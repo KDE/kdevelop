@@ -96,6 +96,28 @@ TranslationUnitAST *Parser::parse(ParseSession* _session)
   return ast;
 }
 
+StatementAST *Parser::parseStatement(ParseSession* _session)
+{
+  _M_block_errors = false;
+  session = _session;
+
+  if (!session->token_stream)
+    session->token_stream = new TokenStream;
+
+  if (!session->location_table)
+    session->location_table = new LocationTable;
+
+  if (!session->line_table)
+    session->line_table = new LocationTable;
+
+  lexer.tokenize(session);
+  session->token_stream->nextToken(); // skip the first token
+
+  StatementAST *ast = 0;
+  parseCompoundStatement(ast);
+  return ast;
+}
+
 bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 {
   if (session->token_stream->lookAhead() != Token_identifier)

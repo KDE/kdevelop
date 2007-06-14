@@ -56,8 +56,12 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
      * @param exp The expression to evaluate
      * @param context the context within which the expression should be evaluated
      * @param debug whether additional output to kdDebug should be issued
+     *
+     * Note: Even expressions that create sub-contexts should work,
+     * Example:
+     * "int i; i += 5;"
     */
-    ExpressionEvaluationResult::Ptr evaluateType( const QByteArray& exp, DUContext* context, bool debug = true );
+    ExpressionEvaluationResult::Ptr evaluateType( const QByteArray& expression, DUContext* context, bool debug = true );
     /**
      * Evaluates the type of an expression given as an AST.
      *

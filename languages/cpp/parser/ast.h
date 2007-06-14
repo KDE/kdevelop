@@ -48,7 +48,7 @@ struct DeclarationStatementAST;
 struct DeclaratorAST;
 struct DeleteExpressionAST;
 struct DoStatementAST;
-struct ElaboratedTypeSpecifierAST;
+struct Elaborated;
 struct EnumSpecifierAST;
 struct EnumeratorAST;
 struct ExceptionSpecificationAST;
@@ -196,7 +196,9 @@ struct AST
   std::size_t start_token;
   std::size_t end_token;
 
-  // External references
+  /** Context opened by this AST
+    *This is usually not filled for all AST's, only for those that open a new context
+    */
   KDevelop::DUContext* ducontext;
 };
 
@@ -308,6 +310,11 @@ struct ConditionalExpressionAST: public ExpressionAST
   ExpressionAST *right_expression;
 };
 
+/**
+ * type_id is the type that should be casted to
+ * expression is the expression casted from
+ * sub_expressions is a list of post-fix expressions, see PostfixExpressionAST
+ */
 struct CppCastExpressionAST: public ExpressionAST
 {
   DECLARE_AST_NODE(CppCastExpression)
@@ -409,6 +416,7 @@ struct ExpressionOrDeclarationStatementAST: public StatementAST
   bool expressionChosen;
 };
 
+///An expression terminated by a semicolon or similar
 struct ExpressionStatementAST: public StatementAST
 {
   DECLARE_AST_NODE(ExpressionStatement)
@@ -611,6 +619,15 @@ struct ParameterDeclarationClauseAST: public AST
   std::size_t ellipsis;
 };
 
+/**
+ * A post-fix expression is an expression that consists of one primary expression and multiple sub-expressions that are evaluated from
+ * left to right, each  sub-expression based on the previous expression.
+ *
+ *
+ * Examples:
+ * "a->b"  : "a" is the primary expression, "->b" is a sub-expression
+ * "a->b(5,3)" : "a" is the primary expression, "->b" is a sub-expression, and "(5,3)" is a sub-expression
+ **/
 struct PostfixExpressionAST: public ExpressionAST
 {
   DECLARE_AST_NODE(PostfixExpression)
@@ -690,6 +707,7 @@ struct StringLiteralAST: public AST
   const ListNode<std::size_t> *literals;
 };
 
+/// operator []
 struct SubscriptExpressionAST: public ExpressionAST
 {
   DECLARE_AST_NODE(SubscriptExpression)
@@ -761,6 +779,7 @@ struct TypeIdAST: public AST
   DeclaratorAST *declarator;
 };
 
+///"typename"
 struct TypeIdentificationAST: public ExpressionAST
 {
   DECLARE_AST_NODE(TypeIdentification)

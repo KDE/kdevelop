@@ -56,6 +56,16 @@ TopDUContext* DeclarationBuilder::buildDeclarations(const KUrl& url, AST *node, 
   return top;
 }
 
+DUContext* DeclarationBuilder::buildSubDeclarations(const KUrl& url, AST *node, KDevelop::DUContext* parent) {
+  DUContext* top = buildSubContexts(url, node, parent);
+
+  Q_ASSERT(m_accessPolicyStack.isEmpty());
+  Q_ASSERT(m_functionDefinedStack.isEmpty());
+
+  return top;
+}
+
+
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   parseStorageSpecifiers(node->storage_specifiers);

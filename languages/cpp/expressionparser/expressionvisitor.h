@@ -46,7 +46,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
 
     /**
      * Will parse the tree and call expressionType(..) for each successfully evaluated type
-     * @param ast the syntax-tree to evaluate. The context must already be built.
+     * @param ast the syntax-tree to evaluate. The context must already be built, the given AST needs to have a filled ducontext.
      **/
     void parse( AST* ast );
 
@@ -85,6 +85,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     AbstractType::Ptr m_lastType;
     Declaration* m_lastDeclaration;
     ParseSession* m_session;
+    DUContext* m_currentContext;
 
   inline void clearLast() {
     m_lastDeclaration = 0;
@@ -185,6 +186,10 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
   virtual void visitUsingDirective(UsingDirectiveAST *) ;
   virtual void visitWhileStatement(WhileStatementAST *) ;
   virtual void visitWinDeclSpec(WinDeclSpecAST *) ;
+
+  ///Visits all nodes, and resets m_lastType and m_lastDeclaration to the previous values before each visit so they cannot influence each other
+  template <class _Tp>
+  void visitIndependentNodes(const ListNode<_Tp> *nodes);
 };
 }
 

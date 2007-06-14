@@ -130,10 +130,48 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
   return topLevelContext;
 }
 
+KDevelop::DUContext* ContextBuilder::buildSubContexts(const KUrl& url, AST *node, KDevelop::DUContext* parent) {
+  m_compilingContexts = true;
+  m_recompiling = false;
+
+  m_editor->setCurrentUrl(url);
+
+  m_encounteredToken = 0; ///@todo What exactly is this?
+
+  node->ducontext = parent;
+
+  {
+    //copied out of supportBuild
+
+    openContext(node->ducontext);
+
+    m_editor->setCurrentRange(m_editor->topRange(EditorIntegrator::DefinitionUseChain ));
+
+    visit (node);
+
+    closeContext();
+  }
+
+  m_compilingContexts = false;
+
+  if( node->ducontext == parent ) {
+    //The node's du-context should have been replaced!
+    //Maybe dump the node
+    kDebug() << "Error in ContextBuilder::buildSubContexts(...): du-context was not replaced with new one" << endl;
+    DUChainWriteLocker lock(DUChain::lock());
+    delete node->ducontext;
+
+    node->ducontext = 0;
+  }
+  
+  return node->ducontext;
+}
+
+
 void ContextBuilder::supportBuild(AST *node)
 {
-  Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext));
-
+  //Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext)); This assertion is invalid, because the node may also be a statement that has a non-top context set
+  
   openContext(node->ducontext);
 
   m_editor->setCurrentUrl(node->ducontext->url());
@@ -346,6 +384,7 @@ void ContextBuilder::closeContext()
   if (currentContext()->lastEncountered() != m_encounteredToken)
   {
     DUChainWriteLocker lock(DUChain::lock());
+    ///@todo what's the use of this, and how does it work?
     currentContext()->cleanIfNotEncountered(m_encounteredToken, m_compilingContexts);
     currentContext()->setEncountered(m_encounteredToken);
   }

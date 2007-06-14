@@ -48,6 +48,20 @@ public:
 
   @sa pool for more information about the memory pool used.*/
   TranslationUnitAST *parse(ParseSession* session);
+
+  /**
+   * Same as parse, except that it parses the content as a compound statement.
+   * This is useful for parsing independent expression-strings that appear for
+   * example within a function.
+   *
+   * parse(..) expects the content to be a valid translation-unit,
+   * while parseStatement can parse strings like "{a.b = 5;}" as if they
+   * appeared within a function.
+   *
+   * Note: The input must be a valid compound-statement, which means it must
+   * start at least with "{", and end with ";}"
+   **/
+  StatementAST *parseStatement(ParseSession* session);
   /**@return the problem count.*/
   int problemCount() const { return _M_problem_count; }
 

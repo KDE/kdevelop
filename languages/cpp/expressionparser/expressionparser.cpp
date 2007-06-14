@@ -45,14 +45,31 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
     kDebug() << "==== .Evaluating ..:" << endl << unit << endl << endl;
 
   ParseSession* session = new ParseSession();
-  session->setContents(unit);
 
   Control control;
   DumpChain dumper;
   
   Parser parser(&control);
-  TranslationUnitAST* ast = parser.parse(session);
-  ast->session = session;
+  
+  AST* ast = 0;
+
+  DUContext::ContextType type;
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    type = context->type();
+  }
+  
+  switch( type ) {
+    case DUContext::Function:
+    case DUContext::Other:
+      session->setContents("{" + unit + ";}");
+      ast = parser.parseStatement(session);
+    break;
+    default:
+      session->setContents(unit);
+      ast = parser.parse(session);
+      ((TranslationUnitAST*)ast)->session = session;
+  }
 
   if (debug) {
     kDebug() << "===== AST:" << endl;
@@ -60,13 +77,14 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
   }
 
   static int testNumber = 0; //@todo what this url for?
-  KUrl url(QString("file:///internal/%1").arg(testNumber++));
+  KUrl url(QString("file:///internal/evaluate_%1").arg(testNumber++));
+  kDebug() << "url: " << url << endl;
 
-  QList<KDevelop::DUContext*> includes;
-  includes << context;
-  
+  /*QList<KDevelop::DUContext*> includes;
+  includes << context;*/
+
   DeclarationBuilder definitionBuilder(session);
-  TopDUContext* top = definitionBuilder.buildDeclarations(url, ast, &includes);
+  DUContext* top = definitionBuilder.buildSubDeclarations(url, ast, context);
 
   UseBuilder useBuilder(session);
   useBuilder.buildUses(ast);
@@ -75,12 +93,13 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
     kDebug() << "===== DUChain:" << endl;
 
     DUChainWriteLocker lock(DUChain::lock());
-    //dumper.dump(top, false);
+    dumper.dump(top, false);
   }
 
   if (debug) {
     kDebug() << "===== Types:" << endl;
     DumpTypes dt;
+    DUChainWriteLocker lock(DUChain::lock());
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
       dt.dump(type.data());
   }
@@ -91,6 +110,11 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
   ExpressionEvaluationResult::Ptr ret = evaluateType( ast, session, debug );
 
   delete session;
+
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    delete top;
+  }
 
   return ret;
 }

@@ -59,6 +59,18 @@ public:
   KDevelop::TopDUContext* buildContexts(const KUrl& url, AST *node, QList<KDevelop::DUContext*>* includes = 0);
 
   /**
+   * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,
+   * but should be deleted as fast as possible because it keeps a reference to an independent context.
+   *
+   * Warning: the resulting context should be deleted some time. Before deleting it, the du-chain must be locked.
+   * Warning: The new context is added as a child to the parent-context.
+   * \param url A temporary url that can be used to identify this context @todo remove this
+   *
+   * \param parent Context that will be used as parent for this context
+   */
+  KDevelop::DUContext* buildSubContexts(const KUrl& url, AST *node, KDevelop::DUContext* parent = 0);
+  
+  /**
    * Support another builder by tracking the current context.
    */
   void supportBuild(AST *node);

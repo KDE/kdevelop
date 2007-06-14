@@ -37,6 +37,7 @@
 
 #include "rpp/preprocessor.h"
 #include "expressionvisitor.h"
+#include "expressionparser.h"
 
 using namespace KTextEditor;
 
@@ -167,10 +168,28 @@ void TestExpressionParser::testSimpleExpression() {
   DUContext* testContext = c->childContexts()[1];
   QCOMPARE( testContext->type(), DUContext::Function );
 
-//abstractType()->toString() <<
-  //c->childContexts()
-  //Q_COMPARE( c->childContexts().
-  //DUChainWriteLocker lock(DUChain::lock());
+  //Make sure the declaration of "c" is found correctly
+  Declaration* d = findDeclaration( testContext, QualifiedIdentifier("c") );
+  QVERIFY(d);
+  QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() ) );
+  QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() )->identifier().toString() == "Cont" );
+
+  kDebug() << "test-Context: " << testContext << endl;
+  lock.unlock();
+
+  Cpp::ExpressionParser parser;
+
+  Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "c.a", testContext );
+  QVERIFY(result);
+  QVERIFY(result->instanceDeclaration);
+  QVERIFY(result->type);
+
+  result = parser.evaluateType( "Cont", testContext );
+  QVERIFY(result);
+  QVERIFY(!result->instanceDeclaration);
+  QVERIFY(result->type);
+
+  lock.lock();
   release(c);
 }
 

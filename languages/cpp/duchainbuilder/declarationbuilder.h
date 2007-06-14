@@ -47,8 +47,18 @@ public:
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
   KDevelop::TopDUContext* buildDeclarations(const KUrl& url, AST *node, QList<KDevelop::DUContext*>* includes = 0);
+  
+  /**
+   * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,
+   * but should be deleted as fast as possible because it keeps a reference to an independent context.
+   *
+   * \param url A temporary url that can be used to identify this context
+   *
+   * \param parent Context that will be used as parent for this context
+   */
+  KDevelop::DUContext* buildSubDeclarations(const KUrl& url, AST *node, KDevelop::DUContext* parent = 0);
 
-protected:
+  protected:
   virtual void openContext(KDevelop::DUContext* newContext);
   virtual void closeContext();
 
