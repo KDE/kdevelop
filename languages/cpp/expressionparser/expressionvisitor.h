@@ -44,6 +44,20 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     ExpressionVisitor( ParseSession* session );
     ~ExpressionVisitor();
 
+    struct Instance {
+      Instance() : isInstance(false), declaration(0) {
+      }
+      Instance( bool is ) : isInstance(is), declaration(0) {
+      }
+      Instance( Declaration* decl ) : isInstance(true), declaration(decl) {
+      }
+      inline operator bool() const {
+        return isInstance;
+      }
+      bool isInstance;
+      Declaration* declaration; //May contain the declaration of the instance, but only when isInstance is true
+    };
+    
     /**
      * Will parse the tree and call expressionType(..) for each successfully evaluated type
      * @param ast the syntax-tree to evaluate. The context must already be built, the given AST needs to have a filled ducontext.
@@ -51,7 +65,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     void parse( AST* ast );
 
     AbstractType::Ptr lastType();
-    Declaration* lastDeclaration();
+    Instance lastInstance();
 
     ParseSession* session();
   protected:
@@ -62,15 +76,21 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
      *
      * @param ast the AST-Node
      * @param type the type the expression in the AST-node evaluates to
-     * @param decl If the expression evaluates to an instance of a type, this is the declaration of that instance.
+     * @param instance If the expression evaluates to an instance of a type, this contains information about that instance. declaration is only filled for explicity declared instances.
      * If this is zero, the expression evaluates to a type.
+     * 
+     * Warning:
+     * In case of temporary instances, decl will be the declaration of the basic type, not of an instance.
+     * Since temporary instances are never declared, there's no other way.
+     * 
      * examples:
      * the expression "AbstractType::Ptr" evaluates to a type, so @param type would be filled and @param decl would be zero.
      * When the context contains "AbstractType::Ptr ptr;", the expression "ptr" will evaluate to an instance of
      * AbstractType::Ptr, so @param type will contain the type AbstractType::Ptr, and @param decl will point to the declaration of ptr.
-     * 
+     *
+     * Problem: 
      **/
-    virtual void expressionType( AST* node, const AbstractType::Ptr& type, Declaration* decl ) {
+    virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance instance ) {
     }
 
     /** Called when there is a problem, with a string for that problem.
@@ -83,14 +103,81 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     
   private:
     AbstractType::Ptr m_lastType;
-    Declaration* m_lastDeclaration;
+    Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
+    
     ParseSession* m_session;
     DUContext* m_currentContext;
 
   inline void clearLast() {
-    m_lastDeclaration = 0;
+    m_lastInstance = Instance();
     m_lastType = 0;
   }
+
+  /**
+   * Returns the dereferenced type(example: ReferenceType(PointerType) -> PointerType)
+   *
+   *
+   *  !!DU-Chain must be locked!
+  * @param constant will be set to true when one of the references made the result constant
+   * @return return-value will only be zero if m_lastType is zero
+   */
+  AbstractType::Ptr realLastType(bool* constant = 0) const;
+
+  /**
+   * Returns the dereferenced type(example: ReferenceType(PointerType(int)) -> PointerType(int))
+   *
+   *  !!DU-Chain must be locked!
+  * @param constant will be set to true when one of the references made the result constant
+   * @return return-value will only be zero if type is zero
+   */
+  AbstractType::Ptr realType(AbstractType::Ptr type, bool* constant = 0) const;
+  
+  /**
+   * Returns the completely dereferenced type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
+   *
+   *  !!DU-Chain must be locked!
+  * @param constant will be set to true when one of the references made the result constant
+   * @return return-value will only be zero if type is zero
+   */
+  AbstractType::Ptr targetType(AbstractType::Ptr type, bool* constant = 0) const;
+  
+  /**
+   * Returns true when m_lastType either is a pointer, or a reference to a pointer
+   *
+   *  !!DU-Chain must be locked!
+   **/
+  bool isPointerType() const;
+  
+  /**
+   *  m_lastType must be a pointer. It will be dereferenced in m_lastType,
+   *  and m_lastDeclaration filled appropriately.
+   *
+   *  !!DU-Chain must be locked!
+   *
+   *  @param node Node shown while reporting problems
+   *  @param constant will be set to true if something constant is dereferenced
+   *  @return false on fail(for example type is no pointer)
+   */
+  bool getPointerTarget( AST* node, bool* constant = 0 );
+
+  /**
+   *  !!DU-Chain must be locked!
+   **/
+  Declaration* getDeclaration( AST* node, const AbstractType::Ptr& base );
+  
+  /**
+   *  m_lastType must be a function.
+   *  Return-value will be extracted, m_lastType and m_lastDeclaration
+   *  filled appropriately.
+   *
+   *  On failure, m_lastType will be 0.
+   *
+   *  !!DU-Chain must be locked!
+   *
+   *  @param node Node shown while reporting problems
+   *  @return false on fail(for example type is no function)
+   */
+  void getReturnValue( AST* node );
 
   const Token& tokenFromIndex( int index );
 

@@ -116,7 +116,10 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
     delete top;
   }
 
-  return ret;
+  if( ret->type )
+    return ret;
+  else
+    return ExpressionEvaluationResult::Ptr();
 }
 
 ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseSession* session, bool debug ) {
@@ -124,7 +127,7 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseS
   ExpressionVisitor v(session);
   v.parse( ast );
   ret->type = v.lastType();
-  ret->instanceDeclaration = v.lastDeclaration();
+  ret->instance = v.lastInstance();
   return ret;
 }
 

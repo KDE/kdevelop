@@ -23,6 +23,7 @@
 #include <typesystem.h>
 #include "visitor.h"
 #include "cppexpressionparserexport.h"
+#include "expressionvisitor.h"
 
 class TranslationUnitAST;
 class AST;
@@ -36,11 +37,11 @@ using namespace KDevelop;
 
 class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult : public KShared {
   public:
-    ExpressionEvaluationResult() : instanceDeclaration(0) {
+    ExpressionEvaluationResult() {
     }
 
     AbstractType::Ptr type; ///Type the expression evaluated to, may be zero when the expression failed to evaluate
-    Declaration* instanceDeclaration; ///If the expression evaluates to an instance, this contains a pointer to the instance's declaration(@see CppExpressionVisitor::expressionType())
+    ExpressionVisitor::Instance instance; ///If the expression evaluates to an instance, this contains a pointer to the instance's declaration(@see CppExpressionVisitor::expressionType())
     
     typedef KSharedPtr<ExpressionEvaluationResult> Ptr;
 };

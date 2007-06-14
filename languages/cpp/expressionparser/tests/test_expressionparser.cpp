@@ -48,7 +48,7 @@ class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   MyExpressionVisitor( ParseSession* session ) : ExpressionVisitor(session)  {
   }
   protected:
-  virtual void expressionType( AST* node, const AbstractType::Ptr& type, Declaration* decl ) {
+  virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance instance ) {
     DumpChain d;
     kDebug() << "expression-result for " << endl;
     DUChainReadLocker lock( DUChain::lock() );
@@ -57,8 +57,7 @@ class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   }
 };
 
-
-QTEST_MAIN(TestExpressionParser)
+QTEST_MAIN(TestExpressionParser);
 
 char* debugString( const QString& str ) {
   char* ret = new char[str.length()+1];
@@ -161,7 +160,7 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
 void TestExpressionParser::testSimpleExpression() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "struct Cont { int a; int* operator -> () {}; }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
+  QByteArray test = "struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
   DUContext* c = parse( test, DumpDUChain | DumpAST );
   DUChainWriteLocker lock(DUChain::lock());
   
@@ -180,13 +179,37 @@ void TestExpressionParser::testSimpleExpression() {
   Cpp::ExpressionParser parser;
 
   Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "c.a", testContext );
-  QVERIFY(result);
-  QVERIFY(result->instanceDeclaration);
+  QVERIFY(result);   
+  QVERIFY(result->instance);
   QVERIFY(result->type);
 
+  result = parser.evaluateType( "&c.a", testContext );
+  QVERIFY(result);
+  QCOMPARE(result->type->toString(), QString("int*"));
+  QVERIFY(result->instance);
+
+  result = parser.evaluateType( "*(&c.a)", testContext );
+  QVERIFY(result);
+  QCOMPARE(result->type->toString(), QString("int"));
+  QVERIFY(result->instance);
+  
+  result = parser.evaluateType( "*c", testContext );
+  QVERIFY(result);
+  QCOMPARE(result->type->toString(), QString("double"));
+  QVERIFY(result->instance);
+  
+  result = parser.evaluateType( "c->a", testContext );
+  QVERIFY(result);
+  QCOMPARE(result->type->toString(), QString("int&"));
+  QVERIFY(result->instance);
+  
+  /*  QVERIFY(result);
+  QVERIFY(result->instanceDeclaration);
+  QVERIFY(result->type);*/
+  
   result = parser.evaluateType( "Cont", testContext );
   QVERIFY(result);
-  QVERIFY(!result->instanceDeclaration);
+  QVERIFY(!result->instance);
   QVERIFY(result->type);
 
   lock.lock();

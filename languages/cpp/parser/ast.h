@@ -253,7 +253,7 @@ struct BinaryExpressionAST: public ExpressionAST
 {
   DECLARE_AST_NODE(BinaryExpression)
 
-  std::size_t op;
+  std::size_t op; //Index of the token that describes the operator
   ExpressionAST *left_expression;
   ExpressionAST *right_expression;
 };
@@ -270,7 +270,7 @@ struct ClassMemberAccessAST: public ExpressionAST
 {
   DECLARE_AST_NODE(ClassMemberAccess)
 
-  std::size_t op;
+  std::size_t op; //Index of the token that describes the operator
   NameAST *name;
 };
 
@@ -319,7 +319,7 @@ struct CppCastExpressionAST: public ExpressionAST
 {
   DECLARE_AST_NODE(CppCastExpression)
 
-  std::size_t op;
+  std::size_t op; //Index of the token that describes the operator
   TypeIdAST *type_id;
   ExpressionAST *expression;
   const ListNode<ExpressionAST*> *sub_expressions;
@@ -467,7 +467,7 @@ struct IncrDecrExpressionAST: public ExpressionAST
 {
   DECLARE_AST_NODE(IncrDecrExpression)
 
-  std::size_t op;
+  std::size_t op; //Index of the token that describes the operator
 };
 
 struct InitDeclaratorAST: public AST
@@ -588,7 +588,7 @@ struct OperatorAST: public AST
 {
   DECLARE_AST_NODE(Operator)
 
-  std::size_t op;
+  std::size_t op; //Index of the token that describes the operator
   std::size_t open;
   std::size_t close;
 };
@@ -597,7 +597,7 @@ struct OperatorFunctionIdAST: public AST
 {
   DECLARE_AST_NODE(OperatorFunctionId)
 
-  OperatorAST *op;
+  OperatorAST *op; 
   TypeSpecifierAST *type_specifier;
   const ListNode<PtrOperatorAST*> *ptr_ops;
 };
@@ -653,7 +653,7 @@ struct PtrOperatorAST: public AST
   DECLARE_AST_NODE(PtrOperator)
 
   const ListNode<std::size_t> *cv;
-  std::size_t op;
+  std::size_t op; //Index of the token that describes the operator
   PtrToMemberAST *mem_ptr;
 };
 
@@ -812,7 +812,7 @@ struct UnaryExpressionAST: public ExpressionAST
 {
   DECLARE_AST_NODE(UnaryExpression)
 
-  std::size_t op;
+  std::size_t op; //Index of the token that describes the operator
   ExpressionAST *expression;
 };
 
