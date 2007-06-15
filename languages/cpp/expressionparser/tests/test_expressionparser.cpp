@@ -57,7 +57,7 @@ class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   }
 };
 
-QTEST_MAIN(TestExpressionParser);
+QTEST_MAIN(TestExpressionParser)
 
 char* debugString( const QString& str ) {
   char* ret = new char[str.length()+1];
