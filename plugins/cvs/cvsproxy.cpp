@@ -16,7 +16,7 @@
 #include <KLocale>
 #include <KUrl>
 #include <KMessageBox>
-
+#include <kshell.h>
 #include "cvsjob.h"
 
 CvsProxy::CvsProxy(QObject* parent)
@@ -73,7 +73,7 @@ bool CvsProxy::addFileList(CvsJob* job, const QString& repository, const KUrl::L
         //      to the given repository
         QString file = KUrl::relativeUrl(repository + QDir::separator(), url);
 
-        *job << K3Process::quote( file );
+        *job << KShell::quoteArg( file );
     }
 
     return true;
@@ -91,7 +91,7 @@ CvsJob* CvsProxy::log(const KUrl& url)
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "log";
-        *job << K3Process::quote(info.fileName());
+        *job << KShell::quoteArg(info.fileName());
 
         return job;
     }
@@ -113,11 +113,11 @@ CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions,
         *job << diffOptions;
 
         if (!revA.isEmpty())
-            *job << "-r"<<K3Process::quote(revA);
+            *job << "-r"<<KShell::quoteArg(revA);
         if (!revB.isEmpty())
-            *job << "-r"<<K3Process::quote(revB);
+            *job << "-r"<<KShell::quoteArg(revB);
 
-        *job << K3Process::quote(info.fileName());
+        *job << KShell::quoteArg(info.fileName());
 
         return job;
     }
@@ -137,9 +137,9 @@ CvsJob * CvsProxy::annotate(const KUrl & url, const QString & revision)
         *job << "annotate";
 
         if (!revision.isEmpty())
-            *job << "-r"<<K3Process::quote(revision);
+            *job << "-r"<<KShell::quoteArg(revision);
 
-        *job << K3Process::quote(info.fileName());
+        *job << KShell::quoteArg(info.fileName());
 
         return job;
     }
@@ -209,7 +209,7 @@ CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QSt
         *job << "commit";
 
         *job << "-m";
-        *job << K3Process::quote( message );
+        *job << KShell::quoteArg( message );
 
         addFileList(job, repo, files);
 
@@ -300,7 +300,7 @@ CvsJob * CvsProxy::import(const KUrl & directory,
         *job << "import";
 
         *job << "-m";
-        *job << K3Process::quote( message );
+        *job << KShell::quoteArg( message );
 
         *job << repositoryName;
         *job << vendortag;
