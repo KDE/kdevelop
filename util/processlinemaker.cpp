@@ -36,7 +36,20 @@ public:
     ProcessLineMaker* p;
     QProcess* m_proc;
 
-    void slotReadyReadStdout( )
+    void slotProcessFinished()
+    {
+        QString out = QString::fromLocal8Bit(m_stdout_rest+m_proc->readAll());
+        m_stdout_rest.clear();
+        processStdOut( out );
+
+        m_proc->setReadChannel( QProcess::StandardError );
+        out = QString::fromLocal8Bit(m_stderr_rest+m_proc->readAll());
+        m_stderr_rest.clear();
+        m_proc->setReadChannel( QProcess::StandardOutput );
+        processStdErr( out );
+    }
+
+    void slotReadyReadStdout()
     {
         QString out;
         while( m_proc->canReadLine() )
@@ -71,7 +84,7 @@ public:
         emit p->receivedStdoutLines(lineList);
     }
 
-    void slotReadyReadStderr( )
+    void slotReadyReadStderr()
     {
         QString out;
         m_proc->setReadChannel( QProcess::StandardError );
@@ -124,6 +137,8 @@ ProcessLineMaker::ProcessLineMaker( QProcess* proc )
 
     connect(proc, SIGNAL(readyReadStandardError()),
             this, SLOT(slotReadyReadStderr()) );
+    connect(proc, SIGNAL(finished(int, QPRocess::ExitStatus)),
+            this, SLOT(slotProcessFinished()));
 }
 
 void ProcessLineMaker::slotReceivedStdout( const QString& s )
