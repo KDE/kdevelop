@@ -59,11 +59,11 @@ public:
     /**
      * set additional arguments to be used when executing the command
      */
-    void setArguments( const QStringList& args);
+    void setArguments( const QStringList& args );
     /**
      * set additional environment variables to be used when executing the command
      */
-    void setEnvironment( const QMap<QString,QString>& env);
+    void setEnvironment( const QMap<QString,QString>& env );
 
     /**
      * Sets the working directory of the command
@@ -74,6 +74,11 @@ public:
      * start the command, after this has been called signals may be emitted
      */
     void start();
+
+    /**
+     * set the Command that should be started, now a commandexecutor can be reused
+     */
+    void setCommand( const QString& command );
 
 Q_SIGNALS:
     void receivedStandardError( const QStringList& );

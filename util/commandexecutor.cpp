@@ -24,6 +24,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
 #include <QtCore/QString>
+#include <kprocess.h>
 
 namespace KDevelop
 {
@@ -36,7 +37,7 @@ public:
     {
     }
     CommandExecutor* m_exec;
-    QProcess* m_process;
+    KProcess* m_process;
     ProcessLineMaker* m_lineMaker;
     QString m_command;
     QStringList m_args;
@@ -60,7 +61,8 @@ public:
 CommandExecutor::CommandExecutor( const QString& command, QObject* parent )
   : QObject(parent), d(new CommandExecutorPrivate(this))
 {
-    d->m_process = new QProcess(this);
+    d->m_process = new KProcess(this);
+    d->m_process->setOutputChannelMode( KProcess::SeparateChannels );
     d->m_lineMaker = new ProcessLineMaker( d->m_process );
     d->m_command = command;
     connect( d->m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
@@ -97,14 +99,18 @@ void CommandExecutor::setWorkingDirectory( const QString& dir )
 
 void CommandExecutor::start()
 {
-    QStringList env = QProcess::systemEnvironment();
     Q_FOREACH( QString s, d->m_env.keys() )
     {
-        env << s+'='+d->m_env[s];
+        d->m_process->setEnv( s, d->m_env[s] );
     }
-    d->m_process->setEnvironment(env);
     d->m_process->setWorkingDirectory( d->m_workDir );
-    d->m_process->start( d->m_command, d->m_args, QIODevice::ReadOnly );
+    d->m_process->setProgram( d->m_command, d->m_args );
+    d->m_process->start();
+}
+
+void CommandExecutor::setCommand( const QString& command )
+{
+    d->m_command = command;
 }
 
 }
