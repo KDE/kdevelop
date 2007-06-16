@@ -29,6 +29,8 @@ public:
     ProcessLineMakerPrivate( ProcessLineMaker* maker )
         : p(maker)
     {}
+    QByteArray m_stdout_rest;
+    QByteArray m_stderr_rest;
     QString stdoutbuf;
     QString stderrbuf;
     ProcessLineMaker* p;
@@ -36,7 +38,13 @@ public:
 
     void slotReadyReadStdout( )
     {
-        QString out = m_proc->readAllStandardOutput();
+        QString out;
+        while( m_proc->canReadLine() )
+        {
+            out += QString::fromLocal8Bit( m_stdout_rest + m_proc->readLine() );
+            m_stdout_rest.clear();
+        }
+        m_stdout_rest = m_proc->readAll();
         processStdOut( out );
     }
 
@@ -65,8 +73,16 @@ public:
 
     void slotReadyReadStderr( )
     {
-        QString err = m_proc->readAllStandardError();
-        processStdErr( err );
+        QString out;
+        m_proc->setReadChannel( QProcess::StandardError );
+        while( m_proc->canReadLine() )
+        {
+            out += QString::fromLocal8Bit( m_stderr_rest + m_proc->readLine() );
+            m_stderr_rest.clear();
+        }
+        m_stderr_rest = m_proc->readAll();
+        m_proc->setReadChannel( QProcess::StandardOutput );
+        processStdErr( out );
     }
 
     void processStdErr( const QString& s )
