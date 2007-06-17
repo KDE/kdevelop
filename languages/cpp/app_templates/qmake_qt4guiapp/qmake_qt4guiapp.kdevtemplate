@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Qt4 GUI Application
+Name[de]=Qt4 Anwendung mit graphischer Oberfläche
 Name[es]=Aplicación con interfaz gráfica Qt4
 Name[x-test]=xxQt4 GUI Applicationxx
 Category=C++/Qt (qmake)
 Comment=Generate a QMake/Qt4 based application with graphical user interface (crossplatform compatible)
+Comment[de]=Erstellt eine QMake/Qt4 basierte Anwendung mit graphischer Benutzeroberfläche (Crossplattform kompatibel)
 Comment[es]=Genera una aplicación basada en QMake/Qt4 con interfaz gráfica (compatible multiplataforma)
 Comment[x-test]=xxGenerate a QMake/Qt4 based application with graphical user interface (crossplatform compatible)xx
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp

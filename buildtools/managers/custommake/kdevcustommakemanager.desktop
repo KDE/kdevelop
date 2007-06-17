@@ -2,7 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop CustomMake Manager
+Name[de]=KDevelop CustomMake-Manager
+Name[es]=Gestor de Make personalizado de KDevelop
 Comment=Imports and edits custom make projects
+Comment[de]=Importiert und bearbeitet benutzerdefinierte make Projekte
+Comment[es]=Importa y edita proyectos make personalizados
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcustommakemanager

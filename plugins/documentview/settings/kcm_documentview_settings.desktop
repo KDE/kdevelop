@@ -12,7 +12,11 @@ X-KDE-ParentComponents=kdevelop
 X-KDE-CfgDlgHierarchy=CORE
 
 Name=Document View
+Name[de]=Dokumentansicht
+Name[es]=Visor de documentos
 Name[x-test]=xxDocument Viewxx
 Comment=Configure Document View settings
+Comment[de]=Dokumentansicht Einstellungen
+Comment[es]=Configurar las preferencias del visor de documentos
 Comment[x-test]=xxConfigure Document View settingsxx
 

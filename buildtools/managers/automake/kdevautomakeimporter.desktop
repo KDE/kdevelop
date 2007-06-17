@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop Autotools Importer
+Name[de]=Autotools-Import für KDevelop
 Name[es]=Importador de Autotools de KDevelop
 Name[x-test]=xxKDevelop Autotools Importerxx
 Comment=Allows KDevelop to manage projects using a GNU-based build system
+Comment[de]=Ermöglicht die Verwaltung von Projekten mit GNU-basiertem Erstellungssystem mit KDevelop
 Comment[es]=Permite que KDevelop gestione proyectos que usan un sistema de construcción basado en GNU
 Comment[x-test]=xxAllows KDevelop to manage projects using a GNU-based build systemxx
 Icon=gear

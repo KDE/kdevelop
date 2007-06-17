@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop QMake Manager
+Name[de]=KDevelop QMake-Manager
 Name[es]=Gestor QMake de KDevelop
 Name[x-test]=xxKDevelop QMake Managerxx
 Comment=Imports and edits qmake projects
