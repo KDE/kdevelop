@@ -5,7 +5,7 @@ include_directories(
 
 #set( folderxmltest_SRCS folderxmltest.cpp )
 #kde4_automoc(${folderxmltest_SRCS})
-#kde4_add_unit_test(cmake-folderxmltest TESTNAME cmake-cmake-folderxmltest  ${folderxmltest_SRCS})
+#kde4_add_unit_test(cmake-folderxmltest  ${folderxmltest_SRCS})
 #target_link_libraries(cmake-folderxmltest
 #    ${QT_QTTEST_LIBRARY}
 #    ${KDE4_KDECORE_LIBS}
@@ -14,7 +14,7 @@ include_directories(
 
 #set( targetxmltest_SRCS targetxmltest.cpp )
 #kde4_automoc(${targetxmltest_SRCS})
-#kde4_add_unit_test(cmake-targetxmltest TESTNAME cmake-cmake-targetxmltest  ${targetxmltest_SRCS})
+#kde4_add_unit_test(cmake-targetxmltest  ${targetxmltest_SRCS})
 #target_link_libraries(cmake-targetxmltest
 #    ${QT_QTTEST_LIBRARY}
 #    ${KDE4_KDECORE_LIBS}
@@ -23,7 +23,7 @@ include_directories(
 
 #set( projectxmltest_SRCS projectxmltest.cpp )
 #kde4_automoc(${projectxmltest_SRCS})
-#kde4_add_unit_test(cmake-projectxmltest TESTNAME cmake-cmake-projectxmltest  ${projectxmltest_SRCS} )
+#kde4_add_unit_test(cmake-projectxmltest  ${projectxmltest_SRCS} )
 #target_link_libraries( cmake-projectxmltest
 #    ${QT_QTTEST_LIBRARY}
 #    ${KDE4_KDECORE_LIBS}
@@ -32,7 +32,7 @@ include_directories(
 
 set( cmakeparsertest_SRCS cmakeparsertest.cpp )
 kde4_automoc( cmake-parsertest ${cmakeparsertest_SRCS} )
-kde4_add_unit_test(cmake-parsertest TESTNAME cmake-cmake-parsertest  ${cmakeparsertest_SRCS} )
+kde4_add_unit_test(cmake-parsertest  ${cmakeparsertest_SRCS} )
 target_link_libraries( cmake-parsertest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
@@ -41,7 +41,7 @@ target_link_libraries( cmake-parsertest
 
 set( astfactorytest_SRCS astfactorytest.cpp )
 kde4_automoc( cmake-astfactorytest ${astfactorytest_SRCS} )
-kde4_add_unit_test(cmake-astfactorytest TESTNAME cmake-cmake-astfactorytest  ${astfactorytest_SRCS} )
+kde4_add_unit_test(cmake-astfactorytest  ${astfactorytest_SRCS} )
 target_link_libraries( cmake-astfactorytest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
@@ -50,7 +50,7 @@ target_link_libraries( cmake-astfactorytest
 
 set( customcommandasttest_SRCS cmakecustomcommandasttest.cpp )
 kde4_automoc( cmake-customcommandasttest ${customcommandasttest_SRCS} )
-kde4_add_unit_test(cmake-customcommandasttest TESTNAME cmake-cmake-customcommandasttest 
+kde4_add_unit_test(cmake-customcommandasttest 
                      ${customcommandasttest_SRCS} )
 target_link_libraries( cmake-customcommandasttest
     ${QT_QTTEST_LIBRARY}
@@ -60,7 +60,7 @@ target_link_libraries( cmake-customcommandasttest
 
 set( customtargetasttest_SRCS cmakecustomtargetasttest.cpp )
 kde4_automoc( cmake-customtargetasttest ${customtargetasttest_SRCS} )
-kde4_add_unit_test(cmake-customtargetasttest TESTNAME cmake-cmake-customtargetasttest 
+kde4_add_unit_test(cmake-customtargetasttest 
                      ${customtargetasttest_SRCS} )
 target_link_libraries( cmake-customtargetasttest
     ${QT_QTTEST_LIBRARY}
@@ -70,7 +70,7 @@ target_link_libraries( cmake-customtargetasttest
 
 set( adddefinitiontest_SRCS cmakeadddefinitionasttest.cpp )
 kde4_automoc( cmake-adddefinitionasttest ${adddefinitiontest_SRCS} )
-kde4_add_unit_test(cmake-adddefinitionasttest TESTNAME cmake-cmake-adddefinitionasttest 
+kde4_add_unit_test(cmake-adddefinitionasttest 
                      ${adddefinitiontest_SRCS} )
 target_link_libraries( cmake-adddefinitionasttest
     ${QT_QTTEST_LIBRARY}
@@ -80,7 +80,7 @@ target_link_libraries( cmake-adddefinitionasttest
 
 set( adddependenciestest_SRCS cmakeadddependenciestest.cpp )
 kde4_automoc( cmake-adddependenciesasttest ${adddependenciestest_SRCS} )
-kde4_add_unit_test(cmake-adddependenciesasttest TESTNAME cmake-cmake-adddependenciesasttest 
+kde4_add_unit_test(cmake-adddependenciesasttest 
                      ${adddependenciestest_SRCS} )
 target_link_libraries( cmake-adddependenciesasttest
     ${QT_QTTEST_LIBRARY}
@@ -90,7 +90,7 @@ target_link_libraries( cmake-adddependenciesasttest
 
 set ( addexecutableasttest_SRCS cmake_addexecutableast_test.cpp )
 kde4_automoc( cmake-addexecutableasttest ${addexecutableasttest_SRCS} )
-kde4_add_unit_test(cmake-addexecutableasttest TESTNAME cmake-cmake-addexecutableasttest  ${addexecutableasttest_SRCS} )
+kde4_add_unit_test(cmake-addexecutableasttest  ${addexecutableasttest_SRCS} )
 target_link_libraries( cmake-addexecutableasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -98,7 +98,7 @@ target_link_libraries( cmake-addexecutableasttest
 
 set ( addlibraryasttest_SRCS cmake_addlibraryast_test.cpp )
 kde4_automoc( cmake-addlibraryasttest ${addlibraryasttest_SRCS} )
-kde4_add_unit_test(cmake-addlibraryasttest TESTNAME cmake-cmake-addlibraryasttest  ${addlibraryasttest_SRCS} )
+kde4_add_unit_test(cmake-addlibraryasttest  ${addlibraryasttest_SRCS} )
 target_link_libraries( cmake-addlibraryasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -106,7 +106,7 @@ target_link_libraries( cmake-addlibraryasttest
 
 set ( addsubdirectoryasttest_SRCS cmake_addsubdirectoryast_test.cpp )
 kde4_automoc( cmake-addsubdirectoryasttest ${addsubdirectoryasttest_SRCS} )
-kde4_add_unit_test(cmake-addsubdirectoryasttest TESTNAME cmake-cmake-addsubdirectoryasttest  ${addsubdirectoryasttest_SRCS} )
+kde4_add_unit_test(cmake-addsubdirectoryasttest  ${addsubdirectoryasttest_SRCS} )
 target_link_libraries( cmake-addsubdirectoryasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -114,7 +114,7 @@ target_link_libraries( cmake-addsubdirectoryasttest
 
 set ( addtestasttest_SRCS cmake_addtestast_test.cpp )
 kde4_automoc( cmake-addtestasttest ${addtestasttest_SRCS} )
-kde4_add_unit_test(cmake-addtestasttest TESTNAME cmake-cmake-addtestasttest  ${addtestasttest_SRCS} )
+kde4_add_unit_test(cmake-addtestasttest  ${addtestasttest_SRCS} )
 target_link_libraries( cmake-addtestasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -122,7 +122,7 @@ target_link_libraries( cmake-addtestasttest
 
 set ( auxsourcedirectoryasttest_SRCS cmake_auxsourcedirectoryast_test.cpp )
 kde4_automoc( cmake-auxsourcedirectoryasttest ${auxsourcedirectoryasttest_SRCS} )
-kde4_add_unit_test(cmake-auxsourcedirectoryasttest TESTNAME cmake-cmake-auxsourcedirectoryasttest  ${auxsourcedirectoryasttest_SRCS} )
+kde4_add_unit_test(cmake-auxsourcedirectoryasttest  ${auxsourcedirectoryasttest_SRCS} )
 target_link_libraries( cmake-auxsourcedirectoryasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -130,7 +130,7 @@ target_link_libraries( cmake-auxsourcedirectoryasttest
 
 set ( buildcommandasttest_SRCS cmake_buildcommandast_test.cpp )
 kde4_automoc( cmake-buildcommandasttest ${buildcommandasttest_SRCS} )
-kde4_add_unit_test(cmake-buildcommandasttest TESTNAME cmake-cmake-buildcommandasttest  ${buildcommandasttest_SRCS} )
+kde4_add_unit_test(cmake-buildcommandasttest  ${buildcommandasttest_SRCS} )
 target_link_libraries( cmake-buildcommandasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -138,23 +138,23 @@ target_link_libraries( cmake-buildcommandasttest
 
 set ( buildnameasttest_SRCS cmake_buildnameast_test.cpp )
 kde4_automoc( cmake-buildnameasttest ${buildnameasttest_SRCS} )
-kde4_add_unit_test(cmake-buildnameasttest TESTNAME cmake-cmake-buildnameasttest  ${buildnameasttest_SRCS} )
+kde4_add_unit_test(cmake-buildnameasttest  ${buildnameasttest_SRCS} )
 target_link_libraries( cmake-buildnameasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
   kdevcmakecommon )
 
 set ( cmakeminimumrequiredasttest_SRCS cmake_cmakeminimumrequiredast_test.cpp )
-kde4_automoc( cmake-cmakeminimumrequiredasttest ${cmakeminimumrequiredasttest_SRCS} )
-kde4_add_unit_test(cmake-cmakeminimumrequiredasttest TESTNAME cmake-cmake-cmakeminimumrequiredasttest  ${cmakeminimumrequiredasttest_SRCS} )
-target_link_libraries( cmake-cmakeminimumrequiredasttest
+kde4_automoc( cmakeminimumrequiredasttest ${cmakeminimumrequiredasttest_SRCS} )
+kde4_add_unit_test(cmakeminimumrequiredasttest  ${cmakeminimumrequiredasttest_SRCS} )
+target_link_libraries( cmakeminimumrequiredasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
   kdevcmakecommon )
 
 set ( configurefileasttest_SRCS cmake_configurefileast_test.cpp )
 kde4_automoc( cmake-configurefileasttest ${configurefileasttest_SRCS} )
-kde4_add_unit_test(cmake-configurefileasttest TESTNAME cmake-cmake-configurefileasttest  ${configurefileasttest_SRCS} )
+kde4_add_unit_test(cmake-configurefileasttest  ${configurefileasttest_SRCS} )
 target_link_libraries( cmake-configurefileasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -162,7 +162,7 @@ target_link_libraries( cmake-configurefileasttest
 
 set ( createtestsourcelistasttest_SRCS cmake_createtestsourcelistast_test.cpp )
 kde4_automoc( cmake-createtestsourcelistasttest ${createtestsourcelistasttest_SRCS} )
-kde4_add_unit_test(cmake-createtestsourcelistasttest TESTNAME cmake-cmake-createtestsourcelistasttest  ${createtestsourcelistasttest_SRCS} )
+kde4_add_unit_test(cmake-createtestsourcelistasttest  ${createtestsourcelistasttest_SRCS} )
 target_link_libraries( cmake-createtestsourcelistasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -170,7 +170,7 @@ target_link_libraries( cmake-createtestsourcelistasttest
 
 set ( enablelanguageasttest_SRCS cmake_enablelanguageast_test.cpp )
 kde4_automoc( cmake-enablelanguageasttest ${enablelanguageasttest_SRCS} )
-kde4_add_unit_test(cmake-enablelanguageasttest TESTNAME cmake-cmake-enablelanguageasttest  ${enablelanguageasttest_SRCS} )
+kde4_add_unit_test(cmake-enablelanguageasttest  ${enablelanguageasttest_SRCS} )
 target_link_libraries( cmake-enablelanguageasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -178,7 +178,7 @@ target_link_libraries( cmake-enablelanguageasttest
 
 set ( enabletestingasttest_SRCS cmake_enabletestingast_test.cpp )
 kde4_automoc( cmake-enabletestingasttest ${enabletestingasttest_SRCS} )
-kde4_add_unit_test(cmake-enabletestingasttest TESTNAME cmake-cmake-enabletestingasttest  ${enabletestingasttest_SRCS} )
+kde4_add_unit_test(cmake-enabletestingasttest  ${enabletestingasttest_SRCS} )
 target_link_libraries( cmake-enabletestingasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -186,7 +186,7 @@ target_link_libraries( cmake-enabletestingasttest
 
 set ( execprogramasttest_SRCS cmake_execprogramast_test.cpp )
 kde4_automoc( cmake-execprogramasttest ${execprogramasttest_SRCS} )
-kde4_add_unit_test(cmake-execprogramasttest TESTNAME cmake-cmake-execprogramasttest  ${execprogramasttest_SRCS} )
+kde4_add_unit_test(cmake-execprogramasttest  ${execprogramasttest_SRCS} )
 target_link_libraries( cmake-execprogramasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -194,7 +194,7 @@ target_link_libraries( cmake-execprogramasttest
 
 set ( executeprocessasttest_SRCS cmake_executeprocessast_test.cpp )
 kde4_automoc( cmake-executeprocessasttest ${executeprocessasttest_SRCS} )
-kde4_add_unit_test(cmake-executeprocessasttest TESTNAME cmake-cmake-executeprocessasttest  ${executeprocessasttest_SRCS} )
+kde4_add_unit_test(cmake-executeprocessasttest  ${executeprocessasttest_SRCS} )
 target_link_libraries( cmake-executeprocessasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -202,7 +202,7 @@ target_link_libraries( cmake-executeprocessasttest
 
 set ( exportlibrarydepsasttest_SRCS cmake_exportlibrarydepsast_test.cpp )
 kde4_automoc( cmake-exportlibrarydepsasttest ${exportlibrarydepsasttest_SRCS} )
-kde4_add_unit_test(cmake-exportlibrarydepsasttest TESTNAME cmake-cmake-exportlibrarydepsasttest  ${exportlibrarydepsasttest_SRCS} )
+kde4_add_unit_test(cmake-exportlibrarydepsasttest  ${exportlibrarydepsasttest_SRCS} )
 target_link_libraries( cmake-exportlibrarydepsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -210,7 +210,7 @@ target_link_libraries( cmake-exportlibrarydepsasttest
 
 set ( fileasttest_SRCS cmake_fileast_test.cpp )
 kde4_automoc( cmake-fileasttest ${fileasttest_SRCS} )
-kde4_add_unit_test(cmake-fileasttest TESTNAME cmake-cmake-fileasttest  ${fileasttest_SRCS} )
+kde4_add_unit_test(cmake-fileasttest  ${fileasttest_SRCS} )
 target_link_libraries( cmake-fileasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -218,7 +218,7 @@ target_link_libraries( cmake-fileasttest
 
 set ( findfileasttest_SRCS cmake_findfileast_test.cpp )
 kde4_automoc( cmake-findfileasttest ${findfileasttest_SRCS} )
-kde4_add_unit_test(cmake-findfileasttest TESTNAME cmake-cmake-findfileasttest  ${findfileasttest_SRCS} )
+kde4_add_unit_test(cmake-findfileasttest  ${findfileasttest_SRCS} )
 target_link_libraries( cmake-findfileasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -226,7 +226,7 @@ target_link_libraries( cmake-findfileasttest
 
 set ( findlibraryasttest_SRCS cmake_findlibraryast_test.cpp )
 kde4_automoc( cmake-findlibraryasttest ${findlibraryasttest_SRCS} )
-kde4_add_unit_test(cmake-findlibraryasttest TESTNAME cmake-cmake-findlibraryasttest  ${findlibraryasttest_SRCS} )
+kde4_add_unit_test(cmake-findlibraryasttest  ${findlibraryasttest_SRCS} )
 target_link_libraries( cmake-findlibraryasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -234,7 +234,7 @@ target_link_libraries( cmake-findlibraryasttest
 
 set ( findpackageasttest_SRCS cmake_findpackageast_test.cpp )
 kde4_automoc( cmake-findpackageasttest ${findpackageasttest_SRCS} )
-kde4_add_unit_test(cmake-findpackageasttest TESTNAME cmake-cmake-findpackageasttest  ${findpackageasttest_SRCS} )
+kde4_add_unit_test(cmake-findpackageasttest  ${findpackageasttest_SRCS} )
 target_link_libraries( cmake-findpackageasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -242,7 +242,7 @@ target_link_libraries( cmake-findpackageasttest
 
 set ( findpathasttest_SRCS cmake_findpathast_test.cpp )
 kde4_automoc( cmake-findpathasttest ${findpathasttest_SRCS} )
-kde4_add_unit_test(cmake-findpathasttest TESTNAME cmake-cmake-findpathasttest  ${findpathasttest_SRCS} )
+kde4_add_unit_test(cmake-findpathasttest  ${findpathasttest_SRCS} )
 target_link_libraries( cmake-findpathasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -250,7 +250,7 @@ target_link_libraries( cmake-findpathasttest
 
 set ( findprogramasttest_SRCS cmake_findprogramast_test.cpp )
 kde4_automoc( cmake-findprogramasttest ${findprogramasttest_SRCS} )
-kde4_add_unit_test(cmake-findprogramasttest TESTNAME cmake-cmake-findprogramasttest  ${findprogramasttest_SRCS} )
+kde4_add_unit_test(cmake-findprogramasttest  ${findprogramasttest_SRCS} )
 target_link_libraries( cmake-findprogramasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -258,7 +258,7 @@ target_link_libraries( cmake-findprogramasttest
 
 set ( fltkwrapuiasttest_SRCS cmake_fltkwrapuiast_test.cpp )
 kde4_automoc( cmake-fltkwrapuiasttest ${fltkwrapuiasttest_SRCS} )
-kde4_add_unit_test(cmake-fltkwrapuiasttest TESTNAME cmake-cmake-fltkwrapuiasttest  ${fltkwrapuiasttest_SRCS} )
+kde4_add_unit_test(cmake-fltkwrapuiasttest  ${fltkwrapuiasttest_SRCS} )
 target_link_libraries( cmake-fltkwrapuiasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -266,7 +266,7 @@ target_link_libraries( cmake-fltkwrapuiasttest
 
 set ( foreachasttest_SRCS cmake_foreachast_test.cpp )
 kde4_automoc( cmake-foreachasttest ${foreachasttest_SRCS} )
-kde4_add_unit_test(cmake-foreachasttest TESTNAME cmake-cmake-foreachasttest  ${foreachasttest_SRCS} )
+kde4_add_unit_test(cmake-foreachasttest  ${foreachasttest_SRCS} )
 target_link_libraries( cmake-foreachasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -274,7 +274,7 @@ target_link_libraries( cmake-foreachasttest
 
 set ( getcmakepropertyasttest_SRCS cmake_getcmakepropertyast_test.cpp )
 kde4_automoc( cmake-getcmakepropertyasttest ${getcmakepropertyasttest_SRCS} )
-kde4_add_unit_test(cmake-getcmakepropertyasttest TESTNAME cmake-cmake-getcmakepropertyasttest  ${getcmakepropertyasttest_SRCS} )
+kde4_add_unit_test(cmake-getcmakepropertyasttest  ${getcmakepropertyasttest_SRCS} )
 target_link_libraries( cmake-getcmakepropertyasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -282,7 +282,7 @@ target_link_libraries( cmake-getcmakepropertyasttest
 
 set ( getdirpropertyasttest_SRCS cmake_getdirpropertyast_test.cpp )
 kde4_automoc( cmake-getdirpropertyasttest ${getdirpropertyasttest_SRCS} )
-kde4_add_unit_test(cmake-getdirpropertyasttest TESTNAME cmake-cmake-getdirpropertyasttest  ${getdirpropertyasttest_SRCS} )
+kde4_add_unit_test(cmake-getdirpropertyasttest  ${getdirpropertyasttest_SRCS} )
 target_link_libraries( cmake-getdirpropertyasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -290,7 +290,7 @@ target_link_libraries( cmake-getdirpropertyasttest
 
 set ( getfilenamecomponentasttest_SRCS cmake_getfilenamecomponentast_test.cpp )
 kde4_automoc( cmake-getfilenamecomponentasttest ${getfilenamecomponentasttest_SRCS} )
-kde4_add_unit_test(cmake-getfilenamecomponentasttest TESTNAME cmake-cmake-getfilenamecomponentasttest  ${getfilenamecomponentasttest_SRCS} )
+kde4_add_unit_test(cmake-getfilenamecomponentasttest  ${getfilenamecomponentasttest_SRCS} )
 target_link_libraries( cmake-getfilenamecomponentasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -298,7 +298,7 @@ target_link_libraries( cmake-getfilenamecomponentasttest
 
 set ( getsourcefilepropasttest_SRCS cmake_getsourcefilepropast_test.cpp )
 kde4_automoc( cmake-getsourcefilepropasttest ${getsourcefilepropasttest_SRCS} )
-kde4_add_unit_test(cmake-getsourcefilepropasttest TESTNAME cmake-cmake-getsourcefilepropasttest  ${getsourcefilepropasttest_SRCS} )
+kde4_add_unit_test(cmake-getsourcefilepropasttest  ${getsourcefilepropasttest_SRCS} )
 target_link_libraries( cmake-getsourcefilepropasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -306,7 +306,7 @@ target_link_libraries( cmake-getsourcefilepropasttest
 
 set ( gettargetpropasttest_SRCS cmake_gettargetpropast_test.cpp )
 kde4_automoc( cmake-gettargetpropasttest ${gettargetpropasttest_SRCS} )
-kde4_add_unit_test(cmake-gettargetpropasttest TESTNAME cmake-cmake-gettargetpropasttest  ${gettargetpropasttest_SRCS} )
+kde4_add_unit_test(cmake-gettargetpropasttest  ${gettargetpropasttest_SRCS} )
 target_link_libraries( cmake-gettargetpropasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -314,7 +314,7 @@ target_link_libraries( cmake-gettargetpropasttest
 
 set ( gettestpropasttest_SRCS cmake_gettestpropast_test.cpp )
 kde4_automoc( cmake-gettestpropasttest ${gettestpropasttest_SRCS} )
-kde4_add_unit_test(cmake-gettestpropasttest TESTNAME cmake-cmake-gettestpropasttest  ${gettestpropasttest_SRCS} )
+kde4_add_unit_test(cmake-gettestpropasttest  ${gettestpropasttest_SRCS} )
 target_link_libraries( cmake-gettestpropasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -322,7 +322,7 @@ target_link_libraries( cmake-gettestpropasttest
 
 set ( ifasttest_SRCS cmake_ifast_test.cpp )
 kde4_automoc( cmake-ifasttest ${ifasttest_SRCS} )
-kde4_add_unit_test(cmake-ifasttest TESTNAME cmake-cmake-ifasttest  ${ifasttest_SRCS} )
+kde4_add_unit_test(cmake-ifasttest  ${ifasttest_SRCS} )
 target_link_libraries( cmake-ifasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -330,7 +330,7 @@ target_link_libraries( cmake-ifasttest
 
 set ( includeasttest_SRCS cmake_includeast_test.cpp )
 kde4_automoc( cmake-includeasttest ${includeasttest_SRCS} )
-kde4_add_unit_test(cmake-includeasttest TESTNAME cmake-cmake-includeasttest  ${includeasttest_SRCS} )
+kde4_add_unit_test(cmake-includeasttest  ${includeasttest_SRCS} )
 target_link_libraries( cmake-includeasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -338,7 +338,7 @@ target_link_libraries( cmake-includeasttest
 
 set ( includedirectoriesasttest_SRCS cmake_includedirectoriesast_test.cpp )
 kde4_automoc( cmake-includedirectoriesasttest ${includedirectoriesasttest_SRCS} )
-kde4_add_unit_test(cmake-includedirectoriesasttest TESTNAME cmake-cmake-includedirectoriesasttest  ${includedirectoriesasttest_SRCS} )
+kde4_add_unit_test(cmake-includedirectoriesasttest  ${includedirectoriesasttest_SRCS} )
 target_link_libraries( cmake-includedirectoriesasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -346,7 +346,7 @@ target_link_libraries( cmake-includedirectoriesasttest
 
 set ( includeexternalmsprojectasttest_SRCS cmake_includeexternalmsprojectast_test.cpp )
 kde4_automoc( cmake-includeexternalmsprojectasttest ${includeexternalmsprojectasttest_SRCS} )
-kde4_add_unit_test(cmake-includeexternalmsprojectasttest TESTNAME cmake-cmake-includeexternalmsprojectasttest  ${includeexternalmsprojectasttest_SRCS} )
+kde4_add_unit_test(cmake-includeexternalmsprojectasttest  ${includeexternalmsprojectasttest_SRCS} )
 target_link_libraries( cmake-includeexternalmsprojectasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -354,7 +354,7 @@ target_link_libraries( cmake-includeexternalmsprojectasttest
 
 set ( includeregularexpressionasttest_SRCS cmake_includeregularexpressionast_test.cpp )
 kde4_automoc( cmake-includeregularexpressionasttest ${includeregularexpressionasttest_SRCS} )
-kde4_add_unit_test(cmake-includeregularexpressionasttest TESTNAME cmake-cmake-includeregularexpressionasttest  ${includeregularexpressionasttest_SRCS} )
+kde4_add_unit_test(cmake-includeregularexpressionasttest  ${includeregularexpressionasttest_SRCS} )
 target_link_libraries( cmake-includeregularexpressionasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -362,7 +362,7 @@ target_link_libraries( cmake-includeregularexpressionasttest
 
 set ( installasttest_SRCS cmake_installast_test.cpp )
 kde4_automoc( cmake-installasttest ${installasttest_SRCS} )
-kde4_add_unit_test(cmake-installasttest TESTNAME cmake-cmake-installasttest  ${installasttest_SRCS} )
+kde4_add_unit_test(cmake-installasttest  ${installasttest_SRCS} )
 target_link_libraries( cmake-installasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -370,7 +370,7 @@ target_link_libraries( cmake-installasttest
 
 set ( installfilesasttest_SRCS cmake_installfilesast_test.cpp )
 kde4_automoc( cmake-installfilesasttest ${installfilesasttest_SRCS} )
-kde4_add_unit_test(cmake-installfilesasttest TESTNAME cmake-cmake-installfilesasttest  ${installfilesasttest_SRCS} )
+kde4_add_unit_test(cmake-installfilesasttest  ${installfilesasttest_SRCS} )
 target_link_libraries( cmake-installfilesasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -378,7 +378,7 @@ target_link_libraries( cmake-installfilesasttest
 
 set ( installprogramsasttest_SRCS cmake_installprogramsast_test.cpp )
 kde4_automoc( cmake-installprogramsasttest ${installprogramsasttest_SRCS} )
-kde4_add_unit_test(cmake-installprogramsasttest TESTNAME cmake-cmake-installprogramsasttest  ${installprogramsasttest_SRCS} )
+kde4_add_unit_test(cmake-installprogramsasttest  ${installprogramsasttest_SRCS} )
 target_link_libraries( cmake-installprogramsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -386,7 +386,7 @@ target_link_libraries( cmake-installprogramsasttest
 
 set ( installtargetsasttest_SRCS cmake_installtargetsast_test.cpp )
 kde4_automoc( cmake-installtargetsasttest ${installtargetsasttest_SRCS} )
-kde4_add_unit_test(cmake-installtargetsasttest TESTNAME cmake-cmake-installtargetsasttest  ${installtargetsasttest_SRCS} )
+kde4_add_unit_test(cmake-installtargetsasttest  ${installtargetsasttest_SRCS} )
 target_link_libraries( cmake-installtargetsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -394,7 +394,7 @@ target_link_libraries( cmake-installtargetsasttest
 
 set ( linkdirectoriesasttest_SRCS cmake_linkdirectoriesast_test.cpp )
 kde4_automoc( cmake-linkdirectoriesasttest ${linkdirectoriesasttest_SRCS} )
-kde4_add_unit_test(cmake-linkdirectoriesasttest TESTNAME cmake-cmake-linkdirectoriesasttest  ${linkdirectoriesasttest_SRCS} )
+kde4_add_unit_test(cmake-linkdirectoriesasttest  ${linkdirectoriesasttest_SRCS} )
 target_link_libraries( cmake-linkdirectoriesasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -402,7 +402,7 @@ target_link_libraries( cmake-linkdirectoriesasttest
 
 set ( linklibrariesasttest_SRCS cmake_linklibrariesast_test.cpp )
 kde4_automoc( cmake-linklibrariesasttest ${linklibrariesasttest_SRCS} )
-kde4_add_unit_test(cmake-linklibrariesasttest TESTNAME cmake-cmake-linklibrariesasttest  ${linklibrariesasttest_SRCS} )
+kde4_add_unit_test(cmake-linklibrariesasttest  ${linklibrariesasttest_SRCS} )
 target_link_libraries( cmake-linklibrariesasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -410,7 +410,7 @@ target_link_libraries( cmake-linklibrariesasttest
 
 set ( listasttest_SRCS cmake_listast_test.cpp )
 kde4_automoc( cmake-listasttest ${listasttest_SRCS} )
-kde4_add_unit_test(cmake-listasttest TESTNAME cmake-cmake-listasttest  ${listasttest_SRCS} )
+kde4_add_unit_test(cmake-listasttest  ${listasttest_SRCS} )
 target_link_libraries( cmake-listasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -418,7 +418,7 @@ target_link_libraries( cmake-listasttest
 
 set ( loadcacheasttest_SRCS cmake_loadcacheast_test.cpp )
 kde4_automoc( cmake-loadcacheasttest ${loadcacheasttest_SRCS} )
-kde4_add_unit_test(cmake-loadcacheasttest TESTNAME cmake-cmake-loadcacheasttest  ${loadcacheasttest_SRCS} )
+kde4_add_unit_test(cmake-loadcacheasttest  ${loadcacheasttest_SRCS} )
 target_link_libraries( cmake-loadcacheasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -426,7 +426,7 @@ target_link_libraries( cmake-loadcacheasttest
 
 set ( loadcommandasttest_SRCS cmake_loadcommandast_test.cpp )
 kde4_automoc( cmake-loadcommandasttest ${loadcommandasttest_SRCS} )
-kde4_add_unit_test(cmake-loadcommandasttest TESTNAME cmake-cmake-loadcommandasttest  ${loadcommandasttest_SRCS} )
+kde4_add_unit_test(cmake-loadcommandasttest  ${loadcommandasttest_SRCS} )
 target_link_libraries( cmake-loadcommandasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -434,7 +434,7 @@ target_link_libraries( cmake-loadcommandasttest
 
 set ( macroasttest_SRCS cmake_macroast_test.cpp )
 kde4_automoc( cmake-macroasttest ${macroasttest_SRCS} )
-kde4_add_unit_test(cmake-macroasttest TESTNAME cmake-cmake-macroasttest  ${macroasttest_SRCS} )
+kde4_add_unit_test(cmake-macroasttest  ${macroasttest_SRCS} )
 target_link_libraries( cmake-macroasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -442,7 +442,7 @@ target_link_libraries( cmake-macroasttest
 
 set ( makedirectoryasttest_SRCS cmake_makedirectoryast_test.cpp )
 kde4_automoc( cmake-makedirectoryasttest ${makedirectoryasttest_SRCS} )
-kde4_add_unit_test(cmake-makedirectoryasttest TESTNAME cmake-cmake-makedirectoryasttest  ${makedirectoryasttest_SRCS} )
+kde4_add_unit_test(cmake-makedirectoryasttest  ${makedirectoryasttest_SRCS} )
 target_link_libraries( cmake-makedirectoryasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -450,7 +450,7 @@ target_link_libraries( cmake-makedirectoryasttest
 
 set ( markasadvancedasttest_SRCS cmake_markasadvancedast_test.cpp )
 kde4_automoc( cmake-markasadvancedasttest ${markasadvancedasttest_SRCS} )
-kde4_add_unit_test(cmake-markasadvancedasttest TESTNAME cmake-cmake-markasadvancedasttest  ${markasadvancedasttest_SRCS} )
+kde4_add_unit_test(cmake-markasadvancedasttest  ${markasadvancedasttest_SRCS} )
 target_link_libraries( cmake-markasadvancedasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -458,7 +458,7 @@ target_link_libraries( cmake-markasadvancedasttest
 
 set ( mathasttest_SRCS cmake_mathast_test.cpp )
 kde4_automoc( cmake-mathasttest ${mathasttest_SRCS} )
-kde4_add_unit_test(cmake-mathasttest TESTNAME cmake-cmake-mathasttest  ${mathasttest_SRCS} )
+kde4_add_unit_test(cmake-mathasttest  ${mathasttest_SRCS} )
 target_link_libraries( cmake-mathasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -466,7 +466,7 @@ target_link_libraries( cmake-mathasttest
 
 set ( messageasttest_SRCS cmake_messageast_test.cpp )
 kde4_automoc( cmake-messageasttest ${messageasttest_SRCS} )
-kde4_add_unit_test(cmake-messageasttest TESTNAME cmake-cmake-messageasttest  ${messageasttest_SRCS} )
+kde4_add_unit_test(cmake-messageasttest  ${messageasttest_SRCS} )
 target_link_libraries( cmake-messageasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -474,7 +474,7 @@ target_link_libraries( cmake-messageasttest
 
 set ( optionasttest_SRCS cmake_optionast_test.cpp )
 kde4_automoc( cmake-optionasttest ${optionasttest_SRCS} )
-kde4_add_unit_test(cmake-optionasttest TESTNAME cmake-cmake-optionasttest  ${optionasttest_SRCS} )
+kde4_add_unit_test(cmake-optionasttest  ${optionasttest_SRCS} )
 target_link_libraries( cmake-optionasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -482,7 +482,7 @@ target_link_libraries( cmake-optionasttest
 
 set ( outputrequiredfilesasttest_SRCS cmake_outputrequiredfilesast_test.cpp )
 kde4_automoc( cmake-outputrequiredfilesasttest ${outputrequiredfilesasttest_SRCS} )
-kde4_add_unit_test(cmake-outputrequiredfilesasttest TESTNAME cmake-cmake-outputrequiredfilesasttest  ${outputrequiredfilesasttest_SRCS} )
+kde4_add_unit_test(cmake-outputrequiredfilesasttest  ${outputrequiredfilesasttest_SRCS} )
 target_link_libraries( cmake-outputrequiredfilesasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -490,7 +490,7 @@ target_link_libraries( cmake-outputrequiredfilesasttest
 
 set ( projectasttest_SRCS cmake_projectast_test.cpp )
 kde4_automoc( cmake-projectasttest ${projectasttest_SRCS} )
-kde4_add_unit_test(cmake-projectasttest TESTNAME cmake-cmake-projectasttest  ${projectasttest_SRCS} )
+kde4_add_unit_test(cmake-projectasttest  ${projectasttest_SRCS} )
 target_link_libraries( cmake-projectasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -498,7 +498,7 @@ target_link_libraries( cmake-projectasttest
 
 set ( qtwrapcppasttest_SRCS cmake_qtwrapcppast_test.cpp )
 kde4_automoc( cmake-qtwrapcppasttest ${qtwrapcppasttest_SRCS} )
-kde4_add_unit_test(cmake-qtwrapcppasttest TESTNAME cmake-cmake-qtwrapcppasttest  ${qtwrapcppasttest_SRCS} )
+kde4_add_unit_test(cmake-qtwrapcppasttest  ${qtwrapcppasttest_SRCS} )
 target_link_libraries( cmake-qtwrapcppasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -506,7 +506,7 @@ target_link_libraries( cmake-qtwrapcppasttest
 
 set ( qtwrapuiasttest_SRCS cmake_qtwrapuiast_test.cpp )
 kde4_automoc( cmake-qtwrapuiasttest ${qtwrapuiasttest_SRCS} )
-kde4_add_unit_test(cmake-qtwrapuiasttest TESTNAME cmake-cmake-qtwrapuiasttest  ${qtwrapuiasttest_SRCS} )
+kde4_add_unit_test(cmake-qtwrapuiasttest  ${qtwrapuiasttest_SRCS} )
 target_link_libraries( cmake-qtwrapuiasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -514,7 +514,7 @@ target_link_libraries( cmake-qtwrapuiasttest
 
 set ( removeasttest_SRCS cmake_removeast_test.cpp )
 kde4_automoc( cmake-removeasttest ${removeasttest_SRCS} )
-kde4_add_unit_test(cmake-removeasttest TESTNAME cmake-cmake-removeasttest  ${removeasttest_SRCS} )
+kde4_add_unit_test(cmake-removeasttest  ${removeasttest_SRCS} )
 target_link_libraries( cmake-removeasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -522,7 +522,7 @@ target_link_libraries( cmake-removeasttest
 
 set ( removedefinitionsasttest_SRCS cmake_removedefinitionsast_test.cpp )
 kde4_automoc( cmake-removedefinitionsasttest ${removedefinitionsasttest_SRCS} )
-kde4_add_unit_test(cmake-removedefinitionsasttest TESTNAME cmake-cmake-removedefinitionsasttest  ${removedefinitionsasttest_SRCS} )
+kde4_add_unit_test(cmake-removedefinitionsasttest  ${removedefinitionsasttest_SRCS} )
 target_link_libraries( cmake-removedefinitionsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -530,7 +530,7 @@ target_link_libraries( cmake-removedefinitionsasttest
 
 set ( separateargumentsasttest_SRCS cmake_separateargumentsast_test.cpp )
 kde4_automoc( cmake-separateargumentsasttest ${separateargumentsasttest_SRCS} )
-kde4_add_unit_test(cmake-separateargumentsasttest TESTNAME cmake-cmake-separateargumentsasttest  ${separateargumentsasttest_SRCS} )
+kde4_add_unit_test(cmake-separateargumentsasttest  ${separateargumentsasttest_SRCS} )
 target_link_libraries( cmake-separateargumentsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -538,7 +538,7 @@ target_link_libraries( cmake-separateargumentsasttest
 
 set ( setasttest_SRCS cmake_setast_test.cpp )
 kde4_automoc( cmake-setasttest ${setasttest_SRCS} )
-kde4_add_unit_test(cmake-setasttest TESTNAME cmake-cmake-setasttest  ${setasttest_SRCS} )
+kde4_add_unit_test(cmake-setasttest  ${setasttest_SRCS} )
 target_link_libraries( cmake-setasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -546,7 +546,7 @@ target_link_libraries( cmake-setasttest
 
 set ( setdirectorypropsasttest_SRCS cmake_setdirectorypropsast_test.cpp )
 kde4_automoc( cmake-setdirectorypropsasttest ${setdirectorypropsasttest_SRCS} )
-kde4_add_unit_test(cmake-setdirectorypropsasttest TESTNAME cmake-cmake-setdirectorypropsasttest  ${setdirectorypropsasttest_SRCS} )
+kde4_add_unit_test(cmake-setdirectorypropsasttest  ${setdirectorypropsasttest_SRCS} )
 target_link_libraries( cmake-setdirectorypropsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -554,7 +554,7 @@ target_link_libraries( cmake-setdirectorypropsasttest
 
 set ( setsourcefilespropsasttest_SRCS cmake_setsourcefilespropsast_test.cpp )
 kde4_automoc( cmake-setsourcefilespropsasttest ${setsourcefilespropsasttest_SRCS} )
-kde4_add_unit_test(cmake-setsourcefilespropsasttest TESTNAME cmake-cmake-setsourcefilespropsasttest  ${setsourcefilespropsasttest_SRCS} )
+kde4_add_unit_test(cmake-setsourcefilespropsasttest  ${setsourcefilespropsasttest_SRCS} )
 target_link_libraries( cmake-setsourcefilespropsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -562,7 +562,7 @@ target_link_libraries( cmake-setsourcefilespropsasttest
 
 set ( settargetpropsasttest_SRCS cmake_settargetpropsast_test.cpp )
 kde4_automoc( cmake-settargetpropsasttest ${settargetpropsasttest_SRCS} )
-kde4_add_unit_test(cmake-settargetpropsasttest TESTNAME cmake-cmake-settargetpropsasttest  ${settargetpropsasttest_SRCS} )
+kde4_add_unit_test(cmake-settargetpropsasttest  ${settargetpropsasttest_SRCS} )
 target_link_libraries( cmake-settargetpropsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -570,7 +570,7 @@ target_link_libraries( cmake-settargetpropsasttest
 
 set ( settestspropsasttest_SRCS cmake_settestspropsast_test.cpp )
 kde4_automoc( cmake-settestspropsasttest ${settestspropsasttest_SRCS} )
-kde4_add_unit_test(cmake-settestspropsasttest TESTNAME cmake-cmake-settestspropsasttest  ${settestspropsasttest_SRCS} )
+kde4_add_unit_test(cmake-settestspropsasttest  ${settestspropsasttest_SRCS} )
 target_link_libraries( cmake-settestspropsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -578,7 +578,7 @@ target_link_libraries( cmake-settestspropsasttest
 
 set ( sitenameasttest_SRCS cmake_sitenameast_test.cpp )
 kde4_automoc( cmake-sitenameasttest ${sitenameasttest_SRCS} )
-kde4_add_unit_test(cmake-sitenameasttest TESTNAME cmake-cmake-sitenameasttest  ${sitenameasttest_SRCS} )
+kde4_add_unit_test(cmake-sitenameasttest  ${sitenameasttest_SRCS} )
 target_link_libraries( cmake-sitenameasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -586,7 +586,7 @@ target_link_libraries( cmake-sitenameasttest
 
 set ( sourcegroupasttest_SRCS cmake_sourcegroupast_test.cpp )
 kde4_automoc( cmake-sourcegroupasttest ${sourcegroupasttest_SRCS} )
-kde4_add_unit_test(cmake-sourcegroupasttest TESTNAME cmake-cmake-sourcegroupasttest  ${sourcegroupasttest_SRCS} )
+kde4_add_unit_test(cmake-sourcegroupasttest  ${sourcegroupasttest_SRCS} )
 target_link_libraries( cmake-sourcegroupasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -594,7 +594,7 @@ target_link_libraries( cmake-sourcegroupasttest
 
 set ( stringasttest_SRCS cmake_stringast_test.cpp )
 kde4_automoc( cmake-stringasttest ${stringasttest_SRCS} )
-kde4_add_unit_test(cmake-stringasttest TESTNAME cmake-cmake-stringasttest  ${stringasttest_SRCS} )
+kde4_add_unit_test(cmake-stringasttest  ${stringasttest_SRCS} )
 target_link_libraries( cmake-stringasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -602,7 +602,7 @@ target_link_libraries( cmake-stringasttest
 
 set ( subdirdependsasttest_SRCS cmake_subdirdependsast_test.cpp )
 kde4_automoc( cmake-subdirdependsasttest ${subdirdependsasttest_SRCS} )
-kde4_add_unit_test(cmake-subdirdependsasttest TESTNAME cmake-cmake-subdirdependsasttest  ${subdirdependsasttest_SRCS} )
+kde4_add_unit_test(cmake-subdirdependsasttest  ${subdirdependsasttest_SRCS} )
 target_link_libraries( cmake-subdirdependsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -610,7 +610,7 @@ target_link_libraries( cmake-subdirdependsasttest
 
 set ( subdirsasttest_SRCS cmake_subdirsast_test.cpp )
 kde4_automoc( cmake-subdirsasttest ${subdirsasttest_SRCS} )
-kde4_add_unit_test(cmake-subdirsasttest TESTNAME cmake-cmake-subdirsasttest  ${subdirsasttest_SRCS} )
+kde4_add_unit_test(cmake-subdirsasttest  ${subdirsasttest_SRCS} )
 target_link_libraries( cmake-subdirsasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -618,7 +618,7 @@ target_link_libraries( cmake-subdirsasttest
 
 set ( targetlinklibrariesasttest_SRCS cmake_targetlinklibrariesast_test.cpp )
 kde4_automoc( cmake-targetlinklibrariesasttest ${targetlinklibrariesasttest_SRCS} )
-kde4_add_unit_test(cmake-targetlinklibrariesasttest TESTNAME cmake-cmake-targetlinklibrariesasttest  ${targetlinklibrariesasttest_SRCS} )
+kde4_add_unit_test(cmake-targetlinklibrariesasttest  ${targetlinklibrariesasttest_SRCS} )
 target_link_libraries( cmake-targetlinklibrariesasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -626,7 +626,7 @@ target_link_libraries( cmake-targetlinklibrariesasttest
 
 set ( trycompileasttest_SRCS cmake_trycompileast_test.cpp )
 kde4_automoc( cmake-trycompileasttest ${trycompileasttest_SRCS} )
-kde4_add_unit_test(cmake-trycompileasttest TESTNAME cmake-cmake-trycompileasttest  ${trycompileasttest_SRCS} )
+kde4_add_unit_test(cmake-trycompileasttest  ${trycompileasttest_SRCS} )
 target_link_libraries( cmake-trycompileasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -634,7 +634,7 @@ target_link_libraries( cmake-trycompileasttest
 
 set ( tryrunasttest_SRCS cmake_tryrunast_test.cpp )
 kde4_automoc( cmake-tryrunasttest ${tryrunasttest_SRCS} )
-kde4_add_unit_test(cmake-tryrunasttest TESTNAME cmake-cmake-tryrunasttest  ${tryrunasttest_SRCS} )
+kde4_add_unit_test(cmake-tryrunasttest  ${tryrunasttest_SRCS} )
 target_link_libraries( cmake-tryrunasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -642,7 +642,7 @@ target_link_libraries( cmake-tryrunasttest
 
 set ( usemangledmesaasttest_SRCS cmake_usemangledmesaast_test.cpp )
 kde4_automoc( cmake-usemangledmesaasttest ${usemangledmesaasttest_SRCS} )
-kde4_add_unit_test(cmake-usemangledmesaasttest TESTNAME cmake-cmake-usemangledmesaasttest  ${usemangledmesaasttest_SRCS} )
+kde4_add_unit_test(cmake-usemangledmesaasttest  ${usemangledmesaasttest_SRCS} )
 target_link_libraries( cmake-usemangledmesaasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -650,7 +650,7 @@ target_link_libraries( cmake-usemangledmesaasttest
 
 set ( utilitysourceasttest_SRCS cmake_utilitysourceast_test.cpp )
 kde4_automoc( cmake-utilitysourceasttest ${utilitysourceasttest_SRCS} )
-kde4_add_unit_test(cmake-utilitysourceasttest TESTNAME cmake-cmake-utilitysourceasttest  ${utilitysourceasttest_SRCS} )
+kde4_add_unit_test(cmake-utilitysourceasttest  ${utilitysourceasttest_SRCS} )
 target_link_libraries( cmake-utilitysourceasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -658,7 +658,7 @@ target_link_libraries( cmake-utilitysourceasttest
 
 set ( variablerequiresasttest_SRCS cmake_variablerequiresast_test.cpp )
 kde4_automoc( cmake-variablerequiresasttest ${variablerequiresasttest_SRCS} )
-kde4_add_unit_test(cmake-variablerequiresasttest TESTNAME cmake-cmake-variablerequiresasttest  ${variablerequiresasttest_SRCS} )
+kde4_add_unit_test(cmake-variablerequiresasttest  ${variablerequiresasttest_SRCS} )
 target_link_libraries( cmake-variablerequiresasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -666,7 +666,7 @@ target_link_libraries( cmake-variablerequiresasttest
 
 set ( vtkmakeinstantiatorasttest_SRCS cmake_vtkmakeinstantiatorast_test.cpp )
 kde4_automoc( cmake-vtkmakeinstantiatorasttest ${vtkmakeinstantiatorasttest_SRCS} )
-kde4_add_unit_test(cmake-vtkmakeinstantiatorasttest TESTNAME cmake-cmake-vtkmakeinstantiatorasttest  ${vtkmakeinstantiatorasttest_SRCS} )
+kde4_add_unit_test(cmake-vtkmakeinstantiatorasttest  ${vtkmakeinstantiatorasttest_SRCS} )
 target_link_libraries( cmake-vtkmakeinstantiatorasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -674,7 +674,7 @@ target_link_libraries( cmake-vtkmakeinstantiatorasttest
 
 set ( vtkwrapjavaasttest_SRCS cmake_vtkwrapjavaast_test.cpp )
 kde4_automoc( cmake-vtkwrapjavaasttest ${vtkwrapjavaasttest_SRCS} )
-kde4_add_unit_test(cmake-vtkwrapjavaasttest TESTNAME cmake-cmake-vtkwrapjavaasttest  ${vtkwrapjavaasttest_SRCS} )
+kde4_add_unit_test(cmake-vtkwrapjavaasttest  ${vtkwrapjavaasttest_SRCS} )
 target_link_libraries( cmake-vtkwrapjavaasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -682,7 +682,7 @@ target_link_libraries( cmake-vtkwrapjavaasttest
 
 set ( vtkwrappythonasttest_SRCS cmake_vtkwrappythonast_test.cpp )
 kde4_automoc( cmake-vtkwrappythonasttest ${vtkwrappythonasttest_SRCS} )
-kde4_add_unit_test(cmake-vtkwrappythonasttest TESTNAME cmake-cmake-vtkwrappythonasttest  ${vtkwrappythonasttest_SRCS} )
+kde4_add_unit_test(cmake-vtkwrappythonasttest  ${vtkwrappythonasttest_SRCS} )
 target_link_libraries( cmake-vtkwrappythonasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -690,7 +690,7 @@ target_link_libraries( cmake-vtkwrappythonasttest
 
 set ( vtkwraptclasttest_SRCS cmake_vtkwraptclast_test.cpp )
 kde4_automoc( cmake-vtkwraptclasttest ${vtkwraptclasttest_SRCS} )
-kde4_add_unit_test(cmake-vtkwraptclasttest TESTNAME cmake-cmake-vtkwraptclasttest  ${vtkwraptclasttest_SRCS} )
+kde4_add_unit_test(cmake-vtkwraptclasttest  ${vtkwraptclasttest_SRCS} )
 target_link_libraries( cmake-vtkwraptclasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -698,7 +698,7 @@ target_link_libraries( cmake-vtkwraptclasttest
 
 set ( whileasttest_SRCS cmake_whileast_test.cpp )
 kde4_automoc( cmake-whileasttest ${whileasttest_SRCS} )
-kde4_add_unit_test(cmake-whileasttest TESTNAME cmake-cmake-whileasttest  ${whileasttest_SRCS} )
+kde4_add_unit_test(cmake-whileasttest  ${whileasttest_SRCS} )
 target_link_libraries( cmake-whileasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
@@ -706,7 +706,7 @@ target_link_libraries( cmake-whileasttest
 
 set ( writefileasttest_SRCS cmake_writefileast_test.cpp )
 kde4_automoc( cmake-writefileasttest ${writefileasttest_SRCS} )
-kde4_add_unit_test(cmake-writefileasttest TESTNAME cmake-cmake-writefileasttest  ${writefileasttest_SRCS} )
+kde4_add_unit_test(cmake-writefileasttest  ${writefileasttest_SRCS} )
 target_link_libraries( cmake-writefileasttest
   ${QT_QTTEST_LIBRARY}
   ${KDE_KDECORE_LIBS}
