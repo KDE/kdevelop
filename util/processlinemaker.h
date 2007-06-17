@@ -60,6 +60,7 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT(d, void slotReadyReadStdout( ) )
     Q_PRIVATE_SLOT(d, void slotReadyReadStderr( ) )
+    Q_PRIVATE_SLOT(d, void slotProcessFinished( ) )
     class ProcessLineMakerPrivate* const d;
     friend class ProcessLineMakerPrivate;
 };
