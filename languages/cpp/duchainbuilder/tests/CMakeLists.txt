@@ -13,7 +13,7 @@ include_directories(
 set(duchaintest_SRCS test_duchain.cpp)
 kde4_automoc(${duchaintest_SRCS})
 
-kde4_add_test(duchaintest ${duchaintest_SRCS})
+kde4_add_unit_test(duchaintest ${duchaintest_SRCS})
 target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY}
     kdevcppparser kdevcpprpp kdevcppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY})
-add_test(kdevelop-duchaintest ${EXECUTABLE_OUTPUT_PATH}/duchaintest)
+

@@ -14,7 +14,7 @@ set(runner_SRCS
     runner.cpp
 )
 
-kde4_add_executable(runner ${runner_SRCS})
+kde4_add_test_executable(runner ${runner_SRCS})
 target_link_libraries(runner ${KDE4_KDECORE_LIBS} kdevautomakeparser ${KDE4_KIO_LIBS})
 
 
@@ -32,7 +32,7 @@ set(viewer_UI
 )
 
 kde4_add_ui3_files(viewer_SRCS ${viewer_UI})
-kde4_add_executable(viewer ${viewer_SRCS})
+kde4_add_test_executable(viewer ${viewer_SRCS})
 target_link_libraries(viewer ${KDE4_KDECORE_LIBS} kdevautomakeparser ${KDE4_KIO_LIBS})
 
 
@@ -43,10 +43,8 @@ set(testinterface_SRCS
 )
 
 kde4_automoc(${testinterface_SRCS})
-kde4_add_executable(testinterface ${testinterface_SRCS})
+kde4_add_unit_test(testinterface TESTNAME kdevelop-testinterface ${testinterface_SRCS})
 target_link_libraries(testinterface ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevautomakeparser ${KDE4_KIO_LIBS})
-add_test(kdevelop-automakeparsertest ${EXECUTABLE_OUTPUT_PATH}/testinterface)
-
 
 endif(false)
 
