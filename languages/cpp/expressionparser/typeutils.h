@@ -28,7 +28,7 @@ class CppFunctionType;
 namespace KDevelop {
   class DUContext;
   class Declaration;
-};
+}
 
 namespace TypeUtils {
   using namespace KDevelop;
@@ -44,7 +44,7 @@ namespace TypeUtils {
   inline AbstractType* realType(AbstractType::Ptr type, bool* constant = 0) {
     return realType(type.data(), constant );
   }
-  
+
   /**
    * Returns the completely dereferenced type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
    *
@@ -68,7 +68,7 @@ namespace TypeUtils {
   inline bool isPointerType(AbstractType::Ptr type) {
     return isPointerType(type.data());
   }
-  
+
 
   /**
    * Returns whether the type is a reference-type.
@@ -76,7 +76,7 @@ namespace TypeUtils {
    *  @param type The type
    * */
   bool isReferenceType(AbstractType* type);
-  
+
   inline bool isReferenceType(AbstractType::Ptr type) {
     return isReferenceType(type.data());
   }
@@ -99,9 +99,9 @@ namespace TypeUtils {
   /**
    * null-type means that the type comes from a 0-literal
    * */
-  
+
   bool isNullType( AbstractType* t );
-  
+
   inline bool isNullType( AbstractType::Ptr t ) {
     return isNullType(t.data());
   }
@@ -111,15 +111,15 @@ namespace TypeUtils {
 
   ///Whether the integral type is an integer-type
   bool isIntegerType( CppIntegralType* type );
-  
+
   ///Whether the integral type is an floating-point-type
   bool isFloatingPointType( CppIntegralType* type );
 
   bool isVoidType( AbstractType* type );
-  
+
   ///Returns whether base is a public base-class of c
   bool isPublicBaseClass( const CppClassType* c, CppClassType* base );
-      
+
   ///Conversion-rank of "unsigned int"
   extern const int unsignedIntConversionRank;
 
