@@ -90,9 +90,9 @@ public:
 UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
 {
-    KSettings::Dispatcher::self()->registerComponent( KGlobal::mainComponent(),
+    KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
                                     defaultMainWindow(), SLOT( loadSettings() ) );
-    KSettings::Dispatcher::self()->registerComponent( KComponentData("kdevplatform"),
+    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
                                     defaultMainWindow(), SLOT( loadSettings() ) );
     d->core = core;
 }
@@ -106,9 +106,9 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
     Q_UNUSED( switchMode );
     MainWindow *main = new MainWindow(this);
-    KSettings::Dispatcher::self()->registerComponent( KGlobal::mainComponent(),
+    KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
                                     main, SLOT( loadSettings() ) );
-    KSettings::Dispatcher::self()->registerComponent( KComponentData("kdevplatform"),
+    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
                                     main, SLOT( loadSettings() ) );
     showArea(area(areaName), main);
     main->initialize();
