@@ -25,23 +25,18 @@ UpdateOptionsDialog::~UpdateOptionsDialog()
 {
 }
 
-QString UpdateOptionsDialog::options() const
+KDevelop::VcsRevision UpdateOptionsDialog::revision()
 {
-    QString options;
-
-    if (revertCheck->isChecked()) {
-        options += " -C ";
-    }
+    KDevelop::VcsRevision rev;
 
     if (revisionRadio->isChecked()) {
-        options += " -r"+revisionEdit->text();
+        rev.setRevisionValue( revisionEdit->text(), KDevelop::VcsRevision::FileNumber );
     } else if (dateRadio->isChecked()) {
-        options += " -D"+dateEdit->text();
+        rev.setRevisionValue( dateEdit->text(), KDevelop::VcsRevision::Date );
     }
 
-    return options;
+    return rev;
 }
 
 #include "updateoptionsdialog.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
-

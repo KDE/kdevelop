@@ -15,6 +15,7 @@
 
 #include <KUrl>
 #include <KJob>
+#include "vcsrevision.h"
 
 class CvsJob;
 
@@ -58,21 +59,24 @@ public:
                 const QString & server, const QString& repositoryName,
                 const QString& vendortag, const QString& releasetag,
                 const QString& message);
-    CvsJob* log(const KUrl& file);
-    CvsJob* diff(const KUrl& url, const QString& diffOptions="",
-              const QString& revA="", const QString& revB="");
-    CvsJob* annotate(const KUrl& url, const QString& revision="");
+    CvsJob* log(const KUrl& file, const KDevelop::VcsRevision& rev);
+    CvsJob* diff(const KUrl& url, 
+                 const KDevelop::VcsRevision& revA, 
+                 const KDevelop::VcsRevision& revB,
+                 const QString& diffOptions="");
+    CvsJob* annotate(const KUrl& url, const KDevelop::VcsRevision& rev);
     CvsJob* edit(const QString& repo, const KUrl::List& files);
     CvsJob* unedit(const QString& repo, const KUrl::List& files);
     CvsJob* editors(const QString& repo, const KUrl::List& files);
     CvsJob* commit(const QString& repo, const KUrl::List& files,
                 const QString& message);
     CvsJob* add(const QString& repo, const KUrl::List& files,
-             bool binary = false);
+                bool recursiv = true, bool binary = false);
     CvsJob* remove(const QString& repo, const KUrl::List& files);
     CvsJob* update(const QString& repo, const KUrl::List& files,
+                const KDevelop::VcsRevision& rev, 
                 const QString& updateOptions,
-                bool pruneDirs = true, bool createDirs = true);
+                bool resursive = true, bool pruneDirs = true, bool createDirs = true);
 
     CvsJob* checkout(const KUrl& targetDir,
                 const QString & server, const QString& module,
@@ -81,13 +85,15 @@ public:
                 bool recursive = true,
                 bool pruneDirs = true);
 
-    CvsJob* status(const KUrl& directory, bool recursive=false, bool taginfo=false);
+    CvsJob* status(const QString & repo, const KUrl::List & files,
+                bool recursive=false, bool taginfo=false);
 
 private slots:
     void slotResult(KJob* job);
 
 private:
     bool addFileList(CvsJob* job, const QString& repository, const KUrl::List& urls);
+    QString convertVcsRevisionToString(const KDevelop::VcsRevision& rev);
 
     enum RequestedOperation {
         NormalOperation,

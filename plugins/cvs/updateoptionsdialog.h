@@ -14,6 +14,8 @@
 
 #include <QDialog>
 
+#include "vcsrevision.h"
+
 #include "ui_updateoptionsdialog.h"
 
 /**
@@ -30,9 +32,9 @@ public:
     virtual ~UpdateOptionsDialog();
 
     /**
-     * @return The options set by the use
+     * @return The revision to update the file to
      */
-    QString options() const;
+    KDevelop::VcsRevision revision();
 };
 
 #endif

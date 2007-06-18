@@ -1,8 +1,10 @@
 add_subdirectory(tests)
 
 include_directories( ${KDE4_INCLUDES}
-	${CMAKE_SOURCE_DIR}/interfaces
-	${CMAKE_SOURCE_DIR}/vcs
+    ${CMAKE_SOURCE_DIR}/util
+    ${CMAKE_SOURCE_DIR}/interfaces
+    ${CMAKE_SOURCE_DIR}/vcs
+    ${CMAKE_SOURCE_DIR}/vcs/interfaces
 )
 
 
@@ -21,7 +23,7 @@ set(kdevcvs_PART_SRCS
 	updateoptionsdialog.cpp
 	importdialog.cpp
 	checkoutdialog.cpp
-	cvsfileinfoprovider.cpp
+#	cvsfileinfoprovider.cpp
 )
 
 set(kdevcvs_PART_UI
@@ -42,6 +44,7 @@ kde4_add_plugin(kdevcvs ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
 	${KDE4_KDECORE_LIBS}
+    kdevplatformutil
 	kdevplatforminterfaces
 	kdevplatformvcs
 )

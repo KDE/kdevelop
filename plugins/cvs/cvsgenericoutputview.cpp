@@ -31,7 +31,7 @@ CvsGenericOutputView::~CvsGenericOutputView()
 
 void CvsGenericOutputView::appendText(const QString& text)
 {
-    kDebug()<<  k_funcinfo <<endl;
+//     kDebug()<<  k_funcinfo <<endl;
     textArea->append(text);
 }
 

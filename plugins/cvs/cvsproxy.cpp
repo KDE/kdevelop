@@ -17,6 +17,7 @@
 #include <KUrl>
 #include <KMessageBox>
 #include <kshell.h>
+
 #include "cvsjob.h"
 
 CvsProxy::CvsProxy(QObject* parent)
@@ -57,7 +58,7 @@ bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum Requested
     // setup the working directory for the new job
     job->setDirectory(repository);
 
-    // each job that was connected by this proxy class will
+    // each job that was created by this proxy will
     // automatically be delete after it has finished.
     // Therefor the slotResult() calls deleteLater() on the job
     connect(job, SIGNAL( result(KJob*) ),
@@ -68,18 +69,49 @@ bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum Requested
 
 bool CvsProxy::addFileList(CvsJob* job, const QString& repository, const KUrl::List& urls)
 {
+    QStringList args;
+
     foreach(KUrl url, urls) {
-        //@todo this is ok for now, but what if some of the urls are not
-        //      to the given repository
+        ///@todo this is ok for now, but what if some of the urls are not
+        ///      to the given repository
         QString file = KUrl::relativeUrl(repository + QDir::separator(), url);
 
-        *job << KShell::quoteArg( file );
+        args << KShell::quoteArg( file );
     }
+
+    *job << args;
 
     return true;
 }
 
-CvsJob* CvsProxy::log(const KUrl& url)
+QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
+{
+    QString str;
+
+    switch (rev.revisionType())
+    {
+        case KDevelop::VcsRevision::Special:
+            break;
+
+        case KDevelop::VcsRevision::FileNumber:
+            if (!rev.revisionValue().isEmpty())
+                str = "-r"+rev.revisionValue();
+            break;
+
+        case KDevelop::VcsRevision::Date:
+            if (!rev.revisionValue().isEmpty())
+                str = "-D"+rev.revisionValue();
+            break;
+
+        case KDevelop::VcsRevision::GlobalNumber: // !! NOT SUPPORTED BY CVS !!
+        default:
+            break;
+    }
+
+    return str;
+}
+
+CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
     kDebug() << k_funcinfo << endl;
 
@@ -91,6 +123,13 @@ CvsJob* CvsProxy::log(const KUrl& url)
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "log";
+
+        QString convRev = convertVcsRevisionToString(rev);
+        if (!convRev.isEmpty()) {
+            convRev.replace("-D", "-d");
+            *job << convRev;
+        }
+
         *job << KShell::quoteArg(info.fileName());
 
         return job;
@@ -99,8 +138,10 @@ CvsJob* CvsProxy::log(const KUrl& url)
     return NULL;
 }
 
-CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions,
-                    const QString& revA, const QString& revB)
+CvsJob* CvsProxy::diff(const KUrl& url, 
+            const KDevelop::VcsRevision& revA, 
+            const KDevelop::VcsRevision& revB,
+            const QString& diffOptions)
 {
     kDebug() << k_funcinfo << endl;
 
@@ -112,10 +153,12 @@ CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions,
         *job << "diff";
         *job << diffOptions;
 
-        if (!revA.isEmpty())
-            *job << "-r"<<KShell::quoteArg(revA);
-        if (!revB.isEmpty())
-            *job << "-r"<<KShell::quoteArg(revB);
+        QString rA = convertVcsRevisionToString(revA);
+        if (!rA.isEmpty())
+            *job << rA;
+        QString rB = convertVcsRevisionToString(revB);
+        if (!rB.isEmpty())
+            *job << rB;
 
         *job << KShell::quoteArg(info.fileName());
 
@@ -125,7 +168,7 @@ CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions,
     return NULL;
 }
 
-CvsJob * CvsProxy::annotate(const KUrl & url, const QString & revision)
+CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
 {
     kDebug() << k_funcinfo << endl;
 
@@ -136,8 +179,9 @@ CvsJob * CvsProxy::annotate(const KUrl & url, const QString & revision)
         *job << "cvs";
         *job << "annotate";
 
+        QString revision = convertVcsRevisionToString(rev);
         if (!revision.isEmpty())
-            *job << "-r"<<KShell::quoteArg(revision);
+            *job << revision;
 
         *job << KShell::quoteArg(info.fileName());
 
@@ -219,7 +263,8 @@ CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QSt
     return NULL;
 }
 
-CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, bool binary)
+CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, 
+                      bool recursiv, bool binary)
 {
     kDebug() << k_funcinfo << endl;
 
@@ -259,8 +304,10 @@ CvsJob * CvsProxy::remove(const QString & repo, const KUrl::List & files)
     return NULL;
 }
 
-CvsJob* CvsProxy::update(const QString & repo, const KUrl::List & files,
-                      const QString & updateOptions, bool pruneDirs, bool createDirs)
+CvsJob * CvsProxy::update(const QString & repo, const KUrl::List & files, 
+                          const KDevelop::VcsRevision & rev, 
+                          const QString & updateOptions, 
+                          bool recursive, bool pruneDirs, bool createDirs)
 {
     kDebug() << k_funcinfo << endl;
 
@@ -269,12 +316,20 @@ CvsJob* CvsProxy::update(const QString & repo, const KUrl::List & files,
         *job << "cvs";
         *job << "update";
 
+        if (recursive)
+            *job << "-R";
+        else 
+            *job << "-L";
         if (pruneDirs)
             *job << "-P";
         if (createDirs)
             *job << "-d";
         if (!updateOptions.isEmpty())
             *job << updateOptions;
+
+        QString revision = convertVcsRevisionToString(rev);
+        if (!revision.isEmpty())
+            *job << revision;
 
         addFileList(job, repo, files);
 
@@ -353,19 +408,23 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
     return NULL;
 }
 
-CvsJob * CvsProxy::status(const KUrl & directory, bool recursive, bool taginfo)
+CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool recursive, bool taginfo)
 {
     kDebug() << k_funcinfo << endl;
 
     CvsJob* job = new CvsJob(this);
-    if ( prepareJob(job, directory.toLocalFile()) ) {
+    if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "status";
 
-        if (!recursive)
+        if (recursive)
+            *job << "-R";
+        else
             *job << "-l";
         if (taginfo)
             *job << "-v";
+
+        addFileList(job, repo, files);
 
         return job;
     }

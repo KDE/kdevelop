@@ -22,28 +22,37 @@
 #include <KDebug>
 #include <KLocale>
 
+#include "processlinemaker.h"
+
 
 struct CvsJob::Private
 {
-    Private() : isRunning(false), commMode(K3Process::AllOutput)
+    Private() : isRunning(false), commMode(KProcess::SeparateChannels) 
     {
-        childproc = new K3Process;
-        childproc->setUseShell(true, "/bin/sh");
+        childproc = new KProcess;
+        lineMaker = new ProcessLineMaker( childproc );
     }
-    ~Private() { delete childproc; }
 
-    K3Process*   childproc;
+    ~Private() {
+        if (lineMaker) delete lineMaker;
+        if (childproc) delete childproc; 
+    }
+
+    ProcessLineMaker* lineMaker;
+
+    KProcess*   childproc;
+    QStringList command;
     QString     server;
     QString     rsh;
     QString     directory;
     bool        isRunning;
-    QString     outputLines;
-    K3Process::Communication commMode;
+    QStringList outputLines;
+    KProcess::OutputChannelMode commMode;
 };
 
 
 CvsJob::CvsJob(QObject* parent)
-    : KJob(parent), d(new Private)
+    : VcsJob(parent), d(new Private)
 {
 }
 
@@ -55,7 +64,8 @@ CvsJob::~CvsJob()
 
 void CvsJob::clear()
 {
-    d->childproc->clearArguments();
+    d->childproc->clearEnvironment();
+    d->command.clear();
     d->outputLines.clear();
 }
 
@@ -86,77 +96,69 @@ bool CvsJob::isRunning() const
 
 CvsJob& CvsJob::operator<<(const QString& arg)
 {
-    *d->childproc << arg;
+    d->command.append( arg );
     return *this;
 }
 
 
 CvsJob& CvsJob::operator<<(const char* arg)
 {
-    *d->childproc << arg;
+    d->command.append( arg );
     return *this;
 }
 
 
 CvsJob& CvsJob::operator<<(const QStringList& args)
 {
-    *d->childproc << args;
+    d->command.append( args.join(" ") );
     return *this;
 }
 
 
 QString CvsJob::cvsCommand() const
 {
-    QString command;
-
-    const QList<QByteArray>& args(d->childproc->args());
-    foreach (QByteArray arg, args)
-    {
-        if (!command.isEmpty())
-            command += ' ';
-
-        command += QFile::decodeName(arg);
-    }
-
-    return command;
+    return d->command.join(" ");
 }
 
 
 QString CvsJob::output() const
 {
-    return d->outputLines;
+    return d->outputLines.join("\n");
 }
 
 
 void CvsJob::start()
 {
     if( !d->rsh.isEmpty() )
-        d->childproc->setEnvironment("CVS_RSH", d->rsh);
+        d->childproc->setEnv("CVS_RSH", d->rsh);
 
     if( !d->server.isEmpty() )
-        d->childproc->setEnvironment("CVS_SERVER", d->server);
+        d->childproc->setEnv("CVS_SERVER", d->server);
 
     if( !d->directory.isEmpty() ) {
         kDebug() << "Working directory: " << d->directory << endl;
         d->childproc->setWorkingDirectory(d->directory);
     }
 
-    connect(d->childproc, SIGNAL(processExited(K3Process*)),
-        SLOT(slotProcessExited(K3Process*)));
-    connect(d->childproc, SIGNAL(receivedStdout(K3Process*, char*, int)),
-        SLOT(slotReceivedStdout(K3Process*, char*, int)));
-    connect(d->childproc, SIGNAL(receivedStderr(K3Process*, char*, int)),
-        SLOT(slotReceivedStderr(K3Process*, char*, int)) );
+    connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
+        SLOT(slotProcessExited(int, QProcess::ExitStatus)));
+
+    connect(d->lineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
+        SLOT(slotReceivedStdout(const QStringList&)));
+    connect(d->lineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
+        SLOT(slotReceivedStderr(const QStringList&)) );
 
     kDebug() << "Execute cvs command: " << cvsCommand() << endl;
 
     d->outputLines.clear();
     d->isRunning = true;
-    d->childproc->start(K3Process::NotifyOnExit, d->commMode);
+    d->childproc->setOutputChannelMode( d->commMode );
+    d->childproc->setProgram( d->command );
+    d->childproc->start();
 }
 
 
-void CvsJob::setCommunicationMode(K3Process::Communication comm)
+void CvsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
 {
     d->commMode = comm;
 }
@@ -168,49 +170,57 @@ void CvsJob::cancel()
 }
 
 
-void CvsJob::slotProcessExited(K3Process* proc)
+void CvsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    Q_UNUSED(proc);
-
     kDebug()<<  k_funcinfo <<endl;
 
-    // disconnect all connections to childproc's signals
+    // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
 
     d->isRunning = false;
 
-    if (!d->childproc->normalExit()) {
-        setError( d->childproc->exitStatus() );
-        setErrorText( i18n("Process exited with status %1", d->childproc->exitStatus()) );
+    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
+        setError( exitCode );
+        setErrorText( i18n("Process exited with status %1", exitCode) );
     }
-    emitResult();
+    emitResult(); //KJob
+    emit resultsReady(this); //VcsJob
 }
 
 
-void CvsJob::slotReceivedStdout(K3Process* proc, char* buffer, int buflen)
+void CvsJob::slotReceivedStdout(const QStringList& output)
 {
-    Q_UNUSED(proc);
-
-    QString output = QString::fromLocal8Bit(buffer, buflen);
-
     // accumulate output
     d->outputLines += output;
+
     kDebug()<<  k_funcinfo <<"received output: "<<endl;
-    kDebug()<<output<<endl;
+    kDebug()<<output.join("\n")<<endl;
 }
 
 
-void CvsJob::slotReceivedStderr(K3Process* proc, char* buffer, int buflen)
+void CvsJob::slotReceivedStderr(const QStringList& output)
 {
-    Q_UNUSED(proc);
-
-    QString output = QString::fromLocal8Bit(buffer, buflen);
-
     // accumulate output
     d->outputLines += output;
 
     kDebug()<<  k_funcinfo <<"received error: "<<endl;
-    kDebug()<<output<<endl;
+    kDebug()<<output.join("\n")<<endl;
+}
+
+QVariant CvsJob::fetchResults()
+{
+    return output();
+}
+
+KDevelop::VcsJob::JobStatus CvsJob::status()
+{
+    if (d->isRunning)
+        return KDevelop::VcsJob::JobRunning;
+
+    if (d->childproc->exitCode() != 0)
+        return KDevelop::VcsJob::JobFailed;
+
+    return KDevelop::VcsJob::JobSucceeded;
 }
 
 #include "cvsjob.moc"

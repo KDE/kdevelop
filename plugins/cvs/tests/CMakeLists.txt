@@ -19,7 +19,8 @@ if (CVS)
 
 	include_directories( ${KDE4_INCLUDES}
 		${CMAKE_SOURCE_DIR}
-		${CMAKE_SOURCE_DIR}/interfaces
+        ${CMAKE_SOURCE_DIR}/util
+        ${CMAKE_SOURCE_DIR}/interfaces
 		${CMAKE_SOURCE_DIR}/vcs
 		${CMAKE_SOURCE_DIR}/plugins/cvs
 	)
@@ -30,6 +31,8 @@ if (CVS)
 	target_link_libraries(kdevcvs-test
 		${QT_QTTEST_LIBRARY}
 		${KDE4_KDECORE_LIBS}
+        kdevplatformutil
+        kdevplatformvcs
 	)
 
 endif (CVS)

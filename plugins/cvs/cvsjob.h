@@ -18,15 +18,16 @@
 
 
 #include <QStringList>
-#include <KJob>
-#include <K3Process>
+#include <KProcess>
+
+#include "vcsjob.h"
 
 /**
  * This class is capable of running our cvs commands
  * Connect to Kjob::result(KJob*) to be notified when the job finished.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CvsJob : public KJob
+class CvsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
@@ -44,7 +45,7 @@ public:
 
     /**
      * Call this mehod to start this job.
-     * @note Default communiaction mode is K3Process::AllOutput.
+     * @note Default communiaction mode is KProcess::AllOutput.
      * @see Use setCommunicationMode() to override the default communication mode.
      */
     virtual void start();
@@ -53,11 +54,11 @@ public:
      * In some cases it's needed to specify the communisation mode between the
      * process and the job object. This is for instance done for the "cvs status"
      * command. If stdout and stderr are processed as separate streams their signals
-     * do not always get emmited in correct order by K3Process. Which will lead to a
+     * do not always get emmited in correct order by KProcess. Which will lead to a
      * screwed up output.
-     * @note Default communiaction mode is K3Process::AllOutput.
+     * @note Default communiaction mode is KProcess::SeparateChannels.
      */
-    void setCommunicationMode(K3Process::Communication comm);
+    void setCommunicationMode(KProcess::OutputChannelMode comm);
 
     /**
      * @return The command that is executed when calling start()
@@ -69,14 +70,19 @@ public:
      */
     QString output() const;
 
+    // Begin:  KDevelop::VcsJob
+    virtual QVariant fetchResults();
+    virtual KDevelop::VcsJob::JobStatus status();
+    // End:  KDevelop::VcsJob
+
 public slots:
     void cancel();
     bool isRunning() const;
 
 private slots:
-    void slotProcessExited(K3Process* proc);
-    void slotReceivedStdout(K3Process* proc, char* buffer, int buflen);
-    void slotReceivedStderr(K3Process* proc, char* buffer, int buflen);
+    void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
+    void slotReceivedStdout(const QStringList&);
+    void slotReceivedStderr(const QStringList&);
 
 private:
     struct Private;
