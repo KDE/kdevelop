@@ -137,7 +137,7 @@ ProcessLineMaker::ProcessLineMaker( QProcess* proc )
 
     connect(proc, SIGNAL(readyReadStandardError()),
             this, SLOT(slotReadyReadStderr()) );
-    connect(proc, SIGNAL(finished(int, QPRocess::ExitStatus)),
+    connect(proc, SIGNAL(finished(int, QProcess::ExitStatus)),
             this, SLOT(slotProcessFinished()));
 }
 
