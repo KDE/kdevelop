@@ -182,7 +182,7 @@ public:
 
   ReferenceType ();
   ~ReferenceType();
-  const AbstractType::Ptr baseType () const;
+  AbstractType::Ptr baseType () const;
 
   void setBaseType(AbstractType::Ptr baseType);
 
@@ -211,7 +211,7 @@ public:
   FunctionType();
   ~FunctionType();
 
-  const AbstractType::Ptr returnType () const;
+  AbstractType::Ptr returnType () const;
 
   void setReturnType(AbstractType::Ptr returnType);
 

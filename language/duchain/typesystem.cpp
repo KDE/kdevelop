@@ -186,7 +186,7 @@ ReferenceType::~ReferenceType()
   delete d;
 }
 
-const AbstractType::Ptr ReferenceType::baseType () const
+AbstractType::Ptr ReferenceType::baseType () const
 {
   return d->m_baseType;
 }
@@ -245,7 +245,7 @@ void FunctionType::setReturnType(AbstractType::Ptr returnType)
   d->m_returnType = returnType;
 }
 
-const AbstractType::Ptr FunctionType::returnType () const
+AbstractType::Ptr FunctionType::returnType () const
 {
   return d->m_returnType;
 }
