@@ -120,14 +120,27 @@ class KDEVCPPDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionTy
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
 
+  enum FunctionKind {
+    NormalFunction,
+    Constructor,
+    Destructor,
+    ConversionFunction
+  };
+  
+  CppFunctionType(FunctionKind kind = NormalFunction);
+
   KDevelop::ClassFunctionDeclaration* declaration() const;
   void setDeclaration(KDevelop::ClassFunctionDeclaration* declaration);
 
   virtual QString toString() const;
 
+  FunctionKind kind() const;
+  
   //virtual uint hash() const;
 
   virtual QString mangled() const;
+  private:
+    FunctionKind m_kind;
 };
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType

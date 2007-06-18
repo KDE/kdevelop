@@ -167,6 +167,14 @@ QString CppCVType::cvString() const
   return QString("%1%2").arg(isConstant() ? " const " : "").arg(isVolatile() ? " volatile " : "");
 }
 
+CppFunctionType::CppFunctionType( FunctionKind kind ) : m_kind(kind) {
+  
+}
+
+CppFunctionType::FunctionKind CppFunctionType::kind() const {
+  return m_kind;
+}
+
 QString CppFunctionType::toString() const
 {
   return QString("%1 %2").arg(FunctionType::toString()).arg(cvString());
