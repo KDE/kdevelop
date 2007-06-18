@@ -41,6 +41,7 @@ namespace KDevelop
  */
 class KDEVPLATFORMVCS_EXPORT VcsJob : public KJob
 {
+    Q_OBJECT
 public:
     VcsJob( QObject* parent = 0);
     virtual ~VcsJob();
