@@ -21,6 +21,7 @@
 
 #include <typesystem.h>
 #include "visitor.h"
+#include "typeutils.h"
 #include "cppexpressionparserexport.h"
 
 
@@ -123,24 +124,6 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
    */
   AbstractType::Ptr realLastType(bool* constant = 0) const;
 
-  /**
-   * Returns the dereferenced type(example: ReferenceType(PointerType(int)) -> PointerType(int))
-   *
-   *  !!DU-Chain must be locked!
-  * @param constant will be set to true when one of the references made the result constant
-   * @return return-value will only be zero if type is zero
-   */
-  AbstractType::Ptr realType(AbstractType::Ptr type, bool* constant = 0) const;
-  
-  /**
-   * Returns the completely dereferenced type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
-   *
-   *  !!DU-Chain must be locked!
-  * @param constant will be set to true when one of the references made the result constant
-   * @return return-value will only be zero if type is zero
-   */
-  AbstractType::Ptr targetType(AbstractType::Ptr type, bool* constant = 0) const;
-  
   /**
    * Returns true when m_lastType either is a pointer, or a reference to a pointer
    *

@@ -225,7 +225,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result->instance);
   lock.unlock();
 
-  //Test normal pointer-access
+  //Test normal pointer-access + assign expression
   result = parser.evaluateType( "d->a = 5", testContext );
   lock.lock();
   QVERIFY(result);

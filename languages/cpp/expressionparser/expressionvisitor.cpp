@@ -62,7 +62,8 @@
 #define MUST_HAVE(X) if(!X) { problem( node, "no " # X ); return; }
 
 namespace Cpp {
-
+using namespace KDevelop;
+using namespace TypeUtils;
 
 template <class _Tp>
 void ExpressionVisitor::visitIndependentNodes(const ListNode<_Tp> *nodes)
@@ -89,16 +90,6 @@ void ExpressionVisitor::visitIndependentNodes(const ListNode<_Tp> *nodes)
 }
 
   
-template<class Type>
-bool isType( const AbstractType::Ptr& t ) {
-  return (bool)dynamic_cast<Type>( t.data() );
-}
-
-bool isConstant( AbstractType* t ) {
-  CppCVType* cv = dynamic_cast<CppCVType*>( t );
-  return cv && cv->isConstant();
-}
-
 ///Replaces a given value if the new value evaluates to be positive, and puts the old one back on destruction
 template<class Value>
 class PushPositiveValue {
@@ -205,13 +196,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     ///@todo isn't there a nicer solution for this? Maybe the internal context should be stored in CppStructureType,
     ///or CppStructureType should store better information so context's are not needed
-    QList<DUContext*> internalContext = declaration->context()->findContexts(DUContext::Class, idType->identifier());
-    internalContext += declaration->context()->findContexts(DUContext::Namespace, idType->identifier());
-    internalContext += declaration->context()->findContexts(DUContext::Global, idType->identifier());
+    DUContext* internalContext = getInternalContext(declaration);
 
-    MUST_HAVE( (internalContext.size()==1) );
+    MUST_HAVE( internalContext );
     
-    QList<Declaration*> decls = internalContext.front()->findLocalDeclarations( member );
+    QList<Declaration*> decls = internalContext->findLocalDeclarations( member );
 
     if( decls.isEmpty() ) {
       if( postProblem ) {
@@ -278,7 +267,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         LOCKDUCHAIN;
         //When the type is a reference, dereference it so we get to the pointer-type
 
-        PointerType* pnt = dynamic_cast<PointerType*>( realType(base).data() );
+        PointerType* pnt = dynamic_cast<PointerType*>( realType(base) );
         if( pnt ) {
           kDebug() << "got type: " << pnt->toString() << endl;
           kDebug() << "base-type: " << pnt->baseType()->toString() << endl;
@@ -326,49 +315,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
 
   AbstractType::Ptr ExpressionVisitor::realLastType(bool* constant) const {
-    return realType( m_lastType, constant );
+    return AbstractType::Ptr(realType( m_lastType, constant ));
   }
   
-  AbstractType::Ptr ExpressionVisitor::realType(AbstractType::Ptr base, bool* constant) const {
-    
-    CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base.data() );
-    
-    while( ref ) {
-      if( constant )
-        (*constant) |= ref->isConstant();
-      base = ref->baseType();
-      ref = dynamic_cast<CppReferenceType*>( base.data() );
-    }
-
-    return base;
-  }
-  
-  AbstractType::Ptr ExpressionVisitor::targetType(AbstractType::Ptr base, bool* constant) const {
-    
-    CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base.data() );
-    CppPointerType* pnt = dynamic_cast<CppPointerType*>( base.data() );
-    
-    while( ref || pnt ) {
-      if( ref ) {
-        if( constant )
-          (*constant) |= ref->isConstant();
-        base = ref->baseType();
-      } else {
-        if( constant )
-          (*constant) |= pnt->isConstant();
-        base = pnt->baseType();
-      }
-      ref = dynamic_cast<CppReferenceType*>( base.data() );
-      pnt = dynamic_cast<CppPointerType*>( base.data() );
-    }
-
-    return base;
-  }
-  
-  bool ExpressionVisitor::isPointerType() const {
-    return dynamic_cast<PointerType*>( realLastType().data() );
-  }
-
   bool ExpressionVisitor::getPointerTarget( AST* node, bool* constant )  {
     if( !m_lastType ) return false;
     
