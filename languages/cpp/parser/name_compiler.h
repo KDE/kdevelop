@@ -30,13 +30,19 @@ class KDEVCPPPARSER_EXPORT NameCompiler: protected DefaultVisitor
 public:
   NameCompiler(ParseSession* session);
 
-  void run(NameAST *node) { internal_run(node); }
-  void run(UnqualifiedNameAST *node) { internal_run(node); }
+  void run(NameAST *node) { m_typeSpecifier = 0; internal_run(node); }
+  void run(UnqualifiedNameAST *node) { m_typeSpecifier = 0; internal_run(node); }
 
   QString name() const { return _M_name.toString(); }
   QStringList qualifiedName() const { return _M_name.toStringList(); }
 
   const KDevelop::QualifiedIdentifier& identifier() const;
+
+  /**
+   * When the name contains one type-specifier, this should contain that specifier after the run.
+   * Especially this is the type-specifier of a conversion-operator like "operator int()"
+   * */
+  TypeSpecifierAST* lastTypeSpecifier() const;
 
 protected:
   virtual void visitUnqualifiedName(UnqualifiedNameAST *node);
@@ -47,6 +53,7 @@ protected:
 
 private:
   ParseSession* m_session;
+  TypeSpecifierAST* m_typeSpecifier;
   KDevelop::QualifiedIdentifier m_base;
   KDevelop::Identifier m_currentIdentifier;
   KDevelop::QualifiedIdentifier _M_name;

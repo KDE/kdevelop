@@ -65,6 +65,8 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
         tmp_name +=  decode_operator(op_id->op->op);
       else
         tmp_name += QLatin1String("<...cast...>");
+      
+      m_typeSpecifier = op_id->type_specifier;
     }
 
   m_currentIdentifier = Identifier(tmp_name);
@@ -75,6 +77,10 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
     }
 
   _M_name.push(m_currentIdentifier);
+}
+
+TypeSpecifierAST* NameCompiler::lastTypeSpecifier() const {
+  return m_typeSpecifier;
 }
 
 void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)

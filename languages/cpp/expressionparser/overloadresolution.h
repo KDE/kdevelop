@@ -21,6 +21,7 @@
 
 #include <typesystem.h>
 #include "typeconversion.h"
+#include <QList>
 
 class CppFunctionType;
 
@@ -37,11 +38,22 @@ using namespace KDevelop;
 class OverloadResolver {
   public:
 
+    struct Parameter {
+      Parameter() : type(0), lValue(false) {
+      }
+      Parameter( AbstractType* t, bool isLValue ) : type(t), lValue( isLValue ) {
+      }
+      AbstractType* type;
+      bool lValue;
+    };
     struct ParameterList {
-      QList<AbstractType*> parameterTypes;
+      QList<Parameter> parameters;
+      ParameterList( const Parameter& param ) {
+        parameters << param;
+      }
 
-      ParameterList( AbstractType* param ) {
-        parameterTypes << param;
+      ParameterList( AbstractType* param, bool isLValue ) {
+        parameters << Parameter(param, isLValue);
       }
     };
 
@@ -50,7 +62,16 @@ class OverloadResolver {
      * */
     OverloadResolver( DUContext* context );
 
-    CppFunctionType* resolve( const ParameterList& params );
+    /**
+     * Resolve one function with the given name that matches the given parameters.
+     * 
+     * When classes are found under the given name, their constructors will be considered as functions.
+     * 
+     * @param params The parameters
+     * @param functionName name of the function
+     * @param noUserDefinedConversion should be true when no user-defined conversions are allowed for parameters
+     * */
+    Declaration* resolve( const ParameterList& params, const QualifiedIdentifier& functionName, bool noUserDefinedConversion = false );
 
     /**
      * The worst conversion-rank achieved while matching the parameters of the last overload-resolution
@@ -58,12 +79,17 @@ class OverloadResolver {
     ConversionRank worstConversionRank();
     
     /**
-     * Tries to find a constructor that matches the given parameter-list
+     * Tries to find a constructor of the class represented by the current context
+     * that matches the given parameter-list
      * @param implicit When this is true, constructors with the keyword "explicit" are ignored
      * @param noUserDefinedConversion When this is true, user-defined conversions(constructor- or conversion-function conversion) are not allowed while matching the parameters
      * */
-    CppFunctionType* resolveConstructor( const ParameterList& params, bool implicit = false, bool noUserDefinedConversion = false );
+    Declaration* resolveConstructor( const ParameterList& params, bool implicit = false, bool noUserDefinedConversion = false );
   private:
+
+    ///Also considers constructors
+    Declaration* resolveInternal( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
+    
     DUContext* m_context;
     ConversionRank m_worstConversionRank;
 };

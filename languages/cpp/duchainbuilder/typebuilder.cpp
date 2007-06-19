@@ -235,8 +235,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     if (!dec.isEmpty() && dec.front()->abstractType()) {
       ///@todo only functions can have multiple declarations here, or maybe template-classes
       if( dec.count() > 1 )
-        kdDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
-      kdDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << endl;
+        kDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
+      kDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << endl;
        openedType = true;
        openType(dec.front()->abstractType(), node);
     }

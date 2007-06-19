@@ -126,15 +126,15 @@ namespace TypeUtils {
   /**
    * Returns all conversion-functions from klass and all accessible bases
    * This cannot be used for constructors, because those have no return-type.
-   * @param functionKind must a one of CppFunctionType::FunctionKind
-   * @param functions A hash that maps functions to their return-types
+   * @param klass The class in which to search
+   * @param functions A hash that will map functions to their return-types
    * */
-  void getFunctions(CppClassType* klass, int functionKind, QHash<AbstractType*, CppFunctionType*>& functions, bool mustBeConstant=false);
+  void getConversionFunctions(CppClassType* klass, QHash<AbstractType*, Declaration*>& functions, bool mustBeConstant=false);
 
   /**
    * Returns all constructors
    * */
-  void getConstructors(CppClassType* klass, QList<CppFunctionType*>& functions);
+  void getConstructors(CppClassType* klass, QList<Declaration*>& functions);
   /**
    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
    * It's possibly a bug in the du-chain that this function is necessary, decl->context() should return the internal context.

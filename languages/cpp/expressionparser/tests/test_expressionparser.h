@@ -51,9 +51,10 @@ public:
 
 private slots:
   void initTestCase();
-  void cleanupTestCase();
-  void testSimpleExpression();
   void testCasts();
+  void testSimpleExpression();
+  void testTypeConversion();
+  void cleanupTestCase();
 
 public:
   enum DumpArea {

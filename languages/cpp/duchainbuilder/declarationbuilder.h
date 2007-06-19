@@ -68,6 +68,7 @@ public:
   virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
+  virtual void visitParameterDeclaration(ParameterDeclarationAST* node);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
 private:
@@ -89,6 +90,9 @@ private:
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
   inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.top(); }
 
+  template<class DeclarationType>
+  inline DeclarationType* currentDeclaration() const { return dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
+  
   inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 

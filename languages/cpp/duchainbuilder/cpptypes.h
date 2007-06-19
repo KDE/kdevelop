@@ -120,27 +120,23 @@ class KDEVCPPDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionTy
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
 
-  enum FunctionKind {
-    NormalFunction,
-    Constructor,
-    Destructor,
-    ConversionFunction
-  };
-  
-  CppFunctionType(FunctionKind kind = NormalFunction);
-
   KDevelop::ClassFunctionDeclaration* declaration() const;
   void setDeclaration(KDevelop::ClassFunctionDeclaration* declaration);
 
   virtual QString toString() const;
 
-  FunctionKind kind() const;
+  ///@todo implement these
+  /** @return whether this is a template-function
+   * */
+  bool isTemplate();
+
+  /** @return whether this function is a specialization of the given function, or whether they are specialized from the same function and this is more specialized.
+   * */
+  bool isMoreSpecialized( CppFunctionType* other );
   
   //virtual uint hash() const;
 
   virtual QString mangled() const;
-  private:
-    FunctionKind m_kind;
 };
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType

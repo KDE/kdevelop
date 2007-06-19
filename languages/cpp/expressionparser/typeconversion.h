@@ -40,18 +40,30 @@ using namespace KDevelop;
      NoMatch = 0,
      Conversion,
      Promotion,
-     ExactMatch
+     ExactMatch,
+     ConversionRankOffset ///ConversionRankOffset is used to model the ranking of implicit conversion sequences(iso c++ 13.3.3.2), it is added once to the result of user-defined conversions, and twice to the result of standard-conversions.
+   };
+
+   enum ConversionType {
+     UserDefinedConversion,
+     EllipsisConversion,
+     StandardConversion
    };
 
 /**
  * Class that models c++ type-conversion.
  *
  * The du-chain must be locked whenever this class is used.
+ *
+ * @todo ellipsis(functions with arbitrary count of arguments) cannot be respected because it is not parsed yet
  * */
 class KDEVCPPEXPRESSIONPARSER_EXPORT TypeConversion {
   public:
+    virtual ~TypeConversion();
     /**
      * An implicit conversion sequence is a sequence of conversions used to convert an argument in a function call to the type of the corresponding parameter of the function being called. (iso c++ draft 13.3.3.1)
+     *
+     * 13.3.3.2(ranking of implicit conversion sequences) is only partially modeled.
      * 
      * @param from The type from which to convert
      * @param to The type to which to convert
@@ -59,7 +71,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT TypeConversion {
      * @return Whether there is an implicit conversion sequence available. 0 when no conversion is possible, else a positive number. The higher it is, the better the conversion
      **/
 
-    uint implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue = true );
+    uint implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue = true, bool noUserDefinedConversion = false );
 
   protected:
     /**
@@ -68,20 +80,21 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT TypeConversion {
      * Warning: standardConversion(..) cannot deal with reference-types as target. That case must be treated from outside. Also reference-binding with the base-class logic etc. is not done here.
      * */
     ConversionRank standardConversion( AbstractType::Ptr from, AbstractType::Ptr to, int allowedCategories = IdentityCategory | LValueTransformationCategory | QualificationAdjustmentCategory | PromotionCategory | ConversionCategory, int maxCategories = 3 );
+
     
+  private:
     /**iso c++ draft 13.3.3.1.2
      *
      * @param secondConversionIsIdentity Whether the second standard-conversion should be an identity-conversion or derived-to-base-conversion
      */
-    uint userDefinedConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool secondConversionIsIdentity = false );
+    ConversionRank userDefinedConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool secondConversionIsIdentity = false );
 
     ///iso c++ draft 13.3.3.1.3
-    uint ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to );
+    ConversionRank ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to );
     
     
     virtual void problem( AbstractType::Ptr from, AbstractType::Ptr to, const QString&  desc );
 
-  private:
 
     /**Identity-conversion:
      * This represents an identity-conversion in the context of copying. That means that top-level cv-qualifiers are ignored.

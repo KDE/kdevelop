@@ -1,3 +1,4 @@
+#include "/media/data/kdedev/4.0/kdevplatform/language/duchain/classfunctiondeclaration.h" /* defines ClassFunctionDeclaration */
 /* This file is part of KDevelop
     Copyright (C) 2006 Hamish Rodda<rodda@kde.org>
 
@@ -271,6 +272,35 @@ void TestExpressionParser::testSimpleExpression() {
 }
 
 
+void TestExpressionParser::testTypeConversion() {
+  TEST_FILE_PARSE_ONLY
+      
+  QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { }";
+  DUContext* c = parse( test, DumpDUChain | DumpAST );
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  DUContext* testContext = c->childContexts()[1];
+  QCOMPARE( testContext->type(), DUContext::Function );
+  
+  DUContext* contContext = c->childContexts()[0];
+  Declaration* decl = contContext->localDeclarations()[0];
+
+  QCOMPARE(decl->identifier(), Identifier("operator<...cast...>"));
+  CppFunctionType* function = dynamic_cast<CppFunctionType*>(decl->abstractType().data());
+  QCOMPARE(function->returnType()->toString(), QString("int"));
+
+  Declaration* testDecl = c->localDeclarations()[1];
+  ClassFunctionDeclaration* functionDecl = dynamic_cast<ClassFunctionDeclaration*>(testDecl);
+  QVERIFY(functionDecl);
+
+  QVERIFY(functionDecl->defaultParameters().size() == 1);
+  QCOMPARE(functionDecl->defaultParameters()[0], QString("5"));
+  
+  //QVERIFY(0);
+  //lock.lock();
+  release(c);
+}
+
 
 void TestExpressionParser::testCasts() {
   TEST_FILE_PARSE_ONLY
@@ -293,8 +323,8 @@ void TestExpressionParser::testCasts() {
   Cpp::ExpressionParser parser;
 
   //Reenable this once the type-parsing system etc. is fixed
-  
-/*  Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "dynamic_cast<Cont2*>(d)", testContext );
+  /*
+  Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "dynamic_cast<Cont2*>(d)", testContext );
   lock.lock();
   QVERIFY(result);   
   QVERIFY(result->instance);

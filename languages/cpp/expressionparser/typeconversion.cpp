@@ -27,8 +27,8 @@ using namespace Cpp;
 using namespace KDevelop;
 using namespace TypeUtils;
 
-#warning Correct filling of function-types in the type-system is not yet implemented
-  ///@todo implement
+TypeConversion::~TypeConversion() {
+}
 
 /**
  * All information taken from iso c++ draft
@@ -60,7 +60,7 @@ using namespace TypeUtils;
  *  - an ellipsis conversion sequence
  *   
  * */
-uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue ) {
+uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool noUserDefinedConversion ) {
   if( !from || !to ) {
     problem( from, to, "one type is invalid" );
     return 0;
@@ -86,8 +86,10 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
     }
 
     //We cannot directly create initialize a reference, but maybe there is a user-defined conversion that creates a compatible reference, as in iso c++ 13.3.3.1.4.1
-    if( int rank = userDefinedConversion( from, to, true ) ) {
-      return rank;
+    if( !noUserDefinedConversion ) {
+      if( int rank = userDefinedConversion( from, to, fromLValue, true ) ) {
+        return rank + ConversionRankOffset;
+      }
     }
     
     if( toReference->isConstant() ) {
@@ -101,11 +103,18 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
 
   //This is very simplified, see iso c++ draft 13.3.3.1
   
-  if( (tempConv = standardConversion(from,to)) && tempConv > conv )
-    conv = tempConv;
+  if( tempConv = standardConversion(from,to) ) {
+    tempConv += 2*ConversionRankOffset;
+    if( tempConv > conv )
+      conv = tempConv;
+  }
 
-  if( (tempConv = userDefinedConversion(from, to)) && tempConv > conv )
-    conv = tempConv;
+  if( !noUserDefinedConversion ) {
+    if( (tempConv = userDefinedConversion(from, to, fromLValue)) && tempConv > conv ) {
+      tempConv += ConversionRankOffset;
+      conv = tempConv;
+    }
+  }
 
   if( (tempConv = ellipsisConversion(from, to)) && tempConv > conv )
     conv = tempConv;
@@ -360,7 +369,7 @@ bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::P
 void TypeConversion::problem( AbstractType::Ptr from, AbstractType::Ptr to, const QString& desc ) {
 }
 
-uint TypeConversion::userDefinedConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool secondConversionIsIdentity ) {
+ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool secondConversionIsIdentity ) {
   /**
    * Two possible cases:
    * - from is a class, that has a conversion-function
@@ -376,9 +385,9 @@ uint TypeConversion::userDefinedConversion( AbstractType::Ptr from, AbstractType
     CppClassType* fromClass = dynamic_cast<CppClassType*>( realFrom.data() );
     if( fromClass ) {
       ///Search for a conversion-function that has a compatible output
-      QHash<AbstractType*, CppFunctionType*> conversionFunctions;
-      getFunctions(fromClass, CppFunctionType::ConversionFunction, conversionFunctions, fromConst);
-      for( QHash<AbstractType*, CppFunctionType*>::const_iterator it = conversionFunctions.begin(); it != conversionFunctions.end(); ++it ) {
+      QHash<AbstractType*, Declaration*> conversionFunctions;
+      getConversionFunctions(fromClass, conversionFunctions, fromConst);
+      for( QHash<AbstractType*, Declaration*>::const_iterator it = conversionFunctions.begin(); it != conversionFunctions.end(); ++it ) {
         AbstractType::Ptr convertedType( it.key() );
         ConversionRank rank = standardConversion( convertedType, to );
         if( rank != NoMatch && (!secondConversionIsIdentity || rank == ExactMatch) ) {
@@ -393,8 +402,8 @@ uint TypeConversion::userDefinedConversion( AbstractType::Ptr from, AbstractType
     ///Try conversion using constructor
     CppClassType* toClass = dynamic_cast<CppClassType*>( to.data() );
     if( toClass ) {
-      OverloadResolver resolver( toClass->declaration()->context() );
-      CppFunctionType* function = resolver.resolveConstructor( from.data(), true, true );
+      OverloadResolver resolver( getInternalContext( toClass->declaration() ) );
+      Declaration* function = resolver.resolveConstructor( OverloadResolver::Parameter( from.data(), fromLValue ), true, true );
       if( function ) {
         //We've successfully located an overloaded constructor that accepts the argument
         maximizeRank( bestRank, resolver.worstConversionRank() );
@@ -405,6 +414,7 @@ uint TypeConversion::userDefinedConversion( AbstractType::Ptr from, AbstractType
   return bestRank;
 }
 
-uint TypeConversion::ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to ) {
+ConversionRank TypeConversion::ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to ) {
+  return NoMatch;
 }
 

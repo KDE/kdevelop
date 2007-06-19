@@ -21,6 +21,7 @@
 
 #include "default_visitor.h"
 #include <identifier.h>
+#include <cppparserexport.h>
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -28,7 +29,7 @@
 
 class ParseSession;
 
-class TypeCompiler: protected DefaultVisitor
+class KDEVCPPPARSER_EXPORT TypeCompiler: protected DefaultVisitor
 {
 public:
   TypeCompiler(ParseSession* session);

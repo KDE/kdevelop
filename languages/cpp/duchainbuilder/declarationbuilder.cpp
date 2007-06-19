@@ -25,6 +25,8 @@
 #include <identifiedtype.h>
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
+#include "classfunctiondeclaration.h"
+#include "type_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
 #include <definition.h>
@@ -195,7 +197,12 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   QualifiedIdentifier id;
 
   if (name) {
-    id = identifierForName(name);
+    TypeSpecifierAST* typeSpecifier = 0; //Additional type-specifier for example the return-type of a cast operator
+    id = identifierForName(name, &typeSpecifier);
+    if( typeSpecifier && id == QualifiedIdentifier("operator<...cast...>") ) {
+      if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
+        visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
+    }
   }
 
   Declaration* declaration = 0;
@@ -498,6 +505,21 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
   }
 
   m_functionSpecifiers.push(specs);
+}
+
+void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node) {
+  DeclarationBuilderBase::visitParameterDeclaration(node);
+  if( node->expression ) {
+    //Fill default-parameters
+    ClassFunctionDeclaration* function = currentDeclaration<ClassFunctionDeclaration>();
+    if( function ) {
+      QString param;
+      for( size_t token = node->expression->start_token; token != node->expression->end_token; ++token )
+        param += m_editor->tokenToString(token);
+
+      function->addDefaultParameter(param);
+    }
+  }
 }
 
 void DeclarationBuilder::popSpecifiers()

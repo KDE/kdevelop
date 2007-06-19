@@ -21,6 +21,7 @@ set(kdevcppexpressionparser_LIB_SRCS
     typeconversion.cpp
     typeutils.cpp
     overloadresolution.cpp
+    viablefunctions.cpp
 )
 
 kde4_add_library(kdevcppexpressionparser SHARED ${kdevcppexpressionparser_LIB_SRCS})
