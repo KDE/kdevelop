@@ -26,7 +26,7 @@ class CppFunctionType;
 
 namespace KDevelop {
   class DUContext;
-};
+}
 
 namespace Cpp {
 using namespace KDevelop;
@@ -68,6 +68,6 @@ class OverloadResolver {
     ConversionRank m_worstConversionRank;
 };
 
-};
+}
 
 #endif
