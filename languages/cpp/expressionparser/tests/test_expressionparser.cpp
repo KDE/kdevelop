@@ -1,4 +1,3 @@
-#include "/media/data/kdedev/4.0/kdevplatform/language/duchain/classfunctiondeclaration.h" /* defines ClassFunctionDeclaration */
 /* This file is part of KDevelop
     Copyright (C) 2006 Hamish Rodda<rodda@kde.org>
 
@@ -39,6 +38,7 @@
 #include "rpp/preprocessor.h"
 #include "expressionvisitor.h"
 #include "expressionparser.h"
+#include "classfunctiondeclaration.h"
 
 using namespace KTextEditor;
 
