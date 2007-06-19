@@ -32,6 +32,7 @@ public:
   bool m_isVirtual: 1;
   bool m_isInline: 1;
   bool m_isExplicit: 1;
+  QList<QString> m_defaultParameters;
 };
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, DUContext* context)
@@ -79,9 +80,21 @@ ClassFunctionDeclaration::QtFunctionType ClassFunctionDeclaration::functionType(
   return d->m_functionType;
 }
 
+const QList<QString>& ClassFunctionDeclaration::defaultParameters() const {
+  return d->m_defaultParameters;
+}
+
+void ClassFunctionDeclaration::addDefaultParameter(const QString& str) {
+  d->m_defaultParameters << str;
+}
+
 void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 {
   d->m_functionType = functionType;
+}
+
+bool ClassFunctionDeclaration::isConversionFunction() const {
+  return identifier() == Identifier("operator<...cast...>");
 }
 
 bool ClassFunctionDeclaration::isConstructor() const

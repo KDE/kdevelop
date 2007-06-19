@@ -46,6 +46,7 @@ public:
 
   bool isConstructor() const;
   bool isDestructor() const;
+  bool isConversionFunction() const;
 
   enum FunctionSpecifier {
     VirtualSpecifier  = 0x1,
@@ -65,6 +66,17 @@ public:
   bool isExplicit() const;
   void setExplicit(bool isExplicit);
 
+  /**
+   * Returns the default-parameters that are set. The last default-parameter matches the last
+   * argument of the function, but the returned list will only contain default-values for those
+   * arguments that have one, for performance-reasons.
+   *
+   * So the list may be empty or smaller than the list of function-arguments.
+   * */
+  const QList<QString>& defaultParameters() const;
+
+  void addDefaultParameter(const QString& str);
+  
   //bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
 
 private:
