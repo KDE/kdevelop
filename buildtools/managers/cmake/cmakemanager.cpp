@@ -69,6 +69,30 @@ CMakeProjectManager::~CMakeProjectManager()
 //     return m_project;
 // }
 
+bool CMakeProjectManager::isVariable(const QString &name)
+{
+    return name.startsWith("${") && name.endsWith("}");
+}
+
+QString CMakeProjectManager::variableName(const QString &name)
+{
+    if(!isVariable(name))
+        return QString::null;
+    return name.mid(2, name.length()-3);
+}
+
+QStringList CMakeProjectManager::resolveVariables(const QStringList & vars)
+{
+    QStringList rvars;
+    for(QStringList::const_iterator i=vars.begin(); i!=vars.end(); ++i) {
+        if(isVariable(*i))
+            rvars += m_vars.value(variableName(*i));
+        else
+            rvars += *i;
+    }
+    return rvars;
+}
+
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {
     return item->project()->folder();
@@ -84,7 +108,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
     kDebug(9025) << "parse: " << folder->url() << endl;
     CMakeAst *node = folder->tree();
-    CMakeProjectVisitor v;
+    CMakeProjectVisitor v(&m_vars);
     node->accept(&v);
 //     FolderInfo fi = folder->folderInfo();
 //     for ( QStringList::iterator it = fi.includes.begin();
@@ -95,7 +119,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 //             m_includeDirList.append( urlCandidate );
 //     }
 
-    foreach ( QString subf, v.subdirectories() ) {
+    //FIXME:resolveVariables is not working
+    kDebug(9032) << "resolveVars" << resolveVariables(v.subdirectories()) << v.subdirectories() << endl;
+    foreach ( QString subf, resolveVariables(v.subdirectories()) ) {
         CMakeAst *newFolder = new CMakeAst;
         KUrl path(folder->url());
         path.addPath(subf);
@@ -117,12 +143,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     foreach ( QString t, v.targets())
     {
         CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
-        foreach( QString sFile, v.files(t) )
+        foreach( QString sFile, resolveVariables(v.files(t)) )
         {
             KUrl sourceFile = folder->url();
             sourceFile.adjustPath( KUrl::AddTrailingSlash );
             sourceFile.addPath( sFile );
             new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+            kDebug(9032) << "..........Adding: " << sFile << endl;
         }
     }
     return folderList;
@@ -148,7 +175,7 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
 
         if ( !CMakeListsParser::parseCMakeFile( rootFolder, cmakeInfoFile.toLocalFile() ) )
         {
-            CMakeProjectVisitor v;
+            CMakeProjectVisitor v(&m_vars);
             rootFolder->accept(&v);
 
             name = v.projectName();

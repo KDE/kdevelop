@@ -464,7 +464,6 @@ CMAKE_ADD_AST_MEMBER( bool, bool, storeInCache, StoreInCache )
 CMAKE_ADD_AST_MEMBER( bool, bool, forceStoring, ForceStoring )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, entryType, EntryType )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
-
 CMAKE_END_AST_CLASS( SetAst )
 
 

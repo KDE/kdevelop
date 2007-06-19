@@ -21,6 +21,12 @@
 #include "cmakeast.h"
 
 #include <kdebug.h>
+#include <QHash>
+
+CMakeProjectVisitor::CMakeProjectVisitor(QHash<QString, QStringList> *vars) : m_vars(vars)
+{
+    
+}
 
 void CMakeProjectVisitor::notImplemented() const {
     kDebug(9032) << "not implemented!" << endl;
@@ -49,25 +55,22 @@ void CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
     m_subdirectories += subd->sourceDir();
 }
 
-CMakeProjectVisitor::CMakeProjectVisitor()
-{
-}
-
 void CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 {
-    foreach(QString s, exec->sourceLists()) {
-        m_filesPerTarget.insert(exec->executable(), s);
-    }
-    
+    m_filesPerTarget.insert(exec->executable(), exec->sourceLists());
     kDebug(9032) << "exec: " << exec->executable() << endl;
 }
 
 void CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
-    foreach(QString s, lib->sourceLists()) {
-        m_filesPerTarget.insert(lib->libraryName(), s);
-    }
-    
+    m_filesPerTarget.insert(lib->libraryName(), lib->sourceLists());
     kDebug(9032) << "lib: " << lib->libraryName() << endl;
+}
+
+void CMakeProjectVisitor::visit(const SetAst *set)
+{
+    m_vars->remove(set->variableName());
+    m_vars->insert(set->variableName(), set->values());
+    kDebug(9032) << "set: " << set->variableName() << "=" << set->values() << endl;
 }
 

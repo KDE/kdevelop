@@ -25,42 +25,46 @@
 #include <QString>
 #include <QStringList>
 #include <QMap>
+#include <QHash>
 
-class CMakeProjectVisitor : public CMakeAstVisitor {
+class CMakeProjectVisitor : public CMakeAstVisitor
+{
     public:
-        CMakeProjectVisitor();
-	virtual ~CMakeProjectVisitor() {}
-	
-	virtual void visit( const CustomCommandAst * ) { notImplemented(); }
-	virtual void visit( const CustomTargetAst * ) { notImplemented(); }
-	virtual void visit( const AddDefinitionsAst * ) { notImplemented(); }
-	virtual void visit( const AddDependenciesAst * ) { notImplemented(); }
-	virtual void visit( const AddExecutableAst * );
-	virtual void visit( const AddLibraryAst * );
-	virtual void visit( const AddSubdirectoryAst * );
-	virtual void visit( const AddTestAst * ) { notImplemented(); }
-	virtual void visit( const AuxSourceDirectoryAst * ) { notImplemented(); }
-	virtual void visit( const BuildCommandAst * ) { notImplemented(); }
-	virtual void visit( const BuildNameAst * ) { notImplemented(); }
-	virtual void visit( const CMakeMinimumRequiredAst * ) { notImplemented(); }
-	virtual void visit( const ConfigureFileAst * ) { notImplemented(); }
-	virtual void visit( const IncludeAst * ) { notImplemented(); }
-	virtual void visit( const SetAst * ) { notImplemented(); }
+        CMakeProjectVisitor(QHash<QString, QStringList> *vars);
+        virtual ~CMakeProjectVisitor() {}
+        
+        virtual void visit( const CustomCommandAst * ) { notImplemented(); }
+        virtual void visit( const CustomTargetAst * ) { notImplemented(); }
+        virtual void visit( const AddDefinitionsAst * ) { notImplemented(); }
+        virtual void visit( const AddDependenciesAst * ) { notImplemented(); }
+        virtual void visit( const AddExecutableAst * );
+        virtual void visit( const AddLibraryAst * );
+        virtual void visit( const AddSubdirectoryAst * );
+        virtual void visit( const AddTestAst * ) { notImplemented(); }
+        virtual void visit( const AuxSourceDirectoryAst * ) { notImplemented(); }
+        virtual void visit( const BuildCommandAst * ) { notImplemented(); }
+        virtual void visit( const BuildNameAst * ) { notImplemented(); }
+        virtual void visit( const CMakeMinimumRequiredAst * ) { notImplemented(); }
+        virtual void visit( const ConfigureFileAst * ) { notImplemented(); }
+        virtual void visit( const IncludeAst * ) { notImplemented(); }
+        
+        virtual void visit( const SetAst * );
         virtual void visit( const ProjectAst * );
-	
-	virtual void visit( const CMakeAst * );
+        
+        virtual void visit( const CMakeAst * );
         
         QString projectName() const { return m_projectName; }
         QStringList subdirectories() const { return m_subdirectories; }
         QStringList targets() const { return m_filesPerTarget.keys(); }
-        QStringList files(const QString &target) const { return m_filesPerTarget.values(target); }
+        QStringList files(const QString &target) const { return m_filesPerTarget[target]; }
     private:
-	void notImplemented() const;
+        void notImplemented() const;
         
         QString m_projectName;
         QStringList m_subdirectories;
-        QMap<QString, QString> m_filesPerTarget;
+        QMap<QString, QStringList> m_filesPerTarget;
         QString m_root;
+        QHash<QString, QStringList> *m_vars;
 };
 
 #endif

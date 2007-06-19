@@ -96,12 +96,16 @@ public:
 
 private:
 
+    static bool isVariable(const QString& name);
+    static QString variableName(const QString &name);
+    QStringList resolveVariables(const QStringList & vars);
     KDevelop::IProject* m_project;
     CMakeFolderItem* m_rootItem;
     KDevelop::IProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
     CMakeListsParser m_parser;
+    QHash<QString, QStringList> m_vars;
 //     ProjectInfo m_projectInfo;
 };
 
