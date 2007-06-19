@@ -27,6 +27,7 @@ class CppFunctionType;
 
 namespace KDevelop {
   class DUContext;
+  class Declaration;
 }
 
 namespace Cpp {
