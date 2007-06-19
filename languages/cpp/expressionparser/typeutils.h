@@ -140,6 +140,6 @@ namespace TypeUtils {
    * It's possibly a bug in the du-chain that this function is necessary, decl->context() should return the internal context.
    **/
   DUContext* getInternalContext( Declaration* decl );
-};
+}
 
 #endif
