@@ -59,7 +59,7 @@ public:
     /// Construct InValid (Unspecified) Revision.
     SvnRevision();
 
-    /// Construct using informations from VcsRevision.
+    /// Construct using information from VcsRevision.
     SvnRevision( const KDevelop::VcsRevision &vcsRev );
 
     /// Specify revision as number.

@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ui_uilogview_option_dlg.h"
 #include "svn_logviewwidgets.h"
+#include "ui_uilogview_option_dlg.h"
 #include "svn_blamewidgets.h"
 #include "subversion_core.h"
 #include "subversionthreads.h"

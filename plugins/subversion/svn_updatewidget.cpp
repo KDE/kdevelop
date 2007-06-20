@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ui_uiupdate_option_dlg.h"
 #include "svn_updatewidget.h"
+#include "ui_uiupdate_option_dlg.h"
 #include "subversion_utils.h"
 #include <kurl.h>
 #include <QRadioButton>

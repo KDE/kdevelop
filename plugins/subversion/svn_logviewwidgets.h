@@ -22,7 +22,7 @@ class SvnLogviewWidget : public QWidget, public Ui::SvnLogviewWidget
 {
     Q_OBJECT
 public:
-    SvnLogviewWidget( KUrl &url, KDevSubversionPart *part, QWidget *parent );
+    explicit SvnLogviewWidget( KUrl &url, KDevSubversionPart *part, QWidget *parent );
     virtual ~SvnLogviewWidget();
     void refreshWithNewData( QList<SvnLogHolder> datalist );
 protected:
