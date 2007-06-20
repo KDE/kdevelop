@@ -2,10 +2,8 @@
                           komparemodellist.cpp  -  description
                              -------------------
     begin                : Tue Jun 26 2001
-    copyright            : (C) 2001-2004 Otto Bruggeman
-                           (C) 2001-2003 John Firebaugh
-    email                : jfirebaugh@kde.org
-                           otto.bruggeman@home.nl
+        copyright               : (C) 2001-2004 Otto Bruggeman <otto.bruggeman@home.nl>
+        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
  ***************************************************************************/
 
 /***************************************************************************

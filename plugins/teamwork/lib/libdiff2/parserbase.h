@@ -2,8 +2,7 @@
 **                             parserbase.h
 **                              -------------------
 **      begin                   : Tue Jul 30 23:53:52 2002
-**      copyright               : (C) 2002-2004 Otto Bruggeman
-**      email                   : otto.bruggeman@home.nl
+        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
 **
 ***************************************************************************/
 /***************************************************************************

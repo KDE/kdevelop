@@ -2,8 +2,7 @@
 **
 ** Filename   : levenshteintable.h
 ** Created on : 08 november, 2003
-** Copyright  : (c) 2003 Otto Bruggeman
-** Email      : bruggie@home.nl
+** Copyright  : (c) 2003 Otto Bruggeman <bruggie@home.nl>
 **
 *******************************************************************************/
 

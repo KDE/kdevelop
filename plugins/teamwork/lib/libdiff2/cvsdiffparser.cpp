@@ -2,8 +2,7 @@
 **                              cvsdiffparser.cpp
 **                              -----------------
 **      begin                   : Sun Aug  4 15:05:35 2002
-**      copyright               : (C) 2002-2004 Otto Bruggeman
-**      email                   : otto.bruggeman@home.nl
+**      copyright               : (C) 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
 **
 ***************************************************************************/
 /***************************************************************************

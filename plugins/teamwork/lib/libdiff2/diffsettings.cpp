@@ -2,8 +2,7 @@
 				diffsettings.cpp  -  description
 				-------------------
 	begin			: Sun Mar 4 2001
-	copyright		: (C) 2001-2004 Otto Bruggeman
-	email			: otto.bruggeman@home.nl
+	copyright		: (C) 2001-2004 Otto Bruggeman <otto.bruggeman@home.nl>
 ****************************************************************************/
 
 /***************************************************************************

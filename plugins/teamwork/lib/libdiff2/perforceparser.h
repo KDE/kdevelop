@@ -2,8 +2,7 @@
 **                             perforceparser.h
 **                              -------------------
 **      begin                   : Sun Sep  8 20:58:59 2002
-**      copyright               : (c) 2002-2004 Otto Bruggeman
-**      email                   : otto.bruggeman@home.nl
+        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
 **
 ***************************************************************************/
 /***************************************************************************

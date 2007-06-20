@@ -2,8 +2,7 @@
 **
 ** Filename   : diffmodellist.cpp
 ** Created on : 26 march, 2004
-** Copyright  : (c) 2004 Otto Bruggeman
-** Email      : bruggie@home.nl
+** Copyright  : (c) 2004 Otto Bruggeman <bruggie@home.nl>
 **
 *******************************************************************************/
 

@@ -2,10 +2,8 @@
                                 kompareprocess.h  -  description
                                 -------------------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 by Otto Bruggeman
-                                  and John Firebaugh
-        email                   : otto.bruggeman@home.nl
-                                  jfirebaugh@kde.org
+        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
+        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
