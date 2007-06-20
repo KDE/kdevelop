@@ -23,6 +23,7 @@
 #include "visitor.h"
 #include "typeutils.h"
 #include "cppexpressionparserexport.h"
+#include "overloadresolution.h" /* needed for OverloadResover::Parameter */
 
 
 namespace KDevelop {
@@ -55,6 +56,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
       inline operator bool() const {
         return isInstance;
       }
+      
       bool isInstance;
       Declaration* declaration; //May contain the declaration of the instance, but only when isInstance is true
     };
@@ -105,6 +107,13 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
   private:
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
+
+    //Whenever a list of declarations is queried, it is stored here. Especially in visitName(...) and findMember(...)
+    QList<Declaration*> m_lastDeclarations;
+
+    //Here the parameters of function-calls are collected
+    //When a parameter could not be evaluated, this will hold a parameter with null-value type
+    QList<OverloadResolver::Parameter> m_parameters;
     
     ParseSession* m_session;
     DUContext* m_currentContext;
@@ -114,6 +123,10 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     m_lastType = 0;
   }
 
+  ///Returns whether the given type and instance-info are an lvalue
+  bool isLValue( const AbstractType::Ptr& type, const Instance& instance );
+
+  
   /**
    * Returns the dereferenced type(example: ReferenceType(PointerType) -> PointerType)
    *

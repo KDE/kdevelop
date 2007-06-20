@@ -378,10 +378,10 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
   ConversionRank bestRank = NoMatch;
 
   ///@todo what exactly to do with the rank? Currently it is only copied from the underlying standardConversion
+  bool fromConst = false;
+  AbstractType::Ptr realFrom( realType(from, &fromConst) );
   {
     ///Try user-defined conversion using a conversion-function, iso c++ 12.3
-    bool fromConst = false;
-    AbstractType::Ptr realFrom( realType(from, &fromConst) );
     CppClassType* fromClass = dynamic_cast<CppClassType*>( realFrom.data() );
     if( fromClass ) {
       ///Search for a conversion-function that has a compatible output
@@ -392,7 +392,11 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
         ConversionRank rank = standardConversion( convertedType, to );
         if( rank != NoMatch && (!secondConversionIsIdentity || rank == ExactMatch) ) {
           //We have found a matching conversion-function
-          maximizeRank( bestRank, rank );
+          if( realType(convertedType) == to.data() )
+            maximizeRank( bestRank, ExactMatch );
+          else
+            maximizeRank( bestRank, Conversion );
+          //maximizeRank( bestRank, rank );
         }
       }
     }
@@ -406,7 +410,11 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
       Declaration* function = resolver.resolveConstructor( OverloadResolver::Parameter( from.data(), fromLValue ), true, true );
       if( function ) {
         //We've successfully located an overloaded constructor that accepts the argument
-        maximizeRank( bestRank, resolver.worstConversionRank() );
+          if( to == realFrom )
+            maximizeRank( bestRank, ExactMatch );
+          else
+            maximizeRank( bestRank, Conversion );
+        //maximizeRank( bestRank, resolver.worstConversionRank() );
       }
     }
   }

@@ -64,7 +64,7 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
   return resolveInternal(params, declarations, noUserDefinedConversion );
 }
 
-ConversionRank OverloadResolver::worstConversionRank() {
+uint OverloadResolver::worstConversionRank() {
   return m_worstConversionRank;
 }
 
@@ -90,8 +90,10 @@ Declaration* OverloadResolver::resolveInternal( const ParameterList& params, con
     ViableFunction viable( *it , noUserDefinedConversion );
     viable.matchParameters( params );
     
-    if( viable.isBetter(bestViableFunction) )
+    if( viable.isBetter(bestViableFunction) ) {
       bestViableFunction = viable;
+      m_worstConversionRank = bestViableFunction.worstConversion();
+    }
   }
 
   if( bestViableFunction.isViable() )

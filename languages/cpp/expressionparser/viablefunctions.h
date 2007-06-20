@@ -43,6 +43,8 @@ namespace Cpp {
 
     bool isBetter( const ViableFunction& other ) const;
 
+    uint worstConversion() const;
+    
     /**
      * Is the function viable for the parameters given by matchParameters(...), as defined in iso c++ 13.3.2?
      * */

@@ -49,6 +49,13 @@ class OverloadResolver {
     };
     struct ParameterList {
       QList<Parameter> parameters;
+
+      ParameterList() {
+      }
+      
+      ParameterList( const QList<Parameter>& params ) : parameters(params) {
+      }
+      
       ParameterList( const Parameter& param ) {
         parameters << param;
       }
@@ -65,9 +72,9 @@ class OverloadResolver {
 
     /**
      * Resolve one function with the given name that matches the given parameters.
-     * 
+     *
      * When classes are found under the given name, their constructors will be considered as functions.
-     * 
+     *
      * @param params The parameters
      * @param functionName name of the function
      * @param noUserDefinedConversion should be true when no user-defined conversions are allowed for parameters
@@ -75,9 +82,10 @@ class OverloadResolver {
     Declaration* resolve( const ParameterList& params, const QualifiedIdentifier& functionName, bool noUserDefinedConversion = false );
 
     /**
-     * The worst conversion-rank achieved while matching the parameters of the last overload-resolution
+     * The worst conversion-rank achieved while matching the parameters of the last overload-resolution.
+     * It is valued like the results of TypeConversion::implicitConversion(..)
      * */
-    ConversionRank worstConversionRank();
+    uint worstConversionRank();
     
     /**
      * Tries to find a constructor of the class represented by the current context
@@ -86,13 +94,19 @@ class OverloadResolver {
      * @param noUserDefinedConversion When this is true, user-defined conversions(constructor- or conversion-function conversion) are not allowed while matching the parameters
      * */
     Declaration* resolveConstructor( const ParameterList& params, bool implicit = false, bool noUserDefinedConversion = false );
+  
+    /**
+     * Tries to choose the correct function out of a given list of function-declarations. If one of those declarations is a class-declaration,
+     * it will be substituted by it's constructors.
+     * @param params parameters to match
+     * @param declarations list of declarations
+     * @param noUserDefinedConversion should be true when user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
+     * */
+    Declaration* resolveInternal( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
   private:
 
-    ///Also considers constructors
-    Declaration* resolveInternal( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
-    
     DUContext* m_context;
-    ConversionRank m_worstConversionRank;
+    uint m_worstConversionRank;
 };
 
 }

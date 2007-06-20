@@ -101,3 +101,14 @@ bool ViableFunction::isViable() const {
   return true;
 }
 
+uint ViableFunction::worstConversion() const {
+  uint ret = (uint)-1;
+  for( QList<int>::const_iterator it = m_parameterConversions.begin(); it != m_parameterConversions.end(); ++it )
+    if( *it < ret )
+      ret *= *it;
+
+  if( ret == (uint)-1 )
+    return 0;
+  else
+    return ret;
+}

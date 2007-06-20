@@ -271,11 +271,10 @@ void TestExpressionParser::testSimpleExpression() {
   release(c);
 }
 
-
 void TestExpressionParser::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { }";
+  QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { test( Cont(), 1, 5.5, 6); }";
   DUContext* c = parse( test, DumpDUChain | DumpAST );
   DUChainWriteLocker lock(DUChain::lock());
   
@@ -300,7 +299,6 @@ void TestExpressionParser::testTypeConversion() {
   //lock.lock();
   release(c);
 }
-
 
 void TestExpressionParser::testCasts() {
   TEST_FILE_PARSE_ONLY
