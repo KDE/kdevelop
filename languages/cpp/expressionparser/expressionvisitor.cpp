@@ -393,8 +393,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         ///If the found declaration declares a type, this is a type-expression and m_lastInstance should be zero.
         ///The declaration declares a type if it's abstractType's declaration is that declaration. Else it is an insantiation, and m_lastType should be filled.
 
-        Declaration* d = getDeclaration(node, m_lastType);
-        if( d->kind() == Declaration::Instance )
+        if( m_lastDeclarations.first()->kind() == Declaration::Instance )
           m_lastInstance = Instance( m_lastDeclarations.first() );
         else
           m_lastInstance = Instance(false);
@@ -794,7 +793,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     clearLast();
     visit(node->arguments);
 
-    //binary expressions don't yield m_lastType, so when m_lastType is set wo probably one have one single parameter
+    //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
     if( m_lastType )
       m_parameters << OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) );
     
@@ -846,6 +845,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   void ExpressionVisitor::visitTypeId(TypeIdAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNewTypeId(NewTypeIdAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { problem(node, "node-type cannot be parsed"); }
 
   void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node)
   {
@@ -898,5 +898,4 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   void ExpressionVisitor::visitUsingDirective(UsingDirectiveAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitWhileStatement(WhileStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitWinDeclSpec(WinDeclSpecAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { problem(node, "node-type cannot be parsed"); }
 }
