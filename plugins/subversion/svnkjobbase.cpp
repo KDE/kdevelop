@@ -14,6 +14,8 @@
 #include "subversionthreads.h"
 #include "svn_models.h"
 #include "vcshelpers.h"
+#include "vcsevent.h"
+#include "vcsrevision.h"
 #include <klocale.h>
 #include <QVariant>
 #include <QMap>
@@ -26,9 +28,12 @@ public:
     QVariant m_variant;
     bool m_validResult;
 
+    // returns QVariant ( const QMap< QString, QVariant > ),
+    // where innermost QVariant (which is template argument) is constructed with
+    // QVariant( KDevelop::VcsState )
     QVariant result_status()
     {
-        QMap< QString, QVariant > ret;
+        QMap< QString, QVariant > retMap;
         SvnStatusJob *thread = dynamic_cast<SvnStatusJob*>(m_th);
         QList<SvnStatusHolder> holderList = thread->m_holderMap.values();
 
@@ -56,16 +61,40 @@ public:
             }
 
             QVariant statVar( stat );
-            ret.insert( QString(), statVar );
+            retMap.insert( _holder.wcPath , statVar );
         }
 
-        QVariant variant( ret );
+        QVariant variant( retMap );
         return variant;
     }
 
+    // returns QVariant ( const QList<QVariant> & val ),
+    // where innermost QVariant (which is template argument) is constructed with
+    // qVariantFromValue( VcsEvent )
     QVariant result_log()
     {
-        return QVariant();
+        QList< QVariant > eventList;
+        SvnLogviewJob *thread = dynamic_cast<SvnLogviewJob*>(m_th);
+        QList<SvnLogHolder> logList = thread->m_loglist;
+
+        foreach( SvnLogHolder _holder, logList ){
+            KDevelop::VcsEvent oneEvent;
+
+            KDevelop::VcsRevision revision;
+            revision.setRevisionValue( QString::number(_holder.rev), KDevelop::VcsRevision::GlobalNumber );
+            oneEvent.setRevision( revision );
+
+            oneEvent.setAuthor( _holder.author );
+            oneEvent.setDate( QDateTime::fromString(_holder.date, Qt::ISODate) );
+            oneEvent.setMessage( _holder.logmsg );
+            // TODO setActions, setItems.
+
+            QVariant eventVariant = qVariantFromValue( oneEvent );
+            eventList.append( eventVariant );
+        }
+
+        QVariant retVariant( eventList );
+        return retVariant;
     }
 
     QVariant result_annotate()
@@ -161,11 +190,6 @@ QString SvnKJobBase::smartError()
     return msg;
 }
 
-QString SvnKJobBase::errorMessage()
-{
-    return KJob::errorText();
-}
-
 void SvnKJobBase::start()
 {
     if( d->m_validResult ){
@@ -177,16 +201,16 @@ void SvnKJobBase::start()
     d->m_th->start();
 }
 
-KDevelop::VcsJob::JobStatus SvnKJobBase::exec()
-{
-    bool ret = KJob::exec();
-    if( ret ){
-        return KDevelop::VcsJob::JobSucceeded;
-    }
-    else{
-        return KDevelop::VcsJob::JobFailed;
-    }
-}
+// KDevelop::VcsJob::JobStatus SvnKJobBase::exec()
+// {
+//     bool ret = KJob::exec();
+//     if( ret ){
+//         return KDevelop::VcsJob::JobSucceeded;
+//     }
+//     else{
+//         return KDevelop::VcsJob::JobFailed;
+//     }
+// }
 
 // SvnUiDelegate* SvnKJobBase::ui()
 // {

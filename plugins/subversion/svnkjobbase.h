@@ -38,10 +38,9 @@ public:
     KDevelop::VcsJob::JobType type();
 
     QString smartError(); // subversion internal
-    QString errorMessage(); // VcsJob iface
 
     virtual void start();
-    JobStatus exec();
+//     JobStatus exec();
 //     SvnUiDelegate* ui();
 
 Q_SIGNALS:
