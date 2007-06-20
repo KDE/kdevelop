@@ -12,6 +12,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "server.h"
 #include "sharedptr.h"
 #include <cc++/socket.h>
 #include <cstdlib>
@@ -26,7 +27,6 @@
 #include "messageimpl.h"
 #include "helpers.h"
 #include "basicsession.h"
-#include "server.h"
 
 
 #define SLEEPTIME 50

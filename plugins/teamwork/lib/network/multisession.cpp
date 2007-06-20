@@ -12,8 +12,8 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include "teamworkserver.h"
 #include "multisession.h"
+#include "teamworkserver.h"
 #include "forwardsession.h"
 
 namespace Teamwork {

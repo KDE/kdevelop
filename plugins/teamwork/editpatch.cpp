@@ -61,7 +61,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "kdevteamwork_client.h"
 
-///Whether arbitrary exceptions that occured while diff-parsing within the library should be caught
+///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
 #define CATCHLIBDIFF
 
 using namespace KDevelop;

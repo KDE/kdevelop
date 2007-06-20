@@ -129,7 +129,7 @@ void PatchesManager::init() {
 }
 
 void PatchesManager::slotManagePatches() {
-  m_manageDlg = new QDialog( m_teamwork->widget() );
+  m_manageDlg = new KDialog( m_teamwork->widget() );
   m_managePatches.setupUi( m_manageDlg );
   m_managePatches.patchesList->setEditTriggers( QAbstractItemView::NoEditTriggers );
   connect( m_managePatches.edit, SIGNAL( pressed() ), this, SLOT( slotEditPatch() ) );

@@ -11,8 +11,8 @@ email                : david.nolden.kdevelop@art-master.de
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <sstream>
 #include "serializationutils.h"
+#include <sstream>
 
 #ifdef XML_USE_TEXT_ARCHIVE
 #include <boost/archive/polymorphic_text_iarchive.hpp>

@@ -15,6 +15,7 @@ email                : david.nolden.kdevelop@art-master.de
 ///@todo the whole inclusion-structure needs a big cleanup
 
 
+#include "kdevteamwork.h"
 #include <list>
 
 #include <QtGui/QHeaderView>
@@ -36,7 +37,6 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "network/messagetypeset.h"
 #include "network/multisession.h"
-#include "kdevteamwork.h"
 #include "kdevteamwork_part.h"
 #include "kdevteamwork_messageshower.h"
 #include "kdevteamwork_user.h"

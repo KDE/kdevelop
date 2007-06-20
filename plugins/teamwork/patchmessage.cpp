@@ -12,13 +12,13 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "patchmessage.h"
 #include "network/serialization.h"
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
 #include  <memory>
 
-#include  "patchmessage.h"
 #include <k3process.h>
 #include <kurl.h>
 #include <kmimetype.h>

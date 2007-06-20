@@ -18,7 +18,6 @@
 #include <QMenu>
 #include <QMetaType>
 #include "filecollaborationmanager.h"
-#include "kdevteamwork_user.h"
 #include "messagemanager.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_client.h"

@@ -12,9 +12,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "messageimpl.h"
 #include "serialization.h"
 #include "messagetypeset.h"
-#include "messageimpl.h"
 #include "helpers.h"
 #include "basicsession.h"
 #include "teamworkmessages.h"
@@ -73,7 +73,7 @@ namespace Teamwork {
     deserialized_ = rhs.deserialized_;
     return *this;
   }
-  
+
 
   MessageInfo::MessageInfo( InArchive& arch ) : id_( arch ), deserialized_( true ) {
     //cout << "deserializing message-info";
@@ -132,7 +132,7 @@ namespace Teamwork {
   const UniqueMessageId MessageInterface::uniqueId() const {
     return info().uniqueId();
   }
-  
+
 
   bool MessageInterface::needReply() const {
     return false;
@@ -144,7 +144,7 @@ namespace Teamwork {
     return false;
   }
 
-  
+
 //By making this a static function, it is sure that the object is initialized when first used
 MessageTypeSet& globalMessageTypeSet() {
   static MessageTypeSet allMessages;
