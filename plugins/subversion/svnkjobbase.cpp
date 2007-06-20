@@ -16,6 +16,7 @@
 #include "vcshelpers.h"
 #include "vcsevent.h"
 #include "vcsrevision.h"
+#include "vcsannotation.h"
 #include <klocale.h>
 #include <QVariant>
 #include <QMap>
@@ -97,9 +98,35 @@ public:
         return retVariant;
     }
 
+    // returns QVariant( VcsAnnotation ) which is constructed with qVariantFromValue( VcsAnnotation )
     QVariant result_annotate()
     {
-        return QVariant();
+        QList< QVariant > annList;
+        SvnBlameJob *thread = dynamic_cast<SvnBlameJob*>(m_th);
+        KDevelop::VcsAnnotation vcsAnn;
+
+        QStringList lines;
+        QStringList authors;
+        QList<QDateTime> dates;
+        QList<KDevelop::VcsRevision> revisions;
+
+        foreach( SvnBlameHolder _holder, thread->m_blameList ){
+            lines.append( _holder.contents );
+            authors.append( _holder.author );
+            dates.append( QDateTime::fromString( _holder.date, Qt::ISODate ) );
+
+            KDevelop::VcsRevision rev;
+            rev.setRevisionValue( QString::number( _holder.revNo ), KDevelop::VcsRevision::GlobalNumber );
+            revisions.append( rev );
+        }
+
+        vcsAnn.setLines( lines );
+        vcsAnn.setAuthors( authors );
+        vcsAnn.setDates( dates );
+        vcsAnn.setRevisions( revisions );
+        vcsAnn.setLocation( KUrl() ); // TODO modify subversion plugin internal.
+
+        return qVariantFromValue( vcsAnn );
     }
 
     QVariant result_diff()
