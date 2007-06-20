@@ -1,3 +1,16 @@
+/***************************************************************************
+copyright            : (C) 2006 by David Nolden
+email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #ifndef WEAKPOINTER_H
 #define WEAKPOINTER_H
 
@@ -64,7 +77,7 @@ class WeakSafeShared : protected SafeShared {
     Holding a pointer of type WeakSafeShared, does not increase the reference-count of the pointed object. If the object is deleted,
     the pointer is set to zero. This comes with additional cost. The pointed object must be based on WeakSafeShared, and for each creation of
     that type one additional allocation of an internal SafeShared-object(especially a mutex) is done.
-    
+
     WeakSafeSharedPtr itself does not consume more memory than SafeSharedPtr, but locking-operations are more costly, because two locks are done instead of one.
  */
 
