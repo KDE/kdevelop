@@ -52,7 +52,7 @@ void EditSnippet::accept()
     snippet_->save();
 
     // Call baseclass' accept() method
-    QDialog::accept();
+    KDialog::accept();
 }
 
 #include "editsnippet.moc"

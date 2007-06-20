@@ -64,7 +64,7 @@ void MoveRepository::accept()
     repo_->changeLocation( newLocation, name->text() );
 
     // Call baseclass' accept() method
-    QDialog::accept();
+    KDialog::accept();
 }
 
 #include "moverepository.moc"
