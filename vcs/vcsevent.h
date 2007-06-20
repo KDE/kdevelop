@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSHELPERS_H
-#define VCSHELPERS_H
+#ifndef VCSEVENT_H
+#define VCSEVENT_H
 
 #include <QtCore/QVariant>
 
