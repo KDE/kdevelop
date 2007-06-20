@@ -582,6 +582,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     clearLast();
 
     ///@todo Change this, share code with TypeBuilder::visitSimpleTypeSpecifier to also respect integral types, const, volatile, pointer, etc.
+    ///We need to parse a TypeIdAST for this. That's not done anywhere until now.
 //     TypeCompiler compiler(m_session);
 //     compiler.run(node->type_id);
 //     

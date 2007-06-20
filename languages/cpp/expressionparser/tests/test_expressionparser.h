@@ -51,9 +51,9 @@ public:
 
 private slots:
   void initTestCase();
-  void testCasts();
   void testSimpleExpression();
   void testTypeConversion();
+  void testCasts();
   void cleanupTestCase();
 
 public:

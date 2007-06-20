@@ -57,6 +57,8 @@ public:
 class KDEVCPPRPP_EXPORT Environment
 {
 public:
+  typedef QHash<QString, pp_macro*> EnvironmentMap;
+  
   Environment(pp* preprocessor);
   virtual ~Environment();
 
@@ -77,13 +79,18 @@ public:
   void cleanup();
 
   void clearMacro(const QString& name);
+
+  //Note: Undef-macros are allowed too
   virtual void setMacro(pp_macro* macro);
-  pp_macro* retrieveMacro(const QString& name) const;
+  virtual pp_macro* retrieveMacro(const QString& name) const;
 
   QList<pp_macro*> allMacros() const;
 
+  //Fater access then allMacros(..), because nothing is copied
+  const EnvironmentMap& environment();
+  
 private:
-  QHash<QString, pp_macro*> m_environment;
+  EnvironmentMap m_environment;
 
   QStack<MacroBlock*> m_blocks;
   bool m_replaying;

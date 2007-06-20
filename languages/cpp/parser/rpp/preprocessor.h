@@ -42,6 +42,7 @@ public:
 
     QString processString(const QString& string);
 
+    
     /**
      * This function is called by the preprocessor whenever
      * it encounters an include directive.

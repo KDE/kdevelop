@@ -23,11 +23,61 @@
 
 using namespace rpp;
 
+void pp_macro::invalidateHash() {
+  m_idHashValid = false;
+  m_valueHashValid = false;
+}
+
+pp_macro::pp_macro(const QString& nm)
+  : name(nm)
+  , sourceLine(-1)
+  , defined(true)
+  , hidden(false)
+  , function_like(false)
+  , variadics(false)
+  , m_idHashValid(false)
+  , m_valueHashValid(false)
+{
+}
+
 pp_macro::pp_macro( )
   : sourceLine(-1)
   , defined(true)
   , hidden(false)
   , function_like(false)
   , variadics(false)
+  , m_idHashValid(false)
+  , m_valueHashValid(false)
 {
+}
+size_t fastHashString( const QString& str ) {
+  size_t hash = 0;
+  if( !str.isEmpty() ) {
+    const QChar* curr = str.unicode();
+    const QChar* end = curr + str.length();
+    QChar c;
+    for(; curr < end ;) {
+      c = *curr;
+      hash = c.unicode() + ( hash * 17 );
+      ++curr;
+    }
+  }
+  return hash;
+}
+
+void pp_macro::computeHash() const {
+    if( m_valueHashValid || m_idHashValid )
+      return;
+    m_idHash = 7 * ( fastHashString( name ) );
+    int a = 1;
+  //m_idHash += 31 * m_argumentList.count();
+
+    m_valueHash = 27 * ( fastHashString( definition ) +  (defined ? 1 : 0 ) );
+
+    for( QStringList::const_iterator it = formals.begin(); it != formals.end(); ++it ) {
+        a *= 19;
+        m_valueHash += a * fastHashString( *it );
+    }
+    m_valueHashValid = true;
+    m_idHashValid = true;
 }

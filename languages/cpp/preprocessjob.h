@@ -25,8 +25,13 @@
 class CPPParseJob;
 
 #include <parsejob.h>
+#include <ksharedptr.h>
 
 #include "parser/rpp/preprocessor.h"
+
+namespace Cpp {
+    class CachedLexedFile;
+};
 
 class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
 {
@@ -45,7 +50,8 @@ protected:
 
 private:
     bool checkAbort();
-
+    
+    KSharedPtr<Cpp::CachedLexedFile> m_cachedLexedFile;
     bool m_success;
 };
 

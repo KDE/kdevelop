@@ -165,7 +165,14 @@ void Environment::setMacro(pp_macro* macro)
   if (!m_replaying)
     m_blocks.top()->macros.append(macro);
 
-  m_environment.insert(macro->name, macro);
+  if( !macro->defined )
+    clearMacro(macro->name);
+  else
+    m_environment.insert(macro->name, macro);
+}
+
+const Environment::EnvironmentMap& Environment::environment() {
+  return m_environment;
 }
 
 pp_macro* Environment::retrieveMacro(const QString& name) const

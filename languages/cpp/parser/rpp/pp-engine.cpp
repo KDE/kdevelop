@@ -995,7 +995,10 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 
   if (test_if_level())
   {
-    bool value = m_environment->retrieveMacro(macro_name);
+    pp_macro* macro = m_environment->retrieveMacro(macro_name);
+    bool value = false;
+    if( macro && macro->defined )
+      value = true;
 
     if (check_undefined)
       value = !value;

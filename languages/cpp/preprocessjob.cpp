@@ -38,15 +38,48 @@
 
 #include "cpplanguagesupport.h"
 #include "cppparsejob.h"
+#include "problem.h"
 #include "parser/parsesession.h"
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-engine.h"
+#include "parser/rpp/pp-macro.h"
+#include "lexercache.h"
 #include <duchain.h>
+
+class CppPreprocessEnvironment : public rpp::Environment {
+    public:
+        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::CachedLexedFile> lexedFile ) : Environment(preprocessor), m_lexedFile(lexedFile) {
+        }
+
+        
+        virtual rpp::pp_macro* retrieveMacro(const QString& name) const {
+            ///@todo use a global string-repository
+            ///note all strings that can be affected by macros
+            m_lexedFile->addString(HashedString(name));
+            rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
+
+            if( ret ) ///note all used macros
+                m_lexedFile->addUsedMacro(*ret);
+            
+            return ret;
+        }
+
+        
+        virtual void setMacro(rpp::pp_macro* macro) {
+            ///Note defined macros
+            m_lexedFile->addDefinedMacro(*macro);
+            rpp::Environment::setMacro(macro);
+        }
+
+    private:
+        mutable KSharedPtr<Cpp::CachedLexedFile> m_lexedFile;
+};
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
+    , m_cachedLexedFile( new Cpp::CachedLexedFile( parent->document().prettyUrl(KUrl::RemoveTrailingSlash), 0 ) ) ///@todo care about manager
     , m_success(true)
 {
 }
@@ -118,6 +151,8 @@ void PreprocessJob::run()
     parentJob()->parseSession()->macros = new rpp::MacroBlock(0);
 
     rpp::pp preprocessor(this);
+    ///@todo enable
+    //preprocessor.setEnvironment( new CppPreprocessEnvironment( &preprocessor, m_cachedLexedFile ) );
     preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);
 
     QString result = preprocessor.processFile(contents, rpp::pp::Data);
@@ -145,9 +180,13 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         if (CppLanguageSupport* lang = parent->cpp()) {
             VALGRIND_CHECK_MEM_IS_DEFINED(lang, sizeof(CppLanguageSupport)); */
 
-
     includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName);
     if (includedFile.isValid()) {
+        /**
+         * @todo Check if there already is a cached usable instance of the file, if it is use it
+         * Else preprocess the file now
+         * */
+        
         if (KDevelop::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile)) {
             /*if (job == parentJob())
                 // Trying to include self

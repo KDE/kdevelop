@@ -27,6 +27,11 @@
 #include <ktexteditor/cursor.h>
 
 #include <cppparserexport.h>
+#include <ksharedptr.h>
+
+namespace Cpp {
+  class CachedLexedFile;
+};
 
 class pool;
 class TokenStream;
@@ -54,6 +59,7 @@ public:
 
   const char *contents() const;
   std::size_t size() const;
+  KSharedPtr<Cpp::CachedLexedFile> cachedLexedFile; //Not filled yet
   pool* mempool;
   TokenStream* token_stream;
   LocationTable* location_table;
