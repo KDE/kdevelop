@@ -154,25 +154,31 @@ namespace TypeUtils {
       return internalContexts.front();
   }
     
-  void getConversionFunctions(CppClassType* klass, QHash<AbstractType*, Declaration*>& functions, bool mustBeConstant)  {
+  void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     DUContext* context = getInternalContext( klass->declaration() );
 
-    QList<Declaration*> declarations = context->localDeclarations();
+    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(functionName));
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
-      if( (*it)->abstractType() ) {
-        CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
-        ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
-        Q_ASSERT(functionDeclaration);
-        if( functionDeclaration->isConversionFunction() && !functions.contains(function->returnType().data()) && (!mustBeConstant || function->isConstant()) ) {
-          functions[function->returnType().data()] =  *it;
+      CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
+      ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
+      if( function && functionDeclaration ) {
+        if( !functions.contains(function) && (!mustBeConstant || function->isConstant()) ) {
+          functions[function] =  functionDeclaration;
         }
       }
     }
 
     for( QList<CppClassType::BaseClassInstance>::const_iterator it =  klass->baseClasses().begin(); it != klass->baseClasses().end(); ++it ) {
-      if( (*it).access != KDevelop::Declaration::Private )
-        getConversionFunctions( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data(), functions );//we need const-cast here because the constant list makes also the pointers constant, which is not intended
+      if( (*it).access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
+        getMemberFunctions( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data(), functions, functionName,   mustBeConstant);
     }
+  }
+
+  void getMemberFunctions(CppClassType* klass, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant)  {
+    QHash<CppFunctionType*, ClassFunctionDeclaration*> tempFunctions;
+    getMemberFunctions( klass, tempFunctions, functionName, mustBeConstant );
+    for( QHash<CppFunctionType*, ClassFunctionDeclaration*>::const_iterator it = tempFunctions.begin(); it != tempFunctions.end(); ++it )
+      functions << (*it);
   }
 
   void getConstructors(CppClassType* klass, QList<Declaration*>& functions) {

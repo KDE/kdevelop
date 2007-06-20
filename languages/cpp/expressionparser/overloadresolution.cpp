@@ -74,19 +74,28 @@ Declaration* OverloadResolver::resolveInternal( const ParameterList& params, con
   
   ViableFunction bestViableFunction;
 
-  ///First step: Find classes in the declaration-list. If there are classes, insert all their constructors.
+  ///First step: Replace class-instances with operator() functions, and pure classes with their constructors
   QList<Declaration*> newDeclarations = declarations;
   
   for( QList<Declaration*>::const_iterator it = declarations.begin(); it != declarations.end(); ++it ) {
     Declaration* decl = *it;
+    bool isConstant = false;
 
-    if( CppClassType* klass = dynamic_cast<CppClassType*>( decl->abstractType().data() ) ) {
-      TypeUtils::getConstructors( klass, newDeclarations );
+    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl->abstractType(), &isConstant) ) )
+    {
+      if( decl->kind() == Declaration::Instance ) {
+        //Instances of classes should be substituted with their operator() members
+        TypeUtils::getMemberFunctions( klass, newDeclarations, "operator()", isConstant );
+      } else {
+        //Classes should be substituted with their constructors
+        TypeUtils::getConstructors( klass, newDeclarations );
+      }
     }
   }
 
   ///Second step: Find best viable function
-  for( QList<Declaration*>::const_iterator it = declarations.begin(); it != declarations.end(); ++it ) {
+  for( QList<Declaration*>::const_iterator it = declarations.begin(); it != declarations.end(); ++it )
+  {
     ViableFunction viable( *it , noUserDefinedConversion );
     viable.matchParameters( params );
     

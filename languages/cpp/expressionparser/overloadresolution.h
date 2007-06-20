@@ -96,8 +96,11 @@ class OverloadResolver {
     Declaration* resolveConstructor( const ParameterList& params, bool implicit = false, bool noUserDefinedConversion = false );
   
     /**
-     * Tries to choose the correct function out of a given list of function-declarations. If one of those declarations is a class-declaration,
-     * it will be substituted by it's constructors.
+     * Tries to choose the correct function out of a given list of function-declarations.
+     * If one of those declarations is a class-declaration, it will be substituted by it's constructors.
+     * If one of those declarations is an instance of a class, it will be substituted with it's operator()
+     * functions. Constant references to class-instances are treated correctly.
+     * 
      * @param params parameters to match
      * @param declarations list of declarations
      * @param noUserDefinedConversion should be true when user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters

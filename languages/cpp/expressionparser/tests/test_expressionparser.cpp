@@ -274,7 +274,7 @@ void TestExpressionParser::testSimpleExpression() {
 void TestExpressionParser::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { test( Cont(), 1, 5.5, 6); }";
+  QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }";
   DUContext* c = parse( test, DumpDUChain | DumpAST );
   DUChainWriteLocker lock(DUChain::lock());
   
@@ -303,7 +303,7 @@ void TestExpressionParser::testTypeConversion() {
 void TestExpressionParser::testCasts() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
+  QByteArray test = "struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); c.a = dynamic_cast<const Cont2*>(d); }";
   DUContext* c = parse( test, DumpDUChain | DumpAST );
   DUChainWriteLocker lock(DUChain::lock());
   

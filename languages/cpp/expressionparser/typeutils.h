@@ -28,6 +28,7 @@ class CppFunctionType;
 namespace KDevelop {
   class DUContext;
   class Declaration;
+  class ClassFunctionDeclaration;
 }
 
 namespace TypeUtils {
@@ -125,12 +126,16 @@ namespace TypeUtils {
 
   /**
    * Returns all conversion-functions from klass and all accessible bases
-   * This cannot be used for constructors, because those have no return-type.
    * @param klass The class in which to search
-   * @param functions A hash that will map functions to their return-types
+   * @param functions A hash that will map functions to their types
+   * @param functionName Name of the functions
    * */
-  void getConversionFunctions(CppClassType* klass, QHash<AbstractType*, Declaration*>& functions, bool mustBeConstant=false);
+  void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
 
+  /**
+   * Same as above, except that it adds the functions to a list.
+   * */
+  void getMemberFunctions(CppClassType* klass, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
   /**
    * Returns all constructors
    * */

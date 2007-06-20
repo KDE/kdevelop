@@ -377,26 +377,30 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
    **/
   ConversionRank bestRank = NoMatch;
 
-  ///@todo what exactly to do with the rank? Currently it is only copied from the underlying standardConversion
   bool fromConst = false;
   AbstractType::Ptr realFrom( realType(from, &fromConst) );
   {
     ///Try user-defined conversion using a conversion-function, iso c++ 12.3
     CppClassType* fromClass = dynamic_cast<CppClassType*>( realFrom.data() );
-    if( fromClass ) {
+    
+    if( fromClass )
+    {
       ///Search for a conversion-function that has a compatible output
-      QHash<AbstractType*, Declaration*> conversionFunctions;
-      getConversionFunctions(fromClass, conversionFunctions, fromConst);
-      for( QHash<AbstractType*, Declaration*>::const_iterator it = conversionFunctions.begin(); it != conversionFunctions.end(); ++it ) {
-        AbstractType::Ptr convertedType( it.key() );
+      QHash<CppFunctionType*, ClassFunctionDeclaration*> conversionFunctions;
+      getMemberFunctions(fromClass, conversionFunctions, "operator<...cast...>", fromConst);
+      
+      for( QHash<CppFunctionType*, ClassFunctionDeclaration*>::const_iterator it = conversionFunctions.begin(); it != conversionFunctions.end(); ++it )
+      {
+        AbstractType::Ptr convertedType( it.key()->returnType() );
         ConversionRank rank = standardConversion( convertedType, to );
-        if( rank != NoMatch && (!secondConversionIsIdentity || rank == ExactMatch) ) {
+        
+        if( rank != NoMatch && (!secondConversionIsIdentity || rank == ExactMatch) )
+        {
           //We have found a matching conversion-function
           if( realType(convertedType) == to.data() )
             maximizeRank( bestRank, ExactMatch );
           else
             maximizeRank( bestRank, Conversion );
-          //maximizeRank( bestRank, rank );
         }
       }
     }
@@ -405,16 +409,18 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
   {
     ///Try conversion using constructor
     CppClassType* toClass = dynamic_cast<CppClassType*>( to.data() );
-    if( toClass ) {
+    if( toClass )
+    {
       OverloadResolver resolver( getInternalContext( toClass->declaration() ) );
       Declaration* function = resolver.resolveConstructor( OverloadResolver::Parameter( from.data(), fromLValue ), true, true );
-      if( function ) {
+      
+      if( function )
+      {
         //We've successfully located an overloaded constructor that accepts the argument
           if( to == realFrom )
             maximizeRank( bestRank, ExactMatch );
           else
             maximizeRank( bestRank, Conversion );
-        //maximizeRank( bestRank, resolver.worstConversionRank() );
       }
     }
   }
