@@ -29,6 +29,14 @@ namespace KDevelop
 
 class Declaration;
 
+/**
+ * An IdentifiedType is a type that has a declaration.
+ * Example of an identified type:
+ * - A class type
+ * Example of not identified types:
+ * - Pointer types(can point to identified types, but itself has no declaration)
+ * - Reference types(the same)
+ * */
 class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedType
 {
 public:

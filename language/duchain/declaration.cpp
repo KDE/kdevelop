@@ -56,6 +56,15 @@ public:
   bool m_inSymbolTable : 1;
 };
 
+Declaration::Kind Declaration::kind() const {
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>( d->m_type.data() );
+  //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
+  if( (!idType) || (idType && idType->declaration() != this) )
+    return Instance;
+  else
+    return Type;
+}
+
 Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* context )
   : DUChainBase(range)
   , d(new DeclarationPrivate)

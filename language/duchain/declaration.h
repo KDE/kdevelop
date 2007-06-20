@@ -60,6 +60,12 @@ public:
     Const = 0x1,
     Volatile = 0x2
   };
+
+  enum Kind {
+    Type, //A type is declared, like a class-declaration or function-declaration("class MyClass {};")
+    Instance //An instance of a type is declared("MyClass m;")
+  };
+  
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
   Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
@@ -107,6 +113,11 @@ public:
 
   QualifiedIdentifier qualifiedIdentifier() const;
 
+  /**
+   * Returns the kind of this declaration. @see Kind
+   * */
+  Kind kind() const;
+  
   /**
    * Provides a mangled version of this definition's identifier, for use in a symbol table.
    */
