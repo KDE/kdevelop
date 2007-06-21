@@ -174,6 +174,7 @@ void LexerCache::erase( const CacheNode* node ) {
 CachedLexedFile::CachedLexedFile( const HashedString& fileName, LexerCache* manager ) : CacheNode( manager ), m_fileName( fileName ) {
   QFileInfo fileInfo( fileName.str() );
   m_modificationTime = fileInfo.lastModified();
+  addIncludeFile(fileName, m_modificationTime );
   m_allModificationTimes[ fileName ] = m_modificationTime;
 }
 
