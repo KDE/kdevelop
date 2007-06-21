@@ -276,9 +276,16 @@ QStandardItem* MakeActionFilter::processAndCreate( const QString& line )
             }
 
             QStandardItem *actionItem = new QStandardItem( txt );
-            QFont newfont( actionItem->font() );
-            newfont.setBold( true );
-            actionItem->setFont( newfont );
+            if( format.action() == i18n("built") )
+            {
+                actionItem->setForeground( KColorScheme().foreground(KColorScheme::PositiveText) );
+            } else
+            {
+
+                QFont newfont( actionItem->font() );
+                newfont.setBold( true );
+                actionItem->setFont( newfont );
+            }
             kDebug( 9038 ) << "Found: " << format.action() << " " << format.file() << "(" << format.tool() << ")" << endl;
             return actionItem;
         }
