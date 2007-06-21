@@ -31,7 +31,7 @@
 
 namespace Cpp {
   class CachedLexedFile;
-};
+}
 
 class pool;
 class TokenStream;
