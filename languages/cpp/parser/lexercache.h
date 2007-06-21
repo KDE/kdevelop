@@ -55,7 +55,7 @@
 namespace rpp {
   class pp_macro;
   class Environment;
-};
+}
 
 class Problem;
 

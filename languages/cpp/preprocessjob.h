@@ -31,7 +31,7 @@ class CPPParseJob;
 
 namespace Cpp {
     class CachedLexedFile;
-};
+}
 
 class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
 {
