@@ -33,10 +33,10 @@ CacheNode::CacheNode( Manager* manager ) : m_manager( manager ), m_value(manager
   
 CacheNode::~CacheNode() {
   m_manager->remove( this );
-};
+}
 
 CacheManager::CacheManager( int maxNodes ) : m_currentFrame(1), m_maxNodes( maxNodes ), m_currentMax(1) {
-};
+}
 
 CacheManager::~CacheManager() {
 }
