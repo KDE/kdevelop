@@ -14,6 +14,10 @@ email                : david.nolden.kdevelop@art-master.de
 #include "indocumentreference.h"
 #include "utils.h"
 
+/* Exclude this file from doublequote_chars check as krazy doesn't understand
+std::string*/
+//krazy:exclude-all=doubleqote_chars
+
 QString InDocumentReference::createReference( const QString& file, int startLine, int startCol, int endLine, int endCol ) {
 	QString ret = file;
 	if( startLine != -1 ) ret.append( QString( ":%1" ).arg( startLine ) );

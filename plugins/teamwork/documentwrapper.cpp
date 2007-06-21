@@ -49,6 +49,10 @@ email                : david.nolden.kdevelop@art-master.de
 #include "iuicontroller.h" /* defines [function] activeMainWindow */
 #include "icore.h" /* defines [function] uiController */
 
+/* Exclude this file from doublequote_chars check as krazy doesn't understand
+std::string*/
+//krazy:exclude-all=doubleqote_chars
+
 using namespace KDevelop;
 
 #define IFDEBUG( x ) /**/

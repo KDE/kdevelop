@@ -45,6 +45,10 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "serializationutils.h"
 
+/* Exclude this file from doublequote_chars check as krazy doesn't understand
+std::string*/
+//krazy:exclude-all=doubleqote_chars
+
 QString userNameFromSession( const SessionPointer& session ) {
   UserPointer::Locked lu = userFromSession( session );
   if ( lu ) {

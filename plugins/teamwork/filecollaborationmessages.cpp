@@ -26,6 +26,10 @@
 #include <boost/serialization/string.hpp>
 #include "qtserialization.h"
 
+/* Exclude this file from doublequote_chars check as krazy doesn't understand
+std::string*/
+//krazy:exclude-all=doubleqote_chars
+
 Q_DECLARE_METATYPE( MessagePointer )
 
 FileCollaborationRequestData::FileCollaborationRequestData( FileCollaboration* collab, uint index, uint senderIndex ) : m_state( Unknown ), m_index( index ), m_senderIndex( senderIndex ), m_isAutomatic( false ), m_collab( collab ), m_acceptAction( 0 ), m_denyAction( 0 ) {
@@ -195,7 +199,7 @@ void FileCollaborationRequestData::dispatchSignal( const DenySignal& /*sig*/ ) {
 
 void FileCollaborationRequestData::acceptCollaboration() {
   cout << "acceptCollaboration" << endl;
-  
+
   MessagePointer::Locked l = ( FileCollaborationRequest* ) this;
   if ( l && m_teamwork ) {
     m_state = Accepted;
@@ -230,7 +234,7 @@ void FileCollaborationRequest::fillContextMenu( QMenu* menu, KDevTeamwork* teamw
     QAction* d = menu->addAction( "Deny File-Collaboration", this, SLOT( denyCollaboration() ) );*/
     QAction* a = menu->addAction( "Accept File-Collaboration", new QSafeSignaller( FileCollaborationRequestPointer(this), FileCollaborationRequestData::AcceptSignal(), menu ), SLOT( signal() ) );
     QAction* d = menu->addAction( "Deny File-Collaboration", new QSafeSignaller( FileCollaborationRequestPointer(this), FileCollaborationRequestData::DenySignal(), menu ), SLOT( signal() ) );
-    
+
 /*
     connect( a, SIGNAL( triggered( bool ) ), new SafeSignaller( FileCollaborationRequestPointer(this), FileCollaborationRequestData::AcceptSignal(), menu ), SLOT( signal() ) );
     connect( d, SIGNAL( triggered( bool ) ), new SafeSignaller( FileCollaborationRequestPointer(this), FileCollaborationRequestData::DenySignal(), menu ), SLOT( signal() ) );*/

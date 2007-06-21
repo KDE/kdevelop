@@ -24,6 +24,9 @@
 #include <kdebug.h>
 #include <kurl.h>
 
+/* Exclude this file from doublequote_chars check as krazy doesn't understand
+std::string*/
+//krazy:exclude-all=doubleqote_chars
 
 TeamworkFolderManager* TeamworkFolderManager::m_self = 0;
 

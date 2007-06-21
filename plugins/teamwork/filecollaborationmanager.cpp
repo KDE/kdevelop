@@ -39,6 +39,10 @@ email                : david.nolden.kdevelop@art-master.de
 #include "kdevteamwork_helpers.h"
 #include "ui_kdevteamwork_filecollaborationsession.h"
 
+/* Exclude this file from doublequote_chars check as krazy doesn't understand
+std::string*/
+//krazy:exclude-all=doubleqote_chars
+
 using namespace Teamwork;
 
 CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, QList<QString>, 0, value->plainFileNames() )

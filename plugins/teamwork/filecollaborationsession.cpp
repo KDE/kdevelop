@@ -45,6 +45,10 @@ Q_DECLARE_METATYPE( Teamwork::UserPointer )
 #include "filesynchronizemessage.h"
 #include "teamworkfoldermanager.h"
 
+/* Exclude this file from doublequote_chars check as krazy doesn't understand
+std::string*/
+//krazy:exclude-all=doubleqote_chars
+
 using namespace KDevelop;
 
 CROSSMAP_KEY_EXTRACTOR( FileCollaborationPointer, FileCollaborationPointer, 0, value )
