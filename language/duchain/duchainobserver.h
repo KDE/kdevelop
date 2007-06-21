@@ -35,7 +35,7 @@ class Use;
 class DUChainObserver
 {
 public:
-  virtual ~DUChainObserver() {};
+  virtual ~DUChainObserver() {}
 
   enum Modification {
     Addition,

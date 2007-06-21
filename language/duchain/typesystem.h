@@ -42,7 +42,7 @@ class ArrayType;
 class TypeVisitor
 {
 public:
-  virtual ~TypeVisitor () {};
+  virtual ~TypeVisitor () {}
 
   virtual bool preVisit (const AbstractType *) { return true; }
   virtual void postVisit (const AbstractType *) {}
