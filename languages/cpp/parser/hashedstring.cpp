@@ -24,10 +24,10 @@
 //It needs to be measured whether this flag should be turned on or off. It seems just to move the complexity from one position to the other, without any variant being really better.
 #define USE_HASHMAP
     
-size_t fastHashString( const QString& str );
+unsigned int fastHashString( const QString& str );
 
-size_t hashStringSafe( const QString& str ) {
-  size_t hash = 0;
+unsigned int hashStringSafe( const QString& str ) {
+  unsigned int hash = 0;
   int len = str.length();
   for( int a = 0; a < len; a++ ) {
     hash = str[a].unicode() + (hash * 17);
@@ -35,13 +35,13 @@ size_t hashStringSafe( const QString& str ) {
   return hash;
 }
 
-size_t HashedString::hashString(  const QString& str )
+unsigned int HashedString::hashString(  const QString& str )
 {
 	return fastHashString( str );
 }
 
-size_t fastHashString( const QString& str ) {
-  size_t hash = 0;
+unsigned int fastHashString( const QString& str ) {
+  unsigned int hash = 0;
   if( !str.isEmpty() ) {
     const QChar* curr = str.unicode();
     const QChar* end = curr + str.length();
@@ -69,7 +69,7 @@ class HashedStringSetData : public KShared {
 #endif
       StringSet m_files;
   mutable bool m_hashValid;
-      mutable size_t m_hash;
+      mutable unsigned int m_hash;
       HashedStringSetData() : m_hashValid( false ) {
       }
   inline void invalidateHash() {
@@ -227,7 +227,7 @@ bool HashedStringSet::operator == ( const HashedStringSet& rhs ) const {
   return m_data->m_files == rhs.m_data->m_files;
 }
 
-size_t HashedStringSet::hash() const {
+unsigned int HashedStringSet::hash() const {
   if( !m_data ) return 0;
   if( !m_data->m_hashValid ) m_data->computeHash();
   return m_data->m_hash;
@@ -284,7 +284,7 @@ QDataStream& operator >> ( QDataStream& stream, HashedString& str ) {
     return stream;
 }
 
-void HashedStringSetGroup::addSet( size_t id, const HashedStringSet& set ) {
+void HashedStringSetGroup::addSet( unsigned int id, const HashedStringSet& set ) {
   if( set.m_data && !set.m_data->m_files.empty() ) {
     m_sizeMap[ id ] = set.size();
     for( HashedStringSetData::StringSet::const_iterator it = set.m_data->m_files.begin(); it != set.m_data->m_files.end(); ++it ) {
@@ -299,19 +299,19 @@ void HashedStringSetGroup::addSet( size_t id, const HashedStringSet& set ) {
   }
 }
 
-void HashedStringSetGroup::disableSet( size_t id ) {
+void HashedStringSetGroup::disableSet( unsigned int id ) {
   m_disabled.insert( id );
 }
 
-void HashedStringSetGroup::enableSet( size_t id ) {
+void HashedStringSetGroup::enableSet( unsigned int id ) {
   m_disabled.erase( id );
 }
 
-bool HashedStringSetGroup::isDisabled( size_t id ) const {
+bool HashedStringSetGroup::isDisabled( unsigned int id ) const {
   return m_disabled.find( id ) != m_disabled.end();
 }
 
-void HashedStringSetGroup::removeSet( size_t id ) {
+void HashedStringSetGroup::removeSet( unsigned int id ) {
   m_disabled.erase( id );
   m_global.erase( id );
   m_sizeMap.erase( id );
@@ -328,7 +328,7 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
     return;
   }
   //This might yet be optimized by sorting the sets according to their size, and starting the intersectioning with the smallest ones.
-  __gnu_cxx::hash_map<size_t, int> hitCounts;
+  __gnu_cxx::hash_map<unsigned int, int> hitCounts;
   
   for( HashedStringSetData::StringSet::const_iterator it = strings.m_data->m_files.begin(); it != strings.m_data->m_files.end(); ++it ) {
     GroupMap::const_iterator itr = m_map.find( *it );
@@ -338,7 +338,7 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
       }
 
       for( ItemSet::const_iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2 ) {
-        __gnu_cxx::hash_map<size_t, int>::iterator v = hitCounts.find( *it2 );
+        __gnu_cxx::hash_map<unsigned int, int>::iterator v = hitCounts.find( *it2 );
         if( v != hitCounts.end() ) {
           ++(*v).second;
         } else {
@@ -349,7 +349,7 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
 
   //Now count together all groups that are completely within the given string-set(their hitCount equals their size)
   ItemSet found;
-  for( __gnu_cxx::hash_map<size_t, int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
+  for( __gnu_cxx::hash_map<unsigned int, int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
     if( (*it).second == (*m_sizeMap.find( (*it).first )).second )
       found.insert( (*it).first );
   }

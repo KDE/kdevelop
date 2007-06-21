@@ -38,7 +38,7 @@ class KDEVCPPPARSER_EXPORT HashedString {
       initHash();
     }
 
-    inline size_t hash() const {
+    inline unsigned int hash() const {
       return m_hash;
     }
 
@@ -61,13 +61,13 @@ class KDEVCPPPARSER_EXPORT HashedString {
       return false;
     }
 
-    static size_t hashString( const QString& str );
+    static unsigned int hashString( const QString& str );
 
   private:
     void initHash();
 
     QString m_str;
-    size_t m_hash;
+    unsigned int m_hash;
 
     friend QDataStream& operator << ( QDataStream& stream, const HashedString& str );
     friend QDataStream& operator >> ( QDataStream& stream, HashedString& str );
@@ -115,7 +115,7 @@ class KDEVCPPPARSER_EXPORT HashedStringSet {
 
     std::string print() const;
 
-  size_t hash() const;
+  unsigned int hash() const;
   private:
     friend class HashedStringSetGroup;
     void makeDataPrivate();
@@ -128,7 +128,7 @@ HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& 
 namespace __gnu_cxx {
 template<>
 struct KDEVCPPPARSER_EXPORT hash<HashedString> {
-  size_t operator () ( const HashedString& str ) const {
+  unsigned int operator () ( const HashedString& str ) const {
     return str.hash();
   }
 };
@@ -137,19 +137,19 @@ struct KDEVCPPPARSER_EXPORT hash<HashedString> {
 ///Used to find all registered HashedStringSet's that contain all strings given to findGroups(..)
 class KDEVCPPPARSER_EXPORT HashedStringSetGroup {
   public:
-    typedef std::set<size_t> ItemSet;
-    void addSet( size_t id, const HashedStringSet& set );
-    void enableSet( size_t id );
-    bool isDisabled( size_t id ) const;
-    void disableSet( size_t id );
-    void removeSet( size_t id );
+    typedef std::set<unsigned int> ItemSet;
+    void addSet( unsigned int id, const HashedStringSet& set );
+    void enableSet( unsigned int id );
+    bool isDisabled( unsigned int id ) const;
+    void disableSet( unsigned int id );
+    void removeSet( unsigned int id );
 
     //Writes the ids of all registered and not disabled HashedStringSet's that are completely included in the given HashedStringSet efficiently)
     void findGroups( HashedStringSet strings, ItemSet& target ) const;
 
   private:
     typedef __gnu_cxx::hash_map<HashedString, ItemSet> GroupMap;
-    typedef __gnu_cxx::hash_map<size_t, size_t> SizeMap;
+    typedef __gnu_cxx::hash_map<unsigned int, unsigned int> SizeMap;
     GroupMap m_map;
     SizeMap m_sizeMap;
     ItemSet m_disabled;
