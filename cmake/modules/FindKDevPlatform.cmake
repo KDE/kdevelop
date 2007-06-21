@@ -31,14 +31,14 @@ endif( KDEVPLATFORM_INCLUDE_DIR AND KDEVPLATFORM_LIBRARIES )
 
 if(WIN32)
     file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _progFiles)
-    set(KDE4_INCLUDE_DIR ${KDE4_INCLUDE_DIR} ${_progFiles}/kdevplatform/include/kdevplatform)
-    set(KDE4_LIB_DIR ${KDE4_LIB_DIR} ${_progFiles}/kdevplatform/lib)
+    set(_KDEVPLATFORM_INCLUDE_DIR ${KDE4_INCLUDE_DIR} ${_progFiles}/kdevplatform/include/kdevplatform)
+    set(_KDEVPLATFORM_LIB_DIR ${KDE4_LIB_DIR} ${_progFiles}/kdevplatform/lib)
 endif(WIN32)
 
 if( NOT KDEVPLATFORM_INCLUDE_DIR )
     find_path( _platformIncDir kdevplatform/interfaces/iplugin.h
         PATHS
-	${KDE4_INCLUDE_DIR}
+        ${_KDEVPLATFORM_INCLUDE_DIR}
     )
     set(KDEVPLATFORM_INCLUDE_DIR ${_platformIncDir}/kdevplatform)
 endif( NOT KDEVPLATFORM_INCLUDE_DIR )
@@ -47,7 +47,7 @@ set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatfor
 if( NOT KDEVPLATFORM_LIBRARY_DIR )
     find_library( _platforminterfaces_lib NAMES kdevplatforminterfaces
 	    PATHS
-	    ${KDE4_LIB_DIR}
+	    ${_KDEVPLATFORM_LIB_DIR}
 	    )
     get_filename_component(KDEVPLATFORM_LIBRARY_DIR ${_platforminterfaces_lib} PATH )
 endif( NOT KDEVPLATFORM_LIBRARY_DIR )
