@@ -34,8 +34,7 @@
 
 #include <QtCore/qdebug.h>
 
-namespace KDevelop
-{
+using namespace KDevelop;
 
 class ProjectTreeViewPrivate
 {
@@ -140,16 +139,16 @@ ProjectTargetItem *ProjectTreeView::currentTargetItem() const
     return 0;
 }
 
-ProjectModel *ProjectTreeView::projectModel() const
+KDevelop::ProjectModel *ProjectTreeView::projectModel() const
 
 {
-    return qobject_cast<ProjectModel*>( model() );
+    return qobject_cast<KDevelop::ProjectModel*>( model() );
 }
 
 void ProjectTreeView::slotActivated( const QModelIndex &index )
 
 {
-    ProjectBaseItem *item = projectModel()->item( index );
+    KDevelop::ProjectBaseItem *item = projectModel()->item( index );
 
     if ( item && item->file() )
     {
@@ -182,7 +181,6 @@ void ProjectTreeView::slotCurrentChanged( const QModelIndex &index )
     }
 }
 
-}
 
 #include "projecttreeview.moc"
 

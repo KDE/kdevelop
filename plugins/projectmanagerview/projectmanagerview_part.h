@@ -28,15 +28,16 @@ class KUrl;
 
 namespace KDevelop
 {
-
 class ProjectBaseItem;
-class ProjectManagerView;
 class ProjectBuilder;
 class ProjectFileItem;
 class ProjectFolderItem;
 class ProjectTargetItem;
+}
 
-class ProjectManagerViewPart: public IPlugin
+class ProjectManagerView;
+
+class ProjectManagerViewPart: public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
@@ -58,20 +59,20 @@ public:
     // Plugin methods
     virtual void unload();
 
-    QPair<QString, QList<QAction*> > requestContextMenuActions( Context* );
+    QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
 
 
     void executeProjectBuilder( KDevelop::ProjectBaseItem* );
 
 Q_SIGNALS:
     void refresh();
-    void addedProjectItem(ProjectBaseItem *dom);
-    void aboutToRemoveProjectItem(ProjectBaseItem *dom);
+    void addedProjectItem(KDevelop::ProjectBaseItem *dom);
+    void aboutToRemoveProjectItem(KDevelop::ProjectBaseItem *dom);
 
 public Q_SLOTS:
     void openURL(const KUrl &url);
     void executeContextMenuAction( const QString& objectname );
-    void updateDetails(ProjectBaseItem *item);
+    void updateDetails(KDevelop::ProjectBaseItem *item);
 
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
@@ -84,7 +85,6 @@ private:
 
 };
 
-}
 #endif
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

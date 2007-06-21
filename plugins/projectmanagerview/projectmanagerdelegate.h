@@ -23,9 +23,6 @@
 
 #include <QtGui/QItemDelegate>
 
-namespace KDevelop
-{
-
 class ProjectManagerDelegate: public QItemDelegate
 {
         Q_OBJECT
@@ -36,7 +33,6 @@ class ProjectManagerDelegate: public QItemDelegate
         virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 };
 
-}
 #endif // KDEVPROJECTMANAGERDELEGATE_H
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

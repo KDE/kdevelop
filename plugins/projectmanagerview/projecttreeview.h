@@ -27,15 +27,16 @@
 class KUrl;
 class QItemSelectionModel;
 
-namespace KDevelop
-{
 
 class ProjectManagerViewPart;
+namespace KDevelop
+{
 class ProjectModel;
 class ProjectFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
 class ProjectBaseItem;
+}
 
 class ProjectTreeView: public QTreeView
 {
@@ -45,11 +46,11 @@ class ProjectTreeView: public QTreeView
         virtual ~ProjectTreeView();
 
         ProjectManagerViewPart *part() const;
-        ProjectModel *projectModel() const;
+        KDevelop::ProjectModel *projectModel() const;
 
-        ProjectFolderItem *currentFolderItem() const;
-        ProjectFileItem *currentFileItem() const;
-        ProjectTargetItem *currentTargetItem() const;
+        KDevelop::ProjectFolderItem *currentFolderItem() const;
+        KDevelop::ProjectFileItem *currentFileItem() const;
+        KDevelop::ProjectTargetItem *currentTargetItem() const;
 
         void setSelectionModel( QItemSelectionModel* );
 
@@ -57,7 +58,7 @@ class ProjectTreeView: public QTreeView
 
     Q_SIGNALS:
         void activateURL( const KUrl &url );
-        void currentChanged( ProjectBaseItem *item );
+        void currentChanged( KDevelop::ProjectBaseItem *item );
 
     protected Q_SLOTS:
         void slotActivated( const QModelIndex &index );
@@ -68,7 +69,6 @@ class ProjectTreeView: public QTreeView
         class ProjectTreeViewPrivate* const d;
 };
 
-}
 #endif // KDEVPROJECTMANAGER_H
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

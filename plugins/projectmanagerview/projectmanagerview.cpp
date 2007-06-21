@@ -47,8 +47,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QStandardItem>
 
-namespace KDevelop
-{
+using namespace KDevelop;
 
 class ProjectManagerPrivate
 {
@@ -161,8 +160,6 @@ ProjectManagerViewPart *ProjectManagerView::part() const
     return d->m_part;
 }
 
-
-}
 #include "projectmanagerview.moc"
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

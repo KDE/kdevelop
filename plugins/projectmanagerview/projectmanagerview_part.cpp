@@ -47,8 +47,7 @@
 #include <QtCore/QList>
 #include <QtCore/QSignalMapper>
 
-namespace KDevelop
-{
+using namespace KDevelop;
 
 typedef KGenericFactory<ProjectManagerViewPart> ProjectManagerFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevprojectmanagerview, ProjectManagerFactory( "kdevprojectmanagerview" ) )
@@ -233,7 +232,6 @@ void ProjectManagerViewPart::slotCloseProject()
     core()->projectController()->closeProject( project );
 }
 
-}
 #include "projectmanagerview_part.moc"
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

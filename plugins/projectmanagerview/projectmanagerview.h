@@ -25,8 +25,6 @@
 
 
 
-namespace KDevelop
-{
 
 class ProjectManagerViewPart;
 
@@ -48,7 +46,6 @@ class ProjectManagerView: public QWidget
         class ProjectManagerPrivate* const d;
 };
 
-}
 #endif // KDEVPROJECTMANAGER_H
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

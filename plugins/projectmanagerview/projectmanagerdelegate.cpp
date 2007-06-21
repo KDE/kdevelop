@@ -25,8 +25,7 @@
 
 #include <kdebug.h>
 
-namespace KDevelop
-{
+using namespace KDevelop;
 
 ProjectManagerDelegate::ProjectManagerDelegate( QObject *parent )
         : QItemDelegate( parent )
@@ -61,7 +60,6 @@ void ProjectManagerDelegate::paint( QPainter *painter, const QStyleOptionViewIte
     QItemDelegate::paint( painter, opt, index );
 }
 
-}
 #include "projectmanagerdelegate.moc"
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
