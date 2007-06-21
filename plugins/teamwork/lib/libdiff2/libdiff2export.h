@@ -24,8 +24,6 @@
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 
-#if defined _WIN32 || defined _WIN64
-
 #ifndef LIBDIFF2_XPORT
 # ifdef MAKE_LIBDIFF2_LIB
 #  define LIBDIFF2_EXPORT KDE_EXPORT
@@ -34,10 +32,5 @@
 # endif
 #endif
 
-#else //UNIX
-
-/* export statements for unix */
-#define LIBDIFF2_EXPORT KDE_EXPORT
-#endif
 #endif /* LIBDIFF2EXPORT_H*/
 
