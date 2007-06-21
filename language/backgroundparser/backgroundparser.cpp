@@ -118,7 +118,7 @@ public:
     BackgroundParser* m_parser;
     ILanguageSupport *m_languageSupport;
 
-    QTimer *m_timer;
+    QTimer m_timer;
     int m_delay;
     int m_threads;
     uint m_modelsToCache;
@@ -136,8 +136,8 @@ public:
 
     ParserDependencyPolicy* m_dependencyPolicy;
 
-    QMutex* m_mutex;
-    QWaitCondition* m_waitForJobCreation;
+    QMutex m_mutex;
+    QWaitCondition m_waitForJobCreation;
 };
 
 BackgroundParser::BackgroundParser(ILanguageSupport *languageSupport,  QObject* parent )
@@ -147,17 +147,14 @@ BackgroundParser::BackgroundParser(ILanguageSupport *languageSupport,  QObject* 
     d->m_delay =  500;
     d->m_threads =  1;
     d->m_modelsToCache =  0;
-    d->m_progressBar =  new QProgressBar;
+//     d->m_progressBar =  new QProgressBar;  TODO enable this if needed, it will leak if not passed to the statusbar
     d->m_weaver =  new Weaver( this );
     d->m_dependencyPolicy =  new ParserDependencyPolicy;
-    d->m_mutex = new QMutex();
-    d->m_waitForJobCreation = new QWaitCondition;
 
     ThreadWeaver::setDebugLevel(true, 1);
 
-    d->m_timer = new QTimer( this );
-    d->m_timer->setSingleShot( true );
-    connect( d->m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
+    d->m_timer.setSingleShot( true );
+    connect( &d->m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
 
     loadSettings(false); //start the weaver
 
@@ -182,12 +179,11 @@ BackgroundParser::~BackgroundParser()
     }
 
     delete d->m_dependencyPolicy;
-    delete d->m_waitForJobCreation;
 }
 
 void BackgroundParser::clear(QObject* parent)
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     QHashIterator<KUrl, ParseJob*> it = d->m_parseJobs;
     while (it.hasNext()) {
@@ -219,7 +215,7 @@ void BackgroundParser::saveSettings( bool projectIsLoaded )
 
 void BackgroundParser::initialize()
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
 /*    m_progressBar->setMinimumWidth( 150 );
     Core::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
@@ -233,7 +229,7 @@ void BackgroundParser::cleanup()
 void BackgroundParser::addDocument( const KUrl &url )
 {
     kDebug() << "BackgroundParser::addDocument" << endl;
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
     {
 
     if (thread() != QThread::currentThread()) {
@@ -247,7 +243,7 @@ void BackgroundParser::addDocument( const KUrl &url )
         do {
             // Only wait for one second, or five wakeups, as this can deadlock when closing the project
             // FIXME: detect when project is closing
-            d->m_waitForJobCreation->wait(d->m_mutex, 200);
+            d->m_waitForJobCreation.wait(&d->m_mutex, 200);
 
             foundParseJob = d->m_parseJobs.contains(url);
             ++count;
@@ -268,7 +264,7 @@ void BackgroundParser::addDocument( const KUrl &url )
     }
 
     // Wake up waiting threads
-    d->m_waitForJobCreation->wakeAll();
+    d->m_waitForJobCreation.wakeAll();
 }
 
 /*
@@ -289,7 +285,7 @@ void BackgroundParser::addDocument( Document* document )
 
 void BackgroundParser::addDocumentList( const KUrl::List &urls )
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     uint i = 0;
     foreach( KUrl url, urls )
@@ -307,7 +303,7 @@ void BackgroundParser::addDocumentList( const KUrl::List &urls )
 
 void BackgroundParser::removeDocument( const KUrl &url )
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     if ( !url.isValid() ) {
         kWarning() << k_funcinfo << "Invalid url " << url << endl;
@@ -332,14 +328,14 @@ void BackgroundParser::removeDocument( Document* document )
 
 void BackgroundParser::parseDocuments()
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     d->parseDocumentsInternal();
 }
 
 void BackgroundParser::parseComplete( Job *job )
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     //kDebug() << k_funcinfo << "Complete " << job << " success? " << job->success() << endl;
 
@@ -358,7 +354,7 @@ void BackgroundParser::parseComplete( Job *job )
 /*
 void BackgroundParser::documentChanged( KTextEditor::Document * document )
 {
-    QMutexLocker lock(m_mutex);
+    QMutexLocker lock(&m_mutex);
 
     Q_ASSERT( d->m_documents.contains( document->url() ) );
     d->m_documents.insert( document->url(), true );
@@ -366,8 +362,8 @@ void BackgroundParser::documentChanged( KTextEditor::Document * document )
     bool s = d->m_weaver->state().stateId() == ThreadWeaver::Suspended
             || d->m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
 
-    if ( !d->m_timer->isActive() && !s )
-        d->m_timer->start( m_delay );
+    if ( !d->m_timer.isActive() && !s )
+        d->m_timer.start( m_delay );
 }
 */
 
@@ -379,7 +375,7 @@ void BackgroundParser::suspend()
     if ( s ) //Already suspending
         return;
 
-    d->m_timer->stop();
+    d->m_timer.stop();
 
     d->m_weaver->suspend();
 
@@ -392,10 +388,10 @@ void BackgroundParser::resume()
     bool s = d->m_weaver->state().stateId() == ThreadWeaver::Suspended
             || d->m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
 
-    if ( d->m_timer->isActive() && !s ) //Not suspending
+    if ( d->m_timer.isActive() && !s ) //Not suspending
         return;
 
-    d->m_timer->start( d->m_delay );
+    d->m_timer.start( d->m_delay );
 
     d->m_weaver->setMaximumNumberOfThreads( d->m_threads );
     d->m_weaver->resume();
@@ -406,14 +402,14 @@ void BackgroundParser::resume()
 
 void BackgroundParser::setDelay( int msec )
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     d->m_delay = msec;
 }
 
 void BackgroundParser::setThreads( int threads )
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     d->m_threads = threads;
 }
@@ -425,7 +421,7 @@ ParserDependencyPolicy* BackgroundParser::dependencyPolicy() const
 
 ParseJob* BackgroundParser::parseJobForDocument(const KUrl& document) const
 {
-    QMutexLocker lock(d->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     if (d->m_parseJobs.contains(document))
         return d->m_parseJobs[document];
