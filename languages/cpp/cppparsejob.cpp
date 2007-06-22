@@ -167,9 +167,6 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 
 void CPPInternalParseJob::run()
 {
-#warning cpp parsing is disabled temporarily because the code is not tested yet
-    //return;
-    
     kDebug( 9007 ) << "===-- PARSING --===> "
     << parentJob()->document().fileName()
     << endl;
