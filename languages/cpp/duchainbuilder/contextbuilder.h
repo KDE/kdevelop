@@ -42,7 +42,8 @@ namespace KTextEditor { class Range; }
 namespace Cpp {
   class CachedLexedFile;
   typedef KSharedPtr<CachedLexedFile> CachedLexedFilePointer;
-};
+}
+
 /**
  * A class which iterates the AST to identify contexts.
  */
