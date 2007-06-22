@@ -15,6 +15,7 @@ Name=QMake
 Name[x-test]=xxQMakexx
 Comment=Configure QMake settings
 Comment[de]=QMake Einstellungen
+Comment[el]=Ρύθμιση επιλογών του QMake
 Comment[es]=Configurar las preferencias de QMake
 Comment[x-test]=xxConfigure QMake settingsxx
 
