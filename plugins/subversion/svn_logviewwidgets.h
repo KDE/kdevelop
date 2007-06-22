@@ -51,7 +51,7 @@ class SvnLogviewOptionDialog : public KDialog
 {
     Q_OBJECT
 public:
-    SvnLogviewOptionDialog( const KUrl &url, QWidget *parent = 0 );
+    explicit SvnLogviewOptionDialog( const KUrl &url, QWidget *parent = 0 );
     virtual ~SvnLogviewOptionDialog();
 
     bool repositLog();
