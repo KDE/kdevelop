@@ -48,9 +48,9 @@ DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
 {
 }
 
-TopDUContext* DeclarationBuilder::buildDeclarations(const KUrl& url, AST *node, QList<DUContext*>* includes)
+TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::CachedLexedFilePointer& file, AST *node, QList<DUContext*>* includes)
 {
-  TopDUContext* top = buildContexts(url, node, includes);
+  TopDUContext* top = buildContexts(file, node, includes);
 
   Q_ASSERT(m_accessPolicyStack.isEmpty());
   Q_ASSERT(m_functionDefinedStack.isEmpty());

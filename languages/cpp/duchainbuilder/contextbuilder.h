@@ -24,6 +24,7 @@
 
 #include <identifier.h>
 #include <ducontext.h>
+#include <ksharedptr.h>
 #include "cppduchainbuilderexport.h"
 
 namespace KDevelop
@@ -38,6 +39,10 @@ class NameCompiler;
 
 namespace KTextEditor { class Range; }
 
+namespace Cpp {
+  class CachedLexedFile;
+  typedef KSharedPtr<CachedLexedFile> CachedLexedFilePointer;
+};
 /**
  * A class which iterates the AST to identify contexts.
  */
@@ -56,7 +61,7 @@ public:
    *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
-  KDevelop::TopDUContext* buildContexts(const KUrl& url, AST *node, QList<KDevelop::DUContext*>* includes = 0);
+  KDevelop::TopDUContext* buildContexts(const Cpp::CachedLexedFilePointer& file, AST *node, QList<KDevelop::DUContext*>* includes = 0);
 
   /**
    * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,

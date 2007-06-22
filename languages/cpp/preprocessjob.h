@@ -33,6 +33,8 @@ namespace Cpp {
     class CachedLexedFile;
 }
 
+class CppPreprocessEnvironment;
+
 class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
 {
     Q_OBJECT
@@ -45,12 +47,13 @@ public:
 
     virtual bool success() const;
 
-protected:
+    //Must only be called for direct parsing when the job is not queued
     virtual void run();
 
 private:
     bool checkAbort();
-    
+
+    CppPreprocessEnvironment* m_currentEnvironment;
     KSharedPtr<Cpp::CachedLexedFile> m_cachedLexedFile;
     bool m_success;
 };

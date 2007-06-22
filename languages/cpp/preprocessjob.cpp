@@ -51,16 +51,17 @@
 class CppPreprocessEnvironment : public rpp::Environment {
     public:
         CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::CachedLexedFile> lexedFile ) : Environment(preprocessor), m_lexedFile(lexedFile) {
+            //If this is included from another preprocessed file, take the current macro-set from there.
         }
 
         
         virtual rpp::pp_macro* retrieveMacro(const QString& name) const {
             ///@todo use a global string-repository
-            ///note all strings that can be affected by macros
+            //note all strings that can be affected by macros
             m_lexedFile->addString(HashedString(name));
             rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
 
-            if( ret ) ///note all used macros
+            if( ret ) //note all used macros
                 m_lexedFile->addUsedMacro(*ret);
             
             return ret;
@@ -68,7 +69,7 @@ class CppPreprocessEnvironment : public rpp::Environment {
 
         
         virtual void setMacro(rpp::pp_macro* macro) {
-            ///Note defined macros
+            //Note defined macros
             m_lexedFile->addDefinedMacro(*macro);
             rpp::Environment::setMacro(macro);
         }
@@ -79,7 +80,8 @@ class CppPreprocessEnvironment : public rpp::Environment {
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
-    , m_cachedLexedFile( new Cpp::CachedLexedFile( parent->document().prettyUrl(KUrl::RemoveTrailingSlash), 0 ) ) ///@todo care about manager
+    , m_currentEnvironment(0)
+    , m_cachedLexedFile( new Cpp::CachedLexedFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
     , m_success(true)
 {
 }
@@ -151,13 +153,31 @@ void PreprocessJob::run()
     parentJob()->parseSession()->macros = new rpp::MacroBlock(0);
 
     rpp::pp preprocessor(this);
-    ///@todo enable
-    //preprocessor.setEnvironment( new CppPreprocessEnvironment( &preprocessor, m_cachedLexedFile ) );
+
+    //Eventually initialize the environment with the parent-environment to get it's macros
+    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_cachedLexedFile );
+
+    //If we are included from another preprocessor, copy it's macros
+    if( parentJob()->parentPreprocessor() )
+            m_currentEnvironment->takeMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
+    
+    
+    preprocessor.setEnvironment( m_currentEnvironment );
     preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);
 
     QString result = preprocessor.processFile(contents, rpp::pp::Data);
 
     parentJob()->parseSession()->setContents( result.toUtf8() );
+    parentJob()->parseSession()->cachedLexedFile = m_cachedLexedFile;
+
+    if( PreprocessJob* parentPreprocessor = parentJob()->parentPreprocessor() ) {
+        //If we are included from another preprocessor, give it back the modified macros,
+        parentPreprocessor->m_currentEnvironment->takeMacros(m_currentEnvironment);
+        //Merge include-file-set, defined macros, used macros, and string-set
+        parentPreprocessor->m_cachedLexedFile->merge(*m_cachedLexedFile);
+    }
+    
+    m_currentEnvironment = 0;
 }
 
 rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine)
@@ -168,9 +188,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
     if (checkAbort())
         return 0;
-
-    bool dependencyAdded = false;
-    bool dependencyAllowed = true;
 
     KUrl includedFile;
 
@@ -186,20 +203,18 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
          * @todo Check if there already is a cached usable instance of the file, if it is use it
          * Else preprocess the file now
          * */
+
+        ///Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the included file right here. Parallel parsing cannot be used here, because we need the macros before we can continue.
+
+        //Create a slave-job that will take over our macros
+        CPPParseJob* slaveJob = new CPPParseJob( includedFile, parentJob()->cpp(), this );
+        slaveJob->parseForeground();
+
+        //Add the included file
+        Q_ASSERT(slaveJob->duChain());
+        parentJob()->addIncludedFile( slaveJob->duChain() );
         
-        if (KDevelop::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile)) {
-            /*if (job == parentJob())
-                // Trying to include self
-                goto done;
-
-            if (!job->isFinished()) {
-                dependencyAllowed = parentJob()->addDependency(job, parentJob()->parseJob());
-
-                kDebug() << k_funcinfo << "Added dependency on job " << job << " to " << parentJob() << " pp " << this << " parse " << parentJob()->parseJob() << " success " << dependencyAllowed << endl;
-            }
-
-            dependencyAdded = true;*/
-        }
+        delete slaveJob;
     }
 
         /*} else {
@@ -208,23 +223,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     } else {
         kWarning() << k_funcinfo << "Parent job disappeared!!" << endl;
     }*/
-
-    if (!dependencyAdded && dependencyAllowed && includedFile.isValid()) {
-        parentJob()->backgroundParser()->addDocument(includedFile);
-        KDevelop::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile);
-        /*if (job == parentJob())
-            // Trying to include self
-            goto done;
-
-        if (job && !job->isFinished()) {
-            dependencyAllowed = parentJob()->addDependency(job, parentJob()->parseJob());
-            kDebug() << k_funcinfo << "Added dependency on job " << job << " to " << parentJob() << " pp " << this << " parse " << parentJob()->parseJob() << " success " << dependencyAllowed << endl;
-        }*/
-    }
-
-    done:
-
-    parentJob()->addIncludedFile(fileName);
 
     return 0;
 }

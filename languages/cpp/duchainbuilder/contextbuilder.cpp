@@ -32,6 +32,7 @@
 #include <topducontext.h>
 #include "dumpchain.h"
 #include <symboltable.h>
+#include "lexercache.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -62,14 +63,14 @@ ContextBuilder::~ContextBuilder ()
   delete m_nameCompiler;
 }
 
-TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DUContext*>* includes)
+TopDUContext* ContextBuilder::buildContexts(const Cpp::CachedLexedFilePointer& file, AST *node, QList<DUContext*>* includes)
 {
   m_compilingContexts = true;
 
-  m_editor->setCurrentUrl(url);
+  m_editor->setCurrentUrl(file->url());
 
   // FIXME ? race here...
-  TopDUContext* topLevelContext = DUChain::self()->chainForDocument(url);
+  TopDUContext* topLevelContext = DUChain::self()->chainForDocument(file->url());
 
   if (topLevelContext) {
     m_recompiling = true;
@@ -95,7 +96,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext->setType(DUContext::Global);
 
-    DUChain::self()->addDocumentChain(url, topLevelContext);
+    DUChain::self()->addDocumentChain(file->url(), topLevelContext);
   }
 
   m_encounteredToken = topLevelContext->lastEncountered() + 1;
@@ -121,7 +122,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
   m_compilingContexts = false;
 
   if (!m_importedParentContexts.isEmpty()) {
-    kWarning() << k_funcinfo << url << " Previous parameter declaration context didn't get used??" << endl;
+    kWarning() << k_funcinfo << file->url() << " Previous parameter declaration context didn't get used??" << endl;
     DumpChain dump;
     dump.dump(topLevelContext);
     m_importedParentContexts.clear();

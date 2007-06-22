@@ -28,6 +28,7 @@
 
 #include <ktexteditor/range.h>
 
+class PreprocessJob;
 class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
@@ -41,14 +42,23 @@ class CPPParseJob : public KDevelop::ParseJob
 {
     Q_OBJECT
 public:
+    /**
+     * @param parentPreprocessor May be the preprocess-job that created this parse-job.
+     * Defined macros will be imported from that preprocess-job.
+     * If parentPreprocessor is set, no jobs will be automatically created, since everything should be parsed in foreground.
+     * Instead the preprocessor should call parseForeground();
+     * */
     CPPParseJob( const KUrl &url,
-              CppLanguageSupport* parent );
+              CppLanguageSupport* parent, PreprocessJob* parentPreprocessor = 0  );
 
 //     CPPParseJob( KDevelop::Document* document,
 //               CppLanguageSupport* parent );
 
     virtual ~CPPParseJob();
 
+    ///When the parse-job was initialized with a parent-preprocessor, the parent-preprocessor should call this to do the parsing
+    void parseForeground();
+    
     CppLanguageSupport* cpp() const;
 
     ParseSession* parseSession() const;
@@ -62,8 +72,11 @@ public:
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
 
-    void addIncludedFile(const QString& filename);
-    const QStringList& includedFiles() const;
+    void addIncludedFile( KDevelop::TopDUContext* );
+    QList<KDevelop::TopDUContext*> includedFiles() const;
+    ///Returns the preprocessor-job that is parent of this job, or 0
+    PreprocessJob* parentPreprocessor() const;
+    
     void requestDependancies();
 
     ::CPPInternalParseJob* parseJob() const;
@@ -71,13 +84,15 @@ public:
     const KTextEditor::Range& textRangeToParse() const;
 
 private:
+    PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;
     TranslationUnitAST *m_AST;
-    QStringList m_includedFiles;
     KDevelop::TopDUContext* m_duContext;
     bool m_readFromDisk;
+    PreprocessJob* m_preprocessJob;
     ::CPPInternalParseJob* m_parseJob;
     KTextEditor::Range m_textRangeToParse;
+    QList<KDevelop::TopDUContext*> m_includedFiles;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job
@@ -91,7 +106,7 @@ public:
     virtual int   priority () const;
     void setPriority(int priority);
 
-protected:
+    //Must only be called for direct parsing when the job is not queued
     virtual void run();
 
 private:

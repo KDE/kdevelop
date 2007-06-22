@@ -54,21 +54,39 @@
 using namespace KDevelop;
 
 CPPParseJob::CPPParseJob( const KUrl &url,
-                    CppLanguageSupport *parent )
+                    CppLanguageSupport *parent, PreprocessJob* parentPreprocessor )
         : KDevelop::ParseJob( url, parent ),
+        m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_duContext( 0 ),
         m_readFromDisk( false )
 {
-    PreprocessJob* ppj;
-    addJob(ppj = new PreprocessJob(this));
-    addJob(m_parseJob = new ::CPPInternalParseJob(this));
+    if( !m_parentPreprocessor ) {
+        addJob(m_preprocessJob = new PreprocessJob(this));
+        addJob(m_parseJob = new CPPInternalParseJob(this));
+        // Higher priority means it will be preferred over other waiting preprocess jobs
+        m_parseJob->setPriority(1);
+    } else {
+        m_preprocessJob = 0;
+        m_parseJob = 0;
+        //The preprocessor will call parseForeground() to preprocess & parse instantly
+    }
 
-    // Higher priority means it will be preferred over other waiting preprocess jobs
-    m_parseJob->setPriority(1);
+    kDebug( 9007 ) << k_funcinfo << "Created job " << this << " pp " << m_preprocessJob << " parse " << parseJob() << endl;
+}
 
-    kDebug( 9007 ) << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
+void CPPParseJob::parseForeground() {
+    //Create the sub-jobs and directly execute them.
+    Q_ASSERT( !m_preprocessJob && !m_parseJob );
+    m_preprocessJob = new PreprocessJob(this);
+    m_parseJob = new CPPInternalParseJob(this);
+    m_preprocessJob->run();
+    m_parseJob->run();
+}
+
+PreprocessJob* CPPParseJob::parentPreprocessor() const {
+    return m_parentPreprocessor;
 }
 
 /*
@@ -110,6 +128,14 @@ CppLanguageSupport * CPPParseJob::cpp() const
     return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
+void CPPParseJob::addIncludedFile( KDevelop::TopDUContext* file ) {
+    m_includedFiles << file;
+}
+
+QList<KDevelop::TopDUContext*> CPPParseJob::includedFiles() const {
+    return m_includedFiles;
+}
+
 CPPParseJob * CPPInternalParseJob::parentJob() const
 {
     Q_ASSERT(parent());
@@ -137,11 +163,17 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 {
 }
 
+
+
 void CPPInternalParseJob::run()
 {
+#warning cpp parsing is disabled temporarily because the code is not tested yet
+    //return;
+    
     kDebug( 9007 ) << "===-- PARSING --===> "
     << parentJob()->document().fileName()
     << endl;
+    Q_ASSERT(parentJob()->parseSession()->cachedLexedFile);
 
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
@@ -176,18 +208,9 @@ void CPPInternalParseJob::run()
 
         QList<DUContext*> chains;
 
-/*
-        if (KDevelop::Core::activeProject()) {
-            foreach (const QString& include, parentJob()->includedFiles()) {
-                KDevelop::AST* ast = KDevelop::Core::activeProject()->persistentHash()->retrieveAST(include);
-                if (ast) {
-                    TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
-                    if (t->ducontext)
-                        chains.append(t->ducontext);
-                }
-            }
-        }
-*/
+        foreach( TopDUContext* context, parentJob()->includedFiles() )
+            chains << context;
+
         TopDUContext* topContext;
 
         // Control the lifetime of the editor integrator (so that locking works)
@@ -201,7 +224,7 @@ void CPPInternalParseJob::run()
               editor.smart()->useRevision(parentJob()->revisionToken());
 
             DeclarationBuilder declarationBuilder(&editor);
-            topContext = declarationBuilder.buildDeclarations(parentJob()->document(), ast, &chains);
+            topContext = declarationBuilder.buildDeclarations(parentJob()->parseSession()->cachedLexedFile, ast, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();
@@ -250,11 +273,6 @@ void CPPInternalParseJob::run()
 }
 
 
-void CPPParseJob::addIncludedFile(const QString & filename)
-{
-    m_includedFiles.append(filename);
-}
-
 void CPPParseJob::requestDependancies()
 {
 }
@@ -262,11 +280,6 @@ void CPPParseJob::requestDependancies()
 ParseSession * CPPParseJob::parseSession() const
 {
     return m_session;
-}
-
-const QStringList & CPPParseJob::includedFiles() const
-{
-    return m_includedFiles;
 }
 
 void CPPParseJob::setReadFromDisk(bool readFromDisk)

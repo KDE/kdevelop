@@ -17,6 +17,7 @@
 #include <hashedstring.h>
 #include <ext/hash_map>
 #include <ksharedptr.h>
+#include <kurl.h>
 #include <QDateTime>
 #include <ext/hash_set>
 #include <QList>
@@ -67,7 +68,7 @@ class MacroSet;
 class KDEVCPPPARSER_EXPORT CachedLexedFile : public KShared, public CacheNode {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
-    CachedLexedFile( const HashedString& fileName, LexerCache* manager );
+    CachedLexedFile( const KUrl& url, LexerCache* manager );
     
     inline void addString( const HashedString& string ) {
         if( !m_definedMacroNames[ string ] ) {
@@ -96,14 +97,14 @@ class KDEVCPPPARSER_EXPORT CachedLexedFile : public KShared, public CacheNode {
     void merge( const CachedLexedFile& file );
 
     bool operator <  ( const CachedLexedFile& rhs ) const {
-      return m_fileName < rhs.m_fileName;
+      return m_hashedUrl < rhs.m_hashedUrl;
     }
 
     size_t hash() const;
 
-    HashedString fileName() const {
-      return m_fileName;
-    }
+    KUrl url() const;
+
+    HashedString hashedUrl() const;
 
     /**Set of all files with absolute paths, including those included indirectly
      * 
@@ -111,28 +112,21 @@ class KDEVCPPPARSER_EXPORT CachedLexedFile : public KShared, public CacheNode {
      * no other files were included.
      *
      * */
-    const HashedStringSet& includeFiles() const {
-      return m_includeFiles;
-    }
+    const HashedStringSet& includeFiles() const;
 
     ///Set of all defined macros, including those of all deeper included files
-    const MacroSet& definedMacros() const {
-      return m_definedMacros;
-    }
+    const MacroSet& definedMacros() const;
     
     ///Set of all macros used from outside, including those used in deeper included files
-    const MacroSet& usedMacros() const {
-      return m_usedMacros;
-    }
+    const MacroSet& usedMacros() const;
 
     ///Should contain a modification-time for each included-file
-    const QMap<HashedString, QDateTime>& allModificationTimes() const {
-      return m_allModificationTimes;
-    }
+    const QMap<HashedString, QDateTime>& allModificationTimes() const;
 
   private:
     friend class LexerCache;
-    HashedString m_fileName;
+    KUrl m_url;
+    HashedString m_hashedUrl;
     QDateTime m_modificationTime;
     HashedStringSet m_strings; //Set of all strings that can be affected by macros from outside
     HashedStringSet m_includeFiles; //Set of all files with absolute paths
@@ -171,6 +165,7 @@ class KDEVCPPPARSER_EXPORT LexerCache : public CacheManager {
 
     ///Returns zero if no fitting file is available for the given Environment
     CachedLexedFilePointer lexedFile( const HashedString& fileName, rpp::Environment* environment );
+    CachedLexedFilePointer lexedFile( const KUrl& url, rpp::Environment* environment );
 
     void clear();
 
@@ -190,7 +185,7 @@ class KDEVCPPPARSER_EXPORT LexerCache : public CacheManager {
     QDateTime fileModificationTimeCached( const HashedString& fileName );
     void initFileModificationCache();
     virtual void erase( const CacheNode* node );
-    bool sourceChanged( const CachedLexedFile& file );///Returns true if the file itself, or any of its dependencies was modified.
+    bool hasSourceChanged( const CachedLexedFile& file );///Returns true if the file itself, or any of its dependencies was modified.
     //typedef __gnu_cxx::hash_multimap<HashedString, CachedLexedFilePointer> CachedLexedFileMap;
     typedef std::multimap<HashedString, CachedLexedFilePointer> CachedLexedFileMap;
     CachedLexedFileMap m_files;

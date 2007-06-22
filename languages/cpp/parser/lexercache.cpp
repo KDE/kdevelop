@@ -31,18 +31,18 @@ LexerCache::~LexerCache() {
 void LexerCache::addLexedFile( const CachedLexedFilePointer& file ) {
   //kdDebug( 9007 ) << "LexerCache: adding an instance of " << file->fileName().str() << endl;
 
-  std::pair< CachedLexedFileMap::iterator, CachedLexedFileMap::iterator> files = m_files.equal_range( file->fileName() );
+  std::pair< CachedLexedFileMap::iterator, CachedLexedFileMap::iterator> files = m_files.equal_range( file->hashedUrl() );
 
   if ( files.first == files.second ) {
-    m_files.insert( std::make_pair( file->fileName(), file ) );
+    m_files.insert( std::make_pair( file->hashedUrl(), file ) );
   } else {
       //Make sure newer files appear first
-      m_files.insert( files.first, std::make_pair( file->fileName(), file ) );
+      m_files.insert( files.first, std::make_pair( file->hashedUrl(), file ) );
   }
 
   int cnt = 0;
   while ( files.first != files.second ) {
-    if ( sourceChanged( *( *( files.first ) ).second ) ) {
+    if ( hasSourceChanged( *( *( files.first ) ).second ) ) {
       m_files.erase( files.first++ );
     } else  {
       cnt++;
@@ -50,6 +50,10 @@ void LexerCache::addLexedFile( const CachedLexedFilePointer& file ) {
     }
   }
   //kdDebug( 9007 ) << "LexerCache: new count of cached instances for the file: " << cnt << endl;
+}
+
+CachedLexedFilePointer LexerCache::lexedFile( const KUrl& url, rpp::Environment* environment )  {
+  return lexedFile( HashedString( url.prettyUrl( KUrl::RemoveTrailingSlash )), environment );
 }
 
 CachedLexedFilePointer LexerCache::lexedFile( const HashedString& fileName, rpp::Environment* environment ) {
@@ -65,7 +69,7 @@ CachedLexedFilePointer LexerCache::lexedFile( const HashedString& fileName, rpp:
 
   while ( files.first != files.second ) {
     const CachedLexedFile& file( *( *( files.first ) ).second );
-    if ( sourceChanged( file ) ) {
+    if ( hasSourceChanged( file ) ) {
       //kdDebug( 9007 ) << "LexerCache: cache for file " << fileName.str() << " is being discarded because the file was modified" << endl;
       m_files.erase( files.first++ );
       continue;
@@ -135,10 +139,11 @@ QDateTime LexerCache::fileModificationTimeCached( const HashedString& fileName )
 }
 
 //Should be cached too!
-bool LexerCache::sourceChanged( const CachedLexedFile& file ) {
+bool LexerCache::hasSourceChanged( const CachedLexedFile& file ) {
   //@todo Check if any of the dependencies changed
 
-  QDateTime modTime = fileModificationTimeCached( file.fileName() );
+  ///@todo make compatible with remote documents
+  QDateTime modTime = fileModificationTimeCached( file.url().path() );
   
   if ( modTime != file.modificationTime() )
     return true;
@@ -160,7 +165,7 @@ void LexerCache::clear() {
 }
 
 void LexerCache::erase( const CacheNode* node ) {
-  std::pair< CachedLexedFileMap::iterator, CachedLexedFileMap::iterator> files = m_files.equal_range( ((const CachedLexedFile*)(node))->fileName() );
+  std::pair< CachedLexedFileMap::iterator, CachedLexedFileMap::iterator> files = m_files.equal_range( ((const CachedLexedFile*)(node))->hashedUrl() );
   while ( files.first != files.second ) {
     if( (*files.first).second.data() == ((const CachedLexedFile*)(node)) ) {
       m_files.erase( files.first );
@@ -171,11 +176,13 @@ void LexerCache::erase( const CacheNode* node ) {
   //kdDebug( 9007 ) << "Error: could not find a node in the list for file " << ((const CachedLexedFile*)(node))->fileName().str() << endl;
 }
 
-CachedLexedFile::CachedLexedFile( const HashedString& fileName, LexerCache* manager ) : CacheNode( manager ), m_fileName( fileName ) {
-  QFileInfo fileInfo( fileName.str() );
+CachedLexedFile::CachedLexedFile( const KUrl& fileName, LexerCache* manager ) : CacheNode( manager ), m_url( fileName ) {
+  QFileInfo fileInfo( fileName.path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
-  addIncludeFile(fileName, m_modificationTime );
-  m_allModificationTimes[ fileName ] = m_modificationTime;
+
+  m_hashedUrl = fileName.prettyUrl(KUrl::RemoveTrailingSlash);
+  addIncludeFile( m_hashedUrl, m_modificationTime );
+  m_allModificationTimes[ m_hashedUrl ] = m_modificationTime;
 }
 
 void CachedLexedFile::addDefinedMacro( const rpp::pp_macro& macro ) {
@@ -193,6 +200,33 @@ void CachedLexedFile::addUsedMacro( const rpp::pp_macro& macro ) {
 #endif
     m_usedMacros.addMacro( macro );
   }
+}
+
+const HashedStringSet& CachedLexedFile::includeFiles() const {
+  return m_includeFiles;
+}
+
+///Set of all defined macros, including those of all deeper included files
+const MacroSet& CachedLexedFile::definedMacros() const {
+  return m_definedMacros;
+}
+
+///Set of all macros used from outside, including those used in deeper included files
+const MacroSet& CachedLexedFile::usedMacros() const {
+  return m_usedMacros;
+}
+
+///Should contain a modification-time for each included-file
+const QMap<HashedString, QDateTime>& CachedLexedFile::allModificationTimes() const {
+  return m_allModificationTimes;
+}
+
+KUrl CachedLexedFile::url() const {
+  return m_url;
+}
+
+HashedString CachedLexedFile::hashedUrl() const {
+  return m_hashedUrl;
 }
 
 void CachedLexedFile::addIncludeFile( const HashedString& file, const QDateTime& modificationTime ) {
