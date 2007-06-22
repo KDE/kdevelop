@@ -15,6 +15,7 @@ Name=CMake
 Name[x-test]=xxCMakexx
 Comment=Configure CMake settings
 Comment[de]=CMake Einstellungen
+Comment[el]=Ρύθμιση επιλογών CMake
 Comment[es]=Configurar las preferencias de CMake
 Comment[x-test]=xxConfigure CMake settingsxx
 

@@ -15,6 +15,7 @@ Name=Make
 Name[x-test]=xxMakexx
 Comment=Configure Make settings
 Comment[de]=Make Einstellungen
+Comment[el]=Ρύθμιση επιλογών Make
 Comment[es]=Configurar las preferencias de make
 Comment[x-test]=xxConfigure Make settingsxx
 
