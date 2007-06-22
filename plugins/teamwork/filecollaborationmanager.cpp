@@ -41,7 +41,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/
-//krazy:exclude-all=doubleqote_chars
+//krazy:excludeall=doubleqote_chars
 
 using namespace Teamwork;
 

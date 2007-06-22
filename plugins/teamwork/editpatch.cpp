@@ -63,7 +63,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/
-//krazy:exclude-all=doubleqote_chars
+//krazy:excludeall=doubleqote_chars
 
 ///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
 #define CATCHLIBDIFF
