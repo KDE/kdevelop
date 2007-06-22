@@ -101,6 +101,10 @@ Declaration::~Declaration()
 
   setContext(0);
 
+  if( IdentifiedType* type = dynamic_cast<IdentifiedType*>(d->m_type.data()) )
+    if( type->declaration() == this )
+      type->setDeclaration(0);
+
   setAbstractType(AbstractType::Ptr());
 
   DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);

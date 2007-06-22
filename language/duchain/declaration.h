@@ -115,6 +115,7 @@ public:
 
   /**
    * Returns the kind of this declaration. @see Kind
+   * @todo the logic behind this does not work anymore once a type may be defined several times in different du-contexts
    * */
   Kind kind() const;
   
