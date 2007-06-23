@@ -33,7 +33,7 @@ Profile listing operation.
 Used to get a plain list of profiles
 and store it in the QMap<QString, Profile*>.
 */
-class KDEVPLATFORMSHELL_EXPORT ProfileListing{ //krazy:exclude=dpointer
+class KDEVPLATFORMSHELL_EXPORT ProfileListing{ //krazy:exclude=dpointer,inline
 public:
     void operator() (Profile *profile)
     {
@@ -49,7 +49,7 @@ Used to get a list of urls to the profile resources.
 Resource urls can be filtered by an @p filter parameter
 passed to the constructor. Filter can have values
 as described in @ref QDir::setNameFilter function documentation.*/
-class KDEVPLATFORMSHELL_EXPORT ProfileListingEx { //krazy:exclude=dpointer
+class KDEVPLATFORMSHELL_EXPORT ProfileListingEx { //krazy:exclude=dpointer,inline
 public:
     ProfileListingEx(const QString &filter): m_filter(filter) {}
     void operator() (Profile *profile)
