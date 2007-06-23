@@ -29,6 +29,7 @@
 #include <documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
+#include "lexercache.h"
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -688,7 +689,8 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   KUrl url(QString("file:///internal/%1").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session);
-  TopDUContext* top = definitionBuilder.buildDeclarations(url, ast);
+  Cpp::CachedLexedFilePointer file( new Cpp::CachedLexedFile( url, 0 ) );
+  TopDUContext* top = definitionBuilder.buildDeclarations(file, ast);
 
   UseBuilder useBuilder(session);
   useBuilder.buildUses(ast);
