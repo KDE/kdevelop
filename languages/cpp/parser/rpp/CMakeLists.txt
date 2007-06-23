@@ -1,5 +1,6 @@
 include_directories( ${CMAKE_SOURCE_DIR}/languages/cpp/parser )
 
+add_subdirectory( tests )
 
 ########### next target ###############
 
@@ -19,16 +20,6 @@ kde4_add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
 target_link_libraries(kdevcpprpp ${KDE4_KDECORE_LIBS})
 set_target_properties(kdevcpprpp PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR} )
-
-########### next target ###############
-
-set(pp_SRCS
-    main.cpp
-)
-
-kde4_add_test_executable(pp ${pp_SRCS})
-target_link_libraries(pp ${KDE4_KDECORE_LIBS} kdevcpprpp)
-
 
 ########### install files ###############
 
