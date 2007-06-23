@@ -23,6 +23,7 @@
 #include "cppparserexport.h"
 
 class QDataStream;
+typedef uint HashType; ///@todo use at least 64 bit hash, if not 128 bit
 
 
 ///A simple class that stores a string together with it's appropriate hash-key
@@ -38,7 +39,7 @@ class KDEVCPPPARSER_EXPORT HashedString {
       initHash();
     }
 
-    inline unsigned int hash() const {
+    inline HashType hash() const {
       return m_hash;
     }
 
@@ -61,13 +62,13 @@ class KDEVCPPPARSER_EXPORT HashedString {
       return false;
     }
 
-    static unsigned int hashString( const QString& str );
+    static HashType hashString( const QString& str );
 
   private:
     void initHash();
 
     QString m_str;
-    unsigned int m_hash;
+    HashType m_hash;
 
     friend QDataStream& operator << ( QDataStream& stream, const HashedString& str );
     friend QDataStream& operator >> ( QDataStream& stream, HashedString& str );
@@ -115,7 +116,7 @@ class KDEVCPPPARSER_EXPORT HashedStringSet {
 
     std::string print() const;
 
-  unsigned int hash() const;
+  HashType hash() const;
   private:
     friend class HashedStringSetGroup;
     void makeDataPrivate();
@@ -128,7 +129,7 @@ HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& 
 namespace __gnu_cxx {
 template<>
 struct KDEVCPPPARSER_EXPORT hash<HashedString> {
-  unsigned int operator () ( const HashedString& str ) const {
+  HashType operator () ( const HashedString& str ) const {
     return str.hash();
   }
 };
@@ -155,4 +156,35 @@ class KDEVCPPPARSER_EXPORT HashedStringSetGroup {
     ItemSet m_disabled;
     ItemSet m_global;
 };
+
+class HashedStringSubset;
+
+class KDEVCPPPARSER_EXPORT HashedStringRepository {
+  public:
+    typedef __gnu_cxx::hash_map<HashedString, HashedStringSubset*> AtomicSubsetMap;
+    typedef __gnu_cxx::hash_map<HashType, HashedStringSubset*> HashMap;
+
+    HashedStringSubset* getAtomicSubset( const HashedString& str );
+
+    /**
+     * Takes a list of atomic sub-sets(hashed-strings), and construct a master-subset
+     * The returned set will be registered in the repository
+     * @param atomics list of atomic subsets
+     * @return the created set, or 0 on failure
+     * */
+    HashedStringSubset* buildSet( const QList<HashedStringSubset*> atomics );
+
+    /**
+     * @return a HashedStringSubset that represents the union of the given sets.
+     * */
+    HashedStringSubset* merge( HashedStringSubset* left, HashedStringSubset* right );
+    
+    void dump( HashedStringSubset* subset );
+  private:
+    //After a new HashedStringSubset was created, this must be called to correctly connect it correctly to it's master-sets
+    void connectToMasterSets( HashedStringSubset* set );
+    AtomicSubsetMap m_atomicSubsets;
+    HashMap m_allSubsets;
+};
+
 #endif

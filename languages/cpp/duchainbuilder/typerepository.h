@@ -33,6 +33,8 @@ public:
 
   CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, KDevelop::Declaration::CVSpecs cv = KDevelop::Declaration::CVNone) const;
 
+  ///@todo The type-repository holds shared-pointers to types, and may keep AbstractType's alive that come from already deleted du-chains. AbstractType's with no declarations should be cleaned away on a regular basis.
+  
   /**
    * Registers the given \a input type, and returns a pointer to the
    * type, or the previously registered type if it has been encountered

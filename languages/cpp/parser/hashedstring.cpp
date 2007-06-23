@@ -19,15 +19,16 @@
 #include <iterator>
 #include<ext/hash_set>
 #include<set>
+#include<list>
 #include<algorithm>
 
 //It needs to be measured whether this flag should be turned on or off. It seems just to move the complexity from one position to the other, without any variant being really better.
 #define USE_HASHMAP
     
-unsigned int fastHashString( const QString& str );
+HashType fastHashString( const QString& str );
 
-unsigned int hashStringSafe( const QString& str ) {
-  unsigned int hash = 0;
+HashType hashStringSafe( const QString& str ) {
+  HashType hash = 0;
   int len = str.length();
   for( int a = 0; a < len; a++ ) {
     hash = str[a].unicode() + (hash * 17);
@@ -35,13 +36,13 @@ unsigned int hashStringSafe( const QString& str ) {
   return hash;
 }
 
-unsigned int HashedString::hashString(  const QString& str )
+HashType HashedString::hashString(  const QString& str )
 {
 	return fastHashString( str );
 }
 
-unsigned int fastHashString( const QString& str ) {
-  unsigned int hash = 0;
+HashType fastHashString( const QString& str ) {
+  HashType hash = 0;
   if( !str.isEmpty() ) {
     const QChar* curr = str.unicode();
     const QChar* end = curr + str.length();
@@ -69,7 +70,7 @@ class HashedStringSetData : public KShared {
 #endif
       StringSet m_files;
   mutable bool m_hashValid;
-      mutable unsigned int m_hash;
+      mutable HashType m_hash;
       HashedStringSetData() : m_hashValid( false ) {
       }
   inline void invalidateHash() {
@@ -227,7 +228,7 @@ bool HashedStringSet::operator == ( const HashedStringSet& rhs ) const {
   return m_data->m_files == rhs.m_data->m_files;
 }
 
-unsigned int HashedStringSet::hash() const {
+HashType HashedStringSet::hash() const {
   if( !m_data ) return 0;
   if( !m_data->m_hashValid ) m_data->computeHash();
   return m_data->m_hash;
@@ -321,7 +322,6 @@ void HashedStringSetGroup::removeSet( unsigned int id ) {
 }
 
 void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target ) const {
-  bool first = true;
   target.clear();
   if( !strings.m_data ) {
     std::set_difference( m_global.begin(), m_global.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
@@ -361,3 +361,394 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
   target.clear();
   std::set_difference( found.begin(), found.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
 }
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////HashedStringRepository/////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+
+WARNING: These are notes I have taken while thinking about the hashed-string-set-repository. They are obselete, inconsistent, ugly, etc. but may be helpful
+for understanding the whole thing. The layering is not implemented.
+
+Structure of the repository:
+Everything is built from sets.
+One set may be built from either:
+  - A string(then it is an atomic set)
+  - From two other string-sets
+
+Each set manages:
+ - either pointers to the two sets it is built from, or to the one string it contains
+ - An arbitrary list of master-sets(sets that were constructed by merging this set with another)
+
+The general idea is that each set can reach ALL sets it is contained in by following it's master-set pointers.
+That needs to be made sure, see the end of these notes to see how it is achieved.
+
+Old notes:
+
+Every string-set has a pointer to each string-set it is contained in.
+Together with that pointer, there is a pointer to the other string-set that is merged with this one.
+
+
+How to build the perfect structure of string-sets?
+
+Important: A string-set MUST be linked to all sub-sets that it contains <=> A sub-set MUST be linked to all bigger sets it is contained in.
+
+
+How to build a string-set:
+- Insert all missing atomic strings into the string-repository
+- Put all atomic string-sets into a set currentStringSets
+- newStringSets = set()
+    - for stringSet in currentStringSets:
+        nextStringSets = all follower string-sets of next that are contained in the current set(easy to compute: test whether the merged string-set is in currentStringSets)
+        
+        if nextStringSets.empty():
+            nextStringSets << new string-set that merges stringSet with the most popular other string-set from currentStringSets, that is not contained within this string-set
+        
+        newStringSets += nextStringSets  #newStringSets should contain no string-set twice
+    
+    currentStringSets = newStringSets
+  loop until currentStringSets only contains one string-set
+
+Test:
+1 - david
+2 - ich
+3 - bin
+4 - hallo
+5 - naja
+6 - blabla
+
+7 - david,ich
+8 - bin,hallo
+9 - hallo,ich,bin,david
+
+
+neues set:
+ich bin david
+
+Durchlauf 1:
+1 - david
+2 - ich
+3 - bin
+Durchlauf 2:
+7 - david,ich
+10 - bin,david
+Durchlauf 3:
+11 - ich,bin,david
+
+Problem:
+
+1 - a
+2 - b
+3 - c
+4 - d
+
+5 - a,b
+6 - c,d
+7 - a,c
+8 - b,d
+9 - a,b,c,d(5,6)
+10 - a,b,c,d(7,8)
+
+Same sets may be separated differently. Since we want each set unique, we use a symmetric hash-sum(just a sum of the hashes of all involved strings) to find the sets.
+
+What if I later want a set a,b,c? 
+
+Run 1:
+1 - a
+2 - b
+3 - c
+Run 2:
+5 - a,b
+11 - c,a
+
+-> Create the set a,b,c as a master-set of a,b and c,a, then:
+- Find all positions where follower-sets of a,b intersect follower-sets of c,a, and insert a,b,c there
+
+Then, a,b,c is correctly inserted.
+
+Problem:
+
+1 - a
+2 - b
+3 - c
+4 - d
+5 - e
+6 - f
+7 - g
+
+construct set: abde
+Run 1:
+a,b
+d,e
+Run 2:
+a,b,d,e
+
+construct set: afcg
+Run 1:
+a,f
+c,g
+Run 2:
+a,f,c,g
+
+construct set abcdeg: (merge both sets above)
+Run 1:
+a,b
+a,f
+d,e
+c,g
+Run 2:
+a,b,d,e
+a,f,c,g
+Run 3:
+a,b,c,d,e,g
+
+
+Now construct set a,b,c (it is not slave of abde and afcg, but of abcdeg)
+start at slaves of a,b,c:
+a,b
+c,g
+
+Notice that a,b and c,g merge 2 levels lower at abcdeg which is based on abde and afcg
+Solution: Instead of letting abcdeg be merged from abde and afcg, change it to be merged from abde and a new node (afcg + abc)
+
+This is needed because every set must have a connection to all it's master-sets, and every master-set must have a connection to all contained sets.
+
+Question: How to efficiently find the intersecting sub-nodes?
+
+ */
+
+inline HashType symmetricMergeHash( HashType left, HashType right ) {
+  return left + right;
+}
+/**
+ * Manages recursive sets of hashed-string-sets in a way that is highly optimized for intersection-tests, and set-union
+ * */
+
+typedef __gnu_cxx::hash_set<HashedString> StdHashedStringSet;
+
+class HashedStringSubset;
+ namespace __gnu_cxx {
+   template<> struct hash<HashedStringSubset*> {
+     size_t operator() (const HashedStringSubset* set) const {
+       return (size_t)set;
+     }
+   };
+ }
+     
+
+class HashedStringSubset {
+  public:
+    typedef std::set<HashedStringSubset*> MasterSetList;
+    typedef __gnu_cxx::hash_set<HashedStringSubset*> MasterHashSet;
+    
+    HashedStringSubset( const HashedString& str ) : left_(0), right_(0), string_(new HashedString(str)) {
+      computeHash();
+    }
+    HashedStringSubset( HashedStringSubset* left, HashedStringSubset* right ) :  left_(left), right_(right), string_(0) {
+
+      left_->masterSets_.insert(this);
+      right_->masterSets_.insert(this);
+      computeHash();
+    }
+
+    ~HashedStringSubset() {
+      delete string_;
+    }
+
+    inline HashType hash() const {
+      return hash_;
+    };
+
+    void setLeft( HashedStringSubset* left ) {
+      left_->masterSets_.erase( left );
+      left_ = left;
+      left_->masterSets_.insert( left );
+    }
+
+    ///Returns all directly connected master-sets(they each represent a union of this set with another set, all sets that contain this set should be reachable through them)
+    const MasterSetList& masterSets() {
+      return masterSets_;
+    }
+    
+    struct PointerCompare {
+      bool operator() ( const HashedStringSubset* lhs, const HashedStringSubset* rhs ) const {
+        return lhs->hash() < rhs->hash();
+      }
+    };
+    struct PointerHash {
+      bool operator() ( const HashedStringSubset* lhs ) const {
+        return lhs->hash();
+      }
+    };
+
+    ///@return left slave(is contained within this set)
+    HashedStringSubset* left() const {
+      return left_;
+    }
+
+    ///@return right slave-set(is contained within this set)
+    HashedStringSubset* right() const {
+      return left_;
+    }
+    
+    ///Returns the slave-set that is not the given one
+    HashedStringSubset* otherSlave( HashedStringSubset* pre ) {
+      if( pre == left_ )
+        return right_;
+      else
+        return left_;
+    }
+    
+    ///Collect all master-sets across all levels
+    void collectMasterSets( MasterHashSet& masters ) {
+      for( MasterSetList::const_iterator it = masterSets_.begin(); it != masterSets_.end(); ++it ) {
+        masters.insert( *it );
+        (*it)->collectMasterSets(masters);
+      }
+    }
+
+    ///Collect the first master-sets that intersect with the given otherMasters
+    void collectIntersectingMasterSets( MasterSetList& masters , const MasterHashSet& otherMasters ) {
+      for( MasterSetList::const_iterator it = masterSets_.begin(); it != masterSets_.end(); ++it ) {
+        if( otherMasters.find( *it ) != otherMasters.end() ) {
+          //We have found an intersecting master-set
+          masters.insert( *it );
+          continue; //do not recurse, because all masters of the intersecting master will intersect anyway
+        }
+        masters.insert( *it );
+        (*it)->collectIntersectingMasterSets(masters, otherMasters);
+      }
+    }
+    
+  private:
+
+    void computeHash() {
+      if( string_ )
+        hash_ = string_->hash();
+      else
+        hash_ = symmetricMergeHash(left_->hash(), right_->hash());
+    }
+    
+    MasterSetList masterSets_; //All subsets on the next layer that contain this subset
+
+    ///Either a subset has left_ and right_ set, or it has string_ set
+    HashedStringSubset* left_, *right_; ///These are set when 2 subsets from the lower layer were merged
+    HashedString* string_; ///If string_ is set, it is an atomic subset.
+
+    HashType hash_;
+};
+
+
+void HashedStringRepository::connectToMasterSets( HashedStringSubset* set ) {
+  ///@todo make efficient, after functionality is verified
+  HashedStringSubset::MasterHashSet allLeftMasters;
+  HashedStringSubset::MasterSetList intersectingMasters;
+
+  set->left()->collectMasterSets(allLeftMasters);
+  set->collectIntersectingMasterSets(intersectingMasters, allLeftMasters);
+
+  for( HashedStringSubset::MasterSetList::const_iterator it = intersectingMasters.begin(); it != intersectingMasters.end(); ++it ) {
+    //The set->left is contained in *it, and set->right is contained in *it,
+    //while in each of *it's slave-sets, exactly either set->left or set->right is connected.
+    //That means that *it is the point where they meet.
+
+    ///Create an intermediate set that merges set and (*it)->left, and use that as slave-set of *it. That way a connection is established.
+
+    //Create the intermediate set, it will automatically add itself as master-set to (*it)->left()
+    HashedStringSubset* newSet = new HashedStringSubset( (*it)->left(), set );
+
+    //Connect the intermediate set and *it
+    (*it)->setLeft(newSet); //setLeft will automatically add itself to the master-list of newSet, and remove itself from the old master-list of it's old left()
+
+    m_allSubsets.insert( std::make_pair(newSet->hash(), newSet) );
+    connectToMasterSets( newSet ); //Think whether this is needed
+    
+  }
+}
+
+
+HashedStringSubset* HashedStringRepository::getAtomicSubset( const HashedString& str )
+{
+  AtomicSubsetMap::const_iterator it = m_atomicSubsets.find(str);
+  if( it != m_atomicSubsets.end() ) {
+    return (*it).second;
+  } else {
+    HashedStringSubset* subset = new HashedStringSubset(str);
+    m_atomicSubsets.insert( std::make_pair(str, subset) );
+    m_allSubsets.insert( std::make_pair(subset->hash(), subset ) );
+  }
+}
+
+HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSubset*> atomics )
+{
+  if( atomics.size() == 0 )
+    return 0;
+  
+  __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash> currentStringSets;
+  __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash> newStringSets;
+
+  foreach( HashedStringSubset* atomic, atomics )
+    currentStringSets.insert(atomic);
+
+  while( currentStringSets.size() > 1 ) {
+    newStringSets.clear();
+    __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash>::iterator currentStringSetsEnd = currentStringSets.end();
+    for( __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash>::iterator it = currentStringSets.begin(); it != currentStringSetsEnd; ++it ) {
+
+      bool addedMasterSet = false; //Every sub-set must have at least one masterSet
+      
+      ///Insert all masterSets that are in the set we build
+      HashedStringSubset::MasterSetList::const_iterator masterSetEnd = (*it)->masterSets().end();
+      for( HashedStringSubset::MasterSetList::const_iterator masterSetIt = (*it)->masterSets().begin(); masterSetIt != masterSetEnd; ++masterSetIt ) {
+        if( currentStringSets.find( (*masterSetIt)->otherSlave(*it) ) != currentStringSetsEnd )  {
+          ///The merge-partner is within the set we build, so the masterSet is within the set too
+          newStringSets.insert( *masterSetIt );
+        }
+      }
+
+      if( !addedMasterSet ) {
+        ///Every sub-set must have at least one masterSet, so it is represented in the final set
+
+        ///We should create a new masterSet, that merges the current set with another one from currentStringSets. Maybe we should be more clever about choosing that one.
+        __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash>::iterator mergePartnerIt = it;
+
+        //Simply take the next set as merge-partner
+        mergePartnerIt++;
+        if( mergePartnerIt == currentStringSetsEnd ) //If it is the last set, take the first
+          mergePartnerIt = currentStringSets.begin();
+
+        newStringSets.insert( merge( *it, *mergePartnerIt ) );
+          
+      }
+    }
+    currentStringSets.swap(newStringSets);
+  }
+
+  //Only one total set should be left in the end
+  Q_ASSERT(currentStringSets.size() == 1);
+  return *currentStringSets.begin();
+}
+
+HashedStringSubset* HashedStringRepository::merge( HashedStringSubset* left, HashedStringSubset* right )
+{
+  HashMap::iterator it = m_allSubsets.find( symmetricMergeHash(left->hash(), right->hash()) );
+  if( it != m_allSubsets.end() ) {
+    return (*it).second;
+  } else {
+    HashedStringSubset* subset = new HashedStringSubset( left, right );
+    m_allSubsets.insert( std::make_pair(subset->hash(), subset ) );
+
+    connectToMasterSets(subset);
+    
+    return subset;
+  }
+}
+
