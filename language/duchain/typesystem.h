@@ -39,30 +39,30 @@ class FunctionType;
 class StructureType;
 class ArrayType;
 
-class TypeVisitor
+class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
 {
 public:
-  virtual ~TypeVisitor () {}
+  virtual ~TypeVisitor ();
 
-  virtual bool preVisit (const AbstractType *) { return true; }
-  virtual void postVisit (const AbstractType *) {}
+  virtual bool preVisit (const AbstractType *) = 0;
+  virtual void postVisit (const AbstractType *) = 0;
 
-  virtual void visit (const IntegralType *) {}
+  virtual void visit (const IntegralType *) = 0;
 
-  virtual bool visit (const PointerType *) { return true; }
-  virtual void endVisit (const PointerType *) {}
+  virtual bool visit (const PointerType *) = 0;
+  virtual void endVisit (const PointerType *) = 0;
 
-  virtual bool visit (const ReferenceType *) { return true; }
-  virtual void endVisit (const ReferenceType *) {}
+  virtual bool visit (const ReferenceType *) = 0;
+  virtual void endVisit (const ReferenceType *) = 0;
 
-  virtual bool visit (const FunctionType *) { return true; }
-  virtual void endVisit (const FunctionType *) {}
+  virtual bool visit (const FunctionType *) = 0;
+  virtual void endVisit (const FunctionType *) = 0;
 
-  virtual bool visit (const StructureType *) { return true; }
-  virtual void endVisit (const StructureType *) {}
+  virtual bool visit (const StructureType *) = 0;
+  virtual void endVisit (const StructureType *) = 0;
 
-  virtual bool visit (const ArrayType *) { return true; }
-  virtual void endVisit (const ArrayType *) {}
+  virtual bool visit (const ArrayType *) = 0;
+  virtual void endVisit (const ArrayType *) = 0;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public KShared

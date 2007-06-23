@@ -23,6 +23,10 @@
 namespace KDevelop
 {
 
+TypeVisitor::~TypeVisitor()
+{
+}
+
 class AbstractTypePrivate
 {
 public:

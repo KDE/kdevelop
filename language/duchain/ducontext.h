@@ -78,7 +78,7 @@ public:
   /**
    * Calculate the depth of this context, from the top level context in the file.
    */
-  inline int depth() const { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
+  int depth() const;
 
   /**
    * Find the top context.
