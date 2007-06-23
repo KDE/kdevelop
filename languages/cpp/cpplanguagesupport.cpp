@@ -156,9 +156,7 @@ KDevelop::CodeRepository *CppLanguageSupport::codeRepository() const
 */
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
-#warning cpp parsing is disabled temporarily because the code crashes
-    return 0;
-    //return new CPPParseJob( url, this );
+    return new CPPParseJob( url, this );
 }
 /*
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( KDevelop::Document *document )
