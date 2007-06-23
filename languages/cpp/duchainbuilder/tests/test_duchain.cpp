@@ -30,6 +30,7 @@
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "lexercache.h"
+#include "hashedstring.h"
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -660,6 +661,40 @@ void TestDUChain::testFileParse()
   SymbolTable::self()->dumpStatistics();
 
   release(top);
+}
+
+void TestDUChain::testHashedStringRepository() {
+  HashedStringRepository* rep = new HashedStringRepository();
+  
+  QList<HashedStringSubset*> set1Strings;
+  set1Strings << rep->getAtomicSubset(HashedString("a"));
+  set1Strings << rep->getAtomicSubset(HashedString("b"));
+  set1Strings << rep->getAtomicSubset(HashedString("c"));
+  set1Strings << rep->getAtomicSubset(HashedString("d"));
+  HashedStringSubset* set1 = rep->buildSet(set1Strings);
+  
+  QList<HashedStringSubset*> set2Strings;
+  set2Strings << rep->getAtomicSubset(HashedString("a"));
+  set2Strings << rep->getAtomicSubset(HashedString("b"));
+  set2Strings << rep->getAtomicSubset(HashedString("c"));
+  HashedStringSubset* set2 = rep->buildSet(set2Strings);
+  
+  QList<HashedStringSubset*> set3Strings;
+  set3Strings << rep->getAtomicSubset(HashedString("a"));
+  set3Strings << rep->getAtomicSubset(HashedString("b"));
+  set3Strings << rep->getAtomicSubset(HashedString("c"));
+  set3Strings << rep->getAtomicSubset(HashedString("e"));
+  HashedStringSubset* set3 = rep->buildSet(set3Strings);
+
+  QList<HashedStringSubset*> set4Strings;
+  set4Strings << rep->getAtomicSubset(HashedString("e"));
+  set4Strings << rep->getAtomicSubset(HashedString("a"));
+  HashedStringSubset* set4 = rep->buildSet(set4Strings);
+
+  kDebug() << "dot-graph: \n" << rep->dumpDotGraph() << "\n";
+  
+  delete rep;
+  
 }
 
 void TestDUChain::release(DUContext* top)

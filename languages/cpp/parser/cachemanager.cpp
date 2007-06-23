@@ -16,7 +16,8 @@
 #include <kdebug.h>
 
 void CacheNode::access() const {
-  m_manager->access( this );
+  if( m_manager )
+    m_manager->access( this );
 }
 
 void CacheManager::remove( const CacheNode* node ) {
@@ -27,12 +28,14 @@ void CacheManager::add( const CacheNode* node ) {
   m_set.insert( node );
 }
 
-CacheNode::CacheNode( Manager* manager ) : m_manager( manager ), m_value(manager->currentMax()) { //initialize m_value with the current maximum, so the new node has a chance even in a cache full of high-rated nodes
-  m_manager->add( this  );
+CacheNode::CacheNode( Manager* manager ) : m_manager( manager ), m_value(manager ? manager->currentMax() : 0) { //initialize m_value with the current maximum, so the new node has a chance even in a cache full of high-rated nodes
+  if( m_manager )
+    m_manager->add( this  );
 }
   
 CacheNode::~CacheNode() {
-  m_manager->remove( this );
+  if( m_manager )
+    m_manager->remove( this );
 }
 
 CacheManager::CacheManager( int maxNodes ) : m_currentFrame(1), m_maxNodes( maxNodes ), m_currentMax(1) {

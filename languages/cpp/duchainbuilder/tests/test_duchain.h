@@ -62,6 +62,7 @@ private slots:
   void testDeclareClass();
   void testDeclareNamespace();
   void testDeclareUsingNamespace();
+  void testHashedStringRepository();
   void testFileParse();
 
 public:

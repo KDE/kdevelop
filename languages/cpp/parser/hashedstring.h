@@ -178,8 +178,15 @@ class KDEVCPPPARSER_EXPORT HashedStringRepository {
      * @return a HashedStringSubset that represents the union of the given sets.
      * */
     HashedStringSubset* merge( HashedStringSubset* left, HashedStringSubset* right );
+
+    /**
+     * @return intersection of left and right
+     * */
+    HashedStringSubset* intersect( HashedStringSubset* left, HashedStringSubset* right );
     
     void dump( HashedStringSubset* subset );
+
+    QString dumpDotGraph();
   private:
     //After a new HashedStringSubset was created, this must be called to correctly connect it correctly to it's master-sets
     void connectToMasterSets( HashedStringSubset* set );
