@@ -102,7 +102,7 @@ static char const * const names[] = {
 };
 
 DumpTree::DumpTree()
-  : indent(0), m_tokenStream(0)
+  : m_tokenStream(0), indent(0)
 {
 }
 
@@ -117,8 +117,8 @@ void DumpTree::visit(AST *node)
 {
   QString nodeText;
   if( m_tokenStream ) {
-    for( int a = node->start_token; a != node->end_token; a++ ) {
-      const Token& tok( m_tokenStream->token(a) );
+    for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
+      const Token& tok( m_tokenStream->token((int) a) );
       nodeText += QByteArray( tok.text+tok.position, tok.size );
     }
   }

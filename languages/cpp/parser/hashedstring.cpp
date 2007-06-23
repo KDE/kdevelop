@@ -331,7 +331,7 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
     return;
   }
   //This might yet be optimized by sorting the sets according to their size, and starting the intersectioning with the smallest ones.
-  __gnu_cxx::hash_map<unsigned int, int> hitCounts;
+  __gnu_cxx::hash_map<unsigned int, unsigned int> hitCounts;
   
   for( HashedStringSetData::StringSet::const_iterator it = strings.m_data->m_files.begin(); it != strings.m_data->m_files.end(); ++it ) {
     GroupMap::const_iterator itr = m_map.find( *it );
@@ -341,7 +341,7 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
       }
 
       for( ItemSet::const_iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2 ) {
-        __gnu_cxx::hash_map<unsigned int, int>::iterator v = hitCounts.find( *it2 );
+        __gnu_cxx::hash_map<unsigned int, unsigned int>::iterator v = hitCounts.find( *it2 );
         if( v != hitCounts.end() ) {
           ++(*v).second;
         } else {
@@ -352,7 +352,7 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
 
   //Now count together all groups that are completely within the given string-set(their hitCount equals their size)
   ItemSet found;
-  for( __gnu_cxx::hash_map<unsigned int, int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
+  for( __gnu_cxx::hash_map<unsigned int, unsigned int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
     if( (*it).second == (*m_sizeMap.find( (*it).first )).second )
       found.insert( (*it).first );
   }
@@ -714,15 +714,15 @@ void HashedStringRepository::connectToMasterSets( HashedStringSubset* set ) {
     kDebug() << "while connecting " << set->string() << ": found master-set " << (*it)->string() << endl;
     kDebug() << "all masters of " << set->left()->string() << ":\n";
 
-    for( HashedStringSubset::MasterHashSet::const_iterator it = allLeftMasters.begin(); it != allLeftMasters.end(); ++it )
-      kDebug() << "  " << (*it)->string() << endl;
+    for( HashedStringSubset::MasterHashSet::const_iterator it2 = allLeftMasters.begin(); it2 != allLeftMasters.end(); ++it2 )
+      kDebug() << "  " << (*it2)->string() << endl;
     
     HashedStringSubset::MasterHashSet allRightMasters;
     set->right()->collectMasterSets(allRightMasters);
     kDebug() << "all masters of " << set->right()->string() << ":\n";
     
-    for( HashedStringSubset::MasterHashSet::const_iterator it = allRightMasters.begin(); it != allRightMasters.end(); ++it )
-      kDebug() << "  " << (*it)->string() << endl;
+    for( HashedStringSubset::MasterHashSet::const_iterator it3 = allRightMasters.begin(); it3 != allRightMasters.end(); ++it3 )
+      kDebug() << "  " << (*it3)->string() << endl;
     
     
     ///Create an intermediate set that merges set and (*it)->left, and use that as slave-set of *it. That way a connection is established.
@@ -812,6 +812,8 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
 }
 
 HashedStringSubset* HashedStringRepository::intersect( HashedStringSubset* left, HashedStringSubset* right ) {
+  Q_UNUSED(left)
+  Q_UNUSED(right)
   return 0;
 }
 

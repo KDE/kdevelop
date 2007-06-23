@@ -123,6 +123,7 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
 }
 
 ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseSession* session, bool debug ) {
+  Q_UNUSED(debug)
   ExpressionEvaluationResult::Ptr ret( new ExpressionEvaluationResult );
   ExpressionVisitor v(session);
   v.parse( ast );

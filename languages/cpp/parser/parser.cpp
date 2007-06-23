@@ -3212,6 +3212,7 @@ bool Parser::skipFunctionBody(StatementAST *&node)
 #warning "Parser::skipFunctionBody() -- implement me"
 #endif
   Q_ASSERT(0); // ### not implemented
+  Q_UNUSED(node)
   return 0;
 }
 

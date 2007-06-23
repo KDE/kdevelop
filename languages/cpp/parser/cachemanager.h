@@ -92,7 +92,7 @@ class CacheManager {
     void add( const CacheNode* node );
     int m_currentFrame;
     int m_maxNodes;
-    int m_currentMax;
+    uint m_currentMax;
     SetType m_set;
 };
 

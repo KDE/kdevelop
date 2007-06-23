@@ -183,6 +183,7 @@ void PreprocessJob::run()
 rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine)
 {
     Q_UNUSED(type)
+    Q_UNUSED(sourceLine)
 
     // FIXME change to interruptable preprocessor
 

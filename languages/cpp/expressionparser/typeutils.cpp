@@ -74,6 +74,7 @@ namespace TypeUtils {
   }
 
   bool isNullType( AbstractType* t ) {
+    Q_UNUSED(t)
     ///@todo implement
 #warning implement
     return false;
@@ -110,10 +111,10 @@ namespace TypeUtils {
           return 6;
 
         return 4; //default-integer
-      break;
       //All other types have no integer-conversion-rank
+      default:
+        return 0;
     };
-    return 0;
   }
   bool isIntegerType( CppIntegralType* type ) {
     return integerConversionRank(type) != 0; //integerConversionRank returns 0 for non-integer types

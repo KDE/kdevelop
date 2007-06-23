@@ -343,6 +343,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   }
 
   Declaration* ExpressionVisitor::getDeclaration( AST* node, const AbstractType::Ptr& base ) {
+    Q_UNUSED(node)
     if( !base ) return 0;
     
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_lastType.data());

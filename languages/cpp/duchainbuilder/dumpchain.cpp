@@ -136,13 +136,13 @@ void DumpChain::visit(AST *node)
   if (node)
     if (m_editor) {
       QString nodeText;
-      for( int a = node->start_token; a != node->end_token; a++ ) {
-        const Token& tok( m_editor->parseSession()->token_stream->token(a) );
+      for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
+        const Token& tok( m_editor->parseSession()->token_stream->token((int) a) );
         if( !nodeText.isEmpty() )
           nodeText += " ";
         nodeText += QByteArray( tok.text+tok.position, tok.size );
       }
-      if( !nodeText.isEmpty() )nodeText = "\"" + nodeText + "\"";
+      if( !nodeText.isEmpty() ) nodeText = "\"" + nodeText + "\"";
 
       
       kDebug() << indentation <<  "\\" << names[node->kind]
@@ -176,7 +176,7 @@ void DumpChain::dump( DUContext * context, bool imported )
   kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << " \"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
   if (!imported) {
     foreach (Declaration* dec, context->localDeclarations()) {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
+      //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]  " << dec->textRange() << ", " << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << " use(s)." << endl;
       if (dec->definition())
         kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition: " << dec->definition()->textRange() << endl;

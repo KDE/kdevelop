@@ -183,7 +183,7 @@ void CppLanguageSupport::documentClosed( KDevelop::Document *document )
 
 void CppLanguageSupport::documentActivated( KDevelop::Document *document )
 {
-    Q_UNUSED( document );
+    Q_UNUSED( document )
 }
 */
 void CppLanguageSupport::documentActivated(KDevelop::IDocument* doc)

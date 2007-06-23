@@ -77,7 +77,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
      * There is also no guarantee in which order expressionType() will be called.
      * The du-chain will not be locked in the moment this is called.
      *
-     * @param ast the AST-Node
+     * @param node the AST-Node
      * @param type the type the expression in the AST-node evaluates to
      * @param instance If the expression evaluates to an instance of a type, this contains information about that instance. declaration is only filled for explicity declared instances.
      * If this is zero, the expression evaluates to a type.
@@ -94,6 +94,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
      * Problem: 
      **/
     virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance instance ) {
+      Q_UNUSED(node) Q_UNUSED(type) Q_UNUSED(instance)
     }
 
     /** Called when there is a problem, with a string for that problem.
@@ -103,7 +104,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
      * @param str a string that describes the problem
      */
     virtual void problem( AST* node, const QString& str );
-    
+
   private:
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration

@@ -51,7 +51,7 @@ void CacheManager::restart( uint normalizeby ) {
   SetType oldSet = m_set;
   m_set = SetType();
   for( SetType::iterator it = oldSet.begin(); it != oldSet.end(); ++it ) {
-    int newValue = (*it)->value() / ( normalizeby / 1000 );
+    uint newValue = (*it)->value() / ( normalizeby / 1000 );
     if( newValue > m_currentMax ) m_currentMax = newValue;
     (*it)->setValue( newValue ); ///This way not all information is discarded
     m_set.insert( *it );
@@ -59,7 +59,7 @@ void CacheManager::restart( uint normalizeby ) {
 }
 
 void CacheManager::access( const CacheNode* node ) {
-  static const int limit = (std::numeric_limits<uint>::max() / 3)*2;
+  static const uint limit = (std::numeric_limits<uint>::max() / 3)*2;
   m_set.erase( node );
   node->setValue( m_currentMax+1 );
   m_set.insert( node );
@@ -76,7 +76,7 @@ void CacheManager::setMaxNodes ( int maxNodes ) {
 
 void CacheManager::increaseFrame() {
   m_currentFrame ++;
-  if( m_set.size() > m_maxNodes ) {
+  if( m_set.size() > (std::size_t) m_maxNodes ) {
     //kdDebug( 9007 ) << "CacheManager: Have " << m_set.size() << " nodes, maximum is " << m_maxNodes << ", erasing." << endl;
     int mustErase = m_set.size() - m_maxNodes;
     while( !m_set.empty() && mustErase != 0 ) {

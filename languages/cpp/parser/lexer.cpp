@@ -158,7 +158,7 @@ void Lexer::scan_preprocessor()
 
 void Lexer::scan_char_constant()
 {
-  const char *begin = cursor;
+  //const char *begin = cursor;
 
   ++cursor;
   while (*cursor && *cursor != '\'')
@@ -196,7 +196,7 @@ void Lexer::scan_char_constant()
 
 void Lexer::scan_string_constant()
 {
-  const char *begin = cursor;
+  //const char *begin = cursor;
 
   ++cursor;
   while (*cursor && *cursor != '"')
@@ -279,13 +279,13 @@ void Lexer::scan_identifier_or_keyword()
     ++skip;
 
   int n = skip - cursor;
-  Token *current_token = &(*session->token_stream)[index];
+  //Token *current_token = &(*session->token_stream)[index];
   (this->*s_scan_keyword_table[n < 17 ? n : 0])();
 
   /*if (current_token->kind == Token_identifier)
     {
       current_token->extra.symbol =
-	control->findOrInsertName((const char*) cursor, n);
+        control->findOrInsertName((const char*) cursor, n);
     }*/
 
   cursor = skip;
@@ -299,7 +299,7 @@ void Lexer::scan_int_constant()
       return;
     }
 
-  const char *begin = cursor;
+  //const char *begin = cursor;
 
   while (isalnum(*cursor) || *cursor == '.')
     ++cursor;

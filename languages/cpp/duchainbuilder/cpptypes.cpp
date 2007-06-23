@@ -172,6 +172,7 @@ bool CppFunctionType::isTemplate() {
 }
 
 bool CppFunctionType::isMoreSpecialized( CppFunctionType* other ) {
+  Q_UNUSED(other)
   return false;
 }
 

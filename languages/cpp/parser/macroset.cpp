@@ -21,6 +21,7 @@ using namespace Cpp;
 
 void MacroSet::read( QDataStream& stream )  {
   Q_ASSERT(0); ///@todo reimplement
+  Q_UNUSED(stream)
 /*    m_idHashValid = false;
     m_valueHashValid = false;
     int cnt;
@@ -35,6 +36,7 @@ void MacroSet::read( QDataStream& stream )  {
 
 void MacroSet::write( QDataStream& stream ) const {
   Q_ASSERT(0); ///@todo reimplement
+  Q_UNUSED(stream)
 /*    stream << int( m_usedMacros.size() );
     for( Macros::const_iterator it = m_usedMacros.begin(); it != m_usedMacros.end(); ++it ) {
         (*it).write( stream );

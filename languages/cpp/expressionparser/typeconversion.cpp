@@ -103,7 +103,7 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
 
   //This is very simplified, see iso c++ draft 13.3.3.1
   
-  if( tempConv = standardConversion(from,to) ) {
+  if( (tempConv = standardConversion(from,to)) ) {
     tempConv += 2*ConversionRankOffset;
     if( tempConv > conv )
       conv = tempConv;
@@ -367,6 +367,9 @@ bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::P
 }
 
 void TypeConversion::problem( AbstractType::Ptr from, AbstractType::Ptr to, const QString& desc ) {
+  Q_UNUSED(from)
+  Q_UNUSED(to)
+  Q_UNUSED(desc)
 }
 
 ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool secondConversionIsIdentity ) {
@@ -429,6 +432,8 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
 }
 
 ConversionRank TypeConversion::ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to ) {
+  Q_UNUSED(from)
+  Q_UNUSED(to)
   return NoMatch;
 }
 
