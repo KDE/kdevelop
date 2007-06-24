@@ -119,6 +119,10 @@ void DUContextPrivate::removeImportedChildContext( DUContext * context )
   DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
 }
 
+int DUContext::depth() const
+{
+  { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
+}
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
   : DUChainBase(range)

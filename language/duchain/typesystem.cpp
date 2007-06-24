@@ -93,6 +93,27 @@ QString AbstractType::mangled() const
   return QString();
 }
 
+void AbstractType::accept(TypeVisitor *v) const
+{
+  if (v->preVisit (this))
+    this->accept0 (v);
+
+  v->postVisit (this);
+}
+
+void AbstractType::acceptType(AbstractType::Ptr type, TypeVisitor *v)
+{
+  if (! type)
+    return;
+
+  type->accept (v);
+}
+
+WhichType AbstractType::whichType() const
+{
+  return TypeAbstract;
+}
+
 IntegralType::IntegralType(const QString & name)
   : d(new IntegralTypePrivate)
 {
@@ -132,6 +153,11 @@ bool IntegralType::operator != (const IntegralType &other) const
 QString IntegralType::toString() const
 {
   return d->m_name;
+}
+
+WhichType IntegralType::whichType() const
+{
+  return TypeIntegral;
 }
 
 PointerType::PointerType()
@@ -178,6 +204,10 @@ QString PointerType::toString() const
   return baseType() ? QString("%1*").arg(baseType()->toString()) : QString("<notype>*");
 }
 
+WhichType PointerType::whichType() const
+{
+  return TypePointer;
+}
 
 ReferenceType::ReferenceType()
   : d(new ReferenceTypePrivate)
@@ -221,6 +251,11 @@ void ReferenceType::accept0 (TypeVisitor *v) const
 QString ReferenceType::toString() const
 {
   return baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&");
+}
+
+WhichType ReferenceType::whichType() const
+{
+  return TypeReference;
 }
 
 FunctionType::FunctionType()
@@ -297,6 +332,11 @@ QString FunctionType::toString() const
   return QString("%1 (%2)").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
 }
 
+WhichType FunctionType::whichType() const
+{
+  return TypeFunction;
+}
+
 StructureType::StructureType()
   : d(new StructureTypePrivate)
 {
@@ -346,6 +386,11 @@ void StructureType::accept0 (TypeVisitor *v) const
 QString StructureType::toString() const
 {
   return "<structure>";
+}
+
+WhichType StructureType::whichType() const
+{
+  return TypeStructure;
 }
 
 ArrayType::ArrayType()
@@ -402,6 +447,12 @@ void ArrayType::accept0 (TypeVisitor *v) const
 
   v->endVisit (this);
 }
+
+WhichType ArrayType::whichType() const
+{
+  return TypeArray;
+}
+
 /*uint PointerType::hash() const
 {
   return baseType()->hash() * 13;

@@ -73,21 +73,9 @@ public:
   AbstractType();
   virtual ~AbstractType ();
 
-  inline void accept (TypeVisitor *v) const
-  {
-    if (v->preVisit (this))
-      this->accept0 (v);
+  void accept(TypeVisitor *v) const;
 
-    v->postVisit (this);
-  }
-
-  static void acceptType (AbstractType::Ptr type, TypeVisitor *v)
-  {
-    if (! type)
-      return;
-
-    type->accept (v);
-  }
+  static void acceptType(AbstractType::Ptr type, TypeVisitor *v);
 
   virtual QString toString() const = 0;
 
@@ -105,7 +93,7 @@ public:
     TypeArray
   };
 
-  virtual WhichType whichType() const { return TypeAbstract; }
+  virtual WhichType whichType() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
@@ -138,7 +126,7 @@ public:
 
   //virtual uint hash() const;
 
-  virtual WhichType whichType() const { return TypeIntegral; }
+  virtual WhichType whichType() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const
@@ -166,7 +154,7 @@ public:
 
   //virtual uint hash() const;
 
-  virtual WhichType whichType() const { return TypePointer; }
+  virtual WhichType whichType() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -194,7 +182,7 @@ public:
 
   //virtual uint hash() const;
 
-  virtual WhichType whichType() const { return TypeReference; }
+  virtual WhichType whichType() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -228,7 +216,7 @@ public:
 
   //virtual uint hash() const;
 
-  virtual WhichType whichType() const { return TypeFunction; }
+  virtual WhichType whichType() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -258,7 +246,7 @@ public:
 
   //virtual uint hash() const;
 
-  virtual WhichType whichType() const { return TypeStructure; }
+  virtual WhichType whichType() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -291,7 +279,7 @@ public:
 
   //virtual uint hash() const;
 
-  virtual WhichType whichType() const { return TypeArray; }
+  virtual WhichType whichType() const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const;
