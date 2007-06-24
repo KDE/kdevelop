@@ -37,6 +37,7 @@
 #include "core.h"
 #include "shellextension.h"
 #include "partcontroller.h"
+#include "plugincontroller.h"
 #include "mainwindow.h"
 #include "partdocument.h"
 #include "textdocument.h"
@@ -212,11 +213,14 @@ void UiController::addNewToolView(MainWindow *mw)
 
 void UiController::showSettingsDialog()
 {
+    QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
+    kDebug() << k_funcinfo << "blacklist" << blacklist << endl;
     if(!d->cfgDlg)
+    {
         d->cfgDlg = new KSettings::Dialog( QStringList() << "kdevplatform",
-                                    KSettings::Dialog::Static,
-                                    activeMainWindow() );
-
+                                           activeMainWindow() );
+        d->cfgDlg->setComponentBlacklist( blacklist );
+    }
 // The following doesn't work for some reason if the parent != activeMainWin,
 // the show() call doesn't show the dialog
 //     if( d->cfgDlg->dialog()->parentWidget() != activeMainWindow() )

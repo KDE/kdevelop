@@ -476,6 +476,17 @@ void PluginController::buildContextMenu( KDevelop::Context* context, KMenu* menu
     }
 }
 
+QStringList PluginController::projectPlugins()
+{
+    QStringList names;
+    Q_FOREACH( KPluginInfo* info , d->plugins )
+    {
+        if( info->property("X-KDevelop-Category").toString() == "Project" )
+            names << info->pluginName();
+    }
+    return names;
+}
+
 }
 #include "plugincontroller.moc"
 

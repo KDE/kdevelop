@@ -76,14 +76,15 @@ public:
         if( !proj )
             return;
         if( !m_cfgDlgs.contains( proj ) )
+        {
             m_cfgDlgs[proj] = new KSettings::Dialog( findPluginsForProject( proj ),
-                                                     KSettings::Dialog::Static,
-                                                     m_core->uiController()->activeMainWindow(),
-                                                     QStringList() << proj->projectTempFile()
-                                                         << proj->developerTempFile()
-                                                         << proj->projectFileUrl().url()
-                                                         << proj->developerFileUrl().url() );
-
+                                                     m_core->uiController()->activeMainWindow() );
+            m_cfgDlgs[proj]->setKCMArguments( QStringList()
+                                              << proj->projectTempFile()
+                                              << proj->developerTempFile()
+                                              << proj->projectFileUrl().url()
+                                              << proj->developerFileUrl().url() );
+        }
         m_cfgDlgs[proj]->show();
     }
     QStringList findPluginsForProject( IProject* project )
