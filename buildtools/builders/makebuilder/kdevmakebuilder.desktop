@@ -16,5 +16,6 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevmakebuilder
 X-KDE-PluginInfo-Name=KDevMakeBuilder
 X-KDevelop-Version=4
+X-KDevelop-Category=Project
 X-KDevelop-Interfaces=org.kdevelop.IMakeBuilder
 X-KDevelop-IRequired=org.kdevelop.IOutputView
