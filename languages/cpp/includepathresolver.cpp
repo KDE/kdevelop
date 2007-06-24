@@ -117,7 +117,7 @@ namespace CppTools {
             }
           }
         }
-      };
+      }
 
       ~FileModificationTimeWrapper() {
         unModify();

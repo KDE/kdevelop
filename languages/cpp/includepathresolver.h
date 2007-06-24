@@ -34,7 +34,7 @@ namespace CppTools {
 
     operator bool() const {
       return success;
-    };
+    }
   };
 
   class SourcePathInformation;
@@ -74,6 +74,6 @@ namespace CppTools {
       QString m_source;
       QString m_build;
   };
-};
+}
 
 #endif
