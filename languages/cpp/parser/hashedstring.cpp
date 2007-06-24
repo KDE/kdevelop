@@ -541,11 +541,28 @@ Merge a,b+a,c, a,c+b,d and then merge those to a,b,c,d
 
 @todo first compute the hash correctly, then solve the problem above
 @todo implement intersection
- */
+ 
+Intersection assumption:
+If there is set A and set B, there is also a set that represents the intersection of A and B
 
-inline HashType symmetricMergeHash( HashType left, HashType right ) {
-  return left + right;
-}
+test:
+atomics are: a,b,c,d,e
+Buld set a,b,c and b,c,d:
+a,b,c:
+a,c
+a,b
+b,c,d:
+b,d
+c,d
+
+- no intersection-set b,c
+
+How to make sure that intersection-sets exist:
+When creating new sets in the building-algorithm, create the new set by choosing the merge-partner in such a way
+that as many of it's master-sets as possible are master-sets of the new set, while still making sure that the set
+is bigger then before.
+*/
+
 /**
  * Manages recursive sets of hashed-string-sets in a way that is highly optimized for intersection-tests, and set-union
  * */
@@ -567,16 +584,23 @@ class HashedStringSubset {
     typedef std::set<HashedStringSubset*> MasterSetList;
     typedef __gnu_cxx::hash_set<HashedStringSubset*> MasterHashSet;
     
-    HashedStringSubset( const HashedString& str ) : left_(0), right_(0), string_(new HashedString(str)) {
-      computeHash();
+    HashedStringSubset( const HashedString& str ) : left_(0), right_(0), string_(new HashedString(str)), anonymous_(false), hash_(0), size_(0) {
+      computeLocalAttributes();
+      kDebug() << "created set " << string() << " of size " << size_ << endl;
     }
-    HashedStringSubset( HashedStringSubset* left, HashedStringSubset* right ) :  left_(left), right_(right), string_(0) {
+    HashedStringSubset( HashedStringSubset* left, HashedStringSubset* right, bool anonymous = false ) :  left_(left), right_(right), string_(0), anonymous_(anonymous), hash_(0), size_(0) {
 
       Q_ASSERT(left != right );
       Q_ASSERT( left_ != this && right_ != this );
-      left_->masterSets_.insert(this);
-      right_->masterSets_.insert(this);
-      computeHash();
+      left_->addMasterSet(this);
+      right_->addMasterSet(this);
+      computeLocalAttributes();
+      kDebug() << "created set " << string() << " of size " << size_ << endl;
+    }
+
+    ///An anonymous set is just a connection between different sets. It may have the same hash as another set. Anonymous sets should be ignored by most algorithms. Instead their one master-set should be used.
+    bool anonymous() const {
+      return anonymous_;
     }
 
     ~HashedStringSubset() {
@@ -602,15 +626,18 @@ class HashedStringSubset {
         else
           str += (*it)->str();
       }
+      if( anonymous_ ) {
+        str+="_anon_"+QString("%1").arg((short)((size_t)this));
+      }
     }
 
     void setLeft( HashedStringSubset* left ) {
       Q_ASSERT(left != this);
       left_->masterSets_.erase( this );
       left_ = left;
-      left_->masterSets_.insert( this );
+      left_->addMasterSet( this );
       Q_ASSERT( left_ != right_ );
-      computeHash();
+      computeLocalAttributes();
     }
 
     ///Returns all directly connected master-sets(they each represent a union of this set with another set, all sets that contain this set should be reachable through them)
@@ -662,16 +689,72 @@ class HashedStringSubset {
     ///Collect the first master-sets that intersect with the given otherMasters
     void collectIntersectingMasterSets( MasterSetList& masters , const MasterHashSet& otherMasters ) {
       for( MasterSetList::const_iterator it = masterSets_.begin(); it != masterSets_.end(); ++it ) {
-        if( otherMasters.find( *it ) != otherMasters.end() ) {
-          //We have found an intersecting master-set
-          masters.insert( *it );
-          continue; //do not recurse, because all masters of the intersecting master will intersect anyway
+        if( !(*it)->anonymous() ) {
+          if( otherMasters.find( *it ) != otherMasters.end() ) {
+            //We have found an intersecting master-set
+            masters.insert( *it );
+            continue; //do not recurse, because all masters of the intersecting master will intersect anyway
+          }
         }
         (*it)->collectIntersectingMasterSets(masters, otherMasters);
       }
     }
 
+    ///Returns the public representation of this set.
+    HashedStringSubset* getNonAnonymous() {
+      if( anonymous_ ) {
+        Q_ASSERT(masterSets_.size() == 1);
+        return (*masterSets_.begin())->getNonAnonymous();
+      } else {
+        return this;
+      }
+    }
+
+    HashedStringSubset* intersection( const HashedStringSubset* other ) {
+      HashedStringSubset* intersect = intersectionInternal( other );
+      kDebug() << "intersection of " << string() << "(" << this << ") and " << other->string() << "("<< other << ")" <<": " << (intersect ? intersect->string() : QString("none")) << endl;
+      return intersect;
+    }
+    
+    ///Returns the intersection of this set with the given other, or 0 on fail
+    HashedStringSubset* intersectionInternal( const HashedStringSubset* other ) {
+      ///The intersection is the lowest(by set-size) non-anonymous point on the shortest path from this to other
+
+      if( isContainedIn(other) )
+        return this;
+      if( !left_ ) return 0;
+      
+      HashedStringSubset* leftIntersection = left_->intersectionInternal(other);
+      HashedStringSubset* rightIntersection = right_->intersectionInternal(other);
+      if( leftIntersection && rightIntersection ) {
+        return leftIntersection->size_ > rightIntersection->size_ ? leftIntersection : rightIntersection;
+      } else if( leftIntersection ) {
+        return leftIntersection;
+      } else if( rightIntersection ) {
+        return rightIntersection;
+      }
+      return 0;
+    }
+
+    bool isContainedIn( const HashedStringSubset* other ) const {
+      if( other == this )
+        return true;
+      ///@todo find a way to do this efficiently
+      for( MasterSetList::const_iterator it = masterSets_.begin(); it != masterSets_.end(); ++it ) {
+        if( (*it)->isContainedIn(other) )
+          return true;
+      }
+      return false;
+    }
+    
   private:
+
+    void addMasterSet( HashedStringSubset* master ) {
+      masterSets_.insert(master);
+      kDebug() << string() << ": adding master " << master->string() << endl;
+      Q_ASSERT( !anonymous_ || masterSets_.size() == 1 );
+    }
+    
     void makeStringInternal( std::set<HashedString*>& allStrings ) const {
       if( left_ ) {
         left_->makeStringInternal(allStrings);
@@ -680,11 +763,20 @@ class HashedStringSubset {
         allStrings.insert( string_ );
       }
     }
-    void computeHash() {
-      if( string_ )
+    
+    void computeLocalAttributes() {
+      if( string_ ) {
         hash_ = string_->hash();
-      else
-        hash_ = symmetricMergeHash(left_->hash(), right_->hash());
+        size_ = 1;
+      } else {
+        hash_ = left_->hash_ + right_->hash_;
+        size_ = left_->size_ + right_->size_;
+        HashedStringSubset* intersection = left_->intersection(right_);
+        if( intersection ) {
+          hash_ -= intersection->hash();
+          size_ -= intersection->size_;
+        }
+      }
     }
 
     MasterSetList masterSets_; //All subsets on the next layer that contain this subset
@@ -693,9 +785,19 @@ class HashedStringSubset {
     HashedStringSubset* left_, *right_; ///These are set when 2 subsets from the lower layer were merged
     HashedString* string_; ///If string_ is set, it is an atomic subset.
 
+    bool anonymous_;
+
     HashType hash_;
+    unsigned int size_;
 };
 
+inline HashType symmetricMergeHash( HashedStringSubset* left, HashedStringSubset* right ) {
+  HashType ret = left->hash() + right->hash();
+  HashedStringSubset* intersection = left->intersection(right);
+  if( intersection )
+    ret -= intersection->hash();
+  return ret;
+}
 
 void HashedStringRepository::connectToMasterSets( HashedStringSubset* set ) {
   ///@todo make efficient, after functionality is verified
@@ -704,6 +806,7 @@ void HashedStringRepository::connectToMasterSets( HashedStringSubset* set ) {
 
   set->left()->collectMasterSets(allLeftMasters);
   set->right()->collectIntersectingMasterSets(intersectingMasters, allLeftMasters);
+  kDebug() << "connecting " << set->string() << " to its masters. m: " << set->left()->masterSets().size() << " " << set->right()->masterSets().size() << " lm: " << allLeftMasters.size() << " isect: " << intersectingMasters.size() << endl;
 
   for( HashedStringSubset::MasterSetList::const_iterator it = intersectingMasters.begin(); it != intersectingMasters.end(); ++it ) {
     //The set->left is contained in *it, and set->right is contained in *it,
@@ -729,6 +832,11 @@ void HashedStringRepository::connectToMasterSets( HashedStringSubset* set ) {
 
     //Create the intermediate set, it will automatically add itself as master-set to (*it)->left() and "set"
     HashedStringSubset* newSet = merge( (*it)->left(), set );
+    if( newSet == *it ) {
+      //Create an intermediate anonymous connector-set
+      newSet = new HashedStringSubset( (*it)->left(), set, true );
+      kDebug() << "inserting anonymous set" << endl;
+    }
 
     Q_ASSERT(*it != newSet);
     //Connect the intermediate set and *it
@@ -760,17 +868,22 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
 {
   if( atomics.size() == 0 )
     return 0;
+  kDebug() << "BUILDING NEW SET" << endl;
   
-  __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash> currentStringSets;
-  __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash> newStringSets;
+  __gnu_cxx::hash_set<HashedStringSubset*> allStringSets;
+  
+  __gnu_cxx::hash_set<HashedStringSubset*> currentStringSets;
+  __gnu_cxx::hash_set<HashedStringSubset*> newStringSets;
 
-  foreach( HashedStringSubset* atomic, atomics )
+  foreach( HashedStringSubset* atomic, atomics ) {
     currentStringSets.insert(atomic);
-
+    allStringSets.insert(atomic);
+  }
+  
   while( currentStringSets.size() > 1 ) {
     newStringSets.clear();
-    __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash>::iterator currentStringSetsEnd = currentStringSets.end();
-    for( __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash>::iterator it = currentStringSets.begin(); it != currentStringSetsEnd; ++it ) {
+    __gnu_cxx::hash_set<HashedStringSubset*>::iterator currentStringSetsEnd = currentStringSets.end();
+    for( __gnu_cxx::hash_set<HashedStringSubset*>::iterator it = currentStringSets.begin(); it != currentStringSetsEnd; ++it ) {
       
       QString totalString;
       (*it)->makeString(totalString);
@@ -778,12 +891,21 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
 
       bool addedMasterSet = false; //Every sub-set must have at least one masterSet
       
-      ///Insert all masterSets that are in the set we build
+      ///Add/create intersections with all master-sets
       HashedStringSubset::MasterSetList::const_iterator masterSetEnd = (*it)->masterSets().end();
-      for( HashedStringSubset::MasterSetList::const_iterator masterSetIt = (*it)->masterSets().begin(); masterSetIt != masterSetEnd; ++masterSetIt ) {
-        if( currentStringSets.find( (*masterSetIt)->otherSlave(*it) ) != currentStringSetsEnd )  {
-          ///The merge-partner is within the set we build, so the masterSet is within the set too
-          newStringSets.insert( *masterSetIt );
+      for( HashedStringSubset::MasterSetList::const_iterator masterSetIt = (*it)->masterSets().begin(); masterSetIt != masterSetEnd; ++masterSetIt )
+      {
+        HashedStringSubset* added = (*masterSetIt)->otherSlave(*it);
+        if( !added )
+          continue; //maybe an atomic set
+
+        //Check if the added subset intersects with the set we are building. If it does, create the intersections of that set with the one we are building.
+        HashedStringSubset* intersect = intersection(added, allStringSets);
+        if( intersect && allStringSets.find(intersect) == allStringSets.end() ) {
+          //probably the intersection was created
+          HashedStringSubset* newSet = merge(intersect,*it);
+          newStringSets.insert( newSet );
+          allStringSets.insert( newSet );
           addedMasterSet = true;
         }
       }
@@ -791,16 +913,18 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
       if( !addedMasterSet ) {
         ///Every sub-set must have at least one masterSet, so it is represented in the final set
 
-        ///We should create a new masterSet, that merges the current set with another one from currentStringSets. Maybe we should be more clever about choosing that one.
-        __gnu_cxx::hash_set<HashedStringSubset*, HashedStringSubset::PointerHash>::iterator mergePartnerIt = it;
+        ///We should create a new masterSet, that merges the current set with another one from currentStringSets
+        
+        __gnu_cxx::hash_set<HashedStringSubset*>::iterator mergePartnerIt = it;
 
         //Simply take the next set as merge-partner
         mergePartnerIt++;
         if( mergePartnerIt == currentStringSetsEnd ) //If it is the last set, take the first
           mergePartnerIt = currentStringSets.begin();
 
-        newStringSets.insert( merge( *it, *mergePartnerIt ) );
-          
+        HashedStringSubset* newSubStringSet = merge( *it, *mergePartnerIt );
+        newStringSets.insert( newSubStringSet );
+        allStringSets.insert( newSubStringSet );
       }
     }
     currentStringSets.swap(newStringSets);
@@ -811,20 +935,38 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
   return *currentStringSets.begin();
 }
 
-HashedStringSubset* HashedStringRepository::intersect( HashedStringSubset* left, HashedStringSubset* right ) {
+HashedStringSubset* HashedStringRepository::intersection( HashedStringSubset* set, const __gnu_cxx::hash_set<HashedStringSubset*>& allStringSets )
+{
+  ///@todo make efficient, the whole tree is walked atm
+
+  if( allStringSets.find(set) != allStringSets.end() )
+    return set;
+
+  if( set->left() ) {
+    HashedStringSubset* leftIntersection = intersection(set->left(), allStringSets);
+    HashedStringSubset* rightIntersection = intersection(set->right(), allStringSets);
+    if( leftIntersection && rightIntersection ) {
+      return merge( leftIntersection, rightIntersection );
+    } else if( leftIntersection ) {
+      return leftIntersection;
+    } else if( rightIntersection ) {
+      return rightIntersection;
+    }
+  }
   Q_UNUSED(left)
   Q_UNUSED(right)
   return 0;
 }
 
-HashedStringSubset* HashedStringRepository::merge( HashedStringSubset* left, HashedStringSubset* right )
+HashedStringSubset* HashedStringRepository::merge( HashedStringSubset* left, HashedStringSubset* right, bool anon )
 {
   QString leftStr, rightStr;
   left->makeString(leftStr);
   right->makeString(rightStr);
-  kDebug() << "merging \"" << leftStr.toAscii().data() << "\" and \"" << rightStr.toAscii().data() << "\"" << endl;
-  HashMap::iterator it = m_allSubsets.find( symmetricMergeHash(left->hash(), right->hash()) );
+  kDebug() << "merge: merging \"" << leftStr.toAscii().data() << "\" and \"" << rightStr.toAscii().data() << "\"" << endl;
+  HashMap::iterator it = m_allSubsets.find( symmetricMergeHash(left, right) );
   if( it != m_allSubsets.end() ) {
+    kDebug() << "merge: got pre-merged node" << endl;
     return (*it).second;
   } else {
     HashedStringSubset* subset = new HashedStringSubset( left, right );
@@ -834,11 +976,15 @@ HashedStringSubset* HashedStringRepository::merge( HashedStringSubset* left, Has
 
     QString totalString;
     subset->makeString(totalString);
-    kDebug() << "merged string: " << totalString.toAscii().data() << endl;
+    kDebug() << "merge: string: " << totalString.toAscii().data() << endl;
 
     
     return subset;
   }
+}
+
+HashedStringSubset* HashedStringRepository::intersection( HashedStringSubset* left, HashedStringSubset* right ) {
+  return left->intersection(right);
 }
 
 QString HashedStringRepository::dumpDotGraph() {
