@@ -128,11 +128,11 @@ CppLanguageSupport * CPPParseJob::cpp() const
     return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
-void CPPParseJob::addIncludedFile( KDevelop::TopDUContext* file ) {
-    m_includedFiles << file;
+void CPPParseJob::addIncludedFile(QString file, KDevelop::TopDUContext* duChain) {
+    m_includedFiles.insert(file, duChain);
 }
 
-QList<KDevelop::TopDUContext*> CPPParseJob::includedFiles() const {
+const IncludedFileHash CPPParseJob::includedFiles() const {
     return m_includedFiles;
 }
 
@@ -162,8 +162,6 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
     , m_priority(0)
 {
 }
-
-
 
 void CPPInternalParseJob::run()
 {
@@ -205,8 +203,11 @@ void CPPInternalParseJob::run()
 
         QList<DUContext*> chains;
 
-        foreach( TopDUContext* context, parentJob()->includedFiles() )
-            chains << context;
+        for ( IncludedFileHash::const_iterator it = parentJob()->includedFiles().constBegin();
+              it != parentJob()->includedFiles().constEnd(); ++it )
+        {
+            chains << it.value();
+        }
 
         TopDUContext* topContext;
 

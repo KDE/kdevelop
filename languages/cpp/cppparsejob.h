@@ -33,10 +33,11 @@ class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
 class CPPInternalParseJob;
-namespace KDevelop
-{
-class TopDUContext;
+namespace KDevelop {
+    class TopDUContext;
 }
+
+typedef QHash<QString, KDevelop::TopDUContext*> IncludedFileHash;
 
 class CPPParseJob : public KDevelop::ParseJob
 {
@@ -48,17 +49,15 @@ public:
      * If parentPreprocessor is set, no jobs will be automatically created, since everything should be parsed in foreground.
      * Instead the preprocessor should call parseForeground();
      * */
-    CPPParseJob( const KUrl &url,
-              CppLanguageSupport* parent, PreprocessJob* parentPreprocessor = 0  );
+    CPPParseJob( const KUrl &url, CppLanguageSupport* parent, PreprocessJob* parentPreprocessor = 0  );
 
-//     CPPParseJob( KDevelop::Document* document,
-//               CppLanguageSupport* parent );
+//  CPPParseJob( KDevelop::Document* document, CppLanguageSupport* parent );
 
     virtual ~CPPParseJob();
 
     ///When the parse-job was initialized with a parent-preprocessor, the parent-preprocessor should call this to do the parsing
     void parseForeground();
-    
+
     CppLanguageSupport* cpp() const;
 
     ParseSession* parseSession() const;
@@ -72,27 +71,28 @@ public:
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
 
-    void addIncludedFile( KDevelop::TopDUContext* );
-    QList<KDevelop::TopDUContext*> includedFiles() const;
+    void addIncludedFile(QString file, KDevelop::TopDUContext* duChain);
+    const IncludedFileHash includedFiles() const;
+
     ///Returns the preprocessor-job that is parent of this job, or 0
     PreprocessJob* parentPreprocessor() const;
-    
+
     void requestDependancies();
 
-    ::CPPInternalParseJob* parseJob() const;
+    CPPInternalParseJob* parseJob() const;
 
     const KTextEditor::Range& textRangeToParse() const;
 
 private:
     PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;
-    TranslationUnitAST *m_AST;
+    TranslationUnitAST* m_AST;
     KDevelop::TopDUContext* m_duContext;
     bool m_readFromDisk;
     PreprocessJob* m_preprocessJob;
-    ::CPPInternalParseJob* m_parseJob;
+    CPPInternalParseJob* m_parseJob;
     KTextEditor::Range m_textRangeToParse;
-    QList<KDevelop::TopDUContext*> m_includedFiles;
+    IncludedFileHash m_includedFiles;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job

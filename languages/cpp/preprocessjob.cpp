@@ -185,12 +185,8 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     Q_UNUSED(type)
     Q_UNUSED(sourceLine)
 
-    // FIXME change to interruptable preprocessor
-
     if (checkAbort())
         return 0;
-
-    KUrl includedFile;
 
 /*    if (CPPParseJob* parent = parentJob()) {
         VALGRIND_CHECK_MEM_IS_DEFINED(parent, sizeof(CPPParseJob));
@@ -198,24 +194,25 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         if (CppLanguageSupport* lang = parent->cpp()) {
             VALGRIND_CHECK_MEM_IS_DEFINED(lang, sizeof(CppLanguageSupport)); */
 
-    includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName);
+    IncludedFileHash::const_iterator it = parentJob()->includedFiles().find(fileName);
+    if (it != parentJob()->includedFiles().constEnd()) {
+        // The file has already been parsed.
+        return 0;
+    }
+
+    KUrl includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName);
     if (includedFile.isValid()) {
-        /**
-         * @todo Check if there already is a cached usable instance of the file, if it is use it
-         * Else preprocess the file now
-         * */
+        /// Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the
+        /// included file right here. Parallel parsing cannot be used here, because we need the
+        /// macros before we can continue.
 
-        ///Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the included file right here. Parallel parsing cannot be used here, because we need the macros before we can continue.
+        // Create a slave-job that will take over our macros.
+        /*CPPParseJob slaveJob(includedFile, parentJob()->cpp(), this);
+        slaveJob.parseForeground();
 
-        //Create a slave-job that will take over our macros
-        CPPParseJob* slaveJob = new CPPParseJob( includedFile, parentJob()->cpp(), this );
-        slaveJob->parseForeground();
-
-        //Add the included file
-        Q_ASSERT(slaveJob->duChain());
-        parentJob()->addIncludedFile( slaveJob->duChain() );
-        
-        delete slaveJob;
+        // Add the included file.
+        Q_ASSERT(slaveJob.duChain());
+        parentJob()->addIncludedFile(fileName, slaveJob.duChain());*/
     }
 
         /*} else {

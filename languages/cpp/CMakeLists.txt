@@ -29,6 +29,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpphighlighting.cpp
     cppcodecompletion.cpp
     cppcodecompletionmodel.cpp
+    includepathresolver.cpp
 )
 
 kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})

@@ -25,15 +25,14 @@
 #include <iplugin.h>
 #include <ilanguagesupport.h>
 
-class CodeModel;
-class CodeProxy;
-class CodeDelegate;
 class CppHighlighting;
 class CppCodeCompletion;
+class AST;
 class TranslationUnitAST;
 
 namespace KParts { class Part; }
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; }
+namespace CppTools { class IncludePathResolver; }
 
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -43,47 +42,30 @@ public:
     CppLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
     virtual ~CppLanguageSupport();
 
-    virtual QString name() const;
+    QString name() const;
 
-    virtual KDevelop::ILanguage *language();
+    KDevelop::ICodeHighlighting *codeHighlighting() const;
+    KDevelop::ILanguage *language();
 
-    virtual KDevelop::ParseJob *createParseJob( const KUrl &url );
+    KDevelop::ParseJob *createParseJob( const KUrl &url );
 
-    //KDevelop::LanguageSupport implementation
-/*    virtual KDevelop::CodeModel *codeModel( const KUrl& url ) const;
-    virtual KDevelop::CodeProxy *codeProxy() const;
-    virtual KDevelop::CodeDelegate *codeDelegate() const;
-    virtual KDevelop::CodeRepository *codeRepository() const;
-    virtual KDevelop::ParseJob *createParseJob( KDevelop::Document *document );
-    virtual QStringList mimeTypes() const;
-*/
-    virtual KDevelop::ICodeHighlighting *codeHighlighting() const;
-/*
-    virtual void releaseAST( KDevelop::AST *ast);
-*/
-    virtual void documentLoaded( TranslationUnitAST *ast, const KUrl& document );
+    void documentLoaded( TranslationUnitAST *ast, const KUrl& document );
+    void releaseAST( AST *ast );
 
     /// Get the full path for a file based on a search through the project's
     /// include directories
-    KUrl findInclude(const KUrl &source, const QString& includeName );
+    KUrl findInclude(const KUrl &source, const QString& includeName);
 
 private slots:
-/*    void documentLoaded( KDevelop::Document *document );
-    void documentClosed( KDevelop::Document *document );
-    void documentActivated( KDevelop::Document *document );
-*/
-    void documentActivated(KDevelop::IDocument* );
+    void documentActivated(KDevelop::IDocument*);
     void documentClosed(KDevelop::IDocument*);
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
 
 private:
-/*    QStringList m_mimetypes;
-    CodeProxy *m_codeProxy;
-    CodeDelegate *m_codeDelegate;
-*/
     CppHighlighting *m_highlights;
-    CppCodeCompletion* m_cc;
+    CppCodeCompletion *m_cc;
+    CppTools::IncludePathResolver *m_includeResolver;
 };
 
 #endif

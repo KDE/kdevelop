@@ -20,17 +20,13 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 #include "cpplanguagesupport.h"
-
 #include "config.h"
-/*
-#ifdef HAVE_VALGRIND_H
-#include <valgrind/valgrind.h>
-#endif
-*/
-#include <QMutex>
-#include <QMutexLocker>
+
+#include <QDir>
+#include <QFileInfo>
 #include <QApplication>
 #include <QExtensionFactory>
+#include <QtDesigner/QExtensionFactory>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
@@ -42,6 +38,8 @@
 
 #include <icore.h>
 #include <iproject.h>
+#include <idocument.h>
+#include <idocumentcontroller.h>
 #include <ilanguage.h>
 #include <ilanguagecontroller.h>
 #include <iprojectcontroller.h>
@@ -49,53 +47,36 @@
 
 #include <projectmodel.h>
 #include <backgroundparser.h>
-#include <idocument.h>
-#include <idocumentcontroller.h>
-
-/*
-#include <kdevcore.h>
-#include <kdevproject.h>
-#include <kdevfilemanager.h>
-#include <kdevbuildmanager.h>
-#include <kdevprojectmodel.h>
-#include <kdevprojectcontroller.h>
-#include <kdevdocumentcontroller.h>
-#include <kdevbackgroundparser.h>
-#include <kdevpersistenthash.h>
-*/
-#include "cpphighlighting.h"
-
-// #include "parser/codemodel.h"
-#include "parser/ast.h"
-#include "parser/parsesession.h"
-
 #include <duchain.h>
+#include <duchainlock.h>
 #include <topducontext.h>
 #include <smartconverter.h>
-#include "cppeditorintegrator.h"
-#include "usebuilder.h"
 #include <symboltable.h>
-#include "typerepository.h"
 
-#include "cppparsejob.h"
-// #include "codeproxy.h"
-// #include "codedelegate.h"
+#include "ast.h"
+#include "parsesession.h"
+#include "cpphighlighting.h"
 #include "cppcodecompletion.h"
-#include <QtDesigner/QExtensionFactory>
+#include "cppeditorintegrator.h"
+#include "includepathresolver.h"
+#include "usebuilder.h"
+#include "typerepository.h"
+#include "cppparsejob.h"
 
 using namespace KDevelop;
 
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
 
-CppLanguageSupport::CppLanguageSupport( QObject* parent,
-                                        const QStringList& /*args*/ )
-        : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
-        KDevelop::ILanguageSupport()
+CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*args*/ )
+    : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
+      KDevelop::ILanguageSupport()
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
+
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
+    m_includeResolver = new CppTools::IncludePathResolver;
 
 /*    connect( KDevelop::Core::documentController(),
              SIGNAL( documentLoaded( KDevelop::Document* ) ),
@@ -113,12 +94,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
              SIGNAL( projectClosing( KDevelop::IProject* ) ),
              this, SLOT( projectClosing( KDevelop::IProject* ) ) );
 
-    ///@todo these connects should be here until proper document controller system is in place
-//     connect( core()->partManager(), SIGNAL( partAdded(KParts::Part*)),
-//              this, SLOT( documentActivated(KParts::Part*) ) );
-//     connect( core()->partManager(), SIGNAL( partRemoved(KParts::Part*)),
-//              this, SLOT( documentClosed(KParts::Part*) ) );
-
     // Initialise singletons, to prevent needing a mutex in their self() methods
     TypeRepository::self();
     SymbolTable::self();
@@ -126,66 +101,14 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
 CppLanguageSupport::~CppLanguageSupport()
 {
-    // Ensure all parse jobs have finished before this object goes away
-/*    lockAllParseMutexes();
-    unlockAllParseMutexes();*/
-}
-/*
-KDevelop::CodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
-{
-    if ( url.isValid() )
-        return m_codeProxy->codeModel( url );
-    else
-        return m_codeProxy->codeModel( KDevelop::Core::documentController() ->activeDocumentUrl() );
+    delete m_includeResolver;
 }
 
-KDevelop::CodeProxy *CppLanguageSupport::codeProxy() const
-{
-    return m_codeProxy;
-}
-
-KDevelop::CodeDelegate *CppLanguageSupport::codeDelegate() const
-{
-    return m_codeDelegate;
-}
-
-KDevelop::CodeRepository *CppLanguageSupport::codeRepository() const
-{
-    return 0;
-}
-*/
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
     return new CPPParseJob( url, this );
 }
-/*
-KDevelop::ParseJob *CppLanguageSupport::createParseJob( KDevelop::Document *document )
-{
-    return new CPPParseJob( document, this );
-}
 
-QStringList CppLanguageSupport::mimeTypes() const
-{
-    return m_mimetypes;
-}
-
-void CppLanguageSupport::documentLoaded( KDevelop::Document *document )
-{
-    if ( supportsDocument( document ) )
-        KDevelop::Core::backgroundParser() ->addDocument( document );
-}
-
-void CppLanguageSupport::documentClosed( KDevelop::Document *document )
-{
-    if ( supportsDocument( document ) )
-        KDevelop::Core::backgroundParser() ->removeDocument( document );
-}
-
-void CppLanguageSupport::documentActivated( KDevelop::Document *document )
-{
-    Q_UNUSED( document )
-}
-*/
 void CppLanguageSupport::documentActivated(KDevelop::IDocument* doc)
 {
     kDebug( 9007 ) << "CppLanguageSupport::documentActivated" << endl;
@@ -207,12 +130,6 @@ KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 
 void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
 {
-#ifdef HAVE_VALGRIND_H
-/*    // If running on valgrind, don't background parse all project files...!!
-    if (RUNNING_ON_VALGRIND > 0)
-        return;*/
-#endif
-
     // FIXME Add signals slots from the filemanager for:
     //       1. filesAddedToProject
     //       2. filesRemovedFromProject
@@ -243,7 +160,7 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
         ///@todo implement ILanguage::supportsDocument or smth like that
 //         if ( language()->supportsDocument( file->url() ) )
 //         {
-            language()->backgroundParser() ->removeDocument( file->url() );
+            language()->backgroundParser()->removeDocument( file->url() );
 //         }
     }
 
@@ -256,22 +173,22 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
     language()->unlockAllParseMutexes();
 }
 
-/*
-void CppLanguageSupport::releaseAST( KDevelop::AST *ast)
+void CppLanguageSupport::releaseAST( AST *ast )
 {
     TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
     delete t->session;
     // The ast is in the memory pool which has been deleted as part of the session.
 }
-*/
 
-KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeName )
+KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeName)
 {
-    foreach (KDevelop::IProject *project, core()->projectController()->projects())
-    {
+    bool fallbackSearch = true;
+
+    foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
         KDevelop::ProjectFileItem *file = project->fileForUrl(source);
-        if (!file)
+        if (!file) {
             continue;
+        }
 
         KDevelop::IBuildSystemManager* buildManager =
             project->managerPlugin()->extension<KDevelop::IBuildSystemManager>();
@@ -280,13 +197,29 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
             continue;
         }
 
-        foreach (KUrl u, buildManager->includeDirectories(file)) {
-            u.adjustPath( KUrl::AddTrailingSlash );
+        KUrl::List dirs = buildManager->includeDirectories(file);
+        fallbackSearch = dirs.size() == 0;
 
-            KUrl newUrl(u, includeName);
+        foreach (KUrl dir, dirs) {
+            dir.adjustPath(KUrl::AddTrailingSlash);
+
+            KUrl newUrl(dir, includeName);
             //kDebug(9007) << k_funcinfo << "checking for existance of " << newUrl << endl;
-            if ( KIO::NetAccess::exists( newUrl, true, qApp->activeWindow() ) ) {
+            if (KIO::NetAccess::exists(newUrl, true, qApp->activeWindow())) {
                 return newUrl; // Found it.
+            }
+        }
+    }
+
+    if (fallbackSearch) {
+        CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
+        if (result) {
+            foreach (QString path, result.paths) {
+                QFileInfo info(QDir(path), includeName);
+                if (info.exists() && info.isReadable()) {
+                    kDebug(9007) << "KWDEBUG: found include file: " << info.absoluteFilePath() << endl;
+                    return KUrl(info.absoluteFilePath());
+                }
             }
         }
     }
@@ -296,25 +229,19 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
 
 void CppLanguageSupport::documentLoaded(TranslationUnitAST *ast, const KUrl & document)
 {
-    // Pretty heavy handed - find another way?
-    // TODO: use the definition-use chain locking here, rather than in the builders?
-    language()->lockAllParseMutexes();
+    DUChainWriteLocker l(DUChain::lock());
 
     TopDUContext* context = DUChain::self()->chainForDocument(document);
     if (context) {
         CppEditorIntegrator editor(ast->session);
-        {
-            SmartConverter sc(&editor, m_highlights);
-            sc.convertDUChain(context);
+        SmartConverter sc(&editor, m_highlights);
+        sc.convertDUChain(context);
 
-            if (!context->hasUses()) {
-                UseBuilder ub(&editor);
-                ub.buildUses(ast);
-            }
+        if (!context->hasUses()) {
+            UseBuilder ub(&editor);
+            ub.buildUses(ast);
         }
     }
-
-    language()->unlockAllParseMutexes();
 }
 
 
