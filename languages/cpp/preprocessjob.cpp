@@ -159,7 +159,7 @@ void PreprocessJob::run()
 
     //If we are included from another preprocessor, copy it's macros
     if( parentJob()->parentPreprocessor() )
-            m_currentEnvironment->takeMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
+            m_currentEnvironment->swapMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
     
     
     preprocessor.setEnvironment( m_currentEnvironment );
@@ -172,7 +172,7 @@ void PreprocessJob::run()
 
     if( PreprocessJob* parentPreprocessor = parentJob()->parentPreprocessor() ) {
         //If we are included from another preprocessor, give it back the modified macros,
-        parentPreprocessor->m_currentEnvironment->takeMacros(m_currentEnvironment);
+        parentPreprocessor->m_currentEnvironment->swapMacros( m_currentEnvironment );
         //Merge include-file-set, defined macros, used macros, and string-set
         parentPreprocessor->m_cachedLexedFile->merge(*m_cachedLexedFile);
     }

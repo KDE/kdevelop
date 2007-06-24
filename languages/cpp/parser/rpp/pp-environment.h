@@ -87,7 +87,7 @@ public:
   QList<pp_macro*> allMacros() const;
 
   //Take the set of environment-macros from the given environment
-  void takeMacros( Environment* parentEnvironment );
+  void swapMacros( Environment* parentEnvironment );
   
   //Fater access then allMacros(..), because nothing is copied
   const EnvironmentMap& environment();

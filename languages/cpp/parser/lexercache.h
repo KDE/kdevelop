@@ -28,6 +28,14 @@
 
 //#define LEXERCACHE_DEBUG
 
+/**@todo Increase the intelligence of the include-file logic:
+ * When a header was already included BEFORE the header represented by the
+ * cached-lexed-file, and the cached-lexed-file includes that header,
+ * it should be accepted anyway.
+ *
+ * That's complicated.
+ * */
+
 /**
  * The lexer-cache helps achieving right representation of the way c++ works:
  * When a file is processed by the preprocessor, the same file may create totally

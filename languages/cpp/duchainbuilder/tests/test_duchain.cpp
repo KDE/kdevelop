@@ -664,7 +664,82 @@ void TestDUChain::testFileParse()
 }
 
 void TestDUChain::testHashedStringRepository() {
-  HashedStringRepository* rep = new HashedStringRepository();
+  /*
+New Problem:
+Have sets:
+a,b
+c,d
+a,c
+b,d
+create set:
+-> a,b,c,d
+
+a,b,c,d should be a unique set, but it can be constructed from a,b + c,d and from a,c + b,d
+Solution:
+Merge a,b+a,c, a,c+b,d and then merge those to a,b,c,d
+*/
+  {
+    HashedStringRepository* rep = new HashedStringRepository();
+    QList<HashedStringSubset*> set1Strings;
+    set1Strings << rep->getAtomicSubset(HashedString("a"));
+    set1Strings << rep->getAtomicSubset(HashedString("b"));
+    HashedStringSubset* set1 = rep->buildSet(set1Strings);
+    
+    QList<HashedStringSubset*> set2Strings;
+    set2Strings << rep->getAtomicSubset(HashedString("c"));
+    set2Strings << rep->getAtomicSubset(HashedString("d"));
+    HashedStringSubset* set2 = rep->buildSet(set2Strings);
+    
+    QList<HashedStringSubset*> set3Strings;
+    set3Strings << rep->getAtomicSubset(HashedString("a"));
+    set3Strings << rep->getAtomicSubset(HashedString("c"));
+    HashedStringSubset* set3 = rep->buildSet(set3Strings);
+
+    QList<HashedStringSubset*> set4Strings;
+    set4Strings << rep->getAtomicSubset(HashedString("b"));
+    set4Strings << rep->getAtomicSubset(HashedString("d"));
+    HashedStringSubset* set4 = rep->buildSet(set4Strings);
+    
+    QList<HashedStringSubset*> set5Strings;
+    set5Strings << rep->getAtomicSubset(HashedString("a"));
+    set5Strings << rep->getAtomicSubset(HashedString("b"));
+    set5Strings << rep->getAtomicSubset(HashedString("c"));
+    set5Strings << rep->getAtomicSubset(HashedString("d"));
+    HashedStringSubset* set5 = rep->buildSet(set5Strings);
+
+    Q_ASSERT(rep->intersection(set1, set5) == set1);
+    Q_ASSERT(rep->intersection(set2, set5) == set2);
+    Q_ASSERT(rep->intersection(set3, set5) == set3);
+    Q_ASSERT(rep->intersection(set4, set5) == set4);
+    
+    kDebug() << "dot-graph: \n" << rep->dumpDotGraph() << "\n";
+    
+    delete rep;
+  }
+  
+  Q_ASSERT(0);
+
+/*
+@todo first compute the hash correctly, then solve the problem above
+@todo implement intersection
+ 
+Intersection assumption:
+If there is set A and set B, there is also a set that represents the intersection of A and B
+
+test:
+atomics are: a,b,c,d,e
+Buld set a,b,c and b,c,d:
+a,b,c:
+a,c
+a,b
+b,c,d:
+b,d
+c,d
+
+- no intersection-set b,c
+
+  */
+    HashedStringRepository* rep = new HashedStringRepository();
   
   QList<HashedStringSubset*> set1Strings;
   set1Strings << rep->getAtomicSubset(HashedString("a"));

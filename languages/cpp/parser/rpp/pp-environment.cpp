@@ -136,7 +136,7 @@ MacroBlock* Environment::elseBlock(int sourceLine, const QString& condition)
   return ret;
 }
 
-void Environment::takeMacros( Environment* parentEnvironment ) {
+void Environment::swapMacros( Environment* parentEnvironment ) {
   m_environment = parentEnvironment->m_environment;
 }
 
