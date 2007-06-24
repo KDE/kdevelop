@@ -109,7 +109,7 @@ void AbstractType::acceptType(AbstractType::Ptr type, TypeVisitor *v)
   type->accept (v);
 }
 
-WhichType AbstractType::whichType() const
+AbstractType::WhichType AbstractType::whichType() const
 {
   return TypeAbstract;
 }
@@ -155,7 +155,7 @@ QString IntegralType::toString() const
   return d->m_name;
 }
 
-WhichType IntegralType::whichType() const
+AbstractType::WhichType IntegralType::whichType() const
 {
   return TypeIntegral;
 }
@@ -204,7 +204,7 @@ QString PointerType::toString() const
   return baseType() ? QString("%1*").arg(baseType()->toString()) : QString("<notype>*");
 }
 
-WhichType PointerType::whichType() const
+AbstractType::WhichType PointerType::whichType() const
 {
   return TypePointer;
 }
@@ -253,7 +253,7 @@ QString ReferenceType::toString() const
   return baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&");
 }
 
-WhichType ReferenceType::whichType() const
+AbstractType::WhichType ReferenceType::whichType() const
 {
   return TypeReference;
 }
@@ -332,7 +332,7 @@ QString FunctionType::toString() const
   return QString("%1 (%2)").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
 }
 
-WhichType FunctionType::whichType() const
+AbstractType::WhichType FunctionType::whichType() const
 {
   return TypeFunction;
 }
@@ -388,7 +388,7 @@ QString StructureType::toString() const
   return "<structure>";
 }
 
-WhichType StructureType::whichType() const
+AbstractType::WhichType StructureType::whichType() const
 {
   return TypeStructure;
 }
@@ -448,7 +448,7 @@ void ArrayType::accept0 (TypeVisitor *v) const
   v->endVisit (this);
 }
 
-WhichType ArrayType::whichType() const
+AbstractType::WhichType ArrayType::whichType() const
 {
   return TypeArray;
 }
