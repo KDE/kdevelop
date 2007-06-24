@@ -38,6 +38,7 @@ endif(WIN32)
 if( NOT KDEVPLATFORM_INCLUDE_DIR )
     find_path( _platformIncDir kdevplatform/interfaces/iplugin.h
         PATHS
+	${CMAKE_INSTALL_PREFIX}/include
         ${_KDEVPLATFORM_INCLUDE_DIR}
     )
     set(KDEVPLATFORM_INCLUDE_DIR ${_platformIncDir}/kdevplatform)
@@ -47,6 +48,7 @@ set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatfor
 if( NOT KDEVPLATFORM_LIBRARY_DIR )
     find_library( _platforminterfaces_lib NAMES kdevplatforminterfaces
 	    PATHS
+	    ${LIB_INSTALL_DIR}
 	    ${_KDEVPLATFORM_LIB_DIR}
 	    )
     get_filename_component(KDEVPLATFORM_LIBRARY_DIR ${_platforminterfaces_lib} PATH )
