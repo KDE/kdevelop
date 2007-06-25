@@ -15,10 +15,12 @@ Name=Document View
 Name[de]=Dokumentansicht
 Name[el]=Προβολή εγγράφου
 Name[es]=Visor de documentos
+Name[sv]=Dokumentvy
 Name[x-test]=xxDocument Viewxx
 Comment=Configure Document View settings
 Comment[de]=Dokumentansicht Einstellungen
 Comment[el]=Ρύθμιση επιλογών προβολής εγγράφου
 Comment[es]=Configurar las preferencias del visor de documentos
+Comment[sv]=Anpassa inställningar av dokumentvy
 Comment[x-test]=xxConfigure Document View settingsxx
 

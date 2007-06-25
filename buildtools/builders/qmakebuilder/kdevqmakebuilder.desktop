@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevQMakeBuilder
+Name[sv]=KDevelop QMake-byggverktyg
 Name[x-test]=xxKDevQMakeBuilderxx
 Comment=Builds QMake Projects
 Comment[de]=Erstellt QMake-Projekte
 Comment[el]=Κατασκευή έργων QMake
 Comment[es]=Construye proyectos QMake
+Comment[sv]=Bygger QMake-projekt
 Comment[x-test]=xxBuilds QMake Projectsxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin
