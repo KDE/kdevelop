@@ -71,6 +71,10 @@ public:
         for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
                 it != m_documents.end(); ++it )
         {
+            //When a document is scheduled for parsing while it is being parsed, it will be parsed again once the job finished, but not now
+            if( m_parseJobs.contains(it.key()) )
+                continue;
+            
             kDebug() << "adding document " << it.key() << endl;
             KUrl url = it.key();
             bool &p = it.value();
@@ -260,7 +264,6 @@ void BackgroundParser::addDocument( const KUrl &url )
         d->m_documents.insert( url, true );
         d->parseDocumentsInternal();
     }
-
     }
 
     // Wake up waiting threads
@@ -341,13 +344,17 @@ void BackgroundParser::parseComplete( Job *job )
 
     if ( ParseJob * parseJob = qobject_cast<ParseJob*>( job ) )
     {
+        kDebug() << "BackgroundParser: parsed " << parseJob->document() << endl;
         d->m_parseJobs.remove(parseJob->document());
 
         // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
         // (awaiting reply from Mirko on this one)
         parseJob->setBackgroundParser(0);
         QTimer::singleShot(500, parseJob, SLOT(deleteLater()));
-        //delete parseJob;
+    
+        //Check if the file needs to be re-parsed.
+        if( d->m_documents[parseJob->document()] )
+            d->parseDocumentsInternal();
     }
 }
 

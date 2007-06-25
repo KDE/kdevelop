@@ -88,6 +88,9 @@ public Q_SLOTS:
     void setDelay( int msecs );
     void setThreads( int threads );
 
+    /**When addDocument is called with a document that is currently
+     * being processed in a parse-job, the document will be parsed
+     * again once the job has finished. */
     void addDocument( const KUrl &url );
 //     void addDocument( Document *document );
     void addDocumentList( const KUrl::List &urls );
