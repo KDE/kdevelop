@@ -92,7 +92,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
              this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
     connect( core()->documentController(),
              SIGNAL( documentStateChanged( KDevelop::IDocument* ) ),
-             this, SLOT( documentStateChanged( KDevelop::IDocument* ) ) );
+             this, SLOT( documentChanged( KDevelop::IDocument* ) ) );
+    connect( core()->documentController(),
+             SIGNAL( documentContentChanged( KDevelop::IDocument* ) ),
+             this, SLOT( documentChanged( KDevelop::IDocument* ) ) );
     connect( core()->documentController(),
              SIGNAL( documentActivated( KDevelop::IDocument* ) ),
              this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
@@ -108,7 +111,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     SymbolTable::self();
 }
 
-void CppLanguageSupport::documentStateChanged( KDevelop::IDocument* document ) {
+void CppLanguageSupport::documentChanged( KDevelop::IDocument* document ) {
     language()->backgroundParser()->addDocument(document->url());
 }
 
