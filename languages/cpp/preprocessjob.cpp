@@ -220,7 +220,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 //     }
     kDebug() << "PreprocessJob " << parentJob()->document() << ": searching for include " << fileName << endl;
 
-    KUrl includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName);
+    KUrl includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName, type);
     if (includedFile.isValid()) {
         kDebug() << "PreprocessJob " << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << " macros)" << ": found include-file " << fileName << ": " << includedFile << endl;
 

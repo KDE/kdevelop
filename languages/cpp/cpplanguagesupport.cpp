@@ -53,6 +53,7 @@
 #include <smartconverter.h>
 #include <symboltable.h>
 
+#include "rpp/preprocessor.h"
 #include "ast.h"
 #include "parsesession.h"
 #include "cpphighlighting.h"
@@ -200,7 +201,7 @@ void CppLanguageSupport::releaseAST( AST *ast )
     // The ast is in the memory pool which has been deleted as part of the session.
 }
 
-KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeName)
+KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeName, int includeType)
 {
     bool fallbackSearch = true;
 
@@ -232,14 +233,19 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
     }
 
     if (fallbackSearch) {
+        QStringList allPaths; ///@todo initialize this from gdb etc., see how it's done in kdev3
+        if( includeType == rpp::Preprocessor::IncludeLocal )
+            allPaths << source.directory();
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
-            foreach (QString path, result.paths) {
-                QFileInfo info(QDir(path), includeName);
-                if (info.exists() && info.isReadable()) {
-                    kDebug(9007) << "KWDEBUG: found include file: " << info.absoluteFilePath() << endl;
-                    return KUrl(info.absoluteFilePath());
-                }
+            allPaths += result.paths;
+        }
+        
+        foreach (QString path, allPaths) {
+            QFileInfo info(QDir(path), includeName);
+            if (info.exists() && info.isReadable()) {
+                kDebug(9007) << "KWDEBUG: found include file: " << info.absoluteFilePath() << endl;
+                return KUrl(info.absoluteFilePath());
             }
         }
     }

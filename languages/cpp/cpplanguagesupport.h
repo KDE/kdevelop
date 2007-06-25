@@ -55,7 +55,7 @@ public:
 
     /// Get the full path for a file based on a search through the project's
     /// include directories
-    KUrl findInclude(const KUrl &source, const QString& includeName);
+    KUrl findInclude(const KUrl &source, const QString& includeName, int includeType);
 
 private slots:
     void documentActivated(KDevelop::IDocument*);
