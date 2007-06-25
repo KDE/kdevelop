@@ -91,6 +91,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
              SIGNAL( documentClosed( KDevelop::IDocument* ) ),
              this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
     connect( core()->documentController(),
+             SIGNAL( documentStateChanged( KDevelop::IDocument* ) ),
+             this, SLOT( documentStateChanged( KDevelop::IDocument* ) ) );
+    connect( core()->documentController(),
              SIGNAL( documentActivated( KDevelop::IDocument* ) ),
              this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( core()->projectController(),
@@ -103,6 +106,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     // Initialise singletons, to prevent needing a mutex in their self() methods
     TypeRepository::self();
     SymbolTable::self();
+}
+
+void CppLanguageSupport::documentStateChanged( KDevelop::IDocument* document ) {
+    language()->backgroundParser()->addDocument(document->url());
 }
 
 CppLanguageSupport::~CppLanguageSupport()

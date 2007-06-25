@@ -62,6 +62,7 @@ private slots:
     void documentClosed(KDevelop::IDocument*);
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
+    void documentStateChanged( KDevelop::IDocument* document );
 
 private:
     CppHighlighting *m_highlights;
