@@ -100,7 +100,7 @@ public Q_SLOTS:
     void parseDocuments();
 
 private Q_SLOTS:
-    void parseComplete( Job *job );
+    void parseComplete( ThreadWeaver::Job *job );
 //     void documentChanged( KTextEditor::Document *document );
 
 protected:

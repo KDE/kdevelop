@@ -125,6 +125,7 @@ protected:
     void notifySaved();
     void notifyStateChanged();
     void notifyActivated();
+    void notifyContentChanged();
 
 private:
     class IDocumentPrivate* const d;

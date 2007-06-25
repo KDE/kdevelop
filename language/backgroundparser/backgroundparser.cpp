@@ -72,8 +72,10 @@ public:
                 it != m_documents.end(); ++it )
         {
             //When a document is scheduled for parsing while it is being parsed, it will be parsed again once the job finished, but not now
-            if( m_parseJobs.contains(it.key()) )
+            if( m_parseJobs.contains(it.key()) ) {
+                kDebug() << "skipping " << it.key() << " because it is already being parsed" << endl;
                 continue;
+            }
             
             kDebug() << "adding document " << it.key() << endl;
             KUrl url = it.key();
@@ -112,6 +114,16 @@ public:
             kDebug() << k_funcinfo << "Enqueue " << parse << endl;
             m_weaver ->enqueue( parse );
         }
+
+        for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
+        it != m_documents.end(); )
+        {
+            if( *it )
+                ++it;
+            else
+                m_documents.erase(it++);
+        }
+
     }
     void acceptAddDocument(const QUrl& url)
     {
@@ -259,10 +271,14 @@ void BackgroundParser::addDocument( const KUrl &url )
 
     Q_ASSERT( url.isValid() );
 
-    if ( !d->m_documents.contains( url ) )
+    QMap<KUrl, bool>::const_iterator it = d->m_documents.find(url);
+    if ( it == d->m_documents.end() || (*it) == false )
     {
-        d->m_documents.insert( url, true );
+        kDebug() << "BackgroundParser::addDocument: queuing " << url<< endl;
+        d->m_documents[url] = true;
         d->parseDocumentsInternal();
+    } else {
+        kDebug() << "BackgroundParser::addDocument: is already queued: " << url<< endl;
     }
     }
 
@@ -336,7 +352,7 @@ void BackgroundParser::parseDocuments()
     d->parseDocumentsInternal();
 }
 
-void BackgroundParser::parseComplete( Job *job )
+void BackgroundParser::parseComplete( ThreadWeaver::Job *job )
 {
     QMutexLocker lock(&d->m_mutex);
 

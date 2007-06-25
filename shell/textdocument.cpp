@@ -56,6 +56,11 @@ struct TextDocumentPrivate {
         m_textDocument->notifyStateChanged();
     }
 
+    void textChanged(KTextEditor::Document *document)
+    {
+        m_textDocument->notifyContentChanged();
+    }
+    
     void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
         KTextEditor::ModificationInterface::ModifiedOnDiskReason reason)
     {
@@ -105,6 +110,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
+        connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)),
+                 this, SLOT(textChanged(KTextEditor::Document*)));
+        
         KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         if (iface)
         {

@@ -60,6 +60,10 @@ void IDocument::notifyActivated()
     emit core()->documentController()->documentActivated(this);
 }
 
+void IDocument::notifyContentChanged() {
+    emit core()->documentController()->documentContentChanged(this);
+}
+
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

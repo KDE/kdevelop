@@ -48,6 +48,7 @@ public:
 
 private:
     Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
+    Q_PRIVATE_SLOT(d, void textChanged(KTextEditor::Document*))
     Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
 
     struct TextDocumentPrivate * const d;

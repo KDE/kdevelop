@@ -94,9 +94,13 @@ Q_SIGNALS:
     /**Emitted when a document has been closed.*/
     void documentClosed( KDevelop::IDocument* document );
 
-    /**This is emitted when the document changes, either internally
-    or on disc.*/
+    /**This is emitted when the document state(the relationship
+     * between the file in the editor and the file stored on disk) changes.*/
     void documentStateChanged( KDevelop::IDocument* document );
+
+    /**This is emitted when the document content changed.*/
+    void documentContentChanged( KDevelop::IDocument* document );
+    
     friend class IDocument;
 };
 
