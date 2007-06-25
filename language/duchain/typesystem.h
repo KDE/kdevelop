@@ -129,8 +129,7 @@ public:
   virtual WhichType whichType() const;
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const
-  { v->visit (this); }
+  virtual void accept0 (TypeVisitor *v) const;
 
 private:
   class IntegralTypePrivate* const d;

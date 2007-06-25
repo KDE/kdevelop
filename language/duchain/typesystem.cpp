@@ -155,6 +155,10 @@ QString IntegralType::toString() const
   return d->m_name;
 }
 
+void IntegralType::accept0(TypeVisitor *v) const
+{ 
+  v->visit (this); 
+}
 AbstractType::WhichType IntegralType::whichType() const
 {
   return TypeIntegral;
