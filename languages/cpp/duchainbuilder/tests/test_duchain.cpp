@@ -114,7 +114,7 @@ void TestDUChain::initTestCase()
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
   topContext = new TopDUContext(new KDevelop::DocumentRange(file1, Range(0,0,25,0)));
-  DUChain::self()->addDocumentChain(file1, topContext);
+  DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
 
   typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
   typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
