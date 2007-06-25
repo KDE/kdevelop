@@ -37,7 +37,7 @@ class CPPInternalParseJob;
 
 namespace Cpp {
     class LexedFile;
-};
+}
 
 namespace KDevelop {
     class TopDUContext;
@@ -92,7 +92,7 @@ public:
     void setLexedFile( Cpp::LexedFile* file );
 
     Cpp::LexedFile* lexedFile();
-    
+
 private:
     KSharedPtr<Cpp::LexedFile> m_lexedFile;
     PreprocessJob* m_parentPreprocessor;
