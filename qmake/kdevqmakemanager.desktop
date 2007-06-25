@@ -5,6 +5,7 @@ Name=KDevelop QMake Manager
 Name[de]=KDevelop QMake-Manager
 Name[el]=Διαχειριστής QMake του KDevelop
 Name[es]=Gestor QMake de KDevelop
+Name[sv]=KDevelop-hanteringsverktyg för QMake
 Name[x-test]=xxKDevelop QMake Managerxx
 Comment=Imports and edits qmake projects
 Comment[be]=Імпарт і рэдагаванне праектаў Qmake
