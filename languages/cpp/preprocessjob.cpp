@@ -31,6 +31,10 @@
 #include <klocale.h>
 
 #include <backgroundparser.h>
+#include <duchain.h>
+#include <duchain/parsingenvironment.h>
+#include "duchain/duchainlock.h"
+#include "duchain/topducontext.h"
 
 #include "Thread.h"
 
@@ -45,12 +49,11 @@
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-engine.h"
 #include "parser/rpp/pp-macro.h"
-#include "lexercache.h"
-#include <duchain.h>
+#include "environmentmanager.h"
 
-class CppPreprocessEnvironment : public rpp::Environment {
+class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
     public:
-        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::CachedLexedFile> lexedFile ) : Environment(preprocessor), m_lexedFile(lexedFile) {
+        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::LexedFile> lexedFile ) : Environment(preprocessor), m_lexedFile(lexedFile) {
             //If this is included from another preprocessed file, take the current macro-set from there.
         }
 
@@ -67,6 +70,15 @@ class CppPreprocessEnvironment : public rpp::Environment {
             return ret;
         }
 
+        /**
+         * Merges the given set of macros into the environment. Does not modify m_lexedFile
+         * */
+        void merge( const Cpp::MacroSet& macros ) {
+            Cpp::MacroSet::Macros::const_iterator endIt = macros.macros().end();
+            for( Cpp::MacroSet::Macros::const_iterator it = macros.macros().begin(); it != endIt; ++it ) {
+                rpp::Environment::setMacro(new rpp::pp_macro(*it)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+            }
+        }
         
         virtual void setMacro(rpp::pp_macro* macro) {
             //Note defined macros
@@ -74,14 +86,18 @@ class CppPreprocessEnvironment : public rpp::Environment {
             rpp::Environment::setMacro(macro);
         }
 
+        virtual int type() const {
+            return KDevelop::CppParsingEnvironment;
+        }
+        
     private:
-        mutable KSharedPtr<Cpp::CachedLexedFile> m_lexedFile;
+        mutable KSharedPtr<Cpp::LexedFile> m_lexedFile;
 };
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_currentEnvironment(0)
-    , m_cachedLexedFile( new Cpp::CachedLexedFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
+    , m_lexedFile( new Cpp::LexedFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
     , m_success(true)
 {
 }
@@ -117,7 +133,7 @@ void PreprocessJob::run()
 
         QByteArray fileData = file.readAll();
         contents = QString::fromUtf8( fileData.constData() );
-	//        Q_ASSERT( !contents.isEmpty() );
+    //        Q_ASSERT( !contents.isEmpty() );
         file.close();
     }
     else
@@ -155,7 +171,7 @@ void PreprocessJob::run()
     rpp::pp preprocessor(this);
 
     //Eventually initialize the environment with the parent-environment to get it's macros
-    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_cachedLexedFile );
+    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_lexedFile );
 
     //If we are included from another preprocessor, copy it's macros
     if( parentJob()->parentPreprocessor() )
@@ -168,13 +184,13 @@ void PreprocessJob::run()
     QString result = preprocessor.processFile(contents, rpp::pp::Data);
 
     parentJob()->parseSession()->setContents( result.toUtf8() );
-    parentJob()->parseSession()->cachedLexedFile = m_cachedLexedFile;
+    parentJob()->setLexedFile( m_lexedFile.data() );
 
     if( PreprocessJob* parentPreprocessor = parentJob()->parentPreprocessor() ) {
         //If we are included from another preprocessor, give it back the modified macros,
         parentPreprocessor->m_currentEnvironment->swapMacros( m_currentEnvironment );
         //Merge include-file-set, defined macros, used macros, and string-set
-        parentPreprocessor->m_cachedLexedFile->merge(*m_cachedLexedFile);
+        parentPreprocessor->m_lexedFile->merge(*m_lexedFile);
     }
     
     m_currentEnvironment = 0;
@@ -194,25 +210,48 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         if (CppLanguageSupport* lang = parent->cpp()) {
             VALGRIND_CHECK_MEM_IS_DEFINED(lang, sizeof(CppLanguageSupport)); */
 
-    IncludedFileHash::const_iterator it = parentJob()->includedFiles().find(fileName);
-    if (it != parentJob()->includedFiles().constEnd()) {
-        // The file has already been parsed.
-        return 0;
-    }
+//     IncludeFileList::const_iterator it = parentJob()->includedFiles().find(fileName);
+//     if (it != parentJob()->includedFiles().constEnd()) {
+//         // The file has already been parsed.
+//         return 0;
+//     }
 
     KUrl includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName);
     if (includedFile.isValid()) {
-        /// Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the
-        /// included file right here. Parallel parsing cannot be used here, because we need the
-        /// macros before we can continue.
 
-        // Create a slave-job that will take over our macros.
-        /*CPPParseJob slaveJob(includedFile, parentJob()->cpp(), this);
-        slaveJob.parseForeground();
+        KDevelop::TopDUContext* includedContext;
+        
+        {
+            KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+            includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment);
+        }
 
-        // Add the included file.
-        Q_ASSERT(slaveJob.duChain());
-        parentJob()->addIncludedFile(fileName, slaveJob.duChain());*/
+        if( includedContext ) {
+            KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+            parentJob()->addIncludedFile(includedContext);
+            KDevelop::ParsingEnvironmentFilePointer file = includedContext->parsingEnvironmentFile();
+            Cpp::LexedFile* lexedFile = dynamic_cast<Cpp::LexedFile*> (file.data());
+            if( lexedFile ) {
+                m_currentEnvironment->merge( lexedFile->definedMacros() );
+                m_lexedFile->merge( *lexedFile );
+            } else {
+                kDebug() << "preprocessjob: included file " << includedFile << " found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support" << endl;
+            }
+        } else {
+            /// Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the
+            /// included file right here. Parallel parsing cannot be used here, because we need the
+            /// macros before we can continue.
+
+            // Create a slave-job that will take over our macros.
+            // It will itself take our macros modify them, copy them back,
+            // and merge information into our m_lexedFile
+            CPPParseJob slaveJob(includedFile, parentJob()->cpp(), this);
+            slaveJob.parseForeground();
+
+            // Add the included file.
+            Q_ASSERT(slaveJob.duChain());
+            parentJob()->addIncludedFile(slaveJob.duChain());
+        }
     }
 
         /*} else {

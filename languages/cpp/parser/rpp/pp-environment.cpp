@@ -175,7 +175,7 @@ void Environment::setMacro(pp_macro* macro)
     m_environment.insert(macro->name, macro);
 }
 
-const Environment::EnvironmentMap& Environment::environment() {
+const Environment::EnvironmentMap& Environment::environment() const {
   return m_environment;
 }
 

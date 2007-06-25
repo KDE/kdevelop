@@ -89,8 +89,8 @@ public:
   //Take the set of environment-macros from the given environment
   void swapMacros( Environment* parentEnvironment );
   
-  //Fater access then allMacros(..), because nothing is copied
-  const EnvironmentMap& environment();
+  //Faster access then allMacros(..), because nothing is copied
+  const EnvironmentMap& environment() const;
   
 private:
   EnvironmentMap m_environment;

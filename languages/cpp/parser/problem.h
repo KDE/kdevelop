@@ -22,6 +22,7 @@
 #include <QtCore/QSharedData>
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QString>
+#include <cppparserexport.h>
 
 /**Parsing problem.
 
@@ -29,7 +30,7 @@ Currently parser problem is either a lexer or parser error. The maximum amount o
 allowed is controlled by the @ref Parser::_M_max_problem_count private
 variable (currently set to 5).
 */
-class Problem
+class KDEVCPPPARSER_EXPORT Problem
 {
 public:
   Problem();

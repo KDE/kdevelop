@@ -62,6 +62,7 @@
 #include "usebuilder.h"
 #include "typerepository.h"
 #include "cppparsejob.h"
+#include "environmentmanager.h"
 
 using namespace KDevelop;
 
@@ -77,6 +78,11 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
     m_includeResolver = new CppTools::IncludePathResolver;
+    m_lexerCache = new Cpp::EnvironmentManager;
+    {
+        DUChainWriteLocker l(DUChain::lock());
+        DUChain::self()->addParsingEnvironmentManager(m_lexerCache);
+    }
 
 /*    connect( KDevelop::Core::documentController(),
              SIGNAL( documentLoaded( KDevelop::Document* ) ),
@@ -101,6 +107,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
 
 CppLanguageSupport::~CppLanguageSupport()
 {
+    {
+        DUChainWriteLocker l(DUChain::lock());
+        DUChain::self()->removeParsingEnvironmentManager(m_lexerCache);
+    }
     delete m_includeResolver;
 }
 

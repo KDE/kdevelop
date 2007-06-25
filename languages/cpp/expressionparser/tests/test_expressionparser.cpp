@@ -30,7 +30,7 @@
 #include <documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
-#include "lexercache.h"
+#include "environmentmanager.h"
 
 
 #include "tokens.h"
@@ -383,7 +383,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
 
   DeclarationBuilder definitionBuilder(session);
 
-  Cpp::CachedLexedFilePointer file( new Cpp::CachedLexedFile( url, 0 ) );
+  Cpp::LexedFilePointer file( new Cpp::LexedFile( url, 0 ) );
   TopDUContext* top = definitionBuilder.buildDeclarations(file, ast);
 
   UseBuilder useBuilder(session);

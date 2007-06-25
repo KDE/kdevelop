@@ -32,7 +32,7 @@
 #include <topducontext.h>
 #include "dumpchain.h"
 #include <symboltable.h>
-#include "lexercache.h"
+#include "environmentmanager.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -63,14 +63,14 @@ ContextBuilder::~ContextBuilder ()
   delete m_nameCompiler;
 }
 
-TopDUContext* ContextBuilder::buildContexts(const Cpp::CachedLexedFilePointer& file, AST *node, QList<DUContext*>* includes)
+TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, AST *node, QList<DUContext*>* includes)
 {
   m_compilingContexts = true;
 
   m_editor->setCurrentUrl(file->url());
 
   // FIXME ? race here...
-  TopDUContext* topLevelContext = DUChain::self()->chainForDocument(file->url());
+  TopDUContext* topLevelContext = DUChain::self()->chainForDocument(file->identity());
 
   if (topLevelContext) {
     m_recompiling = true;
@@ -92,11 +92,11 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::CachedLexedFilePointer& f
     Q_ASSERT(m_compilingContexts);
 
     Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
-    topLevelContext = new TopDUContext(range);
+    topLevelContext = new TopDUContext(range, const_cast<Cpp::LexedFile*>(file.data() ));
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext->setType(DUContext::Global);
 
-    DUChain::self()->addDocumentChain(file->url(), topLevelContext);
+    DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
   }
 
   m_encounteredToken = topLevelContext->lastEncountered() + 1;

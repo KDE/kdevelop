@@ -26,6 +26,7 @@
 
 #include <QStringList>
 
+#include <ksharedptr.h>
 #include <ktexteditor/range.h>
 
 class PreprocessJob;
@@ -33,11 +34,16 @@ class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
 class CPPInternalParseJob;
+
+namespace Cpp {
+    class LexedFile;
+};
+
 namespace KDevelop {
     class TopDUContext;
 }
 
-typedef QHash<QString, KDevelop::TopDUContext*> IncludedFileHash;
+typedef QList<KDevelop::TopDUContext*> IncludeFileList;
 
 class CPPParseJob : public KDevelop::ParseJob
 {
@@ -71,8 +77,8 @@ public:
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
 
-    void addIncludedFile(QString file, KDevelop::TopDUContext* duChain);
-    const IncludedFileHash includedFiles() const;
+    void addIncludedFile(KDevelop::TopDUContext* duChain);
+    const IncludeFileList& includedFiles() const;
 
     ///Returns the preprocessor-job that is parent of this job, or 0
     PreprocessJob* parentPreprocessor() const;
@@ -83,7 +89,12 @@ public:
 
     const KTextEditor::Range& textRangeToParse() const;
 
+    void setLexedFile( Cpp::LexedFile* file );
+
+    Cpp::LexedFile* lexedFile();
+    
 private:
+    KSharedPtr<Cpp::LexedFile> m_lexedFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;
     TranslationUnitAST* m_AST;
@@ -92,7 +103,7 @@ private:
     PreprocessJob* m_preprocessJob;
     CPPInternalParseJob* m_parseJob;
     KTextEditor::Range m_textRangeToParse;
-    IncludedFileHash m_includedFiles;
+    IncludeFileList m_includedFiles;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job

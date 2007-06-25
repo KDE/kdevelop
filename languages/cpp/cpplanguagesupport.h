@@ -33,6 +33,7 @@ class TranslationUnitAST;
 namespace KParts { class Part; }
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; }
 namespace CppTools { class IncludePathResolver; }
+namespace Cpp { class EnvironmentManager; }
 
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -66,6 +67,7 @@ private:
     CppHighlighting *m_highlights;
     CppCodeCompletion *m_cc;
     CppTools::IncludePathResolver *m_includeResolver;
+    Cpp::EnvironmentManager* m_lexerCache;
 };
 
 #endif

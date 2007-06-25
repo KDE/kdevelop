@@ -50,6 +50,7 @@
 #include "usebuilder.h"
 #include <topducontext.h>
 #include "preprocessjob.h"
+#include "environmentmanager.h"
 
 using namespace KDevelop;
 
@@ -128,11 +129,19 @@ CppLanguageSupport * CPPParseJob::cpp() const
     return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
-void CPPParseJob::addIncludedFile(QString file, KDevelop::TopDUContext* duChain) {
-    m_includedFiles.insert(file, duChain);
+void CPPParseJob::addIncludedFile(KDevelop::TopDUContext* duChain) {
+    m_includedFiles.push_back(duChain);
 }
 
-const IncludedFileHash CPPParseJob::includedFiles() const {
+void CPPParseJob::setLexedFile( Cpp::LexedFile* file ) {
+    m_lexedFile = KSharedPtr<Cpp::LexedFile>(file);
+}
+
+Cpp::LexedFile* CPPParseJob::lexedFile() {
+    return m_lexedFile.data();
+}
+
+const IncludeFileList& CPPParseJob::includedFiles() const {
     return m_includedFiles;
 }
 
@@ -168,7 +177,7 @@ void CPPInternalParseJob::run()
     kDebug( 9007 ) << "===-- PARSING --===> "
     << parentJob()->document().fileName()
     << endl;
-    Q_ASSERT(parentJob()->parseSession()->cachedLexedFile);
+    Q_ASSERT(parentJob()->lexedFile());
 
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
@@ -203,10 +212,10 @@ void CPPInternalParseJob::run()
 
         QList<DUContext*> chains;
 
-        for ( IncludedFileHash::const_iterator it = parentJob()->includedFiles().constBegin();
+        for ( IncludeFileList::const_iterator it = parentJob()->includedFiles().constBegin();
               it != parentJob()->includedFiles().constEnd(); ++it )
         {
-            chains << it.value();
+            chains << *it;
         }
 
         TopDUContext* topContext;
@@ -222,7 +231,7 @@ void CPPInternalParseJob::run()
               editor.smart()->useRevision(parentJob()->revisionToken());
 
             DeclarationBuilder declarationBuilder(&editor);
-            topContext = declarationBuilder.buildDeclarations(parentJob()->parseSession()->cachedLexedFile, ast, &chains);
+            topContext = declarationBuilder.buildDeclarations(Cpp::LexedFilePointer(parentJob()->lexedFile()), ast, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();

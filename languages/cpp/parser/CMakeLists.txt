@@ -33,10 +33,6 @@ set(kdevcppparser_LIB_SRCS
     dumptree.cpp
     parsesession.cpp
     type_compiler.cpp
-    hashedstring.cpp
-    macroset.cpp
-    lexercache.cpp
-    cachemanager.cpp
 )
 
 kde4_automoc(${kdevcppparser_LIB_SRCS})

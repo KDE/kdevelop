@@ -20,7 +20,6 @@
 
 #include "lexer.h"
 #include "memorypool.h"
-#include "lexercache.h"
 #include "problem.h"
 
 #include <cctype>

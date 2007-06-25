@@ -14,15 +14,21 @@
 
 #ifndef LEXERCACHE_H
 #define LEXERCACHE_H
-#include <hashedstring.h>
-#include <ext/hash_map>
-#include <ksharedptr.h>
-#include <kurl.h>
-#include <QDateTime>
+
+#include <map>
 #include <ext/hash_set>
+#include <ext/hash_map>
+
+#include <QDateTime>
 #include <QList>
 #include <QMap>
-#include <map>
+
+#include <kurl.h>
+#include <ksharedptr.h>
+
+#include <parsingenvironment.h>
+#include "cppduchainbuilderexport.h"
+#include "hashedstring.h"
 #include "macroset.h"
 #include "cachemanager.h"
 
@@ -37,7 +43,7 @@
  * */
 
 /**
- * The lexer-cache helps achieving right representation of the way c++ works:
+ * The environment-manager helps achieving right representation of the way c++ works:
  * When a file is processed by the preprocessor, the same file may create totally
  * different results depending on the defined macros. Think for example of header-
  * guards.
@@ -46,17 +52,17 @@
  * is a readily parsed du-context for the file that WOULD BE CREATED if it was
  * preprocessed under the current environment of macros.
  *
- * The lexer-cache is there to answer that question:
- * CachedLexedFile collects all information about the context a file was parsed in,
+ * The environment-manager is there to answer that question:
+ * LexedFile collects all information about the context a file was parsed in,
  * the macros used, the words contained in a file that can be influenced by macros,
  * and the defined macros.
  *
- * The lexer-cache is able to match that information agains a current parsing-environment
+ * The environment-manager is able to match that information agains a current parsing-environment
  * to see whether preprocessing the file would yield the same result as an already stored
  * run.
  *
  * If the result would be different, the file will be re-preprocessed, parsed, and imported.
- * Else the set of defined macros is taken from the stored CachedLexedFile,
+ * Else the set of defined macros is taken from the stored LexedFile,
  * and the already available du-context will be imported. The result: correct behavior, perfectly working header-guards, no missing macros, intelligent reparsing of changed headers, ...
  * 
  * */
@@ -70,13 +76,13 @@ class Problem;
 
 namespace Cpp {
 
-class LexerCache;
+class EnvironmentManager;
 class MacroSet;
 
-class KDEVCPPPARSER_EXPORT CachedLexedFile : public KShared, public CacheNode {
+class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
-    CachedLexedFile( const KUrl& url, LexerCache* manager );
+    LexedFile( const KUrl& url, EnvironmentManager* manager );
     
     inline void addString( const HashedString& string ) {
         if( !m_definedMacroNames[ string ] ) {
@@ -101,15 +107,17 @@ class KDEVCPPPARSER_EXPORT CachedLexedFile : public KShared, public CacheNode {
 
     QList<Problem>  problems() const;
 
-    //The parameter should be a CachedLexedFile that was lexed AFTER the content of this file
-    void merge( const CachedLexedFile& file );
+    //The parameter should be a LexedFile that was lexed AFTER the content of this file
+    void merge( const LexedFile& file );
 
-    bool operator <  ( const CachedLexedFile& rhs ) const {
+    bool operator <  ( const LexedFile& rhs ) const {
       return m_hashedUrl < rhs.m_hashedUrl;
     }
 
     size_t hash() const;
 
+    virtual KDevelop::IdentifiedFile identity() const;
+    
     KUrl url() const;
 
     HashedString hashedUrl() const;
@@ -132,7 +140,9 @@ class KDEVCPPPARSER_EXPORT CachedLexedFile : public KShared, public CacheNode {
     const QMap<HashedString, QDateTime>& allModificationTimes() const;
 
   private:
-    friend class LexerCache;
+    virtual int type() const;
+    
+    friend class EnvironmentManager;
     KUrl m_url;
     HashedString m_hashedUrl;
     QDateTime m_modificationTime;
@@ -154,28 +164,20 @@ class KDEVCPPPARSER_EXPORT CachedLexedFile : public KShared, public CacheNode {
     */
 };
 
-typedef KSharedPtr<CachedLexedFile>  CachedLexedFilePointer;
+typedef KSharedPtr<LexedFile>  LexedFilePointer;
 
-struct KDEVCPPPARSER_EXPORT CachedLexedFilePointerCompare {
-  bool operator() ( const CachedLexedFilePointer& lhs, const CachedLexedFilePointer& rhs ) const {
+struct KDEVCPPDUCHAINBUILDER_EXPORT LexedFilePointerCompare {
+  bool operator() ( const LexedFilePointer& lhs, const LexedFilePointer& rhs ) const {
     return (*lhs) < (*rhs );
   }
 };
 
 class Driver;
 
-class KDEVCPPPARSER_EXPORT LexerCache : public CacheManager {
+class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, public KDevelop::ParsingEnvironmentManager {
   public:
-    LexerCache();
-    virtual ~LexerCache();
-
-    void addLexedFile( const CachedLexedFilePointer& file );
-
-    ///Returns zero if no fitting file is available for the given Environment
-    CachedLexedFilePointer lexedFile( const HashedString& fileName, rpp::Environment* environment );
-    CachedLexedFilePointer lexedFile( const KUrl& url, rpp::Environment* environment );
-
-    void clear();
+    EnvironmentManager();
+    virtual ~EnvironmentManager();
 
     const HashedString& unifyString( const HashedString& str ) {
       __gnu_cxx::hash_set<HashedString>::const_iterator it = m_totalStringSet.find( str );
@@ -188,15 +190,38 @@ class KDEVCPPPARSER_EXPORT LexerCache : public CacheManager {
     }
     
     virtual void saveMemory();
+
+    //Overridden from ParsingEnvironmentManager
+    virtual void clear();
+
+    ///Add a new file to the manager
+    virtual void addFile( KDevelop::ParsingEnvironmentFile* file );
+    ///Remove a file from the manager
+    virtual void removeFile( KDevelop::ParsingEnvironmentFile* file );
+
+    /**
+     * Search for the availability of a file parsed in a given environment 
+     * */
+    virtual KDevelop::ParsingEnvironmentFile* find( const KUrl& url, const KDevelop::ParsingEnvironment* environment );
+
   private:
+    virtual int type() const;
     ///before this can be called, initFileModificationCache should be called once
     QDateTime fileModificationTimeCached( const HashedString& fileName );
     void initFileModificationCache();
     virtual void erase( const CacheNode* node );
-    bool hasSourceChanged( const CachedLexedFile& file );///Returns true if the file itself, or any of its dependencies was modified.
-    //typedef __gnu_cxx::hash_multimap<HashedString, CachedLexedFilePointer> CachedLexedFileMap;
-    typedef std::multimap<HashedString, CachedLexedFilePointer> CachedLexedFileMap;
-    CachedLexedFileMap m_files;
+    bool hasSourceChanged( const LexedFile& file );///Returns true if the file itself, or any of its dependencies was modified.
+    
+    ///Returns zero if no fitting file is available for the given Environment
+    LexedFilePointer lexedFile( const HashedString& fileName, const rpp::Environment* environment );
+    LexedFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment );
+
+    void addLexedFile( const LexedFilePointer& file );
+    void removeLexedFile( const LexedFilePointer& file );
+
+    //typedef __gnu_cxx::hash_multimap<HashedString, LexedFilePointer> LexedFileMap;
+    typedef std::multimap<HashedString, LexedFilePointer> LexedFileMap;
+    LexedFileMap m_files;
     __gnu_cxx::hash_set<HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
     struct FileModificationCache {
       QDateTime m_readTime;

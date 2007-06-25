@@ -25,6 +25,10 @@ set(kdevcppduchainbuilder_LIB_SRCS
     cpptypes.cpp
     typerepository.cpp
     dumptypes.cpp
+    macroset.cpp
+    environmentmanager.cpp
+    cachemanager.cpp
+    hashedstring.cpp
 )
 
 kde4_add_library(kdevcppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})
