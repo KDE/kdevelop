@@ -32,6 +32,10 @@ namespace KDevelop
 class TopDUContext;
 class DUChainLock;
 
+class IdentifiedFile;
+class ParsingEnvironmentManager;
+class ParsingEnvironment;
+
 /**
  * Holds references to all top level source file contexts.
  *
@@ -43,8 +47,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChain : public QObject
   Q_OBJECT
 
 public:
+  /**
+   * Return any chain for the given document
+   * */
   TopDUContext* chainForDocument(const KUrl& document);
-  void addDocumentChain(const KUrl& document, TopDUContext* chain);
+  
+  /**
+   * Find the chain based on file-url and identity-number. If the number is zero, any chain for the given url is returned.
+   * */
+  TopDUContext* chainForDocument(const IdentifiedFile& document);
+
+  /**
+   * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
+   * */
+  TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment);
+
+  void addDocumentChain(const IdentifiedFile& document, TopDUContext* chain);
 
   void clear();
 
@@ -72,10 +90,20 @@ public:
   static void definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
   static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
 
+  /**
+   * @see ParsingEnvironmentManager
+   * */
+  void addParsingEnvironmentManager( ParsingEnvironmentManager* manager );
+
+  ///Remove a manager, for example when a language-part is unloaded
+  void removeParsingEnvironmentManager( ParsingEnvironmentManager* manager );
+  
 public Q_SLOTS:
-  void removeDocumentChain(const KUrl& document);
+  void removeDocumentChain(const IdentifiedFile& document);
 
 private:
+  void addToEnvironmentManager( TopDUContext * chain );
+  void removeFromEnvironmentManager( TopDUContext * chain );
   DUChain();
   ~DUChain();
 

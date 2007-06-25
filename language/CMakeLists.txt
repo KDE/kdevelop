@@ -27,6 +27,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainlock.cpp
     duchain/identifier.cpp
     duchain/identifiedtype.cpp
+    duchain/parsingenvironment.cpp
 )
 
 kde4_automoc(${kdevplatformlanguage_LIB_SRCS})
@@ -58,6 +59,7 @@ install(FILES
 )
 
 install(FILES
+    duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/ducontext.h
     duchain/topducontext.h

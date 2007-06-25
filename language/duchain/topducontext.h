@@ -23,8 +23,13 @@
 #include <languageexport.h>
 #include <QtCore/QMutex>
 
+template< class T >
+class KSharedPtr;
+
 namespace KDevelop
 {
+  class IdentifiedFile; //Defined in parsingenvironment.h
+  class ParsingEnvironmentFile;
 
 /**
  * The top context in a definition-use chain for one source file.
@@ -36,11 +41,22 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
-  TopDUContext(KTextEditor::Range* range);
+  TopDUContext(KTextEditor::Range* range, ParsingEnvironmentFile* file = 0);
   virtual ~TopDUContext();
 
   TopDUContext* topContext() const;
 
+  /**
+   * There may be multiple context's for one file, but each of those should have a different identity().
+   *  */
+  IdentifiedFile identity() const;
+
+  /**
+   * @see ParsingEnvironmentFile
+   * May return zero if no file was set.
+   * */
+  KSharedPtr<ParsingEnvironmentFile> parsingEnvironmentFile() const;
+  
   /// Returns true if this object is being deleted, otherwise false.
   bool deleting() const;
 

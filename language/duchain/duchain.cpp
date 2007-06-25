@@ -24,6 +24,7 @@
 #include "editorintegrator.h"
 
 #include "topducontext.h"
+#include "parsingenvironment.h"
 
 namespace KDevelop
 {
@@ -33,8 +34,9 @@ class DUChainPrivate
 public:
   DUChain instance;
   DUChainLock lock;
-  QMap<KUrl, TopDUContext*> m_chains;
+  QMap<IdentifiedFile, TopDUContext*> m_chains;
   QList<DUChainObserver*> m_observers;
+  QMap<int,ParsingEnvironmentManager*> m_managers;
 };
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
@@ -58,22 +60,69 @@ DUChainLock* DUChain::lock()
   return &sdDUChainPrivate->lock;
 }
 
-void DUChain::removeDocumentChain( const KUrl & document )
+void DUChain::removeDocumentChain( const  IdentifiedFile& document )
 {
   sdDUChainPrivate->m_chains.remove(document);
 }
 
-void DUChain::addDocumentChain( const KUrl & document, TopDUContext * chain )
+void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * chain )
 {
   Q_ASSERT(chain);
   sdDUChainPrivate->m_chains.insert(document, chain);
+  addToEnvironmentManager(chain);
 }
 
-TopDUContext * DUChain::chainForDocument( const KUrl & document )
+void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
+  ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
+  if( !file )
+    return; //We don't need to manage
+  
+  QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(file->type());
+  
+  if( it != sdDUChainPrivate->m_managers.end() ) {
+    (*it)->addFile( file.data() );
+  } else {
+    //No manager available for the type
+  }
+}
+
+void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
+  ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
+  if( !file )
+    return; //We don't need to manage
+  
+  QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(file->type());
+  
+  if( it != sdDUChainPrivate->m_managers.end() ) {
+    (*it)->removeFile( file.data() );
+  } else {
+    //No manager available for the type
+  }
+}
+
+TopDUContext* DUChain::chainForDocument(const KUrl& document) {
+  return chainForDocument( IdentifiedFile(document) );
+}
+
+TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document )
 {
   if (sdDUChainPrivate->m_chains.contains(document))
     return sdDUChainPrivate->m_chains[document];
   return 0;
+}
+
+TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment ) {
+  QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(environment->type());
+  if( it != sdDUChainPrivate->m_managers.end() ) {
+    ParsingEnvironmentFilePointer file( (*it)->find(document, environment) );
+    if( !file )
+      return 0;
+    
+      return chainForDocument( file->identity() );
+  } else {
+    //No manager available for the type
+    return chainForDocument( document );
+  }
 }
 
 void DUChain::clear()
@@ -83,6 +132,9 @@ void DUChain::clear()
     KDevelop::EditorIntegrator::releaseTopRange(context->textRangePtr());
     delete context;
   }
+
+  foreach( ParsingEnvironmentManager* manager, sdDUChainPrivate->m_managers )
+    manager->clear();
 
   sdDUChainPrivate->m_chains.clear();
 }
@@ -133,6 +185,20 @@ void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChain
     observer->useChanged(use, change, relationship, relatedObject);
 }
 
+void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
+  Q_ASSERT( sdDUChainPrivate->m_managers.find(manager->type()) == sdDUChainPrivate->m_managers.end() ); //If this fails, there may be multiple managers with the same type, which is wrong
+  
+  sdDUChainPrivate->m_managers[manager->type()] = manager;
+  }
+
+void DUChain::removeParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
+  QMap<int,ParsingEnvironmentManager*>::iterator it = sdDUChainPrivate->m_managers.find(manager->type());
+  
+  if( it != sdDUChainPrivate->m_managers.end() ) {
+    Q_ASSERT( *it == manager ); //If this fails, there may be multiple managers with the same type, which is wrong
+    sdDUChainPrivate->m_managers.erase(it);
+  }
+}
 }
 
 #include "duchain.moc"

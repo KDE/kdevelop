@@ -22,6 +22,7 @@
 #include "declaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
+#include "parsingenvironment.h"
 
 using namespace KTextEditor;
 
@@ -57,14 +58,27 @@ public:
   bool m_hasUses  : 1;
   bool m_deleting : 1;
   TopDUContext* m_ctxt;
+  ParsingEnvironmentFilePointer m_file;
 };
 
-TopDUContext::TopDUContext(KTextEditor::Range* range)
+TopDUContext::TopDUContext(KTextEditor::Range* range, ParsingEnvironmentFile* file)
   : DUContext(range)
   , d(new TopDUContextPrivate(this))
 {
   d->m_hasUses = false;
   d->m_deleting = false;
+  d->m_file = ParsingEnvironmentFilePointer(file);
+}
+
+IdentifiedFile TopDUContext::identity() const {
+  if( d->m_file )
+    return d->m_file->identity();
+  else
+    return IdentifiedFile(url());
+}
+
+KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {
+  return d->m_file;
 }
 
 TopDUContext::~TopDUContext( )
