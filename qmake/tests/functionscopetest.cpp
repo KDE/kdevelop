@@ -309,6 +309,14 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( FunctionScopeTest, orOp,
               "!contains(SOMETHINGELSE, foobar) | contains(OTHER,foo) : VARIABLE = val1 val2\n" )
 
+BEGINTESTFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, 1 )
+    QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
+    TESTFUNCNAME( fn, "foo" )
+    QStringList testlist;
+    testlist << "some" ;
+    TESTFUNCARGS( fn, testlist )
+ENDTESTFUNCIMPL
+DATAFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, "func ( some )")
 
 BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingParenthesis, "No closing parenthesis for function call" )
 ENDTESTFUNCIMPL

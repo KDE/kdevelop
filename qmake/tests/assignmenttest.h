@@ -86,6 +86,8 @@ class AssignmentTest : public QObject
         void pathValue_data();
         void varNameDollar();
         void varNameDollar_data();
+        void commentInMultiline();
+        void commentInMultiline_data();
 
         void commandExecQMakeVar();
         void commandExecQMakeVar_data();

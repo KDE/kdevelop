@@ -70,6 +70,8 @@ class FunctionScopeTest : public QObject
         void notFunc_data();
         void orOp();
         void orOp_data();
+        void spaceBeforeBrace();
+        void spaceBeforeBrace_data();
 
         void missingStmt();
         void missingStmt_data();

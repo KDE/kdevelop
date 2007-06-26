@@ -248,6 +248,13 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, noDashEndVar, "VAR- += value\n" )
 
+BEGINTESTFUNCIMPL( AssignmentTest, commentInMultiline, 1 )
+    QMake::AssignmentAST* assignment;
+    assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VAR", " += ", 6, "foo \\n  bar \\n# ass\n  foo" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, commentInMultiline, "VAR += foo \\n  bar \\n# ass\n  foo")
 
 void AssignmentTest::init()
 {
