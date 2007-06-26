@@ -86,6 +86,9 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
         topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
     }
 
+    DUChainWriteLocker lock(DUChain::lock());
+
+    DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::LexedFile*>(file.data() ) );
   } else {
     m_recompiling = false;
 
@@ -119,6 +122,12 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
 
   supportBuild(node);
 
+  {
+    DUChainReadLocker lock(DUChain::lock());
+
+    kDebug(9007) << "built top-level context with " << topLevelContext->allDeclarations(KTextEditor::Cursor()).size() << " declarations and " << topLevelContext->importedParentContexts().size() << " included files" << endl;
+  }
+  
   m_compilingContexts = false;
 
   if (!m_importedParentContexts.isEmpty()) {

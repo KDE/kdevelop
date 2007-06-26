@@ -20,6 +20,14 @@
 #include "problem.h"
 #include "cppparserexport.h"
 
+#define LEXERCACHE_DEBUG
+
+#ifndef LEXERCACHE_DEBUG
+#define ifDebug(X) /**/
+#else
+#define ifDebug(X) X
+#endif
+
 using namespace Cpp;
 using namespace KDevelop;
 
@@ -30,7 +38,7 @@ EnvironmentManager::~EnvironmentManager() {
 }
 
 void EnvironmentManager::addLexedFile( const LexedFilePointer& file ) {
-  //kdDebug( 9007 ) << "EnvironmentManager: adding an instance of " << file->fileName().str() << endl;
+  ifDebug( kDebug( 9007 ) << "EnvironmentManager: adding an instance of " << file->url() << endl );
 
   std::pair< LexedFileMap::iterator, LexedFileMap::iterator> files = m_files.equal_range( file->hashedUrl() );
 
@@ -44,28 +52,30 @@ void EnvironmentManager::addLexedFile( const LexedFilePointer& file ) {
   int cnt = 0;
   while ( files.first != files.second ) {
     if ( hasSourceChanged( *( *( files.first ) ).second ) ) {
-      m_files.erase( files.first++ );
+      m_files.erase( files.first++ ); ///@todo give notification to du-chain
     } else  {
       cnt++;
       files.first++;
     }
   }
-  //kdDebug( 9007 ) << "EnvironmentManager: new count of cached instances for the file: " << cnt << endl;
+  //kDebug( 9007 ) << "EnvironmentManager: new count of cached instances for the file: " << cnt << endl;
 }
 
 void EnvironmentManager::removeLexedFile( const LexedFilePointer& file ) {
-  //kdDebug( 9007 ) << "EnvironmentManager: adding an instance of " << file->fileName().str() << endl;
+  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeLexedFile: removing an instance of " << file->url() << endl );
 
   std::pair< LexedFileMap::iterator, LexedFileMap::iterator> files = m_files.equal_range( file->hashedUrl() );
 
+  int cnt = 0;
   while ( files.first != files.second ) {
     if ( (*files.first).second == file ) {
       m_files.erase( files.first++ );
     } else  {
+      ++cnt;
       files.first++;
     }
   }
-  //kdDebug( 9007 ) << "EnvironmentManager: new count of cached instances for the file: " << cnt << endl;
+  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeLexedFile: new count of cached instances for the file: " << cnt << endl );
 }
 
 LexedFilePointer EnvironmentManager::lexedFile( const KUrl& url, const rpp::Environment* environment )  {
@@ -78,16 +88,23 @@ LexedFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, co
 
   ///@todo optimize with standard-algorithms(by first computing the intersection)
 
-  /*  if( files.first != files.second )
-        //kdDebug( 9007 ) << "EnvironmentManager: cache for file " << fileName.str() << " is not empty" << endl;
-    else
-        //kdDebug( 9007 ) << "EnvironmentManager: cache for file " << fileName.str() << " is empty" << endl;*/
+#ifdef LEXERCACHE_DEBUG
+    if( files.first != files.second ) {
+      int count = 0;
+      std::pair< LexedFileMap::iterator, LexedFileMap::iterator> files2 = files;
+      for( ; files2.first != files2.second; ++files2.first )
+        ++count;
+        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file " << fileName.str() << " has " << count << " entries" << endl;
+    } else {
+        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file " << fileName.str() << " is empty" << endl;
+    }
+#endif
 
   while ( files.first != files.second ) {
     const LexedFile& file( *( *( files.first ) ).second );
     if ( hasSourceChanged( file ) ) {
-      //kdDebug( 9007 ) << "EnvironmentManager: cache for file " << fileName.str() << " is being discarded because the file was modified" << endl;
-      m_files.erase( files.first++ );
+      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file " << fileName.str() << " is being discarded because the file was modified" << endl );
+      m_files.erase( files.first++ ); ///@todo give notification to du-chain
       continue;
     }
     bool success = true;
@@ -103,7 +120,7 @@ LexedFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, co
         if ( file.m_usedMacros.hasMacro( it.key() ) ) {
           rpp::pp_macro m( file.m_usedMacros.macro(it.key() ) );
           if ( !( m == **it ) ) {
-            //kdDebug( 9007 ) << "EnvironmentManager: The cached file " << fileName.str() << " depends on the string \"" << ( *it ).first.str() << "\" and used a macro for it with the body \"" << m.body() << "\"(from " << m.fileName() << "), but the driver contains the same macro with body \"" << ( *it ).second.body() << "\"(from " << ( *it ).second.fileName() << "), cache is not used" << endl;
+            ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file " << fileName.str() << " depends on the string \"" << it.key() << "\" and used a macro for it with the body \"" << m.definition << "\"(from " << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from " << ( *it )->file << "), cache is not used" << endl );
 
             //rpp::pp_macro with the same name was used, but it is different
             success = false;
@@ -112,7 +129,7 @@ LexedFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, co
 
         } else {
           //There is a macro that affects the file, but was not used while the previous parse
-          //kdDebug( 9007 ) << "EnvironmentManager: The cached file " << fileName.str() << " depends on the string \"" << ( *it ).first.str() << "\" and the driver contains a macro of that name with body \"" << ( *it ).second.body() << "\"(from " << ( *it ).second.fileName() << "), the cached file is not used" << endl;
+          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file " << fileName.str() << " depends on the string \"" << ( it ).key() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from " << ( *it )->file << "), the cached file is not used" << endl );
           success = false;
           break;
         }
@@ -122,14 +139,14 @@ LexedFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, co
   MacroSet::Macros::const_iterator end2 = file.usedMacros().macros().end();
     for ( MacroSet::Macros::const_iterator it = file.usedMacros().macros().begin(); it != end2; ++it ) {
       if ( !environment->retrieveMacro( ( *it ).name ) ) {
-        //kdDebug( 9007 ) << "EnvironmentManager: The cached file " << fileName.str() << " used a macro called \"" << it->name() << "\"(from " << it->fileName() << "), but the driver does not contain that macro, the cached file is not used" << endl;
+        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file " << fileName.str() << " used a macro called \"" << it->name << "\"(from " << it->file << "), but the driver does not contain that macro, the cached file is not used" << endl );
         success = false;
         break;
       }
     }
 
     if ( success ) {
-      //kdDebug( 9007 ) << "EnvironmentManager: Using cached file " << fileName.str() << endl;
+      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: Using cached file " << fileName.str() << endl );
       (*files.first).second->access();
       return ( *files.first ).second;
     }
@@ -146,8 +163,9 @@ QDateTime EnvironmentManager::fileModificationTimeCached( const HashedString& fi
       return (*it).second.m_modificationTime;
     }
   }
-  
-  QFileInfo fileInfo( fileName.str() );
+
+  KUrl u(fileName.str());
+  QFileInfo fileInfo( u.path() ); ///@todo support non-local files and modifications in editor
   m_fileModificationCache[fileName].m_readTime = QDateTime::currentDateTime();
   m_fileModificationCache[fileName].m_modificationTime = fileInfo.lastModified();
   return fileInfo.lastModified();
@@ -158,16 +176,19 @@ QDateTime EnvironmentManager::fileModificationTimeCached( const HashedString& fi
 bool EnvironmentManager::hasSourceChanged( const LexedFile& file ) {
   //@todo Check if any of the dependencies changed
 
-  ///@todo make compatible with remote documents
   QDateTime modTime = fileModificationTimeCached( file.url().path() );
   
-  if ( modTime != file.modificationTime() )
+  if ( modTime != file.modificationTime() ) {
+    ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged: " << file.url() << " has changed, stored stamp: " << file.modificationTime() << " new time: " << modTime << endl );
     return true;
+  }
 
   for( QMap<HashedString, QDateTime>::const_iterator it = file.allModificationTimes().begin(); it != file.allModificationTimes().end(); ++it ) {
     QDateTime modTime = fileModificationTimeCached( it.key() );
-    if( modTime != *it )
+    if( modTime != *it ) {
+      ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged: dependency " << it.key().str() << " has changed" << endl );
       return true;
+    }
   }
   
   return false;
@@ -189,12 +210,13 @@ void EnvironmentManager::erase( const CacheNode* node ) {
     }
       files.first++;
   }
-  //kdDebug( 9007 ) << "Error: could not find a node in the list for file " << ((const LexedFile*)(node))->fileName().str() << endl;
+  ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file " << ((const LexedFile*)(node))->url() << endl );
 }
 
 LexedFile::LexedFile( const KUrl& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_url( fileName ) {
   QFileInfo fileInfo( fileName.path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
+  ifDebug( kDebug(9007) << "LexedFile::LexedFile: created for " << fileName << " modification-time: " << m_modificationTime << endl );
 
   m_hashedUrl = fileName.prettyUrl(KUrl::RemoveTrailingSlash);
   addIncludeFile( m_hashedUrl, m_modificationTime );
@@ -203,7 +225,7 @@ LexedFile::LexedFile( const KUrl& fileName, EnvironmentManager* manager ) : Cach
 
 void LexedFile::addDefinedMacro( const rpp::pp_macro& macro ) {
 #ifdef LEXERCACHE_DEBUG
-  //kdDebug( 9007 ) << "defined macro " << macro.name() << endl;
+  kDebug( 9007 ) << "defined macro " << macro.name << endl;
 #endif
   m_definedMacros.addMacro( macro );
   m_definedMacroNames.insert( HashedString( macro.name ) );
@@ -212,7 +234,7 @@ void LexedFile::addDefinedMacro( const rpp::pp_macro& macro ) {
 void LexedFile::addUsedMacro( const rpp::pp_macro& macro ) {
   if ( !m_definedMacros.hasMacro( macro.name ) ) {
 #ifdef LEXERCACHE_DEBUG
-    //kdDebug( 9007 ) << "used macro " << macro.name() << endl;
+    kDebug( 9007 ) << "used macro " << macro.name << endl;
 #endif
     m_usedMacros.addMacro( macro );
   }
@@ -266,7 +288,7 @@ QList<Problem>  LexedFile::problems() const {
 //The parameter should be a LexedFile that was lexed AFTER the content of this file
 void LexedFile::merge( const LexedFile& file ) {
 #ifdef LEXERCACHE_DEBUG
-  //kdDebug( 9007 ) << fileName().str() << ": merging " << file.fileName().str() << endl << "defined in this: " << m_definedMacroNames.print().c_str() << endl << "defined macros in other: " << file.m_definedMacroNames.print().c_str() << endl;;
+  kDebug( 9007 ) << url() << ": merging " << file.url() << endl << "defined in this: " << m_definedMacroNames.print().c_str() << endl << "defined macros in other: " << file.m_definedMacroNames.print().c_str() << endl;;
 #endif
   HashedStringSet tempStrings = file.m_strings;
   tempStrings -= m_definedMacroNames;
@@ -276,7 +298,7 @@ void LexedFile::merge( const LexedFile& file ) {
   for ( MacroSet::Macros::const_iterator it = file.m_usedMacros.macros().begin(); it != file.m_usedMacros.macros().end(); ++it ) {
     if ( !m_definedMacros.hasMacro(( *it ).name ) ) {///If the macro was not defined locally, add it to the macros-list.
 #ifdef LEXERCACHE_DEBUG
-      //kdDebug( 9007 ) << "inserting used macro " << ( *it ).name() << endl;
+      kDebug( 9007 ) << "inserting used macro " << ( *it ).name << endl;
 #endif
       m_usedMacros.addMacro( *it );
     }
@@ -290,7 +312,7 @@ void LexedFile::merge( const LexedFile& file ) {
 
   
 #ifdef LEXERCACHE_DEBUG
-  //kdDebug( 9007 ) << fileName().str() << ": defined in this after merge: " << m_definedMacroNames.print().c_str() << endl;
+  kDebug( 9007 ) << url() << ": defined in this after merge: " << m_definedMacroNames.print().c_str() << endl;
 #endif
   m_problems += file.m_problems;
 }
@@ -329,6 +351,7 @@ void EnvironmentManager::addFile( ParsingEnvironmentFile* file ) {
     kDebug() << "EnvironmentManager::addFile() called with a non-CachedLexFile of type " << file->type() << endl;
     return;
   }
+  ifDebug( kDebug(9007) << "EnvironmentManager::addFile " << cfile->url() << endl );
   addLexedFile(LexedFilePointer(cfile));
 }
 ///Remove a file from the manager
@@ -338,6 +361,7 @@ void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
     kDebug() << "EnvironmentManager::removeFile() called with a non-CachedLexFile of type " << file->type() << endl;
     return;
   }
+  ifDebug( kDebug(9007) << "EnvironmentManager::removeFile " << cfile->url() << endl );
   removeLexedFile(LexedFilePointer(cfile));
 }
 

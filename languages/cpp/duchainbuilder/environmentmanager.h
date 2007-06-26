@@ -32,8 +32,6 @@
 #include "macroset.h"
 #include "cachemanager.h"
 
-//#define LEXERCACHE_DEBUG
-
 /**@todo Increase the intelligence of the include-file logic:
  * When a header was already included BEFORE the header represented by the
  * cached-lexed-file, and the cached-lexed-file includes that header,
