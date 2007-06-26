@@ -253,7 +253,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             // Create a slave-job that will take over our macros.
             // It will itself take our macros modify them, copy them back,
             // and merge information into our m_lexedFile
-            CPPParseJob slaveJob(includedFile, parentJob()->cpp(), this);
+
+            ///The second parameter is zero because we are in a background-thread and we here
+            ///cannot create a slave of the foreground cpp-support-part.
+            CPPParseJob slaveJob(includedFile, 0, this);
             slaveJob.parseForeground();
 
             // Add the included file.

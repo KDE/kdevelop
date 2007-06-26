@@ -126,7 +126,11 @@ TopDUContext* CPPParseJob::duChain() const
 
 CppLanguageSupport * CPPParseJob::cpp() const
 {
-    return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
+    Q_ASSERT( parent() || parentPreprocessor() );
+    if( parent() )
+        return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
+    else
+        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->cpp();
 }
 
 void CPPParseJob::addIncludedFile(KDevelop::TopDUContext* duChain) {
