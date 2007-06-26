@@ -28,6 +28,7 @@ class KSharedPtr;
 
 namespace KDevelop
 {
+  class DUChain;
   class IdentifiedFile; //Defined in parsingenvironment.h
   class ParsingEnvironmentFile;
 
@@ -71,6 +72,8 @@ public:
   bool imports(TopDUContext* origin, const KTextEditor::Cursor& position) const;
 
 protected:
+  void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;
+  
   virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, QList<Declaration*>& ret, bool inImportedContext) const;
 
   void findDeclarationsInNamespaces(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, QList<Declaration*>& ret) const;
@@ -88,6 +91,7 @@ protected:
 private:
   class TopDUContextPrivate* const d;
   friend class TopDUContextPrivate;
+  friend class DUChain; //To allow access to setParsingEnvironmentFile
 };
 
 }

@@ -31,6 +31,10 @@ KUrl IdentifiedFile::url() const {
   return m_url;
 }
 
+QString IdentifiedFile::toString() const {
+  return QString("%1 %2").arg(url().prettyUrl()).arg(identity());
+}
+
 uint IdentifiedFile::identity() const {
   return m_identity;
 }

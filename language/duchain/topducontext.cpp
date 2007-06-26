@@ -97,6 +97,10 @@ bool TopDUContext::hasUses() const
   return d->m_hasUses;
 }
 
+void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) const {
+  d->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
+}
+
 void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, bool inImportedContext) const
 {
   Q_UNUSED(inImportedContext);

@@ -60,19 +60,36 @@ DUChainLock* DUChain::lock()
   return &sdDUChainPrivate->lock;
 }
 
+void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file ) {
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  removeFromEnvironmentManager( context );
+  context->setParsingEnvironmentFile( file );
+  addToEnvironmentManager( context );
+}
+
+
 void DUChain::removeDocumentChain( const  IdentifiedFile& document )
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+  
+  kDebug() << "duchain: removing document " << document.toString() << endl;
   sdDUChainPrivate->m_chains.remove(document);
 }
 
 void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * chain )
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+  
+  kDebug() << "duchain: adding document " << document.toString() << endl;
   Q_ASSERT(chain);
   sdDUChainPrivate->m_chains.insert(document, chain);
   addToEnvironmentManager(chain);
 }
 
 void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
   if( !file )
     return; //We don't need to manage
@@ -87,6 +104,8 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
 }
 
 void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
+  ENSURE_CHAIN_WRITE_LOCKED
+  
   ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
   if( !file )
     return; //We don't need to manage
@@ -186,12 +205,14 @@ void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChain
 }
 
 void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
+  ENSURE_CHAIN_WRITE_LOCKED
   Q_ASSERT( sdDUChainPrivate->m_managers.find(manager->type()) == sdDUChainPrivate->m_managers.end() ); //If this fails, there may be multiple managers with the same type, which is wrong
   
   sdDUChainPrivate->m_managers[manager->type()] = manager;
   }
 
 void DUChain::removeParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
+  ENSURE_CHAIN_WRITE_LOCKED
   QMap<int,ParsingEnvironmentManager*>::iterator it = sdDUChainPrivate->m_managers.find(manager->type());
   
   if( it != sdDUChainPrivate->m_managers.end() ) {

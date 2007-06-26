@@ -35,6 +35,7 @@ class DUChainLock;
 class IdentifiedFile;
 class ParsingEnvironmentManager;
 class ParsingEnvironment;
+class ParsingEnvironmentFile;
 
 /**
  * Holds references to all top level source file contexts.
@@ -97,6 +98,11 @@ public:
 
   ///Remove a manager, for example when a language-part is unloaded
   void removeParsingEnvironmentManager( ParsingEnvironmentManager* manager );
+
+  /**
+   * Changes the environment attached to the given top-level context, and updates the management-structures to reflect that
+   * */
+  void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );
   
 public Q_SLOTS:
   void removeDocumentChain(const IdentifiedFile& document);

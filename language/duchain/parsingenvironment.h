@@ -51,6 +51,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile  {
 
     operator bool() const;
 
+    ///Gives a short description(url identity)
+    QString toString() const;
   private:
     KUrl m_url;
     uint m_identity;
