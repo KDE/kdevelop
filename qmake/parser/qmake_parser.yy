@@ -200,7 +200,7 @@ scope_name: SCOPENAME
         }
     ;
 
-functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
+functioncall: FUNCTIONNAME ws LPAREN functionargs RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1 );
@@ -209,7 +209,7 @@ functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
             node->setEnd( $<value>4 );
             $<funccall>$ = node;
         }
-    | FUNCTIONNAME LPAREN RPAREN
+    | FUNCTIONNAME ws LPAREN RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1 );
@@ -217,7 +217,7 @@ functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
             node->setEnd( $<value>3 );
             $<funccall>$ = node;
         }
-    | EXCLAM FUNCTIONNAME LPAREN functionargs RPAREN
+    | EXCLAM FUNCTIONNAME ws LPAREN functionargs RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1+$<value>2 );
@@ -226,7 +226,7 @@ functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
             node->setEnd( $<value>5 );
             $<funccall>$ = node;
         }
-    | EXCLAM FUNCTIONNAME LPAREN RPAREN
+    | EXCLAM FUNCTIONNAME ws LPAREN RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1+$<value>2 );
