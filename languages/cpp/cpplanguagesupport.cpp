@@ -59,7 +59,9 @@
 #include "cpphighlighting.h"
 #include "cppcodecompletion.h"
 #include "cppeditorintegrator.h"
+#ifndef Q_OS_WIN
 #include "includepathresolver.h"
+#endif
 #include "usebuilder.h"
 #include "typerepository.h"
 #include "cppparsejob.h"
@@ -78,7 +80,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
 
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
+    #ifndef Q_OS_WIN
     m_includeResolver = new CppTools::IncludePathResolver;
+    #endif
     m_lexerCache = new Cpp::EnvironmentManager;
     {
         DUChainWriteLocker l(DUChain::lock());
@@ -122,7 +126,9 @@ CppLanguageSupport::~CppLanguageSupport()
         DUChainWriteLocker l(DUChain::lock());
         DUChain::self()->removeParsingEnvironmentManager(m_lexerCache);
     }
+    #ifndef Q_OS_WIN
     delete m_includeResolver;
+    #endif
 }
 
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
@@ -236,11 +242,12 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
         QStringList allPaths; ///@todo initialize this from gdb etc., see how it's done in kdev3
         if( includeType == rpp::Preprocessor::IncludeLocal )
             allPaths << source.directory();
+        #ifndef Q_OS_WIN
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
             allPaths += result.paths;
         }
-        
+        #endif
         foreach (QString path, allPaths) {
             QFileInfo info(QDir(path), includeName);
             if (info.exists() && info.isReadable()) {
