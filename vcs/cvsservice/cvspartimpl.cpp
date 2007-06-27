@@ -885,8 +885,10 @@ QStringList CvsServicePartImpl::checkFileListAgainstCVS( const QStringList &file
     {
         const QString &fn = (*it);
         QFileInfo fi( fn );
+        if (fi.isRelative())
+            fi = projectDirectory() + QDir::separator() + fn;
         if (isValidDirectory( fi.dirPath( true ) ))
-            filesInCVS += ( m_part->project()->projectDirectory() + QDir::separator() + fn );
+            filesInCVS += ( fi.filePath() );
     }
 
     return filesInCVS;
