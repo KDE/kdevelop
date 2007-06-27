@@ -827,11 +827,13 @@ void CvsServicePartImpl::flushJobs()
 
 void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
 {
-    kdDebug( 9006 ) << k_funcinfo << endl;
+    kdDebug( 9006 ) << k_funcinfo << " " << filesToAdd << endl;
 
     QStringList filesInCVS = checkFileListAgainstCVS( filesToAdd );
     if (filesInCVS.isEmpty())
         return;
+
+    kdDebug( 9006 ) << k_funcinfo << " " << filesInCVS << endl;
 
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want the files to be added to CVS repository too?"),
