@@ -204,34 +204,34 @@ functioncall: FUNCTIONNAME ws LPAREN functionargs RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1 );
-            node->setBegin( $<value>2 );
-            node->setArguments( $<values>3 );
-            node->setEnd( $<value>4 );
+            node->setBegin( $<value>2+$<value>3 );
+            node->setArguments( $<values>4 );
+            node->setEnd( $<value>5 );
             $<funccall>$ = node;
         }
     | FUNCTIONNAME ws LPAREN RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1 );
-            node->setBegin( $<value>2 );
-            node->setEnd( $<value>3 );
+            node->setBegin( $<value>2+$<value>3 );
+            node->setEnd( $<value>4 );
             $<funccall>$ = node;
         }
     | EXCLAM FUNCTIONNAME ws LPAREN functionargs RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1+$<value>2 );
-            node->setBegin( $<value>3 );
-            node->setArguments( $<values>4 );
-            node->setEnd( $<value>5 );
+            node->setBegin( $<value>3+$<value>4 );
+            node->setArguments( $<values>5 );
+            node->setEnd( $<value>6 );
             $<funccall>$ = node;
         }
     | EXCLAM FUNCTIONNAME ws LPAREN RPAREN
         {
             FunctionCallAST* node = new FunctionCallAST();
             node->setFunctionName( $<value>1+$<value>2 );
-            node->setBegin( $<value>3 );
-            node->setEnd( $<value>4 );
+            node->setBegin( $<value>3+$<value>4 );
+            node->setEnd( $<value>5 );
             $<funccall>$ = node;
         }
     ;
