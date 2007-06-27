@@ -17,6 +17,9 @@ Comment=Configure CMake settings
 Comment[de]=CMake Einstellungen
 Comment[el]=Ρύθμιση επιλογών CMake
 Comment[es]=Configurar las preferencias de CMake
+Comment[pt]=Configurar as opções do CMake
+Comment[pt_BR]=Configurar as opções do CMake
 Comment[sv]=Anpassa inställningar för CMake
 Comment[x-test]=xxConfigure CMake settingsxx
+Comment[zh_TW]=設定 CMake
 
