@@ -311,12 +311,12 @@ DATAFUNCIMPL( FunctionScopeTest, orOp,
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, 1 )
     QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
-    TESTFUNCNAME( fn, "foo" )
+    TESTFUNCNAME( fn, "func" )
     QStringList testlist;
-    testlist << "some" ;
+    testlist << " some " ;
     TESTFUNCARGS( fn, testlist )
 ENDTESTFUNCIMPL
-DATAFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, "func ( some )")
+DATAFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, "func ( some )\n")
 
 BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingParenthesis, "No closing parenthesis for function call" )
 ENDTESTFUNCIMPL
