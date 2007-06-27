@@ -21,14 +21,14 @@
 #include <ext/hash_map>
 #include <ext/hash_set>
 #include <string>
-#include "cppparserexport.h"
+#include "cppduchainbuilderexport.h"
 
 class QDataStream;
 typedef uint HashType; ///@todo use at least 64 bit hash, if not 128 bit
 
 
 ///A simple class that stores a string together with it's appropriate hash-key
-class KDEVCPPPARSER_EXPORT HashedString {
+class KDEVCPPDUCHAINBUILDER_EXPORT HashedString {
   public:
     HashedString() : m_hash( 0 ) {}
 
@@ -83,7 +83,7 @@ class HashedStringSetData;
 class HashedStringSetGroup;
 
 ///This is a reference-counting string-set optimized for fast lookup of hashed strings
-class KDEVCPPPARSER_EXPORT HashedStringSet {
+class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSet {
   public:
     HashedStringSet();
 
@@ -129,7 +129,7 @@ HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& 
 
 namespace __gnu_cxx {
 template<>
-struct KDEVCPPPARSER_EXPORT hash<HashedString> {
+struct KDEVCPPDUCHAINBUILDER_EXPORT hash<HashedString> {
   HashType operator () ( const HashedString& str ) const {
     return str.hash();
   }
@@ -137,7 +137,7 @@ struct KDEVCPPPARSER_EXPORT hash<HashedString> {
 }
 
 ///Used to find all registered HashedStringSet's that contain all strings given to findGroups(..)
-class KDEVCPPPARSER_EXPORT HashedStringSetGroup {
+class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSetGroup {
   public:
     typedef std::set<unsigned int> ItemSet;
     void addSet( unsigned int id, const HashedStringSet& set );
@@ -161,7 +161,7 @@ class KDEVCPPPARSER_EXPORT HashedStringSetGroup {
 class HashedStringSubset;
 
 ///@todo convert to d-pointer once ready
-class KDEVCPPPARSER_EXPORT HashedStringRepository {
+class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringRepository {
   public:
     typedef __gnu_cxx::hash_map<HashedString, HashedStringSubset*> AtomicSubsetMap;
     typedef __gnu_cxx::hash_map<HashType, HashedStringSubset*> HashMap;

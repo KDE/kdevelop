@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <set>
 #include <limits>
+#include <QtCore/qglobal.h>
 
 class CacheManager;
 
