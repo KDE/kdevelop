@@ -34,18 +34,38 @@ void IncludeDirectoriesAstTest::testGoodParse()
 
 void IncludeDirectoriesAstTest::testGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "include_directories";
+    l.addArguments(QStringList() << "../g4u");
+    QTest::newRow("a normal include_directories") << l;
+    
+    l.arguments.clear();
+    l.addArguments(QStringList() << "AFTER" << "boost/");
+    QTest::newRow("a include_directories with AFTER parameter") << l;
+    
+    l.arguments.clear();
+    l.addArguments(QStringList() << "SYSTEM" << "~/kdelibs");
+    QTest::newRow("a include_directories with SYSTEM paremeter") << l;
 }
 
 void IncludeDirectoriesAstTest::testBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    IncludeDirectoriesAst* ast = new IncludeDirectoriesAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
 
 void IncludeDirectoriesAstTest::testBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "include_directories";
+    l.addArguments(QStringList() << "AFTER" << "BEFORE" << "lol");
+    QTest::newRow("can't have after and before in include_directories") << l;
 }
 
 #include "cmake_includedirectoriesast_test.moc"

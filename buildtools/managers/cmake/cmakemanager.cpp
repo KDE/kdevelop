@@ -44,7 +44,7 @@
 typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager,
                             CMakeSupportFactory( "kdevcmakemanager" ) )
-
+    
 CMakeProjectManager::CMakeProjectManager( QObject* parent,
                               const QStringList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
@@ -110,16 +110,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     CMakeAst *node = folder->tree();
     CMakeProjectVisitor v(&m_vars);
     node->accept(&v);
-//     FolderInfo fi = folder->folderInfo();
-//     for ( QStringList::iterator it = fi.includes.begin();
-//           it != fi.includes.end(); ++it )
-//     {
-//         KUrl urlCandidate = KUrl( ( *it ) );
-//         if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
-//             m_includeDirList.append( urlCandidate );
-//     }
 
-    //FIXME:resolveVariables is not working
     kDebug(9032) << "resolveVars" << resolveVariables(v.subdirectories()) << v.subdirectories() << endl;
     foreach ( QString subf, resolveVariables(v.subdirectories()) ) {
         CMakeAst *newFolder = new CMakeAst;
@@ -138,11 +129,26 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             kDebug(9032) << "Parsing error." << endl;
             return folderList;
         }
+        //delete newFolder; //FIXME: don't know if i should do that!!!
     }
+
+    KUrl::List directories;
+    foreach(QString s, resolveVariables(v.includeDirectories())) {
+        KUrl path;
+        if(s.startsWith("/")) {
+            path=s;
+        } else {
+            path=folder->url();
+            path.addPath(s);
+        }
+        directories.append(path);
+    }
+    folder->setIncludeList(directories);
 
     foreach ( QString t, v.targets())
     {
         CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
+
         foreach( QString sFile, resolveVariables(v.files(t)) )
         {
             KUrl sourceFile = folder->url();
@@ -210,7 +216,18 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    return m_includeDirList;
+    CMakeTargetItem* target = dynamic_cast<CMakeTargetItem*>( item );
+    if(!target) {
+        KDevelop::ProjectFileItem* file = dynamic_cast<KDevelop::ProjectFileItem*>( item );
+        if(file) {
+            target = dynamic_cast<CMakeTargetItem*>( item );
+        }
+    }
+
+    if(target)
+        return target->includeDirectories();
+
+    return KUrl::List();
 }
 
 #include "cmakemanager.moc"

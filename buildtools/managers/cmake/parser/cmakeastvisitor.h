@@ -37,7 +37,8 @@ class ConfigureFileAst;
 class IncludeAst;
 class SetAst;
 class ProjectAst;
-
+class ProjectAst;
+class IncludeDirectoriesAst;
 class CMakeAst;
 
 class CMakeAstVisitor {
@@ -60,6 +61,7 @@ class CMakeAstVisitor {
         virtual void visit( const IncludeAst * ) = 0;
         virtual void visit( const SetAst * ) = 0;
         virtual void visit( const ProjectAst * ) = 0;
+        virtual void visit( const IncludeDirectoriesAst * ) = 0;
 	virtual void visit( const CMakeAst * ) = 0;
 };
 

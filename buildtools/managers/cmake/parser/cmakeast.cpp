@@ -53,6 +53,7 @@ CMAKE_REGISTER_AST( BuildNameAst, build_name )
 CMAKE_REGISTER_AST( CMakeMinimumRequiredAst, cmake_minimum_required )
 CMAKE_REGISTER_AST( ConfigureFileAst, configure_file )
 CMAKE_REGISTER_AST( IncludeAst, include )
+CMAKE_REGISTER_AST( IncludeDirectoriesAst, include_directories )
 CMAKE_REGISTER_AST( SetAst, set )
 CMAKE_REGISTER_AST( ProjectAst, project )
 
@@ -1127,7 +1128,7 @@ bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 }
 
-IncludeDirectoriesAst::IncludeDirectoriesAst()
+ IncludeDirectoriesAst::IncludeDirectoriesAst()
 {
 }
 
@@ -1141,7 +1142,43 @@ void IncludeDirectoriesAst::writeBack( QString& )
 
 bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "include_directories" || func.arguments.isEmpty() )
+        return false;
+    
+    int i=0;
+    m_includeType = DEFAULT;
+    m_isSystem = false;
+    
+    if(func.arguments[i].value=="AFTER") {
+        if(m_includeType!=DEFAULT)
+            return false;
+        m_includeType = AFTER;
+        i++;
+    }
+    
+    if(func.arguments[i].value=="BEFORE") {
+        if(m_includeType!=DEFAULT)
+            return false;
+        m_includeType = BEFORE;
+        i++;
+    }
+
+    if(func.arguments[i].value=="SYSTEM") {
+        m_isSystem = true;
+        i++;
+    }
+    
+    if ( func.arguments.size() <= i )
+        return false;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
+    it=func.arguments.begin() + i;
+    itEnd = func.arguments.end();
+
+    for ( ; it != itEnd; ++it )
+        m_includedDirectories.append(it->value);
+
+    return true;
 }
 
 IncludeExternalMsProjectAst::IncludeExternalMsProjectAst()

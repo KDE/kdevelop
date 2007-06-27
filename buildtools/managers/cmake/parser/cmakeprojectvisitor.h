@@ -40,6 +40,7 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         virtual void visit( const AddExecutableAst * );
         virtual void visit( const AddLibraryAst * );
         virtual void visit( const AddSubdirectoryAst * );
+        virtual void visit( const IncludeDirectoriesAst * );
         virtual void visit( const AddTestAst * ) { notImplemented(); }
         virtual void visit( const AuxSourceDirectoryAst * ) { notImplemented(); }
         virtual void visit( const BuildCommandAst * ) { notImplemented(); }
@@ -57,11 +58,13 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         QStringList subdirectories() const { return m_subdirectories; }
         QStringList targets() const { return m_filesPerTarget.keys(); }
         QStringList files(const QString &target) const { return m_filesPerTarget[target]; }
+        QStringList includeDirectories() const { return m_includeDirectories; }
     private:
         void notImplemented() const;
         
         QString m_projectName;
         QStringList m_subdirectories;
+        QStringList m_includeDirectories;
         QMap<QString, QStringList> m_filesPerTarget;
         QString m_root;
         QHash<QString, QStringList> *m_vars;

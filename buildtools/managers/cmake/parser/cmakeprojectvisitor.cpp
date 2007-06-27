@@ -25,7 +25,6 @@
 
 CMakeProjectVisitor::CMakeProjectVisitor(QHash<QString, QStringList> *vars) : m_vars(vars)
 {
-    
 }
 
 void CMakeProjectVisitor::notImplemented() const {
@@ -72,5 +71,20 @@ void CMakeProjectVisitor::visit(const SetAst *set)
     m_vars->remove(set->variableName());
     m_vars->insert(set->variableName(), set->values());
     kDebug(9032) << "set: " << set->variableName() << "=" << set->values() << endl;
+}
+
+void CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
+{
+    IncludeDirectoriesAst::IncludeType t = dirs->includeType();
+
+    if(t==IncludeDirectoriesAst::DEFAULT && m_vars->value("CMAKE_INCLUDE_DIRECTORIES_BEFORE")==QStringList("ON"))
+        t = IncludeDirectoriesAst::BEFORE;
+    else
+        t = IncludeDirectoriesAst::AFTER;
+    
+    if(t==IncludeDirectoriesAst::AFTER)
+        m_includeDirectories += dirs->includedDirectories();
+    else
+        m_includeDirectories = dirs->includedDirectories() + m_includeDirectories;
 }
 

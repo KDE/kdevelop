@@ -48,7 +48,6 @@ CMakeFolderItem::~CMakeFolderItem()
 CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& name,CMakeFolderItem* item)
     : KDevelop::ProjectTargetItem( project, name, item )
 {
-    m_includeList = item->includeDirectories();
 //     m_targetInfo = target;
 }
 
@@ -69,7 +68,13 @@ const KDevelop::DomUtil::PairList& CMakeTargetItem::defines() const
 
 const KUrl::List& CMakeTargetItem::includeDirectories() const
 {
-    return m_includeList;
+    KUrl::List urls;
+    CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(parent());
+    while(folder) {
+        urls += folder->includeList();
+        folder = dynamic_cast<CMakeFolderItem*>(folder->parent());
+    }
+    return urls;
 }
 
 const QHash< QString, QString >& CMakeTargetItem::environment() const

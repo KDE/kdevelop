@@ -333,6 +333,10 @@ CMAKE_END_AST_CLASS( IncludeAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeDirectoriesAst )
+        enum IncludeType { DEFAULT=0, AFTER, BEFORE };
+CMAKE_ADD_AST_MEMBER( IncludeType, IncludeType, includeType, IncludeType )
+CMAKE_ADD_AST_MEMBER( bool, bool, isSystem, System )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, includedDirectories, IncludedDirectories )
 CMAKE_END_AST_CLASS( IncludeDirectoriesAst )
 
 
