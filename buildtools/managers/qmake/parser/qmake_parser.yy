@@ -390,61 +390,68 @@ variable_assignment: ws VARIABLE op values NEWLINE
         }
     ;
 
-values: values WS VAR_VALUE
+var_val : VAR_VALUE
         {
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-        }
-    | values WS QUOTED_VAR_VALUE
-        {
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-        }
-    | values CONT ws VAR_VALUE
-        {
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-            $<values>$.append( $<value>4 );
-        }
-    | values CONT_COMMENT ws VAR_VALUE
-        {
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-            $<values>$.append( $<value>4 );
-        }
-    | values CONT ws QUOTED_VAR_VALUE
-        {
-
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-            $<values>$.append( $<value>4 );
-        }
-    | values CONT_COMMENT ws QUOTED_VAR_VALUE
-        {
-
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-            $<values>$.append( $<value>4 );
+            $<value>$ = $<value>1;
         }
     | QUOTED_VAR_VALUE
         {
-            $<values>$ = QStringList();
+            $<value>$ = $<value>1;
+        }
+    ;
+
+values: values WS var_val
+        {
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+        }
+    | values CONT
+        {
+            $<values>$.append( $<value>2 );
+        }
+    | values CONT var_val
+        {
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+        }
+    | values COMMENT
+        {
+            $<values>$.append( $<value>2 );
+        }
+    | values CONT_COMMENT
+        {
+            $<values>$.append( $<value>2 );
+        }
+    | values CONT_COMMENT var_val
+        {
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+        }
+    | var_val
+        {
             $<values>$.append( $<value>1 );
         }
-    | VAR_VALUE
+    | COMMENT
         {
-            $<values>$ = QStringList();
             $<values>$.append( $<value>1 );
         }
     | CONT
         {
-            $<values>$ = QStringList();
             $<values>$.append( $<value>1 );
         }
     | CONT_COMMENT
         {
-            $<values>$ = QStringList();
             $<values>$.append( $<value>1 );
+        }
+    | CONT var_val
+        {
+            $<values>$.append( $<value>1 );
+            $<values>$.append( $<value>2 );
+        }
+    | CONT_COMMENT var_val
+        {
+            $<values>$.append( $<value>1 );
+            $<values>$.append( $<value>2 );
         }
     ;
 

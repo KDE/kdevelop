@@ -44,7 +44,7 @@ digit         [0-9]
 newline       ("\n"|"\r\n"|"\r")
 identifier    ({letter}|{digit}|"_"|".")(({letter}|{digit}|"_"|"-"|".")*({letter}|{digit}|"_"|"."))?
 op            ("="|"+="|"-="|"~="|"*=")
-non_ws_cont   [^ \t\f\r\n\\]+
+non_ws_cont   [^ \t\f\r\n\\#]+
 non_cont      ([^\n\r\\]|"\\\"")+
 fnvalue       ([^ \t\f\n\r,$()]|"$("[^ \t\f\n\r,$()]+")")+
 %%
@@ -191,7 +191,7 @@ fnvalue       ([^ \t\f\n\r,$()]|"$("[^ \t\f\n\r,$()]+")")+
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
     return Parser::token::WS;
   }
-{ws}*"#"[^\r\n]* {
+<assignment,INITIAL>{ws}*"#"[^\r\n]* {
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
     return Parser::token::COMMENT;
   }
