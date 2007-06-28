@@ -63,7 +63,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
       dump.dump(thisContext);
     }
 
-    setContext(thisContext, range.start());
+    setContext(thisContext, range.start(), view);
   }
 }
 
@@ -258,10 +258,11 @@ int CppCodeCompletionModel::rowCount ( const QModelIndex & parent ) const
   return m_declarations.count();
 }
 
-void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::Cursor& position)
+void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::Cursor& position, KTextEditor::View* view)
 {
   m_context = context;
   Q_ASSERT(m_context);
+  ///@todo move expression-evaluation into another thread
 
   m_declarations = m_context->allDeclarations(position).values();
 }

@@ -15,8 +15,13 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#ifndef VIABLEFUNCTIONS_H
+#define VIABLEFUNCTIONS_H
+
 #include <QList>
 #include "overloadresolution.h"
+#include "cppexpressionparserexport.h"
+
 
 namespace KDevelop  {
   class ClassFunctionDeclaration;
@@ -27,7 +32,7 @@ namespace KDevelop  {
 namespace Cpp {
   using namespace KDevelop;
   
-  class ViableFunction {
+  class KDEVCPPEXPRESSIONPARSER_EXPORT ViableFunction {
     public:
       
     ViableFunction( Declaration* decl = 0, bool noUserDefinedConversion = false );
@@ -39,10 +44,16 @@ namespace Cpp {
       return m_type && m_declaration;
     }
 
-    void matchParameters( const OverloadResolver::ParameterList& params );
+    /**
+     * @param partial If this is true, the function is treated as if it had max. as many parameters as are given, so a match with only a part of the parameters is possible.
+     * */
+    void matchParameters( const OverloadResolver::ParameterList& params, bool partial = false );
 
     bool isBetter( const ViableFunction& other ) const;
 
+    //Same as isBetter(..)
+    bool operator< ( const ViableFunction& other ) const;
+    
     uint worstConversion() const;
     
     /**
@@ -61,3 +72,5 @@ namespace Cpp {
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };  
 }
+
+#endif

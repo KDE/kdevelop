@@ -1,5 +1,6 @@
-/* This file is part of KDevelop
-    Copyright (C) 2007 David Nolden [david.nolden.kdevelop  art-master.de]
+/* 
+   Copyright (C) 2007 David Nolden <user@host.de>
+   (where user = david.nolden.kdevelop, host = art-master)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,6 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #include "overloadresolution.h"
 #include "typeutils.h"
 #include "duchain/ducontext.h"
@@ -23,6 +25,7 @@
 #include "duchainbuilder/cpptypes.h"
 #include "typeutils.h"
 #include "viablefunctions.h"
+#include <QtAlgorithms>
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -54,29 +57,21 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
       }
     }
 
-    return resolveInternal( params, goodDeclarations, noUserDefinedConversion );
+    return resolveList( params, goodDeclarations, noUserDefinedConversion );
 }
 
 Declaration* OverloadResolver::resolve( const ParameterList& params, const QualifiedIdentifier& functionName, bool noUserDefinedConversion )
 {
   QList<Declaration*> declarations = m_context->findDeclarations(functionName);
   
-  return resolveInternal(params, declarations, noUserDefinedConversion );
+  return resolveList(params, declarations, noUserDefinedConversion );
 }
 
 uint OverloadResolver::worstConversionRank() {
   return m_worstConversionRank;
 }
 
-Declaration* OverloadResolver::resolveInternal( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion ) {
-  ///Iso c++ draft 13.3.3
-  m_worstConversionRank = ExactMatch;
-  
-  ViableFunction bestViableFunction;
-
-  ///First step: Replace class-instances with operator() functions, and pure classes with their constructors
-  QList<Declaration*> newDeclarations = declarations;
-  
+void OverloadResolver::expandDeclarations( const QList<Declaration*>& declarations, QList<Declaration*>& newDeclarations ) {
   for( QList<Declaration*>::const_iterator it = declarations.begin(); it != declarations.end(); ++it ) {
     Declaration* decl = *it;
     bool isConstant = false;
@@ -92,8 +87,44 @@ Declaration* OverloadResolver::resolveInternal( const ParameterList& params, con
       }
     }
   }
+}
 
+void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, QList<QPair<OverloadResolver::ParameterList, Declaration*> >& newDeclarations ) {
+  for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = declarations.begin(); it != declarations.end(); ++it ) {
+    QPair<OverloadResolver::ParameterList, Declaration*> decl = *it;
+    bool isConstant = false;
+
+    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl.second->abstractType(), &isConstant) ) )
+    {
+      if( decl.second->kind() == Declaration::Instance ) {
+        //Instances of classes should be substituted with their operator() members
+        QList<Declaration*> functions;
+        TypeUtils::getMemberFunctions( klass, functions, "operator()", isConstant );
+        foreach(Declaration* f, functions)
+          newDeclarations << QPair<OverloadResolver::ParameterList, Declaration*>(decl.first, f );
+      } else {
+        //Classes should be substituted with their constructors
+        QList<Declaration*> functions;
+        TypeUtils::getConstructors( klass, functions );
+        foreach(Declaration* f, functions)
+          newDeclarations << QPair<OverloadResolver::ParameterList, Declaration*>( decl.first, f );
+      }
+    }
+  }
+}
+
+Declaration* OverloadResolver::resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion ) {
+  ///Iso c++ draft 13.3.3
+  m_worstConversionRank = ExactMatch;
+
+
+  ///First step: Replace class-instances with operator() functions, and pure classes with their constructors
+  QList<Declaration*> newDeclarations = declarations;
+  expandDeclarations( declarations, newDeclarations );
+  
   ///Second step: Find best viable function
+  ViableFunction bestViableFunction;
+  
   for( QList<Declaration*>::const_iterator it = declarations.begin(); it != declarations.end(); ++it )
   {
     ViableFunction viable( *it , noUserDefinedConversion );
@@ -111,3 +142,28 @@ Declaration* OverloadResolver::resolveInternal( const ParameterList& params, con
     return 0;
 }
 
+QList< ViableFunction > OverloadResolver::resolveListPartial( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations ) {
+  ///Iso c++ draft 13.3.3
+  m_worstConversionRank = ExactMatch;
+
+  ///First step: Replace class-instances with operator() functions, and pure classes with their constructors
+  QList<QPair<OverloadResolver::ParameterList, Declaration*> > newDeclarations = declarations;
+  expandDeclarations( declarations, newDeclarations );
+  
+  ///Second step: Find best viable function
+  QList<ViableFunction> viableFunctions;
+  
+  for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = declarations.begin(); it != declarations.end(); ++it )
+  {
+    ViableFunction viable( (*it).second );
+    ParameterList mergedParams = (*it).first;
+    mergedParams.parameters += params.parameters;
+    viable.matchParameters( mergedParams, true );
+
+    viableFunctions << viable;
+  }
+
+  qSort( viableFunctions );
+  
+  return viableFunctions;
+}

@@ -38,7 +38,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     CppCodeCompletionModel(QObject* parent);
     virtual ~CppCodeCompletionModel();
 
-    void setContext(KDevelop::DUContext* context, const KTextEditor::Cursor& position);
+    void setContext(KDevelop::DUContext* context, const KTextEditor::Cursor& position, KTextEditor::View* view);
 
     virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
 

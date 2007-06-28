@@ -1,5 +1,6 @@
-/* This file is part of KDevelop
-    Copyright (C) 2007 David Nolden [david.nolden.kdevelop  art-master.de]
+/* 
+   Copyright (C) 2007 David Nolden <user@host.de>
+   (where user = david.nolden.kdevelop, host = art-master)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 #include <typesystem.h>
 #include "typeconversion.h"
 #include <QList>
+#include "cppexpressionparserexport.h"
 
 class CppFunctionType;
 
@@ -32,11 +34,12 @@ namespace KDevelop {
 
 namespace Cpp {
 using namespace KDevelop;
+  class ViableFunction;
 /**
  * Models overloaded function resolution
  * du-chain must be locked whenever this class is used
  * */
-class OverloadResolver {
+class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
   public:
 
     struct Parameter {
@@ -103,10 +106,22 @@ class OverloadResolver {
      * 
      * @param params parameters to match
      * @param declarations list of declarations
-     * @param noUserDefinedConversion should be true when user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
+     * @param noUserDefinedConversion should be true if user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
      * */
-    Declaration* resolveInternal( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
+    Declaration* resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
+
+    /**
+     * Matches the given functions with the given parameters. Only does partial matching, by considering only those parameters that were
+     * actually given.
+     * Returns a sorted list containing all given declarations.
+     *
+     * @return List of all given functions. The list is sorted by viability(the first item is most viable). Non-viable functions are also included.
+     * */
+    QList< ViableFunction > resolveListPartial( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations );
   private:
+    ///Replace class-instances with operator() functions, and pure classes with their constructors
+    void expandDeclarations( const QList<Declaration*>& from, QList<Declaration*>& to );
+    void expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& from, QList<QPair<OverloadResolver::ParameterList, Declaration*> >& to );
 
     DUContext* m_context;
     uint m_worstConversionRank;

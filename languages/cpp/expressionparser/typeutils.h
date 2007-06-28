@@ -1,5 +1,6 @@
-/* This file is part of KDevelop
-    Copyright (C) 2007 David Nolden [david.nolden.kdevelop  art-master.de]
+/* 
+   Copyright (C) 2007 David Nolden <user@host.de>
+   (where user = david.nolden.kdevelop, host = art-master)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,11 +16,13 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #ifndef TYPEUTILS_H
 #define TYPEUTILS_H
 
 #include <typesystem.h>
 #include <QHash>
+#include "cppexpressionparserexport.h"
 
 class CppIntegralType;
 class CppClassType;
@@ -40,9 +43,9 @@ namespace TypeUtils {
   * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
-  AbstractType* realType(AbstractType* type, bool* constant = 0);
+  KDEVCPPEXPRESSIONPARSER_EXPORT AbstractType* realType(AbstractType* type, bool* constant = 0);
 
-  inline AbstractType* realType(AbstractType::Ptr type, bool* constant = 0) {
+  KDEVCPPEXPRESSIONPARSER_EXPORT inline AbstractType* realType(AbstractType::Ptr type, bool* constant = 0) {
     return realType(type.data(), constant );
   }
 
@@ -53,9 +56,9 @@ namespace TypeUtils {
   * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
-  AbstractType* targetType(AbstractType* type, bool* constant = 0);
+  KDEVCPPEXPRESSIONPARSER_EXPORT AbstractType* targetType(AbstractType* type, bool* constant = 0);
 
-  inline AbstractType* targetType(AbstractType::Ptr type, bool* constant = 0) {
+  KDEVCPPEXPRESSIONPARSER_EXPORT inline AbstractType* targetType(AbstractType::Ptr type, bool* constant = 0) {
     return targetType(type.data(), constant);
   }
 
@@ -64,9 +67,9 @@ namespace TypeUtils {
    *
    *  @param type The type
    * */
-  bool isPointerType(AbstractType* type);
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isPointerType(AbstractType* type);
 
-  inline bool isPointerType(AbstractType::Ptr type) {
+  KDEVCPPEXPRESSIONPARSER_EXPORT inline bool isPointerType(AbstractType::Ptr type) {
     return isPointerType(type.data());
   }
 
@@ -76,14 +79,14 @@ namespace TypeUtils {
    *
    *  @param type The type
    * */
-  bool isReferenceType(AbstractType* type);
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isReferenceType(AbstractType* type);
 
-  inline bool isReferenceType(AbstractType::Ptr type) {
+  KDEVCPPEXPRESSIONPARSER_EXPORT inline bool isReferenceType(AbstractType::Ptr type) {
     return isReferenceType(type.data());
   }
 
   template<class Type>
-  bool isType( AbstractType* t ) {
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isType( AbstractType* t ) {
     return (bool)dynamic_cast<Type>( t );
   }
 
@@ -91,9 +94,9 @@ namespace TypeUtils {
    *
    * @return true when the given type is const-qualified
    * */
-  bool isConstant( AbstractType* t );
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isConstant( AbstractType* t );
 
-  inline bool isConstant( AbstractType::Ptr t ) {
+  KDEVCPPEXPRESSIONPARSER_EXPORT inline bool isConstant( AbstractType::Ptr t ) {
     return isConstant(t.data());
   }
 
@@ -101,28 +104,28 @@ namespace TypeUtils {
    * null-type means that the type comes from a 0-literal
    * */
 
-  bool isNullType( AbstractType* t );
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isNullType( AbstractType* t );
 
-  inline bool isNullType( AbstractType::Ptr t ) {
+  KDEVCPPEXPRESSIONPARSER_EXPORT inline bool isNullType( AbstractType::Ptr t ) {
     return isNullType(t.data());
   }
 
   ///Integer-conversion-rank as described in iso c++ 4.13
-  int integerConversionRank( CppIntegralType* type );
+  KDEVCPPEXPRESSIONPARSER_EXPORT int integerConversionRank( CppIntegralType* type );
 
   ///Whether the integral type is an integer-type
-  bool isIntegerType( CppIntegralType* type );
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isIntegerType( CppIntegralType* type );
 
   ///Whether the integral type is an floating-point-type
-  bool isFloatingPointType( CppIntegralType* type );
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isFloatingPointType( CppIntegralType* type );
 
-  bool isVoidType( AbstractType* type );
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isVoidType( AbstractType* type );
 
   ///Returns whether base is a public base-class of c
-  bool isPublicBaseClass( const CppClassType* c, CppClassType* base );
+  KDEVCPPEXPRESSIONPARSER_EXPORT bool isPublicBaseClass( const CppClassType* c, CppClassType* base );
 
   ///Conversion-rank of "unsigned int"
-  extern const int unsignedIntConversionRank;
+  KDEVCPPEXPRESSIONPARSER_EXPORT extern const int unsignedIntConversionRank;
 
   /**
    * Returns all conversion-functions from klass and all accessible bases
@@ -130,21 +133,21 @@ namespace TypeUtils {
    * @param functions A hash that will map functions to their types
    * @param functionName Name of the functions
    * */
-  void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPEXPRESSIONPARSER_EXPORT void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
 
   /**
    * Same as above, except that it adds the functions to a list.
    * */
-  void getMemberFunctions(CppClassType* klass, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPEXPRESSIONPARSER_EXPORT void getMemberFunctions(CppClassType* klass, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
   /**
    * Returns all constructors
    * */
-  void getConstructors(CppClassType* klass, QList<Declaration*>& functions);
+  KDEVCPPEXPRESSIONPARSER_EXPORT void getConstructors(CppClassType* klass, QList<Declaration*>& functions);
   /**
    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
    * It's possibly a bug in the du-chain that this function is necessary, decl->context() should return the internal context.
    **/
-  DUContext* getInternalContext( Declaration* decl );
+  KDEVCPPEXPRESSIONPARSER_EXPORT DUContext* getInternalContext( Declaration* decl );
 }
 
 #endif

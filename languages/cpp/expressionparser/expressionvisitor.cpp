@@ -1,5 +1,6 @@
-/* This file is part of KDevelop
-    Copyright (C) 2007 David Nolden [david.nolden.kdevelop  art-master.de]
+/* 
+   Copyright (C) 2007 David Nolden <user@host.de>
+   (where user = david.nolden.kdevelop, host = art-master)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +34,7 @@
 #include "name_compiler.h"
 #include "lexer.h"
 #include "overloadresolution.h"
+#include "duchainbuilder/cppduchain.h"
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
@@ -59,7 +61,7 @@
 | | | /ExpressionStatement[(45) (0, 102)
 */
 
-#define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock());
+#define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 #define MUST_HAVE(X) if(!X) { problem( node, "no " # X ); return; }
 
 namespace Cpp {
@@ -145,6 +147,11 @@ ExpressionVisitor::ExpressionVisitor(ParseSession* session) : m_session(session)
 ExpressionVisitor::~ExpressionVisitor() {
 }
 
+QList<Declaration*> ExpressionVisitor::lastDeclarations() const {
+  return m_lastDeclarations;
+}
+
+
 ParseSession* ExpressionVisitor::session() {
   return m_session;
 }
@@ -173,6 +180,9 @@ ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
 }
 
 /** Find the member in the declaration's du-chain. This does not respect function-parameters yet.
+ *
+ * @todo make this deal with klass->ParentClass::member
+ * @todo make this deal with parent-classes
  **/
 void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const QualifiedIdentifier& member, bool isConst, bool postProblem ) {
     
@@ -205,8 +215,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     MUST_HAVE( internalContext );
     
-    m_lastDeclarations = internalContext->findLocalDeclarations( member );
+    m_lastDeclarations = findLocalDeclarations( internalContext, member );
 
+    ///@todo parent-classes
     if( m_lastDeclarations.isEmpty() ) {
       if( postProblem ) {
         problem( node, QString("could not find member \"%1\" in \"%2\", scope of context: %3").arg(member.toString()).arg(declaration->toString()).arg(declaration->context()->scopeIdentifier().toString()) );
@@ -348,9 +359,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_lastType.data());
     if( idType ) {
+      LOCKDUCHAIN;
       return idType->declaration();
     } else {
-      LOCKDUCHAIN;
       return 0;
     }
   }
@@ -814,7 +825,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     OverloadResolver resolver( m_currentContext );
 
     if( !fail ) {
-      chosenFunction = resolver.resolveInternal(m_parameters, m_lastDeclarations);
+      chosenFunction = resolver.resolveList(m_parameters, m_lastDeclarations);
     } else {
       //Since not all parameters could be evaluated, Choose the first function
       chosenFunction = m_lastDeclarations.front();

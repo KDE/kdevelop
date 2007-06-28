@@ -30,10 +30,10 @@ ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion 
     m_type = dynamic_cast<CppFunctionType*>( decl->abstractType().data());
 }
 
-void ViableFunction::matchParameters( const OverloadResolver::ParameterList& params ) {
+void ViableFunction::matchParameters( const OverloadResolver::ParameterList& params, bool partial ) {
   if( !isValid() )
     return;
-  if( params.parameters.size() + m_declaration->defaultParameters().size() < m_type->arguments().size() )
+  if( params.parameters.size() + m_declaration->defaultParameters().size() < m_type->arguments().size() && !partial )
     return; //Not enough parameters + default-parameters
   if( params.parameters.size() > m_type->arguments().size() )
     return; //Too many parameters
@@ -47,6 +47,10 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
     m_parameterConversions << conv.implicitConversion(AbstractType::Ptr((*it).type), (*argumentIt), (*it).lValue, m_noUserDefinedConversion );
     ++argumentIt;
   }
+}
+
+bool ViableFunction::operator< ( const ViableFunction& other ) const {
+  return isBetter(other);
 }
 
 bool ViableFunction::isBetter( const ViableFunction& other ) const {

@@ -35,13 +35,15 @@ if( NOT WIN32 )
 set( kdevcpplanguagesupport_PART_SRCS 
     ${kdevcpplanguagesupport_PART_SRCS} 
     includepathresolver.cpp
+    codecompletioncontext.cpp
+    stringhelpers.cpp
 )
 endif( NOT WIN32 )
 
 kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY}
-    ${KDEVPLATFORM_INTERFACES_LIBRARY} kdevcppduchainbuilder kdevcpprpp ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARY})
+    ${KDEVPLATFORM_INTERFACES_LIBRARY} kdevcppduchainbuilder kdevcppexpressionparser kdevcpprpp ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARY})
 
 install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -29,6 +29,7 @@ set(kdevcppduchainbuilder_LIB_SRCS
     environmentmanager.cpp
     cachemanager.cpp
     hashedstring.cpp
+    cppduchain.cpp
 )
 
 kde4_add_library(kdevcppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})

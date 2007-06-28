@@ -1,0 +1,47 @@
+/* 
+   Copyright (C) 2007 David Nolden <user@host.de>
+   (where user = david.nolden.kdevelop, host = art-master)
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "cppduchain.h"
+#include <ducontext.h>
+#include <identifier.h>
+#include "cppduchainbuilderexport.h"
+
+
+using namespace Cpp;
+using namespace KDevelop;
+
+namespace Cpp {
+
+KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier ) {
+  QList<Declaration*> ret;
+  ret += context->findLocalDeclarations( identifier );
+  if( !ret.isEmpty() )
+    return ret;
+
+  if( context->type() != DUContext::Class )
+    return ret;
+  
+  QList<DUContext*> bases = context->importedParentContexts();
+  for( QList<DUContext*>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
+    ret += findLocalDeclarations( *it, identifier );
+  }
+  return ret;
+}
+
+}

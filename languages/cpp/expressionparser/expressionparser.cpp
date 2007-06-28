@@ -39,6 +39,14 @@
 namespace Cpp {
 using namespace KDevelop;
 
+ExpressionEvaluationResult::operator bool() const {
+  return (bool)type;
+}
+
+bool ExpressionEvaluationResult::isLValue() const {
+  return instance && (instance.declaration || dynamic_cast<const ReferenceType*>( type.data() ));
+}
+
 ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool debug ) {
 
   if( debug )
@@ -129,6 +137,7 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseS
   v.parse( ast );
   ret->type = v.lastType();
   ret->instance = v.lastInstance();
+  ret->allDeclarations = v.lastDeclarations();
   return ret;
 }
 

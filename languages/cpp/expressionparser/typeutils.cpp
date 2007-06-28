@@ -1,5 +1,6 @@
-/* This file is part of KDevelop
-    Copyright (C) 2007 David Nolden [david.nolden.kdevelop  art-master.de]
+/* 
+   Copyright (C) 2007 David Nolden <user@host.de>
+   (where user = david.nolden.kdevelop, host = art-master)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -169,6 +170,9 @@ namespace TypeUtils {
       }
     }
 
+    ///@todo One overloaded function of a specific name overloads all inherited with the same name. Think about it in the context where getMemberFunctions is used.
+
+    //equivalent to using the imported parent-contexts
     for( QList<CppClassType::BaseClassInstance>::const_iterator it =  klass->baseClasses().begin(); it != klass->baseClasses().end(); ++it ) {
       if( (*it).access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
         getMemberFunctions( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data(), functions, functionName,   mustBeConstant);

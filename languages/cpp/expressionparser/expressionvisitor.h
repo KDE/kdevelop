@@ -1,5 +1,6 @@
-/* This file is part of KDevelop
-    Copyright (C) 2007 David Nolden [david.nolden.kdevelop  art-master.de]
+/* 
+   Copyright (C) 2007 David Nolden <user@host.de>
+   (where user = david.nolden.kdevelop, host = art-master)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,7 +59,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
       }
       
       bool isInstance;
-      Declaration* declaration; //May contain the declaration of the instance, but only when isInstance is true
+      Declaration* declaration; //May contain the declaration of the instance, but only when isInstance is true. May also contain type-declaration, which signalizes that this is an instance of that type.
     };
     
     /**
@@ -71,6 +72,9 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     Instance lastInstance();
 
     ParseSession* session();
+
+    ///Returns the last queried list of declarations
+    QList<Declaration*> lastDeclarations() const;
   protected:
     /**
      * Will be called for each relevant sub-node with the resolved type of that expression. This is not guaranteed to be called.
