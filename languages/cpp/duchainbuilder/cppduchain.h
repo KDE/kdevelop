@@ -30,7 +30,7 @@ namespace KDevelop {
   class Declaration;
   class DUContext;
   class QualifiedIdentifier;
-};
+}
 
 namespace Cpp {
 /**
