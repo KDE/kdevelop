@@ -1,4 +1,4 @@
-/*
+/* 
    Copyright (C) 2007 David Nolden <user@host.de>
    (where user = david.nolden.kdevelop, host = art-master)
 
@@ -17,36 +17,52 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef __STRINGHELPERS_H__
+#define __STRINGHELPERS_H__
+
+class QString;
+class QChar;
+class QStringList;
+
 namespace Utils {
+/**
+ * Fills all comments  within the given c++ code with the given 'replacement' character
+ * */
+QString clearComments( QString str, QChar replacement = ' ' );
+/**
+ * Fills all strings within the given c++ code with the given 'replacement' character
+ * */
+QString clearStrings( QString str, QChar replacement = ' ' );
 
-bool parenFits( QChar c1, QChar c2 );
-
-bool isParen( QChar c1 );
-
-bool isTypeParen( QChar c1 );
-
-bool isTypeOpenParen( QChar c1 );
-
-bool isTypeCloseParen( QChar c1 );
-
-bool isLeftParen( QChar c1 );
-
-void fillString( QString& str, int start, int end, QChar replacement );
-
-QString clearComments( QString str, QChar replacement = QChar() );
-
+/**
+ * Removes white space at the beginning and end, and replaces contiguous inner white-spaces with single white-spaces. Newlines are treated as whitespaces, the returned text will have no more newlines.
+ * */
 QString reduceWhiteSpace(QString str);
 
-QString clearStrings( QString str, QChar replacement = QChar() );
-
-int expressionAt( const QString& text, int index );
-
-QString reverse( const QString& str );
-
-int findClose( const QString& str , int pos );
-
-int findCommaOrEnd( const QString& str , int pos, QChar validEnd = QChar());
-
+/**
+ * Skips in the string backwards over function-arguments, and stops at the right side of a "("
+ * @param skippedArguments Will contain all skipped arguments
+ * @param argumentsStart Should be set to the position where the seeking should start, will be changed to the right side of a "(" when found
+ * */
 void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart );
+/**
+ * Copied from kdevelop-3.4, should be redone
+ * */
+int expressionAt( const QString& contents, int index );
 
+/**
+searches a fitting closing brace from left to right: a ')' for '(', ']' for '[', ...
+*/
+int findClose( const QString& str , int pos ); 
+
+/**
+ * Searches in the given string for a ',' or closing brace,
+ * while skipping everything between opened braces.
+ * @param str string to search
+ * @param pos position where to start searching
+ * @param validEnd when this is set differently, the function will stop when it finds a comma or the given character, and not at closing-braces.
+ * @return  On fail, str.length() is returned, else the position of the closing character.
+ * */
+int findCommaOrEnd( const QString& str , int pos, QChar validEnd = ' ' );
 }
+#endif 
