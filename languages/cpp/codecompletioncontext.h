@@ -30,12 +30,12 @@
 namespace KTextEditor {
   class View;
   class Cursor;
-};
+}
 
 namespace KDevelop {
   class DUContext;
   class AbstractType;
-};
+}
 
 namespace Cpp {
 
@@ -174,6 +174,6 @@ namespace Cpp {
 
       KSharedPtr<CodeCompletionContext> m_parentContext;
   };
-};
+}
 
 #endif
