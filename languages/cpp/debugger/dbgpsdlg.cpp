@@ -166,14 +166,14 @@ void Dbg_PS_Dialog::slotProcessExited()
         {
             if(ps_output_line.search(item) == -1)
             {
-                KMessageBox::error(
+                KMessageBox::warningYesNo(
                     this, 
                     // FIXME: probably should XML-escape 'item' before passing it
                     // to 'arg'.
                     i18n("<b>Could not parse output from the <tt>ps</tt> command!</b>"
                          "<p>The following line could not be parsed:"
                          "<b><tt>%1</tt>").arg(item),
-                    i18n("Internal error"));
+                    i18n("Internal error"), KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error" );
                 break;
             }
             

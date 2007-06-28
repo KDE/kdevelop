@@ -291,11 +291,11 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
 {
     if (stateIsOn(s_dbgNotStarted))
     {
-        KMessageBox::error(
+        KMessageBox::warningYesNo(
             0,
             i18n("<b>Gdb command sent when debugger is not running</b><br>"
             "The command was:<br> %1").arg(cmd->initialString()),
-            i18n("Internal error"));
+            i18n("Internal error"),KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
         return;
     }
 
@@ -388,9 +388,9 @@ void GDBController::executeCmd()
     }
     if (bad_command)
     {
-        KMessageBox::error(0, i18n("<b>Invalid debugger command</b><br>")
+        KMessageBox::warningYesNo(0, i18n("<b>Invalid debugger command</b><br>")
                            + message,
-                           i18n("Invalid debugger command"));
+                           i18n("Invalid debugger command"),KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
         return;
     }
 
@@ -646,7 +646,7 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     raiseEvent(program_exited);
 
     if (msgBox)
-        KMessageBox::error(0, i18n("gdb message:\n")+msg);
+        KMessageBox::warningYesNo(0, i18n("gdb message:\n")+msg,"Warning", KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
 
     emit dbgStatus (msg, state_);
 }
@@ -707,7 +707,7 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
         // FIXME: throw an exception here. Move reporting
         // to the caller, who knows the gdb output.
 #if 0
-        KMessageBox::error(
+        KMessageBox::warningYesNo(
             0,
             i18n("Invalid gdb reply\n"
                  "Command was: %1\n"
@@ -716,7 +716,7 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
             .arg(currentCmd_->rawDbgCommand())
             .arg(buf)
             .arg(r.reason),
-            i18n("Invalid gdb reply"));
+            i18n("Invalid gdb reply"),KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
 #endif
     }
 
@@ -838,13 +838,13 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     if (!dbgProcess_->start( KProcess::NotifyOnExit,
                              KProcess::Communication(KProcess::All)))
     {
-        KMessageBox::error(
+        KMessageBox::warningYesNo(
             0,
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly."
                 ).arg(dbgProcess_->args()[0]),
-            i18n("Could not start debugger"));
+            i18n("Could not start debugger"),KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
 
         return false;
     }
@@ -1083,11 +1083,11 @@ void GDBController::slotRun()
         QString tty(tty_->getSlave());
         if (tty.isEmpty())
         {
-            KMessageBox::error(0, i18n("GDB cannot use the tty* or pty* devices.\n"
+            KMessageBox::warningYesNo(0, i18n("GDB cannot use the tty* or pty* devices.\n"
                                        "Check the settings on /dev/tty* and /dev/pty*\n"
                                        "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
                                        "and/or add the user to the tty group using "
-                                       "\"usermod -G tty username\"."));
+                                       "\"usermod -G tty username\"."), "Warning", KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
 
             delete tty_;
             tty_ = 0;
@@ -1330,12 +1330,12 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
         return;
     }
 
-    KMessageBox::error(
+    KMessageBox::warningYesNo(
         0,
         i18n("<b>Debugger error</b>"
              "<p>Debugger reported the following error:"
              "<p><tt>") + result["msg"].literal(),
-        i18n("Debugger error"));
+        i18n("Debugger error"), KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
 
     // Error most likely means that some change made in GUI
     // was not communicated to the gdb, so GUI is now not
