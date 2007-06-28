@@ -242,6 +242,7 @@ void GDBOutputWidget::flushPending()
     m_gdbView->scrollToBottom();
     m_gdbView->setUpdatesEnabled(true);
     m_gdbView->update();
+    m_userGDBCmdEditor->setFocus();
 }
 
 /***************************************************************************/
