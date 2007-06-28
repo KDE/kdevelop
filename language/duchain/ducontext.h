@@ -214,6 +214,8 @@ public:
   /**
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
+   * 
+   * Does not search imported parent-contexts(like base-classes).
    */
   QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false) const;
 

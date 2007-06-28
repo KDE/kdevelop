@@ -298,8 +298,12 @@ void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier
   // TODO we're missing ambiguous references by not checking every resolution before returning...
   // but is that such a bad thing? (might be good performance-wise)
   findLocalDeclarationsInternal(identifier, position, dataType, inImportedContext, ret);
-  if (ret.count())
-    return;
+  
+  ///@todo In some cases, for example when constructing a list of global overloaded functions or operators, we must search on and build a complete list of them
+  ///@todo is this too c++ specific?
+
+   if (ret.count()) //We need a way to decide language-independently whether we should search on or stop here
+     return;
 
   if (!identifier.explicitlyGlobal())
     acceptUsingNamespaces(position, usingNS);
@@ -308,8 +312,7 @@ void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier
   it.toBack();
   while (it.hasPrevious()) {
     DUContext* context = it.previous();
-    //Do not give the position, because the document is probably different
-    context->findDeclarationsInternal(identifier,  context->textRange().end(), dataType, usingNS, ret, true);
+    context->findDeclarationsInternal(identifier,  url() == context->url() ? position : context->textRange().end(), dataType, usingNS, ret, true);
     if (!ret.isEmpty())
       return;
   }

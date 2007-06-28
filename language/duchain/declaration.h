@@ -94,6 +94,9 @@ public:
    */
   void setDefinition(Definition* definition);
 
+  /**
+   * Returns the parent-context of this declaration.
+   * */
   DUContext* context() const;
   void setContext(DUContext* context);
 
