@@ -60,7 +60,7 @@ public:
     SvnRevision();
 
     /// Construct using information from VcsRevision.
-    SvnRevision( const KDevelop::VcsRevision &vcsRev );
+    void fromVcsRevision( const KDevelop::VcsRevision &vcsRev );
 
     /// Specify revision as number.
     void setNumber( long int revnum );

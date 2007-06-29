@@ -74,7 +74,7 @@ public:
 
     void spawnBlameThread( const KUrl &url, bool repositBlame,
                     const SvnRevision &rev1, const SvnRevision &rev2 );
-    SvnKJobBase* createBlamdJob( const KUrl &url, bool repositBlame,
+    SvnKJobBase* createBlameJob( const KUrl &url, bool repositBlame,
                                  const SvnRevision &rev1, const SvnRevision &rev2 );
 
     /// Creates job. Starts it ASynchronously. Also returns the running job.

@@ -250,7 +250,7 @@ void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
 }
-SvnKJobBase* SubversionCore::createBlamdJob( const KUrl &url, bool repositBlame,
+SvnKJobBase* SubversionCore::createBlameJob( const KUrl &url, bool repositBlame,
                                  const SvnRevision &rev1, const SvnRevision &rev2 )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_BLAME, this );

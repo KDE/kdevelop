@@ -319,9 +319,8 @@ VcsJob* KDevSubversionPart::update( const KUrl::List& localLocations,
                                     const VcsRevision& rev, RecursionMode recursion )
 {
     bool recurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? true : false );
-    // FIXME convert from VcsRevision
     SvnUtils::SvnRevision headRev;
-    headRev.setKey( SvnUtils::SvnRevision::HEAD );
+    headRev.fromVcsRevision( rev );
     return svncore()->createUpdateJob( localLocations, headRev, recurse, false );
 }
 
@@ -374,9 +373,8 @@ VcsJob* KDevSubversionPart::showDiff( const QVariant& localOrRepoLocationSrc,
 
 VcsJob* KDevSubversionPart::log( const KUrl& localLocation, const VcsRevision& rev, unsigned long limit )
 {
-    // FIXME convert from VcsRevision
     SvnUtils::SvnRevision startRev, endRev;
-    startRev.setKey( SvnUtils::SvnRevision::HEAD );
+    startRev.fromVcsRevision( rev );
     endRev.setNumber(0);
     KUrl::List list;
     list << localLocation;
@@ -387,8 +385,12 @@ VcsJob* KDevSubversionPart::log( const KUrl& localLocation,
             const VcsRevision& rev,
             const VcsRevision& limit )
 {
-    //FIXME implement
-    return 0;
+    SvnUtils::SvnRevision startRev, endRev;
+    startRev.fromVcsRevision( rev );
+    endRev.fromVcsRevision( limit );
+    KUrl::List list;
+    list << localLocation;
+    return svncore()->createLogviewJob( list, startRev, endRev, 0, true, true, false );
 }
 
 VcsJob* KDevSubversionPart::showLog( const KUrl& localLocation,
@@ -410,15 +412,17 @@ VcsJob* KDevSubversionPart::showLog( const KUrl& localLocation,
 VcsJob* KDevSubversionPart::annotate( const KUrl& localLocation,
                 const VcsRevision& rev )
 {
-    // TODO implement vcsannotation
-    return 0;
+    SvnUtils::SvnRevision rev1, rev2;
+    rev1.fromVcsRevision( rev );
+    rev2.setNumber( 0 );
+    return svncore()->createBlameJob( localLocation, true, rev1, rev2 );
 }
 
 VcsJob* KDevSubversionPart::showAnnotate( const KUrl& localLocation,
                     const VcsRevision& rev )
 {
-    // TODO implement vcsannotation
-    return 0;
+    // not that special options are needed for blame.
+    return this->annotate( localLocation, rev );
 }
 
 VcsJob* KDevSubversionPart::merge( const QVariant& localOrRepoLocationSrc,
