@@ -39,6 +39,8 @@ QString clearStrings( QString str, QChar replacement = ' ' );
  * */
 QString reduceWhiteSpace(QString str);
 
+QString stripFinalWhitespace(QString str);
+
 /**
  * Skips in the string backwards over function-arguments, and stops at the right side of a "("
  * @param skippedArguments Will contain all skipped arguments

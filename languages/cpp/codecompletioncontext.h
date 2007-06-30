@@ -68,7 +68,9 @@ namespace Cpp {
         ArrowMemberAccess, ///klass->
         StaticMemberChoose, /// Class::
         MemberChoose, /// klass->ParentClass::
-        FunctionCallAccess  ///"function(". Will never appear is initial access-operation, but as parentContext() access-operation.
+        FunctionCallAccess,  ///"function(". Will never appear is initial access-operation, but as parentContext() access-operation.
+        SignalAccess,  ///All signals from MemberAccessContainer should be listed
+        SlotAccess     ///All slots from MemberAccessContainer should be listed
       };
       /**
        * The first context created will never be a FunctionCallAccess
@@ -140,6 +142,8 @@ namespace Cpp {
     private:
       ///@return the extracted expression, without any access-operation
       QString expression() const;
+
+      void processFunctionCallAccess();
       
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();

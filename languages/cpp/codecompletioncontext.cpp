@@ -60,6 +60,11 @@ CodeCompletionContext::Function::Function() : matchedArguments(0) {
 CodeCompletionContext::Function::Function( int _matchedArguments, const ViableFunction& _viable ) : matchedArguments(_matchedArguments), function(_viable) {
 }
 
+CodeCompletionContext::operator bool() const {
+  return m_valid;
+}
+
+
 CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEditor::Cursor& position, KTextEditor::View* view, bool firstContext, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_position(position), m_view(view), m_document(view->document()), m_contextType(Normal), m_parentContext(0)
 {
   static int depth = 0;
@@ -67,7 +72,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
   IntPusher( depth, depth+1 );
   
   if( depth > 10 ) {
-    log( "too much recursion" );
+    log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
     m_valid = false;
     return;
   }
@@ -78,10 +83,14 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
     return;
   }
 
-  KTextEditor::Range range(context->textRange().start(), position);
-  
-  m_text = m_document->text(context->textRange());
-  m_textStartPosition = context->textRange().start();
+  KTextEditor::Range range;
+  {
+    LOCKDUCHAIN;
+    range = KTextEditor::Range(context->textRange().start(), position);
+    
+    m_text = m_document->text(range);
+    m_textStartPosition = context->textRange().start();
+  }
 
   //Now text is the range that ends with the statement we are analyzing
   if( m_text.isEmpty() ) {
@@ -95,10 +104,12 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
     return;
   }
 
+  log( "non-processed text: " + m_text );
   preprocessText();
   
   m_text = Utils::clearComments( m_text );
   m_text = Utils::clearStrings( m_text );
+  m_text = Utils::stripFinalWhitespace( m_text );
 
   //text = Utils::reduceWhiteSpace(text);
   
@@ -107,6 +118,12 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
   ///@todo template-parameters
   
   ///First: find out what kind of completion we are dealing with
+
+  if( m_text.endsWith( ";" ) || m_text.endsWith("}") || m_text.endsWith("{") ) {
+    ///We're at the beginning of a new statement. General completion is valid.
+    return;
+  }
+  
   if( m_text.endsWith(".") ) {
     m_memberAccessOperation = MemberAccess;
     m_text = m_text.left( m_text.length()-1 );
@@ -260,78 +277,80 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
     }
     break;
     case FunctionCallAccess:
+      processFunctionCallAccess();
+    break;
+  }
+}
+
+void CodeCompletionContext::processFunctionCallAccess() {
+  ///Generate a list of all found functions/operators, together with each a list of optional prefixed parameters
+
+  ///All the variable argument-count management in the following code is done to treat global operator-functions equivalently to local ones. They take a first parameter.
+
+
+  typedef QPair<OverloadResolver::ParameterList, Declaration*> DeclarationWithArgument;
+
+  QList< DeclarationWithArgument > declarations; //Declarations are paired with the optional first argument for the declared functions
+
+  if( m_contextType == BinaryOperatorFunctionCall ) {
+
+    if( !m_expressionResult->instance ) {
+      log( "tried to apply an operator to a non-instance" );
+      m_valid = false;
+      return;
+    }
+
+    QualifiedIdentifier identifier( "operator"+m_operator );
+    LOCKDUCHAIN;
+    ///Search for member operators
+    AbstractType::Ptr real( TypeUtils::realType(m_expressionResult->type.data()) );
+    if( dynamic_cast<CppClassType*>( real.data() ) )
     {
-      ///Generate a list of all found functions/operators, together with each a list of optional prefixed parameters
-
-      ///All the variable argument-count management in the following code is done to treat global operator-functions equivalently to local ones. They take a first parameter.
-
-      
-      typedef QPair<OverloadResolver::ParameterList, Declaration*> DeclarationWithArgument;
-
-      QList< DeclarationWithArgument > declarations; //Declarations are paired with the optional first argument for the declared functions
-      
-      if( m_contextType == BinaryOperatorFunctionCall ) {
-
-        if( !m_expressionResult->instance ) {
-          log( "tried to apply an operator to a non-instance" );
-          m_valid = false;
-          return;
-        }
-        
-        QualifiedIdentifier identifier( "operator"+m_operator );
-        LOCKDUCHAIN;
-        ///Search for member operators
-        AbstractType::Ptr real( TypeUtils::realType(m_expressionResult->type.data()) );
-        if( dynamic_cast<CppClassType*>( real.data() ) )
-        {
-          IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
-          if( idType ) {
-            DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
-            if( ctx ) {
-              QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, identifier );
-              foreach( Declaration* decl, decls )
-                declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl );
-            } else {
-              log( "no internal context found" );
-            }
-          } else {
-              log( "type is not identified" );
-          }
-        }
-        ///Search for static global operators
-        QList<Declaration*> decls = m_duContext->findDeclarations(identifier);
-        foreach( Declaration* decl, decls ) {
-          FunctionType* fun = dynamic_cast<FunctionType*>( decl->abstractType().data() );
-          if( fun && fun->arguments().size() == 2 )
-            declarations << DeclarationWithArgument( OverloadResolver::Parameter(m_expressionResult->type.data(), m_expressionResult->isLValue()), decl );
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
+      if( idType ) {
+        DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
+        if( ctx ) {
+          QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, identifier );
+          foreach( Declaration* decl, decls )
+            declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl );
+        } else {
+          log( "no internal context found" );
         }
       } else {
-        ///Simply take all the declarations that were found by the expression-parser
-        foreach( Declaration* decl, m_expressionResult->allDeclarations )
-          declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); //Insert with argument-offset zero
-      }
-      if( declarations.isEmpty() ) {
-        log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
-        return;
-      }
-
-      QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments where given to which function
-      foreach( const DeclarationWithArgument& decl, declarations )
-        m_argumentCountMap[decl.second] = decl.first.parameters.size();
-      
-      OverloadResolver resolv( m_duContext );
-      OverloadResolver::ParameterList knownParameters;
-      foreach( ExpressionEvaluationResult::Ptr result, m_knownArgumentTypes )
-        knownParameters.parameters << OverloadResolver::Parameter( result->type.data(), result->isLValue() );
-      
-      QList< ViableFunction > viableFunctions = resolv.resolveListPartial( knownParameters, declarations );
-      foreach( const ViableFunction& function, viableFunctions ) {
-        if( function.declaration() && function.declaration()->abstractType() ) {
-          m_functions << Function( m_argumentCountMap[function.declaration()] + knownParameters.parameters.size(), function );
-        }
+          log( "type is not identified" );
       }
     }
-    break;
+    ///Search for static global operators
+    QList<Declaration*> decls = m_duContext->findDeclarations(identifier);
+    foreach( Declaration* decl, decls ) {
+      FunctionType* fun = dynamic_cast<FunctionType*>( decl->abstractType().data() );
+      if( fun && fun->arguments().size() == 2 )
+        declarations << DeclarationWithArgument( OverloadResolver::Parameter(m_expressionResult->type.data(), m_expressionResult->isLValue()), decl );
+    }
+  } else {
+    ///Simply take all the declarations that were found by the expression-parser
+    foreach( Declaration* decl, m_expressionResult->allDeclarations )
+      declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); //Insert with argument-offset zero
+  }
+  if( declarations.isEmpty() ) {
+    log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
+    return;
+  }
+
+  QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments where given to which function
+  foreach( const DeclarationWithArgument& decl, declarations )
+    m_argumentCountMap[decl.second] = decl.first.parameters.size();
+
+  OverloadResolver resolv( m_duContext );
+  OverloadResolver::ParameterList knownParameters;
+  foreach( ExpressionEvaluationResult::Ptr result, m_knownArgumentTypes )
+    knownParameters.parameters << OverloadResolver::Parameter( result->type.data(), result->isLValue() );
+
+  QList< ViableFunction > viableFunctions = resolv.resolveListPartial( knownParameters, declarations );
+  foreach( const ViableFunction& function, viableFunctions ) {
+    if( function.declaration() && function.declaration()->abstractType() ) {
+      m_functions << Function( m_argumentCountMap[function.declaration()] + knownParameters.parameters.size(), function );
+    }
   }
 }
 
@@ -356,7 +375,7 @@ bool CodeCompletionContext::isValidPosition() {
   markedText = Utils::clearStrings(markedText,'$');
 
   if( markedText[markedText.length()-1] == '$' ) {
-    //We are within a comment
+    //We are within a comment or string
     return false;
   }
   return true;

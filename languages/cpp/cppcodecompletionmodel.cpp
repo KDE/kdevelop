@@ -25,6 +25,8 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
+#include "duchainbuilder/cppduchain.h"
+
 #include <declaration.h>
 #include "cpptypes.h"
 #include <classfunctiondeclaration.h>
@@ -33,6 +35,7 @@
 #include <duchainlock.h>
 #include <topducontext.h>
 #include "dumpchain.h"
+#include "codecompletioncontext.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -53,14 +56,17 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   KUrl url = view->document()->url();
   if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
     kDebug(9007) << "completion invoked for context " << top << endl;
-    DUChainReadLocker lock(DUChain::lock());
-    DUContext* thisContext = top->findContextAt(range.start());
-
-    kDebug(9007) << "context is set to " << thisContext << endl;
+    DUContext* thisContext;
     {
-      kDebug( 9007 ) << "================== duchain for the context =======================" << endl;
-      DumpChain dump;
-      dump.dump(thisContext);
+      DUChainReadLocker lock(DUChain::lock());
+      thisContext = top->findContextAt(range.start());
+
+       kDebug(9007) << "context is set to " << thisContext << endl;
+       {
+         kDebug( 9007 ) << "================== duchain for the context =======================" << endl;
+         DumpChain dump;
+         dump.dump(thisContext);
+       }
     }
 
     setContext(thisContext, range.start(), view);
@@ -262,9 +268,34 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
 {
   m_context = context;
   Q_ASSERT(m_context);
-  ///@todo move expression-evaluation into another thread
+  //@todo move completion-context-building into another thread
 
-  m_declarations = m_context->allDeclarations(position).values();
+  m_declarations.clear();
+  
+  Cpp::CodeCompletionContext completionContext( context, position, view );
+
+  if( completionContext ) {
+    DUChainReadLocker lock(DUChain::lock());
+    
+    if( completionContext.memberAccessContainer() && *completionContext.memberAccessContainer() ) {
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(completionContext.memberAccessContainer()->type.data());
+      if( idType && idType->declaration() ) {
+        DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
+        if( ctx ) {
+          m_declarations = Cpp::localDeclarations( ctx );
+        } else {
+          kDebug() << "Could not get internal context from declaration \"" << idType->declaration()->toString() << "\"" << endl;
+        }
+      } else {
+        kDebug() << "CppCodeCompletionModel::setContext: bad container-type" << endl;
+      }
+    } else {
+      m_declarations =  m_context->allDeclarations(position).values();
+      kDebug() << "CppCodeCompletionModel::setContext: using all declarations visible: " << m_declarations.count() << endl;
+    }
+  } else {
+    kDebug() << "CppCodeCompletionModel::setContext: Invalid code-completion context" << endl;
+  }
 }
 
 #include "cppcodecompletionmodel.moc"

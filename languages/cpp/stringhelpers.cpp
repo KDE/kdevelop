@@ -133,6 +133,15 @@ QString reduceWhiteSpace(QString str) {
   return ret;
 }
 
+QString stripFinalWhitespace(QString str) {
+  
+  for( int a = str.length() - 1; a >= 0; --a ) {
+    if( !str[a].isSpace() )
+      return str.left( a+1 );
+    }
+
+  return QString::null;
+}
 
 QString clearStrings( QString str, QChar /*replacement*/ ) {
   ///@todo implement: Replace all strings with the given replacement-character

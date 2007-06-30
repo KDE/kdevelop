@@ -127,7 +127,7 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
   if( ret->type )
     return ret;
   else
-    return ExpressionEvaluationResult::Ptr();
+    return ExpressionEvaluationResult::Ptr(new ExpressionEvaluationResult);
 }
 
 ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseSession* session, bool debug ) {

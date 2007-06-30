@@ -44,4 +44,21 @@ KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> findLocalDeclaration
   return ret;
 }
 
+KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context ) {
+  QList<Declaration*> ret;
+  ret += context->localDeclarations();
+  if( !ret.isEmpty() )
+    return ret;
+
+  if( context->type() != DUContext::Class )
+    return ret;
+
+  ///@todo exclude overloaded functions
+  QList<DUContext*> bases = context->importedParentContexts();
+  for( QList<DUContext*>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
+    ret += localDeclarations( *it );
+  }
+  return ret;
+}
+
 }

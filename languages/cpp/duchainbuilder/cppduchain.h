@@ -38,6 +38,7 @@ namespace Cpp {
  * Du-chain must be locked before.
  * */
 QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );
+QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context );
 
 }
 
