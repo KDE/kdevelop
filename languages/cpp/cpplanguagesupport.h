@@ -32,10 +32,10 @@ class TranslationUnitAST;
 
 namespace KParts { class Part; }
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; }
+namespace Cpp { class MacroSet; class EnvironmentManager; }
 #ifndef Q_OS_WIN
 namespace CppTools { class IncludePathResolver; }
 #endif
-namespace Cpp { class EnvironmentManager; }
 
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -69,10 +69,12 @@ private slots:
 private:
     CppHighlighting *m_highlights;
     CppCodeCompletion *m_cc;
+    Cpp::EnvironmentManager* m_lexerCache;
+    Cpp::MacroSet *m_standardMarcos;
+    QStringList *m_standardIncludePaths;
     #ifndef Q_OS_WIN
     CppTools::IncludePathResolver *m_includeResolver;
     #endif
-    Cpp::EnvironmentManager* m_lexerCache;
 };
 
 #endif

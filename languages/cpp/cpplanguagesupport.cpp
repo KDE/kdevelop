@@ -59,13 +59,16 @@
 #include "cpphighlighting.h"
 #include "cppcodecompletion.h"
 #include "cppeditorintegrator.h"
-#ifndef Q_OS_WIN
-#include "includepathresolver.h"
-#endif
 #include "usebuilder.h"
 #include "typerepository.h"
 #include "cppparsejob.h"
 #include "environmentmanager.h"
+#include "macroset.h"
+
+#ifndef Q_OS_WIN
+#include "includepathresolver.h"
+#include "setuphelpers.h"
+#endif
 
 using namespace KDevelop;
 
@@ -80,14 +83,21 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
 
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
-    #ifndef Q_OS_WIN
-    m_includeResolver = new CppTools::IncludePathResolver;
-    #endif
+    m_standardMarcos = new Cpp::MacroSet;
+    m_standardIncludePaths = new QStringList;
     m_lexerCache = new Cpp::EnvironmentManager;
     {
         DUChainWriteLocker l(DUChain::lock());
         DUChain::self()->addParsingEnvironmentManager(m_lexerCache);
     }
+
+    #ifndef Q_OS_WIN
+    m_includeResolver = new CppTools::IncludePathResolver;
+    // Retrieve the standard include paths & macro definitions for this machine.
+    // Uses gcc commands to retreive the information.
+    CppTools::setupStandardIncludePaths(*m_standardIncludePaths);
+    CppTools::setupStandardMacros(*m_standardMarcos);
+    #endif
 
 /*    connect( KDevelop::Core::documentController(),
              SIGNAL( documentLoaded( KDevelop::Document* ) ),
@@ -126,6 +136,10 @@ CppLanguageSupport::~CppLanguageSupport()
         DUChainWriteLocker l(DUChain::lock());
         DUChain::self()->removeParsingEnvironmentManager(m_lexerCache);
     }
+
+    delete m_standardMarcos;
+    delete m_standardIncludePaths;
+    delete m_lexerCache;
     #ifndef Q_OS_WIN
     delete m_includeResolver;
     #endif
@@ -239,9 +253,12 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
     }
 
     if (fallbackSearch) {
-        QStringList allPaths; ///@todo initialize this from gdb etc., see how it's done in kdev3
-        if( includeType == rpp::Preprocessor::IncludeLocal )
+        QStringList allPaths;
+        if (includeType == rpp::Preprocessor::IncludeLocal) {
             allPaths << source.directory();
+        } else {
+            allPaths += *m_standardIncludePaths;
+        }
         #ifndef Q_OS_WIN
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
@@ -251,7 +268,7 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
         foreach (QString path, allPaths) {
             QFileInfo info(QDir(path), includeName);
             if (info.exists() && info.isReadable()) {
-                kDebug(9007) << "KWDEBUG: found include file: " << info.absoluteFilePath() << endl;
+                //kDebug(9007) << "found include file: " << info.absoluteFilePath() << endl;
                 return KUrl(info.absoluteFilePath());
             }
         }

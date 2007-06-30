@@ -17,6 +17,8 @@
 
 #include <set>
 #include "rpp/pp-macro.h"
+#include "cppduchainbuilderexport.h"
+
 /**
  * Represents a set of c++ preprocess-macros.
  * */
@@ -26,7 +28,7 @@ class HashedString;
 
 namespace Cpp {
 
-class MacroSet {
+class KDEVCPPDUCHAINBUILDER_EXPORT MacroSet {
     public:
         typedef std::set< rpp::pp_macro, rpp::pp_macro::NameCompare > Macros;
         MacroSet() : m_idHashValid( false ), m_valueHashValid( false ) {
