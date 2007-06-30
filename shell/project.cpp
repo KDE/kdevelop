@@ -185,7 +185,7 @@ bool Project::open( const KUrl& projectFileUrl )
     if( !statJob->exec() )
     {
         KUrl dir = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) + ".kdev4");
-        statJob = KIO::stat( projectFileUrl );
+        statJob = KIO::stat( dir );
         if( !statJob->exec() )
         {
             KIO::SimpleJob* mkdirJob = KIO::mkdir( dir );
@@ -218,8 +218,8 @@ bool Project::open( const KUrl& projectFileUrl )
 
         d->tmp = new KTemporaryFile();
         d->tmp->open();
-        d->tmp->close();
         d->developerTempFile = d->tmp->fileName();
+        d->tmp->close();
     }
 
     d->m_cfg = KSharedConfig::openConfig( d->projectTempFile );
