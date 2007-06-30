@@ -128,7 +128,7 @@ void ProjectController::setupActions()
     action->setText(i18n( "&Open Project..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open project" ) );
-    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project." ) );
+    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project.</p>" ) );
 
 //    action = ac->addAction( "project_close" );
 //    action->setText( i18n( "C&lose Project" ) );
@@ -146,7 +146,7 @@ void ProjectController::setupActions()
     ac->addAction( "project_open_recent", d->m_recentAction );
     d->m_recentAction->setToolTip( i18n( "Open recent project" ) );
     d->m_recentAction->setWhatsThis(
-        i18n( "<b>Open recent project</b><p>Opens recently opened project." ) );
+        i18n( "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
 
     d->m_projectConfigAction = new KActionMenu( i18n("Configure Project"), ac );

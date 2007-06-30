@@ -114,14 +114,14 @@ void MainWindowPrivate::setupActions()
                                       actionCollection());
     actionCollection()->addAction( "settings_configure", action );
     action->setToolTip( text );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
+    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
 
     action = actionCollection()->addAction( "settings_configure_editors" );
     action->setText( i18n( "Configure &Editor..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( configureEditors() ) );
     action->setToolTip( i18n( "Configure editor settings" ) );
-    action->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog." ) );
+    action->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog.</p>" ) );
     action->setEnabled( false );
 
     action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
@@ -129,7 +129,7 @@ void MainWindowPrivate::setupActions()
     actionCollection()->addAction( "settings_show_statusbar", action );
     action->setText( i18n( "Show &Statusbar" ) );
     action->setToolTip( i18n( "Show statusbar" ) );
-    action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
+    action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar.</p>" ) );
 
 //     KToolBarPopupAction *popupAction;
 //     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
@@ -154,21 +154,21 @@ void MainWindowPrivate::setupActions()
                  actionCollection());
     actionCollection()->addAction( "settings_show_menubar", action );
     action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
     action = KStandardAction::keyBindings(
                  this, SLOT( keyBindings() ),
                  actionCollection());
     actionCollection()->addAction( "settings_configure_shortcuts", action );
     action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( action->text() ).arg( i18n( "Lets you configure shortcut keys." ) ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you configure shortcut keys." ) ) );
 
     action = KStandardAction::configureToolbars(
                  this, SLOT( configureToolbars() ),
                  actionCollection() );
     actionCollection()->addAction( "settings_configure_toolbars", action );
     action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( action->text() ).arg( i18n( "Lets you configure toolbars." ) ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you configure toolbars." ) ) );
 
     action = KStandardAction::configureNotifications(
                  this, SLOT( configureNotifications() ),
@@ -182,28 +182,28 @@ void MainWindowPrivate::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Right );
     action->setToolTip( i18n( "Next window" ) );
-    action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window." ) );
+    action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window.</p>" ) );
 
     action = actionCollection()->addAction( "view_previous_window" );
     action->setText( i18n( "&Previous Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Left );
     action->setToolTip( i18n( "Previous window" ) );
-    action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window." ) );
+    action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
 
     action = actionCollection()->addAction( "view_last_window" );
     action->setText( i18n( "&Last Accessed Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoLastWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Up );
     action->setToolTip( i18n( "Last accessed window" ) );
-    action->setWhatsThis( i18n( "<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key)." ) );
+    action->setWhatsThis( i18n( "<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key).</p>" ) );
 
     action = actionCollection()->addAction( "view_first_window" );
     action->setText( i18n( "&First Accessed Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoFirstWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Down );
     action->setToolTip( i18n( "First accessed window" ) );
-    action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)." ) );
+    action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key).</p>" ) );
 
     action = actionCollection()->addAction( "new_window" );
     action->setIcon(KIcon( "window-new" ));
@@ -211,7 +211,7 @@ void MainWindowPrivate::setupActions()
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( newWindow() ) );
     action->setToolTip( i18n( "New Window" ) );
-    action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of current area." ) );
+    action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of current area.</p>" ) );
 
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view_bottom" ));
@@ -219,7 +219,7 @@ void MainWindowPrivate::setupActions()
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_T );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitHorizontal() ) );
     action->setToolTip( i18n( "Split Horizontal" ) );
-    action->setWhatsThis( i18n( "<b>Split Horizontal</b><p>Splitts the current view horizontally." ) );
+    action->setWhatsThis( i18n( "<b>Split Horizontal</b><p>Splitts the current view horizontally.</p>" ) );
 
     action = actionCollection()->addAction( "split_vertical" );
     action->setIcon(KIcon( "view-left-right" ));
@@ -227,7 +227,7 @@ void MainWindowPrivate::setupActions()
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
     action->setToolTip( i18n( "Split Vertical" ) );
-    action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically." ) );
+    action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically.</p>" ) );
 
     action = actionCollection()->addAction( "file_new" );
     action->setIcon(KIcon("document-new"));
@@ -235,7 +235,7 @@ void MainWindowPrivate::setupActions()
     action->setText( i18n( "&New File" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileNew() ) );
     action->setToolTip( i18n( "New File" ) );
-    action->setWhatsThis( i18n( "<b>New File</b><p>Creates an empty file." ) );
+    action->setWhatsThis( i18n( "<b>New File</b><p>Creates an empty file.</p>" ) );
 
     action = actionCollection()->addAction( "file_close" );
     action->setIcon(KIcon("window-close"));
@@ -243,7 +243,7 @@ void MainWindowPrivate::setupActions()
     action->setText( i18n( "&Close File" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
     action->setToolTip( i18n( "Close File" ) );
-    action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file." ) );
+    action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file.</p>" ) );
 
     action = actionCollection()->addAction( "add_toolview" );
     action->setIcon(KIcon("window-new"));
@@ -251,7 +251,7 @@ void MainWindowPrivate::setupActions()
     action->setText( i18n( "&Add Tool View..." ) );
     connect( action, SIGNAL( triggered( bool ) ),  SLOT( viewAddNewToolView() ) );
     action->setToolTip( i18n( "Add Tool View" ) );
-    action->setWhatsThis( i18n( "<b>Add Tool View</b><p>Adds a new tool view to this window." ) );
+    action->setWhatsThis( i18n( "<b>Add Tool View</b><p>Adds a new tool view to this window.</p>" ) );
 }
 
 KActionCollection * MainWindowPrivate::actionCollection()
