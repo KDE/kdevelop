@@ -55,6 +55,7 @@ public:
 
     virtual ~QMakeProjectManager();
 
+    virtual Features features() const { return Features(Folders | Targets | Files); }
     virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectItem*) const;
     virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
