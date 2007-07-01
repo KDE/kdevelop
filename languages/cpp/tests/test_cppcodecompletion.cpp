@@ -50,8 +50,8 @@ using namespace KDevelop;
 
 QTEST_MAIN(TestCppCodeCompletion)
 
-QString testFile1 = "struct Honk { int a,b; enum Enum { Number1, Number2 }; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky;";
-QString testFile2 = "struct Erna {}; struct Heinz; Erna globalErna; Heinz globalHeinz; int globalInt; Heinz globalFunction(const Heinz& h ) {}; Erna globalFunction( const Erna& erna);";
+QString testFile1 = "struct Honk { int a,b; enum Enum { Number1, Number2 }; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
+QString testFile2 = "class Honk; struct Erna {}; struct Heinz; Erna globalErna; Heinz globalHeinz; int globalInt; Heinz globalFunction(const Heinz& h ) {}; Erna globalFunction( const Erna& erna); HONK globalMacroHonk; \n#undef HONK\n";
 
 namespace QTest {
   template<>
@@ -182,33 +182,48 @@ void TestCppCodeCompletion::testInclude() {
   addInclude("file1.h", "#include \"testFile1.h\"\n#include \"testFile2.h\"\n");
   
   
-  QByteArray test = "#include \"file1.h\"  \n  struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }";
+  QByteArray test = "#include \"file1.h\"  \n  struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }; HONK undefinedHonk;";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
   Declaration* decl = findDeclaration(c, QualifiedIdentifier("globalHeinz"));
-  QVERIFY(decl && decl->abstractType());
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Heinz"));
   
   decl = findDeclaration(c, QualifiedIdentifier("globalErna"));
-  QVERIFY(decl && decl->abstractType());
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Erna"));
 
   decl = findDeclaration(c, QualifiedIdentifier("globalInt"));
-  QVERIFY(decl && decl->abstractType());
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("int"));
   
   decl = findDeclaration(c, QualifiedIdentifier("Honk"));
-  QVERIFY(decl && decl->abstractType());
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
   
   decl = findDeclaration(c, QualifiedIdentifier("honky"));
-  QVERIFY(decl && decl->abstractType());
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
   
   decl = findDeclaration(c, QualifiedIdentifier("globalHonk"));
-  QVERIFY(decl && decl->abstractType());
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
+  
+  decl = findDeclaration(c, QualifiedIdentifier("globalMacroHonk"));
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
+  QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
+  
+  decl = findDeclaration(c, QualifiedIdentifier("undefinedHonk"));
+  QVERIFY(decl);
+  QVERIFY(!decl->abstractType());
   
   
 /*  DUContext* testContext = c->childContexts()[1];
@@ -277,6 +292,9 @@ QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*
 
     rpp::pp preprocessor(&ppc);
     ppc.setPp( &preprocessor );
+    rpp::MacroBlock* macros = new rpp::MacroBlock(0);
+
+    preprocessor.environment()->enterBlock(macros);
     
     if( parent )
       preprocessor.environment()->swapMacros(parent->environment());
@@ -317,6 +335,7 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
 
   DeclarationBuilder definitionBuilder(session);
 
+  //LexedFile is not built correctly by TestPreprocessor
   Cpp::LexedFilePointer file( new Cpp::LexedFile( url, 0 ) );
   TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, &included);
 

@@ -78,6 +78,7 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
         void merge( const Cpp::MacroSet& macros ) {
             Cpp::MacroSet::Macros::const_iterator endIt = macros.macros().end();
             for( Cpp::MacroSet::Macros::const_iterator it = macros.macros().begin(); it != endIt; ++it ) {
+                ///@todo ownership!
                 rpp::Environment::setMacro(new rpp::pp_macro(*it)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
             }
         }
@@ -170,6 +171,7 @@ void PreprocessJob::run()
     if (checkAbort())
         return;
 
+    ///@todo care about ownership of the macros when copying them around. They are all owned by the here opened macro-block.
     parentJob()->parseSession()->macros = new rpp::MacroBlock(0);
 
     rpp::pp preprocessor(this);

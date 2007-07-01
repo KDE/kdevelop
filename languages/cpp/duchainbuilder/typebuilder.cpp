@@ -239,6 +239,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       kDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << endl;
        openedType = true;
        openType(dec.front()->abstractType(), node);
+    } else {
+        kDebug() << "no declaration found for " << id.toString() << " in context \"" << currentContext()->scopeIdentifier(true).toString() << "\"" << endl;
     }
   }
 

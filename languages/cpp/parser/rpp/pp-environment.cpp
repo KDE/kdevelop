@@ -137,7 +137,9 @@ MacroBlock* Environment::elseBlock(int sourceLine, const QString& condition)
 }
 
 void Environment::swapMacros( Environment* parentEnvironment ) {
+  EnvironmentMap oldEnvironment = m_environment;
   m_environment = parentEnvironment->m_environment;
+  parentEnvironment->m_environment = oldEnvironment;
 }
 
 void Environment::leaveBlock()
