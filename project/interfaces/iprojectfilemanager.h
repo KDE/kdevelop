@@ -63,12 +63,17 @@ public:
     /** Features the file manager supports */
     enum Feature
     {
-        None,              ///< This project supports nothing
-        Folders  = 0x0001, ///< Folders are supported by the project
-        Targets  = 0x0002, ///< Targets are supported by the project
-        Files    = 0x0003 ///< Files are supported by the project
+        None     = 0 ,     ///< This project supports nothing
+        Folders  = 1 << 0, ///< Folders are supported by the project
+        Targets  = 1 << 1, ///< Targets are supported by the project
+        Files    = 1 << 2  ///< Files are supported by the project
     };
     Q_DECLARE_FLAGS( Features, Feature )
+
+    /**
+     * @return the Features supported by the filemanager
+     */
+    virtual Features features() const = 0;
 
     /**
      * This method initialize the model item @arg dom
