@@ -60,16 +60,16 @@ QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IQMakeBuilder )
     m_failedMapper = new QSignalMapper(this);
-    connect(m_failedMapper, SIGNAL(mapped(const QString& )),
-            this, SLOT(errored(const QString&)));
+    connect(m_failedMapper, SIGNAL(mapped( int )),
+            this, SLOT(errored( int)));
     m_completedMapper = new QSignalMapper(this);
-    connect(m_completedMapper, SIGNAL(mapped(const QString& )),
-            this, SLOT(completed(const QString&)));
+    connect(m_completedMapper, SIGNAL(mapped( int )),
+            this, SLOT(completed( int )));
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
-        connect( i, SIGNAL( viewRemoved( const QString& ) ),
-                 this, SLOT( cleanupModel( const QString& ) ) );
+        connect( i, SIGNAL( viewRemoved( int ) ),
+                 this, SLOT( cleanupModel( int ) ) );
     }
     i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
@@ -89,7 +89,7 @@ QMakeBuilder::~QMakeBuilder()
 {
 }
 
-void QMakeBuilder::cleanupModel( const QString& id )
+void QMakeBuilder::cleanupModel( int id )
 {
     kDebug(9024) << "view was removed, check wether its one of ours" << endl;
     if( m_models.contains( id ) )
@@ -127,7 +127,7 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         if( view )
         {
 
-            QString id;
+            int id;
             if( m_ids.contains( dom->project() ) )
             {
                 id = m_ids[dom->project()];
@@ -172,7 +172,7 @@ bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return false;
 }
 
-void QMakeBuilder::completed(const QString &id)
+void QMakeBuilder::completed(int id)
 {
     kDebug(9024) << "command finished " << id << endl;
     if( m_items.contains(id))
@@ -190,7 +190,7 @@ void QMakeBuilder::completed(const QString &id)
     }
 }
 
-void QMakeBuilder::errored(const QString &id)
+void QMakeBuilder::errored(int id)
 {
     if( m_items.contains(id))
         emit failed(m_items[id]);

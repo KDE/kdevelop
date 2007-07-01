@@ -55,14 +55,14 @@ Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
 private Q_SLOTS:
-    void completed( const QString &id );
-    void errored( const QString &id );
-    void cleanupModel( const QString& id );
+    void completed( int id );
+    void errored( int id );
+    void cleanupModel( int id );
 private:
-    QMap< KDevelop::IProject*, QString > m_ids;
-    QMap< QString, KDevelop::CommandExecutor* > m_cmds;
-    QMap< QString, KDevelop::ProjectBaseItem* > m_items;
-    QMap< QString, KDevelop::OutputModel* > m_models;
+    QMap< KDevelop::IProject*, int > m_ids;
+    QMap< int, KDevelop::CommandExecutor* > m_cmds;
+    QMap< int, KDevelop::ProjectBaseItem* > m_items;
+    QMap< int, KDevelop::OutputModel* > m_models;
     QSignalMapper* m_failedMapper;
     QSignalMapper* m_completedMapper;
 };
