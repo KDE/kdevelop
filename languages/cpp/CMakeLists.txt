@@ -3,7 +3,7 @@ add_subdirectory(parser)
 add_subdirectory(duchainbuilder)
 add_subdirectory(app_templates)
 add_subdirectory(expressionparser)
-
+add_subdirectory(tests)
 
 include_directories(${CMAKE_TOP_BUILD_DIR} ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces

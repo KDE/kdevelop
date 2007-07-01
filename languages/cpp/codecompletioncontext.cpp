@@ -65,7 +65,7 @@ CodeCompletionContext::operator bool() const {
 }
 
 
-CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEditor::Cursor& position, KTextEditor::View* view, bool firstContext, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_position(position), m_view(view), m_document(view->document()), m_contextType(Normal), m_parentContext(0)
+CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString& text, bool firstContext, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
 {
   static int depth = 0;
 
@@ -77,27 +77,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
     return;
   }
   log( "Computing context" );
-  //Step 1: Find the statement we're in
-  if(!m_document) {
-    log( "no text-document" );
-    return;
-  }
-
-  KTextEditor::Range range;
-  {
-    LOCKDUCHAIN;
-    range = KTextEditor::Range(context->textRange().start(), position);
-    
-    m_text = m_document->text(range);
-    m_textStartPosition = context->textRange().start();
-  }
-
-  //Now text is the range that ends with the statement we are analyzing
-  if( m_text.isEmpty() ) {
-    log("no text for context");
-    return;
-  }
-
+  
   m_valid = isValidPosition();
   if( !m_valid ) {
     log( "position not valid for code-completion" );
@@ -111,8 +91,6 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
   m_text = Utils::clearStrings( m_text );
   m_text = Utils::stripFinalWhitespace( m_text );
 
-  //text = Utils::reduceWhiteSpace(text);
-  
   log( "processed text: " + m_text );
 
   ///@todo template-parameters
@@ -142,7 +120,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
   if( endsWithOperator( m_text ) ) {
     if( firstContext ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, position, m_view, false );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, false );
       return;
     }
     m_memberAccessOperation = FunctionCallAccess;
@@ -154,7 +132,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
   if( m_text.endsWith("(") ) {
     if( firstContext ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, position, m_view, false );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, false );
       return;
     }
     m_contextType = FunctionCall;
@@ -192,29 +170,28 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const KTextEdi
 
   m_expression = m_text.mid(start_expr).trimmed();
 
-  QString expressionPrefix = m_text.left(start_expr);
-  while( expressionPrefix.endsWith(" ") )
-    expressionPrefix = expressionPrefix.left( expressionPrefix.size() - 1 );
+  QString expressionPrefix = Utils::stripFinalWhitespace( m_text.left(start_expr) );
 
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
   if( expressionPrefix.endsWith("(") || expressionPrefix.endsWith(",") ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
     //Our expression is within a function-call. We need to find out the possible argument-types we need to match, and show an argument-hint.
-    int parentContextEnd = expressionPrefix.length();
-    //Find out which argument-number this expression is
-
-    int parentExpressionStart = parentContextEnd;
+    
+    //Find out which argument-number this expression is, and compute the beginning of the parent function-call(parentContextLast)
     QStringList otherArguments;
-    Utils::skipFunctionArguments( expressionPrefix, otherArguments, parentExpressionStart );
-        
-    log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(expressionPrefix.left(parentExpressionStart)) );
-    m_parentContext = new CodeCompletionContext( m_duContext, mapTextToDocument(parentExpressionStart), m_view, false, otherArguments );
+    int parentContextLast = expressionPrefix.length() - 1;
+    Utils::skipFunctionArguments( expressionPrefix, otherArguments, parentContextLast );
+
+    QString parentContextText = expressionPrefix.left(parentContextLast+1);
+    
+    log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
+    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, false, otherArguments );
   }
 
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) ) {
     log( QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix) );
-    m_parentContext = new CodeCompletionContext( m_duContext, mapTextToDocument(expressionPrefix.length()), m_view, false );
+    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, false );
   }
 
   ///Now care about m_expression. It may still contain keywords like "new "
@@ -381,22 +358,6 @@ bool CodeCompletionContext::isValidPosition() {
   return true;
 }
 
-KTextEditor::Cursor CodeCompletionContext::mapTextToDocument(int pos) const {
-  KTextEditor::Cursor ret = m_position;
-  ret.setColumn( ret.column() + pos );
-  SafetyCounter s(100);
-  while( ret.column() > m_document->lineLength(ret.line()) && s ) {
-    ret.setColumn( ret.column() - m_document->lineLength(ret.line()) + 1  );
-    ret.setLine( ret.line() + 1 );
-  }
-  if( !s ) {
-    log("mapTextToDocument strange error");
-    return m_position;
-  }
-  
-  return ret;
-}
-
 QString CodeCompletionContext::getEndOperator( const QString& str ) const {
   static QStringList allowedOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || [ - * / % & | = < >" ).split( " ", QString::SkipEmptyParts );
   
@@ -422,5 +383,4 @@ QList<KDevelop::AbstractType::Ptr> CodeCompletionContext::additionalMatchTypes()
 void CodeCompletionContext::preprocessText() {
   ///@todo implement, preprocess m_text in m_duContext at m_position
   ///All macros can be found in the context's LexedFile, in definedMacros() together with usedMacros()
-  ///Important: mapTextToDocument needs to stay functional
 }

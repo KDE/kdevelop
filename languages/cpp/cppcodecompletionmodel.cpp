@@ -271,8 +271,30 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
   //@todo move completion-context-building into another thread
 
   m_declarations.clear();
+
+  //Compute the text we should complete on
+  KTextEditor::Document* doc = view->document();
+  if( !doc ) {
+    kDebug() << "No document for completion" << endl;
+    return;
+  }
   
-  Cpp::CodeCompletionContext completionContext( context, position, view );
+  KTextEditor::Range range;
+  QString text;
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    range = KTextEditor::Range(context->textRange().start(), position);
+    
+    text = doc->text(range);
+  }
+
+  if( text.isEmpty() ) {
+    kDebug() << "no text for context" << endl;
+    return;
+  }
+  
+  
+  Cpp::CodeCompletionContext completionContext( context, text );
 
   if( completionContext ) {
     DUChainReadLocker lock(DUChain::lock());

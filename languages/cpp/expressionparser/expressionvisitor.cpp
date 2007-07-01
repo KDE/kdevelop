@@ -396,7 +396,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       
       m_session->positionAt( m_session->token_stream->position(node->start_token), &line, &column, &file );
 
-      m_lastDeclarations = m_currentContext->findDeclarations(nameC.identifier(), KTextEditor::Cursor(line, column) );
+      ///@todo reenable(first make sure the conversion works properly)
+      m_lastDeclarations = m_currentContext->findDeclarations(nameC.identifier() );//, KTextEditor::Cursor(line, column) ); 
       if( m_lastDeclarations.isEmpty() ) {
         problem( node, QString("could not find declaration of %1").arg( nameC.identifier().toString() ) );
       } else {

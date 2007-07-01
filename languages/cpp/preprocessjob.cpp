@@ -23,6 +23,7 @@
 
 //#include <valgrind/memcheck.h>
 
+
 #include <QFile>
 #include <QByteArray>
 #include <QMutexLocker>
@@ -49,6 +50,7 @@
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-engine.h"
 #include "parser/rpp/pp-macro.h"
+#include "parser/rpp/preprocessor.h"
 #include "environmentmanager.h"
 
 class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {

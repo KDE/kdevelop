@@ -86,9 +86,10 @@ namespace Cpp {
 
       /**
        * @param firstContext should be true for a context that has no parent. Such a context will never be a function-call context.
+       * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context, and ending at the position where completion should start
        * @param knownArgumentExpressions has no effect when firstContext is set
        * */
-      CodeCompletionContext(KDevelop::DUContext * context, const KTextEditor::Cursor& position, KTextEditor::View* view, bool firstContext = true, const QStringList& knownArgumentExpressions = QStringList() );
+      CodeCompletionContext(KDevelop::DUContext * context, const QString& text, bool firstContext = true, const QStringList& knownArgumentExpressions = QStringList() );
       ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
@@ -154,7 +155,6 @@ namespace Cpp {
       bool endsWithOperator( const QString& str ) const;
       QString getEndOperator( const QString& str ) const;
       ///Should map a position in m_text to a position in the underlying document
-      KTextEditor::Cursor mapTextToDocument(int pos) const;
       MemberAccessOperation m_memberAccessOperation;
       bool m_valid;
       QString m_expression;
@@ -162,16 +162,12 @@ namespace Cpp {
       ExpressionEvaluationResult::Ptr m_expressionResult;
 
       QString m_text;
-      KTextEditor::Cursor m_textStartPosition; //Position in the document where m_text starts
 
       //Here known argument-expressions and their types, that may have come from sub-context's, are stored
       QStringList m_knownArgumentExpressions;
       QList<ExpressionEvaluationResult::Ptr> m_knownArgumentTypes;
       
       KDevelop::DUContext* m_duContext;
-      KTextEditor::Cursor m_position;
-      KTextEditor::View* m_view;
-      KTextEditor::Document* m_document;
       SpecificContextType m_contextType;
 
       QList<Function> m_functions;
