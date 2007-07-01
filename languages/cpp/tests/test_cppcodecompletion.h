@@ -59,8 +59,9 @@ public:
 
 private slots:
   void initTestCase();
-  void testCompletionContext();
   void testInclude();
+  void testTypeConversion();
+  void testCompletionContext();
   void cleanupTestCase();
 
 public:

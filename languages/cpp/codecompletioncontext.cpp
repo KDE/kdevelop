@@ -166,7 +166,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
    * expressionAt returns both sides
    * */
 
-  int start_expr = Utils::expressionAt( m_text, m_text.length()-1 );
+  int start_expr = Utils::expressionAt( m_text, m_text.length() );
 
   m_expression = m_text.mid(start_expr).trimmed();
 
@@ -179,10 +179,10 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
     
     //Find out which argument-number this expression is, and compute the beginning of the parent function-call(parentContextLast)
     QStringList otherArguments;
-    int parentContextLast = expressionPrefix.length() - 1;
-    Utils::skipFunctionArguments( expressionPrefix, otherArguments, parentContextLast );
+    int parentContextEnd = expressionPrefix.length();
+    Utils::skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
 
-    QString parentContextText = expressionPrefix.left(parentContextLast+1);
+    QString parentContextText = expressionPrefix.left(parentContextEnd);
     
     log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
     m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, false, otherArguments );
@@ -230,7 +230,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
     {
       if( !expr.trimmed().isEmpty() ) {
         //This should never happen, because the position-cursor should be chosen at the beginning of a possible completion-context(not in the middle of a string)
-        log( "Cannot complete \"%1\" because there is an expression without an access-operation" );
+        log( QString("Cannot complete \"%1\" because there is an expression without an access-operation" ).arg(expr) );
         m_valid  = false;
       } else {
         //Do nothing. We do not have a completion-container, which means that a global completion should be done.
@@ -314,15 +314,28 @@ void CodeCompletionContext::processFunctionCallAccess() {
     return;
   }
 
-  QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments where given to which function
+  QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
   foreach( const DeclarationWithArgument& decl, declarations )
     m_argumentCountMap[decl.second] = decl.first.parameters.size();
 
+  LOCKDUCHAIN;
   OverloadResolver resolv( m_duContext );
   OverloadResolver::ParameterList knownParameters;
   foreach( ExpressionEvaluationResult::Ptr result, m_knownArgumentTypes )
     knownParameters.parameters << OverloadResolver::Parameter( result->type.data(), result->isLValue() );
 
+  log( "functions given to overload-resolution:" );
+  foreach( const DeclarationWithArgument& declaration, declarations )
+    log( declaration.second->toString() );
+  
+  log("parameters given to overload-resolution:");
+  lock.unlock();
+  foreach( ExpressionEvaluationResult::Ptr result, m_knownArgumentTypes ) {
+    log( result->toString() );
+  }
+  lock.lock();
+
+  
   QList< ViableFunction > viableFunctions = resolv.resolveListPartial( knownParameters, declarations );
   foreach( const ViableFunction& function, viableFunctions ) {
     if( function.declaration() && function.declaration()->abstractType() ) {
@@ -347,6 +360,8 @@ void CodeCompletionContext::log( const QString& str ) const {
 }
 
 bool CodeCompletionContext::isValidPosition() {
+  if( m_text.isEmpty() )
+    return true;
   //If we are in a string or comment, we should not complete anything
   QString markedText = Utils::clearComments(m_text, '$');
   markedText = Utils::clearStrings(markedText,'$');
@@ -383,4 +398,12 @@ QList<KDevelop::AbstractType::Ptr> CodeCompletionContext::additionalMatchTypes()
 void CodeCompletionContext::preprocessText() {
   ///@todo implement, preprocess m_text in m_duContext at m_position
   ///All macros can be found in the context's LexedFile, in definedMacros() together with usedMacros()
+}
+
+CodeCompletionContext::MemberAccessOperation CodeCompletionContext::memberAccessOperation() const {
+  return m_memberAccessOperation;
+}
+
+CodeCompletionContext* CodeCompletionContext::parentContext() {
+  return m_parentContext.data();
 }

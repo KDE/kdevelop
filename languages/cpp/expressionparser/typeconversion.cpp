@@ -76,11 +76,11 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
     if( toReference->isConstant() || toReference->isConstant() == isConstant(from.data()) && fromLValue ) {
       ///Since from is an lvalue, and the constant-specification matches, we can maybe directly create a reference
       //Either identity-conversion:
-      if( identityConversion( AbstractType::Ptr(realType(fromReference)), AbstractType::Ptr(realType(toReference)) ) )
+      if( identityConversion( AbstractType::Ptr(realType(from)), AbstractType::Ptr(realType(toReference)) ) )
         return ExactMatch;
       //Or realType(toReference) is a public base-class of realType(fromReference)
-      CppClassType* fromClass = dynamic_cast<CppClassType*>( from.data() );
-      CppClassType* toClass = dynamic_cast<CppClassType*>( to.data() );
+      CppClassType* fromClass = dynamic_cast<CppClassType*>( realType(from) );
+      CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to) );
       
       if( fromClass && toClass && isPublicBaseClass( fromClass, toClass ) )
         return ExactMatch;
@@ -299,7 +299,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
   {
     CppIntegralType* fromIntegral = dynamic_cast<CppIntegralType*>( from.data() );
     CppEnumerationType* fromEnumeration = dynamic_cast<CppEnumerationType*>( fromIntegral );
-    CppIntegralType* toIntegral = dynamic_cast<CppIntegralType*>( from.data() );
+    CppIntegralType* toIntegral = dynamic_cast<CppIntegralType*>( to.data() );
 
     if( fromIntegral && toIntegral ) {
       ///iso c++ 4.7 integral conversion: we can convert from any integer type to any other integer type, and from enumeration-type to integer-type
@@ -383,9 +383,9 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
 
   bool fromConst = false;
   AbstractType::Ptr realFrom( realType(from, &fromConst) );
+  CppClassType* fromClass = dynamic_cast<CppClassType*>( realFrom.data() );
   {
     ///Try user-defined conversion using a conversion-function, iso c++ 12.3
-    CppClassType* fromClass = dynamic_cast<CppClassType*>( realFrom.data() );
     
     if( fromClass )
     {
@@ -412,9 +412,17 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
 
   {
     ///Try conversion using constructor
-    CppClassType* toClass = dynamic_cast<CppClassType*>( to.data() );
+    CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to) ); //@todo think whether the realType(..) is ok
     if( toClass )
     {
+      kDebug() << "check whether " << fromClass->toString() << " has public base " << toClass->toString() << endl;
+      if( isPublicBaseClass(fromClass, toClass ) ) {
+        ///@todo check whether this is correct
+        //There is a default-constructor in toClass that initializes from const toClass&, which fromClass can be converted to
+        maximizeRank( bestRank, Conversion );
+        
+      }
+      
       OverloadResolver resolver( getInternalContext( toClass->declaration() ) );
       Declaration* function = resolver.resolveConstructor( OverloadResolver::Parameter( from.data(), fromLValue ), true, true );
       

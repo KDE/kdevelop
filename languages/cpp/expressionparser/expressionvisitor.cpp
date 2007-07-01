@@ -141,7 +141,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
 }
 
   
-ExpressionVisitor::ExpressionVisitor(ParseSession* session) : m_session(session), m_currentContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, bool strict) : m_strict(strict), m_session(session), m_currentContext(0) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -217,7 +217,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     
     m_lastDeclarations = findLocalDeclarations( internalContext, member );
 
-    ///@todo parent-classes
+    
     if( m_lastDeclarations.isEmpty() ) {
       if( postProblem ) {
         problem( node, QString("could not find member \"%1\" in \"%2\", scope of context: %3").arg(member.toString()).arg(declaration->toString()).arg(declaration->context()->scopeIdentifier().toString()) );
@@ -256,6 +256,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     
     AbstractType::Ptr base = m_lastType;
     Instance baseInstance = m_lastInstance;
+    m_lastDeclarations.clear();
 
     clearLast();
 
@@ -801,6 +802,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
      * Step 1: Evaluate the function-argument types. Those are represented a little strangely:
      * node->arguments contains them, using recursive binary expressions
      * */
+    QList<Declaration*> declarations = m_lastDeclarations;
     
     m_parameters.clear();
 
@@ -826,10 +828,18 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     OverloadResolver resolver( m_currentContext );
 
     if( !fail ) {
-      chosenFunction = resolver.resolveList(m_parameters, m_lastDeclarations);
-    } else {
+      chosenFunction = resolver.resolveList(m_parameters, declarations);
+    }
+
+    if( !chosenFunction && !m_strict ) {
+      //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
+      problem(node, "Could not find a function that matches the parameters. Using first candidate function.");
+      fail = true;
+    }
+
+    if( fail ) {
       //Since not all parameters could be evaluated, Choose the first function
-      chosenFunction = m_lastDeclarations.front();
+      chosenFunction = declarations.front();
     }
 
     m_parameters.clear();

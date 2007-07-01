@@ -50,6 +50,9 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult : public KShared
 
     ///@return whether this result is valid(has a type)
     operator bool() const;
+
+    ///it does not matter whether du-chain is locked or not
+    QString toString() const;
     
     typedef KSharedPtr<ExpressionEvaluationResult> Ptr;
 };
@@ -59,25 +62,36 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult : public KShared
  **/
 class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
   public:
+     /**
+     * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.
+     * @param debug Enables additional output
+     * */
+
+    ExpressionParser( bool strict = false, bool debug = true );
     /**
      * Evaluates the type of an expression given as a string within a given context
      *
      * @param exp The expression to evaluate
      * @param context the context within which the expression should be evaluated
+     * @param statement whether the text should be parsed as a statement. If this is false, the text will need to be a valid translation-unit.
      * @param debug whether additional output to kdDebug should be issued
      *
      * Note: Even expressions that create sub-contexts should work,
      * Example:
      * "int i; i += 5;"
     */
-    ExpressionEvaluationResult::Ptr evaluateType( const QByteArray& expression, DUContext* context, bool debug = true );
+    ExpressionEvaluationResult::Ptr evaluateType( const QByteArray& expression, DUContext* context, bool statement = true );
     /**
      * Evaluates the type of an expression given as an AST.
      *
      * @param ast the AST. It's context must be built already(context-member filled).
      * @param debug whether additional output to kdDebug should be issued
     */
-    ExpressionEvaluationResult::Ptr evaluateType( AST* ast, ParseSession* session, bool debug = true );
+    ExpressionEvaluationResult::Ptr evaluateType( AST* ast, ParseSession* session );
+
+  private:
+    bool m_strict;
+    bool m_debug;
 };
 
 }

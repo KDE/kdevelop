@@ -78,6 +78,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
      *
      * When classes are found under the given name, their constructors will be considered as functions.
      *
+     * @warning du-chain must be locked
      * @param params The parameters
      * @param functionName name of the function
      * @param noUserDefinedConversion should be true when no user-defined conversions are allowed for parameters
@@ -93,6 +94,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
     /**
      * Tries to find a constructor of the class represented by the current context
      * that matches the given parameter-list
+     * @warning du-chain must be locked
      * @param implicit When this is true, constructors with the keyword "explicit" are ignored
      * @param noUserDefinedConversion When this is true, user-defined conversions(constructor- or conversion-function conversion) are not allowed while matching the parameters
      * */
@@ -104,7 +106,9 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
      * If one of those declarations is an instance of a class, it will be substituted with it's operator()
      * functions. Constant references to class-instances are treated correctly.
      * 
-     * @param params parameters to match
+     * @warning du-chain must be locked
+     
+    * @param params parameters to match
      * @param declarations list of declarations
      * @param noUserDefinedConversion should be true if user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
      * */
@@ -114,6 +118,8 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
      * Matches the given functions with the given parameters. Only does partial matching, by considering only those parameters that were
      * actually given.
      * Returns a sorted list containing all given declarations.
+     * 
+     * @warning du-chain must be locked
      *
      * @return List of all given functions. The list is sorted by viability(the first item is most viable). Non-viable functions are also included.
      * */

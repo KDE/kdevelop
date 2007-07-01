@@ -43,6 +43,7 @@
 #include "expressionvisitor.h"
 #include "expressionparser.h"
 #include "classfunctiondeclaration.h"
+#include "codecompletioncontext.h"
 
 using namespace KTextEditor;
 
@@ -50,8 +51,12 @@ using namespace KDevelop;
 
 QTEST_MAIN(TestCppCodeCompletion)
 
-QString testFile1 = "struct Honk { int a,b; enum Enum { Number1, Number2 }; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
-QString testFile2 = "class Honk; struct Erna {}; struct Heinz; Erna globalErna; Heinz globalHeinz; int globalInt; Heinz globalFunction(const Heinz& h ) {}; Erna globalFunction( const Erna& erna); HONK globalMacroHonk; \n#undef HONK\n";
+///@todo make forward-declarations work correctly across headers
+
+QString testFile1 = "class Erna; struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
+QString testFile2 = "struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Erna { Erna( const Honk& honk ) {} }; struct Heinz : public Erna {}; Erna globalErna; Heinz globalHeinz; int globalInt; Heinz globalFunction(const Heinz& h ) {}; Erna globalFunction( const Erna& erna); Honk globalFunction( const Honk&, const Heinz& h ) {}; int globalFunction(int ) {}; HONK globalMacroHonk; struct GlobalClass { Heinz function(const Heinz& h ) {}; Erna function( const Erna& erna);  }; GlobalClass globalClass;\n#undef HONK\n";
+
+QString testFile3 = "struct A {}; struct B : public A {};";
 
 namespace QTest {
   template<>
@@ -122,6 +127,7 @@ void TestCppCodeCompletion::initTestCase()
 
   addInclude( "testFile1.h", testFile1 );
   addInclude( "testFile2.h", testFile2 );
+  addInclude( "testFile3.h", testFile3 );
 }
 
 void TestCppCodeCompletion::cleanupTestCase()
@@ -150,30 +156,110 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 void TestCppCodeCompletion::testCompletionContext() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }";
-  DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  QByteArray test = "#include \"testFile1.h\"\n";
+  test += "#include \"testFile2.h\"\n";
+  test += "void test() { }";
+      
+  DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
   
-  DUContext* testContext = c->childContexts()[1];
+  DUContext* testContext = context->childContexts()[0];
   QCOMPARE( testContext->type(), DUContext::Function );
+
+  lock.unlock();
+  {
+    ///Test whether a recursive function-call context is created correctly
+    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(context, "; globalFunction(globalFunction(globalHonk, " ) );
+    Cpp::CodeCompletionContext& c(*cptr);
+    QVERIFY( c );
+    QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
+    QVERIFY( !c.memberAccessContainer() );
+
+    //globalHonk is of type Honk. Check whether all matching functions were rated correctly by the overload-resolution.
+    //The preferred parent-function in the list should be "Honk globalFunction( const Honk&, const Heinz& h )", because the first argument maches globalHonk
+    Cpp::CodeCompletionContext* function = c.parentContext();
+    QVERIFY(function);
+    QVERIFY(function->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
+    QVERIFY(!function->functions().isEmpty());
+    
+    lock.lock();
+    for( Cpp::CodeCompletionContext::FunctionList::const_iterator it = function->functions().begin(); it != function->functions().end(); ++it )
+      kDebug() << (*it).function.declaration()->toString() << ((*it).function.isViable() ? QString("(viable)") : QString("(not viable)"))  << endl;
+    lock.unlock();
+    
+    QVERIFY(function->functions().size() == 4);
+    QVERIFY(function->functions()[0].function.isViable());
+    //Because Honk has a conversion-function to int, globalFunction(int) is yet viable(although it can take only 1 parameter)
+    QVERIFY(function->functions()[1].function.isViable());
+    //Because Erna has a constructor that takes "const Honk&", globalFunction(Erna) is yet viable(although it can take only 1 parameter)
+    QVERIFY(function->functions()[2].function.isViable());
+    //Because a value of type Honk is given, 2 globalFunction's are not viable
+    QVERIFY(!function->functions()[3].function.isViable());
+    
+    
+    function = function->parentContext();
+    QVERIFY(function);
+    QVERIFY(function->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
+    QVERIFY(!function->functions().isEmpty());
+    QVERIFY(!function->parentContext());
+    QVERIFY(function->functions().size() == 4);
+    //Because no arguments were given, all functions are viable
+    QVERIFY(function->functions()[0].function.isViable());
+    QVERIFY(function->functions()[1].function.isViable());
+    QVERIFY(function->functions()[2].function.isViable());
+    QVERIFY(function->functions()[3].function.isViable());
+  }
   
-  DUContext* contContext = c->childContexts()[0];
-  Declaration* decl = contContext->localDeclarations()[0];
+  {
+    ///The context is a function, and there is no prefix-expression, so it should be normal completion.
+    Cpp::CodeCompletionContext c( context, "{" );
+    QVERIFY( c );
+    QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
+    QVERIFY( !c.memberAccessContainer() );
+  }
 
-  QCOMPARE(decl->identifier(), Identifier("operator<...cast...>"));
-  CppFunctionType* function = dynamic_cast<CppFunctionType*>(decl->abstractType().data());
-  QCOMPARE(function->returnType()->toString(), QString("int"));
+  lock.lock();
+  release(context);
+}
 
-  Declaration* testDecl = c->localDeclarations()[1];
-  ClassFunctionDeclaration* functionDecl = dynamic_cast<ClassFunctionDeclaration*>(testDecl);
-  QVERIFY(functionDecl);
 
-  QVERIFY(functionDecl->defaultParameters().size() == 1);
-  QCOMPARE(functionDecl->defaultParameters()[0], QString("5"));
+void TestCppCodeCompletion::testTypeConversion() {
+  TEST_FILE_PARSE_ONLY
+      
+  QByteArray test = "#include \"testFile1.h\"\n";
+  test += "#include \"testFile2.h\"\n";
+  test += "#include \"testFile3.h\"\n";
+  test += "void test() { }";
+      
+  DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
   
-  //QVERIFY(0);
+  DUContext* testContext = context->childContexts()[0];
+  QCOMPARE( testContext->type(), DUContext::Function );
+
+  AbstractType::Ptr Heinz = findDeclaration( testContext, QualifiedIdentifier("Heinz") )->abstractType();
+  AbstractType::Ptr Erna = findDeclaration( testContext, QualifiedIdentifier("Erna") )->abstractType();
+  AbstractType::Ptr Honk = findDeclaration( testContext, QualifiedIdentifier("Honk") )->abstractType();
+  AbstractType::Ptr A = findDeclaration( testContext, QualifiedIdentifier("A") )->abstractType();
+  AbstractType::Ptr B = findDeclaration( testContext, QualifiedIdentifier("B") )->abstractType();
+  
+  //lock.unlock();
+  {
+    ///Test whether a recursive function-call context is created correctly
+    Cpp::TypeConversion conv;
+    QVERIFY( !conv.implicitConversion(Honk, Heinz) );
+    QVERIFY( conv.implicitConversion(Honk, typeInt) ); //Honk has operator int()
+    QVERIFY( conv.implicitConversion(Honk, Erna) ); //Erna has constructor that takes Honk
+    QVERIFY( !conv.implicitConversion(Erna, Heinz) );
+
+    ///@todo reenable once base-classes are parsed correctly
+    //QVERIFY( conv.implicitConversion(B, A) ); //B is based on A, so there is an implicit copy-constructor that creates A from B
+    //QVERIFY( conv.implicitConversion(Heinz, Erna) ); //Heinz is based on Erna, so there is an implicit copy-constructor that creates Erna from Heinz
+    
+  }
+  
   //lock.lock();
-  release(c);
+  release(context);
 }
 
 void TestCppCodeCompletion::testInclude() {
@@ -220,31 +306,75 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
-  
+
+  ///HONK was #undef'ed in testFile2, so this must be unresolved.
   decl = findDeclaration(c, QualifiedIdentifier("undefinedHonk"));
   QVERIFY(decl);
   QVERIFY(!decl->abstractType());
   
-  
-/*  DUContext* testContext = c->childContexts()[1];
-  QCOMPARE( testContext->type(), DUContext::Function );
-  
-  DUContext* contContext = c->childContexts()[0];
-  Declaration* decl = contContext->localDeclarations()[0];
 
-  QCOMPARE(decl->identifier(), Identifier("operator<...cast...>"));
-  CppFunctionType* function = dynamic_cast<CppFunctionType*>(decl->abstractType().data());
-  QCOMPARE(function->returnType()->toString(), QString("int"));
+  Cpp::ExpressionParser parser;
 
-  Declaration* testDecl = c->localDeclarations()[1];
-  ClassFunctionDeclaration* functionDecl = dynamic_cast<ClassFunctionDeclaration*>(testDecl);
-  QVERIFY(functionDecl);
-
-  QVERIFY(functionDecl->defaultParameters().size() == 1);
-  QCOMPARE(functionDecl->defaultParameters()[0], QString("5"));*/
+  ///The following test tests the expression-parser, but it is here because the other tests depend on it
+  lock.unlock();
+  Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "globalHonk.erna", c );
+  lock.lock();
   
-  //QVERIFY(0);
-  //lock.lock();
+  QVERIFY(result);
+  QVERIFY(result->instance);
+  QVERIFY(result->type);
+  QCOMPARE(result->type->toString(), QString("Erna&"));
+
+  
+  ///Test overload-resolution 
+  lock.unlock();
+  result = parser.evaluateType( "globalClass.function(globalHeinz)", c );
+  lock.lock();
+  
+  QVERIFY(result);
+  QVERIFY(result->instance);
+  QVERIFY(result->type);
+  QCOMPARE(result->type->toString(), QString("Heinz"));
+  
+  lock.unlock();
+  result = parser.evaluateType( "globalClass.function(globalHonk.erna)", c );
+  lock.lock();
+  
+  QVERIFY(result);
+  QVERIFY(result->instance);
+  QVERIFY(result->type);
+  QCOMPARE(result->type->toString(), QString("Erna"));
+
+  //No matching function for type Honk. Since the expression-parser is not set to "strict", it returns any found function with the right name.
+  lock.unlock();
+  result = parser.evaluateType( "globalClass.function(globalHonk)", c );
+  lock.lock();
+  
+  QVERIFY(result);
+  QVERIFY(result->instance);
+  QVERIFY(result->type);
+  //QCOMPARE(result->type->toString(), QString("Heinz"));
+  
+  
+  ///@todo fix the parser so this works
+/*  lock.unlock();
+  result = parser.evaluateType( "globalFunction(globalHeinz)", c );
+  lock.lock();
+  
+  QVERIFY(result);
+  QVERIFY(result->instance);
+  QVERIFY(result->type);
+  QCOMPARE(result->type->toString(), QString("Heinz"));
+  lock.unlock();
+  
+  result = parser.evaluateType( "globalFunction(globalHonk.erna)", c );
+  lock.lock();
+  
+  QVERIFY(result);
+  QVERIFY(result->instance);
+  QVERIFY(result->type);
+  QCOMPARE(result->type->toString(), QString("Erna"));*/
+    
   release(c);
 }
 

@@ -20,6 +20,7 @@
 #include "typeutils.h"
 #include "duchainbuilder/cpptypes.h"
 #include "duchain/ducontext.h"
+#include "duchain/forwarddeclaration.h"
 #include "duchain/classfunctiondeclaration.h"
 
 namespace TypeUtils {
@@ -134,6 +135,7 @@ namespace TypeUtils {
   ///Returns whether base is a base-class of c
   bool isPublicBaseClass( const CppClassType* c, CppClassType* base ) {
     foreach( const CppClassType::BaseClassInstance& b, c->baseClasses() ) {
+      kDebug() << "public base of " << c->toString() << " is " << b.baseClass->toString() << endl;
       if( b.access != KDevelop::Declaration::Private ) {
         if( b.baseClass.data() == base )
           return true;
@@ -145,6 +147,10 @@ namespace TypeUtils {
   }
 
   DUContext* getInternalContext( Declaration* declaration ) {
+    if( declaration->isForwardDeclaration() ) {
+      declaration = dynamic_cast<KDevelop::ForwardDeclaration*>(declaration)->resolved();
+      if( !declaration ) return 0;
+    }
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(declaration->abstractType().data());
     QList<DUContext*> internalContexts;
     internalContexts = declaration->context()->findContexts(DUContext::Class, idType->identifier());
@@ -159,13 +165,16 @@ namespace TypeUtils {
   void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     DUContext* context = getInternalContext( klass->declaration() );
 
-    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(functionName));
-    for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
-      CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
-      ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
-      if( function && functionDeclaration ) {
-        if( !functions.contains(function) && (!mustBeConstant || function->isConstant()) ) {
-          functions[function] =  functionDeclaration;
+    
+    if( context ) {
+      QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(functionName));
+      for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
+        CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
+        ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
+        if( function && functionDeclaration ) {
+          if( !functions.contains(function) && (!mustBeConstant || function->isConstant()) ) {
+            functions[function] =  functionDeclaration;
+          }
         }
       }
     }

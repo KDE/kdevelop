@@ -153,7 +153,7 @@ QList< ViableFunction > OverloadResolver::resolveListPartial( const ParameterLis
   ///Second step: Find best viable function
   QList<ViableFunction> viableFunctions;
   
-  for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = declarations.begin(); it != declarations.end(); ++it )
+  for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
     ViableFunction viable( (*it).second );
     ParameterList mergedParams = (*it).first;

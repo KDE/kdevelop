@@ -44,7 +44,10 @@ using namespace KDevelop;
 **/
 class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
   public:
-    ExpressionVisitor( ParseSession* session );
+    /**
+     * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.
+     * */
+    ExpressionVisitor( ParseSession* session, bool strict = false );
     ~ExpressionVisitor();
 
     struct Instance {
@@ -110,6 +113,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     virtual void problem( AST* node, const QString& str );
 
   private:
+    bool m_strict;
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
 

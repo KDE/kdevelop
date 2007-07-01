@@ -45,6 +45,8 @@ namespace Cpp {
   class CodeCompletionContext : public KShared {
     public:
 
+      typedef KSharedPtr<CodeCompletionContext> Ptr;
+
       struct Function {
         Function();
         Function( int _matchedArguments, const ViableFunction& _viable );
@@ -87,6 +89,7 @@ namespace Cpp {
       /**
        * @param firstContext should be true for a context that has no parent. Such a context will never be a function-call context.
        * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context, and ending at the position where completion should start
+       * @warning The du-chain must be unlocked when this is called
        * @param knownArgumentExpressions has no effect when firstContext is set
        * */
       CodeCompletionContext(KDevelop::DUContext * context, const QString& text, bool firstContext = true, const QStringList& knownArgumentExpressions = QStringList() );
@@ -123,11 +126,11 @@ namespace Cpp {
 
       /**
        * When memberAccessOperation is FunctionCallAccess,
-       * this returns all functions available for matching.
+       * this returns all functions available for matching, together with the argument-number that should be matched.
        *
        * Operators are treated as functions, but there is special-cases that need to be treated, especially operator=(..), because that operator competes with normal type-conversion.
        *
-       * So when completing, the builtin operator= using type-conversion should be respected from outside.
+       * To also respect builtin operators, the types returned by additionalMatchTypes() must be respected.
        * */
       const FunctionList& functions() const;
 

@@ -47,9 +47,20 @@ bool ExpressionEvaluationResult::isLValue() const {
   return instance && (instance.declaration || dynamic_cast<const ReferenceType*>( type.data() ));
 }
 
-ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool debug ) {
+QString ExpressionEvaluationResult::toString() const {
+  if( DUChain::lock()->currentThreadHasReadLock() )
+    return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
+  
+  DUChainReadLocker lock(DUChain::lock());
+  return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
+}
 
-  if( debug )
+ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
+}
+
+ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool statement ) {
+
+  if( m_debug )
     kDebug() << "==== .Evaluating ..:" << endl << unit << endl << endl;
 
   ParseSession* session = new ParseSession();
@@ -63,33 +74,31 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
 
   DUContext::ContextType type;
   {
-    DUChainWriteLocker lock(DUChain::lock());
+    DUChainReadLocker lock(DUChain::lock());
     type = context->type();
   }
-  
-  switch( type ) {
-    case DUContext::Function:
-    case DUContext::Other:
+
+  if( statement ) {
       session->setContents("{" + unit + ";}");
       ast = parser.parseStatement(session);
-    break;
-    default:
+  } else {
       session->setContents(unit);
       ast = parser.parse(session);
       ((TranslationUnitAST*)ast)->session = session;
   }
 
-  if (debug) {
+  if (m_debug) {
     kDebug() << "===== AST:" << endl;
     dumper.dump(ast, session);
   }
 
+  ast->ducontext = context;
+  
+  ///@todo think how useful it is to compute contexts and uses here. The main thing we need is the AST.
+  /*
   static int testNumber = 0; //@todo what this url for?
   KUrl url(QString("file:///internal/evaluate_%1").arg(testNumber++));
   kDebug() << "url: " << url << endl;
-
-  /*QList<KDevelop::DUContext*> includes;
-  includes << context;*/
 
   DeclarationBuilder definitionBuilder(session);
   DUContext* top = definitionBuilder.buildSubDeclarations(url, ast, context);
@@ -97,32 +106,33 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
   UseBuilder useBuilder(session);
   useBuilder.buildUses(ast);
 
-  if (debug) {
+  if (m_debug) {
     kDebug() << "===== DUChain:" << endl;
 
-    DUChainWriteLocker lock(DUChain::lock());
+    DUChainReadLocker lock(DUChain::lock());
     dumper.dump(top, false);
   }
 
-  if (debug) {
+  if (m_debug) {
     kDebug() << "===== Types:" << endl;
     DumpTypes dt;
-    DUChainWriteLocker lock(DUChain::lock());
+    DUChainReadLocker lock(DUChain::lock());
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
       dt.dump(type.data());
   }
 
-  if (debug)
+  if (m_debug)
     kDebug() << "===== Finished evaluation." << endl;
-
-  ExpressionEvaluationResult::Ptr ret = evaluateType( ast, session, debug );
+  */
+  ExpressionEvaluationResult::Ptr ret = evaluateType( ast, session );
 
   delete session;
 
+  /*
   {
-    DUChainWriteLocker lock(DUChain::lock());
+    DUChainReadLocker lock(DUChain::lock());
     delete top;
-  }
+  }*/
 
   if( ret->type )
     return ret;
@@ -130,10 +140,9 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
     return ExpressionEvaluationResult::Ptr(new ExpressionEvaluationResult);
 }
 
-ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseSession* session, bool debug ) {
-  Q_UNUSED(debug)
+ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseSession* session) {
   ExpressionEvaluationResult::Ptr ret( new ExpressionEvaluationResult );
-  ExpressionVisitor v(session);
+  ExpressionVisitor v(session, m_strict);
   v.parse( ast );
   ret->type = v.lastType();
   ret->instance = v.lastInstance();

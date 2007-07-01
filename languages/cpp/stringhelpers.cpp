@@ -360,15 +360,20 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
   //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
 
   int pos = 0;
-  int len = str.length();
+  int len = reversed.length();
   //we are searching for an opening-brace, but the reversion has also reversed the brace
-  while( pos != len && str[pos] != ')') {
+  while( pos != len ) {
     int lastPos = pos;
-    pos = findCommaOrEnd( str, pos )  ;
-    int argStart = lastPos + 1;
-    QString arg = reverse( str.mid(argStart, pos-argStart) ).trimmed();
-    if( !arg.isEmpty() ) 
-      skippedArguments.push_front( arg ); //We are processing the reversed string, so push to front
+    pos = findCommaOrEnd( reversed, pos )  ;
+    if( pos > lastPos ) {
+      QString arg = reverse( reversed.mid(lastPos, pos-lastPos) ).trimmed();
+      if( !arg.isEmpty() ) 
+        skippedArguments.push_front( arg ); //We are processing the reversed reverseding, so push to front
+    }
+    if( reversed[pos] == ')' )
+      break;
+    else
+      ++pos;
   }
 
   argumentsStart -= pos;
