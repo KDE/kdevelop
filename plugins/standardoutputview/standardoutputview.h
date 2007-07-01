@@ -27,8 +27,8 @@
 
 template <typename T> class QList;
 class QAbstractItemModel;
-class KUrl;
 class QString;
+class QModelIndex;
 
 /**
 @author Andreas Pakulat
@@ -42,21 +42,25 @@ Q_INTERFACES( KDevelop::IOutputView )
 public:
     explicit StandardOutputView(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~StandardOutputView();
-    QString registerView( const QString& title,
+    int registerView( const QString& title,
                           KDevelop::IOutputView::CloseBehaviour behaviour = AllowUserClose );
-    void setModel( const QString& id, QAbstractItemModel* );
+    void setModel( int id, QAbstractItemModel* );
 
-    QAbstractItemModel* registeredModel( const QString& );
-    QString registeredTitle( const QString& id );
-    QStringList registeredViews();
-    KDevelop::IOutputView::CloseBehaviour closeBehaviour( const QString& );
+    QAbstractItemModel* registeredModel( int ) const;
+    QString registeredTitle( int id ) const;
+    QList<int> registeredViews() const;
+    KDevelop::IOutputView::CloseBehaviour closeBehaviour( int id ) const;
 
 Q_SIGNALS:
     void activated( const QModelIndex& );
     void selectNextItem();
     void selectPrevItem();
-    void modelChanged( const QString& );
-    void viewRemoved( const QString& );
+    void modelChanged( int id );
+    void viewRemoved( int id );
+    /**
+     * Signal to inform the view to remove one output view
+     */
+    void removeView( int id );
 
 private:
     class StandardOutputViewPrivate* const d;

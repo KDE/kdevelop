@@ -23,11 +23,8 @@
 
 #include <iextension.h>
 
-class KUrl;
 class QString;
-template <typename T1, typename T2> class QMap;
 class QAbstractItemModel;
-class QModelIndex;
 
 /**
 @author Andreas Pakulat
@@ -52,17 +49,29 @@ public:
      * @returns an id that identifies the new view and is used in the other
      *          methods
      */
-    virtual QString registerView( const QString& title, CloseBehaviour = AllowUserClose ) = 0;
+    virtual int registerView( const QString& title, CloseBehaviour = AllowUserClose ) = 0;
 
     /**
      * Sets the model of the registered view identified by id to model
      *
      * Does nothing if the id doesn't exist
      */
-    virtual void setModel( const QString& id, QAbstractItemModel* model ) = 0;
+    virtual void setModel( int id, QAbstractItemModel* model ) = 0;
+    
+    /**
+     * remove a view, don't forget to emit viewRemoved when you implement this
+     * 
+     * @param id identifies the view to remove
+     */
+    virtual void removeView( int id ) = 0;
 
 Q_SIGNALS:
-    void viewRemoved( const QString& );
+    /**
+     * emitted after a view was removed
+     * 
+     * @param id identifies the removed view
+     */
+    void viewRemoved( int id );
 };
 }
 KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutputView" )

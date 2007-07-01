@@ -22,7 +22,7 @@
 #include "standardoutputview.h"
 #include "outputwidget.h"
 
-#include <QtCore/QStringList>
+#include <QtCore/QList>
 
 #include <QtDesigner/QExtensionFactory>
 #include <QtCore/QAbstractItemModel>
@@ -47,10 +47,10 @@ public:
     {
         Q_UNUSED(parent)
         OutputWidget* l = new OutputWidget( parent, m_part);
-        QObject::connect( l, SIGNAL( viewRemoved( const QString& ) ),
-                 m_part, SIGNAL( viewRemoved( const QString &) ) );
-        QObject::connect( m_part, SIGNAL( viewRemoved( const QString& ) ),
-                 l, SLOT( removeView( const QString &) ) );
+        QObject::connect( l, SIGNAL( viewRemoved( int ) ),
+                 m_part, SIGNAL( viewRemoved( int ) ) );
+        QObject::connect( m_part, SIGNAL( removeView( int ) ),
+                          l, SLOT( removeView( int ) ) );
 //         QObject::connect( l, SIGNAL( activated(const QModelIndex&) ),
 //                  m_part, SIGNAL(activated(const QModelIndex&)) );
         QObject::connect( m_part, SIGNAL(selectNextItem()), l, SLOT(selectNextItem()) );
@@ -69,10 +69,10 @@ class StandardOutputViewPrivate
 {
 public:
     StandardOutputViewViewFactory* m_factory;
-    QMap<QString, QAbstractItemModel* > m_models;
-    QMap<QString, QString> m_titles;
-    QList<unsigned int> m_ids;
-    QMap<QString, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
+    QMap<int, QAbstractItemModel* > m_models;
+    QMap<int, QString> m_titles;
+    QList<int> m_ids;
+    QMap<int, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
@@ -104,24 +104,23 @@ StandardOutputView::~StandardOutputView()
     delete d;
 }
 
-QString StandardOutputView::registerView( const QString& title,
+int StandardOutputView::registerView( const QString& title,
                                           KDevelop::IOutputView::CloseBehaviour behaviour )
 {
-    unsigned int newid;
+    int newid;
     if( d->m_ids.isEmpty() )
         newid = 0;
     else
         newid = d->m_ids.last()+1;
     kDebug(9004) << "Registering view" << title << " with behaviour: " << behaviour << endl;
-    QString idstr = QString::number(newid);
     d->m_ids << newid;
-    d->m_titles[idstr] = title;
-    d->m_models[idstr] = 0;
-    d->m_behaviours[idstr] = behaviour;
-    return idstr;
+    d->m_titles[newid] = title;
+    d->m_models[newid] = 0;
+    d->m_behaviours[newid] = behaviour;
+    return newid;
 }
 
-KDevelop::IOutputView::CloseBehaviour StandardOutputView::closeBehaviour( const QString& id )
+KDevelop::IOutputView::CloseBehaviour StandardOutputView::closeBehaviour( int id ) const
 {
 
     if( d->m_titles.contains( id ) )
@@ -131,28 +130,22 @@ KDevelop::IOutputView::CloseBehaviour StandardOutputView::closeBehaviour( const 
     return KDevelop::IOutputView::AllowUserClose;
 }
 
-void StandardOutputView::setModel( const QString& id, QAbstractItemModel* model )
+void StandardOutputView::setModel( int id, QAbstractItemModel* model )
 {
-    unsigned int viewid = id.toUInt();
-    if( d->m_ids.contains( viewid ) )
+    if( d->m_ids.contains( id ) )
     {
         d->m_models[id] = model;
         emit modelChanged( id );
     }else
-        kDebug(9004) << "AAAH id is not known:" << id << "|" << viewid<< endl;
+        kDebug(9004) << "AAAH id is not known:" << id << endl;
 }
 
-QStringList StandardOutputView::registeredViews()
+QList<int> StandardOutputView::registeredViews() const
 {
-    QStringList ret;
-    foreach(unsigned int id, d->m_ids)
-    {
-        ret << QString::number(id);
-    }
-    return ret;
+    return d->m_ids;
 }
 
-QAbstractItemModel* StandardOutputView::registeredModel( const QString& id )
+QAbstractItemModel* StandardOutputView::registeredModel( int id ) const
 {
     if( d->m_models.contains( id ) )
     {
@@ -161,7 +154,7 @@ QAbstractItemModel* StandardOutputView::registeredModel( const QString& id )
     return 0;
 }
 
-QString StandardOutputView::registeredTitle( const QString& id )
+QString StandardOutputView::registeredTitle( int id ) const
 {
     if( d->m_titles.contains( id ) )
     {

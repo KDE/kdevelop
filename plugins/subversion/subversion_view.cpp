@@ -47,7 +47,7 @@ public:
     KTabWidget *m_tab;
     QPushButton *m_closeButton;
     KDevelop::IOutputView *m_outview;
-    QString m_outputViewId;
+    int m_outputViewId;
     QStandardItemModel* m_outputModel;
 };
 // TODO first make empty widget by factory. This host container widget is parent

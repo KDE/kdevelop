@@ -46,14 +46,14 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     connect( m_outputView, SIGNAL( modelChanged( const QString& ) ),
              this, SLOT( changeModel( const QString& ) ) );
 
-    foreach( QString id, m_outputView->registeredViews() )
+    foreach( int id, m_outputView->registeredViews() )
     {
         changeModel( id );
     }
 
 }
 
-void OutputWidget::changeModel(const QString& id )
+void OutputWidget::changeModel( int id )
 {
     kDebug(9004) << "model changed for id:" << id << endl;
     if( m_listviews.contains( id ) )
@@ -76,7 +76,7 @@ void OutputWidget::changeModel(const QString& id )
     }
 }
 
-void OutputWidget::removeView( const QString& id )
+void OutputWidget::removeView( int id )
 {
     if( m_listviews.contains( id ) )
     {
@@ -88,6 +88,7 @@ void OutputWidget::removeView( const QString& id )
             m_widgetMap.remove( w );
             m_listviews.remove( id );
             delete w;
+            emit viewRemoved( id );
         }
     }
 }
@@ -99,14 +100,10 @@ void OutputWidget::closeActiveView()
         return;
     if( m_widgetMap.contains( widget ) )
     {
-        QString id = m_widgetMap[widget];
+        int id = m_widgetMap[widget];
         if( m_outputView->closeBehaviour( id ) == KDevelop::IOutputView::AllowUserClose )
         {
-            removeTab( currentIndex() );
-            delete widget;
-            m_widgetMap.remove( widget );
-            m_listviews.remove( id );
-            emit viewRemoved( id );
+            removeView( id );
         }else kDebug(9004) << "OOops, the view is not user closeable" << endl;
     }else kDebug(9004) << "OOops, the selected tab is not in our list??" << endl;
 }

@@ -38,20 +38,20 @@ class OutputWidget : public KTabWidget
     public:
         OutputWidget(QWidget* parent, StandardOutputView* view);
     public Q_SLOTS:
-        void changeModel(const QString& title );
-        void removeView( const QString& id );
+        void changeModel( int id );
+        void removeView( int id );
         void closeActiveView();
         void selectNextItem();
         void selectPrevItem();
         void activate(const QModelIndex&);
 
     Q_SIGNALS:
-        void viewRemoved( const QString& );
+        void viewRemoved( int );
 //         void activated( const QModelIndex& );
 
     private:
-        QMap<QString, QListView*> m_listviews;
-        QMap<QWidget*, QString> m_widgetMap;
+        QMap<int, QListView*> m_listviews;
+        QMap<QWidget*, int> m_widgetMap;
         StandardOutputView* m_outputView;
         QToolButton* m_closeButton;
 };
