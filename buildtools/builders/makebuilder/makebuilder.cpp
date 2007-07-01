@@ -55,10 +55,10 @@ MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
     KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
     errorMapper = new QSignalMapper(this);
     successMapper = new QSignalMapper(this);
-    connect(errorMapper, SIGNAL(mapped(const QString&)),
-            this, SLOT(commandFailed(const QString&) ));
-    connect(successMapper, SIGNAL(mapped(const QString&)),
-            this, SLOT(commandFinished(const QString&) ));
+    connect(errorMapper, SIGNAL(mapped(int)),
+            this, SLOT(commandFailed(int) ));
+    connect(successMapper, SIGNAL(mapped(int)),
+            this, SLOT(commandFinished(int) ));
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
@@ -72,7 +72,7 @@ MakeBuilder::~MakeBuilder()
 {
 }
 
-void MakeBuilder::cleanupModel( const QString& id )
+void MakeBuilder::cleanupModel( int id )
 {
     kDebug(9038) << "view was removed, check wether its one of ours" << endl;
     if( m_models.contains( id ) )
@@ -118,7 +118,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             QStringList cmd = computeBuildCommand( dom );
             if( cmd.isEmpty() )
                 return false;
-            QString id;
+            int id;
             if( m_ids.contains(dom->project()) )
             {
                 id = m_ids[dom->project()];
@@ -162,7 +162,7 @@ bool MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
     return false;
 }
 
-void MakeBuilder::commandFinished(const QString &id)
+void MakeBuilder::commandFinished(int id)
 {
     if( m_items.contains(id) )
     {
@@ -170,7 +170,7 @@ void MakeBuilder::commandFinished(const QString &id)
     }
 }
 
-void MakeBuilder::commandFailed(const QString &id)
+void MakeBuilder::commandFailed(int id)
 {
     if( m_items.contains(id) )
     {
