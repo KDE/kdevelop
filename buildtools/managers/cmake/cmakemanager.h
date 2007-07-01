@@ -56,7 +56,7 @@ public:
     explicit CMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
 
     virtual ~CMakeProjectManager();
-
+    virtual Features features() const { return Features(Folders | Targets | Files); }
 //     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const { return 0; }
     virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;

@@ -39,6 +39,7 @@ public:
 
     virtual ~CustomMakeManager();
 
+    virtual Features features() const { return Features(Folders | Targets | Files); }
     /**
      * Provide access to the builder
      */
