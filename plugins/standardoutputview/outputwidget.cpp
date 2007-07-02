@@ -43,8 +43,8 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     m_closeButton->adjustSize();
     m_closeButton->setToolTip( i18n( "Close the currently active output view") );
     setCornerWidget( m_closeButton, Qt::TopRightCorner );
-    connect( m_outputView, SIGNAL( modelChanged( const QString& ) ),
-             this, SLOT( changeModel( const QString& ) ) );
+    connect( m_outputView, SIGNAL( modelChanged( int ) ),
+             this, SLOT( changeModel( int ) ) );
 
     foreach( int id, m_outputView->registeredViews() )
     {
