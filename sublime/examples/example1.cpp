@@ -25,9 +25,9 @@
 int main(int argc, char **argv)
 {
     static const char description[] = "Sublime UI Library Example";
-    KAboutData aboutData("example1", "Example 1",
-                         "1.0", description, KAboutData::License_LGPL,
-                         "(c) 2007, Alexander Dymo", "", "http://www.kdevelop.org" );
+    KAboutData aboutData("example1", 0, ki18n("Example 1"),
+                         "1.0", ki18n(description), KAboutData::License_LGPL,
+                         ki18n("(c) 2007, Alexander Dymo"), KLocalizedString(), "http://www.kdevelop.org" );
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;

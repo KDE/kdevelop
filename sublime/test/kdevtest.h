@@ -27,9 +27,9 @@
 int main(int argc, char *argv[]) \
 { \
     static const char description[] = "Sublime Library Test"; \
-    KAboutData aboutData("test", "Test", \
-                         "1.0", description, KAboutData::License_LGPL, \
-                         "(c) 2007, KDevelop Developers", "", "http://www.kdevelop.org" ); \
+    KAboutData aboutData("test", 0, ki18n("Test"), \
+                         "1.0", ki18n(description), KAboutData::License_LGPL, ki18n(\
+                         "(c) 2007, KDevelop Developers"), KLocalizedString(), "http://www.kdevelop.org" ); \
  \
     KCmdLineArgs::init(argc, argv, &aboutData); \
     KApplication app; \
