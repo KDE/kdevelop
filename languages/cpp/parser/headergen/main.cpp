@@ -213,20 +213,17 @@ public:
   }
 };
 
-static KCmdLineOptions options[] =
-{
-  { "includes <includes>", I18N_NOOP( "KDE include directory - headers go into <includes>/KDE" ), 0 },
-  { "buildinfo <buildinfo>", I18N_NOOP( "Build information from the cmake XML generator" ), 0 },
-  KCmdLineLastOption // End of options.
-};
-
 int main( int argc, char *argv[] )
 {
-  KAboutData aboutData( "headergen", I18N_NOOP( "KDE forwarding header generator" ),
-                        "0.1", I18N_NOOP( "An application which creates forwarding headers (like Qt headers) from source code." ), KAboutData::License_GPL,
-                        I18N_NOOP( "(c) 2006, Hamish Rodda" ), "", "http://www.kde.org" );
+  KAboutData aboutData( "headergen", 0, ki18n( "KDE forwarding header generator" ),
+                        "0.1", ki18n( "An application which creates forwarding headers (like Qt headers) from source code." ), KAboutData::License_GPL,
+                        ki18n( "(c) 2006, Hamish Rodda" ), KLocalizedString(), "http://www.kde.org" );
 
   KCmdLineArgs::init( argc, argv, &aboutData );
+
+  KCmdLineOptions options;
+  options.add("includes <includes>", ki18n( "KDE include directory - headers go into <includes>/KDE" ));
+  options.add("buildinfo <buildinfo>", ki18n( "Build information from the cmake XML generator" ));
   KCmdLineArgs::addCmdLineOptions( options );
 
   HeaderGenerator hg;

@@ -23,17 +23,14 @@
 
 #include "profileeditor.h"
 
-static KCmdLineOptions options[] =
-{
-    KCmdLineLastOption
-};
-
 int main(int argc, char **argv)
 {
-    KAboutData about("kdevprofileeditor", I18N_NOOP("KDevelop Profile Editor"), "1", "",
-                     KAboutData::License_GPL, I18N_NOOP("(c) 2004, The KDevelop Developers"), 0, 0, "");
-    about.addAuthor("Alexander Dymo", 0, "adymo@kdevelop.org");
+    KAboutData about("kdevprofileeditor", 0, ki18n("KDevelop Profile Editor"), "1", KLocalizedString(),
+                     KAboutData::License_GPL, ki18n("(c) 2004, The KDevelop Developers"));
+    about.addAuthor(ki18n("Alexander Dymo"), KLocalizedString(), "adymo@kdevelop.org");
     KCmdLineArgs::init(argc, argv, &about);
+
+    KCmdLineOptions options;
     KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app;

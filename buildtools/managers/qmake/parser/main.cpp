@@ -32,16 +32,14 @@
 #include <kurl.h>
 #include <klocale.h>
 
-static const KCmdLineOptions options[] =
-{
-    {"silent", I18N_NOOP("Enable Parser debug output"), 0},
-    {"!debug", I18N_NOOP("Disable output of the generated AST"), 0},
-    {"!+files", I18N_NOOP("QMake project files"), 0}
-};
-
 int main( int argc, char* argv[] )
 {
-    KCmdLineArgs::init( argc, argv, "QMake Parser", "qmake-parser", I18N_NOOP("Parse QMake project files"), "4.0.0");
+    KCmdLineArgs::init( argc, argv, "QMake Parser", 0, ki18n("qmake-parser"), "4.0.0", ki18n("Parse QMake project files"));
+
+    KCmdLineOptions options;
+    options.add("silent", ki18n("Enable Parser debug output"));
+    options.add("!debug", ki18n("Disable output of the generated AST"));
+    options.add("!+files", ki18n("QMake project files"));
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

@@ -53,68 +53,65 @@
 
 #include "kdevideextension.h"
 
-static KCmdLineOptions options[] =
-    {
-        { "profile <profile>", I18N_NOOP( "Profile to load" ), 0 },
-        { "project <project>", I18N_NOOP( "Project to load" ), 0 },
-        { "+file(s)", I18N_NOOP( "Files to load" ), 0 },
-        KCmdLineLastOption // End of options.
-    };
-
 int main( int argc, char *argv[] )
 {
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
-    KAboutData aboutData( "kdevelop", I18N_NOOP( "KDevelop" ),
-                          VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP( "(c) 1999-2007, The KDevelop developers" ), "", "http://www.kdevelop.org" );
-    aboutData.addAuthor( "Matt Rogers", I18N_NOOP( "Maintainer" ), "mattr@kde.org");
-    aboutData.addAuthor( "Alexander Dymo", I18N_NOOP( "Co-maintainer, architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
-    aboutData.addAuthor( "Amilcar do Carmo Lucas", I18N_NOOP( "Release coordinator, API documentation, Doxygen and autoproject patches" ), "amilcar@ida.ing.tu-bs.de" );
-    aboutData.addAuthor( "Bernd Gehrmann", I18N_NOOP( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
-    aboutData.addAuthor( "Caleb Tennis", I18N_NOOP( "KTabBar, bugfixes" ), "caleb@aei-tech.com" );
-    aboutData.addAuthor( "Richard Dale", I18N_NOOP( "Java & Objective C support" ), "Richard_Dale@tipitina.demon.co.uk" );
-    aboutData.addAuthor( "John Birch", I18N_NOOP( "Debugger frontend" ), "jbb@kdevelop.org" );
-    aboutData.addAuthor( "Sandy Meier", I18N_NOOP( "PHP support, context menu stuff" ), "smeier@kdevelop.org" );
-    aboutData.addAuthor( "Kurt Granroth", I18N_NOOP( "KDE application templates" ), "kurth@granroth.org" );
-    aboutData.addAuthor( "Ian Reinhart Geiser", I18N_NOOP( "Dist part, bash support, application templates" ), "geiseri@yahoo.com" );
-    aboutData.addAuthor( "Matthias Hoelzer-Kluepfel", I18N_NOOP( "Several components, htdig indexing" ), "hoelzer@kde.org" );
-    aboutData.addAuthor( "Victor Roeder", I18N_NOOP( "Help with Automake manager and persistant class store" ), "victor_roeder@gmx.de" );
-    aboutData.addAuthor( "Harald Fernengel", I18N_NOOP( "Ported to Qt 3, patches, valgrind, diff and perforce support" ), "harry@kdevelop.org" );
-    aboutData.addAuthor( "Roberto Raggi", I18N_NOOP( "QEditor component, code completion, Abbrev component, C++ support, Java support" ), "roberto@kdevelop.org" );
-    aboutData.addAuthor( "Hamish Rodda", I18N_NOOP( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
-    aboutData.addAuthor( "Simon Hausmann", I18N_NOOP( "Help with KParts infrastructure" ), "hausmann@kde.org" );
-    aboutData.addAuthor( "Oliver Kellogg", I18N_NOOP( "Ada support" ), "okellogg@users.sourceforge.net" );
-    aboutData.addAuthor( "Jakob Simon-Gaarde", I18N_NOOP( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
-    aboutData.addAuthor( "Andreas Pakulat", I18N_NOOP( "Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
-    aboutData.addAuthor( "F@lk Brettschneider", I18N_NOOP( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
-    aboutData.addAuthor( "Mario Scalas", I18N_NOOP( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
-    aboutData.addAuthor( "Jens Dagerbo", I18N_NOOP( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
-    aboutData.addAuthor( "Julian Rockey", I18N_NOOP( "Filecreate part and other bits and patches" ), "linux@jrockey.com" );
-    aboutData.addAuthor( "Dukju Ahn", I18N_NOOP( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
-    aboutData.addCredit( "Ajay Guleria", I18N_NOOP( "ClearCase support" ), "ajay_guleria@yahoo.com" );
-    aboutData.addCredit( "Marek Janukowicz", I18N_NOOP( "Ruby support" ), "child@t17.ds.pwr.wroc.pl" );
+    KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ),
+                          VERSION, ki18n(description), KAboutData::License_GPL,
+                          ki18n( "(c) 1999-2007, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
+    aboutData.addAuthor( ki18n("Matt Rogers"), ki18n( "Maintainer" ), "mattr@kde.org");
+    aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Co-maintainer, architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Amilcar do Carmo Lucas"), ki18n( "Release coordinator, API documentation, Doxygen and autoproject patches" ), "amilcar@ida.ing.tu-bs.de" );
+    aboutData.addAuthor( ki18n("Bernd Gehrmann"), ki18n( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Caleb Tennis"), ki18n( "KTabBar, bugfixes" ), "caleb@aei-tech.com" );
+    aboutData.addAuthor( ki18n("Richard Dale"), ki18n( "Java & Objective C support" ), "Richard_Dale@tipitina.demon.co.uk" );
+    aboutData.addAuthor( ki18n("John Birch"), ki18n( "Debugger frontend" ), "jbb@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Sandy Meier"), ki18n( "PHP support, context menu stuff" ), "smeier@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Kurt Granroth"), ki18n( "KDE application templates" ), "kurth@granroth.org" );
+    aboutData.addAuthor( ki18n("Ian Reinhart Geiser"), ki18n( "Dist part, bash support, application templates" ), "geiseri@yahoo.com" );
+    aboutData.addAuthor( ki18n("Matthias Hoelzer-Kluepfel"), ki18n( "Several components, htdig indexing" ), "hoelzer@kde.org" );
+    aboutData.addAuthor( ki18n("Victor Roeder"), ki18n( "Help with Automake manager and persistant class store" ), "victor_roeder@gmx.de" );
+    aboutData.addAuthor( ki18n("Harald Fernengel"), ki18n( "Ported to Qt 3, patches, valgrind, diff and perforce support" ), "harry@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Roberto Raggi"), ki18n( "QEditor component, code completion, Abbrev component, C++ support, Java support" ), "roberto@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
+    aboutData.addAuthor( ki18n("Simon Hausmann"), ki18n( "Help with KParts infrastructure" ), "hausmann@kde.org" );
+    aboutData.addAuthor( ki18n("Oliver Kellogg"), ki18n( "Ada support" ), "okellogg@users.sourceforge.net" );
+    aboutData.addAuthor( ki18n("Jakob Simon-Gaarde"), ki18n( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
+    aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
+    aboutData.addAuthor( ki18n("F@lk Brettschneider"), ki18n( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Mario Scalas"), ki18n( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
+    aboutData.addAuthor( ki18n("Jens Dagerbo"), ki18n( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
+    aboutData.addAuthor( ki18n("Julian Rockey"), ki18n( "Filecreate part and other bits and patches" ), "linux@jrockey.com" );
+    aboutData.addAuthor( ki18n("Dukju Ahn"), ki18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
+    aboutData.addCredit( ki18n("Ajay Guleria"), ki18n( "ClearCase support" ), "ajay_guleria@yahoo.com" );
+    aboutData.addCredit( ki18n("Marek Janukowicz"), ki18n( "Ruby support" ), "child@t17.ds.pwr.wroc.pl" );
 
-    aboutData.addCredit( "The KWrite authors", I18N_NOOP( "Kate editor component" ), "kwrite-devel@kde.org" );
-    aboutData.addCredit( "The KHTML authors", I18N_NOOP( "HTML documentation component" ), "kwrite-devel@kde.org" );
-    aboutData.addCredit( "Robert Moniot", I18N_NOOP( "Fortran documentation" ), "moniot@fordham.edu" );
-    aboutData.addCredit( "Ka-Ping Yee", I18N_NOOP( "Python documentation utility" ), "ping@lfw.org" );
-    aboutData.addCredit( "Dimitri van Heesch", I18N_NOOP( "Doxygen wizard" ), "dimitri@stack.nl" );
-    aboutData.addCredit( "Hugo Varotto", I18N_NOOP( "Fileselector component" ), "hugo@varotto-usa.com" );
-    aboutData.addCredit( "Matt Newell", I18N_NOOP( "Fileselector component" ), "newellm@proaxis.com" );
-    aboutData.addCredit( "Trolltech AS", I18N_NOOP( "Designer code" ), "info@trolltech.com" );
-    aboutData.addCredit( "Daniel Engelschalt", I18N_NOOP( "C++ code completion, persistant class store" ), "daniel.engelschalt@gmx.net" );
-    aboutData.addCredit( "Stephane ANCELOT", I18N_NOOP( "Patches" ), "sancelot@free.fr" );
-    aboutData.addCredit( "Jens Zurheide", I18N_NOOP( "Patches" ), "jens.zurheide@gmx.de" );
-    aboutData.addCredit( "Luc Willems", I18N_NOOP( "Help with Perl support" ), "Willems.luc@pandora.be" );
-    aboutData.addCredit( "Marcel Turino", I18N_NOOP( "Documentation index view" ), "M.Turino@gmx.de" );
-    aboutData.addCredit( "Yann Hodique", I18N_NOOP( "Patches" ), "Yann.Hodique@lifl.fr" );
-    aboutData.addCredit( "Tobias Gl\303\244\303\237er" , I18N_NOOP( "Documentation Finder,  qmake projectmanager patches, usability improvements, bugfixes ... " ), "tobi.web@gmx.de" );
-    aboutData.addCredit( "Andreas Koepfle" , I18N_NOOP( "QMake project manager patches" ), "koepfle@ti.uni-mannheim.de" );
-    aboutData.addCredit( "Sascha Cunz" , I18N_NOOP( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
-    aboutData.addCredit( "Robert Gruber" , I18N_NOOP( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
-    aboutData.addCredit( "Zoran Karavla", I18N_NOOP( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
+    aboutData.addCredit( ki18n("The KWrite authors"), ki18n( "Kate editor component" ), "kwrite-devel@kde.org" );
+    aboutData.addCredit( ki18n("The KHTML authors"), ki18n( "HTML documentation component" ), "kwrite-devel@kde.org" );
+    aboutData.addCredit( ki18n("Robert Moniot"), ki18n( "Fortran documentation" ), "moniot@fordham.edu" );
+    aboutData.addCredit( ki18n("Ka-Ping Yee"), ki18n( "Python documentation utility" ), "ping@lfw.org" );
+    aboutData.addCredit( ki18n("Dimitri van Heesch"), ki18n( "Doxygen wizard" ), "dimitri@stack.nl" );
+    aboutData.addCredit( ki18n("Hugo Varotto"), ki18n( "Fileselector component" ), "hugo@varotto-usa.com" );
+    aboutData.addCredit( ki18n("Matt Newell"), ki18n( "Fileselector component" ), "newellm@proaxis.com" );
+    aboutData.addCredit( ki18n("Trolltech AS"), ki18n( "Designer code" ), "info@trolltech.com" );
+    aboutData.addCredit( ki18n("Daniel Engelschalt"), ki18n( "C++ code completion, persistant class store" ), "daniel.engelschalt@gmx.net" );
+    aboutData.addCredit( ki18n("Stephane ANCELOT"), ki18n( "Patches" ), "sancelot@free.fr" );
+    aboutData.addCredit( ki18n("Jens Zurheide"), ki18n( "Patches" ), "jens.zurheide@gmx.de" );
+    aboutData.addCredit( ki18n("Luc Willems"), ki18n( "Help with Perl support" ), "Willems.luc@pandora.be" );
+    aboutData.addCredit( ki18n("Marcel Turino"), ki18n( "Documentation index view" ), "M.Turino@gmx.de" );
+    aboutData.addCredit( ki18n("Yann Hodique"), ki18n( "Patches" ), "Yann.Hodique@lifl.fr" );
+    aboutData.addCredit( ki18n("Tobias Gl\303\244\303\237er") , ki18n( "Documentation Finder,  qmake projectmanager patches, usability improvements, bugfixes ... " ), "tobi.web@gmx.de" );
+    aboutData.addCredit( ki18n("Andreas Koepfle") , ki18n( "QMake project manager patches" ), "koepfle@ti.uni-mannheim.de" );
+    aboutData.addCredit( ki18n("Sascha Cunz") , ki18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
+    aboutData.addCredit( ki18n("Robert Gruber") , ki18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
+    aboutData.addCredit( ki18n("Zoran Karavla"), ki18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
 
     KCmdLineArgs::init( argc, argv, &aboutData );
+
+    KCmdLineOptions options;
+    options.add("profile <profile>", ki18n( "Profile to load" ));
+    options.add("project <project>", ki18n( "Project to load" ));
+    options.add("+file(s)", ki18n( "Files to load" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     Q_UNUSED(args)
@@ -159,7 +156,7 @@ int main( int argc, char *argv[] )
     }
 
 //     bool openProject = false;
-//     QByteArray projectName = args->getOption("project");
+//     QString projectName = args->getOption("project");
 //     if ( !projectName.isEmpty() )
 //     {
 //         Core::projectController()->openProject( KUrl(projectName) );
