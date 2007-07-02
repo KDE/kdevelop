@@ -40,6 +40,7 @@ if( NOT KDEVPLATFORM_INCLUDE_DIR )
         PATHS
         ${CMAKE_INSTALL_PREFIX}/include
         ${_KDEVPLATFORM_INCLUDE_DIR}
+	${KDE4_INCLUDE_DIR}/kdevplatform
     )
     set(KDEVPLATFORM_INCLUDE_DIR ${_platformIncDir}/kdevplatform)
 endif( NOT KDEVPLATFORM_INCLUDE_DIR )
@@ -49,14 +50,12 @@ if( NOT KDEVPLATFORM_LIBRARY_DIR )
     find_library( _platforminterfaces_lib NAMES kdevplatforminterfaces
         PATHS
         ${LIB_INSTALL_DIR}
+	${KDE4_LIB_DIR}
         ${_KDEVPLATFORM_LIB_DIR}
     )
     get_filename_component(KDEVPLATFORM_LIBRARY_DIR ${_platforminterfaces_lib} PATH )
 endif( NOT KDEVPLATFORM_LIBRARY_DIR )
 set( KDEVPLATFORM_LIBRARY_DIR ${KDEVPLATFORM_LIBRARY_DIR} CACHE PATH "path for kdevplatform libraries" )
-
-message(STATUS "Using kdevplatform include dir: ${KDEVPLATFORM_INCLUDE_DIR}")
-message(STATUS "Using kdevplatform library dir: ${KDEVPLATFORM_LIBRARY_DIR}")
 
 find_library(KDEVPLATFORM_INTERFACES_LIBRARY kdevplatforminterfaces
     PATHS
@@ -194,6 +193,12 @@ endif(KDEVPLATFORM_INCLUDE_DIR
  AND KDEVPLATFORM_SHELL_LIBRARY
  AND KDEVPLATFORM_UTIL_LIBRARY
  AND KDEVPLATFORM_VCS_LIBRARY )
+
+if(KDEVPLATFORM_FOUND)
+    message(STATUS "Using kdevplatform include dir: ${KDEVPLATFORM_INCLUDE_DIR}")
+    message(STATUS "Using kdevplatform library dir: ${KDEVPLATFORM_LIBRARY_DIR}")
+endif(KDEVPLATFORM_FOUND)
+
 
 MARK_AS_ADVANCED(
     KDEVPLATFORM_INTERFACES_LIBRARY
