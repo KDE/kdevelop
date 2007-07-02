@@ -6,11 +6,11 @@
  *   reformatting tool for C, C++, C# and Java source files.
  *   http://astyle.sourceforge.net
  *
- *   The "Artistic Style" project, including all files needed to 
- *   compile it, is free software; you can redistribute it and/or 
- *   modify it under the terms of the GNU Lesser General Public 
+ *   The "Artistic Style" project, including all files needed to
+ *   compile it, is free software; you can redistribute it and/or
+ *   modify it under the terms of the GNU Lesser General Public
  *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later 
+ *   version 2.1 of the License, or (at your option) any later
  *   version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -19,7 +19,7 @@
  *   GNU Lesser General Public License for more details.
  *
  *   You should have received a copy of the GNU Lesser General Public
- *   License along with this project; if not, write to the 
+ *   License along with this project; if not, write to the
  *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *   Boston, MA  02110-1301, USA.
  *
@@ -29,34 +29,43 @@
 #ifndef ASTYLE_H
 #define ASTYLE_H
 
-#include <cctype>
+#ifdef __VMS
+#define __USE_STD_IOSTREAM 1
+#include <sstream>
+#endif
+
 #include <string>
-#include <cstring>
 #include <vector>
+#include <cctype>
 
 using namespace std;
 
-// needed for Red Hat distribution of GCC 3.2 (prior to Jan 2004)
-#if defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 2
-#include <ctype.h>
-#endif
 
-// disable secure version deprecation warnings for .NET 2005
+// 4996 - secure version deprecation warnings for .NET 2005
+// 4267 - 64 bit signed/unsigned loss of data
 #ifdef _MSC_VER
 #pragma warning(disable: 4996)
+#pragma warning(disable: 4267)
 #endif
 
 namespace astyle
 {
+
+enum FileType      { C_TYPE=0, JAVA_TYPE=1, SHARP_TYPE=2 };
+
 /* The enums below are not recognized by 'vectors' in Microsoft Visual C++
    V5 when they are part of a namespace!!!  Use Visual C++ V6 or higher.
 */
 enum BracketMode   { NONE_MODE, ATTACH_MODE, BREAK_MODE, BDAC_MODE };
+
 enum BracketType   { NULL_TYPE = 0,
-                     DEFINITION_TYPE = 1,
-                     COMMAND_TYPE = 2,
-                     ARRAY_TYPE  = 4,
-                     SINGLE_LINE_TYPE = 8};
+                     NAMESPACE_TYPE = 1,		// also a DEFINITION_TYPE
+                     CLASS_TYPE = 2,			// also a DEFINITION_TYPE
+                     DEFINITION_TYPE = 4,
+                     COMMAND_TYPE = 8,
+                     ARRAY_TYPE  = 16,          // arrays and enums
+                     SINGLE_LINE_TYPE = 32
+                   };
 
 class ASSourceIterator
 {
@@ -76,9 +85,9 @@ class ASResource
 	public:
 		void buildAssignmentOperators(vector<const string*> &assignmentOperators);
 		void buildCastOperators(vector<const string*> &castOperators);
-		void buildHeaders(vector<const string*> &headers);
+		void buildHeaders(vector<const string*> &headers, int fileType, bool beautifier=false);
 		void buildNonAssignmentOperators(vector<const string*> &nonAssignmentOperators);
-		void buildNonParenHeaders(vector<const string*> &nonParenHeaders);
+		void buildNonParenHeaders(vector<const string*> &nonParenHeaders, int fileType, bool beautifier=false);
 		void buildOperators(vector<const string*> &operators);
 		void buildPreBlockStatements(vector<const string*> &preBlockStatements);
 		void buildPreCommandHeaders(vector<const string*> &preCommandHeaders);
@@ -138,30 +147,35 @@ class ASBeautifier : protected ASResource
 		void setLabelIndent(bool state);
 		void setCStyle();
 		void setJavaStyle();
+		void setSharpStyle();
 		void setEmptyLineFill(bool state);
 		void setPreprocessorIndent(bool state);
 		int  getIndentLength(void);
 		string getIndentString(void);
 		bool getCaseIndent(void);
 		bool getCStyle(void);
+		bool getJavaStyle(void);
+		bool getSharpStyle(void);
 		bool getEmptyLineFill(void);
 
 	protected:
 		int getNextProgramCharDistance(const string &line, int i);
-		bool isLegalNameChar(char ch) const;
+//		bool isLegalNameChar(char ch) const;
 		const string *findHeader(const string &line, int i,
 		                         const vector<const string*> &possibleHeaders,
 		                         bool checkBoundry = true);
 		string trim(const string &str);
-		int indexOf(vector<const string*> &container, const string *element);
-		bool lineCommentNoBeautify;
-		int  inLineNumber;                              // for debugging
+		int  indexOf(vector<const string*> &container, const string *element);
+		int  fileType;
+		bool isCStyle;
+		bool isJavaStyle;
+		bool isSharpStyle;
 
-	protected:  // inline functions
-		// check if a specific character is a whitespace character
-		inline bool isWhiteSpace(char ch) const {
-			return (ch == ' ' || ch == '\t');
-		}
+		// variables set by ASFormatter - must be updated in preprocessor
+		int  inLineNumber;              // for debugging
+		int  outLineNumber;				// for debugging
+		bool lineCommentNoBeautify;
+		bool isNonInStatementArray;
 
 	private:
 		ASBeautifier(const ASBeautifier &copy);
@@ -177,8 +191,6 @@ class ASBeautifier : protected ASResource
 		static vector<const string*> preBlockStatements;
 		static vector<const string*> assignmentOperators;
 		static vector<const string*> nonAssignmentOperators;
-
-		static bool calledInitStatic;
 
 		ASSourceIterator *sourceIterator;
 		vector<ASBeautifier*> *waitingBeautifierStack;
@@ -205,7 +217,6 @@ class ASBeautifier : protected ASResource
 		bool isInQuestion;
 		bool isInStatement;
 		bool isInHeader;
-		bool isCStyle;
 		bool isInOperator;
 		bool isInTemplate;
 		bool isInDefine;
@@ -223,6 +234,11 @@ class ASBeautifier : protected ASResource
 		bool isInConditional;
 		bool isMinimalConditinalIndentSet;
 		bool shouldForceTabIndentation;
+		bool emptyLineFill;
+		bool backslashEndsPrevLine;
+		bool blockCommentNoIndent;
+		bool blockCommentNoBeautify;
+		bool previousLineProbationTab;
 		int  minConditionalIndent;
 		int  parenDepth;
 		int  indentLength;
@@ -230,16 +246,26 @@ class ASBeautifier : protected ASResource
 		int  leadingWhiteSpaces;
 		int  maxInStatementIndent;
 		int  templateDepth;
+		int  prevFinalLineSpaceTabCount;
+		int  prevFinalLineTabCount;
+		int  defineTabCount;
 		char quoteChar;
 		char prevNonSpaceCh;
 		char currentNonSpaceCh;
 		char currentNonLegalCh;
 		char prevNonLegalCh;
-		int  prevFinalLineSpaceTabCount;
-		int  prevFinalLineTabCount;
-		bool emptyLineFill;
-		bool backslashEndsPrevLine;
-		int  defineTabCount;
+		char peekNextChar(string &line, int i);
+
+	protected:    // inline functions
+		// check if a specific character can be used in a legal variable/method/class name
+		inline bool isLegalNameChar(char ch) const {
+			return (isalnum(ch) || ch == '.' || ch == '_' || (isJavaStyle && ch == '$') || (isCStyle && ch == '~'));
+		}
+
+		// check if a specific character is a whitespace character
+		inline bool isWhiteSpace(char ch) const {
+			return (ch == ' ' || ch == '\t');
+		}
 };
 
 
@@ -249,7 +275,7 @@ class ASEnhancer
 		// functions
 		ASEnhancer();
 		~ASEnhancer();
-		void init(int, string, bool, bool, bool);
+		void init(int, string, bool, bool, bool, bool, bool);
 		void enhance(string &line);
 
 	private:
@@ -257,6 +283,8 @@ class ASEnhancer
 		int    indentLength;
 		bool   useTabs;
 		bool   isCStyle;
+		bool   isJavaStyle;
+		bool   isSharpStyle;
 		bool   caseIndent;
 		bool   emptyLineFill;
 
@@ -276,7 +304,7 @@ class ASEnhancer
 		stringstream *traceOut;
 
 	private:    // private functions
-		bool findHeaderX(const string &line, int i, const char *header, bool checkBoundry = true) const;
+		bool findKeyword(const string &line, int i, const char *header) const;
 		int  indentLine(string  &line, const int indent) const;
 		int  unindentLine(string  &line, const int unindent) const;
 
@@ -298,7 +326,7 @@ class ASEnhancer
 	private:    // inline functions
 		// check if a specific character can be used in a legal variable/method/class name
 		inline bool isLegalNameCharX(char ch) const {
-			return (isalnum(ch) || ch == '.' || ch == '_' || (!isCStyle && ch == '$') || (isCStyle && ch == '~'));
+			return (isalnum(ch) || ch == '.' || ch == '_' || (isJavaStyle && ch == '$') || (isCStyle && ch == '~'));
 		}
 
 		// check if a specific character is a whitespace character
@@ -328,28 +356,36 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 		void setBreakBlocksMode(bool state);
 		void setBreakClosingHeaderBlocksMode(bool state);
 		void setBreakElseIfsMode(bool state);
+		string fileName;
 
 	private:
 		void ASformatter(ASFormatter &copy);            // not to be imlpemented
 		void operator=(ASFormatter&);                  // not to be implemented
 		void staticInit();
 		void goForward(int i);
-		bool getNextChar();
-		char peekNextChar() const;
-		bool isBeforeComment() const;
 		void trimNewLine();
+		char peekNextChar() const;
 		BracketType getBracketType() const;
+		bool getNextChar();
+		bool isBeforeComment() const;
+		bool isBeforeLineEndComment(int startPos) const;
 		bool isPointerOrReference() const;
 		bool isUnaryMinus() const;
 		bool isInExponent() const;
 		bool isOneLineBlockReached() const;
-		bool isNextCharWhiteSpace() const;  
+//		bool isNextCharWhiteSpace() const;
 		bool lineBeginsWith(char charToCheck) const;
 		void appendChar(char ch, bool canBreakLine = true);
+		void appendCharInsideComments();
 		void appendSequence(const string &sequence, bool canBreakLine = true);
 		void appendSpacePad();
 		void appendSpaceAfter();
 		void breakLine();
+		void padOperators(const string *newOperator);
+		void padParens();
+		void formatBrackets(BracketType bracketType);
+		void formatArrayBrackets(BracketType bracketType, bool isOpeningArrayBracket);
+		void adjustComments();
 		const string *findHeader(const vector<const string*> &headers, bool checkBoundry = true);
 
 		static vector<const string*> headers;
@@ -359,7 +395,6 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 		static vector<const string*> operators;
 		static vector<const string*> assignmentOperators;
 		static vector<const string*> castOperators;
-		static bool calledInitStatic;
 
 		ASSourceIterator *sourceIterator;
 		vector<const string*> *preBracketHeaderStack;
@@ -377,7 +412,12 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 		char quoteChar;
 		int  charNum;
 		int  spacePadNum;
+		int  templateDepth;
+		int  traceFileNumber;
+		size_t formattedLineCommentNum;		// comment location on formattedLine
+		size_t previousReadyFormattedLineLength;
 		BracketMode bracketFormatMode;
+		BracketType previousBracketType;
 		bool isVirgin;
 		bool shouldPadOperators;
 		bool shouldPadParensOutside;
@@ -395,15 +435,23 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 		bool isNonParenHeader;
 		bool foundQuestionMark;
 		bool foundPreDefinitionHeader;
+		bool foundNamespaceHeader;
+		bool foundClassHeader;
 		bool foundPreCommandHeader;
 		bool foundCastOperator;
 		bool isInLineBreak;
-		bool isInClosingBracketLineBreak;
+//		bool isInClosingBracketLineBreak;
 		bool endOfCodeReached;
 		bool lineCommentNoIndent;
 		bool isLineReady;
 		bool isPreviousBracketBlockRelated;
 		bool isInPotentialCalculation;
+		bool isCharImmediatelyPostComment;
+		bool isPreviousCharPostComment;
+		bool isCharImmediatelyPostLineComment;
+		bool isCharImmediatelyPostOpenBlock;
+		bool isCharImmediatelyPostCloseBlock;
+		bool isCharImmediatelyPostTemplate;
 		bool shouldBreakOneLineBlocks;
 		bool shouldReparseCurrentChar;
 		bool shouldBreakOneLineStatements;
@@ -415,6 +463,7 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 		bool isImmediatelyPostComment;
 		bool isImmediatelyPostLineComment;
 		bool isImmediatelyPostEmptyBlock;
+		bool isImmediatelyPostPreprocessor;
 
 		bool shouldBreakBlocks;
 		bool shouldBreakClosingHeaderBlocks;
@@ -422,8 +471,8 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 		bool isAppendPostBlockEmptyLineRequested;
 
 		bool prependEmptyLine;
+		bool appendOpeningBracket;
 		bool foundClosingHeader;
-		int  previousReadyFormattedLineLength;
 
 		bool isInHeader;
 		bool isImmediatelyPostHeader;

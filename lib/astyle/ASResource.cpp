@@ -6,11 +6,11 @@
  *   reformatting tool for C, C++, C# and Java source files.
  *   http://astyle.sourceforge.net
  *
- *   The "Artistic Style" project, including all files needed to 
- *   compile it, is free software; you can redistribute it and/or 
- *   modify it under the terms of the GNU Lesser General Public 
+ *   The "Artistic Style" project, including all files needed to
+ *   compile it, is free software; you can redistribute it and/or
+ *   modify it under the terms of the GNU Lesser General Public
  *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later 
+ *   version 2.1 of the License, or (at your option) any later
  *   version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -19,7 +19,7 @@
  *   GNU Lesser General Public License for more details.
  *
  *   You should have received a copy of the GNU Lesser General Public
- *   License along with this project; if not, write to the 
+ *   License along with this project; if not, write to the
  *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *   Boston, MA  02110-1301, USA.
  *
@@ -185,7 +185,7 @@ void ASResource::buildCastOperators(vector<const string*> &castOperators)
  *
  * @param headers       a reference to the vector to be built.
  */
-void ASResource::buildHeaders(vector<const string*> &headers)
+void ASResource::buildHeaders(vector<const string*> &headers, int fileType, bool beautifier)
 {
 	headers.push_back(&AS_IF);
 	headers.push_back(&AS_ELSE);
@@ -193,30 +193,37 @@ void ASResource::buildHeaders(vector<const string*> &headers)
 	headers.push_back(&AS_WHILE);
 	headers.push_back(&AS_DO);
 	headers.push_back(&AS_SWITCH);
-	headers.push_back(&AS_CASE);
-	headers.push_back(&AS_DEFAULT);
 	headers.push_back(&AS_TRY);
 	headers.push_back(&AS_CATCH);
-	headers.push_back(&AS_TEMPLATE);
-	headers.push_back(&AS_CONST);
-	headers.push_back(&AS_STATIC);
-	headers.push_back(&AS_EXTERN);
 
-	// C# and Java
-	headers.push_back(&AS_FINALLY);
+	if (beautifier)
+	{
+		headers.push_back(&AS_CASE);
+		headers.push_back(&AS_DEFAULT);
+		headers.push_back(&AS_CONST);
+		headers.push_back(&AS_STATIC);
+		headers.push_back(&AS_EXTERN);
+		headers.push_back(&AS_TEMPLATE);
+	}
 
-	// Java
-	headers.push_back(&AS_SYNCHRONIZED);
+	if (fileType == JAVA_TYPE)
+	{
+		headers.push_back(&AS_FINALLY);
+		headers.push_back(&AS_SYNCHRONIZED);
+	}
 
-	// C#
-	headers.push_back(&AS_FOREACH);
-	headers.push_back(&AS_LOCK);
-	headers.push_back(&AS_UNSAFE);
-	headers.push_back(&AS_FIXED);
-	headers.push_back(&AS_GET);
-	headers.push_back(&AS_SET);
-	headers.push_back(&AS_ADD);
-	headers.push_back(&AS_REMOVE);
+	if (fileType == SHARP_TYPE)
+	{
+		headers.push_back(&AS_FINALLY);
+		headers.push_back(&AS_FOREACH);
+		headers.push_back(&AS_LOCK);
+		headers.push_back(&AS_UNSAFE);
+		headers.push_back(&AS_FIXED);
+		headers.push_back(&AS_GET);
+		headers.push_back(&AS_SET);
+		headers.push_back(&AS_ADD);
+		headers.push_back(&AS_REMOVE);
+	}
 }
 
 /**
@@ -248,28 +255,36 @@ void ASResource::buildNonAssignmentOperators(vector<const string*> &nonAssignmen
  *
  * @param nonParenHeaders       a reference to the vector to be built.
  */
-void ASResource::buildNonParenHeaders(vector<const string*> &nonParenHeaders)
+void ASResource::buildNonParenHeaders(vector<const string*> &nonParenHeaders, int fileType, bool beautifier)
 {
 	nonParenHeaders.push_back(&AS_ELSE);
 	nonParenHeaders.push_back(&AS_DO);
-	nonParenHeaders.push_back(&AS_CASE);
-	nonParenHeaders.push_back(&AS_DEFAULT);
 	nonParenHeaders.push_back(&AS_TRY);
 
-	nonParenHeaders.push_back(&AS_TEMPLATE);
-	nonParenHeaders.push_back(&AS_CONST);
-	nonParenHeaders.push_back(&AS_STATIC);
-	nonParenHeaders.push_back(&AS_EXTERN);
+	if (beautifier)
+	{
+		nonParenHeaders.push_back(&AS_CASE);
+		nonParenHeaders.push_back(&AS_DEFAULT);
+		nonParenHeaders.push_back(&AS_CONST);
+		nonParenHeaders.push_back(&AS_STATIC);
+		nonParenHeaders.push_back(&AS_EXTERN);
+		nonParenHeaders.push_back(&AS_TEMPLATE);
+	}
 
-	// C# and Java
-	nonParenHeaders.push_back(&AS_FINALLY);
+	if (fileType == JAVA_TYPE)
+	{
+		nonParenHeaders.push_back(&AS_FINALLY);
+	}
 
-	// C#
-	nonParenHeaders.push_back(&AS_UNSAFE);
-	nonParenHeaders.push_back(&AS_GET);
-	nonParenHeaders.push_back(&AS_SET);
-	nonParenHeaders.push_back(&AS_ADD);
-	nonParenHeaders.push_back(&AS_REMOVE);
+	if (fileType == SHARP_TYPE)
+	{
+		nonParenHeaders.push_back(&AS_FINALLY);
+		nonParenHeaders.push_back(&AS_UNSAFE);
+		nonParenHeaders.push_back(&AS_GET);
+		nonParenHeaders.push_back(&AS_SET);
+		nonParenHeaders.push_back(&AS_ADD);
+		nonParenHeaders.push_back(&AS_REMOVE);
+	}
 }
 
 /**

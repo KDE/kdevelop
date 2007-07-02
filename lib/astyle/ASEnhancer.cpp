@@ -6,11 +6,11 @@
  *   reformatting tool for C, C++, C# and Java source files.
  *   http://astyle.sourceforge.net
  *
- *   The "Artistic Style" project, including all files needed to 
- *   compile it, is free software; you can redistribute it and/or 
- *   modify it under the terms of the GNU Lesser General Public 
+ *   The "Artistic Style" project, including all files needed to
+ *   compile it, is free software; you can redistribute it and/or
+ *   modify it under the terms of the GNU Lesser General Public
  *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later 
+ *   version 2.1 of the License, or (at your option) any later
  *   version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -19,15 +19,15 @@
  *   GNU Lesser General Public License for more details.
  *
  *   You should have received a copy of the GNU Lesser General Public
- *   License along with this project; if not, write to the 
+ *   License along with this project; if not, write to the
  *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *   Boston, MA  02110-1301, USA.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 
-// can trace only if _DEBUG is defined (Visual C)
-#ifdef _DEBUG
+// can trace only if NDEBUG is not defined
+#ifndef NDEBUG
 // #define TRACEswitch
 // #define TRACEcase
 // #define TRACEmisc
@@ -92,7 +92,7 @@ ASEnhancer::~ASEnhancer()
 	// write a text file to "My Documents" (Windows)
 	char filename [_MAX_PATH + _MAX_FNAME + _MAX_EXT + 1];   // full path and filename
 	strcpy(filename, getenv("USERPROFILE"));
-	strcat(filename, "\\My Documents\\trace.txt");
+	strcat(filename, "\\My Documents\\tracee.txt");
 	ofstream outfile(filename);
 	outfile << msg;
 	outfile.close();
@@ -108,8 +108,10 @@ ASEnhancer::~ASEnhancer()
 void ASEnhancer::init(int _indentLength,
                       string _indentString,
                       bool _isCStyle,
+                      bool _isJavaStyle,
+                      bool _isSharpStyle,
                       bool _caseIndent,
-					  bool _emptyLineFill)
+                      bool _emptyLineFill)
 {
 	// formatting variables from ASFormatter and ASBeautifier
 	indentLength = _indentLength;
@@ -118,6 +120,8 @@ void ASEnhancer::init(int _indentLength,
 	else
 		useTabs = false;
 	isCStyle      = _isCStyle;
+	isJavaStyle   = _isJavaStyle;
+	isSharpStyle  = _isSharpStyle;
 	caseIndent    = _caseIndent;
 	emptyLineFill = _emptyLineFill;
 
@@ -148,7 +152,7 @@ void ASEnhancer::enhance(string &line)
 {
 	static vector<switchVariables>  swVector;       // stack vector of switch variables
 	static switchVariables sw;                      // switch variables struct
-	
+
 	static bool nextLineIsEventTable;				// begin event table is reached
 	static bool isInEventTable;						// need to indent an event table
 
@@ -162,12 +166,12 @@ void ASEnhancer::enhance(string &line)
 	if (nextLineIsEventTable)
 	{
 		isInEventTable = true;
-		nextLineIsEventTable = false;	
+		nextLineIsEventTable = false;
 	}
-		
+
 	if (lineLength == 0
-		&& ! isInEventTable
-		&& ! emptyLineFill)
+	        && ! isInEventTable
+	        && ! emptyLineFill)
 		return;
 
 	// test for unindent on attached brackets
@@ -252,25 +256,24 @@ void ASEnhancer::enhance(string &line)
 		if (line[i] == '{')                                 // if open bracket
 			bracketCount++;
 
-		if (line[i] == '}')                                 // if close bracket
-		
+		if (line[i] == '}')                     // if close bracket
 			bracketCount--;
 
 		// ----------------  process event tables  --------------------------------------
 
+		// check for event table begin
+		if (findKeyword(line, i, "BEGIN_EVENT_TABLE")
+		        || findKeyword(line, i, "BEGIN_MESSAGE_MAP"))
+			nextLineIsEventTable = true;
+
 		// check for event table end
-		if (findHeaderX(line, i, "END_EVENT_TABLE", true)
-		    || findHeaderX(line, i, "END_MESSAGE_MAP", true))
+		if (findKeyword(line, i, "END_EVENT_TABLE")
+		        || findKeyword(line, i, "END_MESSAGE_MAP"))
 			isInEventTable = false;
 
-		// check for event table begin
-		if (findHeaderX(line, i, "BEGIN_EVENT_TABLE", true)
-		    || findHeaderX(line, i, "BEGIN_MESSAGE_MAP", true))  
-			nextLineIsEventTable = true;			
-		
-		// ----------------  process switch statements  --------------------------------- 
+		// ----------------  process switch statements  ---------------------------------
 
-		if (findHeaderX(line, i, "switch", true))           // if switch statement
+		if (findKeyword(line, i, "switch"))                 // if switch statement
 		{
 			switchDepth++;                                  // bump switch depth
 			TRswitch(" switch ", switchDepth);
@@ -316,7 +319,7 @@ void ASEnhancer::enhance(string &line)
 
 		// look for case or default header
 
-		if (findHeaderX(line, i, "case", true) || findHeaderX(line, i, "default", true))
+		if (findKeyword(line, i, "case") || findKeyword(line, i, "default"))
 		{
 			if (sw.unindentCase)                            // if unindented last case
 			{
@@ -370,9 +373,9 @@ void ASEnhancer::enhance(string &line)
 int ASEnhancer::indentLine(string  &line, const int indent) const
 {
 	if (line.length() == 0
-		&& ! emptyLineFill)
+	        && ! emptyLineFill)
 		return 0;
-		
+
 	size_t charsToInsert;                   	// number of chars to insert
 
 	if (useTabs)                    			// if formatted with tabs
@@ -406,7 +409,7 @@ int ASEnhancer::unindentLine(string  &line, const int unindent) const
 
 	if (whitespace == 0)
 		return 0;
-		
+
 	size_t charsToErase;                    // number of chars to erase
 
 	if (useTabs)                    		// if formatted with tabs
@@ -430,43 +433,39 @@ int ASEnhancer::unindentLine(string  &line, const int unindent) const
 }
 
 /**
- * check if a specific line position contains a header, out of several possible headers.
+ * check if a specific line position contains a keyword.
  *
- * @return    a pointer to the found header. if no header was found then return NULL.
+ * @return    true if the word was found. false if the word was not found.
  */
-bool ASEnhancer::findHeaderX(const string &line, int i, const char *header, bool checkBoundry) const
+bool ASEnhancer::findKeyword(const string &line, int i, const char *keyword) const
 {
-	if (line.compare(i, strlen(header), header) == 0)
+	if (line.compare(i, strlen(keyword), keyword) == 0)
 	{
 		// check that this is a header and not a part of a longer word
 		// (e.g. not at its begining, not at its middle...)
 
 		int lineLength = line.length();
-		int headerEnd = i + strlen(header);
-		char startCh = header[0];      // first char of header
+		int wordEnd = i + strlen(keyword);
+		char startCh = keyword[0];      // first char of header
 		char endCh = 0;                // char just after header
 		char prevCh = 0;               // char just before header
 
-		if (headerEnd < lineLength)
+		if (wordEnd < lineLength)
 		{
-			endCh = line[headerEnd];
+			endCh = line[wordEnd];
 		}
 		if (i > 0)
 		{
 			prevCh = line[i-1];
 		}
 
-		if (!checkBoundry)
-		{
-			return true;
-		}
-		else if (prevCh != 0
-		         && isLegalNameCharX(startCh)
-		         && isLegalNameCharX(prevCh))
+		if (prevCh != 0
+		        && isLegalNameCharX(startCh)
+		        && isLegalNameCharX(prevCh))
 		{
 			return false;
 		}
-		else if (headerEnd >= lineLength
+		else if (wordEnd >= lineLength
 		         || !isLegalNameCharX(startCh)
 		         || !isLegalNameCharX(endCh))
 		{
