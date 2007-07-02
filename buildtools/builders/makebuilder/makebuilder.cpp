@@ -42,6 +42,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
+#include <ksharedconfig.h>
 
 #define MAKE_COMMAND "make"
 
@@ -308,15 +309,26 @@ QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
     if (cmdline.isEmpty())
         cmdline << MAKE_COMMAND;
 
-//     if (!DomUtil::readBoolEntry(dom, abortOnError))
-//         cmdline += " -k";
-//     int jobs = DomUtil::readIntEntry(dom, numberOfJobs);
-//     if (jobs != 0) {
-//         cmdline += " -j";
-//         cmdline += QString::number(jobs);
-//     }
-//     if (DomUtil::readBoolEntry(dom, dontAct))
-//         cmdline += " -n";
+    KSharedConfig::Ptr configPtr = item->project()->projectConfiguration();
+    KSharedConfig *config = configPtr.data();
+    KConfigGroup builderGroup( config, "MakeBuilder" );
+
+    if( ! builderGroup.readEntry("Abort on First Error", false) )
+    {
+        cmdline << "-k";
+    }
+    if( builderGroup.readEntry("Run Multiple Jobs", false ) )
+    {
+        int jobnumber = builderGroup.readEntry("Number Of Jobs", 1);
+        QString jobNumberArg = QString("-j%1").arg(jobnumber);
+        cmdline << jobNumberArg;
+    }
+    if( builderGroup.readEntry("Display Only", false) )
+    {
+        cmdline << "-n";
+    }
+
+
     if( item->type() == KDevelop::ProjectBaseItem::Target )
     {
         KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
