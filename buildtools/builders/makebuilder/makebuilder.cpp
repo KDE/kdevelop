@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+    Copyright (C) 2007 Dukju Ahn <dukjuahn@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -131,6 +132,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
                 m_models[id] = new MakeOutputModel(this, this);
                 view->setModel(id, m_models[id]);
             }
+            m_models[id]->appendRow( new QStandardItem( cmd.join(" ") ) );
 
             if( m_commands.contains(id) )
                 delete m_commands[id];
@@ -139,6 +141,8 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             m_commands[id]->setWorkingDirectory(buildDir.toLocalFile() );
             cmd.pop_front();
             m_commands[id]->setArguments( cmd );
+            QMap<QString, QString> envMap = environmentVars( dom );
+            m_commands[id]->setEnvironment( envMap );
 
             connect(m_commands[id], SIGNAL(receivedStandardOutput(const QStringList&)),
                     m_models[id], SLOT(addStandardOutput(const QStringList&)));
@@ -295,9 +299,6 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
 
 QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
 {
-    //FIXME Get this from the new project file format
-//     QDomDocument &dom = *KDevApi::self()->projectDom();
-
     QStringList cmdline;
 //     QString cmdline = DomUtil::readEntry(dom, makeTool);
 //     int prio = DomUtil::readIntEntry(dom, priority);
@@ -306,14 +307,13 @@ QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
 //         nice = QString("nice -n%1 ").arg(prio);
 //     }
 
-    if (cmdline.isEmpty())
-        cmdline << MAKE_COMMAND;
-
     KSharedConfig::Ptr configPtr = item->project()->projectConfiguration();
-    KSharedConfig *config = configPtr.data();
-    KConfigGroup builderGroup( config, "MakeBuilder" );
+    KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
-    if( ! builderGroup.readEntry("Abort on First Error", false) )
+    QString makeBin = builderGroup.readEntry("Make Binary", "make");
+    cmdline << makeBin;
+
+    if( ! builderGroup.readEntry("Abort on First Error", true) )
     {
         cmdline << "-k";
     }
@@ -327,15 +327,24 @@ QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
     {
         cmdline << "-n";
     }
-
+    QString extraOptions = builderGroup.readEntry("Additional Options", QString());
+    if( ! extraOptions.isEmpty() )
+    {
+        cmdline << extraOptions;
+    }
 
     if( item->type() == KDevelop::ProjectBaseItem::Target )
     {
         KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
         cmdline << targetItem->text();
     }
-//     cmdline.prepend(nice);
-//     cmdline.prepend(makeEnvironment());
+    else if( item->type() == KDevelop::ProjectBaseItem::Project ||
+             item->type() == KDevelop::ProjectBaseItem::BuildFolder )
+    {
+        QString target = builderGroup.readEntry("Default Target", QString());
+        if( !target.isEmpty() )
+            cmdline << target;
+    }
 
 //     Q_ASSERT(item->folder());
 
@@ -344,6 +353,27 @@ QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
 //     cmdline.prepend("cd");
 
     return cmdline;
+}
+
+QMap<QString, QString> MakeBuilder::environmentVars( KDevelop::ProjectBaseItem* item )
+{
+    QMap<QString, QString> envMap;
+    KSharedConfig::Ptr configPtr = item->project()->projectConfiguration();
+    KConfigGroup builderGroup( configPtr, "MakeBuilder" );
+
+    QStringList list = builderGroup.readEntry( "Environment Variables", QStringList() );
+    if( list.isEmpty() )
+        return envMap;
+
+    // convert VARNAME=VARVALUE into qmap
+    foreach( QString _pair, list )
+    {
+        QString varName = _pair.section( '=', 0, 0 );
+        QString varValue = _pair.section( '=', 1, 1 );
+        envMap.insert( varName, varValue );
+    }
+
+    return envMap;
 }
 
 #include "makebuilder.moc"

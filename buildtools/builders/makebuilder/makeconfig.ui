@@ -6,70 +6,35 @@
     <x>0</x>
     <y>0</y>
     <width>521</width>
-    <height>558</height>
+    <height>542</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>0</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <item row="3" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Maximum</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>21</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" colspan="4" >
-    <widget class="QCheckBox" name="kcfg_displayOnly" >
-     <property name="text" >
-      <string>Display commands but do not execute them</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2" >
+   <item row="0" column="0" colspan="3" >
     <widget class="QCheckBox" name="kcfg_abortOnFirstError" >
      <property name="text" >
       <string>Abort on first error</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2" >
+   <item row="1" column="0" colspan="3" >
+    <widget class="QCheckBox" name="kcfg_displayOnly" >
+     <property name="text" >
+      <string>Display commands but do not execute them</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3" >
     <widget class="QCheckBox" name="kcfg_runMoreThanOneJob" >
      <property name="text" >
       <string>Run more than one job at once</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
+   <item row="3" column="0" colspan="2" >
     <widget class="QLabel" name="label" >
      <property name="enabled" >
       <bool>false</bool>
@@ -86,21 +51,84 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="3" >
+   <item row="4" column="0" >
+    <widget class="QLabel" name="label_4" >
+     <property name="text" >
+      <string>Make executable:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="2" >
+    <widget class="KLineEdit" name="kcfg_makeBinary" />
+   </item>
+   <item row="5" column="0" >
+    <widget class="QLabel" name="label_6" >
+     <property name="text" >
+      <string>Default make target:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2" >
+    <widget class="KLineEdit" name="kcfg_defaultTarget" />
+   </item>
+   <item row="6" column="0" >
+    <widget class="QLabel" name="label_5" >
+     <property name="text" >
+      <string>Additional make options:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="2" >
+    <widget class="KLineEdit" name="kcfg_additionalOptions" />
+   </item>
+   <item row="7" column="0" colspan="3" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Environment Variables in the form of VARNAME=VARVALUE</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="3" >
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>ex) PATH=/usr/bin</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="3" >
+    <widget class="KEditListBox" name="kcfg_environmentVars" >
+     <property name="buttons" >
+      <set>KEditListBox::Add|KEditListBox::Remove</set>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="3" >
     <spacer>
      <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>40</width>
-       <height>20</height>
+       <width>503</width>
+       <height>16</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KEditListBox</class>
+   <extends>QGroupBox</extends>
+   <header>keditlistbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -114,8 +142,8 @@
      <y>81</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>254</x>
-     <y>102</y>
+     <x>511</x>
+     <y>116</y>
     </hint>
    </hints>
   </connection>

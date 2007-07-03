@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+    Copyright (C) 2007 Dukju Ahn <dukjuahn@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -53,15 +54,17 @@ public:
     virtual ~MakeBuilder();
 
     /**
-     * If argument is ProjectItem, invoke "make" in IBuildSystemManager::buildDirectory(), with no target
+     * If argument is ProjectItem, invoke "make" in IBuildSystemManager::buildDirectory(), with
+     * specified target in project setting.
      *
      * If argument is ProjectTargetItem, invoke "make" with targetname QStandardItem::text(). In this case,
      * it tries its best to fetch ProjectItem, which is the argument of IBuildSystemManager::buildDirectory()
      * If it fails to fetch ProjectItem, the top build directory is defaulted to project directory.
      * Based on top build directory, the actual build_dir is computed and handed to outputview
      *
-     * If argument is ProjectBuildFolderItem, invoke "make" with no target. To determine the build directory,
-     * first calculates rel_dir between top_project_dir(ProjectItem::url()) and ProjectBuildFolderItem::url().
+     * If argument is ProjectBuildFolderItem, invoke "make" with specified target in project setting.
+     * To determine the build directory, first calculates rel_dir between
+     * top_project_dir(ProjectItem::url()) and ProjectBuildFolderItem::url().
      * Then invokes make in top_build_dir/rel_dir.
      * If this fails to fetch top_build_dir, just invoke "make" in ProjectBuildFolderItem::url().
      *
@@ -82,7 +85,7 @@ private Q_SLOTS:
 private:
     QStringList computeBuildCommand(KDevelop::ProjectBaseItem *item);
     KUrl computeBuildDir( KDevelop::ProjectBaseItem* item );
-
+    QMap<QString, QString> environmentVars( KDevelop::ProjectBaseItem* item );
 
 private:
     QMap< KDevelop::IProject*, int > m_ids;
