@@ -60,7 +60,7 @@ DrillDownView::DrillDownView(QWidget *parent)
 
     connect(&animation, SIGNAL(frameChanged(int)), this, SLOT(slide(int)));
     connect(&animation, SIGNAL(finished()), this, SLOT(update()));
-    animation.setDuration(200);
+    animation.setDuration(100);
 
     setItemDelegate(new DrillDownItemDelegate(this));
 }
