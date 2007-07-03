@@ -25,8 +25,6 @@
 
 #include <sublimeexport.h>
 
-#include <viewcreator.h>
-
 class QWidget;
 
 namespace Sublime {
@@ -40,7 +38,7 @@ class Controller;
 Subclass from Document and implement createViewWidget() method
 to return a new widget for a view.
 */
-class SUBLIME_EXPORT Document: public QObject, public ViewCreator {
+class SUBLIME_EXPORT Document: public QObject {
     Q_OBJECT
 public:
     /**Creates a document and adds it to a @p controller.*/
@@ -60,6 +58,9 @@ public:
     QString title() const;
 
 protected:
+    /**Creates and returns the new view. Reimplement in subclasses to instantiate
+    views of derived from Sublime::View classes.*/
+    virtual View *newView(Document *doc);
     /**Reimplement this to create and return the new widget to display
     this document in the view. This method is used by View class when it
     is asked for its widget.*/

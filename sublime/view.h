@@ -57,7 +57,7 @@ private:
     View(const View &v);
     struct ViewPrivate *const d;
 
-    friend class ViewCreator;
+    friend class Document;
 };
 
 }

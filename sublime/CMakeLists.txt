@@ -19,7 +19,6 @@ set(sublime_LIB_SRCS
     tooldocument.cpp
     view.cpp
     view_p.cpp
-    viewcreator.cpp
     viewwidgetcreator.cpp
     sublimedefs.cpp
 )
@@ -48,6 +47,5 @@ install(FILES
     switcher.h
     tooldocument.h
     view.h
-    viewcreator.h
     viewwidgetcreator.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sublime )
