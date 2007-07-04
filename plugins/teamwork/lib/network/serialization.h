@@ -18,14 +18,9 @@
 #ifndef TEAMWORK_COMMON_H
 #define TEAMWORK_COMMON_H
 
-#include "networkfwd.h"
+#include <boost/serialization/extended_type_info_typeid.hpp>
 
-//#include <boost/serialization/extended_type_info_no_rtti.hpp>
-/*
-#define BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T) \
-    extended_type_info_no_rtti<const T>
-*/
-//#include <cc++/thread.h>
+#include "networkfwd.h"
 
 #ifdef USE_TEXT_ARCHIVE
 #include <boost/archive/text_iarchive.hpp>
