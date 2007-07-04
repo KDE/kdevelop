@@ -32,6 +32,7 @@
 struct svn_opt_revision_t;
 
 #include <QDateTime>
+#include <QVariant>
 
 namespace KDevelop
 {
@@ -54,6 +55,12 @@ public:
         BASE = 3,
         WORKING = 4,
         HEAD = 5
+    };
+    enum RevType
+    {
+        number = 0,
+        kind = 1,
+        date = 2
     };
 
     /// Construct InValid (Unspecified) Revision.
@@ -82,12 +89,6 @@ public:
     bool isValid();
 
 private:
-    enum RevType
-    {
-        number = 0,
-        kind = 1,
-        date = 2
-    };
     RevType type;
 
     long int revNum;
@@ -98,5 +99,6 @@ private:
 } // end of namespace SvnRevision
 
 using namespace SvnUtils;
+// Q_DECLARE_METATYPE(SvnUtils::SvnRevision::RevKeyword)
 
 #endif

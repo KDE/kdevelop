@@ -22,6 +22,7 @@
 #include "svn_logviewwidgets.h"
 #include "svn_checkoutwidgets.h"
 #include "svn_updatewidget.h"
+#include "svn_diffwidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -543,6 +544,50 @@ void KDevSubversionPart::vcsInfo( const KUrl &path_or_url ) // not yet in interf
 
     d->m_impl->spawnInfoThread( path_or_url, peg, revision, false );
 }
+
+// TODO when we can select two items in project manager view, introduce normal diff
+void KDevSubversionPart::pegDiff( const KUrl &path )
+{
+    SvnPegDiffDialog dlg;
+    dlg.setUrl( path );
+    if( dlg.exec() != QDialog::Accepted )
+        return;
+
+    // TODO At least one of the revisions among rev1, rev2 should be non-local revision.
+    // ie, if rev1 is WORKING, rev2 should not be BASE and vice versa.
+    // Otherwise peg-diff fails. There should be some validators in revision choose GUI.
+    // To see what is peg-diff, see peg revision section in subversion book.
+    SvnUtils::SvnRevision rev1 = dlg.startRev();
+    SvnUtils::SvnRevision rev2 = dlg.endRev();
+    SvnUtils::SvnRevision peg_rev;
+    peg_rev.setKey( SvnUtils::SvnRevision::WORKING );
+
+    bool isRecurse = dlg.recurse();
+    bool noDiffDelete = dlg.noDiffDeleted();
+    bool ignoreContent = dlg.ignoreContentType();
+
+    svncore()->spawnDiffThread( path, KUrl(), peg_rev, rev1, rev2,
+            isRecurse, false, noDiffDelete, ignoreContent );
+}
+void KDevSubversionPart::diffToHead( const KUrl &path )
+{
+    SvnUtils::SvnRevision rev1, rev2;
+    rev1.setKey( SvnUtils::SvnRevision::HEAD );
+    rev2.setKey( SvnUtils::SvnRevision::WORKING ); // use this as peg revision
+
+    svncore()->spawnDiffThread( path, KUrl(), rev2/*peg revision*/, rev1, rev2,
+                                true, false, false, false );
+}
+void KDevSubversionPart::diffToBase( const KUrl &path )
+{
+    SvnUtils::SvnRevision peg_rev; // unspecified peg revision. do normal diff
+
+    SvnUtils::SvnRevision rev1, rev2;
+    rev1.setKey( SvnUtils::SvnRevision::BASE );
+    rev2.setKey( SvnUtils::SvnRevision::WORKING );
+
+    svncore()->spawnDiffThread( path, path, peg_rev, rev1, rev2, true, false, false, false );
+}
 SubversionCore* KDevSubversionPart::svncore()
 {
     return d->m_impl;
@@ -623,6 +668,18 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
 
             action = new QAction(i18n("Remove from SVN"), this);
             connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+            actions << action;
+
+            action = new QAction("Diff to HEAD", this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
+            actions << action;
+
+            action = new QAction("Diff to BASE", this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
+            actions << action;
+
+            action = new QAction(i18n("Diff to..."), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
             actions << action;
 
             return qMakePair( QString("Subversion"), actions );
@@ -782,6 +839,20 @@ void KDevSubversionPart::ctxRemove()
 void KDevSubversionPart::ctxCheckout()
 {
     checkout(d->m_ctxUrl);
+}
+
+void KDevSubversionPart::ctxDiff()
+{
+    pegDiff( d->m_ctxUrl );
+}
+
+void KDevSubversionPart::ctxDiffHead()
+{
+    diffToHead( d->m_ctxUrl );
+}
+void KDevSubversionPart::ctxDiffBase()
+{
+    diffToBase( d->m_ctxUrl );
 }
 
 //////////////////////////////////////////////

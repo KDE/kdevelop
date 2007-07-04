@@ -125,6 +125,9 @@ private:
     void logview( const KUrl &wcPath_or_url );
     void annotate( const KUrl &path_or_url );
     void vcsInfo( const KUrl &path_or_url ); // not yet in interface
+    void pegDiff( const KUrl &path );
+    void diffToHead( const KUrl &path );
+    void diffToBase( const KUrl &path );
 
 public:
     // SubversionPart internal methods
@@ -157,6 +160,9 @@ public Q_SLOTS:
     void ctxAdd();
     void ctxRemove();
     void ctxCheckout();
+    void ctxDiff();
+    void ctxDiffHead();
+    void ctxDiffBase();
 
 private Q_SLOTS:
     void slotJobFinished( SvnKJobBase *job );

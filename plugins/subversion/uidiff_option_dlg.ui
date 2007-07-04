@@ -1,0 +1,82 @@
+<ui version="4.0" >
+ <class>SvnPegDiffDialogWidget</class>
+ <widget class="QWidget" name="SvnPegDiffDialogWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>431</width>
+    <height>328</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Target Url</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="KLineEdit" name="urlEdit" >
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="startRevWidget" >
+     <property name="title" >
+      <string>Start Revision</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QGroupBox" name="endRevWidget" >
+     <property name="title" >
+      <string>End Revision</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QCheckBox" name="nonrecurseChk" >
+     <property name="text" >
+      <string>Non Recursive</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QCheckBox" name="nodiffDeletedChk" >
+     <property name="text" >
+      <string>No diff deleted</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" >
+    <widget class="QCheckBox" name="ignoreContentsChk" >
+     <property name="text" >
+      <string>Ignore contents type</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

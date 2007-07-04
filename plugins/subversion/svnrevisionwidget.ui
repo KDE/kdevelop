@@ -1,0 +1,228 @@
+<ui version="4.0" >
+ <class>SvnRevisionWidget</class>
+ <widget class="QWidget" name="SvnRevisionWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>361</width>
+    <height>134</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="leftMargin" >
+    <number>6</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>6</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QRadioButton" name="revnumRadio" >
+     <property name="text" >
+      <string>Specify as number:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="KIntNumInput" name="numInput" >
+     <property name="minimum" >
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QRadioButton" name="revkindRadio" >
+     <property name="text" >
+      <string>Specify as keyword:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="KComboBox" name="kindCombo" />
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QRadioButton" name="revdateRadio" >
+     <property name="text" >
+      <string>Specify as date:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="KDateTimeWidget" name="datetimeWidget" />
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KDateTimeWidget</class>
+   <extends>QWidget</extends>
+   <header>kdatetimewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>revnumRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kindCombo</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>284</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revnumRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>datetimeWidget</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>194</x>
+     <y>157</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revnumRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numInput</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>284</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revkindRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numInput</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>284</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revkindRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kindCombo</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>284</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revkindRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>datetimeWidget</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>194</x>
+     <y>157</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revdateRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numInput</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>284</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revdateRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>revkindRadio</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>103</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>revdateRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>datetimeWidget</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>194</x>
+     <y>157</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
