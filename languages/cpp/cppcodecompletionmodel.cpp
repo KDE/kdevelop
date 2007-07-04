@@ -62,11 +62,14 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
       thisContext = top->findContextAt(range.start());
 
        kDebug(9007) << "context is set to " << thisContext << endl;
-       {
-         kDebug( 9007 ) << "================== duchain for the context =======================" << endl;
-         DumpChain dump;
-         dump.dump(thisContext);
-       }
+        if( thisContext ) {
+          kDebug( 9007 ) << "================== duchain for the context =======================" << endl;
+          DumpChain dump;
+          dump.dump(thisContext);
+        } else {
+          kDebug( 9007 ) << "================== NO CONTEXT FOUND =======================" << endl;
+          return;
+        }
     }
 
     setContext(thisContext, range.start(), view);
