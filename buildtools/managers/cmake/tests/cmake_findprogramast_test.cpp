@@ -34,18 +34,56 @@ void FindProgramAstTest::testGoodParse()
 
 void FindProgramAstTest::testGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc l;
+    l.name = "find_program";
+    l.addArguments(QStringList() << "MY_VAR" << "file" << "location");
+    QTest::newRow("normal use") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "MY_VAR" << "NAMES" << "file1" << "file2" << "PATHS" << "location1" << "location2");
+    QTest::newRow("advanced use") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "MY_VAR" << "NAMES" << "file1" << "file2"
+            << "PATHS" << "location1" << "location2" << "DOC" << "I am documenting"
+            << "PATH_SUFFIXES" << "modules" << "NO_CMAKE_PATH");
+    QTest::newRow("strange use") << l;
 }
 
 void FindProgramAstTest::testBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    FindProgramAst* ast = new FindProgramAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
 
 void FindProgramAstTest::testBadParse_data()
 {
+    
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l1;
+    l1.name = "";
+    l1.addArguments(QStringList() << "MY_VAR" << "file");
+    QTest::newRow ("no function name") << l1;
+
+    CMakeFunctionDesc l;
+    l.name = "find_program";
+    l.addArguments(QStringList() << "MY_VAR" << "file");
+    QTest::newRow("not enough parameters") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "MY_VAR" << "NAMES" << "PATHS" << "location1" << "location2");
+    QTest::newRow("no names") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "MY_VAR" << "NAMES" << "file1" << "file2"
+            << "PATHS"
+            << "PATH_SUFFIXES" << "modules" << "NO_CMAKE_PATH");
+    QTest::newRow("no paths") << l;
 }
 
 #include "cmake_findprogramast_test.moc"

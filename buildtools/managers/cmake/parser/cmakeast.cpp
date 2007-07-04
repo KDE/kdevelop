@@ -56,6 +56,13 @@ CMAKE_REGISTER_AST( IncludeAst, include )
 CMAKE_REGISTER_AST( IncludeDirectoriesAst, include_directories )
 CMAKE_REGISTER_AST( SetAst, set )
 CMAKE_REGISTER_AST( ProjectAst, project )
+CMAKE_REGISTER_AST( MacroAst, macro )
+CMAKE_REGISTER_AST( MarkAsAdvancedAst, mark_as_advanced )
+CMAKE_REGISTER_AST( FindPackageAst, find_package )
+CMAKE_REGISTER_AST( FindProgramAst, find_program )
+CMAKE_REGISTER_AST( FindPathAst, find_path )
+
+enum Stage {NAMES, PATHS, PATH_SUFFIXES};
 
 CustomCommandAst::CustomCommandAst()
 {
@@ -880,6 +887,31 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return false;
 }
 
+
+MacroCallAst::MacroCallAst()
+{
+}
+
+MacroCallAst::~MacroCallAst()
+{
+}
+
+void MacroCallAst::writeBack( QString& )
+{
+}
+
+bool MacroCallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.isEmpty())
+        return false;
+    m_name = func.name;
+
+    foreach(CMakeFunctionArgument fa, func.arguments) {
+        m_arguments += fa.value;
+    }
+    return true;
+}
+
 FindLibraryAst::FindLibraryAst()
 {
 }
@@ -911,7 +943,30 @@ void FindPackageAst::writeBack( QString& )
 
 bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    m_isQuiet=false;
+    m_noModule=false;
+    m_isRequired=false;
+    if ( func.name.toLower() != "find_package" )
+        return false;
+
+    if ( func.arguments.isEmpty() )
+        return false;
+
+    m_name = func.arguments[0].value;
+
+    foreach( CMakeFunctionArgument arg, func.arguments ) {
+        if(arg.value[0].isNumber()) {
+            QStringList version = func.arguments[1].value.split('.');
+            m_minor = version[0].toInt();
+            m_major = version[1].toInt();
+        } else if(arg.value=="QUIET")
+            m_isQuiet=true;
+        else if(arg.value=="NO_MODULE")
+            m_noModule=true;
+        else if(arg.value=="REQUIRED")
+            m_isRequired=true;
+    }
+    return true;
 }
 
 FindPathAst::FindPathAst()
@@ -928,11 +983,58 @@ void FindPathAst::writeBack( QString& )
 
 bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="find_program" || func.arguments.count()<3)
+        return false;
+    
+    m_variableName = func.arguments[0].value;
+    Stage s = NAMES;
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
+    if(it->value=="NAMES")
+        ++it;
+    else {
+        m_filenames=QStringList(it->value);
+        s=PATHS;
+    }
+
+    for(; it!=itEnd; ++it) {
+        if(it->value=="NO_DEFAULT_PATH")
+            m_noDefaultPath = true;
+        else if(it->value=="NO_CMAKE_ENVIRONMENT_PATH")
+            m_noCmakeEnvironmentPath = true;
+        else if(it->value=="NO_CMAKE_PATH")
+            m_noCmakePath=true;
+        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
+            m_noSystemEnvironmentPath = true;
+        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
+            m_noSystemEnvironmentPath = true;
+        else if(it->value=="DOC") {
+            ++it;
+            if(it==itEnd)
+                return false;
+            m_documentation = it->value;
+        } else if(it->value=="PATHS")
+            s=PATHS;
+            else if(it->value=="PATH_SUFFIXES")
+                s=PATH_SUFFIXES;
+            else switch(s) {
+                case NAMES:
+                    m_filenames << it->value;
+                    break;
+                case PATHS:
+                    m_path << it->value;
+                    break;
+                case PATH_SUFFIXES:
+                    m_pathSuffixes << it->value;
+                    break;
+            }
+    }
+    return !m_filenames.isEmpty() && !m_path.isEmpty();
 }
 
 FindProgramAst::FindProgramAst()
 {
+        m_noDefaultPath = m_noCmakeEnvironmentPath = m_noCmakePath =
+        m_noSystemEnvironmentPath = m_noSystemEnvironmentPath = false;
 }
 
 FindProgramAst::~FindProgramAst()
@@ -945,7 +1047,52 @@ void FindProgramAst::writeBack( QString& )
 
 bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="find_program" || func.arguments.count()<3)
+        return false;
+    
+    m_variableName = func.arguments[0].value;
+    Stage s = NAMES;
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
+    if(it->value=="NAMES")
+        ++it;
+    else {
+        m_filenames=QStringList(it->value);
+        s=PATHS;
+    }
+
+    for(; it!=itEnd; ++it) {
+        if(it->value=="NO_DEFAULT_PATH")
+            m_noDefaultPath = true;
+        else if(it->value=="NO_CMAKE_ENVIRONMENT_PATH")
+            m_noCmakeEnvironmentPath = true;
+        else if(it->value=="NO_CMAKE_PATH")
+            m_noCmakePath=true;
+        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
+            m_noSystemEnvironmentPath = true;
+        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
+            m_noSystemEnvironmentPath = true;
+        else if(it->value=="DOC") {
+            ++it;
+            if(it==itEnd)
+                return false;
+            m_documentation = it->value;
+        } else if(it->value=="PATHS")
+            s=PATHS;
+        else if(it->value=="PATH_SUFFIXES")
+            s=PATH_SUFFIXES;
+        else switch(s) {
+            case NAMES:
+                m_filenames << it->value;
+                break;
+            case PATHS:
+                m_path << it->value;
+                break;
+            case PATH_SUFFIXES:
+                m_pathSuffixes << it->value;
+                break;
+        }
+    }
+    return !m_filenames.isEmpty() && !m_path.isEmpty();
 }
 
 FltkWrapUiAst::FltkWrapUiAst()
@@ -2111,4 +2258,5 @@ bool CustomInvokationAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_arguments = func.arguments;
     return true;
 }
+
 

@@ -23,6 +23,7 @@
 // #include "cmakeprojectvisitor.h"
 #include "astfactory.h"
 
+#include <QStack>
 #include <KDebug>
 
 void CMakeFunctionDesc::addArguments( const QStringList& args )
@@ -44,6 +45,20 @@ CMakeListsParser::~CMakeListsParser()
 {
 }
 
+enum RecursivityType { No, Yes, ChangeOnly, End };
+
+RecursivityType recursivity(const QString& functionName)
+{
+    if(functionName.toUpper()=="IF" || functionName.toUpper()=="WHILE" ||
+           functionName.toUpper()=="FOREACH" || functionName.toUpper()=="MACRO")
+        return Yes;
+    else if(functionName.toUpper()=="ELSE" || functionName.toUpper()=="ELSEIF")
+        return ChangeOnly;
+    else if(functionName.startsWith("END"))
+        return End;
+    return No;
+}
+
 bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
 {
     if ( root == 0 )
@@ -57,29 +72,57 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
     bool parseError = false;
     bool haveNewline = true;
     cmListFileLexer_Token* token;
+    QStack<CMakeAst*> parent;
+    parent.push(root);
+
     while(!parseError && (token = cmListFileLexer_Scan(lexer)))
     {
+        parseError=true;
         if(token->type == cmListFileLexer_Token_Newline)
         {
+            parseError=false;
             haveNewline = true;
         }
         else if(token->type == cmListFileLexer_Token_Identifier)
         {
             if(haveNewline)
             {
+                CMakeAst* currentParent=parent.top();
                 haveNewline = false;
                 CMakeFunctionDesc function;
                 function.name = token->text;
                 function.filePath = fileName;
                 function.line = token->line;
-
-                parseError = !parseCMakeFunction( lexer, function, fileName, root );
+                
+                RecursivityType s=recursivity(function.name);
+                if(s==End) {
+                    parent.pop();
+                    break;
+                } else {
+                    parseError = !parseCMakeFunction( lexer, function, fileName, currentParent );
+                    
+                    if(!parseError && s!=No) {
+                        CMakeAst* lastCreated = currentParent->children().last();
+                        CMakeAst* child = new CMakeAst;
+                        lastCreated->addChildAst(child);
+//                         kDebug(9032) << "Lol: " << function.name << s << endl;
+                        switch(s) {
+                            case Yes:
+                                parent.push(lastCreated);
+                                break;
+                            case ChangeOnly: //For else and ifelse
+                                parent.pop();
+                                parent.push(lastCreated);
+                                break;
+                            case End:
+                            default:
+                            case No:
+                                break;
+                        }
+                    }
+                }
             }
-            else
-                parseError = true;
         }
-        else
-            parseError = true;
     }
 
     return parseError;
@@ -109,15 +152,16 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
         if(token->type == cmListFileLexer_Token_ParenRight)
         {
             CMakeAst* newElement = AstFactory::self()->createAst(func.name);
+            bool asMacro=false;
 
-            if(newElement)
+            if(!newElement)
             {
-                newElement->parseFunctionInfo(func);
-                parent->addChildAst(newElement);
+                asMacro=true;
+                newElement = new MacroCallAst;
             }
-            else
-                kWarning(9032) << "The <" << func.name << "> AST is not registered" << endl;
-            kDebug(9032) << "Adding: " << func.name << newElement << endl;
+            newElement->parseFunctionInfo(func);
+            parent->addChildAst(newElement);
+//             kDebug(9032) << "Adding: " << func.name << newElement << " as macro :" << asMacro << endl;
             
             return true;
         }
@@ -142,61 +186,4 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
     return false;
 
 }
-
-/*ProjectInfo CMakeListsParser::parse( const KUrl& file )
-{
-    ProjectInfo pi;
-    CMakeAst *ast = new CMakeAst;
-
-    kDebug(9032) << "Parsing file: " << file.path() << endl;
-
-    if ( !CMakeListsParser::parseCMakeFile( ast, file.toLocalFile() ) )
-    {
-        pi = parseProject( ast );
-    } else {
-        //FIXME: Put here the error.
-	kDebug(9032) << "Parsing error." << endl;
-    }
-
-    if(!pi.name.isEmpty())
-            kDebug(9032) << "Parsed: " << file << endl;
-
-    delete ast;
-    return pi;
-}
-
-ProjectInfo CMakeListsParser::parseProject( const CMakeAst* ast )
-{
-    ProjectInfo pi;
-    if ( ast )
-    {
-        CMakeProjectVisitor v;
-        ast->accept(&v);
-        
-        pi.name = v.projectName();
-        kDebug(9032) << "Subdirectories: " << v.subdirectories() << endl;
-    }
-    return pi;
-}
-
-FolderInfo CMakeListsParser::parseFolder( const CMakeAst*  )
-{
-    FolderInfo mainInfo;
-    if ( false )
-    {
-
-    }
-    return mainInfo;
-}
-
-TargetInfo CMakeListsParser::parseTarget( const CMakeAst* )
-{
-    TargetInfo ti;
-    if ( false )
-    {
-
-    }
-
-    return ti;
-}*/
 

@@ -45,8 +45,7 @@ typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager,
                             CMakeSupportFactory( "kdevcmakemanager" ) )
     
-CMakeProjectManager::CMakeProjectManager( QObject* parent,
-                              const QStringList& )
+CMakeProjectManager::CMakeProjectManager( QObject* parent, const QStringList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
@@ -69,28 +68,11 @@ CMakeProjectManager::~CMakeProjectManager()
 //     return m_project;
 // }
 
-bool CMakeProjectManager::isVariable(const QString &name)
-{
-    return name.startsWith("${") && name.endsWith("}");
-}
 
-QString CMakeProjectManager::variableName(const QString &name)
-{
-    if(!isVariable(name))
-        return QString::null;
-    return name.mid(2, name.length()-3);
-}
 
 QStringList CMakeProjectManager::resolveVariables(const QStringList & vars)
 {
-    QStringList rvars;
-    for(QStringList::const_iterator i=vars.begin(); i!=vars.end(); ++i) {
-        if(isVariable(*i))
-            rvars += m_vars.value(variableName(*i));
-        else
-            rvars += *i;
-    }
-    return rvars;
+    return CMakeProjectVisitor::resolveVariables(vars, &m_vars);
 }
 
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
@@ -108,10 +90,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
     kDebug(9025) << "parse: " << folder->url() << endl;
     CMakeAst *node = folder->tree();
-    CMakeProjectVisitor v(&m_vars);
+    CMakeProjectVisitor v(&m_vars, &m_macros);
     node->accept(&v);
 
-    kDebug(9032) << "resolveVars" << resolveVariables(v.subdirectories()) << v.subdirectories() << endl;
     foreach ( QString subf, resolveVariables(v.subdirectories()) ) {
         CMakeAst *newFolder = new CMakeAst;
         KUrl path(folder->url());
@@ -120,13 +101,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         cmakelistsPath.addPath("CMakeLists.txt");
         if ( !CMakeListsParser::parseCMakeFile( newFolder, cmakelistsPath.toLocalFile() ) )
         {
-            kDebug(9032) << "Subfolder: " << path.toLocalFile() << endl;
+//             kDebug(9032) << "Subfolder: " << path.toLocalFile() << endl;
             CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, newFolder, folder );
             a->setUrl(path);
             folderList.append( a );
         } else {
             //FIXME: Put here the error.
-            kDebug(9032) << "Parsing error." << endl;
+            kDebug(9032) << "Parsing error: " << cmakelistsPath << endl;
             return folderList;
         }
         //delete newFolder; //FIXME: don't know if i should do that!!!
@@ -166,6 +147,7 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();
     cmakeInfoFile.addPath("CMakeLists.txt");
+
     kDebug(9025) << k_funcinfo << "file is " << cmakeInfoFile.path() << endl;
     if ( !cmakeInfoFile.isLocalFile() )
     {
@@ -181,7 +163,8 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
 
         if ( !CMakeListsParser::parseCMakeFile( rootFolder, cmakeInfoFile.toLocalFile() ) )
         {
-            CMakeProjectVisitor v(&m_vars);
+            m_vars.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().url()));
+            CMakeProjectVisitor v(&m_vars, &m_macros);
             rootFolder->accept(&v);
 
             name = v.projectName();

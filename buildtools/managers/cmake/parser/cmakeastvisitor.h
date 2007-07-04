@@ -37,32 +37,41 @@ class ConfigureFileAst;
 class IncludeAst;
 class SetAst;
 class ProjectAst;
-class ProjectAst;
+class MacroAst;
 class IncludeDirectoriesAst;
+class MacroCallAst;
+class FindPackageAst;
+class FindProgramAst;
+class FindPathAst;
 class CMakeAst;
 
 class CMakeAstVisitor {
     public: //maybe protected?
-	virtual ~CMakeAstVisitor() {}
-	
-	virtual void visit( const CustomCommandAst * ) = 0;
-	virtual void visit( const CustomTargetAst * ) = 0;
-	virtual void visit( const AddDefinitionsAst * ) = 0;
-	virtual void visit( const AddDependenciesAst * ) = 0;
-	virtual void visit( const AddExecutableAst * ) = 0;
-	virtual void visit( const AddLibraryAst * ) = 0;
-	virtual void visit( const AddSubdirectoryAst * ) = 0;
-	virtual void visit( const AddTestAst * ) = 0;
-	virtual void visit( const AuxSourceDirectoryAst * ) = 0;
-	virtual void visit( const BuildCommandAst * ) = 0;
-	virtual void visit( const BuildNameAst * ) = 0;
-	virtual void visit( const CMakeMinimumRequiredAst * ) = 0;
-	virtual void visit( const ConfigureFileAst * ) = 0;
+        virtual ~CMakeAstVisitor() {}
+        
+        virtual void visit( const CustomCommandAst * ) = 0;
+        virtual void visit( const CustomTargetAst * ) = 0;
+        virtual void visit( const AddDefinitionsAst * ) = 0;
+        virtual void visit( const AddDependenciesAst * ) = 0;
+        virtual void visit( const AddExecutableAst * ) = 0;
+        virtual void visit( const AddLibraryAst * ) = 0;
+        virtual void visit( const AddSubdirectoryAst * ) = 0;
+        virtual void visit( const AddTestAst * ) = 0;
+        virtual void visit( const AuxSourceDirectoryAst * ) = 0;
+        virtual void visit( const BuildCommandAst * ) = 0;
+        virtual void visit( const BuildNameAst * ) = 0;
+        virtual void visit( const CMakeMinimumRequiredAst * ) = 0;
+        virtual void visit( const ConfigureFileAst * ) = 0;
         virtual void visit( const IncludeAst * ) = 0;
         virtual void visit( const SetAst * ) = 0;
         virtual void visit( const ProjectAst * ) = 0;
         virtual void visit( const IncludeDirectoriesAst * ) = 0;
-	virtual void visit( const CMakeAst * ) = 0;
+        virtual void visit( const MacroCallAst * ) = 0;
+        virtual void visit( const FindPackageAst * ) = 0;
+        virtual void visit( const FindProgramAst * ) = 0;
+        virtual void visit( const FindPathAst * ) = 0;
+        virtual void visit( MacroAst * ) = 0;
+        virtual void visit( const CMakeAst * ) = 0;
 };
 
 #endif

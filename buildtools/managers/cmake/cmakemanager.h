@@ -44,6 +44,7 @@ class IProjectBuilder;
 }
 
 class CMakeFolderItem;
+class MacroAst;
 
 class cmLocalGenerator;
 
@@ -95,9 +96,6 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
 
 private:
-
-    static bool isVariable(const QString& name);
-    static QString variableName(const QString &name);
     QStringList resolveVariables(const QStringList & vars);
     KDevelop::IProject* m_project;
     CMakeFolderItem* m_rootItem;
@@ -106,6 +104,7 @@ private:
     KUrl::List m_includeDirList;
     CMakeListsParser m_parser;
     QHash<QString, QStringList> m_vars;
+    QHash<QString, MacroAst*> m_macros;
 //     ProjectInfo m_projectInfo;
 };
 

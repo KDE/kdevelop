@@ -157,6 +157,10 @@ private:
 
 #define CMAKE_END_AST_CLASS( klassName ) };
 
+CMAKE_BEGIN_AST_CLASS( MacroCallAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
+CMAKE_ADD_AST_MEMBER( QStringList, const QString&, arguments, Arguments )
+CMAKE_END_AST_CLASS( AddDefinitionsAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
@@ -278,15 +282,43 @@ CMAKE_BEGIN_AST_CLASS( FindLibraryAst )
 CMAKE_END_AST_CLASS( FindLibraryAst )
 
 
-CMAKE_BEGIN_AST_CLASS( FindPackageAst )
+CMAKE_BEGIN_AST_CLASS( FindPackageAst ) //FIXME: there are things that I don't understand
+CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
+CMAKE_ADD_AST_MEMBER( int, int, minor, Minor )
+CMAKE_ADD_AST_MEMBER( int, int, major, Major )
+CMAKE_ADD_AST_MEMBER( bool, bool, isQuiet, Quiet )
+CMAKE_ADD_AST_MEMBER( bool, bool, noModule, NoModule )
+CMAKE_ADD_AST_MEMBER( bool, bool, isRequired, Required )
 CMAKE_END_AST_CLASS( FindPackageAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindPathAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+
+CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindPathAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindProgramAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+
+CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindProgramAst )
 
 
@@ -323,6 +355,7 @@ CMAKE_END_AST_CLASS( GetTestPropAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IfAst )
+CMAKE_ADD_AST_MEMBER( QList<QStringList>, const QList<QStringList>&, conditions, Conditions )
 CMAKE_END_AST_CLASS( IfAst )
 
 
@@ -566,4 +599,5 @@ CMAKE_ADD_AST_MEMBER( QList<CMakeFunctionArgument>, const QList<CMakeFunctionArg
 CMAKE_END_AST_CLASS( CustomInvokationAst )
 
 #endif
+
 

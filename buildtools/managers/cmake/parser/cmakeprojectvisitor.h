@@ -30,7 +30,7 @@
 class CMakeProjectVisitor : public CMakeAstVisitor
 {
     public:
-        CMakeProjectVisitor(QHash<QString, QStringList> *vars);
+        CMakeProjectVisitor(QHash<QString, QStringList> *vars, QHash<QString, MacroAst*> *macros);
         virtual ~CMakeProjectVisitor() {}
         
         virtual void visit( const CustomCommandAst * ) { notImplemented(); }
@@ -47,7 +47,12 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         virtual void visit( const BuildNameAst * ) { notImplemented(); }
         virtual void visit( const CMakeMinimumRequiredAst * ) { notImplemented(); }
         virtual void visit( const ConfigureFileAst * ) { notImplemented(); }
-        virtual void visit( const IncludeAst * ) { notImplemented(); }
+        virtual void visit( const IncludeAst * );
+        virtual void visit( const MacroCallAst * call);
+        virtual void visit( const FindPackageAst * );
+        virtual void visit( const FindProgramAst * );
+        virtual void visit( const FindPathAst * );
+        virtual void visit( MacroAst * );
         
         virtual void visit( const SetAst * );
         virtual void visit( const ProjectAst * );
@@ -59,8 +64,15 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         QStringList targets() const { return m_filesPerTarget.keys(); }
         QStringList files(const QString &target) const { return m_filesPerTarget[target]; }
         QStringList includeDirectories() const { return m_includeDirectories; }
+        
+        static bool hasVariable(const QString &name);
+        static QString variableName(const QString &name);
+	static QStringList resolveVariables(const QStringList & vars, const QHash<QString, QStringList> *values);
     private:
+        static QStringList resolveVariable(const QString &exp, const QHash<QString, QStringList> *values);
+        static QString findFile(const QString &file, const QStringList &folders);
         void notImplemented() const;
+        bool haveToFind(const QString &varName);
         
         QString m_projectName;
         QStringList m_subdirectories;
@@ -68,6 +80,7 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         QMap<QString, QStringList> m_filesPerTarget;
         QString m_root;
         QHash<QString, QStringList> *m_vars;
+        QHash<QString, MacroAst*> *m_macros;
 };
 
 #endif

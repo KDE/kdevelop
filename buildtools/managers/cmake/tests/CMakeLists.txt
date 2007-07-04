@@ -712,5 +712,11 @@ target_link_libraries( cmake-writefileasttest
   ${KDE_KDECORE_LIBS}
   kdevcmakecommon )
 
-
+set ( cmakeprojectvisitor_SRCS ../parser/cmakeprojectvisitor.cpp cmake_cmakeprojectvisitor_test.cpp )
+kde4_automoc( cmake-cmakeprojectvisitor ${cmakeprojectvisitor_SRCS} )
+kde4_add_unit_test(cmake-cmakeprojectvisitor  ${cmakeprojectvisitor_SRCS} )
+target_link_libraries( cmake-cmakeprojectvisitor
+	 ${QT_QTTEST_LIBRARY}
+	 ${KDE_KDECORE_LIBS}
+	 kdevcmakecommon )
 
