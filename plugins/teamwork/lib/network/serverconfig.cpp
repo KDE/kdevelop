@@ -24,6 +24,21 @@
 #include "defines.h"
 #include <iostream>
 
+#ifdef USE_POLYMORPHIC_ARCHIVE
+// #include <boost/archive/polymorphic_xml_iarchive.hpp>
+// #include <boost/archive/polymorphic_xml_oarchive.hpp>
+// typedef boost::archive::polymorphic_xml_iarchive InternalIArchive;
+// typedef boost::archive::polymorphic_xml_oarchive InternalOArchive;
+
+#include <boost/archive/polymorphic_text_iarchive.hpp>
+#include <boost/archive/polymorphic_text_oarchive.hpp>
+typedef boost::archive::polymorphic_text_iarchive InternalIArchive;
+typedef boost::archive::polymorphic_text_oarchive InternalOArchive;
+#else
+typedef Teamwork::InArchive InternalIArchive;
+typedef Teamwork::OutArchive InternalOArchive;
+#endif
+
 namespace Teamwork {
 
 ServerConfiguration::ServerConfiguration() : port( STANDARDPORT ), bind( "0.0.0.0" ) {
@@ -35,7 +50,7 @@ bool loadServerConfiguration( ServerConfiguration& conf ) {
     cout << "could not open config-file" << endl;
     return false;
   }
-  boost::archive::polymorphic_text_iarchive arch( file );
+  InternalIArchive arch( file );
   try {
   } catch( ... ) {
     cout << "error while reading the config-file" << endl;
@@ -62,7 +77,7 @@ bool saveServerConfiguration( ServerConfiguration& conf ) {
     return false;
   }
   /*boost::archive::polymorphic_text_oarchive*/
-  boost::archive::polymorphic_text_oarchive arch( file );
+  InternalOArchive arch( file );
   try {
   } catch( ... ) {
     cout << "error while loading the config-file" << endl;

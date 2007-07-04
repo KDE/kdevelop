@@ -50,7 +50,7 @@ struct CollabFile {
 
 typedef std::list<CollabFile> CollabFileList;
 
-typedef quint64 CollabSessionId; //unsigned long long CollabSessionId;
+typedef quint64 CollabSessionId;
 
 class FileCollaborationMessageData {
   public:

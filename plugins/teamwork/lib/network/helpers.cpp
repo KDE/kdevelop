@@ -30,8 +30,8 @@
 typedef boost::archive::polymorphic_text_iarchive InternalIArchive;
 typedef boost::archive::polymorphic_text_oarchive InternalOArchive;
 #else
-typedef IArchive InternalIArchive;
-typedef OArchive InternalOArchive;
+typedef Teamwork::InArchive InternalIArchive;
+typedef Teamwork::OutArchive InternalOArchive;
 #endif
 
 std::string formatInt( int i ) {

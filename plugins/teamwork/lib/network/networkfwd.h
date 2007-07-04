@@ -15,7 +15,8 @@
 #ifndef NETWORKFWD_H
 #define NETWORKFWD_H
 
-#define USE_POLYMORPHIC_ARCHIVE
+//#define USE_POLYMORPHIC_ARCHIVE
+#define USE_TEXT_ARCHIVE
 
 class MessageSerialization;
 class NormalSerialization;
