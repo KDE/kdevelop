@@ -12,6 +12,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include "serverconfig.h"
 #include "serialization.h"
 #include <boost/archive/polymorphic_xml_oarchive.hpp>
