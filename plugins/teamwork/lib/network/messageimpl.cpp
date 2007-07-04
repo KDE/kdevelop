@@ -12,6 +12,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include "messageimpl.h"
 #include "serialization.h"
 #include "messagetypeset.h"
