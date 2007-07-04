@@ -15,6 +15,7 @@
 #ifndef TEAMWORK_USER_H
 #define TEAMWORK_USER_H
 
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <string>
 

@@ -16,6 +16,7 @@ email                : david.nolden.kdevelop@art-master.de
 #define OFFSETUTILS_H
 
 #include <map>
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/map.hpp>
 #include <string>
 #include <iosfwd>

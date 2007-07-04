@@ -15,6 +15,7 @@
 #ifndef DYNAMICTEXT_H
 #define DYNAMICTEXT_H
 #include <string>
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/split_member.hpp>
 
 typedef std::string String;

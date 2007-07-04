@@ -16,6 +16,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "dynamictext.h"
 #include "network/serialization.h"
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/export.hpp>
 #include <ostream>
 #include "verify.h"

@@ -21,6 +21,7 @@
 //#include <ostringstream>
 #include <QList>
 #include <QByteArray>
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/traits.hpp>

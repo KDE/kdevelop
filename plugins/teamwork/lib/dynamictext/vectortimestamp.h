@@ -16,6 +16,7 @@ email                : david.nolden.kdevelop@art-master.de
 #define VECTORTIMESTAMP_H
 
 #include <vector>
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/level.hpp>
 #include <iosfwd>

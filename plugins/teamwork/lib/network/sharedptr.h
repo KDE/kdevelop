@@ -19,6 +19,7 @@ Boston, MA 02110-1301, USA.
 #ifndef SharedPTR_H
 #define SharedPTR_H
 
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/split_member.hpp>
 
 /**

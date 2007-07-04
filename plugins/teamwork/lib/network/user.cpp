@@ -16,6 +16,7 @@
 #include "user.h"
 #include "serialization.h"
 
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/export.hpp> //must be included after archive-headers

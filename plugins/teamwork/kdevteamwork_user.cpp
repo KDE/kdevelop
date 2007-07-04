@@ -15,6 +15,7 @@
 #include "kdevteamwork_user.h"
 #include "network/teamworkmessages.h"
 #include "kdevteamwork.h"
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/export.hpp>
 #include "kdevteamwork_helpers.h"
 #include "network/sessioninterface.h"

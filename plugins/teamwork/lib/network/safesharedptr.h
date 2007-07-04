@@ -20,7 +20,8 @@
 
 #include "sharedptr.h"
 #include "mutexinterface.h"
-#include "boost/serialization/nvp.hpp"
+#include <boost/serialization/extended_type_info_typeid.hpp>
+#include <boost/serialization/nvp.hpp>
 
 #define MILLI_TO_NANO 1000000
 #define SEC_TO_NANO 1000000000

@@ -15,8 +15,8 @@
 #ifndef EASYMESSAGE
 #define EASYMESSAGE
 #include "messagetypeset.h"
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include  <boost/serialization/base_object.hpp>
-#include <boost/serialization/extended_type_info_no_rtti.hpp>
 
 /**
 This header offers by far the easiest way of declaring a message.

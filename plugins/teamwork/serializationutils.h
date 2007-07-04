@@ -32,6 +32,7 @@ typedef boost::archive::polymorphic_xml_iarchive XmlIArchive;
 typedef boost::archive::polymorphic_xml_oarchive XmlOArchive;
 #endif
 
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/base_object.hpp>
 //#include <boost/serialization/extended_type_info.hpp>
 #include <boost/serialization/utility.hpp>

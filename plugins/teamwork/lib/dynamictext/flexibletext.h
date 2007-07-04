@@ -15,6 +15,7 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef FLEXIBLETEXT_H
 #define FLEXIBLETEXT_H
 
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/deque.hpp>
 #include <boost/serialization/string.hpp>
