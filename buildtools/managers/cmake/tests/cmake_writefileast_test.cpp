@@ -34,6 +34,29 @@ void WriteFileAstTest::testGoodParse()
 
 void WriteFileAstTest::testGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    const int NUM_TESTDATA = 2;
+    CMakeFunctionDesc funcs[NUM_TESTDATA];
+    QStringList args[NUM_TESTDATA];
+
+    for ( int i = 0; i < NUM_TESTDATA; i++ )
+    {
+        funcs[i].name = "WRITE_FILE";
+        if ( i % 2 == 0 )
+            funcs[i].name.toLower();
+    }
+    
+    args[0] << "myfile.txt" << "\"this is my message\"";
+    args[1] << "myfile.txt" << "\"this is also my message\"" << "APPEND";
+    
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+
+    for ( int i = 0; i < NUM_TESTDATA; i++)
+    {
+        funcs[i].addArguments( args[i] );
+        QTest::newRow( qPrintable(QString::number(i)) ) << funcs[i];
+    }
 }
 
 void WriteFileAstTest::testBadParse()
@@ -46,6 +69,28 @@ void WriteFileAstTest::testBadParse()
 
 void WriteFileAstTest::testBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    const int NUM_TESTDATA = 3;
+    CMakeFunctionDesc funcs[NUM_TESTDATA];
+    QStringList args[NUM_TESTDATA];
+
+    for ( int i = 0; i < NUM_TESTDATA; i++ )
+        funcs[i].name = "WRITE_FILE";
+
+    funcs[NUM_TESTDATA - 1].name = "wrong_name";
+    
+    args[0] << "myfile.txt";
+    args[1] << "myfile.txt" << "APPEND"; //append but no message
+    args[NUM_TESTDATA - 1] << "myfile.txt" << "\"this is also my message\"" << "APPEND";
+    
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+
+    for ( int i = 0; i < NUM_TESTDATA; i++)
+    {
+        funcs[i].addArguments( args[i] );
+        QTest::newRow( qPrintable(QString::number(i)) ) << funcs[i];
+    }
 }
 
 #include "cmake_writefileast_test.moc"
