@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVEDITORINTEGRATOR_P_H
-#define KDEVEDITORINTEGRATOR_P_H
+#ifndef EDITORINTEGRATOR_H
+#define EDITORINTEGRATOR_H
 
 #include <QObject>
 #include <QHash>

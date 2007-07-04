@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEPARTDOCUMENT_H
-#define SUBLIMEPARTDOCUMENT_H
+#ifndef URLDOCUMENT_H
+#define URLDOCUMENT_H
 
 #include <kurl.h>
 
