@@ -400,6 +400,7 @@ void PluginController::loadDependencies( KPluginInfo* info )
 
 IPlugin* PluginController::pluginForExtension( const QString& extension, const QString& pluginname)
 {
+    kDebug(9000) << "Loading Plugin ("<< pluginname << ") for Extension: " << extension << endl;
     QStringList constraints;
     if (!pluginname.isEmpty())
         constraints << QString("[X-KDE-PluginInfo-Name]=='%1'").arg( pluginname );
@@ -409,6 +410,7 @@ IPlugin* PluginController::pluginForExtension( const QString& extension, const Q
 
 IPlugin *PluginController::pluginForExtension(const QString &extension, const QStringList &constraints)
 {
+    kDebug(9000) << "Finding Plugin for Extension: " << extension << "|" << constraints << endl;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
 
     if( infos.isEmpty() )
@@ -421,6 +423,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
 
 QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extension, const QStringList &constraints)
 {
+    kDebug(9000) << "Finding all Plugins for Extension: " << extension << "|" << constraints << endl;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
     QList<IPlugin*> plugins;
     foreach (KPluginInfo *info, infos)
