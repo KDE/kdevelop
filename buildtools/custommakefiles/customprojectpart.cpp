@@ -439,7 +439,7 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
         while ( !stream.atEnd() )
         {
             QString s = stream.readLine();
-            if ( !s.startsWith( "#" ) && QFileInfo( projectDirectory() + "/" + s ).exists() && m_sourceFiles.find(s) == m_sourceFiles.end() )
+            if ( !s.isEmpty() && !s.startsWith( "#" ) && QFileInfo( projectDirectory() + "/" + s ).exists() && m_sourceFiles.find(s) == m_sourceFiles.end() )
             {
                 if( isInBlacklist(s) )
                     continue;
@@ -684,6 +684,7 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
     QStringList myfileList = fileList;
     kdDebug(9025) << "Adding files: " << myfileList << endl;
     myfileList.remove(".");
+    myfileList.remove("");
     myfileList.remove("..");
     for ( it = myfileList.begin(); it != myfileList.end(); ++it )
     {
@@ -761,6 +762,7 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
     QStringList::ConstIterator it;
     myfileList.remove(".");
     myfileList.remove("..");
+    myfileList.remove("");
 
     for ( it = myfileList.begin(); it != myfileList.end(); ++it )
     {
