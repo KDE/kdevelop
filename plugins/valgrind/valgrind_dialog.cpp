@@ -3,7 +3,7 @@
 #include <QRegExp>
 #include <QStackedWidget>
 
-#include <k3process.h>
+#include <kprocess.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
@@ -190,12 +190,11 @@ void ValgrindDialog::setKcExecutable( const QString& ke )
 
 bool ValgrindDialog::isNewValgrindVersion( ) const
 {
-  K3Process *proc = new K3Process;
-  proc->setUseShell(true);
-  *proc << "test \"valgrind-20\" == `valgrind --version | awk -F \\. '{print $1$2}'`";
-  proc->start(K3Process::Block);
-  if (proc->normalExit())
-    return proc->exitStatus();
+  KProcess proc;
+  proc.setShellCommand("test \"valgrind-20\" == `valgrind --version | awk -F \\. '{print $1$2}'`");
+  int ec = proc.execute();
+  if (ec >= 0)
+    return ec;
   return true;
 }
 

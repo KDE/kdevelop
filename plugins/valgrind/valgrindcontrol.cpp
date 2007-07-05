@@ -26,6 +26,7 @@
 #include <QTcpSocket>
 
 #include <k3process.h>
+#include <kprocess.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -93,11 +94,11 @@ void ValgrindControl::processExited( K3Process* p )
 
     /*if (kcInfo.runKc)
     {
-        K3Process *kcProc = new K3Process;
-//        kcProc->setWorkingDirectory(kcInfo.kcWorkDir);
-        *kcProc << kcInfo.kcPath;
-        *kcProc << QString("cachegrind.out.%1").arg(p->pid());
-        kcProc->start(K3Process::DontCare);
+        KProcess kcProc;
+//        kcProc.setWorkingDirectory(kcInfo.kcWorkDir);
+        kcProc << kcInfo.kcPath;
+        kcProc << QString("cachegrind.out.%1").arg(p->pid());
+        kcProc.startDetached();
     }*/
   }
 }
