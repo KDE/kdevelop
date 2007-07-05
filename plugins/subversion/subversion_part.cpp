@@ -353,23 +353,46 @@ VcsJob* KDevSubversionPart::showCommit( const QString& message,
     return svncore()->createCommitJob( checkedList, message, recurse, keeplocks );
 }
 
-VcsJob* KDevSubversionPart::diff( const QVariant& localOrRepoLocationSrc,
-                const QVariant& localOrRepoLocationDst,
+VcsJob* KDevSubversionPart::diff( const QVariant& src,
+                const QVariant& dst,
                 const VcsRevision& srcRevision,
                 const VcsRevision& dstRevision,
-                VcsDiff::Type )
+                VcsDiff::Type /*Always don't care*/ )
 {
-    // FIXME IMPLEMENT, diff between WORKING and BASE ATM
-    return 0;
+    KUrl srcUrl, dstUrl;
+
+    if( src.canConvert<QString>() ){
+        srcUrl = KUrl( src.toString() );
+    }
+    else if( src.canConvert<KUrl>() ){
+        srcUrl = src.value<KUrl>();
+    }
+
+    if( dst.canConvert<QString>() ){
+        dstUrl = KUrl( dst.toString() );
+    }
+    else if( dst.canConvert<KUrl>() ){
+        dstUrl = dst.value<KUrl>();
+    }
+
+    if( !srcUrl.isValid() || !dstUrl.isValid() )
+        return 0;
+
+    SvnUtils::SvnRevision rev1, rev2, peg_rev; // peg_rev:unspecified
+    rev1.fromVcsRevision( srcRevision );
+    rev2.fromVcsRevision( dstRevision );
+
+    return svncore()->createDiffJob( srcUrl, dstUrl, peg_rev, rev1, rev2,
+                                     true, true, false, true );
 }
 
-VcsJob* KDevSubversionPart::showDiff( const QVariant& localOrRepoLocationSrc,
-                const QVariant& localOrRepoLocationDst,
+VcsJob* KDevSubversionPart::showDiff( const QVariant& src,
+                const QVariant& dst,
                 const VcsRevision& srcRevision,
                 const VcsRevision& dstRevision )
 {
-    // FIXME IMPLEMENT
-    return 0;
+    // For diff action, not that special options which deserve its own dialog box.
+    return diff( src, dst, srcRevision, dstRevision, VcsDiff::DiffDontCare );
 }
 
 VcsJob* KDevSubversionPart::log( const KUrl& localLocation, const VcsRevision& rev, unsigned long limit )
@@ -567,7 +590,7 @@ void KDevSubversionPart::pegDiff( const KUrl &path )
     bool ignoreContent = dlg.ignoreContentType();
 
     svncore()->spawnDiffThread( path, KUrl(), peg_rev, rev1, rev2,
-            isRecurse, false, noDiffDelete, ignoreContent );
+            isRecurse, true, noDiffDelete, ignoreContent );
 }
 void KDevSubversionPart::diffToHead( const KUrl &path )
 {
@@ -576,7 +599,7 @@ void KDevSubversionPart::diffToHead( const KUrl &path )
     rev2.setKey( SvnUtils::SvnRevision::WORKING ); // use this as peg revision
 
     svncore()->spawnDiffThread( path, KUrl(), rev2/*peg revision*/, rev1, rev2,
-                                true, false, false, false );
+                                true, true, false, true );
 }
 void KDevSubversionPart::diffToBase( const KUrl &path )
 {
@@ -586,7 +609,7 @@ void KDevSubversionPart::diffToBase( const KUrl &path )
     rev1.setKey( SvnUtils::SvnRevision::BASE );
     rev2.setKey( SvnUtils::SvnRevision::WORKING );
 
-    svncore()->spawnDiffThread( path, path, peg_rev, rev1, rev2, true, false, false, false );
+    svncore()->spawnDiffThread( path, path, peg_rev, rev1, rev2, true, true, false, true );
 }
 SubversionCore* KDevSubversionPart::svncore()
 {

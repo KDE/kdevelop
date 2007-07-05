@@ -17,9 +17,11 @@
 #include "vcsevent.h"
 #include "vcsrevision.h"
 #include "vcsannotation.h"
+#include "vcsdiff.h"
 #include <klocale.h>
 #include <QVariant>
 #include <QMap>
+#include <QFile>
 
 class SvnKJobBase::Private
 {
@@ -131,7 +133,26 @@ public:
 
     QVariant result_diff()
     {
-        return QVariant();
+        KDevelop::VcsDiff vcsDiff;
+        QString allOutputs;
+
+        SvnDiffJob *thread = dynamic_cast<SvnDiffJob*>(m_th);
+        QFile file( thread->out_name );
+        if( !file.exists() ){
+            return QVariant();
+        }
+
+        if( file.open( QIODevice::ReadOnly ) ){
+            QTextStream stream( &file ); // TODO QDataStream?
+            allOutputs = stream.readAll();
+            file.close();
+        }
+
+        vcsDiff.setDiff( allOutputs );
+        // TODO subversion api doesn't let us know the kind of diff output.
+//         vcsDiff.setType();
+//         vcsDiff.setContentType();
+        return qVariantFromValue( vcsDiff );
     }
 };
 
