@@ -60,6 +60,7 @@ class ProjectControllerPrivate
 public:
     QList<IProject*> m_projects;
     QMap< IProject*, QList<IPlugin*> > m_projectPlugins;
+    QMap< IProject*, QAction* > m_configActions;
     IPlugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
     KActionMenu *m_projectConfigAction;
@@ -270,6 +271,7 @@ bool ProjectController::projectImportingFinished( IProject* project )
 
     config->sync();
     QAction* qa = new QAction( project->name(), d->m_projectConfigAction );
+    d->m_configActions.insert( project, qa );
     connect( qa, SIGNAL( triggered() ), d->m_signalMapper, SLOT( map() ) );
     d->m_signalMapper->setMapping( qa, project );
     d->m_projectConfigAction->addAction( qa );
@@ -314,7 +316,18 @@ bool ProjectController::closeProject( IProject* proj )
             action->setEnabled( false );
     }
 
+    // delete project setting menu and its dialog.
+    QAction *configAction = d->m_configActions.take( proj );
+    delete configAction; configAction = 0;
+    if( d->m_cfgDlgs.contains(proj) )
+    {
+        KSettings::Dialog *dlg = d->m_cfgDlgs.take(proj);
+        delete dlg;
+    }
 
+    // start project manager that is used by this project. If that manager is being used
+    // by other project also, don't unload that manager.
+    // TODO remove all the plugins unique to this project.
     QList<IPlugin*> pluginsForProj = d->m_projectPlugins.value( proj );;
     d->m_projectPlugins.remove( proj );
 
