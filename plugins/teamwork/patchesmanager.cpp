@@ -25,6 +25,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
 #include <k3process.h>
+#include <kprocess.h>
 
 #include <idocumentcontroller.h>
 #include "iplugincontroller.h"
@@ -471,11 +472,12 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
             QString app = d->text();
             if ( !app.isEmpty() ) {
               ///@todo How to run this in a better way, so that .desktop-files are accepted etc.?
-              K3Process proc;
+              // Use KRun, of course!
+              KProcess proc;
               proc << app;
 
               proc << fileName;
-              proc.start( K3Process::DontCare );
+              proc.startDetached();
             } else {
               log( "no application was chosen for opening " + fileName, Warning );
             }
@@ -535,11 +537,11 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 #endif
 
         if ( !app.isEmpty() ) {
-          K3Process proc;
+          KProcess proc;
           proc << app;
 
           proc << tempFileName;
-          proc.start( K3Process::DontCare );
+          proc.startDetached();
         } else {
           log( "no application was chosen for opening " + tempFileName, Warning );
       }*/
