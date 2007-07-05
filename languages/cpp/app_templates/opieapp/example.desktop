@@ -15,6 +15,7 @@ Comment[hu]=%{APPNAME} program
 Comment[it]=Un programma per %{APPNAME}
 Comment[ja]=%{APPNAME} プログラム
 Comment[nds]=En %{APPNAME}-Programm
+Comment[ne]= %{APPNAME} कार्यक्रम
 Comment[nl]=Een %{APPNAME} programma
 Comment[pl]=Program %{APPNAME}
 Comment[pt]=Um Programa %{APPNAME}

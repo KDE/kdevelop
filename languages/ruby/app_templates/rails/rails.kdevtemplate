@@ -2,6 +2,7 @@
 [General]
 Name=Ruby On Rails
 Name[de]=Ruby on Rails
+Name[ne]=रूबि अन रेल्स
 Name[sv]=Ruby on Rails
 Icon=rails.png
 Category=Ruby
@@ -20,6 +21,7 @@ Comment[hu]=Létrehoz egy Ruby On Rails-projektet
 Comment[it]=Genera un progetto Ruby On Rails
 Comment[ja]=Ruby On Rails プロジェクトを作成します
 Comment[nds]=Stellt en eenfach "Ruby-On-Rails"-Projekt op
+Comment[ne]=यसले रूबि अन रेल्स परियोजना उत्पन्न गर्दछ
 Comment[nl]=Genereert een Ruby On Rails-project.
 Comment[pl]=Generuje projekt Ruby On Rails
 Comment[pt]=Gera um projecto de Ruby On Rails
@@ -57,6 +59,7 @@ Comment[hu]=Létrejött egy Ruby On Rails-projekt itt: %{dest}
 Comment[it]=È stato creato un progetto Ruby On Rails in %{dest}
 Comment[ja]=Ruby On Rails プロジェクトを %{dest} に作成しました
 Comment[nds]=In %{dest} wöör en eenfach "Ruby-On-Rails"-Projekt opstellt.
+Comment[ne]=रूबि अन रेल्स परियोजना %{dest} मा सिर्जना गरिन्छ
 Comment[nl]=Een eenvoudig Ruby On Rails-project is aangemaakt in %{dest}.
 Comment[pl]=Projekt Ruby On Rails stworzony w %{dest}
 Comment[pt]=Foi criado um projecto de Ruby on Rails em %{dest}

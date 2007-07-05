@@ -23,6 +23,7 @@ Description[hu]=%{APPNAMELC}-támogató KIOslave
 Description[it]=Un kioslave per %{APPNAMELC}
 Description[ja]=%{APPNAMELC} のための kioslave
 Description[nds]=En In-/Utgaavmoduul för %{APPNAMELC}
+Description[ne]= %{APPNAMELC} का लागि किवस्लेभ
 Description[nl]=Kioslave voor %{APPNAMELC}
 Description[pl]=kioslave dla %{APPNAMELC}
 Description[pt]=Um 'kioslave' para %{APPNAMELC}
