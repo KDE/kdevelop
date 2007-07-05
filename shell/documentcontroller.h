@@ -83,6 +83,8 @@ public Q_SLOTS:
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
             DocumentActivation activate = IDocumentController::ActivateOnOpen );
 
+    virtual void closeDocument( const KUrl &url );
+
 private:
     struct DocumentControllerPrivate *d;
 };

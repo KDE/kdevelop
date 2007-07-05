@@ -264,6 +264,15 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     return doc;
 }
 
+void DocumentController::closeDocument( const KUrl &url )
+{
+    if( !d->documents.contains(url) )
+        return;
+
+    IDocument *doc = d->documents.take(url);
+    doc->close();
+}
+
 IDocument * DocumentController::documentForUrl( const KUrl & url ) const
 {
     if ( d->documents.contains( url ) )

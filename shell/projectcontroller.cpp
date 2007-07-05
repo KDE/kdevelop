@@ -50,6 +50,7 @@ Boston, MA 02110-1301, USA.
 // #include "kdevlanguagecontroller.h"
 #include "plugincontroller.h"
 #include "uicontroller.h"
+#include "documentcontroller.h"
 // #include "kdevdocumentcontroller.h"
 
 namespace KDevelop
@@ -314,6 +315,14 @@ bool ProjectController::closeProject( IProject* proj )
         action = ac->action( "project_close" );
         if( action )
             action->setEnabled( false );
+    }
+
+    // close all opened files.
+    QList<ProjectFileItem *> fileList = proj->files();
+    Q_FOREACH( ProjectFileItem *_fileItem, fileList )
+    {
+        kDebug(9000) << "Closing url " << _fileItem->url() << endl;
+        Core::self()->documentControllerInternal()->closeDocument( _fileItem->url() );
     }
 
     // delete project setting menu and its dialog.
