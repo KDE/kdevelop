@@ -352,7 +352,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
       for (; nextContextIndex() < childContexts.count(); ++nextContextIndex()) {
         DUContext* child = childContexts.at(nextContextIndex());
 
-        if (child->textRange().start() > translated.end())
+        if (child->textRange().start() > translated.end() && child->smartRange())
           break;
 
         if (child->type() == type && child->localScopeIdentifier() == identifier && child->textRange() == translated) {
@@ -360,6 +360,11 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
           ret = child;
           readLock.unlock();
           DUChainWriteLocker writeLock(DUChain::lock());
+
+          //Upgrade to a smart-range
+          if( !ret->smartRange() && m_editor->smart() )
+            ret->setTextRange(m_editor->createRange(range));
+          
           ret->clearUsingNamespaces();
           ret->clearImportedParentContexts();
           m_editor->setCurrentRange(ret->textRangePtr());

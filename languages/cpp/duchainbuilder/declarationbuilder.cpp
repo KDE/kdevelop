@@ -219,9 +219,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     for (; nextDeclaration() < currentContext()->localDeclarations().count(); ++nextDeclaration()) {
       Declaration* dec = currentContext()->localDeclarations().at(nextDeclaration());
 
-      if (dec->textRange().start() > translated.end())
+      if (dec->textRange().start() > translated.end() && dec->smartRange()) //Only break the loop if it is a smartrange, because if it is not one, it could not adapt to changes and hide valid smart-ranges that are in the order behind.
         break;
-
+      //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->textRange() == translated &&
           dec->scope() == scope &&
           (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && id.last() == dec->identifier()) &&
@@ -242,6 +242,14 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
         // Match
         declaration = dec;
+
+        //If the declaration does not have a smart-range, upgrade it if possible
+        if( m_editor->smart() && !declaration->smartRange() ) {
+          readLock.unlock();
+          DUChainWriteLocker writeLock(DUChain::lock());
+          declaration->setTextRange( m_editor->createRange( newRange ) );
+          readLock.lock();
+        }
 
         // Update access policy if needed
         if (currentContext()->type() == DUContext::Class) {

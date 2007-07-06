@@ -97,7 +97,7 @@ void UseBuilder::newUse(NameAST* name)
     for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
       Use* use = uses.at(nextUseIndex());
 
-      if (use->textRange().start() > translated.end())
+      if (use->textRange().start() > translated.end() && use->smartRange() )
         break;
 
       if (use->textRange() == translated &&
@@ -106,6 +106,16 @@ void UseBuilder::newUse(NameAST* name)
       {
         // Match
         ret = use;
+
+        //Eventually upgrade the range to a smart-range
+        if( m_editor->smart() && !ret->smartRange() ) {
+          readLock.unlock();
+          DUChainWriteLocker lock(DUChain::lock());
+          ret->setTextRange(m_editor->createRange(newRange));
+          readLock.lock();
+        }
+
+
         break;
       }
     }
