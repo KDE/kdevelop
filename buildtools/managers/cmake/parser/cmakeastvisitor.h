@@ -43,6 +43,7 @@ class MacroCallAst;
 class FindPackageAst;
 class FindProgramAst;
 class FindPathAst;
+class IfAst;
 class CMakeAst;
 
 class CMakeAstVisitor {
@@ -70,6 +71,8 @@ class CMakeAstVisitor {
         virtual void visit( const FindPackageAst * ) = 0;
         virtual void visit( const FindProgramAst * ) = 0;
         virtual void visit( const FindPathAst * ) = 0;
+        virtual void visit( const ExecProgramAst * ) = 0;
+        virtual void visit( const IfAst * ) = 0;
         virtual void visit( MacroAst * ) = 0;
         virtual void visit( const CMakeAst * ) = 0;
 };

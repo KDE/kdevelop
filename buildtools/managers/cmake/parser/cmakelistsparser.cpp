@@ -45,7 +45,7 @@ CMakeListsParser::~CMakeListsParser()
 {
 }
 
-enum RecursivityType { No, Yes, ChangeOnly, End };
+enum RecursivityType { No, Yes, ElseIf, End };
 
 RecursivityType recursivity(const QString& functionName)
 {
@@ -53,8 +53,8 @@ RecursivityType recursivity(const QString& functionName)
            functionName.toUpper()=="FOREACH" || functionName.toUpper()=="MACRO")
         return Yes;
     else if(functionName.toUpper()=="ELSE" || functionName.toUpper()=="ELSEIF")
-        return ChangeOnly;
-    else if(functionName.startsWith("END"))
+        return ElseIf;
+    else if(functionName.toUpper().startsWith("END"))
         return End;
     return No;
 }
@@ -73,11 +73,12 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
     bool haveNewline = true;
     cmListFileLexer_Token* token;
     QStack<CMakeAst*> parent;
+    QStack<IfAst*> parentIf;
     parent.push(root);
 
     while(!parseError && (token = cmListFileLexer_Scan(lexer)))
     {
-        parseError=true;
+        parseError=false;
         if(token->type == cmListFileLexer_Token_Newline)
         {
             parseError=false;
@@ -93,30 +94,56 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
                 function.name = token->text;
                 function.filePath = fileName;
                 function.line = token->line;
-                
+
                 RecursivityType s=recursivity(function.name);
-                if(s==End) {
+                if(s==End) { //NOTE: We're not checking if ENDIF(<<this>>) is ok.
                     parent.pop();
-                    break;
+                    if(function.name.toUpper()=="ENDIF") {
+                        parentIf.pop();
+                    }
+                    parseError = false;
                 } else {
+                    QString ifWorkaround; //FIXME: Please check it!
+                    if(function.name.toUpper().startsWith("ELSE")) {
+                        ifWorkaround = function.name;
+                        function.name = "IF";
+                    }
                     parseError = !parseCMakeFunction( lexer, function, fileName, currentParent );
-                    
+
+                    if(parseError) {
+                        kDebug(9032) << "Error while parsing: " << function.name;
+                    }
+
+                    if(!ifWorkaround.isEmpty())
+                        function.name = ifWorkaround;
+
                     if(!parseError && s!=No) {
                         CMakeAst* lastCreated = currentParent->children().last();
+//                         kDebug(9032) << "Lol: " << function.name << s << endl;
+
+                        if(function.name.toUpper()=="IF") {
+                            parentIf.append(dynamic_cast<IfAst*>(lastCreated));
+                        } else if(function.name.toUpper()=="ELSEIF") {
+                            IfAst* ifast = parentIf.top(), *elseif=dynamic_cast<IfAst*>(lastCreated);
+                            ifast->conditions().append(elseif->conditions()[0]);
+                            lastCreated = ifast;
+                        } else if(function.name.toUpper()=="ELSE") {
+                            lastCreated = parentIf.top();
+                        }
+
                         CMakeAst* child = new CMakeAst;
                         lastCreated->addChildAst(child);
-//                         kDebug(9032) << "Lol: " << function.name << s << endl;
                         switch(s) {
                             case Yes:
-                                parent.push(lastCreated);
+                                parent.push(child);
                                 break;
-                            case ChangeOnly: //For else and ifelse
+                            case ElseIf: //For else and ifelse
                                 parent.pop();
-                                parent.push(lastCreated);
+                                parent.push(child);
                                 break;
                             case End:
-                            default:
                             case No:
+                            default:
                                 break;
                         }
                     }

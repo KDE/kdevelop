@@ -28,7 +28,9 @@
 #include "astfactory.h"
 #include "cmakelistsparser.h"
 
-void CMakeAst::writeBack(QString& buffer)
+#include <KDebug>
+
+void CMakeAst::writeBack(QString& buffer) const
 {
     QString aux;
     foreach(CMakeAst* s, m_children) {
@@ -53,6 +55,7 @@ CMAKE_REGISTER_AST( BuildNameAst, build_name )
 CMAKE_REGISTER_AST( CMakeMinimumRequiredAst, cmake_minimum_required )
 CMAKE_REGISTER_AST( ConfigureFileAst, configure_file )
 CMAKE_REGISTER_AST( IncludeAst, include )
+CMAKE_REGISTER_AST( IfAst, if )
 CMAKE_REGISTER_AST( IncludeDirectoriesAst, include_directories )
 CMAKE_REGISTER_AST( SetAst, set )
 CMAKE_REGISTER_AST( ProjectAst, project )
@@ -76,7 +79,7 @@ CustomCommandAst::~CustomCommandAst()
 {
 }
 
-void CustomCommandAst::writeBack( QString& /*buffer */ )
+void CustomCommandAst::writeBack( QString& /*buffer */ ) const
 {
 }
 
@@ -213,7 +216,7 @@ CustomTargetAst::~CustomTargetAst()
 {
 }
 
-void CustomTargetAst::writeBack( QString& )
+void CustomTargetAst::writeBack( QString& ) const
 {
 }
 
@@ -323,7 +326,7 @@ AddDefinitionsAst::~AddDefinitionsAst()
 {
 }
 
-void AddDefinitionsAst::writeBack( QString& )
+void AddDefinitionsAst::writeBack( QString& ) const
 {
 }
 
@@ -353,7 +356,7 @@ AddDependenciesAst::~AddDependenciesAst()
 {
 }
 
-void AddDependenciesAst::writeBack( QString& )
+void AddDependenciesAst::writeBack( QString& ) const
 {
 }
 
@@ -389,7 +392,7 @@ AddExecutableAst::~AddExecutableAst()
 {
 }
 
-void AddExecutableAst::writeBack( QString& )
+void AddExecutableAst::writeBack( QString& ) const
 {
 }
 
@@ -437,7 +440,7 @@ AddLibraryAst::~AddLibraryAst()
 {
 }
 
-void AddLibraryAst::writeBack( QString& )
+void AddLibraryAst::writeBack( QString& ) const
 {
 }
 
@@ -507,7 +510,7 @@ AddSubdirectoryAst::~AddSubdirectoryAst()
 {
 }
 
-void AddSubdirectoryAst::writeBack( QString& )
+void AddSubdirectoryAst::writeBack( QString& ) const
 {
 }
 
@@ -542,7 +545,7 @@ AddTestAst::~AddTestAst()
 {
 }
 
-void AddTestAst::writeBack( QString& )
+void AddTestAst::writeBack( QString& ) const
 {
 }
 
@@ -571,7 +574,7 @@ AuxSourceDirectoryAst::~AuxSourceDirectoryAst()
 {
 }
 
-void AuxSourceDirectoryAst::writeBack( QString& )
+void AuxSourceDirectoryAst::writeBack( QString& ) const
 {
 }
 
@@ -596,7 +599,7 @@ BuildCommandAst::~BuildCommandAst()
 {
 }
 
-void BuildCommandAst::writeBack( QString& )
+void BuildCommandAst::writeBack( QString& ) const
 {
 }
 
@@ -622,7 +625,7 @@ BuildNameAst::~BuildNameAst()
 {
 }
 
-void BuildNameAst::writeBack( QString& )
+void BuildNameAst::writeBack( QString& ) const
 {
 }
 
@@ -646,7 +649,7 @@ CMakeMinimumRequiredAst::~CMakeMinimumRequiredAst()
 {
 }
 
-void CMakeMinimumRequiredAst::writeBack( QString& )
+void CMakeMinimumRequiredAst::writeBack( QString& ) const
 {
 }
 
@@ -698,7 +701,7 @@ ConfigureFileAst::~ConfigureFileAst()
 {
 }
 
-void ConfigureFileAst::writeBack( QString& )
+void ConfigureFileAst::writeBack( QString& ) const
 {
 }
 
@@ -740,7 +743,7 @@ CreateTestSourcelistAst::~CreateTestSourcelistAst()
 {
 }
 
-void CreateTestSourcelistAst::writeBack( QString& )
+void CreateTestSourcelistAst::writeBack( QString& ) const
 {
 }
 
@@ -763,7 +766,7 @@ EnableLanguageAst::~EnableLanguageAst()
 {
 }
 
-void EnableLanguageAst::writeBack( QString& )
+void EnableLanguageAst::writeBack( QString& ) const
 {
 }
 
@@ -787,7 +790,7 @@ EnableTestingAst::~EnableTestingAst()
 {
 }
 
-void EnableTestingAst::writeBack( QString& )
+void EnableTestingAst::writeBack( QString& ) const
 {
 }
 
@@ -810,13 +813,39 @@ ExecProgramAst::~ExecProgramAst()
 {
 }
 
-void ExecProgramAst::writeBack( QString& )
+void ExecProgramAst::writeBack( QString& ) const
 {
 }
 
 bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower() != "exec_program" || func.arguments.count()<2)
+        return false;
+    m_executableName = func.arguments[0].value;
+    bool args=false;
+
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin(), itEnd=func.arguments.end();
+    for(; it!=itEnd; ++it) {
+        if(it->value.toUpper()=="OUTPUT_VARIABLE") {
+            ++it;
+            if(it!=itEnd)
+                m_outputVariable = it->value;
+            else
+                return false;
+        } else if(it->value.toUpper()=="RETURN_VALUE") {
+            ++it;
+            if(it!=itEnd)
+                m_returnValue = it->value;
+            else
+                return false;
+        } else if(it->value.toUpper()=="ARGS") {
+            args=true;
+        } else if(args) {
+            m_arguments += it->value;
+        } else
+            m_workingDirectory = it->value;
+    }
+    return true;
 }
 
 ExecuteProcessAst::ExecuteProcessAst()
@@ -827,7 +856,7 @@ ExecuteProcessAst::~ExecuteProcessAst()
 {
 }
 
-void ExecuteProcessAst::writeBack( QString& )
+void ExecuteProcessAst::writeBack( QString& ) const
 {
 }
 
@@ -844,7 +873,7 @@ ExportLibraryDepsAst::~ExportLibraryDepsAst()
 {
 }
 
-void ExportLibraryDepsAst::writeBack( QString& )
+void ExportLibraryDepsAst::writeBack( QString& ) const
 {
 }
 
@@ -861,7 +890,7 @@ FileAst::~FileAst()
 {
 }
 
-void FileAst::writeBack( QString& )
+void FileAst::writeBack( QString& ) const
 {
 }
 
@@ -878,7 +907,7 @@ FindFileAst::~FindFileAst()
 {
 }
 
-void FindFileAst::writeBack( QString& )
+void FindFileAst::writeBack( QString& ) const
 {
 }
 
@@ -896,7 +925,7 @@ MacroCallAst::~MacroCallAst()
 {
 }
 
-void MacroCallAst::writeBack( QString& )
+void MacroCallAst::writeBack( QString& ) const
 {
 }
 
@@ -920,7 +949,7 @@ FindLibraryAst::~FindLibraryAst()
 {
 }
 
-void FindLibraryAst::writeBack( QString& )
+void FindLibraryAst::writeBack( QString& ) const
 {
 }
 
@@ -937,7 +966,7 @@ FindPackageAst::~FindPackageAst()
 {
 }
 
-void FindPackageAst::writeBack( QString& )
+void FindPackageAst::writeBack( QString& ) const
 {
 }
 
@@ -977,13 +1006,13 @@ FindPathAst::~FindPathAst()
 {
 }
 
-void FindPathAst::writeBack( QString& )
+void FindPathAst::writeBack( QString& ) const
 {
 }
 
 bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="find_program" || func.arguments.count()<3)
+    if(func.name.toLower()!="find_path" || func.arguments.count()<3)
         return false;
     
     m_variableName = func.arguments[0].value;
@@ -1041,7 +1070,7 @@ FindProgramAst::~FindProgramAst()
 {
 }
 
-void FindProgramAst::writeBack( QString& )
+void FindProgramAst::writeBack( QString& ) const
 {
 }
 
@@ -1103,7 +1132,7 @@ FltkWrapUiAst::~FltkWrapUiAst()
 {
 }
 
-void FltkWrapUiAst::writeBack( QString& )
+void FltkWrapUiAst::writeBack( QString& ) const
 {
 }
 
@@ -1120,7 +1149,7 @@ ForeachAst::~ForeachAst()
 {
 }
 
-void ForeachAst::writeBack( QString& )
+void ForeachAst::writeBack( QString& ) const
 {
 }
 
@@ -1137,7 +1166,7 @@ GetCMakePropertyAst::~GetCMakePropertyAst()
 {
 }
 
-void GetCMakePropertyAst::writeBack( QString& )
+void GetCMakePropertyAst::writeBack( QString& ) const
 {
 }
 
@@ -1154,7 +1183,7 @@ GetDirPropertyAst::~GetDirPropertyAst()
 {
 }
 
-void GetDirPropertyAst::writeBack( QString& )
+void GetDirPropertyAst::writeBack( QString& ) const
 {
 }
 
@@ -1171,7 +1200,7 @@ GetFilenameComponentAst::~GetFilenameComponentAst()
 {
 }
 
-void GetFilenameComponentAst::writeBack( QString& )
+void GetFilenameComponentAst::writeBack( QString& ) const
 {
 }
 
@@ -1188,7 +1217,7 @@ GetSourceFilePropAst::~GetSourceFilePropAst()
 {
 }
 
-void GetSourceFilePropAst::writeBack( QString& )
+void GetSourceFilePropAst::writeBack( QString& ) const
 {
 }
 
@@ -1205,7 +1234,7 @@ GetTargetPropAst::~GetTargetPropAst()
 {
 }
 
-void GetTargetPropAst::writeBack( QString& )
+void GetTargetPropAst::writeBack( QString& ) const
 {
 }
 
@@ -1222,7 +1251,7 @@ GetTestPropAst::~GetTestPropAst()
 {
 }
 
-void GetTestPropAst::writeBack( QString& )
+void GetTestPropAst::writeBack( QString& ) const
 {
 }
 
@@ -1239,13 +1268,24 @@ IfAst::~IfAst()
 {
 }
 
-void IfAst::writeBack( QString& )
+void IfAst::writeBack( QString& s) const
 {
+    kDebug(9032)<< "if: " << s << endl;
 }
 
 bool IfAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="if" && func.name.toLower()!="elseif" && func.name.toLower()!="else")
+        return false;
+    if(func.name.toLower()=="else" && !func.arguments.isEmpty())
+        return false;
+
+    m_kind = func.name;
+    m_conditions += QStringList();
+    foreach(CMakeFunctionArgument fa, func.arguments) {
+        m_conditions[0] += fa.value;
+    }
+    return true;
 }
 
 IncludeAst::IncludeAst()
@@ -1257,7 +1297,7 @@ IncludeAst::~IncludeAst()
 {
 }
 
-void IncludeAst::writeBack( QString& )
+void IncludeAst::writeBack( QString& ) const
 {
 }
 
@@ -1283,7 +1323,7 @@ IncludeDirectoriesAst::~IncludeDirectoriesAst()
 {
 }
 
-void IncludeDirectoriesAst::writeBack( QString& )
+void IncludeDirectoriesAst::writeBack( QString& ) const
 {
 }
 
@@ -1336,7 +1376,7 @@ IncludeExternalMsProjectAst::~IncludeExternalMsProjectAst()
 {
 }
 
-void IncludeExternalMsProjectAst::writeBack( QString& )
+void IncludeExternalMsProjectAst::writeBack( QString& ) const
 {
 }
 
@@ -1353,7 +1393,7 @@ IncludeRegularExpressionAst::~IncludeRegularExpressionAst()
 {
 }
 
-void IncludeRegularExpressionAst::writeBack( QString& )
+void IncludeRegularExpressionAst::writeBack( QString& ) const
 {
 }
 
@@ -1370,7 +1410,7 @@ InstallAst::~InstallAst()
 {
 }
 
-void InstallAst::writeBack( QString& )
+void InstallAst::writeBack( QString& ) const
 {
 }
 
@@ -1387,7 +1427,7 @@ InstallFilesAst::~InstallFilesAst()
 {
 }
 
-void InstallFilesAst::writeBack( QString& )
+void InstallFilesAst::writeBack( QString& ) const
 {
 }
 
@@ -1404,7 +1444,7 @@ InstallProgramsAst::~InstallProgramsAst()
 {
 }
 
-void InstallProgramsAst::writeBack( QString& )
+void InstallProgramsAst::writeBack( QString& ) const
 {
 }
 
@@ -1421,7 +1461,7 @@ InstallTargetsAst::~InstallTargetsAst()
 {
 }
 
-void InstallTargetsAst::writeBack( QString& )
+void InstallTargetsAst::writeBack( QString& ) const
 {
 }
 
@@ -1438,7 +1478,7 @@ LinkDirectoriesAst::~LinkDirectoriesAst()
 {
 }
 
-void LinkDirectoriesAst::writeBack( QString& )
+void LinkDirectoriesAst::writeBack( QString& ) const
 {
 }
 
@@ -1455,7 +1495,7 @@ LinkLibrariesAst::~LinkLibrariesAst()
 {
 }
 
-void LinkLibrariesAst::writeBack( QString& )
+void LinkLibrariesAst::writeBack( QString& ) const
 {
 }
 
@@ -1472,7 +1512,7 @@ ListAst::~ListAst()
 {
 }
 
-void ListAst::writeBack( QString& )
+void ListAst::writeBack( QString& ) const
 {
 }
 
@@ -1489,7 +1529,7 @@ LoadCacheAst::~LoadCacheAst()
 {
 }
 
-void LoadCacheAst::writeBack( QString& )
+void LoadCacheAst::writeBack( QString& ) const
 {
 }
 
@@ -1506,7 +1546,7 @@ LoadCommandAst::~LoadCommandAst()
 {
 }
 
-void LoadCommandAst::writeBack( QString& )
+void LoadCommandAst::writeBack( QString& ) const
 {
 }
 
@@ -1523,7 +1563,7 @@ MacroAst::~MacroAst()
 {
 }
 
-void MacroAst::writeBack( QString& )
+void MacroAst::writeBack( QString& ) const
 {
 }
 
@@ -1551,7 +1591,7 @@ MakeDirectoryAst::~MakeDirectoryAst()
 {
 }
 
-void MakeDirectoryAst::writeBack( QString& )
+void MakeDirectoryAst::writeBack( QString& ) const
 {
 }
 
@@ -1568,7 +1608,7 @@ MarkAsAdvancedAst::~MarkAsAdvancedAst()
 {
 }
 
-void MarkAsAdvancedAst::writeBack( QString& )
+void MarkAsAdvancedAst::writeBack( QString& ) const
 {
 }
 
@@ -1607,7 +1647,7 @@ MathAst::~MathAst()
 {
 }
 
-void MathAst::writeBack( QString& )
+void MathAst::writeBack( QString& ) const
 {
 }
 
@@ -1624,7 +1664,7 @@ MessageAst::~MessageAst()
 {
 }
 
-void MessageAst::writeBack( QString& )
+void MessageAst::writeBack( QString& ) const
 {
 }
 
@@ -1641,7 +1681,7 @@ OptionAst::~OptionAst()
 {
 }
 
-void OptionAst::writeBack( QString& )
+void OptionAst::writeBack( QString& ) const
 {
 }
 
@@ -1658,7 +1698,7 @@ OutputRequiredFilesAst::~OutputRequiredFilesAst()
 {
 }
 
-void OutputRequiredFilesAst::writeBack( QString& )
+void OutputRequiredFilesAst::writeBack( QString& ) const
 {
 }
 
@@ -1675,7 +1715,7 @@ ProjectAst::~ProjectAst()
 {
 }
 
-void ProjectAst::writeBack( QString& )
+void ProjectAst::writeBack( QString& ) const
 {
 }
 
@@ -1716,7 +1756,7 @@ QtWrapCppAst::~QtWrapCppAst()
 {
 }
 
-void QtWrapCppAst::writeBack( QString& )
+void QtWrapCppAst::writeBack( QString& ) const
 {
 }
 
@@ -1733,7 +1773,7 @@ QtWrapUiAst::~QtWrapUiAst()
 {
 }
 
-void QtWrapUiAst::writeBack( QString& )
+void QtWrapUiAst::writeBack( QString& ) const
 {
 }
 
@@ -1750,7 +1790,7 @@ RemoveAst::~RemoveAst()
 {
 }
 
-void RemoveAst::writeBack( QString& )
+void RemoveAst::writeBack( QString& ) const
 {
 }
 
@@ -1767,7 +1807,7 @@ RemoveDefinitionsAst::~RemoveDefinitionsAst()
 {
 }
 
-void RemoveDefinitionsAst::writeBack( QString& )
+void RemoveDefinitionsAst::writeBack( QString& ) const
 {
 }
 
@@ -1784,7 +1824,7 @@ SeparateArgumentsAst::~SeparateArgumentsAst()
 {
 }
 
-void SeparateArgumentsAst::writeBack( QString& )
+void SeparateArgumentsAst::writeBack( QString& ) const
 {
 }
 
@@ -1801,7 +1841,7 @@ SetAst::~SetAst()
 {
 }
 
-void SetAst::writeBack( QString& )
+void SetAst::writeBack( QString& ) const
 {
 }
 
@@ -1855,7 +1895,7 @@ SetDirectoryPropsAst::~SetDirectoryPropsAst()
 {
 }
 
-void SetDirectoryPropsAst::writeBack( QString& )
+void SetDirectoryPropsAst::writeBack( QString& ) const
 {
 }
 
@@ -1872,7 +1912,7 @@ SetSourceFilesPropsAst::~SetSourceFilesPropsAst()
 {
 }
 
-void SetSourceFilesPropsAst::writeBack( QString& )
+void SetSourceFilesPropsAst::writeBack( QString& ) const
 {
 }
 
@@ -1889,7 +1929,7 @@ SetTargetPropsAst::~SetTargetPropsAst()
 {
 }
 
-void SetTargetPropsAst::writeBack( QString& )
+void SetTargetPropsAst::writeBack( QString& ) const
 {
 }
 
@@ -1906,7 +1946,7 @@ SetTestsPropsAst::~SetTestsPropsAst()
 {
 }
 
-void SetTestsPropsAst::writeBack( QString& )
+void SetTestsPropsAst::writeBack( QString& ) const
 {
 }
 
@@ -1923,7 +1963,7 @@ SiteNameAst::~SiteNameAst()
 {
 }
 
-void SiteNameAst::writeBack( QString& )
+void SiteNameAst::writeBack( QString& ) const
 {
 }
 
@@ -1940,7 +1980,7 @@ SourceGroupAst::~SourceGroupAst()
 {
 }
 
-void SourceGroupAst::writeBack( QString& )
+void SourceGroupAst::writeBack( QString& ) const
 {
 }
 
@@ -1957,7 +1997,7 @@ StringAst::~StringAst()
 {
 }
 
-void StringAst::writeBack( QString& )
+void StringAst::writeBack( QString& ) const
 {
 }
 
@@ -1974,7 +2014,7 @@ SubdirDependsAst::~SubdirDependsAst()
 {
 }
 
-void SubdirDependsAst::writeBack( QString& )
+void SubdirDependsAst::writeBack( QString& ) const
 {
 }
 
@@ -1991,7 +2031,7 @@ SubdirsAst::~SubdirsAst()
 {
 }
 
-void SubdirsAst::writeBack( QString& )
+void SubdirsAst::writeBack( QString& ) const
 {
 }
 
@@ -2008,7 +2048,7 @@ TargetLinkLibrariesAst::~TargetLinkLibrariesAst()
 {
 }
 
-void TargetLinkLibrariesAst::writeBack( QString& )
+void TargetLinkLibrariesAst::writeBack( QString& ) const
 {
 }
 
@@ -2061,7 +2101,7 @@ TryCompileAst::~TryCompileAst()
 {
 }
 
-void TryCompileAst::writeBack( QString& )
+void TryCompileAst::writeBack( QString& ) const
 {
 }
 
@@ -2078,7 +2118,7 @@ TryRunAst::~TryRunAst()
 {
 }
 
-void TryRunAst::writeBack( QString& )
+void TryRunAst::writeBack( QString& ) const
 {
 }
 
@@ -2095,7 +2135,7 @@ UseMangledMesaAst::~UseMangledMesaAst()
 {
 }
 
-void UseMangledMesaAst::writeBack( QString& )
+void UseMangledMesaAst::writeBack( QString& ) const
 {
 }
 
@@ -2112,7 +2152,7 @@ UtilitySourceAst::~UtilitySourceAst()
 {
 }
 
-void UtilitySourceAst::writeBack( QString& )
+void UtilitySourceAst::writeBack( QString& ) const
 {
 }
 
@@ -2129,7 +2169,7 @@ VariableRequiresAst::~VariableRequiresAst()
 {
 }
 
-void VariableRequiresAst::writeBack( QString& )
+void VariableRequiresAst::writeBack( QString& ) const
 {
 }
 
@@ -2146,7 +2186,7 @@ VtkMakeInstantiatorAst::~VtkMakeInstantiatorAst()
 {
 }
 
-void VtkMakeInstantiatorAst::writeBack( QString& )
+void VtkMakeInstantiatorAst::writeBack( QString& ) const
 {
 }
 
@@ -2163,7 +2203,7 @@ VtkWrapJavaAst::~VtkWrapJavaAst()
 {
 }
 
-void VtkWrapJavaAst::writeBack( QString& )
+void VtkWrapJavaAst::writeBack( QString& ) const
 {
 }
 
@@ -2180,7 +2220,7 @@ VtkWrapPythonAst::~VtkWrapPythonAst()
 {
 }
 
-void VtkWrapPythonAst::writeBack( QString& )
+void VtkWrapPythonAst::writeBack( QString& ) const
 {
 }
 
@@ -2197,7 +2237,7 @@ VtkWrapTclAst::~VtkWrapTclAst()
 {
 }
 
-void VtkWrapTclAst::writeBack( QString& )
+void VtkWrapTclAst::writeBack( QString& ) const
 {
 }
 
@@ -2214,7 +2254,7 @@ WhileAst::~WhileAst()
 {
 }
 
-void WhileAst::writeBack( QString& )
+void WhileAst::writeBack( QString& ) const
 {
 }
 
@@ -2231,7 +2271,7 @@ WriteFileAst::~WriteFileAst()
 {
 }
 
-void WriteFileAst::writeBack( QString& )
+void WriteFileAst::writeBack( QString& ) const
 {
 }
 
@@ -2248,7 +2288,7 @@ CustomInvokationAst::~CustomInvokationAst()
 {
 }
 
-void CustomInvokationAst::writeBack( QString& )
+void CustomInvokationAst::writeBack( QString& ) const
 {
 }
 

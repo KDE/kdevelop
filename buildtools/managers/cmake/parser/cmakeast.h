@@ -61,7 +61,7 @@ public:
      * Writes the information stored in the Ast into the @p buffer.
      * All Asts that are a child of this Ast are written back as well.
      */
-    virtual void writeBack(QString& buffer);
+    virtual void writeBack(QString& buffer) const;
 
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
 
@@ -108,7 +108,7 @@ public:
     
     virtual void accept(CMakeAstVisitor* visitor) const { visitor->visit(this); }
 
-    virtual void writeBack( QString& );
+    virtual void writeBack( QString& ) const;
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
 private:
@@ -133,14 +133,14 @@ private:
 
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
         CMakeAst* Create##klassName() { return new klassName; }            \
-        bool astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
+        bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
 
 #define CMAKE_BEGIN_AST_CLASS( klassName ) class KDEVCMAKECOMMON_EXPORT klassName : public CMakeAst {  \
     public:                                                  \
         klassName();                                         \
        ~klassName();                                         \
                                                              \
-        virtual void writeBack( QString& buffer );           \
+        virtual void writeBack( QString& buffer ) const;           \
 	virtual void accept(CMakeAstVisitor * visitor) const { visitor->visit(this); } \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
@@ -259,6 +259,11 @@ CMAKE_END_AST_CLASS( EnableTestingAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExecProgramAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, executableName, ExecutableName )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDirectory, WorkingDirectory )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, arguments, Arguments )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, returnValue, ReturnValue )
 CMAKE_END_AST_CLASS( ExecProgramAst )
 
 
@@ -356,6 +361,7 @@ CMAKE_END_AST_CLASS( GetTestPropAst )
 
 CMAKE_BEGIN_AST_CLASS( IfAst )
 CMAKE_ADD_AST_MEMBER( QList<QStringList>, const QList<QStringList>&, conditions, Conditions )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, kind, Kind )
 CMAKE_END_AST_CLASS( IfAst )
 
 

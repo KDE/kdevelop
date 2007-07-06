@@ -37,26 +37,27 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         virtual void visit( const CustomTargetAst * ) { notImplemented(); }
         virtual void visit( const AddDefinitionsAst * ) { notImplemented(); }
         virtual void visit( const AddDependenciesAst * ) { notImplemented(); }
-        virtual void visit( const AddExecutableAst * );
-        virtual void visit( const AddLibraryAst * );
-        virtual void visit( const AddSubdirectoryAst * );
-        virtual void visit( const IncludeDirectoriesAst * );
         virtual void visit( const AddTestAst * ) { notImplemented(); }
         virtual void visit( const AuxSourceDirectoryAst * ) { notImplemented(); }
         virtual void visit( const BuildCommandAst * ) { notImplemented(); }
         virtual void visit( const BuildNameAst * ) { notImplemented(); }
         virtual void visit( const CMakeMinimumRequiredAst * ) { notImplemented(); }
         virtual void visit( const ConfigureFileAst * ) { notImplemented(); }
+        virtual void visit( const AddExecutableAst * );
+        virtual void visit( const AddLibraryAst * );
+        virtual void visit( const AddSubdirectoryAst * );
+        virtual void visit( const IncludeDirectoriesAst * );
         virtual void visit( const IncludeAst * );
         virtual void visit( const MacroCallAst * call);
         virtual void visit( const FindPackageAst * );
         virtual void visit( const FindProgramAst * );
         virtual void visit( const FindPathAst * );
+        virtual void visit( const IfAst * );
+        virtual void visit( const ExecProgramAst * );
         virtual void visit( MacroAst * );
         
         virtual void visit( const SetAst * );
         virtual void visit( const ProjectAst * );
-        
         virtual void visit( const CMakeAst * );
         
         QString projectName() const { return m_projectName; }

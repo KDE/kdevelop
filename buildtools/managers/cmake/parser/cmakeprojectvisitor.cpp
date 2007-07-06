@@ -40,6 +40,7 @@ QString CMakeProjectVisitor::variableName(const QString &name)
 
 QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const QHash<QString, QStringList> *values)
 {
+//     kDebug(9032) << "lol!" << exp << " @t " << *values << endl;
     if(hasVariable(exp)) {
         QStringList ret;
         QString var = variableName(exp);
@@ -54,6 +55,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const QHash
 
 QStringList CMakeProjectVisitor::resolveVariables(const QStringList & vars, const QHash<QString, QStringList> *values)
 {
+//     kDebug(9032) << "resolving: " << vars << " into " << *values << endl;
     QStringList rvars;
     for(QStringList::const_iterator i=vars.begin(); i!=vars.end(); ++i)
         rvars += resolveVariable(*i, values);
@@ -106,13 +108,16 @@ void CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 
 void CMakeProjectVisitor::visit(const SetAst *set)
 {
-    m_vars->remove(set->variableName());
-    m_vars->insert(set->variableName(), set->values());
-    kDebug(9032) << "set: " << set->variableName() << "=" << set->values() << endl;
+    qDebug() << "cmake support" << "set: " << set->variableName() << "=" << set->values() << endl;
+    
+    QStringList old=m_vars->value(set->variableName());
+    m_vars->insert(set->variableName(), old+resolveVariables(set->values(), m_vars));
+    kDebug(9032) << set->variableName() << "-result:-" << *m_vars << endl;
 }
 
 void CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 {
+    kDebug(9032) << "including " << dirs->includedDirectories() << endl;
     IncludeDirectoriesAst::IncludeType t = dirs->includeType();
     
     QStringList toInclude = resolveVariables(dirs->includedDirectories(), m_vars);
@@ -198,6 +203,8 @@ void CMakeProjectVisitor::visit(const IncludeAst *inc)
 
 void CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
+    if(!haveToFind(pack->name()+"-FOUND"))
+        return;
     kDebug(9032) << "Find: " << pack->name() << " package." << endl;
     const QStringList modulePath = resolveVariables(m_vars->value("CMAKE_MODULE_PATH"), m_vars) + cmakeModulesDirectories();
 
@@ -238,11 +245,11 @@ void CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     if(!haveToFind(fprog->variableName()))
         return;
 
-    kDebug(9032) << "Find: " << fprog->variableName() << " program." << endl;
     QStringList modulePath = resolveVariables(fprog->path(), m_vars);
     if(!fprog->noSystemEnvironmentPath())
-        modulePath += envVarDirectories("PATH"); 
+        modulePath += envVarDirectories("PATH");
 
+    kDebug(9032) << "Find: " << fprog->variableName() << " program into " << modulePath << endl;
     QString path=findFile(fprog->variableName(), modulePath);
     if(!path.isEmpty())
         m_vars->insert(fprog->variableName(), QStringList(path));
@@ -255,9 +262,9 @@ void CMakeProjectVisitor::visit(const FindPathAst *fpath)
     if(!haveToFind(fpath->variableName()))
         return;
 
-    kDebug(9032) << "Find: " << fpath->variableName() << " program." << endl;//FIXME Should review search
     QStringList modulePath = resolveVariables(fpath->path(), m_vars);
 
+    kDebug(9032) << "Find: " << fpath->variableName() << " path." << endl;//FIXME Should review search
     QString path=findFile(fpath->variableName(), modulePath);
     if(!path.isEmpty())
         m_vars->insert(fpath->variableName(), QStringList(path));
@@ -267,12 +274,14 @@ void CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
 void CMakeProjectVisitor::visit(MacroAst *macro)
 {
+    kDebug(9032) << "Adding macro: " << macro->macroName() << endl;
     m_macros->insert(macro->macroName(), macro);
 }
 
 void CMakeProjectVisitor::visit(const MacroCallAst *call)
 {
     if(m_macros->contains(call->name())) {
+        kDebug(9032) << "Running macro: " << call->name() << endl;
         MacroAst *ast=m_macros->value(call->name());
         if(ast->knownArgs().count() == call->arguments().count()) {
             //Giving value to parameters
@@ -294,6 +303,44 @@ void CMakeProjectVisitor::visit(const MacroCallAst *call)
     } else {
         kDebug(9032) << "Did not find the macro: " << call->name() << endl;
     }
+}
+
+enum conditionToken { variable, NOT, AND, OR, COMMAND, EXISTS, IS_NEWER_THAN, IS_DIRECTORY, MATCHES,
+                        LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED };
+
+bool condition(const QStringList &expression, const QHash<QString, QStringList> *vars)
+{
+    //FIXME: Should do lots of things, I'll check only if it is declared for the moment
+//     return vars->contains(expression[0]);
+    return true;
+}
+
+void CMakeProjectVisitor::visit(const IfAst *ifast)
+{
+    kDebug(9032) << "Visiting If" << ifast->conditions() << endl;
+    int nConditions = ifast->conditions().count();
+    int nChild = ifast->children().count();
+    if(nConditions>nChild || nConditions<nChild-1) {
+        kDebug(9032) << "Something weird is happening. nConditions: " << nConditions << ", nChild: " << nChild << endl;
+        return;
+    }
+
+    bool done=false;
+    
+    QList<QStringList>::iterator it=ifast->conditions().begin();
+    QList<CMakeAst*>::const_iterator itch=ifast->children().constBegin();
+    
+    for(; !done && itch != ifast->children().constEnd(); ++it, ++itch) {
+        if(it==ifast->conditions().end() || condition(*it, m_vars)) {
+            (*itch)->accept(this);
+            done=true;
+        }
+    }
+}
+
+void CMakeProjectVisitor::visit(const ExecProgramAst *exec)
+{
+    
 }
 
 
