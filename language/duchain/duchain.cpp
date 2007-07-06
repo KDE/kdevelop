@@ -127,14 +127,10 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document )
 {
   if (!document.identity()) {
     // Match any parsed version of this document
-    for (QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.begin(); it != sdDUChainPrivate->m_chains.end(); ++it)
-      if (it.key().url() == document.url())
-        return it.value();
-    // This should work, not sure why it doesn't (and would be much faster)
-    /*QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(document);
+    QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(document);
     if (it != sdDUChainPrivate->m_chains.constEnd())
       if (it.key().url() == document.url())
-        return it.value();*/
+        return it.value();
 
   } else if (sdDUChainPrivate->m_chains.contains(document))
     return sdDUChainPrivate->m_chains[document];

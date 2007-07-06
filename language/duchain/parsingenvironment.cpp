@@ -40,7 +40,7 @@ uint IdentifiedFile::identity() const {
 }
 
 bool IdentifiedFile::operator<( const IdentifiedFile& rhs ) const {
-  return m_url < rhs.m_url || (/*m_identity != 0 &&*/ m_identity < rhs.m_identity );
+  return m_url < rhs.m_url || (m_url == rhs.m_url && m_identity < rhs.m_identity );
 }
 
 bool IdentifiedFile::isEmpty() const {
