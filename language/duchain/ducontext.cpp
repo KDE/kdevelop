@@ -300,10 +300,12 @@ void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier
   findLocalDeclarationsInternal(identifier, position, dataType, inImportedContext, ret);
   
   ///@todo In some cases, for example when constructing a list of global overloaded functions or operators, we must search on and build a complete list of them
-  ///@todo is this too c++ specific?
+  ///Another case when all declarations are needed seems to be the case of forward-declarations:
+  ///in declarationbuilder.cpp all forward-declarations of a type must be found so they can be resolved.
 
-   if (ret.count()) //We need a way to decide language-independently whether we should search on or stop here
-     return;
+  ///For now, to be exact, search on.
+   //if (ret.count()) //We need a way to decide language-independently whether we should search on or stop here
+     //return;
 
   if (!identifier.explicitlyGlobal())
     acceptUsingNamespaces(position, usingNS);

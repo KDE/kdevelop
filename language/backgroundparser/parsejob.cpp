@@ -97,10 +97,7 @@ QString ParseJob::errorMessage() const
 
 bool ParseJob::contentsAvailableFromEditor() const
 {
-    ///@todo adymo: reenable after documentcontroller is ported
-    return false;
-//     return m_openDocument && m_openDocument->textDocument() &&
-//         EditorIntegrator::documentLoaded(m_openDocument->textDocument());
+    return (bool)EditorIntegrator::documentForUrl(m_document);
 }
 
 int ParseJob::revisionToken() const
@@ -110,9 +107,11 @@ int ParseJob::revisionToken() const
 
 QString ParseJob::contentsFromEditor(bool saveRevisionToken)
 {
-    ///@todo adymo: reenable after documentcontroller is ported
-    return "";
-/*    SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
+    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(m_document);
+    if( !doc )
+        return QString::null;
+    
+    SmartInterface* smart = dynamic_cast<SmartInterface*>(doc);
 
     QMutexLocker lock(smart ? smart->smartMutex() : 0);
 
@@ -120,7 +119,7 @@ QString ParseJob::contentsFromEditor(bool saveRevisionToken)
         m_revisionToken = smart->currentRevision();
     }
 
-    return m_openDocument->textDocument()->text();*/
+    return doc->text();
 }
 
 void ParseJob::setErrorMessage(const QString& message)
