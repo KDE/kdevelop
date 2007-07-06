@@ -112,6 +112,7 @@ void UseBuilder::newUse(NameAST* name)
           readLock.unlock();
           DUChainWriteLocker lock(DUChain::lock());
           ret->setTextRange(m_editor->createRange(newRange));
+          lock.unlock();
           readLock.lock();
         }
 

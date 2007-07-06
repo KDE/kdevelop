@@ -248,6 +248,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
           readLock.unlock();
           DUChainWriteLocker writeLock(DUChain::lock());
           declaration->setTextRange( m_editor->createRange( newRange ) );
+          writeLock.unlock();
           readLock.lock();
         }
 
