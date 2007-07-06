@@ -30,15 +30,45 @@ namespace KDevelop
 
 /**
  * This interface has methods to support distributed version control systems
- * like git or svk
+ * like git or svk.
  */
 class KDEVPLATFORMVCS_EXPORT IDistributedVersionControl
 {
 public:
-    VcsJob* push( const QString& repositoryLocation ) = 0;
-    VcsJob* pull( const QString& repositoryLocation ) = 0;
-    VcsJob* clone( const QString& repositoryLocationSrc,
-                  const QString& repositoryLocationDst ) = 0;
+    /**
+     * Create a new repository inside the given local directory.
+     */
+    virtual VcsJob* init( const KUrl& localRepositoryRoot );
+
+    /**
+     * Create a new repository by cloning another one into a newly created
+     * local directory, including all of the other repository's history.
+     *
+     * @param repositoryLocation The repository that will be cloned.
+     * @param localRepositoryRoot The root folder of the newly created repository.
+     */
+    virtual VcsJob* clone( const QString& repositoryLocationSrc,
+                           const KUrl& localRepositoryRoot ) = 0;
+
+    /**
+     * Export the locally committed revisions to another repository.
+     *
+     * @param localRepositoryLocation Any location inside the local repository.
+     * @param repositoryLocation The repository which will receive the pushed revisions.
+     */
+    virtual VcsJob* push( const KUrl& localRepositoryLocation,
+                          const QString& repositoryLocation ) = 0;
+
+    /**
+     * Import revisions from another repository the local one, but don't yet
+     * merge them into the working copy.
+     *
+     * @param repositoryLocation The repository which contains the revisions
+     *                           to be pulled.
+     * @param localRepositoryLocation Any location inside the local repository.
+     */
+    virtual VcsJob* pull( const QString& repositoryLocation,
+                          const KUrl& localRepositoryLocation ) = 0;
 };
 
 }
