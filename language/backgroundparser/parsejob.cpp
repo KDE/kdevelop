@@ -65,13 +65,16 @@ ParseJob::ParseJob( const KUrl &url,
 
 ParseJob::~ParseJob()
 {
-    ///@todo adymo: reenable after documentcontroller is ported
-/*    if (m_revisionToken != -1) {
-        Q_ASSERT(m_openDocument);
-        SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
-        Q_ASSERT(smart);
+  //@todo save the text-document when acquiring the revision-token, it must somehow be made sure that it is still the same instance
+
+    if (m_revisionToken != -1) {
+      KTextEditor::Document* doc = EditorIntegrator::documentForUrl(m_document);
+      if( doc ) {
+	SmartInterface* smart = dynamic_cast<SmartInterface*>(doc);
+	Q_ASSERT(smart);
         smart->releaseRevision(m_revisionToken);
-    }*/
+      }
+    }
 }
 
 KUrl ParseJob::document() const
