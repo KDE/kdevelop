@@ -22,6 +22,8 @@
 
 #include "default_visitor.h"
 
+#include <QSet>
+
 #include <identifier.h>
 #include <ducontext.h>
 #include <ksharedptr.h>
@@ -30,6 +32,7 @@
 namespace KDevelop
 {
 class DUChain;
+class KDevelop::DUChainBase;
 class DUContext;
 class TopDUContext;
 }
@@ -85,6 +88,20 @@ public:
 protected:
   inline KDevelop::DUContext* currentContext() { return m_contextStack.top(); }
 
+  /**Signalize that a specific item has been encoutered while parsing.
+   * All contained items that are not signalized will be deleted at some stage
+   * */
+  void setEncountered( KDevelop::DUChainBase* item ) {
+    m_encountered.insert(item);
+  }
+
+  /**
+   * @return whether the given item is in the set of encountered items
+   * */
+  bool wasEncountered( KDevelop::DUChainBase* item ) {
+    return m_encountered.contains(item);
+  }
+  
   /**
    * Compile an identifier for the specifed NameAST \a id.
    *
@@ -99,9 +116,6 @@ protected:
   // Notifications for subclasses
   /// Returns true if we are recompiling a definition-use chain
   inline bool recompiling() const { return m_recompiling; }
-
-  /// The current encountered token that objects have to have to avoid being cleaned
-  inline uint encounteredToken() const { return m_encounteredToken; }
 
   // Write lock is already held here...
   virtual void openContext(KDevelop::DUContext* newContext);
@@ -145,8 +159,8 @@ protected:
   bool m_compilingContexts: 1;
   bool m_recompiling : 1;
 
-  uint m_encounteredToken;
-
+  //Here all valid declarations/uses/... will be collected
+  QSet<KDevelop::DUChainBase*> m_encountered;
   QStack<KDevelop::DUContext*> m_contextStack;
   int m_nextContextIndex;
 

@@ -106,8 +106,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
     DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
   }
 
-  m_encounteredToken = topLevelContext->lastEncountered() + 1;
-  topLevelContext->setEncountered(m_encounteredToken);
+  setEncountered(topLevelContext);
 
   node->ducontext = topLevelContext;
 
@@ -154,8 +153,6 @@ KDevelop::DUContext* ContextBuilder::buildSubContexts(const KUrl& url, AST *node
   m_recompiling = false;
 
   m_editor->setCurrentUrl(url);
-
-  m_encounteredToken = 0; ///@todo What exactly is this?
 
   node->ducontext = parent;
 
@@ -389,7 +386,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
     }
   }
 
-  ret->setEncountered(m_encounteredToken);
+  setEncountered(ret);
 
   openContext(ret);
 
@@ -404,13 +401,12 @@ void ContextBuilder::openContext(DUContext* newContext)
 
 void ContextBuilder::closeContext()
 {
-  // Don't need to clean if it's new (encountered will be current if so)
-  if (currentContext()->lastEncountered() != m_encounteredToken)
   {
     DUChainWriteLocker lock(DUChain::lock());
-    ///@todo what's the use of this, and how does it work?
-    currentContext()->cleanIfNotEncountered(m_encounteredToken, m_compilingContexts);
-    currentContext()->setEncountered(m_encounteredToken);
+
+    //Remove all slaves that were not encountered while parsing
+    currentContext()->cleanIfNotEncountered(m_encountered, m_compilingContexts);
+    setEncountered( currentContext() );
   }
 
   // Go back to the context prior to this function definition

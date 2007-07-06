@@ -316,7 +316,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     }
   }
 
-  declaration->setEncountered(encounteredToken());
+  setEncountered(declaration);
 
   m_declarationStack.push(declaration);
 

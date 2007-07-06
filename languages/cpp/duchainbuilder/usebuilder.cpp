@@ -132,7 +132,7 @@ void UseBuilder::newUse(NameAST* name)
 
     Use* newUse = new Use(use, currentContext());
 
-    newUse->setEncountered(encounteredToken());
+    setEncountered(newUse);
     
     if (declarations.count())
       declarations.first()->addUse(newUse);
