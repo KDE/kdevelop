@@ -299,6 +299,8 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
     return;
   }
 
+  if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
+    text += "\n";
 
   Cpp::CodeCompletionContext completionContext( context, text );
 

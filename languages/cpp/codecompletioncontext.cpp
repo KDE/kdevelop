@@ -368,6 +368,7 @@ bool CodeCompletionContext::isValidPosition() {
 
   if( markedText[markedText.length()-1] == '$' ) {
     //We are within a comment or string
+    kDebug() << "code-completion position is invalid, marked text: \n\"" << markedText << "\"\n unmarked text:\n" << m_text << "\n" << endl;
     return false;
   }
   return true;
