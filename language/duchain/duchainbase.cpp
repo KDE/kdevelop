@@ -26,10 +26,8 @@ class DUChainBasePrivate
 public:
   DUChainBasePrivate() {
     m_modelRow = 0;
-    m_encountered = 0;
   }
   int m_modelRow;
-  unsigned int m_encountered;
 };
 
 
@@ -52,16 +50,6 @@ int DUChainBase::modelRow() const
 void DUChainBase::setModelRow(int row)
 {
   d->m_modelRow = row;
-}
-
-unsigned int DUChainBase::lastEncountered() const
-{
-  return d->m_encountered;
-}
-
-void DUChainBase::setEncountered(unsigned int encountered)
-{
-  d->m_encountered = encountered;
 }
 
 TopDUContext* DUChainBase::topContext() const

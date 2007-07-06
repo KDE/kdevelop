@@ -27,6 +27,9 @@
 #include <typesystem.h>
 #include <duchainbase.h>
 
+template<class T>
+class QSet;
+
 namespace KDevelop
 {
 
@@ -321,9 +324,9 @@ public:
   void deleteUses();
 
   /**
-   * Delete and remove all non-encountered properties in a parsing run.
+   * Delete and remove all slaves(uses, declarations, definitions, contexts) that are not in the given set
    */
-  void cleanIfNotEncountered(uint encountered, bool firstPass);
+  void cleanIfNotEncountered(const QSet<DUChainBase*>& encountered, bool firstPass);
 
 protected:
   /**

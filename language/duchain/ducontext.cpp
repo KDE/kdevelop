@@ -20,6 +20,7 @@
 #include "ducontext_p.h"
 
 #include <QMutableLinkedListIterator>
+#include <QSet>
 
 #include "declaration.h"
 #include "definition.h"
@@ -755,26 +756,26 @@ void DUContext::clearImportedParentContexts()
   Q_ASSERT(d->m_importedParentContexts.isEmpty());
 }
 
-void DUContext::cleanIfNotEncountered(uint encountered, bool firstPass)
+void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered, bool firstPass)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
   if (firstPass) {
     foreach (DUContext* childContext, childContexts())
-      if (childContext->lastEncountered() != encountered)
+      if (!encountered.contains(childContext))
         delete childContext;
 
     foreach (Declaration* dec, localDeclarations())
-      if (dec->lastEncountered() != encountered)
+      if (!encountered.contains(dec))
         delete dec;
 
     foreach (Definition* def, localDefinitions())
-      if (def->lastEncountered() != encountered)
+      if ( !encountered.contains(def))
         delete def;
 
   } else {
     foreach (Use* use, uses())
-      if (use->lastEncountered() != encountered)
+      if (!encountered.contains(use))
         delete use;
   }
 }

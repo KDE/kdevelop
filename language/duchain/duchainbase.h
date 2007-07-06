@@ -40,10 +40,6 @@ public:
   /// TODO atomic set? or assert locked?
   void setModelRow(int row);
 
-  unsigned int lastEncountered() const;
-  /// TODO atomic set? or assert locked?
-  void setEncountered(unsigned int encountered);
-
   virtual TopDUContext* topContext() const;
 
 private:
