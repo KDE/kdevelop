@@ -20,10 +20,10 @@
 #include "cmakeast.h"
 #include "cmakeprojectvisitor.h"
 
+#include <KProcess>
 #include <KDebug>
 #include <QHash>
 #include <QFile>
-#include <QProcess>
 
 bool CMakeProjectVisitor::hasVariable(const QString &name)
 {
@@ -340,7 +340,19 @@ void CMakeProjectVisitor::visit(const IfAst *ifast)
 
 void CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 {
-    
+    KProcess p;
+    p.setWorkingDirectory(exec->workingDirectory());
+    p.setOutputChannelMode(KProcess::MergedChannels);
+    p.setProgram(exec->executableName(), exec->arguments());
+    p.start();
+
+    p.waitForFinished();
+
+    if(!exec->returnValue().isEmpty())
+        m_vars->insert(exec->returnValue(), QStringList(QString(p.exitCode())));
+    if(!exec->outputVariable().isEmpty()) {
+        
+    }
 }
 
 

@@ -44,6 +44,7 @@ class FindPackageAst;
 class FindProgramAst;
 class FindPathAst;
 class IfAst;
+class ExecProgramAst;
 class CMakeAst;
 
 class CMakeAstVisitor {
