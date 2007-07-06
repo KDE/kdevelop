@@ -53,6 +53,7 @@ Boston, MA 02110-1301, USA.
 #include "partdocument.h"
 #include "partcontroller.h"
 #include "uicontroller.h"
+#include "documentcontroller.h"
 
 #include "mainwindow.h"
 
