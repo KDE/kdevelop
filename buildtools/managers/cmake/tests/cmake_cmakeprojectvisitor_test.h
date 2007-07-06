@@ -18,34 +18,27 @@
  * 02110-1301, USA.
  */
 
-#include "cmake_ifast_test.h"
-#include "cmakeast.h"
-#include "cmakelistsparser.h"
+#ifndef CMAKECMAKEPROJECTVISITORTEST_H
+#define CMAKECMAKEPROJECTVISITORTEST_H
 
-QTEST_MAIN( IfAstTest )
+#include <QtTest/QtTest>
 
-void IfAstTest::testGoodParse()
+class CMakeProjectVisitorTest : public QObject
 {
-    QFETCH( CMakeFunctionDesc, function );
-    IfAst* ast = new IfAst();
-    QVERIFY( ast->parseFunctionInfo( function ) == true );
-    delete ast;
-}
+    Q_OBJECT
+public:
+    CMakeProjectVisitorTest() {}
+    virtual ~CMakeProjectVisitorTest() {}
 
-void IfAstTest::testGoodParse_data()
-{
-}
+private slots:
+    void testVariables();
+    void testVariables_data();
 
-void IfAstTest::testBadParse()
-{
-    QFETCH( CMakeFunctionDesc, function );
-    IfAst* ast = new IfAst();
-    QVERIFY( ast->parseFunctionInfo( function ) == false );
-    delete ast;
-}
+    void testGoodParse();
+    void testGoodParse_data();
 
-void IfAstTest::testBadParse_data()
-{
-}
+    void testBadParse();
+    void testBadParse_data();
+};
 
-#include "cmake_ifast_test.moc"
+#endif
