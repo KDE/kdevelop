@@ -50,7 +50,11 @@ public:
      */
     void setTextRange(KTextEditor::Range* range, RangeOwning ownsRange = Own);
 
+    /**
+     * DANGER: The previous range is not deleted, use setTextRange instead
+     * */
     void setRange(const KTextEditor::Range& range);
+    
     const KTextEditor::Range textRange() const;
     const DocumentRange textDocRange() const;
     KTextEditor::Range* textRangePtr() const;
