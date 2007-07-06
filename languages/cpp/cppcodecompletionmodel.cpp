@@ -73,6 +73,9 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     }
 
     setContext(thisContext, range.start(), view);
+
+  } else {
+    kDebug(9007) << k_funcinfo << "Completion invoked for unknown context. Document: " << url << ", Known documents: " << DUChain::self()->documents() << endl;
   }
 }
 
@@ -281,13 +284,13 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
     kDebug() << "No document for completion" << endl;
     return;
   }
-  
+
   KTextEditor::Range range;
   QString text;
   {
     DUChainReadLocker lock(DUChain::lock());
     range = KTextEditor::Range(context->textRange().start(), position);
-    
+
     text = doc->text(range);
   }
 
@@ -295,13 +298,13 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
     kDebug() << "no text for context" << endl;
     return;
   }
-  
-  
+
+
   Cpp::CodeCompletionContext completionContext( context, text );
 
   if( completionContext ) {
     DUChainReadLocker lock(DUChain::lock());
-    
+
     if( completionContext.memberAccessContainer() && *completionContext.memberAccessContainer() ) {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>(completionContext.memberAccessContainer()->type.data());
       if( idType && idType->declaration() ) {
@@ -321,6 +324,9 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
   } else {
     kDebug() << "CppCodeCompletionModel::setContext: Invalid code-completion context" << endl;
   }
+
+  // TODO maybe one day just behave like a nice model and call insert rows etc.
+  reset();
 }
 
 #include "cppcodecompletionmodel.moc"

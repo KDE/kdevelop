@@ -70,14 +70,14 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
   static int depth = 0;
 
   IntPusher( depth, depth+1 );
-  
+
   if( depth > 10 ) {
     log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
     m_valid = false;
     return;
   }
   log( "Computing context" );
-  
+
   m_valid = isValidPosition();
   if( !m_valid ) {
     log( "position not valid for code-completion" );
@@ -86,7 +86,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
 
   log( "non-processed text: " + m_text );
   preprocessText();
-  
+
   m_text = Utils::clearComments( m_text );
   m_text = Utils::clearStrings( m_text );
   m_text = Utils::stripFinalWhitespace( m_text );
@@ -94,19 +94,19 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
   log( "processed text: " + m_text );
 
   ///@todo template-parameters
-  
+
   ///First: find out what kind of completion we are dealing with
 
   if( m_text.endsWith( ";" ) || m_text.endsWith("}") || m_text.endsWith("{") ) {
     ///We're at the beginning of a new statement. General completion is valid.
     return;
   }
-  
+
   if( m_text.endsWith(".") ) {
     m_memberAccessOperation = MemberAccess;
     m_text = m_text.left( m_text.length()-1 );
   }
-  
+
   if( m_text.endsWith("->") ) {
     m_memberAccessOperation = ArrowMemberAccess;
     m_text = m_text.left( m_text.length()-2 );
@@ -128,7 +128,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
     m_operator = getEndOperator(m_text);
     m_text = m_text.left( m_text.length() - m_operator.length() );
   }
-  
+
   if( m_text.endsWith("(") ) {
     if( firstContext ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
@@ -138,7 +138,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
     m_contextType = FunctionCall;
     m_memberAccessOperation = FunctionCallAccess;
     m_text = m_text.left( m_text.length()-1 );
-    
+
     ///Compute the types of the argument-expressions
     ExpressionParser expressionParser;
 
@@ -176,14 +176,14 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
   if( expressionPrefix.endsWith("(") || expressionPrefix.endsWith(",") ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
     //Our expression is within a function-call. We need to find out the possible argument-types we need to match, and show an argument-hint.
-    
+
     //Find out which argument-number this expression is, and compute the beginning of the parent function-call(parentContextLast)
     QStringList otherArguments;
     int parentContextEnd = expressionPrefix.length();
     Utils::skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
 
     QString parentContextText = expressionPrefix.left(parentContextEnd);
-    
+
     log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
     m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, false, otherArguments );
   }
@@ -214,7 +214,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
   }
 
   ExpressionParser expressionParser;
-  
+
   if( !expr.trimmed().isEmpty() ) {
     m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
     if( !(*m_expressionResult) ) {
@@ -249,7 +249,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
         log( "Expression was empty, cannot complete" );
         m_valid = false;
       }
-  
+
       //The result of the expression is stored in m_expressionResult, so we're fine
     }
     break;
@@ -306,8 +306,9 @@ void CodeCompletionContext::processFunctionCallAccess() {
     }
   } else {
     ///Simply take all the declarations that were found by the expression-parser
-    foreach( Declaration* decl, m_expressionResult->allDeclarations )
-      declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); //Insert with argument-offset zero
+    if (m_expressionResult)
+      foreach( Declaration* decl, m_expressionResult->allDeclarations )
+        declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); //Insert with argument-offset zero
   }
   if( declarations.isEmpty() ) {
     log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
@@ -327,7 +328,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   log( "functions given to overload-resolution:" );
   foreach( const DeclarationWithArgument& declaration, declarations )
     log( declaration.second->toString() );
-  
+
   log("parameters given to overload-resolution:");
   lock.unlock();
   foreach( ExpressionEvaluationResult::Ptr result, m_knownArgumentTypes ) {
@@ -335,7 +336,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   }
   lock.lock();
 
-  
+
   QList< ViableFunction > viableFunctions = resolv.resolveListPartial( knownParameters, declarations );
   foreach( const ViableFunction& function, viableFunctions ) {
     if( function.declaration() && function.declaration()->abstractType() ) {
@@ -375,7 +376,7 @@ bool CodeCompletionContext::isValidPosition() {
 
 QString CodeCompletionContext::getEndOperator( const QString& str ) const {
   static QStringList allowedOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || [ - * / % & | = < >" ).split( " ", QString::SkipEmptyParts );
-  
+
   for( QStringList::const_iterator it = allowedOperators.begin(); it != allowedOperators.end(); ++it )
     if( str.endsWith(*it) )
       return *it;
