@@ -52,7 +52,7 @@ public:
    * Return any chain for the given document
    * */
   TopDUContext* chainForDocument(const KUrl& document);
-  
+
   /**
    * Find the chain based on file-url and identity-number. If the number is zero, any chain for the given url is returned.
    * */
@@ -62,6 +62,9 @@ public:
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
    * */
   TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment);
+
+  /// Only used for debugging at the moment
+  QList<KUrl> documents() const;
 
   void addDocumentChain(const IdentifiedFile& document, TopDUContext* chain);
 
@@ -103,7 +106,7 @@ public:
    * Changes the environment attached to the given top-level context, and updates the management-structures to reflect that
    * */
   void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );
-  
+
 public Q_SLOTS:
   void removeDocumentChain(const IdentifiedFile& document);
 

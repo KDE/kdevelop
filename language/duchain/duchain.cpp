@@ -72,7 +72,7 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
 void DUChain::removeDocumentChain( const  IdentifiedFile& document )
 {
   ENSURE_CHAIN_WRITE_LOCKED
-  
+
   kDebug() << "duchain: removing document " << document.toString() << endl;
   sdDUChainPrivate->m_chains.remove(document);
 }
@@ -80,7 +80,7 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
 void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * chain )
 {
   ENSURE_CHAIN_WRITE_LOCKED
-  
+
   kDebug() << "duchain: adding document " << document.toString() << endl;
   Q_ASSERT(chain);
   sdDUChainPrivate->m_chains.insert(document, chain);
@@ -93,9 +93,9 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
   ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
   if( !file )
     return; //We don't need to manage
-  
+
   QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(file->type());
-  
+
   if( it != sdDUChainPrivate->m_managers.end() ) {
     (*it)->addFile( file.data() );
   } else {
@@ -105,13 +105,13 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
 
 void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
   ENSURE_CHAIN_WRITE_LOCKED
-  
+
   ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
   if( !file )
     return; //We don't need to manage
-  
+
   QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(file->type());
-  
+
   if( it != sdDUChainPrivate->m_managers.end() ) {
     (*it)->removeFile( file.data() );
   } else {
@@ -125,8 +125,20 @@ TopDUContext* DUChain::chainForDocument(const KUrl& document) {
 
 TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document )
 {
-  if (sdDUChainPrivate->m_chains.contains(document))
+  if (!document.identity()) {
+    // Match any parsed version of this document
+    for (QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.begin(); it != sdDUChainPrivate->m_chains.end(); ++it)
+      if (it.key().url() == document.url())
+        return it.value();
+    // This should work, not sure why it doesn't (and would be much faster)
+    /*QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(document);
+    if (it != sdDUChainPrivate->m_chains.constEnd())
+      if (it.key().url() == document.url())
+        return it.value();*/
+
+  } else if (sdDUChainPrivate->m_chains.contains(document))
     return sdDUChainPrivate->m_chains[document];
+
   return 0;
 }
 
@@ -136,7 +148,7 @@ TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvi
     ParsingEnvironmentFilePointer file( (*it)->find(document, environment) );
     if( !file )
       return 0;
-    
+
       return chainForDocument( file->identity() );
   } else {
     //No manager available for the type
@@ -207,19 +219,29 @@ void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChain
 void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
   ENSURE_CHAIN_WRITE_LOCKED
   Q_ASSERT( sdDUChainPrivate->m_managers.find(manager->type()) == sdDUChainPrivate->m_managers.end() ); //If this fails, there may be multiple managers with the same type, which is wrong
-  
+
   sdDUChainPrivate->m_managers[manager->type()] = manager;
   }
 
 void DUChain::removeParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
   ENSURE_CHAIN_WRITE_LOCKED
   QMap<int,ParsingEnvironmentManager*>::iterator it = sdDUChainPrivate->m_managers.find(manager->type());
-  
+
   if( it != sdDUChainPrivate->m_managers.end() ) {
     Q_ASSERT( *it == manager ); //If this fails, there may be multiple managers with the same type, which is wrong
     sdDUChainPrivate->m_managers.erase(it);
   }
 }
+
+QList<KUrl> DUChain::documents() const
+{
+  QList<KUrl> ret;
+  foreach (const IdentifiedFile& file, sdDUChainPrivate->m_chains.keys()) {
+    ret << file.url();
+  }
+  return ret;
+}
+
 }
 
 #include "duchain.moc"
