@@ -35,7 +35,7 @@ class DUContext;
 namespace Cpp  {
 using namespace KDevelop;
 
-class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult : public KShared {
+class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
   public:
     ExpressionEvaluationResult() {
     }
@@ -49,7 +49,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult : public KShared
     bool isLValue() const;
 
     ///@return whether this result is valid(has a type)
-    operator bool() const;
+    bool isValid() const;
 
     ///it does not matter whether du-chain is locked or not
     QString toString() const;
@@ -80,14 +80,14 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
      * Example:
      * "int i; i += 5;"
     */
-    ExpressionEvaluationResult::Ptr evaluateType( const QByteArray& expression, DUContext* context, bool statement = true );
+    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContext* context, bool statement = true );
     /**
      * Evaluates the type of an expression given as an AST.
      *
      * @param ast the AST. It's context must be built already(context-member filled).
      * @param debug whether additional output to kdDebug should be issued
     */
-    ExpressionEvaluationResult::Ptr evaluateType( AST* ast, ParseSession* session );
+    ExpressionEvaluationResult evaluateType( AST* ast, ParseSession* session );
 
   private:
     bool m_strict;

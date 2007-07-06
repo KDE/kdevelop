@@ -54,9 +54,12 @@ QTEST_MAIN(TestCppCodeCompletion)
 ///@todo make forward-declarations work correctly across headers
 
 QString testFile1 = "class Erna; struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
+
 QString testFile2 = "struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Erna { Erna( const Honk& honk ) {} }; struct Heinz : public Erna {}; Erna globalErna; Heinz globalHeinz; int globalInt; Heinz globalFunction(const Heinz& h ) {}; Erna globalFunction( const Erna& erna); Honk globalFunction( const Honk&, const Heinz& h ) {}; int globalFunction(int ) {}; HONK globalMacroHonk; struct GlobalClass { Heinz function(const Heinz& h ) {}; Erna function( const Erna& erna);  }; GlobalClass globalClass;\n#undef HONK\n";
 
 QString testFile3 = "struct A {}; struct B : public A {};";
+
+QString testFile4 = "void test1() {}; class TestClass() { TestClass() {} };";
 
 namespace QTest {
   template<>
@@ -378,6 +381,23 @@ void TestCppCodeCompletion::testInclude() {
   release(c);
 }
 
+void TestCppCodeCompletion::testUpdateChain() {
+  TEST_FILE_PARSE_ONLY
+      
+  DUContext* context = parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpAST |  DumpType), 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
+  
+  
+  DUChainWriteLocker lock(DUChain::lock());
+  //lock.lock();
+  release(context);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -439,7 +459,7 @@ QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*
     return result;
 }
 
-DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent)
+DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity)
 {
   if (dump)
     kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
@@ -448,9 +468,25 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
    ;
 
    QList<DUContext*> included;
+   QList<DUContext*> temporaryIncluded;
 
   session->setContents( preprocess( QString::fromUtf8(unit), included, parent ).toUtf8() );
 
+    if( parent ) {
+      //Temporarily insert all files parsed previously by the parent, so forward-declarations can be resolved etc.
+      TestPreprocessor* testPreproc = dynamic_cast<TestPreprocessor*>(parent->preprocessor());
+      if( testPreproc ) {
+        foreach( DUContext* include, testPreproc->included ) {
+          if( !included.contains( include ) ) {
+            included.push_front( include );
+            temporaryIncluded << include;
+          }
+        }
+      } else {
+        kDebug() << "PROBLEM" << endl;
+      }
+    }
+  
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);
   ast->session = session;
@@ -462,6 +498,8 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
 
   static int testNumber = 0;
   KUrl url(QString("file:///internal/%1").arg(testNumber++));
+  if( !_identity.isEmpty() )
+        url = _identity;
 
   DeclarationBuilder definitionBuilder(session);
 
@@ -486,6 +524,19 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
       dt.dump(type.data());
   }
+
+  if( parent ) {
+    //Remove temporarily inserted files parsed previously by the parent
+    DUChainWriteLocker lock(DUChain::lock());
+    TestPreprocessor* testPreproc = dynamic_cast<TestPreprocessor*>(parent->preprocessor());
+    if( testPreproc ) {
+      foreach( DUContext* context, temporaryIncluded )
+        top->removeImportedParentContext( context );
+    } else {
+      kDebug() << "PROBLEM" << endl;
+    }
+  }
+  
 
   if (dump)
     kDebug() << "===== Finished test case." << endl;

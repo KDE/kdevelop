@@ -72,6 +72,10 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
   // FIXME ? race here...
   TopDUContext* topLevelContext = DUChain::self()->chainForDocument(file->identity());
 
+  if( topLevelContext ) {
+    ///@todo fix the revision-stuff
+  }
+  
   if (topLevelContext) {
     m_recompiling = true;
 
@@ -126,6 +130,11 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
     DUChainReadLocker lock(DUChain::lock());
 
     kDebug(9007) << "built top-level context with " << topLevelContext->allDeclarations(KTextEditor::Cursor()).size() << " declarations and " << topLevelContext->importedParentContexts().size() << " included files" << endl;
+  
+    if( m_recompiling ) {
+      DumpChain dump;
+      dump.dump(topLevelContext);
+    }
   }
   
   m_compilingContexts = false;

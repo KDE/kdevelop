@@ -305,8 +305,8 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
   if( completionContext ) {
     DUChainReadLocker lock(DUChain::lock());
 
-    if( completionContext.memberAccessContainer() && *completionContext.memberAccessContainer() ) {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(completionContext.memberAccessContainer()->type.data());
+    if( completionContext.memberAccessContainer().isValid() ) {
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(completionContext.memberAccessContainer().type.data());
       if( idType && idType->declaration() ) {
         DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
         if( ctx ) {

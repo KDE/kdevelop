@@ -197,6 +197,8 @@ public:
   pp(Preprocessor* preprocessor);
   ~pp();
 
+  Preprocessor* preprocessor();
+
   enum StringType { File, Data };
   QList<ErrorMessage> errorMessages () const;
   void clearErrorMessages ();

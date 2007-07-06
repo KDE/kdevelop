@@ -122,7 +122,7 @@ namespace Cpp {
        * and maybe do automatic correction.
        * @return the type of the container that should be completed in.
        * */
-      ExpressionEvaluationResult::Ptr memberAccessContainer() const;
+      ExpressionEvaluationResult memberAccessContainer() const;
 
       /**
        * When memberAccessOperation is FunctionCallAccess,
@@ -162,13 +162,13 @@ namespace Cpp {
       bool m_valid;
       QString m_expression;
       QString m_operator; //If this completion-context ends with a binary operator, this is the operator
-      ExpressionEvaluationResult::Ptr m_expressionResult;
+      ExpressionEvaluationResult m_expressionResult;
 
       QString m_text;
 
       //Here known argument-expressions and their types, that may have come from sub-context's, are stored
       QStringList m_knownArgumentExpressions;
-      QList<ExpressionEvaluationResult::Ptr> m_knownArgumentTypes;
+      QList<ExpressionEvaluationResult> m_knownArgumentTypes;
       
       KDevelop::DUContext* m_duContext;
       SpecificContextType m_contextType;

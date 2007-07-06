@@ -60,6 +60,10 @@ void pp::clearErrorMessages ()
   _M_error_messages.clear ();
 }
 
+Preprocessor* pp::preprocessor() {
+  return m_preprocessor;
+}
+
 void pp::reportError (const QString &fileName, int line, int column, const QString &message)
 {
   ErrorMessage msg;

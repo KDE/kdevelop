@@ -215,12 +215,22 @@ void CPPInternalParseJob::run()
 //         parentJob()->setCodeModel(model);
 
         QList<DUContext*> chains;
+        QList<DUContext*> temporaryChains;
 
-        for ( IncludeFileList::const_iterator it = parentJob()->includedFiles().constBegin();
-              it != parentJob()->includedFiles().constEnd(); ++it )
-        {
-            chains << *it;
+        if( parentJob()->parentPreprocessor() ) {
+            //Temporarily insert the parent's chains here, so forward-declarations can be resolved and types can be used, as it should be.
+            //In theory, we would need to insert the whole until-now parsed part of the parent, but that's not possible because preprocessing and parsing are
+            //separate steps. So we simply assume that the includes are at the top of the file.
+            foreach ( TopDUContext* context, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
+                if( !parentJob()->includedFiles().contains(context) ) {
+                    chains << context;
+                    temporaryChains << context;
+                }
+            }
         }
+
+        foreach ( TopDUContext* context, parentJob()->includedFiles() )
+            chains << context;
 
         TopDUContext* topContext;
 
@@ -251,6 +261,12 @@ void CPPInternalParseJob::run()
                     return parentJob()->abortJob();
             }
 
+            if( parentJob()->parentPreprocessor() ) {
+                //Remove include-files we imported temporarily, because they are on the same level in reality
+                foreach ( DUContext* context, temporaryChains )
+                    topContext->removeImportedParentContext(context);
+            }
+            
             parentJob()->setDUChain(topContext);
 
             kDebug( 9007 ) << "duchain is built" << endl;
@@ -263,6 +279,7 @@ void CPPInternalParseJob::run()
             if (editor.smart())
               editor.smart()->clearRevision();
         }
+
 
         // Debug output...
 

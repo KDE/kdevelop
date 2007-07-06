@@ -217,7 +217,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
 
   if( !expr.trimmed().isEmpty() ) {
     m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
-    if( !(*m_expressionResult) ) {
+    if( !m_expressionResult.isValid() ) {
       log( QString("expression \"%1\" could not be evaluated").arg(expr) );
       m_valid = false;
       return;
@@ -262,7 +262,7 @@ CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString&
 void CodeCompletionContext::processFunctionCallAccess() {
   ///Generate a list of all found functions/operators, together with each a list of optional prefixed parameters
 
-  ///All the variable argument-count management in the following code is done to treat global operator-functions equivalently to local ones. They take a first parameter.
+  ///All the variable argument-count management in the following code is done to treat global operator-functions equivalently to local ones. Those take an additional first argument.
 
 
   typedef QPair<OverloadResolver::ParameterList, Declaration*> DeclarationWithArgument;
@@ -271,7 +271,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
 
   if( m_contextType == BinaryOperatorFunctionCall ) {
 
-    if( !m_expressionResult->instance ) {
+    if( !m_expressionResult.instance ) {
       log( "tried to apply an operator to a non-instance" );
       m_valid = false;
       return;
@@ -280,7 +280,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
     QualifiedIdentifier identifier( "operator"+m_operator );
     LOCKDUCHAIN;
     ///Search for member operators
-    AbstractType::Ptr real( TypeUtils::realType(m_expressionResult->type.data()) );
+    AbstractType::Ptr real( TypeUtils::realType(m_expressionResult.type.data()) );
     if( dynamic_cast<CppClassType*>( real.data() ) )
     {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
@@ -302,13 +302,12 @@ void CodeCompletionContext::processFunctionCallAccess() {
     foreach( Declaration* decl, decls ) {
       FunctionType* fun = dynamic_cast<FunctionType*>( decl->abstractType().data() );
       if( fun && fun->arguments().size() == 2 )
-        declarations << DeclarationWithArgument( OverloadResolver::Parameter(m_expressionResult->type.data(), m_expressionResult->isLValue()), decl );
+        declarations << DeclarationWithArgument( OverloadResolver::Parameter(m_expressionResult.type.data(), m_expressionResult.isLValue()), decl );
     }
   } else {
     ///Simply take all the declarations that were found by the expression-parser
-    if (m_expressionResult)
-      foreach( Declaration* decl, m_expressionResult->allDeclarations )
-        declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); //Insert with argument-offset zero
+    foreach( Declaration* decl, m_expressionResult.allDeclarations )
+      declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); //Insert with argument-offset zero
   }
   if( declarations.isEmpty() ) {
     log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
@@ -322,8 +321,8 @@ void CodeCompletionContext::processFunctionCallAccess() {
   LOCKDUCHAIN;
   OverloadResolver resolv( m_duContext );
   OverloadResolver::ParameterList knownParameters;
-  foreach( ExpressionEvaluationResult::Ptr result, m_knownArgumentTypes )
-    knownParameters.parameters << OverloadResolver::Parameter( result->type.data(), result->isLValue() );
+  foreach( ExpressionEvaluationResult result, m_knownArgumentTypes )
+    knownParameters.parameters << OverloadResolver::Parameter( result.type.data(), result.isLValue() );
 
   log( "functions given to overload-resolution:" );
   foreach( const DeclarationWithArgument& declaration, declarations )
@@ -331,8 +330,8 @@ void CodeCompletionContext::processFunctionCallAccess() {
 
   log("parameters given to overload-resolution:");
   lock.unlock();
-  foreach( ExpressionEvaluationResult::Ptr result, m_knownArgumentTypes ) {
-    log( result->toString() );
+  foreach( ExpressionEvaluationResult result, m_knownArgumentTypes ) {
+    log( result.toString() );
   }
   lock.lock();
 
@@ -349,7 +348,7 @@ const CodeCompletionContext::FunctionList& CodeCompletionContext::functions() co
   return m_functions;
 }
 
-ExpressionEvaluationResult::Ptr CodeCompletionContext::memberAccessContainer() const {
+ExpressionEvaluationResult CodeCompletionContext::memberAccessContainer() const {
   return m_expressionResult;
 }
 
@@ -389,9 +388,9 @@ bool CodeCompletionContext::endsWithOperator( const QString& str ) const {
 
 QList<KDevelop::AbstractType::Ptr> CodeCompletionContext::additionalMatchTypes() const {
   QList<KDevelop::AbstractType::Ptr> ret;
-  if( m_operator == "=" && m_expressionResult && m_expressionResult->type && m_expressionResult->instance ) {
+  if( m_operator == "=" && m_expressionResult.isValid() && m_expressionResult.instance ) {
     //Conversion to the left operand-type
-    ret << m_expressionResult->type;
+    ret << m_expressionResult.type;
   }
   return ret;
 }

@@ -39,7 +39,7 @@
 namespace Cpp {
 using namespace KDevelop;
 
-ExpressionEvaluationResult::operator bool() const {
+bool ExpressionEvaluationResult::isValid() const {
   return (bool)type;
 }
 
@@ -58,7 +58,7 @@ QString ExpressionEvaluationResult::toString() const {
 ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
 }
 
-ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool statement ) {
+ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool statement ) {
 
   if( m_debug )
     kDebug() << "==== .Evaluating ..:" << endl << unit << endl << endl;
@@ -124,7 +124,7 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
   if (m_debug)
     kDebug() << "===== Finished evaluation." << endl;
   */
-  ExpressionEvaluationResult::Ptr ret = evaluateType( ast, session );
+  ExpressionEvaluationResult ret = evaluateType( ast, session );
 
   delete session;
 
@@ -134,19 +134,16 @@ ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray
     delete top;
   }*/
 
-  if( ret->type )
-    return ret;
-  else
-    return ExpressionEvaluationResult::Ptr(new ExpressionEvaluationResult);
+  return ret;
 }
 
-ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseSession* session) {
-  ExpressionEvaluationResult::Ptr ret( new ExpressionEvaluationResult );
+ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session) {
+  ExpressionEvaluationResult ret;
   ExpressionVisitor v(session, m_strict);
   v.parse( ast );
-  ret->type = v.lastType();
-  ret->instance = v.lastInstance();
-  ret->allDeclarations = v.lastDeclarations();
+  ret.type = v.lastType();
+  ret.instance = v.lastInstance();
+  ret.allDeclarations = v.lastDeclarations();
   return ret;
 }
 
