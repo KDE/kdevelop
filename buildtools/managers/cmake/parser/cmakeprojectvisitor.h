@@ -54,6 +54,7 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         virtual void visit( const FindPathAst * );
         virtual void visit( const IfAst * );
         virtual void visit( const ExecProgramAst * );
+        virtual void visit( const FileAst * );
         virtual void visit( MacroAst * );
         
         virtual void visit( const SetAst * );
@@ -66,8 +67,9 @@ class CMakeProjectVisitor : public CMakeAstVisitor
         QStringList files(const QString &target) const { return m_filesPerTarget[target]; }
         QStringList includeDirectories() const { return m_includeDirectories; }
         
-        static bool hasVariable(const QString &name);
-        static QString variableName(const QString &name);
+        enum VariableType { None, CMake, ENV };
+        static VariableType hasVariable(const QString &name);
+        static QString variableName(const QString &name, VariableType& isEnv);
 	static QStringList resolveVariables(const QStringList & vars, const QHash<QString, QStringList> *values);
     private:
         static QStringList resolveVariable(const QString &exp, const QHash<QString, QStringList> *values);

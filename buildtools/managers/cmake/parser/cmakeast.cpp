@@ -60,10 +60,12 @@ CMAKE_REGISTER_AST( IncludeDirectoriesAst, include_directories )
 CMAKE_REGISTER_AST( SetAst, set )
 CMAKE_REGISTER_AST( ProjectAst, project )
 CMAKE_REGISTER_AST( MacroAst, macro )
+CMAKE_REGISTER_AST( ExecProgramAst, exec_program )
 CMAKE_REGISTER_AST( MarkAsAdvancedAst, mark_as_advanced )
 CMAKE_REGISTER_AST( FindPackageAst, find_package )
 CMAKE_REGISTER_AST( FindProgramAst, find_program )
 CMAKE_REGISTER_AST( FindPathAst, find_path )
+CMAKE_REGISTER_AST( FileAst, file )
 
 enum Stage {NAMES, PATHS, PATH_SUFFIXES};
 
@@ -896,7 +898,101 @@ void FileAst::writeBack( QString& ) const
 
 bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "file" )
+        return false;
+
+    if ( func.arguments.count()<2 )
+        return false;
+
+    QString type = func.arguments[0].value.toUpper();
+    int min_args=-1;
+    if(type=="WRITE") {
+       m_type = WRITE;
+       min_args=3;
+    } else if(type=="APPEND") {
+        m_type = APPEND;
+        min_args=3;
+    } else if(type=="READ") {
+        m_type = READ;
+        min_args=3;
+    } else if(type=="GLOB") {
+        m_type = GLOB;
+        min_args=3;
+    } else if(type=="GLOB_RECURSE") {
+        m_type = GLOB_RECURSE;
+        min_args = 3;
+    } else if(type=="REMOVE") {
+        m_type = REMOVE;
+        min_args=2;
+    } else if(type=="REMOVE_RECURSE") {
+        m_type = REMOVE_RECURSE;
+        min_args=2;
+    } else if(type=="MAKE_DIRECTORY") {
+        m_type = MAKE_DIRECTORY;
+        min_args=2;
+    } else if(type=="RELATIVE_PATH") {
+        m_type = RELATIVE_PATH;
+        min_args=4;
+    } else if(type=="TO_CMAKE_PATH") {
+        m_type = TO_CMAKE_PATH;
+        min_args=3;
+    } else if(type=="TO_NATIVE_PATH") {
+        m_type = TO_NATIVE_PATH;
+        min_args=3;
+    }
+
+    if(func.arguments.count()<min_args)
+        return false;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
+    switch(m_type) {
+        case WRITE:
+        case APPEND:
+            m_path = func.arguments[1].value;
+            m_message = func.arguments[2].value;
+            break;
+        case READ:
+            m_path=func.arguments[1].value;
+            m_variable = func.arguments[2].value;
+            break;
+        case GLOB:
+        case GLOB_RECURSE:
+            m_variable = func.arguments[1].value;
+            it=func.arguments.constBegin()+2;
+            itEnd=func.arguments.constEnd();
+            
+            for(; it!=itEnd; ++it) {
+                if(it->value=="RELATIVE") {
+                    it++;
+                    if(it==itEnd)
+                        return false;
+                    else
+                        m_path = it->value;
+                } else
+                    m_globbingExpressions << it->value;
+            }
+            break;
+        case REMOVE:
+        case REMOVE_RECURSE:
+        case MAKE_DIRECTORY:
+            it=func.arguments.constBegin()+1;
+            itEnd=func.arguments.constEnd();
+            
+            for(; it!=itEnd; ++it)
+                m_directories << it->value;
+            break;
+        case RELATIVE_PATH:
+            m_variable = func.arguments[1].value;
+            m_directory = func.arguments[2].value;
+            m_path = func.arguments[3].value;
+            break;
+        case TO_CMAKE_PATH:
+        case TO_NATIVE_PATH:
+            m_path = func.arguments[1].value;
+            m_variable = func.arguments[2].value;
+            break;
+    }
+    return true;
 }
 
 FindFileAst::FindFileAst()
@@ -986,8 +1082,8 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     foreach( CMakeFunctionArgument arg, func.arguments ) {
         if(arg.value[0].isNumber()) {
             QStringList version = func.arguments[1].value.split('.');
-            m_minor = version[0].toInt();
-            m_major = version[1].toInt();
+            m_minorVersion = version[0].toInt();
+            m_majorVersion = version[1].toInt();
         } else if(arg.value=="QUIET")
             m_isQuiet=true;
         else if(arg.value=="NO_MODULE")

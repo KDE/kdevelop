@@ -24,17 +24,44 @@
 #include <KDebug>
 #include <QHash>
 #include <QFile>
+#include <QByteArray>
 
-bool CMakeProjectVisitor::hasVariable(const QString &name)
+QStringList envVarDirectories(const QString &varName)
 {
-    return name.indexOf("${")>=0 && name.indexOf('}')>=0;
+    QStringList env = QProcess::systemEnvironment().filter(varName+'=');
+    char separator;
+    if(!env.isEmpty()) {
+        separator = env[0].contains(';') ? ';' : ':';
+        env=env[0].split('=')[1].split(separator);
+    } else
+        return QStringList();
+    return env;
 }
 
-QString CMakeProjectVisitor::variableName(const QString &name)
+CMakeProjectVisitor::VariableType CMakeProjectVisitor::hasVariable(const QString &name)
 {
-    if(!CMakeProjectVisitor::hasVariable(name))
+    int CMakeIdx=name.indexOf("${"), envIdx=name.indexOf("$ENV{");
+    if(name.indexOf('}')>=0) {
+        if(CMakeIdx>=0 && envIdx>=0) {
+            if(CMakeIdx<envIdx)
+                return CMake;
+            else
+                return ENV;
+        } else if(CMakeIdx<0)
+            return ENV;
+        else
+            return CMake;
+    } else
+        return None;
+}
+
+QString CMakeProjectVisitor::variableName(const QString &name, VariableType &type)
+{
+    type = hasVariable(name);
+    if(type==None)
         return QString::null;
-    int begin = name.indexOf("${")+2, end=name.indexOf('}');
+    int begin = (type==CMake) ? name.indexOf("${")+2 : name.indexOf("$ENV{")+5, end=name.indexOf('}');
+    
     return name.mid(begin, end-begin);
 }
 
@@ -42,11 +69,22 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const QHash
 {
 //     kDebug(9032) << "lol!" << exp << " @t " << *values << endl;
     if(hasVariable(exp)) {
+        VariableType type;
         QStringList ret;
-        QString var = variableName(exp);
-        foreach(QString s, values->value(var)) {
-            QString res=exp;
-            ret += resolveVariable(res.replace(QString("${%1}").arg(var), s), values); //FIXME: don't really know if it is correct
+        QString var = variableName(exp, type);
+        if(type==ENV) {
+            kDebug(9032) << "env var " << var << endl;
+            foreach(QString s, envVarDirectories(var)) {
+                QString res=exp;
+                ret += res.replace(QString("$ENV{%1}").arg(var), s);
+            }
+        } else {
+            if(!values->contains(var))
+                kDebug(9032) << "error: Variable " << var << " not defined" << endl;
+            foreach(QString s, values->value(var)) {
+                QString res=exp;
+                ret += resolveVariable(res.replace(QString("${%1}").arg(var), s), values);
+            }
         }
         return ret;
     }
@@ -108,7 +146,7 @@ void CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 
 void CMakeProjectVisitor::visit(const SetAst *set)
 {
-    qDebug() << "cmake support" << "set: " << set->variableName() << "=" << set->values() << endl;
+    kDebug(9032) << "set: " << set->variableName() << "=" << set->values() << endl;
     
     QStringList old=m_vars->value(set->variableName());
     m_vars->insert(set->variableName(), old+resolveVariables(set->values(), m_vars));
@@ -135,16 +173,6 @@ void CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
         m_includeDirectories = toInclude + m_includeDirectories;
 }
 
-QStringList envVarDirectories(const QString &varName)
-{
-    QStringList env = QProcess::systemEnvironment().filter(varName+'=');
-    if(!env.isEmpty())
-        env=env[0].split('=')[1].split(';');
-    else
-        return QStringList();
-    return env;
-}
-
 QStringList cmakeModulesDirectories()
 {
     QStringList env = envVarDirectories("CMAKEDIR");
@@ -157,7 +185,7 @@ QStringList cmakeModulesDirectories()
 
 QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &folders/*, Type of file to search*/)
 {
-    KUrl path;
+    QString path;
     foreach(QString mpath, folders) {
         KUrl p(mpath);
         p.addPath(file);
@@ -166,11 +194,12 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 
 //         kDebug(9032) << "Trying: " << possib << endl;
         if(QFile::exists(possib)) {
-            path=p;
+            path=p.toLocalFile();
             break;
         }
     }
-    return path.toLocalFile();
+    kDebug(9032) << "find file" << file << " into: " << file << " found at: " << path << endl;
+    return path;
 }
 
 void CMakeProjectVisitor::visit(const IncludeAst *inc)
@@ -340,18 +369,52 @@ void CMakeProjectVisitor::visit(const IfAst *ifast)
 
 void CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 {
+    //Commented until find_* work properly
+    kDebug(9032) << "Executing: " << exec->executableName() << "::" << exec->arguments() << " into " << *m_vars << endl;
+    /*QString execName = resolveVariable(exec->executableName(), m_vars)[0];
+
     KProcess p;
     p.setWorkingDirectory(exec->workingDirectory());
     p.setOutputChannelMode(KProcess::MergedChannels);
-    p.setProgram(exec->executableName(), exec->arguments());
+    p.setProgram(execName, resolveVariables(exec->arguments(), m_vars));
     p.start();
 
-    p.waitForFinished();
+    if(!p.waitForFinished())
+        kDebug(9032) << "failed to execute: " << execName << endl;
 
     if(!exec->returnValue().isEmpty())
         m_vars->insert(exec->returnValue(), QStringList(QString(p.exitCode())));
     if(!exec->outputVariable().isEmpty()) {
-        
+        QByteArray b = p.readAllStandardOutput();
+        QString t;
+        t.fromAscii(b, b.length());
+        QStringList res = t.split(':');
+        m_vars->insert(exec->outputVariable(), res);
+    }*/
+}
+
+void CMakeProjectVisitor::visit(const FileAst *file)
+{
+    switch(file->type()) {
+//         case FileAst::WRITE:
+//         case FileAst::APPEND:
+//         case FileAst::READ:
+//         case FileAst::GLOB:
+//         case FileAst::GLOB_RECURSE:
+//         case FileAst::REMOVE:
+//         case FileAst::REMOVE_RECURSE:
+//         case FileAst::MAKE_DIRECTORY:
+//         case FileAst::RELATIVE_PATH:
+        case FileAst::TO_CMAKE_PATH:
+            kDebug(9032) << "file TO_CMAKE_PATH" << " variable: " << file->variable() << " file: " << file->path() << endl;
+            m_vars->insert(file->variable(), resolveVariable(file->path(), m_vars));
+            kDebug(9032) << "file: " << file->variable() << "=" << m_vars->value(file->variable()) << endl;
+            break;
+//         case FileAst::TO_NATIVE_PATH:
+//             break;
+        default:
+            kDebug(9032) << "error: not implemented. file: " << file->type() << " variable: " << file->variable() << " file: " << file->path() << endl;
+            break;
     }
 }
 
