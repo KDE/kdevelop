@@ -80,7 +80,7 @@ private:
   template <typename T>
   QModelIndex createParentIndex(T* type) const
   {
-    return createIndex(type->modelRow(), 0, type);
+    return createIndex(m_modelRow[type], 0, type);
   }
 
   template <typename T>
@@ -124,6 +124,7 @@ private:
   KDevelop::TopDUContext* m_chain;
   mutable QMutex m_mutex;
   mutable QHash<KDevelop::DUChainBase*, QList<KDevelop::DUChainBase*>* > m_objectLists;
+  mutable QHash<KDevelop::DUChainBase*, int > m_modelRow;
   mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBase*> m_proxyObjects;
 };
 

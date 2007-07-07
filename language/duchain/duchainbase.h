@@ -21,11 +21,18 @@
 
 #include <documentrangeobject.h>
 #include <languageexport.h>
+#include <ksharedptr.h>
 
 namespace KDevelop
 {
 
 class TopDUContext;
+class DUChainBase;
+class DUChainPointerData;
+
+///Use DUChainPointer instead of Declaration* etc. to store du-chain object pointers for a longer time
+///To have it even simpler: @file specialpointer.h
+typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
 
 /**
  * Base class for definition-use chain objects.
@@ -36,14 +43,15 @@ public:
   DUChainBase(KTextEditor::Range* range);
   virtual ~DUChainBase();
 
-  int modelRow() const;
-  /// TODO atomic set? or assert locked?
-  void setModelRow(int row);
-
   virtual TopDUContext* topContext() const;
 
+  /**
+   * Returns a special pointer that can be used to track the existence of a du-chain object across locking-cycles.
+   * @see DUChainPointerData
+   * */
+  DUChainBasePointer weakPointer();
 private:
-  class DUChainBasePrivate* const d;
+  DUChainBasePointer m_ptr;
 };
 }
 

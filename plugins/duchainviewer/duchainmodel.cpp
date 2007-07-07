@@ -76,6 +76,7 @@ void DUChainModel::setTopContext(TopDUContext* context)
   m_proxyObjects.clear();
 
   m_objectLists.clear();
+  m_modelRow.clear();
 
   reset();
 }
@@ -295,7 +296,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
         if (!list)
           list = new QList<DUChainBase*>();
 
-        currentItem->setModelRow(list->count());
+        m_modelRow[currentItem] = list->count();
         list->append(currentItem);
 
         first = Cursor::invalid();
@@ -361,7 +362,7 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
 {
   QMutexLocker lock(&m_mutex);
 
-  if (!m_objectLists.contains(context))
+  if (!m_objectLists.contains(context) || !m_modelRow.contains(context))
     return;
 
   QList<DUChainBase*>* list = m_objectLists[context];
@@ -379,7 +380,7 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
         case Change: {
           int index = list->indexOf(relatedObject);
           Q_ASSERT(index != -1);
-          beginRemoveRows(createIndex(context->modelRow(), 0, context), index, index);
+          beginRemoveRows(createIndex(m_modelRow[context], 0, context), index, index);
           list->removeAt(index);
           endRemoveRows();
           if (change == Removal || change == Deletion)
@@ -389,7 +390,7 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
 
         case Addition: {
           int index = findInsertIndex(*list, relatedObject);
-          beginInsertRows(createIndex(context->modelRow(), 0, context), index, index);
+          beginInsertRows(createIndex(m_modelRow[context], 0, context), index, index);
           list->insert(index, relatedObject);
           endInsertRows();
           break;

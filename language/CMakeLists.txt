@@ -73,6 +73,7 @@ install(FILES
     duchain/symboltable.h
     duchain/forwarddeclaration.h
     duchain/duchainbase.h
+    duchain/duchainpointer.h
     duchain/duchainobserver.h
     duchain/duchainlock.h
     duchain/identifier.h

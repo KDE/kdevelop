@@ -17,45 +17,32 @@
 */
 
 #include "duchainbase.h"
+#include "duchainpointer.h"
 
 namespace KDevelop
 {
 
-class DUChainBasePrivate
-{
-public:
-  DUChainBasePrivate() {
-    m_modelRow = 0;
-  }
-  int m_modelRow;
-};
-
 
 DUChainBase::DUChainBase(KTextEditor::Range* range)
-  : KDevelop::DocumentRangeObject(range)
-  , d(new DUChainBasePrivate)
+  : KDevelop::DocumentRangeObject(range), m_ptr( new DUChainPointerData(this) )
 {
+  m_ptr->d = this;
 }
 
 DUChainBase::~DUChainBase()
 {
-  delete d;
-}
-
-int DUChainBase::modelRow() const
-{
-  return d->m_modelRow;
-}
-
-void DUChainBase::setModelRow(int row)
-{
-  d->m_modelRow = row;
+  m_ptr->d = 0;
 }
 
 TopDUContext* DUChainBase::topContext() const
 {
   return 0;
 }
+
+DUChainBasePointer DUChainBase::weakPointer() {
+  return m_ptr;
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
