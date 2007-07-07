@@ -6,13 +6,13 @@ include_directories( ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/int
 
 set( kdevqmakeparser_SRCS
      qmakeast.cpp
-     qmakeast_assignment.cpp
-     qmakeast_body.cpp
-     qmakeast_or.cpp
-     qmakeast_project.cpp
-     qmakeast_func.cpp
-     qmakeast_scope.cpp
-     qmakeast_simple.cpp
+     qmakeastassignment.cpp
+     qmakeastbody.cpp
+     qmakeastor.cpp
+     qmakeastproject.cpp
+     qmakeastfunc.cpp
+     qmakeastscope.cpp
+     qmakeastsimple.cpp
      qmakedriver.cpp
     )
 
@@ -30,39 +30,39 @@ endif(FLEX_FOUND)
 if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
     # Add command to generate the lexer.
     add_custom_command(
-        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
-                "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.h"
+        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.ll"
+                "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h"
         COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -L -s -o"${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
+        ARGS    -L -s -o"${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.ll"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
-    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
+    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp ${kdevqmakeparser_SRCS})
     set_source_files_properties(
-        ${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp
         GENERATED
     )
 
     # Add command to generate the parser.
     add_custom_command(
-        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.hpp"
+        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp"
+                "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.hpp"
                 "${CMAKE_CURRENT_BINARY_DIR}/position.hh"
                 "${CMAKE_CURRENT_BINARY_DIR}/location.hh"
                 "${CMAKE_CURRENT_BINARY_DIR}/stack.hh"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.yy"
-                "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmakeparser.yy"
+                "${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp"
         COMMAND ${BISON_EXECUTABLE}
-        ARGS    -l -r none -o"${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp"
-                -d "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.yy"
+        ARGS    -l -r none -o"${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp"
+                -d "${CMAKE_CURRENT_SOURCE_DIR}/qmakeparser.yy"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
-    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp ${kdevqmakeparser_SRCS})
+    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp ${kdevqmakeparser_SRCS})
     set_source_files_properties(
-        "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp"
-        "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.hpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.hpp"
         "${CMAKE_CURRENT_BINARY_DIR}/position.hh"
         "${CMAKE_CURRENT_BINARY_DIR}/location.hh"
         "${CMAKE_CURRENT_BINARY_DIR}/stack.hh"
@@ -70,21 +70,21 @@ if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
     )
 
     add_custom_target( debug-parser
-        COMMAND ${FLEX_EXECUTABLE} -s -d -o "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"   "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
-        COMMAND ${BISON_EXECUTABLE} -r all -k -t -o"${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp" -d "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.yy"
+        COMMAND ${FLEX_EXECUTABLE} -s -d -o "${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp"   "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.ll"
+        COMMAND ${BISON_EXECUTABLE} -r all -k -t -o"${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp" -d "${CMAKE_CURRENT_SOURCE_DIR}/qmakeparser.yy"
 
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.yy"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.h"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmakeparser.yy"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.ll"
         )
     include_directories( ${CMAKE_CURRENT_BINARY_DIR} 
                      ${FLEX_INCLUDE_DIR} )
 
 else(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
-    message(STATUS "Assuming existence of the generated lexer file qmake_lexer.cpp")
-    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
-    message(STATUS "Assuming existence of the generated parser file qmake_parser.cpp")
-    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp ${kdevqmakeparser_SRCS})
+    message(STATUS "Assuming existence of the generated lexer file qmakelexer.cpp")
+    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakelexer.cpp ${kdevqmakeparser_SRCS})
+    message(STATUS "Assuming existence of the generated parser file qmakeparser.cpp")
+    set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakeparser.cpp ${kdevqmakeparser_SRCS})
     include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/generated )
 endif(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
 
@@ -100,16 +100,16 @@ target_link_libraries(qmake-parser kdevqmakeparser)
 #install(TARGETS qmake-parser DESTINATION ${BIN_INSTALL_DIR})
 
 add_custom_target( copy-generated
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.hpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakeparser.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakeparser.hpp"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/location.hh" "${CMAKE_CURRENT_SOURCE_DIR}/generated/location.hh"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/stack.hh" "${CMAKE_CURRENT_SOURCE_DIR}/generated/stack.hh"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/position.hh" "${CMAKE_CURRENT_SOURCE_DIR}/generated/position.hh"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_lexer.cpp"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.hpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakelexer.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.hpp"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/location.hh"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/stack.hh"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/position.hh"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp"
     )

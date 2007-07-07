@@ -23,7 +23,7 @@
 
 #define DONT_INCLUDE_FLEXLEXER
 
-#include "qmake_lexer.h"
+#include "qmakelexer.h"
 
 
 %}

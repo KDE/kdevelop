@@ -27,8 +27,8 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QStack>
 
-#include "qmake_lexer.h"
-#include "qmake_parser.hpp"
+#include "qmakelexer.h"
+#include "qmakeparser.hpp"
 
 namespace QMake
 {

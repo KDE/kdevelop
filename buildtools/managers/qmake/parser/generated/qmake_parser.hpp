@@ -164,35 +164,7 @@ namespace QMake
     {
       /* Tokens.  */
    enum yytokentype {
-     WS = 258,
-     VARIABLE = 259,
-     DOLLAR = 260,
-     COLON = 261,
-     COMMA = 262,
-     LCURLY = 263,
-     RCURLY = 264,
-     LPAREN = 265,
-     RPAREN = 266,
-     EQUAL = 267,
-     OR = 268,
-     PLUSEQ = 269,
-     MINUSEQ = 270,
-     TILDEEQ = 271,
-     STAREQ = 272,
-     NEWLINE = 273,
-     CONT = 274,
-     COMMENT = 275,
-     EXCLAM = 276,
-     EMPTYLINE = 277,
-     VAR_VALUE = 278,
-     QMVARIABLE = 279,
-     SHELLVARIABLE = 280,
-     FUNCTIONNAME = 281,
-     CONT_COMMENT = 282,
-     FUNCTIONCALL = 283,
-     SCOPENAME = 284,
-     QUOTED_VAR_VALUE = 285,
-     FNVALUE = 286
+
    };
 
     };
@@ -268,7 +240,7 @@ namespace QMake
     typedef unsigned char token_number_type;
     /* Tables.  */
     /// For a state, the index in \a yytable_ of its portion.
-    static const short int yypact_[];
+    static const signed char yypact_[];
     static const signed char yypact_ninf_;
 
     /// For a state, default rule to reduce.
@@ -284,10 +256,10 @@ namespace QMake
     /// - if positive, shift that token.
     /// - if negative, reduce the rule which number is the opposite.
     /// - if zero, do what YYDEFACT says.
-    static const signed char yytable_[];
+    static const unsigned char yytable_[];
     static const signed char yytable_ninf_;
 
-    static const signed char yycheck_[];
+    static const unsigned char yycheck_[];
 
     /// For a state, its accessing symbol.
     static const unsigned char yystos_[];
@@ -315,7 +287,7 @@ namespace QMake
     /// For each rule, the index of the first RHS symbol in \a yyrhs_.
     static const unsigned char yyprhs_[];
     /// For each rule, its source line number.
-    static const unsigned short int yyrline_[];
+    static const unsigned char yyrline_[];
     /// For each scanner token number, its symbol number.
     static const unsigned short int yytoken_number_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
