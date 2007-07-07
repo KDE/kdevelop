@@ -21,6 +21,7 @@
 
 #include <ksharedptr.h>
 #include <typesystem.h>
+#include <duchain/duchainpointer.h>
 #include "visitor.h"
 #include "cppexpressionparserexport.h"
 #include "expressionvisitor.h"

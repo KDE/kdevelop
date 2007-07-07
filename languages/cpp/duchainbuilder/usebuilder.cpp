@@ -73,7 +73,7 @@ void UseBuilder::newUse(NameAST* name)
 
   QualifiedIdentifier id = identifierForName(name);
 
-  DUChainReadLocker readLock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
   QList<Declaration*> declarations = currentContext()->findDeclarations(id, newRange.start());
   foreach (Declaration* declaration, declarations)
     if (!declaration->isForwardDeclaration()) {
@@ -108,14 +108,8 @@ void UseBuilder::newUse(NameAST* name)
         ret = use;
 
         //Eventually upgrade the range to a smart-range
-        if( m_editor->smart() && !ret->smartRange() ) {
-          readLock.unlock();
-          DUChainWriteLocker lock(DUChain::lock());
+        if( m_editor->smart() && !ret->smartRange() )
           ret->setTextRange(m_editor->createRange(newRange));
-          lock.unlock();
-          readLock.lock();
-        }
-
 
         break;
       }
@@ -123,9 +117,6 @@ void UseBuilder::newUse(NameAST* name)
   }
 
   if (!ret) {
-    readLock.unlock();
-    DUChainWriteLocker lock(DUChain::lock());
-
     Range* prior = m_editor->currentRange();
     Range* use = m_editor->createRange(newRange);
     m_editor->exitCurrentRange();

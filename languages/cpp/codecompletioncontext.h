@@ -22,6 +22,7 @@
 
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
+#include <duchain/duchainpointer.h>
 #include "expressionparser/typeconversion.h"
 #include "expressionparser/expressionparser.h"
 #include "expressionparser/viablefunctions.h"
@@ -92,7 +93,7 @@ namespace Cpp {
        * @warning The du-chain must be unlocked when this is called
        * @param knownArgumentExpressions has no effect when firstContext is set
        * */
-      CodeCompletionContext(KDevelop::DUContext * context, const QString& text, bool firstContext = true, const QStringList& knownArgumentExpressions = QStringList() );
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, bool firstContext = true, const QStringList& knownArgumentExpressions = QStringList() );
       ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
@@ -170,7 +171,7 @@ namespace Cpp {
       QStringList m_knownArgumentExpressions;
       QList<ExpressionEvaluationResult> m_knownArgumentTypes;
       
-      KDevelop::DUContext* m_duContext;
+      KDevelop::DUContextPointer m_duContext;
       SpecificContextType m_contextType;
 
       QList<Function> m_functions;

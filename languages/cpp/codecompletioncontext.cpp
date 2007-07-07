@@ -65,7 +65,7 @@ CodeCompletionContext::operator bool() const {
 }
 
 
-CodeCompletionContext::CodeCompletionContext(DUContext * context, const QString& text, bool firstContext, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, bool firstContext, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
 {
   static int depth = 0;
 
@@ -285,7 +285,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
     {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
       if( idType ) {
-        DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
+        DUContextPointer ctx = TypeUtils::getInternalContext( idType->declaration() );
         if( ctx ) {
           QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, identifier );
           foreach( Declaration* decl, decls )

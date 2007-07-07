@@ -21,6 +21,7 @@
 
 #include "cppcodecompletionmodel.h"
 
+#include <QMetaType>
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -33,6 +34,7 @@
 #include <ducontext.h>
 #include <duchain.h>
 #include <duchainlock.h>
+#include <duchainbase.h>
 #include <topducontext.h>
 #include "dumpchain.h"
 #include "codecompletioncontext.h"
@@ -56,16 +58,16 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   KUrl url = view->document()->url();
   if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
     kDebug(9007) << "completion invoked for context " << top << endl;
-    DUContext* thisContext;
+    DUContextPointer thisContext;
     {
       DUChainReadLocker lock(DUChain::lock());
       thisContext = top->findContextAt(range.start());
 
-       kDebug(9007) << "context is set to " << thisContext << endl;
+       kDebug(9007) << "context is set to " << thisContext.data() << endl;
         if( thisContext ) {
           kDebug( 9007 ) << "================== duchain for the context =======================" << endl;
           DumpChain dump;
-          dump.dump(thisContext);
+          dump.dump(thisContext.data());
         } else {
           kDebug( 9007 ) << "================== NO CONTEXT FOUND =======================" << endl;
           return;
@@ -81,11 +83,16 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
-  Declaration* dec = static_cast<Declaration*>(index.internalPointer());
+  int row = (int)index.internalPointer();
+
+  if( row < 0 || row >= m_declarations.size() )
+    return QVariant();
+  
+  DUChainReadLocker lock(DUChain::lock());
+  
+  Declaration* dec = const_cast<Declaration*>( m_declarations[row].data() );
   if (!dec)
     return QVariant();
-
-  DUChainReadLocker lock(DUChain::lock());
 
   switch (role) {
     case Qt::DisplayRole:
@@ -259,7 +266,9 @@ QModelIndex CppCodeCompletionModel::index(int row, int column, const QModelIndex
   if (row < 0 || row >= m_declarations.count() || column < 0 || column >= ColumnCount || parent.isValid())
     return QModelIndex();
 
-  return createIndex(row, column, m_declarations.at(row));
+  QModelIndex ret = createIndex(row, column, (void*)row);
+
+  return ret;
 }
 
 int CppCodeCompletionModel::rowCount ( const QModelIndex & parent ) const
@@ -270,7 +279,7 @@ int CppCodeCompletionModel::rowCount ( const QModelIndex & parent ) const
   return m_declarations.count();
 }
 
-void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::Cursor& position, KTextEditor::View* view)
+void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view)
 {
   m_context = context;
   Q_ASSERT(m_context);
@@ -312,7 +321,9 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
       if( idType && idType->declaration() ) {
         DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
         if( ctx ) {
-          m_declarations = Cpp::localDeclarations( ctx );
+          m_declarations.clear();
+          foreach( Declaration* decl, Cpp::localDeclarations( ctx ) )
+            m_declarations << decl;
         } else {
           kDebug() << "Could not get internal context from declaration \"" << idType->declaration()->toString() << "\"" << endl;
         }
@@ -320,7 +331,9 @@ void CppCodeCompletionModel::setContext(DUContext * context, const KTextEditor::
         kDebug() << "CppCodeCompletionModel::setContext: bad container-type" << endl;
       }
     } else {
-      m_declarations =  m_context->allDeclarations(position).values();
+      m_declarations.clear();
+      foreach( Declaration* decl, m_context->allDeclarations(position).values() )
+        m_declarations << decl;
       kDebug() << "CppCodeCompletionModel::setContext: using all declarations visible: " << m_declarations.count() << endl;
     }
   } else {

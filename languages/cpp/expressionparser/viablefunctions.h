@@ -21,6 +21,7 @@
 #include <QList>
 #include "overloadresolution.h"
 #include "cppexpressionparserexport.h"
+#include <duchainpointer.h>
 
 
 namespace KDevelop  {

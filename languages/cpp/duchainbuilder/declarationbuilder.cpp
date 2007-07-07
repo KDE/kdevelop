@@ -175,7 +175,7 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, b
 
 Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition)
 {
-  DUChainReadLocker readLock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   Declaration::Scope scope = Declaration::GlobalScope;
   switch (currentContext()->type()) {
@@ -245,34 +245,22 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
         //If the declaration does not have a smart-range, upgrade it if possible
         if( m_editor->smart() && !declaration->smartRange() ) {
-          readLock.unlock();
-          DUChainWriteLocker writeLock(DUChain::lock());
           declaration->setTextRange( m_editor->createRange( newRange ) );
-          writeLock.unlock();
-          readLock.lock();
         }
 
         // Update access policy if needed
         if (currentContext()->type() == DUContext::Class) {
           ClassMemberDeclaration* classDeclaration = static_cast<ClassMemberDeclaration*>(declaration);
           if (classDeclaration->accessPolicy() != currentAccessPolicy()) {
-            readLock.unlock();
-            DUChainWriteLocker writeLock(declaration ? DUChain::lock() : 0);
             classDeclaration->setAccessPolicy(currentAccessPolicy());
           }
         }
-
-        // Warning: lock may not be held here...
-
         break;
       }
     }
   }
 
   if (!declaration) {
-    readLock.unlock();
-    DUChainWriteLocker writeLock(DUChain::lock());
-
     Range* prior = m_editor->currentRange();
     Range* range = m_editor->createRange(newRange);
     m_editor->exitCurrentRange();

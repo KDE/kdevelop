@@ -23,6 +23,7 @@
 #define KDEVCPPCODECOMPLETIONMODEL_H
 
 #include <ktexteditor/codecompletionmodel.h>
+#include <duchainpointer.h>
 
 namespace KDevelop
 {
@@ -38,7 +39,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     CppCodeCompletionModel(QObject* parent);
     virtual ~CppCodeCompletionModel();
 
-    void setContext(KDevelop::DUContext* context, const KTextEditor::Cursor& position, KTextEditor::View* view);
+    void setContext(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
 
     virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
 
@@ -47,9 +48,9 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
   private:
-    KDevelop::DUContext* m_context;
+    KDevelop::DUContextPointer m_context;
 
-    QList<KDevelop::Declaration*> m_declarations;
+    QList<KDevelop::DeclarationPointer> m_declarations;
 };
 
 #endif
