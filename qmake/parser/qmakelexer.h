@@ -17,10 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef QMAKE_LEXER_H
-#define QMAKE_LEXER_H
+#ifndef QMAKELEXER_H
+#define QMAKELEXER_H
 
-#include "qmake_parser.hpp"
+#include "qmakeparser.hpp"
 #include <iostream>
 
 #ifndef DONT_INCLUDE_FLEXLEXER
