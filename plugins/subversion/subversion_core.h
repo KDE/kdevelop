@@ -137,6 +137,8 @@ Q_SIGNALS:
     void blameFetched( SvnKJobBase * );
     /// the diff result is available.
     void diffFetched( SvnKJobBase * );
+    /// information result is available.
+    void infoFetched( SvnKJobBase * );
 
 protected:
     /// Receive event from subversion threads. Events are for displaying UI widgets

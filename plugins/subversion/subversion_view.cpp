@@ -80,6 +80,8 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
              this, SLOT(printBlame(SvnKJobBase*)) );
     connect( d->m_part->svncore(), SIGNAL(diffFetched(SvnKJobBase *)),
              this, SLOT(printDiff(SvnKJobBase *)) );
+    connect( d->m_part->svncore(), SIGNAL(infoFetched(SvnKJobBase*)),
+             this, SLOT(printInfo(SvnKJobBase*)) );
     connect( d->m_part->svncore(), SIGNAL(jobFinished(SvnKJobBase*)),
              this, SLOT(slotJobFinished(SvnKJobBase*)) );
 
@@ -177,6 +179,56 @@ void KDevSubversionView::printDiff( SvnKJobBase *job )
     tab()->addTab( widget, i18n("Diff") );
     tab()->setCurrentIndex( tab()->indexOf(widget) );
 
+}
+
+void KDevSubversionView::printInfo( SvnKJobBase* job )
+{
+    if( job->error() ){
+        KMessageBox::error( this, job->smartError() );
+        return;
+    }
+    SvnInfoJob *thread = dynamic_cast<SvnInfoJob*>( job->svnThread() );
+    if( !thread ) return;
+    QMap<KUrl, SvnInfoHolder> map = thread->m_holderMap;
+
+    KTextEdit *widget = new KTextEdit( tab() );
+    for( QMap<KUrl, SvnInfoHolder>::iterator it = map.begin(); it != map.end(); ++it ){
+        SvnInfoHolder holder = it.value();
+        widget->append( "========================" );
+        widget->append( QString("Information for: %1").arg(it.key().toLocalFile()) );
+        widget->append( QString("Repository URL: %1").arg(holder.URL) );
+        widget->append( QString("Repository Root: %1").arg(holder.repos_root_URL) );
+        widget->append( QString("Repository UUID: %1").arg(holder.repos_UUID) );
+        widget->append( QString("Revision: %1").arg(holder.rev) );
+
+        QString scheduleStr;
+        switch( holder.schedule ){
+            case svn_wc_schedule_normal:
+                scheduleStr = QString("Normal");
+                break;
+            case svn_wc_schedule_add:
+                scheduleStr = QString("Add");
+                break;
+            case svn_wc_schedule_delete:
+                scheduleStr = QString("Delete");
+                break;
+            case svn_wc_schedule_replace:
+                scheduleStr = QString("Replace");
+                break;
+        }
+        // from belows are for working-copy only fields.
+        if( !scheduleStr.isEmpty() )
+            widget->append( QString("Schedule: %1").arg(scheduleStr) );
+        if( holder.copyfrom_url ){
+            widget->append( QString("Copied from: %1").arg(holder.copyfrom_url) );
+            widget->append( QString("Copied from revision: %1").arg(holder.copyfrom_rev) );
+        }
+        // todo have a room to add some more fields.
+    }
+
+    widget->setReadOnly( true );
+    tab()->addTab( widget, "Information" );
+    tab()->setCurrentIndex( tab()->indexOf(widget) );
 }
 
 void KDevSubversionView::slotJobFinished( SvnKJobBase *job )

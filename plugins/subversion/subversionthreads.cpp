@@ -17,7 +17,6 @@
 #include "svnkjobbase.h"
 #include "subversion_core.h"
 #include "interthreadevents.h"
-#include "svn_models.h"
 
 #include <QCoreApplication>
 
@@ -932,17 +931,17 @@ svn_error_t* SvnInfoJob::infoReceiver( void *baton, const char *path,
     if( !job )
         return SVN_NO_ERROR;
 
-    SvnInfoHolder holder;
-    holder.path = KUrl( path );
-    holder.url = KUrl( info->URL );
-    holder.rev = info->rev;
-    holder.kind = info->kind;
-    holder.reposRootUrl = KUrl( info->repos_root_URL );
-    holder.reposUuid = QString::fromLocal8Bit( info->repos_UUID );
-    holder.lastChangedRev = info->last_changed_rev;
-    holder.lastChangedAuthor = QString::fromLocal8Bit( info->last_changed_author );
+//     SvnInfoHolder holder;
+//     holder.path = KUrl( path );
+//     holder.url = KUrl( info->URL );
+//     holder.rev = info->rev;
+//     holder.kind = info->kind;
+//     holder.reposRootUrl = KUrl( info->repos_root_URL );
+//     holder.reposUuid = QString::fromLocal8Bit( info->repos_UUID );
+//     holder.lastChangedRev = info->last_changed_rev;
+//     holder.lastChangedAuthor = QString::fromLocal8Bit( info->last_changed_author );
 
-    job->m_holderMap.insert( KUrl(path), holder );
+    job->m_holderMap.insert( KUrl(path), *info );
     return SVN_NO_ERROR;
 }
 
@@ -951,7 +950,6 @@ void SvnInfoJob::run()
     setTerminationEnabled(true);
     kDebug() << " SvnInfoJob:run() " <<endl;
 
-    apr_pool_t *subpool = svn_pool_create (pool());
     svn_opt_revision_t peg_rev = m_peg.revision();
     svn_opt_revision_t revision = m_revision.revision();
 
@@ -964,10 +962,8 @@ void SvnInfoJob::run()
 
     if ( err ){
         setErrorMsgExt( err );
-        svn_pool_destroy (subpool);
         return;
     }
-    svn_pool_destroy (subpool);
 }
 
 ////////////////////////////////////////////////////////////

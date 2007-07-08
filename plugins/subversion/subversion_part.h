@@ -163,6 +163,7 @@ public Q_SLOTS:
     void ctxDiff();
     void ctxDiffHead();
     void ctxDiffBase();
+    void ctxInfo();
 
 private Q_SLOTS:
     void slotJobFinished( SvnKJobBase *job );

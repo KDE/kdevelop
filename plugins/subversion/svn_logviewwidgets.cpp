@@ -137,7 +137,7 @@ void SvnLogviewWidget::blameRev()
     if( holderList.count() > 0 ){
         // get full Url
         SvnInfoHolder holder = holderList.first();
-        KUrl absUrl =  holder.reposRootUrl;
+        KUrl absUrl(holder.repos_root_URL);
         absUrl.addPath( relPath );
         kDebug() << " Blame requested on path " << absUrl << endl;
         // final request

@@ -32,12 +32,12 @@ extern "C" {
 #include <kurl.h>
 
 #include "subversion_utils.h"
+#include "svn_models.h"
 
 class SvnKJobBase;
 class SvnLogHolder;
 class SvnBlameHolder;
 class SvnStatusHolder;
-class SvnInfoHolder;
 class KTempDir;
 class SvnServerCertInfo;
 class SvnLoginInfo;

@@ -183,9 +183,10 @@ VcsJob* KDevSubversionPart::repositoryLocation( const KUrl& localLocation )
     }
     QMap<KUrl,SvnInfoHolder> holderMap = ( dynamic_cast<SvnInfoJob*>(job->svnThread()) )->m_holderMap;
     SvnInfoHolder holder = holderMap[localLocation];
-    KUrl repos = holder.reposRootUrl;
+    KUrl repos( holder.repos_root_URL );
     QVariant result( repos.toLocalFile() );
     job->setResult( result );
+    return job;
 }
 
 QMap<KUrl, SvnStatusHolder> KDevSubversionPart::statusSync( const KUrl &dirPath, bool recurse,
@@ -292,7 +293,7 @@ VcsJob* KDevSubversionPart::localRevision( const KUrl& localLocation, VcsRevisio
     }
 
     SvnInfoHolder holder = holderMap[localLocation];
-    int revnum = holder.rev;
+    int revnum = (int)(holder.rev);
     job->setResult( QVariant(revnum) );
     return job;
 }
@@ -705,6 +706,10 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
             connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
             actions << action;
 
+            action = new QAction(i18n("Information..."), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxInfo()) );
+            actions << action;
+
             return qMakePair( QString("Subversion"), actions );
         }
 
@@ -877,6 +882,10 @@ void KDevSubversionPart::ctxDiffBase()
 {
     diffToBase( d->m_ctxUrl );
 }
+void KDevSubversionPart::ctxInfo()
+{
+    vcsInfo( d->m_ctxUrl );
+}
 
 //////////////////////////////////////////////
 void KDevSubversionPart::slotJobFinished( SvnKJobBase *job )
@@ -932,22 +941,7 @@ void KDevSubversionPart::slotJobFinished( SvnKJobBase *job )
 //             break;
 //         } //end of case SVN_STATUS
         case SVN_INFO: {
-            if( job->error() ){
-                KMessageBox::error(NULL, job->smartError() );
-                break;
-            }
-            SvnInfoJob *infojob = dynamic_cast<SvnInfoJob*>( job->svnThread() );
-            if( !infojob ) return;
-            QList<SvnInfoHolder> list = infojob->m_holderMap.values();
-            // TODO print to GUI
-            for( QList<SvnInfoHolder>::iterator it = list.begin(); it != list.end(); ++it ){
-                SvnInfoHolder holder = (*it);
-                kDebug() << " ReqPath " << holder.path << endl;
-                kDebug() << " url" << holder.url.pathOrUrl() << endl;
-                kDebug() << " Reposit Root " << holder.reposRootUrl.pathOrUrl() << endl;
-                kDebug() << " Repos UUID" << holder.reposUuid << endl;
-            }
-            break;
+
         } //end of case SVN_INFO
         default:
             break;

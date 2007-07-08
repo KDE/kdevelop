@@ -420,7 +420,10 @@ void SubversionCore::slotResult( KJob* aJob )
         emit blameFetched( job );
     } else if( job->type() == SVN_DIFF ){
         emit diffFetched( job );
-    } else {
+    } else if( job->type() == SVN_INFO ){
+        emit infoFetched( job );
+    }
+    else {
         emit jobFinished( job );
     }
 }
