@@ -176,7 +176,7 @@ void TestCppCodeCompletion::testCompletionContext() {
     Cpp::CodeCompletionContext& c(*cptr);
     QVERIFY( c );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
-    QVERIFY( !c.memberAccessContainer() );
+    QVERIFY( !c.memberAccessContainer().isValid() );
 
     //globalHonk is of type Honk. Check whether all matching functions were rated correctly by the overload-resolution.
     //The preferred parent-function in the list should be "Honk globalFunction( const Honk&, const Heinz& h )", because the first argument maches globalHonk
@@ -218,7 +218,7 @@ void TestCppCodeCompletion::testCompletionContext() {
     Cpp::CodeCompletionContext c( context, "{" );
     QVERIFY( c );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
-    QVERIFY( !c.memberAccessContainer() );
+    QVERIFY( !c.memberAccessContainer().isValid() );
   }
 
   lock.lock();
@@ -320,13 +320,13 @@ void TestCppCodeCompletion::testInclude() {
 
   ///The following test tests the expression-parser, but it is here because the other tests depend on it
   lock.unlock();
-  Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "globalHonk.erna", c );
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "globalHonk.erna", c );
   lock.lock();
   
-  QVERIFY(result);
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Erna&"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Erna&"));
 
   
   ///Test overload-resolution 
@@ -334,29 +334,29 @@ void TestCppCodeCompletion::testInclude() {
   result = parser.evaluateType( "globalClass.function(globalHeinz)", c );
   lock.lock();
   
-  QVERIFY(result);
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Heinz"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Heinz"));
   
   lock.unlock();
   result = parser.evaluateType( "globalClass.function(globalHonk.erna)", c );
   lock.lock();
   
-  QVERIFY(result);
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Erna"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Erna"));
 
   //No matching function for type Honk. Since the expression-parser is not set to "strict", it returns any found function with the right name.
   lock.unlock();
   result = parser.evaluateType( "globalClass.function(globalHonk)", c );
   lock.lock();
   
-  QVERIFY(result);
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  //QCOMPARE(result->type->toString(), QString("Heinz"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  //QCOMPARE(result.type->toString(), QString("Heinz"));
   
   
   ///@todo fix the parser so this works
@@ -364,19 +364,19 @@ void TestCppCodeCompletion::testInclude() {
   result = parser.evaluateType( "globalFunction(globalHeinz)", c );
   lock.lock();
   
-  QVERIFY(result);
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Heinz"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Heinz"));
   lock.unlock();
   
   result = parser.evaluateType( "globalFunction(globalHonk.erna)", c );
   lock.lock();
   
-  QVERIFY(result);
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Erna"));*/
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Erna"));*/
     
   release(c);
 }

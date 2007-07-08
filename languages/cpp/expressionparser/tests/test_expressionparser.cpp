@@ -181,91 +181,91 @@ void TestExpressionParser::testSimpleExpression() {
 
   Cpp::ExpressionParser parser;
 
-  Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "c.a", testContext );
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "c.a", testContext );
   lock.lock();
-  QVERIFY(result);   
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
+  QVERIFY(result.isValid());   
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
   lock.unlock();
 
   result = parser.evaluateType( "d", testContext );
   lock.lock();
-  QVERIFY(result);
-  QVERIFY(result->instance);
-  QCOMPARE(result->type->toString(), QString("Cont*"));
-  QCOMPARE(dynamic_cast<CppPointerType*>(result->type.data())->baseType()->toString(), QString("Cont"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QCOMPARE(result.type->toString(), QString("Cont*"));
+  QCOMPARE(dynamic_cast<CppPointerType*>(result.type.data())->baseType()->toString(), QString("Cont"));
   lock.unlock();
   
   //Test pointer-referencing
   result = parser.evaluateType( "&c.a", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("int*"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("int*"));
+  QVERIFY(result.instance);
   lock.unlock();
 
   //Test pointer-referencing and dereferencing
   result = parser.evaluateType( "*(&c.a)", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("int"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("int"));
+  QVERIFY(result.instance);
   lock.unlock();
   
   //Test overloaded "operator*"
   result = parser.evaluateType( "*c", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("double"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("double"));
+  QVERIFY(result.instance);
   lock.unlock();
 
   //Test overloaded "operator->"
   result = parser.evaluateType( "c->a", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("int&"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("int&"));
+  QVERIFY(result.instance);
   lock.unlock();
 
   //Test normal pointer-access + assign expression
   result = parser.evaluateType( "d->a = 5", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("int&"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("int&"));
+  QVERIFY(result.instance);
   lock.unlock();
   
   //Test double * (one real, one overloaded)
   result = parser.evaluateType( "**d", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("double"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("double"));
+  QVERIFY(result.instance);
   lock.unlock();
 
   //Test double &
   result = parser.evaluateType( "&d", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("Cont**"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("Cont**"));
+  QVERIFY(result.instance);
   lock.unlock();
   
   //Test type-expression
   result = parser.evaluateType( "Cont", testContext );
   lock.lock();
-  QVERIFY(result);
-  QVERIFY(!result->instance);
-  QVERIFY(result->type);
+  QVERIFY(result.isValid());
+  QVERIFY(!result.instance);
+  QVERIFY(result.type);
   lock.unlock();
 
   //Test conditional expression
   result = parser.evaluateType( "a ? c.a : c.a", testContext );
   lock.lock();
-  QVERIFY(result);
-  QCOMPARE(result->type->toString(), QString("int&"));
-  QVERIFY(result->instance);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("int&"));
+  QVERIFY(result.instance);
   lock.unlock();
   
 
@@ -324,28 +324,28 @@ void TestExpressionParser::testCasts() {
 
   //Reenable this once the type-parsing system etc. is fixed
   /*
-  Cpp::ExpressionEvaluationResult::Ptr result = parser.evaluateType( "dynamic_cast<Cont2*>(d)", testContext );
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "dynamic_cast<Cont2*>(d)", testContext );
   lock.lock();
-  QVERIFY(result);   
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Cont2*"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2*"));
   lock.unlock();
 
   result = parser.evaluateType( "static_cast<Cont2*>(d)", testContext );
   lock.lock();
-  QVERIFY(result);   
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Cont2*"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2*"));
   lock.unlock();
   
   result = parser.evaluateType( "reinterpret_cast<Cont2*>(d)", testContext );
   lock.lock();
-  QVERIFY(result);   
-  QVERIFY(result->instance);
-  QVERIFY(result->type);
-  QCOMPARE(result->type->toString(), QString("Cont2*"));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2*"));
   lock.unlock();*/
   
   lock.lock();
