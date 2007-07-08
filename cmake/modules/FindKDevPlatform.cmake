@@ -31,7 +31,7 @@ endif( KDEVPLATFORM_INCLUDE_DIR AND KDEVPLATFORM_LIBRARIES )
 
 if(WIN32)
     file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _progFiles)
-    set(_KDEVPLATFORM_INCLUDE_DIR ${KDE4_INCLUDE_DIR} ${_progFiles}/kdevplatform/include/kdevplatform)
+    set(_KDEVPLATFORM_INCLUDE_DIR ${KDE4_INCLUDE_DIR} ${_progFiles}/kdevplatform/include)
     set(_KDEVPLATFORM_LIB_DIR ${KDE4_LIB_DIR} ${_progFiles}/kdevplatform/lib)
 endif(WIN32)
 
