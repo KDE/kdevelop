@@ -39,9 +39,6 @@ namespace KDevelop
 class VcsRevision;
 }
 
-namespace SvnUtils
-{
-
 class SvnRevision
 {
 public:
@@ -96,9 +93,6 @@ private:
     QDateTime revDate;
 };
 
-} // end of namespace SvnRevision
-
-using namespace SvnUtils;
 // Q_DECLARE_METATYPE(SvnUtils::SvnRevision::RevKeyword)
 
 #endif

@@ -11,7 +11,7 @@
 
 #include "svn_updatewidget.h"
 #include "ui_uiupdate_option_dlg.h"
-#include "subversion_utils.h"
+#include "svn_revision.h"
 #include <kurl.h>
 #include <QRadioButton>
 #include <QComboBox>
@@ -57,16 +57,16 @@ SvnUpdateOptionDlg::~SvnUpdateOptionDlg()
     delete d;
 }
 
-SvnUtils::SvnRevision SvnUpdateOptionDlg::revision()
+SvnRevision SvnUpdateOptionDlg::revision()
 {
-    SvnUtils::SvnRevision rev;
+    SvnRevision rev;
     if( d->ui.numRadio->isChecked() ){
         rev.setNumber( d->ui.intInput->value() );
         return rev;
     }
     else if( d->ui.keywordRadio->isChecked() ){
         // note. If you add more keywords in .ui, you should update below.
-        rev.setKey( SvnUtils::SvnRevision::HEAD );
+        rev.setKey( SvnRevision::HEAD );
         return rev;
     }
     else if( d->ui.datetimeRadio->isChecked() ){

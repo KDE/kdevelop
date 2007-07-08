@@ -12,7 +12,7 @@
 #define SVN_CORE_H
 
 #include <kurl.h>
-#include "subversion_utils.h"
+#include "svn_revision.h"
 // #include <Job.h>
 // #include <ThreadWeaver.h>
 // using namespace ThreadWeaver;

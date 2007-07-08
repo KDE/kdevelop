@@ -17,10 +17,7 @@
 
 class SvnRevisionWidget;
 class KUrl;
-namespace SvnUtils
-{
-    class SvnRevision;
-}
+class SvnRevision;
 
 /**
  * Choose revisions and extra options for peg diff of given path. (ie. one path is given
@@ -36,8 +33,8 @@ public:
 
     void setUrl( const KUrl& url );
 
-    SvnUtils::SvnRevision startRev();
-    SvnUtils::SvnRevision endRev();
+    SvnRevision startRev();
+    SvnRevision endRev();
     bool recurse();
     bool noDiffDeleted();
     bool ignoreContentType();

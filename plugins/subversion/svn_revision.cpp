@@ -9,14 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "subversion_utils.h"
+#include "svn_revision.h"
 extern "C" {
 #include <svn_opt.h>
 }
 #include "vcsrevision.h"
-
-namespace SvnUtils
-{
 
 SvnRevision::SvnRevision()
 : type( kind ), revNum(-1), revKind( UNSPECIFIED )
@@ -134,5 +131,3 @@ bool SvnRevision::isValid()
     }
     return true;
 }
-
-} // end of namespace SvnUtils

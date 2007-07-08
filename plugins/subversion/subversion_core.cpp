@@ -21,7 +21,7 @@ extern "C" {
 
 #include "subversion_part.h"
 #include "subversion_view.h"
-#include "subversion_utils.h"
+#include "svn_revision.h"
 #include "interthreadevents.h"
 #include "svnkjobbase.h"
 #include "subversionthreads.h"

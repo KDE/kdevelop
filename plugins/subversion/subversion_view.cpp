@@ -17,7 +17,7 @@
 #include "svn_models.h"
 #include "svn_logviewwidgets.h"
 #include "svn_blamewidgets.h"
-#include "subversion_utils.h"
+#include "svn_revision.h"
 // #include "ui_svnlogviewwidget.h"
 #include "ioutputview.h"
 #include <icore.h>

@@ -20,7 +20,7 @@ SvnRevisionWidget::SvnRevisionWidget( QWidget *parent )
 {
     setupUi( this );
 
-    QList<SvnUtils::SvnRevision::RevKeyword> keylist;
+    QList<SvnRevision::RevKeyword> keylist;
     keylist << SvnRevision::HEAD << SvnRevision::BASE << SvnRevision::WORKING;
     keylist << SvnRevision::PREV << SvnRevision::COMMITTED;
     installKeys( keylist );
@@ -31,16 +31,16 @@ SvnRevisionWidget::SvnRevisionWidget( QWidget *parent )
 SvnRevisionWidget::~SvnRevisionWidget()
 {}
 
-SvnUtils::SvnRevision SvnRevisionWidget::revision()
+SvnRevision SvnRevisionWidget::revision()
 {
-    SvnUtils::SvnRevision rev;
+    SvnRevision rev;
 
     if( revnumRadio->isChecked() ){
         rev.setNumber( numInput->value() );
     }
     else if( revkindRadio->isChecked() ){
         QVariant data = kindCombo->itemData( kindCombo->currentIndex() );
-        SvnUtils::SvnRevision::RevKeyword key = (SvnRevision::RevKeyword)(data.toInt());
+        SvnRevision::RevKeyword key = (SvnRevision::RevKeyword)(data.toInt());
         rev.setKey( key );
     }
     else if( revdateRadio->isChecked() ){
@@ -50,26 +50,26 @@ SvnUtils::SvnRevision SvnRevisionWidget::revision()
     return rev;
 }
 
-void SvnRevisionWidget::installKeys( const QList<SvnUtils::SvnRevision::RevKeyword> &keylist )
+void SvnRevisionWidget::installKeys( const QList<SvnRevision::RevKeyword> &keylist )
 {
     kindCombo->clear();
-    foreach( SvnUtils::SvnRevision::RevKeyword _key, keylist )
+    foreach( SvnRevision::RevKeyword _key, keylist )
     {
         switch( _key ){
-            case SvnUtils::SvnRevision::HEAD:
-                kindCombo->addItem( "HEAD", QVariant( (int)SvnUtils::SvnRevision::HEAD ) );
+            case SvnRevision::HEAD:
+                kindCombo->addItem( "HEAD", QVariant( (int)SvnRevision::HEAD ) );
             break;
-            case SvnUtils::SvnRevision::BASE:
-                kindCombo->addItem( "BASE", QVariant( (int)SvnUtils::SvnRevision::BASE ) );
+            case SvnRevision::BASE:
+                kindCombo->addItem( "BASE", QVariant( (int)SvnRevision::BASE ) );
             break;
-            case SvnUtils::SvnRevision::WORKING:
-                kindCombo->addItem( "WORKING", QVariant( (int)SvnUtils::SvnRevision::WORKING ) );
+            case SvnRevision::WORKING:
+                kindCombo->addItem( "WORKING", QVariant( (int)SvnRevision::WORKING ) );
             break;
-            case SvnUtils::SvnRevision::PREV:
-                kindCombo->addItem( "PREV", QVariant( (int)SvnUtils::SvnRevision::PREV ) );
+            case SvnRevision::PREV:
+                kindCombo->addItem( "PREV", QVariant( (int)SvnRevision::PREV ) );
             break;
-            case SvnUtils::SvnRevision::COMMITTED:
-                kindCombo->addItem( "COMMITTED", QVariant( (int)SvnUtils::SvnRevision::COMMITTED ) );
+            case SvnRevision::COMMITTED:
+                kindCombo->addItem( "COMMITTED", QVariant( (int)SvnRevision::COMMITTED ) );
             break;
         }
     }
@@ -80,7 +80,7 @@ void SvnRevisionWidget::setNumber( long revnum )
     numInput->setValue( revnum );
 }
 
-void SvnRevisionWidget::setKey( SvnUtils::SvnRevision::RevKeyword keyword )
+void SvnRevisionWidget::setKey( SvnRevision::RevKeyword keyword )
 {
     int idx = kindCombo->findData( QVariant((int)keyword) );
     if( idx == -1 ) return;
@@ -88,16 +88,16 @@ void SvnRevisionWidget::setKey( SvnUtils::SvnRevision::RevKeyword keyword )
 }
 
 // only enables specified type. disable all other type
-void SvnRevisionWidget::enableType( SvnUtils::SvnRevision::RevType type )
+void SvnRevisionWidget::enableType( SvnRevision::RevType type )
 {
     switch( type ){
-        case SvnUtils::SvnRevision::number:
+        case SvnRevision::number:
             revnumRadio->setChecked(true);
         break;
-        case SvnUtils::SvnRevision::kind:
+        case SvnRevision::kind:
             revkindRadio->setChecked(true);
         break;
-        case SvnUtils::SvnRevision::date:
+        case SvnRevision::date:
             revdateRadio->setChecked(true);
         break;
     }

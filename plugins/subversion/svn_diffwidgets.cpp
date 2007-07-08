@@ -35,9 +35,9 @@ SvnPegDiffDialog::SvnPegDiffDialog( QWidget *parent )
 
     // set default revision
     m_startRev->setNumber(1);
-    m_startRev->enableType( SvnUtils::SvnRevision::number );
-    m_endRev->setKey( SvnUtils::SvnRevision::WORKING );
-    m_endRev->enableType( SvnUtils::SvnRevision::kind );
+    m_startRev->enableType( SvnRevision::number );
+    m_endRev->setKey( SvnRevision::WORKING );
+    m_endRev->enableType( SvnRevision::kind );
 }
 
 SvnPegDiffDialog::~SvnPegDiffDialog()
@@ -49,12 +49,12 @@ void SvnPegDiffDialog::setUrl( const KUrl& url )
     ui.urlEdit->setUrl( url );
 }
 
-SvnUtils::SvnRevision SvnPegDiffDialog::startRev()
+SvnRevision SvnPegDiffDialog::startRev()
 {
     return m_startRev->revision();
 }
 
-SvnUtils::SvnRevision SvnPegDiffDialog::endRev()
+SvnRevision SvnPegDiffDialog::endRev()
 {
     return m_endRev->revision();
 }

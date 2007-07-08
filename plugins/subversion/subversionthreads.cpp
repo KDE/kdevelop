@@ -1089,8 +1089,8 @@ void SvnImportJob::run()
 /////////////////////////////////////////////////////////////////////////////////////
 
 SvnCheckoutJob::SvnCheckoutJob( const KUrl &servUrl, const KUrl &wcRoot,
-                    const SvnUtils::SvnRevision &peg_revision,
-                    const SvnUtils::SvnRevision &revision,
+                    const SvnRevision &peg_revision,
+                    const SvnRevision &revision,
                     bool recurse, bool ignoreExternals,
                     int type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
@@ -1180,11 +1180,11 @@ class SvnCopyJob::Private
 {
 public:
     KUrl m_srcPathOrUrl;
-    SvnUtils::SvnRevision m_srcRev;
+    SvnRevision m_srcRev;
     KUrl m_dstPathOrUrl;
 };
 
-SvnCopyJob::SvnCopyJob( const KUrl& srcPathOrUrl, const SvnUtils::SvnRevision &srcRev,
+SvnCopyJob::SvnCopyJob( const KUrl& srcPathOrUrl, const SvnRevision &srcRev,
                         const KUrl& dstPathOrUrl, int type, SvnKJobBase *parent )
     : SubversionThread( type, parent ), d( new Private )
 {

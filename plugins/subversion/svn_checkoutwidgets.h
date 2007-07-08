@@ -16,10 +16,7 @@
 #include "ui_uicheckout_option_dlg.h"
 
 class KUrl;
-namespace SvnUtils
-{
 class SvnRevision;
-}
 
 class SvnCheckoutDialog : public KDialog
 {
@@ -30,8 +27,8 @@ public:
 
     KUrl reposUrl();
     KUrl destPath();
-    SvnUtils::SvnRevision revision();
-//     SvnUtils::SvnRevision pegRevision();
+    SvnRevision revision();
+//     SvnRevision pegRevision();
     bool recurse();
     bool ignoreExternals();
 private:

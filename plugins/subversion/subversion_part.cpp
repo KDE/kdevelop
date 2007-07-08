@@ -12,7 +12,7 @@
 #include "subversion_part.h"
 #include "projectmodel.h"
 #include "subversion_view.h"
-#include "subversion_utils.h"
+#include "svn_revision.h"
 #include "subversionthreads.h"
 #include "interthreadevents.h"
 #include "svnkjobbase.h"
@@ -248,7 +248,7 @@ VcsJob* KDevSubversionPart::status( const KUrl::List& localLocations,
 {
     bool recurse = (mode == KDevelop::IBasicVersionControl::Recursive) ? true : false;
     SvnRevision rev;
-    rev.setKey( SvnUtils::SvnRevision::WORKING );
+    rev.setKey( SvnRevision::WORKING );
     // TODO support multiple paths
     KUrl path = localLocations.first();
     SvnKJobBase *job = svncore()->createStatusJob( path, rev, recurse, true, false, true, false );
@@ -300,8 +300,8 @@ VcsJob* KDevSubversionPart::localRevision( const KUrl& localLocation, VcsRevisio
 
 VcsJob* KDevSubversionPart::copy( const KUrl& localLocationSrc, const KUrl& localLocationDstn )
 {
-    SvnUtils::SvnRevision headRev;
-    headRev.setKey( SvnUtils::SvnRevision::WORKING ); // TODO not sure whether BASE OR WORKING
+    SvnRevision headRev;
+    headRev.setKey( SvnRevision::WORKING ); // TODO not sure whether BASE OR WORKING
     SvnKJobBase *job = svncore()->createCopyJob( localLocationSrc, headRev, localLocationDstn );
     return job;
 }
@@ -321,7 +321,7 @@ VcsJob* KDevSubversionPart::update( const KUrl::List& localLocations,
                                     const VcsRevision& rev, RecursionMode recursion )
 {
     bool recurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? true : false );
-    SvnUtils::SvnRevision headRev;
+    SvnRevision headRev;
     headRev.fromVcsRevision( rev );
     return svncore()->createUpdateJob( localLocations, headRev, recurse, false );
 }
@@ -379,7 +379,7 @@ VcsJob* KDevSubversionPart::diff( const QVariant& src,
     if( !srcUrl.isValid() || !dstUrl.isValid() )
         return 0;
 
-    SvnUtils::SvnRevision rev1, rev2, peg_rev; // peg_rev:unspecified
+    SvnRevision rev1, rev2, peg_rev; // peg_rev:unspecified
     rev1.fromVcsRevision( srcRevision );
     rev2.fromVcsRevision( dstRevision );
 
@@ -398,7 +398,7 @@ VcsJob* KDevSubversionPart::showDiff( const QVariant& src,
 
 VcsJob* KDevSubversionPart::log( const KUrl& localLocation, const VcsRevision& rev, unsigned long limit )
 {
-    SvnUtils::SvnRevision startRev, endRev;
+    SvnRevision startRev, endRev;
     startRev.fromVcsRevision( rev );
     endRev.setNumber(0);
     KUrl::List list;
@@ -410,7 +410,7 @@ VcsJob* KDevSubversionPart::log( const KUrl& localLocation,
             const VcsRevision& rev,
             const VcsRevision& limit )
 {
-    SvnUtils::SvnRevision startRev, endRev;
+    SvnRevision startRev, endRev;
     startRev.fromVcsRevision( rev );
     endRev.fromVcsRevision( limit );
     KUrl::List list;
@@ -437,7 +437,7 @@ VcsJob* KDevSubversionPart::showLog( const KUrl& localLocation,
 VcsJob* KDevSubversionPart::annotate( const KUrl& localLocation,
                 const VcsRevision& rev )
 {
-    SvnUtils::SvnRevision rev1, rev2;
+    SvnRevision rev1, rev2;
     rev1.fromVcsRevision( rev );
     rev2.setNumber( 0 );
     return svncore()->createBlameJob( localLocation, true, rev1, rev2 );
@@ -491,9 +491,9 @@ void KDevSubversionPart::checkout( const KUrl &targetDir )
 
     KUrl repos = dlg.reposUrl();
     KUrl path = dlg.destPath();
-    SvnUtils::SvnRevision peg_rev;
+    SvnRevision peg_rev;
     peg_rev.setKey( SvnRevision::HEAD );
-    SvnUtils::SvnRevision rev = dlg.revision();
+    SvnRevision rev = dlg.revision();
     bool recurse = dlg.recurse();
     bool ignoreExternals = dlg.ignoreExternals();
 
@@ -563,8 +563,8 @@ void KDevSubversionPart::annotate( const KUrl &path_or_url )
 }
 void KDevSubversionPart::vcsInfo( const KUrl &path_or_url ) // not yet in interface
 {
-    SvnUtils::SvnRevision peg;
-    SvnUtils::SvnRevision revision;
+    SvnRevision peg;
+    SvnRevision revision;
 
     d->m_impl->spawnInfoThread( path_or_url, peg, revision, false );
 }
@@ -581,10 +581,10 @@ void KDevSubversionPart::pegDiff( const KUrl &path )
     // ie, if rev1 is WORKING, rev2 should not be BASE and vice versa.
     // Otherwise peg-diff fails. There should be some validators in revision choose GUI.
     // To see what is peg-diff, see peg revision section in subversion book.
-    SvnUtils::SvnRevision rev1 = dlg.startRev();
-    SvnUtils::SvnRevision rev2 = dlg.endRev();
-    SvnUtils::SvnRevision peg_rev;
-    peg_rev.setKey( SvnUtils::SvnRevision::WORKING );
+    SvnRevision rev1 = dlg.startRev();
+    SvnRevision rev2 = dlg.endRev();
+    SvnRevision peg_rev;
+    peg_rev.setKey( SvnRevision::WORKING );
 
     bool isRecurse = dlg.recurse();
     bool noDiffDelete = dlg.noDiffDeleted();
@@ -595,20 +595,20 @@ void KDevSubversionPart::pegDiff( const KUrl &path )
 }
 void KDevSubversionPart::diffToHead( const KUrl &path )
 {
-    SvnUtils::SvnRevision rev1, rev2;
-    rev1.setKey( SvnUtils::SvnRevision::HEAD );
-    rev2.setKey( SvnUtils::SvnRevision::WORKING ); // use this as peg revision
+    SvnRevision rev1, rev2;
+    rev1.setKey( SvnRevision::HEAD );
+    rev2.setKey( SvnRevision::WORKING ); // use this as peg revision
 
     svncore()->spawnDiffThread( path, KUrl(), rev2/*peg revision*/, rev1, rev2,
                                 true, true, false, true );
 }
 void KDevSubversionPart::diffToBase( const KUrl &path )
 {
-    SvnUtils::SvnRevision peg_rev; // unspecified peg revision. do normal diff
+    SvnRevision peg_rev; // unspecified peg revision. do normal diff
 
-    SvnUtils::SvnRevision rev1, rev2;
-    rev1.setKey( SvnUtils::SvnRevision::BASE );
-    rev2.setKey( SvnUtils::SvnRevision::WORKING );
+    SvnRevision rev1, rev2;
+    rev1.setKey( SvnRevision::BASE );
+    rev2.setKey( SvnRevision::WORKING );
 
     svncore()->spawnDiffThread( path, path, peg_rev, rev1, rev2, true, true, false, true );
 }

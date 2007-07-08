@@ -13,11 +13,7 @@
 #define SVNUPDATEWIDGET_H
 
 #include <kdialog.h>
-
-namespace SvnUtils
-{
 class SvnRevision;
-}
 
 class SvnUpdateOptionDlg : public KDialog
 {
@@ -26,7 +22,7 @@ public:
     SvnUpdateOptionDlg( QWidget *parent = NULL );
     ~SvnUpdateOptionDlg();
 
-    SvnUtils::SvnRevision revision();
+    SvnRevision revision();
     bool recurse();
     bool ignoreExternal();
 private:

@@ -22,7 +22,7 @@ set(kdevsubversion_PART_SRCS
     svn_authdialog.cpp
     svnkjobbase.cpp
     subversionthreads.cpp
-    subversion_utils.cpp
+    svn_revision.cpp
     interthreadevents.cpp
     svn_importwidgets.cpp
     svn_checkoutwidgets.cpp

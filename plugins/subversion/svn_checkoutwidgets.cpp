@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include "svn_checkoutwidgets.h"
-#include "subversion_utils.h"
+#include "svn_revision.h"
 
 #include <kurl.h>
 #include <kurlrequester.h>
@@ -49,15 +49,15 @@ KUrl SvnCheckoutDialog::destPath()
     return ui.pathRequester->url();
 }
 
-SvnUtils::SvnRevision SvnCheckoutDialog::revision()
+SvnRevision SvnCheckoutDialog::revision()
 {
-    SvnUtils::SvnRevision ret;
+    SvnRevision ret;
 
     if( ui.revnumRadio->isChecked() ){
         ret.setNumber( ui.revNum->value() );
     }
     else if( ui.revkeyRadio->isChecked() ){
-        ret.setKey( SvnUtils::SvnRevision::HEAD );
+        ret.setKey( SvnRevision::HEAD );
     }
     else if( ui.revdateRadio->isChecked() ){
         ret.setDate( ui.revDate->dateTime() );

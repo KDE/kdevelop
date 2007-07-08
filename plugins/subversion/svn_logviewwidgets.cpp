@@ -14,7 +14,7 @@
 #include "svn_blamewidgets.h"
 #include "subversion_core.h"
 #include "subversionthreads.h"
-#include "subversion_utils.h"
+#include "svn_revision.h"
 // #include "svn_models.h" // included int blamewidget
 #include "svnkjobbase.h"
 #include <kaction.h>
@@ -127,7 +127,7 @@ void SvnLogviewWidget::blameRev()
 
     QString relPath = selectedPath.section( '/', 1 );
     // get repository root URL
-    SvnUtils::SvnRevision nullRev;
+    SvnRevision nullRev;
     SvnKJobBase* job = m_part->svncore()->createInfoJob( m_url, nullRev, nullRev, false );
     if( job->exec() != KDevelop::VcsJob::JobSucceeded ) return;
     SvnInfoJob *thread = dynamic_cast<SvnInfoJob*>(job->svnThread());
@@ -157,12 +157,12 @@ void SvnLogviewWidget::diffToPrev()
     if( rev == -1 ){ //error
         return;
     }
-    SvnUtils::SvnRevision rev1, rev2, peg_rev;
+    SvnRevision rev1, rev2, peg_rev;
     rev1.setNumber( rev - 1 );
     rev2.setNumber( rev );
     if( m_url.isLocalFile() ){
         // peg revision is local.
-        peg_rev.setKey( SvnUtils::SvnRevision::BASE );
+        peg_rev.setKey( SvnRevision::BASE );
     }
 
     m_part->svncore()->spawnDiffThread( m_url, m_url, peg_rev, rev1, rev2, true, false, false, false );
@@ -216,7 +216,7 @@ bool SvnLogviewOptionDialog::repositLog()
 
 SvnRevision SvnLogviewOptionDialog::startRev()
 {
-    SvnUtils::SvnRevision rev;
+    SvnRevision rev;
     if( d->ui.startNum->isChecked() ){
         rev.setNumber( d->ui.startNumEdit->value() );
         return rev;
@@ -224,16 +224,16 @@ SvnRevision SvnLogviewOptionDialog::startRev()
     else if( d->ui.startKind->isChecked() ){
         // note. If you add more keywords in .ui, you should update below.
         if( d->ui.startKindEdit->currentText() == "HEAD" ){
-            rev.setKey( SvnUtils::SvnRevision::HEAD );
+            rev.setKey( SvnRevision::HEAD );
         }
         else if( d->ui.startKindEdit->currentText() == "BASE" ){
-            rev.setKey( SvnUtils::SvnRevision::BASE );
+            rev.setKey( SvnRevision::BASE );
         }
         else if( d->ui.startKindEdit->currentText() == "PREV" ){
-            rev.setKey( SvnUtils::SvnRevision::PREV );
+            rev.setKey( SvnRevision::PREV );
         }
         else if( d->ui.startKindEdit->currentText() == "COMMITTED" ){
-            rev.setKey( SvnUtils::SvnRevision::COMMITTED );
+            rev.setKey( SvnRevision::COMMITTED );
         }
         return rev;
     }
@@ -249,7 +249,7 @@ SvnRevision SvnLogviewOptionDialog::startRev()
 
 SvnRevision SvnLogviewOptionDialog::endRev()
 {
-    SvnUtils::SvnRevision rev;
+    SvnRevision rev;
     if( d->ui.endNum->isChecked() ){
         rev.setNumber( d->ui.endNumEdit->value() );
         return rev;
@@ -257,16 +257,16 @@ SvnRevision SvnLogviewOptionDialog::endRev()
     else if( d->ui.endKind->isChecked() ){
         // note. If you add more keywords in .ui, you should update below.
         if( d->ui.endKindEdit->currentText() == "HEAD" ){
-            rev.setKey( SvnUtils::SvnRevision::HEAD );
+            rev.setKey( SvnRevision::HEAD );
         }
         else if( d->ui.endKindEdit->currentText() == "BASE" ){
-            rev.setKey( SvnUtils::SvnRevision::BASE );
+            rev.setKey( SvnRevision::BASE );
         }
         else if( d->ui.endKindEdit->currentText() == "PREV" ){
-            rev.setKey( SvnUtils::SvnRevision::PREV );
+            rev.setKey( SvnRevision::PREV );
         }
         else if( d->ui.endKindEdit->currentText() == "COMMITTED" ){
-            rev.setKey( SvnUtils::SvnRevision::COMMITTED );
+            rev.setKey( SvnRevision::COMMITTED );
         }
         return rev;
     }

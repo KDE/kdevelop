@@ -31,7 +31,7 @@ extern "C" {
 
 #include <kurl.h>
 
-#include "subversion_utils.h"
+#include "svn_revision.h"
 #include "svn_models.h"
 
 class SvnKJobBase;
@@ -296,8 +296,8 @@ public:
 protected:
     virtual void run();
     KUrl m_pathOrUrl;
-    SvnUtils::SvnRevision m_peg;
-    SvnUtils::SvnRevision m_revision;
+    SvnRevision m_peg;
+    SvnRevision m_revision;
     bool m_recurse;
 };
 
@@ -359,15 +359,15 @@ class SvnCheckoutJob : public SubversionThread
 public:
     /// currently, peg revision is set to "HEAD" internally.
     SvnCheckoutJob( const KUrl &servUrl, const KUrl &wcRoot,
-                    const SvnUtils::SvnRevision &pegRevision,
-                    const SvnUtils::SvnRevision &revision,
+                    const SvnRevision &pegRevision,
+                    const SvnRevision &revision,
                     bool recurse, bool ignoreExternals,
                     int type, SvnKJobBase *parent );
 protected:
     virtual void run();
 
     KUrl m_servUrl, m_wcRoot;
-    SvnUtils::SvnRevision m_pegRevision, m_revision;
+    SvnRevision m_pegRevision, m_revision;
     bool m_recurse, m_ignoreExternals;
 };
 
@@ -389,7 +389,7 @@ class SvnCopyJob : public SubversionThread
 {
 public:
     // subversion doesn't support non-recursive ops. It's recursive by default.
-    SvnCopyJob( const KUrl& srcPathOrUrl, const SvnUtils::SvnRevision &srcRev,
+    SvnCopyJob( const KUrl& srcPathOrUrl, const SvnRevision &srcRev,
                 const KUrl& dstPathOrUrl, int type, SvnKJobBase *parent );
     virtual ~SvnCopyJob();
 
