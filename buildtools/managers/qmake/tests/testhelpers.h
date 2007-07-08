@@ -44,8 +44,10 @@ void classname::funcname()\
 {\
     QFETCH( QString, project );\
     QFETCH( QString, output );\
-    int ret = QMake::Driver::parseString( project, ast );\
-    QVERIFY( ret == 0 );\
+    QMake::Driver d; \
+    d.setContent( project ); \
+    bool ret = d.parse( ast );\
+    QVERIFY( ret );\
     QVERIFY( ast->statements().count() == astcount );\
     QString result;\
     ast->writeToString(result);\
@@ -56,9 +58,11 @@ void classname::funcname()\
 {\
     QFETCH( QString, project );\
     QFETCH( QString, output );\
-    int ret = QMake::Driver::parseString( project, ast );\
+    QMake::Driver d; \
+    d.setContent( project ); \
+    bool ret = d.parse( ast );\
     QEXPECT_FAIL( "", comment, Continue );\
-    QVERIFY( ret == 0 );
+    QVERIFY( ret );
 
 
 #define ENDTESTFUNCIMPL }

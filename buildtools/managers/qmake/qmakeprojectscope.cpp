@@ -59,10 +59,12 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
         m_projectFileUrl.adjustPath( KUrl::AddTrailingSlash );
         m_projectFileUrl.setFileName( projectfile );
     }
-    if( QMake::Driver::parseFile( m_projectFileUrl.toLocalFile(), m_ast ) != 0 )
+    QMake::Driver d;
+    d.readFile( m_projectFileUrl.toLocalFile() );
+    if( d.parse( m_ast ) )
     {
         kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.toLocalFile() << endl;
-	delete m_ast;
+        delete m_ast;
         m_ast = 0;
         m_projectFileUrl = KUrl();
     }

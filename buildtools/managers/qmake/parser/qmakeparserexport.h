@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef QMAKEEXPORT_H
-#define QMAKEEXPORT_H
+#ifndef QMAKEPARSEREXPORT_H
+#define QMAKEPARSEREXPORT_H
 
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
@@ -45,5 +45,8 @@
 /* export statements for unix */
 #define QMAKEPARSER_EXPORT KDE_EXPORT
 #endif /* KDEVEXPORT_H*/
+
+#define KDEVPG_EXPORT QMAKEPARSER_EXPORT
+
 #endif
 

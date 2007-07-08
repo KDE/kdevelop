@@ -19,91 +19,65 @@
  */
 
 #include "qmakedriver.h"
-#include "qmakeast.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
+// #include "qmakeast.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QStack>
+#include <QtCore/QTextStream>
+#include <QtCore/QTextCodec>
+#include <QtCore/QFile>
 
-#include "qmakelexer.h"
-#include "qmakeparser.hpp"
+#include "qmake_parser.h"
+#include "qmake_ast.h"
 
 namespace QMake
 {
-    int Driver::parseFile( char const *filename, ProjectAST* ast, int debug )
-    {
-        std::ifstream inf( filename, std::ios::in );
-        if ( !inf.is_open() )
-        {
-            std::cerr << filename << ": file not found" << std::endl;
-            ast = 0;
-            return 1;
-        }
-//         printf("Parsing\n");
-        Lexer l(&inf);
-        l.set_debug(debug);
-        Parser p(&l, ast);
-        p.set_debug_level(debug);
-        int ret = p.parse();
-        switch( l.lineending() )
-        {
-           case QMake::Lexer::MacOS:
-                 ast->setLineEnding( QMake::ProjectAST::MacOS );
-                 break;
-             case QMake::Lexer::Windows:
-                 ast->setLineEnding( QMake::ProjectAST::Windows );
-                 break;
-             case QMake::Lexer::Unix:
-             default:
-                 ast->setLineEnding( QMake::ProjectAST::Unix );
-                 break;
-        }
-        ast->setFilename(QString::fromUtf8( filename ));
-//         printf("lineEnding: %d\n", ast->lineEnding());
-        return ret;
-    }
 
-    int Driver::parseFile( const QString& filename, ProjectAST* ast, int debug )
-    {
-        return parseFile( filename.toUtf8().constData(), ast, debug );
-    }
+Driver::Driver()
+    : mDebug(false)
+{
+}
 
-    int Driver::parseString( char const *content, ProjectAST* ast, int debug )
+bool Driver::readFile( const QString& filename, const char* codec )
+{
+    QFile f(filename);
+    if( !f.open(QIODevice::ReadOnly) )
     {
-        std::istringstream ins;
-        ins.str(content);
-        Lexer l(&ins);
-        l.set_debug(debug);
-        Parser p(&l, ast);
-        p.set_debug_level(debug);
-        int ret = p.parse();
-//         printf("Parsed: %d\n", ret);
-        switch( l.lineending() )
-        {
-           case QMake::Lexer::MacOS:
-                 ast->setLineEnding( QMake::ProjectAST::MacOS );
-                 break;
-             case QMake::Lexer::Windows:
-                 ast->setLineEnding( QMake::ProjectAST::Windows );
-                 break;
-             case QMake::Lexer::Unix:
-             default:
-                 ast->setLineEnding( QMake::ProjectAST::Unix );
-                 break;
-        }
-//         printf("lineEnding: %d\n", ast->lineEnding());
-        ast->setFilename( "" );
-        return ret;
+        kDebug(9024) << "Couldn't open project file: " << filename << endl;
+        return false;
     }
+    QTextStream s(&f);
+    if( codec )
+        s.setCodec( QTextCodec::codecForName(codec) );
+    mContent = s.readAll();
+    return true;
+}
+void Driver::setContent( const QString& content )
+{
+    mContent = content;
+}
+void Driver::setDebug( bool debug )
+{
+    mDebug = debug;
+}
+bool Driver::parse(QMake::ProjectAST*)
+{
+    qmake::parser::token_stream_type token_stream;
+    qmake::parser::memory_pool_type memory_pool;
 
-    int Driver::parseString( const QString& content, ProjectAST* ast, int debug )
+    qmake::parser qmakeparser;
+    qmakeparser.set_token_stream(&token_stream);
+    qmakeparser.set_memory_pool(&memory_pool);
+
+    qmakeparser.tokenize(mContent);
+    qmake::project_ast* ast = 0;
+    bool matched = qmakeparser.parse_project(&ast);
+    if( matched )
     {
-        QByteArray qb = content.toUtf8();
-        const char* data = qb.data();
-        return QMake::Driver::parseString( data, ast, debug );
+    }else
+    {
+        qmakeparser.yy_expected_symbol(qmake::ast_node::Kind_project, "project");
     }
+    return matched;
+}
 
 }
 
