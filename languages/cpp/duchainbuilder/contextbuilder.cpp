@@ -69,58 +69,56 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
 
   m_editor->setCurrentUrl(file->url());
 
-  // FIXME ? race here...
-  TopDUContext* topLevelContext = DUChain::self()->chainForDocument(file->identity());
+  TopDUContext* topLevelContext = 0;
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    topLevelContext = DUChain::self()->chainForDocument(file->identity());
 
-  if( topLevelContext ) {
-    ///@todo fix the revision-stuff
-  }
-  
-  if (topLevelContext) {
-    m_recompiling = true;
-
-    Q_ASSERT(topLevelContext->textRangePtr());
-
-    if (m_compilingContexts) {
-      // To here...
-      Q_ASSERT(topLevelContext->textRangePtr());
-
-      // FIXME remove once conversion works
-      if (!topLevelContext->smartRange() && m_editor->smart())
-        topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
+    if( topLevelContext ) {
+      ///@todo fix the revision-stuff
     }
 
-    DUChainWriteLocker lock(DUChain::lock());
+    if (topLevelContext) {
+      m_recompiling = true;
 
-    DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::LexedFile*>(file.data() ) );
-  } else {
-    m_recompiling = false;
+      Q_ASSERT(topLevelContext->textRangePtr());
 
-    Q_ASSERT(m_compilingContexts);
+      if (m_compilingContexts) {
+        // To here...
+        Q_ASSERT(topLevelContext->textRangePtr());
 
-    Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
-    topLevelContext = new TopDUContext(range, const_cast<Cpp::LexedFile*>(file.data() ));
-    DUChainWriteLocker lock(DUChain::lock());
-    topLevelContext->setType(DUContext::Global);
+        // FIXME remove once conversion works
+        if (!topLevelContext->smartRange() && m_editor->smart())
+          topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
+      }
 
-    DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
-  }
+      DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::LexedFile*>(file.data() ) );
+    } else {
+      m_recompiling = false;
 
-  setEncountered(topLevelContext);
+      Q_ASSERT(m_compilingContexts);
 
-  node->ducontext = topLevelContext;
+      Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
+      topLevelContext = new TopDUContext(range, const_cast<Cpp::LexedFile*>(file.data()));
+      topLevelContext->setType(DUContext::Global);
 
-  if (includes) {
-    DUChainWriteLocker lock(DUChain::lock());
+      DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
+    }
 
-    foreach (DUContext* parent, topLevelContext->importedParentContexts())
-      if (includes->contains(parent))
-        includes->removeAll(parent);
-      else
-        topLevelContext->removeImportedParentContext(parent);
+    setEncountered(topLevelContext);
 
-    foreach (DUContext* included, *includes)
-      topLevelContext->addImportedParentContext(included);
+    node->ducontext = topLevelContext;
+
+    if (includes) {
+      foreach (DUContext* parent, topLevelContext->importedParentContexts())
+        if (includes->contains(parent))
+          includes->removeAll(parent);
+        else
+          topLevelContext->removeImportedParentContext(parent);
+
+      foreach (DUContext* included, *includes)
+        topLevelContext->addImportedParentContext(included);
+    }
   }
 
   supportBuild(node);
@@ -129,13 +127,13 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
     DUChainReadLocker lock(DUChain::lock());
 
     kDebug(9007) << "built top-level context with " << topLevelContext->allDeclarations(KTextEditor::Cursor()).size() << " declarations and " << topLevelContext->importedParentContexts().size() << " included files" << endl;
-  
+
     if( m_recompiling ) {
       DumpChain dump;
       dump.dump(topLevelContext);
     }
   }
-  
+
   m_compilingContexts = false;
 
   if (!m_importedParentContexts.isEmpty()) {

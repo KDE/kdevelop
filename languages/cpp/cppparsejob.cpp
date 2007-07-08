@@ -262,11 +262,12 @@ void CPPInternalParseJob::run()
             }
 
             if( parentJob()->parentPreprocessor() ) {
+                DUChainWriteLocker l(DUChain::lock());
                 //Remove include-files we imported temporarily, because they are on the same level in reality
                 foreach ( DUContext* context, temporaryChains )
                     topContext->removeImportedParentContext(context);
             }
-            
+
             parentJob()->setDUChain(topContext);
 
             kDebug( 9007 ) << "duchain is built" << endl;
@@ -279,7 +280,6 @@ void CPPInternalParseJob::run()
             if (editor.smart())
               editor.smart()->clearRevision();
         }
-
 
         // Debug output...
 
