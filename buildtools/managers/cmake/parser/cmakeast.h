@@ -279,12 +279,12 @@ CMAKE_BEGIN_AST_CLASS( FileAst )
 enum TypeFile { WRITE, APPEND, READ, GLOB, GLOB_RECURSE, REMOVE, REMOVE_RECURSE,
             MAKE_DIRECTORY, RELATIVE_PATH, TO_CMAKE_PATH, TO_NATIVE_PATH };
 CMAKE_ADD_AST_MEMBER(TypeFile, TypeFile, type, Type)
-    CMAKE_ADD_AST_MEMBER(QString, const QString&, path, Path );
-CMAKE_ADD_AST_MEMBER(QString, const QString&, variable, Variable );
-CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory);
-CMAKE_ADD_AST_MEMBER(QString, const QString&, message, Message );
-CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, globbingExpressions, GlobbingExpressions );
-CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, directories, Directories );
+    CMAKE_ADD_AST_MEMBER(QString, const QString&, path, Path )
+CMAKE_ADD_AST_MEMBER(QString, const QString&, variable, Variable )
+CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
+CMAKE_ADD_AST_MEMBER(QString, const QString&, message, Message )
+CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, globbingExpressions, GlobbingExpressions )
+CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, directories, Directories )
 CMAKE_END_AST_CLASS( FileAst )
 
 
