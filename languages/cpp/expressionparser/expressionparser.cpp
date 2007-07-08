@@ -58,7 +58,7 @@ QString ExpressionEvaluationResult::toString() const {
 ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool statement ) {
+ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, bool statement ) {
 
   if( m_debug )
     kDebug() << "==== .Evaluating ..:" << endl << unit << endl << endl;
@@ -75,6 +75,8 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   DUContext::ContextType type;
   {
     DUChainReadLocker lock(DUChain::lock());
+    if( !context )
+      return ExpressionEvaluationResult();
     type = context->type();
   }
 
@@ -92,7 +94,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     dumper.dump(ast, session);
   }
 
-  ast->ducontext = context;
+  ast->ducontext = context.data();
   
   ///@todo think how useful it is to compute contexts and uses here. The main thing we need is the AST.
   /*

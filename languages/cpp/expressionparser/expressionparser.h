@@ -81,7 +81,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
      * Example:
      * "int i; i += 5;"
     */
-    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContext* context, bool statement = true );
+    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContextPointer context, bool statement = true );
     /**
      * Evaluates the type of an expression given as an AST.
      *

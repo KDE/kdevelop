@@ -30,7 +30,7 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-OverloadResolver::OverloadResolver( DUContext* context ) : m_context(context), m_worstConversionRank(NoMatch) {
+OverloadResolver::OverloadResolver( DUContextPointer context ) : m_context(context), m_worstConversionRank(NoMatch) {
   
 }
 

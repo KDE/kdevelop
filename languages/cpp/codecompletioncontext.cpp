@@ -285,7 +285,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
     {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
       if( idType ) {
-        DUContextPointer ctx = TypeUtils::getInternalContext( idType->declaration() );
+        DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
         if( ctx ) {
           QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, identifier );
           foreach( Declaration* decl, decls )

@@ -22,6 +22,7 @@
 #include "duchainbuilder/cpptypes.h"
 #include "duchainbuilder/typerepository.h"
 #include "overloadresolution.h"
+#include <duchain/ducontext.h>
 
 
 using namespace Cpp;

@@ -21,6 +21,7 @@
 #define OVERLOADRESOLUTION_H
 
 #include <typesystem.h>
+#include <duchain/duchainpointer.h>
 #include "typeconversion.h"
 #include <QList>
 #include "cppexpressionparserexport.h"
@@ -71,7 +72,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
     /**
      * @param container The container in which to search for the functions. If it is a class, base-classes will be respected too.
      * */
-    OverloadResolver( DUContext* context );
+    OverloadResolver( DUContextPointer context );
 
     /**
      * Resolve one function with the given name that matches the given parameters.
@@ -129,7 +130,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
     void expandDeclarations( const QList<Declaration*>& from, QList<Declaration*>& to );
     void expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& from, QList<QPair<OverloadResolver::ParameterList, Declaration*> >& to );
 
-    DUContext* m_context;
+    DUContextPointer m_context;
     uint m_worstConversionRank;
 };
 
