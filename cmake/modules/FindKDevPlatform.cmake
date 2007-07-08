@@ -40,11 +40,15 @@ if( NOT KDEVPLATFORM_INCLUDE_DIR )
         PATHS
         ${CMAKE_INSTALL_PREFIX}/include
         ${_KDEVPLATFORM_INCLUDE_DIR}
-	${KDE4_INCLUDE_DIR}/kdevplatform
+	${KDE4_INCLUDE_DIR}
     )
-    set(KDEVPLATFORM_INCLUDE_DIR ${_platformIncDir}/kdevplatform)
+    if(_platformIncDir)
+        set(KDEVPLATFORM_INCLUDE_DIR ${_platformIncDir}/kdevplatform)
+        set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatform include directory containing the various platform modules")
+    endif(_platformIncDir)
+else( NOT KDEVPLATFORM_INCLUDE_DIR )
+    set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatform include directory containing the various platform modules")
 endif( NOT KDEVPLATFORM_INCLUDE_DIR )
-set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatform include directory containing the various platform modules")
 
 if( NOT KDEVPLATFORM_LIBRARY_DIR )
     find_library( _platforminterfaces_lib NAMES kdevplatforminterfaces
@@ -53,9 +57,13 @@ if( NOT KDEVPLATFORM_LIBRARY_DIR )
 	${KDE4_LIB_DIR}
         ${_KDEVPLATFORM_LIB_DIR}
     )
-    get_filename_component(KDEVPLATFORM_LIBRARY_DIR ${_platforminterfaces_lib} PATH )
+    if( _platforminterfaces_lib )
+        get_filename_component(KDEVPLATFORM_LIBRARY_DIR ${_platforminterfaces_lib} PATH )
+        set( KDEVPLATFORM_LIBRARY_DIR ${KDEVPLATFORM_LIBRARY_DIR} CACHE PATH "path for kdevplatform libraries" )
+    endif( _platforminterfaces_lib )
+else( NOT KDEVPLATFORM_LIBRARY_DIR )
+    set( KDEVPLATFORM_LIBRARY_DIR ${KDEVPLATFORM_LIBRARY_DIR} CACHE PATH "path for kdevplatform libraries" )
 endif( NOT KDEVPLATFORM_LIBRARY_DIR )
-set( KDEVPLATFORM_LIBRARY_DIR ${KDEVPLATFORM_LIBRARY_DIR} CACHE PATH "path for kdevplatform libraries" )
 
 find_library(KDEVPLATFORM_INTERFACES_LIBRARY kdevplatforminterfaces
     PATHS
@@ -132,6 +140,7 @@ find_library(KDEVPLATFORM_VCS_LIBRARY kdevplatformvcs
 if(NOT KDEVPLATFORM_VCS_LIBRARY)
 message("Didn't find VCS")
 endif(NOT KDEVPLATFORM_VCS_LIBRARY)
+
 if( KDEVPLATFORM_INCLUDE_DIR
  AND KDEVPLATFORM_INTERFACES_LIBRARY
  AND KDEVPLATFORM_EDITOR_LIBRARY
