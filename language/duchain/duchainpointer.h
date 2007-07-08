@@ -65,10 +65,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
     DUChainPointerData() : d(0) {
     }
     
+  private:
     ///Should not be used from outside, but is needed sometimes to construct an invalid dummy-pointer
     DUChainPointerData( DUChainBase* base ) : d(base) {
     }
-  private:
+    
     friend class DUChainBase;
     DUChainBase* d;
     Q_DISABLE_COPY(DUChainPointerData)
@@ -88,50 +89,74 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
   template<class Type>
   class DUChainPointer {
     public:
-    //Implemented so this can be used in arrays etc. avoid using this, it does an unneeded allocation
-    DUChainPointer() : d(new DUChainPointerData(0)) {
+    DUChainPointer() : d(DUChainBasePointer(0)) {
     }
 
+    ///This constructor includes dynamic casting. If the object cannot be casted to the type, the constructed DUChainPointer will have value zero.
+    template<class OtherType>
+    DUChainPointer( OtherType* rhs ) {
+      if( dynamic_cast<Type*>(rhs) )
+        d = rhs->weakPointer();
+      else
+        d = DUChainBasePointer(0);
+    }
+    
     DUChainPointer( Type* rhs ) {
       if( rhs )
         d = rhs->weakPointer();
       else
-        d = new DUChainPointerData(0);
+        d = DUChainBasePointer(0);
     }
-    
+
+    ///Returns whether the pointed object is still existing
     operator bool() const {
-      return (bool)d->base();
+      return d && d->base();
     }
 
     Type& operator* () {
+      Q_ASSERT(d);
       return *static_cast<Type*>(d->base());
     }
     
     const Type& operator* () const {
+      Q_ASSERT(d);
       return *static_cast<const Type*>(d->base());
     }
 
     Type* operator->() {
-      return static_cast<Type*>(d->base());
-    }
-
-    operator const Type*() const {
-      return static_cast<const Type*>(d->base());
-    }
-    
-    operator Type*() {
+      Q_ASSERT(d);
       return static_cast<Type*>(d->base());
     }
 
     const Type* operator->() const {
       return static_cast<const Type*>(d->base());
     }
+
+    template<class NewType>
+    DUChainPointer<NewType> dynamicCast() {
+      if( dynamic_cast<NewType*>( d->base() ) )
+        return DUChainPointer<NewType>( static_cast<NewType*>(d->base()) );
+      else
+        return DUChainPointer<NewType>();
+    }
+    
+    template<class NewType>
+    DUChainPointer<NewType> dynamicCast() const {
+      if( dynamic_cast<NewType*>( const_cast<DUChainPointerData*>(d->base()) ) ) //When the reference to the pointer is constant that doesn't mean that the pointed object needs to be constant
+        return DUChainPointer<NewType>( static_cast<NewType*>(d->base()) );
+      else
+        return DUChainPointer<NewType>();
+    }
     
     Type* data() {
+      if( !d )
+        return 0;
       return static_cast<Type*>(d->base());
     }
 
     const Type* data() const {
+      if( !d )
+        return 0;
       return static_cast<const Type*>(d->base());
     }
 
