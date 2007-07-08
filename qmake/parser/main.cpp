@@ -37,7 +37,6 @@ int main( int argc, char* argv[] )
     KCmdLineArgs::init( argc, argv, "QMake Parser", 0, ki18n("qmake-parser"), "4.0.0", ki18n("Parse QMake project files"));
 
     KCmdLineOptions options;
-    options.add("silent", ki18n("Enable Parser debug output"));
     options.add("!debug", ki18n("Disable output of the generated AST"));
     options.add("!+files", ki18n("QMake project files"));
     KCmdLineArgs::addCmdLineOptions(options);
@@ -50,28 +49,23 @@ int main( int argc, char* argv[] )
     }
 
     int debug = 0;
-    bool silent = false;
-
-    if( args->isSet("silent") )
-        silent = true;
     if( args->isSet("debug") )
         debug = 1;
     for( int i = 0 ; i < args->count() ; i++ )
     {
         QMake::ProjectAST* ast = new QMake::ProjectAST();
-        if ( QMake::Driver::parseFile( args->url(i).toLocalFile(), ast, debug ) != 0 ) {
+        QMake::Driver d;
+        if( !d.readFile( args->url(i).toLocalFile() ) )
+            exit( EXIT_FAILURE );
+        d.setDebug( debug );
+
+        if ( !d.parse(ast) ) {
             exit( EXIT_FAILURE );
         }else
         {
-            QString buf;
-            if( !silent )
-                ast->writeToString( buf );
-            kDebug(9024) << "Project Read: "<< ast->statements().count() << " Top-Level Statements" << endl;
-            if( !silent )
-                kDebug(9024) << "-------------\n" << buf << "-------------\n";
         }
     }
-
+    return EXIT_SUCCESS;
 }
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

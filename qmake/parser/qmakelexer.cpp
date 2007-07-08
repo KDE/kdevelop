@@ -1,6 +1,6 @@
 /* KDevelop QMake Support
  *
- * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,33 +18,44 @@
  * 02110-1301, USA.
  */
 
-#ifndef QMAKEPARSER_H
-#define QMAKEPARSER_H
-
 #include <QtCore/QString>
-
-#include "qmakeparserexport.h"
+#include "qmakelexer.h"
 
 namespace QMake
 {
-class ProjectAST;
-/**
- * Class to parse a QMake project file or a string containing a QMake project structure
- */
-class QMAKEPARSER_EXPORT Driver
+
+
+Lexer::Lexer( qmake::parser* _parser, const QString& content ):
+        mContent(content), mParser(_parser)
 {
-    public:
-        Driver();
-        bool readFile( const QString&, const char* = 0 );
-        void setContent( const QString& );
-        void setDebug( bool );
-        bool parse(QMake::ProjectAST*);
-    private:
-        QString mContent;
-        bool mDebug;
-};
 }
 
-#endif
+int Lexer::state() const
+{
+    return mState;
+}
+
+void Lexer::setState( int state )
+{
+    mState = state;
+}
+
+int Lexer::getNextTokenKind() const
+{
+    return qmake::parser::Token_EOF;
+}
+
+std::size_t Lexer::getTokenBegin() const
+{
+    return 0;
+}
+
+std::size_t Lexer::getTokenEnd() const
+{
+    return 0;
+}
+
+
+}
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

@@ -1,6 +1,6 @@
 /* KDevelop QMake Support
  *
- * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,36 +17,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef QMAKELEXER_H
-#define QMAKELEXER_H
 
-#include "qmakeparser.hpp"
-#include <iostream>
-
-#ifndef DONT_INCLUDE_FLEXLEXER
-#include "FlexLexer.h"
-#endif
+#include "qmakeparserexport.h"
+#include "qmake_parser.h"
+class QString;
 
 namespace QMake
 {
-    class Lexer : public yyFlexLexer
-    {
-        public:
-            enum LineEnding { None = 0, Unix = 1, MacOS = 2, Windows = 4 };
-            explicit Lexer( std::istream* argin = 0, std::ostream* argout = 0 );
-            int yylex( QMake::Parser::semantic_type* yylval );
-            int yylex();
-            void setLineEndingFromString( const QString& );
-            int lineending();
-        protected:
-            void LexerError( const char* msg );
-        private:
-            unsigned int bracecount;
-            QMake::Result* mylval;
-            LineEnding m_lineEnding;
-    };
-}
 
-#endif
+class QMAKEPARSER_EXPORT Lexer {
+public:
+    Lexer(qmake::parser* _parser, const QString& contents);
+
+    int getNextTokenKind() const;
+    std::size_t getTokenBegin() const;
+    std::size_t getTokenEnd() const;
+
+private:
+    QString mContent;
+    qmake::parser* mParser;
+    int state() const;
+    void setState(int state);
+
+    int mState;
+    enum State
+    {
+        DefaultState,
+        CommentState,
+        QuoteState
+    };
+
+};
+
+}
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

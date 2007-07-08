@@ -25,7 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 
-#include "qmakeexport.h"
+#include "qmakeparserexport.h"
 
 //@TODO Port to default constructors and use the set* API to set the various contents; complex constructors are unreadable
 //@TODO move the code from qmakeast.cpp into multiple files, move all code in this header to .cpp
