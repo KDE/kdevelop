@@ -77,7 +77,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
 typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
 
 /**
- * A smart-pointer similar class that conveniently wraps around DUChainPointer without
+ * A smart-pointer similar class that conveniently wraps around DUChainPointerData without
  * too many dynamic casts.
  *
  * It can be used like a normal pointer.
