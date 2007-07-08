@@ -52,9 +52,6 @@ public:
 
     KDevelop::ParseJob *createParseJob( const KUrl &url );
 
-    void documentLoaded( TranslationUnitAST *ast, const KUrl& document );
-    void releaseAST( AST *ast );
-
     /// Get the full path for a file based on a search through the project's
     /// include directories
     KUrl findInclude(const KUrl &source, const QString& includeName, int includeType);

@@ -191,34 +191,8 @@ void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
 
 void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
 {
-    language()->backgroundParser()->clear(this);
-
-    // FIXME I think this only happens on kdevelop close, but it would be good to figure it out
-    // and fix it
-    KUrl::List documentList;
-    foreach ( KDevelop::ProjectFileItem * file, project->files() )
-    {
-        ///@todo implement ILanguage::supportsDocument or smth like that
-//         if ( language()->supportsDocument( file->url() ) )
-//         {
-            language()->backgroundParser()->removeDocument( file->url() );
-//         }
-    }
-
-    language()->lockAllParseMutexes();
-
-    // Now we can do destructive stuff
-
-    DUChain::self()->clear();
-
-    language()->unlockAllParseMutexes();
-}
-
-void CppLanguageSupport::releaseAST( AST *ast )
-{
-    TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
-    delete t->session;
-    // The ast is in the memory pool which has been deleted as part of the session.
+    Q_UNUSED(project)
+    //TODO: Anything to do here?!?!
 }
 
 KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeName, int includeType)
@@ -276,24 +250,6 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
 
     return KUrl();
 }
-
-void CppLanguageSupport::documentLoaded(TranslationUnitAST *ast, const KUrl & document)
-{
-    DUChainWriteLocker l(DUChain::lock());
-
-    TopDUContext* context = DUChain::self()->chainForDocument(document);
-    if (context) {
-        CppEditorIntegrator editor(ast->session);
-        SmartConverter sc(&editor, m_highlights);
-        sc.convertDUChain(context);
-
-        if (!context->hasUses()) {
-            UseBuilder ub(&editor);
-            ub.buildUses(ast);
-        }
-    }
-}
-
 
 QString CppLanguageSupport::name() const
 {
