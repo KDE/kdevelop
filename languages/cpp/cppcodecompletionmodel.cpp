@@ -83,7 +83,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
-  int row = (int)index.internalPointer();
+  long row = (long)index.internalPointer();
 
   if( row < 0 || row >= m_declarations.size() )
     return QVariant();
@@ -91,8 +91,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
   DUChainReadLocker lock(DUChain::lock());
   
   Declaration* dec = const_cast<Declaration*>( m_declarations[row].data() );
-  if (!dec)
+  if (!dec) {
+    kDebug() <<  "code-completion model item " << row << ": Du-chain item is deleted" << endl;
     return QVariant();
+  }
 
   switch (role) {
     case Qt::DisplayRole:
