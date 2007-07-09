@@ -119,11 +119,11 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
   }
 }
 
-TopDUContext* DUChain::chainForDocument(const KUrl& document) {
+TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
   return chainForDocument( IdentifiedFile(document) );
 }
 
-TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document )
+TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) const
 {
   if (!document.identity()) {
     // Match any parsed version of this document
@@ -138,7 +138,22 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document )
   return 0;
 }
 
-TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment ) {
+QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
+{
+  QList<TopDUContext*> chains;
+
+  // Match all parsed versions of this document
+  for (QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(IdentifiedFile(document)); it != sdDUChainPrivate->m_chains.constEnd(); ++it) {
+    if (it.key().url() == document.url())
+      chains << it.value();
+    else
+      break;
+  }
+
+  return chains;
+}
+
+TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment ) const {
   QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(environment->type());
   if( it != sdDUChainPrivate->m_managers.end() ) {
     ParsingEnvironmentFilePointer file( (*it)->find(document, environment) );

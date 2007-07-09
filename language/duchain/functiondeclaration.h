@@ -1,7 +1,7 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2006 Adam Treat <treat@kde.org>
-    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
+    Copyright (C) 2006-2007 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,10 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLASSFUNCTIONDECLARATION_H
-#define CLASSFUNCTIONDECLARATION_H
+#ifndef FUNCTIONDECLARATION_H
+#define FUNCTIONDECLARATION_H
 
-#include <classmemberdeclaration.h>
+#include <declaration.h>
 #include <abstractfunctiondeclaration.h>
 #include <languageexport.h>
 
@@ -30,43 +30,11 @@ namespace KDevelop
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberDeclaration, public AbstractFunctionDeclaration
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public Declaration, public AbstractFunctionDeclaration
 {
 public:
-  ClassFunctionDeclaration(KTextEditor::Range* range, DUContext* context);
-  ~ClassFunctionDeclaration();
-
-  enum QtFunctionType
-  {
-    Normal,
-    Signal,
-    Slot
-  };
-
-  QtFunctionType functionType() const;
-  void setFunctionType(QtFunctionType functionType);
-
-  bool isConstructor() const;
-  bool isDestructor() const;
-  bool isConversionFunction() const;
-
-  enum FunctionSpecifier {
-    VirtualSpecifier  = 0x1,
-    InlineSpecifier   = 0x2,
-    ExplicitSpecifier = 0x4
-  };
-  Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
-
-  void setFunctionSpecifiers(FunctionSpecifiers specifiers);
-
-  bool isVirtual() const;
-  void setVirtual(bool isVirtual);
-
-  bool isInline() const;
-  void setInline(bool isInline);
-
-  bool isExplicit() const;
-  void setExplicit(bool isExplicit);
+  FunctionDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
+  ~FunctionDeclaration();
 
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
@@ -79,14 +47,11 @@ public:
 
   virtual void addDefaultParameter(const QString& str);
 
-  //bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
-
 private:
-  class ClassFunctionDeclarationPrivate* const d;
+  class FunctionDeclarationPrivate* const d;
 };
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassFunctionDeclaration::FunctionSpecifiers)
 
-#endif // CLASSFUNCTIONDECLARATION_H
+#endif // FUNCTIONDECLARATION_H
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

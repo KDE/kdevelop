@@ -51,17 +51,22 @@ public:
   /**
    * Return any chain for the given document
    * */
-  TopDUContext* chainForDocument(const KUrl& document);
+  TopDUContext* chainForDocument(const KUrl& document) const;
+
+  /**
+   * Return all chains for the given document
+   * */
+  QList<TopDUContext*> chainsForDocument(const KUrl& document) const;
 
   /**
    * Find the chain based on file-url and identity-number. If the number is zero, any chain for the given url is returned.
    * */
-  TopDUContext* chainForDocument(const IdentifiedFile& document);
+  TopDUContext* chainForDocument(const IdentifiedFile& document) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
    * */
-  TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment);
+  TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment) const;
 
   /// Only used for debugging at the moment
   QList<KUrl> documents() const;

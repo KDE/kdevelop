@@ -28,6 +28,8 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/identifier.cpp
     duchain/identifiedtype.cpp
     duchain/parsingenvironment.cpp
+    duchain/abstractfunctiondeclaration.cpp
+    duchain/functiondeclaration.cpp
 )
 
 kde4_automoc(${kdevplatformlanguage_LIB_SRCS})
@@ -78,5 +80,7 @@ install(FILES
     duchain/duchainlock.h
     duchain/identifier.h
     duchain/identifiedtype.h
+    duchain/abstractfunctiondeclaration.h
+    duchain/functiondeclaration.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )

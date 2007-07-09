@@ -65,7 +65,7 @@ public:
     Type, //A type is declared, like a class-declaration or function-declaration("class MyClass {};")
     Instance //An instance of a type is declared("MyClass m;")
   };
-  
+
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
   Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
@@ -85,12 +85,12 @@ public:
   void setDeclarationIsDefinition(bool dd);
 
   /**
-   * Retrieve the definition for this use.
+   * Retrieve the definition for this declaration.
    */
   Definition* definition() const;
 
   /**
-   * Set the definition for this use.
+   * Set the definition for this declaration.
    */
   void setDefinition(Definition* definition);
 
@@ -121,7 +121,7 @@ public:
    * @todo the logic behind this does not work anymore once a type may be defined several times in different du-contexts
    * */
   Kind kind() const;
-  
+
   /**
    * Provides a mangled version of this definition's identifier, for use in a symbol table.
    */
