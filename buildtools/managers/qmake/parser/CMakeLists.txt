@@ -28,7 +28,6 @@ if(KDEVPG_FOUND)
                 "${CMAKE_CURRENT_BINARY_DIR}/qmake_visitor.cpp"
                 "${CMAKE_CURRENT_BINARY_DIR}/qmake_visitor.h"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
-                "${CMAKE_CURRENT_BINARY_DIR}/qmakelexer.cpp"
         COMMAND ${KDEVPG_EXECUTABLE}
         ARGS    --output=qmake "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
