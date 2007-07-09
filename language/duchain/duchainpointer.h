@@ -28,7 +28,7 @@ namespace KDevelop {
 class DUContext;
 class DUChainBase;
 class Declaration;
-class ClassFunctionDeclaration;
+class AbstractFunctionDeclaration;
 class Use;
 class Definition;
 
