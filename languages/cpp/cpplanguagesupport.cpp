@@ -35,6 +35,7 @@
 #include <kio/netaccess.h>
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
+#include <ktexteditor/document.h>
 
 #include <icore.h>
 #include <iproject.h>
@@ -99,9 +100,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     CppTools::setupStandardMacros(*m_standardMarcos);
     #endif
 
-/*    connect( KDevelop::Core::documentController(),
-             SIGNAL( documentLoaded( KDevelop::Document* ) ),
-             this, SLOT( documentLoaded( KDevelop::Document* ) ) );*/
+    connect( core()->documentController(),
+             SIGNAL( documentLoaded( KDevelop::IDocument* ) ),
+             this, SLOT( documentLoaded( KDevelop::IDocument* ) ) );
     connect( core()->documentController(),
              SIGNAL( documentClosed( KDevelop::IDocument* ) ),
              this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
@@ -148,6 +149,18 @@ CppLanguageSupport::~CppLanguageSupport()
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
     return new CPPParseJob( url, this );
+}
+
+void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
+{
+    kDebug( 9007 ) << "CppLanguageSupport::documentLoaded" << endl;
+
+    // Convert any duchains to the smart equivalent first
+    EditorIntegrator editor;
+    SmartConverter sc(&editor, codeHighlighting());
+
+    foreach (TopDUContext* chain, DUChain::self()->chainsForDocument(doc->url()))
+        sc.convertDUChain(chain);
 }
 
 void CppLanguageSupport::documentActivated(KDevelop::IDocument* doc)

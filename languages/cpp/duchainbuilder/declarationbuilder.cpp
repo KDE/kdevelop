@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
+    Copyright (C) 2006-2007 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "classfunctiondeclaration.h"
+#include "functiondeclaration.h"
 #include "type_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
@@ -232,8 +233,12 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
             break;
 
         } else if (isFunction) {
-          if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
+          if (scope == Declaration::ClassScope) {
+            if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
+              break;
+          } else if (!dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
             break;
+          }
 
         } else if (scope == Declaration::ClassScope) {
           if (!dynamic_cast<ClassMemberDeclaration*>(dec))
@@ -244,9 +249,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         declaration = dec;
 
         //If the declaration does not have a smart-range, upgrade it if possible
-        if( m_editor->smart() && !declaration->smartRange() ) {
+        /*if( m_editor->smart() && !declaration->smartRange() ) {
           declaration->setTextRange( m_editor->createRange( newRange ) );
-        }
+        }*/
 
         // Update access policy if needed
         if (currentContext()->type() == DUContext::Class) {
@@ -270,7 +275,11 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       declaration = new ForwardDeclaration(range, scope, currentContext());
 
     } else if (isFunction) {
-      declaration = new ClassFunctionDeclaration(range, currentContext());
+      if (scope == Declaration::ClassScope)
+        declaration = new ClassFunctionDeclaration(range, currentContext());
+      else
+        declaration = new FunctionDeclaration(range, scope, currentContext());
+
       if (!m_functionDefinedStack.isEmpty())
         declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
 
@@ -317,7 +326,7 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
     DUChainWriteLocker lock(DUChain::lock());
 
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
-    
+
     if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
         idType->setDeclaration( currentDeclaration() );
 
@@ -330,10 +339,10 @@ void DeclarationBuilder::closeDeclaration()
     DUChainWriteLocker lock(DUChain::lock());
 
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
-    
+
     if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
         idType->setDeclaration( currentDeclaration() );
-    
+
     currentDeclaration()->setType(lastType());
   }
 
@@ -508,7 +517,7 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
   DeclarationBuilderBase::visitParameterDeclaration(node);
   if( node->expression ) {
     //Fill default-parameters
-    ClassFunctionDeclaration* function = currentDeclaration<ClassFunctionDeclaration>();
+    AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
     if( function ) {
       QString param;
       for( size_t token = node->expression->start_token; token != node->expression->end_token; ++token )

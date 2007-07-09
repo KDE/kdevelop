@@ -108,8 +108,8 @@ void UseBuilder::newUse(NameAST* name)
         ret = use;
 
         //Eventually upgrade the range to a smart-range
-        if( m_editor->smart() && !ret->smartRange() )
-          ret->setTextRange(m_editor->createRange(newRange));
+        /*if( m_editor->smart() && !ret->smartRange() )
+          ret->setTextRange(m_editor->createRange(newRange));*/
 
         break;
       }
@@ -125,7 +125,7 @@ void UseBuilder::newUse(NameAST* name)
     Use* newUse = new Use(use, currentContext());
 
     setEncountered(newUse);
-    
+
     if (declarations.count())
       declarations.first()->addUse(newUse);
     else
