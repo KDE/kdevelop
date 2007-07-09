@@ -222,6 +222,9 @@ public:
 //     QList<SvnStatusHolder> m_holderList;
     QMap< KUrl, SvnStatusHolder > m_holderMap;
 
+    bool contactRepository();
+    KUrl requestedUrl();
+
 protected:
     virtual void run();
     KUrl m_wcPath;

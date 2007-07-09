@@ -758,6 +758,15 @@ SvnStatusJob::SvnStatusJob( const KUrl &wcPath, const SvnRevision &rev,
     m_ignoreExternals = ignoreExternals;
 }
 
+bool SvnStatusJob::contactRepository()
+{
+    return m_update;
+}
+KUrl SvnStatusJob::requestedUrl()
+{
+    return m_wcPath;
+}
+
 void SvnStatusJob::run()
 {
     setTerminationEnabled(true);

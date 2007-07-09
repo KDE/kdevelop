@@ -139,6 +139,8 @@ Q_SIGNALS:
     void diffFetched( SvnKJobBase * );
     /// information result is available.
     void infoFetched( SvnKJobBase * );
+    /// status result is available.
+    void statusFetched( SvnKJobBase * );
 
 protected:
     /// Receive event from subversion threads. Events are for displaying UI widgets

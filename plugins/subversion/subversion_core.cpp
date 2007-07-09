@@ -422,6 +422,8 @@ void SubversionCore::slotResult( KJob* aJob )
         emit diffFetched( job );
     } else if( job->type() == SVN_INFO ){
         emit infoFetched( job );
+    } else if( job->type() == SVN_STATUS ){
+        emit statusFetched( job );
     }
     else {
         emit jobFinished( job );

@@ -1,0 +1,109 @@
+<ui version="4.0" >
+ <class>SvnStatusOptionDlg</class>
+ <widget class="QWidget" name="SvnStatusOptionDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>474</width>
+    <height>415</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Status Requested for:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="KLineEdit" name="urledit" >
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Specify revision</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="SvnRevisionWidget" native="1" name="revisionWidget" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QCheckBox" name="nonrecurse" >
+     <property name="text" >
+      <string>Non recursive</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QCheckBox" name="onlyInterests" >
+     <property name="text" >
+      <string>Retrieve only "interesting" entries (such as local modifications)</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QCheckBox" name="contactRepChk" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Contact repository and augment with repository informations</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" >
+    <widget class="QCheckBox" name="noignore" >
+     <property name="text" >
+      <string>Don't ignore svn:ignore</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" >
+    <widget class="QCheckBox" name="ignoreExternalsChk" >
+     <property name="text" >
+      <string>Ignore external items</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SvnRevisionWidget</class>
+   <extends>QWidget</extends>
+   <header>svn_revisionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

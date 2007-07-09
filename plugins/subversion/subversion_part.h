@@ -128,6 +128,7 @@ private:
     void pegDiff( const KUrl &path );
     void diffToHead( const KUrl &path );
     void diffToBase( const KUrl &path );
+    void svnStatus( const KUrl &wcPath );
 
 public:
     // SubversionPart internal methods
@@ -164,6 +165,7 @@ public Q_SLOTS:
     void ctxDiffHead();
     void ctxDiffBase();
     void ctxInfo();
+    void ctxStatus();
 
 private Q_SLOTS:
     void slotJobFinished( SvnKJobBase *job );

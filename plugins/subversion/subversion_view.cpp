@@ -18,6 +18,7 @@
 #include "svn_logviewwidgets.h"
 #include "svn_blamewidgets.h"
 #include "svn_revision.h"
+#include "svn_statuswidgets.h"
 // #include "ui_svnlogviewwidget.h"
 #include "ioutputview.h"
 #include <icore.h>
@@ -82,6 +83,8 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
              this, SLOT(printDiff(SvnKJobBase *)) );
     connect( d->m_part->svncore(), SIGNAL(infoFetched(SvnKJobBase*)),
              this, SLOT(printInfo(SvnKJobBase*)) );
+    connect( d->m_part->svncore(), SIGNAL(statusFetched(SvnKJobBase*)),
+             this, SLOT(printStatus(SvnKJobBase*)) );
     connect( d->m_part->svncore(), SIGNAL(jobFinished(SvnKJobBase*)),
              this, SLOT(slotJobFinished(SvnKJobBase*)) );
 
@@ -229,6 +232,27 @@ void KDevSubversionView::printInfo( SvnKJobBase* job )
     widget->setReadOnly( true );
     tab()->addTab( widget, "Information" );
     tab()->setCurrentIndex( tab()->indexOf(widget) );
+}
+
+void KDevSubversionView::printStatus( SvnKJobBase* job )
+{
+    if( job->error() ){
+        KMessageBox::error( this, job->smartError() );
+        return;
+    }
+    SvnStatusJob *thread = dynamic_cast<SvnStatusJob*>( job->svnThread() );
+    if( !thread ) return;
+    QMap< KUrl, SvnStatusHolder > map = thread->m_holderMap;
+
+    SvnStatusDisplayWidget *display =
+            new SvnStatusDisplayWidget( thread->requestedUrl(),
+                                        thread->contactRepository(),
+                                        tab() );
+    tab()->addTab( display, "Status" );
+    tab()->setCurrentIndex( tab()->indexOf(display) );
+
+    display->setResults( map );
+
 }
 
 void KDevSubversionView::slotJobFinished( SvnKJobBase *job )

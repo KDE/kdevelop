@@ -23,6 +23,7 @@
 #include "svn_checkoutwidgets.h"
 #include "svn_updatewidget.h"
 #include "svn_diffwidgets.h"
+#include "svn_statuswidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -612,6 +613,23 @@ void KDevSubversionPart::diffToBase( const KUrl &path )
 
     svncore()->spawnDiffThread( path, path, peg_rev, rev1, rev2, true, true, false, true );
 }
+void KDevSubversionPart::svnStatus( const KUrl &wcPath )
+{
+    SvnStatusOptionDlg dlg( wcPath , 0 );
+
+    if( dlg.exec() != QDialog::Accepted )
+        return;
+
+    SvnRevision rev = dlg.revision();
+    bool isRecurse = dlg.recurse();
+    bool getall = dlg.getAll();
+    bool update = dlg.contactRep();
+    bool noignore = dlg.noIgnore();
+    bool igExts = dlg.ignoreExternals();
+
+    svncore()->spawnStatusThread( wcPath, rev, isRecurse, getall, update, noignore, igExts );
+}
+
 SubversionCore* KDevSubversionPart::svncore()
 {
     return d->m_impl;
@@ -708,6 +726,10 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
 
             action = new QAction(i18n("Information..."), this);
             connect( action, SIGNAL(triggered()), this, SLOT(ctxInfo()) );
+            actions << action;
+
+            action = new QAction(i18n("Status..."), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
             actions << action;
 
             return qMakePair( QString("Subversion"), actions );
@@ -885,6 +907,10 @@ void KDevSubversionPart::ctxDiffBase()
 void KDevSubversionPart::ctxInfo()
 {
     vcsInfo( d->m_ctxUrl );
+}
+void KDevSubversionPart::ctxStatus()
+{
+    svnStatus( d->m_ctxUrl );
 }
 
 //////////////////////////////////////////////

@@ -29,6 +29,7 @@ set(kdevsubversion_PART_SRCS
     svn_updatewidget.cpp
     svn_diffwidgets.cpp
     svn_revisionwidget.cpp
+    svn_statuswidgets.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -44,6 +45,7 @@ set(kdevsubversion_PART_UI
     uiupdate_option_dlg.ui
     uidiff_option_dlg.ui
     svnrevisionwidget.ui
+    uistatus_option_dlg.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
