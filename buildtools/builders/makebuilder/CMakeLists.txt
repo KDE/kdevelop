@@ -18,7 +18,7 @@ set(kdevmakebuilder_LIB_SRCS
     makeitem.cpp
 )
 
-kde4_automoc(${kdevmakebuilder_LIB_SRCS})
+
 kde4_add_plugin(kdevmakebuilder ${kdevmakebuilder_LIB_SRCS})
 target_link_libraries(kdevmakebuilder
         ${KDE4_KDEUI_LIBS}
@@ -41,7 +41,7 @@ set( makebuilder_cfg_UI
     makeconfig.ui
 )
 
-kde4_automoc(${makebuilder_cfg_SRCS})
+
 kde4_add_ui_files( makebuilder_cfg_SRCS ${makebuilder_cfg_UI} )
 kde4_add_kcfg_files( makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_makebuilder ${makebuilder_cfg_SRCS} )

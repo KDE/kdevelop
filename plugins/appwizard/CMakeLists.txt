@@ -17,7 +17,7 @@ set(kdevappwizard_PART_UI
 )
 
 kde4_add_ui_files(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
-kde4_automoc(${kdevappwizard_PART_SRCS})
+
 kde4_add_plugin(kdevappwizard ${kdevappwizard_PART_SRCS})
 target_link_libraries(kdevappwizard
     ${KDE4_KDECORE_LIBS}

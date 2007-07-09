@@ -41,7 +41,7 @@ set(kdevcpplanguagesupport_PART_SRCS
 )
 endif(NOT WIN32)
 
-kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
+
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY} kdevcppduchainbuilder kdevcppexpressionparser kdevcpprpp

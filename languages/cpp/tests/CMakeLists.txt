@@ -13,7 +13,7 @@ include_directories(
 ########### next target ###############
 
 set(cppcodecompletiontest_SRCS test_cppcodecompletion.cpp ../codecompletioncontext.cpp ../stringhelpers.cpp)
-kde4_automoc(${cppcodecompletiontest_SRCS})
+
 
 kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})
 target_link_libraries(cppcodecompletiontest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY}

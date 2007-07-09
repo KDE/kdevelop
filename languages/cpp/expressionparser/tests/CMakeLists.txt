@@ -12,7 +12,7 @@ include_directories(
 ########### next target ###############
 
 set(expressionparsertest_SRCS test_expressionparser.cpp)
-kde4_automoc(${expressionparsertest_SRCS})
+
 
 kde4_add_unit_test(cppexpressionparsertest ${expressionparsertest_SRCS})
 target_link_libraries(cppexpressionparsertest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY}

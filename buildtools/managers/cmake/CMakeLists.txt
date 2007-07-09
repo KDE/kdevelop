@@ -34,19 +34,19 @@ set( cmakesettings_UI
 
 remove_definitions( -DQT_NO_STL )
 
-kde4_automoc(${cmakecommon_SRCS})
+
 kde4_add_kcfg_files( cmakecommon_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon ${KDE4_KDEUI_LIBS}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} )
 set_target_properties(kdevcmakecommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
-kde4_automoc(${cmakemanager_SRCS} )
+
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} kdevcmakecommon ${KDEVPLATFORM_PROJECT_LIBRARY})
 
-kde4_automoc(${cmakesettings_SRCS} )
+
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
 kde4_add_plugin( kcm_kdevcmake_settings ${cmakesettings_SRCS} )
 target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS}

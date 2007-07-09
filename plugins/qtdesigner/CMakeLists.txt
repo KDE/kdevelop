@@ -13,7 +13,7 @@ qtdesignerplugin.cpp
 qtdesignerdocument.cpp
 )
 
-kde4_automoc(${kdevqtdesigner_PART_SRCS})
+
 
 kde4_add_plugin(kdevqtdesigner ${kdevqtdesigner_PART_SRCS})
 
