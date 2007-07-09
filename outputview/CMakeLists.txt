@@ -11,7 +11,6 @@ set( outputviewinterfaces_LIB_SRCS
     outputmodel.cpp
     ioutputviewmodel.cpp
 )
-kde4_automoc( ${outputviewinterfaces_LIB_SRCS} )
 kde4_add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
 target_link_libraries(kdevplatformoutputview ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
 set_target_properties(kdevplatformoutputview PROPERTIES VERSION 4.0.0 SOVERSION 4)

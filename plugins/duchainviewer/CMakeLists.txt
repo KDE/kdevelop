@@ -18,7 +18,6 @@ set(kdevduchainview_PART_SRCS
     duchainview_part.cpp
 )
 
-kde4_automoc(${kdevduchainview_PART_SRCS})
 kde4_add_plugin(kdevduchainview ${kdevduchainview_PART_SRCS})
 target_link_libraries(kdevduchainview kdevplatformlanguage kdevplatforminterfaces kdevplatformeditor)
 

@@ -32,7 +32,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/functiondeclaration.cpp
 )
 
-kde4_automoc(${kdevplatformlanguage_LIB_SRCS})
 
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES}

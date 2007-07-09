@@ -49,7 +49,6 @@ set(kdevsubversion_PART_UI
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
-kde4_automoc(${kdevsubversion_PART_SRCS})
 kde4_add_plugin(kdevsubversion ${kdevsubversion_PART_SRCS})
 
 target_link_libraries(kdevsubversion

@@ -26,7 +26,6 @@ if (CVS)
 	)
 
 	set(cvstest_SRCS cvstest.cpp ../cvsjob.cpp ../cvsproxy.cpp)
-	kde4_automoc(kdevcvs-test ${cvstest_SRCS})
 	kde4_add_unit_test(kdevcvs-test ${cvstest_SRCS})
 	target_link_libraries(kdevcvs-test
 		${QT_QTTEST_LIBRARY}

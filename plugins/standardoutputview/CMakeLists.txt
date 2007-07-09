@@ -13,7 +13,6 @@ set(standardoutputview_LIB_SRCS
     outputwidget.cpp
 )
 
-kde4_automoc(${standardoutputview_LIB_SRCS})
 kde4_add_plugin(kdevstandardoutputview ${standardoutputview_LIB_SRCS})
 target_link_libraries(kdevstandardoutputview ${KDE4_KDECORE_LIBS}
     ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces kdevplatformutil kdevplatformoutputview)

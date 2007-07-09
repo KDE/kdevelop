@@ -23,7 +23,6 @@ set(sublime_LIB_SRCS
     sublimedefs.cpp
 )
 
-kde4_automoc(${sublime_LIB_SRCS})
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
 target_link_libraries(sublime ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
 set_target_properties(sublime PROPERTIES VERSION 4.0.0 SOVERSION 4)

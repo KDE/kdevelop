@@ -13,7 +13,6 @@ set(kdevgenericmanager_PART_SRCS
     genericmanager.cpp
 )
 
-kde4_automoc(${kdevgenericmanager_PART_SRCS})
 kde4_add_plugin(kdevgenericmanager ${kdevgenericmanager_PART_SRCS})
 target_link_libraries(kdevgenericmanager ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject )
 

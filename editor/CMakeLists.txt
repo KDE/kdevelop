@@ -11,7 +11,6 @@ set(kdevplatformeditor_LIB_SRCS
     editorintegratorstatic.cpp
 )
 
-kde4_automoc(${kdevplatformeditor_LIB_SRCS})
 
 kde4_add_library(kdevplatformeditor SHARED ${kdevplatformeditor_LIB_SRCS})
 target_link_libraries(kdevplatformeditor ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS})

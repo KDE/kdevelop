@@ -11,7 +11,6 @@ set(kdevplatformvcs_LIB_SRCS
     vcshelpers.cpp
 )
 
-kde4_automoc(${kdevplatformvcs_LIB_SRCS})
 
 kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
 target_link_libraries(kdevplatformvcs ${KDE4_KDECORE_LIBS}  )

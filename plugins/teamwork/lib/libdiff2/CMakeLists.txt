@@ -18,7 +18,6 @@ set(diff2_PART_SRCS
 	diffsettings.cpp
 	settingsbase.cpp )
 
-kde4_automoc(${diff2_PART_SRCS})
 
 kde4_add_library(diff2 ${diff2_PART_SRCS})
 
