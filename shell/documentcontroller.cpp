@@ -170,6 +170,8 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
     KUrl url = inputUrl;
 
+    bool emitLoaded = false;
+
     //get a part document
     if (!d->documents.contains(url))
     {
@@ -220,8 +222,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             d->documents[url] = new TextDocument(url, Core::self());
         else if( !d->documents.contains(url) )
             d->documents[url] = new PartDocument(url, Core::self());
-        if( d->documents.contains(url) )
-            emit documentLoaded( d->documents[url] );
+        emitLoaded = d->documents.contains(url);
     }
     IDocument *doc = d->documents[url];
 
@@ -254,12 +255,18 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     {
         uiController->activeSublimeWindow()->activateView(partView);
         Core::self()->partController()->setActivePart(doc->partForView(partView->widget()), partView->widget());
-        emit documentActivated( doc );
     }
     if( cursor.isValid() )
     {
         doc->setCursorPosition( cursor );
     }
+
+    // Deferred signals, wait until it's all ready first
+    if( emitLoaded )
+        emit documentLoaded( d->documents[url] );
+
+    if (activate == IDocumentController::ActivateOnOpen)
+        emit documentActivated( doc );
 
     return doc;
 }
