@@ -159,15 +159,19 @@ void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
     EditorIntegrator editor;
     SmartConverter sc(&editor, codeHighlighting());
 
-    foreach (TopDUContext* chain, DUChain::self()->chainsForDocument(doc->url()))
+    QList<TopDUContext*> chains = DUChain::self()->chainsForDocument(doc->url());
+
+    foreach (TopDUContext* chain, chains)
         sc.convertDUChain(chain);
+
+    if (chains.isEmpty())
+        language()->backgroundParser()->addDocument(doc->url());
 }
 
 void CppLanguageSupport::documentActivated(KDevelop::IDocument* doc)
 {
     kDebug( 9007 ) << "CppLanguageSupport::documentActivated" << endl;
     kDebug( 9007 ) << "adding document to bgparser" << endl;
-    language()->backgroundParser()->addDocument(doc->url());
 }
 
 void CppLanguageSupport::documentClosed(KDevelop::IDocument* doc)
