@@ -117,29 +117,21 @@ Range* EditorIntegrator::topRange( TopRangeType type )
 
   if (!data()->topRanges.contains(currentUrl()))
     data()->topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
-
-  // FIXME temporary until we get conversion working
-  if (data()->topRanges[currentUrl()][type] && !data()->topRanges[currentUrl()][type]->isSmartRange() && smart()) {
-    //delete data()->topRanges[currentUrl()][type];
-    data()->topRanges[currentUrl()][type] = 0L;
-  }
-
-  if (!data()->topRanges[currentUrl()][type])
-    if (currentDocument()) {
-      Range* newRange = data()->topRanges[currentUrl()][type] = createRange(currentDocument()->documentRange());
-      if (SmartInterface* iface = smart()) {
-        QMutexLocker lock(iface->smartMutex());
-        Q_ASSERT(newRange->isSmartRange());
-        iface->addHighlightToDocument( newRange->toSmartRange(), false );
-        newRange->toSmartRange()->addWatcher(data());
-      }
-
-    } else {
-      // FIXME...
-      data()->topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, INT_MAX));
+  
+  Range* newRange = 0;
+  if (currentDocument()) {
+    newRange = createRange(currentDocument()->documentRange());
+    if (SmartInterface* iface = smart()) {
+      QMutexLocker lock(iface->smartMutex());
+      Q_ASSERT(newRange->isSmartRange());
+      iface->addHighlightToDocument( newRange->toSmartRange(), false );
     }
-
-  d->m_currentRange = data()->topRanges[currentUrl()][type];
+   } else {
+     // FIXME...
+     newRange = createRange(Range(0,0, INT_MAX, INT_MAX));
+   }
+  
+  d->m_currentRange = newRange;
   return d->m_currentRange;
 }
 
