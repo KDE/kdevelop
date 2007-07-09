@@ -161,7 +161,11 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
     }
 
     DUChainPointer<Type>& operator= ( Type* rhs ) {
-      d = rhs->weakPointer();
+      if( rhs )
+        d = rhs->weakPointer();
+      else
+        d = 0;
+      
       return *this;
     }
     
