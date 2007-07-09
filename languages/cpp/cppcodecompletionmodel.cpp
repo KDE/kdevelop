@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <kiconloader.h>
 
 #include "duchainbuilder/cppduchain.h"
 
@@ -160,8 +161,6 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       break;
 
     case Qt::DecorationRole:
-      break;
-
     case CompletionRole: {
       CompletionProperties p;
       if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(dec)) {
@@ -245,6 +244,9 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
             // TODO
             break;
         }
+
+        if( dec->kind() == Declaration::Instance )
+          p |= Variable;
       }
 
       /*
@@ -253,7 +255,75 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       GlobalScope     = 0x200000,
       */
 
-      return (int)p;
+      if( role == CompletionRole ) {
+        return (int)p;
+      } else {
+        ///Assign mini-icons
+        QString iconName;
+
+        if( (p & Variable) )
+          iconName = "CVprotected_var";
+        else if( (p & Variable) && (p & Protected) )
+          iconName = "CVprotected_var";
+        else if( (p & Variable) && (p & Private) )
+          iconName = "CVprivate_var";
+        else if( (p & Union) && (p & Protected) )
+          iconName = "protected_union";
+        else if( (p & Enum) && (p & Protected) )
+          iconName = "protected_enum";
+        else if( (p & Struct) && (p & Private) )
+          iconName = "private_struct";
+        else if( (p & Slot) && (p & Protected) )
+          iconName = "CVprotected_slot";
+        else if( (p & Enum) && (p & Private) )
+          iconName = "private_enum";
+        else if( (p & Signal) && (p & Protected) )
+          iconName = "CVprotected_signal";
+        else if( (p & Slot) && (p & Private) )
+          iconName = "CVprivate_slot";
+        else if( (p & Class) && (p & Protected) )
+          iconName = "protected_class";
+        else if( (p & Class) && (p & Private) )
+          iconName = "private_class";
+        else if( (p & Union) && (p & Private) )
+          iconName = "private_union";
+/*        else if( (p & TypeDef) && ((p & Const) ||  (p & Volatile)) )
+          iconName = "CVtypedef";*/
+        else if( (p & Function) && (p & Protected) )
+          iconName = "protected_function";
+        else if( (p & Function) && (p & Private) )
+          iconName = "private_function";
+        else if( p & Signal )
+          iconName = "signal";
+        else if( p & Variable )
+          iconName = "CVpublic_var";
+        else if( p & Enum )
+          iconName = "enum";
+        else if( p & Class )
+          iconName = "class";
+        else if( p & Slot )
+          iconName = "CVpublic_slot";
+        else if( p & Union )
+          iconName = "union";
+/*        else if( p & Typedef )
+          iconName = "typedef";*/
+        else if( p & Function )
+          iconName = "function";
+        else if( p & Struct )
+          iconName = "struct";
+        else if( p & Protected )
+          iconName = "protected_field";
+        else if( p & Private )
+          iconName = "private_field";
+        else
+          iconName = "field";
+        
+        if( index.column() == 0 ) {
+          return QVariant( KIconLoader::global()->loadIcon(iconName, K3Icon::Small) );
+        }
+        break;
+
+      }
     }
 
     case ScopeIndex:

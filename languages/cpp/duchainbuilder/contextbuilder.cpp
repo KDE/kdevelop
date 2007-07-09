@@ -74,11 +74,8 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = DUChain::self()->chainForDocument(file->identity());
 
-    if( topLevelContext ) {
-      ///@todo fix the revision-stuff
-    }
-
     if (topLevelContext) {
+      kDebug() << "ContextBuilder::buildContexts: recompiling" << endl;
       m_recompiling = true;
 
       Q_ASSERT(topLevelContext->textRangePtr());
@@ -94,6 +91,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
 
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::LexedFile*>(file.data() ) );
     } else {
+      kDebug() << "ContextBuilder::buildContexts: compiling" << endl;
       m_recompiling = false;
 
       Q_ASSERT(m_compilingContexts);
