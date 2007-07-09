@@ -25,7 +25,7 @@
 
 using namespace Cpp;
 
-ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion ) : m_declaration(dynamic_cast<ClassFunctionDeclaration*>(decl)), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
+ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
   if( decl )
     m_type = dynamic_cast<CppFunctionType*>( decl->abstractType().data());
 }
@@ -33,7 +33,8 @@ ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion 
 void ViableFunction::matchParameters( const OverloadResolver::ParameterList& params, bool partial ) {
   if( !isValid() )
     return;
-  if( params.parameters.size() + m_declaration->defaultParameters().size() < m_type->arguments().size() && !partial )
+  AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration);
+  if( params.parameters.size() + functionDecl->defaultParameters().size() < m_type->arguments().size() && !partial )
     return; //Not enough parameters + default-parameters
   if( params.parameters.size() > m_type->arguments().size() )
     return; //Too many parameters

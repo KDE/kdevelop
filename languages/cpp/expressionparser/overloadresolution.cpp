@@ -44,9 +44,9 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
       {
         CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>(*it);
-        Q_ASSERT(functionDeclaration);
+        //Q_ASSERT();
         
-        if( functionDeclaration->isConstructor() )
+        if( functionDeclaration && functionDeclaration->isConstructor() )
         {
           if( function->arguments().size() >= params.parameters.size() )
           {
@@ -137,7 +137,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   }
 
   if( bestViableFunction.isViable() )
-    return bestViableFunction.declaration();
+    return dynamic_cast<Declaration*>(bestViableFunction.declaration());
   else
     return 0;
 }

@@ -21,6 +21,7 @@
 #include "cpptypes.h"
 
 #include <classfunctiondeclaration.h>
+#include <abstractfunctiondeclaration.h>
 
 using namespace KDevelop;
 
@@ -382,7 +383,9 @@ QString CppTypeAliasType::mangled() const
 
 QString CppFunctionType::mangled() const
 {
-  bool constructor = declaration() && declaration()->isConstructor();
+  ClassFunctionDeclaration* classFunctionDecl = dynamic_cast<ClassFunctionDeclaration*>(declaration());
+
+  bool constructor = classFunctionDecl && classFunctionDecl->isConstructor();
 
   QualifiedIdentifier id = identifier();
 
@@ -399,16 +402,6 @@ QString CppFunctionType::mangled() const
       ret += "?";
 
   return ret;
-}
-
-ClassFunctionDeclaration* CppFunctionType::declaration() const
-{
-  return static_cast<ClassFunctionDeclaration*>(IdentifiedType::declaration());
-}
-
-void CppFunctionType::setDeclaration(ClassFunctionDeclaration* declaration)
-{
-  IdentifiedType::setDeclaration(declaration);
 }
 
 QString CppArrayType::mangled() const

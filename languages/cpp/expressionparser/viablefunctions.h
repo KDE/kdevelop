@@ -25,7 +25,7 @@
 
 
 namespace KDevelop  {
-  class ClassFunctionDeclaration;
+  class Declaration;
 }
 
 ///The here defined class is about finding best viable functions as defined in iso c++ draft 13.3.3
@@ -62,13 +62,13 @@ namespace Cpp {
      * */
     bool isViable() const;
 
-    ClassFunctionDeclaration* declaration() const {
+    Declaration* declaration() const {
       return m_declaration;
     }
     
     private:
     QList<int> m_parameterConversions;
-    ClassFunctionDeclaration* m_declaration;
+    Declaration* m_declaration;
     CppFunctionType* m_type;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };  

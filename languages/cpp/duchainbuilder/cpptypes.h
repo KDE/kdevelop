@@ -35,7 +35,6 @@ namespace KDevelop
 {
 class DUContext;
 class Declaration;
-class ClassFunctionDeclaration;
 }
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppCVType
@@ -120,9 +119,8 @@ class KDEVCPPDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionTy
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
 
-  KDevelop::ClassFunctionDeclaration* declaration() const;
-  void setDeclaration(KDevelop::ClassFunctionDeclaration* declaration);
-
+  ///Declarations of this class(@see KDevelop::IdentifiedType::declaration()) are guaranteed to be based on AbstractFunctionDeclaration
+  
   virtual QString toString() const;
 
   ///@todo implement these

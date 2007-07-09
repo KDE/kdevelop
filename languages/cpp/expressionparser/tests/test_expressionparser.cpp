@@ -291,7 +291,7 @@ void TestExpressionParser::testTypeConversion() {
   QCOMPARE(function->returnType()->toString(), QString("int"));
 
   Declaration* testDecl = c->localDeclarations()[1];
-  ClassFunctionDeclaration* functionDecl = dynamic_cast<ClassFunctionDeclaration*>(testDecl);
+  AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(testDecl);
   QVERIFY(functionDecl);
 
   QVERIFY(functionDecl->defaultParameters().size() == 1);

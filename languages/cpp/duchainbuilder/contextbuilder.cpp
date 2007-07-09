@@ -356,9 +356,9 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
           readLock.unlock();
           DUChainWriteLocker writeLock(DUChain::lock());
 
-          //Upgrade to a smart-range
+/*          //Upgrade to a smart-range
           if( !ret->smartRange() && m_editor->smart() )
-            ret->setTextRange(m_editor->createRange(range));
+            ret->setTextRange(m_editor->createRange(range));*/
           
           ret->clearUsingNamespaces();
           ret->clearImportedParentContexts();
