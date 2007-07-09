@@ -177,7 +177,7 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
   typedef DUChainPointer<Declaration> DeclarationPointer;
   typedef DUChainPointer<Use> UsePointer;
   typedef DUChainPointer<Definition> DefinitionPointer;
-  typedef DUChainPointer<ClassFunctionDeclaration> FunctionDeclarationPointer;
+  typedef DUChainPointer<AbstractFunctionDeclaration> FunctionDeclarationPointer;
 }
 
 #endif
