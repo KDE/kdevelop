@@ -126,7 +126,7 @@ bool DUChainLock::lockForWrite()
   bool locked = false;
 
   // 10 second timeout...
-  while (d->m_writer != 0 && !d->m_readers.empty() && currentTime < 1000) {
+  while (d->m_writer != 0 && !d->m_readers.empty() && currentTime < 10000) {
     lock.unlock();
     usleep(10000);
     currentTime++;
