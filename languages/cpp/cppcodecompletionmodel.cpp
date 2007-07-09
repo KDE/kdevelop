@@ -101,6 +101,21 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     case Qt::DisplayRole:
       switch (index.column()) {
         case Prefix:
+          if( dec->kind() == Declaration::Type && !dec->type<CppFunctionType>() ) {
+            if (CppClassType::Ptr classType =  dec->type<CppClassType>())
+              switch (classType->classType()) {
+                case CppClassType::Class:
+                  return "class";
+                  break;
+                case CppClassType::Struct:
+                  return "struct";
+                  break;
+                case CppClassType::Union:
+                  return "union";
+                  break;
+              }
+            return QVariant();
+          }
           if (dec->abstractType()) {
             if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
               if (functionType->returnType())
@@ -318,7 +333,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         else
           iconName = "field";
         
-        if( index.column() == 0 ) {
+        if( index.column() == Icon ) {
           lock.unlock();
           return QVariant( KIconLoader::global()->loadIcon(iconName, K3Icon::Small) );
         }
