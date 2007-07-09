@@ -63,7 +63,7 @@ else(KDEVPG_FOUND)
     include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/generated )
 endif(KDEVPG_FOUND)
 
-kde4_automoc(${kdevqmakeparser_SRCS})
+
 kde4_add_library(kdevqmakeparser SHARED ${kdevqmakeparser_SRCS})
 target_link_libraries(kdevqmakeparser ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBS})
 set_target_properties(kdevqmakeparser PROPERTIES VERSION 1.0.0 SOVERSION 1 )

@@ -16,7 +16,7 @@ set(qmakebuilder_LIB_SRCS
     qmakebuilder.cpp
 )
 
-kde4_automoc(${qmakebuilder_LIB_SRCS})
+
 kde4_add_plugin(kdevqmakebuilder ${qmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevqmakebuilder
@@ -39,7 +39,7 @@ set( qmakebuilder_cfg_UI
     qmakeconfig.ui
 )
 
-kde4_automoc(${qmakebuilder_cfg_SRCS})
+
 kde4_add_ui_files( qmakebuilder_cfg_SRCS ${qmakebuilder_cfg_UI} )
 kde4_add_kcfg_files( qmakebuilder_cfg_SRCS qmakebuilderconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_qmakebuilder ${qmakebuilder_cfg_SRCS} )
