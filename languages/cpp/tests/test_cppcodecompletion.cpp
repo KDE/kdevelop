@@ -359,8 +359,7 @@ void TestCppCodeCompletion::testInclude() {
   //QCOMPARE(result.type->toString(), QString("Heinz"));
   
   
-  ///@todo fix the parser so this works
-/*  lock.unlock();
+  lock.unlock();
   result = parser.evaluateType( "globalFunction(globalHeinz)", c );
   lock.lock();
   
@@ -376,7 +375,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.instance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Erna"));*/
+  QCOMPARE(result.type->toString(), QString("Erna"));
     
   release(c);
 }
