@@ -86,7 +86,7 @@ namespace TypeUtils {
   }
 
   template<class Type>
-  KDEVCPPEXPRESSIONPARSER_EXPORT bool isType( AbstractType* t ) {
+  bool isType( AbstractType* t ) {
     return (bool)dynamic_cast<Type>( t );
   }
 
