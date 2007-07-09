@@ -3546,7 +3546,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
   session->token_stream->rewind(saved_pos);
 
  L_no_rewind:
-  if (!expr && parseSimpleTypeSpecifier(typeSpec)
+  if (!expr && parseSimpleTypeSpecifier(typeSpec,true)
       && session->token_stream->lookAhead() == '(')
     {
       session->token_stream->nextToken(); // skip '('
