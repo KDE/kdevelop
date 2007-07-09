@@ -319,6 +319,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           iconName = "field";
         
         if( index.column() == 0 ) {
+          lock.unlock();
           return QVariant( KIconLoader::global()->loadIcon(iconName, K3Icon::Small) );
         }
         break;
