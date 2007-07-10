@@ -3,12 +3,6 @@ add_subdirectory(rpp)
 add_subdirectory(tests)
 add_subdirectory(headergen)
 
-include_directories(
-    ${KDEVPLATFORM_INCLUDE_DIR}/language
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
-)
-
-
 ########### next target ###############
 
 set(kdevcppparser_LIB_SRCS

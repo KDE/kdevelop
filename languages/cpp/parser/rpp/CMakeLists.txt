@@ -1,4 +1,3 @@
-include_directories( ${CMAKE_SOURCE_DIR}/languages/cpp/parser )
 
 add_subdirectory( tests )
 

@@ -1,8 +1,4 @@
 
-include_directories(
-	${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
-	${KDEVPLATFORM_INCLUDE_DIR}/language
-	${CMAKE_SOURCE_DIR}/languages/cpp/parser )
 
 set(headergen_SRCS
     main.cpp

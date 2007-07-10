@@ -25,7 +25,7 @@ namespace QMake
 {
 
 
-Lexer::Lexer( qmake::parser* _parser, const QString& content ):
+Lexer::Lexer( parser* _parser, const QString& content ):
         mContent(content), mParser(_parser)
 {
 }
@@ -42,7 +42,7 @@ void Lexer::setState( int state )
 
 int Lexer::getNextTokenKind() const
 {
-    return qmake::parser::Token_EOF;
+    return parser::Token_EOF;
 }
 
 std::size_t Lexer::getTokenBegin() const

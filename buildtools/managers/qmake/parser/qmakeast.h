@@ -25,8 +25,6 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 
-#include "qmakeparserexport.h"
-
 //@TODO Port to default constructors and use the set* API to set the various contents; complex constructors are unreadable
 //@TODO move the code from qmakeast.cpp into multiple files, move all code in this header to .cpp
 
@@ -34,7 +32,7 @@ namespace QMake
 {
     class Driver;
 
-    class QMAKEPARSER_EXPORT AST
+    class AST
     {
         public:
             explicit AST( AST* parent = 0 );
@@ -52,7 +50,7 @@ namespace QMake
     };
 
 
-    class QMAKEPARSER_EXPORT StatementAST : public AST
+    class StatementAST : public AST
     {
         public:
             explicit StatementAST( AST* parent = 0 );
@@ -61,7 +59,7 @@ namespace QMake
     /**
      * Represents a QMake Project file
      */
-    class QMAKEPARSER_EXPORT ProjectAST : public AST
+    class ProjectAST : public AST
     {
         public:
             enum LineEnding {
@@ -95,7 +93,7 @@ namespace QMake
 
     };
 
-    class QMAKEPARSER_EXPORT AssignmentAST : public StatementAST
+    class AssignmentAST : public StatementAST
     {
         public:
             explicit AssignmentAST( AST* parent = 0 );
@@ -118,14 +116,14 @@ namespace QMake
             QString m_lineend;
     };
 
-    class QMAKEPARSER_EXPORT NewlineAST : public StatementAST
+    class NewlineAST : public StatementAST
     {
         public:
             explicit NewlineAST( AST* parent = 0 );
             void writeToString( QString& buf ) const;
     };
 
-    class QMAKEPARSER_EXPORT CommentAST : public StatementAST
+    class CommentAST : public StatementAST
     {
         public:
             explicit CommentAST( AST* parent = 0 );
@@ -136,7 +134,7 @@ namespace QMake
             QString m_comment;
     };
 
-    class QMAKEPARSER_EXPORT ScopeBodyAST: public AST
+    class ScopeBodyAST: public AST
     {
         public:
             explicit ScopeBodyAST( AST* parent = 0 );
@@ -157,7 +155,7 @@ namespace QMake
             QString m_end;
     };
 
-    class QMAKEPARSER_EXPORT ScopeAST : public StatementAST
+    class ScopeAST : public StatementAST
     {
         public:
             explicit ScopeAST( AST* parent = 0 );
@@ -172,7 +170,7 @@ namespace QMake
             QString m_lineend;
     };
 
-    class QMAKEPARSER_EXPORT FunctionCallAST : public ScopeAST
+    class FunctionCallAST : public ScopeAST
     {
         public:
             explicit FunctionCallAST( AST* parent = 0 );
@@ -196,7 +194,7 @@ namespace QMake
     };
 
 
-    class QMAKEPARSER_EXPORT SimpleScopeAST : public ScopeAST
+    class SimpleScopeAST : public ScopeAST
     {
         public:
             explicit SimpleScopeAST( AST* parent = 0);
@@ -208,7 +206,7 @@ namespace QMake
             QString m_scopeName;
     };
 
-    class QMAKEPARSER_EXPORT OrAST : public ScopeAST
+    class OrAST : public ScopeAST
     {
         public:
             explicit OrAST( AST* parent = 0 );

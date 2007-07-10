@@ -1,13 +1,7 @@
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/languages/cpp/expressionparser
-    ${CMAKE_SOURCE_DIR}/languages/cpp/parser
-    ${CMAKE_SOURCE_DIR}/languages/cpp/duchainbuilder
     ${CMAKE_SOURCE_DIR}/languages/cpp
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/editor
-    ${KDEVPLATFORM_INCLUDE_DIR}/language
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
 )
 
 ########### next target ###############

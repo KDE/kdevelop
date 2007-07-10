@@ -30,7 +30,6 @@
 [:
 
 
-#include "qmakeparserexport.h"
 #include "kdebug.h"
 #include <QtCore/QString>
 
@@ -103,7 +102,7 @@ namespace QMake
 #include "qmakelexer.h"
 #include <kdebug.h>
 
-namespace qmake
+namespace QMake
 {
 
 void parser::tokenize( const QString& contents )

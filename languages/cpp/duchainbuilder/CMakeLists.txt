@@ -3,14 +3,7 @@ add_subdirectory(tests)
 
 include_directories(
     ${CMAKE_TOP_BUILD_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/language
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
-    ${KDEVPLATFORM_INCLUDE_DIR}/editor
     ${CMAKE_SOURCE_DIR}/languages/cpp
-    ${CMAKE_SOURCE_DIR}/languages/cpp/parser
 )
 
 ########### next target ###############

@@ -18,16 +18,15 @@
  * 02110-1301, USA.
  */
 
-#include "qmakeparserexport.h"
 #include "qmake_parser.h"
 class QString;
 
 namespace QMake
 {
 
-class QMAKEPARSER_EXPORT Lexer {
+class Lexer {
 public:
-    Lexer(qmake::parser* _parser, const QString& contents);
+    Lexer(parser* _parser, const QString& contents);
 
     int getNextTokenKind() const;
     std::size_t getTokenBegin() const;
@@ -35,7 +34,7 @@ public:
 
 private:
     QString mContent;
-    qmake::parser* mParser;
+    parser* mParser;
     int state() const;
     void setState(int state);
 

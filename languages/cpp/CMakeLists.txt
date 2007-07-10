@@ -1,11 +1,6 @@
 
-add_subdirectory(parser)
-add_subdirectory(duchainbuilder)
-add_subdirectory(app_templates)
-add_subdirectory(expressionparser)
-add_subdirectory(tests)
-
-include_directories(${CMAKE_TOP_BUILD_DIR} ${KDEVPLATFORM_INCLUDE_DIR}
+include_directories(${CMAKE_TOP_BUILD_DIR}
+    ${KDE4_INCLUDE_DIR}/threadweaver
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
     ${KDEVPLATFORM_INCLUDE_DIR}/editor
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
@@ -19,6 +14,11 @@ include_directories(${CMAKE_TOP_BUILD_DIR} ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain/viewer
 )
 
+add_subdirectory(parser)
+add_subdirectory(duchainbuilder)
+add_subdirectory(app_templates)
+add_subdirectory(expressionparser)
+add_subdirectory(tests)
 
 ########### next target ###############
 
