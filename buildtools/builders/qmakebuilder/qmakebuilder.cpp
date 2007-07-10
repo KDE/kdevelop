@@ -38,7 +38,6 @@
 #include <QtDesigner/QExtensionFactory>
 
 #include <kgenericfactory.h>
-#include <k3process.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdialog.h>
