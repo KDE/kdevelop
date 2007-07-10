@@ -29,14 +29,14 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpphighlighting.cpp
     cppcodecompletion.cpp
     cppcodecompletionmodel.cpp
+    codecompletioncontext.cpp
+    stringhelpers.cpp
 )
 
 if(NOT WIN32)
 set(kdevcpplanguagesupport_PART_SRCS
     ${kdevcpplanguagesupport_PART_SRCS}
     includepathresolver.cpp
-    codecompletioncontext.cpp
-    stringhelpers.cpp
     setuphelpers.cpp
 )
 endif(NOT WIN32)
