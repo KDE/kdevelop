@@ -9,10 +9,10 @@
 #include <kdev-pg-allocator.h>
 #include <kdev-pg-token-stream.h>
 
-namespace qmake
+namespace QMake
   {
 
-  class KDEVPG_EXPORT parser
+  class parser
     {
 
     public:
@@ -145,7 +145,7 @@ namespace qmake
       bool parse_stmt(stmt_ast **yynode);
     };
 
-} // end of namespace qmake
+} // end of namespace QMake
 
 #endif
 

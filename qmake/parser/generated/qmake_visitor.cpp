@@ -3,7 +3,7 @@
 
 #include "qmake_visitor.h"
 
-namespace qmake
+namespace QMake
   {
 
   visitor::parser_fun_t visitor::_S_parser_table[] =  {
@@ -11,6 +11,6 @@ namespace qmake
         reinterpret_cast<parser_fun_t>(&visitor::visit_stmt)
       }; // _S_parser_table[]
 
-} // end of namespace qmake
+} // end of namespace QMake
 
 

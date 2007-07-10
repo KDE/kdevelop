@@ -3,7 +3,7 @@
 
 #include "qmake_default_visitor.h"
 
-namespace qmake
+namespace QMake
   {
 
   void default_visitor::visit_project(project_ast *node)
@@ -26,6 +26,6 @@ namespace qmake
 {}
 
 
-} // end of namespace qmake
+} // end of namespace QMake
 
 

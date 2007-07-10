@@ -6,10 +6,10 @@
 
 #include "qmake_visitor.h"
 
-namespace qmake
+namespace QMake
   {
 
-  class KDEVPG_EXPORT default_visitor:  public visitor
+  class default_visitor:  public visitor
     {
 
     public:
@@ -17,7 +17,7 @@ namespace qmake
       virtual void visit_stmt(stmt_ast *node);
     };
 
-} // end of namespace qmake
+} // end of namespace QMake
 
 #endif
 
