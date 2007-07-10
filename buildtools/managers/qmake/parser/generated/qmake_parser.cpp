@@ -7,7 +7,7 @@
 #include "qmakelexer.h"
 #include <kdebug.h>
 
-namespace qmake
+namespace QMake
   {
 
   void parser::tokenize( const QString& contents )
@@ -82,7 +82,7 @@ namespace qmake
 } // end of namespace QMake
 
 
-namespace qmake
+namespace QMake
   {
 
   bool parser::parse_project(project_ast **yynode)
@@ -150,6 +150,6 @@ namespace qmake
   }
 
 
-} // end of namespace qmake
+} // end of namespace QMake
 
 

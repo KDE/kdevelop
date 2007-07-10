@@ -6,10 +6,10 @@
 
 #include "qmake_ast.h"
 
-namespace qmake
+namespace QMake
   {
 
-  class KDEVPG_EXPORT visitor
+  class visitor
     {
       typedef void (visitor::*parser_fun_t)(ast_node *);
       static parser_fun_t _S_parser_table[];
@@ -34,7 +34,7 @@ namespace qmake
 
   ;
 
-} // end of namespace qmake
+} // end of namespace QMake
 
 #endif
 

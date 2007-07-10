@@ -9,22 +9,19 @@
 
 
 
-#include "qmakeparserexport.h"
 #include "kdebug.h"
 #include <QtCore/QString>
 
 namespace QMake
   {
-
   class Lexer;
 }
 
 
-namespace qmake
+namespace QMake
   {
 
   struct project_ast;
-
   struct stmt_ast;
 
 
@@ -62,7 +59,7 @@ namespace qmake
 
 
 
-} // end of namespace qmake
+} // end of namespace QMake
 
 #endif
 
