@@ -60,21 +60,21 @@ void Driver::setDebug( bool debug )
 }
 bool Driver::parse(QMake::ProjectAST*)
 {
-    qmake::parser::token_stream_type token_stream;
-    qmake::parser::memory_pool_type memory_pool;
+    parser::token_stream_type token_stream;
+    parser::memory_pool_type memory_pool;
 
-    qmake::parser qmakeparser;
+    parser qmakeparser;
     qmakeparser.set_token_stream(&token_stream);
     qmakeparser.set_memory_pool(&memory_pool);
 
     qmakeparser.tokenize(mContent);
-    qmake::project_ast* ast = 0;
+    project_ast* ast = 0;
     bool matched = qmakeparser.parse_project(&ast);
     if( matched )
     {
     }else
     {
-        qmakeparser.yy_expected_symbol(qmake::ast_node::Kind_project, "project");
+        qmakeparser.yy_expected_symbol(ast_node::Kind_project, "project");
     }
     return matched;
 }
