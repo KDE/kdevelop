@@ -12,7 +12,11 @@
 
 #include <QFileInfo>
 
+#ifdef Q_WS_WIN
+#include <kzip.h>
+#else
 #include <ktar.h>
+#endif //Q_WS_WIN
 #include <kurl.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
