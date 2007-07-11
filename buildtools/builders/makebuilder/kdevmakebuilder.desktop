@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDevMakeBuilder
 Name[da]=KDevelop MakeBuilder
+Name[ne]=केडीई विकास निर्माण विकासकर्ता
 Name[sv]=KDevelop Make-byggverktyg
 Name[x-test]=xxKDevMakeBuilderxx
 Comment=KDevelop Make Builder
