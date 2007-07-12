@@ -72,13 +72,20 @@ namespace QMake
 -- List of defined tokens
 -----------------------------------------------------------
 
-%token VARNAME ("varname"), VARVALUE("varvalue"), CONT("cont"), NEWLINE("newline"),
-       FUNCTIONNAME("functionname"),COMMA("comma"),DOUBLEDOLLAR("doubledollar"),
-       SINGLEDOLLAR("singledollar"),LBRACKET("lbracket"),RBRACKET("rbracket"),
-       LBRACE("lbrace"),RBRACE("rbrace"),LPAREN("lparen"),RPAREN("rparen"),
-       PLUSEQ("pluseq"),EQ("eq"),MINUSEQ("minuseq"),STAREQ("stareq"),TILDEEQ("tildeeq"),
-       COLON("colon"), COMMENT("comment"), SCOPENAME("scopename"),
-       QUOTEDVARVALUE("quotedvarvalue"), QUOTE("quote") ;;
+%token LBRACKET("lbracket"),RBRACKET("rbracket"),
+       LBRACE("lbrace"),RBRACE("rbrace"),LPAREN("lparen"),RPAREN("rparen") ;;
+
+%token PLUSEQ("pluseq"),EQUAL("equal"),MINUSEQ("minuseq"),STAREQ("stareq"),
+       TILDEEQ("tildeeq") ;;
+
+%token COLON("colon"), COMMA("comma"), CONT("cont"),
+       NEWLINE("newline"), DOUBLEDOLLAR("doubledollar"),
+       SINGLEDOLLAR("singledollar") ;;
+
+%token IDENTIFIER("identifier"), QUOTEDIDENTIFIER("quotedidentifier"),
+       QUOTEDSPACE("quotedspace") ;;
+
+%token ERROR("error") ;;
 
 
 -- token that makes the parser fail in any case:
@@ -86,11 +93,9 @@ namespace QMake
 
 -- The actual grammar starts here.
 
-   ( #stmt = stmt NEWLINE )*
+   ( NEWLINE )*
 -> project ;;
 
-   0
--> stmt ;;
 
 -----------------------------------------------------------------
 -- Code segments copied to the implementation (.cpp) file.

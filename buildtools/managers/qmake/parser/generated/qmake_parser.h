@@ -76,12 +76,12 @@ namespace QMake
       {
         Token_COLON =  1000,
         Token_COMMA =  1001,
-        Token_COMMENT =  1002,
-        Token_CONT =  1003,
-        Token_DOUBLEDOLLAR =  1004,
-        Token_EOF =  1005,
-        Token_EQ =  1006,
-        Token_FUNCTIONNAME =  1007,
+        Token_CONT =  1002,
+        Token_DOUBLEDOLLAR =  1003,
+        Token_EOF =  1004,
+        Token_EQUAL =  1005,
+        Token_ERROR =  1006,
+        Token_IDENTIFIER =  1007,
         Token_INVALID =  1008,
         Token_LBRACE =  1009,
         Token_LBRACKET =  1010,
@@ -89,17 +89,14 @@ namespace QMake
         Token_MINUSEQ =  1012,
         Token_NEWLINE =  1013,
         Token_PLUSEQ =  1014,
-        Token_QUOTE =  1015,
-        Token_QUOTEDVARVALUE =  1016,
+        Token_QUOTEDIDENTIFIER =  1015,
+        Token_QUOTEDSPACE =  1016,
         Token_RBRACE =  1017,
         Token_RBRACKET =  1018,
         Token_RPAREN =  1019,
-        Token_SCOPENAME =  1020,
-        Token_SINGLEDOLLAR =  1021,
-        Token_STAREQ =  1022,
-        Token_TILDEEQ =  1023,
-        Token_VARNAME =  1024,
-        Token_VARVALUE =  1025,
+        Token_SINGLEDOLLAR =  1020,
+        Token_STAREQ =  1021,
+        Token_TILDEEQ =  1022,
         token_type_size
       }; // token_type_enum
 
@@ -142,7 +139,6 @@ namespace QMake
       {}
 
       bool parse_project(project_ast **yynode);
-      bool parse_stmt(stmt_ast **yynode);
     };
 
 } // end of namespace QMake

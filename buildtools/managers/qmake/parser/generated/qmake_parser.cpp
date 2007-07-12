@@ -95,16 +95,6 @@ namespace QMake
       {
         while  (yytoken ==  Token_NEWLINE)
           {
-            stmt_ast *__node_0 =  0;
-
-            if  (!parse_stmt(&__node_0))
-              {
-                yy_expected_symbol(ast_node::Kind_stmt,  "stmt");
-                return  false;
-              }
-
-            (*yynode)->stmt_sequence =  snoc((*yynode)->stmt_sequence,  __node_0,  memory_pool);
-
             if  (yytoken !=  Token_NEWLINE)
               {
                 yy_expected_token(yytoken,  Token_NEWLINE,  "newline");
@@ -121,24 +111,6 @@ namespace QMake
           }
       }
 
-    else
-      {
-        return  false;
-      }
-
-    (*yynode)->end_token =  token_stream->index() -  1;
-
-    return  true;
-  }
-
-  bool parser::parse_stmt(stmt_ast **yynode)
-  {
-    *yynode =  create<stmt_ast>();
-
-    (*yynode)->start_token =  token_stream->index() -  1;
-
-    if  (true /*epsilon*/ ||  yytoken ==  Token_NEWLINE)
-    {}
     else
       {
         return  false;
