@@ -41,13 +41,13 @@ private:
     parser* mParser;
     int curpos;
     int mContentSize;
-    kdev_pg_location_table* mLocationTable;
     std::size_t mTokenBegin;
     std::size_t mTokenEnd;
 
     int state() const;
     void setState(int state);
 
+    bool isIdOrValueCharacter(QChar* c);
     bool isIdentifierCharacter(QChar* c);
 
     int mState;

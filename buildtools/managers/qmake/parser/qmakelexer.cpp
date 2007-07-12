@@ -32,7 +32,6 @@ namespace QMake
 Lexer::Lexer( parser* _parser, const QString& content ):
         mContent(content), mParser(_parser),
         curpos(0), mContentSize(mContent.size()),
-        mLocationTable(mParser->token_stream->location_table()),
         mTokenBegin(0), mTokenEnd(0)
 {
 }
@@ -80,18 +79,19 @@ int Lexer::getNextTokenKind()
     }
 
     mTokenBegin = curpos;
-    if( isIdentifierCharacter(it) )
+    if( isIdOrValueCharacter(it) )
     {
         token = parser::Token_IDENTIFIER;
         // it runs one in front of curpos, so we increment curpos only when
         // the next character still is part of the identifier
-        while( !it->isSpace() && isIdentifierCharacter( it ) )
+        while( !it->isSpace() && isIdOrValueCharacter( it ) )
         {
+            if( !isIdentifierCharacter( it ) )
+                token = parser::Token_VALUE;
             it++;
             curpos++;
         }
         qDebug() << "Found identifier";
-        mTokenEnd = curpos-1;
     }else if( state() == QuoteState && it->isSpace() && it->unicode() != '\n' )
     {
         token = parser::Token_QUOTEDSPACE;
@@ -101,7 +101,6 @@ int Lexer::getNextTokenKind()
             curpos++;
         }
         qDebug() << "Found Quote";
-        mTokenEnd = curpos-1;
     }else
     {
         //Now the stuff that will generate a proper token
@@ -224,39 +223,51 @@ int Lexer::getNextTokenKind()
                 token = parser::Token_EQUAL;
                 break;
             case '\n':
-                qDebug() << "Found newline";
-                mLocationTable->newline( curpos );
+                qDebug() << "Found newline at" << curpos ;
+                mParser->token_stream->location_table()->newline( curpos );
                 token = parser::Token_NEWLINE;
                 break;
             default:
                 token = parser::Token_ERROR;
                 break;
         }
-        mTokenEnd = curpos;
         curpos++;
     }
+    mTokenEnd = curpos;
     return token;
 }
 
 std::size_t Lexer::getTokenBegin() const
 {
-    return 0;
+    return mTokenBegin;
 }
 
 std::size_t Lexer::getTokenEnd() const
 {
-    return 0;
+    return mTokenEnd;
+}
+
+bool Lexer::isIdOrValueCharacter(QChar* c)
+{
+    return (   c->isLetter()
+            || c->isDigit()
+            || c->unicode() == '_'
+            || c->unicode() == '.'
+            || c->unicode() == '-'
+            || c->unicode() == '/'
+           );
 }
 
 bool Lexer::isIdentifierCharacter(QChar* c)
 {
     return (   c->isLetter()
             || c->isDigit()
-            || c->unicode() == '"'
             || c->unicode() == '_'
+            || c->unicode() == '.'
             || c->unicode() == '-'
            );
 }
+
 
 }
 
