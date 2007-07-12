@@ -7,8 +7,7 @@ namespace QMake
   {
 
   visitor::parser_fun_t visitor::_S_parser_table[] =  {
-        reinterpret_cast<parser_fun_t>(&visitor::visit_project),
-        reinterpret_cast<parser_fun_t>(&visitor::visit_stmt)
+        reinterpret_cast<parser_fun_t>(&visitor::visit_project)
       }; // _S_parser_table[]
 
 } // end of namespace QMake

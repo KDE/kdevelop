@@ -18,31 +18,42 @@
  * 02110-1301, USA.
  */
 
-#include "qmake_parser.h"
+#include <cstddef>
+
 class QString;
+class kdev_pg_location_table;
 
 namespace QMake
 {
+
+class parser;
 
 class Lexer {
 public:
     Lexer(parser* _parser, const QString& contents);
 
-    int getNextTokenKind() const;
+    int getNextTokenKind();
     std::size_t getTokenBegin() const;
     std::size_t getTokenEnd() const;
 
 private:
     QString mContent;
     parser* mParser;
+    int curpos;
+    int mContentSize;
+    kdev_pg_location_table* mLocationTable;
+    std::size_t mTokenBegin;
+    std::size_t mTokenEnd;
+
     int state() const;
     void setState(int state);
+
+    bool isIdentifierCharacter(QChar* c);
 
     int mState;
     enum State
     {
         DefaultState,
-        CommentState,
         QuoteState
     };
 

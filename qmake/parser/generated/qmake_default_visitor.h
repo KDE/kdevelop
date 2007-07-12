@@ -14,7 +14,6 @@ namespace QMake
 
     public:
       virtual void visit_project(project_ast *node);
-      virtual void visit_stmt(stmt_ast *node);
     };
 
 } // end of namespace QMake

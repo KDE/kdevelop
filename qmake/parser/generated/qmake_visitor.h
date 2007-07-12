@@ -27,9 +27,6 @@ namespace QMake
       virtual void visit_project(project_ast *)
     {}
 
-      virtual void visit_stmt(stmt_ast *)
-      {}
-
     }
 
   ;

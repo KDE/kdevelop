@@ -14,6 +14,7 @@
 
 namespace QMake
   {
+
   class Lexer;
 }
 
@@ -22,14 +23,12 @@ namespace QMake
   {
 
   struct project_ast;
-  struct stmt_ast;
 
 
   struct ast_node
     {
       enum ast_node_kind_enum {
-        Kind_project = 1000,
-        Kind_stmt = 1001,
+        Kind_project =  1000,
         AST_NODE_KIND_COUNT
       };
 
@@ -38,21 +37,11 @@ namespace QMake
       std::size_t end_token;
     };
 
-  struct project_ast: public ast_node
+  struct project_ast:  public ast_node
     {
       enum
       {
-        KIND = Kind_project
-      };
-
-      const list_node<stmt_ast *> *stmt_sequence;
-    };
-
-  struct stmt_ast: public ast_node
-    {
-      enum
-      {
-        KIND = Kind_stmt
+        KIND =  Kind_project
       };
 
     };
