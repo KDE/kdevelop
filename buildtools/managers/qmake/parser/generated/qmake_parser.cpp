@@ -64,7 +64,7 @@ namespace QMake
   {
     std::size_t line;
     std::size_t col;
-    size_t index =  token_stream->index();
+    size_t index =  token_stream->index() - 1;
     token_type &token =  token_stream->token(index);
     kDebug(9024) <<  "token starts at: " <<  token.begin <<  endl;
     kDebug(9024) <<  "index is: " <<  index <<  endl;
