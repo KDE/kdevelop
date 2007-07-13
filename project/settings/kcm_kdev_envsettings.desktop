@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kdev_envsettings
+X-KDE-FactoryName=kcm_kdev_envsettings
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevelop
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=Environment
+Name[x-test]=xxEnvironmentxx
+Comment=Configure Environment Variable settings
+Comment[x-test]=xxConfigure Environment Variable settingsxx
+
