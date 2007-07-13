@@ -89,14 +89,15 @@ namespace QMake
         Token_MINUSEQ =  1012,
         Token_NEWLINE =  1013,
         Token_PLUSEQ =  1014,
-        Token_QUOTEDSPACE =  1015,
-        Token_RBRACE =  1016,
-        Token_RBRACKET =  1017,
-        Token_RPAREN =  1018,
-        Token_SINGLEDOLLAR =  1019,
-        Token_STAREQ =  1020,
-        Token_TILDEEQ =  1021,
-        Token_VALUE =  1022,
+        Token_QUOTE =  1015,
+        Token_QUOTEDSPACE =  1016,
+        Token_RBRACE =  1017,
+        Token_RBRACKET =  1018,
+        Token_RPAREN =  1019,
+        Token_SINGLEDOLLAR =  1020,
+        Token_STAREQ =  1021,
+        Token_TILDEEQ =  1022,
+        Token_VALUE =  1023,
         token_type_size
       }; // token_type_enum
 
@@ -138,7 +139,16 @@ namespace QMake
       virtual ~parser()
       {}
 
+      bool parse_arg_list(arg_list_ast **yynode);
+      bool parse_function_args(function_args_ast **yynode);
+      bool parse_function_scope(function_scope_ast **yynode);
+      bool parse_id_or_value(id_or_value_ast **yynode);
+      bool parse_op(op_ast **yynode);
       bool parse_project(project_ast **yynode);
+      bool parse_scope_body(scope_body_ast **yynode);
+      bool parse_stmt(stmt_ast **yynode);
+      bool parse_value_list(value_list_ast **yynode);
+      bool parse_variable_assignment(variable_assignment_ast **yynode);
     };
 
 } // end of namespace QMake
