@@ -6,7 +6,34 @@
 namespace QMake
   {
 
+  void default_visitor::visit_arg_list(arg_list_ast *)
+  {}
+
+  void default_visitor::visit_function_args(function_args_ast *)
+  {}
+
+  void default_visitor::visit_function_scope(function_scope_ast *)
+  {}
+
+  void default_visitor::visit_id_or_value(id_or_value_ast *)
+  {}
+
+  void default_visitor::visit_op(op_ast *)
+  {}
+
   void default_visitor::visit_project(project_ast *)
+  {}
+
+  void default_visitor::visit_scope_body(scope_body_ast *)
+  {}
+
+  void default_visitor::visit_stmt(stmt_ast *)
+  {}
+
+  void default_visitor::visit_value_list(value_list_ast *)
+  {}
+
+  void default_visitor::visit_variable_assignment(variable_assignment_ast *)
   {}
 
 
