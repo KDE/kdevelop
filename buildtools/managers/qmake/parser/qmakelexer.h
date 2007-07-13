@@ -19,6 +19,7 @@
  */
 
 #include <cstddef>
+#include <QtCore/QStack>
 
 class QString;
 class kdev_pg_location_table;
@@ -45,16 +46,20 @@ private:
     std::size_t mTokenEnd;
 
     int state() const;
-    void setState(int state);
+    void pushState(int state);
+    void popState();
 
-    bool isIdOrValueCharacter(QChar* c);
-    bool isIdentifierCharacter(QChar* c);
+    static bool isIdOrValueCharacter(QChar* c);
+    static bool isIdentifierCharacter(QChar* c);
+    bool isWhitespaceOrComment(QChar* c);
 
-    int mState;
+    QStack<int> mState;
     enum State
     {
-        DefaultState,
-        QuoteState
+        DefaultState = 0,
+        QuoteState = 1,
+        ContState = 2,
+        CommentState = 3
     };
 
 };

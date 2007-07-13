@@ -78,7 +78,7 @@ namespace QMake
 
 %token COLON("colon"), COMMA("comma"), CONT("cont"),
        NEWLINE("newline"), DOUBLEDOLLAR("doubledollar"),
-       SINGLEDOLLAR("singledollar") ;;
+       SINGLEDOLLAR("singledollar"), QUOTE("quote") ;;
 
 %token IDENTIFIER("identifier"), VALUE("value"),
        QUOTEDSPACE("quotedspace") ;;
@@ -91,9 +91,35 @@ namespace QMake
 
 -- The actual grammar starts here.
 
-   ( NEWLINE )*
+   ( stmt )*
 -> project ;;
 
+   IDENTIFIER ( variable_assignment | function_scope | scope_body ) | NEWLINE
+-> stmt ;;
+
+   op ( value_list | 0 ) ( NEWLINE | EOF )
+-> variable_assignment ;;
+
+   PLUSEQ | MINUSEQ | STAREQ | EQUAL | TILDEEQ
+-> op ;;
+
+   ( id_or_value | CONT NEWLINE ) ( id_or_value | CONT NEWLINE )*
+-> value_list ;;
+
+   IDENTIFIER | VALUE
+-> id_or_value ;;
+
+   LPAREN arg_list RPAREN
+-> function_args ;;
+
+   function_args scope_body
+-> function_scope ;;
+
+   ( id_or_value ( COMMA id_or_value ) | 0 )
+-> arg_list ;;
+
+   RBRACE ( NEWLINE | 0 ) ( stmt )* LBRACE | COLON stmt
+-> scope_body ;;
 
 -----------------------------------------------------------------
 -- Code segments copied to the implementation (.cpp) file.
@@ -118,7 +144,7 @@ void parser::tokenize( const QString& contents )
     do
     {
         kind = lexer.getNextTokenKind();
-        kDebug(9024) << kind << "(" << lexer.getTokenBegin() << "," << lexer.getTokenEnd() << ")::" << tokenText(lexer.getTokenBegin(), lexer.getTokenEnd()) << endl; //" "; // debug output
+        kDebug(9024) << kind << "(" << lexer.getTokenBegin() << "," << lexer.getTokenEnd() << ")::" << tokenText(lexer.getTokenBegin(), lexer.getTokenEnd()) << "::"<< endl; //" "; // debug output
 
         if ( !kind ) // when the lexer returns 0, the end of file is reached
             kind = parser::Token_EOF;
@@ -135,7 +161,7 @@ void parser::tokenize( const QString& contents )
 
 QString parser::tokenText( std::size_t begin, std::size_t end ) const
 {
-    return m_contents.mid((int)begin, (int)end-begin);
+    return m_contents.mid((int)begin, (int)end-begin+1);
 }
 
 void parser::reportProblem( parser::ProblemType type, const QString& message )
