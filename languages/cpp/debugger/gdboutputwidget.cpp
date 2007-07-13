@@ -143,12 +143,16 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     }
 
     allCommands_.append(s);
+    allCommandsRaw_.append(line);
     trimList(allCommands_, maxLines_);
+    trimList(allCommandsRaw_, maxLines_);    
 
     if (!internal)
     {
         userCommands_.append(s);
+        userCommandsRaw_.append(line);
         trimList(userCommands_, maxLines_);
+        trimList(userCommandsRaw_, maxLines_);
     }
 
     if (!internal || showInternalCommands_)
@@ -204,13 +208,19 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
 
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
+    QString colored = colorify(html_escape(line), "red");
     // Errors are shown inside user commands too.
-    allCommands_.append(line);
+    allCommands_.append(colored);    
     trimList(allCommands_, maxLines_);
-    userCommands_.append(line);
+    userCommands_.append(colored);
     trimList(userCommands_, maxLines_);
 
-    showLine(colorify(html_escape(line), "red"));
+    allCommandsRaw_.append(line);    
+    trimList(allCommandsRaw_, maxLines_);
+    userCommandsRaw_.append(line);
+    trimList(userCommandsRaw_, maxLines_);
+
+    showLine(colored);
 }
 
 /***************************************************************************/
@@ -336,10 +346,18 @@ QPopupMenu* OutputText::createPopupMenu(const QPoint&)
 
 void OutputText::copyAll()
 {
+    /* See comments for allCommandRaw_ for explanations of
+       this complex logic, as opposed to calling text(). */
+    QStringList& raw = parent_->showInternalCommands_ ?
+        parent_->allCommandsRaw_ : parent_->userCommandsRaw_;
+    QString text;
+    for (unsigned i = 0; i < raw.size(); ++i)
+        text += raw[i];
+
     // Make sure the text is pastable both with Ctrl-C and with
     // middle click.
-    QApplication::clipboard()->setText(text(), QClipboard::Clipboard);
-    QApplication::clipboard()->setText(text(), QClipboard::Selection);
+    QApplication::clipboard()->setText(text, QClipboard::Clipboard);
+    QApplication::clipboard()->setText(text, QClipboard::Selection);
 }
 
 void OutputText::toggleShowInternalCommands()

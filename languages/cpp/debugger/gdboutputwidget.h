@@ -91,6 +91,12 @@ private:
         internal commands. 
     */
     QStringList userCommands_, allCommands_;
+    /** Same output, without any fancy formatting.  Keeping it
+        here because I can't find any way to extract raw text,
+        without formatting, out of QTextEdit except for
+        selecting everything and calling 'copy()'. The latter
+        approach is just ugly.  */
+    QStringList userCommandsRaw_, allCommandsRaw_;
 
 
     /** For performance reasons, we don't immediately add new text
