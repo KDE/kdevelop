@@ -8,7 +8,6 @@ set( environment_cfg_SRCS
     envpreferences.cpp
 )
 
-kde4_automoc(${environment_cfg_SRCS})
 kde4_add_plugin( kcm_kdev_envsettings ${environment_cfg_SRCS} )
 target_link_libraries( kcm_kdev_envsettings kdevplatformproject kdevplatformutil ${KDE4_KUTILS_LIBS} )
 
