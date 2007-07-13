@@ -40,7 +40,8 @@ macro(GET_GENERATED_SRCS _srcFiles)
             ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_parser.cpp
             ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_default_visitor.cpp
             ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_visitor.cpp)
-        include_directories( ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated )
+        include_directories( ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated 
+            ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/kdevelop-pg )
     endif(KDEVPG_FOUND)
 endmacro(GET_GENERATED_SRCS)
 
