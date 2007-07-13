@@ -895,7 +895,7 @@ void DebuggerPart::slotRun_part2()
     if (controller->stateIsOn( s_dbgNotStarted ))
     {
         mainWindow()->statusBar()->message(i18n("Debugging program"), 1000);
-        mainWindow()->raiseView(gdbOutputWidget);
+        mainWindow()->raiseView(framestackWidget);
         appFrontend()->clearView();
         startDebugger();
     }
