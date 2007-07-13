@@ -6,6 +6,7 @@
 
 #include "qmakelexer.h"
 #include <kdebug.h>
+#include <QtCore/QString>
 
 namespace QMake
   {
@@ -19,7 +20,7 @@ namespace QMake
     do
       {
         kind =  lexer.getNextTokenKind();
-        kDebug(9024) <<  kind <<  "::" <<  tokenText(lexer.getTokenBegin(),  lexer.getTokenEnd()) <<  endl; //" "; // debug output
+        kDebug(9024) <<  kind <<  "(" <<  lexer.getTokenBegin() <<  "," <<  lexer.getTokenEnd() <<  ")::" <<  tokenText(lexer.getTokenBegin(),  lexer.getTokenEnd()) <<  endl; //" "; // debug output
 
         if  ( !kind ) // when the lexer returns 0, the end of file is reached
           kind =  parser::Token_EOF;
@@ -61,10 +62,12 @@ namespace QMake
 
   void parser::yy_expected_symbol(int /*expected_symbol*/,  char const *name)
   {
-    int line;
-    int col;
+    std::size_t line;
+    std::size_t col;
     size_t index =  token_stream->index();
     token_type &token =  token_stream->token(index);
+    kDebug(9024) <<  "token starts at: " <<  token.begin <<  endl;
+    kDebug(9024) <<  "index is: " <<  index <<  endl;
     token_stream->start_position(index,  &line,  &col);
     size_t tokenLength =  token.end -  token.begin;
     QString tokenValue =  tokenText(token.begin,  token.end);
@@ -74,8 +77,8 @@ namespace QMake
       .arg(name)
       .arg(token.kind !=  0 ?  tokenValue :  "EOF")
       .arg(token.kind)
-      .arg(line + 1)
-      .arg(col + 1 ) );
+      .arg(line)
+      .arg(col));
   }
 
 

@@ -159,8 +159,8 @@ void parser::yy_expected_token(int /*expected*/, std::size_t /*where*/, char con
 
 void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
 {
-    int line;
-    int col;
+    std::size_t line;
+    std::size_t col;
     size_t index = token_stream->index();
     token_type &token = token_stream->token(index);
     kDebug(9024) << "token starts at: " << token.begin << endl;
