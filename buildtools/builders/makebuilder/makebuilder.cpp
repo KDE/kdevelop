@@ -35,6 +35,7 @@
 #include <ioutputview.h>
 #include <QtDesigner/QExtensionFactory>
 #include <QtCore/QSignalMapper>
+#include <QtCore/QProcess>
 #include <QtGui/QAction>
 #include <QtGui/QKeySequence>
 
@@ -45,7 +46,7 @@
 #include <kactioncollection.h>
 #include <ksharedconfig.h>
 
-#define MAKE_COMMAND "make"
+#include <envwidget.h>
 
 typedef KGenericFactory<MakeBuilder> MakeBuilderFactory ;
 K_EXPORT_COMPONENT_FACTORY(kdevmakebuilder, MakeBuilderFactory("kdevmakebuilder"))
@@ -357,23 +358,32 @@ QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
 
 QMap<QString, QString> MakeBuilder::environmentVars( KDevelop::ProjectBaseItem* item )
 {
-    QMap<QString, QString> envMap;
     KSharedConfig::Ptr configPtr = item->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
+    QString defaultProfile = builderGroup.readEntry(
+            "Default Make Environment Profile", QString() );
 
-    QStringList list = builderGroup.readEntry( "Environment Variables", QStringList() );
-    if( list.isEmpty() )
-        return envMap;
-
-    // convert VARNAME=VARVALUE into qmap
-    foreach( QString _pair, list )
+    QStringList procDefaultList = QProcess::systemEnvironment();
+    QMap<QString, QString> retMap;
+    foreach( QString _line, procDefaultList )
     {
-        QString varName = _pair.section( '=', 0, 0 );
-        QString varValue = _pair.section( '=', 1, 1 );
-        envMap.insert( varName, varValue );
+        QString varName = _line.section( '=', 0, 0 );
+        QString varValue = _line.section( '=', 1 );
+        retMap.insert( varName, varValue );
+    }
+    if( defaultProfile.isEmpty() )
+        return retMap;
+
+    QMap<QString, QString> userMap = EnvWidget::environmentPairFor(
+            configPtr, defaultProfile );
+
+    for( QMap<QString, QString>::iterator it = userMap.begin();
+         it != userMap.end(); ++it )
+    {
+        retMap.insert( it.key(), it.value() );
     }
 
-    return envMap;
+    return retMap;
 }
 
 #include "makebuilder.moc"

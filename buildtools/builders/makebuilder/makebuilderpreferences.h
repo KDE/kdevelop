@@ -35,12 +35,19 @@ namespace Ui { class MakeConfig; }
  */
 class MakeBuilderPreferences : public ProjectKCModule<MakeBuilderSettings>
 {
+    Q_OBJECT
+
 public:
     explicit MakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
     ~MakeBuilderPreferences();
 
+    // Overloaded KCModules virtuals
+    void save();
+    void load();
+    void defaults();
+
 private slots:
-    void settingsChanged();
+    void envGroupChanged();
 
 private:
     Ui::MakeConfig* m_prefsUi;
