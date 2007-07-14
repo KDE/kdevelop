@@ -79,7 +79,9 @@ public:
             return;
         if( !m_cfgDlgs.contains( proj ) )
         {
-            m_cfgDlgs[proj] = new KSettings::Dialog( findPluginsForProject( proj ),
+            QStringList pluginsForPrj = findPluginsForProject( proj );
+            pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
+            m_cfgDlgs[proj] = new KSettings::Dialog( pluginsForPrj,
                                                      m_core->uiController()->activeMainWindow() );
             m_cfgDlgs[proj]->setKCMArguments( QStringList()
                                               << proj->projectTempFile()

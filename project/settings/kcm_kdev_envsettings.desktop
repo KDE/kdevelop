@@ -7,8 +7,8 @@ ServiceTypes=KCModule
 X-KDE-ModuleType=Library
 X-KDE-Library=kdev_envsettings
 X-KDE-FactoryName=kcm_kdev_envsettings
-X-KDE-ParentApp=kdevelop
-X-KDE-ParentComponents=kdevelop
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Environment
