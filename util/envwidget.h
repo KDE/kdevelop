@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include "utilexport.h"
 class QTableWidgetItem;
 class KConfig;
+class KSharedConfigPtr;
 
 template <typename T1, typename T2> class QMap;
 
@@ -102,6 +103,19 @@ public:
     void loadSettings();
     void saveSettings();
     void defaults();
+
+    /// @returns The list of environment variable groups, such as
+    /// "release", "debug" in case of buildtools.
+    static QStringList environmentProfiles( KConfig *config );
+
+    /// @returns The map where key is variable name and value is
+    /// variable value.
+    static QMap<QString, QString> environmentPairFor( KConfig *config,
+                                                const QString &profile );
+
+    /// Same with above.
+    static QMap<QString, QString> environmentPairFor( KSharedConfigPtr config,
+                                                const QString &profile );
 
 Q_SIGNALS:
     void changed();

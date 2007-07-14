@@ -50,6 +50,30 @@ public:
     KConfig *m_config;
     QString m_confgroup;
 //     QString m_entry;
+
+    static QMap<QString, QString> environmentPairForPvt( KConfigGroup &cfg, const QString &profile )
+    {
+        QMap< QString, QString > ret;
+        QStringList pairs = cfg.readEntry( "Environment Variables", QStringList() );
+
+        foreach( QString _oneItem, pairs )
+        {
+            QString leftValue = _oneItem.section( '=', 0, 0 );
+            QString varValue  = _oneItem.section( '=', 1 );
+
+            QString group = leftValue.section( '_', 0, 0 );
+            QString varName = leftValue.section( '_', 1 );
+
+            if( group == profile )
+            {
+                kDebug() << k_funcinfo << " Adding to map " << varName << " :: " << varValue << endl;
+                ret[varName] = varValue;
+            }
+        }
+
+        return ret;
+    }
+
 };
 
 EnvWidget::EnvWidget( QWidget *parent )
@@ -197,6 +221,42 @@ void EnvWidget::defaults()
 //     load( true );
     loadSettings();
 }
+
+// Note: static method.
+QStringList EnvWidget::environmentProfiles( KConfig *config )
+{
+    KConfigGroup cfg( config, "Project Env Settings" );
+    QStringList ret;
+    QStringList pairs = cfg.readEntry( "Environment Variables", QStringList() );
+    foreach( QString _line, pairs )
+    {
+        QString leftValue = _line.section( '=', 0, 0 );
+        QString group = leftValue.section( '_', 0, 0 );
+        if( !ret.contains(group) )
+            ret << group;
+    }
+
+    kDebug() << k_funcinfo << " Returning " << ret;
+    return ret;
+}
+
+// Note: static method.
+QMap<QString, QString> EnvWidget::environmentPairFor( KConfig *config,
+        const QString &profile )
+{
+    KConfigGroup cfg( config, "Project Env Settings" );
+    return EnvWidget::Private::environmentPairForPvt( cfg, profile );
+}
+
+// Note: static method.
+QMap<QString, QString> EnvWidget::environmentPairFor( KSharedConfigPtr config,
+        const QString &profile )
+{
+    KConfigGroup cfg( config, "Project Env Settings" );
+    return EnvWidget::Private::environmentPairForPvt( cfg, profile );
+}
+
+
 
 // void EnvWidget::load( bool defaults )
 // {

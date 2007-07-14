@@ -5,6 +5,7 @@ set(kdevplatformutil_LIB_SRCS
     processlinemaker.cpp
     commandexecutor.cpp
     envwidget.cpp
+    envselectwidget.cpp
 )
 
 set(kdevplatformutil_LIB_UI
@@ -25,7 +26,7 @@ install( FILES
     processlinemaker.h
     commandexecutor.h
     utilexport.h
-    envwidget.h
+    envwidget.h envselectwidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
 
 
