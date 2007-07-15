@@ -43,7 +43,7 @@ public:
         foreach( SvnStatusHolder _holder, holderList ){
 
             int stat = KDevelop::Unknown;
-            if( _holder.textStatus == svn_wc_status_normal||
+            if( _holder.textStatus == svn_wc_status_normal &&
                 _holder.propStatus == svn_wc_status_normal){
 
                 stat = KDevelop::ItemUpToDate;
