@@ -766,14 +766,13 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 				kdDebug(9036) << "kio_svnProtocol LOG" << endl;
 				int revstart, revend;
 				QString revkindstart, revkindend;
-                bool repositLog, discorverChangedPath, strictNodeHistory;
+                bool discorverChangedPath, strictNodeHistory;
 				KURL::List targets;
 
 				stream >> revstart;
 				stream >> revkindstart;
 				stream >> revend;
 				stream >> revkindend;
-				stream >> repositLog;
                 stream >> discorverChangedPath;
                 stream >> strictNodeHistory;
 				while ( !stream.atEnd() ) {
@@ -782,7 +781,7 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 					targets << tmp;
 				}
 				svn_log( revstart, revkindstart, revend, revkindend,
-                         repositLog, discorverChangedPath, strictNodeHistory, targets );
+                         discorverChangedPath, strictNodeHistory, targets );
 				break;
 			}
 		case SVN_IMPORT:
@@ -1058,7 +1057,7 @@ svn_error_t* kio_svnProtocol::blameReceiver( void *baton, apr_int64_t line_no, s
 	Thus, svn_log should get another flag (bool repositHistory )specifying between file:/// or URL
 */
 void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int revend, const QString& revkindend,
-							bool repositLog, bool discorverChangedPaths, bool strictNodeHistory,
+							bool discorverChangedPaths, bool strictNodeHistory,
 							const KURL::List& urls )
 {
 // 	kdDebug(9036) << " from revision " << revstart << " or " << revkindstart << " to " << " revision " << revend << " or " << revkindend << endl;
@@ -1075,31 +1074,15 @@ void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int re
 
 	for ( QValueListConstIterator<KURL> it = urls.begin(); it != urls.end() ; ++it ) {
 		KURL nurl = *it;
+		const char *path =
+				apr_pstrdup( subpool, svn_path_canonicalize( nurl.pathOrURL().utf8(), subpool ) );
+		kdDebug(9036) << path << endl;
+		*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) = path;
 
-		if ( repositLog ){ // show repository log
-			const char *urlFromPath=0;
-			svn_error_t *urlErr=0;
-			urlErr = svn_client_url_from_path( &urlFromPath, nurl.path().utf8(), subpool );
-			if (urlErr || !urlFromPath ){
-				error( KIO::ERR_SLAVE_DEFINED,
-					   i18n("Fail to retrieve repository URL of request file/dir. Check whether requested item is under version control"));
-			}
-			if (QString(urlFromPath).isEmpty()){
-				error( KIO::ERR_SLAVE_DEFINED, i18n("Converted repository URL is empty. Check whether requested item is under version control"));
-			}
-			(*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
-				urlFromPath;
-			kdDebug(9036) << " urlFromPath: " << urlFromPath << endl;
-			
-		}else{ // show working copy log
-			nurl.setProtocol( "file" );
-			(*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
-				svn_path_canonicalize( nurl.path().utf8(), subpool );
-		}
-		setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "requrl", nurl.path() );
+		setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "requrl", nurl.pathOrURL() );
 		incCounter();
 	}
-	
+
 	svn_log_message_receiver_t receiver = kio_svnProtocol::receiveLogMessage;
 	svn_error_t *err = svn_client_log2(targets, &rev1, &rev2, 0, discorverChangedPaths, strictNodeHistory, receiver, this, ctx, subpool);
 	if ( err ){

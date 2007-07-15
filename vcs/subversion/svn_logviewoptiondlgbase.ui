@@ -8,23 +8,29 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>486</width>
-            <height>339</height>
+            <width>449</width>
+            <height>288</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>SvnLogViewOptionDlgBase</string>
     </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QPushButton" row="4" column="0">
+        <widget class="QPushButton" row="3" column="0">
             <property name="name">
                 <cstring>pushButton1</cstring>
             </property>
             <property name="text">
                 <string>&amp;OK</string>
             </property>
+            <property name="accel">
+                <string>Alt+O</string>
+            </property>
         </widget>
-        <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
+        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>checkBox1</cstring>
             </property>
@@ -35,36 +41,7 @@
                 <string></string>
             </property>
         </widget>
-        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>buttonGroup1</cstring>
-            </property>
-            <property name="title">
-                <string>Log Type</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>radio2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Wor&amp;king Copy History</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>radio1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Repository History</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
+        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>buttonGroup2_2</cstring>
             </property>
@@ -106,7 +83,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QPushButton" row="4" column="1">
+        <widget class="QPushButton" row="3" column="1">
             <property name="name">
                 <cstring>pushButton2</cstring>
             </property>
@@ -114,7 +91,7 @@
                 <string>C&amp;ancel</string>
             </property>
         </widget>
-        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>buttonGroup2</cstring>
             </property>
@@ -145,6 +122,9 @@
                     <property name="text">
                         <string>&amp;By Revision Number</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+B</string>
+                    </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
@@ -158,6 +138,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>pushButton1</sender>
@@ -174,8 +156,6 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>

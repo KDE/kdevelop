@@ -468,9 +468,8 @@ void subversionPart::slotLog()
 		QString revkindstart = dlg.revKindStart();
 		int revend = dlg.revend();
 		QString revkindend = dlg.revKindEnd();
-		bool reposit = dlg.repositLog();
 		bool strictNode = dlg.strictNode();
-		m_impl->svnLog (m_urls, revstart, revkindstart, revend, revkindend, reposit, true/*changedPath*/, strictNode);	
+		m_impl->svnLog (m_urls, revstart, revkindstart, revend, revkindend, true/*changedPath*/, strictNode);
 	} else{
 		return;
 	}

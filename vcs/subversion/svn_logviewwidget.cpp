@@ -191,11 +191,10 @@ void SvnLogViewWidget::diffToPrevious()
 SvnLogViewOptionDlg::SvnLogViewOptionDlg( QWidget *parent, const char* name, bool modal, WFlags f )
 : SvnLogViewOptionDlgBase( parent, name, modal,f )
 {
-	radio1->setChecked(true); //repository log
+// 	radio1->setChecked(true); //repository log
 	radio4->setChecked(true); //start revistion by revision keyword
 	radio5->setChecked(true); //end revision by revision number
-	reinstallRevisionSpecifiers( QButton::On );
-	connect( radio1, SIGNAL(stateChanged(int)), this, SLOT(reinstallRevisionSpecifiers(int)) );
+	reinstallRevisionSpecifiers();
 	connect( intInput1, SIGNAL(valueChanged(int)), this, SLOT(setStartRevnumRadio()) );
 	connect( comboBox1, SIGNAL(activated(const QString&)), this, SLOT(setStartRevkindRadio()) );
 	connect( intInput2, SIGNAL(valueChanged(int)), this, SLOT(setEndRevnumRadio()) );
@@ -203,22 +202,15 @@ SvnLogViewOptionDlg::SvnLogViewOptionDlg( QWidget *parent, const char* name, boo
 }
 SvnLogViewOptionDlg::~SvnLogViewOptionDlg()
 {}
-void SvnLogViewOptionDlg::reinstallRevisionSpecifiers(int repositState )
+void SvnLogViewOptionDlg::reinstallRevisionSpecifiers()
 {
-	if( repositState == QButton::NoChange ){
-		return;
-	}
 	comboBox1->clear();
 	comboBox2->clear();
-	if( repositState == QButton::On ){
-		comboBox1->insertItem( "HEAD" );//there is no way to i18n subversion unique keywords
-		comboBox2->insertItem( "HEAD" );//so don't try to translate these:-)
-	} else if( repositState == QButton::Off ){
-		QStringList items;
-		items << "HEAD" << "BASE" << "PREV" << "COMMITTED";
-		comboBox1->insertStringList( items );
-		comboBox2->insertStringList( items );
-	}
+
+	QStringList items;
+	items << "HEAD" << "BASE" << "PREV" << "COMMITTED";
+	comboBox1->insertStringList( items );
+	comboBox2->insertStringList( items );
 }
 int SvnLogViewOptionDlg::revstart()
 {
@@ -250,14 +242,6 @@ QString SvnLogViewOptionDlg::revKindEnd()
 		return QString("");
 	} else{
 		return comboBox2->currentText();
-	}
-}
-bool SvnLogViewOptionDlg::repositLog()
-{
-	if( radio1->isChecked() ){
-		return true;
-	} else{
-		return false;
 	}
 }
 bool SvnLogViewOptionDlg::strictNode()

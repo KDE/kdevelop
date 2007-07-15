@@ -80,10 +80,9 @@ public:
 	QString revKindStart();
 	int revend();
 	QString revKindEnd();
-	bool repositLog();
 	bool strictNode();
 public slots:
-	void reinstallRevisionSpecifiers(int repositState );
+	void reinstallRevisionSpecifiers();
 	void setStartRevnumRadio();
 	void setStartRevkindRadio();
 	void setEndRevnumRadio();

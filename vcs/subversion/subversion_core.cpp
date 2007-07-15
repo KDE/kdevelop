@@ -270,7 +270,7 @@ void subversionCore::commit( const KURL::List& list, bool recurse, bool keeplock
 // Right now, only one item for each action.
 void subversionCore::svnLog( const KURL::List& list,
 		int revstart, QString revKindStart, int revend, QString revKindEnd,
-		bool repositLog, bool discorverChangedPath, bool strictNodeHistory )
+		bool discorverChangedPath, bool strictNodeHistory )
 {
 	// ensure that part has repository information. This info is used to retrieve root repository URL
     if( m_part->m_prjInfoMap.count() < 1 )
@@ -289,7 +289,7 @@ void subversionCore::svnLog( const KURL::List& list,
 // 	QString revKindStart = "HEAD", revKindEnd = "";
 // 	bool repositLog = true, discorverChangedPath = true, strictNodeHistory = true;
 	s << cmd << revstart << revKindStart << revend << revKindEnd;
-	s << repositLog << discorverChangedPath << strictNodeHistory;
+	s << discorverChangedPath << strictNodeHistory;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "svnCore: adding to list: " << (*it).prettyURL() << endl;
 		s << *it;
