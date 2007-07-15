@@ -27,6 +27,9 @@
 #include <ktexteditor/document.h>
 #include <kiconloader.h>
 
+#include <khtml_part.h>
+#include <khtmlview.h>
+
 #include "duchainbuilder/cppduchain.h"
 
 #include <declaration.h>
@@ -84,20 +87,46 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
-  long row = (long)index.internalPointer();
+  quint32 dataIndex = index.internalId();
 
-  if( row < 0 || row >= m_declarations.size() )
+  if( dataIndex >= (quint32)m_declarations.size() )
     return QVariant();
   
   DUChainReadLocker lock(DUChain::lock());
   
-  Declaration* dec = const_cast<Declaration*>( m_declarations[row].data() );
+  Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].first.data() );
   if (!dec) {
-    kDebug() <<  "code-completion model item " << row << ": Du-chain item is deleted" << endl;
+    kDebug() <<  "code-completion model item " << dataIndex << ": Du-chain item is deleted" << endl;
     return QVariant();
   }
 
+  bool isArgumentHint = false;
+  if( m_declarations[dataIndex].second && m_declarations[dataIndex].second->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+    isArgumentHint = true;
+
   switch (role) {
+    case ArgumentHintDepth:
+      if( isArgumentHint )
+        return m_declarations[dataIndex].second->depth();
+    case ItemSelected:
+       return QVariant(dec->toString());
+    case IsExpandable:
+      return QVariant(true);
+    case ExpandingWidget: {
+       KHTMLPart *w = new KHTMLPart();
+       w->begin();
+       w->write( QString( "<html><body><p><small>Item: %1</small></p></body></html>" ).arg(dec->toString()) );
+       w->end();
+       w->view()->resize(500, 70);
+
+//        QPalette palette;
+//        palette.setColor(w->view()->backgroundRole(), QColor(0,0,0));//0xffcfcfcf));
+//        w->view()->setPalette(palette);
+
+       QVariant v;
+       v.setValue<QWidget*>(w->view());
+       return v;
+    }
     case Qt::DisplayRole:
       switch (index.column()) {
         case Prefix:
@@ -354,7 +383,7 @@ QModelIndex CppCodeCompletionModel::index(int row, int column, const QModelIndex
   if (row < 0 || row >= m_declarations.count() || column < 0 || column >= ColumnCount || parent.isValid())
     return QModelIndex();
 
-  QModelIndex ret = createIndex(row, column, (void*)row);
+  QModelIndex ret = createIndex(row, column, row);
 
   return ret;
 }
@@ -399,19 +428,20 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
   if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
     text += "\n";
 
-  Cpp::CodeCompletionContext completionContext( context, text );
+  Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, text ) );
+  m_completionContext = completionContext;
 
-  if( completionContext ) {
+  if( completionContext->isValid() ) {
     DUChainReadLocker lock(DUChain::lock());
 
-    if( completionContext.memberAccessContainer().isValid() ) {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(completionContext.memberAccessContainer().type.data());
+    if( completionContext->memberAccessContainer().isValid() ) {
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(completionContext->memberAccessContainer().type.data());
       if( idType && idType->declaration() ) {
         DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
         if( ctx ) {
           m_declarations.clear();
           foreach( Declaration* decl, Cpp::localDeclarations( ctx ) )
-            m_declarations << decl;
+            m_declarations << DeclarationContextPair( decl, completionContext );
         } else {
           kDebug() << "Could not get internal context from declaration \"" << idType->declaration()->toString() << "\"" << endl;
         }
@@ -421,9 +451,23 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
     } else {
       m_declarations.clear();
       foreach( Declaration* decl, m_context->allDeclarations(position).values() )
-        m_declarations << decl;
+        m_declarations << DeclarationContextPair( decl, completionContext );
       kDebug() << "CppCodeCompletionModel::setContext: using all declarations visible: " << m_declarations.count() << endl;
     }
+
+    ///Find all recursive function-calls that should be shown as call-tips
+    Cpp::CodeCompletionContext::Ptr parentContext = completionContext;
+    do {
+      parentContext = parentContext->parentContext();
+      if( parentContext ) {
+        if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+          foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() )
+            m_declarations << DeclarationContextPair( function.function.declaration(), parentContext );
+        } else {
+          kDebug() << "parent-context has non function-call access type" << endl;
+        }
+      }
+    } while( parentContext );
   } else {
     kDebug() << "CppCodeCompletionModel::setContext: Invalid code-completion context" << endl;
   }

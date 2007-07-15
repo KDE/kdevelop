@@ -30,10 +30,14 @@ ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion 
     m_type = dynamic_cast<CppFunctionType*>( decl->abstractType().data());
 }
 
+KDevelop::DeclarationPointer ViableFunction::declaration() const {
+  return m_declaration;
+}
+
 void ViableFunction::matchParameters( const OverloadResolver::ParameterList& params, bool partial ) {
   if( !isValid() )
     return;
-  AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration);
+  AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());
   if( params.parameters.size() + functionDecl->defaultParameters().size() < m_type->arguments().size() && !partial )
     return; //Not enough parameters + default-parameters
   if( params.parameters.size() > m_type->arguments().size() )

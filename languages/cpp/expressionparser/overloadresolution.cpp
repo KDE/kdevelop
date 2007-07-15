@@ -137,7 +137,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   }
 
   if( bestViableFunction.isViable() )
-    return dynamic_cast<Declaration*>(bestViableFunction.declaration());
+    return dynamic_cast<Declaration*>(bestViableFunction.declaration().data());
   else
     return 0;
 }

@@ -93,12 +93,15 @@ namespace Cpp {
        * @warning The du-chain must be unlocked when this is called
        * @param knownArgumentExpressions has no effect when firstContext is set
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, bool firstContext = true, const QStringList& knownArgumentExpressions = QStringList() );
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0, const QStringList& knownArgumentExpressions = QStringList() );
       ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
-      operator bool() const;
+      bool isValid() const;
 
+      ///@return depth of the context. The basic completion-context has depth 0, it's parent 1, and so on..
+      int depth() const;
+      
       /**In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
@@ -166,6 +169,7 @@ namespace Cpp {
       ExpressionEvaluationResult m_expressionResult;
 
       QString m_text;
+      int m_depth;
 
       //Here known argument-expressions and their types, that may have come from sub-context's, are stored
       QStringList m_knownArgumentExpressions;

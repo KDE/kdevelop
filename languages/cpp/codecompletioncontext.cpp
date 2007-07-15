@@ -60,18 +60,21 @@ CodeCompletionContext::Function::Function() : matchedArguments(0) {
 CodeCompletionContext::Function::Function( int _matchedArguments, const ViableFunction& _viable ) : matchedArguments(_matchedArguments), function(_viable) {
 }
 
-CodeCompletionContext::operator bool() const {
+bool CodeCompletionContext::isValid() const {
   return m_valid;
 }
 
+int CodeCompletionContext::depth() const {
+  return m_depth;
+}
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, bool firstContext, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_depth(depth),  m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
 {
-  static int depth = 0;
+  static int recursionDepth = 0;
 
-  IntPusher( depth, depth+1 );
+  IntPusher( recursionDepth, recursionDepth+1 );
 
-  if( depth > 10 ) {
+  if( recursionDepth > 10 ) {
     log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
     m_valid = false;
     return;
@@ -118,9 +121,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
 
   if( endsWithOperator( m_text ) ) {
-    if( firstContext ) {
+    if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, false );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, depth+1 );
       return;
     }
     m_memberAccessOperation = FunctionCallAccess;
@@ -130,9 +133,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
 
   if( m_text.endsWith("(") ) {
-    if( firstContext ) {
+    if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, false );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, depth+1 );
       return;
     }
     m_contextType = FunctionCall;
@@ -185,13 +188,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     QString parentContextText = expressionPrefix.left(parentContextEnd);
 
     log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
-    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, false, otherArguments );
+    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, depth+1, otherArguments );
   }
 
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) ) {
     log( QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix) );
-    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, false );
+    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, depth+1 );
   }
 
   ///Now care about m_expression. It may still contain keywords like "new "
@@ -339,7 +342,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   QList< ViableFunction > viableFunctions = resolv.resolveListPartial( knownParameters, declarations );
   foreach( const ViableFunction& function, viableFunctions ) {
     if( function.declaration() && function.declaration()->abstractType() ) {
-      m_functions << Function( m_argumentCountMap[function.declaration()] + knownParameters.parameters.size(), function );
+      m_functions << Function( m_argumentCountMap[function.declaration().data()] + knownParameters.parameters.size(), function );
     }
   }
 }

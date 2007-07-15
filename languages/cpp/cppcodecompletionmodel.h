@@ -22,13 +22,19 @@
 #ifndef KDEVCPPCODECOMPLETIONMODEL_H
 #define KDEVCPPCODECOMPLETIONMODEL_H
 
+#include <QPair>
 #include <ktexteditor/codecompletionmodel.h>
+#include <ksharedptr.h>
 #include <duchainpointer.h>
 
 namespace KDevelop
 {
 class DUContext;
 class Declaration;
+}
+
+namespace Cpp {
+  class CodeCompletionContext;
 }
 
 class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
@@ -49,8 +55,10 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
 
   private:
     KDevelop::DUContextPointer m_context;
+    KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
+    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
 
-    QList<KDevelop::DeclarationPointer> m_declarations;
+    QList< DeclarationContextPair > m_declarations;
 };
 
 #endif

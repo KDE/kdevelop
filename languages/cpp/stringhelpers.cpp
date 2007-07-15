@@ -358,11 +358,12 @@ int findCommaOrEnd( const QString& str , int pos, QChar validEnd) {
 void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
   QString reversed = reverse( str.left(argumentsStart) );
   //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
+  SafetyCounter s( 1000 );
 
   int pos = 0;
   int len = reversed.length();
   //we are searching for an opening-brace, but the reversion has also reversed the brace
-  while( pos != len ) {
+  while( pos != len && s ) {
     int lastPos = pos;
     pos = findCommaOrEnd( reversed, pos )  ;
     if( pos > lastPos ) {
@@ -374,6 +375,10 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
       break;
     else
       ++pos;
+  }
+
+  if( !s ) {
+    kDebug() << "skipFunctionArguments: Safety-counter triggered" << endl;
   }
 
   argumentsStart -= pos;

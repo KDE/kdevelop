@@ -62,13 +62,11 @@ namespace Cpp {
      * */
     bool isViable() const;
 
-    Declaration* declaration() const {
-      return m_declaration;
-    }
+    KDevelop::DeclarationPointer declaration() const;
     
     private:
     QList<int> m_parameterConversions;
-    Declaration* m_declaration;
+    KDevelop::DeclarationPointer m_declaration;
     CppFunctionType* m_type;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };  
