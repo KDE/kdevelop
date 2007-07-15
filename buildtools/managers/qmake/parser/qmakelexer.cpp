@@ -18,9 +18,10 @@
  * 02110-1301, USA.
  */
 
+#include "qmakelexer.h"
+
 #include <QtCore/QString>
 #include <QtCore/QDebug>
-#include "qmakelexer.h"
 #include "qmake_parser.h"
 #include <kdev-pg-location-table.h>
 #include <kdev-pg-token-stream.h>
