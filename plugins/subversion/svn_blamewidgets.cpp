@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 #include "svn_blamewidgets.h"
+#include "svn_revision.h"
+#include "svn_revisionwidget.h"
 #include <QListWidget>
 #include <QGridLayout>
 #include <QPushButton>
@@ -113,6 +115,37 @@ void SvnBlameFileSelectDlg::accept()
         }
     }
     KDialog::accept();
+}
+
+//////////////////////////////////////////////////////////////////////
+
+SvnBlameOptionDlg::SvnBlameOptionDlg( QWidget *parent )
+    : KDialog( parent )
+{
+    QWidget *widget = new QWidget(this);
+    ui.setupUi(widget);
+    setMainWidget( widget );
+    setCaption( "Subversion Blame" );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+
+    ui.startRevWidget->setNumber( 0 );
+    ui.startRevWidget->enableType( SvnRevision::number );
+    ui.endRevWidget->setKey( SvnRevision::BASE );
+    ui.endRevWidget->enableType( SvnRevision::kind );
+}
+
+SvnBlameOptionDlg::~SvnBlameOptionDlg()
+{
+}
+
+SvnRevision SvnBlameOptionDlg::startRev()
+{
+    return ui.startRevWidget->revision();
+}
+
+SvnRevision SvnBlameOptionDlg::endRev()
+{
+    return ui.endRevWidget->revision();
 }
 
 #include "svn_blamewidgets.moc"

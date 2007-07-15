@@ -136,7 +136,6 @@ class SvnBlameJob : public SubversionThread
 {
 public:
     SvnBlameJob( const KUrl& path_or_url,
-                 bool repositblame,
                 const SvnRevision &rev1, const SvnRevision &rev2,
                 int actionType, SvnKJobBase *parent );
 
@@ -157,10 +156,8 @@ protected:
 private:
     SvnRevision m_startRev, m_endRev;
     KUrl m_pathOrUrl;
-    bool m_repositBlame;
 };
 
-// class SvnLogviewJob : public SubversionJob
 class SvnLogviewJob : public SubversionThread
 {
 public:

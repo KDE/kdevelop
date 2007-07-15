@@ -72,9 +72,9 @@ public:
                                    const SvnRevision &rev1, const SvnRevision &rev2, int limit,
                                    bool discorverChangedPath, bool strictNodeHistory );
 
-    void spawnBlameThread( const KUrl &url, bool repositBlame,
+    void spawnBlameThread( const KUrl &url,
                     const SvnRevision &rev1, const SvnRevision &rev2 );
-    SvnKJobBase* createBlameJob( const KUrl &url, bool repositBlame,
+    SvnKJobBase* createBlameJob( const KUrl &url,
                                  const SvnRevision &rev1, const SvnRevision &rev2 );
 
     /// Creates job. Starts it ASynchronously. Also returns the running job.

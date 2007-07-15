@@ -46,6 +46,7 @@ set(kdevsubversion_PART_UI
     uidiff_option_dlg.ui
     svnrevisionwidget.ui
     uistatus_option_dlg.ui
+    uiblame_option_dlg.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

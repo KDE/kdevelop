@@ -12,13 +12,11 @@
 #ifndef SVN_BLAMEWIDGET_H
 #define SVN_BLAMEWIDGET_H
 
+#include "ui_uiblame_option_dlg.h"
 #include "ui_svnblamewidget.h"
 #include "svn_models.h"
-#include <QDialog>
-
-class QGridLayout;
-class QPushButton;
-class QListWidget;
+#include <kdialog.h>
+class SvnRevision;
 
 class SvnBlameWidget : public QWidget, public Ui::SvnBlameWidget{
 public:
@@ -43,6 +41,20 @@ public Q_SLOTS:
 
 private:
     class SvnBlameFileSelectDlgPrivate *d;
+};
+
+class SvnBlameOptionDlg : public KDialog
+{
+    Q_OBJECT
+public:
+    explicit SvnBlameOptionDlg( QWidget *parent = 0 );
+    ~SvnBlameOptionDlg();
+
+    SvnRevision startRev();
+    SvnRevision endRev();
+
+private:
+    Ui::SvnBlameOptionDlg ui;
 };
 
 

@@ -499,11 +499,9 @@ apr_pool_t* SubversionThread::pool()
 //////////////////////////////////////////////////////////////////////
 
 SvnBlameJob::SvnBlameJob(  const KUrl& path_or_url,
-                        bool reposit,
                         const SvnRevision &rev1, const SvnRevision &rev2,
                         int actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent )
-    ,m_repositBlame(reposit)
 {
     m_startRev = rev1;
     m_endRev = rev2;
@@ -514,40 +512,10 @@ SvnBlameJob::~SvnBlameJob()
 
 void SvnBlameJob::run()
 {
-    kDebug() << " inside subversion blame job " << (long int)this << endl;
     setTerminationEnabled(true);
     apr_pool_t *subpool = svn_pool_create( pool() );
 
-    const char* path_or_url=0;
-    // fill out path_or_url according to the repository access flag, defined by user
-    kDebug() << " SvnBlameJob::run() reqPath " << m_pathOrUrl << endl;
-    if (m_repositBlame) {
-        svn_error_t *urlErr=0;
-        const char* out_url = 0;
-        urlErr = svn_client_url_from_path( &out_url, m_pathOrUrl.pathOrUrl().toUtf8(), subpool );
-        if (urlErr || !out_url ){
-            setErrorMsg( i18n("Fail to retrieve repository URL of request file."
-                    "Check whether the requested file is really under version control"));
-            svn_pool_destroy( subpool );
-            return;
-        }
-        if (QString(out_url).isEmpty()){
-            setErrorMsg (i18n("Converted repository URL is empty."
-                    "Check whether requested item is really under version control" ));
-            svn_pool_destroy( subpool );
-            return;
-        }
-        // if the out_url is same with m_pathOrUrl..toUtf8, out_url's memory address is just m_pathUrl
-        // so we must allocate separate memory
-        path_or_url = apr_pstrdup( subpool, out_url );
-        kDebug() << " repository URL from PATH: " << path_or_url << endl;
-    } else{
-        const char *out_url = 0;
-        m_pathOrUrl.setProtocol( "file" );
-        out_url = svn_path_canonicalize( m_pathOrUrl.path().toUtf8(), subpool );
-        path_or_url = apr_pstrdup( subpool, out_url );
-        kDebug() << " working copy path : " << path_or_url << endl;
-    }// ent of filling out path_or_url
+    const char* path_or_url= apr_pstrdup( subpool, m_pathOrUrl.pathOrUrl().toUtf8() );
 
     svn_opt_revision_t rev1 = m_startRev.revision();
     svn_opt_revision_t rev2 = m_endRev.revision();

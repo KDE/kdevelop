@@ -1,219 +1,54 @@
 <ui version="4.0" >
  <class>SvnBlameOptionDlg</class>
- <widget class="QDialog" name="SvnBlameOptionDlg" >
+ <widget class="QWidget" name="SvnBlameOptionDlg" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
-    <height>397</height>
+    <width>440</width>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string/>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item row="0" column="0" >
-    <widget class="QGroupBox" name="logType" >
-     <property name="title" >
-      <string>Annotate Type</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QRadioButton" name="workingCopy" >
-        <property name="text" >
-         <string>Working Copy Annotation</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="reposit" >
-        <property name="text" >
-         <string>Repository Annotation</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
-      <string>End Revision</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="endNum" >
-        <property name="text" >
-         <string>Specify By number</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="endDate" >
-        <property name="text" >
-         <string>Specify By Date</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="endKind" >
-        <property name="text" >
-         <string>Specify By Keyword</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="QDateEdit" name="endDateEdit" >
-        <property name="date" >
-         <date>
-          <year>2006</year>
-          <month>1</month>
-          <day>1</day>
-         </date>
-        </property>
-        <property name="calendarPopup" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QComboBox" name="endKindEdit" />
-      </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="endNumEdit" />
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Start Revision</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="startNumEdit" />
-      </item>
-      <item row="1" column="1" >
-       <widget class="QComboBox" name="startKindEdit" />
-      </item>
-      <item row="2" column="1" >
-       <widget class="QDateEdit" name="startDateEdit" >
-        <property name="date" >
-         <date>
-          <year>2007</year>
-          <month>3</month>
-          <day>1</day>
-         </date>
-        </property>
-        <property name="calendarPopup" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="startKind" >
-        <property name="text" >
-         <string>Specify By Keyword</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="startDate" >
-        <property name="text" >
-         <string>Specify By Date</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0" >
-       <widget class="QRadioButton" name="startNum" >
-        <property name="text" >
-         <string>Specify By number</string>
-        </property>
-       </widget>
+       <widget class="SvnRevisionWidget" native="1" name="startRevWidget" />
       </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>End Revision</string>
      </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton" >
-       <property name="text" >
-        <string>OK</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2" >
-       <property name="text" >
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="SvnRevisionWidget" native="1" name="endRevWidget" />
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>SvnRevisionWidget</class>
+   <extends>QWidget</extends>
+   <header>svn_revisionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <includes>
   <include location="local" >knuminput.h</include>
   <include location="local" >knuminput.h</include>

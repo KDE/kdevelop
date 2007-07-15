@@ -24,6 +24,7 @@
 #include "svn_updatewidget.h"
 #include "svn_diffwidgets.h"
 #include "svn_statuswidgets.h"
+#include "svn_blamewidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -441,7 +442,7 @@ VcsJob* KDevSubversionPart::annotate( const KUrl& localLocation,
     SvnRevision rev1, rev2;
     rev1.fromVcsRevision( rev );
     rev2.setNumber( 0 );
-    return svncore()->createBlameJob( localLocation, true, rev1, rev2 );
+    return svncore()->createBlameJob( localLocation, rev1, rev2 );
 }
 
 VcsJob* KDevSubversionPart::showAnnotate( const KUrl& localLocation,
@@ -557,10 +558,13 @@ void KDevSubversionPart::logview( const KUrl &wcPath_or_url )
 }
 void KDevSubversionPart::annotate( const KUrl &path_or_url )
 {
-    SvnRevision rev1, rev2;
-    rev1.setNumber( 0 );
-    rev2.setKey( SvnRevision::HEAD );
-    d->m_impl->spawnBlameThread(path_or_url, true,  rev1, rev2 );
+    SvnBlameOptionDlg dlg;
+    if( dlg.exec() != QDialog::Accepted )
+        return;
+
+    SvnRevision rev1 = dlg.startRev();
+    SvnRevision rev2 = dlg.endRev();
+    d->m_impl->spawnBlameThread(path_or_url, rev1, rev2 );
 }
 void KDevSubversionPart::vcsInfo( const KUrl &path_or_url ) // not yet in interface
 {
@@ -692,7 +696,7 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
             connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
             actions << action;
 
-            action = new QAction(i18n("Blame/Annotate)"), this);
+            action = new QAction(i18n("Blame/Annotate..."), this);
             connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
             actions << action;
 

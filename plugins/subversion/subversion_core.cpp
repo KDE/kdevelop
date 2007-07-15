@@ -235,22 +235,22 @@ SvnKJobBase* SubversionCore::createLogviewJob( const KUrl::List& list,
     return job;
 }
 
-void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
+void SubversionCore::spawnBlameThread( const KUrl &url,
                                        const SvnRevision &rev1, const SvnRevision &rev2 )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_BLAME, this );
-    SvnBlameJob *thread = new SvnBlameJob( url, repositBlame,
+    SvnBlameJob *thread = new SvnBlameJob( url,
                                rev1, rev2,
                                SVN_BLAME, job );
 
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
 }
-SvnKJobBase* SubversionCore::createBlameJob( const KUrl &url, bool repositBlame,
+SvnKJobBase* SubversionCore::createBlameJob( const KUrl &url,
                                  const SvnRevision &rev1, const SvnRevision &rev2 )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_BLAME, this );
-    SvnBlameJob *thread = new SvnBlameJob( url, repositBlame,
+    SvnBlameJob *thread = new SvnBlameJob( url,
                                            rev1, rev2,
                                            SVN_BLAME, job );
     return job;

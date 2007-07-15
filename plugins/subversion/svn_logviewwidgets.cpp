@@ -144,7 +144,7 @@ void SvnLogviewWidget::blameRev()
         SvnRevision rev1, rev2;
         rev1.setNumber( 0 );
         rev2.setNumber( rev );
-        m_part->svncore()->spawnBlameThread( absUrl, true,  rev1, rev2 );
+        m_part->svncore()->spawnBlameThread( absUrl, rev1, rev2 );
     }
     else{
         return;
