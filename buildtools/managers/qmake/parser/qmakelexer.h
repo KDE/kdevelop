@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <QtCore/QStack>
+#include <QtCore/QString>
 
 class QString;
 class kdev_pg_location_table;
