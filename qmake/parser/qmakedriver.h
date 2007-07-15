@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QMAKEPARSER_H
-#define QMAKEPARSER_H
+#ifndef QMAKEDRIVER_H
+#define QMAKEDRIVER_H
 
 #include <QtCore/QString>
 
