@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>401</width>
-    <height>456</height>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -14,158 +14,30 @@
   </property>
   <layout class="QGridLayout" >
    <item row="0" column="0" >
-    <widget class="QGroupBox" name="logType" >
-     <property name="title" >
-      <string>Log Type</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="1" >
-       <widget class="QRadioButton" name="workingCopy" >
-        <property name="text" >
-         <string>Working Copy History</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="reposit" >
-        <property name="text" >
-         <string>Repository History</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Start Revision</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>6</number>
-      </property>
       <item row="0" column="0" >
-       <widget class="QRadioButton" name="startNum" >
-        <property name="text" >
-         <string>Specify By number</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="startKind" >
-        <property name="text" >
-         <string>Specify By Keyword</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QComboBox" name="startKindEdit" >
-        <item>
-         <property name="text" >
-          <string>HEAD</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="startDate" >
-        <property name="text" >
-         <string>Specify By Date</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="KIntNumInput" name="startNumEdit" />
-      </item>
-      <item row="2" column="1" >
-       <widget class="QDateTimeEdit" name="startDateEdit" />
+       <widget class="SvnRevisionWidget" native="1" name="startRevWidget" />
       </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" >
+   <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="title" >
       <string>End Revision</string>
      </property>
      <layout class="QGridLayout" >
       <item row="0" column="0" >
-       <widget class="QRadioButton" name="endNum" >
-        <property name="text" >
-         <string>Specify By number</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="KIntNumInput" name="endNumEdit" />
-      </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="endKind" >
-        <property name="text" >
-         <string>Specify By Keyword</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QComboBox" name="endKindEdit" />
-      </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="endDate" >
-        <property name="text" >
-         <string>Specify By Date</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="QDateTimeEdit" name="endDateEdit" />
+       <widget class="SvnRevisionWidget" native="1" name="endRevWidget" />
       </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" >
+   <item row="2" column="0" >
     <layout class="QHBoxLayout" >
      <property name="spacing" >
       <number>6</number>
@@ -204,7 +76,7 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0" >
+   <item row="3" column="0" >
     <widget class="QCheckBox" name="checkBox1" >
      <property name="text" >
       <string>Do not show logs before branching point</string>
@@ -220,9 +92,10 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KIntNumInput</class>
+   <class>SvnRevisionWidget</class>
    <extends>QWidget</extends>
-   <header>knuminput.h</header>
+   <header>svn_revisionwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <includes>

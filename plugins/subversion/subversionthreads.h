@@ -167,7 +167,6 @@ public:
     SvnLogviewJob( const SvnRevision &rev1,
                    const SvnRevision &rev2,
                    int listLimit,
-                   bool repositLog,
                    bool discorverChangedPaths,
                    bool strictNodeHistory,
                    const KUrl::List& urls,
@@ -191,7 +190,7 @@ protected:
 private:
     SvnRevision m_rev1, m_rev2;
     int limit;
-    bool repositLog, discorverChangedPaths, strictNodeHistory;
+    bool discorverChangedPaths, strictNodeHistory;
     KUrl::List urls;
 };
 

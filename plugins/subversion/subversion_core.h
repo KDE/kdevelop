@@ -67,10 +67,10 @@ public:
 
     void spawnLogviewThread(const KUrl::List& list,
                         const SvnRevision &rev1, const SvnRevision &rev2, int limit,
-                        bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
+                        bool discorverChangedPath, bool strictNodeHistory );
     SvnKJobBase* createLogviewJob( const KUrl::List& list,
                                    const SvnRevision &rev1, const SvnRevision &rev2, int limit,
-                                   bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
+                                   bool discorverChangedPath, bool strictNodeHistory );
 
     void spawnBlameThread( const KUrl &url, bool repositBlame,
                     const SvnRevision &rev1, const SvnRevision &rev2 );

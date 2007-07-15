@@ -54,7 +54,6 @@ public:
     explicit SvnLogviewOptionDialog( const KUrl &url, QWidget *parent = 0 );
     virtual ~SvnLogviewOptionDialog();
 
-    bool repositLog();
     SvnRevision startRev();
     SvnRevision endRev();
     int limit();

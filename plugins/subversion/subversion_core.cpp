@@ -200,7 +200,7 @@ SvnKJobBase* SubversionCore::createUpdateJob( const KUrl::List &wcPaths,
 
 void SubversionCore::spawnLogviewThread(const KUrl::List& list,
                                         const SvnRevision &rev1, const SvnRevision &rev2,
-                                        int limit, bool repositLog,
+                                        int limit,
                                         bool discorverChangedPath, bool strictNodeHistory )
 {
     // KUrl::List is handed. But only one Url will be used effectively.
@@ -209,9 +209,7 @@ void SubversionCore::spawnLogviewThread(const KUrl::List& list,
     SvnKJobBase *job= new SvnKJobBase( SVN_LOGVIEW, this );
     SvnLogviewJob* thread = new SvnLogviewJob(
                             rev1, rev2,
-                            limit,
-                            repositLog, discorverChangedPath, strictNodeHistory,
-                            list,
+                            limit,discorverChangedPath, strictNodeHistory, list,
                             SVN_LOGVIEW, job );
     job->setSvnThread( thread );
 
@@ -225,15 +223,13 @@ void SubversionCore::spawnLogviewThread(const KUrl::List& list,
 }
 
 SvnKJobBase* SubversionCore::createLogviewJob( const KUrl::List& list,
-                                   const SvnRevision &rev1, const SvnRevision &rev2, int limit,
-                                   bool repositLog, bool discorverChangedPath, bool strictNodeHistory )
+                                   const SvnRevision &rev1, const SvnRevision &rev2,
+                                    int limit, bool discorverChangedPath, bool strictNodeHistory )
 {
     SvnKJobBase *job= new SvnKJobBase( SVN_LOGVIEW, this );
     SvnLogviewJob* thread = new SvnLogviewJob(
                             rev1, rev2,
-                            limit,
-                            repositLog, discorverChangedPath, strictNodeHistory,
-                            list,
+                            limit,discorverChangedPath, strictNodeHistory, list,
                             SVN_LOGVIEW, job );
     job->setSvnThread( thread );
     return job;

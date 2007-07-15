@@ -579,14 +579,13 @@ svn_error_t* SvnBlameJob::blameReceiver( void *baton, apr_int64_t line_no, svn_r
 SvnLogviewJob::SvnLogviewJob( const SvnRevision &rev1,
                 const SvnRevision &rev2,
                 int listLimit,
-                bool reposit,
                 bool discorverPaths,
                 bool strictNodeHistory,
                 const KUrl::List& urls,
                 int actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent ),
     m_rev1( rev1 ), m_rev2( rev2 ),
-    limit( listLimit ), repositLog(reposit),
+    limit( listLimit ),
     discorverChangedPaths(discorverPaths),
     strictNodeHistory(strictNodeHistory),
     urls(urls)
@@ -600,9 +599,12 @@ void SvnLogviewJob::run()
     setTerminationEnabled(true);
     apr_pool_t *subpool = svn_pool_create (pool());
 
-    svn_opt_revision_t rev1, rev2;
+    svn_opt_revision_t rev1, rev2/*, peg_rev*/;
     rev1 = m_rev1.revision();
     rev2 = m_rev2.revision();
+//     SvnRevision pegrev;
+//     pegrev.setKey( SvnRevision::BASE );
+//     peg_rev = pegrev.revision();
 
     // IMPORTANT: A special case for the revision range HEAD:1, which was present
     // in svn_client_log(), has been removed from svn_client_log2().  Instead, it
@@ -615,37 +617,18 @@ void SvnLogviewJob::run()
     }
 
     apr_array_header_t *targets = apr_array_make(subpool, 1+urls.count(), sizeof(const char *));
-
-    for ( QList<KUrl>::const_iterator it = urls.begin(); it != urls.end() ; ++it ) {
+    for ( QList<KUrl>::iterator it = urls.begin(); it != urls.end() ; ++it ) {
         KUrl nurl = *it;
-
-        if ( repositLog ){ // show repository log
-            const char *urlFromPath=0;
-            svn_error_t *urlErr=0;
-            urlErr = svn_client_url_from_path( &urlFromPath, nurl.path().toUtf8(), subpool );
-            if (urlErr || !urlFromPath ){
-                setErrorMsg(i18n("Fail to retrieve repository URL of request file/dir. Check whether requested item is really under version control"));
-                svn_pool_destroy (subpool);
-                return;
-            }
-            if (QString(urlFromPath).isEmpty()){
-                setErrorMsg(i18n("Converted repository URL is empty. Check whether requested item is under version control"));
-                svn_pool_destroy (subpool);
-                return;
-            }
-            (*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
-                    apr_pstrdup( subpool, urlFromPath );
-            kDebug() << " urlFromPath: " << urlFromPath << endl;
-        }else{ // show working copy log
-            nurl.setProtocol( "file" );
-            (*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
-                    apr_pstrdup( subpool, svn_path_canonicalize( nurl.path().toUtf8(), subpool ) );
-        }
+//         nurl.setProtocol( "file" );
+        const char *path =
+            apr_pstrdup( subpool, svn_path_canonicalize( nurl.pathOrUrl().toUtf8(), subpool ) );
+        kDebug() << path << endl;
+        *(( const char ** )apr_array_push(( apr_array_header_t* )targets)) = path;
     }
 
     svn_log_message_receiver_t receiver = SvnLogviewJob::receiveLogMessage;
     svn_error_t *err =
-            svn_client_log2(targets, &rev1, &rev2,
+            svn_client_log2(targets, /*&peg_rev, */&rev1, &rev2,
                             limit, discorverChangedPaths, strictNodeHistory,
                             receiver, this, ctx(), subpool);
     if ( err ){

@@ -200,8 +200,10 @@ SvnLogviewOptionDialog::SvnLogviewOptionDialog( const KUrl &url, QWidget *parent
     setCaption( QString("LogView for %1").arg(d->m_url.toLocalFile()) );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
-    d->ui.startDateEdit->setDateTime( QDateTime::currentDateTime() );
-    d->ui.endDateEdit->setDateTime( QDateTime::currentDateTime() );
+    d->ui.startRevWidget->setKey( SvnRevision::BASE );
+    d->ui.startRevWidget->enableType( SvnRevision::kind );
+    d->ui.endRevWidget->setNumber(1);
+    d->ui.endRevWidget->enableType( SvnRevision::number );
 }
 
 SvnLogviewOptionDialog::~SvnLogviewOptionDialog()
@@ -209,75 +211,14 @@ SvnLogviewOptionDialog::~SvnLogviewOptionDialog()
     delete d;
 }
 
-bool SvnLogviewOptionDialog::repositLog()
-{
-    return d->ui.reposit->isChecked();
-}
-
 SvnRevision SvnLogviewOptionDialog::startRev()
 {
-    SvnRevision rev;
-    if( d->ui.startNum->isChecked() ){
-        rev.setNumber( d->ui.startNumEdit->value() );
-        return rev;
-    }
-    else if( d->ui.startKind->isChecked() ){
-        // note. If you add more keywords in .ui, you should update below.
-        if( d->ui.startKindEdit->currentText() == "HEAD" ){
-            rev.setKey( SvnRevision::HEAD );
-        }
-        else if( d->ui.startKindEdit->currentText() == "BASE" ){
-            rev.setKey( SvnRevision::BASE );
-        }
-        else if( d->ui.startKindEdit->currentText() == "PREV" ){
-            rev.setKey( SvnRevision::PREV );
-        }
-        else if( d->ui.startKindEdit->currentText() == "COMMITTED" ){
-            rev.setKey( SvnRevision::COMMITTED );
-        }
-        return rev;
-    }
-    else if( d->ui.startDate->isChecked() ){
-        rev.setDate( d->ui.startDateEdit->dateTime() );
-        return rev;
-    }
-    else{
-        // should not reach here
-        return rev;
-    }
+    return d->ui.startRevWidget->revision();
 }
 
 SvnRevision SvnLogviewOptionDialog::endRev()
 {
-    SvnRevision rev;
-    if( d->ui.endNum->isChecked() ){
-        rev.setNumber( d->ui.endNumEdit->value() );
-        return rev;
-    }
-    else if( d->ui.endKind->isChecked() ){
-        // note. If you add more keywords in .ui, you should update below.
-        if( d->ui.endKindEdit->currentText() == "HEAD" ){
-            rev.setKey( SvnRevision::HEAD );
-        }
-        else if( d->ui.endKindEdit->currentText() == "BASE" ){
-            rev.setKey( SvnRevision::BASE );
-        }
-        else if( d->ui.endKindEdit->currentText() == "PREV" ){
-            rev.setKey( SvnRevision::PREV );
-        }
-        else if( d->ui.endKindEdit->currentText() == "COMMITTED" ){
-            rev.setKey( SvnRevision::COMMITTED );
-        }
-        return rev;
-    }
-    else if( d->ui.endDate->isChecked() ){
-        rev.setDate( d->ui.endDateEdit->dateTime() );
-        return rev;
-    }
-    else{
-        // should not reach here
-        return rev;
-    }
+    return d->ui.endRevWidget->revision();
 }
 
 int SvnLogviewOptionDialog::limit()

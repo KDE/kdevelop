@@ -404,7 +404,7 @@ VcsJob* KDevSubversionPart::log( const KUrl& localLocation, const VcsRevision& r
     endRev.setNumber(0);
     KUrl::List list;
     list << localLocation;
-    return svncore()->createLogviewJob( list, startRev, endRev, limit, true, true, false );
+    return svncore()->createLogviewJob( list, startRev, endRev, limit, true, false );
 }
 
 VcsJob* KDevSubversionPart::log( const KUrl& localLocation,
@@ -416,7 +416,7 @@ VcsJob* KDevSubversionPart::log( const KUrl& localLocation,
     endRev.fromVcsRevision( limit );
     KUrl::List list;
     list << localLocation;
-    return svncore()->createLogviewJob( list, startRev, endRev, 0, true, true, false );
+    return svncore()->createLogviewJob( list, startRev, endRev, 0, true, false );
 }
 
 VcsJob* KDevSubversionPart::showLog( const KUrl& localLocation,
@@ -432,7 +432,7 @@ VcsJob* KDevSubversionPart::showLog( const KUrl& localLocation,
     rev1 = dlg.startRev();
     rev2 = dlg.endRev();
     return svncore()->createLogviewJob( list, rev1, rev2,
-                            dlg.limit() , dlg.repositLog(), true, dlg.strictNode() );
+                            dlg.limit(), true, dlg.strictNode() );
 }
 
 VcsJob* KDevSubversionPart::annotate( const KUrl& localLocation,
@@ -553,7 +553,7 @@ void KDevSubversionPart::logview( const KUrl &wcPath_or_url )
     }
     rev1 = dlg.startRev();
     rev2 = dlg.endRev();
-    svncore()->spawnLogviewThread(list, rev1, rev2, dlg.limit() , dlg.repositLog(), true, dlg.strictNode() );
+    svncore()->spawnLogviewThread(list, rev1, rev2, dlg.limit() , true, dlg.strictNode() );
 }
 void KDevSubversionPart::annotate( const KUrl &path_or_url )
 {
