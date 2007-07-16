@@ -127,12 +127,12 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     SymbolTable::self();
 }
 
-void CppLanguageSupport::documentChanged( KDevelop::IDocument* document ) {
-    language()->backgroundParser()->addDocument(document->url());
-}
-
 CppLanguageSupport::~CppLanguageSupport()
 {
+    // Remove any documents waiting to be parsed from the background paser.
+    BackgroundParser::self()->clear(this);
+
+    // Remove the corresponding parsing environment from the DUChain.
     {
         DUChainWriteLocker l(DUChain::lock());
         DUChain::self()->removeParsingEnvironmentManager(m_lexerCache);
@@ -144,6 +144,11 @@ CppLanguageSupport::~CppLanguageSupport()
     #ifndef Q_OS_WIN
     delete m_includeResolver;
     #endif
+}
+
+void CppLanguageSupport::documentChanged( KDevelop::IDocument* document )
+{
+    BackgroundParser::self()->addDocument(document->url());
 }
 
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
@@ -161,24 +166,9 @@ void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
 
     QList<TopDUContext*> chains = DUChain::self()->chainsForDocument(doc->url());
 
-    foreach (TopDUContext* chain, chains)
+    foreach (TopDUContext* chain, chains) {
         sc.convertDUChain(chain);
-
-    if (chains.isEmpty())
-        language()->backgroundParser()->addDocument(doc->url());
-}
-
-void CppLanguageSupport::documentActivated(KDevelop::IDocument* doc)
-{
-    kDebug( 9007 ) << "CppLanguageSupport::documentActivated" << endl;
-    kDebug( 9007 ) << "adding document to bgparser" << endl;
-}
-
-void CppLanguageSupport::documentClosed(KDevelop::IDocument* doc)
-{
-    kDebug( 9007 ) << "CppLanguageSupport::documentClosed" << endl;
-    kDebug( 9007 ) << "removing document from bgparser" << endl;
-    language()->backgroundParser()->removeDocument(doc->url());
+    }
 }
 
 KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
@@ -188,22 +178,11 @@ KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 
 void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
 {
+    Q_UNUSED(project)
     // FIXME Add signals slots from the filemanager for:
     //       1. filesAddedToProject
     //       2. filesRemovedFromProject
     //       3. filesChangedInProject
-
-    // FIXME this should be moved to the project itself
-    KUrl::List documentList;
-    foreach ( KDevelop::ProjectFileItem * file, project->files() )
-    {
-        ///@todo implement ILanguage::supportsDocument or smth like that
-//         if ( language()->supportsDocument( file->url() ) )
-//         {
-            documentList.append( file->url() );
-//         }
-    }
-    language()->backgroundParser()->addDocumentList( documentList );
 }
 
 void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
