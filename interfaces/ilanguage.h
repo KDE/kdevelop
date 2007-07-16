@@ -43,14 +43,8 @@ public:
     virtual void activate() = 0;
     virtual void deactivate() = 0;
 
-    //virtual CodeDelegate *codeDelegate() const = 0;
-    //virtual CodeHighlighting *codeHighlighting() const = 0;
-
     /** @return the language support plugin.*/
     virtual ILanguageSupport *languageSupport() = 0;
-
-    /** @return the background parser for parsing sources.*/
-    virtual BackgroundParser *backgroundParser() = 0;
 
     virtual QMutex *parseMutex(QThread *thread) const = 0;
     virtual void lockAllParseMutexes() = 0;

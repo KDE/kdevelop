@@ -47,11 +47,9 @@ Boston, MA 02110-1301, USA.
 #include "project.h"
 #include "mainwindow.h"
 #include "projectmodel.h"
-// #include "kdevlanguagecontroller.h"
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
-// #include "kdevdocumentcontroller.h"
 
 namespace KDevelop
 {
@@ -93,8 +91,7 @@ public:
     }
     QStringList findPluginsForProject( IProject* project )
     {
-//         return QStringList();
-        QList<IPlugin*> plugins = m_core->pluginControllerInternal()->loadedPlugins();
+        QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); it++ )
         {
@@ -199,7 +196,6 @@ QList<IProject*> ProjectController::projects() const
 
 bool ProjectController::openProject( const KUrl &projectFile )
 {
-
     KUrl url = projectFile;
 
     if ( url.isEmpty() )
@@ -261,7 +257,7 @@ bool ProjectController::projectImportingFinished( IProject* project )
 
     d->m_projects.append( project );
 
-//     KActionCollection * ac = d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
+//     KActionCollection * ac = d->m_core->uiController()->defaultMainWindow()->actionCollection();
 //     QAction * action;
 
     //action = ac->action( "project_close" );

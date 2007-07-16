@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright (C) 2007 by Alexander Dymo <adymo@kdevelop.org>             *
+ *   Copyright (C) 2007 by Kris Wong <kris.p.wong@gmail.com>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -25,10 +26,11 @@
 
 namespace KDevelop {
 
+class UiController;
 class PluginController;
 class ProjectController;
+class LanguageController;
 class PartController;
-class UiController;
 class DocumentController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
@@ -39,38 +41,48 @@ public:
     virtual ~Core();
 
     /** @copydoc ICore::uiController() */
-    virtual IUiController *uiController();
+    IUiController *uiController();
 
     /** @copydoc ICore::pluginController() */
-    virtual IPluginController *pluginController();
+    IPluginController *pluginController();
 
     /** @copydoc ICore::projectController() */
-    virtual IProjectController *projectController();
+    IProjectController *projectController();
 
     /** @copydoc ICore::languageController() */
-    virtual ILanguageController *languageController();
+    ILanguageController *languageController();
 
-    virtual KParts::PartManager *partManager();
+    /** @copydoc ICore::partManager() */
+    KParts::PartManager *partManager();
 
-    virtual IDocumentController *documentController();
+    /** @copydoc ICore::documentController() */
+    IDocumentController *documentController();
 
-    /// @internal
-    PartController *partController();
-    /// @internal
+    /// The following methods may only be used within the shell.
+
+    /** @return ui controller */
     UiController *uiControllerInternal();
-    /// @internal
-    virtual DocumentController *documentControllerInternal();
 
-    PluginController* pluginControllerInternal();
+    /** @return plugin controller */
+    PluginController *pluginControllerInternal();
 
-    ProjectController* projectControllerInternal();
+    /** @return project controller */
+    ProjectController *projectControllerInternal();
 
+    /** @return language controller */
+    LanguageController *languageControllerInternal();
+
+    /** @return part manager */
+    PartController *partManagerInternal();
+
+    /** @return document controller */
+    DocumentController *documentControllerInternal();
+
+protected:
     void cleanup();
 
 private:
     Core(QObject *parent = 0);
-    static Core *m_self;
-
     struct CorePrivate *d;
 };
 

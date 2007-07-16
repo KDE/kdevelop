@@ -162,9 +162,8 @@ public Q_SLOTS:
      */
 //     PersistentHash *persistentHash() const;
 
-
 private:
-    Q_PRIVATE_SLOT(d, void importDone(KJob*) )
+    Q_PRIVATE_SLOT(d, void importDone(KJob*))
 
     class ProjectPrivate* const d;
 };

@@ -123,10 +123,10 @@ void MainWindow::saveSettings()
 void MainWindow::initialize()
 {
     createGUI(0);
-    Core::self()->partController()->addManagedTopLevelWidget(this);
+    Core::self()->partManager()->addManagedTopLevelWidget(this);
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(IPlugin*)),
              d, SLOT(addPlugin(IPlugin*)));
-    connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
+    connect( Core::self()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
         d, SLOT(activePartChanged(KParts::Part*)));
     connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
         d, SLOT(changeActiveView(Sublime::View*)));

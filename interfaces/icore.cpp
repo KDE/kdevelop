@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright (C) 2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2007 Kris Wong <kris.p.wong@gmail.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -16,17 +17,27 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
+
 #include "icore.h"
 
 namespace KDevelop {
 
-ICore::~ICore()
+ICore *ICore::m_self = 0;
+
+ICore::ICore(QObject *parent)
+    : QObject(parent)
 {
+    m_self = this;
 }
 
-ICore::ICore(QObject* parent )
+ICore::~ICore()
 {
-    Q_UNUSED(parent)
+    m_self = 0;
+}
+
+ICore *ICore::self()
+{
+    return m_self;
 }
 
 }

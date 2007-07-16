@@ -218,7 +218,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
                 }
             }
         }
-        if ( !d->documents.contains(url) && Core::self()->partController()->isTextType(mimeType))
+        if ( !d->documents.contains(url) && Core::self()->partManagerInternal()->isTextType(mimeType))
             d->documents[url] = new TextDocument(url, Core::self());
         else if( !d->documents.contains(url) )
             d->documents[url] = new PartDocument(url, Core::self());
@@ -254,7 +254,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     if (activate == IDocumentController::ActivateOnOpen)
     {
         uiController->activeSublimeWindow()->activateView(partView);
-        Core::self()->partController()->setActivePart(doc->partForView(partView->widget()), partView->widget());
+        Core::self()->partManager()->setActivePart(doc->partForView(partView->widget()), partView->widget());
     }
     if( cursor.isValid() )
     {

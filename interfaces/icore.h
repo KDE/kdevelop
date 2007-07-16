@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright (C) 2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2007 Kris Wong <kris.p.wong@gmail.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -46,7 +47,10 @@ class IDocumentController;
  * ICore can provide the user with instances of the following things:
  * - the mainwindow
  * - the plugin controller
- * .
+ * - the project controller
+ * - the language controller
+ * - the KPart manager
+ * - the document controller
  *
  * When an object is provided to ICore so it can be used later, ICore
  * will take ownership of the object and upon application shutdown will take
@@ -56,23 +60,30 @@ class KDEVPLATFORMINTERFACES_EXPORT ICore: public QObject {
 public:
     virtual ~ICore();
 
-    /** @return ui controller.*/
+    /** @return the static ICore instance */
+    static ICore *self();
+
+    /** @return ui controller */
     virtual IUiController *uiController() = 0;
 
-    /** @return plugin controller.*/
+    /** @return plugin controller */
     virtual IPluginController *pluginController() = 0;
 
+    /** @return project controller */
     virtual IProjectController *projectController() = 0;
 
+    /** @return language controller */
     virtual ILanguageController *languageController() = 0;
 
+    /** @return part manager */
     virtual KParts::PartManager *partManager() = 0;
 
+    /** @return document controller */
     virtual IDocumentController *documentController() = 0;
 
 protected:
     ICore(QObject *parent = 0);
-
+    static ICore *m_self;
 };
 
 }

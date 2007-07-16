@@ -81,7 +81,7 @@ void MainWindowPrivate::removePlugin( IPlugin *plugin )
 
 void MainWindowPrivate::activePartChanged(KParts::Part *part)
 {
-    if ( Core::self()->uiControllerInternal()->activeMainWindow() == m_mainWindow)
+    if ( Core::self()->uiController()->activeMainWindow() == m_mainWindow)
         m_mainWindow->createGUI(part);
 }
 
@@ -97,7 +97,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     {
         //activated view is not a part document so we need to remove active part gui
         ///@todo adymo: only this window needs to remove GUI
-//         KParts::Part *activePart = Core::self()->partController()->activePart();
+//         KParts::Part *activePart = Core::self()->partManager()->activePart();
 //         if (activePart)
 //             guiFactory()->removeClient(activePart);
     }

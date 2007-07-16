@@ -132,7 +132,7 @@ void MainWindowPrivate::keyBindings()
 
 void MainWindowPrivate::newWindow()
 {
-    Core::self()->uiControllerInternal()->switchToArea(m_mainWindow->area()->objectName(), UiController::NewWindow);
+    Core::self()->uiController()->switchToArea(m_mainWindow->area()->objectName(), UiController::NewWindow);
 }
 
 void MainWindowPrivate::splitHorizontal()
@@ -165,7 +165,7 @@ void MainWindowPrivate::fileNew()
 
 void MainWindowPrivate::fileClose()
 {
-    IDocument *doc = Core::self()->documentControllerInternal()->activeDocument();
+    IDocument *doc = Core::self()->documentController()->activeDocument();
     if( !doc )
         return;
     Core::self()->documentControllerInternal()->closeDocument( doc->url() );

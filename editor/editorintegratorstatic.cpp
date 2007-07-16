@@ -21,6 +21,8 @@
 #include "editorintegratorstatic.h"
 
 #include <QtCore/QMutex>
+#include <QtCore/QCoreApplication>
+
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
@@ -33,9 +35,11 @@ namespace KDevelop
 EditorIntegratorStatic::EditorIntegratorStatic()
   : mutex(new QMutex)
 {
+  // This object must live on the main thread for the application.
+  if (thread() != QCoreApplication::instance()->thread()) {
+    moveToThread(QCoreApplication::instance()->thread());
+  }
 }
-
-
 
 EditorIntegratorStatic::~EditorIntegratorStatic()
 {

@@ -24,6 +24,8 @@
 
 #include <interfacesexport.h>
 
+class KUrl;
+
 namespace KDevelop {
 
 class ILanguage;
@@ -32,19 +34,13 @@ class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
 public:
     ILanguageController(QObject *parent = 0);
 
-    /**@return the currently active languages loaded for the currently active file.
-    The list is empty if the file's language is unsupported.*/
+    /** @return the currently active languages loaded for the currently active file.
+    The list is empty if the file's language is unsupported. */
     virtual QList<ILanguage*>activeLanguages() = 0;
-    /**@return the language for given @p name.*/
+    /** @return the language for given @p name. */
     virtual ILanguage* language(const QString &name) = 0;
-
-    /**@return the aggregate code model for all loaded language supports.*/
-    //virtual CodeModel codeModel() = 0;
-
-    /**@return the code model for currenly loaded file
-    (code model is empty if file is not loaded or not supported).*/
-    //virtual CodeModel activeCodeModel() = 0;
-
+    /** @return the languages that support the MIME type of @p url. */
+    virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
 };
 
 }

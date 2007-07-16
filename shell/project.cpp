@@ -51,10 +51,9 @@
 #include "projectcontroller.h"
 #include "importprojectjob.h"
 #include "projectmodel.h"
-// #include "ipersistenthash.h"
 #include "iplugincontroller.h"
 #include "uicontroller.h"
-
+#include "backgroundparser.h"
 
 namespace KDevelop
 {
@@ -105,11 +104,22 @@ public:
         return files;
     }
 
-    void importDone( KJob* /*job*/ )
+    void importDone( KJob* )
     {
         Core::self()->projectControllerInternal()->projectImportingFinished( project );
-    }
 
+        // Add the project files to the baackground parse to be parsed.
+        if ( topItem )
+        {
+            KUrl::List urlList;
+            QList<ProjectFileItem*> files = recurseFiles( topItem );
+            foreach ( ProjectFileItem* file, files )
+            {
+                urlList.append( file->url() );
+            }
+            BackgroundParser::self()->addDocumentList( urlList );
+        }
+    }
 };
 
 Project::Project( QObject *parent )
@@ -192,7 +202,7 @@ bool Project::open( const KUrl& projectFileUrl )
             if( !mkdirJob->exec() )
             {
                 KMessageBox::sorry(
-                        Core::self()->uiControllerInternal()->activeMainWindow(),
+                        Core::self()->uiController()->activeMainWindow(),
                         i18n("Unable to create hidden dir (%1) for developer file",
                         dir.pathOrUrl() )
                         );
@@ -202,9 +212,9 @@ bool Project::open( const KUrl& projectFileUrl )
     }
 
     if( !KIO::NetAccess::download( d->projectFileUrl, d->projectTempFile,
-                        Core::self()->uiControllerInternal()->activeMainWindow() ) )
+                        Core::self()->uiController()->activeMainWindow() ) )
     {
-        KMessageBox::sorry( Core::self()->uiControllerInternal()->activeMainWindow(),
+        KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
                             i18n("Unable to get project file: %1",
                             d->projectFileUrl.pathOrUrl() ) );
         return false;
@@ -213,7 +223,7 @@ bool Project::open( const KUrl& projectFileUrl )
 
     statJob = KIO::stat( d->developerFileUrl );
     if( !statJob->exec() || !KIO::NetAccess::download( d->developerFileUrl, d->developerTempFile,
-            Core::self()->uiControllerInternal()->activeMainWindow() ) )
+            Core::self()->uiController()->activeMainWindow() ) )
     {
 
         d->tmp = new KTemporaryFile();
@@ -288,9 +298,9 @@ void Project::close()
     }
 
     if( !KIO::NetAccess::upload( d->developerTempFile, d->developerFileUrl,
-                Core::self()->uiControllerInternal()->activeMainWindow() ) )
+                Core::self()->uiController()->activeMainWindow() ) )
     {
-        KMessageBox::sorry( Core::self()->uiControllerInternal()->activeMainWindow(),
+        KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
                     i18n("Could not store developer specific project configuration.\n"
                          "Attention: The project settings you changed will be lost."
                     ) );
@@ -362,7 +372,8 @@ ProjectFileItem *Project::fileForUrl(const KUrl& url) const
                     return 0; //not in the project
                 }
                 top = parent;
-            }else
+            }
+            else
                 top = 0;
         }
     }
@@ -428,4 +439,5 @@ ProjectItem* Project::projectItem() const
 }
 
 #include "project.moc"
+
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

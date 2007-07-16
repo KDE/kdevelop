@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright (C) 2007 by Alexander Dymo <adymo@kdevelop.org>             *
+ *   Copyright (C) 2007 by Kris Wong <kris.p.wong@gmail.com>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -37,10 +38,9 @@
 #include "languagecontroller.h"
 #include "editorintegrator.h"
 #include "documentcontroller.h"
+#include "backgroundparser.h"
 
 namespace KDevelop {
-
-Core *Core::m_self = 0;
 
 struct CorePrivate {
     CorePrivate(Core *core): m_core(core)
@@ -87,22 +87,23 @@ struct CorePrivate {
 
 void Core::initialize()
 {
-    if( m_self )
+    if (m_self) {
         return;
-    m_self = new Core();
-    m_self->d->initialize();
+    }
+
+    new Core;
 }
 
 Core *KDevelop::Core::self()
 {
-    return m_self;
+    return static_cast<Core*>(m_self);
 }
 
 Core::Core(QObject *parent)
-    :ICore(parent)
+    : ICore(parent)
 {
     d = new CorePrivate(this);
-    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(deleteLater()));
+    d->initialize();
 }
 
 Core::~Core()
@@ -114,7 +115,6 @@ Core::~Core()
 
 void Core::cleanup()
 {
-//     d->projectController->cleanup();
     d->pluginController->cleanup();
 }
 
@@ -123,32 +123,47 @@ IUiController *Core::uiController()
     return d->uiController;
 }
 
-IPluginController* Core::pluginController()
-{
-    return d->pluginController;
-}
-
-IProjectController* Core::projectController()
-{
-    return d->projectController;
-}
-
-KParts::PartManager *KDevelop::Core::partManager()
-{
-    return d->partController;
-}
-
-PartController *Core::partController()
-{
-    return d->partController;
-}
-
 UiController *Core::uiControllerInternal()
 {
     return d->uiController;
 }
 
+IPluginController *Core::pluginController()
+{
+    return d->pluginController;
+}
+
+PluginController *Core::pluginControllerInternal()
+{
+    return d->pluginController;
+}
+
+IProjectController *Core::projectController()
+{
+    return d->projectController;
+}
+
+ProjectController *Core::projectControllerInternal()
+{
+    return d->projectController;
+}
+
+KParts::PartManager *Core::partManager()
+{
+    return d->partController;
+}
+
+PartController *Core::partManagerInternal()
+{
+    return d->partController;
+}
+
 ILanguageController *Core::languageController()
+{
+    return d->languageController;
+}
+
+LanguageController *Core::languageControllerInternal()
 {
     return d->languageController;
 }
@@ -161,16 +176,6 @@ IDocumentController *Core::documentController()
 DocumentController *Core::documentControllerInternal()
 {
     return d->documentController;
-}
-
-PluginController *Core::pluginControllerInternal()
-{
-    return d->pluginController;
-}
-
-ProjectController *Core::projectControllerInternal()
-{
-    return d->projectController;
 }
 
 }

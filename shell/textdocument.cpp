@@ -104,9 +104,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 {
     if (!d->document)
     {
-        d->document = Core::self()->partController()->createTextPart(url(),
+        d->document = Core::self()->partManagerInternal()->createTextPart(url(),
             Core::self()->documentController()->encoding(), !url().isEmpty());
-        Core::self()->partController()->addPart(d->document);
+        Core::self()->partManager()->addPart(d->document);
 
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
@@ -144,7 +144,7 @@ void TextDocument::reload()
 
     if (d->document->isModified())
     {
-        if (KMessageBox::warningYesNo(Core::self()->uiControllerInternal()->activeMainWindow(),
+        if (KMessageBox::warningYesNo(Core::self()->uiController()->activeMainWindow(),
                 i18n( "The file \"%1\" is modified "
                       "in memory. Are you sure you "
                       "want to reload it? (Local "
@@ -182,7 +182,7 @@ bool TextDocument::save(DocumentSaveMode mode)
             if (!(mode & Silent))
             {
                 int code = KMessageBox::warningYesNoCancel(
-                    Core::self()->uiControllerInternal()->activeMainWindow(),
+                    Core::self()->uiController()->activeMainWindow(),
                     i18n("The file \"%1\" is modified on disk.\n\nAre "
                         "you sure you want to overwrite it? (External "
                         "changes will be lost.)", d->document->url().toLocalFile()),

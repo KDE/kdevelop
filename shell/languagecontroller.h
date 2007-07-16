@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2006 Adam Treat <treat@kde.org>                         *
- *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright (C) 2007 by Alexander Dymo <adymo@kdevelop.org>             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -30,21 +30,23 @@ class Part;
 
 namespace KDevelop {
 
-class KDEVPLATFORMSHELL_EXPORT LanguageController: public ILanguageController {
+class KDEVPLATFORMSHELL_EXPORT LanguageController : public ILanguageController {
     Q_OBJECT
 public:
     LanguageController(QObject *parent);
-    ~LanguageController();
+    virtual ~LanguageController();
 
     void initialize();
 
-    /** @copydoc ILanguageController::activeLanguages()*/
+    /** @copydoc ILanguageController::activeLanguages() */
     virtual QList<ILanguage*> activeLanguages();
-    /** @copydoc ILanguageController::language()*/
+    /** @copydoc ILanguageController::language() */
     virtual ILanguage *language(const QString &name);
+    /** @copydoc ILanguageController::language() */
+    virtual QList<ILanguage*> languagesForUrl(const KUrl &url);
 
 private:
-    Q_PRIVATE_SLOT(d, void activePartChanged(KParts::Part*))
+    Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))
 
     struct LanguageControllerPrivate *d;
 };

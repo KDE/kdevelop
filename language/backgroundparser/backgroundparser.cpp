@@ -1,30 +1,30 @@
 /*
-* This file is part of KDevelop
-*
-* Copyright (c) 2006 Adam Treat <treat@kde.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Library General Public License as
-* published by the Free Software Foundation; either version 2 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * This file is part of KDevelop
+ *
+ * Copyright (c) 2006 Adam Treat <treat@kde.org>
+ * Copyright (c) 2007 Kris Wong <kris.p.wong@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "backgroundparser.h"
 
 #include <QList>
 #include <QFile>
 #include <QTimer>
-#include <QProgressBar>
 #include <QMutex>
 #include <QWaitCondition>
 #include <QMutexLocker>
@@ -32,7 +32,6 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kstatusbar.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
@@ -40,14 +39,17 @@
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
-//ThreadWeaver includes
 #include <State.h>
 #include <ThreadWeaver.h>
 #include <JobCollection.h>
 #include <DebuggingAids.h>
 
-#include "parsejob.h"
+#include "icore.h"
+#include "ilanguagecontroller.h"
+#include "ilanguage.h"
 #include "ilanguagesupport.h"
+
+#include "parsejob.h"
 #include "parserdependencypolicy.h"
 
 namespace KDevelop
@@ -56,9 +58,34 @@ namespace KDevelop
 class BackgroundParserPrivate
 {
 public:
-    BackgroundParserPrivate(BackgroundParser* parser )
-        : m_parser(parser)
-    {}
+    BackgroundParserPrivate()
+    {
+        m_timer.setSingleShot(true);
+        m_delay = 500;
+        m_threads = 1;
+
+        ThreadWeaver::setDebugLevel(true, 1);
+
+        QObject::connect(&m_timer, SIGNAL(timeout()), &m_parser, SLOT(parseDocuments()));
+
+        loadSettings(); // Start the weaver
+    }
+    ~BackgroundParserPrivate()
+    {
+        suspend();
+
+        m_weaver.dequeue();
+        m_weaver.requestAbort();
+        m_weaver.finish();
+
+        // Release dequeued jobs
+        QHashIterator<KUrl, ParseJob*> it = m_parseJobs;
+        while (it.hasNext()) {
+            it.next();
+            it.value()->setBackgroundParser(0);
+            delete it.value();
+        }
+    }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
     void parseDocumentsInternal()
@@ -68,140 +95,137 @@ public:
         // need to access each other for generating dependencies.
         QList<ParseJob*> jobs;
 
-        for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
-                it != m_documents.end(); ++it )
+        for (QMap<KUrl, bool>::Iterator it = m_documents.begin();
+             it != m_documents.end(); ++it)
         {
-            //When a document is scheduled for parsing while it is being parsed, it will be parsed again once the job finished, but not now
-            if( m_parseJobs.contains(it.key()) ) {
+            // When a document is scheduled for parsing while it is being parsed, it will be parsed
+            // again once the job finished, but not now.
+            if (m_parseJobs.contains(it.key()) ) {
                 kDebug() << "skipping " << it.key() << " because it is already being parsed" << endl;
                 continue;
             }
-            
+
             kDebug() << "adding document " << it.key() << endl;
             KUrl url = it.key();
             bool &p = it.value();
-            if ( p )
-            {
-                ParseJob * parse = 0L;
-    //             Document* document = m_openDocuments[ url ];
+            if (p) {
+                QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
+                foreach (ILanguage* language, languages) {
+                    ParseJob* job = language->languageSupport()->createParseJob(url);
+                    if (!job) {
+                        continue; // Language part did not produce a valid ParseJob.
+                    }
 
-    //             if ( document )
-    //                 parse = langSupport->createParseJob( document );
-    //             else
-                    parse = m_languageSupport->createParseJob( url );
+                    job->setBackgroundParser(&m_parser);
 
-                if ( !parse )
-                    return ; //Language part did not produce a valid ParseJob
+                    QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
+                                     &m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
 
-                parse->setBackgroundParser(m_parser);
+                    m_parseJobs.insert(url, job);
+                    jobs.append(job);
+                }
 
-                QObject::connect( parse, SIGNAL( done( ThreadWeaver::Job* ) ),
-                         m_parser, SLOT( parseComplete( ThreadWeaver::Job* ) ) );
-
-                QObject::connect( parse, SIGNAL( failed( ThreadWeaver::Job* ) ),
-                         m_parser, SLOT( parseComplete( ThreadWeaver::Job* ) ) );
-
-                p = false; //Don't parse for next time
-
-                m_parseJobs.insert(url, parse);
-                jobs.append(parse);
+                p = false; // Don't parse for next time.
             }
         }
 
         // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
-        foreach (ParseJob* parse, jobs) {
-            kDebug() << k_funcinfo << "Enqueue " << parse << endl;
-            m_weaver ->enqueue( parse );
+        foreach (ParseJob* job, jobs) {
+            kDebug() << k_funcinfo << "Enqueue " << job << endl;
+            m_weaver.enqueue(job);
         }
 
-        for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
-        it != m_documents.end(); )
-        {
-            if( *it )
+        for (QMap<KUrl, bool>::Iterator it = m_documents.begin(); it != m_documents.end();) {
+            if (*it) {
                 ++it;
-            else
+            } else {
                 m_documents.erase(it++);
+            }
+        }
+    }
+
+    void loadSettings()
+    {
+        KConfigGroup config(KGlobal::config(), "Background Parser");
+
+        m_delay = config.readEntry("Delay", 500);
+        m_timer.setInterval(m_delay);
+        m_threads = config.readEntry("Number of Threads", 1);
+        m_weaver.setMaximumNumberOfThreads(m_threads);
+
+        if (config.readEntry("Enabled", true)) {
+            resume();
+        } else {
+            suspend();
+        }
+    }
+
+    void suspend()
+    {
+        bool s = m_weaver.state().stateId() == ThreadWeaver::Suspended ||
+                 m_weaver.state().stateId() == ThreadWeaver::Suspending;
+
+        if (s) { // Already suspending
+            return;
         }
 
-    }
-    void acceptAddDocument(const QUrl& url)
-    {
-        m_parser->addDocument(KUrl(url));
+        m_timer.stop();
+        m_weaver.suspend();
     }
 
-//     void cacheModelsInternal( uint modelsToCache );
-    BackgroundParser* m_parser;
-    ILanguageSupport *m_languageSupport;
+    void resume()
+    {
+        bool s = m_weaver.state().stateId() == ThreadWeaver::Suspended ||
+                 m_weaver.state().stateId() == ThreadWeaver::Suspending;
+
+        if (m_timer.isActive() && !s) { // Not suspending
+            return;
+        }
+
+        m_timer.start(m_delay);
+        m_weaver.resume();
+    }
+
+    BackgroundParser m_parser;
+    ICore* m_core;
 
     QTimer m_timer;
     int m_delay;
     int m_threads;
-    uint m_modelsToCache;
 
     // A list of known documents, and whether they are due to be parsed or not
     QMap<KUrl, bool> m_documents;
-    // A list of open documents
-//     QMap<KUrl, Document*> m_openDocuments;
     // Current parse jobs
     QHash<KUrl, ParseJob*> m_parseJobs;
 
-    QPointer<QProgressBar> m_progressBar;
-
-    ThreadWeaver::Weaver* m_weaver;
-
-    ParserDependencyPolicy* m_dependencyPolicy;
+    ThreadWeaver::Weaver m_weaver;
+    ParserDependencyPolicy m_dependencyPolicy;
 
     QMutex m_mutex;
-    QWaitCondition m_waitForJobCreation;
 };
 
-BackgroundParser::BackgroundParser(ILanguageSupport *languageSupport,  QObject* parent )
-        : QObject( parent ), d(new BackgroundParserPrivate(this))
+K_GLOBAL_STATIC(BackgroundParserPrivate, sdBgParserPrivate)
+
+BackgroundParser::BackgroundParser()
+    : QObject(0)
 {
-    d->m_languageSupport = languageSupport;
-    d->m_delay =  500;
-    d->m_threads =  1;
-    d->m_modelsToCache =  0;
-//     d->m_progressBar =  new QProgressBar;  TODO enable this if needed, it will leak if not passed to the statusbar
-    d->m_weaver =  new Weaver( this );
-    d->m_dependencyPolicy =  new ParserDependencyPolicy;
-
-    ThreadWeaver::setDebugLevel(true, 1);
-
-    d->m_timer.setSingleShot( true );
-    connect( &d->m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
-
-    loadSettings(false); //start the weaver
-
-    // Signal to allow other threads to request document addition.
-    connect(this, SIGNAL(requestAddDocument(const QUrl&)),
-        this, SLOT(acceptAddDocument(const QUrl&)), Qt::QueuedConnection);
 }
 
 BackgroundParser::~BackgroundParser()
 {
-    suspend();
-    d->m_weaver->dequeue();
-    d->m_weaver->requestAbort();
-    d->m_weaver->finish();
+}
 
-    // Release dequeued jobs
-    QHashIterator<KUrl, ParseJob*> it = d->m_parseJobs;
-    while (it.hasNext()) {
-        it.next();
-        it.value()->setBackgroundParser(0);
-        delete it.value();
-    }
-
-    delete d->m_dependencyPolicy;
+BackgroundParser* BackgroundParser::self()
+{
+    return &sdBgParserPrivate->m_parser;
 }
 
 void BackgroundParser::clear(QObject* parent)
 {
-    QMutexLocker lock(&d->m_mutex);
+    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
 
-    QHashIterator<KUrl, ParseJob*> it = d->m_parseJobs;
+    QHashIterator<KUrl, ParseJob*> it = sdBgParserPrivate->m_parseJobs;
     while (it.hasNext()) {
         it.next();
         if (it.value()->parent() == parent) {
@@ -210,249 +234,114 @@ void BackgroundParser::clear(QObject* parent)
     }
 }
 
-void BackgroundParser::loadSettings( bool projectIsLoaded )
+void BackgroundParser::loadSettings(bool projectIsLoaded)
 {
-    Q_UNUSED( projectIsLoaded )
-    KConfigGroup config(KGlobal::config(), "Background Parser");
-    bool enabled = config.readEntry( "Enabled", true );
-    d->m_delay = config.readEntry( "Delay", 500 );
-    d->m_threads = config.readEntry( "Number of Threads", 1 );
+    Q_UNUSED(projectIsLoaded)
 
-    if ( enabled )
-        resume();
-    else
-        suspend();
+    sdBgParserPrivate->loadSettings();
 }
 
-void BackgroundParser::saveSettings( bool projectIsLoaded )
+void BackgroundParser::saveSettings(bool projectIsLoaded)
 {
-    Q_UNUSED( projectIsLoaded )
+    Q_UNUSED(projectIsLoaded)
 }
 
-void BackgroundParser::initialize()
-{
-    QMutexLocker lock(&d->m_mutex);
-
-/*    m_progressBar->setMinimumWidth( 150 );
-    Core::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
-    m_progressBar->hide();*/
-}
-
-void BackgroundParser::cleanup()
-{
-}
-
-void BackgroundParser::addDocument( const KUrl &url )
+void BackgroundParser::addDocument(const KUrl& url)
 {
     kDebug() << "BackgroundParser::addDocument" << endl;
-    QMutexLocker lock(&d->m_mutex);
+    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
     {
+        Q_ASSERT(url.isValid());
 
-    if (thread() != QThread::currentThread()) {
-        // We're being called from a worker thread... transfer this request to the main thread
-        // and wait for the result ( it will want to be able to retrieve the job)
-        emit requestAddDocument(url);
+        QMap<KUrl, bool>::const_iterator it = sdBgParserPrivate->m_documents.find(url);
+        if (it == sdBgParserPrivate->m_documents.end() || (*it) == false) {
+            kDebug() << "BackgroundParser::addDocument: queuing " << url << endl;
+            sdBgParserPrivate->m_documents[url] = true;
+        } else {
+            kDebug() << "BackgroundParser::addDocument: is already queued: " << url << endl;
+        }
 
-        bool foundParseJob = false;
-        int count = 0;
-
-        do {
-            // Only wait for one second, or five wakeups, as this can deadlock when closing the project
-            // FIXME: detect when project is closing
-            d->m_waitForJobCreation.wait(&d->m_mutex, 200);
-
-            foundParseJob = d->m_parseJobs.contains(url);
-            ++count;
-
-        } while (!foundParseJob && count < 5);
-
-        return;
-    }
-
-    Q_ASSERT( url.isValid() );
-
-    QMap<KUrl, bool>::const_iterator it = d->m_documents.find(url);
-    if ( it == d->m_documents.end() || (*it) == false )
-    {
-        kDebug() << "BackgroundParser::addDocument: queuing " << url<< endl;
-        d->m_documents[url] = true;
-        d->parseDocumentsInternal();
-    } else {
-        kDebug() << "BackgroundParser::addDocument: is already queued: " << url<< endl;
-    }
-    }
-
-    // Wake up waiting threads
-    d->m_waitForJobCreation.wakeAll();
-}
-
-/*
-void BackgroundParser::addDocument( Document* document )
-{
-    Q_ASSERT(thread() == QThread::currentThread());
-
-    Q_ASSERT( document && document->textDocument() );
-
-    d->m_openDocuments.insert( document->url(), document );
-
-    connect( document->textDocument(), SIGNAL( textChanged( KTextEditor::Document* ) ),
-                this, SLOT( documentChanged( KTextEditor::Document* ) ) );
-
-    addDocument( document->url() );
-}
-*/
-
-void BackgroundParser::addDocumentList( const KUrl::List &urls )
-{
-    QMutexLocker lock(&d->m_mutex);
-
-    uint i = 0;
-    foreach( KUrl url, urls )
-    {
-        if ( !d->m_documents.contains( url ) )
-        {
-            i++;
-            d->m_documents.insert( url, true );
+        if (!sdBgParserPrivate->m_timer.isActive()) {
+            sdBgParserPrivate->m_timer.start();
         }
     }
-
-//     cacheModelsInternal( i );
-    d->parseDocumentsInternal();
 }
 
-void BackgroundParser::removeDocument( const KUrl &url )
+void BackgroundParser::addDocumentList(const KUrl::List &urls)
 {
-    QMutexLocker lock(&d->m_mutex);
+    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
 
-    if ( !url.isValid() ) {
-        kWarning() << k_funcinfo << "Invalid url " << url << endl;
-        return;
+    foreach (KUrl url, urls) {
+        Q_ASSERT(url.isValid());
+
+        sdBgParserPrivate->m_documents[url] = true;
     }
 
-    d->m_documents.remove( url );
-//     if ( d->m_openDocuments.contains( url ) )
-//         d->m_openDocuments.remove( url );
+    if (!sdBgParserPrivate->m_timer.isActive()) {
+        sdBgParserPrivate->m_timer.start();
+    }
 }
 
-/*
-void BackgroundParser::removeDocument( Document* document )
+void BackgroundParser::removeDocument(const KUrl &url)
 {
-    Q_ASSERT(thread() == QThread::currentThread());
+    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
 
-    Q_ASSERT( document && document->textDocument() );
+    Q_ASSERT(url.isValid());
 
-    removeDocument( document->url() );
+    sdBgParserPrivate->m_documents.remove(url);
 }
-*/
 
 void BackgroundParser::parseDocuments()
 {
-    QMutexLocker lock(&d->m_mutex);
+    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
 
-    d->parseDocumentsInternal();
+    sdBgParserPrivate->parseDocumentsInternal();
 }
 
-void BackgroundParser::parseComplete( ThreadWeaver::Job *job )
+void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 {
-    QMutexLocker lock(&d->m_mutex);
+    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
 
-    //kDebug() << k_funcinfo << "Complete " << job << " success? " << job->success() << endl;
-
-    if ( ParseJob * parseJob = qobject_cast<ParseJob*>( job ) )
-    {
+    if (ParseJob* parseJob = qobject_cast<ParseJob*>(job)) {
         kDebug() << "BackgroundParser: parsed " << parseJob->document() << endl;
-        d->m_parseJobs.remove(parseJob->document());
+        sdBgParserPrivate->m_parseJobs.remove(parseJob->document());
 
-        // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
-        // (awaiting reply from Mirko on this one)
         parseJob->setBackgroundParser(0);
-        QTimer::singleShot(500, parseJob, SLOT(deleteLater()));
-    
-        //Check if the file needs to be re-parsed.
-        if( d->m_documents[parseJob->document()] )
-            d->parseDocumentsInternal();
+
+        // Use a delayed delete to make sure the weaver has finished up.
+        // TODO: There has to be a better way to do this.
+        QTimer::singleShot(100, parseJob, SLOT(deleteLater()));
     }
 }
 
-/*
-void BackgroundParser::documentChanged( KTextEditor::Document * document )
-{
-    QMutexLocker lock(&m_mutex);
-
-    Q_ASSERT( d->m_documents.contains( document->url() ) );
-    d->m_documents.insert( document->url(), true );
-
-    bool s = d->m_weaver->state().stateId() == ThreadWeaver::Suspended
-            || d->m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
-
-    if ( !d->m_timer.isActive() && !s )
-        d->m_timer.start( m_delay );
-}
-*/
-
 void BackgroundParser::suspend()
 {
-    bool s = d->m_weaver->state().stateId() == ThreadWeaver::Suspended
-            || d->m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
-
-    if ( s ) //Already suspending
-        return;
-
-    d->m_timer.stop();
-
-    d->m_weaver->suspend();
-
-    if (d->m_progressBar)
-        d->m_progressBar->hide();
+    sdBgParserPrivate->suspend();
 }
 
 void BackgroundParser::resume()
 {
-    bool s = d->m_weaver->state().stateId() == ThreadWeaver::Suspended
-            || d->m_weaver->state().stateId() ==  ThreadWeaver::Suspending;
-
-    if ( d->m_timer.isActive() && !s ) //Not suspending
-        return;
-
-    d->m_timer.start( d->m_delay );
-
-    d->m_weaver->setMaximumNumberOfThreads( d->m_threads );
-    d->m_weaver->resume();
-
-    if (d->m_weaver->queueLength() && d->m_progressBar)
-        d->m_progressBar->show();
-}
-
-void BackgroundParser::setDelay( int msec )
-{
-    QMutexLocker lock(&d->m_mutex);
-
-    d->m_delay = msec;
-}
-
-void BackgroundParser::setThreads( int threads )
-{
-    QMutexLocker lock(&d->m_mutex);
-
-    d->m_threads = threads;
+    sdBgParserPrivate->resume();
 }
 
 ParserDependencyPolicy* BackgroundParser::dependencyPolicy() const
 {
-    return d->m_dependencyPolicy;
+    return &sdBgParserPrivate->m_dependencyPolicy;
 }
 
 ParseJob* BackgroundParser::parseJobForDocument(const KUrl& document) const
 {
-    QMutexLocker lock(&d->m_mutex);
+    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
 
-    if (d->m_parseJobs.contains(document))
-        return d->m_parseJobs[document];
+    if (sdBgParserPrivate->m_parseJobs.contains(document)) {
+        return sdBgParserPrivate->m_parseJobs[document];
+    }
 
     return 0;
 }
 
 }
+
 #include "backgroundparser.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
