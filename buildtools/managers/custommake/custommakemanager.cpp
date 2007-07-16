@@ -301,8 +301,11 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
         return IPlugin::requestContextMenuActions( context );
     }
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
-    KDevelop::ProjectBaseItem* baseitem = ctx->item();
+    QList<KDevelop::ProjectBaseItem*> baseitemList = ctx->items();
+    if( baseitemList.count() != 1 )
+        return IPlugin::requestContextMenuActions( context );
 
+    KDevelop::ProjectBaseItem *baseitem = baseitemList.first();
     IPlugin *manager = baseitem->project()->managerPlugin();
     if( manager != this )
     {
