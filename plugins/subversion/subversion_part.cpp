@@ -50,6 +50,8 @@ extern "C" {
 #include <QPair>
 #include <QtDesigner/QExtensionFactory>
 
+using namespace KDevelop;
+
 // KDEV_ADD_EXTENSION_FACTORY_NS(KDevelop, IVersionControl, KDevSubversionPart)
 
 typedef KGenericFactory<KDevSubversionPart> KDevSubversionFactory;
@@ -75,7 +77,7 @@ class KDevSubversionPartPrivate{
 public:
     KDevSubversionViewFactory *m_factory;
     QPointer<SubversionCore> m_impl;
-    KUrl m_ctxUrl;
+    KUrl::List m_ctxUrlList;
 //     QPointer<SvnFileInfoProvider> m_infoProvider;
 //     SvnFileInfoProvider *m_infoProvider;
 //     QList<KDevelop::VcsFileInfo> m_vcsInfoList;
@@ -654,90 +656,105 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
 {
     if( context->type() == KDevelop::Context::ProjectItemContext ){
         KDevelop::ProjectItemContext *itemCtx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
-        KDevelop::ProjectBaseItem *baseItem = itemCtx->item();
-        KUrl ctxUrl;
+        QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
+        KUrl::List ctxUrlList;
 
-        if( baseItem->folder() ){
-            KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(baseItem);
-            ctxUrl = folderItem->url();
-            if( !isVersionControlled( ctxUrl ) ){
-                // checkout only can be done under the non-vcs dir.
-                d->m_ctxUrl = ctxUrl;
-                QList<QAction*> actions;
-                QAction *action = new QAction(i18n("Checkout.."), this);
-                connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
-                actions << action;
-                return qMakePair( QString("Subversion"), actions );
+        foreach( ProjectBaseItem* _item, baseItemList ){
+            if( _item->folder() ){
+                ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>(_item);
+                ctxUrlList << folderItem->url();
+            }
+            else if( _item->file() ){
+                ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>(_item);
+                ctxUrlList << fileItem->url();
             }
         }
 
-        else if( baseItem->file() ){
-            KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(baseItem);
-            ctxUrl = fileItem->url();
-            if( !isVersionControlled( ctxUrl ) ){
-                return KDevelop::IPlugin::requestContextMenuActions( context );
-            }
-        }
-
-        else if( baseItem->projectItem() ){
-
-        }
-
-        else {
+        if( ctxUrlList.isEmpty() )
             return KDevelop::IPlugin::requestContextMenuActions( context );
-        }
 
-        if( ctxUrl.isValid() ){
-            d->m_ctxUrl = ctxUrl;
-            QList<QAction*> actions;
-            QAction *action;
+        d->m_ctxUrlList = ctxUrlList;
 
-            action = new QAction(i18n("Log View..."), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
-            actions << action;
+//         if( baseItem->folder() ){
+//             KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(baseItem);
+//             ctxUrl = folderItem->url();
+//             if( !isVersionControlled( ctxUrl ) ){
+//                 // checkout only can be done under the non-vcs dir.
+//                 d->m_ctxUrl = ctxUrl;
+//                 QList<QAction*> actions;
+//                 QAction *action = new QAction(i18n("Checkout.."), this);
+//                 connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
+//                 actions << action;
+//                 return qMakePair( QString("Subversion"), actions );
+//             }
+//         }
+//
+//         else if( baseItem->file() ){
+//             KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(baseItem);
+//             ctxUrl = fileItem->url();
+//             if( !isVersionControlled( ctxUrl ) ){
+//                 return KDevelop::IPlugin::requestContextMenuActions( context );
+//             }
+//         }
+//
+//         else if( baseItem->projectItem() ){
+//
+//         }
+//
+//         else {
+//             return KDevelop::IPlugin::requestContextMenuActions( context );
+//         }
+//
+//         if( ctxUrl.isValid() ){
 
-            action = new QAction(i18n("Blame/Annotate..."), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
-            actions << action;
+        QList<QAction*> actions;
+        QAction *action;
 
-            action = new QAction(i18n("Update.."), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-            actions << action;
+        action = new QAction(i18n("Log View..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
+        actions << action;
 
-            action = new QAction(i18n("Commit..."), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-            actions << action;
+        action = new QAction(i18n("Blame/Annotate..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
+        actions << action;
 
-            action = new QAction(i18n("Add to SVN"), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-            actions << action;
+        action = new QAction(i18n("Update.."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+        actions << action;
 
-            action = new QAction(i18n("Remove from SVN"), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-            actions << action;
+        action = new QAction(i18n("Commit..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+        actions << action;
 
-            action = new QAction("Diff to HEAD", this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
-            actions << action;
+        action = new QAction(i18n("Add to SVN"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+        actions << action;
 
-            action = new QAction("Diff to BASE", this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
-            actions << action;
+        action = new QAction(i18n("Remove from SVN"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+        actions << action;
 
-            action = new QAction(i18n("Diff to..."), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
-            actions << action;
+        action = new QAction("Diff to HEAD", this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
+        actions << action;
 
-            action = new QAction(i18n("Information..."), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxInfo()) );
-            actions << action;
+        action = new QAction("Diff to BASE", this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
+        actions << action;
 
-            action = new QAction(i18n("Status..."), this);
-            connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
-            actions << action;
+        action = new QAction(i18n("Diff to..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
+        actions << action;
 
-            return qMakePair( QString("Subversion"), actions );
-        }
+        action = new QAction(i18n("Information..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxInfo()) );
+        actions << action;
+
+        action = new QAction(i18n("Status..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
+        actions << action;
+
+        return qMakePair( QString("Subversion"), actions );
 
     }
 
@@ -859,62 +876,87 @@ void KDevSubversionPart::import()
 //////////////////////////////////////////////
 void KDevSubversionPart::ctxLogView()
 {
-    logview( d->m_ctxUrl );
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    logview( d->m_ctxUrlList.first() );
 }
 void KDevSubversionPart::ctxBlame()
 {
-    annotate( d->m_ctxUrl );
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    annotate( d->m_ctxUrlList.first() );
 }
 void KDevSubversionPart::ctxCommit()
 {
-    KUrl::List list;
-    list << d->m_ctxUrl;
-    commit( list );
+    commit( d->m_ctxUrlList );
 }
 void KDevSubversionPart::ctxUpdate()
 {
-    KUrl::List list;
-    list << d->m_ctxUrl;
-    update( list );
+    update( d->m_ctxUrlList );
 }
 void KDevSubversionPart::ctxAdd()
 {
-    KUrl::List list;
-    list << d->m_ctxUrl;
-    add( list );
+    add( d->m_ctxUrlList );
 }
 void KDevSubversionPart::ctxRemove()
 {
-    KUrl::List list;
-    list << d->m_ctxUrl;
-    removeInternal( list );
+    removeInternal( d->m_ctxUrlList );
 }
 
 void KDevSubversionPart::ctxCheckout()
 {
-    checkout(d->m_ctxUrl);
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    checkout(d->m_ctxUrlList.first() );
 }
 
 void KDevSubversionPart::ctxDiff()
 {
-    pegDiff( d->m_ctxUrl );
+    // TODO correct port
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    pegDiff( d->m_ctxUrlList.first() );
 }
 
 void KDevSubversionPart::ctxDiffHead()
 {
-    diffToHead( d->m_ctxUrl );
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    diffToHead( d->m_ctxUrlList.first() );
 }
 void KDevSubversionPart::ctxDiffBase()
 {
-    diffToBase( d->m_ctxUrl );
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    diffToBase( d->m_ctxUrlList.first() );
 }
 void KDevSubversionPart::ctxInfo()
 {
-    vcsInfo( d->m_ctxUrl );
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    vcsInfo( d->m_ctxUrlList.first() );
 }
 void KDevSubversionPart::ctxStatus()
 {
-    svnStatus( d->m_ctxUrl );
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    svnStatus( d->m_ctxUrlList.first() );
 }
 
 //////////////////////////////////////////////

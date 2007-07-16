@@ -38,6 +38,8 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
 
+template <typename T> class QList;
+
 namespace KDevelop
 {
 // class CodeItem;
@@ -211,7 +213,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ProjectItemContext : public Context
 public:
     /**Builds the context.
         @param item The item to build the context from.*/
-    ProjectItemContext( ProjectBaseItem* item );
+    ProjectItemContext( const QList<ProjectBaseItem*> &items );
 
     /**Destructor.*/
     virtual ~ProjectItemContext();
@@ -219,7 +221,7 @@ public:
     virtual int type() const;
 
     /**@return The project model item for the selected item.*/
-    ProjectBaseItem* item() const;
+    QList<ProjectBaseItem*> items() const;
 
 private:
     class ProjectItemContextPrivate* const d;

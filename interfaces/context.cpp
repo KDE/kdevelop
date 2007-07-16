@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include "context.h"
 
 #include <QDir>
+#include <QList>
 
 namespace KDevelop
 {
@@ -157,14 +158,15 @@ KUrl::List FileContext::urls() const
 class ProjectItemContextPrivate
 {
 public:
-    ProjectItemContextPrivate( ProjectBaseItem* item ) : m_item( item )
+    ProjectItemContextPrivate( const QList<ProjectBaseItem*> &items )
+        : m_items( items )
     {}
 
-    ProjectBaseItem* m_item;
+    QList<ProjectBaseItem*> m_items;
 };
 
-ProjectItemContext::ProjectItemContext( ProjectBaseItem* item )
-        : Context(), d( new ProjectItemContextPrivate( item ) )
+ProjectItemContext::ProjectItemContext( const QList<ProjectBaseItem*> &items )
+        : Context(), d( new ProjectItemContextPrivate( items ) )
 {}
 
 ProjectItemContext::~ProjectItemContext()
@@ -177,9 +179,9 @@ int ProjectItemContext::type() const
     return Context::ProjectItemContext;
 }
 
-ProjectBaseItem* ProjectItemContext::item() const
+QList<ProjectBaseItem*> ProjectItemContext::items() const
 {
-    return d->m_item;
+    return d->m_items;
 }
 
 }

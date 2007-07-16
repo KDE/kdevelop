@@ -50,6 +50,7 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPart *part, QWidget *parent 
     header()->hide();
 
     setContextMenuPolicy( Qt::CustomContextMenu );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
     connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
@@ -159,13 +160,21 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
 void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
 {
-    QModelIndex index = indexAt( pos );
+//     QModelIndex index = indexAt( pos );
+    QModelIndexList indexes = selectionModel()->selectedRows();
+    QList<KDevelop::ProjectBaseItem*> itemlist;
 
-    if ( KDevelop::ProjectBaseItem *item = projectModel()->item( index ) )
+    foreach( QModelIndex index, indexes )
+    {
+        if ( KDevelop::ProjectBaseItem *item = projectModel()->item( index ) )
+            itemlist << item;
+    }
+
+    if( !itemlist.isEmpty() )
     {
         KMenu menu( this );
 
-        KDevelop::ProjectItemContext context(item);
+        KDevelop::ProjectItemContext context(itemlist);
         d->m_part->core()->pluginController()->buildContextMenu(&context, &menu);
 
         menu.exec( mapToGlobal( pos ) );

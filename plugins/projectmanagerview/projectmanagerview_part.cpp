@@ -78,7 +78,7 @@ public:
     QMap<QString, Context*> contexts;
     QSignalMapper* contextMenuMapper;
     const QString build_objectname;
-    IProject *ctxProject;
+    QList<IProject*> ctxProjectList;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QStringList& )
@@ -152,18 +152,30 @@ void ProjectManagerViewPart::unload()
     core()->uiController()->removeToolView(d->factory);
 }
 
+// If requested for one KDevelop::ProjectItem, context menu is "close this project"
+// Else if requested for multiples of items, check the type of project base items.
+// If everything is ProjectItem, context menu is "close selected projects"
+// Else if requested for different item types, there is no context menu.
 QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActions( KDevelop::Context* context )
 {
-    if( context->type() == KDevelop::Context::ProjectItemContext )
-    {
-        QList<QAction*> actions;
-        KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
-        KDevelop::ProjectBaseItem* item = ctx->item();
+    if( context->type() != KDevelop::Context::ProjectItemContext )
+        return IPlugin::requestContextMenuActions( context );
 
+    QList<QAction*> actions;
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+    QList<KDevelop::ProjectBaseItem*> items = ctx->items();
+
+    if( items.isEmpty() )
+        return IPlugin::requestContextMenuActions( context );
+
+    if( items.count() == 1 )
+    {
+        KDevelop::ProjectBaseItem *item = items.first();
         if ( KDevelop::ProjectItem *prjitem = item->projectItem() )
         {
             QAction* close = new QAction( i18n( "Close this project" ), this );
-            d->ctxProject = prjitem->project();
+            d->ctxProjectList.clear();
+            d->ctxProjectList << prjitem->project();
             connect( close, SIGNAL(triggered()), this, SLOT(slotCloseProject()), Qt::QueuedConnection );
             actions << close;
         }
@@ -193,22 +205,53 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
 //             actions << targetBldAction;
         }
         return qMakePair(QString("Project Management"), actions);
+    } // end of items.count() == 1
+
+    if( items.count() > 1 )
+    {
+        bool otherItemDetected = false;
+        QList< KDevelop::IProject* > projectlist;
+        foreach( KDevelop::ProjectBaseItem *baseitem, items )
+        {
+            if( KDevelop::ProjectItem *prjitem = baseitem->projectItem() )
+            {
+                projectlist << prjitem->project();
+            }
+            else
+            {
+                otherItemDetected = true;
+                break;
+            }
+        }
+
+        if( otherItemDetected )
+            return qMakePair(QString("Project Management"), actions);
+        else
+        {
+            QAction *closeAll = new QAction( i18n("Close selected projects"), this );
+            d->ctxProjectList = projectlist;
+            connect( closeAll, SIGNAL(triggered()), this, SLOT(slotCloseProject()), Qt::QueuedConnection );
+            actions << closeAll;
+            return qMakePair(QString("Project Management"), actions);
+        }
     }
+    // shouldn't reach here
     return IPlugin::requestContextMenuActions( context );
 }
 
-void ProjectManagerViewPart::executeContextMenuAction( const QString& objectname )
-{
-    if( !d->contexts.contains(objectname) )
-        return;
-    Context* ctxt = d->contexts[objectname];
-    if( ctxt && objectname == d->build_objectname &&
-        ctxt->type() == KDevelop::Context::ProjectItemContext )
-    {
-        ProjectItemContext* prjctxt = dynamic_cast<ProjectItemContext*>(ctxt);
-        executeProjectBuilder( prjctxt->item() );
-    }
-}
+// Currently not used, since build context menu is plugged by each buildsystem managers.
+// void ProjectManagerViewPart::executeContextMenuAction( const QString& objectname )
+// {
+//     if( !d->contexts.contains(objectname) )
+//         return;
+//     Context* ctxt = d->contexts[objectname];
+//     if( ctxt && objectname == d->build_objectname &&
+//         ctxt->type() == KDevelop::Context::ProjectItemContext )
+//     {
+//         ProjectItemContext* prjctxt = dynamic_cast<ProjectItemContext*>(ctxt);
+//         executeProjectBuilder( prjctxt->item() );
+//     }
+// }
 
 void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* item )
 {
@@ -228,8 +271,11 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
 
 void ProjectManagerViewPart::slotCloseProject()
 {
-    IProject *project = d->ctxProject;
-    core()->projectController()->closeProject( project );
+    foreach( IProject *project, d->ctxProjectList )
+    {
+        core()->projectController()->closeProject( project );
+    }
+    d->ctxProjectList.clear();
 }
 
 #include "projectmanagerview_part.moc"

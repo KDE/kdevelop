@@ -71,7 +71,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void openURL(const KUrl &url);
-    void executeContextMenuAction( const QString& objectname );
+//     void executeContextMenuAction( const QString& objectname );
     void updateDetails(KDevelop::ProjectBaseItem *item);
 
 protected:
