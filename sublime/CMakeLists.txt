@@ -25,7 +25,7 @@ set(sublime_LIB_SRCS
 
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
 target_link_libraries(sublime ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
-set_target_properties(sublime PROPERTIES VERSION 4.0.0 SOVERSION 4)
+set_target_properties(sublime PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS sublime DESTINATION ${LIB_INSTALL_DIR} )
 
 

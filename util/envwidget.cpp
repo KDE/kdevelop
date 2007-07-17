@@ -546,7 +546,7 @@ void EnvWidget::activeGroupChanged( int idx )
 
     if( idx == -1 )
     {
-        // TODO combobox becomes empty or current index resetted.
+        // TODO combobox becomes empty or current index reset.
         d->m_enabled = "";
     }
     else

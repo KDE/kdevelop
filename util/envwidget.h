@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #ifndef ENVWIDGET_H
 #define ENVWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include "utilexport.h"
 class QTableWidgetItem;
 class KConfig;
