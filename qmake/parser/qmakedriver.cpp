@@ -28,7 +28,7 @@
 #include "qmake_parser.h"
 #include "qmake_ast.h"
 
-#include "qmake_debug_visitor.h"
+#include "qmakedebugvisitor.h"
 
 namespace QMake
 {
@@ -77,7 +77,7 @@ bool Driver::parse(QMake::ProjectAST*)
         qDebug() << "Sucessfully parsed";
         if( mDebug )
         {
-            debug_visitor d;
+            DebugVisitor d(&qmakeparser);
             d.visit_project(ast);
         }
     }else
