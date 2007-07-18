@@ -69,7 +69,6 @@ namespace QMake
     kDebug(9024) <<  "token starts at: " <<  token.begin <<  endl;
     kDebug(9024) <<  "index is: " <<  index <<  endl;
     token_stream->start_position(index,  &line,  &col);
-    size_t tokenLength =  token.end -  token.begin;
     QString tokenValue =  tokenText(token.begin,  token.end);
     reportProblem(
       parser::Error,
@@ -94,33 +93,154 @@ namespace QMake
 
     (*yynode)->start_token =  token_stream->index() -  1;
 
-    if  (yytoken ==  Token_IDENTIFIER
+    if  (yytoken ==  Token_CONT
+         ||  yytoken ==  Token_DOUBLEDOLLAR
+         ||  yytoken ==  Token_SINGLEDOLLAR
+         ||  yytoken ==  Token_QUOTE
+         ||  yytoken ==  Token_IDENTIFIER
          ||  yytoken ==  Token_VALUE ||  yytoken ==  Token_RPAREN)
       {
-        if  (yytoken ==  Token_IDENTIFIER
+        if  (yytoken ==  Token_CONT
+             ||  yytoken ==  Token_DOUBLEDOLLAR
+             ||  yytoken ==  Token_SINGLEDOLLAR
+             ||  yytoken ==  Token_QUOTE
+             ||  yytoken ==  Token_IDENTIFIER
              ||  yytoken ==  Token_VALUE)
           {
-            id_or_value_ast *__node_0 =  0;
-
-            if  (!parse_id_or_value(&__node_0))
+            if  (yytoken ==  Token_IDENTIFIER
+                 ||  yytoken ==  Token_VALUE)
               {
-                yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
+                id_or_value_ast *__node_0 =  0;
+
+                if  (!parse_id_or_value(&__node_0))
+                  {
+                    yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_QUOTE)
+              {
+                quoted_value_ast *__node_1 =  0;
+
+                if  (!parse_quoted_value(&__node_1))
+                  {
+                    yy_expected_symbol(ast_node::Kind_quoted_value,  "quoted_value");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_CONT)
+              {
+                if  (yytoken !=  Token_CONT)
+                  {
+                    yy_expected_token(yytoken,  Token_CONT,  "cont");
+                    return  false;
+                  }
+
+                yylex();
+
+                if  (yytoken !=  Token_NEWLINE)
+                  {
+                    yy_expected_token(yytoken,  Token_NEWLINE,  "newline");
+                    return  false;
+                  }
+
+                yylex();
+
+              }
+
+            else if  (yytoken ==  Token_DOUBLEDOLLAR
+                      ||  yytoken ==  Token_SINGLEDOLLAR)
+              {
+                ref_ast *__node_2 =  0;
+
+                if  (!parse_ref(&__node_2))
+                  {
+                    yy_expected_symbol(ast_node::Kind_ref,  "ref");
+                    return  false;
+                  }
+              }
+
+            else
+              {
                 return  false;
               }
 
-            if  (yytoken !=  Token_COMMA)
+            if  (yytoken ==  Token_COMMA)
               {
-                yy_expected_token(yytoken,  Token_COMMA,  "comma");
+                if  (yytoken !=  Token_COMMA)
+                  {
+                    yy_expected_token(yytoken,  Token_COMMA,  "comma");
+                    return  false;
+                  }
+
+                yylex();
+
+              }
+
+            else if  (yytoken ==  Token_CONT)
+              {
+                if  (yytoken !=  Token_CONT)
+                  {
+                    yy_expected_token(yytoken,  Token_CONT,  "cont");
+                    return  false;
+                  }
+
+                yylex();
+
+                if  (yytoken !=  Token_NEWLINE)
+                  {
+                    yy_expected_token(yytoken,  Token_NEWLINE,  "newline");
+                    return  false;
+                  }
+
+                yylex();
+
+              }
+
+            else
+              {
                 return  false;
               }
 
-            yylex();
-
-            id_or_value_ast *__node_1 =  0;
-
-            if  (!parse_id_or_value(&__node_1))
+            if  (yytoken ==  Token_IDENTIFIER
+                 ||  yytoken ==  Token_VALUE)
               {
-                yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
+                id_or_value_ast *__node_3 =  0;
+
+                if  (!parse_id_or_value(&__node_3))
+                  {
+                    yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_QUOTE)
+              {
+                quoted_value_ast *__node_4 =  0;
+
+                if  (!parse_quoted_value(&__node_4))
+                  {
+                    yy_expected_symbol(ast_node::Kind_quoted_value,  "quoted_value");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_DOUBLEDOLLAR
+                      ||  yytoken ==  Token_SINGLEDOLLAR)
+              {
+                ref_ast *__node_5 =  0;
+
+                if  (!parse_ref(&__node_5))
+                  {
+                    yy_expected_symbol(ast_node::Kind_ref,  "ref");
+                    return  false;
+                  }
+              }
+
+            else
+              {
                 return  false;
               }
           }
@@ -129,6 +249,41 @@ namespace QMake
         {}
         else
           {
+            return  false;
+          }
+      }
+
+    else
+      {
+        return  false;
+      }
+
+    (*yynode)->end_token =  token_stream->index() -  1;
+
+    return  true;
+  }
+
+  bool parser::parse_funcref(funcref_ast **yynode)
+  {
+    *yynode =  create<funcref_ast>();
+
+    (*yynode)->start_token =  token_stream->index() -  1;
+
+    if  (yytoken ==  Token_IDENTIFIER)
+      {
+        if  (yytoken !=  Token_IDENTIFIER)
+          {
+            yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
+            return  false;
+          }
+
+        yylex();
+
+        function_args_ast *__node_6 =  0;
+
+        if  (!parse_function_args(&__node_6))
+          {
+            yy_expected_symbol(ast_node::Kind_function_args,  "function_args");
             return  false;
           }
       }
@@ -159,9 +314,9 @@ namespace QMake
 
         yylex();
 
-        arg_list_ast *__node_2 =  0;
+        arg_list_ast *__node_7 =  0;
 
-        if  (!parse_arg_list(&__node_2))
+        if  (!parse_arg_list(&__node_7))
           {
             yy_expected_symbol(ast_node::Kind_arg_list,  "arg_list");
             return  false;
@@ -195,19 +350,30 @@ namespace QMake
 
     if  (yytoken ==  Token_LPAREN)
       {
-        function_args_ast *__node_3 =  0;
+        function_args_ast *__node_8 =  0;
 
-        if  (!parse_function_args(&__node_3))
+        if  (!parse_function_args(&__node_8))
           {
             yy_expected_symbol(ast_node::Kind_function_args,  "function_args");
             return  false;
           }
 
-        scope_body_ast *__node_4 =  0;
-
-        if  (!parse_scope_body(&__node_4))
+        if  (yytoken ==  Token_RBRACE
+             ||  yytoken ==  Token_COLON)
           {
-            yy_expected_symbol(ast_node::Kind_scope_body,  "scope_body");
+            scope_body_ast *__node_9 =  0;
+
+            if  (!parse_scope_body(&__node_9))
+              {
+                yy_expected_symbol(ast_node::Kind_scope_body,  "scope_body");
+                return  false;
+              }
+          }
+
+        else if  (true /*epsilon*/)
+        {}
+        else
+          {
             return  false;
           }
       }
@@ -371,9 +537,9 @@ namespace QMake
         while  (yytoken ==  Token_NEWLINE
                 ||  yytoken ==  Token_IDENTIFIER)
           {
-            stmt_ast *__node_5 =  0;
+            stmt_ast *__node_10 =  0;
 
-            if  (!parse_stmt(&__node_5))
+            if  (!parse_stmt(&__node_10))
               {
                 yy_expected_symbol(ast_node::Kind_stmt,  "stmt");
                 return  false;
@@ -381,6 +547,228 @@ namespace QMake
           }
 
         if  (Token_EOF !=  yytoken)
+          {
+            return  false;
+          }
+      }
+
+    else
+      {
+        return  false;
+      }
+
+    (*yynode)->end_token =  token_stream->index() -  1;
+
+    return  true;
+  }
+
+  bool parser::parse_quoted_value(quoted_value_ast **yynode)
+  {
+    *yynode =  create<quoted_value_ast>();
+
+    (*yynode)->start_token =  token_stream->index() -  1;
+
+    if  (yytoken ==  Token_QUOTE)
+      {
+        if  (yytoken !=  Token_QUOTE)
+          {
+            yy_expected_token(yytoken,  Token_QUOTE,  "quote");
+            return  false;
+          }
+
+        yylex();
+
+        while  (yytoken ==  Token_COLON
+                ||  yytoken ==  Token_COMMA
+                ||  yytoken ==  Token_DOUBLEDOLLAR
+                ||  yytoken ==  Token_SINGLEDOLLAR
+                ||  yytoken ==  Token_IDENTIFIER
+                ||  yytoken ==  Token_VALUE
+                ||  yytoken ==  Token_QUOTEDSPACE)
+          {
+            if  (yytoken ==  Token_IDENTIFIER
+                 ||  yytoken ==  Token_VALUE)
+              {
+                id_or_value_ast *__node_11 =  0;
+
+                if  (!parse_id_or_value(&__node_11))
+                  {
+                    yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_DOUBLEDOLLAR
+                      ||  yytoken ==  Token_SINGLEDOLLAR)
+              {
+                ref_ast *__node_12 =  0;
+
+                if  (!parse_ref(&__node_12))
+                  {
+                    yy_expected_symbol(ast_node::Kind_ref,  "ref");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_QUOTEDSPACE)
+              {
+                if  (yytoken !=  Token_QUOTEDSPACE)
+                  {
+                    yy_expected_token(yytoken,  Token_QUOTEDSPACE,  "quotedspace");
+                    return  false;
+                  }
+
+                yylex();
+
+              }
+
+            else if  (yytoken ==  Token_COLON)
+              {
+                if  (yytoken !=  Token_COLON)
+                  {
+                    yy_expected_token(yytoken,  Token_COLON,  "colon");
+                    return  false;
+                  }
+
+                yylex();
+
+              }
+
+            else if  (yytoken ==  Token_COMMA)
+              {
+                if  (yytoken !=  Token_COMMA)
+                  {
+                    yy_expected_token(yytoken,  Token_COMMA,  "comma");
+                    return  false;
+                  }
+
+                yylex();
+
+              }
+
+            else
+              {
+                return  false;
+              }
+          }
+
+        if  (yytoken ==  Token_QUOTE)
+          {
+            if  (yytoken !=  Token_QUOTE)
+              {
+                yy_expected_token(yytoken,  Token_QUOTE,  "quote");
+                return  false;
+              }
+
+            yylex();
+
+          }
+
+        else if  (true /*epsilon*/)
+        {}
+        else
+          {
+            return  false;
+          }
+      }
+
+    else
+      {
+        return  false;
+      }
+
+    (*yynode)->end_token =  token_stream->index() -  1;
+
+    return  true;
+  }
+
+  bool parser::parse_ref(ref_ast **yynode)
+  {
+    *yynode =  create<ref_ast>();
+
+    (*yynode)->start_token =  token_stream->index() -  1;
+
+    if  (yytoken ==  Token_DOUBLEDOLLAR
+         ||  yytoken ==  Token_SINGLEDOLLAR)
+      {
+        if  (yytoken ==  Token_DOUBLEDOLLAR)
+          {
+            if  (yytoken !=  Token_DOUBLEDOLLAR)
+              {
+                yy_expected_token(yytoken,  Token_DOUBLEDOLLAR,  "doubledollar");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken ==  Token_LBRACKET
+                 ||  yytoken ==  Token_LBRACE
+                 ||  yytoken ==  Token_LPAREN
+                 ||  yytoken ==  Token_IDENTIFIER)
+              {
+                varref_ast *__node_13 =  0;
+
+                if  (!parse_varref(&__node_13))
+                  {
+                    yy_expected_symbol(ast_node::Kind_varref,  "varref");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_IDENTIFIER)
+              {
+                funcref_ast *__node_14 =  0;
+
+                if  (!parse_funcref(&__node_14))
+                  {
+                    yy_expected_symbol(ast_node::Kind_funcref,  "funcref");
+                    return  false;
+                  }
+              }
+
+            else
+              {
+                return  false;
+              }
+          }
+
+        else if  (yytoken ==  Token_SINGLEDOLLAR)
+          {
+            if  (yytoken !=  Token_SINGLEDOLLAR)
+              {
+                yy_expected_token(yytoken,  Token_SINGLEDOLLAR,  "singledollar");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_LPAREN)
+              {
+                yy_expected_token(yytoken,  Token_LPAREN,  "lparen");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_IDENTIFIER)
+              {
+                yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_RPAREN)
+              {
+                yy_expected_token(yytoken,  Token_RPAREN,  "rparen");
+                return  false;
+              }
+
+            yylex();
+
+          }
+
+        else
           {
             return  false;
           }
@@ -437,9 +825,9 @@ namespace QMake
             while  (yytoken ==  Token_NEWLINE
                     ||  yytoken ==  Token_IDENTIFIER)
               {
-                stmt_ast *__node_6 =  0;
+                stmt_ast *__node_15 =  0;
 
-                if  (!parse_stmt(&__node_6))
+                if  (!parse_stmt(&__node_15))
                   {
                     yy_expected_symbol(ast_node::Kind_stmt,  "stmt");
                     return  false;
@@ -466,9 +854,9 @@ namespace QMake
 
             yylex();
 
-            stmt_ast *__node_7 =  0;
+            stmt_ast *__node_16 =  0;
 
-            if  (!parse_stmt(&__node_7))
+            if  (!parse_stmt(&__node_16))
               {
                 yy_expected_symbol(ast_node::Kind_stmt,  "stmt");
                 return  false;
@@ -516,9 +904,9 @@ namespace QMake
                  ||  yytoken ==  Token_STAREQ
                  ||  yytoken ==  Token_TILDEEQ)
               {
-                variable_assignment_ast *__node_8 =  0;
+                variable_assignment_ast *__node_17 =  0;
 
-                if  (!parse_variable_assignment(&__node_8))
+                if  (!parse_variable_assignment(&__node_17))
                   {
                     yy_expected_symbol(ast_node::Kind_variable_assignment,  "variable_assignment");
                     return  false;
@@ -527,9 +915,9 @@ namespace QMake
 
             else if  (yytoken ==  Token_LPAREN)
               {
-                function_scope_ast *__node_9 =  0;
+                function_scope_ast *__node_18 =  0;
 
-                if  (!parse_function_scope(&__node_9))
+                if  (!parse_function_scope(&__node_18))
                   {
                     yy_expected_symbol(ast_node::Kind_function_scope,  "function_scope");
                     return  false;
@@ -539,9 +927,9 @@ namespace QMake
             else if  (yytoken ==  Token_RBRACE
                       ||  yytoken ==  Token_COLON)
               {
-                scope_body_ast *__node_10 =  0;
+                scope_body_ast *__node_19 =  0;
 
-                if  (!parse_scope_body(&__node_10))
+                if  (!parse_scope_body(&__node_19))
                   {
                     yy_expected_symbol(ast_node::Kind_scope_body,  "scope_body");
                     return  false;
@@ -589,15 +977,18 @@ namespace QMake
     (*yynode)->start_token =  token_stream->index() -  1;
 
     if  (yytoken ==  Token_CONT
+         ||  yytoken ==  Token_DOUBLEDOLLAR
+         ||  yytoken ==  Token_SINGLEDOLLAR
+         ||  yytoken ==  Token_QUOTE
          ||  yytoken ==  Token_IDENTIFIER
          ||  yytoken ==  Token_VALUE)
       {
         if  (yytoken ==  Token_IDENTIFIER
              ||  yytoken ==  Token_VALUE)
           {
-            id_or_value_ast *__node_11 =  0;
+            id_or_value_ast *__node_20 =  0;
 
-            if  (!parse_id_or_value(&__node_11))
+            if  (!parse_id_or_value(&__node_20))
               {
                 yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
                 return  false;
@@ -624,21 +1015,47 @@ namespace QMake
 
           }
 
+        else if  (yytoken ==  Token_QUOTE)
+          {
+            quoted_value_ast *__node_21 =  0;
+
+            if  (!parse_quoted_value(&__node_21))
+              {
+                yy_expected_symbol(ast_node::Kind_quoted_value,  "quoted_value");
+                return  false;
+              }
+          }
+
+        else if  (yytoken ==  Token_DOUBLEDOLLAR
+                  ||  yytoken ==  Token_SINGLEDOLLAR)
+          {
+            ref_ast *__node_22 =  0;
+
+            if  (!parse_ref(&__node_22))
+              {
+                yy_expected_symbol(ast_node::Kind_ref,  "ref");
+                return  false;
+              }
+          }
+
         else
           {
             return  false;
           }
 
         while  (yytoken ==  Token_CONT
+                ||  yytoken ==  Token_DOUBLEDOLLAR
+                ||  yytoken ==  Token_SINGLEDOLLAR
+                ||  yytoken ==  Token_QUOTE
                 ||  yytoken ==  Token_IDENTIFIER
                 ||  yytoken ==  Token_VALUE)
           {
             if  (yytoken ==  Token_IDENTIFIER
                  ||  yytoken ==  Token_VALUE)
               {
-                id_or_value_ast *__node_12 =  0;
+                id_or_value_ast *__node_23 =  0;
 
-                if  (!parse_id_or_value(&__node_12))
+                if  (!parse_id_or_value(&__node_23))
                   {
                     yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
                     return  false;
@@ -663,6 +1080,29 @@ namespace QMake
 
                 yylex();
 
+              }
+
+            else if  (yytoken ==  Token_QUOTE)
+              {
+                quoted_value_ast *__node_24 =  0;
+
+                if  (!parse_quoted_value(&__node_24))
+                  {
+                    yy_expected_symbol(ast_node::Kind_quoted_value,  "quoted_value");
+                    return  false;
+                  }
+              }
+
+            else if  (yytoken ==  Token_DOUBLEDOLLAR
+                      ||  yytoken ==  Token_SINGLEDOLLAR)
+              {
+                ref_ast *__node_25 =  0;
+
+                if  (!parse_ref(&__node_25))
+                  {
+                    yy_expected_symbol(ast_node::Kind_ref,  "ref");
+                    return  false;
+                  }
               }
 
             else
@@ -694,21 +1134,24 @@ namespace QMake
          ||  yytoken ==  Token_STAREQ
          ||  yytoken ==  Token_TILDEEQ)
       {
-        op_ast *__node_13 =  0;
+        op_ast *__node_26 =  0;
 
-        if  (!parse_op(&__node_13))
+        if  (!parse_op(&__node_26))
           {
             yy_expected_symbol(ast_node::Kind_op,  "op");
             return  false;
           }
 
         if  (yytoken ==  Token_CONT
+             ||  yytoken ==  Token_DOUBLEDOLLAR
+             ||  yytoken ==  Token_SINGLEDOLLAR
+             ||  yytoken ==  Token_QUOTE
              ||  yytoken ==  Token_IDENTIFIER
              ||  yytoken ==  Token_VALUE)
           {
-            value_list_ast *__node_14 =  0;
+            value_list_ast *__node_27 =  0;
 
-            if  (!parse_value_list(&__node_14))
+            if  (!parse_value_list(&__node_27))
               {
                 yy_expected_symbol(ast_node::Kind_value_list,  "value_list");
                 return  false;
@@ -739,6 +1182,129 @@ namespace QMake
             if  (yytoken !=  Token_EOF)
               {
                 yy_expected_token(yytoken,  Token_EOF,  "EOF");
+                return  false;
+              }
+
+            yylex();
+
+          }
+
+        else
+          {
+            return  false;
+          }
+      }
+
+    else
+      {
+        return  false;
+      }
+
+    (*yynode)->end_token =  token_stream->index() -  1;
+
+    return  true;
+  }
+
+  bool parser::parse_varref(varref_ast **yynode)
+  {
+    *yynode =  create<varref_ast>();
+
+    (*yynode)->start_token =  token_stream->index() -  1;
+
+    if  (yytoken ==  Token_LBRACKET
+         ||  yytoken ==  Token_LBRACE
+         ||  yytoken ==  Token_LPAREN
+         ||  yytoken ==  Token_IDENTIFIER)
+      {
+        if  (yytoken ==  Token_LPAREN)
+          {
+            if  (yytoken !=  Token_LPAREN)
+              {
+                yy_expected_token(yytoken,  Token_LPAREN,  "lparen");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_IDENTIFIER)
+              {
+                yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_RPAREN)
+              {
+                yy_expected_token(yytoken,  Token_RPAREN,  "rparen");
+                return  false;
+              }
+
+            yylex();
+
+          }
+
+        else if  (yytoken ==  Token_LBRACE)
+          {
+            if  (yytoken !=  Token_LBRACE)
+              {
+                yy_expected_token(yytoken,  Token_LBRACE,  "lbrace");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_IDENTIFIER)
+              {
+                yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_RBRACE)
+              {
+                yy_expected_token(yytoken,  Token_RBRACE,  "rbrace");
+                return  false;
+              }
+
+            yylex();
+
+          }
+
+        else if  (yytoken ==  Token_LBRACKET)
+          {
+            if  (yytoken !=  Token_LBRACKET)
+              {
+                yy_expected_token(yytoken,  Token_LBRACKET,  "lbracket");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_IDENTIFIER)
+              {
+                yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_RBRACKET)
+              {
+                yy_expected_token(yytoken,  Token_RBRACKET,  "rbracket");
+                return  false;
+              }
+
+            yylex();
+
+          }
+
+        else if  (yytoken ==  Token_IDENTIFIER)
+          {
+            if  (yytoken !=  Token_IDENTIFIER)
+              {
+                yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
                 return  false;
               }
 

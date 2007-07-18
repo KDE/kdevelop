@@ -140,15 +140,19 @@ namespace QMake
       {}
 
       bool parse_arg_list(arg_list_ast **yynode);
+      bool parse_funcref(funcref_ast **yynode);
       bool parse_function_args(function_args_ast **yynode);
       bool parse_function_scope(function_scope_ast **yynode);
       bool parse_id_or_value(id_or_value_ast **yynode);
       bool parse_op(op_ast **yynode);
       bool parse_project(project_ast **yynode);
+      bool parse_quoted_value(quoted_value_ast **yynode);
+      bool parse_ref(ref_ast **yynode);
       bool parse_scope_body(scope_body_ast **yynode);
       bool parse_stmt(stmt_ast **yynode);
       bool parse_value_list(value_list_ast **yynode);
       bool parse_variable_assignment(variable_assignment_ast **yynode);
+      bool parse_varref(varref_ast **yynode);
     };
 
 } // end of namespace QMake

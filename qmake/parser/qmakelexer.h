@@ -44,7 +44,7 @@ public:
 private:
     QString mContent;
     parser* mParser;
-    int curpos;
+    int mCurpos;
     int mContentSize;
     std::size_t mTokenBegin;
     std::size_t mTokenEnd;
@@ -53,17 +53,22 @@ private:
     void pushState(int state);
     void popState();
 
-    static bool isIdOrValueCharacter(QChar* c);
     static bool isIdentifierCharacter(QChar* c);
-    bool isWhitespaceOrComment(QChar* c);
+    static bool isSpecialValueCharacter(QChar* c);
+    static bool isCont(QChar* c);
+
+    QChar* ignoreWhitespace(QChar* it);
+
+    bool mInQuote;
 
     QStack<int> mState;
     enum State
     {
+        ErrorState = -1,
         DefaultState = 0,
-        QuoteState = 1,
         ContState = 2,
-        CommentState = 3
+        VariableValueState = 4,
+        FunctionArgState = 5
     };
 
 };

@@ -22,6 +22,8 @@ namespace QMake
 
   struct arg_list_ast;
 
+  struct funcref_ast;
+
   struct function_args_ast;
 
   struct function_scope_ast;
@@ -32,6 +34,10 @@ namespace QMake
 
   struct project_ast;
 
+  struct quoted_value_ast;
+
+  struct ref_ast;
+
   struct scope_body_ast;
 
   struct stmt_ast;
@@ -40,20 +46,26 @@ namespace QMake
 
   struct variable_assignment_ast;
 
+  struct varref_ast;
+
 
   struct ast_node
     {
       enum ast_node_kind_enum {
         Kind_arg_list =  1000,
-        Kind_function_args =  1001,
-        Kind_function_scope =  1002,
-        Kind_id_or_value =  1003,
-        Kind_op =  1004,
-        Kind_project =  1005,
-        Kind_scope_body =  1006,
-        Kind_stmt =  1007,
-        Kind_value_list =  1008,
-        Kind_variable_assignment =  1009,
+        Kind_funcref =  1001,
+        Kind_function_args =  1002,
+        Kind_function_scope =  1003,
+        Kind_id_or_value =  1004,
+        Kind_op =  1005,
+        Kind_project =  1006,
+        Kind_quoted_value =  1007,
+        Kind_ref =  1008,
+        Kind_scope_body =  1009,
+        Kind_stmt =  1010,
+        Kind_value_list =  1011,
+        Kind_variable_assignment =  1012,
+        Kind_varref =  1013,
         AST_NODE_KIND_COUNT
       };
 
@@ -67,6 +79,15 @@ namespace QMake
       enum
       {
         KIND =  Kind_arg_list
+      };
+
+    };
+
+  struct funcref_ast:  public ast_node
+    {
+      enum
+      {
+        KIND =  Kind_funcref
       };
 
     };
@@ -116,6 +137,24 @@ namespace QMake
 
     };
 
+  struct quoted_value_ast:  public ast_node
+    {
+      enum
+      {
+        KIND =  Kind_quoted_value
+      };
+
+    };
+
+  struct ref_ast:  public ast_node
+    {
+      enum
+      {
+        KIND =  Kind_ref
+      };
+
+    };
+
   struct scope_body_ast:  public ast_node
     {
       enum
@@ -148,6 +187,15 @@ namespace QMake
       enum
       {
         KIND =  Kind_variable_assignment
+      };
+
+    };
+
+  struct varref_ast:  public ast_node
+    {
+      enum
+      {
+        KIND =  Kind_varref
       };
 
     };

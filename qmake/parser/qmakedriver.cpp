@@ -28,6 +28,8 @@
 #include "qmake_parser.h"
 #include "qmake_ast.h"
 
+#include "qmake_debug_visitor.h"
+
 namespace QMake
 {
 
@@ -72,6 +74,12 @@ bool Driver::parse(QMake::ProjectAST*)
     bool matched = qmakeparser.parse_project(&ast);
     if( matched )
     {
+        qDebug() << "Sucessfully parsed";
+        if( mDebug )
+        {
+            debug_visitor d;
+            d.visit_project(ast);
+        }
     }else
     {
         qmakeparser.yy_expected_symbol(ast_node::Kind_project, "project");
