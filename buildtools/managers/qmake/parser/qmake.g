@@ -91,47 +91,56 @@ namespace QMake
 
 -- The actual grammar starts here.
 
-   ( stmt )*
+   ( #stmts=stmt )*
 -> project ;;
 
-   IDENTIFIER ( variable_assignment | function_scope | scope_body ) | NEWLINE
+   id=IDENTIFIER ( var=variable_assignment | func=function_scope | scope=scope_body ) | NEWLINE
 -> stmt ;;
 
-   op ( value_list | 0 ) ( NEWLINE | EOF )
+   op=op ( values=value_list | 0 ) ( NEWLINE | EOF )
 -> variable_assignment ;;
 
-   PLUSEQ | MINUSEQ | STAREQ | EQUAL | TILDEEQ
+   optoken=PLUSEQ | optoken=MINUSEQ | optoken=STAREQ | optoken=EQUAL | optoken=TILDEEQ
 -> op ;;
 
-   ( id_or_value | CONT NEWLINE | quoted_value | ref )
-        ( id_or_value | CONT NEWLINE | quoted_value | ref )*
+   ( #list=value | CONT NEWLINE )
+        ( #list=value | CONT NEWLINE )*
 -> value_list ;;
 
-   DOUBLEDOLLAR ( varref | funcref ) | SINGLEDOLLAR LPAREN IDENTIFIER RPAREN
+   value_str=id_or_value | quote_val=quoted_value | ref=ref
+-> value ;;
+
+   DOUBLEDOLLAR ( varref=varref | funcref=funcref ) | SINGLEDOLLAR LPAREN idref=IDENTIFIER RPAREN
 -> ref ;;
 
-   LPAREN IDENTIFIER RPAREN | LBRACE IDENTIFIER RBRACE | LBRACKET IDENTIFIER RBRACKET | IDENTIFIER
+   LPAREN id=IDENTIFIER RPAREN | LBRACE id=IDENTIFIER RBRACE | LBRACKET id=IDENTIFIER RBRACKET | id=IDENTIFIER
 -> varref ;;
 
-   IDENTIFIER function_args
+   id=IDENTIFIER args=function_args
 -> funcref ;;
 
-   IDENTIFIER | VALUE
+   val=IDENTIFIER | val=VALUE
 -> id_or_value ;;
 
-   QUOTE ( id_or_value | ref | QUOTEDSPACE | COLON | COMMA )* ( QUOTE | 0 )
+   QUOTE ( value=quote_value )* ( QUOTE | 0 )
 -> quoted_value ;;
 
-   LPAREN arg_list RPAREN
+   value_str=id_or_value | ref=ref | token=QUOTEDSPACE | token=COLON | token=COMMA
+-> quote_value ;;
+
+   LPAREN args=arg_list RPAREN
 -> function_args ;;
 
-   function_args ( scope_body | 0 )
+   args=function_args ( scopebody=scope_body | 0 )
 -> function_scope ;;
 
-   ( ( id_or_value | quoted_value | CONT NEWLINE | ref ) ( ( COMMA | CONT NEWLINE ) ( id_or_value | quoted_value | ref ) ) | 0 )
+   ( ( #args=argument | CONT NEWLINE ) ( ( COMMA | CONT NEWLINE ) ( #args=argument ) )* | 0 )
 -> arg_list ;;
 
-   RBRACE ( NEWLINE | 0 ) ( stmt )* LBRACE | COLON stmt
+   value_str=id_or_value | quoted_val=quoted_value | ref=ref
+-> argument ;;
+
+   RBRACE ( NEWLINE | 0 ) ( #stmts=stmt )* LBRACE | COLON #stmts=stmt
 -> scope_body ;;
 
 -----------------------------------------------------------------

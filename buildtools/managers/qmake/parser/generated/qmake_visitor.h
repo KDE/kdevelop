@@ -27,6 +27,9 @@ namespace QMake
       virtual void visit_arg_list(arg_list_ast *)
     {}
 
+      virtual void visit_argument(argument_ast *)
+      {}
+
       virtual void visit_funcref(funcref_ast *)
       {}
 
@@ -45,6 +48,9 @@ namespace QMake
       virtual void visit_project(project_ast *)
       {}
 
+      virtual void visit_quote_value(quote_value_ast *)
+      {}
+
       virtual void visit_quoted_value(quoted_value_ast *)
       {}
 
@@ -55,6 +61,9 @@ namespace QMake
       {}
 
       virtual void visit_stmt(stmt_ast *)
+      {}
+
+      virtual void visit_value(value_ast *)
       {}
 
       virtual void visit_value_list(value_list_ast *)
