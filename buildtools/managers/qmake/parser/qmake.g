@@ -103,19 +103,32 @@ namespace QMake
    PLUSEQ | MINUSEQ | STAREQ | EQUAL | TILDEEQ
 -> op ;;
 
-   ( id_or_value | CONT NEWLINE ) ( id_or_value | CONT NEWLINE )*
+   ( id_or_value | CONT NEWLINE | quoted_value | ref )
+        ( id_or_value | CONT NEWLINE | quoted_value | ref )*
 -> value_list ;;
+
+   DOUBLEDOLLAR ( varref | funcref ) | SINGLEDOLLAR LPAREN IDENTIFIER RPAREN
+-> ref ;;
+
+   LPAREN IDENTIFIER RPAREN | LBRACE IDENTIFIER RBRACE | LBRACKET IDENTIFIER RBRACKET | IDENTIFIER
+-> varref ;;
+
+   IDENTIFIER function_args
+-> funcref ;;
 
    IDENTIFIER | VALUE
 -> id_or_value ;;
 
+   QUOTE ( id_or_value | ref | QUOTEDSPACE | COLON | COMMA )* ( QUOTE | 0 )
+-> quoted_value ;;
+
    LPAREN arg_list RPAREN
 -> function_args ;;
 
-   function_args scope_body
+   function_args ( scope_body | 0 )
 -> function_scope ;;
 
-   ( id_or_value ( COMMA id_or_value ) | 0 )
+   ( ( id_or_value | quoted_value | CONT NEWLINE | ref ) ( ( COMMA | CONT NEWLINE ) ( id_or_value | quoted_value | ref ) ) | 0 )
 -> arg_list ;;
 
    RBRACE ( NEWLINE | 0 ) ( stmt )* LBRACE | COLON stmt
@@ -192,7 +205,6 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
     kDebug(9024) << "token starts at: " << token.begin << endl;
     kDebug(9024) << "index is: " << index << endl;
     token_stream->start_position(index, &line, &col);
-    size_t tokenLength = token.end - token.begin;
     QString tokenValue = tokenText(token.begin, token.end);
     reportProblem(
         parser::Error,

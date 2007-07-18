@@ -25,7 +25,7 @@ find_package(KDevelop-PG QUIET)
 
 macro(GET_GENERATED_SRCS _srcFiles)
     if(KDEVPG_FOUND)
-        kdevpg_generate(_files qmake NAMESPACE QMake
+        kdevpg_generate(_files qmake NAMESPACE QMake DEBUG_VISITOR
             "${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmake.g"
     	    "${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakelexer.h")
 
@@ -40,7 +40,7 @@ macro(GET_GENERATED_SRCS _srcFiles)
             ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_parser.cpp
             ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_default_visitor.cpp
             ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_visitor.cpp)
-        include_directories( ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated 
+        include_directories( ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated
             ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/kdevelop-pg )
     endif(KDEVPG_FOUND)
 endmacro(GET_GENERATED_SRCS)
@@ -76,11 +76,13 @@ add_custom_target( copy-generated
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.h" "${CMAKE_CURRENT_SOURCE_DIR}/parser/generated/qmake_parser.h"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/parser/generated/qmake_visitor.h"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_visitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/parser/generated/qmake_visitor.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_debug_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/parser/generated/qmake_debug_visitor.h"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_default_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/parser/generated/qmake_default_visitor.h"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_default_visitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/parser/generated/qmake_default_visitor.cpp"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_ast.h"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_debug_visitor.h"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_default_visitor.h"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_default_visitor.cpp"
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_visitor.h"
