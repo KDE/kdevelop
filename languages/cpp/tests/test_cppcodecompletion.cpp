@@ -174,7 +174,8 @@ void TestCppCodeCompletion::testCompletionContext() {
     ///Test whether a recursive function-call context is created correctly
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(context, "; globalFunction(globalFunction(globalHonk, " ) );
     Cpp::CodeCompletionContext& c(*cptr);
-    QVERIFY( c );
+    // this doesn't work, as c is not a pointer
+    // QVERIFY( c );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );
 
@@ -216,7 +217,8 @@ void TestCppCodeCompletion::testCompletionContext() {
   {
     ///The context is a function, and there is no prefix-expression, so it should be normal completion.
     Cpp::CodeCompletionContext c( context, "{" );
-    QVERIFY( c );
+    // this test doesn't work because c is not a pointer
+    // QVERIFY( c );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );
   }
