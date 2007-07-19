@@ -11,8 +11,8 @@
 
 #include "interthreadevents.h"
 
-SvnNotificationEvent::SvnNotificationEvent( const QString& msg )
-    : QEvent( SVNACTION_NOTIFICATION ), m_msg(msg)
+SvnNotificationEvent::SvnNotificationEvent( const QString &path, const QString& msg )
+    : QEvent( SVNACTION_NOTIFICATION ), m_path(path), m_msg(msg)
 {}
 
 SvnNotificationEvent::~SvnNotificationEvent()

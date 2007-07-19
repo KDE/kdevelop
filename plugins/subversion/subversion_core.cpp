@@ -432,8 +432,7 @@ void SubversionCore::customEvent( QEvent * event )
     switch( type ){
         case SVNACTION_NOTIFICATION : {
             SvnNotificationEvent *ev = (SvnNotificationEvent*)event;
-			kDebug() << " SubversionCore:: Notification Message " << ev->m_msg << endl;
-            emit svnNotify( ev->m_msg );
+            emit svnNotify( ev->m_path, ev->m_msg );
             break;
         }
         case SVNLOGIN_SERVERTRUSTPROMPT : {

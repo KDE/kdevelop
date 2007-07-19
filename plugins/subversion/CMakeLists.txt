@@ -59,6 +59,7 @@ target_link_libraries(kdevsubversion
                     kdevplatforminterfaces
                     kdevplatformvcs
                     kdevplatformproject
+                    kdevplatformoutputview
                     )
 
 install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR} )

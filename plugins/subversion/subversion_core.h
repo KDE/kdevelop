@@ -127,7 +127,7 @@ protected Q_SLOTS:
 
 Q_SIGNALS:
     /// for notification message
-    void svnNotify( QString );
+    void svnNotify( QString path, QString msg );
     /// For jobs which don't need to display their results via special GUI viewers.
     /// ( i.e. commit, add, delete .. )
     void jobFinished( SvnKJobBase* );

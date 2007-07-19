@@ -28,8 +28,10 @@ struct apr_array_header_t;
 class SvnNotificationEvent : public QEvent
 {
 public:
-    SvnNotificationEvent( const QString& msg );
+    SvnNotificationEvent( const QString &path, const QString &msg );
     virtual ~SvnNotificationEvent();
+    // path
+    QString m_path;
     // notification message
     QString m_msg;
 };

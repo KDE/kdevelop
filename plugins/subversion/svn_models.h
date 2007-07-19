@@ -16,6 +16,8 @@
 #include <QVariant>
 #include <QList>
 #include <kurl.h>
+#include <ioutputviewmodel.h>
+#include <QStandardItemModel>
 
 extern "C" {
 #include <svn_client.h>
@@ -23,6 +25,7 @@ extern "C" {
 
 
 class QModelIndex;
+class KDevSubversionPart;
 
 class SvnGenericHolder {
 public:
@@ -227,6 +230,47 @@ protected:
     int m_activeRow;
     QList<QString> m_pathlist;
     LogItem *m_item;
+};
+
+/**
+ * Model that is used by outputview notification.
+ * When activated, open the file. Depending on the result of update operation, it paints
+ * with corresponding color. For example, regarding conflicted item, it paints red color
+ * on that file.
+ *
+ * TODO Clearing the list by context menu.
+ */
+
+class SvnOutputItem : public QStandardItem
+{
+public:
+    explicit SvnOutputItem( const QString &path, const QString &msg );
+    virtual ~SvnOutputItem();
+    bool stopHere();
+    QString m_path;
+    QString m_msg;
+    bool m_stop;
+};
+
+class SvnOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
+{
+    Q_OBJECT
+public:
+    explicit SvnOutputModel( KDevSubversionPart *part, QObject *parent );
+    ~SvnOutputModel();
+
+    // IOutputViewModel interfaces.
+    /// Open the file
+    void activate( const QModelIndex& index );
+
+    /// Highlight next conflicted item in list.
+    QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
+
+    /// Highlight previous conflicted item in list.
+    QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );
+
+private:
+    KDevSubversionPart *m_part;
 };
 
 #endif

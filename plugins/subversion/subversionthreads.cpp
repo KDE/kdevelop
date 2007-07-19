@@ -278,8 +278,42 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
             notifyString = i18n("Added %1", notify->path );
             break;
         case svn_wc_notify_update_update:
-            notifyString = i18n("Updated %1", notify->path );
+         /* If this is an inoperative dir change, do no notification.
+            An inoperative dir change is when a directory gets closed
+            without any props having been changed. */
+            kDebug() << notify->path << " wc_notify_state: " << notify->content_state << endl;
+            if (! ((notify->kind == svn_node_dir)
+                    && ((notify->prop_state == svn_wc_notify_state_inapplicable)
+                    || (notify->prop_state == svn_wc_notify_state_unknown)
+                    || (notify->prop_state == svn_wc_notify_state_unchanged)))) {
+
+                if (notify->kind == svn_node_file) {
+                    if (notify->content_state == svn_wc_notify_state_conflicted)
+                        notifyString = "TextConflicted";
+                    else if (notify->content_state == svn_wc_notify_state_merged)
+                        notifyString = "TextMerged";
+                    else if (notify->content_state == svn_wc_notify_state_changed)
+                        notifyString = "TextUpdated";
+                }
+
+                if (notify->prop_state == svn_wc_notify_state_conflicted)
+                    notifyString += " PropConflicted";
+                else if (notify->prop_state == svn_wc_notify_state_merged)
+                    notifyString += " PropMerged";
+                else if (notify->prop_state == svn_wc_notify_state_changed)
+                    notifyString += " PropUpdated";
+                else
+                    notifyString += " ";
+
+                if (! ((notify->content_state == svn_wc_notify_state_unchanged
+                        || notify->content_state == svn_wc_notify_state_unknown)
+                        && (notify->prop_state == svn_wc_notify_state_unchanged
+                        || notify->prop_state == svn_wc_notify_state_unknown)))
+                    notifyString += QString( " " ) + notify->path;
+
+            }
             break;
+
         case svn_wc_notify_update_completed:
             // The last notification in an update (including updates of externals).
             notifyString = i18n("Revision %1", notify->revision );
@@ -329,7 +363,7 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
             notifyString = i18n( "Copied %1", notify->path );
             break;
     }
-    SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
+    SvnNotificationEvent *event = new SvnNotificationEvent( notify->path, notifyString );
     QCoreApplication::postEvent( thread->kjob()->parent(), event );
 }
 
@@ -684,7 +718,7 @@ void SvnCommitJob::run()
     } else{
         notifyString = i18n("Committed");
     }
-    SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
+    SvnNotificationEvent *event = new SvnNotificationEvent( QString(), notifyString );
     QCoreApplication::postEvent( kjob()->parent(), event );
 
     // TODO handle separately to adjust svn+ssh  SVN_ERR_RA_SVN_CONNECTION_CLOSED,

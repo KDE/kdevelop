@@ -95,10 +95,10 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
         if( d->m_outview ){
             d->m_outputViewId = d->m_outview->registerView( i18n("Subversion Notification"),
                               KDevelop::IOutputView::AlwaysShowView );
-            d->m_outputModel = new QStandardItemModel(this);
+            d->m_outputModel = new SvnOutputModel( d->m_part, this );
             d->m_outview->setModel( d->m_outputViewId, d->m_outputModel );
-            connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),
-                    this, SLOT(printNotification(QString)) );
+            connect( d->m_part->svncore(), SIGNAL(svnNotify(QString, QString)),
+                    this, SLOT(printNotification(QString, QString)) );
         }
 
     } else{
@@ -113,12 +113,11 @@ KDevSubversionView::~KDevSubversionView()
     delete d;
 }
 
-void KDevSubversionView::printNotification(const QString& msg)
+void KDevSubversionView::printNotification( const QString &path, const QString& msg )
 {
     if(! d->m_outputModel )
         return;
-    kDebug() << " printNotification " << msg << endl;
-    d->m_outputModel->appendRow(new QStandardItem( msg ));
+    d->m_outputModel->appendRow(new SvnOutputItem( path, msg ));
 }
 
 void KDevSubversionView::printLog(SvnKJobBase *j)
