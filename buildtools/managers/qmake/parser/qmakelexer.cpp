@@ -62,6 +62,7 @@ Lexer::Lexer( parser* _parser, const QString& content ):
     foreach( QString line, lines )
     {
         lineendpos = pos+line.size();
+        mParser->token_stream->location_table()->newline(lineendpos);
         if( line.contains( fullLineCommentRE ) )
         {
             for( int i = pos; i < lineendpos+1 ; ++i)
@@ -77,9 +78,7 @@ Lexer::Lexer( parser* _parser, const QString& content ):
             }
         }
         pos = lineendpos+1;
-        mParser->token_stream->location_table()->newline(lineendpos);
     }
-    qDebug() << "Content now" << mContent;
     pushState( ErrorState );
     pushState( DefaultState );
 }
@@ -108,7 +107,6 @@ int Lexer::getNextTokenKind()
     }
     QChar* it = mContent.data();
     it += mCurpos;
-    qDebug() << "Current State:" << state();
     switch( state() )
     {
         case VariableValueState:
@@ -192,7 +190,6 @@ int Lexer::getNextTokenKind()
                         break;
                     case '\n':
                         mInQuote = false;
-                        qDebug() << "Newline in state:" << state();
                         token = parser::Token_NEWLINE;
                         popState();
                         break;
@@ -231,7 +228,7 @@ int Lexer::getNextTokenKind()
                     default:
                         token = parser::Token_IDENTIFIER;
                         while( !it->isSpace()
-                                && !Lexer::isSpecialValueCharacter(it)
+                                && !isSpecialValueCharacter(it)
                                 && !Lexer::isCont(it) )
                         {
                             if( !Lexer::isIdentifierCharacter( it ) )
@@ -247,9 +244,7 @@ int Lexer::getNextTokenKind()
             }
             break;
         case ContState:
-            qDebug() << "Ignored whitespace" << mCurpos;
             it = ignoreWhitespace(it);
-            qDebug() << "Ignored whitespace" << mCurpos;
             mTokenBegin = mCurpos;
             if( it->unicode() == '\n' )
             {
@@ -374,7 +369,7 @@ bool Lexer::isSpecialValueCharacter(QChar* c)
             || c->unicode() == ')'
             || c->unicode() == '['
             || c->unicode() == ']'
-            || c->unicode() == ','
+            || ( state() == FunctionArgState && c->unicode() == ',' )
             || c->unicode() == '"'
           );
 }

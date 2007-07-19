@@ -54,7 +54,7 @@ private:
     void popState();
 
     static bool isIdentifierCharacter(QChar* c);
-    static bool isSpecialValueCharacter(QChar* c);
+    bool isSpecialValueCharacter(QChar* c);
     static bool isCont(QChar* c);
 
     QChar* ignoreWhitespace(QChar* it);
