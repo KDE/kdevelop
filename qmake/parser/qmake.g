@@ -109,19 +109,19 @@ namespace QMake
    value_str=id_or_value | quote_val=quoted_value | ref=ref
 -> value ;;
 
-   DOUBLEDOLLAR ( varref=varref | funcref=funcref ) | SINGLEDOLLAR LPAREN idref=IDENTIFIER RPAREN
+   DOUBLEDOLLAR ( func_var_ref=func_var_ref | varref=varref ) | SINGLEDOLLAR LPAREN idref=IDENTIFIER RPAREN
 -> ref ;;
 
-   LPAREN id=IDENTIFIER RPAREN | LBRACE id=IDENTIFIER RBRACE | LBRACKET id=IDENTIFIER RBRACKET | id=IDENTIFIER
+   LPAREN id=IDENTIFIER RPAREN | LBRACE id=IDENTIFIER RBRACE | LBRACKET id=IDENTIFIER RBRACKET
 -> varref ;;
 
-   id=IDENTIFIER args=function_args
--> funcref ;;
+   id=IDENTIFIER ( args=function_args | 0 )
+-> func_var_ref ;;
 
    val=IDENTIFIER | val=VALUE
 -> id_or_value ;;
 
-   QUOTE ( value=quote_value )* ( QUOTE | 0 )
+   QUOTE ( value=quote_value )* ( QUOTE | CONT NEWLINE )
 -> quoted_value ;;
 
    value_str=id_or_value | ref=ref | token=QUOTEDSPACE | token=COLON | token=COMMA
@@ -139,7 +139,7 @@ namespace QMake
    value_str=id_or_value | quoted_val=quoted_value | ref=ref
 -> argument ;;
 
-   RBRACE ( NEWLINE | 0 ) ( #stmts=stmt )* LBRACE | COLON #stmts=stmt
+    LBRACE ( NEWLINE | 0 ) ( #stmts=stmt )* RBRACE | COLON #stmts=stmt
 -> scope_body ;;
 
 -----------------------------------------------------------------

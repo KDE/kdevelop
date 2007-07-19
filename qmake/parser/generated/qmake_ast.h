@@ -24,7 +24,7 @@ namespace QMake
 
   struct argument_ast;
 
-  struct funcref_ast;
+  struct func_var_ref_ast;
 
   struct function_args_ast;
 
@@ -60,7 +60,7 @@ namespace QMake
       enum ast_node_kind_enum {
         Kind_arg_list =  1000,
         Kind_argument =  1001,
-        Kind_funcref =  1002,
+        Kind_func_var_ref =  1002,
         Kind_function_args =  1003,
         Kind_function_scope =  1004,
         Kind_id_or_value =  1005,
@@ -105,11 +105,11 @@ namespace QMake
       ref_ast *ref;
     };
 
-  struct funcref_ast:  public ast_node
+  struct func_var_ref_ast:  public ast_node
     {
       enum
       {
-        KIND =  Kind_funcref
+        KIND =  Kind_func_var_ref
       };
 
       std::size_t id;
@@ -196,8 +196,8 @@ namespace QMake
         KIND =  Kind_ref
       };
 
+      func_var_ref_ast *func_var_ref;
       varref_ast *varref;
-      funcref_ast *funcref;
       std::size_t idref;
     };
 

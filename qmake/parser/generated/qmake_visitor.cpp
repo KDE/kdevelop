@@ -9,7 +9,7 @@ namespace QMake
   visitor::parser_fun_t visitor::_S_parser_table[] =  {
         reinterpret_cast<parser_fun_t>(&visitor::visit_arg_list),
         reinterpret_cast<parser_fun_t>(&visitor::visit_argument),
-        reinterpret_cast<parser_fun_t>(&visitor::visit_funcref),
+        reinterpret_cast<parser_fun_t>(&visitor::visit_func_var_ref),
         reinterpret_cast<parser_fun_t>(&visitor::visit_function_args),
         reinterpret_cast<parser_fun_t>(&visitor::visit_function_scope),
         reinterpret_cast<parser_fun_t>(&visitor::visit_id_or_value),

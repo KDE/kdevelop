@@ -29,7 +29,7 @@ namespace QMake
     visit_node(node->ref);
   }
 
-  void default_visitor::visit_funcref(funcref_ast *node)
+  void default_visitor::visit_func_var_ref(func_var_ref_ast *node)
   {
     visit_node(node->args);
   }
@@ -80,8 +80,8 @@ namespace QMake
 
   void default_visitor::visit_ref(ref_ast *node)
   {
+    visit_node(node->func_var_ref);
     visit_node(node->varref);
-    visit_node(node->funcref);
   }
 
   void default_visitor::visit_scope_body(scope_body_ast *node)

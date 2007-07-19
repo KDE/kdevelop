@@ -15,7 +15,7 @@ namespace QMake
     public:
       virtual void visit_arg_list(arg_list_ast *node);
       virtual void visit_argument(argument_ast *node);
-      virtual void visit_funcref(funcref_ast *node);
+      virtual void visit_func_var_ref(func_var_ref_ast *node);
       virtual void visit_function_args(function_args_ast *node);
       virtual void visit_function_scope(function_scope_ast *node);
       virtual void visit_id_or_value(id_or_value_ast *node);

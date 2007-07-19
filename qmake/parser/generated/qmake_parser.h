@@ -140,7 +140,7 @@ namespace QMake
 
       bool parse_arg_list(arg_list_ast **yynode);
       bool parse_argument(argument_ast **yynode);
-      bool parse_funcref(funcref_ast **yynode);
+      bool parse_func_var_ref(func_var_ref_ast **yynode);
       bool parse_function_args(function_args_ast **yynode);
       bool parse_function_scope(function_scope_ast **yynode);
       bool parse_id_or_value(id_or_value_ast **yynode);
