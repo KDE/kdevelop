@@ -62,7 +62,7 @@ public:
   };
 
   enum Kind {
-    Type, //A type is declared, like a class-declaration or function-declaration("class MyClass {};")
+    Type, //A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};")
     Instance //An instance of a type is declared("MyClass m;")
   };
 
@@ -84,6 +84,9 @@ public:
   bool isDefinition() const;
   void setDeclarationIsDefinition(bool dd);
 
+  ///Is this a type-alias(in c++ typedef)?
+  bool isTypeAlias() const;
+  void setIsTypeAlias(bool);
   /**
    * Retrieve the definition for this declaration.
    */

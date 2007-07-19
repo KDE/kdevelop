@@ -54,9 +54,13 @@ public:
 
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
+  bool m_isTypeAlias   : 1;
 };
 
 Declaration::Kind Declaration::kind() const {
+  if( d->m_isTypeAlias )
+    return Type;
+  
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>( d->m_type.data() );
   //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
   if( (!idType) || (idType && idType->declaration() != this) )
@@ -74,6 +78,7 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
   d->m_definition = 0;
   d->m_isDefinition = false;
   d->m_inSymbolTable = false;
+  d->m_isTypeAlias = false;
   Q_ASSERT(context);
   setContext(context);
 }
@@ -257,6 +262,15 @@ void Declaration::setDeclarationIsDefinition(bool dd)
   if (d->m_isDefinition && definition()) {
     setDefinition(0);
   }
+}
+
+///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
+bool Declaration::isTypeAlias() const {
+  return d->m_isTypeAlias;
+}
+
+void Declaration::setIsTypeAlias(bool isTypeAlias) {
+  d->m_isTypeAlias = isTypeAlias;
 }
 
 Definition* Declaration::definition() const
