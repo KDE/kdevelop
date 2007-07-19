@@ -50,9 +50,11 @@ public:
     virtual void visit_value_list( value_list_ast *node );
     virtual void visit_variable_assignment( variable_assignment_ast *node );
     virtual void visit_varref( varref_ast *node );
-    QString getTokenInfo(std::size_t idx, std::size_t* line, std::size_t* col);
+    QString getTokenInfo(std::size_t idx);
+    QString getIndent();
 private:
     QMake::parser* mParser;
+    int indent;
 };
 
 } // end of namespace QMake

@@ -83,9 +83,6 @@ namespace QMake
 %token IDENTIFIER("identifier"), VALUE("value"),
        QUOTEDSPACE("quotedspace") ;;
 
-%token ERROR("error") ;;
-
-
 -- token that makes the parser fail in any case:
 %token INVALID ("invalid token") ;;
 
@@ -94,8 +91,11 @@ namespace QMake
    ( #stmts=stmt )*
 -> project ;;
 
-   id=IDENTIFIER ( var=variable_assignment | func=function_scope | scope=scope_body ) | NEWLINE
--> stmt ;;
+   ( id=IDENTIFIER ( var=variable_assignment | func=function_scope | scope=scope_body )
+            [: (*yynode)->isNewline = false; :]
+   ) | NEWLINE
+            [: (*yynode)->isNewline = true; :]
+-> stmt [ member variable isNewline: bool; ] ;;
 
    op=op ( values=value_list | 0 ) ( NEWLINE | EOF )
 -> variable_assignment ;;
@@ -103,8 +103,7 @@ namespace QMake
    optoken=PLUSEQ | optoken=MINUSEQ | optoken=STAREQ | optoken=EQUAL | optoken=TILDEEQ
 -> op ;;
 
-   ( #list=value | CONT NEWLINE )
-        ( #list=value | CONT NEWLINE )*
+   ( #list=value | CONT NEWLINE )  ( #list=value | CONT NEWLINE )*
 -> value_list ;;
 
    value_str=id_or_value | quote_val=quoted_value | ref=ref

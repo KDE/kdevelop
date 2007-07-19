@@ -1059,6 +1059,8 @@ namespace QMake
               {
                 return  false;
               }
+
+            (*yynode)->isNewline =  false;
           }
 
         else if  (yytoken ==  Token_NEWLINE)
@@ -1071,6 +1073,7 @@ namespace QMake
 
             yylex();
 
+            (*yynode)->isNewline =  true;
           }
 
         else

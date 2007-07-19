@@ -218,6 +218,7 @@ namespace QMake
         KIND =  Kind_stmt
       };
 
+      bool isNewline;
       std::size_t id;
       variable_assignment_ast *var;
       function_scope_ast *func;
