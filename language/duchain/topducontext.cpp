@@ -107,7 +107,7 @@ void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifie
 
   ENSURE_CHAIN_READ_LOCKED
 
-  ret = checkDeclarations(SymbolTable::self()->findDeclarations(identifier), position, dataType);
+  ret += checkDeclarations(SymbolTable::self()->findDeclarations(identifier), position, dataType);
   if (!ret.isEmpty())
     return;
 

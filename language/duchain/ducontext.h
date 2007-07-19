@@ -72,6 +72,7 @@ public:
     Namespace,
     Class,
     Function,
+    Template,
     Other
   };
 

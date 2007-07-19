@@ -58,7 +58,7 @@ public:
 };
 
 Declaration::Kind Declaration::kind() const {
-  if( d->m_isTypeAlias )
+  if( d->m_isTypeAlias || isForwardDeclaration() )
     return Type;
   
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>( d->m_type.data() );
