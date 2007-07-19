@@ -127,6 +127,8 @@ protected:
   virtual void visitFunctionDeclaration (FunctionDefinitionAST *);
   virtual void visitPostSimpleDeclaration(SimpleDeclarationAST*);
 
+  virtual void visitTemplateDeclaration(TemplateDeclarationAST *);
+  
   // Normal overridden visitors
   virtual void visitNamespace(NamespaceAST *);
   virtual void visitClassSpecifier(ClassSpecifierAST *);

@@ -745,7 +745,7 @@ struct TemplateParameterAST: public AST
   DECLARE_AST_NODE(TemplateParameter)
 
   TypeParameterAST *type_parameter;
-  ParameterDeclarationAST *parameter_declaration;
+  ParameterDeclarationAST *parameter_declaration; //Default-parameter
 };
 
 struct ThrowExpressionAST: public ExpressionAST

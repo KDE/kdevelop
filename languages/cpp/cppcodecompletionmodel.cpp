@@ -343,7 +343,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           iconName = "private_class";
         else if( (p & Union) && (p & Private) )
           iconName = "private_union";
-/*        else if( (p & TypeDef) && ((p & Const) ||  (p & Volatile)) )
+/*        else if( (p & TypeAlias) && ((p & Const) ||  (p & Volatile)) )
           iconName = "CVtypedef";*/
         else if( (p & Function) && (p & Protected) )
           iconName = "protected_function";
@@ -361,7 +361,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           iconName = "CVpublic_slot";
         else if( p & Union )
           iconName = "union";
-/*        else if( p & Typedef )
+/*        else if( p & TypeAlias )
           iconName = "typedef";*/
         else if( p & Function )
           iconName = "function";

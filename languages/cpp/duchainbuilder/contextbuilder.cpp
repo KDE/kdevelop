@@ -63,6 +63,16 @@ ContextBuilder::~ContextBuilder ()
   delete m_nameCompiler;
 }
 
+void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
+
+  DUContext* ctx = openContext(ast, DUContext::Template, 0); //Open anonymous context for the template-parameters
+  visitNodes(this,ast->template_parameters);
+  closeContext();
+  m_importedParentContexts << ctx; //Import the context into the following function-argument context(so the template-parameters can be found from there)
+  
+  DefaultVisitor::visit(ast->declaration);
+}
+
 TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, AST *node, QList<DUContext*>* includes)
 {
   m_compilingContexts = true;
@@ -220,6 +230,7 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
 void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
   openContext(node, DUContext::Class, node->name);
+  addImportedContexts(); //eventually add template-context
 
   DefaultVisitor::visitClassSpecifier (node);
 
@@ -326,8 +337,6 @@ DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::
 
 DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
-  Q_ASSERT(m_compilingContexts);
-
   DUContext* ret = 0L;
 
   {
@@ -386,6 +395,13 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
 
   openContext(ret);
 
+  /**
+   * @todo either remove this here and add it to the correct other places, or remove it in the over places.
+   * The problem: For template-parameter contexts this needs to be imported into function-parameter contexts
+   * and into class-contexts, directly when they are opened. Maybe it is easier leaving it here.
+   * */
+  addImportedContexts(); 
+  
   return ret;
 }
 
@@ -517,6 +533,8 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
         visit(node->expression);
       else
         visit(node->declaration);
+      break;
+    case DUContext::Template:
       break;
   }
 }

@@ -27,6 +27,7 @@
 #include "name_compiler.h"
 #include "classfunctiondeclaration.h"
 #include "functiondeclaration.h"
+#include "templateparameterdeclaration.h"
 #include "type_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
@@ -35,6 +36,7 @@
 #include <forwarddeclaration.h>
 #include <duchain.h>
 #include <duchainlock.h>
+#include "cpptypes.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -68,6 +70,26 @@ DUContext* DeclarationBuilder::buildSubDeclarations(const KUrl& url, AST *node, 
   return top;
 }
 
+void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
+  TypeBuilder::visitTemplateParameter(ast);
+  
+  if( ast->type_parameter && ast->type_parameter->name ) {
+    ///@todo deal with all the other stuff the AST may contain
+    Declaration* dec = openDeclaration(ast->type_parameter->name, ast);
+    TemplateParameterDeclaration* decl = dynamic_cast<TemplateParameterDeclaration*>(dec);
+    Q_ASSERT(decl);
+    DUChainWriteLocker lock(DUChain::lock());
+    decl->setAbstractType(lastType());
+    if( decl->type<CppTemplateType>() ) {
+      decl->type<CppTemplateType>()->setDeclaration(dec);
+    } else {
+      kDebug() << "bad last type" << endl;
+    }
+    ///@todo note default-parameter
+  } else {
+    kDebug() << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing" << endl;
+  }
+}
 
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
@@ -187,6 +209,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       scope = Declaration::ClassScope;
       break;
     case DUContext::Function:
+    case DUContext::Template:
       scope = Declaration::LocalScope;
       break;
     default:
@@ -228,6 +251,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
           (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && id.last() == dec->identifier()) &&
           dec->isDefinition() == isDefinition && dec->isTypeAlias() == m_inTypedef)
       {
+        ///@todo differentiate template-parameter declarations
         if (isForward) {
           if (!dynamic_cast<ForwardDeclaration*>(dec))
             break;
@@ -286,6 +310,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     } else if (scope == Declaration::ClassScope) {
       declaration = new ClassMemberDeclaration(range, currentContext());
 
+    } else if( currentContext()->type() == DUContext::Template ) {
+      //This is a template-parameter.
+      declaration = new TemplateParameterDeclaration(range, currentContext());
     } else {
       declaration = new Declaration(range, scope, currentContext());
     }

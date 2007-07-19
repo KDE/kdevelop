@@ -70,6 +70,7 @@ public:
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
   virtual void visitParameterDeclaration(ParameterDeclarationAST* node);
   virtual void visitTypedef(TypedefAST *);
+  virtual void visitTemplateParameter(TemplateParameterAST *);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
 private:

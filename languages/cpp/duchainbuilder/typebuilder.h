@@ -51,6 +51,9 @@ public:
   const QList< KDevelop::AbstractType::Ptr >& topTypes() const;
 
 protected:
+  ///Returns either the current context, or the last importend parent-context(needed to find template-argument function return-values)
+  KDevelop::DUContext* searchContext() ;
+  
   KDevelop::AbstractType::Ptr lastType() const;
 
   // Called at the beginning of processing a class-specifier, right after the type for the class was created. The type can be gotten through currentAbstractType().
@@ -72,6 +75,8 @@ protected:
   virtual void visitPtrOperator(PtrOperatorAST*);
   virtual void visitDeclarator(DeclaratorAST*);
   virtual void visitParameterDeclaration(ParameterDeclarationAST*);
+  virtual void visitTemplateParameter(TemplateParameterAST *);
+
 
 private:
   template <class T>

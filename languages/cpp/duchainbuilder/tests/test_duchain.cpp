@@ -31,6 +31,7 @@
 #include "dumptypes.h"
 #include "environmentmanager.h"
 #include "hashedstring.h"
+#include "typeutils.h"
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -39,7 +40,7 @@
 #include "rpp/preprocessor.h"
 
 using namespace KTextEditor;
-
+using namespace TypeUtils;
 using namespace KDevelop;
 
 QTEST_MAIN(TestDUChain)
@@ -656,6 +657,49 @@ void TestDUChain::testTypedef() {
   QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
   QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
   QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);
+  
+  QVERIFY( !dynamic_cast<CppTypeAliasType*>(findDeclaration(top,  Identifier("B"))->abstractType().data()) ); //Just verify that CppTypeAliasType is not used, because it isn't(maybe remove that class?)
+  
+  release(top);
+}
+
+void TestDUChain::testTemplates() {
+  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> B;");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* defClassA = top->localDeclarations()[1];
+  QCOMPARE(defClassA->identifier(), Identifier("A"));
+  QVERIFY(defClassA->type<CppClassType>());
+
+  Declaration* defClassB = top->localDeclarations()[2];
+  QCOMPARE(defClassB->identifier(), Identifier("B"));
+  QVERIFY(defClassB->type<CppClassType>());
+  
+  Declaration* defClassC = top->localDeclarations()[3];
+  QCOMPARE(defClassC->identifier(), Identifier("C"));
+  QVERIFY(defClassC->type<CppClassType>());
+  
+  DUContext* classA = getInternalContext(defClassA);
+  QVERIFY(classA->parentContext());
+  QCOMPARE(classA->importedParentContexts().count(), 1); //The template-parameter context is imported
+  QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
+
+  DUContext* classB = getInternalContext(defClassB);
+  QVERIFY(classB->parentContext());
+  QCOMPARE(classB->importedParentContexts().count(), 0);
+  QCOMPARE(classB->localScopeIdentifier(), QualifiedIdentifier("B"));
+  
+  DUContext* classC = getInternalContext(defClassC);
+  QVERIFY(classC->parentContext());
+  QCOMPARE(classC->importedParentContexts().count(), 0);
+  QCOMPARE(classC->localScopeIdentifier(), QualifiedIdentifier("C"));
+
+/*  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
+  QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
+  QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);*/
   release(top);
 }
 
@@ -838,6 +882,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
 
   if (dump & DumpType) {
     kDebug() << "===== Types:" << endl;
+    DUChainWriteLocker lock(DUChain::lock());
     DumpTypes dt;
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
       dt.dump(type.data());

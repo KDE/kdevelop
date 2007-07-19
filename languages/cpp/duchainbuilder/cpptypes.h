@@ -37,6 +37,8 @@ class DUContext;
 class Declaration;
 }
 
+class TemplateParameterDeclaration;
+
 class KDEVCPPDUCHAINBUILDER_EXPORT CppCVType
 {
   friend class TypeRepository;
@@ -304,17 +306,25 @@ private:
   bool m_defaultValue;
 };*/
 
+/**
+ * This class represents a template-parameter on the type-level(it is strictly attached to a template-declaration)
+ * */
 class KDEVCPPDUCHAINBUILDER_EXPORT CppTemplateType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
 {
 public:
   typedef KSharedPtr<CppTemplateType> Ptr;
 
-  const QList<KDevelop::AbstractType::Ptr>& parameters() const;
-  void addParameter(KDevelop::AbstractType::Ptr parameter);
-  void removeParameter(KDevelop::AbstractType::Ptr parameter);
+  TemplateParameterDeclaration* declaration() const;
 
-private:
-  QList<KDevelop::AbstractType::Ptr> m_parameters;
+  virtual QString toString() const;
+  virtual QString mangled() const;
+
+  protected:
+  virtual void accept0 (KDevelop::TypeVisitor */*v*/) const {
+      ///@todo what to do here?
+      //acceptType (m_type, v);
+  }
+  private:
 };
 
 /*template <class _Target, class _Source>

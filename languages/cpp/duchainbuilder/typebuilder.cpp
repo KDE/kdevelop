@@ -231,16 +231,16 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
-    QList<Declaration*> dec = currentContext()->findDeclarations(id, pos);
+    QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
     if (!dec.isEmpty() && dec.front()->abstractType()) {
       ///@todo only functions can have multiple declarations here, or maybe template-classes
       if( dec.count() > 1 )
         kDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
-      kDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << endl;
+      //kDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << " context: " << dec.front()->context() << endl;
        openedType = true;
        openType(dec.front()->abstractType(), node);
     } else {
-        kDebug() << "no declaration found for " << id.toString() << " in context \"" << currentContext()->scopeIdentifier(true).toString() << "\"" << endl;
+        kDebug() << "no declaration found for " << id.toString() << " in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << " " << searchContext() << endl;
     }
   }
 
@@ -250,6 +250,14 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     closeType();
 }
 
+DUContext* TypeBuilder::searchContext() {
+  if( !m_importedParentContexts.isEmpty() && m_importedParentContexts.last()->type() == DUContext::Template ) {
+    return m_importedParentContexts.last();
+  } else
+    return currentContext();
+}
+
+///@todo check whether this conflicts with the isTypeAlias(..) stuff in declaration, and whether it is used at all
 void TypeBuilder::visitTypedef(TypedefAST* node)
 {
   openType(CppTypeAliasType::Ptr(new CppTypeAliasType()), node);
@@ -435,6 +443,15 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
 const QList< AbstractType::Ptr > & TypeBuilder::topTypes() const
 {
   return m_topTypes;
+}
+
+void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
+{
+  openType(CppTemplateType::Ptr(new CppTemplateType()), ast);
+
+  TypeBuilderBase::visitTemplateParameter(ast);
+  
+  closeType();
 }
 
 void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
