@@ -248,7 +248,7 @@ KDevelop::ProjectItem* CustomMakeManager::import(KDevelop::IProject *project)
 {
     if( !project ) return NULL;
 //     return new KDevelop::ProjectItem( project, project->folder().pathOrUrl(), NULL );
-    CustomMakeProjectItem *item = new CustomMakeProjectItem( project, project->folder().pathOrUrl(), NULL );
+    CustomMakeProjectItem *item = new CustomMakeProjectItem( project, project->name(), NULL );
     item->fsWatcher()->addDirectory( project->folder().toLocalFile(), item );
 
     return item;
