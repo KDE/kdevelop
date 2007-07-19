@@ -40,12 +40,12 @@ using namespace KTextEditor;
 using namespace KDevelop;
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(session)
+  : DeclarationBuilderBase(session), m_inTypedef(false)
 {
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(editor)
+  : DeclarationBuilderBase(editor), m_inTypedef(false)
 {
 }
 
@@ -226,7 +226,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       if (dec->textRange() == translated &&
           dec->scope() == scope &&
           (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && id.last() == dec->identifier()) &&
-          dec->isDefinition() == isDefinition)
+          dec->isDefinition() == isDefinition && dec->isTypeAlias() == m_inTypedef)
       {
         if (isForward) {
           if (!dynamic_cast<ForwardDeclaration*>(dec))
@@ -289,6 +289,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     } else {
       declaration = new Declaration(range, scope, currentContext());
     }
+    
+    if( m_inTypedef )
+      declaration->setIsTypeAlias(true);
 
     if (name) {
       // FIXME this can happen if we're defining a staticly declared variable
@@ -354,6 +357,13 @@ void DeclarationBuilder::closeDeclaration()
 void DeclarationBuilder::abortDeclaration()
 {
   m_declarationStack.pop();
+}
+
+void DeclarationBuilder::visitTypedef(TypedefAST *def)
+{
+  m_inTypedef = true;
+  DeclarationBuilderBase::visitTypedef(def);
+  m_inTypedef = false;
 }
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)

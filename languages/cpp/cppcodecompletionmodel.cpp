@@ -105,6 +105,18 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     isArgumentHint = true;
 
   switch (role) {
+    case SetMatchContext:
+      m_currentMatchContext = m_declarations[dataIndex];
+      return QVariant(1);
+    case MatchQuality:
+    {
+      if( m_currentMatchContext.first && m_currentMatchContext.second && m_currentMatchContext.second->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+        //Cpp::TypeConversion conv;
+        //return conv.implicitConversion(
+      } else {
+        kDebug() << "MatchQuality requested with invalid match-context" << endl;
+      }
+    }
     case ArgumentHintDepth:
       if( isArgumentHint )
         return m_declarations[dataIndex].second->depth();

@@ -114,6 +114,8 @@ void TestDUChain::initTestCase()
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
   topContext = new TopDUContext(new KDevelop::DocumentRange(file1, Range(0,0,25,0)));
+  DUChainWriteLocker lock(DUChain::lock());
+  
   DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
 
   typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
@@ -632,6 +634,28 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier());
   QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier());
 
+  release(top);
+}
+
+void TestDUChain::testTypedef() {
+  QByteArray method("class A { }; typedef A B;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* defClassA = top->localDeclarations().first();
+  QCOMPARE(defClassA->identifier(), Identifier("A"));
+  QVERIFY(defClassA->type<CppClassType>());
+
+  DUContext* classA = top->childContexts().first();
+  QVERIFY(classA->parentContext());
+  QCOMPARE(classA->importedParentContexts().count(), 0);
+  QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
+
+  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
+  QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
+  QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);
   release(top);
 }
 

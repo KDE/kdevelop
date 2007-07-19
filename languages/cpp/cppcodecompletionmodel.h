@@ -57,7 +57,10 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     KDevelop::DUContextPointer m_context;
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
+    
+    mutable DeclarationContextPair m_currentMatchContext;
 
+    
     QList< DeclarationContextPair > m_declarations;
 };
 

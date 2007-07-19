@@ -69,6 +69,7 @@ public:
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
   virtual void visitParameterDeclaration(ParameterDeclarationAST* node);
+  virtual void visitTypedef(TypedefAST *);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
 private:
@@ -109,6 +110,8 @@ private:
   QStack<KDevelop::ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;
+
+  bool m_inTypedef;
 };
 
 #endif // DECLARATIONBUILDER_H
