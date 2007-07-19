@@ -293,9 +293,9 @@ namespace QMake
     return  true;
   }
 
-  bool parser::parse_funcref(funcref_ast **yynode)
+  bool parser::parse_func_var_ref(func_var_ref_ast **yynode)
   {
-    *yynode =  create<funcref_ast>();
+    *yynode =  create<func_var_ref_ast>();
 
     (*yynode)->start_token =  token_stream->index() -  1;
 
@@ -310,16 +310,26 @@ namespace QMake
         (*yynode)->id =  token_stream->index() -  1;
         yylex();
 
-        function_args_ast *__node_5 =  0;
-
-        if  (!parse_function_args(&__node_5))
+        if  (yytoken ==  Token_LPAREN)
           {
-            yy_expected_symbol(ast_node::Kind_function_args,  "function_args");
-            return  false;
+            function_args_ast *__node_5 =  0;
+
+            if  (!parse_function_args(&__node_5))
+              {
+                yy_expected_symbol(ast_node::Kind_function_args,  "function_args");
+                return  false;
+              }
+
+            (*yynode)->args =  __node_5;
+
           }
 
-        (*yynode)->args =  __node_5;
-
+        else if  (true /*epsilon*/)
+        {}
+        else
+          {
+            return  false;
+          }
       }
 
     else
@@ -396,7 +406,7 @@ namespace QMake
 
         (*yynode)->args =  __node_7;
 
-        if  (yytoken ==  Token_RBRACE
+        if  (yytoken ==  Token_LBRACE
              ||  yytoken ==  Token_COLON)
           {
             scope_body_ast *__node_8 =  0;
@@ -760,8 +770,26 @@ namespace QMake
 
           }
 
-        else if  (true /*epsilon*/)
-        {}
+        else if  (yytoken ==  Token_CONT)
+          {
+            if  (yytoken !=  Token_CONT)
+              {
+                yy_expected_token(yytoken,  Token_CONT,  "cont");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_NEWLINE)
+              {
+                yy_expected_token(yytoken,  Token_NEWLINE,  "newline");
+                return  false;
+              }
+
+            yylex();
+
+          }
+
         else
           {
             return  false;
@@ -797,34 +825,33 @@ namespace QMake
 
             yylex();
 
-            if  (yytoken ==  Token_LBRACKET
-                 ||  yytoken ==  Token_LBRACE
-                 ||  yytoken ==  Token_LPAREN
-                 ||  yytoken ==  Token_IDENTIFIER)
+            if  (yytoken ==  Token_IDENTIFIER)
               {
-                varref_ast *__node_13 =  0;
+                func_var_ref_ast *__node_13 =  0;
 
-                if  (!parse_varref(&__node_13))
+                if  (!parse_func_var_ref(&__node_13))
+                  {
+                    yy_expected_symbol(ast_node::Kind_func_var_ref,  "func_var_ref");
+                    return  false;
+                  }
+
+                (*yynode)->func_var_ref =  __node_13;
+
+              }
+
+            else if  (yytoken ==  Token_LBRACKET
+                      ||  yytoken ==  Token_LBRACE
+                      ||  yytoken ==  Token_LPAREN)
+              {
+                varref_ast *__node_14 =  0;
+
+                if  (!parse_varref(&__node_14))
                   {
                     yy_expected_symbol(ast_node::Kind_varref,  "varref");
                     return  false;
                   }
 
-                (*yynode)->varref =  __node_13;
-
-              }
-
-            else if  (yytoken ==  Token_IDENTIFIER)
-              {
-                funcref_ast *__node_14 =  0;
-
-                if  (!parse_funcref(&__node_14))
-                  {
-                    yy_expected_symbol(ast_node::Kind_funcref,  "funcref");
-                    return  false;
-                  }
-
-                (*yynode)->funcref =  __node_14;
+                (*yynode)->varref =  __node_14;
 
               }
 
@@ -893,14 +920,14 @@ namespace QMake
 
     (*yynode)->start_token =  token_stream->index() -  1;
 
-    if  (yytoken ==  Token_RBRACE
+    if  (yytoken ==  Token_LBRACE
          ||  yytoken ==  Token_COLON)
       {
-        if  (yytoken ==  Token_RBRACE)
+        if  (yytoken ==  Token_LBRACE)
           {
-            if  (yytoken !=  Token_RBRACE)
+            if  (yytoken !=  Token_LBRACE)
               {
-                yy_expected_token(yytoken,  Token_RBRACE,  "rbrace");
+                yy_expected_token(yytoken,  Token_LBRACE,  "lbrace");
                 return  false;
               }
 
@@ -940,9 +967,9 @@ namespace QMake
 
               }
 
-            if  (yytoken !=  Token_LBRACE)
+            if  (yytoken !=  Token_RBRACE)
               {
-                yy_expected_token(yytoken,  Token_LBRACE,  "lbrace");
+                yy_expected_token(yytoken,  Token_RBRACE,  "rbrace");
                 return  false;
               }
 
@@ -1040,7 +1067,7 @@ namespace QMake
 
               }
 
-            else if  (yytoken ==  Token_RBRACE
+            else if  (yytoken ==  Token_LBRACE
                       ||  yytoken ==  Token_COLON)
               {
                 scope_body_ast *__node_19 =  0;
@@ -1378,8 +1405,7 @@ namespace QMake
 
     if  (yytoken ==  Token_LBRACKET
          ||  yytoken ==  Token_LBRACE
-         ||  yytoken ==  Token_LPAREN
-         ||  yytoken ==  Token_IDENTIFIER)
+         ||  yytoken ==  Token_LPAREN)
       {
         if  (yytoken ==  Token_LPAREN)
           {
@@ -1464,19 +1490,6 @@ namespace QMake
                 return  false;
               }
 
-            yylex();
-
-          }
-
-        else if  (yytoken ==  Token_IDENTIFIER)
-          {
-            if  (yytoken !=  Token_IDENTIFIER)
-              {
-                yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
-                return  false;
-              }
-
-            (*yynode)->id =  token_stream->index() -  1;
             yylex();
 
           }

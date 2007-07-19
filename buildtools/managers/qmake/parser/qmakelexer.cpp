@@ -31,6 +31,7 @@
 namespace QMake
 {
 
+//@TODO: Lex and parse ! in default state
 
 Lexer::Lexer( parser* _parser, const QString& content ):
         mContent(content), mParser(_parser),

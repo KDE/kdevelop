@@ -67,12 +67,12 @@ void DebugVisitor::visit_argument( argument_ast *node )
     kDebug(9024) << getIndent() << "END(argument)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
-void DebugVisitor::visit_funcref( funcref_ast *node )
+void DebugVisitor::visit_func_var_ref( func_var_ref_ast *node )
 {
     kDebug(9024) << getIndent() << "BEGIN(funcref)( " << getTokenInfo(node->start_token)  << " )" << endl;
     indent++;
     kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
-    default_visitor::visit_funcref( node );
+    default_visitor::visit_func_var_ref( node );
     indent--;
     kDebug(9024) << getIndent() << "END(funcref)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }

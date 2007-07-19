@@ -30,7 +30,7 @@ namespace QMake
       virtual void visit_argument(argument_ast *)
       {}
 
-      virtual void visit_funcref(funcref_ast *)
+      virtual void visit_func_var_ref(func_var_ref_ast *)
       {}
 
       virtual void visit_function_args(function_args_ast *)
