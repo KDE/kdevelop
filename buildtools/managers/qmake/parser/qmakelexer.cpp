@@ -101,7 +101,7 @@ void Lexer::popState()
 
 int Lexer::getNextTokenKind()
 {
-    int token = parser::Token_ERROR;
+    int token = parser::Token_INVALID;
     if( mCurpos >= mContentSize )
     {
         return parser::Token_EOF;

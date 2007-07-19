@@ -20,7 +20,7 @@
 
 #include "qmakedebugvisitor.h"
 
-#include <QtCore/QDebug>
+#include <kdebug.h>
 
 #include "qmake_parser.h"
 #include "kdev-pg-token-stream.h"
@@ -29,139 +29,193 @@ namespace QMake
 {
 
 DebugVisitor::DebugVisitor(QMake::parser* parser)
-    : mParser(parser)
+    : mParser(parser), indent(0)
 {
 }
 
-QString DebugVisitor::getTokenInfo(std::size_t idx, std::size_t* line, std::size_t* col)
+QString DebugVisitor::getTokenInfo(std::size_t idx)
 {
+    std::size_t line,col;
     QMake::parser::token_type token = mParser->token_stream->token(idx);
-    mParser->token_stream->start_position(idx,line,col);
-    return mParser->tokenText(token.begin,token.end);
+    mParser->token_stream->start_position(idx,&line,&col);
+    return QString("%1,%2,%3")
+            .arg(line)
+            .arg(col)
+            .arg(mParser->tokenText(token.begin,token.end).replace("\n","\\n"));
+}
+
+QString DebugVisitor::getIndent()
+{
+    return QString().fill(' ', indent*4);
 }
 
 void DebugVisitor::visit_arg_list( arg_list_ast *node )
 {
-    qDebug() <<  "BEGIN(arg_list)";
+    kDebug(9024) << getIndent() << "BEGIN(arg_list)( " << getTokenInfo(node->start_token) << " )" << endl;
+    indent++;
     default_visitor::visit_arg_list( node );
-    qDebug() <<  "END(arg_list)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(arg_list)( " << getTokenInfo(node->start_token) << " )" << endl;
 }
 
 void DebugVisitor::visit_argument( argument_ast *node )
 {
-    qDebug() <<  "BEGIN(argument)";
+    kDebug(9024) << getIndent() << "BEGIN(argument)( " << getTokenInfo(node->start_token) << " )" << endl;
+    indent++;
     default_visitor::visit_argument( node );
-    qDebug() <<  "END(argument)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(argument)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_funcref( funcref_ast *node )
 {
-    qDebug() <<  "BEGIN(funcref)";
+    kDebug(9024) << getIndent() << "BEGIN(funcref)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
     default_visitor::visit_funcref( node );
-    qDebug() <<  "END(funcref)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(funcref)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_function_args( function_args_ast *node )
 {
-    qDebug() <<  "BEGIN(function_args)";
+    kDebug(9024) << getIndent() << "BEGIN(function_args)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_function_args( node );
-    qDebug() <<  "END(function_args)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(function_args)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_function_scope( function_scope_ast *node )
 {
-    qDebug() <<  "BEGIN(function_scope)";
+    kDebug(9024) << getIndent() << "BEGIN(function_scope)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_function_scope( node );
-    qDebug() <<  "END(function_scope)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(function_scope)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_id_or_value( id_or_value_ast *node )
 {
-    qDebug() <<  "BEGIN(id_or_value)";
+    kDebug(9024) << getIndent() << "BEGIN(id_or_value)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    kDebug(9024) << getIndent() << "val=" << getTokenInfo(node->val) << endl;
     default_visitor::visit_id_or_value( node );
-    qDebug() <<  "END(id_or_value)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(id_or_value)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_op( op_ast *node )
 {
-    std::size_t line,col;
-    QString txt = getTokenInfo(node->optoken,&line,&col);
-    qDebug() <<  "BEGIN(op, optoken(" << line << col << txt << "))";
+    kDebug(9024) << getIndent() << "BEGIN(op)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    kDebug(9024) << getIndent() << "optoken = " << getTokenInfo(node->optoken) << endl;
     default_visitor::visit_op( node );
-    qDebug() <<  "END(op, optoken(" << line << col << txt << "))";
+    indent--;
+    kDebug(9024) << getIndent() << "END(op)(" << getTokenInfo(node->end_token)  << "))" << endl;
 }
 
 void DebugVisitor::visit_project( project_ast *node )
 {
-    qDebug() <<  "BEGIN(project)";
+    kDebug(9024) << getIndent() << "BEGIN(project)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_project( node );
-    qDebug() <<  "END(project)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(project)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_quote_value( quote_value_ast *node )
 {
-    qDebug() <<  "BEGIN(quote_value)";
+    kDebug(9024) << getIndent() << "BEGIN(quote_value)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    if( node->token )
+    {
+        kDebug(9024) << getIndent() << "token=" << getTokenInfo(node->token) << endl;
+    }
     default_visitor::visit_quote_value( node );
-    qDebug() <<  "END(quote_value)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(quote_value)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_quoted_value( quoted_value_ast *node )
 {
-    qDebug() <<  "BEGIN(quoted_value)";
+    kDebug(9024) << getIndent() << "BEGIN(quoted_value)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_quoted_value( node );
-    qDebug() <<  "END(quoted_value)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(quoted_value)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_ref( ref_ast *node )
 {
-    qDebug() <<  "BEGIN(ref)";
+    kDebug(9024) << getIndent() << getIndent() << "BEGIN(ref)( " << getTokenInfo(node->start_token)  << ")" << endl;
+    indent++;
+    if( node->idref )
+    {
+        kDebug(9024) << getIndent() << "idref=" << getTokenInfo(node->idref) << endl;
+    }
     default_visitor::visit_ref( node );
-    qDebug() <<  "END(ref)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(ref)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_scope_body( scope_body_ast *node )
 {
-    qDebug() <<  "BEGIN(scope_body)";
+    kDebug(9024) << getIndent() << "BEGIN(scope_body)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_scope_body( node );
-    qDebug() <<  "END(scope_body)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(scope_body)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_stmt( stmt_ast *node )
 {
-    std::size_t line;
-    std::size_t col;
-    QString txt = getTokenInfo(node->id, &line, &col);
-    qDebug() <<  "BEGIN(stmt,id(" << line << col << txt << "))";
+    kDebug(9024) << getIndent() << "BEGIN(stmt)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    if( !node->isNewline )
+    {
+        kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
+    }
     default_visitor::visit_stmt( node );
-    qDebug() <<  "END(stmt,id(" << line << col << txt << "))";
+    indent--;
+    kDebug(9024) << getIndent() << "END(stmt)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_value( value_ast *node )
 {
-    qDebug() <<  "BEGIN(value)";
+    kDebug(9024) << getIndent() << "BEGIN(value)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_value( node );
-    qDebug() <<  "END(value)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(value)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_value_list( value_list_ast *node )
 {
-    qDebug() <<  "BEGIN(value_list)";
+    kDebug(9024) << getIndent() << "BEGIN(value_list)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_value_list( node );
-    qDebug() <<  "END(value_list)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(value_list)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_variable_assignment( variable_assignment_ast *node )
 {
-    qDebug() <<  "BEGIN(variable_assignment)";
+    kDebug(9024) << getIndent() << "BEGIN(variable_assignment)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
     default_visitor::visit_variable_assignment( node );
-    qDebug() <<  "END(variable_assignment)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(variable_assignment)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_varref( varref_ast *node )
 {
-    qDebug() <<  "BEGIN(varref)";
+    kDebug(9024) << getIndent() << "BEGIN(varref)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
     default_visitor::visit_varref( node );
-    qDebug() <<  "END(varref)";
+    indent--;
+    kDebug(9024) << getIndent() << "END(varref)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 }
