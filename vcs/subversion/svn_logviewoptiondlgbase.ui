@@ -26,9 +26,6 @@
             <property name="text">
                 <string>&amp;OK</string>
             </property>
-            <property name="accel">
-                <string>Alt+O</string>
-            </property>
         </widget>
         <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
@@ -121,9 +118,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;By Revision Number</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
