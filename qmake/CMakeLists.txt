@@ -18,6 +18,7 @@ set(parser_STAT_SRCS
     ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastscope.cpp
     ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastsimple.cpp
     ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakedriver.cpp
+    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakedebugvisitor.cpp
     ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakelexer.cpp
     )
 
@@ -25,7 +26,7 @@ find_package(KDevelop-PG QUIET)
 
 macro(GET_GENERATED_SRCS _srcFiles)
     if(KDEVPG_FOUND)
-        kdevpg_generate(_files qmake NAMESPACE QMake DEBUG_VISITOR
+        kdevpg_generate(_files qmake NAMESPACE QMake
             "${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmake.g"
     	    "${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakelexer.h")
 
