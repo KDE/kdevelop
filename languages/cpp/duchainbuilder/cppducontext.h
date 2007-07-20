@@ -133,7 +133,6 @@ class DUContext : public BaseContext {
           }
         }
       }
-      
     }
 
     virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret ) const
@@ -154,7 +153,6 @@ class DUContext : public BaseContext {
 
       return true;
     }
-
 };
 
 

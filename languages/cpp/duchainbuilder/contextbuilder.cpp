@@ -45,6 +45,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_ownsEditorIntegrator(true)
   , m_compilingContexts(false)
   , m_recompiling(false)
+  , m_lastContext(0)
 {
 }
 
@@ -54,6 +55,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   , m_ownsEditorIntegrator(false)
   , m_compilingContexts(false)
   , m_recompiling(false)
+  , m_lastContext(0)
 {
 }
 
@@ -68,6 +70,7 @@ ContextBuilder::~ContextBuilder ()
 void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
   DUContext* ctx = openContext(ast, DUContext::Template, 0); //Open anonymous context for the template-parameters
+  
   visitNodes(this,ast->template_parameters);
   closeContext();
   m_importedParentContexts << ctx; //Import the context into the following function-argument context(so the template-parameters can be found from there)
@@ -422,6 +425,7 @@ void ContextBuilder::closeContext()
     currentContext()->cleanIfNotEncountered(m_encountered, m_compilingContexts);
     setEncountered( currentContext() );
   }
+  m_lastContext = currentContext();
 
   // Go back to the context prior to this function definition
   m_contextStack.pop();

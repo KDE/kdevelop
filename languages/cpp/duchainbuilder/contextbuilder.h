@@ -165,6 +165,7 @@ protected:
   QSet<KDevelop::DUChainBase*> m_encountered;
   QStack<KDevelop::DUContext*> m_contextStack;
   int m_nextContextIndex;
+  KDevelop::DUContext* m_lastContext; //Last context that was opened
 
   inline int& nextContextIndex() { return m_nextContextStack.top(); }
 

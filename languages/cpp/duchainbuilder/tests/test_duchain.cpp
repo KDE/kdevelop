@@ -32,6 +32,7 @@
 #include "environmentmanager.h"
 #include "hashedstring.h"
 #include "typeutils.h"
+#include "templatedeclaration.h"
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -42,6 +43,7 @@
 using namespace KTextEditor;
 using namespace TypeUtils;
 using namespace KDevelop;
+using namespace Cpp;
 
 QTEST_MAIN(TestDUChain)
 
@@ -664,35 +666,46 @@ void TestDUChain::testTypedef() {
 }
 
 void TestDUChain::testTemplates() {
-  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> D;");
+  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T a; }; class B{int b;}; class C{int c;}; template<class T>A<B,T>{};  typedef A<B,C> D;");
 
   DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
+  Declaration* defTest = top->localDeclarations()[0];
+  QCOMPARE(defTest->identifier(), Identifier("test"));
+  QVERIFY(defTest->type<FunctionType>());
+  QVERIFY( isTemplateDeclaration(defTest) );
+  
   Declaration* defClassA = top->localDeclarations()[1];
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QVERIFY(defClassA->type<CppClassType>());
+  QVERIFY( isTemplateDeclaration(defClassA) );
 
   Declaration* defClassB = top->localDeclarations()[2];
   QCOMPARE(defClassB->identifier(), Identifier("B"));
   QVERIFY(defClassB->type<CppClassType>());
+  QVERIFY( !isTemplateDeclaration(defClassB) );
   
   Declaration* defClassC = top->localDeclarations()[3];
   QCOMPARE(defClassC->identifier(), Identifier("C"));
   QVERIFY(defClassC->type<CppClassType>());
+  QVERIFY( !isTemplateDeclaration(defClassC) );
   
-  DUContext* classA = getInternalContext(defClassA);
+  DUContext* classA = defClassA->internalContext();
+  QVERIFY(classA);
   QVERIFY(classA->parentContext());
   QCOMPARE(classA->importedParentContexts().count(), 1); //The template-parameter context is imported
   QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
-  DUContext* classB = getInternalContext(defClassB);
+  DUContext* classB = defClassB->internalContext();
+  QVERIFY(classB);
   QVERIFY(classB->parentContext());
   QCOMPARE(classB->importedParentContexts().count(), 0);
   QCOMPARE(classB->localScopeIdentifier(), QualifiedIdentifier("B"));
   
-  DUContext* classC = getInternalContext(defClassC);
+  DUContext* classC = defClassC->internalContext();
+  QVERIFY(classC);
   QVERIFY(classC->parentContext());
   QCOMPARE(classC->importedParentContexts().count(), 0);
   QCOMPARE(classC->localScopeIdentifier(), QualifiedIdentifier("C"));

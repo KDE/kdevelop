@@ -18,6 +18,7 @@
 // kate: indent-width 2;
 
 #include "declarationbuilder.h"
+#include "templatedeclaration.h"
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
@@ -40,6 +41,7 @@
 
 using namespace KTextEditor;
 using namespace KDevelop;
+using namespace Cpp;
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
   : DeclarationBuilderBase(session), m_inTypedef(false)
@@ -196,6 +198,40 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, b
   return openDeclaration(name, rangeNode, isFunction, false, true);
 }
 
+KDevelop::DUContext* hasTemplateContext( const QList<KDevelop::DUContext*>& contexts ) {
+  foreach( DUContext* context, contexts )
+    if( context->type() == KDevelop::DUContext::Template )
+      return context;
+  return 0;
+}
+
+//Check whether the given context is a template-context by checking whether it imports a template-parameter context
+KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
+  return hasTemplateContext( context->importedParentContexts() );
+}
+
+template<class DeclarationType>
+DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range )
+{
+    if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
+      SpecialTemplateDeclaration<DeclarationType>* ret = new SpecialTemplateDeclaration<DeclarationType>(range, currentContext());
+      ret->setTemplateParameterContext(ctx);
+      return ret;
+    } else
+      return new DeclarationType(range, currentContext());
+}
+
+template<class DeclarationType>
+DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range, int scope )
+{
+    if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
+      SpecialTemplateDeclaration<DeclarationType>* ret = new SpecialTemplateDeclaration<DeclarationType>(range, (KDevelop::Declaration::Scope)scope, currentContext());
+      ret->setTemplateParameterContext(ctx);
+      return ret;
+    } else
+      return new DeclarationType(range, (KDevelop::Declaration::Scope)scope, currentContext());
+}
+
 Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition)
 {
   DUChainWriteLocker lock(DUChain::lock());
@@ -251,7 +287,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
           (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && id.last() == dec->identifier()) &&
           dec->isDefinition() == isDefinition && dec->isTypeAlias() == m_inTypedef)
       {
-        ///@todo differentiate template-parameter declarations
+        ///@todo differentiate template-parameter declarations and all the template-stuff
         if (isForward) {
           if (!dynamic_cast<ForwardDeclaration*>(dec))
             break;
@@ -299,22 +335,26 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       declaration = new ForwardDeclaration(range, scope, currentContext());
 
     } else if (isFunction) {
-      if (scope == Declaration::ClassScope)
-        declaration = new ClassFunctionDeclaration(range, currentContext());
-      else
-        declaration = new FunctionDeclaration(range, scope, currentContext());
+      if (scope == Declaration::ClassScope) {
+        declaration = specialDeclaration<ClassFunctionDeclaration>( range );
+      } else {
+        declaration = specialDeclaration<FunctionDeclaration>(range, scope );
+      }
 
       if (!m_functionDefinedStack.isEmpty())
         declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
 
     } else if (scope == Declaration::ClassScope) {
-      declaration = new ClassMemberDeclaration(range, currentContext());
+        if( hasTemplateContext(m_importedParentContexts) )
+          declaration = specialDeclaration<ClassMemberDeclaration>(range );
+        else
+          declaration = specialDeclaration<ClassMemberDeclaration>(range );
 
     } else if( currentContext()->type() == DUContext::Template ) {
       //This is a template-parameter.
-      declaration = new TemplateParameterDeclaration(range, currentContext());
+      declaration = specialDeclaration<TemplateParameterDeclaration>(range );
     } else {
-      declaration = new Declaration(range, scope, currentContext());
+      declaration = specialDeclaration<Declaration>(range, scope );
     }
     
     if( m_inTypedef )
@@ -365,16 +405,25 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
 
 void DeclarationBuilder::closeDeclaration()
 {
-  if (lastType()) {
+  if (lastType() || m_lastContext) {
     DUChainWriteLocker lock(DUChain::lock());
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
+    if(lastType()) {
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
 
-    if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
-        idType->setDeclaration( currentDeclaration() );
+      if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
+          idType->setDeclaration( currentDeclaration() );
 
-    currentDeclaration()->setType(lastType());
+      currentDeclaration()->setType(lastType());
+    }
+    if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other ) )
+    {
+       currentDeclaration()->setInternalContext(m_lastContext);
+      m_lastContext = 0;
+    }
   }
+
+  
 
   //kDebug() << k_funcinfo << "Mangled declaration: " << currentDeclaration()->mangledIdentifier() << endl;
 

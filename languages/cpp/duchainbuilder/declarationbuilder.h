@@ -98,6 +98,13 @@ private:
   inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
+  ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
+  template<class DeclarationType>
+  DeclarationType* specialDeclaration( KTextEditor::Range* range );
+  ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
+  template<class DeclarationType>
+  DeclarationType* specialDeclaration( KTextEditor::Range* range, int scope );
+  
   inline int& nextDeclaration() { return m_nextDeclarationStack.top(); }
 
   void applyStorageSpecifiers();

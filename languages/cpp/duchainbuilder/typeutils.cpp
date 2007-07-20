@@ -151,7 +151,8 @@ namespace TypeUtils {
       declaration = static_cast<KDevelop::ForwardDeclaration*>(declaration)->resolved();
       if( !declaration ) return 0;
     }
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(declaration->abstractType().data());
+    return declaration->internalContext();
+/*    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(declaration->abstractType().data());
     if( !idType )
       return 0;
     QList<DUContext*> internalContexts;
@@ -161,7 +162,7 @@ namespace TypeUtils {
     if( internalContexts.isEmpty() )
       return 0;
     else
-      return internalContexts.front();
+      return internalContexts.front();*/
   }
     
   void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
