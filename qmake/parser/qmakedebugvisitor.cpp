@@ -208,15 +208,6 @@ void DebugVisitor::visit_variable_assignment( variable_assignment_ast *node )
     kDebug(9024) << getIndent() << "END(variable_assignment)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
-void DebugVisitor::visit_varref( varref_ast *node )
-{
-    kDebug(9024) << getIndent() << "BEGIN(varref)( " << getTokenInfo(node->start_token)  << " )" << endl;
-    indent++;
-    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
-    default_visitor::visit_varref( node );
-    indent--;
-    kDebug(9024) << getIndent() << "END(varref)( " << getTokenInfo(node->end_token)  << " )" << endl;
-}
 
 }
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

@@ -219,6 +219,7 @@ namespace QMake
       };
 
       bool isNewline;
+      bool isExclam;
       std::size_t id;
       variable_assignment_ast *var;
       function_scope_ast *func;

@@ -589,10 +589,12 @@ namespace QMake
 
     (*yynode)->start_token =  token_stream->index() -  1;
 
-    if  (yytoken ==  Token_NEWLINE
+    if  (yytoken ==  Token_EXCLAM
+         ||  yytoken ==  Token_NEWLINE
          ||  yytoken ==  Token_IDENTIFIER ||  yytoken ==  Token_EOF)
       {
-        while  (yytoken ==  Token_NEWLINE
+        while  (yytoken ==  Token_EXCLAM
+                ||  yytoken ==  Token_NEWLINE
                 ||  yytoken ==  Token_IDENTIFIER)
           {
             stmt_ast *__node_9 =  0;
@@ -952,7 +954,8 @@ namespace QMake
                 return  false;
               }
 
-            while  (yytoken ==  Token_NEWLINE
+            while  (yytoken ==  Token_EXCLAM
+                    ||  yytoken ==  Token_NEWLINE
                     ||  yytoken ==  Token_IDENTIFIER)
               {
                 stmt_ast *__node_15 =  0;
@@ -1021,7 +1024,8 @@ namespace QMake
 
     (*yynode)->start_token =  token_stream->index() -  1;
 
-    if  (yytoken ==  Token_NEWLINE
+    if  (yytoken ==  Token_EXCLAM
+         ||  yytoken ==  Token_NEWLINE
          ||  yytoken ==  Token_IDENTIFIER)
       {
         if  (yytoken ==  Token_IDENTIFIER)
@@ -1088,6 +1092,64 @@ namespace QMake
               }
 
             (*yynode)->isNewline =  false;
+            (*yynode)->isExclam =  false;
+          }
+
+        else if  (yytoken ==  Token_EXCLAM)
+          {
+            if  (yytoken !=  Token_EXCLAM)
+              {
+                yy_expected_token(yytoken,  Token_EXCLAM,  "exclam");
+                return  false;
+              }
+
+            yylex();
+
+            if  (yytoken !=  Token_IDENTIFIER)
+              {
+                yy_expected_token(yytoken,  Token_IDENTIFIER,  "identifier");
+                return  false;
+              }
+
+            (*yynode)->id =  token_stream->index() -  1;
+            yylex();
+
+            if  (yytoken ==  Token_LPAREN)
+              {
+                function_scope_ast *__node_20 =  0;
+
+                if  (!parse_function_scope(&__node_20))
+                  {
+                    yy_expected_symbol(ast_node::Kind_function_scope,  "function_scope");
+                    return  false;
+                  }
+
+                (*yynode)->func =  __node_20;
+
+              }
+
+            else if  (yytoken ==  Token_LBRACE
+                      ||  yytoken ==  Token_COLON)
+              {
+                scope_body_ast *__node_21 =  0;
+
+                if  (!parse_scope_body(&__node_21))
+                  {
+                    yy_expected_symbol(ast_node::Kind_scope_body,  "scope_body");
+                    return  false;
+                  }
+
+                (*yynode)->scope =  __node_21;
+
+              }
+
+            else
+              {
+                return  false;
+              }
+
+            (*yynode)->isNewline =  false;
+            (*yynode)->isExclam =  true;
           }
 
         else if  (yytoken ==  Token_NEWLINE)
@@ -1100,7 +1162,9 @@ namespace QMake
 
             yylex();
 
+
             (*yynode)->isNewline =  true;
+            (*yynode)->isExclam =  false;
           }
 
         else
@@ -1134,44 +1198,44 @@ namespace QMake
         if  (yytoken ==  Token_IDENTIFIER
              ||  yytoken ==  Token_VALUE)
           {
-            id_or_value_ast *__node_20 =  0;
+            id_or_value_ast *__node_22 =  0;
 
-            if  (!parse_id_or_value(&__node_20))
+            if  (!parse_id_or_value(&__node_22))
               {
                 yy_expected_symbol(ast_node::Kind_id_or_value,  "id_or_value");
                 return  false;
               }
 
-            (*yynode)->value_str =  __node_20;
+            (*yynode)->value_str =  __node_22;
 
           }
 
         else if  (yytoken ==  Token_QUOTE)
           {
-            quoted_value_ast *__node_21 =  0;
+            quoted_value_ast *__node_23 =  0;
 
-            if  (!parse_quoted_value(&__node_21))
+            if  (!parse_quoted_value(&__node_23))
               {
                 yy_expected_symbol(ast_node::Kind_quoted_value,  "quoted_value");
                 return  false;
               }
 
-            (*yynode)->quote_val =  __node_21;
+            (*yynode)->quote_val =  __node_23;
 
           }
 
         else if  (yytoken ==  Token_DOUBLEDOLLAR
                   ||  yytoken ==  Token_SINGLEDOLLAR)
           {
-            ref_ast *__node_22 =  0;
+            ref_ast *__node_24 =  0;
 
-            if  (!parse_ref(&__node_22))
+            if  (!parse_ref(&__node_24))
               {
                 yy_expected_symbol(ast_node::Kind_ref,  "ref");
                 return  false;
               }
 
-            (*yynode)->ref =  __node_22;
+            (*yynode)->ref =  __node_24;
 
           }
 
@@ -1210,15 +1274,15 @@ namespace QMake
              ||  yytoken ==  Token_IDENTIFIER
              ||  yytoken ==  Token_VALUE)
           {
-            value_ast *__node_23 =  0;
+            value_ast *__node_25 =  0;
 
-            if  (!parse_value(&__node_23))
+            if  (!parse_value(&__node_25))
               {
                 yy_expected_symbol(ast_node::Kind_value,  "value");
                 return  false;
               }
 
-            (*yynode)->list_sequence =  snoc((*yynode)->list_sequence,  __node_23,  memory_pool);
+            (*yynode)->list_sequence =  snoc((*yynode)->list_sequence,  __node_25,  memory_pool);
 
           }
 
@@ -1260,15 +1324,15 @@ namespace QMake
                  ||  yytoken ==  Token_IDENTIFIER
                  ||  yytoken ==  Token_VALUE)
               {
-                value_ast *__node_24 =  0;
+                value_ast *__node_26 =  0;
 
-                if  (!parse_value(&__node_24))
+                if  (!parse_value(&__node_26))
                   {
                     yy_expected_symbol(ast_node::Kind_value,  "value");
                     return  false;
                   }
 
-                (*yynode)->list_sequence =  snoc((*yynode)->list_sequence,  __node_24,  memory_pool);
+                (*yynode)->list_sequence =  snoc((*yynode)->list_sequence,  __node_26,  memory_pool);
 
               }
 
@@ -1321,15 +1385,15 @@ namespace QMake
          ||  yytoken ==  Token_STAREQ
          ||  yytoken ==  Token_TILDEEQ)
       {
-        op_ast *__node_25 =  0;
+        op_ast *__node_27 =  0;
 
-        if  (!parse_op(&__node_25))
+        if  (!parse_op(&__node_27))
           {
             yy_expected_symbol(ast_node::Kind_op,  "op");
             return  false;
           }
 
-        (*yynode)->op =  __node_25;
+        (*yynode)->op =  __node_27;
 
         if  (yytoken ==  Token_CONT
              ||  yytoken ==  Token_DOUBLEDOLLAR
@@ -1338,15 +1402,15 @@ namespace QMake
              ||  yytoken ==  Token_IDENTIFIER
              ||  yytoken ==  Token_VALUE)
           {
-            value_list_ast *__node_26 =  0;
+            value_list_ast *__node_28 =  0;
 
-            if  (!parse_value_list(&__node_26))
+            if  (!parse_value_list(&__node_28))
               {
                 yy_expected_symbol(ast_node::Kind_value_list,  "value_list");
                 return  false;
               }
 
-            (*yynode)->values =  __node_26;
+            (*yynode)->values =  __node_28;
 
           }
 

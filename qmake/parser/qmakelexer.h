@@ -60,6 +60,8 @@ private:
     QChar* ignoreWhitespace(QChar* it);
 
     bool mInQuote;
+    bool mIgnoreWSinFunctionArg;
+    bool mDollar;
 
     QStack<int> mState;
     enum State
