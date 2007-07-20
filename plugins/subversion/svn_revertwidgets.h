@@ -1,0 +1,37 @@
+/***************************************************************************
+ *   Copyright (C) 2007 by Dukju Ahn                                       *
+ *   dukjuahn@gmail.com                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef SVN_REVERTWIDGETS_H
+#define SVN_REVERTWIDGETS_H
+
+#include <kdialog.h>
+#include "ui_uirevert_option_dlg.h"
+
+class KDevSubversionPart;
+
+class SvnRevertOptionDlg : public KDialog
+{
+    Q_OBJECT
+public:
+    explicit SvnRevertOptionDlg( KDevSubversionPart *part, QWidget *parent = 0 );
+    ~SvnRevertOptionDlg();
+
+    void setCandidates( const KUrl::List &urls );
+    KUrl::List candidates();
+    bool recurse();
+
+private:
+    void insertRow( const KUrl &url, const QString &textStat, const QString &propStat );
+    Ui::SvnRevertOptionDlg ui;
+    KDevSubversionPart *m_part;
+};
+
+#endif

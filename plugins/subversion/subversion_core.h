@@ -108,7 +108,7 @@ public:
     void spawnImportThread( const KUrl &path, const KUrl &url, bool nonRecurse, bool noIgnore );
     SvnKJobBase* createImportJob( const KUrl &path, const KUrl &url, bool nonRecurse, bool noIgnore );
 
-    void spawnRevertThread( const KUrl &path, bool recurse );
+    void spawnRevertThread( const KUrl::List &paths, bool recurse );
     SvnKJobBase* createRevertJob( const KUrl::List &paths, bool recurse );
 
     void spawnCopyThread( const KUrl &srcPathOrUrl, const SvnRevision &srcRev, const KUrl &dstPathOrUrl );

@@ -25,6 +25,7 @@
 #include "svn_diffwidgets.h"
 #include "svn_statuswidgets.h"
 #include "svn_blamewidgets.h"
+#include "svn_revertwidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -513,6 +514,17 @@ void KDevSubversionPart::removeInternal( const KUrl::List &urls )
 {//void spawnRemoveThread( KUrl::List &urls, bool force );
     d->m_impl->spawnRemoveThread( urls, true );
 }
+void KDevSubversionPart::revert( const KUrl::List &wcPaths )
+{
+    SvnRevertOptionDlg dlg( this, 0 );
+    dlg.setCandidates( wcPaths );
+    if( dlg.exec() != QDialog::Accepted )
+        return;
+
+    KUrl::List paths = dlg.candidates();
+    bool isrecurse = dlg.recurse();
+    svncore()->spawnRevertThread( paths, isrecurse );
+}
 void KDevSubversionPart::commit( const KUrl::List &wcPaths )
 {
     SvnCommitOptionDlg dlg( this, NULL );
@@ -734,6 +746,10 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
         actions << action;
 
+        action = new QAction(i18n("Revert..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
+        actions << action;
+
         action = new QAction("Diff to HEAD", this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
         actions << action;
@@ -905,6 +921,11 @@ void KDevSubversionPart::ctxAdd()
 void KDevSubversionPart::ctxRemove()
 {
     removeInternal( d->m_ctxUrlList );
+}
+
+void KDevSubversionPart::ctxRevert()
+{
+    revert( d->m_ctxUrlList );
 }
 
 void KDevSubversionPart::ctxCheckout()

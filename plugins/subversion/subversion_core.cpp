@@ -345,10 +345,10 @@ SvnKJobBase* SubversionCore::createImportJob( const KUrl &path, const KUrl &url,
     return job;
 }
 
-void SubversionCore::spawnRevertThread( const KUrl &path, bool recurse )
+void SubversionCore::spawnRevertThread( const KUrl::List &paths, bool recurse )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_REVERT, this );
-    SvnRevertJob *thread = new SvnRevertJob( path, recurse, SVN_REVERT, job );
+    SvnRevertJob *thread = new SvnRevertJob( paths, recurse, SVN_REVERT, job );
 
     SVNCORE_SPAWN_COMMON( job, thread )
 }

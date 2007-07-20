@@ -1,0 +1,64 @@
+<ui version="4.0" >
+ <class>SvnRevertOptionDlg</class>
+ <widget class="QWidget" name="SvnRevertOptionDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>548</width>
+    <height>283</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Select working copies to be reverted:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTreeWidget" name="treeWidget" >
+     <property name="rootIsDecorated" >
+      <bool>false</bool>
+     </property>
+     <property name="uniformRowHeights" >
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Select</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Text Status</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Prop Status</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Working Copy</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="recursive" >
+     <property name="text" >
+      <string>Recursive</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

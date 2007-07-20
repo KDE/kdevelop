@@ -120,6 +120,7 @@ private:
     void checkout( const KUrl &targetDir );
     void add( const KUrl::List &wcPaths );
     void removeInternal( const KUrl::List &paths_or_urls );
+    void revert( const KUrl::List &wcPaths );
     void commit( const KUrl::List &wcPaths );
     void update( const KUrl::List &wcPaths );
     void logview( const KUrl &wcPath_or_url );
@@ -160,6 +161,7 @@ public Q_SLOTS:
     void ctxUpdate();
     void ctxAdd();
     void ctxRemove();
+    void ctxRevert();
     void ctxCheckout();
     void ctxDiff();
     void ctxDiffHead();
