@@ -183,16 +183,16 @@ DUContext* DUContext::parentContext( ) const
   return d->m_parentContext;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch ) const
+QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, SearchFlags flags ) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
   QList<Declaration*> ret;
-  findLocalDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, allowUnqualifiedMatch, ret);
+  findLocalDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, allowUnqualifiedMatch, ret, flags);
   return ret;
 }
 
-void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret ) const
+void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags flags ) const
 {
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
@@ -294,19 +294,19 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
   return;
 }
 
-void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, bool inImportedContext ) const
-{
-  // TODO we're missing ambiguous references by not checking every resolution before returning...
-  // but is that such a bad thing? (might be good performance-wise)
-  findLocalDeclarationsInternal(identifier, position, dataType, inImportedContext, ret);
-  
-  ///@todo In some cases, for example when constructing a list of global overloaded functions or operators, we must search on and build a complete list of them
-  ///Another case when all declarations are needed seems to be the case of forward-declarations:
-  ///in declarationbuilder.cpp all forward-declarations of a type must be found so they can be resolved.
+bool DUContext::foundEnough( const QList<Declaration*>& ret ) const {
+  if( !ret.isEmpty() )
+    return true;
+  else
+    return false;
+}
 
-  ///For now, to be exact, search on.
-   //if (ret.count()) //We need a way to decide language-independently whether we should search on or stop here
-     //return;
+void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, SearchFlags flags ) const
+{
+  findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, flags);
+  
+  if( foundEnough(ret) )
+    return;
 
   if (!identifier.explicitlyGlobal())
     acceptUsingNamespaces(position, usingNS);
@@ -315,22 +315,22 @@ void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier
   it.toBack();
   while (it.hasPrevious()) {
     DUContext* context = it.previous();
-    context->findDeclarationsInternal(identifier,  url() == context->url() ? position : context->textRange().end(), dataType, usingNS, ret, true);
+    context->findDeclarationsInternal(identifier,  url() == context->url() ? position : context->textRange().end(), dataType, usingNS, ret, flags | InImportedParentContext);
     if (!ret.isEmpty())
       return;
   }
 
-  if (!inImportedContext && parentContext())
-    parentContext()->findDeclarationsInternal(identifier, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, usingNS, ret);
+  if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext())
+    parentContext()->findDeclarationsInternal(identifier, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, usingNS, ret, flags);
 }
 
-QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType) const
+QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, SearchFlags flags) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
   QList<UsingNS*> usingStatements;
   QList<Declaration*> ret;
-  findDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, usingStatements, ret);
+  findDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, usingStatements, ret, flags);
   return ret;
 }
 
@@ -533,13 +533,13 @@ void DUContext::setType(ContextType type)
   DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
 
-QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position) const
+QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position, SearchFlags flags) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
   QList<UsingNS*> usingStatements;
   QList<Declaration*> ret;
-  findDeclarationsInternal(QualifiedIdentifier(identifier), position.isValid() ? position : textRange().end(), AbstractType::Ptr(), usingStatements, ret);
+  findDeclarationsInternal(QualifiedIdentifier(identifier), position.isValid() ? position : textRange().end(), AbstractType::Ptr(), usingStatements, ret, flags);
   return ret;
 }
 
@@ -572,17 +572,17 @@ const QList<DUContext*>& DUContext::importedParentContexts() const
   return d->m_importedParentContexts;
 }
 
-QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position) const
+QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, SearchFlags flags) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
   QList<UsingNS*> usingStatements;
   QList<DUContext*> ret;
-  findContextsInternal(contextType, identifier, position.isValid() ? position : textRange().end(), usingStatements, ret);
+  findContextsInternal(contextType, identifier, position.isValid() ? position : textRange().end(), usingStatements, ret, flags);
   return ret;
 }
 
-void DUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, bool inImportedContext) const
+void DUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, SearchFlags flags) const
 {
   if (contextType == type())
     if (identifier == scopeIdentifier(true))
@@ -596,10 +596,10 @@ void DUContext::findContextsInternal(ContextType contextType, const QualifiedIde
   while (it.hasPrevious()) {
     DUContext* context = it.previous();
 
-    context->findContextsInternal(contextType, identifier, position, usingNS, ret, true);
+    context->findContextsInternal(contextType, identifier, position, usingNS, ret, flags | InImportedParentContext);
   }
 
-  if (!inImportedContext && parentContext())
+  if ( !(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext())
     parentContext()->findContextsInternal(contextType, identifier, position, usingNS, ret);
 }
 

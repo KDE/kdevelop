@@ -76,6 +76,16 @@ public:
     Other
   };
 
+  enum SearchFlag {
+    NoSearchFlags = 0,
+    InImportedParentContext = 1, //Internal, do not use from outside
+    OnlyContainerTypes = 2, //Not implemented yet
+    DontSearchInParent = 4 //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
+  };
+
+  Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
+  
+
   ContextType type() const;
   void setType(ContextType type);
 
@@ -198,7 +208,7 @@ public:
    *
    * \warning this may return declarations which are not in this tree, you may need to lock them too...
    */
-  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr()) const;
+  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -213,7 +223,7 @@ public:
    *
    * \overload
    */
-  QList<Declaration*> findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid()) const;
+  QList<Declaration*> findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
@@ -221,7 +231,7 @@ public:
    * 
    * Does not search imported parent-contexts(like base-classes).
    */
-  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false) const;
+  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -283,7 +293,7 @@ public:
    *
    * \warning this may return contexts which are not in this tree, you may need to lock them too...
    */
-  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid()) const;
+  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Return a list of definitions for a given cursor \a position in a given \a url.
@@ -331,6 +341,11 @@ public:
 
 protected:
   /**
+   * After one scope was searched, this function is asked whether more results should be collected. Override it, for example to collect overloaded functions.
+   * The default-implementation returns true as soon as decls is not empty.
+   * */
+  virtual bool foundEnough( const QList<Declaration*>& decls ) const;
+  /**
    * Merges definitions up all branches of the definition-use chain into one hash.
    */
   void mergeDeclarationsInternal(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext = false) const;
@@ -338,13 +353,13 @@ protected:
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret ) const;
+  virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags flags ) const;
 
   /// Declaration search implementation
-  virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, QList<Declaration*>& ret, bool inImportedContext = false) const;
-
+  virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, QList<Declaration*>& ret, SearchFlags flags ) const;
+  
   /// Context search implementation
-  virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, bool inImportedContext = false) const;
+  virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   void acceptUsingNamespaces(const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS) const;
   void acceptUsingNamespace(UsingNS* ns, QList<UsingNS*>& usingNS) const;

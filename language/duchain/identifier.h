@@ -94,6 +94,7 @@ public:
 
   void push(const Identifier& id);
   void push(const QualifiedIdentifier& id);
+  //Pops one identifier from back:
   void pop();
   void clear();
   bool isEmpty() const;
