@@ -53,8 +53,6 @@ extern "C" {
 
 using namespace KDevelop;
 
-// KDEV_ADD_EXTENSION_FACTORY_NS(KDevelop, IVersionControl, KDevSubversionPart)
-
 typedef KGenericFactory<KDevSubversionPart> KDevSubversionFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevsubversion,
                             KDevSubversionFactory( "kdevsubversion" )  )
@@ -79,12 +77,6 @@ public:
     KDevSubversionViewFactory *m_factory;
     QPointer<SubversionCore> m_impl;
     KUrl::List m_ctxUrlList;
-//     QPointer<SvnFileInfoProvider> m_infoProvider;
-//     SvnFileInfoProvider *m_infoProvider;
-//     QList<KDevelop::VcsFileInfo> m_vcsInfoList;
-//     QMap< SvnKJobBase*, QList<KDevelop::VcsFileInfo> > m_fileInfoMap;
-//     QList<KDevelop::VcsFileInfo> asyncStatusList;
-
 };
 
 KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
@@ -97,8 +89,6 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     core()->uiController()->addToolView("Subversion", d->m_factory);
     // init svn core
     d->m_impl = new SubversionCore(this, this);
-    // for now, used to signal statusReady(QList<VcsFileInfo>&)
-    connect( d->m_impl, SIGNAL(jobFinished( SvnKJobBase* )), this, SLOT(slotJobFinished( SvnKJobBase * )) );
 
     setXMLFile("kdevsubversion.rc");
 
@@ -131,14 +121,6 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action->setText(i18n("Show Blame (annotate)..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(blame()));
 
-//     action = actionCollection()->addAction("svn_status_sync");
-//     action->setText(i18n("Show status with blocking mode"));
-//     connect(action, SIGNAL(triggered(bool)), this, SLOT(statusSync()));
-
-//     action = actionCollection()->addAction("svn_status_async");
-//     action->setText(i18n("Show status with non-blocking mode"));
-//     connect(action, SIGNAL(triggered(bool)), this, SLOT(statusASync()));
-
     action = actionCollection()->addAction("svn_info");
     action->setText(i18n("Show the system-generated metadatas"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(svnInfo()));
@@ -152,7 +134,6 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
 KDevSubversionPart::~KDevSubversionPart()
 {
     delete d->m_impl;
-//     delete d->m_infoProvider;
     delete d;
 }
 bool KDevSubversionPart::isVersionControlled( const KUrl& localLocation )
@@ -844,28 +825,7 @@ void KDevSubversionPart::blame()
         KMessageBox::error(NULL, "No active docuement to view blame" );
     }
 }
-// void KDevSubversionPart::statusSync()
-// {
-//     KUrl activeUrl = urlFocusedDocument();
-//     if( activeUrl.isValid() ){
-//         const QList<KDevelop::VcsFileInfo> &vcsList = statusSync( activeUrl, KDevelop::IVersionControl::Recursive );
-//         for( QList<KDevelop::VcsFileInfo>::const_iterator it = vcsList.constBegin(); it != vcsList.constEnd(); ++it ){
-//             // TODO print to GUI
-//             kDebug() << (*it).toString() << endl;
-//         }
-//     } else{
-//         KMessageBox::error(NULL, "No active docuement to view status" );
-//     }
-// }
-// void KDevSubversionPart::statusASync()
-// {
-//     KUrl activeUrl = urlFocusedDocument();
-//     if( activeUrl.isValid() ){
-//         statusASync( activeUrl, KDevelop::IVersionControl::Recursive, d->asyncStatusList );
-//     } else{
-//         KMessageBox::error(NULL, "No active docuement to view status" );
-//     }
-// }
+
 void KDevSubversionPart::svnInfo()
 {
     KUrl activeUrl = urlFocusedDocument();
@@ -980,66 +940,7 @@ void KDevSubversionPart::ctxStatus()
     svnStatus( d->m_ctxUrlList.first() );
 }
 
-//////////////////////////////////////////////
-void KDevSubversionPart::slotJobFinished( SvnKJobBase *job )
-{
-    switch( job->type() ){
-//         case SVN_STATUS:{
-//             if( job->error() ){
-//                 KMessageBox::error(NULL, job->smartError() );
-//                 break;
-//             }
-//             SvnStatusJob *statusJob = dynamic_cast<SvnStatusJob*>( job->svnThread() );
-//             if( !statusJob ) return;
-//
-//             QList<KDevelop::VcsFileInfo> infos = d->m_fileInfoMap.value( job );
-//
-//             for( QList<SvnStatusHolder>::iterator it = statusJob->m_holderList.begin() ;
-//                  it != statusJob->m_holderList.end() ;
-//                  ++it ) {
-//                 SvnStatusHolder hold = (*it); // debug
-//                 kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
-//                 kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
-//                 // get revision.
-//                 QString rev = QString::number( (*it).baseRevision );
-//
-//                 KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
-//                 // get status -- working copy first
-//                 if( (*it).textStatus == svn_wc_status_normal
-//                     && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
-//                     // text status always exist if under VC. but in most cases, property value may not exist
-//                     state = KDevelop::VcsFileInfo::Uptodate;
-//                 else if( (*it).textStatus == svn_wc_status_added || (*it).propStatus == svn_wc_status_added )
-//                     state = KDevelop::VcsFileInfo::Added;
-//                 else if( (*it).textStatus == svn_wc_status_modified || (*it).propStatus == svn_wc_status_modified )
-//                     state = KDevelop::VcsFileInfo::Modified;
-//                 else if( (*it).textStatus == svn_wc_status_conflicted || (*it).propStatus == svn_wc_status_conflicted )
-//                     state = KDevelop::VcsFileInfo::Conflict;
-//                 else if( (*it).textStatus == svn_wc_status_deleted || (*it).propStatus == svn_wc_status_deleted )
-//                     state = KDevelop::VcsFileInfo::Deleted;
-//                 else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
-//                     state = KDevelop::VcsFileInfo::Replaced;
-//                 // get status -- override the previous result if remote repository is modified
-//                 if( (*it).reposTextStat == svn_wc_status_added || (*it).reposTextStat == svn_wc_status_modified
-//                     || (*it).reposPropStat == svn_wc_status_modified )
-//                     state = KDevelop::VcsFileInfo::NeedsPatch;
-//
-//                 // TODO retrive repository revision. Set workingcopy and reposit revision same for a moment
-//                 KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
-//                 infos.append( vcsInfo );
-//             }
-//
-//             emit statusReady( infos );
-//             d->m_fileInfoMap.remove( job );
-//             break;
-//         } //end of case SVN_STATUS
-        case SVN_INFO: {
 
-        } //end of case SVN_INFO
-        default:
-            break;
-    };
-}
 #include "subversion_part.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

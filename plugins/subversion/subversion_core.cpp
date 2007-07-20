@@ -50,60 +50,17 @@ extern "C" {
 
 SubversionCore::SubversionCore( KDevSubversionPart *part, QObject *parent )
     : QObject(parent) , m_part(part)
-//       ,m_weaver( new Weaver(this) )
 {
     apr_initialize();
 	m_uiServer = new KUiServerJobTracker( this );
-// when using threadweaver
-//     ThreadWeaver::setDebugLevel(true, 1);
-//     m_weaver->setMaximumNumberOfThreads(1);
-
-// when using QThread directly
-//     m_threadList.clear();
-//     unlockEmit();
 }
 
 SubversionCore::~SubversionCore()
 {
-//     kDebug() << " ~SubversionCore(): start cleanup... " << endl;
-//     if( !m_threadList.isEmpty() ){
-//         QList<SubversionJob*>::const_iterator it;
-//         SubversionJob* job=0;
-//         for( it = m_threadList.constBegin(); it != m_threadList.constEnd(); ++it ){
-//             job = *it;
-//             job->terminate();
-//         }
-//         for( it = m_threadList.constBegin(); it != m_threadList.constEnd(); ++it ){
-//             job = *it;
-//             if( ! job->wait(3000) ){
-//                 kDebug() << " ~SubversionCore(): thread could not be terminated... " << endl;
-//             }
-//         }
-//     }
-
 	delete m_uiServer;
     apr_terminate();
-    kDebug() << " ~SubversionCore(): end cleanup... " << endl;
-
 }
-// void SubversionCore::cleanupFinishedThreads()
-// {
-//     if( !m_completedList.isEmpty() ){
-//         QList<SubversionJob*>::iterator it;
-//         SubversionJob* job=0L;
-//         for( it = m_completedList.begin(); it != m_completedList.end(); ++it ){
-//             job = *it;
-//             if( ! job->isFinished() ){
-//                 kDebug() << " STRANGE: thread emitted finished() signal, but not finished  ?? " << endl;
-//                 continue;
-//             }
-//             m_completedList.removeAll(job);
-//             delete job;
-//             job = 0L;
-//             kDebug() << " removed previously completed job " << endl;
-//         }
-//     }
-// }
+
 #define SVNCORE_SPAWN_COMMON( job, thread ) \
     job->setSvnThread( thread ); \
     connect( job, SIGNAL(result(KJob*)), this, SLOT(slotResult(KJob*)) ); \

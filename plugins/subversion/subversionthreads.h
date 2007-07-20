@@ -228,18 +228,6 @@ protected:
     bool m_recurse, m_getAll, m_update, m_noIgnore, m_ignoreExternals;
 };
 
-// class SvnStatusSyncJob : public SubversionSyncJob
-// {
-// public:
-//     SvnStatusSyncJob( int type );
-//     QList<SvnStatusHolder>& statusExec( const KUrl &wcPath, long rev, QString revKind,
-//                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals);
-//
-//     static void statusReceiver( void *baton, const char *path, svn_wc_status2_t *status );
-//
-//     QList<SvnStatusHolder> m_holderList;
-// };
-
 class SvnAddJob : public SubversionThread
 {
 public:
@@ -299,20 +287,6 @@ protected:
     SvnRevision m_revision;
     bool m_recurse;
 };
-
-// class SvnInfoSyncJob : public SubversionSyncJob
-// {
-// public:
-//     SvnInfoSyncJob();
-//     QMap< KUrl, SvnInfoHolder >* infoExec( const KUrl &pathOrUrl,
-//                                            const SvnRevision *peg, const SvnRevision *revision,
-//                                            bool recurse );
-//     static svn_error_t* infoReceiver( void *baton,
-//                                       const char *path,
-//                                       const svn_info_t *info,
-//                                       apr_pool_t *pool);
-//     QMap< KUrl, SvnInfoHolder > m_holderMap;
-// };
 
 class SvnDiffJob : public SubversionThread
 {

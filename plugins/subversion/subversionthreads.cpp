@@ -758,11 +758,7 @@ void SvnStatusJob::run()
     apr_pool_t *subpool = svn_pool_create(pool());
     svn_revnum_t result_rev;
 
-//     recordCurrentURL( nurl );
-
     svn_opt_revision_t rev = m_rev.revision();
-
-//     initNotifier( SvnStatusJob::statusCallback );
 
     svn_error_t *err = svn_client_status2( &result_rev,
                                         svn_path_canonicalize( m_wcPath.path().toUtf8(), subpool ),

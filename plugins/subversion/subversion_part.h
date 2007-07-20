@@ -115,7 +115,7 @@ public:
     VcsJob* checkout( const KDevelop::VcsMapping & mapping );
 
 private:
-    // context menu slots and IVCS::showXXXX() will be redirected to these methods,
+    // context menu slots will be redirected to these methods,
     // because these two should be able to execute job internally.
     void checkout( const KUrl &targetDir );
     void add( const KUrl::List &wcPaths );
@@ -149,8 +149,6 @@ public Q_SLOTS:
     void update();
     void logView();
     void blame();
-//     void statusSync();
-//     void statusASync();
     void svnInfo();
     void import();
 
@@ -169,8 +167,6 @@ public Q_SLOTS:
     void ctxInfo();
     void ctxStatus();
 
-private Q_SLOTS:
-    void slotJobFinished( SvnKJobBase *job );
 private:
 
     struct KDevSubversionPartPrivate * const d;

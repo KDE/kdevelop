@@ -260,27 +260,6 @@ void KDevSubversionView::slotJobFinished( SvnKJobBase *job )
         KMessageBox::error( this, job->errorText(), "error" );
         return;
     }
-    switch( job->type() ){
-        case SVN_LOGVIEW:
-            break; // not used for logview
-        case SVN_BLAME: // not used for blame
-            break;
-        case SVN_CHECKOUT:
-            // not implemented yet
-            break;
-        case SVN_ADD:
-            // note: these messagebox are just temporary ones.
-            // don't try to i18n(), because it will be removed
-            break;
-        case SVN_DELETE:
-            break;
-        case SVN_COMMIT:
-            break;
-        case SVN_UPDATE:
-            break;
-        case SVN_STATUS:
-            break;
-    }
 }
 
 void KDevSubversionView::closeCurrentTab()
