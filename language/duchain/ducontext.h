@@ -72,7 +72,7 @@ public:
     Namespace,
     Class,
     Function,
-    Template,
+    Template, //A context that declares template-parameters
     Other
   };
 
