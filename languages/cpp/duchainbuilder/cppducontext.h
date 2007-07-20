@@ -16,6 +16,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef CPPDUCONTEXT_H
+#define CPPDUCONTEXT_H
+
 /** @todo Remove this. It is currently needed because Cpp::DUContext<KDevelop::DUContext> cannot call protected members of KDevelop::DUContext,
  *  which is wrong because KDevelop::DUContext is a base-class of Cpp::DUContext<KDevelop::DUContext>. Find out why this happens and then remove this.
  * */
@@ -156,3 +159,5 @@ class DUContext : public BaseContext {
 
 
 }
+
+#endif
