@@ -42,6 +42,7 @@ class DeclarationPrivate
 {
 public:
   DUContext* m_context;
+  DUContext* m_internalContext;
   Declaration::Scope m_scope;
   AbstractType::Ptr m_type;
   Identifier m_identifier;
@@ -74,6 +75,7 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
   , d(new DeclarationPrivate)
 {
   d->m_context = 0;
+  d->m_internalContext = 0;
   d->m_scope = scope;
   d->m_definition = 0;
   d->m_isDefinition = false;
@@ -85,6 +87,9 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
 
 Declaration::~Declaration()
 {
+  if( d->m_internalContext )
+    d->m_internalContext->setDeclaration(0);
+  
   // Inserted by the builder after construction has finished.
   if (d->m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
@@ -231,6 +236,32 @@ void Declaration::setContext(DUContext* context)
     d->m_context->d->addDeclaration(this);
     DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
   }
+}
+
+DUContext * Declaration::internalContext() const
+{
+  ENSURE_CHAIN_READ_LOCKED
+
+  return d->m_internalContext;
+}
+
+void Declaration::setInternalContext(DUContext* context)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+  
+  if( context == d->m_internalContext )
+    return;
+
+  DUContext* oldInternalContext = d->m_internalContext;
+  
+  d->m_internalContext = context;
+  
+  if( oldInternalContext && oldInternalContext->declaration() == this )
+    oldInternalContext->setDeclaration(0);
+  
+
+  if( d->m_internalContext )
+    d->m_internalContext->setDeclaration(this);
 }
 
 bool Declaration::operator ==(const Declaration & other) const

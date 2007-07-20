@@ -103,6 +103,13 @@ public:
   DUContext* context() const;
   void setContext(DUContext* context);
 
+  /**
+   * If this declarations opens an own context, this returns that context.
+   * The returned context will also return this Declaration on declaration().
+   * */
+  DUContext* internalContext() const;
+  void setInternalContext(DUContext* context);
+  
   Scope scope() const;
 
   template <class T>

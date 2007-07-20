@@ -37,7 +37,7 @@ namespace KDevelop
 {
 
 DUContextPrivate::DUContextPrivate( DUContext* d)
-  : m_context(d)
+  : m_declaration(0), m_context(d)
 {
 }
 
@@ -138,6 +138,9 @@ DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
 
 DUContext::~DUContext( )
 {
+  if( d->m_declaration && d->m_declaration->internalContext() == this )
+    d->m_declaration->setInternalContext(0);
+  
   if (inSymbolTable())
     SymbolTable::self()->removeContext(this);
 
@@ -176,6 +179,30 @@ const QList< DUContext * > & DUContext::childContexts( ) const
   return d->m_childContexts;
 }
 
+Declaration* DUContext::declaration() const {
+  ENSURE_CHAIN_READ_LOCKED
+  return d->m_declaration;
+}
+
+void DUContext::setDeclaration(Declaration* decl) {
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  if( decl == d->m_declaration )
+    return;
+
+  Declaration* oldDeclaration = d->m_declaration;
+  
+  d->m_declaration = decl;
+  
+  if( oldDeclaration && oldDeclaration->internalContext() == this )
+    oldDeclaration->setInternalContext(0);
+    
+
+  //The context set as internal context should always be the last opened context
+  if( decl )
+    decl->setInternalContext(this);
+}
+
 DUContext* DUContext::parentContext( ) const
 {
   ENSURE_CHAIN_READ_LOCKED
@@ -192,8 +219,9 @@ QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier&
   return ret;
 }
 
-void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags flags ) const
+void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags /*flags*/ ) const
 {
+  ///@todo use flags
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
   QList<Declaration*> resolved;

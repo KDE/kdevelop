@@ -71,9 +71,9 @@ public:
     Global,
     Namespace,
     Class,
-    Function,
+    Function, //A context that declares function-arguments
     Template, //A context that declares template-parameters
-    Other
+    Other //Represents executable code, like for example within a compound-statement
   };
 
   enum SearchFlag {
@@ -89,6 +89,18 @@ public:
   ContextType type() const;
   void setType(ContextType type);
 
+  /**
+   * If this context was opened by a declaration, this returns that declaration.
+   * The returned declaration may have this context set as internalContext(),
+   * but it does not have to, because there may be multiple contexts opened by one declaration,
+   * and the declaration should have the last one assigned.
+   * */
+  Declaration* declaration() const;
+  /**
+   * Sets the declaration, and also updates the declarations internal context if necessary.
+   * */
+  void setDeclaration(Declaration* decl);
+  
   /**
    * Calculate the depth of this context, from the top level context in the file.
    */
