@@ -157,6 +157,46 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
   return 0;
 }
 
+void TestExpressionParser::testTemplates() {
+  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> B;");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* defClassA = top->localDeclarations()[1];
+  QCOMPARE(defClassA->identifier(), Identifier("A"));
+  QVERIFY(defClassA->type<CppClassType>());
+
+  Declaration* defClassB = top->localDeclarations()[2];
+  QCOMPARE(defClassB->identifier(), Identifier("B"));
+  QVERIFY(defClassB->type<CppClassType>());
+  
+  Declaration* defClassC = top->localDeclarations()[3];
+  QCOMPARE(defClassC->identifier(), Identifier("C"));
+  QVERIFY(defClassC->type<CppClassType>());
+  
+  DUContext* classA = getInternalContext(defClassA);
+  QVERIFY(classA->parentContext());
+  QCOMPARE(classA->importedParentContexts().count(), 1); //The template-parameter context is imported
+  QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
+
+  DUContext* classB = getInternalContext(defClassB);
+  QVERIFY(classB->parentContext());
+  QCOMPARE(classB->importedParentContexts().count(), 0);
+  QCOMPARE(classB->localScopeIdentifier(), QualifiedIdentifier("B"));
+  
+  DUContext* classC = getInternalContext(defClassC);
+  QVERIFY(classC->parentContext());
+  QCOMPARE(classC->importedParentContexts().count(), 0);
+  QCOMPARE(classC->localScopeIdentifier(), QualifiedIdentifier("C"));
+
+/*  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
+  QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
+  QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);*/
+  release(top);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

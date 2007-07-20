@@ -18,7 +18,7 @@
 */
 
 #include "typeconversion.h"
-#include "typeutils.h"
+#include "duchainbuilder/typeutils.h"
 #include "duchainbuilder/cpptypes.h"
 #include "duchainbuilder/typerepository.h"
 #include "overloadresolution.h"

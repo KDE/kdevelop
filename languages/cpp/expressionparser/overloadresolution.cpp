@@ -18,12 +18,11 @@
 */
 
 #include "overloadresolution.h"
-#include "typeutils.h"
+#include "duchainbuilder/typeutils.h"
 #include "duchain/ducontext.h"
 #include "duchain/declaration.h"
 #include "duchain/classfunctiondeclaration.h"
 #include "duchainbuilder/cpptypes.h"
-#include "typeutils.h"
 #include "viablefunctions.h"
 #include <QtAlgorithms>
 

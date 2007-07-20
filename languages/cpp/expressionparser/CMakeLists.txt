@@ -13,7 +13,6 @@ set(kdevcppexpressionparser_LIB_SRCS
     expressionparser.cpp
     expressionvisitor.cpp
     typeconversion.cpp
-    typeutils.cpp
     overloadresolution.cpp
     viablefunctions.cpp
 )

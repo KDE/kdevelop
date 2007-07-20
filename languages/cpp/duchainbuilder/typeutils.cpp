@@ -148,10 +148,12 @@ namespace TypeUtils {
 
   DUContext* getInternalContext( Declaration* declaration ) {
     if( declaration->isForwardDeclaration() ) {
-      declaration = dynamic_cast<KDevelop::ForwardDeclaration*>(declaration)->resolved();
+      declaration = static_cast<KDevelop::ForwardDeclaration*>(declaration)->resolved();
       if( !declaration ) return 0;
     }
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(declaration->abstractType().data());
+    if( !idType )
+      return 0;
     QList<DUContext*> internalContexts;
     internalContexts = declaration->context()->findContexts(DUContext::Class, idType->identifier());
     internalContexts += declaration->context()->findContexts(DUContext::Namespace, idType->identifier());

@@ -24,6 +24,8 @@ set(kdevcppduchainbuilder_LIB_SRCS
     hashedstring.cpp
     cppduchain.cpp
     templateparameterdeclaration.cpp
+    cppducontext.cpp
+    typeutils.cpp
 )
 
 kde4_add_library(kdevcppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})

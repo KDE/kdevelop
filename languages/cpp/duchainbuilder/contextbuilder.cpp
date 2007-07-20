@@ -18,6 +18,8 @@
 */
 // kate: indent-width 2;
 
+#include "cppducontext.h"
+
 #include "contextbuilder.h"
 
 #include <ktexteditor/smartrange.h>
@@ -107,7 +109,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
       Q_ASSERT(m_compilingContexts);
 
       Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
-      topLevelContext = new TopDUContext(range, const_cast<Cpp::LexedFile*>(file.data()));
+      topLevelContext = new Cpp::DUContext<TopDUContext>(range, const_cast<Cpp::LexedFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
 
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
@@ -379,7 +381,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
       readLock.unlock();
       DUChainWriteLocker writeLock(DUChain::lock());
 
-      ret = new DUContext(m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
+      ret = new Cpp::DUContext<DUContext>(m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
       ret->setType(type);
 
       if (!identifier.isEmpty()) {

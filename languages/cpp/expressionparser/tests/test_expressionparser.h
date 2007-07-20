@@ -54,6 +54,7 @@ private slots:
   void testSimpleExpression();
   void testTypeConversion();
   void testCasts();
+  void testTemplates();
   void cleanupTestCase();
 
 public:
@@ -61,7 +62,8 @@ public:
     DumpNone = 0,
     DumpAST = 1,
     DumpDUChain = 2,
-    DumpType = 4
+    DumpType = 4,
+    DumpAll = 7
   };
   Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 

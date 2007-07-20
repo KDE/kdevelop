@@ -17,7 +17,7 @@
 */
 
 #include "viablefunctions.h"
-#include "typeutils.h"
+#include "duchainbuilder/typeutils.h"
 #include "duchain/ducontext.h"
 #include "duchain/declaration.h"
 #include "duchain/classfunctiondeclaration.h"
