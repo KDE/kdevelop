@@ -72,7 +72,7 @@ namespace QMake
 %token PLUSEQ("pluseq"),EQUAL("equal"),MINUSEQ("minuseq"),STAREQ("stareq"),
        TILDEEQ("tildeeq") ;;
 
-%token COLON("colon"), COMMA("comma"), CONT("cont"),
+%token COLON("colon"), COMMA("comma"), CONT("cont"), EXCLAM("exclam"),
        NEWLINE("newline"), DOUBLEDOLLAR("doubledollar"),
        SINGLEDOLLAR("singledollar"), QUOTE("quote") ;;
 
@@ -88,10 +88,22 @@ namespace QMake
 -> project ;;
 
    ( id=IDENTIFIER ( var=variable_assignment | func=function_scope | scope=scope_body )
-            [: (*yynode)->isNewline = false; :]
-   ) | NEWLINE
-            [: (*yynode)->isNewline = true; :]
--> stmt [ member variable isNewline: bool; ] ;;
+            [:
+                (*yynode)->isNewline = false;
+                (*yynode)->isExclam = false;
+            :]
+   ) | ( EXCLAM id=IDENTIFIER (func=function_scope | scope=scope_body )
+            [:
+               (*yynode)->isNewline = false;
+               (*yynode)->isExclam = true;
+            :]
+    ) | NEWLINE
+            [:
+                (*yynode)->isNewline = true;
+                (*yynode)->isExclam = false;
+            :]
+-> stmt [ member variable isNewline: bool;
+          member variable isExclam: bool; ] ;;
 
    op=op ( values=value_list | 0 ) ( NEWLINE | EOF )
 -> variable_assignment ;;
@@ -102,16 +114,16 @@ namespace QMake
    ( #list=value | CONT NEWLINE )  ( #list=value | CONT NEWLINE )*
 -> value_list ;;
 
-   value_str=id_or_value | quote_val=quoted_value | ref=ref
+   value_str=id_or_value | quote_val=quoted_value | ref=ref | shellcmd=function_args
 -> value ;;
 
-   DOUBLEDOLLAR ( func_var_ref=func_var_ref | varref=varref ) | SINGLEDOLLAR LPAREN idref=IDENTIFIER RPAREN
+   DOUBLEDOLLAR func_var_ref=func_var_ref | SINGLEDOLLAR LPAREN idref=IDENTIFIER RPAREN
 -> ref ;;
 
-   LPAREN id=IDENTIFIER RPAREN | LBRACE id=IDENTIFIER RBRACE | LBRACKET id=IDENTIFIER RBRACKET
--> varref ;;
-
    id=IDENTIFIER ( args=function_args | 0 )
+   | LBRACKET id=IDENTIFIER RBRACKET
+   | LPAREN id=IDENTIFIER RPAREN
+   | LBRACE id=IDENTIFIER ( args=function_args | 0 ) RBRACE
 -> func_var_ref ;;
 
    val=IDENTIFIER | val=VALUE
@@ -129,11 +141,14 @@ namespace QMake
    args=function_args ( scopebody=scope_body | 0 )
 -> function_scope ;;
 
-   ( ( #args=argument | CONT NEWLINE ) ( ( COMMA | CONT NEWLINE ) ( #args=argument ) )* | 0 )
+   ( ( ( #args=argument | LPAREN ( argument )+ RPAREN )+ | CONT NEWLINE ) ( ( COMMA | CONT NEWLINE ) ( ( #args=argument | LPAREN ( argument )+ RPAREN )+ ) )* | 0 )
 -> arg_list ;;
 
    value_str=id_or_value | quoted_val=quoted_value | ref=ref
+   | plainval=QUOTEDSPACE | plainval=LBRACKET | plainval=RBRACKET
+   | plainval=LBRACE | plainval=RBRACE
 -> argument ;;
+
 
     LBRACE ( NEWLINE | 0 ) ( #stmts=stmt )* RBRACE | COLON #stmts=stmt
 -> scope_body ;;
