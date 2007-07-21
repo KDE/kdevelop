@@ -129,7 +129,7 @@ namespace QMake
    val=IDENTIFIER | val=VALUE
 -> id_or_value ;;
 
-   QUOTE ( value=quote_value )* ( QUOTE | CONT NEWLINE )
+   QUOTE ( value=quote_value )* ( QUOTE | CONT NEWLINE | NEWLINE )
 -> quoted_value ;;
 
    value_str=id_or_value | ref=ref | token=QUOTEDSPACE | token=COLON | token=COMMA
@@ -148,7 +148,6 @@ namespace QMake
    | plainval=QUOTEDSPACE | plainval=LBRACKET | plainval=RBRACKET
    | plainval=LBRACE | plainval=RBRACE
 -> argument ;;
-
 
     LBRACE ( NEWLINE | 0 ) ( #stmts=stmt )* RBRACE | COLON #stmts=stmt
 -> scope_body ;;
