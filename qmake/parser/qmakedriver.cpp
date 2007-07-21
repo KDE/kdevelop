@@ -19,7 +19,6 @@
  */
 
 #include "qmakedriver.h"
-// #include "qmakeast.h"
 
 #include <QtCore/QTextStream>
 #include <QtCore/QTextCodec>
@@ -60,7 +59,7 @@ void Driver::setDebug( bool debug )
 {
     mDebug = debug;
 }
-bool Driver::parse(QMake::ProjectAST*)
+bool Driver::parse()
 {
     parser::token_stream_type token_stream;
     parser::memory_pool_type memory_pool;
