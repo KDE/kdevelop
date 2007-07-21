@@ -666,7 +666,7 @@ void TestDUChain::testTypedef() {
 }
 
 void TestDUChain::testTemplates() {
-  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T a; }; class B{int b;}; class C{int c;}; template<class T>A<B,T>{};  typedef A<B,C> D;");
+  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T a; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 
   DUContext* top = parse(method, DumpAll);
 
