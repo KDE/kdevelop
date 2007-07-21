@@ -358,7 +358,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     Q_UNUSED(node)
     if( !base ) return 0;
     
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_lastType.data());
+    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(base.data());
     if( idType ) {
       LOCKDUCHAIN;
       return idType->declaration();
