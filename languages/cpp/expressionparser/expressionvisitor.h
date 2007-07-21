@@ -22,7 +22,7 @@
 
 #include <typesystem.h>
 #include "visitor.h"
-#include "duchainbuilder/typeutils.h"
+#include "typeutils.h"
 #include "cppexpressionparserexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */
 
