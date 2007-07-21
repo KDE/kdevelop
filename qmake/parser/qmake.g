@@ -85,12 +85,12 @@ namespace QMake
    ( #stmts=stmt )*
 -> project ;;
 
-   ( id=IDENTIFIER ( var=variable_assignment | func=function_scope | scope=scope_body )
+   ( id=IDENTIFIER ( var=variable_assignment | scope=scope )
             [:
                 (*yynode)->isNewline = false;
                 (*yynode)->isExclam = false;
             :]
-   ) | ( EXCLAM id=IDENTIFIER (func=function_scope | scope=scope_body )
+   ) | ( EXCLAM id=IDENTIFIER scope=scope
             [:
                (*yynode)->isNewline = false;
                (*yynode)->isExclam = true;
@@ -102,6 +102,16 @@ namespace QMake
             :]
 -> stmt [ member variable isNewline: bool;
           member variable isExclam: bool; ] ;;
+
+   func_args=function_args ( scope_body=scope_body | or_op=or_op scope_body=scope_body | 0 )
+   | ( or_op=or_op | 0 ) scope_body=scope_body
+-> scope ;;
+
+   ( OR #item=item )+
+-> or_op ;;
+
+   id=IDENTIFIER ( func_args=function_args | 0 )
+-> item ;;
 
    op=op ( values=value_list | 0 ) ( NEWLINE | EOF )
 -> variable_assignment ;;
@@ -117,9 +127,6 @@ namespace QMake
 
    LPAREN args=arg_list RPAREN
 -> function_args ;;
-
-   args=function_args ( scopebody=scope_body | 0 )
--> function_scope ;;
 
    ( ( #args=value | CONT NEWLINE ) ( ( COMMA | CONT NEWLINE ) #args=value )* | 0 )
 -> arg_list ;;

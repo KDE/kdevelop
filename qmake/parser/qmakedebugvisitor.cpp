@@ -23,6 +23,7 @@
 #include <kdebug.h>
 
 #include "qmake_parser.h"
+#include "qmake_ast.h"
 #include "kdev-pg-token-stream.h"
 
 namespace QMake
@@ -58,6 +59,26 @@ void DebugVisitor::visit_arg_list( arg_list_ast *node )
     kDebug(9024) << getIndent() << "END(arg_list)( " << getTokenInfo(node->start_token) << " )" << endl;
 }
 
+
+void DebugVisitor::visit_or_op( or_op_ast *node )
+{
+    kDebug(9024) << getIndent() << "BEGIN(or_op)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    default_visitor::visit_or_op( node );
+    indent--;
+    kDebug(9024) << getIndent() << "END(or_op)( " << getTokenInfo(node->end_token)  << " )" << endl;
+}
+
+void DebugVisitor::visit_scope( scope_ast *node )
+{
+    kDebug(9024) << getIndent() << "BEGIN(scope)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    default_visitor::visit_scope( node );
+    indent--;
+    kDebug(9024) << getIndent() << "END(scope)( " << getTokenInfo(node->end_token)  << " )" << endl;
+
+}
+
 void DebugVisitor::visit_function_args( function_args_ast *node )
 {
     kDebug(9024) << getIndent() << "BEGIN(function_args)( " << getTokenInfo(node->start_token)  << " )" << endl;
@@ -65,15 +86,6 @@ void DebugVisitor::visit_function_args( function_args_ast *node )
     default_visitor::visit_function_args( node );
     indent--;
     kDebug(9024) << getIndent() << "END(function_args)( " << getTokenInfo(node->end_token)  << " )" << endl;
-}
-
-void DebugVisitor::visit_function_scope( function_scope_ast *node )
-{
-    kDebug(9024) << getIndent() << "BEGIN(function_scope)( " << getTokenInfo(node->start_token)  << " )" << endl;
-    indent++;
-    default_visitor::visit_function_scope( node );
-    indent--;
-    kDebug(9024) << getIndent() << "END(function_scope)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_op( op_ast *node )
@@ -146,6 +158,16 @@ void DebugVisitor::visit_variable_assignment( variable_assignment_ast *node )
     kDebug(9024) << getIndent() << "END(variable_assignment)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
+void DebugVisitor::visit_item( item_ast *node )
+{
+
+    kDebug(9024) << getIndent() << "BEGIN(item)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
+    default_visitor::visit_item( node );
+    indent--;
+    kDebug(9024) << getIndent() << "END(item)( " << getTokenInfo(node->end_token)  << " )" << endl;
+}
 
 }
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
