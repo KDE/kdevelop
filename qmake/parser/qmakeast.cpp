@@ -19,73 +19,45 @@
  */
 
 #include "qmakeast.h"
-#include <kdebug.h>
 
 namespace QMake
 {
-    AST::AST( AST* parent )
-            : m_parent( parent )
-    {}
+AST::AST( AST* parent )
+        : m_parent( parent )
+{}
 
-    AST::~AST( )
-    {}
+AST::~AST( )
+{}
 
-    AST* AST::parent() const
-    {
-        return m_parent;
-    }
+AST* AST::parent() const
+{
+    return m_parent;
+}
 
-    void AST::setParent( AST* parent )
-    {
-        m_parent = parent;
-    }
+void AST::setParent( AST* parent )
+{
+    m_parent = parent;
+}
 
-    QString AST::whitespace() const
-    {
-        return m_ws;
-    }
 
-    void AST::setWhitespace( const QString& ws )
-    {
-        m_ws = ws;
-    }
-
-    NewlineAST::NewlineAST( AST* parent )
-        : StatementAST( parent )
-    {
-    }
-
-    void NewlineAST::writeToString( QString& buf ) const
-    {
-        buf += whitespace();
-    }
-
-    CommentAST::CommentAST( AST* parent )
-        : StatementAST( parent )
-    {}
-
-    QString CommentAST::comment() const
-    {
-        return m_comment;
-    }
-
-    void CommentAST::setComment( const QString& comment )
-    {
-        m_comment = comment;
-    }
-
-    void CommentAST::writeToString( QString& buf ) const
-    {
-        buf += whitespace();
-        if ( !m_comment.startsWith( "#" ) )
-            buf += '#';
-        buf += m_comment;
-    }
-
-    StatementAST::StatementAST( AST* parent )
+ValueAST::ValueAST( AST* parent )
         : AST( parent )
-    {
-    }
+{}
+
+void ValueAST::setValue( const QString& value )
+{
+    m_value = value;
+}
+
+QString ValueAST::value() const
+{
+    return m_value;
+}
+
+StatementAST::StatementAST( AST* parent )
+        : AST( parent )
+{}
+
 }
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

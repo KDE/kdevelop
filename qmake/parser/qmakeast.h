@@ -1,6 +1,6 @@
 /* KDevelop QMake Support
  *
- * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,10 @@
 
 #include <QtCore/QString>
 #include <QtCore/QList>
-#include <QtCore/QStringList>
-
-//@TODO Port to default constructors and use the set* API to set the various contents; complex constructors are unreadable
-//@TODO move the code from qmakeast.cpp into multiple files, move all code in this header to .cpp
 
 namespace QMake
 {
-    class Driver;
+    class ValueAST;
 
     class AST
     {
@@ -39,14 +35,10 @@ namespace QMake
             virtual ~AST() = 0;
 
             AST* parent() const;
-            QString whitespace() const;
-            void setWhitespace( const QString& );
-            virtual void writeToString( QString& ) const = 0 ;
         protected:
             void setParent( AST* );
         private:
             AST* m_parent;
-            QString m_ws;
     };
 
 
@@ -62,12 +54,6 @@ namespace QMake
     class ProjectAST : public AST
     {
         public:
-            enum LineEnding {
-                Unix = 1,
-                MacOS = 2,
-                Windows = 4
-            };
-
             explicit ProjectAST( AST* parent = 0 );
             ~ProjectAST();
 
@@ -80,15 +66,11 @@ namespace QMake
             QList<StatementAST*> statements() const;
             void removeStatement( int i );
 
-            void writeToString( QString& ) const;
             void setFilename( const QString& );
 
-            void setLineEnding( LineEnding );
-            LineEnding lineEnding();
         private:
             QString m_filename;
             QList<StatementAST*> m_statements;
-            LineEnding m_lineEnding;
 
 
     };
@@ -99,39 +81,18 @@ namespace QMake
             explicit AssignmentAST( AST* parent = 0 );
             ~AssignmentAST();
 
-            void addValue( const QString& );
-            QStringList values() const;
-            void setValues( const QStringList& );
-            void removeValue( const QString& );
+            void addValue( ValueAST* );
+            void insertValue( int i, ValueAST* );
+            QList<ValueAST*> values() const;
+            void removeValue( int i );
             QString variable() const;
             void setVariable( const QString& );
             QString op() const;
             void setOp( const QString& );
-            void setLineEnding( const QString& );
-            void writeToString( QString& ) const;
         private:
             QString m_variable;
             QString m_op;
-            QStringList m_values;
-            QString m_lineend;
-    };
-
-    class NewlineAST : public StatementAST
-    {
-        public:
-            explicit NewlineAST( AST* parent = 0 );
-            void writeToString( QString& buf ) const;
-    };
-
-    class CommentAST : public StatementAST
-    {
-        public:
-            explicit CommentAST( AST* parent = 0 );
-            QString comment() const;
-            void setComment( const QString& );
-            void writeToString( QString& ) const;
-        private:
-            QString m_comment;
+            QList<ValueAST*> m_values;
     };
 
     class ScopeBodyAST: public AST
@@ -143,16 +104,8 @@ namespace QMake
             void addStatement( StatementAST* );
             QList<StatementAST*> statements() const;
             void removeStatement( int i );
-            void setStatements( QList<StatementAST*> );
-            QString begin() const;
-            QString end() const;
-            void setBegin( const QString& );
-            void setEnd( const QString& );
-            void writeToString( QString& ) const;
         private:
             QList<StatementAST*> m_statements;
-            QString m_begin;
-            QString m_end;
     };
 
     class ScopeAST : public StatementAST
@@ -160,14 +113,10 @@ namespace QMake
         public:
             explicit ScopeAST( AST* parent = 0 );
             ~ScopeAST();
-            void writeToString( QString& ) const;
             void setScopeBody( ScopeBodyAST* );
             ScopeBodyAST* scopeBody() const;
-            QString lineEnding() const;
-            void setLineEnding( const QString& );
         private:
             ScopeBodyAST* m_body;
-            QString m_lineend;
     };
 
     class FunctionCallAST : public ScopeAST
@@ -175,22 +124,14 @@ namespace QMake
         public:
             explicit FunctionCallAST( AST* parent = 0 );
             ~FunctionCallAST();
-            QStringList arguments() const;
-            void insertArgument( int i, const QString& );
-            void setArguments( const QStringList& );
+            QList<ValueAST*> arguments() const;
+            void insertArgument( int i, ValueAST* );
             void removeArgument( int i );
             QString functionName() const;
             void setFunctionName( const QString& );
-            void writeToString( QString& ) const;
-            QString begin() const;
-            QString end() const;
-            void setBegin( const QString& );
-            void setEnd( const QString& );
         private:
-            QStringList m_args;
+            QList<ValueAST*> m_args;
             QString m_functionName;
-            QString m_begin;
-            QString m_end;
     };
 
 
@@ -201,7 +142,6 @@ namespace QMake
             ~SimpleScopeAST();
             QString scopeName() const;
             void setScopeName( const QString& );
-            void writeToString( QString& ) const;
         private:
             QString m_scopeName;
     };
@@ -212,16 +152,23 @@ namespace QMake
             explicit OrAST( AST* parent = 0 );
             ~OrAST();
             void writeToString( QString& ) const;
-            FunctionCallAST* leftCall() const;
-            FunctionCallAST* rightCall() const;
-            void setLeftCall( FunctionCallAST* );
-            void setRightCall( FunctionCallAST* );
-            QString orOp() const;
-            void setOrOp( const QString& );
+            ScopeAST* leftScope() const;
+            ScopeAST* rightScope() const;
+            void setLeftScope( ScopeAST* );
+            void setRightScope( ScopeAST* );
         private:
-            FunctionCallAST* m_lCall;
-            FunctionCallAST* m_rCall;
-            QString m_orop;
+            ScopeAST* m_lScope;
+            ScopeAST* m_rScope;
+    };
+
+    class ValueAST : public AST
+    {
+        public:
+            explicit ValueAST( AST* parent = 0 );
+            void setValue( const QString& );
+            QString value() const;
+        private:
+            QString m_value;
     };
 
 }

@@ -19,60 +19,41 @@
  */
 
 #include "qmakeast.h"
-#include <kdebug.h>
 
 namespace QMake
 {
-    OrAST::OrAST( AST* parent )
-        : ScopeAST( parent ), m_lCall( 0 ), m_rCall( 0 )
-    {}
+OrAST::OrAST( AST* parent )
+        : ScopeAST( parent ), m_lScope( 0 ), m_rScope( 0 )
+{}
 
-    OrAST::~OrAST()
-    {
-        delete m_lCall;
-        m_lCall = 0;
-        delete m_rCall;
-        m_rCall = 0;
-    }
+OrAST::~OrAST()
+{
+    delete m_lScope;
+    m_lScope = 0;
+    delete m_rScope;
+    m_rScope = 0;
+}
 
-    void OrAST::writeToString( QString& buf ) const
-    {
-        buf += whitespace();
-        m_lCall->writeToString( buf );
-        buf += m_orop;
-        m_rCall->writeToString( buf );
-        ScopeAST::writeToString( buf );
-    }
+ScopeAST* OrAST::leftScope() const
+{
+    return m_lScope;
+}
 
-    FunctionCallAST* OrAST::leftCall() const
-    {
-        return m_lCall;
-    }
+ScopeAST* OrAST::rightScope() const
+{
+    return m_rScope;
+}
 
-    FunctionCallAST* OrAST::rightCall() const
-    {
-        return m_rCall;
-    }
+void OrAST::setLeftScope( ScopeAST* call )
+{
+    m_lScope = call;
+}
 
-    void OrAST::setLeftCall( FunctionCallAST* call )
-    {
-        m_lCall = call;
-    }
+void OrAST::setRightScope( ScopeAST* call )
+{
+    m_rScope = call;
+}
 
-    void OrAST::setRightCall( FunctionCallAST* call )
-    {
-        m_rCall = call;
-    }
-
-    QString OrAST::orOp() const
-    {
-        return m_orop;
-    }
-
-    void OrAST::setOrOp( const QString& orop )
-    {
-        m_orop = orop;
-    }
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

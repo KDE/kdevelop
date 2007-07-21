@@ -19,77 +19,59 @@
  */
 
 #include "qmakeast.h"
-#include <kdebug.h>
 
 namespace QMake
 {
-        AssignmentAST::AssignmentAST( AST* parent )
+AssignmentAST::AssignmentAST( AST* parent )
         : StatementAST( parent )
-    {}
+{}
 
-    AssignmentAST::~AssignmentAST()
-    {}
+AssignmentAST::~AssignmentAST()
+{
+    qDeleteAll( m_values );
+    m_values.clear();
+}
 
-    void AssignmentAST::addValue( const QString& value )
-    {
-        m_values.append( value );
-    }
+void AssignmentAST::insertValue( int i, ValueAST* value )
+{
+  m_values.insert(i, value);
+}
 
-    void AssignmentAST::removeValue( const QString& value )
-    {
-        m_values.removeAll( value );
-    }
+void AssignmentAST::addValue( ValueAST* value )
+{
+    m_values.append( value );
+}
 
-    QStringList AssignmentAST::values() const
-    {
-        return m_values;
-    }
+void AssignmentAST::removeValue( int i )
+{
+    m_values.removeAt( i );
+}
 
-    void AssignmentAST::setValues( const QStringList& newlist )
-    {
-        m_values = newlist;
-    }
+QList<ValueAST*> AssignmentAST::values() const
+{
+    return m_values;
+}
 
-    QString AssignmentAST::variable() const
-    {
-        return m_variable;
-    }
+QString AssignmentAST::variable() const
+{
+    return m_variable;
+}
 
-    void AssignmentAST::setVariable( const QString& variable )
-    {
-        m_variable = variable;
-    }
+void AssignmentAST::setVariable( const QString& variable )
+{
+    m_variable = variable;
+}
 
-    QString AssignmentAST::op() const
-    {
-        return m_op;
-    }
+QString AssignmentAST::op() const
+{
+    return m_op;
+}
 
-    void AssignmentAST::setOp( const QString& op )
-    {
-        m_op = op;
-    }
+void AssignmentAST::setOp( const QString& op )
+{
+    m_op = op;
+}
 
-    void AssignmentAST::setLineEnding( const QString& end )
-    {
-        m_lineend = end;
-    }
-
-    void AssignmentAST::writeToString( QString& buf ) const
-    {
-        buf += whitespace();
-        buf += m_variable;
-        buf += m_op;
-        buf += m_values.join( "" );
-        if( m_lineend.isEmpty() )
-#ifdef Q_WS_WIN
-            buf += "\r\n";
-#else
-            buf += '\n';
-#endif
-        else
-            buf += m_lineend;
-    }
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

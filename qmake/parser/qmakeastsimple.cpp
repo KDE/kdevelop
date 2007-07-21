@@ -19,35 +19,25 @@
  */
 
 #include "qmakeast.h"
-#include <kdebug.h>
 
 namespace QMake
 {
-        SimpleScopeAST::SimpleScopeAST( AST* parent )
+SimpleScopeAST::SimpleScopeAST( AST* parent )
         : ScopeAST( parent )
-    {
-    }
+{}
 
-    SimpleScopeAST::~SimpleScopeAST()
-    {
-    }
+SimpleScopeAST::~SimpleScopeAST()
+{}
 
-    QString SimpleScopeAST::scopeName() const
-    {
-        return m_scopeName;
-    }
+QString SimpleScopeAST::scopeName() const
+{
+    return m_scopeName;
+}
 
-    void SimpleScopeAST::setScopeName( const QString& name )
-    {
-        m_scopeName = name;
-    }
-
-    void SimpleScopeAST::writeToString( QString& buf ) const
-    {
-        buf += whitespace();
-        buf += m_scopeName;
-        ScopeAST::writeToString( buf );
-    }
+void SimpleScopeAST::setScopeName( const QString& name )
+{
+    m_scopeName = name;
+}
 
 }
 
