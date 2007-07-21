@@ -447,7 +447,7 @@ const QList< AbstractType::Ptr > & TypeBuilder::topTypes() const
 
 void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
 {
-  openType(CppTemplateType::Ptr(new CppTemplateType()), ast);
+  openType(CppTemplateParameterType::Ptr(new CppTemplateParameterType()), ast);
 
   TypeBuilderBase::visitTemplateParameter(ast);
   

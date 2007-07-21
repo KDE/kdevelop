@@ -36,6 +36,7 @@ namespace Cpp {
   class KDEVCPPDUCHAINBUILDER_EXPORT TemplateDeclaration {
     public:
       TemplateDeclaration();
+      virtual ~TemplateDeclaration();
 
       void setTemplateParameterContext(KDevelop::DUContext* context);
       KDevelop::DUContext* templateParameterContext() const;

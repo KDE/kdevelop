@@ -90,8 +90,8 @@ class DUContext : public BaseContext {
         QList<Declaration*> tempDecls;
         if( !scopeContext )
           BaseContext::findDeclarationsInternal( currentLookup, position, dataType, usingNamespaces, tempDecls, flags );
-        else
-          scopeContext->findDeclarationsInternal( currentLookup, position, dataType, usingNamespaces, tempDecls, flags | BaseContext::DontSearchInParent );
+        else ///@todo Check whether it is the same file, if yes keep the position-cursor
+          scopeContext->findDeclarationsInternal( currentLookup, KTextEditor::Cursor(), dataType, usingNamespaces, tempDecls, flags | BaseContext::DontSearchInParent );
 
         if( !tempDecls.isEmpty() ) {
           //We have found a part of the scope

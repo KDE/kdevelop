@@ -82,8 +82,8 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
     Q_ASSERT(decl);
     DUChainWriteLocker lock(DUChain::lock());
     decl->setAbstractType(lastType());
-    if( decl->type<CppTemplateType>() ) {
-      decl->type<CppTemplateType>()->setDeclaration(dec);
+    if( decl->type<CppTemplateParameterType>() ) {
+      decl->type<CppTemplateParameterType>()->setDeclaration(dec);
     } else {
       kDebug() << "bad last type" << endl;
     }

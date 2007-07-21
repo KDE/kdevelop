@@ -26,6 +26,9 @@ namespace Cpp {
 TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0) {
 }
 
+TemplateDeclaration::~TemplateDeclaration() {
+}
+
 void TemplateDeclaration::setTemplateParameterContext(DUContext* context) {
   m_parameterContext = context;
 }

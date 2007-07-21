@@ -414,15 +414,15 @@ QString CppEnumerationType::mangled() const
   return idMangled();
 }
 
-TemplateParameterDeclaration* CppTemplateType::declaration() const {
+TemplateParameterDeclaration* CppTemplateParameterType::declaration() const {
   return static_cast<TemplateParameterDeclaration*>(IdentifiedType::declaration());
 }
 
-QString CppTemplateType::toString() const {
+QString CppTemplateParameterType::toString() const {
   return "<template> " + (declaration() ? declaration()->identifier().toString() : QString());
 }
 
-QString CppTemplateType::mangled() const
+QString CppTemplateParameterType::mangled() const
 {
   return QString("T%1").arg(declaration() ? declaration()->identifier().toString() : QString());
 }

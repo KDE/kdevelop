@@ -309,10 +309,10 @@ private:
 /**
  * This class represents a template-parameter on the type-level(it is strictly attached to a template-declaration)
  * */
-class KDEVCPPDUCHAINBUILDER_EXPORT CppTemplateType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppTemplateParameterType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
 {
 public:
-  typedef KSharedPtr<CppTemplateType> Ptr;
+  typedef KSharedPtr<CppTemplateParameterType> Ptr;
 
   TemplateParameterDeclaration* declaration() const;
 

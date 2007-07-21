@@ -26,6 +26,8 @@
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
+#include "cpptypes.h"
+#include "templateparameterdeclaration.h"
 #include <documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
@@ -102,6 +104,18 @@ namespace QTest {
     return qstrdup(s.toLatin1().constData());
   }
 }
+
+Declaration* getDeclaration( AbstractType::Ptr base ) {
+  if( !base ) return 0;
+
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.data());
+  if( idType ) {
+    return idType->declaration();
+  } else {
+    return 0;
+  }
+}
+
 
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestDUChain::TestDUChain()
@@ -666,7 +680,7 @@ void TestDUChain::testTypedef() {
 }
 
 void TestDUChain::testTemplates() {
-  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T a; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
+  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 
   DUContext* top = parse(method, DumpAll);
 
@@ -710,6 +724,17 @@ void TestDUChain::testTemplates() {
   QCOMPARE(classC->importedParentContexts().count(), 0);
   QCOMPARE(classC->localScopeIdentifier(), QualifiedIdentifier("C"));
 
+  ///Test getting the typedef for the unset template
+  Declaration* typedefDecl = findDeclaration(classA, Identifier("Template1"));
+  QVERIFY(typedefDecl);
+  QVERIFY(typedefDecl->isTypeAlias());
+  QVERIFY(typedefDecl->abstractType());
+  QVERIFY(getDeclaration(typedefDecl->abstractType()));
+  QVERIFY(dynamic_cast<CppTemplateParameterType*>(typedefDecl->abstractType().data()));
+  TemplateParameterDeclaration* templateDecl = dynamic_cast<TemplateParameterDeclaration*>(getDeclaration(typedefDecl->abstractType()));
+  QVERIFY(templateDecl);
+  QCOMPARE(dynamic_cast<Declaration*>(templateDecl)->qualifiedIdentifier(), QualifiedIdentifier("T"));
+  
 /*  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
   QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
   QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);*/
