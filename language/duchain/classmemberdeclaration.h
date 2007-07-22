@@ -33,6 +33,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
 {
 public:
+  ClassMemberDeclaration(const ClassMemberDeclaration& rhs);
   ClassMemberDeclaration(KTextEditor::Range* range, DUContext* context);
   ~ClassMemberDeclaration();
 
@@ -69,6 +70,8 @@ public:
   bool isMutable() const;
   void setMutable(bool isMutable);
 
+  virtual Declaration* clone() const;
+  
 private:
   class ClassMemberDeclarationPrivate* const d;
 };

@@ -31,6 +31,10 @@ public:
   QList<QString> m_defaultParameters;
 };
 
+FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(), d(new FunctionDeclarationPrivate) {
+  d->m_defaultParameters = rhs.d->m_defaultParameters;
+}
+
 FunctionDeclaration::FunctionDeclaration(KTextEditor::Range * range, Scope scope, DUContext* context)
   : Declaration(range, scope, context)
   , d(new FunctionDeclarationPrivate)
@@ -48,6 +52,10 @@ const QList<QString>& FunctionDeclaration::defaultParameters() const {
 
 void FunctionDeclaration::addDefaultParameter(const QString& str) {
   d->m_defaultParameters << str;
+}
+
+Declaration* FunctionDeclaration::clone() const {
+  return new FunctionDeclaration(*this);
 }
 
 }

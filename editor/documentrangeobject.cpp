@@ -47,7 +47,8 @@ class DocumentRangeObjectPrivate
 DocumentRangeObject::DocumentRangeObject(KTextEditor::Range* range)
     : d( new DocumentRangeObjectPrivate )
 {
-    setTextRange(range);
+    if( range )
+        setTextRange(range);
 }
 
 DocumentRangeObject::~ DocumentRangeObject( )

@@ -33,6 +33,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberDeclaration, public AbstractFunctionDeclaration
 {
 public:
+  ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs);
   ClassFunctionDeclaration(KTextEditor::Range* range, DUContext* context);
   ~ClassFunctionDeclaration();
 
@@ -81,6 +82,7 @@ public:
 
   //bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
 
+  virtual Declaration* clone() const;
 private:
   class ClassFunctionDeclarationPrivate* const d;
 };

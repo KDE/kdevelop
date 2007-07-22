@@ -33,6 +33,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public Declaration, public AbstractFunctionDeclaration
 {
 public:
+  FunctionDeclaration(const FunctionDeclaration& rhs);
   FunctionDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   ~FunctionDeclaration();
 
@@ -47,6 +48,7 @@ public:
 
   virtual void addDefaultParameter(const QString& str);
 
+  virtual Declaration* clone() const;
 private:
   class FunctionDeclarationPrivate* const d;
 };

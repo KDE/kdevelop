@@ -53,21 +53,19 @@ public:
 
   QList<Use*> m_uses;
 
+  Declaration::Kind m_kind;
+      
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
   bool m_isTypeAlias   : 1;
 };
 
 Declaration::Kind Declaration::kind() const {
-  if( d->m_isTypeAlias || isForwardDeclaration() )
-    return Type;
-  
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>( d->m_type.data() );
-  //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
-  if( (!idType) || (idType && idType->declaration() != this) )
-    return Instance;
-  else
-    return Type;
+  return d->m_kind;
+}
+
+void Declaration::setKind(Kind kind) {
+  d->m_kind = kind;
 }
 
 Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* context )
@@ -81,8 +79,24 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
   d->m_isDefinition = false;
   d->m_inSymbolTable = false;
   d->m_isTypeAlias = false;
+  d->m_kind = Instance;
   Q_ASSERT(context);
   setContext(context);
+}
+
+///@todo Do not copy the range
+Declaration::Declaration(const Declaration& rhs) : DUChainBase(0), d(new DeclarationPrivate) {
+  setTextRange(rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+  d->m_identifier = rhs.d->m_identifier;
+  d->m_type = rhs.d->m_type;
+  d->m_scope = rhs.d->m_scope;
+  d->m_kind = rhs.d->m_kind;
+  d->m_isDefinition = rhs.d->m_isDefinition;
+  d->m_isTypeAlias = rhs.d->m_isTypeAlias;
+  d->m_inSymbolTable = false;
+  d->m_context = 0;
+  d->m_internalContext = 0;
+  d->m_definition = 0;
 }
 
 Declaration::~Declaration()
@@ -241,6 +255,13 @@ void Declaration::setContext(DUContext* context)
 DUContext * Declaration::internalContext() const
 {
   ENSURE_CHAIN_READ_LOCKED
+  if( isForwardDeclaration() ) {
+    Declaration* declaration = static_cast<const KDevelop::ForwardDeclaration*>(this)->resolved();
+    if( !declaration )
+      return 0;
+    else
+      return declaration->internalContext();
+  }
 
   return d->m_internalContext;
 }
@@ -384,6 +405,11 @@ TopDUContext * Declaration::topContext() const
 
   return 0;
 }
+
+Declaration* Declaration::clone() const  {
+  return new Declaration(*this);
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

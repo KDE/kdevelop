@@ -31,6 +31,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclaration : public Declaration
 {
 public:
+  ForwardDeclaration(const ForwardDeclaration& rhs);
   ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~ForwardDeclaration();
 
@@ -39,6 +40,8 @@ public:
   Declaration* resolved() const;
   void setResolved(Declaration* declaration);
 
+  virtual Declaration* clone() const;
+  
 private:
   class ForwardDeclarationPrivate* const d;
 };

@@ -35,6 +35,14 @@ public:
   QList<QString> m_defaultParameters;
 };
 
+ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs) : ClassMemberDeclaration(rhs), AbstractFunctionDeclaration(), d(new ClassFunctionDeclarationPrivate) {
+  d->m_functionType = rhs.d->m_functionType;
+  d->m_isVirtual = rhs.d->m_isVirtual;
+  d->m_isInline = rhs.d->m_isInline;
+  d->m_isExplicit = rhs.d->m_isExplicit;
+  d->m_defaultParameters = rhs.d->m_defaultParameters;
+}
+
 ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, DUContext* context)
   : ClassMemberDeclaration(range, context)
   , d(new ClassFunctionDeclarationPrivate)
@@ -43,6 +51,10 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, D
   d->m_isVirtual = false;
   d->m_isInline = false;
   d->m_isExplicit = false;
+}
+
+Declaration* ClassFunctionDeclaration::clone() const {
+  return new ClassFunctionDeclaration(*this);
 }
 
 ClassFunctionDeclaration::~ClassFunctionDeclaration()

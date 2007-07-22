@@ -40,6 +40,11 @@ public:
   Declaration* m_resolvedDeclaration;
 };
 
+ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(rhs), d(new ForwardDeclarationPrivate) {
+  d->m_resolvedDeclaration = 0; ///@todo think about maybe using duchainpointer here, so we don't need to register ourselves as a forward-declaration
+  setResolved( rhs.d->m_resolvedDeclaration );
+}
+
 ForwardDeclaration::ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context )
   : Declaration(range, scope, context)
   , d(new ForwardDeclarationPrivate)
@@ -84,6 +89,10 @@ void ForwardDeclaration::setResolved(Declaration * declaration)
 bool ForwardDeclaration::isForwardDeclaration() const
 {
   return true;
+}
+
+Declaration* ForwardDeclaration::clone() const {
+  return new ForwardDeclaration(*this);
 }
 
 }

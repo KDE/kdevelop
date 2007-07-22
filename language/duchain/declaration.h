@@ -65,10 +65,12 @@ public:
     Type, //A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};")
     Instance //An instance of a type is declared("MyClass m;")
   };
-
+ 
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
   Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
+  ///Copy-constructor for cloning
+  Declaration(const Declaration& rhs);
   virtual ~Declaration();
 
   virtual TopDUContext* topContext() const;
@@ -105,7 +107,7 @@ public:
 
   /**
    * If this declarations opens an own context, this returns that context.
-   * The returned context will also return this Declaration on declaration().
+   * If this is a resolved forward-declaration, this returns the resolved declaration's internal context.
    * */
   DUContext* internalContext() const;
   void setInternalContext(DUContext* context);
@@ -132,6 +134,11 @@ public:
   Kind kind() const;
 
   /**
+   * Set the kind.
+   * */
+  void setKind(Kind kind);
+  
+  /**
    * Provides a mangled version of this definition's identifier, for use in a symbol table.
    */
   QString mangledIdentifier() const;
@@ -147,6 +154,25 @@ public:
 
   virtual QString toString() const;
 
+  /**
+   * Returns a clone of this declaration, with the difference that:
+   * - context will be zero
+   * - internalContext will be zero
+   * - definition will be zero
+   * - forwardDeclarations will be zero
+   * - the list of uses will be empty
+   *
+   * The declaration will not be registered anywhere, so you must care about its deletion.
+   *
+   * This declaration's text-range will be referenced from the clone, so the clone must not live longer than the original.
+   * 
+   * Sub-classes should implement this and should copy as much information into the clone as possible without breaking the du-chain.
+   * Sub-classes should also implement a public copy-constructor that can be used for cloning by sub-classes.
+   *
+   * ---> You do not have to implement this for your language if you are not going to use it(the du-chain itself does not and should not depend on it).
+   * */
+  virtual Declaration* clone() const;
+  
 private:
   class DeclarationPrivate* const d;
 };

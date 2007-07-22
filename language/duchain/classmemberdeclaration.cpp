@@ -34,6 +34,20 @@ public:
   bool m_isMutable: 1;
 };
 
+ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(rhs), d(new ClassMemberDeclarationPrivate) {
+  d->m_accessPolicy = rhs.d->m_accessPolicy; 
+  d->m_isStatic = rhs.d->m_isStatic;
+  d->m_isAuto = rhs.d->m_isAuto;
+  d->m_isFriend = rhs.d->m_isFriend;
+  d->m_isRegister = rhs.d->m_isRegister;
+  d->m_isExtern = rhs.d->m_isExtern;
+  d->m_isMutable = rhs.d->m_isMutable;
+}
+
+Declaration* ClassMemberDeclaration::clone() const {
+  return new ClassMemberDeclaration(*this);
+}
+
 ClassMemberDeclaration::ClassMemberDeclaration(KTextEditor::Range * range, DUContext* context)
   : Declaration(range, ClassScope, context)
   , d(new ClassMemberDeclarationPrivate)
