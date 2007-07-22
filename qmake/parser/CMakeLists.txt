@@ -21,6 +21,7 @@ set(parser_STAT_SRCS
     ${CMAKE_SOURCE_DIR}/qmakeastproject.cpp
     ${CMAKE_SOURCE_DIR}/qmakeastscope.cpp
     ${CMAKE_SOURCE_DIR}/qmakeastsimple.cpp
+    ${CMAKE_SOURCE_DIR}/buildastvisitor.cpp
     )
 
 kdevpg_generate(_files qmake NAMESPACE QMake DUMP_INFO
