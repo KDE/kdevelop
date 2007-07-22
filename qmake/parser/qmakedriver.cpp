@@ -62,7 +62,7 @@ void Driver::setDebug( bool debug )
 {
     m_debug = debug;
 }
-bool Driver::parse( ProjectAST* qmast )
+bool Driver::parse( ProjectAST** qmast )
 {
     parser::token_stream_type token_stream;
     parser::memory_pool_type memory_pool;
@@ -83,9 +83,10 @@ bool Driver::parse( ProjectAST* qmast )
             DebugVisitor d(&qmakeparser);
             d.visit_project(ast);
         }
-        qmast = new ProjectAST();
-        BuildASTVisitor d( &qmakeparser, qmast );
+        *qmast = new ProjectAST();
+        BuildASTVisitor d( &qmakeparser, *qmast );
         d.visit_project(ast);
+        kDebug(9024) << "found stmts:" << (*qmast)->statements().count() << endl;
     }else
     {
         ast = 0;

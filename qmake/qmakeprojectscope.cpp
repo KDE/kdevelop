@@ -40,7 +40,6 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
 {
     m_projectFileUrl = projectfile;
     QFileInfo fi( projectfile.toLocalFile() );
-    m_ast = new QMake::ProjectAST();
     kDebug(9024) << k_funcinfo << "Is " << projectfile << " a dir?" << fi.isDir() << endl;
     if( fi.isDir() )
     {
@@ -61,12 +60,15 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
     }
     QMake::Driver d;
     d.readFile( m_projectFileUrl.toLocalFile() );
-    if( d.parse( m_ast ) )
+    if( !d.parse( &m_ast ) )
     {
         kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.toLocalFile() << endl;
         delete m_ast;
         m_ast = 0;
         m_projectFileUrl = KUrl();
+    }else
+    {
+        kDebug(9024) << "found ast:" << m_ast->statements().count() << endl;
     }
 }
 
@@ -105,7 +107,7 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
 
 KUrl::List QMakeProjectScope::files() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
+    kDebug(9024) << k_funcinfo << "Fetching files" << endl;
     if( !m_ast )
         return KUrl::List();
 
@@ -132,13 +134,13 @@ KUrl::List QMakeProjectScope::files() const
         }
     }
     list.append( m_projectFileUrl );
-    kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
+    kDebug(9024) << k_funcinfo << "found " << list.size() << " files" << endl;
     return list;
 }
 
 QStringList QMakeProjectScope::targets() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
+    kDebug(9024) << k_funcinfo << "Fetching targets" << endl;
     if( !m_ast )
         return QStringList();
 
@@ -161,7 +163,7 @@ QStringList QMakeProjectScope::targets() const
             }
         }
     }
-    kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
+    kDebug(9024) << k_funcinfo << "found " << list.size() << " targets" << endl;
     return list;
 }
 
