@@ -45,6 +45,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_ownsEditorIntegrator(true)
   , m_compilingContexts(false)
   , m_recompiling(false)
+  , m_templateDeclarationDepth(0)
   , m_lastContext(0)
 {
 }
@@ -55,6 +56,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   , m_ownsEditorIntegrator(false)
   , m_compilingContexts(false)
   , m_recompiling(false)
+  , m_templateDeclarationDepth(0)
   , m_lastContext(0)
 {
 }
@@ -74,8 +76,12 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   visitNodes(this,ast->template_parameters);
   closeContext();
   m_importedParentContexts << ctx; //Import the context into the following function-argument context(so the template-parameters can be found from there)
+
+  ++m_templateDeclarationDepth;
   
   DefaultVisitor::visit(ast->declaration);
+  
+  --m_templateDeclarationDepth;
 }
 
 TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, AST *node, QList<DUContext*>* includes)

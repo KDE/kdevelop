@@ -41,4 +41,10 @@ DUContext* TemplateDeclaration::templateParameterContext() const {
 bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
   return (bool)dynamic_cast<const TemplateDeclaration*>(decl);
 }
+
+Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments ) {
+  
 }
+
+}
+

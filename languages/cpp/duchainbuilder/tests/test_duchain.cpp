@@ -682,6 +682,9 @@ void TestDUChain::testTypedef() {
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 
+  QByteArray test2("template<class T> struct Scope1 { struct Scope2 { typedef T Test; } };");
+  QByteArray test3("template<class T> class OtherScope {typedef T Test; }; template<class T> struct Scope1 { struct Scope2 { typedef OtherScope<T>::Test Test; } };");
+  
   DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
@@ -731,10 +734,16 @@ void TestDUChain::testTemplates() {
   QVERIFY(typedefDecl->abstractType());
   QVERIFY(getDeclaration(typedefDecl->abstractType()));
   QVERIFY(dynamic_cast<CppTemplateParameterType*>(typedefDecl->abstractType().data()));
-  TemplateParameterDeclaration* templateDecl = dynamic_cast<TemplateParameterDeclaration*>(getDeclaration(typedefDecl->abstractType()));
+  Declaration* templateDecl = getDeclaration( typedefDecl->abstractType() );
   QVERIFY(templateDecl);
-  QCOMPARE(dynamic_cast<Declaration*>(templateDecl)->qualifiedIdentifier(), QualifiedIdentifier("T"));
-  
+  QCOMPARE(templateDecl->qualifiedIdentifier(), QualifiedIdentifier("T"));
+
+  ///Test creating a template instance of class A<B,C>
+  Identifier ident("A");
+  ident.appendTemplateIdentifier(QualifiedIdentifier("B"));
+  ident.appendTemplateIdentifier(QualifiedIdentifier("C"));
+  Declaration* instanceDefClassA = findDeclaration(top, ident);
+  QVERIFY(instanceDefClassA);
 /*  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
   QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
   QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);*/

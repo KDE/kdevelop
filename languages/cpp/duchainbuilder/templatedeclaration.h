@@ -21,6 +21,7 @@
 
 #include "cppduchainbuilderexport.h"
 #include <duchain/declaration.h>
+#include <QList>
 
 
 namespace KTextEditor {
@@ -32,6 +33,8 @@ namespace  KDevelop {
 }
 
 namespace Cpp {
+  class ExpressionEvaluationResult;
+  
   //Represents the template-part of a template-class'es or template-function's template-part
   class KDEVCPPDUCHAINBUILDER_EXPORT TemplateDeclaration {
     public:
@@ -41,6 +44,11 @@ namespace Cpp {
       void setTemplateParameterContext(KDevelop::DUContext* context);
       KDevelop::DUContext* templateParameterContext() const;
 
+      /**
+       * Either finds the existing instante instantiated with the given template-arguments, or creates a new one.
+       * */
+      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments );
+      
     private:
       //The context in which the template-parameters are declared
       KDevelop::DUContext* m_parameterContext;

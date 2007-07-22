@@ -16,6 +16,29 @@
    Boston, MA 02110-1301, USA.
 */
 
+/*
+
+Some mindmapping about how the template-system works:
+
+While construction:
+- Simplify: Template-parameters are types
+- Within template-contexts, do not resolve any types. Instead create "virtual types" that will resolve the types when specializations are given.
+ (CppDelayedType) - ready
+
+ 
+ Later:
+ - Searching specialized template-class: 
+        - return virtual declaration 
+        - return virtual context (Change template-parameter-context to given template-arguments)
+ - Searching IN specialized template-class:
+       - Search in non-specialized context, then:
+       - Copy & Change returned objects:
+         - Resolve virtual types (CppDelayedType)
+         - Change parent-context to virtual context
+         - Change internal context, (create virtual, move set parent)
+
+*/
+
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
 
@@ -29,6 +52,8 @@
 #include <duchain/abstractfunctiondeclaration.h>
 #include <duchain/declaration.h>
 #include "typeutils.h"
+#include "cpptypes.h"
+#include "templatedeclaration.h"
 #include "expressionparser/expressionparser.h"
 
 namespace Cpp{
@@ -71,11 +96,18 @@ class DUContext : public BaseContext {
           if( !decls.isEmpty() ) {
             ExpressionEvaluationResult res;
             res.type = decls.front()->abstractType();
+
+            ///If the type is CppTemplateParameterType, this means that an unresolved template-parameter is refernced.
+            ///That should fail, so return here.
+            if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<CppTemplateParameterType*>(res.type.data()) )
+              return;
+            
             templateArgumentTypes << res;
           }else{
             ///@todo Let the expression-parser handle the thing. This will allow evaluating integral expressions like "1 - 1" and such
             ///problem: the du-chain is already locked
             templateArgumentTypes << ExpressionEvaluationResult();
+            kDebug() << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << endl;
           }
         }
 
@@ -88,16 +120,41 @@ class DUContext : public BaseContext {
         flags |= basicFlags;
         
         QList<Declaration*> tempDecls;
-        if( !scopeContext )
+        if( !scopeContext ) {
           BaseContext::findDeclarationsInternal( currentLookup, position, dataType, usingNamespaces, tempDecls, flags );
-        else ///@todo Check whether it is the same file, if yes keep the position-cursor
+
+          //If the use of unresolved template-parameters is not allowed, filter them out
+          if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) ) {
+            QList<Declaration*>::iterator it = tempDecls.begin();
+            while( it != tempDecls.end() ) {
+              if( dynamic_cast<CppTemplateParameterType*>(*it) ) {
+                //Unresolved template-paramers are not allowed, so remove the item from the list
+                it = tempDecls.erase(it);
+              } else {
+                ++it;
+              }
+            }
+          }
+          
+        } else ///@todo Check whether it is the same file, if yes keep the position-cursor
           scopeContext->findDeclarationsInternal( currentLookup, KTextEditor::Cursor(), dataType, usingNamespaces, tempDecls, flags | BaseContext::DontSearchInParent );
 
+        
         if( !tempDecls.isEmpty() ) {
           //We have found a part of the scope
           if( num == identifier.count()-1 ) {
             //Last part of the scope found -> target found
-            ret += tempDecls;
+            if( templateArgumentTypes.isEmpty() ) {
+              ret += tempDecls;
+            } else {
+              foreach( Declaration* decl, tempDecls ) {
+                Declaration* dec = specializeDeclaration(decl, templateArgumentTypes);
+                if( dec )
+                  ret << dec;
+                else
+                  kDebug() << "Could not specialize template-declaration" << endl;
+              }
+            }
           }else{
             //Only a part of the scope found, keep on searching
             currentLookup.clear();
@@ -107,6 +164,16 @@ class DUContext : public BaseContext {
             }
             //Extract a context, maybe it would be enough only testing the first found declaration
             foreach( Declaration* decl, tempDecls ) {
+              Declaration* dec = decl;
+              
+              if( !templateArgumentTypes.isEmpty() )
+                dec = specializeDeclaration(decl, templateArgumentTypes);
+              
+              if( !dec ) {
+                kDebug() << "Could not specialize context-declaration" << endl;
+                continue;
+              }
+              
               scopeContext = TypeUtils::getInternalContext(decl);
               if( scopeContext )
                 break;
@@ -146,12 +213,24 @@ class DUContext : public BaseContext {
         return false;
       
       if( decls.front()->isForwardDeclaration() )
-        return false; //All forward-declarations must be collected
+        return false; //All forward-declarations must be collected(for implementation-reasons)
 
       if( dynamic_cast<const KDevelop::AbstractFunctionDeclaration*>(decls.front()) )
         return false; //Collect overloaded function-declarations
 
       return true;
+    }
+
+  private:
+    Declaration* specializeDeclaration( Declaration* decl, const QList<ExpressionEvaluationResult>& templateArguments ) const
+    {
+      TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
+      if( !templateDecl ) {
+        kDebug() << "Tried to specialize a non-template declaration" << endl;
+        return 0;
+      }
+
+      return templateDecl->instantiate( templateArguments );
     }
 };
 

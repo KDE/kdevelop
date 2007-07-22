@@ -426,3 +426,30 @@ QString CppTemplateParameterType::mangled() const
 {
   return QString("T%1").arg(declaration() ? declaration()->identifier().toString() : QString());
 }
+
+QString CppDelayedType::toString() const {
+  return "<delayed> " + qualifiedIdentifier().toString();
+}
+
+CppDelayedType::CppDelayedType() {
+}
+
+void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor */*v*/) const {
+    ///@todo what to do here?
+    //acceptType (m_type, v);
+/*  IdentifiedType::accept0(v);*/
+}
+
+void CppDelayedType::setQualifiedIdentifier(const QualifiedIdentifier& identifier) {
+  m_identifier = identifier;
+}
+
+QualifiedIdentifier CppDelayedType::qualifiedIdentifier() const {
+  return m_identifier;
+}
+
+void CppDelayedType::accept0 (KDevelop::TypeVisitor */*v*/) const {
+    ///@todo what to do here?
+    //acceptType (m_type, v);
+/*  IdentifiedType::accept0(v);*/
+}

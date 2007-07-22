@@ -26,6 +26,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QPair>
 
+#include <duchain/identifier.h>
 #include <typesystem.h>
 #include <declaration.h>
 #include <identifiedtype.h>
@@ -308,6 +309,9 @@ private:
 
 /**
  * This class represents a template-parameter on the type-level(it is strictly attached to a template-declaration)
+ * This is only attached to unset template-parameters. Once the template-parameters are set, the TemplateDeclarations
+ * will return the real set types as abstractType().
+ * This means that when you encounter this type, it means that the template-parameter is not set.
  * */
 class KDEVCPPDUCHAINBUILDER_EXPORT CppTemplateParameterType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
 {
@@ -320,12 +324,34 @@ public:
   virtual QString mangled() const;
 
   protected:
-  virtual void accept0 (KDevelop::TypeVisitor */*v*/) const {
-      ///@todo what to do here?
-      //acceptType (m_type, v);
-  }
+  virtual void accept0 (KDevelop::TypeVisitor *v) const;
   private:
 };
+
+/**
+ * Delayed types are used in template-classes.
+ * In a template-class, many types can not be evaluated at the time they are used, because they depend on unknown template-parameters.
+ * Delayed types store the way the type would be searched, and can be used to find the type once the template-paremeters have values.
+ * */
+class KDEVCPPDUCHAINBUILDER_EXPORT CppDelayedType : public KDevelop::AbstractType,  public KDevelop::IdentifiedType
+{
+public:
+  typedef KSharedPtr<CppDelayedType> Ptr;
+
+  CppDelayedType();
+
+  KDevelop::QualifiedIdentifier qualifiedIdentifier() const;
+  void setQualifiedIdentifier(const KDevelop::QualifiedIdentifier& identifier);
+
+  virtual QString toString() const;
+  
+  private:
+    virtual void accept0 (KDevelop::TypeVisitor *v) const ;
+
+    KDevelop::QualifiedIdentifier m_identifier;
+};
+
+
 
 /*template <class _Target, class _Source>
 _Target model_static_cast(_Source item)

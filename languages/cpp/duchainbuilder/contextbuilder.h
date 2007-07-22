@@ -153,6 +153,10 @@ protected:
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
   void addImportedContexts();
 
+  int templateDeclarationDepth() const {
+    return m_templateDeclarationDepth;
+  }
+  
 protected:
   // Variables
   NameCompiler* m_nameCompiler;
@@ -160,6 +164,8 @@ protected:
   bool m_ownsEditorIntegrator: 1;
   bool m_compilingContexts: 1;
   bool m_recompiling : 1;
+
+  int m_templateDeclarationDepth;
 
   //Here all valid declarations/uses/... will be collected
   QSet<KDevelop::DUChainBase*> m_encountered;

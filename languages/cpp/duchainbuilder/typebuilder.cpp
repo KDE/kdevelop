@@ -20,6 +20,7 @@
 
 #include <ktexteditor/smartrange.h>
 
+#include <duchain/identifier.h>
 #include <duchain.h>
 #include <duchainlock.h>
 #include "cppeditorintegrator.h"
@@ -231,16 +232,26 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
-    QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
+    
+    QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), DUContext::NoUndefinedTemplateParams);
+    
     if (!dec.isEmpty() && dec.front()->abstractType()) {
-      ///@todo only functions can have multiple declarations here, or maybe template-classes
+      ///@todo only functions may have multiple declarations here
       if( dec.count() > 1 )
         kDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
       //kDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << " context: " << dec.front()->context() << endl;
        openedType = true;
        openType(dec.front()->abstractType(), node);
     } else {
+      if( templateDeclarationDepth() != 0 ) {
+        //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
+        ///@todo What about position?
+        
+       openedType = true;
+       openDelayedType(id, node);
+      } else {
         kDebug() << "no declaration found for " << id.toString() << " in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << " " << searchContext() << endl;
+      }
     }
   }
 
@@ -439,6 +450,18 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
+
+void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* node) {
+  QHash<QualifiedIdentifier, KDevelop::AbstractType::Ptr>::const_iterator it = m_delayedTypes.find(identifier);
+  if( it != m_delayedTypes.end() ) {
+    openType(*it, node);
+  }else{
+    CppDelayedType::Ptr type(new CppDelayedType());
+    type->setQualifiedIdentifier(identifier);
+    openType(type, node);
+  }
+}
+
 
 const QList< AbstractType::Ptr > & TypeBuilder::topTypes() const
 {

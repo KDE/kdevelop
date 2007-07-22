@@ -410,8 +410,11 @@ void DeclarationBuilder::closeDeclaration()
 
     if(lastType()) {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
+      CppDelayedType* delayed = dynamic_cast<CppDelayedType*>(lastType().data());
 
-      if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
+      //When the given type has no declaration yet, assume we are declaring it now.
+      //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
+      if( idType && idType->declaration() == 0 && !delayed ) 
           idType->setDeclaration( currentDeclaration() );
 
       currentDeclaration()->setType(lastType());
