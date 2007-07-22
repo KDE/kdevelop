@@ -175,6 +175,7 @@ void BuildASTVisitor::visit_stmt( stmt_ast *node )
         stmt->setIdentifier( val );
         ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
         scope->addStatement(stmt);
+        kDebug(9024) << "added stmt to scope:" << scope->type() << endl;
     }
 }
 

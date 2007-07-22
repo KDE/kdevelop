@@ -58,7 +58,7 @@ int main( int argc, char* argv[] )
         d.setDebug( debug );
 
         QMake::ProjectAST* ast = 0;
-        if ( !d.parse( ast ) ) {
+        if ( !d.parse( &ast ) ) {
             exit( EXIT_FAILURE );
         }else
         {

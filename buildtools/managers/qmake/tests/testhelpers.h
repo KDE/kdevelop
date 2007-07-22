@@ -46,7 +46,7 @@ void classname::funcname()\
     QFETCH( QString, output );\
     QMake::Driver d; \
     d.setContent( project ); \
-    bool ret = d.parse( ast );\
+    bool ret = d.parse( &ast );\
     QVERIFY( ret );\
     QVERIFY( ast->statements().count() == astcount );
 
@@ -57,7 +57,7 @@ void classname::funcname()\
     QFETCH( QString, output );\
     QMake::Driver d; \
     d.setContent( project ); \
-    bool ret = d.parse( ast );\
+    bool ret = d.parse( &ast );\
     QEXPECT_FAIL( "", comment, Continue );\
     QVERIFY( ret );
 

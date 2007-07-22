@@ -36,7 +36,7 @@ class Driver
         bool readFile( const QString&, const char* = 0 );
         void setContent( const QString& );
         void setDebug( bool );
-        bool parse( ProjectAST* ast );
+        bool parse( ProjectAST** ast );
     private:
         QString m_content;
         bool m_debug;
