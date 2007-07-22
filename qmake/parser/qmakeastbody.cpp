@@ -58,6 +58,20 @@ AST::Type ScopeBodyAST::type() const
     return AST::ScopeBody;
 }
 
+int ScopeBodyAST::line() const
+{
+    if( statements().isEmpty() )
+        return 0;
+    return statements().front()->line();
+}
+
+int ScopeBodyAST::column() const
+{
+    if( statements().isEmpty() )
+        return 0;
+    return statements().front()->column();
+}
+
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

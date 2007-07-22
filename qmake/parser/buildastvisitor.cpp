@@ -66,7 +66,12 @@ void BuildASTVisitor::visit_item( item_ast *node )
     if( node->func_args )
     {
         FunctionCallAST* call = new FunctionCallAST( aststack.top() );
-        call->setFunctionName( getTokenString( node->id ) );
+        ValueAST* val = new ValueAST();
+        val->setValue( getTokenString( node->id ) );
+        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn(node->id);
+        val->setLine( line_col.first );
+        val->setColumn( line_col.second );
+        call->setFunctionName( val );
         OrAST* orast = stackTop<OrAST>();
         orast->addScope( call );
         aststack.push( call );
@@ -75,7 +80,12 @@ void BuildASTVisitor::visit_item( item_ast *node )
     }else
     {
         SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
-        simple->setScopeName( getTokenString( node->id ) );
+        ValueAST* val = new ValueAST();
+        val->setValue( getTokenString( node->id ) );
+        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn(node->id);
+        val->setLine( line_col.first );
+        val->setColumn( line_col.second );
+        simple->setScopeName( val );
         OrAST* orast = stackTop<OrAST>();
         orast->addScope( simple );
         default_visitor::visit_item( node );
@@ -128,7 +138,12 @@ void BuildASTVisitor::visit_scope( scope_ast *node )
 void BuildASTVisitor::visit_op( op_ast *node )
 {
     AssignmentAST* assign = stackTop<AssignmentAST>();
-    assign->setOp( getTokenString( node->optoken ) );
+    ValueAST* val = new ValueAST();
+    val->setValue( getTokenString( node->optoken ) );
+    QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn( node->optoken );
+    val->setLine( line_col.first );
+    val->setColumn( line_col.second );
+    assign->setOp( val );
     default_visitor::visit_op(node);
 }
 
@@ -148,12 +163,16 @@ void BuildASTVisitor::visit_stmt( stmt_ast *node )
     if( !node->isNewline )
     {
         StatementAST* stmt = stackPop<StatementAST>();
-        QString id = getTokenString( node->id );
+        ValueAST* val = new ValueAST();
+        val->setValue( getTokenString( node->id ) );
+        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn( node->id );
+        val->setLine( line_col.first );
+        val->setColumn( line_col.second );
         if( node->isExclam )
         {
-            id = "!"+id;
+            val->setValue( "!"+val->value() );
         }
-        stmt->setIdentifier( id );
+        stmt->setIdentifier( val );
         ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
         scope->addStatement(stmt);
     }
@@ -172,6 +191,9 @@ void BuildASTVisitor::visit_value( value_ast *node )
         FunctionCallAST* call = stackTop<FunctionCallAST>();
         ValueAST* value = new ValueAST( call );
         value->setValue( getTokenString(node->value) );
+        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn(node->value);
+        value->setLine( line_col.first );
+        value->setColumn( line_col.second );
         call->addArgument( value );
     }
     default_visitor::visit_value(node);

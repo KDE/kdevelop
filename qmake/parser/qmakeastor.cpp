@@ -52,7 +52,7 @@ QList<ScopeAST*> OrAST::scopes() const
     return m_scopes;
 }
 
-void OrAST::setIdentifier( const QString& id )
+void OrAST::setIdentifier( ValueAST* id )
 {
     m_scopes.front()->setIdentifier(id);
 }
@@ -61,6 +61,16 @@ void OrAST::setIdentifier( const QString& id )
 AST::Type OrAST::type() const
 {
     return AST::Or;
+}
+
+int OrAST::column() const
+{
+    return m_scopes.front()->column();
+}
+
+int OrAST::line() const
+{
+    return m_scopes.front()->line();
 }
 
 }

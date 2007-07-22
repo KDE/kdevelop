@@ -30,6 +30,7 @@ AssignmentAST::~AssignmentAST()
 {
     qDeleteAll( m_values );
     m_values.clear();
+    delete m_op;
 }
 
 void AssignmentAST::insertValue( int i, ValueAST* value )
@@ -52,22 +53,22 @@ QList<ValueAST*> AssignmentAST::values() const
     return m_values;
 }
 
-QString AssignmentAST::variable() const
+ValueAST* AssignmentAST::variable() const
 {
     return identifier();
 }
 
-void AssignmentAST::setVariable( const QString& variable )
+void AssignmentAST::setVariable( ValueAST* variable )
 {
     setIdentifier(variable);
 }
 
-QString AssignmentAST::op() const
+ValueAST* AssignmentAST::op() const
 {
     return m_op;
 }
 
-void AssignmentAST::setOp( const QString& op )
+void AssignmentAST::setOp( ValueAST* op )
 {
     m_op = op;
 }

@@ -48,12 +48,12 @@ void FunctionCallAST::insertArgument( int i, ValueAST* arg )
     m_args.insert( i, arg );
 }
 
-QString FunctionCallAST::functionName() const
+ValueAST* FunctionCallAST::functionName() const
 {
     return identifier();
 }
 
-void FunctionCallAST::setFunctionName( const QString& name )
+void FunctionCallAST::setFunctionName( ValueAST* name )
 {
     setIdentifier(name);
 }

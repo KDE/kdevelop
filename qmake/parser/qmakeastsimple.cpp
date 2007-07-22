@@ -29,12 +29,12 @@ SimpleScopeAST::SimpleScopeAST( AST* parent )
 SimpleScopeAST::~SimpleScopeAST()
 {}
 
-QString SimpleScopeAST::scopeName() const
+ValueAST* SimpleScopeAST::scopeName() const
 {
     return identifier();
 }
 
-void SimpleScopeAST::setScopeName( const QString& name )
+void SimpleScopeAST::setScopeName( ValueAST* name )
 {
     setIdentifier(name);
 }

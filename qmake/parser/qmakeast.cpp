@@ -23,7 +23,7 @@
 namespace QMake
 {
 AST::AST( AST* parent )
-        : m_parent( parent )
+        : m_line(-1), m_column(-1), m_parent( parent )
 {}
 
 AST::~AST( )
@@ -34,11 +34,25 @@ AST* AST::parent() const
     return m_parent;
 }
 
-void AST::setParent( AST* parent )
+int AST::line() const
 {
-    m_parent = parent;
+    return m_line;
 }
 
+void AST::setLine( int line )
+{
+    m_line = line;
+}
+
+int AST::column() const
+{
+    return m_column;
+}
+
+void AST::setColumn( int col )
+{
+    m_column = col;
+}
 
 ValueAST::ValueAST( AST* parent )
         : AST( parent )
@@ -64,14 +78,32 @@ StatementAST::StatementAST( AST* parent )
         : AST( parent )
 {}
 
-QString StatementAST::identifier() const
+StatementAST::~StatementAST( )
+{
+    delete m_identifier;
+}
+
+
+ValueAST* StatementAST::identifier() const
 {
     return m_identifier;
 }
 
-void StatementAST::setIdentifier( const QString& id )
+void StatementAST::setIdentifier( ValueAST* id )
 {
     m_identifier = id;
+}
+
+
+
+int StatementAST::line() const
+{
+    return m_identifier->line();
+}
+
+int StatementAST::column() const
+{
+    return m_identifier->column();
 }
 
 }
