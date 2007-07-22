@@ -48,10 +48,7 @@ void classname::funcname()\
     d.setContent( project ); \
     bool ret = d.parse( ast );\
     QVERIFY( ret );\
-    QVERIFY( ast->statements().count() == astcount );\
-    QString result;\
-    ast->writeToString(result);\
-    QVERIFY( result == output );
+    QVERIFY( ast->statements().count() == astcount );
 
 #define BEGINTESTFAILFUNCIMPL( classname, funcname, comment ) \
 void classname::funcname()\
@@ -67,32 +64,26 @@ void classname::funcname()\
 
 #define ENDTESTFUNCIMPL }
 
-#define TESTASSIGNMENT( ast, var, opval, valcount, joinvalues ) \
+#define TESTASSIGNMENT( ast, var, opval, valcount ) \
     QVERIFY( ast != 0 );\
-    QVERIFY( ast->variable() == var );\
-    QVERIFY( ast->op() == opval );\
-    QVERIFY( ast->values().count() == valcount );\
-    QVERIFY( ast->values().join("") == joinvalues );
+    QVERIFY( ast->variable()->value() == var );\
+    QVERIFY( ast->op()->value() == opval );\
+    QVERIFY( ast->values().count() == valcount );
 
 #define TESTFUNCNAME( scopeast, funcname ) \
     QVERIFY( scopeast ); \
-    QVERIFY( scopeast->functionName() == funcname );
+    QVERIFY( scopeast->identifier()->value() == funcname );
 
 #define TESTSCOPENAME( scopeast, scopename ) \
     QVERIFY( scopeast ); \
-    QVERIFY( scopeast->scopeName() == scopename );
+    QVERIFY( scopeast->scopeName()->value() == scopename );
 
-#define TESTOROP( scopeast, funcname1, funcname2 ) \
-    QVERIFY( scopeast->leftCall() != 0 ); \
-    QVERIFY( scopeast->rightCall() != 0 ); \
-    QMake::FunctionCallAST* leftfunccall = scopeast->leftCall(); \
-    QMake::FunctionCallAST* rightfunccall = scopeast->rightCall(); \
-    QVERIFY( leftfunccall->functionName() == funcname1 ); \
-    QVERIFY( rightfunccall->functionName() == funcname2 );
-
-#define TESTFUNCARGS( funccall, arglist ) \
-    QVERIFY( funccall != 0 ); \
-    QVERIFY( funccall->arguments() == arglist );
+#define TESTOROP( scopeast, funclist ) \
+    for( int i = 0; i < funclist.size(); i++) \
+    {\
+        QVERIFY( i < scopeast->scopes().count() );\
+        QVERIFY( scopeast->scopes().at(i)->identifier()->value() == funclist.at(i) );\
+    }
 
 #define TESTSCOPEBODY( scope, teststmts, stmtcount ) \
     QVERIFY( scope->scopeBody() != 0 ); \

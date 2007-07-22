@@ -58,9 +58,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, execSimpleFunc, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "foobar" )
     QVERIFY( scope->scopeBody() == 0 );
-    QStringList testlist;
-    testlist << " arg1" << " arg2 ";
-    TESTFUNCARGS( scope, testlist )
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, execSimpleFunc, "foobar( arg1, arg2 )\n")
@@ -70,9 +68,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, argWithEqual, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "foobar" )
     QVERIFY( scope->scopeBody() == 0 );
-    QStringList testlist;
-    testlist << " arg1 = arg2 ";
-    TESTFUNCARGS( scope, testlist )
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, argWithEqual, "foobar( arg1 = arg2 )\n")
@@ -82,9 +78,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, evalQMakeSyntax, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "eval" )
     QVERIFY( scope->scopeBody() == 0 );
-    QStringList testlist;
-    testlist << "$${subdir}.depends = $$basename($${subdir})/$(MAKEFILE) ";
-    TESTFUNCARGS( scope, testlist )
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, evalQMakeSyntax,
@@ -95,9 +89,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, simpleVarArg, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "eval" )
     QVERIFY( scope->scopeBody() == 0 );
-    QStringList testlist;
-    testlist << "$${subdir}" << " $$SOMEVAR" << " $(SHELLVAR)";
-    TESTFUNCARGS( scope, testlist )
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, simpleVarArg,
@@ -108,9 +100,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, partlyQuotedArg, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "eval" )
     QVERIFY( scope->scopeBody() == 0 );
-    QStringList testlist;
-    testlist << "\"SOMELITERALSTRNIG\" SOMETHINGELSE";
-    TESTFUNCARGS( scope, testlist )
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, partlyQuotedArg,
@@ -121,9 +111,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, slashArg, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "eval" )
     QVERIFY( scope->scopeBody() == 0 );
-    QStringList testlist;
-    testlist <<"SOMELITERALSTRNIG/$$SOMETHINGELSE";
-    TESTFUNCARGS( scope, testlist )
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, slashArg,
@@ -133,9 +121,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, nestedFunccalls, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "eval" )
     QVERIFY( scope->scopeBody() == 0 );
-    QStringList testlist;
-    testlist << "val" << " $$contains(QT_PROJECT, $$foobar(some))";
-    TESTFUNCARGS( scope, testlist )
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, nestedFunccalls,
@@ -145,17 +131,21 @@ DATAFUNCIMPL( FunctionScopeTest, nestedFunccalls,
 BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtScope, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "contains" )
-    QStringList testlist;
-    testlist << "SOMETHINGELSE" <<  " foobar";
-    TESTFUNCARGS( scope, testlist )
+
     QList<QMake::StatementAST*> teststmts;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue("val1");
-    tst->addValue(" ");
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val1");
+    tst->addValue(val);
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
     teststmts.append( tst );
     TESTSCOPEBODY( scope, teststmts, 1 )
 ENDTESTFUNCIMPL
@@ -167,26 +157,29 @@ DATAFUNCIMPL( FunctionScopeTest, oneStmtScope,
 BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtSubScope, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "contains" )
-    QStringList testlist;
-    testlist <<  "SOMETHINGELSE" << " foobar";
-    TESTFUNCARGS( scope, testlist )
+
     QList<QMake::StatementAST*> teststmts;
     QMake::FunctionCallAST* call = new QMake::FunctionCallAST();
-    call->setFunctionName( "contains" );
-    call->setBegin( "(" );
-    call->setEnd( ")" );
-    call->insertArgument( 0, " foobar " );
-    call->setLineEnding("\n");
+    QMake::ValueAST* val = new QMake::ValueAST(call);
+    val->setValue( "contains" );
+    call->setFunctionName(val);
+    val = new QMake::ValueAST(call);
+    val->setValue("foobar");
+    call->insertArgument( 0, val );
     QMake::ScopeBodyAST* body = new QMake::ScopeBodyAST();
-    body->setBegin( "{" );
-    body->setEnd( "}" );
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue("val1");
-    tst->addValue(" ");
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val1");
+    tst->addValue(val);
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
 
     body->insertStatement(0, tst );
     call->setScopeBody( body );
@@ -200,23 +193,32 @@ DATAFUNCIMPL( FunctionScopeTest, oneStmtSubScope,
 BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScope, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "contains" )
-    QStringList testlist;
-    testlist << "SOMETHINGELSE" << " foobar";
-    TESTFUNCARGS( scope, testlist )
+
     QList<QMake::StatementAST*> teststmts;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue("val1");
-    tst->addValue(" ");
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val1");
+    tst->addValue(val);
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
     teststmts.append( tst );
     tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE2" );
-    tst->setOp( " = " );
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE2" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
     teststmts.append( tst );
     TESTSCOPEBODY( scope, teststmts, 2 )
 ENDTESTFUNCIMPL
@@ -228,33 +230,39 @@ DATAFUNCIMPL( FunctionScopeTest, multiLineScope,
 BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScopeFuncCall, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "contains" )
-    QStringList testlist;
-    testlist << "SOMETHINGELSE" << " foobar";
-    TESTFUNCARGS( scope, testlist )
+
     QList<QMake::StatementAST*> teststmts;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue("val1");
-    tst->addValue(" ");
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val1");
+    tst->addValue(val);
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
     teststmts.append( tst );
     QMake::FunctionCallAST* call;
     call = new QMake::FunctionCallAST( );
-    call->setFunctionName( "func2" );
-    call->setBegin( "(" );
-    call->setEnd( ")" );
-    call->setLineEnding("\n");
+    val = new QMake::ValueAST(call);
+    val->setValue( "func2" );
+    call->setFunctionName(val);
     QMake::ScopeBodyAST* body;
     body = new QMake::ScopeBodyAST();
-    body->setBegin("{");
-    body->setEnd( "}" );
     tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE2" );
-    tst->setOp( " = " );
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE2" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
     body->insertStatement(0, tst );
     call->setScopeBody( body );
     teststmts.append( call );
@@ -267,17 +275,21 @@ DATAFUNCIMPL( FunctionScopeTest, multiLineScopeFuncCall,
 BEGINTESTFUNCIMPL( FunctionScopeTest, notFunc, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "!contains" )
-    QStringList testlist;
-    testlist << "SOMETHINGELSE" <<  " foobar";
-    TESTFUNCARGS( scope, testlist )
+
     QList<QMake::StatementAST*> teststmts;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue("val1");
-    tst->addValue(" ");
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val1");
+    tst->addValue(val);
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
     teststmts.append( tst );
     TESTSCOPEBODY( scope, teststmts, 1 )
 ENDTESTFUNCIMPL
@@ -287,21 +299,24 @@ DATAFUNCIMPL( FunctionScopeTest, notFunc,
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, orOp, 1 )
     QMake::OrAST* orop = dynamic_cast<QMake::OrAST*>( ast->statements().first() );
-    TESTOROP( orop, "!contains", "contains" )
-    QStringList testlist;
-    testlist << "SOMETHINGELSE" <<  " foobar";
-    TESTFUNCARGS( leftfunccall, testlist )
-    testlist.clear();
-    testlist << "OTHER" <<  "foo";
-    TESTFUNCARGS( rightfunccall, testlist )
+    QStringList funcs;
+    funcs << "!contains" << "contains";
+    TESTOROP( orop, funcs )
+
     QList<QMake::StatementAST*> teststmts;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue("val1");
-    tst->addValue(" ");
-    tst->addValue("val2");
-    tst->setLineEnding( "\n" );
+    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("val1");
+    tst->addValue(val);
+    val = new QMake::ValueAST(tst);
+    val->setValue("val2");
+    tst->addValue(val);
     teststmts.append( tst );
     TESTSCOPEBODY( orop, teststmts, 1 )
 ENDTESTFUNCIMPL
@@ -314,7 +329,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, 1 )
     TESTFUNCNAME( fn, "func" )
     QStringList testlist;
     testlist << " some " ;
-    TESTFUNCARGS( fn, testlist )
+
 ENDTESTFUNCIMPL
 DATAFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, "func ( some )\n")
 

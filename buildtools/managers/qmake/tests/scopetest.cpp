@@ -50,10 +50,15 @@ BEGINTESTFUNCIMPL( ScopeTest, basicScope, 1 )
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue( "FOO" );
-    tst->setLineEnding( "\n" );
+    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("FOO");
+    tst->addValue(val);
     testlist.append( tst );
 TESTSCOPEBODY( scope, testlist, 1 )
 ENDTESTFUNCIMPL
@@ -65,10 +70,15 @@ BEGINTESTFUNCIMPL( ScopeTest, basicScopeBrace, 1 )
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue( "FOO" );
-    tst->setLineEnding( "\n" );
+    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("FOO");
+    tst->addValue(val);
     testlist.append( tst );
 TESTSCOPEBODY( scope, testlist, 1 )
 ENDTESTFUNCIMPL
@@ -80,17 +90,22 @@ BEGINTESTFUNCIMPL( ScopeTest, nestedScope, 1 )
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
     QMake::SimpleScopeAST* simple = new QMake::SimpleScopeAST();
-    simple->setScopeName( "barfoo" );
+    QMake::ValueAST* val = new QMake::ValueAST(simple);
+    val->setValue( "barfoo" );
+    simple->setScopeName(val);
+    QMake::ScopeBodyAST* body = new QMake::ScopeBodyAST(simple);
     QList<QMake::StatementAST*> sublist;
     QMake::AssignmentAST* tst = new QMake::AssignmentAST();
-    tst->setVariable( "VARIABLE" );
-    tst->setOp( " = " );
-    tst->addValue( "FOO" );
-    tst->setLineEnding( "\n" );
-    sublist.append( tst );
-    QMake::ScopeBodyAST* body = new QMake::ScopeBodyAST();
-    body->setBegin( " : " );
-    body->setStatements( sublist );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "VARIABLE" );
+    tst->setVariable( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue( "=" );
+    tst->setOp( val );
+    val = new QMake::ValueAST(tst);
+    val->setValue("FOO");
+    tst->addValue(val);
+    body->addStatement( tst );
     simple->setScopeBody( body );
     testlist.append( simple );
 

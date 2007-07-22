@@ -65,13 +65,6 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(ParseTest, failSimpleProject, "VAR =")
 
-BEGINTESTFUNCIMPL(ParseTest, lineEnding, 3)
-    QVERIFY( ast->lineEnding() == QMake::ProjectAST::Windows );
-ENDTESTFUNCIMPL
-
-DATAFUNCIMPL(ParseTest, lineEnding,
-    "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n")
-
 BEGINTESTFUNCIMPL(ParseTest, successFullProject, 11)
 ENDTESTFUNCIMPL
 

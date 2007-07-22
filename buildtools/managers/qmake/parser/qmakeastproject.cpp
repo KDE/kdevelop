@@ -19,72 +19,31 @@
  */
 
 #include "qmakeast.h"
-#include <kdebug.h>
 
 namespace QMake
 {
-    ProjectAST::ProjectAST( AST* parent )
-            : AST( parent ), m_lineEnding(Unix)
-    {}
+ProjectAST::ProjectAST( AST* parent )
+        : ScopeBodyAST( parent )
+{}
 
-    ProjectAST::~ProjectAST()
-    {
-        QList<StatementAST*>::const_iterator it;
-        for ( it = m_statements.begin(); it != m_statements.end(); ++it )
-        {
-            delete( *it );
-        }
-        m_statements.clear();
-    }
+ProjectAST::~ProjectAST()
+{
+}
 
-    void ProjectAST::setFilename( const QString& filename )
-    {
-        m_filename = filename;
-    }
+void ProjectAST::setFilename( const QString& filename )
+{
+    m_filename = filename;
+}
 
-    QString ProjectAST::filename() const
-    {
-        return m_filename;
-    }
+QString ProjectAST::filename() const
+{
+    return m_filename;
+}
 
-    ProjectAST::LineEnding ProjectAST::lineEnding()
-    {
-        return m_lineEnding;
-    }
+AST::Type ProjectAST::type() const
+{
+    return AST::Project;
+}
 
-    void ProjectAST::setLineEnding( ProjectAST::LineEnding l )
-    {
-        m_lineEnding = l;
-    }
-
-    void ProjectAST::writeToString( QString& buf ) const
-    {
-        QList<StatementAST*>::const_iterator it;
-        for ( it = m_statements.begin(); it != m_statements.end(); ++it )
-        {
-            if (( *it ) )
-                ( *it )->writeToString( buf );
-        }
-    }
-
-    void ProjectAST::insertStatement( int i, StatementAST* a )
-    {
-        m_statements.insert( i, a );
-    }
-
-    void ProjectAST::addStatement( StatementAST* a )
-    {
-        m_statements.append( a );
-    }
-
-    QList<StatementAST*> ProjectAST::statements() const
-    {
-        return m_statements;
-    }
-
-    void ProjectAST::removeStatement( int i )
-    {
-        m_statements.removeAt( i );
-    }
 }
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
