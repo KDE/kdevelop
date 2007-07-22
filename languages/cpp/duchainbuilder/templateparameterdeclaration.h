@@ -27,11 +27,12 @@ namespace KDevelop {
 }
 
 /**
- * Represents a single variable definition in a definition-use chain.
+ * Represents a single template-parameter definition
  */
 class KDEVCPPDUCHAINBUILDER_EXPORT TemplateParameterDeclaration : public KDevelop::Declaration
 {
 public:
+  TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs);
   TemplateParameterDeclaration(KTextEditor::Range* range, KDevelop::DUContext* context);
   ~TemplateParameterDeclaration();
 
@@ -39,6 +40,8 @@ public:
 
   void setDefaultParameter(const QString& str);
 
+  virtual Declaration* clone() const;
+  
 private:
   class TemplateParameterDeclarationPrivate* const d;
 };

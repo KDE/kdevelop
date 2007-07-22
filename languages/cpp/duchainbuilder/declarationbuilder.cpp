@@ -414,9 +414,15 @@ void DeclarationBuilder::closeDeclaration()
 
       //When the given type has no declaration yet, assume we are declaring it now.
       //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
-      if( idType && idType->declaration() == 0 && !delayed ) 
+      if( idType && idType->declaration() == 0 && !delayed )
           idType->setDeclaration( currentDeclaration() );
 
+      //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
+      if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) )
+        currentDeclaration()->setKind(Declaration::Instance);
+      else
+        currentDeclaration()->setKind(Declaration::Type);
+        
       currentDeclaration()->setType(lastType());
     }
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other ) )

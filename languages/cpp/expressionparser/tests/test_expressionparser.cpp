@@ -24,6 +24,7 @@
 #include <duchainlock.h>
 #include <topducontext.h>
 #include <duchain/typesystem.h>
+#include "typeutils.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
@@ -43,15 +44,15 @@
 #include "classfunctiondeclaration.h"
 
 using namespace KTextEditor;
-
 using namespace KDevelop;
+using namespace TypeUtils;
 
 class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
   MyExpressionVisitor( ParseSession* session ) : ExpressionVisitor(session)  {
   }
   protected:
-  virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance instance ) {
+  virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance /*instance */) {
     DumpChain d;
     kDebug() << "expression-result for " << endl;
     DUChainReadLocker lock( DUChain::lock() );

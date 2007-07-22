@@ -27,14 +27,15 @@
 #include <identifiedtype.h>
 #include <typeinfo>
 #include "tokens.h"
-#include "duchainbuilder/typebuilder.h"
-#include "duchainbuilder/typerepository.h"
-#include "duchainbuilder/cpptypes.h"
-#include "duchainbuilder/dumpchain.h"
+#include "typebuilder.h"
+#include "typerepository.h"
+#include "cpptypes.h"
+#include "dumpchain.h"
+#include "typeutils.h"
 #include "name_compiler.h"
 #include "lexer.h"
 #include "overloadresolution.h"
-#include "duchainbuilder/cppduchain.h"
+#include "cppduchain.h"
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 

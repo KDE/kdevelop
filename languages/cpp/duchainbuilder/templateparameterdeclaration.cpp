@@ -45,4 +45,14 @@ void TemplateParameterDeclaration::setDefaultParameter(const QString& str) {
   d->m_defaultParameter = str;
 }
 
+TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(rhs), d(new TemplateParameterDeclarationPrivate) {
+  d->m_defaultParameter = rhs.d->m_defaultParameter;
+  setIsTypeAlias(true);
+}
+
+Declaration* TemplateParameterDeclaration::clone() const {
+  return new TemplateParameterDeclaration(*this);
+}
+
+
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

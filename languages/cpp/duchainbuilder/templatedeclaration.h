@@ -38,6 +38,8 @@ namespace Cpp {
   //Represents the template-part of a template-class'es or template-function's template-part
   class KDEVCPPDUCHAINBUILDER_EXPORT TemplateDeclaration {
     public:
+      ///Copy-constructor for cloning
+      TemplateDeclaration(const TemplateDeclaration& rhs);
       TemplateDeclaration();
       virtual ~TemplateDeclaration();
 
@@ -45,7 +47,7 @@ namespace Cpp {
       KDevelop::DUContext* templateParameterContext() const;
 
       /**
-       * Either finds the existing instante instantiated with the given template-arguments, or creates a new one.
+       * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
        * */
       KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments );
       
@@ -63,11 +65,18 @@ namespace Cpp {
   template<class BaseDeclaration>
   class KDEVCPPDUCHAINBUILDER_EXPORT SpecialTemplateDeclaration : public BaseDeclaration, public TemplateDeclaration {
     public:
+    ///Copy-constructor for cloning
+    SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(rhs), TemplateDeclaration(rhs) {
+    }
     ///Arguments are passed to the base
     SpecialTemplateDeclaration( KTextEditor::Range* range, KDevelop::Declaration::Scope scope, KDevelop::DUContext* context ) : BaseDeclaration(range, scope, context) {
     }
     ///Arguments are passed to the base
     SpecialTemplateDeclaration( KTextEditor::Range* range, KDevelop::DUContext* context ) : BaseDeclaration(range, context) {
+    }
+
+    virtual KDevelop::Declaration* clone() const {
+      return new SpecialTemplateDeclaration(*this);
     }
   };
 

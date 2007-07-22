@@ -23,6 +23,8 @@ using namespace Cpp;
 
 
 namespace Cpp {
+TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m_parameterContext(0) {
+}  
 TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0) {
 }
 

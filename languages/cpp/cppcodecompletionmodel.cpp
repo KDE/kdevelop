@@ -34,6 +34,7 @@
 
 #include <declaration.h>
 #include "cpptypes.h"
+#include "typeutils.h"
 #include <classfunctiondeclaration.h>
 #include <ducontext.h>
 #include <duchain.h>

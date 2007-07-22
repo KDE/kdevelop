@@ -147,22 +147,10 @@ namespace TypeUtils {
   }
 
   DUContext* getInternalContext( Declaration* declaration ) {
-    if( declaration->isForwardDeclaration() ) {
-      declaration = static_cast<KDevelop::ForwardDeclaration*>(declaration)->resolved();
-      if( !declaration ) return 0;
-    }
-    return declaration->internalContext();
-/*    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(declaration->abstractType().data());
-    if( !idType )
-      return 0;
-    QList<DUContext*> internalContexts;
-    internalContexts = declaration->context()->findContexts(DUContext::Class, idType->identifier());
-    internalContexts += declaration->context()->findContexts(DUContext::Namespace, idType->identifier());
-    internalContexts += declaration->context()->findContexts(DUContext::Global, idType->identifier());
-    if( internalContexts.isEmpty() )
-      return 0;
+    if( declaration )
+      return declaration->internalContext();
     else
-      return internalContexts.front();*/
+      return 0;
   }
     
   void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
