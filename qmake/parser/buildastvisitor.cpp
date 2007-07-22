@@ -86,8 +86,16 @@ void BuildASTVisitor::visit_scope_body( scope_body_ast *node )
 void BuildASTVisitor::visit_stmt( stmt_ast *node )
 {
     default_visitor::visit_stmt(node);
-    StatementAST* stmt = stackPop<StatementAST>();
-    stmt->setIdentifier( getTokenString( node->id ) );
+    if( !node->isNewline )
+    {
+        StatementAST* stmt = stackPop<StatementAST>();
+        QString id = getTokenString( node->id );
+        if( node->isExclam )
+        {
+            id = "!"+id;
+        }
+        stmt->setIdentifier( id );
+    }
 }
 
 void BuildASTVisitor::visit_value( value_ast *node )
