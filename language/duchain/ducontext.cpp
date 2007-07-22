@@ -221,6 +221,7 @@ QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier&
 
 void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags /*flags*/ ) const
 {
+  kDebug() << "Searching for " << identifier.toString() << " in " << scopeIdentifier(true).toString() << endl;
   ///@todo use flags
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;

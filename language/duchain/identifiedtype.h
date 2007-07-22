@@ -45,6 +45,12 @@ public:
   QualifiedIdentifier identifier() const;
 
   Declaration* declaration() const;
+  /**
+   * You should be careful when setting this, because it also changes the meaning of the declaration.
+   * The logic is:
+   * If a declaration has a set abstractType(), and that abstractType() has set the same declaration as declaration(),
+   * then the declaration declares the type(thus it is a type-declaration, see Declaration::kind())
+   * */
   void setDeclaration(Declaration* declaration);
 
   QString idMangled() const;

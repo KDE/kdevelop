@@ -80,7 +80,8 @@ public:
     NoSearchFlags = 0,
     InImportedParentContext = 1, //Internal, do not use from outside
     OnlyContainerTypes = 2, //Not implemented yet
-    DontSearchInParent = 4 //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
+    DontSearchInParent = 4, //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
+    NoUndefinedTemplateParams = 8 //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
   };
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
