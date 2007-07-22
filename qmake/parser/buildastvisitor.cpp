@@ -45,31 +45,90 @@ BuildASTVisitor::~BuildASTVisitor()
 
 void BuildASTVisitor::visit_arg_list( arg_list_ast *node )
 {
+    //Nothing to be done here as we just need to iterate through the items
     default_visitor::visit_arg_list(node);
 }
 
 void BuildASTVisitor::visit_function_args( function_args_ast *node )
 {
+    //Nothing to be done here as we just need to iterate through the items
     default_visitor::visit_function_args(node);
 }
 
 void BuildASTVisitor::visit_or_op( or_op_ast *node )
 {
+    //Nothing to be done here as we just need to iterate through the items
     default_visitor::visit_or_op(node);
 }
 
 void BuildASTVisitor::visit_item( item_ast *node )
 {
-    default_visitor::visit_item(node);
+    if( node->func_args )
+    {
+        FunctionCallAST* call = new FunctionCallAST( aststack.top() );
+        call->setFunctionName( getTokenString( node->id ) );
+        OrAST* orast = stackTop<OrAST>();
+        orast->addScope( call );
+        aststack.push( call );
+        default_visitor::visit_item( node );
+        aststack.pop();
+    }else
+    {
+        SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
+        simple->setScopeName( getTokenString( node->id ) );
+        OrAST* orast = stackTop<OrAST>();
+        orast->addScope( simple );
+        default_visitor::visit_item( node );
+    }
 }
 
 void BuildASTVisitor::visit_scope( scope_ast *node )
 {
-    default_visitor::visit_scope(node);
+    if( node->or_op )
+    {
+        OrAST* orast = new OrAST( aststack.top() );
+        if( node->func_args )
+        {
+            FunctionCallAST* ast = new FunctionCallAST( orast );
+            aststack.push( ast );
+            visit_node( node->func_args );
+            aststack.pop();
+            orast->addScope( ast );
+        }else
+        {
+            SimpleScopeAST* simple = new SimpleScopeAST( orast );
+            orast->addScope( simple );
+        }
+        aststack.push(orast);
+        visit_node( node->or_op );
+    }else
+    {
+        if( node->func_args )
+        {
+            FunctionCallAST* call = new FunctionCallAST( aststack.top() );
+            aststack.push( call );
+        }else
+        {
+            SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
+            aststack.push( simple );
+        }
+        visit_node( node->func_args );
+    }
+    if( node->scope_body )
+    {
+        ScopeBodyAST* scopebody = new ScopeBodyAST(aststack.top());
+        ScopeAST* scope = stackTop<ScopeAST>();
+        scope->setScopeBody( scopebody );
+        aststack.push( scopebody );
+        visit_node( node->scope_body );
+        aststack.pop();
+    }
 }
 
 void BuildASTVisitor::visit_op( op_ast *node )
 {
+    AssignmentAST* assign = stackTop<AssignmentAST>();
+    assign->setOp( getTokenString( node->optoken ) );
     default_visitor::visit_op(node);
 }
 
@@ -95,11 +154,26 @@ void BuildASTVisitor::visit_stmt( stmt_ast *node )
             id = "!"+id;
         }
         stmt->setIdentifier( id );
+        ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
+        scope->addStatement(stmt);
     }
 }
 
 void BuildASTVisitor::visit_value( value_ast *node )
 {
+    AssignmentAST* assign = dynamic_cast<AssignmentAST*>( aststack.top() );
+    if( assign )
+    {
+        ValueAST* value = new ValueAST( assign );
+        value->setValue( getTokenString(node->value) );
+        assign->addValue( value );
+    }else
+    {
+        FunctionCallAST* call = stackTop<FunctionCallAST>();
+        ValueAST* value = new ValueAST( call );
+        value->setValue( getTokenString(node->value) );
+        call->addArgument( value );
+    }
     default_visitor::visit_value(node);
 }
 
@@ -119,13 +193,15 @@ template <typename T> T* BuildASTVisitor::stackTop()
 {
     if( aststack.isEmpty() )
     {
-        kDebug(9024) << "ERROR: AST stack is empty, this should never happen" << endl;
+        kDebug(9024) << kBacktrace() << endl;
+        kFatal(9024) << k_funcinfo << "ERROR: AST stack is empty, this should never happen" << endl;
         exit(255);
     }
     T* ast = dynamic_cast<T*>(aststack.top());
     if( !ast )
     {
-        kDebug(9024) << "ERROR: AST stack is screwed, doing a hard exist" << endl;
+        kDebug(9024) << kBacktrace() << endl;
+        kFatal(9024) << k_funcinfo << "ERROR: AST stack is screwed, doing a hard exit " << aststack.top()->type() << endl;
         exit(255);
     }
     return ast;
@@ -135,13 +211,16 @@ template <typename T> T* BuildASTVisitor::stackPop()
 {
     if( aststack.isEmpty() )
     {
-        kDebug(9024) << "ERROR: AST stack is empty, this should never happen" << endl;
+        kDebug(9024) << kBacktrace() << endl;
+        kFatal(9024) << k_funcinfo << "ERROR: AST stack is empty, this should never happen" << endl;
         exit(255);
     }
-    T* ast = dynamic_cast<T*>(aststack.pop());
+    AST* tmp = aststack.pop();
+    T* ast = dynamic_cast<T*>(tmp);
     if( !ast )
     {
-        kDebug(9024) << "ERROR: AST stack is screwed, doing a hard exist" << endl;
+        kDebug(9024) << kBacktrace() << endl;
+        kFatal(9024) << k_funcinfo << "ERROR: AST stack is screwed, doing a hard exit" << tmp->type() << endl;
         exit(255);
     }
     return ast;

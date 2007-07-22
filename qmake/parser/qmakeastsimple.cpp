@@ -39,6 +39,11 @@ void SimpleScopeAST::setScopeName( const QString& name )
     setIdentifier(name);
 }
 
+AST::Type SimpleScopeAST::type() const
+{
+    return AST::SimpleScope;
+}
+
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

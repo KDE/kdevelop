@@ -31,11 +31,23 @@ namespace QMake
     class AST
     {
         public:
-            explicit AST( AST* parent = 0 );
-            virtual ~AST() = 0;
 
+            enum Type
+            {
+                Project = 1,
+                Assignment = 2,
+                FunctionCall = 3,
+                SimpleScope = 4,
+                Or = 5,
+                Value = 6,
+                ScopeBody = 7,
+            };
+
+            virtual ~AST() = 0;
+            virtual AST::Type type() const = 0;
             AST* parent() const;
         protected:
+            explicit AST( AST* parent = 0 );
             void setParent( AST* );
         private:
             AST* m_parent;
@@ -47,15 +59,30 @@ namespace QMake
         public:
             explicit StatementAST( AST* parent = 0 );
             QString identifier() const;
-            void setIdentifier( const QString& );
+            virtual void setIdentifier( const QString& );
         private:
             QString m_identifier;
+    };
+
+
+    class ScopeBodyAST: public AST
+    {
+        public:
+            explicit ScopeBodyAST( AST* parent = 0 );
+            ~ScopeBodyAST();
+            void insertStatement( int i, StatementAST* );
+            void addStatement( StatementAST* );
+            QList<StatementAST*> statements() const;
+            void removeStatement( int i );
+            AST::Type type() const;
+        private:
+            QList<StatementAST*> m_statements;
     };
 
     /**
      * Represents a QMake Project file
      */
-    class ProjectAST : public AST
+    class ProjectAST : public ScopeBodyAST
     {
         public:
             explicit ProjectAST( AST* parent = 0 );
@@ -65,16 +92,10 @@ namespace QMake
             * Returns the filename of the project file, or an empty string if the project was parser from a string
             */
             QString filename() const;
-            void insertStatement( int i, StatementAST* );
-            void addStatement( StatementAST* );
-            QList<StatementAST*> statements() const;
-            void removeStatement( int i );
-
             void setFilename( const QString& );
-
+            AST::Type type() const;
         private:
             QString m_filename;
-            QList<StatementAST*> m_statements;
 
 
     };
@@ -93,31 +114,21 @@ namespace QMake
             void setVariable( const QString& );
             QString op() const;
             void setOp( const QString& );
+            AST::Type type() const;
         private:
             QString m_op;
             QList<ValueAST*> m_values;
     };
 
-    class ScopeBodyAST: public AST
-    {
-        public:
-            explicit ScopeBodyAST( AST* parent = 0 );
-            ~ScopeBodyAST();
-            void insertStatement( int i, StatementAST* );
-            void addStatement( StatementAST* );
-            QList<StatementAST*> statements() const;
-            void removeStatement( int i );
-        private:
-            QList<StatementAST*> m_statements;
-    };
 
     class ScopeAST : public StatementAST
     {
         public:
-            explicit ScopeAST( AST* parent = 0 );
             ~ScopeAST();
             void setScopeBody( ScopeBodyAST* );
             ScopeBodyAST* scopeBody() const;
+        protected:
+            explicit ScopeAST( AST* parent = 0 );
         private:
             ScopeBodyAST* m_body;
     };
@@ -128,10 +139,12 @@ namespace QMake
             explicit FunctionCallAST( AST* parent = 0 );
             ~FunctionCallAST();
             QList<ValueAST*> arguments() const;
+            void addArgument( ValueAST* );
             void insertArgument( int i, ValueAST* );
             void removeArgument( int i );
             QString functionName() const;
             void setFunctionName( const QString& );
+            AST::Type type() const;
         private:
             QList<ValueAST*> m_args;
     };
@@ -144,6 +157,7 @@ namespace QMake
             ~SimpleScopeAST();
             QString scopeName() const;
             void setScopeName( const QString& );
+            AST::Type type() const;
         private:
     };
 
@@ -152,14 +166,14 @@ namespace QMake
         public:
             explicit OrAST( AST* parent = 0 );
             ~OrAST();
-            void writeToString( QString& ) const;
-            ScopeAST* leftScope() const;
-            ScopeAST* rightScope() const;
-            void setLeftScope( ScopeAST* );
-            void setRightScope( ScopeAST* );
+            void addScope( ScopeAST* );
+            void insertScope( int i, ScopeAST* );
+            void removeScope( int i );
+            QList<ScopeAST*> scopes() const;
+            void setIdentifier( const QString& );
+            AST::Type type() const;
         private:
-            ScopeAST* m_lScope;
-            ScopeAST* m_rScope;
+            QList<ScopeAST*> m_scopes;
     };
 
     class ValueAST : public AST
@@ -168,6 +182,7 @@ namespace QMake
             explicit ValueAST( AST* parent = 0 );
             void setValue( const QString& );
             QString value() const;
+            AST::Type type() const;
         private:
             QString m_value;
     };

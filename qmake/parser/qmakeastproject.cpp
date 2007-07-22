@@ -23,13 +23,11 @@
 namespace QMake
 {
 ProjectAST::ProjectAST( AST* parent )
-        : AST( parent )
+        : ScopeBodyAST( parent )
 {}
 
 ProjectAST::~ProjectAST()
 {
-    qDeleteAll( m_statements );
-    m_statements.clear();
 }
 
 void ProjectAST::setFilename( const QString& filename )
@@ -42,24 +40,10 @@ QString ProjectAST::filename() const
     return m_filename;
 }
 
-void ProjectAST::insertStatement( int i, StatementAST* a )
+AST::Type ProjectAST::type() const
 {
-    m_statements.insert( i, a );
+    return AST::Project;
 }
 
-void ProjectAST::addStatement( StatementAST* a )
-{
-    m_statements.append( a );
-}
-
-QList<StatementAST*> ProjectAST::statements() const
-{
-    return m_statements;
-}
-
-void ProjectAST::removeStatement( int i )
-{
-    m_statements.removeAt( i );
-}
 }
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

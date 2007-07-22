@@ -23,35 +23,44 @@
 namespace QMake
 {
 OrAST::OrAST( AST* parent )
-        : ScopeAST( parent ), m_lScope( 0 ), m_rScope( 0 )
+        : ScopeAST( parent )
 {}
 
 OrAST::~OrAST()
 {
-    delete m_lScope;
-    m_lScope = 0;
-    delete m_rScope;
-    m_rScope = 0;
+    qDeleteAll(m_scopes);
+    m_scopes.clear();
 }
 
-ScopeAST* OrAST::leftScope() const
+void OrAST::addScope( ScopeAST* ast )
 {
-    return m_lScope;
+    m_scopes.append( ast );
 }
 
-ScopeAST* OrAST::rightScope() const
+void OrAST::insertScope( int i, ScopeAST* ast )
 {
-    return m_rScope;
+    m_scopes.insert( i, ast );
 }
 
-void OrAST::setLeftScope( ScopeAST* call )
+void OrAST::removeScope( int i )
 {
-    m_lScope = call;
+    m_scopes.removeAt( i );
 }
 
-void OrAST::setRightScope( ScopeAST* call )
+QList<ScopeAST*> OrAST::scopes() const
 {
-    m_rScope = call;
+    return m_scopes;
+}
+
+void OrAST::setIdentifier( const QString& id )
+{
+    m_scopes.front()->setIdentifier(id);
+}
+
+
+AST::Type OrAST::type() const
+{
+    return AST::Or;
 }
 
 }

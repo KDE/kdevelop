@@ -38,6 +38,11 @@ QList<ValueAST*> FunctionCallAST::arguments() const
     return m_args;
 }
 
+void FunctionCallAST::addArgument( ValueAST* arg )
+{
+    m_args.append( arg );
+}
+
 void FunctionCallAST::insertArgument( int i, ValueAST* arg )
 {
     m_args.insert( i, arg );
@@ -56,6 +61,11 @@ void FunctionCallAST::setFunctionName( const QString& name )
 void FunctionCallAST::removeArgument( int i )
 {
     m_args.removeAt( i );
+}
+
+AST::Type FunctionCallAST::type() const
+{
+    return AST::FunctionCall;
 }
 
 }

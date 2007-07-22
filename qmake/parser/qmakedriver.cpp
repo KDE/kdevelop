@@ -28,6 +28,9 @@
 #include "qmake_ast.h"
 
 #include "qmakedebugvisitor.h"
+#include "buildastvisitor.h"
+
+#include "qmakeast.h"
 
 namespace QMake
 {
@@ -59,7 +62,7 @@ void Driver::setDebug( bool debug )
 {
     mDebug = debug;
 }
-bool Driver::parse()
+bool Driver::parse( ProjectAST* qmast )
 {
     parser::token_stream_type token_stream;
     parser::memory_pool_type memory_pool;
@@ -79,8 +82,12 @@ bool Driver::parse()
             DebugVisitor d(&qmakeparser);
             d.visit_project(ast);
         }
+        qmast = new ProjectAST();
+        BuildASTVisitor d( &qmakeparser, qmast );
+        d.visit_project(ast);
     }else
     {
+        ast = 0;
         qmakeparser.yy_expected_symbol(ast_node::Kind_project, "project");
     }
     return matched;

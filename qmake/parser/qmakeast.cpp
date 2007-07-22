@@ -54,6 +54,12 @@ QString ValueAST::value() const
     return m_value;
 }
 
+
+AST::Type ValueAST::type() const
+{
+    return AST::Value;
+}
+
 StatementAST::StatementAST( AST* parent )
         : AST( parent )
 {}
