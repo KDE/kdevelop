@@ -98,7 +98,7 @@ public:
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
             if( !iface || plugin == project->managerPlugin() )
-                pluginnames << m_core->pluginController()->pluginInfo( plugin )->name();
+                pluginnames << m_core->pluginController()->pluginInfo( plugin ).name();
         }
 
         return pluginnames;
@@ -350,10 +350,10 @@ bool ProjectController::closeProject( IProject* proj )
     QSet<IPlugin*> tobeRemoved = pluginsForProjSet.subtract( otherPrjPluginsSet );
     Q_FOREACH( IPlugin* _plugin, tobeRemoved )
     {
-        KPluginInfo *_plugInfo = Core::self()->pluginController()->pluginInfo( _plugin );
-        if( _plugInfo )
+        KPluginInfo _plugInfo = Core::self()->pluginController()->pluginInfo( _plugin );
+        if( _plugInfo.isValid() )
         {
-            QString _plugName = _plugInfo->pluginName();
+            QString _plugName = _plugInfo.pluginName();
             kDebug() << k_funcinfo << "about to unloading : " << _plugName << endl;
             Core::self()->pluginController()->unloadPlugin( _plugName );
         }

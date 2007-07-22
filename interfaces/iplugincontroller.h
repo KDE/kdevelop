@@ -64,7 +64,7 @@ public:
     /**
      * Get the plugin info for a loaded plugin
      */
-    virtual KPluginInfo* pluginInfo( IPlugin* ) const = 0;
+    virtual KPluginInfo pluginInfo( IPlugin* ) const = 0;
 
     /**
      * Get a list of currently loaded plugins

@@ -68,7 +68,7 @@ public:
     /**
      * Get the plugin info for a loaded plugin
      */
-    KPluginInfo* pluginInfo( IPlugin* ) const;
+    KPluginInfo pluginInfo( IPlugin* ) const;
 
     /**
      * Get a list of currently loaded plugins
@@ -164,11 +164,11 @@ private:
      *
      * Returns a null pointer when no plugin info is found.
      */
-    KPluginInfo * infoForPluginId( const QString &pluginId ) const;
+    KPluginInfo infoForPluginId( const QString &pluginId ) const;
 
-    bool checkForDependencies( KPluginInfo* info, QStringList& missing ) const;
+    bool checkForDependencies( const KPluginInfo& info, QStringList& missing ) const;
 
-    void loadDependencies( KPluginInfo* );
+    void loadDependencies( const KPluginInfo& );
 
     void cleanup();
 

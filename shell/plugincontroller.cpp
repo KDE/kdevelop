@@ -60,10 +60,10 @@ namespace KDevelop
 class PluginControllerPrivate
 {
 public:
-    QList<KPluginInfo*> plugins;
+    QList<KPluginInfo> plugins;
 
     //map plugin infos to currently loaded plugins
-    typedef QMap<KPluginInfo*, IPlugin*> InfoToPluginMap;
+    typedef QMap<KPluginInfo, IPlugin*> InfoToPluginMap;
     InfoToPluginMap loadedPlugins;
 
     // The plugin manager's mode. The mode is StartingUp until loadAllPlugins()
@@ -102,12 +102,11 @@ PluginController::~PluginController()
     while ( !d->loadedPlugins.empty() )
     {
         PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
-        kWarning(9000) << k_funcinfo << "Deleting stale plugin '" << it.key()->pluginName()
+        kWarning(9000) << k_funcinfo << "Deleting stale plugin '" << it.key().pluginName()
                 << "'" << endl;
         delete it.value();
     }
     delete d->m_manager;
-    qDeleteAll(d->plugins);
     delete d;
 }
 
@@ -121,7 +120,7 @@ ProfileEngine& PluginController::engine() const
     return d->engine;
 }
 
-KPluginInfo* PluginController::pluginInfo( IPlugin* plugin ) const
+KPluginInfo PluginController::pluginInfo( IPlugin* plugin ) const
 {
     for ( PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
           it != d->loadedPlugins.end(); ++it )
@@ -129,7 +128,7 @@ KPluginInfo* PluginController::pluginInfo( IPlugin* plugin ) const
         if ( it.value() == plugin )
             return it.key();
     }
-    return 0;
+    return KPluginInfo();
 }
 
 void PluginController::cleanup()
@@ -169,9 +168,9 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
 void PluginController::loadPlugins( PluginType type )
 {
     KPluginInfo::List offers = d->engine.offers( d->profile, type );
-    foreach( KPluginInfo* pi, offers )
+    foreach( const KPluginInfo& pi, offers )
     {
-        loadPluginInternal( pi->pluginName() );
+        loadPluginInternal( pi.pluginName() );
     }
 }
 
@@ -179,12 +178,12 @@ void PluginController::unloadPlugins( PluginType type )
 {
     //TODO see if this can be optimized so it's not something like O(n^2)
     KPluginInfo::List offers = d->engine.offers( d->profile, type );
-    foreach( KPluginInfo* pi, offers )
+    foreach( const KPluginInfo& pi, offers )
     {
-        foreach ( KPluginInfo* lpi, d->loadedPlugins.keys() )
+        foreach ( const KPluginInfo& lpi, d->loadedPlugins.keys() )
         {
-            if ( pi->pluginName() == lpi->pluginName() )
-                unloadPlugin( pi->pluginName() );
+            if ( pi.pluginName() == lpi.pluginName() )
+                unloadPlugin( pi.pluginName() );
         }
     }
 }
@@ -243,22 +242,22 @@ QString PluginController::changeProfile( const QString &newProfile )
     return QString();
 }
 
-KPluginInfo * PluginController::infoForPluginId( const QString &pluginId ) const
+KPluginInfo PluginController::infoForPluginId( const QString &pluginId ) const
 {
-    QList<KPluginInfo *>::ConstIterator it;
+    QList<KPluginInfo>::ConstIterator it;
     for ( it = d->plugins.begin(); it != d->plugins.end(); ++it )
     {
-        if ( ( *it )->pluginName() == pluginId )
+        if ( it->pluginName() == pluginId )
             return *it;
     }
 
-    return 0L;
+    return KPluginInfo();
 }
 
 IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 {
-    KPluginInfo *info = infoForPluginId( pluginId );
-    if ( !info )
+    KPluginInfo info = infoForPluginId( pluginId );
+    if ( !info.isValid() )
     {
         kWarning(9000) << k_funcinfo << "Unable to find a plugin named '" << pluginId << "'!" << endl;
         return 0L;
@@ -268,7 +267,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return d->loadedPlugins[ info ];
 
     kDebug(9000) << k_funcinfo << "Attempting to load '" << pluginId << "'" << endl;
-    emit loadingPlugin( info->name() );
+    emit loadingPlugin( info.name() );
     int error = 0;
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
@@ -283,7 +282,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     {
         d->loadedPlugins.insert( info, plugin );
         plugin->registerExtensions();
-        info->setPluginEnabled( true );
+        info.setPluginEnabled( true );
 
         connect( plugin, SIGNAL( destroyed( QObject * ) ),
                  this, SLOT( pluginDestroyed( QObject * ) ) );
@@ -340,8 +339,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
 IPlugin* PluginController::plugin( const QString& pluginId )
 {
-    KPluginInfo *info = infoForPluginId( pluginId );
-    if ( !info )
+    KPluginInfo info = infoForPluginId( pluginId );
+    if ( !info.isValid() )
         return 0L;
 
     if ( d->loadedPlugins.contains( info ) )
@@ -364,9 +363,9 @@ void PluginController::pluginDestroyed( QObject* deletedPlugin )
 }
 
 ///@todo plugin load operation should be O(n)
-bool PluginController::checkForDependencies( KPluginInfo* info, QStringList& missing ) const
+bool PluginController::checkForDependencies( const KPluginInfo& info, QStringList& missing ) const
 {
-    QVariant prop = info->property( "X-KDevelop-IRequired" );
+    QVariant prop = info.property( "X-KDevelop-IRequired" );
     bool result = true;
     if( prop.canConvert<QStringList>() )
     {
@@ -384,16 +383,16 @@ bool PluginController::checkForDependencies( KPluginInfo* info, QStringList& mis
     return result;
 }
 
-void PluginController::loadDependencies( KPluginInfo* info )
+void PluginController::loadDependencies( const KPluginInfo& info )
 {
-    QVariant prop = info->property( "X-KDevelop-IRequired" );
+    QVariant prop = info.property( "X-KDevelop-IRequired" );
     if( prop.canConvert<QStringList>() )
     {
         QStringList deps = prop.toStringList();
         foreach( QString iface, deps )
         {
-            KPluginInfo* info = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) ).first();
-            loadPluginInternal( info->pluginName() );
+            KPluginInfo info = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) ).first();
+            loadPluginInternal( info.pluginName() );
         }
     }
 }
@@ -418,7 +417,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
     if( d->plugins.contains( infos.first() ) )
         return d->loadedPlugins[ infos.first() ];
     else
-        return loadPluginInternal( infos.first()->pluginName() );
+        return loadPluginInternal( infos.first().pluginName() );
 }
 
 QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extension, const QStringList &constraints)
@@ -426,12 +425,12 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
     kDebug(9000) << "Finding all Plugins for Extension: " << extension << "|" << constraints << endl;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
     QList<IPlugin*> plugins;
-    foreach (KPluginInfo *info, infos)
+    foreach (const KPluginInfo &info, infos)
     {
         if( d->plugins.contains( info ) )
             plugins << d->loadedPlugins[ info ];
         else
-            plugins << loadPluginInternal( info->pluginName() );
+            plugins << loadPluginInternal( info.pluginName() );
     }
     return plugins;
 }
@@ -451,16 +450,16 @@ QExtensionManager* PluginController::extensionManager()
 QStringList PluginController::allPluginNames()
 {
     QStringList names;
-    Q_FOREACH( KPluginInfo* info , d->plugins )
+    Q_FOREACH( const KPluginInfo& info , d->plugins )
     {
-        names << info->pluginName();
+        names << info.pluginName();
     }
     return names;
 }
 
 void PluginController::buildContextMenu( KDevelop::Context* context, KMenu* menu )
 {
-    Q_FOREACH( KPluginInfo* info, d->loadedPlugins.keys() )
+    Q_FOREACH( const KPluginInfo& info, d->loadedPlugins.keys() )
     {
         IPlugin* plug = d->loadedPlugins[info];
         QPair<QString, QList<QAction*> > actions = plug->requestContextMenuActions( context );
@@ -482,10 +481,10 @@ void PluginController::buildContextMenu( KDevelop::Context* context, KMenu* menu
 QStringList PluginController::projectPlugins()
 {
     QStringList names;
-    Q_FOREACH( KPluginInfo* info , d->plugins )
+    Q_FOREACH( const KPluginInfo& info , d->plugins )
     {
-        if( info->property("X-KDevelop-Category").toString() == "Project" )
-            names << info->pluginName();
+        if( info.property("X-KDevelop-Category").toString() == "Project" )
+            names << info.pluginName();
     }
     return names;
 }

@@ -206,9 +206,9 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
         if( !plugins.isEmpty() )
         {
-            KPluginInfo* info = plugins.first();
-            kDebug(9000) << "loading " << info->pluginName() << endl;
-            Core::self()->pluginController()->loadPlugin( info->pluginName() );
+            KPluginInfo info = plugins.first();
+            kDebug(9000) << "loading " << info.pluginName() << endl;
+            Core::self()->pluginController()->loadPlugin( info.pluginName() );
             if( d->factories.contains( mimeType->name() ) )
             {
                 IDocument* idoc = d->factories[mimeType->name()]->create(url, Core::self());
