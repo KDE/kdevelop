@@ -22,7 +22,6 @@
 #include <iostream>
 #include <stdio.h>
 #include "qmakedriver.h"
-#include "qmakeast.h"
 
 #include <QtGlobal>
 #include <QtCore/QString>
@@ -53,13 +52,13 @@ int main( int argc, char* argv[] )
         debug = 1;
     for( int i = 0 ; i < args->count() ; i++ )
     {
-        QMake::ProjectAST* ast = new QMake::ProjectAST();
         QMake::Driver d;
         if( !d.readFile( args->url(i).toLocalFile() ) )
             exit( EXIT_FAILURE );
         d.setDebug( debug );
 
-        if ( !d.parse(ast) ) {
+        QMake::ProjectAST* ast = 0;
+        if ( !d.parse( ast ) ) {
             exit( EXIT_FAILURE );
         }else
         {

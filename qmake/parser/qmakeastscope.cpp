@@ -19,49 +19,30 @@
  */
 
 #include "qmakeast.h"
-#include <kdebug.h>
 
 namespace QMake
 {
-        ScopeAST::ScopeAST( AST* parent )
+ScopeAST::ScopeAST( AST* parent )
         : StatementAST( parent ), m_body( 0 )
-    {
-    }
+{}
 
-    ScopeAST::~ScopeAST()
-    {
-        delete m_body;
-        m_body = 0;
-    }
+ScopeAST::~ScopeAST()
+{
+    delete m_body;
+    m_body = 0;
+}
 
-    ScopeBodyAST* ScopeAST::scopeBody() const
-    {
-        return m_body;
-    }
+ScopeBodyAST* ScopeAST::scopeBody() const
+{
+    return m_body;
+}
 
 
-    void ScopeAST::writeToString( QString& buf ) const
-    {
-        if ( m_body )
-            m_body->writeToString( buf );
-        else
-            buf += m_lineend;
-    }
+void ScopeAST::setScopeBody( ScopeBodyAST* body )
+{
+    m_body = body;
+}
 
-    void ScopeAST::setScopeBody( ScopeBodyAST* body )
-    {
-        m_body = body;
-    }
-
-    QString ScopeAST::lineEnding() const
-    {
-        return m_lineend;
-    }
-
-    void ScopeAST::setLineEnding( const QString& end )
-    {
-        m_lineend = end;
-    }
 
 }
 

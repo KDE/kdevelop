@@ -66,18 +66,16 @@ namespace QMake
 -- List of defined tokens
 -----------------------------------------------------------
 
-%token LBRACKET("lbracket"),RBRACKET("rbracket"),
-       LBRACE("lbrace"),RBRACE("rbrace"),LPAREN("lparen"),RPAREN("rparen") ;;
+%token LBRACE("lbrace"), RBRACE("rbrace"), LPAREN("lparen"),RPAREN("rparen") ;;
 
 %token PLUSEQ("pluseq"),EQUAL("equal"),MINUSEQ("minuseq"),STAREQ("stareq"),
        TILDEEQ("tildeeq") ;;
 
 %token COLON("colon"), COMMA("comma"), CONT("cont"), EXCLAM("exclam"),
-       NEWLINE("newline"), DOUBLEDOLLAR("doubledollar"),
-       SINGLEDOLLAR("singledollar"), QUOTE("quote") ;;
+       NEWLINE("newline"), OR("or") ;;
 
 %token IDENTIFIER("identifier"), VALUE("value"),
-       QUOTEDSPACE("quotedspace") ;;
+       QUOTEDVALUE("quotedvalue") ;;
 
 -- token that makes the parser fail in any case:
 %token INVALID ("invalid token") ;;
@@ -87,12 +85,12 @@ namespace QMake
    ( #stmts=stmt )*
 -> project ;;
 
-   ( id=IDENTIFIER ( var=variable_assignment | func=function_scope | scope=scope_body )
+   ( id=IDENTIFIER ( var=variable_assignment | scope=scope )
             [:
                 (*yynode)->isNewline = false;
                 (*yynode)->isExclam = false;
             :]
-   ) | ( EXCLAM id=IDENTIFIER (func=function_scope | scope=scope_body )
+   ) | ( EXCLAM id=IDENTIFIER scope=scope
             [:
                (*yynode)->isNewline = false;
                (*yynode)->isExclam = true;
@@ -105,49 +103,33 @@ namespace QMake
 -> stmt [ member variable isNewline: bool;
           member variable isExclam: bool; ] ;;
 
+   func_args=function_args ( scope_body=scope_body | or_op=or_op scope_body=scope_body | 0 )
+   | ( or_op=or_op | 0 ) scope_body=scope_body
+-> scope ;;
+
+   ( OR #item=item )+
+-> or_op ;;
+
+   id=IDENTIFIER ( func_args=function_args | 0 )
+-> item ;;
+
    op=op ( values=value_list | 0 ) ( NEWLINE | EOF )
 -> variable_assignment ;;
 
    optoken=PLUSEQ | optoken=MINUSEQ | optoken=STAREQ | optoken=EQUAL | optoken=TILDEEQ
 -> op ;;
 
-   ( #list=value | CONT NEWLINE )  ( #list=value | CONT NEWLINE )*
+   ( #list=value | CONT NEWLINE )+
 -> value_list ;;
 
-   value_str=id_or_value | quote_val=quoted_value | ref=ref | shellcmd=function_args
+   value=VALUE | value=QUOTEDVALUE
 -> value ;;
-
-   DOUBLEDOLLAR func_var_ref=func_var_ref | SINGLEDOLLAR LPAREN idref=IDENTIFIER RPAREN
--> ref ;;
-
-   id=IDENTIFIER ( args=function_args | 0 )
-   | LBRACKET id=IDENTIFIER RBRACKET
-   | LPAREN id=IDENTIFIER RPAREN
-   | LBRACE id=IDENTIFIER ( args=function_args | 0 ) RBRACE
--> func_var_ref ;;
-
-   val=IDENTIFIER | val=VALUE
--> id_or_value ;;
-
-   QUOTE ( value=quote_value )* ( QUOTE | CONT NEWLINE | NEWLINE )
--> quoted_value ;;
-
-   value_str=id_or_value | ref=ref | token=QUOTEDSPACE | token=COLON | token=COMMA
--> quote_value ;;
 
    LPAREN args=arg_list RPAREN
 -> function_args ;;
 
-   args=function_args ( scopebody=scope_body | 0 )
--> function_scope ;;
-
-   ( ( ( #args=argument | LPAREN ( argument )+ RPAREN )+ | CONT NEWLINE ) ( ( COMMA | CONT NEWLINE ) ( ( #args=argument | LPAREN ( argument )+ RPAREN )+ ) )* | 0 )
+   ( ( #args=value | CONT NEWLINE ) ( ( COMMA | CONT NEWLINE ) #args=value )* | 0 )
 -> arg_list ;;
-
-   value_str=id_or_value | quoted_val=quoted_value | ref=ref
-   | plainval=QUOTEDSPACE | plainval=LBRACKET | plainval=RBRACKET
-   | plainval=LBRACE | plainval=RBRACE
--> argument ;;
 
     LBRACE ( NEWLINE | 0 ) ( #stmts=stmt )* RBRACE | COLON #stmts=stmt
 -> scope_body ;;

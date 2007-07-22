@@ -40,7 +40,7 @@ namespace QMake
 Lexer::Lexer( parser* _parser, const QString& content ):
         mContent( content ), mParser( _parser ),
         mCurpos( 0 ), mContentSize( mContent.size() ),
-        mTokenBegin( 0 ), mTokenEnd( 0 ), mInQuote( false )
+        mTokenBegin( 0 ), mTokenEnd( 0 )
 {
     // preprocess input.
     // this is needed because comments make the lexer harder, unfortunately
@@ -116,155 +116,109 @@ int Lexer::getNextTokenKind()
     switch ( state() )
     {
         case VariableValueState:
-            // Fall through as these two states are very similar
-        case FunctionArgState:
-            if ( !mInQuote && ( state() != FunctionArgState || mIgnoreWSinFunctionArg ) )
-            {
-                it = ignoreWhitespace( it );
-            }
-            mIgnoreWSinFunctionArg = false;
+            it = ignoreWhitespace( it );
             mTokenBegin = mCurpos;
-            if ( it->isSpace() && it->unicode() != '\n' && ( mInQuote || state() == FunctionArgState ) )
+            if( it->unicode() == '\n' )
             {
-                while ( it->isSpace() && it->unicode() != '\n' )
+                popState();
+                token = parser::Token_NEWLINE;
+            }else if( it->unicode() == '\\' )
+
+            {
+                pushState(ContState);
+                token = parser::Token_CONT;
+            }else if( it->unicode() == '"')
+            {
+                it++;
+                mCurpos++;
+                while( it->unicode() != '"' && it->unicode() != '\n' && !isCont( it ) )
                 {
+                    it++;
+                    mCurpos++;
+                }
+                if( it->unicode() != '"' )
+                {
+                    mCurpos--;
+                }
+                token = parser::Token_QUOTEDVALUE;
+            }else if( it->unicode() == '(' )
+            {
+                unsigned int bracecount = 0;
+                while( ( it->unicode() != ';' || bracecount > 0 ) && it->unicode() != '\n' && !isCont( it ) )
+                {
+                    if( it->unicode() == '(' )
+                    {
+                        bracecount++;
+                    }else if( it->unicode() == ')' && bracecount > 0 )
+                    {
+                        bracecount--;
+                    }
+                    ++it;
+                    ++mCurpos;
+                }
+                if( it->unicode() != ';' )
+                {
+                    mCurpos--;
+                }
+                token = parser::Token_VALUE;
+            }else
+            {
+                while( !it->isSpace() && !isCont(it) )
+                {
+                    it++;
+                    mCurpos++;
+                }
+                mCurpos--;
+                token = parser::Token_VALUE;
+            }
+            break;
+        case FunctionArgState:
+            mTokenBegin = mCurpos;
+            if( it->unicode() == '\n' )
+            {
+                token = parser::Token_NEWLINE;
+            }else if( it->unicode() == '\\' )
+            {
+                pushState( ContState );
+                token = parser::Token_CONT;
+            }else if( it->unicode() == ',' )
+            {
+                token = parser::Token_COMMA;
+            }else if( it->unicode() == '"')
+            {
+                it++;
+                mCurpos++;
+                while( it->unicode() != '"' && it->unicode() != '\n' && !isCont( it ) )
+                {
+                    it++;
+                    mCurpos++;
+                }
+                if( it->unicode() != '"' )
+                {
+                    mCurpos--;
+                }
+                token = parser::Token_QUOTEDVALUE;
+            }else if( it->unicode() == ')' )
+            {
+                popState();
+                token = parser::Token_RPAREN;
+            }else
+            {
+                unsigned int parentCount = 0;
+                while( parentCount > 0 || ( it->unicode() != ')' && it->unicode() != ',' ) )
+                {
+                    if( it->unicode() == ')' )
+                    {
+                        parentCount--;
+                    }else if( it->unicode() == '(' )
+                    {
+                        parentCount++;
+                    }
                     ++it;
                     ++mCurpos;
                 }
                 mCurpos--;
-                token = parser::Token_QUOTEDSPACE;
-            }
-            else
-            {
-                QChar* c2 = mCurpos < mContentSize ? it + 1 : 0 ;
-                switch ( it->unicode() )
-                {
-                    case '$':
-                        mDollar = true;
-                        if ( c2->unicode() == '$' )
-                        {
-                            ++mCurpos;
-                            token = parser::Token_DOUBLEDOLLAR;
-                        }
-                        else
-                        {
-                            token = parser::Token_SINGLEDOLLAR;
-                        }
-                        break;
-                    case '(':
-                        pushState( FunctionArgState );
-                        mIgnoreWSinFunctionArg = true;
-                        token = parser::Token_LPAREN;
-                        mDollar = false;
-                        break;
-                    case ')':
-                        while ( state() != FunctionArgState && state() != ErrorState )
-                        {
-                            popState();
-                        }
-                        popState();
-                        token = parser::Token_RPAREN;
-                        break;
-                    case '{':
-                        token = parser::Token_LBRACE;
-                        mDollar = false;
-                        break;
-                    case '}':
-                        token = parser::Token_RBRACE;
-                        mDollar = false;
-                        break;
-                    case '[':
-                        token = parser::Token_LBRACKET;
-                        break;
-                    case ']':
-                        token = parser::Token_RBRACKET;
-                        break;
-                    case ',':
-                        if ( state() == FunctionArgState )
-                        {
-                            mIgnoreWSinFunctionArg = true;
-                            token = parser::Token_COMMA;
-                        }
-                        else
-                        {
-                            token = parser::Token_IDENTIFIER;
-                            while ( !it->isSpace() && ( it->unicode() != ',' && !mInQuote ) )
-                            {
-                                if ( !Lexer::isIdentifierCharacter( it ) )
-                                {
-                                    token = parser::Token_VALUE;
-                                }
-                                ++it;
-                                ++mCurpos;
-                            }
-                            mCurpos--;
-                        }
-                        mDollar = false;
-                        break;
-                    case '"':
-                        token = parser::Token_QUOTE;
-                        mInQuote = !mInQuote;
-                        mDollar = false;
-                        break;
-                    case '\n':
-                        mInQuote = false;
-                        token = parser::Token_NEWLINE;
-                        popState();
-                        mDollar = false;
-                        break;
-                    case '\\':
-                        if ( c2->isSpace() && !mInQuote )
-                        {
-                            pushState( ContState );
-                            token = parser::Token_CONT;
-                            break;
-                        }
-                        else if ( mInQuote && c2->isSpace() )
-                        {
-                            if ( c2->unicode() == '\n' )
-                            {
-                                token = parser::Token_CONT;
-                                pushState( ContState );
-                                break;
-                            }
-                            else
-                            {
-                                QChar* wsit = c2;
-                                while ( wsit->isSpace() && wsit->unicode() != '\n' )
-                                {
-                                    wsit++;
-                                }
-                                if ( wsit->unicode() == '\n' )
-                                {
-                                    token = parser::Token_CONT;
-                                    pushState( ContState );
-                                    break;
-                                }
-                            }
-                        }
-                        // There's no break here by purpose, if \ is found
-                        // before whitespace in quote or any other character
-                        // it is part of a value so fall through to the default
-                        // case.
-                    default:
-                        token = parser::Token_IDENTIFIER;
-                        while ( !it->isSpace()
-                                && !isSpecialValueCharacter( it )
-                                && !Lexer::isCont( it )
-                                && ( !mDollar || Lexer::isIdentifierCharacter( it ) )
-                              )
-                        {
-                            if ( !Lexer::isIdentifierCharacter( it ) )
-                            {
-                                token = parser::Token_VALUE;
-                            }
-                            ++it;
-                            ++mCurpos;
-                        }
-                        mCurpos--;
-                        mDollar = false;
-                        break;
-                }
+                token = parser::Token_VALUE;
             }
             break;
         case ContState:
@@ -272,7 +226,6 @@ int Lexer::getNextTokenKind()
             mTokenBegin = mCurpos;
             if ( it->unicode() == '\n' )
             {
-                mInQuote = false;
                 token = parser::Token_NEWLINE;
                 popState();
             }
@@ -296,20 +249,15 @@ int Lexer::getNextTokenKind()
                 QChar* c2 = mCurpos < mContentSize ? it + 1 : 0 ;
                 switch ( it->unicode() )
                 {
+                    case '|':
+                        token = parser::Token_OR;
+                        break;
                     case '!':
                         token = parser::Token_EXCLAM;
                         break;
                     case '(':
                         pushState( FunctionArgState );
                         token = parser::Token_LPAREN;
-                        break;
-                    case ')':
-                        while ( state() != FunctionArgState && state() != ErrorState )
-                        {
-                            popState();
-                        }
-                        popState();
-                        token = parser::Token_RPAREN;
                         break;
                     case '{':
                         token = parser::Token_LBRACE;
@@ -357,7 +305,6 @@ int Lexer::getNextTokenKind()
                         token = parser::Token_EQUAL;
                         break;
                     case '\n':
-                        mInQuote = false;
                         token = parser::Token_NEWLINE;
                         break;
                     default:
@@ -366,6 +313,7 @@ int Lexer::getNextTokenKind()
             }
             break;
         default:
+            token = parser::Token_INVALID;
             break;
     }
     if ( mCurpos >= mContentSize )
@@ -387,20 +335,20 @@ std::size_t Lexer::getTokenEnd() const
     return mTokenEnd;
 }
 
-bool Lexer::isSpecialValueCharacter( QChar* c )
-{
-    return(
-              c->unicode() == '$'
-              || c->unicode() == '{'
-              || c->unicode() == '}'
-              || c->unicode() == '('
-              || c->unicode() == ')'
-              || c->unicode() == '['
-              || c->unicode() == ']'
-              || ( state() == FunctionArgState && c->unicode() == ',' )
-              || c->unicode() == '"'
-          );
-}
+// bool Lexer::isSpecialValueCharacter( QChar* c )
+// {
+//     return(
+//               c->unicode() == '$'
+//               || c->unicode() == '{'
+//               || c->unicode() == '}'
+//               || c->unicode() == '('
+//               || c->unicode() == ')'
+//               || c->unicode() == '['
+//               || c->unicode() == ']'
+//               || ( state() == FunctionArgState && c->unicode() == ',' )
+//               || c->unicode() == '"'
+//           );
+// }
 
 bool Lexer::isIdentifierCharacter( QChar* c )
 {
@@ -431,7 +379,7 @@ bool Lexer::isCont( QChar* c )
 QChar* Lexer::ignoreWhitespace( QChar* it )
 {
     // Ignore whitespace, but preserve the newline
-    while ( mCurpos < mContentSize && (( !mInQuote || state() == ContState ) && it->isSpace() && it->unicode() != '\n' ) )
+    while ( mCurpos < mContentSize && it->isSpace() && it->unicode() != '\n' )
     {
         ++it;
         ++mCurpos;

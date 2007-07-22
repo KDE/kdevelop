@@ -83,17 +83,17 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
 
-        if( ast && ast->variable().contains("SUBDIRS") )
+        if( ast && ast->variable()->value().contains("SUBDIRS") )
         {
-            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable() << endl;
-            foreach( QString value, ast->values() )
+            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable()->value() << endl;
+            foreach( QMake::ValueAST* value, ast->values() )
             {
-                kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
-                if( !value.trimmed().isEmpty() && value.trimmed() != "\\" )
+                kDebug(9024) << k_funcinfo << "Found value: " << value->value() << endl;
+                if( !value->value().trimmed().isEmpty() && value->value().trimmed() != "\\" )
                 {
                     KUrl u = absoluteDirUrl();
                     u.adjustPath( KUrl::AddTrailingSlash );
-                    u.setFileName( value.trimmed() );
+                    u.setFileName( value->value().trimmed() );
                     list.append( new QMakeProjectScope( u ) );
                 }
             }
@@ -115,17 +115,17 @@ KUrl::List QMakeProjectScope::files() const
     foreach( QMake::StatementAST* stmt, m_ast->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
-        if( ast && QMakeProjectScope::FileVariables.indexOf( ast->variable()  ) != -1 )
+        if( ast && QMakeProjectScope::FileVariables.indexOf( ast->variable()->value()  ) != -1 )
         {
-            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable() << endl;
-            foreach( QString value, ast->values() )
+            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable()->value() << endl;
+            foreach( QMake::ValueAST* value, ast->values() )
             {
-                kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
-                if( !value.trimmed().isEmpty() && value.trimmed() != "\\" )
+                kDebug(9024) << k_funcinfo << "Found value: " << value->value() << endl;
+                if( !value->value().trimmed().isEmpty() && value->value().trimmed() != "\\" )
                 {
                     KUrl u = absoluteDirUrl();
                     u.adjustPath( KUrl::AddTrailingSlash );
-                    u.setFileName( value.trimmed() );
+                    u.setFileName( value->value().trimmed() );
                     list.append( u );
                 }
             }
@@ -148,15 +148,15 @@ QStringList QMakeProjectScope::targets() const
     foreach( QMake::StatementAST* stmt, m_ast->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
-        if( ast && ast->variable() == "INSTALLS" )
+        if( ast && ast->variable()->value() == "INSTALLS" )
         {
-            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable() << endl;
-            foreach( QString value, ast->values() )
+            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable()->value() << endl;
+            foreach( QMake::ValueAST* value, ast->values() )
             {
-                kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
-                if( value.trimmed().isEmpty() && value.trimmed() != "\\" && value.trimmed() != "target" )
+                kDebug(9024) << k_funcinfo << "Found value: " << value->value() << endl;
+                if( value->value().trimmed().isEmpty() && value->value().trimmed() != "\\" && value->value().trimmed() != "target" )
                 {
-                    list << value;
+                    list << value->value();
                 }
             }
         }

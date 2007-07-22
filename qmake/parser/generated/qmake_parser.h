@@ -77,27 +77,23 @@ namespace QMake
         Token_COLON =  1000,
         Token_COMMA =  1001,
         Token_CONT =  1002,
-        Token_DOUBLEDOLLAR =  1003,
-        Token_EOF =  1004,
-        Token_EQUAL =  1005,
-        Token_EXCLAM =  1006,
-        Token_IDENTIFIER =  1007,
-        Token_INVALID =  1008,
-        Token_LBRACE =  1009,
-        Token_LBRACKET =  1010,
-        Token_LPAREN =  1011,
-        Token_MINUSEQ =  1012,
-        Token_NEWLINE =  1013,
-        Token_PLUSEQ =  1014,
-        Token_QUOTE =  1015,
-        Token_QUOTEDSPACE =  1016,
-        Token_RBRACE =  1017,
-        Token_RBRACKET =  1018,
-        Token_RPAREN =  1019,
-        Token_SINGLEDOLLAR =  1020,
-        Token_STAREQ =  1021,
-        Token_TILDEEQ =  1022,
-        Token_VALUE =  1023,
+        Token_EOF =  1003,
+        Token_EQUAL =  1004,
+        Token_EXCLAM =  1005,
+        Token_IDENTIFIER =  1006,
+        Token_INVALID =  1007,
+        Token_LBRACE =  1008,
+        Token_LPAREN =  1009,
+        Token_MINUSEQ =  1010,
+        Token_NEWLINE =  1011,
+        Token_OR =  1012,
+        Token_PLUSEQ =  1013,
+        Token_QUOTEDVALUE =  1014,
+        Token_RBRACE =  1015,
+        Token_RPAREN =  1016,
+        Token_STAREQ =  1017,
+        Token_TILDEEQ =  1018,
+        Token_VALUE =  1019,
         token_type_size
       }; // token_type_enum
 
@@ -140,22 +136,17 @@ namespace QMake
       {}
 
       bool parse_arg_list(arg_list_ast **yynode);
-      bool parse_argument(argument_ast **yynode);
-      bool parse_func_var_ref(func_var_ref_ast **yynode);
       bool parse_function_args(function_args_ast **yynode);
-      bool parse_function_scope(function_scope_ast **yynode);
-      bool parse_id_or_value(id_or_value_ast **yynode);
+      bool parse_item(item_ast **yynode);
       bool parse_op(op_ast **yynode);
+      bool parse_or_op(or_op_ast **yynode);
       bool parse_project(project_ast **yynode);
-      bool parse_quote_value(quote_value_ast **yynode);
-      bool parse_quoted_value(quoted_value_ast **yynode);
-      bool parse_ref(ref_ast **yynode);
+      bool parse_scope(scope_ast **yynode);
       bool parse_scope_body(scope_body_ast **yynode);
       bool parse_stmt(stmt_ast **yynode);
       bool parse_value(value_ast **yynode);
       bool parse_value_list(value_list_ast **yynode);
       bool parse_variable_assignment(variable_assignment_ast **yynode);
-      bool parse_varref(varref_ast **yynode);
     };
 
 } // end of namespace QMake

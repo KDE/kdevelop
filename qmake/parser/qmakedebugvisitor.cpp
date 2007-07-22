@@ -23,6 +23,7 @@
 #include <kdebug.h>
 
 #include "qmake_parser.h"
+#include "qmake_ast.h"
 #include "kdev-pg-token-stream.h"
 
 namespace QMake
@@ -58,23 +59,24 @@ void DebugVisitor::visit_arg_list( arg_list_ast *node )
     kDebug(9024) << getIndent() << "END(arg_list)( " << getTokenInfo(node->start_token) << " )" << endl;
 }
 
-void DebugVisitor::visit_argument( argument_ast *node )
+
+void DebugVisitor::visit_or_op( or_op_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(argument)( " << getTokenInfo(node->start_token) << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(or_op)( " << getTokenInfo(node->start_token)  << " )" << endl;
     indent++;
-    default_visitor::visit_argument( node );
+    default_visitor::visit_or_op( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(argument)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(or_op)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
-void DebugVisitor::visit_func_var_ref( func_var_ref_ast *node )
+void DebugVisitor::visit_scope( scope_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(funcref)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(scope)( " << getTokenInfo(node->start_token)  << " )" << endl;
     indent++;
-    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
-    default_visitor::visit_func_var_ref( node );
+    default_visitor::visit_scope( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(funcref)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(scope)( " << getTokenInfo(node->end_token)  << " )" << endl;
+
 }
 
 void DebugVisitor::visit_function_args( function_args_ast *node )
@@ -84,25 +86,6 @@ void DebugVisitor::visit_function_args( function_args_ast *node )
     default_visitor::visit_function_args( node );
     indent--;
     kDebug(9024) << getIndent() << "END(function_args)( " << getTokenInfo(node->end_token)  << " )" << endl;
-}
-
-void DebugVisitor::visit_function_scope( function_scope_ast *node )
-{
-    kDebug(9024) << getIndent() << "BEGIN(function_scope)( " << getTokenInfo(node->start_token)  << " )" << endl;
-    indent++;
-    default_visitor::visit_function_scope( node );
-    indent--;
-    kDebug(9024) << getIndent() << "END(function_scope)( " << getTokenInfo(node->end_token)  << " )" << endl;
-}
-
-void DebugVisitor::visit_id_or_value( id_or_value_ast *node )
-{
-    kDebug(9024) << getIndent() << "BEGIN(id_or_value)( " << getTokenInfo(node->start_token)  << " )" << endl;
-    indent++;
-    kDebug(9024) << getIndent() << "val=" << getTokenInfo(node->val) << endl;
-    default_visitor::visit_id_or_value( node );
-    indent--;
-    kDebug(9024) << getIndent() << "END(id_or_value)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
 void DebugVisitor::visit_op( op_ast *node )
@@ -124,41 +107,6 @@ void DebugVisitor::visit_project( project_ast *node )
     kDebug(9024) << getIndent() << "END(project)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
-void DebugVisitor::visit_quote_value( quote_value_ast *node )
-{
-    kDebug(9024) << getIndent() << "BEGIN(quote_value)( " << getTokenInfo(node->start_token)  << " )" << endl;
-    indent++;
-    if( node->token )
-    {
-        kDebug(9024) << getIndent() << "token=" << getTokenInfo(node->token) << endl;
-    }
-    default_visitor::visit_quote_value( node );
-    indent--;
-    kDebug(9024) << getIndent() << "END(quote_value)( " << getTokenInfo(node->end_token)  << " )" << endl;
-}
-
-void DebugVisitor::visit_quoted_value( quoted_value_ast *node )
-{
-    kDebug(9024) << getIndent() << "BEGIN(quoted_value)( " << getTokenInfo(node->start_token)  << " )" << endl;
-    indent++;
-    default_visitor::visit_quoted_value( node );
-    indent--;
-    kDebug(9024) << getIndent() << "END(quoted_value)( " << getTokenInfo(node->end_token)  << " )" << endl;
-}
-
-void DebugVisitor::visit_ref( ref_ast *node )
-{
-    kDebug(9024) << getIndent() << getIndent() << "BEGIN(ref)( " << getTokenInfo(node->start_token)  << ")" << endl;
-    indent++;
-    if( node->idref )
-    {
-        kDebug(9024) << getIndent() << "idref=" << getTokenInfo(node->idref) << endl;
-    }
-    default_visitor::visit_ref( node );
-    indent--;
-    kDebug(9024) << getIndent() << "END(ref)( " << getTokenInfo(node->end_token)  << " )" << endl;
-}
-
 void DebugVisitor::visit_scope_body( scope_body_ast *node )
 {
     kDebug(9024) << getIndent() << "BEGIN(scope_body)( " << getTokenInfo(node->start_token)  << " )" << endl;
@@ -172,6 +120,7 @@ void DebugVisitor::visit_stmt( stmt_ast *node )
 {
     kDebug(9024) << getIndent() << "BEGIN(stmt)( " << getTokenInfo(node->start_token)  << " )" << endl;
     indent++;
+    kDebug(9024) << getIndent() << "isExclam=" << node->isExclam << endl;
     if( !node->isNewline )
     {
         kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
@@ -185,6 +134,7 @@ void DebugVisitor::visit_value( value_ast *node )
 {
     kDebug(9024) << getIndent() << "BEGIN(value)( " << getTokenInfo(node->start_token)  << " )" << endl;
     indent++;
+    kDebug(9024) << getIndent() << "value=" << getTokenInfo(node->value) << endl;
     default_visitor::visit_value( node );
     indent--;
     kDebug(9024) << getIndent() << "END(value)( " << getTokenInfo(node->end_token)  << " )" << endl;
@@ -208,6 +158,16 @@ void DebugVisitor::visit_variable_assignment( variable_assignment_ast *node )
     kDebug(9024) << getIndent() << "END(variable_assignment)( " << getTokenInfo(node->end_token)  << " )" << endl;
 }
 
+void DebugVisitor::visit_item( item_ast *node )
+{
+
+    kDebug(9024) << getIndent() << "BEGIN(item)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    indent++;
+    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
+    default_visitor::visit_item( node );
+    indent--;
+    kDebug(9024) << getIndent() << "END(item)( " << getTokenInfo(node->end_token)  << " )" << endl;
+}
 
 }
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

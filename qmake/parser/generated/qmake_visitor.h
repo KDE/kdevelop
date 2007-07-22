@@ -27,34 +27,22 @@ namespace QMake
       virtual void visit_arg_list(arg_list_ast *)
     {}
 
-      virtual void visit_argument(argument_ast *)
-      {}
-
-      virtual void visit_func_var_ref(func_var_ref_ast *)
-      {}
-
       virtual void visit_function_args(function_args_ast *)
       {}
 
-      virtual void visit_function_scope(function_scope_ast *)
-      {}
-
-      virtual void visit_id_or_value(id_or_value_ast *)
+      virtual void visit_item(item_ast *)
       {}
 
       virtual void visit_op(op_ast *)
       {}
 
+      virtual void visit_or_op(or_op_ast *)
+      {}
+
       virtual void visit_project(project_ast *)
       {}
 
-      virtual void visit_quote_value(quote_value_ast *)
-      {}
-
-      virtual void visit_quoted_value(quoted_value_ast *)
-      {}
-
-      virtual void visit_ref(ref_ast *)
+      virtual void visit_scope(scope_ast *)
       {}
 
       virtual void visit_scope_body(scope_body_ast *)
@@ -70,9 +58,6 @@ namespace QMake
       {}
 
       virtual void visit_variable_assignment(variable_assignment_ast *)
-      {}
-
-      virtual void visit_varref(varref_ast *)
       {}
 
     }

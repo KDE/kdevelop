@@ -54,14 +54,9 @@ private:
     void popState();
 
     static bool isIdentifierCharacter(QChar* c);
-    bool isSpecialValueCharacter(QChar* c);
     static bool isCont(QChar* c);
 
     QChar* ignoreWhitespace(QChar* it);
-
-    bool mInQuote;
-    bool mIgnoreWSinFunctionArg;
-    bool mDollar;
 
     QStack<int> mState;
     enum State

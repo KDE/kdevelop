@@ -52,21 +52,18 @@ void matchScopeBodies( QList<QMake::StatementAST*> realbody,
                 || ( orop && testorop ) );
             if( call && testcall )
             {
-                TESTFUNCNAME( call, testcall->functionName() )
-                TESTFUNCARGS( call, testcall->arguments() )
+                TESTFUNCNAME( call, testcall->functionName()->value() )
             }else if( simple && testsimple )
             {
 
             }else if( orop && testorop )
             {
-                TESTFUNCNAME( orop->leftCall(),
-                                testorop->leftCall()->functionName() )
-                TESTFUNCNAME( orop->rightCall(),
-                                testorop->rightCall()->functionName() )
-                TESTFUNCARGS( orop->leftCall(),
-                                testorop->leftCall()->arguments() )
-                TESTFUNCARGS( orop->rightCall(),
-                                testorop->rightCall()->arguments() )
+                for(int i = 0; i < orop->scopes().count(); i++ )
+                {
+                    QVERIFY( i < testorop->scopes().count() );
+                    TESTFUNCNAME( orop->scopes().at(i),
+                                testorop->scopes().at(i)->identifier()->value() )
+                }
             }
             QVERIFY( ( scope->scopeBody() && testscope->scopeBody() )
                         || ( !scope->scopeBody() && !testscope->scopeBody() ) );
@@ -83,8 +80,8 @@ void matchScopeBodies( QList<QMake::StatementAST*> realbody,
         testassign = dynamic_cast<QMake::AssignmentAST*>( testbody.at( i ) );
         if( assign && testassign )
         {
-            TESTASSIGNMENT( assign, testassign->variable(), testassign->op(),
-                            testassign->values().count(), testassign->values().join("") )
+            TESTASSIGNMENT( assign, testassign->variable()->value(), testassign->op()->value(),
+                            testassign->values().count() )
         }
         i++;
     }
