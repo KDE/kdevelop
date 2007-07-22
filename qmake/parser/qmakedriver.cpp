@@ -36,7 +36,7 @@ namespace QMake
 {
 
 Driver::Driver()
-    : mDebug(false)
+    : m_debug(false)
 {
 }
 
@@ -51,16 +51,16 @@ bool Driver::readFile( const QString& filename, const char* codec )
     QTextStream s(&f);
     if( codec )
         s.setCodec( QTextCodec::codecForName(codec) );
-    mContent = s.readAll();
+    m_content = s.readAll();
     return true;
 }
 void Driver::setContent( const QString& content )
 {
-    mContent = content;
+    m_content = content;
 }
 void Driver::setDebug( bool debug )
 {
-    mDebug = debug;
+    m_debug = debug;
 }
 bool Driver::parse( ProjectAST* qmast )
 {
@@ -70,14 +70,15 @@ bool Driver::parse( ProjectAST* qmast )
     parser qmakeparser;
     qmakeparser.set_token_stream(&token_stream);
     qmakeparser.set_memory_pool(&memory_pool);
+    qmakeparser.setDebug( m_debug );
 
-    qmakeparser.tokenize(mContent);
+    qmakeparser.tokenize(m_content);
     project_ast* ast = 0;
     bool matched = qmakeparser.parse_project(&ast);
     if( matched )
     {
         qDebug() << "Sucessfully parsed";
-        if( mDebug )
+        if( m_debug )
         {
             DebugVisitor d(&qmakeparser);
             d.visit_project(ast);

@@ -42,12 +42,12 @@ public:
     std::size_t getTokenEnd() const;
 
 private:
-    QString mContent;
-    parser* mParser;
-    int mCurpos;
-    int mContentSize;
-    std::size_t mTokenBegin;
-    std::size_t mTokenEnd;
+    QString m_content;
+    parser* m_parser;
+    int m_curpos;
+    int m_contentSize;
+    std::size_t m_tokenBegin;
+    std::size_t m_tokenEnd;
 
     int state() const;
     void pushState(int state);

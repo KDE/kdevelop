@@ -56,11 +56,14 @@ namespace QMake
 
     QString tokenText(std::size_t begin, std::size_t end) const;
 
+    void setDebug( bool debug );
+
 :]
 
 %parserclass (private declaration)
 [:
     QString m_contents;
+    bool m_debug;
 :]
 -----------------------------------------------------------
 -- List of defined tokens
@@ -157,7 +160,10 @@ void parser::tokenize( const QString& contents )
     do
     {
         kind = lexer.getNextTokenKind();
-        kDebug(9024) << kind << "(" << lexer.getTokenBegin() << "," << lexer.getTokenEnd() << ")::" << tokenText(lexer.getTokenBegin(), lexer.getTokenEnd()) << "::"<< endl; //" "; // debug output
+        if( m_debug )
+        {
+            kDebug(9024) << kind << "(" << lexer.getTokenBegin() << "," << lexer.getTokenEnd() << ")::" << tokenText(lexer.getTokenBegin(), lexer.getTokenEnd()) << "::"<< endl; //" "; // debug output
+        }
 
         if ( !kind ) // when the lexer returns 0, the end of file is reached
             kind = parser::Token_EOF;
@@ -216,6 +222,10 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
             .arg(col));
 }
 
+void parser::setDebug( bool debug )
+{
+    m_debug = debug;
+}
 
 } // end of namespace QMake
 
