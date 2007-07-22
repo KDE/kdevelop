@@ -46,6 +46,10 @@ namespace QMake
     {
         public:
             explicit StatementAST( AST* parent = 0 );
+            QString identifier() const;
+            void setIdentifier( const QString& );
+        private:
+            QString m_identifier;
     };
 
     /**
@@ -90,7 +94,6 @@ namespace QMake
             QString op() const;
             void setOp( const QString& );
         private:
-            QString m_variable;
             QString m_op;
             QList<ValueAST*> m_values;
     };
@@ -131,7 +134,6 @@ namespace QMake
             void setFunctionName( const QString& );
         private:
             QList<ValueAST*> m_args;
-            QString m_functionName;
     };
 
 
@@ -143,7 +145,6 @@ namespace QMake
             QString scopeName() const;
             void setScopeName( const QString& );
         private:
-            QString m_scopeName;
     };
 
     class OrAST : public ScopeAST

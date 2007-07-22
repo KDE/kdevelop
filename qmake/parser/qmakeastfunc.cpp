@@ -45,12 +45,12 @@ void FunctionCallAST::insertArgument( int i, ValueAST* arg )
 
 QString FunctionCallAST::functionName() const
 {
-    return m_functionName;
+    return identifier();
 }
 
 void FunctionCallAST::setFunctionName( const QString& name )
 {
-    m_functionName = name;
+    setIdentifier(name);
 }
 
 void FunctionCallAST::removeArgument( int i )

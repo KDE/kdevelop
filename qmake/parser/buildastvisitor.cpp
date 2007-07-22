@@ -26,6 +26,8 @@
 
 #include <QtCore/QPair>
 
+#include <kdebug.h>
+
 namespace QMake
 {
 
@@ -33,6 +35,12 @@ BuildASTVisitor::BuildASTVisitor(parser* parser, ProjectAST* project)
     : m_parser(parser)
 {
     aststack.push(project);
+}
+
+BuildASTVisitor::~BuildASTVisitor()
+{
+    aststack.clear();
+    m_parser = 0;
 }
 
 void BuildASTVisitor::visit_arg_list( arg_list_ast *node )
@@ -78,6 +86,8 @@ void BuildASTVisitor::visit_scope_body( scope_body_ast *node )
 void BuildASTVisitor::visit_stmt( stmt_ast *node )
 {
     default_visitor::visit_stmt(node);
+    StatementAST* stmt = stackPop<StatementAST>();
+    stmt->setIdentifier( getTokenString( node->id ) );
 }
 
 void BuildASTVisitor::visit_value( value_ast *node )
@@ -92,7 +102,41 @@ void BuildASTVisitor::visit_value_list( value_list_ast *node )
 
 void BuildASTVisitor::visit_variable_assignment( variable_assignment_ast *node )
 {
+    AssignmentAST* assign = new AssignmentAST(aststack.top());
+    aststack.push(assign);
     default_visitor::visit_variable_assignment(node);
+}
+
+template <typename T> T* BuildASTVisitor::stackTop()
+{
+    if( aststack.isEmpty() )
+    {
+        kDebug(9024) << "ERROR: AST stack is empty, this should never happen" << endl;
+        exit(255);
+    }
+    T* ast = dynamic_cast<T*>(aststack.top());
+    if( !ast )
+    {
+        kDebug(9024) << "ERROR: AST stack is screwed, doing a hard exist" << endl;
+        exit(255);
+    }
+    return ast;
+}
+
+template <typename T> T* BuildASTVisitor::stackPop()
+{
+    if( aststack.isEmpty() )
+    {
+        kDebug(9024) << "ERROR: AST stack is empty, this should never happen" << endl;
+        exit(255);
+    }
+    T* ast = dynamic_cast<T*>(aststack.pop());
+    if( !ast )
+    {
+        kDebug(9024) << "ERROR: AST stack is screwed, doing a hard exist" << endl;
+        exit(255);
+    }
+    return ast;
 }
 
 QString BuildASTVisitor::getTokenString(std::size_t idx)

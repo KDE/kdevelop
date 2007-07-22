@@ -54,12 +54,12 @@ QList<ValueAST*> AssignmentAST::values() const
 
 QString AssignmentAST::variable() const
 {
-    return m_variable;
+    return identifier();
 }
 
 void AssignmentAST::setVariable( const QString& variable )
 {
-    m_variable = variable;
+    setIdentifier(variable);
 }
 
 QString AssignmentAST::op() const

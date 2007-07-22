@@ -31,12 +31,12 @@ SimpleScopeAST::~SimpleScopeAST()
 
 QString SimpleScopeAST::scopeName() const
 {
-    return m_scopeName;
+    return identifier();
 }
 
 void SimpleScopeAST::setScopeName( const QString& name )
 {
-    m_scopeName = name;
+    setIdentifier(name);
 }
 
 }

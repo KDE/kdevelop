@@ -38,6 +38,7 @@ class BuildASTVisitor : public default_visitor
 {
 public:
     BuildASTVisitor(parser* parser, ProjectAST* project);
+    virtual ~BuildASTVisitor();
     virtual void visit_arg_list( arg_list_ast *node );
     virtual void visit_function_args( function_args_ast *node );
     virtual void visit_or_op( or_op_ast *node );
@@ -54,6 +55,9 @@ public:
 private:
     QString getTokenString(std::size_t idx);
     QPair<std::size_t,std::size_t> getTokenLineAndColumn( std::size_t idx );
+
+    template <typename T> T* stackTop();
+    template <typename T> T* stackPop();
 
     QStack<AST*> aststack;
     parser* m_parser;
