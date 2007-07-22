@@ -38,8 +38,8 @@ class Driver
         void setDebug( bool );
         bool parse( ProjectAST* ast );
     private:
-        QString mContent;
-        bool mDebug;
+        QString m_content;
+        bool m_debug;
 };
 }
 

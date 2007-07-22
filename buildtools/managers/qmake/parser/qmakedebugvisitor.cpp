@@ -30,19 +30,19 @@ namespace QMake
 {
 
 DebugVisitor::DebugVisitor(QMake::parser* parser)
-    : mParser(parser), indent(0)
+    : m_parser(parser), indent(0)
 {
 }
 
 QString DebugVisitor::getTokenInfo(std::size_t idx)
 {
     std::size_t line,col;
-    QMake::parser::token_type token = mParser->token_stream->token(idx);
-    mParser->token_stream->start_position(idx,&line,&col);
+    QMake::parser::token_type token = m_parser->token_stream->token(idx);
+    m_parser->token_stream->start_position(idx,&line,&col);
     return QString("%1,%2,%3")
             .arg(line)
             .arg(col)
-            .arg(mParser->tokenText(token.begin,token.end).replace("\n","\\n"));
+            .arg(m_parser->tokenText(token.begin,token.end).replace("\n","\\n"));
 }
 
 QString DebugVisitor::getIndent()

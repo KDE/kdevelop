@@ -20,7 +20,11 @@ namespace QMake
     do
       {
         kind =  lexer.getNextTokenKind();
-        kDebug(9024) <<  kind <<  "(" <<  lexer.getTokenBegin() <<  "," <<  lexer.getTokenEnd() <<  ")::" <<  tokenText(lexer.getTokenBegin(),  lexer.getTokenEnd()) <<  "::" <<  endl; //" "; // debug output
+
+        if ( m_debug )
+          {
+            kDebug(9024) <<  kind <<  "(" <<  lexer.getTokenBegin() <<  "," <<  lexer.getTokenEnd() <<  ")::" <<  tokenText(lexer.getTokenBegin(),  lexer.getTokenEnd()) <<  "::" <<  endl; //" "; // debug output
+          }
 
         if  ( !kind ) // when the lexer returns 0, the end of file is reached
           kind =  parser::Token_EOF;
@@ -80,6 +84,10 @@ namespace QMake
       .arg(col));
   }
 
+  void parser::setDebug( bool debug )
+  {
+    m_debug =  debug;
+  }
 
 } // end of namespace QMake
 

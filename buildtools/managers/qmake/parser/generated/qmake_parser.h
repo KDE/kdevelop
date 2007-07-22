@@ -117,10 +117,13 @@ namespace QMake
 
       QString tokenText(std::size_t begin,  std::size_t end) const;
 
+      void setDebug( bool debug );
+
 
     private:
 
       QString m_contents;
+      bool m_debug;
 
 
     public:

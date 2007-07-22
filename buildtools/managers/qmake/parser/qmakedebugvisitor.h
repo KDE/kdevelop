@@ -48,7 +48,7 @@ public:
     QString getTokenInfo(std::size_t idx);
     QString getIndent();
 private:
-    QMake::parser* mParser;
+    QMake::parser* m_parser;
     int indent;
 };
 
