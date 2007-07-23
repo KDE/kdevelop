@@ -77,7 +77,7 @@ bool Driver::parse( ProjectAST** qmast )
     bool matched = qmakeparser.parse_project(&ast);
     if( matched )
     {
-        qDebug() << "Sucessfully parsed";
+        kDebug(9024) << "Sucessfully parsed" << endl;
         if( m_debug )
         {
             DebugVisitor d(&qmakeparser);
@@ -86,11 +86,11 @@ bool Driver::parse( ProjectAST** qmast )
         *qmast = new ProjectAST();
         BuildASTVisitor d( &qmakeparser, *qmast );
         d.visit_project(ast);
-        kDebug(9024) << "found stmts:" << (*qmast)->statements().count() << endl;
+        kDebug(9024) << "Found " << (*qmast)->statements().count() << " Statements" << endl;
     }else
     {
         ast = 0;
-        qmakeparser.yy_expected_symbol(ast_node::Kind_project, "project");
+        kDebug(9024) << "Couldn't parse content" << endl;
     }
     return matched;
 }

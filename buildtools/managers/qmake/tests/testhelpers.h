@@ -42,6 +42,7 @@ void classname::funcname##_data()\
 #define BEGINTESTFUNCIMPL( classname, funcname, astcount ) \
 void classname::funcname()\
 {\
+    qDebug() << "Beginning Test Function"; \
     QFETCH( QString, project );\
     QFETCH( QString, output );\
     QMake::Driver d; \
@@ -53,6 +54,7 @@ void classname::funcname()\
 #define BEGINTESTFAILFUNCIMPL( classname, funcname, comment ) \
 void classname::funcname()\
 {\
+    qDebug() << "Beginning Test FAIL Function"; \
     QFETCH( QString, project );\
     QFETCH( QString, output );\
     QMake::Driver d; \

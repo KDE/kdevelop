@@ -114,13 +114,15 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( ScopeTest, nestedScope, "foobar :barfoo : VARIABLE = FOO\n")
 
-
-
-BEGINTESTFAILFUNCIMPL( ScopeTest, missingStatement, "No statement after colon" )
+BEGINTESTFUNCIMPL( ScopeTest, missingStatement, 1 )
+    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements().first() );
+TESTSCOPENAME( scope, "eval" )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( ScopeTest, missingStatement,
               "eval :\n" )
+
+
 
 BEGINTESTFAILFUNCIMPL( ScopeTest, missingColon, "No colon" )
 ENDTESTFUNCIMPL

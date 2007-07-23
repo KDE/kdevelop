@@ -77,8 +77,7 @@ namespace QMake
 %token COLON("colon"), COMMA("comma"), CONT("cont"), EXCLAM("exclam"),
        NEWLINE("newline"), OR("or") ;;
 
-%token IDENTIFIER("identifier"), VALUE("value"),
-       QUOTEDVALUE("quotedvalue") ;;
+%token IDENTIFIER("identifier"), VALUE("value") ;;
 
 -- token that makes the parser fail in any case:
 %token INVALID ("invalid token") ;;
@@ -116,7 +115,7 @@ namespace QMake
    id=IDENTIFIER ( func_args=function_args | 0 )
 -> item ;;
 
-   op=op ( values=value_list | 0 ) ( NEWLINE | EOF )
+   op=op values=value_list ( NEWLINE | 0 )
 -> variable_assignment ;;
 
    optoken=PLUSEQ | optoken=MINUSEQ | optoken=STAREQ | optoken=EQUAL | optoken=TILDEEQ
@@ -125,7 +124,7 @@ namespace QMake
    ( #list=value | CONT NEWLINE )+
 -> value_list ;;
 
-   value=VALUE | value=QUOTEDVALUE
+   value=VALUE
 -> value ;;
 
    LPAREN args=arg_list RPAREN
@@ -160,18 +159,27 @@ void parser::tokenize( const QString& contents )
     do
     {
         kind = lexer.getNextTokenKind();
-        if( m_debug )
-        {
-            kDebug(9024) << kind << "(" << lexer.getTokenBegin() << "," << lexer.getTokenEnd() << ")::" << tokenText(lexer.getTokenBegin(), lexer.getTokenEnd()) << "::"<< endl; //" "; // debug output
-        }
 
         if ( !kind ) // when the lexer returns 0, the end of file is reached
             kind = parser::Token_EOF;
 
         parser::token_type &t = this->token_stream->next();
         t.kind = kind;
-        t.begin = lexer.getTokenBegin();
-        t.end = lexer.getTokenEnd();
+        if( t.kind == parser::Token_EOF )
+        {
+            t.begin = m_contents.size();
+            t.end = m_contents.size();
+        }else
+        {
+            t.begin = lexer.getTokenBegin();
+            t.end = lexer.getTokenEnd();
+        }
+
+        if( m_debug )
+        {
+            kDebug(9024) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end) << "::"<< endl; //" "; // debug output
+        }
+
     }
     while ( kind != parser::Token_EOF );
 

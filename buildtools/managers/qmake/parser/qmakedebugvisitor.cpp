@@ -73,7 +73,9 @@ void DebugVisitor::visit_scope( scope_ast *node )
 {
     kDebug(9024) << getIndent() << "BEGIN(scope)( " << getTokenInfo(node->start_token)  << " )" << endl;
     indent++;
-    default_visitor::visit_scope( node );
+    visit_node( node->func_args );
+    visit_node( node->or_op );
+    visit_node( node->scope_body );
     indent--;
     kDebug(9024) << getIndent() << "END(scope)( " << getTokenInfo(node->end_token)  << " )" << endl;
 

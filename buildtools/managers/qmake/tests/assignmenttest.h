@@ -88,13 +88,13 @@ class AssignmentTest : public QObject
         void varNameDollar_data();
         void commentInMultiline();
         void commentInMultiline_data();
-
         void commandExecQMakeVar();
         void commandExecQMakeVar_data();
-        void noDashEndVar();
-        void noDashEndVar_data();
         void varComment();
         void varComment_data();
+
+        void noDashEndVar();
+        void noDashEndVar_data();
         void contAfterComment();
         void contAfterComment_data();
     private:
