@@ -504,7 +504,7 @@ void TrollProjectWidget::cleanDetailView( QMakeScopeItem *item )
     {
         QListViewItem* i = details->firstChild();
         while( i )
-        {
+	{
             QListViewItem* old = i;
             i = i->nextSibling();
             details->takeItem(old);
@@ -1771,8 +1771,9 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         }
         else if ( r == idViewUIH )
         {
+            kdDebug(9024) << "Opening:" << fitem->text(0) << ";" << fitem->text(0).replace(".ui","") << endl;
             m_part->partController() ->editDocument( KURL( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) +
-                    QString( fitem->text( 0 ) + ".h" ) ) );
+                    QString( fitem->text( 0 ).replace(".ui","") + ".h" ) ) );
 
         }
         else if ( r == idSubclassWidget )
