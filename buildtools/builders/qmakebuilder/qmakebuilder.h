@@ -51,6 +51,8 @@ public:
     virtual bool build(KDevelop::ProjectBaseItem *dom);
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
 
+    QString qmakeBinary( KDevelop::IProject* project );
+
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
