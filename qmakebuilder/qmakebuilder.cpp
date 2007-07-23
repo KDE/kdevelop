@@ -195,6 +195,14 @@ void QMakeBuilder::errored(int id)
         emit failed(m_items[id]);
 }
 
+QString QMakeBuilder::qmakeBinary( KDevelop::IProject* project )
+{
+    KSharedConfig::Ptr cfg = project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "QMake Builder");
+    KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
+    return v.toLocalFile();
+}
+
 #include "qmakebuilder.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
