@@ -1,7 +1,15 @@
 
+find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
+include(MacroLibrary)
+find_package(KDevPlatform REQUIRED)
+find_package(KDevelop REQUIRED)
+find_package(KDevelop-PG REQUIRED)
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES}
+	${KDEVELOP_INCLUDE_DIR}/qmake/
+	)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR}
-    ${CMAKE_SOURCE_DIR}/buildtools/builders/qmakebuilder
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
     ${KDEVPLATFORM_INCLUDE_DIR}/project
     ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
@@ -9,27 +17,27 @@ include_directories(${KDEVPLATFORM_INCLUDE_DIR}
     )
 
 set(parser_STAT_SRCS
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeast.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastassignment.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastbody.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastor.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastproject.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastfunc.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastscope.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakeastsimple.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakedriver.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakedebugvisitor.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/buildastvisitor.cpp
-    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakelexer.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeast.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeastassignment.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeastbody.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeastor.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeastproject.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeastfunc.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeastscope.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakeastsimple.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakedriver.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakedebugvisitor.cpp
+    ${CMAKE_SOURCE_DIR}/parser/buildastvisitor.cpp
+    ${CMAKE_SOURCE_DIR}/parser/qmakelexer.cpp
     )
 
-find_package(KDevelop-PG QUIET)
+#find_package(KDevelop-PG QUIET)
 
 macro(GET_GENERATED_SRCS _srcFiles)
     if(KDEVPG_FOUND)
         kdevpg_generate(_files qmake NAMESPACE QMake DUMP_INFO
-            "${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmake.g"
-    	    "${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/qmakelexer.h")
+            "${CMAKE_SOURCE_DIR}/parser/qmake.g"
+    	    "${CMAKE_SOURCE_DIR}/parser/qmakelexer.h")
 
         include_directories(
             ${CMAKE_CURRENT_BINARY_DIR}
@@ -39,11 +47,11 @@ macro(GET_GENERATED_SRCS _srcFiles)
     else(KDEVPG_FOUND)
         message(STATUS "Assuming existence of the parser/generated parser files for the parser")
         set(${_srcFiles}
-            ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_parser.cpp
-            ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_default_visitor.cpp
-            ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/qmake_visitor.cpp)
-        include_directories( ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated
-            ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser/generated/kdevelop-pg )
+            ${CMAKE_SOURCE_DIR}/parser/generated/qmake_parser.cpp
+            ${CMAKE_SOURCE_DIR}/parser/generated/qmake_default_visitor.cpp
+            ${CMAKE_SOURCE_DIR}/parser/generated/qmake_visitor.cpp)
+        include_directories( ${CMAKE_SOURCE_DIR}/parser/generated
+            ${CMAKE_SOURCE_DIR}/parser/generated/kdevelop-pg )
     endif(KDEVPG_FOUND)
 endmacro(GET_GENERATED_SRCS)
 
