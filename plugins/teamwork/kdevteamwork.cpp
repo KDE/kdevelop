@@ -353,7 +353,7 @@ KDevTeamwork::~KDevTeamwork() {
     l->invalidateTeamwork();
   } else {
     ///error
-    kDebug() << "error while destruction of KDevTeamwork: could not lock client-pointer. Client cannot be destroyed.";
+    kDebug() << "error while destruction of KDevTeamwork: could not lock client-pointer. Client cannot be destroyed." << endl;
   }
 
   m_logger.lock() ->invalidate();
