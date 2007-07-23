@@ -65,7 +65,7 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(ParseTest, failSimpleProject, "VAR =")
 
-BEGINTESTFUNCIMPL(ParseTest, successFullProject, 11)
+BEGINTESTFUNCIMPL(ParseTest, successFullProject, 10)
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( ParseTest, successFullProject, "#Comment\n"

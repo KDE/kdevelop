@@ -109,7 +109,7 @@ int Lexer::getNextTokenKind()
     int token = parser::Token_INVALID;
     if ( m_curpos >= m_contentSize )
     {
-        return parser::Token_EOF;
+        return 0;
     }
     QChar* it = m_content.data();
     it += m_curpos;
@@ -131,8 +131,10 @@ int Lexer::getNextTokenKind()
             {
                 it++;
                 m_curpos++;
-                while( it->unicode() != '"' && it->unicode() != '\n' && !isCont( it ) )
+                QChar* lastit = it;
+                while( ( it->unicode() != '"' || lastit->unicode() == '\\' && it->unicode() == '"' ) && it->unicode() != '\n' && !isCont( it ) )
                 {
+                    lastit = it;
                     it++;
                     m_curpos++;
                 }
@@ -140,7 +142,7 @@ int Lexer::getNextTokenKind()
                 {
                     m_curpos--;
                 }
-                token = parser::Token_QUOTEDVALUE;
+                token = parser::Token_VALUE;
             }else if( it->unicode() == '(' )
             {
                 unsigned int bracecount = 0;
@@ -163,7 +165,7 @@ int Lexer::getNextTokenKind()
                 token = parser::Token_VALUE;
             }else
             {
-                while( !it->isSpace() && !isCont(it) )
+                while( !it->isSpace() && !isCont(it) && m_curpos < m_contentSize )
                 {
                     it++;
                     m_curpos++;
@@ -184,20 +186,6 @@ int Lexer::getNextTokenKind()
             }else if( it->unicode() == ',' )
             {
                 token = parser::Token_COMMA;
-            }else if( it->unicode() == '"')
-            {
-                it++;
-                m_curpos++;
-                while( it->unicode() != '"' && it->unicode() != '\n' && !isCont( it ) )
-                {
-                    it++;
-                    m_curpos++;
-                }
-                if( it->unicode() != '"' )
-                {
-                    m_curpos--;
-                }
-                token = parser::Token_QUOTEDVALUE;
             }else if( it->unicode() == ')' )
             {
                 popState();
@@ -205,7 +193,7 @@ int Lexer::getNextTokenKind()
             }else
             {
                 unsigned int parentCount = 0;
-                while( parentCount > 0 || ( it->unicode() != ')' && it->unicode() != ',' ) )
+                while( parentCount > 0 || ( it->unicode() != ')' && it->unicode() != ',' ) && m_curpos < m_contentSize )
                 {
                     if( it->unicode() == ')' )
                     {
@@ -233,13 +221,17 @@ int Lexer::getNextTokenKind()
         case DefaultState:
             it = ignoreWhitespace( it );
             m_tokenBegin = m_curpos;
-            if ( Lexer::isIdentifierCharacter( it ) )
+            if ( Lexer::isBeginIdentifierCharacter( it ) )
             {
                 token = parser::Token_IDENTIFIER;
                 while ( !it->isSpace() && Lexer::isIdentifierCharacter( it ) )
                 {
                     it++;
                     m_curpos++;
+                }
+                if( !Lexer::isEndIdentifierCharacter( ( it-1 ) ) )
+                {
+                    token = parser::Token_INVALID;
                 }
                 m_curpos--;
             }
@@ -318,7 +310,7 @@ int Lexer::getNextTokenKind()
     }
     if ( m_curpos >= m_contentSize )
     {
-        return parser::Token_EOF;
+        return 0;
     }
     m_tokenEnd = m_curpos;
     m_curpos++;
@@ -335,29 +327,37 @@ std::size_t Lexer::getTokenEnd() const
     return m_tokenEnd;
 }
 
-// bool Lexer::isSpecialValueCharacter( QChar* c )
-// {
-//     return(
-//               c->unicode() == '$'
-//               || c->unicode() == '{'
-//               || c->unicode() == '}'
-//               || c->unicode() == '('
-//               || c->unicode() == ')'
-//               || c->unicode() == '['
-//               || c->unicode() == ']'
-//               || ( state() == FunctionArgState && c->unicode() == ',' )
-//               || c->unicode() == '"'
-//           );
-// }
-
 bool Lexer::isIdentifierCharacter( QChar* c )
 {
     return ( c->isLetter()
              || c->isDigit()
              || c->unicode() == '_'
              || c->unicode() == '.'
+             || c->unicode() == '-'
+             || c->unicode() == '$'
            );
 }
+
+bool Lexer::isBeginIdentifierCharacter( QChar* c )
+{
+    return ( c->isLetter()
+             || c->isDigit()
+             || c->unicode() == '_'
+             || c->unicode() == '.'
+             || c->unicode() == '$'
+           );
+}
+
+bool Lexer::isEndIdentifierCharacter( QChar* c )
+{
+    return ( c->isLetter()
+             || c->isDigit()
+             || c->unicode() == '_'
+             || c->unicode() == '.'
+             || c->unicode() == '$'
+           );
+}
+
 
 bool Lexer::isCont( QChar* c )
 {

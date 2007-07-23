@@ -75,12 +75,13 @@ AST::Type ValueAST::type() const
 }
 
 StatementAST::StatementAST( AST* parent )
-        : AST( parent )
+        : AST( parent ), m_identifier(0)
 {}
 
 StatementAST::~StatementAST( )
 {
     delete m_identifier;
+    m_identifier = 0;
 }
 
 
@@ -93,8 +94,6 @@ void StatementAST::setIdentifier( ValueAST* id )
 {
     m_identifier = id;
 }
-
-
 
 int StatementAST::line() const
 {

@@ -340,7 +340,12 @@ DATAFUNCIMPL( FunctionScopeTest, missingParenthesis,
               "eval(SOMETHINGELSE\n" )
 
 
-BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingStmt, "No statement on one line function scope" )
+BEGINTESTFUNCIMPL( FunctionScopeTest, missingStmt, 1 )
+    QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
+    TESTFUNCNAME( fn, "eval" )
+    QStringList testlist;
+    testlist << " SOMETHINGELSE " ;
+
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, missingStmt,

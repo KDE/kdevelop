@@ -117,12 +117,12 @@ void BuildASTVisitor::visit_scope( scope_ast *node )
         {
             FunctionCallAST* call = new FunctionCallAST( aststack.top() );
             aststack.push( call );
+            visit_node( node->func_args );
         }else
         {
             SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
             aststack.push( simple );
         }
-        visit_node( node->func_args );
     }
     if( node->scope_body )
     {
@@ -175,7 +175,6 @@ void BuildASTVisitor::visit_stmt( stmt_ast *node )
         stmt->setIdentifier( val );
         ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
         scope->addStatement(stmt);
-        kDebug(9024) << "added stmt to scope:" << scope->type() << endl;
     }
 }
 
