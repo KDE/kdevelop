@@ -88,12 +88,11 @@ namespace QMake
         Token_NEWLINE =  1011,
         Token_OR =  1012,
         Token_PLUSEQ =  1013,
-        Token_QUOTEDVALUE =  1014,
-        Token_RBRACE =  1015,
-        Token_RPAREN =  1016,
-        Token_STAREQ =  1017,
-        Token_TILDEEQ =  1018,
-        Token_VALUE =  1019,
+        Token_RBRACE =  1014,
+        Token_RPAREN =  1015,
+        Token_STAREQ =  1016,
+        Token_TILDEEQ =  1017,
+        Token_VALUE =  1018,
         token_type_size
       }; // token_type_enum
 

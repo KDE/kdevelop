@@ -21,18 +21,28 @@ namespace QMake
       {
         kind =  lexer.getNextTokenKind();
 
-        if ( m_debug )
-          {
-            kDebug(9024) <<  kind <<  "(" <<  lexer.getTokenBegin() <<  "," <<  lexer.getTokenEnd() <<  ")::" <<  tokenText(lexer.getTokenBegin(),  lexer.getTokenEnd()) <<  "::" <<  endl; //" "; // debug output
-          }
-
         if  ( !kind ) // when the lexer returns 0, the end of file is reached
           kind =  parser::Token_EOF;
 
         parser::token_type &t =  this->token_stream->next();
         t.kind =  kind;
-        t.begin =  lexer.getTokenBegin();
-        t.end =  lexer.getTokenEnd();
+        if ( t.kind ==  parser::Token_EOF )
+          {
+            t.begin =  m_contents.size();
+            t.end =  m_contents.size();
+          }
+
+        else
+          {
+            t.begin =  lexer.getTokenBegin();
+            t.end =  lexer.getTokenEnd();
+          }
+
+        if ( m_debug )
+          {
+            kDebug(9024) <<  kind <<  "(" <<  t.begin <<  "," <<  t.end <<  ")::" <<  tokenText(t.begin,  t.end) <<  "::" <<  endl; //" "; // debug output
+          }
+
       }
 
     while  ( kind !=  parser::Token_EOF );
@@ -102,15 +112,12 @@ namespace QMake
     (*yynode)->start_token =  token_stream->index() -  1;
 
     if  (yytoken ==  Token_CONT
-         ||  yytoken ==  Token_VALUE
-         ||  yytoken ==  Token_QUOTEDVALUE ||  yytoken ==  Token_RPAREN)
+         ||  yytoken ==  Token_VALUE ||  yytoken ==  Token_RPAREN)
       {
         if  (yytoken ==  Token_CONT
-             ||  yytoken ==  Token_VALUE
-             ||  yytoken ==  Token_QUOTEDVALUE)
+             ||  yytoken ==  Token_VALUE)
           {
-            if  (yytoken ==  Token_VALUE
-                 ||  yytoken ==  Token_QUOTEDVALUE)
+            if  (yytoken ==  Token_VALUE)
               {
                 value_ast *__node_0 =  0;
 
@@ -854,39 +861,17 @@ namespace QMake
 
     (*yynode)->start_token =  token_stream->index() -  1;
 
-    if  (yytoken ==  Token_VALUE
-         ||  yytoken ==  Token_QUOTEDVALUE)
+    if  (yytoken ==  Token_VALUE)
       {
-        if  (yytoken ==  Token_VALUE)
+        if  (yytoken !=  Token_VALUE)
           {
-            if  (yytoken !=  Token_VALUE)
-              {
-                yy_expected_token(yytoken,  Token_VALUE,  "value");
-                return  false;
-              }
-
-            (*yynode)->value =  token_stream->index() -  1;
-            yylex();
-
-          }
-
-        else if  (yytoken ==  Token_QUOTEDVALUE)
-          {
-            if  (yytoken !=  Token_QUOTEDVALUE)
-              {
-                yy_expected_token(yytoken,  Token_QUOTEDVALUE,  "quotedvalue");
-                return  false;
-              }
-
-            (*yynode)->value =  token_stream->index() -  1;
-            yylex();
-
-          }
-
-        else
-          {
+            yy_expected_token(yytoken,  Token_VALUE,  "value");
             return  false;
           }
+
+        (*yynode)->value =  token_stream->index() -  1;
+        yylex();
+
       }
 
     else
@@ -906,13 +891,11 @@ namespace QMake
     (*yynode)->start_token =  token_stream->index() -  1;
 
     if  (yytoken ==  Token_CONT
-         ||  yytoken ==  Token_VALUE
-         ||  yytoken ==  Token_QUOTEDVALUE)
+         ||  yytoken ==  Token_VALUE)
       {
         do
           {
-            if  (yytoken ==  Token_VALUE
-                 ||  yytoken ==  Token_QUOTEDVALUE)
+            if  (yytoken ==  Token_VALUE)
               {
                 value_ast *__node_17 =  0;
 
@@ -953,8 +936,7 @@ namespace QMake
           }
 
         while  (yytoken ==  Token_CONT
-                ||  yytoken ==  Token_VALUE
-                ||  yytoken ==  Token_QUOTEDVALUE);
+                ||  yytoken ==  Token_VALUE);
       }
 
     else
@@ -989,28 +971,15 @@ namespace QMake
 
         (*yynode)->op =  __node_18;
 
-        if  (yytoken ==  Token_CONT
-             ||  yytoken ==  Token_VALUE
-             ||  yytoken ==  Token_QUOTEDVALUE)
+        value_list_ast *__node_19 =  0;
+
+        if  (!parse_value_list(&__node_19))
           {
-            value_list_ast *__node_19 =  0;
-
-            if  (!parse_value_list(&__node_19))
-              {
-                yy_expected_symbol(ast_node::Kind_value_list,  "value_list");
-                return  false;
-              }
-
-            (*yynode)->values =  __node_19;
-
-          }
-
-        else if  (true /*epsilon*/)
-        {}
-        else
-          {
+            yy_expected_symbol(ast_node::Kind_value_list,  "value_list");
             return  false;
           }
+
+        (*yynode)->values =  __node_19;
 
         if  (yytoken ==  Token_NEWLINE)
           {
@@ -1024,18 +993,8 @@ namespace QMake
 
           }
 
-        else if  (yytoken ==  Token_EOF)
-          {
-            if  (yytoken !=  Token_EOF)
-              {
-                yy_expected_token(yytoken,  Token_EOF,  "EOF");
-                return  false;
-              }
-
-            yylex();
-
-          }
-
+        else if  (true /*epsilon*/)
+        {}
         else
           {
             return  false;
