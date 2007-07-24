@@ -31,6 +31,7 @@ set(kdevsubversion_PART_SRCS
     svn_revisionwidget.cpp
     svn_statuswidgets.cpp
     svn_revertwidgets.cpp
+    svn_copywidgets.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -49,6 +50,7 @@ set(kdevsubversion_PART_UI
     uistatus_option_dlg.ui
     uiblame_option_dlg.ui
     uirevert_option_dlg.ui
+    uicopy_option_dlg.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

@@ -130,6 +130,7 @@ private:
     void diffToHead( const KUrl &path );
     void diffToBase( const KUrl &path );
     void svnStatus( const KUrl &wcPath );
+    void copy( const KUrl &path_or_url );
 
 public:
     // SubversionPart internal methods
@@ -166,6 +167,7 @@ public Q_SLOTS:
     void ctxDiffBase();
     void ctxInfo();
     void ctxStatus();
+    void ctxCopy();
 
 private:
 

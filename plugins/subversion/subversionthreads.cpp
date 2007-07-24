@@ -1208,6 +1208,9 @@ void SvnCopyJob::run()
         return;
     }
 
+    QString notifyMsg = QString("Copied revision %1" ).arg( commit_info->revision );
+    SvnNotificationEvent *event = new SvnNotificationEvent( QString(), notifyMsg );
+    QCoreApplication::postEvent( kjob()->parent(), event );
     svn_pool_destroy( subpool );
     return;
 }

@@ -26,6 +26,7 @@
 #include "svn_statuswidgets.h"
 #include "svn_blamewidgets.h"
 #include "svn_revertwidgets.h"
+#include "svn_copywidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -629,6 +630,32 @@ void KDevSubversionPart::svnStatus( const KUrl &wcPath )
     svncore()->spawnStatusThread( wcPath, rev, isRecurse, getall, update, noignore, igExts );
 }
 
+void KDevSubversionPart::copy( const KUrl &path_or_url )
+{
+    SvnRevision pegRev; // null revision to fetch working copy info.
+    SvnKJobBase *infojob = svncore()->createInfoJob( path_or_url, pegRev, pegRev, false );
+    SvnCopyOptionDlg *dlg = 0;
+
+    bool infoSucceded = false;
+
+    if( infojob->exec() == VcsJob::JobSucceeded ){
+        SvnInfoJob *thread = dynamic_cast<SvnInfoJob*>(infojob->svnThread());
+        if( thread && thread->m_holderMap.contains(path_or_url) ){
+            SvnInfoHolder holder = thread->m_holderMap[path_or_url];
+            infoSucceded = true;
+            dlg = new SvnCopyOptionDlg( path_or_url, &holder, 0 );
+        }
+    }
+
+    if( infoSucceded == false ){
+        dlg = new SvnCopyOptionDlg( path_or_url, 0, 0 );
+    }
+
+    if( dlg->exec() == QDialog::Accepted ){
+        svncore()->spawnCopyThread( dlg->source(), dlg->sourceRev(), dlg->dest() );
+    }
+}
+
 SubversionCore* KDevSubversionPart::svncore()
 {
     return d->m_impl;
@@ -749,6 +776,10 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
 
         action = new QAction(i18n("Status..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
+        actions << action;
+
+        action = new QAction(i18n("Copy..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCopy()) );
         actions << action;
 
         return qMakePair( QString("Subversion"), actions );
@@ -938,6 +969,15 @@ void KDevSubversionPart::ctxStatus()
         return;
     }
     svnStatus( d->m_ctxUrlList.first() );
+}
+
+void KDevSubversionPart::ctxCopy()
+{
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    copy( d->m_ctxUrlList.first() );
 }
 
 

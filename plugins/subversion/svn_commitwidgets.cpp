@@ -45,8 +45,11 @@ void SvnCommitLogInputDlg::setCommitItems( apr_array_header_t *cis )
     for( int i = 0; i < cis->nelts; i++ ){
         svn_client_commit_item_t *item = ((svn_client_commit_item_t **) cis->elts)[i];
 
-        QString path( item->path );
-        if( path.isEmpty() ) path = ".";
+        QString pathOrUrl;
+        if( item->path )
+            pathOrUrl = QString(item->path);
+        else if( item->url )
+            pathOrUrl = QString(item->url);
 
         char text_mod = '_', prop_mod = '_';
         if ((item->state_flags & SVN_CLIENT_COMMIT_ITEM_DELETE) && (item->state_flags & SVN_CLIENT_COMMIT_ITEM_ADD))
@@ -65,7 +68,7 @@ void SvnCommitLogInputDlg::setCommitItems( apr_array_header_t *cis )
             prop_mod = 'L';
 
         QString oneRow;
-        oneRow = oneRow + text_mod + ' ' + prop_mod + ' ' + path;
+        oneRow = oneRow + text_mod + ' ' + prop_mod + ' ' + pathOrUrl;
         d->ui.listWidget->addItem( oneRow );
     }
 }
