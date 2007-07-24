@@ -374,7 +374,7 @@ QMap<QString, QString> MakeBuilder::environmentVars( KDevelop::ProjectBaseItem* 
     if( defaultProfile.isEmpty() )
         return retMap;
 
-    QMap<QString, QString> userMap = EnvWidget::environmentPairFor(
+    QMap<QString, QString> userMap = KDevelop::EnvWidget::environmentPairFor(
             configPtr, defaultProfile );
 
     for( QMap<QString, QString>::iterator it = userMap.begin();

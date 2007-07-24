@@ -89,7 +89,7 @@
     </widget>
    </item>
    <item row="7" column="2" colspan="2" >
-    <widget class="EnvSelectWidget" native="1" name="envSelectWidget" />
+    <widget class="KDevelop::EnvSelectWidget" native="1" name="envSelectWidget" />
    </item>
    <item row="8" column="0" colspan="4" >
     <spacer>
@@ -113,7 +113,7 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>EnvSelectWidget</class>
+   <class>KDevelop::EnvSelectWidget</class>
    <extends>QWidget</extends>
    <header location="global" >envselectwidget.h</header>
    <container>1</container>
