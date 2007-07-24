@@ -72,9 +72,9 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
     }
 }
 
-void QMakeProjectScope::setQMakeVariables( const QHash<QString,QString>& hash )
+void QMakeProjectScope::setMkSpecs( QMakeMkSpecs* mkspecs )
 {
-    m_qmakeVariables = hash;
+    m_mkSpecs = mkspecs;
 }
 
 QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
@@ -101,9 +101,9 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
                     KUrl u = absoluteDirUrl();
                     u.adjustPath( KUrl::AddTrailingSlash );
                     u.setFileName( value->value().trimmed() );
-                    QMakeProjectScope* scope = new QMakeProjectScope( u );
-                    scope->setQMakeVariables( m_qmakeVariables );
-                    list.append( scope );
+                    QMakeProjectScope* qmscope = new QMakeProjectScope( u );
+                    qmscope->setMkSpecs( m_mkSpecs );
+                    list.append( qmscope );
                 }
             }
         }

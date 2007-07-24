@@ -30,6 +30,8 @@ namespace QMake{
     class ProjectAST;
 }
 
+class QMakeMkSpecs;
+
 class QMakeProjectScope
 {
     public:
@@ -49,12 +51,12 @@ class QMakeProjectScope
 
         KUrl absoluteFileUrl() const { return m_projectFileUrl; }
 
-        void setQMakeVariables( const QHash<QString,QString>& hash );
+        void setMkSpecs( QMakeMkSpecs* mkspecs );
 
     private:
         QMake::ProjectAST* m_ast;
         KUrl m_projectFileUrl;
-        QHash<QString,QString> m_qmakeVariables;
+        QMakeMkSpecs* m_mkSpecs;
 };
 
 #endif

@@ -19,7 +19,7 @@
  */
 
 #include "qmakemanager.h"
-
+#include "qmakemkspecs.h"
 #include <QList>
 #include <QVector>
 
@@ -124,8 +124,9 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         KUrl projecturl = dirName;
         projecturl.adjustPath( KUrl::AddTrailingSlash );
         projecturl.setFileName( projectfile );
+        QMakeMkSpecs* mkspecs = new QMakeMkSpecs( queryQMake( project ) );
         QMakeProjectScope* scope = new QMakeProjectScope( projecturl );
-        scope->setQMakeVariables( queryQMake( project ) );
+        scope->setMkSpecs( mkspecs );
         return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
     return 0;
