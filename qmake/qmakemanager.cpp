@@ -25,9 +25,11 @@
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QtCore/QHash>
 
 #include <kurl.h>
 #include <kio/job.h>
+#include <kprocess.h>
 
 #include <icore.h>
 #include <iplugincontroller.h>
@@ -122,7 +124,9 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         KUrl projecturl = dirName;
         projecturl.adjustPath( KUrl::AddTrailingSlash );
         projecturl.setFileName( projectfile );
-        return new QMakeProjectItem( project, new QMakeProjectScope( projecturl ), project->name(), project->folder() );
+        QMakeProjectScope* scope = new QMakeProjectScope( projecturl );
+        scope->setQMakeVariables( queryQMake( project ) );
+        return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
     return 0;
 }
@@ -166,6 +170,37 @@ KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* it
 {
     Q_UNUSED(item)
     return KUrl::List();
+}
+
+QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* project )
+{
+    if( !project->folder().isLocalFile() )
+        return QHash<QString,QString>();
+
+    QHash<QString,QString> hash;
+    KProcess p;
+    QStringList queryVariables;
+    queryVariables << "QMAKE_MKSPECS" << "QMAKE_VERSION" <<
+            "QT_INSTALL_BINS" << "QT_INSTALL_CONFIGURATION" <<
+            "QT_INSTALL_DATA" << "QT_INSTALL_DEMOS" << "QT_INSTALL_DOCS" <<
+            "QT_INSTALL_EXAMPLES" << "QT_INSTALL_HEADERS" <<
+            "QT_INSTALL_LIBS" << "QT_INSTALL_PLUGINS" << "QT_INSTALL_PREFIX" <<
+            "QT_INSTALL_TRANSLATIONS" << "QT_VERSION";
+    foreach( QString var, queryVariables)
+    {
+        p.clearProgram();
+        p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+        p.setWorkingDirectory( project->folder().toLocalFile() );
+        //To be implemented when there's an API to fetch Env from Project
+        //p.setEnv();
+        p << m_builder->qmakeBinary( project ) << "-query" << var;
+        p.execute();
+        QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
+        if( result != "**Unknown**")
+            hash[var] = result;
+    }
+    kDebug(9024) << "Ran qmake (" << m_builder->qmakeBinary( project ) << "), found:" << hash << endl;
+    return hash;
 }
 
 #include "qmakemanager.moc"

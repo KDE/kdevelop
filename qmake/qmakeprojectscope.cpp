@@ -72,6 +72,11 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
     }
 }
 
+void QMakeProjectScope::setQMakeVariables( const QHash<QString,QString>& hash )
+{
+    m_qmakeVariables = hash;
+}
+
 QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
 {
     kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
@@ -96,7 +101,9 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
                     KUrl u = absoluteDirUrl();
                     u.adjustPath( KUrl::AddTrailingSlash );
                     u.setFileName( value->value().trimmed() );
-                    list.append( new QMakeProjectScope( u ) );
+                    QMakeProjectScope* scope = new QMakeProjectScope( u );
+                    scope->setQMakeVariables( m_qmakeVariables );
+                    list.append( scope );
                 }
             }
         }

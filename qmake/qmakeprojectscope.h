@@ -22,6 +22,7 @@
 #define QMAKEPROJECTSCOPE_H
 
 #include <kurl.h>
+#include <QtCore/QHash>
 
 template <typename T> class QList;
 
@@ -48,9 +49,12 @@ class QMakeProjectScope
 
         KUrl absoluteFileUrl() const { return m_projectFileUrl; }
 
+        void setQMakeVariables( const QHash<QString,QString>& hash );
+
     private:
         QMake::ProjectAST* m_ast;
         KUrl m_projectFileUrl;
+        QHash<QString,QString> m_qmakeVariables;
 };
 
 #endif
