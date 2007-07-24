@@ -38,6 +38,9 @@ class QStringList;
 Convenience class to catch output of K3Process.
 */
 
+namespace KDevelop
+{
+
 class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
 {
     Q_OBJECT
@@ -64,6 +67,8 @@ private:
     class ProcessLineMakerPrivate* const d;
     friend class ProcessLineMakerPrivate;
 };
+
+}
 
 #endif
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

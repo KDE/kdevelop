@@ -21,6 +21,9 @@ Boston, MA 02110-1301, USA.
 #include <ksettings/dispatcher.h>
 #include <kcomponentdata.h>
 
+namespace KDevelop
+{
+
 class EnvSelectWidget::Private
 {
 public:
@@ -98,6 +101,8 @@ void EnvSelectWidget::currentIndexChanged(int /*idx*/)
 KComboBox* EnvSelectWidget::combo()
 {
     return this;
+}
+
 }
 
 #include "envselectwidget.moc"

@@ -29,6 +29,9 @@ class KSharedConfigPtr;
 
 template <typename T1, typename T2> class QMap;
 
+namespace KDevelop
+{
+
 /**
  * @short Environment variable setting widget.
  * Two entry are set by this widget -- "Default Env Group" and "Environment Variables".
@@ -143,6 +146,8 @@ private:
     class Private;
     Private *const d;
 };
+
+}
 
 #endif
 

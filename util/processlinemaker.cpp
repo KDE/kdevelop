@@ -23,6 +23,9 @@
 #include <QtCore/QProcess>
 #include <QtCore/QStringList>
 
+namespace KDevelop
+{
+
 class ProcessLineMakerPrivate
 {
 public:
@@ -165,6 +168,8 @@ void ProcessLineMaker::clearBuffers( )
 {
     d->stderrbuf = "";
     d->stdoutbuf = "";
+}
+
 }
 
 #include "processlinemaker.moc"

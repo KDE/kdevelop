@@ -35,6 +35,9 @@ Boston, MA 02110-1301, USA.
 #include <kconfiggroup.h>
 #include <kconfigdialogmanager.h>
 
+namespace KDevelop
+{
+
 class EnvWidget::Private
 {
 public:
@@ -635,6 +638,8 @@ bool EnvWidget::diff()
 //     generateCurrentMaps();
 //     return ( m_currentOverrides != m_overrides
 //              || m_currentProcessDefaults != m_processDefaults );
+}
+
 }
 
 #include "envwidget.moc"

@@ -22,6 +22,9 @@ Boston, MA 02110-1301, USA.
 #include <kcombobox.h>
 #include "utilexport.h"
 
+namespace KDevelop
+{
+
 /**
  * Simple compobox which allows each plugin to decide which environment
  * variable group to use.
@@ -72,5 +75,7 @@ private:
     Private *const d;
 
 };
+
+}
 
 #endif
