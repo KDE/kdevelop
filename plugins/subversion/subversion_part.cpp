@@ -677,8 +677,25 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
     if( context->type() == KDevelop::Context::ProjectItemContext ){
         KDevelop::ProjectItemContext *itemCtx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
         QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
-        KUrl::List ctxUrlList;
 
+        // hook special case -- just one item was requested for folder context menu.
+        if( baseItemList.count() == 1 && baseItemList.first()->folder() ){
+            KDevelop::ProjectFolderItem *folderItem =
+                    dynamic_cast<KDevelop::ProjectFolderItem*>( baseItemList.first()->folder() );
+
+            if( !isVersionControlled( folderItem->url() ) ){
+                // checkout only can be done under the non-vcs dir.
+                d->m_ctxUrlList << folderItem->url();
+                QList<QAction*> actions;
+                QAction *action = new QAction(i18n("Checkout.."), this);
+                connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
+                actions << action;
+                return qMakePair( QString("Subversion"), actions );
+            }
+        }
+
+        // now general case
+        KUrl::List ctxUrlList;
         foreach( ProjectBaseItem* _item, baseItemList ){
             if( _item->folder() ){
                 ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>(_item);
@@ -694,38 +711,6 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
             return KDevelop::IPlugin::requestContextMenuActions( context );
 
         d->m_ctxUrlList = ctxUrlList;
-
-//         if( baseItem->folder() ){
-//             KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(baseItem);
-//             ctxUrl = folderItem->url();
-//             if( !isVersionControlled( ctxUrl ) ){
-//                 // checkout only can be done under the non-vcs dir.
-//                 d->m_ctxUrl = ctxUrl;
-//                 QList<QAction*> actions;
-//                 QAction *action = new QAction(i18n("Checkout.."), this);
-//                 connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
-//                 actions << action;
-//                 return qMakePair( QString("Subversion"), actions );
-//             }
-//         }
-//
-//         else if( baseItem->file() ){
-//             KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(baseItem);
-//             ctxUrl = fileItem->url();
-//             if( !isVersionControlled( ctxUrl ) ){
-//                 return KDevelop::IPlugin::requestContextMenuActions( context );
-//             }
-//         }
-//
-//         else if( baseItem->projectItem() ){
-//
-//         }
-//
-//         else {
-//             return KDevelop::IPlugin::requestContextMenuActions( context );
-//         }
-//
-//         if( ctxUrl.isValid() ){
 
         QList<QAction*> actions;
         QAction *action;
