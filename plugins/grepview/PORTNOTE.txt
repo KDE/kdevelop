@@ -1,0 +1,17 @@
+grepviewwidget.cpp/h is not needed anymore, since we use outputview.
+It is copied just to serve as reference.
+
+temporarily disabled during porting:
+    proper quotation in dialog box -- see GrepViewPart:;searchActivated().
+    At first line, print out actual command invokation as if it was run via shell.
+
+    useProjectFileFlag() == always false
+    slotKeepOutput()
+
+    at Grepdialog:
+    Kconfig
+    icon
+    tooltips
+    KPushButton with GuiItem
+
+    and many more..
