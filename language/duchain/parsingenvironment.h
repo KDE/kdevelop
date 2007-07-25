@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -23,7 +23,8 @@
 #include <ksharedptr.h>
 #include <kurl.h>
 
-namespace KDevelop {
+namespace KDevelop
+{
 
 /**
  * This class represents an identified file in the du-chain.
@@ -34,17 +35,22 @@ namespace KDevelop {
  * That logic is also implemented by "operator <", so it is automatically
  * implemented by a QMap<IdentifiedFile,...>
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile  {
+class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile
+{
   public:
     IdentifiedFile();
-    
+
     explicit IdentifiedFile( const KUrl& url , uint identity = 0 );
-    
+
+    ~IdentifiedFile();
+
     KUrl url() const;
-    
+
     uint identity() const;
 
     bool operator<( const IdentifiedFile& rhs ) const;
+
+    IdentifiedFile& operator=( const IdentifiedFile& rhs );
 
     bool isEmpty() const;
 
@@ -52,19 +58,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile  {
 
     ///Gives a short description(url identity)
     QString toString() const;
-  private:
-    KUrl m_url;
-    uint m_identity;
+private:
+  class IdentifiedFilePrivate* const d;
 };
 
   ///Access to all these classes must be serialized through du-chain locking
-  
+
 /**
  * Just an enumeration of a few parsing-environment types.
  * Enumerate a few possible future parsing-environment types.
  * A parsing-environment could also have a type not in this enumeration,
  * the only important thing is that it's unique for the type.
- * 
+ *
  * The type is needed to match ParsingEnvironment, ParsingEnvironmentFile, and ParsingEnvironmentManager together so they fit.
  * For example the c++-versions would have their specific type.
  *
@@ -72,7 +77,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile  {
  * and the type must be persistent.(it must be same after restarting kdevelop)
  *
  * */
-enum ParsingEnvironmentType {
+enum ParsingEnvironmentType
+{
   StandardParsingEnvironment,
   CppParsingEnvironment,
   PythonParsingEnvironment,
@@ -84,19 +90,22 @@ enum ParsingEnvironmentType {
 
 /**
  * Use this as base-class to define new parsing-environments.
- * 
+ *
  * Parsing-environments are needed for languages that create different
  * parsing-results depending on the environment. For example in c++,
  * the environment mainly consists of macros. The include-path can
  * be considered to be a part of the parsing-environment too, because
  * different files may be included using another include-path.
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment {
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment
+{
   public:
     virtual ~ParsingEnvironment();
 
     ///@see ParsingEnvironmentType
     virtual int type() const;
+private:
+  class ParsingEnvironmentPrivate const *d;
 };
 
 /**
@@ -108,7 +117,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment {
  * */
 
 
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared
+{
   public:
     virtual ~ParsingEnvironmentFile();
 
@@ -116,6 +126,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared {
     virtual int type() const;
 
     virtual IdentifiedFile identity() const = 0;
+private:
+  class ParsingEnvironmentFilePrivate const *d;
 };
 
 typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
@@ -131,7 +143,8 @@ typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
  * ParsingEnvironmentManager, because that can use additional structural information.
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager {
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
+{
   public:
     virtual ~ParsingEnvironmentManager();
 
@@ -145,9 +158,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager {
     virtual void removeFile( ParsingEnvironmentFile* file );
 
     /**
-     * Search for the availability of a file parsed in a given environment 
+     * Search for the availability of a file parsed in a given environment
      * */
     virtual ParsingEnvironmentFile* find( const KUrl& url, const ParsingEnvironment* environment );
+private:
+  class ParsingEnvironmentFilePrivate const *d;
 };
 }
 

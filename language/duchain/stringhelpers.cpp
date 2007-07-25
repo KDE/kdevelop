@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -16,14 +16,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
-#include <QChar>
-#include <QStringList>
 #include "stringhelpers.h"
 
-namespace KDevelop {
+#include <QString>
+#include <QStringList>
 
-bool parenFits( QChar c1, QChar c2 ) {
+namespace KDevelop
+{
+
+class ParamIteratorPrivate
+{
+public:
+  QString m_prefix;
+  QString m_source;
+  QString m_parens;
+  int m_cur;
+  int m_curEnd;
+
+  int next() const
+  {
+    return findCommaOrEnd( m_source, m_cur, m_parens[ 1 ] );
+  }
+};
+
+
+bool parenFits( QChar c1, QChar c2 )
+{
   if( c1 == '<' && c2 == '>' ) return true;
   else if( c1 == '(' && c2 == ')' ) return true;
   else if( c1 == '[' && c2 == ']' ) return true;
@@ -32,13 +50,15 @@ bool parenFits( QChar c1, QChar c2 ) {
     return false;
 }
 
-int findClose( const QString& str , int pos ) {
+int findClose( const QString& str , int pos )
+{
   int depth = 0;
   QList<QChar> st;
   QChar last = ' ';
-  
-  for( int a = pos; a < (int)str.length(); a++) {
-    switch(str[a].toAscii()) {
+
+  for( int a = pos; a < (int)str.length(); a++)
+  {
+    switch(str[a].unicode()) {
     case '<':
     case '(':
       case '[':
@@ -51,7 +71,8 @@ int findClose( const QString& str , int pos ) {
     case ')':
       case ']':
         case '}':
-        if( !st.isEmpty() && parenFits(st.front(), str[a]) ) {
+        if( !st.isEmpty() && parenFits(st.front(), str[a]) )
+        {
           depth--;
           st.pop_front();
         }
@@ -59,28 +80,33 @@ int findClose( const QString& str , int pos ) {
     case '"':
       last = str[a];
       a++;
-      while( a < (int)str.length() && (str[a] != '"' || last == '\\')) {
+      while( a < (int)str.length() && (str[a] != '"' || last == '\\'))
+      {
         last = str[a];
         a++;
       }
       continue;
       break;
     }
-    
+
     last = str[a];
-    
-    if( depth == 0 ) {
+
+    if( depth == 0 )
+    {
       return a;
     }
   }
-  
+
   return -1;
 }
 
-int findCommaOrEnd( const QString& str , int pos, QChar validEnd) {
-  
-  for( int a = pos; a < (int)str.length(); a++) {
-    switch(str[a].toAscii()) {
+int findCommaOrEnd( const QString& str , int pos, QChar validEnd)
+{
+
+  for( int a = pos; a < (int)str.length(); a++)
+  {
+    switch(str[a].unicode())
+    {
     case '"':
     case '(':
       case '[':
@@ -99,49 +125,56 @@ int findCommaOrEnd( const QString& str , int pos, QChar validEnd) {
       return a;
     }
   }
-  
+
   return str.length();
 }
 
-ParamIterator::ParamIterator( QString parens, QString source ) : m_source( source ), m_parens( parens ), m_cur( 0 ), m_curEnd ( 0 ) {
-  int begin = m_source.indexOf( m_parens[ 0 ] );
-  int end = m_source.lastIndexOf( m_parens[ 1 ] );
-  
+ParamIterator::ParamIterator( QString parens, QString source ) : d(new ParamIteratorPrivate)
+{
+  d->m_source = source;
+  d->m_parens = parens;
+  d->m_cur = 0;
+  d->m_curEnd = 0;
+  int begin = d->m_source.indexOf( d->m_parens[ 0 ] );
+  int end = d->m_source.lastIndexOf( d->m_parens[ 1 ] );
+
   if( begin != -1 )
-    m_prefix = m_source.left( begin );
+    d->m_prefix = d->m_source.left( begin );
   else
-    m_prefix = m_source;
+    d->m_prefix = d->m_source;
 
   if ( begin == -1 || end == -1 && end - begin > 1 )
-    m_cur = m_source.length();
-  else {
-    m_source = source.mid( begin + 1, end - begin );
-    m_curEnd = next();
+    d->m_cur = d->m_source.length();
+  else
+  {
+    d->m_source = source.mid( begin + 1, end - begin );
+    d->m_curEnd = d->next();
   }
 }
 
-ParamIterator& ParamIterator::operator ++() {
-  m_cur = m_curEnd + 1;
-  if ( m_cur < ( int ) m_source.length() ) {
-    m_curEnd = next();
+ParamIterator& ParamIterator::operator ++()
+{
+  d->m_cur = d->m_curEnd + 1;
+  if ( d->m_cur < ( int ) d->m_source.length() )
+  {
+    d->m_curEnd = d->next();
   }
   return *this;
 }
 
-QString ParamIterator::operator *() {
-  return m_source.mid( m_cur, m_curEnd - m_cur ).trimmed();
+QString ParamIterator::operator *()
+{
+  return d->m_source.mid( d->m_cur, d->m_curEnd - d->m_cur ).trimmed();
 }
 
-ParamIterator::operator bool() const {
-  return m_cur < ( int ) m_source.length();
+ParamIterator::operator bool() const
+{
+  return d->m_cur < ( int ) d->m_source.length();
 }
 
-QString ParamIterator::prefix() const {
-        return m_prefix;
-}
-
-int ParamIterator::next() const {
-  return findCommaOrEnd( m_source, m_cur, m_parens[ 1 ] );
+QString ParamIterator::prefix() const
+{
+  return d->m_prefix;
 }
 
 }

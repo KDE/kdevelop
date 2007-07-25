@@ -112,7 +112,7 @@ QString ParseJob::contentsFromEditor(bool saveRevisionToken)
 {
     KTextEditor::Document* doc = EditorIntegrator::documentForUrl(m_document);
     if( !doc )
-        return QString::null;
+        return QString();
     
     SmartInterface* smart = dynamic_cast<SmartInterface*>(doc);
 

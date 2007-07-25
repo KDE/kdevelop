@@ -74,7 +74,7 @@ void SimpleTypeVisitor::endVisit (const ArrayType * type) {
   visit( (AbstractType*)type );
 }
 
-  
+
 TypeVisitor::~TypeVisitor()
 {
 }
@@ -121,6 +121,12 @@ class ArrayTypePrivate
 public:
   int m_dimension;
   AbstractType::Ptr m_elementType;
+};
+
+class DelayedTypePrivate
+{
+public:
+  QualifiedIdentifier m_identifier;
 };
 
 AbstractType::AbstractType(const AbstractType& rhs) : KShared(), d(new AbstractTypePrivate(*rhs.d)) {
@@ -248,8 +254,8 @@ QString IntegralType::toString() const
 }
 
 void IntegralType::accept0(TypeVisitor *v) const
-{ 
-  v->visit (this); 
+{
+  v->visit (this);
 }
 
 AbstractType::WhichType IntegralType::whichType() const
@@ -581,33 +587,43 @@ AbstractType::WhichType ArrayType::whichType() const
   return TypeArray;
 }
 
-AbstractType::WhichType DelayedType::whichType() const {
+AbstractType::WhichType DelayedType::whichType() const
+{
   return AbstractType::TypeDelayed;
 }
 
-AbstractType* DelayedType::clone() const {
+AbstractType* DelayedType::clone() const
+{
   return new DelayedType(*this);
 }
 
-QString DelayedType::toString() const {
+QString DelayedType::toString() const
+{
   return "<delayed> " + qualifiedIdentifier().toString();
 }
 
-DelayedType::DelayedType() {
+DelayedType::DelayedType()
+  : d(new DelayedTypePrivate)
+{
 }
 
-DelayedType::~DelayedType() {
+DelayedType::~DelayedType()
+{
+  delete d;
 }
 
-void DelayedType::setQualifiedIdentifier(const QualifiedIdentifier& identifier) {
-  m_identifier = identifier;
+void DelayedType::setQualifiedIdentifier(const QualifiedIdentifier& identifier)
+{
+  d->m_identifier = identifier;
 }
 
-QualifiedIdentifier DelayedType::qualifiedIdentifier() const {
-  return m_identifier;
+QualifiedIdentifier DelayedType::qualifiedIdentifier() const
+{
+  return d->m_identifier;
 }
 
-void DelayedType::accept0 (KDevelop::TypeVisitor *v) const {
+void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
+{
     v->visit(this);
 /*    v->endVisit(this);*/
 }

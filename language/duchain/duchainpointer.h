@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -42,35 +42,32 @@ class Definition;
  * Store an instance of DUChainPointer instead of a pointer to the du-chain object.
  * Then, access the eventually still existing object by calling pointer->base().
  *
- * To make it even more convenient see 
+ * To make it even more convenient see
  * */
+
 class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
   public:
     /**
      * Will return zero once the pointed-to object was deleted
      * */
-    DUChainBase* base() {
-      return d;
-    }
-    
+    DUChainBase* base();
+
     /**
      * Will return zero once the pointed-to object was deleted
      * */
-    const DUChainBase* base() const {
-      return d;
-    }
+    DUChainBase* base() const;
 
     ///Default-initialization of an invalid reference
-    DUChainPointerData() : d(0) {
-    }
-    
+    DUChainPointerData();
+
+    ~DUChainPointerData();
+
   private:
     ///Should not be used from outside, but is needed sometimes to construct an invalid dummy-pointer
-    DUChainPointerData( DUChainBase* base ) : d(base) {
-    }
-    
+    DUChainPointerData( DUChainBase* base );
+
     friend class DUChainBase;
-    DUChainBase* d;
+    class DUChainPointerDataPrivate * const d;
     Q_DISABLE_COPY(DUChainPointerData)
 };
 
@@ -84,7 +81,7 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
  *
  * Access must be serialized through the du-chain locks
  * */
-  
+
   template<class Type>
   class DUChainPointer {
     public:
@@ -99,7 +96,7 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
       else
         d = DUChainBasePointer(0);
     }
-    
+
     DUChainPointer( Type* rhs ) {
       if( rhs )
         d = rhs->weakPointer();
@@ -116,7 +113,7 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
       Q_ASSERT(d);
       return *static_cast<Type*>(d->base());
     }
-    
+
     const Type& operator* () const {
       Q_ASSERT(d);
       return *static_cast<const Type*>(d->base());
@@ -138,7 +135,7 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
       else
         return DUChainPointer<NewType>();
     }
-    
+
     template<class NewType>
     DUChainPointer<NewType> dynamicCast() const {
       if( dynamic_cast<NewType*>( const_cast<DUChainPointerData*>(d->base()) ) ) //When the reference to the pointer is constant that doesn't mean that the pointed object needs to be constant
@@ -146,7 +143,7 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
       else
         return DUChainPointer<NewType>();
     }
-    
+
     Type* data() {
       if( !d )
         return 0;
@@ -164,10 +161,10 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
         d = rhs->weakPointer();
       else
         d = 0;
-      
+
       return *this;
     }
-    
+
     private:
       DUChainBasePointer d;
   };

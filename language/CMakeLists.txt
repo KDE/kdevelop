@@ -12,6 +12,7 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
     duchain/duchain.cpp
+    duchain/duchainpointer.cpp
     duchain/ducontext.cpp
     duchain/topducontext.cpp
     duchain/declaration.cpp

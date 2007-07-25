@@ -49,7 +49,7 @@ public:
 
   ///Return whether sub-types should be visited(same for the other visit functions)
   virtual bool visit(const AbstractType*) = 0;
-  
+
   virtual void visit (const IntegralType *) = 0;
 
   virtual bool visit (const PointerType *) = 0;
@@ -73,10 +73,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT SimpleTypeVisitor : public TypeVisitor
 public:
   ///When using SimpleTypeVisitor, this is the only function you must override to collect all types.
   virtual bool visit(const AbstractType*) = 0;
-  
+
   virtual bool preVisit (const AbstractType *) ;
   virtual void postVisit (const AbstractType *) ;
-  
+
   virtual void visit (const IntegralType *) ;
 
   virtual bool visit (const PointerType *) ;
@@ -136,7 +136,7 @@ public:
    * Should create a clone of the source-type, with as much data copied as possible without breaking the du-chain.
    * */
   virtual AbstractType* clone() const = 0;
-  
+
   uint hash() const;
 
   enum WhichType {
@@ -156,7 +156,7 @@ public:
    * Should, like accept0, be implemented by all types that hold references to other types.
    * */
   virtual void exchangeTypes( TypeExchanger* exchanger );
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
 
@@ -222,7 +222,7 @@ public:
   virtual WhichType whichType() const;
 
   virtual AbstractType* clone() const;
-  
+
   virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -254,7 +254,7 @@ public:
   virtual WhichType whichType() const;
 
   virtual AbstractType* clone() const;
-  
+
   virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -273,7 +273,7 @@ public:
   ~FunctionType();
 
   virtual AbstractType* clone() const;
-  
+
   AbstractType::Ptr returnType () const;
 
   void setReturnType(AbstractType::Ptr returnType);
@@ -310,7 +310,7 @@ public:
   typedef KSharedPtr<StructureType> Ptr;
 
   virtual AbstractType* clone() const;
-  
+
   const QList<AbstractType::Ptr>& elements () const;
 
   bool operator == (const StructureType &other) const;
@@ -341,9 +341,9 @@ public:
   typedef KSharedPtr<ArrayType> Ptr;
 
   ArrayType(const ArrayType&);
-  
+
   virtual AbstractType* clone() const;
-  
+
   ArrayType();
   ~ArrayType();
 
@@ -392,12 +392,12 @@ public:
   virtual QString toString() const;
 
   virtual AbstractType* clone() const;
-  
-  virtual WhichType whichType() const;
-  private:
-    virtual void accept0 (KDevelop::TypeVisitor *v) const ;
 
-    QualifiedIdentifier m_identifier;
+  virtual WhichType whichType() const;
+  protected:
+    virtual void accept0 (KDevelop::TypeVisitor *v) const ;
+  private:
+    class DelayedTypePrivate* const d;
 };
 
 template <class T>

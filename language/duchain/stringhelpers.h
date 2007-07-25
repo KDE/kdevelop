@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -21,16 +21,18 @@
 
 #include <languageexport.h>
 
+#include <QtCore/QChar>
+
 class QString;
-class QChar;
 class QStringList;
 
-namespace KDevelop {
+namespace KDevelop
+{
 
 /**
 searches a fitting closing brace from left to right: a ')' for '(', ']' for '[', ...
 */
-int KDEVPLATFORMLANGUAGE_EXPORT findClose( const QString& str , int pos ); 
+int KDEVPLATFORMLANGUAGE_EXPORT findClose( const QString& str , int pos );
 
 /**
  * Searches in the given string for a ',' or closing brace,
@@ -45,7 +47,8 @@ int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd( const QString& str , int pos, QC
 /**
  * Iterates for example through template-parameters
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator {
+class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
+{
   public:
     /**
      * @param parens should be a string containing the two parens between which the parameters are searched. Example: "<>" or "()"
@@ -70,13 +73,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator {
     QString prefix() const;
 
   private:
-    QString m_prefix;
-    QString m_source;
-    QString m_parens;
-    int m_cur;
-    int m_curEnd;
-
-    int next() const;
+    class ParamIteratorPrivate* const d;
 };
 
 }

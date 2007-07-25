@@ -18,16 +18,35 @@
 
 #include "parsingenvironment.h"
 
-using namespace KDevelop;
+namespace KDevelop
+{
 
-IdentifiedFile::IdentifiedFile() : m_identity(0) {
+class IdentifiedFilePrivate
+{
+public:
+  KUrl m_url;
+  uint m_identity;
+};
+
+IdentifiedFile::IdentifiedFile()
+  : d(new IdentifiedFilePrivate)
+{
+  d->m_identity = 0;
 }
 
-IdentifiedFile::IdentifiedFile( const KUrl& url , uint identity ) : m_url(url ), m_identity(identity) {
+IdentifiedFile::IdentifiedFile( const KUrl& url , uint identity )
+  : d(new IdentifiedFilePrivate)
+{
+  d->m_url = url;
+  d->m_identity = identity;
+}
+
+IdentifiedFile::~IdentifiedFile() {
+ delete d;
 }
 
 KUrl IdentifiedFile::url() const {
-  return m_url;
+  return d->m_url;
 }
 
 QString IdentifiedFile::toString() const {
@@ -35,15 +54,21 @@ QString IdentifiedFile::toString() const {
 }
 
 uint IdentifiedFile::identity() const {
-  return m_identity;
+  return d->m_identity;
 }
 
 bool IdentifiedFile::operator<( const IdentifiedFile& rhs ) const {
-  return m_url < rhs.m_url || (m_url == rhs.m_url && m_identity < rhs.m_identity );
+  return d->m_url < rhs.url() || (d->m_url == rhs.url() && d->m_identity < rhs.identity() );
+}
+
+IdentifiedFile& IdentifiedFile::operator=( const IdentifiedFile& rhs ) {
+  d->m_url = rhs.url();
+  d->m_identity = rhs.identity();
+  return *this;
 }
 
 bool IdentifiedFile::isEmpty() const {
-  return m_url.isEmpty();
+  return d->m_url.isEmpty();
 }
 
 IdentifiedFile::operator bool() const {
@@ -84,3 +109,5 @@ void ParsingEnvironmentManager::removeFile( ParsingEnvironmentFile* /*file*/ ) {
 ParsingEnvironmentFile* ParsingEnvironmentManager::find( const KUrl& /*url*/, const ParsingEnvironment* /*environment*/ ) {
   return 0;
 }
+
+} //KDevelop

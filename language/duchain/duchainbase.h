@@ -19,6 +19,8 @@
 #ifndef DUCHAINBASE_H
 #define DUCHAINBASE_H
 
+//krazy:excludeall=dpointer
+
 #include <documentrangeobject.h>
 #include <languageexport.h>
 #include <ksharedptr.h>
