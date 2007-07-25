@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright 2006 by Alexander Dymo                                  *
- *   adymo@kdevelop.org                                                    *
- *   Copyright 2006 by Andreas Pakulat                                 *
- *   apaku@gmx.de                                                          *
+ *   Copyright 2006 Alexander Dymo <adymo@kdevelop.org>                    *
+ *   Copyright 2006 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

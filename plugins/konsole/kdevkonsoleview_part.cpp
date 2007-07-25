@@ -1,7 +1,6 @@
 /***************************************************************************
-*   Copyright 2003 by KDevelop Authors                                *
-*   kdevelop-devel@kde.org                                                *
-*   Copyright 2007 by Andreas Pakulat <apaku@gmx.de>                  *
+*   Copyright 2003, 2006 Adam Treat <treat@kde.org>                       *
+*   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *

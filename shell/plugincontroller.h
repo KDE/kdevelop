@@ -4,7 +4,7 @@ Copyright 2004, 2007 Alexander Dymo <adymo@kdevelop.org>
 Copyright 2006 Matt Rogers <mattr@kde.org
 
 Based on code from Kopete
-Copyright (c) 2002-2003 by Martijn Klingens <klingens@kde.org>
+Copyright (c) 2002-2003 Martijn Klingens <klingens@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

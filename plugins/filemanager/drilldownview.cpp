@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright 2005 by Benjamin Meyer                                  *
- *   ben@meyerhome.net                                                     *
- *   Copyright 2006 by Alexander Dymo                                  *
- *   adymo@kdevelop.org                                                    *
+ *   Copyright 2005 Benjamin Meyer <ben@meyerhome.net>                      *
+ *   Copyright 2006 Alexander Dymo <adymo@kdevelop.org>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

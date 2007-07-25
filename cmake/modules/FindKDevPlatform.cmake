@@ -21,7 +21,7 @@
 #
 # KDEVPLATFORM_LIBRARIES           - all platform module libraries
 #
-# Copyright (c) 2007 Andreas Pakulat <apaku@gmx.de>
+# Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright 2007 by Alexander Dymo <adymo@kdevelop.org>             *
- *   Copyright 2007 by Kris Wong <kris.p.wong@gmail.com>               *
+ *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>             *
+ *   Copyright 2007 Kris Wong <kris.p.wong@gmail.com>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *

@@ -3,8 +3,7 @@
  *   Copyright 2003 Mickael Marchand <marchand@kde.org>                *
  *                                                                         *
  *   Adapted for KDevelop                                                  *
- *   Copyright 2007 by Dukju Ahn                                       *
- *   dukjuahn@gmail.com                                                    *
+ *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

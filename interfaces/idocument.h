@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright 2006 by Hamish Rodda <rodda@kde.org>                    *
- *   Copyright 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright 2006 Hamish Rodda <rodda@kde.org>                    *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
  *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

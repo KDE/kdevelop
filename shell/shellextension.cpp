@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright 2004 by Alexander Dymo                                  *
- *   adymo@kdevelop.org                                                    *
+ *   Copyright 2004 Alexander Dymo <adymo@kdevelop.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

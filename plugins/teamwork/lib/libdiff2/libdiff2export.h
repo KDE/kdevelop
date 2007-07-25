@@ -1,6 +1,6 @@
 /*
    This file is part of the KDevelop platform
-   Copyright (c) 2006 Matt Rogers <mattr@kde.org>
+   Copyright 2006 Matt Rogers <mattr@kde.org>
    Copyright 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or

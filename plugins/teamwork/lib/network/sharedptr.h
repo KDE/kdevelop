@@ -1,6 +1,6 @@
 /* This file is part of the KDE libraries
-Copyright (c) 1999 Waldo Bastian <bastian@kde.org>
-Copyright (c) 2006 David Nolden <david.nolden.kdevelop@art-master.de>
+Copyright 1999 Waldo Bastian <bastian@kde.org>
+Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
