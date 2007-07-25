@@ -110,7 +110,7 @@ public:
      * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return Pointer to the extension interface or 0 if no plugin supports it
       */
-    template<class Extension> Extension* extensionForPlugin( const QString &extension, const QString &pluginname) {
+    template<class Extension> Extension* extensionForPlugin( const QString &extension, const QString &pluginname = "") {
         IPlugin *plugin = pluginForExtension(extension, pluginname);
         if (plugin)
             return plugin->extension<Extension>();
