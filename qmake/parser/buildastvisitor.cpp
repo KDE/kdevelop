@@ -170,7 +170,7 @@ void BuildASTVisitor::visit_stmt( stmt_ast *node )
         val->setColumn( line_col.second );
         if( node->isExclam )
         {
-            val->setValue( "!"+val->value() );
+            val->setValue( '!'+val->value() );
         }
         stmt->setIdentifier( val );
         ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
