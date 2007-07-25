@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
-   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+   Copyright 2002 John Firebaugh <jfirebaugh@kde.org>
+   Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

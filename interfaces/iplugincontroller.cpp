@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+Copyright 2004 Alexander Dymo <adymo@kdevelop.org>
 Copyright     2006 Matt Rogers <mattr@kde.org
-Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 
 Based on code from Kopete
 Copyright (c) 2002-2003 by Martijn Klingens <klingens@kde.org>

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Alexander Dymo                                  *
+ *   Copyright 2004 by Alexander Dymo                                  *
  *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

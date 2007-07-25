@@ -1,9 +1,9 @@
 /* This file is part of the KDevelop project
-Copyright (C) 2003 F@lk Brettschneider <falkbr@kdevelop.org>
-Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
-Copyright (C) 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
-Copyright (C) 2004, 2007 Alexander Dymo <adymo@kdevelop.org>
-Copyright (C) 2006 Adam Treat <treat@kde.org>
+Copyright 2003 Falk Brettschneider <falkbr@kdevelop.org>
+Copyright 2003 John Firebaugh <jfirebaugh@kde.org>
+Copyright 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
+Copyright 2004, 2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright 2006 Adam Treat <treat@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

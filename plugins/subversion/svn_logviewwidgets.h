@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Dukju Ahn                                       *
+ *   Copyright 2007 by Dukju Ahn                                       *
  *   dukjuahn@gmail.com                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

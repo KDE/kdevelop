@@ -1,9 +1,9 @@
 /***************************************************************************
  *   This file was partly taken from cervisia's cvsservice                 *
- *   Copyright (C) 2002-2003 Christian Loose <christian.loose@hamburg.de>  *
+ *   Copyright 2002-2003 Christian Loose <christian.loose@hamburg.de>  *
  *                                                                         *
  *   Adapted for KDevelop                                                  *
- *   Copyright (C) 2007 by Robert Gruber                                   *
+ *   Copyright 2007 by Robert Gruber                                   *
  *   rgruber@users.sourceforge.net                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

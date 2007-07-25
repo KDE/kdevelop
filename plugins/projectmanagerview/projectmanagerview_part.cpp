@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
-   Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
-   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+   Copyright 2004 Roberto Raggi <roberto@kdevelop.org>
+   Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

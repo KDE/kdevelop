@@ -1,13 +1,13 @@
 /* This document is part of the KDE project
-Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
-Copyright (C) 2002 Bernd Gehrmann <bernd@kdevelop.org>
-Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
-Copyright (C) 2003 Hamish Rodda <rodda@kde.org>
-Copyright (C) 2003 Harald Fernengel <harry@kdevelop.org>
-Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
-Copyright (C) 2005 Adam Treat <treat@kde.org>
-Copyright (C) 2004-2007 Alexander Dymo <adymo@kdevelop.org>
-Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+Copyright 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
+Copyright 2002 Bernd Gehrmann <bernd@kdevelop.org>
+Copyright 2003 Roberto Raggi <roberto@kdevelop.org>
+Copyright 2003 Hamish Rodda <rodda@kde.org>
+Copyright 2003 Harald Fernengel <harry@kdevelop.org>
+Copyright 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
+Copyright 2005 Adam Treat <treat@kde.org>
+Copyright 2004-2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

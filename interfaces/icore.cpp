@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
-Copyright (C) 2007 Alexander Dymo <adymo@kdevelop.org>
-Copyright (C) 2007 Kris Wong <kris.p.wong@gmail.com>
+Copyright 2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright 2007 Kris Wong <kris.p.wong@gmail.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

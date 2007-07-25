@@ -1,8 +1,8 @@
 /* This file is part of the KDevelop project
-Copyright (C) 2002 F@lk Brettschneider <falkbr@kdevelop.org>
-Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
-Copyright (C) 2006 Adam Treat <treat@kde.org>
-Copyright (C) 2006, 2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright 2002 Falk Brettschneider <falkbr@kdevelop.org>
+Copyright 2003 John Firebaugh <jfirebaugh@kde.org>
+Copyright 2006 Adam Treat <treat@kde.org>
+Copyright 2006, 2007 Alexander Dymo <adymo@kdevelop.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

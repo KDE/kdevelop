@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2007 Trolltech ASA. All rights reserved.
+** Copyright 2007 Trolltech ASA. All rights reserved.
 **
 ** This file is part of the Qt Concurrent project on Trolltech Labs.
 **

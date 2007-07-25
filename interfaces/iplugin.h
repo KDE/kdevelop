@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999-2001 Bernd Gehrmann <bernd@kdevelop.org>
-   Copyright (C) 2004,2007 Alexander Dymo <adymo@kdevelop.org>
-   Copyright (C) 2006 Adam Treat <treat@kde.org>
-   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+   Copyright 1999-2001 Bernd Gehrmann <bernd@kdevelop.org>
+   Copyright 2004,2007 Alexander Dymo <adymo@kdevelop.org>
+   Copyright 2006 Adam Treat <treat@kde.org>
+   Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
