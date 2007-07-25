@@ -254,7 +254,6 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     if (activate == IDocumentController::ActivateOnOpen)
     {
         uiController->activeSublimeWindow()->activateView(partView);
-        Core::self()->partManager()->setActivePart(doc->partForView(partView->widget()), partView->widget());
     }
     if( cursor.isValid() )
     {
