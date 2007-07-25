@@ -44,7 +44,6 @@
 #include <JobCollection.h>
 #include <DebuggingAids.h>
 
-#include "icore.h"
 #include "ilanguagecontroller.h"
 #include "ilanguage.h"
 #include "ilanguagesupport.h"
@@ -58,7 +57,8 @@ namespace KDevelop
 class BackgroundParserPrivate
 {
 public:
-    BackgroundParserPrivate()
+    BackgroundParserPrivate(BackgroundParser *parser, ILanguageController *languageController)
+        :m_parser(parser), m_languageController(languageController)
     {
         m_timer.setSingleShot(true);
         m_delay = 500;
@@ -66,7 +66,7 @@ public:
 
         ThreadWeaver::setDebugLevel(true, 1);
 
-        QObject::connect(&m_timer, SIGNAL(timeout()), &m_parser, SLOT(parseDocuments()));
+        QObject::connect(&m_timer, SIGNAL(timeout()), m_parser, SLOT(parseDocuments()));
 
         loadSettings(); // Start the weaver
     }
@@ -109,17 +109,19 @@ public:
             KUrl url = it.key();
             bool &p = it.value();
             if (p) {
-                QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
+                QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
                 foreach (ILanguage* language, languages) {
                     ParseJob* job = language->languageSupport()->createParseJob(url);
                     if (!job) {
                         continue; // Language part did not produce a valid ParseJob.
                     }
 
-                    job->setBackgroundParser(&m_parser);
+                    job->setBackgroundParser(m_parser);
 
                     QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
-                                     &m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
+                                     m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
+                    QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
+                                     m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
 
                     m_parseJobs.insert(url, job);
                     jobs.append(job);
@@ -187,8 +189,8 @@ public:
         m_weaver.resume();
     }
 
-    BackgroundParser m_parser;
-    ICore* m_core;
+    BackgroundParser *m_parser;
+    ILanguageController* m_languageController;
 
     QTimer m_timer;
     int m_delay;
@@ -205,27 +207,22 @@ public:
     QMutex m_mutex;
 };
 
-K_GLOBAL_STATIC(BackgroundParserPrivate, sdBgParserPrivate)
 
-BackgroundParser::BackgroundParser()
-    : QObject(0)
+BackgroundParser::BackgroundParser(ILanguageController *languageController)
+    : QObject(languageController), d(new BackgroundParserPrivate(this, languageController))
 {
 }
 
 BackgroundParser::~BackgroundParser()
 {
-}
-
-BackgroundParser* BackgroundParser::self()
-{
-    return &sdBgParserPrivate->m_parser;
+    delete d;
 }
 
 void BackgroundParser::clear(QObject* parent)
 {
-    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
-    QHashIterator<KUrl, ParseJob*> it = sdBgParserPrivate->m_parseJobs;
+    QHashIterator<KUrl, ParseJob*> it = d->m_parseJobs;
     while (it.hasNext()) {
         it.next();
         if (it.value()->parent() == parent) {
@@ -238,7 +235,7 @@ void BackgroundParser::loadSettings(bool projectIsLoaded)
 {
     Q_UNUSED(projectIsLoaded)
 
-    sdBgParserPrivate->loadSettings();
+    d->loadSettings();
 }
 
 void BackgroundParser::saveSettings(bool projectIsLoaded)
@@ -249,62 +246,62 @@ void BackgroundParser::saveSettings(bool projectIsLoaded)
 void BackgroundParser::addDocument(const KUrl& url)
 {
     kDebug() << "BackgroundParser::addDocument" << endl;
-    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
     {
         Q_ASSERT(url.isValid());
 
-        QMap<KUrl, bool>::const_iterator it = sdBgParserPrivate->m_documents.find(url);
-        if (it == sdBgParserPrivate->m_documents.end() || (*it) == false) {
+        QMap<KUrl, bool>::const_iterator it = d->m_documents.find(url);
+        if (it == d->m_documents.end() || (*it) == false) {
             kDebug() << "BackgroundParser::addDocument: queuing " << url << endl;
-            sdBgParserPrivate->m_documents[url] = true;
+            d->m_documents[url] = true;
         } else {
             kDebug() << "BackgroundParser::addDocument: is already queued: " << url << endl;
         }
 
-        if (!sdBgParserPrivate->m_timer.isActive()) {
-            sdBgParserPrivate->m_timer.start();
+        if (!d->m_timer.isActive()) {
+            d->m_timer.start();
         }
     }
 }
 
 void BackgroundParser::addDocumentList(const KUrl::List &urls)
 {
-    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     foreach (KUrl url, urls) {
         Q_ASSERT(url.isValid());
 
-        sdBgParserPrivate->m_documents[url] = true;
+        d->m_documents[url] = true;
     }
 
-    if (!sdBgParserPrivate->m_timer.isActive()) {
-        sdBgParserPrivate->m_timer.start();
+    if (!d->m_timer.isActive()) {
+        d->m_timer.start();
     }
 }
 
 void BackgroundParser::removeDocument(const KUrl &url)
 {
-    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     Q_ASSERT(url.isValid());
 
-    sdBgParserPrivate->m_documents.remove(url);
+    d->m_documents.remove(url);
 }
 
 void BackgroundParser::parseDocuments()
 {
-    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
-    sdBgParserPrivate->parseDocumentsInternal();
+    d->parseDocumentsInternal();
 }
 
 void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 {
-    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
     if (ParseJob* parseJob = qobject_cast<ParseJob*>(job)) {
         kDebug() << "BackgroundParser: parsed " << parseJob->document() << endl;
-        sdBgParserPrivate->m_parseJobs.remove(parseJob->document());
+        d->m_parseJobs.remove(parseJob->document());
 
         parseJob->setBackgroundParser(0);
 
@@ -316,25 +313,25 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 
 void BackgroundParser::suspend()
 {
-    sdBgParserPrivate->suspend();
+    d->suspend();
 }
 
 void BackgroundParser::resume()
 {
-    sdBgParserPrivate->resume();
+    d->resume();
 }
 
 ParserDependencyPolicy* BackgroundParser::dependencyPolicy() const
 {
-    return &sdBgParserPrivate->m_dependencyPolicy;
+    return &d->m_dependencyPolicy;
 }
 
 ParseJob* BackgroundParser::parseJobForDocument(const KUrl& document) const
 {
-    QMutexLocker lock(&sdBgParserPrivate->m_mutex);
+    QMutexLocker lock(&d->m_mutex);
 
-    if (sdBgParserPrivate->m_parseJobs.contains(document)) {
-        return sdBgParserPrivate->m_parseJobs[document];
+    if (d->m_parseJobs.contains(document)) {
+        return d->m_parseJobs[document];
     }
 
     return 0;

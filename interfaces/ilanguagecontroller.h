@@ -29,6 +29,7 @@ class KUrl;
 namespace KDevelop {
 
 class ILanguage;
+class BackgroundParser;
 
 class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
 public:
@@ -41,6 +42,9 @@ public:
     virtual ILanguage* language(const QString &name) = 0;
     /** @return the languages that support the MIME type of @p url. */
     virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
+
+    /** @return the background parser used to parse source files */
+    virtual BackgroundParser *backgroundParser() const = 0;
 };
 
 }

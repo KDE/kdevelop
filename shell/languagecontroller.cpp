@@ -31,6 +31,7 @@
 
 #include "core.h"
 #include "language.h"
+#include "backgroundparser.h"
 
 namespace KDevelop {
 
@@ -38,7 +39,8 @@ typedef QHash<QString, Language*> LanguageHash;
 typedef QHash<QString, QList<ILanguage*> > LanguageCache;
 
 struct LanguageControllerPrivate {
-    LanguageControllerPrivate(LanguageController *controller) : m_controller(controller) {}
+    LanguageControllerPrivate(LanguageController *controller)
+        : m_controller(controller), backgroundParser(new BackgroundParser(controller)) {}
 
     void documentActivated(KDevelop::IDocument *document)
     {
@@ -64,6 +66,8 @@ struct LanguageControllerPrivate {
 
     LanguageHash languages;
     LanguageCache languageCache;
+
+    BackgroundParser *backgroundParser;
 
 private:
     LanguageController *m_controller;
@@ -128,6 +132,11 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     }
 
     return languages;
+}
+
+BackgroundParser *LanguageController::backgroundParser() const
+{
+    return d->backgroundParser;
 }
 
 }

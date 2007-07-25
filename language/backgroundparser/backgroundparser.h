@@ -49,7 +49,7 @@ class Document;
 namespace KDevelop
 {
 
-class ICore;
+class ILanguageController;
 class ParseJob;
 class ParserDependencyPolicy;
 
@@ -57,7 +57,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject
 {
     Q_OBJECT
 public:
-    static BackgroundParser* self();
+    BackgroundParser(ILanguageController *languageController);
+    ~BackgroundParser();
 
     /**
      * Abort or dequeue all current running jobs with the specified @p parent.
@@ -119,10 +120,7 @@ protected Q_SLOTS:
     void parseComplete(ThreadWeaver::Job *job);
 
 private:
-    BackgroundParser();
-    ~BackgroundParser();
-
-    friend class BackgroundParserPrivate;
+    class BackgroundParserPrivate *d;
 };
 
 }

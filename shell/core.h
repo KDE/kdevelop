@@ -41,22 +41,22 @@ public:
     virtual ~Core();
 
     /** @copydoc ICore::uiController() */
-    IUiController *uiController();
+    virtual IUiController *uiController();
 
     /** @copydoc ICore::pluginController() */
-    IPluginController *pluginController();
+    virtual IPluginController *pluginController();
 
     /** @copydoc ICore::projectController() */
-    IProjectController *projectController();
+    virtual IProjectController *projectController();
 
     /** @copydoc ICore::languageController() */
-    ILanguageController *languageController();
+    virtual ILanguageController *languageController();
 
     /** @copydoc ICore::partManager() */
-    KParts::PartManager *partManager();
+    virtual KParts::PartManager *partManager();
 
     /** @copydoc ICore::documentController() */
-    IDocumentController *documentController();
+    virtual IDocumentController *documentController();
 
     /// The following methods may only be used within the shell.
 
@@ -83,6 +83,7 @@ protected:
 
 private:
     Core(QObject *parent = 0);
+    static Core *m_self;
     struct CorePrivate *d;
 };
 

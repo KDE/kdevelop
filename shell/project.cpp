@@ -54,6 +54,7 @@
 #include "projectmodel.h"
 #include "iplugincontroller.h"
 #include "uicontroller.h"
+#include "ilanguagecontroller.h"
 #include "backgroundparser.h"
 
 namespace KDevelop
@@ -118,7 +119,7 @@ public:
             {
                 urlList.append( file->url() );
             }
-            BackgroundParser::self()->addDocumentList( urlList );
+            Core::self()->languageController()->backgroundParser()->addDocumentList( urlList );
         }
     }
 };

@@ -60,9 +60,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ICore: public QObject {
 public:
     virtual ~ICore();
 
-    /** @return the static ICore instance */
-    static ICore *self();
-
     /** @return ui controller */
     virtual IUiController *uiController() = 0;
 
@@ -83,7 +80,6 @@ public:
 
 protected:
     ICore(QObject *parent = 0);
-    static ICore *m_self;
 };
 
 }

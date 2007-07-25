@@ -42,6 +42,8 @@
 
 namespace KDevelop {
 
+Core *Core::m_self = 0;
+
 struct CorePrivate {
     CorePrivate(Core *core): m_core(core)
     {
@@ -87,23 +89,23 @@ struct CorePrivate {
 
 void Core::initialize()
 {
-    if (m_self) {
+    if (m_self)
         return;
-    }
 
-    new Core;
+    m_self = new Core();
+    m_self->d->initialize();
 }
 
 Core *KDevelop::Core::self()
 {
-    return static_cast<Core*>(m_self);
+    return m_self;
 }
 
 Core::Core(QObject *parent)
     : ICore(parent)
 {
     d = new CorePrivate(this);
-    d->initialize();
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(deleteLater()));
 }
 
 Core::~Core()
