@@ -19,9 +19,10 @@
 #ifndef SUBLIMEAGGREGATEMODEL_H
 #define SUBLIMEAGGREGATEMODEL_H
 
-#include <QMap>
-#include <QList>
-#include <QAbstractItemModel>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QAbstractItemModel>
+#include <sublimeexport.h>
 
 class QStandardItemModel;
 
@@ -66,7 +67,7 @@ they will look as:
 @note It is impossible to aggregate any model, aggregation works only for standard models.
 @note Currently aggregate model displays only 1 column.
 */
-class AggregateModel: public QAbstractItemModel {
+class SUBLIME_EXPORT AggregateModel: public QAbstractItemModel {
     Q_OBJECT
 public:
     AggregateModel(QObject *parent = 0);
