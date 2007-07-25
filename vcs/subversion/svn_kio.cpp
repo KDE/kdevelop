@@ -983,7 +983,7 @@ void kio_svnProtocol::popupMessage( const QString& message ) {
 // 		kdWarning() << "Communication with KDED:KSvnd failed" << endl;
 }
 
-void kio_svnProtocol::blame( KURL url, UrlMode mode,/* int pegRev, QString pegRevKind,*/ int startRev, QString startRevKind, int endRev, QString endRevKind )
+void kio_svnProtocol::blame( KURL url, UrlMode /*mode*/,/* int pegRev, QString pegRevKind,*/ int startRev, QString startRevKind, int endRev, QString endRevKind )
 {
 	kdDebug(9036) << " __TIME__ " << __TIME__ << endl;
 // 	kdDebug(9036) << " PegRev " << pegRev << pegRevKind << endl;
@@ -991,43 +991,12 @@ void kio_svnProtocol::blame( KURL url, UrlMode mode,/* int pegRev, QString pegRe
 	kdDebug(9036) << " EndRev" << endRev << endRevKind << endl;
 
 	apr_pool_t *subpool = svn_pool_create (pool);
-	const char* path_or_url=0;
+	const char* path_or_url = apr_pstrdup( subpool, url.pathOrURL().utf8() );;
 
 	svn_opt_revision_t rev1 = createRevision( startRev, startRevKind, subpool );
 	svn_opt_revision_t rev2 = createRevision( endRev, endRevKind, subpool );
 // 	svn_opt_revision_t revPeg = createRevision( pegRev, pegRevKind, subpool );
 
-	// fill out "path_or_url"
-	if (mode == path_to_reposit ) {
-		svn_error_t *urlErr=0;
-		// output of svn_client_url_from_path could be the same with url.path().utf8()
-		// In that case, path_or_url just points to url.path().utf8(), which will be destroyed outside the if(){}
-		// Thus, we should allocate new memory
-		const char* orig_path = apr_pstrdup( subpool, url.path().utf8() );
-		urlErr = svn_client_url_from_path( &path_or_url, orig_path, subpool );
-		kdDebug(9036) << " __LINE__ " << __LINE__ << endl;
-		if (urlErr || !path_or_url ){
-			error( KIO::ERR_SLAVE_DEFINED,
-				   i18n("Fail to retrieve repository URL of request file. Check whether requested item is under version control"));
-		}
-		if (QString(path_or_url).isEmpty()){
-			error( KIO::ERR_SLAVE_DEFINED, i18n("Converted repository URL is empty. Check whether requested item is under version control"));
-		}
-		kdDebug(9036) << " URL from PATH: " << path_or_url << endl;
-	} else if (mode == path_to_path ){
-		url.setProtocol( "file" );
-		// svn_path_canonicalize is also the same with the above case. Needs explicit memory allocation.
-		path_or_url = apr_pstrdup( subpool, svn_path_canonicalize( url.path().utf8(), subpool ) );
-		kdDebug(9036) << " Working Copy Path: " << path_or_url << endl;
-	} else {
-        svn_string_t *string = svn_string_create( url.pathOrURL().utf8(), subpool );
-        path_or_url = string->data;
-        kdDebug(9036) << " Untouched URL or Path: " << path_or_url << endl;
-    }
-    if( !path_or_url ){
-        svn_pool_destroy (subpool);
-        error( KIO::ERR_SLAVE_DEFINED, i18n("Fail to retrieve target path or URL") );
-    }
     //initNotifier(false, false, false, subpool);
 	svn_client_blame_receiver_t receiver = kio_svnProtocol::blameReceiver;
 	svn_error_t *err = svn_client_blame( path_or_url, &rev1, &rev2, receiver, (void*)this, ctx, subpool );

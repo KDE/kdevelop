@@ -487,8 +487,7 @@ void subversionPart::slotBlame()
 		return;
 	}
 	KURL url = m_urls.first();
-// 	m_impl->blame(url, repositBlame, int revstart, QString revKindStart, int revend, QString revKindEnd);
-	m_impl->blame(url, SvnGlobal::path_to_reposit, 0, "", -1, "HEAD");
+	m_impl->blame(url, SvnGlobal::path_to_reposit, 0, "", -1, "BASE");
 }
 
 void subversionPart::slotDel() {
