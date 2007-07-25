@@ -37,7 +37,7 @@ class VcsMapping;
 
 /**
  * This is the basic interface that all Version Control or Source Code Management
- * plugins need to implement. None of the methods in this interface is optional.
+ * plugins need to implement. None of the methods in this interface are optional.
  *
  * This only works on a local checkout from the repository, if your plugin should
  * offer functionality that works solely on the server see the
