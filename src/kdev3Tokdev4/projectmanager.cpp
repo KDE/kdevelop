@@ -119,26 +119,26 @@ void ProjectManager::createActions( KActionCollection* ac )
   action = new KAction(KIcon("project-open"), i18n("&Open Project..."), ac, "project_open");
   connect(action, SIGNAL(triggered(bool) ), SLOT(slotOpenProject()));
   action->setToolTip( i18n("Open project"));
-  action->setWhatsThis(i18n("<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project."));
+  action->setWhatsThis(i18n("<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"));
 
   m_openRecentProjectAction =
     new KRecentFilesAction(i18n("Open &Recent Project"), 0,
                           this, SLOT(loadProject(const KUrl &)),
                           ac, "project_open_recent");
   m_openRecentProjectAction->setToolTip(i18n("Open recent project"));
-  m_openRecentProjectAction->setWhatsThis(i18n("<b>Open recent project</b><p>Opens recently opened project."));
+  m_openRecentProjectAction->setWhatsThis(i18n("<b>Open recent project</b><p>Opens recently opened project.</p>"));
   m_openRecentProjectAction->loadEntries(KGlobal::config(), "RecentProjects");
 
   m_closeProjectAction = new KAction(KIcon("window-close"), i18n("C&lose Project"), ac, "project_close");
   connect(m_closeProjectAction, SIGNAL(triggered(bool) ), SLOT(closeProject()));
   m_closeProjectAction->setEnabled(false);
   m_closeProjectAction->setToolTip(i18n("Close project"));
-  m_closeProjectAction->setWhatsThis(i18n("<b>Close project</b><p>Closes the current project."));
+  m_closeProjectAction->setWhatsThis(i18n("<b>Close project</b><p>Closes the current project.</p>"));
 
   m_projectOptionsAction = new KAction(KIcon("configure"), i18n("Project &Options"), ac, "project_options" );
   connect(m_projectOptionsAction, SIGNAL(triggered(bool) ), SLOT(slotProjectOptions()));
   m_projectOptionsAction->setToolTip(i18n("Project options"));
-  m_projectOptionsAction->setWhatsThis(i18n("<b>Project options</b><p>Lets you customize project options."));
+  m_projectOptionsAction->setWhatsThis(i18n("<b>Project options</b><p>Lets you customize project options.</p>"));
   m_projectOptionsAction->setEnabled(false);
 }
 
@@ -318,9 +318,11 @@ bool ProjectManager::closeProject( bool exiting )
   /// @todo if this fails, user is screwed
   saveProjectFile();
 
+#ifdef __GNUC__
 #warning "port me"
 #if 0
   API::getInstance()->codeModel()->wipeout();
+#endif
 #endif
 
   delete m_info;
