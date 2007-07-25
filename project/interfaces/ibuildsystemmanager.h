@@ -89,20 +89,31 @@ public:
     virtual ProjectTargetItem* createTarget(const QString& target, ProjectFolderItem *parent) = 0;
 
     /**
-     * Add a file to a target
-     *
-     * Adds the file specified by @p file to the target @p parent and modifies
-     * the underlying build system if needed.
-     */
-    virtual bool addFileToTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
-
-    /**
      * Remove a target
      *
      * Removes the target specified by @p target and
      * modifies the underlying build system if needed.
      */
     virtual bool removeTarget(ProjectTargetItem *target) = 0;
+
+    /**
+     * Get a list of all the targets in this project
+     *
+     * The list returned by this function should be checked to verify it is not
+     * empty before using it
+     *
+     * @return The list of targets for this project
+     * @todo implement
+     */
+    virtual QList<ProjectTargetItem*> targets(ProjectItem*) const = 0;
+
+    /**
+     * Add a file to a target
+     *
+     * Adds the file specified by @p file to the target @p parent and modifies
+     * the underlying build system if needed.
+     */
+    virtual bool addFileToTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
 
     /**
      * Remove a file from a target
@@ -117,17 +128,6 @@ public:
      * Get the toplevel build directory for the project
      */
     virtual KUrl buildDirectory(ProjectItem*) const = 0;
-
-    /**
-     * Get a list of all the targets in this project
-     *
-     * The list returned by this function should be checked to verify it is not
-     * empty before using it
-     *
-     * @return The list of targets for this project
-     * @todo implement
-     */
-    virtual QList<ProjectTargetItem*> targets(ProjectItem*) const = 0;
 
 
 };
