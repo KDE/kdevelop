@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
-   Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
-   Copyright (C) 2002 Harald Fernengel <harry@kdevelop.org>
+   Copyright 2006 Hamish Rodda <rodda@kde.org>
+   Copyright 2002 Harald Fernengel <harry@kdevelop.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public

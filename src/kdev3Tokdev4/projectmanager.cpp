@@ -1,7 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Jens Dagerbo <jens.dagerbo@swipnet.se>     *
- *   Copyright (C) 2005-2006 by Matt Rogers <mattr@kde.org>                *
- *   Copyright (C) 2005-2006 by Adam Treat <treat@kde.org>                 *
+ *   Copyright 2005-2006 Jens Dagerbo <jens.dagerbo@swipnet.se>     *
+ *   Copyright 2005-2006 Matt Rogers <mattr@kde.org>                *
+ *   Copyright 2005-2006 Adam Treat <treat@kde.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *

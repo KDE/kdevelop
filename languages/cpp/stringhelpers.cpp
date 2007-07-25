@@ -1,5 +1,5 @@
 /* 
-   Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

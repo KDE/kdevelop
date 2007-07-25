@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-   Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
+   Copyright 2006 Hamish Rodda <rodda@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public

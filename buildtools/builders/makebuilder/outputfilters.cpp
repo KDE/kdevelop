@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann and the KDevelop Team       *
- *   bernd@kdevelop.org                                                    *
- *   Copyright (C) 2007 by Dukju Ahn                                       *
- *   dukjuahn@gmail.com                                                    *
+ *   Copyright 1999-2001 Bernd Gehrmann <bernd@kdevelop.org>               *
+ *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

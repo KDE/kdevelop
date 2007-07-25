@@ -1,9 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Alexander Dymo  <adymo@kdevelop.org>       *
- *   Copyright (C) 2003-2007 by Jens Dagerbo <jens.dagerbo@swipnet.se>     *
- *   Copyright (C) 2001-2002 by Matthias Hoelzer-Kluepfel <hoelzer@kde.org>*
- *   Copyright (C) 2003 by Caleb Tennis <caleb@gentoo.org>                 *
- *   Copyright (C) 2003 by George Staikos <staikos@kde.org>                *
+ *   Copyright 2003-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2003-2007 Jens Dagerbo <jens.dagerbo@swipnet.se>     *
+ *   Copyright 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>*
+ *   Copyright 2003 Caleb Tennis <caleb@gentoo.org>                 *
+ *   Copyright 2003 George Staikos <staikos@kde.org>                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *

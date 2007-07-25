@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Alexander Dymo  <adymo@kdevelop.org>       *
- *   Copyright (C) 2007 by Ralf Habacker  <Ralf.Habacker@freenet.de>       *
- *   Copyright (C) 2006-2007 by Matt Rogers  <mattr@kde.org>               *
- *   Copyright (C) 2006-2007 by Hamish Rodda <rodda@kde.org>               *
- *   Copyright (C) 2005-2007 by Adam Treat <treat@kde.org>                 *
- *   Copyright (C) 2003-2007 by Jens Dagerbo <jens.dagerbo@swipnet.se>     *
- *   Copyright (C) 2001-2002 by Bernd Gehrmann <bernd@mail.berlios.de>     *
- *   Copyright (C) 2001-2002 by Matthias Hoelzer-Kluepfel <hoelzer@kde.org>*
- *   Copyright (C) 2003 by Roberto Raggi <roberto@kdevelop.org>            *
+ *   Copyright 2003-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2007 Ralf Habacker  <Ralf.Habacker@freenet.de>       *
+ *   Copyright 2006-2007 Matt Rogers  <mattr@kde.org>               *
+ *   Copyright 2006-2007 Hamish Rodda <rodda@kde.org>               *
+ *   Copyright 2005-2007 Adam Treat <treat@kde.org>                 *
+ *   Copyright 2003-2007 Jens Dagerbo <jens.dagerbo@swipnet.se>     *
+ *   Copyright 2001-2002 Bernd Gehrmann <bernd@mail.berlios.de>     *
+ *   Copyright 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>*
+ *   Copyright 2003 Roberto Raggi <roberto@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *

@@ -1,9 +1,8 @@
 /***************************************************************************
- *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
- *   default support: Eray Ozkural (exa)                                   *
- *   additions: John Firebaugh <jfirebaugh@kde.org>                        *
- *              Jakob Simon-Gaarde <jakob@simon-gaarde.dk>                 *
+ *   Copyright 2001 Bernd Gehrmann <bernd@kdevelop.org>                    *
+ *   Copyright 2001 Jakob Somon Gaarde <jakob@simon-gaarde.dk>             *
+ *   Copyright 2001 John Firebaugh <jfirebaugh@kde.org>                    *
+ *   Copyright 2001  Eray Ozkural <erayo@cs.bilkent.edu.tr>                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

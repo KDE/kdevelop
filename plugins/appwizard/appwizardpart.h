@@ -1,10 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
- *   bernd@kdevelop.org                                                    *
- *   Copyright (C) 2004-2005 by Sascha Cunz                                *
- *   sascha@kdevelop.org                                                   *
- *   Copyright (C) 2007 by Alexander Dymo                                  *
- *   adymo@kdevelop.org                                                    *
+ *   Copyright 2001 Bernd Gehrmann <bernd@kdevelop.org>                    *
+ *   Copyright 2004-2005 Sascha Cunz <sascha@kdevelop.org>                 *
+ *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

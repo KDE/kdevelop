@@ -1,8 +1,8 @@
 /*
    This file is part of the KDevelop platform
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
-   Copyright (c) 2006 Matt Rogers <mattr@kde.org>
-   Copyright (c) 2007 David Nolden [david.nolden.kdevelop art-master.de]
+   Copyright 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright 2006 Matt Rogers <mattr@kde.org>
+   Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

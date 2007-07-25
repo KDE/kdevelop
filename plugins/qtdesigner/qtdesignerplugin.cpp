@@ -1,8 +1,8 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Roberto Raggi <roberto@kdevelop.org>            *
- *   Copyright (C) 2005 by Harald Fernengel <harry@kdevelop.org>           *
- *   Copyright (C) 2006 by Matt Rogers <mattr@kde.org>                     *
- *   Copyright (C) 2007 by Andreas Pakulat <apaku@gmx.de>                  *
+ *   Copyright 2005 Roberto Raggi <roberto@kdevelop.org>            *
+ *   Copyright 2005 Harald Fernengel <harry@kdevelop.org>           *
+ *   Copyright 2006 Matt Rogers <mattr@kde.org>                     *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *

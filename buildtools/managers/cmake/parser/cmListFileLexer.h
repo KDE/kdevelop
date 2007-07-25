@@ -6,7 +6,7 @@
   Date:      $Date: 2004/08/31 22:39:42 $
   Version:   $Revision: 1.3 $
 
-  Copyright (c) 2002 Kitware, Inc., Insight Consortium.  All rights reserved.
+  Copyright 2002 Kitware, Inc., Insight Consortium.  All rights reserved.
   See Copyright.txt or http://www.cmake.org/HTML/Copyright.html for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
