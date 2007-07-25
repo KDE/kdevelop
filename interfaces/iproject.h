@@ -42,6 +42,7 @@ namespace KDevelop
 
 class IPlugin;
 class IProjectFileManager;
+class IBuildSystemManager;
 class ProjectItem;
 class ProjectFileItem;
 
@@ -70,7 +71,14 @@ public:
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    virtual IProjectFileManager* fileManager() const = 0;
+    virtual IProjectFileManager* projectFileManager() const = 0;
+
+    /**
+     * Get the build system manager for the project
+     *
+     * @return the build system manager for the project, if one exists; otherwise null
+     */
+    virtual IBuildSystemManager* buildSystemManager() const = 0;
 
     /**
      * Get the plugin that manages the project

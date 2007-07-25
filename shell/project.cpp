@@ -44,6 +44,7 @@
 #include <ktemporaryfile.h>
 
 #include "iprojectfilemanager.h"
+#include "ibuildsystemmanager.h"
 
 #include "core.h"
 #include "iplugin.h"
@@ -401,9 +402,14 @@ KUrl Project::urlRelativeToProject( const KUrl & relativeUrl ) const
     return relativeUrl;
 }
 
-IProjectFileManager* Project::fileManager() const
+IProjectFileManager* Project::projectFileManager() const
 {
     return d->manager->extension<IProjectFileManager>();
+}
+
+IBuildSystemManager* Project::buildSystemManager() const
+{
+    return d->manager->extension<IBuildSystemManager>();
 }
 
 IPlugin* Project::managerPlugin() const
@@ -411,9 +417,9 @@ IPlugin* Project::managerPlugin() const
   return d->manager;
 }
 
-void Project::setFileManager( IPlugin* newManager )
+void Project::setManagerPlugin( IPlugin* manager )
 {
-    d->manager = newManager;
+    d->manager = manager;
 }
 
 // PersistentHash * Project::persistentHash() const

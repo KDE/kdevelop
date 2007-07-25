@@ -41,6 +41,7 @@ namespace KDevelop
 {
 
 class IProjectFileManager;
+class IBuildSystemManager;
 class ProjectItem;
 class ProjectFileItem;
 class PersistentHash;
@@ -107,7 +108,14 @@ public Q_SLOTS:
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    IProjectFileManager* fileManager() const;
+    IProjectFileManager* projectFileManager() const;
+
+    /**
+     * Get the build system manager for the project
+     *
+     * @return the build system manager for the project, if one exists; otherwise null
+     */
+    IBuildSystemManager* buildSystemManager() const;
 
     /**
      * Get the plugin that manages the project
@@ -116,9 +124,9 @@ public Q_SLOTS:
     IPlugin* managerPlugin() const;
 
     /**
-     * Set the file manager for the project.
+     * Set the manager plugin for the project.
      */
-    void setFileManager( IPlugin* fileManager );
+    void setManagerPlugin( IPlugin* manager );
 
     /**
      * With this the top-level project item can be retrieved
