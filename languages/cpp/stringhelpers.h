@@ -20,6 +20,8 @@
 #ifndef __STRINGHELPERS_H__
 #define __STRINGHELPERS_H__
 
+#include <duchain/stringhelpers.h>
+
 class QString;
 class QChar;
 class QStringList;
@@ -53,19 +55,5 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
  * */
 int expressionAt( const QString& contents, int index );
 
-/**
-searches a fitting closing brace from left to right: a ')' for '(', ']' for '[', ...
-*/
-int findClose( const QString& str , int pos ); 
-
-/**
- * Searches in the given string for a ',' or closing brace,
- * while skipping everything between opened braces.
- * @param str string to search
- * @param pos position where to start searching
- * @param validEnd when this is set differently, the function will stop when it finds a comma or the given character, and not at closing-braces.
- * @return  On fail, str.length() is returned, else the position of the closing character.
- * */
-int findCommaOrEnd( const QString& str , int pos, QChar validEnd = ' ' );
 }
 #endif 

@@ -23,27 +23,33 @@ Some mindmapping about how the template-system works:
 While construction:
 - Simplify: Template-parameters are types
 - Within template-contexts, do not resolve any types. Instead create "virtual types" that will resolve the types when specializations are given.
- (CppDelayedType) - ready
+ (DelayedType) - ready
 
  
  Later:
- - Searching specialized template-class: 
-        - return virtual declaration 
+ - Searching specialized template-class:
+        - return virtual declaration
         - return virtual context (Change template-parameter-context to given template-arguments)
  - Searching IN specialized template-class:
-       - Search in non-specialized context, then:
-       - Copy & Change returned objects:
-         - Resolve virtual types (CppDelayedType)
-         - Change parent-context to virtual context
-         - Change internal context, (create virtual, move set parent)
+       - When searching local declarations:
+         - Check whether they are already in the specialized context, if yes return them
+         - If not, Search in non-specialized context(only for local declarations), then:
+           - Copy & Change returned objects:
+             - Resolve virtual types (DelayedType)
+             - Change parent-context to virtual context
+             - Change internal context, (create virtual, move set parent)
+
+ - How template-parameters are resolved:
+    - The DUContext's with type DUContext::Template get their template-parameter declarations specialized and added locally. Then they will be found when resolving virtual types.
+    - 
 
 */
 
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
 
-/** @todo Remove this. It is currently needed because Cpp::DUContext<KDevelop::DUContext> cannot call protected members of KDevelop::DUContext,
- *  which is wrong because KDevelop::DUContext is a base-class of Cpp::DUContext<KDevelop::DUContext>. Find out why this happens and then remove this.
+/** @todo Remove this. It is currently needed because CppDUContext<KDevelop::DUContext> cannot call protected members of KDevelop::DUContext,
+ *  which is wrong because KDevelop::DUContext is a base-class of CppDUContext<KDevelop::DUContext>. Find out why this happens and then remove this.
  * */
 #define protected public
 #include <duchain/ducontext.h>
@@ -51,29 +57,39 @@ While construction:
 
 #include <duchain/abstractfunctiondeclaration.h>
 #include <duchain/declaration.h>
+#include <duchain/duchainlock.h>
+#include <duchain/duchain.h>
 #include "typeutils.h"
 #include "cpptypes.h"
 #include "templatedeclaration.h"
-#include "expressionparser/expressionparser.h"
+#include "expressionparser.h"
 
-namespace Cpp{
 using namespace KDevelop;
+
+namespace Cpp {
 
 /**
  * This is a du-context template that wraps the c++-specific logic around existing DUContext specializations.
  * In practice this means DUContext and TopDUContext.
  * */
 template<class BaseContext>
-class DUContext : public BaseContext {
+class CppDUContext : public BaseContext {
   public:
-    ///Both parameters will be reached to the base-class
+    ///Parameters will be reached to the base-class
     template<class Param1, class Param2>
-    DUContext( Param1* p1, Param2* p2 ) : BaseContext(p1, p2) {
+    CppDUContext( Param1* p1, Param2* p2, bool isSpecializationContext ) : BaseContext(p1, p2, isSpecializationContext), m_specializedFrom(0) {
     }
 
+    ///Both parameters will be reached to the base-class. This fits TopDUContext.
+    template<class Param1, class Param2>
+    CppDUContext( Param1* p1, Param2* p2) : BaseContext(p1, p2), m_specializedFrom(0) {
+    }
+    
     ///Overridden to take care of templates
     virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::DUContext::UsingNS*>& usingNamespaces, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
+      kDebug() << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl;
+      
       ///@todo maybe move parts of this logic directly into the du-chain
 
       ///Iso c++ 3.4.3.1 and 3.4.3.2 say that identifiers should be looked up part by part
@@ -89,12 +105,12 @@ class DUContext : public BaseContext {
         
         ///Step 1: Resolve the template-arguments
         //Since there may be non-type template-parameters, represent them as ExpressionEvaluationResult's
-        QList<ExpressionEvaluationResult> templateArgumentTypes;
+        QList<Cpp::ExpressionEvaluationResult> templateArgumentTypes;
 
         for( int a = 0; a < currentIdentifier.templateIdentifiers().size(); a++ ) {
           QList<KDevelop::Declaration*> decls = BaseContext::findDeclarations( currentIdentifier.templateIdentifiers().at(a) );
           if( !decls.isEmpty() ) {
-            ExpressionEvaluationResult res;
+            Cpp::ExpressionEvaluationResult res;
             res.type = decls.front()->abstractType();
 
             ///If the type is CppTemplateParameterType, this means that an unresolved template-parameter is refernced.
@@ -106,7 +122,7 @@ class DUContext : public BaseContext {
           }else{
             ///@todo Let the expression-parser handle the thing. This will allow evaluating integral expressions like "1 - 1" and such
             ///problem: the du-chain is already locked
-            templateArgumentTypes << ExpressionEvaluationResult();
+            templateArgumentTypes << Cpp::ExpressionEvaluationResult();
             kDebug() << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << endl;
           }
         }
@@ -123,21 +139,8 @@ class DUContext : public BaseContext {
         if( !scopeContext ) {
           BaseContext::findDeclarationsInternal( currentLookup, position, dataType, usingNamespaces, tempDecls, flags );
 
-          //If the use of unresolved template-parameters is not allowed, filter them out
-          if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) ) {
-            QList<Declaration*>::iterator it = tempDecls.begin();
-            while( it != tempDecls.end() ) {
-              if( dynamic_cast<CppTemplateParameterType*>(*it) ) {
-                //Unresolved template-paramers are not allowed, so remove the item from the list
-                it = tempDecls.erase(it);
-              } else {
-                ++it;
-              }
-            }
-          }
-          
         } else ///@todo Check whether it is the same file, if yes keep the position-cursor
-          scopeContext->findDeclarationsInternal( currentLookup, KTextEditor::Cursor(), dataType, usingNamespaces, tempDecls, flags | BaseContext::DontSearchInParent );
+          scopeContext->findDeclarationsInternal( currentLookup, KTextEditor::Cursor::invalid(), dataType, usingNamespaces, tempDecls, flags | BaseContext::DontSearchInParent );
 
         
         if( !tempDecls.isEmpty() ) {
@@ -160,26 +163,26 @@ class DUContext : public BaseContext {
             currentLookup.clear();
             if( tempDecls.size() == 1 ) {
             } else {
-              kDebug() << "Cpp::DUContext::findDeclarationsInternal: found " << tempDecls.size() << " multiple ambiguous declarations for scope " << currentLookup.toString() << endl;
+              kDebug() << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " multiple ambiguous declarations for scope " << currentLookup.toString() << endl;
             }
             //Extract a context, maybe it would be enough only testing the first found declaration
             foreach( Declaration* decl, tempDecls ) {
-              Declaration* dec = decl;
+              Declaration* specialDecl = decl;
               
               if( !templateArgumentTypes.isEmpty() )
-                dec = specializeDeclaration(decl, templateArgumentTypes);
+                specialDecl = specializeDeclaration(decl, templateArgumentTypes);
               
-              if( !dec ) {
+              if( !specialDecl ) {
                 kDebug() << "Could not specialize context-declaration" << endl;
                 continue;
               }
               
-              scopeContext = TypeUtils::getInternalContext(decl);
-              if( scopeContext )
+              scopeContext = TypeUtils::getInternalContext(specialDecl);
+              if( scopeContext && scopeContext->type() == DUContext::Class )
                 break;
             }
             if( !scopeContext || scopeContext->type() != DUContext::Class ) {
-              kDebug() << "Cpp::DUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString() << endl;
+              kDebug() << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString() << endl;
               return;
               
             }
@@ -189,8 +192,8 @@ class DUContext : public BaseContext {
           if( num != identifier.count() - 1 ) {
             //This is ok in the case that currentLookup stands for a namespace, because namespaces do not have a declaration.
             for( int a = 0; a < currentLookup.count(); a++ ) {
-              if( currentLookup.at(a).templateIdentifiers().count() != 0 ) {
-                kDebug() << "Cpp::DUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString() << endl;
+              if( templateArgumentTypes.count() != 0 ) {
+                kDebug() << "CppDUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString() << endl;
                 return; //If one of the parts has a template-identifier, it cannot be a namespace
               }
             }
@@ -202,9 +205,58 @@ class DUContext : public BaseContext {
       }
     }
 
-    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret ) const
+    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, typename BaseContext::SearchFlags flags ) const
     {
-        return findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret);
+      kDebug() << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl;
+      /**
+        - When searching local declarations:
+         - Check whether they are already in the specialized context, if yes return them
+         - If not, Search in non-specialized context(only for local declarations), then:
+           - Copy & Change returned objects:
+             - Resolve virtual types (DelayedType)
+             - Change parent-context to virtual context
+             - Change internal context, (create virtual, move set parent)
+      * */
+
+        int retCount = ret.count();
+      
+        BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, flags );
+
+          //If the use of unresolved template-parameters is not allowed, filter them out
+          if( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) ) {
+            QList<Declaration*>::iterator it = ret.begin();
+            while( it != ret.end() ) {
+              if( dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) ) {
+                //Unresolved template-paramers are not allowed, so remove the item from the list
+                it = ret.erase(it);
+                kDebug() << "filtered out 1 declaration" << endl;
+              } else {
+                ++it;
+              }
+            }
+          }
+        
+        if( m_specializedFrom && ret.count() == retCount ) {
+          ///Search in the context this one was specialized from
+          QList<Declaration*> decls;
+          m_specializedFrom->findLocalDeclarationsInternal( identifier, position, dataType, allowUnqualifiedMatch, decls, flags );
+          foreach( Declaration* decl, decls ) {
+            Declaration* copy = decl->clone();
+            
+            if(decl->internalContext()) ///@todo think about how dangerous the const_cast is
+              specializeDeclarationContext( const_cast<CppDUContext*>(this), decl->internalContext(), QList<Cpp::ExpressionEvaluationResult>(), copy );
+            else ///@todo think about how dangerous the const_cast is
+              copy->setContext(const_cast<KDevelop::DUContext*>((KDevelop::DUContext*)this)); //At least make sure the context is set.
+
+            ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
+            AbstractType::Ptr changedType = resolveDelayedTypes( copy->abstractType(), copy->internalContext() ? copy->internalContext() : this );
+            if( changedType != copy->abstractType() ) {
+              DUChainWriteLocker lock(DUChain::lock());
+              copy->setAbstractType( changedType );
+            }
+            ret << copy;
+          }
+        }
     }
     
     virtual bool foundEnough( const QList<Declaration*>& decls ) const
@@ -221,19 +273,38 @@ class DUContext : public BaseContext {
       return true;
     }
 
+    /**
+     * Set the context which this is specialized from
+     * */
+    void setSpecializedFrom( KDevelop::DUContext* context ) {
+      m_specializedFrom = context;
+    }
+
+    /**
+     * If this returns true, this context is a specialization of some other context, and that other context will be returned here.
+     * */
+    KDevelop::DUContext* specializedFrom() const {
+      return const_cast<KDevelop::DUContext*>(m_specializedFrom.data()); ///@todo change data() so no const cast is needed 
+    }
+
   private:
-    Declaration* specializeDeclaration( Declaration* decl, const QList<ExpressionEvaluationResult>& templateArguments ) const
+
+    Declaration* specializeDeclaration( Declaration* decl, const QList<Cpp::ExpressionEvaluationResult>& templateArguments ) const
     {
+      if( templateArguments.isEmpty() )
+        return decl;
+      
       TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
       if( !templateDecl ) {
         kDebug() << "Tried to specialize a non-template declaration" << endl;
         return 0;
       }
 
-      return templateDecl->instantiate( templateArguments );
+      return templateDecl->specialize( templateArguments );
     }
-};
 
+    DUContextPointer m_specializedFrom;
+};
 
 }
 

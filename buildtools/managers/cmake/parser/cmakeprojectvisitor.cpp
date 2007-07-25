@@ -150,7 +150,7 @@ void CMakeProjectVisitor::visit(const SetAst *set)
     
     QStringList old=m_vars->value(set->variableName());
     m_vars->insert(set->variableName(), old+resolveVariables(set->values(), m_vars));
-    kDebug(9032) << set->variableName() << "-result:-" << *m_vars << endl;
+    //kDebug(9032) << set->variableName() << "-result:-" << *m_vars << endl;
 }
 
 void CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
@@ -370,7 +370,7 @@ void CMakeProjectVisitor::visit(const IfAst *ifast)
 void CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 {
     //Commented until find_* work properly
-    kDebug(9032) << "Executing: " << exec->executableName() << "::" << exec->arguments() << " into " << *m_vars << endl;
+    //kDebug(9032) << "Executing: " << exec->executableName() << "::" << exec->arguments() << " into " << *m_vars << endl;
     /*QString execName = resolveVariable(exec->executableName(), m_vars)[0];
 
     KProcess p;

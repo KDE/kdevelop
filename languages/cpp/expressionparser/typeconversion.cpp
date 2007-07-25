@@ -392,7 +392,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
     {
       ///Search for a conversion-function that has a compatible output
       QHash<CppFunctionType*, ClassFunctionDeclaration*> conversionFunctions;
-      getMemberFunctions(fromClass, conversionFunctions, "operator<...cast...>", fromConst);
+      getMemberFunctions(fromClass, conversionFunctions, "operator{...cast...}", fromConst);
       
       for( QHash<CppFunctionType*, ClassFunctionDeclaration*>::const_iterator it = conversionFunctions.begin(); it != conversionFunctions.end(); ++it )
       {

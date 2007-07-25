@@ -958,7 +958,7 @@ HashedStringSubset* HashedStringRepository::intersection( HashedStringSubset* se
   return 0;
 }
 
-HashedStringSubset* HashedStringRepository::merge( HashedStringSubset* left, HashedStringSubset* right, bool anon )
+HashedStringSubset* HashedStringRepository::merge( HashedStringSubset* left, HashedStringSubset* right, bool /*anon */)
 {
   QString leftStr, rightStr;
   left->makeString(leftStr);

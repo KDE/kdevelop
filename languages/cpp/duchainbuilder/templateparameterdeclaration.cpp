@@ -16,6 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <duchain/identifier.h>
 #include "templateparameterdeclaration.h"
 
 using namespace KDevelop;
@@ -23,7 +24,7 @@ using namespace KDevelop;
 class TemplateParameterDeclarationPrivate
 {
 public:
-  QString m_defaultParameter;
+  QualifiedIdentifier m_defaultParameter;
 };
 
 TemplateParameterDeclaration::TemplateParameterDeclaration(KTextEditor::Range * range, DUContext* context)
@@ -37,11 +38,11 @@ TemplateParameterDeclaration::~TemplateParameterDeclaration()
   delete d;
 }
 
-QString TemplateParameterDeclaration::defaultParameter() const {
+QualifiedIdentifier TemplateParameterDeclaration::defaultParameter() const {
   return d->m_defaultParameter;
 }
 
-void TemplateParameterDeclaration::setDefaultParameter(const QString& str) {
+void TemplateParameterDeclaration::setDefaultParameter(const QualifiedIdentifier& str) {
   d->m_defaultParameter = str;
 }
 

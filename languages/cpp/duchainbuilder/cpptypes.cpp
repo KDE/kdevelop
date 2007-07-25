@@ -25,6 +25,62 @@
 #include "templateparameterdeclaration.h"
 using namespace KDevelop;
 
+//Because all these classes have no d-pointers, shallow copies are perfectly fine
+
+AbstractType* CppFunctionType::clone() const {
+  return new CppFunctionType(*this);
+}
+
+AbstractType* CppPointerType::clone() const {
+  return new CppPointerType(*this);
+}
+
+AbstractType* CppReferenceType::clone() const {
+  return new CppReferenceType(*this);
+}
+
+AbstractType* CppClassType::clone() const {
+  return new CppClassType(*this);
+}
+
+AbstractType* CppTypeAliasType::clone() const {
+  return new CppTypeAliasType(*this);
+}
+
+AbstractType* CppEnumerationType::clone() const {
+  return new CppEnumerationType(*this);
+}
+
+AbstractType* CppArrayType::clone() const {
+  return new CppArrayType(*this);
+}
+
+AbstractType* CppIntegralType::clone() const {
+  return new CppIntegralType(*this);
+}
+
+AbstractType* CppTemplateParameterType::clone() const {
+  return new CppTemplateParameterType(*this);
+}
+
+void CppClassType::accept0 (TypeVisitor *v) const
+{
+  if (v->visit (this))
+    {
+      foreach(const BaseClassInstance& base, m_baseClasses)
+        acceptType (AbstractType::Ptr( const_cast<AbstractType*>( static_cast<const AbstractType*>(base.baseClass.data()) ) ), v);
+    }
+
+  v->endVisit (this);
+}
+
+void CppClassType::exchangeTypes(TypeExchanger *e)
+{
+  for(QList<BaseClassInstance>::iterator it = m_baseClasses.begin(); it != m_baseClasses.end(); ++it )
+    (*it).baseClass = dynamic_cast<CppClassType*>( e->exchange((*it).baseClass.data()) );
+}
+
+    
 // ---------------------------------------------------------------------------
 const QList<CppClassType::BaseClassInstance>& CppClassType::baseClasses() const
 {
@@ -427,29 +483,7 @@ QString CppTemplateParameterType::mangled() const
   return QString("T%1").arg(declaration() ? declaration()->identifier().toString() : QString());
 }
 
-QString CppDelayedType::toString() const {
-  return "<delayed> " + qualifiedIdentifier().toString();
-}
-
-CppDelayedType::CppDelayedType() {
-}
-
-void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor */*v*/) const {
-    ///@todo what to do here?
-    //acceptType (m_type, v);
-/*  IdentifiedType::accept0(v);*/
-}
-
-void CppDelayedType::setQualifiedIdentifier(const QualifiedIdentifier& identifier) {
-  m_identifier = identifier;
-}
-
-QualifiedIdentifier CppDelayedType::qualifiedIdentifier() const {
-  return m_identifier;
-}
-
-void CppDelayedType::accept0 (KDevelop::TypeVisitor */*v*/) const {
-    ///@todo what to do here?
-    //acceptType (m_type, v);
-/*  IdentifiedType::accept0(v);*/
+void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
+    v->visit(this);
+/*    v->endVisit(this);*/
 }

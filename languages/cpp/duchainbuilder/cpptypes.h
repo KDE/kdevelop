@@ -107,6 +107,8 @@ public:
 
   //virtual uint hash() const;
 
+  virtual AbstractType* clone() const;
+  
 protected:
   CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
 
@@ -138,6 +140,8 @@ public:
   //virtual uint hash() const;
 
   virtual QString mangled() const;
+
+  virtual AbstractType* clone() const;
 };
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
@@ -151,6 +155,8 @@ public:
 
   virtual QString mangled() const;
 
+  virtual AbstractType* clone() const;
+  
   //virtual uint hash() const;
 };
 
@@ -165,6 +171,7 @@ public:
 
   virtual QString mangled() const;
 
+  virtual AbstractType* clone() const;
   //virtual uint hash() const;
 };
 
@@ -181,6 +188,8 @@ public:
     KDevelop::Declaration::AccessPolicy access;
     bool virtualInheritance;
   };
+
+  
 
   const QList<BaseClassInstance>& baseClasses() const;
   void addBaseClass(const BaseClassInstance& baseClass);
@@ -213,6 +222,12 @@ public:
 
   virtual QString mangled() const;
 
+  virtual AbstractType* clone() const;
+
+  virtual void accept0 (KDevelop::TypeVisitor *v) const;
+
+  virtual void exchangeTypes(KDevelop::TypeExchanger*);
+  
 private:
   QList<BaseClassInstance> m_baseClasses;
   ClassType m_classType;
@@ -245,10 +260,12 @@ public:
 
   virtual QString mangled() const;
 
+  virtual AbstractType* clone() const;
+  
 protected:
   virtual void accept0 (KDevelop::TypeVisitor *v) const
   {
-    //if (v->visit (this))
+    if (v->visit (this))
       acceptType (m_type, v);
 
     //v->endVisit (this);
@@ -282,6 +299,8 @@ public:
   CppEnumerationType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
   //virtual uint hash() const;
 
+  virtual AbstractType* clone() const;
+  
   virtual QString mangled() const;
 };
 
@@ -291,6 +310,8 @@ public:
   typedef KSharedPtr<CppArrayType> Ptr;
 
   virtual QString mangled() const;
+
+  virtual AbstractType* clone() const;
 };
 
 /*class CppTemplateParameterType : public
@@ -323,35 +344,12 @@ public:
   virtual QString toString() const;
   virtual QString mangled() const;
 
+  virtual AbstractType* clone() const;
+  
   protected:
   virtual void accept0 (KDevelop::TypeVisitor *v) const;
   private:
 };
-
-/**
- * Delayed types are used in template-classes.
- * In a template-class, many types can not be evaluated at the time they are used, because they depend on unknown template-parameters.
- * Delayed types store the way the type would be searched, and can be used to find the type once the template-paremeters have values.
- * */
-class KDEVCPPDUCHAINBUILDER_EXPORT CppDelayedType : public KDevelop::AbstractType,  public KDevelop::IdentifiedType
-{
-public:
-  typedef KSharedPtr<CppDelayedType> Ptr;
-
-  CppDelayedType();
-
-  KDevelop::QualifiedIdentifier qualifiedIdentifier() const;
-  void setQualifiedIdentifier(const KDevelop::QualifiedIdentifier& identifier);
-
-  virtual QString toString() const;
-  
-  private:
-    virtual void accept0 (KDevelop::TypeVisitor *v) const ;
-
-    KDevelop::QualifiedIdentifier m_identifier;
-};
-
-
 
 /*template <class _Target, class _Source>
 _Target model_static_cast(_Source item)

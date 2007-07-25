@@ -28,6 +28,7 @@
 
 namespace KDevelop {
   class Declaration;
+  class DUContext;
 }
 
 class Token;
@@ -124,7 +125,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     QList<OverloadResolver::Parameter> m_parameters;
     
     ParseSession* m_session;
-    DUContext* m_currentContext;
+    KDevelop::DUContext* m_currentContext;
 
   inline void clearLast() {
     m_lastInstance = Instance();

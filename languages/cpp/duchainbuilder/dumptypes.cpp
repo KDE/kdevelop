@@ -51,6 +51,11 @@ void DumpTypes::visit(const IntegralType *)
 {
 }
 
+bool DumpTypes::visit (const KDevelop::AbstractType *type)
+{
+  return !seen(type);
+}
+
 bool DumpTypes::visit(const PointerType * type)
 {
   return !seen(type);

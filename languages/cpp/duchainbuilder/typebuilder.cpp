@@ -248,6 +248,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         ///@todo What about position?
         
        openedType = true;
+       kDebug() << "opening delayed type for " << id.toString() << endl;
        openDelayedType(id, node);
       } else {
         kDebug() << "no declaration found for " << id.toString() << " in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << " " << searchContext() << endl;
@@ -262,6 +263,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 }
 
 DUContext* TypeBuilder::searchContext() {
+  DUChainReadLocker lock(DUChain::lock());
   if( !m_importedParentContexts.isEmpty() && m_importedParentContexts.last()->type() == DUContext::Template ) {
     return m_importedParentContexts.last();
   } else
@@ -456,9 +458,11 @@ void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* no
   if( it != m_delayedTypes.end() ) {
     openType(*it, node);
   }else{
-    CppDelayedType::Ptr type(new CppDelayedType());
+    DelayedType::Ptr type(new DelayedType());
     type->setQualifiedIdentifier(identifier);
     openType(type, node);
+    Q_ASSERT(dynamic_cast<DelayedType*>((AbstractType*)type.data()));
+    m_delayedTypes.insert(identifier, AbstractType::Ptr( type.data() ) );
   }
 }
 

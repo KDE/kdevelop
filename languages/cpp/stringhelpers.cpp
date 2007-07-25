@@ -23,8 +23,6 @@
 #include "safetycounter.h"
 #include "stringhelpers.h"
 
-using namespace Utils;
-
 namespace Utils {
 
 bool parenFits( QChar c1, QChar c2 ) {
@@ -284,77 +282,6 @@ QString reverse( const QString& str ) {
   return ret;
 }
 
-int findClose( const QString& str , int pos ) {
-  int depth = 0;
-  QList<QChar> st;
-  QChar last = ' ';
-  
-  for( int a = pos; a < (int)str.length(); a++) {
-    switch(str[a].toAscii()) {
-    case '<':
-    case '(':
-      case '[':
-        case '{':
-        st.push_front( str[a] );
-      depth++;
-      break;
-    case '>':
-      if( last == '-' ) break;
-    case ')':
-      case ']':
-        case '}':
-        if( !st.isEmpty() && parenFits(st.front(), str[a]) ) {
-          depth--;
-          st.pop_front();
-        }
-      break;
-    case '"':
-      last = str[a];
-      a++;
-      while( a < (int)str.length() && (str[a] != '"' || last == '\\')) {
-        last = str[a];
-        a++;
-      }
-      continue;
-      break;
-    }
-    
-    last = str[a];
-    
-    if( depth == 0 ) {
-      return a;
-    }
-  }
-  
-  return -1;
-}
-
-int findCommaOrEnd( const QString& str , int pos, QChar validEnd) {
-  
-  for( int a = pos; a < (int)str.length(); a++) {
-    switch(str[a].toAscii()) {
-    case '"':
-    case '(':
-      case '[':
-        case '{':
-        case '<':
-        a = findClose( str, a );
-      if( a == -1 ) return str.length();
-      break;
-    case ')':
-      case ']':
-        case '}':
-        case '>':
-        if( validEnd != ' ' && validEnd != str[a] )
-          continue;
-    case ',':
-      return a;
-    }
-  }
-  
-  return str.length();
-}
-
 void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
   QString reversed = reverse( str.left(argumentsStart) );
   //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
@@ -365,7 +292,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
   //we are searching for an opening-brace, but the reversion has also reversed the brace
   while( pos != len && s ) {
     int lastPos = pos;
-    pos = findCommaOrEnd( reversed, pos )  ;
+    pos = KDevelop::findCommaOrEnd( reversed, pos )  ;
     if( pos > lastPos ) {
       QString arg = reverse( reversed.mid(lastPos, pos-lastPos) ).trimmed();
       if( !arg.isEmpty() ) 

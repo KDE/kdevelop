@@ -17,13 +17,23 @@
 */
 // kate: indent-width 2;
 
+#include <QByteArray>
+
 #include "declarationbuilder.h"
 #include "templatedeclaration.h"
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
+#include <parser/type_compiler.h>
+
+#include <definition.h>
+#include <symboltable.h>
+#include <forwarddeclaration.h>
+#include <duchain.h>
+#include <duchainlock.h>
 #include <identifiedtype.h>
+
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "classfunctiondeclaration.h"
@@ -32,16 +42,16 @@
 #include "type_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
-#include <definition.h>
-#include <symboltable.h>
-#include <forwarddeclaration.h>
-#include <duchain.h>
-#include <duchainlock.h>
 #include "cpptypes.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
-using namespace Cpp;
+
+QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
+    int startPosition = session->token_stream->position(start_token);
+    int endPosition = session->token_stream->position(end_token);
+    return QString::fromUtf8( QByteArray(session->contents() + startPosition, endPosition - startPosition) ); ///@todo Exact encoding?
+}
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
   : DeclarationBuilderBase(session), m_inTypedef(false)
@@ -87,6 +97,26 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
     } else {
       kDebug() << "bad last type" << endl;
     }
+
+    if( ast->parameter_declaration ) {
+      QualifiedIdentifier defaultParam;
+      if( ast->parameter_declaration->type_specifier ) {
+        TypeCompiler tc(m_editor->parseSession());
+        tc.run(ast->parameter_declaration->type_specifier);
+        defaultParam = tc.identifier();
+      } else {
+        QString str;
+        ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
+        if( ast->parameter_declaration->declarator )
+          str += stringFromSessionTokens( m_editor->parseSession(), ast->parameter_declaration->start_token, ast->parameter_declaration->end_token );
+        if( ast->parameter_declaration->expression )
+          str += stringFromSessionTokens( m_editor->parseSession(), ast->parameter_declaration->expression->start_token, ast->parameter_declaration->expression->end_token );
+        defaultParam = QualifiedIdentifier(str);
+      }
+
+      decl->setDefaultParameter(defaultParam);
+    }
+    
     ///@todo note default-parameter
   } else {
     kDebug() << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing" << endl;
@@ -214,7 +244,7 @@ template<class DeclarationType>
 DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range )
 {
     if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
-      SpecialTemplateDeclaration<DeclarationType>* ret = new SpecialTemplateDeclaration<DeclarationType>(range, currentContext());
+      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(range, currentContext());
       ret->setTemplateParameterContext(ctx);
       return ret;
     } else
@@ -225,7 +255,7 @@ template<class DeclarationType>
 DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range, int scope )
 {
     if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
-      SpecialTemplateDeclaration<DeclarationType>* ret = new SpecialTemplateDeclaration<DeclarationType>(range, (KDevelop::Declaration::Scope)scope, currentContext());
+      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(range, (KDevelop::Declaration::Scope)scope, currentContext());
       ret->setTemplateParameterContext(ctx);
       return ret;
     } else
@@ -259,7 +289,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   if (name) {
     TypeSpecifierAST* typeSpecifier = 0; //Additional type-specifier for example the return-type of a cast operator
     id = identifierForName(name, &typeSpecifier);
-    if( typeSpecifier && id == QualifiedIdentifier("operator<...cast...>") ) {
+    if( typeSpecifier && id == QualifiedIdentifier("operator{...cast...}") ) {
       if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
         visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
     }
@@ -345,14 +375,10 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
 
     } else if (scope == Declaration::ClassScope) {
-        if( hasTemplateContext(m_importedParentContexts) )
-          declaration = specialDeclaration<ClassMemberDeclaration>(range );
-        else
-          declaration = specialDeclaration<ClassMemberDeclaration>(range );
-
+        declaration = specialDeclaration<ClassMemberDeclaration>(range );
     } else if( currentContext()->type() == DUContext::Template ) {
       //This is a template-parameter.
-      declaration = specialDeclaration<TemplateParameterDeclaration>(range );
+      declaration = new TemplateParameterDeclaration( range, currentContext() );
     } else {
       declaration = specialDeclaration<Declaration>(range, scope );
     }
@@ -410,7 +436,7 @@ void DeclarationBuilder::closeDeclaration()
 
     if(lastType()) {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
-      CppDelayedType* delayed = dynamic_cast<CppDelayedType*>(lastType().data());
+      DelayedType* delayed = dynamic_cast<DelayedType*>(lastType().data());
 
       //When the given type has no declaration yet, assume we are declaring it now.
       //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.

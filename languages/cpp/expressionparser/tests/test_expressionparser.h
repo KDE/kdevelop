@@ -53,6 +53,7 @@ private slots:
   void initTestCase();
   void testSimpleExpression();
   void testTypeConversion();
+  void testSmartPointer();
   void testCasts();
   void testTemplates();
   void cleanupTestCase();

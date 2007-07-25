@@ -4,6 +4,7 @@ add_subdirectory(tests)
 include_directories(
     ${CMAKE_TOP_BUILD_DIR}
     ${CMAKE_SOURCE_DIR}/languages/cpp
+    ${CMAKE_SOURCE_DIR}/languages/cpp/expressionparser
 )
 
 ########### next target ###############

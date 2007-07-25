@@ -23,6 +23,10 @@
 #include <cppduchainbuilderexport.h>
 
 namespace KDevelop {
+  class QualifiedIdentifier;
+}
+
+namespace KDevelop {
   class DUContext;
 }
 
@@ -36,9 +40,12 @@ public:
   TemplateParameterDeclaration(KTextEditor::Range* range, KDevelop::DUContext* context);
   ~TemplateParameterDeclaration();
 
-  QString defaultParameter() const;
+  /**
+   * The returned identifier may contain an expression
+   * */
+  KDevelop::QualifiedIdentifier defaultParameter() const;
 
-  void setDefaultParameter(const QString& str);
+  void setDefaultParameter(const KDevelop::QualifiedIdentifier& str);
 
   virtual Declaration* clone() const;
   

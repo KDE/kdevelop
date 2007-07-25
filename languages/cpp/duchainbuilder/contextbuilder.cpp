@@ -38,6 +38,7 @@
 
 using namespace KTextEditor;
 using namespace KDevelop;
+using namespace Cpp;
 
 ContextBuilder::ContextBuilder (ParseSession* session)
   : m_editor(new CppEditorIntegrator(session))
@@ -118,7 +119,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
       Q_ASSERT(m_compilingContexts);
 
       Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
-      topLevelContext = new Cpp::DUContext<TopDUContext>(range, const_cast<Cpp::LexedFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(range, const_cast<Cpp::LexedFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
 
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
@@ -390,7 +391,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
       readLock.unlock();
       DUChainWriteLocker writeLock(DUChain::lock());
 
-      ret = new Cpp::DUContext<DUContext>(m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
+      ret = new CppDUContext<DUContext>(m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
       ret->setType(type);
 
       if (!identifier.isEmpty()) {

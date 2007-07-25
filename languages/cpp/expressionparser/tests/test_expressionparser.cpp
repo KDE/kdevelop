@@ -32,6 +32,8 @@
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
+#include "templatedeclaration.h"
+#include "cppducontext.h"
 
 
 #include "tokens.h"
@@ -46,6 +48,7 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
+using namespace Cpp;
 
 class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
@@ -198,6 +201,62 @@ void TestExpressionParser::testTemplates() {
   release(top);
 }
 
+void TestExpressionParser::testSmartPointer() {
+  QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
+
+  DUContext* top = parse(method, DumpAll);
+  
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Cpp::ExpressionParser parser;
+
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[3]->abstractType().data());
+  QVERIFY(idType);
+  QCOMPARE(idType->declaration()->context(), top);
+  QVERIFY(idType->declaration()->internalContext() != top->localDeclarations()[0]->internalContext());
+
+  Declaration* baseDecl = top->localDeclarations()[0];
+  Declaration* specialDecl = idType->declaration();
+  TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(baseDecl);
+  TemplateDeclaration* specialTemplateDecl = dynamic_cast<TemplateDeclaration*>(specialDecl);
+
+  QVERIFY(baseTemplateDecl);
+  QVERIFY(specialTemplateDecl);
+  QVERIFY(specialTemplateDecl->isSpecializedFrom(baseTemplateDecl));
+
+  QVERIFY(specialDecl->internalContext() != baseDecl->internalContext());
+  QCOMPARE(specialDecl->internalContext()->importedParentContexts().count(), 1); //Only the template-contexts are imported
+  QCOMPARE(baseDecl->internalContext()->importedParentContexts().count(), 1);
+
+  DUContext* specialTemplateContext = specialDecl->internalContext()->importedParentContexts().first();
+  DUContext* baseTemplateContext = baseDecl->internalContext()->importedParentContexts().first();
+  QVERIFY(specialTemplateContext != baseTemplateContext);
+  QCOMPARE(specialTemplateContext->type(), DUContext::Template);
+  QCOMPARE(baseTemplateContext->type(), DUContext::Template);
+  kDebug() << typeid(baseTemplateContext).name() << endl;
+  kDebug() << typeid(specialTemplateContext).name() << endl;
+/*  CppDUContext<DUContext>* baseTemplateCtx = dynamic_cast<CppDUContext<DUContext>*>(baseTemplateContext);
+  CppDUContext<DUContext>* specialTemplateCtx = dynamic_cast<CppDUContext<DUContext>*>(specialTemplateContext);
+  QVERIFY(baseTemplateCtx);
+  QVERIFY(specialTemplateCtx);
+  QCOMPARE(specialTemplateCtx->specializedFrom(), baseTemplateContext);*/
+  
+  QCOMPARE(specialTemplateContext->localDeclarations().count(), 1);
+  QCOMPARE(baseTemplateContext->localDeclarations().count(), 1);
+  QVERIFY(specialTemplateContext->localDeclarations()[0] != baseTemplateContext->localDeclarations()[0]);
+  
+  kDebug() << top->localDeclarations()[3]->abstractType()->toString() << endl;
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "*bPointer", top );
+  QVERIFY(result.instance);
+  QCOMPARE(result.type->toString(), QString("B&"));
+
+  result = parser.evaluateType( "bPointer->i", top );
+  QVERIFY(result.instance);
+  QCOMPARE(result.type->toString(), QString("int"));
+  
+  release(top);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -327,7 +386,7 @@ void TestExpressionParser::testTypeConversion() {
   DUContext* contContext = c->childContexts()[0];
   Declaration* decl = contContext->localDeclarations()[0];
 
-  QCOMPARE(decl->identifier(), Identifier("operator<...cast...>"));
+  QCOMPARE(decl->identifier(), Identifier("operator{...cast...}"));
   CppFunctionType* function = dynamic_cast<CppFunctionType*>(decl->abstractType().data());
   QCOMPARE(function->returnType()->toString(), QString("int"));
 

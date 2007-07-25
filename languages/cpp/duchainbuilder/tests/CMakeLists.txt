@@ -7,6 +7,7 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}/editor
     ${KDEVPLATFORM_INCLUDE_DIR}/language
     ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
+    ${CMAKE_SOURCE_DIR}/languages/cpp
 )
 
 ########### next target ###############

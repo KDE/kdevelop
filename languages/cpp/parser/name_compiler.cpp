@@ -64,7 +64,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
       if (op_id->op && op_id->op->op)
         tmp_name +=  decode_operator(op_id->op->op);
       else
-        tmp_name += QLatin1String("<...cast...>");
+        tmp_name += QLatin1String("{...cast...}");
       
       m_typeSpecifier = op_id->type_specifier;
     }
