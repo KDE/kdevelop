@@ -18,7 +18,7 @@ public:
     ProjectTemplateItem();
     ProjectTemplateItem(const QString &text);
     ProjectTemplateItem(const QIcon &icon, const QString &text);
-    ProjectTemplateItem(int rows, int columns = 1);
+    explicit ProjectTemplateItem(int rows, int columns = 1);
 
 private:
     void init();

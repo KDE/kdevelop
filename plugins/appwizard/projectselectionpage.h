@@ -21,7 +21,7 @@ class ProjectTemplatesModel;
 
 class ProjectSelectionPage: public QWidget {
 public:
-    ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent = 0);
+    explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent = 0);
     ~ProjectSelectionPage();
 
     QString selectedTemplate();

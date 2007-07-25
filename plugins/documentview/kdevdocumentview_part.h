@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KDEVPART_KDEVDOCUMENTVIEW_H__
-#define __KDEVPART_KDEVDOCUMENTVIEW_H__
+#ifndef KDEVDOCUMENTVIEW_PART_H
+#define KDEVDOCUMENTVIEW_PART_H
 
 #include <QtCore/QHash>
 #include <QtCore/QPointer>

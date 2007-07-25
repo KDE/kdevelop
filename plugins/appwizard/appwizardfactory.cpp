@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2000-2001 by Bernd Gehrmann <bernd@kdevelop.org>        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,9 +7,10 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <kstandarddirs.h>
 
 #include "appwizardfactory.h"
+
+#include <kstandarddirs.h>
 
 K_EXPORT_COMPONENT_FACTORY(kdevappwizard, AppWizardFactory("kdevappwizard"))
 

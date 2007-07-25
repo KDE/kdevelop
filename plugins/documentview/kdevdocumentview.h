@@ -29,7 +29,7 @@ class KDevDocumentView: public KDevelop::TreeView
 {
     Q_OBJECT
 public:
-    KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent );
+    explicit KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent );
     virtual ~KDevDocumentView();
 
     KDevDocumentViewPart *part() const;

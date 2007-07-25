@@ -24,7 +24,7 @@
 #include <kgenericfactory.h>
 
 #include "ui_settingswidget.h"
-#include "config.h"
+#include <config.h>
 
 
 typedef KGenericFactory<Preferences> PreferencesFactory;

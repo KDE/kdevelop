@@ -1,3 +1,25 @@
+/* This file is part of KDevelop
+ *  Copyright (C) 2002 Harald Fernengel <harry@kdevelop.org>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+
+ */
+
+#include "valgrind_part.h"
+
 #include <unistd.h>
 
 #include <QRegExp>
@@ -22,7 +44,6 @@
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 
-#include "valgrind_part.h"
 #include "valgrind_dialog.h"
 #include "valgrindmodel.h"
 #include "valgrindcontrol.h"
@@ -43,25 +64,25 @@ ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
   m_treeView->setWindowTitle(i18n("Valgrind Output"));
   m_treeView->setModel(m_model);
 
-  m_treeView->setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
-    "use of uninitialized memory<br>"
-    "reading/writing memory after it has been free'd<br>"
-    "reading/writing off the end of malloc'd blocks<br>"
-    "reading/writing inappropriate areas on the stack<br>"
-    "memory leaks -- where pointers to malloc'd blocks are lost forever<br>"
-    "passing of uninitialised and/or unaddressable memory to system calls<br>"
-    "mismatched use of malloc/new/new [] vs free/delete/delete []<br>"
-    "some abuses of the POSIX pthread API." ) );
+  m_treeView->setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/>"
+    "use of uninitialized memory<br/>"
+    "reading/writing memory after it has been free'd<br/>"
+    "reading/writing off the end of malloc'd blocks<br/>"
+    "reading/writing inappropriate areas on the stack<br/>"
+    "memory leaks -- where pointers to malloc'd blocks are lost forever<br/>"
+    "passing of uninitialised and/or unaddressable memory to system calls<br/>"
+    "mismatched use of malloc/new/new [] vs free/delete/delete []<br/>"
+    "some abuses of the POSIX pthread API.</p>" ) );
 
   KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), actionCollection(), "tools_valgrind" );
   action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
   action->setToolTip(i18n("Valgrind memory leak check"));
-  action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs."));
+  action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs.</p>"));
   connect(action, SIGNAL(triggered(bool)), SLOT(slotExecValgrind()));
 
   action = new KAction( i18n("P&rofile with KCachegrind"), actionCollection(), "tools_calltree" );
   action->setToolTip(i18n("Profile with KCachegrind"));
-  action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind."));
+  action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind.</p>"));
   connect(action, SIGNAL(triggered(bool)), SLOT(slotExecCalltree()));
 }
 

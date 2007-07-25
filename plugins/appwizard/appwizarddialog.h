@@ -15,7 +15,7 @@
 
 class AppWizardDialog: public KAssistantDialog {
 public:
-    AppWizardDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
+    explicit AppWizardDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
 
 };
 

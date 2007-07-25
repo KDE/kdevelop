@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "kdevdocumentmodel.h"
 #include "kdevdocumentselection.h"
+#include "kdevdocumentmodel.h"
 
 KDevDocumentSelection::KDevDocumentSelection( KDevDocumentModel * model )
         : QItemSelectionModel( model )

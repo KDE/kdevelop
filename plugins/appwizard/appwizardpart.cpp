@@ -55,7 +55,7 @@ AppWizardPart::AppWizardPart(QObject *parent, const QStringList &)
     action->setWhatsThis( i18n("<b>New project</b><p>"
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
-                               "application from a set of templates.") );
+                               "application from a set of templates.</p>") );
 
     m_templatesModel = new ProjectTemplatesModel(this);
 }
@@ -113,8 +113,8 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
 		unpackArchive(arch->directory(), dest);
 	else
 		kDebug(9010) << "failed to open template archive" << endl;
-	
-    return QDir::cleanPath(dest + "/" + selectionPage->appName().toLower() + ".kdev4");
+
+    return QDir::cleanPath(dest + '/' + selectionPage->appName().toLower() + ".kdev4");
 }
 
 void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
@@ -133,14 +133,14 @@ void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &d
         if (dir->entry(entry)->isDirectory())
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
-            unpackArchive(file, dest + "/" + file->name());
+            unpackArchive(file, dest + '/' + file->name());
         }
         else if (dir->entry(entry)->isFile())
         {
             const KArchiveFile *file = (KArchiveFile *)dir->entry(entry);
             file->copyTo(tdir.name());
-            QString destName = dest + "/" + file->name();
-            if (!copyFile(QDir::cleanPath(tdir.name()+"/"+file->name()),
+            QString destName = dest + '/' + file->name();
+            if (!copyFile(QDir::cleanPath(tdir.name()+'/'+file->name()),
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
                 KMessageBox::sorry(0, i18n("The file %1 cannot be created.", dest));

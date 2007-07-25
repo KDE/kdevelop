@@ -34,7 +34,7 @@ class KDevFileItem;
 class KDevDocumentItem: public KDevelop::ItemCollection
 {
 public:
-    KDevDocumentItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
+    explicit KDevDocumentItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
     virtual ~KDevDocumentItem();
 
     virtual KDevDocumentItem *itemAt( int index ) const;
@@ -81,7 +81,7 @@ private:
 class KDevMimeTypeItem: public KDevDocumentItem
 {
 public:
-    KDevMimeTypeItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
+    explicit KDevMimeTypeItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
     virtual ~KDevMimeTypeItem();
 
     virtual KDevMimeTypeItem *mimeTypeItem() const
@@ -96,7 +96,7 @@ public:
 class KDevFileItem: public KDevDocumentItem
 {
 public:
-    KDevFileItem( const KUrl &url, KDevelop::ItemGroup *parent = 0 );
+    explicit KDevFileItem( const KUrl &url, KDevelop::ItemGroup *parent = 0 );
     virtual ~KDevFileItem();
 
     virtual KDevFileItem *fileItem() const
