@@ -33,3 +33,8 @@ kde4_add_unit_test(sublime-viewactivationtest TESTNAME sublime-sublime-viewactiv
 target_link_libraries(sublime-viewactivationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
 
 
+set( aggregatemodeltest_SRCS aggregatemodeltest.cpp ${CMAKE_SOURCE_DIR}/test/common/modeltest.cpp )
+kde4_automoc(${aggregatemodeltest_SRCS})
+kde4_add_unit_test(sublime-aggregatemodeltest TESTNAME sublime-sublime-aggregatemodeltest  ${aggregatemodeltest_SRCS})
+target_link_libraries(sublime-aggregatemodeltest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
+

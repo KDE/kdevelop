@@ -21,6 +21,7 @@ set(sublime_LIB_SRCS
     view_p.cpp
     viewwidgetcreator.cpp
     sublimedefs.cpp
+    aggregatemodel.cpp
 )
 
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
