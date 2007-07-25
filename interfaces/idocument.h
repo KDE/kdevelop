@@ -101,7 +101,7 @@ public:
     virtual void close() = 0;
 
     /**
-     * Enquires whether this document is currently active in the currently active window.
+     * Enquires whether this document is currently active in the currently active mainwindow.
      */
     virtual bool isActive() const = 0;
 

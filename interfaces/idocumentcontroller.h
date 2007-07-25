@@ -81,7 +81,7 @@ public Q_SLOTS:
             DocumentActivation activate = ActivateOnOpen ) = 0;
 
 Q_SIGNALS:
-    /**Emitted when the document is given focus or activated.*/
+    /**Emitted when the document has been activated.*/
     void documentActivated( KDevelop::IDocument* document );
 
     /**Emitted when a document has been saved.*/

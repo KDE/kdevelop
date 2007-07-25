@@ -6,8 +6,8 @@
    Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
    Copyright (C) 2003 Mario Scalas <mario.scalas@libero.it>
    Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
-   Copyright     2006 Matt Rogers <mattr@kde.org>
-   Copyright     2007 Andreas Pakulat <apaku@gmx.de>
+   Copyright (C) 2006 Matt Rogers <mattr@kde.org>
+   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -153,11 +153,6 @@ public Q_SLOTS:
      * @return true if the url @a url is a part of the project.
      */
     virtual bool inProject(const KUrl &url) const = 0;
-
-    /**
-     * The persistent AST storage for this project.
-     */
-//     virtual IPersistentHash *persistentHash() const = 0;
 
 };
 
