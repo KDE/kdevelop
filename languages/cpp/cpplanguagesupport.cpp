@@ -130,7 +130,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
 CppLanguageSupport::~CppLanguageSupport()
 {
     // Remove any documents waiting to be parsed from the background paser.
-    BackgroundParser::self()->clear(this);
+    core()->languageController()->backgroundParser()->clear(this);
 
     // Remove the corresponding parsing environment from the DUChain.
     {
@@ -148,7 +148,7 @@ CppLanguageSupport::~CppLanguageSupport()
 
 void CppLanguageSupport::documentChanged( KDevelop::IDocument* document )
 {
-    BackgroundParser::self()->addDocument(document->url());
+    core()->languageController()->backgroundParser()->addDocument(document->url());
 }
 
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
