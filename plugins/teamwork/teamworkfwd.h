@@ -10,9 +10,9 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
-#ifndef TEMWORKFWD_H
-#define TEMWORKFWD_H
+
+#ifndef TEAMWORKFWD_H
+#define TEAMWORKFWD_H
 
 #include "network/networkfwd.h"
 

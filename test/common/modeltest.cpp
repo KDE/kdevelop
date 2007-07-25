@@ -21,9 +21,9 @@
 **
 ****************************************************************************/
 
-#include <QtGui/QtGui>
-
 #include "modeltest.h"
+
+#include <QtGui/QtGui>
 
 Q_DECLARE_METATYPE(QModelIndex)
 
