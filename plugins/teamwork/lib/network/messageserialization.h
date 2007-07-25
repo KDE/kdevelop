@@ -10,8 +10,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef MESSAGEPOINTER_H
-#define MESSAGEPOINTER_H
+#ifndef MESSAGESERIALIZATION_H
+#define MESSAGESERIALIZATION_H
 
 ///This header defines a serialization-class that can be used as template-parameter to SafeSharedPtr so it uses the message-serialization-system and the MessageTypeSet to serialize and deserialize messages(it stores and loads the messages as vectors). It automatically uses the global message-set stored in globalMessageTypeSet(). A hard lock is done while saving. Warning: May throw exceptions on errors
 

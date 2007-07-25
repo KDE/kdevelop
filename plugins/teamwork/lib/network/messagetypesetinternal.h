@@ -10,8 +10,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef MESSAGEINTERNAL_H
-#define MESSAGEINTERNAL_H
+#ifndef MESSAGETYPESETINTERNAL_H
+#define MESSAGETYPESETINTERNAL_H
 
 #include "statictree.h"
 #include "messageinterface.h"

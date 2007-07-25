@@ -116,7 +116,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     connect(action, SIGNAL(triggered(bool)), this, SLOT(logView()));
     action->setToolTip( i18n("Show subversion log history") );
     action->setWhatsThis( i18n("<b>Show subversion log</b><p>"
-            "View log in KDevelop. " ) );
+            "View log in KDevelop.</p>" ) );
 
     action = actionCollection()->addAction("svn_blame");
     action->setText(i18n("Show Blame (annotate)..."));

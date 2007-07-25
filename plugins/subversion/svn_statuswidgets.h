@@ -44,7 +44,7 @@ class SvnStatusDisplayWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    explicit SvnStatusDisplayWidget( KUrl requestedUrl,
+    explicit SvnStatusDisplayWidget( const KUrl& requestedUrl,
                                      bool contactRepository,
                                      QWidget *parent = 0 );
     ~SvnStatusDisplayWidget();

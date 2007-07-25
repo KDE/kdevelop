@@ -11,7 +11,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef DEFINES_H
+#define DEFINES_H
+
 #define STANDARDPORT 8161
 
+#endif
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

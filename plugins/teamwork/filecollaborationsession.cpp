@@ -46,7 +46,7 @@ Q_DECLARE_METATYPE( Teamwork::UserPointer )
 
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/
-//krazy:excludeall=doubleqote_chars
+//krazy:excludeall=doublequote_chars
 
 using namespace KDevelop;
 

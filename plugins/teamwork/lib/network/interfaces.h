@@ -11,19 +11,19 @@
  *                                                                         *
  ***************************************************************************/
 
-// #ifndef INTERFACES_H
-// #define INTERFACES_H
-// 
+#ifndef INTERFACES_H
+#define INTERFACES_H
+//
 // #include "serialization.h"
 // #include "safesharedptr.h"
-// 
+//
 // class SafeShared;
 // struct MessageSerialization;
-// 
+//
 // namespace Teamwork {
 //  typedef SafeSharedPtr<MessageInterface, MessageSerialization> MessagePointer;
 //  }
-// 
-// #endif
+//
+#endif
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

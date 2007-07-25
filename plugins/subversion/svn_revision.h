@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SUBVERSION_UTILS_H
-#define SUBVERSION_UTILS_H
+#ifndef SUBVERSION_REVISION_H
+#define SUBVERSION_REVISION_H
 
 #define SVN_LOGVIEW  (KDevelop::VcsJob::Log)
 #define SVN_BLAME    (KDevelop::VcsJob::Annotate)

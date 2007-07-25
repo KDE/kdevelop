@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SERIALIZATIONHELPERS_H
-#define SERIALIZATIONHELPERS_H
+#ifndef QTSERIALIZATION_H
+#define QTSERIALIZATION_H
 
 #include "network/serialization.h"
 #include <boost/serialization/split_free.hpp>

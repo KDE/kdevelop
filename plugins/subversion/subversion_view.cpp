@@ -71,7 +71,7 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
 
     setObjectName( i18n( "Subversion" ) );
     setWhatsThis( i18n( "<b>Subversion</b><p>"
-            "This window contains an embedded Subversion View Reusults." ) );
+            "This window contains an embedded Subversion View Reusults.</p>" ) );
     setWindowIcon( KIcon( "subversion" ) );
     setWindowTitle( i18n( "subversion" ) );
 

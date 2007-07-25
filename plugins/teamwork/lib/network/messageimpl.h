@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MESSAGEIMPL
-#define MESSAGEIMPL
+#ifndef MESSAGEIMPL_H
+#define MESSAGEIMPL_H
 
 #include "networkfwd.h"
 #include "messageinterface.h"

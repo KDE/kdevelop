@@ -11,7 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#ifndef SUMSEARCH_H
+#define SUMSEARCH_H
 
 #include <cstdio>
 #include <cstdlib>
@@ -618,5 +619,6 @@ class DifferenceSumSearch<maxDepth, SumType, order, false> {
 
 using namespace FuzzySearch;
 
+#endif
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

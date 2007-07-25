@@ -11,8 +11,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TEAMWORKSESSION_H
-#define TEAMWORKSESSION_H
+#ifndef MULTISESSION_H
+#define MULTISESSION_H
 
 #include <stdio.h>
 #include <stdlib.h>

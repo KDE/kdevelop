@@ -11,8 +11,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KDEVCODEVIEW_H
-#define KDEVCODEVIEW_H
+#ifndef KDEVTEAMWORK_H
+#define KDEVTEAMWORK_H
 
 #include <QObject>
 #include <QMap>

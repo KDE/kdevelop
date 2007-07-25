@@ -85,7 +85,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPart *part, QWidget* parent )
     setObjectName( i18n( "Konsole" ) );
 
     setWhatsThis( i18n( "<b>Konsole</b><p>"
-            "This window contains an embedded console." ) );
+            "This window contains an embedded console.</p>" ) );
     setWindowIcon( KIcon( "konsole" ) );
     setWindowTitle( i18n( "Konsole" ) );
 

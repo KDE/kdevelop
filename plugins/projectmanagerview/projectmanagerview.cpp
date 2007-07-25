@@ -147,7 +147,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     action->setText(i18n( "Build Selected Project" ) );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( buildCurrentProject() ) );
     action->setToolTip( i18n( "Build Selected Project" ) );
-    action->setWhatsThis( i18n( "<b>Build Selected Project</b><p>Builds the currently selected project." ) );
+    action->setWhatsThis( i18n( "<b>Build Selected Project</b><p>Builds the currently selected project.</p>" ) );
 }
 
 ProjectManagerView::~ProjectManagerView()

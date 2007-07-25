@@ -11,13 +11,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <boost/serialization/extended_type_info_typeid.hpp>
 #include "serverconfig.h"
+#include <boost/serialization/extended_type_info_typeid.hpp>
 #include "serialization.h"
 #include <boost/archive/polymorphic_xml_oarchive.hpp>
 #include <boost/archive/polymorphic_xml_iarchive.hpp>
-#include <boost/archive/polymorphic_text_oarchive.hpp>
-#include <boost/archive/polymorphic_text_iarchive.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/set.hpp>
 #include <fstream>
@@ -30,8 +28,6 @@
 // typedef boost::archive::polymorphic_xml_iarchive InternalIArchive;
 // typedef boost::archive::polymorphic_xml_oarchive InternalOArchive;
 
-#include <boost/archive/polymorphic_text_iarchive.hpp>
-#include <boost/archive/polymorphic_text_oarchive.hpp>
 typedef boost::archive::polymorphic_text_iarchive InternalIArchive;
 typedef boost::archive::polymorphic_text_oarchive InternalOArchive;
 #else

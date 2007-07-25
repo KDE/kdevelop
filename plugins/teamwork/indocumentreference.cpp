@@ -15,7 +15,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/
-//krazy:excludeall=doubleqote_chars
+//krazy:excludeall=doublequote_chars
 
 QString InDocumentReference::createReference( const QString& file, int startLine, int startCol, int endLine, int endCol ) {
 	QString ret = file;

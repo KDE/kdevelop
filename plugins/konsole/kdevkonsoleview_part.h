@@ -10,8 +10,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef __KDEVPART_KDEVKONSOLEVIEW_H__
-#define __KDEVPART_KDEVKONSOLEVIEW_H__
+#ifndef KDEVKONSOLEVIEW_PART_H
+#define KDEVKONSOLEVIEW_PART_H
 
 #include "iplugin.h"
 

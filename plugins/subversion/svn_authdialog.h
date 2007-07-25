@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_SSLTRUSTDIALOG_H
-#define SVN_SSLTRUSTDIALOG_H
+#ifndef SVN_AUTHDIALOG_H
+#define SVN_AUTHDIALOG_H
 
 #include "ui_svnssltrustdialog.h"
 #include "ui_svnlogindialog.h"

@@ -8,8 +8,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef SVN_CORE_H
-#define SVN_CORE_H
+#ifndef SUBVERSION_CORE_H
+#define SUBVERSION_CORE_H
 
 #include <kurl.h>
 #include "svn_revision.h"

@@ -14,8 +14,8 @@
 /** This file needs to be included into any file where boost-serialization takes place
  * */
 
-#ifndef TEAMWORK_COMMON_H
-#define TEAMWORK_COMMON_H
+#ifndef SERIALIZATION_H
+#define SERIALIZATION_H
 
 #include <boost/serialization/extended_type_info_typeid.hpp>
 

@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TEAMWORK_SERVER_H
-#define TEAMWORK_SERVER_H
+#ifndef BASICSERVER_H
+#define BASICSERVER_H
 
 #include "networkfwd.h"
 #include "safesharedptr.h"

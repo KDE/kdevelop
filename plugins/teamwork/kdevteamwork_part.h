@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __KDEVPART_KDEVCODEVIEW_H__
-#define __KDEVPART_KDEVCODEVIEW_H__
+#ifndef KDEVTEAMWORK_PART_H
+#define KDEVTEAMWORK_PART_H
 
 #include <QtCore/QPointer>
 
@@ -50,7 +50,7 @@ public:
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
     void import( RefreshPolicy policy = Refresh );
-    
+
     static KDevelop::ICore* staticCore();
 
     static KDevelop::IDocumentController* staticDocumentController();

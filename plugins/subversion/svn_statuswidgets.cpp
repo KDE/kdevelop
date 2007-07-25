@@ -67,7 +67,7 @@ bool SvnStatusOptionDlg::ignoreExternals()
 
 ////////////////////////////////////////////////////////////////
 
-SvnStatusDisplayWidget::SvnStatusDisplayWidget( KUrl url, bool repContacted, QWidget *parent )
+SvnStatusDisplayWidget::SvnStatusDisplayWidget( const KUrl& url, bool repContacted, QWidget *parent )
     : QTreeWidget( parent )
     , m_repContacted( repContacted ), m_reqUrl(url)
 {

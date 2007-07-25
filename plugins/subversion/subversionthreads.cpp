@@ -303,7 +303,7 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
                 else if (notify->prop_state == svn_wc_notify_state_changed)
                     notifyString += " PropUpdated";
                 else
-                    notifyString += " ";
+                    notifyString += ' ';
 
                 if (! ((notify->content_state == svn_wc_notify_state_unchanged
                         || notify->content_state == svn_wc_notify_state_unknown)
