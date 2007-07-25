@@ -106,7 +106,7 @@ void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 }
 
 bool ClassFunctionDeclaration::isConversionFunction() const {
-  return identifier() == Identifier("operator<...cast...>");
+  return identifier() == Identifier("operator{...cast...}");
 }
 
 bool ClassFunctionDeclaration::isConstructor() const

@@ -40,6 +40,7 @@ class Declaration;
 class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedType
 {
 public:
+  IdentifiedType(const IdentifiedType& rhs);
   IdentifiedType();
 
   QualifiedIdentifier identifier() const;

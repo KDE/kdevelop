@@ -103,7 +103,10 @@ public:
    * Returns the parent-context of this declaration.
    * */
   DUContext* context() const;
-  void setContext(DUContext* context);
+  /**
+   * @param anonymous If this is set, this declaration will be added anonymously into the parent-context. That way it can never be found through any of the context's functions.
+   * */
+  void setContext(DUContext* context, bool anonymous = false);
 
   /**
    * If this declarations opens an own context, this returns that context.

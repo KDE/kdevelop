@@ -78,7 +78,9 @@ public:
    * or timeout is reached (10 seconds).
    *
    * Any number of read locks can be acquired at once, but not while
-   * there is a write lock.  Read locks can be recursive.
+   * there is a write lock.  Read locks are recursive.
+   * That means that a thread can acquire a read-lock when it already
+   * has an arbitrary count of read- and write-locks acquired.
    */
   bool lockForRead();
 
@@ -96,8 +98,8 @@ public:
    * Acquires a write lock. Will not return until the lock is acquired
    * or timeout is reached (10 seconds).
    *
-   * There can be no other read or write locks held at the same time.
-   * Write locks cannot be recursive.
+   * Write locks are recursive. That means that they can by acquired by threads
+   * that already have an arbitrary count of read- and write-locks acquired.
    */
   bool lockForWrite();
 

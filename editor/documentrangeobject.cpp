@@ -63,6 +63,11 @@ DocumentRangeObject::~ DocumentRangeObject( )
     delete d;
 }
 
+void DocumentRangeObject::setRangeOwning(RangeOwning ownsRange) {
+    d->m_ownsRange = ownsRange;
+}
+
+
 void DocumentRangeObject::setTextRange( KTextEditor::Range * range, RangeOwning ownsRange )
 {
     Q_ASSERT(range);

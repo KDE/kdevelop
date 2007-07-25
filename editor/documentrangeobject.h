@@ -50,6 +50,8 @@ public:
      */
     void setTextRange(KTextEditor::Range* range, RangeOwning ownsRange = Own);
 
+    void setRangeOwning(RangeOwning ownsRange);
+
     void setRange(const KTextEditor::Range& range);
     const KTextEditor::Range textRange() const;
     const DocumentRange textDocRange() const;

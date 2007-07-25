@@ -23,6 +23,58 @@
 namespace KDevelop
 {
 
+bool SimpleTypeVisitor::preVisit (const AbstractType *) {
+  return true;
+}
+
+void SimpleTypeVisitor::postVisit (const AbstractType *) {
+}
+
+void SimpleTypeVisitor::visit (const IntegralType * type) {
+  visit( (AbstractType*)type );
+}
+
+bool SimpleTypeVisitor::visit (const PointerType * type) {
+  return visit( (AbstractType*)type );
+}
+
+void SimpleTypeVisitor::endVisit (const PointerType * type) {
+  visit( (AbstractType*)type );
+}
+
+bool SimpleTypeVisitor::visit (const ReferenceType * type) {
+  return visit( (AbstractType*)type );
+}
+
+void SimpleTypeVisitor::endVisit (const ReferenceType * type) {
+  visit( (AbstractType*)type );
+}
+
+bool SimpleTypeVisitor::visit (const FunctionType * type) {
+  return visit( (AbstractType*)type );
+}
+
+void SimpleTypeVisitor::endVisit (const FunctionType * type) {
+  visit( (AbstractType*)type );
+}
+
+bool SimpleTypeVisitor::visit (const StructureType * type) {
+  return visit( (AbstractType*)type );
+}
+
+void SimpleTypeVisitor::endVisit (const StructureType * type) {
+  visit( (AbstractType*)type );
+}
+
+bool SimpleTypeVisitor::visit (const ArrayType * type) {
+  return visit( (AbstractType*)type );
+}
+
+void SimpleTypeVisitor::endVisit (const ArrayType * type) {
+  visit( (AbstractType*)type );
+}
+
+  
 TypeVisitor::~TypeVisitor()
 {
 }
@@ -70,6 +122,46 @@ public:
   int m_dimension;
   AbstractType::Ptr m_elementType;
 };
+
+AbstractType::AbstractType(const AbstractType& rhs) : KShared(), d(new AbstractTypePrivate(*rhs.d)) {
+}
+
+IntegralType::IntegralType(const IntegralType& rhs) : AbstractType(rhs), d(new IntegralTypePrivate(*rhs.d)) {
+}
+
+PointerType::PointerType(const PointerType& rhs) : AbstractType(rhs), d(new PointerTypePrivate(*rhs.d)) {
+}
+
+ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(rhs), d(new ReferenceTypePrivate(*rhs.d)) {
+}
+
+FunctionType::FunctionType(const FunctionType& rhs) : AbstractType(rhs), d(new FunctionTypePrivate(*rhs.d)) {
+}
+
+StructureType::StructureType(const StructureType& rhs) : AbstractType(rhs), d(new StructureTypePrivate(*rhs.d)) {
+}
+
+ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(rhs), d(new ArrayTypePrivate(*rhs.d)) {
+}
+
+AbstractType* IntegralType::clone() const {
+  return new IntegralType(*this);
+}
+AbstractType* PointerType::clone() const {
+  return new PointerType(*this);
+}
+AbstractType* ReferenceType::clone() const {
+  return new ReferenceType(*this);
+}
+AbstractType* FunctionType::clone() const {
+  return new FunctionType(*this);
+}
+AbstractType* StructureType::clone() const {
+  return new StructureType(*this);
+}
+AbstractType* ArrayType::clone() const {
+  return new ArrayType(*this);
+}
 
 AbstractType::AbstractType()
   : d(new AbstractTypePrivate)
@@ -159,6 +251,7 @@ void IntegralType::accept0(TypeVisitor *v) const
 { 
   v->visit (this); 
 }
+
 AbstractType::WhichType IntegralType::whichType() const
 {
   return TypeIntegral;
@@ -176,6 +269,10 @@ void PointerType::accept0 (TypeVisitor *v) const
     acceptType (d->m_baseType, v);
 
   v->endVisit (this);
+}
+
+void PointerType::exchangeTypes( TypeExchanger* exchanger ) {
+  d->m_baseType = exchanger->exchange( d->m_baseType.data() );
 }
 
 PointerType::~PointerType()
@@ -252,6 +349,11 @@ void ReferenceType::accept0 (TypeVisitor *v) const
   v->endVisit (this);
 }
 
+void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
+{
+  d->m_baseType = exchanger->exchange( d->m_baseType.data() );
+}
+
 QString ReferenceType::toString() const
 {
   return baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&");
@@ -308,6 +410,9 @@ bool FunctionType::operator != (const FunctionType &other) const
   return d->m_returnType != other.d->m_returnType || d->m_arguments != other.d->m_arguments;
 }
 
+void AbstractType::exchangeTypes( TypeExchanger* /*exchanger */) {
+}
+
 void FunctionType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
@@ -319,6 +424,13 @@ void FunctionType::accept0 (TypeVisitor *v) const
   }
 
   v->endVisit (this);
+}
+
+void FunctionType::exchangeTypes( TypeExchanger* exchanger )
+{
+  for (int i = 0; i < d->m_arguments.count (); ++i)
+    d->m_arguments[i] = exchanger->exchange( d->m_arguments[i].data() );
+  d->m_returnType = exchanger->exchange(d->m_returnType.data());
 }
 
 QString FunctionType::toString() const
@@ -387,6 +499,13 @@ void StructureType::accept0 (TypeVisitor *v) const
   v->endVisit (this);
 }
 
+void StructureType::exchangeTypes( TypeExchanger* exchanger )
+{
+  if( exchanger->exchangeMembers() )
+    for (int i = 0; i < d->m_elements.count (); ++i)
+      d->m_elements[i] = exchanger->exchange( d->m_elements[i].data() );
+}
+
 QString StructureType::toString() const
 {
   return "<structure>";
@@ -452,10 +571,47 @@ void ArrayType::accept0 (TypeVisitor *v) const
   v->endVisit (this);
 }
 
+void ArrayType::exchangeTypes( TypeExchanger* exchanger )
+{
+  d->m_elementType = exchanger->exchange( d->m_elementType.data() );
+}
+
 AbstractType::WhichType ArrayType::whichType() const
 {
   return TypeArray;
 }
+
+AbstractType::WhichType DelayedType::whichType() const {
+  return AbstractType::TypeDelayed;
+}
+
+AbstractType* DelayedType::clone() const {
+  return new DelayedType(*this);
+}
+
+QString DelayedType::toString() const {
+  return "<delayed> " + qualifiedIdentifier().toString();
+}
+
+DelayedType::DelayedType() {
+}
+
+DelayedType::~DelayedType() {
+}
+
+void DelayedType::setQualifiedIdentifier(const QualifiedIdentifier& identifier) {
+  m_identifier = identifier;
+}
+
+QualifiedIdentifier DelayedType::qualifiedIdentifier() const {
+  return m_identifier;
+}
+
+void DelayedType::accept0 (KDevelop::TypeVisitor *v) const {
+    v->visit(this);
+/*    v->endVisit(this);*/
+}
+
 
 /*uint PointerType::hash() const
 {

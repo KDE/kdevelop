@@ -33,8 +33,10 @@ public:
   Declaration* m_declaration;
   QList<DUContext*> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
+  QList<DUContext*> m_anonymousChildContexts;
   QList<DUContext*> m_importedChildContexts;
   QList<Declaration*> m_localDeclarations;
+  QList<Declaration*> m_anonymousLocalDeclarations;
   QList<Definition*> m_localDefinitions;
   QList<DUContext::UsingNS*> m_usingNamespaces;
   QList<Use*> m_uses;
@@ -48,12 +50,23 @@ public:
    * the chain is sorted correctly.
    */
   void addChildContext(DUContext* context);
+  void addAnonymousChildContext(DUContext* context);
+  
+  /**Removes the context from childContexts as well as anonymousChildContexts
+   * @return Whether a non-anonymous context was removed
+   * */
+  bool removeChildContext(DUContext* context);
 
   void addImportedChildContext( DUContext * context );
   void removeImportedChildContext( DUContext * context );
 
   void addDeclaration(Declaration* declaration);
-  void removeDeclaration(Declaration* declaration);
+  void addAnonymousDeclaration(Declaration* declaration);
+  
+  /**Removes the declaration from localDeclarations as well as anonymousLocalDeclarations
+   * @return Whether a non-anonymous declaration was removed
+   * */
+  bool removeDeclaration(Declaration* declaration);
 
   void addUse(Use* use);
   void removeUse(Use* use);

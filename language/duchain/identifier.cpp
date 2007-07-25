@@ -19,6 +19,8 @@
 #include "identifier.h"
 
 #include <QHash>
+#include "stringhelpers.h"
+
 namespace KDevelop
 {
 
@@ -42,7 +44,14 @@ Identifier::Identifier(const QString& id)
   : d(new IdentifierPrivate)
 {
   d->m_unique = 0;
-  d->m_identifier = id;
+
+  ///Extract template-parameters
+  ParamIterator paramIt("<>", id);
+  d->m_identifier = paramIt.prefix();
+  while( paramIt ) {
+    appendTemplateIdentifier( QualifiedIdentifier(*paramIt) );
+    ++paramIt;
+  }
 }
 
 Identifier::Identifier()
@@ -188,7 +197,7 @@ QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
     d->m_explicitlyGlobal = true;
   } else {
     d->m_explicitlyGlobal = false;
-    d->m_qid = id.d->m_identifier;
+    d->m_qid = id.toString();
     d->m_idSplits.append(0);
   }
 }
@@ -480,12 +489,12 @@ void QualifiedIdentifier::push(const Identifier& id)
       d->m_explicitlyGlobal = true;
     } else {
       d->m_idSplits.append(0);
-      d->m_qid.append(id.d->m_identifier);
+      d->m_qid.append(id.toString());
     }
   } else {
     d->m_qid.append("::");
     d->m_idSplits.append(d->m_qid.length());
-    d->m_qid.append(id.d->m_identifier);
+    d->m_qid.append(id.toString());
   }
 }
 

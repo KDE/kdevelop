@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
-#include <QtCore/QSet>
+#include <QtCore/QHash>
 
 // Uncomment the following to turn on verbose locking information
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
@@ -39,22 +39,53 @@ class DUChainLockPrivate
 public:
   DUChainLockPrivate() {
     m_writer = 0;
+    m_writerRecursion = 0;
+    m_totalReaderRecursion = 0;
+    
   }
+
+  /**
+   * Returns true if ther is no reader that is not this thread.
+   * */
+  bool haveOtherReaders() const {
+    int ownReaderRecursion = 0;
+    
+    DUChainLockPrivate::ReaderMap::const_iterator it = m_readers.find( QThread::currentThreadId() );
+    if( it != m_readers.end() )
+      ownReaderRecursion = *it;
+
+    ///Since m_totalReaderRecursion is the sum of all reader-recursions, it will be same if either there is no reader at all, or if this thread is the only reader.
+    return m_totalReaderRecursion != ownReaderRecursion;
+  }
+  
   QMutex m_mutex;
   Qt::HANDLE m_writer;
-  QSet<Qt::HANDLE> m_readers;
+
+  int m_writerRecursion; ///How often is the chain write-locked by the writer?
+  int m_totalReaderRecursion; ///How often is the chain read-locked recursively by all readers? Should be sum of all m_reader values
+
+  ///Map readers to the count of recursive read-locks they hold(0 if they do not hold a lock)
+  typedef QHash<Qt::HANDLE,int> ReaderMap;
+  ReaderMap m_readers;
+  
 };
 
 class DUChainReadLockerPrivate
 {
 public:
+  DUChainReadLockerPrivate() : m_locked(false) {
+  }
   DUChainLock* m_lock;
+  bool m_locked;
 };
 
 class DUChainWriteLockerPrivate
 {
 public:
+  DUChainWriteLockerPrivate() : m_locked(false) {
+  }
   DUChainLock* m_lock;
+  bool m_locked;
 };
 
 
@@ -80,18 +111,27 @@ bool DUChainLock::lockForRead()
   bool locked = false;
 
   // 10 second timeout...
-  while (d->m_writer != 0 && currentTime < 1000) {
+  while ( (d->m_writer && d->m_writer != QThread::currentThreadId()) && currentTime < 1000) {
     lock.unlock();
     usleep(10000);
     currentTime++;
     lock.relock();
   }
 
-  if (d->m_writer == 0) {
-    d->m_readers << QThread::currentThreadId();
+  if (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) {
+    DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
+    if( it != d->m_readers.end() )
+      ++(*it);
+    else
+      d->m_readers.insert(QThread::currentThreadId(), 1);
     locked = true;
   }
 
+  ++d->m_totalReaderRecursion;
+
+  lock.unlock();
+  Q_ASSERT(currentThreadHasReadLock());
+  
   return locked;
 }
 
@@ -102,13 +142,27 @@ void DUChainLock::releaseReadLock()
 #endif
 
   QMutexLocker lock(&d->m_mutex);
-  d->m_readers.remove(QThread::currentThreadId());
+  DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
+  Q_ASSERT(it != d->m_readers.end());
+  --(*it);
+  Q_ASSERT((*it)>=0);
+  --d->m_totalReaderRecursion;
+
+  ///@todo Remove the all readers that do not exist any more at some point(leave other readers there with recursion 0
+  ///      because it is very probable that they will lock again, and not having to re-allocate the bucket might speed up the locking.
+
+/*  if( *it == 0 )
+    d->m_readers.erase(it); //Maybe it would even be wise simply leaving it there*/
 }
 
 bool DUChainLock::currentThreadHasReadLock()
 {
   QMutexLocker lock(&d->m_mutex);
-  return d->m_readers.contains(QThread::currentThreadId());
+  DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
+  if( it != d->m_readers.end() )
+    return (*it) != 0;
+  else
+    return false;
 }
 
 bool DUChainLock::lockForWrite()
@@ -119,22 +173,21 @@ bool DUChainLock::lockForWrite()
 
   QMutexLocker lock(&d->m_mutex);
 
-  // Write locks are non-recursive.
-  Q_ASSERT(d->m_writer != QThread::currentThreadId());
-
   int currentTime = 0;
   bool locked = false;
 
+  ///@todo use some wake-up queue instead of sleeping
   // 10 second timeout...
-  while (d->m_writer != 0 && !d->m_readers.empty() && currentTime < 10000) {
+  while ( ( (d->m_writer && d->m_writer != QThread::currentThreadId()) || d->haveOtherReaders()) && currentTime < 10000) {
     lock.unlock();
     usleep(10000);
     currentTime++;
     lock.relock();
   }
 
-  if (d->m_writer == 0 && d->m_readers.empty()) {
+  if ( (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) && !d->haveOtherReaders()) {
     d->m_writer = QThread::currentThreadId();
+    ++d->m_writerRecursion;
     locked = true;
   }
 
@@ -148,7 +201,11 @@ void DUChainLock::releaseWriteLock()
 #endif
 
   QMutexLocker lock(&d->m_mutex);
-  d->m_writer = 0;
+  
+  --d->m_writerRecursion;
+  
+  if( !d->m_writerRecursion )
+    d->m_writer = 0;
 }
 
 bool DUChainLock::currentThreadHasWriteLock()
@@ -173,18 +230,25 @@ DUChainReadLocker::~DUChainReadLocker()
 
 bool DUChainReadLocker::lock()
 {
+  if( d->m_locked )
+    return true;
+  
   bool l = false;
   if (d->m_lock) {
     l = d->m_lock->lockForRead();
     Q_ASSERT(l);
   };
+
+  d->m_locked = l;
+  
   return l;
 }
 
 void DUChainReadLocker::unlock()
 {
-  if (d->m_lock) {
+  if (d->m_locked && d->m_lock) {
     d->m_lock->releaseReadLock();
+    d->m_locked = false;
   }
 }
 
@@ -203,18 +267,25 @@ DUChainWriteLocker::~DUChainWriteLocker()
 
 bool DUChainWriteLocker::lock()
 {
+  if( d->m_locked )
+    return true;
+  
   bool l = false;
   if (d->m_lock) {
     l = d->m_lock->lockForWrite();
     Q_ASSERT(l);
   };
+
+  d->m_locked = l;
+  
   return l;
 }
 
 void DUChainWriteLocker::unlock()
 {
-  if (d->m_lock) {
+  if (d->m_locked && d->m_lock) {
     d->m_lock->releaseWriteLock();
+    d->m_locked = false;
   }
 }
 }

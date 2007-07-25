@@ -20,6 +20,7 @@
 
 #include "identifiedtype.h"
 #include "declaration.h"
+#include "duchainpointer.h"
 
 namespace KDevelop
 {
@@ -27,13 +28,15 @@ namespace KDevelop
 class IdentifiedTypePrivate
 {
 public:
-  Declaration* m_declaration;
+  DeclarationPointer m_declaration; //Self-invalidating
 };
+
+IdentifiedType::IdentifiedType(const IdentifiedType& rhs) : d(new IdentifiedTypePrivate(*rhs.d)) {
+}
 
 IdentifiedType::IdentifiedType()
   : d(new IdentifiedTypePrivate)
 {
-  d->m_declaration = 0;
 }
 
 QualifiedIdentifier IdentifiedType::identifier() const
@@ -43,7 +46,7 @@ QualifiedIdentifier IdentifiedType::identifier() const
 
 Declaration* IdentifiedType::declaration() const
 {
-  return d->m_declaration;
+  return d->m_declaration.data();
 }
 
 void IdentifiedType::setDeclaration(Declaration* declaration)

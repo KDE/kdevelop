@@ -232,7 +232,7 @@ DUContext * Declaration::context() const
   return d->m_context;
 }
 
-void Declaration::setContext(DUContext* context)
+void Declaration::setContext(DUContext* context, bool anonymous)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
@@ -240,15 +240,19 @@ void Declaration::setContext(DUContext* context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
 
   if (d->m_context) {
-    d->m_context->d->removeDeclaration(this);
-    DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
+    if( d->m_context->d->removeDeclaration(this) )
+      DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
   }
 
   d->m_context = context;
 
   if (d->m_context) {
-    d->m_context->d->addDeclaration(this);
-    DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
+    if(!anonymous) {
+      d->m_context->d->addDeclaration(this);
+      DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
+    } else {
+      d->m_context->d->addAnonymousDeclaration(this);
+    }
   }
 }
 

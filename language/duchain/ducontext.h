@@ -58,8 +58,9 @@ public:
   /**
    * Constructor. No convenience methods, as the initialisation order is important,
    * and providing all permutations would be overkill.
+   * @param anonymous Whether the context should be added as an anonymous context to the parent. That way the context can never be found through any of the parent's member-functions.
    */
-  explicit DUContext(KTextEditor::Range* range, DUContext* parent = 0);
+  explicit DUContext(KTextEditor::Range* range, DUContext* parent = 0, bool anonymous = false);
 
   /**
    * Destructor. Will delete all child contexts which are defined within
@@ -158,7 +159,7 @@ public:
   const QList<DUContext*>& importedParentContexts() const;
 
   /**
-   * Adds an imported child context.
+   * Adds an imported context.
    *
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.

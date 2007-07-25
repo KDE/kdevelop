@@ -71,13 +71,24 @@ void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
   DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
 }
 
-void DUContextPrivate::removeDeclaration(Declaration* declaration)
+void DUContextPrivate::addAnonymousDeclaration( Declaration * newDeclaration )
 {
+  m_anonymousLocalDeclarations.append(newDeclaration);
+}
+
+bool DUContextPrivate::removeDeclaration(Declaration* declaration)
+{
+  if( m_anonymousLocalDeclarations.removeAll(declaration) )
+    return false; //anonymous does not count
+    
   ENSURE_CHAIN_WRITE_LOCKED
-
-  m_localDeclarations.removeAll(declaration);
-
-  DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
+  
+  if( m_localDeclarations.removeAll(declaration) ) {
+    DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
+    return true;
+  }else {
+    return false;
+  }
 }
 
 void DUContextPrivate::addChildContext( DUContext * context )
@@ -96,6 +107,25 @@ void DUContextPrivate::addChildContext( DUContext * context )
   context->d->m_parentContext = m_context;
 
   DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
+}
+
+bool DUContextPrivate::removeChildContext( DUContext* context ) {
+  if( m_anonymousChildContexts.removeAll(context) )
+    return false; //Anonymous contexts do not count
+
+  if( m_childContexts.removeAll(context) )
+    return true;
+  else
+    return false;
+}
+
+void DUContextPrivate::addAnonymousChildContext( DUContext * context )
+{
+  // Internal, don't need to assert a lock
+
+  m_anonymousChildContexts.append(context);
+  context->d->m_parentContext = m_context;
+/*  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);*/
 }
 
 void DUContextPrivate::addImportedChildContext( DUContext * context )
@@ -125,15 +155,19 @@ int DUContext::depth() const
   { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
 }
 
-DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
+DUContext::DUContext(KTextEditor::Range* range, DUContext* parent, bool anonymous)
   : DUChainBase(range)
   , d(new DUContextPrivate(this))
 {
   d->m_contextType = Other;
   d->m_parentContext = 0;
   d->m_inSymbolTable = false;
-  if (parent)
-    parent->d->addChildContext(this);
+  if (parent) {
+    if( anonymous )
+      parent->d->addAnonymousChildContext(this);
+    else
+      parent->d->addChildContext(this);
+  }
 }
 
 DUContext::~DUContext( )
@@ -145,7 +179,7 @@ DUContext::~DUContext( )
     SymbolTable::self()->removeContext(this);
 
   if (d->m_parentContext)
-    d->m_parentContext->d->m_childContexts.removeAll(this);
+    d->m_parentContext->d->removeChildContext(this);
 
   foreach (DUContext* context, importedChildContexts())
     context->removeImportedParentContext(this);
@@ -260,7 +294,7 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
   foreach (Declaration* declaration, resolved)
     if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || position >= declaration->textRange().start())
+      if (type() == Class || type() == Template || position >= declaration->textRange().start() || !position.isValid())
         ret.append(declaration);
 
   if (!ret.isEmpty())
@@ -462,6 +496,7 @@ void DUContext::deleteLocalDeclarations()
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
+  qDeleteAll(d->m_anonymousLocalDeclarations);
   qDeleteAll(d->m_localDeclarations);
   Q_ASSERT(d->m_localDeclarations.isEmpty());
 }
@@ -470,6 +505,7 @@ void DUContext::deleteChildContextsRecursively()
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
+  qDeleteAll(d->m_anonymousChildContexts);
   qDeleteAll(d->m_childContexts);
 
   Q_ASSERT(d->m_childContexts.isEmpty());

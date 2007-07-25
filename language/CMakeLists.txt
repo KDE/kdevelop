@@ -30,6 +30,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/parsingenvironment.cpp
     duchain/abstractfunctiondeclaration.cpp
     duchain/functiondeclaration.cpp
+    duchain/stringhelpers.cpp
 )
 
 
@@ -81,5 +82,6 @@ install(FILES
     duchain/identifiedtype.h
     duchain/abstractfunctiondeclaration.h
     duchain/functiondeclaration.h
+    duchain/stringhelpers.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )

@@ -47,6 +47,9 @@ public:
   virtual bool preVisit (const AbstractType *) = 0;
   virtual void postVisit (const AbstractType *) = 0;
 
+  ///Return whether sub-types should be visited(same for the other visit functions)
+  virtual bool visit(const AbstractType*) = 0;
+  
   virtual void visit (const IntegralType *) = 0;
 
   virtual bool visit (const PointerType *) = 0;
@@ -65,12 +68,60 @@ public:
   virtual void endVisit (const ArrayType *) = 0;
 };
 
+class KDEVPLATFORMLANGUAGE_EXPORT SimpleTypeVisitor : public TypeVisitor
+{
+public:
+  ///When using SimpleTypeVisitor, this is the only function you must override to collect all types.
+  virtual bool visit(const AbstractType*) = 0;
+  
+  virtual bool preVisit (const AbstractType *) ;
+  virtual void postVisit (const AbstractType *) ;
+  
+  virtual void visit (const IntegralType *) ;
+
+  virtual bool visit (const PointerType *) ;
+  virtual void endVisit (const PointerType *) ;
+
+  virtual bool visit (const ReferenceType *) ;
+  virtual void endVisit (const ReferenceType *) ;
+
+  virtual bool visit (const FunctionType *) ;
+  virtual void endVisit (const FunctionType *) ;
+
+  virtual bool visit (const StructureType *) ;
+  virtual void endVisit (const StructureType *) ;
+
+  virtual bool visit (const ArrayType *) ;
+  virtual void endVisit (const ArrayType *) ;
+};
+
+/**
+ * A class that can be used to walk through all types that are references from one type, and exchange them with other types.
+ * Examples for such types: Base-classes of a class, function-argument types of a function, etc.
+ * */
+class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
+  public:
+    virtual ~TypeExchanger() {
+    }
+
+    /**
+     * By default should return the given type, and can return another type that the given should be replaced with.
+     * Types should allow replacing all their held types using this from within their exchangeTypes function.
+     * */
+    virtual AbstractType* exchange( const AbstractType* ) = 0;
+    /**
+     * Should member-types be exchanged?(Like the types of a structure's members) If false, only types involved in the identity will be exchanged.
+     * */
+    virtual bool exchangeMembers() const = 0;
+};
+
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public KShared
 {
 public:
   typedef KSharedPtr<AbstractType> Ptr;
 
   AbstractType();
+  AbstractType(const AbstractType& rhs);
   virtual ~AbstractType ();
 
   void accept(TypeVisitor *v) const;
@@ -81,6 +132,11 @@ public:
 
   virtual QString mangled() const;
 
+  /**
+   * Should create a clone of the source-type, with as much data copied as possible without breaking the du-chain.
+   * */
+  virtual AbstractType* clone() const = 0;
+  
   uint hash() const;
 
   enum WhichType {
@@ -90,11 +146,17 @@ public:
     TypeReference,
     TypeFunction,
     TypeStructure,
-    TypeArray
+    TypeArray,
+    TypeDelayed
   };
 
   virtual WhichType whichType() const;
 
+  /**
+   * Should, like accept0, be implemented by all types that hold references to other types.
+   * */
+  virtual void exchangeTypes( TypeExchanger* exchanger );
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
 
@@ -111,6 +173,7 @@ public:
   typedef KSharedPtr<IntegralType> Ptr;
 
   IntegralType();
+  IntegralType(const IntegralType& rhs);
   IntegralType(const QString& name);
   ~IntegralType();
 
@@ -128,6 +191,8 @@ public:
 
   virtual WhichType whichType() const;
 
+  virtual AbstractType* clone() const;
+
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -141,6 +206,7 @@ public:
   typedef KSharedPtr<PointerType> Ptr;
 
   PointerType ();
+  PointerType(const PointerType& rhs);
   ~PointerType();
 
   bool operator != (const PointerType &other) const;
@@ -155,6 +221,9 @@ public:
 
   virtual WhichType whichType() const;
 
+  virtual AbstractType* clone() const;
+  
+  virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -168,6 +237,7 @@ public:
   typedef KSharedPtr<ReferenceType> Ptr;
 
   ReferenceType ();
+  ReferenceType (const ReferenceType& rhs);
   ~ReferenceType();
   AbstractType::Ptr baseType () const;
 
@@ -183,6 +253,9 @@ public:
 
   virtual WhichType whichType() const;
 
+  virtual AbstractType* clone() const;
+  
+  virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -196,8 +269,11 @@ public:
   typedef KSharedPtr<FunctionType> Ptr;
 
   FunctionType();
+  FunctionType(const FunctionType& rhs);
   ~FunctionType();
 
+  virtual AbstractType* clone() const;
+  
   AbstractType::Ptr returnType () const;
 
   void setReturnType(AbstractType::Ptr returnType);
@@ -217,6 +293,7 @@ public:
 
   virtual WhichType whichType() const;
 
+  virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -228,9 +305,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public AbstractType
 {
 public:
   StructureType();
+  StructureType(const StructureType&);
   ~StructureType();
   typedef KSharedPtr<StructureType> Ptr;
 
+  virtual AbstractType* clone() const;
+  
   const QList<AbstractType::Ptr>& elements () const;
 
   bool operator == (const StructureType &other) const;
@@ -247,6 +327,7 @@ public:
 
   virtual WhichType whichType() const;
 
+  virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -259,6 +340,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
 public:
   typedef KSharedPtr<ArrayType> Ptr;
 
+  ArrayType(const ArrayType&);
+  
+  virtual AbstractType* clone() const;
+  
   ArrayType();
   ~ArrayType();
 
@@ -280,6 +365,7 @@ public:
 
   virtual WhichType whichType() const;
 
+  virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -287,10 +373,40 @@ private:
   class ArrayTypePrivate* const d;
 };
 
+/**
+ * Delayed types can be used for example in template-classes.
+ * In a template-class, many types can not be evaluated at the time they are used, because they depend on unknown template-parameters.
+ * Delayed types store the way the type would be searched, and can be used to find the type once the template-paremeters have values.
+ * */
+class KDEVPLATFORMLANGUAGE_EXPORT DelayedType : public KDevelop::AbstractType
+{
+public:
+  typedef KSharedPtr<DelayedType> Ptr;
+
+  DelayedType();
+  virtual ~DelayedType();
+
+  KDevelop::QualifiedIdentifier qualifiedIdentifier() const;
+  void setQualifiedIdentifier(const KDevelop::QualifiedIdentifier& identifier);
+
+  virtual QString toString() const;
+
+  virtual AbstractType* clone() const;
+  
+  virtual WhichType whichType() const;
+  private:
+    virtual void accept0 (KDevelop::TypeVisitor *v) const ;
+
+    QualifiedIdentifier m_identifier;
+};
+
 template <class T>
 uint qHash(const KSharedPtr<T>& type) { return type->hash(); }
 
 }
+
+
+
 
 #endif // TYPESYSTEM_H
 
