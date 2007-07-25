@@ -48,7 +48,6 @@ public:
     virtual ~IUiController();
 
     enum SwitchMode { ThisWindow, NewWindow };
-    enum ShowMode { ShowByDefault, HideByDefault };
 
     virtual void switchToArea(const QString &areaName, SwitchMode switchMode) = 0;
 
