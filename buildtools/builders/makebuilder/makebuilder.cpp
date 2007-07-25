@@ -190,8 +190,7 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
     if( item->type() == KDevelop::ProjectBaseItem::Project )
     {
         KDevelop::ProjectItem* prjitem = static_cast<KDevelop::ProjectItem*>(item);
-        KDevelop::IPlugin *plugin = prjitem->project()->managerPlugin();
-        KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
+        KDevelop::IBuildSystemManager *bldMan = prjitem->project()->buildSystemManager();
         if( bldMan )
             buildDir = bldMan->buildDirectory( prjitem ); // the correct build dir
         else
@@ -202,8 +201,7 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
     {
         KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
         // get top build directory, specified by build system manager
-        KDevelop::IPlugin *plugin = targetItem->project()->managerPlugin();
-        KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
+        KDevelop::IBuildSystemManager *bldMan = targetItem->project()->buildSystemManager();
         KDevelop::ProjectItem *prjItem = targetItem->project()->projectItem();
         KUrl topBldDir;
         // ### buildDirectory only takes ProjectItem as an argument. Why it can't be
@@ -272,8 +270,7 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
     {
         KDevelop::ProjectBuildFolderItem *bldFolderItem = static_cast<KDevelop::ProjectBuildFolderItem*>(item);
         // get top build directory, specified by build system manager
-        KDevelop::IPlugin* plugin = bldFolderItem->project()->managerPlugin();
-        KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
+        KDevelop::IBuildSystemManager *bldMan = bldFolderItem->project()->buildSystemManager();
         KDevelop::ProjectItem *prjItem = bldFolderItem->project()->projectItem();
         KUrl topBldDir;
         if( !prjItem || !bldMan )

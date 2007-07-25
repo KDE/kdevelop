@@ -40,7 +40,7 @@ const QList<QPair<QString, QString> >& CustomMakeTargetItem::defines() const
 CustomMakeProjectItem::CustomMakeProjectItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent )
     : KDevelop::ProjectItem( project, name, parent )
 {
-    KDevelop::IProjectFileManager *fileMan = project->fileManager();
+    KDevelop::IProjectFileManager *fileMan = project->projectFileManager();
     CustomMakeManager *manager = dynamic_cast<CustomMakeManager*>(fileMan);
     m_watcher = new CustomMakeTreeSynchronizer( manager );
 }

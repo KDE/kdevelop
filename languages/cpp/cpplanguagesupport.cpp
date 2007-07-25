@@ -201,8 +201,7 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
             continue;
         }
 
-        KDevelop::IBuildSystemManager* buildManager =
-            project->managerPlugin()->extension<KDevelop::IBuildSystemManager>();
+        KDevelop::IBuildSystemManager* buildManager = project->buildSystemManager();
         if (!buildManager) {
             // We found the project, but no build manager!!
             continue;
