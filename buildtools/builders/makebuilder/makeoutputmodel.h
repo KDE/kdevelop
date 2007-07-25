@@ -33,7 +33,7 @@ class MakeOutputModel : public QStandardItemModel, public KDevelop::IOutputViewM
 {
     Q_OBJECT
 public:
-    MakeOutputModel( MakeBuilder *builder, QObject* parent = 0 );
+    explicit MakeOutputModel( MakeBuilder *builder, QObject* parent = 0 );
 
     // IOutputViewModel interfaces
     void activate( const QModelIndex& index );

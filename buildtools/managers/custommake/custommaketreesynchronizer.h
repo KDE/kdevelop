@@ -1,5 +1,15 @@
-#ifndef CustomMakeTreeSynchronizer_H
-#define CustomMakeTreeSynchronizer_H
+/* KDevelop Custom Makefile Support
+ *
+ * Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ */
+
+#ifndef CUSTOMMAKETREESYNCHRONIZER_H
+#define CUSTOMMAKETREESYNCHRONIZER_H
 
 #include "projectfilesystemwatcher.h"
 
@@ -20,7 +30,7 @@ class CustomMakeTreeSynchronizer : public QObject
 {
     Q_OBJECT
 public:
-    CustomMakeTreeSynchronizer( CustomMakeManager* manager, QObject* parent = 0 );
+    explicit CustomMakeTreeSynchronizer( CustomMakeManager* manager, QObject* parent = 0 );
     virtual ~CustomMakeTreeSynchronizer();
 
     void addDirectory( const QString &path, KDevelop::ProjectFolderItem *folderItem );

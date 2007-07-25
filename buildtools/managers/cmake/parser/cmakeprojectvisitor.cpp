@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#include "cmakeast.h"
 #include "cmakeprojectvisitor.h"
+#include "cmakeast.h"
 
 #include <KProcess>
 #include <KDebug>
@@ -59,9 +59,9 @@ QString CMakeProjectVisitor::variableName(const QString &name, VariableType &typ
 {
     type = hasVariable(name);
     if(type==None)
-        return QString::null;
+        return QString();
     int begin = (type==CMake) ? name.indexOf("${")+2 : name.indexOf("$ENV{")+5, end=name.indexOf('}');
-    
+
     return name.mid(begin, end-begin);
 }
 
@@ -147,7 +147,7 @@ void CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 void CMakeProjectVisitor::visit(const SetAst *set)
 {
     kDebug(9032) << "set: " << set->variableName() << "=" << set->values() << endl;
-    
+
     QStringList old=m_vars->value(set->variableName());
     m_vars->insert(set->variableName(), old+resolveVariables(set->values(), m_vars));
     kDebug(9032) << set->variableName() << "-result:-" << *m_vars << endl;
@@ -157,7 +157,7 @@ void CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 {
     kDebug(9032) << "including " << dirs->includedDirectories() << endl;
     IncludeDirectoriesAst::IncludeType t = dirs->includeType();
-    
+
     QStringList toInclude = resolveVariables(dirs->includedDirectories(), m_vars);
 
     if(t==IncludeDirectoriesAst::DEFAULT) {
@@ -166,7 +166,7 @@ void CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
         else
             t = IncludeDirectoriesAst::AFTER;
     }
-    
+
     if(t==IncludeDirectoriesAst::AFTER)
         m_includeDirectories += toInclude;
     else
@@ -355,10 +355,10 @@ void CMakeProjectVisitor::visit(const IfAst *ifast)
     }
 
     bool done=false;
-    
+
     QList<QStringList>::iterator it=ifast->conditions().begin();
     QList<CMakeAst*>::const_iterator itch=ifast->children().constBegin();
-    
+
     for(; !done && itch != ifast->children().constEnd(); ++it, ++itch) {
         if(it==ifast->conditions().end() || condition(*it, m_vars)) {
             (*itch)->accept(this);

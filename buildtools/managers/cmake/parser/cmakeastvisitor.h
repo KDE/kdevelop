@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CMAKEVISITOR_H
-#define CMAKEVISITOR_H
+#ifndef CMAKEASTVISITOR_H
+#define CMAKEASTVISITOR_H
 
 class CustomCommandAst;
 class CustomTargetAst;
@@ -51,7 +51,7 @@ class CMakeAst;
 class CMakeAstVisitor {
     public: //maybe protected?
         virtual ~CMakeAstVisitor() {}
-        
+
         virtual void visit( const CustomCommandAst * ) = 0;
         virtual void visit( const CustomTargetAst * ) = 0;
         virtual void visit( const AddDefinitionsAst * ) = 0;

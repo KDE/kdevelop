@@ -80,9 +80,9 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
 //     d->m_targetOtherFilesGroup = new QActionGroup( this );
 
     actionMenu->setToolTip( i18n( "Build target" ) );
-    actionMenu->setWhatsThis( i18n( "<b>Build target</b><p>Runs <b>make targetname</b> from the project directory (targetname is the name of the target selected).<br>"
-            "Environment variables and make arguments can be specified "
-            "in the project settings dialog, <b>Build Options</b> tab." ) );
+    actionMenu->setWhatsThis( i18n( "<b>Build target</b><p>Runs <b>make targetname</b> from the project directory (targetname is the name of the target selected).</p>"
+            "<p>Environment variables and make arguments can be specified "
+            "in the project settings dialog, <b>Build Options</b> tab.</p>" ) );
 
 //     d->m_targetObjectFilesMenu = new KMenu( i18n( "Object Files" ), d->m_targetMenu );
 //     d->m_targetOtherFilesMenu = new KMenu( i18n( "Other Files" ), d->m_targetMenu );

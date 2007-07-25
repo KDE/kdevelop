@@ -18,8 +18,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
  ***************************************************************************/
-#ifndef QMAKEQMAKEDRIVER_H
-#define QMAKEQMAKEDRIVER_H
+#ifndef AUTOMAKEDRIVER_H
+#define AUTOMAKEDRIVER_H
 
 #include <qlist.h>
 #include <kurl.h>
@@ -49,7 +49,7 @@ public:
 	static int parseFile(const char *fileName, ProjectAST **ast);
 	static int parseFile(const QString& fileName, ProjectAST **ast);
 	static int parseFile(KUrl fileName, ProjectAST **ast);
-	
+
 };
 
 }

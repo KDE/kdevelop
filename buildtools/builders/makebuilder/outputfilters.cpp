@@ -28,7 +28,7 @@ class ErrorFormat
 public:
     ErrorFormat() {}
     ErrorFormat( const char *, int, int, int );
-    ErrorFormat( const char *, int, int, int, QString );
+    ErrorFormat( const char *, int, int, int, const QString& );
     QRegExp expression;
     int fileGroup;
     int lineGroup;
@@ -43,7 +43,7 @@ ErrorFormat::ErrorFormat( const char * regExp, int file, int line, int text )
     , textGroup( text )
 {}
 
-ErrorFormat::ErrorFormat( const char * regExp, int file, int line, int text, QString comp )
+ErrorFormat::ErrorFormat( const char * regExp, int file, int line, int text, const QString& comp )
     : expression( regExp )
     , fileGroup( file )
     , lineGroup( line )

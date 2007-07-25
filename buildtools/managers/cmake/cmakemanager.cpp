@@ -44,7 +44,7 @@
 typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager,
                             CMakeSupportFactory( "kdevcmakemanager" ) )
-    
+
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QStringList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
@@ -116,7 +116,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     KUrl::List directories;
     foreach(QString s, resolveVariables(v.includeDirectories())) {
         KUrl path;
-        if(s.startsWith("/")) {
+        if(s.startsWith('/')) {
             path=s;
         } else {
             path=folder->url();

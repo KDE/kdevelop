@@ -22,6 +22,8 @@
 #ifndef CMAKEEXPORT_H
 #define CMAKEEXPORT_H
 
+//krazy:excludeall=cpp
+
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 

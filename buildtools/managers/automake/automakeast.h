@@ -18,8 +18,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
  ***************************************************************************/
-#ifndef AUTOTOOLSAST_H
-#define AUTOTOOLSAST_H
+#ifndef AUTOMAKEAST_H
+#define AUTOMAKEAST_H
 
 #include <QList>
 #include <QStringList>
@@ -50,40 +50,40 @@ public:
 		ProjectAST,                 ///< Project, scope or function scope.
 		AssignmentAST,              ///< Variable assignment.
 		TargetAST,                  ///< Automake target
-		MakefileConditionalAST,     ///< Makefile.am conditional 
+		MakefileConditionalAST,     ///< Makefile.am conditional
 		NewLineAST,                 ///< Line feed.
 		CommentAST                  ///< Comment.
 	};
-	
+
 	/** Constructs AST with given node type.*/
 	AST(NodeType nodeType): m_nodeType(nodeType), m_depth(0) {}
 	virtual ~AST();
-	
+
 	/**
 	 * Adds child AST node to this node. Despite this function is virtual,
 	 * reimplementations should call it to make automatic destruction of
 	 * AST tree possible.*/
 	virtual void addChildAST(AST *node);
-	
-	/** 
+
+	/**
 	 * Writes information stored in the AST into the @p buffer.
 	 * This is a default implementation which iterates over child nodes
 	 * and calls writeBack for each child node.
 	 */
 	virtual void writeBack(QString &buffer);
-	
+
 	/** @return The type of the node.*/
 	virtual NodeType nodeType() const { return m_nodeType; }
-	
+
 	/** Sets the depth of the node in AST.*/
 	void setDepth(int depth) { m_depth = depth; }
-	
+
 	/** @return The depth of the node in AST.*/
 	int depth() const { return m_depth; }
-	
+
 	/** @return The indentation string based on node depth.*/
 	virtual QString indentation();
-	
+
 	//! \return true if this AST has children
 	bool hasChildren() const;
 
@@ -94,11 +94,11 @@ public:
 	QList<AST*> children() const;
 
 
-	
+
 protected:
 	NodeType m_nodeType;
 	QList<AST*> m_children;
-	
+
 private:
 	int m_depth;
 
@@ -130,36 +130,36 @@ public:
 		Rule,               ///< Automake Rule
 		Empty               ///< Project does not exist. the AST is empty
 	};
-	
+
 	/** Constructs a project node of given @p kind. */
 	ProjectAST(Kind kind = Project): AST(AST::ProjectAST), m_kind(kind) {}
-	
+
 	virtual void writeBack(QString &buffer);
 	virtual void addChildAST(AST *node);
-	
+
 	/** @return true if this node is a project.*/
 	bool isProject() const { return m_kind == Project; }
-	
+
 	bool isRule() const { return m_kind == Rule; }
-	
+
 	/** @return true if this node is an automake conditional */
 	bool isConditionalScope() const { return m_kind == ConditionalScope; }
-	
+
 	/** @return true if this node is empty.*/
 	bool isEmpty() const { return m_kind == Empty; }
-	
+
 	/**Scoped identifier (scope name or rule).*/
 	QString scopedID;
-	
+
 	/**Function arguments. Empty for other kinds of projects.*/
 	QString args;
-	
+
 	/** The automake conditional has an else attached */
 	bool hasElse;
-	
+
 	/**List of statements.*/
 	QList<AutoMake::AST*> statements;
-	
+
 private:
 	Kind m_kind;
 
@@ -179,7 +179,7 @@ private:
  * \code
  * SOURCES=a.cpp \
  * b.cpp c.cpp
- * \endcode 
+ * \endcode
  * then values will be stored as a two elements list:
  * \code
  * a.cpp
@@ -192,13 +192,13 @@ public:
 	AssignmentAST(): AST(AST::AssignmentAST) {}
 
 	virtual void writeBack(QString &buffer);
-	
+
 	/**Scoped name of the variable.*/
 	QString scopedID;
-	
+
 	/**Operator.*/
 	QString op;
-	
+
 	/**List of values.*/
 	QStringList values;
 };
@@ -207,12 +207,12 @@ class AutomakeTargetAST : public AST
 {
 public:
 	AutomakeTargetAST() : AST(AST::TargetAST) {}
-	
+
 	virtual void writeBack( QString& buffer );
-	
+
 	/// The name of the target
 	QString target;
-	
+
 	/// The dependencies for the target, if any
 	QStringList deps;
 };
@@ -221,12 +221,12 @@ class ConditionAST : public AST
 {
 public:
 	ConditionAST() : AST( AST::MakefileConditionalAST ) {}
-	
+
 	virtual void writeBack( QString& buffer );
-	
+
 	/// The keyword for the condition (if, else, endif)
 	QString type;
-		
+
 	/// The name of the condition
 	QString conditionName;
 };
@@ -239,7 +239,7 @@ class NewLineAST: public AST
 {
 public:
 	NewLineAST(): AST(AST::NewLineAST) {}
-	
+
 	virtual void writeBack(QString &buffer);
 };
 
@@ -252,12 +252,12 @@ class CommentAST: public AST
 {
 public:
 	CommentAST(): AST(AST::CommentAST) {}
-	
+
 	virtual void writeBack(QString &buffer);
-	
+
 	/**Comment text.*/
 	QString comment;
-	
+
 };
 
 }
