@@ -181,7 +181,7 @@ void DUChain::clear()
   sdDUChainPrivate->m_chains.clear();
 }
 
-QList< DUChainObserver * > & DUChain::observers() const
+QList< DUChainObserver * > DUChain::observers() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
