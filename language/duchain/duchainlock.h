@@ -99,7 +99,9 @@ public:
    * or timeout is reached (10 seconds).
    *
    * Write locks are recursive. That means that they can by acquired by threads
-   * that already have an arbitrary count of read- and write-locks acquired.
+   * that already have an arbitrary count of write-locks acquired.
+   * 
+   * WARNING: Write-locks can NOT be acquired by threads that already have a read-lock.
    */
   bool lockForWrite();
 

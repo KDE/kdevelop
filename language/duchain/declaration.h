@@ -140,6 +140,12 @@ public:
    * Set the kind.
    * */
   void setKind(Kind kind);
+
+  /**
+   * Returns the comment associated to this declaration in the source-code, or an invalid string if there is none.
+   * */
+  QString comment() const;
+  void setComment(const QString& str);
   
   /**
    * Provides a mangled version of this definition's identifier, for use in a symbol table.

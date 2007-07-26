@@ -48,14 +48,17 @@ public:
    * Returns true if ther is no reader that is not this thread.
    * */
   bool haveOtherReaders() const {
+    ///Since m_totalReaderRecursion is the sum of all reader-recursions, it will be same if either there is no reader at all, or if this thread is the only reader.
+    return m_totalReaderRecursion != ownReaderRecursion();
+  }
+
+  int ownReaderRecursion() const {
     int ownReaderRecursion = 0;
-    
+
     DUChainLockPrivate::ReaderMap::const_iterator it = m_readers.find( QThread::currentThreadId() );
     if( it != m_readers.end() )
       ownReaderRecursion = *it;
-
-    ///Since m_totalReaderRecursion is the sum of all reader-recursions, it will be same if either there is no reader at all, or if this thread is the only reader.
-    return m_totalReaderRecursion != ownReaderRecursion;
+    return ownReaderRecursion;
   }
   
   QMutex m_mutex;
@@ -170,6 +173,10 @@ bool DUChainLock::lockForWrite()
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
   kDebug(9007) << "DUChain write lock requested by thread: " << QThread::currentThreadId() << endl;
 #endif
+
+  //It is not allowed to acquire a write-lock while holding read-lock 
+  ///@todo enable this once the template-instantiation does not need a write-lock
+  //  Q_ASSERT(d->ownReaderRecursion() == 0);
 
   QMutexLocker lock(&d->m_mutex);
 

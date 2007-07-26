@@ -46,6 +46,8 @@ public:
   Declaration::Scope m_scope;
   AbstractType::Ptr m_type;
   Identifier m_identifier;
+  
+  QString m_comment;
 
   QList<ForwardDeclaration*> m_forwardDeclarations;
 
@@ -54,7 +56,7 @@ public:
   QList<Use*> m_uses;
 
   Declaration::Kind m_kind;
-      
+
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
   bool m_isTypeAlias   : 1;
@@ -133,6 +135,14 @@ Declaration::~Declaration()
 
   DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
   delete d;
+}
+
+QString Declaration::comment() const {
+  return d->m_comment;
+}
+
+void Declaration::setComment(const QString& str) {
+  d->m_comment = str;
 }
 
 void Declaration::removeUse( Use* use )
