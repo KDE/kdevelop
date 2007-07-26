@@ -225,9 +225,14 @@ QString FileTreeWidget::projectDirectory()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QStringList FileTreeWidget::projectFiles()
+/**
+ * @brief Test whether given file (or a directory) is part of this project.
+ *
+ * @param fileName or directory to test for presence.
+ */
+bool FileTreeWidget::isInProject(const QString &fileName) const
 {
-    return m_projectFiles;
+    return m_projectFiles.contains(fileName);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -247,10 +252,10 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
             while( !paths.isEmpty() )
             {
                 if( !m_projectFiles.contains( paths.join("/") ) )
-                    m_projectFiles.append( projectDirectory() + "/" + paths.join("/") );
+                    m_projectFiles.insert( projectDirectory() + "/" + paths.join("/"), true );
                 paths.pop_back();
             }
-            m_projectFiles.append( file );
+            m_projectFiles.insert( file, false );
 //            kdDebug(9017) << "file added: " << file << endl;
         }
 

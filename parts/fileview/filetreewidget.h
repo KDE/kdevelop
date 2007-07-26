@@ -55,7 +55,7 @@ public:
     bool shouldBeShown( KFileTreeViewItem* item );
 
     QString projectDirectory();
-    QStringList projectFiles();
+    bool isInProject(const QString &fileName) const;
 
     FileViewPart *part() const { return m_part; }
 
@@ -87,7 +87,17 @@ private:
     KDevVersionControl *versionControl() const;
 
     QStringList m_hidePatterns;
-    QStringList m_projectFiles;
+    /**
+     * @brief Set of all the files in this project.
+     *
+     * @bug
+     * Well, it is not just a plain set,
+     * but rather a map with next-to-useless element value,
+     * keyed by names of files.
+     * QT3 does not seem to have a set datatype,
+     * thus we use the QMap type instead.
+     */
+    QMap<QString, bool> m_projectFiles;
 
     FileViewPart *m_part;
     KFileTreeBranch *m_rootBranch;
