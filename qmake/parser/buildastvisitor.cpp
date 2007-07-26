@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright (C) 2007 Andreas Pakulat <pakulat@rostock.zgdv.de>                     *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -170,7 +170,7 @@ void BuildASTVisitor::visit_stmt( stmt_ast *node )
         val->setColumn( line_col.second );
         if( node->isExclam )
         {
-            val->setValue( "!"+val->value() );
+            val->setValue( '!'+val->value() );
         }
         stmt->setIdentifier( val );
         ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
