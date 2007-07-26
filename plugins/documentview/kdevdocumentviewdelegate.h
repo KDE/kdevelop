@@ -27,7 +27,7 @@ class KDevDocumentViewDelegate: public QItemDelegate
 {
     Q_OBJECT
 public:
-    KDevDocumentViewDelegate( QTreeView *view, QObject *parent = 0 );
+    explicit KDevDocumentViewDelegate( QTreeView *view, QObject *parent = 0 );
     virtual ~KDevDocumentViewDelegate();
 
     virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;

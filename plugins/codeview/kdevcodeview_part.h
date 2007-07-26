@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KDEVPART_KDEVCODEVIEW_H__
-#define __KDEVPART_KDEVCODEVIEW_H__
+#ifndef KDEVCODEVIEW_PART_H
+#define KDEVCODEVIEW_PART_H
 
 #include <QtCore/QHash>
 #include <QtCore/QPointer>
