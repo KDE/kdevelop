@@ -96,7 +96,6 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
   DUChainReadLocker lock(DUChain::lock());
 
   Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].first.data() );
-  ClassMemberDeclaration* test = dynamic_cast<ClassMemberDeclaration*>(dec);
   if (!dec) {
     kDebug() <<  "code-completion model item " << dataIndex << ": Du-chain item is deleted" << endl;
     return QVariant();
