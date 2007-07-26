@@ -47,7 +47,7 @@ Platform consists of
 - preferred coding style is http://www.kdevelop.org/mediawiki/index.php/Coding_Guidelines
 - all platform classes shall be in KDevelop namespace
 - all files have to be named without kdev* prefix
-- all files have to be installed in subdirectories under ${INCLUDE_INSTALL_DIR}/kdevelop/
+- all files have to be installed in subdirectories under ${INCLUDE_INSTALL_DIR}/kdevplatform/
 - all interfaces are named KDevelop::IFoo and their files ifoo.h/cpp
 - all interface implementations are named KDevelop::Foo and their files foo.h/cpp
 .
