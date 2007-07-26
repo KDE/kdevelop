@@ -26,10 +26,12 @@ namespace KDevelop
 DUChainBase::DUChainBase(KTextEditor::Range* range)
   : KDevelop::DocumentRangeObject(range), m_ptr( new DUChainPointerData(this) )
 {
+  m_ptr->m_base = this;
 }
 
 DUChainBase::~DUChainBase()
 {
+  m_ptr->m_base = 0;
 }
 
 TopDUContext* DUChainBase::topContext() const

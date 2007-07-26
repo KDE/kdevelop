@@ -22,39 +22,28 @@
 namespace KDevelop
 {
 
-class DUChainPointerDataPrivate
-{
-public:
-  DUChainBase* myDUChainBase;
-};
-
-
-
 DUChainBase* DUChainPointerData::base()
 {
-  return d->myDUChainBase;
+  return m_base;
 }
 
 DUChainBase* DUChainPointerData::base() const
 {
-  return d->myDUChainBase;
+  return m_base;
 }
 
 DUChainPointerData::DUChainPointerData()
-  : d(new DUChainPointerDataPrivate())
+  : m_base(0)
 {
-  d->myDUChainBase = 0;
 }
 
 DUChainPointerData::~DUChainPointerData()
 {
-  delete d;
 }
 
 DUChainPointerData::DUChainPointerData( DUChainBase* base )
-  : d(new DUChainPointerDataPrivate())
+  : m_base(base)
 {
-  d->myDUChainBase = base;
 }
 
 } //KDevelop

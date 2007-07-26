@@ -22,6 +22,8 @@
 #include <ksharedptr.h>
 #include <languageexport.h>
 
+//krazy:excludeall=dpointer
+
 namespace KDevelop {
 
 class DUContext;
@@ -42,7 +44,7 @@ class Definition;
  * Store an instance of DUChainPointer instead of a pointer to the du-chain object.
  * Then, access the eventually still existing object by calling pointer->base().
  *
- * To make it even more convenient see
+ * To make it even more convenient see DUChainPointer
  * */
 
 class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
@@ -67,7 +69,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
     DUChainPointerData( DUChainBase* base );
 
     friend class DUChainBase;
-    class DUChainPointerDataPrivate * const d;
+    DUChainBase * m_base;
     Q_DISABLE_COPY(DUChainPointerData)
 };
 
@@ -93,15 +95,11 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
     DUChainPointer( OtherType* rhs ) {
       if( dynamic_cast<Type*>(rhs) )
         d = rhs->weakPointer();
-      else
-        d = DUChainBasePointer(0);
     }
 
     DUChainPointer( Type* rhs ) {
       if( rhs )
         d = rhs->weakPointer();
-      else
-        d = DUChainBasePointer(0);
     }
 
     ///Returns whether the pointed object is still existing
@@ -109,31 +107,14 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
       return d && d->base();
     }
 
-    Type& operator* () {
+    Type& operator* () const {
       Q_ASSERT(d);
       return *static_cast<Type*>(d->base());
     }
-
-    const Type& operator* () const {
-      Q_ASSERT(d);
-      return *static_cast<const Type*>(d->base());
-    }
-
-    Type* operator->() {
+    
+    Type* operator->() const {
       Q_ASSERT(d);
       return static_cast<Type*>(d->base());
-    }
-
-    const Type* operator->() const {
-      return static_cast<const Type*>(d->base());
-    }
-
-    template<class NewType>
-    DUChainPointer<NewType> dynamicCast() {
-      if( dynamic_cast<NewType*>( d->base() ) )
-        return DUChainPointer<NewType>( static_cast<NewType*>(d->base()) );
-      else
-        return DUChainPointer<NewType>();
     }
 
     template<class NewType>
@@ -144,16 +125,10 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
         return DUChainPointer<NewType>();
     }
 
-    Type* data() {
+    Type* data() const {
       if( !d )
         return 0;
       return static_cast<Type*>(d->base());
-    }
-
-    const Type* data() const {
-      if( !d )
-        return 0;
-      return static_cast<const Type*>(d->base());
     }
 
     DUChainPointer<Type>& operator= ( Type* rhs ) {
