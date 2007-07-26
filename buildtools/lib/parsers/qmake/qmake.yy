@@ -413,12 +413,6 @@ comment : COMMENT
             node->comment = $<value>1;
             $<node>$ = node;
         } 
-    |  COMMENT_CONT
-        {
-            CommentAST *node = new CommentAST();
-            node->comment = $<value>1;
-            $<node>$ = node;
-        }
     ;
 
 emptyline : NEWLINE
