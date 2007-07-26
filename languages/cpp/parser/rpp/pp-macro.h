@@ -21,7 +21,9 @@
 #ifndef PP_MACRO_H
 #define PP_MACRO_H
 
-#include <QStringList>
+//krazy:excludeall=inline
+
+#include <QtCore/QStringList>
 #include <cppparserexport.h>
 
 namespace rpp {
@@ -39,16 +41,16 @@ public:
   QStringList formals; // argumentList
 
   bool defined: 1; // !isUndefMacro
-  bool hidden: 1; 
+  bool hidden: 1;
   bool function_like: 1; // hasArguments
   bool variadics: 1;
 
   bool operator == ( const pp_macro& rhs ) const;
-  
+
   bool isUndef() const  {
     return !defined;
   }
-  
+
   size_t idHash() const {
     if( !m_idHashValid ) computeHash();
     return m_idHash;
@@ -71,7 +73,7 @@ public:
       return df < 0;
     }
   };
-  
+
   private:
     void computeHash() const;
     mutable bool m_idHashValid;

@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -24,11 +24,11 @@
 
 namespace TypeUtils {
   using namespace KDevelop;
-  
+
   AbstractType* realType(AbstractType* base, bool* constant) {
-    
+
     CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base );
-    
+
     while( ref ) {
       if( constant )
         (*constant) |= ref->isConstant();
@@ -38,12 +38,12 @@ namespace TypeUtils {
 
     return base;
   }
-  
+
   AbstractType* targetType(AbstractType* base, bool* constant) {
-    
+
     CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base );
     CppPointerType* pnt = dynamic_cast<CppPointerType*>( base );
-    
+
     while( ref || pnt ) {
       if( ref ) {
         if( constant )
@@ -60,15 +60,15 @@ namespace TypeUtils {
 
     return base;
   }
-  
+
   bool isPointerType(AbstractType* type) {
     return dynamic_cast<PointerType*>( realType(type) );
   }
-  
+
   bool isReferenceType(AbstractType* type) {
     return dynamic_cast<ReferenceType*>( type );
   }
-  
+
   bool isConstant( AbstractType* t ) {
     CppCVType* cv = dynamic_cast<CppCVType*>( t );
     return cv && cv->isConstant();
@@ -77,14 +77,16 @@ namespace TypeUtils {
   bool isNullType( AbstractType* t ) {
     Q_UNUSED(t)
     ///@todo implement
+#ifdef __GNUC__
 #warning implement
+#endif
     return false;
   }
 
     const int unsignedIntConversionRank = 4;
 
   int integerConversionRank( CppIntegralType* type ) {
-    /** 
+    /**
      * Ranks:
      * 1 - bool
      * 2 - 1 byte, char
@@ -130,7 +132,7 @@ namespace TypeUtils {
     if( !integral ) return false;
     return integral->integralType() == CppIntegralType::TypeVoid;
   }
-  
+
   ///Returns whether base is a base-class of c
   bool isPublicBaseClass( const CppClassType* c, CppClassType* base ) {
     foreach( const CppClassType::BaseClassInstance& b, c->baseClasses() ) {
@@ -151,11 +153,11 @@ namespace TypeUtils {
     else
       return 0;
   }
-    
+
   void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     DUContext* context = getInternalContext( klass->declaration() );
 
-    
+
     if( context ) {
       QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(functionName));
       for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
@@ -187,7 +189,7 @@ namespace TypeUtils {
 
   void getConstructors(CppClassType* klass, QList<Declaration*>& functions) {
     DUContext* context = getInternalContext( klass->declaration() );
-    
+
     QList<Declaration*> declarations = context->localDeclarations();
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );

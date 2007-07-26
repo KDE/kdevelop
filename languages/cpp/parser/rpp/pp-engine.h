@@ -21,9 +21,11 @@
 #ifndef PP_ENGINE_H
 #define PP_ENGINE_H
 
-#include <QHash>
+//krazy:excludeall=inline
 
-#include <QStack>
+#include <QtCore/QHash>
+
+#include <QtCore/QStack>
 #include <cppparserexport.h>
 
 #include "pp-macro.h"

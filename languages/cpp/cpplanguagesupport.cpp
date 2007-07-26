@@ -20,7 +20,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 #include "cpplanguagesupport.h"
-#include "config.h"
+#include <config.h>
 
 #include <QDir>
 #include <QFileInfo>
@@ -95,7 +95,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     #ifndef Q_OS_WIN
     m_includeResolver = new CppTools::IncludePathResolver;
     // Retrieve the standard include paths & macro definitions for this machine.
-    // Uses gcc commands to retreive the information.
+    // Uses gcc commands to retrieve the information.
     CppTools::setupStandardIncludePaths(*m_standardIncludePaths);
     CppTools::setupStandardMacros(*m_standardMarcos);
     #endif
@@ -214,7 +214,7 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
             dir.adjustPath(KUrl::AddTrailingSlash);
 
             KUrl newUrl(dir, includeName);
-            //kDebug(9007) << k_funcinfo << "checking for existance of " << newUrl << endl;
+            //kDebug(9007) << k_funcinfo << "checking for existence of " << newUrl << endl;
             if (KIO::NetAccess::exists(newUrl, true, qApp->activeWindow())) {
                 return newUrl; // Found it.
             }

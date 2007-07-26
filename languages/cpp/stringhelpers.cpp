@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -16,11 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "stringhelpers.h"
 #include <QString>
 #include <QChar>
 #include <QStringList>
 #include "safetycounter.h"
-#include "stringhelpers.h"
 
 namespace Utils {
 
@@ -75,7 +75,7 @@ void fillString( QString& str, int start, int end, QChar replacement ) {
 
 QString clearComments( QString str, QChar replacement ) {
   if( str.isEmpty() ) return "";
-  
+
   SafetyCounter s( 1000 );
   int lastPos = 0;
   int pos;
@@ -91,7 +91,7 @@ QString clearComments( QString str, QChar replacement ) {
       break;
     }
   }
-  
+
   lastPos = 0;
   while( (pos = str.indexOf( "//", lastPos )) != -1 ) {
     if( !s ) return str;
@@ -104,7 +104,7 @@ QString clearComments( QString str, QChar replacement ) {
       break;
     }
   }
-  
+
   return str;
 }
 
@@ -131,13 +131,13 @@ QString reduceWhiteSpace(QString str) {
 }
 
 QString stripFinalWhitespace(QString str) {
-  
+
   for( int a = str.length() - 1; a >= 0; --a ) {
     if( !str[a].isSpace() )
       return str.left( a+1 );
     }
 
-  return QString::null;
+  return QString();
 }
 
 QString clearStrings( QString str, QChar /*replacement*/ ) {
@@ -155,7 +155,7 @@ int expressionAt( const QString& text, int index ) {
 
   if( index == 0 )
     return 0;
-  
+
   int last = T_UNKNOWN;
   int start = index;
   --index;
@@ -294,7 +294,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
     pos = KDevelop::findCommaOrEnd( reversed, pos )  ;
     if( pos > lastPos ) {
       QString arg = reverse( reversed.mid(lastPos, pos-lastPos) ).trimmed();
-      if( !arg.isEmpty() ) 
+      if( !arg.isEmpty() )
         skippedArguments.push_front( arg ); //We are processing the reversed reverseding, so push to front
     }
     if( reversed[pos] == ')' )

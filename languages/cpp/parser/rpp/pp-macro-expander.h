@@ -22,8 +22,8 @@
 #ifndef PP_MACRO_EXPANDER_H
 #define PP_MACRO_EXPANDER_H
 
-#include <QList>
-#include <QHash>
+#include <QtCore/QList>
+#include <QtCore/QHash>
 
 
 #include "pp-macro.h"
@@ -46,7 +46,7 @@ public:
 class pp_macro_expander
 {
 public:
-  pp_macro_expander(pp* engine, pp_frame* frame = 0);
+  explicit pp_macro_expander(pp* engine, pp_frame* frame = 0);
 
   QString resolve_formal(const QString& name);
 

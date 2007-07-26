@@ -26,7 +26,7 @@
 
 //It needs to be measured whether this flag should be turned on or off. It seems just to move the complexity from one position to the other, without any variant being really better.
 #define USE_HASHMAP
-    
+
 HashType fastHashString( const QString& str );
 
 HashType hashStringSafe( const QString& str ) {
@@ -136,7 +136,7 @@ HashedStringSet& HashedStringSet::operator +=( const HashedStringSet& rhs ) {
   for( HashedStringSetData::StringSet::const_iterator it = rhs.m_data->m_files.begin(); it != end; ++it ) {
     mySet.insert( *it );
   }*/
-  
+
 #endif
   return *this;
 }
@@ -156,7 +156,7 @@ HashedStringSet& HashedStringSet::operator -=( const HashedStringSet& rhs ) {
   for( HashedStringSetData::StringSet::const_iterator it = rhs.m_data->m_files.begin(); it != end; ++it ) {
     mySet.erase( *it );
   }
-  
+
 #endif
   return *this;
 }
@@ -210,7 +210,7 @@ bool HashedStringSet::operator <= ( const HashedStringSet& rhs ) const {
 
 bool HashedStringSet::operator == ( const HashedStringSet& rhs ) const {
   if( hash() != rhs.hash() ) return false;
-  
+
   bool empty1 = false;
   if ( !m_data )
     empty1 = true;
@@ -331,7 +331,7 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
   }
   //This might yet be optimized by sorting the sets according to their size, and starting the intersectioning with the smallest ones.
   __gnu_cxx::hash_map<unsigned int, unsigned int> hitCounts;
-  
+
   for( HashedStringSetData::StringSet::const_iterator it = strings.m_data->m_files.begin(); it != strings.m_data->m_files.end(); ++it ) {
     GroupMap::const_iterator itr = m_map.find( *it );
       if( itr == m_map.end() ) {
@@ -356,9 +356,9 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
       found.insert( (*it).first );
   }
 
-  
+
   std::set_union( found.begin(), found.end(), m_global.begin(), m_global.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
-  
+
   target.swap( found );
   target.clear();
   std::set_difference( found.begin(), found.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
@@ -410,12 +410,12 @@ How to build a string-set:
 - newStringSets = set()
     - for stringSet in currentStringSets:
         nextStringSets = all follower string-sets of next that are contained in the current set(easy to compute: test whether the merged string-set is in currentStringSets)
-        
+
         if nextStringSets.empty():
             nextStringSets << new string-set that merges stringSet with the most popular other string-set from currentStringSets, that is not contained within this string-set
-        
+
         newStringSets += nextStringSets  #newStringSets should contain no string-set twice
-    
+
     currentStringSets = newStringSets
   loop until currentStringSets only contains one string-set
 
@@ -461,7 +461,7 @@ Problem:
 
 Same sets may be separated differently. Since we want each set unique, we use a symmetric hash-sum(just a sum of the hashes of all involved strings) to find the sets.
 
-What if I later want a set a,b,c? 
+What if I later want a set a,b,c?
 
 Run 1:
 1 - a
@@ -540,7 +540,7 @@ Merge a,b+a,c, a,c+b,d and then merge those to a,b,c,d
 
 @todo first compute the hash correctly, then solve the problem above
 @todo implement intersection
- 
+
 Intersection assumption:
 If there is set A and set B, there is also a set that represents the intersection of A and B
 
@@ -582,7 +582,7 @@ class HashedStringSubset {
   public:
     typedef std::set<HashedStringSubset*> MasterSetList;
     typedef __gnu_cxx::hash_set<HashedStringSubset*> MasterHashSet;
-    
+
     HashedStringSubset( const HashedString& str ) : left_(0), right_(0), string_(new HashedString(str)), anonymous_(false), hash_(0), size_(0) {
       computeLocalAttributes();
       kDebug() << "created set " << string() << " of size " << size_ << endl;
@@ -615,13 +615,13 @@ class HashedStringSubset {
       makeString(str, shortl);
       return str;
     }
-    
+
     void makeString( QString& str, bool shortl=false ) const {
       std::set<HashedString*> allStrings;
       makeStringInternal(allStrings);
       for( std::set<HashedString*>::const_iterator it = allStrings.begin(); it != allStrings.end(); ++it ) {
         if( !str.isEmpty() && !shortl )
-          str += "," + (*it)->str();
+          str += ',' + (*it)->str();
         else
           str += (*it)->str();
       }
@@ -643,7 +643,7 @@ class HashedStringSubset {
     const MasterSetList& masterSets() {
       return masterSets_;
     }
-    
+
     struct PointerCompare {
       bool operator() ( const HashedStringSubset* lhs, const HashedStringSubset* rhs ) const {
         return lhs->hash() < rhs->hash();
@@ -664,7 +664,7 @@ class HashedStringSubset {
     HashedStringSubset* right() const {
       return right_;
     }
-    
+
     ///Returns the slave-set that is not the given one
     HashedStringSubset* otherSlave( HashedStringSubset* pre ) {
       if( pre == left_ )
@@ -672,7 +672,7 @@ class HashedStringSubset {
       else
         return left_;
     }
-    
+
     ///Collect all master-sets across all levels
     void collectMasterSets( MasterHashSet& masters ) {
       for( MasterSetList::const_iterator it = masterSets_.begin(); it != masterSets_.end(); ++it ) {
@@ -714,7 +714,7 @@ class HashedStringSubset {
       kDebug() << "intersection of " << string() << "(" << this << ") and " << other->string() << "("<< other << ")" <<": " << (intersect ? intersect->string() : QString("none")) << endl;
       return intersect;
     }
-    
+
     ///Returns the intersection of this set with the given other, or 0 on fail
     HashedStringSubset* intersectionInternal( const HashedStringSubset* other ) {
       ///The intersection is the lowest(by set-size) non-anonymous point on the shortest path from this to other
@@ -722,7 +722,7 @@ class HashedStringSubset {
       if( isContainedIn(other) )
         return this;
       if( !left_ ) return 0;
-      
+
       HashedStringSubset* leftIntersection = left_->intersectionInternal(other);
       HashedStringSubset* rightIntersection = right_->intersectionInternal(other);
       if( leftIntersection && rightIntersection ) {
@@ -745,7 +745,7 @@ class HashedStringSubset {
       }
       return false;
     }
-    
+
   private:
 
     void addMasterSet( HashedStringSubset* master ) {
@@ -753,7 +753,7 @@ class HashedStringSubset {
       kDebug() << string() << ": adding master " << master->string() << endl;
       Q_ASSERT( !anonymous_ || masterSets_.size() == 1 );
     }
-    
+
     void makeStringInternal( std::set<HashedString*>& allStrings ) const {
       if( left_ ) {
         left_->makeStringInternal(allStrings);
@@ -762,7 +762,7 @@ class HashedStringSubset {
         allStrings.insert( string_ );
       }
     }
-    
+
     void computeLocalAttributes() {
       if( string_ ) {
         hash_ = string_->hash();
@@ -818,15 +818,15 @@ void HashedStringRepository::connectToMasterSets( HashedStringSubset* set ) {
 
     for( HashedStringSubset::MasterHashSet::const_iterator it2 = allLeftMasters.begin(); it2 != allLeftMasters.end(); ++it2 )
       kDebug() << "  " << (*it2)->string() << endl;
-    
+
     HashedStringSubset::MasterHashSet allRightMasters;
     set->right()->collectMasterSets(allRightMasters);
     kDebug() << "all masters of " << set->right()->string() << ":\n";
-    
+
     for( HashedStringSubset::MasterHashSet::const_iterator it3 = allRightMasters.begin(); it3 != allRightMasters.end(); ++it3 )
       kDebug() << "  " << (*it3)->string() << endl;
-    
-    
+
+
     ///Create an intermediate set that merges set and (*it)->left, and use that as slave-set of *it. That way a connection is established.
 
     //Create the intermediate set, it will automatically add itself as master-set to (*it)->left() and "set"
@@ -845,7 +845,7 @@ void HashedStringRepository::connectToMasterSets( HashedStringSubset* set ) {
 
     //m_allSubsets.insert( std::make_pair(newSet->hash(), newSet) );
     //connectToMasterSets( newSet ); //Think whether this is needed
-    
+
   }
 }
 
@@ -868,9 +868,9 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
   if( atomics.size() == 0 )
     return 0;
   kDebug() << "BUILDING NEW SET" << endl;
-  
+
   __gnu_cxx::hash_set<HashedStringSubset*> allStringSets;
-  
+
   __gnu_cxx::hash_set<HashedStringSubset*> currentStringSets;
   __gnu_cxx::hash_set<HashedStringSubset*> newStringSets;
 
@@ -878,18 +878,18 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
     currentStringSets.insert(atomic);
     allStringSets.insert(atomic);
   }
-  
+
   while( currentStringSets.size() > 1 ) {
     newStringSets.clear();
     __gnu_cxx::hash_set<HashedStringSubset*>::iterator currentStringSetsEnd = currentStringSets.end();
     for( __gnu_cxx::hash_set<HashedStringSubset*>::iterator it = currentStringSets.begin(); it != currentStringSetsEnd; ++it ) {
-      
+
       QString totalString;
       (*it)->makeString(totalString);
       kDebug() << "Processing set: " << totalString.toAscii().data() << endl;
 
       bool addedMasterSet = false; //Every sub-set must have at least one masterSet
-      
+
       ///Add/create intersections with all master-sets
       HashedStringSubset::MasterSetList::const_iterator masterSetEnd = (*it)->masterSets().end();
       for( HashedStringSubset::MasterSetList::const_iterator masterSetIt = (*it)->masterSets().begin(); masterSetIt != masterSetEnd; ++masterSetIt )
@@ -913,7 +913,7 @@ HashedStringSubset* HashedStringRepository::buildSet( const QList<HashedStringSu
         ///Every sub-set must have at least one masterSet, so it is represented in the final set
 
         ///We should create a new masterSet, that merges the current set with another one from currentStringSets
-        
+
         __gnu_cxx::hash_set<HashedStringSubset*>::iterator mergePartnerIt = it;
 
         //Simply take the next set as merge-partner
@@ -977,7 +977,7 @@ HashedStringSubset* HashedStringRepository::merge( HashedStringSubset* left, Has
     subset->makeString(totalString);
     kDebug() << "merge: string: " << totalString.toAscii().data() << endl;
 
-    
+
     return subset;
   }
 }
@@ -996,7 +996,7 @@ QString HashedStringRepository::dumpDotGraph() {
     (*it).second->makeString(label);
     QString shortLabel;
     (*it).second->makeString(shortLabel,true);
-    
+
     for( HashedStringSubset::MasterSetList::const_iterator masterIt = (*it).second->masterSets().begin(); masterIt != (*it).second->masterSets().end(); ++masterIt ) {
       QString label2;
       (*masterIt)->makeString(label2,true);

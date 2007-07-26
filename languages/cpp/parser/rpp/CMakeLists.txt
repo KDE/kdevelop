@@ -22,14 +22,14 @@ install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install(FILES
-    pp-engine.h
-    pp-internal.h
-    pp-macro-expander.h
-    pp-macro.h
-    pp-scanner.h
-    pp-stream.h
-    pp-environment.h
-    preprocessor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/rpp
-)
+# install(FILES
+#     pp-engine.h
+#     pp-internal.h
+#     pp-macro-expander.h
+#     pp-macro.h
+#     pp-scanner.h
+#     pp-stream.h
+#     pp-environment.h
+#     preprocessor.h
+#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/rpp
+# )

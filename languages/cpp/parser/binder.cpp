@@ -16,6 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+//krazy:excludeall=cpp
+
 #include "binder.h"
 #include "symbol.h"
 #include "codemodel_finder.h"

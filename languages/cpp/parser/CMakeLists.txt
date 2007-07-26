@@ -38,31 +38,31 @@ install(TARGETS kdevcppparser DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install(FILES
-    ast.h
-    codemodel_finder.h
-    control.h
-    name_compiler.h
-    rxx_allocator.h
-    visitor.h
-#     binder.h
-#     codemodel_fwd.h
-#     declarator_compiler.h
-    lexer.h
-    parser.h
-    symbol.h
-    class_compiler.h
-#     codemodel.h
-    default_visitor.h
-    listnode.h
-    parsesession.h
-    tokens.h
-#     codedisplay.h
-#     compiler_utils.h
-    dumptree.h
-    memorypool.h
-    problem.h
-    type_compiler.h
-    cppparserexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/parser
-)
+# install(FILES
+#     ast.h
+#     codemodel_finder.h
+#     control.h
+#     name_compiler.h
+#     rxx_allocator.h
+#     visitor.h
+# #     binder.h
+# #     codemodel_fwd.h
+# #     declarator_compiler.h
+#     lexer.h
+#     parser.h
+#     symbol.h
+#     class_compiler.h
+# #     codemodel.h
+#     default_visitor.h
+#     listnode.h
+#     parsesession.h
+#     tokens.h
+# #     codedisplay.h
+# #     compiler_utils.h
+#     dumptree.h
+#     memorypool.h
+#     problem.h
+#     type_compiler.h
+#     cppparserexport.h
+#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/parser
+# )

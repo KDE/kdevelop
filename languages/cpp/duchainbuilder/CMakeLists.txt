@@ -4,7 +4,6 @@ add_subdirectory(tests)
 include_directories(
     ${CMAKE_TOP_BUILD_DIR}
     ${CMAKE_SOURCE_DIR}/languages/cpp
-    ${CMAKE_SOURCE_DIR}/languages/cpp/expressionparser
 )
 
 ########### next target ###############
@@ -37,14 +36,14 @@ install(TARGETS kdevcppduchainbuilder DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install(FILES
-    contextbuilder.h
-    cppeditorintegrator.h
-    cpptypes.h
-    declarationbuilder.h
-    dumpchain.h
-    typebuilder.h
-    typerepository.h
-    usebuilder.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/duchainbuilder
-)
+# install(FILES
+#     contextbuilder.h
+#     cppeditorintegrator.h
+#     cpptypes.h
+#     declarationbuilder.h
+#     dumpchain.h
+#     typebuilder.h
+#     typerepository.h
+#     usebuilder.h
+#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/duchainbuilder
+# )

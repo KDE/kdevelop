@@ -1,10 +1,12 @@
 
 include_directories(${CMAKE_TOP_BUILD_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${KDE4_INCLUDE_DIR}/threadweaver
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
     ${KDEVPLATFORM_INCLUDE_DIR}/editor
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
     ${CMAKE_SOURCE_DIR}/languages/cpp/duchainbuilder
+    ${CMAKE_SOURCE_DIR}/languages/cpp/expressionparser
     ${KDEVPLATFORM_INCLUDE_DIR}/project
     ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
     ${KDEVPLATFORM_INCLUDE_DIR}/language

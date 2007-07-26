@@ -1,3 +1,23 @@
+/*
+  Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
+
+  Permission to use, copy, modify, distribute, and sell this software and its
+  documentation for any purpose is hereby granted without fee, provided that
+  the above copyright notice appear in all copies and that both that
+  copyright notice and this permission notice appear in supporting
+  documentation.
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+  KDEVELOP TEAM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+  AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 #include <QByteArray>
 #include <QFile>
 #include <QDomDocument>
@@ -222,8 +242,8 @@ int main( int argc, char *argv[] )
   KCmdLineArgs::init( argc, argv, &aboutData );
 
   KCmdLineOptions options;
-  options.add("includes <includes>", ki18n( "KDE include directory - headers go into <includes>/KDE" ));
-  options.add("buildinfo <buildinfo>", ki18n( "Build information from the cmake XML generator" ));
+  options.add("includes <includes>", ki18n( "KDE include directory - headers go into <includes>/KDE" )); //krazy:exclude=i18ncheckargs
+  options.add("buildinfo <buildinfo>", ki18n( "Build information from the cmake XML generator" )); //krazy:exclude=i18ncheckargs
   KCmdLineArgs::addCmdLineOptions( options );
 
   HeaderGenerator hg;
@@ -430,7 +450,7 @@ void HeaderGenerator::run()
 
   for (int i = 0; i < folders.count(); ++i) {
     folderElement = folders.at(i).toElement();
-    folderUrl = KUrl(folderElement.attribute("name") + "/");
+    folderUrl = KUrl(folderElement.attribute("name") + '/');
 
     for (QDomElement install = folderElement.firstChildElement(installElementName); !install.isNull(); install = install.nextSiblingElement(installElementName)) {
       KUrl installDestination(install.attribute("destination"));

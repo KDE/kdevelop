@@ -58,7 +58,7 @@ class KDEVCPPRPP_EXPORT Environment
 {
 public:
   typedef QHash<QString, pp_macro*> EnvironmentMap;
-  
+
   Environment(pp* preprocessor);
   virtual ~Environment();
 
@@ -88,10 +88,10 @@ public:
 
   //Take the set of environment-macros from the given environment
   void swapMacros( Environment* parentEnvironment );
-  
+
   //Faster access then allMacros(..), because nothing is copied
-  const EnvironmentMap& environment() const;
-  
+  const EnvironmentMap& environment() const; //krazy:exclude=constref
+
 private:
   EnvironmentMap m_environment;
 

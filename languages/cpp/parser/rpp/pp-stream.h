@@ -22,7 +22,7 @@
 #define STREAM_H
 
 
-#include <QIODevice>
+#include <QtCore/QIODevice>
 
 namespace rpp {
 
@@ -37,7 +37,7 @@ class Stream
 
   public:
     Stream();
-    Stream( QString * string, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
+    explicit Stream( QString * string, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
     virtual ~Stream();
 
     bool isNull() const;
@@ -59,9 +59,9 @@ class Stream
     /// Start from the beginning again
     void reset();
 
-    inline const QChar& current() const { return *c; }
-    inline operator const QChar&() const { return *c; }
-    inline Stream& operator++()
+    inline const QChar& current() const { return *c; } //krazy:exclude=inline
+    inline operator const QChar&() const { return *c; } //krazy:exclude=inline
+    inline Stream& operator++() //krazy:exclude=inline
     {
       if (c == end)
         return *this;

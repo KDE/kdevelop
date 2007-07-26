@@ -21,7 +21,7 @@
 #ifndef CODEDISPLAY_H
 #define CODEDISPLAY_H
 
-#include <QIcon>
+#include <QtGui/QIcon>
 
 
 class _CodeModelItem;

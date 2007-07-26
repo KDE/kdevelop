@@ -45,7 +45,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
     ExpressionVisitor::Instance instance; ///If the expression evaluates to an instance, this contains a pointer to the instance's declaration(@see CppExpressionVisitor::expressionType())
 
     QList<Declaration*> allDeclarations; ///If type is a function-type, this may contain the declarations of all found overloaded functions
-    
+
     ///@return whether the result is an lvalue
     bool isLValue() const;
 
@@ -54,7 +54,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
 
     ///it does not matter whether du-chain is locked or not
     QString toString() const;
-    
+
     typedef KSharedPtr<ExpressionEvaluationResult> Ptr;
 };
 
@@ -68,7 +68,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
      * @param debug Enables additional output
      * */
 
-    ExpressionParser( bool strict = false, bool debug = true );
+    explicit ExpressionParser( bool strict = false, bool debug = true );
     /**
      * Evaluates the type of an expression given as a string within a given context
      *

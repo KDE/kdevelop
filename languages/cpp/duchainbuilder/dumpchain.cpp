@@ -132,19 +132,19 @@ void DumpChain::visit(AST *node)
   QString indentation;
   for( int a = 0; a < indent; a++ )
     indentation += "| ";
-  
+
   if (node)
     if (m_editor) {
       QString nodeText;
       for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
         const Token& tok( m_editor->parseSession()->token_stream->token((int) a) );
         if( !nodeText.isEmpty() )
-          nodeText += " ";
+          nodeText += ' ';
         nodeText += QByteArray( tok.text+tok.position, tok.size );
       }
       if( !nodeText.isEmpty() ) nodeText = "\"" + nodeText + "\"";
 
-      
+
       kDebug() << indentation <<  "\\" << names[node->kind]
               << "[(" << node->start_token << ") " << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << /*", "
               << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) <<*/ "] " << nodeText << endl;

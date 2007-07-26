@@ -249,7 +249,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   dir = QDir( dir.absolutePath() );
   QFileInfo makeFile( dir, "Makefile" );
   if( !makeFile.exists() )
-    return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"").arg(dir.absolutePath()), i18n("problem while trying to resolve include-paths for %1").arg(file) );
+    return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("problem while trying to resolve include-paths for %1", file ) );
 
   QStringList cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
   QDateTime makeFileModification = makeFile.lastModified();
@@ -286,21 +286,21 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   QFileInfo fi( file );
 
   QString absoluteFile = file;
-  if( !file.startsWith("/") )
-    absoluteFile = dir.path() + "/" + file;
+  if( !file.startsWith('/') )
+    absoluteFile = dir.path() + '/' + file;
   KUrl u( absoluteFile );
   u.cleanPath();
   absoluteFile = u.path();
 
   int dot;
   if( (dot = file.lastIndexOf( '.' )) == -1 )
-    return PathResolutionResult( false, i18n( "Filename %1 seems to be malformed" ).arg(file) );
+    return PathResolutionResult( false, i18n( "Filename %1 seems to be malformed", file ) );
 
   targetName = file.left( dot );
 
   QString wd = dir.path();
-  if( !wd.startsWith("/") ) {
-    wd = QDir::currentPath() + "/" + wd;
+  if( !wd.startsWith('/') ) {
+    wd = QDir::currentPath() + '/' + wd;
     KUrl u( wd );
     u.cleanPath();
     wd = u.path();
@@ -308,7 +308,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   if( m_outOfSource ) {
     if( wd.startsWith( m_source ) ) {
       //Move the current working-directory out of source, into the build-system
-      wd = m_build + "/" + wd.mid( m_source.length() );
+      wd = m_build + '/' + wd.mid( m_source.length() );
       KUrl u( wd );
       u.cleanPath();
       wd = u.path();
@@ -376,7 +376,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
 PathResolutionResult IncludePathResolver::getFullOutput( const QString& command, const QString& workingDirectory, QString& output ) const {
   if( !executeCommand(command, workingDirectory, output) )
-    return PathResolutionResult( false, i18n("make-process failed"), i18n("output: %1").arg( output ) );
+    return PathResolutionResult( false, i18n("make-process failed"), i18n("output: %1", output ) );
   return PathResolutionResult(true);
 }
 
@@ -415,20 +415,20 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   while( (offset = makeRx.indexIn( firstLine, offset )) != -1 )
   {
     QString prefix = firstLine.left( offset ).trimmed();
-    if( prefix.endsWith( "&&") || prefix.endsWith( ";" ) || prefix.isEmpty() )
+    if( prefix.endsWith( "&&") || prefix.endsWith( ';' ) || prefix.isEmpty() )
     {
       QString newWorkingDirectory = workingDirectory;
       ///Extract the new working-directory
       if( !prefix.isEmpty() ) {
         if( prefix.endsWith( "&&" ) )
           prefix.truncate( prefix.length() - 2 );
-        else if( prefix.endsWith( ";" ) )
+        else if( prefix.endsWith( ';' ) )
           prefix.truncate( prefix.length() - 1 );
         ///Now test if what we have as prefix is a simple "cd /foo/bar" call.
-        if( prefix.startsWith( "cd ") && !prefix.contains( ";") && !prefix.contains("&&") ) {
+        if( prefix.startsWith( "cd ") && !prefix.contains( ';') && !prefix.contains("&&") ) {
           newWorkingDirectory = prefix.right( prefix.length() - 3 ).trimmed();
-          if( !newWorkingDirectory.startsWith("/") )
-            newWorkingDirectory = workingDirectory + "/" + newWorkingDirectory;
+          if( !newWorkingDirectory.startsWith('/') )
+            newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
           KUrl u( newWorkingDirectory );
           u.cleanPath();
           newWorkingDirectory = u.path();
@@ -438,12 +438,12 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
       if( d.exists() ) {
         ///The recursive working-directory exists.
         QString makeParams = firstLine.mid( offset+5 );
-        if( !makeParams.contains( ";" ) && !makeParams.contains( "&&" ) ) {
+        if( !makeParams.contains( ';' ) && !makeParams.contains( "&&" ) ) {
           ///Looks like valid parameters
           ///Make the file-name absolute, so it can be referenced from any directory
           QString absoluteFile = file;
-          if( !absoluteFile.startsWith("/") )
-            absoluteFile = workingDirectory +  "/" + file;
+          if( !absoluteFile.startsWith('/') )
+            absoluteFile = workingDirectory +  '/' + file;
           KUrl u( absoluteFile );
           u.cleanPath();
           ///Try once with absolute, and if that fails with relative path of the file
@@ -453,14 +453,14 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
             return res;
           return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory,u.path()), newWorkingDirectory, makeParams , newSource );
         }else{
-          return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The parameter-string \"%1\" does not seem to be valid. Output was: %2").arg(makeParams).arg(fullOutput) );
+          return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The parameter-string \"%1\" does not seem to be valid. Output was: %2", makeParams, fullOutput) );
         }
       } else {
-        return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The directory \"%1\" does not exist. Output was: %2").arg(newWorkingDirectory).arg(fullOutput) );
+        return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The directory \"%1\" does not exist. Output was: %2", newWorkingDirectory, fullOutput) );
       }
 
     } else {
-      return PathResolutionResult( false, i18n("Recursive make-call malformed"), i18n("Output was: %2").arg(fullOutput) );
+      return PathResolutionResult( false, i18n("Recursive make-call malformed"), i18n("Output was: %1", fullOutput) );
     }
 
     ++offset;
@@ -470,12 +470,12 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   ///STEP 2: Search the output for include-paths
   QRegExp validRx( "\\b([cg]\\+\\+|gcc)" );
   if( validRx.indexIn( fullOutput ) == -1 )
-    return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"").arg(workingDirectory).arg( source.getCommand(file, makeParameters) ).arg(fullOutput) );
+    return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;
 
-  QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" ); 
+  QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" );
   QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.
   QString escapedPathRx( "(([^)(\"'\\s]*)(\\\\\\s)?)*" ); //Matches /usr/I\ am \ a\ strange\ path/include
 
@@ -500,15 +500,15 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
     int end = offset + includeRx.matchedLength();
 
     QString path = fullOutput.mid( start, end-start ).trimmed();
-    if( path.startsWith( "\"") || path.startsWith( "\'") && path.length() > 2 ) {
+    if( path.startsWith( '"' ) || path.startsWith( '\'') && path.length() > 2 ) {
       //probable a quoted path
       if( path.endsWith(path.left(1)) ) {
         //Quotation is ok, remove it
         path = path.mid( 1, path.length() - 2 );
       }
     }
-    if( !path.startsWith("/") )
-      path = workingDirectory + (workingDirectory.endsWith("/") ? "" : "/") + path;
+    if( !path.startsWith('/') )
+      path = workingDirectory + '/' + path;
 
     KUrl u( path );
     u.cleanPath();

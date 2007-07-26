@@ -16,9 +16,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "tokens.h"
+
 #include <QtCore/qglobal.h>
 
-#include "tokens.h"
 
 static char const * const _S_token_names[] = {
   "K_DCOP",

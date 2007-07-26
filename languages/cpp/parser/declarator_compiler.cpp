@@ -16,6 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+//krazy:excludeall=cpp
+
 #include "declarator_compiler.h"
 #include "name_compiler.h"
 #include "type_compiler.h"

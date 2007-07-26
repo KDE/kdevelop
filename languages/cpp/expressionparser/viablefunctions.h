@@ -32,11 +32,11 @@ namespace KDevelop  {
 
 namespace Cpp {
   using namespace KDevelop;
-  
+
   class KDEVCPPEXPRESSIONPARSER_EXPORT ViableFunction {
     public:
-      
-    ViableFunction( Declaration* decl = 0, bool noUserDefinedConversion = false );
+
+    explicit ViableFunction( Declaration* decl = 0, bool noUserDefinedConversion = false );
 
     /**
      * Is it a valid function?
@@ -54,22 +54,22 @@ namespace Cpp {
 
     //Same as isBetter(..)
     bool operator< ( const ViableFunction& other ) const;
-    
+
     uint worstConversion() const;
-    
+
     /**
      * Is the function viable for the parameters given by matchParameters(...), as defined in iso c++ 13.3.2?
      * */
     bool isViable() const;
 
     KDevelop::DeclarationPointer declaration() const;
-    
+
     private:
     QList<int> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
     CppFunctionType* m_type;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
-  };  
+  };
 }
 
 #endif

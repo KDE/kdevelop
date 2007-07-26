@@ -42,7 +42,7 @@ class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageS
 Q_OBJECT
 Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
-    CppLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
+    explicit CppLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
     virtual ~CppLanguageSupport();
 
     QString name() const;

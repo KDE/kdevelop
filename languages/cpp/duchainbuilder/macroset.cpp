@@ -11,9 +11,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "macroset.h"
 #include <QDataStream>
 
-#include "macroset.h"
 #include "hashedstring.h"
 
 using namespace Cpp;
@@ -49,13 +49,13 @@ void MacroSet::addMacro( const rpp::pp_macro& macro ) {
     m_usedMacros.erase( r.first );
     m_usedMacros.insert( macro );
   }
-    
+
   m_idHashValid = m_valueHashValid = false;
 }
 
 void MacroSet::merge( const MacroSet& macros ) {
   Macros m = macros.m_usedMacros; //Swap is needed so the merged macros take precedence
-  m.insert( m_usedMacros.begin(), m_usedMacros.end() ); 
+  m.insert( m_usedMacros.begin(), m_usedMacros.end() );
   m_usedMacros = m;
   m_idHashValid = m_valueHashValid = false;
 }
@@ -102,7 +102,7 @@ bool MacroSet::hasMacro( const HashedString& name ) const {
 
 rpp::pp_macro MacroSet::macro( const QString& name ) const {
     Macros::const_iterator it = m_usedMacros.find( rpp::pp_macro( name ) );
-    
+
     if( it != m_usedMacros.end() ) {
         return *it;
     } else {

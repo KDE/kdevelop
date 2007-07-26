@@ -19,7 +19,7 @@
 #ifndef CLASS_COMPILER_H
 #define CLASS_COMPILER_H
 
-#include <QtCore/qglobal.h>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
 
 #include "default_visitor.h"

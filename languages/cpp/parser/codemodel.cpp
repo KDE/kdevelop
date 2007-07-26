@@ -24,7 +24,7 @@ CodeModel::CodeModel( QObject *parent )
   : KDevelop::CodeModel( parent )
 {
   _M_globalNamespace = create<NamespaceModelItem>();
-  _M_globalNamespace->setName(QString::null);
+  _M_globalNamespace->setName(QString();
 }
 
 CodeModel::~CodeModel()
@@ -110,7 +110,7 @@ bool TypeInfo::operator==(const TypeInfo &other)
 
 // ---------------------------------------------------------------------------
 _CodeModelItem::_CodeModelItem(CodeModel *model, int kind)
-  : KDevelop::CodeItem( QString::null, 0 ),
+  : KDevelop::CodeItem( QString(), 0 ),
     _M_model(model),
     _M_kind(kind),
     _M_startLine(-1),

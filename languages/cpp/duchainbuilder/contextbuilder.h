@@ -22,12 +22,15 @@
 
 #include "default_visitor.h"
 
-#include <QSet>
+#include <QtCore/QSet>
+
+#include "cppducontext.h"
 
 #include <identifier.h>
 #include <ducontext.h>
 #include <ksharedptr.h>
 #include "cppduchainbuilderexport.h"
+
 
 namespace KDevelop
 {
@@ -78,7 +81,7 @@ public:
    * \param parent Context that will be used as parent for this context
    */
   KDevelop::DUContext* buildSubContexts(const KUrl& url, AST *node, KDevelop::DUContext* parent = 0);
-  
+
   /**
    * Support another builder by tracking the current context.
    * @param context the context to use. Must be set when the given node has no context. When it has one attached, this parameter is not needed.
@@ -101,9 +104,9 @@ protected:
   bool wasEncountered( KDevelop::DUChainBase* item ) {
     return m_encountered.contains(item);
   }
-  
+
   /**
-   * Compile an identifier for the specifed NameAST \a id.
+   * Compile an identifier for the specified NameAST \a id.
    *
    * \note this reference will only be valid until the next time the function
    * is called, so you need to create a copy (store as non-reference).
@@ -128,7 +131,7 @@ protected:
   virtual void visitPostSimpleDeclaration(SimpleDeclarationAST*);
 
   virtual void visitTemplateDeclaration(TemplateDeclarationAST *);
-  
+
   // Normal overridden visitors
   virtual void visitNamespace(NamespaceAST *);
   virtual void visitClassSpecifier(ClassSpecifierAST *);
@@ -156,7 +159,7 @@ protected:
   int templateDeclarationDepth() const {
     return m_templateDeclarationDepth;
   }
-  
+
 protected:
   // Variables
   NameCompiler* m_nameCompiler;

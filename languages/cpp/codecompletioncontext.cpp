@@ -16,11 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "codecompletioncontext.h"
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ducontext.h>
 #include <duchain.h>
-#include "codecompletioncontext.h"
 #include "stringhelpers.h"
 #include "duchainbuilder/cppduchain.h"
 #include "duchainbuilder/typeutils.h"
@@ -99,12 +99,12 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ///First: find out what kind of completion we are dealing with
 
-  if( m_text.endsWith( ";" ) || m_text.endsWith("}") || m_text.endsWith("{") ) {
+  if( m_text.endsWith( ';' ) || m_text.endsWith('}') || m_text.endsWith('{') ) {
     ///We're at the beginning of a new statement. General completion is valid.
     return;
   }
 
-  if( m_text.endsWith(".") ) {
+    if( m_text.endsWith('.') ) {
     m_memberAccessOperation = MemberAccess;
     m_text = m_text.left( m_text.length()-1 );
   }
@@ -131,7 +131,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     m_text = m_text.left( m_text.length() - m_operator.length() );
   }
 
-  if( m_text.endsWith("(") ) {
+  if( m_text.endsWith('(') ) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
       m_parentContext = new CodeCompletionContext( m_duContext, m_text, depth+1 );
@@ -175,7 +175,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   QString expressionPrefix = Utils::stripFinalWhitespace( m_text.left(start_expr) );
 
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
-  if( expressionPrefix.endsWith("(") || expressionPrefix.endsWith(",") ) {
+  if( expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
     //Our expression is within a function-call. We need to find out the possible argument-types we need to match, and show an argument-hint.
 
@@ -377,12 +377,12 @@ bool CodeCompletionContext::isValidPosition() {
 }
 
 QString CodeCompletionContext::getEndOperator( const QString& str ) const {
-  static QStringList allowedOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || [ - * / % & | = < >" ).split( " ", QString::SkipEmptyParts );
+  static QStringList allowedOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || [ - * / % & | = < >" ).split( ' ', QString::SkipEmptyParts );
 
   for( QStringList::const_iterator it = allowedOperators.begin(); it != allowedOperators.end(); ++it )
     if( str.endsWith(*it) )
       return *it;
-  return QString::null;
+  return QString();
 }
 
 bool CodeCompletionContext::endsWithOperator( const QString& str ) const {

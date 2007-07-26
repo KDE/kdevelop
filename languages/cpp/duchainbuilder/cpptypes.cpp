@@ -80,7 +80,7 @@ void CppClassType::exchangeTypes(TypeExchanger *e)
     (*it).baseClass = dynamic_cast<CppClassType*>( e->exchange((*it).baseClass.data()) );
 }
 
-    
+
 // ---------------------------------------------------------------------------
 const QList<CppClassType::BaseClassInstance>& CppClassType::baseClasses() const
 {

@@ -92,9 +92,9 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
   if( dataIndex >= (quint32)m_declarations.size() )
     return QVariant();
-  
+
   DUChainReadLocker lock(DUChain::lock());
-  
+
   Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].first.data() );
   if (!dec) {
     kDebug() <<  "code-completion model item " << dataIndex << ": Du-chain item is deleted" << endl;
@@ -204,7 +204,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
               else
                 ret += "<incomplete type>";
             }
-            ret += ")";
+            ret += ')';
             return ret;
           }
           break;
@@ -374,7 +374,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           iconName = "private_field";
         else
           iconName = "field";
-        
+
         if( index.column() == Icon ) {
           lock.unlock();
           return QVariant( KIconLoader::global()->loadIcon(iconName, K3Icon::Small) );
@@ -439,7 +439,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
   }
 
   if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
-    text += "\n";
+    text += '\n';
 
   Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, text ) );
   m_completionContext = completionContext;

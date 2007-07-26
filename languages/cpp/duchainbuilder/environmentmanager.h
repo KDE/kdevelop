@@ -11,16 +11,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LEXERCACHE_H
-#define LEXERCACHE_H
+#ifndef ENVIRONMENTMANAGER_H
+#define ENVIRONMENTMANAGER_H
 
 #include <map>
 #include <ext/hash_set>
 #include <ext/hash_map>
 
-#include <QDateTime>
-#include <QList>
-#include <QMap>
+#include <QtCore/QDateTime>
+#include <QtCore/QList>
+#include <QtCore/QMap>
 
 #include <kurl.h>
 #include <ksharedptr.h>
@@ -61,7 +61,7 @@
  * If the result would be different, the file will be re-preprocessed, parsed, and imported.
  * Else the set of defined macros is taken from the stored LexedFile,
  * and the already available du-context will be imported. The result: correct behavior, perfectly working header-guards, no missing macros, intelligent reparsing of changed headers, ...
- * 
+ *
  * */
 
 namespace rpp {
@@ -80,7 +80,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
     LexedFile( const KUrl& url, EnvironmentManager* manager );
-    
+
     inline void addString( const HashedString& string ) {
         if( !m_definedMacroNames[ string ] ) {
           m_strings.insert( string );
@@ -114,13 +114,13 @@ class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop
     size_t hash() const;
 
     virtual KDevelop::IdentifiedFile identity() const;
-    
+
     KUrl url() const;
 
     HashedString hashedUrl() const;
 
     /**Set of all files with absolute paths, including those included indirectly
-     * 
+     *
      * This by definition also includes this file, so when the count is 1,
      * no other files were included.
      *
@@ -129,7 +129,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop
 
     ///Set of all defined macros, including those of all deeper included files
     const MacroSet& definedMacros() const;
-    
+
     ///Set of all macros used from outside, including those used in deeper included files
     const MacroSet& usedMacros() const;
 
@@ -138,7 +138,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop
 
   private:
     virtual int type() const;
-    
+
     friend class EnvironmentManager;
     KUrl m_url;
     HashedString m_hashedUrl;
@@ -185,7 +185,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
         return str;
       }
     }
-    
+
     virtual void saveMemory();
 
     //Overridden from ParsingEnvironmentManager
@@ -197,7 +197,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     virtual void removeFile( KDevelop::ParsingEnvironmentFile* file );
 
     /**
-     * Search for the availability of a file parsed in a given environment 
+     * Search for the availability of a file parsed in a given environment
      * */
     virtual KDevelop::ParsingEnvironmentFile* find( const KUrl& url, const KDevelop::ParsingEnvironment* environment );
 
@@ -208,7 +208,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     void initFileModificationCache();
     virtual void erase( const CacheNode* node );
     bool hasSourceChanged( const LexedFile& file );///Returns true if the file itself, or any of its dependencies was modified.
-    
+
     ///Returns zero if no fitting file is available for the given Environment
     LexedFilePointer lexedFile( const HashedString& fileName, const rpp::Environment* environment );
     LexedFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment );

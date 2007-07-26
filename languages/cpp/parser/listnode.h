@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FASTLIST_H
-#define FASTLIST_H
+#ifndef LISTNODE_H
+#define LISTNODE_H
 
 #include "memorypool.h"
 #include <kdebug.h>

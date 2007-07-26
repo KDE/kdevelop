@@ -18,9 +18,8 @@
 */
 // kate: indent-width 2;
 
-#include "cppducontext.h"
-
 #include "contextbuilder.h"
+
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
@@ -73,15 +72,15 @@ ContextBuilder::~ContextBuilder ()
 void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
   DUContext* ctx = openContext(ast, DUContext::Template, 0); //Open anonymous context for the template-parameters
-  
+
   visitNodes(this,ast->template_parameters);
   closeContext();
   m_importedParentContexts << ctx; //Import the context into the following function-argument context(so the template-parameters can be found from there)
 
   ++m_templateDeclarationDepth;
-  
+
   DefaultVisitor::visit(ast->declaration);
-  
+
   --m_templateDeclarationDepth;
 }
 
@@ -197,7 +196,7 @@ KDevelop::DUContext* ContextBuilder::buildSubContexts(const KUrl& url, AST *node
 
     node->ducontext = 0;
   }
-  
+
   return node->ducontext;
 }
 
@@ -378,7 +377,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
 /*          //Upgrade to a smart-range
           if( !ret->smartRange() && m_editor->smart() )
             ret->setTextRange(m_editor->createRange(range));*/
-          
+
           ret->clearUsingNamespaces();
           ret->clearImportedParentContexts();
           m_editor->setCurrentRange(ret->textRangePtr());
@@ -412,8 +411,8 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
    * The problem: For template-parameter contexts this needs to be imported into function-parameter contexts
    * and into class-contexts, directly when they are opened. Maybe it is easier leaving it here.
    * */
-  addImportedContexts(); 
-  
+  addImportedContexts();
+
   return ret;
 }
 

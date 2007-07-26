@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     /**
      * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.
      * */
-    ExpressionVisitor( ParseSession* session, bool strict = false );
+    explicit ExpressionVisitor( ParseSession* session, bool strict = false );
     ~ExpressionVisitor();
 
     struct Instance {
@@ -59,11 +59,11 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
       inline operator bool() const {
         return isInstance;
       }
-      
+
       bool isInstance;
       Declaration* declaration; //May contain the declaration of the instance, but only when isInstance is true. May also contain type-declaration, which signalizes that this is an instance of that type.
     };
-    
+
     /**
      * Will parse the tree and call expressionType(..) for each successfully evaluated type
      * @param ast the syntax-tree to evaluate. The context must already be built, the given AST needs to have a filled ducontext.
@@ -85,19 +85,19 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
      *
      * @param node the AST-Node
      * @param type the type the expression in the AST-node evaluates to
-     * @param instance If the expression evaluates to an instance of a type, this contains information about that instance. declaration is only filled for explicity declared instances.
+     * @param instance If the expression evaluates to an instance of a type, this contains information about that instance. declaration is only filled for explicitly declared instances.
      * If this is zero, the expression evaluates to a type.
-     * 
+     *
      * Warning:
      * In case of temporary instances, decl will be the declaration of the basic type, not of an instance.
      * Since temporary instances are never declared, there's no other way.
-     * 
+     *
      * examples:
      * the expression "AbstractType::Ptr" evaluates to a type, so @param type would be filled and @param decl would be zero.
      * When the context contains "AbstractType::Ptr ptr;", the expression "ptr" will evaluate to an instance of
      * AbstractType::Ptr, so @param type will contain the type AbstractType::Ptr, and @param decl will point to the declaration of ptr.
      *
-     * Problem: 
+     * Problem:
      **/
     virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance instance ) {
       Q_UNUSED(node) Q_UNUSED(type) Q_UNUSED(instance)
@@ -122,7 +122,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     //Here the parameters of function-calls are collected
     //When a parameter could not be evaluated, this will hold a parameter with null-value type
     QList<OverloadResolver::Parameter> m_parameters;
-    
+
     ParseSession* m_session;
     KDevelop::DUContext* m_currentContext;
 
@@ -134,7 +134,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
   ///Returns whether the given type and instance-info are an lvalue
   bool isLValue( const AbstractType::Ptr& type, const Instance& instance );
 
-  
+
   /**
    * Returns the dereferenced type(example: ReferenceType(PointerType) -> PointerType)
    *
@@ -151,7 +151,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
    *  !!DU-Chain must be locked!
    **/
   bool isPointerType() const;
-  
+
   /**
    *  m_lastType must be a pointer. It will be dereferenced in m_lastType,
    *  and m_lastDeclaration filled appropriately.
@@ -168,7 +168,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
    *  !!DU-Chain must be locked!
    **/
   Declaration* getDeclaration( AST* node, const AbstractType::Ptr& base );
-  
+
   /**
    *  m_lastType must be a function.
    *  Return-value will be extracted, m_lastType and m_lastDeclaration

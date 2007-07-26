@@ -50,7 +50,7 @@ bool ExpressionEvaluationResult::isLValue() const {
 QString ExpressionEvaluationResult::toString() const {
   if( DUChain::lock()->currentThreadHasReadLock() )
     return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
-  
+
   DUChainReadLocker lock(DUChain::lock());
   return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
 }
@@ -67,9 +67,9 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
 
   Control control;
   DumpChain dumper;
-  
+
   Parser parser(&control);
-  
+
   AST* ast = 0;
 
   DUContext::ContextType type;
@@ -81,7 +81,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   }
 
   if( statement ) {
-      session->setContents("{" + unit + ";}");
+      session->setContents('{' + unit + ";}");
       ast = parser.parseStatement(session);
   } else {
       session->setContents(unit);
@@ -95,7 +95,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   }
 
   ast->ducontext = context.data();
-  
+
   ///@todo think how useful it is to compute contexts and uses here. The main thing we need is the AST.
   /*
   static int testNumber = 0; //@todo what this url for?

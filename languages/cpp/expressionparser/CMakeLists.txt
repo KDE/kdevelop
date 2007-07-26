@@ -24,10 +24,10 @@ install(TARGETS kdevcppexpressionparser DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install(FILES
-    expressionparser.h
-    expressionvisitor.h
-    typeconversion.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/expressionparser
-
-)
+# install(FILES
+#     expressionparser.h
+#     expressionvisitor.h
+#     typeconversion.h
+#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/expressionparser
+#
+# )

@@ -48,13 +48,13 @@ QString CodeDisplay::display( const _CodeModelItem *item )
             QStringList args;
             foreach( ArgumentModelItem argument, function->arguments() )
             {
-                QString arg = argument->type().toString() + " " + argument->name();
+                QString arg = argument->type().toString() + ' ' + argument->name();
                 args.append( arg );
             }
             if ( args.count() )
-                signature.append( " " + args.join( ", " ) + " " );
+                signature.append( ' ' + args.join( ", " ) + ' ' );
 
-            signature.append( ")" );
+            signature.append( ')' );
             return signature.join( "" );
         }
     case _CodeModelItem::Kind_File:
@@ -140,8 +140,8 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
             if ( function->isAbstract() )
                 signature.append( " abstract" );
 
-            signature.append( " " + function->type().toString() +
-                              " " + function->display() );
+            signature.append( ' ' + function->type().toString() +
+                              ' ' + function->display() );
 
             if ( function->isConstant() )
                 signature.append( " const" );
@@ -155,7 +155,7 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
             const _ClassModelItem *_class =
                 static_cast<const _ClassModelItem *>( item );
             QString bases = _class->baseClasses().join( ", " );
-            return qualified + ( !bases.isEmpty() ? ": " + bases : QString::null );
+            return qualified + ( !bases.isEmpty() ? ": " + bases : QString() );
         }
     default:
         break;

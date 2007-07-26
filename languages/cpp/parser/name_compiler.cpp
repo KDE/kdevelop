@@ -16,6 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+//krazy:excludeall=cpp
+
 #include "name_compiler.h"
 #include "type_compiler.h"
 #include "lexer.h"
@@ -65,7 +67,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
         tmp_name +=  decode_operator(op_id->op->op);
       else
         tmp_name += QLatin1String("{...cast...}");
-      
+
       m_typeSpecifier = op_id->type_specifier;
     }
 

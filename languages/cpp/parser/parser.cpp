@@ -16,6 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+//krazy:excludeall=cpp
+
 // c++ support
 #include "parser.h"
 #include "tokens.h"

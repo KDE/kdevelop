@@ -62,8 +62,8 @@ void ParseSession::positionAt(std::size_t offset, int *line, int *column,
   /*
     NPPL == non-preprocessed line
     NPPL =
-      actual line of the first preceeding preprocessor statement +
-      NPPL of the token - (NPPL of the first preceeding preprocessor statement + 1 to account for the preprocessor statement)
+      actual line of the first preceding preprocessor statement +
+      NPPL of the token - (NPPL of the first preceding preprocessor statement + 1 to account for the preprocessor statement)
   */
   //kDebug() << k_funcinfo << offset << ": line " << (base_line + *line - line2  - 1) << ", column " << *column << " == " << base_line << " + " << *line << " - " << line2 << " - 1" << endl;
   *line = base_line + *line - line2  - 1;

@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QFileInfo>
 #include "environmentmanager.h"
+#include <QFileInfo>
 #include <kdebug.h>
 #include "rpp/pp-macro.h"
 #include "rpp/pp-environment.h"
@@ -168,7 +168,7 @@ QDateTime EnvironmentManager::fileModificationTimeCached( const HashedString& fi
   m_fileModificationCache[fileName].m_readTime = QDateTime::currentDateTime();
   m_fileModificationCache[fileName].m_modificationTime = fileInfo.lastModified();
   return fileInfo.lastModified();
-  
+
 }
 
 //Should be cached too!
@@ -176,7 +176,7 @@ bool EnvironmentManager::hasSourceChanged( const LexedFile& file ) {
   //@todo Check if any of the dependencies changed
 
   QDateTime modTime = fileModificationTimeCached( file.url().path() );
-  
+
   if ( modTime != file.modificationTime() ) {
     ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged: " << file.url() << " has changed, stored stamp: " << file.modificationTime() << " new time: " << modTime << endl );
     return true;
@@ -189,7 +189,7 @@ bool EnvironmentManager::hasSourceChanged( const LexedFile& file ) {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -305,11 +305,11 @@ void LexedFile::merge( const LexedFile& file ) {
 
   m_definedMacros.merge( file.m_definedMacros );
   m_definedMacroNames += file.m_definedMacroNames;
-  
+
   for( QMap<HashedString, QDateTime>::const_iterator it = file.m_allModificationTimes.begin(); it != file.m_allModificationTimes.end(); ++it )
     m_allModificationTimes[it.key()] = *it;
 
-  
+
 #ifdef LEXERCACHE_DEBUG
   kDebug( 9007 ) << url() << ": defined in this after merge: " << m_definedMacroNames.print().c_str() << endl;
 #endif
@@ -376,4 +376,4 @@ KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const KUrl& url, con
   return lexedFile( url, env ).data();
 }
 
-    
+
