@@ -18,4 +18,48 @@
 
 #include "ast.h"
 
+CommentAST::CommentAST ( const CommentAST& rhs )
+{}
+CommentAST& CommentAST::operator= ( const CommentAST& rhs )
+{
+  return *this;
+}
+CommentAST::CommentAST() : m_comment ( 0 )
+{}
+
+void CommentAST::setComment ( const QString& comment )
+{
+  if ( !m_comment )
+    m_comment = new QString;
+  *m_comment = comment;
+}
+
+void CommentAST::addComment ( const QString& comment )
+{
+  if ( comment.isEmpty() )
+    return;
+
+  if ( !m_comment )
+    m_comment = new QString;
+
+  if ( !m_comment->isEmpty() )
+  {
+    *m_comment += "\n(" + comment + ")";
+  }
+  else
+  {
+    *m_comment = comment;
+  }
+}
+
+bool CommentAST::haveComment() const
+{
+  return m_comment && !m_comment->isEmpty();
+}
+CommentAST::~CommentAST()
+{
+  ///@todo make sure this is executed!
+  delete m_comment;
+}
+
 // kate: space-indent on; indent-width 2; replace-tabs on;

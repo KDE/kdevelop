@@ -1044,7 +1044,7 @@ int pp::next_token (Stream& input)
     case '/':
       if (ch2 == '/' || ch2 == '*')
       {
-        skip_comment_or_divop(input, devnull(), false);
+        skip_comment_or_divop(input, devnull(), true);
         return next_token(input);
       }
       ++input;

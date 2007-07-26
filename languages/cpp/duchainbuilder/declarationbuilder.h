@@ -115,6 +115,8 @@ private:
   QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;
   QStack<int> m_nextDeclarationStack;
 
+  QString m_lastComment;
+
   QStack<KDevelop::ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;

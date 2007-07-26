@@ -21,6 +21,7 @@
 
 #include "ast.h"
 #include "lexer.h"
+#include "commentparser.h"
 
 #include <QtCore/QString>
 #include <cppparserexport.h>
@@ -192,7 +193,7 @@ public:
   bool skipUntilStatement();
   bool skip(int l, int r);
 
-  void advance();
+  void advance(bool skipComment = true);
 
   // private:
   TokenStream* token_stream;
@@ -205,10 +206,24 @@ public:
   Control *control;
   Lexer lexer;
 private:
+
+  int lineFromTokenNumber( size_t tokenNumber ) const;
+  
+  ///parses all comments until the end of the line
+  Comment comment();
+  ///Preparses comments in the same line as given token-number
+  void preparseLineComments( int tokenNumber );
+  void processComment( int offset = 0, int line = -1 );
+  void clearComment( );
+
+  Comment m_currentComment;
+  CommentStore m_commentStore;
+  
   int _M_problem_count;
   int _M_max_problem_count;
   ParseSession* session;
   bool _M_block_errors;
+  size_t _M_last_valid_token; //Last encountered token that was not a comment
 
 private:
   Parser(const Parser& source);

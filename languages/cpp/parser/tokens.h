@@ -19,6 +19,8 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
+#include <cppparserexport.h>
+
 /**@file Token kinds.*/
 
 /**Token kinds.*/
@@ -133,7 +135,7 @@ enum TOKEN_KIND
 };
 
 /**@return human-readable name of the token.*/
-char const *token_name(int token);
+KDEVCPPPARSER_EXPORT char const *token_name(int token);
 
 #endif
 

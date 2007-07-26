@@ -125,6 +125,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
 
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
+  m_lastComment = node->comment();
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
@@ -139,6 +140,7 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 
 void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
+  m_lastComment = node->comment();
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
@@ -409,6 +411,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         break;
     }
   }
+  declaration->setComment(m_lastComment);
+  m_lastComment = QString::null;
 
   setEncountered(declaration);
 
@@ -472,6 +476,7 @@ void DeclarationBuilder::abortDeclaration()
 
 void DeclarationBuilder::visitTypedef(TypedefAST *def)
 {
+  m_lastComment = def->comment();
   m_inTypedef = true;
   DeclarationBuilderBase::visitTypedef(def);
   m_inTypedef = false;

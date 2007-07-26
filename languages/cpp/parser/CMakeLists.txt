@@ -27,6 +27,7 @@ set(kdevcppparser_LIB_SRCS
     dumptree.cpp
     parsesession.cpp
     type_compiler.cpp
+    commentparser.cpp
 )
 
 
@@ -66,3 +67,5 @@ install(TARGETS kdevcppparser DESTINATION ${LIB_INSTALL_DIR} )
 #     cppparserexport.h
 #     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/parser
 # )
+
+

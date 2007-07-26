@@ -108,6 +108,34 @@ struct UsingDirectiveAST;
 struct WhileStatementAST;
 struct WinDeclSpecAST;
 
+class CommentAST {
+  QString* m_comment;
+
+  CommentAST(const CommentAST& rhs);
+  CommentAST& operator=( const CommentAST& rhs );
+  public:
+  CommentAST();
+
+  void setComment( const QString& comment );
+
+  /**
+   * Will not add the comment if it is invalid/empty
+   * */
+  void addComment( const QString& comment );
+
+  QString comment() const
+  {
+    if ( !m_comment )
+      return QString::null;
+    else
+      return *m_comment;
+  }
+
+  bool haveComment() const;
+
+  ~CommentAST();
+};
+
 struct AST
 {
   enum NODE_KIND
@@ -215,7 +243,7 @@ struct ExpressionAST: public AST
 {
 };
 
-struct DeclarationAST: public AST
+struct DeclarationAST: public AST, public CommentAST
 {
 };
 
@@ -389,7 +417,7 @@ struct EnumSpecifierAST: public TypeSpecifierAST
   const ListNode<EnumeratorAST*> *enumerators;
 };
 
-struct EnumeratorAST: public AST
+struct EnumeratorAST: public AST, public  CommentAST
 {
   DECLARE_AST_NODE(Enumerator)
 
@@ -756,7 +784,7 @@ struct ThrowExpressionAST: public ExpressionAST
   ExpressionAST *expression;
 };
 
-struct TranslationUnitAST: public AST
+struct TranslationUnitAST: public AST, public CommentAST
 {
   DECLARE_AST_NODE(TranslationUnit)
 

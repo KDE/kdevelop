@@ -21,10 +21,11 @@
 #define DUMPTREE_H
 
 #include "default_visitor.h"
+#include <cppparserexport.h>
 
 class TokenStream;
 
-class DumpTree: protected DefaultVisitor
+class KDEVCPPPARSER_EXPORT DumpTree: protected DefaultVisitor
 {
 public:
   DumpTree();

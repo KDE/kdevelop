@@ -122,13 +122,13 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       if( isArgumentHint )
         return m_declarations[dataIndex].second->depth();
     case ItemSelected:
-       return QVariant(dec->toString());
+       return QVariant(dec->comment().isEmpty() ? dec->toString() : QString("%1 \n%2").arg(dec->comment()).arg(dec->toString()));
     case IsExpandable:
       return QVariant(true);
     case ExpandingWidget: {
        KHTMLPart *w = new KHTMLPart();
        w->begin();
-       w->write( QString( "<html><body><p><small>Item: %1</small></p></body></html>" ).arg(dec->toString()) );
+       w->write( QString( "<html><body><p><small>Item: %1</small> <br>Comment: %2 </p></body></html> " ).arg(dec->toString()).arg(dec->comment()) );
        w->end();
        w->view()->resize(500, 70);
 

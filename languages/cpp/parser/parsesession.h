@@ -61,7 +61,7 @@ public:
   std::size_t size() const;
   pool* mempool;
   TokenStream* token_stream;
-  LocationTable* location_table;
+  LocationTable* location_table; //Maps line-numbers to positions in the document
   LocationTable* line_table;
   rpp::MacroBlock* macros;
   KTextEditor::Cursor m_contentOffset;

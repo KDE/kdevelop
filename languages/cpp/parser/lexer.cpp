@@ -20,10 +20,70 @@
 #include "tokens.h"
 #include "control.h"
 #include "parsesession.h"
+#include "rpp/pp-scanner.h"
 
 #include <cctype>
 
 #include <kdebug.h>
+
+/**
+ * Returns the character BEHIND the found comment
+ * */
+const char* skipComment( const char* cursor )
+{
+  ///A nearly exact copy of rpp::pp_skip_comment_or_divop::operator()
+  enum {
+    MAYBE_BEGIN,
+    BEGIN,
+    MAYBE_END,
+    END,
+    IN_COMMENT,
+    IN_CXX_COMMENT
+  } state (MAYBE_BEGIN);
+
+  while (*cursor) {
+    switch (state) {
+      case MAYBE_BEGIN:
+        if (*cursor != '/')
+          return cursor;
+
+        state = BEGIN;
+        break;
+
+      case BEGIN:
+        if (*cursor == '*')
+          state = IN_COMMENT;
+        else if (*cursor == '/')
+          state = IN_CXX_COMMENT;
+        else
+          return cursor;
+        break;
+
+      case IN_COMMENT:
+        if (*cursor == '*')
+          state = MAYBE_END;
+        break;
+
+      case IN_CXX_COMMENT:
+        if (*cursor == '\n')
+          return cursor;
+        break;
+
+      case MAYBE_END:
+        if (*cursor == '/')
+          state = END;
+        else if (*cursor != '*')
+          state = IN_COMMENT;
+        break;
+
+      case END:
+        return cursor;
+    }
+
+    ++cursor;
+  }
+  return cursor;
+}
 
 scan_fun_ptr Lexer::s_scan_keyword_table[] = {
   &Lexer::scanKeyword0, &Lexer::scanKeyword0,
@@ -509,6 +569,20 @@ void Lexer::scan_divide()
     {
       ++cursor;
       (*session->token_stream)[index++].kind = Token_assign;
+    }
+  else if( *cursor == '*' || *cursor == '/' )
+    {
+      ///It is a comment
+      --cursor; //Move back to the '/'
+      const char* commentBegin = cursor;
+      cursor = skipComment(cursor);
+      if( cursor != commentBegin ) {
+        ///Store the comment
+        (*session->token_stream)[index++].kind = Token_comment;
+        (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
+        (*session->token_stream)[index-1].position = commentBegin - session->contents();
+        (*session->token_stream)[index-1].text = commentBegin;
+      }
     }
   else
     {
