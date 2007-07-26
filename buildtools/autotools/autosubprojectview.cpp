@@ -37,6 +37,7 @@
 #include <kdevmainwindow.h>
 #include <kdevmakefrontend.h>
 #include <kdevappfrontend.h>
+#include <kdevcore.h>
 #include <urlutil.h>
 
 /** AutoProject */
@@ -321,6 +322,11 @@ void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, cons
 
 	popup.insertSeparator();
 	otherAction->plug( &popup );
+
+	KURL::List urls;
+	urls.append(m_widget->selectedSubproject()->path);
+	FileContext context(urls);
+	m_part->core()->fillContextMenu( &popup, &context );
 
 	popup.exec( p );
 }
