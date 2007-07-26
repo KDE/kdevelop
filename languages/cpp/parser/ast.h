@@ -108,34 +108,6 @@ struct UsingDirectiveAST;
 struct WhileStatementAST;
 struct WinDeclSpecAST;
 
-class CommentAST {
-  QString* m_comment;
-
-  CommentAST(const CommentAST& rhs);
-  CommentAST& operator=( const CommentAST& rhs );
-  public:
-  CommentAST();
-
-  void setComment( const QString& comment );
-
-  /**
-   * Will not add the comment if it is invalid/empty
-   * */
-  void addComment( const QString& comment );
-
-  QString comment() const
-  {
-    if ( !m_comment )
-      return QString::null;
-    else
-      return *m_comment;
-  }
-
-  bool haveComment() const;
-
-  ~CommentAST();
-};
-
 struct AST
 {
   enum NODE_KIND
@@ -215,7 +187,7 @@ struct AST
       Kind_UsingDirective,                      // 71
       Kind_WhileStatement,                      // 72
       Kind_WinDeclSpec,                         // 73
-
+      Kind_Comment,
       NODE_KIND_COUNT
     };
 
@@ -228,6 +200,10 @@ struct AST
     *This is usually not filled for all AST's, only for those that open a new context
     */
   KDevelop::DUContext* ducontext;
+};
+
+struct CommentAST {
+  const ListNode<std::size_t> *comments; //A list of comment-tokens
 };
 
 struct TypeSpecifierAST: public AST

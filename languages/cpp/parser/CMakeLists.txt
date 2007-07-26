@@ -28,6 +28,7 @@ set(kdevcppparser_LIB_SRCS
     parsesession.cpp
     type_compiler.cpp
     commentparser.cpp
+    commentformatter.cpp
 )
 
 

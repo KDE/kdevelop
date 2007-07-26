@@ -25,7 +25,8 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
-#include <parser/type_compiler.h>
+#include "parser/type_compiler.h"
+#include "parser/commentformatter.h"
 
 #include <definition.h>
 #include <symboltable.h>
@@ -123,9 +124,16 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   }
 }
 
+void DeclarationBuilder::parseComments(const ListNode<size_t> *comments)
+{
+  m_lastComment = CommentFormatter::formatComment(comments, m_editor->parseSession());
+}
+
+
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
-  m_lastComment = node->comment();
+  
+  parseComments(node->comments);
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
@@ -140,7 +148,7 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 
 void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
-  m_lastComment = node->comment();
+  parseComments(node->comments);
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
@@ -476,7 +484,7 @@ void DeclarationBuilder::abortDeclaration()
 
 void DeclarationBuilder::visitTypedef(TypedefAST *def)
 {
-  m_lastComment = def->comment();
+  parseComments(def->comments);
   m_inTypedef = true;
   DeclarationBuilderBase::visitTypedef(def);
   m_inTypedef = false;

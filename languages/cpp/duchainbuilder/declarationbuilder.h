@@ -107,6 +107,8 @@ private:
   
   inline int& nextDeclaration() { return m_nextDeclarationStack.top(); }
 
+  void parseComments(const ListNode<size_t> *comments);
+  
   void applyStorageSpecifiers();
   void applyFunctionSpecifiers();
   void popSpecifiers();

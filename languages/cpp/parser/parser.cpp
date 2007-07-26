@@ -60,6 +60,10 @@
       (_node)->end_token = end; \
   } while (0)
 
+void Parser::addComment( CommentAST* ast, const Comment& comment ) {
+  ast->comments = snoc(ast->comments, comment.token(), session->mempool);
+}
+
 Parser::Parser(Control *c)
   : control(c), lexer(control), session(0), _M_last_valid_token(0)
 {
@@ -133,7 +137,7 @@ void Parser::processComment( int offset, int line ) {
     session->location_table->positionAt( commentToken.position, &line, &commentColumn );
   }
 
-  m_commentStore.addComment( Comment( QString::fromUtf8( QByteArray(commentToken.text, commentToken.size) ), line ) ); ///@todo encoding?
+  m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
   
 }
 
@@ -478,7 +482,7 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(session->mempool);
 
   if( m_commentStore.hasComment() )
-    ast->setComment(m_commentStore.takeFirstComment());
+    addComment(ast, m_commentStore.takeFirstComment());
   
   while (session->token_stream->lookAhead())
     {
@@ -572,12 +576,12 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
             node = ast;
 
             if( mcomment )
-              ast->setComment(mcomment);
+              addComment(ast, mcomment);
 
             preparseLineComments(--ast->end_token);
             
             if( m_commentStore.hasComment() ) {
-              ast->addComment( m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
+              addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
             }
             
             return true;
@@ -586,12 +590,12 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
             if( parseDeclarationInternal(node) ) {
               //Add the comments to the declaration
               if( mcomment )
-                node->setComment(mcomment);
+                addComment(node, mcomment);
               
               preparseLineComments(--node->end_token);
 
               if( m_commentStore.hasComment() )
-                node->addComment( m_commentStore.takeCommentInRange( lineFromTokenNumber( --node->end_token ) ) );
+                addComment( node, m_commentStore.takeCommentInRange( lineFromTokenNumber( --node->end_token ) ) );
 
               return true;
             }
@@ -878,7 +882,7 @@ bool Parser::parseTypedef(DeclarationAST *&node)
   TypedefAST *ast = CreateNode<TypedefAST>(session->mempool);
 
   if( mcomment )
-      ast->setComment( comment() );
+      addComment( ast, comment() );
   
   ADVANCE(';', ";");
   
@@ -891,8 +895,7 @@ bool Parser::parseTypedef(DeclarationAST *&node)
   preparseLineComments( --ast->end_token );
 
   if( m_commentStore.hasComment() )
-    ast->addComment( m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
-  
+    addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
 
   return true;
 }
@@ -2049,12 +2052,12 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       UPDATE_POS(ast, start, ++_M_last_valid_token);
 
       if( mcomment )
-        ast->setComment(mcomment);
+        addComment(ast,mcomment);
       
       preparseLineComments(--ast->end_token);
 
       if( m_commentStore.hasComment() )
-        ast->addComment( m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
+        addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
       
       node = ast;
 
@@ -2066,12 +2069,12 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       if( parseDeclarationInternal(node) ) {
         //Add the comments to the declaration
         if( mcomment )
-          node->setComment(mcomment);
+          addComment(node, mcomment);
 
         preparseLineComments(--node->end_token);
 
         if( m_commentStore.hasComment() )
-          node->addComment( m_commentStore.takeCommentInRange( lineFromTokenNumber( --node->end_token ) ) );
+          addComment( node, m_commentStore.takeCommentInRange( lineFromTokenNumber( --node->end_token ) ) );
 
         return true;
       }
@@ -2185,12 +2188,12 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
   node = ast;
 
   if( m_commentStore.hasComment() )
-    node->addComment( m_commentStore.takeFirstComment() );
+    addComment( node, m_commentStore.takeFirstComment() );
   
   preparseLineComments( --ast->end_token );
 
   if( m_commentStore.hasComment() )
-    node->addComment( m_commentStore.takeCommentInRange( lineFromTokenNumber(--ast->end_token) ) );
+    addComment( node, m_commentStore.takeCommentInRange( lineFromTokenNumber(--ast->end_token) ) );
   
   return true;
 }
@@ -3089,7 +3092,7 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   ast->init_declarators = declarators;
   
   if(mcomment)
-    ast->setComment(mcomment);
+    addComment(ast, mcomment);
   
   UPDATE_POS(ast, start, ++_M_last_valid_token);
   node = ast;

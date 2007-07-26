@@ -193,6 +193,8 @@ public:
   bool skipUntilStatement();
   bool skip(int l, int r);
 
+  void addComment( CommentAST* ast, const Comment& comment );
+  
   void advance(bool skipComment = true);
 
   // private:

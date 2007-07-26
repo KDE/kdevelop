@@ -656,7 +656,7 @@ void TestDUChain::testDeclareUsingNamespace()
 }
 
 void TestDUChain::testTypedef() {
-  QByteArray method("class A { }; typedef A B;");
+  QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -665,17 +665,20 @@ void TestDUChain::testTypedef() {
   Declaration* defClassA = top->localDeclarations().first();
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QVERIFY(defClassA->type<CppClassType>());
+  QCOMPARE(defClassA->comment(), QString("This is class A"));
 
   DUContext* classA = top->childContexts().first();
   QVERIFY(classA->parentContext());
   QCOMPARE(classA->importedParentContexts().count(), 0);
   QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
-  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
-  QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
-  QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);
+  Declaration* defB = findDeclaration(top,  Identifier("B"));
+  QCOMPARE(defB->abstractType(), defClassA->abstractType());
+  QVERIFY(defB->isTypeAlias());
+  QCOMPARE(defB->kind(), Declaration::Type);
+  QCOMPARE(defB->comment(), QString("This is a typedef"));
   
-  QVERIFY( !dynamic_cast<CppTypeAliasType*>(findDeclaration(top,  Identifier("B"))->abstractType().data()) ); //Just verify that CppTypeAliasType is not used, because it isn't(maybe remove that class?)
+  QVERIFY( !dynamic_cast<CppTypeAliasType*>(defB->abstractType().data()) ); //Just verify that CppTypeAliasType is not used, because it isn't(maybe remove that class?)
   
   release(top);
 }

@@ -9,6 +9,7 @@
 #include "dumptree.h"
 #include "tokens.h"
 #include "parsesession.h"
+#include "commentformatter.h"
 
 #include "testconfig.h"
 
@@ -216,21 +217,21 @@ private slots:
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
     
-    QCOMPARE(ast->comment(), QString("TranslationUnitComment"));
+    QCOMPARE(CommentFormatter::formatComment(ast->comments, lastSession), QString("TranslationUnitComment"));
 
     const ListNode<DeclarationAST*>* it = ast->declarations;
     QVERIFY(it);
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(it->element->comment(), QString("Hello\n(behind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("Hello\n(behind)"));
 
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(it->element->comment(), QString("Hello2\n(behind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("Hello2\n(behind)"));
     
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(it->element->comment(), QString("beforeTest\n(testBehind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("beforeTest\n(testBehind)"));
   }
 
   void testParseFile()
@@ -249,13 +250,14 @@ private slots:
    }
 
 private:
+  ParseSession* lastSession;
 
   TranslationUnitAST* parse(const QByteArray& unit, pool* mem_pool)
   {
     Parser parser(&control);
-    ParseSession* session = new ParseSession();
-    session->setContents(unit);
-    return  parser.parse(session);
+    lastSession = new ParseSession();
+    lastSession->setContents(unit);
+    return  parser.parse(lastSession);
   }
 
 

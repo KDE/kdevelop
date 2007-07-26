@@ -19,31 +19,13 @@
 #include <QString>
 #include <set>
 
-class CommentFormatter {
-    public:
-    
-    static QString formatComment( QString comment );
-  private:
-    static inline bool isWhite( QChar c ) {
-        return c.isSpace();
-    }
-    
-    static void rStrip( QString str, QString& from );
-        
-    static void strip( QString str, QString& from );
-};
+class ParseSession;
 
 class Comment {
   public:
-    Comment( QString text = "", int line = -1 );
-
-    Comment( int line );
-
-    void operator += ( Comment rhs );
+    Comment( size_t token = 0, int line = -1 );
 
     operator bool() const;
-
-    operator QString();
 
     inline int line() const {
         return m_line;
@@ -58,13 +40,13 @@ class Comment {
             return c1.line() < c2.line();
         }
     };
+
+    size_t token() const {
+      return m_token;
+    }
   private:
-    QString m_text;
     int m_line;
-    bool m_formatted;
-    
-    
-    void format();
+    size_t m_token;
 };
 
 

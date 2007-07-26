@@ -16,124 +16,12 @@
    Boston, MA 02110-1301, USA.
 */
 #include "commentparser.h"
-#include <QStringList>
 
-void CommentFormatter::rStrip( QString str, QString& from ) {
-  if( str.isEmpty() ) return;
-
-  int i = 0;
-  int ip = from.length();
-  int s = from.length();
-
-  for( int a = s-1; a >= 0; a-- ) {
-      if( isWhite( from[a] ) ) {
-          continue;
-      } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
-      }
-  }
-
-  if( ip != (int)from.length() ) from = from.left( ip );
-}
-
-void CommentFormatter::strip( QString str, QString& from ) {
-  if( str.isEmpty() ) return;
-
-  int i = 0;
-  int ip = 0;
-  int s = from.length();
-
-  for( int a = 0; a < s; a++ ) {
-      if( isWhite( from[a] ) ) {
-          continue;
-      } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a+1;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
-      }
-  }
-
-  if( ip ) from = from.mid( ip );
-}
-
-QString CommentFormatter::formatComment( QString comment ) {
-  QString ret;
-  int i = 0;
-  int s = comment.length();
-  while( i < s && comment[i] == '/' ) {
-      i++;
-  }
-
-  if( i > 1 ) {
-      ret = comment.mid( i );
-  } else {
-      ///remove the star in each line
-      QStringList lines = comment.split( "\n", QString::KeepEmptyParts );
-
-      if( lines.isEmpty() ) return ret;
-
-      strip( "/**", lines.front() );
-      rStrip( "/**", lines.back() );
-
-      QStringList::iterator it = lines.begin();
-      ++it;
-      QStringList::iterator eit = lines.end();
-
-      if( it != lines.end() ) {
-          --eit;
-
-          for( ; it != eit; ++it ) {
-              strip( "*", *it );
-          }
-
-          if( lines.front().trimmed().isEmpty() )
-              lines.pop_front();
-
-          if( lines.back().trimmed().isEmpty() )
-              lines.pop_back();
-      }
-
-      ret = lines.join( "\n" );
-  }
-
-  return ret;
-}
-
-void Comment::format() {
-  if( m_formatted ) return;
-  m_formatted = true;
-  m_text = CommentFormatter::formatComment( m_text );
-}
-
-Comment::Comment( QString text, int line ) : m_text( text ), m_line( line ), m_formatted(false) {
-}
-
-Comment::Comment( int line ) : m_line( line ) {
-}
-
-void Comment::operator += ( Comment rhs ) {
-    format();
-    rhs.format();
-    m_text += " " + rhs.m_text;
+Comment::Comment( size_t token, int line ) : m_line(line), m_token( token ) {
 }
 
 Comment::operator bool() const {
-    return !m_text.isEmpty();
-}
-
-Comment::operator QString() {
-    format();
-    return m_text;
+    return m_line != -1;
 }
 
 bool Comment::operator < ( Comment& rhs ) const {
@@ -141,8 +29,7 @@ bool Comment::operator < ( Comment& rhs ) const {
 }
 
 bool Comment::isSame ( const Comment& rhs ) {
-    if( rhs.m_formatted ) format();
-    return m_text == rhs.m_text;
+    return m_token == rhs.m_token;
 }
 
 Comment CommentStore::takeComment( int line ) {
@@ -179,9 +66,10 @@ void CommentStore::addComment( Comment comment ) {
     CommentSet::iterator it = m_comments.find( comment );
     if( it != m_comments.end() ) {
         if( comment.isSame( *it ) ) return;
-        Comment c = *it;
+        ///@todo comment-merging?
+/*        Comment c = *it;
         c += comment;
-        comment = c;
+        comment = c;*/
         m_comments.erase( it );
     }
 
