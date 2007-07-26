@@ -28,13 +28,24 @@ namespace Sublime {
 // struct DocumentPrivate
 
 struct DocumentPrivate {
+    DocumentPrivate(Document *doc): m_document(doc) {}
+
     void removeView(QObject *obj)
     {
         views.removeAll(reinterpret_cast<Sublime::View*>(obj));
+        emit m_document->viewNumberChanged(m_document);
+        //no need to keep empty document - we need to remove it
+        if (views.count() == 0)
+        {
+            emit m_document->aboutToDelete(m_document);
+            m_document->deleteLater();
+        }
     }
 
     Controller *controller;
     QList<View*> views;
+
+    Document *m_document;
 };
 
 
@@ -42,7 +53,7 @@ struct DocumentPrivate {
 //class Document
 
 Document::Document(const QString &title, Controller *controller)
-    :QObject(controller), d( new DocumentPrivate() )
+    :QObject(controller), d( new DocumentPrivate(this) )
 {
     setObjectName(title);
     d->controller = controller;
@@ -80,6 +91,7 @@ QString Document::title() const
 
 View *Document::newView(Document *doc)
 {
+    emit viewNumberChanged(this);
     return new View(doc);
 }
 

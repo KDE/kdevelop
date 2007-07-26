@@ -165,10 +165,10 @@ void MainWindowPrivate::fileNew()
 
 void MainWindowPrivate::fileClose()
 {
-    IDocument *doc = Core::self()->documentController()->activeDocument();
-    if( !doc )
+    Sublime::View *view = m_mainWindow->activeView();
+    if (!view)
         return;
-    Core::self()->documentControllerInternal()->closeDocument( doc->url() );
+    m_mainWindow->area()->removeView(view);
 }
 
 void MainWindowPrivate::viewAddNewToolView()

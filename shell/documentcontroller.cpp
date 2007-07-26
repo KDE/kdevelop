@@ -126,6 +126,16 @@ struct DocumentControllerPrivate {
         int id;
     };
 
+    void removeDocument(Sublime::Document *doc)
+    {
+        QList<KUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
+        foreach (const KUrl &url, urlsForDoc)
+        {
+            kDebug() << "destroying document " << doc << endl;
+            documents.remove(url);
+        }
+    }
+
     QList<HistoryEntry> backHistory;
     QList<HistoryEntry> forwardHistory;
     bool isJumping;
@@ -233,6 +243,9 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         delete doc;
         return 0;
     }
+    //react on document deletion - we need to cleanup controller structures
+    connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), this, SLOT(removeDocument(Sublime::Document*)));
+
     //find a view if there's one already opened in this area
     Sublime::View *partView = 0;
     foreach (Sublime::View *view, sdoc->views())
@@ -275,8 +288,10 @@ void DocumentController::closeDocument( const KUrl &url )
     if( !d->documents.contains(url) )
         return;
 
-    IDocument *doc = d->documents.take(url);
-    doc->close();
+    //this will remove all views and after the last view is removed, the
+    //document will be self-destructed and removeDocument() slot will catch that
+    //and clean up internal data structures
+    d->documents[url]->close();
 }
 
 IDocument * DocumentController::documentForUrl( const KUrl & url ) const

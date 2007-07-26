@@ -33,6 +33,10 @@ Boston, MA 02110-1301, USA.
 
 #include <shellexport.h>
 
+namespace Sublime {
+    class Document;
+}
+
 namespace KDevelop {
 
 /**
@@ -86,6 +90,8 @@ public Q_SLOTS:
     virtual void closeDocument( const KUrl &url );
 
 private:
+    Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
+
     struct DocumentControllerPrivate *d;
 };
 

@@ -57,6 +57,13 @@ public:
     /**@return the document title.*/
     QString title() const;
 
+Q_SIGNALS:
+    /**Emitted when the view is added or deleted. Use Document::views to find out
+    which views and how many of them are still there.*/
+    void viewNumberChanged(Sublime::Document *doc);
+    /**Emitted when the document is about to be deleted but is still in valid state.*/
+    void aboutToDelete(Sublime::Document *doc);
+
 protected:
     /**Creates and returns the new view. Reimplement in subclasses to instantiate
     views of derived from Sublime::View classes.*/
@@ -71,6 +78,7 @@ private:
 
     struct DocumentPrivate *const d;
 
+    friend struct DocumentPrivate;
     friend class ViewWidgetCreator;
 };
 
