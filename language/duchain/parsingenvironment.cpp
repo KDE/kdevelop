@@ -61,6 +61,11 @@ bool IdentifiedFile::operator<( const IdentifiedFile& rhs ) const {
   return d->m_url < rhs.url() || (d->m_url == rhs.url() && d->m_identity < rhs.identity() );
 }
 
+IdentifiedFile::IdentifiedFile(const IdentifiedFile& rhs) : d(new IdentifiedFilePrivate) {
+  d->m_url = rhs.url();
+  d->m_identity = rhs.identity();
+}
+
 IdentifiedFile& IdentifiedFile::operator=( const IdentifiedFile& rhs ) {
   d->m_url = rhs.url();
   d->m_identity = rhs.identity();

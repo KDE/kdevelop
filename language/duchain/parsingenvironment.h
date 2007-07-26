@@ -39,6 +39,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile
 {
   public:
     IdentifiedFile();
+    IdentifiedFile(const IdentifiedFile&);
 
     explicit IdentifiedFile( const KUrl& url , uint identity = 0 );
 
