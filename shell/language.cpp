@@ -71,7 +71,7 @@ QMutex *Language::parseMutex(QThread *thread) const
 
     if (!d->parseMutexes.contains(thread)) {
         connect(thread, SIGNAL(finished()), SLOT(threadFinished()));
-        d->parseMutexes.insert(thread, new QMutex);
+        d->parseMutexes.insert(thread, new QMutex(QMutex::Recursive));
     }
 
     return d->parseMutexes[thread];
