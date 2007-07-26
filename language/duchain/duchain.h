@@ -89,7 +89,7 @@ public:
    */
   static DUChainLock* lock();
 
-  QList<DUChainObserver*>& observers() const;
+  QList<DUChainObserver*> observers() const;
   void addObserver(DUChainObserver* observer);
   void removeObserver(DUChainObserver* observer);
 
