@@ -52,7 +52,7 @@ KFileTreeViewItem* StdFileTreeBranchItem::createTreeViewItem( KFileTreeViewItem*
     FileTreeWidget *lv = static_cast<StdFileTreeViewItem*>( parent )->listView();
     const KURL fileURL = fileItem->url();
 
-    const bool isDirectory = lv->isInProject( fileURL.path() );
+    bool isDirectory = lv->projectFiles().contains( fileURL.path() ) > 0;
 
     return new StdFileTreeViewItem( parent, fileItem, this, isDirectory );
 }

@@ -146,7 +146,7 @@ KFileTreeViewItem* VCSFileTreeBranchItem::createTreeViewItem( KFileTreeViewItem*
 
     FileTreeWidget *lv = static_cast<filetreeview::FileTreeViewItem*>( parent )->listView();
     const KURL fileURL = fileItem->url();
-    const bool isDirectory = lv->isInProject( fileURL.path() );
+    bool isDirectory = lv->projectFiles().findIndex( fileURL.path() ) != -1;
 
     VCSFileTreeViewItem *newItem = new VCSFileTreeViewItem( parent, fileItem, this, isDirectory );
 
