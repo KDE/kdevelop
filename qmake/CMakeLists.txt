@@ -64,6 +64,7 @@ set(kdevqmakemanager_PART_SRCS
     qmakemodelitems.cpp
     qmakeprojectscope.cpp
     qmakemkspecs.cpp
+    qmakefile.cpp
 )
 
 

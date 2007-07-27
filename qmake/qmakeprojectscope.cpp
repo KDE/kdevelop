@@ -21,13 +21,11 @@
 #include "qmakeprojectscope.h"
 
 #include <QtCore/QList>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
 
 #include <kurl.h>
 #include <kdebug.h>
 
-#include "qmakedriver.h"
 #include "qmakeast.h"
 
 const QStringList QMakeProjectScope::FileVariables = QStringList() << "IDLS"
@@ -36,40 +34,8 @@ const QStringList QMakeProjectScope::FileVariables = QStringList() << "IDLS"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
-    : m_ast(0)
+    : QMakeFile(projectfile), m_mkSpecs(0)
 {
-    m_projectFileUrl = projectfile;
-    QFileInfo fi( projectfile.toLocalFile() );
-    kDebug(9024) << k_funcinfo << "Is " << projectfile << " a dir?" << fi.isDir() << endl;
-    if( fi.isDir() )
-    {
-        QDir dir( m_projectFileUrl.toLocalFile() );
-        QStringList l = dir.entryList( QStringList() << "*.pro" );
-
-        QString projectfile;
-
-        if( !l.count() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
-        {
-            projectfile = fi.baseName() + ".pro";
-        }else
-        {
-            projectfile = l.first();
-        }
-        m_projectFileUrl.adjustPath( KUrl::AddTrailingSlash );
-        m_projectFileUrl.setFileName( projectfile );
-    }
-    QMake::Driver d;
-    d.readFile( m_projectFileUrl.toLocalFile() );
-    if( !d.parse( &m_ast ) )
-    {
-        kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.toLocalFile() << endl;
-        delete m_ast;
-        m_ast = 0;
-        m_projectFileUrl = KUrl();
-    }else
-    {
-        kDebug(9024) << "found ast:" << m_ast->statements().count() << endl;
-    }
 }
 
 void QMakeProjectScope::setMkSpecs( QMakeMkSpecs* mkspecs )
@@ -80,13 +46,13 @@ void QMakeProjectScope::setMkSpecs( QMakeMkSpecs* mkspecs )
 QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
 {
     kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
-    if( !m_ast )
+    if( !ast() )
         return QList<QMakeProjectScope*>();
 
-    kDebug(9024) << k_funcinfo << "I have " << m_ast->statements().count() << " statements" << endl;
+    kDebug(9024) << k_funcinfo << "I have " << ast()->statements().count() << " statements" << endl;
 
     QList<QMakeProjectScope*> list;
-    foreach( QMake::StatementAST* stmt, m_ast->statements() )
+    foreach( QMake::StatementAST* stmt, ast()->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
 
@@ -115,13 +81,13 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
 KUrl::List QMakeProjectScope::files() const
 {
     kDebug(9024) << k_funcinfo << "Fetching files" << endl;
-    if( !m_ast )
+    if( !ast() )
         return KUrl::List();
 
-    kDebug(9024) << k_funcinfo << "I have " << m_ast->statements().count() << " statements" << endl;
+    kDebug(9024) << k_funcinfo << "I have " << ast()->statements().count() << " statements" << endl;
 
     KUrl::List list;
-    foreach( QMake::StatementAST* stmt, m_ast->statements() )
+    foreach( QMake::StatementAST* stmt, ast()->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
         if( ast && QMakeProjectScope::FileVariables.indexOf( ast->variable()->value()  ) != -1 )
@@ -140,7 +106,7 @@ KUrl::List QMakeProjectScope::files() const
             }
         }
     }
-    list.append( m_projectFileUrl );
+    list.append( absoluteFileUrl() );
     kDebug(9024) << k_funcinfo << "found " << list.size() << " files" << endl;
     return list;
 }
@@ -148,13 +114,13 @@ KUrl::List QMakeProjectScope::files() const
 QStringList QMakeProjectScope::targets() const
 {
     kDebug(9024) << k_funcinfo << "Fetching targets" << endl;
-    if( !m_ast )
+    if( !ast() )
         return QStringList();
 
-    kDebug(9024) << k_funcinfo << "I have " << m_ast->statements().count() << " statements" << endl;
+    kDebug(9024) << k_funcinfo << "I have " << ast()->statements().count() << " statements" << endl;
 
     QStringList list;
-    foreach( QMake::StatementAST* stmt, m_ast->statements() )
+    foreach( QMake::StatementAST* stmt, ast()->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
         if( ast && ast->variable()->value() == "INSTALLS" )
@@ -174,15 +140,8 @@ QStringList QMakeProjectScope::targets() const
     return list;
 }
 
-KUrl QMakeProjectScope::absoluteDirUrl() const
-{
-    return m_projectFileUrl.directory();
-}
-
 QMakeProjectScope::~QMakeProjectScope()
 {
-    delete m_ast;
-    m_ast = 0;
 }
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

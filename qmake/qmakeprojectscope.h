@@ -21,42 +21,31 @@
 #ifndef QMAKEPROJECTSCOPE_H
 #define QMAKEPROJECTSCOPE_H
 
-#include <kurl.h>
-#include <QtCore/QHash>
+#include "qmakefile.h"
 
 template <typename T> class QList;
 
-namespace QMake{
-    class ProjectAST;
-}
-
 class QMakeMkSpecs;
 
-class QMakeProjectScope
+class QMakeProjectScope : public QMakeFile
 {
-    public:
+public:
 
-        static const QStringList FileVariables;
+    static const QStringList FileVariables;
 
-        QMakeProjectScope( const KUrl& projectfile );
-        ~QMakeProjectScope();
+    QMakeProjectScope( const KUrl& projectfile );
+    ~QMakeProjectScope();
 
-        QList<QMakeProjectScope*> subProjects() const;
+    QList<QMakeProjectScope*> subProjects() const;
 
-        KUrl::List files() const;
+    KUrl::List files() const;
 
-        QStringList targets() const;
+    QStringList targets() const;
 
-        KUrl absoluteDirUrl() const;
+    void setMkSpecs( QMakeMkSpecs* mkspecs );
 
-        KUrl absoluteFileUrl() const { return m_projectFileUrl; }
-
-        void setMkSpecs( QMakeMkSpecs* mkspecs );
-
-    private:
-        QMake::ProjectAST* m_ast;
-        KUrl m_projectFileUrl;
-        QMakeMkSpecs* m_mkSpecs;
+private:
+    QMakeMkSpecs* m_mkSpecs;
 };
 
 #endif
