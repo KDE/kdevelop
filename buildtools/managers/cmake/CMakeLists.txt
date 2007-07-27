@@ -39,7 +39,6 @@ kde4_add_kcfg_files( cmakecommon_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon ${KDE4_KDEUI_LIBS}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} )
-set_target_properties(kdevcmakecommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
 
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )

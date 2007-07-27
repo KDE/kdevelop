@@ -19,7 +19,6 @@ set(kdevcppexpressionparser_LIB_SRCS
 
 kde4_add_library(kdevcppexpressionparser SHARED ${kdevcppexpressionparser_LIB_SRCS})
 target_link_libraries(kdevcppexpressionparser ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} kdevcppparser kdevcppduchainbuilder)
-set_target_properties(kdevcppexpressionparser PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevcppexpressionparser DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
