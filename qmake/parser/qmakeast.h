@@ -24,11 +24,13 @@
 #include <QtCore/QString>
 #include <QtCore/QList>
 
+#include "parserexport.h"
+
 namespace QMake
 {
     class ValueAST;
 
-    class AST
+    class KDEVQMAKEPARSER_EXPORT AST
     {
         public:
 
@@ -58,7 +60,7 @@ namespace QMake
     };
 
 
-    class StatementAST : public AST
+    class KDEVQMAKEPARSER_EXPORT StatementAST : public AST
     {
         public:
             explicit StatementAST( AST* parent = 0 );
@@ -72,7 +74,7 @@ namespace QMake
     };
 
 
-    class ScopeBodyAST: public AST
+    class KDEVQMAKEPARSER_EXPORT ScopeBodyAST: public AST
     {
         public:
             explicit ScopeBodyAST( AST* parent = 0 );
@@ -91,7 +93,7 @@ namespace QMake
     /**
      * Represents a QMake Project file
      */
-    class ProjectAST : public ScopeBodyAST
+    class KDEVQMAKEPARSER_EXPORT ProjectAST : public ScopeBodyAST
     {
         public:
             explicit ProjectAST( AST* parent = 0 );
@@ -109,7 +111,7 @@ namespace QMake
 
     };
 
-    class AssignmentAST : public StatementAST
+    class KDEVQMAKEPARSER_EXPORT AssignmentAST : public StatementAST
     {
         public:
             explicit AssignmentAST( AST* parent = 0 );
@@ -130,7 +132,7 @@ namespace QMake
     };
 
 
-    class ScopeAST : public StatementAST
+    class KDEVQMAKEPARSER_EXPORT ScopeAST : public StatementAST
     {
         public:
             explicit ScopeAST( AST* parent = 0 );
@@ -141,7 +143,7 @@ namespace QMake
             ScopeBodyAST* m_body;
     };
 
-    class FunctionCallAST : public ScopeAST
+    class KDEVQMAKEPARSER_EXPORT FunctionCallAST : public ScopeAST
     {
         public:
             explicit FunctionCallAST( AST* parent = 0 );
@@ -158,7 +160,7 @@ namespace QMake
     };
 
 
-    class SimpleScopeAST : public ScopeAST
+    class KDEVQMAKEPARSER_EXPORT SimpleScopeAST : public ScopeAST
     {
         public:
             explicit SimpleScopeAST( AST* parent = 0);
@@ -169,7 +171,7 @@ namespace QMake
         private:
     };
 
-    class OrAST : public ScopeAST
+    class KDEVQMAKEPARSER_EXPORT OrAST : public ScopeAST
     {
         public:
             explicit OrAST( AST* parent = 0 );
@@ -186,7 +188,7 @@ namespace QMake
             QList<ScopeAST*> m_scopes;
     };
 
-    class ValueAST : public AST
+    class KDEVQMAKEPARSER_EXPORT ValueAST : public AST
     {
         public:
             explicit ValueAST( AST* parent = 0 );

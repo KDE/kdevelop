@@ -23,13 +23,15 @@
 
 #include <QtCore/QString>
 
+#include "parserexport.h"
+
 namespace QMake
 {
 class ProjectAST;
 /**
  * Class to parse a QMake project file or a string containing a QMake project structure
  */
-class Driver
+class KDEVQMAKEPARSER_EXPORT Driver
 {
     public:
         Driver();
