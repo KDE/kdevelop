@@ -208,10 +208,12 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
     // If an item is selected, fill the file context with selected files' list
     if (item)
     {
+        kdDebug(9017) << "filling popup for: " << item->text() << endl;
         m_impl->fillPopupMenu( &popup, item );
         FileContext context( m_impl->selectedPathUrls() );
         m_part->core()->fillContextMenu( &popup, &context );
     }
+
 
     popup.exec( p );
 }
@@ -239,11 +241,14 @@ bool FileTreeWidget::isInProject(const QString &fileName) const
 
 void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constructing )
 {
-    kdDebug(9017) << "files added to project: " << fileList.count() << endl;
+    kdDebug(9017) << "files added to project: " << fileList << endl;
 
     QStringList::ConstIterator it;
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
+        if( *it == QString::null )
+            continue;
+        kdDebug(9017) << "adding file: " << *it << endl;
         QString file = projectDirectory() + "/" + ( *it );
         if ( !m_projectFiles.contains( file ) )
         {
