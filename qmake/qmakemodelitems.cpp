@@ -24,7 +24,7 @@
 #include <QtCore/QPair>
 #include <QtCore/QList>
 
-#include "qmakeprojectscope.h"
+#include "qmakeprojectfile.h"
 
 QMakeProjectItem::QMakeProjectItem( KDevelop::IProject* project, QMakeProjectFile* scope,
                                 const QString& name, const KUrl& url, QStandardItem* parent )

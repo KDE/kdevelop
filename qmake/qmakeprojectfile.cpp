@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "qmakeprojectscope.h"
+#include "qmakeprojectfile.h"
 
 #include <QtCore/QList>
 #include <QtCore/QStringList>
