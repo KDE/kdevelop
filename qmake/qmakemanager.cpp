@@ -39,7 +39,7 @@
 #include <projectmodel.h>
 
 #include "qmakemodelitems.h"
-#include "qmakeprojectscope.h"
+#include "qmakeprojectfile.h"
 
 typedef KGenericFactory<QMakeProjectManager> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakemanager,
@@ -81,15 +81,15 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 
     kDebug(9024) << k_funcinfo << "Item is a qmakefolder: " << endl;
 
-    foreach( QMakeProjectScope* subproject, folderitem->projectScope()->subProjects() )
+    foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
     {
         folderList.append( new QMakeFolderItem( item->project(), subproject, subproject->absoluteDirUrl(), item ) );
     }
-    foreach( KUrl u, folderitem->projectScope()->files() )
+    foreach( KUrl u, folderitem->projectFile()->files() )
     {
         new KDevelop::ProjectFileItem( item->project(), u, item );
     }
-    foreach( QString s, folderitem->projectScope()->targets() )
+    foreach( QString s, folderitem->projectFile()->targets() )
     {
         new QMakeTargetItem( item->project(), s,  item );
     }
@@ -126,7 +126,7 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         projecturl.setFileName( projectfile );
         QHash<QString,QString> qmvars = queryQMake( project );
         QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QT_INSTALL_MKSPECS"] ), qmvars );
-        QMakeProjectScope* scope = new QMakeProjectScope( projecturl );
+        QMakeProjectFile* scope = new QMakeProjectFile( projecturl );
         scope->setMkSpecs( mkspecs );
         return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
@@ -141,7 +141,7 @@ KUrl QMakeProjectManager::findMakefile( KDevelop::ProjectFolderItem* folder ) co
     {
         return KUrl();
     }
-    return qmitem->projectScope()->absoluteFileUrl();
+    return qmitem->projectFile()->absoluteFileUrl();
 }
 
 KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* folder ) const
@@ -153,7 +153,7 @@ KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* fold
     }
     KUrl::List l;
 
-    l.append( qmitem->projectScope()->absoluteFileUrl() );
+    l.append( qmitem->projectFile()->absoluteFileUrl() );
     return l;
 }
 

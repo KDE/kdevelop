@@ -28,30 +28,30 @@
 
 #include "qmakeast.h"
 
-const QStringList QMakeProjectScope::FileVariables = QStringList() << "IDLS"
+const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
         << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES"
         << "INTERFACES" << "FORMS" ;
 
-QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
+QMakeProjectFile::QMakeProjectFile( const KUrl& projectfile )
     : QMakeFile(projectfile), m_mkSpecs(0)
 {
 }
 
-void QMakeProjectScope::setMkSpecs( QMakeMkSpecs* mkspecs )
+void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 {
     m_mkSpecs = mkspecs;
 }
 
-QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
+QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
 {
     kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
     if( !ast() )
-        return QList<QMakeProjectScope*>();
+        return QList<QMakeProjectFile*>();
 
     kDebug(9024) << k_funcinfo << "I have " << ast()->statements().count() << " statements" << endl;
 
-    QList<QMakeProjectScope*> list;
+    QList<QMakeProjectFile*> list;
     foreach( QMake::StatementAST* stmt, ast()->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
@@ -67,7 +67,7 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
                     KUrl u = absoluteDirUrl();
                     u.adjustPath( KUrl::AddTrailingSlash );
                     u.setFileName( value->value().trimmed() );
-                    QMakeProjectScope* qmscope = new QMakeProjectScope( u );
+                    QMakeProjectFile* qmscope = new QMakeProjectFile( u );
                     qmscope->setMkSpecs( m_mkSpecs );
                     list.append( qmscope );
                 }
@@ -78,7 +78,7 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
     return list;
 }
 
-KUrl::List QMakeProjectScope::files() const
+KUrl::List QMakeProjectFile::files() const
 {
     kDebug(9024) << k_funcinfo << "Fetching files" << endl;
     if( !ast() )
@@ -90,7 +90,7 @@ KUrl::List QMakeProjectScope::files() const
     foreach( QMake::StatementAST* stmt, ast()->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
-        if( ast && QMakeProjectScope::FileVariables.indexOf( ast->variable()->value()  ) != -1 )
+        if( ast && QMakeProjectFile::FileVariables.indexOf( ast->variable()->value()  ) != -1 )
         {
             kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable()->value() << endl;
             foreach( QMake::ValueAST* value, ast->values() )
@@ -111,7 +111,7 @@ KUrl::List QMakeProjectScope::files() const
     return list;
 }
 
-QStringList QMakeProjectScope::targets() const
+QStringList QMakeProjectFile::targets() const
 {
     kDebug(9024) << k_funcinfo << "Fetching targets" << endl;
     if( !ast() )
@@ -140,7 +140,7 @@ QStringList QMakeProjectScope::targets() const
     return list;
 }
 
-QMakeProjectScope::~QMakeProjectScope()
+QMakeProjectFile::~QMakeProjectFile()
 {
 }
 

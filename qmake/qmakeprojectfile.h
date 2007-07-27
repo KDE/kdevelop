@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QMAKEPROJECTSCOPE_H
-#define QMAKEPROJECTSCOPE_H
+#ifndef QMAKEPROJECTFILE_H
+#define QMAKEPROJECTFILE_H
 
 #include "qmakefile.h"
 
@@ -27,16 +27,16 @@ template <typename T> class QList;
 
 class QMakeMkSpecs;
 
-class QMakeProjectScope : public QMakeFile
+class QMakeProjectFile : public QMakeFile
 {
 public:
 
     static const QStringList FileVariables;
 
-    QMakeProjectScope( const KUrl& projectfile );
-    ~QMakeProjectScope();
+    QMakeProjectFile( const KUrl& projectfile );
+    ~QMakeProjectFile();
 
-    QList<QMakeProjectScope*> subProjects() const;
+    QList<QMakeProjectFile*> subProjects() const;
 
     KUrl::List files() const;
 

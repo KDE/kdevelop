@@ -23,25 +23,25 @@
 
 #include <projectmodel.h>
 
-class QMakeProjectScope;
+class QMakeProjectFile;
 
 
 class QMakeFolderItem : public KDevelop::ProjectFolderItem
 {
 public:
-    QMakeFolderItem( KDevelop::IProject*, QMakeProjectScope*, const KUrl&, QStandardItem* parent = 0 );
+    QMakeFolderItem( KDevelop::IProject*, QMakeProjectFile*, const KUrl&, QStandardItem* parent = 0 );
     virtual ~QMakeFolderItem();
-    QMakeProjectScope* projectScope() const;
+    QMakeProjectFile* projectFile() const;
 
 private:
-    QMakeProjectScope* m_projectScope;
+    QMakeProjectFile* m_projectFile;
 };
 
 
 class QMakeProjectItem : public KDevelop::ProjectItem, public QMakeFolderItem
 {
 public:
-    QMakeProjectItem( KDevelop::IProject*, QMakeProjectScope*, const QString&, const KUrl&, QStandardItem* parent = 0 );
+    QMakeProjectItem( KDevelop::IProject*, QMakeProjectFile*, const QString&, const KUrl&, QStandardItem* parent = 0 );
     virtual ~QMakeProjectItem();
 };
 

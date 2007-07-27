@@ -62,7 +62,7 @@ add_subdirectory(tests)
 set(kdevqmakemanager_PART_SRCS
     qmakemanager.cpp
     qmakemodelitems.cpp
-    qmakeprojectscope.cpp
+    qmakeprojectfile.cpp
     qmakemkspecs.cpp
     qmakefile.cpp
 )

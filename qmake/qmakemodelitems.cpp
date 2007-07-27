@@ -26,7 +26,7 @@
 
 #include "qmakeprojectscope.h"
 
-QMakeProjectItem::QMakeProjectItem( KDevelop::IProject* project, QMakeProjectScope* scope,
+QMakeProjectItem::QMakeProjectItem( KDevelop::IProject* project, QMakeProjectFile* scope,
                                 const QString& name, const KUrl& url, QStandardItem* parent )
 : KDevelop::ProjectItem( project, name, parent ), QMakeFolderItem( project, scope, url )
 {
@@ -36,15 +36,15 @@ QMakeProjectItem::~QMakeProjectItem()
 {
 }
 
-QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, QMakeProjectScope* scope,
+QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, QMakeProjectFile* scope,
                                 const KUrl& url, QStandardItem* parent )
-: KDevelop::ProjectFolderItem( project, url, parent ), m_projectScope( scope )
+: KDevelop::ProjectFolderItem( project, url, parent ), m_projectFile( scope )
 {
 }
 
-QMakeProjectScope* QMakeFolderItem::projectScope() const
+QMakeProjectFile* QMakeFolderItem::projectFile() const
 {
-    return m_projectScope;
+    return m_projectFile;
 }
 
 QMakeFolderItem::~QMakeFolderItem()
