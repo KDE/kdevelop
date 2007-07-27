@@ -55,6 +55,9 @@ While construction:
 #include <duchain/ducontext.h>
 #undef protected
 
+#include <QSet>
+#include <QMutex>
+
 #include <duchain/abstractfunctiondeclaration.h>
 #include <duchain/declaration.h>
 #include <duchain/duchainlock.h>
@@ -67,6 +70,7 @@ While construction:
 using namespace KDevelop;
 
 namespace Cpp {
+extern QMutex cppDuContextSpecializationsMutex;
 
 /**
  * This is a du-context template that wraps the c++-specific logic around existing DUContext specializations.
@@ -83,6 +87,17 @@ class CppDUContext : public BaseContext {
     ///Both parameters will be reached to the base-class. This fits TopDUContext.
     template<class Param1, class Param2>
     CppDUContext( Param1* p1, Param2* p2) : BaseContext(p1, p2), m_specializedFrom(0) {
+    }
+
+    ~CppDUContext() {
+      //Specializations will be destroyed the same time this is destroyed
+      QSet<CppDUContext<BaseContext>*> specializations;
+      {
+        QMutexLocker l(&cppDuContextSpecializationsMutex);
+        specializations = m_specializations;
+      }
+      foreach( CppDUContext<BaseContext>* specialization, specializations )
+        delete specialization;
     }
     
     ///Overridden to take care of templates
@@ -243,17 +258,11 @@ class CppDUContext : public BaseContext {
           foreach( Declaration* decl, decls ) {
             Declaration* copy = decl->clone();
             
-            if(decl->internalContext()) ///@todo think about how dangerous the const_cast is
-              specializeDeclarationContext( const_cast<CppDUContext*>(this), decl->internalContext(), QList<Cpp::ExpressionEvaluationResult>(), copy );
-            else ///@todo think about how dangerous the const_cast is
-              copy->setContext(const_cast<KDevelop::DUContext*>((KDevelop::DUContext*)this)); //At least make sure the context is set.
+            specializeDeclarationContext( const_cast<CppDUContext*>(this), decl->internalContext(), QList<Cpp::ExpressionEvaluationResult>(), copy, decl );
 
-            ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
-            AbstractType::Ptr changedType = resolveDelayedTypes( copy->abstractType(), copy->internalContext() ? copy->internalContext() : this );
-            if( changedType != copy->abstractType() ) {
-              DUChainWriteLocker lock(DUChain::lock());
-              copy->setAbstractType( changedType );
-            }
+            ///specializeDeclarationContext moved the declaration into this context anonymously, but we want to be able to find it
+            copy->setContext(const_cast<CppDUContext*>(this));
+            
             ret << copy;
           }
         }
@@ -274,19 +283,28 @@ class CppDUContext : public BaseContext {
     }
 
     /**
-     * Set the context which this is specialized from
+     * Set the context which this is specialized from. This context will be strictly attached to that context, and will be deleted once the other is deleted.
      * */
-    void setSpecializedFrom( KDevelop::DUContext* context ) {
+    void setSpecializedFrom( CppDUContext<BaseContext>* context ) {
+      QMutexLocker l(&cppDuContextSpecializationsMutex);
+      
+      if( m_specializedFrom )
+        m_specializedFrom->m_specializations.remove( this );
       m_specializedFrom = context;
+      m_specializedFrom->m_specializations.insert( this );
     }
 
     /**
-     * If this returns true, this context is a specialization of some other context, and that other context will be returned here.
+     * If this returns nonzero value, this context is a specialization of some other context, and that other context will be returned here.
      * */
-    KDevelop::DUContext* specializedFrom() const {
-      return const_cast<KDevelop::DUContext*>(m_specializedFrom.data()); ///@todo change data() so no const cast is needed 
+    CppDUContext<BaseContext>* specializedFrom() const {
+      return m_specializedFrom;
     }
 
+    virtual bool inDUChain() const {
+      return m_specializedFrom || BaseContext::inDUChain();
+    }
+    
   private:
 
     Declaration* specializeDeclaration( Declaration* decl, const QList<Cpp::ExpressionEvaluationResult>& templateArguments ) const
@@ -303,7 +321,10 @@ class CppDUContext : public BaseContext {
       return templateDecl->specialize( templateArguments );
     }
 
-    DUContextPointer m_specializedFrom;
+    CppDUContext<BaseContext>* m_specializedFrom;
+
+    ///Every access to m_specializations must be serialized through specializationsMutex, because they may be written without a write-lock
+    QSet<CppDUContext<BaseContext>* > m_specializations;
 };
 
 }

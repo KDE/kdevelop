@@ -129,11 +129,11 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     node->ducontext = topLevelContext;
 
     if (includes) {
-      foreach (DUContext* parent, topLevelContext->importedParentContexts())
-        if (includes->contains(parent))
-          includes->removeAll(parent);
+      foreach (DUContextPointer parent, topLevelContext->importedParentContexts())
+        if (includes->contains(parent.data()))
+          includes->removeAll(parent.data());
         else
-          topLevelContext->removeImportedParentContext(parent);
+          topLevelContext->removeImportedParentContext(parent.data());
 
       foreach (DUContext* included, *includes)
         topLevelContext->addImportedParentContext(included);

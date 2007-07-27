@@ -228,8 +228,8 @@ void TestExpressionParser::testSmartPointer() {
   QCOMPARE(specialDecl->internalContext()->importedParentContexts().count(), 1); //Only the template-contexts are imported
   QCOMPARE(baseDecl->internalContext()->importedParentContexts().count(), 1);
 
-  DUContext* specialTemplateContext = specialDecl->internalContext()->importedParentContexts().first();
-  DUContext* baseTemplateContext = baseDecl->internalContext()->importedParentContexts().first();
+  DUContext* specialTemplateContext = specialDecl->internalContext()->importedParentContexts().first().data();
+  DUContext* baseTemplateContext = baseDecl->internalContext()->importedParentContexts().first().data();
   QVERIFY(specialTemplateContext != baseTemplateContext);
   QCOMPARE(specialTemplateContext->type(), DUContext::Template);
   QCOMPARE(baseTemplateContext->type(), DUContext::Template);

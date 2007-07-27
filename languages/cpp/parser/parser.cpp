@@ -75,8 +75,20 @@ Parser::~Parser()
 {
 }
 
+void Parser::rewind(size_t position) {
+  session->token_stream->rewind(position);
+
+  //Search the previous valid token
+
+  _M_last_valid_token = position > 0 ? position-1 : position;
+  
+  while( _M_last_valid_token > 0 && session->token_stream->kind(_M_last_valid_token) == Token_comment )
+    --_M_last_valid_token;
+}
+
 void Parser::advance( bool skipComment ) {
-  if( session->token_stream->lookAhead() != Token_comment )
+  size_t t = session->token_stream->lookAhead();
+  if(  t != Token_comment )
     _M_last_valid_token = session->token_stream->cursor();
 
   session->token_stream->nextToken();
@@ -220,7 +232,7 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
   node->specifier = specifier;
   node->modifier = modifier;
 
-  UPDATE_POS(node, start, ++_M_last_valid_token);
+  UPDATE_POS(node, start, _M_last_valid_token+1);
 
   return true;
 }
@@ -456,7 +468,7 @@ bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
           Q_ASSERT(n != 0);
           if (!acceptTemplateId)
             {
-              session->token_stream->rewind(n->start_token);
+              rewind(n->start_token);
               parseUnqualifiedName(n, false);
             }
 
@@ -468,7 +480,7 @@ bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
   if (idx == session->token_stream->cursor())
     return false;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -507,7 +519,7 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
         }
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -572,7 +584,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
             ast->storage_specifiers = storageSpec;
             ast->type_specifier = spec;
             ast->init_declarators = declarators;
-            UPDATE_POS(ast, start, ++_M_last_valid_token);
+            UPDATE_POS(ast, start, _M_last_valid_token+1);
             node = ast;
 
             if( mcomment )
@@ -586,7 +598,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
             
             return true;
           } else {
-            session->token_stream->rewind(start);
+            rewind(start);
             if( parseDeclarationInternal(node) ) {
               //Add the comments to the declaration
               if( mcomment )
@@ -629,7 +641,7 @@ bool Parser::parseLinkageSpecification(DeclarationAST *&node)
       reportError(("Declaration syntax error"));
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -677,7 +689,7 @@ bool Parser::parseLinkageBody(LinkageBodyAST *&node)
   else
     advance();
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
   
   return true;
@@ -710,7 +722,7 @@ bool Parser::parseNamespace(DeclarationAST *&node)
             = CreateNode<NamespaceAliasDefinitionAST>(session->mempool);
           ast->namespace_name = namespace_name;
           ast->alias_name = name;
-          UPDATE_POS(ast, start, ++_M_last_valid_token);
+          UPDATE_POS(ast, start, _M_last_valid_token+1);
 
           node = ast;
           return true;
@@ -759,7 +771,7 @@ bool Parser::parseUsing(DeclarationAST *&node)
 
   ADVANCE(';', ";");
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -782,7 +794,7 @@ bool Parser::parseUsingDirective(DeclarationAST *&node)
 
   UsingDirectiveAST *ast = CreateNode<UsingDirectiveAST>(session->mempool);
   ast->name = name;
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -818,7 +830,7 @@ bool Parser::parseOperatorFunctionId(OperatorFunctionIdAST *&node)
         ast->ptr_ops = snoc(ast->ptr_ops, ptr_op, session->mempool);
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
   return true;
 }
@@ -889,7 +901,7 @@ bool Parser::parseTypedef(DeclarationAST *&node)
   ast->type_specifier = spec;
   ast->init_declarators = declarators;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   preparseLineComments( --ast->end_token );
@@ -918,7 +930,7 @@ bool Parser::parseAsmDefinition(DeclarationAST *&node)
 
   AsmDefinitionAST *ast = CreateNode<AsmDefinitionAST>(session->mempool);
   ast->cv = cv;
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -957,7 +969,7 @@ bool Parser::parseTemplateDeclaration(DeclarationAST *&node)
   ast->template_parameters = params;
   ast->declaration = declaration;
 
-  UPDATE_POS(ast, start, declaration ? declaration->end_token : ++_M_last_valid_token);
+  UPDATE_POS(ast, start, declaration ? declaration->end_token : _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1042,7 +1054,7 @@ bool Parser::parseOperator(OperatorAST *&node)
         }
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1117,7 +1129,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
           if (session->token_stream->lookAhead() != ')')
             {
               ast->type_id = 0;
-              session->token_stream->rewind(saved);
+              rewind(saved);
               parseUnaryExpression(ast->expression);
             }
           ADVANCE(')', ")");
@@ -1129,7 +1141,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
     }
   else if (onlyIntegral)
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
   else
@@ -1137,12 +1149,12 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
       if (!parseName(ast->name, true))
         {
           ast->name = 0;
-          session->token_stream->rewind(start);
+          rewind(start);
           return false;
         }
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1174,7 +1186,7 @@ bool Parser::parsePtrOperator(PtrOperatorAST *&node)
       {
         if (!parsePtrToMember(ast->mem_ptr))
           {
-            session->token_stream->rewind(start);
+            rewind(start);
             return false;
           }
       }
@@ -1187,7 +1199,7 @@ bool Parser::parsePtrOperator(PtrOperatorAST *&node)
 
   parseCvQualify(ast->cv);
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1203,7 +1215,7 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
   if (!parseTypeId(typeId) || (session->token_stream->lookAhead() != ','
                                && session->token_stream->lookAhead() != '>'))
     {
-      session->token_stream->rewind(start);
+      rewind(start);
 
       if (!parseLogicalOrExpression(expr, true))
         return false;
@@ -1213,7 +1225,7 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
   ast->type_id = typeId;
   ast->expression = expr;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1229,7 +1241,7 @@ bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
   TypeSpecifierAST *ast = 0;
   if (!parseElaboratedTypeSpecifier(ast) && !parseSimpleTypeSpecifier(ast))
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
 
@@ -1278,7 +1290,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
         }
       else
         {
-          session->token_stream->rewind(start);
+          rewind(start);
           return false;
         }
 
@@ -1325,7 +1337,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
         && !(isVector || tok == '(' || tok == ','
              || tok == ';' || tok == '='))
       {
-        session->token_stream->rewind(start);
+        rewind(start);
         return false;
       }
 
@@ -1337,7 +1349,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
         ParameterDeclarationClauseAST *params = 0;
         if (!parseParameterDeclarationClause(params))
           {
-            session->token_stream->rewind(index);
+            rewind(index);
             goto update_pos;
           }
 
@@ -1345,7 +1357,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
 
         if (session->token_stream->lookAhead() != ')')
           {
-            session->token_stream->rewind(index);
+            rewind(index);
             goto update_pos;
           }
 
@@ -1386,7 +1398,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
   }
 
  update_pos:
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1412,7 +1424,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
 
       if (!parseAbstractDeclarator(decl))
         {
-          session->token_stream->rewind(index);
+          rewind(index);
           goto label1;
         }
 
@@ -1420,7 +1432,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
 
       if (session->token_stream->lookAhead() != ')')
         {
-          session->token_stream->rewind(start);
+          rewind(start);
           return false;
         }
       advance();
@@ -1458,7 +1470,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
         && !(isVector || tok == '(' || tok == ','
              || tok == ';' || tok == '='))
       {
-        session->token_stream->rewind(start);
+        rewind(start);
         return false;
       }
 
@@ -1470,7 +1482,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
         ParameterDeclarationClauseAST *params = 0;
         if (!parseParameterDeclarationClause(params))
           {
-            session->token_stream->rewind(index);
+            rewind(index);
             goto update_pos;
           }
 
@@ -1478,7 +1490,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
 
         if (session->token_stream->lookAhead() != ')')
           {
-            session->token_stream->rewind(index);
+            rewind(index);
             goto update_pos;
           }
 
@@ -1493,7 +1505,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
   if (session->token_stream->cursor() == start)
     return false;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1510,7 +1522,7 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
 
   if (session->token_stream->lookAhead() != '{')
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
   advance();
@@ -1541,7 +1553,7 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
   
   ADVANCE_NR('}', "}");
   
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1588,7 +1600,7 @@ bool Parser::parseTemplateParameter(TemplateParameterAST *&node)
   else if (!parseParameterDeclaration(ast->parameter_declaration))
     return false;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1618,14 +1630,14 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
                 if(!parseTypeId(ast->type_id))
                   {
                     //syntaxError();
-                    session->token_stream->rewind(start);
+                    rewind(start);
                     return false;
                   }
               }
             else if (session->token_stream->lookAhead() != ','
                      && session->token_stream->lookAhead() != '>')
               {
-                session->token_stream->rewind(start);
+                rewind(start);
                 return false;
               }
           }
@@ -1675,7 +1687,7 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
     } // end switch
 
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
   return true;
 }
@@ -1721,7 +1733,7 @@ bool Parser::parseTypeId(TypeIdAST *&node)
   TypeSpecifierAST *spec = 0;
   if (!parseTypeSpecifier(spec))
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
 
@@ -1732,7 +1744,7 @@ bool Parser::parseTypeId(TypeIdAST *&node)
   ast->type_specifier = spec;
   ast->declarator = decl;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1792,7 +1804,7 @@ bool Parser::parseParameterDeclarationClause(ParameterDeclarationClauseAST *&nod
     }
 
   /// @todo add ellipsis
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1805,7 +1817,7 @@ bool Parser::parseParameterDeclarationList(const ListNode<ParameterDeclarationAS
   ParameterDeclarationAST *param = 0;
   if (!parseParameterDeclaration(param))
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
 
@@ -1820,7 +1832,7 @@ bool Parser::parseParameterDeclarationList(const ListNode<ParameterDeclarationAS
 
       if (!parseParameterDeclaration(param))
         {
-          session->token_stream->rewind(start);
+          rewind(start);
           return false;
         }
       node = snoc(node, param, session->mempool);
@@ -1840,7 +1852,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationAST *&node)
   TypeSpecifierAST *spec = 0;
   if (!parseTypeSpecifier(spec))
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
 
@@ -1849,7 +1861,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationAST *&node)
   DeclaratorAST *decl = 0;
   if (!parseDeclarator(decl))
     {
-      session->token_stream->rewind(index);
+      rewind(index);
 
       // try with abstract declarator
       parseAbstractDeclarator(decl);
@@ -1870,7 +1882,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationAST *&node)
   ast->declarator = decl;
   ast->expression = expr;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1910,7 +1922,7 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
 
   if (session->token_stream->lookAhead() != '{')
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
 
@@ -1944,7 +1956,7 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
   
   ADVANCE_NR('}', "}");
   
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -1985,7 +1997,7 @@ bool Parser::parseAccessSpecifier(DeclarationAST *&node)
 
   AccessSpecifierAST *ast = CreateNode<AccessSpecifierAST>(session->mempool);
   ast->specs = specs;
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2022,7 +2034,7 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       return true;
     }
 
-  session->token_stream->rewind(start);
+  rewind(start);
 
   const ListNode<std::size_t> *cv = 0;
   parseCvQualify(cv);
@@ -2049,7 +2061,7 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       ast->storage_specifiers = storageSpec;
       ast->type_specifier = spec;
       ast->init_declarators = declarators;
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
 
       if( mcomment )
         addComment(ast,mcomment);
@@ -2064,7 +2076,7 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       
       return true;
     } else {
-      session->token_stream->rewind(start);
+      rewind(start);
       
       if( parseDeclarationInternal(node) ) {
         //Add the comments to the declaration
@@ -2096,7 +2108,7 @@ bool Parser::parseCtorInitializer(CtorInitializerAST *&node)
       reportError(("Member initializers expected"));
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2125,14 +2137,14 @@ bool Parser::parseElaboratedTypeSpecifier(TypeSpecifierAST *&node)
           ast->type = type;
           ast->name = name;
 
-          UPDATE_POS(ast, start, ++_M_last_valid_token);
+          UPDATE_POS(ast, start, _M_last_valid_token+1);
           node = ast;
 
           return true;
         }
     }
 
-  session->token_stream->rewind(start);
+  rewind(start);
   return false;
 }
 
@@ -2158,7 +2170,7 @@ bool Parser::parseExceptionSpecification(ExceptionSpecificationAST *&node)
 
   ADVANCE(')', ")");
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2184,7 +2196,7 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
         }
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   if( m_commentStore.hasComment() )
@@ -2222,7 +2234,7 @@ bool Parser::parseInitDeclarator(InitDeclaratorAST *&node)
   ast->declarator = decl;
   ast->initializer = init;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2253,7 +2265,7 @@ bool Parser::parseBaseClause(BaseClauseAST *&node)
       ast->base_specifiers = snoc(ast->base_specifiers, baseSpec, session->mempool);
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2285,7 +2297,7 @@ bool Parser::parseInitializer(InitializerAST *&node)
       CHECK(')');
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2333,7 +2345,7 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
   ast->initializer_id = initId;
   ast->expression = expr;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2403,7 +2415,7 @@ bool Parser::parseBaseSpecifier(BaseSpecifierAST *&node)
   if (!parseName(ast->name, true))
     reportError(("Class name expected"));
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2433,7 +2445,7 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
         }
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2467,7 +2479,7 @@ bool Parser::parsePtrToMember(PtrToMemberAST *&node)
           advance();
 
           PtrToMemberAST *ast = CreateNode<PtrToMemberAST>(session->mempool);
-          UPDATE_POS(ast, start, ++_M_last_valid_token);
+          UPDATE_POS(ast, start, _M_last_valid_token+1);
           node = ast;
 
           return true;
@@ -2477,7 +2489,7 @@ bool Parser::parsePtrToMember(PtrToMemberAST *&node)
         advance();
     }
 
-  session->token_stream->rewind(start);
+  rewind(start);
   return false;
 }
 
@@ -2537,12 +2549,12 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
           else
             {
               ast->template_arguments = 0;
-              session->token_stream->rewind(index);
+              rewind(index);
             }
         }
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2563,7 +2575,7 @@ bool Parser::parseStringLiteral(StringLiteralAST *&node)
       advance();
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2581,7 +2593,7 @@ bool Parser::parseExpressionStatement(StatementAST *&node)
   ExpressionStatementAST *ast = CreateNode<ExpressionStatementAST>(session->mempool);
   ast->expression = expr;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
   return true;
 }
@@ -2643,7 +2655,7 @@ bool Parser::parseStatement(StatementAST *&node)
         ReturnStatementAST *ast = CreateNode<ReturnStatementAST>(session->mempool);
         ast->expression = expr;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
 
         node = ast;
       }
@@ -2673,7 +2685,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
 
   std::size_t end = session->token_stream->cursor();
 
-  session->token_stream->rewind(start);
+  rewind(start);
   StatementAST *expr_ast = 0;
   maybe_amb &= parseExpressionStatement(expr_ast);
   maybe_amb &= session->token_stream->kind(session->token_stream->cursor() - 1) == ';';
@@ -2686,12 +2698,12 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
       ast->declaration = decl_ast;
       ast->expression = expr_ast;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
   else
     {
-      session->token_stream->rewind(std::max(end, session->token_stream->cursor()));
+      rewind(std::max(end, session->token_stream->cursor()));
 
       node = decl_ast;
       if (!node)
@@ -2722,7 +2734,7 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
       DeclaratorAST *decl = 0;
       if (!parseDeclarator(decl))
         {
-          session->token_stream->rewind(declarator_start);
+          rewind(declarator_start);
           if (!initRequired && !parseAbstractDeclarator(decl))
             decl = 0;
         }
@@ -2738,19 +2750,19 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
               parseExpression(ast->expression);
             }
 
-          UPDATE_POS(ast, start, ++_M_last_valid_token);
+          UPDATE_POS(ast, start, _M_last_valid_token+1);
           node = ast;
 
           return true;
         }
     }
 
-  session->token_stream->rewind(start);
+  rewind(start);
 
   if (!parseCommaExpression(ast->expression))
     return false;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2783,7 +2795,7 @@ bool Parser::parseWhileStatement(StatementAST *&node)
   ast->condition = cond;
   ast->statement = body;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2819,7 +2831,7 @@ bool Parser::parseDoStatement(StatementAST *&node)
   ast->statement = body;
   ast->expression = expr;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2857,7 +2869,7 @@ bool Parser::parseForStatement(StatementAST *&node)
   ast->expression = expr;
   ast->statement = body;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2903,7 +2915,7 @@ bool Parser::parseCompoundStatement(StatementAST *&node)
   ADVANCE_NR('}', "}");
 
   
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2948,7 +2960,7 @@ bool Parser::parseIfStatement(StatementAST *&node)
         }
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -2980,7 +2992,7 @@ bool Parser::parseSwitchStatement(StatementAST *&node)
   ast->condition = cond;
   ast->statement = stmt;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3070,7 +3082,7 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   TypeSpecifierAST *spec = 0;
   if (!parseTypeSpecifierOrClassSpec(spec))
     { // replace with simpleTypeSpecifier?!?!
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
 
@@ -3082,7 +3094,7 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
 
   if (session->token_stream->lookAhead() != ';')
     {
-      session->token_stream->rewind(start);
+      rewind(start);
       return false;
     }
   advance();
@@ -3094,7 +3106,7 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   if(mcomment)
     addComment(ast, mcomment);
   
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3121,7 +3133,7 @@ bool Parser::parseNamespaceAliasDefinition(DeclarationAST *&node)
 
   ADVANCE(';', ";");
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3138,7 +3150,7 @@ bool Parser::parseDeclarationStatement(StatementAST *&node)
   DeclarationStatementAST *ast = CreateNode<DeclarationStatementAST>(session->mempool);
   ast->declaration = decl;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3177,7 +3189,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
     {
       // no type specifier, maybe a constructor or a cast operator??
 
-      session->token_stream->rewind(index);
+      rewind(index);
 
       InitDeclaratorAST *declarator = 0;
       if (parseInitDeclarator(declarator))
@@ -3193,7 +3205,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
                 ast->init_declarators = snoc(ast->init_declarators,
                                              declarator, session->mempool);
 
-                UPDATE_POS(ast, start, ++_M_last_valid_token);
+                UPDATE_POS(ast, start, _M_last_valid_token+1);
                 node = ast;
               }
               return true;
@@ -3215,7 +3227,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
                     ast->function_body = funBody;
                     ast->constructor_initializers = ctorInit;
 
-                    UPDATE_POS(ast, start, ++_M_last_valid_token);
+                    UPDATE_POS(ast, start, _M_last_valid_token+1);
                     node = ast;
 
                     return true;
@@ -3236,7 +3248,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
                     ast->init_declarator = declarator;
                     ast->function_body = funBody;
 
-                    UPDATE_POS(ast, start, ++_M_last_valid_token);
+                    UPDATE_POS(ast, start, _M_last_valid_token+1);
                     node = ast;
 
                     return true;
@@ -3255,7 +3267,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
     }
 
  start_decl:
-  session->token_stream->rewind(index);
+  rewind(index);
 
   if (session->token_stream->lookAhead() == Token_const
       && session->token_stream->lookAhead(1) == Token_identifier
@@ -3279,7 +3291,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
       SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(session->mempool);
       ast->init_declarators = declarators;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
       
       return true;
@@ -3309,7 +3321,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
             }
           else
             {
-              session->token_stream->rewind(startDeclarator);
+              rewind(startDeclarator);
               if (!parseInitDeclaratorList(declarators))
                 {
                   syntaxError();
@@ -3332,7 +3344,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
             ast->win_decl_specifiers = winDeclSpec;
             ast->init_declarators = declarators;
 
-            UPDATE_POS(ast, start, ++_M_last_valid_token);
+            UPDATE_POS(ast, start, _M_last_valid_token+1);
             node = ast;
           }
           return true;
@@ -3358,7 +3370,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
                 ast->init_declarator = decl;
                 ast->function_body = funBody;
                 
-                UPDATE_POS(ast, start, ++_M_last_valid_token);
+                UPDATE_POS(ast, start, _M_last_valid_token+1);
                 node = ast;
 
                 return true;
@@ -3495,7 +3507,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
       break;
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3529,7 +3541,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
 
         ast->subscript = expr;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3544,7 +3556,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
         FunctionCallAST *ast = CreateNode<FunctionCallAST>(session->mempool);
         ast->arguments = expr;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3570,7 +3582,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
         ast->op = op;
         ast->name = name;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3584,7 +3596,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
         IncrDecrExpressionAST *ast = CreateNode<IncrDecrExpressionAST>(session->mempool);
         ast->op = op;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3634,7 +3646,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
             ast->sub_expressions = snoc(ast->sub_expressions, e, session->mempool);
           }
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3658,7 +3670,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
         ast->name = name;
         ast->expression = expr;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3673,7 +3685,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
         CHECK(')');
 
         TypeIdentificationAST *ast = CreateNode<TypeIdentificationAST>(session->mempool);
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3702,14 +3714,14 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
           if (parseCastExpression(cast_expr)
               && cast_expr->kind == AST::Kind_CastExpression)
             {
-              session->token_stream->rewind(saved_pos);
+              rewind(saved_pos);
               parsePrimaryExpression(expr);
               goto L_no_rewind;
             }
         }
     }
 
-  session->token_stream->rewind(saved_pos);
+  rewind(saved_pos);
 
  L_no_rewind:
   if (!expr && parseSimpleTypeSpecifier(typeSpec,true)
@@ -3726,7 +3738,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
   else
     {
       typeSpec = 0;
-      session->token_stream->rewind(start);
+      rewind(start);
 
       if (!parsePrimaryExpression(expr))
         return false;
@@ -3748,7 +3760,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
       ast->expression = expr;
       ast->sub_expressions = sub_expressions;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -3781,7 +3793,7 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
         ast->op = op;
         ast->expression = expr;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }
       return true;
@@ -3802,19 +3814,19 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
               {
                 advance(); // skip )
 
-                UPDATE_POS(ast, start, ++_M_last_valid_token);
+                UPDATE_POS(ast, start, _M_last_valid_token+1);
                 node = ast;
                 return true;
               }
 
             ast->type_id = 0;
-            session->token_stream->rewind(index);
+            rewind(index);
           }
 
         if (!parseUnaryExpression(ast->expression))
           return false;
 
-        UPDATE_POS(ast, start, ++_M_last_valid_token);
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
         return true;
       }
@@ -3872,7 +3884,7 @@ bool Parser::parseNewExpression(ExpressionAST *&node)
 
   parseNewInitializer(ast->new_initializer);
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3891,7 +3903,7 @@ bool Parser::parseNewTypeId(NewTypeIdAST *&node)
 
   parseNewDeclarator(ast->new_declarator);
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3918,7 +3930,7 @@ bool Parser::parseNewDeclarator(NewDeclaratorAST *&node)
       ADVANCE(']', "]");
     }
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3936,7 +3948,7 @@ bool Parser::parseNewInitializer(NewInitializerAST *&node)
 
   CHECK(')');
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3969,7 +3981,7 @@ bool Parser::parseDeleteExpression(ExpressionAST *&node)
   if (!parseCastExpression(ast->expression))
     return false;
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;
@@ -3993,7 +4005,7 @@ bool Parser::parseCastExpression(ExpressionAST *&node)
 
               if (parseCastExpression(ast->expression))
                 {
-                  UPDATE_POS(ast, start, ++_M_last_valid_token);
+                  UPDATE_POS(ast, start, _M_last_valid_token+1);
                   node = ast;
 
                   return true;
@@ -4002,7 +4014,7 @@ bool Parser::parseCastExpression(ExpressionAST *&node)
         }
     }
 
-  session->token_stream->rewind(start);
+  rewind(start);
   return parseUnaryExpression(node);
 }
 
@@ -4027,7 +4039,7 @@ bool Parser::parsePmExpression(ExpressionAST *&node)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4057,7 +4069,7 @@ bool Parser::parseMultiplicativeExpression(ExpressionAST *&node)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4086,7 +4098,7 @@ bool Parser::parseAdditiveExpression(ExpressionAST *&node)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4114,7 +4126,7 @@ bool Parser::parseShiftExpression(ExpressionAST *&node)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4145,7 +4157,7 @@ bool Parser::parseRelationalExpression(ExpressionAST *&node, bool templArgs)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4174,7 +4186,7 @@ bool Parser::parseEqualityExpression(ExpressionAST *&node, bool templArgs)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4202,7 +4214,7 @@ bool Parser::parseAndExpression(ExpressionAST *&node, bool templArgs)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4230,7 +4242,7 @@ bool Parser::parseExclusiveOrExpression(ExpressionAST *&node, bool templArgs)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4258,7 +4270,7 @@ bool Parser::parseInclusiveOrExpression(ExpressionAST *&node, bool templArgs)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4286,7 +4298,7 @@ bool Parser::parseLogicalAndExpression(ExpressionAST *&node, bool templArgs)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4314,7 +4326,7 @@ bool Parser::parseLogicalOrExpression(ExpressionAST *&node, bool templArgs)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4349,7 +4361,7 @@ bool Parser::parseConditionalExpression(ExpressionAST *&node)
       ast->left_expression = leftExpr;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4380,7 +4392,7 @@ bool Parser::parseAssignmentExpression(ExpressionAST *&node)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4418,7 +4430,7 @@ bool Parser::parseCommaExpression(ExpressionAST *&node)
       ast->left_expression = node;
       ast->right_expression = rightExpr;
 
-      UPDATE_POS(ast, start, ++_M_last_valid_token);
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
     }
 
@@ -4436,7 +4448,7 @@ bool Parser::parseThrowExpression(ExpressionAST *&node)
 
   parseAssignmentExpression(ast->expression);
 
-  UPDATE_POS(ast, start, ++_M_last_valid_token);
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
   return true;

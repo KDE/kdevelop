@@ -20,6 +20,8 @@
 #define TEMPLATEDECLARATION_H
 
 #include <QList>
+#include <QMutex>
+
 #include <duchain/declaration.h>
 #include <duchain/duchainpointer.h>
 #include "expressionparser.h"
@@ -67,7 +69,7 @@ namespace Cpp {
       KDevelop::Declaration* specialize( const QList<ExpressionEvaluationResult>& templateArguments );
 
       bool isSpecializedFrom(const TemplateDeclaration* other) const;
-      
+
     private:
 
       //The context in which the template-parameters are declared
@@ -75,6 +77,9 @@ namespace Cpp {
       TemplateDeclaration* m_specializedFrom;
       QList<ExpressionEvaluationResult> m_specializedWith;
       typedef QHash<QList<ExpressionEvaluationResult>, TemplateDeclaration*> SpecializationHash;
+
+      static QMutex specializationsMutex;
+      ///Every access to m_specializations must be serialized through specializationsMutex!
       SpecializationHash m_specializations;
       
   };
@@ -98,6 +103,10 @@ namespace Cpp {
     SpecialTemplateDeclaration( KTextEditor::Range* range, KDevelop::DUContext* context ) : BaseDeclaration(range, context) {
     }
 
+    virtual bool inDUChain() const {
+      return specializedFrom() || BaseDeclaration::inDUChain();
+    }
+    
     virtual KDevelop::Declaration* clone() const {
       return new SpecialTemplateDeclaration(*this);
     }
@@ -108,14 +117,15 @@ namespace Cpp {
   /**
    * The given context should be one that, on some level, imports a template-parameter-declaration context.
    * The given declaration will be registered anonymously, the same for the created contexts.
-   * @param parentContext he parent-context everything should be created in(specializedDeclaration will be moved into that context)
-   * @param context A du-context that will be copied and used as internal context for declaration
+   * @param parentContext he parent-context everything should be created in(specializedDeclaration will be moved into that context anonymously)
+   * @param context A du-context that will be copied and used as internal context for declaration. If this is zero, no context will be copied.
    * @param templateArguments The template-arguments that will be used to specialize the input-context. If this is empty, the intersting context will be only copied without specialization.
-   * @param specializedDeclaration The copied declaration this should belong to. If this is set, the created context will be made the given declaration's internal-context, and it's parent-context will be set to the given context's parent-context.
+   * @param specializedDeclaration The copied declaration this should belong to. If this is set, the created context will be made the given declaration's internal-context, and it's parent-context will be set to the given context's parent-context. Also delayed types in the declaration will be resolved(The declaration will be changed)
+   * @param specializedFrom The declaration specializedDeclaration should be/is specialized from. This is needed to eventually change the declaration of in IdentifiedType
    *
    * The DU-Context must be read-locked but not write-locked when this is called.
    * */
-  CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* specializedDeclaration  );
+  CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* specializedDeclaration, KDevelop::Declaration* specializedFrom  );
 
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.

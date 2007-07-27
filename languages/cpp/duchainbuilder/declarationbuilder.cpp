@@ -245,6 +245,13 @@ KDevelop::DUContext* hasTemplateContext( const QList<KDevelop::DUContext*>& cont
   return 0;
 }
 
+KDevelop::DUContext* hasTemplateContext( const QList<KDevelop::DUContextPointer>& contexts ) {
+  foreach( DUContextPointer context, contexts )
+    if( context.data() && context->type() == KDevelop::DUContext::Template )
+      return context.data();
+  return 0;
+}
+
 //Check whether the given context is a template-context by checking whether it imports a template-parameter context
 KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
   return hasTemplateContext( context->importedParentContexts() );

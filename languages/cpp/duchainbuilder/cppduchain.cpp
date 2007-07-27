@@ -19,6 +19,7 @@
 #include "cppduchain.h"
 #include <ducontext.h>
 #include <identifier.h>
+#include <duchainpointer.h>
 #include "cppduchainbuilderexport.h"
 
 
@@ -36,9 +37,10 @@ KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> findLocalDeclaration
   if( context->type() != DUContext::Class )
     return ret;
   
-  QList<DUContext*> bases = context->importedParentContexts();
-  for( QList<DUContext*>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
-    ret += findLocalDeclarations( *it, identifier );
+  QList<DUContextPointer> bases = context->importedParentContexts();
+  for( QList<DUContextPointer>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
+    if( *it )
+      ret += findLocalDeclarations( (*it).data(), identifier );
   }
   return ret;
 }
@@ -53,9 +55,10 @@ KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> localDeclarations( K
     return ret;
 
   ///@todo exclude overloaded functions
-  QList<DUContext*> bases = context->importedParentContexts();
-  for( QList<DUContext*>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
-    ret += localDeclarations( *it );
+  QList<DUContextPointer> bases = context->importedParentContexts();
+  for( QList<DUContextPointer>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
+    if( *it )
+      ret += localDeclarations( (*it).data() );
   }
   return ret;
 }

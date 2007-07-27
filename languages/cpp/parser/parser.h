@@ -196,7 +196,7 @@ public:
   void addComment( CommentAST* ast, const Comment& comment );
   
   void advance(bool skipComment = true);
-
+  void rewind(size_t position);
   // private:
   TokenStream* token_stream;
   LocationTable* location_table;

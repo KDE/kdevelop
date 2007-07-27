@@ -28,6 +28,7 @@
 #include <ducontext.h>
 #include <declaration.h>
 #include <definition.h>
+#include <duchainpointer.h>
 #include <use.h>
 #include "parser/parsesession.h"
 
@@ -174,6 +175,8 @@ DumpChain::~ DumpChain( )
 void DumpChain::dump( DUContext * context, bool imported )
 {
   kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << " \"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
+  if( !context )
+    return;
   if (!imported) {
     foreach (Declaration* dec, context->localDeclarations()) {
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
@@ -187,8 +190,8 @@ void DumpChain::dump( DUContext * context, bool imported )
 
   ++indent;
   if (!imported) {
-    foreach (DUContext* parent, context->importedParentContexts()) {
-      dump(parent, true);
+    foreach (DUContextPointer parent, context->importedParentContexts()) {
+      dump(parent.data(), true);
     }
 
     foreach (DUContext* child, context->childContexts())

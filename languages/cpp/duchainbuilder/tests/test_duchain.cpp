@@ -396,7 +396,7 @@ void TestDUChain::testDeclareFor()
   QCOMPARE(forCtx->localDeclarations().count(), 0);
   QVERIFY(forCtx->localScopeIdentifier().isEmpty());
 
-  DUContext* forParamCtx = forCtx->importedParentContexts().first();
+  DUContext* forParamCtx = forCtx->importedParentContexts().first().data();
   QVERIFY(forParamCtx->parentContext());
   QCOMPARE(forParamCtx->importedParentContexts().count(), 0);
   QCOMPARE(forParamCtx->childContexts().count(), 0);
@@ -473,7 +473,7 @@ void TestDUChain::testDeclareStruct()
   QCOMPARE(ctorImplCtx->localDeclarations().count(), 0);
   QVERIFY(ctorImplCtx->localScopeIdentifier().isEmpty());
 
-  DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first();
+  DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().data();
   QVERIFY(ctorCtx->parentContext());
   QCOMPARE(ctorCtx->childContexts().count(), 0);
   QCOMPARE(ctorCtx->localDeclarations().count(), 2);

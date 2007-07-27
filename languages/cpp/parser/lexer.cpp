@@ -581,7 +581,7 @@ void Lexer::scan_divide()
         (*session->token_stream)[index++].kind = Token_comment;
         (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
         (*session->token_stream)[index-1].position = commentBegin - session->contents();
-        (*session->token_stream)[index-1].text = commentBegin;
+        (*session->token_stream)[index-1].text = session->contents();
       }
     }
   else

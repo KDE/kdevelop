@@ -72,7 +72,7 @@ void CommentFormatter::strip( QString str, QString& from ) {
 
 QString CommentFormatter::formatComment( size_t token, const ParseSession* session ) {
   const Token& commentToken( (*session->token_stream)[token] );
-  return formatComment( QString::fromUtf8( QByteArray(commentToken.text, commentToken.size) ) );
+  return formatComment( QString::fromUtf8( QByteArray(commentToken.text+commentToken.position, commentToken.size) ) );
 }
 
 QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const ParseSession* session ) {

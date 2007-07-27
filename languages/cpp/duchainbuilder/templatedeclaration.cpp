@@ -24,6 +24,8 @@
 using namespace KDevelop;
 using namespace Cpp;
 
+QMutex TemplateDeclaration::specializationsMutex;
+
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
 uint qHash( const ExpressionEvaluationResult& key ) {
@@ -54,16 +56,25 @@ TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0), m_specialize
 }
 
 TemplateDeclaration::~TemplateDeclaration()
-{ ///Delete all slave-declarations
-  if( m_specializedFrom ) {
-    SpecializationHash::iterator it = m_specializedFrom->m_specializations.find(m_specializedWith);
-    if( it != m_specializedFrom->m_specializations.end() && *it == this )
-      m_specializedFrom->m_specializations.erase(it);
-    
-    m_specializedFrom = 0;
+{ 
+  
+  SpecializationHash specializations;
+  {
+    QMutexLocker l(&specializationsMutex);
+    specializations = m_specializations;
+
+    ///Unregister at the declaration this one is specialized from
+    if( m_specializedFrom ) {
+      SpecializationHash::iterator it = m_specializedFrom->m_specializations.find(m_specializedWith);
+      if( it != m_specializedFrom->m_specializations.end() && *it == this )
+        m_specializedFrom->m_specializations.erase(it);
+      
+      m_specializedFrom = 0;
+    }
   }
 
-  foreach( TemplateDeclaration* decl, m_specializations ) {
+  ///Delete all slave-declarations
+  foreach( TemplateDeclaration* decl, specializations ) {
     ///Specializations should always be anonymous, so we can delete them here.
     decl->m_specializedFrom = 0;
     delete decl;
@@ -75,12 +86,17 @@ TemplateDeclaration* TemplateDeclaration::specializedFrom() const {
 }
 
 void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* from, const QList<ExpressionEvaluationResult>& templateArguments) {
+  QMutexLocker l(&specializationsMutex);
+  if( m_specializedFrom )
+    m_specializedFrom->m_specializations.remove(m_specializedWith);
   m_specializedFrom = from;
   m_specializedWith = templateArguments;
   from->m_specializations.insert(templateArguments, this);
 }
 
 bool TemplateDeclaration::isSpecializedFrom(const TemplateDeclaration* other) const {
+    QMutexLocker l(&specializationsMutex);
+  
     SpecializationHash::const_iterator it = other->m_specializations.find(m_specializedWith);
     if( it != other->m_specializations.end() && (*it) == this )
       return true;
@@ -101,10 +117,8 @@ bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
   return (bool)dynamic_cast<const TemplateDeclaration*>(decl);
 }
 
-CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* specializedDeclaration  )
+CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* specializedDeclaration, Declaration* specializedFrom )
 {
-  DUChainWriteLocker lock(DUChain::lock());
-  
   if( specializedDeclaration ) {
     ///Move the specialized declaration anonymously into the parent-context
     specializedDeclaration->setContext(parentContext, true);
@@ -125,114 +139,120 @@ CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUCon
       specializedDeclaration->setIdentifier(id);
     }
   }
+
+  StandardCppDUContext* contextCopy = 0;
   
-  if( !context ) {
-    ///Note: this is possible, for example for template function-declarations(They do not have an internal context, because they have no compound statement)
-    return 0;
-  }
+  if( context ) {
+    ///Specialize involved contexts
+    Q_ASSERT(context->parentContext()); //Top-context is not allowed
+    contextCopy = new StandardCppDUContext(context->textRangePtr(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be specialized
+    contextCopy->setRangeOwning(KDevelop::DocumentRangeObject::DontOwn); //The range belongs to the original context, so flag it not to be owned by the context
+    contextCopy->setType(context->type());
+    contextCopy->setLocalScopeIdentifier(context->localScopeIdentifier());
 
-  Q_ASSERT(context->parentContext()); //Top-context is not allowed
-  StandardCppDUContext* contextCopy = new StandardCppDUContext(context->textRangePtr(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be specialized
-  contextCopy->setRangeOwning(KDevelop::DocumentRangeObject::DontOwn); //The range belongs to the original context, so flag it not to be owned by the context
-  contextCopy->setType(context->type());
-  contextCopy->setLocalScopeIdentifier(context->localScopeIdentifier());
-
-  kDebug() << "Created context " << contextCopy << " as specialization of context " << context << endl;
-  
-  if( specializedDeclaration )
-    specializedDeclaration->setInternalContext(contextCopy);
-
-  contextCopy->setSpecializedFrom(context);
-
-  ///Now the created context is already partially functional and can be used for searching(not the specialized template-params though)
-  
-  if(context->type() == KDevelop::DUContext::Template && !templateArguments.isEmpty()) { //templateArguments may be empty, that means that only copying should happen.
-    ///Specialize the local template-declarations
-
-    QList<ExpressionEvaluationResult>::const_iterator currentArgument = templateArguments.begin();
+    kDebug() << "Created context " << contextCopy << " as specialization of context " << context << endl;
     
-    foreach(Declaration* decl, context->localDeclarations())
-    {
-      TemplateParameterDeclaration* templateDecl = dynamic_cast<TemplateParameterDeclaration*>(decl);
-      Q_ASSERT(templateDecl); //Only template-parameter declarations are allowed in template-contexts
-      TemplateParameterDeclaration* declCopy = dynamic_cast<TemplateParameterDeclaration*>(decl->clone());
-      Q_ASSERT(declCopy);
+    if( specializedDeclaration )
+      specializedDeclaration->setInternalContext(contextCopy);
 
-      if( currentArgument != templateArguments.end() )
+    
+    ///Now the created context is already partially functional and can be used for searching(not the specialized template-params yet though)
+    
+    if(context->type() == KDevelop::DUContext::Template && !templateArguments.isEmpty()) { //templateArguments may be empty, that means that only copying should happen.
+      ///Specialize the local template-declarations
+
+      QList<ExpressionEvaluationResult>::const_iterator currentArgument = templateArguments.begin();
+      
+      foreach(Declaration* decl, context->localDeclarations())
       {
-        declCopy->setAbstractType( currentArgument->type );
-        
-        ++currentArgument;
-      } else {
-        //templateDecl->defaultParameter()
-        ///@todo Use default-parameters! Use the expression-parser here to resolve the default-parameters(If the default-parameter is not a valid qualified identifier)
-        kDebug() << "missing template-argument" << endl;
+        TemplateParameterDeclaration* templateDecl = dynamic_cast<TemplateParameterDeclaration*>(decl);
+        Q_ASSERT(templateDecl); //Only template-parameter declarations are allowed in template-contexts
+        TemplateParameterDeclaration* declCopy = dynamic_cast<TemplateParameterDeclaration*>(decl->clone());
+        Q_ASSERT(declCopy);
+
+        if( currentArgument != templateArguments.end() )
+        {
+          declCopy->setAbstractType( currentArgument->type );
+          
+          ++currentArgument;
+        } else {
+          //templateDecl->defaultParameter()
+          ///@todo Use default-parameters! Use the expression-parser here to resolve the default-parameters(If the default-parameter is not a valid qualified identifier)
+          kDebug() << "missing template-argument" << endl;
+        }
+        ///This inserts the copied declaration into the copied context
+        declCopy->setContext(contextCopy);
       }
-      ///This inserts the copied declaration into the copied context
-      declCopy->setContext(contextCopy);
     }
+    
+    foreach( KDevelop::DUContextPointer importedContext,  context->importedParentContexts() )
+    {
+      if( !importedContext)
+        continue;
+        ///For functions, the Template-context is one level deeper(it is imported by the function-context) so also copy the function-context
+      if( importedContext->type() == KDevelop::DUContext::Template || importedContext->type() == KDevelop::DUContext::Function )
+      {
+        DUContext* ctx = specializeDeclarationContext( parentContext, importedContext.data(), templateArguments, 0, 0);
+        contextCopy->addImportedParentContext( ctx, true );
+      }
+      else
+      {
+        ///@todo resolve template-dependent base-classes(They can not be found here, because their type is DelayedType and those have no context)
+        //Import all other imported contexts
+        contextCopy->addImportedParentContext( importedContext.data(), true );
+      }
+    }
+  } else {
+    ///Note: this is possible, for example for template function-declarations(They do not have an internal context, because they have no compound statement), for variables, etc.
   }
 
-  lock.unlock();
+  if( contextCopy )
+    contextCopy->setSpecializedFrom(dynamic_cast<CppDUContext<DUContext>*>(context));
+  ///Since now the context is accessible through the du-chain, so it must not be changed any more.
+    
+  if( specializedDeclaration && specializedDeclaration->abstractType() ) {
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(specializedDeclaration->abstractType().data());
+
+    ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
+    AbstractType::Ptr changedType = resolveDelayedTypes( specializedDeclaration->abstractType(), specializedDeclaration->internalContext() ? specializedDeclaration->internalContext() : parentContext );
+
+    if( changedType == specializedDeclaration->abstractType() )
+      if( idType && idType->declaration() == specializedFrom ) { //We must clone it, so we can change IdentifiedType::declaration
+        changedType = specializedDeclaration->abstractType()->clone();
+
+        IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
+        Q_ASSERT(changedIdType);
+        changedIdType->setDeclaration(specializedDeclaration);
+      }
+    
+    specializedDeclaration->setAbstractType( changedType );
+  }
   
-  foreach( const KDevelop::DUContext* importedContext,  context->importedParentContexts() )
-  {///@todo remove the const_cast's
-      ///For functions, the Template-context is one level deeper(it is imported by the function-context) so also copy the function-context
-    if( importedContext->type() == KDevelop::DUContext::Template || importedContext->type() == KDevelop::DUContext::Function )
-    {
-      DUContext* ctx = specializeDeclarationContext( parentContext, const_cast<KDevelop::DUContext*>(importedContext), templateArguments, 0);
-      lock.lock();
-      contextCopy->addImportedParentContext( ctx );
-      lock.unlock();
-    }
-    else
-    {
-      ///@todo resolve template-dependent base-classes(They can not be found here, because their type is DelayedType and those have no context)
-      //Import all other imported contexts
-      lock.lock();
-      contextCopy->addImportedParentContext(const_cast<KDevelop::DUContext*>(importedContext));
-      lock.unlock();
-    }
-  }
-
   return contextCopy;
 }
 
-///@todo register specialized declarations, re-use them, find best matching specialization, delete them when this class is deleted
-Declaration* TemplateDeclaration::specialize( const QList<ExpressionEvaluationResult>& templateArguments ) {
+///@todo Use explicitly declared specializations
+Declaration* TemplateDeclaration::specialize( const QList<ExpressionEvaluationResult>& templateArguments )
+{
+  {
+    QMutexLocker l(&specializationsMutex);
+    SpecializationHash::const_iterator it;
+    it = m_specializations.find(templateArguments);
+    if( it != m_specializations.end() )
+      return dynamic_cast<Declaration*>(*it);
+  }
 
-  SpecializationHash::const_iterator it = m_specializations.find(templateArguments);
-
-  if( it != m_specializations.end() )
-    return dynamic_cast<Declaration*>(*it);
   
   Declaration* decl = dynamic_cast<Declaration*>(this);
   Q_ASSERT(decl);
   Declaration* clone = decl->clone();
   Q_ASSERT(clone);
-
-
-  if( decl->abstractType() ) {
-    ///Also specialize the type(This usually just means that the declaration is changed, but in case of a function the arguments may be changed)
-    AbstractType::Ptr typeCopy( resolveDelayedTypes( decl->abstractType(), decl->internalContext() ? decl->internalContext() : decl->context() ) );
-    DUChainWriteLocker lock(DUChain::lock());
-
-    if( typeCopy == decl->abstractType() ) //It must be a copy, so we can change the declaration
-      typeCopy = decl->abstractType()->clone();
-    
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(typeCopy.data());
-    if( idType )
-      idType->setDeclaration(clone);
-    
-    clone->setAbstractType(typeCopy);
-  }
-
   TemplateDeclaration* cloneTemplateDecl = dynamic_cast<TemplateDeclaration*>(clone);
   Q_ASSERT(cloneTemplateDecl);
   
   ///Now eventually create the virtual contexts
-  specializeDeclarationContext( decl->context(), decl->internalContext(), templateArguments, clone );
-  
+  specializeDeclarationContext( decl->context(), decl->internalContext(), templateArguments, clone, decl );
+
   cloneTemplateDecl->setSpecializedFrom(this, templateArguments);
   
   return clone;
@@ -329,12 +349,6 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
     ///Delayed types were found. We must copy the whole type, and replace the delayed types.
 
     DelayedTypeResolver resolver(context);
-
-/*    AbstractType::Ptr temp( resolver.exchange(type.data()) );
-    if( temp ) //The whole type was a delayed type
-      return temp;
-*/
-    DUChainWriteLocker lock(DUChain::lock());
 
     AbstractType::Ptr typeCopy;
     if( delayedType )
