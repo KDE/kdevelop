@@ -155,7 +155,7 @@ public:
     }
 };
 
-SvnKJobBase::SvnKJobBase( int type, QObject *parent )
+SvnKJobBase::SvnKJobBase( int type, SubversionCore *parent )
     : VcsJob( parent ), d( new Private )
 {
     d->m_th = 0;
@@ -226,6 +226,11 @@ SubversionThread* SvnKJobBase::svnThread()
 KDevelop::VcsJob::JobType SvnKJobBase::type()
 {
     return (KDevelop::VcsJob::JobType)(d->m_type);
+}
+
+SubversionCore* SvnKJobBase::svncore()
+{
+    return dynamic_cast<SubversionCore*>(parent());
 }
 
 QString SvnKJobBase::smartError()

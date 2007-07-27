@@ -15,6 +15,7 @@
 #include "subversionthreads.h"
 #include "svnkjobbase.h"
 #include "subversion_core.h"
+#include "subversion_part.h"
 #include "interthreadevents.h"
 
 #include <QCoreApplication>
@@ -965,12 +966,12 @@ SvnDiffJob::SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2, const Sv
     , m_pathOrUrl1(pathOrUrl1), m_pathOrUrl2(pathOrUrl2), m_peg(peg), m_rev1(rev1), m_rev2(rev2)
     , m_recurse(recurse), m_ignoreAncestry(ignoreAncestry)
     , m_noDiffDeleted(noDiffDeleted), m_ignoreContentType(ignoreContentType)
-    , m_tmpDir(0), out_name(0), err_name(0)
+    , out_name(0), err_name(0)
 {}
 
 SvnDiffJob::~SvnDiffJob()
 {
-    delete m_tmpDir;
+//     delete m_tmpDir;
 }
 
 void SvnDiffJob::run()
@@ -1001,8 +1002,11 @@ void SvnDiffJob::run()
     revision2 = m_rev2.revision();
 
     // make temp files
-    m_tmpDir = new KTempDir();
-    QString tmpPath = m_tmpDir->name();
+//     m_tmpDir = new KTempDir();
+//     QString tmpPath = m_tmpDir->name();
+
+    QString tmpPath = kjob()->svncore()->svnPart()->outputTmpDir()->name();
+
     // Don't allocate in subpool. Use pool. subpool is destroyed after run() return,
     // which will destroy tempfiles. But, pool is destroyed in ~SubversionJob().
     // Slots to this job will display tempfile and delete SubversionJob*

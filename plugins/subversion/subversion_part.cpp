@@ -45,6 +45,7 @@ extern "C" {
 #include <kmenu.h>
 #include <kurl.h>
 #include <kactioncollection.h>
+#include <ktempdir.h>
 #include <qwidget.h>
 
 #include <QPointer>
@@ -78,6 +79,7 @@ public:
     KDevSubversionViewFactory *m_factory;
     QPointer<SubversionCore> m_impl;
     KUrl::List m_ctxUrlList;
+    KTempDir *m_outputTmpDir;
 };
 
 KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
@@ -90,6 +92,8 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     core()->uiController()->addToolView("Subversion", d->m_factory);
     // init svn core
     d->m_impl = new SubversionCore(this, this);
+    // init output tmp dir
+    d->m_outputTmpDir = new KTempDir();
 
     setXMLFile("kdevsubversion.rc");
 
@@ -135,6 +139,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
 KDevSubversionPart::~KDevSubversionPart()
 {
     delete d->m_impl;
+    delete d->m_outputTmpDir;
     delete d;
 }
 bool KDevSubversionPart::isVersionControlled( const KUrl& localLocation )
@@ -686,6 +691,12 @@ SubversionCore* KDevSubversionPart::svncore()
 {
     return d->m_impl;
 }
+
+KTempDir* KDevSubversionPart::outputTmpDir()
+{
+    return d->m_outputTmpDir;
+}
+
 const KUrl KDevSubversionPart::urlFocusedDocument()
 {
     KParts::ReadOnlyPart *part =

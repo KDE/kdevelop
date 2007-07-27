@@ -16,6 +16,7 @@
 #include "vcsjob.h"
 
 class SubversionThread;
+class SubversionCore;
 class QVariant;
 
 class SvnKJobBase : public KDevelop::VcsJob
@@ -24,7 +25,7 @@ class SvnKJobBase : public KDevelop::VcsJob
 public:
     friend class SubversionThread;
 
-    SvnKJobBase( int type, QObject *parent );
+    SvnKJobBase( int type, SubversionCore *parent );
     virtual ~SvnKJobBase();
 
     JobStatus status();
@@ -35,6 +36,7 @@ public:
     void setSvnThread( SubversionThread *job );
     SubversionThread *svnThread();
     KDevelop::VcsJob::JobType type();
+    SubversionCore *svncore();
 
     QString smartError(); // subversion internal
 

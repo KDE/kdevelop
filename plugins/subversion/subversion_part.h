@@ -20,6 +20,7 @@
 class QMenu;
 class KUrl;
 class SvnStatusHolder;
+class KTempDir;
 
 using namespace KDevelop;
 
@@ -137,6 +138,7 @@ public:
     QMap<KUrl, SvnStatusHolder> statusSync( const KUrl &dirPath, bool recurse,
         bool getall, bool contactReposit = false, bool noIgnore = true, bool ignoreExternals = false );
     SubversionCore* svncore();
+    KTempDir *outputTmpDir();
     const KUrl urlFocusedDocument( );
 
     QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );

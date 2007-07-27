@@ -22,10 +22,10 @@
 #include "ioutputview.h"
 #include <icore.h>
 #include <iplugincontroller.h>
+#include <idocumentcontroller.h>
 #include <kmessagebox.h>
 #include <ktabwidget.h>
 #include <ktextedit.h>
-#include <ktextbrowser.h>
 #include <klineedit.h>
 
 #include <QList>
@@ -156,30 +156,45 @@ void KDevSubversionView::printDiff( SvnKJobBase *job )
     }
 
     SvnDiffJob *th = dynamic_cast<SvnDiffJob*>( job->svnThread() );
-    if( !job ) return;
+    if( !th ) return;
 
     QFile file( th->out_name );
     if( !file.exists() ){
         KMessageBox::error( this, i18n("The output diff file cannot be located") );
         return;
     }
+    if( file.size() == 0 ){
+        KMessageBox::information( this, i18n("No subversion differences") );
+        return;
+    }
     // end of error check
 
-    KTextBrowser *widget = new KTextBrowser( tab() );
-    if ( file.open( QIODevice::ReadOnly ) ) {
-        QTextStream stream( &file );
-        QString line;
-        while ( !stream.atEnd() ) {
-            line = stream.readLine();
-            widget->append( line );
-        }
-        file.close();
-    }
+    // Below code prints diff into dockwidget, which has no advantage over katepart
+    // because printing area is small and no syntax highlighting is available.
 
-    widget->setReadOnly( true );
-    tab()->addTab( widget, i18n("Diff") );
-    tab()->setCurrentIndex( tab()->indexOf(widget) );
+//     KTextBrowser *widget = new KTextBrowser( tab() );
+//     if ( file.open( QIODevice::ReadOnly ) ) {
+//         QTextStream stream( &file );
+//         QString line;
+//         while ( !stream.atEnd() ) {
+//             line = stream.readLine();
+//             widget->append( line );
+//         }
+//         file.close();
+//     }
+//
+//     widget->setReadOnly( true );
+//     tab()->addTab( widget, i18n("Diff") );
+//     tab()->setCurrentIndex( tab()->indexOf(widget) );
 
+    openDiff( job );
+
+}
+
+void KDevSubversionView::openDiff( SvnKJobBase *job )
+{
+    SvnDiffJob *th = dynamic_cast<SvnDiffJob*>( job->svnThread() );
+    d->m_part->core()->documentController()->openDocument( KUrl(th->out_name) );
 }
 
 void KDevSubversionView::printInfo( SvnKJobBase* job )

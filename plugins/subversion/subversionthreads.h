@@ -297,7 +297,7 @@ public:
     /// Destuctor. Destroy temp dir and output/error files
     virtual ~SvnDiffJob();
 
-    KTempDir *m_tmpDir;
+//     KTempDir *m_tmpDir;
     /// full path to *.diff file output
     char *out_name;
     /// full path to error file

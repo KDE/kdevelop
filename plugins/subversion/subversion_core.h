@@ -39,6 +39,8 @@ public:
     explicit SubversionCore( KDevSubversionPart *part, QObject *parent = 0 );
     virtual ~SubversionCore();
 
+    KDevSubversionPart *svnPart(){ return m_part; }
+
     // not used anymore
 //     void cleanupFinishedThreads();
 

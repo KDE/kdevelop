@@ -35,6 +35,7 @@ public Q_SLOTS:
     void printLog( SvnKJobBase *job );
     void printBlame( SvnKJobBase *job );
     void printDiff( SvnKJobBase *job );
+    void openDiff( SvnKJobBase *job );
     void printInfo( SvnKJobBase* job );
     void printStatus( SvnKJobBase* job );
     void slotJobFinished( SvnKJobBase *job );
