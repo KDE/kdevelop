@@ -37,12 +37,12 @@ namespace QMake
             enum Type
             {
                 Project = 1,
-                Assignment = 2,
-                FunctionCall = 3,
-                SimpleScope = 4,
-                Or = 5,
-                Value = 6,
-                ScopeBody = 7
+                ScopeBody = 2,
+                Assignment = 3,
+                FunctionCall = 4,
+                SimpleScope = 5,
+                Or = 6,
+                Value = 7
             };
 
             explicit AST( AST* parent = 0 );

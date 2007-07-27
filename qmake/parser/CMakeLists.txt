@@ -12,6 +12,8 @@ set(parser_STAT_SRCS
     qmakedebugvisitor.cpp
     buildastvisitor.cpp
     qmakelexer.cpp
+    qmakeastvisitor.cpp
+    qmakeastdefaultvisitor.cpp
     )
 
 if(KDEVPG_FOUND)
@@ -40,6 +42,7 @@ kde4_add_library( kdevqmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS})
 target_link_libraries(kdevqmakeparser ${KDE4_KDECORE_LIBS})
 
 install(TARGETS qmake-parser DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kdevqmakeparser DESTINATION ${LIB_INSTALL_DIR})
 
 add_custom_target( copy-generated
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_ast.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_ast.h"
