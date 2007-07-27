@@ -33,6 +33,9 @@
 #include "ducontext_p.h"
 #include "use_p.h"
 
+#define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
+#define ENSURE_CAN_READ { if( inDUChain() ) { ENSURE_CHAIN_READ_LOCKED }}
+
 using namespace KTextEditor;
 
 namespace KDevelop
@@ -41,6 +44,9 @@ namespace KDevelop
 class DeclarationPrivate
 {
 public:
+  DeclarationPrivate() : m_isDefinition(false), m_inSymbolTable(false),  m_isTypeAlias(false), m_anonymousInContext(false) {
+  }
+  
   DUContext* m_context;
   DUContext* m_internalContext;
   Declaration::Scope m_scope;
@@ -60,6 +66,7 @@ public:
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
   bool m_isTypeAlias   : 1;
+  bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
 };
 
 Declaration::Kind Declaration::kind() const {
@@ -70,6 +77,13 @@ void Declaration::setKind(Kind kind) {
   d->m_kind = kind;
 }
 
+bool Declaration::inDUChain() const {
+  if( d->m_anonymousInContext )
+    return false;
+  TopDUContext* top = topContext();
+  return top && top->inDuChain();
+}
+
 Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* context )
   : DUChainBase(range)
   , d(new DeclarationPrivate)
@@ -78,15 +92,11 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
   d->m_internalContext = 0;
   d->m_scope = scope;
   d->m_definition = 0;
-  d->m_isDefinition = false;
-  d->m_inSymbolTable = false;
-  d->m_isTypeAlias = false;
   d->m_kind = Instance;
   Q_ASSERT(context);
   setContext(context);
 }
 
-///@todo Do not copy the range
 Declaration::Declaration(const Declaration& rhs) : DUChainBase(0), d(new DeclarationPrivate) {
   setTextRange(rhs.textRangePtr(), DocumentRangeObject::DontOwn);
   d->m_identifier = rhs.d->m_identifier;
@@ -147,7 +157,7 @@ void Declaration::setComment(const QString& str) {
 
 void Declaration::removeUse( Use* use )
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   use->d->setDeclaration(0L);
   d->m_uses.removeAll(use);
@@ -157,7 +167,7 @@ void Declaration::removeUse( Use* use )
 
 void Declaration::addUse( Use* use )
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   use->d->setDeclaration(this);
   d->m_uses.append(use);
@@ -167,21 +177,21 @@ void Declaration::addUse( Use* use )
 
 const QList< Use* > & Declaration::uses( ) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_uses;
 }
 
 const Identifier& Declaration::identifier( ) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_identifier;
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   d->m_identifier = identifier;
 
@@ -190,14 +200,14 @@ void Declaration::setIdentifier(const Identifier& identifier)
 
 AbstractType::Ptr Declaration::abstractType( ) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_type;
 }
 
 void Declaration::setAbstractType(AbstractType::Ptr type)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   if (d->m_type)
     DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
@@ -210,14 +220,14 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 
 Declaration::Scope Declaration::scope( ) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_scope;
 }
 
 QualifiedIdentifier Declaration::qualifiedIdentifier() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   QualifiedIdentifier ret = context()->scopeIdentifier(true);
   ret.push(identifier());
@@ -237,14 +247,14 @@ QString Declaration::mangledIdentifier() const
 
 DUContext * Declaration::context() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_context;
 }
 
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   if (d->m_context && context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
@@ -255,20 +265,19 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   }
 
   d->m_context = context;
+  d->m_anonymousInContext = anonymous;
 
   if (d->m_context) {
     if(!anonymous) {
       d->m_context->d->addDeclaration(this);
       DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
-    } else {
-      d->m_context->d->addAnonymousDeclaration(this);
     }
   }
 }
 
 DUContext * Declaration::internalContext() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
   if( isForwardDeclaration() ) {
     Declaration* declaration = static_cast<const KDevelop::ForwardDeclaration*>(this)->resolved();
     if( !declaration )
@@ -282,7 +291,7 @@ DUContext * Declaration::internalContext() const
 
 void Declaration::setInternalContext(DUContext* context)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
   
   if( context == d->m_internalContext )
     return;
@@ -301,7 +310,7 @@ void Declaration::setInternalContext(DUContext* context)
 
 bool Declaration::operator ==(const Declaration & other) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return this == &other;
 }
@@ -315,14 +324,14 @@ QString Declaration::toString() const
 
 bool Declaration::isDefinition() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_isDefinition;
 }
 
 void Declaration::setDeclarationIsDefinition(bool dd)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   d->m_isDefinition = dd;
   if (d->m_isDefinition && definition()) {
@@ -341,14 +350,14 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
 
 Definition* Declaration::definition() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_definition;
 }
 
 void Declaration::setDefinition(Definition* definition)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   if (d->m_definition) {
     d->m_definition->d->setDeclaration(0);
@@ -378,21 +387,21 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
 
 const QList< ForwardDeclaration * > & Declaration::forwardDeclarations() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_forwardDeclarations;
 }
 
 void Declaration::addForwardDeclaration( ForwardDeclaration* declaration)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   d->m_forwardDeclarations.append( declaration );
 }
 
 void Declaration::removeForwardDeclaration( ForwardDeclaration* declaration)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   d->m_forwardDeclarations.removeAll( declaration );
 }
@@ -414,8 +423,8 @@ const ForwardDeclaration* Declaration::toForwardDeclaration() const
 
 TopDUContext * Declaration::topContext() const
 {
-  if (context())
-    return context()->topContext();
+  if (d->m_context)
+    return d->m_context->topContext();
 
   return 0;
 }

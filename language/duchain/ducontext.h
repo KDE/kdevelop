@@ -38,6 +38,12 @@ class Definition;
 class DUChain;
 class Use;
 class TopDUContext;
+class DUContext;
+
+
+template<class T>
+class DUChainPointer;
+typedef DUChainPointer<DUContext> DUContextPointer;
 
 /**
  * A single context in source code, represented as a node in a
@@ -46,6 +52,10 @@ class TopDUContext;
  * Access to context objects must be serialised by holding the
  * chain lock, ie. DUChain::lock().
  *
+ * NOTE: A du-context can be freely edited as long as it's parent-context is zero.
+ * In the moment the parent-context is set, the context may only be edited when it
+ * is allowed to edited it's top-level context(@see TopLevelContext::inDUChain()
+ * 
  * \todo change child relationships to a linked list within the context?
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
@@ -155,16 +165,19 @@ public:
 
   /**
    * Returns the list of imported parent contexts for this context.
+   * @warning The list may contain objects that are not valid any more(data() returns zero, but that can only happen when using anonymous imports, @see addImportedParentContext)
    */
-  const QList<DUContext*>& importedParentContexts() const;
+  const QList<DUContextPointer>& importedParentContexts() const;
 
   /**
    * Adds an imported context.
    *
+   * @param anonymous If this is true, the import will not be registered at the imported context. This allows du-chain contexts importing without having a write-lock.
+   * 
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
-  virtual void addImportedParentContext(DUContext* context);
+  virtual void addImportedParentContext(DUContext* context, bool anonymous = false);
 
   /**
    * Removes a child context.
@@ -192,6 +205,9 @@ public:
    */
   void deleteChildContextsRecursively();
 
+  ///Returns true if this declaration is accessible through the du-chain, and thus cannot be edited without a du-chain write lock
+  virtual bool inDUChain() const;
+  
   /**
    * A class which represents a "using namespace" statement.
    */
@@ -262,7 +278,7 @@ public:
   /**
    * Returns all local declarations
    */
-  const QList<Declaration*>& localDeclarations() const;
+  const QList<Declaration*> localDeclarations() const;
 
   /**
    * Returns all local definitions

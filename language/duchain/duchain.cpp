@@ -84,6 +84,7 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
   kDebug() << "duchain: adding document " << document.toString() << endl;
   Q_ASSERT(chain);
   sdDUChainPrivate->m_chains.insert(document, chain);
+  chain->setInDuChain(true);
   addToEnvironmentManager(chain);
 }
 
@@ -203,28 +204,48 @@ void DUChain::removeObserver(DUChainObserver * observer)
   sdDUChainPrivate->m_observers.removeAll(observer);
 }
 
+///This mutex is used to make sure that only one observer-callback is called at a time
+///That is needed because addDeclaration(..) can be called from multiple threads simultaneuously, triggering multiple observer-callbacks.
+QMutex duChainObserverMutex;
+
 void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  foreach (DUChainObserver* observer, self()->observers())
-    observer->contextChanged(context, change, relationship, relatedObject);
+  if( !sdDUChainPrivate->m_observers.isEmpty() )
+  {
+    QMutexLocker l(&duChainObserverMutex);
+    foreach (DUChainObserver* observer, self()->observers())
+      observer->contextChanged(context, change, relationship, relatedObject);
+  }
 }
 
 void DUChain::declarationChanged(Declaration* declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  foreach (DUChainObserver* observer, self()->observers())
-    observer->declarationChanged(declaration, change, relationship, relatedObject);
+  if( !sdDUChainPrivate->m_observers.isEmpty() )
+  {
+    QMutexLocker l(&duChainObserverMutex);
+    foreach (DUChainObserver* observer, self()->observers())
+      observer->declarationChanged(declaration, change, relationship, relatedObject);
+  }
 }
 
 void DUChain::definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  foreach (DUChainObserver* observer, self()->observers())
-    observer->definitionChanged(definition, change, relationship, relatedObject);
+  if( !sdDUChainPrivate->m_observers.isEmpty() )
+  {
+    QMutexLocker l(&duChainObserverMutex);
+    foreach (DUChainObserver* observer, self()->observers())
+      observer->definitionChanged(definition, change, relationship, relatedObject);
+  }
 }
 
 void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  foreach (DUChainObserver* observer, self()->observers())
-    observer->useChanged(use, change, relationship, relatedObject);
+  if( !sdDUChainPrivate->m_observers.isEmpty() )
+  {
+    QMutexLocker l(&duChainObserverMutex);
+    foreach (DUChainObserver* observer, self()->observers())
+      observer->useChanged(use, change, relationship, relatedObject);
+  }
 }
 
 void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {

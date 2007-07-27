@@ -64,6 +64,11 @@ public:
   bool hasUses() const;
   void setHasUses(bool hasUses);
 
+  /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
+  bool inDuChain() const;
+  /// This flag is only used by DUChain, never change it from outside.
+  void setInDuChain(bool);
+  
   /**
    * Determine if this chain imports another chain.
    *

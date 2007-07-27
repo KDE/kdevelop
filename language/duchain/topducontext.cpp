@@ -23,6 +23,7 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "parsingenvironment.h"
+#include "duchainpointer.h"
 
 using namespace KTextEditor;
 
@@ -33,7 +34,7 @@ class TopDUContextPrivate
 {
 public:
   TopDUContextPrivate( TopDUContext* ctxt)
-    : m_ctxt(ctxt)
+    : m_inDuChain(false), m_ctxt(ctxt)
   {
   }
   bool imports(TopDUContext* origin, int depth) const
@@ -43,9 +44,9 @@ public:
       return false;
     }
 
-    foreach (DUContext* context, m_ctxt->importedParentContexts()) {
-      Q_ASSERT(dynamic_cast<TopDUContext*>(context));
-      TopDUContext* top = static_cast<TopDUContext*>(context);
+    foreach (DUContextPointer context, m_ctxt->importedParentContexts()) {
+      Q_ASSERT(dynamic_cast<TopDUContext*>(context.data()));
+      TopDUContext* top = static_cast<TopDUContext*>(context.data());
       if (top == origin)
         return true;
 
@@ -57,6 +58,7 @@ public:
   }
   bool m_hasUses  : 1;
   bool m_deleting : 1;
+  bool m_inDuChain : 1;
   TopDUContext* m_ctxt;
   ParsingEnvironmentFilePointer m_file;
 };
@@ -294,6 +296,16 @@ TopDUContext * TopDUContext::topContext() const
 bool TopDUContext::deleting() const
 {
   return d->m_deleting;
+}
+
+/// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
+bool TopDUContext::inDuChain() const {
+  return d->m_inDuChain;
+}
+
+/// This flag is only used by DUChain, never change it from outside.
+void TopDUContext::setInDuChain(bool b) {
+  d->m_inDuChain = b;
 }
 
 }

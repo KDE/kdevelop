@@ -21,6 +21,10 @@
 #ifndef ducontext_p_H
 #define ducontext_p_H
 
+#include <QMutex>
+
+#include "duchainpointer.h"
+
 namespace KDevelop{
 class DUContext;
 class DUContextPrivate
@@ -29,20 +33,23 @@ public:
   DUContextPrivate( DUContext* );
   DUContext::ContextType m_contextType;
   QualifiedIdentifier m_scopeIdentifier;
-  DUContext* m_parentContext;
-  Declaration* m_declaration;
-  QList<DUContext*> m_importedParentContexts;
+  DUContextPointer m_parentContext;
+  DeclarationPointer m_declaration;
+  QList<DUContextPointer> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
-  QList<DUContext*> m_anonymousChildContexts;
   QList<DUContext*> m_importedChildContexts;
+
+  static QMutex m_localDeclarationsMutex;
+  ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsMutex must be locked.
   QList<Declaration*> m_localDeclarations;
-  QList<Declaration*> m_anonymousLocalDeclarations;
+  
   QList<Definition*> m_localDefinitions;
   QList<DUContext::UsingNS*> m_usingNamespaces;
   QList<Use*> m_uses;
   QList<Use*> m_orphanUses;
   DUContext* m_context;
   bool m_inSymbolTable : 1;
+  bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
     /**
    * Adds a child context.
    *
@@ -50,10 +57,9 @@ public:
    * the chain is sorted correctly.
    */
   void addChildContext(DUContext* context);
-  void addAnonymousChildContext(DUContext* context);
   
-  /**Removes the context from childContexts as well as anonymousChildContexts
-   * @return Whether a non-anonymous context was removed
+  /**Removes the context from childContexts
+   * @return Whether a context was removed
    * */
   bool removeChildContext(DUContext* context);
 
@@ -61,10 +67,9 @@ public:
   void removeImportedChildContext( DUContext * context );
 
   void addDeclaration(Declaration* declaration);
-  void addAnonymousDeclaration(Declaration* declaration);
   
-  /**Removes the declaration from localDeclarations as well as anonymousLocalDeclarations
-   * @return Whether a non-anonymous declaration was removed
+  /**Removes the declaration from localDeclarations
+   * @return Whether a declaration was removed
    * */
   bool removeDeclaration(Declaration* declaration);
 

@@ -38,6 +38,10 @@ class ForwardDeclaration;
 
 /**
  * Represents a single declaration in a definition-use chain.
+ * 
+ * NOTE: A du-context can be freely edited as long as it's parent-context is zero.
+ * In the moment the parent-context is set, the context may only be edited when it
+ * is allowed to edited it's top-level context(@see TopLevelContext::inDUChain()
  */
 class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 {
@@ -83,6 +87,9 @@ public:
   ForwardDeclaration* toForwardDeclaration();
   const ForwardDeclaration* toForwardDeclaration() const;
 
+  ///Returns true if this declaration is accessible through the du-chain, and thus cannot be edited without a du-chain write lock
+  virtual bool inDUChain() const;
+  
   bool isDefinition() const;
   void setDeclarationIsDefinition(bool dd);
 
@@ -104,6 +111,8 @@ public:
    * */
   DUContext* context() const;
   /**
+   * When setContext(..) is called, this declaration is inserted into the given context.
+   * You only need to be able to write this declaration. You do not need write-privileges for the context, because addDeclaration(..) works separately from that.
    * @param anonymous If this is set, this declaration will be added anonymously into the parent-context. That way it can never be found through any of the context's functions.
    * */
   void setContext(DUContext* context, bool anonymous = false);

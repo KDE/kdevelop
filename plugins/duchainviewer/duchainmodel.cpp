@@ -32,6 +32,7 @@
 #include "use.h"
 #include "duchain.h"
 #include "duchainlock.h"
+#include "duchainpointer.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -253,11 +254,18 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
   QList<DUChainBase*>* list = 0;
 
   if (DUContext* context = dynamic_cast<DUContext*>(parent)) {
+    
+    QList<DUContext*> importedParentContextsData;
+    foreach( DUContextPointer p, context->importedParentContexts() )
+      if( p.data() )
+        importedParentContextsData << p.data();
+
     QListIterator<DUContext*> contexts = context->childContexts();
-    QListIterator<DUContext*> importedParentContexts = context->importedParentContexts();
+    QListIterator<DUContext*> importedParentContexts = importedParentContextsData;
     QListIterator<Declaration*> declarations = context->localDeclarations();
     QListIterator<Definition*> definitions = context->localDefinitions();
     QListIterator<Use*> uses = context->uses();
+
 
     bool firstInit = true;
     forever {

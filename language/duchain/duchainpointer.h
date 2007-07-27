@@ -102,6 +102,14 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
         d = rhs->weakPointer();
     }
 
+    bool operator ==( const DUChainPointer<Type>& rhs ) const {
+      return d.data() == rhs.d.data();
+    }
+
+    bool operator !=( const DUChainPointer<Type>& rhs ) const {
+      return d.data() != rhs.d.data();
+    }
+    
     ///Returns whether the pointed object is still existing
     operator bool() const {
       return d && d->base();

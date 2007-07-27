@@ -175,8 +175,7 @@ bool DUChainLock::lockForWrite()
 #endif
 
   //It is not allowed to acquire a write-lock while holding read-lock 
-  ///@todo enable this once the template-instantiation does not need a write-lock
-  //  Q_ASSERT(d->ownReaderRecursion() == 0);
+  Q_ASSERT(d->ownReaderRecursion() == 0);
 
   QMutexLocker lock(&d->m_mutex);
 
