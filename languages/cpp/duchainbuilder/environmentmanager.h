@@ -50,7 +50,7 @@
  * preprocessed under the current environment of macros.
  *
  * The environment-manager is there to answer that question:
- * LexedFile collects all information about the context a file was parsed in,
+ * EnvironmentFile collects all information about the context a file was parsed in,
  * the macros used, the words contained in a file that can be influenced by macros,
  * and the defined macros.
  *
@@ -59,7 +59,7 @@
  * run.
  *
  * If the result would be different, the file will be re-preprocessed, parsed, and imported.
- * Else the set of defined macros is taken from the stored LexedFile,
+ * Else the set of defined macros is taken from the stored EnvironmentFile,
  * and the already available du-context will be imported. The result: correct behavior, perfectly working header-guards, no missing macros, intelligent reparsing of changed headers, ...
  *
  * */
@@ -76,10 +76,10 @@ namespace Cpp {
 class EnvironmentManager;
 class MacroSet;
 
-class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
+class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
-    LexedFile( const KUrl& url, EnvironmentManager* manager );
+    EnvironmentFile( const KUrl& url, EnvironmentManager* manager );
 
     inline void addString( const HashedString& string ) {
         if( !m_definedMacroNames[ string ] ) {
@@ -104,10 +104,10 @@ class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop
 
     QList<Problem>  problems() const;
 
-    //The parameter should be a LexedFile that was lexed AFTER the content of this file
-    void merge( const LexedFile& file );
+    //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
+    void merge( const EnvironmentFile& file );
 
-    bool operator <  ( const LexedFile& rhs ) const {
+    bool operator <  ( const EnvironmentFile& rhs ) const {
       return m_hashedUrl < rhs.m_hashedUrl;
     }
 
@@ -161,10 +161,10 @@ class KDEVCPPDUCHAINBUILDER_EXPORT LexedFile : public CacheNode, public KDevelop
     */
 };
 
-typedef KSharedPtr<LexedFile>  LexedFilePointer;
+typedef KSharedPtr<EnvironmentFile>  EnvironmentFilePointer;
 
-struct KDEVCPPDUCHAINBUILDER_EXPORT LexedFilePointerCompare {
-  bool operator() ( const LexedFilePointer& lhs, const LexedFilePointer& rhs ) const {
+struct KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFilePointerCompare {
+  bool operator() ( const EnvironmentFilePointer& lhs, const EnvironmentFilePointer& rhs ) const {
     return (*lhs) < (*rhs );
   }
 };
@@ -207,18 +207,18 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     QDateTime fileModificationTimeCached( const HashedString& fileName );
     void initFileModificationCache();
     virtual void erase( const CacheNode* node );
-    bool hasSourceChanged( const LexedFile& file );///Returns true if the file itself, or any of its dependencies was modified.
+    bool hasSourceChanged( const EnvironmentFile& file );///Returns true if the file itself, or any of its dependencies was modified.
 
     ///Returns zero if no fitting file is available for the given Environment
-    LexedFilePointer lexedFile( const HashedString& fileName, const rpp::Environment* environment );
-    LexedFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment );
+    EnvironmentFilePointer lexedFile( const HashedString& fileName, const rpp::Environment* environment );
+    EnvironmentFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment );
 
-    void addLexedFile( const LexedFilePointer& file );
-    void removeLexedFile( const LexedFilePointer& file );
+    void addEnvironmentFile( const EnvironmentFilePointer& file );
+    void removeEnvironmentFile( const EnvironmentFilePointer& file );
 
-    //typedef __gnu_cxx::hash_multimap<HashedString, LexedFilePointer> LexedFileMap;
-    typedef std::multimap<HashedString, LexedFilePointer> LexedFileMap;
-    LexedFileMap m_files;
+    //typedef __gnu_cxx::hash_multimap<HashedString, EnvironmentFilePointer> EnvironmentFileMap;
+    typedef std::multimap<HashedString, EnvironmentFilePointer> EnvironmentFileMap;
+    EnvironmentFileMap m_files;
     __gnu_cxx::hash_set<HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
     struct FileModificationCache {
       QDateTime m_readTime;

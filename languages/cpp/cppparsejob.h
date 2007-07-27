@@ -36,7 +36,7 @@ class ParseSession;
 class CPPInternalParseJob;
 
 namespace Cpp {
-    class LexedFile;
+    class EnvironmentFile;
 }
 
 namespace KDevelop {
@@ -89,12 +89,12 @@ public:
 
     const KTextEditor::Range& textRangeToParse() const;
 
-    void setLexedFile( Cpp::LexedFile* file );
+    void setEnvironmentFile( Cpp::EnvironmentFile* file );
 
-    Cpp::LexedFile* lexedFile();
+    Cpp::EnvironmentFile* lexedFile();
 
 private:
-    KSharedPtr<Cpp::LexedFile> m_lexedFile;
+    KSharedPtr<Cpp::EnvironmentFile> m_lexedFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;
     TranslationUnitAST* m_AST;

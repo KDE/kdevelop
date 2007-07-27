@@ -30,7 +30,7 @@ class CPPParseJob;
 #include "parser/rpp/preprocessor.h"
 
 namespace Cpp {
-    class LexedFile;
+    class EnvironmentFile;
 }
 
 class CppPreprocessEnvironment;
@@ -54,7 +54,7 @@ private:
     bool checkAbort();
 
     CppPreprocessEnvironment* m_currentEnvironment;
-    KSharedPtr<Cpp::LexedFile> m_lexedFile;
+    KSharedPtr<Cpp::EnvironmentFile> m_lexedFile;
     bool m_success;
 };
 

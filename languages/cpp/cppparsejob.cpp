@@ -137,11 +137,11 @@ void CPPParseJob::addIncludedFile(KDevelop::TopDUContext* duChain) {
     m_includedFiles.push_back(duChain);
 }
 
-void CPPParseJob::setLexedFile( Cpp::LexedFile* file ) {
-    m_lexedFile = KSharedPtr<Cpp::LexedFile>(file);
+void CPPParseJob::setEnvironmentFile( Cpp::EnvironmentFile* file ) {
+    m_lexedFile = KSharedPtr<Cpp::EnvironmentFile>(file);
 }
 
-Cpp::LexedFile* CPPParseJob::lexedFile() {
+Cpp::EnvironmentFile* CPPParseJob::lexedFile() {
     return m_lexedFile.data();
 }
 
@@ -245,7 +245,7 @@ void CPPInternalParseJob::run()
               editor.smart()->useRevision(parentJob()->revisionToken());
 
             DeclarationBuilder declarationBuilder(&editor);
-            topContext = declarationBuilder.buildDeclarations(Cpp::LexedFilePointer(parentJob()->lexedFile()), ast, &chains);
+            topContext = declarationBuilder.buildDeclarations(Cpp::EnvironmentFilePointer(parentJob()->lexedFile()), ast, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();

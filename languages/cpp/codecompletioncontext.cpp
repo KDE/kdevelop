@@ -400,7 +400,7 @@ QList<KDevelop::AbstractType::Ptr> CodeCompletionContext::additionalMatchTypes()
 
 void CodeCompletionContext::preprocessText() {
   ///@todo implement, preprocess m_text in m_duContext at m_position
-  ///All macros can be found in the context's LexedFile, in definedMacros() together with usedMacros()
+  ///All macros can be found in the context's EnvironmentFile, in definedMacros() together with usedMacros()
 }
 
 CodeCompletionContext::MemberAccessOperation CodeCompletionContext::memberAccessOperation() const {

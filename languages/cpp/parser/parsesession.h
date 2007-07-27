@@ -30,7 +30,7 @@
 #include <ksharedptr.h>
 
 namespace Cpp {
-  class LexedFile;
+  class EnvironmentFile;
 }
 
 class pool;

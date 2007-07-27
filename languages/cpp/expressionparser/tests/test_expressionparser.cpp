@@ -483,7 +483,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
 
   DeclarationBuilder definitionBuilder(session);
 
-  Cpp::LexedFilePointer file( new Cpp::LexedFile( url, 0 ) );
+  Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );
   TopDUContext* top = definitionBuilder.buildDeclarations(file, ast);
 
   UseBuilder useBuilder(session);

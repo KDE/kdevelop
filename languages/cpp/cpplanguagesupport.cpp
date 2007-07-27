@@ -86,10 +86,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     m_cc = new CppCodeCompletion( this );
     m_standardMarcos = new Cpp::MacroSet;
     m_standardIncludePaths = new QStringList;
-    m_lexerCache = new Cpp::EnvironmentManager;
+    m_environmentManager = new Cpp::EnvironmentManager;
     {
         DUChainWriteLocker l(DUChain::lock());
-        DUChain::self()->addParsingEnvironmentManager(m_lexerCache);
+        DUChain::self()->addParsingEnvironmentManager(m_environmentManager);
     }
 
     #ifndef Q_OS_WIN
@@ -135,12 +135,12 @@ CppLanguageSupport::~CppLanguageSupport()
     // Remove the corresponding parsing environment from the DUChain.
     {
         DUChainWriteLocker l(DUChain::lock());
-        DUChain::self()->removeParsingEnvironmentManager(m_lexerCache);
+        DUChain::self()->removeParsingEnvironmentManager(m_environmentManager);
     }
 
     delete m_standardMarcos;
     delete m_standardIncludePaths;
-    delete m_lexerCache;
+    delete m_environmentManager;
     #ifndef Q_OS_WIN
     delete m_includeResolver;
     #endif

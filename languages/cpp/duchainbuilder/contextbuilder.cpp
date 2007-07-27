@@ -84,7 +84,7 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   --m_templateDeclarationDepth;
 }
 
-TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, AST *node, QList<DUContext*>* includes)
+TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes)
 {
   m_compilingContexts = true;
 
@@ -110,7 +110,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
           topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
       }
 
-      DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::LexedFile*>(file.data() ) );
+      DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
     } else {
       kDebug() << "ContextBuilder::buildContexts: compiling" << endl;
       m_recompiling = false;
@@ -118,7 +118,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::LexedFilePointer& file, A
       Q_ASSERT(m_compilingContexts);
 
       Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
-      topLevelContext = new CppDUContext<TopDUContext>(range, const_cast<Cpp::LexedFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(range, const_cast<Cpp::EnvironmentFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
 
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);

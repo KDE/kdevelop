@@ -128,7 +128,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     case ExpandingWidget: {
        KHTMLPart *w = new KHTMLPart();
        w->begin();
-       w->write( QString( "<html><body><p><small>Item: %1</small> <br>Comment: %2 </p></body></html> " ).arg(dec->toString()).arg(dec->comment()) );
+       w->write( QString( "<html><body><p><small>Item: %1</small> %2 </p></body></html> " ).arg(dec->toString()).arg(QString("<br>Comment: %1").arg(dec->comment())) );
        w->end();
        w->view()->resize(500, 70);
 

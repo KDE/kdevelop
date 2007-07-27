@@ -502,8 +502,8 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
 
   DeclarationBuilder definitionBuilder(session);
 
-  //LexedFile is not built correctly by TestPreprocessor
-  Cpp::LexedFilePointer file( new Cpp::LexedFile( url, 0 ) );
+  //EnvironmentFile is not built correctly by TestPreprocessor
+  Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );
   TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, &included);
 
   UseBuilder useBuilder(session);

@@ -54,7 +54,7 @@
 
 class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
     public:
-        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::LexedFile> lexedFile ) : Environment(preprocessor), m_lexedFile(lexedFile) {
+        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> lexedFile ) : Environment(preprocessor), m_lexedFile(lexedFile) {
             //If this is included from another preprocessed file, take the current macro-set from there.
         }
 
@@ -93,13 +93,13 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
         }
 
     private:
-        mutable KSharedPtr<Cpp::LexedFile> m_lexedFile;
+        mutable KSharedPtr<Cpp::EnvironmentFile> m_lexedFile;
 };
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_currentEnvironment(0)
-    , m_lexedFile( new Cpp::LexedFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
+    , m_lexedFile( new Cpp::EnvironmentFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
     , m_success(true)
 {
 }
@@ -189,7 +189,7 @@ void PreprocessJob::run()
     QString result = preprocessor.processFile(contents, rpp::pp::Data);
 
     parentJob()->parseSession()->setContents( result.toUtf8() );
-    parentJob()->setLexedFile( m_lexedFile.data() );
+    parentJob()->setEnvironmentFile( m_lexedFile.data() );
 
     if( PreprocessJob* parentPreprocessor = parentJob()->parentPreprocessor() ) {
         //If we are included from another preprocessor, give it back the modified macros,
@@ -240,7 +240,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             parentJob()->addIncludedFile(includedContext);
             KDevelop::ParsingEnvironmentFilePointer file = includedContext->parsingEnvironmentFile();
-            Cpp::LexedFile* lexedFile = dynamic_cast<Cpp::LexedFile*> (file.data());
+            Cpp::EnvironmentFile* lexedFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
             if( lexedFile ) {
                 m_currentEnvironment->merge( lexedFile->definedMacros() );
                 m_lexedFile->merge( *lexedFile );

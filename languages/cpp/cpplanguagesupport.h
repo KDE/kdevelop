@@ -65,7 +65,7 @@ private slots:
 private:
     CppHighlighting *m_highlights;
     CppCodeCompletion *m_cc;
-    Cpp::EnvironmentManager* m_lexerCache;
+    Cpp::EnvironmentManager* m_environmentManager;
     Cpp::MacroSet *m_standardMarcos;
     QStringList *m_standardIncludePaths;
     #ifndef Q_OS_WIN
