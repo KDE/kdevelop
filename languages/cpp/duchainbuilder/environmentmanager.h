@@ -62,6 +62,8 @@
  * Else the set of defined macros is taken from the stored EnvironmentFile,
  * and the already available du-context will be imported. The result: correct behavior, perfectly working header-guards, no missing macros, intelligent reparsing of changed headers, ...
  *
+ * There is only one assumption made that needs to be fulfilled to be correct:
+ * - Headers should be included at the top of the file
  * */
 
 namespace rpp {

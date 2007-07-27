@@ -13,12 +13,11 @@
 
 #include "hashedstring.h"
 #include <QDataStream>
+#include <QSet>
 #include <QTextStream>
 #include <sstream>
 #include <algorithm>
 #include <iterator>
-#include<ext/hash_set>
-#include<set>
 #include<list>
 #include<algorithm>
 #include <iostream>
@@ -26,6 +25,10 @@
 
 //It needs to be measured whether this flag should be turned on or off. It seems just to move the complexity from one position to the other, without any variant being really better.
 #define USE_HASHMAP
+
+uint qHash ( const HashedString& str ) {
+  return str.hash();
+}
 
 HashType fastHashString( const QString& str );
 
@@ -65,13 +68,10 @@ void HashedString::initHash() {
 
 class HashedStringSetData : public KShared {
   public:
-#ifdef USE_HASHMAP
-      typedef __gnu_cxx::hash_set<HashedString> StringSet;
-#else
-      typedef std::set<HashedString> StringSet; //must be a set, so the set-algorithms work
-#endif
+      typedef QSet<HashedString> StringSet;
+      
       StringSet m_files;
-  mutable bool m_hashValid;
+      mutable bool m_hashValid;
       mutable HashType m_hash;
       HashedStringSetData() : m_hashValid( false ) {
       }
@@ -123,41 +123,20 @@ HashedStringSet& HashedStringSet::operator +=( const HashedStringSet& rhs ) {
   if ( !rhs.m_data )
     return * this;
 
-#ifndef USE_HASHMAP
-  KSharedPtr<HashedStringSetData> oldData = m_data;
-  if( !oldData ) oldData = new HashedStringSetData();
-  m_data = new HashedStringSetData();
-  std::set_union( oldData->m_files.begin(), oldData->m_files.end(), rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), std::insert_iterator<HashedStringSetData::StringSet>( m_data->m_files, m_data->m_files.end() ) );
-#else
   makeDataPrivate();
-  m_data->m_files.insert( rhs.m_data->m_files.begin(), rhs.m_data->m_files.end() );
-  /*HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
-  HashedStringSetData::StringSet& mySet( m_data->m_files );
-  for( HashedStringSetData::StringSet::const_iterator it = rhs.m_data->m_files.begin(); it != end; ++it ) {
-    mySet.insert( *it );
-  }*/
-
-#endif
+  m_data->m_files += rhs.m_data->m_files;
+  
   return *this;
 }
 
 HashedStringSet& HashedStringSet::operator -=( const HashedStringSet& rhs ) {
   if( !m_data ) return *this;
   if( !rhs.m_data ) return *this;
-#ifndef USE_HASHMAP
-  KSharedPtr<HashedStringSetData> oldData = m_data;
-  m_data = new HashedStringSetData();
-  std::set_difference( oldData->m_files.begin(), oldData->m_files.end(), rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), std::insert_iterator<HashedStringSetData::StringSet>( m_data->m_files, m_data->m_files.end() ) );
-#else
-  makeDataPrivate();
-  HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
-  HashedStringSetData::StringSet::const_iterator myEnd = m_data->m_files.end();
-  HashedStringSetData::StringSet& mySet( m_data->m_files );
-  for( HashedStringSetData::StringSet::const_iterator it = rhs.m_data->m_files.begin(); it != end; ++it ) {
-    mySet.erase( *it );
-  }
 
-#endif
+  makeDataPrivate();
+
+  m_data->m_files -= rhs.m_data->m_files;
+
   return *this;
 }
 
@@ -193,9 +172,7 @@ bool HashedStringSet::operator <= ( const HashedStringSet& rhs ) const {
     return true;
   if ( !rhs.m_data )
     return false;
-#ifndef USE_HASHMAP
-  return std::includes( rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), m_data->m_files.begin(), m_data->m_files.end() );
-#else
+  
   const HashedStringSetData::StringSet& otherSet( rhs.m_data->m_files );
   HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
   HashedStringSetData::StringSet::const_iterator myEnd = m_data->m_files.end();
@@ -205,7 +182,6 @@ bool HashedStringSet::operator <= ( const HashedStringSet& rhs ) const {
     if( i == end ) return false;
   }
   return true;
-#endif
 }
 
 bool HashedStringSet::operator == ( const HashedStringSet& rhs ) const {
