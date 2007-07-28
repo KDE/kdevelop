@@ -77,7 +77,7 @@ void CppClassType::accept0 (TypeVisitor *v) const
 void CppClassType::exchangeTypes(TypeExchanger *e)
 {
   for(QList<BaseClassInstance>::iterator it = m_baseClasses.begin(); it != m_baseClasses.end(); ++it )
-    (*it).baseClass = dynamic_cast<CppClassType*>( e->exchange((*it).baseClass.data()) );
+    (*it).baseClass = e->exchange((*it).baseClass.data());
 }
 
 
@@ -92,7 +92,7 @@ void CppClassType::addBaseClass(const BaseClassInstance& baseClass)
   m_baseClasses.append(baseClass);
 }
 
-void CppClassType::removeBaseClass(CppClassType::Ptr baseClass)
+void CppClassType::removeBaseClass(AbstractType::Ptr baseClass)
 {
   for (int i = 0; i < m_baseClasses.count(); ++i)
     if (m_baseClasses[i].baseClass == baseClass) {

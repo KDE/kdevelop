@@ -33,6 +33,84 @@ uint qHash( const ExpressionEvaluationResult& key ) {
   return (uint)key.type.data();
 }
 
+
+
+///Finds out whether any DelayedType's are involved in a given type(It searches return-values, argument-types, base-classes, etc.)
+struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
+  bool found;
+
+  DelayedTypeSearcher() : found(false) {
+  }
+
+  virtual bool visit ( const AbstractType* type ) {
+    if( found ) return false;
+    if( dynamic_cast<const DelayedType*>(type) )
+      found = true;
+    return !found;
+  }
+
+  virtual bool visit (const StructureType *) {
+    ///We do not want to visit member-types, so return false here
+    return false;
+  }
+};
+
+/**
+ * Returns whether any count of reference/pointer-types are followed by a delayed type
+ * */
+const DelayedType* containsDelayedType(const AbstractType* type)
+{
+  const PointerType* pType = dynamic_cast<const PointerType*>(type);
+  const ReferenceType* rType = dynamic_cast<const ReferenceType*>(type);
+  const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
+  if( pType )
+    return containsDelayedType(pType->baseType().data());
+  if( rType )
+    return containsDelayedType(rType->baseType().data());
+  return delayedType;
+}
+
+///Replaces any DelayedType's in interesting positions with their resolved versions, if they can be resolved.
+struct DelayedTypeResolver : public KDevelop::TypeExchanger {
+  const KDevelop::DUContext* searchContext;
+
+  DelayedTypeResolver(const KDevelop::DUContext* _searchContext) : searchContext(_searchContext) {
+  }
+
+  virtual AbstractType* exchange( const AbstractType* type )
+  {
+    const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
+
+    if( delayedType ) {
+      QList<Declaration*> decls = searchContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
+      if( !decls.isEmpty() ) {
+        return decls.front()->abstractType().data();
+      }
+    }else{
+      if( containsDelayedType(type) )
+      {
+        //Copy the type to keep the correct reference/pointer structure
+        AbstractType* typeCopy = type->clone();
+        PointerType* pType = dynamic_cast<PointerType*>(typeCopy);
+        ReferenceType* rType = dynamic_cast<ReferenceType*>(typeCopy);
+        if( pType ) //Replace the base
+          pType->exchangeTypes(this);
+        if( rType ) //Replace the base
+          rType->exchangeTypes(this);
+        
+        return typeCopy;
+      }
+      
+    }
+    
+    return const_cast<AbstractType*>(type); ///@todo remove const_cast;
+  }
+
+  virtual bool exchangeMembers() const {
+    return false;
+  }
+};
+
 bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
  return left.type == right.type; ///@todo use the other parts
 }
@@ -117,6 +195,7 @@ bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
   return (bool)dynamic_cast<const TemplateDeclaration*>(decl);
 }
 
+///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
 CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* specializedDeclaration, Declaration* specializedFrom )
 {
   if( specializedDeclaration ) {
@@ -197,11 +276,37 @@ CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUCon
       }
       else
       {
-        ///@todo resolve template-dependent base-classes(They can not be found here, because their type is DelayedType and those have no context)
         //Import all other imported contexts
         contextCopy->addImportedParentContext( importedContext.data(), true );
       }
     }
+
+    if( specializedDeclaration ) {
+      const CppClassType* klass = dynamic_cast<const CppClassType*>( specializedDeclaration->abstractType().data() );
+      if( klass ) { //It could also be a function
+        ///Resolve template-dependent base-classes(They can not be found in the imports-list, because their type is DelayedType and those have no context)
+
+        foreach( const CppClassType::BaseClassInstance& base, klass->baseClasses() ) {
+          const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.data());
+          if( delayed ) {
+            ///Resolve the delayed type, and import the context
+            DelayedTypeResolver res(contextCopy);
+            AbstractType::Ptr newType( res.exchange(delayed) );
+
+            if( CppClassType* baseClass = dynamic_cast<CppClassType*>(newType.data()) )
+            {
+              if( baseClass->declaration() && baseClass->declaration()->internalContext() )
+              {
+                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), true );
+              }
+            } else {
+              kDebug() << "Resolved bad base-class" << endl;
+            }
+          }
+        }
+      }
+    }
+
   } else {
     ///Note: this is possible, for example for template function-declarations(They do not have an internal context, because they have no compound statement), for variables, etc.
   }
@@ -257,82 +362,6 @@ Declaration* TemplateDeclaration::specialize( const QList<ExpressionEvaluationRe
   
   return clone;
 }
-
-///Finds out whether any DelayedType's are involved in a given type(It searches return-values, argument-types, base-classes, etc.)
-struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
-  bool found;
-
-  DelayedTypeSearcher() : found(false) {
-  }
-
-  virtual bool visit ( const AbstractType* type ) {
-    if( found ) return false;
-    if( dynamic_cast<const DelayedType*>(type) )
-      found = true;
-    return !found;
-  }
-
-  virtual bool visit (const StructureType *) {
-    ///We do not want to visit member-types, so return false here
-    return false;
-  }
-};
-
-/**
- * Returns whether any count of reference/pointer-types are followed by a delayed type
- * */
-const DelayedType* containsDelayedType(const AbstractType* type)
-{
-  const PointerType* pType = dynamic_cast<const PointerType*>(type);
-  const ReferenceType* rType = dynamic_cast<const ReferenceType*>(type);
-  const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
-  if( pType )
-    return containsDelayedType(pType->baseType().data());
-  if( rType )
-    return containsDelayedType(rType->baseType().data());
-  return delayedType;
-}
-
-///Replaces any DelayedType's in interesting positions with their resolved versions, if they can be resolved.
-struct DelayedTypeResolver : public KDevelop::TypeExchanger {
-  const KDevelop::DUContext* searchContext;
-
-  DelayedTypeResolver(const KDevelop::DUContext* _searchContext) : searchContext(_searchContext) {
-  }
-
-  virtual AbstractType* exchange( const AbstractType* type )
-  {
-    const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
-
-    if( delayedType ) {
-      QList<Declaration*> decls = searchContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
-      if( !decls.isEmpty() ) {
-        return decls.front()->abstractType().data();
-      }
-    }else{
-      if( containsDelayedType(type) )
-      {
-        //Copy the type to keep the correct reference/pointer structure
-        AbstractType* typeCopy = type->clone();
-        PointerType* pType = dynamic_cast<PointerType*>(typeCopy);
-        ReferenceType* rType = dynamic_cast<ReferenceType*>(typeCopy);
-        if( pType ) //Replace the base
-          pType->exchangeTypes(this);
-        if( rType ) //Replace the base
-          rType->exchangeTypes(this);
-        
-        return typeCopy;
-      }
-      
-    }
-    
-    return const_cast<AbstractType*>(type); ///@todo remove const_cast;
-  }
-
-  virtual bool exchangeMembers() const {
-    return false;
-  }
-};
 
 AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context ) {
   if( !type )

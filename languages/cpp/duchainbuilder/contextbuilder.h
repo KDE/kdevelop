@@ -120,6 +120,8 @@ protected:
   /// Returns true if we are recompiling a definition-use chain
   inline bool recompiling() const { return m_recompiling; }
 
+  virtual void addBaseType( CppClassType::BaseClassInstance base );
+  
   // Write lock is already held here...
   virtual void openContext(KDevelop::DUContext* newContext);
   // Write lock is already held here...

@@ -184,7 +184,7 @@ public:
 
   struct BaseClassInstance
   {
-    CppClassType::Ptr baseClass;
+    AbstractType::Ptr baseClass; //May either be CppClassType, or CppDelayedType
     KDevelop::Declaration::AccessPolicy access;
     bool virtualInheritance;
   };
@@ -193,7 +193,7 @@ public:
 
   const QList<BaseClassInstance>& baseClasses() const;
   void addBaseClass(const BaseClassInstance& baseClass);
-  void removeBaseClass(CppClassType::Ptr baseClass);
+  void removeBaseClass(AbstractType::Ptr baseClass);
 
   const QList<CppClassType::Ptr>& subClasses() const;
   void addSubClass(CppClassType::Ptr subClass);

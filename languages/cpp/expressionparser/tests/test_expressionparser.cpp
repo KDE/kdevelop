@@ -373,6 +373,10 @@ void TestExpressionParser::testSimpleExpression() {
   release(c);
 }
 
+void TestExpressionParser::testBaseClasses() {
+  TEST_FILE_PARSE_ONLY
+}
+
 void TestExpressionParser::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
       

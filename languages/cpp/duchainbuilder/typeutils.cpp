@@ -140,8 +140,9 @@ namespace TypeUtils {
       if( b.access != KDevelop::Declaration::Private ) {
         if( b.baseClass.data() == base )
           return true;
-        if( isPublicBaseClass( b.baseClass.data(), base ) )
-          return true;
+        if( const CppClassType* c = dynamic_cast<const CppClassType*>(b.baseClass.data()) )
+          if( isPublicBaseClass( c, base ) )
+            return true;
       }
     }
     return false;
@@ -176,7 +177,8 @@ namespace TypeUtils {
     //equivalent to using the imported parent-contexts
     for( QList<CppClassType::BaseClassInstance>::const_iterator it =  klass->baseClasses().begin(); it != klass->baseClasses().end(); ++it ) {
       if( (*it).access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
-        getMemberFunctions( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data(), functions, functionName,   mustBeConstant);
+        if( dynamic_cast<const CppClassType*>((*it).baseClass.data()) )
+          getMemberFunctions( static_cast<CppClassType*>( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data() ), functions, functionName,   mustBeConstant);
     }
   }
 

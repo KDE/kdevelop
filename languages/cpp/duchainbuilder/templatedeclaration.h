@@ -115,6 +115,9 @@ namespace Cpp {
   bool KDEVCPPDUCHAINBUILDER_EXPORT isTemplateDeclaration(const KDevelop::Declaration*);
 
   /**
+   * If this is used to specialize a declaration, it should be called BEFORE the Declaration's types DelayedType's are resolved,
+   * because those are needed to resolve missing base-classes.
+   * 
    * The given context should be one that, on some level, imports a template-parameter-declaration context.
    * The given declaration will be registered anonymously, the same for the created contexts.
    * @param parentContext he parent-context everything should be created in(specializedDeclaration will be moved into that context anonymously)

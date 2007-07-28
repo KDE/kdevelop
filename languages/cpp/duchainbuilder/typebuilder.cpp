@@ -102,10 +102,80 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   closeType();
 }
 
+void TypeBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    CppClassType* klass = dynamic_cast<CppClassType*>(m_typeStack.top().data());
+    Q_ASSERT( klass );
+    klass->addBaseClass(base);
+  }
+  TypeBuilderBase::addBaseType(base);
+}
+
 void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 {
   if (node->name) {
+    DUChainReadLocker lock(DUChain::lock());
+    
+    CppClassType* klass = dynamic_cast<CppClassType*>(m_typeStack.top().data());
+    Q_ASSERT( klass );
+    
     QualifiedIdentifier baseClassIdentifier = identifierForName(node->name);
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    
+    QList<Declaration*> declarations = searchContext()->findDeclarations(baseClassIdentifier, pos, AbstractType::Ptr(), DUContext::NoUndefinedTemplateParams);
+    bool openedType = false;
+    if( !declarations.isEmpty() )
+    {
+      if( declarations.count() > 1 )
+        kDebug() << "found multiple declarations for " << baseClassIdentifier.toString() << endl;
+      
+      foreach( Declaration* decl, declarations )
+      {
+        if( decl->kind() == Declaration::Type && decl->abstractType() && dynamic_cast<CppClassType*>(decl->abstractType().data()) )
+        {
+          openType( decl->abstractType(), node );
+          openedType = true;
+          break;
+        }
+      }
+    } else if( templateDeclarationDepth() != 0 ) {
+        //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
+       openedType = true;
+       openDelayedType(baseClassIdentifier, node);
+    }
+
+    if( openedType ) {
+      closeType();
+
+      CppClassType::BaseClassInstance instance;
+      
+      instance.virtualInheritance = (bool)node->virt;
+      instance.baseClass = m_lastType;
+
+      int tk = 0;
+      if( node->access_specifier )
+        tk = m_editor->parseSession()->token_stream->token(node->access_specifier).kind;
+
+      switch( tk ) {
+        default:
+        case Token_private:
+          instance.access = KDevelop::Declaration::Private;
+          break;
+        case Token_public:
+          instance.access = KDevelop::Declaration::Public;
+          break;
+        case Token_protected:
+          instance.access = KDevelop::Declaration::Protected;
+          break;
+      }
+
+      lock.unlock();
+      
+      addBaseType(instance);
+    } else { //A case for the problem-reporter
+      kDebug() << "Could not find declaration for " << baseClassIdentifier.toString() << endl;
+    }
   }
 
   TypeBuilderBase::visitBaseSpecifier(node);

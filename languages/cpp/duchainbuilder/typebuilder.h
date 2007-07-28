@@ -81,6 +81,7 @@ protected:
   virtual void visitParameterDeclaration(ParameterDeclarationAST*);
   virtual void visitTemplateParameter(TemplateParameterAST *);
 
+  virtual void addBaseType( CppClassType::BaseClassInstance base );
 
 private:
   template <class T>

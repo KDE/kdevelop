@@ -26,13 +26,13 @@
 
 #include <duchain.h>
 #include <duchainlock.h>
-#include "cppeditorintegrator.h"
-#include "name_compiler.h"
 #include <declaration.h>
 #include <use.h>
 #include <topducontext.h>
-#include "dumpchain.h"
 #include <symboltable.h>
+#include "cppeditorintegrator.h"
+#include "name_compiler.h"
+#include "dumpchain.h"
 #include "environmentmanager.h"
 
 using namespace KTextEditor;
@@ -236,6 +236,18 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
   DefaultVisitor::visitNamespace (node);
 
   closeContext();
+}
+
+void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Q_ASSERT(currentContext()->type() == DUContext::Class);
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.baseClass.data());
+  if( idType && idType->declaration() && idType->declaration()->internalContext() ) {
+    currentContext()->addImportedParentContext( idType->declaration()->internalContext() );
+  } else if( !dynamic_cast<DelayedType*>(base.baseClass.data()) ) {
+    kDebug() << "ContextBuilder::addBaseType: Got invalid base-class " << (base.baseClass ? QString() : base.baseClass->toString()) << endl;
+  }
 }
 
 void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)

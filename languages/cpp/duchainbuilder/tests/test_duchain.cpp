@@ -655,10 +655,90 @@ void TestDUChain::testDeclareUsingNamespace()
   release(top);
 }
 
+void TestDUChain::testFunctionDefinition() {
+  QByteArray text("class A { inline char at(); }; \n inline char A::at() {} ");
+
+  DUContext* top = parse(text, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QVERIFY(top->localDeclarations()[1]->isDefinition());
+  
+  release(top);
+}
+
+void TestDUChain::testBaseClasses() {
+  QByteArray text("class A{int aValue; }; class B{int bValue;}; class C : public A{int cValue;}; class D : public A, B {int dValue;}; template<class Base> class F : public Base { int fValue;};");
+
+  DUContext* top = parse(text, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 5);
+  Declaration* defClassA = top->localDeclarations().first();
+  QCOMPARE(defClassA->identifier(), Identifier("A"));
+  QVERIFY(defClassA->type<CppClassType>());
+  
+  Declaration* defClassB = top->localDeclarations()[1];
+  QCOMPARE(defClassB->identifier(), Identifier("B"));
+  QVERIFY(defClassB->type<CppClassType>());
+
+  Declaration* defClassC = top->localDeclarations()[2];
+  QCOMPARE(defClassC->identifier(), Identifier("C"));
+  QVERIFY(defClassC->type<CppClassType>());
+  QCOMPARE( defClassC->type<CppClassType>()->baseClasses().size(), 1 );
+  
+  Declaration* defClassD = top->localDeclarations()[3];
+  QCOMPARE(defClassD->identifier(), Identifier("D"));
+  QVERIFY(defClassD->type<CppClassType>());
+  QCOMPARE( defClassD->type<CppClassType>()->baseClasses().size(), 2 );
+
+  QVERIFY( findDeclaration( defClassD->internalContext(), Identifier("dValue") ) );
+  QVERIFY( !findDeclaration( defClassD->internalContext(), Identifier("cValue") ) );
+  QVERIFY( findDeclaration( defClassD->internalContext(), Identifier("aValue") ) );
+  QVERIFY( findDeclaration( defClassD->internalContext(), Identifier("bValue") ) );
+  
+  QVERIFY( !findDeclaration( defClassC->internalContext(), Identifier("dValue") ) );
+  QVERIFY( findDeclaration( defClassC->internalContext(), Identifier("cValue") ) );
+  QVERIFY( !findDeclaration( defClassC->internalContext(), Identifier("bValue") ) );
+  QVERIFY( findDeclaration( defClassC->internalContext(), Identifier("aValue") ) );
+
+  QVERIFY( !findDeclaration( defClassB->internalContext(), Identifier("dValue") ) );
+  QVERIFY( !findDeclaration( defClassB->internalContext(), Identifier("cValue") ) );
+  QVERIFY( findDeclaration( defClassB->internalContext(), Identifier("bValue") ) );
+  QVERIFY( !findDeclaration( defClassB->internalContext(), Identifier("aValue") ) );
+
+  QVERIFY( !findDeclaration( defClassA->internalContext(), Identifier("dValue") ) );
+  QVERIFY( !findDeclaration( defClassA->internalContext(), Identifier("cValue") ) );
+  QVERIFY( !findDeclaration( defClassA->internalContext(), Identifier("bValue") ) );
+  QVERIFY( findDeclaration( defClassA->internalContext(), Identifier("aValue") ) );
+
+  ///Now test a template-class as base-class
+  Declaration* defClassF = top->localDeclarations()[4];
+  QCOMPARE(defClassF->identifier(), Identifier("F"));
+  QVERIFY(defClassF->type<CppClassType>());
+  QCOMPARE( defClassF->type<CppClassType>()->baseClasses().size(), 1 );
+  QVERIFY( dynamic_cast<const DelayedType*>( defClassF->type<CppClassType>()->baseClasses().front().baseClass.data() ) );
+
+  Declaration* FDDecl = findDeclaration(top, QualifiedIdentifier("F<D>") );
+  QVERIFY(FDDecl);
+  QVERIFY(FDDecl->internalContext() != defClassF->internalContext());
+  
+  QVERIFY( findDeclaration( FDDecl->internalContext(), Identifier("dValue") ) );
+  QVERIFY( !findDeclaration( FDDecl->internalContext(), Identifier("cValue") ) );
+  QVERIFY( findDeclaration( FDDecl->internalContext(), Identifier("aValue") ) );
+  QVERIFY( findDeclaration( FDDecl->internalContext(), Identifier("bValue") ) );
+  QVERIFY( findDeclaration( FDDecl->internalContext(), Identifier("fValue") ) );
+  
+  
+  release(top);
+}
+
 void TestDUChain::testTypedef() {
   QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
