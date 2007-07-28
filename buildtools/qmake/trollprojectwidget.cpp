@@ -77,7 +77,6 @@
 #include "scope.h"
 #include "createscopedlg.h"
 #include "disablesubprojectdlg.h"
-#include <kapplication.h> 
 
 TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     : QVBox( 0, "troll project widget" ), m_shownSubproject( 0 ), m_rootSubproject( 0 ),
@@ -634,20 +633,7 @@ void TrollProjectWidget::slotExecuteTarget()
     if ( !m_shownSubproject->scope->variableValues( "TEMPLATE" ).isEmpty() && m_shownSubproject->scope->variableValues( "TEMPLATE" ).findIndex( "app" ) == -1 )
         return ;
 
-    //only run once 
-    if (m_part->appFrontend()->isRunning()) 
-    { 
-        if (KMessageBox::questionYesNo(this, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application already running"), i18n("&Restart application"), i18n("Do &Nothing")) == KMessageBox::No) 
-            return; 
-        m_part->appFrontend()->stopApplication(); 
-        while(m_part->appFrontend()->isRunning()) 
-        { 
-            KApplication::kApplication()->processEvents(); 
-            usleep(100); 
-        } 
-    } 
 
- 
     QString program = KProcess::quote( "." + QString( QChar( QDir::separator() ) ) + getCurrentOutputFilename() );
 
     // Build environment variables to prepend to the executable path
@@ -2012,19 +1998,6 @@ void TrollProjectWidget::slotExecuteProject()
         return ;
     }
 
-    //only run once 
-    if (m_part->appFrontend()->isRunning()) 
-    { 
-        if (KMessageBox::questionYesNo(this, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application already running"), i18n("&Restart application"), i18n("Do &Nothing")) == KMessageBox::No) 
-            return; 
-        m_part->appFrontend()->stopApplication(); 
-        while(m_part->appFrontend()->isRunning()) 
-        { 
-            KApplication::kApplication()->processEvents(); 
-            usleep(100); 
-        } 
-    } 
- 
     if ( !program.startsWith( QDir::rootDirPath() ) )
         program.prepend( "." + QString( QChar( QDir::separator() ) ) );
 
