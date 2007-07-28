@@ -240,7 +240,7 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
     QStringList::ConstIterator it;
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
-        if( *it == QString::null )
+        if( (*it).isEmpty() )
             continue;
         kdDebug(9017) << "adding file: " << *it << endl;
         QString file = projectDirectory() + "/" + ( *it );
