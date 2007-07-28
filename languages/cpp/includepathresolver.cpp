@@ -72,7 +72,9 @@ namespace CppTools {
             ///change the modification-time to m_newTime
             struct timeval times[2];
             times[0].tv_sec = m_newTime;
+            times[0].tv_usec = 0;
             times[1].tv_sec = m_newTime;
+            times[1].tv_usec = 0;
             
             if( utimes( (*it).local8Bit().data(), times ) != 0 )
             {
