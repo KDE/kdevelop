@@ -119,7 +119,7 @@ private:
 
   QString m_lastComment;
 
-  QStack<KDevelop::ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
+  QStack<KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;
 

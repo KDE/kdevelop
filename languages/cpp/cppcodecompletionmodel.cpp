@@ -247,7 +247,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           ;//TODO
       }
 
-      if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(dec)) {
+      if (AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
         if (function->isVirtual())
           p |= Virtual;
         if (function->isInline())

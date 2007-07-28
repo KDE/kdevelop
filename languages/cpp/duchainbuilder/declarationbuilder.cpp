@@ -628,7 +628,7 @@ void DeclarationBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* sto
 
 void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
 {
-  ClassFunctionDeclaration::FunctionSpecifiers specs = 0;
+  AbstractFunctionDeclaration::FunctionSpecifiers specs = 0;
 
   if (function_specifiers) {
     const ListNode<std::size_t> *it = function_specifiers->toFront();
@@ -637,13 +637,13 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
       int kind = m_editor->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_inline:
-          specs |= ClassFunctionDeclaration::InlineSpecifier;
+          specs |= AbstractFunctionDeclaration::InlineSpecifier;
           break;
         case Token_virtual:
-          specs |= ClassFunctionDeclaration::VirtualSpecifier;
+          specs |= AbstractFunctionDeclaration::VirtualSpecifier;
           break;
         case Token_explicit:
-          specs |= ClassFunctionDeclaration::ExplicitSpecifier;
+          specs |= AbstractFunctionDeclaration::ExplicitSpecifier;
           break;
       }
 
@@ -688,8 +688,8 @@ void DeclarationBuilder::applyStorageSpecifiers()
 void DeclarationBuilder::applyFunctionSpecifiers()
 {
   if (!m_functionSpecifiers.isEmpty() && m_functionSpecifiers.top() != 0) {
-    Q_ASSERT(dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()));
-    ClassFunctionDeclaration* function = static_cast<ClassFunctionDeclaration*>(currentDeclaration());
+    AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration());
+    Q_ASSERT(function);
 
     DUChainWriteLocker lock(DUChain::lock());
 
