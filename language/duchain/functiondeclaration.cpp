@@ -25,33 +25,16 @@
 namespace KDevelop
 {
 
-class FunctionDeclarationPrivate
-{
-public:
-  QList<QString> m_defaultParameters;
-};
-
-FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(), d(new FunctionDeclarationPrivate) {
-  d->m_defaultParameters = rhs.d->m_defaultParameters;
+FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(rhs) {
 }
 
 FunctionDeclaration::FunctionDeclaration(KTextEditor::Range * range, Scope scope, DUContext* context)
   : Declaration(range, scope, context)
-  , d(new FunctionDeclarationPrivate)
 {
 }
 
 FunctionDeclaration::~FunctionDeclaration()
 {
-  delete d;
-}
-
-const QList<QString>& FunctionDeclaration::defaultParameters() const {
-  return d->m_defaultParameters;
-}
-
-void FunctionDeclaration::addDefaultParameter(const QString& str) {
-  d->m_defaultParameters << str;
 }
 
 Declaration* FunctionDeclaration::clone() const {

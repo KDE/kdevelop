@@ -29,28 +29,17 @@ class ClassFunctionDeclarationPrivate
 {
 public:
   ClassFunctionDeclaration::QtFunctionType m_functionType;
-  bool m_isVirtual: 1;
-  bool m_isInline: 1;
-  bool m_isExplicit: 1;
-  QList<QString> m_defaultParameters;
 };
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs) : ClassMemberDeclaration(rhs), AbstractFunctionDeclaration(), d(new ClassFunctionDeclarationPrivate) {
+ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs) : ClassMemberDeclaration(rhs), AbstractFunctionDeclaration(rhs), d(new ClassFunctionDeclarationPrivate) {
   d->m_functionType = rhs.d->m_functionType;
-  d->m_isVirtual = rhs.d->m_isVirtual;
-  d->m_isInline = rhs.d->m_isInline;
-  d->m_isExplicit = rhs.d->m_isExplicit;
-  d->m_defaultParameters = rhs.d->m_defaultParameters;
 }
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, DUContext* context)
-  : ClassMemberDeclaration(range, context)
+  : ClassMemberDeclaration(range, context), AbstractFunctionDeclaration()
   , d(new ClassFunctionDeclarationPrivate)
 {
   d->m_functionType = Normal;
-  d->m_isVirtual = false;
-  d->m_isInline = false;
-  d->m_isExplicit = false;
 }
 
 Declaration* ClassFunctionDeclaration::clone() const {
@@ -92,14 +81,6 @@ ClassFunctionDeclaration::QtFunctionType ClassFunctionDeclaration::functionType(
   return d->m_functionType;
 }
 
-const QList<QString>& ClassFunctionDeclaration::defaultParameters() const {
-  return d->m_defaultParameters;
-}
-
-void ClassFunctionDeclaration::addDefaultParameter(const QString& str) {
-  d->m_defaultParameters << str;
-}
-
 void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 {
   d->m_functionType = functionType;
@@ -120,43 +101,6 @@ bool ClassFunctionDeclaration::isDestructor() const
 {
   QString id = identifier().toString();
   return context()->type() == DUContext::Class && id.startsWith('~') && id.mid(1) == context()->localScopeIdentifier().top().toString();
-}
-
-bool ClassFunctionDeclaration::isVirtual() const
-{
-  return d->m_isVirtual;
-}
-
-void ClassFunctionDeclaration::setVirtual(bool isVirtual)
-{
-  d->m_isVirtual = isVirtual;
-}
-
-bool ClassFunctionDeclaration::isInline() const
-{
-  return d->m_isInline;
-}
-
-void ClassFunctionDeclaration::setInline(bool isInline)
-{
-  d->m_isInline = isInline;
-}
-
-bool ClassFunctionDeclaration::isExplicit() const
-{
-  return d->m_isExplicit;
-}
-
-void ClassFunctionDeclaration::setExplicit(bool isExplicit)
-{
-  d->m_isExplicit = isExplicit;
-}
-
-void ClassFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)
-{
-  d->m_isInline = specifiers & InlineSpecifier;
-  d->m_isExplicit = specifiers & ExplicitSpecifier;
-  d->m_isVirtual = specifiers & VirtualSpecifier;
 }
 }
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

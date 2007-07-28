@@ -25,14 +25,38 @@
 namespace KDevelop
 {
 
+class AbstractFunctionDeclarationPrivate;
+
 /**
  * Provides an interface to declarations which represent functions in a definition-use chain.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractFunctionDeclaration
 {
 public:
+  AbstractFunctionDeclaration();
+  AbstractFunctionDeclaration(const AbstractFunctionDeclaration& rhs);
   virtual ~AbstractFunctionDeclaration();
 
+  enum FunctionSpecifier {
+    VirtualSpecifier  = 0x1,
+    InlineSpecifier   = 0x2,
+    ExplicitSpecifier = 0x4
+  };
+  Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
+
+  void setFunctionSpecifiers(FunctionSpecifiers specifiers);
+  
+  bool isInline() const;
+  void setInline(bool isInline);
+  
+  ///Only used for class-member function declarations(see ClassFunctionDeclaration)
+  bool isVirtual() const;
+  void setVirtual(bool isVirtual);
+
+  ///Only used for class-member function declarations(see ClassFunctionDeclaration)
+  bool isExplicit() const;
+  void setExplicit(bool isExplicit);
+      
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
    * argument of the function, but the returned list will only contain default-values for those
@@ -40,9 +64,12 @@ public:
    *
    * So the list may be empty or smaller than the list of function-arguments.
    * */
-  virtual const QList<QString>& defaultParameters() const = 0;
+  const QList<QString>& defaultParameters() const;
 
-  virtual void addDefaultParameter(const QString& str) = 0;
+  void addDefaultParameter(const QString& str);
+
+  private:
+    AbstractFunctionDeclarationPrivate* d;
 };
 
 }

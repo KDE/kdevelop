@@ -51,24 +51,6 @@ public:
   bool isDestructor() const;
   bool isConversionFunction() const;
 
-  enum FunctionSpecifier {
-    VirtualSpecifier  = 0x1,
-    InlineSpecifier   = 0x2,
-    ExplicitSpecifier = 0x4
-  };
-  Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
-
-  void setFunctionSpecifiers(FunctionSpecifiers specifiers);
-
-  bool isVirtual() const;
-  void setVirtual(bool isVirtual);
-
-  bool isInline() const;
-  void setInline(bool isInline);
-
-  bool isExplicit() const;
-  void setExplicit(bool isExplicit);
-
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
    * argument of the function, but the returned list will only contain default-values for those
@@ -76,9 +58,9 @@ public:
    *
    * So the list may be empty or smaller than the list of function-arguments.
    * */
-  virtual const QList<QString>& defaultParameters() const;
+  const QList<QString>& defaultParameters() const;
 
-  virtual void addDefaultParameter(const QString& str);
+  void addDefaultParameter(const QString& str);
 
   //bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
 

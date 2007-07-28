@@ -37,20 +37,7 @@ public:
   FunctionDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   ~FunctionDeclaration();
 
-  /**
-   * Returns the default-parameters that are set. The last default-parameter matches the last
-   * argument of the function, but the returned list will only contain default-values for those
-   * arguments that have one, for performance-reasons.
-   *
-   * So the list may be empty or smaller than the list of function-arguments.
-   * */
-  virtual const QList<QString>& defaultParameters() const;
-
-  virtual void addDefaultParameter(const QString& str);
-
   virtual Declaration* clone() const;
-private:
-  class FunctionDeclarationPrivate* const d;
 };
 }
 

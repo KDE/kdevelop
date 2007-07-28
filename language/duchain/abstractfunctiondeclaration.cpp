@@ -17,10 +17,76 @@
 */
 
 #include "abstractfunctiondeclaration.h"
+#include <QStringList>
 
-using namespace KDevelop;
+namespace KDevelop {
+class AbstractFunctionDeclarationPrivate
+{
+public:
+  AbstractFunctionDeclarationPrivate() : m_isVirtual(false), m_isInline(false), m_isExplicit(false) {
+  }
+  bool m_isVirtual: 1;
+  bool m_isInline: 1;
+  bool m_isExplicit: 1;
+  QStringList m_defaultParameters;
+};
+
+AbstractFunctionDeclaration::AbstractFunctionDeclaration() : d(new AbstractFunctionDeclarationPrivate) {
+}
+
+AbstractFunctionDeclaration::AbstractFunctionDeclaration(const AbstractFunctionDeclaration& rhs) : d(new AbstractFunctionDeclarationPrivate(*rhs.d)) {
+}
 
 AbstractFunctionDeclaration::~AbstractFunctionDeclaration() {
+  delete d;
 }
+
+const QList<QString>& AbstractFunctionDeclaration::defaultParameters() const {
+  return d->m_defaultParameters;
+}
+
+void AbstractFunctionDeclaration::addDefaultParameter(const QString& str) {
+  d->m_defaultParameters << str;
+}
+
+bool AbstractFunctionDeclaration::isVirtual() const
+{
+  return d->m_isVirtual;
+}
+
+void AbstractFunctionDeclaration::setVirtual(bool isVirtual)
+{
+  d->m_isVirtual = isVirtual;
+}
+
+bool AbstractFunctionDeclaration::isInline() const
+{
+  return d->m_isInline;
+}
+
+void AbstractFunctionDeclaration::setInline(bool isInline)
+{
+  d->m_isInline = isInline;
+}
+
+bool AbstractFunctionDeclaration::isExplicit() const
+{
+  return d->m_isExplicit;
+}
+
+void AbstractFunctionDeclaration::setExplicit(bool isExplicit)
+{
+  d->m_isExplicit = isExplicit;
+}
+
+void AbstractFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)
+{
+  d->m_isInline = specifiers & InlineSpecifier;
+  d->m_isExplicit = specifiers & ExplicitSpecifier;
+  d->m_isVirtual = specifiers & VirtualSpecifier;
+}
+
+}
+
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
