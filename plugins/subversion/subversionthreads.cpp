@@ -18,6 +18,10 @@
 #include "subversion_part.h"
 #include "interthreadevents.h"
 
+extern "C" {
+#include <svn_io.h>
+}
+
 #include <QCoreApplication>
 
 #include <ktempdir.h>
@@ -1264,5 +1268,71 @@ void SvnMoveJob::run()
     return;
 }
 
+/////////////////////////////////////////////////////////////////
+
+SvnCatJob::SvnCatJob( const KUrl &path_or_url, const SvnRevision &peg_rev, const SvnRevision &rev,
+               int type, SvnKJobBase *parent )
+    : SubversionThread( type, parent )
+    , m_path_or_url(path_or_url), m_peg_rev(peg_rev), m_rev(rev)
+{}
+
+SvnCatJob::~SvnCatJob()
+{}
+
+void SvnCatJob::run()
+{
+    setTerminationEnabled(true);
+    m_stringbuf = svn_stringbuf_create( "", pool() );
+    svn_stringbuf_setempty( m_stringbuf );
+
+    svn_stream_t *out = svn_stream_create( this, pool() );
+
+    svn_stream_set_read( out, SvnCatJob::catStreamReader );
+    svn_stream_set_write( out, SvnCatJob::catStreamWriter );
+    svn_stream_set_close( out, SvnCatJob::catStreamCloseHandler );
+
+    const char* path_or_url = apr_pstrdup( pool(),
+            svn_path_canonicalize( m_path_or_url.pathOrUrl().toUtf8(), pool() ) );
+
+    svn_opt_revision_t peg_rev = m_peg_rev.revision();
+    svn_opt_revision_t rev = m_rev.revision();
+
+    svn_error_t *err = svn_client_cat2( out, path_or_url, &peg_rev, &rev, ctx(), pool() );
+    if( err ){
+        setErrorMsgExt( err );
+    }
+    svn_stream_close( out );
+    m_total_string = apr_pstrdup( pool(), m_stringbuf->data );
+    return;
+}
+
+svn_error_t* SvnCatJob::catStreamReader( void */*baton*/, char */*buffer*/, apr_size_t */*len*/ )
+{
+    return SVN_NO_ERROR;
+}
+
+svn_error_t* SvnCatJob::catStreamWriter( void *baton, const char *data, apr_size_t *len )
+{
+    SvnCatJob *job = (SvnCatJob*)(baton);
+    if( *len <= 0 ) return SVN_NO_ERROR;
+
+    svn_stringbuf_appendbytes( job->m_stringbuf, data, *len );
+    return SVN_NO_ERROR;
+}
+
+svn_error_t* SvnCatJob::catStreamCloseHandler( void */*baton*/ )
+{
+    kDebug() << "Stream Close Handler" << endl;
+
+    return SVN_NO_ERROR;
+}
+
 
 #include "subversionthreads.moc"
+
+
+
+
+
+
+

@@ -38,6 +38,7 @@ public Q_SLOTS:
     void openDiff( SvnKJobBase *job );
     void printInfo( SvnKJobBase* job );
     void printStatus( SvnKJobBase* job );
+    void openCat( SvnKJobBase *job );
     void slotJobFinished( SvnKJobBase *job );
     void closeCurrentTab();
 private:

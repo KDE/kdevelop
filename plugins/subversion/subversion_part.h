@@ -132,6 +132,7 @@ private:
     void svnStatus( const KUrl &wcPath );
     void copy( const KUrl &path_or_url );
     void move( const KUrl &path_or_url );
+    void cat( const KUrl &path_or_url );
 
 public:
     // SubversionPart internal methods
@@ -154,6 +155,7 @@ public Q_SLOTS:
     void blame();
     void svnInfo();
     void import();
+    void cat();
 
     // invoked by context-menu
     void ctxLogView();
@@ -171,6 +173,7 @@ public Q_SLOTS:
     void ctxStatus();
     void ctxCopy();
     void ctxMove();
+    void ctxCat();
 
 private:
 

@@ -12,6 +12,7 @@
     <Action name="svn_status_async" />
     <Action name="svn_info" />
     <Action name="svn_import" />
+    <Action name="svn_cat" />
   </Menu>
 </MenuBar>
 </kpartgui>

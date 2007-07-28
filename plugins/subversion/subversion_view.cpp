@@ -27,6 +27,8 @@
 #include <ktabwidget.h>
 #include <ktextedit.h>
 #include <klineedit.h>
+#include <ktemporaryfile.h>
+#include <ktempdir.h>
 
 #include <QList>
 #include <QVariant>
@@ -84,6 +86,8 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
              this, SLOT(printInfo(SvnKJobBase*)) );
     connect( d->m_part->svncore(), SIGNAL(statusFetched(SvnKJobBase*)),
              this, SLOT(printStatus(SvnKJobBase*)) );
+    connect( d->m_part->svncore(), SIGNAL(catFetched(SvnKJobBase*)),
+             this, SLOT(openCat(SvnKJobBase*)) );
     connect( d->m_part->svncore(), SIGNAL(jobFinished(SvnKJobBase*)),
              this, SLOT(slotJobFinished(SvnKJobBase*)) );
 
@@ -266,6 +270,36 @@ void KDevSubversionView::printStatus( SvnKJobBase* job )
 
     display->setResults( map );
 
+}
+
+void KDevSubversionView::openCat( SvnKJobBase *job )
+{
+    if( job->error() ){
+        KMessageBox::error( this, job->errorText(), "error" );
+        return;
+    }
+    SvnCatJob *thread = dynamic_cast<SvnCatJob*>( job->svnThread() );
+    if( !thread ) return;
+
+    KTemporaryFile tmpFile;
+    QString prefix = d->m_part->outputTmpDir()->name();
+    tmpFile.setPrefix( prefix );
+    tmpFile.setAutoRemove( false );
+    tmpFile.setFileTemplate( prefix + QString("SVNCAT_") + thread->url().fileName() );
+
+    if( !tmpFile.open() ){
+        KMessageBox::error( this, "Fail to create temp file", "error" );
+        return;
+    }
+
+    QByteArray ba( thread->m_total_string );
+    tmpFile.write( ba );
+    QString outputFile = tmpFile.fileName();
+    tmpFile.close();
+
+    KUrl url( outputFile );
+    if( ! d->m_part->core()->documentController()->openDocument( url ) )
+        KMessageBox::error( this, "Fail to open file", "error" );
 }
 
 void KDevSubversionView::slotJobFinished( SvnKJobBase *job )

@@ -32,6 +32,7 @@ set(kdevsubversion_PART_SRCS
     svn_statuswidgets.cpp
     svn_revertwidgets.cpp
     svn_copywidgets.cpp svn_movewidgets.cpp
+    svn_catwidgets.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -51,6 +52,7 @@ set(kdevsubversion_PART_UI
     uiblame_option_dlg.ui
     uirevert_option_dlg.ui
     uicopy_option_dlg.ui uimove_option_dlg.ui
+    uicat_option_dlg.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

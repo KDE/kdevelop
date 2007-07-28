@@ -27,6 +27,7 @@
 #include "svn_revertwidgets.h"
 #include "svn_copywidgets.h"
 #include "svn_movewidgets.h"
+#include "svn_catwidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -133,6 +134,10 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action = actionCollection()->addAction("svn_import");
     action->setText(i18n("Import into repository"));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(import()));
+
+    action = actionCollection()->addAction("svn_cat");
+    action->setText(i18n("Cat this file"));
+    connect( action, SIGNAL(triggered(bool)), this, SLOT(cat()));
 
 }
 
@@ -687,6 +692,16 @@ void KDevSubversionPart::move( const KUrl &path_or_url )
     }
 }
 
+void KDevSubversionPart::cat( const KUrl &path_or_url )
+{
+    SvnRevision pegRev, rev;
+    SvnCatOptionDlg dlg( path_or_url, 0 );
+    if( dlg.exec() != QDialog::Accepted )
+        return;
+
+    svncore()->spawnCatThread( dlg.url(), pegRev, dlg.revision() );
+}
+
 SubversionCore* KDevSubversionPart::svncore()
 {
     return d->m_impl;
@@ -752,18 +767,6 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
         QList<QAction*> actions;
         QAction *action;
 
-        action = new QAction(i18n("Log View..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
-        actions << action;
-
-        action = new QAction(i18n("Blame/Annotate..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
-        actions << action;
-
-        action = new QAction(i18n("Update.."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-        actions << action;
-
         action = new QAction(i18n("Commit..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
         actions << action;
@@ -774,6 +777,22 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
 
         action = new QAction(i18n("Remove from SVN"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+        actions << action;
+
+        action = new QAction(i18n("Update.."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+        actions << action;
+
+        action = new QAction(i18n("Log View..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
+        actions << action;
+
+        action = new QAction(i18n("Blame/Annotate..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
+        actions << action;
+
+        action = new QAction(i18n("Cat..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCat()) );
         actions << action;
 
         action = new QAction(i18n("Revert..."), this);
@@ -906,6 +925,16 @@ void KDevSubversionPart::import()
                                   dlg.nonRecurse(), dlg.noIgnore() );
 }
 
+void KDevSubversionPart::cat()
+{
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
+        cat( activeUrl );
+    } else{
+        KMessageBox::error(NULL, "No active docuement to view information" );
+    }
+}
+
 //////////////////////////////////////////////
 void KDevSubversionPart::ctxLogView()
 {
@@ -1013,6 +1042,15 @@ void KDevSubversionPart::ctxMove()
         return;
     }
     move( d->m_ctxUrlList.first() );
+}
+
+void KDevSubversionPart::ctxCat()
+{
+    if( d->m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( NULL, i18n("Please select only one item for this operation") );
+        return;
+    }
+    cat( d->m_ctxUrlList.first() );
 }
 
 

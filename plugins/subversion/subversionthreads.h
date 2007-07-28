@@ -386,5 +386,30 @@ protected:
     Private *d;
 };
 
+class SvnCatJob : public SubversionThread
+{
+public:
+    SvnCatJob( const KUrl &path_or_url, const SvnRevision &peg_rev, const SvnRevision &rev,
+               int type, SvnKJobBase *parent );
+    ~SvnCatJob();
+
+    KUrl url(){ return m_path_or_url; }
+
+    // these two will be freed when this class is destroyed.
+    svn_stringbuf_t *m_stringbuf;
+    char *m_total_string;
+
+protected:
+    void run();
+    // see svn_io.h
+    static svn_error_t* catStreamReader( void *baton, char *buffer, apr_size_t *len );
+    static svn_error_t* catStreamWriter( void *baton, const char *data, apr_size_t *len );
+    static svn_error_t* catStreamCloseHandler( void *baton );
+
+    KUrl m_path_or_url;
+    SvnRevision m_peg_rev, m_rev;
+
+};
+
 
 #endif

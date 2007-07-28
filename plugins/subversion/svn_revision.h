@@ -24,6 +24,7 @@
 #define SVN_REVERT   (KDevelop::VcsJob::Revert)
 #define SVN_COPY     (KDevelop::VcsJob::Copy)
 #define SVN_MOVE     (KDevelop::VcsJob::Move)
+#define SVN_CAT      (KDevelop::VcsJob::Cat)
 
 // subversion internals
 #define SVN_INFO     (101)

@@ -353,6 +353,23 @@ SvnKJobBase* SubversionCore::createMoveJob( const KUrl &srcPathOrUrl, const KUrl
     return job;
 }
 
+void SubversionCore::spawnCatThread( const KUrl &pathOrUrl,
+                                     const SvnRevision &peg_rev, const SvnRevision &rev )
+{
+    SvnKJobBase* job = createCatJob( pathOrUrl, peg_rev, rev );
+    connect( job, SIGNAL(result(KJob*)), this, SLOT(slotResult(KJob*)) );
+    job->start();
+}
+
+SvnKJobBase* SubversionCore::createCatJob( const KUrl &pathOrUrl,
+                                           const SvnRevision &peg_rev, const SvnRevision &rev )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_CAT, this );
+    SvnCatJob *thread = new SvnCatJob( pathOrUrl, peg_rev, rev, SVN_CAT, job );
+    job->setSvnThread( thread );
+    return job;
+}
+
 ///////////////////////     internals       ///////////////////////////////////////////////
 
 void SubversionCore::slotLogResult( KJob *aJob )
@@ -376,6 +393,8 @@ void SubversionCore::slotResult( KJob* aJob )
         emit infoFetched( job );
     } else if( job->type() == SVN_STATUS ){
         emit statusFetched( job );
+    } else if( job->type() == SVN_CAT ){
+        emit catFetched( job );
     }
     else {
         emit jobFinished( job );

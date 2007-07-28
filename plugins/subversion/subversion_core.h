@@ -118,6 +118,9 @@ public:
     void spawnMoveThread( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force );
     SvnKJobBase* createMoveJob( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force );
 
+    void spawnCatThread( const KUrl &pathOrUrl, const SvnRevision &peg_rev, const SvnRevision &rev );
+    SvnKJobBase* createCatJob( const KUrl &pathOrUrl, const SvnRevision &peg_rev, const SvnRevision &rev );
+
 
 protected Q_SLOTS:
     /// slot for logview only. Logview is the testbed whenever a big change happens.
@@ -142,6 +145,8 @@ Q_SIGNALS:
     void infoFetched( SvnKJobBase * );
     /// status result is available.
     void statusFetched( SvnKJobBase * );
+
+    void catFetched( SvnKJobBase * );
 
 protected:
     /// Receive event from subversion threads. Events are for displaying UI widgets
