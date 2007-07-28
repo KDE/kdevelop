@@ -154,7 +154,6 @@ public Q_SLOTS:
     void logView();
     void blame();
     void svnInfo();
-    void import();
     void cat();
 
     // invoked by context-menu

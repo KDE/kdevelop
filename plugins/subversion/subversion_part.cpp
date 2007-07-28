@@ -131,10 +131,6 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action->setText(i18n("Show the system-generated metadatas"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(svnInfo()));
 
-    action = actionCollection()->addAction("svn_import");
-    action->setText(i18n("Import into repository"));
-    connect( action, SIGNAL(triggered(bool)), this, SLOT(import()));
-
     action = actionCollection()->addAction("svn_cat");
     action->setText(i18n("Cat this file"));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(cat()));
@@ -910,19 +906,6 @@ void KDevSubversionPart::svnInfo()
     } else{
         KMessageBox::error(NULL, "No active docuement to view information" );
     }
-}
-
-// I think importing one currently opened file is impractical
-void KDevSubversionPart::import()
-{
-    SvnImportDialog dlg;
-    if( dlg.exec() != QDialog::Accepted ){
-        return;
-    }
-    // TODO if context menu systems are ready in kdevplatform
-    // redirect this to import( KUrl local ) which doesn't exist yet.
-    d->m_impl->spawnImportThread( dlg.srcLocal(), dlg.destRepository(),
-                                  dlg.nonRecurse(), dlg.noIgnore() );
 }
 
 void KDevSubversionPart::cat()
