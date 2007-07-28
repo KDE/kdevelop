@@ -45,6 +45,8 @@ While construction:
 
 */
 
+#define ifDebug(x)
+
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
 
@@ -103,7 +105,7 @@ class CppDUContext : public BaseContext {
     ///Overridden to take care of templates
     virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::DUContext::UsingNS*>& usingNamespaces, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
-      kDebug() << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl;
+      ifDebug( kDebug() << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
       
       ///@todo maybe move parts of this logic directly into the du-chain
 
@@ -222,7 +224,7 @@ class CppDUContext : public BaseContext {
 
     virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, typename BaseContext::SearchFlags flags ) const
     {
-      kDebug() << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl;
+      ifDebug( kDebug() << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
       /**
         - When searching local declarations:
          - Check whether they are already in the specialized context, if yes return them

@@ -43,6 +43,13 @@ set(kdevcpplanguagesupport_PART_SRCS
 )
 endif(NOT WIN32)
 
+ADD_DEFINITIONS(-DTEST)
+
+ADD_EXECUTABLE(kdev_includepathresolver includepathresolver.cpp)
+
+TARGET_LINK_LIBRARIES( kdev_includepathresolver ${KDEVPLATFORM_INTERFACES_LIBRARY}  ${KDEVPLATFORM_PROJECT_LIBRARY} )
+
+install(TARGETS kdev_includepathresolver DESTINATION ${BIN_INSTALL_DIR} )
 
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY}

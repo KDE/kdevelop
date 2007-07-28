@@ -51,6 +51,7 @@
 
 #ifdef TEST
 #include <iostream>
+#include <QApplication>
 using namespace std;
 #endif
 
@@ -78,7 +79,9 @@ namespace CppTools {
             ///change the modification-time to m_newTime
             struct timeval times[2];
             times[0].tv_sec = m_newTime;
+            times[0].tv_usec = 0;
             times[1].tv_sec = m_newTime;
+            times[1].tv_usec = 0;
 
             if( utimes( (*it).toLocal8Bit().constData(), times ) != 0 )
             {
@@ -528,6 +531,7 @@ void IncludePathResolver::setOutOfSourceBuildSystem( const QString& source, cons
 }
 
 #ifdef TEST
+
 /** This can be used for testing and debugging the system. To compile it use
  * gcc includepathresolver.cpp -I /usr/share/qt3/include -I /usr/include/kde -I ../../lib/util -DTEST -lkdecore -g -o includepathresolver
  * */
@@ -546,10 +550,10 @@ int main(int argc, char **argv) {
   PathResolutionResult res = resolver.resolveIncludePath( argv[1], argv[2] );
   cout << "success: " << res.success << "\n";
   if( !res.success ) {
-    cout << "error-message: \n" << res.errorMessage << "\n";
-    cout << "long error-message: \n" << res.longErrorMessage << "\n";
+    cout << "error-message: \n" << res.errorMessage.toLocal8Bit().data() << "\n";
+    cout << "long error-message: \n" << res.longErrorMessage.toLocal8Bit().data() << "\n";
   }
-  cout << "path: \n" << res.path.join("\n");
+  cout << "path: \n" << res.paths.join("\n").toLocal8Bit().data() << "\n";
   return res.success;
 }
 #endif

@@ -232,6 +232,8 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
             allPaths += result.paths;
+        }else{
+            kDebug() << "Failed to resolve include-path for \"" << source << "\": " << result.errorMessage << "\n" << result.longErrorMessage << "\n";
         }
         #endif
         foreach (QString path, allPaths) {
