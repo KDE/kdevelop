@@ -1370,15 +1370,12 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
                 res.insert( QDir::cleanDirPath( file ) );
             }
         }
-        else
+        values = variableValues( "IMAGES" ,false );
+        for ( it = values.begin(); it != values.end(); ++it )
         {
-            values = variableValues( "IMAGES" ,false );
-            for ( it = values.begin(); it != values.end(); ++it )
-            {
-                file = myRelPath + QString(QChar(QDir::separator())) + *it;
-                file = resolveVariables( file );
-                res.insert( QDir::cleanDirPath( file ) );
-            }
+            file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
+            res.insert( QDir::cleanDirPath( file ) );
         }
 
         values = variableValues( "TRANSLATIONS" ,false );

@@ -47,7 +47,7 @@ class GroupItem : public qProjectItem
 public:
     enum GroupType {NoType, Sources, Headers, Forms, Distfiles, Images, Resources, Lexsources, Yaccsources, Translations, IDLs, InstallRoot, InstallObject, MaxTypeEnum };
 
-    static GroupType groupTypeForExtension( const QString &ext, bool qt4project );
+    static GroupType groupTypeForExtension( const QString &ext );
     static void groupTypeMeanings( GroupItem::GroupType type, QString& title, QString& ext );
 
     GroupItem( QListView *lv, GroupType type, const QString &text, QMakeScopeItem* spitem );

@@ -52,7 +52,7 @@ GroupItem::GroupItem( QListView *lv, GroupType type, const QString &text, QMakeS
     setPixmap( 0, SmallIcon( "tar" ) );
 }
 
-GroupItem::GroupType GroupItem::groupTypeForExtension( const QString &ext, bool qt4project )
+GroupItem::GroupType GroupItem::groupTypeForExtension( const QString &ext )
 {
     if ( ext == "cpp" || ext == "cc" || ext == "c" || ext == "C" || ext == "c++" || ext == "cxx" || ext == "ocl" )
         return Sources;
@@ -60,7 +60,7 @@ GroupItem::GroupType GroupItem::groupTypeForExtension( const QString &ext, bool 
         return Headers;
     else if ( ext == "ui" )
         return Forms;
-    else if ( qt4project && ( ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "xpm" || ext == "gif" || ext == "bmp" ) )
+    else if ( ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "xpm" || ext == "gif" || ext == "bmp" )
         return Images;
     else if ( ext == "idl" )
         return IDLs;
@@ -235,10 +235,6 @@ void GroupItem::removeFileFromScope( const QString& filename )
     {
         owner->removeValue( "FORMS", filename );
     }
-    else if ( groupType == GroupItem::Distfiles )
-    {
-        owner->removeValue( "DISTFILES", filename );
-    }
     else if ( groupType == GroupItem::Images )
     {
         owner->removeValue( "IMAGES", filename );
@@ -262,6 +258,10 @@ void GroupItem::removeFileFromScope( const QString& filename )
     else if ( groupType == GroupItem::IDLs )
     {
         owner->removeValue( "IDL", filename );
+    }
+    else if ( groupType == GroupItem::Distfiles )
+    {
+        owner->removeValue( "DISTFILES", filename );
     }
     else if ( groupType == GroupItem::InstallObject )
     {
@@ -627,15 +627,12 @@ void QMakeScopeItem::buildGroups()
             item->files.append( createFileItem( *it ) );
         }
     }
-    else
+    values = scope->variableValues( "IMAGES" );
+    item = createGroupItem( GroupItem::Images, "IMAGES", this );
+    groups.insert( item->groupType, item );
+    for ( it = values.begin(); it != values.end(); ++it )
     {
-        values = scope->variableValues( "IMAGES" );
-        item = createGroupItem( GroupItem::Images, "IMAGES", this );
-        groups.insert( item->groupType, item );
-        for ( it = values.begin(); it != values.end(); ++it )
-        {
-            item->files.append( createFileItem( *it ) );
-        }
+        item->files.append( createFileItem( *it ) );
     }
 
     values = scope->variableValues( "TRANSLATIONS" );
