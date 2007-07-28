@@ -18,40 +18,28 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef QMAKEASTVISITOR_H
-#define QMAKEASTVISITOR_H
+#ifndef SCOPE_H
+#define SCOPE_H
 
-#include "parserexport.h"
+#include <QtCore/QHash>
 
 namespace QMake
 {
-
-class AST;
-class ProjectAST;
-class AssignmentAST;
-class FunctionCallAST;
-class SimpleScopeAST;
-class OrAST;
-class ScopeBodyAST;
-class ValueAST;
-
-class KDEVQMAKEPARSER_EXPORT ASTVisitor
-{
-    typedef void (ASTVisitor::*parser_fun_t)(AST*);
-    static parser_fun_t _S_parser_table[];
-    public:
-        virtual ~ASTVisitor();
-        virtual void visitNode( AST* node );
-        virtual void visitProject( ProjectAST* node );
-        virtual void visitAssignment( AssignmentAST* node );
-        virtual void visitValue( ValueAST* node );
-        virtual void visitFunctionCall( FunctionCallAST* node );
-        virtual void visitScopeBody( ScopeBodyAST* node );
-        virtual void visitOr( OrAST* node );
-        virtual void visitSimpleScope( SimpleScopeAST* node );
-};
-
+    class AssignmentAST;
 }
+class QString;
+
+class Scope
+{
+public:
+    Scope();
+    void setParent( Scope* s );
+    Scope* parent();
+    void addVariable(const QString& var, QMake::AssignmentAST* node );
+private:
+    Scope* m_parent;
+    QHash<QString, QMake::AssignmentAST*> m_variables;
+};
 
 #endif
 

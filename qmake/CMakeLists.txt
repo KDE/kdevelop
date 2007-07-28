@@ -28,6 +28,7 @@ set(kdevqmakemanager_PART_SRCS
     qmakeprojectfile.cpp
     qmakemkspecs.cpp
     qmakefile.cpp
+    scope.cpp
 )
 
 

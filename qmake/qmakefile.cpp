@@ -28,6 +28,7 @@
 
 #include "qmakeast.h"
 #include "qmakedriver.h"
+#include "scope.h"
 
 QMakeFile::QMakeFile( const KUrl& file )
     : m_ast(0)
@@ -63,6 +64,7 @@ QMakeFile::QMakeFile( const KUrl& file )
     }else
     {
         kDebug(9024) << "found ast:" << m_ast->statements().count() << endl;
+        visitNode(m_ast);
     }
 }
 
@@ -84,7 +86,27 @@ KUrl QMakeFile::absoluteFileUrl() const
 
 QMake::ProjectAST* QMakeFile::ast() const
 {
-	return m_ast;
+    return m_ast;
+}
+
+void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
+{
+    top()->addVariable( node->variable()->value(), node );
+}
+
+Scope* QMakeFile::top() const
+{
+    return m_scopes.top();
+}
+
+Scope* QMakeFile::pop()
+{
+    return m_scopes.pop();
+}
+
+void QMakeFile::push( Scope* s )
+{
+    m_scopes.push(s);
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

@@ -21,14 +21,19 @@
 #ifndef QMAKEFILE_H
 #define QMAKEFILE_H
 
+#include "qmakeastdefaultvisitor.h"
+#include <QtCore/QStack>
 #include <kurl.h>
 
 namespace QMake
 {
     class ProjectAST;
+    class AssignmentAST;
 }
 
-class QMakeFile
+class Scope;
+
+class QMakeFile : QMake::ASTDefaultVisitor
 {
 public:
     QMakeFile( const KUrl& file );
@@ -36,9 +41,16 @@ public:
     KUrl absoluteDirUrl() const;
     KUrl absoluteFileUrl() const;
     QMake::ProjectAST* ast() const;
+    void visitAssignment( QMake::AssignmentAST* node );
+
+    Scope* top() const;
+    Scope* pop();
+    void push( Scope* s );
 private:
     QMake::ProjectAST* m_ast;
     KUrl m_projectFileUrl;
+    Scope* m_topScope;
+    QStack<Scope*> m_scopes;
 };
 
 #endif
