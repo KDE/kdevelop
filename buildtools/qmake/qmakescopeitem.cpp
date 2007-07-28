@@ -491,6 +491,8 @@ void QMakeScopeItem::buildSubTree()
 {
     QValueList<Scope*>::const_iterator it;
 
+    sortChildItems( 0, false );
+
     QValueList<Scope*> scopes = scope->scopesInOrder();
 
     for ( it = scopes.begin(); it != scopes.end(); ++it )
@@ -500,7 +502,6 @@ void QMakeScopeItem::buildSubTree()
         else
             kdDebug( 9024 ) << "No QMakeScopeItem created" << endl;
     }
-    sortChildItems( 0, true );
 }
 
 
