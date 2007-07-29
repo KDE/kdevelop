@@ -13,6 +13,6 @@ find $dirs -maxdepth 1 -name "*.cc" -print >> files
 find $dirs -maxdepth 1 -name "*.h" -print >> files
 $EXTRACTRC `find $dirs -maxdepth 1 \( -name \*.rc -o -name \*.ui -o -name \*.ui3 -o -name \*.ui4 -o -name \*.kcfg \) ` >> rc.cpp || exit 11
 echo rc.cpp >> files
-$XGETTEXT --files-from=files -o $podir/kdevelop.pot
+$XGETTEXT --files-from=files -o $podir/kdevplatform.pot
 rm -f rc.cpp dirs
 
