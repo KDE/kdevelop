@@ -50,6 +50,11 @@ using namespace KDevelop;
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel(parent)
 {
+  QString allIconNames = "CVprotected_var CVprivate_var protected_union protected_enum private_struct CVprotected_slot private_enum CVprotected_signal CVprivate_slot protected_class private_class private_union protected_function private_function signal CVpublic_var enum class CVpublic_slot union typedef function struct protected_field private_field field";
+
+  foreach( QString iconName, QString("allIcons").split(" ") )
+    m_icons[iconName] = KIconLoader::global()->loadIcon(iconName, K3Icon::Small);
+  
 }
 
 CppCodeCompletionModel::~CppCodeCompletionModel()
@@ -377,7 +382,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
         if( index.column() == Icon ) {
           lock.unlock();
-          return QVariant( KIconLoader::global()->loadIcon(iconName, K3Icon::Small) );
+          return QVariant( m_icons[iconName] );
         }
         break;
 

@@ -23,9 +23,13 @@
 #define KDEVCPPCODECOMPLETIONMODEL_H
 
 #include <QPair>
+#include <QMap>
 #include <ktexteditor/codecompletionmodel.h>
 #include <ksharedptr.h>
 #include <duchainpointer.h>
+
+class QIcon;
+class QString;
 
 namespace KDevelop
 {
@@ -60,7 +64,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     
     mutable DeclarationContextPair m_currentMatchContext;
 
-    
+    QMap<QString, QIcon> m_icons;
     QList< DeclarationContextPair > m_declarations;
 };
 
