@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <duchain/identifier.h>
 #include "templateparameterdeclaration.h"
+#include <duchain/identifier.h>
 
 using namespace KDevelop;
 

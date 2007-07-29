@@ -17,9 +17,10 @@
 */
 // kate: indent-width 2;
 
+#include "declarationbuilder.h"
+
 #include <QByteArray>
 
-#include "declarationbuilder.h"
 #include "templatedeclaration.h"
 
 #include <ktexteditor/smartrange.h>
@@ -85,7 +86,7 @@ DUContext* DeclarationBuilder::buildSubDeclarations(const KUrl& url, AST *node, 
 
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   TypeBuilder::visitTemplateParameter(ast);
-  
+
   if( ast->type_parameter && ast->type_parameter->name ) {
     ///@todo deal with all the other stuff the AST may contain
     Declaration* dec = openDeclaration(ast->type_parameter->name, ast);
@@ -117,7 +118,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
 
       decl->setDefaultParameter(defaultParam);
     }
-    
+
     ///@todo note default-parameter
   } else {
     kDebug() << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing" << endl;
@@ -132,7 +133,7 @@ void DeclarationBuilder::parseComments(const ListNode<size_t> *comments)
 
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
-  
+
   parseComments(node->comments);
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
@@ -399,7 +400,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     } else {
       declaration = specialDeclaration<Declaration>(range, scope );
     }
-    
+
     if( m_inTypedef )
       declaration->setIsTypeAlias(true);
 
@@ -427,7 +428,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     }
   }
   declaration->setComment(m_lastComment);
-  m_lastComment = QString::null;
+  m_lastComment = QString();
 
   setEncountered(declaration);
 
@@ -467,7 +468,7 @@ void DeclarationBuilder::closeDeclaration()
         currentDeclaration()->setKind(Declaration::Instance);
       else
         currentDeclaration()->setKind(Declaration::Type);
-        
+
       currentDeclaration()->setType(lastType());
     }
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other ) )
@@ -477,7 +478,7 @@ void DeclarationBuilder::closeDeclaration()
     }
   }
 
-  
+
 
   //kDebug() << k_funcinfo << "Mangled declaration: " << currentDeclaration()->mangledIdentifier() << endl;
 

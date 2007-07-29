@@ -455,7 +455,7 @@ QString CppFunctionType::mangled() const
     if (argument)
       ret += argument->mangled();
     else
-      ret += "?";
+      ret += '?';
 
   return ret;
 }

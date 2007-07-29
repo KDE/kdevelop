@@ -21,6 +21,8 @@
 #ifndef CPPEXPRESSIONPARSEREXPORT_H
 #define CPPEXPRESSIONPARSEREXPORT_H
 
+//krazy:excludeall=cpp
+
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 

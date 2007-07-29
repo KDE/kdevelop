@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -16,6 +16,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef COMMENTFORMATTER_H
+#define COMMENTFORMATTER_H
+
 #include <QString>
 #include <cppparserexport.h>
 
@@ -31,7 +34,7 @@ class ParseSession;
 
 class KDEVCPPPARSER_EXPORT CommentFormatter {
     public:
-    static QString formatComment( QString comment );
+    static QString formatComment( const QString& comment );
     ///Processes the comment represented by the given token-number within the parse-session's token-stream
     static QString formatComment( size_t token, const ParseSession* session );
 
@@ -41,6 +44,8 @@ class KDEVCPPPARSER_EXPORT CommentFormatter {
     static inline bool isWhite( QChar c ) {
         return c.isSpace();
     }
-    static void rStrip( QString str, QString& from );
-    static void strip( QString str, QString& from );
+    static void rStrip( const QString& str, QString& from );
+    static void strip( const QString& str, QString& from );
 };
+
+#endif

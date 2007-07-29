@@ -20,6 +20,8 @@
 #ifndef CPPPARSEREXPORT_H
 #define CPPPARSEREXPORT_H
 
+//krazy:excludeall=cpp
+
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 

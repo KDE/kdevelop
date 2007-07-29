@@ -20,6 +20,8 @@
 #ifndef CPPDUCHAINBUILDEREXPORT_H
 #define CPPDUCHAINBUILDEREXPORT_H
 
+//krazy:excludeall=cpp
+
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 

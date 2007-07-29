@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 #include "parsesession.h"
 #include "lexer.h"
 
-void CommentFormatter::rStrip( QString str, QString& from ) {
+void CommentFormatter::rStrip( const QString& str, QString& from ) {
   if( str.isEmpty() ) return;
 
   int i = 0;
@@ -46,7 +46,7 @@ void CommentFormatter::rStrip( QString str, QString& from ) {
   if( ip != (int)from.length() ) from = from.left( ip );
 }
 
-void CommentFormatter::strip( QString str, QString& from ) {
+void CommentFormatter::strip( const QString& str, QString& from ) {
   if( str.isEmpty() ) return;
 
   int i = 0;
@@ -87,7 +87,7 @@ QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const
         ret = c;
       else
         ret += QString("\n(%1)").arg(c);
-      
+
       it = it->next;
     }while( it != end );
   }
@@ -95,7 +95,7 @@ QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const
   return ret;
 }
 
-QString CommentFormatter::formatComment( QString comment ) {
+QString CommentFormatter::formatComment( const QString& comment ) {
   QString ret;
   int i = 0;
   int s = comment.length();
