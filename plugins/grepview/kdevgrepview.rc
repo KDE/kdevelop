@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="kdevgrepview" version="4">
+<MenuBar>
+ <Menu name="edit"><Text>Edit</Text>
+  <Action name="edit_grep" />
+ </Menu>
+</MenuBar>
+</kpartgui>
+
