@@ -31,6 +31,7 @@
 #include <QComboBox>
 #include <QDateTimeEdit>
 #include <QSpinBox>
+#include <QListWidget>
 
 SvnLogviewWidget::SvnLogviewWidget( KUrl &url, KDevSubversionPart *part, QWidget *parent )
     :QWidget(parent), Ui::SvnLogviewWidget()
@@ -79,25 +80,10 @@ void SvnLogviewWidget::customContextMenuEvent( const QPoint &point )
     action = menu.addAction(i18n("Diff to previous revision"));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(diffToPrev()) );
 
-    menu.exec( treeView->viewport()->mapToGlobal(point) );
-}
+    action = menu.addAction(i18n("Cat this revision"));
+    connect( action, SIGNAL(triggered(bool)), this, SLOT(catThisRev()) );
 
-void SvnLogviewWidget::contextMenuEvent( QContextMenuEvent * event )
-{
-    kDebug() << " SvnLogviewWidget::contextMenuEvent " << endl;
-//     m_contextIndex = treeView->indexAt( event->pos() );
-//     if( !m_contextIndex.isValid() ){
-//         kDebug() << " contextMenu is not in TreeView " << endl;
-//         return;
-//     }
-//
-//     KMenu menu( this );
-//
-//     QAction *action = menu.addAction(i18n("Blame this Revision"));
-//     connect( action, SIGNAL(triggered(bool)), this, SLOT(blameRev()) );
-//     menu.exec(event->globalPos());
-//
-    QWidget::contextMenuEvent( event );
+    menu.exec( treeView->viewport()->mapToGlobal(point) );
 }
 
 void SvnLogviewWidget::blameRev()
@@ -110,7 +96,7 @@ void SvnLogviewWidget::blameRev()
     QStringList modifies = m_logviewModel->modifiedLists( m_contextIndex );
     QString selectedPath;
     if( modifies.count() > 1 ){
-        SvnBlameFileSelectDlg dlg(this);
+        SvnFileSelectFromLogviewDlg dlg(i18n("Select one file to view annotation"),this);
         dlg.setCandidate( &modifies );
         if( dlg.exec() == QDialog::Accepted ){
             selectedPath = dlg.selected();
@@ -166,6 +152,58 @@ void SvnLogviewWidget::diffToPrev()
 
     m_part->svncore()->spawnDiffThread( m_url, m_url, peg_rev, rev1, rev2, true, false, false, false );
 }
+
+void SvnLogviewWidget::catThisRev()
+{
+    long rev = m_logviewModel->revision( m_contextIndex );
+    if( rev == -1 ){ //error
+        return;
+    }
+    SvnRevision rev1, peg_rev;
+    peg_rev.setNumber( rev );
+    rev1.setNumber( rev );
+
+    // note that cat is done on single file.
+    QStringList modifies = m_logviewModel->modifiedLists( m_contextIndex );
+    QString selectedPath;
+    if( modifies.count() > 1 ){
+        SvnFileSelectFromLogviewDlg dlg("Select one file to cat", this);
+        dlg.setCandidate( &modifies );
+        if( dlg.exec() == QDialog::Accepted ){
+            selectedPath = dlg.selected();
+        } else{
+            return;
+        }
+
+    } else if( modifies.count() == 1 ){
+        selectedPath = modifies.at(0);
+    } else {
+        return;
+    }
+
+    QString relPath = selectedPath.section( '/', 1 );
+    // get repository root URL
+    SvnRevision nullRev;
+    SvnKJobBase* job = m_part->svncore()->createInfoJob( m_url, nullRev, nullRev, false );
+    if( job->exec() != KDevelop::VcsJob::JobSucceeded ) return;
+    SvnInfoJob *thread = dynamic_cast<SvnInfoJob*>(job->svnThread());
+    QMap<KUrl, SvnInfoHolder> &infoMap = thread->m_holderMap;
+
+    QList< SvnInfoHolder > holderList = infoMap.values();
+    if( holderList.count() > 0 ){
+        // get full Url
+        SvnInfoHolder holder = holderList.first();
+        KUrl absUrl(holder.repos_root_URL);
+        absUrl.addPath( relPath );
+        kDebug() << "Cat requested on path " << absUrl << endl;
+        // final request
+        m_part->svncore()->spawnCatThread( absUrl, peg_rev, rev1 );
+    }
+    else{
+        return;
+    }
+}
+
 void SvnLogviewWidget::treeViewClicked( const QModelIndex &index )
 {
     m_logviewDetailedModel->setNewRevision( index );
@@ -228,6 +266,69 @@ int SvnLogviewOptionDialog::limit()
 bool SvnLogviewOptionDialog::strictNode()
 {
     return d->ui.checkBox1->isChecked();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+class SvnFileSelectWidget : public QWidget
+{
+public:
+    SvnFileSelectWidget( QWidget* parent )
+    : QWidget( parent )
+    {
+        m_layout = new QGridLayout( this );
+        m_listWidget = new QListWidget( this );
+        m_layout->addWidget( m_listWidget, 0, 0, 1, -1 );
+    }
+    virtual ~SvnFileSelectWidget()
+    {
+    }
+
+    QGridLayout *m_layout;
+    QListWidget *m_listWidget;
+};
+
+SvnFileSelectFromLogviewDlg::SvnFileSelectFromLogviewDlg( const QString &title, QWidget *parent )
+    : KDialog( parent )
+{
+    m_selected = "";
+    setWindowTitle( title );
+
+    widget = new SvnFileSelectWidget( this );
+    setMainWidget( widget );
+
+    setButtons( KDialog::Ok | KDialog::Cancel );
+}
+
+SvnFileSelectFromLogviewDlg::~SvnFileSelectFromLogviewDlg()
+{
+}
+
+void SvnFileSelectFromLogviewDlg::setCandidate( QStringList *list )
+{
+    for( QList<QString>::iterator it = list->begin(); it != list->end(); ++it ){
+        widget->m_listWidget->addItem( *it );
+    }
+}
+
+QString SvnFileSelectFromLogviewDlg::selected()
+{
+    return m_selected;
+}
+
+void SvnFileSelectFromLogviewDlg::accept()
+{
+    while( true ){
+        QListWidgetItem *item = widget->m_listWidget->currentItem();
+        if( item ){
+            m_selected = item->text();
+            break;
+        }
+        else{
+            KMessageBox::error( this, i18n("Select file from list") );
+        }
+    }
+    KDialog::accept();
 }
 
 #include "svn_logviewwidgets.moc"

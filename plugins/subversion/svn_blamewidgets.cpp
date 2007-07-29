@@ -11,9 +11,6 @@
 #include "svn_blamewidgets.h"
 #include "svn_revision.h"
 #include "svn_revisionwidget.h"
-#include <QListWidget>
-#include <QGridLayout>
-#include <QPushButton>
 #include <kmessagebox.h>
 
 SvnBlameWidget::SvnBlameWidget(QWidget *parent)
@@ -44,77 +41,6 @@ void SvnBlameWidget::refreshWithNewData( QList<SvnBlameHolder> datalist )
     treeView->resizeColumnToContents(2);//author
 }
 
-/////////////////////////////////////////////////////////////////////////////
-
-class SvnBlameFileSelectWidget : public QWidget
-{
-public:
-    SvnBlameFileSelectWidget( QWidget* parent )
-    : QWidget( parent )
-    {
-        m_layout = new QGridLayout( this );
-        m_listWidget = new QListWidget( this );
-        m_layout->addWidget( m_listWidget, 0, 0, 1, -1 );
-    }
-    virtual ~SvnBlameFileSelectWidget()
-    {
-    }
-
-    QGridLayout *m_layout;
-    QListWidget *m_listWidget;
-};
-
-class SvnBlameFileSelectDlgPrivate
-{
-public:
-    QStringList *m_candidates;
-    QString m_selected;
-    SvnBlameFileSelectWidget *widget;
-};
-
-SvnBlameFileSelectDlg::SvnBlameFileSelectDlg( QWidget *parent )
-    : KDialog( parent ), d( new SvnBlameFileSelectDlgPrivate )
-{
-    d->m_selected = "";
-    setWindowTitle( i18n("Select one file to view annotation") );
-
-    d->widget = new SvnBlameFileSelectWidget( this );
-    setMainWidget( d->widget );
-
-    setButtons( KDialog::Ok | KDialog::Cancel );
-}
-
-SvnBlameFileSelectDlg::~SvnBlameFileSelectDlg()
-{
-    delete d;
-}
-
-void SvnBlameFileSelectDlg::setCandidate( QStringList *list )
-{
-    for( QList<QString>::iterator it = list->begin(); it != list->end(); ++it ){
-        d->widget->m_listWidget->addItem( *it );
-    }
-}
-
-QString SvnBlameFileSelectDlg::selected()
-{
-    return d->m_selected;
-}
-
-void SvnBlameFileSelectDlg::accept()
-{
-    while( true ){
-        QListWidgetItem *item = d->widget->m_listWidget->currentItem();
-        if( item ){
-            d->m_selected = item->text();
-            break;
-        }
-        else{
-            KMessageBox::error( this, i18n("Select file from list to view annotation") );
-        }
-    }
-    KDialog::accept();
-}
 
 //////////////////////////////////////////////////////////////////////
 

@@ -27,20 +27,20 @@ private:
     BlameTreeModel *m_blameModel;
 };
 
-class SvnBlameFileSelectDlg : public KDialog {
-    Q_OBJECT
-public:
-    SvnBlameFileSelectDlg( QWidget *parent = 0L );
-    virtual ~SvnBlameFileSelectDlg();
-    void setCandidate( QStringList *modifies );
-    QString selected();
-
-public Q_SLOTS:
-    virtual void accept();
-
-private:
-    class SvnBlameFileSelectDlgPrivate *d;
-};
+// class SvnBlameFileSelectDlg : public KDialog {
+//     Q_OBJECT
+// public:
+//     SvnBlameFileSelectDlg( QWidget *parent = 0L );
+//     virtual ~SvnBlameFileSelectDlg();
+//     void setCandidate( QStringList *modifies );
+//     QString selected();
+//
+// public Q_SLOTS:
+//     virtual void accept();
+//
+// private:
+//     class SvnBlameFileSelectDlgPrivate *d;
+// };
 
 class SvnBlameOptionDlg : public KDialog
 {

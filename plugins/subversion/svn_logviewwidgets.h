@@ -24,13 +24,12 @@ public:
     explicit SvnLogviewWidget( KUrl &url, KDevSubversionPart *part, QWidget *parent );
     virtual ~SvnLogviewWidget();
     void refreshWithNewData( QList<SvnLogHolder> datalist );
-protected:
-    virtual void contextMenuEvent( QContextMenuEvent * event );
 
 protected slots:
     void customContextMenuEvent( const QPoint &point );
     void blameRev();
     void diffToPrev();
+    void catThisRev();
     void treeViewClicked( const QModelIndex &index );
     void listViewClicked( const QModelIndex &index );
 
@@ -60,6 +59,25 @@ public:
 private:
     SvnLogviewOptionDialogPrivate *d;
 
+};
+
+class SvnFileSelectWidget;
+class SvnFileSelectFromLogviewDlg : public KDialog
+{
+    Q_OBJECT
+public:
+    SvnFileSelectFromLogviewDlg( const QString &title, QWidget *parent = 0L );
+    virtual ~SvnFileSelectFromLogviewDlg();
+    void setCandidate( QStringList *modifies );
+    QString selected();
+
+public Q_SLOTS:
+    virtual void accept();
+
+private:
+    QStringList *m_candidates;
+    QString m_selected;
+    SvnFileSelectWidget *widget;
 };
 
 #endif
