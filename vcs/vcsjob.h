@@ -70,7 +70,8 @@ public:
         Annotate,
         Clone,
         Status,
-        Revert
+        Revert,
+        Cat
     };
 
     /**
