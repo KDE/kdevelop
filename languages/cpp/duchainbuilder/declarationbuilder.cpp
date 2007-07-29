@@ -414,8 +414,10 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     if (isDefinition)
       declaration->setDeclarationIsDefinition(true);
 
-    if (currentContext()->type() == DUContext::Class)
-      static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
+    if (currentContext()->type() == DUContext::Class) {
+      if(dynamic_cast<ClassMemberDeclaration*>(declaration)) //It may also be a forward-declaration, not based on ClassMemberDeclaration!
+        static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
+    }
 
     switch (currentContext()->type()) {
       case DUContext::Global:
