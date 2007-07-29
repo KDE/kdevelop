@@ -72,6 +72,9 @@ QMakeFile::~QMakeFile()
 {
     delete m_ast;
     m_ast = 0;
+    delete m_topScope;
+    m_topScope = 0;
+    m_scopes.clear();
 }
 
 KUrl QMakeFile::absoluteDirUrl() const
@@ -89,22 +92,55 @@ QMake::ProjectAST* QMakeFile::ast() const
     return m_ast;
 }
 
-void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
+void QMakeFile::visitProject( QMake::ProjectAST* node )
 {
-    top()->addVariable( node->variable()->value(), node );
+    m_topScope = new Scope();
+    m_topScope->setParent( m_scopes.top() );
+    m_topScope->setAst( node );
+    pushScope( m_topScope );
+    QMake::ASTDefaultVisitor::visitProject( node );
+    popScope();
 }
 
-Scope* QMakeFile::top() const
+void QMakeFile::visitScopeBody( QMake::ScopeBodyAST* node )
 {
+    Scope* s = new Scope();
+    s->setParent( topScope() );
+    s->setAst( node );
+    topScope()->addSubScope(s);
+    pushScope( s );
+    QMake::ASTDefaultVisitor::visitScopeBody( node );
+    popScope();
+}
+
+void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
+{
+    topScope()->addVariable( node->variable()->value(), node );
+}
+
+Scope* QMakeFile::topScope() const
+{
+    if( m_scopes.isEmpty() )
+        return 0;
     return m_scopes.top();
 }
 
-Scope* QMakeFile::pop()
+Scope* QMakeFile::topScope()
 {
+    if( m_scopes.isEmpty() )
+        return 0;
+    return m_scopes.top();
+}
+
+
+Scope* QMakeFile::popScope()
+{
+    if( m_scopes.isEmpty() )
+        return 0;
     return m_scopes.pop();
 }
 
-void QMakeFile::push( Scope* s )
+void QMakeFile::pushScope( Scope* s )
 {
     m_scopes.push(s);
 }

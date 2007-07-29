@@ -25,12 +25,24 @@ Scope::Scope()
 {
 }
 
+Scope::~Scope()
+{
+    m_ast = 0;
+    qDeleteAll( m_subScopes );
+    m_subScopes.clear();
+}
+
+void Scope::addSubScope( Scope* s )
+{
+    m_subScopes.append( s );
+}
+
 void Scope::setParent( Scope* s )
 {
     m_parent = s;
 }
 
-Scope* Scope::parent()
+Scope* Scope::parent() const
 {
     return m_parent;
 }
@@ -38,6 +50,16 @@ Scope* Scope::parent()
 void Scope::addVariable(const QString& var, QMake::AssignmentAST* node )
 {
     m_variables[var] = node;
+}
+
+void Scope::setAst( QMake::ScopeBodyAST* a )
+{
+    m_ast = a;
+}
+
+QMake::ScopeBodyAST* Scope::ast() const
+{
+    return m_ast;
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

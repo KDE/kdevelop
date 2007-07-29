@@ -41,11 +41,14 @@ public:
     KUrl absoluteDirUrl() const;
     KUrl absoluteFileUrl() const;
     QMake::ProjectAST* ast() const;
+    void visitProject( QMake::ProjectAST* node );
+    void visitScopeBody( QMake::ScopeBodyAST* node );
     void visitAssignment( QMake::AssignmentAST* node );
 
-    Scope* top() const;
-    Scope* pop();
-    void push( Scope* s );
+    Scope* topScope() const;
+    Scope* topScope();
+    Scope* popScope();
+    void pushScope( Scope* s );
 private:
     QMake::ProjectAST* m_ast;
     KUrl m_projectFileUrl;

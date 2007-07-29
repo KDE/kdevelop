@@ -26,6 +26,7 @@
 namespace QMake
 {
     class AssignmentAST;
+    class ScopeBodyAST;
 }
 class QString;
 
@@ -33,12 +34,22 @@ class Scope
 {
 public:
     Scope();
+    ~Scope();
     void setParent( Scope* s );
-    Scope* parent();
+    Scope* parent() const;
+
+    void setAst( QMake::ScopeBodyAST* a );
+    QMake::ScopeBodyAST* ast() const;
+
     void addVariable(const QString& var, QMake::AssignmentAST* node );
+
+    void addSubScope( Scope* s );
+
 private:
     Scope* m_parent;
     QHash<QString, QMake::AssignmentAST*> m_variables;
+    QMake::ScopeBodyAST* m_ast;
+    QList<Scope*> m_subScopes;
 };
 
 #endif
