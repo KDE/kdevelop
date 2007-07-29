@@ -45,10 +45,10 @@ public:
   Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 
   void setFunctionSpecifiers(FunctionSpecifiers specifiers);
-  
+
   bool isInline() const;
   void setInline(bool isInline);
-  
+
   ///Only used for class-member function declarations(see ClassFunctionDeclaration)
   bool isVirtual() const;
   void setVirtual(bool isVirtual);
@@ -56,7 +56,7 @@ public:
   ///Only used for class-member function declarations(see ClassFunctionDeclaration)
   bool isExplicit() const;
   void setExplicit(bool isExplicit);
-      
+
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
    * argument of the function, but the returned list will only contain default-values for those
@@ -69,7 +69,7 @@ public:
   void addDefaultParameter(const QString& str);
 
   private:
-    AbstractFunctionDeclarationPrivate* d;
+    AbstractFunctionDeclarationPrivate* const d;
 };
 
 }

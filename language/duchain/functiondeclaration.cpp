@@ -25,11 +25,15 @@
 namespace KDevelop
 {
 
-FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(rhs) {
+class FunctionDeclarationPrivate
+{
+};
+
+FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(rhs), d(new FunctionDeclarationPrivate) {
 }
 
 FunctionDeclaration::FunctionDeclaration(KTextEditor::Range * range, Scope scope, DUContext* context)
-  : Declaration(range, scope, context)
+  : Declaration(range, scope, context), d(new FunctionDeclarationPrivate)
 {
 }
 
