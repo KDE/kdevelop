@@ -32,6 +32,7 @@ extern "C" {
 
 #include "svn_revision.h"
 #include "svn_models.h"
+#include "svnkjobbase.h"
 
 class SvnKJobBase;
 class SvnLogHolder;
@@ -53,10 +54,10 @@ class SubversionThread : public QThread
 {
     Q_OBJECT
 public:
-    SubversionThread( int actionType, SvnKJobBase *parent );
+    SubversionThread( SvnKJobBase::JobType actionType, SvnKJobBase *parent );
     virtual ~SubversionThread();
 
-    int type();
+    SvnKJobBase::JobType type();
     SvnKJobBase* kjob();
     /// Set a result QVariant to KJob. QVariant object is not stored in thread.
     void setResult( const QVariant& result );
@@ -136,7 +137,7 @@ class SvnBlameJob : public SubversionThread
 public:
     SvnBlameJob( const KUrl& path_or_url,
                 const SvnRevision &rev1, const SvnRevision &rev2,
-                int actionType, SvnKJobBase *parent );
+                SvnKJobBase::JobType actionType, SvnKJobBase *parent );
 
     virtual ~SvnBlameJob();
 
@@ -166,7 +167,7 @@ public:
                    bool discorverChangedPaths,
                    bool strictNodeHistory,
                    const KUrl::List& urls,
-                   int actionType, SvnKJobBase *parent );
+                   SvnKJobBase::JobType type, SvnKJobBase *parent );
 
     virtual ~SvnLogviewJob();
 
@@ -194,7 +195,7 @@ class SvnCommitJob : public SubversionThread
 {
 public:
     SvnCommitJob( const KUrl::List &urls, const QString &msg, bool recurse, bool keepLocks,
-                  int actionType, SvnKJobBase *parent );
+                  SvnKJobBase::JobType type, SvnKJobBase *parent );
     virtual ~SvnCommitJob();
 
 protected:
@@ -210,7 +211,7 @@ class SvnStatusJob : public SubversionThread
 public:
     SvnStatusJob( const KUrl &wcPath, const SvnRevision &rev,
                   bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals,
-                  int type, SvnKJobBase *parent );
+                  SvnKJobBase::JobType type, SvnKJobBase *parent );
 
     static void statusReceiver( void *baton, const char *path, svn_wc_status2_t *status );
 
@@ -232,7 +233,7 @@ class SvnAddJob : public SubversionThread
 public:
     SvnAddJob( const KUrl::List &wcPaths,
                bool recurse, bool force, bool noIgnore,
-               int type, SvnKJobBase *parent );
+               SvnKJobBase::JobType type, SvnKJobBase *parent );
 
 protected:
     virtual void run();
@@ -243,7 +244,7 @@ protected:
 class SvnDeleteJob : public SubversionThread
 {
 public:
-    SvnDeleteJob( const KUrl::List &urls, bool force, int type, SvnKJobBase *parent );
+    SvnDeleteJob( const KUrl::List &urls, bool force, SvnKJobBase::JobType type, SvnKJobBase *parent );
 protected:
     virtual void run();
 
@@ -256,7 +257,7 @@ class SvnUpdateJob : public SubversionThread
 public:
     SvnUpdateJob( const KUrl::List &wcPaths, const SvnRevision &rev,
                   bool recurse, bool ignoreExternals,
-                  int type, SvnKJobBase *parent );
+                  SvnKJobBase::JobType type, SvnKJobBase *parent );
 
 protected:
     virtual void run();
@@ -271,7 +272,7 @@ class SvnInfoJob : public SubversionThread
 public:
     SvnInfoJob( const KUrl &pathOrUrl,
                 const SvnRevision &peg, const SvnRevision &revision,
-                bool recurse, int type, SvnKJobBase *parent );
+                bool recurse, SvnKJobBase::JobType type, SvnKJobBase *parent );
 
     static svn_error_t* infoReceiver( void *baton,
                                       const char *path,
@@ -293,7 +294,7 @@ public:
     SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,const SvnRevision &peg,
                 const SvnRevision &rev1, const SvnRevision &rev2,
                 bool recurse, bool ignoreAncestry, bool noDiffDeleted, bool ignoreContentType,
-                int type, SvnKJobBase *parent );
+                SvnKJobBase::JobType type, SvnKJobBase *parent );
     /// Destuctor. Destroy temp dir and output/error files
     virtual ~SvnDiffJob();
 
@@ -316,7 +317,7 @@ class SvnImportJob : public SubversionThread
 public:
     SvnImportJob( const KUrl &path, const KUrl &url,
                   bool nonRecurse, bool noIgnore,
-                  int type, SvnKJobBase *parent );
+                  SvnKJobBase::JobType type, SvnKJobBase *parent );
     virtual ~SvnImportJob();
 
 protected:
@@ -334,7 +335,7 @@ public:
                     const SvnRevision &pegRevision,
                     const SvnRevision &revision,
                     bool recurse, bool ignoreExternals,
-                    int type, SvnKJobBase *parent );
+                    SvnKJobBase::JobType type, SvnKJobBase *parent );
 protected:
     virtual void run();
 
@@ -347,7 +348,7 @@ class SvnRevertJob : public SubversionThread
 {
 public:
     SvnRevertJob( const KUrl::List &paths, bool recurse,
-                  int type, SvnKJobBase *parent );
+                  SvnKJobBase::JobType type, SvnKJobBase *parent );
     virtual ~SvnRevertJob();
 
 protected:
@@ -362,7 +363,7 @@ class SvnCopyJob : public SubversionThread
 public:
     // subversion doesn't support non-recursive ops. It's recursive by default.
     SvnCopyJob( const KUrl& srcPathOrUrl, const SvnRevision &srcRev,
-                const KUrl& dstPathOrUrl, int type, SvnKJobBase *parent );
+                const KUrl& dstPathOrUrl, SvnKJobBase::JobType type, SvnKJobBase *parent );
     virtual ~SvnCopyJob();
 
 protected:
@@ -376,7 +377,7 @@ class SvnMoveJob : public SubversionThread
 {
 public:
     SvnMoveJob( const KUrl& srcPathOrUrl, const KUrl& dstPathOrUrl,
-                bool force, int type, SvnKJobBase *parent );
+                bool force, SvnKJobBase::JobType type, SvnKJobBase *parent );
     virtual ~SvnMoveJob();
 
 protected:
@@ -390,7 +391,7 @@ class SvnCatJob : public SubversionThread
 {
 public:
     SvnCatJob( const KUrl &path_or_url, const SvnRevision &peg_rev, const SvnRevision &rev,
-               int type, SvnKJobBase *parent );
+               SvnKJobBase::JobType type, SvnKJobBase *parent );
     ~SvnCatJob();
 
     KUrl url(){ return m_path_or_url; }

@@ -13,7 +13,6 @@
  ***************************************************************************/
 
 #include "subversionthreads.h"
-#include "svnkjobbase.h"
 #include "subversion_core.h"
 #include "subversion_part.h"
 #include "interthreadevents.h"
@@ -39,7 +38,7 @@ public:
     QString m_commitMsg;
     SvnServerCertInfo *m_certInfo;
     SvnLoginInfo *m_loginInfo;
-    int m_type;
+    SvnKJobBase::JobType m_type;
     SvnKJobBase *m_kjob;
 
     svn_client_ctx_t *m_ctx;
@@ -48,7 +47,7 @@ public:
     bool m_sent_first_txdelta;
 };
 
-SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
+SubversionThread::SubversionThread( SvnKJobBase::JobType actionType, SvnKJobBase *parent )
     : QThread(parent), d( new Private ) /*, m_triedTermination(false)*/
 {
     d->m_type = actionType;
@@ -130,7 +129,7 @@ SubversionThread::~SubversionThread()
     svn_pool_destroy( pool() );
 }
 
-int SubversionThread::type()
+SvnKJobBase::JobType SubversionThread::type()
 {
     return d->m_type;
 }
@@ -541,7 +540,7 @@ apr_pool_t* SubversionThread::pool()
 
 SvnBlameJob::SvnBlameJob(  const KUrl& path_or_url,
                         const SvnRevision &rev1, const SvnRevision &rev2,
-                        int actionType, SvnKJobBase *parent )
+                        SvnKJobBase::JobType actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent )
 {
     m_startRev = rev1;
@@ -591,7 +590,7 @@ SvnLogviewJob::SvnLogviewJob( const SvnRevision &rev1,
                 bool discorverPaths,
                 bool strictNodeHistory,
                 const KUrl::List& urls,
-                int actionType, SvnKJobBase *parent )
+                SvnKJobBase::JobType actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent ),
     m_rev1( rev1 ), m_rev2( rev2 ),
     limit( listLimit ),
@@ -681,7 +680,7 @@ svn_error_t* SvnLogviewJob::receiveLogMessage(void *baton, apr_hash_t *changed_p
 
 SvnCommitJob::SvnCommitJob( const KUrl::List &urls, const QString &msg,
                             bool recurse, bool keepLocks,
-                            int actionType, SvnKJobBase *parent )
+                            SvnKJobBase::JobType actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent )
     , m_urls(urls), m_recurse(recurse), m_keepLocks(keepLocks)
 {
@@ -737,7 +736,7 @@ void SvnCommitJob::run()
 SvnStatusJob::SvnStatusJob( const KUrl &wcPath, const SvnRevision &rev,
                             bool recurse, bool getAll, bool update,
                             bool noIgnore, bool ignoreExternals,
-                            int type, SvnKJobBase *parent )
+                            SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
 {
     m_wcPath = wcPath;
@@ -812,7 +811,7 @@ void SvnStatusJob::statusReceiver( void *baton, const char *path, svn_wc_status2
 ////////////////////////////////////////////////////////////
 
 SvnAddJob::SvnAddJob( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore,
-                    int type, SvnKJobBase *parent )
+                    SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_wcPaths(wcPaths), m_recurse(recurse), m_force(force), m_noIgnore(noIgnore)
 {
@@ -840,7 +839,7 @@ void SvnAddJob::run()
 
 //////////////////////////////////////////////////////////
 
-SvnDeleteJob::SvnDeleteJob( const KUrl::List &urls, bool force, int type, SvnKJobBase *parent )
+SvnDeleteJob::SvnDeleteJob( const KUrl::List &urls, bool force, SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_urls(urls), m_force(force)
 {}
@@ -874,7 +873,7 @@ void SvnDeleteJob::run()
 
 SvnUpdateJob::SvnUpdateJob( const KUrl::List &wcPaths, const SvnRevision &rev,
                             bool recurse, bool ignoreExternals,
-                            int type, SvnKJobBase *parent )
+                            SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_wcPaths( wcPaths )
     , m_recurse(recurse), m_ignoreExternals(ignoreExternals)
@@ -914,7 +913,7 @@ void SvnUpdateJob::run()
 
 SvnInfoJob::SvnInfoJob( const KUrl &pathOrUrl,
                         const SvnRevision &peg, const SvnRevision &revision,
-                        bool recurse, int type, SvnKJobBase *parent  )
+                        bool recurse, SvnKJobBase::JobType type, SvnKJobBase *parent  )
     : SubversionThread( type, parent )
     , m_pathOrUrl(pathOrUrl)
     , m_peg(peg), m_revision(revision), m_recurse(recurse)
@@ -968,7 +967,7 @@ void SvnInfoJob::run()
 SvnDiffJob::SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2, const SvnRevision &peg,
                         const SvnRevision &rev1, const SvnRevision &rev2,
                         bool recurse, bool ignoreAncestry, bool noDiffDeleted, bool ignoreContentType,
-                        int type, SvnKJobBase *parent )
+                        SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_pathOrUrl1(pathOrUrl1), m_pathOrUrl2(pathOrUrl2), m_peg(peg), m_rev1(rev1), m_rev2(rev2)
     , m_recurse(recurse), m_ignoreAncestry(ignoreAncestry)
@@ -1054,7 +1053,7 @@ void SvnDiffJob::run()
 //////////////////////////////////////////////////////////////////////////////////
 SvnImportJob::SvnImportJob( const KUrl &path, const KUrl &url,
                             bool nonRecurse, bool noIgnore,
-                            int type, SvnKJobBase *parent )
+                            SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_path(path), m_url(url), m_nonRecurse(nonRecurse), m_noIgnore(noIgnore)
 {}
@@ -1092,7 +1091,7 @@ SvnCheckoutJob::SvnCheckoutJob( const KUrl &servUrl, const KUrl &wcRoot,
                     const SvnRevision &peg_revision,
                     const SvnRevision &revision,
                     bool recurse, bool ignoreExternals,
-                    int type, SvnKJobBase *parent )
+                    SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_servUrl( servUrl ), m_wcRoot( wcRoot ), m_pegRevision( peg_revision )
     , m_revision( revision ), m_recurse( recurse ), m_ignoreExternals( ignoreExternals )
@@ -1135,7 +1134,7 @@ public:
 };
 
 SvnRevertJob::SvnRevertJob( const KUrl::List &paths, bool recurse,
-              int type, SvnKJobBase *parent )
+              SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent ), d( new Private )
 {
     d->m_paths = paths;
@@ -1185,7 +1184,7 @@ public:
 };
 
 SvnCopyJob::SvnCopyJob( const KUrl& srcPathOrUrl, const SvnRevision &srcRev,
-                        const KUrl& dstPathOrUrl, int type, SvnKJobBase *parent )
+                        const KUrl& dstPathOrUrl, SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent ), d( new Private )
 {
     d->m_srcPathOrUrl = srcPathOrUrl;
@@ -1236,7 +1235,7 @@ public:
 };
 
 SvnMoveJob::SvnMoveJob( const KUrl& srcPathOrUrl, const KUrl& dstPathOrUrl,
-                bool force, int type, SvnKJobBase *parent )
+                bool force, SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent ), d( new Private )
 {
     d->m_srcPathOrUrl = srcPathOrUrl;
@@ -1274,7 +1273,7 @@ void SvnMoveJob::run()
 /////////////////////////////////////////////////////////////////
 
 SvnCatJob::SvnCatJob( const KUrl &path_or_url, const SvnRevision &peg_rev, const SvnRevision &rev,
-               int type, SvnKJobBase *parent )
+               SvnKJobBase::JobType type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_path_or_url(path_or_url), m_peg_rev(peg_rev), m_rev(rev)
 {}
