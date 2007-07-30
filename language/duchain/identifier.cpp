@@ -25,49 +25,89 @@
 namespace KDevelop
 {
 
-class IdentifierPrivate
+class IdentifierPrivate : public KShared
 {
 public:
+  IdentifierPrivate() : m_unique(0), m_hash(0){
+  }
+
+  //Flags the stored hash-value invalid
+  void clearHash() { //This is always called on an object private to an Identifier, so there is no threading-problem.
+    m_hash = 0;
+  }
+
+  uint hash() const { //Since this only needs reading and the data needs not to be private, this may be called by multiple threads simultaneously, so computeHash() must be thread-safe.
+    if( !m_hash )
+      computeHash();
+    return m_hash;
+  }
+
   int m_unique;
   HashedString m_identifier;
   QList<QualifiedIdentifier> m_templateIdentifiers;
+
+private:
+    void computeHash() const {
+      //this must stay thread-safe(may be called by multiple threads at a time)
+      //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
+      uint hash = m_identifier.hash();
+      for( QList<QualifiedIdentifier>::const_iterator it = m_templateIdentifiers.begin(); it != m_templateIdentifiers.end(); ++it )
+        hash = hash * 13 + (*it).hash();
+      m_hash = hash;
+    }
+  
+    mutable uint m_hash;
 };
 
-///Before something is modified in QualifiedIdentifierPrivate, it must be made sure that it is private to the QualifiedIdentifier it is used in(@see QualifiedIdentifier::makePrivate)
+///Before something is modified in QualifiedIdentifierPrivate, it must be made sure that it is private to the QualifiedIdentifier it is used in(@see QualifiedIdentifier::prepareWrite)
 class QualifiedIdentifierPrivate : public KShared
 {
 public:
   HashedString m_qid;
-  QVarLengthArray<int, 8> m_idSplits;
+  QList<Identifier> m_identifiers; //Think about maybe removing m_qid, because the id can also be got from the identifiers
   bool m_explicitlyGlobal;
+
+
+  //Constructs m_identifiers from m_qid
+  void splitIdentifiers()
+  {
+    uint currentStart = 0;
+
+    while( currentStart < (uint)m_qid.str().length() ) {
+      m_identifiers << Identifier( m_qid.str(), currentStart, &currentStart );
+      currentStart += 2; //Skip "::"
+    }
+  }
 };
 
-Identifier::Identifier(const Identifier& rhs) : d(new IdentifierPrivate) {
-  operator=(rhs);
+Identifier::Identifier(const Identifier& rhs) : d(rhs.d) {
 }
 
 Identifier::~Identifier() {
-  delete d;
 }
 
-Identifier::Identifier(const QString& id)
+uint Identifier::hash() const {
+  return d->hash();
+}
+
+Identifier::Identifier(const QString& id, uint start, uint* takenRange)
   : d(new IdentifierPrivate)
 {
-  d->m_unique = 0;
-
   ///Extract template-parameters
-  ParamIterator paramIt("<>", id);
+  ParamIterator paramIt("<>:", id, start);
   d->m_identifier = paramIt.prefix();
   while( paramIt ) {
     appendTemplateIdentifier( QualifiedIdentifier(*paramIt) );
     ++paramIt;
   }
+
+  if( takenRange )
+    *takenRange = paramIt.position();
 }
 
 Identifier::Identifier()
   : d(new IdentifierPrivate)
 {
-  d->m_unique = 0;
 }
 
 Identifier Identifier::unique(int token)
@@ -89,6 +129,7 @@ int Identifier::uniqueToken() const
 
 void Identifier::setUnique(int token)
 {
+  prepareWrite();
   d->m_unique = token;
 }
 
@@ -99,6 +140,7 @@ const QString Identifier::identifier() const
 
 void Identifier::setIdentifier(const QString& identifier)
 {
+  prepareWrite();
   d->m_identifier = identifier;
 }
 
@@ -109,16 +151,19 @@ const QList<QualifiedIdentifier>& Identifier::templateIdentifiers() const
 
 void Identifier::appendTemplateIdentifier(const QualifiedIdentifier& identifier)
 {
+  prepareWrite();
   d->m_templateIdentifiers.append(identifier);
 }
 
 void Identifier::clearTemplateIdentifiers()
 {
+  prepareWrite();
   d->m_templateIdentifiers.clear();
 }
 
 void Identifier::setTemplateIdentifiers(const QList<QualifiedIdentifier>& templateIdentifiers)
 {
+  prepareWrite();
   d->m_templateIdentifiers = templateIdentifiers;
 }
 
@@ -145,6 +190,9 @@ QString Identifier::toString() const
 
 bool Identifier::operator==(const Identifier& rhs) const
 {
+  if( d == rhs.d )
+    return true;
+  
   if (isUnique() || rhs.isUnique())
     if (uniqueToken() == rhs.uniqueToken())
       return true;
@@ -167,14 +215,18 @@ bool Identifier::operator!=(const Identifier& rhs) const
 
 Identifier& Identifier::operator=(const Identifier& rhs)
 {
-  if( d != rhs.d )
-  {
-    d->m_identifier = rhs.d->m_identifier;
-    d->m_unique = rhs.d->m_unique;
-    d->m_templateIdentifiers = rhs.d->m_templateIdentifiers;
-  }
+  d = rhs.d;
   return *this;
 }
+
+void Identifier::prepareWrite() {
+  if( ((int)d->ref) != 1 ) {
+    //If there is more than one counted references to the d-pointer, it is shared with other QualifiedIdentifiers, so copy it
+    d = KSharedPtr<IdentifierPrivate>(new IdentifierPrivate(*d));
+  }
+  d->clearHash();
+}
+
 
 static const int idguess = 4;
 
@@ -189,15 +241,7 @@ QualifiedIdentifier::QualifiedIdentifier(const QString& id)
     d->m_qid = id;
   }
 
-  d->m_idSplits.append(0);
-  int split = 0;
-  forever {
-    split = d->m_qid.str().indexOf("::", split);
-    if (split == -1)
-      break;
-    d->m_idSplits.append(split + 2);
-    split += 2;
-  }
+  d->splitIdentifiers();
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
@@ -208,7 +252,8 @@ QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
   } else {
     d->m_explicitlyGlobal = false;
     d->m_qid = id.toString();
-    d->m_idSplits.append(0);
+    
+    d->m_identifiers << id;
   }
 }
 
@@ -221,7 +266,7 @@ QualifiedIdentifier::QualifiedIdentifier()
 QualifiedIdentifier::~QualifiedIdentifier() {
 }
 
-QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id, int /*reserve*/)
+QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
   : d(id.d)
 {
 }
@@ -232,7 +277,8 @@ QStringList QualifiedIdentifier::toStringList() const
   if (d->m_explicitlyGlobal)
     ret.append(QString());
 
-  ret << d->m_qid.str().split("::");
+  foreach(const Identifier& id, d->m_identifiers)
+    ret << id.toString();
 
   return ret;
 }
@@ -250,17 +296,15 @@ QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) 
   if (explicitlyGlobal())
     return *this;
 
-  QualifiedIdentifier ret(base, base.d->m_qid.str().length() + 2 + d->m_qid.str().length());
+  QualifiedIdentifier ret(base);
+  ret.prepareWrite();
+  
   if (ret.count())
     ret.d->m_qid = ret.d->m_qid.str() +  "::" + d->m_qid.str();
   else
     ret.d->m_qid = ret.d->m_qid.str() +  d->m_qid.str();
 
-  const int offset = ret.d->m_qid.str().length();
-  for (int i = 0; i < d->m_idSplits.count(); ++i)
-    ret.d->m_idSplits.append(d->m_idSplits[i] + offset);
-
-  // TODO verify...
+  ret.d->m_identifiers += d->m_identifiers;
 
   return ret;
 }
@@ -296,25 +340,21 @@ QualifiedIdentifier QualifiedIdentifier::strip(const QualifiedIdentifier & unwan
   if (count() <= unwantedBase.count())
     return *this;
 
-  if (d->m_qid.str().startsWith(unwantedBase.d->m_qid.str())) {
-    const int offset = unwantedBase.d->m_qid.str().length() + 2;
+  //Make sure this one starts with unwantedBase
+  for( int a = 0; a < unwantedBase.count(); a++ )
+    if( d->m_identifiers[a] != unwantedBase.d->m_identifiers[a] )
+      return *this;
+  
+  
+  QualifiedIdentifier ret(*this);
+  ret.prepareWrite();
 
-    for (int index = 0; index < d->m_idSplits.count(); ++index) {
-      if (d->m_idSplits[index] != offset)
-        continue;
+  for( int a = 0; a < unwantedBase.d->m_identifiers.count(); a++ )
+    ret.d->m_identifiers.pop_front();
 
-      // Match
-      QualifiedIdentifier id;
-      // Don't convey explicitly global...
-      id.d->m_qid = d->m_qid.str().mid(d->m_idSplits[index]);
-      for (; index < d->m_idSplits.count(); ++index)
-        id.d->m_idSplits.append(d->m_idSplits[index] - offset);
+  ret.d->m_qid = ret.d->m_qid.str().mid( unwantedBase.d->m_qid.str().length() + 2 );
 
-      return id;
-    }
-  }
-
-  return *this;
+  return ret;
 }
 
 bool QualifiedIdentifier::explicitlyGlobal() const
@@ -325,17 +365,16 @@ bool QualifiedIdentifier::explicitlyGlobal() const
 
 void QualifiedIdentifier::setExplicitlyGlobal(bool eg)
 {
-  makePrivate();
+  prepareWrite();
   
   d->m_explicitlyGlobal = eg;
 }
 
 bool QualifiedIdentifier::operator==(const QualifiedIdentifier& rhs) const
 {
-  // Fast path
-  if (d->m_idSplits.count() != rhs.d->m_idSplits.count())
-    return false;
-
+  if( d == rhs.d )
+    return true;
+  
   return d->m_qid == rhs.d->m_qid;
 }
 
@@ -352,18 +391,16 @@ QualifiedIdentifier& QualifiedIdentifier::operator=(const QualifiedIdentifier& r
 
 QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const Identifier& rhs) const
 {
-  const int difference = count() - 1;
-  if (difference == 0) {
-    if (d->m_qid == rhs.d->m_identifier)
+  if( d->m_identifiers.isEmpty() )
+    return NoMatch;
+
+  if( d->m_identifiers.last() == rhs ) {
+    if( d->m_identifiers.count() == 1 )
       return ExactMatch;
     else
-      return NoMatch;
-
-  } else if (difference > 0) {
-    if (d->m_qid.str().endsWith(rhs.d->m_identifier.str()))
-      return Contains;
+      return EndsWith;
   }
-
+    
   return NoMatch;
 }
 
@@ -381,66 +418,37 @@ QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdenti
     if (rhs.explicitlyGlobal())
       return NoMatch;
 
-    //if (m_idSplits[count() - 1 - rhs.count()] == rhs.m_qid.length())
-    if (d->m_qid.str().endsWith(rhs.d->m_qid.str()))
-        return Contains;
-
+    for( int a = difference; a < count(); a++ )
+      if( rhs.d->m_identifiers[a-difference] != d->m_identifiers[a] )
+        return NoMatch;
+    
+    return EndsWith;
   } else {
     if (explicitlyGlobal())
       return NoMatch;
+      
+    for( int a = -difference; a < rhs.count(); a++ )
+        if( rhs.d->m_identifiers[a] != d->m_identifiers[a+difference] )
+          return NoMatch;
 
-    //if (rhs.m_idSplits[rhs.count() - 1 - count()] == m_qid.length())
-    if (rhs.d->m_qid.str().endsWith(d->m_qid.str()))
-        return ContainedBy;
+    return TargetEndsWith;
   }
 
   return NoMatch;
-
-  /*int i = count() - 1;
-  int j = rhs.count() - 1;
-  for (; i >= 0 && j >= 0; --i, --j)
-    if (at(i) != rhs.at(j))
-      return NoMatch;
-
-  // put i and j back where they were before the last unneeded decrement
-  ++i;
-  ++j;
-
-  if (i == l && j == r)
-    return ExactMatch;
-
-  if (i > l)
-    if (!rhs.explicitlyGlobal())
-      return Contains;
-    else
-      return NoMatch;
-  else if (!explicitlyGlobal())
-    return ContainedBy;
-  else
-    return NoMatch;*/
 }
 
 bool QualifiedIdentifier::beginsWith(const QualifiedIdentifier& other) const
 {
   int i = 0, j = 0;
 
-  /*if (explicitlyGlobal())
-    i = 1;
-
-  if (other.explicitlyGlobal())
-    j = 1;*/
-
-  bool ret = true;
-
   for (; i < count() && j < other.count(); ++i, ++j)
     if (at(i) == other.at(j)) {
       continue;
     } else {
-      ret = false;
-      break;
+      return false;
     }
 
-  return ret;
+  return true;
 }
 
 uint QualifiedIdentifier::hash() const {
@@ -448,6 +456,11 @@ uint QualifiedIdentifier::hash() const {
 }
 
 uint qHash(const QualifiedIdentifier& id)
+{
+  return id.hash();
+}
+
+uint qHash(const Identifier& id)
 {
   return id.hash();
 }
@@ -492,85 +505,85 @@ QString QualifiedIdentifier::mangled() const
 
 void QualifiedIdentifier::push(const Identifier& id)
 {
-  makePrivate();
+  prepareWrite();
   
-  if (d->m_qid.str().isEmpty()) {
-    if (id.d->m_identifier.str().isEmpty()) {
-      d->m_explicitlyGlobal = true;
-    } else {
-      d->m_idSplits.append(0);
-      d->m_qid += id.toString();
-    }
-  } else {
-    d->m_idSplits.append(d->m_qid.str().length() + 2);
+  d->m_identifiers << id;
+  
+  if (d->m_qid.str().isEmpty())
+    d->m_qid = id.toString();
+  else
     d->m_qid = d->m_qid.str() + "::" + id.toString();
-  }
 }
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)
 {
-  makePrivate();
-  
-  if (d->m_qid.str().isEmpty()) {
-    d->m_qid = id.d->m_qid;
-    d->m_idSplits = id.d->m_idSplits;
-    d->m_explicitlyGlobal = id.d->m_explicitlyGlobal;
+  prepareWrite();
 
-  } else {
-    const int offset = d->m_qid.str().length() + 2;
+  d->m_identifiers += id.d->m_identifiers;
+  
+  if (d->m_qid.str().isEmpty())
+    d->m_qid = id.d->m_qid;
+  else
     d->m_qid = d->m_qid.str() + "::" + id.d->m_qid.str();
-    for (int i = 0; i < id.d->m_idSplits.count(); ++i)
-      d->m_idSplits.append(offset + id.d->m_idSplits[i]);
-  }
 }
 
 void QualifiedIdentifier::pop()
 {
-  makePrivate();
-  d->m_qid = d->m_qid.str().left(d->m_idSplits[d->m_idSplits.count() - 1] - 2);
-  d->m_idSplits.resize(d->m_idSplits.count() - 1);
+  prepareWrite();
+  d->m_qid = d->m_qid.str().left( d->m_qid.str().length() - d->m_identifiers.back().toString().length() );
+  d->m_identifiers.pop_back();
 }
 
 void QualifiedIdentifier::clear()
 {
-  makePrivate();
+  prepareWrite();
   d->m_qid = HashedString();
-  d->m_idSplits.clear();
+  d->m_identifiers.clear();
   d->m_explicitlyGlobal = false;
 }
 
 
 bool QualifiedIdentifier::isEmpty() const
 {
-  return d->m_idSplits.isEmpty();
+  return d->m_identifiers.isEmpty();
 }
 
 int QualifiedIdentifier::count() const
 {
-  return d->m_idSplits.count();
+  return d->m_identifiers.count();
 }
 
 Identifier QualifiedIdentifier::first() const
 {
-  return at(0);
+  if( d->m_identifiers.isEmpty() )
+    return Identifier();
+  else
+    return at(0);
 }
 
 Identifier QualifiedIdentifier::last() const
 {
-  return at(count() - 1);
+  if( d->m_identifiers.isEmpty() )
+    return Identifier();
+  else
+    return at(count() - 1);
 }
 
 Identifier QualifiedIdentifier::top() const
 {
-  return at(count() - 1);
+  if( d->m_identifiers.isEmpty() )
+    return Identifier();
+  else
+    return at(count() - 1);
 }
 
 Identifier QualifiedIdentifier::at(int i) const
 {
-  return Identifier(d->m_qid.str().mid(d->m_idSplits[i], (i == d->m_idSplits.count() - 1) ? -1 : d->m_idSplits[i + 1] - 2));
+  Q_ASSERT(i >= 0 && i < d->m_identifiers.size());
+  return d->m_identifiers[i];
 }
 
-void QualifiedIdentifier::makePrivate() {
+void QualifiedIdentifier::prepareWrite() {
   if( ((int)d->ref) != 1 ) {
     //If there is more than one counted references to the d-pointer, it is shared with other QualifiedIdentifiers, so copy it
     d = KSharedPtr<QualifiedIdentifierPrivate>(new QualifiedIdentifierPrivate(*d));

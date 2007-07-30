@@ -45,15 +45,17 @@ int KDEVPLATFORMLANGUAGE_EXPORT findClose( const QString& str , int pos );
 int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd( const QString& str , int pos, QChar validEnd = ' ' );
 
 /**
- * Iterates for example through template-parameters
+ * Can be used to iterate through different kinds of parameters, for example template-parameters(By giving it "<>:")
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
 {
   public:
     /**
-     * @param parens should be a string containing the two parens between which the parameters are searched. Example: "<>" or "()"
+     * @param parens should be a string containing the two parens between which the parameters are searched. Example: "<>" or "()" Optionally it can also contain one third end-character. If that end-character is encountered in the prefix, the iteration will be stopped.
+     *
+     * Example: When "<>:" is given, ParamIterator will only parse the first identifier of a c++ scope
      * */
-    ParamIterator( QString parens, QString source );
+    ParamIterator( QString parens, QString source, int start = 0);
 
     ParamIterator& operator ++();
 
@@ -72,6 +74,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
      * */
     QString prefix() const;
 
+    uint position() const;
+  
   private:
     class ParamIteratorPrivate* const d;
 };

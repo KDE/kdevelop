@@ -22,6 +22,7 @@
 #define ducontext_p_H
 
 #include <QMutex>
+#include <QMultiHash>
 
 #include "duchainpointer.h"
 
@@ -39,9 +40,14 @@ public:
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
 
+  //Use DeclarationPointer instead of declaration, so we can locate management-problems
+  typedef QMultiHash<Identifier, DeclarationPointer> DeclarationsHash;
+  
   static QMutex m_localDeclarationsMutex;
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsMutex must be locked.
   QList<Declaration*> m_localDeclarations;
+  ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
+  DeclarationsHash m_localDeclarationsHash;
   
   QList<Definition*> m_localDefinitions;
   QList<DUContext::UsingNS*> m_usingNamespaces;

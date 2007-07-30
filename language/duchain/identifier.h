@@ -28,11 +28,15 @@
 #include <kdebug.h>
 #include <languageexport.h>
 
+//We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
+//krazy:excludeall=dpointer
+
 namespace KDevelop
 {
 
 class QualifiedIdentifier;
 class QualifiedIdentifierPrivate;
+class IdentifierPrivate;
 
 /// Represents a single unqualified identifier
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
@@ -40,7 +44,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT Identifier
   friend class QualifiedIdentifier;
 
 public:
-  explicit Identifier(const QString& id);
+  /**
+   * @param start The position in the given string where to start searching for the identifier(optional).
+   * @param takenRange If this is nonzero, it will be filled with the length of the range from the beginning of the given string, that was used to construct this identifier.(optional)
+   * */
+  explicit Identifier(const QString& str, uint start = 0, uint* takenRange = 0);
   Identifier(const Identifier& rhs);
   Identifier();
   ~Identifier();
@@ -59,6 +67,8 @@ public:
 
   QString mangled() const;
 
+  uint hash() const;
+  
   const QList<QualifiedIdentifier>& templateIdentifiers() const;
   void appendTemplateIdentifier(const QualifiedIdentifier& identifier);
   void clearTemplateIdentifiers();
@@ -84,11 +94,9 @@ public:
   inline friend kndbgstream& operator<< (kndbgstream& s, const Identifier&) { return s; }
 
 private:
-  class IdentifierPrivate* const d;
+  void prepareWrite();
+  KSharedPtr<IdentifierPrivate> d;
 };
-
-//We use a shared d-pointer, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
-//krazy:excludeall=dpointer
 
 /**
  * Represents a qualified identifier
@@ -100,7 +108,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
 public:
   explicit QualifiedIdentifier(const QString& id);
   explicit QualifiedIdentifier(const Identifier& id);
-  QualifiedIdentifier(const QualifiedIdentifier& id, int reserve = 0);
+  QualifiedIdentifier(const QualifiedIdentifier& id);
   //QualifiedIdentifier(const QualifiedIdentifier& id);
   QualifiedIdentifier();
   ~QualifiedIdentifier();
@@ -128,6 +136,7 @@ public:
 
   QString mangled() const;
 
+  //Returns a QualifiedIdentifier with this one appended to the other
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
   QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;
   QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
@@ -138,8 +147,8 @@ public:
 
   enum MatchTypes {
     NoMatch,
-    Contains,
-    ContainedBy,
+    EndsWith, //The current identifier ends with the one given to the match function
+    TargetEndsWith, //The identifier given to the match function ends with the current identifier
     ExactMatch
   };
 
@@ -163,11 +172,12 @@ public:
   inline friend kndbgstream& operator<< (kndbgstream& s, const QualifiedIdentifier&) { return s; }
 
 private:
-  void makePrivate();
+  void prepareWrite();
   KSharedPtr<QualifiedIdentifierPrivate> d;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);
+KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
 
 }
 

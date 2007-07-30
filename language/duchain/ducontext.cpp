@@ -72,6 +72,7 @@ void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
     QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
 
     m_localDeclarations.append(newDeclaration);
+    m_localDeclarationsHash.insert( newDeclaration->identifier(), DeclarationPointer(newDeclaration) );
   }
 
   DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
@@ -80,6 +81,8 @@ void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
 bool DUContextPrivate::removeDeclaration(Declaration* declaration)
 {
   QMutexLocker lock(&m_localDeclarationsMutex);
+  
+  m_localDeclarationsHash.remove( declaration->identifier(), DeclarationPointer(declaration) );
   
   if( m_localDeclarations.removeAll(declaration) ) {
     DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
@@ -254,13 +257,13 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
         case QualifiedIdentifier::NoMatch:
           continue;
 
-        case QualifiedIdentifier::Contains:
+        case QualifiedIdentifier::EndsWith:
           // identifier is a more complete specification...
           // Try again with a qualified definition identifier
           ensureResolution.append(declaration);
           continue;
 
-        case QualifiedIdentifier::ContainedBy:
+      case QualifiedIdentifier::TargetEndsWith : ///NOTE: This cannot happen, because declaration() identifier is of type Identifier
           // definition is a more complete specification...
           if (!allowUnqualifiedMatch)
             tryToResolve.append(declaration);
@@ -295,10 +298,10 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
     QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
     switch (m) {
       case QualifiedIdentifier::NoMatch:
-      case QualifiedIdentifier::Contains:
+      case QualifiedIdentifier::EndsWith:
         break;
 
-      case QualifiedIdentifier::ContainedBy:
+      case QualifiedIdentifier::TargetEndsWith:
       case QualifiedIdentifier::ExactMatch:
         resolved.append(it.value());
         break;
@@ -319,10 +322,10 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
     QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
     switch (m) {
       case QualifiedIdentifier::NoMatch:
-      case QualifiedIdentifier::Contains:
+      case QualifiedIdentifier::EndsWith:
         break;
 
-      case QualifiedIdentifier::ContainedBy:
+      case QualifiedIdentifier::TargetEndsWith:
       case QualifiedIdentifier::ExactMatch:
         resolved.append(it.value());
         break;
