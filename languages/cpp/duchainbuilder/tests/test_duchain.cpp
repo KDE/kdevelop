@@ -764,12 +764,35 @@ void TestDUChain::testTypedef() {
   release(top);
 }
 
+void TestDUChain::testSpecializedTemplates() {
+  QByteArray text("class A{}; class B{}; class C{}; template<class T,class T2> class E{typedef A Type1;}; template<class T2> class E<A,T2> { typedef B Type2;}; template<class T2> class E<T2,A> { typedef C Type3; };");
+  DUContext* top = parse(text, DumpAll);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 6);
+  Declaration* ADecl = top->localDeclarations()[0];
+  Declaration* BDecl = top->localDeclarations()[1];
+  Declaration* CDecl = top->localDeclarations()[2];
+  Declaration* EDecl = top->localDeclarations()[3];
+  Declaration* E1Decl = top->localDeclarations()[4];
+  Declaration* E2Decl = top->localDeclarations()[5];
+
+  TemplateDeclaration* templateEDecl = dynamic_cast<TemplateDeclaration*>(EDecl);
+  TemplateDeclaration* templateE1Decl = dynamic_cast<TemplateDeclaration*>(E1Decl);
+  TemplateDeclaration* templateE2Decl = dynamic_cast<TemplateDeclaration*>(E2Decl);
+  QVERIFY(templateEDecl);
+  QVERIFY(templateE1Decl);
+  QVERIFY(templateE2Decl);
+
+  QCOMPARE(templateE1Decl->specializedFrom(), templateEDecl);
+  QCOMPARE(templateE2Decl->specializedFrom(), templateEDecl);
+  
+  release(top);
+}
+
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 
-  QByteArray test2("template<class T> struct Scope1 { struct Scope2 { typedef T Test; } };");
-  QByteArray test3("template<class T> class OtherScope {typedef T Test; }; template<class T> struct Scope1 { struct Scope2 { typedef OtherScope<T>::Test Test; } };");
-  
   DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
@@ -852,7 +875,7 @@ void TestDUChain::testTemplates() {
     QVERIFY(instanceDefClassA->internalContext()->importedParentContexts().size() == 1);
     QVERIFY(defClassA->internalContext()->importedParentContexts().size() == 1);
     QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front()->type(), DUContext::Template);
-    QVERIFY(defClassA->internalContext()->importedParentContexts().front() != instanceDefClassA->internalContext()->importedParentContexts().front()); //The template-context has been specialized
+    QVERIFY(defClassA->internalContext()->importedParentContexts().front() != instanceDefClassA->internalContext()->importedParentContexts().front()); //The template-context has been instantiated
 
     //Make sure the first template-parameter has been resolved to class B
     QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0]->localDeclarations()[0]->abstractType().data(), defClassB->abstractType().data() );

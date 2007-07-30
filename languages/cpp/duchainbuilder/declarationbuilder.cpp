@@ -45,9 +45,11 @@
 #include "tokens.h"
 #include "parsesession.h"
 #include "cpptypes.h"
+#include "templatedeclaration.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
+using namespace Cpp;
 
 QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
     int startPosition = session->token_stream->position(start_token);
@@ -118,8 +120,6 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
 
       decl->setDefaultParameter(defaultParam);
     }
-
-    ///@todo note default-parameter
   } else {
     kDebug() << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing" << endl;
   }
@@ -313,6 +313,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     }
   }
 
+  Identifier lastId = id.last();
+
   Declaration* declaration = 0;
 
   if (recompiling()) {
@@ -332,7 +334,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->textRange() == translated &&
           dec->scope() == scope &&
-          (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && id.last() == dec->identifier()) &&
+          (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && lastId == dec->identifier()) &&
           dec->isDefinition() == isDefinition && dec->isTypeAlias() == m_inTypedef)
       {
         ///@todo differentiate template-parameter declarations and all the template-stuff
@@ -372,6 +374,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       }
     }
   }
+  
 
   if (!declaration) {
     Range* prior = m_editor->currentRange();
@@ -429,6 +432,36 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         break;
     }
   }
+  
+  if( !lastId.templateIdentifiers().isEmpty() ) {
+    TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
+    if( declaration ) {
+      ///This is a template-specialization. Find the class it is specialized from.
+      lastId.clearTemplateIdentifiers();
+      id.pop();
+      id.push(lastId);
+
+      ///@todo Make sure the searched class is in the same namespace
+      QList<Declaration*> decls = currentContext()->findDeclarations(id, m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge) );
+      
+      if( !decls.isEmpty() )
+      {
+        if( decls.count() > 1 )
+          kDebug() << "Found multiple declarations of specialization-base " << id.toString() << " for " << declaration->toString() << endl;
+        
+        foreach( Declaration* decl, decls )
+          if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) )
+            templateDecl->setSpecializedFrom(baseTemplateDecl);
+
+        if( !templateDecl->specializedFrom() )
+          kDebug() << "Could not find valid specialization-base " << id.toString() << " for " << declaration->toString() << endl;
+      }
+    } else {
+      kDebug() << "Specialization of non-template class " << declaration->toString() << endl;
+    }
+    
+  }
+  
   declaration->setComment(m_lastComment);
   m_lastComment = QString();
 

@@ -222,7 +222,7 @@ void TestExpressionParser::testSmartPointer() {
 
   QVERIFY(baseTemplateDecl);
   QVERIFY(specialTemplateDecl);
-  QVERIFY(specialTemplateDecl->isSpecializedFrom(baseTemplateDecl));
+  QVERIFY(specialTemplateDecl->isInstantiatedFrom(baseTemplateDecl));
 
   QVERIFY(specialDecl->internalContext() != baseDecl->internalContext());
   QCOMPARE(specialDecl->internalContext()->importedParentContexts().count(), 1); //Only the template-contexts are imported
@@ -239,7 +239,7 @@ void TestExpressionParser::testSmartPointer() {
   CppDUContext<DUContext>* specialTemplateCtx = dynamic_cast<CppDUContext<DUContext>*>(specialTemplateContext);
   QVERIFY(baseTemplateCtx);
   QVERIFY(specialTemplateCtx);
-  QCOMPARE(specialTemplateCtx->specializedFrom(), baseTemplateContext);*/
+  QCOMPARE(specialTemplateCtx->instantiatedFrom(), baseTemplateContext);*/
   
   QCOMPARE(specialTemplateContext->localDeclarations().count(), 1);
   QCOMPARE(baseTemplateContext->localDeclarations().count(), 1);

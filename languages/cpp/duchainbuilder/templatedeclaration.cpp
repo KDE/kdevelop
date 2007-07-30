@@ -1,3 +1,4 @@
+
 /* This file is part of KDevelop
     Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
@@ -24,7 +25,7 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-QMutex TemplateDeclaration::specializationsMutex;
+QMutex TemplateDeclaration::instantiationsMutex;
 
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
@@ -127,56 +128,75 @@ namespace Cpp {
 //   return true;
 // }
 
-TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m_parameterContext(0), m_specializedFrom(0) {
+TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m_parameterContext(0), m_instantiatedFrom(0), m_specializedFrom(0) {
 }
 
-TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0), m_specializedFrom(0) {
+TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0), m_instantiatedFrom(0), m_specializedFrom(0) {
 }
 
 TemplateDeclaration::~TemplateDeclaration()
-{ 
+{
+  setSpecializedFrom(0);
   
-  SpecializationHash specializations;
+  InstantiationsHash instantiations;
   {
-    QMutexLocker l(&specializationsMutex);
-    specializations = m_specializations;
+    QMutexLocker l(&instantiationsMutex);
+    instantiations = m_instantiations;
 
-    ///Unregister at the declaration this one is specialized from
-    if( m_specializedFrom ) {
-      SpecializationHash::iterator it = m_specializedFrom->m_specializations.find(m_specializedWith);
-      if( it != m_specializedFrom->m_specializations.end() && *it == this )
-        m_specializedFrom->m_specializations.erase(it);
+    ///Unregister at the declaration this one is instantiated from
+    if( m_instantiatedFrom ) {
+      InstantiationsHash::iterator it = m_instantiatedFrom->m_instantiations.find(m_instantiatedWith);
+      if( it != m_instantiatedFrom->m_instantiations.end() && *it == this )
+        m_instantiatedFrom->m_instantiations.erase(it);
       
-      m_specializedFrom = 0;
+      m_instantiatedFrom = 0;
     }
   }
 
   ///Delete all slave-declarations
-  foreach( TemplateDeclaration* decl, specializations ) {
+  foreach( TemplateDeclaration* decl, instantiations ) {
     ///Specializations should always be anonymous, so we can delete them here.
-    decl->m_specializedFrom = 0;
+    decl->m_instantiatedFrom = 0;
     delete decl;
   }
+
+  QList<TemplateDeclaration*> specializations = m_specializations;
+  foreach( TemplateDeclaration* specialization, specializations )
+    specialization->setSpecializedFrom(0);
+}
+
+TemplateDeclaration* TemplateDeclaration::instantiatedFrom() const {
+  return m_instantiatedFrom;
+}
+
+void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* other) {
+  if( m_specializedFrom )
+    m_specializedFrom->m_specializations.removeAll(this);
+
+  m_specializedFrom = other;
+
+  if( m_specializedFrom )
+    m_specializedFrom->m_specializations << this;
 }
 
 TemplateDeclaration* TemplateDeclaration::specializedFrom() const {
   return m_specializedFrom;
 }
 
-void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* from, const QList<ExpressionEvaluationResult>& templateArguments) {
-  QMutexLocker l(&specializationsMutex);
-  if( m_specializedFrom )
-    m_specializedFrom->m_specializations.remove(m_specializedWith);
-  m_specializedFrom = from;
-  m_specializedWith = templateArguments;
-  from->m_specializations.insert(templateArguments, this);
+void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const QList<ExpressionEvaluationResult>& templateArguments) {
+  QMutexLocker l(&instantiationsMutex);
+  if( m_instantiatedFrom )
+    m_instantiatedFrom->m_instantiations.remove(m_instantiatedWith);
+  m_instantiatedFrom = from;
+  m_instantiatedWith = templateArguments;
+  from->m_instantiations.insert(templateArguments, this);
 }
 
-bool TemplateDeclaration::isSpecializedFrom(const TemplateDeclaration* other) const {
-    QMutexLocker l(&specializationsMutex);
+bool TemplateDeclaration::isInstantiatedFrom(const TemplateDeclaration* other) const {
+    QMutexLocker l(&instantiationsMutex);
   
-    SpecializationHash::const_iterator it = other->m_specializations.find(m_specializedWith);
-    if( it != other->m_specializations.end() && (*it) == this )
+    InstantiationsHash::const_iterator it = other->m_instantiations.find(m_instantiatedWith);
+    if( it != other->m_instantiations.end() && (*it) == this )
       return true;
     else
       return false;
@@ -196,15 +216,15 @@ bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
 }
 
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
-CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* specializedDeclaration, Declaration* specializedFrom )
+CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
 {
-  if( specializedDeclaration ) {
-    ///Move the specialized declaration anonymously into the parent-context
-    specializedDeclaration->setContext(parentContext, true);
+  if( instantiatedDeclaration ) {
+    ///Move the instantiated declaration anonymously into the parent-context
+    instantiatedDeclaration->setContext(parentContext, true);
 
     if( !templateArguments.isEmpty() ) {
       ///Change the identifier to reflect the set template-arguments @todo use default-parameters
-      KDevelop::Identifier id = specializedDeclaration->identifier();
+      KDevelop::Identifier id = instantiatedDeclaration->identifier();
       foreach(Cpp::ExpressionEvaluationResult expr, templateArguments) {
         KDevelop::IdentifiedType* idType = dynamic_cast<KDevelop::IdentifiedType*>(expr.type.data());
         
@@ -215,7 +235,7 @@ CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUCon
           id.appendTemplateIdentifier(QualifiedIdentifier(expr.toString()));*/
       }
       
-      specializedDeclaration->setIdentifier(id);
+      instantiatedDeclaration->setIdentifier(id);
     }
   }
 
@@ -224,18 +244,18 @@ CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUCon
   if( context ) {
     ///Specialize involved contexts
     Q_ASSERT(context->parentContext()); //Top-context is not allowed
-    contextCopy = new StandardCppDUContext(context->textRangePtr(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be specialized
+    contextCopy = new StandardCppDUContext(context->textRangePtr(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be instantiated
     contextCopy->setRangeOwning(KDevelop::DocumentRangeObject::DontOwn); //The range belongs to the original context, so flag it not to be owned by the context
     contextCopy->setType(context->type());
     contextCopy->setLocalScopeIdentifier(context->localScopeIdentifier());
 
     kDebug() << "Created context " << contextCopy << " as specialization of context " << context << endl;
     
-    if( specializedDeclaration )
-      specializedDeclaration->setInternalContext(contextCopy);
+    if( instantiatedDeclaration )
+      instantiatedDeclaration->setInternalContext(contextCopy);
 
     
-    ///Now the created context is already partially functional and can be used for searching(not the specialized template-params yet though)
+    ///Now the created context is already partially functional and can be used for searching(not the instantiated template-params yet though)
     
     if(context->type() == KDevelop::DUContext::Template && !templateArguments.isEmpty()) { //templateArguments may be empty, that means that only copying should happen.
       ///Specialize the local template-declarations
@@ -271,7 +291,7 @@ CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUCon
         ///For functions, the Template-context is one level deeper(it is imported by the function-context) so also copy the function-context
       if( importedContext->type() == KDevelop::DUContext::Template || importedContext->type() == KDevelop::DUContext::Function )
       {
-        DUContext* ctx = specializeDeclarationContext( parentContext, importedContext.data(), templateArguments, 0, 0);
+        DUContext* ctx = instantiateDeclarationContext( parentContext, importedContext.data(), templateArguments, 0, 0);
         contextCopy->addImportedParentContext( ctx, true );
       }
       else
@@ -281,8 +301,8 @@ CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUCon
       }
     }
 
-    if( specializedDeclaration ) {
-      const CppClassType* klass = dynamic_cast<const CppClassType*>( specializedDeclaration->abstractType().data() );
+    if( instantiatedDeclaration ) {
+      const CppClassType* klass = dynamic_cast<const CppClassType*>( instantiatedDeclaration->abstractType().data() );
       if( klass ) { //It could also be a function
         ///Resolve template-dependent base-classes(They can not be found in the imports-list, because their type is DelayedType and those have no context)
 
@@ -312,38 +332,38 @@ CppDUContext<KDevelop::DUContext>* specializeDeclarationContext( KDevelop::DUCon
   }
 
   if( contextCopy )
-    contextCopy->setSpecializedFrom(dynamic_cast<CppDUContext<DUContext>*>(context));
+    contextCopy->setInstantiatedFrom(dynamic_cast<CppDUContext<DUContext>*>(context));
   ///Since now the context is accessible through the du-chain, so it must not be changed any more.
     
-  if( specializedDeclaration && specializedDeclaration->abstractType() ) {
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(specializedDeclaration->abstractType().data());
+  if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instantiatedDeclaration->abstractType().data());
 
     ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
-    AbstractType::Ptr changedType = resolveDelayedTypes( specializedDeclaration->abstractType(), specializedDeclaration->internalContext() ? specializedDeclaration->internalContext() : parentContext );
+    AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext );
 
-    if( changedType == specializedDeclaration->abstractType() )
-      if( idType && idType->declaration() == specializedFrom ) { //We must clone it, so we can change IdentifiedType::declaration
-        changedType = specializedDeclaration->abstractType()->clone();
+    if( changedType == instantiatedDeclaration->abstractType() )
+      if( idType && idType->declaration() == instantiatedFrom ) { //We must clone it, so we can change IdentifiedType::declaration
+        changedType = instantiatedDeclaration->abstractType()->clone();
 
         IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
         Q_ASSERT(changedIdType);
-        changedIdType->setDeclaration(specializedDeclaration);
+        changedIdType->setDeclaration(instantiatedDeclaration);
       }
     
-    specializedDeclaration->setAbstractType( changedType );
+    instantiatedDeclaration->setAbstractType( changedType );
   }
   
   return contextCopy;
 }
 
 ///@todo Use explicitly declared specializations
-Declaration* TemplateDeclaration::specialize( const QList<ExpressionEvaluationResult>& templateArguments )
+Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments )
 {
   {
-    QMutexLocker l(&specializationsMutex);
-    SpecializationHash::const_iterator it;
-    it = m_specializations.find(templateArguments);
-    if( it != m_specializations.end() )
+    QMutexLocker l(&instantiationsMutex);
+    InstantiationsHash::const_iterator it;
+    it = m_instantiations.find(templateArguments);
+    if( it != m_instantiations.end() )
       return dynamic_cast<Declaration*>(*it);
   }
 
@@ -356,9 +376,9 @@ Declaration* TemplateDeclaration::specialize( const QList<ExpressionEvaluationRe
   Q_ASSERT(cloneTemplateDecl);
   
   ///Now eventually create the virtual contexts
-  specializeDeclarationContext( decl->context(), decl->internalContext(), templateArguments, clone, decl );
+  instantiateDeclarationContext( decl->context(), decl->internalContext(), templateArguments, clone, decl );
 
-  cloneTemplateDecl->setSpecializedFrom(this, templateArguments);
+  cloneTemplateDecl->setInstantiatedFrom(this, templateArguments);
   
   return clone;
 }

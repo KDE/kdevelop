@@ -65,6 +65,7 @@ private slots:
   void testHashedStringRepository();
   void testTypedef();
   void testTemplates();
+  void testSpecializedTemplates();
   void testFunctionDefinition();
   void testBaseClasses();
   void testFileParse();

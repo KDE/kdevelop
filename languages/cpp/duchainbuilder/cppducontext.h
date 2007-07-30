@@ -22,25 +22,25 @@ Some mindmapping about how the template-system works:
 
 While construction:
 - Simplify: Template-parameters are types
-- Within template-contexts, do not resolve any types. Instead create "virtual types" that will resolve the types when specializations are given.
+- Within template-contexts, do not resolve any types. Instead create "virtual types" that will resolve the types when template-parameters are given.
  (DelayedType) - ready
 
  
  Later:
- - Searching specialized template-class:
+ - Searching instantiated template-class:
         - return virtual declaration
         - return virtual context (Change template-parameter-context to given template-arguments)
- - Searching IN specialized template-class:
+ - Searching IN instantiated template-class:
        - When searching local declarations:
-         - Check whether they are already in the specialized context, if yes return them
-         - If not, Search in non-specialized context(only for local declarations), then:
+         - Check whether they are already in the instantiated context, if yes return them
+         - If not, Search in non-instantiated context(only for local declarations), then:
            - Copy & Change returned objects:
              - Resolve virtual types (DelayedType)
              - Change parent-context to virtual context
              - Change internal context, (create virtual, move set parent)
 
  - How template-parameters are resolved:
-    - The DUContext's with type DUContext::Template get their template-parameter declarations specialized and added locally. Then they will be found when resolving virtual types.
+    - The DUContext's with type DUContext::Template get their template-parameter declarations instantiated and added locally. Then they will be found when resolving virtual types.
     - 
 
 */
@@ -72,10 +72,10 @@ While construction:
 using namespace KDevelop;
 
 namespace Cpp {
-extern QMutex cppDuContextSpecializationsMutex;
+extern QMutex cppDuContextInstantiationsMutex;
 
 /**
- * This is a du-context template that wraps the c++-specific logic around existing DUContext specializations.
+ * This is a du-context template that wraps the c++-specific logic around existing DUContext-derived classes.
  * In practice this means DUContext and TopDUContext.
  * */
 template<class BaseContext>
@@ -83,23 +83,23 @@ class CppDUContext : public BaseContext {
   public:
     ///Parameters will be reached to the base-class
     template<class Param1, class Param2>
-    CppDUContext( Param1* p1, Param2* p2, bool isSpecializationContext ) : BaseContext(p1, p2, isSpecializationContext), m_specializedFrom(0) {
+    CppDUContext( Param1* p1, Param2* p2, bool isInstantiationContext ) : BaseContext(p1, p2, isInstantiationContext), m_instantiatedFrom(0) {
     }
 
     ///Both parameters will be reached to the base-class. This fits TopDUContext.
     template<class Param1, class Param2>
-    CppDUContext( Param1* p1, Param2* p2) : BaseContext(p1, p2), m_specializedFrom(0) {
+    CppDUContext( Param1* p1, Param2* p2) : BaseContext(p1, p2), m_instantiatedFrom(0) {
     }
 
     ~CppDUContext() {
       //Specializations will be destroyed the same time this is destroyed
-      QSet<CppDUContext<BaseContext>*> specializations;
+      QSet<CppDUContext<BaseContext>*> instatiations;
       {
-        QMutexLocker l(&cppDuContextSpecializationsMutex);
-        specializations = m_specializations;
+        QMutexLocker l(&cppDuContextInstantiationsMutex);
+        instatiations = m_instatiations;
       }
-      foreach( CppDUContext<BaseContext>* specialization, specializations )
-        delete specialization;
+      foreach( CppDUContext<BaseContext>* instatiation, instatiations )
+        delete instatiation;
     }
     
     ///Overridden to take care of templates
@@ -168,11 +168,11 @@ class CppDUContext : public BaseContext {
               ret += tempDecls;
             } else {
               foreach( Declaration* decl, tempDecls ) {
-                Declaration* dec = specializeDeclaration(decl, templateArgumentTypes);
+                Declaration* dec = instantiateDeclaration(decl, templateArgumentTypes);
                 if( dec )
                   ret << dec;
                 else
-                  kDebug() << "Could not specialize template-declaration" << endl;
+                  kDebug() << "Could not instantiate template-declaration" << endl;
               }
             }
           }else{
@@ -184,17 +184,17 @@ class CppDUContext : public BaseContext {
             }
             //Extract a context, maybe it would be enough only testing the first found declaration
             foreach( Declaration* decl, tempDecls ) {
-              Declaration* specialDecl = decl;
+              Declaration* instanceDecl = decl;
               
               if( !templateArgumentTypes.isEmpty() )
-                specialDecl = specializeDeclaration(decl, templateArgumentTypes);
+                instanceDecl = instantiateDeclaration(decl, templateArgumentTypes);
               
-              if( !specialDecl ) {
-                kDebug() << "Could not specialize context-declaration" << endl;
+              if( !instanceDecl ) {
+                kDebug() << "Could not instantiate context-declaration" << endl;
                 continue;
               }
               
-              scopeContext = TypeUtils::getInternalContext(specialDecl);
+              scopeContext = TypeUtils::getInternalContext(instanceDecl);
               if( scopeContext && scopeContext->type() == DUContext::Class )
                 break;
             }
@@ -227,8 +227,8 @@ class CppDUContext : public BaseContext {
       ifDebug( kDebug() << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
       /**
         - When searching local declarations:
-         - Check whether they are already in the specialized context, if yes return them
-         - If not, Search in non-specialized context(only for local declarations), then:
+         - Check whether they are already in the instantiated context, if yes return them
+         - If not, Search in non-instantiated context(only for local declarations), then:
            - Copy & Change returned objects:
              - Resolve virtual types (DelayedType)
              - Change parent-context to virtual context
@@ -253,16 +253,16 @@ class CppDUContext : public BaseContext {
             }
           }
         
-        if( m_specializedFrom && ret.count() == retCount ) {
-          ///Search in the context this one was specialized from
+        if( m_instantiatedFrom && ret.count() == retCount ) {
+          ///Search in the context this one was instantiated from
           QList<Declaration*> decls;
-          m_specializedFrom->findLocalDeclarationsInternal( identifier, position, dataType, allowUnqualifiedMatch, decls, flags );
+          m_instantiatedFrom->findLocalDeclarationsInternal( identifier, position, dataType, allowUnqualifiedMatch, decls, flags );
           foreach( Declaration* decl, decls ) {
             Declaration* copy = decl->clone();
             
-            specializeDeclarationContext( const_cast<CppDUContext*>(this), decl->internalContext(), QList<Cpp::ExpressionEvaluationResult>(), copy, decl );
+            instantiateDeclarationContext( const_cast<CppDUContext*>(this), decl->internalContext(), QList<Cpp::ExpressionEvaluationResult>(), copy, decl );
 
-            ///specializeDeclarationContext moved the declaration into this context anonymously, but we want to be able to find it
+            ///instantiateDeclarationContext moved the declaration into this context anonymously, but we want to be able to find it
             copy->setContext(const_cast<CppDUContext*>(this));
             
             ret << copy;
@@ -285,48 +285,48 @@ class CppDUContext : public BaseContext {
     }
 
     /**
-     * Set the context which this is specialized from. This context will be strictly attached to that context, and will be deleted once the other is deleted.
+     * Set the context which this is instantiated from. This context will be strictly attached to that context, and will be deleted once the other is deleted.
      * */
-    void setSpecializedFrom( CppDUContext<BaseContext>* context ) {
-      QMutexLocker l(&cppDuContextSpecializationsMutex);
+    void setInstantiatedFrom( CppDUContext<BaseContext>* context ) {
+      QMutexLocker l(&cppDuContextInstantiationsMutex);
       
-      if( m_specializedFrom )
-        m_specializedFrom->m_specializations.remove( this );
-      m_specializedFrom = context;
-      m_specializedFrom->m_specializations.insert( this );
+      if( m_instantiatedFrom )
+        m_instantiatedFrom->m_instatiations.remove( this );
+      m_instantiatedFrom = context;
+      m_instantiatedFrom->m_instatiations.insert( this );
     }
 
     /**
-     * If this returns nonzero value, this context is a specialization of some other context, and that other context will be returned here.
+     * If this returns nonzero value, this context is a instatiation of some other context, and that other context will be returned here.
      * */
-    CppDUContext<BaseContext>* specializedFrom() const {
-      return m_specializedFrom;
+    CppDUContext<BaseContext>* instantiatedFrom() const {
+      return m_instantiatedFrom;
     }
 
     virtual bool inDUChain() const {
-      return m_specializedFrom || BaseContext::inDUChain();
+      return m_instantiatedFrom || BaseContext::inDUChain();
     }
     
   private:
 
-    Declaration* specializeDeclaration( Declaration* decl, const QList<Cpp::ExpressionEvaluationResult>& templateArguments ) const
+    Declaration* instantiateDeclaration( Declaration* decl, const QList<Cpp::ExpressionEvaluationResult>& templateArguments ) const
     {
       if( templateArguments.isEmpty() )
         return decl;
       
       TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
       if( !templateDecl ) {
-        kDebug() << "Tried to specialize a non-template declaration" << endl;
+        kDebug() << "Tried to instantiate a non-template declaration" << endl;
         return 0;
       }
 
-      return templateDecl->specialize( templateArguments );
+      return templateDecl->instantiate( templateArguments );
     }
 
-    CppDUContext<BaseContext>* m_specializedFrom;
+    CppDUContext<BaseContext>* m_instantiatedFrom;
 
-    ///Every access to m_specializations must be serialized through specializationsMutex, because they may be written without a write-lock
-    QSet<CppDUContext<BaseContext>* > m_specializations;
+    ///Every access to m_instatiations must be serialized through instatiationsMutex, because they may be written without a write-lock
+    QSet<CppDUContext<BaseContext>* > m_instatiations;
 };
 
 }

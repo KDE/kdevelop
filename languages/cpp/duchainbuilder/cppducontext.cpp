@@ -20,6 +20,6 @@
 
 namespace Cpp {
 
-QMutex cppDuContextSpecializationsMutex;
+QMutex cppDuContextInstantiationsMutex;
 
 }
