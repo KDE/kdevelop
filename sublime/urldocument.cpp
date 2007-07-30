@@ -19,7 +19,7 @@
 #include "urldocument.h"
 
 #include <QWidget>
-#include <QTextEdit>
+#include <KTextEdit>
 
 namespace Sublime {
 
@@ -52,7 +52,7 @@ KUrl UrlDocument::url() const
 QWidget *UrlDocument::createViewWidget(QWidget *parent)
 {
     ///@todo adymo: load file contents here
-    return new QTextEdit(parent);
+    return new KTextEdit(parent);
 }
 
 }
