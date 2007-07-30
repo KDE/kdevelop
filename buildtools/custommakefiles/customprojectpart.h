@@ -26,7 +26,6 @@ class QListViewItem;
 class QPopupMenu;
 class QStringList;
 class KDialogBase;
-class KDirWatch;
 class CustomProjectWidget;
 class Context;
 class KSelectAction;
@@ -66,14 +65,13 @@ public:
 
 private slots:
     void populateProject();
-    void slotDirDirty( const QString& dir );
     void projectConfigWidget( KDialogBase *dlg );
     void contextMenu( QPopupMenu *popup, const Context *context );
     void slotAddToProject();
     void slotRemoveFromProject();
     void slotAddToProjectRecursive();
     void slotRemoveFromProjectRecursive();
-    void addNewFilesToProject();
+    void addNewFilesToProject( const QStringList& );
     void slotChangeBlacklist();
     void slotChooseActiveDirectory();
     void slotBuild();
@@ -102,7 +100,6 @@ private:
     void cleanFileList();
     void setFiletypes( const QStringList& );
     QString relativeToProject( const QString& ) const;
-    void addDirWatches( const QString& );
     void findNewFiles( const QString& dir, QStringList& list) const;
 
     QStringList filetypes() const;
@@ -119,7 +116,6 @@ private:
     QString m_projectName;
     QString m_filelistDir;
     QStringList m_sourceFiles;
-    QStringList m_autoAddFiles;
     QPopupMenu *m_targetMenu;
     QPopupMenu *m_targetObjectFilesMenu;
     QPopupMenu *m_targetOtherFilesMenu;
@@ -140,7 +136,6 @@ private:
     QMap<QString, QString> m_makefileVars;
     bool m_recursive;
     bool m_first_recursive;
-    KDirWatch* dirwatch;
 };
 
 #endif
