@@ -1,2 +1,1 @@
 EXCLUDE dpointer
-SKIP /buildtools/managers/cmake/parser/cmListFileLexer\.c\|/buildtools/managers/cmake/parser/cmListFileLexer\.h\|/plugins/qtdesigner/internals/\|/buildtools/managers/qmake/parser/generated/\|/languages/cpp/app_templates/

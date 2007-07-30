@@ -1,0 +1,1 @@
+SKIP /managers/cmake/parser/cmListFileLexer\.c\|/managers/cmake/parser/cmListFileLexer\.h\|/managers/qmake/parser/generated/
