@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ bool Comment::isSame ( const Comment& rhs ) {
 }
 
 Comment CommentStore::takeComment( int line ) {
-    CommentSet::iterator it = m_comments.find( line );
+    CommentSet::iterator it = m_comments.find( Comment( 0, line ) );
     if( it != m_comments.end() ) {
         Comment ret = *it;
         m_comments.erase( it );
@@ -45,7 +45,7 @@ Comment CommentStore::takeComment( int line ) {
 
 
 Comment CommentStore::takeCommentInRange( int end, int start ) {
-    CommentSet::iterator it = m_comments.lower_bound(  end );
+    CommentSet::iterator it = m_comments.lower_bound( Comment( 0, end ) );
 
 
     while( it != m_comments.begin() && (*it).line() > end ) {

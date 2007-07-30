@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -16,6 +16,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef COMMENTPARSER_H
+#define COMMENTPARSER_H
+
 #include <QString>
 #include <set>
 
@@ -23,7 +26,7 @@ class ParseSession;
 
 class Comment {
   public:
-    Comment( size_t token = 0, int line = -1 );
+    explicit Comment( size_t token = 0, int line = -1 );
 
     operator bool() const;
 
@@ -61,24 +64,25 @@ class CommentStore {
          * Returns & removes the first comment currently in the comment-store
          * */
         Comment takeFirstComment();
-        
+
         /**
          * Returns the comment nearest to the line of "end"(inclusive), and returns & removes it
          * */
         Comment takeCommentInRange( int endLine, int startLine = 0 );
-        
+
         ///Returns and removes the comment in the given line
         Comment takeComment( int line );
-        
+
         void addComment( Comment comment );
-        
+
         ///Does not delete the comment
         Comment latestComment() const;
 
         bool hasComment() const {
           return !m_comments.empty();
         }
-        
+
         void clear();
 };
 
+#endif
