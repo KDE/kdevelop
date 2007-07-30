@@ -242,8 +242,8 @@ int main( int argc, char *argv[] )
   KCmdLineArgs::init( argc, argv, &aboutData );
 
   KCmdLineOptions options;
-  options.add("includes <includes>", ki18n( "KDE include directory - headers go into <includes>/KDE" )); //krazy:exclude=i18ncheckarg
-  options.add("buildinfo <buildinfo>", ki18n( "Build information from the cmake XML generator" )); //krazy:exclude=i18ncheckarg
+  options.add("includes <includes>", ki18n( "KDE include directory - headers go into <placeholder>includes</placeholder>/KDE" ));
+  options.add("buildinfo <buildinfo>", ki18n( "Build information from the cmake XML generator" ));
   KCmdLineArgs::addCmdLineOptions( options );
 
   HeaderGenerator hg;
