@@ -1724,7 +1724,7 @@ svn_error_t *kio_svnProtocol::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **
 		*cred_p = (svn_auth_cred_ssl_server_trust_t*)apr_pcalloc (pool, sizeof (svn_auth_cred_ssl_server_trust_t));
 		kdDebug(9036) << " accept permanently " << endl;
 		(*cred_p)->may_save = true;
-		(*cred_p)->accepted_failures = 0;
+		(*cred_p)->accepted_failures = failures;
 	} else{
 		kdWarning() << " SSL server trust failed for some reason" << endl;
 		*cred_p = 0L;
