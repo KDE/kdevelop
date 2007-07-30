@@ -313,7 +313,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     }
   }
 
-  Identifier lastId = id.last();
+  Identifier lastId;
+  if( !id.isEmpty() )
+    lastId = id.last();
 
   Declaration* declaration = 0;
 

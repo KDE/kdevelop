@@ -21,7 +21,7 @@ set(kdevcppduchainbuilder_LIB_SRCS
     macroset.cpp
     environmentmanager.cpp
     cachemanager.cpp
-    hashedstring.cpp
+    hashedstringset.cpp
     cppduchain.cpp
     templateparameterdeclaration.cpp
     cppducontext.cpp

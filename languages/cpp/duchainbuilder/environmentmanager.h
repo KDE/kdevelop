@@ -27,7 +27,7 @@
 
 #include <parsingenvironment.h>
 #include "cppduchainbuilderexport.h"
-#include "hashedstring.h"
+#include "hashedstringset.h"
 #include "macroset.h"
 #include "cachemanager.h"
 

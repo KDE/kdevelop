@@ -194,10 +194,18 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(aj2.match(ajt), QualifiedIdentifier::NoMatch);
   QCOMPARE(ajt.match(aj2), QualifiedIdentifier::NoMatch);
   //QCOMPARE(jt.match(aj2), QualifiedIdentifier::ContainedBy); ///@todo reenable this(but it fails)
-  QCOMPARE(ajt.match(jt), QualifiedIdentifier::Contains);
+  QCOMPARE(ajt.match(jt), QualifiedIdentifier::EndsWith);
 
   QCOMPARE(aj2.match(ajt2), QualifiedIdentifier::NoMatch);
   QCOMPARE(ajt2.match(aj2), QualifiedIdentifier::NoMatch);
+  QualifiedIdentifier t("Area<A,B>::jump<F>::tes<C>");
+  QCOMPARE(t.count(), 3);
+  QCOMPARE(t.at(0).templateIdentifiers().count(), 2);
+  QCOMPARE(t.at(1).templateIdentifiers().count(), 1);
+  QCOMPARE(t.at(2).templateIdentifiers().count(), 1);
+  QCOMPARE(t.at(0).identifier(), QString("Area"));
+  QCOMPARE(t.at(1).identifier(), QString("jump"));
+  QCOMPARE(t.at(2).identifier(), QString("tes"));
 }
 
 void TestDUChain::testContextRelationships()

@@ -11,7 +11,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "hashedstring.h"
+#include "hashedstringset.h"
 #include <QDataStream>
 #include <QSet>
 #include <QTextStream>
