@@ -31,6 +31,7 @@
 #include <khtmlview.h>
 
 #include "duchainbuilder/cppduchain.h"
+#include "duchainbuilder/typeutils.h"
 
 #include <declaration.h>
 #include "cpptypes.h"
@@ -46,6 +47,7 @@
 
 using namespace KTextEditor;
 using namespace KDevelop;
+using namespace TypeUtils;
 
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel(parent)
@@ -452,8 +454,20 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
   if( completionContext->isValid() ) {
     DUChainReadLocker lock(DUChain::lock());
 
-    if( completionContext->memberAccessContainer().isValid() ) {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(completionContext->memberAccessContainer().type.data());
+    if( completionContext->memberAccessContainer().isValid() )
+    {
+      AbstractType::Ptr containerType = completionContext->memberAccessContainer().type;
+      if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::ArrowMemberAccess ) {
+        //Dereference a pointer
+        CppPointerType* pnt = dynamic_cast<CppPointerType*>(realType(containerType.data()));
+        if( !pnt ) {
+          kDebug() << "Arrow-operator on non-pointer type" << endl;
+          containerType = AbstractType::Ptr();
+        } else {
+          containerType = pnt->baseType();
+        }
+      }
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( realType(containerType.data()) );
       if( idType && idType->declaration() ) {
         DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
         if( ctx ) {
