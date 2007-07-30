@@ -25,7 +25,7 @@
 class QDataStream;
 namespace KDevelop {
 class HashedString;
-};
+}
 
 namespace Cpp {
 
