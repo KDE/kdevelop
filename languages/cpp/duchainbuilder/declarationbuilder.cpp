@@ -437,7 +437,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   
   if( !lastId.templateIdentifiers().isEmpty() ) {
     TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
-    if( declaration ) {
+    if( declaration && templateDecl ) {
       ///This is a template-specialization. Find the class it is specialized from.
       lastId.clearTemplateIdentifiers();
       id.pop();

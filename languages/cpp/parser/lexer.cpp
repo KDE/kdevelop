@@ -135,7 +135,7 @@ void Lexer::tokenize(ParseSession* _session)
     Token *current_token = &(*session->token_stream)[index];
     current_token->text = session->contents();
     current_token->position = cursor - session->contents();
-    (this->*s_scan_table[*cursor])();
+    (this->*s_scan_table[((uchar)*cursor)])();
     current_token->size = cursor - session->contents() - current_token->position;
   } while (cursor < session->contents() + session->size()-1);
 
