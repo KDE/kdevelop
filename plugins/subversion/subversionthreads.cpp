@@ -125,8 +125,8 @@ SubversionThread::SubversionThread( SvnKJobBase::JobType actionType, SvnKJobBase
 SubversionThread::~SubversionThread()
 {
     kDebug() << " SubversionThread destructor .. " << endl;
-    delete d;
     svn_pool_destroy( pool() );
+    delete d;
 }
 
 SvnKJobBase::JobType SubversionThread::type()
@@ -238,7 +238,7 @@ SubversionThread::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **cred_p,
                 (*cred_p)->may_save = true;
                 kDebug() << " Saving SSL Cert " << endl;
             }
-            (*cred_p)->accepted_failures = 0;
+            (*cred_p)->accepted_failures = failures;
             break;
         default:
         case -1:
