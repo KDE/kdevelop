@@ -98,7 +98,7 @@ QStringList fromChar( const char *strs[] )
 }
 
 GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent )
-    : QDialog(parent ), m_part( part )
+    : KDialog(parent ), m_part( part )
 {
     QStringList template_desc = fromChar( __template_desc );
     QStringList template_str = fromChar( __template_str );
@@ -267,7 +267,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent )
             "but at most <i>m</i> times."
             "</ul>"
             "Furthermore, backreferences to bracketed subexpressions are "
-            "available via the notation \\<i>n</i>.</qt>"
+            "available via the notation \\<i>n</i>.</p></qt>"
             ));
     files_combo->setWhatsThis(
             i18n("Enter the file name pattern of the files to search here. "
@@ -376,14 +376,14 @@ void GrepDialog::show()
     if (isVisible())
         hide();
 //         QDialog::hide();
-    QDialog::show();
+    KDialog::show();
     pattern_combo->setFocus();
 }
 
 void GrepDialog::hide()
 {
     pattern_combo->setFocus();
-    QDialog::hide();
+    KDialog::hide();
 }
 
 void GrepDialog::slotSynchDirectory( )

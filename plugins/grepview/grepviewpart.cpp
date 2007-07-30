@@ -89,7 +89,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const QStringList & )
             "can enter a regular expression which is then "
             "searched for within all files in the directories "
             "you specify. Matches will be displayed, you "
-            "can switch to a match directly.") );
+            "can switch to a match directly.</p>") );
 
     KDevelop::IPlugin* plugin =
             core()->pluginController()->pluginForExtension( "org.kdevelop.IOutputView" );
@@ -115,10 +115,11 @@ void GrepViewPart::slotGrep()
 
 }
 
-void GrepViewPart::showDialogWithPattern(QString pattern)
+void GrepViewPart::showDialogWithPattern(const QString& p)
 {
     // Before anything, this removes line feeds from the
     // beginning and the end.
+    QString pattern = p;
     int len = pattern.length();
     if (len > 0 && pattern[0] == '\n')
     {
@@ -346,7 +347,7 @@ void GrepViewPart::searchActivated()
     int id = m_view->registerView( m_grepdlg->patternString() );
     m_view->setModel( id, model );
 
-    // At first line, print out actual command invokation as if it was run via shell.
+    // At first line, print out actual command invocation as if it was run via shell.
     QString printCmd;
     foreach( GrepviewProcess *_proc, validProcs )
     {
@@ -401,7 +402,7 @@ QString GrepViewPart::currentWord()
     while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
         endPos++;
 
-    return ( ( startPos == endPos ) ? QString::null : linestr.mid( startPos+1, endPos-startPos-1 ) );
+    return ( ( startPos == endPos ) ? QString() : linestr.mid( startPos+1, endPos-startPos-1 ) );
 }
 
 QString GrepViewPart::currentSelectedWord()

@@ -34,7 +34,7 @@ public:
 
 private Q_SLOTS:
     void slotGrep();
-    void showDialogWithPattern(QString pattern);
+    void showDialogWithPattern(const QString& pattern);
     void searchActivated();
 
 private:

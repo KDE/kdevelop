@@ -13,7 +13,7 @@
 #ifndef _GREPDLG_H_
 #define _GREPDLG_H_
 
-#include <qdialog.h>
+#include <kdialog.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <kcombobox.h>
@@ -26,12 +26,12 @@ class QPushButton;
 class GrepViewPart;
 class KLineEdit;
 
-class GrepDialog : public QDialog
+class GrepDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    GrepDialog( GrepViewPart * part, QWidget *parent=0 );
+    explicit GrepDialog( GrepViewPart * part, QWidget *parent=0 );
     ~GrepDialog();
 
     void setPattern(const QString &pattern)
