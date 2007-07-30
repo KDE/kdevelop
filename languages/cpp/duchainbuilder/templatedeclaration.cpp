@@ -25,7 +25,7 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-QMutex TemplateDeclaration::instantiationsMutex;
+QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 

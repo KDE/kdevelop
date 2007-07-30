@@ -20,6 +20,6 @@
 
 namespace Cpp {
 
-QMutex cppDuContextInstantiationsMutex;
+QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
 
 }
