@@ -11,6 +11,7 @@ include_directories(
 
 set(kdevgrepview_PART_SRCS
     grepviewpart.cpp grepdlg.cpp grepoutputmodel.cpp
+    grepviewprocess.cpp
 )
 
 # set(kdevgrepview_PART_UI

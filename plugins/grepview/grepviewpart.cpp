@@ -13,6 +13,7 @@
 #include "grepviewpart.h"
 #include "grepdlg.h"
 #include "grepoutputmodel.h"
+#include "grepviewprocess.h"
 
 #include <qwhatsthis.h>
 #include <QtDesigner/QExtensionFactory>
@@ -28,7 +29,6 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
-#include <kprocess.h>
 #include <kstringhandler.h>
 #include <kmessagebox.h>
 #include <ktexteditor/document.h>
@@ -157,8 +157,8 @@ void GrepViewPart::showDialogWithPattern(QString pattern)
 
 void GrepViewPart::searchActivated()
 {
-    KProcess *catProc=0, *findProc=0, *grepProc=0, *sedProc=0, *xargsProc=0;
-    QList<KProcess*> validProcs;
+    GrepviewProcess *catProc=0, *findProc=0, *grepProc=0, *sedProc=0, *xargsProc=0;
+    QList<GrepviewProcess*> validProcs;
 
     // waba: code below breaks on filenames containing a ',' !!!
 //     QStringList filelist = QString::split(",", m_grepdlg->filesString());
@@ -222,7 +222,7 @@ void GrepViewPart::searchActivated()
 
             QStringList catCmd;
             catCmd << tmpFilePath.toLocalFile().replace(' ', "\\ ");
-            catProc = new KProcess(this);
+            catProc = new GrepviewProcess(this);
             catProc->setProgram( "cat", catCmd );
             catProc->setOutputChannelMode( KProcess::SeparateChannels );
             validProcs << catProc;
@@ -256,7 +256,7 @@ void GrepViewPart::searchActivated()
 //             findCmd += " 2>/dev/null";
 
         kDebug() << "findCmd :" << findCmd << endl;
-        findProc = new KProcess(this);
+        findProc = new GrepviewProcess(this);
         findProc->setProgram( "find", findCmd );
         findProc->setOutputChannelMode( KProcess::SeparateChannels );
         validProcs << findProc;
@@ -272,7 +272,7 @@ void GrepViewPart::searchActivated()
         for (; it != excludelist.end(); ++it)
             grepCmd << "-e" << *it;
 
-        grepProc = new KProcess(this);
+        grepProc = new GrepviewProcess(this);
         grepProc->setProgram( "grep", grepCmd );
         grepProc->setOutputChannelMode( KProcess::SeparateChannels );
         validProcs << grepProc;
@@ -283,7 +283,7 @@ void GrepViewPart::searchActivated()
     {
         // quote spaces in filenames going to xargs
         sedCmd << "s/ /\\\\\\ /g";
-        sedProc = new KProcess(this);
+        sedProc = new GrepviewProcess(this);
         sedProc->setProgram( "sed", sedCmd );
         sedProc->setOutputChannelMode( KProcess::SeparateChannels );
         validProcs << sedProc;
@@ -316,7 +316,7 @@ void GrepViewPart::searchActivated()
 //     xargsCmd += quote(pattern); // quote isn't needed now.
     xargsCmd << pattern;
 
-    xargsProc = new KProcess(this);
+    xargsProc = new GrepviewProcess(this);
     xargsProc->setProgram( "xargs", xargsCmd );
     xargsProc->setOutputChannelMode( KProcess::SeparateChannels );
     validProcs << xargsProc;
@@ -330,6 +330,9 @@ void GrepViewPart::searchActivated()
 
     GrepOutputModel *model = new GrepOutputModel(this);
     ProcessLineMaker *lineMaker = new ProcessLineMaker( xargsProc );
+
+    // needed because processlinemaker is not a child of KProcess.
+    connect( xargsProc, SIGNAL(destroyed(QObject*)), lineMaker, SLOT(deleteLater()) );
 
     connect( lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
              model, SLOT(appendOutputs(const QStringList&)) );
@@ -345,19 +348,18 @@ void GrepViewPart::searchActivated()
 
     // At first line, print out actual command invokation as if it was run via shell.
     QString printCmd;
-    foreach( KProcess *_proc, validProcs )
+    foreach( GrepviewProcess *_proc, validProcs )
     {
         printCmd += _proc->program().join(" ") + " | ";
     }
     printCmd.chop(3); // chop last '|'
     model->appendRow( new QStandardItem(printCmd) );
 
-    // start process
-    foreach( KProcess *_proc, validProcs )
+    // start process. GrepviewProcess is self-deleted.
+    foreach( GrepviewProcess *_proc, validProcs )
     {
         _proc->start();
     }
-    //TODO memory free when completed.
 }
 
 QString GrepViewPart::escape(const QString &str)
