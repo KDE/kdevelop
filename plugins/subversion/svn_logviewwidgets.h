@@ -66,7 +66,7 @@ class SvnFileSelectFromLogviewDlg : public KDialog
 {
     Q_OBJECT
 public:
-    SvnFileSelectFromLogviewDlg( const QString &title, QWidget *parent = 0L );
+    explicit SvnFileSelectFromLogviewDlg( const QString &title, QWidget *parent = 0L );
     virtual ~SvnFileSelectFromLogviewDlg();
     void setCandidate( QStringList *modifies );
     QString selected();
