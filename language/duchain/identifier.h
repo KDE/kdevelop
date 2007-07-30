@@ -24,6 +24,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVarLengthArray>
 
+#include <ksharedptr.h>
 #include <kdebug.h>
 #include <languageexport.h>
 
@@ -31,6 +32,7 @@ namespace KDevelop
 {
 
 class QualifiedIdentifier;
+class QualifiedIdentifierPrivate;
 
 /// Represents a single unqualified identifier
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
@@ -39,7 +41,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT Identifier
 
 public:
   explicit Identifier(const QString& id);
+  Identifier(const Identifier& rhs);
   Identifier();
+  ~Identifier();
 
   static Identifier unique(int token);
 
@@ -50,7 +54,7 @@ public:
   /// Pass a token which is specific to the document to allow correct equality comparison.
   void setUnique(int token);
 
-  const QString& identifier() const;
+  const QString identifier() const;
   void setIdentifier(const QString& identifier);
 
   QString mangled() const;
@@ -83,14 +87,23 @@ private:
   class IdentifierPrivate* const d;
 };
 
-/// Represents a qualified identifier
+//We use a shared d-pointer, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
+//krazy:excludeall=dpointer
+
+/**
+ * Represents a qualified identifier
+ * 
+ * QualifiedIdentifier has it's hash-values stored, so using the hash-values is very efficient.
+ * */
 class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
 {
 public:
   explicit QualifiedIdentifier(const QString& id);
   explicit QualifiedIdentifier(const Identifier& id);
   QualifiedIdentifier(const QualifiedIdentifier& id, int reserve = 0);
+  //QualifiedIdentifier(const QualifiedIdentifier& id);
   QualifiedIdentifier();
+  ~QualifiedIdentifier();
 
   void push(const Identifier& id);
   void push(const QualifiedIdentifier& id);
@@ -142,13 +155,16 @@ public:
     return s;
   }
 
+  uint hash() const;
+
   /**
     * Non-debug stream operator; does nothing.
     */
   inline friend kndbgstream& operator<< (kndbgstream& s, const QualifiedIdentifier&) { return s; }
 
 private:
-  class QualifiedIdentifierPrivate* const d;
+  void makePrivate();
+  KSharedPtr<QualifiedIdentifierPrivate> d;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);

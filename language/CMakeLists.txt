@@ -32,6 +32,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/abstractfunctiondeclaration.cpp
     duchain/functiondeclaration.cpp
     duchain/stringhelpers.cpp
+    duchain/hashedstring.cpp
 )
 
 
@@ -84,5 +85,6 @@ install(FILES
     duchain/abstractfunctiondeclaration.h
     duchain/functiondeclaration.h
     duchain/stringhelpers.h
+    duchain/hashedstring.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
