@@ -62,7 +62,7 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
         virtual rpp::pp_macro* retrieveMacro(const QString& name) const {
             ///@todo use a global string-repository
             //note all strings that can be affected by macros
-            m_lexedFile->addString(HashedString(name));
+            m_lexedFile->addString(KDevelop::HashedString(name));
             rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
 
             if( ret ) //note all used macros

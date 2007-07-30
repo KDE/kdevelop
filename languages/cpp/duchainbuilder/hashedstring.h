@@ -11,72 +11,17 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef HASHED_STRING_H
-#define HASHED_STRING_H
+#ifndef HASHED_STRING_SET_H
+#define HASHED_STRING_SET_H
 
 #include<QString>
 #include<ksharedptr.h>
 #include<set>
 #include <ext/hash_map>
 #include <ext/hash_set>
+#include <duchain/hashedstring.h>
 #include <string>
 #include "cppduchainbuilderexport.h"
-
-class QDataStream;
-typedef uint HashType; ///@todo use at least 64 bit hash, if not 128 bit
-
-
-///A simple class that stores a string together with it's appropriate hash-key
-class KDEVCPPDUCHAINBUILDER_EXPORT HashedString {
-  public:
-    HashedString() : m_hash( 0 ) {}
-
-    HashedString( const QString& str ) : m_str( str ) {
-      initHash();
-    }
-    
-    HashedString( const char* str ) : m_str( str ) {
-      initHash();
-    }
-
-    inline HashType hash() const {
-      return m_hash;
-    }
-
-    QString str() const {
-      return m_str;
-    }
-
-    bool operator == ( const HashedString& rhs ) const {
-      if ( m_hash != rhs.m_hash )
-        return false;
-      return m_str == rhs.m_str;
-    }
-
-    ///Does not compare alphabetically, uses the hash-key for ordering.
-    bool operator < ( const HashedString& rhs ) const {
-      if ( m_hash < rhs.m_hash )
-        return true;
-      if ( m_hash == rhs.m_hash )
-        return m_str < rhs.m_str;
-      return false;
-    }
-
-    static HashType hashString( const QString& str );
-
-  private:
-    void initHash();
-
-    QString m_str;
-    HashType m_hash;
-
-    friend QDataStream& operator << ( QDataStream& stream, const HashedString& str );
-    friend QDataStream& operator >> ( QDataStream& stream, HashedString& str );
-};
-
-QDataStream& operator << ( QDataStream& stream, const HashedString& str );
-
-QDataStream& operator >> ( QDataStream& stream, HashedString& str );
 
 class HashedStringSetData;
 class HashedStringSetGroup;
@@ -89,7 +34,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSet {
     ~HashedStringSet();
 
     ///Constructs a string-set from one single file
-    HashedStringSet( const HashedString& file );
+    HashedStringSet( const KDevelop::HashedString& file );
 
     HashedStringSet( const HashedStringSet& rhs );
 
@@ -97,9 +42,9 @@ class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSet {
 
     HashedStringSet& operator = ( const HashedStringSet& rhs );
     ///@return whether the given file-name was included
-    bool operator[] ( const HashedString& rhs ) const;
+    bool operator[] ( const KDevelop::HashedString& rhs ) const;
 
-    void insert( const HashedString& str );
+    void insert( const KDevelop::HashedString& str );
 
     HashedStringSet& operator +=( const HashedStringSet& );
     
@@ -116,7 +61,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSet {
 
     std::string print() const;
 
-  HashType hash() const;
+    KDevelop::HashType hash() const;
   private:
     friend class HashedStringSetGroup;
     void makeDataPrivate();
@@ -128,8 +73,8 @@ HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& 
 
 namespace __gnu_cxx {
 template<>
-struct KDEVCPPDUCHAINBUILDER_EXPORT hash<HashedString> {
-  HashType operator () ( const HashedString& str ) const {
+struct KDEVCPPDUCHAINBUILDER_EXPORT hash<KDevelop::HashedString> {
+  KDevelop::HashType operator () ( const KDevelop::HashedString& str ) const {
     return str.hash();
   }
 };
@@ -149,7 +94,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSetGroup {
     void findGroups( HashedStringSet strings, ItemSet& target ) const;
 
   private:
-    typedef __gnu_cxx::hash_map<HashedString, ItemSet> GroupMap;
+    typedef __gnu_cxx::hash_map<KDevelop::HashedString, ItemSet> GroupMap;
     typedef __gnu_cxx::hash_map<unsigned int, unsigned int> SizeMap;
     GroupMap m_map;
     SizeMap m_sizeMap;
@@ -162,10 +107,10 @@ class HashedStringSubset;
 ///@todo convert to d-pointer once ready
 class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringRepository {
   public:
-    typedef __gnu_cxx::hash_map<HashedString, HashedStringSubset*> AtomicSubsetMap;
-    typedef __gnu_cxx::hash_map<HashType, HashedStringSubset*> HashMap;
+    typedef __gnu_cxx::hash_map<KDevelop::HashedString, HashedStringSubset*> AtomicSubsetMap;
+    typedef __gnu_cxx::hash_map<KDevelop::HashType, HashedStringSubset*> HashMap;
 
-    HashedStringSubset* getAtomicSubset( const HashedString& str );
+    HashedStringSubset* getAtomicSubset( const KDevelop::HashedString& str );
 
     /**
      * Takes a list of atomic sub-sets(hashed-strings), and construct a master-subset

@@ -23,7 +23,9 @@
  * */
 
 class QDataStream;
+namespace KDevelop {
 class HashedString;
+};
 
 namespace Cpp {
 
@@ -42,7 +44,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT MacroSet {
         void write( QDataStream& stream ) const;
 
         bool hasMacro( const QString& name ) const;
-        bool hasMacro( const HashedString& name ) const;
+        bool hasMacro( const KDevelop::HashedString& name ) const;
         rpp::pp_macro macro( const QString& name ) const;
         
         size_t idHash() const;

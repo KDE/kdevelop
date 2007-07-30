@@ -17,6 +17,7 @@
 #include "hashedstring.h"
 
 using namespace Cpp;
+using namespace KDevelop;
 
 void MacroSet::read( QDataStream& stream )  {
   Q_ASSERT(0); ///@todo reimplement

@@ -83,7 +83,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
     EnvironmentFile( const KUrl& url, EnvironmentManager* manager );
 
-    inline void addString( const HashedString& string ) {
+    inline void addString( const KDevelop::HashedString& string ) {
         if( !m_definedMacroNames[ string ] ) {
           m_strings.insert( string );
         }
@@ -94,9 +94,9 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     ///the given macro will only make it into usedMacros() if it was not defined in this file
     void addUsedMacro( const rpp::pp_macro& macro );
 
-    void addIncludeFile( const HashedString& file, const QDateTime& modificationTime );
+    void addIncludeFile( const KDevelop::HashedString& file, const QDateTime& modificationTime );
 
-    inline bool hasString( const HashedString& string ) const {
+    inline bool hasString( const KDevelop::HashedString& string ) const {
       return m_strings[string];
     }
 
@@ -119,7 +119,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
 
     KUrl url() const;
 
-    HashedString hashedUrl() const;
+    KDevelop::HashedString hashedUrl() const;
 
     /**Set of all files with absolute paths, including those included indirectly
      *
@@ -136,14 +136,14 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     const MacroSet& usedMacros() const;
 
     ///Should contain a modification-time for each included-file
-    const QMap<HashedString, QDateTime>& allModificationTimes() const;
+    const QMap<KDevelop::HashedString, QDateTime>& allModificationTimes() const;
 
   private:
     virtual int type() const;
 
     friend class EnvironmentManager;
     KUrl m_url;
-    HashedString m_hashedUrl;
+    KDevelop::HashedString m_hashedUrl;
     QDateTime m_modificationTime;
     HashedStringSet m_strings; //Set of all strings that can be affected by macros from outside
     HashedStringSet m_includeFiles; //Set of all files with absolute paths
@@ -151,7 +151,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     MacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
     HashedStringSet m_definedMacroNames;
     QList<Problem> m_problems;
-    QMap<HashedString, QDateTime>  m_allModificationTimes;
+    QMap<KDevelop::HashedString, QDateTime>  m_allModificationTimes;
     /*
     Needed data:
     1. Set of all strings that appear in this file(For memory-reasons they should be taken from a global string-repository, because many will be the same)
@@ -178,8 +178,8 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     EnvironmentManager();
     virtual ~EnvironmentManager();
 
-    const HashedString& unifyString( const HashedString& str ) {
-      __gnu_cxx::hash_set<HashedString>::const_iterator it = m_totalStringSet.find( str );
+    const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {
+      __gnu_cxx::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
       if( it != m_totalStringSet.end() ) {
         return *it;
       } else {
@@ -206,27 +206,27 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
   private:
     virtual int type() const;
     ///before this can be called, initFileModificationCache should be called once
-    QDateTime fileModificationTimeCached( const HashedString& fileName );
+    QDateTime fileModificationTimeCached( const KDevelop::HashedString& fileName );
     void initFileModificationCache();
     virtual void erase( const CacheNode* node );
     bool hasSourceChanged( const EnvironmentFile& file );///Returns true if the file itself, or any of its dependencies was modified.
 
     ///Returns zero if no fitting file is available for the given Environment
-    EnvironmentFilePointer lexedFile( const HashedString& fileName, const rpp::Environment* environment );
+    EnvironmentFilePointer lexedFile( const KDevelop::HashedString& fileName, const rpp::Environment* environment );
     EnvironmentFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment );
 
     void addEnvironmentFile( const EnvironmentFilePointer& file );
     void removeEnvironmentFile( const EnvironmentFilePointer& file );
 
-    //typedef __gnu_cxx::hash_multimap<HashedString, EnvironmentFilePointer> EnvironmentFileMap;
-    typedef std::multimap<HashedString, EnvironmentFilePointer> EnvironmentFileMap;
+    //typedef __gnu_cxx::hash_multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
+    typedef std::multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
     EnvironmentFileMap m_files;
-    __gnu_cxx::hash_set<HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
+    __gnu_cxx::hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
     struct FileModificationCache {
       QDateTime m_readTime;
       QDateTime m_modificationTime;
     };
-    typedef __gnu_cxx::hash_map<HashedString, FileModificationCache> FileModificationMap;
+    typedef __gnu_cxx::hash_map<KDevelop::HashedString, FileModificationCache> FileModificationMap;
     FileModificationMap m_fileModificationCache;
     QDateTime m_currentDateTime;
 };

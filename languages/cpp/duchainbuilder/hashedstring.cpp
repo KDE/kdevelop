@@ -26,45 +26,7 @@
 //It needs to be measured whether this flag should be turned on or off. It seems just to move the complexity from one position to the other, without any variant being really better.
 #define USE_HASHMAP
 
-uint qHash ( const HashedString& str ) {
-  return str.hash();
-}
-
-HashType fastHashString( const QString& str );
-
-HashType hashStringSafe( const QString& str ) {
-  HashType hash = 0;
-  int len = str.length();
-  for( int a = 0; a < len; a++ ) {
-    hash = str[a].unicode() + (hash * 17);
-  }
-  return hash;
-}
-
-HashType HashedString::hashString(  const QString& str )
-{
-	return fastHashString( str );
-}
-
-HashType fastHashString( const QString& str ) {
-  HashType hash = 0;
-  if( !str.isEmpty() ) {
-    const QChar* curr = str.unicode();
-    const QChar* end = curr + str.length();
-    QChar c;
-    for(; curr < end ;) {
-      c = *curr;
-      hash = c.unicode() + ( hash * 17 );
-      ++curr;
-    }
-  }
-  return hash;
-}
-
-void HashedString::initHash() {
-    m_hash = hashString( m_str );
-}
-
+using namespace KDevelop;
 
 class HashedStringSetData : public KShared {
   public:
@@ -139,7 +101,6 @@ HashedStringSet& HashedStringSet::operator -=( const HashedStringSet& rhs ) {
 
   return *this;
 }
-
 
 void HashedStringSet::makeDataPrivate() {
   if ( !m_data ) {
@@ -249,18 +210,6 @@ std::string HashedStringSet::print() const {
 	}
   }
   return s.str();
-}
-
-QDataStream& operator << ( QDataStream& stream, const HashedString& str ) {
-    stream << str.m_str;
-    stream << str.m_hash;
-    return stream;
-}
-
-QDataStream& operator >> ( QDataStream& stream, HashedString& str ) {
-    stream >> str.m_str;
-    stream >> str.m_hash;
-    return stream;
 }
 
 void HashedStringSetGroup::addSet( unsigned int id, const HashedStringSet& set ) {
