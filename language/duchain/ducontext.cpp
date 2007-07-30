@@ -43,7 +43,7 @@ using namespace KTextEditor;
 
 namespace KDevelop
 {
-QMutex DUContextPrivate::m_localDeclarationsMutex;
+QMutex DUContextPrivate::m_localDeclarationsMutex(QMutex::Recursive);
 
 DUContextPrivate::DUContextPrivate( DUContext* d)
   : m_declaration(0), m_context(d), m_anonymousInParent(false)

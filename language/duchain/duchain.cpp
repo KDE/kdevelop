@@ -206,7 +206,7 @@ void DUChain::removeObserver(DUChainObserver * observer)
 
 ///This mutex is used to make sure that only one observer-callback is called at a time
 ///That is needed because addDeclaration(..) can be called from multiple threads simultaneuously, triggering multiple observer-callbacks.
-QMutex duChainObserverMutex;
+QMutex duChainObserverMutex(QMutex::Recursive);
 
 void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {

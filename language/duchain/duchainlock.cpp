@@ -184,6 +184,7 @@ bool DUChainLock::lockForWrite()
 
   ///@todo use some wake-up queue instead of sleeping
   // 10 second timeout...
+  
   while ( ( (d->m_writer && d->m_writer != QThread::currentThreadId()) || d->haveOtherReaders()) && currentTime < 10000) {
     lock.unlock();
     usleep(10000);
