@@ -11,7 +11,6 @@
 #ifndef SVNKJOB_H
 #define SVNKJOB_H
 
-#include <kjob.h>
 #include "vcshelpers.h"
 #include "vcsjob.h"
 
@@ -23,9 +22,27 @@ class SvnKJobBase : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
+    enum JobType
+    {
+        LOGVIEW = (KDevelop::VcsJob::Log),
+        BLAME   = (KDevelop::VcsJob::Annotate),
+        CHECKOUT= (KDevelop::VcsJob::Checkout),
+        ADD     = (KDevelop::VcsJob::Add),
+        DELETE  = (KDevelop::VcsJob::Remove),
+        COMMIT  = (KDevelop::VcsJob::Commit),
+        UPDATE  = (KDevelop::VcsJob::Update),
+        STATUS  = (KDevelop::VcsJob::Status),
+        DIFF    = (KDevelop::VcsJob::Diff),
+        IMPORT  = (KDevelop::VcsJob::Import),
+        REVERT  = (KDevelop::VcsJob::Revert),
+        COPY    = (KDevelop::VcsJob::Copy),
+        MOVE    = (KDevelop::VcsJob::Move),
+        CAT     = (KDevelop::VcsJob::Cat),
+        INFO    = 101
+    };
     friend class SubversionThread;
 
-    SvnKJobBase( int type, SubversionCore *parent );
+    SvnKJobBase( SvnKJobBase::JobType type, SubversionCore *parent );
     virtual ~SvnKJobBase();
 
     JobStatus status();
@@ -35,7 +52,6 @@ public:
 
     void setSvnThread( SubversionThread *job );
     SubversionThread *svnThread();
-    KDevelop::VcsJob::JobType type();
     SubversionCore *svncore();
 
     QString smartError(); // subversion internal

@@ -172,7 +172,8 @@ SubversionThread::displayLoginDialog(svn_auth_cred_simple_t **cred,
     *(p->loginInfo()) = loginInfo;
     loginInfo->realm = QString( realm );
     loginInfo->origSender = (QObject*)p;
-    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent( SVNLOGIN_IDPWDPROMPT, loginInfo );
+    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent(
+            SvnInterThreadPromptEvent::LOGIN_IDPWDPROMPT, loginInfo );
     QCoreApplication::postEvent( p->kjob()->parent(), ev );
 
     kDebug() << " Entering event loop " << endl;
@@ -214,7 +215,8 @@ SubversionThread::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **cred_p,
     info->cert_info = ci;
     info->fails = failures;
     info->origSender = (QObject*)th;
-    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent( SVNLOGIN_SERVERTRUSTPROMPT, info );
+    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent(
+            SvnInterThreadPromptEvent::LOGIN_SERVERTRUSTPROMPT, info );
     QCoreApplication::postEvent( th->kjob()->parent(), ev );
 //     bool maySave;
 
@@ -390,7 +392,8 @@ SubversionThread::commitLogUserInput( const char **log_msg,
     SvnCommitLogInfo *info = new SvnCommitLogInfo();
     info->m_commit_items = commit_items;
     info->origSender = thread;
-    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent( SVNCOMMIT_LOGMESSAGEPROMPT, info
+    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent(
+            SvnInterThreadPromptEvent::COMMIT_LOGMESSAGEPROMPT, info
                                                                  );
     QCoreApplication::postEvent( thread->kjob()->parent(), ev );
 
@@ -475,21 +478,21 @@ void SubversionThread::slotFinished()
 void SubversionThread::customEvent( QEvent *event )
 {
     switch( event->type() ){
-        case SVNLOGIN_SERVERTRUSTPROMPT : {
+        case SvnInterThreadPromptEvent::LOGIN_SERVERTRUSTPROMPT : {
             SvnInterThreadPromptEvent *ev = (SvnInterThreadPromptEvent*)event;
             SvnServerCertInfo *recvCert= (SvnServerCertInfo *) ev->m_data;
             if( recvCert->origSender == this )
                 quit(); // finishes event loop
             break;
         }
-        case SVNLOGIN_IDPWDPROMPT : {
+        case SvnInterThreadPromptEvent::LOGIN_IDPWDPROMPT : {
             SvnInterThreadPromptEvent *ev = (SvnInterThreadPromptEvent*)event;
             SvnLoginInfo *info = (SvnLoginInfo*) ev->m_data;
             if( info->origSender == this )
                 quit();
             break;
         }
-        case SVNCOMMIT_LOGMESSAGEPROMPT : {
+        case SvnInterThreadPromptEvent::COMMIT_LOGMESSAGEPROMPT : {
             SvnInterThreadPromptEvent *ev = (SvnInterThreadPromptEvent*)event;
             SvnCommitLogInfo *info = (SvnCommitLogInfo*) ev->m_data;
             if( info->origSender == this )

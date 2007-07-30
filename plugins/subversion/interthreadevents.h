@@ -18,15 +18,13 @@ struct svn_opt_revision_t;
 struct svn_auth_ssl_server_cert_info_t;
 struct apr_array_header_t;
 
-#define SVNACTION_PROGRESS           ( (QEvent::Type)15148 )
-#define SVNACTION_NOTIFICATION       ( (QEvent::Type)15149 )
-#define SVNLOGIN_IDPWDPROMPT         ( (QEvent::Type)15150 )
-#define SVNLOGIN_SERVERTRUSTPROMPT   ( (QEvent::Type)15151 )
-#define SVNCOMMIT_LOGMESSAGEPROMPT   ( (QEvent::Type)15160 )
-
 class SvnNotificationEvent : public QEvent
 {
 public:
+    enum ActionType{
+        NOTIFICATION = 15149
+    };
+
     SvnNotificationEvent( const QString &path, const QString &msg );
     virtual ~SvnNotificationEvent();
     // path
@@ -38,7 +36,13 @@ public:
 class SvnInterThreadPromptEvent : public QEvent
 {
 public:
-    SvnInterThreadPromptEvent(QEvent::Type type, void *data);
+    enum PromptType{
+        LOGIN_IDPWDPROMPT = 15150,
+        LOGIN_SERVERTRUSTPROMPT = 15151,
+        COMMIT_LOGMESSAGEPROMPT = 15152
+    };
+
+    SvnInterThreadPromptEvent(PromptType type, void *data);
     virtual ~SvnInterThreadPromptEvent();
     void *m_data;
 };

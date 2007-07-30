@@ -11,15 +11,15 @@
 #include "interthreadevents.h"
 
 SvnNotificationEvent::SvnNotificationEvent( const QString &path, const QString& msg )
-    : QEvent( SVNACTION_NOTIFICATION ), m_path(path), m_msg(msg)
+    : QEvent( (QEvent::Type)NOTIFICATION ), m_path(path), m_msg(msg)
 {}
 
 SvnNotificationEvent::~SvnNotificationEvent()
 {
 }
 
-SvnInterThreadPromptEvent::SvnInterThreadPromptEvent(QEvent::Type type, void *data)
-    : QEvent(type), m_data(data)
+SvnInterThreadPromptEvent::SvnInterThreadPromptEvent(PromptType type, void *data)
+    : QEvent((QEvent::Type)type), m_data(data)
 {}
 
 SvnInterThreadPromptEvent::~SvnInterThreadPromptEvent()

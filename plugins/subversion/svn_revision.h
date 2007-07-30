@@ -11,24 +11,6 @@
 #ifndef SVN_REVISION_H
 #define SVN_REVISION_H
 
-#define SVN_LOGVIEW  (KDevelop::VcsJob::Log)
-#define SVN_BLAME    (KDevelop::VcsJob::Annotate)
-#define SVN_CHECKOUT (KDevelop::VcsJob::Checkout)
-#define SVN_ADD      (KDevelop::VcsJob::Add)
-#define SVN_DELETE   (KDevelop::VcsJob::Remove)
-#define SVN_COMMIT   (KDevelop::VcsJob::Commit)
-#define SVN_UPDATE   (KDevelop::VcsJob::Update)
-#define SVN_STATUS   (KDevelop::VcsJob::Status)
-#define SVN_DIFF     (KDevelop::VcsJob::Diff)
-#define SVN_IMPORT   (KDevelop::VcsJob::Import)
-#define SVN_REVERT   (KDevelop::VcsJob::Revert)
-#define SVN_COPY     (KDevelop::VcsJob::Copy)
-#define SVN_MOVE     (KDevelop::VcsJob::Move)
-#define SVN_CAT      (KDevelop::VcsJob::Cat)
-
-// subversion internals
-#define SVN_INFO     (101)
-
 struct svn_opt_revision_t;
 
 #include <QDateTime>

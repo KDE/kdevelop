@@ -26,7 +26,6 @@ class SvnKJobBase::Private
 {
 public:
     SubversionThread *m_th;
-    int m_type;
     QVariant m_variant;
     bool m_validResult;
 
@@ -155,11 +154,11 @@ public:
     }
 };
 
-SvnKJobBase::SvnKJobBase( int type, SubversionCore *parent )
+SvnKJobBase::SvnKJobBase( SvnKJobBase::JobType type, SubversionCore *parent )
     : VcsJob( parent ), d( new Private )
 {
     d->m_th = 0;
-    d->m_type = type;
+    setType( (VcsJob::JobType) type );
     d->m_validResult = false;
 
     // The forceful termination of thread causes deadlock in some cases.
@@ -221,11 +220,6 @@ void SvnKJobBase::setSvnThread( SubversionThread *th )
 SubversionThread* SvnKJobBase::svnThread()
 {
     return d->m_th;
-}
-
-KDevelop::VcsJob::JobType SvnKJobBase::type()
-{
-    return (KDevelop::VcsJob::JobType)(d->m_type);
 }
 
 SubversionCore* SvnKJobBase::svncore()
