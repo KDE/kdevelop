@@ -328,7 +328,7 @@ VcsJob* KDevSubversionPart::commit( const QString& message, const KUrl::List& lo
 
 VcsJob* KDevSubversionPart::showCommit( const QString& message,
                                         const KUrl::List& localLocations,
-                                        RecursionMode recursion )
+                                        RecursionMode /*recursion*/ )
 {
     SvnCommitOptionDlg dlg( this, NULL );
     dlg.setCommitCandidates( localLocations );
@@ -412,7 +412,7 @@ VcsJob* KDevSubversionPart::log( const KUrl& localLocation,
 }
 
 VcsJob* KDevSubversionPart::showLog( const KUrl& localLocation,
-                const VcsRevision& rev )
+                const VcsRevision& /*rev*/ )
 {
     KUrl::List list;
     list << localLocation;

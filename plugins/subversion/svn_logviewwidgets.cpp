@@ -33,7 +33,7 @@
 #include <QSpinBox>
 #include <QListWidget>
 
-SvnLogviewWidget::SvnLogviewWidget( KUrl &url, KDevSubversionPart *part, QWidget *parent )
+SvnLogviewWidget::SvnLogviewWidget( const KUrl &url, KDevSubversionPart *part, QWidget *parent )
     :QWidget(parent), Ui::SvnLogviewWidget()
     ,m_url(url), m_part(part)
 {
@@ -213,7 +213,7 @@ void SvnLogviewWidget::treeViewClicked( const QModelIndex &index )
 //     connect( action, SIGNAL(triggered(bool)), this, SLOT(blameRev()) );
 //     menu.exec(QCursor::pos());
 }
-void SvnLogviewWidget::listViewClicked( const QModelIndex &index )
+void SvnLogviewWidget::listViewClicked( const QModelIndex &/*index*/ )
 {
 }
 

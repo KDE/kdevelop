@@ -35,20 +35,10 @@ SvnUpdateOptionDlg::SvnUpdateOptionDlg( QWidget *parent )
     setCaption( i18n("Subversion Update") );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
-    connect( d->ui.numRadio, SIGNAL(toggled(bool)), d->ui.intInput,  SLOT(setEnabled(bool)) );
-    connect( d->ui.numRadio, SIGNAL(toggled(bool)), d->ui.comboBox, SLOT(setDisabled(bool)) );
-    connect( d->ui.numRadio, SIGNAL(toggled(bool)), d->ui.dateTimeWidget, SLOT(setDisabled(bool)) );
-
-    connect( d->ui.keywordRadio, SIGNAL(toggled(bool)), d->ui.comboBox,  SLOT(setEnabled(bool)) );
-    connect( d->ui.keywordRadio, SIGNAL(toggled(bool)), d->ui.intInput, SLOT(setDisabled(bool)) );
-    connect( d->ui.keywordRadio, SIGNAL(toggled(bool)), d->ui.dateTimeWidget, SLOT(setDisabled(bool)) );
-
-    connect( d->ui.datetimeRadio, SIGNAL(toggled(bool)), d->ui.dateTimeWidget,  SLOT(setEnabled(bool)) );
-    connect( d->ui.datetimeRadio, SIGNAL(toggled(bool)), d->ui.comboBox, SLOT(setDisabled(bool)) );
-    connect( d->ui.datetimeRadio, SIGNAL(toggled(bool)), d->ui.intInput, SLOT(setDisabled(bool)) );
-
-    QDateTime dateTime = QDateTime::currentDateTime();
-    d->ui.dateTimeWidget->setDateTime( dateTime );
+    QList<SvnRevision::RevKeyword> keys;
+    keys << SvnRevision::HEAD;
+    d->ui.revisionWidget->installKeys( keys );
+    d->ui.revisionWidget->enableType( SvnRevision::kind );
 }
 
 SvnUpdateOptionDlg::~SvnUpdateOptionDlg()
@@ -58,25 +48,7 @@ SvnUpdateOptionDlg::~SvnUpdateOptionDlg()
 
 SvnRevision SvnUpdateOptionDlg::revision()
 {
-    SvnRevision rev;
-    if( d->ui.numRadio->isChecked() ){
-        rev.setNumber( d->ui.intInput->value() );
-        return rev;
-    }
-    else if( d->ui.keywordRadio->isChecked() ){
-        // note. If you add more keywords in .ui, you should update below.
-        rev.setKey( SvnRevision::HEAD );
-        return rev;
-    }
-    else if( d->ui.datetimeRadio->isChecked() ){
-        rev.setDate( d->ui.dateTimeWidget->dateTime() );
-        return rev;
-    }
-    else{
-        // should not reach here
-        return rev;
-    }
-
+    return d->ui.revisionWidget->revision();
 }
 
 bool SvnUpdateOptionDlg::recurse()

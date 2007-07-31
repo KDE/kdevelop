@@ -29,12 +29,13 @@ class KDevSubversionPart;
 class SvnGenericHolder {
 public:
     virtual QVariant variant(int col)=0;
+    virtual ~SvnGenericHolder(){}
 };
 /** represent one revision for blame-fetched data
  */
 class SvnBlameHolder : public SvnGenericHolder {
 public:
-    virtual QVariant variant( int col );
+    QVariant variant( int col );
 
     long lineNo;
     long int revNo;
@@ -47,7 +48,7 @@ public:
  */
 class SvnLogHolder : public SvnGenericHolder {
 public:
-    virtual QVariant variant(int col);
+    QVariant variant(int col);
 
     long int rev;
     QString author;
@@ -58,7 +59,7 @@ public:
 /// represent the status of one item
 class SvnStatusHolder : public SvnGenericHolder {
 public:
-    virtual QVariant variant(int col);
+    QVariant variant(int col);
 
     static QString statusToString( int status );
 

@@ -263,7 +263,7 @@ void SubversionThread::progressCallback( apr_off_t progress, apr_off_t total,
     }
 }
 
-void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool )
+void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t */*pool*/ )
 {
     SubversionThread *thread = (SubversionThread*) baton;
     QString notifyString;
@@ -569,7 +569,7 @@ void SvnBlameJob::run()
     svn_pool_destroy (subpool);
 }
 svn_error_t* SvnBlameJob::blameReceiver( void *baton, apr_int64_t line_no, svn_revnum_t rev,
-                const char *author, const char *date, const char *line, apr_pool_t *pool )
+                const char *author, const char *date, const char *line, apr_pool_t */*pool*/ )
 {
     SvnBlameJob *job = (SvnBlameJob*)baton;
     SvnBlameHolder holder;
@@ -921,7 +921,7 @@ SvnInfoJob::SvnInfoJob( const KUrl &pathOrUrl,
 }
 
 svn_error_t* SvnInfoJob::infoReceiver( void *baton, const char *path,
-                                    const svn_info_t *info, apr_pool_t *pool)
+                                    const svn_info_t *info, apr_pool_t */*pool*/)
 {
     SvnInfoJob *job = (SvnInfoJob*)baton ;
     if( !job )

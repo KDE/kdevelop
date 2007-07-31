@@ -64,7 +64,7 @@ QVariant SvnLogHolder::variant(int col)
     }
 }
 //////////////////////////////////
-QVariant SvnStatusHolder::variant(int col)
+QVariant SvnStatusHolder::variant(int /*col*/)
 {
     // TODO refactor this function.
     return QVariant();
@@ -120,7 +120,7 @@ QVariant ResultItem<T>::data( int row, int col )
     return oneRow.variant(col);
 }
 template <class T>
-void ResultItem<T>::sort( int column, Qt::SortOrder order )
+void ResultItem<T>::sort( int /*column*/, Qt::SortOrder order )
 {
     if( order == Qt::AscendingOrder )
         qSort( m_itemList.begin(), m_itemList.end(), TreeItemIface::intLessThan );
@@ -145,11 +145,11 @@ void ResultItem<T>::sort( int column, Qt::SortOrder order )
 // //     return holder.variant( index.column() );
 //     return rootItem->data( index.row(), index.column() );
 // }
-Qt::ItemFlags ParentlessTreeModel::flags(const QModelIndex &index) const
+Qt::ItemFlags ParentlessTreeModel::flags(const QModelIndex &/*index*/) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable ;
 }
-QVariant ParentlessTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant ParentlessTreeModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
 {
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole )
         return QString("");
@@ -163,7 +163,7 @@ QModelIndex ParentlessTreeModel::index( int row, int col, const QModelIndex &par
     return QModelIndex();
 
 }
-QModelIndex ParentlessTreeModel::parent( const QModelIndex &parent ) const
+QModelIndex ParentlessTreeModel::parent( const QModelIndex &/*parent*/ ) const
 {
     return QModelIndex();
 }
@@ -194,18 +194,18 @@ void ParentlessTreeModel::finishedItemUpdate()
     emit layoutChanged();
 }
 //////////////////////////////////
-BlameTreeModel::BlameTreeModel( BlameItem *item, QObject *parent )
+BlameTreeModel::BlameTreeModel( BlameItem *item, QObject */*parent*/ )
     : ParentlessTreeModel ()
 {
     rootItem = item;
 }
 BlameTreeModel::~BlameTreeModel()
 {}
-int BlameTreeModel::rowCount ( const QModelIndex & parent  ) const
+int BlameTreeModel::rowCount ( const QModelIndex & /*parent*/  ) const
 {
     return rootItem->rowCount();
 }
-int BlameTreeModel::columnCount ( const QModelIndex & parent ) const
+int BlameTreeModel::columnCount ( const QModelIndex & /*parent*/ ) const
 {
     return 5;
 }
@@ -262,18 +262,18 @@ void BlameTreeModel::sort ( int column, Qt::SortOrder order )
     emit layoutChanged();
 }
 /////////////////////////////////////////////////////////////////
-LogviewTreeModel::LogviewTreeModel( LogItem *item, QObject *parent )
+LogviewTreeModel::LogviewTreeModel( LogItem *item, QObject */*parent*/ )
     : ParentlessTreeModel ( /*item, parent*/ )
 {
     rootItem = item;
 }
 LogviewTreeModel::~LogviewTreeModel()
 {}
-int LogviewTreeModel::rowCount ( const QModelIndex & parent  ) const
+int LogviewTreeModel::rowCount ( const QModelIndex & /*parent*/  ) const
 {
     return rootItem->rowCount();
 }
-int LogviewTreeModel::columnCount ( const QModelIndex & parent ) const
+int LogviewTreeModel::columnCount ( const QModelIndex & /*parent*/ ) const
 {
     return 4;
 }

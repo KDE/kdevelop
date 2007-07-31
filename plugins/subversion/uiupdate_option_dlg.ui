@@ -52,47 +52,7 @@
      </property>
      <layout class="QGridLayout" >
       <item row="0" column="0" >
-       <widget class="QRadioButton" name="numRadio" >
-        <property name="text" >
-         <string>Specify By number</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="KIntNumInput" name="intInput" >
-        <property name="minimum" >
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="keywordRadio" >
-        <property name="text" >
-         <string>Specify By Keyword</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QComboBox" name="comboBox" >
-        <item>
-         <property name="text" >
-          <string>HEAD</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="datetimeRadio" >
-        <property name="text" >
-         <string>Specify By Date</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2" >
-       <widget class="KDateTimeWidget" name="dateTimeWidget" />
+       <widget class="SvnRevisionWidget" native="1" name="revisionWidget" />
       </item>
      </layout>
     </widget>
@@ -103,14 +63,10 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KDateTimeWidget</class>
+   <class>SvnRevisionWidget</class>
    <extends>QWidget</extends>
-   <header>kdatetimewidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
+   <header>svn_revisionwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <includes>

@@ -113,6 +113,7 @@ SvnKJobBase* SubversionCore::createRemoveJob( const KUrl::List &urls, bool force
     SvnKJobBase *job = new SvnKJobBase( SvnKJobBase::DELETE, this );
     SvnDeleteJob *thread = new SvnDeleteJob( urls, force, SvnKJobBase::DELETE, job );
     job->setSvnThread( thread );
+    return job;
 }
 
 void SubversionCore::spawnCommitThread( const KUrl::List &urls, bool recurse, bool keepLocks )
@@ -130,6 +131,7 @@ SvnKJobBase* SubversionCore::createCommitJob( const KUrl::List &urls, const QStr
     SvnKJobBase *job = new SvnKJobBase( SvnKJobBase::COMMIT, this );
     SvnCommitJob *thread = new SvnCommitJob( urls, msg, recurse, keepLocks, SvnKJobBase::COMMIT, job );
     job->setSvnThread( thread );
+    return job;
 }
 void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
                                         const SvnRevision &rev,
@@ -152,6 +154,7 @@ SvnKJobBase* SubversionCore::createUpdateJob( const KUrl::List &wcPaths,
                                              recurse, ignoreExternals,
                                              SvnKJobBase::UPDATE, job );
     job->setSvnThread( thread );
+    return job;
 }
 
 void SubversionCore::spawnLogviewThread(const KUrl::List& list,
@@ -209,6 +212,7 @@ SvnKJobBase* SubversionCore::createBlameJob( const KUrl &url,
     SvnBlameJob *thread = new SvnBlameJob( url,
                                            rev1, rev2,
                                            SvnKJobBase::BLAME, job );
+    job->setSvnThread( thread );
     return job;
 }
 

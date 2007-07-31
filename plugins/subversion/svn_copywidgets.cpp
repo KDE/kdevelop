@@ -61,11 +61,11 @@ KUrl SvnCopyOptionDlg::dest()
 
 void SvnCopyOptionDlg::srcAsUrlClicked()
 {
-    ui.srcEdit->setText( m_info->URL );
-
-    KUrl srcUrl( m_info->URL );
-    KUrl destParent = srcUrl.upUrl();
-    ui.destEdit->setUrl( destParent );
+    if( m_info ){
+        ui.srcEdit->setText( m_info->URL );
+        KUrl srcUrl( m_info->URL );
+        ui.destEdit->setUrl( srcUrl.upUrl() );
+    }
 
     QList<SvnRevision::RevKeyword> keylist;
     keylist << SvnRevision::HEAD;
