@@ -522,7 +522,7 @@ void TestDUChain::testDeclareClass()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("class A { void test(int); }; void A::test(int j) {}");
+  QByteArray method("class A { A rec; void test(int); }; void A::test(int j) {}");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -537,22 +537,24 @@ void TestDUChain::testDeclareClass()
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QCOMPARE(defClassA->uses().count(), 0);
   QVERIFY(defClassA->type<CppClassType>());
-  QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 1);
-  CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements().first());
+  QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 2);
+  CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements()[1]);
   QVERIFY(function);
   QCOMPARE(function->returnType(), typeVoid);
   QCOMPARE(function->arguments().count(), 1);
   QCOMPARE(function->arguments().first(), typeInt);
+  
 
   DUContext* classA = top->childContexts().first();
   QVERIFY(classA->parentContext());
   QCOMPARE(classA->importedParentContexts().count(), 0);
   QCOMPARE(classA->childContexts().count(), 1);
-  QCOMPARE(classA->localDeclarations().count(), 1);
+  QCOMPARE(classA->localDeclarations().count(), 2);
   QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
-  Declaration* defTest = classA->localDeclarations().first();
-  Q_UNUSED(defTest);
+  Declaration* defRec = classA->localDeclarations().first();
+  QVERIFY(defRec->abstractType());
+  QCOMPARE(defRec->abstractType(), defClassA->abstractType());
 
   release(top);
 }
@@ -619,7 +621,7 @@ void TestDUChain::testDeclareUsingNamespace()
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
   QByteArray method("namespace foo { int bar; } using namespace foo; int test() { return bar; }");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 

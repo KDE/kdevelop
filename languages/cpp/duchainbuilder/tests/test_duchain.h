@@ -48,6 +48,10 @@ public:
 
   KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
   KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
+  
+
+  //Move to slots again once it should be tested
+  void testHashedStringRepository();
 
 private slots:
   void initTestCase();
@@ -62,7 +66,6 @@ private slots:
   void testDeclareClass();
   void testDeclareNamespace();
   void testDeclareUsingNamespace();
-  void testHashedStringRepository();
   void testTypedef();
   void testTemplates();
   void testSpecializedTemplates();

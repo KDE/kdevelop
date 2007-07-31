@@ -147,6 +147,8 @@ class CppDUContext : public BaseContext {
         currentIdentifier.clearTemplateIdentifiers();
         
         currentLookup.push(currentIdentifier);
+        if( num == 0 )
+          currentLookup.setExplicitlyGlobal( identifier.explicitlyGlobal() );
 
         ///Step 2: Find the type
         typename BaseContext::SearchFlags flags = (num != (identifier.count()-1)) ? BaseContext::OnlyContainerTypes : BaseContext::NoSearchFlags;
