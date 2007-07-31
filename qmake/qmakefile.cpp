@@ -28,7 +28,6 @@
 
 #include "qmakeast.h"
 #include "qmakedriver.h"
-#include "scope.h"
 
 QMakeFile::QMakeFile( const KUrl& file )
     : m_ast(0)
@@ -65,6 +64,7 @@ QMakeFile::QMakeFile( const KUrl& file )
     {
         kDebug(9024) << "found ast:" << m_ast->statements().count() << endl;
         visitNode(m_ast);
+        kDebug(9024) << "Variables found:" << m_variableValues << endl;
     }
 }
 
@@ -72,9 +72,6 @@ QMakeFile::~QMakeFile()
 {
     delete m_ast;
     m_ast = 0;
-    delete m_topScope;
-    m_topScope = 0;
-    m_scopes.clear();
 }
 
 KUrl QMakeFile::absoluteDirUrl() const
@@ -92,57 +89,62 @@ QMake::ProjectAST* QMakeFile::ast() const
     return m_ast;
 }
 
-void QMakeFile::visitProject( QMake::ProjectAST* node )
-{
-    m_topScope = new Scope();
-    m_topScope->setParent( m_scopes.top() );
-    m_topScope->setAst( node );
-    pushScope( m_topScope );
-    QMake::ASTDefaultVisitor::visitProject( node );
-    popScope();
-}
-
-void QMakeFile::visitScopeBody( QMake::ScopeBodyAST* node )
-{
-    Scope* s = new Scope();
-    s->setParent( topScope() );
-    s->setAst( node );
-    topScope()->addSubScope(s);
-    pushScope( s );
-    QMake::ASTDefaultVisitor::visitScopeBody( node );
-    popScope();
-}
-
 void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
 {
-    topScope()->addVariable( node->variable()->value(), node );
+    QString op = node->op()->value();
+    if( op == "=" )
+    {
+        m_variableValues[node->variable()->value()] = QMakeFile::getValueList(node->values());
+    }else if( op == "+=" )
+    {
+        m_variableValues[node->variable()->value()] += QMakeFile::getValueList(node->values());
+    }else if( op == "-=" )
+    {
+        foreach( QString value, QMakeFile::getValueList(node->values()) )
+        {
+            m_variableValues[node->variable()->value()].removeAll(value);
+        }
+    }else if( op == "*=" )
+    {
+        foreach( QString value, QMakeFile::getValueList(node->values()) )
+        {
+            if( !m_variableValues[node->variable()->value()].contains(value) )
+            {
+                m_variableValues[node->variable()->value()].append(value);
+            }
+        }
+    }else if( op == "~=" )
+    {
+        if( node->values().isEmpty() )
+            return;
+        QString value = node->values().first()->value().trimmed();
+        QString regex = value.mid(2,value.indexOf("/", 2));
+        QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
+        kDebug(9024) << "Replacing variable, using regex " << regex << " value " << value << endl;
+        QStringList list = m_variableValues[node->variable()->value()];
+        list.replaceInStrings( QRegExp(regex), replacement );
+        m_variableValues[node->variable()->value()] = list;
+    }
 }
 
-Scope* QMakeFile::topScope() const
+QStringList QMakeFile::getValueList( const QList<QMake::ValueAST*>& list )
 {
-    if( m_scopes.isEmpty() )
-        return 0;
-    return m_scopes.top();
+    QStringList result;
+    foreach( QMake::ValueAST* v, list)
+    {
+        result << v->value();
+    }
+    return result;
 }
 
-Scope* QMakeFile::topScope()
+QStringList QMakeFile::variableValues( const QString& variable ) const
 {
-    if( m_scopes.isEmpty() )
-        return 0;
-    return m_scopes.top();
+    if( m_variableValues.contains( variable ) )
+    {
+        return m_variableValues[ variable ];
+    }
+    return QStringList();
 }
 
-
-Scope* QMakeFile::popScope()
-{
-    if( m_scopes.isEmpty() )
-        return 0;
-    return m_scopes.pop();
-}
-
-void QMakeFile::pushScope( Scope* s )
-{
-    m_scopes.push(s);
-}
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

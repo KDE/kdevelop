@@ -29,6 +29,7 @@ namespace QMake
 {
     class ProjectAST;
     class AssignmentAST;
+    class ValueAST;
 }
 
 class Scope;
@@ -37,23 +38,20 @@ class QMakeFile : QMake::ASTDefaultVisitor
 {
 public:
     QMakeFile( const KUrl& file );
-    ~QMakeFile();
+    virtual ~QMakeFile();
     KUrl absoluteDirUrl() const;
     KUrl absoluteFileUrl() const;
     QMake::ProjectAST* ast() const;
-    void visitProject( QMake::ProjectAST* node );
-    void visitScopeBody( QMake::ScopeBodyAST* node );
     void visitAssignment( QMake::AssignmentAST* node );
 
-    Scope* topScope() const;
-    Scope* topScope();
-    Scope* popScope();
-    void pushScope( Scope* s );
+    static QStringList getValueList( const QList<QMake::ValueAST*>& list );
+
+    virtual QStringList variableValues(const QString&) const;
+
 private:
     QMake::ProjectAST* m_ast;
     KUrl m_projectFileUrl;
-    Scope* m_topScope;
-    QStack<Scope*> m_scopes;
+    QMap<QString, QStringList> m_variableValues;
 };
 
 #endif
