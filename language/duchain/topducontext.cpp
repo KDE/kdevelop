@@ -109,26 +109,49 @@ void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifie
 
   ENSURE_CHAIN_READ_LOCKED
 
-  ret += checkDeclarations(SymbolTable::self()->findDeclarations(identifier), position, dataType);
+  // TODO: Insert namespace alias matching at this point ??
+
+  // Retrieve all direct declarations (not accounting for using statements) for the identifier we're looking for
+  QList<Declaration*> directDeclarations = SymbolTable::self()->findDeclarations(identifier);
+
+  // Filter out those declarations that can't be reached from this point in the file
+  // Eg. where the declaration is from a file that isn't #included
+  ret += checkDeclarations(directDeclarations, position, dataType);
+
   if (!ret.isEmpty())
+    // Success, finish up - don't need to check using definitions (I think this is right - as per standard - rodda)
     return;
 
+  // If the identifier doesn't start with ::<Blah> FIXME wrong, and is identifier.merge correct then?? (in findDeclarationsInNamespaces)
   if (!identifier.explicitlyGlobal()) {
+    // Integrate using namespace directives from this scope up to the current position into usingNS
     acceptUsingNamespaces(position, usingNS);
 
+    // If there are using namespace directives
     if (!usingNS.isEmpty()) {
+
+      // Search for declarations which match when taking into account using namespace directives
       findDeclarationsInNamespaces(identifier, position, dataType, usingNS, ret);
+
       if (!ret.isEmpty())
+        // Success, finish up (I think this is right - as per standard - rodda)
         return;
 
-      // Search nested namespaces
+      // Search for declarations which match when taking into account using namespace directives in a nested fashion
       for (int depth = 0; depth < 10; ++depth) {
+        // TODO: Insert namespace alias matching at this point ?? -
+        //  ? iterate directives, apply aliases, then iterate directives, try out using directives?
         foreach (NamespaceAlias* ns, usingNS) {
+          // Find nested using directives
           QList<NamespaceAlias*> newNamespaceAlias = findNestedNamespaces(position, ns);
+
           if (!newNamespaceAlias.isEmpty())
+            // Search for declarations which match when taking into account nested using namespace directives
             findDeclarationsInNamespaces(identifier.strip(ns->nsIdentifier), position, dataType, newNamespaceAlias, ret);
         }
+
         if (!ret.isEmpty())
+          // Success, finish up (I think this is right - as per standard - rodda)
           return;
       }
     }
@@ -137,10 +160,20 @@ void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifie
 
 void TopDUContext::findDeclarationsInNamespaces(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& usingNS, QList<Declaration*>& ret) const
 {
+  // TODO: Insert namespace alias matching at this point ?? -
+  //  ? iterate directives, apply aliases, then iterate directives, try out using directives?
+
   foreach (NamespaceAlias* ns, usingNS) {
+    // Merge using namespace statement with identifier we're searching for
     QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
-    ret = checkDeclarations(SymbolTable::self()->findDeclarations(id), position, dataType);
+    // Note: Same as at top of findDeclarationsInternal
+    // Retrieve all direct declarations (not accounting for using statements) for the identifier we're looking for
+    QList<Declaration*> usingDeclarations = SymbolTable::self()->findDeclarations(id);
+
+    // Filter out those declarations that can't be reached from this point in the file
+    // Eg. where the declaration is from a file that isn't #included
+    ret = checkDeclarations(usingDeclarations, position, dataType);
   }
 }
 
@@ -148,9 +181,13 @@ QList<DUContext::NamespaceAlias*> TopDUContext::findNestedNamespaces(const KText
 {
   QList<NamespaceAlias*> nestedNamespaceAlias;
 
-  // Retrieve nested namespaces
   QList<DUContext*> contexts;
-  checkContexts(DUContext::Namespace, SymbolTable::self()->findContexts(ns->nsIdentifier), position, contexts);
+
+  // Find all contexts with the name specified by the given using namespace statement
+  QList<DUContext*> allContexts = SymbolTable::self()->findContexts(ns->nsIdentifier);
+
+  // Filter out contexts which are not reachable from the position in this file
+  checkContexts(DUContext::Namespace, allContexts, position, contexts);
 
   foreach (DUContext* nsContext, contexts) {
     TopDUContext* origin = nsContext->topContext();
@@ -159,11 +196,13 @@ QList<DUContext::NamespaceAlias*> TopDUContext::findNestedNamespaces(const KText
     bool importEvaluated = false;
     bool sameDocument = nsContext->topContext() == this;
 
+    // Iterate the using namespace declarations in this context, accepting those which are imported at the current position
     foreach (NamespaceAlias* nested, nsContext->namespaceAliases()) {
       if (sameDocument && position >= nested->textCursor()) {
         acceptUsingNamespace(nested, nestedNamespaceAlias);
 
       } else {
+        // Save time here, only check once if this context is imported at the current position
         if (!importEvaluated) {
           doesImport = imports(origin, nested->textCursor());
           importEvaluated = true;
@@ -177,6 +216,7 @@ QList<DUContext::NamespaceAlias*> TopDUContext::findNestedNamespaces(const KText
     }
   }
 
+  // Now we have a list of all accessible nested namespaces (1 level only though)
   return nestedNamespaceAlias;
 }
 
@@ -200,6 +240,7 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
     TopDUContext* top = dec->topContext();
     if (top != this) {
       if (dataType && dec->abstractType() != dataType)
+        // The declaration doesn't match the type filter we are applying
         continue;
 
       // Make sure that this declaration is accessible
@@ -208,15 +249,19 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
 
     } else {
       if (dataType && dec->abstractType() != dataType)
+        // The declaration doesn't match the type filter we are applying
         continue;
 
       if (dec->textRange().start() > position)
+        // The declaration is after the position we're searching on, therefore not accessible
         continue;
     }
 
+    // Success, this declaration is accessible
     found.append(dec);
   }
 
+  // Returns the list of accessible declarations
   return found;
 }
 
@@ -224,28 +269,46 @@ void TopDUContext::findContextsInternal(ContextType contextType, const Qualified
 {
   Q_UNUSED(inImportedContext);
 
-  checkContexts(contextType, SymbolTable::self()->findContexts(identifier), position, ret);
+  // TODO: Insert namespace alias matching at this point ??
 
-  // Don't search using definitions if we already found a match
+  // Retrieve all contexts with the matching identifier
+  QList<DUContext*> allContexts = SymbolTable::self()->findContexts(identifier);
+  // Check that these contexts are accessible from this position - deletes those that aren't
+  checkContexts(contextType, allContexts, position, ret);
+
   if (!ret.isEmpty())
+    // Success, finish up (I think this is right - as per standard - rodda)
     return;
 
+  // If the identifier doesn't start with ::<Blah> FIXME wrong, and is identifier.merge correct then?? (in findContextsInNamespaces)
   if (!identifier.explicitlyGlobal()) {
+    // Integrate using namespace directives from this scope up to the current position into usingNS
     acceptUsingNamespaces(position, usingNS);
 
+    // If there are using namespace directives
     if (!usingNS.isEmpty()) {
+
+      // Search for contexts which match when taking into account using namespace directives
       findContextsInNamespaces(contextType, identifier, position, usingNS, ret);
+
       if (!ret.isEmpty())
+        // Success, finish up (I think this is right - as per standard - rodda)
         return;
 
-      // Search nested namespaces
+      // Search for contexts which match when taking into account using namespace directives in a nested fashion
       for (int depth = 0; depth < 10; ++depth) {
+        // TODO: Insert namespace alias matching at this point ?? -
+        //  ? iterate directives, apply aliases, then iterate directives, try out using directives?
+
         foreach (NamespaceAlias* ns, usingNS) {
+          // Find nested using directives
           QList<NamespaceAlias*> newNamespaceAlias = findNestedNamespaces(position, ns);
           if (!newNamespaceAlias.isEmpty())
+            // Search for contexts which match when taking into account nested using namespace directives
             findContextsInNamespaces(contextType, identifier.strip(ns->nsIdentifier), position, newNamespaceAlias, ret);
         }
         if (!ret.isEmpty())
+          // Success, finish up (I think this is right - as per standard - rodda)
           return;
       }
     }
@@ -254,6 +317,9 @@ void TopDUContext::findContextsInternal(ContextType contextType, const Qualified
 
 void TopDUContext::findContextsInNamespaces(ContextType contextType, const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, QList< NamespaceAlias * >& usingNS, QList<DUContext*>& ret) const
 {
+  // TODO: Insert namespace alias matching at this point ?? -
+  //  ? iterate directives, apply aliases, then iterate directives, try out using directives?
+
   foreach (NamespaceAlias* ns, usingNS) {
     QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
