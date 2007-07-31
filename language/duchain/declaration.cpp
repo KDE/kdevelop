@@ -193,8 +193,11 @@ void Declaration::setIdentifier(const Identifier& identifier)
 {
   ENSURE_CAN_WRITE
 
-  d->m_identifier = identifier;
+  if( d->m_context )
+    d->m_context->changingIdentifier( this, d->m_identifier, identifier );
 
+  d->m_identifier = identifier;
+  
   DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 

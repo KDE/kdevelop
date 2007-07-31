@@ -27,13 +27,13 @@
 
 // Uncomment the following to turn on verbose locking information
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
-namespace KDevelop
-{
 
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
 #include <kdebug.h>
 #endif
 
+namespace KDevelop
+{
 class DUChainLockPrivate
 {
 public:

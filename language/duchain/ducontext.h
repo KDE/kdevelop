@@ -369,6 +369,11 @@ public:
    */
   void cleanIfNotEncountered(const QSet<DUChainBase*>& encountered, bool firstPass);
 
+  /**
+   * Used exclusively by Declaration, do not use this.
+   * */
+  void changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to );
+  
 protected:
   /**
    * After one scope was searched, this function is asked whether more results should be collected. Override it, for example to collect overloaded functions.

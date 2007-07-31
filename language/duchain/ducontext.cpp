@@ -92,6 +92,12 @@ bool DUContextPrivate::removeDeclaration(Declaration* declaration)
   }
 }
 
+void DUContext::changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to ) {
+  QMutexLocker lock(&d->m_localDeclarationsMutex);
+  d->m_localDeclarationsHash.remove( from, DeclarationPointer(decl) );
+  d->m_localDeclarationsHash.insert( to, DeclarationPointer(decl) );
+}
+
 void DUContextPrivate::addChildContext( DUContext * context )
 {
   // Internal, don't need to assert a lock
@@ -248,10 +254,21 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
   QList<Declaration*> resolved;
 
   {
-    QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
-    QList<Declaration*>::ConstIterator end = d->m_localDeclarations.constEnd();
-    for (QList<Declaration*>::ConstIterator it = d->m_localDeclarations.constBegin(); it != end; ++it) {
-      Declaration* declaration = *it;
+     QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
+    Identifier lastIdentifier = identifier.last();
+
+    QHash<Identifier, DeclarationPointer>::const_iterator it = d->m_localDeclarationsHash.find(lastIdentifier);
+    QHash<Identifier, DeclarationPointer>::const_iterator end = d->m_localDeclarationsHash.end();
+
+    for( ; it != end && it.key() == lastIdentifier; ++it ) {
+      Declaration* declaration = (*it).data();
+
+      if(!declaration) {
+        //This should never happen, but let's see
+        kDebug() << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash" << endl;
+        continue;
+      }
+        
       QualifiedIdentifier::MatchTypes m = identifier.match(declaration->identifier());
       switch (m) {
         case QualifiedIdentifier::NoMatch:
