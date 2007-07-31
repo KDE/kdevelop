@@ -19,7 +19,6 @@ set(kdevgrepview_PART_SRCS
 # )
 
 # kde4_add_ui_files(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
-# kde4_automoc(${kdevgrepview_PART_SRCS})
 kde4_add_plugin(kdevgrepview ${kdevgrepview_PART_SRCS})
 target_link_libraries(kdevgrepview
     ${KDE4_KDECORE_LIBS}
