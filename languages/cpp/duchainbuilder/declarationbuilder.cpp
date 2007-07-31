@@ -45,7 +45,6 @@
 #include "tokens.h"
 #include "parsesession.h"
 #include "cpptypes.h"
-#include "templatedeclaration.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -376,7 +375,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       }
     }
   }
-  
+
 
   if (!declaration) {
     Range* prior = m_editor->currentRange();
@@ -434,7 +433,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         break;
     }
   }
-  
+
   if( !lastId.templateIdentifiers().isEmpty() ) {
     TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
     if( declaration && templateDecl ) {
@@ -445,12 +444,12 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
       ///@todo Make sure the searched class is in the same namespace
       QList<Declaration*> decls = currentContext()->findDeclarations(id, m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge) );
-      
+
       if( !decls.isEmpty() )
       {
         if( decls.count() > 1 )
           kDebug() << "Found multiple declarations of specialization-base " << id.toString() << " for " << declaration->toString() << endl;
-        
+
         foreach( Declaration* decl, decls )
           if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) )
             templateDecl->setSpecializedFrom(baseTemplateDecl);
@@ -461,9 +460,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     } else {
       kDebug() << "Specialization of non-template class " << declaration->toString() << endl;
     }
-    
+
   }
-  
+
   declaration->setComment(m_lastComment);
   m_lastComment = QString();
 
