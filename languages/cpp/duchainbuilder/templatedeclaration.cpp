@@ -19,11 +19,26 @@
 
 
 #include "templatedeclaration.h"
+
+#include <qatomic.h>
+
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
 
 using namespace KDevelop;
 using namespace Cpp;
+
+struct AtomicIncrementer {
+  AtomicIncrementer(int* cnt ) : c(cnt) {
+    q_atomic_increment(cnt);
+  }
+
+  ~AtomicIncrementer() {
+    q_atomic_decrement(c);
+  }
+
+  int* c;
+};
 
 QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 
@@ -80,6 +95,13 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
 
   virtual AbstractType* exchange( const AbstractType* type )
   {
+    static int depth_counter = 0;
+    AtomicIncrementer inc(&depth_counter);
+    if( depth_counter > 30 ) {
+      kDebug() << "Too much depth in DelayedTypeResolver::exchange, while exchanging " << (type ? type->toString() : QString("(null)")) << endl;
+    return const_cast<AbstractType*>(type); ///@todo remove const_cast;
+    }
+    
     const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
 
     if( delayedType ) {
