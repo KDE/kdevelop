@@ -347,6 +347,7 @@ QualifiedIdentifier QualifiedIdentifier::strip(const QualifiedIdentifier & unwan
   
   
   QualifiedIdentifier ret(*this);
+  ret.setExplicitlyGlobal(false);
   ret.prepareWrite();
 
   for( int a = 0; a < unwantedBase.d->m_identifiers.count(); a++ )

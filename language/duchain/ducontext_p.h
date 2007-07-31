@@ -50,7 +50,7 @@ public:
   DeclarationsHash m_localDeclarationsHash;
   
   QList<Definition*> m_localDefinitions;
-  QList<DUContext::UsingNS*> m_usingNamespaces;
+  QList<DUContext::NamespaceAlias*> m_namespaceAliases;
   QList<Use*> m_uses;
   QList<Use*> m_orphanUses;
   DUContext* m_context;

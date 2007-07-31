@@ -139,6 +139,7 @@ public:
   //Returns a QualifiedIdentifier with this one appended to the other
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
   QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;
+  //The returned identifier will have explicitlyGlobal() set to false
   QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
 
   bool operator==(const QualifiedIdentifier& rhs) const;

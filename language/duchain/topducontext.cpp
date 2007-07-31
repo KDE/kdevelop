@@ -103,7 +103,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) const
   d->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 }
 
-void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, bool inImportedContext) const
+void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& usingNS, QList<Declaration*>& ret, bool inImportedContext) const
 {
   Q_UNUSED(inImportedContext);
 
@@ -123,10 +123,10 @@ void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifie
 
       // Search nested namespaces
       for (int depth = 0; depth < 10; ++depth) {
-        foreach (UsingNS* ns, usingNS) {
-          QList<UsingNS*> newUsingNS = findNestedNamespaces(position, ns);
-          if (!newUsingNS.isEmpty())
-            findDeclarationsInNamespaces(identifier.strip(ns->nsIdentifier), position, dataType, newUsingNS, ret);
+        foreach (NamespaceAlias* ns, usingNS) {
+          QList<NamespaceAlias*> newNamespaceAlias = findNestedNamespaces(position, ns);
+          if (!newNamespaceAlias.isEmpty())
+            findDeclarationsInNamespaces(identifier.strip(ns->nsIdentifier), position, dataType, newNamespaceAlias, ret);
         }
         if (!ret.isEmpty())
           return;
@@ -135,18 +135,18 @@ void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifie
   }
 }
 
-void TopDUContext::findDeclarationsInNamespaces(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret) const
+void TopDUContext::findDeclarationsInNamespaces(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& usingNS, QList<Declaration*>& ret) const
 {
-  foreach (UsingNS* ns, usingNS) {
+  foreach (NamespaceAlias* ns, usingNS) {
     QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
     ret = checkDeclarations(SymbolTable::self()->findDeclarations(id), position, dataType);
   }
 }
 
-QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor::Cursor & position, UsingNS* ns) const
+QList<DUContext::NamespaceAlias*> TopDUContext::findNestedNamespaces(const KTextEditor::Cursor & position, NamespaceAlias* ns) const
 {
-  QList<UsingNS*> nestedUsingNS;
+  QList<NamespaceAlias*> nestedNamespaceAlias;
 
   // Retrieve nested namespaces
   QList<DUContext*> contexts;
@@ -159,9 +159,9 @@ QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor:
     bool importEvaluated = false;
     bool sameDocument = nsContext->topContext() == this;
 
-    foreach (UsingNS* nested, nsContext->usingNamespaces()) {
+    foreach (NamespaceAlias* nested, nsContext->namespaceAliases()) {
       if (sameDocument && position >= nested->textCursor()) {
-        acceptUsingNamespace(nested, nestedUsingNS);
+        acceptUsingNamespace(nested, nestedNamespaceAlias);
 
       } else {
         if (!importEvaluated) {
@@ -170,14 +170,14 @@ QList<DUContext::UsingNS*> TopDUContext::findNestedNamespaces(const KTextEditor:
         }
 
         if (doesImport)
-          acceptUsingNamespace(nested, nestedUsingNS);
+          acceptUsingNamespace(nested, nestedNamespaceAlias);
         else
           break;
       }
     }
   }
 
-  return nestedUsingNS;
+  return nestedNamespaceAlias;
 }
 
 bool TopDUContext::imports(TopDUContext * origin, const KTextEditor::Cursor& position) const
@@ -220,7 +220,7 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
   return found;
 }
 
-void TopDUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, QList< UsingNS * >& usingNS, QList<DUContext*>& ret, bool inImportedContext) const
+void TopDUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, QList< NamespaceAlias * >& usingNS, QList<DUContext*>& ret, bool inImportedContext) const
 {
   Q_UNUSED(inImportedContext);
 
@@ -240,10 +240,10 @@ void TopDUContext::findContextsInternal(ContextType contextType, const Qualified
 
       // Search nested namespaces
       for (int depth = 0; depth < 10; ++depth) {
-        foreach (UsingNS* ns, usingNS) {
-          QList<UsingNS*> newUsingNS = findNestedNamespaces(position, ns);
-          if (!newUsingNS.isEmpty())
-            findContextsInNamespaces(contextType, identifier.strip(ns->nsIdentifier), position, newUsingNS, ret);
+        foreach (NamespaceAlias* ns, usingNS) {
+          QList<NamespaceAlias*> newNamespaceAlias = findNestedNamespaces(position, ns);
+          if (!newNamespaceAlias.isEmpty())
+            findContextsInNamespaces(contextType, identifier.strip(ns->nsIdentifier), position, newNamespaceAlias, ret);
         }
         if (!ret.isEmpty())
           return;
@@ -252,9 +252,9 @@ void TopDUContext::findContextsInternal(ContextType contextType, const Qualified
   }
 }
 
-void TopDUContext::findContextsInNamespaces(ContextType contextType, const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, QList< UsingNS * >& usingNS, QList<DUContext*>& ret) const
+void TopDUContext::findContextsInNamespaces(ContextType contextType, const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, QList< NamespaceAlias * >& usingNS, QList<DUContext*>& ret) const
 {
-  foreach (UsingNS* ns, usingNS) {
+  foreach (NamespaceAlias* ns, usingNS) {
     QualifiedIdentifier id = identifier.merge(ns->nsIdentifier);
 
     checkContexts(contextType, SymbolTable::self()->findContexts(id), position, ret);

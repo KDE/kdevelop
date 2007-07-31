@@ -193,7 +193,7 @@ DUContext::~DUContext( )
   foreach (Use* use, useList)
     use->setContext(0);
 
-  clearUsingNamespaces();
+  clearNamespaceAliases();
 
   DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
   delete d;
@@ -370,7 +370,7 @@ bool DUContext::foundEnough( const QList<Declaration*>& ret ) const {
     return false;
 }
 
-void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, SearchFlags flags ) const
+void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& usingNS, QList<Declaration*>& ret, SearchFlags flags ) const
 {
   findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, flags);
   
@@ -407,7 +407,7 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
 {
   ENSURE_CAN_READ
 
-  QList<UsingNS*> usingStatements;
+  QList<NamespaceAlias*> usingStatements;
   QList<Declaration*> ret;
   findDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, usingStatements, ret, flags);
   return ret;
@@ -583,19 +583,21 @@ const QualifiedIdentifier & DUContext::localScopeIdentifier() const
   return d->m_scopeIdentifier;
 }
 
-DUContext::UsingNS::UsingNS(KTextEditor::Cursor* cursor)
+DUContext::NamespaceAlias::NamespaceAlias(KTextEditor::Cursor* cursor)
   : KDevelop::DocumentCursorObject(cursor)
 {
 }
 
-void DUContext::addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id)
+void DUContext::addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id, const QualifiedIdentifier& aliasName)
 {
   ENSURE_CAN_WRITE
 
-  UsingNS* use = new UsingNS(cursor);
+  NamespaceAlias* use = new NamespaceAlias(cursor);
   use->nsIdentifier = id;
+  use->aliasIdentifier = aliasName;
+  use->scope = scopeIdentifier();
 
-  QMutableListIterator<UsingNS*> it = d->m_usingNamespaces;
+  QMutableListIterator<NamespaceAlias*> it = d->m_namespaceAliases;
   while (it.hasPrevious())
     if (use->textCursor() > it.previous()->textCursor()) {
       it.next();
@@ -603,16 +605,16 @@ void DUContext::addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedId
       return;
     }
 
-  d->m_usingNamespaces.prepend(use);
+  d->m_namespaceAliases.prepend(use);
 
   DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::UsingNamespaces);
 }
 
-const QList<DUContext::UsingNS*>& DUContext::usingNamespaces() const
+const QList<DUContext::NamespaceAlias*>& DUContext::namespaceAliases() const
 {
   ENSURE_CAN_READ
 
-  return d->m_usingNamespaces;
+  return d->m_namespaceAliases;
 }
 
 DUContext::ContextType DUContext::type() const
@@ -635,7 +637,7 @@ QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, co
 {
   ENSURE_CAN_READ
 
-  QList<UsingNS*> usingStatements;
+  QList<NamespaceAlias*> usingStatements;
   QList<Declaration*> ret;
   findDeclarationsInternal(QualifiedIdentifier(identifier), position.isValid() ? position : textRange().end(), AbstractType::Ptr(), usingStatements, ret, flags);
   return ret;
@@ -682,13 +684,13 @@ QList<DUContext*> DUContext::findContexts(ContextType contextType, const Qualifi
 {
   ENSURE_CAN_READ
 
-  QList<UsingNS*> usingStatements;
+  QList<NamespaceAlias*> usingStatements;
   QList<DUContext*> ret;
   findContextsInternal(contextType, identifier, position.isValid() ? position : textRange().end(), usingStatements, ret, flags);
   return ret;
 }
 
-void DUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, SearchFlags flags) const
+void DUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<NamespaceAlias*>& usingNS, QList<DUContext*>& ret, SearchFlags flags) const
 {
   if (contextType == type())
     if (identifier == scopeIdentifier(true))
@@ -817,12 +819,12 @@ void DUContext::setInSymbolTable(bool inSymbolTable)
   d->m_inSymbolTable = inSymbolTable;
 }
 
-void DUContext::acceptUsingNamespaces(const KTextEditor::Cursor & position, QList< UsingNS * > & usingNS) const
+void DUContext::acceptUsingNamespaces(const KTextEditor::Cursor & position, QList< NamespaceAlias * > & usingNS) const
 {
-  foreach (UsingNS* ns, usingNamespaces())
+  foreach (NamespaceAlias* ns, namespaceAliases())
     if (ns->textCursor() <= position) {
       // TODO: inefficient... needs a hash??
-      foreach (UsingNS* ns2, usingNS)
+      foreach (NamespaceAlias* ns2, usingNS)
         if (ns2->nsIdentifier == ns->nsIdentifier)
           goto duplicate;
 
@@ -836,22 +838,22 @@ void DUContext::acceptUsingNamespaces(const KTextEditor::Cursor & position, QLis
     }
 }
 
-void DUContext::acceptUsingNamespace(UsingNS* ns, QList<UsingNS*>& usingNS) const
+void DUContext::acceptUsingNamespace(NamespaceAlias* ns, QList<NamespaceAlias*>& usingNS) const
 {
   // TODO: inefficient... needs a hash??
-  foreach (UsingNS* ns2, usingNS)
+  foreach (NamespaceAlias* ns2, usingNS)
     if (ns2->nsIdentifier == ns->nsIdentifier)
       return;
 
   usingNS.append(ns);
 }
 
-void DUContext::clearUsingNamespaces()
+void DUContext::clearNamespaceAliases()
 {
   ENSURE_CAN_WRITE
 
-  qDeleteAll(d->m_usingNamespaces);
-  d->m_usingNamespaces.clear();
+  qDeleteAll(d->m_namespaceAliases);
+  d->m_namespaceAliases.clear();
 
   DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::UsingNamespaces);
 }

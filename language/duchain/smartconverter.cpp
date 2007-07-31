@@ -63,7 +63,7 @@ public:
       m_editor->exitCurrentRange();
     }
 
-    foreach (DUContext::UsingNS* usingNS, context->usingNamespaces())
+    foreach (DUContext::NamespaceAlias* usingNS, context->namespaceAliases())
       usingNS->setTextCursor(m_editor->createCursor(usingNS->textCursor()));
 
     foreach (DUContext* child, context->childContexts())

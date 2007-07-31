@@ -209,22 +209,27 @@ public:
   virtual bool inDUChain() const;
   
   /**
-   * A class which represents a "using namespace" statement.
+   * A class which represents a "using namespace" statement, or a "namespace A = B" statement.
    */
-  class UsingNS : public KDevelop::DocumentCursorObject
+  class NamespaceAlias : public KDevelop::DocumentCursorObject
   {
   public:
-    UsingNS(KTextEditor::Cursor* cursor);
+    NamespaceAlias(KTextEditor::Cursor* cursor);
 
-    QualifiedIdentifier nsIdentifier;
+    QualifiedIdentifier nsIdentifier; //The identifier that was imported
+    QualifiedIdentifier aliasIdentifier; //The identifier nsIdentifier should be "renamed to" within scope, or empty if it is an import.
+    QualifiedIdentifier scope; //The scope this using namespace was issued in
   };
 
-  /// Register a using namespace statement with this context.
-  void addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier);
-  /// Return a list of using namespace statements for this context.
-  const QList<UsingNS*>& usingNamespaces() const;
-  /// Clear using namespace statements for this context.
-  void clearUsingNamespaces();
+  /**
+   * Register a namespace-alias with this context.
+   * @param aliasName The name as which the imported context should be found. If this is QualifiedIdentifier(), nsIdentifier will be imported(like "using namespace ...")
+   * */
+  void addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier, const QualifiedIdentifier& aliasName = QualifiedIdentifier() );
+  /// Return a list of namespace aliases for this context.
+  const QList<NamespaceAlias*>& namespaceAliases() const;
+  /// Clear namespace aliases for this context.
+  void clearNamespaceAliases();
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -391,13 +396,13 @@ protected:
   virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags flags ) const;
 
   /// Declaration search implementation
-  virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNamespaces, QList<Declaration*>& ret, SearchFlags flags ) const;
+  virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret, SearchFlags flags ) const;
   
   /// Context search implementation
-  virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<NamespaceAlias*>& usingNS, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
-  void acceptUsingNamespaces(const KTextEditor::Cursor& position, QList<UsingNS*>& usingNS) const;
-  void acceptUsingNamespace(UsingNS* ns, QList<UsingNS*>& usingNS) const;
+  void acceptUsingNamespaces(const KTextEditor::Cursor& position, QList<NamespaceAlias*>& usingNS) const;
+  void acceptUsingNamespace(NamespaceAlias* ns, QList<NamespaceAlias*>& usingNS) const;
 
 private:
   class DUContextPrivate* const d;
