@@ -36,6 +36,25 @@ HashedString::HashedString( const char* str ) : m_str( str ) {
   initHash();
 }
 
+QString HashedString::str() const {
+  return m_str;
+}
+
+bool HashedString::operator == ( const HashedString& rhs ) const {
+  if ( m_hash != rhs.m_hash )
+    return false;
+  return m_str == rhs.m_str;
+}
+
+///Does not compare alphabetically, uses the hash-key for ordering.
+bool HashedString::operator < ( const HashedString& rhs ) const {
+  if ( m_hash < rhs.m_hash )
+    return true;
+  if ( m_hash == rhs.m_hash )
+    return m_str < rhs.m_str;
+  return false;
+}
+
 HashedString& HashedString::operator= ( const QString& str ) {
   operator=(HashedString(str));
   return *this;

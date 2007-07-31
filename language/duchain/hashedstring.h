@@ -14,6 +14,8 @@
 #ifndef HASHED_STRING_H
 #define HASHED_STRING_H
 
+//krazy:exclude-all:dpointer,inline
+
 #include<QString>
 #include <languageexport.h>
 
@@ -43,37 +45,25 @@ class KDEVPLATFORMLANGUAGE_EXPORT HashedString {
   HashedString();
 
   HashedString( const QString& str );
-    
+
   HashedString( const char* str );
 
   inline HashType hash() const {
     return m_hash;
   }
 
-  QString str() const {
-    return m_str;
-  }
+  QString str() const;
 
   HashedString& operator= ( const QString& str );
 
   HashedString& operator +=( const QString& str );
-  
+
   HashedString& operator +=( const char* str );
-  
-  bool operator == ( const HashedString& rhs ) const {
-    if ( m_hash != rhs.m_hash )
-      return false;
-    return m_str == rhs.m_str;
-  }
+
+  bool operator == ( const HashedString& rhs ) const;
 
   ///Does not compare alphabetically, uses the hash-key for ordering.
-  bool operator < ( const HashedString& rhs ) const {
-    if ( m_hash < rhs.m_hash )
-      return true;
-    if ( m_hash == rhs.m_hash )
-      return m_str < rhs.m_str;
-    return false;
-  }
+  bool operator < ( const HashedString& rhs ) const;
 
   static HashType hashString( const QString& str );
 
