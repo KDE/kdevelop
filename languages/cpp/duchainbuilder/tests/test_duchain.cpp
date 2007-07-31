@@ -613,6 +613,41 @@ void TestDUChain::testDeclareNamespace()
   release(top);
 }
 
+void TestDUChain::testDeclareUsingNamespace2()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("namespace foo2 {int bar2; }; namespace foo { int bar; using namespace foo2; } int test() { return bar; }");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 4);
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QVERIFY(top->localScopeIdentifier().isEmpty());
+  QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
+
+  QCOMPARE( top->childContexts().first()->localDeclarations().count(), 1);
+  Declaration* bar2 = top->childContexts().first()->localDeclarations()[0];
+  QVERIFY(bar2);
+  QCOMPARE(bar2->identifier(), Identifier("bar2"));
+  
+  //QCOMPARE(top->usingNamespaces().count(), 1);
+  //QCOMPARE(top->usingNamespaces().first()->nsIdentifier, QualifiedIdentifier("foo"));
+
+/*  QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar2")), bar2);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar2")), noDef);*/
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar2")), bar2);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo2::bar2")), bar2);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar2")), bar2);
+
+  release(top);
+}
+
 void TestDUChain::testDeclareUsingNamespace()
 {
   TEST_FILE_PARSE_ONLY
