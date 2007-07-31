@@ -13,7 +13,7 @@
 #ifndef _GREPDLG_H_
 #define _GREPDLG_H_
 
-#include <kdialog.h>
+#include <qdialog.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <kcombobox.h>
@@ -26,7 +26,7 @@ class QPushButton;
 class GrepViewPart;
 class KLineEdit;
 
-class GrepDialog : public KDialog
+class GrepDialog : public QDialog
 {
     Q_OBJECT
 

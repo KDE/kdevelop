@@ -98,7 +98,7 @@ QStringList fromChar( const char *strs[] )
 }
 
 GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent )
-    : KDialog(parent ), m_part( part )
+    : QDialog(parent ), m_part( part )
 {
     QStringList template_desc = fromChar( __template_desc );
     QStringList template_str = fromChar( __template_str );
@@ -376,14 +376,14 @@ void GrepDialog::show()
     if (isVisible())
         hide();
 //         QDialog::hide();
-    KDialog::show();
+    QDialog::show();
     pattern_combo->setFocus();
 }
 
 void GrepDialog::hide()
 {
     pattern_combo->setFocus();
-    KDialog::hide();
+    QDialog::hide();
 }
 
 void GrepDialog::slotSynchDirectory( )
