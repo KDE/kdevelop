@@ -103,7 +103,7 @@ class CppDUContext : public BaseContext {
     }
     
     ///Overridden to take care of templates
-    virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::DUContext::UsingNS*>& usingNamespaces, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
+    virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::DUContext::NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
       ifDebug( kDebug() << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
       
@@ -156,10 +156,10 @@ class CppDUContext : public BaseContext {
         
         QList<Declaration*> tempDecls;
         if( !scopeContext ) {
-          BaseContext::findDeclarationsInternal( currentLookup, position, dataType, usingNamespaces, tempDecls, flags );
+          BaseContext::findDeclarationsInternal( currentLookup, position, dataType, namespaceAliases, tempDecls, flags );
 
         } else ///@todo Check whether it is the same file, if yes keep the position-cursor
-          scopeContext->findDeclarationsInternal( currentLookup, KTextEditor::Cursor::invalid(), dataType, usingNamespaces, tempDecls, flags | BaseContext::DontSearchInParent );
+          scopeContext->findDeclarationsInternal( currentLookup, KTextEditor::Cursor::invalid(), dataType, namespaceAliases, tempDecls, flags | BaseContext::DontSearchInParent );
 
         
         if( !tempDecls.isEmpty() ) {

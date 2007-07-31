@@ -577,7 +577,7 @@ void TestDUChain::testDeclareNamespace()
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
 
-  QCOMPARE(top->usingNamespaces().count(), 0);
+  QCOMPARE(top->namespaceAliases().count(), 0);
 
   DUContext* fooCtx = top->childContexts().first();
   QCOMPARE(fooCtx->childContexts().count(), 0);
@@ -636,8 +636,8 @@ void TestDUChain::testDeclareUsingNamespace2()
   QVERIFY(bar2);
   QCOMPARE(bar2->identifier(), Identifier("bar2"));
   
-  //QCOMPARE(top->usingNamespaces().count(), 1);
-  //QCOMPARE(top->usingNamespaces().first()->nsIdentifier, QualifiedIdentifier("foo"));
+  //QCOMPARE(top->namespaceAliases().count(), 1);
+  //QCOMPARE(top->namespaceAliases().first()->nsIdentifier, QualifiedIdentifier("foo"));
 
 /*  QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar2")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar2")), noDef);*/
@@ -666,9 +666,9 @@ void TestDUChain::testDeclareUsingNamespace()
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
 
-  QCOMPARE(top->usingNamespaces().count(), 1);
-  QCOMPARE(top->usingNamespaces().first()->nsIdentifier, QualifiedIdentifier("foo"));
-  QCOMPARE(top->usingNamespaces().first()->textCursor(), Cursor(0, 47));
+  QCOMPARE(top->namespaceAliases().count(), 1);
+  QCOMPARE(top->namespaceAliases().first()->nsIdentifier, QualifiedIdentifier("foo"));
+  QCOMPARE(top->namespaceAliases().first()->textCursor(), Cursor(0, 47));
 
   DUContext* fooCtx = top->childContexts().first();
   QCOMPARE(fooCtx->childContexts().count(), 0);

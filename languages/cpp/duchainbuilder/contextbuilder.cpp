@@ -390,7 +390,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
           if( !ret->smartRange() && m_editor->smart() )
             ret->setTextRange(m_editor->createRange(range));*/
 
-          ret->clearUsingNamespaces();
+          ret->clearNamespaceAliases();
           ret->clearImportedParentContexts();
           m_editor->setCurrentRange(ret->textRangePtr());
           break;
@@ -490,7 +490,7 @@ void ContextBuilder::visitUsingDirective(UsingDirectiveAST * node)
 
   if (m_compilingContexts && node->name) {
     DUChainWriteLocker lock(DUChain::lock());
-    currentContext()->addUsingNamespace(m_editor->createCursor(m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge)), identifierForName(node->name));
+    currentContext()->addNamespaceAlias(m_editor->createCursor(m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge)), identifierForName(node->name));
   }
 }
 
