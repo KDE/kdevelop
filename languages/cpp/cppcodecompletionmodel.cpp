@@ -54,7 +54,7 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
 {
   QString allIconNames = "CVprotected_var CVprivate_var protected_union protected_enum private_struct CVprotected_slot private_enum CVprotected_signal CVprivate_slot protected_class private_class private_union protected_function private_function signal CVpublic_var enum class CVpublic_slot union typedef function struct protected_field private_field field";
 
-  foreach( QString iconName, QString("allIcons").split(" ") )
+  foreach( QString iconName, allIconNames.split(" ") )
     m_icons[iconName] = KIconLoader::global()->loadIcon(iconName, K3Icon::Small);
   
 }
@@ -129,13 +129,13 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       if( isArgumentHint )
         return m_declarations[dataIndex].second->depth();
     case ItemSelected:
-       return QVariant(dec->comment().isEmpty() ? dec->toString() : QString("%1 \n%2").arg(dec->comment()).arg(dec->toString()));
+       return QVariant(dec->comment().isEmpty() ? dec->toString() : QString("\"%1\" \n%2").arg(dec->comment()).arg(dec->toString()));
     case IsExpandable:
       return QVariant(true);
     case ExpandingWidget: {
        KHTMLPart *w = new KHTMLPart();
        w->begin();
-       w->write( QString( "<html><body><p><small>Item: %1</small> %2 </p></body></html> " ).arg(dec->toString()).arg(QString("<br>Comment: %1").arg(dec->comment())) );
+      w->write( QString( "<html><body><p><small><small>Item: %1 %2 </small></small></p></body></html> " ).arg(dec->toString()).arg(QString("<br>Comment: %1").arg(dec->comment())) );
        w->end();
        w->view()->resize(500, 70);
 

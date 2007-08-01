@@ -62,9 +62,9 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
     
-    mutable DeclarationContextPair m_currentMatchContext;
+    DeclarationContextPair m_currentMatchContext;
 
-    QMap<QString, QIcon> m_icons;
+    mutable QMap<QString, QIcon> m_icons;
     QList< DeclarationContextPair > m_declarations;
 };
 
