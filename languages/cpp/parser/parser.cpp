@@ -61,7 +61,8 @@
   } while (0)
 
 void Parser::addComment( CommentAST* ast, const Comment& comment ) {
-  ast->comments = snoc(ast->comments, comment.token(), session->mempool);
+  if( comment )
+    ast->comments = snoc(ast->comments, comment.token(), session->mempool);
 }
 
 Parser::Parser(Control *c)
@@ -144,6 +145,7 @@ int Parser::lineFromTokenNumber( size_t tokenNumber ) const {
 
 void Parser::processComment( int offset, int line ) {
   const Token& commentToken( (*session->token_stream)[session->token_stream->cursor() + offset] );
+  Q_ASSERT(commentToken.kind == Token_comment);
   if( line == -1 ) {
     int commentColumn;
     session->location_table->positionAt( commentToken.position, &line, &commentColumn );
@@ -592,9 +594,8 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
 
             preparseLineComments(--ast->end_token);
             
-            if( m_commentStore.hasComment() ) {
+            if( m_commentStore.hasComment() )
               addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
-            }
             
             return true;
           } else {
@@ -894,7 +895,7 @@ bool Parser::parseTypedef(DeclarationAST *&node)
   TypedefAST *ast = CreateNode<TypedefAST>(session->mempool);
 
   if( mcomment )
-      addComment( ast, comment() );
+      addComment( ast, mcomment );
   
   ADVANCE(';', ";");
   
