@@ -588,9 +588,10 @@ DUContext::NamespaceAlias::NamespaceAlias(KTextEditor::Cursor* cursor)
 {
 }
 
-void DUContext::addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id, const QualifiedIdentifier& aliasName)
+void DUContext::addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id, const QString& aliasName)
 {
   ENSURE_CAN_WRITE
+    //kDebug() << "Adding namespace-alias " << id << " -> " << aliasName << endl;
 
   NamespaceAlias* use = new NamespaceAlias(cursor);
   use->nsIdentifier = id;

@@ -217,16 +217,16 @@ public:
     NamespaceAlias(KTextEditor::Cursor* cursor);
 
     QualifiedIdentifier nsIdentifier; //The identifier that was imported
-    QualifiedIdentifier aliasIdentifier; //The identifier nsIdentifier should be "renamed to" within scope, or empty if it is an import.
+    QString aliasIdentifier; //The identifier nsIdentifier should be "renamed to" within scope, or empty if it is an import.
     QualifiedIdentifier scope; //The scope this using namespace was issued in
   };
 
   /**
    * Register a namespace-alias with this context.
-   * @param aliasName The name as which the imported context should be found. If this is QualifiedIdentifier(), nsIdentifier will be imported(like "using namespace ...")
+   * @param aliasName The name as which the imported context should be found. If this is QString::null, nsIdentifier will be imported(like "using namespace ...")
    * */
-  void addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier, const QualifiedIdentifier& aliasName = QualifiedIdentifier() );
-  /// Return a list of namespace aliases for this context.
+  void addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier, const QString& aliasName = QString::null );
+  /// Return a list of namespace aliases for this context. They are ordered in the reversed oder of their appearance.
   const QList<NamespaceAlias*>& namespaceAliases() const;
   /// Clear namespace aliases for this context.
   void clearNamespaceAliases();
