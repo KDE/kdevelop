@@ -10,15 +10,16 @@ include_directories(
 ########### next target ###############
 
 set(kdevgrepview_PART_SRCS
-    grepviewpart.cpp grepdlg.cpp grepoutputmodel.cpp
-    grepviewprocess.cpp
+    grepviewpart.cpp
+    grepdialog.cpp
+    grepoutputmodel.cpp
 )
 
-# set(kdevgrepview_PART_UI
-#     projectselectionpage.ui
-# )
+set(kdevgrepview_PART_UI
+    grepwidget.ui
+)
 
-# kde4_add_ui_files(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
+kde4_add_ui_files(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
 kde4_add_plugin(kdevgrepview ${kdevgrepview_PART_SRCS})
 target_link_libraries(kdevgrepview
     ${KDE4_KDECORE_LIBS}

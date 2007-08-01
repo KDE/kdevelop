@@ -1,0 +1,393 @@
+<ui version="4.0" >
+ <class>GrepWidget</class>
+ <widget class="QWidget" name="GrepWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>730</width>
+    <height>304</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Find In Files</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label_8" >
+     <property name="text" >
+      <string>Pattern:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>patternCombo</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="5" >
+    <widget class="KComboBox" name="patternCombo" >
+     <property name="whatsThis" >
+      <string>Enter the regular expression you want to search for here.&lt;p>Possible meta characters are:&lt;ul>&lt;li>&lt;b>.&lt;/b> - Matches any character&lt;/li>&lt;li>&lt;b>^&lt;/b> - Matches the beginning of a line&lt;/li>&lt;li>&lt;b>$&lt;/b> - Matches the end of a line&lt;/li>&lt;li>&lt;b>\&amp;lt;&lt;/b> - Matches the beginning of a word&lt;/li>&lt;li>&lt;b>\&amp;gt;&lt;/b> - Matches the end of a word&lt;/li>&lt;/ul>The following repetition operators exist:&lt;ul>&lt;li>&lt;b>?&lt;/b> - The preceding item is matched at most once&lt;/li>&lt;li>&lt;b>*&lt;/b> - The preceding item is matched zero or more times&lt;/li>&lt;li>&lt;b>+&lt;/b> - The preceding item is matched one or more times&lt;/li>&lt;li>&lt;b>{&lt;i>n&lt;/i>}&lt;/b> - The preceding item is matched exactly &lt;i>n&lt;/i> times&lt;/li>&lt;li>&lt;b>{&lt;i>n&lt;/i>,}&lt;/b> - The preceding item is matched &lt;i>n&lt;/i> or more times&lt;/li>&lt;li>&lt;b>{,&lt;i>n&lt;/i>}&lt;/b> - The preceding item is matched at most &lt;i>n&lt;/i> times&lt;/li>&lt;li>&lt;b>{&lt;i>n&lt;/i>,&lt;i>m&lt;/i>}&lt;/b> - The preceding item is matched at least &lt;i>n&lt;/i>, but at most &lt;i>m&lt;/i> times.&lt;/li>&lt;/ul>Furthermore, backreferences to bracketed subexpressions are available via the notation \&lt;i>n&lt;/i>.&lt;/p></string>
+     </property>
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+     <property name="autoCompletion" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_9" >
+     <property name="text" >
+      <string>Template:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>templateEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="3" >
+    <widget class="KLineEdit" name="templateEdit" >
+     <property name="text" >
+      <string>%s</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4" colspan="2" >
+    <widget class="KComboBox" name="templateTypeCombo" />
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_10" >
+     <property name="text" >
+      <string>Regular Expression:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>regexCheck</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QCheckBox" name="regexCheck" >
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" >
+    <widget class="QLabel" name="label_11" >
+     <property name="text" >
+      <string>Case Sensitive:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>caseSensitiveCheck</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3" >
+    <widget class="QCheckBox" name="caseSensitiveCheck" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="label_5" >
+     <property name="text" >
+      <string>Directory:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>directoryRequester</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="4" >
+    <widget class="KUrlComboRequester" name="directoryRequester" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="5" >
+    <widget class="KPushButton" name="syncButton" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="label_6" >
+     <property name="text" >
+      <string>Recursive:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>recursiveCheck</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QCheckBox" name="recursiveCheck" >
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" >
+    <widget class="QLabel" name="label_7" >
+     <property name="text" >
+      <string>Limit to project files:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>limitToProjectCheck</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" >
+    <widget class="QCheckBox" name="limitToProjectCheck" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Files:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>filesCombo</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="5" >
+    <widget class="KComboBox" name="filesCombo" >
+     <property name="whatsThis" >
+      <string>Enter the file name pattern of the files to search here. You may give several patterns separated by commas</string>
+     </property>
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+     <property name="autoCompletion" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Exclude:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>excludeCombo</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="5" >
+    <widget class="KComboBox" name="excludeCombo" >
+     <property name="whatsThis" >
+      <string>You can choose a template for the pattern from the combo box and edit it here. The string %s in the template is replaced  by the pattern input field, resulting in the regular expression to search for.</string>
+     </property>
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+     <property name="autoCompletion" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>141</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>41</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>151</width>
+       <height>31</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="3" colspan="3" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>361</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="7" column="1" >
+    <widget class="QCheckBox" name="suppressErrorsCheck" >
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>Suppress find errors:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>suppressErrorsCheck</cstring>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlComboRequester</class>
+   <extends>KUrlRequester</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>patternCombo</tabstop>
+  <tabstop>templateEdit</tabstop>
+  <tabstop>templateTypeCombo</tabstop>
+  <tabstop>regexCheck</tabstop>
+  <tabstop>caseSensitiveCheck</tabstop>
+  <tabstop>directoryRequester</tabstop>
+  <tabstop>syncButton</tabstop>
+  <tabstop>recursiveCheck</tabstop>
+  <tabstop>limitToProjectCheck</tabstop>
+  <tabstop>filesCombo</tabstop>
+  <tabstop>excludeCombo</tabstop>
+  <tabstop>suppressErrorsCheck</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

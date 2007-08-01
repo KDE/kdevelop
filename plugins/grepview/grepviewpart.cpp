@@ -11,40 +11,36 @@
 ***************************************************************************/
 
 #include "grepviewpart.h"
-#include "grepdlg.h"
+#include "grepdialog.h"
 #include "grepoutputmodel.h"
-#include "grepviewprocess.h"
 
-#include <qwhatsthis.h>
-#include <QtDesigner/QExtensionFactory>
+#include <QWhatsThis>
 #include <QList>
-#include <QFile>
-#include <QDir>
 #include <QRegExp>
 #include <QKeySequence>
 
+#include <kprocess.h>
 #include <kgenericfactory.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaction.h>
-#include <kiconloader.h>
-#include <kstringhandler.h>
+#include <ktemporaryfile.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/view.h>
-#include <kparts/partmanager.h>
 
 #include <icore.h>
 #include <ioutputview.h>
 #include <iplugincontroller.h>
+#include <iuicontroller.h>
+#include <kparts/mainwindow.h>
 #include <idocument.h>
 #include <idocumentcontroller.h>
 #include <iproject.h>
 #include <iprojectcontroller.h>
 #include <projectmodel.h>
-#include <commandexecutor.h>
 #include <processlinemaker.h>
 
 using namespace KDevelop;
@@ -55,31 +51,18 @@ K_EXPORT_COMPONENT_FACTORY( kdevgrepview,
 
 GrepViewPart::GrepViewPart( QObject *parent, const QStringList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent )
-    , m_view(0), m_projectForActiveFile(0)
+    , m_projectForActiveFile(0), m_view(0)
 {
     setXMLFile("kdevgrepview.rc");
 
 //     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
 //              this, SLOT(stopButtonClicked(KDevPlugin*)) );
 
-    m_grepdlg = new GrepDialog( this, 0 );
-    connect( m_grepdlg, SIGNAL(searchClicked()), this, SLOT(searchActivated()) );
+    m_grepdlg = new GrepDialog( this );
+    connect( m_grepdlg, SIGNAL(search()), this, SLOT(searchActivated()) );
 
-//     m_widget = new GrepViewWidget(this);
-//     m_widget->setIcon(SmallIcon("grep"));
-//     m_widget->setCaption(i18n("Grep Output"));
-//     QWhatsThis::add(m_widget, i18n("<b>Find in files</b><p>"
-//                                 "This window contains the output of a grep "
-//                                 "command. Clicking on an item in the list "
-//                                 "will automatically open the corresponding "
-//                                 "source file and set the cursor to the line "
-//                                 "with the match."));
 
-//     mainWindow()->embedOutputView(m_widget, i18n("Find in Files"), i18n("Output of the grep command"));
-
-    QAction *action;
-
-    action = actionCollection()->addAction("edit_grep");
+    QAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find in Fi&les..."));
     action->setShortcut( QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F) );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotGrep()));
@@ -100,6 +83,10 @@ GrepViewPart::GrepViewPart( QObject *parent, const QStringList & )
 
 }
 
+void GrepViewPart::updateOkButton(const QString& text)
+{
+    m_grepdlg->enableButtonOk( !text.isEmpty() );
+}
 
 GrepViewPart::~GrepViewPart()
 {
@@ -130,8 +117,8 @@ void GrepViewPart::showDialogWithPattern(const QString& p)
         pattern.truncate(len-1);
     m_grepdlg->setPattern( pattern );
 
-    // Determine if we have a list of project files
-    // dukju ahn: is this feature really useful?
+    updateOkButton( pattern );
+
     KUrl currentUrl;
     KDevelop::IDocument *document = core()->documentController()->activeDocument();
     if( document )
@@ -158,18 +145,25 @@ void GrepViewPart::showDialogWithPattern(const QString& p)
 
 void GrepViewPart::searchActivated()
 {
-    GrepviewProcess *catProc=0, *findProc=0, *grepProc=0, *sedProc=0, *xargsProc=0;
-    QList<GrepviewProcess*> validProcs;
+//     m_grepdlg->hide();
+
+    KProcess *catProc=0, *findProc=0, *grepProc=0, *sedProc=0, *xargsProc=0;
+    QList<KProcess*> validProcs;
 
     // waba: code below breaks on filenames containing a ',' !!!
 //     QStringList filelist = QString::split(",", m_grepdlg->filesString());
     QStringList filelist = m_grepdlg->filesString().split(",");
-
+    KTemporaryFile* tempFile = 0;
     if (m_grepdlg->useProjectFilesFlag())
     {
         if (m_projectForActiveFile)
         {
-            KUrl tmpFilePath;
+            tempFile = new KTemporaryFile();
+            tempFile->setSuffix(".grep.tmp");
+            //This is ok, the tempfile is deleted when the last process
+            //finished running, see the end of this function
+            tempFile->setAutoRemove( false );
+
             QList<ProjectFileItem*> fileItems = m_projectForActiveFile->files();
             KUrl::List projectFiles;
             foreach( ProjectFileItem *_item, fileItems )
@@ -178,9 +172,7 @@ void GrepViewPart::searchActivated()
             }
             if (!projectFiles.isEmpty())
             {
-                tmpFilePath = m_projectForActiveFile->folder();
-                tmpFilePath.addPath(".grep.tmp");
-                KUrl dir(m_grepdlg->directoryString());
+                KUrl dir = m_grepdlg->directory();
                 QList<QRegExp> regExpList;
 
                 if (!filelist.isEmpty())
@@ -189,10 +181,10 @@ void GrepViewPart::searchActivated()
                         regExpList.append(QRegExp(*it, Qt::CaseSensitive, QRegExp::Wildcard));
                 }
 
-                m_tempFile.setFileName(tmpFilePath.toLocalFile());
-                if (m_tempFile.open(QIODevice::WriteOnly))
+
+                if (tempFile->open())
                 {
-                    QTextStream out(&m_tempFile);
+                    QTextStream out(tempFile);
                     for (QList<KUrl>::Iterator it = projectFiles.begin(); it != projectFiles.end(); ++it)
                     {
                         // parent directory check.
@@ -212,18 +204,21 @@ void GrepViewPart::searchActivated()
                             out << (*it).toLocalFile().replace(' ', "\\ ") << endl;
                     }
 
-                    m_tempFile.close();
+//                     tempFile.close();
                 }
                 else
                 {
                     KMessageBox::error(0, i18n("Unable to create a temporary file for search."));
+                    delete tempFile;
                     return;
                 }
             }
 
             QStringList catCmd;
-            catCmd << tmpFilePath.toLocalFile().replace(' ', "\\ ");
-            catProc = new GrepviewProcess(this);
+            catCmd << tempFile->fileName().replace(' ', "\\ ");
+            catProc = new KProcess(this);
+            connect( catProc, SIGNAL(error(QProcess::ProcessError)), catProc, SLOT(deleteLater()));
+            connect( catProc, SIGNAL(finished(int, QProcess::ExitStatus)), catProc, SLOT(deleteLater()));
             catProc->setProgram( "cat", catCmd );
             catProc->setOutputChannelMode( KProcess::SeparateChannels );
             validProcs << catProc;
@@ -241,23 +236,18 @@ void GrepViewPart::searchActivated()
                 files << "-o" << "-name" << *it;
         }
         QStringList findCmd;
-        findCmd << m_grepdlg->directoryString();
+        findCmd << m_grepdlg->directory().path();
         if (!m_grepdlg->recursiveFlag())
             findCmd << "-maxdepth" << "1";
 
-        // these cause error, and doesn't needed in qt4
-//         QString filePattern;
-//         filePattern = "\\( -name ";
-//         filePattern += files;
-//         filePattern += " \\)";
         findCmd << "-name" << files;
         findCmd << "-follow";
 
-//         if (m_grepdlg->noFindErrorsFlag()) // PORT specify it by channel mode.
-//             findCmd += " 2>/dev/null";
-
         kDebug() << "findCmd :" << findCmd << endl;
-        findProc = new GrepviewProcess(this);
+        findProc = new KProcess(this);
+
+        connect( findProc, SIGNAL(error(QProcess::ProcessError)), findProc, SLOT(deleteLater()));
+        connect( findProc, SIGNAL(finished(int, QProcess::ExitStatus)), findProc, SLOT(deleteLater()));
         findProc->setProgram( "find", findCmd );
         findProc->setOutputChannelMode( KProcess::SeparateChannels );
         validProcs << findProc;
@@ -273,7 +263,9 @@ void GrepViewPart::searchActivated()
         for (; it != excludelist.end(); ++it)
             grepCmd << "-e" << *it;
 
-        grepProc = new GrepviewProcess(this);
+        grepProc = new KProcess(this);
+        connect( grepProc, SIGNAL(error(QProcess::ProcessError)), grepProc, SLOT(deleteLater()));
+        connect( grepProc, SIGNAL(finished(int, QProcess::ExitStatus)), grepProc, SLOT(deleteLater()));
         grepProc->setProgram( "grep", grepCmd );
         grepProc->setOutputChannelMode( KProcess::SeparateChannels );
         validProcs << grepProc;
@@ -284,7 +276,9 @@ void GrepViewPart::searchActivated()
     {
         // quote spaces in filenames going to xargs
         sedCmd << "s/ /\\\\\\ /g";
-        sedProc = new GrepviewProcess(this);
+        sedProc = new KProcess(this);
+        connect( sedProc, SIGNAL(error(QProcess::ProcessError)), sedProc, SLOT(deleteLater()));
+        connect( sedProc, SIGNAL(finished(int, QProcess::ExitStatus)), sedProc, SLOT(deleteLater()));
         sedProc->setProgram( "sed", sedCmd );
         sedProc->setOutputChannelMode( KProcess::SeparateChannels );
         validProcs << sedProc;
@@ -317,7 +311,10 @@ void GrepViewPart::searchActivated()
 //     xargsCmd += quote(pattern); // quote isn't needed now.
     xargsCmd << pattern;
 
-    xargsProc = new GrepviewProcess(this);
+    xargsProc = new KProcess(this);
+
+    connect( xargsProc, SIGNAL(error(QProcess::ProcessError)), xargsProc, SLOT(deleteLater()));
+    connect( xargsProc, SIGNAL(finished(int, QProcess::ExitStatus)), xargsProc, SLOT(deleteLater()));
     xargsProc->setProgram( "xargs", xargsCmd );
     xargsProc->setOutputChannelMode( KProcess::SeparateChannels );
     validProcs << xargsProc;
@@ -335,6 +332,10 @@ void GrepViewPart::searchActivated()
     // needed because processlinemaker is not a child of KProcess.
     connect( xargsProc, SIGNAL(destroyed(QObject*)), lineMaker, SLOT(deleteLater()) );
 
+    // Delete the tempfile when xargs process is destroyed
+    if( tempFile )
+        connect( xargsProc, SIGNAL(destroyed(QObject*)), tempFile, SLOT(deleteLater()) );
+
     connect( lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
              model, SLOT(appendOutputs(const QStringList&)) );
     connect( lineMaker, SIGNAL(receivedStderrLines( const QStringList& )),
@@ -349,7 +350,7 @@ void GrepViewPart::searchActivated()
 
     // At first line, print out actual command invocation as if it was run via shell.
     QString printCmd;
-    foreach( GrepviewProcess *_proc, validProcs )
+    foreach( KProcess *_proc, validProcs )
     {
         printCmd += _proc->program().join(" ") + " | ";
     }
@@ -357,7 +358,7 @@ void GrepViewPart::searchActivated()
     model->appendRow( new QStandardItem(printCmd) );
 
     // start process. GrepviewProcess is self-deleted.
-    foreach( GrepviewProcess *_proc, validProcs )
+    foreach( KProcess *_proc, validProcs )
     {
         _proc->start();
     }
@@ -368,7 +369,7 @@ QString GrepViewPart::escape(const QString &str)
     QString escaped("[]{}()\\^$?.+-*|");
     QString res;
 
-    for (uint i=0; i < str.length(); ++i)
+    for (int i=0; i < str.length(); ++i)
     {
         if (escaped.indexOf(str[i]) != -1)
             res += "\\";
@@ -382,18 +383,22 @@ QString GrepViewPart::escape(const QString &str)
 // from kdeveditorutil.cpp in kdev3.4, plus porting
 QString GrepViewPart::currentWord()
 {
-    KTextEditor::Document *doc =
-            dynamic_cast<KTextEditor::Document*>( core()->partManager()->activePart() );
+    KDevelop::IDocument *doc =
+             core()->documentController()->activeDocument();
 
     if( !doc ) return QString();
 
-    KTextEditor::View *view = doc->activeView();
+    KTextEditor::Document* ktedoc = doc->textDocument();
+
+    if( !ktedoc ) return QString();
+
+    KTextEditor::View *view = ktedoc->activeView();
     if( !view ) return QString();
 
     KTextEditor::Cursor cursor = view->cursorPositionVirtual();
     int line = cursor.line();
     int col  = cursor.column();
-    QString linestr = doc->line(line);
+    QString linestr = ktedoc->line(line);
 
     int startPos = qMax( qMin( col, linestr.length()-1 ), 0 );
     int endPos = startPos;
@@ -407,16 +412,19 @@ QString GrepViewPart::currentWord()
 
 QString GrepViewPart::currentSelectedWord()
 {
-    KTextEditor::Document *doc =
-            dynamic_cast<KTextEditor::Document*>( core()->partManager()->activePart() );
+    KDevelop::IDocument *doc =
+             core()->documentController()->activeDocument();
 
     if( !doc ) return QString();
 
-    KTextEditor::View *view = doc->activeView();
+    KTextEditor::Document* ktedoc = doc->textDocument();
+
+    if( !ktedoc ) return QString();
+
+    KTextEditor::View *view = ktedoc->activeView();
     if( !view ) return QString();
     return view->selectionText();
 }
 
-
-
 #include "grepviewpart.moc"
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

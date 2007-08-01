@@ -14,9 +14,9 @@
 
 #include <iplugin.h>
 
-#include <QFile>
 class QStringList;
 class GrepDialog;
+class KDialog;
 
 namespace KDevelop
 {
@@ -36,19 +36,20 @@ private Q_SLOTS:
     void slotGrep();
     void showDialogWithPattern(const QString& pattern);
     void searchActivated();
+    void updateOkButton(const QString& text);
 
 private:
     static QString escape(const QString &str);
     QString currentWord();
     QString currentSelectedWord();
 
-    GrepDialog *m_grepdlg;
+    GrepDialog* m_grepdlg;
     QString m_lastPattern;
 
-    QFile m_tempFile;
     KDevelop::IProject *m_projectForActiveFile;
 
     KDevelop::IOutputView *m_view;
 };
 
 #endif
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
