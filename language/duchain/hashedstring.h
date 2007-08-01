@@ -14,7 +14,7 @@
 #ifndef HASHED_STRING_H
 #define HASHED_STRING_H
 
-//krazy:exclude-all:dpointer,inline
+//krazy:exclude-all=dpointer,inline
 
 #include<QString>
 #include <languageexport.h>
