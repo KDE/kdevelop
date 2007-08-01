@@ -139,8 +139,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
           break;
         }
       }
-    } else /*if( templateDeclarationDepth() != 0 )*/ {
-      //Use DelayedType even if we are not in a template. That way we at least know what's missing.
+    } else if( templateDeclarationDepth() != 0 ) {
         //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
        openedType = true;
        openDelayedType(baseClassIdentifier, node);
@@ -309,21 +308,19 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     if (!dec.isEmpty() && dec.front()->abstractType()) {
       ///@todo only functions may have multiple declarations here
       if( dec.count() > 1 )
-        //kDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
+        kDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
       //kDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << " context: " << dec.front()->context() << endl;
        openedType = true;
        openType(dec.front()->abstractType(), node);
     } else {
-      /*if( templateDeclarationDepth() != 0 )*/ {
-        //Always create a delayed type, so we at least see names of unresolved types
+      if( templateDeclarationDepth() != 0 ) {
         //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
         ///@todo What about position?
         
        openedType = true;
-        //kDebug() << "opening delayed type for " << id.toString() << endl;
+       kDebug() << "opening delayed type for " << id.toString() << endl;
        openDelayedType(id, node);
-      }
-      if( templateDeclarationDepth() == 0 ) {
+      } else {
         kDebug() << "no declaration found for " << id.toString() << " in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << " " << searchContext() << endl;
       }
     }
