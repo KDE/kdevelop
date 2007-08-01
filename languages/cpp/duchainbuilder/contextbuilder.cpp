@@ -30,6 +30,8 @@
 #include <use.h>
 #include <topducontext.h>
 #include <symboltable.h>
+
+#include "parsesession.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "dumpchain.h"
@@ -496,8 +498,12 @@ void ContextBuilder::visitUsingDirective(UsingDirectiveAST * node)
 
 void ContextBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
 {
-  // TODO store the alias
   DefaultVisitor::visitNamespaceAliasDefinition(node);
+
+  if (m_compilingContexts && node->alias_name) {
+    DUChainWriteLocker lock(DUChain::lock());
+    currentContext()->addNamespaceAlias(m_editor->createCursor(m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge)), identifierForName(node->alias_name), m_editor->parseSession()->token_stream->token(node->namespace_name).symbol() );
+  }
 }
 
 void ContextBuilder::visitUsing(UsingAST* node)
