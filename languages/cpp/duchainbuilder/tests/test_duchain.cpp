@@ -516,6 +516,33 @@ void TestDUChain::testDeclareStruct()
   release(top);
 }
 
+void TestDUChain::testVariableDeclaration()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("A instance(b); A instance(2);");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 0);
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QVERIFY(top->localScopeIdentifier().isEmpty());
+
+//   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[1]->abstractType().data());
+//   QVERIFY(idType);
+//   QCOMPARE( idType->identifier(), QualifiedIdentifier("A") );
+//   
+//   Declaration* defStructA = top->localDeclarations().first();
+//   QCOMPARE(defStructA->identifier(), Identifier("A"));
+
+  release(top);
+}
+
 void TestDUChain::testDeclareClass()
 {
   TEST_FILE_PARSE_ONLY
@@ -647,6 +674,7 @@ void TestDUChain::testDeclareUsingNamespace2()
 
   release(top);
 }
+
 
 void TestDUChain::testDeclareUsingNamespace()
 {
