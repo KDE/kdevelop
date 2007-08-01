@@ -51,7 +51,18 @@ public:
         AreaParams defaultAreaParams = ShellExtension::getInstance()->defaultArea();
         defaultArea = new Sublime::Area(m_controller, defaultAreaParams.name, defaultAreaParams.title);
         defaultMainWindow = new MainWindow(controller);
+        activeSublimeWindow = defaultMainWindow;
     }
+
+    void widgetChanged(QWidget*, QWidget* now)
+    {
+        Sublime::MainWindow* win = qobject_cast<Sublime::MainWindow*>(now);
+        if( win )
+        {
+            activeSublimeWindow = win;
+        }
+    }
+
 
     Sublime::Area *defaultArea;
     Core *core;
@@ -60,6 +71,8 @@ public:
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
 
     KSettings::Dialog* cfgDlg;
+
+    Sublime::MainWindow* activeSublimeWindow;
 
 private:
     UiController *m_controller;
@@ -96,6 +109,9 @@ UiController::UiController(Core *core)
     KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
                                     defaultMainWindow(), SLOT( loadSettings() ) );
     d->core = core;
+    connect( QApplication::instance(),
+             SIGNAL( focusChanged( QWidget*, QWidget* ) ),
+            this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
 }
 
 UiController::~UiController()
@@ -154,10 +170,7 @@ Sublime::Area *UiController::activeArea()
 
 Sublime::MainWindow *UiController::activeSublimeWindow()
 {
-    QWidget *active = QApplication::activeWindow();
-    if (!active)
-        return 0;
-    return qobject_cast<Sublime::MainWindow*>(active);
+    return d->activeSublimeWindow;
 }
 
 MainWindow *UiController::defaultMainWindow()

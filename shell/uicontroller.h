@@ -61,7 +61,9 @@ public:
 
     void showSettingsDialog();
     Sublime::Controller* controller();
+
 private:
+    Q_PRIVATE_SLOT(d, void widgetChanged(QWidget*,QWidget*))
     class UiControllerPrivate* const d;
 };
 
