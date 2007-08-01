@@ -191,10 +191,10 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
     //TODO: Anything to do here?!?!
 }
 
-KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeName, int includeType)
+KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 {
-    bool fallbackSearch = true;
-
+    KUrl::List allPaths;
+    
     foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
         KDevelop::ProjectFileItem *file = project->fileForUrl(source);
         if (!file) {
@@ -208,44 +208,113 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
         }
 
         KUrl::List dirs = buildManager->includeDirectories(file);
-        fallbackSearch = dirs.size() == 0;
-
-        foreach (KUrl dir, dirs) {
+        
+        foreach( KUrl dir, dirs ) {
             dir.adjustPath(KUrl::AddTrailingSlash);
-
-            KUrl newUrl(dir, includeName);
-            //kDebug(9007) << k_funcinfo << "checking for existence of " << newUrl << endl;
-            if (KIO::NetAccess::exists(newUrl, true, qApp->activeWindow())) {
-                return newUrl; // Found it.
-            }
+            allPaths << dir;
         }
     }
 
-    if (fallbackSearch) {
-        QStringList allPaths;
-        if (includeType == rpp::Preprocessor::IncludeLocal) {
-            allPaths << source.directory();
-        } else {
-            allPaths += *m_standardIncludePaths;
-        }
+    if( allPaths.isEmpty() ) {
+        //Fallback-search using include-path resolver
+
         #ifndef Q_OS_WIN
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
-            allPaths += result.paths;
+            foreach( QString res, result.paths ) {
+                KUrl r(res);
+                r.adjustPath(KUrl::AddTrailingSlash);
+                allPaths << r;
+            }
         }else{
             kDebug() << "Failed to resolve include-path for \"" << source << "\": " << result.errorMessage << "\n" << result.longErrorMessage << "\n";
         }
         #endif
-        foreach (QString path, allPaths) {
-            QFileInfo info(QDir(path), includeName);
-            if (info.exists() && info.isReadable()) {
-                //kDebug(9007) << "found include file: " << info.absoluteFilePath() << endl;
-                return KUrl(info.absoluteFilePath());
-            }
+    }
+    
+    if( allPaths.isEmpty() ) {
+        ///Last chance: Take a parsed version of the file from the du-chain, and get it's include-paths(We will then get the include-path that some time was used to parse the file)
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+        TopDUContext* ctx = KDevelop::DUChain::self()->chainForDocument(source);
+        if( ctx && ctx->parsingEnvironmentFile() ) {
+            Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data());
+            Q_ASSERT(envFile);
+            allPaths = envFile->includePaths();
+            kDebug() << "Took include-path for " << source << " from a random parsed duchain-version of it" << endl;
         }
     }
 
-    return KUrl();
+    //Insert the standard-paths at the end
+    foreach( QString path, *m_standardIncludePaths)
+        allPaths << KUrl(path);
+
+    
+    //Clean the list for better search-performance(remove multiple paths)
+    QMap<KUrl, bool> hadUrls;
+    for( KUrl::List::iterator it = allPaths.begin(); it != allPaths.end(); ) {
+        if( hadUrls.contains(*it) )
+            it = allPaths.erase(it);
+        else {
+            hadUrls[*it] = true;
+            ++it;
+        }
+    }
+    
+    return allPaths;
+}
+
+QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const {
+    QPair<KUrl, KUrl> ret;
+
+    kDebug() << "searching for include-file " << includeName << endl;
+    if( !skipPath.isEmpty() )
+        kDebug() << "skipping path " << skipPath << endl;
+    
+    if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
+        QFileInfo info(QDir(localPath.path()), includeName);
+        if (info.exists() && info.isReadable()) {
+            //kDebug(9007) << "found include file: " << info.absoluteFilePath() << endl;
+            ret.first = KUrl(info.absoluteFilePath());
+            ret.second = localPath;
+            return ret;
+        }
+    }
+
+    //When a path is skipped, we will start searching exactly after that path
+    bool needSkip = !skipPath.isEmpty();
+
+restart:
+    foreach( KUrl path, includePaths ) {
+        if( needSkip ) {
+            if( path == skipPath ) {
+                needSkip = false;
+                continue;
+            }
+        }
+            
+        QFileInfo info(QDir( path.path() ), includeName);
+        
+        if (info.exists() && info.isReadable()) {
+            //kDebug(9007) << "found include file: " << info.absoluteFilePath() << endl;
+            ret.first = KUrl(info.absoluteFilePath());
+            ret.second = path.path();
+            return ret;
+        }
+    }
+
+    if( needSkip ) {
+        //The path to be skipped was not found, so simply start from the begin, considering any path.
+        needSkip = false;
+        goto restart;
+    }
+
+    if( ret.first.isEmpty() ) {
+        kDebug() << "FAILED to find include-file " << includeName << " in paths:" << endl;
+        foreach( KUrl path, includePaths )
+            kDebug() << path << endl;
+    }
+    
+    return ret;
 }
 
 QString CppLanguageSupport::name() const

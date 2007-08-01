@@ -138,11 +138,16 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     ///Should contain a modification-time for each included-file
     const QMap<KDevelop::HashedString, QDateTime>& allModificationTimes() const;
 
+    ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
+    const KUrl::List& includePaths() const;
+    void setIncludePaths( const KUrl::List& paths );
+  
   private:
     virtual int type() const;
 
     friend class EnvironmentManager;
     KUrl m_url;
+    KUrl::List m_includePaths;
     KDevelop::HashedString m_hashedUrl;
     QDateTime m_modificationTime;
     HashedStringSet m_strings; //Set of all strings that can be affected by macros from outside

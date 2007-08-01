@@ -83,6 +83,8 @@ public:
     ///Returns the preprocessor-job that is parent of this job, or 0
     PreprocessJob* parentPreprocessor() const;
 
+    const KUrl::List& includePaths() const;
+    
     void requestDependancies();
 
     CPPInternalParseJob* parseJob() const;
@@ -91,10 +93,19 @@ public:
 
     void setEnvironmentFile( Cpp::EnvironmentFile* file );
 
-    Cpp::EnvironmentFile* lexedFile();
+    Cpp::EnvironmentFile* environmentFile();
+
+    ///If this file was included from another, this contains the path within the search-paths that this file was found through
+    KUrl includedFromPath() const;
+    void setIncludedFromPath( const KUrl& path );
+    
+    //Returns the master parse-job, which means the one that was not issued as an include-file
+    const CPPParseJob* masterJob() const;
+    CPPParseJob* masterJob();
 
 private:
-    KSharedPtr<Cpp::EnvironmentFile> m_lexedFile;
+    
+    KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;
     TranslationUnitAST* m_AST;
@@ -104,6 +115,10 @@ private:
     CPPInternalParseJob* m_parseJob;
     KTextEditor::Range m_textRangeToParse;
     IncludeFileList m_includedFiles;
+
+    KUrl m_includedFromPath;
+    mutable bool m_includePathsComputed;
+    mutable KUrl::List m_includePaths; //Only a master-job has this set
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job

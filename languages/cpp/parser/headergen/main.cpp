@@ -128,7 +128,7 @@ public:
 
   QString preprocess(const KUrl& url, int sourceLine = -1);
 
-  virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine);
+  virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, , bool skipCurrentPath);
 
   int status;
 
@@ -377,7 +377,7 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
   return ret;
 }
 
-rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/, int sourceLine)
+rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/, int sourceLine, bool skipCurrentPath)
 {
   //kDebug() << k_funcinfo << fileName << " from " << preprocessing.top() << endl;
 

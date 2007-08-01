@@ -53,12 +53,13 @@ public:
      *
      * \param fileName name of the source file to include
      * \param type the way that the file was requested
+     * \param skipCurrentPath whether the path fileName was found in should be skipped(gcc extension include_next)
      *
      * \return a Stream with the appropriate contents to allow
      * the file to be #included.  Ownership of the Stream is yielded to
      * class pp at this point.
      */
-    virtual Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine);
+    virtual Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath);
 };
 
 }

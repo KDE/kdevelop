@@ -48,11 +48,12 @@ QString Preprocessor::processString(const QString& string)
     return ret;
 }
 
-Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type, int sourceLine )
+Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type, int sourceLine, bool skipCurrentPath )
 {
   Q_UNUSED(fileName)
   Q_UNUSED(type)
   Q_UNUSED(sourceLine)
+  Q_UNUSED(skipCurrentPath)
 
   return 0;
 }

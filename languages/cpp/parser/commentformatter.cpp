@@ -74,7 +74,7 @@ QString CommentFormatter::formatComment( size_t token, const ParseSession* sessi
   if( !token )
     return QString();
   const Token& commentToken( (*session->token_stream)[token] );
-  return formatComment( QString::fromUtf8( QByteArray(commentToken.text+commentToken.position, commentToken.size) ) );
+  return formatComment( commentToken.symbol() );
 }
 
 QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const ParseSession* session ) {

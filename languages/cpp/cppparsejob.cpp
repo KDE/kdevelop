@@ -61,7 +61,8 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_duContext( 0 ),
-        m_readFromDisk( false )
+        m_readFromDisk( false ),
+        m_includePathsComputed( false )
 {
     if( !m_parentPreprocessor ) {
         addJob(m_preprocessJob = new PreprocessJob(this));
@@ -86,8 +87,28 @@ void CPPParseJob::parseForeground() {
     m_parseJob->run();
 }
 
+KUrl CPPParseJob::includedFromPath() const {
+    return m_includedFromPath;
+}
+
+void CPPParseJob::setIncludedFromPath( const KUrl& path ) {
+    m_includedFromPath = path;
+}
+
 PreprocessJob* CPPParseJob::parentPreprocessor() const {
     return m_parentPreprocessor;
+}
+
+const KUrl::List& CPPParseJob::includePaths() const {
+    if( masterJob() == this ) {
+        if( !m_includePathsComputed ) {
+            m_includePathsComputed = true;
+            m_includePaths = cpp()->findIncludePaths(document());
+        }
+        return m_includePaths;
+    } else {
+        return masterJob()->includePaths();
+    }
 }
 
 /*
@@ -124,6 +145,20 @@ TopDUContext* CPPParseJob::duChain() const
     return m_duContext;
 }
 
+CPPParseJob* CPPParseJob::masterJob() {
+    if( parentPreprocessor() )
+        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->masterJob();
+    else
+        return this;
+}
+
+const CPPParseJob* CPPParseJob::masterJob() const {
+    if( parentPreprocessor() )
+        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->masterJob();
+    else
+        return this;
+}
+
 CppLanguageSupport * CPPParseJob::cpp() const
 {
     Q_ASSERT( parent() || parentPreprocessor() );
@@ -138,11 +173,11 @@ void CPPParseJob::addIncludedFile(KDevelop::TopDUContext* duChain) {
 }
 
 void CPPParseJob::setEnvironmentFile( Cpp::EnvironmentFile* file ) {
-    m_lexedFile = KSharedPtr<Cpp::EnvironmentFile>(file);
+    m_environmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
 }
 
-Cpp::EnvironmentFile* CPPParseJob::lexedFile() {
-    return m_lexedFile.data();
+Cpp::EnvironmentFile* CPPParseJob::environmentFile() {
+    return m_environmentFile.data();
 }
 
 const IncludeFileList& CPPParseJob::includedFiles() const {
@@ -181,7 +216,7 @@ void CPPInternalParseJob::run()
     kDebug( 9007 ) << "===-- PARSING --===> "
     << parentJob()->document().fileName()
     << endl;
-    Q_ASSERT(parentJob()->lexedFile());
+    Q_ASSERT(parentJob()->environmentFile());
 
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
@@ -245,7 +280,7 @@ void CPPInternalParseJob::run()
               editor.smart()->useRevision(parentJob()->revisionToken());
 
             DeclarationBuilder declarationBuilder(&editor);
-            topContext = declarationBuilder.buildDeclarations(Cpp::EnvironmentFilePointer(parentJob()->lexedFile()), ast, &chains);
+            topContext = declarationBuilder.buildDeclarations(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), ast, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();

@@ -54,7 +54,7 @@
 
 class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
     public:
-        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> lexedFile ) : Environment(preprocessor), m_lexedFile(lexedFile) {
+        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_environmentFile(environmentFile) {
             //If this is included from another preprocessed file, take the current macro-set from there.
         }
 
@@ -62,17 +62,17 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
         virtual rpp::pp_macro* retrieveMacro(const QString& name) const {
             ///@todo use a global string-repository
             //note all strings that can be affected by macros
-            m_lexedFile->addString(KDevelop::HashedString(name));
+            m_environmentFile->addString(KDevelop::HashedString(name));
             rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
 
             if( ret ) //note all used macros
-                m_lexedFile->addUsedMacro(*ret);
+                m_environmentFile->addUsedMacro(*ret);
 
             return ret;
         }
 
         /**
-         * Merges the given set of macros into the environment. Does not modify m_lexedFile
+         * Merges the given set of macros into the environment. Does not modify m_environmentFile
          * */
         void merge( const Cpp::MacroSet& macros ) {
             Cpp::MacroSet::Macros::const_iterator endIt = macros.macros().end();
@@ -84,7 +84,7 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
 
         virtual void setMacro(rpp::pp_macro* macro) {
             //Note defined macros
-            m_lexedFile->addDefinedMacro(*macro);
+            m_environmentFile->addDefinedMacro(*macro);
             rpp::Environment::setMacro(macro);
         }
 
@@ -93,15 +93,16 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
         }
 
     private:
-        mutable KSharedPtr<Cpp::EnvironmentFile> m_lexedFile;
+        mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
 };
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_currentEnvironment(0)
-    , m_lexedFile( new Cpp::EnvironmentFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
+    , m_environmentFile( new Cpp::EnvironmentFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
     , m_success(true)
 {
+    m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
 }
 
 CPPParseJob * PreprocessJob::parentJob() const
@@ -176,7 +177,7 @@ void PreprocessJob::run()
     rpp::pp preprocessor(this);
 
     //Eventually initialize the environment with the parent-environment to get it's macros
-    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_lexedFile );
+    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_environmentFile );
 
     //If we are included from another preprocessor, copy it's macros
     if( parentJob()->parentPreprocessor() )
@@ -189,20 +190,20 @@ void PreprocessJob::run()
     QString result = preprocessor.processFile(contents, rpp::pp::Data);
 
     parentJob()->parseSession()->setContents( result.toUtf8() );
-    parentJob()->setEnvironmentFile( m_lexedFile.data() );
+    parentJob()->setEnvironmentFile( m_environmentFile.data() );
 
     if( PreprocessJob* parentPreprocessor = parentJob()->parentPreprocessor() ) {
         //If we are included from another preprocessor, give it back the modified macros,
         parentPreprocessor->m_currentEnvironment->swapMacros( m_currentEnvironment );
         //Merge include-file-set, defined macros, used macros, and string-set
-        parentPreprocessor->m_lexedFile->merge(*m_lexedFile);
+        parentPreprocessor->m_environmentFile->merge(*m_environmentFile);
     }
     kDebug() << "PreprocessJob: finished " << parentJob()->document() << endl;
 
     m_currentEnvironment = 0;
 }
 
-rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine)
+rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath)
 {
     Q_UNUSED(type)
     Q_UNUSED(sourceLine)
@@ -223,7 +224,11 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 //     }
     kDebug() << "PreprocessJob " << parentJob()->document() << ": searching for include " << fileName << endl;
 
-    KUrl includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName, type);
+    KUrl localPath(parentJob()->document());
+    localPath.setFileName(QString::null);
+    
+    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude(parentJob()->includePaths(), localPath, fileName, type, skipCurrentPath ? parentJob()->includedFromPath() : KUrl() );
+    KUrl includedFile = included.first;
     if (includedFile.isValid()) {
         kDebug() << "PreprocessJob " << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << " macros)" << ": found include-file " << fileName << ": " << includedFile << endl;
 
@@ -240,10 +245,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             parentJob()->addIncludedFile(includedContext);
             KDevelop::ParsingEnvironmentFilePointer file = includedContext->parsingEnvironmentFile();
-            Cpp::EnvironmentFile* lexedFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
-            if( lexedFile ) {
-                m_currentEnvironment->merge( lexedFile->definedMacros() );
-                m_lexedFile->merge( *lexedFile );
+            Cpp::EnvironmentFile* environmentFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
+            if( environmentFile ) {
+                m_currentEnvironment->merge( environmentFile->definedMacros() );
+                m_environmentFile->merge( *environmentFile );
             } else {
                 kDebug() << "preprocessjob: included file " << includedFile << " found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support" << endl;
             }
@@ -255,11 +260,12 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
             // Create a slave-job that will take over our macros.
             // It will itself take our macros modify them, copy them back,
-            // and merge information into our m_lexedFile
+            // and merge information into our m_environmentFile
 
             ///The second parameter is zero because we are in a background-thread and we here
             ///cannot create a slave of the foreground cpp-support-part.
             CPPParseJob slaveJob(includedFile, 0, this);
+            slaveJob.setIncludedFromPath(included.second);
             slaveJob.parseForeground();
 
             // Add the included file.

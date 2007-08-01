@@ -43,7 +43,7 @@ public:
 
     CPPParseJob* parentJob() const;
 
-    virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine);
+    virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath);
 
     virtual bool success() const;
 
@@ -54,7 +54,7 @@ private:
     bool checkAbort();
 
     CppPreprocessEnvironment* m_currentEnvironment;
-    KSharedPtr<Cpp::EnvironmentFile> m_lexedFile;
+    KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
     bool m_success;
 };
 

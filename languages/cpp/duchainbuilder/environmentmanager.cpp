@@ -19,7 +19,7 @@
 #include "problem.h"
 #include "cppparserexport.h"
 
-#define LEXERCACHE_DEBUG
+//#define LEXERCACHE_DEBUG
 
 #ifndef LEXERCACHE_DEBUG
 #define ifDebug(X) /**/
@@ -251,6 +251,14 @@ const MacroSet& EnvironmentFile::definedMacros() const {
 ///Set of all macros used from outside, including those used in deeper included files
 const MacroSet& EnvironmentFile::usedMacros() const {
   return m_usedMacros;
+}
+
+const KUrl::List& EnvironmentFile::includePaths() const {
+  return m_includePaths;
+}
+
+void EnvironmentFile::setIncludePaths( const KUrl::List& paths ) {
+  m_includePaths = paths;
 }
 
 ///Should contain a modification-time for each included-file
