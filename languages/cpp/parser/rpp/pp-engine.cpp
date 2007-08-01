@@ -30,6 +30,8 @@
 #include "preprocessor.h"
 #include "pp-environment.h"
 
+#define PP_NO_SMART_HEADER_PROTECTION
+
 using namespace rpp;
 
 pp::pp(Preprocessor* preprocessor)
@@ -1044,7 +1046,7 @@ int pp::next_token (Stream& input)
     case '/':
       if (ch2 == '/' || ch2 == '*')
       {
-        skip_comment_or_divop(input, devnull(), true);
+        skip_comment_or_divop(input, devnull());
         return next_token(input);
       }
       ++input;

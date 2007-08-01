@@ -249,7 +249,7 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
       continue;
 
     } else if (input == '/') {
-      skip_comment_or_divop (input, output);
+      skip_comment_or_divop (input, output, true);
       continue;
 
     } else if (input.current().isLetter() || input == '_') {

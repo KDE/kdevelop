@@ -782,7 +782,7 @@ void TestDUChain::testBaseClasses() {
 }
 
 void TestDUChain::testTypedef() {
-  QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef");
+  QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef\nvoid test() { }");
 
   DUContext* top = parse(method, DumpAll);
 

@@ -128,7 +128,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
     }
     else if (isComment(input))
     {
-      skip_comment_or_divop(input, output);
+      skip_comment_or_divop(input, output, true);
     }
     else if (input.current().isSpace())
     {
