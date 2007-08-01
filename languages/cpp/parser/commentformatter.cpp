@@ -71,6 +71,8 @@ void CommentFormatter::strip( const QString& str, QString& from ) {
 }
 
 QString CommentFormatter::formatComment( size_t token, const ParseSession* session ) {
+  if( !token )
+    return QString();
   const Token& commentToken( (*session->token_stream)[token] );
   return formatComment( QString::fromUtf8( QByteArray(commentToken.text+commentToken.position, commentToken.size) ) );
 }
