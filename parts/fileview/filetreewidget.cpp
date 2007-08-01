@@ -238,6 +238,18 @@ bool FileTreeWidget::isInProject(const QString &fileName) const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Add a bunch of files to this project.
+ *
+ * Whenever we load a project or user chooses to add a bunch of files using UI,
+ * we end in this method.
+ * We merge the list of files already in the project (if any) with the incoming set.
+ *
+ * @param fileList
+ * @param constructing
+ *
+ * @see m_projectFiles
+ */
 void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constructing )
 {
     kdDebug(9017) << "files added to project: " << fileList << endl;
@@ -248,15 +260,23 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
         if( (*it).isEmpty() )
             continue;
         kdDebug(9017) << "adding file: " << *it << endl;
-        QString file = projectDirectory() + "/" + ( *it );
+        const QString file = projectDirectory() + "/" + ( *it );
         if ( !m_projectFiles.contains( file ) )
         {
+            // We got a new file to add to this project.
+            // Ensure all the parent directories are part of the project set, too.
             QStringList paths = QStringList::split( "/", *it);
             paths.pop_back();
             while( !paths.isEmpty() )
             {
-                if( !m_projectFiles.contains( paths.join("/") ) )
-                    m_projectFiles.insert( projectDirectory() + "/" + paths.join("/"), true );
+                // We are adding the directories from longest (the one containing our file),
+                // to the shortest, measured from root directory of our project.
+                // Whenever we find out that a directory is already recorded as part of our project,
+                // we may stop adding, because its parent directories were already added -
+                // in some previous addition.
+                if( m_projectFiles.contains( paths.join("/") ) )
+                    break;
+                m_projectFiles.insert( projectDirectory() + "/" + paths.join("/"), true );
                 paths.pop_back();
             }
             m_projectFiles.insert( file, false );

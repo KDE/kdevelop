@@ -90,6 +90,10 @@ private:
     /**
      * @brief Set of all the files in this project.
      *
+     * In addition to all the project files,
+     * we also keep a list of all directories containing any project files -
+     * effectively holding the whole project tree.
+     *
      * @bug
      * Well, it is not just a plain set,
      * but rather a map with next-to-useless element value,
