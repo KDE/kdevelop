@@ -243,9 +243,9 @@ void EditPatch::slotUserButton() {
 
     m_parent->teamwork() ->showUserInfo( u.cast<KDevTeamworkUser>() );
   } catch ( const QString & str ) {
-    err() << "slotUserButton(): " << str;
+    err() << "slotUserButton():" << str;
   } catch ( const char * str ) {
-    err() << "slotUserButton(): " << str;
+    err() << "slotUserButton():" << str;
   }
 }
 
@@ -288,7 +288,7 @@ void EditPatch::slotApplyEditPatch() {
       session.unsafe() ->send( mp );
       m_parent->teamwork() ->addMessageToList( mp );
     } catch ( const char * str ) {
-      err() << "error in slotApplyEditPatch: " << str;
+      err() << "error in slotApplyEditPatch:" << str;
     }
   }
   emit stateChanged( this );
@@ -342,11 +342,11 @@ SafeSharedPtr<PatchMessage> EditPatch::getPatchMessage( PatchRequestData::Reques
 
     return msg.cast<PatchMessage>().data();
   } catch ( const char * str ) {
-    err() << "getPatchMessage: error: " << str;
+    err() << "getPatchMessage: error:" << str;
   } catch ( const QString & str ) {
-    err() << "getPatchMessage: error: " << str;
+    err() << "getPatchMessage: error:" << str;
   } catch ( const TeamworkError & error ) {
-    err() << "getPatchMessage: failed to serialize and deserialize the patch locally: " << error.what();
+    err() << "getPatchMessage: failed to serialize and deserialize the patch locally:" << error.what();
   }
   return 0;
 }
@@ -378,7 +378,7 @@ KUrl EditPatch::getPatchFile( bool temp ) {
     else
       fileName += getDefaultExtension( mime->patterns() );
 
-    out( Logger::Debug ) << "getPatchFile() creating file for patch: " << fileName;
+    out( Logger::Debug ) << "getPatchFile() creating file for patch:" << fileName;
 
     QString subFolder = "local";
     if ( temp )
@@ -401,10 +401,10 @@ KUrl EditPatch::getPatchFile( bool temp ) {
     }
     return filePath;
   } catch ( const QString & str ) {
-    err() << "getPatchFile(" << temp << ") failed: " << str;
+    err() << "getPatchFile(" << temp << ") failed:" << str;
     return QString();
   } catch ( const char * str ) {
-    err() << "getPatchFile(" << temp << ") failed: " << str;
+    err() << "getPatchFile(" << temp << ") failed:" << str;
     return QString();
   }
 }
@@ -440,9 +440,9 @@ void EditPatch::slotShowEditPatch() {
       m_parent->teamwork() ->addMessageToList( mp );
     }
   } catch ( const QString & str ) {
-    err() << "error in slotShowEditPatch: " << str;
+    err() << "error in slotShowEditPatch:" << str;
   } catch ( const char * str ) {
-    err() << "error in slotShowEditPatch: " << str;
+    err() << "error in slotShowEditPatch:" << str;
   }
 }
 
@@ -747,7 +747,7 @@ void EditPatch::apply( bool reverse, const QString& _fileName ) {
     if ( fileName.isEmpty() )
       throw "cannot apply patch without a filename";
 
-    out() << "Applying patch " << patch->name << " from file " << fileName;
+    out() << "Applying patch" << patch->name << "from file" << fileName;
 
     if ( ( !reverse && patch->state == LocalPatchSource::Applied ) )
       throw QString( "tried to apply an already applied patch: %1" ).arg( ~patch->name );
@@ -889,7 +889,7 @@ void EditPatch::seekHunk( bool forwards, bool isSource, const QString& fileName 
       if ( !fileName.isEmpty() && fileName != file.toLocalFile() )
         continue;
 
-      //out( Logger::Debug ) << "highlighting " << file.toLocalFile();
+      //out( Logger::Debug ) << "highlighting" << file.toLocalFile();
 
       IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
 
@@ -928,9 +928,9 @@ void EditPatch::seekHunk( bool forwards, bool isSource, const QString& fileName 
     }
 
   } catch ( const QString & str ) {
-    err() << "seekHunk(): " << str;
+    err() << "seekHunk():" << str;
   } catch ( const char * str ) {
-    err() << "seekHunk(): " << str;
+    err() << "seekHunk():" << str;
   }
   out() << "no matching hunk found";
 }
@@ -961,7 +961,7 @@ void EditPatch::highlightFile() {
         file.addPath( model->destinationFile() );
       }
 
-      out( Logger::Debug ) << "highlighting " << file.toLocalFile();
+      out( Logger::Debug ) << "highlighting" << file.toLocalFile();
 
       IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
 
@@ -975,9 +975,9 @@ void EditPatch::highlightFile() {
     }
 
   } catch ( const QString & str ) {
-    err() << "highlightFile(): " << str;
+    err() << "highlightFile():" << str;
   } catch ( const char * str ) {
-    err() << "highlightFile(): " << str;
+    err() << "highlightFile():" << str;
   }
 }
 
@@ -1001,15 +1001,15 @@ void EditPatch::fileDoubleClicked( const QModelIndex& i ) {
       file.addPath( model->destinationFile() );
     }
 
-    out( Logger::Debug ) << "opening " << file.toLocalFile();
+    out( Logger::Debug ) << "opening" << file.toLocalFile();
 
     KDevTeamworkPart::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
 
     seekHunk( true, m_isSource, file.toLocalFile() );
   } catch ( const QString & str ) {
-    err() << "fileDoubleClicked(): " << str;
+    err() << "fileDoubleClicked():" << str;
   } catch ( const char * str ) {
-    err() << "fileDoubleClicked(): " << str;
+    err() << "fileDoubleClicked():" << str;
   }
 }
 
@@ -1187,9 +1187,9 @@ void EditPatch::updateKompareModel() {
     fileSelectionChanged();
     return ;
   } catch ( const QString & str ) {
-    err() << "updateKompareModel: " << str;
+    err() << "updateKompareModel:" << str;
   } catch ( const char * str ) {
-    err() << "updateKompareModel: " << str;
+    err() << "updateKompareModel:" << str;
   }
   m_modelList.reset( 0 );
   delete m_diffSettings;

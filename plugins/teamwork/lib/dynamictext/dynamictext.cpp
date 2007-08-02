@@ -27,7 +27,7 @@ typedef DynamicTextErrorDummy CatchedDynamicTextError;
 #endif
 
 std::ostream& operator << ( std::ostream& o, const SimpleReplacement& rhs ) {
-  o << "( at " << rhs.m_position << ": '" << rhs.m_oldText << "' -> '" << rhs.m_newText << "' )";
+  o << "( at" << rhs.m_position << ": '" << rhs.m_oldText << "' -> '" << rhs.m_newText << "' )";
   return o;
 }
 
@@ -49,11 +49,11 @@ DynamicTextError::DynamicTextError( const String& fun, int l, const String& f, c
 }
 String DynamicTextError::what() const {
   std::ostringstream os;
-  os << "DynamicTextError in " << function << ", " << file << ":" << line;
+  os << "DynamicTextError in" << function << "," << file << ":" << line;
   if ( !expression.empty() )
     os << ", expression \"" << expression << "\" failed";
   if ( !realExpression.empty() )
-    os << ", values: " << realExpression;
+    os << ", values:" << realExpression;
   return os.str();
 }
 
@@ -69,7 +69,7 @@ void Replacement::setEnabled( bool e ) {
 template <class TextType>
 bool Replacement::apply( TextType& text, const OffsetMap& outerOffset, OffsetMap& staticOffset ) {
   if ( m_enabled ) {
-    std::cout << "applying replacement " << replacement() << "\noffset: " << outerOffset.print() << "\nstaticOffset: " << staticOffset.print() << endl;
+    std::cout << "applying replacement" << replacement() << "\noffset:" << outerOffset.print() << "\nstaticOffset:" << staticOffset.print() << endl;
     int pos = outerOffset( staticOffset( m_replacement.m_position ) );
     DYN_VERIFY_SMALLERSAME( 0, pos );
     DYN_VERIFY_SMALLERSAME( (int)pos, (int)text.length() );

@@ -108,6 +108,6 @@ QString DiffHunk::recreateHunk() const
 
 	hunk += differences;
 
-	kDebug( 8101 ) << hunk << endl;
+	kDebug( 8101 ) << hunk;
 	return hunk;
 }

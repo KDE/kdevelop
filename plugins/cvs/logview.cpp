@@ -35,12 +35,12 @@ LogView::LogView(CvsPart* part, CvsJob* job, QWidget *parent)
 
 LogView::~LogView()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 }
 
 void LogView::slotJobFinished(KJob* job)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     if ( job->error() )
     {
@@ -89,7 +89,7 @@ void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revision
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
-//         kDebug() << "line: " << s <<endl;
+//         kDebug() << "line:" << s <<endl;
 
         if (rx_rev.exactMatch(s)) {
 //             kDebug() << "MATCH REVISION" <<endl;

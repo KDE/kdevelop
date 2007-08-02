@@ -54,7 +54,7 @@ CvsMainView::~CvsMainView()
 
 void CvsMainView::slotAddTab(QWidget * tab, const QString& label)
 {
-    kDebug() <<  k_funcinfo << label << endl;
+    kDebug() <<  k_funcinfo << label;
 
     int idx = tabwidget->addTab( tab, label );
     tabwidget->setCurrentIndex(idx);

@@ -227,7 +227,7 @@ void FileCollaborationManager::processMessage( FileCollaborationMessagePointer m
       if ( s ) {
         s->processMessage( l.data() );
       } else {
-        err() << "got message for unknown file-collaboration-session with id ~" << l->sessionId() <<", type: " << msg.unsafe()->name();
+        err() << "got message for unknown file-collaboration-session with id ~" << l->sessionId() <<", type:" << msg.unsafe()->name();
       }
     }
   } else {
@@ -236,7 +236,7 @@ void FileCollaborationManager::processMessage( FileCollaborationMessagePointer m
 }
 
 int FileCollaborationManager::receiveMessage( MessageInterface* msg ) {
-  out( Logger::Warning ) << "got unknown message-type " << msg->name();
+  out( Logger::Warning ) << "got unknown message-type" << msg->name();
   return 0;
 }
 
@@ -251,7 +251,7 @@ int FileCollaborationManager::receiveMessage( FileCollaborationMessage* msg ) {
   if( it ) {
     return const_cast<FileCollaborationSession*>((*it).data())->processMessage( msg );
   } else {
-    out( Logger::Warning ) << "got a FileCollaborationMessage of type " << msg->name() << " for a non-existent session: " << (uint)msg->sessionId();
+    out( Logger::Warning ) << "got a FileCollaborationMessage of type" << msg->name() << "for a non-existent session:" << (uint)msg->sessionId();
     return 0;
   }
 }
@@ -347,10 +347,10 @@ bool FileCollaborationManager::acceptCollaboration( const FileCollaborationReque
     m_requests.erase( l->sessionId() );
     return true;
   } catch ( const QString & str ) {
-    err() << "error in acceptCollaboration: " << str;
+    err() << "error in acceptCollaboration:" << str;
     return false;
   } catch ( const char * str ) {
-    err() << "error in acceptCollaboration: " << str;
+    err() << "error in acceptCollaboration:" << str;
     return false;
   }
 }

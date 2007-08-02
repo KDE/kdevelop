@@ -211,8 +211,8 @@ QMap<KUrl, SvnStatusHolder> KDevSubversionPart::statusSync( const KUrl &dirPath,
 //         KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
 //
 //         SvnStatusHolder hold = (*it); // debug
-//         kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
-//         kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
+//         kDebug() << hold.wcPath << "textStat" << hold.textStatus << "propStat" << hold.propStatus;
+//         kDebug() << hold.wcPath << "reposTextStat" << hold.reposTextStat<< "reposPropStat" << hold.reposPropStat<< endl;
 //
 //         // get status -- working copy
 //         if( (*it).textStatus == svn_wc_status_normal
@@ -342,7 +342,7 @@ VcsJob* KDevSubversionPart::showCommit( const QString& message,
     bool keeplocks = dlg.keepLocks();
     //debug
     for( QList<KUrl>::iterator it = checkedList.begin(); it!=checkedList.end() ; ++it ){
-        kDebug() << "KDevSubversionPart::commit(KUrl::List&) : " << *it << endl;
+        kDebug() << "KDevSubversionPart::commit(KUrl::List&) :" << *it;
     }
     return svncore()->createCommitJob( checkedList, message, recurse, keeplocks );
 }
@@ -527,7 +527,7 @@ void KDevSubversionPart::commit( const KUrl::List &wcPaths )
     bool keeplocks = dlg.keepLocks();
     //debug
     for( QList<KUrl>::iterator it = checkedList.begin(); it!=checkedList.end() ; ++it ){
-        kDebug() << "KDevSubversionPart::commit(KUrl::List&) : " << *it << endl;
+        kDebug() << "KDevSubversionPart::commit(KUrl::List&) :" << *it;
     }
 
     d->m_impl->spawnCommitThread( checkedList, recurse, keeplocks );

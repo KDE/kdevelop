@@ -135,7 +135,7 @@ void PluginController::cleanup()
 {
     if(d->cleanupMode != PluginControllerPrivate::Running)
     {
-        kDebug(9000) << k_funcinfo << "called when not running. state = " << d->cleanupMode << endl;
+        kDebug(9000) << k_funcinfo << "called when not running. state =" << d->cleanupMode;
         return;
     }
 
@@ -266,7 +266,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
 
-    kDebug(9000) << k_funcinfo << "Attempting to load '" << pluginId << "'" << endl;
+    kDebug(9000) << k_funcinfo << "Attempting to load '" << pluginId << "'";
     emit loadingPlugin( info.name() );
     int error = 0;
     IPlugin *plugin = 0;
@@ -287,7 +287,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         connect( plugin, SIGNAL( destroyed( QObject * ) ),
                  this, SLOT( pluginDestroyed( QObject * ) ) );
 
-        kDebug(9000) << k_funcinfo << "Successfully loaded plugin '" << pluginId << "'" << endl;
+        kDebug(9000) << k_funcinfo << "Successfully loaded plugin '" << pluginId << "'";
 
         emit pluginLoaded( plugin );
     }
@@ -308,22 +308,22 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
                     break;
 
                 case KLibLoader::ErrServiceProvidesNoLibrary:
-                    kDebug(9000) << "the specified service provides no shared library." << endl;
+                    kDebug(9000) << "the specified service provides no shared library.";
                     break;
 
                 case KLibLoader::ErrNoLibrary:
-                    kDebug(9000) << "the specified library could not be loaded." << endl;
+                    kDebug(9000) << "the specified library could not be loaded.";
                     break;
 
                 case KLibLoader::ErrNoFactory:
-                    kDebug(9000) << "the library does not export a factory for creating components." << endl;
+                    kDebug(9000) << "the library does not export a factory for creating components.";
                     break;
 
                 case KLibLoader::ErrNoComponent:
-                    kDebug(9000) << "the factory does not support creating components of the specified type." << endl;
+                    kDebug(9000) << "the factory does not support creating components of the specified type.";
                     break;
                 default:
-                    kDebug(9000) << "An unknown error occurred" << endl;
+                    kDebug(9000) << "An unknown error occurred";
                     break;
             }
 
@@ -399,7 +399,7 @@ void PluginController::loadDependencies( const KPluginInfo& info )
 
 IPlugin* PluginController::pluginForExtension( const QString& extension, const QString& pluginname)
 {
-    kDebug(9000) << "Loading Plugin ("<< pluginname << ") for Extension: " << extension << endl;
+    kDebug(9000) << "Loading Plugin ("<< pluginname << ") for Extension:" << extension;
     QStringList constraints;
     if (!pluginname.isEmpty())
         constraints << QString("[X-KDE-PluginInfo-Name]=='%1'").arg( pluginname );
@@ -409,7 +409,7 @@ IPlugin* PluginController::pluginForExtension( const QString& extension, const Q
 
 IPlugin *PluginController::pluginForExtension(const QString &extension, const QStringList &constraints)
 {
-    kDebug(9000) << "Finding Plugin for Extension: " << extension << "|" << constraints << endl;
+    kDebug(9000) << "Finding Plugin for Extension:" << extension << "|" << constraints;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
 
     if( infos.isEmpty() )
@@ -422,7 +422,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
 
 QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extension, const QStringList &constraints)
 {
-    kDebug(9000) << "Finding all Plugins for Extension: " << extension << "|" << constraints << endl;
+    kDebug(9000) << "Finding all Plugins for Extension:" << extension << "|" << constraints;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
     QList<IPlugin*> plugins;
     foreach (const KPluginInfo &info, infos)

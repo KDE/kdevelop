@@ -74,7 +74,7 @@ void ImportProjectJob::start()
     }
 
     emitResult();
-    kDebug() << "ImportProjectThread::run() returning" << endl;
+    kDebug() << "ImportProjectThread::run() returning";
 }
 
 }

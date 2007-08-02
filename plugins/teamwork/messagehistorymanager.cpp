@@ -137,11 +137,11 @@ QList< HistoryMessagePointer > MessageHistoryManager::getMessages( const KDevTea
       fileUrl.addPath( *it );
       std::ifstream f( fileUrl.toLocalFile().toLatin1(), ios_base::binary );
       if( !f.good() ) {
-        err() << "could not open " << ~fileUrl.toLocalFile();
+        err() << "could not open" << ~fileUrl.toLocalFile();
       }
       while( !f.eof() ) {
         if( !f.good() ) {
-          err() << "error while reading " << ~fileUrl.toLocalFile();
+          err() << "error while reading" << ~fileUrl.toLocalFile();
           break;
         }
 
@@ -170,7 +170,7 @@ QList< HistoryMessagePointer > MessageHistoryManager::getMessages( const KDevTea
           }
         }
         catch( std::exception& exc ) {
-          err() << "error while deserializing from \"" << ~*it << "\": " << exc.what();
+          err() << "error while deserializing from \"" << ~*it << "\":" << exc.what();
           break;
         }
       }
@@ -178,7 +178,7 @@ QList< HistoryMessagePointer > MessageHistoryManager::getMessages( const KDevTea
 
   }
   catch( QString str ) {
-    err() << "error in MessageHistoryManager::getMessages: " << ~str;
+    err() << "error in MessageHistoryManager::getMessages:" << ~str;
   }
 
   return fillMessageUsers( ret, client );
@@ -215,7 +215,7 @@ void MessageHistoryManager::writePending()
       QDate date( it.key() );
 
       if( !date.isValid() ) {
-        err() << "tried to store " << it->count() << " messages with invalid date";
+        err() << "tried to store" << it->count() << "messages with invalid date";
         continue;
       }
 
@@ -240,7 +240,7 @@ void MessageHistoryManager::writePending()
       std::string fileName = ~file.toLocalFile();
 
       if( fileName.empty() ) {
-        err() << "empty file-path for date " << ~date.toString( Qt::ISODate );
+        err() << "empty file-path for date" << ~date.toString( Qt::ISODate );
         continue;
       }
 
@@ -281,7 +281,7 @@ void MessageHistoryManager::writePending()
         }
       }
       catch( std::exception& exc ) {
-        err() << "error while serializing into \"" << fileName << "\": " << exc.what();
+        err() << "error while serializing into \"" << fileName << "\":" << exc.what();
       }
     }
 
@@ -293,7 +293,7 @@ void MessageHistoryManager::writePending()
       readIndex( index  );
       }
       catch( QString str ) {
-        out( Logger::Warning ) << "error in readIndex: " << str;
+        out( Logger::Warning ) << "error in readIndex:" << str;
       }
 
       index.insert( insertions.begin(), insertions.end() );
@@ -305,11 +305,11 @@ void MessageHistoryManager::writePending()
     m_pending.clear();
   }
   catch( WaitError err ) {
-    out( Logger::Warning ) << "in MessageHistoryManager::writePending: " << err.str;
+    out( Logger::Warning ) << "in MessageHistoryManager::writePending:" << err.str;
   }
   catch( QString str )
   {
-    err() << "error in MessageHistoryManager::writePending: " << str;
+    err() << "error in MessageHistoryManager::writePending:" << str;
     m_pending.clear();
   }
 
@@ -339,7 +339,7 @@ void MessageHistoryManager::readIndex( std::map<Teamwork::UniqueMessageId, Histo
       arch & index;
     }
     catch( std::exception& exc ) {
-      err() << "error while deserializing the index \"" << indexFile << "\": " << exc.what();
+      err() << "error while deserializing the index \"" << indexFile << "\":" << exc.what();
       throw QString( "error in readIndex" );
     }
   }
@@ -362,7 +362,7 @@ void MessageHistoryManager::writeIndex( const std::map<Teamwork::UniqueMessageId
       arch & index;
     }
     catch( std::exception& exc ) {
-      err() << "error while serializing the index \"" << indexFile << "\": " << exc.what();
+      err() << "error while serializing the index \"" << indexFile << "\":" << exc.what();
       throw QString( "error in writeIndex" );
     }
   }
@@ -410,7 +410,7 @@ void MessageHistoryManager::readMessages( const QString& file, uint offset, QLis
         }
       }
       catch( std::exception& exc ) {
-        err() << "error while deserializing from \"" << ~path.toLocalFile() << "\": " << exc.what();
+        err() << "error while deserializing from \"" << ~path.toLocalFile() << "\":" << exc.what();
       }
     }
 }
@@ -439,7 +439,7 @@ HistoryMessagePointer  MessageHistoryManager::getMessageFromId( Teamwork::Unique
   }
   }
   catch( QString str ) {
-    err() << "error in messageFromId: " << ~str;
+    err() << "error in messageFromId:" << ~str;
     return HistoryMessagePointer();
   }
 }

@@ -259,9 +259,9 @@ void CollaborationManager::uiCloseCollaboration() {
     globalMessageSendHelper().send<KDevSystemMessage>( lUser->online().session().unsafe(), KDevSystemMessage::CollaborationClosed, "stopping collaboration" );
   }
   catch ( QString & str ) {
-    err() << "in uiCloseCollaboration: " <<  str;
+    err() << "in uiCloseCollaboration:" <<  str;
   } catch ( const char * str ) {
-    err() << "in uiCloseCollaboration: " <<  str;
+    err() << "in uiCloseCollaboration:" <<  str;
   }
 }
 
@@ -350,7 +350,7 @@ void CollaborationManager::uiAcceptCollaboration() {
       throw "could not lock message-info or client-class";
     }
   } catch ( const char * str ) {
-    err() << "in uiAcceptCollaboration: " << str;
+    err() << "in uiAcceptCollaboration:" << str;
   }
 }
 
@@ -413,7 +413,7 @@ void CollaborationManager::uiRequestCollaboration() {
       throw "could not lock target-user or local user";
     }
   } catch ( const char * str ) {
-    err() << "uiRequestCollaboration: " << str;
+    err() << "uiRequestCollaboration:" << str;
   }
 }
 

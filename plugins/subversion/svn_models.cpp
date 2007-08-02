@@ -359,7 +359,7 @@ QVariant LogviewDetailedModel::data( const QModelIndex &index, int role ) const
 
 void LogviewDetailedModel::setNewRevision( const QModelIndex &index )
 {
-    kDebug() << " LogviewDetailedModel::setNewRevision " << endl;
+    kDebug() << "LogviewDetailedModel::setNewRevision";
     emit layoutAboutToBeChanged();
     m_activeRow = index.row();
     m_pathlist =

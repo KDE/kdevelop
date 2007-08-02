@@ -319,7 +319,7 @@ bool ProjectController::closeProject( IProject* proj )
     QList<ProjectFileItem *> fileList = proj->files();
     Q_FOREACH( ProjectFileItem *_fileItem, fileList )
     {
-        kDebug(9000) << "Closing url " << _fileItem->url() << endl;
+        kDebug(9000) << "Closing url" << _fileItem->url();
         Core::self()->documentControllerInternal()->closeDocument( _fileItem->url() );
     }
 
@@ -354,7 +354,7 @@ bool ProjectController::closeProject( IProject* proj )
         if( _plugInfo.isValid() )
         {
             QString _plugName = _plugInfo.pluginName();
-            kDebug() << k_funcinfo << "about to unloading : " << _plugName << endl;
+            kDebug() << k_funcinfo << "about to unloading :" << _plugName;
             Core::self()->pluginController()->unloadPlugin( _plugName );
         }
     }

@@ -333,7 +333,7 @@ void InDocumentConversation::selectMessage( InDocumentMessagePointer msg ) {
 
     KUrl url = TeamworkFolderManager::workspaceAbsolute( l->document() );
 
-    out( Logger::Debug ) << "opening: " << url.toLocalFile();
+    out( Logger::Debug ) << "opening:" << url.toLocalFile();
 
 
     IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
@@ -506,7 +506,7 @@ void InDocumentConversation::sendMessage() {
       QString path = TeamworkFolderManager::workspaceRelative( doc->url() );
       start = InDocumentReference( path, b.line(), b.column(), txt );
       end = InDocumentReference( path, e.line(), e.column(), txt );
-      out( Logger::Debug ) << "sending references: " << start.asText() << " " << end.asText();
+      out( Logger::Debug ) << "sending references:" << start.asText() << "" << end.asText();
     }
 
     MessagePointer::Locked stdMsg = new InDocumentMessage( globalMessageTypeSet(), text, start, end, context() );
@@ -533,9 +533,9 @@ void InDocumentConversation::sendMessage() {
 
     manager()->manager()->teamwork()->addMessageToList( msg.data() );
   } catch ( const char * str ) {
-    err() <<"error while sending message: " << str;
+    err() <<"error while sending message:" << str;
   } catch ( QString str ) {
-    err() <<"error while sending message: " << str;
+    err() <<"error while sending message:" << str;
   }
 }
 
@@ -871,7 +871,7 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
       m_widget->show();
     }
   } catch ( const char * str ) {
-    err() << "placeWidget: " << str;
+    err() << "placeWidget:" << str;
   }
 }
 
@@ -896,12 +896,12 @@ KTextEditor::Cursor InDocumentConversation::findPositionInDocument( InDocumentMe
         col = endCol;
         endLine = l;
         endCol = c;
-        out( Logger::Warning ) << "Found end-marker before start-marker: " << line << ":" << col << "  -  " << endLine << ":" << endCol;
+        out( Logger::Warning ) << "Found end-marker before start-marker:" << line << ":" << col << " - " << endLine << ":" << endCol;
       }
     }
 
     if ( line == -1 ) {
-      out( Logger::Warning ) << "Could not find reference-position for " << l->start().asText() << " in text of length "<< m_currentSearchInstance.text().length();
+      out( Logger::Warning ) << "Could not find reference-position for" << l->start().asText() << "in text of length "<< m_currentSearchInstance.text().length();
       line = l->start().line();
       col = l->start().col();
       if ( l->end().isValid() && endTarget ) {
@@ -986,7 +986,7 @@ SessionPointer InDocumentConversation::session() {
       throw "could not lock message";
     return lmsg->info().session();
   } catch ( const char * str ) {
-    err() << "could not get session: " << str;
+    err() << "could not get session:" << str;
     return 0;
   }
 }
@@ -1035,7 +1035,7 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
   MessageSet::Iterator it = m_messages.values( file );
 
   if( !it /*&& !msg_*/ ) {
-  /*  out( Logger::Debug ) << "comparing " << file << " failed: is not part of conversation";
+  /*  out( Logger::Debug ) << "comparing" << file << "failed: is not part of conversation";
     MessageSet::Iterator it = m_messages.orderedValues<QString>();
     QString current = "__/__";
     while( it ) {
@@ -1051,7 +1051,7 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
   }*/
     return; ///Document contains none of our messages
   }
-  out( Logger::Debug ) << "comparing " << file << " successful";
+  out( Logger::Debug ) << "comparing" << file << "successful";
 
   KTextEditor::Document* doc = document->textDocument();
 

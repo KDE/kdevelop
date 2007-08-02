@@ -90,12 +90,12 @@ void KompareProcess::writeCommandLine()
 	// load the executable into the K3Process
 	if ( m_diffSettings->m_diffProgram.isEmpty() )
 	{
-		kDebug(8101) << "Using the first diff in the path..." << endl;
+		kDebug(8101) << "Using the first diff in the path...";
 		m_prog =  "diff";
 	}
 	else
 	{
-		kDebug(8101) << "Using a user specified diff, namely: " << m_diffSettings->m_diffProgram << endl;
+		kDebug(8101) << "Using a user specified diff, namely:" << m_diffSettings->m_diffProgram;
 		m_prog = m_diffSettings->m_diffProgram;
 	}
 
@@ -164,7 +164,7 @@ void KompareProcess::writeCommandLine()
 
 	if ( m_diffSettings->m_ignoreRegExp && !m_diffSettings->m_ignoreRegExpText.isEmpty() )
 	{
-		m_args << "-I " << m_diffSettings->m_ignoreRegExpText;
+		m_args << "-I" << m_diffSettings->m_ignoreRegExpText;
 	}
 
 	if ( m_diffSettings->m_showCFunctionChange )
@@ -221,7 +221,7 @@ void KompareProcess::setEncoding( const QString& encoding )
 		m_textDecoder = textCodec->makeDecoder();
 	else
 	{
-		kDebug(8101) << "Using locale codec as backup..." << endl;
+		kDebug(8101) << "Using locale codec as backup...";
 		textCodec = QTextCodec::codecForLocale();
 		m_textDecoder = textCodec->makeDecoder();
 	}
@@ -244,7 +244,7 @@ void KompareProcess::start()
 	QStringList::ConstIterator it = m_args.begin();
 	for (; it != m_args.end(); ++it )
 		cmdLine += "\"" + (*it) + "\" ";
-	kDebug(8101) << cmdLine << endl;
+	kDebug(8101) << cmdLine;
 #endif
 	m_proc->setEnvironment(m_env);
 	m_proc->start(m_prog, m_args);
@@ -260,7 +260,7 @@ void KompareProcess::slotProcessExited( int code, QProcess::ExitStatus status )
 	// exit status of 0: no differences
 	//   1: some differences
 	//   2: error but there may be differences !
-	kDebug(8101) << "Exited with exit status : " << status << endl;
+	kDebug(8101) << "Exited with exit status :" << status;
 	emit diffHasFinished( code == 0 && status != QProcess::CrashExit );
 }
 

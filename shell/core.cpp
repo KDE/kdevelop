@@ -110,7 +110,7 @@ Core::Core(QObject *parent)
 
 Core::~Core()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     cleanup();
     delete d;
 }

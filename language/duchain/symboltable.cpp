@@ -52,7 +52,7 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  //kDebug() << k_funcinfo << "Adding declaration " << declaration->qualifiedIdentifier().toString(true) << " from " << declaration->textRange() << endl;
+  //kDebug() << k_funcinfo << "Adding declaration" << declaration->qualifiedIdentifier().toString(true) << "from" << declaration->textRange();
 
   sdSymbolPrivate->m_declarations.insert(declaration->qualifiedIdentifier().toString(true), declaration);
 
@@ -73,7 +73,7 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
         return;
       }
 
-  kWarning() << k_funcinfo << "Could not find declaration matching " << id << endl;
+  kWarning() << k_funcinfo << "Could not find declaration matching" << id << endl;
 }
 
 QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id) const
@@ -111,7 +111,7 @@ void SymbolTable::dumpStatistics() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  kDebug() << k_funcinfo << "Definitions " << sdSymbolPrivate->m_declarations.count() << ", Contexts " << sdSymbolPrivate->m_contexts.count() << endl;
+  kDebug() << k_funcinfo << "Definitions" << sdSymbolPrivate->m_declarations.count() << ", Contexts" << sdSymbolPrivate->m_contexts.count();
 
   // TODO: more data
 }
@@ -146,7 +146,7 @@ void SymbolTable::removeContext(DUContext * namedContext)
         return;
       }
 
-  kWarning() << k_funcinfo << "Could not find context matching " << id << endl;
+  kWarning() << k_funcinfo << "Could not find context matching" << id << endl;
 }
 }
 

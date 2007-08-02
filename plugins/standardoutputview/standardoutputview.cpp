@@ -112,7 +112,7 @@ int StandardOutputView::registerView( const QString& title,
         newid = 0;
     else
         newid = d->m_ids.last()+1;
-    kDebug(9004) << "Registering view" << title << " with behaviour: " << behaviour << endl;
+    kDebug(9004) << "Registering view" << title << "with behaviour:" << behaviour;
     d->m_ids << newid;
     d->m_titles[newid] = title;
     d->m_models[newid] = 0;
@@ -137,7 +137,7 @@ void StandardOutputView::setModel( int id, QAbstractItemModel* model )
         d->m_models[id] = model;
         emit modelChanged( id );
     }else
-        kDebug(9004) << "AAAH id is not known:" << id << endl;
+        kDebug(9004) << "AAAH id is not known:" << id;
 }
 
 QList<int> StandardOutputView::registeredViews() const

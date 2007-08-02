@@ -45,8 +45,8 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
-    kDebug(9000) << "Bottom Left: " << bottomleft << endl;
-    kDebug(9000) << "Bottom Right: " << bottomright << endl;
+    kDebug(9000) << "Bottom Left:" << bottomleft;
+    kDebug(9000) << "Bottom Right:" << bottomright;
 
     // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
     if( bottomleft == 0 )
@@ -79,12 +79,12 @@ MainWindow::~ MainWindow()
 // TODO why doesn't called automatically when the settings are changed??
 void MainWindow::loadSettings()
 {
-    kDebug(9000) << "Loading Settings" << endl;
+    kDebug(9000) << "Loading Settings";
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
     bool verticaltabs = cg.readEntry( "Use Vertical Tabs", true );
     bool verticaltitle = cg.readEntry( "Use Vertical TitleBar", true );
 
-    kDebug(9000) << verticaltabs <<"|" << verticaltitle << endl;
+    kDebug(9000) << verticaltabs <<"|" << verticaltitle;
     if( verticaltabs )
         setVerticalToolViewTabsMode( Sublime::MainWindow::UseVerticalTabs );
     else
@@ -97,8 +97,8 @@ void MainWindow::loadSettings()
     // dock widget corner layout
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
-    kDebug(9000) << "Bottom Left: " << bottomleft << endl;
-    kDebug(9000) << "Bottom Right: " << bottomright << endl;
+    kDebug(9000) << "Bottom Left:" << bottomleft;
+    kDebug(9000) << "Bottom Right:" << bottomright;
 
     // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
     if( bottomleft == 0 )

@@ -134,7 +134,7 @@ OffsetMap OffsetMap::operator ~() const {
     }*/
   }
 
-  //cout << "inverting. old map size: " << newMap.size() << " new map size: " << m_offsets.size() << endl;
+  //cout << "inverting. old map size:" << newMap.size() << "new map size:" << m_offsets.size() << endl;
   return ret;
 }
 
@@ -157,18 +157,18 @@ OffsetMap OffsetMap::engInvert() const {
     }
   }
   
-  //cout << "inverting. old map size: " << newMap.size() << " new map size: " << m_offsets.size() << endl;
+  //cout << "inverting. old map size:" << newMap.size() << "new map size:" << m_offsets.size() << endl;
   return ret;
 }
 
 void OffsetMap::printMap() const {
-  cout << "offsets: " << print() << endl;
+  cout << "offsets:" << print() << endl;
 }
 
 std::string OffsetMap::print() const {
   ostringstream o;
   for ( std::map<OffsetPosition, int>::const_iterator it = m_offsets.begin(); it != m_offsets.end(); ++it )
-    o << "(" << ( *it ).first << ": " << ( *it ).second << ") ";
+    o << "(" << ( *it ).first << ":" << ( *it ).second << ") ";
   return o.str();
 }
 
@@ -191,7 +191,7 @@ int OffsetMap::operator () ( const OffsetPosition position ) const {
 void OffsetMap::addOffset( OffsetPosition position, int offset ) {
   /*if ( ( offset + int( position ) ) < 0 || offset == 0 )
 	return ;*/
-  //cout << "inserting offset " << offset << " at position " << position << endl;
+  //cout << "inserting offset" << offset << "at position" << position << endl;
 	OffsetInternalMap::iterator it = m_offsets.find( position );
   if ( it == m_offsets.end() ) {
 		it = m_offsets.insert( OffsetInternalMap::value_type( position, offset ) ).first;

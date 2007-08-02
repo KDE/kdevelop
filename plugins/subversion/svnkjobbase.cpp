@@ -171,11 +171,11 @@ SvnKJobBase::~SvnKJobBase()
     if( d->m_th ){
         bool ret = d->m_th->requestTerminate(500);
         if( !ret )
-            kWarning() << " SvnKJobBase::Destructor: deleting still-running thread " << endl;
+            kWarning() << "SvnKJobBase::Destructor: deleting still-running thread" << endl;
         delete d->m_th;
     }
     delete d;
-    kDebug() << " SvnKJobBase::Destructor: end cleanup " << endl;
+    kDebug() << "SvnKJobBase::Destructor: end cleanup";
 }
 
 KDevelop::VcsJob::JobStatus SvnKJobBase::status()
@@ -288,7 +288,7 @@ bool SvnKJobBase::doKill()
 // 	disconnect( d->m_th, 0, 0, 0 );
 //     setErrorText( i18n("Job was terminated") );
     bool ret = d->m_th->requestTerminate();
-    kDebug() << " SvnKJobBase::doKill() return value : " << ret << endl;
+    kDebug() << "SvnKJobBase::doKill() return value :" << ret;
     return ret;
 }
 

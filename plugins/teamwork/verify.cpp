@@ -18,11 +18,11 @@ ExpressionError::ExpressionError( const std::string& fun, int l, const std::stri
 
 std::string ExpressionError::what() const {
   std::ostringstream os;
-  os << "DynamicTextError in " << function << ", " << file << ":" << line;
+  os << "DynamicTextError in" << function << "," << file << ":" << line;
   if ( !expression.empty() )
     os << ", expression \"" << expression << "\" failed";
   if ( !realExpression.empty() )
-    os << ", values: " << realExpression;
+    os << ", values:" << realExpression;
   return os.str();
 }
 

@@ -105,7 +105,7 @@ DUChainLock::~DUChainLock()
 bool DUChainLock::lockForRead()
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9007) << "DUChain read lock requested by thread: " << QThread::currentThreadId() << endl;
+  kDebug(9007) << "DUChain read lock requested by thread:" << QThread::currentThreadId();
 #endif
 
   QMutexLocker lock(&d->m_mutex);
@@ -141,7 +141,7 @@ bool DUChainLock::lockForRead()
 void DUChainLock::releaseReadLock()
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9007) << "DUChain read lock released by thread: " << QThread::currentThreadId() << endl;
+  kDebug(9007) << "DUChain read lock released by thread:" << QThread::currentThreadId();
 #endif
 
   QMutexLocker lock(&d->m_mutex);
@@ -171,7 +171,7 @@ bool DUChainLock::currentThreadHasReadLock()
 bool DUChainLock::lockForWrite()
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9007) << "DUChain write lock requested by thread: " << QThread::currentThreadId() << endl;
+  kDebug(9007) << "DUChain write lock requested by thread:" << QThread::currentThreadId();
 #endif
 
   //It is not allowed to acquire a write-lock while holding read-lock 
@@ -204,7 +204,7 @@ bool DUChainLock::lockForWrite()
 void DUChainLock::releaseWriteLock()
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9007) << "DUChain write lock released by thread: " << QThread::currentThreadId() << endl;
+  kDebug(9007) << "DUChain write lock released by thread:" << QThread::currentThreadId();
 #endif
 
   QMutexLocker lock(&d->m_mutex);

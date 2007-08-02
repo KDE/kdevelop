@@ -63,7 +63,7 @@ std::string compareText( const std::string& str1, const std::string& str2 ) {
   StringList::iterator it2 = l2.begin();
   int cnt1 = 0;
   int cnt2 = 0;
-  os << "total length: " << str1.length() << " " << str2.length() << endl;
+  os << "total length:" << str1.length() << "" << str2.length() << endl;
 
   for ( uint a = 0; a < size; a++ ) {
     std::string text1 = "empty";
@@ -75,7 +75,7 @@ std::string compareText( const std::string& str1, const std::string& str2 ) {
     if ( it2 != l2.end() )
       text2 = "\"" + *it2 + "\"";
 
-    os << a << "(total counts " << cnt1 << ":" << cnt2 << "): " << text1 << " : " << text2 << "(length " << ( text1 == "empty" ? 0 : it1->length() ) << ":" << ( text2 == "empty" ? 0 : it2->length() ) << ") " << ( text1 == text2 ? "match" : "MISMATCH" ) << "\n" ;
+    os << a << "(total counts" << cnt1 << ":" << cnt2 << "):" << text1 << ":" << text2 << "(length" << ( text1 == "empty" ? 0 : it1->length() ) << ":" << ( text2 == "empty" ? 0 : it2->length() ) << ")" << ( text1 == text2 ? "match" : "MISMATCH" ) << "\n" ;
 
     if ( it1 != l1.end() ) {
       cnt1 += it1->length() + 1;
@@ -143,27 +143,27 @@ struct doubleText {
         int line, column;
         flexText.linearToLineColumn( a, line, column );
         if( flexText.lineColumnToLinear( line, column ) != a ) {
-          cout << "linear to line/column-check: back-conversion failed at position " << a << endl;
+          cout << "linear to line/column-check: back-conversion failed at position" << a << endl;
           fail = false;
         }
       }
     }
 
     if( fail ){
-      cout << "error, last action: " << ( lastActionType ? "removal " : "insertion " ) << " of \"";
+      cout << "error, last action:" << ( lastActionType ? "removal " : "insertion " ) << "of \"";
       if ( lastActionType )
         cout << lastLength;
       else
         cout << lastText;
-      cout << "\" at " << lastPosition << " comparing flexText(left) to string(right): \n" << compareText( flexText.text(), string );
+      cout << "\" at" << lastPosition << "comparing flexText(left) to string(right): \n" << compareText( flexText.text(), string );
     }
 
     DYN_VERIFY_SAME( flexText.text().length(), string.length() );
-    //cout << "length: " << flexText.text().length() << " " << string.length() << endl;
+    //cout << "length:" << flexText.text().length() << "" << string.length() << endl;
     DYN_VERIFY_SAME( flexText.text(), string );
   }
   void showClock() {
-    cout << "\\flexible: " << float( flexClock ) / float( CLOCKS_PER_SEC ) << endl << "\\string: " << float( stringClock ) / float( CLOCKS_PER_SEC ) << endl;
+    cout << "\\flexible:" << float( flexClock ) / float( CLOCKS_PER_SEC ) << endl << "\\string:" << float( stringClock ) / float( CLOCKS_PER_SEC ) << endl;
   }
 };
 
@@ -248,7 +248,7 @@ dddd (length 5, total 15)
     if ( cnt == 1000 ) {
       cnt = 0;
       d.showClock();
-      cout << "size: " << d.string.size() << endl;
+      cout << "size:" << d.string.size() << endl;
       d.compare();
     }
 
@@ -279,13 +279,13 @@ void verifySumTree() {
       tree.indexAndSum( a, r );
       DYN_VERIFY_SAME( r.index, a );
       DYN_VERIFY_SAME( r.sum, a );
-      cout << a << ": " << tree.indexValue( a ) << " "<< tree.sum( a ) << endl;
+      cout << a << ":" << tree.indexValue( a ) << ""<< tree.sum( a ) << endl;
     }
     DYN_VERIFY_SAME( tree.sum( 10 ), 10 );
     DYN_VERIFY_SAME( tree.sum( 11 ), 10 );
     tree.setIndexValue( 1, 0 );
     for( int a = 0; a < 10; a++ )
-      cout << a << ": " << tree.indexValue( a ) << " " << tree.sum( a ) << endl;
+      cout << a << ":" << tree.indexValue( a ) << "" << tree.sum( a ) << endl;
     DYN_VERIFY_SAME( tree.sum( 10 ), 9 );
     DYN_VERIFY_SAME( tree.sum( 11 ), 9 );
     DYN_VERIFY_SAME( tree.indexValue( 1 ), 0 );
@@ -302,13 +302,13 @@ void verifySumTree() {
     DYN_VERIFY_SAME( tree.indexValue( 0 ), 0 );
 
   } catch ( DynamicTextError err ) {
-  cout << "remove-index-test failed: " << err.what() << endl;
+  cout << "remove-index-test failed:" << err.what() << endl;
     terminate();
   }
 
   int cycles = 3;
   for ( int a = 0; a < cycles; a++ ) {
-    cout << "testing cycle " << a + 1 << endl;
+    cout << "testing cycle" << a + 1 << endl;
     std::vector<int > summands;
     //srand ( time(NULL) );
     int count = rand() % 20000;
@@ -326,7 +326,7 @@ void verifySumTree() {
       tree.setIndexValue( 5, 0 );
       //      DYN_VERIFY_SAME( tree.index( sum ), 6 ); ///Reactivate in time!
     } catch ( DynamicTextError err ) {
-      cout << "custom test failed: " << err.what() << endl;
+      cout << "custom test failed:" << err.what() << endl;
       terminate();
     }
 
@@ -335,10 +335,10 @@ void verifySumTree() {
       SumTree::Map tree( summands );
       DYN_VERIFY_SAME( tree.indexCount(), count );
     } catch ( DynamicTextError err ) {
-      cout << "count-invariance failed: " << err.what() << endl;
+      cout << "count-invariance failed:" << err.what() << endl;
       terminate();
     }
-    //cout << "count-invariance elapsed time: " << timeGetTime() - t << endl;
+    //cout << "count-invariance elapsed time:" << timeGetTime() - t << endl;
 
     int a = 0;
     try {
@@ -353,11 +353,11 @@ void verifySumTree() {
       }
 
     } catch ( DynamicTextError err ) {
-      cout << "sum-test failed: " << err.what() << endl;
+      cout << "sum-test failed:" << err.what() << endl;
       terminate();
     }
 
-    //cout << "sum-test elapsed time: " << time(NULL) - t << endl;
+    //cout << "sum-test elapsed time:" << time(NULL) - t << endl;
 
     try {
       SumTree::Map tree( summands );
@@ -368,7 +368,7 @@ void verifySumTree() {
       }
 
     } catch ( DynamicTextError err ) {
-      cout << "index-value failed: " << err.what() << endl;
+      cout << "index-value failed:" << err.what() << endl;
       terminate();
     }
 
@@ -380,7 +380,7 @@ void verifySumTree() {
       }
 
     } catch ( DynamicTextError err ) {
-      cout << "set-index-value failed: " << err.what() << endl;
+      cout << "set-index-value failed:" << err.what() << endl;
       terminate();
     }
 
@@ -392,7 +392,7 @@ void verifySumTree() {
       }
 
     } catch ( DynamicTextError err ) {
-      cout << "change-index-value failed: " << err.what() << endl;
+      cout << "change-index-value failed:" << err.what() << endl;
       terminate();
     }
 
@@ -405,7 +405,7 @@ void verifySumTree() {
         DYN_VERIFY_SAME( tree.indexValue( a + 1 ), v );
       }
     } catch ( DynamicTextError err ) {
-      cout << "insert-index-test failed: " << err.what() << endl;
+      cout << "insert-index-test failed:" << err.what() << endl;
       terminate();
     }
     try {
@@ -415,7 +415,7 @@ void verifySumTree() {
         DYN_VERIFY_SAME( r, summands[ a * 9 ] );
       }
     } catch ( DynamicTextError err ) {
-      cout << "remove-index-test failed: " << err.what() << endl;
+      cout << "remove-index-test failed:" << err.what() << endl;
       terminate();
     }
   }
@@ -436,22 +436,22 @@ void verifyDynamicText() {
     VectorTimestamp b1 = t.insert( 1, SimpleReplacement( 2, "b", "" ) );
     VectorTimestamp a2 = t.insert( 0, SimpleReplacement( 3, "a", "" ) );
 
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
 
     VectorTimestamp v( t.state() );
     v.setStamp( 0, 0 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
     DYN_VERIFY_SAME( t.text().text(), "b" );
 
     v.setStamp( 0, 1 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
     DYN_VERIFY_SAME( t.text().text(), "ab" );
 
     v.setStamp( 0, 2 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
     DYN_VERIFY_SAME( t.text().text(), "aab" );
 
     v.setStamp( 0, 3 );
@@ -459,7 +459,7 @@ void verifyDynamicText() {
     DYN_VERIFY_SAME( t.text().text(), "aaba" );
 
   } catch ( DynamicTextError err ) {
-    cout << "error: " << err.what();
+    cout << "error:" << err.what();
     terminate();
   }
 
@@ -475,19 +475,19 @@ void verifyDynamicText() {
     VectorTimestamp a5 = t.insert( 0, SimpleReplacement( 0, "q", "" ) );  ///!
     VectorTimestamp a6 = t.insert( 0, SimpleReplacement( 1, "v", "" ) );
 
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
     VectorTimestamp v( t.state() );
     v.setStamp( 1, 0 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
 
     v = t.state();
     v.setStamp( 0, 1 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
 
   } catch ( DynamicTextError err ) {
-    cout << "error: " << err.what();
+    cout << "error:" << err.what();
     terminate();
   }
 
@@ -500,14 +500,14 @@ void verifyDynamicText() {
     VectorTimestamp b2 = t.insert( 1, SimpleReplacement( 3, "d", "" ) );
     VectorTimestamp a3 = t.insert( 0, SimpleReplacement( 4, "e", "" ) );
 
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
     VectorTimestamp v( t.state() );
     v.setStamp( 1, 1 );
     t.changeState( v );
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
 
   } catch ( DynamicTextError err ) {
-    cout << "error: " << err.what();
+    cout << "error:" << err.what();
     terminate();
   }
 
@@ -519,19 +519,19 @@ void verifyDynamicText() {
     t.insert( 1, SimpleReplacement( 1, "q", "" ) );
     t.insert( 1, SimpleReplacement( 2, "q", "" ) );
 
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
     VectorTimestamp v( t.state() );
     v.setStamp( 0, 1 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
     /*
     v = t.state();
     v.setStamp( 0, 1 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;*/
+    cout << t.state().print() << v << "text:" << t.text() << endl;*/
 
   } catch ( DynamicTextError err ) {
-    cout << "error: " << err.what();
+    cout << "error:" << err.what();
     terminate();
   }
 
@@ -545,16 +545,16 @@ void verifyDynamicText() {
     VectorTimestamp u2r1( 2, start );
     t.insert( u2r1, SimpleReplacement( 8, "jsem", "bin" ) );
     t.changeState();
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
     VectorTimestamp u1r2( 1, t.state() );
     t.insert( u1r2, SimpleReplacement( 18, "Davidek", "David" ) );
     t.changeState();
     VectorTimestamp mix = t.state();
     mix.setStamp( 0, 1 );
     t.changeState( mix );
-    cout << t.state().print() << " text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
     t.changeState( u1r1 );
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
     t.changeState( start );
     ReplacementPointer r = t.replacement( 0, 2 );
     assert( r );
@@ -564,10 +564,10 @@ void verifyDynamicText() {
     r->setEnabled( false );
     t.changeState();
 
-    cout << t.state().print() << ", some disabled, text: " << t.text() << endl;
+    cout << t.state().print() << ", some disabled, text:" << t.text() << endl;
 
   } catch ( DynamicTextError err ) {
-    cout << "error: " << err.what();
+    cout << "error:" << err.what();
   }
 
   {
@@ -609,13 +609,13 @@ void verifyDynamicText() {
 
 #define VERIFY_OFFSET( index, from, to )    \
     {  OffsetMap om = t.offset( to, from ); \
-      cout << "verifying offset from " << from.print() << " to " << to.print() << " at index " << index << " map is: " << om.print() << cout;  \
+      cout << "verifying offset from" << from.print() << "to" << to.print() << "at index" << index << "map is:" << om.print() << cout;  \
       t.changeState( from );  \
-      cout << "text in state " << from.print() << ": " << t.text() << endl;   \
+      cout << "text in state" << from.print() << ":" << t.text() << endl;   \
       char c = t.text()[index];   \
       t.changeState( to );    \
-      cout << "text in state " << to.print() << ": " << t.text() << endl;   \
-      cout << "index: " << index << " mapped index: " << om(index) << " values: " << c << " " << t.text()[ om( index ) ] << endl;   \
+      cout << "text in state" << to.print() << ":" << t.text() << endl;   \
+      cout << "index:" << index << "mapped index:" << om(index) << "values:" << c << "" << t.text()[ om( index ) ] << endl;   \
       DYN_VERIFY_SAME( c, t.text()[ om( index ) ] );    \
       OffsetMap om2 = t.offset( from, to ); DYN_VERIFY_SAME( om2( om( index ) ), index );   \
   }   \
@@ -625,18 +625,18 @@ void verifyDynamicText() {
     VERIFY_OFFSET( 2, b1, a2 );
 
     t.changeState();
-    cout << t.state().print() << "text: " << t.text() << endl;
+    cout << t.state().print() << "text:" << t.text() << endl;
     VectorTimestamp v( t.state() );
     v.setStamp( 2, 0 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
 
     v.setStamp( 0, 1 );
     t.changeState( v );
-    cout << t.state().print() << v << " text: " << t.text() << endl;
+    cout << t.state().print() << v << "text:" << t.text() << endl;
 
   } catch ( DynamicTextError err ) {
-    cout << "error: " << err.what();
+    cout << "error:" << err.what();
     terminate();
   }
 
@@ -657,31 +657,31 @@ void verifyDynamicText() {
   t.changeState();
 
 
-  cout << "text: " << t.text() << endl;
+  cout << "text:" << t.text() << endl;
   VectorTimestamp ss( 0 );
   ss.setStamp( 0, 1 );
   ss.setStamp( 1, 2 );
   t.changeState( ss );
-  cout << "text on 1,2: " << t.text() << endl;
+  cout << "text on 1,2:" << t.text() << endl;
 
   t.changeState();
   /*VectorTimestamp nv( 0, t.state() );
   t.insert( nv, SimpleReplacement( 0, "ey", "dda" ) );
   t.changeState();*/
 
-  cout << "end text: " << t.text() << endl;
+  cout << "end text:" << t.text() << endl;
 
   VectorTimestamp ns( 0, t.state() );
   t.insert( ns, SimpleReplacement( 5, "hihi", "c" ) );
   t.changeState();
 
-  cout << "whole end text: " << t.text() << endl;
+  cout << "whole end text:" << t.text() << endl;
   /*
   ns.setStamp( 1, 0 );
 
   t.changeState( ns );*/
 
-  cout << "text edited by 1: " << t.text() << endl;
+  cout << "text edited by 1:" << t.text() << endl;
 
   ss.setStamp( 1, 0 );
 
@@ -729,7 +729,7 @@ void verifyOffsets() {
           }
         }
       } catch ( const DynamicTextError & error ) {
-        cout << "verifyOffsets error: " << error.what() << endl;
+        cout << "verifyOffsets error:" << error.what() << endl;
         terminate();
       }
     }
@@ -760,7 +760,7 @@ void verifyOffsets() {
       if ( o.isCompatible( in ) )
         o %= in;
       /*      else
-              cout << "incompatible: " << (uint)f << " " << of << endl;*/
+              cout << "incompatible:" << (uint)f << "" << of << endl;*/
     }
   }
   cout << "ready" << endl;
@@ -795,8 +795,8 @@ void verifyOffsets() {
     cout << endl;
     for( int a = 5; a < CNT; a++ ) {
       int oa = o(a);
-      cout << a << " == " << oInv( oa );
-      cout << " (" << oa << ")" << endl;
+      cout << a << "==" << oInv( oa );
+      cout << "(" << oa << ")" << endl;
       assert( oInv( o(a) ) == a );
     }
     cout << "success "<< endl;*/
@@ -807,7 +807,7 @@ void verifyOffsets() {
     if ( o2( a ) < 0 || o( a ) < 0 )
       continue;
     if ( !o( o2( a ) ) == o3( a ) )
-      cout << "error for a " << a << ": " << o( a ) << " " << o2( a ) << " : " << o( o2( a ) ) << " != " << o3( a ) << endl;
+      cout << "error for a" << a << ":" << o( a ) << "" << o2( a ) << ":" << o( o2( a ) ) << "!=" << o3( a ) << endl;
     assert( o( o2( a ) ) == o3( a ) );
   }
   cout << "success" << endl;
@@ -821,7 +821,7 @@ void verifyOffsets() {
     int val1 = o3( a );
     int val2 = o( a );
     if ( val1 != val2 )
-      cout << "error for a " << a << ": " << o( a ) << " " << o3( a ) << " : " << val1 << " != " << val2 << endl;
+      cout << "error for a" << a << ":" << o( a ) << "" << o3( a ) << ":" << val1 << "!=" << val2 << endl;
     assert( val1 == val2 );
   }
   cout << "success" << endl;

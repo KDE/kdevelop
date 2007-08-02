@@ -65,7 +65,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
 
 void MainWindowPrivate::addPlugin( IPlugin *plugin )
 {
-    kDebug(9037) << "add plugin" << endl;
+    kDebug(9037) << "add plugin";
     Q_ASSERT( plugin );
 
     m_mainWindow->guiFactory()->addClient( plugin );

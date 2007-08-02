@@ -330,7 +330,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
 
   } else {
     // No child items for definitions or uses
-    //kDebug() << k_funcinfo << "No child items for definitions or uses" << endl;
+    //kDebug() << k_funcinfo << "No child items for definitions or uses";
   }
 
   m_objectLists.insert(parent, list);

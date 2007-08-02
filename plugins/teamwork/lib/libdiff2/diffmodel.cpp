@@ -85,7 +85,7 @@ void DiffModel::splitSourceInPathAndFileName()
 	else
 		m_sourceFile = m_source;
 
-	kDebug(8101) << m_source << " was split into " << m_sourcePath << " and " << m_sourceFile << endl;
+	kDebug(8101) << m_source << "was split into" << m_sourcePath << "and" << m_sourceFile;
 }
 
 void DiffModel::splitDestinationInPathAndFileName()
@@ -100,7 +100,7 @@ void DiffModel::splitDestinationInPathAndFileName()
 	else
 		m_destinationFile = m_source;
 
-	kDebug(8101) << m_destination << " was split into " << m_destinationPath << " and " << m_destinationFile << endl;
+	kDebug(8101) << m_destination << "was split into" << m_destinationPath << "and" << m_destinationFile;
 }
 
 DiffModel& DiffModel::operator=( const DiffModel& model )
@@ -204,9 +204,9 @@ DifferenceList* DiffModel::allDifferences()
 
 Difference* DiffModel::firstDifference()
 {
-	kDebug( 8101 ) << "DiffModel::firstDifference()" << endl;
+	kDebug( 8101 ) << "DiffModel::firstDifference()";
 	m_diffIndex = 0;
-	kDebug( 8101 ) << "m_diffIndex = " << m_diffIndex << endl;
+	kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 
 	m_selectedDifference = m_differences[ m_diffIndex ];
 
@@ -215,9 +215,9 @@ Difference* DiffModel::firstDifference()
 
 Difference* DiffModel::lastDifference()
 {
-	kDebug( 8101 ) << "DiffModel::lastDifference()" << endl;
+	kDebug( 8101 ) << "DiffModel::lastDifference()";
 	m_diffIndex = m_differences.count() - 1;
-	kDebug( 8101 ) << "m_diffIndex = " << m_diffIndex << endl;
+	kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 
 	m_selectedDifference = m_differences[ m_diffIndex ];
 
@@ -226,17 +226,17 @@ Difference* DiffModel::lastDifference()
 
 Difference* DiffModel::prevDifference()
 {
-	kDebug( 8101 ) << "DiffModel::prevDifference()" << endl;
+	kDebug( 8101 ) << "DiffModel::prevDifference()";
 	if ( --m_diffIndex < m_differences.count() )
 	{
-		kDebug( 8101 ) << "m_diffIndex = " << m_diffIndex << endl;
+		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 		m_selectedDifference = m_differences[ m_diffIndex ];
 	}
 	else
 	{
 		m_selectedDifference = 0;
 		m_diffIndex = 0;
-		kDebug( 8101 ) << "m_diffIndex = " << m_diffIndex << endl;
+		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 	}
 
 	return m_selectedDifference;
@@ -244,17 +244,17 @@ Difference* DiffModel::prevDifference()
 
 Difference* DiffModel::nextDifference()
 {
-	kDebug( 8101 ) << "DiffModel::nextDifference()" << endl;
+	kDebug( 8101 ) << "DiffModel::nextDifference()";
 	if (  ++m_diffIndex < m_differences.count() )
 	{
-		kDebug( 8101 ) << "m_diffIndex = " << m_diffIndex << endl;
+		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 		m_selectedDifference = m_differences[ m_diffIndex ];
 	}
 	else
 	{
 		m_selectedDifference = 0;
 		m_diffIndex = 0; // just for safety...
-		kDebug( 8101 ) << "m_diffIndex = " << m_diffIndex << endl;
+		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 	}
 
 	return m_selectedDifference;
@@ -386,8 +386,8 @@ void DiffModel::slotSetModified( bool modified )
 
 bool DiffModel::setSelectedDifference( Difference* diff )
 {
-	kDebug(8101) << "diff = " << diff << endl;
-	kDebug(8101) << "m_selectedDifference = " << m_selectedDifference << endl;
+	kDebug(8101) << "diff =" << diff;
+	kDebug(8101) << "m_selectedDifference =" << m_selectedDifference;
 
 	if ( diff != m_selectedDifference )
 	{
@@ -395,7 +395,7 @@ bool DiffModel::setSelectedDifference( Difference* diff )
 			return false;
 		// Dont set m_diffIndex if it cant be found
 		m_diffIndex = findItem( diff, m_differences );
-		kDebug( 8101 ) << "m_diffIndex = " << m_diffIndex << endl;
+		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 		m_selectedDifference = diff;
 	}
 

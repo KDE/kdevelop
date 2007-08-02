@@ -184,7 +184,7 @@ bool SvnCommitOptionDlg::keepLocks()
 
 // void SvnCommitOptionDlg::insertRow( const KDevelop::VcsFileInfo &info ) // {
 //     QStringList strings;
-//     strings << " " << VcsFileInfo::state2String(info.state()) << info.filePath().prettyUrl();
+//     strings << "" << VcsFileInfo::state2String(info.state()) << info.filePath().prettyUrl();
 //     QTreeWidgetItem *item = new QTreeWidgetItem( treeWidget, strings );
 //     item->setCheckState(0, Qt::Checked);
 // }
@@ -193,7 +193,7 @@ bool SvnCommitOptionDlg::keepLocks()
 void SvnCommitOptionDlg::insertRow( const QString& state, const KUrl& url )
 {
     QStringList strings;
-    strings << " " << state << url.prettyUrl();
+    strings << "" << state << url.prettyUrl();
     QTreeWidgetItem *item = new QTreeWidgetItem( d->ui.treeWidget, strings );
     item->setCheckState(0, Qt::Checked);
 }

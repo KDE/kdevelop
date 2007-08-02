@@ -89,7 +89,7 @@ bool SvnRevertOptionDlg::recurse()
 void SvnRevertOptionDlg::insertRow( const KUrl &url, const QString &textStat, const QString &propStat )
 {
     QStringList list;
-    list << " " << textStat << propStat << url.toLocalFile() ;
+    list << "" << textStat << propStat << url.toLocalFile() ;
     QTreeWidgetItem *item = new QTreeWidgetItem( ui.treeWidget, list );
     item->setCheckState(0, Qt::Checked);
 }

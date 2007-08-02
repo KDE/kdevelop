@@ -140,9 +140,9 @@ void FileCollaborationSession::removeUserAction() {
 
     removeCollaboration( collab );
   } catch( const char* str ) {
-    err() << "removeUserAction: " << str;
+    err() << "removeUserAction:" << str;
   } catch( const QString& str ) {
-    err() << "removeUserAction: " << str;
+    err() << "removeUserAction:" << str;
   }
 }
 
@@ -214,10 +214,10 @@ bool FileCollaborationSession::acceptMessage( const FileCollaborationRequestPoin
 
     return true;
   } catch ( const QString & str ) {
-    err() << "error in acceptMessage: " << str;
+    err() << "error in acceptMessage:" << str;
     return false;
   } catch ( const char * str ) {
-    err() << "error in acceptMessage: " << str;
+    err() << "error in acceptMessage:" << str;
     return false;
   }
   return false;
@@ -225,7 +225,7 @@ bool FileCollaborationSession::acceptMessage( const FileCollaborationRequestPoin
 
 DocumentWrapperPointer FileCollaborationSession::getDocument( const QString& fileName ) {
   if ( ! m_files.values( fileName ) ) {
-    out( Logger::Warning ) << "getDocument: Document-wrapper for a file not being collaborated was requested: " << fileName;
+    out( Logger::Warning ) << "getDocument: Document-wrapper for a file not being collaborated was requested:" << fileName;
     return 0;
   }
 
@@ -234,7 +234,7 @@ DocumentWrapperPointer FileCollaborationSession::getDocument( const QString& fil
 
 std::string FileCollaborationSession::logPrefix() {
   ostringstream str;
-  str << "FileCollaborationSession(" << name() << ", " << id() << "): ";
+  str << "FileCollaborationSession(" << name() << "," << id() << "): ";
   return str.str();
 }
 
@@ -245,7 +245,7 @@ FileCollaborationPointer FileCollaborationSession::newCollaboration( const KDevT
     m_collaborations.insert( ret );
     return ret;
   } catch ( const QString & str ) {
-    err() << "error while creating file-collaboration: " << str;
+    err() << "error while creating file-collaboration:" << str;
     return 0;
   }
 }
@@ -324,9 +324,9 @@ void FileCollaborationSession::updateTree( QModelIndex& i, QStandardItemModel* m
     }
 
   } catch ( const char * str ) {
-    err() << "in updateTree: " << str;
+    err() << "in updateTree:" << str;
   } catch ( const QString & str ) {
-    err() << "in updateTree: " << str;
+    err() << "in updateTree:" << str;
   }
 }
 
@@ -403,7 +403,7 @@ uint FileCollaborationSession::addFileInternal( const CollabFile& f, bool fromBu
     m_stateChangeTimer->start( 100 );
     return f.id;
   } catch ( const QString & str ) {
-    err() << "failed to create document-wrapper for " << f.file << ": " << str;
+    err() << "failed to create document-wrapper for" << f.file << ":" << str;
     return 0;
   }
 }
@@ -450,7 +450,7 @@ void FileCollaborationSession::addFile() {
 
     KUrl u = TeamworkFolderManager::workspaceRelative( document->url() );
 
-    out( Logger::Debug ) << "adding " << u.toLocalFile() << " to the session";
+    out( Logger::Debug ) << "adding" << u.toLocalFile() << "to the session";
 
     uint index = allocateWrapperIndex();
     QString fileName = TeamworkFolderManager::teamworkRelative( u );
@@ -468,9 +468,9 @@ void FileCollaborationSession::addFile() {
 
 
   } catch ( const QString & str ) {
-    err() << "addFile(): " << str;
+    err() << "addFile():" << str;
   } catch ( const char * str ) {
-    err() << "addFile(): " << str;
+    err() << "addFile():" << str;
   }
 }
 
@@ -600,9 +600,9 @@ void FileCollaborationSession::inviteUser( const KDevTeamworkUserPointer & user 
     FileCollaborationPointer collab = newCollaboration( user );
 
   } catch ( const char * str ) {
-    err() << "inviteUser: " << str;
+    err() << "inviteUser:" << str;
   } catch ( QString str ) {
-    err() << "inviteUser: " << str;
+    err() << "inviteUser:" << str;
   }
 }
 
@@ -671,7 +671,7 @@ void FileCollaborationSession::processMessage( const FileCollaborationMessagePoi
     collab->processMessage( msg );
 
   } catch ( QString str ) {
-    err() << "could not process message: " << str;
+    err() << "could not process message:" << str;
   }
 }*/
 int FileCollaborationSession::receiveMessage( MessageInterface* /*msg*/ ) {
@@ -685,19 +685,19 @@ int FileCollaborationSession::receiveMessage( FileListMessage* msg ) {
     if ( doc ) {
       if ( it->file.isEmpty() ) {
         if( m_isMasterSession ) {
-          out( Logger::Debug ) << "file " << it->file << " was tried to be removed from the session";
+          out( Logger::Debug ) << "file" << it->file << "was tried to be removed from the session";
         } else {
-          out( Logger::Debug ) << "file " << it->file << " has been removed from the session";
+          out( Logger::Debug ) << "file" << it->file << "has been removed from the session";
           killFile( it->id );
         }
       }
     } else {
-      out( Logger::Warning ) << "unknown reference in file-list-message: " << it->id << " " << it->file;
+      out( Logger::Warning ) << "unknown reference in file-list-message:" << it->id << "" << it->file;
       /*if ( !it->file.isEmpty() ) {
         ///Add the new file
         addFileInternal( *it, false, false );
       } else {
-        out( Logger::Warning ) << "unknown referenced in file-list-message: " << it->id;
+        out( Logger::Warning ) << "unknown referenced in file-list-message:" << it->id;
       }*/
     }
   }
@@ -720,7 +720,7 @@ int FileCollaborationSession::receiveMessage( FileCollaborationMessage* msg ) {
         }
       }
     default:
-    out() << "got unhandled file-collaboration-message: " << msg->messageAsString();
+    out() << "got unhandled file-collaboration-message:" << msg->messageAsString();
   }
   return 1;
 }
@@ -744,7 +744,7 @@ int FileCollaborationSession::receiveMessage( DocumentWrapperMessage* msg ) {
         QString userName = "anonymous user";
         if ( msg->info().user() )
           userName = ~msg->info().user().unsafe() ->safeName();
-        out( Logger::Warning ) << "got a file-synchronization from " << userName << " for \"" << smsg->fileName() << "\", but new files from collaborators are not allowed.";
+        out( Logger::Warning ) << "got a file-synchronization from" << userName << "for \"" << smsg->fileName() << "\", but new files from collaborators are not allowed.";
         return 1;
       }
       if ( addFileInternal( CollabFile( smsg->wrapperId(), smsg->fileName() ), false, false ) ) {
@@ -765,11 +765,11 @@ int FileCollaborationSession::receiveMessage( DocumentWrapperMessage* msg ) {
           }
         }
       } else {
-        err() << "failed to add file on synchronization: " << smsg->fileName();
+        err() << "failed to add file on synchronization:" << smsg->fileName();
         globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
       }
     } else {
-      out( Logger::Warning ) << "could not locate the correct document-wrapper for a message of type " << msg->name() << " wrapper-id: " << msg->wrapperId();
+      out( Logger::Warning ) << "could not locate the correct document-wrapper for a message of type" << msg->name() << "wrapper-id:" << msg->wrapperId();
     }
   }
   return 1;

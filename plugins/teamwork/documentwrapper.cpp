@@ -95,7 +95,7 @@ DocumentWrapper::DocumentWrapper( uint id, const LoggerPointer& logger, QString 
                 m_dead( false ),
                 m_dispatcher( *this ){
   //openDocument();
-  out( Logger::Debug ) << "DocumentWrapper for " << fileName << "created: " << ownIndex << " " << readFile_;
+  out( Logger::Debug ) << "DocumentWrapper for" << fileName << "created:" << ownIndex << "" << readFile_;
   if ( m_realFile )
     readFile( fromBuffer );
 
@@ -170,7 +170,7 @@ void DocumentWrapper::remove
 
 void DocumentWrapper::toggleEnabled() {
   m_disabled = !m_disabled;
-  out( Logger::Debug ) << "Editing is now " << ( m_disabled ? "disabled" : "enabled");
+  out( Logger::Debug ) << "Editing is now" << ( m_disabled ? "disabled" : "enabled");
 }
 
 void DocumentWrapper::saveAsBufferFile() {
@@ -187,7 +187,7 @@ void DocumentWrapper::saveAsBufferFile() {
     doc->textDocument() ->setText( ~m_text->text().text() );
 
   } else {
-    err() << "saveAsBufferFile(): could not open document for " << u.toLocalFile();
+    err() << "saveAsBufferFile(): could not open document for" << u.toLocalFile();
   }
 }
 
@@ -277,9 +277,9 @@ LocalPatchSourcePointer DocumentWrapper::saveAsPatch( bool addToList, bool edit 
 
     return l;
   } catch ( const QString & str ) {
-    err() << "saveAsPatch(): " << str;
+    err() << "saveAsPatch():" << str;
   } catch ( const char * str ) {
-    err() << "saveAsPatch(): " << str;
+    err() << "saveAsPatch():" << str;
   }
   return 0;
 }
@@ -302,7 +302,7 @@ bool DocumentWrapper::synchronize( const UserPointer& user ) {
   if ( m_dead )
     return false;
 
-  out( Logger::Debug ) << "synchronizing with " << user.unsafe()->safeName();
+  out( Logger::Debug ) << "synchronizing with" << user.unsafe()->safeName();
 
   UserPointer::Locked l = user;
   if ( l && l->online().session() ) {
@@ -327,14 +327,14 @@ int DocumentWrapper::receiveMessage( FileEditRejectMessage* msg ) {
     m_text->cut();
   } catch ( const DynamicTextError & err ) {
     ///There is no other way than resynchronizing the whole file
-    out() << "error while handling a reject, resynchronizing. Error: " << err.what();
+    out() << "error while handling a reject, resynchronizing. Error:" << err.what();
     globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, VectorTimestamp(), id(), m_session->id() );
   }
   return 1;
 }
 
 int DocumentWrapper::receiveMessage( MessageInterface* msg ) {
-  out( Logger::Warning ) << "got unknown message of type " << msg->name();
+  out( Logger::Warning ) << "got unknown message of type" << msg->name();
   return 0;
 }
 
@@ -359,7 +359,7 @@ int DocumentWrapper::receiveMessage( FileEditMessage* msg ) {
 
   } catch ( const DynamicTextError & error ) {
     ///@todo error-handling
-    err() << "receiveMessage( FileEditMessage " << msg->timeStamp() << " " << msg->replacement() << " ): " << error.what();
+    err() << "receiveMessage( FileEditMessage" << msg->timeStamp() << "" << msg->replacement() << "):" << error.what();
     globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
     m_text->text().unregisterNotifier(); //@todo use a little wrapper-class for this
   }
@@ -438,7 +438,7 @@ void DocumentWrapper::processMessage( DocumentWrapperMessage* msg ) {
     }
   }*/
 
-  IFDEBUG( out( Logger::Debug ) << "processMessage(..) processing " << msg->name() );
+  IFDEBUG( out( Logger::Debug ) << "processMessage(..) processing" << msg->name() );
 
   m_dispatcher( msg );
   /*
@@ -479,7 +479,7 @@ void DocumentWrapper::openDocument( bool toForeground ) {
       return ;
     }
 
-    out( Logger::Debug ) << "openDocument() " << fileName() << " " << toForeground;
+    out( Logger::Debug ) << "openDocument()" << fileName() << "" << toForeground;
 
     if ( m_tempFile.isEmpty() ) {
       KUrl subfolder( QString( "filecollaboration" ) );
@@ -496,7 +496,7 @@ void DocumentWrapper::openDocument( bool toForeground ) {
       m_tempFile = TeamworkFolderManager::createUniqueFile( subfolder.toLocalFile(), m_fileName, "", "@" + m_session->name() ).toLocalFile();
     }
 
-    out( Logger::Debug ) << "temporary file for " << fileName() << " is " << m_tempFile;
+    out( Logger::Debug ) << "temporary file for" << fileName() << "is" << m_tempFile;
 
     m_document = KDevTeamworkPart::staticDocumentController() ->openDocument( m_tempFile, KTextEditor::Cursor(), toForeground == true ? KDevelop::IDocumentController::ActivateOnOpen : KDevelop::IDocumentController::DontActivate );
 
@@ -525,9 +525,9 @@ void DocumentWrapper::openDocument( bool toForeground ) {
       throw "could not open document";
     }
   } catch ( const QString & str ) {
-    err() << "openDocument(): " << str;
+    err() << "openDocument():" << str;
   } catch ( const char * str ) {
-    err() << "openDocument(): " << str;
+    err() << "openDocument():" << str;
   }
 }
 
@@ -559,9 +559,9 @@ void DocumentWrapper::textChanged ( KTextEditor::Document * document, const KTex
   QString newText = document->text( newRange );
 
   if ( oldRange.end().line() == oldRange.start().line() && newRange.end().line() == newRange.start().line() ) {
-    out( Logger::Debug ) << "textChanged at " << start << ": " << oldText << " -> " << newText;
+    out( Logger::Debug ) << "textChanged at" << start << ":" << oldText << "->" << newText;
   } else {
-    out( Logger::Debug ) << "textChanged at " << start;
+    out( Logger::Debug ) << "textChanged at" << start;
   }
 
   ///It might be better to model the edit by one removal and one insertion, because that allows better resolution of conflicts.(Think about if it should be like that)
@@ -573,7 +573,7 @@ void DocumentWrapper::textChanged ( KTextEditor::Document * document, const KTex
     Block b( m_block );
     m_text->insert( v, r );
   } catch ( const DynamicTextError & error ) {
-    err() << "error in textRemoved(..): " << error.what();
+    err() << "error in textRemoved(..):" << error.what();
     fillDocumentText();
     return ;
   }
@@ -598,9 +598,9 @@ void DocumentWrapper::textRemoved ( KTextEditor::Document * /*document*/, const 
   std::string oldText = m_text->text().substr( start, end - start );
 
   if ( range.end().line() == range.start().line() ) {
-    IFDEBUG( out( Logger::Debug ) << "textRemoved at " << start << ": " << document->text( range ) );
+    IFDEBUG( out( Logger::Debug ) << "textRemoved at" << start << ":" << document->text( range ) );
   } else {
-    IFDEBUG( out( Logger::Debug ) << "textRemoved at " << start );
+    IFDEBUG( out( Logger::Debug ) << "textRemoved at" << start );
   }
 
   SimpleReplacement r( start, "", oldText );
@@ -612,7 +612,7 @@ void DocumentWrapper::textRemoved ( KTextEditor::Document * /*document*/, const 
     Block b( m_block );
     v = m_text->insert( m_ownIndex, r );
   } catch ( const DynamicTextError & error ) {
-    err() << "error in textRemoved(..): " << error.what();
+    err() << "error in textRemoved(..):" << error.what();
     fillDocumentText();
     return ;
   }
@@ -630,9 +630,9 @@ void DocumentWrapper::textInserted ( KTextEditor::Document * document, const KTe
   uint pos = m_text->text().lineColumnToLinear( range.start().line(), range.start().column() );
 
   if ( range.end().line() == range.start().line() ) {
-    IFDEBUG( out( Logger::Debug ) << "textInserted at " << pos << ": " << document->text( range ) );
+    IFDEBUG( out( Logger::Debug ) << "textInserted at" << pos << ":" << document->text( range ) );
   } else {
-    IFDEBUG( out( Logger::Debug ) << "textInserted at " << pos );
+    IFDEBUG( out( Logger::Debug ) << "textInserted at" << pos );
   }
 
   SimpleReplacement r = SimpleReplacement( pos, ~newText, "" );
@@ -643,7 +643,7 @@ void DocumentWrapper::textInserted ( KTextEditor::Document * document, const KTe
     Block b( m_block );
     v = m_text->insert( m_ownIndex, r );
   } catch ( const DynamicTextError & error ) {
-    err() << "error in textInserted(..): " << error.what();
+    err() << "error in textInserted(..):" << error.what();
     fillDocumentText();
     return ;
   }
@@ -659,10 +659,10 @@ std::string DocumentWrapper::logPrefix() {
 int DocumentWrapper::receiveMessage( FileSynchronize* msg ) {
   ///@todo merge synchronizations from different clients when self was crashed
   /*if ( !m_text->state().isZero() ) {
-    err() << "got synchronization although timestamp already is " << m_text->state().print();
+    err() << "got synchronization although timestamp already is" << m_text->state().print();
     return ;
   }*/
-  out( Logger::Debug ) << "got synchronization - current Timestamp: " << m_text->state().print() << " new: " << msg->state().print();
+  out( Logger::Debug ) << "got synchronization - current Timestamp:" << m_text->state().print() << "new:" << msg->state().print();
 
   try {
     m_text = msg->createDynamicText();
@@ -670,7 +670,7 @@ int DocumentWrapper::receiveMessage( FileSynchronize* msg ) {
     fillDocumentText();
     globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionSuccessful );
   } catch ( const DynamicTextError & error ) {
-    err() << "error while synchronization: " << error.what();
+    err() << "error while synchronization:" << error.what();
     globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
   }
 
@@ -697,7 +697,7 @@ void DocumentWrapper::readFile( bool fromBuffer ) throw ( QString ) {
   KUrl u = TeamworkFolderManager::workspaceAbsolute( m_fileName );
 
   if ( !m_text->state().isZero() ) {
-    out( Logger::Warning ) << "readFile called although state already is " << m_text->state().print();
+    out( Logger::Warning ) << "readFile called although state already is" << m_text->state().print();
   }
 
   QString txt;

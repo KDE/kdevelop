@@ -53,7 +53,7 @@ Example1Main::Example1Main()
         new Sublime::SimpleToolWidgetFactory<QTextEdit>());
 
     //areas (aka perspectives)
-    kDebug() << "constructing area 1" << endl;
+    kDebug() << "constructing area 1";
     m_area1 = new Sublime::Area(m_controller, "Area 1");
     m_area1->addView(doc1->createView());
     m_area1->addView(doc2->createView());
@@ -61,7 +61,7 @@ Example1Main::Example1Main()
     m_area1->addToolView(tool1->createView(), Sublime::Left);
     m_area1->addToolView(tool2->createView(), Sublime::Bottom);
 
-    kDebug() << "constructing area 2" << endl;
+    kDebug() << "constructing area 2";
     m_area2 = new Sublime::Area(m_controller, "Area 2");
     Sublime::View *view1 = doc1->createView();
     m_area2->addView(view1);

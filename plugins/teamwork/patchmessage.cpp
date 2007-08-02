@@ -187,7 +187,7 @@ void PatchData::saveInternal( OutArchive& arch, const uint /*version*/ ) {
       EntryType v = BinaryHeader;
       arch << v;
       KUrl url = TeamworkFolderManager::teamworkAbsolute( ~lpatch->filename );
-      log( Logger::Debug ) << "opening file for sending: " << ~url.prettyUrl();
+      log( Logger::Debug ) << "opening file for sending:" << ~url.prettyUrl();
 
       //(QWidget*)KDevApi::self()->mainWindow()->main()
       if ( !KIO::NetAccess::exists( url, true, 0 ) )
@@ -226,7 +226,7 @@ void PatchData::saveInternal( OutArchive& arch, const uint /*version*/ ) {
         LoggerPrinter l = log() << "calling process: \"" << lpatch->command << "\" params: ";
         for ( QStringList::iterator it = args.begin(); it != args.end(); ++it )
           l << "\"" << ~( *it ) << "\"";
-        l << " in folder " << ~projectDir.toLocalFile();
+        l << "in folder" << ~projectDir.toLocalFile();
       }
 
       auto_ptr<K3Process> proc( new K3Process() );

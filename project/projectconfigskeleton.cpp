@@ -66,7 +66,7 @@ void ProjectConfigSkeleton::setDeveloperFileUrl( const QString& cfg )
 
 void ProjectConfigSkeleton::setDefaults()
 {
-    kDebug(9000) << "Setting Defaults" << endl;
+    kDebug(9000) << "Setting Defaults";
     KConfig cfg( d->m_projectTempFile );
     Q_FOREACH( KConfigSkeletonItem* item, items() )
     {
@@ -89,14 +89,14 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
         KConfig cfg( d->m_projectTempFile );
         Q_FOREACH( KConfigSkeletonItem* item, items() )
         {
-            kDebug(9000) << item->key() << "|" << item->property() << endl;
+            kDebug(9000) << item->key() << "|" << item->property();
             item->swapDefault();
-            kDebug(9000) << item->key() << "|" << item->property() << endl;
+            kDebug(9000) << item->key() << "|" << item->property();
                 KConfigGroup grp = cfg.group( item->group() );
-            kDebug( 9000 ) << grp.readEntry( item->key(), item->property() ) << endl;
+            kDebug( 9000 ) << grp.readEntry( item->key(), item->property() );
             if( cfg.hasGroup( item->group() ) )
             {
-                kDebug(9000) << "reading" << endl;
+                kDebug(9000) << "reading";
 //                 KConfigGroup grp = cfg.group( item->group() );
                 item->setProperty( grp.readEntry( item->key(), item->property() ) );
             }

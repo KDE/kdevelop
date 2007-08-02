@@ -59,7 +59,7 @@ struct AreaWidgetChecker {
         foreach (View *view, index->views())
         {
             if (!view->hasWidget())
-                kDebug() << "   view " << view << " has no widget" << endl;
+                kDebug() << "  view" << view << "has no widget";
             hasWidgets = hasWidgets && view->hasWidget();
         }
         return Area::ContinueWalker;
@@ -67,7 +67,7 @@ struct AreaWidgetChecker {
     Area::WalkerMode operator()(View *view, Sublime::Position)
     {
         if (!view->hasWidget())
-            kDebug() << "   view " << view << " has no widget" << endl;
+            kDebug() << "  view" << view << "has no widget";
         hasWidgets = hasWidgets && view->hasWidget();
         return Area::ContinueWalker;
     }

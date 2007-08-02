@@ -265,7 +265,7 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
       if(!declaration) {
         //This should never happen, but let's see
-        kDebug() << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash" << endl;
+        kDebug() << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
         continue;
       }
         
@@ -591,7 +591,7 @@ DUContext::NamespaceAlias::NamespaceAlias(KTextEditor::Cursor* cursor)
 void DUContext::addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id, const QString& aliasName)
 {
   ENSURE_CAN_WRITE
-    //kDebug() << "Adding namespace-alias " << id << " -> " << aliasName << endl;
+    //kDebug() << "Adding namespace-alias" << id << "->" << aliasName;
 
   NamespaceAlias* use = new NamespaceAlias(cursor);
   use->nsIdentifier = id;

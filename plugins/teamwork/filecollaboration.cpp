@@ -77,7 +77,7 @@ void FileCollaboration::processMessage( const MessagePointer& msg ) {
 }
 /*
 int FileCollaboration::receiveMessage( MessageInterface* msg ) {
-  out( Logger::Warning ) << "got unknown message of type " << msg->name();
+  out( Logger::Warning ) << "got unknown message of type" << msg->name();
   return 0;
 }
 
@@ -85,7 +85,7 @@ int FileCollaboration::receiveMessage( FileCollaborationMessage* msg ) {
   ///@todo clean/remove
   out( Logger::Debug ) << "got FileCollaborationMessage";
   if ( msg->isDerived() ) {
-    out( Logger::Warning ) << "dispatched a message of type " << msg->name() << " as FileCollaborationMessage";
+    out( Logger::Warning ) << "dispatched a message of type" << msg->name() << "as FileCollaborationMessage";
     return 0;
   }
   try {
@@ -108,13 +108,13 @@ int FileCollaboration::receiveMessage( FileCollaborationMessage* msg ) {
       }
       break;
       default:
-      out( Logger::Warning ) << "got unhandled FileCollaborationMessage with message " << msg->messageAsString();
+      out( Logger::Warning ) << "got unhandled FileCollaborationMessage with message" << msg->messageAsString();
       break;
     }
   } catch ( const QString & str ) {
-    err() << "in receiveMessage( FileCollaborationMessage* ): " << str;
+    err() << "in receiveMessage( FileCollaborationMessage* ):" << str;
   } catch ( const char * str ) {
-    err() << "in receiveMessage( FileCollaborationMessage* ): " << str;
+    err() << "in receiveMessage( FileCollaborationMessage* ):" << str;
   }
   return 0;
 }
@@ -146,14 +146,14 @@ void FileCollaboration::userStateChanged() {
       emit connectionResult( this, false );
     }
   } catch ( const QString & str ) {
-    err() << "error in userStateChanged(): " << str;
+    err() << "error in userStateChanged():" << str;
   } catch ( const char * str ) {
-    err() << "error in userStateChanged(): " << str;
+    err() << "error in userStateChanged():" << str;
   }
 }
 
 void FileCollaboration::slotConnectionResult( bool result ) {
-  out( Logger::Debug ) << "slotConnectionResult " << result;
+  out( Logger::Debug ) << "slotConnectionResult" << result;
   m_userConnected = result;
   if ( result )
     m_connectionActive = true;

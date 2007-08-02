@@ -47,7 +47,7 @@ bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum Requested
     // directory is not yet under CVS control
     if (op == CvsProxy::NormalOperation &&
         !isValidDirectory(repository)) {
-        kDebug() << repository << " is not a valid CVS repository" << endl;
+        kDebug() << repository << "is not a valid CVS repository";
         return false;
     }
 
@@ -112,7 +112,7 @@ QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
 
 CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     QFileInfo info(url.toLocalFile());
     if (!info.isFile())
@@ -142,7 +142,7 @@ CvsJob* CvsProxy::diff(const KUrl& url,
             const KDevelop::VcsRevision& revB,
             const QString& diffOptions)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     QFileInfo info(url.toLocalFile());
 
@@ -169,7 +169,7 @@ CvsJob* CvsProxy::diff(const KUrl& url,
 
 CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     QFileInfo info(url.toLocalFile());
 
@@ -192,7 +192,7 @@ CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
 
 CvsJob* CvsProxy::edit(const QString& repo, const KUrl::List& files)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -210,7 +210,7 @@ CvsJob* CvsProxy::edit(const QString& repo, const KUrl::List& files)
 
 CvsJob* CvsProxy::unedit(const QString& repo, const KUrl::List& files)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -227,7 +227,7 @@ CvsJob* CvsProxy::unedit(const QString& repo, const KUrl::List& files)
 
 CvsJob* CvsProxy::editors(const QString& repo, const KUrl::List& files)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -244,7 +244,7 @@ CvsJob* CvsProxy::editors(const QString& repo, const KUrl::List& files)
 
 CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QString& message)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -265,7 +265,7 @@ CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QSt
 CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, 
                       bool recursiv, bool binary)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -286,7 +286,7 @@ CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files,
 
 CvsJob * CvsProxy::remove(const QString & repo, const KUrl::List & files)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -308,7 +308,7 @@ CvsJob * CvsProxy::update(const QString & repo, const KUrl::List & files,
                           const QString & updateOptions, 
                           bool recursive, bool pruneDirs, bool createDirs)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -343,7 +343,7 @@ CvsJob * CvsProxy::import(const KUrl & directory,
                           const QString & vendortag, const QString & releasetag,
                           const QString& message)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, directory.toLocalFile(), CvsProxy::Import) ) {
@@ -373,7 +373,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
                             bool recursive,
                             bool pruneDirs)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     ///@todo when doing a checkout we don't have the targetdir yet,
@@ -409,7 +409,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
 
 CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool recursive, bool taginfo)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {

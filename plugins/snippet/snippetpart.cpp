@@ -63,7 +63,7 @@ void SnippetPart::unload()
 
 void SnippetPart::insertText(const QString& snippet)
 {
-    kDebug() << "Insert Snippet: " << snippet <<endl;
+    kDebug() << "Insert Snippet:" << snippet <<endl;
 
 	KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( core()->partManager()->activeWidget() );
 	if (view) {

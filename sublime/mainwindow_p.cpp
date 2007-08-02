@@ -90,7 +90,7 @@ Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sub
 
 Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
-    kDebug(9037) << "  reconstructing views for area index " << index << endl;
+    kDebug(9037) << " reconstructing views for area index" << index;
     QSplitter *parent = 0;
     QSplitter *splitter;
     if (d->m_indexSplitters.contains(index))
@@ -103,7 +103,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         //no splitter - we shall create it and populate with views
         if (!index->parent())
         {
-            kDebug(9037) << "   reconstructing root area" << endl;
+            kDebug(9037) << "  reconstructing root area";
             //this is root area
             splitter = new QSplitter(d->m_mainWindow);
             d->m_indexSplitters[index] = splitter;
@@ -112,7 +112,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         else
         {
             parent = d->m_indexSplitters[index->parent()];
-            kDebug(9037) << "adding new splitter to " << parent << endl;
+            kDebug(9037) << "adding new splitter to" << parent;
             splitter = new QSplitter(parent);
             d->m_indexSplitters[index] = splitter;
             parent->addWidget(splitter);
@@ -290,7 +290,7 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 
 void MainWindowPrivate::switchToArea(QAction *action)
 {
-    kDebug(9037) << k_funcinfo << " for " << action << endl;
+    kDebug(9037) << k_funcinfo << "for" << action;
     controller->showArea(m_actionAreas[action], m_mainWindow);
 }
 
@@ -307,10 +307,10 @@ QMenu *MainWindowPrivate::areaSwitcherMenu()
         m_areaSwitcherMenu = new QMenu("Areas", m_mainWindow);
         QActionGroup *group = new QActionGroup(m_mainWindow);
         group->setExclusive(true);
-        kDebug(9037) << "preparing area switcher menu" << endl;
+        kDebug(9037) << "preparing area switcher menu";
         foreach (Area *a, controller->areas())
         {
-            kDebug(9037) << "   creating action for area " << a->objectName() << endl;
+            kDebug(9037) << "  creating action for area" << a->objectName();
             QAction *action = m_areaSwitcherMenu->addAction(a->objectName());
             action->setCheckable(true);
             action->setActionGroup(group);

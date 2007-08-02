@@ -69,7 +69,7 @@ public:
 
             if( group == profile )
             {
-                kDebug() << k_funcinfo << " Adding to map " << varName << " :: " << varValue << endl;
+                kDebug() << k_funcinfo << "Adding to map" << varName << "::" << varValue;
                 ret[varName] = varValue;
             }
         }
@@ -136,7 +136,7 @@ void EnvWidget::setConfig( KConfig *config, const QString &group )
 
 void EnvWidget::setVariables(const QStringList& items)
 {
-    kDebug () << "Setting items " << items << endl;
+    kDebug () << "Setting items" << items;
     d->m_maps.clear();
     d->ui.activeCombo->clear();
     d->ui.variableTable->clear();
@@ -192,7 +192,7 @@ QStringList EnvWidget::variables() const
         }
     }
 
-    kDebug() << "Returning " << ret << endl;
+    kDebug() << "Returning" << ret;
     return ret;
 }
 
@@ -239,7 +239,7 @@ QStringList EnvWidget::environmentProfiles( KConfig *config )
             ret << group;
     }
 
-    kDebug() << k_funcinfo << " Returning " << ret;
+    kDebug() << k_funcinfo << "Returning" << ret;
     return ret;
 }
 
@@ -456,7 +456,7 @@ void EnvWidget::processDefaultButtonClicked()
 
 void EnvWidget::settingsChanged( int row, int /*column*/ )
 {
-    kDebug()<< k_funcinfo << endl;
+    kDebug()<< k_funcinfo;
     QTableWidgetItem * name = d->ui.variableTable->item( row, 0 );
     QTableWidgetItem * value = d->ui.variableTable->item( row, 1 );
     QString _name = name->text();

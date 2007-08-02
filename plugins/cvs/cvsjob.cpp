@@ -135,7 +135,7 @@ void CvsJob::start()
         d->childproc->setEnv("CVS_SERVER", d->server);
 
     if( !d->directory.isEmpty() ) {
-        kDebug() << "Working directory: " << d->directory << endl;
+        kDebug() << "Working directory:" << d->directory;
         d->childproc->setWorkingDirectory(d->directory);
     }
 
@@ -147,7 +147,7 @@ void CvsJob::start()
     connect(d->lineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
         SLOT(slotReceivedStderr(const QStringList&)) );
 
-    kDebug() << "Execute cvs command: " << cvsCommand() << endl;
+    kDebug() << "Execute cvs command:" << cvsCommand();
 
     d->outputLines.clear();
     d->isRunning = true;

@@ -41,7 +41,7 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 
 MainWindow::~MainWindow()
 {
-    kDebug(9037) << "destroying mainwindow" << endl;
+    kDebug(9037) << "destroying mainwindow";
     delete d;
 }
 
@@ -150,7 +150,7 @@ MainWindow::VerticalTabsMode MainWindow::verticalToolViewTabsMode()
 void MainWindow::setVerticalToolViewTabsMode( Sublime::MainWindow::VerticalTabsMode tabmode )
 {
     d->m_verticalTabsMode = tabmode;
-    kDebug(9000) << tabmode << endl;
+    kDebug(9000) << tabmode;
     if( d->m_verticalTabsMode == MainWindow::UseVerticalTabs)
         setDockOptions( dockOptions() | QMainWindow::VerticalTabs );
     else if( dockOptions() & QMainWindow::VerticalTabs )

@@ -55,7 +55,7 @@ void Snippet::save()
         input << snippetText_;
 
         foreach(QString keyword, keywords_) {
-            input << SNIPPET_METADATA << " keyword="<<keyword<<endl;
+            input << SNIPPET_METADATA << "keyword="<<keyword<<endl;
         }
     }
 }

@@ -104,7 +104,7 @@ MessagePointer MessageTypeSet::buildMessage( InArchive& from, const MessageInfo&
     return MessagePointer( i->buildMessage( from, info ) );
   }
 
-  cout << "could not build message with id " << id.desc() << endl;
+  cout << "could not build message with id" << id.desc() << endl;
   return MessagePointer();
 }
 
@@ -257,7 +257,7 @@ MessageType MessageTypeSet::allocateSubId( const MessageType& id, int preferredS
     --tempId;
   }
 
-  cout << "problem while allocating sub-id for " << id.desc() << ", all sub-id's seem to be taken" << endl;
+  cout << "problem while allocating sub-id for" << id.desc() << ", all sub-id's seem to be taken" << endl;
   ///This should not happen, but anyway try to allocate some id
   if ( tempId ) {
     return allocateSubId( allocateSubId( --tempId ), preferredSubId );
@@ -296,9 +296,9 @@ const MessageType& MessageTypeSet::idFromName( const std::string& name ) const {
 
 std::string MessageTypeSet::stats() const {
   ostringstream ret;
-  ret << "count of  message-types: " << types_.size() << endl;
+  ret << "count of  message-types:" << types_.size() << endl;
   for ( TypeNameMap::const_iterator it = ids_.begin(); it != ids_.end(); ++it ) {
-    ret << "type: " << ( *it ).first << " id: " << ( *it ).second.desc() << endl;
+    ret << "type:" << ( *it ).first << "id:" << ( *it ).second.desc() << endl;
   }
   return ret.str();
 }

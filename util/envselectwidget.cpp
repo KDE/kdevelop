@@ -82,7 +82,7 @@ void EnvSelectWidget::saveSettings()
 // void EnvSelectWidget::updateEnvGroup()
 // {
 //     QStringList items = EnvWidget::environmentProfiles( d->m_config );
-//     kDebug() << "Environment Profiles " << items << endl;
+//     kDebug() << "Environment Profiles" << items;
 //     combo()->clear();
 //     combo()->addItems( items );
 // }

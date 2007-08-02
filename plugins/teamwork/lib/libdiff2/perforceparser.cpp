@@ -40,7 +40,7 @@ PerforceParser::~PerforceParser()
 
 enum Kompare::Format PerforceParser::determineFormat()
 {
-	kDebug(8101) << "Determining the format of the Perforce Diff" << endl;
+	kDebug(8101) << "Determining the format of the Perforce Diff";
 
 	QRegExp unifiedRE( "^@@" );
 	QRegExp contextRE( "^\\*{15}" );
@@ -54,33 +54,33 @@ enum Kompare::Format PerforceParser::determineFormat()
 	{
 		if( (*it).indexOf( unifiedRE, 0 ) == 0 )
 		{
-			kDebug(8101) << "Difflines are from a Unified diff..." << endl;
+			kDebug(8101) << "Difflines are from a Unified diff...";
 			return Kompare::Unified;
 		}
 		else if( (*it).indexOf( contextRE, 0 ) == 0 )
 		{
-			kDebug(8101) << "Difflines are from a Context diff..." << endl;
+			kDebug(8101) << "Difflines are from a Context diff...";
 			return Kompare::Context;
 		}
 		else if( (*it).indexOf( normalRE, 0 ) == 0 )
 		{
-			kDebug(8101) << "Difflines are from a Normal diff..." << endl;
+			kDebug(8101) << "Difflines are from a Normal diff...";
 			return Kompare::Normal;
 		}
 		else if( (*it).indexOf( rcsRE, 0 ) == 0 )
 		{
-			kDebug(8101) << "Difflines are from a RCS diff..." << endl;
+			kDebug(8101) << "Difflines are from a RCS diff...";
 			return Kompare::RCS;
 		}
 		++it;
 	}
-	kDebug(8101) << "Difflines are from an unknown diff..." << endl;
+	kDebug(8101) << "Difflines are from an unknown diff...";
 	return Kompare::UnknownFormat;
 }
 
 bool PerforceParser::parseContextDiffHeader()
 {
-//	kDebug(8101) << "ParserBase::parseContextDiffHeader()" << endl;
+//	kDebug(8101) << "ParserBase::parseContextDiffHeader()";
 	bool result = false;
 
 	QStringList::ConstIterator itEnd = m_diffLines.end();
@@ -92,20 +92,20 @@ bool PerforceParser::parseContextDiffHeader()
 	{
 		if ( m_contextDiffHeader1.exactMatch( *(m_diffIterator)++ ) )
 		{
-//			kDebug(8101) << "Matched length Header1 = " << m_contextDiffHeader1.matchedLength() << endl;
-//			kDebug(8101) << "Matched string Header1 = " << m_contextDiffHeader1.cap( 0 ) << endl;
-//			kDebug(8101) << "First capture  Header1 = " << m_contextDiffHeader1.cap( 1 ) << endl;
-//			kDebug(8101) << "Second capture Header1 = " << m_contextDiffHeader1.cap( 2 ) << endl;
+//			kDebug(8101) << "Matched length Header1 =" << m_contextDiffHeader1.matchedLength();
+//			kDebug(8101) << "Matched string Header1 =" << m_contextDiffHeader1.cap( 0 );
+//			kDebug(8101) << "First capture  Header1 =" << m_contextDiffHeader1.cap( 1 );
+//			kDebug(8101) << "Second capture Header1 =" << m_contextDiffHeader1.cap( 2 );
 
 			m_currentModel = new DiffModel();
 			sourceFileRE.exactMatch( m_contextDiffHeader1.cap( 1 ) );
 			destinationFileRE.exactMatch( m_contextDiffHeader1.cap( 2 ) );
-			kDebug(8101) << "Matched length   = " << sourceFileRE.matchedLength() << endl;
-			kDebug(8101) << "Matched length   = " << destinationFileRE.matchedLength() << endl;
-			kDebug(8101) << "Captured texts   = " << sourceFileRE.capturedTexts() << endl;
-			kDebug(8101) << "Captured texts   = " << destinationFileRE.capturedTexts() << endl;
-			kDebug(8101) << "Source File      : " << sourceFileRE.cap( 1 ) << endl;
-			kDebug(8101) << "Destination File : " << destinationFileRE.cap( 1 ) << endl;
+			kDebug(8101) << "Matched length   =" << sourceFileRE.matchedLength();
+			kDebug(8101) << "Matched length   =" << destinationFileRE.matchedLength();
+			kDebug(8101) << "Captured texts   =" << sourceFileRE.capturedTexts();
+			kDebug(8101) << "Captured texts   =" << destinationFileRE.capturedTexts();
+			kDebug(8101) << "Source File      :" << sourceFileRE.cap( 1 );
+			kDebug(8101) << "Destination File :" << destinationFileRE.cap( 1 );
 			m_currentModel->setSourceFile     ( sourceFileRE.cap( 1 ) );
 			m_currentModel->setDestinationFile( destinationFileRE.cap( 1 ) );
 
@@ -115,8 +115,8 @@ bool PerforceParser::parseContextDiffHeader()
 		}
 		else
 		{
-			kDebug(8101) << "Matched length = " << m_contextDiffHeader1.matchedLength() << endl;
-			kDebug(8101) << "Captured texts = " << m_contextDiffHeader1.capturedTexts() << endl;
+			kDebug(8101) << "Matched length =" << m_contextDiffHeader1.matchedLength();
+			kDebug(8101) << "Captured texts =" << m_contextDiffHeader1.capturedTexts();
 		}
 	}
 
@@ -134,24 +134,24 @@ bool PerforceParser::parseNormalDiffHeader()
 
 	while ( m_diffIterator != itEnd )
 	{
-		kDebug(8101) << "Line = " << *m_diffIterator << endl;
-		kDebug(8101) << "String length  = " << (*m_diffIterator).length() << endl;
+		kDebug(8101) << "Line =" << *m_diffIterator;
+		kDebug(8101) << "String length  =" << (*m_diffIterator).length();
 		if ( m_normalDiffHeader.exactMatch( *(m_diffIterator)++ ) )
 		{
-			kDebug(8101) << "Matched length Header1 = " << m_normalDiffHeader.matchedLength() << endl;
-			kDebug(8101) << "Matched string Header1 = " << m_normalDiffHeader.cap( 0 ) << endl;
-			kDebug(8101) << "First  capture Header1 = \"" << m_normalDiffHeader.cap( 1 ) << "\"" << endl;
-			kDebug(8101) << "Second capture Header1 = \"" << m_normalDiffHeader.cap( 2 ) << "\"" << endl;
+			kDebug(8101) << "Matched length Header1 =" << m_normalDiffHeader.matchedLength();
+			kDebug(8101) << "Matched string Header1 =" << m_normalDiffHeader.cap( 0 );
+			kDebug(8101) << "First  capture Header1 = \"" << m_normalDiffHeader.cap( 1 ) << "\"";
+			kDebug(8101) << "Second capture Header1 = \"" << m_normalDiffHeader.cap( 2 ) << "\"";
 
 			m_currentModel = new DiffModel();
 			sourceFileRE.exactMatch( m_normalDiffHeader.cap( 1 ) );
 			destinationFileRE.exactMatch( m_normalDiffHeader.cap( 2 ) );
-			kDebug(8101) << "Matched length   = " << sourceFileRE.matchedLength() << endl;
-			kDebug(8101) << "Matched length   = " << destinationFileRE.matchedLength() << endl;
-			kDebug(8101) << "Captured texts   = " << sourceFileRE.capturedTexts() << endl;
-			kDebug(8101) << "Captured texts   = " << destinationFileRE.capturedTexts() << endl;
-			kDebug(8101) << "Source File      : " << sourceFileRE.cap( 1 ) << endl;
-			kDebug(8101) << "Destination File : " << destinationFileRE.cap( 1 ) << endl;
+			kDebug(8101) << "Matched length   =" << sourceFileRE.matchedLength();
+			kDebug(8101) << "Matched length   =" << destinationFileRE.matchedLength();
+			kDebug(8101) << "Captured texts   =" << sourceFileRE.capturedTexts();
+			kDebug(8101) << "Captured texts   =" << destinationFileRE.capturedTexts();
+			kDebug(8101) << "Source File      :" << sourceFileRE.cap( 1 );
+			kDebug(8101) << "Destination File :" << destinationFileRE.cap( 1 );
 			m_currentModel->setSourceFile     ( sourceFileRE.cap( 1 ) );
 			m_currentModel->setDestinationFile( destinationFileRE.cap( 1 ) );
 
@@ -161,8 +161,8 @@ bool PerforceParser::parseNormalDiffHeader()
 		}
 		else
 		{
-			kDebug(8101) << "Matched length = " << m_normalDiffHeader.matchedLength() << endl;
-			kDebug(8101) << "Captured texts = " << m_normalDiffHeader.capturedTexts() << endl;
+			kDebug(8101) << "Matched length =" << m_normalDiffHeader.matchedLength();
+			kDebug(8101) << "Captured texts =" << m_normalDiffHeader.capturedTexts();
 		}
 	}
 
@@ -185,24 +185,24 @@ bool PerforceParser::parseUnifiedDiffHeader()
 
 	while ( m_diffIterator != itEnd )
 	{
-//		kDebug(8101) << "Line = " << *m_diffIterator << endl;
-//		kDebug(8101) << "String length  = " << (*m_diffIterator).length() << endl;
+//		kDebug(8101) << "Line =" << *m_diffIterator;
+//		kDebug(8101) << "String length  =" << (*m_diffIterator).length();
 		if ( m_unifiedDiffHeader1.exactMatch( *(m_diffIterator)++ ) )
 		{
-//			kDebug(8101) << "Matched length Header1 = " << m_unifiedDiffHeader1.matchedLength() << endl;
-//			kDebug(8101) << "Matched string Header1 = " << m_unifiedDiffHeader1.cap( 0 ) << endl;
-//			kDebug(8101) << "First  capture Header1 = \"" << m_unifiedDiffHeader1.cap( 1 ) << "\"" << endl;
-//			kDebug(8101) << "Second capture Header1 = \"" << m_unifiedDiffHeader1.cap( 2 ) << "\"" << endl;
+//			kDebug(8101) << "Matched length Header1 =" << m_unifiedDiffHeader1.matchedLength();
+//			kDebug(8101) << "Matched string Header1 =" << m_unifiedDiffHeader1.cap( 0 );
+//			kDebug(8101) << "First  capture Header1 = \"" << m_unifiedDiffHeader1.cap( 1 ) << "\"";
+//			kDebug(8101) << "Second capture Header1 = \"" << m_unifiedDiffHeader1.cap( 2 ) << "\"";
 
 			m_currentModel = new DiffModel();
 			sourceFileRE.exactMatch( m_unifiedDiffHeader1.cap( 1 ) );
 			destinationFileRE.exactMatch( m_unifiedDiffHeader1.cap( 2 ) );
-//			kDebug(8101) << "Matched length   = " << sourceFileRE.matchedLength() << endl;
-//			kDebug(8101) << "Matched length   = " << destinationFileRE.matchedLength() << endl;
-//			kDebug(8101) << "Captured texts   = " << sourceFileRE.capturedTexts() << endl;
-//			kDebug(8101) << "Captured texts   = " << destinationFileRE.capturedTexts() << endl;
-//			kDebug(8101) << "Source File      : " << sourceFileRE.cap( 1 ) << endl;
-//			kDebug(8101) << "Destination File : " << destinationFileRE.cap( 1 ) << endl;
+//			kDebug(8101) << "Matched length   =" << sourceFileRE.matchedLength();
+//			kDebug(8101) << "Matched length   =" << destinationFileRE.matchedLength();
+//			kDebug(8101) << "Captured texts   =" << sourceFileRE.capturedTexts();
+//			kDebug(8101) << "Captured texts   =" << destinationFileRE.capturedTexts();
+//			kDebug(8101) << "Source File      :" << sourceFileRE.cap( 1 );
+//			kDebug(8101) << "Destination File :" << destinationFileRE.cap( 1 );
 			m_currentModel->setSourceFile     ( sourceFileRE.cap( 1 ) );
 			m_currentModel->setDestinationFile( destinationFileRE.cap( 1 ) );
 
@@ -212,8 +212,8 @@ bool PerforceParser::parseUnifiedDiffHeader()
 		}
 		else
 		{
-//			kDebug(8101) << "Matched length = " << m_unifiedDiffHeader1.matchedLength() << endl;
-//			kDebug(8101) << "Captured texts = " << m_unifiedDiffHeader1.capturedTexts() << endl;
+//			kDebug(8101) << "Matched length =" << m_unifiedDiffHeader1.matchedLength();
+//			kDebug(8101) << "Captured texts =" << m_unifiedDiffHeader1.capturedTexts();
 		}
 	}
 

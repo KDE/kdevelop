@@ -34,12 +34,12 @@ EditorsView::EditorsView(CvsPart* part, CvsJob* job, QWidget *parent)
 
 EditorsView::~EditorsView()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 }
 
 void EditorsView::slotJobFinished(KJob* job)
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     if ( job->error() )
     {

@@ -55,12 +55,12 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
 
 void OutputWidget::changeModel( int id )
 {
-    kDebug(9004) << "model changed for id:" << id << endl;
+    kDebug(9004) << "model changed for id:" << id;
     if( m_listviews.contains( id ) )
         m_listviews[id]->setModel(m_outputView->registeredModel(id));
     else
     {
-        kDebug(9004) << "creating listview" << endl;
+        kDebug(9004) << "creating listview";
         QListView* listview = new QListView(this);
         listview->setModel( m_outputView->registeredModel(id) );
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
@@ -104,8 +104,8 @@ void OutputWidget::closeActiveView()
         if( m_outputView->closeBehaviour( id ) == KDevelop::IOutputView::AllowUserClose )
         {
             removeView( id );
-        }else kDebug(9004) << "OOops, the view is not user closeable" << endl;
-    }else kDebug(9004) << "OOops, the selected tab is not in our list??" << endl;
+        }else kDebug(9004) << "OOops, the view is not user closeable";
+    }else kDebug(9004) << "OOops, the selected tab is not in our list??";
 }
 
 void OutputWidget::selectNextItem()

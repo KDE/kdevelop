@@ -379,7 +379,7 @@ SvnProgressDialog::SvnProgressDialog( QWidget *parent, const QString &caption )
 
 SvnProgressDialog::~SvnProgressDialog()
 {
-    kDebug() << "SvnProgressDialog:: destructor " << endl;
+    kDebug() << "SvnProgressDialog:: destructor";
 	delete d;
 }
 

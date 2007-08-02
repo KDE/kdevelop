@@ -101,7 +101,7 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
 
         if ( !isValid( fileInfo ) )
         {
-            //kDebug(9000) << "skip:" << fileInfo.absoluteFilePath() << endl;
+            //kDebug(9000) << "skip:" << fileInfo.absoluteFilePath();
         }
         else if ( fileInfo.isDir() && fileInfo.fileName() != QLatin1String( "." )
                   && fileInfo.fileName() != QLatin1String( ".." ) )

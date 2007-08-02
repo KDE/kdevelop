@@ -241,7 +241,7 @@ int main() {
   CrossMap< TestMappable, KeyList>::Iterator it = testSet.values<int>( 15 );
   assert( it.count() == 3 );
   while ( it ) {
-    cout << "Item: " << ( *it ).name.value << endl;
+    cout << "Item:" << ( *it ).name.value << endl;
     ++it;
   }
 
