@@ -104,7 +104,7 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
     if( !dirName.isLocalFile() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" << endl;
+        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
     }else
     {
         QFileInfo fi( dirName.toLocalFile() );
