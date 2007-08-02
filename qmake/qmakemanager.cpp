@@ -126,8 +126,10 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         projecturl.setFileName( projectfile );
         QHash<QString,QString> qmvars = queryQMake( project );
         QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QT_INSTALL_MKSPECS"] ), qmvars );
+        mkspecs->read();
         QMakeProjectFile* scope = new QMakeProjectFile( projecturl );
         scope->setMkSpecs( mkspecs );
+        scope->read();
         return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
     return 0;

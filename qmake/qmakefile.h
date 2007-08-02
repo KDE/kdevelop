@@ -39,19 +39,22 @@ class QMakeFile : QMake::ASTDefaultVisitor
 public:
     QMakeFile( const KUrl& file );
     virtual ~QMakeFile();
+    bool read();
     KUrl absoluteDirUrl() const;
     KUrl absoluteFileUrl() const;
     QMake::ProjectAST* ast() const;
-    void visitAssignment( QMake::AssignmentAST* node );
 
-    static QStringList getValueList( const QList<QMake::ValueAST*>& list );
+    void visitAssignment( QMake::AssignmentAST* node );
+    void visitFunctionCall( QMake::FunctionCallAST* node );
 
     virtual QStringList variableValues(const QString&) const;
+    bool containsVariable( const QString& ) const;
 
+protected:
+    QMap<QString, QStringList> m_variableValues;
 private:
     QMake::ProjectAST* m_ast;
     KUrl m_projectFileUrl;
-    QMap<QString, QStringList> m_variableValues;
 };
 
 #endif

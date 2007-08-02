@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright (C) 2007 Andreas Pakulat <pakulat@rostock.zgdv.de>                     *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,20 +18,25 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "qmakemkspecs.h"
-#include <QStringList>
+#include "qmakeincludefile.h"
 
-QMakeMkSpecs::QMakeMkSpecs( const KUrl& basicmkspecs, const QHash<QString,QString>& variables )
-    : QMakeFile(basicmkspecs), m_qmakeInternalVariables(variables)
+#include <QtCore/QMap>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+
+QMakeIncludeFile::QMakeIncludeFile( const KUrl& fileurl,
+                                    const QMap<QString,QStringList>& variables  )
+    : QMakeFile( fileurl )
 {
+    foreach( QString variable, variables.keys() )
+    {
+        m_variableValues[variable] = variables[variable];
+    }
 }
 
-QString QMakeMkSpecs::qmakeInternalVariable( const QString& var ) const
+QStringList QMakeIncludeFile::variables() const
 {
-    if( m_qmakeInternalVariables.contains( var ) )
-        return m_qmakeInternalVariables[var];
-    return QString();
+    return m_variableValues.keys();
 }
-
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

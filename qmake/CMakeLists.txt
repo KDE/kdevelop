@@ -26,6 +26,7 @@ set(kdevqmakemanager_PART_SRCS
     qmakemanager.cpp
     qmakemodelitems.cpp
     qmakeprojectfile.cpp
+    qmakeincludefile.cpp
     qmakemkspecs.cpp
     qmakefile.cpp
 )

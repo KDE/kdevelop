@@ -55,7 +55,10 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
         u.setFileName( subdir.trimmed() );
         QMakeProjectFile* qmscope = new QMakeProjectFile( u );
         qmscope->setMkSpecs( m_mkSpecs );
-        list.append( qmscope );
+        if( qmscope->read() )
+        {
+            list.append( qmscope );
+        }
     }
     kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
     return list;
@@ -65,7 +68,6 @@ KUrl::List QMakeProjectFile::files() const
 {
     kDebug(9024) << k_funcinfo << "Fetching files" << endl;
 
-    kDebug(9024) << k_funcinfo << "I have " << ast()->statements().count() << " statements" << endl;
 
     KUrl::List list;
     foreach( QString variable, QMakeProjectFile::FileVariables )

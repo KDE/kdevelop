@@ -28,13 +28,27 @@
 
 #include "qmakeast.h"
 #include "qmakedriver.h"
+#include "qmakeincludefile.h"
+
+QStringList getValueList( const QList<QMake::ValueAST*>& list )
+{
+    QStringList result;
+    foreach( QMake::ValueAST* v, list)
+    {
+        result << v->value();
+    }
+    return result;
+}
 
 QMakeFile::QMakeFile( const KUrl& file )
-    : m_ast(0)
+    : m_ast(0), m_projectFileUrl(file)
 {
-    m_projectFileUrl = file;
-    QFileInfo fi( file.toLocalFile() );
-    kDebug(9024) << k_funcinfo << "Is " << file << " a dir?" << fi.isDir() << endl;
+}
+
+bool QMakeFile::read()
+{
+    QFileInfo fi( m_projectFileUrl.toLocalFile() );
+    kDebug(9024) << k_funcinfo << "Is " << m_projectFileUrl << " a dir?" << fi.isDir() << endl;
     if( fi.isDir() )
     {
         QDir dir( m_projectFileUrl.toLocalFile() );
@@ -60,12 +74,14 @@ QMakeFile::QMakeFile( const KUrl& file )
         delete m_ast;
         m_ast = 0;
         m_projectFileUrl = KUrl();
+        return false;
     }else
     {
         kDebug(9024) << "found ast:" << m_ast->statements().count() << endl;
         visitNode(m_ast);
         kDebug(9024) << "Variables found:" << m_variableValues << endl;
     }
+    return true;
 }
 
 QMakeFile::~QMakeFile()
@@ -89,24 +105,72 @@ QMake::ProjectAST* QMakeFile::ast() const
     return m_ast;
 }
 
+void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
+{
+    if( node->functionName()->value() == "include" || node->functionName()->value() == "!include" )
+    {
+        if( node->arguments().isEmpty() )
+            return;
+        QStringList arguments = getValueList( node->arguments() );
+        kDebug(9024) << "found include" << node->functionName()->value() << arguments;
+        QString argument = arguments.join("").trimmed();
+        KUrl incfile;
+        if( KUrl::isRelativeUrl( argument ) )
+        {
+            incfile = absoluteDirUrl();
+            incfile.addPath( argument );
+        }else
+        {
+            incfile = KUrl( argument );
+        }
+        kDebug(9024) << "Reading Include file:" << argument;
+        QMakeIncludeFile includefile( argument, m_variableValues );
+        bool read = includefile.read();
+        if( read )
+        {
+            foreach( QString var, includefile.variables() )
+            {
+                if( m_variableValues[ var ] != includefile.variableValues( var ) )
+                {
+                    m_variableValues[ var ] = includefile.variableValues( var );
+                }
+            }
+            if( !node->functionName()->value().startsWith("!") )
+            {
+                visitNode( node->scopeBody() );
+            }
+        }else if( node->functionName()->value().startsWith("!") )
+        {
+            visitNode( node->scopeBody() );
+        }
+    }else
+    {
+        visitNode( node->scopeBody() );
+    }
+}
+
 void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
 {
     QString op = node->op()->value();
+    QStringList values = getValueList(node->values());
     if( op == "=" )
     {
-        m_variableValues[node->variable()->value()] = QMakeFile::getValueList(node->values());
+        kDebug(9024) << "Setting var" << node->variable()->value() << values;
+        m_variableValues[node->variable()->value()] = values;
     }else if( op == "+=" )
     {
-        m_variableValues[node->variable()->value()] += QMakeFile::getValueList(node->values());
+        m_variableValues[node->variable()->value()] += values;
     }else if( op == "-=" )
     {
-        foreach( QString value, QMakeFile::getValueList(node->values()) )
+        kDebug(9024) << "Removing from var" << node->variable()->value() << values;
+        foreach( QString value, values )
         {
             m_variableValues[node->variable()->value()].removeAll(value);
         }
     }else if( op == "*=" )
     {
-        foreach( QString value, QMakeFile::getValueList(node->values()) )
+        kDebug(9024) << "adding to var if not existent " << node->variable()->value() << values;
+        foreach( QString value, values )
         {
             if( !m_variableValues[node->variable()->value()].contains(value) )
             {
@@ -115,9 +179,10 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         }
     }else if( op == "~=" )
     {
-        if( node->values().isEmpty() )
+        if( values.isEmpty() )
             return;
-        QString value = node->values().first()->value().trimmed();
+        kDebug(9024) << "replacing in var" << node->variable()->value() << values;
+        QString value = values.first().trimmed();
         QString regex = value.mid(2,value.indexOf("/", 2));
         QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
         kDebug(9024) << "Replacing variable, using regex " << regex << " value " << value << endl;
@@ -125,16 +190,6 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         list.replaceInStrings( QRegExp(regex), replacement );
         m_variableValues[node->variable()->value()] = list;
     }
-}
-
-QStringList QMakeFile::getValueList( const QList<QMake::ValueAST*>& list )
-{
-    QStringList result;
-    foreach( QMake::ValueAST* v, list)
-    {
-        result << v->value();
-    }
-    return result;
 }
 
 QStringList QMakeFile::variableValues( const QString& variable ) const
@@ -146,5 +201,9 @@ QStringList QMakeFile::variableValues( const QString& variable ) const
     return QStringList();
 }
 
+bool QMakeFile::containsVariable( const QString& variable ) const
+{
+    return m_variableValues.contains( variable );
+}
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
