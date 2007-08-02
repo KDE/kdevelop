@@ -58,7 +58,7 @@ void EditorIntegratorStatic::documentLoaded()
 {
   Document* doc = qobject_cast<Document*>(sender());
   if (!doc) {
-    kWarning() << k_funcinfo << "Unexpected non-document sender called this slot!" << endl;
+    kWarning() << k_funcinfo << "Unexpected non-document sender called this slot!" ;
     return;
   }
 
@@ -89,7 +89,7 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
     }
   }
 
-  //kWarning() << k_funcinfo << "Document URL change - couldn't find corresponding document!" << endl;
+  //kWarning() << k_funcinfo << "Document URL change - couldn't find corresponding document!" ;
 }
 void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
@@ -122,7 +122,7 @@ void EditorIntegratorStatic::rangeDeleted(KTextEditor::SmartRange * range)
   }
 
   // Should have found the top level range by now
-  kWarning() << k_funcinfo << "Could not find record of top level range" << range << "!" << endl;
+  kWarning() << k_funcinfo << "Could not find record of top level range" << range << "!" ;
 }
 
 }

@@ -53,7 +53,7 @@ SnippetPart::SnippetPart(QObject *parent, const QStringList &)
 
 SnippetPart::~SnippetPart()
 {
-    kDebug() << k_funcinfo <<endl;
+    kDebug() << k_funcinfo ;
 }
 
 void SnippetPart::unload()
@@ -63,7 +63,7 @@ void SnippetPart::unload()
 
 void SnippetPart::insertText(const QString& snippet)
 {
-    kDebug() << "Insert Snippet:" << snippet <<endl;
+    kDebug() << "Insert Snippet:" << snippet ;
 
 	KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( core()->partManager()->activeWidget() );
 	if (view) {

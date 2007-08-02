@@ -26,7 +26,7 @@ CvsProxy::CvsProxy(QObject* parent)
 
 CvsProxy::~CvsProxy()
 {
-    kDebug()<<  k_funcinfo <<endl;
+    kDebug()<<  k_funcinfo ;
 }
 
 void CvsProxy::slotResult(KJob* job)

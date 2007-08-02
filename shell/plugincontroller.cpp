@@ -259,7 +259,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     KPluginInfo info = infoForPluginId( pluginId );
     if ( !info.isValid() )
     {
-        kWarning(9000) << k_funcinfo << "Unable to find a plugin named '" << pluginId << "'!" << endl;
+        kWarning(9000) << k_funcinfo << "Unable to find a plugin named '" << pluginId << "'!" ;
         return 0L;
     }
 

@@ -185,7 +185,7 @@ void PartController::removePart( KParts::Part *part )
             return ;
         }
 
-        kWarning() << k_funcinfo << "Deleting text editor" << doc << "which does not have a smart interface." << endl;
+        kWarning() << k_funcinfo << "Deleting text editor" << doc << "which does not have a smart interface." ;
     }
 
     KParts::PartManager::removePart( part );

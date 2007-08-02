@@ -896,7 +896,7 @@ KTextEditor::Cursor InDocumentConversation::findPositionInDocument( InDocumentMe
         col = endCol;
         endLine = l;
         endCol = c;
-        out( Logger::Warning ) << "Found end-marker before start-marker:" << line << ":" << col << " - " << endLine << ":" << endCol;
+        out( Logger::Warning ) << "Found end-marker before start-marker:" << line << ":" << col << "-" << endLine << ":" << endCol;
       }
     }
 

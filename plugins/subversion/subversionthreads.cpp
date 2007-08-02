@@ -818,7 +818,7 @@ SvnAddJob::SvnAddJob( const KUrl::List &wcPaths, bool recurse, bool force, bool 
 }
 void SvnAddJob::run()
 {
-    kDebug() << "SvnAddJob::run() ";
+    kDebug() << "SvnAddJob::run()";
     apr_pool_t *subpool = svn_pool_create (pool());
     for( QList<KUrl>::iterator it = m_wcPaths.begin(); it != m_wcPaths.end(); ++it ){
 
@@ -845,7 +845,7 @@ SvnDeleteJob::SvnDeleteJob( const KUrl::List &urls, bool force, SvnKJobBase::Job
 {}
 void SvnDeleteJob::run()
 {
-    kDebug() << "SvnDeleteJob:run()" <<endl;
+    kDebug() << "SvnDeleteJob:run()" ;
 
     apr_pool_t *subpool = svn_pool_create (pool());
     svn_client_commit_info_t *commit_info = NULL;
@@ -884,7 +884,7 @@ SvnUpdateJob::SvnUpdateJob( const KUrl::List &wcPaths, const SvnRevision &rev,
 void SvnUpdateJob::run()
 {
     setTerminationEnabled(true);
-    kDebug() << "SvnUpdateJob:run()" <<endl;
+    kDebug() << "SvnUpdateJob:run()" ;
 
     apr_pool_t *subpool = svn_pool_create (pool());
     apr_array_header_t *targets = apr_array_make( subpool, 1+m_wcPaths.count(), sizeof(const char *));
@@ -944,7 +944,7 @@ svn_error_t* SvnInfoJob::infoReceiver( void *baton, const char *path,
 void SvnInfoJob::run()
 {
     setTerminationEnabled(true);
-    kDebug() << "SvnInfoJob:run()" <<endl;
+    kDebug() << "SvnInfoJob:run()" ;
 
     svn_opt_revision_t peg_rev = m_peg.revision();
     svn_opt_revision_t revision = m_revision.revision();

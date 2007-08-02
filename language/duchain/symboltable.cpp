@@ -73,7 +73,7 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
         return;
       }
 
-  kWarning() << k_funcinfo << "Could not find declaration matching" << id << endl;
+  kWarning() << k_funcinfo << "Could not find declaration matching" << id ;
 }
 
 QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id) const
@@ -146,7 +146,7 @@ void SymbolTable::removeContext(DUContext * namedContext)
         return;
       }
 
-  kWarning() << k_funcinfo << "Could not find context matching" << id << endl;
+  kWarning() << k_funcinfo << "Could not find context matching" << id ;
 }
 }
 

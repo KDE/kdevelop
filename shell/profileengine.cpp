@@ -144,11 +144,11 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, PluginContro
 
 //BEGIN debug
 //     kDebug() << "=============" << endl
-//         << "   =============" << endl
-//         << "       =============   Plugins for Profile:" << endl;
+//         << " =============" << endl
+//         << "     =============   Plugins for Profile:" << endl;
 //     for (KService::List::const_iterator it = list.begin(); it != list.end(); ++it)
-//         kDebug() << "      " << (*it)->name();
-//     kDebug() << endl;
+//         kDebug() << "  " << (*it)->name();
+//     kDebug();
 //END debug
     KPluginInfo::List pluginList = KPluginInfo::fromServices( list );
     return pluginList;
@@ -239,12 +239,12 @@ void ProfileEngine::diffProfiles(PluginController::PluginType offerType, const Q
 //         kDebug() << "checking:" << *it;
         if (offers2List.contains(*it))
         {
-//             kDebug() << "   keep";
+//             kDebug() << " keep";
             offers2.removeAll(offers2List[*it]);
         }
         else
         {
-//             kDebug() << "   unload";
+//             kDebug() << " unload";
             unload.append(*it);
         }
     }

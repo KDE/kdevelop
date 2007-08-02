@@ -90,7 +90,7 @@ Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sub
 
 Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
-    kDebug(9037) << " reconstructing views for area index" << index;
+    kDebug(9037) << "reconstructing views for area index" << index;
     QSplitter *parent = 0;
     QSplitter *splitter;
     if (d->m_indexSplitters.contains(index))
@@ -103,7 +103,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         //no splitter - we shall create it and populate with views
         if (!index->parent())
         {
-            kDebug(9037) << "  reconstructing root area";
+            kDebug(9037) << "reconstructing root area";
             //this is root area
             splitter = new QSplitter(d->m_mainWindow);
             d->m_indexSplitters[index] = splitter;
@@ -310,7 +310,7 @@ QMenu *MainWindowPrivate::areaSwitcherMenu()
         kDebug(9037) << "preparing area switcher menu";
         foreach (Area *a, controller->areas())
         {
-            kDebug(9037) << "  creating action for area" << a->objectName();
+            kDebug(9037) << "creating action for area" << a->objectName();
             QAction *action = m_areaSwitcherMenu->addAction(a->objectName());
             action->setCheckable(true);
             action->setActionGroup(group);

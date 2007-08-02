@@ -162,7 +162,7 @@ void Controller::areaReleased()
     kDebug(9037) << "marking areas as mainwindow-free";
     foreach (Area *area, d->shownAreas.keys(w))
     {
-        kDebug(9037) << " " << area->objectName();
+        kDebug(9037) << "" << area->objectName();
         areaReleased(area);
         disconnect(area, 0, w, 0);
     }

@@ -171,7 +171,7 @@ SvnKJobBase::~SvnKJobBase()
     if( d->m_th ){
         bool ret = d->m_th->requestTerminate(500);
         if( !ret )
-            kWarning() << "SvnKJobBase::Destructor: deleting still-running thread" << endl;
+            kWarning() << "SvnKJobBase::Destructor: deleting still-running thread" ;
         delete d->m_th;
     }
     delete d;

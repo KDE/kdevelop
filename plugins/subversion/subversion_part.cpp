@@ -212,7 +212,7 @@ QMap<KUrl, SvnStatusHolder> KDevSubversionPart::statusSync( const KUrl &dirPath,
 //
 //         SvnStatusHolder hold = (*it); // debug
 //         kDebug() << hold.wcPath << "textStat" << hold.textStatus << "propStat" << hold.propStatus;
-//         kDebug() << hold.wcPath << "reposTextStat" << hold.reposTextStat<< "reposPropStat" << hold.reposPropStat<< endl;
+//         kDebug() << hold.wcPath << "reposTextStat" << hold.reposTextStat<< "reposPropStat" << hold.reposPropStat;
 //
 //         // get status -- working copy
 //         if( (*it).textStatus == svn_wc_status_normal

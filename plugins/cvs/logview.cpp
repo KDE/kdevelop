@@ -89,19 +89,19 @@ void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revision
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
-//         kDebug() << "line:" << s <<endl;
+//         kDebug() << "line:" << s ;
 
         if (rx_rev.exactMatch(s)) {
-//             kDebug() << "MATCH REVISION" <<endl;
+//             kDebug() << "MATCH REVISION" ;
             item.revision = rx_rev.cap(1);
         } else if (rx_branch.exactMatch(s)) {
-//             kDebug() << "MATCH BRANCH" <<endl;
+//             kDebug() << "MATCH BRANCH" ;
         } else if (rx_date.exactMatch(s)) {
-//             kDebug() << "MATCH DATE" <<endl;
+//             kDebug() << "MATCH DATE" ;
             item.date = rx_date.cap(1);
             item.user = rx_date.cap(2);
         } else  if (rx_sep.exactMatch(s)) {
-//             kDebug() << "MATCH SEPERATOR" <<endl;
+//             kDebug() << "MATCH SEPERATOR" ;
             if (firstSeperatorReached) {
                 revisions.append( item );
 
@@ -114,7 +114,7 @@ void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revision
             }
         } else {
             if (firstSeperatorReached) {
-//                 kDebug() << "ADDING LOG" <<endl;
+//                 kDebug() << "ADDING LOG" ;
                 item.log += s+'\n';
             }
         }

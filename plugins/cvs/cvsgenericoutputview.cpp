@@ -25,18 +25,18 @@ CvsGenericOutputView::CvsGenericOutputView(CvsPart *part, CvsJob* job, QWidget* 
 
 CvsGenericOutputView::~CvsGenericOutputView()
 {
-    kDebug()<<  k_funcinfo <<endl;
+    kDebug()<<  k_funcinfo ;
 }
 
 void CvsGenericOutputView::appendText(const QString& text)
 {
-//     kDebug()<<  k_funcinfo <<endl;
+//     kDebug()<<  k_funcinfo ;
     textArea->append(text);
 }
 
 void CvsGenericOutputView::slotJobFinished(KJob * job)
 {
-    kDebug() <<  k_funcinfo <<endl;
+    kDebug() <<  k_funcinfo ;
 
     CvsJob * cvsjob = dynamic_cast<CvsJob*>(job);
     if (cvsjob) {

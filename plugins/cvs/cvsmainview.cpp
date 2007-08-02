@@ -48,7 +48,7 @@ CvsMainView::CvsMainView( CvsPart *part, QWidget* parent )
 
 CvsMainView::~CvsMainView()
 {
-    kDebug() <<  k_funcinfo <<endl;
+    kDebug() <<  k_funcinfo ;
     delete m_mainview;
 }
 
@@ -65,7 +65,7 @@ void CvsMainView::slotAddTab(QWidget * tab, const QString& label)
 
 void CvsMainView::slotJobFinished(KJob * job)
 {
-    kDebug() <<  k_funcinfo <<endl;
+    kDebug() <<  k_funcinfo ;
     m_mainview->slotJobFinished(job);
     tabwidget->setCurrentIndex(0);
 }

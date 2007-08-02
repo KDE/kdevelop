@@ -40,7 +40,7 @@ public:
   bool imports(TopDUContext* origin, int depth) const
   {
     if (depth == 100) {
-      kWarning() << k_funcinfo << "Imported context list too deep! Infinite recursion?" << endl;
+      kWarning() << k_funcinfo << "Imported context list too deep! Infinite recursion?" ;
       return false;
     }
 
