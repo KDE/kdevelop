@@ -23,8 +23,8 @@
 
 #include <iproject.h>
 
-CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeAst* tree, QStandardItem* item )
-    : KDevelop::ProjectItem( project, name, item ), m_tree(tree)
+CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
+    : KDevelop::ProjectItem( project, name, item )
 {
 //     m_folderInfo = fi;
 //     KUrl::List includeList;
@@ -33,11 +33,6 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &na
 //         includeList.append( KUrl( inc ) );
 //     }
 //     setIncludeDirectories( includeList );
-}
-
-CMakeFolderItem::~CMakeFolderItem()
-{
-    delete m_tree;
 }
 
 // FolderInfo CMakeFolderItem::folderInfo() const

@@ -28,6 +28,7 @@
 #include <iplugin.h>
 
 #include "cmakelistsparser.h"
+#include "cmakeprojectvisitor.h"
 
 class QDir;
 class QObject;
@@ -103,8 +104,8 @@ private:
 
     KUrl::List m_includeDirList;
     CMakeListsParser m_parser;
-    QHash<QString, QStringList> m_vars;
-    QHash<QString, MacroAst*> m_macros;
+    VariableMap m_vars;
+    MacroMap m_macros;
 //     ProjectInfo m_projectInfo;
 };
 

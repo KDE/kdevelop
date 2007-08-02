@@ -39,15 +39,12 @@ class IProject;
 class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
 {
     public:
-        CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeAst *tree, QStandardItem* item = 0 );
-        ~CMakeFolderItem();
+        CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
 
         void setIncludeList(const KUrl::List &l) { m_includeList=l; }
         KUrl::List includeList() const { return m_includeList; }
-        CMakeAst* tree() const { return m_tree; }
 
     private:
-        CMakeAst *m_tree;
         KUrl::List m_includeList;
 };
 

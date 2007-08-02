@@ -35,6 +35,20 @@ void CMakeFunctionDesc::addArguments( const QStringList& args )
     }
 }
 
+QString CMakeFunctionDesc::writeBack() const
+{
+    QString output=name+"( ";
+    foreach(CMakeFunctionArgument arg, arguments)
+    {
+        QString o = arg.value;
+        if(arg.quoted)
+            o='"'+o+'"';
+        output += o+' ';
+    }
+    output += ')';
+    return output;
+}
+
 CMakeListsParser::CMakeListsParser(QObject *parent)
  : QObject(parent)
 {
@@ -45,6 +59,7 @@ CMakeListsParser::~CMakeListsParser()
 {
 }
 
+#if 0
 enum RecursivityType { No, Yes, ElseIf, End };
 
 RecursivityType recursivity(const QString& functionName)
@@ -148,13 +163,12 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
                         }
                     }
                 }
+//                 kDebug(9032) << "Parsing: " << function.name << " depth: " << parent.count() << endl;
             }
         }
     }
 
     return parseError;
-
-
 }
 
 bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
@@ -186,10 +200,102 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
                 asMacro=true;
                 newElement = new MacroCallAst;
             }
-            newElement->parseFunctionInfo(func);
+            bool err = newElement->parseFunctionInfo(func);
+            if(!err)
+                kDebug(9032) << "error! found an error while reading " << func.name << " at " << func.line << endl;
             parent->addChildAst(newElement);
 //             kDebug(9032) << "Adding: " << func.name << newElement << " as macro :" << asMacro << endl;
             
+            return true;
+            //FIXME: should return the parseFunctionInfo boolean return value, err
+        }
+        else if(token->type == cmListFileLexer_Token_Identifier ||
+                token->type == cmListFileLexer_Token_ArgumentUnquoted)
+        {
+            CMakeFunctionArgument a( token->text, false, fileName, token->line );
+            func.arguments << a;
+        }
+        else if(token->type == cmListFileLexer_Token_ArgumentQuoted)
+        {
+            CMakeFunctionArgument a( token->text, true, fileName, token->line );
+            func.arguments << a;
+        }
+        else if(token->type != cmListFileLexer_Token_Newline)
+        {
+            return false;
+        }
+        lastLine = cmListFileLexer_GetCurrentLine(lexer);
+    }
+
+    return false;
+
+}
+#endif
+
+CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
+{
+    cmListFileLexer* lexer = cmListFileLexer_New();
+    if ( !lexer )
+        return CMakeFileContent();
+    if ( !cmListFileLexer_SetFileName( lexer, qPrintable( fileName ) ) )
+        return CMakeFileContent();
+
+    CMakeFileContent ret;
+    bool readError = false, haveNewline = true;
+    cmListFileLexer_Token* token;
+
+    while(!readError && (token = cmListFileLexer_Scan(lexer)))
+    {
+        readError=false;
+        if(token->type == cmListFileLexer_Token_Newline)
+        {
+            readError=false;
+            haveNewline = true;
+        }
+        else if(token->type == cmListFileLexer_Token_Identifier)
+        {
+            if(haveNewline)
+            {
+                haveNewline = false;
+                CMakeFunctionDesc function;
+                function.name = token->text;
+                function.filePath = fileName;
+                function.line = token->line;
+
+                readError = !readCMakeFunction( lexer, function, fileName );
+                ret.append(function);
+
+                if(readError)
+                {
+                    kDebug(9032) << "Error while parsing: " << function.name << " at " << function.line << endl;
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+
+bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDesc &func, const QString & fileName)
+{
+        // Command name has already been parsed.  Read the left paren.
+    cmListFileLexer_Token* token;
+    if(!(token = cmListFileLexer_Scan(lexer)))
+    {
+        return false;
+    }
+    if(token->type != cmListFileLexer_Token_ParenLeft)
+    {
+        return false;
+    }
+
+    // Arguments.
+    unsigned long lastLine = cmListFileLexer_GetCurrentLine(lexer);
+    while((token = cmListFileLexer_Scan(lexer)))
+    {
+        if(token->type == cmListFileLexer_Token_ParenRight)
+        {
+            //Here we do not convert to an Ast
             return true;
         }
         else if(token->type == cmListFileLexer_Token_Identifier ||
@@ -213,4 +319,20 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
     return false;
 
 }
+
+bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
+{
+    if(other.arguments.count()!=arguments.count() || name!=other.name)
+        return false;
+    
+    QList<CMakeFunctionArgument>::const_iterator it=arguments.constBegin();
+    QList<CMakeFunctionArgument>::const_iterator itOther=other.arguments.constBegin();
+    for(;it!=arguments.constEnd(); ++it, ++itOther)
+    {
+        if(*it!=*itOther)
+            return false;
+    }
+    return true;
+}
+
 

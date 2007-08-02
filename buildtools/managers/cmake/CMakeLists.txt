@@ -20,7 +20,8 @@ set( cmakecommon_SRCS
  )
 
 set( cmakemanager_SRCS
-  parser/cmakeprojectvisitor.cpp
+  parser/cmakeprojectvisitor.cpp #must move them to cmakecommon
+  parser/cmakecondition.cpp
   cmakemanager.cpp
 )
 

@@ -21,69 +21,103 @@
 #ifndef CMAKEPROJECTVISITOR_H
 #define CMAKEPROJECTVISITOR_H
 
-#include "cmakeastvisitor.h"
 #include <QString>
 #include <QStringList>
 #include <QMap>
 #include <QHash>
+#include "cmakeastvisitor.h"
+#include "cmakelistsparser.h"
 
-class CMakeProjectVisitor : public CMakeAstVisitor
+struct Macro
+{
+    QString name;
+    QStringList knownArgs;
+    CMakeFileContent code;
+};
+
+typedef QHash<QString, QStringList> VariableMap;
+typedef QHash<QString, Macro> MacroMap;
+
+class CMakeFunctionDesc;
+
+class CMakeProjectVisitor : CMakeAstVisitor
 {
     public:
-        CMakeProjectVisitor(QHash<QString, QStringList> *vars, QHash<QString, MacroAst*> *macros);
+        explicit CMakeProjectVisitor(const QString& root);
         virtual ~CMakeProjectVisitor() {}
         
-        virtual void visit( const CustomCommandAst * ) { notImplemented(); }
-        virtual void visit( const CustomTargetAst * ) { notImplemented(); }
-        virtual void visit( const AddDefinitionsAst * ) { notImplemented(); }
-        virtual void visit( const AddDependenciesAst * ) { notImplemented(); }
-        virtual void visit( const AddTestAst * ) { notImplemented(); }
-        virtual void visit( const AuxSourceDirectoryAst * ) { notImplemented(); }
-        virtual void visit( const BuildCommandAst * ) { notImplemented(); }
-        virtual void visit( const BuildNameAst * ) { notImplemented(); }
-        virtual void visit( const CMakeMinimumRequiredAst * ) { notImplemented(); }
-        virtual void visit( const ConfigureFileAst * ) { notImplemented(); }
-        virtual void visit( const AddExecutableAst * );
-        virtual void visit( const AddLibraryAst * );
-        virtual void visit( const AddSubdirectoryAst * );
-        virtual void visit( const IncludeDirectoriesAst * );
-        virtual void visit( const IncludeAst * );
-        virtual void visit( const MacroCallAst * call);
-        virtual void visit( const FindPackageAst * );
-        virtual void visit( const FindProgramAst * );
-        virtual void visit( const FindPathAst * );
-        virtual void visit( const IfAst * );
-        virtual void visit( const ExecProgramAst * );
-        virtual void visit( const FileAst * );
-        virtual void visit( MacroAst * );
+        virtual int visit( const CustomCommandAst * );
+        virtual int visit( const CustomTargetAst * ) { return notImplemented("CustomTargetAst"); }
+        virtual int visit( const AddDefinitionsAst * ) { return notImplemented("AddDefinitionsAst"); }
+        virtual int visit( const AddDependenciesAst * ) { return notImplemented("AddDependenciesAst"); }
+        virtual int visit( const AddTestAst * ) { return notImplemented("AddTestAst"); }
+        virtual int visit( const AuxSourceDirectoryAst * ) { return notImplemented("AuxSourceDirectoryAst"); }
+        virtual int visit( const BuildCommandAst * ) { return notImplemented("BuildCommandAst"); }
+        virtual int visit( const BuildNameAst * ) { return notImplemented("BuildNameAst"); }
+        virtual int visit( const CMakeMinimumRequiredAst * ) { return notImplemented("CMakeMinimumRequiredAst"); }
+        virtual int visit( const ConfigureFileAst * ) { return notImplemented("ConfigureFileAst"); }
+        virtual int visit( const AddExecutableAst * );
+        virtual int visit( const AddLibraryAst * );
+        virtual int visit( const AddSubdirectoryAst * );
+        virtual int visit( const IncludeDirectoriesAst * );
+        virtual int visit( const IncludeAst * );
+        virtual int visit( const MacroCallAst * call);
+        virtual int visit( const FindPackageAst * );
+        virtual int visit( const FindProgramAst * );
+        virtual int visit( const FindPathAst * );
+        virtual int visit( const FindLibraryAst * );
+        virtual int visit( const FindFileAst * );
+        virtual int visit( const IfAst * );
+        virtual int visit( const ExecProgramAst * );
+        virtual int visit( const FileAst * );
+        virtual int visit( const MessageAst * );
+        virtual int visit( const MathAst * );
+        virtual int visit( const MacroAst * );
+        virtual int visit( const ListAst * );
+        virtual int visit( const GetFilenameComponentAst * );
+        virtual int visit( const OptionAst * );
+        virtual int visit( const SetAst * );
+        virtual int visit( const ForeachAst * );
+        virtual int visit( const ProjectAst * );
+        virtual int visit( const StringAst * );
+        virtual int visit( const GetCMakePropertyAst * );
+        virtual int visit( const CMakeAst * );
         
-        virtual void visit( const SetAst * );
-        virtual void visit( const ProjectAst * );
-        virtual void visit( const CMakeAst * );
+        void setVariableMap( VariableMap* vars );
+        void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         
         QString projectName() const { return m_projectName; }
         QStringList subdirectories() const { return m_subdirectories; }
         QStringList targets() const { return m_filesPerTarget.keys(); }
         QStringList files(const QString &target) const { return m_filesPerTarget[target]; }
+        QStringList targetDependencies(const QString & target) const;
         QStringList includeDirectories() const { return m_includeDirectories; }
         
-        enum VariableType { None, CMake, ENV };
+        int walk(const CMakeFileContent& fc, int line);
+        
+        enum VariableType { NoVar, CMake, ENV };
         static VariableType hasVariable(const QString &name);
         static QString variableName(const QString &name, VariableType& isEnv);
-	static QStringList resolveVariables(const QStringList & vars, const QHash<QString, QStringList> *values);
+        static QStringList resolveVariables(const QStringList & vars, const VariableMap *values);
+        static QStringList resolveVariable(const QString &exp, const VariableMap *values);
+        static CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp, const VariableMap *values);
+        static QStringList envVarDirectories(const QString &varName);
+        
+        enum FileType { Location, File, Executable, Library };
+        static QString findFile(const QString &file, const QStringList &folders, FileType t=File);
+        
     private:
-        static QStringList resolveVariable(const QString &exp, const QHash<QString, QStringList> *values);
-        static QString findFile(const QString &file, const QStringList &folders);
-        void notImplemented() const;
+        int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         
         QString m_projectName;
         QStringList m_subdirectories;
         QStringList m_includeDirectories;
         QMap<QString, QStringList> m_filesPerTarget;
+        QMap<QString, QStringList> m_generatedFiles;
         QString m_root;
-        QHash<QString, QStringList> *m_vars;
-        QHash<QString, MacroAst*> *m_macros;
+        VariableMap *m_vars;
+        MacroMap *m_macros;
 };
 
 #endif

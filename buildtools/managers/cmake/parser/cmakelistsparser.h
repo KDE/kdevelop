@@ -46,7 +46,9 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
     int numSpacesAfterLeftParen;
     int numSpacesBeforeRightParen; */
 
+    bool operator==(const CMakeFunctionDesc &other) const;
     void addArguments( const QStringList& );
+    QString writeBack() const;
 };
 Q_DECLARE_METATYPE( CMakeFunctionDesc )
 
@@ -80,51 +82,32 @@ struct CMakeFunctionArgument
 };
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
-/*struct TargetInfo
-{
-    QString name;
-    QString type;
-    QStringList sources;
-};
-
-struct FolderInfo
-{
-    QString name;
-    QList<FolderInfo> subFolders;
-    QStringList includes;
-    QStringList defines;
-    QList<TargetInfo> targets;
-};
-
-struct ProjectInfo
-{
-    QString name;
-    QString root;
-    FolderInfo rootFolder;
-};*/
-
 /**
- * Recursive descent parser for CMakeLists.txt files
+ * CMake files function descriptor collector
  * @author Matt Rogers <mattr@kde.org>
+ * @author Aleix Pol <aleixpol@gmail.com>
  */
+
+typedef QList<CMakeFunctionDesc> CMakeFileContent;
+
 class KDEVCMAKECOMMON_EXPORT CMakeListsParser : public QObject
 {
 public:
     CMakeListsParser(QObject *parent = 0);
     ~CMakeListsParser();
-
-/*    ProjectInfo parse( const KUrl& file );
-
-    ProjectInfo parseProject( const CMakeAst* );
-    TargetInfo parseTarget( const CMakeAst* );
-    FolderInfo parseFolder( const CMakeAst* );*/
-
-    static bool parseCMakeFile( CMakeAst* root, const QString& fileName );
-
+    
+    static CMakeFileContent readCMakeFile(const QString& fileName);
+    
 private:
-    static bool parseCMakeFunction( cmListFileLexer*,
+    static bool readCMakeFunction( cmListFileLexer*,
                                     CMakeFunctionDesc&,
-                                    const QString& fileName, CMakeAst* parent);
+                                    const QString& fileName);
+//     static bool parseCMakeFunction( cmListFileLexer*,
+//                                     CMakeFunctionDesc&,
+//                                     const QString& fileName, CMakeAst* parent);
+// // public:
+//     static bool parseCMakeFile( CMakeAst* root, const QString& fileName );
+
 };
 
 #endif

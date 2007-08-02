@@ -28,34 +28,34 @@
 #include "cmakelistsparser.h"
 #include "cmakeastvisitor.h"
 
-class KDEVCMAKECOMMON_EXPORT CMakeAst
+class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. */
 {
 public:
-    CMakeAst() { }
-    CMakeAst( const CMakeAst& ast ) : m_children( ast.m_children ) {}
-    virtual ~CMakeAst() { qDeleteAll( m_children ); }
+    CMakeAst() : m_line(-1) { }
+    CMakeAst( const CMakeAst& ast ) /*: m_children( ast.m_children )*/ {}
+    virtual ~CMakeAst() { /*qDeleteAll( m_children );*/ }
 
     /**
      * Adds a child Ast Node to this node. This will only have uses in cases
      * where custom macros are used since CMakeLists.txt files generally have
      * a pretty flat tree structure
      */
-    virtual void addChildAst( CMakeAst* node ) { m_children.append( node ); }
+//     virtual void addChildAst( CMakeAst* node ) { m_children.append( node ); }
 
     /**
      * Indicates if the Ast has children
      * @return true if the Ast has children
      * @return false if the Ast has no children
      */
-    bool hasChildren() const { return m_children.isEmpty(); }
+//     bool hasChildren() const { return m_children.isEmpty(); }
 
     /**
      * Get the children of this ast
      * @return the list of this ast's children
      */
-    QList<CMakeAst*> children() const  { return m_children; }
+//     QList<CMakeAst*> children() const  { return m_children; }
     
-    virtual void accept(CMakeAstVisitor * v) const { v->visit(this); }
+    virtual int accept(CMakeAstVisitor * v) const { return v->visit(this); }
 
     /**
      * Writes the information stored in the Ast into the @p buffer.
@@ -64,9 +64,14 @@ public:
     virtual void writeBack(QString& buffer) const;
 
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
-
-protected:
-    QList<CMakeAst*> m_children;
+    
+    int line() const { return m_line; }
+    const CMakeFileContent content() const { return m_content; }
+    void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
+    
+    protected:
+        CMakeFileContent m_content;
+        int m_line;
 
 };
 
@@ -106,7 +111,7 @@ public:
     void setComment( const QString& comment ) { m_comment = comment; }
     QString comment() const { return m_comment; }
     
-    virtual void accept(CMakeAstVisitor* visitor) const { visitor->visit(this); }
+    virtual int accept(CMakeAstVisitor* visitor) const { return visitor->visit(this); }
 
     virtual void writeBack( QString& ) const;
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
@@ -126,11 +131,6 @@ private:
     QString m_source;
 };
 
-
-
-
-
-
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
         CMakeAst* Create##klassName() { return new klassName; }            \
         bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
@@ -141,7 +141,7 @@ private:
        ~klassName();                                         \
                                                              \
         virtual void writeBack( QString& buffer ) const;           \
-	virtual void accept(CMakeAstVisitor * visitor) const { visitor->visit(this); } \
+	virtual int accept(CMakeAstVisitor * visitor) const { return visitor->visit(this); } \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
@@ -160,7 +160,7 @@ private:
 CMAKE_BEGIN_AST_CLASS( MacroCallAst )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
 CMAKE_ADD_AST_MEMBER( QStringList, const QString&, arguments, Arguments )
-CMAKE_END_AST_CLASS( AddDefinitionsAst )
+CMAKE_END_AST_CLASS( MacroCallAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
@@ -289,10 +289,32 @@ CMAKE_END_AST_CLASS( FileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindFileAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+
+CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindFileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindLibraryAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+
+CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindLibraryAst )
 
 
@@ -341,10 +363,18 @@ CMAKE_END_AST_CLASS( FltkWrapUiAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ForeachAst )
+    struct rangeValues { int start, stop, step; };
+CMAKE_ADD_AST_MEMBER( QString, const QString&, loopVar, LoopVar )
+CMAKE_ADD_AST_MEMBER( rangeValues, const rangeValues&, ranges, Ranges )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, arguments, arguments )
+CMAKE_ADD_AST_MEMBER( bool, bool, range, Range )
 CMAKE_END_AST_CLASS( ForeachAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetCMakePropertyAst )
+        enum PropertyType { VARIABLES, CACHE_VARIABLES, COMMANDS, MACROS };
+CMAKE_ADD_AST_MEMBER( PropertyType, PropertyType, type, Type )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
 CMAKE_END_AST_CLASS( GetCMakePropertyAst )
 
 
@@ -353,6 +383,12 @@ CMAKE_END_AST_CLASS( GetDirPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
+        enum ComponentType { PATH, ABSOLUTE, NAME, EXT, NAME_WE, PROGRAM };
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, fileName, FileName )
+CMAKE_ADD_AST_MEMBER( ComponentType, ComponentType, type, Type )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, programArgs, ProgramArgs )
+CMAKE_ADD_AST_MEMBER( bool, bool, cache, Cache )
 CMAKE_END_AST_CLASS( GetFilenameComponentAst )
 
 
@@ -369,7 +405,7 @@ CMAKE_END_AST_CLASS( GetTestPropAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IfAst )
-CMAKE_ADD_AST_MEMBER( QList<QStringList>, const QList<QStringList>&, conditions, Conditions )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, condition, Condition )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, kind, Kind )
 CMAKE_END_AST_CLASS( IfAst )
 
@@ -429,6 +465,7 @@ CMAKE_END_AST_CLASS( InstallTargetsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( LinkDirectoriesAst )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, directories, Directories)
 CMAKE_END_AST_CLASS( LinkDirectoriesAst )
 
 
@@ -437,6 +474,12 @@ CMAKE_END_AST_CLASS( LinkLibrariesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ListAst )
+    enum ListType { LENGTH, GET, APPEND, INSERT, REMOVE_ITEM, REMOVE_AT, SORT, REVERSE };
+    CMAKE_ADD_AST_MEMBER( ListType, ListType, type, type)
+    CMAKE_ADD_AST_MEMBER( QString, const QString&, list, List)
+    CMAKE_ADD_AST_MEMBER( QString, const QString&, output, Output)
+    CMAKE_ADD_AST_MEMBER( QList<int>, const QList<int> &, index, Index)
+    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, elements, Elements)
 CMAKE_END_AST_CLASS( ListAst )
 
 
@@ -466,14 +509,22 @@ CMAKE_END_AST_CLASS( MarkAsAdvancedAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MathAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, expression, Expression)
 CMAKE_END_AST_CLASS( MathAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MessageAst )
+enum MessageType { SEND_ERROR, STATUS, FATAL_ERROR };
+CMAKE_ADD_AST_MEMBER( MessageType, MessageType, type, Type)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, message, Message )
 CMAKE_END_AST_CLASS( MessageAst )
 
 
 CMAKE_BEGIN_AST_CLASS( OptionAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, description, Description )
+CMAKE_ADD_AST_MEMBER( bool, bool, defaultValue, defaultValue )
 CMAKE_END_AST_CLASS( OptionAst )
 
 
@@ -536,6 +587,7 @@ CMAKE_END_AST_CLASS( SetTestsPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SiteNameAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName );
 CMAKE_END_AST_CLASS( SiteNameAst )
 
 
@@ -544,6 +596,19 @@ CMAKE_END_AST_CLASS( SourceGroupAst )
 
 
 CMAKE_BEGIN_AST_CLASS( StringAst )
+enum StringAstType { REGEX, REPLACE, COMPARE, ASCII, CONFIGURE,
+    TOUPPER, TOLOWER, LENGTH, SUBSTRING };
+enum CommandType { MATCH, MATCHALL, REGEX_REPLACE, EQUAL, NOTEQUAL, LESS, GREATER };
+CMAKE_ADD_AST_MEMBER( StringAstType, StringAstType, type, Type );
+CMAKE_ADD_AST_MEMBER( CommandType, CommandType, cmdType, CmdType );
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable );
+CMAKE_ADD_AST_MEMBER( QString, const QString&, regex, Regex );
+CMAKE_ADD_AST_MEMBER( QString, const QString&, replace, Replace );
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, input, Input);
+CMAKE_ADD_AST_MEMBER( bool, bool, only, Only );
+CMAKE_ADD_AST_MEMBER( bool, bool, escapeQuotes, EscapeQuotes );
+CMAKE_ADD_AST_MEMBER( int, int, begin, Begin );
+CMAKE_ADD_AST_MEMBER( int, int, length, Length );
 CMAKE_END_AST_CLASS( StringAst )
 
 
