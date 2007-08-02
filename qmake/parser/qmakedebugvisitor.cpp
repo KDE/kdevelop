@@ -52,123 +52,123 @@ QString DebugVisitor::getIndent()
 
 void DebugVisitor::visit_arg_list( arg_list_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(arg_list)( " << getTokenInfo(node->start_token) << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(arg_list)(" << getTokenInfo(node->start_token) << ")";
     indent++;
     default_visitor::visit_arg_list( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(arg_list)( " << getTokenInfo(node->start_token) << " )" << endl;
+    kDebug(9024) << getIndent() << "END(arg_list)(" << getTokenInfo(node->start_token) << ")";
 }
 
 
 void DebugVisitor::visit_or_op( or_op_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(or_op)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(or_op)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
     default_visitor::visit_or_op( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(or_op)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(or_op)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_scope( scope_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(scope)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(scope)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
     visit_node( node->func_args );
     visit_node( node->or_op );
     visit_node( node->scope_body );
     indent--;
-    kDebug(9024) << getIndent() << "END(scope)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(scope)(" << getTokenInfo(node->end_token)  << ")";
 
 }
 
 void DebugVisitor::visit_function_args( function_args_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(function_args)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(function_args)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
     default_visitor::visit_function_args( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(function_args)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(function_args)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_op( op_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(op)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(op)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
-    kDebug(9024) << getIndent() << "optoken = " << getTokenInfo(node->optoken) << endl;
+    kDebug(9024) << getIndent() << "optoken =" << getTokenInfo(node->optoken);
     default_visitor::visit_op( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(op)(" << getTokenInfo(node->end_token)  << "))" << endl;
+    kDebug(9024) << getIndent() << "END(op)(" << getTokenInfo(node->end_token)  << "))";
 }
 
 void DebugVisitor::visit_project( project_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(project)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(project)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
     default_visitor::visit_project( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(project)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(project)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_scope_body( scope_body_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(scope_body)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(scope_body)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
     default_visitor::visit_scope_body( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(scope_body)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(scope_body)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_stmt( stmt_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(stmt)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(stmt)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
-    kDebug(9024) << getIndent() << "isExclam=" << node->isExclam << endl;
+    kDebug(9024) << getIndent() << "isExclam=" << node->isExclam;
     if( !node->isNewline )
     {
-        kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
+        kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id);
     }
     default_visitor::visit_stmt( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(stmt)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(stmt)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_value( value_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(value)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(value)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
-    kDebug(9024) << getIndent() << "value=" << getTokenInfo(node->value) << endl;
+    kDebug(9024) << getIndent() << "value=" << getTokenInfo(node->value);
     default_visitor::visit_value( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(value)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(value)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_value_list( value_list_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(value_list)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(value_list)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
     default_visitor::visit_value_list( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(value_list)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(value_list)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_variable_assignment( variable_assignment_ast *node )
 {
-    kDebug(9024) << getIndent() << "BEGIN(variable_assignment)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(variable_assignment)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
     default_visitor::visit_variable_assignment( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(variable_assignment)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(variable_assignment)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 void DebugVisitor::visit_item( item_ast *node )
 {
 
-    kDebug(9024) << getIndent() << "BEGIN(item)( " << getTokenInfo(node->start_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "BEGIN(item)(" << getTokenInfo(node->start_token)  << ")";
     indent++;
-    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id) << endl;
+    kDebug(9024) << getIndent() << "id=" << getTokenInfo(node->id);
     default_visitor::visit_item( node );
     indent--;
-    kDebug(9024) << getIndent() << "END(item)( " << getTokenInfo(node->end_token)  << " )" << endl;
+    kDebug(9024) << getIndent() << "END(item)(" << getTokenInfo(node->end_token)  << ")";
 }
 
 }

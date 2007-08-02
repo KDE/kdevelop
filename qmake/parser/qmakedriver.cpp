@@ -45,7 +45,7 @@ bool Driver::readFile( const QString& filename, const char* codec )
     QFile f(filename);
     if( !f.open(QIODevice::ReadOnly) )
     {
-        kDebug(9024) << "Couldn't open project file: " << filename << endl;
+        kDebug(9024) << "Couldn't open project file:" << filename;
         return false;
     }
     QTextStream s(&f);
@@ -77,7 +77,7 @@ bool Driver::parse( ProjectAST** qmast )
     bool matched = qmakeparser.parse_project(&ast);
     if( matched )
     {
-        kDebug(9024) << "Sucessfully parsed" << endl;
+        kDebug(9024) << "Sucessfully parsed";
         if( m_debug )
         {
             DebugVisitor d(&qmakeparser);
@@ -86,11 +86,11 @@ bool Driver::parse( ProjectAST** qmast )
         *qmast = new ProjectAST();
         BuildASTVisitor d( &qmakeparser, *qmast );
         d.visit_project(ast);
-        kDebug(9024) << "Found " << (*qmast)->statements().count() << " Statements" << endl;
+        kDebug(9024) << "Found" << (*qmast)->statements().count() << "Statements";
     }else
     {
         ast = 0;
-        kDebug(9024) << "Couldn't parse content" << endl;
+        kDebug(9024) << "Couldn't parse content";
     }
     return matched;
 }

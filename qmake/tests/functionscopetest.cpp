@@ -328,7 +328,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, 1 )
     QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( fn, "func" )
     QStringList testlist;
-    testlist << " some " ;
+    testlist << "some " ;
 
 ENDTESTFUNCIMPL
 DATAFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, "func ( some )\n")
@@ -344,7 +344,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, missingStmt, 1 )
     QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( fn, "eval" )
     QStringList testlist;
-    testlist << " SOMETHINGELSE " ;
+    testlist << "SOMETHINGELSE " ;
 
 ENDTESTFUNCIMPL
 

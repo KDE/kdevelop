@@ -45,11 +45,11 @@ void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 
 QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
+    kDebug(9024) << k_funcinfo << "Fetching subprojects";
     QList<QMakeProjectFile*> list;
     foreach( QString subdir, variableValues( "SUBDIRS" ) )
     {
-        kDebug(9024) << k_funcinfo << "Found value: " << subdir << endl;
+        kDebug(9024) << k_funcinfo << "Found value:" << subdir;
         KUrl u = absoluteDirUrl();
         u.adjustPath( KUrl::AddTrailingSlash );
         u.setFileName( subdir.trimmed() );
@@ -60,13 +60,13 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
             list.append( qmscope );
         }
     }
-    kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
+    kDebug(9024) << k_funcinfo << "found" << list.size() << "subprojects";
     return list;
 }
 
 KUrl::List QMakeProjectFile::files() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching files" << endl;
+    kDebug(9024) << k_funcinfo << "Fetching files";
 
 
     KUrl::List list;
@@ -81,13 +81,13 @@ KUrl::List QMakeProjectFile::files() const
         }
     }
     list.append( absoluteFileUrl() );
-    kDebug(9024) << k_funcinfo << "found " << list.size() << " files" << endl;
+    kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
     return list;
 }
 
 QStringList QMakeProjectFile::targets() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching targets" << endl;
+    kDebug(9024) << k_funcinfo << "Fetching targets";
 
     QStringList list;
 
@@ -98,7 +98,7 @@ QStringList QMakeProjectFile::targets() const
             list << value;
         }
     }
-    kDebug(9024) << k_funcinfo << "found " << list.size() << " targets" << endl;
+    kDebug(9024) << k_funcinfo << "found" << list.size() << "targets";
     return list;
 }
 

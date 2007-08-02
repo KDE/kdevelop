@@ -48,7 +48,7 @@ QMakeFile::QMakeFile( const KUrl& file )
 bool QMakeFile::read()
 {
     QFileInfo fi( m_projectFileUrl.toLocalFile() );
-    kDebug(9024) << k_funcinfo << "Is " << m_projectFileUrl << " a dir?" << fi.isDir() << endl;
+    kDebug(9024) << k_funcinfo << "Is" << m_projectFileUrl << "a dir?" << fi.isDir();
     if( fi.isDir() )
     {
         QDir dir( m_projectFileUrl.toLocalFile() );
@@ -70,16 +70,16 @@ bool QMakeFile::read()
     d.readFile( m_projectFileUrl.toLocalFile() );
     if( !d.parse( &m_ast ) )
     {
-        kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.toLocalFile() << endl;
+        kDebug( 9024 ) << "Couldn't parse project:" << m_projectFileUrl.toLocalFile();
         delete m_ast;
         m_ast = 0;
         m_projectFileUrl = KUrl();
         return false;
     }else
     {
-        kDebug(9024) << "found ast:" << m_ast->statements().count() << endl;
+        kDebug(9024) << "found ast:" << m_ast->statements().count();
         visitNode(m_ast);
-        kDebug(9024) << "Variables found:" << m_variableValues << endl;
+        kDebug(9024) << "Variables found:" << m_variableValues;
     }
     return true;
 }
@@ -169,7 +169,7 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         }
     }else if( op == "*=" )
     {
-        kDebug(9024) << "adding to var if not existent " << node->variable()->value() << values;
+        kDebug(9024) << "adding to var if not existent" << node->variable()->value() << values;
         foreach( QString value, values )
         {
             if( !m_variableValues[node->variable()->value()].contains(value) )
@@ -185,7 +185,7 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         QString value = values.first().trimmed();
         QString regex = value.mid(2,value.indexOf("/", 2));
         QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
-        kDebug(9024) << "Replacing variable, using regex " << regex << " value " << value << endl;
+        kDebug(9024) << "Replacing variable, using regex" << regex << "value" << value;
         QStringList list = m_variableValues[node->variable()->value()];
         list.replaceInStrings( QRegExp(regex), replacement );
         m_variableValues[node->variable()->value()] = list;

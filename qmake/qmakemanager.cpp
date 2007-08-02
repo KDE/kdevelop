@@ -73,13 +73,13 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
 
-    kDebug(9024) << k_funcinfo << "Parsing item: " << endl;
+    kDebug(9024) << k_funcinfo << "Parsing item:";
 
     QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
     if( !folderitem )
         return folderList;
 
-    kDebug(9024) << k_funcinfo << "Item is a qmakefolder: " << endl;
+    kDebug(9024) << k_funcinfo << "Item is a qmakefolder:";
 
     foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
     {
@@ -93,7 +93,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     {
         new QMakeTargetItem( item->project(), s,  item );
     }
-    kDebug(9024) << k_funcinfo << "Added " << folderList.count() << " Elements" << endl;
+    kDebug(9024) << k_funcinfo << "Added" << folderList.count() << "Elements";
 
     return folderList;
 }
@@ -212,7 +212,7 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* proj
         if( result != "**Unknown**")
             hash[var] = result;
     }
-    kDebug(9024) << "Ran qmake (" << m_builder->qmakeBinary( project ) << "), found:" << hash << endl;
+    kDebug(9024) << "Ran qmake (" << m_builder->qmakeBinary( project ) << "), found:" << hash;
     return hash;
 }
 

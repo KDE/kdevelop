@@ -40,7 +40,7 @@ namespace QMake
 
         if ( m_debug )
           {
-            kDebug(9024) <<  kind <<  "(" <<  t.begin <<  "," <<  t.end <<  ")::" <<  tokenText(t.begin,  t.end) <<  "::" <<  endl; //" "; // debug output
+            kDebug(9024) <<  kind <<  "(" <<  t.begin <<  "," <<  t.end <<  ")::" <<  tokenText(t.begin,  t.end) <<  "::" <<  endl; //""; // debug output
           }
 
       }
@@ -58,11 +58,11 @@ namespace QMake
   void parser::reportProblem( parser::ProblemType type,  const QString& message )
   {
     if  (type ==  Error)
-      kDebug(9024) <<  "** ERROR: " <<  message <<  endl;
+      kDebug(9024) <<  "** ERROR:" <<  message <<  endl;
     else if  (type ==  Warning)
-      kDebug(9024) <<  "** WARNING: " <<  message <<  endl;
+      kDebug(9024) <<  "** WARNING:" <<  message <<  endl;
     else if  (type ==  Info)
-      kDebug(9024) <<  "** Info: " <<  message <<  endl;
+      kDebug(9024) <<  "** Info:" <<  message <<  endl;
   }
 
 
@@ -80,8 +80,8 @@ namespace QMake
     std::size_t col;
     size_t index =  token_stream->index() - 1;
     token_type &token =  token_stream->token(index);
-    kDebug(9024) <<  "token starts at: " <<  token.begin <<  endl;
-    kDebug(9024) <<  "index is: " <<  index <<  endl;
+    kDebug(9024) <<  "token starts at:" <<  token.begin <<  endl;
+    kDebug(9024) <<  "index is:" <<  index <<  endl;
     token_stream->start_position(index,  &line,  &col);
     QString tokenValue =  tokenText(token.begin,  token.end);
     reportProblem(
