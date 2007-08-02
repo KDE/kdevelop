@@ -42,7 +42,7 @@ BasicTCPSocket::BasicTCPSocket( InetAddress &ia, int port ) : TCPSocket( ia, por
 
 bool BasicTCPSocket::onAccept( const InetHostAddress &ia, tpport_t port ) {
   setCompletion( false );
-  cout << "accepting from:" << ia.getHostname() << ":" << port << endl;
+  cout << "accepting from: " << ia.getHostname() << ":" << port << endl;
 
   return true;
 }
@@ -57,13 +57,13 @@ void BasicServer::buildSocket() {
 
   try {
     server_ = new BasicTCPSocket( addr, port_ );
-    out() << "server is listening on" << addr << ":" << port_;
+    out() << "server is listening on " << addr << ":" << port_;
   } catch ( Socket * socket ) {
     failed_ = true;
     tpport_t port;
     int erro = socket->getErrorNumber();
     InetAddress saddr = ( InetAddress ) socket->getPeer( &port );
-    err() << "socket error" << saddr.getHostname() << ":" << port << "=" << erro;
+    err() << "socket error " << saddr.getHostname() << ":" << port << " = " << erro;
     if ( erro == Socket::errBindingFailed ) {
       err() << "bind failed; port busy";
     } else {
@@ -86,10 +86,10 @@ void BasicServer::run() {
       try {
         InetHostAddress next = server_->getRequest();
         if ( !allowIncoming_ ) {
-          out() << "refusing session for client" << next;
+          out() << "refusing session for client " << next;
           server_->reject();
         } else {
-          out() << "creating session for client" << next;
+          out() << "creating session for client " << next;
           SessionPointer tcp = createSession( server_ );
           if ( tcp ) {
             out() << "session created" ;
@@ -108,7 +108,7 @@ void BasicServer::run() {
         tpport_t port;
         int err = socket->getErrorNumber();
         InetAddress saddr = ( InetAddress ) socket->getPeer( &port );
-        cerr << "socket error" << saddr.getHostname() << ":" << port << "=" << err << endl;
+        cerr << "socket error " << saddr.getHostname() << ":" << port << " = " << err << endl;
         if ( err == Socket::errBindingFailed )
           cerr << "bind failed; port busy" << endl;
         else

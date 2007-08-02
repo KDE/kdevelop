@@ -93,7 +93,7 @@ MultiSession::~MultiSession() {
 void MultiSession::registerForwardSession( const UserPointer& peer, const ForwardSessionPointer& sess ) {
   if ( forwardSessions_.find( peer ) != forwardSessions_.end() ) { ///finalize some older open session to the same target
     UserPointer::Locked u = peer;
-    out() << "closing a duplicated indirect session to" << ( u ? u->name() : "not lockable" );
+    out() << "closing a duplicated indirect session to " << ( u ? u->name() : "not lockable" );
     forwardSessions_[ peer ].unsafe() ->stopRunning();
     garbageSessions_.push_back( forwardSessions_[ peer ] );
   }

@@ -281,7 +281,7 @@ int Server::receiveMessage( IdentificationMessage* msg ) {
 
     if ( it == users_.end() ) {
       if( configuration_.serverPassword.empty() || ul->password() == configuration_.serverPassword ) {
-        out() << "adding new user:" << ul->name();
+        out() << "adding new user: " << ul->name();
         addUser( user );
       } else {
         throw TeamworkError( "server-password mismatched" );
@@ -292,7 +292,7 @@ int Server::receiveMessage( IdentificationMessage* msg ) {
         throw TeamworkError( "failed to lock user" );
       if ( !nul->match( *ul ) ) {
         ostringstream str;
-        str << "authentication failed, names: \"" << nul->name() << "\" \"" << ul->name() << "\", banned:" << nul->banned();
+        str << "authentication failed, names: \"" << nul->name() << "\" \"" << ul->name() << "\", banned: " << nul->banned();
         throw TeamworkError( str.str() );
       }
       ul = nul;
@@ -307,7 +307,7 @@ int Server::receiveMessage( IdentificationMessage* msg ) {
       SessionPointer::Locked ll = ul->online().session();
       if ( ll )
         peerDesc = ll->peerDesc();
-      out() << "the user " + ul->name() + " logged in twice, the first one from" << peerDesc << "is disconnected";
+      out() << "the user " + ul->name() + " logged in twice, the first one from " << peerDesc << " is disconnected";
       send<SystemMessage>( ul->online().session().unsafe(), SystemMessage::BadAuthentication, "another use with the name " + ul->name() + " logged in" );
       send<SystemMessage>( msg->info().session().unsafe(), SystemMessage::AlreadyLoggedIn, "the user " + ul->name() + " was already logged in" );
       closeSession( ul->online().session() );
@@ -331,7 +331,7 @@ int Server::receiveMessage( IdentificationMessage* msg ) {
     if ( theSession )
       unknownSessions_.erase( theSession );
 
-    out() << "login of user \"" << username << "\"" << addrInfo << "failed:" << exc.what();
+    out() << "login of user \"" << username << "\" " << addrInfo << "failed: " << exc.what();
 
     msg->info().session().unsafe()->send( new SystemMessage( messageTypes_ , SystemMessage::LoginFailedUnknown, "reason: " + string( exc.what() ) ) );
 
@@ -340,7 +340,7 @@ int Server::receiveMessage( IdentificationMessage* msg ) {
 }
 
 int Server::receiveMessage( TextMessage* msg ) {
-  out() << "got text-message:" << msg->text();
+  out() << "got text-message: " << msg->text();
   return 0;
 }
 
@@ -350,7 +350,7 @@ int Server::receiveMessage( MessageInterface* /*msg*/ ) {
 }
 
 int Server::receiveMessage( SystemMessage* msg ) {
-  out() << "got system-message:" << msg->messageAsString() << ":" << msg->text();
+  out() << "got system-message: " << msg->messageAsString() << ": " << msg->text();
   switch ( msg->message() ) {
     case SystemMessage::GetUserList: {
       //SessionPointer::Locked l = msg->info().session();
@@ -359,7 +359,7 @@ int Server::receiveMessage( SystemMessage* msg ) {
         if ( identity() )
           users.push_back( identity() );
 
-        out() << "sending user-list of size" << users.size();
+        out() << "sending user-list of size " << users.size();
 
         sendReply<UserListMessage>( msg, users, msg->info().user() );
       }
@@ -398,14 +398,14 @@ int Teamwork::Server::receiveMessage( ForwardMessage * msg ) {
       UserPointer::Locked l = *it;
       if ( l ) {
         if ( l->online() && l->online().session() ) {
-          out( Logger::Debug ) << "forwarding a message from" << msg->source().name() << "to" << msg->target().name();
+          out( Logger::Debug ) << "forwarding a message from " << msg->source().name() << " to " << msg->target().name();
           l->online().session().unsafe() ->send( msg );
         } else {
           if ( msg->storeOnServer() ) {
-            out( Logger::Debug ) << "failed to forward a message from" << msg->source().name() << "to" << msg->target().name() << ", storing it on the server";
+            out( Logger::Debug ) << "failed to forward a message from " << msg->source().name() << " to " << msg->target().name() << ", storing it on the server";
             sendReply<SystemMessage>( msg, SystemMessage::StoredOnServer, "" );
           } else {
-            out( Logger::Debug ) << "failed to forward a message from" << msg->source().name() << "to" << msg->target().name() << "because the target is not online";
+            out( Logger::Debug ) << "failed to forward a message from " << msg->source().name() << " to " << msg->target().name() << " because the target is not online";
             sendReply<SystemMessage>( msg, SystemMessage::BadTarget, "" );
           }
         }
@@ -417,7 +417,7 @@ int Teamwork::Server::receiveMessage( ForwardMessage * msg ) {
       throw string( "the target-user does not exist" );
     }
   } catch ( string s ) {
-    out( Logger::Debug ) << "failed to forward a message from" << msg->source().name() << "to" << msg->target().name() << "reason:" << s;
+    out( Logger::Debug ) << "failed to forward a message from " << msg->source().name() << " to " << msg->target().name() << " reason: " << s;
     sendReply<SystemMessage>( msg, SystemMessage::BadTarget, s );
   }
 

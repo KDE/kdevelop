@@ -124,7 +124,7 @@ void Client::disconnectAllServers () {
 }
 
 int Client::receiveMessage( UserListMessage* msg ) {
-  out( Logger::Debug ) << "handling user-list of size" << msg->users.size();
+  out( Logger::Debug ) << "handling user-list of size " << msg->users.size();
   std::list<UserPointer> users;
   {
     std::set
@@ -154,7 +154,7 @@ int Client::receiveMessage( UserListMessage* msg ) {
     for ( list<User>::iterator it = msg->users.begin(); it != msg->users.end(); ++it ) {
       UserPointer::Locked l = getUser( createUser( &( *it ) ) );
       if ( !l ) {
-        err() << "could not get/create indirect user" << ( *it ).name();
+        err() << "could not get/create indirect user " << ( *it ).name();
         continue;
       }
       if ( l->online() )
@@ -234,7 +234,7 @@ int Client::receiveMessage( ForwardMessage * msg ) {
     cl->info().setSession( f );
 
     if ( user->online() ) {
-      out( Logger::Warning ) << "got indirect message from directly connected user" << user->name() << ", keeping communication indirect";
+      out( Logger::Warning ) << "got indirect message from directly connected user " << user->name() << ", keeping communication indirect";
     } else {
       user->setSession( f );
     }

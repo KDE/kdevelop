@@ -21,13 +21,13 @@ LoggerPrinter ForwardSession::err( int prio ) {
   LoggerPrinter p ( logger_, Logger::Error );
   if ( prio )
     p << prio << ":";
-  p << "error in session" << "(" << sessionName() << "): ";
+  p << "error in session " << "(" << sessionName() << "): ";
   return p;
 }
 
 LoggerPrinter ForwardSession::out( Logger::Level lv  ) {
   LoggerPrinter p ( logger_, lv );
-  p << "in session" << "(" << sessionName() << "): ";
+  p << "in session " << "(" << sessionName() << "): ";
   return p;
 }
 
@@ -44,7 +44,7 @@ ForwardSession::ForwardSession( const UserPointer& sourceUser, const UserPointer
     setSessionName( "forward_" + lu->name() );
     SessionPointer::Locked ls = lu->online().session();
     if ( ls && ls->isRunning() ) {
-      out( Logger::Warning ) << "creating an indirect session to" << lu->name() << ", but there already is a direct session";
+      out( Logger::Warning ) << "creating an indirect session to " << lu->name() << ", but there already is a direct session";
     } else {
       lu->setSession( this );
     }
@@ -168,13 +168,13 @@ LoggerPrinter FakeSession::err( int prio ) {
   LoggerPrinter p ( logger_, Logger::Error );
   if ( prio )
     p << prio << ":";
-  p << "error in session" << "(" << sessionName() << "): ";
+  p << "error in session " << "(" << sessionName() << "): ";
   return p;
 }
 
 LoggerPrinter FakeSession::out( Logger::Level lv ) {
   LoggerPrinter p ( logger_, lv );
-  p << "in session" << "(" << sessionName() << "): ";
+  p << "in session " << "(" << sessionName() << "): ";
   return p;
 }
 

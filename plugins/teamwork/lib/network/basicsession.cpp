@@ -156,14 +156,14 @@ bool BasicTCPSession::inputOutput() {
           if ( s >= 0 && s < MAXMESSAGESIZE ) {
             receivingData_.clear();
             receivingSize_ = s;
-            //out() << "receiving message of size" << receivingSize_;
+            //out() << "receiving message of size " << receivingSize_;
           } else {
             throw StreamError( "message-header-integer is wrong: " + formatInt( s ) );
           }
         } else {
           throw StreamError( "message-header-integer is wrong, count of bytes: " + formatInt( cnt ) + " size of buffer: " + formatInt( sz.size() ) );
         }
-        DEBUGLOG( "receiving message of size" << receivingSize_ );
+        DEBUGLOG( "receiving message of size " << receivingSize_ );
       }
 
       if ( isPending( pendingInput, 0 ) ) {
@@ -173,12 +173,12 @@ bool BasicTCPSession::inputOutput() {
           ///process a complete message
           if ( !receivingData_.empty() ) {
             processIncomingMessage( receivingData_ );
-            //out() << "got:" << toString( receivingData_ );
+            //out() << "got: " << toString( receivingData_ );
             MessagePointer msg = buildMessageFromBuffer( receivingData_, messages_, this );
             MessagePointer::Locked l = ( MessagePointer ) msg;
             if ( l ) {
               l->info().setSession( this );
-              DEBUGLOG( "handling message of size" << receivingData_.size() << "and type" << messages_.identify( l ) );
+              DEBUGLOG( "handling message of size " << receivingData_.size() << " and type " << messages_.identify( l ) );
             } else
               out() << "handling not lockable message";
 
@@ -194,7 +194,7 @@ bool BasicTCPSession::inputOutput() {
           receivingSize_ = 0;
           receivingData_.clear();
         }
-        //out() << "received:" << receivingData_.size() << "yet needed:" << receivingSize_;
+        //out() << "received: " << receivingData_.size() << " yet needed: " << receivingSize_;
       }
     }
     if ( sendData_.empty() ) {
@@ -203,9 +203,9 @@ bool BasicTCPSession::inputOutput() {
       serializeMessage();
     }
     if ( !sendData_.empty() ) {
-      //out() << "writing" << sendData_.size();
+      //out() << "writing " << sendData_.size();
       uint cnt = writeData( sendData_, sendData_.size() );
-      //DEBUGLOG( "wrote" << cnt << "left:" << sendData_.size() );
+      //DEBUGLOG( "wrote " << cnt << " left: " << sendData_.size() );
       //if( sendData_.empty() )
       if ( cnt )
         worked = true;
@@ -257,7 +257,7 @@ void BasicTCPSession::serializeMessage() {
           clone = 0;
         }
         catch( const boost::archive::archive_exception& e ) {
-          err() << "archive-exception while reconstructing message:" << e.what();
+          err() << "archive-exception while reconstructing message: " << e.what();
         }
         catch ( ... ) {
           err() << "exception while reconstructing the message";
@@ -272,7 +272,7 @@ void BasicTCPSession::serializeMessage() {
                 err() << "the reconstruction of a message of type \"" << mp->name() << "\" is wrong, the serialized content does not match!" ;
                 compare( buffer, buffer2 );
             } else {
-              err() << "the reconstruction of a message of type \"" << mp->name() << "\" is wrong!(mismatch in size:" << buffer.size() << "->" << buffer2.size() << ")" ;
+              err() << "the reconstruction of a message of type \"" << mp->name() << "\" is wrong!(mismatch in size: " << buffer.size() << " -> " << buffer2.size() << ")" ;
                 compare( buffer, buffer2 );
             }
           } else {
@@ -281,7 +281,7 @@ void BasicTCPSession::serializeMessage() {
         } catch ( const CannotReserialize& )
         {}
         catch( const boost::archive::archive_exception& e ) {
-          err() << "archive-exception while reconstructing message:" << e.what();
+          err() << "archive-exception while reconstructing message: " << e.what();
         }
 #ifndef DISABLEUNIVERSALCATCH
 
@@ -294,9 +294,9 @@ void BasicTCPSession::serializeMessage() {
         processOutgoingMessage( buffer );
         sendData_ = binaryInt( buffer.size() );
         sendData_ += buffer;
-        //out() << "sending:" << toString( buffer );
+        //out() << "sending: " << toString( buffer );
 
-        DEBUGLOG( "serialized outgoing message of size" << sendData_.size() << "and type" << messages_.identify( mp ) );
+        DEBUGLOG( "serialized outgoing message of size " << sendData_.size() << " and type " << messages_.identify( mp ) );
 
 #ifndef DISABLETRYCATCH
 
@@ -312,7 +312,7 @@ void BasicTCPSession::serializeMessage() {
         }
       }
       catch( const boost::archive::archive_exception& exc ) {
-        err() << "archive-exception while reconstructing message:" << exc.what();
+        err() << "archive-exception while reconstructing message: " << exc.what();
         failed( std::string( "could not serialize message of type \"" ) + mp->name() + "\", reason: " + std::string( exc.what() ) );
       }
 #ifndef DISABLEUNIVERSALCATCH
@@ -341,7 +341,7 @@ u32 BasicTCPSession::writeData( std::vector<DataType>& from, u32 max ) {
         }
       }
       u32 write = Socket::writeData( &from[ count ], Portion * sizeof( DataType ) );
-      //DEBUGLOG( "wrote portion of size" << write );
+      //DEBUGLOG( "wrote portion of size " << write );
       if ( write == 0 || write == 0xffffffff ) {
         if ( isPending( pendingOutput, 0 ) ) {
           throw StreamError( "writeData could not send" );
@@ -389,7 +389,7 @@ u32 BasicTCPSession::getData( std::vector<DataType>& to, u32 max ) {
           throw StreamError( "could not get data" );
         }
 
-        //DEBUGLOG( "got" << count );
+        //DEBUGLOG( "got " << count );
         return count;
       } else {
         u32 units = read / sizeof( DataType );
@@ -401,7 +401,7 @@ u32 BasicTCPSession::getData( std::vector<DataType>& to, u32 max ) {
       }
     }
   }
-  //DEBUGLOG( "got" << count );
+  //DEBUGLOG( "got " << count );
   return count;
 }
 
@@ -418,7 +418,7 @@ BasicTCPSession::BasicTCPSession( ost::TCPSocket &server, HandlerPointer handler
 }
 
 void BasicTCPSession::failed( std::string reason ) {
-  err() << "failed:" << reason.c_str();
+  err() << "failed: " << reason.c_str();
   sendingResult( false );
   failed_ = true;
   exit_ = true;
@@ -445,13 +445,13 @@ LoggerPrinter BasicTCPSession::err( int prio ) {
   LoggerPrinter p ( logger_, Logger::Error );
   if ( prio )
     p << prio << ":";
-  p << "error in session" << "(" << sessionName() << "): ";
+  p << "error in session " << "(" << sessionName() << "): ";
   return p;
 }
 
 LoggerPrinter BasicTCPSession::out( Logger::Level lv ) {
   LoggerPrinter p ( logger_, lv );
-  p << "in session" << "(" << sessionName() << "): ";
+  p << "in session " << "(" << sessionName() << "): ";
   return p;
 }
 
@@ -578,7 +578,7 @@ bool BasicTCPSession::send( MessageInterface* msg ) {
 
   //The following message indicates that the message's constructor does not correctly fill it's message-info. When this error happens, probably MessageConstructionInfo is not used correctly.
   if( !(msg->info().type() == messages_.idFromName( msg->name() )) )
-    err() << "sending message that is flagged with an incorrect type, real type:" << msg->name() << "" << messages_.idFromName( msg->name() ).desc() <<  " flagged type:" << msg->info().type().desc();
+    err() << "sending message that is flagged with an incorrect type, real type: " << msg->name() << " " << messages_.idFromName( msg->name() ).desc() <<  " flagged type: " << msg->info().type().desc();
 
   if ( !exit_ && !failed_ ) {
     messagesToSend_ << msg;

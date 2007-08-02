@@ -70,7 +70,7 @@ int changeSettings( int argc, char * argv[] ) {
     } else {
       conf.port = STANDARDPORT;
     }
-    cout << "changed the port to" << conf.port << endl;
+    cout << "changed the port to " << conf.port << endl;
     changed = true;
   }
   if( arg == "--setbind" ) {
@@ -79,7 +79,7 @@ int changeSettings( int argc, char * argv[] ) {
     } else {
       conf.bind = "0.0.0.0";
     }
-    cout << "changed the bound address to" << conf.bind << endl;
+    cout << "changed the bound address to " << conf.bind << endl;
     changed = true;
   }
 
@@ -100,7 +100,7 @@ int changeSettings( int argc, char * argv[] ) {
         User u = *it;
         const_cast<User&>(*it).setRights( rights );
         changed = true;
-        cout << "successfully set rights for" << it->name() << ":" << it->rightsAsString() << endl;
+        cout << "successfully set rights for " << it->name() << ": " << it->rightsAsString() << endl;
         break;
       }
     }
@@ -111,8 +111,8 @@ int changeSettings( int argc, char * argv[] ) {
   if( arg == "--show" ) {
     cout << "server-name: \"" << conf.serverName << "\"\n";
     cout << "server-password: \"" << conf.serverPassword << "\"\n";
-    cout << "count of registered users:" << conf.registeredUsers.size() << endl;
-    cout << "locally bound to address:" << conf.bind << "on port:" << conf.port << endl;
+    cout << "count of registered users: " << conf.registeredUsers.size() << endl;
+    cout << "locally bound to address: " << conf.bind << " on port:" << conf.port << endl;
   }
 
   if( arg == "--list" ) {
@@ -121,8 +121,8 @@ int changeSettings( int argc, char * argv[] ) {
       //UserPointer::Locked l = *it;
       cout << it->name();
       if( !it->password().empty() )
-        cout << " (has password)";
-      cout << "rights:" << it->rightsAsString();
+        cout << "  (has password)";
+      cout << " rights: " << it->rightsAsString();
       cout << endl;
     }
   }
@@ -239,13 +239,13 @@ class StandaloneServer : public Teamwork::Server {
     virtual ~StandaloneServer() {}
 
     int receiveMessage( TextMessage* msg ) {
-      out() << "standalone-server got text-message:" << msg->text() << "real message-type:" << msg->name();
+      out() << "standalone-server got text-message: " << msg->text() << " real message-type: " << msg->name();
       return 1;
     }
 
     int receiveMessage( MessageInterface* msg ) {
       UserPointer::Locked lu = msg->info().user();
-      out() << "standalone-server got unknown message:" << msg->name() << "from:" << (lu ? lu->name() : "unknown user" );
+      out() << "standalone-server got unknown message: " << msg->name() << " from: " << (lu ? lu->name() : "unknown user" );
       return 1;
     }
 
@@ -270,14 +270,14 @@ class StandaloneServer : public Teamwork::Server {
 
     int receiveTextMessage( const SafeSharedPtr<TextMessage>& smsg ) {
       LockedSharedPtr<TextMessage> msg = smsg;
-      out() << "standalone-server got text-message:" << msg->text() << "real message-type:" << msg->name();
+      out() << "standalone-server got text-message: " << msg->text() << " real message-type: " << msg->name();
       return 1;
     }
 
     int receiveUnknownMessage( const SafeSharedPtr<MessageInterface>& smsg ) {
       LockedSharedPtr<MessageInterface> msg = smsg;
       UserPointer::Locked lu = msg->info().user();
-      out() << "standalone-server got unknown message:" << msg->name() << "from:" << (lu ? lu->name() : "unknown user" );
+      out() << "standalone-server got unknown message: " << msg->name() << " from: " << (lu ? lu->name() : "unknown user" );
       return 1;
     }
 
@@ -300,7 +300,7 @@ int server() {
   serv.unsafe()->setConfiguration( conf );
   serv.unsafe() ->start();
   serv.unsafe() ->allowIncoming( true );
-  cout << "server running on port" << conf.port << endl;
+  cout << "server running on port " << conf.port << endl;
 
   serv.unsafe() ->join();
   return 0;

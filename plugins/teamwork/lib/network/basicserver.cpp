@@ -35,7 +35,7 @@ BasicTCPSocket::BasicTCPSocket( ost::InetAddress &ia, int port ) : ost::TCPSocke
 
 bool BasicTCPSocket::onAccept( const ost::InetHostAddress &ia, ost::tpport_t port ) {
   setCompletion( false );
-  cout << "accepting from:" << ia.getHostname() << ":" << port << endl;
+  cout << "accepting from: " << ia.getHostname() << ":" << port << endl;
 
   return true;
 }
@@ -50,13 +50,13 @@ void BasicServer::buildSocket() {
 
   try {
     server_ = new BasicTCPSocket( addr, port_ );
-    out() << "server is listening on" << addr << ":" << port_;
+    out() << "server is listening on " << addr << ":" << port_;
   } catch ( ost::Socket * socket ) {
     failed_ = true;
     ost::tpport_t port;
     int erro = socket->getErrorNumber();
     ost::InetAddress saddr = ( ost::InetAddress ) socket->getPeer( &port );
-    err() << "socket error" << saddr.getHostname() << ":" << port << "=" << erro;
+    err() << "socket error " << saddr.getHostname() << ":" << port << " = " << erro;
     if ( erro == ost::Socket::errBindingFailed ) {
       err() << "bind failed; port busy";
     } else {
@@ -79,10 +79,10 @@ void BasicServer::run() {
       try {
         ost::InetHostAddress next = server_->getRequest();
         if ( !allowIncoming_ ) {
-          out() << "refusing session for client" << next;
+          out() << "refusing session for client " << next;
           server_->reject();
         } else {
-          out() << "creating session for client" << next;
+          out() << "creating session for client " << next;
           SessionPointer tcp = createSession( server_ );
           if ( tcp ) {
             out() << "session created" ;
@@ -101,7 +101,7 @@ void BasicServer::run() {
         ost::tpport_t port;
         int err = socket->getErrorNumber();
         ost::InetAddress saddr = ( ost::InetAddress ) socket->getPeer( &port );
-        cerr << "socket error" << saddr.getHostname() << ":" << port << "=" << err << endl;
+        cerr << "socket error " << saddr.getHostname() << ":" << port << " = " << err << endl;
         if ( err == ost::Socket::errBindingFailed )
           cerr << "bind failed; port busy" << endl;
         else

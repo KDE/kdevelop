@@ -681,16 +681,16 @@ Map Map::rebuild() {
 std::string Node::dump( int indexOffset, int depth ) const {
   std::ostringstream os;
   mult( os, depth, "  " );
-  os << "depth:" << depth << ( isLeaf_ ? " leaf " : " helper " ) << "sum:" << sum_ << "";
+  os << "depth: " << depth << ( isLeaf_ ? " leaf " : " helper " ) << "sum: " << sum_ << " ";
 
   if ( !isLeaf_ ) {
-    os << "index-count" << indexCount_ << "(nodes:" << nodes_.size() << ")\n";
+    os << "index-count " << indexCount_ << " (nodes: " << nodes_.size() << ")\n";
     for ( ListType::const_iterator it = nodes_.begin(); it != nodes_.end(); ++it ) {
       os << ( *it ) ->dump( indexOffset, depth + 1 );
       indexOffset += ( *it ) ->indexCount();
     }
   } else {
-    os << "index:" << indexOffset << "\n";
+    os << "index: " << indexOffset << "\n";
   }
 
   return os.str();
