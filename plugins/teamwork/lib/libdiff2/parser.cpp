@@ -96,8 +96,8 @@ DiffModelList* Parser::parse( QStringList& diffLines )
 		DiffModelListIterator mEnd    = modelList->end();
 		for ( ; modelIt != mEnd; ++modelIt )
 		{
-			kDebug(8101) << "Hunkcount: " << (*modelIt)->hunkCount();
-			kDebug(8101) << "Diffcount: " << (*modelIt)->differenceCount();
+			kDebug(8101) << "Hunkcount:" << (*modelIt)->hunkCount();
+			kDebug(8101) << "Diffcount:" << (*modelIt)->differenceCount();
 		}
 	}
 
