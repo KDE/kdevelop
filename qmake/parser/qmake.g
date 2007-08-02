@@ -177,7 +177,7 @@ void parser::tokenize( const QString& contents )
 
         if( m_debug )
         {
-            kDebug(9024) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end) << "::"; //" "; // debug output
+            kDebug(9024) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end) << "::";
         }
 
     }
