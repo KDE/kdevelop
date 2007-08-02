@@ -587,7 +587,7 @@ CMAKE_END_AST_CLASS( SetTestsPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SiteNameAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName );
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
 CMAKE_END_AST_CLASS( SiteNameAst )
 
 
@@ -599,16 +599,16 @@ CMAKE_BEGIN_AST_CLASS( StringAst )
 enum StringAstType { REGEX, REPLACE, COMPARE, ASCII, CONFIGURE,
     TOUPPER, TOLOWER, LENGTH, SUBSTRING };
 enum CommandType { MATCH, MATCHALL, REGEX_REPLACE, EQUAL, NOTEQUAL, LESS, GREATER };
-CMAKE_ADD_AST_MEMBER( StringAstType, StringAstType, type, Type );
-CMAKE_ADD_AST_MEMBER( CommandType, CommandType, cmdType, CmdType );
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable );
-CMAKE_ADD_AST_MEMBER( QString, const QString&, regex, Regex );
-CMAKE_ADD_AST_MEMBER( QString, const QString&, replace, Replace );
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, input, Input);
-CMAKE_ADD_AST_MEMBER( bool, bool, only, Only );
-CMAKE_ADD_AST_MEMBER( bool, bool, escapeQuotes, EscapeQuotes );
-CMAKE_ADD_AST_MEMBER( int, int, begin, Begin );
-CMAKE_ADD_AST_MEMBER( int, int, length, Length );
+CMAKE_ADD_AST_MEMBER( StringAstType, StringAstType, type, Type )
+CMAKE_ADD_AST_MEMBER( CommandType, CommandType, cmdType, CmdType )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, regex, Regex )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, replace, Replace )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, input, Input)
+CMAKE_ADD_AST_MEMBER( bool, bool, only, Only )
+CMAKE_ADD_AST_MEMBER( bool, bool, escapeQuotes, EscapeQuotes )
+CMAKE_ADD_AST_MEMBER( int, int, begin, Begin )
+CMAKE_ADD_AST_MEMBER( int, int, length, Length )
 CMAKE_END_AST_CLASS( StringAst )
 
 
