@@ -629,7 +629,7 @@ void TestDUChain::testDeclareNamespace()
   QCOMPARE(findDeclaration(testCtx,  QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(bar->uses().count(), 1);
   QCOMPARE(findDeclaration(top, bar->identifier()), bar2);
-  kDebug() << "searching " << bar->qualifiedIdentifier().toString() << endl;
+  kDebug() << "searching" << bar->qualifiedIdentifier().toString();
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
 
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar")), bar2);
@@ -966,12 +966,12 @@ void TestDUChain::testTemplates() {
     QVERIFY(template1InstanceDecl2);
     QCOMPARE(template1InstanceDecl2->abstractType()->toString(), QString("C"));
     
-    kDebug() << "searching for " << ident2.toString() << endl;
-    kDebug() << "Part 1: " << ident2.at(0).toString() << " templates: " << ident2.at(0).templateIdentifiers().count() << endl;
-    kDebug() << "Part 2: " << ident2.at(1).toString() << endl;
+    kDebug() << "searching for" << ident2.toString();
+    kDebug() << "Part 1:" << ident2.at(0).toString() << "templates:" << ident2.at(0).templateIdentifiers().count();
+    kDebug() << "Part 2:" << ident2.at(1).toString();
     Declaration* template1InstanceDecl = findDeclaration(top, ident2);
     QVERIFY(template1InstanceDecl);
-    kDebug() << "found: " << template1InstanceDecl->toString() << endl;
+    kDebug() << "found:" << template1InstanceDecl->toString();
     QCOMPARE(template1InstanceDecl->abstractType()->toString(), QString("B"));
   }
   
@@ -1127,7 +1127,7 @@ void TestDUChain::release(DUContext* top)
 DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
 {
   if (dump)
-    kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
+    kDebug() << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
   session->setContents(unit);
@@ -1137,7 +1137,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   ast->session = session;
 
   if (dump & DumpAST) {
-    kDebug() << "===== AST:" << endl;
+    kDebug() << "===== AST:";
     dumper.dump(ast, session);
   }
 
@@ -1152,14 +1152,14 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   useBuilder.buildUses(ast);
 
   if (dump & DumpDUChain) {
-    kDebug() << "===== DUChain:" << endl;
+    kDebug() << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
     dumper.dump(top);
   }
 
   if (dump & DumpType) {
-    kDebug() << "===== Types:" << endl;
+    kDebug() << "===== Types:";
     DUChainWriteLocker lock(DUChain::lock());
     DumpTypes dt;
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
@@ -1167,7 +1167,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   }
 
   if (dump)
-    kDebug() << "===== Finished test case." << endl;
+    kDebug() << "===== Finished test case.";
 
   delete session;
 

@@ -75,7 +75,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         //The preprocessor will call parseForeground() to preprocess & parse instantly
     }
 
-    kDebug( 9007 ) << k_funcinfo << "Created job " << this << " pp " << m_preprocessJob << " parse " << parseJob() << endl;
+    kDebug( 9007 ) << k_funcinfo << "Created job" << this << "pp" << m_preprocessJob << "parse" << parseJob();
 }
 
 void CPPParseJob::parseForeground() {
@@ -127,7 +127,7 @@ CPPParseJob::CPPParseJob( KDevelop::Document *document,
     addJob(ppj = new PreprocessJob(this));
     addJob(m_parseJob = new ::ParseJob(this));
 
-    //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
+    //kDebug() << k_funcinfo << "Created job" << this << "pp" << ppj << "parse" << parseJob();
 }
 */
 
@@ -271,7 +271,7 @@ void CPPInternalParseJob::run()
 
         // Control the lifetime of the editor integrator (so that locking works)
         {
-            kDebug( 9007 ) << "building duchain" << endl;
+            kDebug( 9007 ) << "building duchain";
             CppEditorIntegrator editor(parentJob()->parseSession());
             editor.setCurrentUrl(parentJob()->document());
 
@@ -305,7 +305,7 @@ void CPPInternalParseJob::run()
 
             parentJob()->setDUChain(topContext);
 
-            kDebug( 9007 ) << "duchain is built" << endl;
+            kDebug( 9007 ) << "duchain is built";
             if ( parentJob()->cpp()->codeHighlighting() && editor.smart() )
             {
                 QMutexLocker lock(editor.smart()->smartMutex());
@@ -320,7 +320,7 @@ void CPPInternalParseJob::run()
 
         /*if (topContext->smartRange()) {
             DUChainReadLocker lock(DUChain::lock());
-            kDebug( 9007 ) << "================== duchain ==================" << endl;
+            kDebug( 9007 ) << "================== duchain ==================";
             if (topContext->smartRange()) {
                 DumpChain dump;
                 dump.dump(ast, parentJob()->parseSession());
@@ -332,7 +332,7 @@ void CPPInternalParseJob::run()
     //DumpTree dumpTree;
     //dumpTree.dump( m_AST );
 
-    kDebug( 9007 ) << "===-- Parsing finished --===> " << parentJob()->document().fileName() << endl;
+    kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().fileName();
 }
 
 

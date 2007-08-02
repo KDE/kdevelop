@@ -1499,7 +1499,7 @@ IfAst::~IfAst()
 
 void IfAst::writeBack( QString& s) const
 {
-    kDebug(9032)<< "if: " << s << endl;
+    kDebug(9032)<< "if:" << s;
 }
 
 bool IfAst::parseFunctionInfo( const CMakeFunctionDesc& func )
@@ -2016,7 +2016,7 @@ bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(type=="FATAL_ERROR")
             m_type=FATAL_ERROR;
         else
-            kDebug(9032) << "error. unknown message parameter: " << type << endl;
+            kDebug(9032) << "error. unknown message parameter:" << type;
     }
     return true;
 }

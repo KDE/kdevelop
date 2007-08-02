@@ -77,10 +77,10 @@ MakeBuilder::~MakeBuilder()
 
 void MakeBuilder::cleanupModel( int id )
 {
-    kDebug(9038) << "view was removed, check wether its one of ours" << endl;
+    kDebug(9038) << "view was removed, check wether its one of ours";
     if( m_models.contains( id ) )
     {
-        kDebug(9038) << "do some cleanup" << endl;
+        kDebug(9038) << "do some cleanup";
         MakeOutputModel* model = m_models[id];
         KDevelop::CommandExecutor* cmd = m_commands[id];
         foreach( KDevelop::IProject* p, m_ids.keys() )
@@ -103,7 +103,7 @@ void MakeBuilder::cleanupModel( int id )
 
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
 {
-    kDebug(9038) << "Building with make" << endl;
+    kDebug(9038) << "Building with make";
     if( ! (dom->type() == KDevelop::ProjectBaseItem::Project ||
            dom->type() == KDevelop::ProjectBaseItem::Target ||
            dom->type() == KDevelop::ProjectBaseItem::BuildFolder ) )
@@ -154,7 +154,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             connect( m_commands[id], SIGNAL( completed() ), successMapper, SLOT( map() ) );
             errorMapper->setMapping( m_commands[id], id );
             successMapper->setMapping( m_commands[id], id );
-            kDebug(9038) << "Starting build: " << cmd << " Build directory " << buildDir << endl;
+            kDebug(9038) << "Starting build:" << cmd << "Build directory" << buildDir;
             m_commands[id]->start();
             return true;
         } // end of if(view)
@@ -212,14 +212,14 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
                 topBldDir = bldMan->buildDirectory( prjItem ); // the correct build dir
             else
             {
-                kDebug(9038) << " Warning: fail to get build manager " << endl;
+                kDebug(9038) << "Warning: fail to get build manager";
                 topBldDir = prjItem->url();
             }
         }
         else
         {
             // just set to top project dir, since we can't call buildDirectory without ProjectItem
-            kDebug(9038) << " Warning: fail to retrieve KDevelop::ProjectItem " << endl;
+            kDebug(9038) << "Warning: fail to retrieve KDevelop::ProjectItem";
             topBldDir = targetItem->project()->folder();
         }
 

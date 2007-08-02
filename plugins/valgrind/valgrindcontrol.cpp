@@ -64,9 +64,9 @@ void ValgrindControl::run( ValgrindModel * model, const QString & executable, co
       ++port;
 
     if (!m_server->isListening())
-      kWarning() << "Could not open TCP socket for communication with Valgrind." << endl;
+      kWarning() << "Could not open TCP socket for communication with Valgrind." ;
     else
-      kDebug() << "Opened TCP socket " << port << " for communication with Valgrind." << endl;
+      kDebug() << "Opened TCP socket" << port << "for communication with Valgrind.";
   }
 
   m_process->clearArguments();
@@ -110,7 +110,7 @@ void ValgrindControl::readFromValgrind( )
 void ValgrindControl::newValgrindConnection( )
 {
   QTcpSocket* sock = m_server->nextPendingConnection();
-  kDebug() << k_funcinfo << sock << endl;
+  kDebug() << k_funcinfo << sock;
   if (sock && !m_connection) {
     m_connection = sock;
     delete m_inputSource;

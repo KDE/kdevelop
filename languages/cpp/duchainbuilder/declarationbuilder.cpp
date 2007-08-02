@@ -98,7 +98,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
     if( decl->type<CppTemplateParameterType>() ) {
       decl->type<CppTemplateParameterType>()->setDeclaration(dec);
     } else {
-      kDebug() << "bad last type" << endl;
+      kDebug() << "bad last type";
     }
 
     if( ast->parameter_declaration ) {
@@ -120,7 +120,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
       decl->setDefaultParameter(defaultParam);
     }
   } else {
-    kDebug() << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing" << endl;
+    kDebug() << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing";
   }
 }
 
@@ -198,7 +198,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
         if (id.count() > 1) {
           KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
-          //kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
+          //kDebug() << k_funcinfo << "Searching for declaration of" << id;
 
           // TODO: potentially excessive locking
           DUChainWriteLocker lock(DUChain::lock());
@@ -448,17 +448,17 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       if( !decls.isEmpty() )
       {
         if( decls.count() > 1 )
-          kDebug() << "Found multiple declarations of specialization-base " << id.toString() << " for " << declaration->toString() << endl;
+          kDebug() << "Found multiple declarations of specialization-base" << id.toString() << "for" << declaration->toString();
 
         foreach( Declaration* decl, decls )
           if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) )
             templateDecl->setSpecializedFrom(baseTemplateDecl);
 
         if( !templateDecl->specializedFrom() )
-          kDebug() << "Could not find valid specialization-base " << id.toString() << " for " << declaration->toString() << endl;
+          kDebug() << "Could not find valid specialization-base" << id.toString() << "for" << declaration->toString();
       }
     } else {
-      kDebug() << "Specialization of non-template class " << declaration->toString() << endl;
+      kDebug() << "Specialization of non-template class" << declaration->toString();
     }
 
   }
@@ -516,7 +516,7 @@ void DeclarationBuilder::closeDeclaration()
 
 
 
-  //kDebug() << k_funcinfo << "Mangled declaration: " << currentDeclaration()->mangledIdentifier() << endl;
+  //kDebug() << k_funcinfo << "Mangled declaration:" << currentDeclaration()->mangledIdentifier();
 
   m_declarationStack.pop();
 }

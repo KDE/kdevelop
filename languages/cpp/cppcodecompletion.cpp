@@ -55,7 +55,7 @@ void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEdito
   if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
     cc->setAutomaticInvocationEnabled(true);
     cc->registerCompletionModel(m_model);
-    kDebug(9007) << "Registered completion model" << endl;
+    kDebug(9007) << "Registered completion model";
   }
 }
 
@@ -69,7 +69,7 @@ void CppCodeCompletion::documentLoaded(KParts::Part* document)
     connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
 
   } else {
-    kDebug(9007) << k_funcinfo << "Non-text editor document added" << endl;
+    kDebug(9007) << k_funcinfo << "Non-text editor document added";
   }
 }
 

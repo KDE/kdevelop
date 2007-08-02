@@ -88,14 +88,14 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     if ( !folder )
         return folderList;
 
-    kDebug(9025) << "parse: " << folder->url() << endl;
+    kDebug(9025) << "parse:" << folder->url();
     KUrl cmakeListsPath(folder->url());
     cmakeListsPath.addPath("CMakeLists.txt");
     
     CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
     
     if(f.isEmpty()) {
-        kDebug(9032) << "There is no " << cmakeListsPath << endl;
+        kDebug(9032) << "There is no" << cmakeListsPath;
         return folderList;
     }
     m_vars.insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
@@ -155,7 +155,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             sourceFile.adjustPath( KUrl::AddTrailingSlash );
             sourceFile.addPath( sFile );
             new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-            kDebug(9032) << "..........Adding: " << sFile << endl;
+            kDebug(9032) << "..........Adding:" << sFile;
         }
     }
     return folderList;
@@ -168,11 +168,11 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     QString folderUrl(cmakeInfoFile.toLocalFile());
     cmakeInfoFile.addPath("CMakeLists.txt");
 
-    kDebug(9025) << k_funcinfo << "file is " << cmakeInfoFile.path() << endl;
+    kDebug(9025) << k_funcinfo << "file is" << cmakeInfoFile.path();
     if ( !cmakeInfoFile.isLocalFile() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. CMake support doesn't handle remote projects" << endl;
+        kWarning(9025) << "not a local file. CMake support doesn't handle remote projects" ;
     }
     else
     {

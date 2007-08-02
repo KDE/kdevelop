@@ -128,7 +128,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     if( !declarations.isEmpty() )
     {
       if( declarations.count() > 1 )
-        kDebug() << "found multiple declarations for " << baseClassIdentifier.toString() << endl;
+        kDebug() << "found multiple declarations for" << baseClassIdentifier.toString();
       
       foreach( Declaration* decl, declarations )
       {
@@ -174,7 +174,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
       
       addBaseType(instance);
     } else { //A case for the problem-reporter
-      kDebug() << "Could not find declaration for " << baseClassIdentifier.toString() << endl;
+      kDebug() << "Could not find declaration for" << baseClassIdentifier.toString();
     }
   }
 
@@ -308,8 +308,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     if (!dec.isEmpty() && dec.front()->abstractType()) {
       ///@todo only functions may have multiple declarations here
       if( dec.count() > 1 )
-        kDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
-      //kDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << " context: " << dec.front()->context() << endl;
+        kDebug() << id.toString() << "was found" << dec.count() << "times";
+      //kDebug() << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();
        openedType = true;
        openType(dec.front()->abstractType(), node);
     } else {
@@ -318,10 +318,10 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         ///@todo What about position?
         
        openedType = true;
-       kDebug() << "opening delayed type for " << id.toString() << endl;
+       kDebug() << "opening delayed type for" << id.toString();
        openDelayedType(id, node);
       } else {
-        kDebug() << "no declaration found for " << id.toString() << " in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << " " << searchContext() << endl;
+        kDebug() << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext();
       }
     }
   }

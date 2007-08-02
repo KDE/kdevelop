@@ -35,7 +35,7 @@ int main (int /*argc*/, char *argv[])
   char const *filename = *++argv;
   if (!filename)
     {
-      kDebug() << "usage: pp file.cpp" << endl;
+      kDebug() << "usage: pp file.cpp";
       return EXIT_FAILURE;
     }
 
@@ -55,10 +55,10 @@ int main (int /*argc*/, char *argv[])
 
   QStringList resultLines = result.split('\n');
   for (int i = 0; i < resultLines.count(); ++i)
-    kDebug() << i << ": " << resultLines[i] << endl;
+    kDebug() << i << ":" << resultLines[i];
 
   /*foreach (const Preprocessor::MacroItem& macro, p.macros())
-    kDebug() << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")" << endl;*/
+    kDebug() << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")";*/
 
   return EXIT_SUCCESS;
 }

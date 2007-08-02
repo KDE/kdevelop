@@ -136,7 +136,7 @@ namespace TypeUtils {
   ///Returns whether base is a base-class of c
   bool isPublicBaseClass( const CppClassType* c, CppClassType* base ) {
     foreach( const CppClassType::BaseClassInstance& b, c->baseClasses() ) {
-      kDebug() << "public base of " << c->toString() << " is " << b.baseClass->toString() << endl;
+      kDebug() << "public base of" << c->toString() << "is" << b.baseClass->toString();
       if( b.access != KDevelop::Declaration::Private ) {
         if( b.baseClass.data() == base )
           return true;

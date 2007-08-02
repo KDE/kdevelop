@@ -37,10 +37,10 @@ void MakeOutputModel::activate( const QModelIndex& index )
 {
     if( index.model() != this )
     {
-        kDebug(9038) << "not my model, returning" << endl;
+        kDebug(9038) << "not my model, returning";
         return;
     }
-    kDebug(9038) << "Model activated " << index.row() << endl;
+    kDebug(9038) << "Model activated" << index.row();
 
     QStandardItem *stditem = itemFromIndex( index );
     MakeWarningItem *warn = dynamic_cast<MakeWarningItem*>( stditem );

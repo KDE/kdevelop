@@ -99,7 +99,7 @@ ValgrindModel::~ ValgrindModel( )
 
 bool ValgrindModel::startElement( const QString &, const QString & localName, const QString &, const QXmlAttributes &)
 {
-  kDebug() << k_funcinfo << localName << endl;
+  kDebug() << k_funcinfo << localName;
 
   m_buffer.clear();
 

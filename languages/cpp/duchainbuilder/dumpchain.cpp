@@ -147,11 +147,11 @@ void DumpChain::visit(AST *node)
 
 
       kDebug() << indentation <<  "\\" << names[node->kind]
-              << "[(" << node->start_token << ") " << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << /*", "
-              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) <<*/ "] " << nodeText << endl;
+              << "[(" << node->start_token << ")" << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << /*", "
+              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) <<*/ "]" << nodeText << endl;
     } else
       kDebug() << indentation << "\\" << names[node->kind]
-              << "[" << node->start_token << ", " << node->end_token << "]" << endl;
+              << "[" << node->start_token << "," << node->end_token << "]" << endl;
 
   ++indent;
   DefaultVisitor::visit(node);
@@ -164,7 +164,7 @@ void DumpChain::visit(AST *node)
               << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << "]" << endl;
     else
       kDebug() << indentation << "/" << names[node->kind]
-              << "[" << node->start_token << ", " << node->end_token << ']' << endl;
+              << "[" << node->start_token << "," << node->end_token << ']' << endl;
 }
 
 DumpChain::~ DumpChain( )
@@ -174,17 +174,17 @@ DumpChain::~ DumpChain( )
 
 void DumpChain::dump( DUContext * context, bool imported )
 {
-  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << " \"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
+  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->textRange();
   if( !context )
     return;
   if (!imported) {
     foreach (Declaration* dec, context->localDeclarations()) {
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
-      kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]  " << dec->textRange() << ", " << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << " use(s)." << endl;
+      kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec->textRange() << "," << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
       if (dec->definition())
-        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition: " << dec->definition()->textRange() << endl;
+        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << dec->definition()->textRange();
       foreach (Use* use, dec->uses())
-        kDebug() << QString((indent+2) * 2, ' ') << "Use: " << use->textRange() << endl;
+        kDebug() << QString((indent+2) * 2, ' ') << "Use:" << use->textRange();
     }
   }
 

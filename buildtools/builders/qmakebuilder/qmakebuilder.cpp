@@ -90,10 +90,10 @@ QMakeBuilder::~QMakeBuilder()
 
 void QMakeBuilder::cleanupModel( int id )
 {
-    kDebug(9024) << "view was removed, check wether its one of ours" << endl;
+    kDebug(9024) << "view was removed, check wether its one of ours";
     if( m_models.contains( id ) )
     {
-        kDebug(9024) << "do some cleanup" << endl;
+        kDebug(9024) << "do some cleanup";
         KDevelop::OutputModel* model = m_models[id];
         KDevelop::CommandExecutor* cmd = m_cmds[id];
         foreach( KDevelop::IProject* p, m_ids.keys() )
@@ -116,7 +116,7 @@ void QMakeBuilder::cleanupModel( int id )
 
 bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
-    kDebug(9024) << "Building" << endl;
+    kDebug(9024) << "Building";
     if( dom->type() != KDevelop::ProjectBaseItem::Project )
         return false;
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
@@ -144,9 +144,9 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             QString cmd;
             KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
             KConfigGroup group(cfg.data(), "QMake Builder");
-            kDebug(9024) << "Reading setting: " << group.readEntry("QMake Binary") << endl;
+            kDebug(9024) << "Reading setting:" << group.readEntry("QMake Binary");
             KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
-//             kDebug(9024) << v << v.type() << v.userType() << endl;
+//             kDebug(9024) << v << v.type() << v.userType();
             cmd = v.toLocalFile();
             m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
             connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
@@ -173,7 +173,7 @@ bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 
 void QMakeBuilder::completed(int id)
 {
-    kDebug(9024) << "command finished " << id << endl;
+    kDebug(9024) << "command finished" << id;
     if( m_items.contains(id))
     {
         IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
@@ -182,10 +182,10 @@ void QMakeBuilder::completed(int id)
             IMakeBuilder* builder = i->extension<IMakeBuilder>();
             if( builder )
             {
-                kDebug(9024) << "Building with make" << endl;
+                kDebug(9024) << "Building with make";
                 builder->build(m_items[id]);
-            }else kDebug(9024) << "Make builder not with extension" << endl;
-        } else kDebug(9024) << "Make builder not found" << endl;
+            }else kDebug(9024) << "Make builder not with extension";
+        } else kDebug(9024) << "Make builder not found";
     }
 }
 

@@ -71,13 +71,13 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
 
-    kDebug(9024) << k_funcinfo << "Parsing item: " << endl;
+    kDebug(9024) << k_funcinfo << "Parsing item:";
 
     QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
     if( !folderitem )
         return folderList;
 
-    kDebug(9024) << k_funcinfo << "Item is a qmakefolder: " << endl;
+    kDebug(9024) << k_funcinfo << "Item is a qmakefolder:";
 
     foreach( QMakeProjectScope* subproject, folderitem->projectScope()->subProjects() )
     {
@@ -91,7 +91,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     {
         new QMakeTargetItem( item->project(), s,  item );
     }
-    kDebug(9024) << k_funcinfo << "Added " << folderList.count() << " Elements" << endl;
+    kDebug(9024) << k_funcinfo << "Added" << folderList.count() << "Elements";
 
     return folderList;
 }
@@ -102,7 +102,7 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
     if( !dirName.isLocalFile() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" << endl;
+        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" ;
     }else
     {
         QFileInfo fi( dirName.toLocalFile() );

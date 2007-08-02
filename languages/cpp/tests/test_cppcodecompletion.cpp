@@ -187,7 +187,7 @@ void TestCppCodeCompletion::testCompletionContext() {
     
     lock.lock();
     for( Cpp::CodeCompletionContext::FunctionList::const_iterator it = function->functions().begin(); it != function->functions().end(); ++it )
-      kDebug() << (*it).function.declaration()->toString() << ((*it).function.isViable() ? QString("(viable)") : QString("(not viable)"))  << endl;
+      kDebug() << (*it).function.declaration()->toString() << ((*it).function.isViable() ? QString("(viable)") : QString("(not viable)")) ;
     lock.unlock();
     
     QVERIFY(function->functions().size() == 4);
@@ -423,10 +423,10 @@ struct TestPreprocessor : public rpp::Preprocessor {
   {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.find(fileName);
     if( it != cc->fakeIncludes.end() || !pp ) {
-      kDebug() << "parsing included file \"" << fileName << "\"" << endl;
+      kDebug() << "parsing included file \"" << fileName << "\"";
       included << cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp);
     } else {
-      kDebug() << "could not find include-file \"" << fileName << "\"" << endl;
+      kDebug() << "could not find include-file \"" << fileName << "\"";
     }
     return 0;
   }
@@ -461,7 +461,7 @@ QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*
 DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity)
 {
   if (dump)
-    kDebug() << "==== Beginning new test case...:" << endl << unit << endl << endl;
+    kDebug() << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
    ;
@@ -482,7 +482,7 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
           }
         }
       } else {
-        kDebug() << "PROBLEM" << endl;
+        kDebug() << "PROBLEM";
       }
     }
   
@@ -491,7 +491,7 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
   ast->session = session;
 
   if (dump & DumpAST) {
-    kDebug() << "===== AST:" << endl;
+    kDebug() << "===== AST:";
     dumper.dump(ast, session);
   }
 
@@ -510,14 +510,14 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
   useBuilder.buildUses(ast);
 
   if (dump & DumpDUChain) {
-    kDebug() << "===== DUChain:" << endl;
+    kDebug() << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
     dumper.dump(top);
   }
   
   if (dump & DumpType) {
-    kDebug() << "===== Types:" << endl;
+    kDebug() << "===== Types:";
     DumpTypes dt;
     DUChainWriteLocker lock(DUChain::lock());
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
@@ -532,13 +532,13 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
       foreach( DUContext* context, temporaryIncluded )
         top->removeImportedParentContext( context );
     } else {
-      kDebug() << "PROBLEM" << endl;
+      kDebug() << "PROBLEM";
     }
   }
   
 
   if (dump)
-    kDebug() << "===== Finished test case." << endl;
+    kDebug() << "===== Finished test case.";
 
   delete session;
 

@@ -61,7 +61,7 @@ ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict)
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, bool statement ) {
 
   if( m_debug )
-    kDebug() << "==== .Evaluating ..:" << endl << unit << endl << endl;
+    kDebug() << "==== .Evaluating ..:" << endl << unit;
 
   ParseSession* session = new ParseSession();
 
@@ -90,7 +90,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   }
 
   if (m_debug) {
-    kDebug() << "===== AST:" << endl;
+    kDebug() << "===== AST:";
     dumper.dump(ast, session);
   }
 
@@ -100,7 +100,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   /*
   static int testNumber = 0; //@todo what this url for?
   KUrl url(QString("file:///internal/evaluate_%1").arg(testNumber++));
-  kDebug() << "url: " << url << endl;
+  kDebug() << "url:" << url;
 
   DeclarationBuilder definitionBuilder(session);
   DUContext* top = definitionBuilder.buildSubDeclarations(url, ast, context);
@@ -109,14 +109,14 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   useBuilder.buildUses(ast);
 
   if (m_debug) {
-    kDebug() << "===== DUChain:" << endl;
+    kDebug() << "===== DUChain:";
 
     DUChainReadLocker lock(DUChain::lock());
     dumper.dump(top, false);
   }
 
   if (m_debug) {
-    kDebug() << "===== Types:" << endl;
+    kDebug() << "===== Types:";
     DumpTypes dt;
     DUChainReadLocker lock(DUChain::lock());
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
@@ -124,7 +124,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   }
 
   if (m_debug)
-    kDebug() << "===== Finished evaluation." << endl;
+    kDebug() << "===== Finished evaluation.";
   */
   ExpressionEvaluationResult ret = evaluateType( ast, session );
 

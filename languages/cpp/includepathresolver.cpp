@@ -71,7 +71,7 @@ namespace CppTools {
       ///@param files list of files that should be fake-modified(modtime will be set to current time)
       FileModificationTimeWrapper( const QStringList& files = QStringList() ) : m_newTime( time(0) ) {
         for( QStringList::const_iterator it = files.begin(); it != files.end(); ++it ) {
-          ifTest( cout << "touching " << (*it).toUtf8().constData() << endl );
+          ifTest( cout << "touching" << (*it).toUtf8().constData() << endl );
           struct stat s;
           if( stat( (*it).toLocal8Bit().constData(), &s ) == 0 ) {
             ///Success
@@ -85,7 +85,7 @@ namespace CppTools {
 
             if( utimes( (*it).toLocal8Bit().constData(), times ) != 0 )
             {
-              ifTest( cout << "failed to touch " << (*it).toUtf8().constData() << endl );
+              ifTest( cout << "failed to touch" << (*it).toUtf8().constData() << endl );
             }
           }
         }
@@ -100,7 +100,7 @@ namespace CppTools {
       void unModify() {
         for( StatMap::const_iterator it = m_stat.begin(); it != m_stat.end(); ++it ) {
 
-          ifTest( cout << "untouching " << it.key().toUtf8().constData() << endl );
+          ifTest( cout << "untouching" << it.key().toUtf8().constData() << endl );
 
           struct stat s;
           if( stat( it.key().toLocal8Bit().constData(), &s ) == 0 ) {
@@ -112,11 +112,11 @@ namespace CppTools {
               times[1].tv_usec = 0;
               times[1].tv_sec = (*it).st_mtime;
               if( utimes( it.key().toLocal8Bit().constData(), times ) != 0 ) {
-                ifTest( cout << "failed to untouch " << it.key().toUtf8().constData() << endl );
+                ifTest( cout << "failed to untouch" << it.key().toUtf8().constData() << endl );
               }
             } else {
               ///The file was modified since we changed the modtime
-              ifTest( cout << " will not untouch " << it.key().toUtf8().constData() << " because the modification-time has changed" << endl );
+              ifTest( cout << "will not untouch" << it.key().toUtf8().constData() << "because the modification-time has changed" << endl );
             }
           }
         }
@@ -205,7 +205,7 @@ using namespace CppTools;
 
 bool IncludePathResolver::executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const
 {
-  ifTest( cout << "executing " << command.toUtf8().constData() << endl );
+  ifTest( cout << "executing" << command.toUtf8().constData() << endl );
 
   KProcess proc;
   proc.setWorkingDirectory(workingDirectory);
@@ -544,11 +544,11 @@ int main(int argc, char **argv) {
     return 1;
   }
   if( argc >= 5 ) {
-    cout << "mapping " << argv[3] << " -> " << argv[4] << endl;
+    cout << "mapping" << argv[3] << "->" << argv[4] << endl;
     resolver.setOutOfSourceBuildSystem( argv[3], argv[4] );
   }
   PathResolutionResult res = resolver.resolveIncludePath( argv[1], argv[2] );
-  cout << "success: " << res.success << "\n";
+  cout << "success:" << res.success << "\n";
   if( !res.success ) {
     cout << "error-message: \n" << res.errorMessage.toLocal8Bit().data() << "\n";
     cout << "long error-message: \n" << res.longErrorMessage.toLocal8Bit().data() << "\n";

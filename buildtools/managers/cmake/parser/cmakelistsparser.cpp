@@ -126,7 +126,7 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
                     parseError = !parseCMakeFunction( lexer, function, fileName, currentParent );
 
                     if(parseError) {
-                        kDebug(9032) << "Error while parsing: " << function.name;
+                        kDebug(9032) << "Error while parsing:" << function.name;
                     }
 
                     if(!ifWorkaround.isEmpty())
@@ -134,7 +134,7 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
 
                     if(!parseError && s!=No) {
                         CMakeAst* lastCreated = currentParent->children().last();
-//                         kDebug(9032) << "Lol: " << function.name << s << endl;
+//                         kDebug(9032) << "Lol:" << function.name << s;
 
                         if(function.name.toUpper()=="IF") {
                             parentIf.append(dynamic_cast<IfAst*>(lastCreated));
@@ -163,7 +163,7 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
                         }
                     }
                 }
-//                 kDebug(9032) << "Parsing: " << function.name << " depth: " << parent.count() << endl;
+//                 kDebug(9032) << "Parsing:" << function.name << "depth:" << parent.count();
             }
         }
     }
@@ -202,9 +202,9 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
             }
             bool err = newElement->parseFunctionInfo(func);
             if(!err)
-                kDebug(9032) << "error! found an error while reading " << func.name << " at " << func.line << endl;
+                kDebug(9032) << "error! found an error while reading" << func.name << "at" << func.line;
             parent->addChildAst(newElement);
-//             kDebug(9032) << "Adding: " << func.name << newElement << " as macro :" << asMacro << endl;
+//             kDebug(9032) << "Adding:" << func.name << newElement << "as macro :" << asMacro;
             
             return true;
             //FIXME: should return the parseFunctionInfo boolean return value, err
@@ -267,7 +267,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
 
                 if(readError)
                 {
-                    kDebug(9032) << "Error while parsing: " << function.name << " at " << function.line << endl;
+                    kDebug(9032) << "Error while parsing:" << function.name << "at" << function.line;
                 }
             }
         }

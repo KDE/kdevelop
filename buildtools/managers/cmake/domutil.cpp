@@ -189,7 +189,7 @@ void DomUtil::writeMapEntry(QDomDocument &doc, const QString &path, const QMap<Q
     QMap<QString,QString>::ConstIterator it;
     for (it = map.begin(); it != map.end(); ++it)
     {
-        kDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
+        kDebug( 9010 ) << "writing" << basePath <<";" << it.key() <<";" << it.value();
 	if( ! it.key().isEmpty() )
             writeEntry(doc, basePath + it.key(), it.value() );
     }
@@ -201,7 +201,7 @@ void DomUtil::writeHashEntry(QDomDocument &doc, const QString &path, const QHash
     QHash<QString,QString>::ConstIterator it;
     for (it = hash.begin(); it != hash.end(); ++it)
     {
-        kDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.value() << endl;
+        kDebug( 9010 ) << "writing" << basePath <<";" << it.key() <<";" << it.value();
 	if( ! it.key().isEmpty() )
             writeEntry(doc, basePath + it.key(), it.value() );
     }

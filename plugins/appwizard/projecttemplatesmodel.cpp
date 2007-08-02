@@ -85,7 +85,7 @@ void ProjectTemplatesModel::extractTemplateDescriptions()
 
     foreach (QString archName, templateArchives)
     {
-        kDebug(9010) << "processing template " << archName << endl;
+        kDebug(9010) << "processing template" << archName;
 #ifdef Q_WS_WIN
 	KZip templateArchive(archName);
 #else
@@ -98,16 +98,16 @@ void ProjectTemplatesModel::extractTemplateDescriptions()
                 templateArchive.directory()->entry(templateInfo.baseName() + ".kdevtemplate");
             if (!templateEntry || !templateEntry->isFile())
             {
-                kDebug(9010) << "template " << archName << " does not contain .kdevtemplate file" << endl;
+                kDebug(9010) << "template" << archName << "does not contain .kdevtemplate file";
                 continue;
             }
             const KArchiveFile *templateFile = (KArchiveFile*)templateEntry;
 
-            kDebug(9010) << "copy template description to " << localDescriptionsDir << endl;
+            kDebug(9010) << "copy template description to" << localDescriptionsDir;
             templateFile->copyTo(localDescriptionsDir);
         }
         else
-            kDebug(9010) << "could not open template " << archName << endl;
+            kDebug(9010) << "could not open template" << archName;
     }
 }
 

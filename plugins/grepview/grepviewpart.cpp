@@ -243,7 +243,7 @@ void GrepViewPart::searchActivated()
         findCmd << "-name" << files;
         findCmd << "-follow";
 
-        kDebug() << "findCmd :" << findCmd << endl;
+        kDebug() << "findCmd :" << findCmd;
         findProc = new KProcess(this);
 
         connect( findProc, SIGNAL(error(QProcess::ProcessError)), findProc, SLOT(deleteLater()));

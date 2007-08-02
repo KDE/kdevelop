@@ -90,7 +90,7 @@ bool setupStandardIncludePaths(QStringList& includePaths)
         }
         return true;
     } else {
-        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc: " <<QString(proc.readAll()) <<endl;
+        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
         return false;
     }
 }
@@ -128,7 +128,7 @@ bool setupStandardMacros(Cpp::MacroSet& macros)
         }
         return true;
     } else {
-        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc: " <<QString(proc.readAll()) <<endl;
+        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
         return false;
     }
 }

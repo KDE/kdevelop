@@ -138,7 +138,7 @@ QString MakefileInterface::canonicalize( const QString& target )
 
 bool MakefileInterface::parse( const KUrl& dir, ParserRecursion recursive )
 {
-    kDebug(9020) << k_funcinfo << "directory to parse is: " << dir.path() << endl;
+    kDebug(9020) << k_funcinfo << "directory to parse is:" << dir.path();
     int ret = -1;
     AutoMake::ProjectAST* ast = 0L;
 
@@ -158,8 +158,8 @@ bool MakefileInterface::parse( const KUrl& dir, ParserRecursion recursive )
 
     if ( !ast || ret == -1 )
     {
-        kWarning(9020) << k_funcinfo << "parsing " << dir.path()
-                << " not successful! Fix your Makefile!" << endl;
+        kWarning(9020) << k_funcinfo << "parsing" << dir.path()
+                << "not successful! Fix your Makefile!" << endl;
         return false;
     }
 
@@ -172,7 +172,7 @@ bool MakefileInterface::parse( const KUrl& dir, ParserRecursion recursive )
     QStringList subdirs = subdirsFor( dir );
     foreach( QString sd, subdirs )
     {
-        kDebug(9020) << k_funcinfo << "Beginning parsing of '" << sd << "'" << endl;
+        kDebug(9020) << k_funcinfo << "Beginning parsing of '" << sd << "'";
         parse( dir.path() + '/' + sd, recursive );
     }
 
@@ -226,7 +226,7 @@ QString MakefileInterface::resolveVariable( const QString& variable, AutoMake::P
     if ( !ast )
         return variable;
 
-    kDebug(9020) << k_funcinfo << "attempting to resolve '" << variable << "'"<< endl;
+    kDebug(9020) << k_funcinfo << "attempting to resolve '" << variable << "'";
     QList<AST*> childList = ast->children();
     QList<AST*>::iterator it( childList.begin() ), clEnd( childList.end() );
 
@@ -263,7 +263,7 @@ QStringList MakefileInterface::subdirsFor( const KUrl& folder ) const
 
 QList<TargetInfo> MakefileInterface::targetsForFolder( const KUrl& folder ) const
 {
-    kDebug(9020) << k_funcinfo << folder.path() << endl;
+    kDebug(9020) << k_funcinfo << folder.path();
 
     QList<TargetInfo> targetList;
     AutoMake::ProjectAST* ast = astForFolder( folder );
@@ -293,15 +293,15 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const KUrl& folder ) cons
                     QString primary = targetSplit.takeLast();
                     QString location = targetSplit.join( "_" );
 
-                    kDebug( 9020 ) << k_funcinfo << "primary: " << primary
-                                   << " location: " << location << endl;
+                    kDebug( 9020 ) << k_funcinfo << "primary:" << primary
+                                   << "location:" << location << endl;
 
                     TargetInfo info;
                     info.type = AutoMake::convertToType( primary );
                     info.location = AutoMake::convertToLocation( location );
                     info.name = target;
                     info.url = folder;
-                    kDebug( 9020 ) << k_funcinfo << "target name: " << target << endl;
+                    kDebug( 9020 ) << k_funcinfo << "target name:" << target;
                     targetList.append( info );
                 }
             }
@@ -341,7 +341,7 @@ QStringList MakefileInterface::subdirsFor( AutoMake::ProjectAST* ast ) const
                     {
                         if ( isVariable( realDir ) )
                         {
-                            kDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable" << endl;
+                            kDebug(9020) << k_funcinfo << "'" << realDir << "' is a variable";
                             realDir = resolveVariable( realDir, ast );
                         }
 
@@ -424,7 +424,7 @@ QList<QFileInfo> MakefileInterface::filesForTarget( const TargetInfo& target ) c
 
 QStringList MakefileInterface::valuesForId( const QString& id, AutoMake::ProjectAST* ast ) const
 {
-    kDebug(9020) << k_funcinfo << "looking for '" << id << "'" << endl;
+    kDebug(9020) << k_funcinfo << "looking for '" << id << "'";
 
     QStringList valuesList;
     QList<AST*> childList = ast->children();
@@ -436,7 +436,7 @@ QStringList MakefileInterface::valuesForId( const QString& id, AutoMake::Project
             AssignmentAST* assignment = static_cast<AssignmentAST*>( (*cit) );
             if ( assignment->scopedID == id  )
             {
-                kDebug(9020) << k_funcinfo << "found " << id << endl;
+                kDebug(9020) << k_funcinfo << "found" << id;
                 QStringList valuesList = assignment->values;
                 valuesList.removeAll( QLatin1String( "\\" ) );
 

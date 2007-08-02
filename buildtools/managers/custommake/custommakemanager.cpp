@@ -395,7 +395,7 @@ void CustomMakeManager::updateTargetMenu()
 
 void CustomMakeManager::targetMenuActivated( QAction* action )
 {
-    kDebug() << " targetActivated: " << action->data().toString() << endl;
+    kDebug() << "targetActivated:" << action->data().toString();
     // test
 //     foreach( KDevelop::ProjectBaseItem *item , d->m_testItems )
 //     {
@@ -408,7 +408,7 @@ void CustomMakeManager::slotBuilt( KDevelop::ProjectBaseItem* item )
 {
     if( item->type() != KDevelop::ProjectBaseItem::Target )
         return;
-    kDebug() << " CustomMakeManager:: slotBuilt() " << endl;
+    kDebug() << "CustomMakeManager:: slotBuilt()";
 //     KDevelop::ProjectTargetItem *target = static_cast< KDevelop::ProjectTargetItem* >( item );
 //
 //     if( d->m_targetsByMenu.contains( target ) )
@@ -430,7 +430,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
     QFile f( makefile.toLocalFile() );
     if ( !f.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-        kDebug() << "could not open " << makefile<< endl;
+        kDebug() << "could not open" << makefile;
         return ret;
     }
 

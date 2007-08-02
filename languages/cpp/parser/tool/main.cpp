@@ -63,9 +63,9 @@ bool parse_file(const QString &fileName)
     {
       Problem p = control.problem(i);
 
-      std::cerr << "** ERRROR: " << qPrintable(p.fileName())
+      std::cerr << "** ERRROR:" << qPrintable(p.fileName())
                 << ":" << p.line()
-                << ": " << qPrintable(p.message())
+                << ":" << qPrintable(p.message())
                 << std::endl;
     }
 

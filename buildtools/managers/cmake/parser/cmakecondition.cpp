@@ -109,7 +109,7 @@ bool CMakeCondition::isTrue(const QString& var) const
     {
         const QStringList valu=m_vars->value(CMakeProjectVisitor::resolveVariable(varName, m_vars).join(";"));
 
-//         kDebug(9032) << "Checking " << varName << "is true" << endl;
+//         kDebug(9032) << "Checking" << varName << "is true";
         QString val = valu.join(";");
         return !val.isEmpty() && val!="0" && val!="N" && val!="NO" && val!="OFF" && val!="FALSE" && val!="NOTFOUND" && !val.endsWith("_NOTFOUND");
     }
@@ -140,7 +140,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
-//         kDebug(9032) << "operator " << *it2 << c << "..." << variable << endl;
+//         kDebug(9032) << "operator" << *it2 << c << "..." << variable;
         if(c<=variable)
         {
             return isTrue(*itBegin);
@@ -164,7 +164,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             {
                 QStringList v=CMakeProjectVisitor::resolveVariable(*(it2+1), m_vars);
                 if(v.isEmpty())
-                    kDebug(9032) << "error: no" << endl;
+                    kDebug(9032) << "error: no";
                 else
                 {
                     last=false;
@@ -178,7 +178,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                         }
                     }
                 }
-//                 kDebug(9032) << "EXISTS!!!! " << last << "_" << v << endl;
+//                 kDebug(9032) << "EXISTS!!!!" << last << "_" << v;
                 itEnd=it2-1;
             }   break;
             case IS_DIRECTORY: {
@@ -260,6 +260,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 bool CMakeCondition::condition(const QStringList &expression) const
 {
     bool ret = evaluateCondition(expression.constBegin(), expression.constEnd());
-    kDebug(9032) << "condition " << expression << " => " << ret << endl;
+    kDebug(9032) << "condition" << expression << "=>" << ret;
     return ret;
 }

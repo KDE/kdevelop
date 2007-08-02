@@ -124,14 +124,14 @@ void DumpTree::visit(AST *node)
   }
   if (node)
     kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
-             <<  "[" << node->start_token << ", " << node->end_token << "]  " << nodeText << endl;
+             <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText << endl;
 
   ++indent;
   DefaultVisitor::visit(node);
   --indent;
 
   if (node)
-    kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind] << endl;
+    kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
 }
 
 DumpTree::~ DumpTree( )

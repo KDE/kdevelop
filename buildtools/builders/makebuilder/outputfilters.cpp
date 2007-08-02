@@ -284,12 +284,12 @@ QStandardItem* MakeActionFilter::processAndCreate( const QString& line )
                 newfont.setBold( true );
                 actionItem->setFont( newfont );
             }
-            kDebug( 9038 ) << "Found: " << format.action() << " " << format.file() << "(" << format.tool() << ")" << endl;
+            kDebug( 9038 ) << "Found:" << format.action() << "" << format.file() << "(" << format.tool() << ")";
             return actionItem;
         }
 // #ifdef DEBUG
 //         if ( t.elapsed() > 100 )
-//             kDebug(9038) << "MakeActionFilter::processLine: SLOW regexp matching: " << t.elapsed() << " ms \n";
+//             kDebug(9038) << "MakeActionFilter::processLine: SLOW regexp matching:" << t.elapsed() << "ms \n";
 // #endif
     }
     return 0;

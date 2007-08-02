@@ -57,7 +57,7 @@ MakeWarningItem::~MakeWarningItem()
 //
 //     KTextEditor::Cursor range(lineNo, 0);
 //     docCtrl->openDocument( file, range );
-//     kDebug(9038) << "filename " << file << " lineNo " << lineNo << " errorText " << errorText << endl;
+//     kDebug(9038) << "filename" << file << "lineNo" << lineNo << "errorText" << errorText;
 // }
 
 // QList<QAction*> MakeWarningItem::contextMenuActions()

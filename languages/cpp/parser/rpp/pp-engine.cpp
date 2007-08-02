@@ -103,7 +103,7 @@ QString pp::processFile(const QString& input, StringType type)
       return result;
     }
 
-    kWarning() << k_funcinfo << "file '" << input << "' not found!" << endl;
+    kWarning() << k_funcinfo << "file '" << input << "' not found!" ;
     return QString();
   }
   else
@@ -335,7 +335,7 @@ void pp::operator () (Stream& input, Stream& output)
   QString headerDefine = find_header_protection(input);
   if (m_environment->retrieveMacro(headerDefine))
   {
-    //kDebug() << k_funcinfo << "found header protection: " << headerDefine << endl;
+    //kDebug() << k_funcinfo << "found header protection:" << headerDefine;
     return;
   }
 #endif
@@ -389,7 +389,7 @@ void pp::operator () (Stream& input, Stream& output)
   }
 
   if (iflevel != previousIfLevel) {
-    kWarning() << "Unterminated #if statement" << endl;
+    kWarning() << "Unterminated #if statement" ;
   }
 }
 
@@ -559,7 +559,7 @@ Value pp::eval_primary(Stream& input)
 
       if (token != TOKEN_IDENTIFIER)
       {
-        kWarning() << k_funcinfo << "expected ``identifier'' found:" << char(token) << endl;
+        kWarning() << k_funcinfo << "expected ``identifier'' found:" << char(token) ;
         break;
       }
 
@@ -569,7 +569,7 @@ Value pp::eval_primary(Stream& input)
 
       if (expect_paren) {
         if (token != ')')
-          kWarning() << k_funcinfo << "expected ``)''" << endl;
+          kWarning() << k_funcinfo << "expected ``)''" ;
         else
           accept_token();
       }
@@ -595,7 +595,7 @@ Value pp::eval_primary(Stream& input)
       token = next_token(input);
 
       if (token != ')')
-        kWarning() << k_funcinfo << "expected ``)'' = " << char(token) << endl;
+        kWarning() << k_funcinfo << "expected ``)'' =" << char(token) ;
       else
         accept_token();
 
@@ -624,7 +624,7 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else if (token == '/') {
       if (value.is_zero()) {
-        kWarning() << k_funcinfo << "division by zero" << endl;
+        kWarning() << k_funcinfo << "division by zero" ;
         result.set_long(0);
 
       } else {
@@ -633,7 +633,7 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else {
       if (value.is_zero()) {
-        kWarning() << k_funcinfo << "division by zero" << endl;
+        kWarning() << k_funcinfo << "division by zero" ;
         result.set_long(0);
 
       } else {
@@ -867,7 +867,7 @@ Value pp::eval_constant_expression(Stream& input)
     }
     else
     {
-      kWarning() << k_funcinfo << "expected ``:'' = " << int (token) << endl;
+      kWarning() << k_funcinfo << "expected ``:'' =" << int (token) ;
       result = left_value;
     }
   }
@@ -925,7 +925,7 @@ void pp::handle_else(int sourceLine)
 {
   if (iflevel == 0 && !skipping ())
   {
-    kWarning() << k_funcinfo << "#else without #if" << endl;
+    kWarning() << k_funcinfo << "#else without #if" ;
   }
   else if (iflevel > 0 && _M_skipping[iflevel - 1])
   {
@@ -946,7 +946,7 @@ void pp::handle_elif(Stream& input)
 
   if (iflevel == 0 && !skipping())
   {
-    kWarning() << k_funcinfo << "#else without #if" << endl;
+    kWarning() << k_funcinfo << "#else without #if" ;
   }
   else
   {
@@ -979,7 +979,7 @@ void pp::handle_endif(Stream& output)
 {
   if (iflevel == 0 && !skipping())
   {
-    kFatal() << k_funcinfo << "#endif without #if at output line " << output.outputLineNumber() << endl;
+    kFatal() << k_funcinfo << "#endif without #if at output line" << output.outputLineNumber() << endl;
   }
   else
   {
@@ -1169,7 +1169,7 @@ int pp::next_token (Stream& input)
       }
   }
 
-  //kDebug() << "Next token '" << ch << ch2 << "' " << nextToken << " txt " << token_text << " val " << token_value << endl;
+  //kDebug() << "Next token '" << ch << ch2 << "'" << nextToken << "txt" << token_text << "val" << token_value;
 
   haveNextToken = true;
   return nextToken;

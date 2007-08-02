@@ -158,7 +158,7 @@ KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 
 void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
 {
-    kDebug( 9007 ) << "CppLanguageSupport::documentLoaded" << endl;
+    kDebug( 9007 ) << "CppLanguageSupport::documentLoaded";
 
     // Convert any duchains to the smart equivalent first
     EditorIntegrator editor;
@@ -227,7 +227,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                 allPaths << r;
             }
         }else{
-            kDebug() << "Failed to resolve include-path for \"" << source << "\": " << result.errorMessage << "\n" << result.longErrorMessage << "\n";
+            kDebug() << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
         }
         #endif
     }
@@ -240,7 +240,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data());
             Q_ASSERT(envFile);
             allPaths = envFile->includePaths();
-            kDebug() << "Took include-path for " << source << " from a random parsed duchain-version of it" << endl;
+            kDebug() << "Took include-path for" << source << "from a random parsed duchain-version of it";
         }
     }
 
@@ -266,14 +266,14 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const {
     QPair<KUrl, KUrl> ret;
 
-    kDebug() << "searching for include-file " << includeName << endl;
+    kDebug() << "searching for include-file" << includeName;
     if( !skipPath.isEmpty() )
-        kDebug() << "skipping path " << skipPath << endl;
+        kDebug() << "skipping path" << skipPath;
     
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
         QFileInfo info(QDir(localPath.path()), includeName);
         if (info.exists() && info.isReadable()) {
-            //kDebug(9007) << "found include file: " << info.absoluteFilePath() << endl;
+            //kDebug(9007) << "found include file:" << info.absoluteFilePath();
             ret.first = KUrl(info.absoluteFilePath());
             ret.second = localPath;
             return ret;
@@ -295,7 +295,7 @@ restart:
         QFileInfo info(QDir( path.path() ), includeName);
         
         if (info.exists() && info.isReadable()) {
-            //kDebug(9007) << "found include file: " << info.absoluteFilePath() << endl;
+            //kDebug(9007) << "found include file:" << info.absoluteFilePath();
             ret.first = KUrl(info.absoluteFilePath());
             ret.second = path.path();
             return ret;
@@ -309,9 +309,9 @@ restart:
     }
 
     if( ret.first.isEmpty() ) {
-        kDebug() << "FAILED to find include-file " << includeName << " in paths:" << endl;
+        kDebug() << "FAILED to find include-file" << includeName << "in paths:";
         foreach( KUrl path, includePaths )
-            kDebug() << path << endl;
+            kDebug() << path;
     }
     
     return ret;

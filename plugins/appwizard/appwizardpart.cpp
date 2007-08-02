@@ -83,7 +83,7 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
         return "";
 
     QString templateName = templateInfo.baseName();
-    kDebug(9010) << "creating project for template: " << templateName << endl;
+    kDebug(9010) << "creating project for template:" << templateName;
 
     QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
     if (templateArchive.isEmpty())
@@ -108,7 +108,7 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
 	if (arch->open(QIODevice::ReadOnly))
 		unpackArchive(arch->directory(), dest);
 	else
-		kDebug(9010) << "failed to open template archive" << endl;
+		kDebug(9010) << "failed to open template archive";
 
     return QDir::cleanPath(dest + '/' + selectionPage->appName().toLower() + ".kdev4");
 }
@@ -116,9 +116,9 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
 void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
 {
     KIO::NetAccess::mkdir(dest, 0);
-    kDebug(9010) << "unpacking dir: " << dir->name() << " to " << dest << endl;
+    kDebug(9010) << "unpacking dir:" << dir->name() << "to" << dest;
     QStringList entries = dir->entries();
-    kDebug(9010) << "   entries: " << entries.join(",") << endl;
+    kDebug(9010) << "entries:" << entries.join(",");
 
     KTempDir tdir;
 
@@ -149,7 +149,7 @@ void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &d
 
 bool AppWizardPart::copyFile(const QString &source, const QString &dest)
 {
-    kDebug(9010) << "copy: " << source << " to " << dest << endl;
+    kDebug(9010) << "copy:" << source << "to" << dest;
     QFile inputFile(source);
     QFile outputFile(dest);
 
