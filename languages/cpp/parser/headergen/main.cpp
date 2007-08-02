@@ -128,7 +128,7 @@ public:
 
   QString preprocess(const KUrl& url, int sourceLine = -1);
 
-  virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, , bool skipCurrentPath);
+  virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath);
 
   int status;
 
