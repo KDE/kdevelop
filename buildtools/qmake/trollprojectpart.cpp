@@ -388,9 +388,10 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
     DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/root", defaultQtDir );
     DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/qmake", qmakePath );
 
+    m_projectName = projectName;
+
     m_widget->openProject(dirName);
 
-    m_projectName = projectName;
 
     QDomDocument &dom = *projectDom();
     // Set the default directory radio to "executable"
@@ -685,7 +686,7 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 }
 */
 
-void TrollProjectPart::startQMakeCommand(const QString &dir)
+void TrollProjectPart::startQMakeCommand(const QString &dir, bool recursive)
 {
     QFileInfo fi(dir);
     QString cmdline;
@@ -698,12 +699,22 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
         cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "")+" ";
     }
 
+    if(isQt4Project() && recursive)
+    {
+        cmdline += " -recursive";
+    }
+
     //QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
 //    cmdline += fi.baseName() + ".pro";
     QDir d(dir);
     QStringList l = d.entryList("*.pro");
 
-    cmdline += l.count()?l[0]:(fi.baseName() + ".pro");
+    if( l.isEmpty() || ( l.count() && l.findIndex( projectName() + ".pro" ) != -1 ) )
+        cmdline += projectName()+".pro";
+    else if( :l.isEmpty() || (l.count() && l.findIndex( fi.baseName() + ".pro" ) != -1 ) )
+        cmdline += fi.baseName() + ".pro";
+    else
+        cmdline += l[0];
 
 //    cmdline += QString::fromLatin1( " -o Makefile" );
 

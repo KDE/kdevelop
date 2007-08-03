@@ -328,7 +328,9 @@ void TrollProjectWidget::openProject( const QString &dirName )
     QStringList l = dir.entryList( "*.pro" );
 
     QString profile;
-    if( !l.count() || (l.count() && l.findIndex( fi.baseName() + ".pro") != -1  ) )
+    if( l.count() && l.findIndex( m_part->projectName() + ".pro") != -1  ) 
+        profile = m_part->projectName()+".pro";
+    else if( l.isEmpty() || ( l.count() && l.findIndex( fi.baseName() + ".pro") != -1  ) )
         profile = fi.baseName()+".pro";
     else
       profile = l[0];
@@ -2316,15 +2318,21 @@ void TrollProjectWidget::setLastFocusedView( TrollProjectView view )
 
 void TrollProjectWidget::runQMakeRecursive( QMakeScopeItem* proj )
 {
-    if ( proj->scope->scopeType() == Scope::ProjectScope )
+    if( m_part->isQt4Project() )
     {
-        m_part->startQMakeCommand( proj->scope->projectDir() );
-    }
-    QMakeScopeItem* item = static_cast<QMakeScopeItem*>( proj->firstChild() );
-    while ( item )
+        m_part->startQMakeCommand( proj->scope->projectDir(), true );
+    }else
     {
-        runQMakeRecursive( item );
-        item = static_cast<QMakeScopeItem*>( item->nextSibling() );
+        if ( proj->scope->scopeType() == Scope::ProjectScope )
+        {
+            m_part->startQMakeCommand( proj->scope->projectDir() );
+        }
+        QMakeScopeItem* item = static_cast<QMakeScopeItem*>( proj->firstChild() );
+        while ( item )
+        {
+            runQMakeRecursive( item );
+            item = static_cast<QMakeScopeItem*>( item->nextSibling() );
+        }
     }
 }
 
