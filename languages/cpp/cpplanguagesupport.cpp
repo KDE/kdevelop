@@ -66,10 +66,8 @@
 #include "environmentmanager.h"
 #include "macroset.h"
 
-#ifndef Q_OS_WIN
 #include "includepathresolver.h"
 #include "setuphelpers.h"
-#endif
 
 using namespace KDevelop;
 
@@ -92,14 +90,12 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
         DUChain::self()->addParsingEnvironmentManager(m_environmentManager);
     }
 
-    #ifndef Q_OS_WIN
     m_includeResolver = new CppTools::IncludePathResolver;
     // Retrieve the standard include paths & macro definitions for this machine.
     // Uses gcc commands to retrieve the information.
     CppTools::setupStandardIncludePaths(*m_standardIncludePaths);
     CppTools::setupStandardMacros(*m_standardMarcos);
-    #endif
-
+    
     connect( core()->documentController(),
              SIGNAL( documentLoaded( KDevelop::IDocument* ) ),
              this, SLOT( documentLoaded( KDevelop::IDocument* ) ) );
@@ -141,9 +137,7 @@ CppLanguageSupport::~CppLanguageSupport()
     delete m_standardMarcos;
     delete m_standardIncludePaths;
     delete m_environmentManager;
-    #ifndef Q_OS_WIN
     delete m_includeResolver;
-    #endif
 }
 
 void CppLanguageSupport::documentChanged( KDevelop::IDocument* document )
@@ -218,7 +212,6 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
     if( allPaths.isEmpty() ) {
         //Fallback-search using include-path resolver
 
-        #ifndef Q_OS_WIN
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
             foreach( QString res, result.paths ) {
@@ -229,7 +222,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         }else{
             kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
         }
-        #endif
+        
     }
     
     if( allPaths.isEmpty() ) {

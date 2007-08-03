@@ -33,23 +33,19 @@ set(kdevcpplanguagesupport_PART_SRCS
     cppcodecompletionmodel.cpp
     codecompletioncontext.cpp
     stringhelpers.cpp
-)
-
-if(NOT WIN32)
-set(kdevcpplanguagesupport_PART_SRCS
-    ${kdevcpplanguagesupport_PART_SRCS}
     includepathresolver.cpp
     setuphelpers.cpp
 )
-endif(NOT WIN32)
+
 
 ADD_DEFINITIONS(-DTEST)
+
 
 ADD_EXECUTABLE(kdev_includepathresolver includepathresolver.cpp)
 
 TARGET_LINK_LIBRARIES( kdev_includepathresolver
 ${KDEVPLATFORM_INTERFACES_LIBRARY}  ${KDEVPLATFORM_PROJECT_LIBRARY}
-${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
+${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} )
 
 install(TARGETS kdev_includepathresolver DESTINATION ${BIN_INSTALL_DIR} )
 
@@ -57,6 +53,7 @@ kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY} kdevcppduchainbuilder kdevcppexpressionparser kdevcpprpp
     ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARY} khtml
+    ${KDE4_KDECORE_LIBS}
 )
 
 install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
