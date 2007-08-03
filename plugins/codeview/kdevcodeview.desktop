@@ -6,6 +6,7 @@ Comment=This plugin displays a graphical view of the codemodel produced by the l
 Comment[de]=Dieses Modul stellt eine graphische Darstellung des Code-Modells dar, das vom Sprachmodul erstellt wurde.
 Comment[el]=Αυτό το πρόσθετο εμφανίζει μια γραφική προβολή του μοντέλου κώδικα που δημιουργήθηκε από το τμήμα γλώσσας.
 Comment[es]=Esta extensión muestra una vista gráfica del modelo de código producido por la parte de lenguaje.
+Comment[ga]=Taispeánann an breiseán seo amharc grafach ar an tsamhail chóid a chruthaíonn an chomhpháirt teanga.
 Comment[it]=Questo plugin mostra una vista grafica del modello di codice prodotto dal part della lingua.
 Comment[pt]=Este 'plugin' mostra uma visão gráfico do modelo de código produzido pela componente da linguagem.
 Comment[pt_BR]=Este 'plugin' mostra uma visão gráfico do modelo de código produzido pela componente da linguagem.
