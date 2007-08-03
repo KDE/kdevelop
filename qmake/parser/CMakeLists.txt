@@ -18,8 +18,8 @@ set(parser_STAT_SRCS
 
 if(KDEVPG_FOUND)
     kdevpg_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
-        "${CMAKE_SOURCE_DIR}/parser/qmake.g"
-	    "${CMAKE_SOURCE_DIR}/parser/qmakelexer.h")
+        "${QMakeManager_SOURCE_DIR}/parser/qmake.g"
+	    "${QMakeManager_SOURCE_DIR}/parser/qmakelexer.h")
 
     include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}

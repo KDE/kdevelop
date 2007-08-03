@@ -1,7 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser
-                    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake)
-
-include_directories(${CMAKE_SOURCE_DIR}/parser)
+include_directories(${QMakeManager_SOURCE_DIR}/parser)
 
 set(parsetest_SRCS parsetest.cpp )
 

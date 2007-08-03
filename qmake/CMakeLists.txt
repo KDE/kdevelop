@@ -1,13 +1,16 @@
 
+project(QMakeManager)
+
+
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 find_package(KDevPlatform REQUIRED)
 find_package(KDevelop REQUIRED)
 find_package(KDevelop-PG REQUIRED)
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES}
-	${KDEVELOP_INCLUDE_DIR}/qmake/
-	)
+include_directories(${QMakeManager_SOURCE_DIR} ${QMakeManager_BINARY_DIR} ${KDE4_INCLUDES}
+    ${KDEVELOP_INCLUDE_DIR}/qmake/
+)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
@@ -17,7 +20,7 @@ include_directories(${KDEVPLATFORM_INCLUDE_DIR}
 
 add_subdirectory(parser)
 
-include_directories(${CMAKE_SOURCE_DIR}/parser)
+include_directories(${QMakeManager_SOURCE_DIR}/parser)
 
 ########### next target ###############
 
