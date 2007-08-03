@@ -20,7 +20,6 @@
 
 #include "qmakefile.h"
 
-#include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 
@@ -40,18 +39,18 @@ QStringList getValueList( const QList<QMake::ValueAST*>& list )
     return result;
 }
 
-QMakeFile::QMakeFile( const KUrl& file )
-    : m_ast(0), m_projectFileUrl(file)
+QMakeFile::QMakeFile( const QString& file )
+    : m_ast(0), m_projectFile(file)
 {
 }
 
 bool QMakeFile::read()
 {
-    QFileInfo fi( m_projectFileUrl.toLocalFile() );
-    kDebug(9024) << k_funcinfo << "Is" << m_projectFileUrl << "a dir?" << fi.isDir();
+    QFileInfo fi( m_projectFile );
+    kDebug(9024) << k_funcinfo << "Is" << m_projectFile << "a dir?" << fi.isDir() ;
     if( fi.isDir() )
     {
-        QDir dir( m_projectFileUrl.toLocalFile() );
+        QDir dir( m_projectFile );
         QStringList l = dir.entryList( QStringList() << "*.pro" );
 
         QString projectfile;
@@ -63,23 +62,22 @@ bool QMakeFile::read()
         {
             projectfile = l.first();
         }
-        m_projectFileUrl.adjustPath( KUrl::AddTrailingSlash );
-        m_projectFileUrl.setFileName( projectfile );
+        m_projectFile += '/' + projectfile;
     }
     QMake::Driver d;
-    d.readFile( m_projectFileUrl.toLocalFile() );
+    d.readFile( m_projectFile );
     if( !d.parse( &m_ast ) )
     {
-        kDebug( 9024 ) << "Couldn't parse project:" << m_projectFileUrl.toLocalFile();
+        kDebug( 9024 ) << "Couldn't parse project:" << m_projectFile;
         delete m_ast;
         m_ast = 0;
-        m_projectFileUrl = KUrl();
+        m_projectFile = QString();
         return false;
     }else
     {
-        kDebug(9024) << "found ast:" << m_ast->statements().count();
+        kDebug(9024) << "found ast:" << m_ast->statements().count() ;
         visitNode(m_ast);
-        kDebug(9024) << "Variables found:" << m_variableValues;
+        kDebug(9024) << "Variables found:" << m_variableValues ;
     }
     return true;
 }
@@ -90,14 +88,14 @@ QMakeFile::~QMakeFile()
     m_ast = 0;
 }
 
-KUrl QMakeFile::absoluteDirUrl() const
+QString QMakeFile::absoluteDir() const
 {
-    return m_projectFileUrl.directory();
+    return QFileInfo( m_projectFile ).absoluteDir().canonicalPath();
 }
 
-KUrl QMakeFile::absoluteFileUrl() const
+QString QMakeFile::absoluteFile() const
 {
-    return m_projectFileUrl;
+    return m_projectFile;
 }
 
 QMake::ProjectAST* QMakeFile::ast() const
@@ -114,14 +112,10 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         QStringList arguments = getValueList( node->arguments() );
         kDebug(9024) << "found include" << node->functionName()->value() << arguments;
         QString argument = arguments.join("").trimmed();
-        KUrl incfile;
-        if( KUrl::isRelativeUrl( argument ) )
+        kDebug(9024) << "My dir is:" << absoluteDir();
+        if( QFileInfo( argument ).isRelative() )
         {
-            incfile = absoluteDirUrl();
-            incfile.addPath( argument );
-        }else
-        {
-            incfile = KUrl( argument );
+            argument = QFileInfo( absoluteDir() + "/" + argument ).canonicalFilePath();
         }
         kDebug(9024) << "Reading Include file:" << argument;
         QMakeIncludeFile includefile( argument, m_variableValues );
@@ -185,7 +179,7 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         QString value = values.first().trimmed();
         QString regex = value.mid(2,value.indexOf("/", 2));
         QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
-        kDebug(9024) << "Replacing variable, using regex" << regex << "value" << value;
+        kDebug(9024) << "Replacing variable, using regex" << regex << "value" << value ;
         QStringList list = m_variableValues[node->variable()->value()];
         list.replaceInStrings( QRegExp(regex), replacement );
         m_variableValues[node->variable()->value()] = list;

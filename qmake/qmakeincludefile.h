@@ -26,7 +26,7 @@
 class QMakeIncludeFile : public QMakeFile
 {
 public:
-    QMakeIncludeFile( const KUrl& fileurl, const QMap<QString,QStringList>& variables  );
+    QMakeIncludeFile( const QString& incfile, const QMap<QString,QStringList>& variables  );
 
     QStringList variables() const;
 };

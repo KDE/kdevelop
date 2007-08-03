@@ -37,11 +37,11 @@ class Scope;
 class QMakeFile : QMake::ASTDefaultVisitor
 {
 public:
-    QMakeFile( const KUrl& file );
+    QMakeFile( const QString& file );
     virtual ~QMakeFile();
     bool read();
-    KUrl absoluteDirUrl() const;
-    KUrl absoluteFileUrl() const;
+    QString absoluteDir() const;
+    QString absoluteFile() const;
     QMake::ProjectAST* ast() const;
 
     void visitAssignment( QMake::AssignmentAST* node );
@@ -54,7 +54,7 @@ protected:
     QMap<QString, QStringList> m_variableValues;
 private:
     QMake::ProjectAST* m_ast;
-    KUrl m_projectFileUrl;
+    QString m_projectFile;
 };
 
 #endif

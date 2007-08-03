@@ -21,8 +21,8 @@
 #include "qmakemkspecs.h"
 #include <QStringList>
 
-QMakeMkSpecs::QMakeMkSpecs( const KUrl& basicmkspecs, const QHash<QString,QString>& variables )
-    : QMakeFile(basicmkspecs), m_qmakeInternalVariables(variables)
+QMakeMkSpecs::QMakeMkSpecs( const QString& basicmkspecs, const QHash<QString,QString>& variables )
+    : QMakeFile( basicmkspecs ), m_qmakeInternalVariables( variables )
 {
 }
 

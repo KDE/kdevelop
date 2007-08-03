@@ -83,7 +83,10 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 
     foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
     {
-        folderList.append( new QMakeFolderItem( item->project(), subproject, subproject->absoluteDirUrl(), item ) );
+        folderList.append( new QMakeFolderItem( item->project(),
+                           subproject,
+                           KUrl( subproject->absoluteDir() ),
+                           item ) );
     }
     foreach( KUrl u, folderitem->projectFile()->files() )
     {
@@ -125,9 +128,9 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         projecturl.adjustPath( KUrl::AddTrailingSlash );
         projecturl.setFileName( projectfile );
         QHash<QString,QString> qmvars = queryQMake( project );
-        QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QT_INSTALL_MKSPECS"] ), qmvars );
+        QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
         mkspecs->read();
-        QMakeProjectFile* scope = new QMakeProjectFile( projecturl );
+        QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
         scope->setMkSpecs( mkspecs );
         scope->read();
         return new QMakeProjectItem( project, scope, project->name(), project->folder() );
@@ -143,7 +146,7 @@ KUrl QMakeProjectManager::findMakefile( KDevelop::ProjectFolderItem* folder ) co
     {
         return KUrl();
     }
-    return qmitem->projectFile()->absoluteFileUrl();
+    return KUrl( qmitem->projectFile()->absoluteFile() );
 }
 
 KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* folder ) const
@@ -155,7 +158,7 @@ KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* fold
     }
     KUrl::List l;
 
-    l.append( qmitem->projectFile()->absoluteFileUrl() );
+    l.append( KUrl( qmitem->projectFile()->absoluteFile() ) );
     return l;
 }
 
@@ -176,13 +179,13 @@ KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* it
     return KUrl::List();
 }
 
-KUrl QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
+QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
 {
     QFileInfo fi( mkspecdir+"/default/qmake.conf" );
     if( !fi.exists() )
-        return KUrl();
+        return QString();
 
-    return KUrl( fi.absoluteFilePath() );
+    return fi.absoluteFilePath();
 }
 
 QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* project ) const

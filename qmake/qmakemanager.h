@@ -104,7 +104,7 @@ Q_SIGNALS:
                      KDevelop::ProjectFileItem* newFile);
 private:
     QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
-    KUrl findBasicMkSpec( const QString& mkspecdir ) const;
+    QString findBasicMkSpec( const QString& mkspecdir ) const;
     IQMakeBuilder* m_builder;
 };
 

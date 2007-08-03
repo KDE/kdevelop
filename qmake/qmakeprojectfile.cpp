@@ -22,6 +22,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QStringList>
+#include <QtCore/QDir>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -33,8 +34,8 @@ const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES"
         << "INTERFACES" << "FORMS" ;
 
-QMakeProjectFile::QMakeProjectFile( const KUrl& projectfile )
-    : QMakeFile(projectfile), m_mkSpecs(0)
+QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
+    : QMakeFile( projectfile ), m_mkSpecs(0)
 {
 }
 
@@ -50,10 +51,9 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
     foreach( QString subdir, variableValues( "SUBDIRS" ) )
     {
         kDebug(9024) << k_funcinfo << "Found value:" << subdir;
-        KUrl u = absoluteDirUrl();
-        u.adjustPath( KUrl::AddTrailingSlash );
-        u.setFileName( subdir.trimmed() );
-        QMakeProjectFile* qmscope = new QMakeProjectFile( u );
+        QDir d = QDir( absoluteDir() );
+        d.cd( subdir.trimmed() );
+        QMakeProjectFile* qmscope = new QMakeProjectFile( d.canonicalPath() );
         qmscope->setMkSpecs( m_mkSpecs );
         if( qmscope->read() )
         {
@@ -74,13 +74,13 @@ KUrl::List QMakeProjectFile::files() const
     {
         foreach( QString value, variableValues(variable) )
         {
-                KUrl u = absoluteDirUrl();
+                KUrl u = absoluteDir();
                 u.adjustPath( KUrl::AddTrailingSlash );
                 u.setFileName( value.trimmed() );
                 list.append( u );
         }
     }
-    list.append( absoluteFileUrl() );
+    list.append( absoluteFile() );
     kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
     return list;
 }

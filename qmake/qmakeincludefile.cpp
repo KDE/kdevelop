@@ -24,9 +24,9 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-QMakeIncludeFile::QMakeIncludeFile( const KUrl& fileurl,
+QMakeIncludeFile::QMakeIncludeFile( const QString& incfile,
                                     const QMap<QString,QStringList>& variables  )
-    : QMakeFile( fileurl )
+    : QMakeFile( incfile )
 {
     foreach( QString variable, variables.keys() )
     {

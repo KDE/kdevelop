@@ -33,7 +33,7 @@ public:
 
     static const QStringList FileVariables;
 
-    QMakeProjectFile( const KUrl& projectfile );
+    QMakeProjectFile( const QString& projectfile );
     ~QMakeProjectFile();
 
     QList<QMakeProjectFile*> subProjects() const;
