@@ -225,7 +225,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": searching for include" << fileName;
 
     KUrl localPath(parentJob()->document());
-    localPath.setFileName(QString::null);
+    localPath.setFileName(QString());
     
     QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude(parentJob()->includePaths(), localPath, fileName, type, skipCurrentPath ? parentJob()->includedFromPath() : KUrl() );
     KUrl includedFile = included.first;

@@ -130,7 +130,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     foreach(QString s, v.includeDirectories())
     {
         KUrl path;
-        if(s.startsWith("/"))
+        if(s.startsWith('/'))
         {
             path=s;
         }

@@ -90,7 +90,7 @@ QString CMakeProjectVisitor::variableName(const QString &name, VariableType &typ
 
     switch(type) {
         case NoVar:
-            return QString::null;
+            return QString();
         case CMake:
             exp="\\$\\{[A-z0-9-]+\\}";
             break;

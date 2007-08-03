@@ -10,8 +10,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef GREPWIDGET_H
-#define GREPWIDGET_H
+#ifndef GREPDIALOG_H
+#define GREPDIALOG_H
 
 #include <kdialog.h>
 #include "ui_grepwidget.h"
