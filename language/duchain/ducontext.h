@@ -225,7 +225,7 @@ public:
    * Register a namespace-alias with this context.
    * @param aliasName The name as which the imported context should be found. If this is QString::null, nsIdentifier will be imported(like "using namespace ...")
    * */
-  void addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier, const QString& aliasName = QString::null );
+  void addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier, const QString& aliasName = QString() );
   /// Return a list of namespace aliases for this context. They are ordered in the reversed oder of their appearance.
   const QList<NamespaceAlias*>& namespaceAliases() const;
   /// Clear namespace aliases for this context.
