@@ -7,6 +7,11 @@ mkdir build
 Then run cmake and point it to the sources like this:
 cmake ../
 
+A useful option to specify for the cmake command is CMAKE_INSTALL_PREFIX so 
+that you can tell cmake where to install the software. For example, to install
+in /usr/kde/4 you would run:
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/kde/4
+
 Afterwards run:
 make
 
