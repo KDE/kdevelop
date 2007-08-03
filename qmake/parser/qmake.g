@@ -115,7 +115,7 @@ namespace QMake
    id=IDENTIFIER ( func_args=function_args | 0 )
 -> item ;;
 
-   op=op values=value_list ( NEWLINE | 0 )
+   op=op ( values=value_list ( NEWLINE | 0 ) | NEWLINE | 0 )
 -> variable_assignment ;;
 
    optoken=PLUSEQ | optoken=MINUSEQ | optoken=STAREQ | optoken=EQUAL | optoken=TILDEEQ
