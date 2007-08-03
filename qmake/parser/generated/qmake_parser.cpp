@@ -971,17 +971,40 @@ namespace QMake
 
         (*yynode)->op =  __node_18;
 
-        value_list_ast *__node_19 =  0;
-
-        if  (!parse_value_list(&__node_19))
+        if  (yytoken ==  Token_CONT
+             ||  yytoken ==  Token_VALUE)
           {
-            yy_expected_symbol(ast_node::Kind_value_list,  "value_list");
-            return  false;
+            value_list_ast *__node_19 =  0;
+
+            if  (!parse_value_list(&__node_19))
+              {
+                yy_expected_symbol(ast_node::Kind_value_list,  "value_list");
+                return  false;
+              }
+
+            (*yynode)->values =  __node_19;
+
+            if  (yytoken ==  Token_NEWLINE)
+              {
+                if  (yytoken !=  Token_NEWLINE)
+                  {
+                    yy_expected_token(yytoken,  Token_NEWLINE,  "newline");
+                    return  false;
+                  }
+
+                yylex();
+
+              }
+
+            else if  (true /*epsilon*/)
+            {}
+            else
+              {
+                return  false;
+              }
           }
 
-        (*yynode)->values =  __node_19;
-
-        if  (yytoken ==  Token_NEWLINE)
+        else if  (yytoken ==  Token_NEWLINE)
           {
             if  (yytoken !=  Token_NEWLINE)
               {
