@@ -122,7 +122,7 @@ int Lexer::getNextTokenKind()
             {
                 popState();
                 token = parser::Token_NEWLINE;
-            }else if( it->unicode() == '\\' )
+            }else if( it->unicode() == '\\' && isCont(it) )
 
             {
                 pushState(ContState);
@@ -179,7 +179,7 @@ int Lexer::getNextTokenKind()
             if( it->unicode() == '\n' )
             {
                 token = parser::Token_NEWLINE;
-            }else if( it->unicode() == '\\' )
+            }else if( it->unicode() == '\\' && isCont(it) )
             {
                 pushState( ContState );
                 token = parser::Token_CONT;

@@ -19,15 +19,17 @@
  */
 
 #include "qmakemanager.h"
-
+#include "qmakemkspecs.h"
 #include <QList>
 #include <QVector>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QtCore/QHash>
 
 #include <kurl.h>
 #include <kio/job.h>
+#include <kprocess.h>
 
 #include <icore.h>
 #include <iplugincontroller.h>
@@ -37,7 +39,7 @@
 #include <projectmodel.h>
 
 #include "qmakemodelitems.h"
-#include "qmakeprojectscope.h"
+#include "qmakeprojectfile.h"
 
 typedef KGenericFactory<QMakeProjectManager> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakemanager,
@@ -79,15 +81,18 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 
     kDebug(9024) << k_funcinfo << "Item is a qmakefolder:";
 
-    foreach( QMakeProjectScope* subproject, folderitem->projectScope()->subProjects() )
+    foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
     {
-        folderList.append( new QMakeFolderItem( item->project(), subproject, subproject->absoluteDirUrl(), item ) );
+        folderList.append( new QMakeFolderItem( item->project(),
+                           subproject,
+                           KUrl( subproject->absoluteDir() ),
+                           item ) );
     }
-    foreach( KUrl u, folderitem->projectScope()->files() )
+    foreach( KUrl u, folderitem->projectFile()->files() )
     {
         new KDevelop::ProjectFileItem( item->project(), u, item );
     }
-    foreach( QString s, folderitem->projectScope()->targets() )
+    foreach( QString s, folderitem->projectFile()->targets() )
     {
         new QMakeTargetItem( item->project(), s,  item );
     }
@@ -102,7 +107,7 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
     if( !dirName.isLocalFile() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" ;
+        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
     }else
     {
         QFileInfo fi( dirName.toLocalFile() );
@@ -122,7 +127,13 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         KUrl projecturl = dirName;
         projecturl.adjustPath( KUrl::AddTrailingSlash );
         projecturl.setFileName( projectfile );
-        return new QMakeProjectItem( project, new QMakeProjectScope( projecturl ), project->name(), project->folder() );
+        QHash<QString,QString> qmvars = queryQMake( project );
+        QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
+        mkspecs->read();
+        QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
+        scope->setMkSpecs( mkspecs );
+        scope->read();
+        return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
     return 0;
 }
@@ -135,7 +146,7 @@ KUrl QMakeProjectManager::findMakefile( KDevelop::ProjectFolderItem* folder ) co
     {
         return KUrl();
     }
-    return qmitem->projectScope()->absoluteFileUrl();
+    return KUrl( qmitem->projectFile()->absoluteFile() );
 }
 
 KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* folder ) const
@@ -147,7 +158,7 @@ KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* fold
     }
     KUrl::List l;
 
-    l.append( qmitem->projectScope()->absoluteFileUrl() );
+    l.append( KUrl( qmitem->projectFile()->absoluteFile() ) );
     return l;
 }
 
@@ -166,6 +177,46 @@ KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* it
 {
     Q_UNUSED(item)
     return KUrl::List();
+}
+
+QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
+{
+    QFileInfo fi( mkspecdir+"/default/qmake.conf" );
+    if( !fi.exists() )
+        return QString();
+
+    return fi.absoluteFilePath();
+}
+
+QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* project ) const
+{
+    if( !project->folder().isLocalFile() )
+        return QHash<QString,QString>();
+
+    QHash<QString,QString> hash;
+    KProcess p;
+    QStringList queryVariables;
+    queryVariables << "QMAKE_MKSPECS" << "QMAKE_VERSION" <<
+            "QT_INSTALL_BINS" << "QT_INSTALL_CONFIGURATION" <<
+            "QT_INSTALL_DATA" << "QT_INSTALL_DEMOS" << "QT_INSTALL_DOCS" <<
+            "QT_INSTALL_EXAMPLES" << "QT_INSTALL_HEADERS" <<
+            "QT_INSTALL_LIBS" << "QT_INSTALL_PLUGINS" << "QT_INSTALL_PREFIX" <<
+            "QT_INSTALL_TRANSLATIONS" << "QT_VERSION";
+    foreach( QString var, queryVariables)
+    {
+        p.clearProgram();
+        p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+        p.setWorkingDirectory( project->folder().toLocalFile() );
+        //To be implemented when there's an API to fetch Env from Project
+        //p.setEnv();
+        p << m_builder->qmakeBinary( project ) << "-query" << var;
+        p.execute();
+        QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
+        if( result != "**Unknown**")
+            hash[var] = result;
+    }
+    kDebug(9024) << "Ran qmake (" << m_builder->qmakeBinary( project ) << "), found:" << hash;
+    return hash;
 }
 
 #include "qmakemanager.moc"

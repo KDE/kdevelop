@@ -103,8 +103,9 @@ Q_SIGNALS:
     void fileRenamed(const KUrl& oldFile,
                      KDevelop::ProjectFileItem* newFile);
 private:
-
-   IQMakeBuilder* m_builder;
+    QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
+    QString findBasicMkSpec( const QString& mkspecdir ) const;
+    IQMakeBuilder* m_builder;
 };
 
 #endif

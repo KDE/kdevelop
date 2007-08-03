@@ -18,39 +18,34 @@
  * 02110-1301, USA.
  */
 
-#ifndef QMAKEPROJECTSCOPE_H
-#define QMAKEPROJECTSCOPE_H
+#ifndef QMAKEPROJECTFILE_H
+#define QMAKEPROJECTFILE_H
 
-#include <kurl.h>
+#include "qmakefile.h"
 
 template <typename T> class QList;
 
-namespace QMake{
-    class ProjectAST;
-}
+class QMakeMkSpecs;
 
-class QMakeProjectScope
+class QMakeProjectFile : public QMakeFile
 {
-    public:
+public:
 
-        static const QStringList FileVariables;
+    static const QStringList FileVariables;
 
-        QMakeProjectScope( const KUrl& projectfile );
-        ~QMakeProjectScope();
+    QMakeProjectFile( const QString& projectfile );
+    ~QMakeProjectFile();
 
-        QList<QMakeProjectScope*> subProjects() const;
+    QList<QMakeProjectFile*> subProjects() const;
 
-        KUrl::List files() const;
+    KUrl::List files() const;
 
-        QStringList targets() const;
+    QStringList targets() const;
 
-        KUrl absoluteDirUrl() const;
+    void setMkSpecs( QMakeMkSpecs* mkspecs );
 
-        KUrl absoluteFileUrl() const { return m_projectFileUrl; }
-
-    private:
-        QMake::ProjectAST* m_ast;
-        KUrl m_projectFileUrl;
+private:
+    QMakeMkSpecs* m_mkSpecs;
 };
 
 #endif
