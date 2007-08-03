@@ -98,7 +98,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
     static int depth_counter = 0;
     AtomicIncrementer inc(&depth_counter);
     if( depth_counter > 30 ) {
-      kDebug() << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
+      kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
     return const_cast<AbstractType*>(type); ///@todo remove const_cast;
     }
     
@@ -271,7 +271,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     contextCopy->setType(context->type());
     contextCopy->setLocalScopeIdentifier(context->localScopeIdentifier());
 
-    kDebug() << "Created context" << contextCopy << "as specialization of context" << context;
+    kDebug(9007) << "Created context" << contextCopy << "as specialization of context" << context;
     
     if( instantiatedDeclaration )
       instantiatedDeclaration->setInternalContext(contextCopy);
@@ -299,7 +299,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
         } else {
           //templateDecl->defaultParameter()
           ///@todo Use default-parameters! Use the expression-parser here to resolve the default-parameters(If the default-parameter is not a valid qualified identifier)
-          kDebug() << "missing template-argument";
+          kDebug(9007) << "missing template-argument";
         }
         ///This inserts the copied declaration into the copied context
         declCopy->setContext(contextCopy);
@@ -342,7 +342,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
                 contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), true );
               }
             } else {
-              kDebug() << "Resolved bad base-class";
+              kDebug(9007) << "Resolved bad base-class";
             }
           }
         }

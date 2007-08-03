@@ -198,12 +198,12 @@ void visitBlock(rpp::MacroBlock* block, int indent = 0, bool elseBlock = false)
 
   ++indent;
   if (FileBlock* fb = dynamic_cast<FileBlock*>(block))
-    kDebug() << QString(indent * 2, QChar(' ')) << "Block for file [" << fb->file << "]";
+    kDebug(9007) << QString(indent * 2, QChar(' ')) << "Block for file [" << fb->file << "]";
   else
-    kDebug() << QString(indent * 2, QChar(' ')) << "Block, condition" << (elseBlock ? " else" : "") << "[" << block->condition << "]";
+    kDebug(9007) << QString(indent * 2, QChar(' ')) << "Block, condition" << (elseBlock ? " else" : "") << "[" << block->condition << "]";
 
   foreach (rpp::pp_macro* macro, block->macros)
-    kDebug() << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name << ", defined" << macro->defined;
+    kDebug(9007) << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name << ", defined" << macro->defined;
 
   foreach (rpp::MacroBlock* child, block->childBlocks)
     visitBlock(child, indent);
@@ -352,7 +352,7 @@ HeaderGenerator::HeaderGenerator()
 
 QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 {
-  //kDebug() << k_funcinfo << url;
+  //kDebug(9007) << k_funcinfo << url;
 
   preprocessing.push(url);
 
@@ -379,7 +379,7 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 
 rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/, int sourceLine, bool skipCurrentPath)
 {
-  //kDebug() << k_funcinfo << fileName << "from" << preprocessing.top();
+  //kDebug(9007) << k_funcinfo << fileName << "from" << preprocessing.top();
 
   KUrl::List toTry;
 
@@ -422,16 +422,16 @@ rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type
   kWarning() << "Did not find include" << fileName <<endl;//<< "in urls" << toTry << endl;//" in the following directories:" ;
   /*QDomNodeList include = folderElement.elementsByTagName("include");
   for (int i = 0; i < include.count(); ++i)
-    kDebug() << "" << include.at(i).toElement().text();*/
+    kDebug(9007) << "" << include.at(i).toElement().text();*/
 
   return 0;
 }
 
 void printMacros(rpp::Environment* environment)
 {
-  kDebug() << "Macros for environment:";
+  kDebug(9007) << "Macros for environment:";
   foreach (rpp::pp_macro* macro, environment->allMacros())
-    kDebug() << "Macro [" << macro->name << "]" << (macro->defined ? " [" : "undefined") << macro->definition << (macro->defined ? "]" : "");
+    kDebug(9007) << "Macro [" << macro->name << "]" << (macro->defined ? " [" : "undefined") << macro->definition << (macro->defined ? "]" : "");
 }
 
 void HeaderGenerator::run()
@@ -461,7 +461,7 @@ void HeaderGenerator::run()
       for (QDomElement source = install.firstChildElement(sourceElementName); !source.isNull(); source = source.nextSiblingElement(sourceElementName)) {
         //if (source.text().endsWith("kkeydialog.h"))
           //continue;
-          //kDebug() << "Parsing" << source.text();
+          //kDebug(9007) << "Parsing" << source.text();
 
         preprocessor.environment()->clear();
         preprocessor.environment()->visitBlock(topBlock);
@@ -499,7 +499,7 @@ void HeaderGenerator::run()
         }
 
         if (false && source.text().endsWith("kkeydialog.h")) {
-          kDebug() << "Parse" << source.text() << ":" << hg.m_classes.count() << "classes found:" << hg.m_classes << "lines" << contents.count('\n') << endl
+          kDebug(9007) << "Parse" << source.text() << ":" << hg.m_classes.count() << "classes found:" << hg.m_classes << "lines" << contents.count('\n') << endl
           << QString::fromUtf8(contents) << endl;
 
 #if 0
@@ -647,5 +647,5 @@ void HeaderGenerator::run()
     }
   }
 
-  kDebug() << "Finished parsing" << fileCount << "files.";
+  kDebug(9007) << "Finished parsing" << fileCount << "files.";
 }

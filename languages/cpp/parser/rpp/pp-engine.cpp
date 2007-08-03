@@ -335,7 +335,7 @@ void pp::operator () (Stream& input, Stream& output)
   QString headerDefine = find_header_protection(input);
   if (m_environment->retrieveMacro(headerDefine))
   {
-    //kDebug() << k_funcinfo << "found header protection:" << headerDefine;
+    //kDebug(9007) << k_funcinfo << "found header protection:" << headerDefine;
     return;
   }
 #endif
@@ -1169,7 +1169,7 @@ int pp::next_token (Stream& input)
       }
   }
 
-  //kDebug() << "Next token '" << ch << ch2 << "'" << nextToken << "txt" << token_text << "val" << token_value;
+  //kDebug(9007) << "Next token '" << ch << ch2 << "'" << nextToken << "txt" << token_text << "val" << token_value;
 
   haveNextToken = true;
   return nextToken;

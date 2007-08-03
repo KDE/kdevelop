@@ -57,10 +57,10 @@ class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   protected:
   virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance /*instance */) {
     DumpChain d;
-    kDebug() << "expression-result for";
+    kDebug(9007) << "expression-result for";
     DUChainReadLocker lock( DUChain::lock() );
     d.dump( node, session() );
-    kDebug() << "is:" << type->toString();
+    kDebug(9007) << "is:" << type->toString();
   }
 };
 
@@ -233,8 +233,8 @@ void TestExpressionParser::testSmartPointer() {
   QVERIFY(specialTemplateContext != baseTemplateContext);
   QCOMPARE(specialTemplateContext->type(), DUContext::Template);
   QCOMPARE(baseTemplateContext->type(), DUContext::Template);
-  kDebug() << typeid(baseTemplateContext).name();
-  kDebug() << typeid(specialTemplateContext).name();
+  kDebug(9007) << typeid(baseTemplateContext).name();
+  kDebug(9007) << typeid(specialTemplateContext).name();
 /*  CppDUContext<DUContext>* baseTemplateCtx = dynamic_cast<CppDUContext<DUContext>*>(baseTemplateContext);
   CppDUContext<DUContext>* specialTemplateCtx = dynamic_cast<CppDUContext<DUContext>*>(specialTemplateContext);
   QVERIFY(baseTemplateCtx);
@@ -245,7 +245,7 @@ void TestExpressionParser::testSmartPointer() {
   QCOMPARE(baseTemplateContext->localDeclarations().count(), 1);
   QVERIFY(specialTemplateContext->localDeclarations()[0] != baseTemplateContext->localDeclarations()[0]);
   
-  kDebug() << top->localDeclarations()[3]->abstractType()->toString();
+  kDebug(9007) << top->localDeclarations()[3]->abstractType()->toString();
   Cpp::ExpressionEvaluationResult result = parser.evaluateType( "*bPointer", top );
   QVERIFY(result.instance);
   QCOMPARE(result.type->toString(), QString("B&"));
@@ -276,7 +276,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() ) );
   QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() )->identifier().toString() == "Cont" );
 
-  kDebug() << "test-Context:" << testContext;
+  kDebug(9007) << "test-Context:" << testContext;
   lock.unlock();
 
   Cpp::ExpressionParser parser;
@@ -468,7 +468,7 @@ void TestExpressionParser::release(DUContext* top)
 DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
 {
   if (dump)
-    kDebug() << "==== Beginning new test case...:" << endl << unit;
+    kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
   session->setContents(unit);
@@ -478,7 +478,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   ast->session = session;
 
   if (dump & DumpAST) {
-    kDebug() << "===== AST:";
+    kDebug(9007) << "===== AST:";
     dumper.dump(ast, session);
   }
 
@@ -494,14 +494,14 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   useBuilder.buildUses(ast);
 
   if (dump & DumpDUChain) {
-    kDebug() << "===== DUChain:";
+    kDebug(9007) << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
     dumper.dump(top);
   }
   
   if (dump & DumpType) {
-    kDebug() << "===== Types:";
+    kDebug(9007) << "===== Types:";
     DumpTypes dt;
     DUChainWriteLocker lock(DUChain::lock());
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
@@ -509,7 +509,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   }
 
   if (dump)
-    kDebug() << "===== Finished test case.";
+    kDebug(9007) << "===== Finished test case.";
 
   delete session;
 

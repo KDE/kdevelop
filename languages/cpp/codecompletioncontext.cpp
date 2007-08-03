@@ -358,7 +358,7 @@ CodeCompletionContext::~CodeCompletionContext() {
 }
 
 void CodeCompletionContext::log( const QString& str ) const {
-  kDebug() << "CodeCompletionContext:" << str;
+  kDebug(9007) << "CodeCompletionContext:" << str;
 }
 
 bool CodeCompletionContext::isValidPosition() {
@@ -370,7 +370,7 @@ bool CodeCompletionContext::isValidPosition() {
 
   if( markedText[markedText.length()-1] == '$' ) {
     //We are within a comment or string
-    kDebug() << "code-completion position is invalid, marked text: \n\"" << markedText << "\"\n unmarked text:\n" << m_text << "\n";
+    kDebug(9007) << "code-completion position is invalid, marked text: \n\"" << markedText << "\"\n unmarked text:\n" << m_text << "\n";
     return false;
   }
   return true;

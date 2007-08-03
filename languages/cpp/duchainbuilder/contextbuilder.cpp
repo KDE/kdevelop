@@ -98,7 +98,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     topLevelContext = DUChain::self()->chainForDocument(file->identity());
 
     if (topLevelContext) {
-      kDebug() << "ContextBuilder::buildContexts: recompiling";
+      kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
       m_recompiling = true;
 
       Q_ASSERT(topLevelContext->textRangePtr());
@@ -114,7 +114,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
     } else {
-      kDebug() << "ContextBuilder::buildContexts: compiling";
+      kDebug(9007) << "ContextBuilder::buildContexts: compiling";
       m_recompiling = false;
 
       Q_ASSERT(m_compilingContexts);
@@ -192,7 +192,7 @@ KDevelop::DUContext* ContextBuilder::buildSubContexts(const KUrl& url, AST *node
   if( node->ducontext == parent ) {
     //The node's du-context should have been replaced!
     //Maybe dump the node
-    kDebug() << "Error in ContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
+    kDebug(9007) << "Error in ContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
     DUChainWriteLocker lock(DUChain::lock());
     delete node->ducontext;
 
@@ -248,7 +248,7 @@ void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
   if( idType && idType->declaration() && idType->declaration()->internalContext() ) {
     currentContext()->addImportedParentContext( idType->declaration()->internalContext() );
   } else if( !dynamic_cast<DelayedType*>(base.baseClass.data()) ) {
-    kDebug() << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? QString() : base.baseClass->toString());
+    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? QString() : base.baseClass->toString());
   }
 }
 
@@ -288,7 +288,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       else if (classContexts.count() > 1) {
         kWarning() << k_funcinfo << "Muliple class contexts for" << functionName.toString() << "- shouldn't happen!" ;
         foreach (DUContext* classContext, classContexts) {
-          kDebug() << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->textRange() << "in" << classContext->url();
+          kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->textRange() << "in" << classContext->url();
         }
       }
     }
@@ -555,7 +555,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
         DUChainReadLocker lock(DUChain::lock());
         IdentifierVerifier iv(this, m_editor->findPosition(node->start_token));
         iv.visit(node->expression);
-        //kDebug() << k_funcinfo << m_editor->findPosition(node->start_token) << "IdentifierVerifier returned" << iv.result;
+        //kDebug(9007) << k_funcinfo << m_editor->findPosition(node->start_token) << "IdentifierVerifier returned" << iv.result;
         node->expressionChosen = iv.result;
       }
 

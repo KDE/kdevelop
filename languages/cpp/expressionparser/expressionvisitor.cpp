@@ -164,9 +164,9 @@ void ExpressionVisitor::parse( AST* ast ) {
 }
 
 void ExpressionVisitor::problem( AST* node, const QString& str ) {
-  kDebug() << "Cpp::ExpressionVisitor problem:" << str;
+  kDebug(9007) << "Cpp::ExpressionVisitor problem:" << str;
 
-  kDebug() << "Cpp::ExpressionVisitor dumping the node that created the problem";
+  kDebug(9007) << "Cpp::ExpressionVisitor dumping the node that created the problem";
   DumpChain d;
   d.dump(node, m_session);
 }
@@ -284,8 +284,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
         PointerType* pnt = dynamic_cast<PointerType*>( realType(base) );
         if( pnt ) {
-          kDebug() << "got type:" << pnt->toString();
-          kDebug() << "base-type:" << pnt->baseType()->toString();
+          kDebug(9007) << "got type:" << pnt->toString();
+          kDebug(9007) << "base-type:" << pnt->baseType()->toString();
           
           isConst = isConstant(pnt);
           //It is a pointer, reduce the pointer-depth by one

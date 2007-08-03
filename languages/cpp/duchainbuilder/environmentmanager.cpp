@@ -355,7 +355,7 @@ void EnvironmentManager::saveMemory() {
 void EnvironmentManager::addFile( ParsingEnvironmentFile* file ) {
   EnvironmentFile* cfile = dynamic_cast<EnvironmentFile*>(file);
   if( !cfile ) {
-    kDebug() << "EnvironmentManager::addFile() called with a non-CachedLexFile of type" << file->type();
+    kDebug(9007) << "EnvironmentManager::addFile() called with a non-CachedLexFile of type" << file->type();
     return;
   }
   ifDebug( kDebug(9007) << "EnvironmentManager::addFile" << cfile->url() << endl );
@@ -365,7 +365,7 @@ void EnvironmentManager::addFile( ParsingEnvironmentFile* file ) {
 void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
   EnvironmentFile* cfile = dynamic_cast<EnvironmentFile*>(file);
   if( !cfile ) {
-    kDebug() << "EnvironmentManager::removeFile() called with a non-CachedLexFile of type" << file->type();
+    kDebug(9007) << "EnvironmentManager::removeFile() called with a non-CachedLexFile of type" << file->type();
     return;
   }
   ifDebug( kDebug(9007) << "EnvironmentManager::removeFile" << cfile->url() << endl );
@@ -378,7 +378,7 @@ void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
 KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const KUrl& url, const ParsingEnvironment* environment ) {
   const rpp::Environment* env = dynamic_cast<const rpp::Environment*>(environment);
   if( !env ) {
-    kDebug() << "EnvironmentManager::find() called with a wrong environment of type" << environment->type();
+    kDebug(9007) << "EnvironmentManager::find() called with a wrong environment of type" << environment->type();
     return 0;
   }
   return lexedFile( url, env ).data();

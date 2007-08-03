@@ -123,7 +123,7 @@ void DumpTree::visit(AST *node)
     }
   }
   if (node)
-    kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+    kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
              <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText << endl;
 
   ++indent;
@@ -131,7 +131,7 @@ void DumpTree::visit(AST *node)
   --indent;
 
   if (node)
-    kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
+    kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
 }
 
 DumpTree::~ DumpTree( )

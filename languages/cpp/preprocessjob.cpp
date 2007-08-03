@@ -112,9 +112,9 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
-    //kDebug() << k_funcinfo << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
+    //kDebug(9007) << k_funcinfo << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
 
-    kDebug() << "PreprocessJob: preprocessing" << parentJob()->document();
+    kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document();
 
     if (checkAbort())
         return;
@@ -198,7 +198,7 @@ void PreprocessJob::run()
         //Merge include-file-set, defined macros, used macros, and string-set
         parentPreprocessor->m_environmentFile->merge(*m_environmentFile);
     }
-    kDebug() << "PreprocessJob: finished" << parentJob()->document();
+    kDebug(9007) << "PreprocessJob: finished" << parentJob()->document();
 
     m_currentEnvironment = 0;
 }
@@ -222,7 +222,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 //         // The file has already been parsed.
 //         return 0;
 //     }
-    kDebug() << "PreprocessJob" << parentJob()->document() << ": searching for include" << fileName;
+    kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": searching for include" << fileName;
 
     KUrl localPath(parentJob()->document());
     localPath.setFileName(QString::null);
@@ -230,7 +230,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude(parentJob()->includePaths(), localPath, fileName, type, skipCurrentPath ? parentJob()->includedFromPath() : KUrl() );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
-        kDebug() << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile;
+        kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile;
 
         KDevelop::TopDUContext* includedContext;
 
@@ -240,7 +240,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         }
 
         if( includedContext ) {
-            kDebug() << "PreprocessJob" << parentJob()->document() << ": took included file from the du-chain" << fileName;
+            kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": took included file from the du-chain" << fileName;
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             parentJob()->addIncludedFile(includedContext);
@@ -250,10 +250,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
                 m_currentEnvironment->merge( environmentFile->definedMacros() );
                 m_environmentFile->merge( *environmentFile );
             } else {
-                kDebug() << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support";
+                kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support";
             }
         } else {
-            kDebug() << "PreprocessJob" << parentJob()->document() << ": no fitting entry in du-chain, parsing";
+            kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": no fitting entry in du-chain, parsing";
             /// Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the
             /// included file right here. Parallel parsing cannot be used here, because we need the
             /// macros before we can continue.
@@ -272,9 +272,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             Q_ASSERT(slaveJob.duChain());
             parentJob()->addIncludedFile(slaveJob.duChain());
         }
-        kDebug() << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
+        kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
     } else {
-        kDebug() << "PreprocessJob" << parentJob()->document() << ": include not found:" << fileName;
+        kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": include not found:" << fileName;
     }
 
         /*} else {

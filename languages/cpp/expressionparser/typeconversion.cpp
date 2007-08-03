@@ -415,7 +415,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
     CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to) ); //@todo think whether the realType(..) is ok
     if( toClass )
     {
-      kDebug() << "check whether" << fromClass->toString() << "has public base" << toClass->toString();
+      kDebug(9007) << "check whether" << fromClass->toString() << "has public base" << toClass->toString();
       if( isPublicBaseClass(fromClass, toClass ) ) {
         ///@todo check whether this is correct
         //There is a default-constructor in toClass that initializes from const toClass&, which fromClass can be converted to

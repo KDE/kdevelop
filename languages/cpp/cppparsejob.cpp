@@ -127,7 +127,7 @@ CPPParseJob::CPPParseJob( KDevelop::Document *document,
     addJob(ppj = new PreprocessJob(this));
     addJob(m_parseJob = new ::ParseJob(this));
 
-    //kDebug() << k_funcinfo << "Created job" << this << "pp" << ppj << "parse" << parseJob();
+    //kDebug(9007) << k_funcinfo << "Created job" << this << "pp" << ppj << "parse" << parseJob();
 }
 */
 

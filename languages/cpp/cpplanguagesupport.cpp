@@ -227,7 +227,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                 allPaths << r;
             }
         }else{
-            kDebug() << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
+            kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
         }
         #endif
     }
@@ -240,7 +240,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data());
             Q_ASSERT(envFile);
             allPaths = envFile->includePaths();
-            kDebug() << "Took include-path for" << source << "from a random parsed duchain-version of it";
+            kDebug(9007) << "Took include-path for" << source << "from a random parsed duchain-version of it";
         }
     }
 
@@ -266,9 +266,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const {
     QPair<KUrl, KUrl> ret;
 
-    kDebug() << "searching for include-file" << includeName;
+    kDebug(9007) << "searching for include-file" << includeName;
     if( !skipPath.isEmpty() )
-        kDebug() << "skipping path" << skipPath;
+        kDebug(9007) << "skipping path" << skipPath;
     
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
         QFileInfo info(QDir(localPath.path()), includeName);
@@ -309,9 +309,9 @@ restart:
     }
 
     if( ret.first.isEmpty() ) {
-        kDebug() << "FAILED to find include-file" << includeName << "in paths:";
+        kDebug(9007) << "FAILED to find include-file" << includeName << "in paths:";
         foreach( KUrl path, includePaths )
-            kDebug() << path;
+            kDebug(9007) << path;
     }
     
     return ret;

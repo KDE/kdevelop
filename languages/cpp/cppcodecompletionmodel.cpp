@@ -104,7 +104,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
   Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].first.data() );
   if (!dec) {
-    kDebug() <<  "code-completion model item" << dataIndex << ": Du-chain item is deleted";
+    kDebug(9007) <<  "code-completion model item" << dataIndex << ": Du-chain item is deleted";
     return QVariant();
   }
 
@@ -122,7 +122,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         //Cpp::TypeConversion conv;
         //return conv.implicitConversion(
       } else {
-        kDebug() << "MatchQuality requested with invalid match-context";
+        kDebug(9007) << "MatchQuality requested with invalid match-context";
       }
     }
     case ArgumentHintDepth:
@@ -427,7 +427,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
   //Compute the text we should complete on
   KTextEditor::Document* doc = view->document();
   if( !doc ) {
-    kDebug() << "No document for completion";
+    kDebug(9007) << "No document for completion";
     return;
   }
 
@@ -441,7 +441,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
   }
 
   if( text.isEmpty() ) {
-    kDebug() << "no text for context";
+    kDebug(9007) << "no text for context";
     return;
   }
 
@@ -461,7 +461,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
         //Dereference a pointer
         CppPointerType* pnt = dynamic_cast<CppPointerType*>(realType(containerType.data()));
         if( !pnt ) {
-          kDebug() << "Arrow-operator on non-pointer type";
+          kDebug(9007) << "Arrow-operator on non-pointer type";
           containerType = AbstractType::Ptr();
         } else {
           containerType = pnt->baseType();
@@ -475,16 +475,16 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
           foreach( Declaration* decl, Cpp::localDeclarations( ctx ) )
             m_declarations << DeclarationContextPair( decl, completionContext );
         } else {
-          kDebug() << "Could not get internal context from declaration \"" << idType->declaration()->toString() << "\"";
+          kDebug(9007) << "Could not get internal context from declaration \"" << idType->declaration()->toString() << "\"";
         }
       } else {
-        kDebug() << "CppCodeCompletionModel::setContext: bad container-type";
+        kDebug(9007) << "CppCodeCompletionModel::setContext: bad container-type";
       }
     } else {
       m_declarations.clear();
       foreach( Declaration* decl, m_context->allDeclarations(position).values() )
         m_declarations << DeclarationContextPair( decl, completionContext );
-      kDebug() << "CppCodeCompletionModel::setContext: using all declarations visible:" << m_declarations.count();
+      kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible:" << m_declarations.count();
     }
 
     ///Find all recursive function-calls that should be shown as call-tips
@@ -496,12 +496,12 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
           foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() )
             m_declarations << DeclarationContextPair( function.function.declaration(), parentContext );
         } else {
-          kDebug() << "parent-context has non function-call access type";
+          kDebug(9007) << "parent-context has non function-call access type";
         }
       }
     } while( parentContext );
   } else {
-    kDebug() << "CppCodeCompletionModel::setContext: Invalid code-completion context";
+    kDebug(9007) << "CppCodeCompletionModel::setContext: Invalid code-completion context";
   }
 
   // TODO maybe one day just behave like a nice model and call insert rows etc.

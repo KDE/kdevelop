@@ -38,7 +38,7 @@ void DumpTypes::dump(const AbstractType * type)
 bool DumpTypes::preVisit(const AbstractType * type)
 {
   ++indent;
-  kDebug() << QString(indent*2, ' ') << type->toString();
+  kDebug(9007) << QString(indent*2, ' ') << type->toString();
   return true;
 }
 
