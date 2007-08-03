@@ -63,7 +63,7 @@ BEGINTESTFAILFUNCIMPL(ParseTest, failSimpleProject,
         "Missing value for variable and no lineending")
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL(ParseTest, failSimpleProject, "VAR =")
+DATAFUNCIMPL(ParseTest, failSimpleProject, "foo(")
 
 BEGINTESTFUNCIMPL(ParseTest, successFullProject, 10)
 ENDTESTFUNCIMPL

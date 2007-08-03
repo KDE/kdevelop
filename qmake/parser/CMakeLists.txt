@@ -35,6 +35,8 @@ else(KDEVPG_FOUND)
         generated/kdevelop-pg )
 endif(KDEVPG_FOUND)
 
+add_subdirectory(tests)
+
 add_executable(qmake-parser main.cpp)
 target_link_libraries(qmake-parser kdevqmakeparser )
 

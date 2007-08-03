@@ -1,6 +1,8 @@
 include_directories(${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser
                     ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake)
 
+include_directories(${CMAKE_SOURCE_DIR}/parser)
+
 set(parsetest_SRCS parsetest.cpp )
 
 kde4_add_unit_test(qmake-parsetest ${parsetest_SRCS})

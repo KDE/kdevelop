@@ -16,7 +16,6 @@ include_directories(${KDEVPLATFORM_INCLUDE_DIR}
     )
 
 add_subdirectory(parser)
-add_subdirectory(tests)
 
 include_directories(${CMAKE_SOURCE_DIR}/parser)
 
