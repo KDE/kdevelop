@@ -115,7 +115,7 @@ namespace QMake
    id=IDENTIFIER ( func_args=function_args | 0 )
 -> item ;;
 
-   op=op values=value_list ( NEWLINE | 0 )
+   op=op ( values=value_list ( NEWLINE | 0 ) | NEWLINE | 0 )
 -> variable_assignment ;;
 
    optoken=PLUSEQ | optoken=MINUSEQ | optoken=STAREQ | optoken=EQUAL | optoken=TILDEEQ
@@ -177,7 +177,7 @@ void parser::tokenize( const QString& contents )
 
         if( m_debug )
         {
-            kDebug(9024) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end) << "::"<< endl; //" "; // debug output
+            kDebug(9024) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end) << "::";
         }
 
     }
@@ -194,11 +194,11 @@ QString parser::tokenText( std::size_t begin, std::size_t end ) const
 void parser::reportProblem( parser::ProblemType type, const QString& message )
 {
     if (type == Error)
-        kDebug(9024) << "** ERROR: " << message << endl;
+        kDebug(9024) << "** ERROR:" << message;
     else if (type == Warning)
-        kDebug(9024) << "** WARNING: " << message << endl;
+        kDebug(9024) << "** WARNING:" << message;
     else if (type == Info)
-        kDebug(9024) << "** Info: " << message << endl;
+        kDebug(9024) << "** Info:" << message;
 }
 
 
@@ -216,8 +216,8 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
     std::size_t col;
     size_t index = token_stream->index()-1;
     token_type &token = token_stream->token(index);
-    kDebug(9024) << "token starts at: " << token.begin << endl;
-    kDebug(9024) << "index is: " << index << endl;
+    kDebug(9024) << "token starts at:" << token.begin;
+    kDebug(9024) << "index is:" << index;
     token_stream->start_position(index, &line, &col);
     QString tokenValue = tokenText(token.begin, token.end);
     reportProblem(
