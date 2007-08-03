@@ -105,7 +105,7 @@ class CppDUContext : public BaseContext {
     ///Overridden to take care of templates
     virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::DUContext::NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
-      ifDebug( kDebug() << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
+      ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
       
       ///@todo maybe move parts of this logic directly into the du-chain
 
@@ -140,7 +140,7 @@ class CppDUContext : public BaseContext {
             ///@todo Let the expression-parser handle the thing. This will allow evaluating integral expressions like "1 - 1" and such
             ///problem: the du-chain is already locked
             templateArgumentTypes << Cpp::ExpressionEvaluationResult();
-            kDebug() << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << endl;
+            kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << endl;
           }
         }
 
@@ -174,7 +174,7 @@ class CppDUContext : public BaseContext {
                 if( dec )
                   ret << dec;
                 else
-                  kDebug() << "Could not instantiate template-declaration" << endl;
+                  kDebug(9007) << "Could not instantiate template-declaration" << endl;
               }
             }
           }else{
@@ -182,7 +182,7 @@ class CppDUContext : public BaseContext {
             currentLookup.clear();
             if( tempDecls.size() == 1 ) {
             } else {
-              kDebug() << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " multiple ambiguous declarations for scope " << currentLookup.toString() << endl;
+              kDebug(9007) << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " multiple ambiguous declarations for scope " << currentLookup.toString() << endl;
             }
             //Extract a context, maybe it would be enough only testing the first found declaration
             foreach( Declaration* decl, tempDecls ) {
@@ -192,7 +192,7 @@ class CppDUContext : public BaseContext {
                 instanceDecl = instantiateDeclaration(decl, templateArgumentTypes);
               
               if( !instanceDecl ) {
-                kDebug() << "Could not instantiate context-declaration" << endl;
+                kDebug(9007) << "Could not instantiate context-declaration" << endl;
                 continue;
               }
               
@@ -201,7 +201,7 @@ class CppDUContext : public BaseContext {
                 break;
             }
             if( !scopeContext || scopeContext->type() != DUContext::Class ) {
-              kDebug() << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString() << endl;
+              kDebug(9007) << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString() << endl;
               return;
               
             }
@@ -212,7 +212,7 @@ class CppDUContext : public BaseContext {
             //This is ok in the case that currentLookup stands for a namespace, because namespaces do not have a declaration.
             for( int a = 0; a < currentLookup.count(); a++ ) {
               if( templateArgumentTypes.count() != 0 ) {
-                kDebug() << "CppDUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString() << endl;
+                kDebug(9007) << "CppDUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString() << endl;
                 return; //If one of the parts has a template-identifier, it cannot be a namespace
               }
             }
@@ -226,7 +226,7 @@ class CppDUContext : public BaseContext {
 
     virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, typename BaseContext::SearchFlags flags ) const
     {
-      ifDebug( kDebug() << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
+      ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
       /**
         - When searching local declarations:
          - Check whether they are already in the instantiated context, if yes return them
@@ -248,7 +248,7 @@ class CppDUContext : public BaseContext {
               if( dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) ) {
                 //Unresolved template-paramers are not allowed, so remove the item from the list
                 it = ret.erase(it);
-                kDebug() << "filtered out 1 declaration" << endl;
+                kDebug(9007) << "filtered out 1 declaration" << endl;
               } else {
                 ++it;
               }
@@ -318,7 +318,7 @@ class CppDUContext : public BaseContext {
       
       TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
       if( !templateDecl ) {
-        kDebug() << "Tried to instantiate a non-template declaration" << endl;
+        kDebug(9007) << "Tried to instantiate a non-template declaration" << endl;
         return 0;
       }
 
