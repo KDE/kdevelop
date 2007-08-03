@@ -6,8 +6,8 @@ find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 find_package(KDevPlatform REQUIRED)
-find_package(KDevelop REQUIRED)
-find_package(KDevelop-PG REQUIRED)
+#find_package(KDevelop REQUIRED)
+find_package(KDevelop-PG QUIET)
 include_directories(${QMakeManager_SOURCE_DIR} ${QMakeManager_BINARY_DIR} ${KDE4_INCLUDES}
     ${KDEVELOP_INCLUDE_DIR}/qmake/
 )
