@@ -69,13 +69,13 @@ class DifferenceString
 public:
 	DifferenceString()
 	{
-//		kDebug(8101) << "DifferenceString::DifferenceString()" << endl;
+//		kDebug(8101) << "DifferenceString::DifferenceString()";
 	}
 	explicit DifferenceString( const QString& string, const MarkerList& markerList = MarkerList() ) :
 		m_string( string ),
 		m_markerList( markerList )
 	{
-//		kDebug(8101) << "DifferenceString::DifferenceString( " << string << ", " << markerList << " )" << endl;
+//		kDebug(8101) << "DifferenceString::DifferenceString( " << string << ", " << markerList << " )";
 		calculateHash();
 	}
 	DifferenceString( const DifferenceString& ds ) :
@@ -84,7 +84,7 @@ public:
 		m_hash( ds.m_hash ),
 		m_markerList( ds.m_markerList )
 	{
-//		kDebug(8101) << "DifferenceString::DifferenceString( const DifferenceString& " << ds << " )" << endl;
+//		kDebug(8101) << "DifferenceString::DifferenceString( const DifferenceString& " << ds << " )";
 	}
 	~DifferenceString() {}
 

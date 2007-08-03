@@ -340,7 +340,7 @@ bool KompareModelList::saveDestination( DiffModel* model )
 		}
 	}
 
-	// kDebug( 8101 ) << "Everything:" << endl << list.join( "\n" );
+	// kDebug( 8101 ) << "Everything:"<< list.join( "\n" );
 
 	if( list.count() > 0 )
 		*stream << list.join( "" );
