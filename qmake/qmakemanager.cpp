@@ -98,6 +98,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     }
     kDebug(9024) << k_funcinfo << "Added" << folderList.count() << "Elements";
 
+
     return folderList;
 }
 
@@ -116,7 +117,9 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
 
         QString projectfile;
 
-        if( !l.count() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
+        if( l.count() && l.indexOf( project->name() + ".pro") != -1 )
+            projectfile = project->name() + ".pro";
+        if( l.isEmpty() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
         {
             projectfile = fi.baseName() + ".pro";
         }else
