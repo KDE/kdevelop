@@ -78,6 +78,7 @@ public:
         if( !m_cfgDlgs.contains( proj ) )
         {
             QStringList pluginsForPrj = findPluginsForProject( proj );
+	    kDebug(9000) << "Using pluginlist:" << pluginsForPrj;
             pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
             m_cfgDlgs[proj] = new KSettings::Dialog( pluginsForPrj,
                                                      m_core->uiController()->activeMainWindow() );
@@ -93,12 +94,14 @@ public:
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
+	kDebug(9000) << "managerplugin:" << project->managerPlugin();
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); it++ )
         {
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
+	    kDebug(9000) << "Checking plugin:" << plugin << "with iface" << iface;
             if( !iface || plugin == project->managerPlugin() )
-                pluginnames << m_core->pluginController()->pluginInfo( plugin ).name();
+                pluginnames << m_core->pluginController()->pluginInfo( plugin ).pluginName();
         }
 
         return pluginnames;
