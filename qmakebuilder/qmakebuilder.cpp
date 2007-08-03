@@ -45,8 +45,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#define QMAKE_COMMAND "qmake"
-
 typedef KGenericFactory<QMakeBuilder> QMakeBuilderFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakebuilder,
                             QMakeBuilderFactory( "kdevqmakebuilder" ) )
