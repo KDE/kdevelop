@@ -40,6 +40,7 @@ public:
 
     KUrl::List files() const;
     KUrl::List filesForTarget( const QString& ) const;
+    KUrl::List includeDirectories() const;
 
     QStringList targets() const;
 

@@ -78,6 +78,70 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
     return list;
 }
 
+KUrl::List QMakeProjectFile::includeDirectories() const
+{
+    kDebug(9024) << k_funcinfo << "Fetching include dirs";
+
+    KUrl::List list;
+    kDebug(9024) << k_funcinfo << variableValues("INCLUDEPATH");
+    foreach( QString val, variableValues("INCLUDEPATH") )
+    {
+        KUrl url(val);
+        if( !list.contains( url ) )
+            list << url;
+    }
+    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR");
+    foreach( QString val, variableValues("QMAKE_INCDIR") )
+    {
+        KUrl url(val);
+        if( !list.contains( url ) )
+            list << url;
+    }
+    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_OPENGL");
+    if( variableValues("CONFIG").contains("opengl") )
+    {
+        foreach( QString val, variableValues("QMAKE_INCDIR_OPENGL") )
+        {
+            KUrl url(val);
+            if( !list.contains( url ) )
+                list << url;
+        }
+    }
+    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_QT");
+    if( variableValues("CONFIG").contains("qt") )
+    {
+        //@TODO add QtCore,QtGui and so on depending on CONFIG values,
+        //      as QMAKE_INCDIR_QT only contains the include/ dir
+        foreach( QString val, variableValues("QMAKE_INCDIR_QT") )
+        {
+            KUrl url(val);
+            if( !list.contains( url ) )
+                list << url;
+        }
+    }
+    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_THREAD");
+    if( variableValues("CONFIG").contains("thread") )
+    {
+        foreach( QString val, variableValues("QMAKE_INCDIR_THREAD") )
+        {
+            KUrl url(val);
+            if( !list.contains( url ) )
+                list << url;
+        }
+    }
+    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_X11");
+    if( variableValues("CONFIG").contains("x11") )
+    {
+        foreach( QString val, variableValues("QMAKE_INCDIR_X11") )
+        {
+            KUrl url(val);
+            if( !list.contains( url ) )
+                list << url;
+        }
+    }
+    return list;
+}
+
 KUrl::List QMakeProjectFile::files() const
 {
     kDebug(9024) << k_funcinfo << "Fetching files";

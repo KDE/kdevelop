@@ -181,8 +181,32 @@ KDevelop::IProjectBuilder* QMakeProjectManager::builder(KDevelop::ProjectItem*) 
 
 KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* item) const
 {
-    Q_UNUSED(item)
-    return KUrl::List();
+    KUrl::List list;
+    QMakeFolderItem* folder = 0;
+
+    if( item->type() == KDevelop::ProjectBaseItem::File )
+    {
+        folder =
+                dynamic_cast<QMakeFolderItem*>( item->parent() );
+        if( !folder )
+        {
+            folder =
+                dynamic_cast<QMakeFolderItem*>( item->parent()->parent() );
+        }
+    }else if( item->type() == KDevelop::ProjectBaseItem::Target )
+    {
+        folder =
+                dynamic_cast<QMakeFolderItem*>( item->parent() );
+    }else
+    {
+        folder =
+                dynamic_cast<QMakeFolderItem*>( item );
+    }
+    if( folder )
+    {
+        list += folder->projectFile()->includeDirectories();
+    }
+    return list;
 }
 
 QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
