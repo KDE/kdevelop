@@ -9,9 +9,6 @@
     <height>494</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form2</string>
-  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>9</number>
@@ -39,9 +36,6 @@
     <widget class="QCheckBox" name="kcfg_displayMimeType" >
      <property name="text" >
       <string>Display document &amp;categories</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+A</string>
      </property>
     </widget>
    </item>
