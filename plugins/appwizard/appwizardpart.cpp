@@ -85,7 +85,12 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
     QString templateName = templateInfo.baseName();
     kDebug(9010) << "creating project for template:" << templateName;
 
-    QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
+    QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".zip");
+    if( templateArchive.isEmpty() )
+    {
+        templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
+    }
+
     if (templateArchive.isEmpty())
         return "";
 
