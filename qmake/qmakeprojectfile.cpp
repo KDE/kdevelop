@@ -80,9 +80,38 @@ KUrl::List QMakeProjectFile::files() const
                 list.append( u );
         }
     }
-    list.append( absoluteFile() );
     kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
     return list;
+}
+
+KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
+{
+    kDebug(9024) << k_funcinfo << "Fetching files";
+
+
+    KUrl::List list;
+    foreach( QString variable, QMakeProjectFile::FileVariables )
+    {
+        foreach( QString value, variableValues(variable) )
+        {
+                KUrl u = absoluteDir();
+                u.adjustPath( KUrl::AddTrailingSlash );
+                u.setFileName( value.trimmed() );
+                list.append( u );
+        }
+    }
+    kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
+    return list;
+}
+
+QString QMakeProjectFile::getTemplate() const
+{
+    QString templ = "app";
+    if( !variableValues("TEMPLATE").isEmpty() )
+    {
+        templ = variableValues("TEMPLATE").first();
+    }
+    return templ;
 }
 
 QStringList QMakeProjectFile::targets() const
@@ -91,13 +120,12 @@ QStringList QMakeProjectFile::targets() const
 
     QStringList list;
 
-    foreach( QString value, variableValues("INSTALLS") )
+    list += variableValues("TARGET");
+    if( list.isEmpty() && getTemplate() != "subdirs" )
     {
-        if( value.trimmed() != "target" )
-        {
-            list << value;
-        }
+        list += QFileInfo( absoluteFile() ).baseName();
     }
+
     kDebug(9024) << k_funcinfo << "found" << list.size() << "targets";
     return list;
 }

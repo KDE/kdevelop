@@ -88,14 +88,17 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
                            KUrl( subproject->absoluteDir() ),
                            item ) );
     }
-    foreach( KUrl u, folderitem->projectFile()->files() )
-    {
-        new KDevelop::ProjectFileItem( item->project(), u, item );
-    }
     foreach( QString s, folderitem->projectFile()->targets() )
     {
-        new QMakeTargetItem( item->project(), s,  item );
+        QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
+        foreach( KUrl u, folderitem->projectFile()->filesForTarget(s) )
+        {
+            new KDevelop::ProjectFileItem( item->project(), u, target );
+        }
     }
+    new KDevelop::ProjectFileItem( item->project(),
+                                   KUrl( folderitem->projectFile()->absoluteFile() ),
+                                   item );
     kDebug(9024) << k_funcinfo << "Added" << folderList.count() << "Elements";
 
 

@@ -39,8 +39,11 @@ public:
     QList<QMakeProjectFile*> subProjects() const;
 
     KUrl::List files() const;
+    KUrl::List filesForTarget( const QString& ) const;
 
     QStringList targets() const;
+
+    QString getTemplate() const;
 
     void setMkSpecs( QMakeMkSpecs* mkspecs );
 
