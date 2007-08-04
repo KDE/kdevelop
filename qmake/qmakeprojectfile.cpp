@@ -50,16 +50,30 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
     QList<QMakeProjectFile*> list;
     foreach( QString subdir, variableValues( "SUBDIRS" ) )
     {
+        QString fileOrPath;
         kDebug(9024) << k_funcinfo << "Found value:" << subdir;
-        QDir d = QDir( absoluteDir() );
-        d.cd( subdir.trimmed() );
-        QMakeProjectFile* qmscope = new QMakeProjectFile( d.canonicalPath() );
+        if ( containsVariable( subdir+".file" ) && !variableValues( subdir+".file" ).isEmpty() )
+        {
+            subdir = variableValues( subdir+".file" ).first();
+        }else if( containsVariable( subdir+".subdir" ) && !variableValues( subdir+".subdir" ).isEmpty() )
+        {
+            subdir = variableValues( subdir+".subdir" ).first();
+        }
+        if( subdir.endsWith( ".pro" ) )
+        {
+            fileOrPath = resolveFileName( subdir.trimmed() );
+        }else
+        {
+            fileOrPath = resolveFileName( subdir.trimmed() );
+        }
+        QMakeProjectFile* qmscope = new QMakeProjectFile( fileOrPath );
         qmscope->setMkSpecs( m_mkSpecs );
         if( qmscope->read() )
         {
             list.append( qmscope );
         }
     }
+
     kDebug(9024) << k_funcinfo << "found" << list.size() << "subprojects";
     return list;
 }
@@ -74,10 +88,7 @@ KUrl::List QMakeProjectFile::files() const
     {
         foreach( QString value, variableValues(variable) )
         {
-                KUrl u = absoluteDir();
-                u.adjustPath( KUrl::AddTrailingSlash );
-                u.setFileName( value.trimmed() );
-                list.append( u );
+            list << KUrl( resolveFileName( value ) );
         }
     }
     kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
@@ -90,14 +101,25 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
 
 
     KUrl::List list;
-    foreach( QString variable, QMakeProjectFile::FileVariables )
+    if( variableValues("INSTALLS").contains(s) )
     {
-        foreach( QString value, variableValues(variable) )
+        QStringList files = variableValues(s+".files");
+        if( !files.isEmpty() )
         {
-                KUrl u = absoluteDir();
-                u.adjustPath( KUrl::AddTrailingSlash );
-                u.setFileName( value.trimmed() );
-                list.append( u );
+            foreach( QString val, files )
+            {
+                list << KUrl( resolveFileName( val ) );
+            }
+        }
+    }
+    if( !variableValues("INSTALLS").contains(s) || s == "target" )
+    {
+        foreach( QString variable, QMakeProjectFile::FileVariables )
+        {
+            foreach( QString value, variableValues(variable) )
+            {
+                list << KUrl( resolveFileName( value ) );
+            }
         }
     }
     kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
@@ -124,6 +146,12 @@ QStringList QMakeProjectFile::targets() const
     if( list.isEmpty() && getTemplate() != "subdirs" )
     {
         list += QFileInfo( absoluteFile() ).baseName();
+    }
+
+    foreach( QString target, variableValues("INSTALLS") )
+    {
+        if( target != "target" )
+            list << target;
     }
 
     kDebug(9024) << k_funcinfo << "found" << list.size() << "targets";

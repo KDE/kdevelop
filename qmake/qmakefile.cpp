@@ -200,4 +200,14 @@ bool QMakeFile::containsVariable( const QString& variable ) const
     return m_variableValues.contains( variable );
 }
 
+QString QMakeFile::resolveFileName( const QString& file ) const
+{
+    QString absolutefile = file;
+    if( QFileInfo( file ).isRelative() )
+    {
+        absolutefile = absoluteDir() + "/" + file;
+    }
+    return QFileInfo( absolutefile ).canonicalFilePath();
+}
+
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
