@@ -711,7 +711,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir, bool recursive)
 
     if( l.isEmpty() || ( l.count() && l.findIndex( projectName() + ".pro" ) != -1 ) )
         cmdline += projectName()+".pro";
-    else if( :l.isEmpty() || (l.count() && l.findIndex( fi.baseName() + ".pro" ) != -1 ) )
+    else if( l.isEmpty() || (l.count() && l.findIndex( fi.baseName() + ".pro" ) != -1 ) )
         cmdline += fi.baseName() + ".pro";
     else
         cmdline += l[0];
