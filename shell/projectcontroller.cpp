@@ -365,7 +365,7 @@ bool ProjectController::closeProject( IProject* proj )
         if( _plugInfo.isValid() )
         {
             QString _plugName = _plugInfo.pluginName();
-            kDebug() << k_funcinfo << "about to unloading :" << _plugName;
+            kDebug(9501) << k_funcinfo << "about to unloading :" << _plugName;
             Core::self()->pluginController()->unloadPlugin( _plugName );
         }
     }

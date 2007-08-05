@@ -131,7 +131,7 @@ struct DocumentControllerPrivate {
         QList<KUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
         foreach (const KUrl &url, urlsForDoc)
         {
-            kDebug() << "destroying document" << doc;
+            kDebug(9501) << "destroying document" << doc;
             documents.remove(url);
         }
     }

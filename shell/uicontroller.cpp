@@ -135,7 +135,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {
-    kDebug() << k_funcinfo;
+    kDebug(9501) << k_funcinfo;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
     d->defaultArea->addToolView(doc->createView(),
@@ -144,7 +144,7 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 {
-    kDebug() << k_funcinfo;
+    kDebug(9501) << k_funcinfo;
     //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments[factory];
 
@@ -227,7 +227,7 @@ void UiController::addNewToolView(MainWindow *mw)
 void UiController::showSettingsDialog()
 {
     QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
-    kDebug() << k_funcinfo << "blacklist" << blacklist;
+    kDebug(9501) << k_funcinfo << "blacklist" << blacklist;
     if(!d->cfgDlg)
     {
         d->cfgDlg = new KSettings::Dialog( QStringList() << "kdevplatform",

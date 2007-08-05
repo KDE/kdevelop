@@ -58,7 +58,7 @@ ProfileEngine::~ProfileEngine()
 
 void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root)
 {
-//     kDebug() << "processDir:" << dir << "" << currPath;
+//     kDebug(9501) << "processDir:" << dir << "" << currPath;
 
     QDir qDir(dir);
     QStringList entryList = qDir.entryList(QDir::Dirs);
@@ -143,12 +143,12 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, PluginContro
     }
 
 //BEGIN debug
-//     kDebug() << "=============" << endl
+//     kDebug(9501) << "=============" << endl
 //         << " =============" << endl
 //         << "     =============   Plugins for Profile:" << endl;
 //     for (KService::List::const_iterator it = list.begin(); it != list.end(); ++it)
-//         kDebug() << "  " << (*it)->name();
-//     kDebug();
+//         kDebug(9501) << "  " << (*it)->name();
+//     kDebug(9501);
 //END debug
     KPluginInfo::List pluginList = KPluginInfo::fromServices( list );
     return pluginList;
@@ -230,21 +230,21 @@ void ProfileEngine::diffProfiles(PluginController::PluginType offerType, const Q
         it != offers2.constEnd(); ++it)
         offers2List[it->desktopEntryPath()] = *it;
 
-//    kDebug() << "OLD PROFILE:" << offers1List;
-//    kDebug() << "NEW PROFILE:" << offers2List;
+//    kDebug(9501) << "OLD PROFILE:" << offers1List;
+//    kDebug(9501) << "NEW PROFILE:" << offers2List;
 
     for (QStringList::const_iterator it = offers1List.constBegin();
         it != offers1List.constEnd(); ++it)
     {
-//         kDebug() << "checking:" << *it;
+//         kDebug(9501) << "checking:" << *it;
         if (offers2List.contains(*it))
         {
-//             kDebug() << " keep";
+//             kDebug(9501) << " keep";
             offers2.removeAll(offers2List[*it]);
         }
         else
         {
-//             kDebug() << " unload";
+//             kDebug(9501) << " unload";
             unload.append(*it);
         }
     }
