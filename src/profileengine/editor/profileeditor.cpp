@@ -137,7 +137,7 @@ void ProfileEditor::refreshAvailableList()
     allList->clear();
     allCore = new K3ListViewItem(allList, i18n("Core"));
     allCore->setOpen(true);
-    allGlobal = new K3ListViewItem(allList, i18n("Global"));
+    allGlobal = new K3ListViewItem(allList, i18nc("list of global plugins", "Global"));
     allGlobal->setOpen(true);
     allProject = new K3ListViewItem(allList, i18n("Project"));
     allProject->setOpen(true);

@@ -66,7 +66,7 @@ void AppWizardPart::slotNewProject()
     AppWizardDialog dlg;
 
     ProjectSelectionPage *selectionPage = new ProjectSelectionPage(m_templatesModel, &dlg);
-    dlg.addPage(selectionPage, i18n("General"));
+    dlg.addPage(selectionPage, i18nc("Page for general configuration options", "General"));
 
     if (dlg.exec() == QDialog::Accepted)
     {
