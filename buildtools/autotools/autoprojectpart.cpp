@@ -294,10 +294,10 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
         m_widget->setActiveTarget(activeTarget);
     else
     {
-        KMessageBox::information( m_widget, "No active target specified, running the application will\n"
+        KMessageBox::information( m_widget, i18n("No active target specified, running the application will\n"
                                    "not work until you make a target active in the Automake Manager\n"
                                    "on the right side or use the Main Program options under\n"
-                                   "Project -> Project Options -> Run Options", "No active target specified",  "kdevelop_open_project_no_active_target");
+                                   "Project -> Project Options -> Run Options"), i18n("No active target specified"),  "kdevelop_open_project_no_active_target");
     }
 
     KDevProject::openProject( dirName, projectName );
@@ -402,17 +402,17 @@ QString AutoProjectPart::mainProgram() const
         TargetItem* titem = m_widget->activeTarget();
 
         if ( !titem ) {
-            KMessageBox::error( m_widget, "There's no active target!\n"
-                                "Unable to determine the main program", "No active target found" );
+            KMessageBox::error( m_widget, i18n("There's no active target!\n"
+                                "Unable to determine the main program", "No active target found") );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
 
         if ( titem->primary != "PROGRAMS" ) {
-            KMessageBox::error( m_widget, "Active target \""+titem->name+"\"isn't binary ( " + titem->primary + " ) !\n"
+            KMessageBox::error( m_widget, i18n("Active target \"%1\"isn't binary ( %2 ) !\n"
                                 "Unable to determine the main program. If you want this\n"
                                 "to be the active target, set a main program under\n"
-                                "Project -> Project Options -> Run Options", "Active target is not a library" );
+                                "Project -> Project Options -> Run Options").arg(titem->name).arg(titem->primary), i18n("Active target is not a library") );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
@@ -1131,15 +1131,15 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
     QString program = environString();
 
     if ( !titem ) {
-        KMessageBox::error( m_widget, "There's no active target!\n"
-                                "Unable to determine the main program", "No active target found" );
+        KMessageBox::error( m_widget, i18n("There's no active target!\n"
+                                "Unable to determine the main program"), i18n("No active target found") );
         kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else if ( titem->primary != "PROGRAMS" ) {
-        KMessageBox::error( m_widget, "Active target \""+titem->name+"\"isn't binary ( " + titem->primary + " ) !\n"
+        KMessageBox::error( m_widget, i18n("Active target \"%1\"isn't binary ( %2 ) !\n"
                                 "Unable to determine the main program. If you want this\n"
                                 "to be the active target, set a main program under\n"
-                                "Project -> Project Options -> Run Options", "Active target is not a library" );
+                                "Project -> Project Options -> Run Options").arg(titem->name).arg(titem->primary), i18n("Active target is not a library") );
         kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else
