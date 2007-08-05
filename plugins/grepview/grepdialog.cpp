@@ -165,7 +165,7 @@ void GrepDialog::slotHidden()
 void GrepDialog::syncButtonClicked( )
 {
     KDevelop::IDocument *doc = m_part->core()->documentController()->activeDocument();
-    kDebug() << doc;
+    kDebug(9001) << doc;
     if ( doc )
     {
         KUrl url = doc->url();
