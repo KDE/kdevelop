@@ -77,6 +77,7 @@ public:
      * @param config the KConfig object to read the environment groups from
      */
     EnvironmentGroupList( KSharedConfigPtr config );
+    EnvironmentGroupList( KConfig* config );
     ~EnvironmentGroupList();
     
     /**
@@ -85,7 +86,7 @@ public:
      * @param group  the name of the group for which the environment should be returned
      * @return a map containing the environment variables for this group, or an empty map if the group doesn't exist in this list
      */
-    QMap<QString, QString> variables( const QString& group ) const;
+    const QMap<QString, QString> variables( const QString& group ) const;
     
     /**
      * returns the default group

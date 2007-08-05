@@ -45,7 +45,7 @@ public:
     ~EnvironmentSelectWidget();
 
     /// Call this before using any public interfaces of this class.
-    void setConfigObject( KSharedConfigPtr config, const QString &group,
+    void setConfigObject( KConfig* config, const QString &group,
                           const QString &entry = QString("Default Env Profile"));
 
 public Q_SLOTS:

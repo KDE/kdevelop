@@ -27,7 +27,7 @@ namespace KDevelop
 class EnvironmentSelectWidgetPrivate
 {
 public:
-    KSharedConfigPtr m_config;
+    KConfig* m_config;
     QString m_group;
     QString m_entry;
 };
@@ -48,7 +48,7 @@ EnvironmentSelectWidget::~EnvironmentSelectWidget()
     delete d;
 }
 
-void EnvironmentSelectWidget::setConfigObject( KSharedConfigPtr config, const QString &group,
+void EnvironmentSelectWidget::setConfigObject( KConfig* config, const QString &group,
                                        const QString &entry )
 {
     d->m_config = config;

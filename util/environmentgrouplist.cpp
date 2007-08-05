@@ -79,12 +79,20 @@ EnvironmentGroupList::EnvironmentGroupList( KSharedConfigPtr config )
     decode( cfg, d );
 }
 
+EnvironmentGroupList::EnvironmentGroupList( KConfig* config )
+    : d(new EnvironmentGroupListPrivate)
+{
+    KConfigGroup cfg( config, "Environment Settings" );
+    decode( cfg, d );
+}
+
+
 EnvironmentGroupList::~EnvironmentGroupList()
 {
     delete d;
 }
 
-QMap<QString, QString> EnvironmentGroupList::variables( const QString& group ) const
+const QMap<QString, QString> EnvironmentGroupList::variables( const QString& group ) const
 {
     return d->m_groups[group];
 }
