@@ -29,12 +29,25 @@ namespace KDevelop
  * Simple compobox which allows each plugin to decide which environment
  * variable group to use.
  *
- * At construction, it shows all the environment variable group configurations
- * which was set at project-wide environment setting page. User will select
- * one group among them, and selected groupname will be saved in project config file.
+ * Can be used just like a KComboBox in Configuration dialogs including usage
+ * with KConfigXT.
  *
- * @TODO: Make this compatible with KConfigXT.
- * Refer to KDevelop/MakeBuilderPreferences and its .ui file to see how to use this.
+ * Example code to populate the list:
+ * \code
+ * EnvironmentGroupList envlist( PluginSettings::self()->config() );
+ * ui->kcfg_environmentGroup->addItems( envlist.groups()) );
+ * \endcode
+ *
+ * The .kcfg file for that would include an entry like this:
+ * \code
+ * <entry name="environmentGroup" key="Make Environment Group" type="string">
+ *   <default>default</default>
+ * </entry>
+ * \endcode
+ *
+ * Its important to list "default" as the default value, because thats currently
+ * the only way to avoid an empty entry in the combo box.
+ *
  */
 class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectionWidget : public KComboBox
 {
@@ -45,7 +58,17 @@ public:
     explicit EnvironmentSelectionWidget( QWidget *parent = 0 );
     ~EnvironmentSelectionWidget();
 
+    /**
+     * Return the currently selected text as special property so this widget
+     * works with KConfigXT
+     * @returns the currently selected items text
+     */
     QString currentProfile() const;
+
+    /**
+     * Setter for the KConfigXT property
+     * @param text the item text which should be set as current.
+     */
     void setCurrentProfile( const QString& text );
 
 private:
