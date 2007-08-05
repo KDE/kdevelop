@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
-#include <environmentselectwidget.h>
+#include <environmentgrouplist.h>
 
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
@@ -41,10 +41,8 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringLis
     m_prefsUi->setupUi( w );
     l->addWidget( w );
 
-    m_prefsUi->envSelectWidget->setConfigObject( MakeBuilderSettings::self()->config(),
-            "MakeBuilder", "Default Make Environment Profile" );
-    connect( m_prefsUi->envSelectWidget, SIGNAL(changed()),
-             this, SLOT(envGroupChanged()) );
+    KDevelop::EnvironmentGroupList env( MakeBuilderSettings::self()->config() );
+    m_prefsUi->kcfg_environmentProfile->addItems( env.groups() );
 
     addConfig( MakeBuilderSettings::self(), w );
 
@@ -54,29 +52,6 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringLis
 
 MakeBuilderPreferences::~MakeBuilderPreferences()
 {
-}
-
-void MakeBuilderPreferences::save()
-{
-    m_prefsUi->envSelectWidget->saveSettings();
-    ProjectKCModule<MakeBuilderSettings>::save();
-}
-
-void MakeBuilderPreferences::load()
-{
-    m_prefsUi->envSelectWidget->loadSettings();
-    ProjectKCModule<MakeBuilderSettings>::load();
-}
-
-void MakeBuilderPreferences::defaults()
-{
-    m_prefsUi->envSelectWidget->loadSettings();
-    ProjectKCModule<MakeBuilderSettings>::defaults();
-}
-
-void MakeBuilderPreferences::envGroupChanged()
-{
-    unmanagedWidgetChangeState(true);
 }
 
 #include "makebuilderpreferences.moc"

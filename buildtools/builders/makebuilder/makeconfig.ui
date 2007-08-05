@@ -5,33 +5,64 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>542</height>
+    <width>688</width>
+    <height>390</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <item row="0" column="0" colspan="4" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label_8" >
+     <property name="text" >
+      <string>Abort on first error:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
     <widget class="QCheckBox" name="kcfg_abortOnFirstError" >
      <property name="text" >
-      <string>Abort on first error</string>
+      <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="4" >
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_7" >
+     <property name="text" >
+      <string>Display commands but do not
+execute them:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
     <widget class="QCheckBox" name="kcfg_displayOnly" >
      <property name="text" >
-      <string>Display commands but do not execute them</string>
+      <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="4" >
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>Run more than one job at once:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
     <widget class="QCheckBox" name="kcfg_runMoreThanOneJob" >
      <property name="text" >
-      <string>Run more than one job at once</string>
+      <string/>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3" >
+   <item row="3" column="0" >
     <widget class="QLabel" name="label" >
      <property name="enabled" >
       <bool>false</bool>
@@ -39,9 +70,12 @@
      <property name="text" >
       <string>Number of simultaneous jobs:</string>
      </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
-   <item row="3" column="3" >
+   <item row="3" column="1" >
     <widget class="QSpinBox" name="kcfg_numberOfJobs" >
      <property name="enabled" >
       <bool>false</bool>
@@ -53,19 +87,25 @@
      <property name="text" >
       <string>Make executable:</string>
      </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="3" >
-    <widget class="KLineEdit" name="kcfg_makeBinary" />
+   <item row="4" column="1" >
+    <widget class="KUrlRequester" name="kcfg_makeBinary" />
    </item>
    <item row="5" column="0" >
     <widget class="QLabel" name="label_6" >
      <property name="text" >
       <string>Default make target:</string>
      </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
-   <item row="5" column="1" colspan="3" >
+   <item row="5" column="1" >
     <widget class="KLineEdit" name="kcfg_defaultTarget" />
    </item>
    <item row="6" column="0" >
@@ -73,30 +113,46 @@
      <property name="text" >
       <string>Additional make options:</string>
      </property>
-    </widget>
-   </item>
-   <item row="6" column="1" colspan="3" >
-    <widget class="KLineEdit" name="kcfg_additionalOptions" />
-   </item>
-   <item row="7" column="0" colspan="2" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
-      <string>Active Environment Variable profile: </string>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="7" column="2" colspan="2" >
-    <widget class="KDevelop::EnvironmentSelectWidget" native="1" name="envSelectWidget" />
+   <item row="6" column="1" >
+    <widget class="KLineEdit" name="kcfg_additionalOptions" />
    </item>
-   <item row="8" column="0" colspan="4" >
+   <item row="7" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Active Environment Profile: </string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" >
+    <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environmentProfile" >
+     <property name="editable" >
+      <bool>false</bool>
+     </property>
+     <property name="insertPolicy" >
+      <enum>QComboBox::NoInsert</enum>
+     </property>
+     <property name="autoCompletion" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>503</width>
-       <height>16</height>
+       <width>670</width>
+       <height>191</height>
       </size>
      </property>
     </spacer>
@@ -110,10 +166,14 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>KDevelop::EnvironmentSelectWidget</class>
-   <extends>QWidget</extends>
-   <header location="global" >environmentselectwidget.h</header>
-   <container>1</container>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KDevelop::EnvironmentSelectionWidget</class>
+   <extends>KComboBox</extends>
+   <header location="global" >environmentselectionwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

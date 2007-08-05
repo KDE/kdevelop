@@ -358,7 +358,7 @@ QMap<QString, QString> MakeBuilder::environmentVars( KDevelop::ProjectBaseItem* 
     KSharedConfig::Ptr configPtr = item->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     QString defaultProfile = builderGroup.readEntry(
-            "Default Make Environment Profile", QString() );
+            "Default Make Environment Profile", "default" );
 
     QStringList procDefaultList = QProcess::systemEnvironment();
     QMap<QString, QString> retMap;
