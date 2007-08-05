@@ -231,12 +231,16 @@ MakeActionFilter::MakeActionFilter()
     m_actlist << ActionFormat( i18n("generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)");
     m_actlist << ActionFormat( i18n("generating"), 1, 2, "^generating (.*)" ); //unsermake
 
-    m_actlist << ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 );
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", "linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 );
     //can distcc link too ?
-    m_actlist << ActionFormat( i18n("linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)");
-    m_actlist << ActionFormat( i18n("linking"), 1, 2, "^linking (.*)" ); //unsermaker
-    m_actlist << ActionFormat( i18n("linking"), -1, 1, "^Linking .* module (.*)" ); //cmake
-    m_actlist << ActionFormat( i18n("linking"), -1, 1, "^Linking (.*)" ); //cmake
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", 
+                               "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)");
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", 
+                               "linking"), 1, 2, "^linking (.*)" ); //unsermaker
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", 
+                               "linking"), -1, 1, "^Linking .* module (.*)" ); //cmake
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable",
+                               "linking"), -1, 1, "^Linking (.*)" ); //cmake
 
     m_actlist << ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 );
     m_actlist << ActionFormat( i18n("installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 );
