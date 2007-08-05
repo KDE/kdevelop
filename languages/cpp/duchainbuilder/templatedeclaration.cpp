@@ -46,7 +46,7 @@ typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
 uint qHash( const ExpressionEvaluationResult& key ) {
   ///@todo Use the whole content for the hash
-  return (uint)key.type.data();
+  return qHash(key.type);
 }
 
 
