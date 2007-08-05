@@ -403,13 +403,13 @@ QString AutoProjectPart::mainProgram() const
 
         if ( !titem ) {
             KMessageBox::error( m_widget, i18n("There's no active target!\n"
-                                "Unable to determine the main program", "No active target found") );
+                                "Unable to determine the main program"), i18n("No active target found") );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
 
         if ( titem->primary != "PROGRAMS" ) {
-            KMessageBox::error( m_widget, i18n("Active target \"%1\"isn't binary ( %2 ) !\n"
+            KMessageBox::error( m_widget, i18n("Active target \"%1\" isn't binary ( %2 ) !\n"
                                 "Unable to determine the main program. If you want this\n"
                                 "to be the active target, set a main program under\n"
                                 "Project -> Project Options -> Run Options").arg(titem->name).arg(titem->primary), i18n("Active target is not a library") );
@@ -1136,7 +1136,7 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
         kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else if ( titem->primary != "PROGRAMS" ) {
-        KMessageBox::error( m_widget, i18n("Active target \"%1\"isn't binary ( %2 ) !\n"
+        KMessageBox::error( m_widget, i18n("Active target \"%1\" isn't binary ( %2 ) !\n"
                                 "Unable to determine the main program. If you want this\n"
                                 "to be the active target, set a main program under\n"
                                 "Project -> Project Options -> Run Options").arg(titem->name).arg(titem->primary), i18n("Active target is not a library") );
