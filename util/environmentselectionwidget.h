@@ -16,8 +16,8 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef ENVIRONMENTSELECTWIDGET_H
-#define ENVIRONMENTSELECTWIDGET_H
+#ifndef ENVIRONMENTSELECTIONWIDGET_H
+#define ENVIRONMENTSELECTIONWIDGET_H
 
 #include <kcombobox.h>
 #include "utilexport.h"
@@ -36,34 +36,21 @@ namespace KDevelop
  * @TODO: Make this compatible with KConfigXT.
  * Refer to KDevelop/MakeBuilderPreferences and its .ui file to see how to use this.
  */
-class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectWidget : public KComboBox
+class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectionWidget : public KComboBox
 {
     Q_OBJECT
+    Q_PROPERTY( QString currentProfile READ currentProfile WRITE setCurrentProfile USER true )
 
 public:
-    explicit EnvironmentSelectWidget( QWidget *parent );
-    ~EnvironmentSelectWidget();
+    explicit EnvironmentSelectionWidget( QWidget *parent = 0 );
+    ~EnvironmentSelectionWidget();
 
-    /// Call this before using any public interfaces of this class.
-    void setConfigObject( KConfig* config, const QString &group,
-                          const QString &entry = QString("Default Env Profile"));
-
-public Q_SLOTS:
-    /// Call this inside the overloaded KCModule::load()
-    void loadSettings();
-
-    /// Call this inside the overloaded KCModule::save()
-    void saveSettings();
-
-    // Repaint combobox by reading again from config object.
-//     void updateEnvGroup();
-
-protected:
-    virtual void showEvent( QShowEvent *ev );
+    QString currentProfile() const;
+    void setCurrentProfile( const QString& text );
 
 private:
-    class EnvironmentSelectWidgetPrivate* const d;
-    friend class EnvironmentSelectWidgetPrivate;
+    class EnvironmentSelectionWidgetPrivate* const d;
+    friend class EnvironmentSelectionWidgetPrivate;
 
 };
 
