@@ -20,17 +20,9 @@
 #ifndef CPPDUCHAINBUILDEREXPORT_H
 #define CPPDUCHAINBUILDEREXPORT_H
 
-//krazy:excludeall=cpp
-
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 
-/* needed, because e.g. Q_OS_UNIX is so frequently used */
-#ifdef __cplusplus
-# include <QtCore/qglobal.h>
-#endif
-
-#if defined _WIN32 || defined _WIN64
 
 #ifndef KDEVDUCHAINBUILDER_EXPORT
 # ifdef MAKE_KDEVCPPDUCHAINBUILDER_LIB
@@ -38,10 +30,6 @@
 # else
 #  define KDEVCPPDUCHAINBUILDER_EXPORT KDE_IMPORT
 # endif
-#endif
-
-#else //UNIX
-#define KDEVCPPDUCHAINBUILDER_EXPORT KDE_EXPORT
 #endif
 
 #endif /* CPPDUCHAINBUILDEREXPORT_H*/

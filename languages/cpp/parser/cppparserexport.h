@@ -20,17 +20,8 @@
 #ifndef CPPPARSEREXPORT_H
 #define CPPPARSEREXPORT_H
 
-//krazy:excludeall=cpp
-
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
-
-/* needed, because e.g. Q_OS_UNIX is so frequently used */
-#ifdef __cplusplus
-# include <QtCore/qglobal.h>
-#endif
-
-#if defined _WIN32 || defined _WIN64
 
 #ifndef KDEVCPPPARSER_EXPORT
 # ifdef MAKE_KDEVCPPPARSER_LIB
@@ -46,11 +37,6 @@
 # else
 #  define KDEVCPPRPP_EXPORT KDE_IMPORT
 # endif
-#endif
-
-#else //UNIX
-#define KDEVCPPRPP_EXPORT KDE_EXPORT
-#define KDEVCPPPARSER_EXPORT KDE_EXPORT
 #endif
 
 #endif /* CPPPARSEREXPORT_H*/

@@ -22,18 +22,8 @@
 #ifndef CMAKEEXPORT_H
 #define CMAKEEXPORT_H
 
-//krazy:excludeall=cpp
-
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
-
-/* needed, because e.g. Q_OS_UNIX is so frequently used */
-#ifdef __cplusplus
-# include <QtCore/qglobal.h>
-#endif
-
-
-#if defined _WIN32 || defined _WIN64
 
 #ifndef KDEVCMAKECOMMON_EXPORT
 # ifdef MAKE_KDEVCMAKECOMMON_LIB
@@ -43,12 +33,6 @@
 # endif
 #endif
 
-
-#else //UNIX
-
-/* export statements for unix */
-#define KDEVCMAKECOMMON_EXPORT KDE_EXPORT
-#endif /* KDEVEXPORT_H*/
 #endif
 
 
