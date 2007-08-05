@@ -16,40 +16,39 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#include "envselectwidget.h"
-#include "envwidget.h"
+#include "environmentselectwidget.h"
+#include "environmentgrouplist.h"
 #include <ksettings/dispatcher.h>
 #include <kcomponentdata.h>
 
 namespace KDevelop
 {
 
-class EnvSelectWidget::Private
+class EnvironmentSelectWidgetPrivate
 {
 public:
-    KConfig *m_config;
+    KSharedConfigPtr m_config;
     QString m_group;
     QString m_entry;
 };
 
-EnvSelectWidget::EnvSelectWidget( QWidget *parent )
-    : KComboBox( parent ), d( new EnvSelectWidget::Private )
-{
+EnvironmentSelectWidget::EnvironmentSelectWidget( QWidget *parent )
+    : KComboBox( parent ), d( new EnvironmentSelectWidgetPrivate )
+{ 
     // doesn't work for some reason. reimplement showEvent() instead.
 //     KComponentData data( "kdevplatformproject", "kdevplatformproject",
 //                          KComponentData::SkipMainComponentRegistration );
 //     KSettings::Dispatcher::registerComponent( data, this, SLOT(updateEnvGroup()) );
 //     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(), this, SLOT(updateEnvGroup()) );
 
-    connect( combo(), SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChanged(int)) );
 }
 
-EnvSelectWidget::~EnvSelectWidget()
+EnvironmentSelectWidget::~EnvironmentSelectWidget()
 {
     delete d;
 }
 
-void EnvSelectWidget::setConfigObject( KConfig *config, const QString &group,
+void EnvironmentSelectWidget::setConfigObject( KSharedConfigPtr config, const QString &group,
                                        const QString &entry )
 {
     d->m_config = config;
@@ -57,29 +56,30 @@ void EnvSelectWidget::setConfigObject( KConfig *config, const QString &group,
     d->m_entry = entry;
 }
 
-void EnvSelectWidget::loadSettings()
+void EnvironmentSelectWidget::loadSettings()
 {
     KConfigGroup cfgGroup( d->m_config, d->m_group );
     QString active = cfgGroup.readEntry( d->m_entry, QString() );
-    QStringList profiles = EnvWidget::environmentProfiles( d->m_config );
+    EnvironmentGroupList env( d->m_config );
+    QStringList profiles = env.groups();
 
-    combo()->clear();
-    combo()->addItems( profiles );
+    clear();
+    addItems( profiles );
     if( profiles.contains( active ) )
     {
-        int idx = combo()->findText( active );
-        combo()->setCurrentIndex( idx );
+        int idx = findText( active );
+        setCurrentIndex( idx );
     }
 }
 
-void EnvSelectWidget::saveSettings()
+void EnvironmentSelectWidget::saveSettings()
 {
     KConfigGroup cfgGroup( d->m_config, d->m_group );
-    cfgGroup.writeEntry( d->m_entry, combo()->currentText() );
+    cfgGroup.writeEntry( d->m_entry, currentText() );
     cfgGroup.sync();
 }
 
-// void EnvSelectWidget::updateEnvGroup()
+// void EnvironmentSelectWidget::updateEnvGroup()
 // {
 //     QStringList items = EnvWidget::environmentProfiles( d->m_config );
 //     kDebug() << "Environment Profiles" << items;
@@ -87,22 +87,12 @@ void EnvSelectWidget::saveSettings()
 //     combo()->addItems( items );
 // }
 
-void EnvSelectWidget::showEvent( QShowEvent *ev )
+void EnvironmentSelectWidget::showEvent( QShowEvent *ev )
 {
     loadSettings();
     KComboBox::showEvent( ev );
 }
 
-void EnvSelectWidget::currentIndexChanged(int /*idx*/)
-{
-    emit changed();
 }
 
-KComboBox* EnvSelectWidget::combo()
-{
-    return this;
-}
-
-}
-
-#include "envselectwidget.moc"
+#include "EnvironmentSelectWidget.moc"

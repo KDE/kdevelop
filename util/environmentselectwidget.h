@@ -16,8 +16,8 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef ENVSELECTWIDGET_H
-#define ENVSELECTWIDGET_H
+#ifndef ENVIRONMENTSELECTWIDGET_H
+#define ENVIRONMENTSELECTWIDGET_H
 
 #include <kcombobox.h>
 #include "utilexport.h"
@@ -33,25 +33,20 @@ namespace KDevelop
  * which was set at project-wide environment setting page. User will select
  * one group among them, and selected groupname will be saved in project config file.
  *
- * This isn't compatible with KConfigXT.
+ * @TODO: Make this compatible with KConfigXT.
  * Refer to KDevelop/MakeBuilderPreferences and its .ui file to see how to use this.
  */
-class KDEVPLATFORMUTIL_EXPORT EnvSelectWidget : public KComboBox
+class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectWidget : public KComboBox
 {
     Q_OBJECT
 
 public:
-    explicit EnvSelectWidget( QWidget *parent );
-    ~EnvSelectWidget();
+    explicit EnvironmentSelectWidget( QWidget *parent );
+    ~EnvironmentSelectWidget();
 
     /// Call this before using any public interfaces of this class.
-    void setConfigObject( KConfig *config, const QString &group,
+    void setConfigObject( KSharedConfigPtr config, const QString &group,
                           const QString &entry = QString("Default Env Profile"));
-
-Q_SIGNALS:
-    /// Call KCModule::unmanagedWidgetChangeState(true)
-    /// in the slot connected to this signal.
-    void changed();
 
 public Q_SLOTS:
     /// Call this inside the overloaded KCModule::load()
@@ -66,13 +61,9 @@ public Q_SLOTS:
 protected:
     virtual void showEvent( QShowEvent *ev );
 
-private Q_SLOTS:
-    void currentIndexChanged(int);
-
 private:
-    KComboBox *combo();
-    class Private;
-    Private *const d;
+    class EnvironmentSelectWidgetPrivate* const d;
+    friend class EnvironmentSelectWidgetPrivate;
 
 };
 
