@@ -26,13 +26,6 @@
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 
-/* needed, because e.g. Q_OS_UNIX is so frequently used */
-#ifdef __cplusplus
-# include <QtCore/qglobal.h>
-#endif
-
-#if defined _WIN32 || defined _WIN64
-
 #ifndef KDEVPLATFORMOUTPUTVIEW_EXPORT
 # ifdef MAKE_KDEVPLATFORMOUTPUTVIEW_LIB
 #  define KDEVPLATFORMOUTPUTVIEW_EXPORT KDE_EXPORT
@@ -41,12 +34,6 @@
 # endif
 #endif
 
-#else //UNIX
-
-/* export statements for unix */
-#define KDEVPLATFORMOUTPUTVIEW_EXPORT KDE_EXPORT
-
-#endif /* KDEVEXPORT_H*/
 
 #endif
 

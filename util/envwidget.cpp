@@ -347,10 +347,10 @@ void EnvWidget::newButtonClicked()
     QWidget *main = new QWidget( dialog );
     QVBoxLayout *layout = new QVBoxLayout( main );
 
-    layout->addWidget( new QLabel( i18n( "Name:" ), main ) );
+    layout->addWidget( new QLabel( i18nc( "Name of an environment variable", "Name:" ), main ) );
     KLineEdit *nameEdit = new KLineEdit( main );
     layout->addWidget( nameEdit );
-    layout->addWidget( new QLabel( i18n( "Value:" ), main ) );
+    layout->addWidget( new QLabel( i18nc( "Name of an environment variable", "Value:" ), main ) );
     KTextEdit *valueEdit = new KTextEdit( main );
     layout->addWidget( valueEdit, 1 );
     nameEdit->setFocus();

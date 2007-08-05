@@ -24,25 +24,12 @@
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 
-/* needed, because e.g. Q_OS_UNIX is so frequently used */
-#ifdef __cplusplus
-# include <QtCore/qglobal.h>
-#endif
-
-#if defined _WIN32 || defined _WIN64
-
 #ifndef KDEVPLATFORMLANGUAGE_EXPORT
 # ifdef MAKE_KDEVPLATFORMLANGUAGE_LIB
 #  define KDEVPLATFORMLANGUAGE_EXPORT KDE_EXPORT
 # else
 #  define KDEVPLATFORMLANGUAGE_EXPORT KDE_IMPORT
 # endif
-#endif
-
-#else //UNIX
-
-#define KDEVPLATFORMLANGUAGE_EXPORT KDE_EXPORT
-
 #endif
 
 #endif
