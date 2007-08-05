@@ -241,7 +241,7 @@ QVariant BlameTreeModel::headerData(int section, Qt::Orientation orientation, in
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole )
         switch (section){
             case 0:
-                return QString(i18n("Line"));
+                return QString(i18nc("line number in a text file", "Line"));
             case 1:
                 return QString(i18n("Rev"));
             case 2:

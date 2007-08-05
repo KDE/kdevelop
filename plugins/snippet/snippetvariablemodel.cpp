@@ -126,7 +126,7 @@ QVariant SnippetVariableModel::headerData(int section, Qt::Orientation orientati
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (section == 0) {
-            return QString( i18n("Variable") );
+            return QString( i18nc("variable name to store the snipped under", "Variable") );
         } else if (section == 1) {
             return QString( i18n("Value") );
         }

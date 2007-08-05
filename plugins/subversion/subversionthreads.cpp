@@ -269,18 +269,18 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
     QString notifyString;
     switch( notify->action ){
         case svn_wc_notify_add:
-            notifyString = i18n("Added %1", notify->path );
+            notifyString = i18nc( "A file was marked to be added to svn", "Added %1", notify->path );
             break;
         case svn_wc_notify_delete:
-            notifyString = i18n("Deleted %1", notify->path );
+            notifyString = i18nc( "A file was marked for deletion from svn", "Deleted %1", notify->path );
             break;
         // various update notifications
         case svn_wc_notify_update_delete:
-            notifyString = i18n("Deleted %1", notify->path );
+            notifyString = i18nc( "A file was deleted during an svn update operation", "Deleted %1", notify->path );
             kDebug() << notifyString;
             break;
         case svn_wc_notify_update_add:
-            notifyString = i18n("Added %1", notify->path );
+            notifyString = i18nc( "A file was added during an svn update operation", "Added %1", notify->path );
             break;
         case svn_wc_notify_update_update:
          /* If this is an inoperative dir change, do no notification.

@@ -66,7 +66,7 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
     d->m_layout->addWidget( tab() );
 
     d->m_closeButton = new QPushButton( tab() );
-    d->m_closeButton->setText( i18n("Close") );
+    d->m_closeButton->setText( i18nc("Close the current tab", "Close") );
     tab()->setCornerWidget( d->m_closeButton );
     connect( d->m_closeButton, SIGNAL(clicked()), this, SLOT(closeCurrentTab()) );
 
@@ -352,7 +352,7 @@ SvnProgressDialog::SvnProgressDialog( QWidget *parent, const QString &caption )
 	QWidget *mainWidget = new QWidget( this );
 	QGridLayout *layout = new QGridLayout( mainWidget );
 
-	d->srcLabel = new QLabel( i18n("Source:"), mainWidget );
+	d->srcLabel = new QLabel( i18nc("The source url of the operation", "Source:"), mainWidget );
 	layout->addWidget( d->srcLabel, 0, 0 );
 	d->destLabel = new QLabel( i18n("Destination:"), mainWidget );
 	layout->addWidget( d->destLabel, 1, 0 );
