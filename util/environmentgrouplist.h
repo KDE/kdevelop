@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef ENVIRONTMENTGROUPLIST_H
 #define ENVIRONTMENTGROUPLIST_H
 
+#include <utilexport.h>
 
 class KSharedConfigPtr;
 class KConfig;
@@ -67,7 +68,7 @@ class EnvironmentWidget;
  * \endcode
  *
  */
-class EnvironmentGroupList
+class KDEVPLATFORMUTIL_EXPORT EnvironmentGroupList
 {
 friend class KDevelop::EnvironmentWidget;
 public:

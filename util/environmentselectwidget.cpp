@@ -95,4 +95,4 @@ void EnvironmentSelectWidget::showEvent( QShowEvent *ev )
 
 }
 
-#include "EnvironmentSelectWidget.moc"
+#include "environmentselectwidget.moc"
