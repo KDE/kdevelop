@@ -59,7 +59,7 @@ void ProjectFileSystemWatcher::addFile( const QString &path, KDevelop::ProjectFi
 
 void ProjectFileSystemWatcher::removeDirectory( const QString & path, bool recurse )
 {
-    kDebug() << "Removing Directory from Watcher" << path;
+    kDebug(9025) << "Removing Directory from Watcher" << path;
     QStringList tobeRemovedPaths;
     tobeRemovedPaths.append( path );
     d->m_folderHash.remove( path );
@@ -74,7 +74,7 @@ void ProjectFileSystemWatcher::removeDirectory( const QString & path, bool recur
         {
             if( _key.contains(path) )
             {
-                kDebug() << "Removing Directory from Watcher: SubDir" << _key;
+                kDebug(9025) << "Removing Directory from Watcher: SubDir" << _key;
                 d->m_folderHash.remove( _key );
                 tobeRemovedPaths << _key;
             }
@@ -86,7 +86,7 @@ void ProjectFileSystemWatcher::removeDirectory( const QString & path, bool recur
         {
             if( _filekey.contains(path) )
             {
-                kDebug() << "Removing File      from Watcher: SubFile" << _filekey;
+                kDebug(9025) << "Removing File      from Watcher: SubFile" << _filekey;
                 d->m_fileHash.remove( _filekey );
                 tobeRemovedPaths << _filekey;
             }
@@ -100,7 +100,7 @@ void ProjectFileSystemWatcher::removeFile( const QString & path )
 {
     if( d->m_fileHash.contains( path ) )
     {
-        kDebug() << "Removing file from Watcher" << path;
+        kDebug(9025) << "Removing file from Watcher" << path;
         d->m_watch->removePath( path );
         d->m_fileHash.remove( path );
     }

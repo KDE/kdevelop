@@ -122,7 +122,7 @@ void CustomMakeTreeSynchronizer::directoriesDeleted( const QList<KDevelop::Proje
 
 void CustomMakeTreeSynchronizer::fileChanged( const QString& file, KDevelop::ProjectFileItem* fileItem)
 {
-    kDebug() << "File" << file << "changed";
+    kDebug(9025) << "File" << file << "changed";
 
     QFileInfo info( file );
     if( info.fileName() != QString("Makefile") )
