@@ -16,7 +16,7 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#include "envpreferences.h"
+#include "environmentpreferences.h"
 
 #include <QVBoxLayout>
 
@@ -24,31 +24,29 @@ Boston, MA 02110-1301, USA.
 #include <kconfiggroup.h>
 #include <kconfig.h>
 
-#include "envwidget.h"
-// #include "envconfig.h"
+#include "environmentwidget.h"
 #include "projectconfigskeleton.h"
 
 namespace KDevelop
 {
 
-class EnvPreferences::Private
+class EnvironmentPreferencesPrivate
 {
 public:
     ProjectConfigSkeleton *m_skel;
-    EnvWidget *preferencesDialog;
-    KConfig *m_config;
+    EnvironmentWidget *preferencesDialog;
+    KConfig* m_config;
 };
 
-typedef KGenericFactory<EnvPreferences> PreferencesFactory;
+typedef KGenericFactory<EnvironmentPreferences> PreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdev_envsettings, PreferencesFactory( "kcm_kdev_envsettings" ) )
 
-EnvPreferences::EnvPreferences( QWidget *parent, const QStringList &args )
-//     : ProjectKCModule<EnvSettings>( PreferencesFactory::componentData(), parent, args )
+EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QStringList &args )
     : KCModule( PreferencesFactory::componentData(), parent, args )
-    , d( new EnvPreferences::Private )
+    , d( new EnvironmentPreferencesPrivate )
 {
     QVBoxLayout * l = new QVBoxLayout( this );
-    d->preferencesDialog = new EnvWidget( this );
+    d->preferencesDialog = new EnvironmentWidget( this );
     l->addWidget( d->preferencesDialog );
 
     connect( d->preferencesDialog, SIGNAL( changed() ),
@@ -60,49 +58,50 @@ EnvPreferences::EnvPreferences( QWidget *parent, const QStringList &args )
     d->m_skel->setProjectFileUrl( args.at(2) );
     d->m_skel->setDeveloperFileUrl( args.at(3) );
 
-//     addConfig( EnvSettings::self(), d->preferencesDialog );
     addConfig( d->m_skel, d->preferencesDialog );
 
-//     d->m_config = EnvSettings::self()->config();
     d->m_config = d->m_skel->config();
-    d->preferencesDialog->setConfig( d->m_config, "Project Env Settings" );
 
     load();
 }
 
-EnvPreferences::~EnvPreferences( )
+EnvironmentPreferences::~EnvironmentPreferences( )
 {
     delete d->m_skel;
     delete d;
 }
 
-void EnvPreferences::save()
+void EnvironmentPreferences::save()
 {
-    d->preferencesDialog->saveSettings();
-//     ProjectKCModule<EnvSettings>::save();
+    d->preferencesDialog->saveSettings( d->m_config );
     KCModule::save();
 }
 
-void EnvPreferences::load()
+void EnvironmentPreferences::load()
 {
-    d->preferencesDialog->loadSettings();
-//     ProjectKCModule<EnvSettings>::load();
+    d->preferencesDialog->loadSettings( d->m_config );
     KCModule::load();
 }
 
-void EnvPreferences::defaults()
+void EnvironmentPreferences::defaults()
 {
-    d->preferencesDialog->defaults();
-//     ProjectKCModule<EnvSettings>::defaults();
+    d->preferencesDialog->defaults( d->m_config );
     KCModule::defaults();
 }
 
-void EnvPreferences::settingsChanged(/* bool changed */)
+void EnvironmentPreferences::settingsChanged( bool changed )
 {
+    Q_UNUSED( changed )
     unmanagedWidgetChangeState( true );
 }
 
+KUrl EnvironmentPreferences::localNonShareableFile() const
+{
+    return KUrl::fromPath(
+               KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
 }
-#include "envpreferences.moc"
+
+}
+#include "environmentpreferences.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

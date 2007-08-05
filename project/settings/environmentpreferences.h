@@ -17,45 +17,34 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ENVPREFERENCES_H
-#define ENVPREFERENCES_H
-
-// #include "projectkcmodule.h"
+#ifndef ENVIRONMENTPREFERENCES_H
+#define ENVIRONMENTPREFERENCES_H
 
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kcmodule.h>
 
-class EnvSettings;
-class EnvWidget;
-
 namespace KDevelop
 {
 
-// class EnvPreferences : public ProjectKCModule<EnvSettings>
-class EnvPreferences : public KCModule
+class EnvironmentPreferences : public KCModule
 {
     Q_OBJECT
 public:
-    explicit EnvPreferences( QWidget *parent, const QStringList &args );
-    virtual ~EnvPreferences();
+    explicit EnvironmentPreferences( QWidget *parent, const QStringList &args );
+    virtual ~EnvironmentPreferences();
 
     virtual void save();
     virtual void load();
     virtual void defaults();
 
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
-    }
+    virtual KUrl localNonShareableFile() const;
 
 private slots:
-    void settingsChanged(/* bool changed */);
+    void settingsChanged( bool );
 
 private:
-    class Private;
-    Private *const d;
+    class EnvironmentPreferencesPrivate *const d;
 };
 
 }
