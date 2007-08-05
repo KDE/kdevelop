@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
-#include <envselectwidget.h>
+#include <environmentselectwidget.h>
 
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"

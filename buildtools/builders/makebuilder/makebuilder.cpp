@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <ksharedconfig.h>
 
-#include <envwidget.h>
+#include <environmentgrouplist.h>
 
 typedef KGenericFactory<MakeBuilder> MakeBuilderFactory ;
 K_EXPORT_COMPONENT_FACTORY(kdevmakebuilder, MakeBuilderFactory("kdevmakebuilder"))
@@ -371,10 +371,10 @@ QMap<QString, QString> MakeBuilder::environmentVars( KDevelop::ProjectBaseItem* 
     if( defaultProfile.isEmpty() )
         return retMap;
 
-    QMap<QString, QString> userMap = KDevelop::EnvWidget::environmentPairFor(
-            configPtr, defaultProfile );
+    const KDevelop::EnvironmentGroupList l(configPtr);
+    const QMap<QString, QString> userMap = l.variables( defaultProfile );
 
-    for( QMap<QString, QString>::iterator it = userMap.begin();
+    for( QMap<QString, QString>::const_iterator it = userMap.begin();
          it != userMap.end(); ++it )
     {
         retMap.insert( it.key(), it.value() );
