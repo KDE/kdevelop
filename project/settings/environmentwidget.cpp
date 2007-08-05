@@ -231,7 +231,6 @@ void EnvironmentWidget::processDefaultButtonClicked()
 
 void EnvironmentWidget::settingsChanged( int row, int /*column*/ )
 {
-    kDebug()<< k_funcinfo;
     QTableWidgetItem * name = ui.variableTable->item( row, 0 );
     QTableWidgetItem * value = ui.variableTable->item( row, 1 );
     QString _name = name->text();

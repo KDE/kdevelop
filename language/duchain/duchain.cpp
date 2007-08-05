@@ -73,7 +73,7 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  kDebug() << "duchain: removing document" << document.toString();
+  kDebug(9505) << "duchain: removing document" << document.toString();
   sdDUChainPrivate->m_chains.remove(document);
 }
 
@@ -81,7 +81,7 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  kDebug() << "duchain: adding document" << document.toString();
+  kDebug(9505) << "duchain: adding document" << document.toString();
   Q_ASSERT(chain);
   sdDUChainPrivate->m_chains.insert(document, chain);
   chain->setInDuChain(true);

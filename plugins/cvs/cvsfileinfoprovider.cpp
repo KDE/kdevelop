@@ -58,9 +58,9 @@ QList< KDevelop::VcsFileInfo > CvsFileInfoProvider::requestStatusSync(const KUrl
         QList<KDevelop::VcsFileInfo> infos;
         parseOutput(job->output(), infos);
 
-        kDebug() << "Fetched status in sync:";
+        kDebug(9500) << "Fetched status in sync:";
         foreach (KDevelop::VcsFileInfo info, infos) {
-             kDebug() << info.toString();
+             kDebug(9500) << info.toString();
         }
 
         return infos;
@@ -70,7 +70,7 @@ QList< KDevelop::VcsFileInfo > CvsFileInfoProvider::requestStatusSync(const KUrl
 
 void CvsFileInfoProvider::slotJobFinished(KJob * job)
 {
-    kDebug() << k_funcinfo;
+    kDebug(9500) << k_funcinfo;
 
     if ( job->error() )
     {
@@ -86,7 +86,7 @@ void CvsFileInfoProvider::slotJobFinished(KJob * job)
     parseOutput(cvsjob->output(), infos);
 
     foreach (KDevelop::VcsFileInfo info, infos) {
-         kDebug() << info.toString();
+         kDebug(9500) << info.toString();
     }
 
     emit statusReady( infos );
@@ -116,7 +116,7 @@ void CvsFileInfoProvider::parseOutput(const QString & output, QList<KDevelop::Vc
 
         if ( re_start.exactMatch(s) ) {
             if ( !filename.isEmpty() ) {
-//                 kDebug() << "File:" << filename << "Status:" << status
+//                 kDebug(9500) << "File:" << filename << "Status:" << status
 //                          << "working:" << workrev << "repo:" << reporev << endl;
 
                 // join the current directory (if any) and the found filename ...

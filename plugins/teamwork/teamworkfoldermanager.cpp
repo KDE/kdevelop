@@ -226,7 +226,7 @@ QString TeamworkFolderManager::workspaceRelative( const KUrl& url, const QString
   KUrl u = self()->m_workspaceDir;
   u.addPath( subfolder );
   u.adjustPath( KUrl::AddTrailingSlash );
-  //kDebug() << "workspaceRelative(" << url << "," << subfolder << ") called. Worspace:" << self()->m_workspaceDir << "base:" << u << "result:" << KUrl::relativeUrl( u, url );
+  //kDebug(9500) << "workspaceRelative(" << url << "," << subfolder << ") called. Worspace:" << self()->m_workspaceDir << "base:" << u << "result:" << KUrl::relativeUrl( u, url );
   return KUrl::relativeUrl( u, url );
 }
 
@@ -237,9 +237,9 @@ TeamworkFolderManager::~TeamworkFolderManager() {
     f.cleanPath();
     if( (f.path()).startsWith( m_teamworkDir.path(KUrl::AddTrailingSlash) ) && (f.pathOrUrl()).startsWith( m_teamworkDir.pathOrUrl() ) ) {
       if( ! KIO::NetAccess::del( f, 0 ) )
-        kDebug() << "TeamworkFolderManager error: File" << f.prettyUrl() << "could not be deleted";
+        kDebug(9500) << "TeamworkFolderManager error: File" << f.prettyUrl() << "could not be deleted";
     } else {
-      kDebug() << "TeamworkFolderManager error: File" << f.prettyUrl() << "was registered as temporary file, but is not in folder" << m_teamworkDir;
+      kDebug(9500) << "TeamworkFolderManager error: File" << f.prettyUrl() << "was registered as temporary file, but is not in folder" << m_teamworkDir;
     }
   }
   m_tempItems.clear();

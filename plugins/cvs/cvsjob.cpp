@@ -57,7 +57,7 @@ CvsJob::CvsJob(QObject* parent)
 
 CvsJob::~CvsJob()
 {
-    kDebug()<<  k_funcinfo ;
+    kDebug(9500)<<  k_funcinfo ;
     delete d;
 }
 
@@ -135,7 +135,7 @@ void CvsJob::start()
         d->childproc->setEnv("CVS_SERVER", d->server);
 
     if( !d->directory.isEmpty() ) {
-        kDebug() << "Working directory:" << d->directory;
+        kDebug(9500) << "Working directory:" << d->directory;
         d->childproc->setWorkingDirectory(d->directory);
     }
 
@@ -147,7 +147,7 @@ void CvsJob::start()
     connect(d->lineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
         SLOT(slotReceivedStderr(const QStringList&)) );
 
-    kDebug() << "Execute cvs command:" << cvsCommand();
+    kDebug(9500) << "Execute cvs command:" << cvsCommand();
 
     d->outputLines.clear();
     d->isRunning = true;
@@ -171,7 +171,7 @@ void CvsJob::cancel()
 
 void CvsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    kDebug()<<  k_funcinfo ;
+    kDebug(9500)<<  k_funcinfo ;
 
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
@@ -192,8 +192,8 @@ void CvsJob::slotReceivedStdout(const QStringList& output)
     // accumulate output
     d->outputLines += output;
 
-    kDebug()<<  k_funcinfo <<"received output:";
-    kDebug()<<output.join("\n");
+    kDebug(9500)<<  k_funcinfo <<"received output:";
+    kDebug(9500)<<output.join("\n");
 }
 
 
@@ -202,8 +202,8 @@ void CvsJob::slotReceivedStderr(const QStringList& output)
     // accumulate output
     d->outputLines += output;
 
-    kDebug()<<  k_funcinfo <<"received error:";
-    kDebug()<<output.join("\n");
+    kDebug(9500)<<  k_funcinfo <<"received error:";
+    kDebug(9500)<<output.join("\n");
 }
 
 QVariant CvsJob::fetchResults()

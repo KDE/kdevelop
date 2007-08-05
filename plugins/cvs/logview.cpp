@@ -35,12 +35,12 @@ LogView::LogView(CvsPart* part, CvsJob* job, QWidget *parent)
 
 LogView::~LogView()
 {
-    kDebug() << k_funcinfo;
+    kDebug(9500) << k_funcinfo;
 }
 
 void LogView::slotJobFinished(KJob* job)
 {
-    kDebug() << k_funcinfo;
+    kDebug(9500) << k_funcinfo;
 
     if ( job->error() )
     {
@@ -89,19 +89,19 @@ void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revision
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
-//         kDebug() << "line:" << s ;
+//         kDebug(9500) << "line:" << s ;
 
         if (rx_rev.exactMatch(s)) {
-//             kDebug() << "MATCH REVISION" ;
+//             kDebug(9500) << "MATCH REVISION" ;
             item.revision = rx_rev.cap(1);
         } else if (rx_branch.exactMatch(s)) {
-//             kDebug() << "MATCH BRANCH" ;
+//             kDebug(9500) << "MATCH BRANCH" ;
         } else if (rx_date.exactMatch(s)) {
-//             kDebug() << "MATCH DATE" ;
+//             kDebug(9500) << "MATCH DATE" ;
             item.date = rx_date.cap(1);
             item.user = rx_date.cap(2);
         } else  if (rx_sep.exactMatch(s)) {
-//             kDebug() << "MATCH SEPERATOR" ;
+//             kDebug(9500) << "MATCH SEPERATOR" ;
             if (firstSeperatorReached) {
                 revisions.append( item );
 
@@ -114,7 +114,7 @@ void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revision
             }
         } else {
             if (firstSeperatorReached) {
-//                 kDebug() << "ADDING LOG" ;
+//                 kDebug(9500) << "ADDING LOG" ;
                 item.log += s+'\n';
             }
         }

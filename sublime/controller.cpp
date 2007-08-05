@@ -159,10 +159,10 @@ void Controller::addDocument(Document *document)
 void Controller::areaReleased()
 {
     MainWindow *w = reinterpret_cast<Sublime::MainWindow*>(sender());
-    kDebug(9037) << "marking areas as mainwindow-free";
+    kDebug(9504) << "marking areas as mainwindow-free";
     foreach (Area *area, d->shownAreas.keys(w))
     {
-        kDebug(9037) << "" << area->objectName();
+        kDebug(9504) << "" << area->objectName();
         areaReleased(area);
         disconnect(area, 0, w, 0);
     }

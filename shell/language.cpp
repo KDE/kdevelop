@@ -39,7 +39,7 @@ struct LanguagePrivate {
 Language::Language(ILanguageSupport *support, QObject *parent)
     : ILanguage(support->name(), parent)
 {
-    kDebug(9000) << "creating language" << support->name();
+    kDebug(9501) << "creating language" << support->name();
 
     d = new LanguagePrivate;
     d->support = support;
@@ -52,12 +52,12 @@ Language::~Language()
 
 void Language::deactivate()
 {
-    kDebug(9000) << "deactivating language" << name();
+    kDebug(9501) << "deactivating language" << name();
 }
 
 void Language::activate()
 {
-    kDebug(9000) << "activating language" << name();
+    kDebug(9501) << "activating language" << name();
 }
 
 ILanguageSupport *Language::languageSupport()

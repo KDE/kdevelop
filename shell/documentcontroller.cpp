@@ -217,7 +217,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         if( !plugins.isEmpty() )
         {
             KPluginInfo info = plugins.first();
-            kDebug(9000) << "loading" << info.pluginName();
+            kDebug(9501) << "loading" << info.pluginName();
             Core::self()->pluginController()->loadPlugin( info.pluginName() );
             if( d->factories.contains( mimeType->name() ) )
             {

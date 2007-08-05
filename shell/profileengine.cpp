@@ -109,7 +109,7 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, PluginContro
         constraint += " and ( " + constraint_add + " ) ";
 
 // //BEGIN debug
-//     kDebug(9000) << "Query for Profile:" << endl
+//     kDebug(9501) << "Query for Profile:" << endl
 //               << constraint << endl << endl;
 // //END debug
 

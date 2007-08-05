@@ -68,7 +68,7 @@ void SvnLogviewWidget::customContextMenuEvent( const QPoint &point )
 {
     m_contextIndex = treeView->indexAt( point );
     if( !m_contextIndex.isValid() ){
-        kDebug() << "contextMenu is not in TreeView";
+        kDebug(9500) << "contextMenu is not in TreeView";
         return;
     }
 
@@ -124,7 +124,7 @@ void SvnLogviewWidget::blameRev()
         SvnInfoHolder holder = holderList.first();
         KUrl absUrl(holder.repos_root_URL);
         absUrl.addPath( relPath );
-        kDebug() << "Blame requested on path" << absUrl;
+        kDebug(9500) << "Blame requested on path" << absUrl;
         // final request
         SvnRevision rev1, rev2;
         rev1.setNumber( 0 );
@@ -195,7 +195,7 @@ void SvnLogviewWidget::catThisRev()
         SvnInfoHolder holder = holderList.first();
         KUrl absUrl(holder.repos_root_URL);
         absUrl.addPath( relPath );
-        kDebug() << "Cat requested on path" << absUrl;
+        kDebug(9500) << "Cat requested on path" << absUrl;
         // final request
         m_part->svncore()->spawnCatThread( absUrl, peg_rev, rev1 );
     }

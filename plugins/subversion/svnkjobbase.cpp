@@ -175,7 +175,7 @@ SvnKJobBase::~SvnKJobBase()
         delete d->m_th;
     }
     delete d;
-    kDebug() << "SvnKJobBase::Destructor: end cleanup";
+    kDebug(9500) << "SvnKJobBase::Destructor: end cleanup";
 }
 
 KDevelop::VcsJob::JobStatus SvnKJobBase::status()
@@ -288,7 +288,7 @@ bool SvnKJobBase::doKill()
 // 	disconnect( d->m_th, 0, 0, 0 );
 //     setErrorText( i18n("Job was terminated") );
     bool ret = d->m_th->requestTerminate();
-    kDebug() << "SvnKJobBase::doKill() return value :" << ret;
+    kDebug(9500) << "SvnKJobBase::doKill() return value :" << ret;
     return ret;
 }
 

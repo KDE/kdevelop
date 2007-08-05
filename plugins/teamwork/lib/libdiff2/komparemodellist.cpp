@@ -288,7 +288,7 @@ void KompareModelList::slotSaveDestination()
 
 bool KompareModelList::saveDestination( DiffModel* model )
 {
-	kDebug() << "KompareModelList::saveDestination:";
+	kDebug(9500) << "KompareModelList::saveDestination:";
 
 	if( !model->isModified() )
 		return true;
@@ -410,12 +410,12 @@ bool KompareModelList::saveAll()
 void KompareModelList::setEncoding( const QString& encoding )
 {
 	m_encoding = encoding;
-	kDebug() << "Encoding :" << encoding;
+	kDebug(9500) << "Encoding :" << encoding;
 	m_textCodec = KGlobal::charsets()->codecForName( encoding.toLatin1() );
-	kDebug() << "TextCodec:" << m_textCodec;
+	kDebug(9500) << "TextCodec:" << m_textCodec;
 	if ( !m_textCodec )
 		m_textCodec = QTextCodec::codecForLocale();
-	kDebug() << "TextCodec:" << m_textCodec;
+	kDebug(9500) << "TextCodec:" << m_textCodec;
 }
 
 void KompareModelList::slotDiffProcessFinished( bool success )
@@ -431,7 +431,7 @@ void KompareModelList::slotDiffProcessFinished( bool success )
 		{
 			if ( m_info.mode != Kompare::ShowingDiff )
 			{
-				kDebug() << "Blend this crap please and do not gimme any conflicts...";
+				kDebug(9500) << "Blend this crap please and do not gimme any conflicts...";
 				blendOriginalIntoModelList( m_info.localSource );
 			}
 			updateModelListActions();
@@ -509,7 +509,7 @@ QString KompareModelList::readFile( const QString& fileName )
 	file.open( QIODevice::ReadOnly );
 
 	QTextStream stream( &file );
-	kDebug() << "Codec =" << m_textCodec;
+	kDebug(9500) << "Codec =" << m_textCodec;
 
 	if (  !m_textCodec )
 		m_textCodec = QTextCodec::codecForLocale();
@@ -566,7 +566,7 @@ QString KompareModelList::recreateDiff() const
 
 bool KompareModelList::saveDiff( const QString& url, const QString& directory, DiffSettings* diffSettings )
 {
-	kDebug() << "KompareModelList::saveDiff:";
+	kDebug(9500) << "KompareModelList::saveDiff:";
 
 	m_diffTemp = new K3TempFile();
 	m_diffURL = url;
@@ -884,7 +884,7 @@ int KompareModelList::parseDiffOutput( const QString& diff )
 
 bool KompareModelList::blendOriginalIntoModelList( const QString& localURL )
 {
-	kDebug() << "Hurrah we are blending...";
+	kDebug(9500) << "Hurrah we are blending...";
 	QFileInfo fi( localURL );
 
 	bool result = false;
@@ -894,7 +894,7 @@ bool KompareModelList::blendOriginalIntoModelList( const QString& localURL )
 
 	if ( fi.isDir() )
 	{ // is a dir
-		kDebug() << "Blend Dir";
+		kDebug(9500) << "Blend Dir";
 //		QDir dir( localURL, QString::null, QDir::Name|QDir::DirsFirst, QDir::TypeMask );
 		DiffModelListIterator modelIt = m_models->begin();
 		DiffModelListIterator mEnd    = m_models->end();
@@ -923,16 +923,16 @@ bool KompareModelList::blendOriginalIntoModelList( const QString& localURL )
 				result = blendFile( model, fileContents );
 			}
 		}
-		kDebug() << "End of Blend Dir";
+		kDebug(9500) << "End of Blend Dir";
 	}
 	else if ( fi.isFile() )
 	{ // is a file
-		kDebug() << "Blend File";
+		kDebug(9500) << "Blend File";
 		kDebug(8101) << "Reading from:" << localURL;
 		fileContents = readFile( localURL );
 
 		result = blendFile( (*m_models)[ 0 ], fileContents );
-		kDebug() << "End of Blend File";
+		kDebug(9500) << "End of Blend File";
 	}
 
 	return result;
@@ -942,7 +942,7 @@ bool KompareModelList::blendFile( DiffModel* model, const QString& fileContents 
 {
 	if ( !model )
 	{
-		kDebug() << "**** model is null :(";
+		kDebug(9500) << "**** model is null :(";
 		return false;
 	}
 
@@ -998,7 +998,7 @@ bool KompareModelList::blendFile( DiffModel* model, const QString& fileContents 
 		for ( int i = 0; i < size; ++i )
 		{
 			if( linesIt == lEnd ) {
-				kDebug() << "kompare error";
+				kDebug(9500) << "kompare error";
 				return false;
 			}
 			++linesIt;
@@ -1029,7 +1029,7 @@ bool KompareModelList::blendFile( DiffModel* model, const QString& fileContents 
 		DifferenceList hunkDiffList   = (*hunkIt)->differences();
 		DifferenceListIterator diffIt = hunkDiffList.begin();
 		DifferenceListIterator dEnd   = hunkDiffList.end();
-		kDebug() << "Number of differences in hunkDiffList =" << diffList.count();
+		kDebug(9500) << "Number of differences in hunkDiffList =" << diffList.count();
 
 		DifferenceListIterator tempIt;
 		Difference* diff;
@@ -1037,7 +1037,7 @@ bool KompareModelList::blendFile( DiffModel* model, const QString& fileContents 
 		for ( ; diffIt != dEnd; ++diffIt )
 		{
 			diff = *diffIt;
-			kDebug() << "*(Diff it) =" << diff;
+			kDebug(9500) << "*(Diff it) =" << diff;
 			// Check if there are lines in the original file before the difference
 			// that are not yet in the diff. If so create new Unchanged diff
 			if ( srcLineNo < diff->sourceLineNumber() )
@@ -1177,7 +1177,7 @@ bool KompareModelList::blendFile( DiffModel* model, const QString& fileContents 
 
 void KompareModelList::show()
 {
-	kDebug() << "KompareModelList::Show Number of models =" << m_models->count();
+	kDebug(9500) << "KompareModelList::Show Number of models =" << m_models->count();
 	emit modelsChanged( m_models );
 	emit setSelection( m_selectedModel, m_selectedDifference );
 }

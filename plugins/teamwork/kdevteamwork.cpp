@@ -352,7 +352,7 @@ KDevTeamwork::~KDevTeamwork() {
     l->invalidateTeamwork();
   } else {
     ///error
-    kDebug() << "error while destruction of KDevTeamwork: could not lock client-pointer. Client cannot be destroyed.";
+    kDebug(9500) << "error while destruction of KDevTeamwork: could not lock client-pointer. Client cannot be destroyed.";
   }
 
   m_logger.lock() ->invalidate();
@@ -590,7 +590,7 @@ void KDevTeamwork::connectServer() {
     if ( m_client ) {
       TeamworkClientPointer::Locked l = m_client;
       if ( l ) {
-        kDebug() << "connecting to \"" << toQ( stringToAddr( txt ) ) << "\":" << stringToPort( txt );
+        kDebug(9500) << "connecting to \"" << toQ( stringToAddr( txt ) ) << "\":" << stringToPort( txt );
 
         QString userName = m_widgets->loginName->text();
 
@@ -650,7 +650,7 @@ void KDevTeamwork::log( const QString & str, LogLevel level ) {
       m_widgets->logList->setRowHidden( 0 , true );*/
 
   filterLog( 3 );
-  //kDebug() << "log: \"" << str << "\" level:" << level;
+  //kDebug(9500) << "log: \"" << str << "\" level:" << level;
 }
 
 void KDevTeamwork::err( const QString& str ) {
@@ -718,10 +718,10 @@ void KDevTeamworkLogger::log( const std::string& str , Level lv ) {
       return ;
     }
 
-    kDebug() << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"";
+    kDebug(9500) << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"";
     QMetaObject::invokeMethod( m_teamwork, "guiLog", Qt::QueuedConnection, Q_ARG( QString, toQ( str ) ), Q_ARG( int, level ) );
   } else {
-    kDebug() << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"";
+    kDebug(9500) << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"";
   }
 }
 
@@ -783,7 +783,7 @@ void KDevTeamwork::guiUserDisconnected( Teamwork::UserPointer user ) {
     m_widgets->messageTargetUser->removeItem( i );
 
 
-  //kDebug() << "disconnecting user is not in list:" << name;
+  //kDebug(9500) << "disconnecting user is not in list:" << name;
 }
 
 void KDevTeamwork::guiServerConnected( Teamwork::ClientSessionDesc /*session*/, Teamwork::ServerInformation server ) {
@@ -821,7 +821,7 @@ void KDevTeamwork::guiServerDisconnected( Teamwork::ClientSessionDesc /*session*
     }
   }
 
-  kDebug() << "disconnecting server is not in list:" << desc;
+  kDebug(9500) << "disconnecting server is not in list:" << desc;
 }
 
 QIcon KDevTeamwork::iconFromUser( User* user, K3Icon::Group size ) {

@@ -90,7 +90,7 @@ public:
     // Non-mutex guarded functions, only call with m_mutex acquired.
     void parseDocumentsInternal()
     {
-        kDebug() << "BackgroundParser::parseDocumentsInternal";
+        kDebug(9505) << "BackgroundParser::parseDocumentsInternal";
         // First create the jobs, then enqueue them, because they may
         // need to access each other for generating dependencies.
         QList<ParseJob*> jobs;
@@ -101,11 +101,11 @@ public:
             // When a document is scheduled for parsing while it is being parsed, it will be parsed
             // again once the job finished, but not now.
             if (m_parseJobs.contains(it.key()) ) {
-                kDebug() << "skipping" << it.key() << "because it is already being parsed";
+                kDebug(9505) << "skipping" << it.key() << "because it is already being parsed";
                 continue;
             }
 
-            kDebug() << "adding document" << it.key();
+            kDebug(9505) << "adding document" << it.key();
             KUrl url = it.key();
             bool &p = it.value();
             if (p) {
@@ -134,7 +134,7 @@ public:
         // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
         foreach (ParseJob* job, jobs) {
-            kDebug() << k_funcinfo << "Enqueue" << job;
+            kDebug(9505) << k_funcinfo << "Enqueue" << job;
             m_weaver.enqueue(job);
         }
 
@@ -245,17 +245,17 @@ void BackgroundParser::saveSettings(bool projectIsLoaded)
 
 void BackgroundParser::addDocument(const KUrl& url)
 {
-    kDebug() << "BackgroundParser::addDocument";
+    kDebug(9505) << "BackgroundParser::addDocument";
     QMutexLocker lock(&d->m_mutex);
     {
         Q_ASSERT(url.isValid());
 
         QMap<KUrl, bool>::const_iterator it = d->m_documents.find(url);
         if (it == d->m_documents.end() || (*it) == false) {
-            kDebug() << "BackgroundParser::addDocument: queuing" << url;
+            kDebug(9505) << "BackgroundParser::addDocument: queuing" << url;
             d->m_documents[url] = true;
         } else {
-            kDebug() << "BackgroundParser::addDocument: is already queued:" << url;
+            kDebug(9505) << "BackgroundParser::addDocument: is already queued:" << url;
         }
 
         if (!d->m_timer.isActive()) {
@@ -300,7 +300,7 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
     QMutexLocker lock(&d->m_mutex);
 
     if (ParseJob* parseJob = qobject_cast<ParseJob*>(job)) {
-        kDebug() << "BackgroundParser: parsed" << parseJob->document();
+        kDebug(9505) << "BackgroundParser: parsed" << parseJob->document();
         d->m_parseJobs.remove(parseJob->document());
 
         parseJob->setBackgroundParser(0);

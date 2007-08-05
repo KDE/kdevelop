@@ -52,7 +52,7 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  //kDebug() << k_funcinfo << "Adding declaration" << declaration->qualifiedIdentifier().toString(true) << "from" << declaration->textRange();
+  //kDebug(9505) << k_funcinfo << "Adding declaration" << declaration->qualifiedIdentifier().toString(true) << "from" << declaration->textRange();
 
   sdSymbolPrivate->m_declarations.insert(declaration->qualifiedIdentifier().toString(true), declaration);
 
@@ -111,7 +111,7 @@ void SymbolTable::dumpStatistics() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  kDebug() << k_funcinfo << "Definitions" << sdSymbolPrivate->m_declarations.count() << ", Contexts" << sdSymbolPrivate->m_contexts.count();
+  kDebug(9505) << k_funcinfo << "Definitions" << sdSymbolPrivate->m_declarations.count() << ", Contexts" << sdSymbolPrivate->m_contexts.count();
 
   // TODO: more data
 }

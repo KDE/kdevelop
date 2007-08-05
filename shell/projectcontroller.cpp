@@ -86,7 +86,7 @@ public:
             //the plugin will show up on all projects settings dialogs.
 
             QStringList pluginsForPrj = findPluginsForProject( proj );
-	    kDebug(9000) << "Using pluginlist:" << pluginsForPrj;
+	    kDebug(9501) << "Using pluginlist:" << pluginsForPrj;
             pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
             m_cfgDlgs[proj] = new KSettings::Dialog( pluginsForPrj,
                                                      m_core->uiController()->activeMainWindow() );
@@ -102,12 +102,12 @@ public:
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
-	kDebug(9000) << "managerplugin:" << project->managerPlugin();
+	kDebug(9501) << "managerplugin:" << project->managerPlugin();
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); it++ )
         {
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
-	    kDebug(9000) << "Checking plugin:" << plugin << "with iface" << iface;
+	    kDebug(9501) << "Checking plugin:" << plugin << "with iface" << iface;
             if( !iface || plugin == project->managerPlugin() )
                 pluginnames << m_core->pluginController()->pluginInfo( plugin ).pluginName();
         }
@@ -330,7 +330,7 @@ bool ProjectController::closeProject( IProject* proj )
     QList<ProjectFileItem *> fileList = proj->files();
     Q_FOREACH( ProjectFileItem *_fileItem, fileList )
     {
-        kDebug(9000) << "Closing url" << _fileItem->url();
+        kDebug(9501) << "Closing url" << _fileItem->url();
         Core::self()->documentControllerInternal()->closeDocument( _fileItem->url() );
     }
 
