@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ENVIRONTMENTGROUPLIST_H
-#define ENVIRONTMENTGROUPLIST_H
+#ifndef ENVIRONMENTGROUPLIST_H
+#define ENVIRONMENTGROUPLIST_H
 
 #include <utilexport.h>
 
