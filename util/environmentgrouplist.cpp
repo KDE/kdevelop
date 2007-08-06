@@ -39,6 +39,7 @@ public:
 
 void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
+    kDebug(9508) << "Reading environment variables";
     foreach( QString setting, cfg.readEntry( "Environment Variables", QStringList() ) )
     {
         QString profile_and_var = setting.section( '=', 0, 0 );
@@ -48,8 +49,10 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
         value = value.mid( 1, value.length() - 2 );
         d->m_groups[ profile ].insert( var, value );
     }
-    d->m_defaultGroup = cfg.readEntry( "Default Environment Group", "default" );
-    
+    d->m_defaultGroup = cfg.readEntry( "Default Environment Group", QString("default") );
+    kDebug(9508) << "default group" << d->m_defaultGroup;
+    kDebug(9508) << "groups:" << d->m_groups;
+
     // If the defaultgroup doesn't exist yet create it
     if( !d->m_groups.contains( d->m_defaultGroup ) )
     {
@@ -126,7 +129,7 @@ void EnvironmentGroupList::loadSettings( KConfig* config )
 {
     d->m_groups.clear();
     KConfigGroup cfg(config, "EnvironmentSettings" );
-    encode( cfg, d );
+    decode( cfg, d );
 }
 
 QStringList EnvironmentGroupList::groups() const
