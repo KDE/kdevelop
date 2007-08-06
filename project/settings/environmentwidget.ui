@@ -54,12 +54,12 @@
      </property>
      <column>
       <property name="text" >
-       <string>Name</string>
+       <string>Variable Name</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Value</string>
+       <string>Variable Value</string>
       </property>
      </column>
     </widget>

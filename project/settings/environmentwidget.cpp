@@ -45,9 +45,9 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     // setup ui
     ui.setupUi( this );
 
-    ui.variableTable->setHorizontalHeaderLabels( QStringList()
-                << i18nc( "Name of an environment variable", "Variable Name" )
-                << i18nc( "Name of an environment variable", "Variable Name" ) );
+//     ui.variableTable->setHorizontalHeaderLabels( QStringList()
+//                 << i18nc( "Name of an environment variable", "Variable Name" )
+//                 << i18nc( "Name of an environment variable", "Variable Name" ) );
     ui.variableTable->verticalHeader() ->hide();
     ui.variableTable->setSelectionMode( QAbstractItemView::NoSelection );
     ui.variableTable->horizontalHeader() ->setStretchLastSection ( true );
@@ -87,7 +87,7 @@ void EnvironmentWidget::loadSettings( KConfig* config )
     m_groups.loadSettings( config );
 
     ui.activeCombo->clear();
-    ui.variableTable->clear();
+    ui.variableTable->clearContents();
 
     ui.activeCombo->blockSignals( true );
     QList<QString> groupList = m_groups.groups();
@@ -121,10 +121,14 @@ void EnvironmentWidget::newButtonClicked()
     QWidget *main = new QWidget( dialog );
     QGridLayout *layout = new QGridLayout( main );
 
-    layout->addWidget( new QLabel( i18nc( "Name of an environment variable", "Variable Name:" ), main ), 0, 0 );
+    QLabel* l = new QLabel( i18nc( "Name of an environment variable", "Variable Name:" ), main );
+    l->setAlignment( Qt::AlignRight | Qt::AlignTop );
+    layout->addWidget( l, 0, 0 );
     KLineEdit *nameEdit = new KLineEdit( main );
     layout->addWidget( nameEdit, 0, 1 );
-    layout->addWidget( new QLabel( i18nc( "Name of an environment variable", "Variable Value:" ), main ), 1, 0 );
+    l = new QLabel( i18nc( "Name of an environment variable", "Variable Value:" ), main );
+    l->setAlignment( Qt::AlignRight | Qt::AlignTop );
+    layout->addWidget( l, 1, 0 );
     KTextEdit *valueEdit = new KTextEdit( main );
     layout->addWidget( valueEdit, 1, 1 );
     nameEdit->setFocus();
