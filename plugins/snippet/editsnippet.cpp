@@ -17,10 +17,10 @@
 #include "snippetstore.h"
 
 EditSnippet::EditSnippet(Snippet *s, QWidget* parent)
- : KDialog(parent), Ui::EditSnippetBase(), snippet_(s)
+ : KDialog(parent), Ui::EditSnippet(), snippet_(s)
 {
-    Ui::EditSnippetBase::setupUi(this);
-
+    Ui::EditSnippet::setupUi(mainWidget());
+    setCaption(i18n("Edit Snippet"));
     snippetName->setText( s->text() );
     snippetText->clear();
     snippetText->insertPlainText( s->getSnippetPlainText() );

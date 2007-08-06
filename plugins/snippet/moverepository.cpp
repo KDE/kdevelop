@@ -16,15 +16,16 @@
 #include "snippetrepository.h"
 
 MoveRepository::MoveRepository(SnippetRepository* repo, QWidget* parent)
-: KDialog(parent), Ui::MoveRepositoryBase(), repo_(repo)
+: KDialog(parent), Ui::AddRepository(), repo_(repo)
 {
-    Ui::MoveRepositoryBase::setupUi(this);
-
-    connect(toolButton, SIGNAL(clicked()),
-        this, SLOT(slotOpenDir()));
-
+    Ui::AddRepository::setupUi(mainWidget());
+    setCaption(i18n("Move Repository"));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setButtonText(KDialog::Ok, i18n("Move Repository"));
+    location->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     name->setText( repo->text() );
-    location->setText( repo->getLocation() );
+    location->setUrl( repo->getLocation() );
+
 
     if ( repo->QStandardItem::parent() ) {
         // If it's a subrepo we don't allow to change the location.
@@ -37,27 +38,21 @@ MoveRepository::~MoveRepository()
 {
 }
 
-void MoveRepository::slotOpenDir()
-{
-    QString dir = KFileDialog::getExistingDirectory(KUrl("kfiledialog:///repository"), this);
-    if (!dir.isEmpty())
-        location->setText( dir );
-}
-
 void MoveRepository::accept()
 {
-    if ( name->text().isEmpty() || location->text().isEmpty() ) {
-        KMessageBox::error( this, i18n("Empty name"), i18n("Please enter a name and a location") );
+    if ( name->text().isEmpty() || location->url().isEmpty() ) {
+        KMessageBox::error( this, i18n("Empty name or location"),
+                            i18n("Please enter a name and a location") );
         return;
     }
 
     QString newLocation;
     if ( repo_->QStandardItem::parent() ) {
-        QDir dir( location->text() );
+        QDir dir( location->url().path() );
         dir.cdUp();
         newLocation = dir.path() + QDir::separator() + name->text();
     } else {
-        newLocation = location->text();
+        newLocation = location->url().path();
     }
 
     repo_->changeLocation( newLocation, name->text() );

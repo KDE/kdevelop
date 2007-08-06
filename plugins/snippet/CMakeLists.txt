@@ -19,12 +19,10 @@ set(kdevsnippet_PART_SRCS
     snippet.cpp
     moverepository.cpp
     editsnippet.cpp
-    addrepository.cpp
 )
 set(kdevsnippet_PART_UI
     snippetview.ui
     snippetvariablesubst.ui
-    moverepository.ui
     editsnippet.ui
     addrepository.ui
 )

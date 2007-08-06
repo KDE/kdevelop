@@ -22,7 +22,7 @@ class Snippet;
  * @see editsnippet.ui
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class EditSnippet : public KDialog, public Ui::EditSnippetBase
+class EditSnippet : public KDialog, public Ui::EditSnippet
 {
     Q_OBJECT
 

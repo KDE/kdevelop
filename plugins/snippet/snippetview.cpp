@@ -15,12 +15,14 @@
 #include <QContextMenuEvent>
 #include <kmenu.h>
 #include <kinputdialog.h>
+#include <kdialog.h>
+#include <kurlrequester.h>
 
+#include "ui_addrepository.h"
 #include "snippet.h"
 #include "snippetpart.h"
 #include "snippetrepository.h"
 #include "snippetstore.h"
-#include "addrepository.h"
 #include "editsnippet.h"
 #include "snippetfilterproxymodel.h"
 #include "moverepository.h"
@@ -66,12 +68,18 @@ QStandardItem* SnippetView::currentItem()
 
 void SnippetView::slotAddRepo()
 {
-    AddRepository dlg(this);
+    Ui::AddRepository addrepoui;
+    KDialog dlg(this);
+    dlg.setCaption(i18n("Add an existing Repository"));
+    dlg.setButtons(KDialog::Ok|KDialog::Cancel);
+    dlg.setButtonText(KDialog::Ok, i18n("Add Repository"));
+    addrepoui.setupUi(dlg.mainWidget());
+    addrepoui.location->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     if (dlg.exec() == QDialog::Accepted) {
         SnippetStore::instance()->createNewRepository(
                 NULL, // create a new toplevel repository
-                dlg.name->text(),
-                dlg.location->text());
+                addrepoui.name->text(),
+                addrepoui.location->url().path());
     }
 }
 

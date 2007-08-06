@@ -11,7 +11,7 @@
 #ifndef __MOVEREPOSITORY_H__
 #define __MOVEREPOSITORY_H__
 
-#include "ui_moverepository.h"
+#include "ui_addrepository.h"
 #include <kdialog.h>
 
 class SnippetRepository;
@@ -24,16 +24,13 @@ class SnippetRepository;
  * @see moverepository.ui
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class MoveRepository : public KDialog, private Ui::MoveRepositoryBase
+class MoveRepository : public KDialog, private Ui::AddRepository
 {
   Q_OBJECT
 
 public:
   explicit MoveRepository(SnippetRepository* repo, QWidget* parent = 0);
   ~MoveRepository();
-
-private slots:
-    void slotOpenDir();
 
 private:
     SnippetRepository* repo_;
