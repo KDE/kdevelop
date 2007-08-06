@@ -11,5 +11,5 @@ set(cppcodecompletiontest_SRCS test_cppcodecompletion.cpp ../codecompletionconte
 
 kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})
 target_link_libraries(cppcodecompletiontest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY}
-    kdevcppparser kdevcpprpp kdevcppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY} kdevcppexpressionparser)
+    kdev4cppparser kdev4cpprpp kdev4cppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY} kdev4cppexpressionparser)
 

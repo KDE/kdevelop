@@ -38,16 +38,16 @@ endif(KDEVPG_FOUND)
 add_subdirectory(tests)
 
 add_executable(qmake-parser main.cpp)
-target_link_libraries(qmake-parser kdevqmakeparser )
+target_link_libraries(qmake-parser kdev4qmakeparser )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
-kde4_add_library( kdevqmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS})
-target_link_libraries(kdevqmakeparser ${KDE4_KDECORE_LIBS})
+kde4_add_library( kdev4qmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS})
+target_link_libraries(kdev4qmakeparser ${KDE4_KDECORE_LIBS})
 
 install(TARGETS qmake-parser DESTINATION ${BIN_INSTALL_DIR})
-install(TARGETS kdevqmakeparser DESTINATION ${LIB_INSTALL_DIR}/kde4)
+install(TARGETS kdev4qmakeparser DESTINATION ${LIB_INSTALL_DIR})
 
 add_custom_target( copy-generated
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_ast.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_ast.h"

@@ -17,5 +17,5 @@ set(duchaintest_SRCS test_duchain.cpp)
 
 kde4_add_unit_test(duchaintest ${duchaintest_SRCS})
 target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY}
-    kdevcppparser kdevcpprpp kdevcppduchainbuilder kdevcppexpressionparser ${KDEVPLATFORM_LANGUAGE_LIBRARY})
+    kdev4cppparser kdev4cpprpp kdev4cppduchainbuilder kdev4cppexpressionparser ${KDEVPLATFORM_LANGUAGE_LIBRARY})
 

@@ -14,13 +14,12 @@ set(kdevcpprpp_LIB_SRCS
     preprocessor.cpp
 )
 
-
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
-kde4_add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
-target_link_libraries(kdevcpprpp ${KDE4_KDECORE_LIBS})
-install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR}/kde4 )
+kde4_add_library(kdev4cpprpp SHARED ${kdevcpprpp_LIB_SRCS})
+target_link_libraries(kdev4cpprpp ${KDE4_KDECORE_LIBS})
+install(TARGETS kdev4cpprpp DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
