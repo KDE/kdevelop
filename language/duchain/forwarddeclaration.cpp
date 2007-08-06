@@ -31,6 +31,9 @@
 
 using namespace KTextEditor;
 
+#define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
+#define ENSURE_CAN_READ { if( inDUChain() ) { ENSURE_CHAIN_READ_LOCKED }}
+
 namespace KDevelop
 {
 
@@ -60,14 +63,14 @@ ForwardDeclaration::~ForwardDeclaration()
 
 Declaration * ForwardDeclaration::resolved() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   return d->m_resolvedDeclaration;
 }
 
 void ForwardDeclaration::setResolved(Declaration * declaration)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  ENSURE_CAN_WRITE
 
   if (d->m_resolvedDeclaration)
     d->m_resolvedDeclaration->removeForwardDeclaration(this);
@@ -84,6 +87,8 @@ void ForwardDeclaration::setResolved(Declaration * declaration)
     foreach (Use* use, uses())
       use->d->setDeclaration(d->m_resolvedDeclaration);
   }
+
+  Q_ASSERT( d->m_resolvedDeclaration == 0 || ((uint)d->m_resolvedDeclaration) > 100u );
 }
 
 bool ForwardDeclaration::isForwardDeclaration() const

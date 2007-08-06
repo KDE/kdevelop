@@ -25,6 +25,9 @@
 #include "parsingenvironment.h"
 #include "duchainpointer.h"
 
+#define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
+#define ENSURE_CAN_READ { if( inDUChain() ) { ENSURE_CHAIN_READ_LOCKED }}
+
 using namespace KTextEditor;
 
 namespace KDevelop
@@ -107,7 +110,7 @@ void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifie
 {
   Q_UNUSED(inImportedContext);
 
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   // TODO: Insert namespace alias matching at this point ??
 
@@ -222,7 +225,7 @@ QList<DUContext::NamespaceAlias*> TopDUContext::findNestedNamespaces(const KText
 
 bool TopDUContext::imports(TopDUContext * origin, const KTextEditor::Cursor& position) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   Q_UNUSED(position);
   // TODO use position
@@ -232,7 +235,7 @@ bool TopDUContext::imports(TopDUContext * origin, const KTextEditor::Cursor& pos
 
 QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   QList<Declaration*> found;
 
@@ -329,7 +332,7 @@ void TopDUContext::findContextsInNamespaces(ContextType contextType, const Quali
 
 void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  ENSURE_CAN_READ
 
   foreach (DUContext* context, contexts) {
     TopDUContext* top = context->topContext();
