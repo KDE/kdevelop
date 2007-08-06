@@ -20,7 +20,7 @@ set(kdevcpprpp_LIB_SRCS
 #       to the plugin target
 kde4_add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
 target_link_libraries(kdevcpprpp ${KDE4_KDECORE_LIBS})
-install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR}/kde4 )
 
 ########### install files ###############
 

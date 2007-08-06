@@ -60,7 +60,7 @@ target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS}
 
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )
-install(TARGETS kdevcmakecommon DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kdevcmakecommon DESTINATION ${LIB_INSTALL_DIR}/kde4 )
 install(FILES kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakemanager )

@@ -22,7 +22,7 @@ set(kdevcppexpressionparser_LIB_SRCS
 #       to the plugin target
 kde4_add_library(kdevcppexpressionparser SHARED ${kdevcppexpressionparser_LIB_SRCS})
 target_link_libraries(kdevcppexpressionparser ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} kdevcppparser kdevcppduchainbuilder)
-install(TARGETS kdevcppexpressionparser DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kdevcppexpressionparser DESTINATION ${LIB_INSTALL_DIR}/kde4 )
 
 ########### install files ###############
 
