@@ -40,6 +40,9 @@ add_subdirectory(tests)
 add_executable(qmake-parser main.cpp)
 target_link_libraries(qmake-parser kdevqmakeparser )
 
+# Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
+#       Its only purpose is to support the plugin without needing to add all source files
+#       to the plugin target
 kde4_add_library( kdevqmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS})
 target_link_libraries(kdevqmakeparser ${KDE4_KDECORE_LIBS})
 

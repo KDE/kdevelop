@@ -29,6 +29,9 @@ set(kdevcppduchainbuilder_LIB_SRCS
     templatedeclaration.cpp
 )
 
+# Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
+#       Its only purpose is to support the plugin without needing to add all source files
+#       to the plugin target
 kde4_add_library(kdevcppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})
 target_link_libraries(kdevcppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} kdevcppparser)
 install(TARGETS kdevcppduchainbuilder DESTINATION ${LIB_INSTALL_DIR} )
