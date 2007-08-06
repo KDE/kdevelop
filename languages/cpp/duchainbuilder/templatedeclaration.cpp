@@ -44,9 +44,15 @@ QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
-uint qHash( const ExpressionEvaluationResult& key ) {
-  ///@todo Use the whole content for the hash
-  return qHash(key.type);
+uint qHash( const ExpressionEvaluationResult& key )
+{
+  ///@todo Currently ExpressionEvaluationResult is not accessible because of the library it is in. Fix that, and use it's content here.
+  uint ret = 0/*11*key.isLValue() + 13*key.instance.isInstance + 17*(quint64)key.instance.declaration*/;
+  
+  if( key.type )
+    return qHash(key.type);
+  
+  return ret;
 }
 
 
