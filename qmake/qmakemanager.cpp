@@ -19,7 +19,6 @@
  */
 
 #include "qmakemanager.h"
-#include "qmakemkspecs.h"
 #include <QList>
 #include <QVector>
 
@@ -40,6 +39,8 @@
 
 #include "qmakemodelitems.h"
 #include "qmakeprojectfile.h"
+#include "qmakecache.h"
+#include "qmakemkspecs.h"
 
 typedef KGenericFactory<QMakeProjectManager> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakemanager,
@@ -136,8 +137,12 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         QHash<QString,QString> qmvars = queryQMake( project );
         QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
         mkspecs->read();
+        QMakeCache* cache = findQMakeCache( projecturl.path() );
+        cache->setMkSpecs( mkspecs );
+        cache->read();
         QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
         scope->setMkSpecs( mkspecs );
+        scope->setQMakeCache( cache );
         scope->read();
         return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
@@ -247,6 +252,22 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* proj
     }
     kDebug(9024) << "Ran qmake (" << m_builder->qmakeBinary( project ) << "), found:" << hash;
     return hash;
+}
+
+QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) const
+{
+
+    QDir curdir( QFileInfo( projectfile ).canonicalPath() );
+    while( !curdir.exists(".qmake.cache") && curdir.isRoot() )
+    {
+        curdir.cdUp();
+    }
+
+    if( curdir.exists(".qmake.cache") )
+    {
+        return new QMakeCache( curdir.canonicalPath()+"/.qmake.cache" );
+    }
+    return 0;
 }
 
 #include "qmakemanager.moc"

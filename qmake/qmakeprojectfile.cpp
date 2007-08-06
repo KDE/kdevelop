@@ -28,6 +28,8 @@
 #include <kdebug.h>
 
 #include "qmakeast.h"
+#include "qmakecache.h"
+#include "qmakemkspecs.h"
 
 const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
@@ -35,8 +37,13 @@ const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
-    : QMakeFile( projectfile ), m_mkSpecs(0)
+    : QMakeFile( projectfile ), m_mkSpecs(0), m_cache(0)
 {
+}
+
+void QMakeProjectFile::setQMakeCache( QMakeCache* cache )
+{
+    m_cache = cache;
 }
 
 void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
@@ -67,6 +74,24 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
             fileOrPath = resolveFileName( subdir.trimmed() );
         }
         QMakeProjectFile* qmscope = new QMakeProjectFile( fileOrPath );
+        QDir d;
+        if( QFileInfo( fileOrPath ).isDir() )
+        {
+            d = QDir( fileOrPath );
+        }else
+        {
+            d = QFileInfo( fileOrPath ).dir();
+        }
+        if( d.exists(".qmake.cache") )
+        {
+            QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
+            cache->setMkSpecs( m_mkSpecs );
+            cache->read();
+            qmscope->setQMakeCache( cache );
+        }else
+        {
+            qmscope->setQMakeCache( m_cache );
+        }
         qmscope->setMkSpecs( m_mkSpecs );
         if( qmscope->read() )
         {

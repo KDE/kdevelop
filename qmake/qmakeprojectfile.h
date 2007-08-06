@@ -26,6 +26,7 @@
 template <typename T> class QList;
 
 class QMakeMkSpecs;
+class QMakeCache;
 
 class QMakeProjectFile : public QMakeFile
 {
@@ -47,9 +48,11 @@ public:
     QString getTemplate() const;
 
     void setMkSpecs( QMakeMkSpecs* mkspecs );
+    void setQMakeCache( QMakeCache* cache );
 
 private:
     QMakeMkSpecs* m_mkSpecs;
+    QMakeCache* m_cache;
 };
 
 #endif
