@@ -25,9 +25,6 @@
 #include "parsingenvironment.h"
 #include "duchainpointer.h"
 
-#define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
-#define ENSURE_CAN_READ { if( inDUChain() ) { ENSURE_CHAIN_READ_LOCKED }}
-
 using namespace KTextEditor;
 
 namespace KDevelop

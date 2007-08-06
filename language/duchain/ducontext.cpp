@@ -35,9 +35,6 @@
 
 using namespace KTextEditor;
 
-#define ENSURE_CAN_WRITE {if(inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
-#define ENSURE_CAN_READ {if(inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
-
 #define ENSURE_CAN_WRITE_(x) {if(x->inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
 #define ENSURE_CAN_READ_(x) {if(x->inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
 
