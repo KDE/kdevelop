@@ -87,8 +87,6 @@ void ForwardDeclaration::setResolved(Declaration * declaration)
     foreach (Use* use, uses())
       use->d->setDeclaration(d->m_resolvedDeclaration);
   }
-
-  Q_ASSERT( d->m_resolvedDeclaration == 0 || ((uint)d->m_resolvedDeclaration) > 100u );
 }
 
 bool ForwardDeclaration::isForwardDeclaration() const
