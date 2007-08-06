@@ -34,7 +34,6 @@ set(kdevcppparser_LIB_SRCS
 
 kde4_add_library(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
 target_link_libraries(kdevcppparser ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} kdevcpprpp )
-set_target_properties(kdevcppparser PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS kdevcppparser DESTINATION ${LIB_INSTALL_DIR} )
 
 
