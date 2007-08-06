@@ -99,9 +99,9 @@ KDevCodeView::KDevCodeView( QWidget *parent )
     mode->setArrowType( Qt::DownArrow );
     mode->setPopupMode( QToolButton::InstantPopup );
     QMenu *modeMenu = new QMenu( i18n( "Mode" ) );
-    QAction *currentdoc = modeMenu->addAction( i18n( "&Current" ) );
-    QAction *normalize = modeMenu->addAction( i18n( "&Normalize" ) );
-    QAction *aggregate = modeMenu->addAction( i18n( "&Aggregate" ) );
+    QAction *currentdoc = modeMenu->addAction( i18nc( "Current View", "&Current" ) );
+    QAction *normalize = modeMenu->addAction( i18nc( "Normalize View", "&Normalize" ) );
+    QAction *aggregate = modeMenu->addAction( i18nc( "Aggregate View", "&Aggregate" ) );
     mode->setMenu( modeMenu );
 
     connect( currentdoc, SIGNAL( triggered() ), codeTree, SLOT( modeCurrent() ) );
