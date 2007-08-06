@@ -17,6 +17,7 @@ set(kdevcpprpp_LIB_SRCS
 
 kde4_add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
 target_link_libraries(kdevcpprpp ${KDE4_KDECORE_LIBS})
+set_target_properties(kdevcpprpp PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
