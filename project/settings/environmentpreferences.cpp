@@ -79,6 +79,7 @@ void EnvironmentPreferences::save()
 
 void EnvironmentPreferences::load()
 {
+    kDebug(9503) << "Loading env settings";
     d->preferencesDialog->loadSettings( d->m_config );
     KCModule::load();
 }
@@ -89,9 +90,8 @@ void EnvironmentPreferences::defaults()
     KCModule::defaults();
 }
 
-void EnvironmentPreferences::settingsChanged( bool changed )
+void EnvironmentPreferences::settingsChanged()
 {
-    Q_UNUSED( changed )
     unmanagedWidgetChangeState( true );
 }
 

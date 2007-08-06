@@ -44,9 +44,9 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
     // setup ui
     ui.setupUi( this );
-    
-    ui.variableTable->setHorizontalHeaderLabels( QStringList() 
-                << i18nc( "Name of an environment variable", "Variable Name" ) 
+
+    ui.variableTable->setHorizontalHeaderLabels( QStringList()
+                << i18nc( "Name of an environment variable", "Variable Name" )
                 << i18nc( "Name of an environment variable", "Variable Name" ) );
     ui.variableTable->verticalHeader() ->hide();
     ui.variableTable->setSelectionMode( QAbstractItemView::NoSelection );
@@ -83,11 +83,12 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
 void EnvironmentWidget::loadSettings( KConfig* config )
 {
+    kDebug(9508) << "Loading groups from config";
     m_groups.loadSettings( config );
-    
+
     ui.activeCombo->clear();
     ui.variableTable->clear();
-    
+
     ui.activeCombo->blockSignals( true );
     QList<QString> groupList = m_groups.groups();
     ui.activeCombo->addItems( m_groups.groups() );
@@ -153,7 +154,7 @@ void EnvironmentWidget::newButtonClicked()
         // Add it to QMap
         QString currentGroup = ui.activeCombo->currentText();
         m_groups.variables( currentGroup ).insert( _name, _value );
-        
+
         ui.variableTable->blockSignals( true );
 
         // Add it at the top?
@@ -303,11 +304,11 @@ void EnvironmentWidget::addGroupClicked()
 void EnvironmentWidget::removeGroupClicked()
 {
     int idx = ui.activeCombo->currentIndex();
-    if( idx < 0 || ui.activeCombo->count() == 1 ) 
+    if( idx < 0 || ui.activeCombo->count() == 1 )
     {
         return;
     }
-    
+
     QString curText = ui.activeCombo->currentText();
     m_groups.removeGroup( curText );
 //     ui.variableTable->clear();
@@ -325,7 +326,7 @@ void EnvironmentWidget::activeGroupChanged( int idx )
     ui.variableTable->blockSignals(true);
 
     QString group = m_groups.defaultGroup();
-    
+
     foreach( QString var, m_groups.variables( group ) )
     {
         //Add it at the top?

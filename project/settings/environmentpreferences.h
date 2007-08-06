@@ -41,7 +41,7 @@ public:
     virtual KUrl localNonShareableFile() const;
 
 private slots:
-    void settingsChanged( bool );
+    void settingsChanged();
 
 private:
     class EnvironmentPreferencesPrivate *const d;
