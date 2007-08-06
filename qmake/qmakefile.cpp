@@ -115,7 +115,7 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         kDebug(9024) << "My dir is:" << absoluteDir();
         if( QFileInfo( argument ).isRelative() )
         {
-            argument = QFileInfo( absoluteDir() + "/" + argument ).canonicalFilePath();
+            argument = QFileInfo( absoluteDir() + '/' + argument ).canonicalFilePath();
         }
         kDebug(9024) << "Reading Include file:" << argument;
         QMakeIncludeFile includefile( argument, m_variableValues );
@@ -129,11 +129,11 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
                     m_variableValues[ var ] = includefile.variableValues( var );
                 }
             }
-            if( !node->functionName()->value().startsWith("!") )
+            if( !node->functionName()->value().startsWith('!') )
             {
                 visitNode( node->scopeBody() );
             }
-        }else if( node->functionName()->value().startsWith("!") )
+        }else if( node->functionName()->value().startsWith('!') )
         {
             visitNode( node->scopeBody() );
         }
