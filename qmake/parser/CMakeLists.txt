@@ -42,7 +42,6 @@ target_link_libraries(qmake-parser kdevqmakeparser )
 
 kde4_add_library( kdevqmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS})
 target_link_libraries(kdevqmakeparser ${KDE4_KDECORE_LIBS})
-set_target_properties(kdevqmakeparser PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 
 install(TARGETS qmake-parser DESTINATION ${BIN_INSTALL_DIR})
 install(TARGETS kdevqmakeparser DESTINATION ${LIB_INSTALL_DIR})
