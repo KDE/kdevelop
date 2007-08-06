@@ -61,6 +61,7 @@ public:
     virtual QString debugArguments() const;
     virtual QString runArguments() const;
     virtual DomUtil::PairList runEnvironmentVars() const;
+    QString relativeToProject( const QString& ) const;
 
 
 private slots:
@@ -99,7 +100,6 @@ private:
     bool isInBlacklist( const QString& ) const;
     void cleanFileList();
     void setFiletypes( const QStringList& );
-    QString relativeToProject( const QString& ) const;
     void findNewFiles( const QString& dir, QStringList& list) const;
 
     QStringList filetypes() const;

@@ -28,8 +28,10 @@ public:
     CustomManagerWidget( CustomProjectPart* part, QWidget* parent );
     ~CustomManagerWidget();
 public slots:
+    void checkUrl(const QString& url);
     void accept();
 private:
+    CustomProjectPart* m_part;
     QDomDocument& m_dom;
     KEditListBox* m_blacklistBox;
 };
