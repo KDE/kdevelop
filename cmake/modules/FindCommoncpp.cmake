@@ -22,23 +22,17 @@ ENDIF( NOT WIN32 )
 FIND_PATH(COMMONCPP2_INCLUDE_DIRS cc++/network.h
     PATHS
     ${_Libccgnu2IncDir}
-    /usr/include/
-    /usr/local/include/
     PATH_SUFFIX cc++
 )
 
 FIND_LIBRARY(LIBCCGNU2_LIBRARY NAMES ccgnu2 libccgnu2
     PATHS
     ${_Libccext2LinkDir}
-    /usr/lib
-    /usr/local/lib
 )
 
 FIND_LIBRARY(LIBCCEXT2_LIBRARY NAMES ccext2 libccext2
     PATHS
     ${_Libccext2LinkDir}
-    /usr/lib
-    /usr/local/lib
 )
 
 IF(COMMONCPP2_INCLUDE_DIRS AND LIBCCGNU2_LIBRARY AND LIBCCEXT2_LIBRARY)

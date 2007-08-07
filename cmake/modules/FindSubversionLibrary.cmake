@@ -23,15 +23,9 @@ IF (NOT WIN32)
           FIND_LIBRARY(${targetvar} ${libname}
               PATHS
               ${SUBVERSION_INSTALL_PATH}/lib
-              /usr/lib
-              /usr/local/lib
           )
       ELSE(SUBVERSION_INSTALL_PATH)
-          FIND_LIBRARY(${targetvar} ${libname}
-              PATHS
-              /usr/lib
-              /usr/local/lib
-          )
+          FIND_LIBRARY(${targetvar} ${libname} )
       ENDIF(SUBVERSION_INSTALL_PATH)
     ENDMACRO(FIND_SUB_LIB)
 
@@ -40,17 +34,13 @@ IF (NOT WIN32)
             PATHS
             ${SUBVERSION_INSTALL_PATH}/include
             ${SUBVERSION_INSTALL_PATH}/include/subversion-1
-            /usr/include
             /usr/include/subversion-1
-            /usr/local/include
             /usr/local/include/subversion-1
         )
     ELSE(SUBVERSION_INSTALL_PATH)
         FIND_PATH(SUBVERSION_INCLUDE_DIR svn_version.h
             PATHS
-            /usr/include
             /usr/include/subversion-1
-            /usr/local/include
             /usr/local/include/subversion-1
         )
     ENDIF(SUBVERSION_INSTALL_PATH)
@@ -67,15 +57,11 @@ IF (NOT WIN32)
         FIND_PROGRAM(APR_CONFIG NAMES apr-config apr-1-config
             PATHS
             ${APR_CONFIG_PATH}
-            /usr/bin
-            /usr/local/bin
             /usr/local/apr/bin
         )
     ELSE(APR_CONFIG_PATH)
         FIND_PROGRAM(APR_CONFIG NAMES apr-config apr-1-config
             PATHS
-            /usr/bin
-            /usr/local/bin
             /usr/local/apr/bin
         )
     ENDIF(APR_CONFIG_PATH)
@@ -84,15 +70,11 @@ IF (NOT WIN32)
         FIND_PROGRAM(APU_CONFIG NAMES apu-config apu-1-config
             PATHS
             ${APU_CONFIG_PATH}
-            /usr/bin
-            /usr/local/bin
             /usr/local/apr/bin
         )
     ELSE(APU_CONFIG_PATH)
         FIND_PROGRAM(APU_CONFIG NAMES apu-config apu-1-config
             PATHS
-            /usr/bin
-            /usr/local/bin
             /usr/local/apr/bin
         )
     ENDIF(APU_CONFIG_PATH)
@@ -115,8 +97,6 @@ IF (NOT WIN32)
                FIND_LIBRARY(_LIB_FROM_ARG NAMES ${_ARG}
                     PATHS
                     ${_APR_LIB_PATHS}
-                    /usr/lib
-                    /usr/local/lib
                )
                IF(_LIB_FROM_ARG)
                   SET(APR_LIBRARY ${APR_LIBRARY} ${_LIB_FROM_ARG})
@@ -142,8 +122,6 @@ IF (NOT WIN32)
                FIND_LIBRARY(_LIB_FROM_ARG NAMES ${_ARG}
                     PATHS
                     ${_APU_LIB_PATHS}
-                    /usr/lib
-                    /usr/local/lib
                )
                IF(_LIB_FROM_ARG)
                   SET(APU_LIBRARY ${APU_LIBRARY} ${_LIB_FROM_ARG})
