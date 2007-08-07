@@ -197,7 +197,7 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
         {
             foreach( QString val, files )
             {
-                list << KUrl( resolveFileName( val ) );
+                list += KUrl::List( QMakeFile::resolveShellGlobbing( resolveFileName( val ) ) );
             }
         }
     }
