@@ -272,4 +272,9 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
     return result;
 }
 
+QStringList QMakeFile::variables() const
+{
+    return m_variableValues.keys();
+}
+
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

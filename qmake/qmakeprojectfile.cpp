@@ -37,7 +37,7 @@ const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
-    : QMakeFile( projectfile ), m_mkSpecs(0), m_cache(0)
+    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0)
 {
 }
 
@@ -48,7 +48,26 @@ void QMakeProjectFile::setQMakeCache( QMakeCache* cache )
 
 void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 {
-    m_mkSpecs = mkspecs;
+    m_mkspecs = mkspecs;
+}
+
+bool QMakeProjectFile::read()
+{
+    if( m_cache )
+    {
+        foreach( QString var, m_cache->variables() )
+        {
+            m_variableValues[var] = m_cache->variableValues( var );
+        }
+    }else
+    {
+
+        foreach( QString var, m_mkspecs->variables() )
+        {
+            m_variableValues[var] = m_mkspecs->variableValues( var );
+        }
+    }
+    return QMakeFile::read();
 }
 
 QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
@@ -85,14 +104,14 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
         if( d.exists(".qmake.cache") )
         {
             QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
-            cache->setMkSpecs( m_mkSpecs );
+            cache->setMkSpecs( m_mkspecs );
             cache->read();
             qmscope->setQMakeCache( cache );
         }else
         {
             qmscope->setQMakeCache( m_cache );
         }
-        qmscope->setMkSpecs( m_mkSpecs );
+        qmscope->setMkSpecs( m_mkspecs );
         if( qmscope->read() )
         {
             list.append( qmscope );

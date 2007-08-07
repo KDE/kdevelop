@@ -37,6 +37,8 @@ public:
     QMakeProjectFile( const QString& projectfile );
     ~QMakeProjectFile();
 
+    bool read();
+
     QList<QMakeProjectFile*> subProjects() const;
 
     KUrl::List files() const;
@@ -51,7 +53,7 @@ public:
     void setQMakeCache( QMakeCache* cache );
 
 private:
-    QMakeMkSpecs* m_mkSpecs;
+    QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;
 };
 

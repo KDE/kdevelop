@@ -39,7 +39,7 @@ class QMakeFile : QMake::ASTDefaultVisitor
 public:
     QMakeFile( const QString& file );
     virtual ~QMakeFile();
-    bool read();
+    virtual bool read();
     QString absoluteDir() const;
     QString absoluteFile() const;
     QMake::ProjectAST* ast() const;
@@ -47,7 +47,8 @@ public:
     void visitAssignment( QMake::AssignmentAST* node );
     void visitFunctionCall( QMake::FunctionCallAST* node );
 
-    virtual QStringList variableValues(const QString&) const;
+    QStringList variableValues(const QString&) const;
+    QStringList variables() const;
     bool containsVariable( const QString& ) const;
 
     static QStringList resolveShellGlobbing( const QString& absolutefile );

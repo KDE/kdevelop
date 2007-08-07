@@ -27,8 +27,6 @@ class QMakeIncludeFile : public QMakeFile
 {
 public:
     QMakeIncludeFile( const QString& incfile, const QMap<QString,QStringList>& variables  );
-
-    QStringList variables() const;
 };
 
 #endif

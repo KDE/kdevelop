@@ -20,6 +20,9 @@
 
 #include "qmakecache.h"
 
+#include <QtCore/QStringList>
+
+#include "qmakemkspecs.h"
 
 QMakeCache::QMakeCache( const QString& cachefile )
     : QMakeFile( cachefile ), m_mkspecs(0)
@@ -29,6 +32,15 @@ QMakeCache::QMakeCache( const QString& cachefile )
 void QMakeCache::setMkSpecs( QMakeMkSpecs* specs )
 {
     m_mkspecs = specs;
+}
+
+bool QMakeCache::read()
+{
+    foreach( QString var, m_mkspecs->variables() )
+    {
+        m_variableValues[var] = m_mkspecs->variableValues( var );
+    }
+    return QMakeFile::read();
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
