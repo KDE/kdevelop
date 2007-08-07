@@ -137,7 +137,7 @@ int main( int argc, char *argv[] )
     Core::initialize();
 /*    Core::setPartController( new PartController );
     Core::setDocumentController( new DocumentController );*/
-    Core::self()->pluginController()->loadPlugins( PluginController::Global );
+//     Core::self()->pluginController()->loadPlugins( PluginController::Global );
 //     Core::setLanguageController( new LanguageController );
 //     Core::setProjectController( new ProjectController );
 //     Core::setBackgroundParser( new BackgroundParser );
