@@ -50,10 +50,13 @@ public:
     virtual QStringList variableValues(const QString&) const;
     bool containsVariable( const QString& ) const;
 
+    static QStringList resolveShellGlobbing( const QString& absolutefile );
+
 protected:
     QMap<QString, QStringList> m_variableValues;
     QString resolveFileName( const QString& file ) const;
 private:
+
     QMake::ProjectAST* m_ast;
     QString m_projectFile;
 };

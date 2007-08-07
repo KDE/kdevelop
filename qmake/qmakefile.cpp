@@ -29,6 +29,53 @@
 #include "qmakedriver.h"
 #include "qmakeincludefile.h"
 
+QStringList resolveShellGlobbingInternal( const QString& relativefile,
+        const QString& dir )
+{
+    QStringList result;
+    if( !relativefile.isEmpty() )
+    {
+        int index = relativefile.indexOf( QRegExp( "[^\\\\]/" ) );
+        QString firstpath = relativefile.mid( 0,  index+1 );
+        QString remainder = relativefile.mid( index+2 );
+        if( index == -1 )
+        {
+            firstpath = relativefile;
+            remainder = "";
+        }
+        QStringList entries;
+        if( firstpath.contains( QRegExp( "[^\\\\]?(\\*|\\?|\\[)" ) ) )
+        {
+            QRegExp wildcard( firstpath, Qt::CaseSensitive, QRegExp::Wildcard );
+            foreach( QString entry, QDir( dir ).entryList()  )
+            {
+                if( wildcard.exactMatch( entry ) )
+                {
+                    entries << entry;
+                }
+            }
+        }else
+        {
+            entries << firstpath;
+        }
+        foreach( QString entry, entries )
+        {
+            QStringList subentries = resolveShellGlobbingInternal( remainder, dir+'/'+entry );
+            if( !subentries.isEmpty() )
+            {
+                foreach( QString subentry, subentries )
+                {
+                    result << entry+'/'+subentry;
+                }
+            }else if( QFileInfo( dir+'/'+entry ).exists() && remainder.isEmpty() )
+            {
+                result << entry;
+            }
+        }
+    }
+    return result;
+}
+
 QStringList getValueList( const QList<QMake::ValueAST*>& list )
 {
     QStringList result;
@@ -199,6 +246,12 @@ bool QMakeFile::containsVariable( const QString& variable ) const
 {
     return m_variableValues.contains( variable );
 }
+
+QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
+{
+    return resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" );
+}
+
 
 QString QMakeFile::resolveFileName( const QString& file ) const
 {
