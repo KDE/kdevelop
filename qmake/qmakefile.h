@@ -54,7 +54,8 @@ public:
 
 protected:
     QMap<QString, QStringList> m_variableValues;
-    QString resolveFileName( const QString& file ) const;
+    QStringList resolveFileName( const QString& file ) const;
+    QString resolveToSingleFileName( const QString& file ) const;
 private:
 
     QMake::ProjectAST* m_ast;

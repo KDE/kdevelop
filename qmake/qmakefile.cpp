@@ -252,15 +252,24 @@ QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
     return resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" );
 }
 
-
-QString QMakeFile::resolveFileName( const QString& file ) const
+QString QMakeFile::resolveToSingleFileName( const QString& file ) const
 {
-    QString absolutefile = file;
-    if( QFileInfo( file ).isRelative() )
+    return resolveFileName( file ).first();
+}
+
+QStringList QMakeFile::resolveFileName( const QString& file ) const
+{
+    QString absolutepath = file;
+    if( QFileInfo( absolutepath ).isRelative() )
     {
-        absolutefile = absoluteDir() + "/" + file;
+        absolutepath = absoluteDir() + "/" + file;
     }
-    return QFileInfo( absolutefile ).canonicalFilePath();
+    QStringList result;
+    foreach( QString s, resolveShellGlobbing( absolutepath ) )
+    {
+        result << QFileInfo( s ).canonicalFilePath();
+    }
+    return result;
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

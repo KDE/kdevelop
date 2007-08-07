@@ -68,10 +68,10 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
         }
         if( subdir.endsWith( ".pro" ) )
         {
-            fileOrPath = resolveFileName( subdir.trimmed() );
+            fileOrPath = resolveToSingleFileName( subdir.trimmed() );
         }else
         {
-            fileOrPath = resolveFileName( subdir.trimmed() );
+            fileOrPath = resolveToSingleFileName( subdir.trimmed() );
         }
         QMakeProjectFile* qmscope = new QMakeProjectFile( fileOrPath );
         QDir d;
@@ -177,7 +177,7 @@ KUrl::List QMakeProjectFile::files() const
     {
         foreach( QString value, variableValues(variable) )
         {
-            list << KUrl( resolveFileName( value ) );
+            list += KUrl::List( resolveFileName( value ) );
         }
     }
     kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
@@ -197,7 +197,7 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
         {
             foreach( QString val, files )
             {
-                list += KUrl::List( QMakeFile::resolveShellGlobbing( resolveFileName( val ) ) );
+                list += KUrl::List( resolveFileName( val ) );
             }
         }
     }
@@ -207,7 +207,7 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
         {
             foreach( QString value, variableValues(variable) )
             {
-                list << KUrl( resolveFileName( value ) );
+                list += KUrl::List( resolveFileName( value ) );
             }
         }
     }
