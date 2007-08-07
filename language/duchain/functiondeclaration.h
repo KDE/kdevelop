@@ -38,6 +38,8 @@ public:
   virtual ~FunctionDeclaration();
 
   virtual Declaration* clone() const;
+
+  virtual QString toString() const;
 private:
   class FunctionDeclarationPrivate* const d;
 };

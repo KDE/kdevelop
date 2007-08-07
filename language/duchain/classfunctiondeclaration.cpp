@@ -21,6 +21,7 @@
 #include "classfunctiondeclaration.h"
 
 #include "ducontext.h"
+#include "typesystem.h"
 
 namespace KDevelop
 {
@@ -50,6 +51,16 @@ ClassFunctionDeclaration::~ClassFunctionDeclaration()
 {
   delete d;
 }
+
+QString ClassFunctionDeclaration::toString() const {
+  if( !abstractType() )
+    return ClassMemberDeclaration::toString();
+
+  KSharedPtr<FunctionType> function = type<FunctionType>();
+  Q_ASSERT(function);
+  return QString("%1 %2 %3").arg(function->toString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->toString( FunctionType::SignatureArguments ));
+}
+
 
 /*bool ClassFunctionDeclaration::isSimilar(KDevelop::CodeItem *other, bool strict ) const
 {

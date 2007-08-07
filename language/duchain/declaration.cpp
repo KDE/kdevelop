@@ -317,7 +317,7 @@ bool Declaration::operator ==(const Declaration & other) const
 
 QString Declaration::toString() const
 {
-  return QString("Declaration: %3 %4").arg(abstractType() ? abstractType()->toString() : QString("<notype>")).arg(identifier().toString());
+  return QString("%3 %4").arg(abstractType() ? abstractType()->toString() : QString("<notype>")).arg(identifier().toString());
 }
 
 // kate: indent-width 2;

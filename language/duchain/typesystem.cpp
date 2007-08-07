@@ -439,19 +439,33 @@ void FunctionType::exchangeTypes( TypeExchanger* exchanger )
   d->m_returnType = exchanger->exchange(d->m_returnType.data());
 }
 
+QString FunctionType::toString( SignaturePart sigPart ) const {
+  QString args;
+  if( sigPart == SignatureArguments || sigPart == SignatureWhole )
+  {
+    args += "(";
+    bool first = true;
+    foreach (const AbstractType::Ptr& type, d->m_arguments) {
+      if (first)
+        first = false;
+      else
+        args.append(", ");
+      args.append(type ? type->toString() : QString("<notype>"));
+    }
+    args += ")";
+  }
+  
+  if( sigPart == SignatureArguments )
+    return args;
+  else if( sigPart == SignatureWhole )
+    return QString("%1 %2").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
+  else if( sigPart == SignatureReturn )
+    return returnType() ? returnType()->toString() : QString();
+}
+
 QString FunctionType::toString() const
 {
-  QString args;
-  bool first = true;
-  foreach (const AbstractType::Ptr& type, d->m_arguments) {
-    if (first)
-      first = false;
-    else
-      args.append(", ");
-    args.append(type ? type->toString() : QString("<notype>"));
-  }
-
-  return QString("%1 (%2)").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
+  return toString(SignatureWhole);
 }
 
 AbstractType::WhichType FunctionType::whichType() const

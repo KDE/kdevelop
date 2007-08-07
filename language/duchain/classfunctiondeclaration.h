@@ -51,6 +51,7 @@ public:
   bool isDestructor() const;
   bool isConversionFunction() const;
 
+  virtual QString toString() const;
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
    * argument of the function, but the returned list will only contain default-values for those

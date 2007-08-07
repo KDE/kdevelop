@@ -45,5 +45,14 @@ Declaration* FunctionDeclaration::clone() const {
   return new FunctionDeclaration(*this);
 }
 
+QString FunctionDeclaration::toString() const {
+  if( !abstractType() )
+    return Declaration::toString();
+
+  KSharedPtr<FunctionType> function = type<FunctionType>();
+  Q_ASSERT(function);
+  return QString("%1 %2 %3").arg(function->toString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->toString( FunctionType::SignatureArguments ));
+}
+
 }
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

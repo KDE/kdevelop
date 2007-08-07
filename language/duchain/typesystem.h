@@ -268,6 +268,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionType : public AbstractType
 public:
   typedef KSharedPtr<FunctionType> Ptr;
 
+  enum SignaturePart {
+    SignatureWhole, //When this is given to toString(..), a string link "RETURNTYPE (ARGTYPE1, ARGTYPE1, ..)" is returned
+    SignatureReturn, //When this is given, only a string that represents the return-type is returned
+    SignatureArguments //When this is given, a string that represents the arguments like "(ARGTYPE1, ARGTYPE1, ..)" is returend
+  };
+  
   FunctionType();
   FunctionType(const FunctionType& rhs);
   ~FunctionType();
@@ -289,6 +295,9 @@ public:
 
   virtual QString toString() const;
 
+  ///Creates a string that represents the given part of the signature
+  virtual QString toString( SignaturePart sigPart ) const;
+  
   //virtual uint hash() const;
 
   virtual WhichType whichType() const;
