@@ -42,19 +42,23 @@ void Example2Main::splitVertical()
 {
     if (!activeView())
         return;
-    area()->addView(activeView()->document()->createView(), activeView(), Qt::Vertical);
+    Sublime::View *newView = activeView()->document()->createView();
+    area()->addView(newView, activeView(), Qt::Vertical);
+    activateView(newView);
 }
 
 void Example2Main::splitHorizontal()
 {
     if (!activeView())
         return;
-    area()->addView(activeView()->document()->createView(), activeView(), Qt::Horizontal);
+    Sublime::View *newView = activeView()->document()->createView();
+    area()->addView(newView, activeView(), Qt::Horizontal);
+    activateView(newView);
 }
 
 void Example2Main::close()
 {
-    if (!activeView())
+    if (!activeView() || area()->views().count() == 1)
         return;
     area()->removeView(activeView());
 }
