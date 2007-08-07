@@ -570,7 +570,7 @@ ProjectSession* ProjectManager::projectSession() const
 
 QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)
 {
-    KConfig config(KStandardDirs::locate("data", "kdevelop/profiles/projectprofiles"));
+    KConfig config(KStandardDirs::locate("data", "kdevplatform/profiles/projectprofiles"));
     config.setGroup(language);
 
     QStringList profileKeywords = QStringList::split("/", "Empty");

@@ -10,6 +10,6 @@ add_subdirectory(PascalIDE)
 
 ########### install files ###############
 
-install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/CompiledLanguageIDE )
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevplatform/profiles/IDE/CompiledLanguageIDE )
 
 

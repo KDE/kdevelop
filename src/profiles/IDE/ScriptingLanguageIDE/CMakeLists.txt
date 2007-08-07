@@ -8,6 +8,6 @@ add_subdirectory(ShellIDE)
 
 ########### install files ###############
 
-install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/IDE/ScriptingLanguageIDE )
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevplatform/profiles/IDE/ScriptingLanguageIDE )
 
 

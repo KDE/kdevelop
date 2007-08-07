@@ -1,5 +1,5 @@
 
 ########### install files ###############
 
-install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevelop/profiles/KDevAssistant )
+install( FILES profile.config DESTINATION ${DATA_INSTALL_DIR}/kdevplatform/profiles/KDevAssistant )
 
