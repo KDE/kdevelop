@@ -24,6 +24,7 @@
 
 #include <QPair>
 #include <QMap>
+#include <QPointer>
 #include <ktexteditor/codecompletionmodel.h>
 #include <ksharedptr.h>
 #include <duchainpointer.h>
@@ -39,6 +40,7 @@ class Declaration;
 
 namespace Cpp {
   class CodeCompletionContext;
+  class NavigationWidget;
 }
 
 class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
@@ -65,6 +67,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     mutable DeclarationContextPair m_currentMatchContext;
 
     QMap<QString, QIcon> m_icons;
+    mutable QMap<KDevelop::Declaration*, QPointer<Cpp::NavigationWidget> > m_navigationWidgets;
     QList< DeclarationContextPair > m_declarations;
 };
 

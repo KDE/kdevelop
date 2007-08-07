@@ -21,14 +21,14 @@
 
 #include "cppcodecompletionmodel.h"
 
+#include <QIcon>
 #include <QMetaType>
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <kiconloader.h>
-
-#include <khtml_part.h>
 #include <khtmlview.h>
+
 
 #include "duchainbuilder/cppduchain.h"
 #include "duchainbuilder/typeutils.h"
@@ -44,6 +44,8 @@
 #include <topducontext.h>
 #include "dumpchain.h"
 #include "codecompletioncontext.h"
+#include "navigationwidget.h"
+
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -66,6 +68,8 @@ CppCodeCompletionModel::~CppCodeCompletionModel()
 void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
 {
   Q_UNUSED(invocationType)
+  
+  m_navigationWidgets.clear();
 
   KUrl url = view->document()->url();
   if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
@@ -113,6 +117,27 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     isArgumentHint = true;
 
   switch (role) {
+    case AccessibilityNext:
+    {
+      Cpp::NavigationWidget* w = m_navigationWidgets[dec];
+      if( w )
+        w->next();
+    }
+    break;
+    case AccessibilityPrevious:
+    {
+      Cpp::NavigationWidget* w = m_navigationWidgets[dec];
+      if( w )
+        w->previous();
+    }
+    break;
+    case AccessibilityAccept:
+    {
+      Cpp::NavigationWidget* w = m_navigationWidgets[dec];
+      if( w )
+        w->accept();
+    }
+    break;
     case SetMatchContext:
       m_currentMatchContext = m_declarations[dataIndex];
       return QVariant(1);
@@ -133,18 +158,11 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     case IsExpandable:
       return QVariant(true);
     case ExpandingWidget: {
-       KHTMLPart *w = new KHTMLPart();
-       w->begin();
-      w->write( QString( "<html><body><p><small><small>Item: %1 %2 </small></small></p></body></html> " ).arg(dec->toString()).arg(QString("<br>Comment: %1").arg(dec->comment())) );
-       w->end();
-       w->view()->resize(500, 70);
-
-//        QPalette palette;
-//        palette.setColor(w->view()->backgroundRole(), QColor(0,0,0));//0xffcfcfcf));
-//        w->view()->setPalette(palette);
+      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(dec);
+      m_navigationWidgets[dec] = nav;
 
        QVariant v;
-       v.setValue<QWidget*>(w->view());
+       v.setValue<QWidget*>((QWidget*)nav->view());
        return v;
     }
     case Qt::DisplayRole:

@@ -71,6 +71,8 @@
 
 using namespace KDevelop;
 
+CppLanguageSupport* CppLanguageSupport::m_self = 0;
+
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
 
@@ -78,6 +80,8 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
       KDevelop::ILanguageSupport()
 {
+    m_self = this;
+    
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
 
     m_highlights = new CppHighlighting( this );
@@ -125,6 +129,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
 
 CppLanguageSupport::~CppLanguageSupport()
 {
+    m_self = 0;
     // Remove any documents waiting to be parsed from the background paser.
     core()->languageController()->backgroundParser()->clear(this);
 
@@ -138,6 +143,10 @@ CppLanguageSupport::~CppLanguageSupport()
     delete m_standardIncludePaths;
     delete m_environmentManager;
     delete m_includeResolver;
+}
+
+CppLanguageSupport* CppLanguageSupport::self() {
+    return m_self;
 }
 
 void CppLanguageSupport::documentChanged( KDevelop::IDocument* document )

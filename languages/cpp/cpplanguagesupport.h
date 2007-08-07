@@ -59,6 +59,8 @@ public:
 
     ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
     KUrl::List findIncludePaths(const KUrl& source) const;
+
+    static CppLanguageSupport* self();
     
 private slots:
     void documentLoaded(KDevelop::IDocument*);
@@ -67,6 +69,8 @@ private slots:
     void documentChanged( KDevelop::IDocument* document );
 
 private:
+    static CppLanguageSupport* m_self;
+    
     CppHighlighting *m_highlights;
     CppCodeCompletion *m_cc;
     Cpp::EnvironmentManager* m_environmentManager;
