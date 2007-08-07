@@ -276,6 +276,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
                 QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QStringList(), &error );
         loadDependencies( info );
+	loadOptionalDependencies( info );
     }
 
     if ( plugin )
@@ -381,6 +382,23 @@ bool PluginController::checkForDependencies( const KPluginInfo& info, QStringLis
         }
     }
     return result;
+}
+
+void PluginController::loadOptionalDependencies( const KPluginInfo& info )
+{
+    QVariant prop = info.property( "X-KDevelop-IOptional" );
+    if( prop.canConvert<QStringList>() )
+    {
+        QStringList deps = prop.toStringList();
+        foreach( QString iface, deps )
+        {
+            KPluginInfo info = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) ).first();
+            if( !loadPluginInternal( info.pluginName() ) )
+	    {
+		    kDebug(9501) << "Couldn't load optional dependecy:" << iface << info.pluginName();
+	    }
+        }
+    }
 }
 
 void PluginController::loadDependencies( const KPluginInfo& info )
