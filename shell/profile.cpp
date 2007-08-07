@@ -53,7 +53,7 @@ Profile::Profile(Profile *parent, const QString &name)
     if (d->m_parent)
         d->m_parent->addChildProfile(this);
 
-    QString profileConfig = KStandardDirs::locate("data", "kdevelop/profiles" + dirName() + "/profile.config");
+    QString profileConfig = KStandardDirs::locate("data", "kdevplatform/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
 
     KConfigGroup group = config.group("Information");
@@ -108,7 +108,7 @@ QString Profile::dirName() const
 
 void Profile::save()
 {
-    QString profileConfig = KStandardDirs::locateLocal("data", "kdevelop/profiles" + dirName() + "/profile.config");
+    QString profileConfig = KStandardDirs::locateLocal("data", "kdevplatform/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
 
     KConfigGroup group = config.group("Information");
@@ -179,7 +179,7 @@ bool Profile::hasInEntryList(EntryList &list, const QString& value)
 
 bool Profile::remove()
 {
-    QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles" + dirName());
+    QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevplatform/profiles" + dirName());
     if ((dirs.count() == 1) && dirs[0].startsWith(QDir::homePath()))
         return KIO::NetAccess::del(KUrl(dirs[0]), 0);
     return false;
@@ -198,7 +198,7 @@ KUrl::List Profile::resources(const QString &nameFilter)
     for (QStringList::const_iterator it = resourceDirs.begin(); it != resourceDirs.end(); ++it)
     {
         QString dir = *it;
-        dir = dir + "kdevelop/profiles" + dirName();
+        dir = dir + "kdevplatform/profiles" + dirName();
 
         QDir d(dir);
         const QFileInfoList infoList = d.entryInfoList(QStringList(nameFilter), QDir::Files);
@@ -211,7 +211,7 @@ KUrl::List Profile::resources(const QString &nameFilter)
 
 void Profile::addResource(const KUrl &url)
 {
-    QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevelop/profiles"+dirName(), true);
+    QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevplatform/profiles"+dirName(), true);
     KIO::NetAccess::file_copy(url, KUrl(saveLocation), -1, true);
 }
 

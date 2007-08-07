@@ -40,7 +40,7 @@ public:
 ProfileEngine::ProfileEngine()
     : d(new ProfileEnginePrivate)
 {
-    QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles");
+    QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevplatform/profiles");
 
     d->m_rootProfile = new Profile(0, "KDevelop");
 
