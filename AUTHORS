@@ -1,4 +1,18 @@
-Bernd Gehrmann <bernd@physik.hu-berlin.de>
+Current Maintainers:
+
+Matt Rogers <mattr@kde.org> - Lead Maintainer
+Alexander Dymo <adymo@kdevelop.org> - Maintainer
+Amilcar do Carmo Lucas <a.lucas@tu-bs.de> - Maintainer - KDevelop.org
+
+Previous Maintainers and their areas of expertise can be found below. It is best
+to contain the KDevelop developers list at kdevelop-devel@kdevelop.org if you have
+a question about one of these particular areas. 
+
+For a more complete list, please check the About Dialog from the KDevelop Help menu.
+
+
+Main author, lots of code. :)
+  Bernd Gehrmann <bernd@physik.hu-berlin.de>
 
 Debugger frontend:
   John Birch <jbb@kdevelop.org>
