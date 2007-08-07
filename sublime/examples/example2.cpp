@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>              *
+ *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,36 +16,38 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef EXAMPLE1MAIN_H
-#define EXAMPLE1MAIN_H
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
+#include <kurl.h>
 
-#include <kxmlguiwindow.h>
+#include <sublime/area.h>
+#include <sublime/urldocument.h>
+#include <sublime/controller.h>
 
-namespace Sublime {
-    class Area;
-    class Controller;
+#include "example2main.h"
+
+int main(int argc, char **argv)
+{
+    static const char description[] = "Sublime UI Library: Splitting Example";
+    KAboutData aboutData("example2", 0, ki18n("Example 2"),
+                         "1.0", ki18n(description), KAboutData::License_LGPL,
+                         ki18n("(c) 2007, Alexander Dymo"), KLocalizedString(), "http://www.kdevelop.org" );
+
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
+
+    Sublime::Controller *controller = new Sublime::Controller(&app);
+    Sublime::Area *area = new Sublime::Area(controller, "Area");
+    Sublime::Document *doc = new Sublime::UrlDocument(controller, KUrl::fromPath("~/foo.cpp"));
+    area->addView(doc->createView());
+    Example2Main *window = new Example2Main(controller);
+    controller->showArea(area, window);
+    window->resize(800, 600);
+    window->show();
+
+    return app.exec();
 }
-
-class Example1Main: public KXmlGuiWindow {
-    Q_OBJECT
-public:
-    Example1Main();
-
-public slots:
-    void selectArea1();
-    void selectArea2();
-
-private slots:
-    void updateTitle(Sublime::Area *area);
-
-private:
-    Sublime::Controller *m_controller;
-
-    Sublime::Area *m_area1;
-    Sublime::Area *m_area2;
-
-};
-
-#endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

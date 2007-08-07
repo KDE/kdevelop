@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>              *
+ *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,36 +16,49 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef EXAMPLE1MAIN_H
-#define EXAMPLE1MAIN_H
+#include "example2main.h"
 
-#include <kxmlguiwindow.h>
+#include <QMenu>
 
-namespace Sublime {
-    class Area;
-    class Controller;
+#include <kdebug.h>
+#include <kmenubar.h>
+
+#include <sublime/area.h>
+#include <sublime/view.h>
+#include <sublime/document.h>
+
+Example2Main::Example2Main(Sublime::Controller *controller, Qt::WindowFlags flags)
+    :Sublime::MainWindow(controller, flags)
+{
+    QMenu *windowMenu = new QMenu("Window", this);
+    windowMenu->addAction("Split Top/Bottom", this, SLOT(splitVertical()), Qt::CTRL + Qt::Key_T);
+    windowMenu->addAction("Split Left/Right", this, SLOT(splitHorizontal()), Qt::CTRL + Qt::Key_L);
+    windowMenu->addSeparator();
+    windowMenu->addAction("Close", this, SLOT(close()), Qt::CTRL + Qt::Key_W);
+    menuBar()->addMenu(windowMenu);
 }
 
-class Example1Main: public KXmlGuiWindow {
-    Q_OBJECT
-public:
-    Example1Main();
+void Example2Main::splitVertical()
+{
+    if (!activeView())
+        return;
+    area()->addView(activeView()->document()->createView(), activeView(), Qt::Vertical);
+}
 
-public slots:
-    void selectArea1();
-    void selectArea2();
+void Example2Main::splitHorizontal()
+{
+    if (!activeView())
+        return;
+    area()->addView(activeView()->document()->createView(), activeView(), Qt::Horizontal);
+}
 
-private slots:
-    void updateTitle(Sublime::Area *area);
+void Example2Main::close()
+{
+    if (!activeView())
+        return;
+    area()->removeView(activeView());
+}
 
-private:
-    Sublime::Controller *m_controller;
-
-    Sublime::Area *m_area1;
-    Sublime::Area *m_area2;
-
-};
-
-#endif
+#include "example2main.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

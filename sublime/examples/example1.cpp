@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv)
 {
-    static const char description[] = "Sublime UI Library Example";
+    static const char description[] = "Sublime UI Library: Area Example";
     KAboutData aboutData("example1", 0, ki18n("Example 1"),
                          "1.0", ki18n(description), KAboutData::License_LGPL,
                          ki18n("(c) 2007, Alexander Dymo"), KLocalizedString(), "http://www.kdevelop.org" );
