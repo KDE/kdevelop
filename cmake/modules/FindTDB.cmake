@@ -13,14 +13,12 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 FIND_PATH(TDB_INCLUDE_DIR tdb.h
-  /usr/include/
   /usr/include/samba
   /usr/local/samba/include
 )
 
 FIND_LIBRARY(TDB_LIBRARIES NAMES tdb
   PATHS
-  /usr/lib
   /usr/lib/samba
   /usr/local/samba/lib
 )
