@@ -210,6 +210,12 @@ class NavigationContext : public KShared {
               details << "signal";
             if( classFunDecl->functionType() == ClassFunctionDeclaration::Slot )
               details << "slot";
+            if( classFunDecl->isConstructor() )
+              details << "constructor";
+            if( classFunDecl->isDestructor() )
+              details << "destructor";
+            if( classFunDecl->isConversionFunction() )
+              details << "conversion-function";
           }
 
           //Print the function-signature in a way that return-type and argument can be jumped to
@@ -217,8 +223,10 @@ class NavigationContext : public KShared {
           const FunctionType* type = dynamic_cast<const FunctionType*>( m_declaration->abstractType().data() );
 
           if( type && function ) {
-            eventuallyMakeTypeLink( type->returnType().data() );
-            m_currentText += " " + m_declaration->identifier().toString();
+            if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
+              eventuallyMakeTypeLink( type->returnType().data() );
+              m_currentText += " " + m_declaration->identifier().toString();
+            }
 
             if( type->arguments().count() == 0 )
             {

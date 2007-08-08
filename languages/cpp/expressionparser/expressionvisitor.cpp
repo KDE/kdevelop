@@ -431,6 +431,25 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     visit( node->literal );
     visit( node->expression_statement );
     visit( node->name );
+
+    //Respect "this" token
+    if( tokenFromIndex(node->token).kind == Token_this ) {
+      LOCKDUCHAIN;
+      
+      if( !m_currentContext->parentContext() || m_currentContext->parentContext()->type() != DUContext::Class || !m_currentContext->parentContext()->declaration() || !m_currentContext->declaration() ) {
+        problem(node, "\"this\" used in invalid context");
+        return;
+      }
+      CppFunctionType* cppFunction = dynamic_cast<CppFunctionType*>(m_currentContext->declaration()->abstractType().data());
+
+      if( cppFunction ) {
+        CppPointerType::Ptr thisPointer( new CppPointerType( cppFunction->cv() ) );
+        thisPointer->setBaseType( m_currentContext->parentContext()->declaration()->abstractType() );
+
+        m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(thisPointer.data()) );
+        m_lastInstance = Instance(true);
+      }
+    }
     
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );

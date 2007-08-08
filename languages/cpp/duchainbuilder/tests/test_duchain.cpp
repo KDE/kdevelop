@@ -862,6 +862,23 @@ void TestDUChain::testSpecializedTemplates() {
   
   release(top);
 }
+void TestDUChain::testFunctionTemplates() {
+  QByteArray method("template<class T> T test(const T& t) {};");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* defTest = top->localDeclarations()[0];
+  QCOMPARE(defTest->identifier(), Identifier("test"));
+  QVERIFY(defTest->type<FunctionType>());
+  QVERIFY( isTemplateDeclaration(defTest) );
+
+  QCOMPARE( defTest->type<FunctionType>()->arguments().count(), 1 );
+  QVERIFY( dynamic_cast<const DelayedType*>( realType(defTest->type<FunctionType>()->arguments()[0]) ) );
+  
+  release(top);
+}
 
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");

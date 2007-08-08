@@ -70,6 +70,7 @@ private slots:
   void testDeclareUsingNamespace2();
   void testTypedef();
   void testTemplates();
+  void testFunctionTemplates();
   void testSpecializedTemplates();
   void testFunctionDefinition();
   void testBaseClasses();

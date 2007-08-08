@@ -102,11 +102,11 @@ class CppDUContext : public BaseContext {
         delete instatiation;
     }
     
-    ///Overridden to take care of templates
+    ///Overridden to take care of templates and other c++ specific things
     virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::DUContext::NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
-      
+
       ///@todo maybe move parts of this logic directly into the du-chain
 
       ///Iso c++ 3.4.3.1 and 3.4.3.2 say that identifiers should be looked up part by part

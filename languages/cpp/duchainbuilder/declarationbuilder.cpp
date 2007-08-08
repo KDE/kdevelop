@@ -507,7 +507,7 @@ void DeclarationBuilder::closeDeclaration()
 
       currentDeclaration()->setType(lastType());
     }
-    if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other ) )
+    if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
        currentDeclaration()->setInternalContext(m_lastContext);
       m_lastContext = 0;
