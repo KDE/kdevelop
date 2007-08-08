@@ -64,6 +64,7 @@ While construction:
 #include <duchain/declaration.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
+#include <duchain/classfunctiondeclaration.h>
 #include "typeutils.h"
 #include "cpptypes.h"
 #include "templatedeclaration.h"
@@ -241,20 +242,18 @@ class CppDUContext : public BaseContext {
       
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, flags );
 
-          //If the use of unresolved template-parameters is not allowed, filter them out
-          if( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) ) {
-            QList<Declaration*>::iterator it = ret.begin();
-            while( it != ret.end() ) {
-              if( dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) ) {
-                //Unresolved template-paramers are not allowed, so remove the item from the list
-                it = ret.erase(it);
-                kDebug(9007) << "filtered out 1 declaration" << endl;
-              } else {
-                ++it;
-              }
-            }
+        //Filter out constructors and if needed unresolved template-params
+        QList<Declaration*>::iterator it = ret.begin();
+        while( it != ret.end() ) {
+          if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) )
+             || ( (dynamic_cast<ClassFunctionDeclaration*>(*it) && static_cast<ClassFunctionDeclaration*>(*it)->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
+            it = ret.erase(it);
+            //kDebug(9007) << "filtered out 1 declaration" << endl;
+          } else {
+            ++it;
           }
-        
+        }
+
         if( m_instantiatedFrom && ret.count() == retCount ) {
           ///Search in the context this one was instantiated from
           QList<Declaration*> decls;

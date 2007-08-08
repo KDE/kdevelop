@@ -549,7 +549,7 @@ void TestDUChain::testDeclareClass()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("class A { A rec; void test(int); }; void A::test(int j) {}");
+  QByteArray method("class A { A() {}; A rec; void test(int); }; void A::test(int j) {}");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -564,22 +564,26 @@ void TestDUChain::testDeclareClass()
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QCOMPARE(defClassA->uses().count(), 0);
   QVERIFY(defClassA->type<CppClassType>());
-  QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 2);
-  CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements()[1]);
+  QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 3);
+  CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements()[2]);
   QVERIFY(function);
   QCOMPARE(function->returnType(), typeVoid);
   QCOMPARE(function->arguments().count(), 1);
   QCOMPARE(function->arguments().first(), typeInt);
-  
+
+  QVERIFY(defClassA->internalContext());
+
+  QCOMPARE(defClassA->internalContext()->localDeclarations().count(), 3);
+  QCOMPARE(defClassA->internalContext()->localDeclarations()[1]->abstractType(), defClassA->abstractType());
 
   DUContext* classA = top->childContexts().first();
   QVERIFY(classA->parentContext());
   QCOMPARE(classA->importedParentContexts().count(), 0);
-  QCOMPARE(classA->childContexts().count(), 1);
-  QCOMPARE(classA->localDeclarations().count(), 2);
+  QCOMPARE(classA->childContexts().count(), 3);
+  QCOMPARE(classA->localDeclarations().count(), 3);
   QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
-  Declaration* defRec = classA->localDeclarations().first();
+  Declaration* defRec = classA->localDeclarations()[1];
   QVERIFY(defRec->abstractType());
   QCOMPARE(defRec->abstractType(), defClassA->abstractType());
 
