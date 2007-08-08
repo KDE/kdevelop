@@ -18,7 +18,7 @@
 
 #include "navigationwidget.h"
 
-#include <QTextBrowser>
+#include <ktextbrowser.h>
 #include <QMap>
 #include <QStringList>
 #include <QMetaObject>
@@ -46,7 +46,7 @@ namespace Cpp {
 
 QString declarationName( Declaration* decl ) {
   if( !decl )
-    return i18n("Unknown");
+    return i18nc("An unkown c++ declaration that is unknown", "Unknown");
   else
     return decl->qualifiedIdentifier().toString();
 }
@@ -107,7 +107,7 @@ class NavigationContext : public KShared {
       return NavigationContextPointer(this);
     }
 
-    NavigationContextPointer acceptLink(QString link) {
+    NavigationContextPointer acceptLink(const QString& link) {
       if( !m_links.contains(link) ) {
         kDebug(9007) << "Executed unregistered link " << link << endl;
         return NavigationContextPointer(this);
@@ -225,7 +225,7 @@ class NavigationContext : public KShared {
           if( type && function ) {
             if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
               eventuallyMakeTypeLink( type->returnType().data() );
-              m_currentText += " " + m_declaration->identifier().toString();
+              m_currentText += ' ' + m_declaration->identifier().toString();
             }
 
             if( type->arguments().count() == 0 )
@@ -266,23 +266,23 @@ class NavigationContext : public KShared {
 
             eventuallyMakeTypeLink( m_declaration->abstractType().data() );
 
-            m_currentText += " " + declarationName(m_declaration.data()) + "<br>";
+            m_currentText += ' ' + declarationName(m_declaration.data()) + "<br>";
           }
         }
 
         QualifiedIdentifier identifier = m_declaration->qualifiedIdentifier();
         if( identifier.count() > 1 ) {
           if( m_declaration->context() && m_declaration->context()->declaration() ) {
-            makeLink( i18n("Container: %1<br>", declarationName(m_declaration->context()->declaration()) ), m_declaration->context()->declaration(), NavigationAction::NavigateDeclaration );
+            makeLink( i18n("Container: %1<br />", declarationName(m_declaration->context()->declaration()) ), m_declaration->context()->declaration(), NavigationAction::NavigateDeclaration );
           } else {
             QualifiedIdentifier parent = identifier;
             parent.pop();
-            m_currentText += i18n("Scope: %1<br>", parent.toString());
+            m_currentText += i18n("Scope: %1<br />", parent.toString());
           }
         }
 
         if( !access.isEmpty() )
-          m_currentText += i18n("Access: %1<br>", access);
+          m_currentText += i18n("Access: %1<br />", access);
         
         
         ///@todo Enumerations
@@ -301,21 +301,21 @@ class NavigationContext : public KShared {
 
         if( !kind.isEmpty() ) {
           if( !detailsString.isEmpty() )
-            m_currentText += i18n("Kind: %1 (%2)<br>", kind, detailsString);
+            m_currentText += i18n("Kind: %1 (%2)<br />", kind, detailsString);
           else
             m_currentText += i18n("Kind: %1<br>", kind);
         } else if( !detailsString.isEmpty() ) {
-          m_currentText += i18n("Modifiers: %1<br>", kind);
+          m_currentText += i18n("Modifiers: %1<br />", kind);
         }
       }
 
       m_currentText += i18n( "Declaration: " );
       makeLink( QString("%1:%2:%3").arg( m_declaration->url().prettyUrl() ).arg( m_declaration->textRange().start().line() ).arg( m_declaration->textRange().start().column() ), m_declaration, NavigationAction::JumpToSource );
-      m_currentText += "<br>";
+      m_currentText += "<br />";
       
       if( !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
-        comment.replace("\n", "<br>");
+        comment.replace("\n", "<br />");
         m_currentText += comment;
       }
       m_currentText += "</small></small></p></body></html>";
@@ -345,7 +345,7 @@ class NavigationContext : public KShared {
     }
     
     ///Creates and registers a link to the given declaration, labeled by the given name
-    void makeLink( QString name, DeclarationPointer declaration, NavigationAction::Type actionType )
+    void makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType )
     {
       QString targetId = QString("%1").arg((unsigned long long)declaration.data());
       NavigationAction action( declaration, actionType );
@@ -408,7 +408,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
 
 NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration) : m_declaration(declaration)
 {
-    m_browser = new QTextBrowser();
+    m_browser = new KTextBrowser();
     m_browser->setOpenLinks(false);
     m_browser->setOpenExternalLinks(false);
     m_browser->resize(500, 100);
