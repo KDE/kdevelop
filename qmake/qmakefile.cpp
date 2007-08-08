@@ -159,7 +159,6 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         QStringList arguments = getValueList( node->arguments() );
         kDebug(9024) << "found include" << node->functionName()->value() << arguments;
         QString argument = arguments.join("").trimmed();
-        kDebug(9024) << "My dir is:" << absoluteDir();
         if( QFileInfo( argument ).isRelative() )
         {
             argument = QFileInfo( absoluteDir() + '/' + argument ).canonicalFilePath();
@@ -196,21 +195,18 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
     QStringList values = getValueList(node->values());
     if( op == "=" )
     {
-        kDebug(9024) << "Setting var" << node->variable()->value() << values;
         m_variableValues[node->variable()->value()] = values;
     }else if( op == "+=" )
     {
         m_variableValues[node->variable()->value()] += values;
     }else if( op == "-=" )
     {
-        kDebug(9024) << "Removing from var" << node->variable()->value() << values;
         foreach( QString value, values )
         {
             m_variableValues[node->variable()->value()].removeAll(value);
         }
     }else if( op == "*=" )
     {
-        kDebug(9024) << "adding to var if not existent" << node->variable()->value() << values;
         foreach( QString value, values )
         {
             if( !m_variableValues[node->variable()->value()].contains(value) )
@@ -222,11 +218,9 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
     {
         if( values.isEmpty() )
             return;
-        kDebug(9024) << "replacing in var" << node->variable()->value() << values;
         QString value = values.first().trimmed();
         QString regex = value.mid(2,value.indexOf("/", 2));
         QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
-        kDebug(9024) << "Replacing variable, using regex" << regex << "value" << value ;
         QStringList list = m_variableValues[node->variable()->value()];
         list.replaceInStrings( QRegExp(regex), replacement );
         m_variableValues[node->variable()->value()] = list;
@@ -249,7 +243,12 @@ bool QMakeFile::containsVariable( const QString& variable ) const
 
 QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
 {
-    return resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" );
+    QStringList result;
+    foreach( QString s, resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" ) )
+    {
+        result << '/'+s;
+    }
+    return result;
 }
 
 QString QMakeFile::resolveToSingleFileName( const QString& file ) const

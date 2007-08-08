@@ -84,6 +84,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 
     foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
     {
+        kDebug(9024) << k_funcinfo << "adding subproject:" << subproject->absoluteDir();
         folderList.append( new QMakeFolderItem( item->project(),
                            subproject,
                            KUrl( subproject->absoluteDir() ),
@@ -91,12 +92,15 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     }
     foreach( QString s, folderitem->projectFile()->targets() )
     {
+        kDebug(9024) << k_funcinfo << "adding target:" << s;
         QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
         foreach( KUrl u, folderitem->projectFile()->filesForTarget(s) )
         {
+            kDebug(9024) << k_funcinfo << "adding file:" << u;
             new KDevelop::ProjectFileItem( item->project(), u, target );
         }
     }
+    kDebug(9024) << "adding project file:" << folderitem->projectFile()->absoluteFile();
     new KDevelop::ProjectFileItem( item->project(),
                                    KUrl( folderitem->projectFile()->absoluteFile() ),
                                    item );
@@ -144,6 +148,7 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         scope->setMkSpecs( mkspecs );
         scope->setQMakeCache( cache );
         scope->read();
+        kDebug(9024) << "top-level scope with variables:" << scope->variables();
         return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
     return 0;

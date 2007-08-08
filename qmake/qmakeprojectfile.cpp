@@ -92,6 +92,7 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
         {
             fileOrPath = resolveToSingleFileName( subdir.trimmed() );
         }
+        Q_ASSERT( !fileOrPath.isEmpty() );
         QMakeProjectFile* qmscope = new QMakeProjectFile( fileOrPath );
         QDir d;
         if( QFileInfo( fileOrPath ).isDir() )
