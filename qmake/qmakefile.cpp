@@ -29,6 +29,8 @@
 #include "qmakedriver.h"
 #include "qmakeincludefile.h"
 
+//@TODO: Make the globbing stuff work with drives on win32
+
 QStringList resolveShellGlobbingInternal( const QString& relativefile,
         const QString& dir )
 {
