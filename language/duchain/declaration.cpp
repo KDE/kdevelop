@@ -90,8 +90,9 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
   d->m_scope = scope;
   d->m_definition = 0;
   d->m_kind = Instance;
-  Q_ASSERT(context);
-  setContext(context);
+
+  if(context)
+    setContext(context);
 }
 
 Declaration::Declaration(const Declaration& rhs) : DUChainBase(0), d(new DeclarationPrivate) {
