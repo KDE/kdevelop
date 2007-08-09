@@ -46,7 +46,7 @@ namespace Cpp {
 
 QString declarationName( Declaration* decl ) {
   if( !decl )
-    return i18nc("An unkown c++ declaration that is unknown", "Unknown");
+    return i18nc("An unknown c++ declaration that is unknown", "Unknown");
   else
     return decl->qualifiedIdentifier().toString();
 }
@@ -303,7 +303,7 @@ class NavigationContext : public KShared {
           if( !detailsString.isEmpty() )
             m_currentText += i18n("Kind: %1 (%2)<br />", kind, detailsString);
           else
-            m_currentText += i18n("Kind: %1<br>", kind);
+            m_currentText += i18n("Kind: %1<br />", kind);
         } else if( !detailsString.isEmpty() ) {
           m_currentText += i18n("Modifiers: %1<br />", kind);
         }
