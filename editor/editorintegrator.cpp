@@ -271,6 +271,8 @@ Range* EditorIntegrator::createRange( const KTextEditor::Range & range )
               break;
           if( range.end() > (*it)->end() )
               continue;
+          if( **it == range )
+            continue; //This case should already have been handled by the test above
           //Now the condition range.start() >= (*it)->start() && range.end() <= (*it)->end()  is fulfilled(range is contained)
           currentRange = *it; //Move down to the range that contains range
       }

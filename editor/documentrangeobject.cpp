@@ -67,6 +67,9 @@ void DocumentRangeObject::setRangeOwning(RangeOwning ownsRange) {
     d->m_ownsRange = ownsRange;
 }
 
+DocumentRangeObject::RangeOwning DocumentRangeObject::ownsRange() const {
+    return d->m_ownsRange;
+}
 
 void DocumentRangeObject::setTextRange( KTextEditor::Range * range, RangeOwning ownsRange )
 {
@@ -163,6 +166,7 @@ void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
     Q_ASSERT(d->m_url);
     //Q_ASSERT(false);
     d->m_range = new DocumentRange(*d->m_url, *d->m_range);
+    d->m_ownsRange = Own;
 }
 
 KTextEditor::Range* DocumentRangeObject::takeRange()

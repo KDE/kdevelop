@@ -58,6 +58,8 @@ public:
     KTextEditor::Range* textRangePtr() const;
     KTextEditor::SmartRange* smartRange() const;
 
+    RangeOwning ownsRange() const;
+    
     KUrl url() const;
     static KUrl url(const KTextEditor::Range* range);
 
