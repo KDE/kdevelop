@@ -78,8 +78,12 @@ QStringList CMakeProjectManager::resolveVariables(const QStringList & vars)
 
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {
-    kDebug(9032) << "Build folder: " << item->project()->folder();
-    return item->project()->folder();
+    KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
+    KConfigGroup group(cfg.data(), "CMake");
+    KUrl path = group.readEntry("Build Dir");
+    
+    kDebug(9032) << "Build folder: " << path;
+    return path;
 }
 
 QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
@@ -90,7 +94,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     if ( !folder )
         return folderList;
 
-    kDebug(9025) << "parse:" << folder->url();
+    kDebug(9032) << "parse:" << folder->url();
     KUrl cmakeListsPath(folder->url());
     cmakeListsPath.addPath("CMakeLists.txt");
     

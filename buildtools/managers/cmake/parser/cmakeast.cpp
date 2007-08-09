@@ -234,6 +234,8 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 1 )
         return false;
 
+    return false;
+/*
     //check and make sure the target name isn't something silly
     CMakeFunctionArgument arg = func.arguments.front();
     if ( arg.value.toLower() == QLatin1String( "all" ) )
@@ -242,11 +244,14 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_target = arg.value;
 
     //check if we're part of the special "all" target
-    CMakeFunctionArgument arg2 = func.arguments[1];
-    if ( arg2.value == QLatin1String( "ALL" ) )
-        m_buildAlways = true;
-    else
-        m_buildAlways = false;
+    if(func.arguments.count()>1)
+    {
+        CMakeFunctionArgument arg2 = func.arguments[1];
+        if ( arg2.value == QLatin1String( "ALL" ) )
+            m_buildAlways = true;
+        else
+            m_buildAlways = false;
+    }
 
     //what are we doing?
     enum Action {
@@ -318,6 +323,7 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
 
     return true;
+*/
 }
 
 /* Add Definitions AST */
