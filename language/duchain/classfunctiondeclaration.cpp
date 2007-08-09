@@ -37,6 +37,11 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaratio
   d->m_functionType = rhs.d->m_functionType;
 }
 
+void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
+  Q_ASSERT( !type || dynamic_cast<FunctionType*>(type.data()) );
+  ClassMemberDeclaration::setAbstractType(type);
+}
+
 ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, DUContext* context)
   : ClassMemberDeclaration(range, context), AbstractFunctionDeclaration()
   , d(new ClassFunctionDeclarationPrivate)

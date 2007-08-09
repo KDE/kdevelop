@@ -65,6 +65,8 @@ public:
 
   //bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
 
+  virtual void setAbstractType(AbstractType::Ptr type);
+  
   virtual Declaration* clone() const;
 private:
   class ClassFunctionDeclarationPrivate* const d;
