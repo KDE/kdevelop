@@ -45,12 +45,18 @@ Declaration* FunctionDeclaration::clone() const {
   return new FunctionDeclaration(*this);
 }
 
+void FunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
+  Q_ASSERT( !type || dynamic_cast<FunctionType*>(type.data()) );
+  Declaration::setAbstractType(type);
+}
+
 QString FunctionDeclaration::toString() const {
   if( !abstractType() )
     return Declaration::toString();
 
   KSharedPtr<FunctionType> function = type<FunctionType>();
   Q_ASSERT(function);
+  
   return QString("%1 %2 %3").arg(function->toString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->toString( FunctionType::SignatureArguments ));
 }
 

@@ -37,6 +37,8 @@ public:
   FunctionDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~FunctionDeclaration();
 
+  virtual void setAbstractType(AbstractType::Ptr type);
+  
   virtual Declaration* clone() const;
 
   virtual QString toString() const;

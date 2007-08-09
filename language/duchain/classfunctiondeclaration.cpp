@@ -25,6 +25,7 @@
 
 namespace KDevelop
 {
+Identifier conversionIdentifier("operator{...cast...}");
 
 class ClassFunctionDeclarationPrivate
 {
@@ -98,12 +99,12 @@ void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 }
 
 bool ClassFunctionDeclaration::isConversionFunction() const {
-  return identifier() == Identifier("operator{...cast...}");
+  return identifier() == conversionIdentifier;
 }
 
 bool ClassFunctionDeclaration::isConstructor() const
 {
-  if (context()->type() == DUContext::Class && context()->localScopeIdentifier().top() == identifier())
+  if (context() && context()->type() == DUContext::Class && context()->localScopeIdentifier().top() == identifier())
     return true;
   return false;
 }
@@ -111,7 +112,7 @@ bool ClassFunctionDeclaration::isConstructor() const
 bool ClassFunctionDeclaration::isDestructor() const
 {
   QString id = identifier().toString();
-  return context()->type() == DUContext::Class && id.startsWith('~') && id.mid(1) == context()->localScopeIdentifier().top().toString();
+  return context() && context()->type() == DUContext::Class && id.startsWith('~') && id.mid(1) == context()->localScopeIdentifier().top().toString();
 }
 }
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

@@ -130,13 +130,11 @@ void DUContextPrivate::addImportedChildContext( DUContext * context )
   DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
 }
 
+//Can also be called with a context that is not in the list
 void DUContextPrivate::removeImportedChildContext( DUContext * context )
 {
-  Q_ASSERT(m_importedChildContexts.contains(context));
-
-  m_importedChildContexts.removeAll(context);
-
-  DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
+  if( m_importedChildContexts.removeAll(context) != 0 )
+    DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
 }
 
 int DUContext::depth() const
@@ -171,13 +169,15 @@ DUContext::~DUContext( )
   if (d->m_parentContext)
     d->m_parentContext->d->removeChildContext(this);
 
-  foreach (DUContext* context, importedChildContexts())
-    context->removeImportedParentContext(this);
+  while( !d->m_importedChildContexts.isEmpty() )
+    importedChildContexts().first()->removeImportedParentContext(this);
 
-  QList<DUContextPointer> importedParentContexts = d->m_importedParentContexts;
-  foreach (DUContextPointer context, importedParentContexts)
-    removeImportedParentContext(context.data());
-
+  while( !d->m_importedParentContexts.isEmpty() )
+    if( d->m_importedParentContexts.front() )
+      removeImportedParentContext(d->m_importedParentContexts.front().data());
+    else
+      d->m_importedParentContexts.pop_front();
+    
   deleteChildContextsRecursively();
 
   deleteUses();
@@ -514,8 +514,8 @@ void DUContext::mergeDeclarationsInternal(QHash<QualifiedIdentifier, Declaration
     context->mergeDeclarationsInternal(definitions, position, true);
   }
 
-  if (!inImportedContext && parentContext())
-    parentContext()->mergeDeclarationsInternal(definitions, position);
+  if (!inImportedContext && parentContext())                            ///In classes the position does not play a role(@todo this is language-dependent)
+    parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->textRange().end() : position);
 }
 
 void DUContext::deleteLocalDeclarations()

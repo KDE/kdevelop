@@ -133,7 +133,7 @@ public:
   void setType(KSharedPtr<T> type) { setAbstractType(AbstractType::Ptr::staticCast(type)); }
 
   AbstractType::Ptr abstractType() const;
-  void setAbstractType(AbstractType::Ptr type);
+  virtual void setAbstractType(AbstractType::Ptr type);
 
   void setIdentifier(const Identifier& identifier);
   const Identifier& identifier() const;
