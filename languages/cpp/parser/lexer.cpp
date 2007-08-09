@@ -821,6 +821,8 @@ void LocationTable::positionAt(std::size_t offset,
 
   *line = std::max(first, 1);
   *column = offset - lines[*line - 1] - 1;
+  if( *column < 0 )
+    *column = 0;
 }
 
 void Lexer::scanKeyword0()
