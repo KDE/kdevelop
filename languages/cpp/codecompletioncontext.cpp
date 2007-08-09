@@ -244,8 +244,47 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     {
       ///@todo Check whether it is a MemberChoose
     }
-    case MemberAccess:
     case ArrowMemberAccess:
+    {
+      LOCKDUCHAIN;
+      //Dereference a pointer
+      AbstractType::Ptr containerType = m_expressionResult.type;
+      CppPointerType* pnt = dynamic_cast<CppPointerType*>(TypeUtils::realType(containerType));
+      if( !pnt ) {
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType));
+        if( idType ) {
+          if( idType->declaration() && idType->declaration()->internalContext() ) {
+            QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(QualifiedIdentifier("operator*"));
+            if( !operatorDeclarations.isEmpty() ) {
+              ///@todo care about const
+              m_expressionResult.allDeclarations = operatorDeclarations;
+              CppFunctionType* function = dynamic_cast<CppFunctionType*>( operatorDeclarations.front()->abstractType().data() );
+
+              if( function ) {
+                m_expressionResult.type = function->returnType();
+                m_expressionResult.instance = ExpressionVisitor::Instance(true);
+              } else {
+                  log( QString("arrow-operator of class is not a function: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+              }
+            } else {
+              log( QString("arrow-operator on type without operator* member: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+            }
+          } else {
+            log( QString("arrow-operator on type without declaration and context: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+          }
+        } else {
+          log( QString("arrow-operator on invalid type: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+          m_expressionResult = ExpressionEvaluationResult();
+        }
+      }
+
+      if( pnt ) {
+        ///@todo what about const in pointer?
+        m_expressionResult.type = pnt->baseType();
+        m_expressionResult.instance = ExpressionVisitor::Instance(true);
+      }
+    }
+    case MemberAccess:
     {
       if( expr.trimmed().isEmpty() ) {
         log( "Expression was empty, cannot complete" );

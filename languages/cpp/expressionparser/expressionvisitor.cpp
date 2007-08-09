@@ -179,7 +179,7 @@ ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
   return m_lastInstance;
 }
 
-/** Find the member in the declaration's du-chain. This does not respect function-parameters yet.
+/** Find the member in the declaration's du-chain.
  *
  * @todo make this deal with klass->ParentClass::member
  * @todo make this deal with parent-classes
@@ -448,6 +448,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
         m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(thisPointer.data()) );
         m_lastInstance = Instance(true);
+      }else{
+        if( m_currentContext->declaration()->abstractType() )
+          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( typeid(m_currentContext->declaration()->abstractType().data()).name() ) .arg(m_currentContext->declaration()->abstractType()->toString()));
+        else
+          problem(node, "\"this\" used in non-function context with invalid type");
       }
     }
     
@@ -754,7 +759,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     {
       LOCKDUCHAIN;
       if( PointerType* pt = dynamic_cast<PointerType*>( m_lastType.data() ) )
-      {
+      { ///@todo what about const in pointer?
         //Dereference
         m_lastType = pt->baseType();
         m_lastInstance = Instance(getDeclaration(node,m_lastType));

@@ -300,6 +300,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   }
 
   Range newRange = m_editor->findRange(name ? static_cast<AST*>(name) : rangeNode);
+  Q_ASSERT(newRange.start() != newRange.end());
 
   QualifiedIdentifier id;
 
@@ -326,6 +327,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     Range translated = newRange;
     if (m_editor->smart())
       translated = m_editor->smart()->translateFromRevision(translated);
+    Q_ASSERT(translated.start() != translated.end());
 
     for (; nextDeclaration() < currentContext()->localDeclarations().count(); ++nextDeclaration()) {
       Declaration* dec = currentContext()->localDeclarations().at(nextDeclaration());
@@ -359,11 +361,6 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         // Match
         declaration = dec;
 
-        //If the declaration does not have a smart-range, upgrade it if possible
-        /*if( m_editor->smart() && !declaration->smartRange() ) {
-          declaration->setTextRange( m_editor->createRange( newRange ) );
-        }*/
-
         // Update access policy if needed
         if (currentContext()->type() == DUContext::Class) {
           ClassMemberDeclaration* classDeclaration = static_cast<ClassMemberDeclaration*>(declaration);
@@ -378,9 +375,14 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
 
   if (!declaration) {
+    if( recompiling() )
+      kDebug(9007) << "creating new declaration while recompiling: " << lastId << "(" << newRange << ")" << endl;
     Range* prior = m_editor->currentRange();
     Range* range = m_editor->createRange(newRange);
+    
     m_editor->exitCurrentRange();
+  Q_ASSERT(range->start() != range->end());
+    
     Q_ASSERT(m_editor->currentRange() == prior);
 
     if (isForward) {
@@ -477,7 +479,7 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
   //We override this so we can get the class-declaration into a usable state(with filled type) earlier
     DUChainWriteLocker lock(DUChain::lock());
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
 
     if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
         idType->setDeclaration( currentDeclaration() );
@@ -509,7 +511,11 @@ void DeclarationBuilder::closeDeclaration()
     }
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
-       currentDeclaration()->setInternalContext(m_lastContext);
+      currentDeclaration()->setInternalContext(m_lastContext);
+      
+      if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )
+        kDebug() << "Warning: Range was invalidated" << endl;
+      
       m_lastContext = 0;
     }
   }

@@ -158,6 +158,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   m_compilingContexts = false;
 
   if (!m_importedParentContexts.isEmpty()) {
+    DUChainReadLocker lock(DUChain::lock());
     kWarning() << k_funcinfo << file->url() << "Previous parameter declaration context didn't get used??" ;
     DumpChain dump;
     dump.dump(topLevelContext);
@@ -388,10 +389,6 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
           readLock.unlock();
           DUChainWriteLocker writeLock(DUChain::lock());
 
-/*          //Upgrade to a smart-range
-          if( !ret->smartRange() && m_editor->smart() )
-            ret->setTextRange(m_editor->createRange(range));*/
-
           ret->clearNamespaceAliases();
           ret->clearImportedParentContexts();
           m_editor->setCurrentRange(ret->textRangePtr());
@@ -413,6 +410,9 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
         if (type == DUContext::Class || type == DUContext::Namespace)
           SymbolTable::self()->addContext(ret);
       }
+
+      if( recompiling() )
+        kDebug(9007) << "created new context while recompiling for " << identifier.toString() << "(" << ret->textRange() << ")";
     }
   }
 

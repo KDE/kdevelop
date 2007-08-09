@@ -185,8 +185,14 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           }
           if (dec->abstractType()) {
             if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
+              ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
+              
               if (functionType->returnType())
                 return functionType->returnType()->toString();
+              else if(funDecl && funDecl->isConstructor() )
+                return "<constructor>";
+              else if(funDecl && funDecl->isDestructor() )
+                return "<destructor>";
               else
                 return "<incomplete type>";
 
@@ -475,16 +481,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
     if( completionContext->memberAccessContainer().isValid() )
     {
       AbstractType::Ptr containerType = completionContext->memberAccessContainer().type;
-      if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::ArrowMemberAccess ) {
-        //Dereference a pointer
-        CppPointerType* pnt = dynamic_cast<CppPointerType*>(realType(containerType.data()));
-        if( !pnt ) {
-          kDebug(9007) << "Arrow-operator on non-pointer type";
-          containerType = AbstractType::Ptr();
-        } else {
-          containerType = pnt->baseType();
-        }
-      }
+      
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>( realType(containerType.data()) );
       if( idType && idType->declaration() ) {
         DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
@@ -500,7 +497,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
       }
     } else {
       m_declarations.clear();
-      foreach( Declaration* decl, m_context->allDeclarations(position).values() )
+      foreach( Declaration* decl, m_context->allDeclarations(m_context->type() == DUContext::Class ? m_context->textRange().end() : position).values() )
         m_declarations << DeclarationContextPair( decl, completionContext );
       kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible:" << m_declarations.count();
     }
