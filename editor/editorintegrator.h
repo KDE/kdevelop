@@ -141,7 +141,7 @@ public:
 
   /**
    * Create a text range over \a range as a child range of the current range.
-   * The returned range will become the new currentRange().
+   * The returned range will become the new currentRange(), and will be put upon the range-stack.
    *
    * If the current document is loaded, and it supports creating smart ranges,
    * this will be a smart range, otherwise it will be a DocumentRange.
@@ -188,17 +188,17 @@ public:
   };
 
   /**
-   * Returns the current text range.
+   * Returns the most current text range.
    */
   KTextEditor::Range* currentRange() const;
 
   /**
-   * Sets the current range to \a range.
+   * Sets the current range to \a range. It is put upon the range-stack.
    */
   void setCurrentRange(KTextEditor::Range* range);
 
   /**
-   * Sets the parent range to be the new current range.
+   * Sets the previous range on the stack to be the new current range.
    */
   void exitCurrentRange();
 
