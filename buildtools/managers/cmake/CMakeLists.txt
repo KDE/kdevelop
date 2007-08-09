@@ -7,6 +7,7 @@ include_directories(
  ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
  ${KDEVPLATFORM_INCLUDE_DIR}/util
  ${CMAKE_CURRENT_SOURCE_DIR}/parser
+ ${CMAKE_SOURCE_DIR}/buildtools/builders/cmakebuilder/
 )
 add_subdirectory(tests)
 

@@ -11,5 +11,7 @@
     </entry>
     <entry name="generator" key="Generator" type="String">
     </entry>
+    <entry name="cmakebin" key="CMake Binary" type="Url">
+    </entry>
   </group>
 </kcfg>

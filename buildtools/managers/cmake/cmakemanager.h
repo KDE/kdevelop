@@ -35,19 +35,20 @@ class QObject;
 
 namespace KDevelop
 {
-class IProject;
-class ProjectItem;
-class ProjectFolderItem;
-class ProjectBaseItem;
-class ProjectFileItem;
-class ProjectTargetItem;
-class IProjectBuilder;
+    class IProject;
+    class ProjectItem;
+    class ProjectFolderItem;
+    class ProjectBaseItem;
+    class ProjectFileItem;
+    class ProjectTargetItem;
+    class IProjectBuilder;
 }
 
 class CMakeFolderItem;
 class MacroAst;
 
 class cmLocalGenerator;
+class ICMakeBuilder;
 
 class CMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
@@ -60,7 +61,7 @@ public:
     virtual ~CMakeProjectManager();
     virtual Features features() const { return Features(Folders | Targets | Files); }
 //     virtual KDevelop::IProject* project() const;
-    virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const { return 0; }
+    virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const;
     virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual KUrl::List preprocessorDefines(KDevelop::ProjectBaseItem *) const { return KUrl::List(); }
@@ -100,13 +101,14 @@ private:
     QStringList resolveVariables(const QStringList & vars);
     KDevelop::IProject* m_project;
     CMakeFolderItem* m_rootItem;
-    KDevelop::IProjectBuilder* m_builder;
+//     KDevelop::IProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
     CMakeListsParser m_parser;
     VariableMap m_vars;
     MacroMap m_macros;
 //     ProjectInfo m_projectInfo;
+    ICMakeBuilder* m_builder;
 };
 
 #endif

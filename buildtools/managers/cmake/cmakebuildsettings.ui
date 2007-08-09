@@ -13,97 +13,115 @@
    <string/>
   </property>
   <layout class="QGridLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>6</number>
-   </property>
-   <property name="verticalSpacing" >
-    <number>6</number>
-   </property>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_2" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label_5" >
      <property name="text" >
-      <string>Build &amp;type:</string>
+      <string>&amp;CMake binary:</string>
      </property>
      <property name="alignment" >
-      <set>Qt::AlignCenter|Qt::AlignHorizontal_Mask|Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
-     </property>
-     <property name="buddy" >
-      <cstring>kcfg_buildType</cstring>
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" >
+   <item row="0" column="1" >
+    <widget class="KUrlRequester" name="kcfg_cmakebin" />
+   </item>
+   <item row="1" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >
       <string>Installation &amp;Prefix:</string>
      </property>
      <property name="alignment" >
-      <set>Qt::AlignCenter|Qt::AlignHorizontal_Mask|Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_4" >
-     <property name="text" >
-      <string>&amp;Generator:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter|Qt::AlignHorizontal_Mask|Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
-     </property>
-     <property name="buddy" >
-      <cstring>kcfg_buildType</cstring>
-     </property>
-    </widget>
+   <item row="1" column="1" >
+    <widget class="KUrlRequester" name="kcfg_installPrefix" />
    </item>
-   <item row="3" column="1" >
-    <widget class="QComboBox" name="kcfg_generator" />
-   </item>
-   <item row="4" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>362</width>
-       <height>61</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QLineEdit" name="kcfg_buildType" />
-   </item>
-   <item row="1" column="0" >
+   <item row="2" column="0" >
     <widget class="QLabel" name="label_3" >
      <property name="text" >
       <string>Build &amp;directory:</string>
      </property>
      <property name="alignment" >
-      <set>Qt::AlignCenter|Qt::AlignHorizontal_Mask|Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
      </property>
      <property name="buddy" >
       <cstring>kcfg_buildFolder</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="2" column="1" >
     <widget class="QLineEdit" name="kcfg_buildFolder" />
    </item>
-   <item row="0" column="1" >
-    <widget class="KUrlRequester" name="kcfg_installPrefix" />
+   <item row="3" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Build &amp;type:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QComboBox" name="kcfg_buildType" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+     <property name="currentIndex" >
+      <number>-1</number>
+     </property>
+     <item>
+      <property name="text" >
+       <string>debugfull</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>debug</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>release</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="label_4" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>&amp;Generator:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QComboBox" name="kcfg_generator" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>455</width>
+       <height>61</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -115,9 +133,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>kcfg_buildType</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

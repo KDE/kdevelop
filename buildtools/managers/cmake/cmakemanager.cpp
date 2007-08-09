@@ -31,6 +31,7 @@
 
 #include <icore.h>
 #include <iproject.h>
+#include <iplugincontroller.h>
 #include "kgenericfactory.h"
 #include <projectmodel.h>
 
@@ -40,22 +41,22 @@
 #include "cmakeastvisitor.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakeexport.h"
+#include "icmakebuilder.h"
 
 typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager,
-                            CMakeSupportFactory( "kdevcmakemanager" ) )
+K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager, CMakeSupportFactory( "kdevcmakemanager" ) )
 
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QStringList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
-/*    CMakeSettings* settings = CMakeSettings::self();
-
-    //what do the settings say about our generator?
-    QString generator = settings->generator();
-    if ( generator.contains( "Unix" ) ) //use make
-        m_builder = new KDevMakeBuilder()*/
+    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.ICMakeBuilder" );
+    Q_ASSERT(i);
+    if( i )
+    {
+        m_builder = i->extension<ICMakeBuilder>();
+    }
 }
 
 CMakeProjectManager::~CMakeProjectManager()
@@ -77,6 +78,7 @@ QStringList CMakeProjectManager::resolveVariables(const QStringList & vars)
 
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {
+    kDebug(9032) << "Build folder: " << item->project()->folder();
     return item->project()->folder();
 }
 
@@ -220,3 +222,8 @@ KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *it
 #include "cmakemanager.moc"
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
+
+KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectItem *) const
+{
+    return m_builder;
+}
