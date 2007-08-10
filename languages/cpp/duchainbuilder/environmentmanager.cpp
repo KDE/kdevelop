@@ -37,7 +37,7 @@ EnvironmentManager::~EnvironmentManager() {
 }
 
 void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file ) {
-  ifDebug( kDebug( 9007 ) << "EnvironmentManager: adding an instance of" << file->url() << endl );
+  ifDebug( kDebug( 9007 ) << "EnvironmentManager: adding an instance of" << file->url()  );
 
   std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->hashedUrl() );
 
@@ -61,7 +61,7 @@ void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file 
 }
 
 void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& file ) {
-  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: removing an instance of" << file->url() << endl );
+  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: removing an instance of" << file->url()  );
 
   std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->hashedUrl() );
 
@@ -74,7 +74,7 @@ void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& fi
       files.first++;
     }
   }
-  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: new count of cached instances for the file:" << cnt << endl );
+  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: new count of cached instances for the file:" << cnt  );
 }
 
 EnvironmentFilePointer EnvironmentManager::lexedFile( const KUrl& url, const rpp::Environment* environment )  {
@@ -102,8 +102,9 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
   while ( files.first != files.second ) {
     const EnvironmentFile& file( *( *( files.first ) ).second );
     if ( hasSourceChanged( file ) ) {
-      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file" << fileName.str() << "is being discarded because the file was modified" << endl );
-      m_files.erase( files.first++ ); ///@todo give notification to du-chain
+      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file" << fileName.str() << "is being discarded because the file was modified"  );
+      m_files.erase( files.first++ );
+       ///@todo give notification to du-chain
       continue;
     }
     bool success = true;
@@ -119,7 +120,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
         if ( file.m_usedMacros.hasMacro( it.key() ) ) {
           rpp::pp_macro m( file.m_usedMacros.macro(it.key() ) );
           if ( !( m == **it ) ) {
-            ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << it.key() << "\" and used a macro for it with the body \"" << m.definition << "\"(from" << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), cache is not used" << endl );
+            ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << it.key() << "\" and used a macro for it with the body \"" << m.definition << "\"(from" << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), cache is not used"  );
 
             //rpp::pp_macro with the same name was used, but it is different
             success = false;
@@ -128,7 +129,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
 
         } else {
           //There is a macro that affects the file, but was not used while the previous parse
-          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << ( it ).key() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), the cached file is not used" << endl );
+          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << ( it ).key() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), the cached file is not used"  );
           success = false;
           break;
         }
@@ -138,14 +139,14 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
   MacroSet::Macros::const_iterator end2 = file.usedMacros().macros().end();
     for ( MacroSet::Macros::const_iterator it = file.usedMacros().macros().begin(); it != end2; ++it ) {
       if ( !environment->retrieveMacro( ( *it ).name ) ) {
-        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "used a macro called \"" << it->name << "\"(from" << it->file << "), but the driver does not contain that macro, the cached file is not used" << endl );
+        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "used a macro called \"" << it->name << "\"(from" << it->file << "), but the driver does not contain that macro, the cached file is not used"  );
         success = false;
         break;
       }
     }
 
     if ( success ) {
-      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: Using cached file" << fileName.str() << endl );
+      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: Using cached file" << fileName.str()  );
       (*files.first).second->access();
       return ( *files.first ).second;
     }
@@ -154,7 +155,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
   return EnvironmentFilePointer();
 }
 
-QDateTime EnvironmentManager::fileModificationTimeCached( const HashedString& fileName ) {
+QDateTime EnvironmentManager::fileModificationTimeCached( const HashedString& fileName ) const {
   FileModificationMap::const_iterator it = m_fileModificationCache.find( fileName );
   if( it != m_fileModificationCache.end() ) {
     ///Use the cache for 10 seconds
@@ -172,20 +173,20 @@ QDateTime EnvironmentManager::fileModificationTimeCached( const HashedString& fi
 }
 
 //Should be cached too!
-bool EnvironmentManager::hasSourceChanged( const EnvironmentFile& file ) {
+bool EnvironmentManager::hasSourceChanged( const EnvironmentFile& file ) const {
   //@todo Check if any of the dependencies changed
 
-  QDateTime modTime = fileModificationTimeCached( file.url().path() );
+  ModificationRevision revision = EditorIntegrator::modificationRevision( file.url() );
 
-  if ( modTime != file.modificationTime() ) {
-    ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged:" << file.url() << "has changed, stored stamp:" << file.modificationTime() << "new time:" << modTime << endl );
+  if ( revision != file.modificationRevision() ) {
+    ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged:" << file.url() << "has changed, stored stamp:" << file.modificationRevision() << "new time:" << revision  );
     return true;
   }
 
-  for( QMap<HashedString, QDateTime>::const_iterator it = file.allModificationTimes().begin(); it != file.allModificationTimes().end(); ++it ) {
-    QDateTime modTime = fileModificationTimeCached( it.key() );
-    if( modTime != *it ) {
-      ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged: dependency" << it.key().str() << "has changed" << endl );
+  for( QMap<HashedString, ModificationRevision>::const_iterator it = file.allModificationTimes().begin(); it != file.allModificationTimes().end(); ++it ) {
+    ModificationRevision revision = EditorIntegrator::modificationRevision( file.url() );
+    if( revision != *it ) {
+      ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged: dependency" << it.key().str() << "has changed"  );
       return true;
     }
   }
@@ -209,13 +210,13 @@ void EnvironmentManager::erase( const CacheNode* node ) {
     }
       files.first++;
   }
-  ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url() << endl );
+  ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url()  );
 }
 
 EnvironmentFile::EnvironmentFile( const KUrl& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_url( fileName ) {
   QFileInfo fileInfo( fileName.path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
-  ifDebug( kDebug(9007) << "EnvironmentFile::EnvironmentFile: created for" << fileName << "modification-time:" << m_modificationTime << endl );
+  ifDebug( kDebug(9007) << "EnvironmentFile::EnvironmentFile: created for" << fileName << "modification-time:" << m_modificationTime  );
 
   m_hashedUrl = fileName.prettyUrl(KUrl::RemoveTrailingSlash);
   addIncludeFile( m_hashedUrl, m_modificationTime );
@@ -262,7 +263,7 @@ void EnvironmentFile::setIncludePaths( const KUrl::List& paths ) {
 }
 
 ///Should contain a modification-time for each included-file
-const QMap<HashedString, QDateTime>& EnvironmentFile::allModificationTimes() const {
+const QMap<HashedString, KDevelop::ModificationRevision>& EnvironmentFile::allModificationTimes() const {
   return m_allModificationTimes;
 }
 
@@ -274,13 +275,16 @@ HashedString EnvironmentFile::hashedUrl() const {
   return m_hashedUrl;
 }
 
-void EnvironmentFile::addIncludeFile( const HashedString& file, const QDateTime& modificationTime ) {
+void EnvironmentFile::addIncludeFile( const HashedString& file, const ModificationRevision& modificationTime ) {
   m_includeFiles.insert( file );
   m_allModificationTimes[file] = modificationTime;
 }
 
+void EnvironmentFile::setModificationRevision( const KDevelop::ModificationRevision& rev ) {
+  m_modificationTime = rev;
+}
 
-QDateTime EnvironmentFile::modificationTime() const {
+KDevelop::ModificationRevision EnvironmentFile::modificationRevision() const {
   return m_modificationTime;
 }
 
@@ -295,7 +299,7 @@ QList<Problem>  EnvironmentFile::problems() const {
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
 #ifdef LEXERCACHE_DEBUG
-  kDebug( 9007 ) << url() << ": merging" << file.url() << endl << "defined in this:" << m_definedMacroNames.print().c_str() << endl << "defined macros in other:" << file.m_definedMacroNames.print().c_str();;
+  kDebug( 9007 ) << url() << ": merging" << file.url()  << "defined in this:" << m_definedMacroNames.print().c_str()  << "defined macros in other:" << file.m_definedMacroNames.print().c_str();;
 #endif
   HashedStringSet tempStrings = file.m_strings;
   tempStrings -= m_definedMacroNames;
@@ -314,7 +318,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   m_definedMacros.merge( file.m_definedMacros );
   m_definedMacroNames += file.m_definedMacroNames;
 
-  for( QMap<HashedString, QDateTime>::const_iterator it = file.m_allModificationTimes.begin(); it != file.m_allModificationTimes.end(); ++it )
+  for( QMap<HashedString, KDevelop::ModificationRevision>::const_iterator it = file.m_allModificationTimes.begin(); it != file.m_allModificationTimes.end(); ++it )
     m_allModificationTimes[it.key()] = *it;
 
 
@@ -344,7 +348,6 @@ int EnvironmentManager::type() const {
   return CppParsingEnvironment;
 }
 
-
 void EnvironmentManager::saveMemory() {
   m_fileModificationCache.clear();
 
@@ -355,20 +358,20 @@ void EnvironmentManager::saveMemory() {
 void EnvironmentManager::addFile( ParsingEnvironmentFile* file ) {
   EnvironmentFile* cfile = dynamic_cast<EnvironmentFile*>(file);
   if( !cfile ) {
-    kDebug(9007) << "EnvironmentManager::addFile() called with a non-CachedLexFile of type" << file->type();
+    kDebug(9007) << "EnvironmentManager::addFile() called with a non-cpp EnvironmentFile of type" << file->type();
     return;
   }
-  ifDebug( kDebug(9007) << "EnvironmentManager::addFile" << cfile->url() << endl );
+  ifDebug( kDebug(9007) << "EnvironmentManager::addFile" << cfile->url()  );
   addEnvironmentFile(EnvironmentFilePointer(cfile));
 }
 ///Remove a file from the manager
 void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
   EnvironmentFile* cfile = dynamic_cast<EnvironmentFile*>(file);
   if( !cfile ) {
-    kDebug(9007) << "EnvironmentManager::removeFile() called with a non-CachedLexFile of type" << file->type();
+    kDebug(9007) << "EnvironmentManager::removeFile() called with a non-cpp EnvironmentFile of type" << file->type();
     return;
   }
-  ifDebug( kDebug(9007) << "EnvironmentManager::removeFile" << cfile->url() << endl );
+  ifDebug( kDebug(9007) << "EnvironmentManager::removeFile" << cfile->url()  );
   removeEnvironmentFile(EnvironmentFilePointer(cfile));
 }
 

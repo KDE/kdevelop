@@ -25,6 +25,7 @@
 
 
 #include <QFile>
+#include <QFileInfo>
 #include <QByteArray>
 #include <QMutexLocker>
 
@@ -126,6 +127,8 @@ void PreprocessJob::run()
 
     QString contents;
 
+    QFileInfo fileInfo( parentJob()->document().toLocalFile() );
+    
     if ( readFromDisk )
     {
         QFile file( parentJob()->document().toLocalFile() );
@@ -140,6 +143,8 @@ void PreprocessJob::run()
         contents = QString::fromUtf8( fileData.constData() );
     //        Q_ASSERT( !contents.isEmpty() );
         file.close();
+        
+        m_environmentFile->setModificationRevision( KDevelop::ModificationRevision(fileInfo.lastModified()) );
     }
     else
     {
@@ -160,6 +165,7 @@ void PreprocessJob::run()
         }*/
 
         contents = parentJob()->contentsFromEditor(true);
+        m_environmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
     }
 
     kDebug( 9007 ) << "===-- PREPROCESSING --===> "

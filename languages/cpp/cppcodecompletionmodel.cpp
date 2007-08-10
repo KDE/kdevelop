@@ -73,7 +73,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
   KUrl url = view->document()->url();
   if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
-    kDebug(9007) << "completion invoked for context" << top;
+    kDebug(9007) << "completion invoked for context" << (DUContext*)top;
     DUContextPointer thisContext;
     {
       DUChainReadLocker lock(DUChain::lock());
