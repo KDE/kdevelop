@@ -76,7 +76,14 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
   ENSURE_CHAIN_WRITE_LOCKED
 
   removeFromEnvironmentManager( context );
+  
+  if( context->parsingEnvironmentFile() )
+    sdDUChainPrivate->m_chains.remove( context->parsingEnvironmentFile()->identity() );
+  
   context->setParsingEnvironmentFile( file );
+  
+  sdDUChainPrivate->m_chains.insert( context->parsingEnvironmentFile()->identity(), context );
+  
   addToEnvironmentManager( context );
 }
 
@@ -102,7 +109,7 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
     QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(firstDoc);
 
     ModificationRevision rev = EditorIntegrator::modificationRevision( document.url() );
-        
+
     for( ;it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); )
     {
       ModificationRevision thisRev = (*it)->parsingEnvironmentFile()->modificationRevision();
@@ -123,8 +130,9 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
       ++it;
     }
   }
-  
+
   sdDUChainPrivate->m_chains.insert(document, chain);
+  kDebug() << "new count of chains: " << sdDUChainPrivate->m_chains.count() << endl;
   chain->setInDuChain(true);
   addToEnvironmentManager(chain);
 }
@@ -186,6 +194,8 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) cons
   } else if (sdDUChainPrivate->m_chains.contains(document))
     return sdDUChainPrivate->m_chains[document];
 
+  kDebug() << "No chain found for document " << document.toString() << endl;
+    
   return 0;
 }
 

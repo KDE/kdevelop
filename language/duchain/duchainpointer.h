@@ -27,6 +27,7 @@
 namespace KDevelop {
 
 class DUContext;
+class TopDUContext;
 class DUChainBase;
 class Declaration;
 class AbstractFunctionDeclaration;
@@ -153,6 +154,7 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
   };
 
   typedef DUChainPointer<DUContext> DUContextPointer;
+  typedef DUChainPointer<TopDUContext> TopDUContextPointer;
   typedef DUChainPointer<Declaration> DeclarationPointer;
   typedef DUChainPointer<Use> UsePointer;
   typedef DUChainPointer<Definition> DefinitionPointer;
