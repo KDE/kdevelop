@@ -68,7 +68,20 @@ void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
   {
     QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
 
+//     m_localDeclarations.append(newDeclaration);
+
+  bool inserted = false;
+  for (int i = 0; i < m_localDeclarations.count(); ++i) {
+    Declaration* child = m_localDeclarations.at(i);
+    if (newDeclaration->textRange().start() < child->textRange().start()) {
+      m_localDeclarations.insert(i, newDeclaration);
+      inserted = true;
+      break;
+    }
+  }
+  if( !inserted )
     m_localDeclarations.append(newDeclaration);
+      
     m_localDeclarationsHash.insert( newDeclaration->identifier(), DeclarationPointer(newDeclaration) );
   }
 
@@ -99,16 +112,20 @@ void DUContextPrivate::addChildContext( DUContext * context )
 {
   // Internal, don't need to assert a lock
 
+  bool inserted = false;
   for (int i = 0; i < m_childContexts.count(); ++i) {
     DUContext* child = m_childContexts.at(i);
     if (context->textRange().start() < child->textRange().start()) {
       m_childContexts.insert(i, context);
       context->d->m_parentContext = m_context;
-      return;
+      inserted = true;
+      break;
     }
   }
-  m_childContexts.append(context);
-  context->d->m_parentContext = m_context;
+  if( !inserted ) {
+    m_childContexts.append(context);
+    context->d->m_parentContext = m_context;
+  }
 
   DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
 }
