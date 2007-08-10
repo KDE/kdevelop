@@ -283,6 +283,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 {
   DUChainWriteLocker lock(DUChain::lock());
 
+  if( isFunction && !m_functionDefinedStack.isEmpty() )
+        isDefinition |= (bool)m_functionDefinedStack.top();
+  
   Declaration::Scope scope = Declaration::GlobalScope;
   switch (currentContext()->type()) {
     case DUContext::Namespace:
@@ -329,18 +332,20 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       translated = m_editor->smart()->translateFromRevision(translated);
     Q_ASSERT(translated.start() != translated.end());
 
-    for (; nextDeclaration() < currentContext()->localDeclarations().count(); ++nextDeclaration()) {
-      Declaration* dec = currentContext()->localDeclarations().at(nextDeclaration());
+    foreach( Declaration* dec, currentContext()->allLocalDeclarations(lastId) ) {
 
-      if (dec->textRange().start() > translated.end() && dec->smartRange()) //Only break the loop if it is a smartrange, because if it is not one, it could not adapt to changes and hide valid smart-ranges that are in the order behind.
-        break;
+      if( wasEncountered(dec) )
+        continue;
+
       //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->textRange() == translated &&
           dec->scope() == scope &&
-          (id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && lastId == dec->identifier()) &&
-          dec->isDefinition() == isDefinition && dec->isTypeAlias() == m_inTypedef)
+          ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && lastId == dec->identifier())) &&
+           dec->isDefinition() == isDefinition &&
+          dec->isTypeAlias() == m_inTypedef &&
+          (!hasTemplateContext(m_importedParentContexts) || dynamic_cast<TemplateDeclaration*>(dec))
+         )
       {
-        ///@todo differentiate template-parameter declarations and all the template-stuff
         if (isForward) {
           if (!dynamic_cast<ForwardDeclaration*>(dec))
             break;
@@ -394,10 +399,6 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       } else {
         declaration = specialDeclaration<FunctionDeclaration>(range, scope );
       }
-
-      if (!m_functionDefinedStack.isEmpty())
-        declaration->setDeclarationIsDefinition(m_functionDefinedStack.top());
-
     } else if (scope == Declaration::ClassScope) {
         declaration = specialDeclaration<ClassMemberDeclaration>(range );
     } else if( currentContext()->type() == DUContext::Template ) {
@@ -417,8 +418,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       declaration->setIdentifier(id.last());
     }
 
-    if (isDefinition)
-      declaration->setDeclarationIsDefinition(true);
+    declaration->setDeclarationIsDefinition(isDefinition);
 
     if (currentContext()->type() == DUContext::Class) {
       if(dynamic_cast<ClassMemberDeclaration*>(declaration)) //It may also be a forward-declaration, not based on ClassMemberDeclaration!
