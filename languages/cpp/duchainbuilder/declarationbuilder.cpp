@@ -66,9 +66,9 @@ DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
 {
 }
 
-TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes)
+TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes, const TopDUContextPointer& updateContext)
 {
-  TopDUContext* top = buildContexts(file, node, includes);
+  TopDUContext* top = buildContexts(file, node, includes, updateContext);
 
   Q_ASSERT(m_accessPolicyStack.isEmpty());
   Q_ASSERT(m_functionDefinedStack.isEmpty());

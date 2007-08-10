@@ -121,7 +121,7 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   --m_templateDeclarationDepth;
 }
 
-TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes)
+TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes, const TopDUContextPointer& updateContext)
 {
   m_compilingContexts = true;
 
@@ -130,7 +130,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   TopDUContext* topLevelContext = 0;
   {
     DUChainWriteLocker lock(DUChain::lock());
-    topLevelContext = DUChain::self()->chainForDocument(file->identity());
+    topLevelContext = updateContext.data();
 
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";

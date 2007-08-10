@@ -86,7 +86,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
 
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
-    m_standardMarcos = new Cpp::MacroSet;
+    m_standardMacros = new Cpp::MacroSet;
     m_standardIncludePaths = new QStringList;
     m_environmentManager = new Cpp::EnvironmentManager;
     {
@@ -98,7 +98,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     // Retrieve the standard include paths & macro definitions for this machine.
     // Uses gcc commands to retrieve the information.
     CppTools::setupStandardIncludePaths(*m_standardIncludePaths);
-    CppTools::setupStandardMacros(*m_standardMarcos);
+    CppTools::setupStandardMacros(*m_standardMacros);
     
     connect( core()->documentController(),
              SIGNAL( documentLoaded( KDevelop::IDocument* ) ),
@@ -139,10 +139,14 @@ CppLanguageSupport::~CppLanguageSupport()
         DUChain::self()->removeParsingEnvironmentManager(m_environmentManager);
     }
 
-    delete m_standardMarcos;
+    delete m_standardMacros;
     delete m_standardIncludePaths;
     delete m_environmentManager;
     delete m_includeResolver;
+}
+
+const Cpp::MacroSet& CppLanguageSupport::standardMacros() const {
+    return *m_standardMacros;
 }
 
 CppLanguageSupport* CppLanguageSupport::self() {

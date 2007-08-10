@@ -159,6 +159,14 @@ const CPPParseJob* CPPParseJob::masterJob() const {
         return this;
 }
 
+void CPPParseJob::setUpdatingContext( const TopDUContextPointer& context ) {
+    m_updatingContext = context;
+}
+
+TopDUContextPointer CPPParseJob::updatingContext() const {
+    return m_updatingContext;
+}
+
 CppLanguageSupport * CPPParseJob::cpp() const
 {
     Q_ASSERT( parent() || parentPreprocessor() );
@@ -280,7 +288,7 @@ void CPPInternalParseJob::run()
               editor.smart()->useRevision(parentJob()->revisionToken());
 
             DeclarationBuilder declarationBuilder(&editor);
-            topContext = declarationBuilder.buildDeclarations(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), ast, &chains);
+            topContext = declarationBuilder.buildDeclarations(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), ast, &chains, parentJob()->updatingContext());
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();

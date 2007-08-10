@@ -85,7 +85,6 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
 
         virtual void setMacro(rpp::pp_macro* macro) {
             //Note defined macros
-            m_environmentFile->addDefinedMacro(*macro);
             rpp::Environment::setMacro(macro);
         }
 
@@ -104,6 +103,13 @@ PreprocessJob::PreprocessJob(CPPParseJob * parent)
     , m_success(true)
 {
     m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
+}
+
+KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
+    CppPreprocessEnvironment* ret = new CppPreprocessEnvironment(0, Cpp::EnvironmentFilePointer());
+    ret->merge( CppLanguageSupport::self()->standardMacros() );
+            
+    return ret;
 }
 
 CPPParseJob * PreprocessJob::parentJob() const
@@ -186,9 +192,20 @@ void PreprocessJob::run()
     m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_environmentFile );
 
     //If we are included from another preprocessor, copy it's macros
-    if( parentJob()->parentPreprocessor() )
-            m_currentEnvironment->swapMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
+    if( parentJob()->parentPreprocessor() ) {
+        m_currentEnvironment->swapMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
+    } else {
+        //Insert standard-macros
+        KDevelop::ParsingEnvironment* standardEnv = createStandardEnvironment();
+        m_currentEnvironment->swapMacros( dynamic_cast<CppPreprocessEnvironment*>(standardEnv) );
+        delete standardEnv;
+    }
 
+    {
+        ///Find a context that can be updated
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+        parentJob()->setUpdatingContext( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment) );
+    }
 
     preprocessor.setEnvironment( m_currentEnvironment );
     preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);

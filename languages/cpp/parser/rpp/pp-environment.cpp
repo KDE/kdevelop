@@ -168,7 +168,7 @@ void Environment::clearMacro(const QString& name)
 
 void Environment::setMacro(pp_macro* macro)
 {
-  if (!m_replaying)
+  if (!m_replaying && !m_blocks.isEmpty())
     m_blocks.top()->macros.append(macro);
 
   if( !macro->defined )

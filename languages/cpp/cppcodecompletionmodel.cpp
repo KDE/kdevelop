@@ -39,12 +39,15 @@
 #include <classfunctiondeclaration.h>
 #include <ducontext.h>
 #include <duchain.h>
+#include <parsingenvironment.h>
+#include <editorintegrator.h>
 #include <duchainlock.h>
 #include <duchainbase.h>
 #include <topducontext.h>
 #include "dumpchain.h"
 #include "codecompletioncontext.h"
 #include "navigationwidget.h"
+#include "preprocessjob.h"
 
 
 using namespace KTextEditor;
@@ -72,8 +75,27 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   m_navigationWidgets.clear();
 
   KUrl url = view->document()->url();
-  if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
+  TopDUContext* top = 0;
+  
+  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
+  {
+    KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+    top = KDevelop::DUChain::self()->chainForDocument(url, env);
+  }
+  delete env;
+
+  if( !top ) {
+    kDebug() << "Could not find perfectly matching version of " << url << " for completion";
+    top = DUChain::self()->chainForDocument(url);
+  }
+  
+  if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;
+
+    if( top->parsingEnvironmentFile()->modificationRevision() != EditorIntegrator::modificationRevision(url) ) {
+      kDebug(9007) << "Found context is not current. It's revision is " << top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << EditorIntegrator::modificationRevision(url);
+    }
+    
     DUContextPointer thisContext;
     {
       DUChainReadLocker lock(DUChain::lock());

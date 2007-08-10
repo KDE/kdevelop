@@ -33,6 +33,10 @@ namespace Cpp {
     class EnvironmentFile;
 }
 
+namespace KDevelop {
+    class ParsingEnvironment;
+}
+
 class CppPreprocessEnvironment;
 
 class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
@@ -50,6 +54,15 @@ public:
     //Must only be called for direct parsing when the job is not queued
     virtual void run();
 
+    /**
+     * Returns the standard-environment used for parsing c++ files(all other environments are based on that one)
+     * The returned environment can be dynamic_casted to rpp::Environment.
+     *
+     * The returned environment is created exclusively for you, and you must destroy it.
+     *
+     * It can be used for matching, but it cannot be used for parsing.
+     * */
+    static KDevelop::ParsingEnvironment* createStandardEnvironment();
 private:
     bool checkAbort();
 

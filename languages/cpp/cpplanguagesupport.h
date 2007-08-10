@@ -61,6 +61,8 @@ public:
     KUrl::List findIncludePaths(const KUrl& source) const;
 
     static CppLanguageSupport* self();
+
+    const Cpp::MacroSet& standardMacros() const;
     
 private slots:
     void documentLoaded(KDevelop::IDocument*);
@@ -74,7 +76,7 @@ private:
     CppHighlighting *m_highlights;
     CppCodeCompletion *m_cc;
     Cpp::EnvironmentManager* m_environmentManager;
-    Cpp::MacroSet *m_standardMarcos;
+    Cpp::MacroSet *m_standardMacros;
     QStringList *m_standardIncludePaths;
     CppTools::IncludePathResolver *m_includeResolver;
 };

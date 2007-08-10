@@ -29,6 +29,8 @@
 #include <ksharedptr.h>
 #include <ktexteditor/range.h>
 
+#include <duchainpointer.h>
+
 class PreprocessJob;
 class TranslationUnitAST;
 class CppLanguageSupport;
@@ -95,6 +97,9 @@ public:
 
     Cpp::EnvironmentFile* environmentFile();
 
+    void setUpdatingContext( const KDevelop::TopDUContextPointer& context );
+    KDevelop::TopDUContextPointer updatingContext() const;
+    
     ///If this file was included from another, this contains the path within the search-paths that this file was found through
     KUrl includedFromPath() const;
     void setIncludedFromPath( const KUrl& path );
@@ -116,6 +121,8 @@ private:
     KTextEditor::Range m_textRangeToParse;
     IncludeFileList m_includedFiles;
 
+    KDevelop::TopDUContextPointer m_updatingContext;
+    
     KUrl m_includedFromPath;
     mutable bool m_includePathsComputed;
     mutable KUrl::List m_includePaths; //Only a master-job has this set

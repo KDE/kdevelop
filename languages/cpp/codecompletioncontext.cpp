@@ -67,13 +67,13 @@ int CodeCompletionContext::depth() const {
   return m_depth;
 }
 
+int completionRecursionDepth = 0;
+
 CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_depth(depth),  m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
 {
-  static int recursionDepth = 0;
+  IntPusher( completionRecursionDepth, completionRecursionDepth+1 );
 
-  IntPusher( recursionDepth, recursionDepth+1 );
-
-  if( recursionDepth > 10 ) {
+  if( completionRecursionDepth > 10 ) {
     log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
     m_valid = false;
     return;
