@@ -51,7 +51,7 @@ public:
 
     void setMkSpecs( QMakeMkSpecs* mkspecs );
     void setQMakeCache( QMakeCache* cache );
-
+    QString resolveVariables( const QString& value ) const;
 private:
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;

@@ -31,7 +31,7 @@ class QMakeMkSpecs : public QMakeFile
         QMakeMkSpecs( const QString& basicmkspec, const QHash<QString,QString>& variables );
 
         QString qmakeInternalVariable( const QString& ) const;
-        QString resolveVariables( const QString& value ) const;
+
     private:
         QHash<QString,QString> m_qmakeInternalVariables;
 };

@@ -271,4 +271,18 @@ QMakeProjectFile::~QMakeProjectFile()
 {
 }
 
+
+QString QMakeProjectFile::resolveVariables( const QString& value ) const
+{
+    QRegExp mkspecsvar("$$\\[([^\\]])\\]");
+    int pos = 0;
+    QString ret = value;
+    while( pos != -1 )
+    {
+        pos = mkspecsvar.indexIn( value, pos );
+        ret.replace( pos, mkspecsvar.matchedLength(), m_mkspecs->qmakeInternalVariable( mkspecsvar.cap(1) ) );
+    }
+    return ret;
+}
+
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
