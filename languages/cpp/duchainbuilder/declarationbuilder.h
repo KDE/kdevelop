@@ -105,8 +105,6 @@ private:
   template<class DeclarationType>
   DeclarationType* specialDeclaration( KTextEditor::Range* range, int scope );
   
-  inline int& nextDeclaration() { return m_nextDeclarationStack.top(); }
-
   void parseComments(const ListNode<size_t> *comments);
   
   void applyStorageSpecifiers();
@@ -115,7 +113,6 @@ private:
 
   QStack<KDevelop::Declaration*> m_declarationStack;
   QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;
-  QStack<int> m_nextDeclarationStack;
 
   QString m_lastComment;
 

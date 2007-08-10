@@ -743,13 +743,9 @@ void DeclarationBuilder::applyFunctionSpecifiers()
 void DeclarationBuilder::openContext(DUContext * newContext)
 {
   DeclarationBuilderBase::openContext(newContext);
-
-  m_nextDeclarationStack.push(0);
 }
 
 void DeclarationBuilder::closeContext()
 {
   DeclarationBuilderBase::closeContext();
-
-  m_nextDeclarationStack.pop();
 }
