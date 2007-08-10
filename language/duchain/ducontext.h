@@ -344,6 +344,11 @@ public:
   QHash<QualifiedIdentifier, Declaration*> allDeclarations(const KTextEditor::Cursor& position) const;
 
   /**
+   * Return all declarations in this context that have the given \a identifier, without any filtering.
+   * */
+  QList<Declaration*> allLocalDeclarations(const Identifier& identifier) const;
+  
+  /**
    * Find the use which encompasses \a position, if one exists.
    */
   Use* findUseAt(const KTextEditor::Cursor& position) const;

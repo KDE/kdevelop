@@ -476,6 +476,22 @@ DUContext * DUContext::findContext( const KTextEditor::Cursor& position, DUConte
   return 0;
 }
 
+QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier) const
+{
+  ENSURE_CAN_READ
+  QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
+
+  QList<Declaration*> ret;
+  
+  QHash<Identifier, DeclarationPointer>::const_iterator it = d->m_localDeclarationsHash.find(identifier);
+  QHash<Identifier, DeclarationPointer>::const_iterator end = d->m_localDeclarationsHash.end();
+
+  for( ; it != end && it.key() == identifier; ++it )
+    ret << (*it).data();
+
+  return ret;
+}
+
 QHash<QualifiedIdentifier, Declaration*> DUContext::allDeclarations(const KTextEditor::Cursor& position) const
 {
   ENSURE_CAN_READ
