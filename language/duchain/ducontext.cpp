@@ -392,9 +392,9 @@ void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier
       break;
     
     context->findDeclarationsInternal(identifier,  url() == context->url() ? position : context->textRange().end(), dataType, usingNS, ret, flags | InImportedParentContext);
-    if (!ret.isEmpty())
-      return;
   }
+  if( foundEnough(ret) )
+    return;
 
   if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext())
     parentContext()->findDeclarationsInternal(identifier, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, usingNS, ret, flags);

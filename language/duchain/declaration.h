@@ -113,7 +113,7 @@ public:
   /**
    * When setContext(..) is called, this declaration is inserted into the given context.
    * You only need to be able to write this declaration. You do not need write-privileges for the context, because addDeclaration(..) works separately from that.
-   * @param anonymous If this is set, this declaration will be added anonymously into the parent-context. That way it can never be found through any of the context's functions.
+   * @param anonymous If this is set, this declaration will be added anonymously into the parent-context. That way it can never be found through any of the context's functions, and will not be deleted when the context is deleted, so it must be deleted from elsewhere.
    * */
   void setContext(DUContext* context, bool anonymous = false);
 
