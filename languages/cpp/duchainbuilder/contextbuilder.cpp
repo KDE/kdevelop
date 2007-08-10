@@ -146,8 +146,6 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
         if (!topLevelContext->smartRange() && m_editor->smart())
           topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
         
-        m_editor->updateTopRange(topLevelContext->textRangePtr(), EditorIntegrator::DefinitionUseChain);
-        
         if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
           kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
           Q_ASSERT(0);
