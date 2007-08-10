@@ -112,7 +112,8 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
         if (!topLevelContext->smartRange() && m_editor->smart())
           topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
         else
-          Q_ASSERT(topLevelContext->textRange() == m_editor->currentDocument()->documentRange());
+          if (m_editor->currentDocument())
+            Q_ASSERT(topLevelContext->textRange() == m_editor->currentDocument()->documentRange());
       }
 
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
@@ -623,7 +624,7 @@ void ContextBuilder::addImportedContexts()
         if( importedContext->declaration() && importedContext->declaration()->internalContext() == importedContext )
           importedContext->declaration()->setInternalContext(currentContext());
     }
-    
+
     m_importedParentContexts.clear();
   }
 }
