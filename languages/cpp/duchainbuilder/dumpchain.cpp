@@ -26,6 +26,7 @@
 #include <identifiedtype.h>
 #include "cppeditorintegrator.h"
 #include <ducontext.h>
+#include <topducontext.h>
 #include <declaration.h>
 #include <definition.h>
 #include <duchainpointer.h>
@@ -174,7 +175,7 @@ DumpChain::~ DumpChain( )
 
 void DumpChain::dump( DUContext * context, bool imported )
 {
-  kDebug(9007) << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->textRange();
+  kDebug(9007) << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->textRange() << " " << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
   if( !context )
     return;
   if (!imported) {

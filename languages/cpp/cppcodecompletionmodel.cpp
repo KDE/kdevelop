@@ -86,6 +86,9 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
           dump.dump(thisContext.data());
         } else {
           kDebug( 9007 ) << "================== NO CONTEXT FOUND =======================";
+          m_declarations.clear();
+          m_navigationWidgets.clear();
+          reset();
           return;
         }
     }

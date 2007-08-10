@@ -509,6 +509,10 @@ void DeclarationBuilder::closeDeclaration()
 
       currentDeclaration()->setType(lastType());
     }
+
+    if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
+      Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
+    
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
       currentDeclaration()->setInternalContext(m_lastContext);

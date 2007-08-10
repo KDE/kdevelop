@@ -23,6 +23,7 @@
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
+#include <ktexteditor/document.h>
 
 #include <duchain.h>
 #include <duchainlock.h>
@@ -110,6 +111,8 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
         // FIXME remove once conversion works
         if (!topLevelContext->smartRange() && m_editor->smart())
           topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
+        else
+          Q_ASSERT(topLevelContext->textRange() == m_editor->currentDocument()->documentRange());
       }
 
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
