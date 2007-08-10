@@ -42,6 +42,33 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
 
+///Retrieves the first and last item from a list
+template <class _Tp>
+void getFirstLast(AST** first, AST** last, const ListNode<_Tp> *nodes)
+{
+  *first = 0;
+  *last = 0;
+
+  if (!nodes)
+    return;
+
+  const ListNode<_Tp>
+    *it = nodes->toFront(),
+    *end = it;
+
+  do
+    {
+      if( !*first )
+        *first = it->element;
+
+      *last = it->element;
+
+      it = it->next;
+    }
+  while (it != end);
+}
+
+
 ContextBuilder::ContextBuilder (ParseSession* session)
   : m_editor(new CppEditorIntegrator(session))
   , m_nameCompiler(new NameCompiler(session))
@@ -74,7 +101,14 @@ ContextBuilder::~ContextBuilder ()
 
 void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
-  DUContext* ctx = openContext(ast, DUContext::Template, 0); //Open anonymous context for the template-parameters
+  AST* first, *last;
+  getFirstLast(&first, &last, ast->template_parameters);
+  DUContext* ctx = 0;
+
+  if( first && last )
+    ctx = openContext(first, last, DUContext::Template, 0); //Open anonymous context for the template-parameters
+  else
+    ctx = openContextEmpty(ast, DUContext::Template); //Open an empty context, because there are no template-parameters
 
   visitNodes(this,ast->template_parameters);
   closeContext();
@@ -349,6 +383,22 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
   }
 }
 
+DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextType type)
+{
+  if (m_compilingContexts) {
+    KTextEditor::Range range = m_editor->findRange(rangeNode);
+    range.end() = range.start();
+    DUContext* ret = openContextInternal(range, type, QualifiedIdentifier());
+    rangeNode->ducontext = ret;
+    return ret;
+
+  } else {
+    openContext(rangeNode->ducontext);
+    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    return currentContext();
+  }
+}
+
 DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
   if (m_compilingContexts) {
@@ -369,7 +419,6 @@ DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::
     DUContext* ret = openContextInternal(m_editor->findRange(fromRange, toRange), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
     fromRange->ducontext = ret;
     return ret;
-
   } else {
     openContext(fromRange->ducontext);
     m_editor->setCurrentRange(currentContext()->textRangePtr());

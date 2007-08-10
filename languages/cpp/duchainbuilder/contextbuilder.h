@@ -152,6 +152,9 @@ protected:
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
   KDevelop::DUContext* openContext(AST* fromRange, AST* toRange, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
+  //Opens a context of size 0, starting at the given node
+  KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
+  
   KDevelop::DUContext* openContextInternal(const KTextEditor::Range& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
 
   bool createContextIfNeeded(AST* node, const QList<KDevelop::DUContext*>& importedParentContexts);
