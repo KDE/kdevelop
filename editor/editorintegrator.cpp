@@ -21,6 +21,7 @@
 
 #include <limits.h>
 
+#include <QFileInfo>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QStack>
@@ -389,6 +390,48 @@ void EditorIntegrator::exitCurrentRange()
     return;
 
   d->m_currentRangeStack.pop();
+}
+
+ModificationRevision EditorIntegrator::modificationRevision(const KUrl& url) {
+  ///@todo add a cache, use the old code from Cpp::EnvironmentManager
+  ///@todo support non-local files
+
+  QFileInfo fileInfo( url.toLocalFile() );
+  
+  ModificationRevision ret(fileInfo.lastModified());
+
+  KTextEditor::Document* doc = documentForUrl(url);
+  if( doc ) {
+    KTextEditor::SmartInterface* smart =   dynamic_cast<KTextEditor::SmartInterface*>(doc);
+    if( smart )
+      ret.revision = smart->currentRevision();
+  }
+  
+  return ret;
+}
+
+ModificationRevision::ModificationRevision( const QDateTime& modTime , int revision_ ) : modificationTime(modTime), revision(revision_) {
+}
+
+bool ModificationRevision::operator <( const ModificationRevision& rhs ) const {
+  return modificationTime < rhs.modificationTime || (modificationTime == rhs.modificationTime && revision < rhs.revision);
+}
+
+bool ModificationRevision::operator ==( const ModificationRevision& rhs ) const {
+  return modificationTime == rhs.modificationTime && revision == rhs.revision;
+}
+
+bool ModificationRevision::operator !=( const ModificationRevision& rhs ) const {
+  return modificationTime != rhs.modificationTime && revision != rhs.revision;
+}
+
+QString ModificationRevision::toString() const {
+  return QString("%1 (rev %2)").arg(modificationTime.time().toString()).arg(revision);
+}
+
+kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev) {
+  s << rev.toString();
+  return s;
 }
 
 }

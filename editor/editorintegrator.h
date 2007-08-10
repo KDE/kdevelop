@@ -19,12 +19,14 @@
 #ifndef KDEVEDITORINTEGRATOR_H
 #define KDEVEDITORINTEGRATOR_H
 
+#include <QDateTime>
 #include <kurl.h>
 
 #include <ktexteditor/range.h>
 #include <ktexteditor/smartrange.h>
 
 #include <documentcursor.h>
+
 
 class QMutex;
 
@@ -33,7 +35,33 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
 namespace KDevelop
 {
   class DocumentRange;
-    class EditorIntegratorStatic;
+  class EditorIntegratorStatic;
+
+/**
+ * Pairs together a date and a revision-number, for simpler moving around and comparison. Plus some convenience-functions.
+ * Use this to track changes to files, by storing the file-modification time and the editor-revision if applicable(@see KTextEditor::SmartInterface)
+ *
+ * All member-functions directly act on the two members, without additional logic.
+ * 
+ * Does not need a d-pointer, is only a container-class.
+ * */
+struct KDEVPLATFORMEDITOR_EXPORT ModificationRevision
+{
+  ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
+
+  bool operator <( const ModificationRevision& rhs ) const;
+
+  bool operator==( const ModificationRevision& rhs ) const;
+  
+  bool operator!=( const ModificationRevision& rhs ) const;
+
+  QString toString() const;
+
+  QDateTime modificationTime;  //On-disk modification-time of a document
+  int revision;        //SmartInterface revision of a document(0 if the document is not loaded)
+};
+
+KDEVPLATFORMEDITOR_EXPORT kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev);
 
 /**
  * Provides facilities for easy integration of a text editor component with
@@ -204,6 +232,11 @@ public:
    */
   void exitCurrentRange();
 
+  /**
+   * Returns the modification-revision that contains the file-modification time,
+   * and if the document is loaded, the revision-number of it's content.
+   * */
+  static ModificationRevision modificationRevision(const KUrl& url);
 private:
   static KDevelop::EditorIntegratorStatic *data();
   class EditorIntegratorPrivate* const d;

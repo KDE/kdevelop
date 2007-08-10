@@ -37,6 +37,18 @@ public:
   QMap<IdentifiedFile, TopDUContext*> m_chains;
   QList<DUChainObserver*> m_observers;
   QMap<int,ParsingEnvironmentManager*> m_managers;
+
+
+  ParsingEnvironmentManager* managerForType(int type)
+  {
+    QMap<int,ParsingEnvironmentManager*>::const_iterator it = m_managers.find(type);
+
+    if( it != m_managers.end() )
+      return *it;
+    else
+      return 0;
+  }
+  
 };
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
@@ -83,6 +95,35 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
 
   kDebug(9505) << "duchain: adding document" << document.toString();
   Q_ASSERT(chain);
+
+  {
+    ///Remove obsolete versions of the document
+    IdentifiedFile firstDoc( document.url(), 0 );
+    QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(firstDoc);
+
+    ModificationRevision rev = EditorIntegrator::modificationRevision( document.url() );
+        
+    for( ;it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); )
+    {
+      ModificationRevision thisRev = (*it)->parsingEnvironmentFile()->modificationRevision();
+      
+      if( (*it)->parsingEnvironmentFile() && !(thisRev == rev)  )
+      {
+        kDebug(9505) << "duchain: removing obsolete document " << (*it)->parsingEnvironmentFile()->identity().toString() << " from du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
+
+        if( ParsingEnvironmentManager* manager = sdDUChainPrivate->managerForType((*it)->parsingEnvironmentFile()->type() ) )
+          manager->removeFile( (*it)->parsingEnvironmentFile().data() );
+        
+        delete *it;
+        it = sdDUChainPrivate->m_chains.erase(it);
+        continue;
+      } else {
+        kDebug(9505) << "duchain: leaving other version of document " << (*it)->parsingEnvironmentFile()->identity().toString() << " in du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
+      }
+      ++it;
+    }
+  }
+  
   sdDUChainPrivate->m_chains.insert(document, chain);
   chain->setInDuChain(true);
   addToEnvironmentManager(chain);
@@ -127,6 +168,15 @@ TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
 TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) const
 {
   if (!document.identity()) {
+    {
+      int count = 0;
+      QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(document);
+      for( ; it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); ++it )
+        ++count;
+      if( count > 1 )
+        kDebug() << "found " << count << " chains for " << document.url();
+
+    }
     // Match any parsed version of this document
     QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(document);
     if (it != sdDUChainPrivate->m_chains.constEnd())
