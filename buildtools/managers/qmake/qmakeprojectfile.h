@@ -26,6 +26,7 @@
 template <typename T> class QList;
 
 class QMakeMkSpecs;
+class QMakeCache;
 
 class QMakeProjectFile : public QMakeFile
 {
@@ -36,16 +37,24 @@ public:
     QMakeProjectFile( const QString& projectfile );
     ~QMakeProjectFile();
 
+    bool read();
+
     QList<QMakeProjectFile*> subProjects() const;
 
     KUrl::List files() const;
+    KUrl::List filesForTarget( const QString& ) const;
+    KUrl::List includeDirectories() const;
 
     QStringList targets() const;
 
-    void setMkSpecs( QMakeMkSpecs* mkspecs );
+    QString getTemplate() const;
 
+    void setMkSpecs( QMakeMkSpecs* mkspecs );
+    void setQMakeCache( QMakeCache* cache );
+    QString resolveVariables( const QString& value ) const;
 private:
-    QMakeMkSpecs* m_mkSpecs;
+    QMakeMkSpecs* m_mkspecs;
+    QMakeCache* m_cache;
 };
 
 #endif

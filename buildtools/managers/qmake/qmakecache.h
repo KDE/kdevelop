@@ -18,15 +18,21 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef QMAKEINCLUDEFILE_H
-#define QMAKEINCLUDEFILE_H
+#ifndef QMAKECACHE_H
+#define QMAKECACHE_H
 
 #include "qmakefile.h"
 
-class QMakeIncludeFile : public QMakeFile
+class QMakeMkSpecs;
+
+class QMakeCache : public QMakeFile
 {
 public:
-    QMakeIncludeFile( const QString& incfile, const QMap<QString,QStringList>& variables  );
+    QMakeCache( const QString& cachefile );
+    void setMkSpecs( QMakeMkSpecs* specs );
+    bool read();
+private:
+    QMakeMkSpecs* m_mkspecs;
 };
 
 #endif

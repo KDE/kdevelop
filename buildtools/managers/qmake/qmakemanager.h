@@ -34,6 +34,8 @@ class QDir;
 class QObject;
 class KDialogBase;
 class IQMakeBuilder;
+class QMakeCache;
+class QMakeMkSpecs;
 namespace KDevelop
 {
 class IProject;
@@ -105,6 +107,7 @@ Q_SIGNALS:
 private:
     QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
     QString findBasicMkSpec( const QString& mkspecdir ) const;
+    QMakeCache* findQMakeCache( const QString& projectfile ) const;
     IQMakeBuilder* m_builder;
 };
 
