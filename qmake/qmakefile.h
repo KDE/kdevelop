@@ -52,7 +52,7 @@ public:
     bool containsVariable( const QString& ) const;
 
     static QStringList resolveShellGlobbing( const QString& absolutefile );
-
+    virtual QString resolveVariables( const QString& value ) const;
 protected:
     QMap<QString, QStringList> m_variableValues;
     QStringList resolveFileName( const QString& file ) const;
