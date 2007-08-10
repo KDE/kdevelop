@@ -111,9 +111,13 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
         // FIXME remove once conversion works
         if (!topLevelContext->smartRange() && m_editor->smart())
           topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
-        else
-          if (m_editor->currentDocument())
-            Q_ASSERT(topLevelContext->textRange() == m_editor->currentDocument()->documentRange());
+        
+        m_editor->updateTopRange(topLevelContext->textRangePtr(), EditorIntegrator::DefinitionUseChain);
+        
+        if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
+          kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
+          Q_ASSERT(0);
+        }
       }
 
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
@@ -147,6 +151,11 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   }
 
   supportBuild(node);
+
+  if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
+    kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
+    Q_ASSERT(0);
+  }
 
   {
     DUChainReadLocker lock(DUChain::lock());
@@ -212,7 +221,10 @@ void ContextBuilder::supportBuild(AST *node, DUContext* context)
 {
   //Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext)); This assertion is invalid, because the node may also be a statement that has a non-top context set
 
-  openContext( context ? context : node->ducontext );
+  if( !context )
+    context = node->ducontext;
+  
+  openContext( context );
 
   m_editor->setCurrentUrl(currentContext()->url());
 
