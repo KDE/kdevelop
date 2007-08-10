@@ -210,7 +210,20 @@ Document* EditorIntegrator::currentDocument() const
   return d->m_currentDocument;
 }
 
-Range* EditorIntegrator::topRange( TopRangeType type )
+void EditorIntegrator::updateTopRange(KTextEditor::Range* range, TopRangeType /*type*/) const
+{
+  QMutexLocker lock(data()->mutex);
+
+  if (currentDocument()) {
+    *range = currentDocument()->documentRange();
+   } else {
+     // FIXME...
+     *range = Range(0,0, INT_MAX, INT_MAX);
+   }
+}
+
+
+Range* EditorIntegrator::topRange( TopRangeType /*type*/)
 {
   QMutexLocker lock(data()->mutex);
 

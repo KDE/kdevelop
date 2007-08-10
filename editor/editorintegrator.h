@@ -110,6 +110,12 @@ public:
   KTextEditor::Range* topRange(TopRangeType type);
 
   /**
+   * Updates a given toplevel \a range. This needed because when the user appends
+   * new text to the document end of the document, smart-range cannot catch that.
+   * */
+  void updateTopRange(KTextEditor::Range* range, TopRangeType type) const;
+  
+  /**
    * Releases a toplevel \a range.  The range should be deleted by the caller.
    */
   static void releaseTopRange(KTextEditor::Range* range);
