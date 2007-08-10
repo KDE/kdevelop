@@ -29,6 +29,55 @@
 #include "qmakedriver.h"
 #include "qmakeincludefile.h"
 
+//@TODO: Make the globbing stuff work with drives on win32
+
+QStringList resolveShellGlobbingInternal( const QString& relativefile,
+        const QString& dir )
+{
+    QStringList result;
+    if( !relativefile.isEmpty() )
+    {
+        int index = relativefile.indexOf( QRegExp( "[^\\\\]/" ) );
+        QString firstpath = relativefile.mid( 0,  index+1 );
+        QString remainder = relativefile.mid( index+2 );
+        if( index == -1 )
+        {
+            firstpath = relativefile;
+            remainder = "";
+        }
+        QStringList entries;
+        if( firstpath.contains( QRegExp( "[^\\\\]?(\\*|\\?|\\[)" ) ) )
+        {
+            QRegExp wildcard( firstpath, Qt::CaseSensitive, QRegExp::Wildcard );
+            foreach( QString entry, QDir( dir ).entryList()  )
+            {
+                if( wildcard.exactMatch( entry ) )
+                {
+                    entries << entry;
+                }
+            }
+        }else
+        {
+            entries << firstpath;
+        }
+        foreach( QString entry, entries )
+        {
+            QStringList subentries = resolveShellGlobbingInternal( remainder, dir+'/'+entry );
+            if( !subentries.isEmpty() )
+            {
+                foreach( QString subentry, subentries )
+                {
+                    result << entry+'/'+subentry;
+                }
+            }else if( QFileInfo( dir+'/'+entry ).exists() && remainder.isEmpty() )
+            {
+                result << entry;
+            }
+        }
+    }
+    return result;
+}
+
 QStringList getValueList( const QList<QMake::ValueAST*>& list )
 {
     QStringList result;
@@ -112,7 +161,6 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         QStringList arguments = getValueList( node->arguments() );
         kDebug(9024) << "found include" << node->functionName()->value() << arguments;
         QString argument = arguments.join("").trimmed();
-        kDebug(9024) << "My dir is:" << absoluteDir();
         if( QFileInfo( argument ).isRelative() )
         {
             argument = QFileInfo( absoluteDir() + '/' + argument ).canonicalFilePath();
@@ -149,21 +197,18 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
     QStringList values = getValueList(node->values());
     if( op == "=" )
     {
-        kDebug(9024) << "Setting var" << node->variable()->value() << values;
         m_variableValues[node->variable()->value()] = values;
     }else if( op == "+=" )
     {
         m_variableValues[node->variable()->value()] += values;
     }else if( op == "-=" )
     {
-        kDebug(9024) << "Removing from var" << node->variable()->value() << values;
         foreach( QString value, values )
         {
             m_variableValues[node->variable()->value()].removeAll(value);
         }
     }else if( op == "*=" )
     {
-        kDebug(9024) << "adding to var if not existent" << node->variable()->value() << values;
         foreach( QString value, values )
         {
             if( !m_variableValues[node->variable()->value()].contains(value) )
@@ -175,11 +220,9 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
     {
         if( values.isEmpty() )
             return;
-        kDebug(9024) << "replacing in var" << node->variable()->value() << values;
         QString value = values.first().trimmed();
         QString regex = value.mid(2,value.indexOf("/", 2));
         QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
-        kDebug(9024) << "Replacing variable, using regex" << regex << "value" << value ;
         QStringList list = m_variableValues[node->variable()->value()];
         list.replaceInStrings( QRegExp(regex), replacement );
         m_variableValues[node->variable()->value()] = list;
@@ -198,6 +241,46 @@ QStringList QMakeFile::variableValues( const QString& variable ) const
 bool QMakeFile::containsVariable( const QString& variable ) const
 {
     return m_variableValues.contains( variable );
+}
+
+QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
+{
+    QStringList result;
+    foreach( QString s, resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" ) )
+    {
+        result << '/'+s;
+    }
+    return result;
+}
+
+QString QMakeFile::resolveToSingleFileName( const QString& file ) const
+{
+    return resolveFileName( file ).first();
+}
+
+QStringList QMakeFile::resolveFileName( const QString& file ) const
+{
+    QString absolutepath = file;
+    if( QFileInfo( absolutepath ).isRelative() )
+    {
+        absolutepath = absoluteDir() + "/" + file;
+    }
+    QStringList result;
+    foreach( QString s, resolveShellGlobbing( absolutepath ) )
+    {
+        result << QFileInfo( s ).canonicalFilePath();
+    }
+    return result;
+}
+
+QStringList QMakeFile::variables() const
+{
+    return m_variableValues.keys();
+}
+
+QString QMakeFile::resolveVariables( const QString& value ) const
+{
+    return value;
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

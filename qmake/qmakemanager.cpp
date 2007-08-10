@@ -19,7 +19,6 @@
  */
 
 #include "qmakemanager.h"
-#include "qmakemkspecs.h"
 #include <QList>
 #include <QVector>
 
@@ -40,6 +39,8 @@
 
 #include "qmakemodelitems.h"
 #include "qmakeprojectfile.h"
+#include "qmakecache.h"
+#include "qmakemkspecs.h"
 
 typedef KGenericFactory<QMakeProjectManager> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakemanager,
@@ -83,20 +84,28 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 
     foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
     {
+        kDebug(9024) << k_funcinfo << "adding subproject:" << subproject->absoluteDir();
         folderList.append( new QMakeFolderItem( item->project(),
                            subproject,
                            KUrl( subproject->absoluteDir() ),
                            item ) );
     }
-    foreach( KUrl u, folderitem->projectFile()->files() )
-    {
-        new KDevelop::ProjectFileItem( item->project(), u, item );
-    }
     foreach( QString s, folderitem->projectFile()->targets() )
     {
-        new QMakeTargetItem( item->project(), s,  item );
+        kDebug(9024) << k_funcinfo << "adding target:" << s;
+        QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
+        foreach( KUrl u, folderitem->projectFile()->filesForTarget(s) )
+        {
+            kDebug(9024) << k_funcinfo << "adding file:" << u;
+            new KDevelop::ProjectFileItem( item->project(), u, target );
+        }
     }
+    kDebug(9024) << "adding project file:" << folderitem->projectFile()->absoluteFile();
+    new KDevelop::ProjectFileItem( item->project(),
+                                   KUrl( folderitem->projectFile()->absoluteFile() ),
+                                   item );
     kDebug(9024) << k_funcinfo << "Added" << folderList.count() << "Elements";
+
 
     return folderList;
 }
@@ -116,7 +125,9 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
 
         QString projectfile;
 
-        if( !l.count() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
+        if( l.count() && l.indexOf( project->name() + ".pro") != -1 )
+            projectfile = project->name() + ".pro";
+        if( l.isEmpty() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
         {
             projectfile = fi.baseName() + ".pro";
         }else
@@ -130,9 +141,14 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         QHash<QString,QString> qmvars = queryQMake( project );
         QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
         mkspecs->read();
+        QMakeCache* cache = findQMakeCache( projecturl.path() );
+        cache->setMkSpecs( mkspecs );
+        cache->read();
         QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
         scope->setMkSpecs( mkspecs );
+        scope->setQMakeCache( cache );
         scope->read();
+        kDebug(9024) << "top-level scope with variables:" << scope->variables();
         return new QMakeProjectItem( project, scope, project->name(), project->folder() );
     }
     return 0;
@@ -175,8 +191,32 @@ KDevelop::IProjectBuilder* QMakeProjectManager::builder(KDevelop::ProjectItem*) 
 
 KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* item) const
 {
-    Q_UNUSED(item)
-    return KUrl::List();
+    KUrl::List list;
+    QMakeFolderItem* folder = 0;
+
+    if( item->type() == KDevelop::ProjectBaseItem::File )
+    {
+        folder =
+                dynamic_cast<QMakeFolderItem*>( item->parent() );
+        if( !folder )
+        {
+            folder =
+                dynamic_cast<QMakeFolderItem*>( item->parent()->parent() );
+        }
+    }else if( item->type() == KDevelop::ProjectBaseItem::Target )
+    {
+        folder =
+                dynamic_cast<QMakeFolderItem*>( item->parent() );
+    }else
+    {
+        folder =
+                dynamic_cast<QMakeFolderItem*>( item );
+    }
+    if( folder )
+    {
+        list += folder->projectFile()->includeDirectories();
+    }
+    return list;
 }
 
 QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
@@ -217,6 +257,22 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* proj
     }
     kDebug(9024) << "Ran qmake (" << m_builder->qmakeBinary( project ) << "), found:" << hash;
     return hash;
+}
+
+QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) const
+{
+
+    QDir curdir( QFileInfo( projectfile ).canonicalPath() );
+    while( !curdir.exists(".qmake.cache") && curdir.isRoot() )
+    {
+        curdir.cdUp();
+    }
+
+    if( curdir.exists(".qmake.cache") )
+    {
+        return new QMakeCache( curdir.canonicalPath()+"/.qmake.cache" );
+    }
+    return 0;
 }
 
 #include "qmakemanager.moc"
