@@ -22,6 +22,7 @@
 #include <kurl.h>
 
 #include <ktexteditor/range.h>
+#include <ktexteditor/smartrange.h>
 
 #include <documentcursor.h>
 
@@ -110,12 +111,6 @@ public:
   KTextEditor::Range* topRange(TopRangeType type);
 
   /**
-   * Updates a given toplevel \a range. This needed because when the user appends
-   * new text to the document end of the document, smart-range cannot catch that.
-   * */
-  void updateTopRange(KTextEditor::Range* range, TopRangeType type) const;
-  
-  /**
    * Releases a toplevel \a range.  The range should be deleted by the caller.
    */
   static void releaseTopRange(KTextEditor::Range* range);
@@ -154,10 +149,11 @@ public:
    *
    * \param range Range of text to cover.  If this is outside the parent's range, the
    * parent will be adjusted (standard behaviour of SmartRange%s).
+   * \param insertBehavior: If a smart-range will be created, it will be created with the given insert-behavior
    *
    * \returns the newly created text range.
    */
-  KTextEditor::Range* createRange(const KTextEditor::Range& range);
+  KTextEditor::Range* createRange(const KTextEditor::Range& range, KTextEditor::SmartRange::InsertBehaviors insertBehavior = KTextEditor::SmartRange::DoNotExpand);
 
   /**
    * Create a text range from \a start to \a end as a child range of the current range.

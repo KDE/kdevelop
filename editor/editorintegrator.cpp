@@ -210,19 +210,6 @@ Document* EditorIntegrator::currentDocument() const
   return d->m_currentDocument;
 }
 
-void EditorIntegrator::updateTopRange(KTextEditor::Range* range, TopRangeType /*type*/) const
-{
-  QMutexLocker lock(data()->mutex);
-
-  if (currentDocument()) {
-    *range = currentDocument()->documentRange();
-   } else {
-     // FIXME...
-     *range = Range(0,0, INT_MAX, INT_MAX);
-   }
-}
-
-
 Range* EditorIntegrator::topRange( TopRangeType /*type*/)
 {
   QMutexLocker lock(data()->mutex);
@@ -232,7 +219,7 @@ Range* EditorIntegrator::topRange( TopRangeType /*type*/)
   
   Range* newRange = 0;
   if (currentDocument()) {
-    newRange = createRange(currentDocument()->documentRange());
+    newRange = createRange(currentDocument()->documentRange(), KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
     if (SmartInterface* iface = smart()) {
       QMutexLocker lock(iface->smartMutex());
       Q_ASSERT(newRange->isSmartRange());
@@ -247,7 +234,7 @@ Range* EditorIntegrator::topRange( TopRangeType /*type*/)
   return d->m_currentRangeStack.top();
 }
 
-Range* EditorIntegrator::createRange( const KTextEditor::Range & range )
+Range* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
   SmartInterface* iface = smart();
   
@@ -258,7 +245,7 @@ Range* EditorIntegrator::createRange( const KTextEditor::Range & range )
   if( !d->m_currentRangeStack.isEmpty() )
     currentRange = UnifiedRange( d->m_currentRangeStack.top() );
   
-  UnifiedRange ret( iface ? (Range*)iface->newSmartRange(range) : (Range*)new DocumentRange(d->m_currentUrl, range) );
+  UnifiedRange ret( iface ? (Range*)iface->newSmartRange(range, 0, insertBehavior) : (Range*)new DocumentRange(d->m_currentUrl, range) );
 
   if (!d->m_currentRangeStack.isEmpty()) {
     ///@todo Evaluate whether these special-cases code should go into kdelibs
