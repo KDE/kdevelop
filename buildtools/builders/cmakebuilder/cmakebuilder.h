@@ -25,6 +25,7 @@
 #include "icmakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QPair>
+#include <KUrl>
 
 class QStringList;
 class QSignalMapper;
@@ -36,7 +37,8 @@ namespace KDevelop{
 }
 
 /**
-@author Andreas Pakulat
+ * @author Andreas Pakulat
+ * @author Aleix Pol
 */
 class CMakeBuilder : public KDevelop::IPlugin, public ICMakeBuilder
 {
@@ -51,7 +53,7 @@ public:
     virtual bool build(KDevelop::ProjectBaseItem *dom);
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
 
-    QString cmakeBinary( KDevelop::IProject* project );
+    bool updateConfig( KDevelop::IProject* project );
 
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
@@ -67,6 +69,12 @@ private:
     QMap< int, KDevelop::OutputModel* > m_models;
     QSignalMapper* m_failedMapper;
     QSignalMapper* m_completedMapper;
+    
+    KUrl m_buildDirectory;
+    KUrl m_cmakeBinary;
+    KUrl m_installPrefix;
+    QString m_buildType;
+    bool m_dirty;
 };
 
 #endif // CMAKEBUILDER_H

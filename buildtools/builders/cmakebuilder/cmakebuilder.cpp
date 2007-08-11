@@ -25,6 +25,7 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QSignalMapper>
+#include <QtCore/QFile>
 
 
 #include <projectmodel.h>
@@ -54,7 +55,8 @@ K_EXPORT_COMPONENT_FACTORY( kdevcmakebuilder,
 CMakeBuilder::CMakeBuilder(QObject *parent, const QStringList &)
     : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),
       m_failedMapper( new QSignalMapper( this ) ),
-      m_completedMapper( new QSignalMapper( this ) )
+      m_completedMapper( new QSignalMapper( this ) ),
+      m_dirty(true)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( ICMakeBuilder )
@@ -112,9 +114,16 @@ void CMakeBuilder::cleanupModel( int id )
 
 bool CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
-    kDebug(9032) << "Building";
-    if( dom->type() != KDevelop::ProjectBaseItem::Project )
-        return false;
+    if(dom->folder())
+        kDebug(9032) << "Building folder: " << dom->folder()->url();
+    else if(dom->file())
+        kDebug(9032) << "Building file: " << dom->file()->url();
+    else if(dom->target())
+        kDebug(9032) << "Building target";
+    
+//     kDebug(9032) << "Building " << dom->folder()->url();
+//     if( dom->type() != KDevelop::ProjectBaseItem::Project )
+//         return false;
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
@@ -138,48 +147,28 @@ bool CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
                 view->setModel( id, m_models[id] );
             }
             m_items[id] = dom;
-            
-            QString cmd;
-            QStringList args;
-            KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
-            KConfigGroup group(cfg.data(), "CMake");
-            kDebug(9032) << "Reading setting (CMake Binary):" << group.readEntry("CMake Binary");
-            KUrl cmdUrl = group.readEntry("CMake Binary", KUrl( "file:///usr/bin/cmake" ) );
-            kDebug(9032) << "Reading setting (Prefix):" << group.readEntry("Prefix");
-            args += dom->project()->folder().toLocalFile();
-            KUrl prefixUrl = group.readEntry("Prefix");
-            if(prefixUrl.isEmpty())
+
+            if(!updateConfig(dom->project()))
             {
-                kDebug(9032) << "error. Prefix not defined";
+                kDebug(9032) << "Input not correct";
                 return false;
             }
-            else
+
+            KUrl cmakeCachePath=m_buildDirectory;
+            cmakeCachePath.addPath("CMakeCache.txt");
+            if(QFile::exists(cmakeCachePath.toLocalFile())) //We do not want to run cmake always
             {
-                kDebug(9032) << "Installing to: " << prefixUrl;
-                args += "-DCMAKE_INSTALL_PREFIX="+prefixUrl.toLocalFile();
+                completed(id);
+                return true;
             }
+            QStringList args(dom->project()->folder().toLocalFile());
+            kDebug(9032) << "Type of build: " << m_buildType;
+            kDebug(9032) << "Installing to: " << m_installPrefix;
+            kDebug(9032) << "Build directory: " << m_buildDirectory;
+            args += "-DCMAKE_INSTALL_PREFIX="+m_installPrefix.toLocalFile();
+            args += "-DCMAKE_BUILD_TYPE="+m_buildType;
             
-            kDebug(9032) << "Reading setting (Build Type):" << group.readEntry("Build Type");
-            QString buildType = group.readEntry("Build Type", "-1");
-            if(buildType=="-1")
-            {
-                kDebug(9032) << "Build Type not defined";
-            }
-            else
-            {
-                kDebug(9032) << "Type of build: " << buildType;
-                args += "-DCMAKE_BUILD_TYPE="+buildType;
-            }
-            
-            kDebug(9032) << "Reading setting (Build Dir):" << group.readEntry("Build Dir");
-            KUrl buildUrl = group.readEntry("Build Dir");
-            if(buildUrl.isEmpty())
-            {
-                kDebug(9032) << "Build Directory not defined";
-                return false;
-            }
-            
-            cmd = cmdUrl.toLocalFile();
+            QString cmd = m_cmakeBinary.toLocalFile();
             m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
             connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
                     m_models[id], SLOT(appendLines(const QStringList&) ) );
@@ -188,7 +177,7 @@ bool CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             m_failedMapper->setMapping( m_cmds[id], id );
             m_completedMapper->setMapping( m_cmds[id], id );
             m_cmds[id]->setArguments(args);
-            m_cmds[id]->setWorkingDirectory( buildUrl.toLocalFile() );
+            m_cmds[id]->setWorkingDirectory( m_buildDirectory.toLocalFile() );
             connect( m_cmds[id], SIGNAL( failed() ), m_failedMapper, SLOT(map()));
             connect( m_cmds[id], SIGNAL( completed() ), m_completedMapper, SLOT(map()));
             m_cmds[id]->start();
@@ -215,8 +204,9 @@ void CMakeBuilder::completed(int id)
             IMakeBuilder* builder = i->extension<IMakeBuilder>();
             if( builder )
             {
+                KDevelop::ProjectBaseItem* item = m_items[id];
                 kDebug(9032) << "Building with make";
-                if(!builder->build(m_items[id]))
+                if(!builder->build(item))
                     kDebug(9032) << "The build failed.";
             }
             else
@@ -233,12 +223,17 @@ void CMakeBuilder::errored(int id)
         emit failed(m_items[id]);
 }
 
-QString CMakeBuilder::cmakeBinary( KDevelop::IProject* project )
+bool CMakeBuilder::updateConfig( KDevelop::IProject* project )
 {
     KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake Builder");
-    KUrl v = group.readEntry("CMake Binary", KUrl( "file:///usr/bin/cmake" ) );
-    return v.toLocalFile();
+    KConfigGroup group(cfg.data(), "CMake");
+    
+    m_cmakeBinary = group.readEntry("CMake Binary", KUrl( "file:///usr/bin/cmake" ) );
+    m_buildDirectory = group.readEntry("Build Dir");
+    m_installPrefix = group.readEntry("Prefix");
+    m_buildType = group.readEntry("Build Type", "-1");
+//     return m_cmakeBinary.isEmpty() || m_buildDirectory.isEmpty();
+    return true;
 }
 
 #include "cmakebuilder.moc"

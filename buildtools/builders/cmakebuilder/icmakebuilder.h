@@ -32,7 +32,7 @@ class ProjectItem;
 class ICMakeBuilder : public KDevelop::IProjectBuilder
 {
 public:
-    virtual QString cmakeBinary(  KDevelop::IProject* project  ) = 0;
+//     virtual QString cmakeBinary(  KDevelop::IProject* project  ) = 0;
     virtual ~ICMakeBuilder() {}
 
 };
