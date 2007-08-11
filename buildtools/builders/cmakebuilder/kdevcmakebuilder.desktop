@@ -2,7 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevCMakeBuilder
+Name[sv]=KDevelop CMake-byggverktyg
 Comment=Builds CMake Projects
+Comment[es]=Construye proyectos CMake
+Comment[ga]=Tóg Tionscadail CMake
+Comment[sv]=Bygger CMake-projekt
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcmakebuilder
