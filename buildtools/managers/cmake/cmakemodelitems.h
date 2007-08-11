@@ -65,7 +65,6 @@ public:
     virtual const KDevelop::DomUtil::PairList& defines() const;
     virtual const KUrl::List& includeDirectories() const;
     virtual const QHash< QString, QString >& environment() const;
-
 private:
     KDevelop::DomUtil::PairList m_defines;
     QHash<QString, QString> m_environment;

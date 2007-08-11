@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +23,7 @@
 #define CMAKEPREFERENCES_H
 
 #include <projectkcmodule.h>
-
-#include <kurl.h>
-#include <kstandarddirs.h>
-
+#include "cmakecachemodel.h"
 
 class CMakeSettings;
 class QWidget;
@@ -35,19 +33,28 @@ namespace Ui { class CMakeBuildSettings; }
 
 /**
  * @author Matt Rogers <mattr@kde.org>
+ * @author Aleix Pol <aleixpol@gmail.com>
  */
 class CMakePreferences : public ProjectKCModule<CMakeSettings>
 {
+    Q_OBJECT
 public:
     explicit CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());
     ~CMakePreferences();
 
 
 private slots:
-    void settingsChanged();
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
+    
+    void buildDirChanged(const QString&);
+    void listSelectionChanged ( const QModelIndex & index );
+    void showInternal(int state);
 
 private:
     Ui::CMakeBuildSettings* m_prefsUi;
+    CMakeCacheModel* m_currentModel;
 };
 
 #endif

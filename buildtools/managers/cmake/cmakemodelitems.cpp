@@ -25,36 +25,15 @@
 
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
     : KDevelop::ProjectItem( project, name, item )
-{
-//     m_folderInfo = fi;
-//     KUrl::List includeList;
-//     foreach( QString inc, fi.includes )
-//     {
-//         includeList.append( KUrl( inc ) );
-//     }
-//     setIncludeDirectories( includeList );
-}
+{}
 
-// FolderInfo CMakeFolderItem::folderInfo() const
-// {
-//     return m_folderInfo;
-// }
-
-CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& name,CMakeFolderItem* item)
+CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item)
     : KDevelop::ProjectTargetItem( project, name, item )
-{
-//     m_targetInfo = target;
-}
+{}
 
 
 CMakeTargetItem::~CMakeTargetItem()
-{
-}
-
-// TargetInfo CMakeTargetItem::targetInfo() const
-// {
-//     return m_targetInfo;
-// }
+{}
 
 const KDevelop::DomUtil::PairList& CMakeTargetItem::defines() const
 {
@@ -65,7 +44,8 @@ const KUrl::List& CMakeTargetItem::includeDirectories() const
 {
     KUrl::List urls;
     CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(parent());
-    while(folder) {
+    while(folder)
+    {
         urls += folder->includeList();
         folder = dynamic_cast<CMakeFolderItem*>(folder->parent());
     }

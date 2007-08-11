@@ -32,7 +32,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
 {
 public:
     CMakeAst() : m_line(-1) { }
-    CMakeAst( const CMakeAst& ast ) /*: m_children( ast.m_children )*/ {}
     virtual ~CMakeAst() { /*qDeleteAll( m_children );*/ }
 
     /**
@@ -69,6 +68,8 @@ public:
     const CMakeFileContent content() const { return m_content; }
     void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
     
+    private:
+        CMakeAst( const CMakeAst&  ) /*: m_children( ast.m_children )*/ {}
     protected:
         CMakeFileContent m_content;
         int m_line;

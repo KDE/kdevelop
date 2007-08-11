@@ -101,7 +101,6 @@ private:
     QStringList resolveVariables(const QStringList & vars);
     KDevelop::IProject* m_project;
     CMakeFolderItem* m_rootItem;
-//     KDevelop::IProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
     CMakeListsParser m_parser;

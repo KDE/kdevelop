@@ -78,11 +78,13 @@ QStringList CMakeProjectManager::resolveVariables(const QStringList & vars)
 
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {
+    Q_ASSERT(dynamic_cast<KDevelop::ProjectItem*>(item));
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
     KUrl path = group.readEntry("Build Dir");
+//     KUrl projectPath = item->project()->folder();
     
-    kDebug(9032) << "Build folder: " << path;
+    kDebug(9032) << "Build folder: " << path/* << "..." << projectPath*/;
     return path;
 }
 
