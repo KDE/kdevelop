@@ -223,6 +223,7 @@ public:
   ParseSession* session;
 
 private:
+  void skipComment();
   /**Fills the scan table with method pointers.*/
   void initialize_scan_table();
   void scan_newline();

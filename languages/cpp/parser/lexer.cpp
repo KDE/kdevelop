@@ -29,7 +29,7 @@
 /**
  * Returns the character BEHIND the found comment
  * */
-const char* skipComment( const char* cursor )
+void Lexer::skipComment()
 {
   ///A nearly exact copy of rpp::pp_skip_comment_or_divop::operator()
   enum {
@@ -45,7 +45,7 @@ const char* skipComment( const char* cursor )
     switch (state) {
       case MAYBE_BEGIN:
         if (*cursor != '/')
-          return cursor;
+          return;
 
         state = BEGIN;
         break;
@@ -56,17 +56,21 @@ const char* skipComment( const char* cursor )
         else if (*cursor == '/')
           state = IN_CXX_COMMENT;
         else
-          return cursor;
+          return;
         break;
 
       case IN_COMMENT:
+        if( *cursor == '\n' ) {
+          scan_newline();
+          continue;
+        }
         if (*cursor == '*')
           state = MAYBE_END;
         break;
 
       case IN_CXX_COMMENT:
         if (*cursor == '\n')
-          return cursor;
+          return;
         break;
 
       case MAYBE_END:
@@ -74,15 +78,19 @@ const char* skipComment( const char* cursor )
           state = END;
         else if (*cursor != '*')
           state = IN_COMMENT;
+        if( *cursor == '\n' ) {
+          scan_newline();
+          continue;
+        }
         break;
 
       case END:
-        return cursor;
+        return;
     }
 
     ++cursor;
   }
-  return cursor;
+  return;
 }
 
 scan_fun_ptr Lexer::s_scan_keyword_table[] = {
@@ -575,7 +583,7 @@ void Lexer::scan_divide()
       ///It is a comment
       --cursor; //Move back to the '/'
       const char* commentBegin = cursor;
-      cursor = skipComment(cursor);
+      skipComment();
       if( cursor != commentBegin ) {
         ///Store the comment
         (*session->token_stream)[index++].kind = Token_comment;
