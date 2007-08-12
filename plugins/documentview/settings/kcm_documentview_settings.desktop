@@ -5,7 +5,7 @@ Type=Service
 ServiceTypes=KCModule
 
 X-KDE-ModuleType=Library
-X-KDE-Library=documentview_settings
+X-KDE-Library=kcm_documentview_settings
 X-KDE-FactoryName=kcm_documentview_settings
 X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
