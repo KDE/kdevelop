@@ -5,7 +5,7 @@ Type=Service
 ServiceTypes=KCModule
 
 X-KDE-ModuleType=Library
-X-KDE-Library=kdev_uisettings
+X-KDE-Library=kcm_kdev_uisettings
 X-KDE-FactoryName=kcm_kdev_uisettings
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
