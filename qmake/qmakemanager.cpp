@@ -142,8 +142,11 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
         mkspecs->read();
         QMakeCache* cache = findQMakeCache( projecturl.path() );
-        cache->setMkSpecs( mkspecs );
-        cache->read();
+        if( cache )
+        {
+            cache->setMkSpecs( mkspecs );
+            cache->read();
+        }
         QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
         scope->setMkSpecs( mkspecs );
         scope->setQMakeCache( cache );
@@ -263,7 +266,7 @@ QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) co
 {
 
     QDir curdir( QFileInfo( projectfile ).canonicalPath() );
-    while( !curdir.exists(".qmake.cache") && curdir.isRoot() )
+    while( !curdir.exists(".qmake.cache") && !curdir.isRoot() )
     {
         curdir.cdUp();
     }
