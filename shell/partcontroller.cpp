@@ -154,15 +154,9 @@ KTextEditor::Document* PartController::createTextPart(
 
     if ( !encoding.isNull() )
     {
-        KParts::BrowserExtension * extension =
-            KParts::BrowserExtension::childObject( doc );
-        if ( extension )
-        {
-            KParts::URLArgs args;
-            args.serviceType = QString( "text/plain;" )
-                               + encoding;
-            extension->setUrlArgs( args );
-        }
+        KParts::OpenUrlArguments args = doc->arguments();
+        args.setMimeType( QString( "text/plain;" ) + encoding );
+        doc->setArguments( args );
     }
 
     if ( activate )
