@@ -99,10 +99,10 @@ struct UnifiedRange {
   Range* m_range;
 };
 
-//A helper to iterator through childs of SmartRange'es and DocumentRange'es in the same way.
+//A helper to iterator through children of SmartRange'es and DocumentRange'es in the same way.
 struct UnifiedRangeChildIterator {
 
-  //Iterates through the childs of the one parameter that is not zero
+  //Iterates through the children of the one parameter that is not zero
   UnifiedRangeChildIterator( UnifiedRange& parent ) : m_parent(parent) {
     if( parent.smartRange() ) {
         m_smartChildRangesEnd = parent.smartRange()->childRanges().end();
