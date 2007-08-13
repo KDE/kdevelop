@@ -56,8 +56,10 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                 currentComment.clear();
                 currentIdx++;
             }
-            else if(!line.startsWith("#"))
+            else if(!line.startsWith('#'))
+            {
                 kDebug(9032) << "unrecognized cache line: " << line;
+            }
         }
     }
 }
