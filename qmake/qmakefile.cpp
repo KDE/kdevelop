@@ -263,7 +263,7 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
     QString absolutepath = file;
     if( QFileInfo( absolutepath ).isRelative() )
     {
-        absolutepath = absoluteDir() + "/" + file;
+        absolutepath = absoluteDir() + '/' + file;
     }
     QStringList result;
     foreach( QString s, resolveShellGlobbing( absolutepath ) )
