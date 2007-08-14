@@ -443,7 +443,7 @@ QString FunctionType::toString( SignaturePart sigPart ) const {
   QString args;
   if( sigPart == SignatureArguments || sigPart == SignatureWhole )
   {
-    args += "(";
+    args += '(';
     bool first = true;
     foreach (const AbstractType::Ptr& type, d->m_arguments) {
       if (first)
@@ -452,7 +452,7 @@ QString FunctionType::toString( SignaturePart sigPart ) const {
         args.append(", ");
       args.append(type ? type->toString() : QString("<notype>"));
     }
-    args += ")";
+    args += ')';
   }
   
   if( sigPart == SignatureArguments )
