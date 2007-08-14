@@ -1,0 +1,41 @@
+/***************************************************************************
+   Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include <QMap>
+#include <QString>
+#include <kurl.h>
+#include <languageexport.h>
+
+namespace KDevelop {
+  class TopDUContext;
+  class DUContext;
+  /**
+   * A helper-class for debugging, that nicely visualizes the whole structure of a du-context.
+   * */
+  class KDEVPLATFORMLANGUAGE_EXPORT DumpDotGraph {
+      Q_DISABLE_COPY(DumpDotGraph)
+    public:
+      DumpDotGraph();
+      ~DumpDotGraph();
+    /**
+     * Should be started at a TopDUContext.
+     * @param shortened if this is given sub-items like declarations, definitions, child-contexts, etc. will not be shown as own nodes
+     * @param isMaster must always be true when called from outside
+     * @param allFiles is for internal use only.
+     * */
+      QString dotGraph(KDevelop::TopDUContext* context, bool shortened = true);
+
+    private:
+      class DumpDotGraphPrivate* const d;
+  };
+}
