@@ -33,7 +33,7 @@ namespace KDevelop {
 
 namespace Cpp {
 /**
- * Searches context, and if the identifier is not found there, in it's base-classes, as it should be in c++.
+ * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++.
  * Du-chain must be locked before.
  * */
 QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );

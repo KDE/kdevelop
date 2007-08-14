@@ -405,7 +405,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         m_lastType = m_lastDeclarations.first()->abstractType();
 
         ///If the found declaration declares a type, this is a type-expression and m_lastInstance should be zero.
-        ///The declaration declares a type if it's abstractType's declaration is that declaration. Else it is an insantiation, and m_lastType should be filled.
+        ///The declaration declares a type if its abstractType's declaration is that declaration. Else it is an insantiation, and m_lastType should be filled.
 
         if( m_lastDeclarations.first()->kind() == Declaration::Instance )
           m_lastInstance = Instance( m_lastDeclarations.first() );

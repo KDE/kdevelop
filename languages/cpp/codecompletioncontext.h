@@ -98,7 +98,7 @@ namespace Cpp {
       ///@return whether this context is valid for code-completion
       bool isValid() const;
 
-      ///@return depth of the context. The basic completion-context has depth 0, it's parent 1, and so on..
+      ///@return depth of the context. The basic completion-context has depth 0, its parent 1, and so on..
       int depth() const;
       
       /**In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
@@ -113,7 +113,7 @@ namespace Cpp {
       /**
        * When the access-operation is a MemberAccess or ArrowMemberAccess, this
        * is the container that completion should happen in
-       * (the code-completion should list it's non-static content).
+       * (the code-completion should list its non-static content).
        *
        * When memberAccessOperation is StaticMemberChoose, the code-completion
        * should list all static members of this container.
@@ -170,7 +170,7 @@ namespace Cpp {
       QString m_text;
       int m_depth;
 
-      //Here known argument-expressions and their types, that may have come from sub-context's, are stored
+      //Here known argument-expressions and their types, that may have come from sub-contexts, are stored
       QStringList m_knownArgumentExpressions;
       QList<ExpressionEvaluationResult> m_knownArgumentTypes;
       

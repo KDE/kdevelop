@@ -188,10 +188,10 @@ void PreprocessJob::run()
 
     rpp::pp preprocessor(this);
 
-    //Eventually initialize the environment with the parent-environment to get it's macros
+    //Eventually initialize the environment with the parent-environment to get its macros
     m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_environmentFile );
 
-    //If we are included from another preprocessor, copy it's macros
+    //If we are included from another preprocessor, copy its macros
     if( parentJob()->parentPreprocessor() ) {
         m_currentEnvironment->swapMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
     } else {

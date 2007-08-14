@@ -328,7 +328,7 @@ class NavigationContext : public KShared {
 
     NavigationContextPointer execute(NavigationAction& action);
 
-    ///Creates and registers a link for the given type that jumps to it's declaration
+    ///Creates and registers a link for the given type that jumps to its declaration
     void eventuallyMakeTypeLink( AbstractType* type ) {
         AbstractType* target = TypeUtils::targetType( type );
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>( target );

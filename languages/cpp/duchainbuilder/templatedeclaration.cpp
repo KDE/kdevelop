@@ -46,7 +46,7 @@ typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
 uint qHash( const ExpressionEvaluationResult& key )
 {
-  ///@todo Currently ExpressionEvaluationResult is not accessible because of the library it is in. Fix that, and use it's content here.
+  ///@todo Currently ExpressionEvaluationResult is not accessible because of the library it is in. Fix that, and use its content here.
   uint ret = 0/*11*key.isLValue() + 13*key.instance.isInstance + 17*(quint64)key.instance.declaration*/;
   
   if( key.type )

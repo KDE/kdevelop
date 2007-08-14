@@ -239,7 +239,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
     }
     
     if( allPaths.isEmpty() ) {
-        ///Last chance: Take a parsed version of the file from the du-chain, and get it's include-paths(We will then get the include-path that some time was used to parse the file)
+        ///Last chance: Take a parsed version of the file from the du-chain, and get its include-paths(We will then get the include-path that some time was used to parse the file)
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
         TopDUContext* ctx = KDevelop::DUChain::self()->chainForDocument(source);
         if( ctx && ctx->parsingEnvironmentFile() ) {

@@ -129,7 +129,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringRepository {
 
     QString dumpDotGraph();
   private:
-    //After a new HashedStringSubset was created, this must be called to correctly connect it correctly to it's master-sets
+    //After a new HashedStringSubset was created, this must be called to correctly connect it correctly to its master-sets
     void connectToMasterSets( HashedStringSubset* set );
 
     /**

@@ -250,7 +250,7 @@ Basically, &automanag; creates and updates the variable-names and lists of files
 <screen>
 ## Makefile.am for myapp
 
-# this is the program that gets installed.  it's name is used for all
+# this is the program that gets installed.  its name is used for all
 # of the other Makefile.am variables
 bin_PROGRAMS = myapp
 

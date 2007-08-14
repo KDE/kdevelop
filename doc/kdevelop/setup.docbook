@@ -898,7 +898,7 @@ the mouse cursor over the title of that snippet.</para>
 <para>The <guilabel>Code Snippets</guilabel> tool allows for a variable text
 in predefined places any time you insert a snippet into a file. To
 accomplish this  <guilabel>Code Snippets</guilabel> provides its own
-variables' mechanism. You can set up it's behaviour in the
+variables' mechanism. You can set up its behaviour in the
 <guilabel>Variables</guilabel> group.</para>
 
 <variablelist>

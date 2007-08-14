@@ -102,8 +102,8 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
   
     /**
      * Tries to choose the correct function out of a given list of function-declarations.
-     * If one of those declarations is a class-declaration, it will be substituted by it's constructors.
-     * If one of those declarations is an instance of a class, it will be substituted with it's operator()
+     * If one of those declarations is a class-declaration, it will be substituted by its constructors.
+     * If one of those declarations is an instance of a class, it will be substituted with its operator()
      * functions. Constant references to class-instances are treated correctly.
      * 
      * @warning du-chain must be locked

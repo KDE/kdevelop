@@ -315,7 +315,7 @@ Each set manages:
  - either pointers to the two sets it is built from, or to the one string it contains
  - An arbitrary list of master-sets(sets that were constructed by merging this set with another)
 
-The general idea is that each set can reach ALL sets it is contained in by following it's master-set pointers.
+The general idea is that each set can reach ALL sets it is contained in by following its master-set pointers.
 That needs to be made sure, see the end of these notes to see how it is achieved.
 
 Old notes:
@@ -446,7 +446,7 @@ c,g
 Notice that a,b and c,g merge 2 levels lower at abcdeg which is based on abde and afcg
 Solution: Instead of letting abcdeg be merged from abde and afcg, change it to be merged from abde and a new node (afcg + abc)
 
-This is needed because every set must have a connection to all it's master-sets, and every master-set must have a connection to all contained sets.
+This is needed because every set must have a connection to all its master-sets, and every master-set must have a connection to all contained sets.
 
 Question: How to efficiently find the intersecting sub-nodes?
 
@@ -483,7 +483,7 @@ c,d
 
 How to make sure that intersection-sets exist:
 When creating new sets in the building-algorithm, create the new set by choosing the merge-partner in such a way
-that as many of it's master-sets as possible are master-sets of the new set, while still making sure that the set
+that as many of its master-sets as possible are master-sets of the new set, while still making sure that the set
 is bigger then before.
 */
 

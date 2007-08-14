@@ -32,7 +32,7 @@ namespace Cpp {
   typedef KSharedPtr<NavigationContext> NavigationContextPointer;
 
   /**
-   * This class deleted itself when it's part is deleted, so always use a QPointer when referencing it.
+   * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
    * */
   class NavigationWidget : public QObject {
     Q_OBJECT

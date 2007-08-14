@@ -59,7 +59,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
 };
 
 /**
- * A class that simplifies the usage of CppExpressionVisitor by eventually parsing the expression and using CppExpressionVisitor to evaluate it's type
+ * A class that simplifies the usage of CppExpressionVisitor by eventually parsing the expression and using CppExpressionVisitor to evaluate its type
  **/
 class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
   public:
@@ -85,7 +85,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
     /**
      * Evaluates the type of an expression given as an AST.
      *
-     * @param ast the AST. It's context must be built already(context-member filled).
+     * @param ast the AST. Its context must be built already(context-member filled).
      * @param debug whether additional output to kdDebug should be issued
     */
     ExpressionEvaluationResult evaluateType( AST* ast, ParseSession* session );
