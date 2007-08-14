@@ -42,14 +42,17 @@ QString rangeToString( const KTextEditor::Range& r ) {
 
 struct DumpDotGraphPrivate {
   QString dotGraphInternal(KDevelop::DUContext* contex, bool isMaster);
+
+  void addDeclaraation(QTextStream& stream, Declaration* decl);
+  
   QMap<KUrl,QString> m_hadVersions;
-  QMap<KDevelop::DUContext*, bool> m_hadContexts;
+  QMap<KDevelop::DUChainBase*, bool> m_hadObjects;
   bool m_shortened;
 };
 
 QString DumpDotGraph::dotGraph(KDevelop::DUContext* context, bool shortened ) {
   d->m_shortened = shortened;
-  d->m_hadContexts.clear();
+  d->m_hadObjects.clear();
   d->m_hadVersions.clear();
   return d->dotGraphInternal(context, true);
 }
@@ -62,25 +65,41 @@ DumpDotGraph::~DumpDotGraph() {
   delete d;
 }
 
+void DumpDotGraphPrivate::addDeclaraation(QTextStream& stream, Declaration* dec) {
+  if( m_hadObjects.contains(dec) )
+    return;
+
+  m_hadObjects[dec] = true;
+
+  stream << shortLabel(dec) <<
+      "[shape=distortion,label=\"" <<
+      dec->toString() << " [" <<
+      dec->qualifiedIdentifier().toString() << "]" << " " <<
+      rangeToString(dec->textRange()) << "\"];\n";
+  stream << shortLabel(dec->context()) << " -> " << shortLabel(dec) << "[color=green];\n";
+  if( dec->internalContext() )
+    stream << shortLabel(dec) << " -> " << shortLabel(dec->internalContext()) << "[label=\"internal\", color=blue];\n";
+}
+
 QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool isMaster) {
   QTextStream stream;
   QString ret;
   stream.setString(&ret, QIODevice::WriteOnly);
 
   //Only work on each context once
-  if( m_hadContexts.contains(context) )
+  if( m_hadObjects.contains(context) )
     return QString();
   
-  m_hadContexts[context] = true;
+  m_hadObjects[context] = true;
   
   if( isMaster )
     stream << "Digraph chain {\n";
   
-  QString shape = "box";
+  QString shape = "parallelogram";
+  //QString shape = "box";
   QString label = "unknown";
   
   if( dynamic_cast<TopDUContext*>(context) ) {
-    shape = "parallelogram";
     if( static_cast<TopDUContext*>(context)->parsingEnvironmentFile() ) {
       IdentifiedFile file( static_cast<TopDUContext*>(context)->parsingEnvironmentFile()->identity() );
 
@@ -96,15 +115,26 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       label = "unknown file";
     }
   }else{
-    label = "context " + context->localScopeIdentifier().toString();
+    label = /*"context " + */context->localScopeIdentifier().toString();
   }
 
   label += " " + rangeToString(context->textRange());
 
+  if( isMaster && !dynamic_cast<TopDUContext*>(context) ) {
+    //Also draw contexts that import this one
+    foreach( DUContext* ctx, context->importedChildContexts() )
+      stream << dotGraphInternal(ctx, false);
+  }
+  
   foreach (DUContextPointer parent, context->importedParentContexts()) {
     if( parent ) {
       stream << dotGraphInternal(parent.data(), false);
-      stream << shortLabel(context) << " -> " << shortLabel(parent.data()) << "[style=dotted,label=\"imports\"];\n";
+      QString label = "imports";
+      if( (!dynamic_cast<TopDUContext*>(parent.data()) || !dynamic_cast<TopDUContext*>(context)) && parent->url() != context->url() ) {
+        label += " from " + parent->url().fileName() + " to " + context->url().fileName();
+      }
+      
+      stream << shortLabel(context) << " -> " << shortLabel(parent.data()) << "[style=dotted,label=\"" << label  << "\"];\n";
     }
   }
 
@@ -123,17 +153,12 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   
   if(!m_shortened ) {
     foreach (Declaration* dec, context->localDeclarations()) {
-
-      stream << shortLabel(dec) <<
-          "[shape=distortion,label=\"" <<
-          dec->toString() << " [" <<
-          dec->qualifiedIdentifier().toString() << "]" << " " <<
-          rangeToString(dec->textRange()) << "\"];\n";
-      stream << shortLabel(context) << " -> " << shortLabel(dec) << "[color=green];\n";
-      if( dec->internalContext() )
-        stream << shortLabel(dec) << " -> " << shortLabel(dec->internalContext()) << "[label=\"internal\", color=blue];\n";
+      addDeclaraation(stream, dec);
     }
   }
+
+  if( context->declaration() )
+    addDeclaraation(stream, context->declaration());
 
   if( !context->localDefinitions().isEmpty() ) {
     label += QString(", %1 Df.").arg(context->localDefinitions().count());

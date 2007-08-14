@@ -451,8 +451,12 @@ int DUChainModel::findInsertIndex(QList<DUChainBase*>& list, DUChainBase* object
 
 void DUChainModel::doubleClicked ( const QModelIndex & index ) {
   if( index.isValid() ) {
-    DUChainBase* b = objectForIndex(index);
-    if( b && dynamic_cast<DUContext*>(b) ) {
+    DUChainBase* base = objectForIndex(index);
+    DUContext* ctx = dynamic_cast<DUContext*>(base);
+    if( base && !ctx && dynamic_cast<Declaration*>(base) )
+      ctx = static_cast<Declaration*>(base)->internalContext();
+    
+    if(ctx) {
       KTemporaryFile tempFile;
 
       {
@@ -460,9 +464,9 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
         QMutexLocker lock(&m_mutex);
 
 
-        QString suffix = (dynamic_cast<TopDUContext*>(b) && static_cast<TopDUContext*>(b)->parsingEnvironmentFile()) ?
-                            static_cast<TopDUContext*>(b)->parsingEnvironmentFile()->identity().toString()
-                            : static_cast<DUContext*>(b)->scopeIdentifier().toString();
+        QString suffix = (dynamic_cast<TopDUContext*>(ctx) && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile()) ?
+                            static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile()->identity().toString()
+                            : ctx->localScopeIdentifier().toString();
         suffix = suffix.replace('/', '_');
         suffix = suffix.replace(':', '.');
         suffix = suffix.replace(' ', '_');
@@ -472,7 +476,7 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
       
         if( tempFile.open() ) {
           DumpDotGraph dump;
-          tempFile.write( dump.dotGraph( static_cast<DUContext*>(b), (bool)dynamic_cast<TopDUContext*>(b) ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
+          tempFile.write( dump.dotGraph( ctx, (bool)dynamic_cast<TopDUContext*>(ctx) ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
         } else {
           readLock.unlock();
           lock.unlock();
@@ -482,7 +486,7 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
       tempFile.setAutoRemove(false);
       QString fileName = tempFile.fileName();
       tempFile.close();
-      kDebug(9500) << "Wrote dot-graph of context " << static_cast<DUContext*>(b) << " into " << fileName << endl;
+      kDebug(9500) << "Wrote dot-graph of context " << ctx << " into " << fileName << endl;
       KProcess proc; ///@todo this is a simple hack. Maybe do it with mime-types etc.
       proc << "kgraphviewer" << fileName;
       if( !proc.startDetached() ) {
