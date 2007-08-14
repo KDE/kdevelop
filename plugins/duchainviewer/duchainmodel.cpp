@@ -22,13 +22,18 @@
 #include "duchainmodel.h"
 
 #include <klocale.h>
+#include <kmessagebox.h>
+#include <ktemporaryfile.h>
+#include <kprocess.h>
 
 #include "idocument.h"
 
 #include "duchainview_part.h"
+#include "dumpdotgraph.h"
 #include "topducontext.h"
 #include "declaration.h"
 #include "definition.h"
+#include "parsingenvironment.h"
 #include "use.h"
 #include "duchain.h"
 #include "duchainlock.h"
@@ -442,6 +447,54 @@ int DUChainModel::findInsertIndex(QList<DUChainBase*>& list, DUChainBase* object
       return i;
 
   return list.count();
+}
+
+void DUChainModel::doubleClicked ( const QModelIndex & index ) {
+  if( index.isValid() ) {
+    DUChainBase* b = objectForIndex(index);
+    if( b && dynamic_cast<DUContext*>(b) ) {
+      KTemporaryFile tempFile;
+
+      {
+        DUChainReadLocker readLock(DUChain::lock());
+        QMutexLocker lock(&m_mutex);
+
+
+        QString suffix = (dynamic_cast<TopDUContext*>(b) && static_cast<TopDUContext*>(b)->parsingEnvironmentFile()) ?
+                            static_cast<TopDUContext*>(b)->parsingEnvironmentFile()->identity().toString()
+                            : static_cast<DUContext*>(b)->scopeIdentifier().toString();
+        suffix = suffix.replace('/', '_');
+        suffix = suffix.replace(':', '.');
+        suffix = suffix.replace(' ', '_');
+        suffix += ".temp.dot";
+        tempFile.setSuffix( suffix );
+      
+      
+        if( tempFile.open() ) {
+          DumpDotGraph dump;
+          tempFile.write( dump.dotGraph( static_cast<DUContext*>(b), (bool)dynamic_cast<TopDUContext*>(b) ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
+        } else {
+          readLock.unlock();
+          lock.unlock();
+          KMessageBox::error(0, i18n("Cannot create temporary file \"%1\" with suffix \"%2\"", tempFile.fileName(), suffix));
+        }
+      }
+      tempFile.setAutoRemove(false);
+      QString fileName = tempFile.fileName();
+      tempFile.close();
+      kDebug(9500) << "Wrote dot-graph of context " << static_cast<DUContext*>(b) << " into " << fileName << endl;
+      KProcess proc; ///@todo this is a simple hack. Maybe do it with mime-types etc.
+      proc << "kgraphviewer" << fileName;
+      if( !proc.startDetached() ) {
+        KProcess proc2;
+        proc2 << "dotty" << fileName;
+        if( !proc2.startDetached() ) {
+          KMessageBox::error(0, i18n("Could not open %1 with kgraphviewer or dotty.", fileName));
+        }
+      }
+      
+    }
+  }
 }
 
 #include "duchainmodel.moc"

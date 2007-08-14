@@ -73,6 +73,9 @@ public:
   virtual void definitionChanged(KDevelop::Definition* definition, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
   virtual void useChanged(KDevelop::Use* use, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
 
+private slots:
+  void doubleClicked ( const QModelIndex & index );
+    
 private:
   KDevelop::DUChainBase* objectForIndex(const QModelIndex& index) const;
   int findInsertIndex(QList<KDevelop::DUChainBase*>& list, KDevelop::DUChainBase* object) const;

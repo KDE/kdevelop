@@ -49,6 +49,7 @@ public:
         view->setModel(m_part->model());
         view->header()->hide();
         QObject::connect(m_part->model(), SIGNAL(modelReset()), view, SLOT(reset()));
+        QObject::connect(view, SIGNAL(doubleClicked(const QModelIndex &)), m_part->model(), SLOT(doubleClicked(const QModelIndex &)));
         return view;
     }
 
