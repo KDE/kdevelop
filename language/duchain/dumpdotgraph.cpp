@@ -116,9 +116,9 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     }
   }else{
     label = /*"context " + */context->localScopeIdentifier().toString();
+    label += " " + rangeToString(context->textRange());
   }
 
-  label += " " + rangeToString(context->textRange());
 
   if( isMaster && !dynamic_cast<TopDUContext*>(context) ) {
     //Also draw contexts that import this one
