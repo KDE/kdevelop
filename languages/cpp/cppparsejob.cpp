@@ -43,6 +43,7 @@
 #include "parser/control.h"
 #include <duchain.h>
 #include <duchainlock.h>
+#include <dumpdotgraph.h>
 #include "dumpchain.h"
 #include <parsejob.h>
 #include "cppeditorintegrator.h"
@@ -326,15 +327,15 @@ void CPPInternalParseJob::run()
 
         // Debug output...
 
-        /*if (topContext->smartRange()) {
+        if ( !parentJob()->parentPreprocessor() ) {
             DUChainReadLocker lock(DUChain::lock());
             kDebug( 9007 ) << "================== duchain ==================";
-            if (topContext->smartRange()) {
-                DumpChain dump;
-                dump.dump(ast, parentJob()->parseSession());
-                dump.dump(topContext);
-            }
-        }*/
+            DumpChain dump;
+            //dump.dump(ast, parentJob()->parseSession());
+            dump.dump(topContext);
+            KDevelop::DumpDotGraph dumpGraph;
+            kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
+        }
     }
 
     //DumpTree dumpTree;

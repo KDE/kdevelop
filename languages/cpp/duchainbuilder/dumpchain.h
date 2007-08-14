@@ -20,6 +20,7 @@
 #ifndef DUMPCHAIN_H
 #define DUMPCHAIN_H
 
+
 #include "default_visitor.h"
 #include "cppduchainbuilderexport.h"
 
@@ -39,11 +40,6 @@ public:
 
   void dump(KDevelop::DUContext* context, bool imported = false);
 
-  /**
-   * Should be started at a TopDUContext.
-   * @param shortened if this is given, all similar items(like declarations) will be grouped to only one item
-   * */
-  QString dotGraph(KDevelop::DUContext* context, bool shortened = true, bool isMaster = true);
   
 protected:
   virtual void visit(AST *node);
