@@ -89,7 +89,7 @@ public:
 
 	/**
 	 * Get the children of this ast
-	 * \return the list of this ast's childre
+	 * \return the list of this ast's children
 	 */
 	QList<AST*> children() const;
 
