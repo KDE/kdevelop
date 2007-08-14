@@ -65,22 +65,22 @@ public:
             return;
 
         QModelIndex realIndex = m_proxyModel->mapToSource(index);
-        KFileItem *fileItem = m_model->itemForIndex(realIndex);
-        if (!fileItem)
+        KFileItem fileItem = m_model->itemForIndex(realIndex);
+        if (fileItem.isNull())
             return;
 
-        if (fileItem->isFile())
+        if (fileItem.isFile())
             openFile(fileItem);
-        else if (fileItem->isDir())
+        else if (fileItem.isDir())
             m_view->slideRight();
     }
 
-    void openFile(KFileItem *fileItem)
+    void openFile(const KFileItem &fileItem)
     {
-        if (!fileItem)
+        if (fileItem.isNull())
             return;
 
-        m_part->core()->documentController()->openDocument(fileItem->url());
+        m_part->core()->documentController()->openDocument(fileItem.url());
     }
 
     void init()
@@ -148,9 +148,9 @@ public:
     void urlChanged(const QModelIndex &index)
     {
         QModelIndex realIndex = m_proxyModel->mapToSource(index);
-        KFileItem *file = m_model->itemForIndex(realIndex);
-        if (file)
-            m_urlBox->setUrl(file->url());
+        KFileItem file = m_model->itemForIndex(realIndex);
+        if (!file.isNull())
+            m_urlBox->setUrl(file.url());
     }
 
     void addToolButton(QAction *action)
