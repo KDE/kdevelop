@@ -28,6 +28,7 @@ class KSharedPtr;
 
 namespace KDevelop
 {
+  class QualifiedIdentifier;
   class DUChain;
   class IdentifiedFile; //Defined in parsingenvironment.h
   class ParsingEnvironmentFile;
@@ -79,20 +80,21 @@ public:
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;
   
-  virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret, bool inImportedContext) const;
-
-  void findDeclarationsInNamespaces(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret) const;
-
-  QList<NamespaceAlias*> findNestedNamespaces(const KTextEditor::Cursor& position, NamespaceAlias* ns) const;
+  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, bool inImportedContext) const;
 
   QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const;
 
-  virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<NamespaceAlias*>& usingNS, QList<DUContext*>& ret, bool inImportedContext = false) const;
-
-  void findContextsInNamespaces(ContextType contextType, const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, QList< NamespaceAlias * >& usingNS, QList<DUContext*>& ret) const;
+  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const;
 
+  /**
+   * Does the same as DUContext::updateAliases, except that it uses the symbol-store, and processes the whole identifier.
+   * @param canBeNamespace whether the searched identifier may be a namespace.
+   * If this is true, namespace-aliasing is applied to the last elements of the identifiers.
+   * */
+  void applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const KTextEditor::Cursor& position, bool canBeNamespace, int startPos = 0, int maxPos = -1 ) const;
+  
 private:
   class TopDUContextPrivate* const d;
   friend class TopDUContextPrivate;

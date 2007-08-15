@@ -36,12 +36,14 @@ public:
   NamespaceAliasDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~NamespaceAliasDeclaration();
 
+  ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.
   virtual void setAbstractType(AbstractType::Ptr type);
   
   virtual Declaration* clone() const;
 
-  //The identifier that was imported
+  /**The identifier that was imported.*/
   QualifiedIdentifier importIdentifier() const;
+  ///The identifier must be absolute(Resolve it before setting it!) Since it is absolute, it should also be explicitlyGlobal.
   void setImportIdentifier(const QualifiedIdentifier& id);
       
   //Declaration::identifier() is the identifier that importIdentifier() should be "renamed to" within scope, or globalImportIdentifier() if it should be imported.

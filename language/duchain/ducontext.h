@@ -92,7 +92,8 @@ public:
     InImportedParentContext = 1, //Internal, do not use from outside
     OnlyContainerTypes = 2, //Not implemented yet
     DontSearchInParent = 4, //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
-    NoUndefinedTemplateParams = 8 //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
+    NoUndefinedTemplateParams = 8, //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
+    LanguageSpecificFlag1 = 16 //This is a flag that can be used to control language-specific parts of the search in overridden functions(has no direct function in the du-chain)
   };
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
@@ -139,7 +140,8 @@ public:
   QualifiedIdentifier scopeIdentifier(bool includeClasses = false) const;
 
   /**
-   * Scope identifier, used to qualify the identifiers occurring in each context
+   * Scope identifier, used to qualify the identifiers occurring in each context.
+   * This is the part relative to the parent context.
    */
   const QualifiedIdentifier& localScopeIdentifier() const;
 
@@ -208,29 +210,6 @@ public:
   ///Returns true if this declaration is accessible through the du-chain, and thus cannot be edited without a du-chain write lock
   virtual bool inDUChain() const;
   
-  /**
-   * A class which represents a "using namespace" statement, or a "namespace A = B" statement.
-   */
-  class NamespaceAlias : public KDevelop::DocumentCursorObject
-  {
-  public:
-    NamespaceAlias(KTextEditor::Cursor* cursor);
-
-    QualifiedIdentifier nsIdentifier; //The identifier that was imported
-    QString aliasIdentifier; //The identifier nsIdentifier should be "renamed to" within scope, or empty if it is an import.
-    QualifiedIdentifier scope; //The scope this using namespace was issued in
-  };
-
-  /**
-   * Register a namespace-alias with this context.
-   * @param aliasName The name as which the imported context should be found. If this is QString::null, nsIdentifier will be imported(like "using namespace ...")
-   * */
-  void addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier, const QString& aliasName = QString() );
-  /// Return a list of namespace aliases for this context. They are ordered in the reversed oder of their appearance.
-  const QList<NamespaceAlias*>& namespaceAliases() const;
-  /// Clear namespace aliases for this context.
-  void clearNamespaceAliases();
-
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position, with the given type \a dataType.
@@ -401,18 +380,28 @@ protected:
   virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags flags ) const;
 
   /// Declaration search implementation
-  virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret, SearchFlags flags ) const;
+  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, SearchFlags flags ) const;
   
   /// Context search implementation
-  virtual void findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<NamespaceAlias*>& usingNS, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
-  void acceptUsingNamespaces(const KTextEditor::Cursor& position, QList<NamespaceAlias*>& usingNS) const;
-  void acceptUsingNamespace(NamespaceAlias* ns, QList<NamespaceAlias*>& usingNS) const;
-
+  /**Applies namespace-imports and namespace-aliases and returns possible absolute identifiers that need to be searched.
+   * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.
+   * */
+  void applyAliases(const QList<QualifiedIdentifier>& identifier, QList<QualifiedIdentifier>& targetIdentifiers, const KTextEditor::Cursor& position, bool canBeNamespace) const;
+  
 private:
   class DUContextPrivate* const d;
   friend class DUContextPrivate;
 };
+
+/**
+ * This is the identifier that can be used to search namespace-import declarations, and should be used to store namespace-imports.
+ * It is stored statically for performance-reasons, so it doesn't need to be constructed every time it is used.
+ *
+ * @see NamespaceAliasDeclaration.
+ * */
+KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier globalImportIdentifier;
 
 }
 

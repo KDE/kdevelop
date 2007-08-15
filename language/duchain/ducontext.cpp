@@ -27,13 +27,17 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "use.h"
+#include "identifier.h"
 #include "typesystem.h"
 #include "topducontext.h"
 #include "symboltable.h"
+#include "namespacealiasdeclaration.h"
 
 ///It is fine to use one global static mutex here
 
 using namespace KTextEditor;
+
+//Stored statically for performance-reasons
 
 #define ENSURE_CAN_WRITE_(x) {if(x->inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
 #define ENSURE_CAN_READ_(x) {if(x->inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
@@ -41,6 +45,8 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 QMutex DUContextPrivate::m_localDeclarationsMutex(QMutex::Recursive);
+
+const Identifier globalImportIdentifier("{...import...}");
 
 DUContextPrivate::DUContextPrivate( DUContext* d)
   : m_declaration(0), m_context(d), m_anonymousInParent(false)
@@ -207,8 +213,6 @@ DUContext::~DUContext( )
   foreach (Use* use, useList)
     use->setContext(0);
 
-  clearNamespaceAliases();
-
   DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
   delete d;
 }
@@ -262,6 +266,9 @@ QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier&
 
 void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags /*flags*/ ) const
 {
+  if( identifier.explicitlyGlobal() && parentContext() )
+    return;
+  
   ///@todo use flags
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
@@ -282,6 +289,8 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
         kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
         continue;
       }
+      if( dynamic_cast<NamespaceAliasDeclaration*>(declaration) )
+        continue; //Do not include NamespaceAliasDeclarations here, they are handled by DUContext directly.
         
       QualifiedIdentifier::MatchTypes m = identifier.match(declaration->identifier());
       switch (m) {
@@ -384,46 +393,67 @@ bool DUContext::foundEnough( const QList<Declaration*>& ret ) const {
     return false;
 }
 
-void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<NamespaceAlias*>& usingNS, QList<Declaration*>& ret, SearchFlags flags ) const
+void DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & baseIdentifiers, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, SearchFlags flags ) const
 {
-  findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, flags);
+  foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
+      findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, flags);
   
   if( foundEnough(ret) )
     return;
 
-  if (!identifier.explicitlyGlobal())
-    acceptUsingNamespaces(position, usingNS);
+  ///Step 1: Apply namespace-aliases and -imports
+  QList<QualifiedIdentifier> aliasedIdentifiers;
+  //Because of namespace-imports and aliases, this identifier may need to be searched under multiple names
+  if( type() == Namespace )
+    applyAliases(baseIdentifiers, aliasedIdentifiers, position, false);
+  else
+    aliasedIdentifiers = baseIdentifiers;
 
-  QList<DUContextPointer>::iterator it = d->m_importedParentContexts.end();
-  QList<DUContextPointer>::iterator begin = d->m_importedParentContexts.begin();
-  while( it != begin ) {
-    --it;
-    DUContext* context = (*it).data();
-    
-    while( !context && it != begin ) {
-      --it;
-      context = (*it).data();
+
+  if( !d->m_importedParentContexts.isEmpty() ) {
+    ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
+    QList<QualifiedIdentifier> nonGlobalIdentifiers;
+    foreach( const QualifiedIdentifier& identifier, aliasedIdentifiers )
+      if( !identifier.explicitlyGlobal() )
+        nonGlobalIdentifiers << identifier;
+
+    if( !nonGlobalIdentifiers.isEmpty() ) {
+      QList<DUContextPointer>::iterator it = d->m_importedParentContexts.end();
+      QList<DUContextPointer>::iterator begin = d->m_importedParentContexts.begin();
+      while( it != begin ) {
+        --it;
+        DUContext* context = (*it).data();
+
+        while( !context && it != begin ) {
+          --it;
+          context = (*it).data();
+        }
+
+        if( !context )
+          break;
+
+        context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->textRange().end(), dataType, ret, flags | InImportedParentContext);
+      }
     }
-    
-    if( !context )
-      break;
-    
-    context->findDeclarationsInternal(identifier,  url() == context->url() ? position : context->textRange().end(), dataType, usingNS, ret, flags | InImportedParentContext);
   }
+  
   if( foundEnough(ret) )
     return;
 
-  if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext())
-    parentContext()->findDeclarationsInternal(identifier, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, usingNS, ret, flags);
+  ///Step 3: Continue search in parent-context
+  if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext()) {
+    parentContext()->findDeclarationsInternal(aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, ret, flags);
+  }
 }
 
 QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
-  QList<NamespaceAlias*> usingStatements;
   QList<Declaration*> ret;
-  findDeclarationsInternal(identifier, position.isValid() ? position : textRange().end(), dataType, usingStatements, ret, flags);
+  QList<QualifiedIdentifier> identifiers;
+  identifiers << identifier;
+  findDeclarationsInternal(identifiers, position.isValid() ? position : textRange().end(), dataType, ret, flags);
   return ret;
 }
 
@@ -587,12 +617,12 @@ QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
   ENSURE_CAN_READ
 
   QualifiedIdentifier ret;
+  if (parentContext())
+    ret = parentContext()->scopeIdentifier();
 
   if (includeClasses || type() == Namespace)
-    ret = localScopeIdentifier();
+    ret += localScopeIdentifier();
 
-  if (parentContext())
-    ret = ret.merge(parentContext()->scopeIdentifier());
 
   return ret;
 }
@@ -611,41 +641,6 @@ const QualifiedIdentifier & DUContext::localScopeIdentifier() const
   ENSURE_CAN_READ
 
   return d->m_scopeIdentifier;
-}
-
-DUContext::NamespaceAlias::NamespaceAlias(KTextEditor::Cursor* cursor)
-  : KDevelop::DocumentCursorObject(cursor)
-{
-}
-
-void DUContext::addNamespaceAlias(KTextEditor::Cursor* cursor, const QualifiedIdentifier& id, const QString& aliasName)
-{
-  ENSURE_CAN_WRITE
-    //kDebug(9505) << "Adding namespace-alias" << id << "->" << aliasName;
-
-  NamespaceAlias* use = new NamespaceAlias(cursor);
-  use->nsIdentifier = id;
-  use->aliasIdentifier = aliasName;
-  use->scope = scopeIdentifier();
-
-  QMutableListIterator<NamespaceAlias*> it = d->m_namespaceAliases;
-  while (it.hasPrevious())
-    if (use->textCursor() > it.previous()->textCursor()) {
-      it.next();
-      it.insert(use);
-      return;
-    }
-
-  d->m_namespaceAliases.prepend(use);
-
-  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::UsingNamespaces);
-}
-
-const QList<DUContext::NamespaceAlias*>& DUContext::namespaceAliases() const
-{
-  ENSURE_CAN_READ
-
-  return d->m_namespaceAliases;
 }
 
 DUContext::ContextType DUContext::type() const
@@ -668,9 +663,10 @@ QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, co
 {
   ENSURE_CAN_READ
 
-  QList<NamespaceAlias*> usingStatements;
   QList<Declaration*> ret;
-  findDeclarationsInternal(QualifiedIdentifier(identifier), position.isValid() ? position : textRange().end(), AbstractType::Ptr(), usingStatements, ret, flags);
+  QList<QualifiedIdentifier> identifiers;
+  identifiers << QualifiedIdentifier(identifier);
+  findDeclarationsInternal(identifiers, position.isValid() ? position : textRange().end(), AbstractType::Ptr(), ret, flags);
   return ret;
 }
 
@@ -715,37 +711,109 @@ QList<DUContext*> DUContext::findContexts(ContextType contextType, const Qualifi
 {
   ENSURE_CAN_READ
 
-  QList<NamespaceAlias*> usingStatements;
   QList<DUContext*> ret;
-  findContextsInternal(contextType, identifier, position.isValid() ? position : textRange().end(), usingStatements, ret, flags);
+  QList<QualifiedIdentifier> identifiers;
+  identifiers << QualifiedIdentifier(identifier);
+  
+  findContextsInternal(contextType, identifiers, position.isValid() ? position : textRange().end(), ret, flags);
   return ret;
 }
 
-void DUContext::findContextsInternal(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, QList<NamespaceAlias*>& usingNS, QList<DUContext*>& ret, SearchFlags flags) const
-{
-  if (contextType == type())
-    if (identifier == scopeIdentifier(true))
-      ret.append(const_cast<DUContext*>(this));
+void DUContext::applyAliases(const QList<QualifiedIdentifier>& baseIdentifiers, QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, bool canBeNamespace) const {
 
-  if (!identifier.explicitlyGlobal())
-    acceptUsingNamespaces(position, usingNS);
+  foreach( const QualifiedIdentifier& identifier, baseIdentifiers ) {
+    bool addUnmodified = true;
 
-  QListIterator<DUContextPointer> it = d->m_importedParentContexts;
-  it.toBack();
-  while (it.hasPrevious()) {
-    DUContext* context = it.previous().data();
-    
-    while( !context && it.hasPrevious() ) {
-      context = it.previous().data();
+    if( !identifier.explicitlyGlobal() ) {
+      QList<Declaration*> imports = allLocalDeclarations(globalImportIdentifier);
+
+      if( !imports.isEmpty() )
+      {
+        //We have namespace-imports.
+        foreach( Declaration* importDecl, imports )
+        {
+          if( importDecl->textRange().end() > position )
+            continue;
+          //Search for the identifier with the import-identifier prepended
+          Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
+          NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
+          QualifiedIdentifier identifierInImport = alias->importIdentifier();
+          identifierInImport.push(identifier);
+          identifiers << identifierInImport;
+        }
+      }
+
+      if( !identifier.isEmpty() && (identifier.count() > 1 || canBeNamespace) ) {
+        QList<Declaration*> aliases = allLocalDeclarations(identifier.first());
+        if(!aliases.isEmpty()) {
+          //The first part of the identifier has been found as a namespace-alias.
+          //In c++, we only need the first alias. However, just to be correct, follow them all for now.
+          foreach( Declaration* aliasDecl, aliases )
+          {
+            if( aliasDecl->textRange().end() > position )
+              continue;
+            if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
+              continue;
+
+            addUnmodified = false; //The un-modified identifier can be ignored, because it will be replaced with the resolved alias
+            NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
+
+            //Create an identifier where namespace-alias part is replaced with the alias target
+            QualifiedIdentifier aliasedIdentifier = alias->importIdentifier();
+            for( int a = 1; a <  identifier.count(); a++ )
+              aliasedIdentifier.push(identifier.at(a));
+
+            identifiers << aliasedIdentifier;
+          }
+        }
+      }
     }
-    if( !context )
-      break;
 
-    context->findContextsInternal(contextType, identifier, position, usingNS, ret, flags | InImportedParentContext);
+    if( addUnmodified )
+        identifiers << identifier;
+  }
+}
+
+void DUContext::findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& baseIdentifiers, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags) const
+{
+  if (contextType == type()) {
+    foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
+      if (identifier == scopeIdentifier(true) && (!parentContext() || !identifier.explicitlyGlobal()) )
+        ret.append(const_cast<DUContext*>(this));
   }
 
+  ///Step 1: Apply namespace-aliases and -imports
+  QList<QualifiedIdentifier> aliasedIdentifiers;
+  //Because of namespace-imports and aliases, this identifier may need to be searched as under multiple names
+  applyAliases(baseIdentifiers, aliasedIdentifiers, position, contextType == Namespace);
+
+  if( !d->m_importedParentContexts.isEmpty() ) {
+    ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
+    QList<QualifiedIdentifier> nonGlobalIdentifiers;
+    foreach( const QualifiedIdentifier& identifier, aliasedIdentifiers )
+      if( !identifier.explicitlyGlobal() )
+        nonGlobalIdentifiers << identifier;
+    
+    if( !nonGlobalIdentifiers.isEmpty() ) {
+      QListIterator<DUContextPointer> it = d->m_importedParentContexts;
+      it.toBack();
+      while (it.hasPrevious()) {
+        DUContext* context = it.previous().data();
+
+        while( !context && it.hasPrevious() ) {
+          context = it.previous().data();
+        }
+        if( !context )
+          break;
+
+        context->findContextsInternal(contextType, nonGlobalIdentifiers, url() == context->url() ? position : context->textRange().end(), ret, flags | InImportedParentContext);
+      }
+    }
+  }
+
+  ///Step 3: Continue search in parent
   if ( !(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext())
-    parentContext()->findContextsInternal(contextType, identifier, position, usingNS, ret);
+    parentContext()->findContextsInternal(contextType, aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->textRange().end(), ret, flags);
 }
 
 const QList<Definition*>& DUContext::localDefinitions() const
@@ -848,45 +916,6 @@ void DUContext::setInSymbolTable(bool inSymbolTable)
   // Only one symbol table, no need for a lock
 
   d->m_inSymbolTable = inSymbolTable;
-}
-
-void DUContext::acceptUsingNamespaces(const KTextEditor::Cursor & position, QList< NamespaceAlias * > & usingNS) const
-{
-  foreach (NamespaceAlias* ns, namespaceAliases())
-    if (ns->textCursor() <= position) {
-      // TODO: inefficient... needs a hash??
-      foreach (NamespaceAlias* ns2, usingNS)
-        if (ns2->nsIdentifier == ns->nsIdentifier)
-          goto duplicate;
-
-      usingNS.append(ns);
-
-      duplicate:
-      continue;
-
-    } else {
-      break;
-    }
-}
-
-void DUContext::acceptUsingNamespace(NamespaceAlias* ns, QList<NamespaceAlias*>& usingNS) const
-{
-  // TODO: inefficient... needs a hash??
-  foreach (NamespaceAlias* ns2, usingNS)
-    if (ns2->nsIdentifier == ns->nsIdentifier)
-      return;
-
-  usingNS.append(ns);
-}
-
-void DUContext::clearNamespaceAliases()
-{
-  ENSURE_CAN_WRITE
-
-  qDeleteAll(d->m_namespaceAliases);
-  d->m_namespaceAliases.clear();
-
-  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::UsingNamespaces);
 }
 
 // kate: indent-width 2;

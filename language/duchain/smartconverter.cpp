@@ -63,9 +63,6 @@ public:
       m_editor->exitCurrentRange();
     }
 
-    foreach (DUContext::NamespaceAlias* usingNS, context->namespaceAliases())
-      usingNS->setTextCursor(m_editor->createCursor(usingNS->textCursor()));
-
     foreach (DUContext* child, context->childContexts())
       convertDUChainInternal(child);
 

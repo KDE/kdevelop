@@ -47,7 +47,7 @@ public:
   void removeDeclaration(Declaration* declaration);
 
   QList<Declaration*> findDeclarations(const QualifiedIdentifier& id) const;
-  QList<Declaration*> findDeclarationsBeginningWith(const QualifiedIdentifier& id) const;
+//   QList<Declaration*> findDeclarationsBeginningWith(const QualifiedIdentifier& id) const;
 
   // Named Contexts (classes and namespaces)
   void addContext(DUContext* namedContext);

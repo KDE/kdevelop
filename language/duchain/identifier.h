@@ -80,6 +80,8 @@ public:
   bool operator!=(const Identifier& rhs) const;
   Identifier& operator=(const Identifier& rhs);
 
+  bool isEmpty() const;
+  
   /**
     * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -124,6 +126,11 @@ public:
   Identifier last() const;
   Identifier top() const;
   Identifier at(int i) const;
+  /**
+   * @param pos Position where to start the copy.
+   * @param len If this is -1, the whole following part will be returned.
+   * */
+  QualifiedIdentifier mid(int pos, int len = -1) const;
 
   static QualifiedIdentifier merge(const QStack<QualifiedIdentifier>& idStack);
 
@@ -136,12 +143,22 @@ public:
 
   QString mangled() const;
 
-  //Returns a QualifiedIdentifier with this one appended to the other
+  QualifiedIdentifier operator+(const QualifiedIdentifier& rhs) const;
+  QualifiedIdentifier& operator+=(const QualifiedIdentifier& rhs);
+
+  //Nicer interfaces to merge
+  QualifiedIdentifier operator+(const Identifier& rhs) const;
+  QualifiedIdentifier& operator+=(const Identifier& rhs);
+  
+  //Returns a QualifiedIdentifier with this one appended to the other. It is explicitly global if either this or base is.
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
   QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;
   //The returned identifier will have explicitlyGlobal() set to false
   QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
 
+  bool isSame(const QualifiedIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
+  
+  ///The comparison-operators do not respect explicitlyGlobal, they only respect the real scope. This is for convenient use in hash-tables etc.
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
@@ -165,6 +182,7 @@ public:
     return s;
   }
 
+  ///The hash does not respect explicitlyGlobal, only the real scope.
   uint hash() const;
 
   /**

@@ -461,6 +461,8 @@ QString FunctionType::toString( SignaturePart sigPart ) const {
     return QString("%1 %2").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
   else if( sigPart == SignatureReturn )
     return returnType() ? returnType()->toString() : QString();
+
+  return QString("ERROR");
 }
 
 QString FunctionType::toString() const
