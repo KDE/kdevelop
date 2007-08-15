@@ -68,7 +68,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
      * @param debug Enables additional output
      * */
 
-    explicit ExpressionParser( bool strict = false, bool debug = true );
+    explicit ExpressionParser( bool strict = false, bool debug = false );
     /**
      * Evaluates the type of an expression given as a string within a given context
      *

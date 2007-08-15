@@ -120,8 +120,10 @@ namespace TypeUtils {
 
   KDEVCPPDUCHAINBUILDER_EXPORT bool isVoidType( AbstractType* type );
 
-  ///Returns whether base is a public base-class of c
-  KDEVCPPDUCHAINBUILDER_EXPORT bool isPublicBaseClass( const CppClassType* c, CppClassType* base );
+  /**Returns whether base is a public base-class of c
+   * @param baseConversionLevels If nonzero, this will count the distance of the classes.
+   * */
+  KDEVCPPDUCHAINBUILDER_EXPORT bool isPublicBaseClass( const CppClassType* c, CppClassType* base, int* baseConversionLevels  = 0 );
 
   ///Conversion-rank of "unsigned int"
   KDEVCPPDUCHAINBUILDER_EXPORT extern const int unsignedIntConversionRank;

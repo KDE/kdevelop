@@ -26,6 +26,7 @@
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
+#include <dumpdotgraph.h>
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
 #include <documentrange.h>
@@ -524,7 +525,7 @@ void TestDUChain::testVariableDeclaration()
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("A instance(b); A instance(2);");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -555,6 +556,12 @@ void TestDUChain::testDeclareClass()
 
   DUChainWriteLocker lock(DUChain::lock());
 
+  KDevelop::DumpDotGraph dump;
+/*  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
+
+  kDebug() << "ENDE ENDE ENDE";
+  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);*/
+  
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
   QCOMPARE(top->localDeclarations().count(), 1);
@@ -600,15 +607,14 @@ void TestDUChain::testDeclareNamespace()
 
   DUContext* top = parse(method, DumpNone);
 
-  DUChainWriteLocker lock(DUChain::lock());
 
+  DUChainWriteLocker lock(DUChain::lock());
+  
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
   QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
-
-  QCOMPARE(top->namespaceAliases().count(), 0);
 
   DUContext* fooCtx = top->childContexts().first();
   QCOMPARE(fooCtx->childContexts().count(), 0);
@@ -640,7 +646,7 @@ void TestDUChain::testDeclareNamespace()
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
-
+  
   release(top);
 }
 
@@ -649,16 +655,16 @@ void TestDUChain::testDeclareUsingNamespace2()
   TEST_FILE_PARSE_ONLY
 
   //                 0         1         2         3         4         5         6         7
-  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("namespace foo2 {int bar2; }; namespace foo { int bar; using namespace foo2; } int test() { return bar; }");
+  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+  QByteArray method("namespace foo2 {int bar2; namespace SubFoo { int subBar2; } }; namespace foo { int bar; using namespace foo2; } namespace GFoo{ namespace renamedFoo2 = foo2; using namespace renamedFoo2; using namespace SubFoo; int gf; } using namespace GFoo; int test() { return bar; }");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-
+  
   QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 4);
-  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts().count(), 5);
+  QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
 
@@ -667,15 +673,33 @@ void TestDUChain::testDeclareUsingNamespace2()
   QVERIFY(bar2);
   QCOMPARE(bar2->identifier(), Identifier("bar2"));
   
+  QCOMPARE( top->childContexts()[1]->localDeclarations().count(), 2);
+  Declaration* bar = top->childContexts()[1]->localDeclarations()[0];
+  QVERIFY(bar);
+  QCOMPARE(bar->identifier(), Identifier("bar"));
+  
+  QCOMPARE( top->childContexts()[2]->localDeclarations().count(), 4);
+  Declaration* gf = top->childContexts()[2]->localDeclarations()[3];
+  QVERIFY(gf);
+  QCOMPARE(gf->identifier(), Identifier("gf"));
+  
   //QCOMPARE(top->namespaceAliases().count(), 1);
   //QCOMPARE(top->namespaceAliases().first()->nsIdentifier, QualifiedIdentifier("foo"));
 
-/*  QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar2")), bar2);
-  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar2")), noDef);*/
+/*  QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar2")), bar2);*/
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), noDef);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar2")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo2::bar2")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar2")), bar2);
 
+  //bar2 can be found from GFoo
+  QCOMPARE(findDeclaration(top->childContexts()[2], QualifiedIdentifier("bar2")), bar2);
+  QCOMPARE(findDeclaration(top->childContexts()[2], QualifiedIdentifier("bar")), noDef);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("gf")), gf);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar2")), bar2);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::GFoo::renamedFoo2::bar2")), bar2);
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("subBar2")) != noDef);
+  
   release(top);
 }
 
@@ -686,21 +710,21 @@ void TestDUChain::testDeclareUsingNamespace()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("namespace foo { int bar; } using namespace foo; int test() { return bar; }");
+  QByteArray method("namespace foo { int bar; } using namespace foo; namespace alternativeFoo = foo; int test() { return bar; }");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-
+  
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
-  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 3);
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QCOMPARE(findDeclaration(top, Identifier("foo")), noDef);
 
-  QCOMPARE(top->namespaceAliases().count(), 1);
-  QCOMPARE(top->namespaceAliases().first()->nsIdentifier, QualifiedIdentifier("foo"));
-  QCOMPARE(top->namespaceAliases().first()->textCursor(), Cursor(0, 47));
+//   QCOMPARE(top->namespaceAliases().count(), 1);
+//   QCOMPARE(top->namespaceAliases().first()->nsIdentifier, QualifiedIdentifier("foo"));
+//   QCOMPARE(top->namespaceAliases().first()->textCursor(), Cursor(0, 47));
 
   DUContext* fooCtx = top->childContexts().first();
   QCOMPARE(fooCtx->childContexts().count(), 0);
@@ -717,9 +741,11 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
 
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar")), bar);
-  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), noDef);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), bar); //iso c++ 3.4.3 says this must work
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("alternativeFoo::bar")), bar);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("::alternativeFoo::bar")), bar);
 
   DUContext* testCtx = top->childContexts()[2];
   QVERIFY(testCtx->parentContext());
@@ -728,14 +754,14 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(testCtx->localDeclarations().count(), 0);
   QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier());
   QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier());
-
+  
   release(top);
 }
 
 void TestDUChain::testFunctionDefinition() {
   QByteArray text("class A { inline char at(); }; \n inline char A::at() {} ");
 
-  DUContext* top = parse(text, DumpAll);
+  DUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
   
@@ -749,7 +775,7 @@ void TestDUChain::testFunctionDefinition() {
 void TestDUChain::testBaseClasses() {
   QByteArray text("class A{int aValue; }; class B{int bValue;}; class C : public A{int cValue;}; class D : public A, B {int dValue;}; template<class Base> class F : public Base { int fValue;};");
 
-  DUContext* top = parse(text, DumpAll);
+  DUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -816,7 +842,7 @@ void TestDUChain::testBaseClasses() {
 void TestDUChain::testTypedef() {
   QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef\nvoid test() { }");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -843,7 +869,7 @@ void TestDUChain::testTypedef() {
 
 void TestDUChain::testSpecializedTemplates() {
   QByteArray text("class A{}; class B{}; class C{}; template<class T,class T2> class E{typedef A Type1;}; template<class T2> class E<A,T2> { typedef B Type2;}; template<class T2> class E<T2,A> { typedef C Type3; };");
-  DUContext* top = parse(text, DumpAll);
+  DUContext* top = parse(text, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
 
   QCOMPARE(top->localDeclarations().count(), 6);
@@ -869,7 +895,7 @@ void TestDUChain::testSpecializedTemplates() {
 void TestDUChain::testFunctionTemplates() {
   QByteArray method("template<class T> T test(const T& t) {};");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -887,7 +913,7 @@ void TestDUChain::testFunctionTemplates() {
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 

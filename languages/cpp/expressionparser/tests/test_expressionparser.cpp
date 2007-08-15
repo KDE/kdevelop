@@ -164,7 +164,7 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
 void TestExpressionParser::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> B;");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -204,7 +204,7 @@ void TestExpressionParser::testTemplates() {
 void TestExpressionParser::testSmartPointer() {
   QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
   
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -445,7 +445,7 @@ void TestExpressionParser::testCasts() {
   TEST_FILE_PARSE_ONLY
       
   QByteArray test = "struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }";
-  DUContext* c = parse( test, DumpDUChain | DumpAST );
+  DUContext* c = parse( test, DumpNone );
   DUChainWriteLocker lock(DUChain::lock());
   
   DUContext* testContext = c->childContexts()[2];

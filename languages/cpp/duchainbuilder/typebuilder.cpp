@@ -32,6 +32,14 @@
 #include <declaration.h>
 #include "typerepository.h"
 
+//#define DEBUG
+
+#ifdef DEBUG
+#define ifDebug(x) x;
+#else
+#define ifDebug(x)
+#endif
+
 using namespace KDevelop;
 
 TypeBuilder::TypeBuilder(ParseSession* session)
@@ -307,8 +315,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     
     if (!dec.isEmpty() && dec.front()->abstractType()) {
       ///@todo only functions may have multiple declarations here
-      if( dec.count() > 1 )
-        kDebug(9007) << id.toString() << "was found" << dec.count() << "times";
+      ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
       //kDebug(9007) << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();
        openedType = true;
        openType(dec.front()->abstractType(), node);
@@ -318,10 +325,10 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         ///@todo What about position?
         
        openedType = true;
-       kDebug(9007) << "opening delayed type for" << id.toString();
+       ifDebug( kDebug(9007) << "opening delayed type for" << id.toString() )
        openDelayedType(id, node);
       } else {
-        kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext();
+        ifDebug( kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
       }
     }
   }

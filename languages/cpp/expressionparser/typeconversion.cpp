@@ -62,10 +62,13 @@ TypeConversion::~TypeConversion() {
  *   
  * */
 uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool noUserDefinedConversion ) {
+  m_baseConversionLevels = 0;
+
   if( !from || !to ) {
     problem( from, to, "one type is invalid" );
     return 0;
   }
+  kDebug() << "Checking conversion from " << from->toString() << " to " << to->toString();
   CppReferenceType* fromReference = dynamic_cast<CppReferenceType*>(from.data());
   if( fromReference )
     fromLValue = true;
@@ -82,7 +85,7 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
       CppClassType* fromClass = dynamic_cast<CppClassType*>( realType(from) );
       CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to) );
       
-      if( fromClass && toClass && isPublicBaseClass( fromClass, toClass ) )
+      if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) )
         return ExactMatch;
     }
 
@@ -122,6 +125,10 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
 
   
   return conv;
+}
+
+int TypeConversion::baseConversionLevels() const {
+  return m_baseConversionLevels;
 }
 
 ///Helper for standardConversion(..) that makes sure that when one category is taken out of the possible ones, the earlier are taken out too, because categories must be checked in order.
@@ -343,7 +350,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
       CppClassType* fromClass = dynamic_cast<CppClassType*>( fromPointer->baseType().data() );
       CppClassType* toClass = dynamic_cast<CppClassType*>( toPointer->baseType().data() );
       if( toClass && fromClass ) {
-        if( isPublicBaseClass( fromClass, toClass ) ) {
+        if( isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) ) {
           maximizeRank( bestRank, Conversion );
         }
       }
@@ -416,7 +423,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
     if( toClass )
     {
       kDebug(9007) << "check whether" << fromClass->toString() << "has public base" << toClass->toString();
-      if( isPublicBaseClass(fromClass, toClass ) ) {
+      if( isPublicBaseClass(fromClass, toClass, &m_baseConversionLevels ) ) {
         ///@todo check whether this is correct
         //There is a default-constructor in toClass that initializes from const toClass&, which fromClass can be converted to
         maximizeRank( bestRank, Conversion );

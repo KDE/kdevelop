@@ -74,6 +74,11 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT TypeConversion {
 
     uint implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue = true, bool noUserDefinedConversion = false );
 
+    /**
+     * Returns the count of steps by which a class needed to be converted to it's base-class during the last implicit conversion.
+     * Since a conversion to a base-class is still considered an exact match, this can be used to more precisely compare results.
+     * */
+    int baseConversionLevels() const;
   protected:
     /**
      * iso c++ draf 13.3.3.1.1
@@ -105,6 +110,9 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT TypeConversion {
      * @return Whether the types are same except for cv-qualification */
     
     bool identityConversion( AbstractType::Ptr from, AbstractType::Ptr to );
+
+    //Used to store the count of steps by which a class needed to be converted to it's base-class
+    int m_baseConversionLevels;
 };
 
 }

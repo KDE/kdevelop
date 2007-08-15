@@ -64,6 +64,7 @@ While construction:
 #include <duchain/declaration.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
+#include <duchain/topducontext.h>
 #include <duchain/classfunctiondeclaration.h>
 #include "typeutils.h"
 #include "cpptypes.h"
@@ -103,11 +104,25 @@ class CppDUContext : public BaseContext {
         delete instatiation;
     }
     
+    virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
+    {
+      if( basicFlags & BaseContext::LanguageSpecificFlag1 ) {
+        ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
+        //We use LanguageSpecificFlag1 to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.
+        BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, basicFlags );
+        return;
+      }
+      
+      foreach( const QualifiedIdentifier& identifier, identifiers )
+        findDeclarationsInternal(identifier, position, dataType, ret, basicFlags);
+    }
+    
     ///Overridden to take care of templates and other c++ specific things
-    virtual void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::DUContext::NamespaceAlias*>& namespaceAliases, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
+    void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
 
+      
       ///@todo maybe move parts of this logic directly into the du-chain
 
       ///Iso c++ 3.4.3.1 and 3.4.3.2 say that identifiers should be looked up part by part
@@ -115,9 +130,24 @@ class CppDUContext : public BaseContext {
       ///we put qualified identifiers in the form of Namespace::...::Identifier together in currentLookup.
       QualifiedIdentifier currentLookup;
       KDevelop::DUContext* scopeContext = 0; //The scope(class) we are searching in
-      
 
-      for( int num = 0; num < identifier.count(); num++ )
+      //num is the part of the scope that's being looked up
+      int num = 0;
+
+      currentLookup.setExplicitlyGlobal(identifier.explicitlyGlobal());
+      
+      //Only do the piece-by-piece lookup when templates are involved.
+      //Push all earlier non-template parts on the lookup-identifier, and continue behind them.
+      for( int a = 0; a < identifier.count()-1; a++ ) {
+        if( identifier.at(a).templateIdentifiers().isEmpty() ) {
+          num = a+1;
+          currentLookup.push(identifier.at(a));
+        }else{
+          break;
+        }
+      }
+
+      for( ; num < identifier.count(); num++ )
       {
         Identifier currentIdentifier = identifier.at(num);
         
@@ -148,8 +178,6 @@ class CppDUContext : public BaseContext {
         currentIdentifier.clearTemplateIdentifiers();
         
         currentLookup.push(currentIdentifier);
-        if( num == 0 )
-          currentLookup.setExplicitlyGlobal( identifier.explicitlyGlobal() );
 
         ///Step 2: Find the type
         typename BaseContext::SearchFlags flags = (num != (identifier.count()-1)) ? BaseContext::OnlyContainerTypes : BaseContext::NoSearchFlags;
@@ -157,10 +185,10 @@ class CppDUContext : public BaseContext {
         
         QList<Declaration*> tempDecls;
         if( !scopeContext ) {
-          BaseContext::findDeclarationsInternal( currentLookup, position, dataType, namespaceAliases, tempDecls, flags );
+          BaseContext::findDeclarationsInternal( toList(currentLookup), position, dataType, tempDecls, flags | BaseContext::LanguageSpecificFlag1 );
 
-        } else ///@todo Check whether it is the same file, if yes keep the position-cursor
-          scopeContext->findDeclarationsInternal( currentLookup, KTextEditor::Cursor::invalid(), dataType, namespaceAliases, tempDecls, flags | BaseContext::DontSearchInParent );
+        } else
+          scopeContext->findDeclarationsInternal( toList(currentLookup), scopeContext->url() == this->url() ? position : scopeContext->textRange().end(), dataType, tempDecls, flags | BaseContext::DontSearchInParent | BaseContext::LanguageSpecificFlag1 );
 
         
         if( !tempDecls.isEmpty() ) {
@@ -180,6 +208,8 @@ class CppDUContext : public BaseContext {
             }
           }else{
             //Only a part of the scope found, keep on searching
+
+            //Handle normal found declarations
             currentLookup.clear();
             if( tempDecls.size() == 1 ) {
             } else {
@@ -188,15 +218,15 @@ class CppDUContext : public BaseContext {
             //Extract a context, maybe it would be enough only testing the first found declaration
             foreach( Declaration* decl, tempDecls ) {
               Declaration* instanceDecl = decl;
-              
+
               if( !templateArgumentTypes.isEmpty() )
                 instanceDecl = instantiateDeclaration(decl, templateArgumentTypes);
-              
+
               if( !instanceDecl ) {
                 kDebug(9007) << "Could not instantiate context-declaration" << endl;
                 continue;
               }
-              
+
               scopeContext = TypeUtils::getInternalContext(instanceDecl);
               if( scopeContext && scopeContext->type() == DUContext::Class )
                 break;
@@ -204,7 +234,7 @@ class CppDUContext : public BaseContext {
             if( !scopeContext || scopeContext->type() != DUContext::Class ) {
               kDebug(9007) << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString() << endl;
               return;
-              
+
             }
           }
         } else {
@@ -275,7 +305,7 @@ class CppDUContext : public BaseContext {
     {
       if( decls.isEmpty() )
         return false;
-      
+
       if( decls.front()->isForwardDeclaration() )
         return false; //All forward-declarations must be collected(for implementation-reasons)
 
@@ -309,6 +339,11 @@ class CppDUContext : public BaseContext {
     }
     
   private:
+    QList<QualifiedIdentifier> toList( const QualifiedIdentifier& id ) const {
+      QList<QualifiedIdentifier> ret;
+      ret << id;
+      return ret;
+    }
 
     Declaration* instantiateDeclaration( Declaration* decl, const QList<Cpp::ExpressionEvaluationResult>& templateArguments ) const
     {

@@ -194,10 +194,11 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
     kDebug(9007) << "built top-level context with" << topLevelContext->allDeclarations(KTextEditor::Cursor()).size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
 
-    if( m_recompiling ) {
+/*     if( m_recompiling ) {
       DumpChain dump;
       dump.dump(topLevelContext);
-    }
+      kDebug() << dump.dotGraph(topLevelContext);
+     }*/
   }
 
   m_compilingContexts = false;
@@ -275,7 +276,6 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
   if (m_compilingContexts) {
     DUChainReadLocker lock(DUChain::lock());
 
-    identifier = currentContext()->scopeIdentifier();
     if (node->namespace_name)
       identifier.push(QualifiedIdentifier(m_editor->tokenToString(node->namespace_name)));
     else
@@ -452,7 +452,6 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
           readLock.unlock();
           DUChainWriteLocker writeLock(DUChain::lock());
 
-          ret->clearNamespaceAliases();
           ret->clearImportedParentContexts();
           m_editor->setCurrentRange(ret->textRangePtr());
           break;
@@ -547,26 +546,6 @@ void ContextBuilder::visitPostSimpleDeclaration(SimpleDeclarationAST*)
 void ContextBuilder::visitName (NameAST *)
 {
   // Note: we don't want to visit the name node, the name compiler does that for us (only when we need it)
-}
-
-void ContextBuilder::visitUsingDirective(UsingDirectiveAST * node)
-{
-  DefaultVisitor::visitUsingDirective(node);
-
-  if (m_compilingContexts && node->name) {
-    DUChainWriteLocker lock(DUChain::lock());
-    currentContext()->addNamespaceAlias(m_editor->createCursor(m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge)), identifierForName(node->name));
-  }
-}
-
-void ContextBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
-{
-  DefaultVisitor::visitNamespaceAliasDefinition(node);
-
-  if (m_compilingContexts && node->alias_name) {
-    DUChainWriteLocker lock(DUChain::lock());
-    currentContext()->addNamespaceAlias(m_editor->createCursor(m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge)), identifierForName(node->alias_name), m_editor->parseSession()->token_stream->token(node->namespace_name).symbol() );
-  }
 }
 
 void ContextBuilder::visitUsing(UsingAST* node)

@@ -25,6 +25,15 @@
 
 using namespace Cpp;
 
+inline bool ViableFunction::ParameterConversion::operator<(const ParameterConversion& rhs) const {
+  if( rank < rhs.rank )
+    return true;
+  else if( rank > rhs.rank )
+    return false;
+  else
+    return baseConversionLevels > rhs.baseConversionLevels; //Conversion-rank is same, so use the base-conversion levels for ranking
+}
+
 ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
   if( decl )
     m_type = dynamic_cast<CppFunctionType*>( decl->abstractType().data());
@@ -38,6 +47,7 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   if( !isValid() )
     return;
   AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());
+  Q_ASSERT(functionDecl);
   if( params.parameters.size() + functionDecl->defaultParameters().size() < m_type->arguments().size() && !partial )
     return; //Not enough parameters + default-parameters
   if( params.parameters.size() > m_type->arguments().size() )
@@ -49,7 +59,10 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
 
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
     TypeConversion conv;
-    m_parameterConversions << conv.implicitConversion(AbstractType::Ptr((*it).type), (*argumentIt), (*it).lValue, m_noUserDefinedConversion );
+    ParameterConversion c;
+    c.rank = conv.implicitConversion(AbstractType::Ptr((*it).type), (*argumentIt), (*it).lValue, m_noUserDefinedConversion );
+    c.baseConversionLevels = conv.baseConversionLevels();
+    m_parameterConversions << c;
     ++argumentIt;
   }
 }
@@ -69,8 +82,8 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
 
   //Is one of our conversions worse than one of the other function's?
 
-  QList<int>::const_iterator myConversions = m_parameterConversions.begin();
-  QList<int>::const_iterator otherConversions = other.m_parameterConversions.begin();
+  QList<ParameterConversion>::const_iterator myConversions = m_parameterConversions.begin();
+  QList<ParameterConversion>::const_iterator otherConversions = other.m_parameterConversions.begin();
 
   bool hadBetterConversion = false;
   while( myConversions != m_parameterConversions.end() )
@@ -78,7 +91,7 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
     if( *myConversions < *otherConversions )
       return false; //All this function's conversions must not be worse then the other function one's
 
-    if( *myConversions > *otherConversions )
+    if( *otherConversions < *myConversions )
       hadBetterConversion = true;
 
     ++myConversions;
@@ -103,8 +116,8 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
 bool ViableFunction::isViable() const {
   if( !isValid() || m_parameterCountMismatch ) return false;
 
-  for( QList<int>::const_iterator it = m_parameterConversions.begin(); it != m_parameterConversions.end(); ++it )
-    if( !*it )
+  for( QList<ParameterConversion>::const_iterator it = m_parameterConversions.begin(); it != m_parameterConversions.end(); ++it )
+    if( !(*it).rank )
       return false;
 
   return true;
@@ -112,9 +125,9 @@ bool ViableFunction::isViable() const {
 
 uint ViableFunction::worstConversion() const {
   uint ret = (uint)-1;
-  for( QList<int>::const_iterator it = m_parameterConversions.begin(); it != m_parameterConversions.end(); ++it )
-    if( (uint) *it < ret )
-      ret *= *it;
+  for( QList<ParameterConversion>::const_iterator it = m_parameterConversions.begin(); it != m_parameterConversions.end(); ++it )
+    if( (uint) (*it).rank < ret )
+      ret *= (*it).rank;
 
   if( ret == (uint)-1 )
     return 0;

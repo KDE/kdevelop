@@ -35,6 +35,7 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <identifiedtype.h>
+#include <namespacealiasdeclaration.h>
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
@@ -166,14 +167,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   if (node->parameter_declaration_clause) {
     openDeclaration(node->id, node, true);
 
-    /*if (!node->type_specifier) {
-      // TODO detect identifiers not equal to classname
-      if (currentDeclaration()->identifier().toString().startsWith('~'))
-        static_cast<ClassFunctionDeclaration*>(currentDeclaration())->setDestructor(true);
-      else
-        static_cast<ClassFunctionDeclaration*>(currentDeclaration())->setConstructor(true);
-    }*/
-
     applyFunctionSpecifiers();
 
   } else {
@@ -279,7 +272,7 @@ DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* ran
       return new DeclarationType(range, (KDevelop::Declaration::Scope)scope, currentContext());
 }
 
-Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition)
+Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition, bool isNamespaceAlias, const Identifier& aliasName)
 {
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -314,6 +307,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
         visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
     }
+  } else if( isNamespaceAlias ) {
+    id = QualifiedIdentifier(aliasName);
   }
 
   Identifier lastId;
@@ -343,13 +338,14 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
           ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && lastId == dec->identifier())) &&
            dec->isDefinition() == isDefinition &&
           dec->isTypeAlias() == m_inTypedef &&
-          (!hasTemplateContext(m_importedParentContexts) || dynamic_cast<TemplateDeclaration*>(dec))
+          ( ((!hasTemplateContext(m_importedParentContexts) && !dynamic_cast<TemplateDeclaration*>(dec)) ||
+             hasTemplateContext(m_importedParentContexts) && dynamic_cast<TemplateDeclaration*>(dec) ) )
          )
       {
-        if (isForward) {
-          if (!dynamic_cast<ForwardDeclaration*>(dec))
-            break;
-
+        if(isNamespaceAlias && !dynamic_cast<NamespaceAliasDeclaration*>(dec)) {
+          break;
+        } else if (isForward && !dynamic_cast<ForwardDeclaration*>(dec)) {
+          break;
         } else if (isFunction) {
           if (scope == Declaration::ClassScope) {
             if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
@@ -390,7 +386,10 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     
     Q_ASSERT(m_editor->currentRange() == prior);
 
-    if (isForward) {
+    if( isNamespaceAlias ) {
+      declaration = new NamespaceAliasDeclaration(range, scope, currentContext());
+      declaration->setIdentifier(aliasName);
+    } else if (isForward) {
       declaration = new ForwardDeclaration(range, scope, currentContext());
 
     } else if (isFunction) {
@@ -559,6 +558,72 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   closeDeclaration();
 
   m_accessPolicyStack.pop();
+}
+
+QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position)
+{
+  QList<DUContext*> contexts = currentContext()->findContexts(DUContext::Namespace, identifier, position);
+  if( contexts.isEmpty() ) {
+    //Failed to resolve namespace
+    kDebug() << "Failed to resolve namespace \"" << identifier << "\"";
+    QualifiedIdentifier ret = identifier;
+    ret.setExplicitlyGlobal(true);
+    Q_ASSERT(ret.count());
+    return ret;
+  } else {
+    QualifiedIdentifier ret = contexts.first()->scopeIdentifier(true);
+    Q_ASSERT(ret.count());
+    ret.setExplicitlyGlobal(true);
+    return ret;
+  }
+}
+
+
+void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
+{
+  DeclarationBuilderBase::visitUsingDirective(node);
+
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
+      ///@todo report problem
+      kDebug() << "Namespace-import used in non-global scope" << endl;
+      return;
+    }
+  }
+  
+  if( m_compilingContexts ) {
+    openDeclaration(0, node, false, false, false, true, globalImportIdentifier);
+    {
+      DUChainWriteLocker lock(DUChain::lock());
+      Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(currentDeclaration()));
+      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForName(node->name), currentDeclaration()->textRange().start()) );
+    }
+    closeDeclaration();
+  }
+}
+
+void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
+{
+  DeclarationBuilderBase::visitNamespaceAliasDefinition(node);
+
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
+      ///@todo report problem
+      kDebug() << "Namespace-alias used in non-global scope" << endl;
+    }
+  }
+  
+  if( m_compilingContexts ) {
+    openDeclaration(0, node, false, false, false, true, Identifier(m_editor->parseSession()->token_stream->token(node->namespace_name).symbol()));
+    {
+      DUChainWriteLocker lock(DUChain::lock());
+      Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(currentDeclaration()));
+      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForName(node->alias_name), currentDeclaration()->textRange().start()) );
+    }
+    closeDeclaration();
+  }
 }
 
 void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)

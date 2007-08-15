@@ -240,6 +240,11 @@ void TestCppCodeCompletion::testTypeConversion() {
   DUContext* testContext = context->childContexts()[0];
   QCOMPARE( testContext->type(), DUContext::Function );
 
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Heinz") ));
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Erna") ));
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Honk") ));
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("A") ));
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("B") ));
   AbstractType::Ptr Heinz = findDeclaration( testContext, QualifiedIdentifier("Heinz") )->abstractType();
   AbstractType::Ptr Erna = findDeclaration( testContext, QualifiedIdentifier("Erna") )->abstractType();
   AbstractType::Ptr Honk = findDeclaration( testContext, QualifiedIdentifier("Honk") )->abstractType();
@@ -383,13 +388,13 @@ void TestCppCodeCompletion::testInclude() {
 void TestCppCodeCompletion::testUpdateChain() {
   TEST_FILE_PARSE_ONLY
       
-  DUContext* context = parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpAST |  DumpType), 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), static_cast<DumpAreas>(DumpDUChain | DumpType), 0, KUrl("testIdentity") );
+  DUContext* context = parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
+  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
   
   
   DUChainWriteLocker lock(DUChain::lock());
@@ -419,7 +424,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
   TestPreprocessor( TestCppCodeCompletion* _cc, QList<DUContext*>& _included ) : cc(_cc), included(_included), pp(0) {
   }
   
-  rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType type, int sourceLine)
+  rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType type, int sourceLine, bool skipCurrentPath)
   {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.find(fileName);
     if( it != cc->fakeIncludes.end() || !pp ) {

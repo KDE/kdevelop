@@ -143,8 +143,6 @@ protected:
   virtual void visitCompoundStatement(CompoundStatementAST *);
   virtual void visitSimpleDeclaration(SimpleDeclarationAST *);
   virtual void visitName(NameAST *);
-  virtual void visitUsingDirective(UsingDirectiveAST *);
-  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
   virtual void visitUsing(UsingAST*);
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
   virtual void visitForStatement(ForStatementAST*);

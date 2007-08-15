@@ -72,16 +72,21 @@ public:
   virtual void visitParameterDeclaration(ParameterDeclarationAST* node);
   virtual void visitTypedef(TypedefAST *);
   virtual void visitTemplateParameter(TemplateParameterAST *);
+  virtual void visitUsingDirective(UsingDirectiveAST *);
+  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
 private:
+  //Du-chain must be locked
+  QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position);
+  
   KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    * \param range provide a valid AST here if name is null
    */
-  KDevelop::Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false);
+  KDevelop::Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false, bool isNamespaceAlias = false, const Identifier& aliasName = Identifier());
   /// Same as the above, but sets it as the definition too
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDeclaration();

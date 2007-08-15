@@ -65,7 +65,16 @@ namespace Cpp {
     KDevelop::DeclarationPointer declaration() const;
 
     private:
-    QList<int> m_parameterConversions;
+    struct ParameterConversion {
+      ParameterConversion(int _rank=0, int _baseConversionLevels=0) : rank(_rank), baseConversionLevels(_baseConversionLevels) {
+      }
+
+      inline bool operator<(const ParameterConversion& rhs) const;
+      
+      int rank; ///@see TypeConversion::ConversionRank
+      int baseConversionLevels; ///@see TypeConversion::baseConversionLevels
+    };
+    QList<ParameterConversion> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
     CppFunctionType* m_type;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
