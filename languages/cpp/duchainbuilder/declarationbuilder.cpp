@@ -514,12 +514,14 @@ void DeclarationBuilder::closeDeclaration()
     
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
-      currentDeclaration()->setInternalContext(m_lastContext);
-      
-      if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )
-        kDebug() << "Warning: Range was invalidated" << endl;
-      
-      m_lastContext = 0;
+      if( !m_lastContext->declaration() ) { //if the context is already internalContext of another declaration, leave it alone
+        currentDeclaration()->setInternalContext(m_lastContext);
+        
+        if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )
+          kDebug() << "Warning: Range was invalidated" << endl;
+        
+        m_lastContext = 0;
+      }
     }
   }
 
