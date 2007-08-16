@@ -19,6 +19,8 @@
 #include <QMap>
 #include <QMutex>
 
+class KUrl;
+
 namespace CppTools {
   class FileModificationTimeWrapper;
 
@@ -64,6 +66,8 @@ namespace CppTools {
       Cache m_cache;
       QMutex m_cacheMutex;
 
+      KUrl mapToBuild(const KUrl& url);
+      
       ///Executes the command using KProcess
       PathResolutionResult getFullOutput( const QString& command, const QString& workingDirectory, QString& output ) const;
       bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;

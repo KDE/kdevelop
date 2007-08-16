@@ -230,6 +230,20 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   return resolveIncludePath( fi.fileName(), fi.absolutePath() );
 }
 
+KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
+  QString wd = url.toLocalFile();
+  if( m_outOfSource ) {
+      if( wd.startsWith( m_source ) ) {
+        //Move the current working-directory out of source, into the build-system
+        wd = m_build + '/' + wd.mid( m_source.length() );
+        KUrl u( wd );
+        u.cleanPath();
+        wd = u.path();
+      }
+  }
+  return KUrl(wd);
+}
+
 PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& workingDirectory ) {
 
   struct Enabler {
@@ -249,7 +263,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   ///STEP 1: CACHING
   QDir dir( workingDirectory );
-  dir = QDir( dir.absolutePath() );
+  dir = QDir( mapToBuild(dir.absolutePath()).toLocalFile() );
   QFileInfo makeFile( dir, "Makefile" );
   if( !makeFile.exists() )
     return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("problem while trying to resolve include-paths for %1", file ) );
@@ -308,15 +322,8 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     u.cleanPath();
     wd = u.path();
   }
-  if( m_outOfSource ) {
-    if( wd.startsWith( m_source ) ) {
-      //Move the current working-directory out of source, into the build-system
-      wd = m_build + '/' + wd.mid( m_source.length() );
-      KUrl u( wd );
-      u.cleanPath();
-      wd = u.path();
-    }
-  }
+
+  wd = mapToBuild(wd).toLocalFile();
 
   SourcePathInformation source( wd );
   QStringList possibleTargets = source.possibleTargets( targetName );
