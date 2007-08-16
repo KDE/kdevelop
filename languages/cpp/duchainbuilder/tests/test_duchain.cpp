@@ -208,6 +208,19 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(t.at(0).identifier(), QString("Area"));
   QCOMPARE(t.at(1).identifier(), QString("jump"));
   QCOMPARE(t.at(2).identifier(), QString("tes"));
+
+  QualifiedIdentifier op1("operator<");
+  QualifiedIdentifier op2("operator<=");
+  QualifiedIdentifier op3("operator>");
+  QualifiedIdentifier op4("operator>=");
+  QCOMPARE(op1.count(), 1);
+  QCOMPARE(op2.count(), 1);
+  QCOMPARE(op3.count(), 1);
+  QCOMPARE(op4.count(), 1);
+  QCOMPARE(op4.toString(), QString("operator>="));
+  QCOMPARE(op3.toString(), QString("operator>"));
+  QCOMPARE(op1.toString(), QString("operator<"));
+  QCOMPARE(op2.toString(), QString("operator<="));
 }
 
 void TestDUChain::testContextRelationships()
