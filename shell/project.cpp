@@ -111,7 +111,7 @@ public:
         Core::self()->projectControllerInternal()->projectImportingFinished( project );
 
         // Add the project files to the baackground parse to be parsed.
-        if ( topItem )
+/*        if ( topItem )
         {
             KUrl::List urlList;
             QList<ProjectFileItem*> files = recurseFiles( topItem );
@@ -120,7 +120,7 @@ public:
                 urlList.append( file->url() );
             }
             Core::self()->languageController()->backgroundParser()->addDocumentList( urlList );
-        }
+        }*/
     }
 };
 
