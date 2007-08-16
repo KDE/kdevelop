@@ -488,10 +488,10 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
       tempFile.close();
       kDebug(9500) << "Wrote dot-graph of context " << ctx << " into " << fileName << endl;
       KProcess proc; ///@todo this is a simple hack. Maybe do it with mime-types etc.
-      proc << "kgraphviewer" << fileName;
+      proc << "dotty" << fileName;
       if( !proc.startDetached() ) {
         KProcess proc2;
-        proc2 << "dotty" << fileName;
+        proc2 << "kgraphviewer" << fileName;
         if( !proc2.startDetached() ) {
           KMessageBox::error(0, i18n("Could not open %1 with kgraphviewer or dotty.", fileName));
         }
