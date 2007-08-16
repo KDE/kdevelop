@@ -535,7 +535,7 @@ void DeclarationBuilder::closeDeclaration()
     
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
-      if( !m_lastContext->owner() || !wasEncountered(m_lastContext->owner()->asDeclaration()) ) { //if the context is already internalContext of another declaration, leave it alone
+      if( !m_lastContext->owner() || (!wasEncountered(m_lastContext->owner()->asDeclaration()) && !wasEncountered(m_lastContext->owner()->asDefinition()) ) ) { //if the context is already internalContext of another declaration, leave it alone
         currentDeclaration()->setInternalContext(m_lastContext);
         
         if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )
