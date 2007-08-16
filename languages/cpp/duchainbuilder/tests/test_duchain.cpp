@@ -26,6 +26,7 @@
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
+#include <definition.h>
 #include <dumpdotgraph.h>
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
@@ -759,11 +760,30 @@ void TestDUChain::testDeclareUsingNamespace()
 }
 
 void TestDUChain::testFunctionDefinition() {
-  QByteArray text("class A { inline char at(); }; \n inline char A::at() {} ");
+  QByteArray text("class A { char at(B* b); }; \n char A::at(B* b) {} ");
 
-  DUContext* top = parse(text, DumpNone);
+  DUContext* top = parse(text, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+
+  Declaration* atInA = top->childContexts()[0]->localDeclarations()[0];
+  
+  QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(atInA));
+
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDefinitions().count(), 1);
+
+  QCOMPARE(top->localDefinitions()[0]->declaration(), top->childContexts()[0]->localDeclarations()[0]);
+  QCOMPARE(top->localDefinitions()[0], top->childContexts()[0]->localDeclarations()[0]->definition());
+
+  QCOMPARE(top->childContexts()[2]->owner()->asDefinition(), top->localDefinitions()[0]);
+  
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
+  
   
   ///How exactly should this look now?
 /*  QCOMPARE(top->localDeclarations().count(), 2);

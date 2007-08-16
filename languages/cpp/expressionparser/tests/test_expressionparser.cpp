@@ -376,20 +376,20 @@ void TestExpressionParser::testSimpleExpression() {
 void TestExpressionParser::testThis() {
   TEST_FILE_PARSE_ONLY
   
-  QByteArray text("class A{ void test() { } void test2() const { } };");
-  DUContext* top = parse( text, DumpNone /*DumpDUChain | DumpAST */);
+  QByteArray text("class A{ void test() { } void test2() const { }; void extTest(); }; void A::extTest() {}");
+  DUContext* top = parse( text, DumpAll );//DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
   
-  QCOMPARE(top->childContexts().count(), 1);
+  QCOMPARE(top->childContexts().count(), 3);
   QCOMPARE(top->childContexts()[0]->type(), DUContext::Class);
-  QCOMPARE(top->childContexts()[0]->childContexts().count(), 4);
+  QCOMPARE(top->childContexts()[0]->childContexts().count(), 5);
   DUContext* testContext = top->childContexts()[0]->childContexts()[1];
   QCOMPARE(testContext->type(), DUContext::Other);
-  QVERIFY(testContext->declaration());
+  QVERIFY(testContext->owner());
   
   DUContext* test2Context = top->childContexts()[0]->childContexts()[3];
   QCOMPARE(test2Context->type(), DUContext::Other);
-  QVERIFY(test2Context->declaration());
+  QVERIFY(test2Context->owner());
 
   Cpp::ExpressionParser parser;
   Cpp::ExpressionEvaluationResult result1 = parser.evaluateType( "this", testContext );
@@ -405,6 +405,17 @@ void TestExpressionParser::testThis() {
   QVERIFY(result2.instance);
   QCOMPARE(result2.type->toString().trimmed(), QString("A* const"));
 
+  DUContext* extTestCtx = top->childContexts()[2];
+  QCOMPARE(extTestCtx->type(), DUContext::Other);
+  QVERIFY(extTestCtx->owner());
+  QVERIFY(extTestCtx->owner()->asDefinition());
+  
+  Cpp::ExpressionEvaluationResult result3 = parser.evaluateType( "this", extTestCtx );
+  QVERIFY(result3.isValid());
+  QVERIFY(result3.type);
+  QVERIFY(result3.instance);
+  QCOMPARE(result3.type->toString(), QString("A*"));
+  
   release(top);
 }
 

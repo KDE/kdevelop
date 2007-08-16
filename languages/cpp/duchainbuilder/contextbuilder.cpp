@@ -655,12 +655,11 @@ void ContextBuilder::addImportedContexts()
     foreach (DUContext* imported, m_importedParentContexts)
       currentContext()->addImportedParentContext(imported);
 
-    //Move on the internal-context of Declarations
-    if( m_importedParentContexts.size() == 1 ) {
-      DUContext* importedContext( m_importedParentContexts.first() );
+    //Move on the internal-context of Declarations/Definitions
+    foreach( DUContext* importedContext, m_importedParentContexts )  {
       if( (importedContext->type() == DUContext::Template || importedContext->type() == DUContext::Function) )
-        if( importedContext->declaration() && importedContext->declaration()->internalContext() == importedContext )
-          importedContext->declaration()->setInternalContext(currentContext());
+        if( importedContext->owner() && importedContext->owner()->internalContext() == importedContext )
+          importedContext->owner()->setInternalContext(currentContext());
     }
 
     m_importedParentContexts.clear();

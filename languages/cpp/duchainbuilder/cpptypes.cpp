@@ -63,6 +63,154 @@ AbstractType* CppTemplateParameterType::clone() const {
   return new CppTemplateParameterType(*this);
 }
 
+bool CppCVType::equals(const CppCVType* rhs) const {
+  return m_constant == rhs->m_constant && m_volatile == rhs->m_volatile;
+}
+
+bool CppFunctionType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppFunctionType*>(_rhs))
+    return false;
+  const CppFunctionType* rhs = static_cast<const CppFunctionType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  //Ignore IdentifiedType here, because we do not want to respect that while comparing function-types.
+
+  return CppCVType::equals(rhs) && FunctionType::equals(rhs);
+}
+
+bool CppPointerType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppPointerType*>(_rhs))
+    return false;
+  const CppPointerType* rhs = static_cast<const CppPointerType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+
+  return CppCVType::equals(rhs) && PointerType::equals(rhs);
+}
+
+bool CppReferenceType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppReferenceType*>(_rhs))
+    return false;
+  const CppReferenceType* rhs = static_cast<const CppReferenceType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  return CppCVType::equals(rhs) && ReferenceType::equals(rhs);
+}
+
+bool CppClassType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppClassType*>(_rhs))
+    return false;
+  const CppClassType* rhs = static_cast<const CppClassType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  if( m_classType != rhs->m_classType )
+    return false;
+  
+  if( m_baseClasses.count() != rhs->m_baseClasses.count() )
+    return false;
+
+  QList<BaseClassInstance>::const_iterator it1 = m_baseClasses.begin();
+  QList<BaseClassInstance>::const_iterator it2 = rhs->m_baseClasses.begin();
+  
+  for( ;it1 != m_baseClasses.end(); ++it1, ++it2 ) {
+    if( (bool)it1->baseClass != (bool)it2->baseClass )
+      return false;
+    if( it1->access != it2->access )
+      return false;
+    
+    if( !it1->baseClass)
+      continue;
+
+    if( !it1->baseClass->equals( it2->baseClass.data() ) )
+      return false;
+  }
+  
+  return CppCVType::equals(rhs) && IdentifiedType::equals(rhs) && StructureType::equals(rhs);
+}
+
+bool CppTypeAliasType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppTypeAliasType*>(_rhs))
+    return false;
+  const CppTypeAliasType* rhs = static_cast<const CppTypeAliasType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  if( CppCVType::equals(rhs) && IdentifiedType::equals(rhs) )
+  {
+    if( (bool)m_type != (bool)rhs->m_type )
+      return false;
+
+    if( !m_type )
+      return true;
+    
+    return m_type->equals(rhs->m_type.data());
+  
+  } else {
+    return false;
+  }
+}
+
+bool CppEnumerationType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppEnumerationType*>(_rhs))
+    return false;
+  const CppEnumerationType* rhs = static_cast<const CppEnumerationType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  return CppIntegralType::equals(rhs) && IdentifiedType::equals(rhs);
+}
+
+bool CppArrayType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppArrayType*>(_rhs))
+    return false;
+  const CppArrayType* rhs = static_cast<const CppArrayType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  return ArrayType::equals(rhs);
+}
+
+bool CppIntegralType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppIntegralType*>(_rhs))
+    return false;
+  const CppIntegralType* rhs = static_cast<const CppIntegralType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  return m_type == rhs->m_type && m_modifiers == rhs->m_modifiers && IntegralType::equals(rhs) && CppCVType::equals(rhs);
+}
+
+bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const CppTemplateParameterType*>(_rhs))
+    return false;
+  const CppTemplateParameterType* rhs = static_cast<const CppTemplateParameterType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  return IdentifiedType::equals(rhs);
+}
+
 void CppClassType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
@@ -222,15 +370,6 @@ CppCVType::CppCVType(Declaration::CVSpecs spec)
 QString CppCVType::cvString() const
 {
   return QString("%1%2").arg(isConstant() ? " const " : "").arg(isVolatile() ? " volatile " : "");
-}
-
-bool CppFunctionType::isTemplate() {
-  return false;
-}
-
-bool CppFunctionType::isMoreSpecialized( CppFunctionType* other ) {
-  Q_UNUSED(other)
-  return false;
 }
 
 QString CppFunctionType::toString() const
@@ -435,6 +574,15 @@ QString CppClassType::mangled() const
 QString CppTypeAliasType::mangled() const
 {
   return type()->mangled();
+}
+
+bool CppFunctionType::isTemplate() {
+  return false;
+}
+
+bool CppFunctionType::isMoreSpecialized( CppFunctionType* other ) {
+  Q_UNUSED(other)
+  return false;
 }
 
 QString CppFunctionType::mangled() const

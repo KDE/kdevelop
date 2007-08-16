@@ -59,6 +59,8 @@ public:
 
   KDevelop::Declaration::CVSpecs cv() const { return static_cast<KDevelop::Declaration::CVSpecs>((m_constant & KDevelop::Declaration::Const) | (m_volatile & KDevelop::Declaration::Volatile)); }
 
+  bool equals(const CppCVType* rhs) const;
+  
 protected:
   inline void setCV(KDevelop::Declaration::CVSpecs spec) { m_constant = spec & KDevelop::Declaration::Const; m_volatile = spec & KDevelop::Declaration::Volatile; }
   inline void setConstant(bool is) { m_constant = is; }
@@ -108,6 +110,8 @@ public:
   //virtual uint hash() const;
 
   virtual AbstractType* clone() const;
+
+  virtual bool equals(const AbstractType* rhs) const;
   
 protected:
   CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
@@ -124,10 +128,6 @@ class KDEVCPPDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionTy
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
 
-  ///Declarations of this class(@see KDevelop::IdentifiedType::declaration()) are guaranteed to be based on AbstractFunctionDeclaration
-  
-  virtual QString toString() const;
-
   ///@todo implement these
   /** @return whether this is a template-function
    * */
@@ -137,11 +137,17 @@ public:
    * */
   bool isMoreSpecialized( CppFunctionType* other );
   
+  ///Declarations of this class(@see KDevelop::IdentifiedType::declaration()) are guaranteed to be based on AbstractFunctionDeclaration
+  
+  virtual QString toString() const;
+
   //virtual uint hash() const;
 
   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
+
+  virtual bool equals(const AbstractType* rhs) const;
 };
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
@@ -157,6 +163,7 @@ public:
 
   virtual AbstractType* clone() const;
   
+  virtual bool equals(const AbstractType* rhs) const;
   //virtual uint hash() const;
 };
 
@@ -172,6 +179,8 @@ public:
   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
+  
+  virtual bool equals(const AbstractType* rhs) const;
   //virtual uint hash() const;
 };
 
@@ -224,6 +233,8 @@ public:
 
   virtual AbstractType* clone() const;
 
+  virtual bool equals(const AbstractType* rhs) const;
+  
   virtual void accept0 (KDevelop::TypeVisitor *v) const;
 
   virtual void exchangeTypes(KDevelop::TypeExchanger*);
@@ -261,6 +272,8 @@ public:
   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
+  
+  virtual bool equals(const AbstractType* rhs) const;
   
 protected:
   virtual void accept0 (KDevelop::TypeVisitor *v) const
@@ -301,6 +314,8 @@ public:
 
   virtual AbstractType* clone() const;
   
+  virtual bool equals(const AbstractType* rhs) const;
+  
   virtual QString mangled() const;
 };
 
@@ -312,6 +327,8 @@ public:
   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
+  
+  virtual bool equals(const AbstractType* rhs) const;
 };
 
 /*class CppTemplateParameterType : public
@@ -345,6 +362,8 @@ public:
   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
+  
+  virtual bool equals(const AbstractType* rhs) const;
   
   protected:
   virtual void accept0 (KDevelop::TypeVisitor *v) const;

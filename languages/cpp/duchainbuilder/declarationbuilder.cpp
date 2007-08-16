@@ -195,16 +195,29 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
           // TODO: potentially excessive locking
           DUChainWriteLocker lock(DUChain::lock());
-          QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, lastType());
+          QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
           foreach (Declaration* dec, declarations) {
             if (dec->isForwardDeclaration())
               continue;
+            //Compare signatures of function-declarations:
+            if(dec->abstractType() == lastType()
+               || (dec->abstractType() && lastType() && dec->abstractType()->equals(lastType().data())))
+            {
+              //The declaration-type matches this definition, good.
+            }else{
+              continue;
+            }
 
             Declaration* oldDec = currentDeclaration();
             abortDeclaration();
             Definition* def = new Definition(oldDec->takeRange(), currentContext());
+            setEncountered(def);
             delete oldDec;
             dec->setDefinition(def);
+            
+            if( m_lastContext && !m_lastContext->owner() )
+              def->setInternalContext(m_lastContext);
+            m_lastContext = 0;
 
             // Resolve forward declarations
             foreach (Declaration* forward, declarations) {
@@ -213,6 +226,14 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
             }
             return;
           }
+          //We do not want unresolved definitions to hide declarations.
+          //As declarations are named by Identifiers, not by QualifiedIdentifiers,
+          //they would be named by only one part of their scope, and thus be wrong anyway.
+          Declaration* oldDec = currentDeclaration();
+          abortDeclaration();
+          delete oldDec;
+          kDebug(9007) << "No declaration found for definition " << id << ", discarding definition";
+          return;
         }
       }
     }
@@ -514,7 +535,7 @@ void DeclarationBuilder::closeDeclaration()
     
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
-      if( !m_lastContext->declaration() ) { //if the context is already internalContext of another declaration, leave it alone
+      if( !m_lastContext->owner() || !wasEncountered(m_lastContext->owner()->asDeclaration()) ) { //if the context is already internalContext of another declaration, leave it alone
         currentDeclaration()->setInternalContext(m_lastContext);
         
         if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )

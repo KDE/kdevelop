@@ -272,9 +272,11 @@ class NavigationContext : public KShared {
 
         QualifiedIdentifier identifier = m_declaration->qualifiedIdentifier();
         if( identifier.count() > 1 ) {
-          if( m_declaration->context() && m_declaration->context()->declaration() ) {
+          if( m_declaration->context() && m_declaration->context()->owner() && m_declaration->context()->owner()->asDeclaration() )
+          {
+            Declaration* decl = m_declaration->context()->owner()->asDeclaration();
             m_currentText += i18n("Container: ");
-            makeLink( declarationName(m_declaration->context()->declaration())+"<br />", m_declaration->context()->declaration(), NavigationAction::NavigateDeclaration );
+            makeLink( declarationName(decl)+"<br />", decl, NavigationAction::NavigateDeclaration );
           } else {
             QualifiedIdentifier parent = identifier;
             parent.pop();

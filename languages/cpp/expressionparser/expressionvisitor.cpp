@@ -23,6 +23,7 @@
 #include <ducontext.h>
 #include <parsesession.h>
 #include <declaration.h>
+#include <definition.h>
 #include <identifiedtype.h>
 #include <typeinfo>
 #include "tokens.h"
@@ -435,22 +436,60 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     //Respect "this" token
     if( tokenFromIndex(node->token).kind == Token_this ) {
       LOCKDUCHAIN;
-      
-      if( !m_currentContext->parentContext() || m_currentContext->parentContext()->type() != DUContext::Class || !m_currentContext->parentContext()->declaration() || !m_currentContext->declaration() ) {
-        problem(node, "\"this\" used in invalid context");
+
+      AbstractType::Ptr thisType;
+
+      DUContext* context = m_currentContext;
+      while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
+      { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
+        context = context->parentContext();
+      }
+
+      ///Step 1: Find the function-declaration for the function we are in
+      Declaration* functionDeclaration = 0;
+
+      if( context->owner() && context->owner()->asDefinition() )
+      {
+        //If we are in a definition, move the classContext to the declaration's classContext, and take the type from there
+        Q_ASSERT(context->owner()->asDefinition()->declaration());
+        
+        functionDeclaration = context->owner()->asDefinition()->declaration();
+      }
+      else if( context->owner()->asDeclaration() )
+      {
+        functionDeclaration = context->owner()->asDeclaration();
+      }
+       
+      if( !functionDeclaration )
+      {
+        problem(node, "\"this\" used, but no function-declaration could be found");
         return;
       }
-      CppFunctionType* cppFunction = dynamic_cast<CppFunctionType*>(m_currentContext->declaration()->abstractType().data());
+
+      ///Step 2: Find the type of "this" from the function-declaration
+      DUContext* classContext = functionDeclaration->context();
+
+      //Take the type from the classContext
+      if( classContext && classContext->type() == DUContext::Class && classContext->owner() && classContext->owner()->asDeclaration() )
+        thisType = classContext->owner()->asDeclaration()->abstractType();
+
+      if( !thisType ) {
+        problem(node, "\"this\" used in invalid classContext");
+        return;
+      }
+
+      ///Step 3: Create a pointer-type for the "this" type and return it
+      CppFunctionType* cppFunction = dynamic_cast<CppFunctionType*>(functionDeclaration->abstractType().data());
 
       if( cppFunction ) {
         CppPointerType::Ptr thisPointer( new CppPointerType( cppFunction->cv() ) );
-        thisPointer->setBaseType( m_currentContext->parentContext()->declaration()->abstractType() );
+        thisPointer->setBaseType( thisType );
 
         m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(thisPointer.data()) );
         m_lastInstance = Instance(true);
       }else{
-        if( m_currentContext->declaration()->abstractType() )
-          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( typeid(m_currentContext->declaration()->abstractType().data()).name() ) .arg(m_currentContext->declaration()->abstractType()->toString()));
+        if( context->owner() && context->owner()->asDeclaration() && context->owner()->asDeclaration()->abstractType() )
+          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( typeid(m_currentContext->owner()->asDeclaration()->abstractType().data()).name() ) .arg(m_currentContext->owner()->asDeclaration()->abstractType()->toString()));
         else
           problem(node, "\"this\" used in non-function context with invalid type");
       }
