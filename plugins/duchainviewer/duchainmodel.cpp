@@ -476,7 +476,7 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
       
         if( tempFile.open() ) {
           DumpDotGraph dump;
-          tempFile.write( dump.dotGraph( ctx, (bool)dynamic_cast<TopDUContext*>(ctx) ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
+          tempFile.write( dump.dotGraph( ctx ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
         } else {
           readLock.unlock();
           lock.unlock();
