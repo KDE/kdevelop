@@ -161,6 +161,11 @@ ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(n
       d->m_prefix = d->m_source.mid( offset, parenBegin - offset );
       d->m_cur = parenBegin + 1;
       d->m_curEnd = d->next();
+      if( d->m_curEnd == d->m_source.length() ) {
+        //The paren was not closed. It might be an identifier like "operator<", so count everything as prefix.
+        d->m_prefix = d->m_source.mid(offset);
+        d->m_curEnd = d->m_end = d->m_cur = d->m_source.length();
+      }
     } else {
       //We have neither found an ending-character, nor an opening-paren, so take the whole input and end
       d->m_prefix = d->m_source.mid(offset);
