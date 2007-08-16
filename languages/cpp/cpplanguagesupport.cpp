@@ -69,6 +69,8 @@
 #include "includepathresolver.h"
 #include "setuphelpers.h"
 
+//#define DEBUG
+
 using namespace KDevelop;
 
 CppLanguageSupport* CppLanguageSupport::m_self = 0;
@@ -271,10 +273,11 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 
 QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const {
     QPair<KUrl, KUrl> ret;
-
+#ifdef DEBUG
     kDebug(9007) << "searching for include-file" << includeName;
     if( !skipPath.isEmpty() )
         kDebug(9007) << "skipping path" << skipPath;
+#endif
     
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
         QFileInfo info(QDir(localPath.path()), includeName);

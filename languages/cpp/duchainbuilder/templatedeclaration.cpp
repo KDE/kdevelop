@@ -277,8 +277,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     contextCopy->setType(context->type());
     contextCopy->setLocalScopeIdentifier(context->localScopeIdentifier());
 
-    kDebug(9007) << "Created context" << contextCopy << "as specialization of context" << context;
-    
     if( instantiatedDeclaration )
       instantiatedDeclaration->setInternalContext(contextCopy);
 
