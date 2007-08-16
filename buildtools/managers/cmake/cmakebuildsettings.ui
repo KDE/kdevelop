@@ -47,13 +47,7 @@
      <property name="alignment" >
       <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
      </property>
-     <property name="buddy" >
-      <cstring>kcfg_buildFolder</cstring>
-     </property>
     </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QLineEdit" name="kcfg_buildFolder" />
    </item>
    <item row="3" column="0" >
     <widget class="QLabel" name="label_2" >
@@ -149,6 +143,9 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="KUrlRequester" name="kcfg_buildFolder" />
    </item>
   </layout>
  </widget>

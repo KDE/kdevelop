@@ -45,9 +45,6 @@ namespace KDevelop
 }
 
 class CMakeFolderItem;
-class MacroAst;
-
-class cmLocalGenerator;
 class ICMakeBuilder;
 
 class CMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
@@ -106,8 +103,8 @@ private:
     CMakeListsParser m_parser;
     VariableMap m_vars;
     MacroMap m_macros;
-//     ProjectInfo m_projectInfo;
     ICMakeBuilder* m_builder;
+    QList<KDevelop::ProjectTargetItem*> m_targets;
 };
 
 #endif

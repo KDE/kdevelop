@@ -5,7 +5,7 @@
   <group name="CMake">
     <entry name="installPrefix" key="Prefix" type="Url">
     </entry>
-    <entry name="buildFolder" key="Build Dir" type="String">
+    <entry name="buildFolder" key="Build Dir" type="Url">
     </entry>
     <entry name="buildType" key="Build Type" type="String">
     </entry>

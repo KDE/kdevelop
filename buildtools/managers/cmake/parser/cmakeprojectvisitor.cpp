@@ -55,7 +55,7 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
     }
     else
     {
-        kDebug(9032) << "error:" << varName << "not found";
+        kDebug(9032) << "error:" << varName << " not found";
         return QStringList();
     }
 //     kDebug(9032) << "resolving env:" << varName << "=" << env;
@@ -128,7 +128,10 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
         else
         {
             if(!values->contains(var))
+            {
                 kDebug(9032) << "warning: Variable" << var << "not defined";
+                ret = QStringList();
+            }
             else
             {
                 foreach(QString s, values->value(var))
@@ -214,13 +217,12 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //FIXME: Must deal with ENV{something} case
-    QString name = set->variableName();
-    kDebug(9032) << "set:" << name << "=" << set->values();
-    if(!set->values().isEmpty())
-        m_vars->insert(name, resolveVariables(set->values(), m_vars));
-    else
-        m_vars->insert(name, QStringList("FALSE")); //FIXME: Must know what do we need here
-//     kDebug(9032) << set->variableName() << "-result:-" << m_vars->value(name);
+    kDebug(9032) << "set:" << set->variableName() << "=" << set->values();
+//     if(!set->values().isEmpty())
+        m_vars->insert(set->variableName(), resolveVariables(set->values(), m_vars));
+//     else
+//         m_vars->insert(set->variableName(), QStringList("FALSE")); //FIXME: Must know what do we need here
+    kDebug(9032) << "set:" << set->variableName() << "=" << m_vars->value(set->variableName()) << "...";
     return 1;
 }
 
@@ -695,7 +697,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
     {
         QByteArray b = p.readAllStandardOutput();
         QString t;
-        t.prepend(b);
+        t.prepend(b.trimmed());
         m_vars->insert(exec->outputVariable(), QStringList(t.trimmed()));
         kDebug(9032) << "executed" << execName << "<" << t;
     }
@@ -709,7 +711,21 @@ int CMakeProjectVisitor::visit(const FileAst *file)
     {
 //         case FileAst::WRITE:
 //         case FileAst::APPEND:
-//         case FileAst::READ:
+        case FileAst::READ:
+        {
+            KUrl filename=file->path();
+            kDebug(9032) << "FileAst: reading " << filename;
+            QFile f(filename.toLocalFile());
+            if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+                return 1;
+            QString output;
+            while (!f.atEnd()) {
+                QByteArray line = f.readLine();
+                output += line;
+            }
+            m_vars->insert(file->variable(), QStringList(output));
+        }
+            break;
 //         case FileAst::GLOB:
 //         case FileAst::GLOB_RECURSE:
 //         case FileAst::REMOVE:
@@ -914,12 +930,68 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
 
 int CMakeProjectVisitor::visit(const StringAst *sast)
 {
-    kDebug(9032) << "String to" << sast->outputVariable() << sast->input().isEmpty();
+    kDebug(9032) << "String to" << sast->input() << sast->input().isEmpty();
     switch(sast->type())
     {
         case StringAst::REGEX:
-        case StringAst::REPLACE:
+        {
+            QStringList res;
+            QRegExp rx(sast->regex());
+            switch(sast->cmdType())
+            {
+                case StringAst::MATCH:
+                    foreach(QString in, sast->input())
+                    {
+                        rx.indexIn(in);
+                        res += rx.capturedTexts();
+                    }
+                    break;
+                case StringAst::MATCHALL: //TODO
+                    kDebug(9032) << "Error! String feature MATCHALL not supported!";
+                    break;
+                case StringAst::REGEX_REPLACE: //TODO
+                    kDebug(9032) << "Error! String feature REPLACE not supported!";
+                    break;
+                default:
+                    kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();
+                    break;
+            }
+            m_vars->insert(sast->outputVariable(), QStringList(res));
+        }
+            break;
+        case StringAst::REPLACE: {
+            QStringList out;
+            foreach(QString in, sast->input())
+            {
+                QString aux=in.replace(sast->regex(), sast->replace());
+                out += aux;
+            }
+            m_vars->insert(sast->outputVariable(), out);
+        }   break;
         case StringAst::COMPARE:
+        {
+            QString res;
+            switch(sast->cmdType()){
+                case StringAst::EQUAL:
+                case StringAst::NOTEQUAL:
+                    if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::EQUAL)
+                        res = "TRUE";
+                    else
+                        res = "FALSE";
+                    break;
+                case StringAst::LESS:
+                case StringAst::GREATER:
+                    if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::LESS)
+                        res = "TRUE";
+                    else
+                        res = "FALSE";
+                    break;
+                default:
+                    kDebug(9032) << "String: Not a compare. " << sast->cmdType();
+            }
+            m_vars->insert(sast->outputVariable(), QStringList(res));
+        }
+            break;
         case StringAst::ASCII:
         case StringAst::CONFIGURE:
             kDebug(9032) << "Error! String feature not supported!";
@@ -934,6 +1006,11 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input()[0].count())));
             break;
         case StringAst::SUBSTRING:
+        {
+            QString res=sast->input()[0];
+            res=res.mid(sast->begin(), sast->length());
+            m_vars->insert(sast->outputVariable(), QStringList(res));
+        }
             break;
     }
     return 1;
@@ -949,10 +1026,10 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
             kDebug(9032) << "get cmake prop: variables:" << m_vars->size();
             output = m_vars->keys();
             break;
-        case GetCMakePropertyAst::CACHE_VARIABLES: //FIXME: I do not have cache yet
+        case GetCMakePropertyAst::CACHE_VARIABLES: //FIXME: We do not have cache yet
             output = m_vars->keys();
             break;
-        case GetCMakePropertyAst::COMMANDS:      //FIXME: I do not have commands yet
+        case GetCMakePropertyAst::COMMANDS:      //FIXME: We do not have commands yet
             output = QStringList();
             break;
         case GetCMakePropertyAst::MACROS:

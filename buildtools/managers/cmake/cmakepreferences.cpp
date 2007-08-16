@@ -42,11 +42,13 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QStringList& args)
 
     load();
     connect(m_prefsUi->kcfg_buildFolder, SIGNAL(textChanged(const QString& )),
-            this, SLOT(buildDirChanged(const QString&)));
+            this, SLOT(buildDirChanged( const QString & )));
     connect(m_prefsUi->cacheList, SIGNAL(clicked ( const QModelIndex & ) ),
             this, SLOT(listSelectionChanged ( const QModelIndex & )));
     connect(m_prefsUi->showInternal, SIGNAL( stateChanged ( int ) ),
             this, SLOT(showInternal ( int )));
+    connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
+            this, SLOT( cacheEdited( QStandardItem * ) ));
 }
 
 CMakePreferences::~CMakePreferences()
@@ -56,23 +58,24 @@ CMakePreferences::~CMakePreferences()
 void CMakePreferences::load()
 {
     ProjectKCModule<CMakeSettings>::load();
-    kDebug(9032) << "********loading";
-    buildDirChanged(m_prefsUi->kcfg_buildFolder->text());
+//     kDebug(9032) << "********loading";
+    updateCache(m_prefsUi->kcfg_buildFolder->url());
 }
 
 void CMakePreferences::save()
 {
     ProjectKCModule<CMakeSettings>::save();
-    kDebug(9032) << "*******saving";
+//     kDebug(9032) << "*******saving";
+    m_currentModel->writeDown();
 }
 
 void CMakePreferences::defaults()
 {
     ProjectKCModule<CMakeSettings>::defaults();
-    kDebug(9032) << "*********defaults!";
+//     kDebug(9032) << "*********defaults!";
 }
 
-void CMakePreferences::buildDirChanged(const QString& newBuildDir)
+void CMakePreferences::updateCache(const KUrl& newBuildDir)
 {
     KUrl file(newBuildDir);
     file.addPath("CMakeCache.txt");
@@ -82,6 +85,7 @@ void CMakePreferences::buildDirChanged(const QString& newBuildDir)
         m_currentModel=new CMakeCacheModel(this, file);
         m_prefsUi->cacheList->setModel(m_currentModel);
         m_prefsUi->cacheList->hideColumn(3);
+        m_prefsUi->cacheList->hideColumn(4);
         m_prefsUi->cacheList->setEnabled(true);
     }
     else
@@ -100,12 +104,9 @@ void CMakePreferences::listSelectionChanged(const QModelIndex & index)
 }
 void CMakePreferences::showInternal(int state)
 {
-    for(int i=0; i<m_currentModel->rowCount(); i++)
+    for(int i=m_currentModel->internal(); i<m_currentModel->rowCount(); i++)
     {
-        QStandardItem* it = m_currentModel->item(i, 4);
-        if(!it)
-            continue;
-        if(!it->text().isEmpty() && state==Qt::Unchecked)
+        if(state==Qt::Unchecked)
             m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), true);
         else
             m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), false);
@@ -116,3 +117,8 @@ void CMakePreferences::showInternal(int state)
 #include "cmakepreferences.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on;
+
+void CMakePreferences::buildDirChanged(const QString &)
+{
+    m_prefsUi->kcfg_buildFolder->url();
+}

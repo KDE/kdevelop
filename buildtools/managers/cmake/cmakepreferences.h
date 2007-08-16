@@ -38,23 +38,23 @@ namespace Ui { class CMakeBuildSettings; }
 class CMakePreferences : public ProjectKCModule<CMakeSettings>
 {
     Q_OBJECT
-public:
-    explicit CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());
-    ~CMakePreferences();
+    public:
+        explicit CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+        ~CMakePreferences();
 
+    private slots:
+        virtual void load();
+        virtual void save();
+        virtual void defaults();
+        void listSelectionChanged ( const QModelIndex & index );
+        void showInternal(int state);
+        void cacheEdited(QStandardItem * ) { emit changed(true); }
+        void buildDirChanged(const QString &);
 
-private slots:
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
-    
-    void buildDirChanged(const QString&);
-    void listSelectionChanged ( const QModelIndex & index );
-    void showInternal(int state);
-
-private:
-    Ui::CMakeBuildSettings* m_prefsUi;
-    CMakeCacheModel* m_currentModel;
+    private:
+        void updateCache( const KUrl & );
+        Ui::CMakeBuildSettings* m_prefsUi;
+        CMakeCacheModel* m_currentModel;
 };
 
 #endif

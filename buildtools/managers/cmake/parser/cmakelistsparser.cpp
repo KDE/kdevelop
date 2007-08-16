@@ -28,10 +28,18 @@
 
 void CMakeFunctionDesc::addArguments( const QStringList& args )
 {
-    foreach( QString arg, args )
+    if(args.isEmpty())
     {
-        CMakeFunctionArgument cmakeArg( arg );
+        CMakeFunctionArgument cmakeArg("");
         arguments.append( cmakeArg );
+    }
+    else
+    {
+        foreach( QString arg, args )
+        {
+            CMakeFunctionArgument cmakeArg( arg );
+            arguments.append( cmakeArg );
+        }
     }
 }
 
@@ -261,6 +269,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
                 function.name = token->text;
                 function.filePath = fileName;
                 function.line = token->line;
+                function.column = token->column;
 
                 readError = !readCMakeFunction( lexer, function, fileName );
                 ret.append(function);
@@ -301,12 +310,12 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
         else if(token->type == cmListFileLexer_Token_Identifier ||
                 token->type == cmListFileLexer_Token_ArgumentUnquoted)
         {
-            CMakeFunctionArgument a( token->text, false, fileName, token->line );
+            CMakeFunctionArgument a( token->text, false, fileName, token->line, token->column );
             func.arguments << a;
         }
         else if(token->type == cmListFileLexer_Token_ArgumentQuoted)
         {
-            CMakeFunctionArgument a( token->text, true, fileName, token->line );
+            CMakeFunctionArgument a( token->text, true, fileName, token->line, token->column );
             func.arguments << a;
         }
         else if(token->type != cmListFileLexer_Token_Newline)

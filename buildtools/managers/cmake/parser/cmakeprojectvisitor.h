@@ -27,16 +27,7 @@
 #include <QHash>
 #include "cmakeastvisitor.h"
 #include "cmakelistsparser.h"
-
-struct Macro
-{
-    QString name;
-    QStringList knownArgs;
-    CMakeFileContent code;
-};
-
-typedef QHash<QString, QStringList> VariableMap;
-typedef QHash<QString, Macro> MacroMap;
+#include "cmaketypes.h"
 
 class CMakeFunctionDesc;
 

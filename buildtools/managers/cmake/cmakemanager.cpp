@@ -69,8 +69,6 @@ CMakeProjectManager::~CMakeProjectManager()
 //     return m_project;
 // }
 
-
-
 QStringList CMakeProjectManager::resolveVariables(const QStringList & vars)
 {
     return CMakeProjectVisitor::resolveVariables(vars, &m_vars);
@@ -84,7 +82,7 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
     KUrl path = group.readEntry("Build Dir");
 //     KUrl projectPath = item->project()->folder();
     
-    kDebug(9032) << "Build folder: " << path/* << "..." << projectPath*/;
+    kDebug(9032) << "Build folder: " << path;
     return path;
 }
 
@@ -102,10 +100,15 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     
     CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
     
-    if(f.isEmpty()) {
+    if(f.isEmpty())
+    {
         kDebug(9032) << "There is no" << cmakeListsPath;
         return folderList;
     }
+    
+    new KDevelop::ProjectFileItem( item->project(), cmakeListsPath, folder );
+    kDebug(9032) << "Adding cmake: " << cmakeListsPath << " to the model";
+    
     m_vars.insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
     m_vars.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(cmakeListsPath.upUrl().toLocalFile()));
     CMakeProjectVisitor v(folder->url().toLocalFile());
@@ -122,13 +125,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     
     foreach ( QString subf, v.subdirectories() )
     {
-        CMakeAst *newFolder = new CMakeAst;
         KUrl path(folder->url());
         path.addPath(subf);
-        KUrl cmakelistsPath(path);
-        cmakelistsPath.addPath("CMakeLists.txt");
 
-        //FIXME: Maybe we should save the file content now
         CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
         a->setUrl(path);
         folderList.append( a );
@@ -157,14 +156,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
         foreach( QString sFile, v.targetDependencies(t) )
         {
-            if(sFile=="FALSE") //FIXME: Should remove that, should not be necessary
-                continue;
             KUrl sourceFile = folder->url();
             sourceFile.adjustPath( KUrl::AddTrailingSlash );
             sourceFile.addPath( sFile );
             new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
             kDebug(9032) << "..........Adding:" << sFile;
         }
+        m_targets.append(targetItem);
     }
     return folderList;
 }
@@ -204,32 +202,30 @@ KUrl::List CMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* dom 
 
 QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 {
-    return QList<KDevelop::ProjectTargetItem*>();
+    return m_targets;
 }
 
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    CMakeTargetItem* target = dynamic_cast<CMakeTargetItem*>( item );
-    if(!target)
+    CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
+    while(!folder && folder->parent()!=0)
     {
-        KDevelop::ProjectFileItem* file = dynamic_cast<KDevelop::ProjectFileItem*>( item );
-        if(file)
-        {
-            target = dynamic_cast<CMakeTargetItem*>( item );
-        }
+        folder = dynamic_cast<CMakeFolderItem*>( item );
     }
 
-    if(target)
-        return target->includeDirectories();
-
-    return KUrl::List();
+    if(!folder)
+        return KUrl::List();
+    
+    kDebug(9032) << "Include directories!" << folder->includeDirectories();
+    return folder->includeDirectories();
 }
-
-#include "cmakemanager.moc"
-
-// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
 
 KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectItem *) const
 {
     return m_builder;
 }
+
+
+#include "cmakemanager.moc"
+
+// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;

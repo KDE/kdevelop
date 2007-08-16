@@ -35,6 +35,7 @@ class IProject;
  * The project model item for CMake folders.
  *
  * @author Matt Rogers <mattr@kde.org>
+ * @author Aleix Pol <aleixpol@gmail.com>
  */
 class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
 {
@@ -42,7 +43,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
 
         void setIncludeList(const KUrl::List &l) { m_includeList=l; }
-        KUrl::List includeList() const { return m_includeList; }
+        KUrl::List includeList() const;
 
     private:
         KUrl::List m_includeList;
@@ -53,6 +54,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
  * The project model item for CMake targets.
  *
  * @author Matt Rogers <mattr@kde.org>
+ * @author Aleix Pol <aleixpol@gmail.com>
  */
 class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public KDevelop::ProjectTargetItem
 {

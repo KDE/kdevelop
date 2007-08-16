@@ -26,16 +26,26 @@
 
 #include <KUrl>
 
-/** This class parses the CMakeCache.txt files and put it to a Model */
+/**
+* This class parses the CMakeCache.txt files and put it to a Model
+* @author Aleix Pol
+*/
 class KDEVCMAKECOMMON_EXPORT CMakeCacheModel : public QStandardItemModel
 {
     Q_OBJECT
     public:
         CMakeCacheModel(QObject* parent, const KUrl &path);
         ~CMakeCacheModel() {}
-
+        bool changed() const { return m_changed; }
+        bool writeDown() const { return writeBack(m_filePath); }
+        int internal() const { return m_internalBegin; }
+    private slots:
+        void edited() { m_changed=true; }
     private:
+        bool writeBack(const KUrl& path) const;
         KUrl m_filePath;
+        bool m_changed;
+        int m_internalBegin;
 };
 
 #endif

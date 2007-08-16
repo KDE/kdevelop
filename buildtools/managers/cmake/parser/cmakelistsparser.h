@@ -30,7 +30,7 @@
 #include <KUrl>
 
 #include "cmListFileLexer.h"
-#include "cmakeexport.h"
+#include <cmakeexport.h>
 // #include "cmakemodelitems.h"
 
 class CMakeAst;
@@ -42,6 +42,7 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
     QList<CMakeFunctionArgument> arguments;
     QString filePath;
     quint32 line;
+    quint32 column;
 /*  int numSpacesBeforeLeftParen;
     int numSpacesAfterLeftParen;
     int numSpacesBeforeRightParen; */
@@ -54,12 +55,12 @@ Q_DECLARE_METATYPE( CMakeFunctionDesc )
 
 struct CMakeFunctionArgument
 {
-    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0) {}
+    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {}
     CMakeFunctionArgument(const CMakeFunctionArgument& r):
-        value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line) {}
+        value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line), column(r.column) {}
     CMakeFunctionArgument(const QString& v, bool q = false,
-                          const QString& file = QString(), quint32 l = 0)
-        : value(v), quoted(q), filePath(file), line(l) {}
+                          const QString& file = QString(), quint32 l = 0, quint32 c=0)
+        : value(v), quoted(q), filePath(file), line(l), column(c) {}
     bool operator == (const CMakeFunctionArgument& r) const
     {
         return (this->value == r.value) && (this->quoted == r.quoted);
@@ -79,6 +80,7 @@ struct CMakeFunctionArgument
     bool quoted;
     QString filePath;
     quint32 line;
+    quint32 column;
 };
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
