@@ -131,14 +131,14 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
   DUChainReadLocker lock(DUChain::lock());
 
-  Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].first.data() );
+  Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].declaration.data() );
   if (!dec) {
     kDebug(9007) <<  "code-completion model item" << dataIndex << ": Du-chain item is deleted";
     return QVariant();
   }
 
   bool isArgumentHint = false;
-  if( m_declarations[dataIndex].second && m_declarations[dataIndex].second->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+  if( m_declarations[dataIndex].completionContext && m_declarations[dataIndex].completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
     isArgumentHint = true;
 
   switch (role) {
@@ -163,13 +163,16 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         w->accept();
     }
     break;
+    case InheritanceDepth:
+      return m_declarations[dataIndex].inheritanceDepth;
+    break;
     case SetMatchContext:
       m_currentMatchContext = m_declarations[dataIndex];
       return QVariant(1);
     case MatchQuality:
     {
-      if( m_currentMatchContext.first && m_currentMatchContext.second && m_currentMatchContext.second->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-        //Cpp::TypeConversion conv;
+      if( m_currentMatchContext.declaration && m_currentMatchContext.completionContext && m_currentMatchContext.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+        Cpp::TypeConversion conv;
         //return conv.implicitConversion(
       } else {
         kDebug(9007) << "MatchQuality requested with invalid match-context";
@@ -177,7 +180,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     }
     case ArgumentHintDepth:
       if( isArgumentHint )
-        return m_declarations[dataIndex].second->depth();
+        return m_declarations[dataIndex].completionContext->depth();
     case ItemSelected:
        return QVariant(dec->comment().isEmpty() ? dec->toString() : QString("\"%1\" \n%2").arg(dec->comment()).arg(dec->toString()));
     case IsExpandable:
@@ -500,6 +503,8 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
   Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, text ) );
   m_completionContext = completionContext;
 
+  typedef QPair<Declaration*, int> DeclarationDepthPair;
+  
   if( completionContext->isValid() ) {
     DUChainReadLocker lock(DUChain::lock());
 
@@ -512,8 +517,8 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
         DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
         if( ctx ) {
           m_declarations.clear();
-          foreach( Declaration* decl, Cpp::localDeclarations( ctx ) )
-            m_declarations << DeclarationContextPair( decl, completionContext );
+          foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), false) ) )
+            m_declarations << CompletionItem( decl.first, completionContext, decl.second );
         } else {
           kDebug(9007) << "Could not get internal context from declaration \"" << idType->declaration()->toString() << "\"";
         }
@@ -522,8 +527,8 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
       }
     } else {
       m_declarations.clear();
-      foreach( Declaration* decl, m_context->allDeclarations(m_context->type() == DUContext::Class ? m_context->textRange().end() : position).values() )
-        m_declarations << DeclarationContextPair( decl, completionContext );
+      foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( m_context->allDeclarations(m_context->type() == DUContext::Class ? m_context->textRange().end() : position) ) )
+        m_declarations << CompletionItem( decl.first, completionContext, decl.second );
       kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible:" << m_declarations.count();
     }
 
@@ -533,8 +538,11 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
       parentContext = parentContext->parentContext();
       if( parentContext ) {
         if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-          foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() )
-            m_declarations << DeclarationContextPair( function.function.declaration(), parentContext );
+          int num = 0;
+          foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
+            m_declarations << CompletionItem( function.function.declaration(), parentContext, 0, num );
+            ++num;
+          }
         } else {
           kDebug(9007) << "parent-context has non function-call access type";
         }

@@ -19,6 +19,7 @@
 #include "cppduchain.h"
 #include <ducontext.h>
 #include <identifier.h>
+#include <declaration.h>
 #include <duchainpointer.h>
 #include "cppduchainbuilderexport.h"
 
@@ -60,6 +61,32 @@ KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> localDeclarations( K
     if( *it )
       ret += localDeclarations( (*it).data() );
   }
+  return ret;
+}
+
+void minimize(int& i, const int with) {
+  if( with < i )
+    i = with;
+}
+
+QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<Declaration*, int> >& declarations ) {
+  QHash<Identifier, int> minimumDepths;
+
+  typedef QPair<Declaration*, int> Pair;
+  foreach(  const Pair& decl, declarations ) {
+    if( minimumDepths.contains( decl.first->identifier() ) )
+      minimize( minimumDepths[ decl.first->identifier() ], decl.second );
+    else
+      minimumDepths[ decl.first->identifier() ] = decl.second;
+  }
+
+    QList< QPair<Declaration*, int> > ret;
+    
+  ///Only keep the declarations of each name on the lowest inheritance-level
+  foreach( const Pair& decl, declarations )
+    if( minimumDepths[decl.first->identifier()] == decl.second )
+      ret << decl;
+
   return ret;
 }
 

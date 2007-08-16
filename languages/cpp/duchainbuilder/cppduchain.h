@@ -24,6 +24,9 @@
 #define CPPDUCHAIN_H
 
 #include <QList>
+#include <QPair>
+#include "cppduchainbuilderexport.h"
+
 
 namespace KDevelop {
   class Declaration;
@@ -36,9 +39,15 @@ namespace Cpp {
  * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++.
  * Du-chain must be locked before.
  * */
-QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );
-QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context );
+KDEVCPPDUCHAINBUILDER_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );
+KDEVCPPDUCHAINBUILDER_EXPORT QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context );
 
+/**
+ * Takes and returns a list of declarations together with inheritance-depth.
+ * Since in c++ one declaration with a name in one depth overloads deeper
+ * declarations, they are hidden here.
+ * */
+KDEVCPPDUCHAINBUILDER_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<KDevelop::Declaration*, int> >& declarations );
 }
 
 #endif
