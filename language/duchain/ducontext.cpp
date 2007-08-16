@@ -541,14 +541,14 @@ QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier
   return ret;
 }
 
-QHash<QualifiedIdentifier, Declaration*> DUContext::allDeclarations(const KTextEditor::Cursor& position) const
+QList< QPair<Declaration*, int> > DUContext::allDeclarations(const KTextEditor::Cursor& position, bool searchInParents) const
 {
   ENSURE_CAN_READ
 
-  QHash<QualifiedIdentifier, Declaration*> ret;
+  QList< QPair<Declaration*, int> > ret;
 
   // Iterate back up the chain
-  mergeDeclarationsInternal(ret, position);
+  mergeDeclarationsInternal(ret, type() == DUContext::Class ? KTextEditor::Cursor::invalid() : position, searchInParents);
 
   return ret;
 }
@@ -561,11 +561,14 @@ const QList<Declaration*> DUContext::localDeclarations() const
   return d->m_localDeclarations;
 }
 
-void DUContext::mergeDeclarationsInternal(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext) const
+void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, bool searchInParents, int currentDepth) const
 {
+  if( type() == DUContext::Namespace || type() == DUContext::Global && currentDepth < 1000 )
+    currentDepth += 1000;
+  
   foreach (Declaration* definition, localDeclarations())
-    if (!definitions.contains(definition->qualifiedIdentifier()) && (inImportedContext || definition->textRange().start() <= position))
-      definitions.insert(definition->qualifiedIdentifier(), definition);
+    if ( (!position.isValid() || definition->textRange().start() <= position) )
+      definitions << qMakePair(definition, currentDepth);
 
   QListIterator<DUContextPointer> it = d->m_importedParentContexts;
   it.toBack();
@@ -576,11 +579,11 @@ void DUContext::mergeDeclarationsInternal(QHash<QualifiedIdentifier, Declaration
     if( !context )
       break;
 
-    context->mergeDeclarationsInternal(definitions, position, true);
+    context->mergeDeclarationsInternal(definitions, KTextEditor::Cursor::invalid(), false, currentDepth+1);
   }
 
-  if (!inImportedContext && parentContext())                            ///In classes the position does not play a role(@todo this is language-dependent)
-    parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->textRange().end() : position);
+  if (searchInParents && parentContext())                            ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
+    parentContext()->mergeDeclarationsInternal(definitions, (parentContext()->type() != DUContext::Class) ? position : KTextEditor::Cursor::invalid(), true, currentDepth+1);
 }
 
 void DUContext::deleteLocalDeclarations()

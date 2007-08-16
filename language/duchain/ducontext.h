@@ -309,17 +309,18 @@ public:
   QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), SearchFlags flags = NoSearchFlags) const;
 
   /**
-   * Return a list of definitions for a given cursor \a position in a given \a url.
+   * Return a list of all reachable declarations for a given cursor \a position in a given \a url.
    *
    * \param location the text position to search for
-   * \param parent the parent context to search from (this is mostly an internal detail, but if you only
-   *               want to search in a subbranch of the chain, you may specify the parent here)
+   * \param searchInParents should declarations from parent-contexts be listed? If false, only declarations from this and imported contexts will be returned.
    *
+   * The returned declarations are paired together with their inheritance-depth, which is the count of steps
+   * to into other contexts that were needed to find the declaration. Declarations reached through a namespace- or global-context
+   * are offsetted by 1000.
+   * 
    * \returns the requested definitions, if any were active at that location.
-   *
-   * \warning this may return declarations which are not in this tree, you may need to lock them too...
    */
-  QHash<QualifiedIdentifier, Declaration*> allDeclarations(const KTextEditor::Cursor& position) const;
+  QList< QPair<Declaration*, int> > allDeclarations(const KTextEditor::Cursor& position, bool searchInParents=true) const;
 
   /**
    * Return all declarations in this context that have the given \a identifier, without any filtering.
@@ -369,9 +370,9 @@ protected:
    * */
   virtual bool foundEnough( const QList<Declaration*>& decls ) const;
   /**
-   * Merges definitions up all branches of the definition-use chain into one hash.
+   * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
    */
-  void mergeDeclarationsInternal(QHash<QualifiedIdentifier, Declaration*>& definitions, const KTextEditor::Cursor& position, bool inImportedContext = false) const;
+  void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, bool searchInParents = true, int currentDepth = 0) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
