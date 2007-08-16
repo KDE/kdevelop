@@ -26,6 +26,7 @@
 #include <documentrangeobject.h>
 #include <typesystem.h>
 #include <duchainbase.h>
+#include "contextowner.h"
 
 namespace KDevelop
 {
@@ -33,8 +34,8 @@ namespace KDevelop
 class AbstractType;
 class DUContext;
 class Use;
-class Definition;
 class ForwardDeclaration;
+class Definition;
 
 /**
  * Represents a single declaration in a definition-use chain.
@@ -43,7 +44,7 @@ class ForwardDeclaration;
  * In the moment the parent-context is set, the context may only be edited when it
  * is allowed to edited it's top-level context(@see TopLevelContext::inDUChain()
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
+class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase, public ContextOwner
 {
 
 public:
@@ -107,6 +108,12 @@ public:
   void setDefinition(Definition* definition);
 
   /**
+   * If this is a forward-declaration, it returns the internal context of the resolved declaration.
+   * If this is a definition, and the definition is resolved, it returns the internal context of the definition.
+   * */
+  virtual DUContext * internalContext() const;
+  
+  /**
    * Returns the parent-context of this declaration.
    * */
   DUContext* context() const;
@@ -117,13 +124,6 @@ public:
    * */
   void setContext(DUContext* context, bool anonymous = false);
 
-  /**
-   * If this declarations opens an own context, this returns that context.
-   * If this is a resolved forward-declaration, this returns the resolved declaration's internal context.
-   * */
-  DUContext* internalContext() const;
-  void setInternalContext(DUContext* context);
-  
   Scope scope() const;
 
   template <class T>
@@ -138,6 +138,7 @@ public:
   void setIdentifier(const Identifier& identifier);
   const Identifier& identifier() const;
 
+  ///Returns the global qualified identifier of this declaration
   QualifiedIdentifier qualifiedIdentifier() const;
 
   /**

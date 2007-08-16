@@ -45,6 +45,8 @@ public:
 
   QualifiedIdentifier identifier() const;
 
+  bool equals(const IdentifiedType* rhs) const;
+  
   Declaration* declaration() const;
   /**
    * You should be careful when setting this, because it also changes the meaning of the declaration.

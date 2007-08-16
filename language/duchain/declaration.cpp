@@ -45,7 +45,6 @@ public:
   }
   
   DUContext* m_context;
-  DUContext* m_internalContext;
   Declaration::Scope m_scope;
   AbstractType::Ptr m_type;
   Identifier m_identifier;
@@ -83,10 +82,10 @@ bool Declaration::inDUChain() const {
 
 Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* context )
   : DUChainBase(range)
+  , ContextOwner(this)
   , d(new DeclarationPrivate)
 {
   d->m_context = 0;
-  d->m_internalContext = 0;
   d->m_scope = scope;
   d->m_definition = 0;
   d->m_kind = Instance;
@@ -95,7 +94,7 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
     setContext(context);
 }
 
-Declaration::Declaration(const Declaration& rhs) : DUChainBase(0), d(new DeclarationPrivate) {
+Declaration::Declaration(const Declaration& rhs) : DUChainBase(0), ContextOwner(this), d(new DeclarationPrivate) {
   setTextRange(rhs.textRangePtr(), DocumentRangeObject::DontOwn);
   d->m_identifier = rhs.d->m_identifier;
   d->m_type = rhs.d->m_type;
@@ -105,15 +104,11 @@ Declaration::Declaration(const Declaration& rhs) : DUChainBase(0), d(new Declara
   d->m_isTypeAlias = rhs.d->m_isTypeAlias;
   d->m_inSymbolTable = false;
   d->m_context = 0;
-  d->m_internalContext = 0;
   d->m_definition = 0;
 }
 
 Declaration::~Declaration()
 {
-  if( d->m_internalContext )
-    d->m_internalContext->setDeclaration(0);
-  
   // Inserted by the builder after construction has finished.
   if (d->m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
@@ -287,26 +282,10 @@ DUContext * Declaration::internalContext() const
       return declaration->internalContext();
   }
 
-  return d->m_internalContext;
-}
+  if( definition() )
+    return definition()->internalContext();
 
-void Declaration::setInternalContext(DUContext* context)
-{
-  ENSURE_CAN_WRITE
-  
-  if( context == d->m_internalContext )
-    return;
-
-  DUContext* oldInternalContext = d->m_internalContext;
-  
-  d->m_internalContext = context;
-  
-  if( oldInternalContext && oldInternalContext->declaration() == this )
-    oldInternalContext->setDeclaration(0);
-  
-
-  if( d->m_internalContext )
-    d->m_internalContext->setDeclaration(this);
+  return ContextOwner::internalContext();
 }
 
 bool Declaration::operator ==(const Declaration & other) const

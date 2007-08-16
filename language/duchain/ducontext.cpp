@@ -31,6 +31,7 @@
 #include "typesystem.h"
 #include "topducontext.h"
 #include "symboltable.h"
+#include "contextowner.h"
 #include "namespacealiasdeclaration.h"
 
 ///It is fine to use one global static mutex here
@@ -49,7 +50,7 @@ QMutex DUContextPrivate::m_localDeclarationsMutex(QMutex::Recursive);
 const Identifier globalImportIdentifier("{...import...}");
 
 DUContextPrivate::DUContextPrivate( DUContext* d)
-  : m_declaration(0), m_context(d), m_anonymousInParent(false)
+  : m_owner(0), m_context(d), m_anonymousInParent(false)
 {
 }
 
@@ -183,8 +184,8 @@ DUContext::DUContext(KTextEditor::Range* range, DUContext* parent, bool anonymou
 
 DUContext::~DUContext( )
 {
-  if( d->m_declaration && d->m_declaration->internalContext() == this )
-    d->m_declaration->setInternalContext(0);
+  if(d->m_owner)
+    d->m_owner->setInternalContext(0);
   
   if (inSymbolTable())
     SymbolTable::self()->removeContext(this);
@@ -224,28 +225,29 @@ const QList< DUContext * > & DUContext::childContexts( ) const
   return d->m_childContexts;
 }
 
-Declaration* DUContext::declaration() const {
+ContextOwner* DUContext::owner() const {
   ENSURE_CAN_READ
-  return d->m_declaration.data();
+  return d->m_owner;
 }
 
-void DUContext::setDeclaration(Declaration* decl) {
+void DUContext::setOwner(ContextOwner* owner) {
   ENSURE_CAN_WRITE
 
-  if( decl == d->m_declaration.data() )
+  if( owner == d->m_owner )
     return;
 
-  Declaration* oldDeclaration = d->m_declaration.data();
+  ContextOwner* oldOwner = d->m_owner;
   
-  d->m_declaration = decl;
-  
-  if( oldDeclaration && oldDeclaration->internalContext() == this )
-    oldDeclaration->setInternalContext(0);
+  d->m_owner = owner;
+
+  //Q_ASSERT(!oldOwner || oldOwner->internalContext() == this);
+  if( oldOwner && oldOwner->internalContext() == this )
+    oldOwner->setInternalContext(0);
     
 
   //The context set as internal context should always be the last opened context
-  if( decl )
-    decl->setInternalContext(this);
+  if( owner )
+    owner->setInternalContext(this);
 }
 
 DUContext* DUContext::parentContext( ) const

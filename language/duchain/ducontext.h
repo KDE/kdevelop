@@ -33,6 +33,7 @@ class QSet;
 namespace KDevelop
 {
 
+class ContextOwner;
 class Declaration;
 class Definition;
 class DUChain;
@@ -103,16 +104,14 @@ public:
   void setType(ContextType type);
 
   /**
-   * If this context was opened by a declaration, this returns that declaration.
-   * The returned declaration may have this context set as internalContext(),
-   * but it does not have to, because there may be multiple contexts opened by one declaration,
-   * and the declaration should have the last one assigned.
+   * If this context was opened by a declaration or definition, this returns that item.
+   * The returned declaration/definition will have this context set as internalContext()
    * */
-  Declaration* declaration() const;
+  ContextOwner* owner() const;
   /**
-   * Sets the declaration, and also updates the declarations internal context if necessary.
+   * Sets the declaration/definition, and also updates it's internal context(they are strictly paired together)
    * */
-  void setDeclaration(Declaration* decl);
+  void setOwner(ContextOwner* decl);
   
   /**
    * Calculate the depth of this context, from the top level context in the file.

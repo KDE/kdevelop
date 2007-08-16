@@ -49,6 +49,7 @@ void DefinitionPrivate::setDeclaration(Declaration* declaration)
 
 Definition::Definition(KTextEditor::Range* range, DUContext* context)
   : DUChainBase(range)
+  , ContextOwner(this)
   , d(new DefinitionPrivate(this))
 {
   d->m_context = 0;

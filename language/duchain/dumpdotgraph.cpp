@@ -43,7 +43,8 @@ QString rangeToString( const KTextEditor::Range& r ) {
 struct DumpDotGraphPrivate {
   QString dotGraphInternal(KDevelop::DUContext* contex, bool isMaster, bool shortened);
 
-  void addDeclaraation(QTextStream& stream, Declaration* decl);
+  void addDeclaration(QTextStream& stream, Declaration* decl);
+  void addDefinition(QTextStream& stream, Definition* decl);
   
   QMap<KUrl,QString> m_hadVersions;
   QMap<KDevelop::DUChainBase*, bool> m_hadObjects;
@@ -63,7 +64,7 @@ DumpDotGraph::~DumpDotGraph() {
   delete d;
 }
 
-void DumpDotGraphPrivate::addDeclaraation(QTextStream& stream, Declaration* dec) {
+void DumpDotGraphPrivate::addDeclaration(QTextStream& stream, Declaration* dec) {
   if( m_hadObjects.contains(dec) )
     return;
 
@@ -78,6 +79,24 @@ void DumpDotGraphPrivate::addDeclaraation(QTextStream& stream, Declaration* dec)
   if( dec->internalContext() )
     stream << shortLabel(dec) << " -> " << shortLabel(dec->internalContext()) << "[label=\"internal\", color=blue];\n";
 }
+
+void DumpDotGraphPrivate::addDefinition(QTextStream& stream, Definition* def) {
+  if( m_hadObjects.contains(def) )
+    return;
+
+  m_hadObjects[def] = true;
+  
+  stream << shortLabel(def) <<  "[shape=regular,label=\"" << (def->declaration() ? def->declaration()->toString() : QString("no declaration")) << " "<< rangeToString(def->textRange()) <<  "\"];\n";
+  stream << shortLabel(def->context()) << " -> " << shortLabel(def) << ";\n";
+  if( def->declaration() ) {
+    stream << shortLabel(def) << " -> " << shortLabel(def->declaration()) << "[label=\"defines\",color=green];\n";
+    addDeclaration(stream, def->declaration());
+  }
+
+  if( def->internalContext() )
+    stream << shortLabel(def) << " -> " << shortLabel(def->internalContext()) << "[label=\"internal\", color=blue];\n";
+}
+
 
 QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool isMaster, bool shortened) {
   QTextStream stream;
@@ -149,29 +168,26 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   if( !context->localDeclarations().isEmpty() )
     label += QString(", %1 D.").arg(context->localDeclarations().count());
   
-  if(!shortened ) {
-    foreach (Declaration* dec, context->localDeclarations()) {
-      addDeclaraation(stream, dec);
-    }
+  if(!shortened )
+  {
+    foreach (Declaration* dec, context->localDeclarations())
+      addDeclaration(stream, dec);
+    
+    foreach (Definition* def, context->localDefinitions())
+      addDefinition(stream, def);
   }
 
-  if( context->declaration() )
-    addDeclaraation(stream, context->declaration());
+  if( context->owner() ) {
+    if( context->owner()->asDeclaration() )
+      addDeclaration(stream, context->owner()->asDeclaration());
+    else if(context->owner()->asDefinition() )
+      addDefinition(stream, context->owner()->asDefinition());
+  }
 
   if( !context->localDefinitions().isEmpty() ) {
     label += QString(", %1 Df.").arg(context->localDefinitions().count());
   }
   
-  if(!shortened) {
-    foreach (Definition* def, context->localDefinitions()) {
-
-      stream << shortLabel(def) <<  "[shape=regular,label=\"" << (def->declaration() ? def->declaration()->toString() : QString("no declaration")) << " "<< rangeToString(def->textRange()) <<  "\"];\n";
-      stream << shortLabel(context) << " -> " << shortLabel(def) << ";\n";
-      if( def->declaration() )
-        stream << shortLabel(def) << " -> " << shortLabel(def->declaration()) << "[label=\"defines\",color=green];\n";
-    }
-  }
-
   stream << shortLabel(context) << "[shape=" << shape << ",label=\"" << label << "\"" << (isMaster ? QString("color=red") : QString("color=blue")) << "];\n";
 
   if( isMaster )

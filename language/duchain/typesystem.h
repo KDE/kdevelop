@@ -132,6 +132,9 @@ public:
 
   virtual QString mangled() const;
 
+  ///Should return whether this type's content equals the given one
+  virtual bool equals(const AbstractType* rhs) const = 0;
+  
   /**
    * Should create a clone of the source-type, with as much data copied as possible without breaking the du-chain.
    * */
@@ -188,10 +191,11 @@ public:
   virtual QString toString() const;
 
   //virtual uint hash() const;
-
   virtual WhichType whichType() const;
 
   virtual AbstractType* clone() const;
+  
+  virtual bool equals(const AbstractType* rhs) const;
 
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -214,7 +218,6 @@ public:
   void setBaseType(AbstractType::Ptr type);
   AbstractType::Ptr baseType () const;
 
-
   virtual QString toString() const;
 
   //virtual uint hash() const;
@@ -223,6 +226,8 @@ public:
 
   virtual AbstractType* clone() const;
 
+  virtual bool equals(const AbstractType* rhs) const;
+  
   virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -255,6 +260,8 @@ public:
 
   virtual AbstractType* clone() const;
 
+  virtual bool equals(const AbstractType* rhs) const;
+  
   virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -278,8 +285,6 @@ public:
   FunctionType(const FunctionType& rhs);
   ~FunctionType();
 
-  virtual AbstractType* clone() const;
-
   AbstractType::Ptr returnType () const;
 
   void setReturnType(AbstractType::Ptr returnType);
@@ -293,6 +298,10 @@ public:
 
   bool operator != (const FunctionType &other) const;
 
+  virtual AbstractType* clone() const;
+
+  virtual bool equals(const AbstractType* rhs) const;
+  
   virtual QString toString() const;
 
   ///Creates a string that represents the given part of the signature
@@ -320,6 +329,8 @@ public:
 
   virtual AbstractType* clone() const;
 
+  virtual bool equals(const AbstractType* rhs) const;
+  
   const QList<AbstractType::Ptr>& elements () const;
 
   bool operator == (const StructureType &other) const;
@@ -353,6 +364,8 @@ public:
 
   virtual AbstractType* clone() const;
 
+  virtual bool equals(const AbstractType* rhs) const;
+  
   ArrayType();
   ~ArrayType();
 
@@ -402,6 +415,8 @@ public:
 
   virtual AbstractType* clone() const;
 
+  virtual bool equals(const AbstractType* rhs) const;
+  
   virtual WhichType whichType() const;
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;

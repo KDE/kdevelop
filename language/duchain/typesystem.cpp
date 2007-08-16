@@ -153,20 +153,155 @@ ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(rhs), d(new ArrayTypeP
 AbstractType* IntegralType::clone() const {
   return new IntegralType(*this);
 }
+
 AbstractType* PointerType::clone() const {
   return new PointerType(*this);
 }
+
 AbstractType* ReferenceType::clone() const {
   return new ReferenceType(*this);
 }
+
 AbstractType* FunctionType::clone() const {
   return new FunctionType(*this);
 }
+
 AbstractType* StructureType::clone() const {
   return new StructureType(*this);
 }
+
 AbstractType* ArrayType::clone() const {
   return new ArrayType(*this);
+}
+
+AbstractType* DelayedType::clone() const {
+  return new DelayedType(*this);
+}
+
+bool IntegralType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const IntegralType*>(_rhs))
+    return false;
+  const IntegralType* rhs = static_cast<const IntegralType*>(_rhs);
+  
+  return rhs->d->m_name == d->m_name;
+}
+
+bool PointerType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const PointerType*>(_rhs))
+    return false;
+  const PointerType* rhs = static_cast<const PointerType*>(_rhs);
+
+  if( (bool)rhs->d->m_baseType != (bool)d->m_baseType )
+    return false;
+  
+  if( !d->m_baseType )
+    return true;
+  
+  return rhs->d->m_baseType->equals(d->m_baseType.data());
+}
+
+bool ReferenceType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const ReferenceType*>(_rhs))
+    return false;
+  const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
+
+  if( (bool)rhs->d->m_baseType != (bool)d->m_baseType )
+    return false;
+  
+  if( !d->m_baseType )
+    return true;
+  
+  return rhs->d->m_baseType->equals(d->m_baseType.data());
+}
+
+bool FunctionType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const FunctionType*>(_rhs))
+    return false;
+  const FunctionType* rhs = static_cast<const FunctionType*>(_rhs);
+
+  if( d->m_arguments.count() != rhs->d->m_arguments.count() )
+    return false;
+  
+  if( (bool)rhs->d->m_returnType != (bool)d->m_returnType )
+    return false;
+  
+  if( d->m_returnType )
+    if( !rhs->d->m_returnType->equals(d->m_returnType.data()) )
+      return false;
+  
+  QList<AbstractType::Ptr>::const_iterator it1 = d->m_arguments.begin();
+  QList<AbstractType::Ptr>::const_iterator it2 = rhs->d->m_arguments.begin();
+  
+  for( ;it1 != d->m_arguments.end(); ++it1, ++it2 ) {
+    if( (bool)*it1 != (bool)*it2 )
+      return false;
+    
+    if( !*it1)
+      continue;
+
+    if( !(*it1)->equals( (*it2).data() ) )
+      return false;
+  }
+
+  return true;
+}
+
+bool StructureType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const StructureType*>(_rhs))
+    return false;
+  const StructureType* rhs = static_cast<const StructureType*>(_rhs);
+
+  if( d->m_elements.count() != rhs->d->m_elements.count() )
+    return false;
+  
+  QList<AbstractType::Ptr>::const_iterator it1 = d->m_elements.begin();
+  QList<AbstractType::Ptr>::const_iterator it2 = rhs->d->m_elements.begin();
+  
+  for( ;it1 != d->m_elements.end(); ++it1, ++it2 ) {
+    if( (bool)*it1 != (bool)*it2 )
+      return false;
+    
+    if( !*it1)
+      continue;
+
+    if( !(*it1)->equals( (*it2).data() ) )
+      return false;
+  }
+
+  return true;
+}
+
+bool ArrayType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const ArrayType*>(_rhs))
+    return false;
+  const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
+
+  if( d->m_dimension != rhs->d->m_dimension )
+    return false;
+  
+  if( (bool)rhs->d->m_elementType != (bool)d->m_elementType )
+    return false;
+  
+  if( !d->m_elementType )
+    return true;
+  
+  return rhs->d->m_elementType->equals(d->m_elementType.data());
+}
+
+bool DelayedType::equals(const AbstractType* _rhs) const
+{
+  if( !dynamic_cast<const DelayedType*>(_rhs))
+    return false;
+
+  const DelayedType* rhs = static_cast<const DelayedType*>(_rhs);
+
+  return d->m_identifier == rhs->d->m_identifier;
 }
 
 AbstractType::AbstractType()
@@ -606,11 +741,6 @@ AbstractType::WhichType ArrayType::whichType() const
 AbstractType::WhichType DelayedType::whichType() const
 {
   return AbstractType::TypeDelayed;
-}
-
-AbstractType* DelayedType::clone() const
-{
-  return new DelayedType(*this);
 }
 
 QString DelayedType::toString() const

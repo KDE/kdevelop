@@ -22,6 +22,7 @@
 #include <documentrangeobject.h>
 #include <duchainbase.h>
 #include <languageexport.h>
+#include "contextowner.h"
 
 namespace KDevelop
 {
@@ -32,7 +33,7 @@ class DUContext;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Definition : public DUChainBase
+class KDEVPLATFORMLANGUAGE_EXPORT Definition : public DUChainBase, public ContextOwner
 {
 friend class Declaration;
 public:

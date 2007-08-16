@@ -35,7 +35,7 @@ public:
   DUContext::ContextType m_contextType;
   QualifiedIdentifier m_scopeIdentifier;
   DUContextPointer m_parentContext;
-  DeclarationPointer m_declaration;
+  ContextOwner* m_owner;
   QList<DUContextPointer> m_importedParentContexts;
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;

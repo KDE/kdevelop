@@ -35,6 +35,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/hashedstring.cpp
     duchain/namespacealiasdeclaration.cpp
     duchain/dumpdotgraph.cpp
+    duchain/contextowner.cpp
 )
 
 
@@ -90,5 +91,6 @@ install(FILES
     duchain/hashedstring.h
     duchain/namespacealiasdeclaration.h
     duchain/dumpdotgraph.h
+    duchain/contextowner.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )

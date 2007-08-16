@@ -39,6 +39,20 @@ IdentifiedType::IdentifiedType()
 {
 }
 
+bool IdentifiedType::equals(const IdentifiedType* rhs) const
+{
+  if( (bool)d->m_declaration != (bool)rhs->d->m_declaration )
+    return false;
+  if( d->m_declaration == rhs->d->m_declaration )
+    return true;
+  
+  if( !d->m_declaration )
+    return false;
+
+  return d->m_declaration.data()->textRange() == rhs->d->m_declaration->textRange()
+         && d->m_declaration.data()->url() == rhs->d->m_declaration->url();
+}
+
 QualifiedIdentifier IdentifiedType::identifier() const
 {
   return d->m_declaration ? d->m_declaration->qualifiedIdentifier() : QualifiedIdentifier();

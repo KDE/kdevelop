@@ -207,6 +207,8 @@ void DUChainLock::releaseWriteLock()
   kDebug(9007) << "DUChain write lock released by thread:" << QThread::currentThreadId();
 #endif
 
+  Q_ASSERT(currentThreadHasWriteLock());
+  
   QMutexLocker lock(&d->m_mutex);
   
   --d->m_writerRecursion;
