@@ -205,7 +205,7 @@ using namespace CppTools;
 
 bool IncludePathResolver::executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const
 {
-  ifTest( cout << "executing" << command.toUtf8().constData() << endl );
+  ifTest( cout << "executing " << command.toUtf8().constData() << endl );
 
   KProcess proc;
   proc.setWorkingDirectory(workingDirectory);
