@@ -86,7 +86,7 @@ void DumpDotGraphPrivate::addDefinition(QTextStream& stream, Definition* def) {
 
   m_hadObjects[def] = true;
   
-  stream << shortLabel(def) <<  "[shape=regular,label=\"" << (def->declaration() ? def->declaration()->toString() : QString("no declaration")) << " "<< rangeToString(def->textRange()) <<  "\"];\n";
+  stream << shortLabel(def) <<  "[shape=regular,color=yellow,label=\"" << (def->declaration() ? def->declaration()->toString() : QString("no declaration")) << " "<< rangeToString(def->textRange()) <<  "\"];\n";
   stream << shortLabel(def->context()) << " -> " << shortLabel(def) << ";\n";
   if( def->declaration() ) {
     stream << shortLabel(def) << " -> " << shortLabel(def->declaration()) << "[label=\"defines\",color=green];\n";
