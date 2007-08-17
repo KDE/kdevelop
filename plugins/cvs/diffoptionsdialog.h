@@ -30,12 +30,12 @@ public:
 
     /**
      * @return The first diffing revision, branchname or tag
-     * @note Can also be QString::null if the user requested a diff agains BASE
+     * @note Can also be QString() if the user requested a diff agains BASE
      */
     QString revA() const;
     /**
      * @return The second diffing revision, branchname or tag
-     * @note Can also be QString::null if the user requested a diff agains a single revision
+     * @note Can also be QString() if the user requested a diff agains a single revision
      */
     QString revB() const;
 

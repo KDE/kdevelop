@@ -311,7 +311,7 @@ bool ProjectController::closeProject( IProject* proj )
     // save the the project to open it automatically on startup if needed
 //     d->m_lastProject = d->m_globalFile;
 
-//     d->m_name = QString::null;
+//     d->m_name = QString();
 //     d->m_localFile.clear();
 //     d->m_globalFile.clear();
 //     d->m_projectsDir.clear();
