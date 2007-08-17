@@ -949,8 +949,32 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 case StringAst::MATCHALL: //TODO
                     kDebug(9032) << "Error! String feature MATCHALL not supported!";
                     break;
-                case StringAst::REGEX_REPLACE: //TODO
-                    kDebug(9032) << "Error! String feature REPLACE not supported!";
+                case StringAst::REGEX_REPLACE:
+                {
+                    QRegExp rx(sast->regex());
+                    QStringList res;
+                    if(sast->replace().startsWith('\\'))
+                    {
+                        rx.indexIn(sast->input()[0]);
+                        QStringList info = rx.capturedTexts();
+                        int idx = sast->replace().right(sast->replace().size()-1).toInt();
+                        res.append(info[idx]);
+                    }
+                    else
+                    {
+                        foreach(QString in, sast->input())
+                        {
+                            rx.indexIn(in);
+                            QStringList info = rx.capturedTexts();
+                            foreach(QString s, info)
+                            {
+                                res.append(in.replace(s, sast->replace()));
+                            }
+                        }
+                    }
+                    kDebug(9032) << "ret: " << res << " << string(regex replace " << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
+                    m_vars->insert(sast->outputVariable(), res);
+                }
                     break;
                 default:
                     kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();

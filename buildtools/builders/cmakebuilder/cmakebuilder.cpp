@@ -45,6 +45,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <KProcess>
 
 #define CMAKE_COMMAND "cmake"
 
@@ -228,10 +229,41 @@ bool CMakeBuilder::updateConfig( KDevelop::IProject* project )
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
     
-    m_cmakeBinary = group.readEntry("CMake Binary", KUrl( "file:///usr/bin/cmake" ) );
+    m_cmakeBinary = group.readEntry("CMake Binary");
     m_buildDirectory = group.readEntry("Build Dir");
     m_installPrefix = group.readEntry("Prefix");
     m_buildType = group.readEntry("Build Type", "-1");
+    if(m_cmakeBinary.isEmpty())
+    {
+        KProcess p;
+        p.setOutputChannelMode(KProcess::MergedChannels);
+        p.setProgram("which", QStringList("cmake"));
+        p.start();
+
+        if(!p.waitForFinished())
+        {
+            kDebug(9032) << "failed to execute: 'which' command";
+        }
+
+        if(p.exitCode()!=0)
+        {
+            kDebug(9032) << "failed to execute: 'which' command. Bad return";
+        }
+
+        QByteArray b = p.readAllStandardOutput();
+        QString t;
+        t.prepend(b.trimmed());
+        m_cmakeBinary = KUrl::fromPath(t);
+
+        if(!m_cmakeBinary.isEmpty())
+        {
+            group.writeEntry("CMake Binary", m_cmakeBinary);
+        }
+        else
+        {
+            kDebug(9032) << "error!!! Could not find cmake in the path";
+        }
+    }
 //     return m_cmakeBinary.isEmpty() || m_buildDirectory.isEmpty();
     return true;
 }
@@ -239,3 +271,4 @@ bool CMakeBuilder::updateConfig( KDevelop::IProject* project )
 #include "cmakebuilder.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
+
