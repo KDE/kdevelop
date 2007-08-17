@@ -329,12 +329,12 @@ void CPPInternalParseJob::run()
 
         if ( !parentJob()->parentPreprocessor() ) {
             DUChainReadLocker lock(DUChain::lock());
-            kDebug( 9007 ) << "================== duchain ==================";
+/*            kDebug( 9007 ) << "================== duchain ==================";
             DumpChain dump;
             //dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);
             KDevelop::DumpDotGraph dumpGraph;
-            kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
+            kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);*/
         }
     }
 

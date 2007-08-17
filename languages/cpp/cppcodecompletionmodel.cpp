@@ -191,7 +191,8 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           Cpp::TypeConversion conv;
 
           ///@todo fill the lvalue-ness correctly
-          return ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<CppFunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / 4;
+          int quality = ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<CppFunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
+          return QVariant(quality);
         }else{
           kDebug(9007) << "MatchQuality requested with invalid match-context";
         }

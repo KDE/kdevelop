@@ -51,6 +51,10 @@ using namespace KDevelop;
      StandardConversion
    };
 
+   enum {
+     MaximumConversionResult = 2*ConversionRankOffset + ExactMatch
+   };
+
 /**
  * Class that models c++ type-conversion.
  *
@@ -69,7 +73,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT TypeConversion {
      * @param from The type from which to convert
      * @param to The type to which to convert
      * @param fromLValue Whether the from-type is explicitly an lvalue. When the from-type is a reference, it is an lvalue anyway. This especially influences whether a conversion to a non-constant reference is possible.
-     * @return Whether there is an implicit conversion sequence available. 0 when no conversion is possible, else a positive number. The higher it is, the better the conversion
+     * @return Whether there is an implicit conversion sequence available. 0 when no conversion is possible, else a positive number. The higher it is, the better the conversion. Maximum should be MaximumConversionResult
      **/
 
     uint implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue = true, bool noUserDefinedConversion = false );

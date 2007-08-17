@@ -80,16 +80,16 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
       ///Since from is an lvalue, and the constant-specification matches, we can maybe directly create a reference
       //Either identity-conversion:
       if( identityConversion( AbstractType::Ptr(realType(from)), AbstractType::Ptr(realType(toReference)) ) )
-        return ExactMatch;
+        return ExactMatch + 2*ConversionRankOffset;
       //Or realType(toReference) is a public base-class of realType(fromReference)
       CppClassType* fromClass = dynamic_cast<CppClassType*>( realType(from) );
       CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to) );
       
       if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) )
-        return ExactMatch;
+        return ExactMatch + 2*ConversionRankOffset;
     }
 
-    //We cannot directly create initialize a reference, but maybe there is a user-defined conversion that creates a compatible reference, as in iso c++ 13.3.3.1.4.1
+    //We cannot directly create a reference, but maybe there is a user-defined conversion that creates a compatible reference, as in iso c++ 13.3.3.1.4.1
     if( !noUserDefinedConversion ) {
       if( int rank = userDefinedConversion( from, to, fromLValue, true ) ) {
         return rank + ConversionRankOffset;
@@ -114,9 +114,10 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
   }
 
   if( !noUserDefinedConversion ) {
-    if( (tempConv = userDefinedConversion(from, to, fromLValue)) && tempConv > conv ) {
+    if( (tempConv = userDefinedConversion(from, to, fromLValue)) ) {
       tempConv += ConversionRankOffset;
-      conv = tempConv;
+      if( tempConv > conv )
+        conv = tempConv;
     }
   }
 
