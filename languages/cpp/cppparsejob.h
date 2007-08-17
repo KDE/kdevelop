@@ -73,9 +73,6 @@ public:
     void setAST(TranslationUnitAST* ast);
     virtual TranslationUnitAST *AST() const;
 
-    void setDUChain(KDevelop::TopDUContext* duChain);
-    virtual KDevelop::TopDUContext* duChain() const;
-
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
 
@@ -114,7 +111,6 @@ private:
     PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;
     TranslationUnitAST* m_AST;
-    KDevelop::TopDUContext* m_duContext;
     bool m_readFromDisk;
     PreprocessJob* m_preprocessJob;
     CPPInternalParseJob* m_parseJob;

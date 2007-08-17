@@ -61,7 +61,6 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
         m_AST( 0 ),
-        m_duContext( 0 ),
         m_readFromDisk( false ),
         m_includePathsComputed( false )
 {
@@ -120,7 +119,6 @@ CPPParseJob::CPPParseJob( KDevelop::Document *document,
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
-        m_duContext( 0 ),
         m_readFromDisk( false ),
         m_textRangeToParse(textRangeToParse)
 {
@@ -139,11 +137,6 @@ TranslationUnitAST *CPPParseJob::AST() const
 {
     Q_ASSERT ( isFinished () && m_AST );
     return m_AST;
-}
-
-TopDUContext* CPPParseJob::duChain() const
-{
-    return m_duContext;
 }
 
 CPPParseJob* CPPParseJob::masterJob() {
@@ -202,11 +195,6 @@ CPPParseJob * CPPInternalParseJob::parentJob() const
 void CPPParseJob::setAST(TranslationUnitAST * ast)
 {
     m_AST = ast;
-}
-
-void CPPParseJob::setDUChain(TopDUContext * duChain)
-{
-    m_duContext = duChain;
 }
 
 const KTextEditor::Range& CPPParseJob::textRangeToParse() const
@@ -312,7 +300,7 @@ void CPPInternalParseJob::run()
                     topContext->removeImportedParentContext(context);
             }
 
-            parentJob()->setDUChain(topContext);
+            parentJob()->setDuChain(topContext);
 
             kDebug( 9007 ) << "duchain is built";
             if ( parentJob()->cpp()->codeHighlighting() && editor.smart() )
