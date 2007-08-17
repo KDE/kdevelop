@@ -130,7 +130,7 @@ void Viewer::processAST(ProjectAST *projectAST, Q3ListViewItem *globAfter)
 		{
 			AutomakeTargetAST* ata = static_cast<AutomakeTargetAST*>(ast);
 			Q3ListViewItem* item = new Q3ListViewItem(projectIt, after,
-					ata->target, QString::null, ata->deps.join(""));
+					ata->target, QString::null, ata->deps.join(""));	//krazy:exclude=nullstrassign for old broken gcc
 			after = item;
 		}
 		break;
@@ -147,7 +147,7 @@ void Viewer::processAST(ProjectAST *projectAST, Q3ListViewItem *globAfter)
 		{
 			ConditionAST* ata = static_cast<ConditionAST*>(ast);
 			Q3ListViewItem* item = new Q3ListViewItem(projectIt, after,
-					ata->type, ata->conditionName, QString::null );
+					ata->type, ata->conditionName, QString::null );	//krazy:exclude=nullstrassign for old broken gcc
 			after = item;
 		}
 	case AST::ProjectAST: {
