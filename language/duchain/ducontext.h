@@ -94,7 +94,8 @@ public:
     OnlyContainerTypes = 2, //Not implemented yet
     DontSearchInParent = 4, //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
     NoUndefinedTemplateParams = 8, //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
-    LanguageSpecificFlag1 = 16 //This is a flag that can be used to control language-specific parts of the search in overridden functions(has no direct function in the du-chain)
+    LanguageSpecificFlag1 = 16, //This is a flag that can be used to control language-specific parts of the search in overridden functions(has no direct function in the du-chain)
+    NoFiltering = 32           //Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default)
   };
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
@@ -372,7 +373,7 @@ protected:
   /**
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
    */
-  void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, bool searchInParents = true, int currentDepth = 0) const;
+  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, bool searchInParents = true, int currentDepth = 0) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;

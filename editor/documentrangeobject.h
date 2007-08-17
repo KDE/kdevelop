@@ -56,6 +56,7 @@ public:
     const KTextEditor::Range textRange() const;
     const DocumentRange textDocRange() const;
     KTextEditor::Range* textRangePtr() const;
+    ///If this document's range is a SmartRange, returns it. Else 0.
     KTextEditor::SmartRange* smartRange() const;
 
     RangeOwning ownsRange() const;

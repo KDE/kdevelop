@@ -47,19 +47,22 @@ public:
 
     foreach (Declaration* dec, context->localDeclarations()) {
       dec->setTextRange(m_editor->createRange(dec->textRange()));
-      m_hl->highlightDeclaration(dec);
+      if( m_hl )
+        m_hl->highlightDeclaration(dec);
       m_editor->exitCurrentRange();
     }
 
     foreach (Definition* def, context->localDefinitions()) {
       def->setTextRange(m_editor->createRange(def->textRange()));
-      m_hl->highlightDefinition(def);
+      if( m_hl )
+        m_hl->highlightDefinition(def);
       m_editor->exitCurrentRange();
     }
 
     foreach (Use* use, context->uses()) {
       use->setTextRange(m_editor->createRange(use->textRange()));
-      m_hl->highlightUse(use);
+      if( m_hl )
+        m_hl->highlightUse(use);
       m_editor->exitCurrentRange();
     }
 
