@@ -272,15 +272,17 @@ class CppDUContext : public BaseContext {
       
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, flags );
 
-        //Filter out constructors and if needed unresolved template-params
-        QList<Declaration*>::iterator it = ret.begin();
-        while( it != ret.end() ) {
-          if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) )
-             || ( (dynamic_cast<ClassFunctionDeclaration*>(*it) && static_cast<ClassFunctionDeclaration*>(*it)->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
-            it = ret.erase(it);
-            //kDebug(9007) << "filtered out 1 declaration" << endl;
-          } else {
-            ++it;
+        if( !(flags & DUContext::NoFiltering) ) {
+          //Filter out constructors and if needed unresolved template-params
+          QList<Declaration*>::iterator it = ret.begin();
+          while( it != ret.end() ) {
+            if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) )
+               || ( (dynamic_cast<ClassFunctionDeclaration*>(*it) && static_cast<ClassFunctionDeclaration*>(*it)->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
+              it = ret.erase(it);
+              //kDebug(9007) << "filtered out 1 declaration" << endl;
+            } else {
+              ++it;
+            }
           }
         }
 
@@ -357,6 +359,24 @@ class CppDUContext : public BaseContext {
       }
 
       return templateDecl->instantiate( templateArguments );
+    }
+
+    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, bool searchInParents, int currentDepth) const
+    {
+      if( m_instantiatedFrom )
+      {
+        //We need to make sure that all declarations from the specialization-base are instantiated, so they are returned.
+        QList<Declaration*> baseDecls = m_instantiatedFrom->localDeclarations();
+        QList<Declaration*> temp;
+
+        //This requests all declarations, so they all will be instantiated and instances of them added into this context.
+        //DUContext::mergeDeclarationsInternal will then get them.
+        
+        foreach( Declaration* baseDecls, m_instantiatedFrom->localDeclarations() )
+          this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), true, temp, DUContext::NoFiltering );
+      }
+
+      return BaseContext::mergeDeclarationsInternal(definitions, position, searchInParents, currentDepth);
     }
 
     CppDUContext<BaseContext>* m_instantiatedFrom;

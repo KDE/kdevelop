@@ -178,6 +178,8 @@ void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
     foreach (TopDUContext* chain, chains) {
         sc.convertDUChain(chain);
     }
+    if( chains.isEmpty() )
+        core()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
 KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const

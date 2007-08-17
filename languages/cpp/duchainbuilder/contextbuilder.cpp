@@ -31,6 +31,7 @@
 #include <use.h>
 #include <topducontext.h>
 #include <symboltable.h>
+#include <smartconverter.h>
 
 #include "parsesession.h"
 #include "cppeditorintegrator.h"
@@ -131,6 +132,17 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   {
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext.data();
+    if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
+      //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
+      //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
+      //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
+      kDebug(9007) << "Warning: A document is updated that has no smart-ranges, although the document is loaded. The ranges will be converted now.";
+      ///@todo what about smart-mutex locking?
+      lock.unlock();
+      SmartConverter conv(m_editor, 0);
+      conv.convertDUChain(topLevelContext);
+      lock.lock();
+    }
 
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
