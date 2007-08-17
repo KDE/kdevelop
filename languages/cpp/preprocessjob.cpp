@@ -57,12 +57,16 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
     public:
         CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_environmentFile(environmentFile) {
             //If this is included from another preprocessed file, take the current macro-set from there.
+            ///NOTE: m_environmentFile may be zero, this must be treated
         }
 
 
         virtual rpp::pp_macro* retrieveMacro(const QString& name) const {
             ///@todo use a global string-repository
             //note all strings that can be affected by macros
+            if( !m_environmentFile )
+                return rpp::Environment::retrieveMacro(name);
+            
             m_environmentFile->addString(KDevelop::HashedString(name));
             rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
 
@@ -85,6 +89,9 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
 
         virtual void setMacro(rpp::pp_macro* macro) {
             //Note defined macros
+            if( m_environmentFile )
+                m_environmentFile->addDefinedMacro(*macro);
+                
             rpp::Environment::setMacro(macro);
         }
 
