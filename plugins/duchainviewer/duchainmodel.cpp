@@ -27,6 +27,10 @@
 #include <kprocess.h>
 
 #include "idocument.h"
+#include "icore.h"
+#include "ilanguagecontroller.h"
+#include "backgroundparser/backgroundparser.h"
+#include "backgroundparser/parsejob.h"
 
 #include "duchainview_part.h"
 #include "dumpdotgraph.h"
@@ -55,10 +59,25 @@ DUChainModel::DUChainModel(DUChainViewPart* parent)
 {
   DUChainWriteLocker writeLock(DUChain::lock());
   DUChain::self()->addObserver(this);
+  connect( part()->core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
+}
+
+DUChainViewPart* DUChainModel::part() const {
+  return qobject_cast<DUChainViewPart*>(QObject::parent());
 }
 
 DUChainModel::~DUChainModel()
 {
+}
+
+void DUChainModel::parseJobFinished(KDevelop::ParseJob* job)
+{
+  QMutexLocker lock(&m_mutex);
+  if( job->document() == m_document && job->duChain() ) {
+    lock.unlock();
+    setTopContext(job->duChain());
+  }
+  
 }
 
 void DUChainModel::documentActivated(KDevelop::IDocument* document)
@@ -67,6 +86,10 @@ void DUChainModel::documentActivated(KDevelop::IDocument* document)
     TopDUContext* chain = DUChain::self()->chainForDocument(document->url());
     if (chain)
       setTopContext(chain);
+    else {
+      QMutexLocker lock(&m_mutex);
+      m_document = document->url();
+    }
   }
 }
 
@@ -75,6 +98,11 @@ void DUChainModel::setTopContext(TopDUContext* context)
   DUChainReadLocker readLock(DUChain::lock());
   QMutexLocker lock(&m_mutex);
 
+  if( context )
+    m_document = context->url();
+  else
+    m_document = KUrl();
+  
   if (m_chain != context)
     m_chain = context;
 
@@ -389,6 +417,12 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
             m_objectLists.remove(context);
           // fallthrough
         }
+        if( context == m_chain ) {
+          //Top-context was deleted
+          setTopContext(0);
+          return;
+        }
+          
 
         case Change: {
           int index = list->indexOf(relatedObject);

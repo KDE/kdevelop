@@ -47,8 +47,12 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-class ParseJobPrivate
+struct ParseJobPrivate
 {
+    ParseJobPrivate() : m_duContext(0) {
+    }
+
+    TopDUContext* m_duContext;
 };
 
 ParseJob::ParseJob( const KUrl &url,
@@ -75,6 +79,7 @@ ParseJob::~ParseJob()
         smart->releaseRevision(m_revisionToken);
       }
     }
+    delete d;
 }
 
 KUrl ParseJob::document() const
@@ -86,6 +91,17 @@ bool ParseJob::success() const
 {
     return !m_aborted;
 }
+
+void ParseJob::setDuChain(KDevelop::TopDUContext* duChain)
+{
+    d->m_duContext = duChain;
+}
+
+TopDUContext* ParseJob::duChain() const
+{
+    return d->m_duContext;
+}
+
 
 QString ParseJob::errorMessage() const
 {

@@ -301,6 +301,9 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 
     if (ParseJob* parseJob = qobject_cast<ParseJob*>(job)) {
         kDebug(9505) << "BackgroundParser: parsed" << parseJob->document();
+
+        emit parseJobFinished(parseJob);
+
         d->m_parseJobs.remove(parseJob->document());
 
         parseJob->setBackgroundParser(0);

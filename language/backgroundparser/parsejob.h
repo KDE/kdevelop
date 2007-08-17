@@ -32,6 +32,7 @@ namespace KDevelop
 {
 
 class BackgroundParser;
+class TopDUContext;
 
 /**
  * The base class for background parser jobs.
@@ -65,6 +66,11 @@ public:
 
     void setErrorMessage(const QString& message);
     QString errorMessage() const;
+
+    /// Sets the du-context that was created by this parse-job
+    virtual void setDuChain(TopDUContext* duChain);
+    /// Returns the set du-context, or zero of none was set.
+    virtual TopDUContext* duChain() const;
 
     /// Overriden to allow jobs to determine if they've been requested to abort
     virtual void requestAbort();

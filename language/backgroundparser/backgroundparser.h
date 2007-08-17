@@ -80,6 +80,10 @@ public:
      */
     ParserDependencyPolicy* dependencyPolicy() const;
 
+signals:
+    ///Emitted whenever a document parse-job has finished. The job contains the du-chain(if one was created) etc.
+    void parseJobFinished(KDevelop::ParseJob* job);
+        
 public Q_SLOTS:
 
     /**

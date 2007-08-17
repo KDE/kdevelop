@@ -26,6 +26,7 @@
 #include <QtCore/QHash>
 
 #include <ktexteditor/cursor.h>
+#include <kurl.h>
 
 #include "duchainbase.h"
 #include "duchainobserver.h"
@@ -35,6 +36,7 @@ class DUChainViewPart;
 namespace KDevelop {
  class TopDUContext;
  class IDocument;
+ class ParseJob;
 }
 
 class ProxyObject : public KDevelop::DUChainBase
@@ -58,6 +60,7 @@ public:
 
 public Q_SLOTS:
   void documentActivated(KDevelop::IDocument* document);
+  void parseJobFinished(KDevelop::ParseJob* job);
 
 public:
   virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
@@ -77,6 +80,8 @@ private slots:
   void doubleClicked ( const QModelIndex & index );
     
 private:
+  DUChainViewPart* part() const;
+  
   KDevelop::DUChainBase* objectForIndex(const QModelIndex& index) const;
   int findInsertIndex(QList<KDevelop::DUChainBase*>& list, KDevelop::DUChainBase* object) const;
 
@@ -125,6 +130,7 @@ private:
   QList<KDevelop::DUChainBase*>* childItems(KDevelop::DUChainBase* parent) const;
 
   KDevelop::TopDUContext* m_chain;
+  KUrl m_document;
   mutable QMutex m_mutex;
   mutable QHash<KDevelop::DUChainBase*, QList<KDevelop::DUChainBase*>* > m_objectLists;
   mutable QHash<KDevelop::DUChainBase*, int > m_modelRow;
