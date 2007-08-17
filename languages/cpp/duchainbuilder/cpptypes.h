@@ -131,11 +131,11 @@ public:
   ///@todo implement these
   /** @return whether this is a template-function
    * */
-  bool isTemplate();
+  bool isTemplate() const;
 
   /** @return whether this function is a specialization of the given function, or whether they are specialized from the same function and this is more specialized.
    * */
-  bool isMoreSpecialized( CppFunctionType* other );
+  bool isMoreSpecialized( const CppFunctionType* other ) const;
   
   ///Declarations of this class(@see KDevelop::IdentifiedType::declaration()) are guaranteed to be based on AbstractFunctionDeclaration
   

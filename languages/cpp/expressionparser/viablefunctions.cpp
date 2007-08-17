@@ -36,7 +36,7 @@ inline bool ViableFunction::ParameterConversion::operator<(const ParameterConver
 
 ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
   if( decl )
-    m_type = dynamic_cast<CppFunctionType*>( decl->abstractType().data());
+    m_type = KSharedPtr<CppFunctionType>(dynamic_cast<CppFunctionType*>( decl->abstractType().data()));
 }
 
 KDevelop::DeclarationPointer ViableFunction::declaration() const {
@@ -107,7 +107,7 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
    */
   if( !m_type->isTemplate() && other.m_type->isTemplate() )
     return true;
-  if( m_type->isMoreSpecialized( other.m_type ) )
+  if( m_type->isMoreSpecialized( other.m_type.data() ) )
     return true;
 
   return false;

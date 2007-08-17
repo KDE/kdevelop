@@ -54,6 +54,18 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+//Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
+AbstractType::Ptr effectiveType( Declaration* decl )
+{
+  if( !decl || !decl->abstractType() )
+    return AbstractType::Ptr();
+  
+  if( decl->type<FunctionType>() )
+    return decl->type<FunctionType>()->returnType();
+
+  return decl->abstractType();
+}
+
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel(parent)
 {
@@ -171,9 +183,18 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       return QVariant(1);
     case MatchQuality:
     {
-      if( m_currentMatchContext.declaration && m_currentMatchContext.completionContext && m_currentMatchContext.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-        Cpp::TypeConversion conv;
-        //return conv.implicitConversion(
+      if( m_currentMatchContext.declaration && m_currentMatchContext.completionContext && m_currentMatchContext.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && m_currentMatchContext.listOffset < m_currentMatchContext.completionContext->functions().count() )
+      {
+        Cpp::CodeCompletionContext::Function f( m_currentMatchContext.completionContext->functions()[m_currentMatchContext.listOffset] );
+
+        if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<CppFunctionType>() && f.function.declaration()->type<CppFunctionType>()->arguments().count() > f.matchedArguments ) {
+          Cpp::TypeConversion conv;
+
+          ///@todo fill the lvalue-ness correctly
+          return ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<CppFunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / 4;
+        }else{
+          kDebug(9007) << "MatchQuality requested with invalid match-context";
+        }
       } else {
         kDebug(9007) << "MatchQuality requested with invalid match-context";
       }

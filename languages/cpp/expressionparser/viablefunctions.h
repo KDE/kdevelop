@@ -76,7 +76,7 @@ namespace Cpp {
     };
     QList<ParameterConversion> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
-    CppFunctionType* m_type;
+    KSharedPtr<CppFunctionType> m_type;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };
 }

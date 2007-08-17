@@ -576,11 +576,11 @@ QString CppTypeAliasType::mangled() const
   return type()->mangled();
 }
 
-bool CppFunctionType::isTemplate() {
+bool CppFunctionType::isTemplate() const {
   return false;
 }
 
-bool CppFunctionType::isMoreSpecialized( CppFunctionType* other ) {
+bool CppFunctionType::isMoreSpecialized( const CppFunctionType* other ) const {
   Q_UNUSED(other)
   return false;
 }
