@@ -19,9 +19,9 @@
 #include "problem.h"
 #include "cppparserexport.h"
 
-#define LEXERCACHE_DEBUG
+//#define LEXERCACHE_DEBUG
 
-//#ifndef LEXERCACHE_DEBUG
+#ifndef LEXERCACHE_DEBUG
 #define ifDebug(X) /**/
 #else
 #define ifDebug(X) X
