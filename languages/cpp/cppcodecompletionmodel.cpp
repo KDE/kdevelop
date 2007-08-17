@@ -255,13 +255,15 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           }
 
         case Scope: {
-          QualifiedIdentifier id = dec->qualifiedIdentifier();
+          //The scopes are not needed
+          return QVariant();
+/*          QualifiedIdentifier id = dec->qualifiedIdentifier();
           if (id.isEmpty())
             return QVariant();
           id.pop();
           if (id.isEmpty())
             return QVariant();
-          return id.toString() + "::";
+          return id.toString() + "::";*/
         }
 
         case Name:

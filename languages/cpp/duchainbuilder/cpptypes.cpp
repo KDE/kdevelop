@@ -573,7 +573,10 @@ QString CppClassType::mangled() const
 
 QString CppTypeAliasType::mangled() const
 {
-  return type()->mangled();
+  if( type() )
+    return "TA" + type()->mangled();
+  else
+    return "TA";
 }
 
 bool CppFunctionType::isTemplate() const {
