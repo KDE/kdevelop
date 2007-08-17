@@ -19,9 +19,9 @@
 #include "problem.h"
 #include "cppparserexport.h"
 
-//#define LEXERCACHE_DEBUG
+#define LEXERCACHE_DEBUG
 
-#ifndef LEXERCACHE_DEBUG
+//#ifndef LEXERCACHE_DEBUG
 #define ifDebug(X) /**/
 #else
 #define ifDebug(X) X
@@ -101,12 +101,6 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
 
   while ( files.first != files.second ) {
     const EnvironmentFile& file( *( *( files.first ) ).second );
-    if ( hasSourceChanged( file ) ) {
-      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file" << fileName.str() << "is being discarded because the file was modified"  );
-      m_files.erase( files.first++ );
-       ///@todo give notification to du-chain
-      continue;
-    }
     bool success = true;
     //Make sure that none of the macros stored in the driver affect the file in a different way than the one before
     rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
