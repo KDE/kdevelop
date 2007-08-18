@@ -77,7 +77,6 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
   if( !other.isViable() )
     return true;
 
-  Q_ASSERT( m_parameterConversions.size() == other.m_parameterConversions.size() );
   ///iso c++ 13.3.3 - best viable function
 
   //Is one of our conversions worse than one of the other function's?
@@ -86,7 +85,7 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
   QList<ParameterConversion>::const_iterator otherConversions = other.m_parameterConversions.begin();
 
   bool hadBetterConversion = false;
-  while( myConversions != m_parameterConversions.end() )
+  while( myConversions != m_parameterConversions.end() && otherConversions != other.m_parameterConversions.end() )
   {
     if( *myConversions < *otherConversions )
       return false; //All this function's conversions must not be worse then the other function one's
@@ -97,6 +96,8 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
     ++myConversions;
     ++otherConversions;
   }
+
+  ///@todo any special measures when parameter-counts differ?
 
   if( hadBetterConversion )
     return true;

@@ -428,9 +428,6 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       declaration = specialDeclaration<Declaration>(range, scope );
     }
 
-    if( m_inTypedef )
-      declaration->setIsTypeAlias(true);
-
     if (name) {
       // FIXME this can happen if we're defining a staticly declared variable
       //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
@@ -455,6 +452,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         break;
     }
   }
+
+  if( m_inTypedef )
+    declaration->setIsTypeAlias(true);
 
   if( !lastId.templateIdentifiers().isEmpty() ) {
     TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);

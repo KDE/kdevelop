@@ -122,6 +122,19 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   --m_templateDeclarationDepth;
 }
 
+void ContextBuilder::smartenContext(TopDUContext* topLevelContext) {
+  
+  if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
+    //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
+    //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
+    //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
+    kDebug(9007) << "Warning: A document is updated that has no smart-ranges, although the document is loaded. The ranges will be converted now.";
+    ///@todo what about smart-mutex locking?
+    SmartConverter conv(m_editor, 0);
+    conv.convertDUChain(topLevelContext);
+  }
+}
+
 TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes, const TopDUContextPointer& updateContext)
 {
   m_compilingContexts = true;
@@ -132,18 +145,15 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   {
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext.data();
-    if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
-      //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
-      //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
-      //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
-      kDebug(9007) << "Warning: A document is updated that has no smart-ranges, although the document is loaded. The ranges will be converted now.";
-      ///@todo what about smart-mutex locking?
-      lock.unlock();
-      SmartConverter conv(m_editor, 0);
-      conv.convertDUChain(topLevelContext);
-      lock.lock();
-    }
 
+    if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
+      lock.unlock();
+      smartenContext(topLevelContext);
+      lock.lock();
+      topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
+    }
+    
+    
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
       m_recompiling = true;
@@ -154,10 +164,6 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
         // To here...
         Q_ASSERT(topLevelContext->textRangePtr());
 
-        // FIXME remove once conversion works
-        if (!topLevelContext->smartRange() && m_editor->smart())
-          topLevelContext->setTextRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain));
-        
         if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
           kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
           Q_ASSERT(0);
@@ -261,13 +267,16 @@ KDevelop::DUContext* ContextBuilder::buildSubContexts(const KUrl& url, AST *node
   return node->ducontext;
 }
 
-
 void ContextBuilder::supportBuild(AST *node, DUContext* context)
 {
   //Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext)); This assertion is invalid, because the node may also be a statement that has a non-top context set
 
+  
   if( !context )
     context = node->ducontext;
+  
+  if( TopDUContext* topLevelContext = dynamic_cast<TopDUContext*>(context) )
+    smartenContext(topLevelContext);
   
   openContext( context );
 

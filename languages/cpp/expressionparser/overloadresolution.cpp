@@ -33,7 +33,9 @@ OverloadResolver::OverloadResolver( DUContextPointer context ) : m_context(conte
 }
 
 Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, bool implicit, bool noUserDefinedConversion ) {
-
+    if( !m_context )
+      return 0;
+    
     QList<Declaration*> goodDeclarations;
     QList<Declaration*> declarations = m_context->localDeclarations();
     
@@ -60,6 +62,9 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
 
 Declaration* OverloadResolver::resolve( const ParameterList& params, const QualifiedIdentifier& functionName, bool noUserDefinedConversion )
 {
+  if( !m_context )
+    return 0;
+  
   QList<Declaration*> declarations = m_context->findDeclarations(functionName);
   
   return resolveList(params, declarations, noUserDefinedConversion );
@@ -111,7 +116,11 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
   }
 }
 
-Declaration* OverloadResolver::resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion ) {
+Declaration* OverloadResolver::resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion )
+{
+  if( !m_context )
+    return 0;
+  
   ///Iso c++ draft 13.3.3
   m_worstConversionRank = ExactMatch;
 
@@ -140,7 +149,11 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
     return 0;
 }
 
-QList< ViableFunction > OverloadResolver::resolveListPartial( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations ) {
+QList< ViableFunction > OverloadResolver::resolveListPartial( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations )
+{
+  if( !m_context )
+    return QList<ViableFunction>();
+  
   ///Iso c++ draft 13.3.3
   m_worstConversionRank = ExactMatch;
 

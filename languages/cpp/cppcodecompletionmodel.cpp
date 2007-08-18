@@ -175,6 +175,9 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         w->accept();
     }
     break;
+    case BestMatchesCount:
+      return QVariant(5);
+    break;
     case InheritanceDepth:
       return m_declarations[dataIndex].inheritanceDepth;
     break;
@@ -218,17 +221,28 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     case Qt::DisplayRole:
       switch (index.column()) {
         case Prefix:
-          if( dec->kind() == Declaration::Type && !dec->type<CppFunctionType>() ) {
+        {
+          QString indentation;
+          int depth = m_declarations[dataIndex].inheritanceDepth;
+          if( depth > 1000 )
+            depth-=1000;
+          for( int a = 0; a < depth; a++ )
+            indentation += " ";
+
+          if( dec->isTypeAlias() )
+            indentation += "typedef ";
+          
+          if( dec->kind() == Declaration::Type && !dec->type<CppFunctionType>() && !dec->isTypeAlias() ) {
             if (CppClassType::Ptr classType =  dec->type<CppClassType>())
               switch (classType->classType()) {
                 case CppClassType::Class:
-                  return "class";
+                  return indentation + "class";
                   break;
                 case CppClassType::Struct:
-                  return "struct";
+                  return indentation + "struct";
                   break;
                 case CppClassType::Union:
-                  return "union";
+                  return indentation + "union";
                   break;
               }
             return QVariant();
@@ -238,21 +252,22 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
               ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
               
               if (functionType->returnType())
-                return functionType->returnType()->toString();
+                return indentation + functionType->returnType()->toString();
               else if(funDecl && funDecl->isConstructor() )
-                return "<constructor>";
+                return indentation + "<constructor>";
               else if(funDecl && funDecl->isDestructor() )
-                return "<destructor>";
+                return indentation + "<destructor>";
               else
-                return "<incomplete type>";
+                return indentation + "<incomplete type>";
 
             } else {
-              return dec->abstractType()->toString();
+              return indentation + dec->abstractType()->toString();
             }
 
           } else {
-            return "<incomplete type>";
+            return indentation + "<incomplete type>";
           }
+        }
 
         case Scope: {
           //The scopes are not needed
@@ -339,6 +354,9 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           ;//TODO
       }
 
+      if( dec->isTypeAlias() )
+        p |= TypeAlias;
+
       if (dec->abstractType()) {
         if (CppCVType* cv = dynamic_cast<CppCVType*>(dec->abstractType().data())) {
           if (cv->isConstant())
@@ -394,6 +412,12 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       NamespaceScope  = 0x100000,
       GlobalScope     = 0x200000,
       */
+      if( dec->context()->type() == DUContext::Global )
+        p |= GlobalScope;
+      else if( dec->context()->type() == DUContext::Namespace )
+        p |= NamespaceScope;
+      else if( dec->context()->type() != DUContext::Class )
+        p |= LocalScope;
 
       if( role == CompletionRole ) {
         return (int)p;
@@ -427,8 +451,8 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           iconName = "private_class";
         else if( (p & Union) && (p & Private) )
           iconName = "private_union";
-/*        else if( (p & TypeAlias) && ((p & Const) ||  (p & Volatile)) )
-          iconName = "CVtypedef";*/
+        else if( (p & TypeAlias) && ((p & Const) /*||  (p & Volatile)*/) )
+          iconName = "CVtypedef";
         else if( (p & Function) && (p & Protected) )
           iconName = "protected_function";
         else if( (p & Function) && (p & Private) )
@@ -445,8 +469,8 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           iconName = "CVpublic_slot";
         else if( p & Union )
           iconName = "union";
-/*        else if( p & TypeAlias )
-          iconName = "typedef";*/
+        else if( p & TypeAlias )
+          iconName = "typedef";
         else if( p & Function )
           iconName = "function";
         else if( p & Struct )

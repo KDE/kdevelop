@@ -160,6 +160,8 @@ protected:
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
   void addImportedContexts();
 
+  void smartenContext(TopDUContext* topLevelContext);
+  
   int templateDeclarationDepth() const {
     return m_templateDeclarationDepth;
   }

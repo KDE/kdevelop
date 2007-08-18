@@ -372,6 +372,10 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 }
 
 bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::Ptr to ) {
+  if( !from && !to )
+    return true;
+  else if( !from || !to )
+    return false;
   return from->mangled() == to->mangled(); ///@todo do this more efficiently
 }
 

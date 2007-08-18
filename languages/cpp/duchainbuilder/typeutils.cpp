@@ -199,6 +199,10 @@ namespace TypeUtils {
 
   void getConstructors(CppClassType* klass, QList<Declaration*>& functions) {
     DUContext* context = getInternalContext( klass->declaration() );
+    if( !context ) {
+      kDebug(9007) << "Tried to get constructors of a class without context";
+      return;
+    }
 
     QList<Declaration*> declarations = context->localDeclarations();
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
