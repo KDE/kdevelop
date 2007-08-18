@@ -373,10 +373,10 @@ KUrl MessageHistoryManager::directory() throw(QString)
   KUrl ul = TeamworkFolderManager::teamworkAbsolute( "messages" );
   TeamworkFolderManager::createTeamworkFolder();
 
-  if( !KIO::NetAccess::exists( ul, true, 0 ) )
+  if( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
     KIO::NetAccess::mkdir( ul, 0 );
 
-  if( !KIO::NetAccess::exists( ul, true, 0 ) )
+  if( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
     throw QString( "could not create messages-directory " ) + ul.toLocalFile();
 
   return ul;
@@ -388,7 +388,7 @@ void MessageHistoryManager::readMessages( const QString& file, uint offset, QLis
   path.addPath( file );
 
   if( !path.isLocalFile() ) throw QString( "message is not local" );
-  if( !KIO::NetAccess::exists( path, true, 0 ) ) throw QString( "index does not exist" );
+  if( !KIO::NetAccess::exists( path, KIO::NetAccess::SourceSide, 0 ) ) throw QString( "index does not exist" );
 
   std::ifstream f( path.toLocalFile().toLatin1(), ios_base::binary );
   f.seekg( offset );

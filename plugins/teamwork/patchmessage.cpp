@@ -190,7 +190,7 @@ void PatchData::saveInternal( OutArchive& arch, const uint /*version*/ ) {
       log( Logger::Debug ) << "opening file for sending:" << ~url.prettyUrl();
 
       //(QWidget*)KDevApi::self()->mainWindow()->main()
-      if ( !KIO::NetAccess::exists( url, true, 0 ) )
+      if ( !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, 0 ) )
         throw ( "the file \"" + url.prettyUrl() + "\" seems not to exist, or is not accessible" );
 
       auto_ptr<KIO::TransferJob> transfer( KIO::get

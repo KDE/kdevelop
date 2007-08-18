@@ -186,7 +186,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     if (!d->documents.contains(url))
     {
         //make sure the URL exists
-        if ( !url.isValid() || !KIO::NetAccess::exists( url, false, 0 ) )
+        if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
         {
             kDebug( 9000 ) << "cannot find URL:" << url.url();
             return 0;

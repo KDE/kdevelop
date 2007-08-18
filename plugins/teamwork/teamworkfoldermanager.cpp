@@ -71,7 +71,7 @@ void TeamworkFolderManager::createTeamworkFolder() throw(QString) {
   KUrl ul = self()->m_workspaceDir;
 
   ul.addPath( ".teamwork" );
-  if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+  if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
     if( !KIO::NetAccess::mkdir( ul, 0 ) )
       throw QString( "could not create \"%1\"" ).arg( ul.prettyUrl() );
 }
@@ -83,20 +83,20 @@ KUrl TeamworkFolderManager::createUniqueDirectory( const QString& subFolder, con
   KUrl ul = self()->m_workspaceDir;
 
   ul.addPath( ".teamwork" );
-  if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+  if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
     KIO::NetAccess::mkdir( ul, 0 );
 
-  if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+  if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
     throw QString( "could not create .teamwork-directory" );
 
 
   QStringList sub = subFolder.split( "/" );
   while( !sub.isEmpty() ) {
     ul.addPath( sub.front() );
-    if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+    if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
       KIO::NetAccess::mkdir( ul, 0 );
 
-    if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+    if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
       throw QString( "could not create directory %1 directory" ).arg( ul.prettyUrl() );
 
     sub.pop_front();
@@ -107,10 +107,10 @@ KUrl TeamworkFolderManager::createUniqueDirectory( const QString& subFolder, con
   nu.addPath( namePrefix + name + nameSuffix );
   nu.cleanPath();
 
-  if( !KIO::NetAccess::exists( nu, true, 0 ) ){
+  if( !KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) ){
     KIO::NetAccess::mkdir( nu, 0 );
 
-    if ( KIO::NetAccess::exists( nu, true, 0 ) )
+    if ( KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) )
       return nu;
   }
 
@@ -119,10 +119,10 @@ KUrl TeamworkFolderManager::createUniqueDirectory( const QString& subFolder, con
   nu.addPath( namePrefix + name + QDateTime::currentDateTime().toString( Qt::ISODate ) + nameSuffix );
 
   nu.cleanPath();
-  if( !KIO::NetAccess::exists( nu, true, 0 ) ) {
+  if( !KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) ) {
     KIO::NetAccess::mkdir( nu, 0 );
 
-    if ( KIO::NetAccess::exists( nu, true, 0 ) )
+    if ( KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) )
       return nu;
   }
 
@@ -131,10 +131,10 @@ KUrl TeamworkFolderManager::createUniqueDirectory( const QString& subFolder, con
     nu = ul;
     nu.addPath( namePrefix + QString("_%1_").arg( a ) + name + QDateTime::currentDateTime().toString( Qt::ISODate ) + nameSuffix );
     nu.cleanPath();
-    if( !KIO::NetAccess::exists( nu, true, 0 ) ){
+    if( !KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) ){
       KIO::NetAccess::mkdir( nu, 0 );
 
-      if ( KIO::NetAccess::exists( nu, true, 0 ) )
+      if ( KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) )
         return nu;
     }
   }
@@ -148,20 +148,20 @@ KUrl TeamworkFolderManager::createUniqueFile( const QString& subFolder, const QS
     KUrl ul = self()->m_workspaceDir;
 
     ul.addPath( ".teamwork" );
-    if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+    if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
       KIO::NetAccess::mkdir( ul, 0 );
 
-    if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+    if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
       throw QString( "could not create .teamwork-directory" );
 
 
     QStringList sub = subFolder.split( "/" );
     while( !sub.isEmpty() ) {
       ul.addPath( sub.front() );
-      if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+      if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
         KIO::NetAccess::mkdir( ul, 0 );
 
-      if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+      if ( !KIO::NetAccess::exists( ul, KIO::NetAccess::SourceSide, 0 ) )
         throw QString( "could not create directory %1 directory" ).arg( ul.prettyUrl() );
 
       sub.pop_front();
@@ -172,7 +172,7 @@ KUrl TeamworkFolderManager::createUniqueFile( const QString& subFolder, const QS
     nu.addPath( namePrefix + name + nameSuffix + "." + extension );
 
     nu.cleanPath();
-    if( !KIO::NetAccess::exists( nu, true, 0 ) ){
+    if( !KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) ){
       if( createFile( nu ) )
         return nu;
     }
@@ -182,7 +182,7 @@ KUrl TeamworkFolderManager::createUniqueFile( const QString& subFolder, const QS
     nu.addPath( namePrefix + name + QDateTime::currentDateTime().toString( Qt::ISODate ) + nameSuffix + "." + extension );
 
     nu.cleanPath();
-    if( !KIO::NetAccess::exists( nu, true, 0 ) ) {
+    if( !KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) ) {
       if( createFile( nu ) )
         return nu;
     }
@@ -192,7 +192,7 @@ KUrl TeamworkFolderManager::createUniqueFile( const QString& subFolder, const QS
       nu = ul;
       nu.addPath( namePrefix + QString("_%1_").arg( a ) + name + QDateTime::currentDateTime().toString( Qt::ISODate ) + nameSuffix + "." + extension );
       nu.cleanPath();
-      if( !KIO::NetAccess::exists( nu, true, 0 ) ){
+      if( !KIO::NetAccess::exists( nu, KIO::NetAccess::SourceSide, 0 ) ){
       if( createFile( nu ) )
         return nu;
       }
