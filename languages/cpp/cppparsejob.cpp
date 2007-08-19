@@ -62,7 +62,8 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_readFromDisk( false ),
-        m_includePathsComputed( false )
+        m_includePathsComputed( false ),
+        m_useContentContext( false )
 {
     if( !m_parentPreprocessor ) {
         addJob(m_preprocessJob = new PreprocessJob(this));
@@ -76,6 +77,14 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     }
 
     kDebug( 9007 ) << k_funcinfo << "Created job" << this << "pp" << m_preprocessJob << "parse" << parseJob();
+}
+
+void CPPParseJob::setUseContentContext(bool b) {
+    m_useContentContext = b;
+}
+
+bool CPPParseJob::useContentContext() const {
+    return m_useContentContext;
 }
 
 void CPPParseJob::parseForeground() {
@@ -161,6 +170,14 @@ TopDUContextPointer CPPParseJob::updatingContext() const {
     return m_updatingContext;
 }
 
+void CPPParseJob::setContentContext( const TopDUContextPointer& context ) {
+    m_contentContext = context;
+}
+
+TopDUContextPointer CPPParseJob::contentContext() const {
+    return m_contentContext;
+}
+
 CppLanguageSupport * CPPParseJob::cpp() const
 {
     Q_ASSERT( parent() || parentPreprocessor() );
@@ -180,6 +197,14 @@ void CPPParseJob::setEnvironmentFile( Cpp::EnvironmentFile* file ) {
 
 Cpp::EnvironmentFile* CPPParseJob::environmentFile() {
     return m_environmentFile.data();
+}
+
+void CPPParseJob::setContentEnvironmentFile( Cpp::EnvironmentFile* file ) {
+    m_contentEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
+}
+
+Cpp::EnvironmentFile* CPPParseJob::contentEnvironmentFile() {
+    return m_contentEnvironmentFile.data();
 }
 
 const IncludeFileList& CPPParseJob::includedFiles() const {
@@ -268,46 +293,93 @@ void CPPInternalParseJob::run()
 
         // Control the lifetime of the editor integrator (so that locking works)
         {
-            kDebug( 9007 ) << "building duchain";
+            //If we are building a separate content-context
+            TopDUContext* updating = parentJob()->updatingContext().data();
+            Cpp::EnvironmentFilePointer environmentFile(parentJob()->environmentFile());
+            
+            if( parentJob()->contentEnvironmentFile() )
+            {
+                if( parentJob()->contentContext() )
+                    updating = parentJob()->contentContext().data();
+                else
+                    updating = 0; //We should build a separate context, but none is set.
+
+                //Use the EnvironmentFile of the content-context.
+                environmentFile = parentJob()->contentEnvironmentFile();
+                Q_ASSERT(environmentFile->identity().url().prettyUrl().endsWith(":content"));
+            }
+
             CppEditorIntegrator editor(parentJob()->parseSession());
             editor.setCurrentUrl(parentJob()->document());
 
             // Translate the cursors we generate with edits that have happened since retrieval of the document source.
             if (editor.smart() && parentJob()->revisionToken() != -1)
               editor.smart()->useRevision(parentJob()->revisionToken());
+            
+            if( !parentJob()->useContentContext() )
+            {
+                ///We need to update or build a context
+                kDebug( 9007 ) << "building duchain";
 
-            DeclarationBuilder declarationBuilder(&editor);
-            topContext = declarationBuilder.buildDeclarations(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), ast, &chains, parentJob()->updatingContext());
-
-            if (parentJob()->abortRequested())
-                return parentJob()->abortJob();
-
-            // We save some time here by not running the use compiler if the file is not loaded... (it's only needed
-            // for navigation in that case)
-            // FIXME make configurable
-            if (!parentJob()->wasReadFromDisk()) {
-                UseBuilder useBuilder(&editor);
-                useBuilder.buildUses(ast);
-
+                DeclarationBuilder declarationBuilder(&editor);
+                topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updating);
+                
                 if (parentJob()->abortRequested())
                     return parentJob()->abortJob();
+
+                // We save some time here by not running the use compiler if the file is not loaded... (it's only needed
+                // for navigation in that case)
+                // FIXME make configurable
+                if (!parentJob()->wasReadFromDisk()) {
+                    UseBuilder useBuilder(&editor);
+                    useBuilder.buildUses(ast);
+
+                    if (parentJob()->abortRequested())
+                        return parentJob()->abortJob();
+                }
+            }
+            else
+            {
+                ///We can re-use a readily available content-context
+                Q_ASSERT(parentJob()->contentContext());
+                kDebug( 9007 ) << "reusing existing content duchain";
+                topContext = parentJob()->contentContext().data();
+                if( !topContext ) {
+                    kDebug( 9007 ) << "Context was deleted while parsing";
+                    return;
+                }
             }
 
-            if( parentJob()->parentPreprocessor() ) {
-                DUChainWriteLocker l(DUChain::lock());
-                //Remove include-files we imported temporarily, because they are on the same level in reality
-                foreach ( DUContext* context, temporaryChains )
-                    topContext->removeImportedParentContext(context);
-            }
-
-            parentJob()->setDuChain(topContext);
-
-            kDebug( 9007 ) << "duchain is built";
             if ( parentJob()->cpp()->codeHighlighting() && editor.smart() )
             {
                 QMutexLocker lock(editor.smart()->smartMutex());
                 parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
             }
+            
+            if( parentJob()->parentPreprocessor() ) {
+                DUChainWriteLocker l(DUChain::lock());
+                //Remove include-files we imported temporarily, because they are on the same level in reality
+                ///@todo what if the same context was later imported explicitly?
+                foreach ( DUContext* context, temporaryChains ) {
+                    topContext->removeImportedParentContext(context);
+                    chains.removeAll(context);
+                }
+            }
+
+            Q_ASSERT(topContext);
+            
+            if( parentJob()->contentEnvironmentFile() ) {
+                //We have created a content-context. Remove all imports from it, and create our real context that glues the content and the.imports together.
+                foreach( DUContextPointer ctx, topContext->importedParentContexts())
+                    topContext->removeImportedParentContext(ctx.data());
+
+                ContextBuilder builder(&editor);
+                topContext = builder.buildContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), &chains, topContext, parentJob()->updatingContext().data());
+            }
+
+            parentJob()->setDuChain(topContext);
+
+            kDebug( 9007 ) << "duchain is built";
 
             if (editor.smart())
               editor.smart()->clearRevision();

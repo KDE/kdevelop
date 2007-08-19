@@ -135,6 +135,87 @@ void ContextBuilder::smartenContext(TopDUContext* topLevelContext) {
   }
 }
 
+KDevelop::TopDUContext* ContextBuilder::buildContextFromContent(const Cpp::EnvironmentFilePointer& file, QList<KDevelop::DUContext*>* includes, const TopDUContextPointer& content, const TopDUContextPointer& updateContext) {
+  KUrl u(file->url());
+  Q_ASSERT(u.path().endsWith(":content"));
+  u.setPath(u.path().mid(-8));
+  
+  m_editor->setCurrentUrl(u);
+
+  TopDUContext* topLevelContext = 0;
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    topLevelContext = updateContext.data();
+
+    if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
+      lock.unlock();
+      smartenContext(topLevelContext);
+      lock.lock();
+      topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
+    }
+    
+    if( content && !content->smartRange() && m_editor->smart() ) {
+      lock.unlock();
+      smartenContext(content.data());
+      lock.lock();
+    }
+    
+    if (topLevelContext) {
+      kDebug(9007) << "ContextBuilder::buildContextFromContent: recompiling";
+
+      Q_ASSERT(topLevelContext->textRangePtr());
+
+      DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
+    } else {
+      kDebug(9007) << "ContextBuilder::buildContextFromContent: compiling";
+
+      Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
+      topLevelContext = new CppDUContext<TopDUContext>(range, const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext->setType(DUContext::Global);
+
+      DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
+    }
+
+    if (includes) {
+      foreach (DUContextPointer parent, topLevelContext->importedParentContexts())
+        if (includes->contains(parent.data()))
+          includes->removeAll(parent.data());
+        else
+          topLevelContext->removeImportedParentContext(parent.data());
+
+      foreach (DUContext* included, *includes)
+        topLevelContext->addImportedParentContext(included);
+    }
+  }
+
+  ///@todo actually attach the content-context to the created one. Think about how this should be done so that searching from inside still works.
+  ///Possible solution: Add all headers incrementally to the content-context. That way it will have at least all needed ones.
+  
+  {
+    DUChainReadLocker lock(DUChain::lock());
+
+    kDebug(9007) << "built content-merging top-level context with " << topLevelContext->allDeclarations(KTextEditor::Cursor()).size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
+
+/*     if( m_recompiling ) {
+      DumpChain dump;
+      dump.dump(topLevelContext);
+      kDebug() << dump.dotGraph(topLevelContext);
+     }*/
+  }
+
+  m_compilingContexts = false;
+
+  if (!m_importedParentContexts.isEmpty()) {
+    DUChainReadLocker lock(DUChain::lock());
+    kWarning() << k_funcinfo << file->url() << "Previous parameter declaration context didn't get used??" ;
+    DumpChain dump;
+    dump.dump(topLevelContext);
+    m_importedParentContexts.clear();
+  }
+
+  return topLevelContext;
+}
+
 TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes, const TopDUContextPointer& updateContext)
 {
   m_compilingContexts = true;

@@ -57,3 +57,8 @@ Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type, int s
 
   return 0;
 }
+
+void Preprocessor::headerSectionEnded(rpp::Stream& stream)
+{
+  
+}

@@ -77,6 +77,11 @@ bool Stream::atEnd() const
   return c == end;
 }
 
+void Stream::toEnd()
+{
+  c = end;
+}
+
 const QChar& Stream::peek(int offset) const
 {
   if (c + offset > end)

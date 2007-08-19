@@ -37,6 +37,7 @@
 #include <duchain/parsingenvironment.h>
 #include "duchain/duchainlock.h"
 #include "duchain/topducontext.h"
+#include <editorintegrator.h>
 
 #include "Thread.h"
 
@@ -76,6 +77,10 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
             return ret;
         }
 
+        void setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile ) {
+            m_environmentFile = environmentFile;
+        }
+
         /**
          * Merges the given set of macros into the environment. Does not modify m_environmentFile
          * */
@@ -106,7 +111,7 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_currentEnvironment(0)
-    , m_environmentFile( new Cpp::EnvironmentFile( parent->document(), 0 ) ) ///@todo care about lexer-cache
+    , m_environmentFile( new Cpp::EnvironmentFile( parent->document(), 0 ) )
     , m_success(true)
 {
     m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
@@ -132,6 +137,16 @@ void PreprocessJob::run()
 
     if (checkAbort())
         return;
+
+    {
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+
+        if( CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching() ) {
+            KUrl u = parentJob()->document();
+            u.addPath(":content");
+            m_contentEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
+        }
+    }
 
     QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(thread()));
 
@@ -222,6 +237,11 @@ void PreprocessJob::run()
     parentJob()->parseSession()->setContents( result.toUtf8() );
     parentJob()->setEnvironmentFile( m_environmentFile.data() );
 
+    if( m_contentEnvironmentFile ) {
+        m_environmentFile->merge(*m_contentEnvironmentFile);
+        parentJob()->setContentEnvironmentFile(m_contentEnvironmentFile.data());
+    }
+    
     if( PreprocessJob* parentPreprocessor = parentJob()->parentPreprocessor() ) {
         //If we are included from another preprocessor, give it back the modified macros,
         parentPreprocessor->m_currentEnvironment->swapMacros( m_currentEnvironment );
@@ -233,11 +253,43 @@ void PreprocessJob::run()
     m_currentEnvironment = 0;
 }
 
+void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
+{
+    if( m_contentEnvironmentFile ) {
+        KUrl u = parentJob()->document();
+        u.addPath(":content");
+
+        ///Find a matching content-context
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment);
+        if(content) {
+            //We have found a content-context that we can use
+            parentJob()->setContentContext(content);
+
+            if( content->parsingEnvironmentFile()->modificationRevision() == KDevelop::EditorIntegrator::modificationRevision(parentJob()->document()) ) {
+                //We can completely re-use the specialized context
+                m_contentEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
+                Q_ASSERT(m_contentEnvironmentFile);
+                stream.toEnd();
+                parentJob()->setUseContentContext(true);
+            } else {
+                //We will re-use the specialized context, but it needs updating. So we keep processing here.
+            }
+        } else {
+            //We need to process the content ourselves
+        }
+
+        m_currentEnvironment->setEnvironmentFile(m_contentEnvironmentFile);
+    }
+}
+
+
 rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath)
 {
     Q_UNUSED(type)
     Q_UNUSED(sourceLine)
 
+    
     if (checkAbort())
         return 0;
 

@@ -68,6 +68,38 @@
  * - Headers should be included at the top of the file
  * */
 
+/**
+ * Simplified matching:
+ * Consider this case:
+----- File 3.h
+#ifndef HAD_3
+#define HAD_3
+int i;
+#endif
+
+----- File 2.h
+#include "3.h"
+int independent;
+
+----- File test_1.h
+#include "2.h"
+
+----- File test_2.h
+#include "3.h"
+#include "2.h"
+
+----- end
+
+2.h and 3.h both depend on the macro HAD_3. In test_2.h, 3.h is included before 3.h, and when 2.h is included in the next line,
+it needs to be completeley re-parsed, because 2.h depends on the macro HAD_3, and that macro is different(it is set) then when it was parsed
+in test_1.h.
+
+In practice this is very problematic, because it leads to massive multiple parsing of everything, which costs a lot of resources.
+To solve this, "Simplified matching" can be used, which will mean that parsed files will be re-used by specialization in such a case, and only
+the imports are changed. This is not quite correct, because it when something could not be resolved correctly in the base-run, but it could be
+in the specialization, it still will not be correctly resolved. Nonetheless, in 99% of all cases it should not be a problem.
+* */
+
 namespace rpp {
   class pp_macro;
   class Environment;
@@ -180,8 +212,6 @@ struct KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFilePointerCompare {
   }
 };
 
-class Driver;
-
 class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, public KDevelop::ParsingEnvironmentManager {
   public:
     EnvironmentManager();
@@ -207,6 +237,10 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     ///Remove a file from the manager
     virtual void removeFile( KDevelop::ParsingEnvironmentFile* file );
 
+    ///See the comment about simplified matching at the top
+    void setSimplifiedMatching(bool simplified);
+    bool isSimplifiedMatching() const;
+    
     /**
      * Search for the availability of a file parsed in a given environment
      * */
@@ -238,6 +272,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     typedef __gnu_cxx::hash_map<KDevelop::HashedString, FileModificationCache> FileModificationMap;
     mutable FileModificationMap m_fileModificationCache;
     QDateTime m_currentDateTime;
+    bool m_simplifiedMatching;
 };
 
 }

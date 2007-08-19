@@ -30,10 +30,18 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-EnvironmentManager::EnvironmentManager() {
+EnvironmentManager::EnvironmentManager() : m_simplifiedMatching(false) {
 }
 
 EnvironmentManager::~EnvironmentManager() {
+}
+
+void EnvironmentManager::setSimplifiedMatching(bool simplified) {
+  m_simplifiedMatching = simplified;
+}
+
+bool EnvironmentManager::isSimplifiedMatching() const {
+  return m_simplifiedMatching;
 }
 
 void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file ) {

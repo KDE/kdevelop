@@ -29,6 +29,7 @@
 #include "pp-internal.h"
 #include "pp-engine.h"
 #include "pp-environment.h"
+#include "preprocessor.h"
 
 using namespace rpp;
 
@@ -66,6 +67,7 @@ QString pp_macro_expander::resolve_formal(const QString& name)
 pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame)
   : m_engine(engine)
   , m_frame(frame)
+  , m_in_header_section(true)
 {
 }
 
@@ -75,241 +77,252 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
   while (!input.atEnd())
   {
-    if (input == '\n')
-    {
-      output << input;
-
-      skip_blanks(++input, output);
-
-      if (!input.atEnd() && input == '#')
-        break;
-    }
-    else if (input == '#')
-    {
-      skip_blanks(++input, output);
-
-      QString identifier = skip_identifier(input);
-      QString formal = resolve_formal(identifier);
-
-      if (!formal.isEmpty()) {
-        Stream is(&formal);
-        skip_whitespaces(is, devnull());
-
-        output << '\"';
-
-        while (!is.atEnd()) {
-          if (input == '"') {
-            output << '\\' << is;
-
-          } else if (input == '\n') {
-            output << '"' << is << '"';
-
-          } else {
-            output << is;
-          }
-
-          skip_whitespaces(++is, output);
-        }
-
-        output << '\"';
-
-      } else {
-        output << '#'; // TODO ### warning message?
-      }
-
-    }
-    else if (input == '\"')
-    {
-      skip_string_literal(input, output);
-    }
-    else if (input == '\'')
-    {
-      skip_char_literal(input, output);
-    }
-    else if (isComment(input))
+    if (isComment(input))
     {
       skip_comment_or_divop(input, output, true);
-    }
-    else if (input.current().isSpace())
-    {
-      do {
-        if (input == '\n' || !input.current().isSpace())
-          break;
-
+    }else{
+      if( m_in_header_section )
+      {
+        //A header-section ends when the first non-directive and non-comment occurs
+        m_in_header_section = false;
+        m_engine->preprocessor()->headerSectionEnded(input);
+        if( input.atEnd() )
+          continue;
+      }
+      
+      if (input == '\n')
+      {
         output << input;
 
-      } while (!(++input).atEnd());
-    }
-    else if (input.current().isNumber())
-    {
-      skip_number (input, output);
-    }
-    else if (input.current().isLetter() || input == '_')
-    {
-      QString name = skip_identifier (input);
-
-      // search for the paste token
-      int blankStart = input.pos();
-      skip_blanks (input, devnull());
-      if (!input.atEnd() && input == '#') {
-        ++input;
+        skip_blanks(++input, output);
 
         if (!input.atEnd() && input == '#')
-          skip_blanks(++input, devnull());
-        else
-          input.seek(blankStart);
-
-      } else {
-        input.seek(blankStart);
+          break;
       }
-
-      Q_ASSERT(name.length() >= 0 && name.length() < 512);
-
-      QString actual = resolve_formal(name);
-      if (!actual.isEmpty()) {
-        output << actual;
-        continue;
-      }
-
-      // TODO handle inbuilt "defined" etc functions
-
-      pp_macro* macro = m_engine->environment()->retrieveMacro(name);
-      if (!macro || macro->hidden || m_engine->hideNextMacro())
+      else if (input == '#')
       {
-        m_engine->setHideNextMacro(name == "defined");
+        skip_blanks(++input, output);
 
-        if (name == "__LINE__")
-          output << QString::number(input.inputLineNumber());
-        else if (name == "__FILE__")
-          output << '"' << m_engine->currentFile() << '"';
-        else if (name == "__DATE__")
-          output << QDate::currentDate().toString("MMM dd yyyy");
-        else if (name == "__TIME__")
-          output << QTime::currentTime().toString("hh:mm:ss");
-        else
-          output << name;
-        continue;
-      }
+        QString identifier = skip_identifier(input);
+        QString formal = resolve_formal(identifier);
 
-      if (!macro->function_like)
-      {
-        pp_macro* m = 0;
+        if (!formal.isEmpty()) {
+          Stream is(&formal);
+          skip_whitespaces(is, devnull());
 
-        if (!macro->definition.isEmpty()) {
-          macro->hidden = true;
+          output << '\"';
 
-          pp_macro_expander expand_macro(m_engine);
-          Stream ms(&macro->definition, QIODevice::ReadOnly);
-          ms.setInputLineNumber(input.inputLineNumber());
-          QString expanded;
-          {
-            Stream es(&expanded);
-            expand_macro(ms, es);
-          }
+          while (!is.atEnd()) {
+            if (input == '"') {
+              output << '\\' << is;
 
-          if (!expanded.isEmpty())
-          {
-            Stream es(&expanded);
-            skip_whitespaces(es, devnull());
-            QString identifier = skip_identifier(es);
-
-            pp_macro* m2 = 0;
-            if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier))) {
-              m = m2;
+            } else if (input == '\n') {
+              output << '"' << is << '"';
 
             } else {
-              output << expanded;
+              output << is;
             }
+
+            skip_whitespaces(++is, output);
           }
 
-          macro->hidden = false;
+          output << '\"';
+
+        } else {
+          output << '#'; // TODO ### warning message?
         }
 
-        if (!m)
+      }
+      else if (input == '\"')
+      {
+        skip_string_literal(input, output);
+      }
+      else if (input == '\'')
+      {
+        skip_char_literal(input, output);
+      }
+      else if (input.current().isSpace())
+      {
+        do {
+          if (input == '\n' || !input.current().isSpace())
+            break;
+
+          output << input;
+
+        } while (!(++input).atEnd());
+      }
+      else if (input.current().isNumber())
+      {
+        skip_number (input, output);
+      }
+      else if (input.current().isLetter() || input == '_')
+      {
+        QString name = skip_identifier (input);
+
+        // search for the paste token
+        int blankStart = input.pos();
+        skip_blanks (input, devnull());
+        if (!input.atEnd() && input == '#') {
+          ++input;
+
+          if (!input.atEnd() && input == '#')
+            skip_blanks(++input, devnull());
+          else
+            input.seek(blankStart);
+
+        } else {
+          input.seek(blankStart);
+        }
+
+        Q_ASSERT(name.length() >= 0 && name.length() < 512);
+
+        QString actual = resolve_formal(name);
+        if (!actual.isEmpty()) {
+          output << actual;
           continue;
-
-        macro = m;
-      }
-
-      skip_whitespaces(input, devnull());
-
-      // function like macro
-      if (input.atEnd() || input != '(')
-      {
-        output << name;
-        continue;
-      }
-
-      QList<QString> actuals;
-      ++input; // skip '('
-
-      pp_macro_expander expand_actual(m_engine, m_frame);
-
-      int before = input.pos();
-      {
-        actual.clear();
-
-        {
-          Stream as(&actual);
-          skip_argument_variadics(actuals, macro, input, as);
         }
 
-        if (input.pos() != before)
+        // TODO handle inbuilt "defined" etc functions
+
+        pp_macro* macro = m_engine->environment()->retrieveMacro(name);
+        if (!macro || macro->hidden || m_engine->hideNextMacro())
         {
-          QString newActual;
-          {
-            Stream as(&actual);
-            as.setInputLineNumber(input.inputLineNumber());
-            Stream nas(&newActual);
-            expand_actual(as, nas);
+          m_engine->setHideNextMacro(name == "defined");
+
+          if (name == "__LINE__")
+            output << QString::number(input.inputLineNumber());
+          else if (name == "__FILE__")
+            output << '"' << m_engine->currentFile() << '"';
+          else if (name == "__DATE__")
+            output << QDate::currentDate().toString("MMM dd yyyy");
+          else if (name == "__TIME__")
+            output << QTime::currentTime().toString("hh:mm:ss");
+          else
+            output << name;
+          continue;
+        }
+
+        if (!macro->function_like)
+        {
+          pp_macro* m = 0;
+
+          if (!macro->definition.isEmpty()) {
+            macro->hidden = true;
+
+            pp_macro_expander expand_macro(m_engine);
+            Stream ms(&macro->definition, QIODevice::ReadOnly);
+            ms.setInputLineNumber(input.inputLineNumber());
+            QString expanded;
+            {
+              Stream es(&expanded);
+              expand_macro(ms, es);
+            }
+
+            if (!expanded.isEmpty())
+            {
+              Stream es(&expanded);
+              skip_whitespaces(es, devnull());
+              QString identifier = skip_identifier(es);
+
+              pp_macro* m2 = 0;
+              if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier))) {
+                m = m2;
+
+              } else {
+                output << expanded;
+              }
+            }
+
+            macro->hidden = false;
           }
-          actuals.append(newActual);
+
+          if (!m)
+            continue;
+
+          macro = m;
         }
-      }
 
-      // TODO: why separate from the above?
-      while (!input.atEnd() && input == ',')
-      {
-        actual.clear();
-        ++input; // skip ','
+        skip_whitespaces(input, devnull());
 
+        // function like macro
+        if (input.atEnd() || input != '(')
         {
+          output << name;
+          continue;
+        }
+
+        QList<QString> actuals;
+        ++input; // skip '('
+
+        pp_macro_expander expand_actual(m_engine, m_frame);
+
+        int before = input.pos();
+        {
+          actual.clear();
+
           {
             Stream as(&actual);
             skip_argument_variadics(actuals, macro, input, as);
           }
 
-          QString newActual;
+          if (input.pos() != before)
           {
-            Stream as(&actual);
-            Stream nas(&newActual);
-            expand_actual(as, nas);
+            QString newActual;
+            {
+              Stream as(&actual);
+              as.setInputLineNumber(input.inputLineNumber());
+              Stream nas(&newActual);
+              expand_actual(as, nas);
+            }
+            actuals.append(newActual);
           }
-          actuals.append(newActual);
         }
-      }
 
-      //Q_ASSERT(!input.atEnd() && input == ')');
+        // TODO: why separate from the above?
+        while (!input.atEnd() && input == ',')
+        {
+          actual.clear();
+          ++input; // skip ','
 
-      ++input; // skip ')'
+          {
+            {
+              Stream as(&actual);
+              skip_argument_variadics(actuals, macro, input, as);
+            }
+
+            QString newActual;
+            {
+              Stream as(&actual);
+              Stream nas(&newActual);
+              expand_actual(as, nas);
+            }
+            actuals.append(newActual);
+          }
+        }
+
+        //Q_ASSERT(!input.atEnd() && input == ')');
+
+        ++input; // skip ')'
 
 #if 0 // ### enable me
-      assert ((macro->variadics && macro->formals.size () >= actuals.size ())
-                  || macro->formals.size() == actuals.size());
+        assert ((macro->variadics && macro->formals.size () >= actuals.size ())
+                    || macro->formals.size() == actuals.size());
 #endif
 
-      pp_frame frame(macro, actuals);
-      pp_macro_expander expand_macro(m_engine, &frame);
-      macro->hidden = true;
-      Stream ms(&macro->definition, QIODevice::ReadOnly);
-      ms.setInputLineNumber(input.inputLineNumber());
-      expand_macro(ms, output);
-      macro->hidden = false;
+        pp_frame frame(macro, actuals);
+        pp_macro_expander expand_macro(m_engine, &frame);
+        macro->hidden = true;
+        Stream ms(&macro->definition, QIODevice::ReadOnly);
+        ms.setInputLineNumber(input.inputLineNumber());
+        expand_macro(ms, output);
+        macro->hidden = false;
 
-    } else {
-      output << input;
-      ++input;
+      } else {
+        output << input;
+        ++input;
+      }
     }
+
   }
 }
 

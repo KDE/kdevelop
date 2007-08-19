@@ -54,6 +54,8 @@ public:
     //Must only be called for direct parsing when the job is not queued
     virtual void run();
 
+    virtual void headerSectionEnded(rpp::Stream& stream);
+    
     /**
      * Returns the standard-environment used for parsing c++ files(all other environments are based on that one)
      * The returned environment can be dynamic_casted to rpp::Environment.
@@ -68,6 +70,8 @@ private:
 
     CppPreprocessEnvironment* m_currentEnvironment;
     KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
+    //If simplified matching is used, a separate EnvironmentFile is used for the content, as opposed to the #include statements.
+    KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
     bool m_success;
 };
 

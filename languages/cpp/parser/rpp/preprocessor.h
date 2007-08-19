@@ -60,6 +60,12 @@ public:
      * class pp at this point.
      */
     virtual Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath);
+
+    /**
+     * Is called when the header-section ended. The header-section is the top of the file, that consists only if #include, #define, and #ifdef statements, or comments.
+     * It ends as soon as anything else is found. You can use stream.toEnd() to stop the preprocessing.
+     * */
+    virtual void headerSectionEnded(rpp::Stream& stream);
 };
 
 }

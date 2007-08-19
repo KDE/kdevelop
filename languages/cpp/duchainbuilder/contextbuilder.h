@@ -63,6 +63,13 @@ public:
   ContextBuilder(CppEditorIntegrator* editor);
   virtual ~ContextBuilder ();
 
+
+  /**
+   * Builds or updates a context that merges a content-context together with arbitray include-contexts.
+   * */
+  
+  KDevelop::TopDUContext* buildContextFromContent(const Cpp::EnvironmentFilePointer& file, QList<KDevelop::DUContext*>* includes, const TopDUContextPointer& content, const TopDUContextPointer& updateContext);
+  
   /**
    * Compile either a context-definition chain, or add uses to an existing
    * chain.

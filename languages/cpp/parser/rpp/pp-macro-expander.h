@@ -69,6 +69,8 @@ private:
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
   pp_skip_whitespaces skip_whitespaces;
+
+  bool m_in_header_section;
 };
 
 }

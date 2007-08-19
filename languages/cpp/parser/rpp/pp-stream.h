@@ -21,6 +21,7 @@
 #ifndef STREAM_H
 #define STREAM_H
 
+#include <cppparserexport.h>
 
 #include <QtCore/QIODevice>
 
@@ -31,7 +32,7 @@ namespace rpp {
  *
  * @author Hamish Rodda <rodda@kde.org>
  */
-class Stream
+class KDEVCPPRPP_EXPORT Stream
 {
     static const QChar newline;
 
@@ -43,6 +44,8 @@ class Stream
     bool isNull() const;
 
     bool atEnd() const;
+
+    void toEnd();
 
     int pos() const;
 

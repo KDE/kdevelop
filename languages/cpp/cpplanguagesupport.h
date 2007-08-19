@@ -63,6 +63,8 @@ public:
     static CppLanguageSupport* self();
 
     const Cpp::MacroSet& standardMacros() const;
+
+    Cpp::EnvironmentManager* environmentManager() const;
     
 private slots:
     void documentLoaded(KDevelop::IDocument*);

@@ -94,8 +94,26 @@ public:
 
     Cpp::EnvironmentFile* environmentFile();
 
+    /**When simplified-matching is used, two separate contexts will be created.
+     * One that contains all the imports, and one that contains the real parsed content. */
+    void setContentEnvironmentFile( Cpp::EnvironmentFile* file );
+    /**
+     * If this is set, a separate context for the content should be built. If contentContext is set,
+     * contentContext should be used or updated. If contentContext is not set, it should be created separetely
+     * and registered using this EnvironmentFile.
+     * */
+    Cpp::EnvironmentFile* contentEnvironmentFile();
+
+    ///Set whether the contentContext should be re-used directly. If false, it will be updated instead.
+    void setUseContentContext(bool b);
+    bool useContentContext() const;
+    
     void setUpdatingContext( const KDevelop::TopDUContextPointer& context );
     KDevelop::TopDUContextPointer updatingContext() const;
+
+    void setContentContext( const KDevelop::TopDUContextPointer& context );
+    ///If this is set, the contentContext should either be used without modification, or updated if it is outdated.
+    KDevelop::TopDUContextPointer contentContext() const;
     
     ///If this file was included from another, this contains the path within the search-paths that this file was found through
     KUrl includedFromPath() const;
@@ -119,9 +137,14 @@ private:
 
     KDevelop::TopDUContextPointer m_updatingContext;
     
+    //The following two members are used when simplified-matching is used, which means that one content-context and one specialized context will be used.
+    KDevelop::TopDUContextPointer m_contentContext;
+    KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
+    
     KUrl m_includedFromPath;
     mutable bool m_includePathsComputed;
     mutable KUrl::List m_includePaths; //Only a master-job has this set
+    bool m_useContentContext;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job
