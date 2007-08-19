@@ -791,18 +791,38 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
 
 void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node) {
   DeclarationBuilderBase::visitParameterDeclaration(node);
-  if( node->expression ) {
-    //Fill default-parameters
-    AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
-    if( function ) {
-      QString param;
+  AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
+  
+  if( function ) {
+    if( node->expression ) {
+      //Fill default-parameters and parameter-names
+      QString defaultParam;
       for( size_t token = node->expression->start_token; token != node->expression->end_token; ++token )
-        param += m_editor->tokenToString(token);
+        defaultParam += m_editor->tokenToString(token);
 
-      function->addDefaultParameter(param);
+
+      function->addDefaultParameter(defaultParam);
+
+      QString paramName;
+      for( size_t token = node->declarator->start_token; token != node->declarator->end_token; ++token )
+        paramName += m_editor->tokenToString(token);
+
+
+      function->addParameterName(paramName);
+    }
+    if( node->declarator ) {
+      QString paramName;
+      for( size_t token = node->declarator->start_token; token != node->declarator->end_token; ++token )
+        paramName += m_editor->tokenToString(token);
+
+
+      function->addParameterName(paramName);
+    }else{
+      function->addParameterName(QString());
     }
   }
 }
+
 
 void DeclarationBuilder::popSpecifiers()
 {

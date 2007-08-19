@@ -64,7 +64,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     KDevelop::DUContextPointer m_context;
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
-    
+
 
     struct CompletionItem {
       CompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), inheritanceDepth(_inheritanceDepth), listOffset(_listOffset) {
@@ -76,6 +76,8 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
       int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
     };
 
+    void createArgumentList(const CompletionItem& item, QString& ret, QList<QVariant>* highlighting ) const;
+    
     mutable CompletionItem m_currentMatchContext;
     
     QMap<QString, QIcon> m_icons;

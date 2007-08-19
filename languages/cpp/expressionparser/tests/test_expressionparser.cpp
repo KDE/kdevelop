@@ -502,6 +502,76 @@ void TestExpressionParser::testCasts() {
   release(c);
 }
 
+void TestExpressionParser::testOperators() {
+  TEST_FILE_PARSE_ONLY
+      
+  QByteArray test = "struct Cont2 {}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
+  DUContext* ctx = parse( test, DumpNone );
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(ctx->childContexts().count(), 5);
+  QCOMPARE(ctx->localDeclarations().count(), 6);
+
+  Declaration* cont2Dec = ctx->localDeclarations()[0];
+  Declaration* cont3Dec = ctx->localDeclarations()[1];
+  Declaration* contDec = ctx->localDeclarations()[2];
+  Declaration* cDec = ctx->localDeclarations()[3];
+  Declaration* plusDec = ctx->localDeclarations()[4];
+
+  QVERIFY(cont2Dec->internalContext());
+  QVERIFY(cont3Dec->internalContext());
+  QVERIFY(contDec->internalContext());
+  QVERIFY(!cDec->internalContext());
+  QVERIFY(plusDec->internalContext());
+  
+  CppClassType::Ptr cont2 = cont2Dec->type<CppClassType>();
+  CppClassType::Ptr cont3 = cont3Dec->type<CppClassType>();
+  CppClassType::Ptr cont = contDec->type<CppClassType>();
+  QVERIFY(cont2);
+  QVERIFY(cont3);
+  QVERIFY(cont);
+
+  lock.unlock();
+
+  Cpp::ExpressionParser parser(false, true);
+
+  //Reenable this once the type-parsing system etc. is fixed
+  
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "c[5]", ctx );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont3"));
+  lock.unlock();
+
+  result = parser.evaluateType( "c+c", ctx );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2"));
+  lock.unlock();
+  
+  result = parser.evaluateType( "c+c3", ctx );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont3"));
+  lock.unlock();
+  
+  result = parser.evaluateType( "c()", ctx );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont3"));
+  lock.unlock();
+  
+  lock.lock();
+  release(ctx);
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

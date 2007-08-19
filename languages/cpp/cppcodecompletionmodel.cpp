@@ -23,6 +23,8 @@
 
 #include <QIcon>
 #include <QMetaType>
+#include <QTextFormat>
+#include <QBrush>
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -134,6 +136,96 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   }
 }
 
+void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QString& ret, QList<QVariant>* highlighting ) const
+{
+  Declaration* dec(item.declaration.data());
+
+  Cpp::CodeCompletionContext::Function f;
+
+  if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext->functions().count() > item.listOffset )
+    f = item.completionContext->functions()[item.listOffset];
+  
+  int textFormatStart = 0;
+  QTextFormat normalFormat;
+  QTextFormat highlightFormat(normalFormat);
+  highlightFormat.setBackground(Qt::yellow);
+  
+  AbstractFunctionDeclaration* decl = dynamic_cast<AbstractFunctionDeclaration*>(dec);
+  CppFunctionType::Ptr functionType = dec->type<CppFunctionType>();
+  if (functionType && decl) {
+
+    QStringList paramNames = decl->parameterNames();
+    QStringList defaultParams = decl->defaultParameters();
+
+    QStringList::const_iterator paramNameIt = paramNames.begin();
+    QStringList::const_iterator defaultParamIt = defaultParams.begin();
+
+    int firstDefaultParam = functionType->arguments().count() - defaultParams.count();
+    
+    ret = "(";
+    bool first = true;
+    int num = 0;
+    foreach (const AbstractType::Ptr& argument, functionType->arguments()) {
+      if (first)
+        first = false;
+      else
+        ret += ", ";
+
+      if( f.function.isValid() && num == f.matchedArguments )
+      {
+        if( highlighting && ret.length() != textFormatStart )
+        {
+          *highlighting <<  QVariant(textFormatStart);
+          *highlighting << QVariant(ret.length());
+          *highlighting << normalFormat;
+          textFormatStart = ret.length();
+        }
+        ///@todo use real highlighting instead of this ugly sign
+        ret += " --[ "; //Currently highlighting does not work, so we highlight the item using this ugly sign
+      }
+      
+      if (argument)
+        ret += argument->toString();
+      else
+        ret += "<incomplete type>";
+
+      if( paramNameIt != paramNames.end() && !(*paramNameIt).isEmpty() )
+        ret += " " + *paramNameIt;
+      
+      if( f.function.isValid() && num == f.matchedArguments  )
+      {
+        ret += " ]-- "; //Currently highlighting does not work, so we highlight the item using this ugly sign
+        if( highlighting && ret.length() != textFormatStart )
+        {
+          *highlighting <<  QVariant(textFormatStart);
+          *highlighting << QVariant(ret.length());
+          *highlighting << highlightFormat;
+          textFormatStart = ret.length();
+        }
+      }
+      
+      if( num >= firstDefaultParam ) {
+        ret += " = " + *defaultParamIt;
+        ++defaultParamIt;
+      }
+      
+      ++num;
+    }
+    ret += ')';
+    if( functionType->isConstant() )
+      ret += " const";
+
+    if( highlighting && ret.length() != textFormatStart ) {
+      *highlighting <<  QVariant(textFormatStart);
+      *highlighting << QVariant(ret.length());
+      *highlighting << normalFormat;
+      textFormatStart = ret.length();
+    }
+    
+    return;
+  }
+}
+
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
   quint32 dataIndex = index.internalId();
@@ -149,8 +241,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     return QVariant();
   }
 
+  const CompletionItem& item(m_declarations[dataIndex]);
+
   bool isArgumentHint = false;
-  if( m_declarations[dataIndex].completionContext && m_declarations[dataIndex].completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+  if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
     isArgumentHint = true;
 
   switch (role) {
@@ -179,10 +273,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       return QVariant(5);
     break;
     case InheritanceDepth:
-      return m_declarations[dataIndex].inheritanceDepth;
+      return item.inheritanceDepth;
     break;
     case SetMatchContext:
-      m_currentMatchContext = m_declarations[dataIndex];
+      m_currentMatchContext = item;
       return QVariant(1);
     case MatchQuality:
     {
@@ -205,7 +299,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     }
     case ArgumentHintDepth:
       if( isArgumentHint )
-        return m_declarations[dataIndex].completionContext->depth();
+        return item.completionContext->depth();
     case ItemSelected:
        return QVariant(dec->comment().isEmpty() ? dec->toString() : QString("\"%1\" \n%2").arg(dec->comment()).arg(dec->toString()));
     case IsExpandable:
@@ -223,7 +317,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         case Prefix:
         {
           QString indentation;
-          int depth = m_declarations[dataIndex].inheritanceDepth;
+          int depth = item.inheritanceDepth;
           if( depth > 1000 )
             depth-=1000;
           for( int a = 0; a < depth; a++ )
@@ -289,24 +383,11 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
         case Arguments:
           if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
-            QString ret = "(";
-            bool first = true;
-            foreach (const AbstractType::Ptr& argument, functionType->arguments()) {
-              if (first)
-                first = false;
-              else
-                ret += ", ";
-
-              if (argument)
-                ret += argument->toString();
-              else
-                ret += "<incomplete type>";
-            }
-            ret += ')';
+            QString ret;
+            createArgumentList(item, ret, 0);
             return ret;
           }
-          break;
-
+        break;
         case Postfix:
           if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
             return functionType->cvString();
@@ -314,7 +395,24 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           break;
       }
       break;
+    case HighlightingMethod:
+    if( index.column() == Arguments ) {
+      if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+        return QVariant(CustomHighlighting);
+      else
+        return QVariant();
+      break;
+    }
+    break;
 
+    case CustomHighlight:
+    if( index.column() == Arguments && index.column() == Arguments && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+      QString ret;
+      QList<QVariant> highlight;
+      createArgumentList(item, ret, &highlight);
+      return QVariant(highlight);
+    }
+    break;
     case Qt::DecorationRole:
     case CompletionRole: {
       CompletionProperties p;
