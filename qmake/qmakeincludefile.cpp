@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "qmakeincludefile.h"
-
+#include "qmakemkspecs.h"
 #include <QtCore/QMap>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -31,6 +31,20 @@ QMakeIncludeFile::QMakeIncludeFile( const QString& incfile,
     foreach( QString variable, variables.keys() )
     {
         m_variableValues[variable] = variables[variable];
+    }
+}
+
+void QMakeIncludeFile::setParent( QMakeFile* file )
+{
+    QMakeProjectFile* parent = dynamic_cast<QMakeProjectFile*>(file);
+    if( parent )
+    {
+        setMkSpecs( parent->mkSpecs() );
+        setQMakeCache( parent->qmakeCache() );
+    }else
+    {
+        QMakeMkSpecs* specs = dynamic_cast<QMakeMkSpecs*>(file);
+        setMkSpecs( specs );
     }
 }
 

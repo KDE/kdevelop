@@ -33,7 +33,6 @@ public:
     QString qmakeInternalVariable( const QString& ) const;
 
     QString resolveInternalQMakeVariables( const QString& value ) const;
-    virtual QMakeMkSpecs* mkSpecs() const;
 private:
     QHash<QString, QString> m_qmakeInternalVariables;
 };

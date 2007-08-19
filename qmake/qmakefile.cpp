@@ -167,7 +167,7 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         }
         kDebug(9024) << "Reading Include file:" << argument;
         QMakeIncludeFile includefile( argument, m_variableValues );
-        includefile.setMkSpecs( mkSpecs() );
+        includefile.setParent( this );
         bool read = includefile.read();
         if( read )
         {

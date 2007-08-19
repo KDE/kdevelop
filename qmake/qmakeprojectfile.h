@@ -54,6 +54,7 @@ public:
     void setMkSpecs( QMakeMkSpecs* mkspecs );
     QMakeMkSpecs* mkSpecs() const;
     void setQMakeCache( QMakeCache* cache );
+    QMakeCache* qmakeCache() const;
     QStringList resolveVariables( const QString& variable ) const;
 private:
     QMakeMkSpecs* m_mkspecs;

@@ -46,9 +46,4 @@ QString QMakeMkSpecs::resolveInternalQMakeVariables( const QString& value ) cons
     return ret;
 }
 
-QMakeMkSpecs* QMakeMkSpecs::mkSpecs() const
-{
-    return const_cast<QMakeMkSpecs*>(this);
-}
-
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

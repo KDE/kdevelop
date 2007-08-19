@@ -55,7 +55,6 @@ public:
     static QStringList resolveShellGlobbing( const QString& absolutefile );
     virtual QStringList resolveVariables( const QString& value ) const;
 
-    virtual QMakeMkSpecs* mkSpecs() const = 0;
 
 protected:
     QMap<QString, QStringList> m_variableValues;

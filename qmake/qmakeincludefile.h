@@ -26,7 +26,9 @@
 class QMakeIncludeFile : public QMakeProjectFile
 {
 public:
-    QMakeIncludeFile( const QString& incfile, const QMap<QString,QStringList>& variables  );
+    QMakeIncludeFile( const QString& incfile, const QMap<QString,QStringList>& variables );
+    void setParent( QMakeFile* );
+private:
 };
 
 #endif
