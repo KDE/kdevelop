@@ -153,6 +153,13 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
   bool isPointerType() const;
 
   /**
+   * Dereferences m_lastType if it is a pointer-type, else returns false.
+   *
+   * !!DU-Chain must be locked!
+   * */
+  bool dereferenceLastPointer(AST* node);
+  
+  /**
    *  m_lastType must be a pointer. It will be dereferenced in m_lastType,
    *  and m_lastDeclaration filled appropriately.
    *

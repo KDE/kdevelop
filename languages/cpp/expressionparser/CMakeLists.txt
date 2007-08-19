@@ -15,6 +15,7 @@ set(kdevcppexpressionparser_LIB_SRCS
     typeconversion.cpp
     overloadresolution.cpp
     viablefunctions.cpp
+    overloadresolutionhelper.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION

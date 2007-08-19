@@ -505,10 +505,10 @@ void TestExpressionParser::testCasts() {
 void TestExpressionParser::testOperators() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "struct Cont2 {}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
-  DUContext* ctx = parse( test, DumpNone );
+  QByteArray test = "struct Cont2 {operator[] {}; operator()() {};}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
+  DUContext* ctx = parse( test, DumpAll );
   DUChainWriteLocker lock(DUChain::lock());
-
+  
   QCOMPARE(ctx->childContexts().count(), 5);
   QCOMPARE(ctx->localDeclarations().count(), 6);
 
@@ -523,6 +523,9 @@ void TestExpressionParser::testOperators() {
   QVERIFY(contDec->internalContext());
   QVERIFY(!cDec->internalContext());
   QVERIFY(plusDec->internalContext());
+
+  Q_ASSERT(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()")));
+  Q_ASSERT(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()"))->type<CppFunctionType>());
   
   CppClassType::Ptr cont2 = cont2Dec->type<CppClassType>();
   CppClassType::Ptr cont3 = cont3Dec->type<CppClassType>();
@@ -537,15 +540,7 @@ void TestExpressionParser::testOperators() {
 
   //Reenable this once the type-parsing system etc. is fixed
   
-  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "c[5]", ctx );
-  lock.lock();
-  QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont3"));
-  lock.unlock();
-
-  result = parser.evaluateType( "c+c", ctx );
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "c+c", ctx );
   lock.lock();
   QVERIFY(result.isValid());
   QVERIFY(result.instance);
@@ -567,6 +562,23 @@ void TestExpressionParser::testOperators() {
   QVERIFY(result.instance);
   QVERIFY(result.type);
   QCOMPARE(result.type->toString(), QString("Cont3"));
+  lock.unlock();
+  
+  result = parser.evaluateType( "c[5]", ctx );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont3"));
+  lock.unlock();
+
+  //A simple test: Constructing a type should always result in the type, no matter whether there is a constructor.
+  result = parser.evaluateType( "Cont(5)", ctx );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont"));
   lock.unlock();
   
   lock.lock();

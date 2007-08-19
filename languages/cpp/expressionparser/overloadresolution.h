@@ -50,6 +50,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
       AbstractType* type;
       bool lValue;
     };
+    
     struct ParameterList {
       QList<Parameter> parameters;
 
@@ -116,14 +117,17 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
 
     /**
      * Matches the given functions with the given parameters. Only does partial matching, by considering only those parameters that were
-     * actually given.
+     * actually given, if @param partial is given.
+     *
+     * The main difference of this call to resolveList(..) is that it for each given declaration, it allows a list of parameters that are prepended.
+     * 
      * Returns a sorted list containing all given declarations.
      * 
      * @warning du-chain must be locked
      *
      * @return List of all given functions. The list is sorted by viability(the first item is most viable). Non-viable functions are also included.
      * */
-    QList< ViableFunction > resolveListPartial( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations );
+    QList< ViableFunction > resolveListOffsetted( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial );
   private:
     ///Replace class-instances with operator() functions, and pure classes with their constructors
     void expandDeclarations( const QList<Declaration*>& from, QList<Declaration*>& to );

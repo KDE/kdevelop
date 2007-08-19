@@ -132,7 +132,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   ///Second step: Find best viable function
   ViableFunction bestViableFunction;
   
-  for( QList<Declaration*>::const_iterator it = declarations.begin(); it != declarations.end(); ++it )
+  for( QList<Declaration*>::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
     ViableFunction viable( *it , noUserDefinedConversion );
     viable.matchParameters( params );
@@ -149,7 +149,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
     return 0;
 }
 
-QList< ViableFunction > OverloadResolver::resolveListPartial( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations )
+QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial  )
 {
   if( !m_context )
     return QList<ViableFunction>();
@@ -163,13 +163,13 @@ QList< ViableFunction > OverloadResolver::resolveListPartial( const ParameterLis
   
   ///Second step: Find best viable function
   QList<ViableFunction> viableFunctions;
-  
+
   for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
     ViableFunction viable( (*it).second );
     ParameterList mergedParams = (*it).first;
     mergedParams.parameters += params.parameters;
-    viable.matchParameters( mergedParams, true );
+    viable.matchParameters( mergedParams, partial );
 
     viableFunctions << viable;
   }

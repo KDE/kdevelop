@@ -35,6 +35,8 @@
 #include "duchainbuilder/cppduchain.h"
 #include "duchainbuilder/typeutils.h"
 
+#include "expressionparser/overloadresolutionhelper.h"
+
 #include <declaration.h>
 #include "cpptypes.h"
 #include "typeutils.h"

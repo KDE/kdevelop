@@ -25,6 +25,7 @@
 #include "expressionparser/typeconversion.h"
 #include "expressionparser/expressionparser.h"
 #include "expressionparser/viablefunctions.h"
+#include "expressionparser/overloadresolutionhelper.h"
 #include <typesystem.h>
 
 namespace KTextEditor {
@@ -38,6 +39,7 @@ namespace KDevelop {
 }
 
 namespace Cpp {
+  class OverloadResolutionFunction;
 
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
@@ -47,20 +49,7 @@ namespace Cpp {
 
       typedef KSharedPtr<CodeCompletionContext> Ptr;
 
-      struct Function {
-        Function();
-        Function( int _matchedArguments, const ViableFunction& _viable );
-
-        /**The count of arguments that are already matched in this function. The argument of the function at this offset is the next one to be matched.
-         *This is variable, and needed so global binary overloaded operators and member binary
-         *operators can be treated same(global operators take 2 arguments, local
-         *operators only 1)
-         * */
-        int matchedArguments;
-
-        ///Result of matching the function to available arguments. Also contains the declaration.
-        ViableFunction function;
-      };
+      typedef OverloadResolutionFunction Function;
 
       typedef QList<Function> FunctionList;
       

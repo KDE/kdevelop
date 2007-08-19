@@ -24,6 +24,7 @@
 #include <cppparserexport.h>
 
 class ParseSession;
+class OperatorAST;
 
 class KDEVCPPPARSER_EXPORT NameCompiler: protected DefaultVisitor
 {
@@ -49,7 +50,7 @@ protected:
   virtual void visitTemplateArgument(TemplateArgumentAST *node);
 
   void internal_run(AST *node);
-  QString decode_operator(std::size_t index) const;
+  QString decode_operator(OperatorAST* ast) const;
 
 private:
   ParseSession* m_session;

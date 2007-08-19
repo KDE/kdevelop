@@ -53,11 +53,6 @@ class PushValue {
 
 typedef PushValue<int> IntPusher;
 
-CodeCompletionContext::Function::Function() : matchedArguments(0) {
-}
-
-CodeCompletionContext::Function::Function( int _matchedArguments, const ViableFunction& _viable ) : matchedArguments(_matchedArguments), function(_viable) {
-}
 
 bool CodeCompletionContext::isValid() const {
   return m_valid;
@@ -305,11 +300,10 @@ void CodeCompletionContext::processFunctionCallAccess() {
 
   ///All the variable argument-count management in the following code is done to treat global operator-functions equivalently to local ones. Those take an additional first argument.
 
-
-  typedef QPair<OverloadResolver::ParameterList, Declaration*> DeclarationWithArgument;
-
-  QList< DeclarationWithArgument > declarations; //Declarations are paired with the optional first argument for the declared functions
-
+  LOCKDUCHAIN;
+  
+  OverloadResolutionHelper helper(m_duContext);
+  
   if( m_contextType == BinaryOperatorFunctionCall ) {
 
     if( !m_expressionResult.instance ) {
@@ -318,71 +312,25 @@ void CodeCompletionContext::processFunctionCallAccess() {
       return;
     }
 
-    QualifiedIdentifier identifier( "operator"+m_operator );
-    LOCKDUCHAIN;
-    ///Search for member operators
-    AbstractType::Ptr real( TypeUtils::realType(m_expressionResult.type.data()) );
-    if( dynamic_cast<CppClassType*>( real.data() ) )
-    {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
-      if( idType ) {
-        DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
-        if( ctx ) {
-          QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, identifier );
-          foreach( Declaration* decl, decls )
-            declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl );
-        } else {
-          log( "no internal context found" );
-        }
-      } else {
-          log( "type is not identified" );
-      }
-    }
-    ///Search for static global operators
-    QList<Declaration*> decls = m_duContext->findDeclarations(identifier);
-    foreach( Declaration* decl, decls ) {
-      FunctionType* fun = dynamic_cast<FunctionType*>( decl->abstractType().data() );
-      if( fun && fun->arguments().size() == 2 )
-        declarations << DeclarationWithArgument( OverloadResolver::Parameter(m_expressionResult.type.data(), m_expressionResult.isLValue()), decl );
-    }
+    helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.data(), m_expressionResult.isLValue()), m_operator);
   } else {
     ///Simply take all the declarations that were found by the expression-parser
-    foreach( Declaration* decl, m_expressionResult.allDeclarations )
-      declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); //Insert with argument-offset zero
-  }
-  if( declarations.isEmpty() ) {
-    log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
-    return;
+    
+    helper.setFunctions(m_expressionResult.allDeclarations);
   }
 
-  QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
-  foreach( const DeclarationWithArgument& decl, declarations )
-    m_argumentCountMap[decl.second] = decl.first.parameters.size();
-
-  LOCKDUCHAIN;
-  OverloadResolver resolv( m_duContext );
   OverloadResolver::ParameterList knownParameters;
   foreach( ExpressionEvaluationResult result, m_knownArgumentTypes )
     knownParameters.parameters << OverloadResolver::Parameter( result.type.data(), result.isLValue() );
+  
+  helper.setKnownParameters(knownParameters);
+  
+  m_functions = helper.resolve(true);
 
-  log( "functions given to overload-resolution:" );
-  foreach( const DeclarationWithArgument& declaration, declarations )
-    log( declaration.second->toString() );
-
-  log("parameters given to overload-resolution:");
-  lock.unlock();
-  foreach( ExpressionEvaluationResult result, m_knownArgumentTypes ) {
-    log( result.toString() );
-  }
-  lock.lock();
-
-
-  QList< ViableFunction > viableFunctions = resolv.resolveListPartial( knownParameters, declarations );
-  foreach( const ViableFunction& function, viableFunctions ) {
-    if( function.declaration() && function.declaration()->abstractType() ) {
-      m_functions << Function( m_argumentCountMap[function.declaration().data()] + knownParameters.parameters.size(), function );
-    }
-  }
+//   if( declarations.isEmpty() ) {
+//     log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
+//     return;
+//   }
 }
 
 const CodeCompletionContext::FunctionList& CodeCompletionContext::functions() const {
@@ -415,12 +363,18 @@ bool CodeCompletionContext::isValidPosition() {
   return true;
 }
 
+QString originalOperator( const QString& str ) {
+  if( str == "[" )
+    return "[]";
+  return str;
+}
+
 QString CodeCompletionContext::getEndOperator( const QString& str ) const {
   static QStringList allowedOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || [ - * / % & | = < >" ).split( ' ', QString::SkipEmptyParts );
 
   for( QStringList::const_iterator it = allowedOperators.begin(); it != allowedOperators.end(); ++it )
     if( str.endsWith(*it) )
-      return *it;
+      return originalOperator(*it);
   return QString();
 }
 

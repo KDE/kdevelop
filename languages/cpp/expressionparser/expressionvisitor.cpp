@@ -36,6 +36,7 @@
 #include "lexer.h"
 #include "overloadresolution.h"
 #include "cppduchain.h"
+#include "overloadresolutionhelper.h"
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
@@ -68,6 +69,47 @@
 namespace Cpp {
 using namespace KDevelop;
 using namespace TypeUtils;
+
+QHash<int, QString> initOperatorNames() {
+  QHash<int, QString> ret;
+  ret['+'] = "+";
+  ret['-'] = "-";
+  ret['*'] = "*";
+  ret['/'] = "/";
+  ret['%'] = "%";
+  ret['^'] = "^";
+  ret['&'] = "&";
+  ret['|'] = "|";
+  ret['~'] = "~";
+  ret['!'] = "!";
+  ret['='] = "=";
+  ret['<'] = "<";
+  ret['>'] = ">";
+  ret[','] = ",";
+  ret[Token_assign] = "=";
+  ret[Token_shift] = "<<"; ///@todo Parser does not differentiate between << and >>
+  ret[Token_eq] = "==";
+  ret[Token_not_eq] = "!=";
+  ret[Token_leq] = "<=";
+  ret[Token_geq] = ">=";
+  ret[Token_not_eq] = "!=";
+  ret[Token_and] = "&&";
+  ret[Token_or] = "||";
+
+  return ret;
+}
+
+QHash<int, QString> operatorNames = initOperatorNames();
+
+QString operatorNameFromTokenKind( int tokenKind )
+{
+  QHash<int, QString>::const_iterator it = operatorNames.find(tokenKind);
+  if( it == operatorNames.end() )
+    return QString();
+  else
+    return *it;
+}
+
 
 template <class _Tp>
 void ExpressionVisitor::visitIndependentNodes(const ListNode<_Tp> *nodes)
@@ -631,13 +673,44 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     switch( tokenFromIndex(node->op).kind ) {
       ///@todo implement all the other binary expressions
-      default:
-        problem(node, "not implemented binary expression" );
       case Token_assign:
-      case '=':
-        ///have test
-        m_lastType = leftType;
-        m_lastInstance = leftInstance;
+      default:
+      {
+        QString op = operatorNameFromTokenKind(tokenFromIndex(node->op).kind);
+
+        bool success = false;
+        if( !op.isEmpty() )
+        {
+          LOCKDUCHAIN;
+          OverloadResolutionHelper helper(m_currentContext);
+          helper.setOperator( OverloadResolver::Parameter(leftType.data(), isLValue( leftType, leftInstance ) ), op );
+          helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType.data(), isLValue( rightType, rightInstance ) ) ) );
+          QList<OverloadResolutionFunction> functions = helper.resolve(false);
+
+          if( !functions.isEmpty() )
+          {
+            CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+            if( functions.first().function.isViable() && function ) {
+              success = true;
+              m_lastType = function->returnType();
+              m_lastInstance = Instance(true);
+            }else{
+              problem(node, QString("Found no viable operator-function"));
+            }
+          }else{
+            //Do not complain here, because we do not check for builtin operators
+            //problem(node, "No fitting operator. found" );
+          }
+          //Find an overloaded binary operator
+        } else {
+          problem(node, "not implemented binary expression" );
+        }
+
+        if( !success ) {
+          m_lastType = leftType;
+          m_lastInstance = leftInstance;
+        }
+      }
       break;
     };
     
@@ -777,6 +850,22 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       expressionType( node, m_lastType, m_lastInstance );
   }
 
+  bool ExpressionVisitor::dereferenceLastPointer(AST* node) {
+    if( CppPointerType* pt = dynamic_cast<CppPointerType*>( realLastType().data() ) )
+    { ///@todo what about const in pointer?
+      //Dereference
+      m_lastType = pt->baseType();
+      m_lastInstance = Instance(getDeclaration(node,m_lastType));
+      return true;
+    }else if( CppArrayType* pt = dynamic_cast<CppArrayType*>( realLastType().data() ) ) {
+      m_lastType = pt->elementType();
+      m_lastInstance = Instance(getDeclaration(node,m_lastType));
+      return true;
+    }else{
+      return false;
+    }
+  }
+  
   /**
    * partially have test */
   void ExpressionVisitor::visitUnaryExpression(UnaryExpressionAST* node)
@@ -797,11 +886,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     case '*':
     {
       LOCKDUCHAIN;
-      if( PointerType* pt = dynamic_cast<PointerType*>( m_lastType.data() ) )
-      { ///@todo what about const in pointer?
-        //Dereference
-        m_lastType = pt->baseType();
-        m_lastInstance = Instance(getDeclaration(node,m_lastType));
+      if( dereferenceLastPointer(node) ) {
       } else {
         //Get return-value of operator*
         findMember(node, m_lastType, QualifiedIdentifier("operator*") );
@@ -823,14 +908,46 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       //m_lastInstance will be left alone as it was before. A pointer is not identified, and has no declaration.
     }
     break;
-    case Token_incr:
+    default:
+    {
+      QString op = operatorNameFromTokenKind(tokenFromIndex(node->op).kind);
+      if( !op.isEmpty() )
+      {
+        LOCKDUCHAIN;
+        OverloadResolutionHelper helper(m_currentContext);
+        helper.setOperator( OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) ), op );
+
+        ///@todo differentiate post-fix and suffix increment
+        //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) ) );
+        QList<OverloadResolutionFunction> functions = helper.resolve(false);
+        
+        if( !functions.isEmpty() )
+        {
+          CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+          if( functions.first().function.isViable() && function ) {
+            m_lastType = function->returnType();
+            m_lastInstance = Instance(true);
+          }else{
+            problem(node, QString("Found no viable function"));
+          }
+        }else{
+          //Do not complain here, because we do not check for builtin operators
+          //problem(node, "No fitting operator. found" );
+        }
+        
+      }else{
+        problem(node, "Invalid unary expression");
+      }
+    }
+    break;
+/*    case Token_incr:
     case Token_decr:
     case '+':
     case '-':
     case '!':
     case '~':
       ///@todo use overloaded functions
-    break;
+    break;*/
     }
     
     if( m_lastType )
@@ -887,6 +1004,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       }
     }
     LOCKDUCHAIN;
+
+    if( !declarations.isEmpty() && declarations.first()->type<CppClassType>() && declarations.first()->kind() == Declaration::Type ) {
+      //If a type was found, simply assume that it is constructed. We do not need more checks for it.
+      m_lastType = declarations.first()->abstractType();
+      m_lastInstance = Instance(true);
+      return;
+    }
+
+    //Resolve functions
     Declaration* chosenFunction = 0;
     OverloadResolver resolver( m_currentContext );
 
@@ -918,12 +1044,65 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     }
   }
   
+  void ExpressionVisitor::visitSubscriptExpression(SubscriptExpressionAST* node)
+  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
+    Instance masterInstance = m_lastInstance;
+    AbstractType::Ptr masterType = m_lastType;
+
+    if( !masterType || !masterInstance ) {
+      problem(node, "Tried subscript-expression on invalid object");
+      return;
+    }
+
+    {
+      LOCKDUCHAIN;
+
+      //If the type the subscript-operator is applied on is a pointer, dereference it
+      if( dereferenceLastPointer(node) )
+        return;
+    }
+
+    clearLast();
+    
+    visit(node->subscript);
+
+    LOCKDUCHAIN;
+
+    OverloadResolutionHelper helper(m_currentContext);
+    helper.setOperator( OverloadResolver::Parameter(masterType.data(), isLValue( masterType, masterInstance ) ), "[]" );
+
+    QList<OverloadResolutionFunction> functions = helper.resolve(false);
+
+    if( !functions.isEmpty() )
+    {
+      CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+      
+      if( function ) {
+        m_lastType = function->returnType();
+        m_lastInstance = Instance(true);
+      }else{
+        clearLast();
+        problem(node, QString("Found no subscript-function"));
+      }
+      
+      if( !functions.first().function.isViable() )
+        problem(node, QString("Found no viable subscript-function"));
+        
+    }else{
+      //Do not complain here, because we do not check for builtin operators
+      //problem(node, "No fitting operator. found" );
+    }
+
+
+    
+  }
+  
   void ExpressionVisitor::visitCondition(ConditionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitDeleteExpression(DeleteExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitOperator(OperatorAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitSubscriptExpression(SubscriptExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitStringLiteral(StringLiteralAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -941,6 +1120,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   }
 
   ///Nodes that are invalid inside an expression:
+  void ExpressionVisitor::visitOperator(OperatorAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitAccessSpecifier(AccessSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitAsmDefinition(AsmDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitBaseClause(BaseClauseAST* node)  { problem(node, "node-type cannot be parsed"); }
