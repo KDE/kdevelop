@@ -29,6 +29,7 @@ public:
   bool m_isInline: 1;
   bool m_isExplicit: 1;
   QStringList m_defaultParameters;
+  QStringList m_parameterNames;
 };
 
 AbstractFunctionDeclaration::AbstractFunctionDeclaration() : d(new AbstractFunctionDeclarationPrivate) {
@@ -47,6 +48,14 @@ const QList<QString>& AbstractFunctionDeclaration::defaultParameters() const {
 
 void AbstractFunctionDeclaration::addDefaultParameter(const QString& str) {
   d->m_defaultParameters << str;
+}
+
+const QList<QString>& AbstractFunctionDeclaration::parameterNames() const {
+  return d->m_parameterNames;
+}
+
+void AbstractFunctionDeclaration::addParameterName(const QString& str) {
+  d->m_parameterNames << str;
 }
 
 bool AbstractFunctionDeclaration::isVirtual() const
