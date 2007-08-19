@@ -34,6 +34,8 @@
 
 using namespace rpp;
 
+#define RETURN_ON_FAIL(x) if(!(x)) { ++input; kDebug() << "Preprocessor: Condition not satisfied"; return; }
+
 pp::pp(Preprocessor* preprocessor)
   : m_environment(new Environment(this))
   , expand(this)
@@ -294,21 +296,21 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     }
 
     skip_blanks(input, devnull());
-    Q_ASSERT(!includeString.isEmpty() && (includeString.startsWith('<') || includeString.startsWith('"')));
+    RETURN_ON_FAIL(!includeString.isEmpty() && (includeString.startsWith('<') || includeString.startsWith('"')));
 
     Stream newInput(&includeString);
     handle_include(skip_current_path, newInput, output);
     return;
   }
 
-  Q_ASSERT(input == '<' || input == '"');
+  RETURN_ON_FAIL(input == '<' || input == '"');
   QChar quote((input == '"') ? '"' : '>');
   ++input;
 
   QString includeName;
 
   while (!input.atEnd() && input != quote) {
-    Q_ASSERT(input != '\n');
+    RETURN_ON_FAIL(input != '\n');
 
     includeName.append(input);
     ++input;
@@ -448,7 +450,7 @@ void pp::handle_define (Stream& input)
       }
     }
 
-    Q_ASSERT(input == ')');
+    RETURN_ON_FAIL(input == ')');
     ++input;
   }
 
@@ -942,7 +944,7 @@ void pp::handle_else(int sourceLine)
 
 void pp::handle_elif(Stream& input)
 {
-  Q_ASSERT(iflevel > 0);
+  RETURN_ON_FAIL(iflevel > 0);
 
   if (iflevel == 0 && !skipping())
   {
@@ -1020,7 +1022,7 @@ void pp::handle_undef(Stream& input)
   skip_blanks (input, devnull());
 
   QString macro_name = skip_identifier(input);
-  Q_ASSERT(!macro_name.isEmpty());
+  RETURN_ON_FAIL(!macro_name.isEmpty());
 
   m_environment->clearMacro(macro_name);
 }
