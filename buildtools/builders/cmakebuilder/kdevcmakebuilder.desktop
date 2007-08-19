@@ -5,6 +5,7 @@ Name=KDevCMakeBuilder
 Name[sv]=KDevelop CMake-byggverktyg
 Comment=Builds CMake Projects
 Comment[es]=Construye proyectos CMake
+Comment[fa]=پروژه‌های CMake را می‌سازد
 Comment[ga]=Tóg Tionscadail CMake
 Comment[pt]=Compila Projectos do CMake
 Comment[pt_BR]=Compila Projectos do CMake
