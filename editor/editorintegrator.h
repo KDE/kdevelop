@@ -19,7 +19,7 @@
 #ifndef KDEVEDITORINTEGRATOR_H
 #define KDEVEDITORINTEGRATOR_H
 
-#include <QDateTime>
+#include <QtCore/QDateTime>
 #include <kurl.h>
 
 #include <ktexteditor/range.h>

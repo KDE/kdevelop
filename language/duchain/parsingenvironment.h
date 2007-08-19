@@ -19,7 +19,7 @@
 #ifndef PARSINGENVIRONMENT_H
 #define PARSINGENVIRONMENT_H
 
-#include <QDateTime>
+#include <QtCore/QDateTime>
 
 #include <languageexport.h>
 #include <ksharedptr.h>

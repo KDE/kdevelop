@@ -46,7 +46,7 @@ class InDocumentReference {
     static void parseReference( const QString& ref, QString& file, int& startLine, int& startCol, int& endLine, int& endCol );
 
     ///This creates a reference that refers to a position, but not intelligently.
-    InDocumentReference( bool start = true, const QString& ref = "" );
+    explicit InDocumentReference( bool start = true, const QString& ref = "" );
 
     InDocumentReference( const QString& document, int line, int col = 0, const QString& text = "" );
 
