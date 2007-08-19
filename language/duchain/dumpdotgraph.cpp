@@ -117,8 +117,9 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   QString label = "unknown";
   
   if( dynamic_cast<TopDUContext*>(context) ) {
-    if( static_cast<TopDUContext*>(context)->parsingEnvironmentFile() ) {
-      IdentifiedFile file( static_cast<TopDUContext*>(context)->parsingEnvironmentFile()->identity() );
+    TopDUContext* topCtx = static_cast<TopDUContext*>(context);
+    if( topCtx->parsingEnvironmentFile() ) {
+      IdentifiedFile file( topCtx->parsingEnvironmentFile()->identity() );
 
       //Find the context this one is derived from. If there is one, connect it with a line, and shorten the url.
       if( m_hadVersions.contains(file.url()) ) {
@@ -127,7 +128,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       } else {
         m_hadVersions[file.url()] = shortLabel(context);
       }
-      label = file.toString();
+      label = file.toString() + QString(" imported by: %1").arg(topCtx->importedChildContexts().count());
     } else {
       label = "unknown file";
     }
