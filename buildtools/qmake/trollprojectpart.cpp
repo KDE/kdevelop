@@ -701,7 +701,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir, bool recursive)
 
     if(isQt4Project() && recursive)
     {
-        cmdline += " -recursive";
+        cmdline += " -recursive ";
     }
 
     //QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
