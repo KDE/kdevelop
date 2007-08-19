@@ -285,7 +285,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     if( integral ) {
 
       ///Integral promotions, iso c++ 4.5
-      if( integerConversionRank(integral) < unsignedIntConversionRank && integral->integralType() != CppIntegralType::TypeBool && integral->integralType() != CppIntegralType::TypeWchar_t ) {
+      if( integerConversionRank(integral) < unsignedIntConversionRank && integral->integralType() != CppIntegralType::TypeBool && integral->integralType() != CppIntegralType::TypeWchar_t && integral->integralType() != CppIntegralType::TypeVoid ) {
         ///iso c++ 4.5.1
         AbstractType::Ptr newFrom( TypeRepository::self()->integral(CppIntegralType::TypeInt, (integral->typeModifiers() & CppIntegralType::ModifierUnsigned) ? CppIntegralType::ModifierUnsigned : CppIntegralType::ModifierNone ).data() );
         ConversionRank rank = standardConversion( newFrom, to, removeCategories(categories,PromotionCategory), maxCategories-1 );

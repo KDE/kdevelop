@@ -232,7 +232,8 @@ void TestCppCodeCompletion::testTypeConversion() {
   QByteArray test = "#include \"testFile1.h\"\n";
   test += "#include \"testFile2.h\"\n";
   test += "#include \"testFile3.h\"\n";
-  test += "void test() { }";
+  test += "int n;\n";
+  test += "void test() { }\n";
       
   DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
@@ -245,12 +246,27 @@ void TestCppCodeCompletion::testTypeConversion() {
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Honk") ));
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("A") ));
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("B") ));
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("test") ));
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("n") ));
   AbstractType::Ptr Heinz = findDeclaration( testContext, QualifiedIdentifier("Heinz") )->abstractType();
   AbstractType::Ptr Erna = findDeclaration( testContext, QualifiedIdentifier("Erna") )->abstractType();
   AbstractType::Ptr Honk = findDeclaration( testContext, QualifiedIdentifier("Honk") )->abstractType();
   AbstractType::Ptr A = findDeclaration( testContext, QualifiedIdentifier("A") )->abstractType();
   AbstractType::Ptr B = findDeclaration( testContext, QualifiedIdentifier("B") )->abstractType();
+  AbstractType::Ptr n = findDeclaration( testContext, QualifiedIdentifier("n") )->abstractType();
+
+  QVERIFY(n);
   
+  {
+    CppFunctionType::Ptr test = findDeclaration( testContext, QualifiedIdentifier("test") )->type<CppFunctionType>();
+    QVERIFY(test);
+  
+    Cpp::TypeConversion conv;
+    QVERIFY(!conv.implicitConversion(test->returnType(), Heinz, false));
+    QVERIFY(!conv.implicitConversion(Heinz, test->returnType(), false));
+    QVERIFY(!conv.implicitConversion(test->returnType(), n, false));
+    QVERIFY(!conv.implicitConversion(n, test->returnType(), false));
+  }
   //lock.unlock();
   {
     ///Test whether a recursive function-call context is created correctly
