@@ -85,6 +85,7 @@ enum ParsingEnvironmentType
   StandardParsingEnvironment,
   CppParsingEnvironment,
   PythonParsingEnvironment,
+  CMakeParsingEnvironment,
   CSharpParsingEnvironment,
   JavaParsingEnvironment,
   RubyParsingEnvironment,
