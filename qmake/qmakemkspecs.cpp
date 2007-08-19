@@ -33,5 +33,22 @@ QString QMakeMkSpecs::qmakeInternalVariable( const QString& var ) const
     return QString();
 }
 
+QString QMakeMkSpecs::resolveInternalQMakeVariables( const QString& value ) const
+{
+    QRegExp mkspecsvar("$$\\[([^\\]])\\]");
+    int pos = 0;
+    QString ret = value;
+    while( pos != -1 )
+    {
+        pos = mkspecsvar.indexIn( value, pos );
+        ret.replace( pos, mkspecsvar.matchedLength(), qmakeInternalVariable( mkspecsvar.cap(1) ) );
+    }
+    return ret;
+}
+
+QMakeMkSpecs* QMakeMkSpecs::mkSpecs() const
+{
+    return const_cast<QMakeMkSpecs*>(this);
+}
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

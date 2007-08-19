@@ -31,6 +31,7 @@ public:
     QMakeCache( const QString& cachefile );
     void setMkSpecs( QMakeMkSpecs* specs );
     bool read();
+    QMakeMkSpecs* mkSpecs() const;
 private:
     QMakeMkSpecs* m_mkspecs;
 };

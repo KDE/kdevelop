@@ -33,6 +33,7 @@ namespace QMake
 }
 
 class Scope;
+class QMakeMkSpecs;
 
 class QMakeFile : QMake::ASTDefaultVisitor
 {
@@ -52,13 +53,17 @@ public:
     bool containsVariable( const QString& ) const;
 
     static QStringList resolveShellGlobbing( const QString& absolutefile );
-    virtual QString resolveVariables( const QString& value ) const;
+    virtual QStringList resolveVariables( const QString& value ) const;
+
+    virtual QMakeMkSpecs* mkSpecs() const = 0;
+
 protected:
     QMap<QString, QStringList> m_variableValues;
     QStringList resolveFileName( const QString& file ) const;
     QString resolveToSingleFileName( const QString& file ) const;
 private:
 
+    QStringList getValueList( const QList<QMake::ValueAST*>& list ) const;
     QMake::ProjectAST* m_ast;
     QString m_projectFile;
 };

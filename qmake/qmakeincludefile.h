@@ -21,9 +21,9 @@
 #ifndef QMAKEINCLUDEFILE_H
 #define QMAKEINCLUDEFILE_H
 
-#include "qmakefile.h"
+#include "qmakeprojectfile.h"
 
-class QMakeIncludeFile : public QMakeFile
+class QMakeIncludeFile : public QMakeProjectFile
 {
 public:
     QMakeIncludeFile( const QString& incfile, const QMap<QString,QStringList>& variables  );

@@ -78,12 +78,12 @@ QStringList resolveShellGlobbingInternal( const QString& relativefile,
     return result;
 }
 
-QStringList getValueList( const QList<QMake::ValueAST*>& list )
+QStringList QMakeFile::getValueList( const QList<QMake::ValueAST*>& list ) const
 {
     QStringList result;
     foreach( QMake::ValueAST* v, list)
     {
-        result << v->value();
+        result += resolveVariables( v->value() );
     }
     return result;
 }
@@ -167,6 +167,7 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         }
         kDebug(9024) << "Reading Include file:" << argument;
         QMakeIncludeFile includefile( argument, m_variableValues );
+        includefile.setMkSpecs( mkSpecs() );
         bool read = includefile.read();
         if( read )
         {
@@ -278,9 +279,9 @@ QStringList QMakeFile::variables() const
     return m_variableValues.keys();
 }
 
-QString QMakeFile::resolveVariables( const QString& value ) const
+QStringList QMakeFile::resolveVariables( const QString& value ) const
 {
-    return value;
+    return QStringList() << value;
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

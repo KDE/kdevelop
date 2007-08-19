@@ -27,13 +27,15 @@
 
 class QMakeMkSpecs : public QMakeFile
 {
-    public:
-        QMakeMkSpecs( const QString& basicmkspec, const QHash<QString,QString>& variables );
+public:
+    QMakeMkSpecs( const QString& basicmkspec, const QHash<QString, QString>& variables );
 
-        QString qmakeInternalVariable( const QString& ) const;
+    QString qmakeInternalVariable( const QString& ) const;
 
-    private:
-        QHash<QString,QString> m_qmakeInternalVariables;
+    QString resolveInternalQMakeVariables( const QString& value ) const;
+    virtual QMakeMkSpecs* mkSpecs() const;
+private:
+    QHash<QString, QString> m_qmakeInternalVariables;
 };
 
 #endif
