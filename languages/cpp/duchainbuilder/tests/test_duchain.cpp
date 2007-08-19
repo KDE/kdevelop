@@ -213,14 +213,20 @@ void TestDUChain::testIdentifiers()
   QualifiedIdentifier op2("operator<=");
   QualifiedIdentifier op3("operator>");
   QualifiedIdentifier op4("operator>=");
+  QualifiedIdentifier op5("operator()");
+  QualifiedIdentifier op6("operator( )");
   QCOMPARE(op1.count(), 1);
   QCOMPARE(op2.count(), 1);
   QCOMPARE(op3.count(), 1);
   QCOMPARE(op4.count(), 1);
+  QCOMPARE(op5.count(), 1);
+  QCOMPARE(op6.count(), 1);
   QCOMPARE(op4.toString(), QString("operator>="));
   QCOMPARE(op3.toString(), QString("operator>"));
   QCOMPARE(op1.toString(), QString("operator<"));
   QCOMPARE(op2.toString(), QString("operator<="));
+  QCOMPARE(op5.toString(), QString("operator()"));
+  QCOMPARE(op6.toString(), QString("operator( )"));
 }
 
 void TestDUChain::testContextRelationships()
