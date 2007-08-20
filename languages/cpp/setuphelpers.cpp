@@ -66,21 +66,23 @@ bool setupStandardIncludePaths(QStringList& includePaths)
                 line = buff;
                 switch (parsingMode) {
                 case parsingInitial:
-                    if (line.indexOf("search starts here:") != -1) {
+                    if (line.indexOf("#include \"...\"") != -1) {
                         parsingMode = parsedFirstSearch;
                     }
                     break;
                 case parsedFirstSearch:
-                    if (line.indexOf("search starts here:") != -1) {
+                    if (line.indexOf("#include <...>") != -1) {
                         parsingMode = parsingIncludes;
+                        break;
                     }
-                    break;
                 case parsingIncludes:
-                    line = line.trimmed();
-                    if (line.indexOf(QDir::separator()) == -1) {
+                    //if (!line.indexOf(QDir::separator()) == -1 && line != "." ) {
+                    //Detect the include-paths by the first space that is prepended. Reason: The list may contain relative paths like "."
+                    if (!line.startsWith(" ") ) {
                         // We've reached the end of the list.
                         parsingMode = parsingFinished;
                     } else {
+                        line = line.trimmed();
                         // This is an include path, add it to the list.
                         includePaths << QDir::cleanPath(line);
                     }
