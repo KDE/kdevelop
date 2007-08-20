@@ -645,6 +645,10 @@ void StructureType::removeElement(AbstractType::Ptr element)
   d->m_elements.removeAll(element);
 }
 
+void StructureType::clear() {
+  d->m_elements.clear();
+}
+
 void StructureType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))

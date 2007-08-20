@@ -46,6 +46,8 @@ public:
   QualifiedIdentifier identifier() const;
 
   bool equals(const IdentifiedType* rhs) const;
+
+  void clear();
   
   Declaration* declaration() const;
   /**

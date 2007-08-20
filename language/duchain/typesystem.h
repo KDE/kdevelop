@@ -340,6 +340,7 @@ public:
   virtual void addElement(AbstractType::Ptr element);
   void removeElement(AbstractType::Ptr element);
 
+  void clear();
 
   virtual QString toString() const;
 

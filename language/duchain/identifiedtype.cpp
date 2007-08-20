@@ -39,6 +39,10 @@ IdentifiedType::IdentifiedType()
 {
 }
 
+void IdentifiedType::clear() {
+  d->m_declaration = DeclarationPointer();
+}
+
 bool IdentifiedType::equals(const IdentifiedType* rhs) const
 {
   if( (bool)d->m_declaration != (bool)rhs->d->m_declaration )
