@@ -153,6 +153,9 @@ KDevelop::TopDUContext* ContextBuilder::buildContextFromContent(const Cpp::Envir
       lock.lock();
       topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
     }
+
+    if( topLevelContext && topLevelContext->smartRange() )
+      Q_ASSERT(!topLevelContext->smartRange()->parentRange()); //Top-range must have no parent, else something is wrong with the structure
     
     if( content && !content->smartRange() && m_editor->smart() ) {
       lock.unlock();
@@ -233,7 +236,9 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       lock.lock();
       topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
     }
-    
+
+    if( topLevelContext && topLevelContext->smartRange() )
+      Q_ASSERT(!topLevelContext->smartRange()->parentRange()); //Top-range must have no parent, else something is wrong with the structure
     
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
