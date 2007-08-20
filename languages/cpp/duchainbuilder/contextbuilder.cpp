@@ -290,8 +290,8 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   supportBuild(node);
 
   if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
-    kDebug(9007) << "ERROR: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
-    Q_ASSERT(0);
+    kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
+    (*topLevelContext->textRangePtr()) = m_editor->currentDocument()->documentRange();
   }
 
   {
