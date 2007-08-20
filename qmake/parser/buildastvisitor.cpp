@@ -216,14 +216,14 @@ template <typename T> T* BuildASTVisitor::stackTop()
     if( aststack.isEmpty() )
     {
         kDebug(9024) << kBacktrace();
-        kFatal(9024) << k_funcinfo << "ERROR: AST stack is empty, this should never happen";
+        kFatal(9024) << "ERROR: AST stack is empty, this should never happen";
         exit(255);
     }
     T* ast = dynamic_cast<T*>(aststack.top());
     if( !ast )
     {
         kDebug(9024) << kBacktrace();
-        kFatal(9024) << k_funcinfo << "ERROR: AST stack is screwed, doing a hard exit" << aststack.top()->type();
+        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << aststack.top()->type();
         exit(255);
     }
     return ast;
@@ -234,7 +234,7 @@ template <typename T> T* BuildASTVisitor::stackPop()
     if( aststack.isEmpty() )
     {
         kDebug(9024) << kBacktrace();
-        kFatal(9024) << k_funcinfo << "ERROR: AST stack is empty, this should never happen";
+        kFatal(9024) << "ERROR: AST stack is empty, this should never happen";
         exit(255);
     }
     AST* tmp = aststack.pop();
@@ -242,7 +242,7 @@ template <typename T> T* BuildASTVisitor::stackPop()
     if( !ast )
     {
         kDebug(9024) << kBacktrace();
-        kFatal(9024) << k_funcinfo << "ERROR: AST stack is screwed, doing a hard exit" << tmp->type();
+        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << tmp->type();
         exit(255);
     }
     return ast;

@@ -96,7 +96,7 @@ QMakeFile::QMakeFile( const QString& file )
 bool QMakeFile::read()
 {
     QFileInfo fi( m_projectFile );
-    kDebug(9024) << k_funcinfo << "Is" << m_projectFile << "a dir?" << fi.isDir() ;
+    kDebug(9024) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;
     if( fi.isDir() )
     {
         QDir dir( m_projectFile );
