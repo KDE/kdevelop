@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevQMakeBuilder
+Name[ne]=केडीई विकास क्यूमेक विकासकर्ता
 Name[sv]=KDevelop QMake-byggverktyg
 Name[x-test]=xxKDevQMakeBuilderxx
 Comment=Builds QMake Projects
@@ -12,6 +13,7 @@ Comment[fa]=پروژه‌های QMake را می‌سازد
 Comment[ga]=Tóg tionscadail QMake
 Comment[it]=Compila i progetti QMake
 Comment[ja]=QMake プロジェクトをビルドします
+Comment[ne]=क्यूमेक परियोजना निर्माण गर्दछ
 Comment[pa]=QMake ਪ੍ਰੋਜੈਕਟ ਬਣਾਓ
 Comment[pt]=Compila Projectos do QMake
 Comment[pt_BR]=Compila Projectos do QMake
