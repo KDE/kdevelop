@@ -53,8 +53,20 @@ DocumentRangeObject::DocumentRangeObject(KTextEditor::Range* range)
 
 DocumentRangeObject::~ DocumentRangeObject( )
 {
-    if (d->m_range && d->m_range->isSmartRange())
-        d->m_range->toSmartRange()->removeWatcher(this);
+    if (d->m_range && d->m_range->isSmartRange()) {
+        //If a smart-range is deleted, move it's child-ranges into it's parent.
+        //That way we do not delete other DocumentRangeObject's smart-ranges, which corrupts the structure integrity.
+        SmartRange* smart = d->m_range->toSmartRange();
+        if( smart->parentRange() )
+        {
+            SmartRange* oldParent = smart->parentRange();
+            smart->setParentRange(0);
+            QList<SmartRange*> childRanges = smart->childRanges();
+            foreach( SmartRange* range, childRanges )
+                range->setParentRange(oldParent);
+        }
+        smart->removeWatcher(this);
+    }
 
     if (d->m_ownsRange == DocumentRangeObject::Own)
         EditorIntegrator::releaseRange(d->m_range);
