@@ -35,7 +35,7 @@ class TopDUContextPrivate
 {
 public:
   TopDUContextPrivate( TopDUContext* ctxt)
-    : m_inDuChain(false), m_ctxt(ctxt)
+    : m_inDuChain(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
   {
   }
   bool imports(TopDUContext* origin, int depth) const
@@ -60,6 +60,7 @@ public:
   bool m_hasUses  : 1;
   bool m_deleting : 1;
   bool m_inDuChain : 1;
+  TopDUContext::Flags m_flags;
   TopDUContext* m_ctxt;
   ParsingEnvironmentFilePointer m_file;
 };
@@ -312,6 +313,14 @@ bool TopDUContext::inDuChain() const {
 /// This flag is only used by DUChain, never change it from outside.
 void TopDUContext::setInDuChain(bool b) {
   d->m_inDuChain = b;
+}
+
+TopDUContext::Flags TopDUContext::flags() const {
+  return d->m_flags;
+}
+
+void TopDUContext::setFlags(Flags f) {
+  d->m_flags = f;
 }
 
 }

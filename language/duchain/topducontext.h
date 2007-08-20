@@ -77,6 +77,25 @@ public:
    */
   bool imports(TopDUContext* origin, const KTextEditor::Cursor& position) const;
 
+  enum Flags {
+    NoFlags = 0,
+    /**
+     * A language-specific flag used by C++ to mark one context as a proxy of another.
+     * If this flag is set on a context, the first imported context should be used for any computations
+     * like searches, listing, etc. instead of using this context.
+     * 
+     * Note: This flag does not directly change the behavior of the language-independent du-chain.
+     * */
+    ProxyContextFlag = 1,
+    LastFlag = 1
+  };
+  
+  /**
+   * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
+   * */
+  Flags flags() const;
+  void setFlags(Flags f);
+  
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;
   
