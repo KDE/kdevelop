@@ -227,6 +227,10 @@ void PreprocessJob::run()
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
         parentJob()->setUpdatingContext( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment) );
+        if( m_contentEnvironmentFile && parentJob()->updatingContext() && !(parentJob()->updatingContext()->flags() & KDevelop::TopDUContext::ProxyContextFlag) ) {
+            parentJob()->setUpdatingContext(0);
+            kDebug() << "Warning: Cannot update a non-proxy context with a proxy-context";
+        }
     }
 
     preprocessor.setEnvironment( m_currentEnvironment );

@@ -65,18 +65,19 @@ public:
 
 
   /**
-   * Builds or updates a context that merges a content-context together with arbitray include-contexts.
+   * Builds or updates a proxy-context that represents a content-context under a different environment.
    * */
   
-  KDevelop::TopDUContext* buildContextFromContent(const Cpp::EnvironmentFilePointer& file, QList<KDevelop::DUContext*>* includes, const TopDUContextPointer& content, const TopDUContextPointer& updateContext);
+  KDevelop::TopDUContext* buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext);
   
   /**
    * Compile either a context-definition chain, or add uses to an existing
    * chain.
    *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
+   * \param removeOldImports Should old imports that are not in the includes-list be removed?
    */
-  KDevelop::TopDUContext* buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<KDevelop::DUContext*>* includes = 0, const TopDUContextPointer& updateContext = TopDUContextPointer());
+  KDevelop::TopDUContext* buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<KDevelop::DUContext*>* includes = 0, const TopDUContextPointer& updateContext = TopDUContextPointer(), bool removeOldImports = true);
 
   /**
    * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,

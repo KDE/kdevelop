@@ -271,44 +271,46 @@ void CPPInternalParseJob::run()
 
 //         parentJob()->setCodeModel(model);
 
+        
+        //If we are building a separate content-context
+        TopDUContext* updating = parentJob()->updatingContext().data();
+        Cpp::EnvironmentFilePointer environmentFile(parentJob()->environmentFile());
+
+        if( parentJob()->contentEnvironmentFile() )
+        {
+            if( parentJob()->contentContext() )
+                updating = parentJob()->contentContext().data();
+            else
+                updating = 0; //We should build a separate context, but none is set.
+
+            //Use the EnvironmentFile of the content-context.
+            environmentFile = parentJob()->contentEnvironmentFile();
+            Q_ASSERT(environmentFile->identity().url().prettyUrl().endsWith(":content"));
+        }
+        
         QList<DUContext*> chains;
         QList<DUContext*> temporaryChains;
 
+        foreach ( TopDUContext* context, parentJob()->includedFiles() )
+            chains << context;
+        
         if( parentJob()->parentPreprocessor() ) {
             //Temporarily insert the parent's chains here, so forward-declarations can be resolved and types can be used, as it should be.
             //In theory, we would need to insert the whole until-now parsed part of the parent, but that's not possible because preprocessing and parsing are
             //separate steps. So we simply assume that the includes are at the top of the file.
             foreach ( TopDUContext* context, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
-                if( !parentJob()->includedFiles().contains(context) ) {
+                if( !chains.contains(context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(context)) ) {
                     chains << context;
                     temporaryChains << context;
                 }
             }
         }
 
-        foreach ( TopDUContext* context, parentJob()->includedFiles() )
-            chains << context;
-
         TopDUContext* topContext;
 
         // Control the lifetime of the editor integrator (so that locking works)
         {
-            //If we are building a separate content-context
-            TopDUContext* updating = parentJob()->updatingContext().data();
-            Cpp::EnvironmentFilePointer environmentFile(parentJob()->environmentFile());
             
-            if( parentJob()->contentEnvironmentFile() )
-            {
-                if( parentJob()->contentContext() )
-                    updating = parentJob()->contentContext().data();
-                else
-                    updating = 0; //We should build a separate context, but none is set.
-
-                //Use the EnvironmentFile of the content-context.
-                environmentFile = parentJob()->contentEnvironmentFile();
-                Q_ASSERT(environmentFile->identity().url().prettyUrl().endsWith(":content"));
-            }
-
             CppEditorIntegrator editor(parentJob()->parseSession());
             editor.setCurrentUrl(parentJob()->document());
 
@@ -322,7 +324,7 @@ void CPPInternalParseJob::run()
                 kDebug( 9007 ) << "building duchain";
 
                 DeclarationBuilder declarationBuilder(&editor);
-                topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updating);
+                topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updating, !(bool)parentJob()->contentContext());
                 
                 if (parentJob()->abortRequested())
                     return parentJob()->abortJob();
@@ -344,6 +346,10 @@ void CPPInternalParseJob::run()
                 Q_ASSERT(parentJob()->contentContext());
                 kDebug( 9007 ) << "reusing existing content duchain";
                 topContext = parentJob()->contentContext().data();
+
+                ///Add all our imports to the re-used context
+                foreach( DUContext* import, chains )
+                    topContext->addImportedParentContext(import);
                 if( !topContext ) {
                     kDebug( 9007 ) << "Context was deleted while parsing";
                     return;
@@ -359,7 +365,6 @@ void CPPInternalParseJob::run()
             if( parentJob()->parentPreprocessor() ) {
                 DUChainWriteLocker l(DUChain::lock());
                 //Remove include-files we imported temporarily, because they are on the same level in reality
-                ///@todo what if the same context was later imported explicitly?
                 foreach ( DUContext* context, temporaryChains ) {
                     topContext->removeImportedParentContext(context);
                     chains.removeAll(context);
@@ -369,12 +374,8 @@ void CPPInternalParseJob::run()
             Q_ASSERT(topContext);
             
             if( parentJob()->contentEnvironmentFile() ) {
-                //We have created a content-context. Remove all imports from it, and create our real context that glues the content and the.imports together.
-                foreach( DUContextPointer ctx, topContext->importedParentContexts())
-                    topContext->removeImportedParentContext(ctx.data());
-
                 ContextBuilder builder(&editor);
-                topContext = builder.buildContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), &chains, topContext, parentJob()->updatingContext().data());
+                topContext = builder.buildProxyContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), topContext, parentJob()->updatingContext().data());
             }
 
             parentJob()->setDuChain(topContext);
