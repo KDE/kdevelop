@@ -53,7 +53,7 @@ SnippetPart::SnippetPart(QObject *parent, const QStringList &)
 
 SnippetPart::~SnippetPart()
 {
-    kDebug(9500) << k_funcinfo ;
+    kDebug(9500) ;
 }
 
 void SnippetPart::unload()

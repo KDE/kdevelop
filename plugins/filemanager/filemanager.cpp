@@ -123,7 +123,7 @@ public:
 
     void goToUrl(const QString &url)
     {
-        kDebug(9500) << k_funcinfo;
+        kDebug(9500) ;
         goToUrl(KUrl(url));
         m_view->setFocus();
     }

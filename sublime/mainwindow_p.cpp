@@ -290,7 +290,7 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 
 void MainWindowPrivate::switchToArea(QAction *action)
 {
-    kDebug(9504) << k_funcinfo << "for" << action;
+    kDebug(9504) << "for" << action;
     controller->showArea(m_actionAreas[action], m_mainWindow);
 }
 

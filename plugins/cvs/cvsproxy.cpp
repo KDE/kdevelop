@@ -26,7 +26,7 @@ CvsProxy::CvsProxy(QObject* parent)
 
 CvsProxy::~CvsProxy()
 {
-    kDebug(9500)<<  k_funcinfo ;
+    kDebug(9500);
 }
 
 void CvsProxy::slotResult(KJob* job)
@@ -112,7 +112,7 @@ QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
 
 CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     QFileInfo info(url.toLocalFile());
     if (!info.isFile())
@@ -142,7 +142,7 @@ CvsJob* CvsProxy::diff(const KUrl& url,
             const KDevelop::VcsRevision& revB,
             const QString& diffOptions)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     QFileInfo info(url.toLocalFile());
 
@@ -169,7 +169,7 @@ CvsJob* CvsProxy::diff(const KUrl& url,
 
 CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     QFileInfo info(url.toLocalFile());
 
@@ -192,7 +192,7 @@ CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
 
 CvsJob* CvsProxy::edit(const QString& repo, const KUrl::List& files)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -210,7 +210,7 @@ CvsJob* CvsProxy::edit(const QString& repo, const KUrl::List& files)
 
 CvsJob* CvsProxy::unedit(const QString& repo, const KUrl::List& files)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -227,7 +227,7 @@ CvsJob* CvsProxy::unedit(const QString& repo, const KUrl::List& files)
 
 CvsJob* CvsProxy::editors(const QString& repo, const KUrl::List& files)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -244,7 +244,7 @@ CvsJob* CvsProxy::editors(const QString& repo, const KUrl::List& files)
 
 CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QString& message)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -265,7 +265,7 @@ CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QSt
 CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, 
                       bool recursiv, bool binary)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -286,7 +286,7 @@ CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files,
 
 CvsJob * CvsProxy::remove(const QString & repo, const KUrl::List & files)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -308,7 +308,7 @@ CvsJob * CvsProxy::update(const QString & repo, const KUrl::List & files,
                           const QString & updateOptions, 
                           bool recursive, bool pruneDirs, bool createDirs)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {
@@ -343,7 +343,7 @@ CvsJob * CvsProxy::import(const KUrl & directory,
                           const QString & vendortag, const QString & releasetag,
                           const QString& message)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, directory.toLocalFile(), CvsProxy::Import) ) {
@@ -373,7 +373,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
                             bool recursive,
                             bool pruneDirs)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     ///@todo when doing a checkout we don't have the targetdir yet,
@@ -409,7 +409,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
 
 CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool recursive, bool taginfo)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, repo) ) {

@@ -81,7 +81,7 @@ CvsPart::CvsPart( QObject *parent, const QStringList & )
 
 CvsPart::~CvsPart()
 {
-    kDebug(9500)<<  k_funcinfo ;
+    kDebug(9500);
 
     delete d;
 }

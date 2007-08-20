@@ -358,7 +358,7 @@ void EditorIntegrator::releaseTopRange(KTextEditor::Range * range)
     }
   }
 
-  //kWarning() << k_funcinfo << "Could not find top range to delete." ;
+  //kWarning() << "Could not find top range to delete." ;
 }
 
 void EditorIntegrator::releaseRange(KTextEditor::Range* range)

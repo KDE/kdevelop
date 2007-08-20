@@ -93,7 +93,7 @@ PluginController::PluginController(Core *core)
 PluginController::~PluginController()
 {
     if ( d->cleanupMode != PluginControllerPrivate::CleanupDone )
-        kWarning(9000) << k_funcinfo << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
+        kWarning(9000) << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
                        << endl << kBacktrace() << endl;
 
     // Quick cleanup of the remaining plugins, hope it helps
@@ -102,7 +102,7 @@ PluginController::~PluginController()
     while ( !d->loadedPlugins.empty() )
     {
         PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
-        kWarning(9000) << k_funcinfo << "Deleting stale plugin '" << it.key().pluginName()
+        kWarning(9000) << "Deleting stale plugin '" << it.key().pluginName()
                 << "'" << endl;
         delete it.value();
     }
@@ -135,7 +135,7 @@ void PluginController::cleanup()
 {
     if(d->cleanupMode != PluginControllerPrivate::Running)
     {
-        kDebug(9501) << k_funcinfo << "called when not running. state =" << d->cleanupMode;
+        kDebug(9501) << "called when not running. state =" << d->cleanupMode;
         return;
     }
 
@@ -259,14 +259,14 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     KPluginInfo info = infoForPluginId( pluginId );
     if ( !info.isValid() )
     {
-        kWarning(9000) << k_funcinfo << "Unable to find a plugin named '" << pluginId << "'!" ;
+        kWarning(9000) << "Unable to find a plugin named '" << pluginId << "'!" ;
         return 0L;
     }
 
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
 
-    kDebug(9501) << k_funcinfo << "Attempting to load '" << pluginId << "'";
+    kDebug(9501) << "Attempting to load '" << pluginId << "'";
     emit loadingPlugin( info.name() );
     int error = 0;
     IPlugin *plugin = 0;
@@ -288,7 +288,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         connect( plugin, SIGNAL( destroyed( QObject * ) ),
                  this, SLOT( pluginDestroyed( QObject * ) ) );
 
-        kDebug(9501) << k_funcinfo << "Successfully loaded plugin '" << pluginId << "'";
+        kDebug(9501) << "Successfully loaded plugin '" << pluginId << "'";
 
         emit pluginLoaded( plugin );
     }
@@ -296,7 +296,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     {
         if( !error && !missingInterfaces.isEmpty() )
         {
-            kDebug(9501) << k_funcinfo << "Can't load plugin '" << pluginId
+            kDebug(9501) << "Can't load plugin '" << pluginId
                     << "' some of its required dependecies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         }else
@@ -304,7 +304,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
             switch( error )
             {
                 case KLibLoader::ErrNoServiceFound:
-                    kDebug(9501) << k_funcinfo << "No service implementing the given mimetype "
+                    kDebug(9501) << "No service implementing the given mimetype "
                             << "and fullfilling the given constraint expression can be found." << endl;
                     break;
 
@@ -328,7 +328,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
                     break;
             }
 
-            kDebug(9501) << k_funcinfo << "Loading plugin '" << pluginId
+            kDebug(9501) << "Loading plugin '" << pluginId
                     << "' failed, KLibLoader reported error: '" << endl <<
                     KLibLoader::self()->lastErrorMessage() << "'" << endl;
         }

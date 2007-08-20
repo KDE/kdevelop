@@ -1110,7 +1110,7 @@ void SvnCheckoutJob::run()
     svn_opt_revision_t peg_rev = m_pegRevision.revision();
     svn_opt_revision_t rev = m_revision.revision();
 
-    kDebug(9500) << k_funcinfo << "path:" << wcRoot << "Url:" << reposUrl;
+    kDebug(9500) << "path:" << wcRoot << "Url:" << reposUrl;
 
     svn_error_t *err = svn_client_checkout2( &result_rev, reposUrl, wcRoot, &peg_rev, &rev,
                                              m_recurse, m_ignoreExternals, ctx(), subpool );

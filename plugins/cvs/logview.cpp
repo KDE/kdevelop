@@ -35,12 +35,12 @@ LogView::LogView(CvsPart* part, CvsJob* job, QWidget *parent)
 
 LogView::~LogView()
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 }
 
 void LogView::slotJobFinished(KJob* job)
 {
-    kDebug(9500) << k_funcinfo;
+    kDebug(9500) ;
 
     if ( job->error() )
     {

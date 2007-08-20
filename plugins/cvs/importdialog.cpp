@@ -68,7 +68,7 @@ void ImportDialog::jobFinished(KJob * job)
             continue;
         } else {
             // any other line must mean that an error occurred
-            kDebug(9500) << k_funcinfo << line;
+            kDebug(9500) << line;
             error = true;
         }
     }

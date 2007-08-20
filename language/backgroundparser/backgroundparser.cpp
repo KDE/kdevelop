@@ -134,7 +134,7 @@ public:
         // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
         foreach (ParseJob* job, jobs) {
-            kDebug(9505) << k_funcinfo << "Enqueue" << job;
+            kDebug(9505) << "Enqueue" << job;
             m_weaver.enqueue(job);
         }
 

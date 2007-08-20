@@ -57,7 +57,7 @@ CvsJob::CvsJob(QObject* parent)
 
 CvsJob::~CvsJob()
 {
-    kDebug(9500)<<  k_funcinfo ;
+    kDebug(9500);
     delete d;
 }
 
@@ -171,7 +171,7 @@ void CvsJob::cancel()
 
 void CvsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    kDebug(9500)<<  k_funcinfo ;
+    kDebug(9500);
 
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
@@ -192,7 +192,7 @@ void CvsJob::slotReceivedStdout(const QStringList& output)
     // accumulate output
     d->outputLines += output;
 
-    kDebug(9500)<<  k_funcinfo <<"received output:";
+    kDebug(9500)<<"received output:";
     kDebug(9500)<<output.join("\n");
 }
 
@@ -202,7 +202,7 @@ void CvsJob::slotReceivedStderr(const QStringList& output)
     // accumulate output
     d->outputLines += output;
 
-    kDebug(9500)<<  k_funcinfo <<"received error:";
+    kDebug(9500)<<"received error:";
     kDebug(9500)<<output.join("\n");
 }
 

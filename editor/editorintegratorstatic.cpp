@@ -58,7 +58,7 @@ void EditorIntegratorStatic::documentLoaded()
 {
   Document* doc = qobject_cast<Document*>(sender());
   if (!doc) {
-    kWarning() << k_funcinfo << "Unexpected non-document sender called this slot!" ;
+    kWarning() << "Unexpected non-document sender called this slot!" ;
     return;
   }
 
@@ -78,7 +78,7 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
     it.next();
     if (it.value() == document) {
       if (topRanges.contains(it.key())) {
-        kDebug(9506) << k_funcinfo << "Document URL change - found corresponding document";
+        kDebug(9506) << "Document URL change - found corresponding document";
         topRanges.insert(document->url(), topRanges.take(it.key()));
       }
 
@@ -89,7 +89,7 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
     }
   }
 
-  //kWarning() << k_funcinfo << "Document URL change - couldn't find corresponding document!" ;
+  //kWarning() << "Document URL change - couldn't find corresponding document!" ;
 }
 void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
@@ -113,7 +113,7 @@ void EditorIntegratorStatic::rangeDeleted(KTextEditor::SmartRange * range)
   QMutableHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
   while (it.hasNext()) {
     it.next();
-    //kDebug(9506) << k_funcinfo << "Searching for" << range << ", potentials" << it.value().toList();
+    //kDebug(9506) << "Searching for" << range << ", potentials" << it.value().toList();
     int index = it.value().indexOf(range);
     if (index != -1) {
       it.value()[index] = 0;
@@ -122,7 +122,7 @@ void EditorIntegratorStatic::rangeDeleted(KTextEditor::SmartRange * range)
   }
 
   // Should have found the top level range by now
-  kWarning() << k_funcinfo << "Could not find record of top level range" << range << "!" ;
+  kWarning() << "Could not find record of top level range" << range << "!" ;
 }
 
 }

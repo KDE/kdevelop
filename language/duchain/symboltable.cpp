@@ -65,7 +65,7 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  ifDebug( kDebug(9505) << k_funcinfo << "Adding declaration" << declaration->qualifiedIdentifier().toString() << " with hash " <<  declaration->qualifiedIdentifier().hash(); )
+  ifDebug( kDebug(9505) << "Adding declaration" << declaration->qualifiedIdentifier().toString() << " with hash " <<  declaration->qualifiedIdentifier().hash(); )
 
   sdSymbolPrivate->m_declarations.insert(declaration->qualifiedIdentifier(), declaration);
 
@@ -86,13 +86,13 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
         return;
       }
 
-  kWarning() << k_funcinfo << "Could not find declaration matching" << id ;
+  kWarning() << "Could not find declaration matching" << id ;
 }
 
 QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id) const
 {
   ENSURE_CHAIN_READ_LOCKED
-  ifDebug( kDebug(9505) << k_funcinfo << "Searching declaration " << id.toString() << " with hash " <<  id.hash(); )
+  ifDebug( kDebug(9505) << "Searching declaration " << id.toString() << " with hash " <<  id.hash(); )
 
   return sdSymbolPrivate->m_declarations.values(id);
 }
@@ -124,7 +124,7 @@ void SymbolTable::dumpStatistics() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  ifDebug( kDebug(9505) << k_funcinfo << "Definitions" << sdSymbolPrivate->m_declarations.count() << ", Contexts" << sdSymbolPrivate->m_contexts.count(); )
+  ifDebug( kDebug(9505) << "Definitions" << sdSymbolPrivate->m_declarations.count() << ", Contexts" << sdSymbolPrivate->m_contexts.count(); )
 
   // TODO: more data
 }
@@ -132,7 +132,7 @@ void SymbolTable::dumpStatistics() const
 QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) const
 {
   ENSURE_CHAIN_READ_LOCKED
-  ifDebug( kDebug(9505) << k_funcinfo << "Searching context " << id.toString() << " with hash " <<  id.hash(); )
+  ifDebug( kDebug(9505) << "Searching context " << id.toString() << " with hash " <<  id.hash(); )
 
   return sdSymbolPrivate->m_contexts.values(id);
 }
@@ -140,7 +140,7 @@ QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) cons
 void SymbolTable::addContext(DUContext * namedContext)
 {
   ENSURE_CHAIN_WRITE_LOCKED
-  ifDebug( kDebug(9505) << k_funcinfo << "Adding context " << namedContext->scopeIdentifier(true).toString() << " with hash " <<  namedContext->scopeIdentifier(true).hash(); )
+  ifDebug( kDebug(9505) << "Adding context " << namedContext->scopeIdentifier(true).toString() << " with hash " <<  namedContext->scopeIdentifier(true).hash(); )
 
   sdSymbolPrivate->m_contexts.insert(namedContext->scopeIdentifier(true), namedContext);
 
@@ -161,7 +161,7 @@ void SymbolTable::removeContext(DUContext * namedContext)
         return;
       }
 
-  kWarning() << k_funcinfo << "Could not find context matching" << id ;
+  kWarning() << "Could not find context matching" << id ;
 }
 }
 
