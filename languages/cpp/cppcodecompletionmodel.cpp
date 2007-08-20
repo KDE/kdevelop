@@ -140,6 +140,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
 void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QString& ret, QList<QVariant>* highlighting ) const
 {
+  ///@todo also highlight the matches of the previous arguments, they are given by ViableFunction
   Declaration* dec(item.declaration.data());
 
   Cpp::CodeCompletionContext::Function f;
