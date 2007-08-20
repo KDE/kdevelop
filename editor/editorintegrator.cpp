@@ -254,15 +254,6 @@ Range* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEdi
 
     ///Special-case 1: The range we are creating completely contains n ranges that are slaves of currentRange
 
-    for( UnifiedRangeChildIterator it(currentRange); it; ++it ) {
-        if( (*it)->end() > range.end() )
-            break;
-        if( (*it)->start() < range.start() )
-            continue;
-        //Now the condition (*it)->start() >= range.start() && (*it)->end() <= range.end() is fulfilled(range is contained)
-        it.unified().setParentRange(ret.range()); //Move the range into our one
-    }
-
     ///Special-case 2: The range we are creating is completely contained in a child-range of the current at any deeper level. Replace currentRange with it.
     bool found = true;
     while(found) {
@@ -276,15 +267,22 @@ Range* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEdi
             continue; //This case should already have been handled by the test above
           //Now the condition range.start() >= (*it)->start() && range.end() <= (*it)->end()  is fulfilled(range is contained)
           currentRange = *it; //Move down to the range that contains range
+          found = true;
       }
     }
+    
+    for( UnifiedRangeChildIterator it(currentRange); it; ++it ) {
+        if( (*it)->end() > range.end() )
+            break;
+        if( (*it)->start() < range.start() )
+            continue;
+        //Now the condition (*it)->start() >= range.start() && (*it)->end() <= range.end() is fulfilled(range is contained)
+        it.unified().setParentRange(ret.range()); //Move the range into our one
+    }
+
 
     ///Normal case:
     ret.setParentRange( currentRange.range() );
-
-    if( !d->m_currentRangeStack.isEmpty() )
-      Q_ASSERT(d->m_currentRangeStack.top()->start() <=  range.start() && d->m_currentRangeStack.top()->end() >= range.end());
-
   }
 
   d->m_currentRangeStack << ret.range();
