@@ -22,6 +22,8 @@
 #include <ksharedptr.h>
 #include <typesystem.h>
 #include <duchain/duchainpointer.h>
+#include <duchain/duchainlock.h>
+#include <duchain/duchain.h>
 #include "visitor.h"
 #include "cppexpressionparserexport.h"
 #include "expressionvisitor.h"
@@ -36,6 +38,11 @@ class DUContext;
 namespace Cpp  {
 using namespace KDevelop;
 
+/**
+ *
+ * The functions in ExpressionEvaluationResult are inlined for now, so they can be used from within the duchainbuilder module
+ * (It's a circular dependency)
+ * */
 class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
   public:
     ExpressionEvaluationResult() {
@@ -47,13 +54,34 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
     QList<Declaration*> allDeclarations; ///If type is a function-type, this may contain the declarations of all found overloaded functions
 
     ///@return whether the result is an lvalue
-    bool isLValue() const;
+    bool isLValue() const {
+      return instance && (instance.declaration || dynamic_cast<const ReferenceType*>( type.data() ));
+    }
 
     ///@return whether this result is valid(has a type)
-    bool isValid() const;
+    bool isValid() const {
+      return (bool)type;
+    }
 
+    ///@return A short version, that only contains the name or value, without instance-information etc.
+    QString toShortString() const
+    {
+      //Inline for now, so it can be used from the duchainbuilder module
+      if( DUChain::lock()->currentThreadHasReadLock() )
+        return type ? type->toString() : QString("<no type>");
+
+      DUChainReadLocker lock(DUChain::lock());
+      return type ? type->toString() : QString("<no type>");
+    }
+    
     ///it does not matter whether du-chain is locked or not
-    QString toString() const;
+    QString toString() const {
+      if( DUChain::lock()->currentThreadHasReadLock() )
+        return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
+
+      DUChainReadLocker lock(DUChain::lock());
+      return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
+    }
 
     typedef KSharedPtr<ExpressionEvaluationResult> Ptr;
 };

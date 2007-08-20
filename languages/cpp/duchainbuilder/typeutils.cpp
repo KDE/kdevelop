@@ -61,6 +61,28 @@ namespace TypeUtils {
     return base;
   }
 
+  const AbstractType* targetType(const AbstractType* base, bool* constant) {
+
+    const CppReferenceType* ref = dynamic_cast<const CppReferenceType*>( base );
+    const CppPointerType* pnt = dynamic_cast<const CppPointerType*>( base );
+
+    while( ref || pnt ) {
+      if( ref ) {
+        if( constant )
+          (*constant) |= ref->isConstant();
+        base = ref->baseType().data();
+      } else {
+        if( constant )
+          (*constant) |= pnt->isConstant();
+        base = pnt->baseType().data();
+      }
+      ref = dynamic_cast<const CppReferenceType*>( base );
+      pnt = dynamic_cast<const CppPointerType*>( base );
+    }
+
+    return base;
+  }
+  
   bool isPointerType(AbstractType* type) {
     return dynamic_cast<PointerType*>( realType(type) );
   }

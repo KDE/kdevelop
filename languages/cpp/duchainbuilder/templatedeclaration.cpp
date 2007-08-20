@@ -22,6 +22,8 @@
 
 #include <qatomic.h>
 
+#include <duchain/declaration.h>
+
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
 
@@ -211,7 +213,16 @@ TemplateDeclaration* TemplateDeclaration::specializedFrom() const {
   return m_specializedFrom;
 }
 
-void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const QList<ExpressionEvaluationResult>& templateArguments) {
+void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const QList<ExpressionEvaluationResult>& templateArguments)
+{
+  Declaration* thisDecl = dynamic_cast<Declaration*>(this);
+  //Change the identifier so it contains the template-parameters
+  Identifier id = thisDecl->identifier();
+  id.clearTemplateIdentifiers();
+  foreach( const ExpressionEvaluationResult& result, templateArguments )
+    id.appendTemplateIdentifier( QualifiedIdentifier(result.toShortString()) );
+  thisDecl->setIdentifier(id);
+  
   QMutexLocker l(&instantiationsMutex);
   if( m_instantiatedFrom )
     m_instantiatedFrom->m_instantiations.remove(m_instantiatedWith);
@@ -358,7 +369,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
   }
 
   if( contextCopy )
-    contextCopy->setInstantiatedFrom(dynamic_cast<CppDUContext<DUContext>*>(context));
+    contextCopy->setInstantiatedFrom(dynamic_cast<CppDUContext<DUContext>*>(context), templateArguments);
   ///Since now the context is accessible through the du-chain, so it must not be changed any more.
     
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
@@ -442,6 +453,10 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
   } else {
     return type;
   }
+}
+
+const QList<ExpressionEvaluationResult>& TemplateDeclaration::instantiatedWith() const {
+  return m_instantiatedWith;
 }
 
 }

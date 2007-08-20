@@ -39,22 +39,6 @@
 namespace Cpp {
 using namespace KDevelop;
 
-bool ExpressionEvaluationResult::isValid() const {
-  return (bool)type;
-}
-
-bool ExpressionEvaluationResult::isLValue() const {
-  return instance && (instance.declaration || dynamic_cast<const ReferenceType*>( type.data() ));
-}
-
-QString ExpressionEvaluationResult::toString() const {
-  if( DUChain::lock()->currentThreadHasReadLock() )
-    return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
-
-  DUChainReadLocker lock(DUChain::lock());
-  return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
-}
-
 ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
 }
 

@@ -43,6 +43,7 @@
 #include <classfunctiondeclaration.h>
 #include <ducontext.h>
 #include <duchain.h>
+#include <namespacealiasdeclaration.h>
 #include <parsingenvironment.h>
 #include <editorintegrator.h>
 #include <duchainlock.h>
@@ -326,6 +327,14 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           for( int a = 0; a < depth; a++ )
             indentation += " ";
 
+          if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(dec) ) {
+            if( alias->identifier().isEmpty() ) {
+              return indentation + "using namespace";/* " + alias->importIdentifier().toString();*/
+            } else {
+              return indentation + "namespace";/* " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();*/
+            }
+          }
+          
           if( dec->isTypeAlias() )
             indentation += "typedef ";
           

@@ -56,6 +56,7 @@ namespace TypeUtils {
    * @return return-value will only be zero if type is zero
    */
   KDEVCPPDUCHAINBUILDER_EXPORT AbstractType* targetType(AbstractType* type, bool* constant = 0);
+  KDEVCPPDUCHAINBUILDER_EXPORT const AbstractType* targetType(const AbstractType* type, bool* constant = 0);
 
   KDEVCPPDUCHAINBUILDER_EXPORT inline AbstractType* targetType(AbstractType::Ptr type, bool* constant = 0) {
     return targetType(type.data(), constant);

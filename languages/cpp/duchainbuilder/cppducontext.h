@@ -320,7 +320,24 @@ class CppDUContext : public BaseContext {
     /**
      * Set the context which this is instantiated from. This context will be strictly attached to that context, and will be deleted once the other is deleted.
      * */
-    void setInstantiatedFrom( CppDUContext<BaseContext>* context ) {
+    void setInstantiatedFrom( CppDUContext<BaseContext>* context, const QList<ExpressionEvaluationResult>& templateArguments )
+    {
+      //Change the identifier so it contains the template-parameters
+      QualifiedIdentifier totalId = this->localScopeIdentifier();
+      KDevelop::Identifier id;
+      if( !totalId.isEmpty() ) {
+        id = totalId.last();
+        totalId.pop();
+      }
+      
+      id.clearTemplateIdentifiers();
+      foreach( const ExpressionEvaluationResult& result, templateArguments )
+        id.appendTemplateIdentifier( QualifiedIdentifier(result.toShortString()) );
+
+      totalId.push(id);
+      
+      this->setLocalScopeIdentifier(totalId);
+      
       QMutexLocker l(&cppDuContextInstantiationsMutex);
       
       if( m_instantiatedFrom )

@@ -26,9 +26,11 @@
 #include <klocale.h>
 
 #include <duchain/declaration.h>
+#include <duchain/definition.h>
 #include <duchain/ducontext.h>
 #include <duchain/typesystem.h>
 #include <duchain/functiondeclaration.h>
+#include <duchain/namespacealiasdeclaration.h>
 #include <duchain/classfunctiondeclaration.h>
 #include <duchain/classmemberdeclaration.h>
 
@@ -37,14 +39,38 @@
 
 #include "cpplanguagesupport.h"
 #include "cpptypes.h"
+#include "templatedeclaration.h"
 #include "typeutils.h"
-
 
 using namespace KDevelop;
 
 namespace Cpp {
 
+QString stringFromAccess(Declaration::AccessPolicy access) {
+  switch(access) {
+    case Declaration::Private:
+      return "private";
+    case Declaration::Protected:
+      return "protected";
+    case Declaration::Public:
+      return "public";
+  }
+  return "";
+}
+  
+QString htmlColor(const QString& text, const QString& color = "880088") {
+  return "<font color=\"#" + color + "\">" + text + "</font>";
+}
+  
 QString declarationName( Declaration* decl ) {
+
+  if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl) ) {
+    if( alias->identifier().isEmpty() )
+      return "using namespace " + alias->importIdentifier().toString();
+    else
+      return "namespace " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();
+  }
+  
   if( !decl )
     return i18nc("An unknown c++ declaration that is unknown", "Unknown");
   else
@@ -55,7 +81,8 @@ struct NavigationAction {
   enum Type {
     None,
     NavigateDeclaration,
-    JumpToSource
+    JumpToSource,
+    JumpToDefinition
   };
 
   NavigationAction() : type(None) {
@@ -122,10 +149,38 @@ class NavigationContext : public KShared {
     }
 
     QString html() {
+      
+      struct Colorizer
+      {
+        Colorizer(const QString& color, bool bold=false, bool italic=false) : m_color(color), m_bold(bold), m_italic(italic) {
+        }
+
+        QString operator()(const QString& str) const
+        {
+          QString ret = htmlColor(str, m_color);
+          if( m_bold )
+            ret = "<b>"+ret+"</b>";
+
+          if( m_italic )
+            ret = "<i>"+ret+"</i>";
+          return ret;
+        }
+
+        QString m_color;
+        bool m_bold, m_italic;
+      };
+
+      static const Colorizer errorHighlight("990000");
+      static const Colorizer labelHighlight("000035");
+      static const Colorizer propertyHighlight("009900");
+      static const Colorizer navigationHighlight("000099");
+      static const Colorizer importantHighlight("000000", true);
+      static const Colorizer commentHighlight("000000", false, true);
+      
       m_linkCount = 0;
       m_currentText  = "<html><body><p><small><small>";
       if( m_previousContext ) {
-        m_currentText += "Back to ";
+        m_currentText += navigationHighlight("Back to ");
         makeLink( declarationName(m_previousContext->m_declaration.data()), m_previousContext->m_declaration, NavigationAction::NavigateDeclaration );
         m_currentText += "<br>";
       }
@@ -169,10 +224,22 @@ class NavigationContext : public KShared {
 
         if( m_declaration->isTypeAlias() )
           kind = "Typedef";
-        else if( m_declaration->kind() == Declaration::Type )
-          kind = "Type";
+        else if( m_declaration->kind() == Declaration::Type ) {
+          if( m_declaration->type<CppClassType>() )
+            kind = i18n("Class");
+          else
+            i18n("Class");
+        }
 
+        if( m_declaration->kind() == Declaration::Instance )
+          kind = i18n("Variable");
         
+        if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(m_declaration.data()) ) {
+          if( alias->identifier().isEmpty() )
+            kind = i18n("Namespace import");
+          else
+            kind = i18n("Namespace alias");
+        }
 
         if( m_declaration->isDefinition() )
           details << "definition";
@@ -188,11 +255,8 @@ class NavigationContext : public KShared {
             details << "volatile";
         }
 
-        if( m_declaration->kind() == Declaration::Instance )
-          kind = "Variable";
-
         if( function ) {
-          kind = "Function";
+          kind = i18n("Function");
 
           if( function->isInline() )
             details << "inline";
@@ -224,7 +288,7 @@ class NavigationContext : public KShared {
 
           if( type && function ) {
             if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
-              eventuallyMakeTypeLink( type->returnType().data() );
+              eventuallyMakeTypeLinks( type->returnType().data() );
               m_currentText += ' ' + m_declaration->identifier().toString();
             }
 
@@ -245,7 +309,7 @@ class NavigationContext : public KShared {
                   m_currentText += ", ";
                 first = false;
                 
-                eventuallyMakeTypeLink( argType.data() );
+                eventuallyMakeTypeLinks( argType.data() );
 
                 if( currentArgNum >= firstDefaultParam )
                   m_currentText += " = " + function->defaultParameters()[ currentArgNum - firstDefaultParam ];
@@ -257,16 +321,27 @@ class NavigationContext : public KShared {
             }
             m_currentText += "<br>";
           }else {
-            m_currentText += "Invalid type<br>";
+            m_currentText += errorHighlight("Invalid type<br>");
           }
         } else {
           if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
             if( m_declaration->isTypeAlias() )
-              m_currentText += "typedef ";
+              m_currentText += importantHighlight("typedef ");
 
-            eventuallyMakeTypeLink( m_declaration->abstractType().data() );
+            eventuallyMakeTypeLinks( m_declaration->abstractType().data() );
 
             m_currentText += ' ' + declarationName(m_declaration.data()) + "<br>";
+          }else{
+            CppClassType* klass = dynamic_cast<CppClassType*>(m_declaration->abstractType().data());
+            if( m_declaration->kind() == Declaration::Type && klass ) {
+              m_currentText += "class ";
+              eventuallyMakeTypeLinks( klass );
+
+              foreach( const CppClassType::BaseClassInstance& base, klass->baseClasses() ) {
+                m_currentText += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
+                eventuallyMakeTypeLinks(base.baseClass.data());
+              }
+            }
           }
         }
 
@@ -275,17 +350,18 @@ class NavigationContext : public KShared {
           if( m_declaration->context() && m_declaration->context()->owner() && m_declaration->context()->owner()->asDeclaration() )
           {
             Declaration* decl = m_declaration->context()->owner()->asDeclaration();
-            m_currentText += i18n("Container: ");
-            makeLink( declarationName(decl)+"<br />", decl, NavigationAction::NavigateDeclaration );
+            m_currentText += labelHighlight(i18n("Container: "));
+            makeLink( declarationName(decl), decl, NavigationAction::NavigateDeclaration );
+            m_currentText += " ";
           } else {
             QualifiedIdentifier parent = identifier;
             parent.pop();
-            m_currentText += i18n("Scope: %1<br />", parent.toString());
+            m_currentText += labelHighlight(i18n("Scope: ")) + parent.toString() + " ";
           }
         }
 
         if( !access.isEmpty() )
-          m_currentText += i18n("Access: %1<br />", access);
+          m_currentText += labelHighlight(i18n("Access: ")) + propertyHighlight(access) + " ";
         
         
         ///@todo Enumerations
@@ -298,29 +374,39 @@ class NavigationContext : public KShared {
             if( !first )
               detailsString += ", ";
             first = false;
-            detailsString += str;
+            detailsString += propertyHighlight(str);
           }
         }
 
         if( !kind.isEmpty() ) {
           if( !detailsString.isEmpty() )
-            m_currentText += i18n("Kind: %1 (%2)<br />", kind, detailsString);
+            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(kind) + " " + detailsString + " ";
           else
-            m_currentText += i18n("Kind: %1<br />", kind);
+            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(kind) + " ";
         } else if( !detailsString.isEmpty() ) {
-          m_currentText += i18n("Modifiers: %1<br />", kind);
+          m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(kind) + " ";
         }
       }
 
-      m_currentText += i18n( "Declaration: " );
-      makeLink( QString("%1:%2:%3").arg( m_declaration->url().prettyUrl() ).arg( m_declaration->textRange().start().line() ).arg( m_declaration->textRange().start().column() ), m_declaration, NavigationAction::JumpToSource );
       m_currentText += "<br />";
-      
+
       if( !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
         comment.replace("\n", "<br />");
-        m_currentText += comment;
+        m_currentText += commentHighlight(comment);
+        m_currentText += "<br />";
       }
+      
+      m_currentText += labelHighlight(i18n( "Decl.: " ));
+      makeLink( QString("%1 :%2").arg( m_declaration->url().fileName() ).arg( m_declaration->textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
+      m_currentText += " ";
+      //m_currentText += "<br />";
+      if( m_declaration->definition() ) {
+        m_currentText += labelHighlight(i18n( "Def.: " ));
+        makeLink( QString("%1 :%2").arg( m_declaration->definition()->url().fileName() ).arg( m_declaration->definition()->textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+      }
+      //m_currentText += "<br />";
+      
       m_currentText += "</small></small></p></body></html>";
 
       kDebug() << "printing " << m_currentText << endl;
@@ -331,19 +417,43 @@ class NavigationContext : public KShared {
 
     NavigationContextPointer execute(NavigationAction& action);
 
-    ///Creates and registers a link for the given type that jumps to its declaration
-    void eventuallyMakeTypeLink( AbstractType* type ) {
-        AbstractType* target = TypeUtils::targetType( type );
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>( target );
+    ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
+    void eventuallyMakeTypeLinks( const AbstractType* type ) {
+      if( !type ) {
+        m_currentText += Qt::escape("<notype>");
+        return;
+      }
+        const AbstractType* target = TypeUtils::targetType( type );
+        const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target );
 
         
         if( target && idType && idType->declaration() ) {
           makeLink( type->toString(), idType->declaration(), NavigationAction::NavigateDeclaration );
         } else {
-          if( type )
-            m_currentText += type->toString();
-          else
-            m_currentText += "<notype>";
+          m_currentText += Qt::escape(type->toString());
+        }
+
+        if( const TemplateDeclaration* templ = dynamic_cast<const TemplateDeclaration*>(idType->declaration()) ) {
+          if( templ->instantiatedFrom() ) {
+            m_currentText += Qt::escape("  <");
+
+            const QList<ExpressionEvaluationResult>& params = templ->instantiatedWith();
+            bool first = true;
+            foreach( const ExpressionEvaluationResult& result, params ) {
+              if( first )
+                first = false;
+              else
+                m_currentText += ", ";
+
+              if( result.type ) {
+                eventuallyMakeTypeLinks(result.type.data());
+              }else{
+                m_currentText += result.toShortString();
+              }
+            }
+            
+            m_currentText += Qt::escape(" >");
+          }
         }
     }
     
@@ -355,7 +465,7 @@ class NavigationContext : public KShared {
       m_links[ targetId ] = action;
       m_intLinks[ m_linkCount ] = action;
 
-      QString str = name;
+      QString str = Qt::escape(name);
       if( m_linkCount == m_selectedLink ) ///@todo Change background-color here instead of foreground-color
         str = "<font color=\"#880088\">" + str + "</font>";
       
@@ -402,6 +512,12 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
     case NavigationAction::JumpToSource:
       //This is used to execute the slot delayed in the event-loop, so crashes are avoided
       QMetaObject::invokeMethod( CppLanguageSupport::self()->core()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, action.decl->url()), Q_ARG(KTextEditor::Cursor, action.decl->textRange().start()) );
+      break;
+    case NavigationAction::JumpToDefinition:
+      //This is used to execute the slot delayed in the event-loop, so crashes are avoided
+      if( action.decl->definition() ) {
+        QMetaObject::invokeMethod( CppLanguageSupport::self()->core()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, action.decl->definition()->url()), Q_ARG(KTextEditor::Cursor, action.decl->definition()->textRange().start()) );
+      }
       break;
   }
   

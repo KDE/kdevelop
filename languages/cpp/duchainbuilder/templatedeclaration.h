@@ -75,7 +75,9 @@ namespace Cpp {
 
       ///@return Zero, or a non-specialized(thus also non-instantiated) template-class, which this was explicitly specialized from.
       TemplateDeclaration* specializedFrom() const;
-    
+
+      const QList<ExpressionEvaluationResult>& instantiatedWith() const;
+      
     private:
 
       //The context in which the template-parameters are declared
