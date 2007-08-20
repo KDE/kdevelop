@@ -31,6 +31,10 @@ AbstractType* CppFunctionType::clone() const {
   return new CppFunctionType(*this);
 }
 
+AbstractType* CppConstantIntegralType::clone() const {
+  return new CppConstantIntegralType(*this);
+}
+
 AbstractType* CppPointerType::clone() const {
   return new CppPointerType(*this);
 }
@@ -299,6 +303,38 @@ CppClassType::CppClassType(Declaration::CVSpecs spec)
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
+
+CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, CppConstantIntegralType::TypeModifiers modifiers) : CppIntegralType(type, modifiers) {
+}
+
+void CppConstantIntegralType::setValue(size_t value) {
+  m_value = value;
+}
+size_t CppConstantIntegralType::value() const {
+  return m_value;
+}
+
+QString CppConstantIntegralType::toString() const {
+  switch(integralType()) {
+    case TypeNone:
+      return "none";
+    case TypeChar:
+      return QString("%1").arg((char)m_value);
+    case TypeWchar_t:
+      return QString("%1").arg((wchar_t)m_value);
+    case TypeBool:
+      return m_value ? "true" : "false";
+    case TypeInt:
+      return (typeModifiers() & ModifierUnsigned) ? QString("%1u").arg((uint)m_value) : QString("%1").arg((int)m_value);
+    case TypeFloat:
+      return QString("%1").arg( *((float*)&m_value) );
+    case TypeDouble:
+      return QString("%1").arg( *((float*)&m_value) );
+    case TypeVoid:
+      return "void";
+  }
+  return "<unknown_value>";
+}
 
 CppIntegralType::CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers)
   : m_type(type)

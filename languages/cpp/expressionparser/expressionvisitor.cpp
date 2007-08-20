@@ -489,8 +489,41 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     {
       if( isNumber(tokenFromIndex(node->start_token).symbol()) )
       {
+        QString num;
+        for( size_t a = node->start_token; a < node->end_token; a++ )
+          num += tokenFromIndex(a).symbol();
+        
+        
         LOCKDUCHAIN;
-        m_lastType = AbstractType::Ptr(TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data());
+        if( num.indexOf('.') != -1 || num.endsWith('f') ) {
+          float f[5];
+          bool ok = false;
+          while( !num.isEmpty() && !ok ) {
+            f[2] = num.toFloat(&ok);
+            num.truncate(num.length()-1);
+          }
+
+          size_t val = *( (size_t*)(&f[2]));
+          
+          m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeFloat, CppIntegralType::ModifierNone)));
+          static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue(val);
+        } else {
+          int val;
+
+          CppIntegralType::TypeModifier mod = CppIntegralType::ModifierNone;
+
+          if( num.endsWith("u") )
+            mod = CppIntegralType::ModifierUnsigned;
+          
+          bool ok = false;
+          while( !num.isEmpty() && !ok ) {
+            val = num.toInt(&ok);
+            num.truncate(num.length()-1);
+          }
+          
+          m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeInt, mod)));
+          static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue(val);
+        }
         m_lastInstance = Instance(true);
         
         return;
@@ -1223,19 +1256,19 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     }
   }
   
-  void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  {
+  void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* /*node*/)  {
     LOCKDUCHAIN;
     m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
     m_lastInstance = Instance(true);
   }
   
-  void ExpressionVisitor::visitCondition(ConditionAST* node)  {
+  void ExpressionVisitor::visitCondition(ConditionAST* /*node*/)  {
     LOCKDUCHAIN;
     m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeBool, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
     m_lastInstance = Instance(true);
   }
   
-  void ExpressionVisitor::visitTypeId(TypeIdAST* node)  {
+  void ExpressionVisitor::visitTypeId(TypeIdAST* /*node*/)  {
     
   }
   

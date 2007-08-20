@@ -97,12 +97,11 @@ namespace TypeUtils {
   }
 
   bool isNullType( AbstractType* t ) {
-    Q_UNUSED(t)
-    ///@todo implement
-#ifdef __GNUC__
-#warning implement
-#endif
-    return false;
+    CppConstantIntegralType* integral = dynamic_cast<CppConstantIntegralType*>(t);
+    if( integral && integral->integralType() == CppIntegralType::TypeInt && integral->value() == 0 )
+      return true;
+    else
+      return false;
   }
 
     const int unsignedIntConversionRank = 4;

@@ -375,13 +375,6 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.instance);
   lock.unlock();
 
-  result = parser.evaluateType( "5", testContext );
-  lock.lock();
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("int"));
-  QVERIFY(result.instance);
-  lock.unlock();
-
   result = parser.evaluateType( "sizeof(Cont)", testContext );
   lock.lock();
   QVERIFY(result.isValid());
@@ -395,6 +388,33 @@ void TestExpressionParser::testSimpleExpression() {
   QCOMPARE(result.type->toString(), QString("Cont*"));
   QVERIFY(result.instance);
   lock.unlock();
+  
+  result = parser.evaluateType( "5", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("5"));
+  QVERIFY(result.instance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  lock.unlock();
+  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  
+  result = parser.evaluateType( "5.5", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("5.5"));
+  QVERIFY(result.instance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  lock.unlock();
+  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  
+  result = parser.evaluateType( "0", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("0"));
+  QVERIFY(result.instance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  lock.unlock();
+  QVERIFY(TypeUtils::isNullType(result.type.data()));
   
   lock.lock();
   release(c);

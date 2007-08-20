@@ -121,6 +121,31 @@ private:
   CppIntegralType::TypeModifiers m_modifiers;
 };
 
+/**
+ * An integral type that additionally has a constant value
+ * */
+class KDEVCPPDUCHAINBUILDER_EXPORT CppConstantIntegralType : public CppIntegralType
+{
+  friend class TypeRepository;
+
+public:
+  typedef KSharedPtr<CppConstantIntegralType> Ptr;
+
+  size_t value() const;
+  
+  void setValue(size_t value);
+  
+  virtual QString toString() const;
+
+  virtual AbstractType* clone() const;
+
+  CppConstantIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
+protected:
+
+private:
+  size_t m_value;
+};
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionType, public KDevelop::IdentifiedType, public CppCVType
