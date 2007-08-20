@@ -113,7 +113,7 @@ void KDevDocumentViewPart::activated( KDevelop::Document* document )
 
 void KDevDocumentViewPart::saved( KDevelop::Document* )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
 }
 
 void KDevDocumentViewPart::loaded( KDevelop::Document* document )
@@ -161,13 +161,13 @@ void KDevDocumentViewPart::closed( KDevelop::Document* document )
 
 void KDevDocumentViewPart::externallyModified( KDevelop::Document* )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
 }
 
 void KDevDocumentViewPart::urlChanged( KDevelop::Document*, const KUrl & /*oldurl*/,
                                        const KUrl & /*newurl*/ )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
 }
 
 void KDevDocumentViewPart::stateChanged( KDevelop::Document* document )

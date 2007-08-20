@@ -76,7 +76,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         //The preprocessor will call parseForeground() to preprocess & parse instantly
     }
 
-    kDebug( 9007 ) << k_funcinfo << "Created job" << this << "pp" << m_preprocessJob << "parse" << parseJob();
+    kDebug( 9007 ) << "Created job" << this << "pp" << m_preprocessJob << "parse" << parseJob();
 }
 
 void CPPParseJob::setUseContentContext(bool b) {
@@ -135,7 +135,7 @@ CPPParseJob::CPPParseJob( KDevelop::Document *document,
     addJob(ppj = new PreprocessJob(this));
     addJob(m_parseJob = new ::ParseJob(this));
 
-    //kDebug(9007) << k_funcinfo << "Created job" << this << "pp" << ppj << "parse" << parseJob();
+    //kDebug(9007) << "Created job" << this << "pp" << ppj << "parse" << parseJob();
 }
 */
 

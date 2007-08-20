@@ -493,7 +493,7 @@ QString CppTypeAliasType::toString() const
 void CppClassType::addElement(AbstractType::Ptr element)
 {
   if (isClosed())
-    kWarning() << k_funcinfo << "Tried to add type" << element->toString() << "to closed class!" ;
+    kWarning() << "Tried to add type" << element->toString() << "to closed class!" ;
   else
     StructureType::addElement(element);
 }

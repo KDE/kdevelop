@@ -147,7 +147,7 @@ void ProjectSession::recreateDocs(QDomElement& el)
     if (!docName.isEmpty() /* && URL::exists(docName)*/) {
       KUrl url(docName);
       // create the views of this document, the first view creation will also create the document
-      kDebug() << k_funcinfo << "Doc to be activated?" << (nDoc == nNrOfDocs - 1);
+      kDebug() << "Doc to be activated?" << (nDoc == nNrOfDocs - 1);
          recreateViews(url, docEl, (nDoc == nNrOfDocs - 1));
     }
   }

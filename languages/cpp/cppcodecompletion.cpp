@@ -69,7 +69,7 @@ void CppCodeCompletion::documentLoaded(KParts::Part* document)
     connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
 
   } else {
-    kDebug(9007) << k_funcinfo << "Non-text editor document added";
+    kDebug(9007) << "Non-text editor document added";
   }
 }
 

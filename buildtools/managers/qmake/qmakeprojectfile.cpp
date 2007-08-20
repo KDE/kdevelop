@@ -72,12 +72,12 @@ bool QMakeProjectFile::read()
 
 QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching subprojects";
+    kDebug(9024) << "Fetching subprojects";
     QList<QMakeProjectFile*> list;
     foreach( QString subdir, variableValues( "SUBDIRS" ) )
     {
         QString fileOrPath;
-        kDebug(9024) << k_funcinfo << "Found value:" << subdir;
+        kDebug(9024) << "Found value:" << subdir;
         if ( containsVariable( subdir+".file" ) && !variableValues( subdir+".file" ).isEmpty() )
         {
             subdir = variableValues( subdir+".file" ).first();
@@ -119,30 +119,30 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
         }
     }
 
-    kDebug(9024) << k_funcinfo << "found" << list.size() << "subprojects";
+    kDebug(9024) << "found" << list.size() << "subprojects";
     return list;
 }
 
 KUrl::List QMakeProjectFile::includeDirectories() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching include dirs";
+    kDebug(9024) << "Fetching include dirs";
 
     KUrl::List list;
-    kDebug(9024) << k_funcinfo << variableValues("INCLUDEPATH");
+    kDebug(9024) << variableValues("INCLUDEPATH");
     foreach( QString val, variableValues("INCLUDEPATH") )
     {
         KUrl url(val);
         if( !list.contains( url ) )
             list << url;
     }
-    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR");
+    kDebug(9024) << variableValues("QMAKE_INCDIR");
     foreach( QString val, variableValues("QMAKE_INCDIR") )
     {
         KUrl url(val);
         if( !list.contains( url ) )
             list << url;
     }
-    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_OPENGL");
+    kDebug(9024) << variableValues("QMAKE_INCDIR_OPENGL");
     if( variableValues("CONFIG").contains("opengl") )
     {
         foreach( QString val, variableValues("QMAKE_INCDIR_OPENGL") )
@@ -152,7 +152,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 list << url;
         }
     }
-    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_QT");
+    kDebug(9024) << variableValues("QMAKE_INCDIR_QT");
     if( variableValues("CONFIG").contains("qt") )
     {
         //@TODO add QtCore,QtGui and so on depending on CONFIG values,
@@ -164,7 +164,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 list << url;
         }
     }
-    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_THREAD");
+    kDebug(9024) << variableValues("QMAKE_INCDIR_THREAD");
     if( variableValues("CONFIG").contains("thread") )
     {
         foreach( QString val, variableValues("QMAKE_INCDIR_THREAD") )
@@ -174,7 +174,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 list << url;
         }
     }
-    kDebug(9024) << k_funcinfo << variableValues("QMAKE_INCDIR_X11");
+    kDebug(9024) << variableValues("QMAKE_INCDIR_X11");
     if( variableValues("CONFIG").contains("x11") )
     {
         foreach( QString val, variableValues("QMAKE_INCDIR_X11") )
@@ -189,7 +189,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
 
 KUrl::List QMakeProjectFile::files() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching files";
+    kDebug(9024) << "Fetching files";
 
 
     KUrl::List list;
@@ -200,13 +200,13 @@ KUrl::List QMakeProjectFile::files() const
             list += KUrl::List( resolveFileName( value ) );
         }
     }
-    kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
+    kDebug(9024) << "found" << list.size() << "files";
     return list;
 }
 
 KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
 {
-    kDebug(9024) << k_funcinfo << "Fetching files";
+    kDebug(9024) << "Fetching files";
 
 
     KUrl::List list;
@@ -231,7 +231,7 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
             }
         }
     }
-    kDebug(9024) << k_funcinfo << "found" << list.size() << "files";
+    kDebug(9024) << "found" << list.size() << "files";
     return list;
 }
 
@@ -247,7 +247,7 @@ QString QMakeProjectFile::getTemplate() const
 
 QStringList QMakeProjectFile::targets() const
 {
-    kDebug(9024) << k_funcinfo << "Fetching targets";
+    kDebug(9024) << "Fetching targets";
 
     QStringList list;
 
@@ -263,7 +263,7 @@ QStringList QMakeProjectFile::targets() const
             list << target;
     }
 
-    kDebug(9024) << k_funcinfo << "found" << list.size() << "targets";
+    kDebug(9024) << "found" << list.size() << "targets";
     return list;
 }
 

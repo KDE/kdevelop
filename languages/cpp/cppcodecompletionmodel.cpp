@@ -135,7 +135,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     setContext(thisContext, range.start(), view);
 
   } else {
-    kDebug(9007) << k_funcinfo << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
+    kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
   }
 }
 

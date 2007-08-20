@@ -155,7 +155,7 @@ void QtDesignerDocument::activate(Sublime::View* view)
     if(a)
     {
         int num = m_areas.indexOf(a);
-        kDebug(9039) << k_funcinfo << "Area found at" << num;
+        kDebug(9039) << "Area found at" << num;
         if( num >= 0 )
         {
             m_designerPlugin->designer()->formWindowManager()->setActiveFormWindow( m_forms.at(num) );

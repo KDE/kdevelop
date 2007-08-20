@@ -191,7 +191,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
         if (id.count() > 1) {
           KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
-          //kDebug(9007) << k_funcinfo << "Searching for declaration of" << id;
+          //kDebug(9007) << "Searching for declaration of" << id;
 
           // TODO: potentially excessive locking
           DUChainWriteLocker lock(DUChain::lock());
@@ -548,7 +548,7 @@ void DeclarationBuilder::closeDeclaration()
 
 
 
-  //kDebug(9007) << k_funcinfo << "Mangled declaration:" << currentDeclaration()->mangledIdentifier();
+  //kDebug(9007) << "Mangled declaration:" << currentDeclaration()->mangledIdentifier();
 
   m_declarationStack.pop();
 }

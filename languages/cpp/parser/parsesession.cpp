@@ -65,7 +65,7 @@ void ParseSession::positionAt(std::size_t offset, int *line, int *column,
       actual line of the first preceding preprocessor statement +
       NPPL of the token - (NPPL of the first preceding preprocessor statement + 1 to account for the preprocessor statement)
   */
-  //kDebug(9007) << k_funcinfo << offset << ": line" << (base_line + *line - line2  - 1) << ", column" << *column << "==" << base_line << "+" << *line << "-" << line2 << "- 1";
+  //kDebug(9007) << offset << ": line" << (base_line + *line - line2  - 1) << ", column" << *column << "==" << base_line << "+" << *line << "-" << line2 << "- 1";
   *line = base_line + *line - line2  - 1;
 
   if (*filename == "<internal>") {
@@ -135,7 +135,7 @@ void ParseSession::extract_line(int offset, int *line, QString *filename) const
 
       *filename = buffer;
       *line = line_number;
-      //kDebug(9007) << k_funcinfo << "filename:" << buffer << "line:" << line;
+      //kDebug(9007) << "filename:" << buffer << "line:" << line;
       return;
     }
 	}

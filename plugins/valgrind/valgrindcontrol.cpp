@@ -110,7 +110,7 @@ void ValgrindControl::readFromValgrind( )
 void ValgrindControl::newValgrindConnection( )
 {
   QTcpSocket* sock = m_server->nextPendingConnection();
-  kDebug() << k_funcinfo << sock;
+  kDebug() << sock;
   if (sock && !m_connection) {
     m_connection = sock;
     delete m_inputSource;

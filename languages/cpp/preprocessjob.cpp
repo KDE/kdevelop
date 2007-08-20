@@ -131,7 +131,7 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
-    //kDebug(9007) << k_funcinfo << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
+    //kDebug(9007) << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
 
     kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document();
 
@@ -163,7 +163,7 @@ void PreprocessJob::run()
         if ( !file.open( QIODevice::ReadOnly ) )
         {
             parentJob()->setErrorMessage(i18n( "Could not open file '%1'", parentJob()->document().toLocalFile() ));
-            kWarning( 9007 ) << k_funcinfo << "Could not open file" << parentJob()->document() << "(path" << parentJob()->document().toLocalFile() << ")" ;
+            kWarning( 9007 ) << "Could not open file" << parentJob()->document() << "(path" << parentJob()->document().toLocalFile() << ")" ;
             return ;
         }
 
@@ -364,10 +364,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     }
 
         /*} else {
-            kWarning() << k_funcinfo << "Language support disappeared!!" ;
+            kWarning() << "Language support disappeared!!" ;
         }
     } else {
-        kWarning() << k_funcinfo << "Parent job disappeared!!" ;
+        kWarning() << "Parent job disappeared!!" ;
     }*/
 
     return 0;
@@ -385,7 +385,7 @@ bool PreprocessJob::checkAbort()
 
     } else {
         // What... the parent job got deleted??
-        kWarning() << k_funcinfo << "Parent job disappeared!!" ;
+        kWarning() << "Parent job disappeared!!" ;
         m_success = false;
         setFinished(true);
         return true;

@@ -55,7 +55,7 @@ QString pp_macro_expander::resolve_formal(const QString& name)
       if (index < m_frame->actuals.size())
         return m_frame->actuals[index];
       else
-        kWarning() << k_funcinfo << "Call to macro" << name << "missing argument number" << index ;
+        kWarning() << "Call to macro" << name << "missing argument number" << index ;
         // Triggers on deflate.c
         //Q_ASSERT(0); // internal error?
     }

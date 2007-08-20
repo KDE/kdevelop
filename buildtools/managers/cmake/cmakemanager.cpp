@@ -174,7 +174,7 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     QString folderUrl(cmakeInfoFile.toLocalFile());
     cmakeInfoFile.addPath("CMakeLists.txt");
 
-    kDebug(9025) << k_funcinfo << "file is" << cmakeInfoFile.path();
+    kDebug(9025) << "file is" << cmakeInfoFile.path();
     if ( !cmakeInfoFile.isLocalFile() )
     {
         //FIXME turn this into a real warning

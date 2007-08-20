@@ -74,17 +74,17 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
 
-    kDebug(9024) << k_funcinfo << "Parsing item:";
+    kDebug(9024) << "Parsing item:";
 
     QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
     if( !folderitem )
         return folderList;
 
-    kDebug(9024) << k_funcinfo << "Item is a qmakefolder:";
+    kDebug(9024) << "Item is a qmakefolder:";
 
     foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
     {
-        kDebug(9024) << k_funcinfo << "adding subproject:" << subproject->absoluteDir();
+        kDebug(9024) << "adding subproject:" << subproject->absoluteDir();
         folderList.append( new QMakeFolderItem( item->project(),
                            subproject,
                            KUrl( subproject->absoluteDir() ),
@@ -92,11 +92,11 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     }
     foreach( QString s, folderitem->projectFile()->targets() )
     {
-        kDebug(9024) << k_funcinfo << "adding target:" << s;
+        kDebug(9024) << "adding target:" << s;
         QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
         foreach( KUrl u, folderitem->projectFile()->filesForTarget(s) )
         {
-            kDebug(9024) << k_funcinfo << "adding file:" << u;
+            kDebug(9024) << "adding file:" << u;
             new KDevelop::ProjectFileItem( item->project(), u, target );
         }
     }
@@ -104,7 +104,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     new KDevelop::ProjectFileItem( item->project(),
                                    KUrl( folderitem->projectFile()->absoluteFile() ),
                                    item );
-    kDebug(9024) << k_funcinfo << "Added" << folderList.count() << "Elements";
+    kDebug(9024) << "Added" << folderList.count() << "Elements";
 
 
     return folderList;

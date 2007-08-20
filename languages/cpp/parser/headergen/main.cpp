@@ -352,7 +352,7 @@ HeaderGenerator::HeaderGenerator()
 
 QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 {
-  //kDebug(9007) << k_funcinfo << url;
+  //kDebug(9007) << url;
 
   preprocessing.push(url);
 
@@ -379,7 +379,7 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 
 rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/, int sourceLine, bool skipCurrentPath)
 {
-  //kDebug(9007) << k_funcinfo << fileName << "from" << preprocessing.top();
+  //kDebug(9007) << fileName << "from" << preprocessing.top();
 
   KUrl::List toTry;
 
