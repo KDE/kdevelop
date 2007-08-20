@@ -341,6 +341,7 @@ class NavigationContext : public KShared {
                 m_currentText += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
                 eventuallyMakeTypeLinks(base.baseClass.data());
               }
+              m_currentText += " ";
             }
           }
         }
@@ -426,34 +427,37 @@ class NavigationContext : public KShared {
         const AbstractType* target = TypeUtils::targetType( type );
         const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target );
 
-        
-        if( target && idType && idType->declaration() ) {
-          makeLink( type->toString(), idType->declaration(), NavigationAction::NavigateDeclaration );
-        } else {
-          m_currentText += Qt::escape(type->toString());
-        }
-
-        if( const TemplateDeclaration* templ = dynamic_cast<const TemplateDeclaration*>(idType->declaration()) ) {
-          if( templ->instantiatedFrom() ) {
-            m_currentText += Qt::escape("  <");
-
-            const QList<ExpressionEvaluationResult>& params = templ->instantiatedWith();
-            bool first = true;
-            foreach( const ExpressionEvaluationResult& result, params ) {
-              if( first )
-                first = false;
-              else
-                m_currentText += ", ";
-
-              if( result.type ) {
-                eventuallyMakeTypeLinks(result.type.data());
-              }else{
-                m_currentText += result.toShortString();
-              }
-            }
-            
-            m_currentText += Qt::escape(" >");
+        if( idType ) {
+          if( idType->declaration() ) {
+            makeLink( type->toString(), idType->declaration(), NavigationAction::NavigateDeclaration );
+          } else {
+            m_currentText += Qt::escape(type->toString());
           }
+
+          if( const TemplateDeclaration* templ = dynamic_cast<const TemplateDeclaration*>(idType->declaration()) ) {
+            if( templ->instantiatedFrom() ) {
+              m_currentText += Qt::escape("  <");
+
+              const QList<ExpressionEvaluationResult>& params = templ->instantiatedWith();
+              bool first = true;
+              foreach( const ExpressionEvaluationResult& result, params ) {
+                if( first )
+                  first = false;
+                else
+                  m_currentText += ", ";
+
+                if( result.type ) {
+                  eventuallyMakeTypeLinks(result.type.data());
+                }else{
+                  m_currentText += result.toShortString();
+                }
+              }
+              
+              m_currentText += Qt::escape(" >");
+            }
+          }
+        }else if( type ) {
+          m_currentText += type->toString();
         }
     }
     
@@ -481,6 +485,13 @@ class NavigationContext : public KShared {
     int m_selectedLink; //The link currently selected
     NavigationAction m_selectedLinkAction; //Target of the currently selected link
 
+    NavigationContextPointer registerChild( NavigationContext* context ) {
+      m_children << NavigationContextPointer(context);
+      return m_children.last();
+    }
+    
+    QList<NavigationContextPointer> m_children; //Useed to keep alive all children until this is deleted
+
     //A counter used while building the html-code to count the used links.
     int m_linkCount;
     QString m_currentText; //Here the text is built
@@ -507,7 +518,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
       if( m_previousContext && m_previousContext->m_declaration == action.decl )
         return NavigationContextPointer( m_previousContext );
       
-      return NavigationContextPointer( new NavigationContext(action.decl, this) );
+      return registerChild( new NavigationContext(action.decl, this) );
     } break;
     case NavigationAction::JumpToSource:
       //This is used to execute the slot delayed in the event-loop, so crashes are avoided
