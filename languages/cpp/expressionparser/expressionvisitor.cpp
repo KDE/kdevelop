@@ -33,6 +33,7 @@
 #include "dumpchain.h"
 #include "typeutils.h"
 #include "name_compiler.h"
+#include "type_compiler.h"
 #include "lexer.h"
 #include "overloadresolution.h"
 #include "cppduchain.h"
@@ -69,6 +70,13 @@
 namespace Cpp {
 using namespace KDevelop;
 using namespace TypeUtils;
+
+bool isNumber( const QString& str ) {
+  if( str.isEmpty() )
+    return false;
+    QChar c = str[0];
+    return c == '0' || c == '1' || c == '2' || c == '3' || c == '4'|| c == '5'|| c == '6'|| c == '7'|| c == '8'|| c == '9';
+}
 
 QHash<int, QString> initOperatorNames() {
   QHash<int, QString> ret;
@@ -469,9 +477,27 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   void ExpressionVisitor::visitPrimaryExpression(PrimaryExpressionAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
+
+    clearLast();
+
+    if( node->literal ) {
+      visit( node->literal );
+      return; //We had a string-literal
+    }
+
+    if( !node->literal && !node->sub_expression && !node->expression_statement && !node->name )
+    {
+      if( isNumber(tokenFromIndex(node->start_token).symbol()) )
+      {
+        LOCKDUCHAIN;
+        m_lastType = AbstractType::Ptr(TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data());
+        m_lastInstance = Instance(true);
+        
+        return;
+      }
+    }
     
     visit( node->sub_expression );
-    visit( node->literal );
     visit( node->expression_statement );
     visit( node->name );
 
@@ -722,6 +748,72 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
    *
    * Not ready yet */
   
+  void ExpressionVisitor::visitTypeSpecifier(TypeSpecifierAST* ast)
+  {
+    ///@todo cv-qualifiers
+    clearLast();
+    
+    TypeCompiler comp(m_session);
+    comp.run(ast);
+    LOCKDUCHAIN;
+
+    QList<Declaration*> decls = m_currentContext->findDeclarations(comp.identifier());
+
+    if( !decls.isEmpty() )
+    {
+      if( decls.first()->kind() == Declaration::Type )
+      {
+        m_lastType = decls.first()->abstractType();
+        m_lastInstance = Instance(false);
+      } else {
+        problem(ast, "Resolved declaration is not a type");
+      }
+    } else {
+      problem(ast, "Could not resolve type");
+    }
+  }
+
+  //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
+  void ExpressionVisitor::visitDeclarator(DeclaratorAST* node)  {
+    if( !m_lastType ) {
+      problem(node, "Declarator used without type");
+      return;
+    }
+    
+    if( m_lastInstance ) {
+      problem(node, "Declarator used on an instance instead of a type");
+      return;
+    }
+    
+    LOCKDUCHAIN;
+    if( node->array_dimensions ) {
+      ///@todo cv-qualifiers
+      CppArrayType::Ptr p( new CppArrayType() );
+      p->setElementType( m_lastType );
+      
+      m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
+      m_lastInstance = Instance(false);
+    }
+
+    visitNodes(this, node->ptr_ops);
+  }
+
+  void ExpressionVisitor::visitNewDeclarator(NewDeclaratorAST* node)  {
+    if( !m_lastType ) {
+      problem(node, "Declarator used without type");
+      return;
+    }
+    
+    if( m_lastInstance ) {
+      problem(node, "Declarator used on an instance instead of a type");
+      return;
+    }
+    
+    LOCKDUCHAIN;
+
+    visit(node->ptr_op);
+  }
+  
   void ExpressionVisitor::visitCppCastExpression(CppCastExpressionAST* node)  {
     
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -731,43 +823,47 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     visit( node->expression );
     clearLast();
 
-    ///@todo Change this, share code with TypeBuilder::visitSimpleTypeSpecifier to also respect integral types, const, volatile, pointer, etc.
-    ///We need to parse a TypeIdAST for this. That's not done anywhere until now.
-//     TypeCompiler compiler(m_session);
-//     compiler.run(node->type_id);
-//     
-//     
-//     if( compiler.identifier().isEmpty() ) {
-//       problem( node, QString("could not compile identifier") );
-//       return;
-//     }
-//     {
-//       LOCKDUCHAIN;
-//       int line, column;
-//       QString file;
-//       
-//       m_session->positionAt( m_session->token_stream->position(node->start_token), &line, &column, &file );
-// 
-//       m_lastDeclarations = m_currentContext->findDeclarations(compiler.identifier(), KTextEditor::Cursor(line, column) );
-// 
-//       if( m_lastDeclarations.isEmpty() ) {
-//         problem( node, QString("could not find declaration of %1").arg(compiler.identifier().toString()) );
-//         return;
-//       }
-//       if( m_lastDeclarations.size() > 1 ) {
-//         problem( node, QString("found multiple declarations of %1").arg(compiler.identifier().toString()) );
-//       }
-//       
-//       m_lastType = m_lastDeclarations.front()->abstractType();
-//       m_lastInstance = Instance( getDeclaration(node, m_lastType ) );
-//     }
+    //Visit declarator and type-specifier, which should build the type
+    if( node->type_id ) {
+      visitTypeSpecifier(node->type_id->type_specifier);
+      visit(node->type_id->declarator);
+    }
+    if( !m_lastType ) {
+      problem(node, "Could not resolve type");
+      return;
+    }
+
+    m_lastInstance = Instance(true);
+    
+    if( m_lastType )
+      expressionType( node, m_lastType, m_lastInstance );
 
     visitSubExpressions( node, node->sub_expressions );
+  }  
+  //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
+  void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node) {
+    if( !m_lastType ) {
+      problem(node, "Pointer-operator used without type");
+      return;
+    }
+    
+    if( m_lastInstance ) {
+      problem(node, "Pointer-operator used on an instance instead of a type");
+      return;
+    }
+  
+    LOCKDUCHAIN;
+    ///@todo cv-qualifiers
+    CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::CVNone) );
+    p->setBaseType( m_lastType );
+
+    m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
+    m_lastInstance = Instance(false);
   }
   
   /**
    *
-   * Not ready yet */
+   * Has test */
   void ExpressionVisitor::visitCastExpression(CastExpressionAST* node)  {
 
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -776,25 +872,56 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     clearLast();
     visit( node->expression );
     clearLast();
-    
-    ///Change this, don't use type-builder, instead somehow parse a QualifiedIdentifier and some decoration, and search for that in the du-context
-    TypeBuilder t( m_session );
-    t.supportBuild(node->type_id, m_currentContext);
-    if( t. topTypes().size() != 1 ) {
-      problem( node, QString("wrong count of types built: %1").arg(t.topTypes().size() ) );
+
+    //Visit declarator and type-specifier, which should build the type
+    if( node->type_id ) {
+      visitTypeSpecifier(node->type_id->type_specifier);
+      visit(node->type_id->declarator);
+    }
+    if( !m_lastType ) {
+      problem(node, "Could not resolve type");
       return;
     }
-    {
-      LOCKDUCHAIN;
-      
-      m_lastType = t.topTypes().first();
-      m_lastInstance = Instance(getDeclaration(node, m_lastType ));
-    }
 
+    m_lastInstance = Instance(true);
+    
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }
 
+  void ExpressionVisitor::visitNewExpression(NewExpressionAST* node)  {
+    clearLast();
+    visit( node->expression );
+    clearLast();
+
+    //Visit declarator and type-specifier, which should build the type
+    if( node->type_id ) {
+      visitTypeSpecifier(node->type_id->type_specifier);
+      visit(node->type_id->declarator);
+    } else if( node->new_type_id ) {
+      visitTypeSpecifier(node->new_type_id->type_specifier);
+      visit(node->new_type_id->new_declarator);
+    }
+    if( !m_lastType ) {
+      problem(node, "Could not resolve type");
+      return;
+    }
+
+    LOCKDUCHAIN;
+    ///@todo cv-qualifiers
+    CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::CVNone) );
+    p->setBaseType( m_lastType );
+
+    m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
+    
+    
+    m_lastInstance = Instance(true);
+
+    
+    if( m_lastType )
+      expressionType( node, m_lastType, m_lastInstance );
+  }
+  
   /**
    *
    * have test */
@@ -1094,32 +1221,49 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       //Do not complain here, because we do not check for builtin operators
       //problem(node, "No fitting operator. found" );
     }
-
-
+  }
+  
+  void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  {
+    LOCKDUCHAIN;
+    m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
+    m_lastInstance = Instance(true);
+  }
+  
+  void ExpressionVisitor::visitCondition(ConditionAST* node)  {
+    LOCKDUCHAIN;
+    m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeBool, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
+    m_lastInstance = Instance(true);
+  }
+  
+  void ExpressionVisitor::visitTypeId(TypeIdAST* node)  {
     
   }
   
-  void ExpressionVisitor::visitCondition(ConditionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitDeleteExpression(DeleteExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitStringLiteral(StringLiteralAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitNewExpression(NewExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTypeId(TypeIdAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitNewTypeId(NewTypeIdAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { problem(node, "node-type cannot be parsed"); }
-
-  void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node)
-  {
-    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+  void ExpressionVisitor::visitStringLiteral(StringLiteralAST* node)  {
+    LOCKDUCHAIN;
+    CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::Const) );
+    p->setBaseType( AbstractType::Ptr(TypeRepository::self()->integral(CppIntegralType::TypeChar, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data()) );
+    
+    m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
+    m_lastInstance = Instance(true);
+  }
+  
+  void ExpressionVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)  {
     problem(node, "node-type cannot be parsed");
   }
-
+  
+  void ExpressionVisitor::visitNewTypeId(NewTypeIdAST* node)  {
+    //Return a pointer to the type
+    problem(node, "node-type cannot be parsed");
+  }
+  
   ///Nodes that are invalid inside an expression:
+  void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitDeleteExpression(DeleteExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitOperator(OperatorAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitAccessSpecifier(AccessSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitAsmDefinition(AsmDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -1129,7 +1273,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
   void ExpressionVisitor::visitCtorInitializer(CtorInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitDeclarationStatement(DeclarationStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitDeclarator(DeclaratorAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitDoStatement(DoStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitEnumSpecifier(EnumSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -1147,7 +1290,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   void ExpressionVisitor::visitMemInitializer(MemInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNamespace(NamespaceAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitNewDeclarator(NewDeclaratorAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNewInitializer(NewInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitParameterDeclaration(ParameterDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)  { problem(node, "node-type cannot be parsed"); }

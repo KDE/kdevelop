@@ -368,7 +368,34 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.instance);
   lock.unlock();
   
+  result = parser.evaluateType( "\"hello\"", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString().trimmed(), QString("char* const").trimmed());
+  QVERIFY(result.instance);
+  lock.unlock();
 
+  result = parser.evaluateType( "5", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("int"));
+  QVERIFY(result.instance);
+  lock.unlock();
+
+  result = parser.evaluateType( "sizeof(Cont)", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("int"));
+  QVERIFY(result.instance);
+  lock.unlock();
+  
+  result = parser.evaluateType( "new Cont()", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("Cont*"));
+  QVERIFY(result.instance);
+  lock.unlock();
+  
   lock.lock();
   release(c);
 }
@@ -473,8 +500,16 @@ void TestExpressionParser::testCasts() {
   Cpp::ExpressionParser parser;
 
   //Reenable this once the type-parsing system etc. is fixed
-  /*
-  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "dynamic_cast<Cont2*>(d)", testContext );
+  
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "(Cont2*)(d)", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  lock.unlock();
+  
+  result = parser.evaluateType( "dynamic_cast<Cont2*>(d)", testContext );
   lock.lock();
   QVERIFY(result.isValid());
   QVERIFY(result.instance);
@@ -496,7 +531,31 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.instance);
   QVERIFY(result.type);
   QCOMPARE(result.type->toString(), QString("Cont2*"));
-  lock.unlock();*/
+  lock.unlock();
+  
+  result = parser.evaluateType( "new Cont2*", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2**"));
+  lock.unlock();
+  
+  result = parser.evaluateType( "new Cont2", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  lock.unlock();
+  
+  result = parser.evaluateType( "new Cont2[5]", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  lock.unlock();
   
   lock.lock();
   release(c);

@@ -211,6 +211,8 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
    **/
   void visitSubExpressions( AST* node, const ListNode<ExpressionAST*>* nodes );
 
+  void visitTypeSpecifier(TypeSpecifierAST*);
+  
   virtual void visitAccessSpecifier(AccessSpecifierAST *) ;
   virtual void visitAsmDefinition(AsmDefinitionAST *) ;
   virtual void visitBaseClause(BaseClauseAST *) ;
