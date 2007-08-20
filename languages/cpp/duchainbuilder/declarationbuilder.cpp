@@ -364,20 +364,20 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
          )
       {
         if(isNamespaceAlias && !dynamic_cast<NamespaceAliasDeclaration*>(dec)) {
-          break;
+          continue;
         } else if (isForward && !dynamic_cast<ForwardDeclaration*>(dec)) {
-          break;
+          continue;
         } else if (isFunction) {
           if (scope == Declaration::ClassScope) {
             if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
-              break;
+              continue;
           } else if (!dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
-            break;
+            continue;
           }
 
         } else if (scope == Declaration::ClassScope) {
           if (!dynamic_cast<ClassMemberDeclaration*>(dec))
-            break;
+            continue;
         }
 
         // Match
@@ -802,17 +802,10 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
 
 
       function->addDefaultParameter(defaultParam);
-
-      QString paramName;
-      for( size_t token = node->declarator->start_token; token != node->declarator->end_token; ++token )
-        paramName += m_editor->tokenToString(token);
-
-
-      function->addParameterName(paramName);
     }
-    if( node->declarator ) {
+    if( node->declarator && node->declarator->id) {
       QString paramName;
-      for( size_t token = node->declarator->start_token; token != node->declarator->end_token; ++token )
+      for( size_t token = node->declarator->id->start_token; token != node->declarator->id->end_token; ++token )
         paramName += m_editor->tokenToString(token);
 
 
