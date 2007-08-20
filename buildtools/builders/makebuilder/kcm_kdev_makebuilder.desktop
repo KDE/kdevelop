@@ -12,6 +12,7 @@ X-KDE-ParentComponents=KDevMakeBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Make
+Name[ne]=बनाउनुहोस्
 Name[x-test]=xxMakexx
 Comment=Configure Make settings
 Comment[de]=Make Einstellungen
@@ -21,6 +22,7 @@ Comment[fa]=پیکربندی تنظیمات Make
 Comment[ga]=Cumraigh socruithe Make
 Comment[it]=Configura le impostazioni di Make
 Comment[ja]=Make のオプションを設定
+Comment[ne]=बनाउने सेटिङ कन्फिगर गर्नुहोस्
 Comment[pt]=Configurar as opções do Make
 Comment[pt_BR]=Configurar as opções do Make
 Comment[sv]=Anpassa inställningar för Make

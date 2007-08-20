@@ -12,6 +12,7 @@ X-KDE-ParentComponents=KDevQMakeBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=QMake
+Name[ne]=क्यूमेक
 Name[x-test]=xxQMakexx
 Comment=Configure QMake settings
 Comment[de]=QMake Einstellungen
@@ -21,6 +22,7 @@ Comment[fa]=پیکربندی تنظیمات QMake
 Comment[ga]=Cumraigh socruithe QMake
 Comment[it]=Configura le impostazioni di QMake
 Comment[ja]=QMake のオプションを設定
+Comment[ne]=क्यूमेक सेटिङ कन्फिगर गर्नुहोस्
 Comment[pt]=Configurar as opções do QMake
 Comment[pt_BR]=Configurar as opções do QMake
 Comment[sv]=Anpassa inställningar för QMake

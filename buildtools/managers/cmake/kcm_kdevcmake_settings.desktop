@@ -12,6 +12,7 @@ X-KDE-ParentComponents=KDevCMakeManager
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=CMake
+Name[ne]=सीमेक
 Name[x-test]=xxCMakexx
 Comment=Configure CMake settings
 Comment[de]=CMake Einstellungen
@@ -21,6 +22,7 @@ Comment[fa]=پیکربندی تنظیمات CMake
 Comment[ga]=Cumraigh socruithe CMake
 Comment[it]=Configura impostazioni CMake
 Comment[ja]=CMake のオプションを設定
+Comment[ne]=सीमेक सेटिङ कन्फिगर गर्नुहोस्
 Comment[pt]=Configurar as opções do CMake
 Comment[pt_BR]=Configurar as opções do CMake
 Comment[sv]=Anpassa inställningar för CMake
