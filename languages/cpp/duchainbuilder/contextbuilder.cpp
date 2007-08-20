@@ -246,8 +246,9 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
         Q_ASSERT(topLevelContext->textRangePtr());
 
         if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
+          (*topLevelContext->textRangePtr()) = m_editor->currentDocument()->documentRange();
+          //This happens the whole file is deleted, and then a space inserted.
           kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
-          Q_ASSERT(0);
         }
       }
 
