@@ -256,15 +256,17 @@ void Declaration::setContext(DUContext* context, bool anonymous)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
 
   if (d->m_context) {
-    if( d->m_context->d->removeDeclaration(this) )
-      DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
+    if( !d->m_anonymousInContext ) {
+      if( d->m_context->d->removeDeclaration(this) )
+        DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
+    }
   }
 
   d->m_context = context;
   d->m_anonymousInContext = anonymous;
 
   if (d->m_context) {
-    if(!anonymous) {
+    if(!d->m_anonymousInContext) {
       d->m_context->d->addDeclaration(this);
       DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
     }
