@@ -27,6 +27,9 @@
 #include <QPair>
 #include "cppduchainbuilderexport.h"
 
+namespace KTextEditor {
+  class Cursor;
+}
 
 namespace KDevelop {
   class Declaration;
@@ -41,6 +44,12 @@ namespace Cpp {
  * */
 KDEVCPPDUCHAINBUILDER_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );
 KDEVCPPDUCHAINBUILDER_EXPORT QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context );
+
+/**
+ * Searches for declarations on the same level, either locally within the context, or namespace. \param identifier that will be declared in a given \param context
+ * Tries to follow the C++ rules, that decide where a type may have been forward-declared.
+ * */
+QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier, const KTextEditor::Cursor& position);
 
 /**
  * Takes and returns a list of declarations together with inheritance-depth.

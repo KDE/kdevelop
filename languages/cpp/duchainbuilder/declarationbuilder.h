@@ -59,6 +59,8 @@ public:
    */
   KDevelop::DUContext* buildSubDeclarations(const KUrl& url, AST *node, KDevelop::DUContext* parent = 0);
 
+  inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.top(); }
+  
   protected:
   virtual void openContext(KDevelop::DUContext* newContext);
   virtual void closeContext();
@@ -76,6 +78,7 @@ public:
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
+
 private:
   //Du-chain must be locked
   QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position);
@@ -96,7 +99,6 @@ private:
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
-  inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.top(); }
 
   template<class DeclarationType>
   inline DeclarationType* currentDeclaration() const { return dynamic_cast<DeclarationType*>(m_declarationStack.top()); }

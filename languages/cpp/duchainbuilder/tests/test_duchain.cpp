@@ -23,6 +23,7 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <topducontext.h>
+#include <forwarddeclaration.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
@@ -781,7 +782,7 @@ void TestDUChain::testDeclareUsingNamespace()
 void TestDUChain::testFunctionDefinition() {
   QByteArray text("class A { char at(B* b); }; \n char A::at(B* b) {} ");
 
-  DUContext* top = parse(text, DumpAll);
+  DUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1065,6 +1066,47 @@ void TestDUChain::testTemplates() {
   QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
   QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);*/
   release(top);
+}
+
+void TestDUChain::testForwardDeclaration()
+{
+  QByteArray method("class Test; Test t; class Test {int i; class SubTest; }; Test::SubTest t2; class Test::SubTest{ int i;};");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 5);
+
+  QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[0]));
+  
+  CppClassType* type1 = top->localDeclarations()[0]->type<CppClassType>().data();
+  CppClassType* type2 = top->localDeclarations()[1]->type<CppClassType>().data();
+  CppClassType* type3 = top->localDeclarations()[2]->type<CppClassType>().data();
+  CppClassType* type4 = top->localDeclarations()[3]->type<CppClassType>().data();
+  CppClassType* type5 = top->localDeclarations()[4]->type<CppClassType>().data();
+
+  kDebug() << top->localDeclarations()[1]->abstractType()->toString();
+  
+  QVERIFY(type1);
+  kDebug() << type1->toString();
+  QVERIFY(type2);
+  QVERIFY(type3);
+  QVERIFY(type4);
+  QVERIFY(type5);
+
+  Declaration* TestDecl = top->localDeclarations()[2];
+  QVERIFY(TestDecl->internalContext());
+  QCOMPARE(TestDecl->internalContext()->localDeclarations().count(), 2);
+  CppClassType* subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>().data();
+
+  QCOMPARE(type1, type2);
+  QCOMPARE(type2, type3);
+  QCOMPARE(subType, type4);
+  QCOMPARE(type4, type5);
+  
+  release(top);
+  
 }
 
 void TestDUChain::testFileParse()

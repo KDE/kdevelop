@@ -397,6 +397,12 @@ QString CppIntegralType::toString() const
   return QString("%1%2").arg(cvString()).arg(IntegralType::toString());
 }
 
+void CppCVType::clear() {
+  m_constant = false;
+  m_volatile = false;
+}
+
+
 CppCVType::CppCVType(Declaration::CVSpecs spec)
   : m_constant(spec & Declaration::Const)
   , m_volatile(spec & Declaration::Volatile)
@@ -496,6 +502,15 @@ void CppClassType::addElement(AbstractType::Ptr element)
     kWarning() << "Tried to add type" << element->toString() << "to closed class!" ;
   else
     StructureType::addElement(element);
+}
+
+void CppClassType::clear() {
+  StructureType::clear();
+  IdentifiedType::clear();
+  CppCVType::clear();
+  m_baseClasses.clear();
+  m_classType = Class;
+  m_closed = false;
 }
 
 QString CppClassType::toString() const

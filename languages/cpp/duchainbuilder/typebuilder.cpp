@@ -20,8 +20,9 @@
 
 #include <ktexteditor/smartrange.h>
 
-#include <duchain/identifier.h>
+#include <identifier.h>
 #include <duchain.h>
+#include <forwarddeclaration.h>
 #include <duchainlock.h>
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
@@ -29,8 +30,10 @@
 #include "cpptypes.h"
 #include "parsesession.h"
 #include "tokens.h"
+#include "cppduchain.h"
 #include <declaration.h>
 #include "typerepository.h"
+#include "declarationbuilder.h"
 
 //#define DEBUG
 
@@ -83,21 +86,57 @@ void TypeBuilder::closeType()
     m_topTypes.append(m_lastType);
 }
 
+CppClassType::ClassType classTypeFromTokenKind(int kind)
+{
+  switch(kind)
+  {
+  case Token_struct:
+    return CppClassType::Struct;
+  case Token_union:
+    return CppClassType::Union;
+  default:
+    return CppClassType::Class;
+  }
+}
+
 CppClassType* TypeBuilder::openClass(int kind)
 {
   CppClassType* classType = new CppClassType();
 
-  if (kind == Token_struct)
-    classType->setClassType(CppClassType::Struct);
-  else if (kind == Token_union)
-    classType->setClassType(CppClassType::Union);
-
+  classType->setClassType( classTypeFromTokenKind(kind) );
+  
   return classType;
 }
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  CppClassType::Ptr classType(openClass(m_editor->parseSession()->token_stream->kind(node->class_key)));
+  int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
+  CppClassType::Ptr classType;
+
+  if( dynamic_cast<DeclarationBuilder*>(this) && node->name ) {
+    //Check if there is a forward-declaration of this type. If it is, use that forward-declarations type.
+    {
+      DUChainWriteLocker lock(DUChain::lock());
+
+      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      
+      //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
+      QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
+      if( !declarations.isEmpty() && declarations.first()->abstractType()) {
+        ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(declarations.first());
+        if( forward ) {
+          classType = forward->type<CppClassType>();
+          forward->setResolved(static_cast<DeclarationBuilder*>(this)->currentDeclaration());
+        
+          classType->clear(); //Clear the type, because we will re-fill it
+        }
+      }
+    }
+  }
+  
+  if(!classType)
+    classType = CppClassType::Ptr(openClass(kind));
+  
   openType(classType, node);
 
   classTypeOpened( TypeRepository::self()->registerType(currentAbstractType()) ); //This callback is needed, because the type of the class-declaration needs to be set early so the class can be referenced from within itself
@@ -218,6 +257,22 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
   AbstractType::Ptr type;
 
   if (node->name) {
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      
+      ///If possible, find another forward-declaration and re-use it's type
+    
+      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+
+      QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
+      if( !declarations.isEmpty() && declarations.first()->abstractType()) {
+        openType(declarations.first()->abstractType(), node);
+        closeType();
+        return;
+      }
+    }
+    
+    
     int kind = m_editor->parseSession()->token_stream->kind(node->type);
     switch (kind) {
       case Token_class:

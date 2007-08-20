@@ -657,32 +657,19 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
     QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
-    Declaration* actual = 0;
-    {
-      DUChainReadLocker lock(DUChain::lock());
-      QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
-      foreach (Declaration* declaration, declarations)
-        if (!declaration->isForwardDeclaration()) {
-          actual = declaration;
-          break;
-        }
-    }
-
-    if (!actual) {
-      int kind = m_editor->parseSession()->token_stream->kind(node->type);
-      // Create forward declaration
-      switch (kind) {
-        case Token_class:
-        case Token_struct:
-        case Token_union:
-          openForwardDeclaration(node->name, node);
-          openedDeclaration = true;
-          break;
-        case Token_enum:
-        case Token_typename:
-          // TODO what goes here...?
-          break;
-      }
+    int kind = m_editor->parseSession()->token_stream->kind(node->type);
+    // Create forward declaration
+    switch (kind) {
+      case Token_class:
+      case Token_struct:
+      case Token_union:
+        openForwardDeclaration(node->name, node);
+        openedDeclaration = true;
+        break;
+      case Token_enum:
+      case Token_typename:
+        // TODO what goes here...?
+        break;
     }
   }
 

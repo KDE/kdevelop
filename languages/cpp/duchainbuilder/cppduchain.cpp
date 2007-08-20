@@ -90,4 +90,18 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
   return ret;
 }
 
+QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position)
+{
+  if( context->type() == DUContext::Namespace || context->type() == DUContext::Global ) {
+    ///May have been forward-declared anywhere
+    QualifiedIdentifier totalId = context->scopeIdentifier();
+    totalId += identifier;
+    return context->findDeclarations(identifier, position);
+  }else{
+    ///Only search locally within this context
+    return context->findLocalDeclarations(identifier, position);
+  }
 }
+
+}
+

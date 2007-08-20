@@ -295,10 +295,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           int quality = ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<CppFunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
           return QVariant(quality);
         }else{
-          kDebug(9007) << "MatchQuality requested with invalid match-context";
+          //kDebug(9007) << "MatchQuality requested with invalid match-context";
         }
       } else {
-        kDebug(9007) << "MatchQuality requested with invalid match-context";
+        //kDebug(9007) << "MatchQuality requested with invalid match-context";
       }
     }
     case ArgumentHintDepth:
@@ -369,7 +369,6 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
             } else {
               return indentation + dec->abstractType()->toString();
             }
-
           } else {
             return indentation + "<incomplete type>";
           }

@@ -342,6 +342,8 @@ class NavigationContext : public KShared {
                 eventuallyMakeTypeLinks(base.baseClass.data());
               }
               m_currentText += " ";
+              if( !klass->isClosed() )
+                m_currentText += i18n("(only forward-declared)") + " ";
             }
           }
         }

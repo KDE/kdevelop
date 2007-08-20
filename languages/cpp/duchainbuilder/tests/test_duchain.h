@@ -51,7 +51,8 @@ public:
   
 
   //Move to slots again once it should be tested
-  void testHashedStringRepository();
+   void testHashedStringRepository();
+  void testFileParse();
 
 private slots:
   void initTestCase();
@@ -74,7 +75,7 @@ private slots:
   void testSpecializedTemplates();
   void testFunctionDefinition();
   void testBaseClasses();
-  void testFileParse();
+  void testForwardDeclaration();
 
 public:
   enum DumpArea {

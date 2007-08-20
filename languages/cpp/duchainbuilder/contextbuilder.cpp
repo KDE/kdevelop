@@ -785,7 +785,9 @@ bool ContextBuilder::createContextIfNeeded(AST* node, const QList<DUContext*>& i
 
 const QualifiedIdentifier& ContextBuilder::identifierForName(NameAST* id, TypeSpecifierAST** typeSpecifier) const
 {
-  Q_ASSERT(id);
+  if( !id )
+    return QualifiedIdentifier();
+
   m_nameCompiler->run(id);
   if( typeSpecifier )
     *typeSpecifier = m_nameCompiler->lastTypeSpecifier();

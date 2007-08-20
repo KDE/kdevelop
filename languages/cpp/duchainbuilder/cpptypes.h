@@ -52,6 +52,8 @@ public:
 
   inline bool isVolatile() const { return m_volatile; }
 
+  void clear();
+  
   QString cvString() const;
   QString cvMangled() const;
 
@@ -246,6 +248,9 @@ public:
   /// C++ classes are closed types, once they are defined, they can't be changed.
   bool isClosed() const { return m_closed; }
   void close() { m_closed = true; }
+
+  ///After clearing, a class-type is open again.
+  void clear(); 
 
   /// Error if the type is closed.
   virtual void addElement(KDevelop::AbstractType::Ptr element);
