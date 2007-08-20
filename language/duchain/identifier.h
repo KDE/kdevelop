@@ -68,6 +68,11 @@ public:
   QString mangled() const;
 
   uint hash() const;
+
+  /**
+   * Comparison ignoring the template-identifiers
+   * */
+  bool nameEquals(const Identifier& rhs) const;
   
   const QList<QualifiedIdentifier>& templateIdentifiers() const;
   void appendTemplateIdentifier(const QualifiedIdentifier& identifier);

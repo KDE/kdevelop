@@ -109,7 +109,7 @@ bool ClassFunctionDeclaration::isConversionFunction() const {
 
 bool ClassFunctionDeclaration::isConstructor() const
 {
-  if (context() && context()->type() == DUContext::Class && context()->localScopeIdentifier().top() == identifier())
+  if (context() && context()->type() == DUContext::Class && context()->localScopeIdentifier().top().nameEquals(identifier()))
     return true;
   return false;
 }

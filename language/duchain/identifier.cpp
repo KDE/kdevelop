@@ -105,6 +105,10 @@ Identifier::Identifier(const Identifier& rhs) : d(rhs.d) {
 Identifier::~Identifier() {
 }
 
+bool Identifier::nameEquals(const Identifier& rhs) const {
+  return d->m_identifier == rhs.d->m_identifier;
+}
+
 uint Identifier::hash() const {
   return d->hash();
 }
