@@ -115,24 +115,26 @@ bool CppClassType::equals(const AbstractType* _rhs) const
     return false;
   const CppClassType* rhs = static_cast<const CppClassType*>(_rhs);
 
-  if( this == rhs )
-    return true;
+  return identifier() == rhs->identifier();
   
+/*  if( this == rhs )
+    return true;
+
   if( m_classType != rhs->m_classType )
     return false;
-  
+
   if( m_baseClasses.count() != rhs->m_baseClasses.count() )
     return false;
 
   QList<BaseClassInstance>::const_iterator it1 = m_baseClasses.begin();
   QList<BaseClassInstance>::const_iterator it2 = rhs->m_baseClasses.begin();
-  
+
   for( ;it1 != m_baseClasses.end(); ++it1, ++it2 ) {
     if( (bool)it1->baseClass != (bool)it2->baseClass )
       return false;
     if( it1->access != it2->access )
       return false;
-    
+
     if( !it1->baseClass)
       continue;
 
@@ -140,7 +142,7 @@ bool CppClassType::equals(const AbstractType* _rhs) const
       return false;
   }
   
-  return CppCVType::equals(rhs) && IdentifiedType::equals(rhs) && StructureType::equals(rhs);
+  return CppCVType::equals(rhs) && IdentifiedType::equals(rhs) && StructureType::equals(rhs);*/
 }
 
 bool CppTypeAliasType::equals(const AbstractType* _rhs) const

@@ -618,6 +618,39 @@ void TestDUChain::testDeclareClass()
   release(top);
 }
 
+void TestDUChain::testDeclareFriend()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("class A { friend class F; }; ");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  KDevelop::DumpDotGraph dump;
+/*  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
+
+  kDebug() << "ENDE ENDE ENDE";
+  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);*/
+  
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QVERIFY(top->localScopeIdentifier().isEmpty());
+
+  Declaration* defClassA = top->localDeclarations().first();
+  QCOMPARE(defClassA->identifier(), Identifier("A"));
+  QCOMPARE(defClassA->uses().count(), 0);
+  QVERIFY(defClassA->type<CppClassType>());
+  QVERIFY(defClassA->internalContext());
+  QCOMPARE(defClassA->internalContext()->localDeclarations().count(), 0);
+
+  release(top);
+}
+
 void TestDUChain::testDeclareNamespace()
 {
   TEST_FILE_PARSE_ONLY

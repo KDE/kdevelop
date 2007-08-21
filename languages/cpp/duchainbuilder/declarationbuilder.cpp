@@ -420,7 +420,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     Range* range = m_editor->createRange(newRange);
     
     m_editor->exitCurrentRange();
-  Q_ASSERT(range->start() != range->end());
+  //Q_ASSERT(range->start() != range->end());
     
     Q_ASSERT(m_editor->currentRange() == prior);
 
@@ -599,7 +599,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   
   closeDeclaration();
 
-  if( m_lastForwardDeclaration )
+  if( m_lastForwardDeclaration ) ///@todo use the whole list of forward-declarations, because there may be multiple
   {
     DUChainReadLocker lock(DUChain::lock());
     if( m_lastForwardDeclaration ) {
@@ -705,33 +705,29 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
 
 void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
+  //For now completely ignore friend-class specifiers, because those currently are wrongly parsed as forward-declarations.
+  if( !m_storageSpecifiers.isEmpty() && (m_storageSpecifiers.top() & ClassMemberDeclaration::FriendSpecifier) )
+    return;
+  
   bool openedDeclaration = false;
 
   if (node->name) {
     //Do not store new template-declarations if there is already known ones for the same type
-    DUChainReadLocker lock(DUChain::lock());
     QualifiedIdentifier id = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
-    
-    if(declarations.isEmpty() )
-    {
-      int kind = m_editor->parseSession()->token_stream->kind(node->type);
-      // Create forward declaration
-      switch (kind) {
-        case Token_class:
-        case Token_struct:
-        case Token_union:
-          lock.unlock();
-          openForwardDeclaration(node->name, node);
-          openedDeclaration = true;
-          break;
-        case Token_enum:
-        case Token_typename:
-          // TODO what goes here...?
-          break;
-      }
+    int kind = m_editor->parseSession()->token_stream->kind(node->type);
+    // Create forward declaration
+    switch (kind) {
+      case Token_class:
+      case Token_struct:
+      case Token_union:
+        openForwardDeclaration(node->name, node);
+        openedDeclaration = true;
+        break;
+      case Token_enum:
+      case Token_typename:
+        // TODO what goes here...?
+        break;
     }
   }
 

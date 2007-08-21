@@ -393,8 +393,6 @@ void ContextBuilder::visitTypedef (TypedefAST *node)
 
 void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  visitFunctionDeclaration(node);
-
   if (m_compilingContexts && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
@@ -414,6 +412,8 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       }
     }
   }
+  
+  visitFunctionDeclaration(node);
 
   if (node->constructor_initializers && node->function_body) {
     openContext(node->constructor_initializers, node->function_body, DUContext::Other);
