@@ -304,7 +304,8 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
     {
         if(token->type == cmListFileLexer_Token_ParenRight)
         {
-            //Here we do not convert to an Ast
+            func.endLine=token->line;
+            func.endColumn=token->column;
             return true;
         }
         else if(token->type == cmListFileLexer_Token_Identifier ||

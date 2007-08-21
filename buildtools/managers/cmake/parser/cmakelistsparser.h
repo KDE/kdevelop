@@ -43,6 +43,8 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
     QString filePath;
     quint32 line;
     quint32 column;
+    quint32 endLine;
+    quint32 endColumn;
 /*  int numSpacesBeforeLeftParen;
     int numSpacesAfterLeftParen;
     int numSpacesBeforeRightParen; */

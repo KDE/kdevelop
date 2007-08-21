@@ -94,6 +94,8 @@ public:
 
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
 
+    const VariableMap* variables() const { return &m_vars; }
+    const MacroMap* macros() const { return &m_macros; }
 private:
     QStringList resolveVariables(const QStringList & vars);
     KDevelop::IProject* m_project;

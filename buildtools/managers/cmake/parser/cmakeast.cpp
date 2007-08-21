@@ -1301,7 +1301,7 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
         }
     }
-    return !m_filenames.isEmpty() && !m_path.isEmpty();
+    return !m_filenames.isEmpty();
 }
 
 FltkWrapUiAst::FltkWrapUiAst()

@@ -1183,7 +1183,7 @@ void CMakeProjectVisitor::setVariableMap(VariableMap * vars)
         m_vars->insert("CMAKE_MODULE_PATH", cmakeModulesDirectories());
         m_vars->insert("CMAKE_SYSTEM_NAME", QStringList("Linux")); //FIXME: Make me multi platform
         m_vars->insert("UNIX", QStringList("TRUE")); //FIXME: Make me multi platform
-    }
+   }
 }
 
 bool generated(const QString& name)
