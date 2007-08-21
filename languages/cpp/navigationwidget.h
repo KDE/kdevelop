@@ -44,6 +44,11 @@ namespace Cpp {
       void next();
       void previous();
       void accept();
+
+      /**
+       * Creates a compact html description-text
+       * */
+      static QString shortDescription(KDevelop::Declaration* declaration);
       
     private slots:
       void targetDestroyed(QObject*);

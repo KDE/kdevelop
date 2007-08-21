@@ -185,7 +185,7 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
           textFormatStart = ret.length();
         }
         ///@todo use real highlighting instead of this ugly sign
-        ret += " --[ "; //Currently highlighting does not work, so we highlight the item using this ugly sign
+        ret += "    > "; //Currently highlighting does not work, so we highlight the item using this ugly sign
       }
       
       if (argument)
@@ -198,7 +198,7 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       
       if( f.function.isValid() && num == f.matchedArguments  )
       {
-        ret += " ]-- "; //Currently highlighting does not work, so we highlight the item using this ugly sign
+        ret += " <    "; //Currently highlighting does not work, so we highlight the item using this ugly sign
         if( highlighting && ret.length() != textFormatStart )
         {
           *highlighting <<  QVariant(textFormatStart);
@@ -305,7 +305,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       if( isArgumentHint )
         return item.completionContext->depth();
     case ItemSelected:
-       return QVariant(dec->comment().isEmpty() ? dec->toString() : QString("\"%1\" \n%2").arg(dec->comment()).arg(dec->toString()));
+       return QVariant(Cpp::NavigationWidget::shortDescription(dec));
     case IsExpandable:
       return QVariant(true);
     case ExpandingWidget: {

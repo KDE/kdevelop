@@ -94,6 +94,8 @@ struct NavigationAction {
   DeclarationPointer decl;
   Type type;
 };
+
+
   
 class NavigationContext : public KShared {
   public:
@@ -148,7 +150,7 @@ class NavigationContext : public KShared {
       return m_selectedLinkAction;
     }
 
-    QString html() {
+    QString html(bool shorten = false) {
       
       struct Colorizer
       {
@@ -179,6 +181,18 @@ class NavigationContext : public KShared {
       
       m_linkCount = 0;
       m_currentText  = "<html><body><p><small><small>";
+
+      if( shorten && !m_declaration->comment().isEmpty() ) {
+        QString comment = m_declaration->comment();
+        if( comment.length() > 60 ) {
+          comment.truncate(60);
+          comment += "...";
+        }
+        comment.replace('\n', ' ');
+        m_currentText += commentHighlight(comment) + "   ";
+      }
+      
+      
       if( m_previousContext ) {
         m_currentText += navigationHighlight("Back to ");
         makeLink( declarationName(m_previousContext->m_declaration.data()), m_previousContext->m_declaration, NavigationAction::NavigateDeclaration );
@@ -260,7 +274,7 @@ class NavigationContext : public KShared {
 
           if( function->isInline() )
             details << "inline";
-          
+
           if( function->isExplicit() )
             details << "explicit";
 
@@ -286,44 +300,46 @@ class NavigationContext : public KShared {
 
           const FunctionType* type = dynamic_cast<const FunctionType*>( m_declaration->abstractType().data() );
 
-          if( type && function ) {
-            if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
-              eventuallyMakeTypeLinks( type->returnType().data() );
-              m_currentText += ' ' + m_declaration->identifier().toString();
-            }
-
-            if( type->arguments().count() == 0 )
-            {
-              m_currentText += "()";
-            } else {
-              m_currentText += "( ";
-              bool first = true;
-
-              QList<QString>::const_iterator defaultIt = function->defaultParameters().begin();
-              int firstDefaultParam = type->arguments().count() - function->defaultParameters().count();
-              int currentArgNum = 0;
-              
-              foreach( AbstractType::Ptr argType, type->arguments() )
-              {
-                if( !first )
-                  m_currentText += ", ";
-                first = false;
-                
-                eventuallyMakeTypeLinks( argType.data() );
-
-                if( currentArgNum >= firstDefaultParam )
-                  m_currentText += " = " + function->defaultParameters()[ currentArgNum - firstDefaultParam ];
-
-                ++currentArgNum;
+          if( !shorten ) {
+            if( type && function ) {
+              if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
+                eventuallyMakeTypeLinks( type->returnType().data() );
+                m_currentText += ' ' + m_declaration->identifier().toString();
               }
-              
-              m_currentText += " )";
+
+              if( type->arguments().count() == 0 )
+              {
+                m_currentText += "()";
+              } else {
+                m_currentText += "( ";
+                bool first = true;
+
+                QList<QString>::const_iterator defaultIt = function->defaultParameters().begin();
+                int firstDefaultParam = type->arguments().count() - function->defaultParameters().count();
+                int currentArgNum = 0;
+
+                foreach( AbstractType::Ptr argType, type->arguments() )
+                {
+                  if( !first )
+                    m_currentText += ", ";
+                  first = false;
+
+                  eventuallyMakeTypeLinks( argType.data() );
+
+                  if( currentArgNum >= firstDefaultParam )
+                    m_currentText += " = " + function->defaultParameters()[ currentArgNum - firstDefaultParam ];
+
+                  ++currentArgNum;
+                }
+
+                m_currentText += " )";
+              }
+              m_currentText += "<br>";
+            }else {
+              m_currentText += errorHighlight("Invalid type<br>");
             }
-            m_currentText += "<br>";
-          }else {
-            m_currentText += errorHighlight("Invalid type<br>");
           }
-        } else {
+        } else if( !shorten ) {
           if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
             if( m_declaration->isTypeAlias() )
               m_currentText += importantHighlight("typedef ");
@@ -343,7 +359,7 @@ class NavigationContext : public KShared {
               }
               m_currentText += " ";
               if( !klass->isClosed() )
-                m_currentText += i18n("(only forward-declared)") + " ";
+                m_currentText += i18n("(forward-declaration)") + " ";
             }
           }
         }
@@ -393,20 +409,22 @@ class NavigationContext : public KShared {
 
       m_currentText += "<br />";
 
-      if( !m_declaration->comment().isEmpty() ) {
+      if( !shorten && !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
         comment.replace("\n", "<br />");
         m_currentText += commentHighlight(comment);
         m_currentText += "<br />";
       }
-      
-      m_currentText += labelHighlight(i18n( "Decl.: " ));
-      makeLink( QString("%1 :%2").arg( m_declaration->url().fileName() ).arg( m_declaration->textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
-      m_currentText += " ";
-      //m_currentText += "<br />";
-      if( m_declaration->definition() ) {
-        m_currentText += labelHighlight(i18n( "Def.: " ));
-        makeLink( QString("%1 :%2").arg( m_declaration->definition()->url().fileName() ).arg( m_declaration->definition()->textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+
+      if( !shorten ) {
+        m_currentText += labelHighlight(i18n( "Decl.: " ));
+        makeLink( QString("%1 :%2").arg( m_declaration->url().fileName() ).arg( m_declaration->textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
+        m_currentText += " ";
+        //m_currentText += "<br />";
+        if( m_declaration->definition() ) {
+          m_currentText += labelHighlight(i18n( "Def.: " ));
+          makeLink( QString("%1 :%2").arg( m_declaration->definition()->url().fileName() ).arg( m_declaration->definition()->textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+        }
       }
       //m_currentText += "<br />";
       
@@ -501,6 +519,11 @@ class NavigationContext : public KShared {
     QMap<int, NavigationAction> m_intLinks;
     NavigationContext* m_previousContext;
 };
+
+QString NavigationWidget::shortDescription(KDevelop::Declaration* declaration) {
+  NavigationContextPointer ctx(new NavigationContext(DeclarationPointer(declaration)));
+  return ctx->html(true);
+}
 
 NavigationContextPointer NavigationContext::execute(NavigationAction& action)
 {
