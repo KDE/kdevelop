@@ -46,10 +46,27 @@
 #include "tokens.h"
 #include "parsesession.h"
 #include "cpptypes.h"
+#include "cppduchain.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
+
+void copyCppClass( const CppClassType* from, CppClassType* to )
+{
+  to->clear();
+  to->setClassType(from->classType());
+  to->setDeclaration(from->declaration());
+  to->setCV(from->cv());
+  
+  foreach( const CppClassType::BaseClassInstance& base, from->baseClasses() )
+    to->addBaseClass(base);
+  
+  foreach( const AbstractType::Ptr& element, from->elements() )
+    to->addElement(element);
+
+  to->close();
+}
 
 QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
     int startPosition = session->token_stream->position(start_token);
@@ -411,7 +428,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       declaration = new NamespaceAliasDeclaration(range, scope, currentContext());
       declaration->setIdentifier(aliasName);
     } else if (isForward) {
-      declaration = new ForwardDeclaration(range, scope, currentContext());
+      declaration = specialDeclaration<ForwardDeclaration>(range, scope);
 
     } else if (isFunction) {
       if (scope == Declaration::ClassScope) {
@@ -578,7 +595,44 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   DeclarationBuilderBase::visitClassSpecifier(node);
 
+  Declaration* dec = currentDeclaration();
+  
   closeDeclaration();
+
+  if( m_lastForwardDeclaration )
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    if( m_lastForwardDeclaration ) {
+      //Update instantiations
+      SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (m_lastForwardDeclaration.data());
+      SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (dec);
+
+      if( templateForward && currentTemplate )
+      {
+        //Change the types of all the forward-template instantiations
+        TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
+
+        for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
+        {
+          Declaration* realInstance = currentTemplate->instantiate(it.key());
+          Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
+          //Now change the type of forwardInstance so it matches the type of realInstance
+          CppClassType::Ptr realClass = realInstance->type<CppClassType>();
+          CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
+          
+          if( realClass && forwardClass ) {
+            //Copy the class from real into the forward-declaration's instance
+            copyCppClass(realClass.data(), forwardClass.data());
+          } else {
+            kDebug() << "Bad types involved in formward-declaration";
+          }
+        }
+      }
+      
+      m_lastForwardDeclaration = DUChainPointer<ForwardDeclaration>();
+    }
+  }
+  
 
   m_accessPolicyStack.pop();
 }
@@ -654,22 +708,30 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
   bool openedDeclaration = false;
 
   if (node->name) {
+    //Do not store new template-declarations if there is already known ones for the same type
+    DUChainReadLocker lock(DUChain::lock());
     QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
-    int kind = m_editor->parseSession()->token_stream->kind(node->type);
-    // Create forward declaration
-    switch (kind) {
-      case Token_class:
-      case Token_struct:
-      case Token_union:
-        openForwardDeclaration(node->name, node);
-        openedDeclaration = true;
-        break;
-      case Token_enum:
-      case Token_typename:
-        // TODO what goes here...?
-        break;
+    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
+    
+    if(declarations.isEmpty() )
+    {
+      int kind = m_editor->parseSession()->token_stream->kind(node->type);
+      // Create forward declaration
+      switch (kind) {
+        case Token_class:
+        case Token_struct:
+        case Token_union:
+          lock.unlock();
+          openForwardDeclaration(node->name, node);
+          openedDeclaration = true;
+          break;
+        case Token_enum:
+        case Token_typename:
+          // TODO what goes here...?
+          break;
+      }
     }
   }
 

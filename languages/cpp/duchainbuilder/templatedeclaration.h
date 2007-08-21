@@ -50,6 +50,8 @@ namespace Cpp {
   //Represents the template-part of a template-class'es or template-function's template-part
   class KDEVCPPDUCHAINBUILDER_EXPORT TemplateDeclaration {
     public:
+      typedef QHash<QList<ExpressionEvaluationResult>, TemplateDeclaration*> InstantiationsHash;
+      
       ///Copy-constructor for cloning
       TemplateDeclaration(const TemplateDeclaration& rhs);
       TemplateDeclaration();
@@ -65,6 +67,8 @@ namespace Cpp {
       
       /**
        * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
+       *
+       * If this is a forward-declaration, the returned declaration can return another declaration than this one on instantiatedFrom(..).
        * */
       KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments );
 
@@ -77,6 +81,9 @@ namespace Cpp {
       TemplateDeclaration* specializedFrom() const;
 
       const QList<ExpressionEvaluationResult>& instantiatedWith() const;
+
+      ///Returns all current instantiations of this declaration
+      InstantiationsHash instantiations() const;
       
     private:
 
@@ -85,7 +92,6 @@ namespace Cpp {
       TemplateDeclaration* m_instantiatedFrom;
       TemplateDeclaration* m_specializedFrom; 
       QList<ExpressionEvaluationResult> m_instantiatedWith;
-      typedef QHash<QList<ExpressionEvaluationResult>, TemplateDeclaration*> InstantiationsHash;
 
       static QMutex instantiationsMutex;
       ///Every access to m_instantiations must be serialized through instantiationsMutex!

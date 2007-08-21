@@ -23,6 +23,7 @@
 #include <qatomic.h>
 
 #include <duchain/declaration.h>
+#include <duchain/forwarddeclaration.h>
 
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
@@ -269,9 +270,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
         
         if( idType )
           id.appendTemplateIdentifier(idType->identifier());
-        ///@todo reenable once expressionparser und duchainbuilder are merged
-/*        else
-          id.appendTemplateIdentifier(QualifiedIdentifier(expr.toString()));*/
+        else
+          id.appendTemplateIdentifier(QualifiedIdentifier(expr.toShortString()));
       }
       
       instantiatedDeclaration->setIdentifier(id);
@@ -396,6 +396,12 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
 ///@todo Use explicitly declared specializations
 Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments )
 {
+  if( ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(this) ) {
+    TemplateDeclaration* resolvedTemplate = dynamic_cast<TemplateDeclaration*>(forward->resolved());
+    if( resolvedTemplate )
+      return resolvedTemplate->instantiate(templateArguments);
+  }
+  
   {
     QMutexLocker l(&instantiationsMutex);
     InstantiationsHash::const_iterator it;
@@ -457,6 +463,11 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
 
 const QList<ExpressionEvaluationResult>& TemplateDeclaration::instantiatedWith() const {
   return m_instantiatedWith;
+}
+
+TemplateDeclaration::InstantiationsHash TemplateDeclaration::instantiations() const {
+    QMutexLocker l(&instantiationsMutex);
+    return m_instantiations;
 }
 
 }

@@ -76,6 +76,7 @@ private slots:
   void testFunctionDefinition();
   void testBaseClasses();
   void testForwardDeclaration();
+  void testTemplateForwardDeclaration();
 
 public:
   enum DumpArea {

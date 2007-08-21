@@ -29,6 +29,7 @@ class CppFunctionType;
 
 namespace KDevelop {
   class QualifiedIdentifier;
+  class ForwardDeclaration;
 }
 
 typedef ContextBuilder TypeBuilderBase;
@@ -83,7 +84,10 @@ protected:
 
   virtual void addBaseType( CppClassType::BaseClassInstance base );
 
-private:
+  //Is filled in visitClassSpecifier
+  DUChainPointer<KDevelop::ForwardDeclaration> m_lastForwardDeclaration;
+
+  private:
   template <class T>
   void openType(KSharedPtr<T> type, AST* node)
   { openAbstractType(KDevelop::AbstractType::Ptr::staticCast(type), node); }

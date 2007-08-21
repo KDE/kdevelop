@@ -1106,9 +1106,38 @@ void TestDUChain::testForwardDeclaration()
   QCOMPARE(type4, type5);
   
   release(top);
-  
 }
 
+void TestDUChain::testTemplateForwardDeclaration()
+{
+  QByteArray method("class B{}; template<class T>class Test; Test<B> t; template<class T>class Test {}; ");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 4);
+
+  QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[1]));
+  
+  CppClassType* type1 = top->localDeclarations()[1]->type<CppClassType>().data();
+  CppClassType* type2 = top->localDeclarations()[2]->type<CppClassType>().data();
+  CppClassType* type3 = top->localDeclarations()[3]->type<CppClassType>().data();
+
+  QVERIFY(type1);
+  kDebug() << type1->toString();
+  QVERIFY(type2);
+  QVERIFY(type3);
+
+  kDebug() << type2->toString();
+  TemplateDeclaration* temp2Decl = dynamic_cast<TemplateDeclaration*>(type2->declaration());
+  QVERIFY(temp2Decl);
+  TemplateDeclaration* temp3Decl = dynamic_cast<TemplateDeclaration*>(type3->declaration());
+  QVERIFY(temp3Decl);
+  QCOMPARE(temp2Decl->instantiatedFrom(), temp3Decl);
+  
+  release(top);
+}
 void TestDUChain::testFileParse()
 {
   //QSKIP("Unwanted", SkipSingle);

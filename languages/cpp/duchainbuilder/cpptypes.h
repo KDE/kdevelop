@@ -63,8 +63,8 @@ public:
 
   bool equals(const CppCVType* rhs) const;
   
-protected:
   inline void setCV(KDevelop::Declaration::CVSpecs spec) { m_constant = spec & KDevelop::Declaration::Const; m_volatile = spec & KDevelop::Declaration::Volatile; }
+protected:
   inline void setConstant(bool is) { m_constant = is; }
   inline void setVolatile(bool is) { m_volatile = is; }
 
@@ -230,10 +230,6 @@ public:
   const QList<BaseClassInstance>& baseClasses() const;
   void addBaseClass(const BaseClassInstance& baseClass);
   void removeBaseClass(AbstractType::Ptr baseClass);
-
-  const QList<CppClassType::Ptr>& subClasses() const;
-  void addSubClass(CppClassType::Ptr subClass);
-  void removeSubClass(CppClassType::Ptr subClass);
 
   enum ClassType
   {

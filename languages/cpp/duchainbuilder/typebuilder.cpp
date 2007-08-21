@@ -110,6 +110,7 @@ CppClassType* TypeBuilder::openClass(int kind)
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
+  m_lastForwardDeclaration = DUChainPointer<ForwardDeclaration>();
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
   CppClassType::Ptr classType;
 
@@ -127,6 +128,8 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
         if( forward ) {
           classType = forward->type<CppClassType>();
           forward->setResolved(static_cast<DeclarationBuilder*>(this)->currentDeclaration());
+
+          m_lastForwardDeclaration = forward;
         
           classType->clear(); //Clear the type, because we will re-fill it
         }
