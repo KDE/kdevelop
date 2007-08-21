@@ -30,16 +30,6 @@
 #include <QRegExp>
 #include <QFileInfo>
 
-QStringList cmakeModulesDirectories()
-{
-    QStringList env = CMakeProjectVisitor::envVarDirectories("CMAKEDIR");
-
-    QStringList::iterator it=env.begin();
-    for(; it!=env.end(); ++it)
-        *it += "/Modules";
-    return env;
-}
-
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root) : m_root(root)
 {}
 
@@ -290,21 +280,22 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 
 int CMakeProjectVisitor::visit(const IncludeAst *inc)
 {
-    const QStringList modulePath = resolveVariables(m_vars->value("CMAKE_MODULE_PATH"), m_vars) + cmakeModulesDirectories();
-//     kDebug(9032) << "CMAKE_MODULE_PATH:" << modulePath << cmakeModulesDirectories();
+    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
+    kDebug(9032) << "Include:" << modulePath;
 
-    QStringList possib=resolveVariable(inc->includeFile(), m_vars);
+    QString possib=inc->includeFile();
     QString path;
-    foreach(QString p, possib) {
-        if(p[0]=='/' && QFile::exists(p)) {
-            path=p;
-            break;
-        } else if(!p.endsWith(".cmake"))
-            p += ".cmake";
-        path=findFile(p, modulePath);
+    if(possib[0]=='/' && QFile::exists(possib))
+        path=possib;
+    else
+    {
+        if(!possib.endsWith(".cmake"))
+            possib += ".cmake";
+        path=findFile(possib, modulePath);
     }
 
-    if(!path.isEmpty()) {
+    if(!path.isEmpty())
+    {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
@@ -335,7 +326,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
     if(!haveToFind(pack->name()))
         return 1;
-    const QStringList modulePath = resolveVariables(m_vars->value("CMAKE_MODULE_PATH"), m_vars) + cmakeModulesDirectories();
+    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     kDebug(9032) << "Find:" << pack->name() << "package.";
 
     QString possib=pack->name();
@@ -1080,6 +1071,16 @@ int CMakeProjectVisitor::visit(const CustomCommandAst *ccast)
     return 1;
 }
 
+
+int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
+{
+    kDebug(9032) << "custom_target " << ctar->target() << ctar->dependencies() << ", " << ctar->commandArgs();
+    kDebug(9032) << ctar->content()[ctar->line()].writeBack();
+    
+    m_filesPerTarget.insert(ctar->target(), ctar->dependencies());
+    return 1;
+}
+
 CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc & exp, const VariableMap * vars)
 {
     CMakeFunctionDesc ret=exp;
@@ -1175,15 +1176,6 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 void CMakeProjectVisitor::setVariableMap(VariableMap * vars)
 {
     m_vars=vars;
-    if(m_vars && !m_vars->contains("CMAKE_MODULE_PATH"))
-    {
-        QString cmakeCmd = findFile("cmake", envVarDirectories("PATH"), Executable);
-        m_vars->insert("CMAKE_CURRENT_BINARY_DIR", QStringList("#[install_dir]")); //FIXME Must arrange it
-        m_vars->insert("CMAKE_COMMAND", QStringList(cmakeCmd));
-        m_vars->insert("CMAKE_MODULE_PATH", cmakeModulesDirectories());
-        m_vars->insert("CMAKE_SYSTEM_NAME", QStringList("Linux")); //FIXME: Make me multi platform
-        m_vars->insert("UNIX", QStringList("TRUE")); //FIXME: Make me multi platform
-   }
 }
 
 bool generated(const QString& name)
@@ -1208,6 +1200,5 @@ QStringList CMakeProjectVisitor::targetDependencies(const QString & target) cons
     }
     return ret;
 }
-
 
 

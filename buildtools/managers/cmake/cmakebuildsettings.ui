@@ -59,31 +59,6 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="QComboBox" name="kcfg_buildType" >
-     <property name="editable" >
-      <bool>true</bool>
-     </property>
-     <property name="currentIndex" >
-      <number>-1</number>
-     </property>
-     <item>
-      <property name="text" >
-       <string>debugfull</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>debug</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>release</string>
-      </property>
-     </item>
-    </widget>
-   </item>
    <item row="4" column="0" >
     <widget class="QLabel" name="label_4" >
      <property name="enabled" >
@@ -146,6 +121,41 @@
    </item>
    <item row="2" column="1" >
     <widget class="KUrlRequester" name="kcfg_buildFolder" />
+   </item>
+   <item row="3" column="1" >
+    <widget class="QComboBox" name="kcfg_buildType" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <item>
+      <property name="text" >
+       <string>debug</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>release</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>debugfull</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>RelWithDebInfo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>MinSizeRel</string>
+      </property>
+     </item>
+    </widget>
    </item>
   </layout>
  </widget>

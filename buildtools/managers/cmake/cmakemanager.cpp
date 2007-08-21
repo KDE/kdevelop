@@ -47,7 +47,7 @@ typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager, CMakeSupportFactory( "kdevcmakemanager" ) )
 
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QStringList& )
-    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
+    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0), m_modulePath(cmakeModulesDirectories())
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -57,6 +57,14 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QStringList& )
     {
         m_builder = i->extension<ICMakeBuilder>();
     }
+    
+    QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
+    m_vars.insert("CMAKE_BINARY_DIR", QStringList("#[install_dir]/"));
+    m_vars.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
+    m_vars.insert("CMAKE_MODULE_PATH", m_modulePath);
+    m_vars.insert("CMAKE_SYSTEM_NAME", QStringList("Linux")); //FIXME: Make me multi platform
+    m_vars.insert("UNIX", QStringList("TRUE")); //FIXME: Make me multi platform
+    kDebug(9032) << "modPath" << m_vars.value("CMAKE_MODULE_PATH");
 }
 
 CMakeProjectManager::~CMakeProjectManager()
@@ -109,14 +117,21 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     new KDevelop::ProjectFileItem( item->project(), cmakeListsPath, folder );
     kDebug(9032) << "Adding cmake: " << cmakeListsPath << " to the model";
     
+    QString currentBinDir=KUrl::relativeUrl(folder->project()->projectFileUrl().upUrl(), folder->url());
+    m_vars.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(m_vars.value("CMAKE_BINARY_DIR")[0]+currentBinDir));
     m_vars.insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
-    m_vars.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(cmakeListsPath.upUrl().toLocalFile()));
+    m_vars.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile()));
+    
+    kDebug(9032) << "currentBinDir" << m_vars.value("CMAKE_CURRENT_BINARY_DIR");
+    
     CMakeProjectVisitor v(folder->url().toLocalFile());
     v.setVariableMap(&m_vars);
     v.setMacroMap(&m_macros);
+    v.setModulePath(m_modulePath);
     v.walk(f, 0);
     m_vars.remove("CMAKE_CURRENT_LIST_FILE");
     m_vars.remove("CMAKE_CURRENT_SOURCE_DIR");
+    m_vars.remove("CMAKE_CURRENT_BINARY_DIR");
 
     if(folder->text()=="/")
     {
@@ -152,17 +167,20 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
     foreach ( QString t, v.targets())
     {
-        CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
-
-        foreach( QString sFile, v.targetDependencies(t) )
+        if(!v.targetDependencies(t).isEmpty()) //Just to remove verbosity
         {
-            KUrl sourceFile = folder->url();
-            sourceFile.adjustPath( KUrl::AddTrailingSlash );
-            sourceFile.addPath( sFile );
-            new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-            kDebug(9032) << "..........Adding:" << sFile;
+            CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
+    
+            foreach( QString sFile, v.targetDependencies(t) )
+            {
+                KUrl sourceFile = folder->url();
+                sourceFile.adjustPath( KUrl::AddTrailingSlash );
+                sourceFile.addPath( sFile );
+                new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+                kDebug(9032) << "..........Adding:" << sFile;
+            }
+            m_targets.append(targetItem);
         }
-        m_targets.append(targetItem);
     }
     return folderList;
 }
@@ -225,6 +243,15 @@ KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectItem *
     return m_builder;
 }
 
+QStringList CMakeProjectManager::cmakeModulesDirectories()
+{
+    QStringList env = CMakeProjectVisitor::envVarDirectories("CMAKEDIR");
+
+    QStringList::iterator it=env.begin();
+    for(; it!=env.end(); ++it)
+        *it += "/Modules";
+    return env;
+}
 
 #include "cmakemanager.moc"
 

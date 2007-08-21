@@ -38,7 +38,7 @@ class CMakeProjectVisitor : CMakeAstVisitor
         virtual ~CMakeProjectVisitor() {}
         
         virtual int visit( const CustomCommandAst * );
-        virtual int visit( const CustomTargetAst * ) { return notImplemented("CustomTargetAst"); }
+        virtual int visit( const CustomTargetAst * );
         virtual int visit( const AddDefinitionsAst * ) { return notImplemented("AddDefinitionsAst"); }
         virtual int visit( const AddDependenciesAst * ) { return notImplemented("AddDependenciesAst"); }
         virtual int visit( const AddTestAst * ) { return notImplemented("AddTestAst"); }
@@ -76,6 +76,7 @@ class CMakeProjectVisitor : CMakeAstVisitor
         
         void setVariableMap( VariableMap* vars );
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
+        void setModulePath(const QStringList& mp) { m_modulePath=mp; }
         
         QString projectName() const { return m_projectName; }
         QStringList subdirectories() const { return m_subdirectories; }
@@ -101,6 +102,7 @@ class CMakeProjectVisitor : CMakeAstVisitor
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         
+        QStringList m_modulePath;
         QString m_projectName;
         QStringList m_subdirectories;
         QStringList m_includeDirectories;

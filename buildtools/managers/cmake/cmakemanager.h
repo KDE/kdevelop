@@ -98,8 +98,10 @@ public:
     const MacroMap* macros() const { return &m_macros; }
 private:
     QStringList resolveVariables(const QStringList & vars);
+    QStringList cmakeModulesDirectories();
     KDevelop::IProject* m_project;
     CMakeFolderItem* m_rootItem;
+    const QStringList m_modulePath;
 
     KUrl::List m_includeDirList;
     CMakeListsParser m_parser;

@@ -164,9 +164,10 @@ CMAKE_ADD_AST_MEMBER( QStringList, const QString&, arguments, Arguments )
 CMAKE_END_AST_CLASS( MacroCallAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
+typedef QMap<QString, QStringList> cmdAndArgs; //Just to make preprocessor not to cry
 CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
 CMAKE_ADD_AST_MEMBER( bool, bool, buildAlways, BuildAlways )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, commands, Commands )
+CMAKE_ADD_AST_MEMBER( cmdAndArgs, const cmdAndArgs &, commandArgs, CommandArgs )
 CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, dependencies, Dependencies )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDir, WorkingDir )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, comment, Comment )

@@ -234,8 +234,6 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 1 )
         return false;
 
-    return false;
-/*
     //check and make sure the target name isn't something silly
     CMakeFunctionArgument arg = func.arguments.front();
     if ( arg.value.toLower() == QLatin1String( "all" ) )
@@ -247,7 +245,7 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.arguments.count()>1)
     {
         CMakeFunctionArgument arg2 = func.arguments[1];
-        if ( arg2.value == QLatin1String( "ALL" ) )
+        if ( arg2.value.toUpper() == QLatin1String( "ALL" ) )
             m_buildAlways = true;
         else
             m_buildAlways = false;
@@ -266,7 +264,12 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QString currentLine;
     Action act = ParsingCommand;
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
-    it = func.arguments.begin() + 2; //advance the iterator two places
+    it = func.arguments.begin();
+    if(m_buildAlways)
+        it+=2;
+    else
+        ++it;
+    QString currCmd;
     for ( ; it != itEnd; ++it )
     {
         QString arg = it->value;
@@ -283,19 +286,21 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             act = ParsingComment;
         else if ( arg == "COMMAND" )
         {
+            currCmd.clear();
             act = ParsingCommand;
-            if ( !currentLine.isEmpty() )
-            {
-                m_commands.append( currentLine );
-                currentLine.clear();
-            }
         }
         else
         {
             switch( act )
             {
             case ParsingCommand:
-                m_commands.append( arg );
+                if(m_commandArgs.contains(currCmd))
+                    m_commandArgs[currCmd].append(arg);
+                else
+                {
+                    currCmd=arg;
+                    m_commandArgs.insert(arg, QStringList());
+                }
                 break;
             case ParsingDep:
                 m_dependencies.append( arg );
@@ -316,14 +321,7 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( m_target.indexOf( QRegExp( "(#|<|>)" ) ) != -1 )
         return false;
 
-    if ( !currentLine.isEmpty() )
-    {
-        m_commands.append( currentLine );
-        currentLine.clear();
-    }
-
     return true;
-*/
 }
 
 /* Add Definitions AST */
