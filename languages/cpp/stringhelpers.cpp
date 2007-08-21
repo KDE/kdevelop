@@ -290,7 +290,6 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
   int len = reversed.length();
   //we are searching for an opening-brace, but the reversion has also reversed the brace
   while( pos < len && s ) {
-    ++cnt;
     int lastPos = pos;
     pos = KDevelop::findCommaOrEnd( reversed, pos )  ;
     if( pos > lastPos ) {
