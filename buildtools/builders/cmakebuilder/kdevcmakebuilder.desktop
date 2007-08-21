@@ -10,6 +10,7 @@ Comment[ga]=Tóg Tionscadail CMake
 Comment[pt]=Compila Projectos do CMake
 Comment[pt_BR]=Compila Projectos do CMake
 Comment[sv]=Bygger CMake-projekt
+Comment[zh_TW]=建立 CMake 專案
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcmakebuilder
