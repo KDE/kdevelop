@@ -11,6 +11,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef DUMPDOTGRAPH_H
+#define DUMPDOTGRAPH_H
+
 #include <QtCore/QMap>
 #include <QtCore/QString>
 #include <kurl.h>
@@ -40,3 +43,5 @@ namespace KDevelop {
       class DumpDotGraphPrivate* const d;
   };
 }
+
+#endif // DUMPDOTGRAPH_H

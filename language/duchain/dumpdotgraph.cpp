@@ -134,7 +134,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     }
   }else{
     label = /*"context " + */context->localScopeIdentifier().toString();
-    label += " " + rangeToString(context->textRange());
+    label += ' ' + rangeToString(context->textRange());
   }
 
 
