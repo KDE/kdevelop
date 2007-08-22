@@ -208,10 +208,14 @@ KParts::Part* PartController::createPart( const QString & mimeType,
 
 KParts::Part* PartController::createPart( const KUrl & url )
 {
-    if ( !url.isValid() )
+    KMimeType::Ptr mimeType;
+    if ( url.isEmpty() )
+        //create a part for empty text file
+        mimeType = KMimeType::mimeType("text/plain");
+    else if ( !url.isValid() )
         return 0;
-
-    KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
+    else
+        mimeType = KMimeType::findByUrl( url );
 
     QString className;
     QString services[] =
