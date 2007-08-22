@@ -363,7 +363,6 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     Range translated = newRange;
     if (m_editor->smart())
       translated = m_editor->smart()->translateFromRevision(translated);
-    Q_ASSERT(translated.start() != translated.end());
 
     foreach( Declaration* dec, currentContext()->allLocalDeclarations(lastId) ) {
 
