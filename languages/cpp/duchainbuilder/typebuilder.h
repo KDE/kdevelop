@@ -61,6 +61,8 @@ protected:
   
   KDevelop::AbstractType::Ptr lastType() const;
 
+  void setLastType(KDevelop::AbstractType::Ptr ptr);
+  
   // Called at the beginning of processing a class-specifier, right after the type for the class was created. The type can be gotten through currentAbstractType().
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr) {};
   
@@ -83,9 +85,6 @@ protected:
   virtual void visitTemplateParameter(TemplateParameterAST *);
 
   virtual void addBaseType( CppClassType::BaseClassInstance base );
-
-  //Is filled in visitClassSpecifier
-  DUChainPointer<KDevelop::ForwardDeclaration> m_lastForwardDeclaration;
 
   private:
   template <class T>

@@ -596,42 +596,69 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   Declaration* dec = currentDeclaration();
   
-  closeDeclaration();
 
-  if( m_lastForwardDeclaration ) ///@todo use the whole list of forward-declarations, because there may be multiple
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    if( m_lastForwardDeclaration ) {
-      //Update instantiations
-      SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (m_lastForwardDeclaration.data());
-      SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (dec);
+  if( node->name ) {
+    //Resolve forward-declarations
+    DUChainWriteLocker lock(DUChain::lock());
 
-      if( templateForward && currentTemplate )
-      {
-        //Change the types of all the forward-template instantiations
-        TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
-        for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
-        {
-          Declaration* realInstance = currentTemplate->instantiate(it.key());
-          Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
-          //Now change the type of forwardInstance so it matches the type of realInstance
-          CppClassType::Ptr realClass = realInstance->type<CppClassType>();
-          CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
-          
-          if( realClass && forwardClass ) {
-            //Copy the class from real into the forward-declaration's instance
+    //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
+    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
+
+    AbstractType::Ptr newLastType;
+    
+    foreach( Declaration* decl, declarations ) {
+      if( decl->abstractType()) {
+        ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
+        if( forward ) {
+          forward->setResolved(currentDeclaration());
+
+          CppClassType::Ptr realClass(dynamic_cast<CppClassType*>(lastType().data()));
+          CppClassType::Ptr forwardClass = forward->type<CppClassType>();
+          if( realClass && forwardClass )
+          {
+            ///Copy the class into the forward-declarations class, and re-use that class for this declaration.
             copyCppClass(realClass.data(), forwardClass.data());
+            newLastType = forward->abstractType();
           } else {
-            kDebug() << "Bad types involved in formward-declaration";
+            kDebug() << "Problem while forward-declaration resolution";
           }
-        }
+
+          //Update instantiations in case of template forward-declarations
+          SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (decl);
+          SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (currentDeclaration());
+
+          if( templateForward && currentTemplate )
+          {
+            //Change the types of all the forward-template instantiations
+            TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
+
+            for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
+            {
+              Declaration* realInstance = currentTemplate->instantiate(it.key());
+              Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
+              //Now change the type of forwardInstance so it matches the type of realInstance
+              CppClassType::Ptr realClass = realInstance->type<CppClassType>();
+              CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
+
+              if( realClass && forwardClass ) {
+                //Copy the class from real into the forward-declaration's instance
+                copyCppClass(realClass.data(), forwardClass.data());
+              } else {
+                kDebug() << "Bad types involved in formward-declaration";
+              }
+            }
+          }
+        }//templateForward && currentTemplate
       }
-      
-      m_lastForwardDeclaration = DUChainPointer<ForwardDeclaration>();
-    }
-  }
+    }//foreach
+
+    if( newLastType )
+      setLastType(newLastType);
+  }//node-name
   
+  closeDeclaration();
 
   m_accessPolicyStack.pop();
 }

@@ -110,35 +110,8 @@ CppClassType* TypeBuilder::openClass(int kind)
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  m_lastForwardDeclaration = DUChainPointer<ForwardDeclaration>();
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
-  CppClassType::Ptr classType;
-
-  if( dynamic_cast<DeclarationBuilder*>(this) && node->name ) {
-    //Check if there is a forward-declaration of this type. If it is, use that forward-declarations type.
-    {
-      DUChainWriteLocker lock(DUChain::lock());
-
-      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-      
-      //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
-      QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
-      if( !declarations.isEmpty() && declarations.first()->abstractType()) {
-        ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(declarations.first());
-        if( forward ) {
-          classType = forward->type<CppClassType>();
-          forward->setResolved(static_cast<DeclarationBuilder*>(this)->currentDeclaration());
-
-          m_lastForwardDeclaration = forward;
-        
-          classType->clear(); //Clear the type, because we will re-fill it
-        }
-      }
-    }
-  }
-  
-  if(!classType)
-    classType = CppClassType::Ptr(openClass(kind));
+  CppClassType::Ptr classType = CppClassType::Ptr(openClass(kind));
   
   openType(classType, node);
 
@@ -263,7 +236,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
     {
       DUChainReadLocker lock(DUChain::lock());
       
-      ///If possible, find another forward-declaration and re-use it's type
+      ///If possible, find another fitting declaration/forward-declaration and re-use it's type
     
       KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
@@ -558,6 +531,10 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
 
   if (typeOpened)
     closeType();
+}
+
+void TypeBuilder::setLastType(KDevelop::AbstractType::Ptr ptr) {
+  m_lastType = ptr;
 }
 
 AbstractType::Ptr TypeBuilder::lastType() const
