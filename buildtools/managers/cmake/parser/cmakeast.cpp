@@ -23,12 +23,13 @@
 
 #include "cmakeast.h"
 
-#include <QtCore/QRegExp>
-#include <QtCore/QString>
-#include "astfactory.h"
-#include "cmakelistsparser.h"
+#include <QRegExp>
+#include <QString>
 
 #include <KDebug>
+
+#include "astfactory.h"
+#include "cmakelistsparser.h"
 
 void CMakeAst::writeBack(QString& buffer) const
 {
@@ -666,14 +667,22 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "cmake_minimum_required" )
         return false;
-    if ( func.arguments.size() < 2 || func.arguments.first().value.toLower()!="VERSION")
+    if ( func.arguments.size() < 2 || func.arguments.first().value.toUpper()!="VERSION")
         return false;
 
-    bool floatGood = true;
-    m_version = func.arguments[1].value.toFloat( &floatGood );
-    if ( m_version == 0.0 || !floatGood )
+    QRegExp rx("([0-9]*).([0-9]*).([0-9]*)");
+    rx.indexIn(func.arguments[1].value);
+    foreach(QString s, rx.capturedTexts())
+        m_version.append(s.toInt());
+
+    if(func.arguments.count()==3)
+    {
+        if(func.arguments[2].value.toUpper()=="FATAL_ERROR")
+            m_wrongVersionIsFatal = true;
+        else
+            return false;
+    } else if(func.arguments.count()>3)
         return false;
-    m_wrongVersionIsFatal = func.arguments.count()>=2 && func.arguments[2].value=="FATAL_ERROR";
     return true;
 }
 

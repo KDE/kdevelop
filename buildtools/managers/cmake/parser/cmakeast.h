@@ -232,7 +232,7 @@ CMAKE_END_AST_CLASS( BuildNameAst )
 
 
 CMAKE_BEGIN_AST_CLASS( CMakeMinimumRequiredAst )
-CMAKE_ADD_AST_MEMBER( float, float, version, Version )
+CMAKE_ADD_AST_MEMBER( QList<int>, QList<int>, version, Version )
 CMAKE_ADD_AST_MEMBER( bool, bool, wrongVersionIsFatal, WrongVersionIsFatal )
 CMAKE_END_AST_CLASS( CMakeMinimumRequiredAst )
 

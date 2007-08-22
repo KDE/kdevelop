@@ -218,7 +218,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
 
 int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 {
-    kDebug(9032) << "including" << dirs->includedDirectories();
+    kDebug(9032) << "adding include directories" << dirs->includedDirectories();
     IncludeDirectoriesAst::IncludeType t = dirs->includeType();
 
     QStringList toInclude = dirs->includedDirectories();
@@ -280,8 +280,8 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 
 int CMakeProjectVisitor::visit(const IncludeAst *inc)
 {
-    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
-    kDebug(9032) << "Include:" << modulePath;
+    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath + m_vars->value("CMAKE_CURRENT_SOURCE_DIR");
+    kDebug(9032) << "Include:" << inc->includeFile() << "@" << modulePath << " into ";
 
     QString possib=inc->includeFile();
     QString path;
