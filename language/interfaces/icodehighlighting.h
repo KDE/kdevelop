@@ -31,9 +31,9 @@ class Declaration;
 class Use;
 
 /**
-  KDevelop text highlighting support interface - the base class for
-  language support text highlighting routines. Languages can apply
-  highlighting to parsed code here.
+  @short KDevelop text highlighting support interface
+  The base class for language support text highlighting
+  routines. Languages can apply highlighting to parsed code here.
 */
 class KDEVPLATFORMLANGUAGE_EXPORT ICodeHighlighting
 {

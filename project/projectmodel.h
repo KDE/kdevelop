@@ -1,4 +1,4 @@
-/* This file is part of KDevelop
+    /* This file is part of KDevelop
     Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 
@@ -69,19 +69,32 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
             BuildFolder
         };
 
-        // Convenience function to return the current project
+        /** @returns Returns the project that the item belongs to.  */
         IProject* project() const;
 
+        /** @returns If this item is a folder, it returns a pointer to the folder, otherwise returns a 0 pointer. */
         virtual ProjectFolderItem *folder() const;
+
+        /** @returns If this item is a target, it returns a pointer to the target, otherwise returns a 0 pointer. */
         virtual ProjectTargetItem *target() const;
+
+        /** @returns If this item is a file, it returns a pointer to the file, otherwise returns a 0 pointer. */
         virtual ProjectFileItem *file() const;
+
+        /** @returns If this item is a project root, it returns a pointer to the project root item, otherwise returns a 0 pointer. */
         virtual ProjectItem* projectItem() const;
 
-        void setParent( QStandardItem* );
+        /**  @param parent sets the item parent to @p parent */
+        void setParent( QStandardItem* parent);
         virtual void setIcon();
 
+        /** @returns Returns a list of the folders that have this object as the parent. */
         QList<ProjectFolderItem*> folderList() const;
+
+        /** @returns Returns a list of the targets that have this object as the parent. */
         QList<ProjectTargetItem*> targetList() const;
+
+        /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
@@ -137,13 +150,13 @@ public:
     void setIncludeDirectories( const KUrl::List& includeList );
 
     /**
-     * Return a list of directories that are used as include directories
+     * @return Return a list of directories that are used as include directories
      * for all targets in this directory.
      */
     const KUrl::List& includeDirectories() const;
 
     /**
-     * Returns an association of environment variables which have been defined
+     * @return Returns an association of environment variables which have been defined
      * for all targets in this directory.
      */
     const QHash<QString, QString>& environment() const;
