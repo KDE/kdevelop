@@ -82,6 +82,8 @@ public:
     View *activeView;
     View *activeToolView;
 
+    QWidget *centralWidget;
+
     Sublime::MainWindow::VerticalTabsMode m_verticalTabsMode;
     Sublime::MainWindow::VerticalTitleBarMode m_verticalTitleBarMode;
 
@@ -97,6 +99,7 @@ private slots:
 
 private:
     Qt::DockWidgetArea positionToDockArea(Position position);
+    void recreateCentralWidget();
 
     MainWindow *m_mainWindow;
     QMap<AreaIndex*, QSplitter*> m_indexSplitters;
@@ -104,7 +107,6 @@ private:
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
-
 };
 
 }

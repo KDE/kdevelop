@@ -19,6 +19,7 @@
 #include "mainwindow_p.h"
 
 #include <QMenu>
+#include <QLayout>
 #include <QSplitter>
 #include <QDockWidget>
 
@@ -36,11 +37,12 @@
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w)
-    :controller(0), area(0), activeView(0), activeToolView(0),
+    :controller(0), area(0), activeView(0), activeToolView(0), centralWidget(0),
     m_verticalTabsMode( Sublime::MainWindow::UseVerticalTabs ),
     m_verticalTitleBarMode( Sublime::MainWindow::HorizontalDocks ),
     m_mainWindow(w), m_areaSwitcherMenu(0)
 {
+    recreateCentralWidget();
 }
 
 Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sublime::Position position)
@@ -105,9 +107,9 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         {
             kDebug(9504) << "reconstructing root area";
             //this is root area
-            splitter = new QSplitter(d->m_mainWindow);
+            splitter = new QSplitter(d->centralWidget);
             d->m_indexSplitters[index] = splitter;
-            d->m_mainWindow->setCentralWidget(splitter);
+            d->centralWidget->layout()->addWidget(splitter);
         }
         else
         {
@@ -174,10 +176,17 @@ void MainWindowPrivate::clearArea()
         if (view->hasWidget())
             view->widget()->setParent(0);
     }
-    m_mainWindow->setCentralWidget(0);
+    recreateCentralWidget();
     docks.clear();
     m_indexSplitters.clear();
     area = 0;
+}
+
+void MainWindowPrivate::recreateCentralWidget()
+{
+    centralWidget = new QWidget(m_mainWindow);
+    centralWidget->setLayout(new QVBoxLayout());
+    m_mainWindow->setCentralWidget(centralWidget);
 }
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*view*/)
@@ -223,7 +232,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         //conainer will be empty after widget removal so we need to delete it
         container->removeWidget(view->widget());
         delete container;
-        if ((splitter->count() == 0) && (splitter != m_mainWindow->centralWidget()))
+        if ((splitter->count() == 0) && (index->parent()))
         {
             m_indexSplitters.remove(index);
             delete splitter;
@@ -236,18 +245,12 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             AreaIndex *sibling = parent->first() == index ? parent->second() : parent->first();
             QSplitter *siblingSplitter = m_indexSplitters[sibling];
 
-            if (parentSplitter != m_mainWindow->centralWidget())
-            {
-                QWidget *grandParent = parentSplitter->parentWidget();
-                siblingSplitter->setParent(grandParent);
-                delete parentSplitter;
-            }
-            else
-            {
-                siblingSplitter->setParent(0);
-                m_mainWindow->setCentralWidget(0);
-                m_mainWindow->setCentralWidget(siblingSplitter);
-            }
+            QWidget *grandParent = parentSplitter->parentWidget();
+            siblingSplitter->setParent(grandParent);
+            if (grandParent == centralWidget)
+                centralWidget->layout()->addWidget(siblingSplitter);
+            delete parentSplitter;
+
             m_indexSplitters[parent] = siblingSplitter;
 
             //activate the current view in the remaining child

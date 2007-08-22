@@ -220,10 +220,14 @@ void AreaOperationTest::checkArea1(MainWindow *mw)
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
     QVERIFY(central != 0);
-    QVERIFY(central->inherits("QSplitter"));
+    QVERIFY(central->inherits("QWidget"));
+
+    QWidget *splitter = central->findChild<QSplitter*>();
+    QVERIFY(splitter);
+    QVERIFY(splitter->inherits("QSplitter"));
 
     //check that we have a container and 4 views inside
-    Container *container = central->findChild<Sublime::Container*>();
+    Container *container = splitter->findChild<Sublime::Container*>();
     QVERIFY(container);
     ViewCounter c;
     area->walkViews(c, area->rootIndex());
@@ -243,10 +247,14 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
     QVERIFY(central != 0);
-    QVERIFY(central->inherits("QSplitter"));
+    QVERIFY(central->inherits("QWidget"));
+
+    QWidget *splitter = central->findChild<QSplitter*>();
+    QVERIFY(splitter);
+    QVERIFY(splitter->inherits("QSplitter"));
 
     //check that we have 4 properly initialized containers
-    QList<Container*> containers = central->findChildren<Sublime::Container*>();
+    QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
     QCOMPARE(containers.count(), 4);
 
     int widgetCount = 0;
@@ -262,8 +270,8 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
     QCOMPARE(widgetCount, c.count);
 
     //check that we have 7 splitters: 2 vertical and 1 horizontal, rest is not splitted
-    QList<QSplitter*> splitters = central->findChildren<QSplitter*>();
-    splitters.append(qobject_cast<QSplitter*>(central));
+    QList<QSplitter*> splitters = splitter->findChildren<QSplitter*>();
+    splitters.append(qobject_cast<QSplitter*>(splitter));
     QCOMPARE(splitters.count(), 6+1); //6 child splitters + 1 central itself = 7 splitters
     int verticalSplitterCount = 0;
     int horizontalSplitterCount = 0;
@@ -494,10 +502,14 @@ void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     //check mainwindow
     QWidget *central = mw->centralWidget();
     QVERIFY(central != 0);
-    QVERIFY(central->inherits("QSplitter"));
+    QVERIFY(central->inherits("QWidget"));
+
+    QWidget *splitter = central->findChild<QSplitter*>();
+    QVERIFY(splitter);
+    QVERIFY(splitter->inherits("QSplitter"));
 
     //check containers
-    QList<Container*> containers = central->findChildren<Sublime::Container*>();
+    QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
     QCOMPARE(containers.count(), containerCount);
 
     int widgetCount = 0;
@@ -515,8 +527,8 @@ void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     area->walkViews(c, area->rootIndex());
     QCOMPARE(widgetCount, c.count);
 
-    QList<QSplitter*> splitters = central->findChildren<QSplitter*>();
-    splitters.append(qobject_cast<QSplitter*>(central));
+    QList<QSplitter*> splitters = splitter->findChildren<QSplitter*>();
+    splitters.append(qobject_cast<QSplitter*>(splitter));
     QCOMPARE(splitters.count(), splitterCount);
 }
 
