@@ -117,7 +117,7 @@ void DocumentRangeObject::setTextRange( KTextEditor::Range * range, RangeOwning 
     }
 }
 
-const Range DocumentRangeObject::textRange( ) const
+const Range& DocumentRangeObject::textRange( ) const
 {
     QMutexLocker lock(&d->m_rangeMutex);
     return *d->m_range;
