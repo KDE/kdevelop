@@ -34,6 +34,7 @@
 #include <kxmlguiwindow.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <ktexteditor/cursor.h>
 
 #include <QFileInfo>
 #include <QPixmap>
@@ -52,6 +53,8 @@
 // #include "kdevbackgroundparser.h"
 
 #include "kdevideextension.h"
+#include "projectcontroller.h"
+#include "documentcontroller.h"
 
 int main( int argc, char *argv[] )
 {
@@ -148,39 +151,56 @@ int main( int argc, char *argv[] )
         QObject::connect(Core::self()->pluginController(), SIGNAL(loadingPlugin(const QString&)),
                          splash, SLOT(showMessage(const QString&)));
         QTimer::singleShot(0, splash, SLOT(deleteLater()));
-//         QObject::connect( Core::documentController(),
-//                           SIGNAL( openingDocument( const QString & ) ),
-//                           splash, SLOT( showMessage( const QString & ) ) );
 
         splash->showMessage( i18n( "Starting GUI" ) );
     }
 
-//     bool openProject = false;
-//     QString projectName = args->getOption("project");
-//     if ( !projectName.isEmpty() )
-//     {
-//         Core::projectController()->openProject( KUrl(projectName) );
-//         openProject = true;
-//     }
-//     else if( args->count() > 0 )
-//     {
-//         KUrl url = args->url( 0 );
-//         QString ext = QFileInfo( url.fileName() ).suffix();
-//         if( ext == "kdev4" )
-//         {
-//             Core::projectController()->openProject( url );
-//             openProject = true;
-//         }
-//     }
-//
-//     if( !openProject )
-//     {
-//         for( int a=0; a<args->count(); ++a )
-//         {
-//             Core::documentController()->editDocument( KUrl( args->url( a ) ) );
-//         }
-//     }
+     bool openProject = false;
+    QString projectName = args->getOption("project");
+    if ( !projectName.isEmpty() )
+    {
+        Core::self()->projectController()->openProject( KUrl(projectName) );
+        openProject = true;
+    }
+    else if( args->count() > 0 )
+    {
+        KUrl url = args->url( 0 );
+        QString ext = QFileInfo( url.fileName() ).suffix();
+        if( ext == "kdev4" )
+        {
+            Core::self()->projectController()->openProject( url );
+            openProject = true;
+        }
+    }
 
+    if( !openProject )
+    {
+        for( int a=0; a<args->count(); ++a )
+        {
+            QString file = args->arg(a);
+
+            //Allow opening specific lines in documents, like mydoc.cpp:10
+            int line = -1;
+            int lineNumberOffset = file.lastIndexOf(':');
+            if( lineNumberOffset != -1 ) {
+                bool ok;
+                line = file.mid(lineNumberOffset+1).toInt(&ok);
+                if( !ok )
+                    line = -1;
+                else
+                    file = file.left(lineNumberOffset);
+            }
+
+            
+            kDebug() << "opening " << KUrl(file);
+            Core::self()->documentController()->openDocument( KUrl( file ), line != -1 ? KTextEditor::Cursor(line, 0) : KTextEditor::Cursor() );
+        }
+        if( args->count() == 1 )
+            splash->showMessage(args->url(0).prettyUrl());
+    }
+
+    
+    
     return app.exec();
 }
 
