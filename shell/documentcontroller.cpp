@@ -30,6 +30,9 @@ Boston, MA 02110-1301, USA.
 #include <QtDBus/QtDBus>
 
 #include <kio/netaccess.h>
+#include <kfiledialog.h>
+#include <kactioncollection.h>
+#include <klocale.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -152,11 +155,32 @@ DocumentController::DocumentController( QObject *parent )
     d = new DocumentControllerPrivate();
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/DocumentController",
         this, QDBusConnection::ExportScriptableSlots );
+
+    setupActions();
 }
 
 DocumentController::~DocumentController()
 {
     delete d;
+}
+
+void DocumentController::chooseDocument()
+{
+    openDocument(KUrl());
+}
+
+void DocumentController::setupActions()
+{
+    KActionCollection * ac =
+        Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
+
+    QAction *action;
+
+    action = ac->addAction( "file_open" );
+    action->setText(i18n( "&Open File..." ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( chooseDocument() ) );
+    action->setToolTip( i18n( "Open file" ) );
+    action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
 }
 
 void DocumentController::setEncoding( const QString &encoding )
@@ -180,6 +204,19 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
     KUrl url = inputUrl;
 
+    if ( url.isEmpty() )
+    {
+        KSharedConfig * config = KGlobal::config().data();
+        KConfigGroup group = config->group( "General Options" );
+        QString dir = group.readEntry( "DefaultProjectsDirectory",
+                                             QDir::homePath() );
+
+        url = KFileDialog::getOpenUrl( dir, i18n( "*.*|Text File\n" ),
+                                       Core::self()->uiControllerInternal()->defaultMainWindow(),
+                                       i18n( "Open File" ) );
+    }
+    
+    
     bool emitLoaded = false;
 
     //get a part document

@@ -80,7 +80,7 @@ public:
 
 public Q_SLOTS:
     /**Opens a new or existing document.
-    @param url The full Url of the document to open.
+    @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.
     @param range The location information, if applicable.
     @param activate Indicates whether to fully activate the document.*/
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
@@ -89,7 +89,10 @@ public Q_SLOTS:
 
     virtual void closeDocument( const KUrl &url );
 
+    private slots:
+    void chooseDocument();
 private:
+    void setupActions();
     Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
 
     struct DocumentControllerPrivate *d;
