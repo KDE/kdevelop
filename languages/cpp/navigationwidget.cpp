@@ -430,7 +430,6 @@ class NavigationContext : public KShared {
       
       m_currentText += "</small></small></p></body></html>";
 
-      kDebug() << "printing " << m_currentText << endl;
       return m_currentText;
     }
   private:
