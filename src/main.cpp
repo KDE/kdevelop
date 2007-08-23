@@ -39,6 +39,7 @@
 #include <QFileInfo>
 #include <QPixmap>
 #include <QTimer>
+#include <QDir>
 
 #include <core.h>
 // #include "kdevconfig.h"
@@ -191,8 +192,12 @@ int main( int argc, char *argv[] )
                     file = file.left(lineNumberOffset);
             }
 
+            if( KUrl::isRelativeUrl(file) ) {
+                KUrl u = QDir::currentPath();
+                u.addPath(file);
+                file = u.path();
+            }
             
-            kDebug() << "opening " << KUrl(file);
             Core::self()->documentController()->openDocument( KUrl( file ), line != -1 ? KTextEditor::Cursor(line, 0) : KTextEditor::Cursor() );
         }
         if( args->count() == 1 )
