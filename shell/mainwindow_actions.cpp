@@ -23,28 +23,18 @@ namespace KDevelop {
 
 void MainWindowPrivate::gotoNextWindow()
 {
-    if ( ( center->currentIndex() + 1 ) < center->count() )
-        center->setCurrentIndex( center->currentIndex() + 1 );
-    else
-        center->setCurrentIndex( 0 );
 }
 
 void MainWindowPrivate::gotoPreviousWindow()
 {
-    if ( ( center->currentIndex() - 1 ) >= 0 )
-        center->setCurrentIndex( center->currentIndex() - 1 );
-    else
-        center->setCurrentIndex( center->count() - 1 );
 }
 
 void MainWindowPrivate::gotoFirstWindow()
 {
-    center->setCurrentIndex( 0 );
 }
 
 void MainWindowPrivate::gotoLastWindow()
 {
-    center->setCurrentIndex( center->count() - 1 );
 }
 
 void MainWindowPrivate::projectOpened()

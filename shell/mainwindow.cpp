@@ -61,9 +61,7 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
 
     setObjectName( "MainWindow" );
     d = new MainWindowPrivate(this);
-    d->center = new QStackedWidget( this );
-    setCentralWidget( d->center );
-    
+
     setStandardToolBarMenuEnabled( true );
     d->setupActions();
 //     setStatusBar( new KDevelop::StatusBar( this ) );

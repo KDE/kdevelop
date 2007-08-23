@@ -59,7 +59,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-    :center(0), m_mainWindow(mainWindow)
+    :m_mainWindow(mainWindow)
 {
 }
 

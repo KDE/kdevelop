@@ -46,7 +46,6 @@ class MainWindowPrivate: public QObject {
 public:
     MainWindowPrivate(MainWindow *mainWindow);
 
-    QStackedWidget *center;
     QPointer<QWidget> centralPlugin;
 
     void setupActions();
