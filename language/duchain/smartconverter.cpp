@@ -93,7 +93,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
 
   d->m_editor->setCurrentUrl(context->url());
 
-  if (d->m_editor->smart()) {
+  if (d->m_editor->smart() && !context->smartRange()) {
     context->setTextRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
 
     d->convertDUChainInternal(context, true);
