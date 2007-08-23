@@ -130,8 +130,8 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
                 ILanguage *_lang = new Language(languageSupport, this);
                 d->languages.insert(languageSupport->name(),  reinterpret_cast<KDevelop::Language *const>(_lang));
 #else
-                ILanguage *lang = new Language(languageSupport, this);
-                d->languages.insert(languageSupport->name(), lang);
+                Language *_lang = new Language(languageSupport, this);
+                d->languages.insert(languageSupport->name(), _lang);
 #endif
                 languages << _lang;
             }
