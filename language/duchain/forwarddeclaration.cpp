@@ -41,7 +41,7 @@ public:
 };
 
 ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(rhs), d(new ForwardDeclarationPrivate) {
-  d->m_resolvedDeclaration = 0; ///@todo think about maybe using duchainpointer here, so we don't need to register ourselves as a forward-declaration
+  d->m_resolvedDeclaration = 0;
   setResolved( rhs.d->m_resolvedDeclaration );
 }
 
