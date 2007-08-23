@@ -102,7 +102,7 @@ DUChainLock::~DUChainLock()
   delete d;
 }
 
-bool DUChainLock::lockForRead()
+bool DUChainLock::lockForRead(unsigned int timeout)
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
   kDebug(9007) << "DUChain read lock requested by thread:" << QThread::currentThreadId();
@@ -113,10 +113,12 @@ bool DUChainLock::lockForRead()
   int currentTime = 0;
   bool locked = false;
 
+  unsigned int sleepTime = 10000;
+  unsigned int cycles = (timeout*1000)/sleepTime;
   // 10 second timeout...
-  while ( (d->m_writer && d->m_writer != QThread::currentThreadId()) && currentTime < 1000) {
+  while ( (d->m_writer && d->m_writer != QThread::currentThreadId()) && currentTime <= cycles) {
     lock.unlock();
-    usleep(10000);
+    usleep(sleepTime);
     currentTime++;
     lock.relock();
   }
@@ -133,9 +135,14 @@ bool DUChainLock::lockForRead()
   ++d->m_totalReaderRecursion;
 
   lock.unlock();
-  Q_ASSERT(currentThreadHasReadLock());
   
   return locked;
+}
+
+bool DUChainLock::lockForRead() {
+  bool ret = lockForRead(10000);
+  Q_ASSERT(currentThreadHasReadLock());
+  return ret;
 }
 
 void DUChainLock::releaseReadLock()

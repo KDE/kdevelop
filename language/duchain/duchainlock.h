@@ -85,7 +85,19 @@ public:
 
   /**
    * Acquires a read lock. Will not return until the lock is acquired
-   * or timeout is reached (10 seconds).
+   * or timeout
+   *
+   * Any number of read locks can be acquired at once, but not while
+   * there is a write lock.  Read locks are recursive.
+   * That means that a thread can acquire a read-lock when it already
+   * has an arbitrary count of read- and write-locks acquired.
+   * @param timeout A locking timeout in milliseconds. If it is reached, and the lock could not be acquired, false is returned.
+   */
+  bool lockForRead(unsigned int timeout);
+
+  /**
+   * Acquires a read lock. Will not return until the lock is acquired
+   * or timeout of 10 seconds is reached.
    *
    * Any number of read locks can be acquired at once, but not while
    * there is a write lock.  Read locks are recursive.
@@ -93,7 +105,7 @@ public:
    * has an arbitrary count of read- and write-locks acquired.
    */
   bool lockForRead();
-
+  
   /**
    * Releases a previously acquired read lock.
    */
