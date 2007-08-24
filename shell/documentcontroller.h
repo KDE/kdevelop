@@ -89,11 +89,10 @@ public Q_SLOTS:
 
     virtual void closeDocument( const KUrl &url );
 
-    private slots:
-    void chooseDocument();
 private:
     void setupActions();
     Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
+    Q_PRIVATE_SLOT(d, void chooseDocument())
 
     struct DocumentControllerPrivate *d;
 };

@@ -112,6 +112,11 @@ namespace KDevelop
 {
 
 struct DocumentControllerPrivate {
+    DocumentControllerPrivate(DocumentController* c)
+        : controller(c)
+    {
+    }
+
     QString presetEncoding;
 
     // used to map urls to open docs
@@ -138,6 +143,13 @@ struct DocumentControllerPrivate {
             documents.remove(url);
         }
     }
+    void chooseDocument()
+    {
+        controller->openDocument(KUrl());
+    }
+
+
+    DocumentController* controller;
 
     QList<HistoryEntry> backHistory;
     QList<HistoryEntry> forwardHistory;
@@ -152,7 +164,7 @@ struct DocumentControllerPrivate {
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
 {
-    d = new DocumentControllerPrivate();
+    d = new DocumentControllerPrivate(this);
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/DocumentController",
         this, QDBusConnection::ExportScriptableSlots );
 
@@ -162,11 +174,6 @@ DocumentController::DocumentController( QObject *parent )
 DocumentController::~DocumentController()
 {
     delete d;
-}
-
-void DocumentController::chooseDocument()
-{
-    openDocument(KUrl());
 }
 
 void DocumentController::setupActions()
