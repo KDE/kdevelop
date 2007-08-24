@@ -95,7 +95,7 @@ QList<ILanguage*> LanguageController::activeLanguages()
     return d->activeLanguages;
 }
 
-ILanguage *LanguageController::language(const QString &name) const
+ILanguage *LanguageController::language(const QString &name)
 {
     return d->languages[name];
 }
@@ -119,16 +119,8 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
             if (ILanguage *lang = language(languageSupport->name())) {
                 languages << lang;
             } else {
-#ifdef Q_CC_MSVC
-                // vcexpress++ 2005 complains with a "multiple defined variable lang" and 
-                // a "cannot convert KDevelop::Language* to KDevelop::Language* const&" error
-                // may be there is a better way to solve this 
-                ILanguage *_lang = new Language(languageSupport, this);
-                d->languages.insert(languageSupport->name(),  reinterpret_cast<KDevelop::Language *const>(_lang));
-#else
                 Language *_lang = new Language(languageSupport, this);
                 d->languages.insert(languageSupport->name(), _lang);
-#endif
                 languages << _lang;
             }
         }
