@@ -95,13 +95,9 @@ QList<ILanguage*> LanguageController::activeLanguages()
     return d->activeLanguages;
 }
 
-ILanguage *LanguageController::language(const QString &name)
+ILanguage *LanguageController::language(const QString &name) const
 {
-    LanguageHash::iterator it = d->languages.find(name);
-    if (it != d->languages.constEnd()) {
-        return it.value();
-    }
-    return 0;
+    return d->languages[name];
 }
 
 QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)

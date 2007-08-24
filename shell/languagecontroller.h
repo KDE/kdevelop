@@ -41,7 +41,7 @@ public:
     /** @copydoc ILanguageController::activeLanguages() */
     virtual QList<ILanguage*> activeLanguages();
     /** @copydoc ILanguageController::language() */
-    virtual ILanguage *language(const QString &name);
+    virtual ILanguage *language(const QString &name) const;
     /** @copydoc ILanguageController::languageForUrl() */
     virtual QList<ILanguage*> languagesForUrl(const KUrl &url);
     /** @copydoc ILanguageController::backgroundParser() */

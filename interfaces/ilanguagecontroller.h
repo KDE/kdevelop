@@ -39,7 +39,7 @@ public:
     The list is empty if the file's language is unsupported. */
     virtual QList<ILanguage*>activeLanguages() = 0;
     /** @return the language for given @p name. */
-    virtual ILanguage* language(const QString &name) = 0;
+    virtual ILanguage* language(const QString &name) const = 0;
     /** @return the languages that support the MIME type of @p url. */
     virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
 
