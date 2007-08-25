@@ -61,6 +61,8 @@ public:
      * All Asts that are a child of this Ast are written back as well.
      */
     virtual void writeBack(QString& buffer) const;
+    
+    virtual bool isDeprecated() const { return false; }
 
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
     
@@ -155,6 +157,8 @@ private:
 #define CMAKE_ADD_AST_FUNCTION( function ) \
     public:                                \
        function;
+
+#define CMAKE_MARK_AS_DEPRECATED() virtual bool isDeprecated() const { return true; }
 
 #define CMAKE_END_AST_CLASS( klassName ) };
 
@@ -261,6 +265,7 @@ CMAKE_END_AST_CLASS( EnableTestingAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExecProgramAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_ADD_AST_MEMBER( QString, const QString&, executableName, ExecutableName )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDirectory, WorkingDirectory )
 CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, arguments, Arguments )
@@ -270,10 +275,24 @@ CMAKE_END_AST_CLASS( ExecProgramAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExecuteProcessAst )
+CMAKE_ADD_AST_MEMBER( QList<QStringList>, const QList<QStringList>&, commands, Commands )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, resultVariable, ResultVariable )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, errorVariable, ErrorVariable )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, inputFile, InputFile )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputFile, OutputFile )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, errorFile, ErrorFile )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDirectory, WorkingDirectory )
+CMAKE_ADD_AST_MEMBER( float, float, timeout, Timeout )
+CMAKE_ADD_AST_MEMBER( bool, bool, isOutputQuiet, OutputQuiet )
+CMAKE_ADD_AST_MEMBER( bool, bool, isErrorQuiet, ErrorQuiet )
+CMAKE_ADD_AST_MEMBER( bool, bool, isOutputStrip, OutputStrip )
+CMAKE_ADD_AST_MEMBER( bool, bool, isErrorStrip, ErrorStrip )
 CMAKE_END_AST_CLASS( ExecuteProcessAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExportLibraryDepsAst )
+
 CMAKE_END_AST_CLASS( ExportLibraryDepsAst )
 
 
@@ -431,6 +450,8 @@ CMAKE_END_AST_CLASS( IncludeExternalMsProjectAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeRegularExpressionAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, match, Match)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, complain, Complain)
 CMAKE_END_AST_CLASS( IncludeRegularExpressionAst )
 
 
@@ -455,14 +476,17 @@ CMAKE_END_AST_CLASS( InstallAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallFilesAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( InstallFilesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallProgramsAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( InstallProgramsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallTargetsAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( InstallTargetsAst )
 
 
@@ -472,6 +496,7 @@ CMAKE_END_AST_CLASS( LinkDirectoriesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( LinkLibrariesAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( LinkLibrariesAst )
 
 
@@ -500,6 +525,8 @@ CMAKE_END_AST_CLASS( MacroAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MakeDirectoryAst )
+CMAKE_MARK_AS_DEPRECATED()
+CMAKE_ADD_AST_MEMBER( QString, const QString&, directory, Directory )
 CMAKE_END_AST_CLASS( MakeDirectoryAst )
 
 
@@ -635,18 +662,35 @@ CMAKE_END_AST_CLASS( TryCompileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( TryRunAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, runResultVar, RunResultVar)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, compileResultVar, CompileResultVar )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, binDir, BinDir)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, srcFile, SrcFile )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, cmakeFlags, CMakeFlags )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, compileDefs, CompileDefs )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVar, OutputVar)
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, args, Args )
 CMAKE_END_AST_CLASS( TryRunAst )
 
 
 CMAKE_BEGIN_AST_CLASS( UseMangledMesaAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, pathToMesa, PathToMesa)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputDir, OutputDir)
 CMAKE_END_AST_CLASS( UseMangledMesaAst )
 
 
 CMAKE_BEGIN_AST_CLASS( UtilitySourceAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, cacheEntry, CacheEntry)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, executableName, ExecutableName)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, pathToSource, PathToSource)
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, fileList, FileList)
 CMAKE_END_AST_CLASS( UtilitySourceAst )
 
 
 CMAKE_BEGIN_AST_CLASS( VariableRequiresAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, testVariable, TestVariable)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, resultVariable, ResultVariable)
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, requiredVariables, requiredVariables)
 CMAKE_END_AST_CLASS( VariableRequiresAst )
 
 
@@ -667,10 +711,12 @@ CMAKE_END_AST_CLASS( VtkWrapTclAst )
 
 
 CMAKE_BEGIN_AST_CLASS( WhileAst )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, condition, Condition )
 CMAKE_END_AST_CLASS( WhileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( WriteFileAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( WriteFileAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomInvokationAst )

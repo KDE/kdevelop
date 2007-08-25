@@ -556,7 +556,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     }
     else
     {
-        kDebug(9032) << "Did not find the macro:" << call->name();
+        kDebug(9032) << "Did not find the macro:" << call->name() << call->content()[call->line()].writeBack();
     }
     return 1;
 }
@@ -1161,7 +1161,8 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             delete element;
             return line;
         }
-
+        if(element->isDeprecated())
+            kDebug(9032) << "Warning: Using the function: " << funcName << " which is deprecated by cmake.";
         element->setContent(fc, line);
 
         int lines=element->accept(this);

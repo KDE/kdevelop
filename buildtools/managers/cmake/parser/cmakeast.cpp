@@ -31,7 +31,7 @@
 #include "astfactory.h"
 #include "cmakelistsparser.h"
 
-void CMakeAst::writeBack(QString& buffer) const
+void CMakeAst::writeBack(QString& ) const
 {
 }
 
@@ -70,6 +70,14 @@ CMAKE_REGISTER_AST( OptionAst, option )
 CMAKE_REGISTER_AST( StringAst, string )
 CMAKE_REGISTER_AST( GetCMakePropertyAst, get_cmake_property )
 CMAKE_REGISTER_AST( ForeachAst, foreach )
+CMAKE_REGISTER_AST( ExecuteProcessAst, execute_process )
+CMAKE_REGISTER_AST( IncludeRegularExpressionAst, include_regular_expression )
+CMAKE_REGISTER_AST( LinkDirectoriesAst, link_directories )
+CMAKE_REGISTER_AST( TryRunAst, try_run )
+CMAKE_REGISTER_AST( UseMangledMesaAst, use_mangled_mesa )
+CMAKE_REGISTER_AST( UtilitySourceAst, utility_source )
+CMAKE_REGISTER_AST( VariableRequiresAst, variable_requires )
+CMAKE_REGISTER_AST( WhileAst, while)
 
 enum Stage {NAMES, PATHS, PATH_SUFFIXES};
 
@@ -681,7 +689,8 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_wrongVersionIsFatal = true;
         else
             return false;
-    } else if(func.arguments.count()>3)
+    }
+    else if(func.arguments.count()>3)
         return false;
     return true;
 }
@@ -842,6 +851,8 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 ExecuteProcessAst::ExecuteProcessAst()
+    : m_timeout(0.f), m_isOutputQuiet(false), m_isErrorQuiet(false),
+                m_isOutputStrip(false), m_isErrorStrip(false)
 {
 }
 
@@ -855,7 +866,88 @@ void ExecuteProcessAst::writeBack( QString& ) const
 
 bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower() != "execute_process" || func.arguments.count()<2)
+        return false;
+    
+    enum Action {
+        None,
+        Cmd,
+        WorkDir,
+        Timeout,
+        ResultVar,
+        OutputVar,
+        ErrorVar,
+        InputFile,
+        OutputFile,
+        ErrorFile
+    };
+    Action act;
+    foreach(CMakeFunctionArgument a, func.arguments) {
+        QString val=a.value.toLower();
+        if(val=="command") {
+            m_commands.append(QStringList());
+            act=Cmd;
+        } else if(val=="working_directory")
+            act=WorkDir;
+        else if(val=="timeout")
+            act=Timeout;
+        else if(val=="result_variable")
+            act=ResultVar;
+        else if(val=="output_variable")
+            act=OutputVar;
+        else if(val=="error_variable")
+            act=ErrorVar;
+        else if(val=="input_file")
+            act=InputFile;
+        else if(val=="output_file")
+            act=OutputFile;
+        else if(val=="error_file")
+            act=ErrorFile;
+        else { 
+            act=None;
+            if(val=="output_quiet")
+                m_isOutputQuiet=true;
+            else if(val=="error_quiet")
+                m_isErrorQuiet=true;
+            else if(val=="output_strip_trailing_whitespace")
+                m_isOutputStrip=true;
+            else if(val=="error_strip_trailing_whitespace")
+                m_isErrorStrip=true;
+        }
+        
+        switch(act) {
+            case None:
+                return false;
+            case Cmd:
+                m_commands.last().append(val);
+                break;
+            case WorkDir:
+                m_workingDirectory=val;
+                break;
+            case Timeout:
+                m_timeout=val.toFloat();
+                break;
+            case ResultVar:
+                m_resultVariable=val;
+                break;
+            case OutputVar:
+                m_outputVariable=val;
+                break;
+            case ErrorVar:
+                m_errorVariable=val;
+                break;
+            case InputFile:
+                m_inputFile=val;
+                break;
+            case OutputFile:
+                m_outputFile=val;
+                break;
+            case ErrorFile:
+                m_errorFile=val;
+                break;
+        }
+    }
+    return true;
 }
 
 ExportLibraryDepsAst::ExportLibraryDepsAst()
@@ -1642,7 +1734,12 @@ void IncludeRegularExpressionAst::writeBack( QString& ) const
 
 bool IncludeRegularExpressionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "include_regular_expression" || func.arguments.isEmpty() || func.arguments.count()>2 )
+        return false;
+    m_match=func.arguments[0].value;
+    if(func.arguments.count()==2)
+        m_complain=func.arguments[1].value;
+    return true;
 }
 
 InstallAst::InstallAst()
@@ -1727,7 +1824,12 @@ void LinkDirectoriesAst::writeBack( QString& ) const
 
 bool LinkDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "include_regular_expression" || func.arguments.isEmpty() )
+        return false;
+    
+    foreach(CMakeFunctionArgument arg, func.arguments)
+        m_directories.append(arg.value);
+    return true;
 }
 
 LinkLibrariesAst::LinkLibrariesAst()
@@ -1910,10 +2012,7 @@ void MacroAst::writeBack( QString& ) const
 
 bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "macro" )
-        return false;
-
-    if ( func.arguments.size() < 1 )
+    if ( func.name.toLower() != "macro" || func.arguments.isEmpty())
         return false;
 
     m_macroName = func.arguments[0].value.toLower();
@@ -1938,7 +2037,10 @@ void MakeDirectoryAst::writeBack( QString& ) const
 
 bool MakeDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "make_directory" || func.arguments.isEmpty() || func.arguments.size()>1)
+        return false;
+    m_directory=func.arguments.first().value;
+    return true;
 }
 
 MarkAsAdvancedAst::MarkAsAdvancedAst()
@@ -2606,7 +2708,51 @@ void TryRunAst::writeBack( QString& ) const
 
 bool TryRunAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="try_run" || func.arguments.count()<4)
+        return false;
+    
+    enum Actions { None, CMakeFlags, CompileDefs, OutputVariable, Args };
+    Actions act;
+    unsigned int i=0;
+    foreach(CMakeFunctionArgument arg, func.arguments) {
+        QString val=arg.value.toLower();
+        if(i<4)
+            act=None;
+
+        if(i==0)
+            m_runResultVar=arg.value;
+        else if(i==1)
+            m_compileResultVar=arg.value;
+        else if(i==2)
+            m_binDir=arg.value;
+        else if(i==3)
+            m_srcFile=arg.value;
+        else if(val=="cmake_flags")
+            act=CMakeFlags;
+        else if(val=="compile_definitions")
+            act=CompileDefs;
+        else if(val=="output_variable")
+            act=OutputVariable;
+        else if(val=="args")
+            act=Args;
+        else switch(act) {
+            case None:
+                return false;
+            case CMakeFlags:
+                m_cmakeFlags.append(arg.value);
+                break;
+            case CompileDefs:
+                m_compileDefs.append(arg.value);
+            case OutputVariable:
+                m_outputVar=arg.value;
+                break;
+            case Args:
+                m_args.append(arg.value);
+                break;
+        }
+        i++;
+    }
+    return true;
 }
 
 UseMangledMesaAst::UseMangledMesaAst()
@@ -2623,7 +2769,11 @@ void UseMangledMesaAst::writeBack( QString& ) const
 
 bool UseMangledMesaAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="path_to_mesa" || func.arguments.count()!=2)
+        return false;
+    m_pathToMesa=func.arguments[0].value;
+    m_outputDir=func.arguments[1].value;
+    return true;
 }
 
 UtilitySourceAst::UtilitySourceAst()
@@ -2640,7 +2790,20 @@ void UtilitySourceAst::writeBack( QString& ) const
 
 bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="utility_source" || func.arguments.count()<3)
+        return false;
+    unsigned int i=0;
+    foreach(CMakeFunctionArgument arg, func.arguments) {
+        if(i==0)
+            m_cacheEntry=arg.value;
+        else if(i==1)
+            m_executableName=arg.value;
+        else if(i==2)
+            m_pathToSource=arg.value;
+        else
+            m_fileList.append(arg.value);
+    }
+    return true;
 }
 
 VariableRequiresAst::VariableRequiresAst()
@@ -2657,7 +2820,19 @@ void VariableRequiresAst::writeBack( QString& ) const
 
 bool VariableRequiresAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="variable_requires" || func.arguments.count()<2)
+        return false;
+    unsigned int i=0;
+    foreach(CMakeFunctionArgument arg, func.arguments) {
+        if(i==0)
+            m_testVariable=arg.value;
+        else if(i==1)
+            m_resultVariable=arg.value;
+        else
+            m_requiredVariables.append(arg.value);
+        i++;
+    }
+    return true;
 }
 
 VtkMakeInstantiatorAst::VtkMakeInstantiatorAst()
@@ -2742,7 +2917,12 @@ void WhileAst::writeBack( QString& ) const
 
 bool WhileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="while" || func.arguments.isEmpty())
+        return false;
+    foreach(CMakeFunctionArgument arg, func.arguments) {
+        m_condition.append(arg.value);
+    }
+    return true;
 }
 
 WriteFileAst::WriteFileAst()
