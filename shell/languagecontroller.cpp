@@ -40,7 +40,7 @@ typedef QHash<QString, QList<ILanguage*> > LanguageCache;
 
 struct LanguageControllerPrivate {
     LanguageControllerPrivate(LanguageController *controller)
-        : m_controller(controller), backgroundParser(new BackgroundParser(controller)) {}
+        : backgroundParser(new BackgroundParser(controller)), m_controller(controller) {}
 
     void documentActivated(KDevelop::IDocument *document)
     {
@@ -95,7 +95,7 @@ QList<ILanguage*> LanguageController::activeLanguages()
     return d->activeLanguages;
 }
 
-ILanguage *LanguageController::language(const QString &name)
+ILanguage *LanguageController::language(const QString &name) const
 {
     return d->languages[name];
 }
