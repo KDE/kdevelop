@@ -35,6 +35,8 @@ namespace QMake
  * @TODO: functions do not always completely ignore whitespace:
  *        message( foo   bar  )
  *        this prints "foo   bar" on the output
+ * @TODO: Think about putting comment-parsing into the lexer again so things like
+ *        "sfsd#sdfs" don't get to the parser without the comment-part being chopped off
  */
 
 Lexer::Lexer( parser* _parser, const QString& content ):
