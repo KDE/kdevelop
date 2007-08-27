@@ -54,21 +54,7 @@ public:
      * Provide a list of files that contain the preprocessor defines for the
      * project
      */
-    virtual KUrl::List preprocessorDefines(KDevelop::ProjectBaseItem*) const;
-
-    /** @return The Makefile associated with the specified @p folder.
-     *   @note The Makefile list must contain absolute file names
-     *
-     * For instance, in <b>Automake</b> projects you can use something like:
-     * @code
-     * return dom->name() + "/Makefile.am";
-     * @endcode
-     */
-    virtual KUrl findMakefile(KDevelop::ProjectFolderItem* folder) const;
-
-    /** @return The list of the Makefiles from the @p folder.
-    @note The Makefile list must contains absolute file names */
-    virtual KUrl::List findMakefiles(KDevelop::ProjectFolderItem* folder) const;
+    virtual QMap<QString,QString> preprocessorDefines(KDevelop::ProjectBaseItem*) const;
 
     /**
      * Create a new target

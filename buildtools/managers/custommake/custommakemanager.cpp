@@ -116,28 +116,9 @@ KUrl::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem*) con
     return KUrl::List();
 }
 
-KUrl::List CustomMakeManager::preprocessorDefines(KDevelop::ProjectBaseItem*) const
+QMap<QString,QString> CustomMakeManager::preprocessorDefines(KDevelop::ProjectBaseItem*) const
 {
-    return KUrl::List();
-}
-
-KUrl CustomMakeManager::findMakefile(KDevelop::ProjectFolderItem* folder) const
-{
-    KUrl ret = folder->url();
-    ret.addPath( "Makefile" );
-    QFileInfo fileInfo( ret.toLocalFile() );
-    if( ! fileInfo.exists() )
-    {
-        // not exist
-        return KUrl();
-    }
-    return ret;
-}
-
-KUrl::List CustomMakeManager::findMakefiles(KDevelop::ProjectFolderItem* folder) const
-{
-    Q_UNUSED(folder)
-    return KUrl::List();
+    return QMap<QString,QString>();
 }
 
 ProjectTargetItem* CustomMakeManager::createTarget(const QString& target, KDevelop::ProjectFolderItem *parent)

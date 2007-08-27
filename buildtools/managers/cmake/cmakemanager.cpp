@@ -206,18 +206,6 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     return m_rootItem;
 }
 
-KUrl CMakeProjectManager::findMakefile( KDevelop::ProjectFolderItem* dom ) const
-{
-    Q_UNUSED( dom );
-    return KUrl();
-}
-
-KUrl::List CMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* dom ) const
-{
-    Q_UNUSED( dom );
-    return KUrl::List();
-}
-
 QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 {
     return m_targets;
