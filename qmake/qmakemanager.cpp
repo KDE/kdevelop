@@ -157,30 +157,6 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
     return 0;
 }
 
-KUrl QMakeProjectManager::findMakefile( KDevelop::ProjectFolderItem* folder ) const
-{
-
-    QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
-    if( !qmitem )
-    {
-        return KUrl();
-    }
-    return KUrl( qmitem->projectFile()->absoluteFile() );
-}
-
-KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* folder ) const
-{
-    QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
-    if( !qmitem )
-    {
-        return KUrl::List();
-    }
-    KUrl::List l;
-
-    l.append( KUrl( qmitem->projectFile()->absoluteFile() ) );
-    return l;
-}
-
 QList<KDevelop::ProjectTargetItem*> QMakeProjectManager::targets(KDevelop::ProjectItem* item) const
 {
     Q_UNUSED(item)

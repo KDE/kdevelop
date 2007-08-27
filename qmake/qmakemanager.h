@@ -61,7 +61,7 @@ public:
     virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectItem*) const;
     virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
-    virtual KUrl::List preprocessorDefines(KDevelop::ProjectBaseItem*) const { return KUrl::List(); }
+    virtual QMap<QString,QString> preprocessorDefines(KDevelop::ProjectBaseItem*) const { return QMap<QString,QString>(); }
 
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
             KDevelop::ProjectFolderItem* ) { return false; }
@@ -78,8 +78,6 @@ public:
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectItem* import( KDevelop::IProject* );
-    virtual KUrl findMakefile( KDevelop::ProjectFolderItem* folder ) const;
-    virtual KUrl::List findMakefiles( KDevelop::ProjectFolderItem* folder ) const;
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl&,
             KDevelop::ProjectFolderItem* ) { return 0; }
