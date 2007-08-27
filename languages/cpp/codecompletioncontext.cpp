@@ -221,9 +221,15 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if( !expr.trimmed().isEmpty() ) {
     m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
     if( !m_expressionResult.isValid() ) {
-      log( QString("expression \"%1\" could not be evaluated").arg(expr) );
-      m_valid = false;
-      return;
+      if( m_memberAccessOperation != StaticMemberChoose ) {
+        log( QString("expression \"%1\" could not be evaluated").arg(expr) );
+        m_valid = false;
+        return;
+      } else {
+        //It may be an access to a namespace, like "MyNamespace::".
+        //The "MyNamespace" can not be evaluated, still we can give some completions.
+        return;
+      }
     }
   }
 
@@ -346,6 +352,28 @@ const CodeCompletionContext::FunctionList& CodeCompletionContext::functions() co
 ExpressionEvaluationResult CodeCompletionContext::memberAccessContainer() const {
   return m_expressionResult;
 }
+
+QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
+  QList<DUContext*> ret;
+  
+  if( memberAccessOperation() == StaticMemberChoose && m_duContext ) {
+    //Locate all namespace-instances we will be completing from
+    ret += m_duContext->findContexts(DUContext::Class, QualifiedIdentifier(m_expression)); 
+    ret += m_duContext->findContexts(DUContext::Namespace, QualifiedIdentifier(m_expression)); ///@todo respect position
+  }
+
+  if(m_expressionResult.isValid() ) {
+    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( TypeUtils::targetType(m_expressionResult.type.data()) );
+    if( idType && idType->declaration() ) {
+      DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
+      if( ctx )
+        ret << ctx;
+    }
+  }
+  
+  return ret;
+}
+
 
 CodeCompletionContext::~CodeCompletionContext() {
 }

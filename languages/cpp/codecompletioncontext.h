@@ -117,6 +117,14 @@ namespace Cpp {
       ExpressionEvaluationResult memberAccessContainer() const;
 
       /**
+       * Returns the internal context of memberAccessContainer, if any.
+       * 
+       * When memberAccessOperation is StaticMemberChoose, this returns all
+       * fitting namespace-contexts.
+       * */
+      QList<DUContext*> memberAccessContainers() const;
+      
+      /**
        * When memberAccessOperation is FunctionCallAccess,
        * this returns all functions available for matching, together with the argument-number that should be matched.
        *
