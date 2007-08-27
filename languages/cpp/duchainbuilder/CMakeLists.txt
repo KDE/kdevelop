@@ -32,7 +32,7 @@ set(kdevcppduchainbuilder_LIB_SRCS
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 kde4_add_library(kdev4cppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})
-target_link_libraries(kdev4cppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} kdev4cppparser)
+target_link_libraries(kdev4cppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY} kdev4cppparser)
 install(TARGETS kdev4cppduchainbuilder DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
