@@ -42,7 +42,7 @@ remove_definitions( -DQT_NO_STL )
 #       to the plugin target
 kde4_add_kcfg_files( cmakecommon_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
-target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS}
+target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBRARY}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} )
 
 

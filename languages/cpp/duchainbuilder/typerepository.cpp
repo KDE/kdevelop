@@ -20,11 +20,11 @@
 
 #include <QMutexLocker>
 
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 using namespace KDevelop;
 
-static KStaticDeleter<TypeRepository> sdType;
+static K3StaticDeleter<TypeRepository> sdType;
 TypeRepository* TypeRepository::s_instance = 0;
 
 TypeRepository::TypeRepository()
