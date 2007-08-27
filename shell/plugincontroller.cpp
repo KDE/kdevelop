@@ -41,7 +41,6 @@ Boston, MA 02110-1301, USA.
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <kxmlguifactory.h>
-#include <kstaticdeleter.h>
 #include <kmenu.h>
 #include <QtGui/QAction>
 
