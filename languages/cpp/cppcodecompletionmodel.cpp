@@ -94,11 +94,13 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   KUrl url = view->document()->url();
   TopDUContext* top = 0;
   
-  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
-  {
-    KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-    top = KDevelop::DUChain::self()->chainForDocument(url, env);
+  if( !KDevelop::DUChain::lock()->lockForRead(400) ) {
+    kDebug() << "could not lock du-chain in time" << endl;
+    return;
   }
+  
+  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
+  top = KDevelop::DUChain::self()->chainForDocument(url, env);
   delete env;
 
   if( !top ) {
@@ -115,7 +117,6 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     
     DUContextPointer thisContext;
     {
-      DUChainReadLocker lock(DUChain::lock());
       thisContext = top->findContextAt(range.start());
 
        kDebug(9007) << "context is set to" << thisContext.data();
@@ -132,10 +133,12 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
         }
     }
 
+    DUChain::lock()->releaseReadLock();
+    
     setContext(thisContext, range.start(), view);
-
   } else {
     kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
+    DUChain::lock()->releaseReadLock();
   }
 }
 
@@ -665,20 +668,13 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
   if( completionContext->isValid() ) {
     DUChainReadLocker lock(DUChain::lock());
 
-    if( completionContext->memberAccessContainer().isValid() )
+    if( completionContext->memberAccessContainer().isValid() ||completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
     {
-      AbstractType::Ptr containerType = completionContext->memberAccessContainer().type;
-      
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( realType(containerType.data()) );
-      if( idType && idType->declaration() ) {
-        DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
-        if( ctx ) {
-          m_declarations.clear();
+      QList<DUContext*> containers = completionContext->memberAccessContainers();
+      if( !containers.isEmpty() ) {
+        foreach(DUContext* ctx, containers)
           foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), false) ) )
             m_declarations << CompletionItem( decl.first, completionContext, decl.second );
-        } else {
-          kDebug(9007) << "Could not get internal context from declaration \"" << idType->declaration()->toString() << "\"";
-        }
       } else {
         kDebug(9007) << "CppCodeCompletionModel::setContext: bad container-type";
       }
