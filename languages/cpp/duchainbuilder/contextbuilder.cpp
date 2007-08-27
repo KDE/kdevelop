@@ -783,7 +783,7 @@ bool ContextBuilder::createContextIfNeeded(AST* node, const QList<DUContext*>& i
   return contextNeeded;
 }
 
-const QualifiedIdentifier& ContextBuilder::identifierForName(NameAST* id, TypeSpecifierAST** typeSpecifier) const
+QualifiedIdentifier ContextBuilder::identifierForName(NameAST* id, TypeSpecifierAST** typeSpecifier) const
 {
   if( !id )
     return QualifiedIdentifier();

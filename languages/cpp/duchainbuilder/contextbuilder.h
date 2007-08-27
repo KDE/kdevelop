@@ -121,7 +121,7 @@ protected:
    * is called, so you need to create a copy (store as non-reference).
    * @param typeSpecifier a pointer that will eventually be filled with a type-specifier that can be found in the name(for example the return-type of a cast-operator)
    */
-  const KDevelop::QualifiedIdentifier& identifierForName(NameAST* id, TypeSpecifierAST** typeSpecifier = 0) const;
+  KDevelop::QualifiedIdentifier identifierForName(NameAST* id, TypeSpecifierAST** typeSpecifier = 0) const;
 
   CppEditorIntegrator* m_editor;
 
