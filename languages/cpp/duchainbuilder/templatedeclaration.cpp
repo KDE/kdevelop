@@ -29,6 +29,10 @@
 using namespace KDevelop;
 using namespace Cpp;
 
+QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
+
+typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
+
 struct Incrementer {
   Incrementer(int* cnt ) : c(cnt) {
     ++*cnt;
@@ -40,10 +44,6 @@ struct Incrementer {
 
   int* c;
 };
-
-QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
-
-typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
 uint qHash( const ExpressionEvaluationResult& key )
 {
@@ -96,13 +96,13 @@ const DelayedType* containsDelayedType(const AbstractType* type)
 ///Replaces any DelayedType's in interesting positions with their resolved versions, if they can be resolved.
 struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   const KDevelop::DUContext* searchContext;
+  int depth_counter;
 
-  DelayedTypeResolver(const KDevelop::DUContext* _searchContext) : searchContext(_searchContext) {
+  DelayedTypeResolver(const KDevelop::DUContext* _searchContext) : searchContext(_searchContext), depth_counter(0) {
   }
 
   virtual AbstractType* exchange( const AbstractType* type )
   {
-    static int depth_counter = 0;
     Incrementer inc(&depth_counter);
     if( depth_counter > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
