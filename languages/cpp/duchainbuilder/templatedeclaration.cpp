@@ -20,8 +20,6 @@
 
 #include "templatedeclaration.h"
 
-#include <qatomic.h>
-
 #include <duchain/declaration.h>
 #include <duchain/forwarddeclaration.h>
 
@@ -31,13 +29,13 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-struct AtomicIncrementer {
-  AtomicIncrementer(int* cnt ) : c(cnt) {
-    q_atomic_increment(cnt);
+struct Incrementer {
+  Incrementer(int* cnt ) : c(cnt) {
+    ++*cnt;
   }
 
-  ~AtomicIncrementer() {
-    q_atomic_decrement(c);
+  ~Incrementer() {
+    --*c;
   }
 
   int* c;
@@ -105,7 +103,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   virtual AbstractType* exchange( const AbstractType* type )
   {
     static int depth_counter = 0;
-    AtomicIncrementer inc(&depth_counter);
+    Incrementer inc(&depth_counter);
     if( depth_counter > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
     return const_cast<AbstractType*>(type); ///@todo remove const_cast;
