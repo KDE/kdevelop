@@ -27,18 +27,31 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kmacroexpander.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kactioncollection.h>
 #include <kio/netaccess.h>
 
 #include <icore.h>
 #include <iprojectcontroller.h>
 
-#include "appwizardfactory.h"
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
 #include "projecttemplatesmodel.h"
 
-AppWizardPart::AppWizardPart(QObject *parent, const QStringList &)
+K_PLUGIN_FACTORY(AppWizardFactory,
+    registerPlugin<AppWizardPart>();
+    KComponentData compData = componentData();
+    KStandardDirs *dirs = compData.dirs();
+    dirs->addResourceType("apptemplates", "data", "kdevappwizard/templates/");
+    dirs->addResourceType("apptemplate_descriptions","data", "kdevappwizard/template_descriptions/");
+    dirs->addResourceType("appimports", "data", "kdevappwizard/imports/");
+    dirs->addResourceType("appimportfiles", "data", "kdevappwizard/importfiles/");
+    setComponentData(compData);
+)
+K_EXPORT_PLUGIN(AppWizardFactory("kdevappwizard"))
+
+AppWizardPart::AppWizardPart(QObject *parent, const QVariantList &)
     :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
 {
     setXMLFile("kdevappwizard.rc");

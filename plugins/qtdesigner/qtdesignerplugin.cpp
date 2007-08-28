@@ -34,7 +34,8 @@
 #include <kaction.h>
 #include <kmimetype.h>
 #include <kxmlguiwindow.h>
-#include <kparts/genericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kparts/mainwindow.h>
 #include <kparts/partmanager.h>
 #include <ksavefile.h>
@@ -48,8 +49,8 @@
 #include "qtdesignerdocument.h"
 #include "internals/qdesigner_integration_p.h"
 
-typedef KGenericFactory<QtDesignerPlugin> QtDesignerPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kdevqtdesigner, QtDesignerPluginFactory("kdevqtdesigner"))
+K_PLUGIN_FACTORY(QtDesignerPluginFactory, registerPlugin<QtDesignerPlugin>(); )
+K_EXPORT_PLUGIN(QtDesignerPluginFactory("kdevqtdesigner"))
 
 class QtDesignerDocumentFactory : public KDevelop::IDocumentFactory
 {
@@ -124,7 +125,7 @@ private:
     Type m_type;
 };
 
-QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
+QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     : KDevelop::IPlugin(QtDesignerPluginFactory::componentData(),parent),
       m_activeDoc(0), m_docFactory(new QtDesignerDocumentFactory(this)),
       m_widgetBoxFactory(0), m_propertyEditorFactory(0),

@@ -25,6 +25,7 @@
 #include <QHash>
 #include <QtCore/QPointer>
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 class QAction;
 class QDesignerIntegrationInterface;
@@ -54,7 +55,7 @@ class QtDesignerPlugin: public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    QtDesignerPlugin(QObject *parent, const QStringList &args);
+    QtDesignerPlugin(QObject *parent, const QVariantList &args = QVariantList() );
     virtual ~QtDesignerPlugin();
 
     void setupActions();

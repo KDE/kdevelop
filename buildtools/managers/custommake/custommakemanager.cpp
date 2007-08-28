@@ -16,7 +16,8 @@
 #include <iprojectcontroller.h>
 #include <iplugincontroller.h>
 #include "imakebuilder.h"
-#include "kgenericfactory.h"
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <projectmodel.h>
 #include <context.h>
 
@@ -31,15 +32,15 @@
 #include <QtDesigner/QExtensionFactory>
 
 #include <kurl.h>
+#include <klocale.h>
 #include <kmenu.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
 using namespace KDevelop;
 
-typedef KGenericFactory<CustomMakeManager> CustomMakeSupportFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevcustommakemanager,
-                            CustomMakeSupportFactory( "kdevcustommakemanager" ) )
+K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
+K_EXPORT_PLUGIN(CustomMakeSupportFactory("kdevcustommakemanager"))
 
 class CustomMakeManager::Private
 {
@@ -53,7 +54,7 @@ public:
 //     QList< KDevelop::ProjectBaseItem* > m_testItems; // for debug
 };
 
-CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
+CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
     : KDevelop::IPlugin( CustomMakeSupportFactory::componentData(), parent )
     , d( new Private )
 {

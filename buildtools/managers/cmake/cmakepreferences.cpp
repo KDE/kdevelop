@@ -20,16 +20,17 @@
 
 #include "cmakepreferences.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include "ui_cmakebuildsettings.h"
 #include "cmakeconfig.h"
 #include <KUrl>
 
-typedef KGenericFactory<CMakePreferences> CMakePreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdevcmake_settings, CMakePreferencesFactory( "kcm_kdevcmake_settings" )  )
+K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
+K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
 
-CMakePreferences::CMakePreferences(QWidget* parent, const QStringList& args)
+CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<CMakeSettings>(CMakePreferencesFactory::componentData(), parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );

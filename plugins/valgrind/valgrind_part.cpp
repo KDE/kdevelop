@@ -48,10 +48,11 @@
 #include "valgrindmodel.h"
 #include "valgrindcontrol.h"
 
-typedef KGenericFactory<ValgrindPart> ValgrindFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevvalgrind, ValgrindFactory( "kdevvalgrind" ) )
+K_PLUGIN_FACTORY(ValgrindFactory, registerPlugin<ValgrindPart>(); )
+K_EXPORT_PLUGIN(ValgrindFactory("kdevvalgrind"))
 
-ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
+
+ValgrindPart::ValgrindPart( QObject *parent, const QVariantList& )
   : KDevPlugin( ValgrindFactory::componentData(), parent)
   , m_model(new ValgrindModel())
   , m_control(new ValgrindControl(this))

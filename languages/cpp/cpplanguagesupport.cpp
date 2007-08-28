@@ -31,7 +31,8 @@
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kio/netaccess.h>
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
@@ -75,15 +76,16 @@ using namespace KDevelop;
 
 CppLanguageSupport* CppLanguageSupport::m_self = 0;
 
-typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
 
-CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*args*/ )
+K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
+K_EXPORT_PLUGIN(KDevCppSupportFactory("kdevcppsupport"))
+
+CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
       KDevelop::ILanguageSupport()
 {
     m_self = this;
-    
+
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
 
     m_highlights = new CppHighlighting( this );
@@ -102,7 +104,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QStringList& /*ar
     // Uses gcc commands to retrieve the information.
     CppTools::setupStandardIncludePaths(*m_standardIncludePaths);
     CppTools::setupStandardMacros(*m_standardMacros);
-    
+
     connect( core()->documentController(),
              SIGNAL( documentLoaded( KDevelop::IDocument* ) ),
              this, SLOT( documentLoaded( KDevelop::IDocument* ) ) );
@@ -206,7 +208,7 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
 KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 {
     KUrl::List allPaths;
-    
+
     foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
         KDevelop::ProjectFileItem *file = project->fileForUrl(source);
         if (!file) {
@@ -220,7 +222,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         }
 
         KUrl::List dirs = buildManager->includeDirectories(file);
-        
+
         foreach( KUrl dir, dirs ) {
             dir.adjustPath(KUrl::AddTrailingSlash);
             allPaths << dir;
@@ -240,9 +242,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         }else{
             kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
         }
-        
+
     }
-    
+
     if( allPaths.isEmpty() ) {
         ///Last chance: Take a parsed version of the file from the du-chain, and get its include-paths(We will then get the include-path that some time was used to parse the file)
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -259,7 +261,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
     foreach( QString path, *m_standardIncludePaths)
         allPaths << KUrl(path);
 
-    
+
     //Clean the list for better search-performance(remove multiple paths)
     QMap<KUrl, bool> hadUrls;
     for( KUrl::List::iterator it = allPaths.begin(); it != allPaths.end(); ) {
@@ -270,7 +272,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             ++it;
         }
     }
-    
+
     return allPaths;
 }
 
@@ -281,7 +283,7 @@ QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths
     if( !skipPath.isEmpty() )
         kDebug(9007) << "skipping path" << skipPath;
 #endif
-    
+
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
         QFileInfo info(QDir(localPath.path()), includeName);
         if (info.exists() && info.isReadable()) {
@@ -303,9 +305,9 @@ restart:
                 continue;
             }
         }
-            
+
         QFileInfo info(QDir( path.path() ), includeName);
-        
+
         if (info.exists() && info.isReadable()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
             ret.first = KUrl(info.absoluteFilePath());
@@ -325,7 +327,7 @@ restart:
         foreach( KUrl path, includePaths )
             kDebug(9007) << path;
     }
-    
+
     return ret;
 }
 

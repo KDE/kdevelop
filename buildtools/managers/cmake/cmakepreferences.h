@@ -39,7 +39,7 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
 {
     Q_OBJECT
     public:
-        explicit CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+        explicit CMakePreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
         ~CMakePreferences();
 
     private slots:

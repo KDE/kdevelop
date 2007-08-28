@@ -34,7 +34,8 @@
 #include <iplugincontroller.h>
 #include <iproject.h>
 #include "iqmakebuilder.h"
-#include "kgenericfactory.h"
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <projectmodel.h>
 
 #include "qmakemodelitems.h"
@@ -42,12 +43,11 @@
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
 
-typedef KGenericFactory<QMakeProjectManager> QMakeSupportFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevqmakemanager,
-                            QMakeSupportFactory( "kdevqmakemanager" ) )
+K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
+K_EXPORT_PLUGIN(QMakeSupportFactory("kdevqmakemanager"))
 
 QMakeProjectManager::QMakeProjectManager( QObject* parent,
-                              const QStringList& )
+                              const QVariantList& )
         : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent ), m_builder(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )

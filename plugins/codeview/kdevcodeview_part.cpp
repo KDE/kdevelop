@@ -23,16 +23,17 @@
 #include "kdevcodeview.h"
 
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 
-typedef KGenericFactory<KDevCodeViewPart> KDevCodeViewFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevcodeview, KDevCodeViewFactory( "kdevcodeview" ) )
+K_PLUGIN_FACTORY(KDevCodeViewFactory, registerPlugin<KDevCodeViewPart>(); )
+K_EXPORT_PLUGIN(KDevCodeViewFactory("kdevcodeview"))
 
 KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
-                                    const QStringList& )
+                                    const QVariantList& )
     : KDevelop::Plugin( KDevCodeViewFactory::componentData(), parent )
 {
     m_codeView = new KDevCodeView;

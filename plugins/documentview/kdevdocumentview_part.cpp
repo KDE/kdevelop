@@ -37,11 +37,11 @@
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 
-typedef KGenericFactory<KDevDocumentViewPart> KDevDocumentViewFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevdocumentview, KDevDocumentViewFactory( "kdevdocumentview" ) )
+K_PLUGIN_FACTORY(KDevDocumentViewFactory, registerPlugin<KDevDocumentViewPart>(); )
+K_EXPORT_PLUGIN(KDevDocumentViewFactory("kdevdocumentview"))
 
 KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
-        const QStringList& )
+        const QVariantList& )
         : KDevelop::Plugin( KDevDocumentViewFactory::componentData(), parent )
 {
     m_documentModel = new KDevDocumentModel( this );

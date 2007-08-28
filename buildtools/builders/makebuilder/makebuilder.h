@@ -25,6 +25,7 @@
 #include "imakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QPair>
+#include <QtCore/QVariant>
 
 
 class QStringList;
@@ -50,7 +51,7 @@ class MakeBuilder: public KDevelop::IPlugin, public IMakeBuilder
     Q_INTERFACES( IMakeBuilder )
     Q_INTERFACES( KDevelop::IProjectBuilder )
 public:
-    explicit MakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
+    explicit MakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~MakeBuilder();
 
     /**

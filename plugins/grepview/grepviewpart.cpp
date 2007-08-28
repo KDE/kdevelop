@@ -20,7 +20,8 @@
 #include <QKeySequence>
 
 #include <kprocess.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,11 +46,10 @@
 
 using namespace KDevelop;
 
-typedef KGenericFactory<GrepViewPart> GrepViewFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevgrepview,
-                            GrepViewFactory( "kdevgrepview" )  )
+K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPart>(); )
+K_EXPORT_PLUGIN(GrepViewFactory("kdevgrepview"))
 
-GrepViewPart::GrepViewPart( QObject *parent, const QStringList & )
+GrepViewPart::GrepViewPart( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent )
     , m_projectForActiveFile(0), m_view(0)
 {

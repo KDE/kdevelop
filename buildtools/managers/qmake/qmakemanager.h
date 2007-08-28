@@ -23,6 +23,7 @@
 
 #include <ibuildsystemmanager.h>
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 template <typename T> class QList;
 class QString;
@@ -53,7 +54,7 @@ Q_OBJECT
 Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
-    explicit QMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
+    explicit QMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
     virtual ~QMakeProjectManager();
 

@@ -24,6 +24,7 @@
 #include <iplugin.h>
 #include "icmakebuilder.h"
 #include <QtCore/QList>
+#include <QtCore/QVariant>
 #include <QtCore/QPair>
 #include <KUrl>
 
@@ -47,7 +48,7 @@ class CMakeBuilder : public KDevelop::IPlugin, public ICMakeBuilder
     Q_INTERFACES( KDevelop::IProjectBuilder )
 
 public:
-    explicit CMakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
+    explicit CMakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~CMakeBuilder();
 
     virtual bool build(KDevelop::ProjectBaseItem *dom);
@@ -69,7 +70,7 @@ private:
     QMap< int, KDevelop::OutputModel* > m_models;
     QSignalMapper* m_failedMapper;
     QSignalMapper* m_completedMapper;
-    
+
     KUrl m_buildDirectory;
     KUrl m_cmakeBinary;
     KUrl m_installPrefix;

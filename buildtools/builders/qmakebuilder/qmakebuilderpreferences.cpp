@@ -22,16 +22,18 @@
 
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kurlrequester.h>
 
 #include "ui_qmakeconfig.h"
 #include "qmakebuilderconfig.h"
 
-typedef KGenericFactory<QMakeBuilderPreferences> QMakeBuilderPreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdev_qmakebuilder, QMakeBuilderPreferencesFactory( "kcm_kdev_qmakebuilder" )  )
+K_PLUGIN_FACTORY(QMakeBuilderPreferencesFactory, registerPlugin<QMakeBuilderPreferences>(); )
+K_EXPORT_PLUGIN(QMakeBuilderPreferencesFactory("kcm_kdev_qmakebuilder"))
 
-QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QStringList& args)
+
+QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<QMakeBuilderSettings>( QMakeBuilderPreferencesFactory::componentData(), parent, args)
 {
 //     Q_ASSERT( args.count() > 0 );

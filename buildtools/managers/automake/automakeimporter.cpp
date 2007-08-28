@@ -22,18 +22,18 @@
 
 #include <QList>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include "kdevproject.h"
 #include "kdevprojectmodel.h"
 
 #include "makefileinterface.h"
 
-typedef KGenericFactory<AutoMakeImporter> AutotoolsSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevautomakeimporter,
-                            AutotoolsSupportFactory( "kdevautomakeimporter" ) )
+K_PLUGIN_FACTORY(AutotoolsSupportFactory, registerPlugin<AutoMakeImporter>(); )
+K_EXPORT_PLUGIN(AutotoolsSupportFactory("kdevautomakeimporter"))
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent,
-                                    const QStringList& )
+                                    const QVariantList& )
 : KDevelop::BuildManager( AutotoolsSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
     m_project = qobject_cast<KDevelop::Project*>( parent );

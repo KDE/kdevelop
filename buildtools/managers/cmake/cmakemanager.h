@@ -23,6 +23,7 @@
 
 #include <QList>
 #include <QString>
+#include <QtCore/QVariant>
 
 #include <ibuildsystemmanager.h>
 #include <iplugin.h>
@@ -53,7 +54,7 @@ Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
-    explicit CMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
+    explicit CMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
     virtual ~CMakeProjectManager();
     virtual Features features() const { return Features(Folders | Targets | Files); }

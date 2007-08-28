@@ -41,7 +41,7 @@ public:
     };
 
 public:
-    KDevCodeViewPart( QObject *parent, const QStringList & );
+    KDevCodeViewPart( QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevCodeViewPart();
 
     // KDevPlugin methods

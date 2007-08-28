@@ -15,6 +15,7 @@
 #include <iplugin.h>
 
 #include <QHash>
+#include <QVariant>
 
 class ProjectTemplatesModel;
 class ProjectSelectionPage;
@@ -23,7 +24,7 @@ class KArchiveDirectory;
 class AppWizardPart: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    AppWizardPart(QObject *parent, const QStringList &);
+    AppWizardPart(QObject *parent, const QVariantList & = QVariantList() );
     ~AppWizardPart();
 
 private slots:

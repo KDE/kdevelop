@@ -13,6 +13,7 @@
 
 #include <ibuildsystemmanager.h>
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 template <typename T> class QList;
 class QString;
@@ -35,7 +36,7 @@ class CustomMakeManager : public KDevelop::IPlugin, public KDevelop::IBuildSyste
     Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
 
-    explicit CustomMakeManager( QObject *parent = NULL, const QStringList& args = QStringList()  );
+    explicit CustomMakeManager( QObject *parent = NULL, const QVariantList& args = QVariantList()  );
 
     virtual ~CustomMakeManager();
 

@@ -25,6 +25,7 @@
 #include "iqmakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QPair>
+#include <QtCore/QVariant>
 
 class QStringList;
 class QSignalMapper;
@@ -45,7 +46,7 @@ class QMakeBuilder : public KDevelop::IPlugin, public IQMakeBuilder
     Q_INTERFACES( KDevelop::IProjectBuilder )
 
 public:
-    explicit QMakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
+    explicit QMakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~QMakeBuilder();
 
     virtual bool build(KDevelop::ProjectBaseItem *dom);

@@ -23,6 +23,7 @@
 
 #include <QList>
 #include <QString>
+#include <QtCore/QVariant>
 #include "kdevbuildmanager.h"
 
 class QObject;
@@ -46,7 +47,7 @@ namespace KDevelop
 class AutoMakeImporter : public KDevelop::BuildManager
 {
 public:
-	explicit AutoMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
+	explicit AutoMakeImporter( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
 	virtual ~AutoMakeImporter();
 

@@ -38,7 +38,8 @@
 #include <commandexecutor.h>
 #include <QtDesigner/QExtensionFactory>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdialog.h>
@@ -49,11 +50,10 @@
 
 #define CMAKE_COMMAND "cmake"
 
-typedef KGenericFactory<CMakeBuilder> CMakeBuilderFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevcmakebuilder,
-                            CMakeBuilderFactory( "kdevcmakebuilder" ) )
+K_PLUGIN_FACTORY(CMakeBuilderFactory, registerPlugin<CMakeBuilder>(); )
+K_EXPORT_PLUGIN(CMakeBuilderFactory("kdevcmakebuilder"))
 
-CMakeBuilder::CMakeBuilder(QObject *parent, const QStringList &)
+CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),
       m_failedMapper( new QSignalMapper( this ) ),
       m_completedMapper( new QSignalMapper( this ) ),
@@ -65,7 +65,7 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QStringList &)
     connect(m_failedMapper, SIGNAL(mapped( int )), this, SLOT(errored( int)));
     m_completedMapper = new QSignalMapper(this);
     connect(m_completedMapper, SIGNAL(mapped( int )), this, SLOT(completed( int )));
-    
+
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
@@ -121,7 +121,7 @@ bool CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         kDebug(9032) << "Building file: " << dom->file()->url();
     else if(dom->target())
         kDebug(9032) << "Building target";
-    
+
 //     kDebug(9032) << "Building " << dom->folder()->url();
 //     if( dom->type() != KDevelop::ProjectBaseItem::Project )
 //         return false;
@@ -168,7 +168,7 @@ bool CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             kDebug(9032) << "Build directory: " << m_buildDirectory;
             args += "-DCMAKE_INSTALL_PREFIX="+m_installPrefix.toLocalFile();
             args += "-DCMAKE_BUILD_TYPE="+m_buildType;
-            
+
             QString cmd = m_cmakeBinary.toLocalFile();
             m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
             connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
@@ -228,7 +228,7 @@ bool CMakeBuilder::updateConfig( KDevelop::IProject* project )
 {
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
-    
+
     m_cmakeBinary = group.readEntry("CMake Binary");
     m_buildDirectory = group.readEntry("Build Dir");
     m_installPrefix = group.readEntry("Prefix");

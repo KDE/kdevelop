@@ -40,7 +40,7 @@ class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageS
 Q_OBJECT
 Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
-    explicit CppLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
+    explicit CppLanguageSupport( QObject* parent, const QVariantList& args = QVariantList() );
     virtual ~CppLanguageSupport();
 
     QString name() const;
@@ -65,7 +65,7 @@ public:
     const Cpp::MacroSet& standardMacros() const;
 
     Cpp::EnvironmentManager* environmentManager() const;
-    
+
 private slots:
     void documentLoaded(KDevelop::IDocument*);
     void projectOpened(KDevelop::IProject *project);
@@ -74,7 +74,7 @@ private slots:
 
 private:
     static CppLanguageSupport* m_self;
-    
+
     CppHighlighting *m_highlights;
     CppCodeCompletion *m_cc;
     Cpp::EnvironmentManager* m_environmentManager;

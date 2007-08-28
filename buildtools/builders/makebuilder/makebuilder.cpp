@@ -39,7 +39,8 @@
 #include <QtGui/QAction>
 #include <QtGui/QKeySequence>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -48,10 +49,11 @@
 
 #include <environmentgrouplist.h>
 
-typedef KGenericFactory<MakeBuilder> MakeBuilderFactory ;
-K_EXPORT_COMPONENT_FACTORY(kdevmakebuilder, MakeBuilderFactory("kdevmakebuilder"))
+K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
+K_EXPORT_PLUGIN(MakeBuilderFactory("kdevmakebuilder"))
 
-MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
+
+MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(MakeBuilderFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )

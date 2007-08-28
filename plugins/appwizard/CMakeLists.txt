@@ -5,7 +5,6 @@ include_directories( ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/int
 
 set(kdevappwizard_PART_SRCS
     appwizardpart.cpp
-    appwizardfactory.cpp
     appwizarddialog.cpp
     projectselectionpage.cpp
     projecttemplatesmodel.cpp

@@ -35,7 +35,7 @@ class ValgrindPart : public KDevPlugin
   Q_OBJECT
 
 public:
-  ValgrindPart( QObject *parent, const QStringList & );
+  ValgrindPart( QObject *parent, const QVariantList & = QVariantList() );
   ~ValgrindPart();
 
   void runValgrind( const QString& exec, const QString& parameters, const QString& valExec, const QString& valParameters );

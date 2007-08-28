@@ -13,6 +13,7 @@
 #define _GREPVIEWPART_H_
 
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 class QStringList;
 class GrepDialog;
@@ -29,7 +30,7 @@ class GrepViewPart : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    GrepViewPart( QObject *parent, const QStringList & );
+    GrepViewPart( QObject *parent, const QVariantList & = QVariantList() );
     ~GrepViewPart();
 
 private Q_SLOTS:

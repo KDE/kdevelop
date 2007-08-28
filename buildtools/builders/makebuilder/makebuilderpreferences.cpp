@@ -22,16 +22,17 @@
 
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <environmentgrouplist.h>
 
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
 
-typedef KGenericFactory<MakeBuilderPreferences> MakeBuilderPreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdev_makebuilder, MakeBuilderPreferencesFactory( "kcm_kdev_makebuilder" )  )
+K_PLUGIN_FACTORY(MakeBuilderPreferencesFactory, registerPlugin<MakeBuilderPreferences>(); )
+K_EXPORT_PLUGIN(MakeBuilderPreferencesFactory("kcm_kdev_makebuilder"))
 
-MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringList& args)
+MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<MakeBuilderSettings>( MakeBuilderPreferencesFactory::componentData(),
                 parent, args)
 {

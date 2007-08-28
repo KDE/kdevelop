@@ -35,7 +35,7 @@ class MakeBuilderPreferences : public ProjectKCModule<MakeBuilderSettings>
     Q_OBJECT
 
 public:
-    explicit MakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+    explicit MakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
     ~MakeBuilderPreferences();
 
 
