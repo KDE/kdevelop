@@ -538,6 +538,28 @@ void TestDUChain::testDeclareStruct()
   release(top);
 }
 
+void TestDUChain::testCStruct()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("struct A { }; struct A instance; typedef struct { int a; } B, *BPointer;");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 4);
+
+  QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
+  QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);
+  
+  release(top);
+}
+
 void TestDUChain::testVariableDeclaration()
 {
   TEST_FILE_PARSE_ONLY

@@ -59,7 +59,7 @@ public:
    */
   KDevelop::DUContext* buildSubDeclarations(const KUrl& url, AST *node, KDevelop::DUContext* parent = 0);
 
-  inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.top(); }
+  inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
   
   protected:
   virtual void openContext(KDevelop::DUContext* newContext);
@@ -101,7 +101,7 @@ private:
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
 
   template<class DeclarationType>
-  inline DeclarationType* currentDeclaration() const { return dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
+  inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
   
   inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
