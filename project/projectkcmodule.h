@@ -21,7 +21,9 @@
 #ifndef PROJECTKCMODULE_H
 #define PROJECTKCMODULE_H
 
+#define KDE3_SUPPORT
 #include <kcmodule.h>
+#undef KDE3_SUPPORT
 
 class KComponentData;
 class QWidget;

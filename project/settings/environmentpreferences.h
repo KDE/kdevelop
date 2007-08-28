@@ -22,7 +22,9 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 #include <kstandarddirs.h>
+#define KDE3_SUPPORT
 #include <kcmodule.h>
+#undef KDE3_SUPPORT
 
 namespace KDevelop
 {

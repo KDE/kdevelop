@@ -21,7 +21,9 @@
 #ifndef UIPREFERENCES_H
 #define UIPREFERENCES_H
 
+#define KDE3_SUPPORT
 #include <kcmodule.h>
+#undef KDE3_SUPPORT
 
 namespace Ui{
     class UiConfig;
