@@ -35,7 +35,7 @@ class CvsPart: public KDevelop::IPlugin , public KDevelop::IBasicVersionControl
 friend class CvsProxy;
 
 public:
-    CvsPart( QObject *parent, const QStringList & );
+    CvsPart( QObject *parent, const QVariantList & args = QVariantList() );
     virtual ~CvsPart();
     // Begin:  KDevelop::IBasicVersionControl
     virtual bool isVersionControlled( const KUrl& localLocation );
@@ -56,7 +56,7 @@ public:
     virtual KDevelop::VcsJob* revert( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
     virtual KDevelop::VcsJob* update( const KUrl::List& localLocations,
-                const KDevelop::VcsRevision& rev, 
+                const KDevelop::VcsRevision& rev,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
     virtual KDevelop::VcsJob* commit( const QString& message,
                 const KUrl::List& localLocations,

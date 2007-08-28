@@ -44,9 +44,9 @@ public:
         Q_ASSERT( konsolepart == 0 );
 
 
-        if ( KLibFactory * factory = KLibLoader::self() ->factory( "libkonsolepart" ) )
+        if ( KPluginFactory * factory = KPluginLoader("libkonsolepart").factory() )
         {
-            if ( ( konsolepart = qobject_cast<KParts::ReadOnlyPart*>( factory->create( m_view ) ) ) )
+            if ( ( konsolepart = factory->create<KParts::ReadOnlyPart>( m_view ) ) )
             {
                 konsolepart->widget() ->setFocusPolicy( Qt::WheelFocus );
                 konsolepart->widget() ->setFocus();

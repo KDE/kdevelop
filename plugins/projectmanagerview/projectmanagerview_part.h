@@ -22,7 +22,7 @@
 
 #include <QtCore/QPointer>
 #include "iplugin.h"
-
+#include <QtCore/QVariant>
 
 class KUrl;
 
@@ -49,7 +49,7 @@ public:
     };
 
 public:
-    ProjectManagerViewPart(QObject *parent, const QStringList &);
+    ProjectManagerViewPart(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ProjectManagerViewPart();
 
 //     ProjectFolderItem *activeFolder();

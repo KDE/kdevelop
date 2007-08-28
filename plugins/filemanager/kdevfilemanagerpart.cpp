@@ -22,7 +22,8 @@
 #include <QTimer>
 
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
@@ -30,8 +31,9 @@
 
 #include "filemanager.h"
 
-typedef KGenericFactory<KDevFileManagerPart> KDevFileManagerFactory;
-K_EXPORT_COMPONENT_FACTORY(kdevfilemanager, KDevFileManagerFactory("kdevfilemanager"))
+K_PLUGIN_FACTORY(KDevFileManagerFactory, registerPlugin<KDevFileManagerPart>(); )
+K_EXPORT_PLUGIN(KDevFileManagerFactory("kdevfilemanager"))
+
 
 class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -49,7 +51,7 @@ private:
     KDevFileManagerPart *m_part;
 };
 
-KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QStringList &/*args*/)
+KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QVariantList &/*args*/)
     :KDevelop::IPlugin(KDevFileManagerFactory::componentData(), parent)
 {
     setXMLFile("kdevfilemanager.rc");

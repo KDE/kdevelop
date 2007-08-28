@@ -11,7 +11,8 @@
 #include "snippetpart.h"
 
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <ktexteditor/view.h>
 #include <kparts/partmanager.h>
 
@@ -20,9 +21,8 @@
 
 #include "snippetview.h"
 
-
-typedef KGenericFactory<SnippetPart> SnippetFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevsnippet, SnippetFactory("kdevsnippet") )
+K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPart>(); )
+K_EXPORT_PLUGIN(SnippetFactory("kdevsnippet"))
 
 class SnippetViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -44,7 +44,7 @@ private:
 };
 
 
-SnippetPart::SnippetPart(QObject *parent, const QStringList &)
+SnippetPart::SnippetPart(QObject *parent, const QVariantList &)
   : KDevelop::IPlugin(SnippetFactory::componentData(), parent)
 {
     m_factory = new SnippetViewFactory(this);

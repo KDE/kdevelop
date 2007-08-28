@@ -21,9 +21,8 @@
 #ifndef PROJECTKCMODULE_H
 #define PROJECTKCMODULE_H
 
-#define KDE3_SUPPORT
 #include <kcmodule.h>
-#undef KDE3_SUPPORT
+#include <QtCore/QVariant>
 
 class KComponentData;
 class QWidget;
@@ -32,14 +31,14 @@ class QStringList;
 template <typename T> class ProjectKCModule : public KCModule
 {
     public:
-        ProjectKCModule( const KComponentData& componentData, QWidget* parent, const QStringList& args )
+        ProjectKCModule( const KComponentData& componentData, QWidget* parent, const QVariantList& args = QVariantList() )
             : KCModule( componentData, parent, args )
         {
             Q_ASSERT( args.count() > 3 );
-            T::instance( args.first() );
-            T::self()->setDeveloperTempFile( args.at(1) );
-            T::self()->setProjectFileUrl( args.at(2) );
-            T::self()->setDeveloperFileUrl( args.at(3) );
+            T::instance( args.first().toString() );
+            T::self()->setDeveloperTempFile( args.at(1).toString() );
+            T::self()->setProjectFileUrl( args.at(2).toString() );
+            T::self()->setDeveloperFileUrl( args.at(3).toString() );
         }
         virtual ~ProjectKCModule() {}
 };

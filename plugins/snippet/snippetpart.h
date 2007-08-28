@@ -12,7 +12,7 @@
 #define __SNIPPETPART_H__
 
 #include <iplugin.h>
-
+#include <QtCore/QVariant>
 
 /**
  * This is the main class of KDevelop's snippet plugin.
@@ -23,7 +23,7 @@ class SnippetPart : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    SnippetPart(QObject *parent, const QStringList &args);
+    SnippetPart(QObject *parent, const QVariantList &args = QVariantList() );
     virtual ~SnippetPart();
 
     /**

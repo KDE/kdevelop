@@ -49,8 +49,8 @@
 
 using namespace KDevelop;
 
-typedef KGenericFactory<ProjectManagerViewPart> ProjectManagerFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevprojectmanagerview, ProjectManagerFactory( "kdevprojectmanagerview" ) )
+K_PLUGIN_FACTORY(ProjectManagerFactory, registerPlugin<ProjectManagerViewPart>(); )
+K_EXPORT_PLUGIN(ProjectManagerFactory("kdevprojectmanagerview"))
 
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {
@@ -81,7 +81,7 @@ public:
     QList<IProject*> ctxProjectList;
 };
 
-ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QStringList& )
+ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPartPrivate)
 {
     d->factory = new KDevProjectManagerViewFactory( this );

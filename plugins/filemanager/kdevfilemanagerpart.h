@@ -20,13 +20,14 @@
 #define KDEVFILEMANAGERPART_H
 
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 class FileManager;
 
 class KDevFileManagerPart: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    KDevFileManagerPart(QObject *parent, const QStringList &args);
+    KDevFileManagerPart(QObject *parent, const QVariantList &args = QVariantList() );
     ~KDevFileManagerPart();
 
     virtual void unload();

@@ -34,7 +34,8 @@
 #include <kaboutdata.h>
 #include <kiconloader.h>
 #include <kparts/componentfactory.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <icore.h>
 #include <iprojectcontroller.h>
 #include <iproject.h>
@@ -44,8 +45,9 @@
 
 KDevTeamworkPart* KDevTeamworkPart::m_self = 0;
 
- typedef KGenericFactory<KDevTeamworkPart> KDevTeamworkFactory;
- K_EXPORT_COMPONENT_FACTORY( kdevteamwork, KDevTeamworkFactory( "kdevteamwork" ) )
+K_PLUGIN_FACTORY(KDevTeamworkFactory, registerPlugin<KDevTeamworkPart>(); )
+K_EXPORT_PLUGIN(KDevTeamworkFactory("kdevteamwork"))
+
 
 class KDevTeamworkViewFactory : public KDevelop::IToolViewFactory
 {
@@ -76,7 +78,7 @@ void KDevTeamworkPart::unload()
 }
 
 KDevTeamworkPart::KDevTeamworkPart( QObject *parent,
-                                    const QStringList& )
+                                    const QVariantList& )
     : KDevelop::IPlugin( KDevTeamworkFactory::componentData(), parent ), m_currentProject( 0 ), m_window(0), m_factory( new KDevTeamworkViewFactory(this) )
 {
     m_self = this;

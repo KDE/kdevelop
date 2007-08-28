@@ -17,6 +17,7 @@
 #include <QtCore/QPointer>
 
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 class KDevTeamworkViewFactory;
 class KUrl;
@@ -42,7 +43,7 @@ public:
     };
 
 public:
-    KDevTeamworkPart( QObject *parent, const QStringList & );
+    KDevTeamworkPart( QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevTeamworkPart();
 
     //KDevPlugin methods

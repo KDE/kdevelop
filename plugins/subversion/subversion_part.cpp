@@ -42,7 +42,8 @@ extern "C" {
 #include <kmessagebox.h>
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kmenu.h>
 #include <kurl.h>
 #include <kactioncollection.h>
@@ -56,9 +57,9 @@ extern "C" {
 
 using namespace KDevelop;
 
-typedef KGenericFactory<KDevSubversionPart> KDevSubversionFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevsubversion,
-                            KDevSubversionFactory( "kdevsubversion" )  )
+
+K_PLUGIN_FACTORY(KDevSubversionFactory, registerPlugin<KDevSubversionPart>(); )
+K_EXPORT_PLUGIN(KDevSubversionFactory("kdevsubversion"))
 
 class KDevSubversionViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -83,7 +84,7 @@ public:
     KTempDir *m_outputTmpDir;
 };
 
-KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
+KDevSubversionPart::KDevSubversionPart( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin(KDevSubversionFactory::componentData(), parent)
     , d(new KDevSubversionPartPrivate)
 {

@@ -17,7 +17,8 @@
 
 #include <KParts/PartManager>
 #include <KParts/Part>
-#include <KGenericFactory>
+#include <KPluginFactory>
+#include <KPluginLoader>
 #include <KActionCollection>
 #include <KMessageBox>
 #include <KUrl>
@@ -38,9 +39,9 @@
 #include "importdialog.h"
 #include "checkoutdialog.h"
 
-typedef KGenericFactory<CvsPart> KDevCvsFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevcvs,
-                            KDevCvsFactory( "kdevcvs" )  )
+
+K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPart>(); )
+K_EXPORT_PLUGIN(KDevCvsFactory("kdevcvs"))
 
 class KDevCvsViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -63,7 +64,7 @@ public:
     QPointer<CvsProxy> m_proxy;
 };
 
-CvsPart::CvsPart( QObject *parent, const QStringList & )
+CvsPart::CvsPart( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin(KDevCvsFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
@@ -276,8 +277,8 @@ void CvsPart::slotUpdate()
 
     UpdateOptionsDialog dlg;
     if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::VcsJob* j = update(urls, 
-                                     dlg.revision(), 
+        KDevelop::VcsJob* j = update(urls,
+                                     dlg.revision(),
                                      KDevelop::IBasicVersionControl::Recursive);
         CvsJob* job = dynamic_cast<CvsJob*>(j);
         if (job) {

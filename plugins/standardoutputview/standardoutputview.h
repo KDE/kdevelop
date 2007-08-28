@@ -24,6 +24,7 @@
 
 #include "ioutputview.h"
 #include "iplugin.h"
+#include <QtCore/QVariant>
 
 template <typename T> class QList;
 class QAbstractItemModel;
@@ -40,7 +41,7 @@ Q_OBJECT
 Q_INTERFACES( KDevelop::IOutputView )
 
 public:
-    explicit StandardOutputView(QObject *parent = 0, const QStringList &args = QStringList());
+    explicit StandardOutputView(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~StandardOutputView();
     int registerView( const QString& title,
                           KDevelop::IOutputView::CloseBehaviour behaviour = AllowUserClose );

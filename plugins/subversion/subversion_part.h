@@ -17,6 +17,8 @@
 #include "subversion_core.h"
 #include <qwidget.h>
 
+#include <QtCore/QVariant>
+
 class QMenu;
 class KUrl;
 class SvnStatusHolder;
@@ -29,7 +31,7 @@ class KDevSubversionPart: public KDevelop::IPlugin, public KDevelop::IBasicVersi
     Q_OBJECT
     Q_INTERFACES( KDevelop::IBasicVersionControl )
 public:
-    KDevSubversionPart( QObject *parent, const QStringList & );
+    KDevSubversionPart( QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevSubversionPart();
 
     // IBasicVersionControl interfaces.

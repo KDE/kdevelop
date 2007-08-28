@@ -21,6 +21,7 @@
 
 #include "iprojectfilemanager.h"
 #include "iplugin.h"
+#include <QtCore/QVariant>
 
 class QFileInfo;
 class QStringList;
@@ -41,7 +42,7 @@ class GenericProjectManager: public KDevelop::IPlugin, public KDevelop::IProject
     Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
     explicit GenericProjectManager( QObject *parent = 0,
-                     const QStringList &args = QStringList() );
+                     const QVariantList &args = QVariantList() );
     virtual ~GenericProjectManager();
 
 //

@@ -5,7 +5,7 @@ add_subdirectory(projectmanagerview)
 add_subdirectory(genericprojectmanager)
 add_subdirectory(standardoutputview)
 macro_optional_add_subdirectory(snippet)
-#macro_optional_add_subdirectory(cvs)
+macro_optional_add_subdirectory(cvs)
 
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     find_package(Commoncpp)

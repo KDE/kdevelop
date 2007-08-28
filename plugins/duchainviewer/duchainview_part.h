@@ -24,6 +24,7 @@
 #define DUCHAINVIEW_PART_H
 
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 class DUChainModel;
 
@@ -32,7 +33,7 @@ class DUChainViewPart : public KDevelop::IPlugin
     Q_OBJECT
 
 public:
-    DUChainViewPart(QObject *parent, const QStringList &);
+    DUChainViewPart(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~DUChainViewPart();
 
     // KDevelop::Plugin methods

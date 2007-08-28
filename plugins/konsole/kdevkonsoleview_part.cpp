@@ -17,32 +17,16 @@
 #include "icore.h"
 #include "kdevkonsoleview.h"
 
-class KonsoleViewFactory : public KGenericFactory<KDevKonsoleViewPart>
+QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
-    public:
-        KonsoleViewFactory(const char* componentName = 0 )
-            : KGenericFactory<KDevKonsoleViewPart>( componentName )
-        {
-        }
+    KPluginFactory *factory = KPluginLoader("libkonsolepart").factory();
+    if( factory )
+        return new KDevKonsoleViewPart( op, args );
+    return 0;
+}
 
-        KonsoleViewFactory(const KAboutData* data)
-            : KGenericFactory<KDevKonsoleViewPart>( data )
-        {
-        }
-
-        virtual QObject* createObject(QObject* parent, const char* className,
-                                      const QStringList& args)
-        {
-            KLibFactory * factory = KLibLoader::self() ->factory( "libkonsolepart" );
-            if( factory )
-                return KGenericFactory<KDevKonsoleViewPart>::createObject( parent,className,args );
-            return 0;
-        }
-};
-
-K_EXPORT_COMPONENT_FACTORY( kdevkonsoleview,
-                            KonsoleViewFactory( "kdevkonsoleview" )  )
-
+K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPart>( "kdevkonsoleview", &createKonsoleView ); )
+K_EXPORT_PLUGIN(KonsoleViewFactory("kdevkonsoleview"))
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -59,7 +43,7 @@ private:
     KDevKonsoleViewPart *m_part;
 };
 
-KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
+KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( KonsoleViewFactory::componentData(), parent )
 {
     m_factory = new KDevKonsoleViewFactory(this);

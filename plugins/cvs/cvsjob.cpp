@@ -26,18 +26,18 @@
 
 struct CvsJob::Private
 {
-    Private() : isRunning(false), commMode(KProcess::SeparateChannels) 
+    Private() : isRunning(false), commMode(KProcess::SeparateChannels)
     {
         childproc = new KProcess;
-        lineMaker = new ProcessLineMaker( childproc );
+        lineMaker = new KDevelop::ProcessLineMaker( childproc );
     }
 
     ~Private() {
         if (lineMaker) delete lineMaker;
-        if (childproc) delete childproc; 
+        if (childproc) delete childproc;
     }
 
-    ProcessLineMaker* lineMaker;
+    KDevelop::ProcessLineMaker* lineMaker;
 
     KProcess*   childproc;
     QStringList command;

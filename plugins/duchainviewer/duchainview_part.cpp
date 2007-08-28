@@ -27,14 +27,15 @@
 #include <QtGui/QHeaderView>
 
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
 #include <idocumentcontroller.h>
 
-typedef KGenericFactory<DUChainViewPart> KDevDUChainViewFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevduchainview, KDevDUChainViewFactory( "kdevduchainview" ) )
+K_PLUGIN_FACTORY(KDevDUChainViewFactory, registerPlugin<DUChainViewPart>(); )
+K_EXPORT_PLUGIN(KDevDUChainViewFactory("kdevduchainview"))
 
 class DUChainViewFactory: public KDevelop::IToolViewFactory
 {
@@ -63,7 +64,7 @@ private:
 };
 
 DUChainViewPart::DUChainViewPart(QObject *parent,
-                                 const QStringList&)
+                                 const QVariantList&)
     : KDevelop::IPlugin(KDevDUChainViewFactory::componentData(), parent)
     , m_model(new DUChainModel(this))
     , m_factory(new DUChainViewFactory(this))

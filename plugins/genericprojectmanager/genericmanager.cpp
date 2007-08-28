@@ -24,7 +24,8 @@
 #include <iprojectcontroller.h>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginloader.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 
 #include <QDir>
@@ -33,8 +34,8 @@
 #include <QFileInfo>
 #include <QRegExp>
 
-typedef KGenericFactory<GenericProjectManager> GenericSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevgenericmanager, GenericSupportFactory( "kdevgenericmanager" ) )
+K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
+K_EXPORT_PLUGIN(GenericSupportFactory("kdevgenericmanager"))
 
 class GenericProjectManagerPrivate
 {
@@ -45,7 +46,7 @@ class GenericProjectManagerPrivate
         QStringList excludes;
 };
 
-GenericProjectManager::GenericProjectManager( QObject *parent, const QStringList & args )
+GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantList & args )
         : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager(), d( new GenericProjectManagerPrivate )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )

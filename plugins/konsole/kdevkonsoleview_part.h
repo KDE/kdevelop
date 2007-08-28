@@ -13,6 +13,7 @@
 #define KDEVKONSOLEVIEW_PART_H
 
 #include "iplugin.h"
+#include <QtCore/QVariant>
 
 class KDevKonsoleViewFactory;
 
@@ -20,7 +21,7 @@ class KDevKonsoleViewPart : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    KDevKonsoleViewPart( QObject *parent, const QStringList & );
+    KDevKonsoleViewPart( QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevKonsoleViewPart();
 
 private:

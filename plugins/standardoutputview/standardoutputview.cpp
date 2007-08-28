@@ -31,14 +31,15 @@
 #include <icore.h>
 #include <iuicontroller.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
 
-typedef KGenericFactory<StandardOutputView> StandardOutputViewFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevstandardoutputview,
-                            StandardOutputViewFactory( "kdevstandardoutputview" ) )
+K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
+K_EXPORT_PLUGIN(StandardOutputViewFactory("kdevstandardoutputview"))
+
 
 class StandardOutputViewViewFactory : public KDevelop::IToolViewFactory{
 public:
@@ -75,7 +76,7 @@ public:
     QMap<int, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
 };
 
-StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
+StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent),
       d(new StandardOutputViewPrivate)
 {

@@ -34,7 +34,6 @@ Boston, MA 02110-1301, USA.
 #include <kconfig.h>
 #include <klocale.h>
 #include <kxmlguiwindow.h>
-#include <kparts/componentfactory.h>
 #include <assert.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -267,15 +266,15 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
     kDebug(9501) << "Attempting to load '" << pluginId << "'";
     emit loadingPlugin( info.name() );
-    int error = 0;
+    QString str_error;
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
     if ( checkForDependencies( info, missingInterfaces ) )
     {
         plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
-                QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QStringList(), &error );
+                QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QVariantList(), &str_error );
         loadDependencies( info );
-	loadOptionalDependencies( info );
+        loadOptionalDependencies( info );
     }
 
     if ( plugin )
@@ -293,43 +292,16 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     }
     else
     {
-        if( !error && !missingInterfaces.isEmpty() )
+        if( str_error.isEmpty() && !missingInterfaces.isEmpty() )
         {
             kDebug(9501) << "Can't load plugin '" << pluginId
                     << "' some of its required dependecies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         }else
         {
-            switch( error )
-            {
-                case KLibLoader::ErrNoServiceFound:
-                    kDebug(9501) << "No service implementing the given mimetype "
-                            << "and fullfilling the given constraint expression can be found." << endl;
-                    break;
-
-                case KLibLoader::ErrServiceProvidesNoLibrary:
-                    kDebug(9501) << "the specified service provides no shared library.";
-                    break;
-
-                case KLibLoader::ErrNoLibrary:
-                    kDebug(9501) << "the specified library could not be loaded.";
-                    break;
-
-                case KLibLoader::ErrNoFactory:
-                    kDebug(9501) << "the library does not export a factory for creating components.";
-                    break;
-
-                case KLibLoader::ErrNoComponent:
-                    kDebug(9501) << "the factory does not support creating components of the specified type.";
-                    break;
-                default:
-                    kDebug(9501) << "An unknown error occurred";
-                    break;
-            }
-
             kDebug(9501) << "Loading plugin '" << pluginId
-                    << "' failed, KLibLoader reported error: '" << endl <<
-                    KLibLoader::self()->lastErrorMessage() << "'" << endl;
+                << "' failed, KPluginLoader reported error: '" << endl <<
+                str_error << "'";
         }
     }
 
