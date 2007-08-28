@@ -26,6 +26,10 @@
 #include "cpptypes.h"
 #include "cppduchainbuilderexport.h"
 
+namespace KDevelop {
+  class QualifiedIdentifier;
+}
+
 class KDEVCPPDUCHAINBUILDER_EXPORT  TypeRepository
 {
 public:
@@ -52,6 +56,7 @@ private:
   KDevelop::AbstractType::Ptr registerReference(CppReferenceType::Ptr input);
   KDevelop::AbstractType::Ptr registerFunction(CppFunctionType::Ptr input);
   KDevelop::AbstractType::Ptr registerArray(KDevelop::ArrayType::Ptr input);
+  KDevelop::AbstractType::Ptr registerDelayedType(KDevelop::DelayedType::Ptr input);
 
   static TypeRepository* s_instance;
 
@@ -60,6 +65,7 @@ private:
 
   QMultiHash<KDevelop::AbstractType::Ptr, CppPointerType::Ptr> m_pointers;
   QMultiHash<KDevelop::AbstractType::Ptr, CppReferenceType::Ptr> m_references;
+  QMultiHash<KDevelop::QualifiedIdentifier, KDevelop::DelayedType::Ptr> m_delayedTypes;
   QMultiHash<int, CppFunctionType::Ptr> m_functions;
   //QSet<CppClassType::Ptr> m_structures;
   QMultiHash<KDevelop::AbstractType::Ptr, KDevelop::ArrayType::Ptr> m_arrays;

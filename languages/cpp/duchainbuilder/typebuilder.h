@@ -91,7 +91,7 @@ protected:
   void openType(KSharedPtr<T> type, AST* node)
   { openAbstractType(KDevelop::AbstractType::Ptr::staticCast(type), node); }
 
-  void openDelayedType(const KDevelop::QualifiedIdentifier& identifier, AST* node);
+  void openDelayedType(const KDevelop::QualifiedIdentifier& identifier, AST* node, DelayedType::Kind kind);
   
   void openAbstractType(KDevelop::AbstractType::Ptr type, AST* node);
   void closeType();
@@ -115,7 +115,6 @@ protected:
   KDevelop::AbstractType::Ptr m_lastType;
 
   QList<KDevelop::AbstractType::Ptr> m_topTypes;
-  QHash<KDevelop::QualifiedIdentifier, KDevelop::AbstractType::Ptr> m_delayedTypes; //Used to re-use delayed types
 };
 
 #endif // TYPEBUILDER_H

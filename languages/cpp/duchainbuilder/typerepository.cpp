@@ -21,6 +21,7 @@
 #include <QMutexLocker>
 
 #include <k3staticdeleter.h>
+#include <duchain/identifier.h>
 
 using namespace KDevelop;
 
@@ -198,6 +199,8 @@ AbstractType::Ptr TypeRepository::registerType(AbstractType::Ptr input)
     case AbstractType::TypeArray:
       return registerArray(ArrayType::Ptr::dynamicCast(input));
 
+    case AbstractType::TypeDelayed:
+      return registerDelayedType(DelayedType::Ptr::dynamicCast(input));
     default:
       return input;
   }
@@ -296,6 +299,22 @@ AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
   m_functions.insert(input->arguments().count(), input);
   return AbstractType::Ptr::staticCast(input);
 }
+
+KDevelop::AbstractType::Ptr TypeRepository::registerDelayedType(KDevelop::DelayedType::Ptr input)
+{
+  QMutexLocker lock(&m_mutex);
+  Q_ASSERT(input);
+  
+  QMultiHash<QualifiedIdentifier, DelayedType::Ptr>::const_iterator it = m_delayedTypes.find(input->qualifiedIdentifier());
+  for(;it != m_delayedTypes.end(); ++it) {
+    if( (*it)->kind() == input->kind() )
+      return KDevelop::AbstractType::Ptr::staticCast(*it);
+  }
+
+  m_delayedTypes.insert(input->qualifiedIdentifier(), input);
+  return KDevelop::AbstractType::Ptr::staticCast(input);
+}
+
 
 AbstractType::Ptr TypeRepository::registerArray(ArrayType::Ptr input)
 {

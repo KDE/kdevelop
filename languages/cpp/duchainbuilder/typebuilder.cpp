@@ -162,10 +162,10 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
           break;
         }
       }
-    } else if( templateDeclarationDepth() != 0 ) {
+    } else {
         //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
        openedType = true;
-       openDelayedType(baseClassIdentifier, node);
+       openDelayedType(baseClassIdentifier, node, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
     }
 
     if( openedType ) {
@@ -351,16 +351,13 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
        openedType = true;
        openType(dec.front()->abstractType(), node);
     } else {
-      if( templateDeclarationDepth() != 0 ) {
-        //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
-        ///@todo What about position?
-        
-       openedType = true;
-       ifDebug( kDebug(9007) << "opening delayed type for" << id.toString() )
-       openDelayedType(id, node);
-      } else {
-        ifDebug( kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
-      }
+      ///@todo What about position?
+
+      //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
+     openedType = true;
+     openDelayedType(id, node, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
+
+     ifDebug( if(templateDeclarationDepth() != 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
     }
   }
 
@@ -565,17 +562,11 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
 
-void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* node) {
-  QHash<QualifiedIdentifier, KDevelop::AbstractType::Ptr>::const_iterator it = m_delayedTypes.find(identifier);
-  if( it != m_delayedTypes.end() ) {
-    openType(*it, node);
-  }else{
-    DelayedType::Ptr type(new DelayedType());
-    type->setQualifiedIdentifier(identifier);
-    openType(type, node);
-    Q_ASSERT(dynamic_cast<DelayedType*>((AbstractType*)type.data()));
-    m_delayedTypes.insert(identifier, AbstractType::Ptr( type.data() ) );
-  }
+void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* node, DelayedType::Kind kind) {
+  DelayedType::Ptr type(new DelayedType());
+  type->setQualifiedIdentifier(identifier);
+  type->setKind(kind);
+  openType(type, node);
 }
 
 

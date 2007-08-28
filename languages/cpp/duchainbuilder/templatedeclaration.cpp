@@ -111,7 +111,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
     
     const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
 
-    if( delayedType ) {
+    if( delayedType && delayedType->kind() == DelayedType::Delayed ) {
       QList<Declaration*> decls = searchContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
       if( !decls.isEmpty() ) {
         return decls.front()->abstractType().data();
