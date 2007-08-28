@@ -37,7 +37,8 @@
 #include <commandexecutor.h>
 #include <QtDesigner/QExtensionFactory>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdialog.h>
@@ -45,11 +46,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-typedef KGenericFactory<QMakeBuilder> QMakeBuilderFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevqmakebuilder,
-                            QMakeBuilderFactory( "kdevqmakebuilder" ) )
+K_PLUGIN_FACTORY(QMakeBuilderFactory, registerPlugin<QMakeBuilder>(); )
+K_EXPORT_PLUGIN(QMakeBuilderFactory("kdevqmakebuilder"))
 
-QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
+QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent),
       m_failedMapper( new QSignalMapper( this ) ),
       m_completedMapper( new QSignalMapper( this ) )

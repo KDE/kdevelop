@@ -34,7 +34,7 @@ namespace Ui { class QMakeConfig; }
 class QMakeBuilderPreferences : public ProjectKCModule<QMakeBuilderSettings>
 {
 public:
-    explicit QMakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+    explicit QMakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
     ~QMakeBuilderPreferences();
 
 private Q_SLOTS:
