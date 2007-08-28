@@ -126,7 +126,11 @@ public:
 class DelayedTypePrivate
 {
 public:
+  DelayedTypePrivate() : m_kind(DelayedType::Delayed) {
+  }
+  
   QualifiedIdentifier m_identifier;
+  DelayedType::Kind m_kind;
 };
 
 AbstractType::AbstractType(const AbstractType& rhs) : KShared(), d(new AbstractTypePrivate(*rhs.d)) {
@@ -749,7 +753,15 @@ AbstractType::WhichType DelayedType::whichType() const
 
 QString DelayedType::toString() const
 {
-  return "<delayed> " + qualifiedIdentifier().toString();
+  return (d->m_kind == Delayed ? "<delayed> " : "<unresolved> ") + qualifiedIdentifier().toString();
+}
+
+DelayedType::Kind DelayedType::kind() const {
+  return d->m_kind;
+}
+
+void DelayedType::setKind(Kind kind) {
+  d->m_kind = kind;
 }
 
 DelayedType::DelayedType()

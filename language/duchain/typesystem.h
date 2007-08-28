@@ -397,7 +397,8 @@ private:
 };
 
 /**
- * Delayed types can be used for example in template-classes.
+ * Delayed types can be used for any types that cannot be resolved in the moment they are encountered.
+ * They can be used for example in template-classes, or to store the names of unresolved types.
  * In a template-class, many types can not be evaluated at the time they are used, because they depend on unknown template-parameters.
  * Delayed types store the way the type would be searched, and can be used to find the type once the template-paremeters have values.
  * */
@@ -406,6 +407,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT DelayedType : public KDevelop::AbstractType
 public:
   typedef KSharedPtr<DelayedType> Ptr;
 
+  enum Kind {
+    Delayed, //The type should be resolved later
+    Unresolved //The type could not be resolved
+  };
+  
   DelayedType();
   virtual ~DelayedType();
 
@@ -417,6 +423,9 @@ public:
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
+
+  Kind kind() const;
+  void setKind(Kind kind);
   
   virtual WhichType whichType() const;
   protected:
