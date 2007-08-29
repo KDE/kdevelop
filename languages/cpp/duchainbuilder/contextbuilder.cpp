@@ -261,7 +261,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   {
     DUChainReadLocker lock(DUChain::lock());
 
-    kDebug(9007) << "built top-level context with" << topLevelContext->allDeclarations(KTextEditor::Cursor()).size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
+    kDebug(9007) << "built top-level context with" << topLevelContext->localDeclarations().size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
 
 /*     if( m_recompiling ) {
       DumpChain dump;
