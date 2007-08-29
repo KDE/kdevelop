@@ -112,6 +112,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     bool success = true;
     //Make sure that none of the macros stored in the driver affect the file in a different way than the one before
     rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
+    
     for ( rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().begin(); rit != end; ) {
       rpp::Environment::EnvironmentMap::const_iterator it = rit;
       ++rit;
@@ -120,9 +121,9 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
 
       if ( file.hasString( it.key() ) ) {
         if ( file.m_usedMacros.hasMacro( it.key() ) ) {
-          rpp::pp_macro m( file.m_usedMacros.macro(it.key() ) );
+          rpp::pp_macro m( file.m_usedMacros.macro(it.key()) );
           if ( !( m == **it ) ) {
-            ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << it.key() << "\" and used a macro for it with the body \"" << m.definition << "\"(from" << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), cache is not used"  );
+            ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << it.key().str() << "\" and used a macro for it with the body \"" << m.definition << "\"(from" << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), cache is not used"  );
 
             //rpp::pp_macro with the same name was used, but it is different
             success = false;
@@ -131,7 +132,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
 
         } else {
           //There is a macro that affects the file, but was not used while the previous parse
-          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << ( it ).key() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), the cached file is not used"  );
+          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << ( it ).key().str() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), the cached file is not used"  );
           success = false;
           break;
         }
@@ -141,7 +142,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
   MacroSet::Macros::const_iterator end2 = file.usedMacros().macros().end();
     for ( MacroSet::Macros::const_iterator it = file.usedMacros().macros().begin(); it != end2; ++it ) {
       if ( !environment->retrieveMacro( ( *it ).name ) ) {
-        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "used a macro called \"" << it->name << "\"(from" << it->file << "), but the driver does not contain that macro, the cached file is not used"  );
+        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "used a macro called \"" << it->name.str() << "\"(from" << it->file << "), but the driver does not contain that macro, the cached file is not used"  );
         success = false;
         break;
       }
@@ -227,7 +228,7 @@ EnvironmentFile::EnvironmentFile( const KUrl& fileName, EnvironmentManager* mana
 
 void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro ) {
 #ifdef LEXERCACHE_DEBUG
-  kDebug( 9007 ) << "defined macro" << macro.name;
+  kDebug( 9007 ) << "defined macro" << macro.name.str();
 #endif
   m_definedMacros.addMacro( macro );
   m_definedMacroNames.insert( HashedString( macro.name ) );
@@ -236,7 +237,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro ) {
 void EnvironmentFile::addUsedMacro( const rpp::pp_macro& macro ) {
   if ( !m_definedMacros.hasMacro( macro.name ) ) {
 #ifdef LEXERCACHE_DEBUG
-    kDebug( 9007 ) << "used macro" << macro.name;
+    kDebug( 9007 ) << "used macro" << macro.name.str();
 #endif
     m_usedMacros.addMacro( macro );
   }
@@ -311,7 +312,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   for ( MacroSet::Macros::const_iterator it = file.m_usedMacros.macros().begin(); it != file.m_usedMacros.macros().end(); ++it ) {
     if ( !m_definedMacros.hasMacro(( *it ).name ) ) {///If the macro was not defined locally, add it to the macros-list.
 #ifdef LEXERCACHE_DEBUG
-      kDebug( 9007 ) << "inserting used macro" << ( *it ).name;
+      kDebug( 9007 ) << "inserting used macro" << ( *it ).name.str();
 #endif
       m_usedMacros.addMacro( *it );
     }
