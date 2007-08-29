@@ -54,6 +54,15 @@ DUContextPrivate::DUContextPrivate( DUContext* d)
 {
 }
 
+bool DUContextPrivate::isThisImportedBy(const DUContext* context) const {
+  foreach( const DUContext* ctx, m_importedChildContexts ) {
+    if( ctx->d->isThisImportedBy(context) )
+      return true;
+  }
+  
+  return this == context->d;
+}
+
 void DUContextPrivate::addUse(Use* use)
 {
   m_uses.append(use);
@@ -462,6 +471,11 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
 void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
 {
   ENSURE_CAN_WRITE
+
+  if( d->isThisImportedBy(context) ) {
+    kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " into " << this;
+    return;
+  }
   
   if (d->m_importedParentContexts.contains(context))
     return;

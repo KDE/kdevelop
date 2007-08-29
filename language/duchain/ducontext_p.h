@@ -80,6 +80,11 @@ public:
 
   void addUse(Use* use);
   void removeUse(Use* use);
+
+  /**
+   * Returns true if this context is imported by the given one, on any level.
+   * */
+  bool isThisImportedBy(const DUContext* context) const;
 };
 }
 
