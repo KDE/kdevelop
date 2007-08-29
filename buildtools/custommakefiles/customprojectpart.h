@@ -112,10 +112,26 @@ private:
     void putEnvVarsInVarMap();
     void switchBlacklistEntry(const QString& );
 
+    bool isInProject( const QString& fileName ) const;
+    void addToProject( const QString& fileName );
+    void removeFromProject( const QString& fileName );
+
+    /**
+     * @brief Set of all the project's files.
+     *
+     * @bug
+     * Due to deficiency in QT3,
+     * we have to use a map with next-to-useless element value,
+     * keyed by the file name,
+     * as a set-container replacement.
+     */
+    typedef QMap<QString, bool> ProjectFilesSet;
+
     QString m_projectDirectory;
     QString m_projectName;
     QString m_filelistDir;
-    QStringList m_sourceFiles;
+    /** All the sources (files and directories) of this project. */
+    ProjectFilesSet m_sourceFilesSet;
     QPopupMenu *m_targetMenu;
     QPopupMenu *m_targetObjectFilesMenu;
     QPopupMenu *m_targetOtherFilesMenu;
