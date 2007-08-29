@@ -16,16 +16,18 @@
 #include <QtCore/QVariant>
 
 class KDevKonsoleViewFactory;
+class KPluginFactory;
 
 class KDevKonsoleViewPart : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    KDevKonsoleViewPart( QObject *parent, const QVariantList & = QVariantList() );
+    KDevKonsoleViewPart( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevKonsoleViewPart();
-
+    KPluginFactory* konsoleFactory() const;
 private:
     class KDevKonsoleViewFactory *m_factory;
+    KPluginFactory* m_konsoleFactory;
 };
 
 #endif

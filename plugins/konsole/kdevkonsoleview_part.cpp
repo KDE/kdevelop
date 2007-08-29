@@ -15,15 +15,15 @@
 
 #include <iuicontroller.h>
 #include "icore.h"
+#include <kservice.h>
 #include "kdevkonsoleview.h"
 
 QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
-    kDebug() << "Checking for konsole factory";
-    KPluginFactory *factory = KPluginLoader("libkonsolepart").factory();
-    kDebug() << "Found:" << factory;
+    KService::Ptr service = KService::serviceByDesktopName("konsolepart");
+    KPluginFactory *factory = KPluginLoader(*service.data()).factory();
     if( factory )
-        return new KDevKonsoleViewPart( op, args );
+        return new KDevKonsoleViewPart( factory, op, args );
     return 0;
 }
 
@@ -32,7 +32,8 @@ K_EXPORT_PLUGIN(KonsoleViewFactory("kdevkonsoleview"))
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
-    KDevKonsoleViewFactory(KDevKonsoleViewPart *part): m_part(part) {}
+    KDevKonsoleViewFactory(KDevKonsoleViewPart *part):
+        m_part(part) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
         return new KDevKonsoleView(m_part, parent);
@@ -45,11 +46,16 @@ private:
     KDevKonsoleViewPart *m_part;
 };
 
-KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( KonsoleViewFactory::componentData(), parent )
+KDevKonsoleViewPart::KDevKonsoleViewPart( KPluginFactory* konsolefactory, QObject *parent, const QVariantList & )
+    : KDevelop::IPlugin( KonsoleViewFactory::componentData(), parent ), m_konsoleFactory( konsolefactory )
 {
     m_factory = new KDevKonsoleViewFactory(this);
     core()->uiController()->addToolView("Konsole", m_factory);
+}
+
+KPluginFactory* KDevKonsoleViewPart::konsoleFactory() const
+{
+    return m_konsoleFactory;
 }
 
 KDevKonsoleViewPart::~KDevKonsoleViewPart()

@@ -39,36 +39,31 @@ public:
     KParts::ReadOnlyPart *konsolepart;
     QVBoxLayout *m_vbox;
 
-    void init( )
+    void init( KPluginFactory* factory )
     {
         Q_ASSERT( konsolepart == 0 );
 
+        Q_ASSERT( factory != 0 );
 
-        if ( KPluginFactory * factory = KPluginLoader("libkonsolepart").factory() )
+        if ( ( konsolepart = factory->create<KParts::ReadOnlyPart>( m_view ) ) )
         {
-            if ( ( konsolepart = factory->create<KParts::ReadOnlyPart>( m_view ) ) )
-            {
-                konsolepart->widget() ->setFocusPolicy( Qt::WheelFocus );
-                konsolepart->widget() ->setFocus();
+            konsolepart->widget() ->setFocusPolicy( Qt::WheelFocus );
+            konsolepart->widget() ->setFocus();
 
-                if ( QFrame * frame = qobject_cast<QFrame*>( konsolepart->widget() ) )
-                    frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+            if ( QFrame * frame = qobject_cast<QFrame*>( konsolepart->widget() ) )
+                frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
 
-                m_vbox->addWidget( konsolepart->widget() );
-                m_view->setFocusProxy( konsolepart->widget() );
-                konsolepart->widget() ->show();
+            m_vbox->addWidget( konsolepart->widget() );
+            m_view->setFocusProxy( konsolepart->widget() );
+            konsolepart->widget() ->show();
 
-                TerminalInterface* interface = qobject_cast<TerminalInterface*>(konsolepart);
-                Q_ASSERT(interface);
+            TerminalInterface* interface = qobject_cast<TerminalInterface*>(konsolepart);
+            Q_ASSERT(interface);
 
-                interface->showShellInDir( QString() );
-            }
-        }
-        else
+            interface->showShellInDir( QString() );
+        }else
         {
-            m_vbox->addWidget(
-                new QLabel( i18n( "Konsole not available or libkonsolepart not in path." ),
-                            m_view ) );
+            kDebug() << "Couldn't create KParts::ReadOnlyPart from konsole factory!";
         }
     }
 
@@ -92,7 +87,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPart *part, QWidget* parent )
     d->m_vbox->setMargin( 0 );
     d->m_vbox->setSpacing( 0 );
 
-    d->init();
+    d->init( d->m_part->konsoleFactory() );
 
     //TODO Make this configurable in the future,
     // but by default the konsole shouldn't
