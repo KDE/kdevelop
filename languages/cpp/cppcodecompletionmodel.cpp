@@ -304,9 +304,12 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         //kDebug(9007) << "MatchQuality requested with invalid match-context";
       }
     }
+    return QVariant();
     case ArgumentHintDepth:
       if( isArgumentHint )
         return item.completionContext->depth();
+      else
+        return QVariant();
     case ItemSelected:
        return QVariant(Cpp::NavigationWidget::shortDescription(dec));
     case IsExpandable:
