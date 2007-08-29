@@ -42,7 +42,6 @@ public:
 
 ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(rhs), d(new ForwardDeclarationPrivate) {
   d->m_resolvedDeclaration = 0;
-  setResolved( rhs.d->m_resolvedDeclaration );
 }
 
 ForwardDeclaration::ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context )
