@@ -128,7 +128,8 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       } else {
         m_hadVersions[file.url()] = shortLabel(context);
       }
-      label = file.toString() + QString(" imported by: %1").arg(topCtx->importedChildContexts().count());
+      if( topCtx->importedChildContexts().count() != 0 )
+        label = file.toString() + QString(" imported by %1").arg(topCtx->importedChildContexts().count());
     } else {
       label = "unknown file";
     }
