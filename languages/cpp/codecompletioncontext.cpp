@@ -87,14 +87,14 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     return;
   }
 
-  log( "non-processed text: " + m_text );
+  //log( "non-processed text: " + m_text );
   preprocessText();
 
   m_text = Utils::clearComments( m_text );
   m_text = Utils::clearStrings( m_text );
   m_text = Utils::stripFinalWhitespace( m_text );
 
-  log( "processed text: " + m_text );
+  //log( "processed text: " + m_text );
 
   ///@todo template-parameters
 
