@@ -19,13 +19,15 @@
 
 QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
+    kDebug() << "Checking for konsole factory";
     KPluginFactory *factory = KPluginLoader("libkonsolepart").factory();
+    kDebug() << "Found:" << factory;
     if( factory )
         return new KDevKonsoleViewPart( op, args );
     return 0;
 }
 
-K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPart>( "kdevkonsoleview", &createKonsoleView ); )
+K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPart>( QString(), &createKonsoleView ); )
 K_EXPORT_PLUGIN(KonsoleViewFactory("kdevkonsoleview"))
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
