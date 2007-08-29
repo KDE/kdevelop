@@ -61,6 +61,9 @@ class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSet {
 
     std::string print() const;
 
+    ///Returns all strings, separated by spaces
+    QString dump() const;
+    
     KDevelop::HashType hash() const;
   private:
     friend class HashedStringSetGroup;

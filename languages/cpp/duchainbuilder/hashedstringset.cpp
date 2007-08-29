@@ -102,6 +102,16 @@ HashedStringSet& HashedStringSet::operator -=( const HashedStringSet& rhs ) {
   return *this;
 }
 
+QString HashedStringSet::dump() const {
+  QString ret;
+  if( m_data ) {
+  foreach( const HashedString& str, m_data->m_files )
+    ret += str.str();
+  ret += " ";
+  }
+  return ret;
+}
+
 void HashedStringSet::makeDataPrivate() {
   if ( !m_data ) {
     m_data = new HashedStringSetData();
