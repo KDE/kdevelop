@@ -18,6 +18,8 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <hashedstring.h> //Needs to be up here, so qHash(HashedString) is found
+
 #include "pp-environment.h"
 
 #include <kdebug.h>
@@ -153,7 +155,7 @@ void Environment::clear()
   m_blocks.clear();
 }
 
-void Environment::clearMacro(const QString& name)
+void Environment::clearMacro(const KDevelop::HashedString& name)
 {
   if (!m_replaying) {
     pp_macro* undef = new pp_macro();
@@ -181,7 +183,7 @@ const Environment::EnvironmentMap& Environment::environment() const {
   return m_environment;
 }
 
-pp_macro* Environment::retrieveMacro(const QString& name) const
+pp_macro* Environment::retrieveMacro(const KDevelop::HashedString& name) const
 {
   if (m_environment.contains(name))
     return m_environment[name];

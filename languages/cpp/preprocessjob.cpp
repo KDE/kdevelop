@@ -62,7 +62,7 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
         }
 
 
-        virtual rpp::pp_macro* retrieveMacro(const QString& name) const {
+        virtual rpp::pp_macro* retrieveMacro(const KDevelop::HashedString& name) const {
             ///@todo use a global string-repository
             //note all strings that can be affected by macros
             if( !m_environmentFile )
@@ -251,6 +251,11 @@ void PreprocessJob::run()
         parentPreprocessor->m_currentEnvironment->swapMacros( m_currentEnvironment );
         //Merge include-file-set, defined macros, used macros, and string-set
         parentPreprocessor->m_environmentFile->merge(*m_environmentFile);
+    }else{
+/*        kDebug(9007) << "Macros:";
+        for( rpp::Environment::EnvironmentMap::const_iterator it = m_currentEnvironment->environment().begin(); it != m_currentEnvironment->environment().end(); ++it ) {
+            kDebug(9007) << (*it)->name.str() << "                  from: " << (*it)->file << ":" << (*it)->sourceLine;
+        }*/
     }
     kDebug(9007) << "PreprocessJob: finished" << parentJob()->document();
 

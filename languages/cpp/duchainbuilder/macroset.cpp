@@ -101,7 +101,7 @@ bool MacroSet::hasMacro( const HashedString& name ) const {
     }
 }
 
-rpp::pp_macro MacroSet::macro( const QString& name ) const {
+rpp::pp_macro MacroSet::macro( const HashedString& name ) const {
     Macros::const_iterator it = m_usedMacros.find( rpp::pp_macro( name ) );
 
     if( it != m_usedMacros.end() ) {

@@ -25,6 +25,7 @@
 
 #include <QtCore/QStringList>
 #include <cppparserexport.h>
+#include <hashedstring.h>
 
 namespace rpp {
 
@@ -32,9 +33,9 @@ class KDEVCPPRPP_EXPORT pp_macro
 {
 public:
   pp_macro();
-  pp_macro(const QString& name);
+  pp_macro(const KDevelop::HashedString& name);
 
-  QString name;
+  KDevelop::HashedString name;
   QString definition; //body
   QString file; //fileName
   int sourceLine; //line
@@ -69,7 +70,7 @@ public:
         if( lhash < rhash ) return true;
         else if( lhash > rhash ) return false;
 
-      int df = lhs.name.compare( rhs.name );
+      int df = lhs.name.str().compare( rhs.name.str() );
       return df < 0;
     }
   };
@@ -90,6 +91,10 @@ inline bool pp_macro::operator == ( const pp_macro& rhs ) const {
   return m_idHash == rhs.m_idHash && m_valueHash == rhs.m_valueHash;
 }
 
+}
+
+inline uint qHash( const rpp::pp_macro& m ) {
+  return (uint)m.idHash();
 }
 
 #endif // PP_MACRO_H

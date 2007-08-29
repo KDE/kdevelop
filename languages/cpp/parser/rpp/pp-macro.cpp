@@ -28,7 +28,7 @@ void pp_macro::invalidateHash() {
   m_valueHashValid = false;
 }
 
-pp_macro::pp_macro(const QString& nm)
+pp_macro::pp_macro(const KDevelop::HashedString& nm)
   : name(nm)
   , sourceLine(-1)
   , defined(true)
@@ -68,7 +68,7 @@ size_t fastHashString( const QString& str ) {
 void pp_macro::computeHash() const {
     if( m_valueHashValid || m_idHashValid )
       return;
-    m_idHash = 7 * ( fastHashString( name ) );
+    m_idHash = 7 * ( name.hash() );
     int a = 1;
   //m_idHash += 31 * m_argumentList.count();
 

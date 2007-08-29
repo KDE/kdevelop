@@ -27,6 +27,10 @@
 #include <QStack>
 #include <cppparserexport.h>
 
+namespace KDevelop {
+  class HashedString;
+}
+
 namespace rpp {
 
 class pp_macro;
@@ -57,7 +61,7 @@ public:
 class KDEVCPPRPP_EXPORT Environment
 {
 public:
-  typedef QHash<QString, pp_macro*> EnvironmentMap;
+  typedef QHash<KDevelop::HashedString, pp_macro*> EnvironmentMap;
 
   Environment(pp* preprocessor);
   virtual ~Environment();
@@ -78,11 +82,11 @@ public:
   // For those not interested in the result, just in getting memory released etc.
   void cleanup();
 
-  void clearMacro(const QString& name);
+  void clearMacro(const KDevelop::HashedString& name);
 
   //Note: Undef-macros are allowed too
   virtual void setMacro(pp_macro* macro);
-  virtual pp_macro* retrieveMacro(const QString& name) const;
+  virtual pp_macro* retrieveMacro(const KDevelop::HashedString& name) const;
 
   QList<pp_macro*> allMacros() const;
 

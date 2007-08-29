@@ -18,7 +18,7 @@ set(kdevcpprpp_LIB_SRCS
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 kde4_add_library(kdev4cpprpp SHARED ${kdevcpprpp_LIB_SRCS})
-target_link_libraries(kdev4cpprpp ${KDE4_KDECORE_LIBS})
+target_link_libraries(kdev4cpprpp ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARY})
 install(TARGETS kdev4cpprpp DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############

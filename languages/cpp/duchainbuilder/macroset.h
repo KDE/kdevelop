@@ -45,7 +45,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT MacroSet {
 
         bool hasMacro( const QString& name ) const;
         bool hasMacro( const KDevelop::HashedString& name ) const;
-        rpp::pp_macro macro( const QString& name ) const;
+        rpp::pp_macro macro( const KDevelop::HashedString& name ) const;
         
         size_t idHash() const;
         size_t valueHash() const;
