@@ -21,9 +21,7 @@
 #ifndef UIPREFERENCES_H
 #define UIPREFERENCES_H
 
-#define KDE3_SUPPORT
 #include <kcmodule.h>
-#undef KDE3_SUPPORT
 
 namespace Ui{
     class UiConfig;
@@ -37,7 +35,7 @@ class UiPreferences : public KCModule
 {
 
     public:
-        explicit UiPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+        explicit UiPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
 
         ~UiPreferences();
 

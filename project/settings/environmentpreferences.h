@@ -22,9 +22,8 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 #include <kstandarddirs.h>
-#define KDE3_SUPPORT
 #include <kcmodule.h>
-#undef KDE3_SUPPORT
+#include <QtCore/QVariant>
 
 namespace KDevelop
 {
@@ -33,7 +32,7 @@ class EnvironmentPreferences : public KCModule
 {
     Q_OBJECT
 public:
-    explicit EnvironmentPreferences( QWidget *parent, const QStringList &args );
+    explicit EnvironmentPreferences( QWidget *parent, const QVariantList &args = QVariantList() );
     virtual ~EnvironmentPreferences();
 
     virtual void save();

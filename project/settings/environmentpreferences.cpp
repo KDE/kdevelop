@@ -20,7 +20,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
 
@@ -38,10 +39,10 @@ public:
     KConfig* m_config;
 };
 
-typedef KGenericFactory<EnvironmentPreferences> PreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdev_envsettings, PreferencesFactory( "kcm_kdev_envsettings" ) )
+K_PLUGIN_FACTORY(PreferencesFactory, registerPlugin<EnvironmentPreferences>(); )
+K_EXPORT_PLUGIN(PreferencesFactory("kcm_kdev_envsettings"))
 
-EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QStringList &args )
+EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantList &args )
     : KCModule( PreferencesFactory::componentData(), parent, args )
     , d( new EnvironmentPreferencesPrivate )
 {
@@ -53,10 +54,10 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QStringLi
              this, SLOT( settingsChanged() ) );
 
     // init kconfigskeleton
-    d->m_skel = new ProjectConfigSkeleton( args.first() );
-    d->m_skel->setDeveloperTempFile( args.at(1) );
-    d->m_skel->setProjectFileUrl( args.at(2) );
-    d->m_skel->setDeveloperFileUrl( args.at(3) );
+    d->m_skel = new ProjectConfigSkeleton( args.first().toString() );
+    d->m_skel->setDeveloperTempFile( args.at(1).toString() );
+    d->m_skel->setProjectFileUrl( args.at(2).toString() );
+    d->m_skel->setDeveloperFileUrl( args.at(3).toString() );
 
     addConfig( d->m_skel, d->preferencesDialog );
 

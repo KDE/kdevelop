@@ -22,16 +22,16 @@
 
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include "ui_uiconfig.h"
 #include "uiconfig.h"
 
-typedef KGenericFactory<UiPreferences> UiPreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdev_uisettings, UiPreferencesFactory( "kcm_kdev_uisettings" )  )
+K_PLUGIN_FACTORY(UiPreferencesFactory, registerPlugin<UiPreferences>();)
+K_EXPORT_PLUGIN(UiPreferencesFactory("kcm_kdev_uisettings"))
 
-
-UiPreferences::UiPreferences(QWidget* parent, const QStringList& args )
+UiPreferences::UiPreferences(QWidget* parent, const QVariantList& args )
     : KCModule( UiPreferencesFactory::componentData(), parent, args )
 {
     QVBoxLayout* l = new QVBoxLayout( this );
