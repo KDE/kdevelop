@@ -32,7 +32,7 @@ namespace KDevelop
  * This interface has methods to support distributed version control systems
  * like git or svk.
  */
-class KDEVPLATFORMVCS_EXPORT IDistributedVersionControl
+class IDistributedVersionControl
 {
 public:
     /**

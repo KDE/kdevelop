@@ -30,7 +30,7 @@ class QString;
 namespace KDevelop
 {
 
-class KDEVPLATFORMVCS_EXPORT IBrowsableVersionControl
+class IBrowsableVersionControl
 {
 public:
     /**

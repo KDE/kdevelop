@@ -45,7 +45,7 @@ class VcsMapping;
  *
  */
 
-class KDEVPLATFORMVCS_EXPORT IBasicVersionControl
+class IBasicVersionControl
 {
 public:
 

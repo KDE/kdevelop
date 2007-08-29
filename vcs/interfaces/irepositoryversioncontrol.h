@@ -30,7 +30,7 @@ class QStringList;
 namespace KDevelop
 {
 
-class KDEVPLATFORMVCS_EXPORT IRepositoryVersionControl
+class IRepositoryVersionControl
 {
 public:
     /**

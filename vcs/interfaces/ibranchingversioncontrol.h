@@ -31,7 +31,7 @@ class VcsRevision;
 namespace KDevelop
 {
 
-class KDEVPLATFORMVCS_EXPORT IBranchingVersionControl
+class IBranchingVersionControl
 {
 public:
     /**
