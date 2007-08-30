@@ -96,7 +96,7 @@ QMakeFile::QMakeFile( const QString& file )
 bool QMakeFile::read()
 {
     QFileInfo fi( m_projectFile );
-    kDebug(9024) << k_funcinfo << "Is" << m_projectFile << "a dir?" << fi.isDir() ;
+    kDebug(9024) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;
     if( fi.isDir() )
     {
         QDir dir( m_projectFile );
@@ -264,7 +264,7 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
     QString absolutepath = file;
     if( QFileInfo( absolutepath ).isRelative() )
     {
-        absolutepath = absoluteDir() + "/" + file;
+        absolutepath = absoluteDir() + '/' + file;
     }
     QStringList result;
     foreach( QString s, resolveShellGlobbing( absolutepath ) )

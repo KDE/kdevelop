@@ -23,6 +23,7 @@
 
 #include <ibuildsystemmanager.h>
 #include <iplugin.h>
+#include <QtCore/QVariant>
 
 template <typename T> class QList;
 class QString;
@@ -53,7 +54,7 @@ Q_OBJECT
 Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
-    explicit QMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
+    explicit QMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
     virtual ~QMakeProjectManager();
 
@@ -61,7 +62,7 @@ public:
     virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectItem*) const;
     virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
-    virtual KUrl::List preprocessorDefines(KDevelop::ProjectBaseItem*) const { return KUrl::List(); }
+    virtual QMap<QString,QString> preprocessorDefines(KDevelop::ProjectBaseItem*) const { return QMap<QString,QString>(); }
 
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
             KDevelop::ProjectFolderItem* ) { return false; }
@@ -78,8 +79,6 @@ public:
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectItem* import( KDevelop::IProject* );
-    virtual KUrl findMakefile( KDevelop::ProjectFolderItem* folder ) const;
-    virtual KUrl::List findMakefiles( KDevelop::ProjectFolderItem* folder ) const;
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl&,
             KDevelop::ProjectFolderItem* ) { return 0; }
