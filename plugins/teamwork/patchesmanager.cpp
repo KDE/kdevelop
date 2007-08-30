@@ -133,7 +133,7 @@ void PatchesManager::init() {
 }
 
 void PatchesManager::slotManagePatches() {
-  m_manageDlg = new KDialog( m_teamwork->widget() );
+  m_manageDlg = new QDialog( m_teamwork->widget() );
   m_managePatches.setupUi( m_manageDlg );
   m_managePatches.patchesList->setEditTriggers( QAbstractItemView::NoEditTriggers );
   connect( m_managePatches.edit, SIGNAL( pressed() ), this, SLOT( slotEditPatch() ) );
@@ -467,7 +467,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 
           auto_ptr<KOpenWithDialog> d( new KOpenWithDialog( ~patchInfo->type, "" ) );
 
-          if ( d->exec() == KDialog::Accepted ) {
+          if ( d->exec() == QDialog::Accepted ) {
             QString app = d->text();
             if ( !app.isEmpty() ) {
               ///@todo How to run this in a better way, so that .desktop-files are accepted etc.?
@@ -519,7 +519,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 
         auto_ptr<KOpenWithDlg> d = new KOpenWithDlg( ~patchInfo->type, "" );
 
-        if ( d->exec() == KDialog::Accepted ) {
+        if ( d->exec() == QDialog::Accepted ) {
           app = d->text();
         } else {
           throw QString( "open-with dialog was closed" );

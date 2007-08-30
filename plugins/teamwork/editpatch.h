@@ -27,7 +27,7 @@ namespace KParts{
   class Part;
 }
 
-class KDialog;
+class QDialog;
 
 class PatchesManager;
 namespace Diff2 {
@@ -128,7 +128,7 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
     bool m_editPatchLocal;
 
     Ui_EditPatch m_editPatch;
-    KDialog* m_editDlg;
+    QDialog* m_editDlg;
 
     QTime m_lastDataTime;
     QString m_lastTerminalData;

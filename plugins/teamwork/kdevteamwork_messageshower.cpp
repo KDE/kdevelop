@@ -105,7 +105,7 @@ void KDevTeamworkMessageShower::isReplyToButton() {
         repliedMessage = m_teamwork->messageManager() ->historyManager().getMessageFromId( l->info().isReplyTo() , m_teamwork->client() );
 
       if ( LockedSharedPtr<KDevTeamworkTextMessage> lrep = repliedMessage.cast<KDevTeamworkTextMessage>() ) {
-        KDialog * dialog = new KDialog( m_widget );
+        QDialog * dialog = new QDialog( m_widget );
         dialog->setAttribute( Qt::WA_DeleteOnClose, true );
         new KDevTeamworkMessageShower( lrep, dialog, m_teamwork );
         dialog->show();

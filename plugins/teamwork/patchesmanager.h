@@ -158,7 +158,7 @@ class PatchesManager : public QObject {
     MessageDispatcher< PatchesManager, PatchesManagerMessages > dispatcher_;
 
     Ui_ManagePatches m_managePatches;
-    QPointer<KDialog> m_manageDlg;
+    QPointer<QDialog> m_manageDlg;
 
     QStandardItemModel* m_patchesModel;
 

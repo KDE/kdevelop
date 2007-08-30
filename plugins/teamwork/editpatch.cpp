@@ -518,7 +518,7 @@ void EditPatch::slotChooseType() {
   QStringList list;
   list << m_editPatch.type->text();
   KMimeTypeChooserDialog *d = new KMimeTypeChooserDialog( text, "", list , "text", QStringList(), KMimeTypeChooser::Comments | KMimeTypeChooser::Patterns | KMimeTypeChooser::EditButton, m_editDlg );
-  if ( d->exec() == KDialog::Accepted ) {
+  if ( d->exec() == QDialog::Accepted ) {
     if ( !d->chooser() ->mimeTypes().isEmpty() ) {
       ///It would be perfect to have a mime-type-chooser that allows only one choice.
       if ( d->chooser() ->mimeTypes().back() == m_editPatch.type->text() ) {
@@ -608,7 +608,7 @@ void EditPatch::showEditDialog() {
   }
 
 
-  m_editDlg = new KDialog( m_parent->teamwork() ->widget() );
+  m_editDlg = new QDialog( m_parent->teamwork() ->widget() );
 
   connect( m_editDlg, SIGNAL( destroyed( QObject* ) ), this, SLOT( dialogDestroyed() ) );
   m_editPatch.setupUi( m_editDlg );

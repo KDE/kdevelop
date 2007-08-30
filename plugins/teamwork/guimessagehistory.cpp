@@ -38,7 +38,7 @@ GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, c
   if ( users.isEmpty() )
     m_allUsers = true;
 
-  m_dialog = new KDialog( manager->teamwork() ->widget() );
+  m_dialog = new QDialog( manager->teamwork() ->widget() );
   m_widgetData.setupUi( m_dialog );
 
   m_developersModel = new QStandardItemModel( 0, 1, m_widgetData.developers );

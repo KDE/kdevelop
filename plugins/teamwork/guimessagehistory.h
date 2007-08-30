@@ -25,7 +25,7 @@ namespace Teamwork {
 	typedef SafeSharedPtr<Logger> LoggerPointer;
 }
 
-class KDialog;
+class QDialog;
 class MessageManager;
 class KDevTeamworkTextMessage;
 
@@ -83,7 +83,7 @@ class GuiMessageHistory : public QObject, public SafeLogger {
 		QStandardItemModel* m_messagesModel;
 		QTimer* m_updateTimer;
 		QTimer* m_userIconUpdateTimer;
-		KDialog* m_dialog;
+		QDialog* m_dialog;
 		QString m_defaultContext;
 
 		enum TableColumns {
