@@ -55,6 +55,7 @@ public:
   DUContext* m_context;
   bool m_inSymbolTable : 1;
   bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
+  bool m_propagateDeclarations : 1;
     /**
    * Adds a child context.
    *
@@ -81,8 +82,14 @@ public:
   void addUse(Use* use);
   void removeUse(Use* use);
 
+  ///Must be called with m_localDeclarationsMutex locked
+  void addDeclarationToHash(const Identifier& identifer, Declaration* declaration);
+  ///Must be called with m_localDeclarationsMutex locked
+  void removeDeclarationFromHash(const Identifier& identifer, Declaration* declaration);
+  
   /**
    * Returns true if this context is imported by the given one, on any level.
+   * This propagates the declaration into the parent search-hashes, up to the first parent that has m_propagateDeclarations set to false.
    * */
   bool isThisImportedBy(const DUContext* context) const;
 };

@@ -192,6 +192,14 @@ public:
   void clearImportedParentContexts();
 
   /**
+   * If this is set to true, all declarations that are added to this context will also be visible in the parent-context.
+   * They will be visible in the parent using findDeclarations(..), and findLocalDeclarations, but will not be in the list of localDeclarations(...).
+   * */
+  void setPropagateDeclarations(bool propagate);
+
+  bool isPropagateDeclarations() const;
+  
+  /**
    * Returns the list of contexts importing this context.
    */
   const QList<DUContext*>& importedChildContexts() const;

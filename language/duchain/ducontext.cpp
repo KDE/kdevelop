@@ -50,7 +50,7 @@ QMutex DUContextPrivate::m_localDeclarationsMutex(QMutex::Recursive);
 const Identifier globalImportIdentifier("{...import...}");
 
 DUContextPrivate::DUContextPrivate( DUContext* d)
-  : m_owner(0), m_context(d), m_anonymousInParent(false)
+  : m_owner(0), m_context(d), m_anonymousInParent(false), m_propagateDeclarations(false)
 {
 }
 
@@ -68,6 +68,22 @@ void DUContextPrivate::addUse(Use* use)
   m_uses.append(use);
 
   DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::Uses, use);
+}
+
+void DUContextPrivate::addDeclarationToHash(const Identifier& identifier, Declaration* declaration)
+{
+  m_localDeclarationsHash.insert( identifier, DeclarationPointer(declaration) );
+  
+  if( m_propagateDeclarations && m_parentContext )
+    m_parentContext->d->addDeclarationToHash(identifier, declaration);
+}
+
+void DUContextPrivate::removeDeclarationFromHash(const Identifier& identifier, Declaration* declaration)
+{
+  m_localDeclarationsHash.remove( identifier, DeclarationPointer(declaration) );
+  
+  if( m_propagateDeclarations && m_parentContext )
+    m_parentContext->d->removeDeclarationFromHash(identifier,  declaration);
 }
 
 void DUContextPrivate::removeUse(Use* use)
@@ -98,7 +114,7 @@ void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
   if( !inserted )
     m_localDeclarations.append(newDeclaration);
       
-    m_localDeclarationsHash.insert( newDeclaration->identifier(), DeclarationPointer(newDeclaration) );
+    addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
   }
 
   DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
@@ -108,7 +124,7 @@ bool DUContextPrivate::removeDeclaration(Declaration* declaration)
 {
   QMutexLocker lock(&m_localDeclarationsMutex);
   
-  m_localDeclarationsHash.remove( declaration->identifier(), DeclarationPointer(declaration) );
+  removeDeclarationFromHash(declaration->identifier(), declaration);
   
   if( m_localDeclarations.removeAll(declaration) ) {
     DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
@@ -120,8 +136,8 @@ bool DUContextPrivate::removeDeclaration(Declaration* declaration)
 
 void DUContext::changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to ) {
   QMutexLocker lock(&d->m_localDeclarationsMutex);
-  d->m_localDeclarationsHash.remove( from, DeclarationPointer(decl) );
-  d->m_localDeclarationsHash.insert( to, DeclarationPointer(decl) );
+  d->removeDeclarationFromHash(from, decl);
+  d->addDeclarationToHash(to, decl);
 }
 
 void DUContextPrivate::addChildContext( DUContext * context )
@@ -264,6 +280,31 @@ DUContext* DUContext::parentContext( ) const
   ENSURE_CAN_READ
 
   return d->m_parentContext.data();
+}
+
+void DUContext::setPropagateDeclarations(bool propagate)
+{
+  ENSURE_CAN_WRITE
+  QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
+  
+  bool oldPropagate = d->m_propagateDeclarations;
+
+  if( oldPropagate && !propagate && d->m_parentContext )
+    foreach(const DeclarationPointer& decl, d->m_localDeclarationsHash)
+      if(decl)
+        d->m_parentContext->d->removeDeclarationFromHash(decl->identifier(), decl.data());
+  
+  d->m_propagateDeclarations = propagate;
+
+  if( !oldPropagate && propagate && d->m_parentContext )
+    foreach(const DeclarationPointer& decl, d->m_localDeclarationsHash)
+      if(decl)
+        d->m_parentContext->d->addDeclarationToHash(decl->identifier(), decl.data());
+}
+
+bool DUContext::isPropagateDeclarations() const
+{
+  return d->m_propagateDeclarations;
 }
 
 QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, SearchFlags flags ) const
