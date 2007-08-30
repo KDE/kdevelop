@@ -620,10 +620,13 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
 {
   if( type() == DUContext::Namespace || type() == DUContext::Global && currentDepth < 1000 )
     currentDepth += 1000;
-  
-  foreach (Declaration* definition, localDeclarations())
-    if ( (!position.isValid() || definition->textRange().start() <= position) )
-      definitions << qMakePair(definition, currentDepth);
+
+  {
+    QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
+      foreach (DeclarationPointer decl, d->m_localDeclarationsHash)
+        if ( decl && (!position.isValid() || decl->textRange().start() <= position) )
+          definitions << qMakePair(decl.data(), currentDepth);
+  }
 
   QListIterator<DUContextPointer> it = d->m_importedParentContexts;
   it.toBack();

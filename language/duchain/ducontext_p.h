@@ -47,7 +47,7 @@ public:
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsMutex must be locked.
   QList<Declaration*> m_localDeclarations;
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
-  DeclarationsHash m_localDeclarationsHash;
+  DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
   
   QList<Definition*> m_localDefinitions;
   QList<Use*> m_uses;

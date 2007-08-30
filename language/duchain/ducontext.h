@@ -327,7 +327,7 @@ public:
    * to into other contexts that were needed to find the declaration. Declarations reached through a namespace- or global-context
    * are offsetted by 1000.
    * 
-   * \returns the requested definitions, if any were active at that location.
+   * \returns the requested declarations, if any were active at that location. Declarations propagated into this context(@see setPropagateDeclarations) are included.
    */
   QList< QPair<Declaration*, int> > allDeclarations(const KTextEditor::Cursor& position, bool searchInParents=true) const;
 
