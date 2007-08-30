@@ -203,7 +203,7 @@ void visitBlock(rpp::MacroBlock* block, int indent = 0, bool elseBlock = false)
     kDebug(9007) << QString(indent * 2, QChar(' ')) << "Block, condition" << (elseBlock ? " else" : "") << "[" << block->condition << "]";
 
   foreach (rpp::pp_macro* macro, block->macros)
-    kDebug(9007) << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name << ", defined" << macro->defined;
+    kDebug(9007) << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name.str() << ", defined" << macro->defined;
 
   foreach (rpp::MacroBlock* child, block->childBlocks)
     visitBlock(child, indent);
@@ -303,48 +303,48 @@ HeaderGenerator::HeaderGenerator()
   topBlock->file = "<internal pp>";
 
   rpp::pp_macro* exportMacro = new rpp::pp_macro;
-  exportMacro->name = "__cplusplus";
+  exportMacro->name = QString("__cplusplus");
   exportMacro->definition = "1";
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(exportMacro);
 
   exportMacro = new rpp::pp_macro;
-  exportMacro->name = "__GNUC__";
+  exportMacro->name = QString("__GNUC__");
   exportMacro->definition = "4";
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(exportMacro);
 
   exportMacro = new rpp::pp_macro;
-  exportMacro->name = "__GNUC_MINOR__";
+  exportMacro->name = QString("__GNUC_MINOR__");
   exportMacro->definition = "1";
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(exportMacro);
 
   exportMacro = new rpp::pp_macro;
-  exportMacro->name = "__linux__";
+  exportMacro->name = QString("__linux__");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(exportMacro);
 
   exportMacro = new rpp::pp_macro;
-  exportMacro->name = "KDE_EXPORT";
+  exportMacro->name = QString("KDE_EXPORT");
   exportMacro->definition = "__declspec(dllexport)";
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(exportMacro);
 
   exportMacro = new rpp::pp_macro;
-  exportMacro->name = "KJS_EXPORT";
+  exportMacro->name = QString("KJS_EXPORT");
   exportMacro->definition = "__declspec(dllexport)";
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(exportMacro);
 
   exportMacro = new rpp::pp_macro;
-  exportMacro->name = "Q_WS_X11";
+  exportMacro->name = QString("Q_WS_X11");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(exportMacro);
@@ -431,7 +431,7 @@ void printMacros(rpp::Environment* environment)
 {
   kDebug(9007) << "Macros for environment:";
   foreach (rpp::pp_macro* macro, environment->allMacros())
-    kDebug(9007) << "Macro [" << macro->name << "]" << (macro->defined ? " [" : "undefined") << macro->definition << (macro->defined ? "]" : "");
+    kDebug(9007) << "Macro [" << macro->name.str() << "]" << (macro->defined ? " [" : "undefined") << macro->definition << (macro->defined ? "]" : "");
 }
 
 void HeaderGenerator::run()
