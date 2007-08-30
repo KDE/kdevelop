@@ -1,6 +1,9 @@
 Basic Installation
 ==================
 
+First make sure you have the kdevplatform module installed, it's also available
+from KDE's subversion repository in trunk/KDE/kdevplatform.
+
 Create a build directory, for example:
 mkdir build
 
