@@ -33,7 +33,6 @@
 #include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
-#include <kparts/componentfactory.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <icore.h>
