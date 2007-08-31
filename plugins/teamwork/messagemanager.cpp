@@ -64,10 +64,10 @@ void MessageManager::showMessage( const MessagePointer& msg ) {
   if ( !l.freeCast<AbstractGUIMessage>() )
     throw "message is no GUI-message";
 
-  QDialog* d = new QDialog( m_teamwork->widget() );
+  KDialog* d = new KDialog( m_teamwork->widget() );
   d->setAttribute( Qt::WA_DeleteOnClose, true );
 
-  l.freeCast<AbstractGUIMessage>() ->showInWidget( d, m_teamwork );
+  l.freeCast<AbstractGUIMessage>() ->showInWidget( d->mainWidget(), m_teamwork );
 
   d->show();
 }

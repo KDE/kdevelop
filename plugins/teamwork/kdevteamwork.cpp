@@ -554,9 +554,9 @@ void KDevTeamwork::showUserInfo( const UserPointer& user ) {
     if ( !l.freeCast<KDevTeamworkUser>() )
       throw QString( "bad user-type" );
 
-    QDialog* d = new QDialog( m_widget );
+    KDialog* d = new KDialog( m_widget );
     d->setAttribute( Qt::WA_DeleteOnClose, true );
-    KDevTeamworkUserInfoShower( l.freeCast<KDevTeamworkUser>(), d, this );
+    KDevTeamworkUserInfoShower( l.freeCast<KDevTeamworkUser>(), d->mainWidget(), this );
     d->show();
   } catch ( QString str ) {
     log( "error in showUserInfo:" + str, Error );

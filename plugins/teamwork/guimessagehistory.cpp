@@ -38,8 +38,9 @@ GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, c
   if ( users.isEmpty() )
     m_allUsers = true;
 
-  m_dialog = new QDialog( manager->teamwork() ->widget() );
-  m_widgetData.setupUi( m_dialog );
+  m_dialog = new KDialog( manager->teamwork() ->widget() );
+  m_dialog->setButtons( KDialog::Close );
+  m_widgetData.setupUi( m_dialog->mainWidget() );
 
   m_developersModel = new QStandardItemModel( 0, 1, m_widgetData.developers );
   m_widgetData.developers->setModel( m_developersModel );
@@ -70,8 +71,8 @@ GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, c
   connect( &m_manager->historyManager(), SIGNAL( newMessage( HistoryMessagePointer ) ), this, SLOT( slotNewMessage( const HistoryMessagePointer& ) ), Qt::QueuedConnection );
   connect( m_updateTimer, SIGNAL( timeout() ), this, SLOT( slotUpdateMessages() ) );
   connect( m_userIconUpdateTimer, SIGNAL( timeout() ), this, SLOT( updateMessageUserIcons() ) );
-  connect( m_widgetData.exitButton, SIGNAL( clicked( bool ) ), this, SLOT( slotExit() ) );
-  connect( m_dialog, SIGNAL( finished( int ) ), this, SLOT( slotExit() ) );
+//   connect( m_widgetData.exitButton, SIGNAL( clicked( bool ) ), this, SLOT( slotExit() ) );
+  connect( m_dialog, SIGNAL( finished() ), this, SLOT( slotExit() ) );
   connect( m_widgetData.messages, SIGNAL( clicked ( const QModelIndex & ) ), this, SLOT( messageItemClicked( const QModelIndex& ) ) );
 
 

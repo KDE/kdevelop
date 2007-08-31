@@ -25,6 +25,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <kopenwithdialog.h>
 #include <k3process.h>
 #include <kprocess.h>
+#include <kdialog.h>
 
 #include <idocumentcontroller.h>
 #include "iplugincontroller.h"
@@ -133,13 +134,15 @@ void PatchesManager::init() {
 }
 
 void PatchesManager::slotManagePatches() {
-  m_manageDlg = new QDialog( m_teamwork->widget() );
-  m_managePatches.setupUi( m_manageDlg );
+  m_manageDlg = new KDialog( m_teamwork->widget() );
+  m_manageDlg->setButtons( KDialog::Close );
+  m_manageDlg->setCaption( i18n("Manage Patches") );
+  m_managePatches.setupUi( m_manageDlg->mainWidget() );
   m_managePatches.patchesList->setEditTriggers( QAbstractItemView::NoEditTriggers );
   connect( m_managePatches.edit, SIGNAL( pressed() ), this, SLOT( slotEditPatch() ) );
   connect( m_managePatches.add, SIGNAL( pressed() ), this, SLOT( slotAddPatch() ) );
   connect( m_managePatches.remove, SIGNAL( pressed() ), this, SLOT( slotRemovePatch() ) );
-  connect( m_managePatches.closeButton, SIGNAL( pressed() ), this, SLOT( slotCloseManagement() ) );
+  connect( m_manageDlg, SIGNAL( finished() ), this, SLOT( slotCloseManagement() ) );
   m_manageDlg->show();
   m_patchesModel = new QStandardItemModel( 0, 1, m_managePatches.patchesList );
   m_managePatches.patchesList->setModel( m_patchesModel );

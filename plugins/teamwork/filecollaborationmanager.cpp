@@ -190,8 +190,9 @@ void FileCollaborationManager::slotStartCollaborationSession() {
     files.push_back(CollabFile(0, currentDocumentPath() ) );
 
     Ui_NewFileCollaborationSession s;
-    QDialog d;
-    s.setupUi( &d );
+    KDialog d;
+    d.setButtons( KDialog::Ok | KDialog::Cancel );
+    s.setupUi( d.mainWidget() );
     s.sessionName->setText( "Collaborate_on_" + QFileInfo( files.front().file ).baseName() );
     QString filesText = "Files:";
     for( CollabFileList::iterator it = files.begin(); it != files.end(); ++it ) {
