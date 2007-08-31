@@ -15,7 +15,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QStandardItemModel>
 #include <QModelIndex>
 #include <QVBoxLayout>
-#include <QDialog>
+#include <kdialog.h>
 #include "qdynamictext.h"
 #include "verify.h"
 #include "utils.h"
@@ -91,7 +91,7 @@ void TimestampEditor::fillWidgets() {
   } else {
     m_widgets.none->setEnabled( true );
   }
-  
+
   uint disabledCount = 0;
   ///Now count all disabled replacements lower than the current together
   ReplacementPointer p2 = t->first( m_index );
@@ -119,7 +119,7 @@ void TimestampEditor::tail() {
     if( !trySeekTo( p->primaryStamp() ) )
       m_parent->log( "could not seek to current state", Error );
   }
-  
+
   fillWidgets();
 }
 
@@ -127,7 +127,7 @@ void TimestampEditor::none() {
   QDynamicTextPointer t = m_parent->text();
   if( !trySeekTo( t->initialState()[m_index] ) )
     m_parent->log( "could not seek to initial state", Error );
-  
+
   fillWidgets();
 }
 
@@ -137,7 +137,7 @@ void TimestampEditor::enableAll() {
   VectorTimestamp cur = t->state();
 
   ReplacementPointer p = replacement();
-  
+
   ReplacementPointer p2 = t->first( m_index );
   if( !p2 ) {
     m_parent->log( "enableAll: error", Error );
@@ -156,7 +156,7 @@ void TimestampEditor::enableAll() {
   }
 
   if( lowest == stamp() ) return;
-  
+
   if( !trySeekTo( lowest - 1 ) ) {
     m_parent->log( QString( "enableAll: could not seek to bottom-state %1").arg( lowest-1 ), Error );
     fillWidgets();
@@ -172,7 +172,7 @@ void TimestampEditor::enableAll() {
   if( !trySeekTo( cur[m_index] ) ) {
     m_parent->log( "enableAll: seek back failed", Error );
   }
-  
+
   fillWidgets();
 }
 
@@ -203,7 +203,7 @@ void TimestampEditor::enableChanged( bool enabled ) {
   } catch( const DynamicTextError& err ) {
     m_parent->log( "TimestampEditor::enableChanged(..): serious corruption-error: " + ~err.what(), Error );
   }
-  
+
   fillWidgets();
 }
 
@@ -219,9 +219,11 @@ VectorTimestampEditor::VectorTimestampEditor( Teamwork::LoggerPointer logger, QO
       return;
     }
   } else {
-    m_dialog = new QDialog;
+    m_dialog = new KDialog;
+    m_dialog->setButtons( KDialog::Close );
     m_dialog->setAttribute( Qt::WA_DeleteOnClose, true );
-    widget = m_dialog;
+    widget = m_dialog->mainWidget();
+    connect( m_dialog, SIGNAL( closeClicked() ), this, SLOT( finish() ) );
   }
   m_widgets.setupUi( widget );
   m_layout = new QVBoxLayout( m_widgets.timestampsGroup );
@@ -236,7 +238,6 @@ VectorTimestampEditor::VectorTimestampEditor( Teamwork::LoggerPointer logger, QO
 
   connect( m_widgets.toTailTimestamp, SIGNAL( clicked( bool ) ), this, SLOT( toTailTimestamp() ) );
   connect( m_widgets.clearLog, SIGNAL( clicked( bool ) ), this, SLOT( clearLog() ) );
-  connect( m_widgets.finish, SIGNAL( clicked( bool ) ), this, SLOT( finish() ) );
   connect( text.data(), SIGNAL( stateChanged( QDynamicText& ) ), this, SLOT( textChanged() ) );
   connect( text.data(), SIGNAL( inserted( const ReplacementPointer&, QDynamicText& ) ), this, SLOT( textChanged() ) );
   connect( m_text, SIGNAL( destroyed( QObject* ) ), this, SLOT( textDestroyed() ) );
@@ -256,14 +257,14 @@ void VectorTimestampEditor::fillWidgets() {
       m_timestamps << new TimestampEditor( new VectorTimestampEditorLogger( this ), this, a+cnt );
     }
   }
-  
+
   for( QList< TimestampEditorPointer >::iterator it = m_timestamps.begin(); it != m_timestamps.end(); ++it ) {
     (*it)->update();
   }
 
   VectorTimestamp state = m_text->state();
   VectorTimestamp tailState = m_text->tailState();
-  
+
   QString txt = QString( "Current State: %1 Tail-State: %2" ).arg( ~toText( state ) ).arg( ~toText( tailState ) );
   m_widgets.stateInfo->setText( txt );
 

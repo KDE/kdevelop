@@ -108,7 +108,7 @@ class VectorTimestampEditor : public QObject, public SafeLogger {
     QList< TimestampEditorPointer > m_timestamps;
     QStandardItemModel* m_logModel;
     QVBoxLayout* m_layout;
-    QPointer<QDialog> m_dialog; ///Can be zero
+    QPointer<KDialog> m_dialog; ///Can be zero
 };
 
 #endif
