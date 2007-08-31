@@ -26,6 +26,7 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QBrush>
+#include <QMutexLocker>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -278,13 +279,15 @@ void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
       if( m_currentRange )
         delete m_currentRange;
 
-      m_currentRange = smart->newSmartRange( c, endC );
+      QMutexLocker lock(smart->smartMutex());
+      m_currentRange = smart->newSmartRange(d->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
+      KTextEditor::SmartRange* highlightRange = smart->newSmartRange( c, endC, m_currentRange );
       KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( Qt::yellow ) );
-      m_currentRange->setAttribute( t );
+      highlightRange->setAttribute( t );
 
-      smart->addHighlightToView( view, m_currentRange, true );
+      smart->addHighlightToDocument( /*view, */m_currentRange );//, true );
     }
   } else {
     throw "no smart-interface";
@@ -807,6 +810,14 @@ void InDocumentConversation::embedInView( KTextEditor::View* view, IDocument* do
   }
 }
 
+bool isCovered(int line1, int line2, int position, int length) {
+  if( line1 >= position-1 && line1 <= position+length+1 )
+    return true;
+  if( line2 >= position-1 && line2 <= position+length+1 )
+    return true;
+  return false;
+}
+
 void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEditor::Cursor* awayFrom, bool forceShow ) {
   try {
     if ( !m_smartCursor )
@@ -820,56 +831,86 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
     } else {
       if ( awayFrom ) {
         int sline = m_smartCursor->line();
-        int widgetLines = 8; ///Determine this somehow better
-        int sbottom = sline + widgetLines;
+        int widgetLines = 12; ///@todo Determine this better: How many lines does the widget cover?
         int cline = awayFrom->line();
-        int diff = sline - cline;
-        if ( diff < 0 )
-          diff = -diff;
-        int diff2 = sbottom - cline;
-        if ( diff2 < 0 )
-          diff2 = -diff2;
-        if ( diff < 10 || diff2 < 10 ) {
-          p = QPoint( -1, -1 );
+        p = QPoint( -1, -1 );
+        //Find any line-position where neither cline nor sline are coverd
 
-          if ( diff > diff2 ) {
-            int nline = cline - 5 - widgetLines;
-            if ( nline > 0 )
-              p = view->cursorToCoordinate( KTextEditor::Cursor( nline, 0 ) );
-
-            if ( p == QPoint( -1, -1 ) ) {
-              nline = cline + 5;  ///If there's no space at the top, try it downwards.
-              if ( view->document() && nline < view->document() ->lines() )
-                p = view->cursorToCoordinate( KTextEditor::Cursor( nline, 0 ) );
-            }
-          } else {
-            int nline = cline + 5;
-            if ( view->document() && nline < view->document() ->lines() )
-              p = view->cursorToCoordinate( KTextEditor::Cursor( nline, 0 ) );
-
-            if ( p == QPoint( -1, -1 ) ) {
-              nline = cline - 5 - widgetLines;  ///If there's no space at the top, try it downwards.
-              if ( nline > 0 )
-                p = view->cursorToCoordinate( KTextEditor::Cursor( nline, 0 ) );
-            }
-          }
+        //Try 1; Above cline
+        int resultLine = -1;
+        if( !isCovered(cline, cline, sline+1, widgetLines) ) {
+          resultLine = sline+1;
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
-      }
 
-      if( p == QPoint( -1, -1 ) ) {
-        if( !forceShow ) {
-            err() << "could not determine a good position to show the widget";
-          p.setX( 50 );
-        } else {
-          p.setX( 50 );
-          p.setY( 50 );
+        if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline - 5 - widgetLines, widgetLines) ) {
+          resultLine = cline - 5 - widgetLines; //Above cursor
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
-      }
 
-      //manager()->log( QString("smartcursor coordinates: %1 %2").arg( p.x() ).arg( p.y() ), Debug );
-      m_widget->move( p );
-      m_widget->show();
+        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+          resultLine = -1; //Make sure the lower end of the widget is visible too
+        
+        if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline - 2 - widgetLines, widgetLines) ) {
+          resultLine = sline - 5 - widgetLines; //Above target-position
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+        }
+        
+        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+          resultLine = -1; //Make sure the lower end of the widget is visible too
+        
+        if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline + 5, widgetLines) ) {
+          resultLine = cline + 5; //Below cursor
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+        }
+
+        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+          resultLine = -1; //Make sure the lower end of the widget is visible too
+        
+        if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline + 2, widgetLines) ) {
+          resultLine = sline + 5; //Below target-position
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+        }
+      
+
+        ///Try exactly the same positions as above, using less distance
+        if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline - 2 - widgetLines, widgetLines) ) {
+          resultLine = cline - 2 - widgetLines; //Above cursor
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+        }
+
+        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+          resultLine = -1; //Make sure the lower end of the widget is visible too
+        
+        if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline + 2, widgetLines) ) {
+          resultLine = cline + 2; //Below cursor
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+        }
+
+        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+          resultLine = -1; //Make sure the lower end of the widget is visible too
+        
+        if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline + 2, widgetLines) ) {
+          resultLine = sline + 2; //Below target-position
+          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+        }
+
+      }
     }
+
+    if( p == QPoint( -1, -1 ) ) {
+      if( !forceShow ) {
+          err() << "could not determine a good position to show the widget";
+        p.setX( 50 );
+      } else {
+        p.setX( 50 );
+        p.setY( 50 );
+      }
+    }
+
+    //manager()->log( QString("smartcursor coordinates: %1 %2").arg( p.x() ).arg( p.y() ), Debug );
+    m_widget->move( p );
+    m_widget->show();
   } catch ( const char * str ) {
     err() << "placeWidget:" << str;
   }
