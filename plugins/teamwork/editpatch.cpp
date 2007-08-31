@@ -23,6 +23,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QMenu>
 #include <QFile>
 #include <QTimer>
+#include <QMutexLocker>
 #include <QPersistentModelIndex>
 //#include <lib/kdevappintterface.h>
 #include "patchesmanager.h"
@@ -1050,6 +1051,11 @@ DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocume
   KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc );
   if ( !smart )
     throw QString( "no smart-interface" );
+
+  QMutexLocker lock(smart->smartMutex());
+  
+  KTextEditor::SmartRange* topRange = smart->newSmartRange(doc->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
+  
   for ( Diff2::DifferenceList::const_iterator it = model->differences() ->begin(); it != model->differences() ->end(); ++it ) {
     Diff2::Difference* diff = *it;
     int line, lineCount;
@@ -1073,15 +1079,17 @@ DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocume
 
     if ( endC.isValid() && c.isValid() ) {
       KTextEditor::SmartRange * r = smart->newSmartRange( c, endC );
+      r->setParentRange(topRange);
       KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 200, 200, 255 ) ) );
       r->setAttribute( t );
-
-      smart->addHighlightToView( doc->activeView(), r, true );
-      m_ranges << r;
     }
   }
+
+  m_ranges << topRange;
+
+  smart->addHighlightToDocument(topRange);
 }
 
 DocumentHighlighter::~DocumentHighlighter() {
