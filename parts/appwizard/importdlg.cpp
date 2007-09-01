@@ -289,7 +289,11 @@ void ImportDialog::dirChanged()
         return;
     }
 
-    name_edit->setText(dir.dirName());
+    // Remove any characters from the dirName that would be invalid in a project name
+    QString projectName(dir.dirName().replace(QRegExp("[^a-zA-Z0-9_]"), "_"));
+
+    // Set the project name
+    name_edit->setText(projectName);
 
     // QMake based?
     files = dir.entryList("*.pro");
