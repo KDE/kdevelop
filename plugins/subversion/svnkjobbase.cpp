@@ -9,9 +9,9 @@
  ***************************************************************************/
 
 #include "svnkjobbase.h"
-#include "subversion_core.h"
+#include "subversioncore.h"
 #include "subversionthreads.h"
-#include "svn_models.h"
+#include "svnmodels.h"
 #include "vcshelpers.h"
 #include "vcsevent.h"
 #include "vcsrevision.h"

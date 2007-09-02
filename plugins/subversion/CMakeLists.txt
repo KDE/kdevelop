@@ -12,27 +12,28 @@ include_directories( ${CMAKE_SOURCE_DIR}
 ########### next target ###############
 
 set(kdevsubversion_PART_SRCS
-    subversion_part.cpp
-    subversion_view.cpp
-    subversion_core.cpp
-    svn_models.cpp
-    svn_commitwidgets.cpp
-    svn_logviewwidgets.cpp
-    svn_blamewidgets.cpp
-    svn_authdialog.cpp
+    subversionpart.cpp
+    subversionview.cpp
+    subversioncore.cpp
+    svnmodels.cpp
+    svncommitwidgets.cpp
+    svnlogviewwidgets.cpp
+    svnblamewidgets.cpp
+    svnauthdialog.cpp
     svnkjobbase.cpp
     subversionthreads.cpp
-    svn_revision.cpp
+    svnrevision.cpp
     interthreadevents.cpp
-    svn_importwidgets.cpp
-    svn_checkoutwidgets.cpp
-    svn_updatewidget.cpp
-    svn_diffwidgets.cpp
-    svn_revisionwidget.cpp
-    svn_statuswidgets.cpp
-    svn_revertwidgets.cpp
-    svn_copywidgets.cpp svn_movewidgets.cpp
-    svn_catwidgets.cpp
+    svnimportwidgets.cpp
+    svncheckoutwidgets.cpp
+    svnupdatewidget.cpp
+    svndiffwidgets.cpp
+    svnrevisionwidget.cpp
+    svnstatuswidgets.cpp
+    svnrevertwidgets.cpp
+    svncopywidgets.cpp
+    svnmovewidgets.cpp
+    svncatwidgets.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -41,18 +42,18 @@ set(kdevsubversion_PART_UI
     svnlogindialog.ui
     svnssltrustdialog.ui
     svncommitloginputdlg.ui
-    uicommit_option_dlg.ui
-    uilogview_option_dlg.ui
-    uicheckout_option_dlg.ui
+    uicommitoptiondlg.ui
+    uilogviewoptiondlg.ui
+    uicheckoutoptiondlg.ui
     svnimportdialog.ui
-    uiupdate_option_dlg.ui
-    uidiff_option_dlg.ui
+    uiupdateoptiondlg.ui
+    uidiffoptiondlg.ui
     svnrevisionwidget.ui
-    uistatus_option_dlg.ui
-    uiblame_option_dlg.ui
-    uirevert_option_dlg.ui
-    uicopy_option_dlg.ui uimove_option_dlg.ui
-    uicat_option_dlg.ui
+    uistatusoptiondlg.ui
+    uiblameoptiondlg.ui
+    uirevertoptiondlg.ui
+    uicopyoptiondlg.ui uimoveoptiondlg.ui
+    uicatoptiondlg.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

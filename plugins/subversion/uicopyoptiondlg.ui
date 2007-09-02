@@ -1,0 +1,121 @@
+<ui version="4.0" >
+ <class>SvnCopyOptionDlg</class>
+ <widget class="QWidget" name="SvnCopyOptionDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>444</width>
+    <height>469</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Requested local path:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="KLineEdit" name="reqEdit" >
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Source</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="QRadioButton" name="urlRadio" >
+        <property name="text" >
+         <string>Specify by repository URL</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="pathRadio" >
+        <property name="text" >
+         <string>Specify by local working copy</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KLineEdit" name="srcEdit" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Source revision</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="SvnRevisionWidget" native="1" name="revisionWidget" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="title" >
+      <string>Destination</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="QLabel" name="label_2" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Specify either the full repository URL or local working path</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KUrlRequester" name="destEdit" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SvnRevisionWidget</class>
+   <extends>QWidget</extends>
+   <header>svnrevisionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

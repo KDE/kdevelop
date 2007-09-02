@@ -30,8 +30,8 @@ extern "C" {
 
 #include <kurl.h>
 
-#include "svn_revision.h"
-#include "svn_models.h"
+#include "svnrevision.h"
+#include "svnmodels.h"
 #include "svnkjobbase.h"
 
 class SvnKJobBase;

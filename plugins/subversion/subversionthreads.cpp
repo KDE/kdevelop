@@ -13,8 +13,8 @@
  ***************************************************************************/
 
 #include "subversionthreads.h"
-#include "subversion_core.h"
-#include "subversion_part.h"
+#include "subversioncore.h"
+#include "subversionpart.h"
 #include "interthreadevents.h"
 
 extern "C" {
