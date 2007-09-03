@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +32,7 @@ K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<CMakeSettings>(CMakePreferencesFactory::componentData(), parent, args)
+    : ProjectKCModule<CMakeSettings>(CMakePreferencesFactory::componentData(), parent, args), m_currentModel(0)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -82,7 +83,6 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     file.addPath("CMakeCache.txt");
     if(QFile::exists(file.toLocalFile()))
     {
-        m_prefsUi->cacheList->setEnabled(true);
         m_currentModel=new CMakeCacheModel(this, file);
         m_prefsUi->cacheList->setModel(m_currentModel);
         m_prefsUi->cacheList->hideColumn(3);
@@ -92,7 +92,8 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     else
     {
         kDebug(9032) << "did not exist " << file;
-        m_currentModel->clear();
+        if(m_currentModel)
+            m_currentModel->clear();
         m_prefsUi->cacheList->setEnabled(false);
     }
 }
@@ -103,8 +104,11 @@ void CMakePreferences::listSelectionChanged(const QModelIndex & index)
     QModelIndex idx = index.sibling(index.row(), 3);
     m_prefsUi->commentText->setText(m_currentModel->itemFromIndex(idx)->text());
 }
+
 void CMakePreferences::showInternal(int state)
 {
+    if(!m_currentModel)
+        return;
     for(int i=m_currentModel->internal(); i<m_currentModel->rowCount(); i++)
     {
         if(state==Qt::Unchecked)
@@ -114,12 +118,12 @@ void CMakePreferences::showInternal(int state)
     }
 }
 
+void CMakePreferences::buildDirChanged(const QString &)
+{
+    m_prefsUi->kcfg_buildFolder->url();
+}
 
 #include "cmakepreferences.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on;
 
-void CMakePreferences::buildDirChanged(const QString &)
-{
-    m_prefsUi->kcfg_buildFolder->url();
-}

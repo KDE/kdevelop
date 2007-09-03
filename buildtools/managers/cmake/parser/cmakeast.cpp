@@ -68,6 +68,7 @@ CMAKE_REGISTER_AST( GetFilenameComponentAst, get_filename_component )
 CMAKE_REGISTER_AST( ListAst, list )
 CMAKE_REGISTER_AST( OptionAst, option )
 CMAKE_REGISTER_AST( StringAst, string )
+CMAKE_REGISTER_AST( SubdirsAst, subdirs )
 CMAKE_REGISTER_AST( GetCMakePropertyAst, get_cmake_property )
 CMAKE_REGISTER_AST( ForeachAst, foreach )
 CMAKE_REGISTER_AST( ExecuteProcessAst, execute_process )
@@ -2118,10 +2119,9 @@ void MessageAst::writeBack( QString& ) const
 
 bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="message" || func.arguments.isEmpty() || func.arguments.count()>2)
+    if(func.name.toLower()!="message" || func.arguments.isEmpty())
         return false;
     int lastIdx = -1;
-    m_message = func.arguments.last().value;
     if(func.arguments.count()>1) {
         QString type=func.arguments.first().value;
         if(type=="SEND_ERROR")
@@ -2131,8 +2131,10 @@ bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(type=="FATAL_ERROR")
             m_type=FATAL_ERROR;
         else
-            kDebug(9032) << "error. unknown message parameter:" << type;
+            m_message.append(func.arguments.last().value);
     }
+    else
+        m_message.append(func.arguments.last().value);
     return true;
 }
 
@@ -2607,7 +2609,7 @@ bool SubdirDependsAst::parseFunctionInfo( const CMakeFunctionDesc& func)
     return true;
 }
 
-SubdirsAst::SubdirsAst()
+SubdirsAst::SubdirsAst() : m_preorder(false)
 {
 }
 
@@ -2621,7 +2623,27 @@ void SubdirsAst::writeBack( QString& ) const
 
 bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "subdirs" )
+        return false;
+
+    if ( func.arguments.isEmpty() )
+        return false;
+    
+    bool excludeFromAll=false;
+    foreach(CMakeFunctionArgument arg, func.arguments)
+    {
+        if(arg.value.toLower()=="EXCLUDE_FROM_ALL")
+            excludeFromAll=true;
+        else if(arg.value.toLower()=="PREORDER")
+            m_preorder=true;
+        else {
+            if(excludeFromAll)
+                m_exluceFromAll.append(arg.value);
+            else
+                m_directories.append(arg.value);
+        }
+    }
+    return true;
 }
 
 TargetLinkLibrariesAst::TargetLinkLibrariesAst()

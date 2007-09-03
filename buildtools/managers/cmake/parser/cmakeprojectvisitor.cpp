@@ -155,7 +155,7 @@ int CMakeProjectVisitor::notImplemented(const QString &name) const
     return 1;
 }
 
-int CMakeProjectVisitor::visit(const CMakeAst *ast)
+int CMakeProjectVisitor::visit(const CMakeAst *)
 {
 //     kDebug(9032) << "Pipiripipi" << ast->children().count();
     kDebug(9032) << "error! function not implemented";
@@ -178,14 +178,25 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
 int CMakeProjectVisitor::visit(const ProjectAst *project)
 {
     m_projectName = project->projectName();
+    if(!m_vars->contains("CMAKE_PROJECT_NAME"))
+        m_vars->insert("CMAKE_PROJECT_NAME", QStringList(project->projectName()));
+
+    m_vars->insert("PROJECT_NAME", QStringList(project->projectName()));
     m_vars->insert("PROJECT_SOURCE_DIR", QStringList(m_root));
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
 {
-    kDebug(9032) << "adding subdirectory" << resolveVariable(subd->sourceDir(), m_vars);
-    m_subdirectories += resolveVariable(subd->sourceDir(), m_vars);
+    kDebug(9032) << "adding subdirectory" << subd->sourceDir();
+    m_subdirectories += subd->sourceDir();
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
+{
+    kDebug(9032) << "adding subdirectory" << sdirs->directories() << sdirs->exluceFromAll();
+    m_subdirectories += sdirs->directories() << sdirs->exluceFromAll();
     return 1;
 }
 
@@ -207,11 +218,7 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //FIXME: Must deal with ENV{something} case
-    kDebug(9032) << "set:" << set->variableName() << "=" << set->values();
-//     if(!set->values().isEmpty())
-        m_vars->insert(set->variableName(), resolveVariables(set->values(), m_vars));
-//     else
-//         m_vars->insert(set->variableName(), QStringList("FALSE")); //FIXME: Must know what do we need here
+    m_vars->insert(set->variableName(), resolveVariables(set->values(), m_vars));
     kDebug(9032) << "set:" << set->variableName() << "=" << m_vars->value(set->variableName()) << "...";
     return 1;
 }
@@ -289,7 +296,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         path=possib;
     else
     {
-        if(!possib.endsWith(".cmake"))
+        if(!possib.contains('.'))
             possib += ".cmake";
         path=findFile(possib, modulePath);
     }
@@ -622,7 +629,6 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     }
     
 //     kDebug(9032) << "looking for the endif now @" << lines;
-    bool done=false;
     int inside=0;
     CMakeFileContent::const_iterator it=ifast->content().constBegin()+lines;
     CMakeFileContent::const_iterator itEnd=ifast->content().constEnd();
@@ -642,14 +648,8 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
 
 int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 {
-    QStringList vars = resolveVariable(exec->executableName(), m_vars);
-    if(vars.isEmpty()) {
-        kDebug(9032) << "bang!" << exec->executableName();
-        return 1;
-    }
-
-    QString execName = vars[0];
-    QStringList argsTemp = resolveVariables(exec->arguments(), m_vars), args;
+    QString execName = exec->executableName();
+    QStringList argsTemp = exec->arguments(), args;
 
     foreach(QString arg, argsTemp)
     {
@@ -671,7 +671,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
     KProcess p;
     p.setWorkingDirectory(exec->workingDirectory());
     p.setOutputChannelMode(KProcess::MergedChannels);
-    p.setProgram(execName, resolveVariables(args, m_vars));
+    p.setProgram(execName, args);
     p.start();
 
     if(!p.waitForFinished())
@@ -1165,6 +1165,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             kDebug(9032) << "Warning: Using the function: " << funcName << " which is deprecated by cmake.";
         element->setContent(fc, line);
 
+        m_vars->insert("CMAKE_CURRENT_LIST_LINE ", QStringList(QString::number(it->line)));
         int lines=element->accept(this);
         line+=lines;
         it+=lines;
@@ -1201,5 +1202,6 @@ QStringList CMakeProjectVisitor::targetDependencies(const QString & target) cons
     }
     return ret;
 }
+
 
 

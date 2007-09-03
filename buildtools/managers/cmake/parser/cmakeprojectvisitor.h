@@ -71,6 +71,7 @@ class CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const ForeachAst * );
         virtual int visit( const ProjectAst * );
         virtual int visit( const StringAst * );
+        virtual int visit( const SubdirsAst * );
         virtual int visit( const GetCMakePropertyAst * );
         virtual int visit( const CMakeAst * );
         

@@ -96,7 +96,6 @@ public:
     const VariableMap* variables() const { return &m_vars; }
     const MacroMap* macros() const { return &m_macros; }
 private:
-    QStringList resolveVariables(const QStringList & vars);
     QStringList cmakeModulesDirectories();
     KDevelop::IProject* m_project;
     CMakeFolderItem* m_rootItem;

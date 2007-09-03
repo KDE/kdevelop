@@ -55,6 +55,7 @@ class OptionAst;
 class ListAst;
 class ForeachAst;
 class StringAst;
+class SubdirsAst;
 class GetCMakePropertyAst;
 class CMakeAst;
 
@@ -96,6 +97,7 @@ class CMakeAstVisitor {
         virtual int visit( const ListAst * ) = 0;
         virtual int visit( const ForeachAst * ) = 0;
         virtual int visit( const StringAst * ) = 0;
+        virtual int visit( const SubdirsAst * ) = 0;
         virtual int visit( const GetCMakePropertyAst * ) = 0;
         virtual int visit( const CMakeAst * ) = 0;
 };

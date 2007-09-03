@@ -27,6 +27,7 @@
 #include <QtDesigner/QExtensionFactory>
 
 #include <KUrl>
+#include <KProcess>
 #include <kio/job.h>
 
 #include <icore.h>
@@ -47,6 +48,28 @@
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeProjectManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory("kdevcmakemanager"))
 
+QString executeProcess(const QString& execName, const QStringList& args=QStringList())
+{
+    kDebug(9032) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+
+    KProcess p;
+    p.setOutputChannelMode(KProcess::MergedChannels);
+    p.setProgram(execName, args);
+    p.start();
+
+    if(!p.waitForFinished())
+    {
+        kDebug(9032) << "failed to execute:" << execName;
+    }
+
+    QByteArray b = p.readAllStandardOutput();
+    QString t;
+    t.prepend(b.trimmed());
+    kDebug(9032) << "executed" << execName << "<" << t;
+
+    return t;
+}
+
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0), m_modulePath(cmakeModulesDirectories())
 {
@@ -60,11 +83,32 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     }
 
     QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
-    m_vars.insert("CMAKE_BINARY_DIR", QStringList("#[install_dir]/"));
+    m_vars.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
+    m_vars.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
     m_vars.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
     m_vars.insert("CMAKE_MODULE_PATH", m_modulePath);
-    m_vars.insert("CMAKE_SYSTEM_NAME", QStringList("Linux")); //FIXME: Make me multi platform
-    m_vars.insert("UNIX", QStringList("TRUE")); //FIXME: Make me multi platform
+
+#if defined(Q_WS_X11) || defined(Q_WS_MAC) //If it has uname :)
+    QString sysName=executeProcess("uname", QStringList("-s"));
+    QString sysVersion=executeProcess("uname", QStringList("-r"));
+    QString sysProcessor=executeProcess("uname", QStringList("-p"));
+    
+    m_vars.insert("UNIX", QStringList("TRUE"));
+    m_vars.insert("CMAKE_SYSTEM_NAME", QStringList(sysName));
+    m_vars.insert("CMAKE_SYSTEM_VERSION", QStringList(sysVersion));
+    m_vars.insert("CMAKE_SYSTEM", QStringList(sysName+'-'+sysVersion));
+    m_vars.insert("CMAKE_SYSTEM_PROCESSOR", QStringList(sysProcessor));
+#ifdef Q_WS_X11
+    m_vars.insert("LINUX", QStringList("TRUE"));
+#endif
+#ifdef Q_WS_MAC //NOTE: maybe should use __APPLE__
+    m_vars.insert("APPLE", QStringList("TRUE"));
+#endif
+#endif
+
+#ifdef Q_WS_WIN
+    m_vars.insert("WIN32", QStringList("TRUE"));
+#endif
     kDebug(9032) << "modPath" << m_vars.value("CMAKE_MODULE_PATH");
 }
 
@@ -77,11 +121,6 @@ CMakeProjectManager::~CMakeProjectManager()
 // {
 //     return m_project;
 // }
-
-QStringList CMakeProjectManager::resolveVariables(const QStringList & vars)
-{
-    return CMakeProjectVisitor::resolveVariables(vars, &m_vars);
-}
 
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {

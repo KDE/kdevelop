@@ -144,7 +144,7 @@ private:
        ~klassName();                                         \
                                                              \
         virtual void writeBack( QString& buffer ) const;           \
-	virtual int accept(CMakeAstVisitor * visitor) const { return visitor->visit(this); } \
+        virtual int accept(CMakeAstVisitor * visitor) const { return visitor->visit(this); } \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
@@ -546,7 +546,7 @@ CMAKE_END_AST_CLASS( MathAst )
 CMAKE_BEGIN_AST_CLASS( MessageAst )
 enum MessageType { SEND_ERROR, STATUS, FATAL_ERROR };
 CMAKE_ADD_AST_MEMBER( MessageType, MessageType, type, Type)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, message, Message )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, message, Message )
 CMAKE_END_AST_CLASS( MessageAst )
 
 
@@ -646,6 +646,10 @@ CMAKE_END_AST_CLASS( SubdirDependsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SubdirsAst )
+CMAKE_MARK_AS_DEPRECATED()
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, directories, Directories)
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, exluceFromAll, ExcludeFromAll)
+CMAKE_ADD_AST_MEMBER( bool, bool, preorder, Preorder)
 CMAKE_END_AST_CLASS( SubdirsAst )
 
 

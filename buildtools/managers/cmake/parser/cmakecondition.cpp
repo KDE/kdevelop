@@ -64,8 +64,9 @@ CMakeCondition::CMakeCondition(const VariableMap* vars) : m_vars(vars)
     m_parameters[IS_DIRECTORY]=1;*/
 }
 
-CMakeCondition::conditionToken CMakeCondition::typeName(const QString& name)
+CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 {
+    QString name=_name.toUpper();
     if(name=="NOT")
         return NOT;
     else if(name=="AND")
@@ -102,15 +103,16 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& name)
 
 
 
-bool CMakeCondition::isTrue(const QString& var) const
+bool CMakeCondition::isTrue(const QString& varName) const
 {
-    QString varName=CMakeProjectVisitor::resolveVariable(var, m_vars).join(";");
+    kDebug(9032) << "++++++++++++++++++++++ isTrue: " << varName;
+    
     if(m_vars->contains(varName))
     {
-        const QStringList valu=m_vars->value(CMakeProjectVisitor::resolveVariable(varName, m_vars).join(";"));
+        const QStringList valu=m_vars->value(varName);
 
 //         kDebug(9032) << "Checking" << varName << "is true";
-        QString val = valu.join(";");
+        QString val = valu.join(";").toUpper();
         return !val.isEmpty() && val!="0" && val!="N" && val!="NO" && val!="OFF" && val!="FALSE" && val!="NOTFOUND" && !val.endsWith("_NOTFOUND");
     }
     else
@@ -124,29 +126,31 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
     while(!done && it!=itStop)
     {
         conditionToken c = typeName(*it);
-        if(done = c>variable)
-            break;
-        it--;
+        done = c>variable;
+        if(!done)
+            it--;
     }
     return it;
 }
 
 bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd) const
 {
-    bool last=false, done=false;
+    bool last, done=false;
     while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
-//         kDebug(9032) << "operator" << *it2 << c << "..." << variable;
-        if(c<=variable)
-        {
-            return isTrue(*itBegin);
-        }
-
+        kDebug(9032) << "operator" << *it2 << c << "..." << variable;
         QString cmd;
+        
+        if(c==variable && it2==itBegin) { //we will only find variables in the first case
+            last = isTrue(*it2);
+        } else {
+            last = isTrue(*(it2+1));
+        }
+        
         switch(c)
         {
             case NOT:
@@ -162,20 +166,17 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 break;
             case EXISTS:
             {
-                QStringList v=CMakeProjectVisitor::resolveVariable(*(it2+1), m_vars);
+                QString v=*(it2+1);
                 if(v.isEmpty())
                     kDebug(9032) << "error: no";
                 else
                 {
                     last=false;
-                    foreach(QString s, v)
+                    QFileInfo f(v);
+                    if(f.exists())
                     {
-                        QFileInfo f(s);
-                        if(f.exists())
-                        {
-                            last=true;
-                            break;
-                        }
+                        last=true;
+                        break;
                     }
                 }
 //                 kDebug(9032) << "EXISTS!!!!" << last << "_" << v;
@@ -251,6 +252,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             default:
+                kDebug(9032) << "unrecog:" << *it2;
                 break;
         }
     }
