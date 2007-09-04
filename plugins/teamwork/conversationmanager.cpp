@@ -280,6 +280,8 @@ void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
         delete m_currentRange;
 
       QMutexLocker lock(smart->smartMutex());
+      if(m_currentRange)
+        delete m_currentRange;
       m_currentRange = smart->newSmartRange(d->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
       KTextEditor::SmartRange* highlightRange = smart->newSmartRange( c, endC, m_currentRange );
       KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
@@ -1160,6 +1162,9 @@ void InDocumentConversation::setActive( bool active ) {
 
     disconnect( docControl, 0, this, 0 );
     disconnect( manager() ->manager() ->teamwork(), 0, this, 0 );
+
+    if(m_currentRange)
+      delete m_currentRange;
   }
 }
 
