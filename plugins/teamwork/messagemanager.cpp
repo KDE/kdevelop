@@ -142,7 +142,7 @@ void MessageManager::fillMessageMenu( QMenu* menu, MessagePointer msg ) {
   if ( l ) {
     UserPointer u = l->info().user();
     if ( u ) {
-      if ( l->info().isIncoming() && l.freeCast<AbstractGUIMessage>() ) {
+      if ( /*l->info().isIncoming() &&*/ l.freeCast<AbstractGUIMessage>() ) {
         AbstractGUIMessage * request = l.freeCast<AbstractGUIMessage>();
         request->fillContextMenu( menu, teamwork() );
       }
