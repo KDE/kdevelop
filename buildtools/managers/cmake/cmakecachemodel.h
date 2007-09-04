@@ -31,7 +31,7 @@
 * This class parses the CMakeCache.txt files and put it to a Model
 * @author Aleix Pol
 */
-class KDEVCMAKECOMMON_EXPORT CMakeCacheModel : public QStandardItemModel
+class CMakeCacheModel : public QStandardItemModel
 {
     Q_OBJECT
     public:
