@@ -9,7 +9,7 @@
 namespace QMake
   {
 
-  class visitor
+  class  visitor
     {
       typedef void (visitor::*parser_fun_t)(ast_node *);
       static parser_fun_t _S_parser_table[];

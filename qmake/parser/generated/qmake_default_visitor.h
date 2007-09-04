@@ -9,7 +9,7 @@
 namespace QMake
   {
 
-  class default_visitor:  public visitor
+  class  default_visitor:  public visitor
     {
 
     public:
