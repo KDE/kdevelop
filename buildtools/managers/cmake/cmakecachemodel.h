@@ -23,6 +23,7 @@
 
 #include <cmakeexport.h>
 #include <QStandardItemModel>
+#include <QHash>
 
 #include <KUrl>
 
@@ -43,9 +44,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeCacheModel : public QStandardItemModel
         void edited() { m_changed=true; }
     private:
         bool writeBack(const KUrl& path) const;
+        
         KUrl m_filePath;
         bool m_changed;
         int m_internalBegin;
+        QHash<QString, int> m_variablePos;
 };
 
 #endif

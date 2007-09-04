@@ -51,6 +51,8 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
             this, SLOT(showInternal ( int )));
     connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
             this, SLOT( cacheEdited( QStandardItem * ) ));
+    
+    showInternal(m_prefsUi->showInternal->checkState());
 }
 
 CMakePreferences::~CMakePreferences()
@@ -109,12 +111,26 @@ void CMakePreferences::showInternal(int state)
 {
     if(!m_currentModel)
         return;
-    for(int i=m_currentModel->internal(); i<m_currentModel->rowCount(); i++)
+    if(state==Qt::Unchecked)
     {
-        if(state==Qt::Unchecked)
-            m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), true);
-        else
+        for(int i=0; i<m_currentModel->rowCount(); i++)
+        {
+            QStandardItem *p=m_currentModel->item(i, 4);
+            bool isAdv=p;
+            if(!isAdv)
+            {
+                p=m_currentModel->item(i, 1);
+                isAdv = p->text()=="INTERNAL" || p->text()=="STATIC";
+            }
+            m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), isAdv);
+        }
+    }
+    else
+    {
+        for(int i=0; i<m_currentModel->rowCount(); i++)
+        {
             m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), false);
+        }
     }
 }
 

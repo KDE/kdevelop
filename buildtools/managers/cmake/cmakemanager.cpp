@@ -117,11 +117,6 @@ CMakeProjectManager::~CMakeProjectManager()
     //delete m_rootItem;
 }
 
-// KDevelop::IProject* CMakeProjectManager::project() const
-// {
-//     return m_project;
-// }
-
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {
     Q_ASSERT(dynamic_cast<KDevelop::ProjectItem*>(item));
@@ -271,7 +266,7 @@ KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectItem *
     return m_builder;
 }
 
-QStringList CMakeProjectManager::cmakeModulesDirectories()
+QStringList CMakeProjectManager::cmakeModulesDirectories() const
 {
     QStringList env = CMakeProjectVisitor::envVarDirectories("CMAKEDIR");
 
