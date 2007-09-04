@@ -180,6 +180,8 @@ void Server::closeAllIncomingSessions() {
 }
 
 void Server::closeSession( const SessionPointer& session ) {
+  if(!session)
+    return;
   bool haveSession = false;
   {
     SessionMap::iterator it = sessions_.find( session );
