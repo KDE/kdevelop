@@ -45,6 +45,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "kdevteamwork_helpers.h"
 #include "messageusertab.h"
 #include "messagesendmanager.h"
+#include "conversationmanager.h"
 
 ///@todo Make most of these managers independent
 #include "collaborationmanager.h"
@@ -1748,7 +1749,7 @@ void KDevTeamwork::sendMessageButton() {
 
   MessagePointer::Locked lmsg = m_answerTo;
 
-  if( txt.isEmpty() ) return;
+  //Allow sending empty messages, which is useful for text-references
 
   UserPointer user = currentMessageTargetUser();
   if( !user ) {
@@ -1790,6 +1791,8 @@ void KDevTeamwork::sendMessageButton() {
           log( QString("created reference for: (%1, %2) : (%3, %4)").arg( ref.line() ).arg( ref.col() ).arg( endRef.line() ).arg( endRef.col() ), Debug );
 
           msg = new InDocumentMessage( l->messageTypes(), txt, ref, endRef, m_widgets->context->text() );
+          msg.cast<InDocumentMessage>()->setConversation( m_messageManager->conversationManager().getConversation(msg.cast<InDocumentMessage>()) );
+
 
           InDocumentMessage* dmsg = msg.freeCast<InDocumentMessage>();
           if ( dmsg ) {
