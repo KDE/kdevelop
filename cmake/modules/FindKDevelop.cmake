@@ -24,7 +24,7 @@ if(WIN32)
 endif(WIN32)
 
 if( NOT KDEVELOP_INCLUDE_DIR )
-    find_path( _kdevIncDir kdevelop/cpp/parser/parser.h
+    find_path( _kdevIncDir kdevelop/make/imakebuilder.h
         PATHS
         ${CMAKE_INSTALL_PREFIX}/include
         ${_KDEVELOP_INCLUDE_DIR}
