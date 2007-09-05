@@ -269,7 +269,7 @@ LocalPatchSourcePointer DocumentWrapper::saveAsPatch( bool addToList, bool edit 
 
     out( Logger::Debug ) << "saveAsPatch(..) executing \"diff --unified=4 " + tempBase.toLocalFile() + " " + tempCurrent.toLocalFile() + "\"";
 
-    proc.start( K3Process::Block );
+    proc.start( K3Process::Block, K3Process::Stdout );
     if ( addToList )
       pm->addPatch( l );
     if ( edit )
