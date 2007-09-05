@@ -1,9 +1,15 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevRubySupport" version="2">
+<kpartgui name="KDevRubySupport" version="3">
 <MenuBar>
   <Menu name="build" >
     <Action name="build_execute" />
     <Action name="build_launch_browser" />
+  </Menu>
+  <Menu name="tools" >
+      <Action name="switch_to_controller" group="tools_language_operations" />
+      <Action name="switch_to_model" group="tools_language_operations" />
+      <Action name="switch_to_view" group="tools_language_operations" />
+      <Action name="switch_to_test" group="tools_language_operations" />
   </Menu>
 </MenuBar>
 <ToolBar name="buildToolBar">

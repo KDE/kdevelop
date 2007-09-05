@@ -13,7 +13,9 @@
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
 #include "kdevshellwidget.h"
+#include "kdevquickopen.h"
 
+#include <qdir.h>
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
@@ -52,6 +54,11 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
   action = new KAction( i18n("Launch Browser"), "network", 0, this, SLOT(slotBrowse()), actionCollection(), "build_launch_browser" );
   action->setToolTip(i18n("Launch Browser"));
   action->setWhatsThis(i18n("<b>Launch Browser</b><p>Opens a web browser pointing to the Ruby Rails server") );
+
+  action = new KAction( i18n("Switch To Controller"), 0, CTRL+ALT+Key_1, this, SLOT(slotSwitchToController()), actionCollection(), "switch_to_controller" );
+  action = new KAction( i18n("Switch To Model"), 0, CTRL+ALT+Key_2, this, SLOT(slotSwitchToModel()), actionCollection(), "switch_to_model" );
+  action = new KAction( i18n("Switch To View"), 0, CTRL+ALT+Key_3, this, SLOT(slotSwitchToView()), actionCollection(), "switch_to_view" );
+  action = new KAction( i18n("Switch To Test"), 0, CTRL+ALT+Key_4, this, SLOT(slotSwitchToTest()), actionCollection(), "switch_to_test" );
 
   kdDebug() << "Creating RubySupportPart" << endl;
 
@@ -655,6 +662,155 @@ void RubySupportPart::slotCreateSubclass()
 void RubySupportPart::slotBrowse()
 {
     kapp->invokeBrowser("http://localhost:3000/");
+}
+
+void RubySupportPart::slotSwitchToController()
+{
+    KParts::Part *activePart = partController()->activePart();
+    if (!activePart)
+        return;
+    KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(activePart);
+    if (!ropart)
+        return;
+    QFileInfo file(ropart->url().path());
+    if (!file.exists())
+        return;
+    QString ext = file.extension();
+    QString name = file.baseName();
+    QString switchTo = "";
+    if ((ext == "rb") && !name.endsWith("_controller"))
+    {
+        if (name.endsWith("_test"))
+            switchTo = name.remove(QRegExp("_test$"));  //the file is the test
+        else
+            switchTo = name;
+    }
+    else if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    {
+        //this is a view, we need to find the directory of this view and try to find
+        //the controller basing on the directory information
+        switchTo = file.dir().dirName();
+    }
+    QString controllersDir = project()->projectDirectory() + "/app/controllers/";
+    if (!switchTo.isEmpty())
+    {
+        if (!switchTo.endsWith("_controller"))
+            switchTo += "_controller";
+        partController()->editDocument(KURL::fromPathOrURL(controllersDir + switchTo + ".rb"));
+    }
+}
+
+void RubySupportPart::slotSwitchToTest()
+{
+    KParts::Part *activePart = partController()->activePart();
+    if (!activePart)
+        return;
+    KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(activePart);
+    if (!ropart)
+        return;
+    QFileInfo file(ropart->url().path());
+    if (!file.exists())
+        return;
+    QString ext = file.extension();
+    QString name = file.baseName();
+    QString switchTo = "";
+
+    if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    {
+        //this is a view already, let's show the list of all views for this model
+        switchTo = file.dir().dirName();
+    }
+    else if (ext == "rb")
+        switchTo = name.remove(QRegExp("_controller$")).remove(QRegExp("_controller_test$")).remove(QRegExp("_test$"));
+
+    if (switchTo.isEmpty())
+        return;
+
+    KURL::List urls;
+    QString testDir = project()->projectDirectory() + "/test/";
+    QString functionalTest = testDir + "functional/" + switchTo + "_controller_test.rb";
+    QString integrationTest = testDir + "integration/" + switchTo + "_test.rb";
+    QString unitTest = testDir + "unit/" + switchTo + "_test.rb";
+    if (QFile::exists(functionalTest)) urls << KURL::fromPathOrURL(functionalTest);
+    if (QFile::exists(integrationTest)) urls << KURL::fromPathOrURL(integrationTest);
+    if (QFile::exists(unitTest)) urls << KURL::fromPathOrURL(unitTest);
+
+    KDevQuickOpen *qo = extension<KDevQuickOpen>("KDevelop/QuickOpen");
+    if (qo && !urls.isEmpty())
+        qo->quickOpenFile(urls);
+}
+
+void RubySupportPart::slotSwitchToModel()
+{
+    KParts::Part *activePart = partController()->activePart();
+    if (!activePart)
+        return;
+    KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(activePart);
+    if (!ropart)
+        return;
+    QFileInfo file(ropart->url().path());
+    if (!file.exists())
+        return;
+    QString ext = file.extension();
+    QString name = file.baseName();
+    QString switchTo = "";
+
+    if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    {
+        //this is a view already, let's show the list of all views for this model
+        switchTo = file.dir().dirName();
+    }
+    else if (ext == "rb" && (name.endsWith("_controller") || name.endsWith("_test")))
+    {
+        switchTo = name.remove(QRegExp("_controller$")).remove(QRegExp("_controller_test$")).remove(QRegExp("_test$"));
+    }
+
+    if (switchTo.isEmpty())
+        return;
+
+    QString modelsDir = project()->projectDirectory() + "/app/models/";
+    partController()->editDocument(KURL::fromPathOrURL(modelsDir + switchTo + ".rb"));
+}
+
+void RubySupportPart::slotSwitchToView()
+{
+    KParts::Part *activePart = partController()->activePart();
+    if (!activePart)
+        return;
+    KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(activePart);
+    if (!ropart)
+        return;
+    QFileInfo file(ropart->url().path());
+    if (!file.exists())
+        return;
+    QString ext = file.extension();
+    QString name = file.baseName();
+    QString switchTo = "";
+
+    if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    {
+        //this is a view already, let's show the list of all views for this model
+        switchTo = file.dir().dirName();
+    }
+    else if (ext == "rb")
+        switchTo = name.remove(QRegExp("_controller$")).remove(QRegExp("_test$"));
+
+    if (switchTo.isEmpty())
+        return;
+
+    KURL::List urls;
+    QDir viewsDir = QDir(project()->projectDirectory() + "/app/views/" + switchTo);
+    QStringList views = viewsDir.entryList();
+
+    for (QStringList::const_iterator it = views.begin(); it != views.end(); ++it)
+    {
+        QString viewName = *it;
+        if ( !(viewName.endsWith("~") || viewName == "." || viewName == "..") )
+            urls << KURL::fromPathOrURL(viewsDir.absPath() + "/" + viewName);
+    }
+    KDevQuickOpen *qo = extension<KDevQuickOpen>("KDevelop/QuickOpen");
+    if (qo)
+        qo->quickOpenFile(urls);
 }
 
 #include "rubysupport_part.moc"

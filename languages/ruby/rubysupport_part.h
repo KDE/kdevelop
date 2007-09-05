@@ -44,6 +44,11 @@ private slots:
 
     void initialParse();
 
+    void slotSwitchToController();
+    void slotSwitchToView();
+    void slotSwitchToModel();
+    void slotSwitchToTest();
+
 private:
     void startApplication(const QString &program);
     QString interpreter();
