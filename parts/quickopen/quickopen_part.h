@@ -22,12 +22,12 @@
 #define __KDEVPART_QUICKOPEN_H__
 
 #include <qguardedptr.h>
-#include <kdevplugin.h>
+#include <kdevquickopen.h>
 #include <codemodel.h>
 
 class KAction;
 
-class QuickOpenPart : public KDevPlugin
+class QuickOpenPart : public KDevQuickOpen
 {
     Q_OBJECT
 public:
@@ -35,6 +35,8 @@ public:
     virtual ~QuickOpenPart();
 
     void selectItem( ItemDom item );
+
+    virtual void quickOpenFile(const KURL::List urls);
     
 private slots:
     void slotProjectOpened();

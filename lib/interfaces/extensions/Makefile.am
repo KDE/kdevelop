@@ -1,11 +1,13 @@
 kdevelopincludeextdir = $(includedir)/kdevelop/interfaces/extensions
-kdevelopincludeext_HEADERS = kdevsourceformatter.h kdevappfrontend.h \
-	kdevmakefrontend.h kdevdifffrontend.h kdevcreatefile.h kdevversioncontrol.h codebrowserfrontend.h
+kdevelopincludeext_HEADERS = codebrowserfrontend.h kdevappfrontend.h \
+	kdevcreatefile.h kdevdifffrontend.h kdevmakefrontend.h kdevquickopen.h \
+	kdevsourceformatter.h kdevversioncontrol.h
 
 servicetypedir = $(kde_servicetypesdir)
-servicetype_DATA = kdevelopappfrontend.desktop kdevelopcreatefile.desktop \
-	kdevelopdifffrontend.desktop kdevelopmakefrontend.desktop kdevelopsourceformatter.desktop \
-	kdevelopversioncontrol.desktop kdevelopcodebrowserfrontend.desktop
+servicetype_DATA = kdevelopappfrontend.desktop \
+	kdevelopcodebrowserfrontend.desktop kdevelopcreatefile.desktop kdevelopdifffrontend.desktop \
+	kdevelopmakefrontend.desktop kdevelopquickopen.desktop kdevelopsourceformatter.desktop \
+	kdevelopversioncontrol.desktop
 
 SUBDIRS = dcop
 libkdevextensions_la_LDFLAGS = $(all_libraries)

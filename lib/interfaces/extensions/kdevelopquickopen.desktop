@@ -1,0 +1,22 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/QuickOpen
+X-KDE-Derived=KDevelop/Plugin
+Name=Quick Open Interface
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
+
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/QuickOpen
+X-KDE-Derived=KDevelop/Plugin
+Name=Quick Open Interface
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
+

@@ -50,7 +50,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( data ) )
 using namespace KTextEditor;
 
 QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin(&data, parent, name ? name : "QuickOpenPart" )
+    : KDevQuickOpen(&data, parent, name ? name : "QuickOpenPart" )
 {
     setInstance(QuickOpenFactory::instance());
     setXMLFile("kdevpart_quickopen.rc");
@@ -127,6 +127,12 @@ void QuickOpenPart::selectItem( ItemDom item )
     } else {
         kdDebug() << "could not find the proper extension\n";
     }
+}
+
+void QuickOpenPart::quickOpenFile(const KURL::List urls)
+{
+    QuickOpenFileDialog dlg( this, urls, mainWindow()->main() );
+    dlg.exec();
 }
 
 
