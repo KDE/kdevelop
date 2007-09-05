@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>534</width>
-            <height>349</height>
+            <width>552</width>
+            <height>475</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,6 +19,14 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Also look into C++/Qt to define the QMake, Qt and Designer paths</string>
+            </property>
+        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>groupBehaviour</cstring>
