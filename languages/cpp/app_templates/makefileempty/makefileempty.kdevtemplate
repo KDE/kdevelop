@@ -1,0 +1,28 @@
+# KDE Config File
+[General]
+Name=Empty Custom Makefile Template
+Icon=makefileempty.png
+Category=C++
+Comment=Generate an empty Custom Makefile based application
+FileTemplates=h,CStyle,cpp,CStyle
+Archive=makefileempty.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE2]
+Type=install
+Source=%{src}/makefileempty-Makefile
+Dest=%{dest}/Makefile
+
+[MSG]
+Type=message
+Comment=A Custom Makefile based application was created in %{dest}
+
