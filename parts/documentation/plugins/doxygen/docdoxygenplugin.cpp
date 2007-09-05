@@ -26,6 +26,7 @@
 #include <qfileinfo.h>
 #include <qdialog.h>
 #include <qregexp.h>
+#include <qvaluestack.h>
 
 #include <kurl.h>
 #include <kaboutdata.h>
@@ -247,20 +248,29 @@ void DocDoxygenPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* it
     }
     
     //KDE doxygen documentation mode (if catalog points to a index.html)
-    QDir d(fi.dirPath(true));
-    QStringList fileList = d.entryList("*", QDir::Dirs);
-    
-    QStringList::ConstIterator it;
-    for (it = fileList.begin(); it != fileList.end(); ++it)
-    {
-        QString dirName = (*it);
-        if (dirName == "." || dirName == ".." || dirName == "common")
+    QDir d;
+    QValueStack<QString> dirStack;
+    dirStack.push(fi.dirPath(true));
+    do {
+        d.setPath(dirStack.pop());
+        if (!d.exists())
             continue;
-        if (QFile::exists(d.absFilePath(*it) + "/html/index.html"))
+
+        const QFileInfoList *dirEntries = d.entryInfoList();
+        if (!dirEntries) continue;
+        QPtrListIterator<QFileInfo> it(*dirEntries);
+        for (; it.current(); ++it)
         {
-            createBookIndex(d.absFilePath(*it) + "/" + *it + ".tag", index, item);
+            QString fileName = it.current()->fileName();
+            if (fileName == "." || fileName == ".." || fileName == "common" || fileName == "html")
+                continue;
+            if (it.current()->isDir())
+                dirStack.push(it.current()->absFilePath());
         }
-    }
+
+        if (QFile::exists(d.absPath() + "/html/index.html"))
+            createBookIndex(d.absPath() + "/" + d.dirName() + ".tag", index, item);
+    } while (!dirStack.isEmpty());
 }
 
 void DocDoxygenPlugin::createTOC(DocumentationCatalogItem* item)
@@ -288,22 +298,34 @@ void DocDoxygenPlugin::createTOC(DocumentationCatalogItem* item)
     }
     
     //KDE doxygen documentation mode (if catalog points to a index.html)
-    QDir d(fi.dirPath(true));
-    QStringList fileList = d.entryList("*", QDir::Dirs, QDir::Name | QDir::Reversed);
-    QStringList::ConstIterator it;
-    for (it = fileList.begin(); it != fileList.end(); ++it)
-    {
-        QString dirName = (*it);
-        if (dirName == "." || dirName == ".." || dirName == "common")
+    QDir d;
+    QValueStack<QString> dirStack;
+    dirStack.push(fi.dirPath(true));
+    do {
+        d.setPath(dirStack.pop());
+        if (!d.exists())
             continue;
-        if (QFile::exists(d.absFilePath(*it) + "/html/index.html"))
+
+        const QFileInfoList *dirEntries = d.entryInfoList();
+        if (!dirEntries) continue;
+        QPtrListIterator<QFileInfo> it(*dirEntries);
+        for (; it.current(); ++it)
         {
-            DocumentationItem *docItem = new DocumentationItem(DocumentationItem::Book, item, *it);
-            docItem->setURL(KURL(d.absFilePath(*it) + "/html/index.html"));
+            QString fileName = it.current()->fileName();
+            if (fileName == "." || fileName == ".." || fileName == "common" || fileName == "html")
+                continue;
+            if (it.current()->isDir())
+                dirStack.push(it.current()->absFilePath());
+        }
+
+        if (QFile::exists(d.absPath() + "/html/index.html"))
+        {
+            DocumentationItem *docItem = new DocumentationItem(DocumentationItem::Book, item, d.dirName());
+            docItem->setURL(KURL(d.absPath() + "/html/index.html"));
             docItem->setExpandable(true);
             createBookTOC(docItem);
         }
-    }
+    } while (!dirStack.isEmpty());
 }
 
 DocumentationCatalogItem *DocDoxygenPlugin::createCatalog(KListView *contents, const QString &title, const QString &url)
