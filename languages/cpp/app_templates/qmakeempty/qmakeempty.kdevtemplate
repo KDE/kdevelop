@@ -1,0 +1,36 @@
+# KDE Config File
+[General]
+Name=Empty QMake Template
+Icon=qmakeempty.png
+Category=C++/QMake project
+Comment=Generate an empty QMake based application (crossplatform compatible) - Needs Qt
+FileTemplates=h,CStyle,cpp,CStyle
+Archive=qmakeempty.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/qmakeempty.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/qmakeempty.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MSG]
+Type=message
+Comment=A Qmake based application was created in %{dest}
+
+[QMAKE]
+Type=value
+ValueType=QString
+Value=QMAKE
+Comment=Absolute Path for QMake.
+Default=
+
+[DESIGNER]
+Type=value
+ValueType=QString
+Value=DESIGNER
+Comment=Absolute Path for Designer.
+Default=
