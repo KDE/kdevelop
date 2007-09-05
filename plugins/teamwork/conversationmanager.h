@@ -224,7 +224,7 @@ class InDocumentConversation : public QObject, public Shared, public SafeLogger 
 
     QPointer<KTextEditor::Document> m_currentConnectedDocument;
 
-    QPointer<KTextEditor::SmartRange> m_currentRange;
+    KTextEditor::SmartRange* m_currentRange;
 
     InDocumentReference::TextSearchInstance m_currentSearchInstance;
 
