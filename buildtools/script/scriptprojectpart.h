@@ -22,7 +22,6 @@ class QStringList;
 class KDialogBase;
 class ScriptProjectWidget;
 
-
 class ScriptProjectPart : public KDevBuildTool
 {
     Q_OBJECT
@@ -51,10 +50,13 @@ protected:
     virtual QString runArguments() const;
     virtual DomUtil::PairList runEnvironmentVars() const;
 
+    bool canAddToProject(const QString &path);
+
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotNewFile();
-     
+    void rescan();
+
 private:
     QString m_projectDirectory;
     QString m_projectName;

@@ -1,8 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCustomProject" version="1">
+<kpartgui name="KDevCustomProject" version="2">
 <MenuBar>
   <Menu name="file" >
     <Action name="file_newfile" />
+  </Menu>
+  <Menu name="project" >
+      <Action name="rescan" />
   </Menu>
 </MenuBar>
 </kpartgui>

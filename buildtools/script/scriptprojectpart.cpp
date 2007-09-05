@@ -25,6 +25,7 @@
 #include <kmessagebox.h>
 #include <kdevgenericfactory.h>
 #include <kdevcreatefile.h>
+#include <kdirwatch.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -55,6 +56,9 @@ ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QS
       action->setWhatsThis( i18n("<b>New file</b><p>Creates a new file.") );
       action->setToolTip( i18n("Create a new file") );
     }
+    new KAction( i18n("Rescan Project"), 0, CTRL+ALT+Key_R,
+                            this, SLOT(rescan()),
+                            actionCollection(), "rescan" );
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -106,28 +110,6 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
         DomUtil::writeEntry(dom, "/kdevscriptproject/run/directoryradio", "executable");
     }
 
-    QString includepatterns
-        = DomUtil::readEntry(dom, "/kdevscriptproject/general/includepatterns");
-    QStringList includepatternList;
-    if ( includepatterns.isNull() ) {
-	if ( languageSupport() ){
-	    KMimeType::List list = languageSupport()->mimeTypes();
-	    KMimeType::List::Iterator it = list.begin();
-	    while( it != list.end() ){
-		includepatternList += (*it)->patterns();
-		++it;
-	    }
-	}
-    } else {
-        includepatternList = QStringList::split(",", includepatterns);
-    }
-
-    QString excludepatterns
-        = DomUtil::readEntry(dom, "/kdevscriptproject/general/excludepatterns");
-    if (excludepatterns.isNull())
-        excludepatterns = "*~";
-    QStringList excludepatternList = QStringList::split(",", excludepatterns);
-
     // Put all files from all subdirectories into file list
     QValueStack<QString> s;
     int prefixlen = m_projectDirectory.length()+1;
@@ -158,13 +140,8 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
                     s.push(path);
                 }
                 else {
-                   if (matchesPattern(path, includepatternList)
-                        && !matchesPattern(path, excludepatternList)) {
-                        kdDebug(9015) << "Adding: " << path << endl;
+                    if (canAddToProject(path))
                         m_sourceFiles.append(path.mid(prefixlen));
-                   } else {
-                        kdDebug(9015) << "Ignoring: " << path << endl;
-                   }
                 }
             }
         }
@@ -336,9 +313,6 @@ void ScriptProjectPart::slotNewFile()
     dlg.exec();
 }
 
-#include "scriptprojectpart.moc"
-
-
 /*!
     \fn ScriptProjectPart::distFiles() const
  */
@@ -351,3 +325,102 @@ QStringList ScriptProjectPart::distFiles() const
 	QStringList files = dir.entryList( "*README*");
 	return sourceList + files;
 }
+
+void ScriptProjectPart::rescan()
+{
+//     kdDebug() << "Directory " << path << " changed, scanning for new files in the project" << endl;
+
+    // Put all files from all subdirectories into file list
+    QValueStack<QString> s;
+    int prefixlen = m_projectDirectory.length()+1;
+    s.push(m_projectDirectory);
+
+    QDir dir;
+    do {
+        dir.setPath(s.pop());
+        kdDebug(9015) << "Examining: " << dir.path() << endl;
+        const QFileInfoList *dirEntries = dir.entryInfoList();
+        if ( dirEntries )
+        {
+            QPtrListIterator<QFileInfo> it(*dirEntries);
+            for (; it.current(); ++it) {
+                QString fileName = it.current()->fileName();
+                if (fileName == "." || fileName == "..")
+                   continue;
+                QString path = it.current()->absFilePath();
+                if (it.current()->isDir()) {
+                    //do not follow symlinks which point to the themselves
+                    if (it.current()->isSymLink())
+                    {
+                        QString symLink = it.current()->readLink();
+                        if ((symLink == path) || (symLink == "./"))
+                            continue;
+                    }
+                    kdDebug(9015) << "Pushing: " << path << endl;
+                    s.push(path);
+                }
+                else {
+                    if (!isProjectFile(path) && canAddToProject(path))
+                        addFile(path.mid(prefixlen));
+//                         m_sourceFiles.append(path.mid(prefixlen));
+                }
+            }
+        }
+    } while (!s.isEmpty());
+
+/*    const QFileInfoList *dirEntries = QDir(path).entryInfoList();
+    if ( dirEntries )
+    {
+        kdDebug() << "1" << endl;
+        QPtrListIterator<QFileInfo> it(*dirEntries);
+        for (; it.current(); ++it) {
+            kdDebug() << "2" << endl;
+            QString fileName = it.current()->fileName();
+            if (fileName == "." || fileName == "..")
+                continue;
+            kdDebug() << "3" << endl;
+            QString filePath = it.current()->absFilePath();
+            if (!it.current()->isDir() && canAddToProject(filePath) && !isProjectFile(filePath)) {
+                kdDebug() << "=== adding " << filePath << endl;
+                addFile(filePath);
+            }
+        }
+    }*/
+}
+
+bool ScriptProjectPart::canAddToProject(const QString & path)
+{
+    QDomDocument &dom = *projectDom();
+    QString includepatterns
+        = DomUtil::readEntry(dom, "/kdevscriptproject/general/includepatterns");
+    QStringList includepatternList;
+    if ( includepatterns.isNull() ) {
+    if ( languageSupport() ){
+        KMimeType::List list = languageSupport()->mimeTypes();
+        KMimeType::List::Iterator it = list.begin();
+        while( it != list.end() ){
+        includepatternList += (*it)->patterns();
+        ++it;
+        }
+    }
+    } else {
+        includepatternList = QStringList::split(",", includepatterns);
+    }
+
+    QString excludepatterns
+        = DomUtil::readEntry(dom, "/kdevscriptproject/general/excludepatterns");
+    if (excludepatterns.isNull())
+        excludepatterns = "*~";
+    QStringList excludepatternList = QStringList::split(",", excludepatterns);
+
+    if (matchesPattern(path, includepatternList)
+        && !matchesPattern(path, excludepatternList)) {
+        kdDebug(9015) << "Adding: " << path << endl;
+        return true;
+    } else {
+        kdDebug(9015) << "Ignoring: " << path << endl;
+        return false;
+    }
+}
+
+#include "scriptprojectpart.moc"
