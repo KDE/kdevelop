@@ -63,6 +63,7 @@ private slots:
   void testTypeConversion();
   void testCompletionContext();
   void testUpdateChain();
+  void testHeaderSections();
   void cleanupTestCase();
 
 public:
@@ -78,7 +79,7 @@ private:
   friend class TestPreprocessor;
 
   //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed
-  QString preprocess( const QString& text, QList<KDevelop::DUContext*>& included, rpp::pp* parent = 0 );
+  QString preprocess( const QString& text, QList<KDevelop::DUContext*>& included, rpp::pp* parent = 0, bool stopAfterHeaders = false );
   
   KDevelop::DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
 

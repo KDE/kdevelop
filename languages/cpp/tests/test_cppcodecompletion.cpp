@@ -334,7 +334,7 @@ void TestCppCodeCompletion::testInclude() {
   ///HONK was #undef'ed in testFile2, so this must be unresolved.
   decl = findDeclaration(c, QualifiedIdentifier("undefinedHonk"));
   QVERIFY(decl);
-  QVERIFY(!decl->abstractType());
+  QVERIFY(dynamic_cast<DelayedType*>(decl->abstractType().data()));
   
 
   Cpp::ExpressionParser parser;
@@ -418,12 +418,50 @@ void TestCppCodeCompletion::testUpdateChain() {
   release(context);
 }
 
+void TestCppCodeCompletion::testHeaderSections() {
+  TEST_FILE_PARSE_ONLY
+  /**
+   * Make sure that the ends of header-sections are recognized correctly
+   * */
+
+  addInclude( "someHeader.h", "\n" );
+  addInclude( "otherHeader.h", "\n" );
+      
+  QList<DUContext*> includes;
+
+  QCOMPARE(preprocess("#include \"someHeader.h\"\nHello", includes, 0, true), QString("\n"));
+  QCOMPARE(includes.count(), 1);
+  includes.clear();
+  
+  QCOMPARE(preprocess("#include \"someHeader.h\"\nHello", includes, 0, false), QString("\nHello"));
+  QCOMPARE(includes.count(), 1);
+  includes.clear();
+  
+  QCOMPARE(preprocess("#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, false), QString("\n\nHello"));
+  QCOMPARE(includes.count(), 2);
+  includes.clear();
+  
+  QCOMPARE(preprocess("#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, true), QString("\n\n"));
+  QCOMPARE(includes.count(), 2);
+  includes.clear();
+  
+  QCOMPARE(preprocess("#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, true), QString("\n\n\n"));
+  QCOMPARE(includes.count(), 1);
+  includes.clear();
+  
+  QCOMPARE(preprocess("#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, false), QString("\n\n\nHello\n"));
+  QCOMPARE(includes.count(), 1);
+  includes.clear();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TestCppCodeCompletion::release(DUContext* top)
 {
   KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
+  if(dynamic_cast<TopDUContext*>(top))
+    DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
   delete top;
 }
 
@@ -436,8 +474,9 @@ struct TestPreprocessor : public rpp::Preprocessor {
   TestCppCodeCompletion* cc;
   QList<DUContext*>& included;
   rpp::pp* pp;
+  bool stopAfterHeaders;
 
-  TestPreprocessor( TestCppCodeCompletion* _cc, QList<DUContext*>& _included ) : cc(_cc), included(_included), pp(0) {
+  TestPreprocessor( TestCppCodeCompletion* _cc, QList<DUContext*>& _included, bool _stopAfterHeaders ) : cc(_cc), included(_included), pp(0), stopAfterHeaders(_stopAfterHeaders) {
   }
   
   rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType type, int sourceLine, bool skipCurrentPath)
@@ -455,10 +494,15 @@ struct TestPreprocessor : public rpp::Preprocessor {
   void setPp( rpp::pp* _pp ) {
     pp = _pp;
   }
+
+  virtual void headerSectionEnded(rpp::Stream& stream) {
+    if(stopAfterHeaders)
+      stream.toEnd();
+  }
 };
 
-QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*>& included, rpp::pp* parent ) {
-  TestPreprocessor ppc( this, included );
+QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*>& included, rpp::pp* parent, bool stopAfterHeaders ) {
+  TestPreprocessor ppc( this, included, stopAfterHeaders );
 
     rpp::pp preprocessor(&ppc);
     ppc.setPp( &preprocessor );
