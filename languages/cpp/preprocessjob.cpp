@@ -143,8 +143,8 @@ void PreprocessJob::run()
 
         if( CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching() ) {
             KUrl u = parentJob()->document();
-            u.addPath(":content");
             m_contentEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
+//            m_contentEnvironmentFile->setFlags(IdentifiedFile::Content);
         }
     }
 
@@ -243,6 +243,7 @@ void PreprocessJob::run()
 
     if( m_contentEnvironmentFile ) {
         m_environmentFile->merge(*m_contentEnvironmentFile);
+        //Q_ASSERT(m_contentEnvironmentFile->identity().flags() & IdentifiedFile::Content);
         parentJob()->setContentEnvironmentFile(m_contentEnvironmentFile.data());
     }
     
@@ -266,24 +267,28 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
 {
     if( m_contentEnvironmentFile ) {
         KUrl u = parentJob()->document();
-        u.addPath(":content");
 
         ///Find a matching content-context
-        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment);
-        if(content) {
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock()); //Write-lock because of setFlags below
+        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment);
+        if(content && (content->flags() & KDevelop::TopDUContext::ProxyContextFlag)) {
             //We have found a content-context that we can use
             parentJob()->setContentContext(content);
 
             if( content->parsingEnvironmentFile()->modificationRevision() == KDevelop::EditorIntegrator::modificationRevision(parentJob()->document()) ) {
                 //We can completely re-use the specialized context
                 m_contentEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
-                Q_ASSERT(m_contentEnvironmentFile);
+
                 stream.toEnd();
                 parentJob()->setUseContentContext(true);
+                Q_ASSERT(m_contentEnvironmentFile);
             } else {
+                kDebug() << "updating content-context";
                 //We will re-use the specialized context, but it needs updating. So we keep processing here.
             }
+            //content->parsingEnvironmentFile()->setFlags(content); //It may happen here that a proxy-context is transformed into a normal one
+        } else if(content) {
+            kDebug() << "Found a matching content-context that is a proxy-context for " << u << ", ignoring it.";
         } else {
             //We need to process the content ourselves
         }

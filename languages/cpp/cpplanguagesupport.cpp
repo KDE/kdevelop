@@ -93,7 +93,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_standardMacros = new Cpp::MacroSet;
     m_standardIncludePaths = new QStringList;
     m_environmentManager = new Cpp::EnvironmentManager;
-    //m_environmentManager->setSimplifiedMatching(true); ///@todo Make simplified matching optional. Before that, make it work.
+    m_environmentManager->setSimplifiedMatching(true); ///@todo Make simplified matching optional. Before that, make it work.
     {
         DUChainWriteLocker l(DUChain::lock());
         DUChain::self()->addParsingEnvironmentManager(m_environmentManager);

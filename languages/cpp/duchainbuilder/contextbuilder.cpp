@@ -138,8 +138,6 @@ void ContextBuilder::smartenContext(TopDUContext* topLevelContext) {
 KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
   KUrl u(file->url());
-  Q_ASSERT(!u.path().endsWith(":content"));
-  u.setPath(u.path().mid(-8));
   
   m_editor->setCurrentUrl(u);
 
@@ -168,6 +166,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
     CppDUContext<TopDUContext>* cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
 
     cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
+
     cppContext->addImportedParentContext(content.data());
   }
 
@@ -178,14 +177,12 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 {
   m_compilingContexts = true;
 
-  KUrl u(file->url());
-  if(u.path().endsWith("/:content")) {
-    QString p = u.path();
-    p.truncate(p.length()-strlen("/:content"));
-    u.setPath(p);
-    kDebug() << "redirecting " << file->url() << " -> " << u;
+  if(updateContext && (updateContext->flags() & TopDUContext::ProxyContextFlag)) {
+    kDebug() << "updating a context " << file->identity() << " from a proxy-context to a content-context";
+    updateContext->setFlags((TopDUContext::Flags)( updateContext->flags() & (~TopDUContext::ProxyContextFlag))); //It is possible to upgrade a proxy-context to a content-context
   }
-  u.setPath(u.path().mid(-8));
+  
+  KUrl u(file->url());
   
   m_editor->setCurrentUrl(file->url());
 

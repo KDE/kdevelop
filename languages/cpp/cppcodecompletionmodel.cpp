@@ -107,6 +107,23 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     kDebug() << "Could not find perfectly matching version of " << url << " for completion";
     top = DUChain::self()->chainForDocument(url);
   }
+
+  if(top && top->flags() & TopDUContext::ProxyContextFlag)
+  {
+    if(!top->importedParentContexts().isEmpty())
+    {
+      if(top->importedParentContexts().count() != 1)
+        kDebug(9007) << "WARNING: Proxy-context has more than one content-contexts, this should never happen";
+      
+      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
+      
+      if(!top)
+        kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
+      
+    } else {
+      kDebug(9007) << "ERROR: Proxy-context has no content-context";
+    }
+  }
   
   if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;

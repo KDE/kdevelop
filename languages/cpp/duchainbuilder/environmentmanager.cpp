@@ -141,7 +141,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     //Make sure that all external macros used by the file now exist too
   MacroSet::Macros::const_iterator end2 = file.usedMacros().macros().end();
     for ( MacroSet::Macros::const_iterator it = file.usedMacros().macros().begin(); it != end2; ++it ) {
-      if ( !environment->retrieveMacro( ( *it ).name ) ) {
+      if ( !environment->retrieveStoredMacro( ( *it ).name ) ) {
         ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "used a macro called \"" << it->name.str() << "\"(from" << it->file << "), but the driver does not contain that macro, the cached file is not used"  );
         success = false;
         break;

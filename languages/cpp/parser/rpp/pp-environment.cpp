@@ -183,12 +183,17 @@ const Environment::EnvironmentMap& Environment::environment() const {
   return m_environment;
 }
 
-pp_macro* Environment::retrieveMacro(const KDevelop::HashedString& name) const
+pp_macro* Environment::retrieveStoredMacro(const KDevelop::HashedString& name) const
 {
   if (m_environment.contains(name))
     return m_environment[name];
 
   return 0;
+}
+
+pp_macro* Environment::retrieveMacro(const KDevelop::HashedString& name) const
+{
+  return retrieveStoredMacro(name);
 }
 
 MacroBlock::MacroBlock(int _sourceLine)

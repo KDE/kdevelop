@@ -200,6 +200,7 @@ Cpp::EnvironmentFile* CPPParseJob::environmentFile() {
 }
 
 void CPPParseJob::setContentEnvironmentFile( Cpp::EnvironmentFile* file ) {
+    //Q_ASSERT(!file || file->identity().flags() & IdentifiedFile::Content);
     m_contentEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
 }
 
@@ -285,7 +286,7 @@ void CPPInternalParseJob::run()
 
             //Use the EnvironmentFile of the content-context.
             environmentFile = parentJob()->contentEnvironmentFile();
-            Q_ASSERT(environmentFile->identity().url().prettyUrl().endsWith(":content"));
+            //Q_ASSERT(environmentFile->identity().flags() & IdentifiedFile::Content);
         }
         
         QList<DUContext*> chains;
@@ -295,6 +296,7 @@ void CPPInternalParseJob::run()
             chains << context;
         
         if( parentJob()->parentPreprocessor() ) {
+            DUChainReadLocker lock(DUChain::lock());
             //Temporarily insert the parent's chains here, so forward-declarations can be resolved and types can be used, as it should be.
             //In theory, we would need to insert the whole until-now parsed part of the parent, but that's not possible because preprocessing and parsing are
             //separate steps. So we simply assume that the includes are at the top of the file.
@@ -342,6 +344,7 @@ void CPPInternalParseJob::run()
             }
             else
             {
+                DUChainWriteLocker l(DUChain::lock());
                 ///We can re-use a readily available content-context
                 Q_ASSERT(parentJob()->contentContext());
                 kDebug( 9007 ) << "reusing existing content duchain";

@@ -88,6 +88,9 @@ public:
   virtual void setMacro(pp_macro* macro);
   virtual pp_macro* retrieveMacro(const KDevelop::HashedString& name) const;
 
+  //Returns macros that are really stored locally(retrieveMacro may be overridden to perform more complex actions)
+  pp_macro* retrieveStoredMacro(const KDevelop::HashedString& name) const;
+  
   QList<pp_macro*> allMacros() const;
 
   //Take the set of environment-macros from the given environment
