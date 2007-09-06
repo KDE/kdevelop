@@ -104,7 +104,7 @@ class CppDUContext : public BaseContext {
         delete instatiation;
     }
     
-    virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
+    virtual void findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
       if( basicFlags & BaseContext::LanguageSpecificFlag1 ) {
         ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
@@ -113,8 +113,8 @@ class CppDUContext : public BaseContext {
         return;
       }
       
-      foreach( const QualifiedIdentifier& identifier, identifiers )
-        findDeclarationsInternal(identifier, position, dataType, ret, basicFlags);
+      for( QList<QualifiedIdentifier>::const_iterator it = identifiers.begin(); it != identifiers.end(); it++ )
+        findDeclarationsInternal(*it, position, dataType, ret, basicFlags);
     }
     
     ///Overridden to take care of templates and other c++ specific things
@@ -331,8 +331,8 @@ class CppDUContext : public BaseContext {
       }
       
       id.clearTemplateIdentifiers();
-      foreach( const ExpressionEvaluationResult& result, templateArguments )
-        id.appendTemplateIdentifier( QualifiedIdentifier(result.toShortString()) );
+      for( QList<ExpressionEvaluationResult>::const_iterator it = templateArguments.begin(); it != templateArguments.end(); it++ )
+        id.appendTemplateIdentifier( QualifiedIdentifier(it->toShortString()) );
 
       totalId.push(id);
       
