@@ -51,7 +51,7 @@ class QListViewItem;
 class KToolBarPopupAction;
 class NamespaceItem;
 class Navigator;
-
+class HierarchyDialog;
 class ClassViewPart : public Extensions::KDevCodeBrowserFrontend
 {
     Q_OBJECT
@@ -91,6 +91,7 @@ private:
     KTextEditor::EditInterface* m_activeEditor;
     KTextEditor::ViewCursorInterface* m_activeViewCursor;
 
+    HierarchyDialog* m_hierarchyDlg;
     friend class Navigator;
 };
 

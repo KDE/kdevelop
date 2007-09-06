@@ -145,7 +145,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( data ) )
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
     :/// KDevPlugin( &data, parent, name ? name : "ClassViewPart" ),
     KDevCodeBrowserFrontend( &data, parent, name ? name : "ClassViewPart" ),
-    m_activeDocument(0), m_activeView(0), m_activeSelection(0), m_activeEditor(0), m_activeViewCursor(0)
+    m_activeDocument(0), m_activeView(0), m_activeSelection(0), m_activeEditor(0), m_activeViewCursor(0), m_hierarchyDlg(0)
 {
     setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");
@@ -177,6 +177,7 @@ ClassViewPart::~ClassViewPart()
 {
     mainWindow()->removeView( m_widget );
     delete (ClassViewWidget*) m_widget;
+    delete m_hierarchyDlg;
 }
 
 void ClassViewPart::slotProjectOpened( )
@@ -225,8 +226,9 @@ bool ClassViewPart::langHasFeature(KDevLanguageSupport::Features feature)
 
 void ClassViewPart::graphicalClassView( )
 {
-    HierarchyDialog dia(this);
-    dia.exec();
+    if( !m_hierarchyDlg )
+        m_hierarchyDlg = new HierarchyDialog(this);
+    m_hierarchyDlg->show();
 }
 
 void ClassViewPart::refresh() {

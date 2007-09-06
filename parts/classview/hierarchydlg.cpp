@@ -30,7 +30,7 @@
 
 
 HierarchyDialog::HierarchyDialog( ClassViewPart *part )
-    : QDialog(0, "hierarchy dialog", WDestructiveClose)
+    : QDialog(0, "hierarchy dialog", false)
 {
     class_combo = new KComboView(true, 150, this);
     class_combo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
@@ -58,8 +58,12 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
              this, SLOT(slotNamespaceComboChoice(QListViewItem*)) );
     connect( class_combo, SIGNAL(activated(QListViewItem*)),
              this, SLOT(slotClassComboChoice(QListViewItem*)) );
+    connect( namespace_combo, SIGNAL(textChanged(const QString&)),
+             this, SLOT(slotNamespaceComboChoice(const QString&)) );
+    connect( class_combo, SIGNAL(textChanged(const QString&)),
+             this, SLOT(slotClassComboChoice(const QString&)) );
     connect( close_button, SIGNAL(clicked()),
-             this, SLOT(reject()) );
+             this, SLOT(hide()) );
     connect( digraph, SIGNAL(selected(const QString&)),
              this, SLOT(classSelected(const QString&)) );
 
@@ -123,6 +127,28 @@ void HierarchyDialog::slotClassComboChoice(QListViewItem * item)
     classSelected(className);
 }
 
+void HierarchyDialog::slotClassComboChoice( const QString& itemText )
+{
+    QListViewItem* item = class_combo->listView()->firstChild();
+    while( item )
+    {
+        if( item->text(0) == itemText )
+	{
+            ClassItem *ci = dynamic_cast<ClassItem*>(item);
+            if (!ci)
+                return;
+        
+            KDevLanguageSupport *ls = m_part->languageSupport();
+        
+            QString className = ls->formatClassName(uclasses[item->text(0)]);
+            digraph->setSelected(className);
+            digraph->ensureVisible(className);
+            classSelected(className);
+      	    return;
+	}
+	item = item->nextSibling();
+    }
+}
 
 void HierarchyDialog::classSelected(const QString &/*className*/)
 {
@@ -143,6 +169,23 @@ void HierarchyDialog::slotNamespaceComboChoice( QListViewItem * item )
     if (!ni)
         return;
     ViewCombosOp::refreshClasses(m_part, class_combo, ni->dom()->name());
+}
+
+void HierarchyDialog::slotNamespaceComboChoice( const QString& itemText )
+{
+    QListViewItem* item = namespace_combo->listView()->firstChild();
+    while( item )
+    {
+        if( item->text(0) == itemText )
+	{
+            NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
+            if (!ni)
+                return;
+            ViewCombosOp::refreshClasses(m_part, class_combo, ni->dom()->name());
+	    return;
+	}
+	item = item->nextSibling();
+    }
 }
 
 void HierarchyDialog::processNamespace( QString prefix, NamespaceDom dom )

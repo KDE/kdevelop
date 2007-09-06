@@ -35,6 +35,8 @@ private slots:
     void setLanguageSupport(KDevLanguageSupport *ls);
     void slotClassComboChoice(QListViewItem *item);
     void slotNamespaceComboChoice(QListViewItem *item);
+    void slotClassComboChoice(const QString&);
+    void slotNamespaceComboChoice(const QString&);
     void classSelected(const QString &className);
 
 private:
