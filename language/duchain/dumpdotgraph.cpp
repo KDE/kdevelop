@@ -116,7 +116,8 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   //QString shape = "box";
   QString label = "unknown";
   
-  if( dynamic_cast<TopDUContext*>(context) ) {
+  if( dynamic_cast<TopDUContext*>(context) )
+  {
     TopDUContext* topCtx = static_cast<TopDUContext*>(context);
     if( topCtx->parsingEnvironmentFile() ) {
       IdentifiedFile file( topCtx->parsingEnvironmentFile()->identity() );
@@ -128,16 +129,22 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       } else {
         m_hadVersions[file.url()] = shortLabel(context);
       }
+      
+      label = file.toString();
+      
       if( topCtx->importedChildContexts().count() != 0 )
-        label = file.toString() + QString(" imported by %1").arg(topCtx->importedChildContexts().count());
+        label += QString(" imported by %1").arg(topCtx->importedChildContexts().count());
     } else {
       label = "unknown file";
     }
+    if(topCtx->flags() & TopDUContext::ProxyContextFlag)
+      label = "Proxy-context " + label;
   }else{
     label = /*"context " + */context->localScopeIdentifier().toString();
     label += ' ' + rangeToString(context->textRange());
   }
 
+  //label = QString("%1 ").arg((size_t)context) + label;
 
   if( isMaster && !dynamic_cast<TopDUContext*>(context) ) {
     //Also draw contexts that import this one
