@@ -116,14 +116,15 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
       
       if( (*it)->parsingEnvironmentFile() && !(thisRev == rev)  )
       {
-        kDebug(9505) << "duchain: removing obsolete document " << (*it)->parsingEnvironmentFile()->identity().toString() << " from du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
+        //Don't remove obsolete chains here, because the caller may not be prepared to it, and also the chains may yet be updated.
+/*        kDebug(9505) << "duchain: removing obsolete document " << (*it)->parsingEnvironmentFile()->identity().toString() << " from du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
 
         if( ParsingEnvironmentManager* manager = sdDUChainPrivate->managerForType((*it)->parsingEnvironmentFile()->type() ) )
           manager->removeFile( (*it)->parsingEnvironmentFile().data() );
         
         delete *it;
         it = sdDUChainPrivate->m_chains.erase(it);
-        continue;
+        continue;*/
       } else {
         kDebug(9505) << "duchain: leaving other version of document " << (*it)->parsingEnvironmentFile()->identity().toString() << " in du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
       }
@@ -132,7 +133,18 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
   }
 
   sdDUChainPrivate->m_chains.insert(document, chain);
-  kDebug() << "new count of chains: " << sdDUChainPrivate->m_chains.count() << endl;
+  {
+    //This is just for debugging, and should be disabled later.
+    int realChainCount = 0;
+    int proxyChainCount = 0;
+    for(QMap<IdentifiedFile, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chains.begin(); it != sdDUChainPrivate->m_chains.end(); ++it)
+      if((*it)->flags() & TopDUContext::ProxyContextFlag)
+        ++proxyChainCount;
+      else
+        ++realChainCount;
+        
+    kDebug() << "new count of real chains: " << realChainCount << " proxy-chains: " << proxyChainCount << endl;
+  }
   chain->setInDuChain(true);
   addToEnvironmentManager(chain);
 }
