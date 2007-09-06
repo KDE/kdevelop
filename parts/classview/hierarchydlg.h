@@ -38,6 +38,7 @@ private slots:
     void slotClassComboChoice(const QString&);
     void slotNamespaceComboChoice(const QString&);
     void classSelected(const QString &className);
+    void save();
 
 private:
     void refresh();

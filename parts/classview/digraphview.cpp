@@ -25,6 +25,7 @@
 #include <kglobalsettings.h>
 #include <ktempfile.h>
 #include <kdeversion.h>
+#include <kdebug.h>
 
 struct DigraphNode
 {
@@ -255,6 +256,14 @@ void DigraphView::process()
     viewport()->update();
 }
 
+QPixmap DigraphView::pixmap()
+{
+    QPixmap pix(width,height);
+    kdDebug(9003) << "drawing inheritance diagram to pixmap: " << width << " " << height << " " << pix.size() << endl;
+    QPainter p(&pix);
+    drawContents(&p, 0, 0, width, height);
+    return pix;
+}
 
 void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int cliph)
 {
@@ -329,7 +338,7 @@ QSize DigraphView::sizeHint() const
         return QSize(100, 100); // arbitrary
 
     QSize dsize = KGlobalSettings::desktopGeometry(viewport()).size();
-
+    kdDebug(9003) << "sizehint for inheritance diagram" << dsize << " " << width << " " << height << endl;
     return QSize(width, height).boundedTo(QSize(dsize.width()*2/3, dsize.height()*2/3));
 }
 

@@ -33,6 +33,7 @@ public:
     void clear();
     void setSelected(const QString &name);
     void ensureVisible(const QString &name);
+    QPixmap pixmap();
     
 signals:
     void selected(const QString &name);

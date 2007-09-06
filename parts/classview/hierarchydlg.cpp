@@ -15,8 +15,15 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kstdguiitem.h>
+#include <kfile.h>
+#include <kfiledialog.h>
+#include <kurlrequesterdlg.h>
+#include <kurlrequester.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <qlayout.h>
+#include <qfileinfo.h>
 #include <qlistview.h>
 #include <qsplitter.h>
 
@@ -40,6 +47,7 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
 //    namespace_combo->setMinimumWidth(150);
 
     QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
+    QPushButton *save_button = new KPushButton(KStdGuiItem::save(), this);
 
     QSplitter *splitter = new QSplitter(Vertical, this);
     digraph = new DigraphView(splitter, "digraph view");
@@ -51,6 +59,7 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     combo_layout->addWidget(namespace_combo);
     combo_layout->addWidget(class_combo);
     combo_layout->addSpacing(60);
+    combo_layout->addWidget(save_button);
     combo_layout->addWidget(close_button);
     layout->addWidget(splitter);
 
@@ -64,6 +73,8 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
              this, SLOT(slotClassComboChoice(const QString&)) );
     connect( close_button, SIGNAL(clicked()),
              this, SLOT(hide()) );
+    connect( save_button, SIGNAL(clicked()),
+             this, SLOT(save()) );
     connect( digraph, SIGNAL(selected(const QString&)),
              this, SLOT(classSelected(const QString&)) );
 
@@ -78,6 +89,30 @@ HierarchyDialog::~HierarchyDialog()
 //    m_part->unregisterHierarchyDialog(this);
 }
 
+void HierarchyDialog::save()
+{
+    KURLRequesterDlg dlg(QString::null, this, "save_inheritance");
+    dlg.fileDialog()->setFilter("image/png image/jpeg image/bmp");
+    dlg.fileDialog()->setOperationMode( KFileDialog::Saving );
+    dlg.fileDialog()->setMode( KFile::File | KFile::LocalOnly );
+    dlg.urlRequester()->setMode( KFile::File | KFile::LocalOnly );
+    if(dlg.exec() && dlg.selectedURL().isLocalFile())
+    {
+	QFileInfo fi(dlg.selectedURL().pathOrURL());
+	if( fi.extension() == "png" || fi.extension() == "jpeg" || fi.extension() == "jpg" || fi.extension() == "bmp")
+	{
+            QPixmap out = digraph->pixmap();
+	    QString format = fi.extension().upper();
+	    if( format == "JPG" )
+                format = "JPEG";
+	    kdDebug(9003) << "Storing inheritance diagram to " << fi.absFilePath() << " using pixmap size: " << out.size() << endl;
+            out.save(fi.absFilePath(), format.ascii(), 75);
+	}else
+	{
+            KMessageBox::sorry(this, i18n("Couldn't store image %1. Filename not recognizes, only .jpg, .png and .bmp are supported").arg(fi.absFilePath()), i18n("Couldn't store image"));
+	}
+    }
+}
 
 void HierarchyDialog::refresh()
 {
