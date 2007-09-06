@@ -48,6 +48,7 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
 
     QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
     QPushButton *save_button = new KPushButton(KStdGuiItem::save(), this);
+    QPushButton *refresh_button = new KPushButton(i18n("Refresh"), this);
 
     QSplitter *splitter = new QSplitter(Vertical, this);
     digraph = new DigraphView(splitter, "digraph view");
@@ -59,6 +60,7 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     combo_layout->addWidget(namespace_combo);
     combo_layout->addWidget(class_combo);
     combo_layout->addSpacing(60);
+    combo_layout->addWidget(refresh_button);
     combo_layout->addWidget(save_button);
     combo_layout->addWidget(close_button);
     layout->addWidget(splitter);
@@ -75,6 +77,8 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
              this, SLOT(hide()) );
     connect( save_button, SIGNAL(clicked()),
              this, SLOT(save()) );
+    connect( refresh_button, SIGNAL(clicked()),
+             this, SLOT(refresh()) );
     connect( digraph, SIGNAL(selected(const QString&)),
              this, SLOT(classSelected(const QString&)) );
 
@@ -117,6 +121,8 @@ void HierarchyDialog::save()
 void HierarchyDialog::refresh()
 {
     digraph->clear();
+    classes.clear();
+    uclasses.clear();
     ViewCombosOp::refreshNamespaces(m_part, namespace_combo);
     processNamespace("", m_part->codeModel()->globalNamespace());
 
@@ -124,6 +130,7 @@ void HierarchyDialog::refresh()
 
     for (QMap<QString, ClassDom>::const_iterator it = classes.begin(); it != classes.end(); ++it)
     {
+        kdDebug(9003) << "Adding class to graph: " << it.key() << endl;
         QString formattedName = ls->formatClassName(it.key());
         QStringList baseClasses = it.data()->baseClassList();
         for (QStringList::const_iterator bit = baseClasses.begin(); bit != baseClasses.end(); ++bit)

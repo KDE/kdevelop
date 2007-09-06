@@ -132,6 +132,9 @@ void DigraphView::clear()
     nodes.clear();
     edges.clear();
     selNode = 0;
+    width = -1;
+    height = -1;
+    inputs.clear();
     viewport()->update();
 }
 

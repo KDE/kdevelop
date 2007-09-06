@@ -30,6 +30,8 @@ class HierarchyDialog : public QDialog
 public:
     HierarchyDialog( ClassViewPart *part );
     ~HierarchyDialog();
+public slots:
+    void refresh();
 
 private slots:
     void setLanguageSupport(KDevLanguageSupport *ls);
@@ -41,7 +43,6 @@ private slots:
     void save();
 
 private:
-    void refresh();
     void processNamespace(QString prefix, NamespaceDom dom);
     void processClass(QString prefix, ClassDom dom);
 

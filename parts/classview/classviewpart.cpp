@@ -228,6 +228,7 @@ void ClassViewPart::graphicalClassView( )
 {
     if( !m_hierarchyDlg )
         m_hierarchyDlg = new HierarchyDialog(this);
+    m_hierarchyDlg->refresh();
     m_hierarchyDlg->show();
 }
 
