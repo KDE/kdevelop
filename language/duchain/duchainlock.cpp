@@ -132,7 +132,8 @@ bool DUChainLock::lockForRead(unsigned int timeout)
     locked = true;
   }
 
-  ++d->m_totalReaderRecursion;
+  if(locked)
+    ++d->m_totalReaderRecursion;
 
   lock.unlock();
   
