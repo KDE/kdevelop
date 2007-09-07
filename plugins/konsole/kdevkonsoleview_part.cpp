@@ -21,9 +21,12 @@
 QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
     KService::Ptr service = KService::serviceByDesktopName("konsolepart");
-    KPluginFactory *factory = KPluginLoader(*service.data()).factory();
-    if( factory )
-        return new KDevKonsoleViewPart( factory, op, args );
+    if( !service.isNull() )
+    {
+        KPluginFactory *factory = KPluginLoader(*service.data()).factory();
+        if( factory )
+            return new KDevKonsoleViewPart( factory, op, args );
+    }
     return 0;
 }
 
