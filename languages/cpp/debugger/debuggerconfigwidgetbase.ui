@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>555</width>
-            <height>590</height>
+            <width>558</width>
+            <height>627</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,11 +21,20 @@
     <property name="whatsThis" stdset="0">
         <string></string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="1" column="0">
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Debug arguments can be set on the Run Options page
+ or directly in the project manager</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
             <property name="name">
                 <cstring>gdbPath_label</cstring>
             </property>
@@ -44,7 +53,7 @@
                 <cstring>gdbPath_edit</cstring>
             </property>
         </widget>
-        <widget class="KURLRequester" row="2" column="0" rowspan="1" colspan="2">
+        <widget class="KURLRequester">
             <property name="name">
                 <cstring>gdbPath_edit</cstring>
             </property>
@@ -55,7 +64,7 @@
                 <string>To run "gdb" binary from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, "arm-gdb"), by typing the name here, or specify full path to the gdb executable.</string>
             </property>
         </widget>
-        <widget class="QLabel" row="3" column="0">
+        <widget class="QLabel">
             <property name="name">
                 <cstring>debuggingShell_label</cstring>
             </property>
@@ -80,7 +89,7 @@
                 <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.</string>
             </property>
         </widget>
-        <widget class="KURLRequester" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="KURLRequester">
             <property name="name">
                 <cstring>debuggingShell_edit</cstring>
             </property>
@@ -91,9 +100,9 @@
                 <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and &lt;b&gt;libtool&lt;/b&gt; is needed to get it to run inside gdb.</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>layout4</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -106,27 +115,11 @@
                     <property name="title">
                         <string>Options</string>
                     </property>
-                    <vbox>
+                    <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>displayStaticMembers_box</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Display static &amp;members</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Displaying static members makes GDB slower in
-producing data within KDE and Qt.
-It may change the "signature" of the data
-which QString and friends rely on,
-but if you need to debug into these values then
-check this option.</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
+                        <widget class="QCheckBox" row="1" column="0">
                             <property name="name">
                                 <cstring>asmDemangle_box</cstring>
                             </property>
@@ -139,7 +132,7 @@ can select to see the methods' mangled names.
 However, non-mangled names are easier to read.</string>
                             </property>
                         </widget>
-                        <widget class="QCheckBox">
+                        <widget class="QCheckBox" row="2" column="0">
                             <property name="name">
                                 <cstring>breakOnLoadingLibrary_box</cstring>
                             </property>
@@ -156,12 +149,32 @@ for more details relating to this behavior.
 If you are not "dlopen"ing libs then leave this unchecked.</string>
                             </property>
                         </widget>
-                        <widget class="QCheckBox">
+                        <widget class="QCheckBox" row="4" column="0">
+                            <property name="name">
+                                <cstring>dbgTerminal_box</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Enable separate terminal for application &amp;IO</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+I</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This allows you to enter terminal input when your
+application contains terminal input code (e.g. cin, fgets, etc.).
+If you use terminal input in your application then check this option.
+Otherwise leave it unchecked.</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="3" column="0">
                             <property name="name">
                                 <cstring>enableFloatingToolBar_box</cstring>
                             </property>
                             <property name="text">
                                 <string>E&amp;nable floating toolbar</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+N</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Use the floating toolbar. This toolbar always stays
@@ -172,62 +185,106 @@ can also be docked into the panel.
 This toolbar is in addition to the toolbar in KDevelop.</string>
                             </property>
                         </widget>
-                        <widget class="QCheckBox">
+                        <widget class="QCheckBox" row="0" column="0">
                             <property name="name">
-                                <cstring>dbgTerminal_box</cstring>
+                                <cstring>displayStaticMembers_box</cstring>
                             </property>
                             <property name="text">
-                                <string>Enable separate terminal for application &amp;IO</string>
+                                <string>Display static &amp;members</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+M</string>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This allows you to enter terminal input when your
-application contains terminal input code (e.g. cin, fgets, etc.).
-If you use terminal input in your application then check this option.
-Otherwise leave it unchecked.</string>
+                                <string>Displaying static members makes GDB slower in
+producing data within KDE and Qt.
+It may change the "signature" of the data
+which QString and friends rely on,
+but if you need to debug into these values then
+check this option.</string>
                             </property>
                         </widget>
-                    </vbox>
+                    </grid>
                 </widget>
-                <widget class="QButtonGroup">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>globalOutputRadix</cstring>
-                    </property>
-                    <property name="title">
-                        <string>Global Output Radix</string>
+                        <cstring>layout3</cstring>
                     </property>
                     <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QRadioButton">
+                        <widget class="QButtonGroup">
                             <property name="name">
-                                <cstring>outputRadixOctal</cstring>
+                                <cstring>globalOutputRadix</cstring>
                             </property>
-                            <property name="text">
-                                <string>Oct&amp;al</string>
+                            <property name="title">
+                                <string>Global Output Radix</string>
                             </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>outputRadixOctal</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Oct&amp;al</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>outputRadixHexadecimal</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>He&amp;xadecimal</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>outputRadixDecimal</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Decimal</string>
+                                    </property>
+                                </widget>
+                            </vbox>
                         </widget>
-                        <widget class="QRadioButton">
+                        <widget class="QButtonGroup">
                             <property name="name">
-                                <cstring>outputRadixHexadecimal</cstring>
+                                <cstring>buttonGroup2</cstring>
                             </property>
-                            <property name="text">
-                                <string>He&amp;xadecimal</string>
+                            <property name="title">
+                                <string>Start Debugger With</string>
                             </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>outputRadixDecimal</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Decimal</string>
-                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioFramestack</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Framestack</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioGDB</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>GDB Output</string>
+                                    </property>
+                                </widget>
+                            </vbox>
                         </widget>
                     </vbox>
                 </widget>
             </hbox>
         </widget>
-        <widget class="QGroupBox" row="6" column="0" rowspan="1" colspan="2">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
@@ -337,7 +394,7 @@ or if your executable contains the gdb stub
                 </widget>
             </vbox>
         </widget>
-        <spacer row="7" column="1">
+        <spacer>
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -354,19 +411,8 @@ or if your executable contains the gdb stub
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Debug arguments can be set on the Run Options page
- or directly in the project manager</string>
-            </property>
-        </widget>
-    </grid>
+    </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <tabstops>
     <tabstop>debuggingShell_edit</tabstop>
     <tabstop>gdbPath_edit</tabstop>

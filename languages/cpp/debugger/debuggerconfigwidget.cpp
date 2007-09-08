@@ -64,7 +64,7 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
     dbgTerminal_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false));
     enableFloatingToolBar_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", false));
     int outputRadix = DomUtil::readIntEntry(dom, "/kdevdebugger/display/outputradix", 10);
-    
+
     switch (outputRadix)
     {
     case 8:
@@ -78,8 +78,16 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
       outputRadixDecimal->setChecked(true);
       break;
     }
-    
-    
+
+
+    if( DomUtil::readBoolEntry( dom, "/kdevdebugger/general/raiseGDBOnStart", false ) )
+    {
+        radioGDB->setChecked(true);
+    }else
+    {
+        radioFramestack->setChecked(true);
+    }
+
     // ??? DomUtil::readEntry(dom, "/kdevdebugger/general/allowforcedbpset");
 
     resize(sizeHint());
@@ -104,7 +112,7 @@ void DebuggerConfigWidget::accept()
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", breakOnLoadingLibrary_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/separatetty", dbgTerminal_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", enableFloatingToolBar_box->isChecked());
-    
+
     int outputRadix;
     if (outputRadixOctal->isChecked())
       outputRadix = 8;
@@ -112,8 +120,17 @@ void DebuggerConfigWidget::accept()
       outputRadix = 16;
     else
       outputRadix = 10;
-      
-   DomUtil::writeIntEntry(dom, "/kdevdebugger/display/outputradix", outputRadix);
+
+    DomUtil::writeIntEntry(dom, "/kdevdebugger/display/outputradix", outputRadix);
+
+    if( radioGDB->isChecked() )
+    {
+        DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/raiseGDBOnStart", true);
+    }else
+    {
+        DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/raiseGDBOnStart", false);
+    }
+
 }
 
 }

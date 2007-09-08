@@ -895,7 +895,13 @@ void DebuggerPart::slotRun_part2()
     if (controller->stateIsOn( s_dbgNotStarted ))
     {
         mainWindow()->statusBar()->message(i18n("Debugging program"), 1000);
-        mainWindow()->raiseView(framestackWidget);
+        if ( DomUtil::readBoolEntry( *projectDom(), "/kdevdebugger/general/raiseGDBOnStart", false ) )
+        {
+            mainWindow()->raiseView( gdbOutputWidget );
+        }else
+        {
+            mainWindow()->raiseView( framestackWidget );
+        }
         appFrontend()->clearView();
         startDebugger();
     }
