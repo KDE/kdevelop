@@ -79,6 +79,7 @@ public:
     FileItem( QListView *lv, const QString &text );
 
     QString uiFileLink;
+    QString localFilePath;
 };
 
 /**

@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>552</width>
+            <width>738</width>
             <height>475</height>
         </rect>
     </property>
@@ -116,6 +116,14 @@
             </property>
             <property name="toolTip" stdset="0">
                 <string>This replaces the relative paths of added files with existing custom variables if the value assigned to it is the same as the path.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>checkFilenamesOnly</cstring>
+            </property>
+            <property name="text">
+                <string>Display only filenames in the QMake Manager (Project reload is needed after changing this setting)</string>
             </property>
         </widget>
         <widget class="QCheckBox">

@@ -95,6 +95,8 @@ public:
     enum SaveType { AlwaysSave, NeverSave, Ask };
     QMakeScopeItem* currentSubproject();
 
+    bool showFilenamesOnly() const;
+
 public slots:
     void slotBuildTarget();
     void slotInstallTarget();
@@ -201,6 +203,7 @@ private:
     TrollProjectView m_lastFocusedView;
 
     bool m_filesCached;
+    bool m_showFilenamesOnly;
     QStringList m_allFilesCache;
 
     friend class ChooseSubprojectDlg;

@@ -210,12 +210,15 @@ void GroupItem::addFileToScope( const QString& filename )
 
 void GroupItem::removeFileFromScope( const QString& filename )
 {
+    QString filePath;
+
     QPtrListIterator<FileItem> it( files );
     while ( it.current() != 0 )
     {
         if ( it.current() ->text( 0 ) == filename )      //File already exists in this subproject
         {
             FileItem * fitem = it.current();
+            filePath = fitem->localFilePath;
             files.remove( it );
             delete fitem;
             break;
@@ -225,47 +228,47 @@ void GroupItem::removeFileFromScope( const QString& filename )
 
     if ( groupType == GroupItem::Sources )
     {
-        owner->removeValue( "SOURCES", filename );
+        owner->removeValue( "SOURCES", filePath );
     }
     else if ( groupType == GroupItem::Headers )
     {
-        owner->removeValue( "HEADERS", filename );
+        owner->removeValue( "HEADERS", filePath );
     }
     else if ( groupType == GroupItem::Forms )
     {
-        owner->removeValue( "FORMS", filename );
+        owner->removeValue( "FORMS", filePath );
     }
     else if ( groupType == GroupItem::Images )
     {
-        owner->removeValue( "IMAGES", filename );
+        owner->removeValue( "IMAGES", filePath );
     }
     else if ( groupType == GroupItem::Resources )
     {
-        owner->removeValue( "RESOURCES", filename );
+        owner->removeValue( "RESOURCES", filePath );
     }
     else if ( groupType == GroupItem::Lexsources )
     {
-        owner->removeValue( "LEXSOURCES", filename );
+        owner->removeValue( "LEXSOURCES", filePath );
     }
     else if ( groupType == GroupItem::Yaccsources )
     {
-        owner->removeValue( "YACCSOURCES", filename );
+        owner->removeValue( "YACCSOURCES", filePath );
     }
     else if ( groupType == GroupItem::Translations )
     {
-        owner->removeValue( "TRANSLATIONS", filename );
+        owner->removeValue( "TRANSLATIONS", filePath );
     }
     else if ( groupType == GroupItem::IDLs )
     {
-        owner->removeValue( "IDL", filename );
+        owner->removeValue( "IDL", filePath );
     }
     else if ( groupType == GroupItem::Distfiles )
     {
-        owner->removeValue( "DISTFILES", filename );
+        owner->removeValue( "DISTFILES", filePath );
     }
     else if ( groupType == GroupItem::InstallObject )
     {
-        owner->removeValue( text( 0 ) + ".files", filename );
+        owner->removeValue( text( 0 ) + ".files", filePath );
     }
     owner->scope->saveToFile();
 }
@@ -558,8 +561,18 @@ GroupItem* QMakeScopeItem::createGroupItem( GroupItem::GroupType type, const QSt
 
 FileItem* QMakeScopeItem::createFileItem( const QString& name )
 {
-    FileItem * fitem = new FileItem( listView(), name );
+    QString display = name;
+    if( m_widget->showFilenamesOnly() )
+    {
+        int dirSepPos = name.findRev( QChar( QDir::separator() ) );
+        if  ( dirSepPos != - 1 )
+            display = name.mid( dirSepPos + 1 );
+    }
+    FileItem * fitem = new FileItem( listView(), display );
     listView() ->takeItem( fitem );
+
+    fitem->localFilePath = name;
+
     return fitem;
 }
 

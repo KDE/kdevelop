@@ -83,6 +83,8 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     : QVBox( 0, "troll project widget" ), m_shownSubproject( 0 ), m_rootSubproject( 0 ),
         m_rootScope ( 0 ), m_part ( part ), m_configDlg( 0 ), m_filesCached(false)
 {
+    m_showFilenamesOnly = DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/enableFilenamesOnly", false );
+
     QSplitter * splitter = new QSplitter( Vertical, this );
 
     //////////////////
@@ -328,7 +330,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
     QStringList l = dir.entryList( "*.pro" );
 
     QString profile;
-    if( l.count() && l.findIndex( m_part->projectName() + ".pro") != -1  ) 
+    if( l.count() && l.findIndex( m_part->projectName() + ".pro") != -1  )
         profile = m_part->projectName()+".pro";
     else if( l.isEmpty() || ( l.count() && l.findIndex( fi.baseName() + ".pro") != -1  ) )
         profile = fi.baseName()+".pro";
@@ -342,6 +344,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
     m_rootScope = new Scope( proname, m_part );
 
     m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
+
 
     m_rootSubproject->setOpen( true );
     if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).findIndex("subdirs") != -1 )
@@ -595,21 +598,20 @@ void TrollProjectWidget::slotDetailsExecuted( QListViewItem *item )
     if ( pvitem->type() != qProjectItem::File )
         return ;
 
-    QString dirName = m_shownSubproject->scope->projectDir();
     FileItem *fitem = static_cast<FileItem*>( pvitem );
+    QString filePath = m_shownSubproject->scope->projectDir() + QChar( QDir::separator() ) + m_shownSubproject->scope->resolveVariables( fitem->localFilePath );
 
     bool isUiFile = QFileInfo( fitem->text( 0 ) ).extension() == "ui";
-    kdDebug(9024) << "Opening file: " << dirName + "/" + m_shownSubproject->scope->resolveVariables( fitem->text( 0 ) ) << endl;
+    kdDebug(9024) << "Opening file: " << filePath << endl;
     if ( isTMakeProject() && isUiFile )
     {
         // start designer in your PATH
         KShellProcess proc;
-        proc << "designer" << ( dirName + QString( QChar( QDir::separator() ) ) + QString( fitem->text( 0 ) ) );
+        proc << "designer" << filePath;
         proc.start( KProcess::DontCare, KProcess::NoCommunication );
-
     }
     else
-        m_part->partController() ->editDocument( KURL( dirName + QString( QChar( QDir::separator() ) ) + QString( m_shownSubproject->scope->resolveVariables( fitem->text( 0 ) ) ) ) );
+        m_part->partController() ->editDocument( KURL( filePath ) );
 }
 
 
@@ -1768,7 +1770,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         if ( !( gitem->groupType == GroupItem::InstallObject ) )
         {
             KURL::List urls;
-            urls.append( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ) );
+            urls.append( m_shownSubproject->scope->projectDir() + QChar( QDir::separator() ) + m_shownSubproject->scope->resolveVariables( fitem->localFilePath ) );
             FileContext context( urls );
             m_part->core() ->fillContextMenu( &popup, &context );
         }
@@ -1788,14 +1790,14 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         else if ( r == idViewUIH )
         {
             kdDebug(9024) << "Opening:" << fitem->text(0) << ";" << fitem->text(0).replace(".ui","") << endl;
-            m_part->partController() ->editDocument( KURL( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) +
-                    QString( fitem->text( 0 ).replace(".ui","") + ".h" ) ) );
+            m_part->partController() ->editDocument( KURL( m_shownSubproject->scope->projectDir() + QChar( QDir::separator() ) +
+                    fitem->localFilePath.replace(".ui","") + ".h" ) );
 
         }
         else if ( r == idSubclassWidget )
         {
             QStringList newFileNames;
-            newFileNames = m_part->languageSupport() ->subclassWidget( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ) );
+            newFileNames = m_part->languageSupport() ->subclassWidget( m_shownSubproject->scope->projectDir() + QChar( QDir::separator() ) + fitem->localFilePath );
             kdDebug(9024) << "got new filenames: " << newFileNames << endl;
             if ( !newFileNames.empty() )
             {
@@ -1804,7 +1806,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                 {
                     QString srcfile_relpath = URLUtil::getRelativePath( m_shownSubproject->scope->projectDir(), newFileNames[ i ] ) ;
                     newFileNames[i] = URLUtil::getRelativePath( projectDirectory(), newFileNames[ i ] ) ;
-                    QString uifile_relpath = m_shownSubproject->relativePath() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 );
+                    QString uifile_relpath = m_shownSubproject->relativePath() + QChar( QDir::separator() ) + fitem->localFilePath;
                     DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
                                              "subclass", "sourcefile", "uifile" );
 
@@ -1821,7 +1823,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         }
         else if ( r == idUpdateWidgetclass )
         {
-            QString noext = m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 );
+            QString noext = fitem->text( 0 );
             if ( noext.findRev( '.' ) > -1 )
                 noext = noext.left( noext.findRev( '.' ) );
             QStringList dummy;
@@ -1838,7 +1840,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
             QDomDocument & dom = *( m_part->projectDom() );
             DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
                                      "subclass", "sourcefile", "uifile" );
-            SubclassesDlg *sbdlg = new SubclassesDlg( m_shownSubproject->relativePath() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ),
+            SubclassesDlg *sbdlg = new SubclassesDlg( m_shownSubproject->relativePath() + QChar( QDir::separator() ) + fitem->localFilePath,
                                    list, projectDirectory() );
 
             if ( sbdlg->exec() )
@@ -1888,7 +1890,7 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
     m_filesCached = false;
     m_allFilesCache.clear();
 
-    QString realfilename = spitem->scope->resolveVariables( fitem->text( 0 ) );
+    QString realfilename = spitem->scope->resolveVariables( fitem->localFilePath );
     if ( KMessageBox::warningYesNo( this,
                                     "<qt>" +
                                     i18n( "Do you want to delete the file <strong>%1</strong> from the project and your disk?" )
@@ -2351,7 +2353,7 @@ void TrollProjectWidget::slotBuildSelectedFile()
 
 void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
 {
-    QFileInfo fi( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + spitem->scope->resolveVariables( fitem->text( 0 ) ) );
+    QFileInfo fi( spitem->scope->projectDir() + QChar( QDir::separator() ) + spitem->scope->resolveVariables( fitem->localFilePath ) );
     QString sourceDir = fi.dirPath();
     QString baseName = fi.baseName( true );
     kdDebug( 9024 ) << "Compiling " << spitem->scope->resolveVariables( fitem->text( 0 ) )
@@ -2484,6 +2486,10 @@ QMakeScopeItem* TrollProjectWidget::currentSubproject()
     return m_shownSubproject;
 }
 
+bool TrollProjectWidget::showFilenamesOnly() const
+{
+    return m_showFilenamesOnly;
+}
 
 #include "trollprojectwidget.moc"
 
