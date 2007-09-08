@@ -105,43 +105,4 @@ class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSetGroup {
     ItemSet m_global;
 };
 
-class HashedStringSubset;
-
-///@todo convert to d-pointer once ready
-class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringRepository {
-  public:
-    typedef __gnu_cxx::hash_map<KDevelop::HashedString, HashedStringSubset*> AtomicSubsetMap;
-    typedef __gnu_cxx::hash_map<KDevelop::HashType, HashedStringSubset*> HashMap;
-
-    HashedStringSubset* getAtomicSubset( const KDevelop::HashedString& str );
-
-    /**
-     * Takes a list of atomic sub-sets(hashed-strings), and construct a master-subset
-     * The returned set will be registered in the repository
-     * @param atomics list of atomic subsets
-     * @return the created set, or 0 on failure
-     * */
-    HashedStringSubset* buildSet( const QList<HashedStringSubset*> atomics );
-
-    /**
-     * @return a HashedStringSubset that represents the union of the given sets.
-     * */
-    HashedStringSubset* merge( HashedStringSubset* left, HashedStringSubset* right, bool anon = false );
-    HashedStringSubset* intersection( HashedStringSubset* left, HashedStringSubset* right );
-    void dump( HashedStringSubset* subset );
-
-    QString dumpDotGraph();
-  private:
-    //After a new HashedStringSubset was created, this must be called to correctly connect it correctly to its master-sets
-    void connectToMasterSets( HashedStringSubset* set );
-
-    /**
-     * @return intersection of left and right
-     * */
-    HashedStringSubset* intersection( HashedStringSubset* set, const __gnu_cxx::hash_set<HashedStringSubset*>& allStringSets );
-    
-    AtomicSubsetMap m_atomicSubsets;
-    HashMap m_allSubsets;
-};
-
 #endif

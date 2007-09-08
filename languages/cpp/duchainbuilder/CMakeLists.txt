@@ -27,6 +27,7 @@ set(kdevcppduchainbuilder_LIB_SRCS
     cppducontext.cpp
     typeutils.cpp
     templatedeclaration.cpp
+    setrepository.cpp
 )
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files

@@ -29,12 +29,15 @@
 #include <declaration.h>
 #include <definition.h>
 #include <dumpdotgraph.h>
+#include <time.h>
+#include <set>
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
 #include <documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
+#include "setrepository.h"
 #include "hashedstring.h"
 #include "typeutils.h"
 #include "templatedeclaration.h"
@@ -49,6 +52,7 @@ using namespace KTextEditor;
 using namespace TypeUtils;
 using namespace KDevelop;
 using namespace Cpp;
+using namespace Utils;
 
 QTEST_MAIN(TestDUChain)
 
@@ -1221,113 +1225,44 @@ void TestDUChain::testFileParse()
   release(top);
 }
 
+typedef BasicSetRepository::Index Index;
+
 void TestDUChain::testHashedStringRepository() {
-  /*
-New Problem:
-Have sets:
-a,b
-c,d
-a,c
-b,d
-create set:
--> a,b,c,d
 
-a,b,c,d should be a unique set, but it can be constructed from a,b + c,d and from a,c + b,d
-Solution:
-Merge a,b+a,c, a,c+b,d and then merge those to a,b,c,d
-*/
+#ifdef 0
+  
+  //Create 3 random sets with each 10 of 20 items
+  const unsigned int setCount = 3;
+  const unsigned int choiceCount = 10;
+  const unsigned int itemCount = 20;
+  
+  BasicSetRepository rep;
+  
+  for(Index a = 0; a < itemCount; a++)
+    Q_ASSERT( a == rep.appendIndices(1) );
+
+  Set sets[setCount];
+  std::set<Index> realSets[setCount];
+  for(unsigned int a = 0; a < setCount; a++)
   {
-    HashedStringRepository* rep = new HashedStringRepository();
-    QList<HashedStringSubset*> set1Strings;
-    set1Strings << rep->getAtomicSubset(HashedString("a"));
-    set1Strings << rep->getAtomicSubset(HashedString("b"));
-    HashedStringSubset* set1 = rep->buildSet(set1Strings);
-    
-    QList<HashedStringSubset*> set2Strings;
-    set2Strings << rep->getAtomicSubset(HashedString("c"));
-    set2Strings << rep->getAtomicSubset(HashedString("d"));
-    HashedStringSubset* set2 = rep->buildSet(set2Strings);
-    
-    QList<HashedStringSubset*> set3Strings;
-    set3Strings << rep->getAtomicSubset(HashedString("a"));
-    set3Strings << rep->getAtomicSubset(HashedString("c"));
-    HashedStringSubset* set3 = rep->buildSet(set3Strings);
+    std::set<Index> chosenIndices;
+    for(unsigned int b = 0; b < choiceCount; b++)
+    {
+      Index choose = rand() % itemCount;
+      while(chosenIndices.find(choose) != chosenIndices.end()) {
+        choose = rand() % itemCount;
+      }
+      chosenIndices.insert(choose);
+      
+      set[a] = rep.createSet(chosenIndices);
+      realSets[a] = chosenIndices;
+    }
 
-    QList<HashedStringSubset*> set4Strings;
-    set4Strings << rep->getAtomicSubset(HashedString("b"));
-    set4Strings << rep->getAtomicSubset(HashedString("d"));
-    HashedStringSubset* set4 = rep->buildSet(set4Strings);
-    
-    QList<HashedStringSubset*> set5Strings;
-    set5Strings << rep->getAtomicSubset(HashedString("a"));
-    set5Strings << rep->getAtomicSubset(HashedString("b"));
-    set5Strings << rep->getAtomicSubset(HashedString("c"));
-    set5Strings << rep->getAtomicSubset(HashedString("d"));
-    HashedStringSubset* set5 = rep->buildSet(set5Strings);
-
-    Q_ASSERT(rep->intersection(set1, set5) == set1);
-    Q_ASSERT(rep->intersection(set2, set5) == set2);
-    Q_ASSERT(rep->intersection(set3, set5) == set3);
-    Q_ASSERT(rep->intersection(set4, set5) == set4);
-    
-    kDebug(9007) << "dot-graph: \n" << rep->dumpDotGraph() << "\n";
-    
-    delete rep;
+    //Now create ranges from the indices
   }
-  
-  Q_ASSERT(0);
 
-/*
-@todo first compute the hash correctly, then solve the problem above
-@todo implement intersection
- 
-Intersection assumption:
-If there is set A and set B, there is also a set that represents the intersection of A and B
-
-test:
-atomics are: a,b,c,d,e
-Buld set a,b,c and b,c,d:
-a,b,c:
-a,c
-a,b
-b,c,d:
-b,d
-c,d
-
-- no intersection-set b,c
-
-  */
-    HashedStringRepository* rep = new HashedStringRepository();
   
-  QList<HashedStringSubset*> set1Strings;
-  set1Strings << rep->getAtomicSubset(HashedString("a"));
-  set1Strings << rep->getAtomicSubset(HashedString("b"));
-  set1Strings << rep->getAtomicSubset(HashedString("c"));
-  set1Strings << rep->getAtomicSubset(HashedString("d"));
-  HashedStringSubset* set1 = rep->buildSet(set1Strings);
-  
-  QList<HashedStringSubset*> set2Strings;
-  set2Strings << rep->getAtomicSubset(HashedString("a"));
-  set2Strings << rep->getAtomicSubset(HashedString("b"));
-  set2Strings << rep->getAtomicSubset(HashedString("c"));
-  HashedStringSubset* set2 = rep->buildSet(set2Strings);
-  
-  QList<HashedStringSubset*> set3Strings;
-  set3Strings << rep->getAtomicSubset(HashedString("a"));
-  set3Strings << rep->getAtomicSubset(HashedString("b"));
-  set3Strings << rep->getAtomicSubset(HashedString("c"));
-  set3Strings << rep->getAtomicSubset(HashedString("e"));
-  HashedStringSubset* set3 = rep->buildSet(set3Strings);
-
-  QList<HashedStringSubset*> set4Strings;
-  set4Strings << rep->getAtomicSubset(HashedString("e"));
-  set4Strings << rep->getAtomicSubset(HashedString("a"));
-  HashedStringSubset* set4 = rep->buildSet(set4Strings);
-
-  kDebug(9007) << "dot-graph: \n" << rep->dumpDotGraph() << "\n";
-  
-  delete rep;
-  
+#endif
 }
 
 void TestDUChain::release(DUContext* top)
