@@ -101,9 +101,9 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
       std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files2 = files;
       for( ; files2.first != files2.second; ++files2.first )
         ++count;
-        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file" << fileName.str() << "has" << count << "entries";
+        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file " << fileName.str() << " has " << count << " entries";
     } else {
-        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file" << fileName.str() << "is empty";
+        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file " << fileName.str() << " is empty";
     }
 #endif
 

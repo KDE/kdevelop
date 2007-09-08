@@ -1264,7 +1264,7 @@ void TestDUChain::testHashedStringRepository() {
       }
       
       clock_t c = clock();
-      chosenIndices.insert(choose);
+      chosenIndices.insert(chosenIndices.end(), choose);
       genericClockTime += clock() - c;
     }
 

@@ -15,7 +15,7 @@
 #include <list>
 #include <QString>
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define ifDebug(X) X
@@ -437,54 +437,60 @@ SetNode::Ptr set_union(SetNode* left, SetNode* right)
 
 SetNode* set_intersect(SetNode* first, SetNode* second)
 {
-  if(first->start >= second->end || second->start >= first->end)
+  Index firstStart = first->start, secondEnd=second->end;
+  if(firstStart >= secondEnd)
+    return 0;
+  
+  Index secondStart = second->start, firstEnd = first->end;
+  if(secondStart >= firstEnd)
     return 0;
   
   if(first == second)
     return first;
   
-  bool firstHasSlaves = first->left; //for performance-reasons we do not call hasSlaves()
-  bool secondHasSlaves = second->left;
-
   //first and second intersect.
-  if(firstHasSlaves)
+
+  SetNode* splitLeftIntersection;
+  SetNode* splitRightIntersection;
+  //Always split up the one side that is bigger, so we have a better chance that shared nodes meet each other.
+  if(firstEnd-firstStart < secondEnd - secondStart)
   {
-    SetNode* firstLeftIntersection = set_intersect(second, first->left.data());
-    SetNode* firstRightIntersection = set_intersect(second, first->right.data());
-    
-    if(firstLeftIntersection && firstRightIntersection)
-    {
-      if(firstLeftIntersection == first->left.data() && firstRightIntersection == first->right.data())
-        return first;
-      
-      SetNode* set(new SetNode);
-      set->inRepository = false;
-      set->left = firstLeftIntersection;
-      set->right = firstRightIntersection;
-
-      if(!set->left->contiguous || !set->right->contiguous)
-        set->contiguous = false;
-      else
-        set->contiguous = set->left->end == set->right->start;
-
-      set->start = set->left->start;
-      set->end = set->right->end;
-
-      ifDebug( set->check() );
-      return set;
-    }else if(firstLeftIntersection) {
-      return firstLeftIntersection;
-    }else{
-      return firstRightIntersection;
-    }
-  }else if(secondHasSlaves) {
-    return set_intersect(second, first);
+    SetNode* left = second->left.data(), *right = second->right.data();
+    splitLeftIntersection = set_intersect(first, left);
+    splitRightIntersection = set_intersect(first, right);
+    if(splitLeftIntersection == left && splitRightIntersection == right)
+      return second;
   } else {
-    Q_ASSERT(!secondHasSlaves);
-    //Since neither first nor second have slaves, and they cut each other, they must be same, and in the repository.
-    Q_ASSERT(first == second);
-    return first;
+    SetNode* left = first->left.data(), *right = first->right.data();
+    splitLeftIntersection = set_intersect(second, left);
+    splitRightIntersection = set_intersect(second, right);
+    if(splitLeftIntersection == left && splitRightIntersection == right)
+      return first;
   }
+  
+  if(splitLeftIntersection && splitRightIntersection)
+  {
+    SetNode* set(new SetNode);
+    set->inRepository = false;
+    set->left = splitLeftIntersection;
+    set->right = splitRightIntersection;
+
+    if(!set->left->contiguous || !set->right->contiguous)
+      set->contiguous = false;
+    else
+      set->contiguous = set->left->end == set->right->start;
+
+    set->start = set->left->start;
+    set->end = set->right->end;
+
+    ifDebug( set->check() );
+    return set;
+  }else if(splitLeftIntersection) {
+    return splitLeftIntersection;
+  }else{
+    return splitRightIntersection;
+  }
+  
   return 0;
 }
 
@@ -535,6 +541,8 @@ SetNode::Ptr createBinaryTree(Iterator start, Iterator end, int count = 0) {
 Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
   Index lastIndex = 0;
   std::vector<SetNode*> nodes;
+
+  SetNode* searchNode = d->m_root.data();
   
   for(std::vector<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it) {
     Q_ASSERT(*it >= lastIndex);
@@ -546,9 +554,14 @@ Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
     Index end = *it;
     lastIndex = end;
 
+    //Move up in the tree to the first node that contains start
+    while(searchNode->end <= start)
+      searchNode = searchNode->parentInRepository;
+    
     //Find the bottom node that contains this range
     //findContainer could be used here, but the recursion is too slow.
-    SetNode* searchNode = d->m_root.data();
+    
+    //SetNode* searchNode = d->m_root.data();
     {
       SetNode* searchNodeLeft = searchNode->left.data();
       while(searchNodeLeft) {
