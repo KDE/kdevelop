@@ -602,7 +602,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox" row="2" column="1">
+                            <widget class="QCheckBox" row="1" column="1">
                                 <property name="name">
                                     <cstring>checkQt4OpenGL</cstring>
                                 </property>
@@ -610,7 +610,7 @@
                                     <string>OpenGL</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="2" column="0">
+                            <widget class="QCheckBox" row="1" column="0">
                                 <property name="name">
                                     <cstring>checkQt4Gui</cstring>
                                 </property>
@@ -621,7 +621,7 @@
                                     <bool>true</bool>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="0" rowspan="2" colspan="1">
+                            <widget class="QCheckBox" row="0" column="0">
                                 <property name="name">
                                     <cstring>checkQt4Core</cstring>
                                 </property>
@@ -632,7 +632,7 @@
                                     <bool>true</bool>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="2" rowspan="2" colspan="1">
+                            <widget class="QCheckBox" row="0" column="2">
                                 <property name="name">
                                     <cstring>checkQt4SQL</cstring>
                                 </property>
@@ -640,7 +640,7 @@
                                     <string>SQL</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="2" column="2">
+                            <widget class="QCheckBox" row="1" column="2">
                                 <property name="name">
                                     <cstring>checkQt4SVG</cstring>
                                 </property>
@@ -648,7 +648,7 @@
                                     <string>SVG</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="0">
+                            <widget class="QCheckBox" row="2" column="0">
                                 <property name="name">
                                     <cstring>checkQt4XML</cstring>
                                 </property>
@@ -656,7 +656,7 @@
                                     <string>XML</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="2">
+                            <widget class="QCheckBox" row="2" column="2">
                                 <property name="name">
                                     <cstring>checkTestlib</cstring>
                                 </property>
@@ -664,7 +664,7 @@
                                     <string>QtTest</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="1">
+                            <widget class="QCheckBox" row="2" column="1">
                                 <property name="name">
                                     <cstring>checkUiTools</cstring>
                                 </property>
@@ -672,7 +672,7 @@
                                     <string>QtUiTools</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="1" rowspan="2" colspan="1">
+                            <widget class="QCheckBox" row="0" column="1">
                                 <property name="name">
                                     <cstring>checkQt4Network</cstring>
                                 </property>
@@ -680,23 +680,7 @@
                                     <string>Network</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="3" rowspan="2" colspan="2">
-                                <property name="name">
-                                    <cstring>checkQt3Support</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Qt3 Support</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="4">
-                                <property name="name">
-                                    <cstring>checkQtScript</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>QtScript (Qt4.3)</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="3">
+                            <widget class="QCheckBox" row="1" column="3">
                                 <property name="name">
                                     <cstring>checkQDBus</cstring>
                                 </property>
@@ -704,12 +688,28 @@
                                     <string>QDBus (Qt4.2)</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="3">
+                            <widget class="QCheckBox" row="2" column="3">
                                 <property name="name">
                                     <cstring>checkAssistant</cstring>
                                 </property>
                                 <property name="text">
                                     <string>QtAssistant</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="4">
+                                <property name="name">
+                                    <cstring>checkQtScript</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>QtScript (Qt4.3)</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="3">
+                                <property name="name">
+                                    <cstring>checkQt3Support</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt3 Support</string>
                                 </property>
                             </widget>
                         </grid>
