@@ -351,6 +351,10 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             myProjectItem->addValue( "CONFIG", "dbus" );
         else
             myProjectItem->removeValue( "CONFIG", "dbus" );
+        if ( checkQtScript->isChecked() )
+            myProjectItem->addValue( "QT", "script" );
+        else
+            myProjectItem->removeValue( "QT", "script" );
         if ( checkBuildAll->isChecked() )
             myProjectItem->addValue( "CONFIG", "build_all" );
         else
@@ -843,6 +847,10 @@ void ProjectConfigurationDlg::updateControls()
             checkQt3Support->setChecked( true );
         else
             checkQt3Support->setChecked( false );
+        if ( qtLibs.findIndex( "script" ) != -1 )
+            checkQtScript->setChecked( true );
+        else
+            checkQtScript->setChecked( false );
 
         checkDebugReleaseMode->setEnabled( true );
         checkBuildAll->setEnabled( true );
