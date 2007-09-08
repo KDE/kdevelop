@@ -15,8 +15,15 @@
 #include <list>
 #include <QString>
 
-#define ifDebug(X) X
+#define DEBUG
 
+#ifdef DEBUG
+#define ifDebug(X) X
+#else
+#define ifDebug(x)
+#undef Q_ASSERT
+#define Q_ASSERT(x)
+#endif
 /**
  * Notes:
  * - Tree tree is balanced while insertion
@@ -70,6 +77,7 @@ struct SetNode : public KShared
    * @param splitPosition Will be the end of the left, and the start of the right node sub-node.
    * */
   void split(Index splitPosition) {
+    Q_ASSERT(splitPosition != start && contains(splitPosition));
     left = new SetNode;
     left->start = start;
     left->end = splitPosition;
@@ -84,11 +92,13 @@ struct SetNode : public KShared
       left->parentInRepository = this;
       right->parentInRepository = this;
     }
+
+    ifDebug( check(); )
   }
 
   ///Only here for better readability. Either their is left+right, or neither left nor right.
   inline bool hasSlaves() const {
-    return left || right;
+    return (bool)left;
   }
   
   /**
@@ -96,9 +106,10 @@ struct SetNode : public KShared
    * Returns a node representing the range start -> end
    * */
   SetNode* createIntersection(Index start, Index end) {
+    Q_ASSERT(end > this->start && start < this->end); //Would be useless calling this with non-intersecting ranges
     Q_ASSERT(!left && !right);
     SetNode* ret = 0;
-    //searchNode is only partially covered by this range. Split searchNode up so the intersection can be represented.
+    //this is only partially covered by this range. Split this up so the intersection can be represented.
     //Since this has no slaves, we do not need to care about them. Just split this up into the right count of sub-nodes.
     if(start > this->start) {
       this->split(start);
@@ -113,27 +124,33 @@ struct SetNode : public KShared
         this->right->split(end);
         ret = this->right->left.data();
       } else {
-        this->split(right); //Probably start == startNode->start, so this wasn't split yet
+        this->split(end); //Probably start == startNode->start, so this wasn't split yet
         ret = this->left.data();
       }
     }
-    
+
+    ifDebug( localCheck(); )
     return ret ? ret : this;
   }
-  
-  void check() {
-    Q_ASSERT(start <= end);
+
+  void localCheck() {
+    Q_ASSERT(start > 0);
+    Q_ASSERT(start < end);
     Q_ASSERT((left && right) || (!left && !right));
     Q_ASSERT(!left || (left->start == start && right->end == end));
     Q_ASSERT(!left || (left->end <= right->start));
     Q_ASSERT(!inRepository || contiguous);
+  }
+  
+  void check() {
+    localCheck();
     if(left)
       left->check();
     if(right)
       right->check();
   }
 
-  bool contains(Index i) {
+  inline bool contains(Index i) {
     return i >= start && i < end;
   }
 
@@ -228,7 +245,7 @@ struct SetNode : public KShared
       if(left->contains(position))
         return left->findContainer(position);
       else if(right->contains(position))
-        return left->findContainer(position);
+        return right->findContainer(position);
       else
         return 0;
     }
@@ -240,7 +257,7 @@ struct SetNode : public KShared
   }
 
   QString shortLabel() const {
-    return QString("%1_%2").arg(start).arg(end);
+    return QString("n%1_%2").arg(start).arg(end);
   }
 
   QString dumpDotGraph() const;
@@ -248,15 +265,31 @@ private:
   QString dumpDotGraphInternal(bool master=false) const;
 };
 
-Set::Set() {
+struct Set::Private : public KShared {
+  mutable SetNode::Ptr m_tree; //May be zero for an empty set
+};
+
+Set::Set() : d(KSharedPtr<Private>(new Private)) {
 }
 
 Set::~Set() {
 }
 
-struct Set::Private : public KShared {
-  mutable SetNode::Ptr m_tree;
-};
+Set::Set(const Set& rhs) {
+  d = rhs.d;
+}
+
+Set& Set::operator=(const Set& rhs) {
+  d = rhs.d;
+  return *this;
+}
+
+QString Set::dumpDotGraph() const {
+  if(d->m_tree)
+    return d->m_tree->dumpDotGraph();
+  else
+    return QString::null;
+}
 
 struct BasicSetRepository::Private {
   Private() : m_root(new SetNode), m_debug(true) {
@@ -279,14 +312,14 @@ QString SetNode::dumpDotGraphInternal(bool master) const {
   if(!contiguous)
     label += ", with gaps";
   
-  QString ret = QString("%1[label=\"%2\", color=\"%2\"];\n").arg(label).arg(color);
+  QString ret = QString("%1[label=\"%2\", color=\"%3\"];\n").arg(shortLabel()).arg(label).arg(color);
 
   if(left) {
     Q_ASSERT(right);
-    ret += left->dumpDotGraphInternal();
-    ret += right->dumpDotGraphInternal();
     ret += QString("%1 -> %2;\n").arg(shortLabel()).arg(left->shortLabel());
     ret += QString("%1 -> %2;\n").arg(shortLabel()).arg(right->shortLabel());
+    ret += left->dumpDotGraphInternal();
+    ret += right->dumpDotGraphInternal();
   }
   
   return ret;
@@ -317,6 +350,20 @@ struct Set::Iterator::IteratorPrivate : public KShared {
     } while(node);
   }
 };
+
+
+std::set<Index> Set::stdSet() const
+{
+  Set::Iterator it = iterator();
+  std::set<Index> ret;
+  
+  while(it) {
+    ret.insert(*it);
+    ++it;
+  }
+  
+  return ret;
+}
 
 Set::Iterator::Iterator(const Iterator& rhs) : d(new IteratorPrivate(*rhs.d)) {
 }
@@ -361,7 +408,8 @@ BasicSetRepository::Index Set::Iterator::operator*() const {
 
 Set::Iterator Set::iterator() const {
   Set::Iterator ret;
-  ret.d->startAtNode(d->m_tree.data());
+  if(d->m_tree)
+    ret.d->startAtNode(d->m_tree.data());
   return ret;
 }
 
@@ -382,34 +430,34 @@ SetNode::Ptr set_union(SetNode* left, SetNode* right)
   else
     set->contiguous = set->left->end == set->right->start;
 
+  ifDebug( set->check() );
+  
   return set;
 }
 
-SetNode::Ptr set_intersect(SetNode* first, SetNode* second)
+SetNode* set_intersect(SetNode* first, SetNode* second)
 {
-  if(first== second)
-    return SetNode::Ptr(first);
-
-  //Make sure that first has always slaves. If first has no slaves, then second should have no slaves too.
-  if(!first->hasSlaves() && first->hasSlaves())
-    return set_intersect(second, first);
+  if(first->start >= second->end || second->start >= first->end)
+    return 0;
   
-  if(!first->contains(second->start) && !first->contains(second->end-1) &&
-     !second->contains(first->start) && !second->contains(first->end-1))
-    return SetNode::Ptr();
+  if(first == second)
+    return first;
+  
+  bool firstHasSlaves = first->left; //for performance-reasons we do not call hasSlaves()
+  bool secondHasSlaves = second->left;
 
   //first and second intersect.
-  if(first->hasSlaves())
+  if(firstHasSlaves)
   {
-    SetNode::Ptr firstLeftIntersection = set_intersect(second, first->left.data());
-    SetNode::Ptr firstRightIntersection = set_intersect(second, first->right.data());
+    SetNode* firstLeftIntersection = set_intersect(second, first->left.data());
+    SetNode* firstRightIntersection = set_intersect(second, first->right.data());
     
     if(firstLeftIntersection && firstRightIntersection)
     {
-      if(firstLeftIntersection == first->left && firstRightIntersection == first->right)
-        return SetNode::Ptr(first);
+      if(firstLeftIntersection == first->left.data() && firstRightIntersection == first->right.data())
+        return first;
       
-      SetNode::Ptr set(new SetNode);
+      SetNode* set(new SetNode);
       set->inRepository = false;
       set->left = firstLeftIntersection;
       set->right = firstRightIntersection;
@@ -422,15 +470,22 @@ SetNode::Ptr set_intersect(SetNode* first, SetNode* second)
       set->start = set->left->start;
       set->end = set->right->end;
 
+      ifDebug( set->check() );
       return set;
+    }else if(firstLeftIntersection) {
+      return firstLeftIntersection;
+    }else{
+      return firstRightIntersection;
     }
-  }else{
-    Q_ASSERT(!second->hasSlaves());
+  }else if(secondHasSlaves) {
+    return set_intersect(second, first);
+  } else {
+    Q_ASSERT(!secondHasSlaves);
     //Since neither first nor second have slaves, and they cut each other, they must be same, and in the repository.
     Q_ASSERT(first == second);
-    return SetNode::Ptr(first);
+    return first;
   }
-  return SetNode::Ptr();
+  return 0;
 }
 
 /**
@@ -471,6 +526,8 @@ SetNode::Ptr createBinaryTree(Iterator start, Iterator end, int count = 0) {
 
   set->start = set->left->start;
   set->end = set->right->end;
+
+  ifDebug( set->localCheck() );
   
   return set;
 }
@@ -487,9 +544,32 @@ Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
     Q_ASSERT(it != indices.end());
     Q_ASSERT(*it >= lastIndex);
     Index end = *it;
+    lastIndex = end;
 
+    //Find the bottom node that contains this range
+    //findContainer could be used here, but the recursion is too slow.
+    SetNode* searchNode = d->m_root.data();
+    {
+      SetNode* searchNodeLeft = searchNode->left.data();
+      while(searchNodeLeft) {
+        if(start >= searchNodeLeft->start && start < searchNodeLeft->end)
+        {
+          searchNode = searchNodeLeft;
+          searchNodeLeft = searchNode->left.data();
+        } else {
+          SetNode* searchNodeRight = searchNode->right.data();
+          if(start >= searchNodeRight->start && start < searchNodeRight->end) {
+            searchNode = searchNodeRight;
+            searchNodeLeft = searchNode->left.data();
+          }else{
+            //No node found that contains the position
+            Q_ASSERT(0);
+          }
+        }
+      }
+    }
+    
     //Walk through the nodes, using the fact that they are too ordered by indices
-    SetNode* searchNode = d->m_root->findContainer(start);
     Q_ASSERT(searchNode);
     Q_ASSERT(searchNode->contains(start));
 
@@ -535,6 +615,7 @@ Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
           nodes.push_back(currentNode->right.data());
         }
 
+        previousNode = currentNode;
         currentNode = currentNode->parentInRepository;
       }
 
@@ -573,7 +654,7 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
 
   for( std::set<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it )
   {
-    if(ranges.empty() || *ranges.end() != *it)
+    if(ranges.empty() || ranges.back() != *it)
     {
       //Create new range
       ranges.push_back(*it);
@@ -597,6 +678,13 @@ Index BasicSetRepository::appendIndices(int count) {
   return d->m_root->appendIndices(d->m_root, count);
 }
 
+QString BasicSetRepository::dumpDotGraph() const {
+  if(d->m_root)
+    return d->m_root->dumpDotGraph();
+  else
+    return QString::null;
+}
+
 Set BasicSetRepository::setUnion(const Set& first, const Set& second) {
   Set ret;
   ret.d->m_tree = set_union(first.d->m_tree.data(), second.d->m_tree.data());
@@ -607,7 +695,7 @@ Set BasicSetRepository::setUnion(const Set& first, const Set& second) {
   * */
 Set BasicSetRepository::intersect(const Set& first, const Set& second) {
   Set ret;
-  ret.d->m_tree = set_intersect(first.d->m_tree.data(), second.d->m_tree.data());
+  ret.d->m_tree = SetNode::Ptr(set_intersect(first.d->m_tree.data(), second.d->m_tree.data()));
   return ret;
 }
 /**

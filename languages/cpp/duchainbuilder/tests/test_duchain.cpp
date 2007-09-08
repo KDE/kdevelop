@@ -31,6 +31,9 @@
 #include <dumpdotgraph.h>
 #include <time.h>
 #include <set>
+#include <algorithm>
+#include <iterator>
+#include <time.h>
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
 #include <documentrange.h>
@@ -1229,18 +1232,25 @@ typedef BasicSetRepository::Index Index;
 
 void TestDUChain::testHashedStringRepository() {
 
-#ifdef 0
-  
   //Create 3 random sets with each 10 of 20 items
-  const unsigned int setCount = 3;
-  const unsigned int choiceCount = 10;
-  const unsigned int itemCount = 20;
+  const unsigned int setCount = 10;
+  const unsigned int choiceCount = 1000;
+  const unsigned int itemCount = 3000;
   
   BasicSetRepository rep;
   
   for(Index a = 0; a < itemCount; a++)
-    Q_ASSERT( a == rep.appendIndices(1) );
+    Q_ASSERT( a+1 == rep.appendIndices(1) );
 
+  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
+
+  clock_t repositoryClockTime = 0; //Time spent on repository-operations
+  clock_t genericClockTime = 0; //Time spend on equivalent operations with generic sets
+  
+  clock_t repositoryIntersectionClockTime = 0; //Time spent on repository-operations
+  clock_t genericIntersectionClockTime = 0; //Time spend on equivalent operations with generic sets
+  clock_t qsetIntersectionClockTime = 0; //Time spend on equivalent operations with generic sets
+  
   Set sets[setCount];
   std::set<Index> realSets[setCount];
   for(unsigned int a = 0; a < setCount; a++)
@@ -1248,21 +1258,116 @@ void TestDUChain::testHashedStringRepository() {
     std::set<Index> chosenIndices;
     for(unsigned int b = 0; b < choiceCount; b++)
     {
-      Index choose = rand() % itemCount;
+      Index choose = (rand() % itemCount) + 1;
       while(chosenIndices.find(choose) != chosenIndices.end()) {
-        choose = rand() % itemCount;
+        choose = (rand() % itemCount) + 1;
       }
-      chosenIndices.insert(choose);
       
-      set[a] = rep.createSet(chosenIndices);
-      realSets[a] = chosenIndices;
+      clock_t c = clock();
+      chosenIndices.insert(choose);
+      genericClockTime += clock() - c;
     }
 
-    //Now create ranges from the indices
+    clock_t c = clock();
+    sets[a] = rep.createSet(chosenIndices);
+    repositoryClockTime += clock() - c;
+    
+    realSets[a] = chosenIndices;
+
+    std::set<Index> tempSet = sets[a].stdSet();
+
+    if(tempSet != realSets[a]) {
+      QString dbg = "created set: ";
+      for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+        dbg += QString("%1 ").arg(*it);
+      kDebug() << dbg;
+
+      dbg = "repo.   set: ";
+      for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+        dbg += QString("%1 ").arg(*it);
+      kDebug() << dbg;
+
+      kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+    }
+    Q_ASSERT(tempSet == realSets[a]);
   }
 
-  
-#endif
+  for(int cycle = 0; cycle < 10; ++cycle) {
+    for(unsigned int a = 0; a < setCount; a++) {
+      for(unsigned int b = 0; b < setCount; b++) {
+  /*      std::set<Index> _realUnion;
+        std::set_union(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realUnion, _realUnion.begin()));
+
+        Set _union = rep.setUnion(sets[a], sets[b]);
+
+        Q_ASSERT(_union.stdSet() == _realUnion);*/
+      
+        std::set<Index> _realIntersection;
+
+        clock_t c = clock();
+        std::set_intersection(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realIntersection, _realIntersection.begin()));
+        genericIntersectionClockTime += clock() - c;
+
+        //Just for fun: Test how fast QSet intersections are
+        QSet<Index> first, second;
+        for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+          first.insert(*it);
+        for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+          second.insert(*it);
+        c = clock();
+        QSet<Index> i = first.intersect(second);
+        qsetIntersectionClockTime += clock() - c;
+
+        c = clock();
+        Set _intersection = rep.intersect(sets[a], sets[b]);
+        repositoryIntersectionClockTime += clock() - c;
+
+        
+        if(_intersection.stdSet() != _realIntersection)
+        {
+          {
+            kDebug() << "SET a:";
+            QString dbg = "";
+            for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+
+            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+          }
+          {
+            kDebug() << "SET b:";
+            QString dbg = "";
+            for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+
+            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+          }
+
+          {
+            std::set<Index> tempSet = _intersection.stdSet();
+            
+            kDebug() << "SET intersection:";
+            QString dbg = "real    set: ";
+            for(std::set<Index>::const_iterator it = _realIntersection.begin(); it != _realIntersection.end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+
+            dbg = "repo.   set: ";
+            for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+            
+            kDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
+          }
+        }
+        Q_ASSERT(_intersection.stdSet() == _realIntersection);
+      }
+    }
+  }
+
+  kDebug() << "Clock-cycles used for set-building: repository-set: " << repositoryClockTime << " generic-set: " << genericClockTime;
+  kDebug() << "Clock-cycles used for intersection: repository-sets: " << repositoryIntersectionClockTime<< " generic-set: " << genericIntersectionClockTime << " QSet: " << qsetIntersectionClockTime;
 }
 
 void TestDUChain::release(DUContext* top)

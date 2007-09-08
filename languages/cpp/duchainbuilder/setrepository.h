@@ -49,11 +49,16 @@ public:
   
   Set();
   ~Set();
+  Set(const Set& rhs);
+  Set& operator=(const Set& rhs);
 
-  QString dumpDotGraph();
+  QString dumpDotGraph() const;
 
   //Returns an itrator that can be used to iterate over the contained indices
   Iterator iterator() const;
+
+  //Returns this set converted to a standard set that contains all indices contained by this set.
+  std::set<unsigned int> stdSet() const;
   
   /**
    * Use this to iterate over the indices contained by a set. See bottom of the file
@@ -104,7 +109,7 @@ public:
    * */
   Set createSet(const std::set<Index>& indices);
   
-  QString dumpDotGraph();
+  QString dumpDotGraph() const;
 
   /**
    * Set-union operation

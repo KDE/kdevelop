@@ -51,7 +51,6 @@ public:
   
 
   //Move to slots again once it should be tested
-   void testHashedStringRepository();
   void testFileParse();
 
 private slots:
@@ -78,6 +77,8 @@ private slots:
   void testBaseClasses();
   void testForwardDeclaration();
   void testTemplateForwardDeclaration();
+   void testHashedStringRepository();
+  
   void testCStruct();
 
 public:

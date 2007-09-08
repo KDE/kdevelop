@@ -33,14 +33,6 @@
 #include "macroset.h"
 #include "cachemanager.h"
 
-/**@todo Increase the intelligence of the include-file logic:
- * When a header was already included BEFORE the header represented by the
- * cached-lexed-file, and the cached-lexed-file includes that header,
- * it should be accepted anyway.
- *
- * That's complicated.
- * */
-
 /**
  * The environment-manager helps achieving right representation of the way c++ works:
  * When a file is processed by the preprocessor, the same file may create totally
@@ -95,9 +87,19 @@ it needs to be completeley re-parsed, because 2.h depends on the macro HAD_3, an
 in test_1.h.
 
 In practice this is very problematic, because it leads to massive multiple parsing of everything, which costs a lot of resources.
-To solve this, "Simplified matching" can be used, which will mean that parsed files will be re-used by specialization in such a case, and only
-the imports are changed. This is not quite correct, because it when something could not be resolved correctly in the base-run, but it could be
-in the specialization, it still will not be correctly resolved. Nonetheless, in 99% of all cases it should not be a problem.
+To solve this, "Simplified matching" can be used(it is enabled in CppLanguageSupport).
+With simplified matching enabled, every file is always represented by at least 2 parts:
+One part for all the headers at the top(we will call it header-section), and one part for the real content below the headers.
+From the header-section, we create a proxy-context, that only stores the environment-matching information, and that imports the next created content-context.
+The content-context starts right behind the header-context, and its environment-matching information only represents the real content.
+The content-context can then be re-used many times, as long as the environment matches, while many different proxy-contexts will be created that represent
+different constellations of macro-dependences across included headers.
+
+The downside of this approach:
+- Many different includes may be added to the content-context, coming from different proxy-contexts. This is not 100% correct visibility-wise.
+- This only works perfectly if the includes are at the top, within one block. If this is not the case, the behavior will partially become like without simplified matching.
+The good things:
+- The general code-completion should be exactly as good as without simplified matching.
 * */
 
 namespace rpp {
