@@ -14,6 +14,7 @@
 #include "setrepository.h"
 #include <list>
 #include <QString>
+#include <limits>
 
 //#define DEBUG
 
@@ -358,6 +359,7 @@ std::set<Index> Set::stdSet() const
   std::set<Index> ret;
   
   while(it) {
+    Q_ASSERT(ret.find(*it) == ret.end());
     ret.insert(*it);
     ++it;
   }
@@ -413,25 +415,160 @@ Set::Iterator Set::iterator() const {
   return ret;
 }
 
-SetNode::Ptr set_union(SetNode* left, SetNode* right)
+///The bounds must already be represented in the repository, which means that there must be sets separated by these bounds.
+SetNode* applyBounds(SetNode* node, Index lowerBound, Index upperBound)
 {
-  Q_ASSERT(0);
-  ///@todo implement
-  SetNode::Ptr set(new SetNode);
+  if(node->start >= lowerBound && node->end <= upperBound)
+    return node;
+  if(node->start >= upperBound || node->end <= lowerBound)
+    return 0;
+  
+  if(node->left->end <= lowerBound) //left node is completely out of the bounds, continue with the right
+    return applyBounds(node->right.data(), lowerBound, upperBound);
+  
+  if(node->right->start >= upperBound) //right node is completely out of the bounds, continue with the left
+    return applyBounds(node->left.data(), lowerBound, upperBound);
+
+  SetNode* left = applyBounds(node->left.data(), lowerBound, upperBound);
+  SetNode* right = applyBounds(node->right.data(), lowerBound, upperBound);
+  if(!left)
+    return right;
+  else if(!right)
+    return left;
+  
+  SetNode* set(new SetNode);
+  set->left = SetNode::Ptr(left);
+  set->right = SetNode::Ptr(right);
   set->inRepository = false;
 
-  set->start = left->start < right->start ? left->start : right->start;
-  set->end = left->end > right->end ? left->end : right->end;
-
-  
-  
   if(!set->left->contiguous || !set->right->contiguous)
     set->contiguous = false;
   else
     set->contiguous = set->left->end == set->right->start;
 
+  set->start = set->left->start;
+  set->end = set->right->end;
+
   ifDebug( set->check() );
+  Q_ASSERT(set->end <= upperBound);
+  Q_ASSERT(set->start >= lowerBound);
+  return set;
+}
+
+SetNode* set_union(SetNode* first, SetNode* second, Index lowerBound = 0, Index upperBound = std::numeric_limits<Index>::max())
+{
+  if(first == second || (first->start == second->start && first->end == second->end && first->contiguous && second->contiguous))
+    return applyBounds(first, lowerBound, upperBound);
   
+  Index firstStart = first->start, secondEnd=second->end;
+
+  if(firstStart >= upperBound)
+    return applyBounds(second, lowerBound, upperBound);
+  
+  if(firstStart >= secondEnd)
+  {
+    SetNode* left = applyBounds(second, lowerBound, upperBound);
+    SetNode* right = applyBounds(first, lowerBound, upperBound);
+    if(!left)
+      return right;
+    else if(!right)
+      return left;
+    
+    SetNode* set(new SetNode);
+    set->left = SetNode::Ptr(left);
+    set->right = SetNode::Ptr(right);
+    set->inRepository = false;
+
+    if(!set->left->contiguous || !set->right->contiguous)
+      set->contiguous = false;
+    else
+      set->contiguous = set->left->end == set->right->start;
+
+    set->start = set->left->start;
+    set->end = set->right->end;
+
+    ifDebug( set->check() );
+    Q_ASSERT(set->end <= upperBound);
+    Q_ASSERT(set->start >= lowerBound);
+    return set;
+  }
+  
+  Index secondStart = second->start, firstEnd = first->end;
+
+  if(firstEnd <= lowerBound)
+    return applyBounds(second, lowerBound, upperBound);
+  
+  if(secondStart >= firstEnd)
+  {
+    SetNode* left = applyBounds(first, lowerBound, upperBound);
+    SetNode* right = applyBounds(second, lowerBound, upperBound);
+    if(!left)
+      return right;
+    else if(!right)
+      return left;
+    
+    SetNode* set(new SetNode);
+    set->left = SetNode::Ptr(left);
+    set->right = SetNode::Ptr(right);
+    set->inRepository = false;
+
+    if(!set->left->contiguous || !set->right->contiguous)
+      set->contiguous = false;
+    else
+      set->contiguous = set->left->end == set->right->start;
+
+    set->start = set->left->start;
+    set->end = set->right->end;
+
+    ifDebug( set->check() );
+    Q_ASSERT(set->end <= upperBound);
+    Q_ASSERT(set->start >= lowerBound);
+    return set;
+  }
+  
+  //first and second intersect.
+
+  SetNode* leftUnion;
+  SetNode* rightUnion;
+  //Always split up the one side that is bigger, so we have a better chance that shared nodes meet each other.
+  if(firstEnd - firstStart < secondEnd - secondStart)
+  {
+    SetNode* left = second->left.data(), *right = second->right.data();
+    leftUnion = set_union(first, left, lowerBound, left->end < upperBound ? left->end : upperBound);
+    rightUnion = set_union(first, right, left->end > lowerBound ? left->end : lowerBound, upperBound);
+    if(leftUnion == left && rightUnion == right)
+      return second;
+  } else {
+    SetNode* left = first->left.data(), *right = first->right.data();
+    leftUnion = set_union(second, left, lowerBound, left->end < upperBound ? left->end : upperBound);
+    rightUnion = set_union(second, right, left->end > lowerBound ? left->end : lowerBound, upperBound);
+    if(leftUnion == left && rightUnion == right)
+      return first;
+  }
+
+  if(leftUnion && !rightUnion)
+    return leftUnion;
+  else if(rightUnion && !leftUnion)
+    return rightUnion;
+  else if(!leftUnion && !rightUnion)
+    return 0;
+
+  SetNode* set(new SetNode);
+  set->inRepository = false;
+  set->left = leftUnion;
+  set->right = rightUnion;
+
+  if(!set->left->contiguous || !set->right->contiguous)
+    set->contiguous = false;
+  else
+    set->contiguous = set->left->end == set->right->start;
+
+  set->start = set->left->start;
+  set->end = set->right->end;
+
+  ifDebug( set->check() );
+  Q_ASSERT(set->end <= upperBound);
+  Q_ASSERT(set->start >= lowerBound);
   return set;
 }
 
@@ -557,7 +694,7 @@ Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
     //Move up in the tree to the first node that contains start
     while(searchNode->end <= start)
       searchNode = searchNode->parentInRepository;
-    
+
     //Find the bottom node that contains this range
     //findContainer could be used here, but the recursion is too slow.
     
@@ -700,7 +837,7 @@ QString BasicSetRepository::dumpDotGraph() const {
 
 Set BasicSetRepository::setUnion(const Set& first, const Set& second) {
   Set ret;
-  ret.d->m_tree = set_union(first.d->m_tree.data(), second.d->m_tree.data());
+  ret.d->m_tree = SetNode::Ptr(set_union(first.d->m_tree.data(), second.d->m_tree.data()));
   return ret;
 }
 /**
