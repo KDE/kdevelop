@@ -60,10 +60,17 @@ public:
   //Returns this set converted to a standard set that contains all indices contained by this set.
   std::set<unsigned int> stdSet() const;
   
-  /**
-   * Use this to iterate over the indices contained by a set. See bottom of the file
-   * */
+  ///Set union
+  Set operator +(const Set& rhs) const;
+  Set& operator +=(const Set& rhs);
   
+  ///Set intersection
+  Set operator &(const Set& rhs) const;
+  Set& operator &=(const Set& rhs);
+
+  ///Set subtraction
+  Set operator -(const Set& rhs) const;
+  Set& operator -=(const Set& rhs);
 private:
   friend class BasicSetRepository;
   
@@ -110,37 +117,24 @@ public:
   Set createSet(const std::set<Index>& indices);
   
   QString dumpDotGraph() const;
-
-  /**
-   * Set-union operation
-   * @warning not implemented yet
-   * */
-  Set setUnion(const Set& first, const Set& second);
-  
-  /**
-   * Set-intersection operation
-   * */
-  Set intersect(const Set& first, const Set& second);
-
-  /**
-   * Return first - second (The returned set will contain all items that are in first, but not in second)
-   * @warning not implemented yet
-   * */
-  Set subtract(const Set& first, const Set& second);
   
 private:
   class Private;
   Private* d;
 };
 
+
 /**
- * Manage a set-repository, where each item in the set is of type T.
+ * Manage a set-repository, where each item in the set is of type T. The elemnt-type should be implicitly shared, because it is stored twice.
  * @param Hash Should be a functor-object with an operator() that returns the hash for a given T
  * */
 template<class T, class Hash>
   class KDEVCPPDUCHAINBUILDER_EXPORT SetRepository : public BasicSetRepository {
   typedef __gnu_cxx::hash_map<T, Index, Hash> ElementHash; ///@todo use a pool allocator, @see rxx_allocator
 public:
+  SetRepository() {
+    m_elements.push_back(T()); //Index zero will not be used
+  }
   /**
    * @param item The item to be searched for.
    * @param repositoryIndex Target will be filled with the index repositoryItem has in the repository.
@@ -151,8 +145,8 @@ public:
    * */
   void getItem(const T& item, Index* repositoryIndex, T* repositoryItem = 0)
   {
-    typename ElementHash::const_iterator it = m_elements.find(item);
-    if(it != m_elements.end()) {
+    typename ElementHash::const_iterator it = m_elementHash.find(item);
+    if(it != m_elementHash.end()) {
       
       if(repositoryItem)
         *repositoryItem = (*it).first;
@@ -162,7 +156,9 @@ public:
     }else{
       Index ret = appendIndices(1);
       Q_ASSERT(ret);
-      m_elements.insert(item, ret);
+      m_elementHash.insert(item, ret);
+      Q_ASSERT(m_elements.size() == ret);
+      m_elements.push_back(item);
       
       if(repositoryItem)
         *repositoryItem = item;
@@ -172,9 +168,18 @@ public:
     }
   }
 
+  class Iterator;
+
+  /**
+   * In the returned vector, each element is accessible by its index.
+   * */
+  const std::vector<T>& elements() const {
+    return m_elements;
+  }
 private:
   // Tracks what elements have been assigned to what indices
-  ElementHash m_elements;
+  ElementHash m_elementHash;
+  std::vector<T> m_elements;
 };
 
 class Set::Iterator {
@@ -192,6 +197,36 @@ private:
   class IteratorPrivate;
   KSharedPtr<IteratorPrivate> d;
 };
+
+template<class ElementType, class ElementHash>
+class SetRepository<ElementType, ElementHash>::Iterator {
+public:
+  Iterator(const SetRepository<ElementType, ElementHash>* rep=0, Set::Iterator it=Set::Iterator()) : m_rep(rep), m_it(it) {
+  }
+  Iterator(const Iterator& rhs) : m_rep(rhs.m_rep), m_it(rhs.m_it) {
+  }
+  Iterator& operator=(const Iterator& rhs) {
+    m_rep = rhs.m_rep;
+    m_it = rhs.m_it;
+  }
+  
+  operator bool() const {
+    return m_it && m_rep;
+  }
+
+  Iterator& operator++() {
+    ++m_it;
+  }
+  
+  const ElementType& operator*() const {
+    Q_ASSERT(m_rep);
+    return m_rep->elements()[*m_it];
+  }
+private:
+  SetRepository<ElementType, ElementHash>* m_rep;
+  Set::Iterator m_it;
+};
+
 
 }
 

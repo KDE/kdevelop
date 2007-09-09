@@ -1234,8 +1234,8 @@ void TestDUChain::testHashedStringRepository() {
 
   //Create 3 random sets with each 10 of 20 items
   const unsigned int setCount = 10;
-  const unsigned int choiceCount = 1000;
-  const unsigned int itemCount = 2000;
+  const unsigned int choiceCount = 10000;
+  const unsigned int itemCount = 30000;
   
   BasicSetRepository rep;
   
@@ -1253,6 +1253,9 @@ void TestDUChain::testHashedStringRepository() {
   
   clock_t repositoryUnionClockTime = 0; //Time spent on repository-operations
   clock_t genericUnionClockTime = 0; //Time spend on equivalent operations with generic sets
+  
+  clock_t repositoryDifferenceClockTime = 0; //Time spent on repository-operations
+  clock_t genericDifferenceClockTime = 0; //Time spend on equivalent operations with generic sets
   
   Set sets[setCount];
   std::set<Index> realSets[setCount];
@@ -1298,13 +1301,66 @@ void TestDUChain::testHashedStringRepository() {
   for(int cycle = 0; cycle < 10; ++cycle) {
     for(unsigned int a = 0; a < setCount; a++) {
       for(unsigned int b = 0; b < setCount; b++) {
-        std::set<Index> _realUnion;
+        /// ----- SUBTRACTION/DIFFERENCE
+        std::set<Index> _realDifference;
         clock_t c = clock();
+        std::set_difference(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realDifference, _realDifference.begin()));
+        genericDifferenceClockTime += clock() - c;
+
+        c = clock();
+        Set _difference = sets[a] - sets[b];
+        repositoryDifferenceClockTime += clock() - c;
+
+        if(_difference.stdSet() != _realDifference)
+        {
+          {
+            kDebug() << "SET a:";
+            QString dbg = "";
+            for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+
+            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+          }
+          {
+            kDebug() << "SET b:";
+            QString dbg = "";
+            for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+
+            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+          }
+
+          {
+            std::set<Index> tempSet = _difference.stdSet();
+            
+            kDebug() << "SET difference:";
+            QString dbg = "real    set: ";
+            for(std::set<Index>::const_iterator it = _realDifference.begin(); it != _realDifference.end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+
+            dbg = "repo.   set: ";
+            for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+              dbg += QString("%1 ").arg(*it);
+            kDebug() << dbg;
+            
+            kDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
+          }
+        }        
+        Q_ASSERT(_difference.stdSet() == _realDifference);
+
+
+        /// ------ UNION
+        
+        std::set<Index> _realUnion;
+        c = clock();
         std::set_union(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realUnion, _realUnion.begin()));
         genericUnionClockTime += clock() - c;
 
         c = clock();
-        Set _union = rep.setUnion(sets[a], sets[b]);
+        Set _union = sets[a] + sets[b];
         repositoryUnionClockTime += clock() - c;
 
         if(_union.stdSet() != _realUnion)
@@ -1349,6 +1405,7 @@ void TestDUChain::testHashedStringRepository() {
       
         std::set<Index> _realIntersection;
 
+        /// -------- INTERSECTION
         c = clock();
         std::set_intersection(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realIntersection, _realIntersection.begin()));
         genericIntersectionClockTime += clock() - c;
@@ -1364,7 +1421,7 @@ void TestDUChain::testHashedStringRepository() {
         qsetIntersectionClockTime += clock() - c;
 
         c = clock();
-        Set _intersection = rep.intersect(sets[a], sets[b]);
+        Set _intersection = sets[a] & sets[b];
         repositoryIntersectionClockTime += clock() - c;
 
         
@@ -1413,6 +1470,7 @@ void TestDUChain::testHashedStringRepository() {
   kDebug() << "Clock-cycles needed for set-building: repository-set: " << repositoryClockTime << " generic-set: " << genericClockTime;
   kDebug() << "Clock-cycles needed for intersection: repository-sets: " << repositoryIntersectionClockTime << " generic-set: " << genericIntersectionClockTime << " QSet: " << qsetIntersectionClockTime;
   kDebug() << "Clock-cycles needed for union: repository-sets: " << repositoryUnionClockTime << " generic-set: " << genericUnionClockTime;
+  kDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime << " generic-set: " << genericDifferenceClockTime;
   }
 
 }

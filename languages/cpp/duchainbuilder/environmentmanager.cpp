@@ -30,6 +30,8 @@
 using namespace Cpp;
 using namespace KDevelop;
 
+Utils::SetRepository<HashedString, HashedStringHash> EnvironmentManager::m_stringRepository;
+
 EnvironmentManager::EnvironmentManager() : m_simplifiedMatching(false) {
 }
 

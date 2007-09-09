@@ -32,6 +32,17 @@
 #include "hashedstringset.h"
 #include "macroset.h"
 #include "cachemanager.h"
+#include "setrepository.h"
+
+struct HashedStringHash {
+  uint operator() (const KDevelop::HashedString& str) const {
+    return str.hash();
+  }
+};
+
+///@todo thread-safety
+typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash>::Iterator StringSetIterator;
+typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash> StringSetRepository;
 
 /**
  * The environment-manager helps achieving right representation of the way c++ works:
@@ -218,6 +229,9 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
   public:
     EnvironmentManager();
     virtual ~EnvironmentManager();
+
+    ///No lock needs to be acquired for reading, only for writing.
+    static StringSetRepository m_stringRepository;
 
     const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {
       __gnu_cxx::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );

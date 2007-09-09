@@ -631,6 +631,64 @@ SetNode* set_intersect(SetNode* first, SetNode* second)
   return 0;
 }
 
+SetNode* set_subtract(SetNode* first, SetNode* second)
+{
+  Index firstStart = first->start, secondEnd=second->end;
+  if(firstStart >= secondEnd)
+    return first;
+  
+  Index secondStart = second->start, firstEnd = first->end;
+  if(secondStart >= firstEnd)
+    return first;
+  
+  if(first == second)
+    return 0;
+  
+  //first and second intersect.
+
+  SetNode* splitLeftSubtraction;
+  SetNode* splitRightSubtraction;
+  //Always split up the one side that is bigger, so we have a better chance that shared nodes meet each other.
+  if(firstEnd-firstStart < secondEnd - secondStart)
+  {
+    SetNode* temp = set_subtract(first, second->left.data());
+    if(!temp)
+      return 0;
+    return set_subtract( temp, second->right.data());
+  } else {
+    SetNode* left = first->left.data(), *right = first->right.data();
+    splitLeftSubtraction = set_subtract(left, second);
+    splitRightSubtraction = set_subtract(right, second);
+    if(splitLeftSubtraction == left && splitRightSubtraction == right)
+      return first;
+  }
+
+  if(splitLeftSubtraction && splitRightSubtraction)
+  {
+    SetNode* set(new SetNode);
+    set->inRepository = false;
+    set->left = splitLeftSubtraction;
+    set->right = splitRightSubtraction;
+
+    if(!set->left->contiguous || !set->right->contiguous)
+      set->contiguous = false;
+    else
+      set->contiguous = set->left->end == set->right->start;
+
+    set->start = set->left->start;
+    set->end = set->right->end;
+
+    ifDebug( set->check() );
+    return set;
+  }else if(splitLeftSubtraction) {
+    return splitLeftSubtraction;
+  }else{
+    return splitRightSubtraction;
+  }
+  
+  return 0;
+}
+
 /**
  * Creates a binary out-of-repository tree containing the given nodes.
  * @param start A start-iterator of a container that contains SetNode* values, sorted by their index-ranges.
@@ -835,32 +893,65 @@ QString BasicSetRepository::dumpDotGraph() const {
     return QString::null;
 }
 
-Set BasicSetRepository::setUnion(const Set& first, const Set& second) {
+Set Set::operator +(const Set& first) const
+{
   if(!first.d->m_tree)
-    return second;
-  else if(!second.d->m_tree)
+    return *this;
+  else if(!d->m_tree)
     return first;
   Set ret;
-  ret.d->m_tree = SetNode::Ptr(set_union(first.d->m_tree.data(), second.d->m_tree.data()));
+  ret.d->m_tree = SetNode::Ptr(set_union(d->m_tree.data(), first.d->m_tree.data()));
   return ret;
-}
-/**
-  * Set-intersection operation
-  * */
-Set BasicSetRepository::intersect(const Set& first, const Set& second) {
-  if(!first.d->m_tree || !second.d->m_tree)
-    return Set();
-  Set ret;
-  ret.d->m_tree = SetNode::Ptr(set_intersect(first.d->m_tree.data(), second.d->m_tree.data()));
-  return ret;
-}
-/**
-  * Return first - second (The returned set will contain all items that are in first, but not in second)
-  * */
-Set BasicSetRepository::subtract(const Set& /*first*/, const Set& /*second*/) {
-  Q_ASSERT(0); ///@todo implement
-  return Set();
 }
 
+Set& Set::operator +=(const Set& first) {
+  if(!first.d->m_tree)
+    return *this;
+  else if(!d->m_tree) {
+    d->m_tree = first.d->m_tree;
+    return *this;
+  }
+  SetNode::Ptr newTree(set_union(d->m_tree.data(), first.d->m_tree.data()));
+  d->m_tree = newTree;
+  return *this;
+}
+
+Set Set::operator &(const Set& first) const {
+  if(!first.d->m_tree || !d->m_tree)
+    return Set();
+  Set ret;
+  ret.d->m_tree = SetNode::Ptr(set_intersect(d->m_tree.data(), first.d->m_tree.data()));
+  return ret;
+}
+
+Set& Set::operator &=(const Set& first) {
+  if(!first.d->m_tree || !d->m_tree) {
+    d->m_tree = SetNode::Ptr();
+    return *this;
+  }
+  
+  SetNode::Ptr newTree = SetNode::Ptr(set_intersect(d->m_tree.data(), first.d->m_tree.data()));
+  d->m_tree = newTree;
+  return *this;
+}
+
+Set Set::operator -(const Set& rhs) const {
+  if(!d->m_tree || !rhs.d->m_tree)
+    return *this;
+
+  Set ret;
+  ret.d->m_tree = SetNode::Ptr(set_subtract(d->m_tree.data(), rhs.d->m_tree.data()));
+  return ret;
+}
+
+Set& Set::operator -=(const Set& rhs) {
+  if(!d->m_tree || !rhs.d->m_tree)
+    return *this;
+
+  SetNode::Ptr newTree = SetNode::Ptr(set_subtract(d->m_tree.data(), rhs.d->m_tree.data()));
+
+  d->m_tree = newTree;
+  return *this;
+}
 }
 
