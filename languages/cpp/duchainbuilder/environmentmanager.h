@@ -18,9 +18,11 @@
 #include <ext/hash_set>
 #include <ext/hash_map>
 
+#include "hashedstringset.h"
 #include <QtCore/QDateTime>
 #include <QtCore/QList>
 #include <QtCore/QMap>
+#include <QMutex>
 
 #include <kurl.h>
 #include <ksharedptr.h>
@@ -29,7 +31,6 @@
 #include <editorintegrator.h>
 
 #include "cppduchainbuilderexport.h"
-#include "hashedstringset.h"
 #include "macroset.h"
 #include "cachemanager.h"
 #include "setrepository.h"
@@ -130,11 +131,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
     EnvironmentFile( const KUrl& url, EnvironmentManager* manager );
 
-    inline void addString( const KDevelop::HashedString& string ) {
-        if( !m_definedMacroNames[ string ] ) {
-          m_strings.insert( string );
-        }
-    }
+    void setStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 
     void addDefinedMacro( const rpp::pp_macro& macro  );
 
@@ -143,10 +140,12 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
 
     void addIncludeFile( const KDevelop::HashedString& file, const KDevelop::ModificationRevision& modificationTime );
 
-    inline bool hasString( const KDevelop::HashedString& string ) const {
-      return m_strings[string];
-    }
+//     inline bool hasString( const KDevelop::HashedString& string ) const {
+//       return m_strings[string];
+//     }
 
+    Utils::Set strings() const;
+    
     void addProblem( const Problem& p );
 
     QList<Problem>  problems() const;
@@ -176,7 +175,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
      * no other files were included.
      *
      * */
-    const HashedStringSet& includeFiles() const;
+    //const HashedStringSet& includeFiles() const;
 
     ///Set of all defined macros, including those of all deeper included files
     const MacroSet& definedMacros() const;
@@ -199,11 +198,11 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     KUrl::List m_includePaths;
     KDevelop::HashedString m_hashedUrl;
     KDevelop::ModificationRevision m_modificationTime;
-    HashedStringSet m_strings; //Set of all strings that can be affected by macros from outside
-    HashedStringSet m_includeFiles; //Set of all files with absolute paths
+    Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
+    Utils::Set m_includeFiles; //Set of all files with absolute paths
     MacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
     MacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
-    HashedStringSet m_definedMacroNames;
+    Utils::Set m_definedMacroNames;
     QList<Problem> m_problems;
     QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
     /*
@@ -231,6 +230,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     virtual ~EnvironmentManager();
 
     ///No lock needs to be acquired for reading, only for writing.
+    static QMutex m_stringRepositoryMutex;
     static StringSetRepository m_stringRepository;
 
     const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {

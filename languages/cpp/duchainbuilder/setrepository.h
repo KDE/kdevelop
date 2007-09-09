@@ -115,6 +115,12 @@ public:
    * Takes a simple set of indices, not ranges.
    * */
   Set createSet(const std::set<Index>& indices);
+
+  /**
+   * Creates a set that only contains that single index.
+   * For better performance, you should create bigger sets than this.
+   * */
+  Set createSet(Index i);
   
   QString dumpDotGraph() const;
   
@@ -123,6 +129,21 @@ private:
   Private* d;
 };
 
+class Set::Iterator {
+public:
+  Iterator(const Iterator& rhs);
+  Iterator& operator=(const Iterator& rhs);
+  
+  Iterator();
+  ~Iterator();
+  operator bool() const;
+  Iterator& operator++();
+  BasicSetRepository::Index operator*() const;
+private:
+  friend class Set;
+  class IteratorPrivate;
+  KSharedPtr<IteratorPrivate> d;
+};
 
 /**
  * Manage a set-repository, where each item in the set is of type T. The elemnt-type should be implicitly shared, because it is stored twice.
@@ -156,7 +177,7 @@ public:
     }else{
       Index ret = appendIndices(1);
       Q_ASSERT(ret);
-      m_elementHash.insert(item, ret);
+      m_elementHash[item] = ret;
       Q_ASSERT(m_elements.size() == ret);
       m_elements.push_back(item);
       
@@ -168,8 +189,34 @@ public:
     }
   }
 
-  class Iterator;
+  class Iterator {
+  public:
+    Iterator(const SetRepository<T, Hash>* rep=0, Set::Iterator it=Set::Iterator()) : m_rep(rep), m_it(it) {
+    }
+    Iterator(const Iterator& rhs) : m_rep(rhs.m_rep), m_it(rhs.m_it) {
+    }
+    Iterator& operator=(const Iterator& rhs) {
+      m_rep = rhs.m_rep;
+      m_it = rhs.m_it;
+    }
+    
+    operator bool() const {
+      return m_it && m_rep;
+    }
 
+    Iterator& operator++() {
+      ++m_it;
+      return *this;
+    }
+    
+    const T& operator*() const {
+      Q_ASSERT(m_rep);
+      return m_rep->elements()[*m_it];
+    }
+  private:
+    const SetRepository<T, Hash>* m_rep;
+    Set::Iterator m_it;
+  };
   /**
    * In the returned vector, each element is accessible by its index.
    * */
@@ -181,52 +228,6 @@ private:
   ElementHash m_elementHash;
   std::vector<T> m_elements;
 };
-
-class Set::Iterator {
-public:
-  Iterator(const Iterator& rhs);
-  Iterator& operator=(const Iterator& rhs);
-  
-  Iterator();
-  ~Iterator();
-  operator bool() const;
-  Iterator& operator++();
-  BasicSetRepository::Index operator*() const;
-private:
-  friend class Set;
-  class IteratorPrivate;
-  KSharedPtr<IteratorPrivate> d;
-};
-
-template<class ElementType, class ElementHash>
-class SetRepository<ElementType, ElementHash>::Iterator {
-public:
-  Iterator(const SetRepository<ElementType, ElementHash>* rep=0, Set::Iterator it=Set::Iterator()) : m_rep(rep), m_it(it) {
-  }
-  Iterator(const Iterator& rhs) : m_rep(rhs.m_rep), m_it(rhs.m_it) {
-  }
-  Iterator& operator=(const Iterator& rhs) {
-    m_rep = rhs.m_rep;
-    m_it = rhs.m_it;
-  }
-  
-  operator bool() const {
-    return m_it && m_rep;
-  }
-
-  Iterator& operator++() {
-    ++m_it;
-  }
-  
-  const ElementType& operator*() const {
-    Q_ASSERT(m_rep);
-    return m_rep->elements()[*m_it];
-  }
-private:
-  SetRepository<ElementType, ElementHash>* m_rep;
-  Set::Iterator m_it;
-};
-
 
 }
 

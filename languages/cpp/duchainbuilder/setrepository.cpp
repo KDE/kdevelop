@@ -173,7 +173,32 @@ struct SetNode : public KShared
           end = newEnd;
           return true;
         }else{
-          return false;
+          if(ref.value <= 1) {
+            //We can expand by adding an intermediate node to the right.
+            SetNode::Ptr newRight(new SetNode);
+            newRight->left = right;
+            newRight->inRepository = inRepository;
+            newRight->contiguous = right->contiguous;
+
+            newRight->right = SetNode::Ptr(new SetNode);
+            newRight->right->start = right->end;
+            newRight->right->end = newEnd;
+            newRight->right->inRepository = newRight->inRepository;
+
+            newRight->start = right->start;
+            newRight->end = newEnd;
+            right = newRight;
+            end = newEnd;
+            
+            newRight->right->parentInRepository = newRight.data();
+            newRight->left->parentInRepository = newRight.data();
+            newRight->parentInRepository = this;
+            
+            ifDebug(check());
+            return true;
+          }else{
+            return false;
+          }
         }
       }else{
         end = newEnd;
@@ -738,6 +763,7 @@ Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
   std::vector<SetNode*> nodes;
 
   SetNode* searchNode = d->m_root.data();
+  ifDebug(searchNode->check());
   
   for(std::vector<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it) {
     Q_ASSERT(*it >= lastIndex);
@@ -753,6 +779,8 @@ Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
     while(searchNode->end <= start)
       searchNode = searchNode->parentInRepository;
 
+    ifDebug(searchNode->localCheck();)
+    
     //Find the bottom node that contains this range
     //findContainer could be used here, but the recursion is too slow.
     
@@ -852,8 +880,17 @@ Set BasicSetRepository::createSet(const std::vector<Index>& indices) {
   ///nodes now contains all repository-nodes contained by the given ranges.
   ///Now place a hull of non-repository SetNodes over the nodes.
   Set ret;
-  ret.d->m_tree = createBinaryTree(nodes.begin(), nodes.end(), nodes.size());
+  if(!nodes.empty())
+    ret.d->m_tree = createBinaryTree(nodes.begin(), nodes.end(), nodes.size());
+  ifDebug(d->m_root->check();)
   return ret;
+}
+
+Set BasicSetRepository::createSet(Index i) {
+  std::vector<Index> ranges;
+  ranges.push_back(i);
+  ranges.push_back(i+1);
+  return createSet(ranges);
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
@@ -901,6 +938,8 @@ Set Set::operator +(const Set& first) const
     return first;
   Set ret;
   ret.d->m_tree = SetNode::Ptr(set_union(d->m_tree.data(), first.d->m_tree.data()));
+  
+  ifDebug(if(ret.d->m_tree)ret.d->m_tree->check());
   return ret;
 }
 
@@ -913,6 +952,7 @@ Set& Set::operator +=(const Set& first) {
   }
   SetNode::Ptr newTree(set_union(d->m_tree.data(), first.d->m_tree.data()));
   d->m_tree = newTree;
+  ifDebug(if(d->m_tree)d->m_tree->check());
   return *this;
 }
 
@@ -921,6 +961,7 @@ Set Set::operator &(const Set& first) const {
     return Set();
   Set ret;
   ret.d->m_tree = SetNode::Ptr(set_intersect(d->m_tree.data(), first.d->m_tree.data()));
+  ifDebug(if(ret.d->m_tree)ret.d->m_tree->check());
   return ret;
 }
 
@@ -932,6 +973,7 @@ Set& Set::operator &=(const Set& first) {
   
   SetNode::Ptr newTree = SetNode::Ptr(set_intersect(d->m_tree.data(), first.d->m_tree.data()));
   d->m_tree = newTree;
+  ifDebug(if(d->m_tree)d->m_tree->check());
   return *this;
 }
 
@@ -941,6 +983,7 @@ Set Set::operator -(const Set& rhs) const {
 
   Set ret;
   ret.d->m_tree = SetNode::Ptr(set_subtract(d->m_tree.data(), rhs.d->m_tree.data()));
+  ifDebug(if(ret.d->m_tree)ret.d->m_tree->check());
   return ret;
 }
 
@@ -951,6 +994,7 @@ Set& Set::operator -=(const Set& rhs) {
   SetNode::Ptr newTree = SetNode::Ptr(set_subtract(d->m_tree.data(), rhs.d->m_tree.data()));
 
   d->m_tree = newTree;
+  ifDebug(if(d->m_tree)d->m_tree->check());
   return *this;
 }
 }

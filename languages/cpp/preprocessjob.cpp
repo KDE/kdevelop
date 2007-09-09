@@ -56,19 +56,35 @@
 
 class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
     public:
-        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_environmentFile(environmentFile) {
+        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_finished(false), m_environmentFile(environmentFile) {
             //If this is included from another preprocessed file, take the current macro-set from there.
             ///NOTE: m_environmentFile may be zero, this must be treated
         }
 
+        ~CppPreprocessEnvironment() {
+            finish();
+        }
+
+        void finish() {
+            if(!m_finished) {
+                if(m_environmentFile)
+                    m_environmentFile->setStrings(m_strings);
+                m_finished = true;
+            }
+        }
+
 
         virtual rpp::pp_macro* retrieveMacro(const KDevelop::HashedString& name) const {
-            ///@todo use a global string-repository
             //note all strings that can be affected by macros
             if( !m_environmentFile )
                 return rpp::Environment::retrieveMacro(name);
-            
-            m_environmentFile->addString(KDevelop::HashedString(name));
+
+            {
+                QMutexLocker l(&Cpp::EnvironmentManager::m_stringRepositoryMutex);
+                Utils::BasicSetRepository::Index idx;
+                Cpp::EnvironmentManager::m_stringRepository.getItem(name, &idx);
+                m_strings.insert(idx);
+            }
             rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
 
             if( ret ) //note all used macros
@@ -105,6 +121,8 @@ class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::Parsi
         }
 
     private:
+        bool m_finished;
+        mutable std::set<Utils::BasicSetRepository::Index> m_strings;
         mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
 };
 
@@ -241,6 +259,8 @@ void PreprocessJob::run()
     parentJob()->parseSession()->setContents( result.toUtf8() );
     parentJob()->setEnvironmentFile( m_environmentFile.data() );
 
+    m_currentEnvironment->finish();
+    
     if( m_contentEnvironmentFile ) {
         m_environmentFile->merge(*m_contentEnvironmentFile);
         //Q_ASSERT(m_contentEnvironmentFile->identity().flags() & IdentifiedFile::Content);

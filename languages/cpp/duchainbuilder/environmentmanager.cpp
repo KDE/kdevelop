@@ -30,6 +30,7 @@
 using namespace Cpp;
 using namespace KDevelop;
 
+QMutex EnvironmentManager::m_stringRepositoryMutex;
 Utils::SetRepository<HashedString, HashedStringHash> EnvironmentManager::m_stringRepository;
 
 EnvironmentManager::EnvironmentManager() : m_simplifiedMatching(false) {
@@ -109,35 +110,57 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     }
 #endif
 
+    Utils::Set environmentMacroNames;
+    
+    {
+      ///@todo this should be done earlier, and less often(environments should already manage it)
+      QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
+      std::set<Utils::BasicSetRepository::Index> indices;
+      rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
+      for ( rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().begin(); rit != end; ++rit ) {
+        Utils::BasicSetRepository::Index idx;
+        EnvironmentManager::m_stringRepository.getItem(rit.key(), &idx);
+        indices.insert(idx);
+      }
+      
+      environmentMacroNames = EnvironmentManager::m_stringRepository.createSet(indices);
+    }
+
   while ( files.first != files.second ) {
     const EnvironmentFile& file( *( *( files.first ) ).second );
     bool success = true;
     //Make sure that none of the macros stored in the driver affect the file in a different way than the one before
-    rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
+   
+    Utils::Set conflicts = environmentMacroNames & file.strings();
+
+    StringSetIterator conflictIt(&EnvironmentManager::m_stringRepository, conflicts.iterator());
     
-    for ( rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().begin(); rit != end; ) {
+    rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
+    for( ; conflictIt; ++conflictIt) {
+      rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().find(*conflictIt);
       rpp::Environment::EnvironmentMap::const_iterator it = rit;
       ++rit;
-      if ( rit != end && it.key() == rit.key() ) continue; //Always only use the last macro of the same name for comparison, it is on top of the macro-stack
+      while ( rit != end && it.key() == rit.key() ) {; //Always only use the last macro of the same name for comparison, it is on top of the macro-stack
+        it = rit;
+        ++rit;
+      }
       if (( *it )->isUndef() ) continue; //Undef-macros practically don't exist
 
-      if ( file.hasString( it.key() ) ) {
-        if ( file.m_usedMacros.hasMacro( it.key() ) ) {
-          rpp::pp_macro m( file.m_usedMacros.macro(it.key()) );
-          if ( !( m == **it ) ) {
-            ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << it.key().str() << "\" and used a macro for it with the body \"" << m.definition << "\"(from" << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), cache is not used"  );
+      if ( file.m_usedMacros.hasMacro( it.key() ) ) {
+        rpp::pp_macro m( file.m_usedMacros.macro(it.key()) );
+        if ( !( m == **it ) ) {
+          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << it.key().str() << "\" and used a macro for it with the body \"" << m.definition << "\"(from" << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), cache is not used"  );
 
-            //rpp::pp_macro with the same name was used, but it is different
-            success = false;
-            break;
-          }
-
-        } else {
-          //There is a macro that affects the file, but was not used while the previous parse
-          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << ( it ).key().str() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), the cached file is not used"  );
+          //rpp::pp_macro with the same name was used, but it is different
           success = false;
           break;
         }
+
+      } else {
+        //There is a macro that affects the file, but was not used while the previous parse
+        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file" << fileName.str() << "depends on the string \"" << ( it ).key().str() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), the cached file is not used"  );
+        success = false;
+        break;
       }
     }
     //Make sure that all external macros used by the file now exist too
@@ -233,7 +256,12 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro ) {
   kDebug( 9007 ) << "defined macro" << macro.name.str();
 #endif
   m_definedMacros.addMacro( macro );
-  m_definedMacroNames.insert( HashedString( macro.name ) );
+  
+  QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
+  Utils::BasicSetRepository::Index idx;
+  EnvironmentManager::m_stringRepository.getItem(HashedString( macro.name ), &idx);
+  m_definedMacroNames += EnvironmentManager::m_stringRepository.createSet(idx); ///@todo batch this, inserting single items is bad for the structure
+  
 }
 
 void EnvironmentFile::addUsedMacro( const rpp::pp_macro& macro ) {
@@ -245,9 +273,14 @@ void EnvironmentFile::addUsedMacro( const rpp::pp_macro& macro ) {
   }
 }
 
-const HashedStringSet& EnvironmentFile::includeFiles() const {
-  return m_includeFiles;
+// const HashedStringSet& EnvironmentFile::includeFiles() const {
+//   return m_includeFiles;
+// }
+
+Utils::Set EnvironmentFile::strings() const {
+  return m_strings;
 }
+
 
 ///Set of all defined macros, including those of all deeper included files
 const MacroSet& EnvironmentFile::definedMacros() const {
@@ -281,7 +314,10 @@ HashedString EnvironmentFile::hashedUrl() const {
 }
 
 void EnvironmentFile::addIncludeFile( const HashedString& file, const ModificationRevision& modificationTime ) {
-  m_includeFiles.insert( file );
+  QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
+  Utils::BasicSetRepository::Index idx;
+  EnvironmentManager::m_stringRepository.getItem(file, &idx);
+  m_includeFiles += EnvironmentManager::m_stringRepository.createSet(idx); ///@todo batch this, inserting single items is bad for the structure
   m_allModificationTimes[file] = modificationTime;
 }
 
@@ -301,12 +337,17 @@ QList<Problem>  EnvironmentFile::problems() const {
   return m_problems;
 }
 
+void EnvironmentFile::setStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
+  QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
+  m_strings = EnvironmentManager::m_stringRepository.createSet(strings);
+}
+
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
 #ifdef LEXERCACHE_DEBUG
   kDebug( 9007 ) << url() << ": merging" << file.url()  << "defined in this:" << m_definedMacroNames.print().c_str()  << "defined macros in other:" << file.m_definedMacroNames.print().c_str();;
 #endif
-  HashedStringSet tempStrings = file.m_strings;
+  Utils::Set tempStrings = file.m_strings;
   tempStrings -= m_definedMacroNames;
   m_strings += tempStrings;
   m_includeFiles += file.m_includeFiles;
@@ -334,7 +375,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 }
 
 size_t EnvironmentFile::hash() const {
-  return m_usedMacros.valueHash() + m_usedMacros.idHash() + m_definedMacros.idHash() + m_definedMacros.valueHash() + m_strings.hash();
+  return m_usedMacros.valueHash() + m_usedMacros.idHash() + m_definedMacros.idHash() + m_definedMacros.valueHash() /*+ m_strings.hash()*/; ///@todo is the string-hash needed here?
 }
 
 IdentifiedFile EnvironmentFile::identity() const {

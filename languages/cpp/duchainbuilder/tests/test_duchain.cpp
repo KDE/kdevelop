@@ -1234,8 +1234,8 @@ void TestDUChain::testHashedStringRepository() {
 
   //Create 3 random sets with each 10 of 20 items
   const unsigned int setCount = 10;
-  const unsigned int choiceCount = 10000;
-  const unsigned int itemCount = 30000;
+  const unsigned int choiceCount = 30;
+  const unsigned int itemCount = 100;
   
   BasicSetRepository rep;
   
@@ -1262,7 +1262,11 @@ void TestDUChain::testHashedStringRepository() {
   for(unsigned int a = 0; a < setCount; a++)
   {
     std::set<Index> chosenIndices;
-    for(unsigned int b = 0; b < choiceCount; b++)
+    unsigned int thisCount = rand() % choiceCount;
+    if(thisCount == 0)
+      thisCount = 1;
+    
+    for(unsigned int b = 0; b < thisCount; b++)
     {
       Index choose = (rand() % itemCount) + 1;
       while(chosenIndices.find(choose) != chosenIndices.end()) {
@@ -1298,7 +1302,7 @@ void TestDUChain::testHashedStringRepository() {
     Q_ASSERT(tempSet == realSets[a]);
   }
 
-  for(int cycle = 0; cycle < 10; ++cycle) {
+  for(int cycle = 0; cycle < 100; ++cycle) {
     for(unsigned int a = 0; a < setCount; a++) {
       for(unsigned int b = 0; b < setCount; b++) {
         /// ----- SUBTRACTION/DIFFERENCE
