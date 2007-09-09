@@ -53,18 +53,15 @@ void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 
 bool QMakeProjectFile::read()
 {
+    foreach( QString var, m_mkspecs->variables() )
+    {
+        m_variableValues[var] = m_mkspecs->variableValues( var );
+    }
     if( m_cache )
     {
         foreach( QString var, m_cache->variables() )
         {
             m_variableValues[var] = m_cache->variableValues( var );
-        }
-    }else
-    {
-
-        foreach( QString var, m_mkspecs->variables() )
-        {
-            m_variableValues[var] = m_mkspecs->variableValues( var );
         }
     }
     return QMakeFile::read();
