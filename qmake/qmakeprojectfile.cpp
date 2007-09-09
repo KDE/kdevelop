@@ -271,9 +271,9 @@ QMakeProjectFile::~QMakeProjectFile()
 {
 }
 
-QStringList QMakeProjectFile::resolveVariables( const QString& variable ) const
+QStringList QMakeProjectFile::resolveVariables( const QString& value ) const
 {
-    QString mkspecresolved = m_mkspecs->resolveInternalQMakeVariables( variable );
+    QString mkspecresolved = m_mkspecs->resolveInternalQMakeVariables( value );
     return QMakeFile::resolveVariables( mkspecresolved );
 }
 

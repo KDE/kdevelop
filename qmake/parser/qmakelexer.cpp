@@ -381,19 +381,16 @@ std::size_t Lexer::tokenEnd() const
 QChar* Lexer::ignoreWhitespaceAndComment( QChar* it )
 {
     // Ignore whitespace, but preserve the newline
-    qDebug() << "Checking" << *it << m_curpos;
     bool comment = false;
     while ( m_curpos < m_contentSize && ( it->isSpace() || comment || it->unicode() == '#' ) && it->unicode() != '\n' )
     {
         if( it->unicode() == '#' )
         {
-            qDebug() << "Comment" << *it << m_curpos;
             comment = true;
         }
         ++it;
         ++m_curpos;
     }
-    qDebug() << "Finish" << m_curpos << m_contentSize;
     return it;
 }
 

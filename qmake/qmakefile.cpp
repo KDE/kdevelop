@@ -28,6 +28,7 @@
 #include "qmakeast.h"
 #include "qmakedriver.h"
 #include "qmakeincludefile.h"
+#include "variablereferenceparser.h"
 
 //@TODO: Make the globbing stuff work with drives on win32
 
@@ -281,7 +282,21 @@ QStringList QMakeFile::variables() const
 
 QStringList QMakeFile::resolveVariables( const QString& value ) const
 {
-    return QStringList() << value;
+    VariableReferenceParser parser;
+    parser.setContent( value );
+    if( !parser.parse() )
+    {
+        kWarning(9024) << "Couldn't parse" << value << "to replace variables in it";
+        return QStringList() << value;
+    }
+    QStringList ret;
+    ret << value;
+    foreach( QString variable, parser.variableReferences() )
+    {
+        VariableInfo vi = parser.variableInfo( variable );
+        kDebug(9024) << "Found variable reference:" << variable << vi.positions << vi.type;
+    }
+    return ret;
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
