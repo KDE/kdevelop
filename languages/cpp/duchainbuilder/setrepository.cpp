@@ -836,6 +836,10 @@ QString BasicSetRepository::dumpDotGraph() const {
 }
 
 Set BasicSetRepository::setUnion(const Set& first, const Set& second) {
+  if(!first.d->m_tree)
+    return second;
+  else if(!second.d->m_tree)
+    return first;
   Set ret;
   ret.d->m_tree = SetNode::Ptr(set_union(first.d->m_tree.data(), second.d->m_tree.data()));
   return ret;
@@ -844,6 +848,8 @@ Set BasicSetRepository::setUnion(const Set& first, const Set& second) {
   * Set-intersection operation
   * */
 Set BasicSetRepository::intersect(const Set& first, const Set& second) {
+  if(!first.d->m_tree || !second.d->m_tree)
+    return Set();
   Set ret;
   ret.d->m_tree = SetNode::Ptr(set_intersect(first.d->m_tree.data(), second.d->m_tree.data()));
   return ret;
