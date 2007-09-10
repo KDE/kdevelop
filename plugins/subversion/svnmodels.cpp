@@ -375,7 +375,9 @@ SvnOutputItem::SvnOutputItem( const QString &path, const QString &msg )
 {
     //conflict
     if( m_msg.contains("Conflicted") ){
-        setForeground(KColorScheme().foreground(KColorScheme::NegativeText));
+        //Need to use KCS instead of KStatefulBrush because we don't have a
+	//widget or QPalette here
+        setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::NegativeText));
         m_stop = true;
     }
 }
