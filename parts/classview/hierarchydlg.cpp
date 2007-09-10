@@ -25,6 +25,7 @@
 #include <qlayout.h>
 #include <qfileinfo.h>
 #include <qlistview.h>
+#include <qapplication.h>
 #include <qsplitter.h>
 
 #include "kdevlanguagesupport.h"
@@ -103,6 +104,7 @@ void HierarchyDialog::save()
     if(dlg.exec() && dlg.selectedURL().isLocalFile())
     {
 	QFileInfo fi(dlg.selectedURL().pathOrURL());
+        QApplication::setOverrideCursor( Qt::waitCursor );
         KDevLanguageSupport *ls = m_part->languageSupport();
         for (QMap<QString, ClassDom>::const_iterator it = classes.begin(); it != classes.end(); ++it)
         {
@@ -120,6 +122,7 @@ void HierarchyDialog::save()
             }
         }
         digraph->process(fi.absFilePath(), fi.extension());
+        QApplication::restoreOverrideCursor();
     }
 }
 
