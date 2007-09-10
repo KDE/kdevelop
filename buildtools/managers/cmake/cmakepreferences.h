@@ -25,9 +25,9 @@
 #include <projectkcmodule.h>
 #include "cmakecachemodel.h"
 
+#include <KSharedConfig>
+
 class CMakeSettings;
-class QWidget;
-class QStringList;
 
 namespace Ui { class CMakeBuildSettings; }
 
@@ -50,8 +50,10 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
         void showInternal(int state);
         void cacheEdited(QStandardItem * ) { emit changed(true); }
         void buildDirChanged(const QString &);
-
+        void createBuildDir();
     private:
+        KUrl m_srcFolder;
+        KSharedConfig::Ptr m_cfg;
         void updateCache( const KUrl & );
         Ui::CMakeBuildSettings* m_prefsUi;
         CMakeCacheModel* m_currentModel;

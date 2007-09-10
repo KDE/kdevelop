@@ -10,5 +10,7 @@ struct Macro
 
 typedef QHash<QString, QStringList> VariableMap;
 typedef QHash<QString, Macro> MacroMap;
+typedef QPair<QString, QString> Definition;
+typedef QList<Definition> DefineList;
 
 #endif

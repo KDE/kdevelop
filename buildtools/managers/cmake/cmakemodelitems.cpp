@@ -28,39 +28,47 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &na
 {}
 
 CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item)
-    : KDevelop::ProjectTargetItem( project, name, item )
+    : KDevelop::ProjectTargetItem( project, name, item ), m_parent(item)
 {}
 
 
 CMakeTargetItem::~CMakeTargetItem()
 {}
 
-const KDevelop::DomUtil::PairList& CMakeTargetItem::defines() const
-{
-    return m_defines;
-}
-
 const QHash< QString, QString >& CMakeTargetItem::environment() const
 {
     return m_environment;
 }
 
-KUrl::List CMakeFolderItem::includeList() const
+const KUrl::List & CMakeFolderItem::includeDirectories() const
 {
-    KUrl::List urls(m_includeList);
+    KUrl::List urls(m_includeList); //FIXME: Returning a temporary variable
     
     CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(parent());
     while(folder)
     {
-        urls += folder->includeList();
+        urls += folder->includeDirectories();
         folder = dynamic_cast<CMakeFolderItem*>(folder->parent());
     }
     return urls;
 }
 
+const QList< QPair < QString , QString > > & CMakeFolderItem::defines() const
+{
+    CMakeFolderItem *par = dynamic_cast<CMakeFolderItem*>(parent());
+    if(par)
+        return m_defines+par->defines(); //FIXME: Returning a temporary variable
+    else
+        return m_defines;
+}
+
 const KUrl::List & CMakeTargetItem::includeDirectories() const
 {
-    CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(parent());
-    return folder->includeDirectories();
+    return m_parent->includeDirectories();
+}
+
+const QList< QPair < QString , QString > > & CMakeTargetItem::defines() const
+{
+    return m_parent->defines();
 }
 

@@ -21,8 +21,9 @@
 #ifndef CMAKEMODELITEMS_H
 #define CMAKEMODELITEMS_H
 
+#include <QHash>
+
 #include <projectmodel.h>
-#include <domutil.h>
 #include "cmakelistsparser.h"
 #include <cmakeexport.h>
 #include "cmakeast.h"
@@ -37,18 +38,18 @@ class IProject;
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem //FIXME: Should be projectFolderItem
 {
     public:
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
 
-        void setIncludeList(const KUrl::List &l) { m_includeList=l; }
-        KUrl::List includeList() const;
-
+        void setIncludeDirectories(const KUrl::List &l) { m_includeList=l; }
+        virtual const KUrl::List& includeDirectories() const;
+        virtual const QList<QPair<QString, QString> >& defines() const;
     private:
         KUrl::List m_includeList;
+        QList<QPair<QString, QString> > m_defines;
 };
-
 
 /**
  * The project model item for CMake targets.
@@ -62,14 +63,13 @@ public:
     CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item );
     ~CMakeTargetItem();
 
-//     TargetInfo targetInfo() const;
-
-    virtual const KDevelop::DomUtil::PairList& defines() const;
     virtual const KUrl::List& includeDirectories() const;
     virtual const QHash< QString, QString >& environment() const;
+	virtual const QList<QPair<QString, QString> >& defines() const;
 private:
-    KDevelop::DomUtil::PairList m_defines;
     QHash<QString, QString> m_environment;
+//     QString m_relativePath;
+    CMakeFolderItem *m_parent;
 };
 
 #endif

@@ -39,7 +39,7 @@ class CMakeProjectVisitor : CMakeAstVisitor
         
         virtual int visit( const CustomCommandAst * );
         virtual int visit( const CustomTargetAst * );
-        virtual int visit( const AddDefinitionsAst * ) { return notImplemented("AddDefinitionsAst"); }
+        virtual int visit( const AddDefinitionsAst * );
         virtual int visit( const AddDependenciesAst * ) { return notImplemented("AddDependenciesAst"); }
         virtual int visit( const AddTestAst * ) { return notImplemented("AddTestAst"); }
         virtual int visit( const AuxSourceDirectoryAst * ) { return notImplemented("AuxSourceDirectoryAst"); }
@@ -112,6 +112,7 @@ class CMakeProjectVisitor : CMakeAstVisitor
         QString m_root;
         VariableMap *m_vars;
         MacroMap *m_macros;
+        DefineList m_defs;
 };
 
 #endif

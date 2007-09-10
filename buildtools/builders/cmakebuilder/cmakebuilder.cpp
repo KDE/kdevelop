@@ -113,78 +113,22 @@ void CMakeBuilder::cleanupModel( int id )
     }
 }
 
-bool CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
+bool CMakeBuilder::build(KDevelop::ProjectBaseItem *item)
 {
-    if(dom->folder())
-        kDebug(9032) << "Building folder: " << dom->folder()->url();
-    else if(dom->file())
-        kDebug(9032) << "Building file: " << dom->file()->url();
-    else if(dom->target())
-        kDebug(9032) << "Building target";
-
-//     kDebug(9032) << "Building " << dom->folder()->url();
-//     if( dom->type() != KDevelop::ProjectBaseItem::Project )
-//         return false;
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
     {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-        if( view )
+        IMakeBuilder* builder = i->extension<IMakeBuilder>();
+        if( builder )
         {
-
-            int id;
-            if( m_ids.contains( dom->project() ) )
-            {
-                id = m_ids[dom->project()];
-                m_models[id]->clear();
-                if( m_cmds.contains(id) )
-                    delete m_cmds[id];
-            }
-            else
-            {
-                id = view->registerView(i18n("CMake: %1", dom->project()->name() ) );
-                m_ids[dom->project()] = id;
-                m_models[id] = new KDevelop::OutputModel(this);
-                view->setModel( id, m_models[id] );
-            }
-            m_items[id] = dom;
-
-            if(!updateConfig(dom->project()))
-            {
-                kDebug(9032) << "Input not correct";
-                return false;
-            }
-
-            KUrl cmakeCachePath=m_buildDirectory;
-            cmakeCachePath.addPath("CMakeCache.txt");
-            if(QFile::exists(cmakeCachePath.toLocalFile())) //We do not want to run cmake always
-            {
-                completed(id);
-                return true;
-            }
-            QStringList args(dom->project()->folder().toLocalFile());
-            kDebug(9032) << "Type of build: " << m_buildType;
-            kDebug(9032) << "Installing to: " << m_installPrefix;
-            kDebug(9032) << "Build directory: " << m_buildDirectory;
-            args += "-DCMAKE_INSTALL_PREFIX="+m_installPrefix.toLocalFile();
-            args += "-DCMAKE_BUILD_TYPE="+m_buildType;
-
-            QString cmd = m_cmakeBinary.toLocalFile();
-            m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
-            connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
-                    m_models[id], SLOT(appendLines(const QStringList&) ) );
-            connect(m_cmds[id], SIGNAL(receivedStandardOutput(const QStringList&)),
-                    m_models[id], SLOT(appendLines(const QStringList&) ) );
-            m_failedMapper->setMapping( m_cmds[id], id );
-            m_completedMapper->setMapping( m_cmds[id], id );
-            m_cmds[id]->setArguments(args);
-            m_cmds[id]->setWorkingDirectory( m_buildDirectory.toLocalFile() );
-            connect( m_cmds[id], SIGNAL( failed() ), m_failedMapper, SLOT(map()));
-            connect( m_cmds[id], SIGNAL( completed() ), m_completedMapper, SLOT(map()));
-            m_cmds[id]->start();
-            return true;
+            kDebug(9032) << "Building with make";
+            return builder->build(item);
         }
+        else
+            kDebug(9032) << "Make builder not with extension";
     }
+    else
+        kDebug(9032) << "Make builder not found";
     return false;
 }
 
@@ -197,75 +141,12 @@ bool CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 void CMakeBuilder::completed(int id)
 {
     kDebug(9032) << "command finished" << id;
-    if( m_items.contains(id))
-    {
-        IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
-        if( i )
-        {
-            IMakeBuilder* builder = i->extension<IMakeBuilder>();
-            if( builder )
-            {
-                KDevelop::ProjectBaseItem* item = m_items[id];
-                kDebug(9032) << "Building with make";
-                if(!builder->build(item))
-                    kDebug(9032) << "The build failed.";
-            }
-            else
-                kDebug(9032) << "Make builder not with extension";
-        }
-        else
-            kDebug(9032) << "Make builder not found";
-    }
 }
 
 void CMakeBuilder::errored(int id)
 {
     if( m_items.contains(id))
         emit failed(m_items[id]);
-}
-
-bool CMakeBuilder::updateConfig( KDevelop::IProject* project )
-{
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake");
-
-    m_cmakeBinary = group.readEntry("CMake Binary");
-    m_buildDirectory = group.readEntry("Build Dir");
-    m_installPrefix = group.readEntry("Prefix");
-    m_buildType = group.readEntry("Build Type", "-1");
-    if(m_cmakeBinary.isEmpty())
-    {
-        KProcess p;
-        p.setOutputChannelMode(KProcess::MergedChannels);
-        p.setProgram("which", QStringList("cmake"));
-        p.start();
-
-        if(!p.waitForFinished())
-        {
-            kDebug(9032) << "failed to execute: 'which' command";
-        }
-
-        if(p.exitCode()!=0)
-        {
-            kDebug(9032) << "failed to execute: 'which' command. Bad return";
-        }
-
-        QByteArray b = p.readAllStandardOutput();
-        QString t;
-        t.prepend(b.trimmed());
-        m_cmakeBinary = KUrl::fromPath(t);
-
-        if(!m_cmakeBinary.isEmpty())
-        {
-            group.writeEntry("CMake Binary", m_cmakeBinary);
-        }
-        else
-        {
-            kDebug(9032) << "error!!! Could not find cmake in the path";
-        }
-    }
-//     return m_cmakeBinary.isEmpty() || m_buildDirectory.isEmpty();
-    return true;
 }
 
 #include "cmakebuilder.moc"

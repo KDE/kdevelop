@@ -1081,6 +1081,27 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     return 1;
 }
 
+
+int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
+{
+    kDebug(9032) << "Adding defs: " << addDef->definitions();
+    QString regex="-D([A-Za-z0-9]+)=?([A-Za-z0-9]+)";
+    QRegExp rx(regex);
+    foreach(QString def, addDef->definitions())
+    {
+        if(rx.indexIn(def)<0)
+            kDebug(9032) << "error: definition not matched" << regex;
+        QStringList captured=rx.capturedTexts();
+        Definition d;
+        d.first=captured[1];
+        if(captured.count()==3)
+            d.second=captured[2];
+        m_defs.append(d);
+        kDebug(9032) << "added definition" << d << " from " << def;
+    }
+    return 1;
+}
+
 CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc & exp, const VariableMap * vars)
 {
     CMakeFunctionDesc ret=exp;
@@ -1202,6 +1223,4 @@ QStringList CMakeProjectVisitor::targetDependencies(const QString & target) cons
     }
     return ret;
 }
-
-
 

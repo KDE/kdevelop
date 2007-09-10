@@ -1,6 +1,6 @@
 /* KDevelop CMake Support
  *
- * Copyright 2006-2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2006-2007 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,6 @@ namespace KDevelop{
 }
 
 /**
- * @author Andreas Pakulat
  * @author Aleix Pol
 */
 class CMakeBuilder : public KDevelop::IPlugin, public ICMakeBuilder

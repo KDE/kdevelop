@@ -29,10 +29,12 @@ set( cmakemanager_SRCS
 set( cmakesettings_SRCS
   cmakepreferences.cpp
   cmakecachemodel.cpp
+  cmakebuilddircreator.cpp
 )
 
 set( cmakesettings_UI
   cmakebuildsettings.ui
+  cmakebuilddircreator.ui
 )
 
 remove_definitions( -DQT_NO_STL )

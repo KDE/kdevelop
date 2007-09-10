@@ -58,7 +58,6 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                         {
                             p=new QStandardItem(info[4]);
                             setItem(pos, 4, p);
-                            kDebug(9032) << "loooooooool" << info;
                         }
                         else
                         {
@@ -75,7 +74,6 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                 {
                     lineItems[0]->setText(lineItems[0]->text()+"-"+info[2]);
                 }
-                kDebug(9032) << "inserting " << lineItems;
                 insertRow(currentIdx, lineItems);
                 m_variablePos[info[1]]=currentIdx;
                 currentIdx++;

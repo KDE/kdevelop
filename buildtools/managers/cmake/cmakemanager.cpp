@@ -119,10 +119,9 @@ CMakeProjectManager::~CMakeProjectManager()
 
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {
-    Q_ASSERT(dynamic_cast<KDevelop::ProjectItem*>(item));
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
-    KUrl path = group.readEntry("Build Dir");
+    KUrl path = group.readEntry("CurrentBuildDir");
 //     KUrl projectPath = item->project()->folder();
 
     kDebug(9032) << "Build folder: " << path;
@@ -168,7 +167,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     m_vars.remove("CMAKE_CURRENT_SOURCE_DIR");
     m_vars.remove("CMAKE_CURRENT_BINARY_DIR");
 
-    if(folder->text()=="/")
+    if(folder->text()=="/" && !v.projectName().isEmpty())
     {
         folder->setText(v.projectName());
     }
@@ -198,7 +197,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         }
         directories.append(path);
     }
-    folder->setIncludeList(directories);
+    folder->setIncludeDirectories(directories);
 
     foreach ( QString t, v.targets())
     {
@@ -208,6 +207,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
             foreach( QString sFile, v.targetDependencies(t) )
             {
+                if(sFile.isEmpty())
+                    continue;
                 KUrl sourceFile = folder->url();
                 sourceFile.adjustPath( KUrl::AddTrailingSlash );
                 sourceFile.addPath( sFile );

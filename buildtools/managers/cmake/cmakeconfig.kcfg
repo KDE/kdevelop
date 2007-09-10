@@ -3,15 +3,9 @@
 <kcfg>
   <kcfgfile arg="true"/>
   <group name="CMake">
-    <entry name="installPrefix" key="Prefix" type="Url">
-    </entry>
-    <entry name="buildFolder" key="Build Dir" type="Url">
-    </entry>
-    <entry name="buildType" key="Build Type" type="String">
-    </entry>
-    <entry name="generator" key="Generator" type="String">
-    </entry>
-    <entry name="cmakebin" key="CMake Binary" type="Url">
-    </entry>
+    <entry name="buildDirs" key="BuildDirs" type="StringList" />
+    <entry name="currentBuildDir" key="CurrentBuildDir" type="Url" />
+    
+    <entry name="lastCMakeBin" key="LastCMakeBin" type="Url" />
   </group>
 </kcfg>

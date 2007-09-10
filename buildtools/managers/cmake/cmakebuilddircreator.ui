@@ -1,0 +1,215 @@
+<ui version="4.0" >
+ <class>CMakeBuildDirCreator</class>
+ <widget class="QDialog" name="CMakeBuildDirCreator" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>536</width>
+    <height>308</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Build Directory Creator</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label_5" >
+     <property name="text" >
+      <string>CMake &amp;Binary:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+     </property>
+     <property name="buddy" >
+      <cstring>cmakeBin</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="KUrlRequester" name="cmakeBin" />
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>&amp;Build Directory:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+     </property>
+     <property name="buddy" >
+      <cstring>buildFolder</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="KUrlRequester" name="buildFolder" />
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>&amp;Installation Prefix:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+     </property>
+     <property name="buddy" >
+      <cstring>installPrefix</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="KUrlRequester" name="installPrefix" />
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Build &amp;type:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+     </property>
+     <property name="buddy" >
+      <cstring>buildType</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QComboBox" name="buildType" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+     <property name="currentIndex" >
+      <number>-1</number>
+     </property>
+     <item>
+      <property name="text" >
+       <string>debug</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>release</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>RelWithDebInfo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>MinSizeRel</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="label_4" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>Generator:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+     </property>
+     <property name="buddy" >
+      <cstring>generator</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QComboBox" name="generator" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QPushButton" name="run" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>Run</string>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="5" column="1" >
+    <widget class="QTextEdit" name="cmakeOutput" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" >
+    <widget class="QLabel" name="status" >
+     <property name="text" >
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>CMakeBuildDirCreator</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>266</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>CMakeBuildDirCreator</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>334</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

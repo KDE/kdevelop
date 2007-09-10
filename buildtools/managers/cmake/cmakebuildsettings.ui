@@ -6,118 +6,27 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>472</height>
+    <height>393</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string/>
   </property>
   <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label_5" >
-     <property name="text" >
-      <string>CMake binary:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1" >
-    <widget class="KUrlRequester" name="kcfg_cmakebin" />
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Installation Prefix:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="KUrlRequester" name="kcfg_installPrefix" />
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
-      <string>Build directory:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="KUrlRequester" name="kcfg_buildFolder" />
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
-      <string>Build type:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QComboBox" name="kcfg_buildType" >
-     <property name="editable" >
-      <bool>true</bool>
-     </property>
-     <property name="currentIndex" >
-      <number>0</number>
-     </property>
-     <item>
-      <property name="text" >
-       <string>debug</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>release</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>debugfull</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>RelWithDebInfo</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>MinSizeRel</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="label_4" >
-     <property name="enabled" >
-      <bool>false</bool>
+    <widget class="QPushButton" name="addBuildDir" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
      <property name="text" >
-      <string>Generator:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+      <string>Add</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
-    <widget class="QComboBox" name="kcfg_generator" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="2" >
+   <item row="1" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Cache Values</string>
@@ -163,14 +72,16 @@
      </layout>
     </widget>
    </item>
+   <item row="0" column="0" >
+    <widget class="KComboBox" name="kcfg_buildDirs" />
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
-   <container>1</container>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

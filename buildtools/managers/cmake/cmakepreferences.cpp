@@ -25,8 +25,10 @@
 #include <kpluginloader.h>
 
 #include "ui_cmakebuildsettings.h"
+#include "cmakebuilddircreator.h"
 #include "cmakeconfig.h"
 #include <KUrl>
+#include <QFile>
 
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
@@ -42,34 +44,56 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
 
     addConfig( CMakeSettings::self(), w );
 
-    load();
-    connect(m_prefsUi->kcfg_buildFolder, SIGNAL(textChanged(const QString& )),
+    connect(m_prefsUi->kcfg_buildDirs, SIGNAL(currentIndexChanged(const QString& )),
             this, SLOT(buildDirChanged( const QString & )));
     connect(m_prefsUi->cacheList, SIGNAL(clicked ( const QModelIndex & ) ),
             this, SLOT(listSelectionChanged ( const QModelIndex & )));
     connect(m_prefsUi->showInternal, SIGNAL( stateChanged ( int ) ),
             this, SLOT(showInternal ( int )));
-    connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
-            this, SLOT( cacheEdited( QStandardItem * ) ));
-    
+    connect(m_prefsUi->addBuildDir, SIGNAL(pressed()),
+            this, SLOT(createBuildDir()));
     showInternal(m_prefsUi->showInternal->checkState());
+    m_srcFolder=KUrl(args[0].toString());
+    m_srcFolder=m_srcFolder.upUrl();
+    
+    m_cfg = KSharedConfig::openConfig(args[1].toString());
+//     kDebug(9032) << "cfgs" << args;
+    load();
 }
 
 CMakePreferences::~CMakePreferences()
-{
-}
+{}
 
 void CMakePreferences::load()
 {
-    ProjectKCModule<CMakeSettings>::load();
+    //We do not want it to retrieve and save info for us
+//     ProjectKCModule<CMakeSettings>::load();
 //     kDebug(9032) << "********loading";
-    updateCache(m_prefsUi->kcfg_buildFolder->url());
+
+    KConfigGroup group(m_cfg.data(), "CMake");
+    QStringList bDirs=group.readPathListEntry("BuildDirs");
+    m_prefsUi->kcfg_buildDirs->addItems(bDirs);
+    
+    QString current=group.readEntry("CurrentBuildDir");
+    m_prefsUi->kcfg_buildDirs->setCurrentIndex(0); //FIXME should use current
+    kDebug(9032) << "builddirs" << bDirs;
 }
 
 void CMakePreferences::save()
 {
-    ProjectKCModule<CMakeSettings>::save();
+    //We do not want it to retrieve and save info for us
+//     ProjectKCModule<CMakeSettings>::save();
 //     kDebug(9032) << "*******saving";
+    QStringList bDirs;
+    int count=m_prefsUi->kcfg_buildDirs->model()->rowCount();
+    for(int i=0; i<count; i++)
+    {
+        bDirs += m_prefsUi->kcfg_buildDirs->itemText(i);
+    }
+    
+    KConfigGroup group(m_cfg.data(), "CMake");
+    group.writeEntry("BuildDirs", bDirs);
+    group.writeEntry("CurrentBuildDir", m_prefsUi->kcfg_buildDirs->currentText());
     m_currentModel->writeDown();
 }
 
@@ -90,6 +114,8 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         m_prefsUi->cacheList->hideColumn(3);
         m_prefsUi->cacheList->hideColumn(4);
         m_prefsUi->cacheList->setEnabled(true);
+        connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
+                this, SLOT( cacheEdited( QStandardItem * ) ));
     }
     else
     {
@@ -134,9 +160,21 @@ void CMakePreferences::showInternal(int state)
     }
 }
 
-void CMakePreferences::buildDirChanged(const QString &)
+void CMakePreferences::buildDirChanged(const QString &str)
 {
-    m_prefsUi->kcfg_buildFolder->url();
+    updateCache(str);
+    emit changed(true);
+}
+
+void CMakePreferences::createBuildDir()
+{
+    CMakeBuildDirCreator bdCreator(m_srcFolder.toLocalFile(), this);
+    //TODO: if there is information, use it to initialize the dialog
+    if(bdCreator.exec()) {
+        m_prefsUi->kcfg_buildDirs->addItem(bdCreator.buildFolder().toLocalFile());
+        emit changed(true);
+    }
+    //TODO: Save it for next runs
 }
 
 #include "cmakepreferences.moc"
