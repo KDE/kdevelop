@@ -43,6 +43,10 @@ class VcsMapping;
  * offer functionality that works solely on the server see the
  * IRepositoryVersionControl interface
  *
+ * Note: The showXXX methods <b>always</b> create a GUI element for the result,
+ * while the non-show versions allow to retrieve the result of the action
+ * via the VcsJob class
+ *
  */
 
 class IBasicVersionControl
@@ -155,13 +159,6 @@ public:
                             RecursionMode recursion ) = 0;
 
     /**
-     * Shows a dialog asking for a commit message that will check in the changes
-     * of the given file(s)/dir(s) into the repository
-     */
-    virtual VcsJob* showCommit( const QString& message,
-                                const KUrl::List& localLocations,
-                                RecursionMode recursion ) = 0;
-    /**
      * Retrieves a diff between the two locations at the given revisions
      *
      * The QVariant should either be a KUrl, which is assumed to be a local file
@@ -239,6 +236,8 @@ public:
      *
      * The QVariant should either be a KUrl, which is assumed to be a local file
      * or a QString which is assumed to define a repository path
+     *
+     * Note: This might create conflicts in the file(s) that are changed
      */
     virtual VcsJob* merge( const QVariant& localOrRepoLocationSrc,
                            const QVariant& localOrRepoLocationDst,

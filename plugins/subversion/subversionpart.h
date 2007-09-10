@@ -69,10 +69,6 @@ public:
                             const KUrl::List& localLocations,
                             RecursionMode recursion );
 
-    VcsJob* showCommit( const QString& message,
-                                const KUrl::List& localLocations,
-                                RecursionMode recursion );
-
     VcsJob* diff( const QVariant& localOrRepoLocationSrc,
                           const QVariant& localOrRepoLocationDst,
                           const VcsRevision& srcRevision,

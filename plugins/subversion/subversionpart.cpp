@@ -327,27 +327,6 @@ VcsJob* KDevSubversionPart::commit( const QString& message, const KUrl::List& lo
     return svncore()->createCommitJob( localLocations, message, recurse, false );
 }
 
-VcsJob* KDevSubversionPart::showCommit( const QString& message,
-                                        const KUrl::List& localLocations,
-                                        RecursionMode /*recursion*/ )
-{
-    SvnCommitOptionDlg dlg( this, NULL );
-    dlg.setCommitCandidates( localLocations );
-    if( dlg.exec() != QDialog::Accepted )
-        return 0;
-
-    KUrl::List checkedList = dlg.checkedUrls();
-    if( checkedList.count() < 1 )
-        return 0;
-    bool recurse = dlg.recursive();
-    bool keeplocks = dlg.keepLocks();
-    //debug
-    for( QList<KUrl>::iterator it = checkedList.begin(); it!=checkedList.end() ; ++it ){
-        kDebug(9500) << "KDevSubversionPart::commit(KUrl::List&) :" << *it;
-    }
-    return svncore()->createCommitJob( checkedList, message, recurse, keeplocks );
-}
-
 VcsJob* KDevSubversionPart::diff( const QVariant& src,
                 const QVariant& dst,
                 const VcsRevision& srcRevision,

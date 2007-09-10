@@ -61,9 +61,6 @@ public:
     virtual KDevelop::VcsJob* commit( const QString& message,
                 const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* showCommit( const QString& message,
-                const KUrl::List& localLocations,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
     virtual KDevelop::VcsJob* diff( const QVariant& localOrRepoLocationSrc,
                 const QVariant& localOrRepoLocationDst,
                 const KDevelop::VcsRevision& srcRevision,

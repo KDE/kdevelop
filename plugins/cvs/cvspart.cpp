@@ -260,7 +260,7 @@ void CvsPart::slotCommit()
     KUrl::List urls;
     urls << url;
 
-    KDevelop::VcsJob* j = showCommit("", urls, KDevelop::IBasicVersionControl::Recursive);
+    KDevelop::VcsJob* j = commit("", urls, KDevelop::IBasicVersionControl::Recursive);
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
@@ -462,26 +462,22 @@ KDevelop::VcsJob * CvsPart::update(const KUrl::List & localLocations, const KDev
 
 KDevelop::VcsJob * CvsPart::commit(const QString & message, const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
+    QString msg = message;
+    if( msg.isEmpty() )
+    {
+        CommitDialog dlg;
+	if( dlg.exec() == QDialog::Accepted )
+	{
+            msg = dlg.message();
+	}
+    }
     ///@todo find a common base directory for the files
     QFileInfo info( localLocations[0].toLocalFile() );
 
     CvsJob* job = d->m_proxy->commit( info.absolutePath(),
                                       localLocations,
-                                      message);
+                                      msg);
     return job;
-}
-
-KDevelop::VcsJob * CvsPart::showCommit(const QString & message, const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
-{
-    CommitDialog dlg;
-    if (dlg.exec() == QDialog::Accepted) {
-        ///@todo find a common base directory for the files
-        QFileInfo info( localLocations[0].toLocalFile() );
-
-        CvsJob* job = d->m_proxy->commit( info.absolutePath(), localLocations, dlg.message() );
-        return job;
-    }
-    return NULL;
 }
 
 KDevelop::VcsJob * CvsPart::showDiff(const QVariant & localOrRepoLocationSrc, const QVariant & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision)
