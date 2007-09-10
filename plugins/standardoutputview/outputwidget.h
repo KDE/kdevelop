@@ -39,6 +39,7 @@ class OutputWidget : public KTabWidget
         OutputWidget(QWidget* parent, StandardOutputView* view);
     public Q_SLOTS:
         void changeModel( int id );
+        void changeDelegate( int id );
         void removeView( int id );
         void closeActiveView();
         void selectNextItem();

@@ -23,11 +23,11 @@
 #include "outputwidget.h"
 
 #include <QtCore/QList>
-
 #include <QtDesigner/QExtensionFactory>
 #include <QtCore/QAbstractItemModel>
-
 #include <QtGui/QAction>
+#include <QtGui/QAbstractItemDelegate>
+
 #include <icore.h>
 #include <iuicontroller.h>
 
@@ -52,6 +52,8 @@ public:
                  m_part, SIGNAL( viewRemoved( int ) ) );
         QObject::connect( m_part, SIGNAL( removeView( int ) ),
                           l, SLOT( removeView( int ) ) );
+        QObject::connect( l, SIGNAL( viewRemoved( int ) ),
+                          m_part, SLOT( removeViewData( int ) ) );
 //         QObject::connect( l, SIGNAL( activated(const QModelIndex&) ),
 //                  m_part, SIGNAL(activated(const QModelIndex&)) );
         QObject::connect( m_part, SIGNAL(selectNextItem()), l, SLOT(selectNextItem()) );
@@ -71,6 +73,7 @@ class StandardOutputViewPrivate
 public:
     StandardOutputViewViewFactory* m_factory;
     QMap<int, QAbstractItemModel* > m_models;
+    QMap<int, QAbstractItemDelegate* > m_delegates;
     QMap<int, QString> m_titles;
     QList<int> m_ids;
     QMap<int, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
@@ -138,7 +141,17 @@ void StandardOutputView::setModel( int id, QAbstractItemModel* model )
         d->m_models[id] = model;
         emit modelChanged( id );
     }else
-        kDebug(9500) << "AAAH id is not known:" << id;
+        kDebug(9500) << "Trying to set model on unknown view-id:" << id;
+}
+
+void StandardOutputView::setDelegate( int id, QAbstractItemDelegate* delegate )
+{
+    if( d->m_ids.contains( id ) )
+    {
+        d->m_delegates[id] = delegate;
+        emit delegateChanged( id );
+    }else
+        kDebug(9500) << "Trying to set delegate on unknown view-id:" << id;
 }
 
 QList<int> StandardOutputView::registeredViews() const
@@ -155,6 +168,15 @@ QAbstractItemModel* StandardOutputView::registeredModel( int id ) const
     return 0;
 }
 
+QAbstractItemDelegate* StandardOutputView::registeredDelegate( int id ) const
+{
+    if( d->m_delegates.contains( id ) )
+    {
+        return d->m_delegates[id];
+    }
+    return 0;
+}
+
 QString StandardOutputView::registeredTitle( int id ) const
 {
     if( d->m_titles.contains( id ) )
@@ -162,6 +184,31 @@ QString StandardOutputView::registeredTitle( int id ) const
         return d->m_titles[id];
     }
     return QString();
+}
+
+void StandardOutputView::removeViewData( int id )
+{
+    if( d->m_models.contains( id ) )
+    {
+        d->m_models.remove(id);
+    }
+    if( d->m_delegates.contains( id ) )
+    {
+        d->m_delegates.remove( id );
+    }
+    if( d->m_titles.contains( id ) )
+    {
+        d->m_titles.remove( id );
+    }
+    if( d->m_behaviours.contains( id ) )
+    {
+        d->m_behaviours.remove( id );
+    }
+    if( d->m_ids.contains( id ) )
+    {
+        d->m_ids.removeAll( id );
+    }
+
 }
 
 #include "standardoutputview.moc"

@@ -30,6 +30,7 @@ template <typename T> class QList;
 class QAbstractItemModel;
 class QString;
 class QModelIndex;
+class QAbstractItemDelegate;
 
 /**
 @author Andreas Pakulat
@@ -47,16 +48,21 @@ public:
                           KDevelop::IOutputView::CloseBehaviour behaviour = AllowUserClose );
     void setModel( int id, QAbstractItemModel* );
 
+    void setDelegate( int id, QAbstractItemDelegate* );
+
     QAbstractItemModel* registeredModel( int ) const;
+    QAbstractItemDelegate* registeredDelegate( int ) const;
     QString registeredTitle( int id ) const;
     QList<int> registeredViews() const;
     KDevelop::IOutputView::CloseBehaviour closeBehaviour( int id ) const;
-
+public Q_SLOTS:
+    void removeViewData( int );
 Q_SIGNALS:
     void activated( const QModelIndex& );
     void selectNextItem();
     void selectPrevItem();
     void modelChanged( int id );
+    void delegateChanged( int id );
     void viewRemoved( int id );
     /**
      * Signal to inform the view to remove one output view

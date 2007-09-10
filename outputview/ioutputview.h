@@ -25,6 +25,7 @@
 
 class QString;
 class QAbstractItemModel;
+class QAbstractItemDelegate;
 
 /**
 @author Andreas Pakulat
@@ -54,13 +55,26 @@ public:
     /**
      * Sets the model of the registered view identified by id to model
      *
+     * This function does _not_ take ownership of the model, the user is
+     * responsible for deleting the model once the view is removed
+     *
      * Does nothing if the id doesn't exist
      */
     virtual void setModel( int id, QAbstractItemModel* model ) = 0;
-    
+
+    /**
+     * Sets the item delegate of the registered view identified by id to @p delegate
+     *
+     * This function does _not_ take ownership of the delegate, the user is
+     * responsible for deleting the delegate once the view is removed
+     *
+     * Does nothing if the id doesn't exist
+     */
+    virtual void setDelegate( int id, QAbstractItemDelegate* model ) = 0;
+
     /**
      * remove a view, don't forget to emit viewRemoved when you implement this
-     * 
+     *
      * @param id identifies the view to remove
      */
     virtual void removeView( int id ) = 0;
@@ -68,7 +82,7 @@ public:
 Q_SIGNALS:
     /**
      * emitted after a view was removed
-     * 
+     *
      * @param id identifies the removed view
      */
     void viewRemoved( int id );

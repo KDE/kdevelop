@@ -23,7 +23,7 @@
 #include "ioutputviewmodel.h"
 
 #include "standardoutputview.h"
-#include <QtGui/QStandardItemModel>
+#include <QtGui/QAbstractItemDelegate>
 #include <QtGui/QItemSelectionModel>
 #include <QtGui/QListView>
 #include <QtGui/QToolButton>
@@ -38,19 +38,47 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
 {
     m_closeButton = new QToolButton( this );
     connect( m_closeButton, SIGNAL( clicked() ),
-             this, SLOT(closeActiveView() ) );
+             this, SLOT( closeActiveView() ) );
     m_closeButton->setIcon( KIcon("tab-remove") );
     m_closeButton->adjustSize();
     m_closeButton->setToolTip( i18n( "Close the currently active output view") );
     setCornerWidget( m_closeButton, Qt::TopRightCorner );
     connect( m_outputView, SIGNAL( modelChanged( int ) ),
              this, SLOT( changeModel( int ) ) );
+    connect( m_outputView, SIGNAL( delegateChanged( int ) ),
+             this, SLOT( changeDelegate( int ) ) );
 
     foreach( int id, m_outputView->registeredViews() )
     {
         changeModel( id );
+        changeDelegate( id );
     }
 
+}
+
+
+void OutputWidget::changeDelegate( int id )
+{
+    kDebug(9500) << "delegate changed for id:" << id;
+    if( m_listviews.contains( id ) )
+        m_listviews[id]->setItemDelegate(m_outputView->registeredDelegate(id));
+    else
+    {
+        kDebug(9500) << "creating listview";
+        QListView* listview = new QListView(this);
+        listview->setModel( m_outputView->registeredModel(id) );
+        listview->setItemDelegate(m_outputView->registeredDelegate(id));
+        listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
+        m_listviews[id] = listview;
+        m_widgetMap[listview] = id;
+//         connect( listview, SIGNAL(activated(const QModelIndex&)),
+//                  this, SIGNAL(activated(const QModelIndex&)));
+        connect( listview, SIGNAL(clicked(const QModelIndex&)),
+                 this, SLOT(activate(const QModelIndex&)));
+        connect( listview, SIGNAL(activated(const QModelIndex&)),
+                 this, SLOT( activate(const QModelIndex&) ) );
+        addTab( listview, m_outputView->registeredTitle(id) );
+    }
 }
 
 void OutputWidget::changeModel( int id )
