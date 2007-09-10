@@ -27,12 +27,12 @@ GrepOutputItem::GrepOutputItem(const QString &fileName, const QString &lineNumbe
     {
         QString formattedTxt = lineNumber + ": " + text;
         setText( formattedTxt );
-        setForeground(KColorScheme().foreground(KColorScheme::LinkText));
+        setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText));
     }
     else
     {
         setText( fileName );
-        setForeground(KColorScheme().foreground(KColorScheme::InactiveText));
+        setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::InactiveText));
     }
 }
 

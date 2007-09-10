@@ -134,12 +134,12 @@ QStandardItem* ErrorFilter::processAndCreate( const QString& line )
         {
             //TODO: Maybe using KColorUtils::mix() is better here, the default NeutralText is a blue-greenish color and doesn't really fit, IMHO
             ret = new MakeWarningItem( line );
-            ret->setForeground(KColorScheme().foreground(KColorScheme::NeutralText));
+            ret->setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::NeutralText));
         }
         else // case of real error
         {
             ret = new MakeErrorItem( line );
-            ret->setForeground(KColorScheme().foreground(KColorScheme::NegativeText));
+            ret->setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::NegativeText));
         }
 
         ret->errorText = text;
@@ -280,7 +280,7 @@ QStandardItem* MakeActionFilter::processAndCreate( const QString& line )
             QStandardItem *actionItem = new QStandardItem( txt );
             if( format.action() == i18n("built") )
             {
-                actionItem->setForeground( KColorScheme().foreground(KColorScheme::PositiveText) );
+                actionItem->setForeground( KColorScheme(QPalette::Active).foreground(KColorScheme::PositiveText) );
             } else
             {
 
