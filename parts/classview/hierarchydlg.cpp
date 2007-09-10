@@ -96,25 +96,30 @@ HierarchyDialog::~HierarchyDialog()
 void HierarchyDialog::save()
 {
     KURLRequesterDlg dlg(QString::null, this, "save_inheritance");
-    dlg.fileDialog()->setFilter("image/png image/jpeg image/bmp");
+    dlg.fileDialog()->setFilter("image/png image/jpeg image/bmp image/svg+xml");
     dlg.fileDialog()->setOperationMode( KFileDialog::Saving );
     dlg.fileDialog()->setMode( KFile::File | KFile::LocalOnly );
     dlg.urlRequester()->setMode( KFile::File | KFile::LocalOnly );
     if(dlg.exec() && dlg.selectedURL().isLocalFile())
     {
 	QFileInfo fi(dlg.selectedURL().pathOrURL());
-	if( fi.extension() == "png" || fi.extension() == "jpeg" || fi.extension() == "jpg" || fi.extension() == "bmp")
-	{
-            QPixmap out = digraph->pixmap();
-	    QString format = fi.extension().upper();
-	    if( format == "JPG" )
-                format = "JPEG";
-	    kdDebug(9003) << "Storing inheritance diagram to " << fi.absFilePath() << " using pixmap size: " << out.size() << endl;
-            out.save(fi.absFilePath(), format.ascii(), 75);
-	}else
-	{
-            KMessageBox::sorry(this, i18n("Couldn't store image %1. Filename not recognizes, only .jpg, .png and .bmp are supported").arg(fi.absFilePath()), i18n("Couldn't store image"));
-	}
+        KDevLanguageSupport *ls = m_part->languageSupport();
+        for (QMap<QString, ClassDom>::const_iterator it = classes.begin(); it != classes.end(); ++it)
+        {
+            kdDebug(9003) << "Adding class to graph: " << it.key() << endl;
+            QString formattedName = ls->formatClassName(it.key());
+            QStringList baseClasses = it.data()->baseClassList();
+            for (QStringList::const_iterator bit = baseClasses.begin(); bit != baseClasses.end(); ++bit)
+            {
+                QMap<QString, QString>::const_iterator baseIt = uclasses.find(*bit);
+                if (baseIt != uclasses.end())
+                {
+                    QString formattedParentName = ls->formatClassName(baseIt.data());
+                    digraph->addEdge(formattedParentName, formattedName);
+                }
+            }
+        }
+        digraph->process(fi.absFilePath(), fi.extension());
     }
 }
 

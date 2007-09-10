@@ -15,6 +15,7 @@
 #include <qptrlist.h>
 #include <qscrollview.h>
 #include <qstringlist.h>
+#include <qimage.h>
 
 class DigraphNode;
 class DigraphEdge;
@@ -29,11 +30,10 @@ public:
     ~DigraphView();
 
     void addEdge(const QString &name1, const QString &name2);
-    void process();
+    void process(const QString& file = "", const QString& ext = "");
     void clear();
     void setSelected(const QString &name);
     void ensureVisible(const QString &name);
-    QPixmap pixmap();
     
 signals:
     void selected(const QString &name);

@@ -221,7 +221,7 @@ void DigraphView::parseDotResults(const QStringList &list)
 }
 
 
-void DigraphView::process()
+void DigraphView::process( const QString& file, const QString& ext )
 {
     QString cmd = KGlobal::dirs()->findExe("dot");
     if (cmd.isEmpty()) {
@@ -243,8 +243,20 @@ void DigraphView::process()
     ifile.close();
 
     KProcess proc;
-    proc << cmd << "-Tplain" << ifile.name() << "-o" << ofile.name();
+    if( !file.isEmpty() && !ext.isEmpty() )
+    {
+        proc << cmd << QString("-T")+ext << ifile.name() << "-o" << file;
+	kdDebug() << "Executing: " << cmd <<" "<<QString("-T")+ext <<" "<< ifile.name() << "-o"<<file << endl;
+    }else
+    {
+        proc << cmd << "-Tplain" << ifile.name() << "-o" << ofile.name();
+    }
     proc.start(KProcess::Block);
+
+    if( !file.isEmpty() && !ext.isEmpty() ) 
+    {
+        return;
+    }
 
     QTextStream &os = *ofile.textStream();
     while (!os.atEnd())
@@ -257,15 +269,6 @@ void DigraphView::process()
     if (nodes.first())
         selNode = nodes.first();
     viewport()->update();
-}
-
-QPixmap DigraphView::pixmap()
-{
-    QPixmap pix(width,height);
-    kdDebug(9003) << "drawing inheritance diagram to pixmap: " << width << " " << height << " " << pix.size() << endl;
-    QPainter p(&pix);
-    drawContents(&p, 0, 0, width, height);
-    return pix;
 }
 
 void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int cliph)
