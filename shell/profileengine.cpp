@@ -223,12 +223,12 @@ void ProfileEngine::diffProfiles(PluginController::PluginType offerType, const Q
     QStringList offers1List;
     for (KPluginInfo::List::const_iterator it = offers1.constBegin();
         it != offers1.constEnd(); ++it)
-        offers1List.append(it->desktopEntryPath());
+        offers1List.append(it->entryPath());
     QMap<QString, KPluginInfo> offers2List;
 
     for (KPluginInfo::List::const_iterator it = offers2.constBegin();
         it != offers2.constEnd(); ++it)
-        offers2List[it->desktopEntryPath()] = *it;
+        offers2List[it->entryPath()] = *it;
 
 //    kDebug(9501) << "OLD PROFILE:" << offers1List;
 //    kDebug(9501) << "NEW PROFILE:" << offers2List;
