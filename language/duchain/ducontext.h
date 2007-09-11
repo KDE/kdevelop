@@ -398,7 +398,7 @@ protected:
    * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.
    * */
   void applyAliases(const QList<QualifiedIdentifier>& identifier, QList<QualifiedIdentifier>& targetIdentifiers, const KTextEditor::Cursor& position, bool canBeNamespace) const;
-  
+
 private:
   class DUContextPrivate* const d;
   friend class DUContextPrivate;

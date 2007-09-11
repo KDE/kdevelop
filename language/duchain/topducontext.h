@@ -75,7 +75,7 @@ public:
    *
    * \note you must be holding a read but not a write chain lock when you access this function.
    */
-  bool imports(TopDUContext* origin, const KTextEditor::Cursor& position) const;
+  virtual bool imports(TopDUContext* origin, const KTextEditor::Cursor& position) const;
 
   enum Flags {
     NoFlags = 0,
@@ -95,6 +95,9 @@ public:
    * */
   Flags flags() const;
   void setFlags(Flags f);
+
+  virtual void addImportedParentContext(DUContext* context, bool anonymous=false);
+  virtual void removeImportedParentContext(DUContext* context);
   
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;

@@ -31,6 +31,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+
 class TopDUContextPrivate
 {
 public:
@@ -40,21 +41,43 @@ public:
   }
   bool imports(TopDUContext* origin, int depth) const
   {
+    if(depth == 0) {
+      QHash<TopDUContext*, bool>::const_iterator it = m_importsCache.find(origin);
+      if(it != m_importsCache.end()) {
+        return *it;
+      }
+    }
+    
     if (depth == 100) {
       kWarning() << "Imported context list too deep! Infinite recursion?" ;
       return false;
     }
 
-    foreach (DUContextPointer context, m_ctxt->importedParentContexts()) {
-      Q_ASSERT(dynamic_cast<TopDUContext*>(context.data()));
-      TopDUContext* top = static_cast<TopDUContext*>(context.data());
-      if (top == origin)
+    const QList<DUContextPointer>& importedContexts(m_ctxt->importedParentContexts());
+    QList<DUContextPointer>::const_iterator end = importedContexts.end();
+    for( QList<DUContextPointer>::const_iterator it = importedContexts.begin(); it != end; ++it) {
+      if(!(*it)) {
+        kWarning() << "Imported context was invalidated";
+        continue;
+      }
+      Q_ASSERT(dynamic_cast<TopDUContext*>((*it).data()));
+      TopDUContext* top = static_cast<TopDUContext*>((*it).data());
+      if (top == origin) {
+        if(depth == 0) {
+          m_importsCache[origin] = true;
+        }
         return true;
+      }
 
-      if (top->d->imports(origin, depth + 1))
+      if (top->d->imports(origin, depth + 1)) {
+        if(depth == 0) {
+          m_importsCache[origin] = true;
+        }
         return true;
+      }
     }
 
+    m_importsCache[origin] = false;
     return false;
   }
   bool m_hasUses  : 1;
@@ -63,6 +86,7 @@ public:
   TopDUContext::Flags m_flags;
   TopDUContext* m_ctxt;
   ParsingEnvironmentFilePointer m_file;
+  mutable QHash<TopDUContext*, bool> m_importsCache;
 };
 
 TopDUContext::TopDUContext(KTextEditor::Range* range, ParsingEnvironmentFile* file)
@@ -304,6 +328,16 @@ bool TopDUContext::imports(TopDUContext * origin, const KTextEditor::Cursor& pos
 
   return d->imports(origin, 0);
  }
+
+void TopDUContext::addImportedParentContext(DUContext* context, bool anonymous) {
+  d->m_importsCache.remove(static_cast<TopDUContext*>(context));
+  DUContext::addImportedParentContext(context, anonymous);
+}
+
+void TopDUContext::removeImportedParentContext(DUContext* context) {
+  d->m_importsCache.remove(static_cast<TopDUContext*>(context));
+  DUContext::removeImportedParentContext(context);
+}
  
 /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
 bool TopDUContext::inDuChain() const {
