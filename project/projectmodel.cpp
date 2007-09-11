@@ -323,13 +323,13 @@ void ProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
     d->m_includeDirs = dirList;
 }
 
-const KUrl::List& ProjectBuildFolderItem::includeDirectories() const
+KUrl::List ProjectBuildFolderItem::includeDirectories() const
 {
     Q_D(const ProjectBuildFolderItem);
     return d->m_includeDirs;
 }
 
-const QHash<QString, QString>& ProjectBuildFolderItem::environment() const
+QHash<QString, QString> ProjectBuildFolderItem::environment() const
 {
     Q_D(const ProjectBuildFolderItem);
     return d->m_env;

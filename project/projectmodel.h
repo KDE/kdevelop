@@ -153,13 +153,13 @@ public:
      * @return Return a list of directories that are used as include directories
      * for all targets in this directory.
      */
-    const KUrl::List& includeDirectories() const;
+    KUrl::List includeDirectories() const;
 
     /**
      * @return Returns an association of environment variables which have been defined
      * for all targets in this directory.
      */
-    const QHash<QString, QString>& environment() const;
+    QHash<QString, QString> environment() const;
 
     virtual void setIcon();
 
@@ -210,18 +210,18 @@ public:
      * Return a list of directories that are used as additional include directories
      * specific to this target.
      */
-    virtual const KUrl::List& includeDirectories() const = 0;
+    virtual KUrl::List includeDirectories() const = 0;
 
     /**
      * Returns an association of additional environment variables which have been defined
      * specifically for this target.
      */
-    virtual const QHash<QString, QString>& environment() const = 0;
+    virtual QHash<QString, QString> environment() const = 0;
 
     /**
      * Returns a list of defines passed to the compiler with -D(macro) (value)
      */
-    virtual const QList<QPair<QString, QString> >& defines() const = 0;
+    virtual QList<QPair<QString, QString> > defines() const = 0;
 protected:
     ProjectTargetItem( ProjectTargetItemPrivate& );
 private:
