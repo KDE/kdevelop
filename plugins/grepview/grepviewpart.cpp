@@ -13,6 +13,7 @@
 #include "grepviewpart.h"
 #include "grepdialog.h"
 #include "grepoutputmodel.h"
+#include "grepoutputdelegate.h"
 
 #include <QWhatsThis>
 #include <QList>
@@ -327,6 +328,7 @@ void GrepViewPart::searchActivated()
         validProcs[2]->setStandardOutputProcess( validProcs[3] );
 
     GrepOutputModel *model = new GrepOutputModel(this);
+    GrepOutputDelegate* delegate = new GrepOutputDelegate(this);
     ProcessLineMaker *lineMaker = new ProcessLineMaker( xargsProc );
 
     // needed because processlinemaker is not a child of KProcess.
@@ -347,6 +349,7 @@ void GrepViewPart::searchActivated()
 
     int id = m_view->registerView( m_grepdlg->patternString() );
     m_view->setModel( id, model );
+    m_view->setDelegate( id, delegate );
 
     // At first line, print out actual command invocation as if it was run via shell.
     QString printCmd;

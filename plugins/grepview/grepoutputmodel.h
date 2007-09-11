@@ -36,6 +36,11 @@ class GrepOutputModel : public QStandardItemModel, public KDevelop::IOutputViewM
     Q_OBJECT
 
 public:
+    enum ItemType
+    {
+        Text,
+        File
+    };
     explicit GrepOutputModel( GrepViewPart *part );
     ~GrepOutputModel();
 
