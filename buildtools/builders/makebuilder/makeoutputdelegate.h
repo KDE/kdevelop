@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,41 +18,21 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef MAKEOUTPUTMODEL_H
-#define MAKEOUTPUTMODEL_H
+#ifndef MAKEOUTPUTDELEGATE_H
+#define MAKEOUTPUTDELEGATE_H
 
-#include <QtGui/QStandardItemModel>
-#include <ioutputviewmodel.h>
+#include <QtGui/QItemDelegate>
+#include <kcolorscheme.h>
 
-class QObject;
-class MakeActionFilter;
-class ErrorFilter;
-class MakeBuilder;
-
-class MakeOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
+class MakeOutputDelegate : public QItemDelegate
 {
-    Q_OBJECT
-public:
-    enum OutputItemType{
-        MakeError,
-        MakeWarning,
-        MakeBuilt
-    };
-    explicit MakeOutputModel( MakeBuilder *builder, QObject* parent = 0 );
-
-    // IOutputViewModel interfaces
-    void activate( const QModelIndex& index );
-    QModelIndex nextHighlightIndex( const QModelIndex &current );
-    QModelIndex previousHighlightIndex( const QModelIndex &current );
-
-public slots:
-    void addStandardError( const QStringList& );
-    void addStandardOutput( const QStringList& );
-
+  public:
+    MakeOutputDelegate( QObject* );
+    void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
 private:
-    MakeActionFilter* actionFilter;
-    ErrorFilter* errorFilter;
-    MakeBuilder *m_builder;
+    KStatefulBrush errorBrush;
+    KStatefulBrush warningBrush;
+    KStatefulBrush builtBrush;
 };
 
 #endif

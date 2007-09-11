@@ -49,6 +49,8 @@
 
 #include <environmentgrouplist.h>
 
+#include "makeoutputdelegate.h"
+
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 K_EXPORT_PLUGIN(MakeBuilderFactory("kdevmakebuilder"))
 
@@ -85,6 +87,7 @@ void MakeBuilder::cleanupModel( int id )
         kDebug(9038) << "do some cleanup";
         MakeOutputModel* model = m_models[id];
         KDevelop::CommandExecutor* cmd = m_commands[id];
+        MakeOutputDelegate* delegate = m_delegates[id];
         foreach( KDevelop::IProject* p, m_ids.keys() )
         {
             if( m_ids[p] == id )
@@ -93,12 +96,14 @@ void MakeBuilder::cleanupModel( int id )
                 break;
             }
         }
+        m_delegates.remove(id);
         m_models.remove(id);
         m_commands.remove(id);
         m_items.remove(id);
         errorMapper->removeMappings(cmd);
         successMapper->removeMappings(cmd);
         delete model;
+        delete delegate;
         delete cmd;
     }
 }
@@ -133,7 +138,9 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
                 id = view->registerView(i18n("Make: %1", dom->project()->name() ) );
                 m_ids[dom->project()] = id;
                 m_models[id] = new MakeOutputModel(this, this);
+                m_delegates[id] = new MakeOutputDelegate(this);
                 view->setModel(id, m_models[id]);
+                view->setDelegate(id, m_delegates[id]);
             }
             m_models[id]->appendRow( new QStandardItem( cmd.join(" ") ) );
 

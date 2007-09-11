@@ -35,6 +35,7 @@ class QSignalMapper;
 class QString;
 class QStandardItem;
 class KUrl;
+class MakeOutputDelegate;
 
 namespace KDevelop {
 class ProjectBaseItem;
@@ -93,6 +94,7 @@ private:
     QMap< int, KDevelop::CommandExecutor* > m_commands;
     QMap< int, KDevelop::ProjectBaseItem* > m_items;
     QMap< int, MakeOutputModel* > m_models;
+    QMap< int, MakeOutputDelegate* > m_delegates;
     QSignalMapper* errorMapper;
     QSignalMapper* successMapper;
 };

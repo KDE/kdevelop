@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,43 +18,35 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef MAKEOUTPUTMODEL_H
-#define MAKEOUTPUTMODEL_H
+#include "makeoutputdelegate.h"
 
-#include <QtGui/QStandardItemModel>
-#include <ioutputviewmodel.h>
+#include "makeoutputmodel.h"
+#include <QtGui/QPainter>
 
-class QObject;
-class MakeActionFilter;
-class ErrorFilter;
-class MakeBuilder;
+#include <kdebug.h>
 
-class MakeOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
+MakeOutputDelegate::MakeOutputDelegate( QObject* parent )
+    : QItemDelegate(parent), errorBrush( KColorScheme::View, KColorScheme::NegativeText ),
+      warningBrush( KColorScheme::View, KColorScheme::NeutralText ),
+      builtBrush( KColorScheme::View, KColorScheme::PositiveText )
 {
-    Q_OBJECT
-public:
-    enum OutputItemType{
-        MakeError,
-        MakeWarning,
-        MakeBuilt
-    };
-    explicit MakeOutputModel( MakeBuilder *builder, QObject* parent = 0 );
+}
 
-    // IOutputViewModel interfaces
-    void activate( const QModelIndex& index );
-    QModelIndex nextHighlightIndex( const QModelIndex &current );
-    QModelIndex previousHighlightIndex( const QModelIndex &current );
-
-public slots:
-    void addStandardError( const QStringList& );
-    void addStandardOutput( const QStringList& );
-
-private:
-    MakeActionFilter* actionFilter;
-    ErrorFilter* errorFilter;
-    MakeBuilder *m_builder;
-};
-
-#endif
+void MakeOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QStyleOptionViewItem opt = option;
+    QVariant status = index.data(Qt::UserRole+1);
+    if( status.isValid() && status.toInt() == MakeOutputModel::MakeError )
+    {
+        opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
+    }else if( status.isValid() && status.toInt() == MakeOutputModel::MakeWarning )
+    {
+        opt.palette.setBrush( QPalette::Text, warningBrush.brush( option.palette ) );
+    }else if( status.isValid() && status.toInt() == MakeOutputModel::MakeBuilt )
+    {
+        opt.palette.setBrush( QPalette::Text, builtBrush.brush( option.palette ) );
+    }
+    QItemDelegate::paint(painter, opt, index);
+}
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

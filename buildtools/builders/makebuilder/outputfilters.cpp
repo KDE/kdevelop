@@ -19,7 +19,7 @@
 #include <QString>
 #include <QPalette>
 #include <klocale.h>
-#include <kcolorscheme.h>
+#include "makeoutputmodel.h"
 #include <QFont>
 ////////////////////////////////////////////////////////
 
@@ -134,12 +134,11 @@ QStandardItem* ErrorFilter::processAndCreate( const QString& line )
         {
             //TODO: Maybe using KColorUtils::mix() is better here, the default NeutralText is a blue-greenish color and doesn't really fit, IMHO
             ret = new MakeWarningItem( line );
-            ret->setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::NeutralText));
         }
         else // case of real error
         {
             ret = new MakeErrorItem( line );
-            ret->setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::NegativeText));
+//             ret->setForeground(KColorScheme(QPalette::Active).foreground(KColorScheme::NegativeText));
         }
 
         ret->errorText = text;
@@ -233,11 +232,11 @@ MakeActionFilter::MakeActionFilter()
 
     m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", "linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 );
     //can distcc link too ?
-    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", 
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable",
                                "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)");
-    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", 
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable",
                                "linking"), 1, 2, "^linking (.*)" ); //unsermaker
-    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable", 
+    m_actlist << ActionFormat( i18nc("Linking object files into a library or executable",
                                "linking"), -1, 1, "^Linking .* module (.*)" ); //cmake
     m_actlist << ActionFormat( i18nc("Linking object files into a library or executable",
                                "linking"), -1, 1, "^Linking (.*)" ); //cmake
@@ -280,7 +279,7 @@ QStandardItem* MakeActionFilter::processAndCreate( const QString& line )
             QStandardItem *actionItem = new QStandardItem( txt );
             if( format.action() == i18n("built") )
             {
-                actionItem->setForeground( KColorScheme(QPalette::Active).foreground(KColorScheme::PositiveText) );
+                actionItem->setData( MakeOutputModel::MakeBuilt );
             } else
             {
 

@@ -21,6 +21,7 @@
 #include "icore.h"
 #include "makebuilder.h"
 #include <ktexteditor/cursor.h>
+#include "makeoutputmodel.h"
 
 // MakeItem::MakeItem( const QString &text )
 //     : IOutputViewItem( text )
@@ -44,7 +45,9 @@
 MakeWarningItem::MakeWarningItem( const QString &text )
     : QStandardItem( text )
     , file( "" ), lineNo(-1), errorText( "" )
-{}
+{
+    setData( QVariant( MakeOutputModel::MakeWarning ) );
+}
 
 MakeWarningItem::~MakeWarningItem()
 {}
@@ -78,7 +81,9 @@ MakeWarningItem::~MakeWarningItem()
 
 MakeErrorItem::MakeErrorItem( const QString &text )
     : MakeWarningItem( text )
-{}
+{
+    setData( QVariant( MakeOutputModel::MakeError ) );
+}
 
 MakeErrorItem::~MakeErrorItem()
 {}
