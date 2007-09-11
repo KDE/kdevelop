@@ -30,9 +30,9 @@ class CustomMakeTargetItem : public KDevelop::ProjectTargetItem
 public:
     CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, QStandardItem *parent=NULL );
 
-    virtual const KUrl::List& includeDirectories() const;
-    virtual const QHash<QString, QString>& environment() const;
-    virtual const QList<QPair<QString, QString> >& defines() const;
+    virtual KUrl::List includeDirectories() const;
+    virtual QHash<QString, QString> environment() const;
+    virtual QList<QPair<QString, QString> > defines() const;
 
 private:
     KUrl::List m_includeDirs;

@@ -2121,7 +2121,6 @@ bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="message" || func.arguments.isEmpty())
         return false;
-    int lastIdx = -1;
     if(func.arguments.count()>1) {
         QString type=func.arguments.first().value;
         if(type=="SEND_ERROR")
@@ -2632,9 +2631,9 @@ bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     bool excludeFromAll=false;
     foreach(CMakeFunctionArgument arg, func.arguments)
     {
-        if(arg.value.toLower()=="EXCLUDE_FROM_ALL")
+        if(arg.value.toLower()=="exclude_from_all")
             excludeFromAll=true;
-        else if(arg.value.toLower()=="PREORDER")
+        else if(arg.value.toLower()=="preorder")
             m_preorder=true;
         else {
             if(excludeFromAll)

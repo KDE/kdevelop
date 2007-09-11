@@ -88,16 +88,18 @@ void CMakeBuildDirCreator::updated()
 	if(!haveCMake) {
 		m_creatorUi->status->setText(i18n("You need to select a cmake binary"));
 	} else {
-		QDir d(m_creatorUi->buildFolder->url().toLocalFile());
-		bool dirCorrect=d.exists();
-		kDebug(9032) << "lol" << d.count();
+        bool dirCorrect=!m_creatorUi->buildFolder->url().isEmpty();
+        if(dirCorrect) {
+            QDir d(m_creatorUi->buildFolder->url().toLocalFile());
+            dirCorrect=d.exists() && d.count()<=2;
+        }
 // 		m_creatorUi->buildFolder->setEnabled(true);
 		m_creatorUi->installPrefix->setEnabled(dirCorrect);
 		m_creatorUi->buildType->setEnabled(dirCorrect);
 // 		m_creatorUi->generator->setEnabled(dirCorrect);
 		m_creatorUi->run->setEnabled(dirCorrect);
 		if(!dirCorrect)
-			m_creatorUi->status->setText(i18n("The selected directory does not exist"));
+			m_creatorUi->status->setText(i18n("The selected directory does not exist or is not empty")); //Useful to prevent disasters
 		else
 			m_creatorUi->status->setText(i18n("Click run when you are ready"));
 	}

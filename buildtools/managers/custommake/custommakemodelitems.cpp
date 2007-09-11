@@ -20,17 +20,17 @@ CustomMakeTargetItem::CustomMakeTargetItem( KDevelop::IProject *project, const Q
 {
 }
 
-const KUrl::List& CustomMakeTargetItem::includeDirectories() const
+KUrl::List CustomMakeTargetItem::includeDirectories() const
 {
     return m_includeDirs;
 }
 
-const QHash<QString, QString>& CustomMakeTargetItem::environment() const
+QHash<QString, QString> CustomMakeTargetItem::environment() const
 {
     return m_envs;
 }
 
-const QList<QPair<QString, QString> >& CustomMakeTargetItem::defines() const
+QList<QPair<QString, QString> > CustomMakeTargetItem::defines() const
 {
     return m_defines;
 }

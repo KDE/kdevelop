@@ -38,14 +38,14 @@ class IProject;
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem //FIXME: Should be projectFolderItem
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
 {
     public:
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
 
         void setIncludeDirectories(const KUrl::List &l) { m_includeList=l; }
-        virtual const KUrl::List& includeDirectories() const;
-        virtual const QList<QPair<QString, QString> >& defines() const;
+        virtual KUrl::List includeDirectories() const;
+        virtual QList<QPair<QString, QString> > defines() const;
     private:
         KUrl::List m_includeList;
         QList<QPair<QString, QString> > m_defines;
@@ -63,9 +63,9 @@ public:
     CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item );
     ~CMakeTargetItem();
 
-    virtual const KUrl::List& includeDirectories() const;
-    virtual const QHash< QString, QString >& environment() const;
-	virtual const QList<QPair<QString, QString> >& defines() const;
+    virtual KUrl::List includeDirectories() const;
+    virtual QHash< QString, QString > environment() const;
+    virtual QList<QPair<QString, QString> > defines() const;
 private:
     QHash<QString, QString> m_environment;
 //     QString m_relativePath;

@@ -35,12 +35,12 @@ CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& na
 CMakeTargetItem::~CMakeTargetItem()
 {}
 
-const QHash< QString, QString >& CMakeTargetItem::environment() const
+QHash< QString, QString > CMakeTargetItem::environment() const
 {
     return m_environment;
 }
 
-const KUrl::List & CMakeFolderItem::includeDirectories() const
+KUrl::List CMakeFolderItem::includeDirectories() const
 {
     KUrl::List urls(m_includeList); //FIXME: Returning a temporary variable
     
@@ -53,7 +53,7 @@ const KUrl::List & CMakeFolderItem::includeDirectories() const
     return urls;
 }
 
-const QList< QPair < QString , QString > > & CMakeFolderItem::defines() const
+QList< QPair < QString , QString > > CMakeFolderItem::defines() const
 {
     CMakeFolderItem *par = dynamic_cast<CMakeFolderItem*>(parent());
     if(par)
@@ -62,12 +62,12 @@ const QList< QPair < QString , QString > > & CMakeFolderItem::defines() const
         return m_defines;
 }
 
-const KUrl::List & CMakeTargetItem::includeDirectories() const
+KUrl::List CMakeTargetItem::includeDirectories() const
 {
     return m_parent->includeDirectories();
 }
 
-const QList< QPair < QString , QString > > & CMakeTargetItem::defines() const
+QList< QPair < QString , QString > > CMakeTargetItem::defines() const
 {
     return m_parent->defines();
 }
