@@ -53,25 +53,26 @@ public:
      */
     enum JobType
     {
-        Add,
-        Remove,
-        Copy,
-        Move,
-        Diff,
-        Commit,
-        Update,
-        Merge,
-        Resolve,
-        Import,
-        Checkout,
-        Log,
-        Push,
-        Pull,
-        Annotate,
-        Clone,
-        Status,
-        Revert,
-        Cat
+        Add = 0,
+        Remove = 1,
+        Copy = 2,
+        Move = 3,
+        Diff = 4,
+        Commit = 5,
+        Update = 6,
+        Merge = 7,
+        Resolve = 8,
+        Import = 9,
+        Checkout = 10,
+        Log = 11,
+        Push = 12,
+        Pull = 13,
+        Annotate = 14,
+        Clone = 15,
+        Status = 16,
+        Revert = 17,
+        Cat = 18,
+	UserType = 1000
     };
 
     /**
