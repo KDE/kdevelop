@@ -185,7 +185,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         // TODO handle inbuilt "defined" etc functions
 
         pp_macro* macro = m_engine->environment()->retrieveMacro(name);
-        if (!macro || macro->hidden || m_engine->hideNextMacro())
+        if (!macro || !macro->defined || macro->hidden || m_engine->hideNextMacro())
         {
           m_engine->setHideNextMacro(name == "defined");
 
@@ -225,9 +225,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               QString identifier = skip_identifier(es);
 
               pp_macro* m2 = 0;
-              if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier))) {
+              if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier)) && m2->defined) {
                 m = m2;
-
               } else {
                 output << expanded;
               }

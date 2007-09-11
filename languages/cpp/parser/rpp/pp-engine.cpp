@@ -565,7 +565,10 @@ Value pp::eval_primary(Stream& input)
         break;
       }
 
-      result.set_long(m_environment->retrieveMacro(token_text) ? 1 : 0);
+      {
+        pp_macro* m = m_environment->retrieveMacro(token_text);
+        result.set_long( (m && !m->isUndef()) ? 1 : 0);
+      }
 
       token = next_token(input); // skip '('
 
@@ -1024,7 +1027,15 @@ void pp::handle_undef(Stream& input)
   QString macro_name = skip_identifier(input);
   RETURN_ON_FAIL(!macro_name.isEmpty());
 
-  m_environment->clearMacro(macro_name);
+  pp_macro* macro = new pp_macro();
+  macro->file = m_files.top();
+  macro->name = macro_name;
+
+  macro->defined = false;
+
+  m_environment->setMacro(macro);
+  
+  //m_environment->clearMacro(macro_name);
 }
 
 int pp::next_token (Stream& input)

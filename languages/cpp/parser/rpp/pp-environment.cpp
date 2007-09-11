@@ -157,14 +157,23 @@ void Environment::clear()
 
 void Environment::clearMacro(const KDevelop::HashedString& name)
 {
-  if (!m_replaying) {
+//   pp_macro* undef = new pp_macro();
+//   undef->name = name;
+//   undef->defined = false;
+//   if(!m_replaying)
+//     m_blocks.top()->macros.append(undef);
+// 
+//   setMacro(undef); //Before, m_environment.remove(..) was called
+
+ if(!m_replaying) {
     pp_macro* undef = new pp_macro();
     undef->name = name;
     undef->defined = false;
-
     m_blocks.top()->macros.append(undef);
   }
 
+  ///@todo Think about how this plays together with environment-management
+  ///We need undef-macros to be put into the definedMacros etc. lists
   m_environment.remove(name);
 }
 
@@ -173,9 +182,9 @@ void Environment::setMacro(pp_macro* macro)
   if (!m_replaying && !m_blocks.isEmpty())
     m_blocks.top()->macros.append(macro);
 
-  if( !macro->defined )
+/*  if( !macro->defined )
     clearMacro(macro->name);
-  else
+  else*/
     m_environment.insert(macro->name, macro);
 }
 
