@@ -18,6 +18,7 @@
 #include "svnblamewidgets.h"
 #include "svnrevision.h"
 #include "svnstatuswidgets.h"
+#include "svnoutputdelegate.h"
 // #include "ui_svnlogviewwidget.h"
 #include "ioutputview.h"
 #include <icore.h>
@@ -51,6 +52,7 @@ public:
     KDevelop::IOutputView *m_outview;
     int m_outputViewId;
     QStandardItemModel* m_outputModel;
+    SvnOutputDelegate* m_delegate;
 };
 // TODO first make empty widget by factory. This host container widget is parent
 // of every other subwidgets, including logviewer, blame, notifier, ...
@@ -100,6 +102,8 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
                               KDevelop::IOutputView::AlwaysShowView );
             d->m_outputModel = new SvnOutputModel( d->m_part, this );
             d->m_outview->setModel( d->m_outputViewId, d->m_outputModel );
+	    d->m_delegate = new SvnOutputDelegate(this);
+	    d->m_outview->setDelegate( d->m_outputViewId, d->m_delegate );
             connect( d->m_part->svncore(), SIGNAL(svnNotify(QString, QString)),
                     this, SLOT(printNotification(QString, QString)) );
         }

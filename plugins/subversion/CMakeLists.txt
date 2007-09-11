@@ -34,6 +34,7 @@ set(kdevsubversion_PART_SRCS
     svncopywidgets.cpp
     svnmovewidgets.cpp
     svncatwidgets.cpp
+    svnoutputdelegate.cpp
 )
 
 set(kdevsubversion_PART_UI

@@ -256,6 +256,11 @@ class SvnOutputModel : public QStandardItemModel, public KDevelop::IOutputViewMo
 {
     Q_OBJECT
 public:
+    enum UpdateType
+    {
+        Conflict
+    };
+
     explicit SvnOutputModel( KDevSubversionPart *part, QObject *parent );
     ~SvnOutputModel();
 
