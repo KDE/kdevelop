@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevCMakeBuilder
+Name[el]=KDevMakeBuilder
 Name[sv]=KDevelop CMake-byggverktyg
 Comment=Builds CMake Projects
+Comment[el]=Κατασκευή έργων CMake
 Comment[es]=Construye proyectos CMake
 Comment[fa]=پروژه‌های CMake را می‌سازد
 Comment[ga]=Tóg Tionscadail CMake
