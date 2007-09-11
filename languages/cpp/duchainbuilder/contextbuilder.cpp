@@ -167,7 +167,12 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
 
     cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
 
-    cppContext->addImportedParentContext(content.data());
+    if(content) {
+      cppContext->addImportedParentContext(content.data());
+    } else {
+      ///This happens if a content-context is deleted from the du-chain during the time that the du-chain is not locked by this thread
+      kDebug() << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << u;
+    }
   }
 
   return topLevelContext;

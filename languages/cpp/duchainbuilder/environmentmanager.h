@@ -41,10 +41,6 @@ struct HashedStringHash {
   }
 };
 
-///@todo thread-safety
-typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash>::Iterator StringSetIterator;
-typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash> StringSetRepository;
-
 /**
  * The environment-manager helps achieving right representation of the way c++ works:
  * When a file is processed by the preprocessor, the same file may create totally
@@ -123,6 +119,9 @@ class Problem;
 
 namespace Cpp {
 
+typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash>::Iterator StringSetIterator;
+typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash> StringSetRepository;
+
 class EnvironmentManager;
 class MacroSet;
 
@@ -199,10 +198,10 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     KDevelop::HashedString m_hashedUrl;
     KDevelop::ModificationRevision m_modificationTime;
     Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
-    Utils::Set m_includeFiles; //Set of all files with absolute paths
+    Cpp::StringSetRepository::LazySet m_includeFiles; //Set of all files with absolute paths
     MacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
     MacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
-    Utils::Set m_definedMacroNames;
+    Cpp::StringSetRepository::LazySet m_definedMacroNames;
     QList<Problem> m_problems;
     QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
     /*

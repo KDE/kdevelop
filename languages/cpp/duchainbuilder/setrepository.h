@@ -14,8 +14,10 @@
 #ifndef SETREPOSITORY_H
 #define SETREPOSITORY_H
 
+#include <QMutex>
 #include <ksharedptr.h>
 #include <ext/hash_map>
+#include <list>
 #include <set>
 #include <vector>
 #include "cppduchainbuilderexport.h"
@@ -189,6 +191,7 @@ public:
     }
   }
 
+  /** Use this to conveniently iterate over the real items contained in a set(not indices) */
   class Iterator {
   public:
     Iterator(const SetRepository<T, Hash>* rep=0, Set::Iterator it=Set::Iterator()) : m_rep(rep), m_it(it) {
@@ -223,6 +226,66 @@ public:
   const std::vector<T>& elements() const {
     return m_elements;
   }
+
+    /** This is a helper-class that helps inserting a bunch of items into a set without caring about grouping them together.
+     *
+     * It creates a much better tree-structure if many items are inserted at one time, and this class helps doing that in
+     * cases where there is no better choice then storing a temporary list of items and inserting them all at once.
+     *
+     * This set will then care about really inserting them into the repository once the real set is requested.
+     **/
+  class LazySet {
+  public:
+    /** @param rep The repository the set should belong/belongs to
+     *  @param lockBeforeAccess If this is nonzero, the given mutex will be locked before each modification to the repository.
+     *  @param basicSet If this is explicitly given, the given set will be used as base. However it will not be changed.
+     *
+     * @warning Watch for deadlocks, never use this class while the mutex given through lockBeforeAccess is locked
+     */
+    LazySet(SetRepository<T, Hash>* rep, QMutex* lockBeforeAccess, const Set& basicSet = Set()) : m_rep(rep), m_set(basicSet), m_lockBeforeAccess(lockBeforeAccess) {
+    }
+
+    void insert(const T& t) {
+      m_temporaryIndices.push_back(t);
+    }
+
+    ///Returns the set this LazySet represents. When this is called, the set is constructed in the repository.
+    Set set() const {
+      apply();
+      return m_set;
+    }
+
+    LazySet& operator +=(const Set& set) {
+      m_set += set;
+      return *this;
+    }
+
+    ///Returns an iterator that can conveniently be used to iterate over the items contained in this set
+//     Iterator iterator() const {
+//       return Iterator(m_rep, set().iterator());
+//     }
+
+  private:
+    void apply() const {
+      if(!m_temporaryIndices.empty()) {
+        QMutexLocker l(m_lockBeforeAccess);
+        std::set<Utils::BasicSetRepository::Index> indices;
+        typename std::list<T>::const_iterator end = m_temporaryIndices.end();
+        for ( typename std::list<T>::const_iterator rit = m_temporaryIndices.begin(); rit != end; ++rit ) {
+          Utils::BasicSetRepository::Index idx;
+          m_rep->getItem(*rit, &idx);
+          indices.insert(idx);
+        }
+        Set tempSet = m_rep->createSet(indices);
+        m_temporaryIndices.clear();
+        m_set += tempSet;
+      }
+    }
+    SetRepository<T, Hash>* m_rep;
+    mutable Set m_set;
+    QMutex* m_lockBeforeAccess;
+    mutable std::list<T> m_temporaryIndices;
+  };
 private:
   // Tracks what elements have been assigned to what indices
   ElementHash m_elementHash;

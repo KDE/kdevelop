@@ -17,7 +17,7 @@
 #include "rpp/pp-macro.h"
 #include "rpp/pp-environment.h"
 #include "problem.h"
-#include "cppparserexport.h"
+#include "cpppreprocessenvironment.h"
 
 //#define LEXERCACHE_DEBUG
 
@@ -110,21 +110,10 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     }
 #endif
 
-    Utils::Set environmentMacroNames;
-    
-    {
-      ///@todo this should be done earlier, and less often(environments should already manage it)
-      QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
-      std::set<Utils::BasicSetRepository::Index> indices;
-      rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
-      for ( rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().begin(); rit != end; ++rit ) {
-        Utils::BasicSetRepository::Index idx;
-        EnvironmentManager::m_stringRepository.getItem(rit.key(), &idx);
-        indices.insert(idx);
-      }
-      
-      environmentMacroNames = EnvironmentManager::m_stringRepository.createSet(indices);
-    }
+  const CppPreprocessEnvironment* cppEnvironment = dynamic_cast<const CppPreprocessEnvironment*>(environment);
+  Q_ASSERT(cppEnvironment);
+
+  Utils::Set environmentMacroNames = cppEnvironment->macroNameSet().set();
 
   while ( files.first != files.second ) {
     const EnvironmentFile& file( *( *( files.first ) ).second );
@@ -138,6 +127,10 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
     for( ; conflictIt; ++conflictIt) {
       rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().find(*conflictIt);
+      if(rit == environment->environment().end()) {
+        kDebug() << "Found environment-macro name, but not the fitting macro: " << (*conflictIt).str();
+        continue;
+      }
       rpp::Environment::EnvironmentMap::const_iterator it = rit;
       ++rit;
       while ( rit != end && it.key() == rit.key() ) {; //Always only use the last macro of the same name for comparison, it is on top of the macro-stack
@@ -241,7 +234,7 @@ void EnvironmentManager::erase( const CacheNode* node ) {
   ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url()  );
 }
 
-EnvironmentFile::EnvironmentFile( const KUrl& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_url( fileName ) {
+EnvironmentFile::EnvironmentFile( const KUrl& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex) {
   QFileInfo fileInfo( fileName.path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
   ifDebug( kDebug(9007) << "EnvironmentFile::EnvironmentFile: created for" << fileName << "modification-time:" << m_modificationTime  );
@@ -257,11 +250,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro ) {
 #endif
   m_definedMacros.addMacro( macro );
   
-  QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
-  Utils::BasicSetRepository::Index idx;
-  EnvironmentManager::m_stringRepository.getItem(HashedString( macro.name ), &idx);
-  m_definedMacroNames += EnvironmentManager::m_stringRepository.createSet(idx); ///@todo batch this, inserting single items is bad for the structure
-  
+  m_definedMacroNames.insert( macro.name );
 }
 
 void EnvironmentFile::addUsedMacro( const rpp::pp_macro& macro ) {
@@ -314,10 +303,7 @@ HashedString EnvironmentFile::hashedUrl() const {
 }
 
 void EnvironmentFile::addIncludeFile( const HashedString& file, const ModificationRevision& modificationTime ) {
-  QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
-  Utils::BasicSetRepository::Index idx;
-  EnvironmentManager::m_stringRepository.getItem(file, &idx);
-  m_includeFiles += EnvironmentManager::m_stringRepository.createSet(idx); ///@todo batch this, inserting single items is bad for the structure
+  m_includeFiles.insert(file);
   m_allModificationTimes[file] = modificationTime;
 }
 
@@ -348,9 +334,9 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   kDebug( 9007 ) << url() << ": merging" << file.url()  << "defined in this:" << m_definedMacroNames.print().c_str()  << "defined macros in other:" << file.m_definedMacroNames.print().c_str();;
 #endif
   Utils::Set tempStrings = file.m_strings;
-  tempStrings -= m_definedMacroNames;
+  tempStrings -= m_definedMacroNames.set();
   m_strings += tempStrings;
-  m_includeFiles += file.m_includeFiles;
+  m_includeFiles += file.m_includeFiles.set();
   //Only add macros to the usedMacros-list that were not defined locally
   for ( MacroSet::Macros::const_iterator it = file.m_usedMacros.macros().begin(); it != file.m_usedMacros.macros().end(); ++it ) {
     if ( !m_definedMacros.hasMacro(( *it ).name ) ) {///If the macro was not defined locally, add it to the macros-list.
@@ -362,7 +348,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   }
 
   m_definedMacros.merge( file.m_definedMacros );
-  m_definedMacroNames += file.m_definedMacroNames;
+  m_definedMacroNames += file.m_definedMacroNames.set();
 
   for( QMap<HashedString, KDevelop::ModificationRevision>::const_iterator it = file.m_allModificationTimes.begin(); it != file.m_allModificationTimes.end(); ++it )
     m_allModificationTimes[it.key()] = *it;

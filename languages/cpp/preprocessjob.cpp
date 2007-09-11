@@ -34,7 +34,6 @@
 
 #include <backgroundparser.h>
 #include <duchain.h>
-#include <duchain/parsingenvironment.h>
 #include "duchain/duchainlock.h"
 #include "duchain/topducontext.h"
 #include <editorintegrator.h>
@@ -48,83 +47,11 @@
 #include "problem.h"
 #include "parser/ast.h"
 #include "parser/parsesession.h"
-#include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-engine.h"
 #include "parser/rpp/pp-macro.h"
 #include "parser/rpp/preprocessor.h"
 #include "environmentmanager.h"
-
-class CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
-    public:
-        CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_finished(false), m_environmentFile(environmentFile) {
-            //If this is included from another preprocessed file, take the current macro-set from there.
-            ///NOTE: m_environmentFile may be zero, this must be treated
-        }
-
-        ~CppPreprocessEnvironment() {
-            finish();
-        }
-
-        void finish() {
-            if(!m_finished) {
-                if(m_environmentFile)
-                    m_environmentFile->setStrings(m_strings);
-                m_finished = true;
-            }
-        }
-
-
-        virtual rpp::pp_macro* retrieveMacro(const KDevelop::HashedString& name) const {
-            //note all strings that can be affected by macros
-            if( !m_environmentFile )
-                return rpp::Environment::retrieveMacro(name);
-
-            {
-                QMutexLocker l(&Cpp::EnvironmentManager::m_stringRepositoryMutex);
-                Utils::BasicSetRepository::Index idx;
-                Cpp::EnvironmentManager::m_stringRepository.getItem(name, &idx);
-                m_strings.insert(idx);
-            }
-            rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
-
-            if( ret ) //note all used macros
-                m_environmentFile->addUsedMacro(*ret);
-
-            return ret;
-        }
-
-        void setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile ) {
-            m_environmentFile = environmentFile;
-        }
-
-        /**
-         * Merges the given set of macros into the environment. Does not modify m_environmentFile
-         * */
-        void merge( const Cpp::MacroSet& macros ) {
-            Cpp::MacroSet::Macros::const_iterator endIt = macros.macros().end();
-            for( Cpp::MacroSet::Macros::const_iterator it = macros.macros().begin(); it != endIt; ++it ) {
-                ///@todo ownership!
-                rpp::Environment::setMacro(new rpp::pp_macro(*it)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
-            }
-        }
-
-        virtual void setMacro(rpp::pp_macro* macro) {
-            //Note defined macros
-            if( m_environmentFile )
-                m_environmentFile->addDefinedMacro(*macro);
-                
-            rpp::Environment::setMacro(macro);
-        }
-
-        virtual int type() const {
-            return KDevelop::CppParsingEnvironment;
-        }
-
-    private:
-        bool m_finished;
-        mutable std::set<Utils::BasicSetRepository::Index> m_strings;
-        mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
-};
+#include "cpppreprocessenvironment.h"
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
