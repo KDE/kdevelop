@@ -55,7 +55,7 @@ target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS}
 
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
 kde4_add_plugin( kcm_kdevcmake_settings ${cmakesettings_SRCS} )
-target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS}
+target_link_libraries( kcm_kdevcmake_settings ${KDE4_KIO_LIBS}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} kdev4cmakecommon )
 
 
