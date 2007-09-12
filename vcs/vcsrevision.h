@@ -45,17 +45,19 @@ public:
      */
     enum RevisionType
     {
-        Special         /**<One of the special versions in RevisionSpecialType.*/,
-        GlobalNumber    /**<Global repository version when item was last changed.*/,
-        FileNumber      /**<Item's independent version number.*/,
-        Date
+        Special = 0         /**<One of the special versions in RevisionSpecialType.*/,
+        GlobalNumber = 1    /**<Global repository version when item was last changed.*/,
+        FileNumber = 2      /**<Item's independent version number.*/,
+        Date = 3,
+	UserType = 1000
     };
     enum RevisionSpecialType
     {
-        Head            /**<Latest revision in the repository.*/,
-        Working         /**<The local copy (including any changes made).*/,
-        Base            /**<The repository source of the local copy.*/,
-        Previous        /**<The version prior the other one (only valid in functions that take two revisions).*/
+        Head = 0            /**<Latest revision in the repository.*/,
+        Working = 1        /**<The local copy (including any changes made).*/,
+        Base = 2           /**<The repository source of the local copy.*/,
+        Previous = 3        /**<The version prior the other one (only valid in functions that take two revisions).*/,
+        UserSpecialType = 1000
     };
 
     VcsRevision();
