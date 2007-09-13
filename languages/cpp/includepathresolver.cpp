@@ -477,10 +477,10 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
     if( offset >= firstLine.length() ) break;
   }
 
-  ///STEP 2: Search the output for include-paths
-  QRegExp validRx( "\\b([cg]\\+\\+|gcc)" );
-  if( validRx.indexIn( fullOutput ) == -1 )
-    return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
+  ////STEP 2: Search the output for include-paths
+//   QRegExp validRx( "\\b([cg]\\+\\+|gcc)" );
+//   if( validRx.indexIn( fullOutput ) == -1 )
+//     return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;
@@ -493,6 +493,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   includeRx.setMinimal( true );
   includeRx.setCaseSensitivity( Qt::CaseSensitive );
   offset = 0;
+  
   while( (offset = includeRx.indexIn( fullOutput, offset )) != -1 ) {
     offset += 1; ///The previous white space
     int pathOffset = 2;
@@ -528,6 +529,9 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
     offset = end-1;
   }
 
+  if(ret.paths.isEmpty())
+    return PathResolutionResult( false, i18n("Could not extract include-paths from make-output"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
+  
   return ret;
 }
 
