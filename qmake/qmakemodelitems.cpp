@@ -69,17 +69,17 @@ QMakeTargetItem::~QMakeTargetItem()
     delete d;
 }
 
-const KUrl::List& QMakeTargetItem::includeDirectories() const
+KUrl::List QMakeTargetItem::includeDirectories() const
 {
     return d->m_includes;
 }
 
-const QHash<QString, QString>& QMakeTargetItem::environment() const
+QHash<QString, QString> QMakeTargetItem::environment() const
 {
     return d->m_env;
 }
 
-const QList<QPair<QString, QString> >& QMakeTargetItem::defines() const
+QList<QPair<QString, QString> > QMakeTargetItem::defines() const
 {
     return d->m_defs;
 }

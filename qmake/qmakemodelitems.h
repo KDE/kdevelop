@@ -50,9 +50,9 @@ class QMakeTargetItem : public KDevelop::ProjectTargetItem
 public:
     QMakeTargetItem( KDevelop::IProject*, const QString& s, QStandardItem* parent );
     ~QMakeTargetItem();
-    const KUrl::List& includeDirectories() const;
-    const QHash<QString, QString>& environment() const;
-    const QList<QPair<QString,QString> >& defines() const;
+    KUrl::List includeDirectories() const;
+    QHash<QString, QString> environment() const;
+    QList<QPair<QString,QString> > defines() const;
 private:
     struct QMakeTargetItemPrivate* const d;
 };
