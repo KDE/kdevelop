@@ -233,7 +233,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	//    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
 
 	setXMLFile( "kdevcppsupport.rc" );
-	
+
 	m_catalogList.setAutoDelete( true );
 
 	connect( core(), SIGNAL( projectOpened() ), this, SLOT( projectOpened() ) );
@@ -319,7 +319,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 CppSupportPart::~CppSupportPart()
 {
 	delete m_lockupTester;
-	
+
 	if ( !m_projectClosed )
 		projectClosed();
 
@@ -398,7 +398,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		} else {
 			kdDebug( 9007 ) << "customEvent() parsed file \"" << fileName << "\"" <<  endl;
 		}
-		
+
 		if( p && !p->includedFrom().isEmpty() ) {
 			if( !project()->isProjectFile( fileName ) ) {
 				//The file was parsed to resolve a dependency, and is not a project file
@@ -409,13 +409,13 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		} else if( !project()->isProjectFile( fileName ) || !m_parseEmitWaiting.reject( fileName ) ) {
             ParseEmitWaiting::Processed p = m_parseEmitWaiting.processFile( fileName, ( !m_hadErrors && hasErrors && !fromDisk && m_isTyping && fileName == m_activeFileName ) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None );
 			parseEmit( p );
-			
+
 	        //Increase status-bar
 			if( p.hasFlag( ParseEmitWaiting::Silent ) && _jd ) {
 				_jd->backgroundState ++;
 				_jd->lastParse = QTime::currentTime();
 			}
-			
+
         } else {
 	        ParseEmitWaiting::Processed p = m_fileParsedEmitWaiting.processFile( fileName );
 	        if( !p.hasFlag( ParseEmitWaiting::Silent ) )
@@ -2545,6 +2545,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 					emit codeModelUpdated( l.front() );
 					l.pop_front();
 				}
+				emit updatedSourceInfo();
 			}
 		}
 		kdDebug( 9007 ) << "files in code-model after parseEmit: " << codeModel()->fileList().count() << " before: " << oldFileCount << endl;
@@ -3034,7 +3035,7 @@ void CppSupportPart::buildSafeFileSet() {
 
 void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 	QString catalogString( "automatic_" + KURL::encode_string_no_slash(m_projectDirectory) );
-	
+
 	KStandardDirs *dirs = CppSupportFactory::instance() ->dirs();
 
 	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + catalogString + ".db";
@@ -3071,7 +3072,7 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 
 	bool compatibleParsed = false;
 	Tag compatibleParsedTag;
-	
+
 	args << Catalog::QueryArgument( "kind", Tag::Kind_TranslationUnit );
 	args << Catalog::QueryArgument( "fileName", file->fileName() );
 	QValueList<Tag> tags( catalog->query( args ) );
@@ -3113,7 +3114,7 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 	TagCreator w( file->fileName(), catalog );
 	w.parseTranslationUnit( *file );
 	codeRepository()->touchCatalog( catalog );
-	
+
 	m_safeProjectFiles.insert( file->fileName() + "||" + QString("%1").arg(file->usedMacros().valueHash()) + "||" + QString("%1").arg(file->usedMacros().idHash()) );
 }
 
@@ -3134,7 +3135,7 @@ QString CppSupportPart::findHeaderSimple( const QString &header )
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {
 }
-      
+
 void UIBlockTester::UIBlockTesterThread::run() {
   while(!m_stop) {
 	  msleep( m_parent.m_msecs / 10 );
@@ -3164,13 +3165,13 @@ UIBlockTester::~UIBlockTester() {
   m_thread.stop();
   m_thread.wait();
 }
-	
+
 void UIBlockTester::timer() {
 	m_timeMutex.lock();
 	m_lastTime = QDateTime::currentDateTime();
 	m_timeMutex.unlock();
 }
-	
+
 void UIBlockTester::lockup() {
 	//std::cout << "UIBlockTester: lockup of the UI for " << m_msecs << endl; ///kdDebug(..) is not thread-safe..
 	int a = 1; ///Place breakpoint here
