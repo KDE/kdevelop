@@ -6,6 +6,8 @@ include_directories(
 
 ########### next target ###############
 
+add_definitions(-DTEST)
+
 set(cppcodecompletiontest_SRCS test_cppcodecompletion.cpp ../codecompletioncontext.cpp ../stringhelpers.cpp)
 
 
