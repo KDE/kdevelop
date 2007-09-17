@@ -53,6 +53,8 @@ class KDEVCPPDUCHAINBUILDER_EXPORT MacroSet {
         const Macros& macros() const {
           return m_usedMacros;
         }
+
+        int size() const;
         
         void merge( const MacroSet& macros );
     private:

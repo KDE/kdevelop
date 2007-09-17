@@ -250,6 +250,77 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
   }
 }
 
+QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int role) const {
+  quint32 dataIndex = index.internalId();
+
+  if( dataIndex >= (quint32)m_declarations.size() )
+    return QVariant();
+
+  const CompletionItem& completionItem(m_declarations[dataIndex]);
+  const Cpp::IncludeItem& item( completionItem.includeItem );
+
+  switch (role) {
+    case IsExpandable:
+      return QVariant(true);
+    case ExpandingWidget: {
+      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(item);
+      m_navigationWidgets[&completionItem] = nav;
+
+       QVariant v;
+       v.setValue<QWidget*>((QWidget*)nav->view());
+       return v;
+    }
+    case AccessibilityNext:
+    {
+      Cpp::NavigationWidget* w = m_navigationWidgets[&completionItem];
+      if( w )
+        w->next();
+    }
+    break;
+    case AccessibilityPrevious:
+    {
+      Cpp::NavigationWidget* w = m_navigationWidgets[&completionItem];
+      if( w )
+        w->previous();
+    }
+    break;
+    case AccessibilityAccept:
+    {
+      Cpp::NavigationWidget* w = m_navigationWidgets[&completionItem];
+      if( w )
+        w->accept();
+    }
+    break;
+    case InheritanceDepth:
+      return item.pathNumber;
+    case Qt::DisplayRole:
+      switch (index.column()) {
+        case Prefix:
+          if(item.isDirectory)
+            return QVariant("directory");
+          else
+            return QVariant("file");
+        case Name: {
+/*          QString indentation;
+          for( int a = 0; a < item.pathNumber; a++ )
+            indentation += ' ';*/
+        
+          return /*indentation + */item.name;
+        }
+      }
+      break;
+    case ItemSelected:
+    {
+//      KUrl path = item.basePath;
+//      path.addPath("/" + item.name);
+//      return QVariant(path.prettyUrl());
+      return QVariant( Cpp::NavigationWidget::shortDescription(item) );
+    }
+  }
+  
+  return QVariant();
+}
+
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
   quint32 dataIndex = index.internalId();
@@ -261,6 +332,9 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
   Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].declaration.data() );
   if (!dec) {
+    if(m_completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess)
+      return getIncludeData(index, role);
+  
     kDebug(9007) <<  "code-completion model item" << dataIndex << ": Du-chain item is deleted";
     return QVariant();
   }
@@ -274,21 +348,21 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
   switch (role) {
     case AccessibilityNext:
     {
-      Cpp::NavigationWidget* w = m_navigationWidgets[dec];
+      Cpp::NavigationWidget* w = m_navigationWidgets[&item];
       if( w )
         w->next();
     }
     break;
     case AccessibilityPrevious:
     {
-      Cpp::NavigationWidget* w = m_navigationWidgets[dec];
+      Cpp::NavigationWidget* w = m_navigationWidgets[&item];
       if( w )
         w->previous();
     }
     break;
     case AccessibilityAccept:
     {
-      Cpp::NavigationWidget* w = m_navigationWidgets[dec];
+      Cpp::NavigationWidget* w = m_navigationWidgets[&item];
       if( w )
         w->accept();
     }
@@ -333,7 +407,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       return QVariant(true);
     case ExpandingWidget: {
       Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(dec);
-      m_navigationWidgets[dec] = nav;
+      m_navigationWidgets[&item] = nav;
 
        QVariant v;
        v.setValue<QWidget*>((QWidget*)nav->view());
@@ -698,7 +772,20 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
       } else {
         kDebug(9007) << "CppCodeCompletionModel::setContext: bad container-type";
       }
+    } else if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess ) {
+      //Include-file completion
+      m_declarations.clear();
+      int cnt = 0;
+      QList<Cpp::IncludeItem> allIncludeItems = completionContext->includeItems();
+      foreach(const Cpp::IncludeItem& includeItem, allIncludeItems) {
+        CompletionItem completionItem;
+        completionItem.includeItem = includeItem;
+        m_declarations << completionItem;
+        ++cnt;
+      }
+      kDebug(9007) << "Added " << cnt << " include-files to completion-list";
     } else {
+      //Show all visible declarations
       m_declarations.clear();
       foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( m_context->allDeclarations(m_context->type() == DUContext::Class ? m_context->textRange().end() : position) ) )
         m_declarations << CompletionItem( decl.first, completionContext, decl.second );

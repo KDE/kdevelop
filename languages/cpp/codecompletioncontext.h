@@ -27,6 +27,7 @@
 #include "expressionparser/viablefunctions.h"
 #include "expressionparser/overloadresolutionhelper.h"
 #include <typesystem.h>
+#include "includeitem.h"
 
 namespace KTextEditor {
   class View;
@@ -61,7 +62,8 @@ namespace Cpp {
         MemberChoose, /// klass->ParentClass::
         FunctionCallAccess,  ///"function(". Will never appear is initial access-operation, but as parentContext() access-operation.
         SignalAccess,  ///All signals from MemberAccessContainer should be listed
-        SlotAccess     ///All slots from MemberAccessContainer should be listed
+        SlotAccess,     ///All slots from MemberAccessContainer should be listed
+        IncludeListAccess ///A list of include-files should be presented. Get the list through includeItems()
       };
       /**
        * The first context created will never be a FunctionCallAccess
@@ -135,6 +137,10 @@ namespace Cpp {
       const FunctionList& functions() const;
 
       /**
+       * When memberAccessOperation is IncludeListAccess, then this contains all the files to be listed.
+      * */
+      QList<Cpp::IncludeItem> includeItems() const;
+      /**
        *
        * Returns additional potential match-types based on builtin operators(like the = operator)
        *
@@ -153,6 +159,7 @@ namespace Cpp {
       bool isValidPosition();
       ///Should preprocess the given text(replace macros with their body etc.)
       void preprocessText();
+      void processIncludeDirective(QString line);
       void log( const QString& str ) const;
       ///Returns whether the given strings ends with an overloaded operator that can form a parent-context
       bool endsWithOperator( const QString& str ) const;
@@ -164,6 +171,8 @@ namespace Cpp {
       QString m_operator; //If this completion-context ends with a binary operator, this is the operator
       ExpressionEvaluationResult m_expressionResult;
 
+      QList<Cpp::IncludeItem> m_includeItems;
+    
       QString m_text;
       int m_depth;
 

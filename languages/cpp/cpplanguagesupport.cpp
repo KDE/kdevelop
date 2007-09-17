@@ -23,6 +23,7 @@
 #include <config.h>
 
 #include <QDir>
+#include <QDirIterator>
 #include <QFileInfo>
 #include <QApplication>
 #include <QExtensionFactory>
@@ -274,6 +275,59 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
     }
 
     return allPaths;
+}
+
+QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath) const {
+
+    QMap<KUrl, bool> hadPaths; //Only process each path once
+    QList<Cpp::IncludeItem> ret;
+
+    KUrl::List paths = findIncludePaths(source);
+
+    if(local) {
+        KUrl localPath = source;
+        localPath.setFileName(QString());
+        paths.push_front(localPath);
+    }
+    
+    int pathNumber = 0;
+
+    foreach(const KUrl& path, paths)
+    {
+        if(!hadPaths.contains(path)) {
+            hadPaths[path] = true;
+        }else{
+            continue;
+        }
+        if(!path.isLocalFile()) {
+            kDebug(9007) << "include-path " << path << " is not local";
+            continue;
+        }
+        KUrl searchPath = path;
+        searchPath.addPath(addPath);
+        QDirIterator dirContent(searchPath.path());
+
+        while(dirContent.hasNext()) {
+            QString next = dirContent.next();
+            KUrl u(next);
+            if(u.fileName() == ".." || u.fileName() == ".")
+                continue;
+
+            Cpp::IncludeItem item;
+            item.name = u.fileName();
+            item.isDirectory = QFileInfo(u.path()).isDir();
+            u.setFileName(QString());
+            if(item.isDirectory)
+                item.name += '/'; //We rely on having a trailing slash behind directories
+            item.basePath = u;
+            item.pathNumber = pathNumber;
+
+            ret << item;
+        }
+        ++pathNumber;
+    }
+
+    return ret;
 }
 
 QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const {

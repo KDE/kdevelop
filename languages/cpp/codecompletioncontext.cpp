@@ -21,6 +21,8 @@
 #include <ktexteditor/document.h>
 #include <ducontext.h>
 #include <duchain.h>
+#include <classfunctiondeclaration.h>
+#include <duchainlock.h>
 #include "stringhelpers.h"
 #include "duchainbuilder/cppduchain.h"
 #include "duchainbuilder/typeutils.h"
@@ -28,8 +30,7 @@
 #include "expressionparser/viablefunctions.h"
 #include "cpptypes.h"
 #include "safetycounter.h"
-#include <classfunctiondeclaration.h>
-#include <duchainlock.h>
+#include "cpplanguagesupport.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -53,6 +54,13 @@ class PushValue {
 
 typedef PushValue<int> IntPusher;
 
+QString extractLastLine(const QString& str) {
+  int prevLineEnd = str.lastIndexOf('\n');
+  if(prevLineEnd != -1)
+    return str.mid(prevLineEnd+1);
+  else
+    return str;
+}
 
 bool CodeCompletionContext::isValid() const {
   return m_valid;
@@ -81,6 +89,15 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
   log( "Computing context" );
 
+  {
+    //Since include-file completion has nothing in common with the other completion-types, process it within a separate function
+    QString lineText = extractLastLine(m_text).trimmed();
+    if(lineText.startsWith("#include")) {
+      processIncludeDirective(lineText);
+      return;
+    }
+  }
+  
   m_valid = isValidPosition();
   if( !m_valid ) {
     log( "position not valid for code-completion" );
@@ -345,8 +362,46 @@ void CodeCompletionContext::processFunctionCallAccess() {
 //   }
 }
 
+void CodeCompletionContext::processIncludeDirective(QString line)
+{
+  if(line.count('"') == 2 || line.endsWith('>'))
+    return; //We are behind a complete include-directive
+
+  kDebug() << "include line: " << line;
+  line = line.mid(8).trimmed(); //Strip away the #include
+  kDebug() << "trimmed include line: " << line;
+
+  if(!line.startsWith('<') && !line.startsWith('"'))
+    return; //We are not behind the beginning of a path-specification
+
+  bool local = false;
+  if(line.startsWith('"'))
+    local = true;
+  
+  line = line.mid(1);
+
+  kDebug() << "extract prefix from " << line;
+  //Extract the prefix-path
+  KUrl u(line);
+  u.setFileName(QString());
+  QString prefixPath = u.path();
+  kDebug() << "extracted prefix " << prefixPath;
+  
+  LOCKDUCHAIN;
+  if(!m_duContext)
+    return;
+  
+  m_includeItems = CppLanguageSupport::self()->allFilesInIncludePath(m_duContext->url(), local, prefixPath);
+  m_valid = true;
+  m_memberAccessOperation = IncludeListAccess;
+}
+
 const CodeCompletionContext::FunctionList& CodeCompletionContext::functions() const {
   return m_functions;
+}
+
+QList<Cpp::IncludeItem> CodeCompletionContext::includeItems() const {
+  return m_includeItems;
 }
 
 ExpressionEvaluationResult CodeCompletionContext::memberAccessContainer() const {

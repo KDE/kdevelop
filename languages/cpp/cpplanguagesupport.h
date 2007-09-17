@@ -24,6 +24,7 @@
 
 #include <iplugin.h>
 #include <ilanguagesupport.h>
+#include "includeitem.h"
 
 class CppHighlighting;
 class CppCodeCompletion;
@@ -57,6 +58,12 @@ public:
     /// @return first: The found file, second: The include-path the file was found in(can be used to skip that path on #include_next)
     QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const;
 
+    /**
+     * Returns a list of all files within the include-path of the given file
+     * @param addPath This path is added behind each include-path, and the content of the resulting directory used.
+     * */
+    QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath) const;
+    
     ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
     KUrl::List findIncludePaths(const KUrl& source) const;
 

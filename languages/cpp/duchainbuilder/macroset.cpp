@@ -72,6 +72,10 @@ size_t MacroSet::valueHash() const {
     return m_valueHash;
 }
 
+int MacroSet::size() const {
+  return m_usedMacros.size();
+}
+
 void MacroSet::computeHash() const {
     m_idHash = 0;
     m_valueHash = 0;

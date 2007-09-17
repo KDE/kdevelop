@@ -23,6 +23,7 @@
 #include <QPointer>
 #include <KSharedPtr>
 #include <duchainpointer.h>
+#include "includeitem.h"
 
 class QWidget;
 class QTextBrowser;
@@ -33,11 +34,13 @@ namespace Cpp {
 
   /**
    * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
+   * The duchain must be read-locked for most operations
    * */
   class NavigationWidget : public QObject {
     Q_OBJECT
     public:
       NavigationWidget(KDevelop::DeclarationPointer declaration);
+      NavigationWidget(const IncludeItem& includeItem);
       ~NavigationWidget();
       QWidget* view() const;
 
@@ -49,11 +52,14 @@ namespace Cpp {
        * Creates a compact html description-text
        * */
       static QString shortDescription(KDevelop::Declaration* declaration);
+    
+      static QString shortDescription(const IncludeItem& includeItem);
       
     private slots:
       void targetDestroyed(QObject*);
     private:
 
+      void initBrowser(int height);
       void update();
       
       void setContext(NavigationContextPointer context);
