@@ -31,9 +31,9 @@
 #include "config.h"
 
 #include "kdevsvnd.h"
-#include "commitdlg.h"
 
 #include "kdevsvnd_widgets.h"
+#include "commitdlg.h"
 
 extern "C" {
     KDE_EXPORT KDEDModule *create_kdevsvnd(const QCString &name) {
@@ -49,7 +49,7 @@ KDevSvnd::~KDevSvnd()
 
 QString KDevSvnd::commitDialog(QString modifiedFiles) {
 	CommitDlg commitDlg;
-	commitDlg.setCaption(i18n("Enter Commit Log Message "));
+	commitDlg.setCaption(i18n("Enter Commit Log Message:"));
 	commitDlg.listMessage->setText( modifiedFiles );
 	int result = commitDlg.exec();
 	if ( result == QDialog::Accepted ) {

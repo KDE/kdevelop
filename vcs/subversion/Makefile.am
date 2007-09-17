@@ -18,7 +18,8 @@ kio_kdevsvn_la_SOURCES = svn_kio.cpp
 kio_kdevsvn_la_LIBADD = $(LIB_KIO)
 kio_kdevsvn_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN) $(SVN_LIB)
 
-kded_kdevsvnd_la_SOURCES = commitdlg.ui kdevsvnd.cpp kdevsvnd.skel kdevsvnd_widgets.cpp svnssltrustpromptbase.ui
+kded_kdevsvnd_la_SOURCES = commitdlg.cpp commitdlgbase.ui kdevsvnd.cpp \
+	kdevsvnd.skel kdevsvnd_widgets.cpp svnssltrustpromptbase.ui
 kded_kdevsvnd_la_LIBADD = $(LIB_KIO) -lkdeinit_kded
 kded_kdevsvnd_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
 
@@ -33,5 +34,5 @@ protocol_DATA = kdevsvn+file.protocol kdevsvn+http.protocol kdevsvn+https.protoc
 
 
 SUBDIRS = integrator
-noinst_HEADERS = kdevsvnd.h svn_blamewidget.h svn_copywidget.h \
+noinst_HEADERS = commitdlg.h kdevsvnd.h svn_blamewidget.h svn_copywidget.h \
 	svn_fileselectdlg_commit.h svn_logviewwidget.h svn_mergewidget.h svn_switchwidget.h

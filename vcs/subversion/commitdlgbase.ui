@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>CommitDlg</class>
+<class>CommitDlgBase</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>CommitDlg</cstring>
+        <cstring>CommitDlgBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -87,17 +87,19 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>pushButton1</sender>
         <signal>clicked()</signal>
-        <receiver>CommitDlg</receiver>
+        <receiver>CommitDlgBase</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>pushButton2</sender>
         <signal>clicked()</signal>
-        <receiver>CommitDlg</receiver>
+        <receiver>CommitDlgBase</receiver>
         <slot>reject()</slot>
     </connection>
 </connections>
