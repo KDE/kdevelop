@@ -681,7 +681,10 @@ void RubySupportPart::slotSwitchToController()
     if ((ext == "rb") && !name.endsWith("_controller"))
     {
         if (name.endsWith("_test"))
+        {
             switchTo = name.remove(QRegExp("_test$"));  //the file is the test
+            switchTo = name.remove(QRegExp("_controller$"));  //remove functional test name parts
+        }
         else
             switchTo = name;
     }
@@ -694,9 +697,12 @@ void RubySupportPart::slotSwitchToController()
     QString controllersDir = project()->projectDirectory() + "/app/controllers/";
     if (!switchTo.isEmpty())
     {
-        if (!switchTo.endsWith("_controller"))
-            switchTo += "_controller";
-        partController()->editDocument(KURL::fromPathOrURL(controllersDir + switchTo + ".rb"));
+        if (switchTo.endsWith("s"))
+            switchTo = switchTo.mid(0, switchTo.length()-1);
+        QString singular = controllersDir + switchTo + "_controller.rb";
+        QString plural = controllersDir + switchTo + "s_controller.rb";
+        KURL url = KURL::fromPathOrURL(QFile::exists(singular) ? singular : plural);
+        partController()->editDocument(url);
     }
 }
 
@@ -726,14 +732,23 @@ void RubySupportPart::slotSwitchToTest()
     if (switchTo.isEmpty())
         return;
 
+    if (switchTo.endsWith("s"))
+        switchTo = switchTo.mid(0, switchTo.length() - 1);
+
     KURL::List urls;
     QString testDir = project()->projectDirectory() + "/test/";
-    QString functionalTest = testDir + "functional/" + switchTo + "_controller_test.rb";
-    QString integrationTest = testDir + "integration/" + switchTo + "_test.rb";
-    QString unitTest = testDir + "unit/" + switchTo + "_test.rb";
-    if (QFile::exists(functionalTest)) urls << KURL::fromPathOrURL(functionalTest);
-    if (QFile::exists(integrationTest)) urls << KURL::fromPathOrURL(integrationTest);
-    if (QFile::exists(unitTest)) urls << KURL::fromPathOrURL(unitTest);
+    QString functionalTestS = testDir + "functional/" + switchTo + "_controller_test.rb";
+    QString functionalTestP = testDir + "functional/" + switchTo + "s_controller_test.rb";
+    QString integrationTestS = testDir + "integration/" + switchTo + "_test.rb";
+    QString integrationTestP = testDir + "integration/" + switchTo + "s_test.rb";
+    QString unitTestS = testDir + "unit/" + switchTo + "_test.rb";
+    QString unitTestP = testDir + "unit/" + switchTo + "s_test.rb";
+    if (QFile::exists(functionalTestP)) urls << KURL::fromPathOrURL(functionalTestP);
+    if (QFile::exists(integrationTestP)) urls << KURL::fromPathOrURL(integrationTestP);
+    if (QFile::exists(unitTestP)) urls << KURL::fromPathOrURL(unitTestP);
+    if (QFile::exists(functionalTestS)) urls << KURL::fromPathOrURL(functionalTestS);
+    if (QFile::exists(integrationTestS)) urls << KURL::fromPathOrURL(integrationTestS);
+    if (QFile::exists(unitTestS)) urls << KURL::fromPathOrURL(unitTestS);
 
     KDevQuickOpen *qo = extension<KDevQuickOpen>("KDevelop/QuickOpen");
     if (qo && !urls.isEmpty())
@@ -768,7 +783,14 @@ void RubySupportPart::slotSwitchToModel()
     if (switchTo.isEmpty())
         return;
 
+    if (switchTo.endsWith("s"))
+        switchTo = switchTo.mid(0, switchTo.length() - 1);
+
     QString modelsDir = project()->projectDirectory() + "/app/models/";
+    QString singular = modelsDir + switchTo + "_controller.rb";
+    QString plural = modelsDir + switchTo + "s_controller.rb";
+    KURL url = KURL::fromPathOrURL(QFile::exists(singular) ? singular : plural);
+
     partController()->editDocument(KURL::fromPathOrURL(modelsDir + switchTo + ".rb"));
 }
 
@@ -793,13 +815,25 @@ void RubySupportPart::slotSwitchToView()
         switchTo = file.dir().dirName();
     }
     else if (ext == "rb")
-        switchTo = name.remove(QRegExp("_controller$")).remove(QRegExp("_test$"));
+        switchTo = name.remove(QRegExp("_controller$")).remove(QRegExp("_controller_test$")).remove(QRegExp("_test$"));
 
     if (switchTo.isEmpty())
         return;
 
+    if (switchTo.endsWith("s"))
+        switchTo = switchTo.mid(0, switchTo.length() - 1);
+
     KURL::List urls;
-    QDir viewsDir = QDir(project()->projectDirectory() + "/app/views/" + switchTo);
+    QDir viewsDir;
+    QDir viewsDirS = QDir(project()->projectDirectory() + "/app/views/" + switchTo);
+    QDir viewsDirP = QDir(project()->projectDirectory() + "/app/views/" + switchTo + "s");
+    if (viewsDirS.exists())
+        viewsDir = viewsDirS;
+    else if (viewsDirP.exists())
+        viewsDir = viewsDirP;
+    else
+        return;
+
     QStringList views = viewsDir.entryList();
 
     for (QStringList::const_iterator it = views.begin(); it != views.end(); ++it)
