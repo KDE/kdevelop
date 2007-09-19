@@ -1,5 +1,5 @@
 #include "cmakebuilddircreator.h"
-
+#include <QScrollBar>
 #include "ui_cmakebuilddircreator.h"
 
 CMakeBuildDirCreator::CMakeBuildDirCreator(const QString& srcDir, QWidget* parent, Qt::WindowFlags f)
@@ -24,21 +24,27 @@ CMakeBuildDirCreator::CMakeBuildDirCreator(const QString& srcDir, QWidget* paren
 
 void CMakeBuildDirCreator::runBegin()
 {
-	m_creatorUi->cmakeOutput->clear();
-	QStringList args;
-	kDebug(9032) << "Type of build: " << buildType();
-	kDebug(9032) << "Installing to: " << installPrefix();
-	kDebug(9032) << "Build directory: " << buildFolder();
-	args += m_srcFolder;
-	args += "-DCMAKE_INSTALL_PREFIX="+installPrefix().toLocalFile();
-	args += "-DCMAKE_BUILD_TYPE="+buildType();
-	
-	m_proc.setWorkingDirectory(buildFolder().toLocalFile());
-	m_proc.setProgram(cmakeBinary().toLocalFile(), args);
-	m_proc.setOutputChannelMode(KProcess::MergedChannels);
-	m_proc.start();
-	updated();
-	m_creatorUi->status->setText(i18n("Running"));
+    if(m_proc.state()==QProcess::NotRunning) {
+        m_creatorUi->cmakeOutput->clear();
+        QStringList args;
+        kDebug(9032) << "Type of build: " << buildType();
+        kDebug(9032) << "Installing to: " << installPrefix();
+        kDebug(9032) << "Build directory: " << buildFolder();
+        args += m_srcFolder;
+        args += "-DCMAKE_INSTALL_PREFIX="+installPrefix().toLocalFile();
+        args += "-DCMAKE_BUILD_TYPE="+buildType();
+        
+        m_proc.setWorkingDirectory(buildFolder().toLocalFile());
+        m_proc.setProgram(cmakeBinary().toLocalFile(), args);
+        m_proc.setOutputChannelMode(KProcess::MergedChannels);
+        m_proc.start();
+        updated();
+        m_creatorUi->status->setText(i18n("Running"));
+        m_creatorUi->run->setText(i18n("&Cancel"));
+    } else {
+        m_proc.kill();
+        m_creatorUi->status->setText(i18n("CMake process killed"));
+    }
 }
 
 void CMakeBuildDirCreator::runEnd()
@@ -59,6 +65,7 @@ void CMakeBuildDirCreator::addOutput()
 	QString s;
 	s.append(output.trimmed());
 	m_creatorUi->cmakeOutput->setPlainText(m_creatorUi->cmakeOutput->toPlainText()+s+'\n');
+    m_creatorUi->cmakeOutput->verticalScrollBar()->setValue(m_creatorUi->cmakeOutput->verticalScrollBar()->maximum());
 }
 
 void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus exitStatus)
@@ -68,7 +75,7 @@ void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus e
 	t.prepend(b.trimmed());
 	m_creatorUi->cmakeOutput->setPlainText(t);*/
 	
-	bool successful=exitCode==0;
+    bool successful=exitCode==0 & exitStatus==QProcess::NormalExit;
 	if(successful) {
 		m_creatorUi->status->setText(i18n("Created successfully"));
 	} else {
@@ -88,20 +95,32 @@ void CMakeBuildDirCreator::updated()
 	if(!haveCMake) {
 		m_creatorUi->status->setText(i18n("You need to select a cmake binary"));
 	} else {
-        bool dirCorrect=!m_creatorUi->buildFolder->url().isEmpty();
+        bool dirCorrect=!m_creatorUi->buildFolder->url().isEmpty(), alreadyCreated=false;
         if(dirCorrect) {
             QDir d(m_creatorUi->buildFolder->url().toLocalFile());
             dirCorrect=d.exists() && d.count()<=2;
+            alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
         }
-// 		m_creatorUi->buildFolder->setEnabled(true);
-		m_creatorUi->installPrefix->setEnabled(dirCorrect);
-		m_creatorUi->buildType->setEnabled(dirCorrect);
-// 		m_creatorUi->generator->setEnabled(dirCorrect);
-		m_creatorUi->run->setEnabled(dirCorrect);
-		if(!dirCorrect)
-			m_creatorUi->status->setText(i18n("The selected directory does not exist or is not empty")); //Useful to prevent disasters
-		else
-			m_creatorUi->status->setText(i18n("Click run when you are ready"));
+        
+//      m_creatorUi->buildFolder->setEnabled(true);
+        if(alreadyCreated) {
+            m_creatorUi->installPrefix->setEnabled(false);
+            m_creatorUi->buildType->setEnabled(false);
+//          m_creatorUi->generator->setEnabled(dirCorrect);
+            m_creatorUi->run->setEnabled(false);
+            m_creatorUi->status->setText(i18n("Using an already created build directory"));
+            m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        } else {
+            m_creatorUi->installPrefix->setEnabled(dirCorrect);
+            m_creatorUi->buildType->setEnabled(dirCorrect);
+//          m_creatorUi->generator->setEnabled(dirCorrect);
+            m_creatorUi->run->setEnabled(dirCorrect);
+            m_creatorUi->run->setText(i18n("&Run"));
+            if(!dirCorrect)
+                m_creatorUi->status->setText(i18n("The selected directory does not exist or is not empty")); //Useful to prevent disasters
+            else
+                m_creatorUi->status->setText(i18n("Click run when you are ready"));
+        }
 	}
 }
 
