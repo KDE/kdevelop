@@ -553,7 +553,7 @@ void TestDUChain::testCStruct()
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
   QByteArray method("struct A { }; struct A instance; typedef struct { int a; } B, *BPointer;");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1134,7 +1134,7 @@ void TestDUChain::testForwardDeclaration()
 {
   QByteArray method("class Test; Test t; class Test {int i; class SubTest; }; Test::SubTest t2; class Test::SubTest{ int i;};");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1174,7 +1174,7 @@ void TestDUChain::testTemplateForwardDeclaration()
 {
   QByteArray method("class B{}; template<class T>class Test; Test<B> t; template<class T>class Test {}; ");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1482,7 +1482,9 @@ void TestDUChain::testHashedStringRepository() {
 void TestDUChain::release(DUContext* top)
 {
   KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
-  delete top;
+  if(dynamic_cast<TopDUContext*>(top))
+    DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
+  //delete top;
 }
 
 DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)

@@ -669,7 +669,9 @@ void TestExpressionParser::testOperators() {
 void TestExpressionParser::release(DUContext* top)
 {
   KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
-  delete top;
+  if(dynamic_cast<TopDUContext*>(top))
+    DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
+  //delete top;
 }
 
 DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)

@@ -464,7 +464,7 @@ void TestCppCodeCompletion::release(DUContext* top)
   KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
   if(dynamic_cast<TopDUContext*>(top))
     DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
-  delete top;
+  //delete top;
 }
 
 void TestCppCodeCompletion::addInclude( const QString& identity, const QString& text ) {
