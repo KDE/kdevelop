@@ -390,7 +390,7 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   LOCKDUCHAIN;
   if(!m_duContext)
     return;
-#ifndef TEST
+#ifndef TEST_COMPLETION
   m_includeItems = CppLanguageSupport::self()->allFilesInIncludePath(m_duContext->url(), local, prefixPath);
 #endif
   m_valid = true;
