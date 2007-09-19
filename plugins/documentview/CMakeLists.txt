@@ -1,7 +1,7 @@
 
 add_subdirectory(settings)
 
-include_directories( ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/util ${KDEVPLATFORM_INCLUDE_DIR}/widgets
+include_directories( ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/util ${KDEVPLATFORM_INCLUDE_DIR}/widgets ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
     )
 
 

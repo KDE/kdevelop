@@ -23,8 +23,8 @@
 #include <QtCore/QHash>
 #include <QtCore/QPointer>
 
-#include <kdevplugin.h>
-#include <kdevdocumentcontroller.h>
+#include <iplugin.h>
+#include <idocumentcontroller.h>
 
 class KUrl;
 class QModelIndex;
@@ -32,7 +32,7 @@ class KDevDocumentView;
 class KDevDocumentModel;
 class KDevDocumentItem;
 
-class KDevDocumentViewPart: public KDevelop::Plugin
+class KDevDocumentViewPart: public KDevelop::IPlugin
 {
     Q_OBJECT
 public:

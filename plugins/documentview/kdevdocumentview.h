@@ -20,12 +20,12 @@
 #ifndef KDEVDOCUMENTVIEW_H
 #define KDEVDOCUMENTVIEW_H
 
-#include "kdevtreeview.h"
+#include "QTreeView"
 
 class KUrl;
 class KDevDocumentViewPart;
 
-class KDevDocumentView: public KDevelop::TreeView
+class KDevDocumentView: public QTreeView
 {
     Q_OBJECT
 public:

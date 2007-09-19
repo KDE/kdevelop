@@ -37,7 +37,7 @@ Boston, MA 02110-1301, USA.
 #include <kdevdocumentcontroller.h>
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent )
-    : KDevelop::TreeView( parent ),
+    : QTreeView( parent ),
         m_part( part )
 {
     setObjectName( i18n( "Documents" ) );
@@ -82,7 +82,7 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
         setExpanded( index, !isExpanded( index ) );
     }
 
-    KDevelop::TreeView::mousePressEvent( event );
+    QTreeView::mousePressEvent( event );
 }
 
 void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
@@ -104,7 +104,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     KDevelop::Core::mainWindow() ->fillContextMenu( &menu, &context );
     menu.exec( event->globalPos() );
 
-    KDevelop::TreeView::contextMenuEvent( event );
+    QTreeView::contextMenuEvent( event );
 }
 
 #include "kdevdocumentview.moc"
