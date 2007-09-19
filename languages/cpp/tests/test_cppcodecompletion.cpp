@@ -16,8 +16,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#define TEST_COMPLETION
-
 #include "test_cppcodecompletion.h"
 
 #include <QtTest/QtTest>
@@ -454,6 +452,23 @@ void TestCppCodeCompletion::testHeaderSections() {
   QCOMPARE(preprocess("#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, false), QString("\n\n\nHello\n"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
+}
+
+void TestCppCodeCompletion::testForwardDeclaration()
+{
+  addInclude( "testdeclaration.h", "class Test{ };" );
+  QByteArray method("class Test; #include \"testdeclaration.h\"\n class Test; ");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+
+  Declaration* decl = findDeclaration(top, Identifier("Test"), top->textRange().end());
+  QVERIFY(decl);
+  QVERIFY(!decl->isForwardDeclaration());
+  
+  release(top);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

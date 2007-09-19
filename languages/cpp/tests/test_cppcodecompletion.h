@@ -65,6 +65,7 @@ private slots:
   void testUpdateChain();
   void testHeaderSections();
   void cleanupTestCase();
+  void testForwardDeclaration();
 
 public:
   enum DumpArea {
