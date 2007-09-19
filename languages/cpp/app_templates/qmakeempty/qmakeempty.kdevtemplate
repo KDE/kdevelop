@@ -1,9 +1,13 @@
 # KDE Config File
 [General]
 Name=Empty QMake Template
+Name[nds]=Leddig QMake-Vörlaag
+Name[sv]=Tom Qmake-mall
 Icon=qmakeempty.png
 Category=C++/QMake project
 Comment=Generate an empty QMake based application (crossplatform compatible) - Needs Qt
+Comment[nds]=Stellt en op QMake opbuut Programm op (över Bedriefümgeven weg kompatibel) - Qt deit noot
+Comment[sv]=Skapar ett tomt Qmake-baserat program (fungerar på andra plattformar). Kräver Qt.
 FileTemplates=h,CStyle,cpp,CStyle
 Archive=qmakeempty.tar.gz
 
@@ -20,12 +24,16 @@ Dest=%{dest}/%{APPNAMELC}.pro
 [MSG]
 Type=message
 Comment=A Qmake based application was created in %{dest}
+Comment[nds]=In %{dest} wöör en op QMake opbuut Programm opstellt
+Comment[sv]=Ett Qmake-baserat program skapades i %{dest}
 
 [QMAKE]
 Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake.
+Comment[nds]=Afsluut Padd för QMake
+Comment[sv]=Absolut sökväg till Qmake.
 Default=
 
 [DESIGNER]
@@ -33,4 +41,6 @@ Type=value
 ValueType=QString
 Value=DESIGNER
 Comment=Absolute Path for Designer.
+Comment[nds]=Afsluut Padd för Designer
+Comment[sv]=Absolut sökväg till Designer.
 Default=

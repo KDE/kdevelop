@@ -1,9 +1,14 @@
 # KDE Config File
 [General]
 Name=Empty Custom Makefile Template
+Name[nds]=Egen leddig Makefile-Vörlaag
+Name[sv]=Tom mall för egen byggfil
 Icon=makefileempty.png
 Category=C++
 Comment=Generate an empty Custom Makefile based application
+Comment[nds]=Stellt en leddig Programm op, dat op en egen Makefile opbuut
+Comment[sv]=Skapar ett tomt program baserat på en egen byggfil
+Comment[zh_TW]=產生一個空的使用自訂 Makefile 的應用程式
 FileTemplates=h,CStyle,cpp,CStyle
 Archive=makefileempty.tar.gz
 
@@ -25,4 +30,6 @@ Dest=%{dest}/Makefile
 [MSG]
 Type=message
 Comment=A Custom Makefile based application was created in %{dest}
+Comment[nds]=In %{dest} wöör en Programm opstellt, dat op en egen Makefile opbuut
+Comment[sv]=Ett program baserat på en egen byggfil skapades i %{dest}
 

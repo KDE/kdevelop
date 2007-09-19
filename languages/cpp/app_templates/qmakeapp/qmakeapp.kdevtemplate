@@ -42,7 +42,7 @@ Comment[pt_BR]=Gera uma aplicação baseada no QMake/Qt3 (compatível com vária
 Comment[sk]=Vygeneruje aplikáciu založenú na QMake/Qt3 (multiplatformovo kompatibilnú)
 Comment[sr]=Прави програм на основи QMake/Qt3 (прекоплатформски компатибилан)
 Comment[sr@Latn]=Pravi program na osnovi QMake/Qt3 (prekoplatformski kompatibilan)
-Comment[sv]=Skapar ett QMake/Qt3-baserat program (fungerar på andra plattformar)
+Comment[sv]=Skapar ett Qmake/Qt3-baserat program (fungerar på andra plattformar)
 Comment[zh_TW]=產生一個 QMake/Qt3 為基礎的應用程式（跨平台相容）
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -117,7 +117,7 @@ Comment[pt_BR]=Foi criada uma aplicação baseada no Qt3/Qmake em %{dest}
 Comment[sk]=Aplikácia založená na Qt3/Qmake bola vytvorená v %{dest}
 Comment[sr]=Програм на основи Qt3/Qmake направљен је у %{dest}
 Comment[sr@Latn]=Program na osnovi Qt3/Qmake napravljen je u %{dest}
-Comment[sv]=Ett QMake/Qt3-baserat program skapades i %{dest}
+Comment[sv]=Ett Qmake/Qt3-baserat program skapades i %{dest}
 Comment[zh_TW]=一個 QMake/Qt3 為基礎的應用程式已建立於 %{dest}
 
 [QTDIR]
@@ -167,6 +167,6 @@ Comment[pt_BR]=Localização Absoluta do QMake (Qt3).
 Comment[sk]=Absolútna cesta ku QMake (Qt3).
 Comment[sr]=Апсолутна путања до QMake-ва (Qt3).
 Comment[sr@Latn]=Apsolutna putanja do QMake-va (Qt3).
-Comment[sv]=Absolut sökväg till QMake (Qt3).
+Comment[sv]=Absolut sökväg till Qmake (Qt3).
 Comment[zh_TW]=QMake (Qt3) 的絕對路徑
 Default=

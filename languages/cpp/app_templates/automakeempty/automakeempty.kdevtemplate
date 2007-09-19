@@ -1,9 +1,14 @@
 # KDE Config File
 [General]
 Name=Empty Autotools Template
+Name[nds]=Leddig Vörlaag för Automake un sien Kanuten
+Name[sv]=Tom mall för Autotools
 Icon=automakeempty.png
 Category=C++/Automake project
 Comment=Generate an empty Automake based application
+Comment[nds]=Stellt en leddig Programm op, dat op Automake opbuut
+Comment[sv]=Skapar ett tomt Automake-baserat program
+Comment[zh_TW]=產生一個空的使用 Automake 的應用程式
 FileTemplates=h,CStyle,cpp,CStyle
 Archive=automakeempty.tar.gz
 
@@ -39,4 +44,7 @@ Dest=%{dest}/configure.in
 [MSG]
 Type=message
 Comment=An Automake based application was created in %{dest}
+Comment[nds]=In %{dest} wöör en op Automake opbuut Programm opstellt
+Comment[sv]=Ett Automake-baserat program skapades i %{dest}
+Comment[zh_TW]=一個以 Automake 為基礎的應用程式已建立於 %{dest}
 
