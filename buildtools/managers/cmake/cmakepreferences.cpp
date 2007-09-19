@@ -55,7 +55,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     showInternal(m_prefsUi->showInternal->checkState());
     m_srcFolder=KUrl(args[0].toString());
     m_srcFolder=m_srcFolder.upUrl();
-    
+
     m_cfg = KSharedConfig::openConfig(args[1].toString());
 //     kDebug(9032) << "cfgs" << args;
     load();
@@ -73,7 +73,7 @@ void CMakePreferences::load()
     KConfigGroup group(m_cfg.data(), "CMake");
     QStringList bDirs=group.readPathListEntry("BuildDirs");
     m_prefsUi->kcfg_buildDirs->addItems(bDirs);
-    
+
     QString current=group.readEntry("CurrentBuildDir");
     m_prefsUi->kcfg_buildDirs->setCurrentIndex(0); //FIXME should use current
     kDebug(9032) << "builddirs" << bDirs;
@@ -90,11 +90,12 @@ void CMakePreferences::save()
     {
         bDirs += m_prefsUi->kcfg_buildDirs->itemText(i);
     }
-    
+
     KConfigGroup group(m_cfg.data(), "CMake");
     group.writeEntry("BuildDirs", bDirs);
     group.writeEntry("CurrentBuildDir", m_prefsUi->kcfg_buildDirs->currentText());
     m_currentModel->writeDown();
+    m_cfg->sync();
 }
 
 void CMakePreferences::defaults()
@@ -163,6 +164,7 @@ void CMakePreferences::showInternal(int state)
 void CMakePreferences::buildDirChanged(const QString &str)
 {
     updateCache(str);
+    kDebug() << "Emitting changed signal for cmake kcm";
     emit changed(true);
 }
 
@@ -172,6 +174,7 @@ void CMakePreferences::createBuildDir()
     //TODO: if there is information, use it to initialize the dialog
     if(bdCreator.exec()) {
         m_prefsUi->kcfg_buildDirs->addItem(bdCreator.buildFolder().toLocalFile());
+        kDebug() << "Emitting changed signal for cmake kcm";
         emit changed(true);
     }
     //TODO: Save it for next runs
