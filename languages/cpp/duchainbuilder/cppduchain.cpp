@@ -70,21 +70,29 @@ void minimize(int& i, const int with) {
 }
 
 QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<Declaration*, int> >& declarations ) {
-  QHash<Identifier, int> minimumDepths;
+  QHash<Identifier, Declaration*> nearestDeclaration;
+  QHash<Declaration*, int> depthHash;
 
   typedef QPair<Declaration*, int> Pair;
   foreach(  const Pair& decl, declarations ) {
-    if( minimumDepths.contains( decl.first->identifier() ) )
-      minimize( minimumDepths[ decl.first->identifier() ], decl.second );
-    else
-      minimumDepths[ decl.first->identifier() ] = decl.second;
+    depthHash[decl.first] = decl.second;
+    
+    QHash<Identifier, Declaration*>::iterator it = nearestDeclaration.find(decl.first->identifier());
+
+    if(it == nearestDeclaration.end()) {
+      nearestDeclaration[ decl.first->identifier() ] = decl.first;
+    }else if(decl.first->isForwardDeclaration() == (*it)->isForwardDeclaration() || (!decl.first->isForwardDeclaration() && (*it)->isForwardDeclaration())){
+      //Always prefer non forward-declarations over forward-declarations
+      if((!decl.first->isForwardDeclaration() && (*it)->isForwardDeclaration()) || decl.second < depthHash[*it])
+        nearestDeclaration[ decl.first->identifier() ] = decl.first;
+    }
   }
 
-    QList< QPair<Declaration*, int> > ret;
+  QList< QPair<Declaration*, int> > ret;
     
   ///Only keep the declarations of each name on the lowest inheritance-level
   foreach( const Pair& decl, declarations )
-    if( minimumDepths[decl.first->identifier()] == decl.second )
+    if( nearestDeclaration[decl.first->identifier()] == decl.first )
       ret << decl;
 
   return ret;
