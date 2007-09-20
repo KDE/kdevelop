@@ -31,6 +31,9 @@ Boston, MA 02110-1301, USA.
 #include <klocale.h>
 #include <kiconloader.h>
 
+#include "kdevdocumentselection.h"
+#include "kdevdocumentviewdelegate.h"
+
 #include <icore.h>
 //#include <kdevcontext.h>
 //#include <kdevmainwindow.h>
@@ -42,6 +45,15 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent 
     : QTreeView( parent ),
         m_part( part )
 {
+    m_documentModel = new KDevDocumentModel();
+
+    m_selectionModel = new KDevDocumentSelection( m_documentModel );
+    m_delegate = new KDevDocumentViewDelegate( this, this );
+
+    setModel( m_documentModel );
+    setSelectionModel( m_selectionModel );
+    setItemDelegate( m_delegate );
+
     setObjectName( i18n( "Documents" ) );
 
     setWindowIcon( SmallIcon( "kmultiple" ) );
@@ -95,7 +107,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     KUrl::List list;
     foreach ( QModelIndex index, indexes )
     {
-        if ( KDevFileItem * fileItem = static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem() )
+        if ( KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem() )
         {
             list.append( fileItem->url() );
         }
@@ -126,7 +138,7 @@ void KDevDocumentView::loaded( KDevelop::IDocument* document )
     if ( !mimeItem )
     {
         mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
-        m_documentModel->insertRow( m_documentModel->rowCount(QModelIndex()), mimeItem );
+        m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
         expand( m_documentModel->indexFromItem( mimeItem ) );
     }
 

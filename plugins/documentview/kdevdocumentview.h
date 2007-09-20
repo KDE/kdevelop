@@ -24,7 +24,9 @@
 
 class KUrl;
 class KDevDocumentViewPart;
-
+class KDevDocumentModel;
+class KDevDocumentViewDelegate;
+class KDevDocumentSelection;
 namespace KDevelop
 {
     class IDocument;
@@ -60,7 +62,9 @@ protected:
 private:
     KDevDocumentViewPart *m_part;
     KDevDocumentModel *m_documentModel;
-    KDevDocumentItem *m_documentItem;
+    KDevDocumentSelection* m_selectionModel;
+    KDevDocumentViewDelegate* m_delegate;
+//     KDevDocumentItem *m_documentItem;
     QHash< KDevelop::IDocument*, QModelIndex > m_doc2index;
 };
 

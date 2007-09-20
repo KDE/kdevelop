@@ -46,7 +46,7 @@ QList<KDevFileItem*> KDevMimeTypeItem::fileList() const
 
     for ( int i = 0; i < rowCount(); ++i )
     {
-        if ( KDevFileItem * item = static_cast<KDevDocumentItem*>( child( i ) ) ->fileItem() )
+        if ( KDevFileItem * item = dynamic_cast<KDevDocumentItem*>( child( i ) ) ->fileItem() )
             lst.append( item );
     }
 
@@ -74,7 +74,10 @@ KDevFileItem::~KDevFileItem()
 
 KDevDocumentModel::KDevDocumentModel( QObject *parent )
     : QStandardItemModel( parent )
-{}
+{
+    setRowCount(0);
+    setColumnCount(1);
+}
 
 KDevDocumentModel::~KDevDocumentModel()
 {}
@@ -83,10 +86,9 @@ QList<KDevMimeTypeItem*> KDevDocumentModel::mimeTypeList() const
 {
 
     QList<KDevMimeTypeItem*> lst;
-
-    for ( int i = 0; i < rowCount( QModelIndex() ); ++i )
+    for ( int i = 0; i < rowCount() ; ++i )
     {
-        if ( KDevMimeTypeItem * mimeitem = static_cast<KDevDocumentItem*>( item( i ) ) ->mimeTypeItem() )
+        if ( KDevMimeTypeItem * mimeitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->mimeTypeItem() )
         {
 
             lst.append( mimeitem );
