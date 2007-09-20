@@ -1,12 +1,22 @@
 # KDE Config File
 [General]
 Name=Empty Autotools Template
+Name[de]=Leere Autotools-Vorlage
+Name[el]=Κενό πρότυπο των Autotools
+Name[es]=Plantilla Autotools vacía
 Name[nds]=Leddig Vörlaag för Automake un sien Kanuten
+Name[pt]=Modelo de Autotools Vazio
+Name[pt_BR]=Modelo de Autotools Vazio
 Name[sv]=Tom mall för Autotools
 Icon=automakeempty.png
 Category=C++/Automake project
 Comment=Generate an empty Automake based application
+Comment[de]=Erstellt eine leere auf Automake basierende Anwendung
+Comment[el]=Δημιουργία μίας κενής εφαρμογής βασισμένης στο Automake
+Comment[es]=Genera una aplicación vacía basada en Automake
 Comment[nds]=Stellt en leddig Programm op, dat op Automake opbuut
+Comment[pt]=Gera uma aplicação vazia baseada no Automake
+Comment[pt_BR]=Gera uma aplicação vazia baseada no Automake
 Comment[sv]=Skapar ett tomt Automake-baserat program
 Comment[zh_TW]=產生一個空的使用 Automake 的應用程式
 FileTemplates=h,CStyle,cpp,CStyle
@@ -44,7 +54,12 @@ Dest=%{dest}/configure.in
 [MSG]
 Type=message
 Comment=An Automake based application was created in %{dest}
+Comment[de]=Eine auf Automake basierende Anwendung wurde in %{dest} erstellt.
+Comment[el]=Μία εφαρμογή βασισμένη στο Automake δημιουργήθηκε στο %{dest}
+Comment[es]=Una aplicación basada en Automake ha sido creada en %{dest}
 Comment[nds]=In %{dest} wöör en op Automake opbuut Programm opstellt
+Comment[pt]=Foi criada uma aplicação baseada no Automake em %{dest}
+Comment[pt_BR]=Foi criada uma aplicação baseada no Automake em %{dest}
 Comment[sv]=Ett Automake-baserat program skapades i %{dest}
 Comment[zh_TW]=一個以 Automake 為基礎的應用程式已建立於 %{dest}
 

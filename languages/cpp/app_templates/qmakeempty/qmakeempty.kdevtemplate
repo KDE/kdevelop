@@ -1,12 +1,22 @@
 # KDE Config File
 [General]
 Name=Empty QMake Template
+Name[de]=Leere QMake-Vorlage
+Name[el]=Κενό πρότυπο του QMake
+Name[es]=Plantilla QMake vacía
 Name[nds]=Leddig QMake-Vörlaag
+Name[pt]=Modelo do QMake Vazio
+Name[pt_BR]=Modelo do QMake Vazio
 Name[sv]=Tom Qmake-mall
 Icon=qmakeempty.png
 Category=C++/QMake project
 Comment=Generate an empty QMake based application (crossplatform compatible) - Needs Qt
+Comment[de]=Erstellt eine leere auf QMake basierende Anwendung (plattformunabhängig). - Benötigt Qt
+Comment[el]=Δημιουργία μιας κενής εφαρμογής βασισμένης στο QMake (crossplatform) - Βασίζεται στην Qt
+Comment[es]=Genera una aplicación vacía basada en QMake (con compatibilidad multiplataforma) - Necesita Qt
 Comment[nds]=Stellt en op QMake opbuut Programm op (över Bedriefümgeven weg kompatibel) - Qt deit noot
+Comment[pt]=Gera uma aplicação vazia baseada no QMake (compatível com várias plataformas) - Necessita do Qt4
+Comment[pt_BR]=Gera uma aplicação vazia baseada no QMake (compatível com várias plataformas) - Necessita do Qt4
 Comment[sv]=Skapar ett tomt Qmake-baserat program (fungerar på andra plattformar). Kräver Qt.
 FileTemplates=h,CStyle,cpp,CStyle
 Archive=qmakeempty.tar.gz
@@ -24,7 +34,12 @@ Dest=%{dest}/%{APPNAMELC}.pro
 [MSG]
 Type=message
 Comment=A Qmake based application was created in %{dest}
+Comment[de]=Eine auf Qmake basierende Anwendung wurde in %{dest} erstellt.
+Comment[el]=Δημιουργήθηκε μια εφαρμογή βασισμένη σε Qmake στο %{dest}
+Comment[es]=Una aplicación basada en QMake ha sido creada en %{dest}
 Comment[nds]=In %{dest} wöör en op QMake opbuut Programm opstellt
+Comment[pt]=Foi criada uma aplicação baseada no Qmake em %{dest}
+Comment[pt_BR]=Foi criada uma aplicação baseada no Qmake em %{dest}
 Comment[sv]=Ett Qmake-baserat program skapades i %{dest}
 
 [QMAKE]
@@ -32,7 +47,12 @@ Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake.
+Comment[de]=Absoluter Pfad für QMake.
+Comment[el]=Απόλυτη διαδρομή του QMake.
+Comment[es]=Ruta completa para QMake.
 Comment[nds]=Afsluut Padd för QMake
+Comment[pt]=Localização Absoluta do QMake.
+Comment[pt_BR]=Localização Absoluta do QMake.
 Comment[sv]=Absolut sökväg till Qmake.
 Default=
 
@@ -41,6 +61,11 @@ Type=value
 ValueType=QString
 Value=DESIGNER
 Comment=Absolute Path for Designer.
+Comment[de]=Absoluter Pfad für Designer.
+Comment[el]=Απόλυτη διαδρομή του Designer.
+Comment[es]=Ruta completa para Designer.
 Comment[nds]=Afsluut Padd för Designer
+Comment[pt]=Localização Absoluta do Designer.
+Comment[pt_BR]=Localização Absoluta do Designer.
 Comment[sv]=Absolut sökväg till Designer.
 Default=

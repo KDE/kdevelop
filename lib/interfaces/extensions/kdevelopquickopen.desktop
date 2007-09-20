@@ -4,7 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/QuickOpen
 X-KDE-Derived=KDevelop/Plugin
 Name=Quick Open Interface
+Name[de]=Schnittstelle für Schnellöffnen
+Name[el]=Διασύνδεση γρήγορου ανοίγματος
+Name[es]=Interfaz de apertura rápida
 Name[nds]=Fixopmaak-Koppelsteed
+Name[pt]=Interface de Abertura Rápida
+Name[pt_BR]=Interface de Abertura Rápida
 Name[sv]=Snabböppningsgränssnitt
 
 # versioning - prevent DLL hell
@@ -17,7 +22,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/QuickOpen
 X-KDE-Derived=KDevelop/Plugin
 Name=Quick Open Interface
+Name[de]=Schnittstelle für Schnellöffnen
+Name[el]=Διασύνδεση γρήγορου ανοίγματος
+Name[es]=Interfaz de apertura rápida
 Name[nds]=Fixopmaak-Koppelsteed
+Name[pt]=Interface de Abertura Rápida
+Name[pt_BR]=Interface de Abertura Rápida
 Name[sv]=Snabböppningsgränssnitt
 
 # versioning - prevent DLL hell

@@ -1,12 +1,22 @@
 # KDE Config File
 [General]
 Name=Empty Custom Makefile Template
+Name[de]=Leere Vorlage für benutzerdefiniertes Makefile
+Name[el]=Κενό προσαρμοσμένο πρότυπο Makefile
+Name[es]=Plantilla vacía para Makefile personalizado
 Name[nds]=Egen leddig Makefile-Vörlaag
+Name[pt]=Modelo de Makefile Personalizada Vazio            
+Name[pt_BR]=Modelo de Makefile Personalizada Vazio            
 Name[sv]=Tom mall för egen byggfil
 Icon=makefileempty.png
 Category=C++
 Comment=Generate an empty Custom Makefile based application
+Comment[de]=Erstellt eine auf einem benutzerdefinierten Makefile basierende Anwendung
+Comment[el]=Δημιουργία μίας κενής εφαρμογής βασισμένης σε προσαρμοσμένο Makefile
+Comment[es]=Genera una aplicación vacía basada en un Makefile personalizado
 Comment[nds]=Stellt en leddig Programm op, dat op en egen Makefile opbuut
+Comment[pt]=Gera uma aplicação baseada em Makefile's personalizadas
+Comment[pt_BR]=Gera uma aplicação baseada em Makefile's personalizadas
 Comment[sv]=Skapar ett tomt program baserat på en egen byggfil
 Comment[zh_TW]=產生一個空的使用自訂 Makefile 的應用程式
 FileTemplates=h,CStyle,cpp,CStyle
@@ -30,6 +40,11 @@ Dest=%{dest}/Makefile
 [MSG]
 Type=message
 Comment=A Custom Makefile based application was created in %{dest}
+Comment[de]=Eine auf einem benutzerdefinierten Makefile basierende Anwendung wurde in %{dest} erstellt.
+Comment[el]=Δημιουργήθηκε μία εφαρμογή βασισμένη σε προσαρμοσμένο Makefile στο %{dest}
+Comment[es]=Una aplicación basada en un Makefile personalizado ha sido creada en %{dest}
 Comment[nds]=In %{dest} wöör en Programm opstellt, dat op en egen Makefile opbuut
+Comment[pt]=Foi criada uma aplicação baseada em Makefile's personalizadas em %{dest}
+Comment[pt_BR]=Foi criada uma aplicação baseada em Makefile's personalizadas em %{dest}
 Comment[sv]=Ett program baserat på en egen byggfil skapades i %{dest}
 
