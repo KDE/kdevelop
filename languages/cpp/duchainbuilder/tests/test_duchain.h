@@ -76,6 +76,7 @@ private slots:
   void testFunctionDefinition();
   void testBaseClasses();
   void testForwardDeclaration();
+  void testForwardDeclaration2();
   void testTemplateForwardDeclaration();
    void testHashedStringRepository();
   
