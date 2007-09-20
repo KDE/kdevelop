@@ -594,9 +594,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   DeclarationBuilderBase::visitClassSpecifier(node);
 
-  Declaration* dec = currentDeclaration();
-  
-
   if( node->name ) {
     //Resolve forward-declarations
     DUChainWriteLocker lock(DUChain::lock());
@@ -759,8 +756,16 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
   DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
 
-  if (openedDeclaration)
+  if (openedDeclaration) {
+    DUChainWriteLocker lock(DUChain::lock());
+    //Resolve forward-declarations that are declared after the real type was already declared
+    Q_ASSERT(dynamic_cast<ForwardDeclaration*>(currentDeclaration()));
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
+    if(idType && idType->declaration())
+      static_cast<ForwardDeclaration*>(currentDeclaration())->setResolved(idType->declaration());
+    
     closeDeclaration();
+  }
 }
 
 
