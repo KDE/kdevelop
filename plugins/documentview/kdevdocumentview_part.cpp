@@ -32,68 +32,60 @@
 #include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kgenericfactory.h>
-#include <kparts/componentfactory.h>
 
-#include <kdevcore.h>
-#include <kdevmainwindow.h>
+#include <icore.h>
+#include <iuicontroller.h>
 
 K_PLUGIN_FACTORY(KDevDocumentViewFactory, registerPlugin<KDevDocumentViewPart>(); )
 K_EXPORT_PLUGIN(KDevDocumentViewFactory("kdevdocumentview"))
 
-KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
-        const QVariantList& )
-        : KDevelop::Plugin( KDevDocumentViewFactory::componentData(), parent )
+class KDevDocumentViewPartFactory: public KDevelop::IToolViewFactory
 {
-    m_documentModel = new KDevDocumentModel( this );
+    public:
+        KDevDocumentViewPartFactory( KDevDocumentViewPart *part ): m_part( part )
+        {}
+        virtual QWidget* create( QWidget *parent = 0 )
+        {
+            KDevDocumentView* view = new KDevDocumentView( m_part, parent );
+            KDevelop::IDocumentController* docController = m_part->core()->documentController();
+            QObject::connect( docController, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
+                    view, SLOT( activated( KDevelop::IDocument* ) ) );
+            QObject::connect( docController, SIGNAL( documentSaved( KDevelop::IDocument* ) ),
+                    view, SLOT( saved( KDevelop::IDocument* ) ) );
+            QObject::connect( docController, SIGNAL( documentLoaded( KDevelop::IDocument* ) ),
+                    view, SLOT( loaded( KDevelop::IDocument* ) ) );
+            QObject::connect( docController, SIGNAL( documentClosed( KDevelop::IDocument* ) ),
+                    view, SLOT( closed( KDevelop::IDocument* ) ) );
+            QObject::connect( docController,
+                    SIGNAL( documentContentChanged( KDevelop::IDocument* ) ),
+                    view, SLOT( contentChanged( KDevelop::Document* ) ) );
+            QObject::connect( docController,
+                    SIGNAL( documentStateChanged( KDevelop::IDocument* ) ),
+                    view, SLOT( stateChanged( KDevelop::IDocument* ) ) );
+            return view;
+        }
+        virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+        {
+            return Qt::RightDockWidgetArea;
+        }
+    private:
+        KDevDocumentViewPart* m_part;
+};
 
-    setComponentData( KDevDocumentViewFactory::componentData() );
 
-    m_documentView = new KDevDocumentView( this, 0 );
+KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const QVariantList& args )
+        : KDevelop::IPlugin( KDevDocumentViewFactory::componentData(), parent )
+{
 
-    m_documentView->setModel( m_documentModel );
+    factory = new KDevDocumentViewPartFactory( this );
 
-    m_documentView->setSelectionModel(
-        new KDevDocumentSelection( m_documentModel ) );
-
-    KDevDocumentViewDelegate *delegate =
-        new KDevDocumentViewDelegate( m_documentView, this );
-
-    m_documentView->setItemDelegate( delegate );
-
-    KDevelop::DocumentController* docController = KDevelop::Core::documentController();
-
-    connect( docController, SIGNAL( documentActivated( KDevelop::Document* ) ),
-             this, SLOT( activated( KDevelop::Document* ) ) );
-    connect( docController, SIGNAL( documentSaved( KDevelop::Document* ) ),
-             this, SLOT( saved( KDevelop::Document* ) ) );
-    connect( docController, SIGNAL( documentLoaded( KDevelop::Document* ) ),
-             this, SLOT( loaded( KDevelop::Document* ) ) );
-    connect( docController, SIGNAL( documentClosed( KDevelop::Document* ) ),
-             this, SLOT( closed( KDevelop::Document* ) ) );
-    connect( docController,
-             SIGNAL( documentExternallyModified( KDevelop::Document* ) ),
-             this, SLOT( externallyModified( KDevelop::Document* ) ) );
-    connect( docController,
-             SIGNAL( documentUrlChanged( KDevelop::Document*, const KUrl &, const KUrl & ) ),
-             this, SLOT( urlChanged( KDevelop::Document*, const KUrl &, const KUrl & ) ) );
-    connect( docController,
-             SIGNAL( documentStateChanged( KDevelop::Document* ) ),
-             this, SLOT( stateChanged( KDevelop::Document* ) ) );
+    core()->uiController()->addToolView( "Document View", factory );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
 
 KDevDocumentViewPart::~KDevDocumentViewPart()
 {
-    if ( m_documentView )
-    {
-        delete m_documentView;
-    }
-}
-
-QWidget *KDevDocumentViewPart::pluginView() const
-{
-    return m_documentView;
 }
 
 Qt::DockWidgetArea KDevDocumentViewPart::dockWidgetAreaHint() const
@@ -106,80 +98,7 @@ bool KDevDocumentViewPart::isCentralPlugin() const
     return true;
 }
 
-void KDevDocumentViewPart::activated( KDevelop::Document* document )
-{
-    m_documentView->setCurrentIndex( m_doc2index[ document ] );
-}
 
-void KDevDocumentViewPart::saved( KDevelop::Document* )
-{
-    kDebug() ;
-}
-
-void KDevDocumentViewPart::loaded( KDevelop::Document* document )
-{
-    QString mimeType = document->mimeType() ->comment();
-    KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
-    if ( !mimeItem )
-    {
-        mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
-        m_documentModel->appendItem( mimeItem );
-        m_documentView->expand( m_documentModel->indexOf( mimeItem ) );
-    }
-
-    if ( !mimeItem->file( document->url() ) )
-    {
-        KDevFileItem * fileItem = new KDevFileItem( document->url() );
-        m_documentModel->appendItem( fileItem, mimeItem );
-        m_documentView->setCurrentIndex( m_documentModel->indexOf( fileItem ) );
-        m_doc2index[ document ] = m_documentModel->indexOf( fileItem );
-    }
-}
-
-void KDevDocumentViewPart::closed( KDevelop::Document* document )
-{
-    QModelIndex fileIndex = m_doc2index[ document ];
-    KDevDocumentItem *fileItem = m_documentModel->item( fileIndex );
-    if ( !fileItem )
-        return ;
-
-    QModelIndex mimeIndex = m_documentModel->parent( fileIndex );
-
-    m_documentModel->removeItem( fileItem );
-    m_doc2index.remove( document );
-
-    if ( m_documentModel->hasChildren( mimeIndex ) )
-        return ;
-
-    KDevDocumentItem *mimeItem = m_documentModel->item( mimeIndex );
-    if ( !mimeItem )
-        return ;
-
-    m_documentModel->removeItem( mimeItem );
-    m_documentView->doItemsLayout();
-}
-
-void KDevDocumentViewPart::externallyModified( KDevelop::Document* )
-{
-    kDebug() ;
-}
-
-void KDevDocumentViewPart::urlChanged( KDevelop::Document*, const KUrl & /*oldurl*/,
-                                       const KUrl & /*newurl*/ )
-{
-    kDebug() ;
-}
-
-void KDevDocumentViewPart::stateChanged( KDevelop::Document* document )
-{
-    KDevDocumentItem * documentItem =
-        m_documentModel->item( m_doc2index[ document ] );
-
-    if ( documentItem && documentItem->documentState() != document->state() )
-        documentItem->setDocumentState( document->state() );
-
-    m_documentView->doItemsLayout();
-}
 
 #include "kdevdocumentview_part.moc"
 

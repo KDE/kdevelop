@@ -20,8 +20,10 @@
 #ifndef KDEVDOCUMENTMODEL_H
 #define KDEVDOCUMENTMODEL_H
 
-#include <kdevitemmodel.h>
-#include <kdevdocumentcontroller.h>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <idocumentcontroller.h>
+#include <idocument.h>
 
 #include <kurl.h>
 #include <kicon.h>
@@ -31,13 +33,13 @@ class KDevDocumentItem;
 class KDevMimeTypeItem;
 class KDevFileItem;
 
-class KDevDocumentItem: public KDevelop::ItemCollection
+class KDevDocumentItem: public QStandardItem
 {
 public:
-    explicit KDevDocumentItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
+    explicit KDevDocumentItem( const QString &name );
     virtual ~KDevDocumentItem();
 
-    virtual KDevDocumentItem *itemAt( int index ) const;
+//     virtual KDevDocumentItem *itemAt( int index ) const;
     virtual KDevMimeTypeItem *mimeTypeItem() const
     {
         return 0;
@@ -51,37 +53,37 @@ public:
     {
         switch ( m_documentState )
         {
-        case KDevelop::Document::Clean:
+        case KDevelop::IDocument::Clean:
             return QIcon();
-        case KDevelop::Document::Modified:
+        case KDevelop::IDocument::Modified:
             return KIcon( "document-save" );
-        case KDevelop::Document::Dirty:
+        case KDevelop::IDocument::Dirty:
             return KIcon( "file-revert" );
-        case KDevelop::Document::DirtyAndModified:
+        case KDevelop::IDocument::DirtyAndModified:
             return KIcon( "process-stop" );
         default:
             return QIcon();
         }
     }
 
-    KDevelop::Document::DocumentState documentState() const
+    KDevelop::IDocument::DocumentState documentState() const
     {
         return m_documentState;
     }
 
-    void setDocumentState( KDevelop::Document::DocumentState state )
+    void setDocumentState( KDevelop::IDocument::DocumentState state )
     {
         m_documentState = state;
     }
 
 private:
-    KDevelop::Document::DocumentState m_documentState;
+    KDevelop::IDocument::DocumentState m_documentState;
 };
 
 class KDevMimeTypeItem: public KDevDocumentItem
 {
 public:
-    explicit KDevMimeTypeItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
+    explicit KDevMimeTypeItem( const QString &name );
     virtual ~KDevMimeTypeItem();
 
     virtual KDevMimeTypeItem *mimeTypeItem() const
@@ -96,7 +98,7 @@ public:
 class KDevFileItem: public KDevDocumentItem
 {
 public:
-    explicit KDevFileItem( const KUrl &url, KDevelop::ItemGroup *parent = 0 );
+    explicit KDevFileItem( const KUrl &url );
     virtual ~KDevFileItem();
 
     virtual KDevFileItem *fileItem() const
@@ -104,12 +106,12 @@ public:
         return const_cast<KDevFileItem*>( this );
     }
 
-    const KUrl &URL() const
+    const KUrl &url() const
     {
         return m_url;
     }
 
-    void setURL( const KUrl &url )
+    void setUrl( const KUrl &url )
     {
         m_url = url;
     }
@@ -118,16 +120,12 @@ private:
     KUrl m_url;
 };
 
-class KDevDocumentModel: public KDevelop::ItemModel
+class KDevDocumentModel: public QStandardItemModel
 {
     Q_OBJECT
 public:
     KDevDocumentModel( QObject *parent = 0 );
     virtual ~KDevDocumentModel();
-
-    virtual KDevDocumentItem *item( const QModelIndex &index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex &parent ) const;
-    virtual int rowCount( const QModelIndex &parent ) const;
 
     QList<KDevMimeTypeItem*> mimeTypeList() const;
     KDevMimeTypeItem* mimeType( const QString& mimeType ) const;

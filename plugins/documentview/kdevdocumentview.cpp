@@ -31,10 +31,12 @@ Boston, MA 02110-1301, USA.
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include <kdevcore.h>
-#include <kdevcontext.h>
-#include <kdevmainwindow.h>
-#include <kdevdocumentcontroller.h>
+#include <icore.h>
+//#include <kdevcontext.h>
+//#include <kdevmainwindow.h>
+#include <idocumentcontroller.h>
+#include <iplugincontroller.h>
+#include <context.h>
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent )
     : QTreeView( parent ),
@@ -72,8 +74,8 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     if ( event->button() == Qt::LeftButton && index.parent().isValid() &&
             event->modifiers() == Qt::NoModifier )
     {
-        KDevelop::Core::documentController() ->editDocument(
-            docModel->item( index ) ->fileItem() ->URL() );
+        m_part->core()->documentController() ->openDocument(
+            static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) ) ->fileItem() ->url() );
 
     }
 
@@ -93,18 +95,84 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     KUrl::List list;
     foreach ( QModelIndex index, indexes )
     {
-        if ( KDevFileItem * fileItem = docModel->item( index ) ->fileItem() )
+        if ( KDevFileItem * fileItem = static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem() )
         {
-            list.append( fileItem->URL() );
+            list.append( fileItem->url() );
         }
     }
 
     KMenu menu( this );
     KDevelop::FileContext context( list ); //FIXME change filecontext to documentcontext
-    KDevelop::Core::mainWindow() ->fillContextMenu( &menu, &context );
+    m_part->core()->pluginController()->buildContextMenu( &context, &menu );
     menu.exec( event->globalPos() );
 
     QTreeView::contextMenuEvent( event );
+}
+
+void KDevDocumentView::activated( KDevelop::IDocument* document )
+{
+    setCurrentIndex( m_doc2index[ document ] );
+}
+
+void KDevDocumentView::saved( KDevelop::IDocument* )
+{
+    kDebug() ;
+}
+
+void KDevDocumentView::loaded( KDevelop::IDocument* document )
+{
+    QString mimeType = document->mimeType() ->comment();
+    KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
+    if ( !mimeItem )
+    {
+        mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
+        m_documentModel->insertRow( m_documentModel->rowCount(QModelIndex()), mimeItem );
+        expand( m_documentModel->indexFromItem( mimeItem ) );
+    }
+
+    if ( !mimeItem->file( document->url() ) )
+    {
+        KDevFileItem * fileItem = new KDevFileItem( document->url() );
+        mimeItem->setChild( mimeItem->rowCount(), fileItem );
+        setCurrentIndex( m_documentModel->indexFromItem( fileItem ) );
+        m_doc2index[ document ] = m_documentModel->indexFromItem( fileItem );
+    }
+}
+
+void KDevDocumentView::closed( KDevelop::IDocument* document )
+{
+    QModelIndex fileIndex = m_doc2index[ document ];
+    if ( !fileIndex.isValid() )
+        return ;
+
+    QModelIndex mimeIndex = m_documentModel->parent( fileIndex );
+    if ( !mimeIndex.isValid() )
+        return ;
+
+    m_documentModel->takeItem( fileIndex.row() );
+    m_doc2index.remove( document );
+
+    if ( m_documentModel->hasChildren( mimeIndex ) )
+        return ;
+
+    m_documentModel->takeItem( mimeIndex.row() );
+    doItemsLayout();
+}
+
+void KDevDocumentView::contentChanged( KDevelop::IDocument* )
+{
+    kDebug() ;
+}
+
+void KDevDocumentView::stateChanged( KDevelop::IDocument* document )
+{
+    KDevDocumentItem * documentItem = static_cast<KDevDocumentItem*>(
+        m_documentModel->itemFromIndex( m_doc2index[ document ] ) );
+
+    if ( documentItem && documentItem->documentState() != document->state() )
+        documentItem->setDocumentState( document->state() );
+
+    doItemsLayout();
 }
 
 #include "kdevdocumentview.moc"

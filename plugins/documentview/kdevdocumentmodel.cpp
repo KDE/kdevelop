@@ -20,21 +20,21 @@
 #include "kdevdocumentmodel.h"
 #include <QtCore/qdebug.h>
 
-KDevDocumentItem::KDevDocumentItem( const QString &name, KDevelop::ItemGroup *parent )
-    : KDevelop::ItemCollection( name, parent ),
-        m_documentState( KDevelop::Document::Clean )
+KDevDocumentItem::KDevDocumentItem( const QString &name )
+    : QStandardItem( name ),
+        m_documentState( KDevelop::IDocument::Clean )
 {}
 
 KDevDocumentItem::~KDevDocumentItem()
 {}
 
-KDevDocumentItem *KDevDocumentItem::itemAt( int index ) const
-{
-    return static_cast<KDevDocumentItem*>( KDevelop::ItemCollection::itemAt( index ) );
-}
+// KDevDocumentItem *KDevDocumentItem::itemAt( int index ) const
+// {
+//     return static_cast<KDevDocumentItem*>( QStandardItem::itemFromIndex( index ) );
+// }
 
-KDevMimeTypeItem::KDevMimeTypeItem( const QString &name, KDevelop::ItemGroup *parent )
-        : KDevDocumentItem( name, parent )
+KDevMimeTypeItem::KDevMimeTypeItem( const QString &name )
+        : KDevDocumentItem( name )
 {}
 
 KDevMimeTypeItem::~KDevMimeTypeItem()
@@ -44,9 +44,9 @@ QList<KDevFileItem*> KDevMimeTypeItem::fileList() const
 {
     QList<KDevFileItem*> lst;
 
-    for ( int i = 0; i < itemCount(); ++i )
+    for ( int i = 0; i < rowCount(); ++i )
     {
-        if ( KDevFileItem * item = itemAt( i ) ->fileItem() )
+        if ( KDevFileItem * item = static_cast<KDevDocumentItem*>( child( i ) ) ->fileItem() )
             lst.append( item );
     }
 
@@ -57,15 +57,15 @@ KDevFileItem* KDevMimeTypeItem::file( const KUrl &url ) const
 {
     foreach( KDevFileItem * item, fileList() )
     {
-        if ( item->URL() == url )
+        if ( item->url() == url )
             return item;
     }
 
     return 0;
 }
 
-KDevFileItem::KDevFileItem( const KUrl &url, KDevelop::ItemGroup *parent )
-        : KDevDocumentItem( url.fileName(), parent ),
+KDevFileItem::KDevFileItem( const KUrl &url )
+        : KDevDocumentItem( url.fileName() ),
         m_url( url )
 {}
 
@@ -73,37 +73,24 @@ KDevFileItem::~KDevFileItem()
 {}
 
 KDevDocumentModel::KDevDocumentModel( QObject *parent )
-    : KDevelop::ItemModel( parent )
+    : QStandardItemModel( parent )
 {}
 
 KDevDocumentModel::~KDevDocumentModel()
 {}
 
-KDevDocumentItem *KDevDocumentModel::item( const QModelIndex &index ) const
-{
-    return reinterpret_cast<KDevDocumentItem*>( KDevelop::ItemModel::item( index ) );
-}
-
-QModelIndex KDevDocumentModel::index( int row, int column, const QModelIndex &parent ) const
-{
-    return KDevelop::ItemModel::index( row, column, parent );
-}
-
-int KDevDocumentModel::rowCount( const QModelIndex &parent ) const
-{
-    return KDevelop::ItemModel::rowCount( parent );
-}
-
 QList<KDevMimeTypeItem*> KDevDocumentModel::mimeTypeList() const
 {
-    KDevDocumentItem * collection = reinterpret_cast<KDevDocumentItem*>( root() );
 
     QList<KDevMimeTypeItem*> lst;
 
-    for ( int i = 0; i < collection->itemCount(); ++i )
+    for ( int i = 0; i < rowCount( QModelIndex() ); ++i )
     {
-        if ( KDevMimeTypeItem * item = collection->itemAt( i ) ->mimeTypeItem() )
-            lst.append( item );
+        if ( KDevMimeTypeItem * mimeitem = static_cast<KDevDocumentItem*>( item( i ) ) ->mimeTypeItem() )
+        {
+
+            lst.append( mimeitem );
+        }
     }
 
     return lst;
@@ -113,7 +100,7 @@ KDevMimeTypeItem* KDevDocumentModel::mimeType( const QString& mimeType ) const
 {
     foreach( KDevMimeTypeItem * item, mimeTypeList() )
     {
-        if ( item->name() == mimeType )
+        if ( item->text() == mimeType )
             return item;
     }
 

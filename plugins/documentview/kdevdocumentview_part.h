@@ -26,11 +26,7 @@
 #include <iplugin.h>
 #include <idocumentcontroller.h>
 
-class KUrl;
-class QModelIndex;
-class KDevDocumentView;
-class KDevDocumentModel;
-class KDevDocumentItem;
+class KDevDocumentViewPartFactory;
 
 class KDevDocumentViewPart: public KDevelop::IPlugin
 {
@@ -44,28 +40,15 @@ public:
     };
 
 public:
-    KDevDocumentViewPart( QObject *parent, const QVariantList & = QVariantList() );
+    KDevDocumentViewPart( QObject *parent, const QVariantList& args );
     virtual ~KDevDocumentViewPart();
 
     // KDevelop::Plugin methods
-    virtual QWidget *pluginView() const;
+    //virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
     virtual bool isCentralPlugin() const;
-
-private slots:
-    void activated( KDevelop::Document* document );
-    void saved( KDevelop::Document* document );
-    void loaded( KDevelop::Document* document );
-    void closed( KDevelop::Document* document );
-    void externallyModified( KDevelop::Document* document );
-    void urlChanged( KDevelop::Document* document, const KUrl &oldurl, const KUrl &newurl );
-    void stateChanged( KDevelop::Document* document );
-
 private:
-    KDevDocumentModel *m_documentModel;
-    KDevDocumentItem *m_documentItem;
-    QPointer<KDevDocumentView> m_documentView;
-    QHash< KDevelop::Document*, QModelIndex > m_doc2index;
+    KDevDocumentViewPartFactory* factory;
 };
 
 #endif

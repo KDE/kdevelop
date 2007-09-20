@@ -20,10 +20,18 @@
 #ifndef KDEVDOCUMENTVIEW_H
 #define KDEVDOCUMENTVIEW_H
 
-#include "QTreeView"
+#include <QTreeView>
 
 class KUrl;
 class KDevDocumentViewPart;
+
+namespace KDevelop
+{
+    class IDocument;
+}
+
+class KDevDocumentModel;
+class KDevDocumentItem;
 
 class KDevDocumentView: public QTreeView
 {
@@ -37,12 +45,23 @@ public:
 signals:
     void activateURL( const KUrl &url );
 
+private slots:
+    void activated( KDevelop::IDocument* document );
+    void saved( KDevelop::IDocument* document );
+    void loaded( KDevelop::IDocument* document );
+    void closed( KDevelop::IDocument* document );
+    void contentChanged( KDevelop::IDocument* document );
+    void stateChanged( KDevelop::IDocument* document );
+
 protected:
     virtual void mousePressEvent( QMouseEvent * event );
     virtual void contextMenuEvent( QContextMenuEvent * event );
 
 private:
     KDevDocumentViewPart *m_part;
+    KDevDocumentModel *m_documentModel;
+    KDevDocumentItem *m_documentItem;
+    QHash< KDevelop::IDocument*, QModelIndex > m_doc2index;
 };
 
 #endif // KDEVDOCUMENTVIEW_H
