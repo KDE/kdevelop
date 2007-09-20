@@ -31,6 +31,7 @@
 #include <duchain/ducontext.h>
 #include <duchain/typesystem.h>
 #include <duchain/functiondeclaration.h>
+#include <duchain/forwarddeclaration.h>
 #include <duchain/namespacealiasdeclaration.h>
 #include <duchain/classfunctiondeclaration.h>
 #include <duchain/classmemberdeclaration.h>
@@ -396,6 +397,19 @@ class NavigationContext : public KShared {
               m_currentText += " ";
               if( !klass->isClosed() )
                 m_currentText += i18n("(forward-declaration)") + " ";
+              else {
+                if(m_declaration->isForwardDeclaration()) {
+                  ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
+                  if(forwardDec->resolved()) {
+                    m_currentText += "(" + i18n("resolved forward-declaration") + ": ";
+                    makeLink(forwardDec->resolved()->identifier().toString(), KDevelop::DeclarationPointer(forwardDec->resolved()), NavigationAction::NavigateDeclaration );
+                    m_currentText += ") ";
+                  }else{
+                    m_currentText += i18n("(bad forward-declaration)") + " ";
+                  }
+                  
+                }
+              }
             }
           }
         }
