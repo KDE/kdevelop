@@ -149,8 +149,6 @@ void GroupItem::paintCell( QPainter* p, const QColorGroup& c, int column, int wi
 void GroupItem::addFileToScope( const QString& filename )
 {
     QString file = filename;
-    if( filename.find(QRegExp("[ \t]") ) != -1 )
-        file = "\""+file+"\"";
 
     QPtrListIterator<FileItem> it( files );
     while ( it.current() != 0 )
