@@ -43,14 +43,14 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 	/// @todo could get these from emacs compile.el
 	static ErrorFormat formats[] = {
 		// GCC - another case, eg. for #include "pixmap.xpm" which does not exists
-		ErrorFormat( "([^:\t]+):([0-9]+):(?:[0-9]+):([^0-9]+)", 1, 2, 3 ),
+		ErrorFormat( "^([^:\t]{1,1024}):([0-9]{1,10}):(?:[0-9]+):([^0-9]+)", 1, 2, 3 ),
 		// GCC
-		ErrorFormat( "([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
+		ErrorFormat( "^([^:\t]{1,1024}):([0-9]{1,10}):([^0-9]+)", 1, 2, 3 ),
 		// ICC
-		ErrorFormat( "([^:\\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" ),
+		ErrorFormat( "^([^:\\t]{1,1024})\\(([0-9]{1,10})\\):([^0-9]+)", 1, 2, 3, "intel" ),
 		//libtool link
 		ErrorFormat( "(libtool):( link):( warning): ", 0, 0, 0 ),
-		// ld 
+		// ld
 		ErrorFormat( "undefined reference", 0, 0, 0 ),
 		ErrorFormat( "undefined symbol", 0, 0, 0 ),
 		ErrorFormat( "ld: cannot find", 0, 0, 0 ),
