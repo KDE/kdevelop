@@ -115,6 +115,27 @@ class CppDUContext : public BaseContext {
       
       for( QList<QualifiedIdentifier>::const_iterator it = identifiers.begin(); it != identifiers.end(); it++ )
         findDeclarationsInternal(*it, position, dataType, ret, basicFlags);
+
+      //Remove all foward-declarations if there is a real declaration in the list
+
+      bool haveForwardDeclaration = false;
+      bool haveNonForwardDeclaration = false;
+      
+      foreach(KDevelop::Declaration* dec, ret)
+      {
+        if(dec->isForwardDeclaration())
+          haveForwardDeclaration = true;
+        else
+          haveNonForwardDeclaration = true;
+      }
+
+      if(haveForwardDeclaration && haveNonForwardDeclaration) {
+        QList<KDevelop::Declaration*> oldRet = ret;
+        ret.clear();
+        foreach(KDevelop::Declaration* decl, oldRet)
+          if(!decl->isForwardDeclaration())
+            ret << decl;
+      }
     }
     
     ///Overridden to take care of templates and other c++ specific things
