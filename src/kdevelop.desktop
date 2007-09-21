@@ -18,6 +18,7 @@ GenericName[ru]=Интегрированная среда разработки
 GenericName[sv]=Utvecklingsmiljö
 GenericName[tr]=Bütünleşik Geliştirme Ortamı
 GenericName[x-test]=xxIDExx
+GenericName[zh_CN]=集成开发环境
 GenericName[zh_TW]=整合開發環境
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

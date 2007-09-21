@@ -24,6 +24,7 @@ Name[pt]=Visualizador de Documentos
 Name[pt_BR]=Visualizador de Documentos
 Name[sv]=Dokumentvy
 Name[x-test]=xxDocument Viewxx
+Name[zh_CN]=文档视图
 Name[zh_TW]=文件檢視
 Comment=Configure Document View settings
 Comment[de]=Dokumentansicht Einstellungen
@@ -37,5 +38,6 @@ Comment[pt]=Configurar as opções do Visualizador de Documentação
 Comment[pt_BR]=Configurar as opções do Visualizador de Documentação
 Comment[sv]=Anpassa inställningar av dokumentvy
 Comment[x-test]=xxConfigure Document View settingsxx
+Comment[zh_CN]=配置文档视图设置
 Comment[zh_TW]=設定文件檢視
 

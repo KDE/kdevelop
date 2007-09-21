@@ -13,6 +13,7 @@ Comment[ko]=CMake 프로젝트를 빌드합니다
 Comment[pt]=Compila Projectos do CMake
 Comment[pt_BR]=Compila Projectos do CMake
 Comment[sv]=Bygger CMake-projekt
+Comment[zh_CN]=构建 CMake 工程
 Comment[zh_TW]=建立 CMake 專案
 Icon=gear
 ServiceTypes=KDevelop/Plugin
