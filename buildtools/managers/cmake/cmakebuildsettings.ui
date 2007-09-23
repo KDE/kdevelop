@@ -5,25 +5,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>393</height>
+    <width>488</width>
+    <height>442</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="1" >
-    <widget class="QPushButton" name="addBuildDir" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>Add</string>
-     </property>
-    </widget>
+  <layout class="QVBoxLayout" >
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="KComboBox" name="buildDirs" />
+     </item>
+     <item>
+      <widget class="QPushButton" name="addBuildDir" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Add</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="1" column="0" colspan="2" >
+   <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Cache Values</string>
@@ -69,8 +76,37 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="0" >
-    <widget class="KComboBox" name="kcfg_buildDirs" />
+   <item>
+    <widget class="QPushButton" name="showAdvanced" >
+     <property name="text" >
+      <string>Show Advanced</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="advancedBox" >
+     <property name="title" >
+      <string>Advanced</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <item>
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>CMake Directory</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KUrlRequester" name="kcfg_cmakeDir" />
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -79,6 +115,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -71,7 +71,7 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
 }
 
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
-    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0), m_modulePath(cmakeModulesDirectories())
+    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -83,6 +83,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     }
 
     QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
+    m_modulePath=guessCMakeModulesDirectories(cmakeCmd);
     m_vars.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
     m_vars.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
     m_vars.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
@@ -228,14 +229,18 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     QString folderUrl(cmakeInfoFile.toLocalFile());
     cmakeInfoFile.addPath("CMakeLists.txt");
 
-    kDebug(9025) << "file is" << cmakeInfoFile.path();
+    kDebug(9032) << "file is" << cmakeInfoFile.path();
     if ( !cmakeInfoFile.isLocalFile() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. CMake support doesn't handle remote projects" ;
+        kWarning(9032) << "not a local file. CMake support doesn't handle remote projects" ;
     }
     else
     {
+        KSharedConfig::Ptr cfg = project->projectConfiguration();
+        KConfigGroup group(cfg.data(), "CMake");
+        group.writeEntry("CMakeDir", m_modulePath);
+        
         m_vars.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
         m_rootItem = new CMakeFolderItem(project, "/", 0 );
     }
@@ -267,14 +272,19 @@ KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectItem *
     return m_builder;
 }
 
-QStringList CMakeProjectManager::cmakeModulesDirectories() const
+QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin) const
 {
-    QStringList env = CMakeProjectVisitor::envVarDirectories("CMAKEDIR");
-
-    QStringList::iterator it=env.begin();
-    for(; it!=env.end(); ++it)
-        *it += "/Modules";
-    return env;
+    KUrl bin(cmakeBin);
+    bin=bin.upUrl();
+    bin=bin.upUrl();
+    bin.cd("share/cmake-2.4/Modules");
+//     QStringList env = CMakeProjectVisitor::envVarDirectories("CMAKEDIR");
+// 
+//     QStringList::iterator it=env.begin();
+//     for(; it!=env.end(); ++it)
+//         *it += "/Modules";
+    kDebug(9032) << "guessing: " << bin.toLocalFile();
+    return QStringList(bin.toLocalFile());
 }
 
 #include "cmakemanager.moc"

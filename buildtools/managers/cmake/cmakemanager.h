@@ -96,10 +96,10 @@ public:
     const VariableMap* variables() const { return &m_vars; }
     const MacroMap* macros() const { return &m_macros; }
 private:
-    QStringList cmakeModulesDirectories() const;
+    QStringList guessCMakeModulesDirectories(const QString& cmakeBin) const;
     CMakeFolderItem* m_rootItem;
-    const QStringList m_modulePath;
 
+    QStringList m_modulePath;
     VariableMap m_vars;
     MacroMap m_macros;
     ICMakeBuilder* m_builder;

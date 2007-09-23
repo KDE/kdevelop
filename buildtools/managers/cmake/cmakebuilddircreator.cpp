@@ -56,7 +56,8 @@ void CMakeBuildDirCreator::addError()
 	QByteArray output=m_proc.readAllStandardError();
 	QString s;
 	s.append(output.trimmed());
-	m_creatorUi->cmakeOutput->setPlainText(m_creatorUi->cmakeOutput->toPlainText()+s+'\n');
+    m_creatorUi->cmakeOutput->setPlainText(m_creatorUi->cmakeOutput->toPlainText()+s+'\n');
+    m_creatorUi->cmakeOutput->verticalScrollBar()->setValue(m_creatorUi->cmakeOutput->verticalScrollBar()->maximum());
 }
 
 void CMakeBuildDirCreator::addOutput()

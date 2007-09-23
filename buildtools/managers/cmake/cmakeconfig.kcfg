@@ -5,6 +5,7 @@
   <group name="CMake">
     <entry name="buildDirs" key="BuildDirs" type="StringList" />
     <entry name="currentBuildDir" key="CurrentBuildDir" type="Url" />
+    <entry name="cmakeDir" key="CMakeDir" type="Url" />
     
     <entry name="lastCMakeBin" key="LastCMakeBin" type="Url" />
   </group>
