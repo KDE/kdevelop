@@ -93,15 +93,15 @@ public:
 
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
 
-    const VariableMap* variables() const { return &m_vars; }
-    const MacroMap* macros() const { return &m_macros; }
 private:
     QStringList guessCMakeModulesDirectories(const QString& cmakeBin) const;
-    CMakeFolderItem* m_rootItem;
 
-    QStringList m_modulePath;
-    VariableMap m_vars;
-    MacroMap m_macros;
+    VariableMap m_varsDef;
+    QStringList m_modulePathDef;
+    QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
+    QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
+    QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
+    
     ICMakeBuilder* m_builder;
     QList<KDevelop::ProjectTargetItem*> m_targets;
 };

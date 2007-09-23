@@ -71,7 +71,7 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
 }
 
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
-    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0)
+    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -83,34 +83,34 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     }
 
     QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
-    m_modulePath=guessCMakeModulesDirectories(cmakeCmd);
-    m_vars.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
-    m_vars.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
-    m_vars.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
-    m_vars.insert("CMAKE_MODULE_PATH", m_modulePath);
+    m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd);
+    m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
+    m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
+    m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
+    m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
 
 #if defined(Q_WS_X11) || defined(Q_WS_MAC) //If it has uname :)
     QString sysName=executeProcess("uname", QStringList("-s"));
     QString sysVersion=executeProcess("uname", QStringList("-r"));
     QString sysProcessor=executeProcess("uname", QStringList("-p"));
     
-    m_vars.insert("UNIX", QStringList("TRUE"));
-    m_vars.insert("CMAKE_SYSTEM_NAME", QStringList(sysName));
-    m_vars.insert("CMAKE_SYSTEM_VERSION", QStringList(sysVersion));
-    m_vars.insert("CMAKE_SYSTEM", QStringList(sysName+'-'+sysVersion));
-    m_vars.insert("CMAKE_SYSTEM_PROCESSOR", QStringList(sysProcessor));
+    m_varsDef.insert("UNIX", QStringList("TRUE"));
+    m_varsDef.insert("CMAKE_SYSTEM_NAME", QStringList(sysName));
+    m_varsDef.insert("CMAKE_SYSTEM_VERSION", QStringList(sysVersion));
+    m_varsDef.insert("CMAKE_SYSTEM", QStringList(sysName+'-'+sysVersion));
+    m_varsDef.insert("CMAKE_SYSTEM_PROCESSOR", QStringList(sysProcessor));
 #ifdef Q_WS_X11
-    m_vars.insert("LINUX", QStringList("TRUE"));
+    m_varsDef.insert("LINUX", QStringList("TRUE"));
 #endif
 #ifdef Q_WS_MAC //NOTE: maybe should use __APPLE__
-    m_vars.insert("APPLE", QStringList("TRUE"));
+    m_varsDef.insert("APPLE", QStringList("TRUE"));
 #endif
 #endif
 
 #ifdef Q_WS_WIN
-    m_vars.insert("WIN32", QStringList("TRUE"));
+    m_varsDef.insert("WIN32", QStringList("TRUE"));
 #endif
-    kDebug(9032) << "modPath" << m_vars.value("CMAKE_MODULE_PATH");
+    kDebug(9032) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH");
 }
 
 CMakeProjectManager::~CMakeProjectManager()
@@ -143,6 +143,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
     CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
 
+    VariableMap *vm=&m_varsPerProject[item->project()];
+    MacroMap *mm=&m_macrosPerProject[item->project()];
     if(f.isEmpty())
     {
         kDebug(9032) << "There is no" << cmakeListsPath;
@@ -153,20 +155,20 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     kDebug(9032) << "Adding cmake: " << cmakeListsPath << " to the model";
 
     QString currentBinDir=KUrl::relativeUrl(folder->project()->projectFileUrl().upUrl(), folder->url());
-    m_vars.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(m_vars.value("CMAKE_BINARY_DIR")[0]+currentBinDir));
-    m_vars.insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
-    m_vars.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile()));
+    vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
+    vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
+    vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile()));
 
-    kDebug(9032) << "currentBinDir" << m_vars.value("CMAKE_CURRENT_BINARY_DIR");
+    kDebug(9032) << "currentBinDir" << vm->value("CMAKE_CURRENT_BINARY_DIR");
 
     CMakeProjectVisitor v(folder->url().toLocalFile());
-    v.setVariableMap(&m_vars);
-    v.setMacroMap(&m_macros);
-    v.setModulePath(m_modulePath);
+    v.setVariableMap(vm);
+    v.setMacroMap(mm);
+    v.setModulePath(m_modulePathPerProject[item->project()]);
     v.walk(f, 0);
-    m_vars.remove("CMAKE_CURRENT_LIST_FILE");
-    m_vars.remove("CMAKE_CURRENT_SOURCE_DIR");
-    m_vars.remove("CMAKE_CURRENT_BINARY_DIR");
+    vm->remove("CMAKE_CURRENT_LIST_FILE");
+    vm->remove("CMAKE_CURRENT_SOURCE_DIR");
+    vm->remove("CMAKE_CURRENT_BINARY_DIR");
 
     if(folder->text()=="/" && !v.projectName().isEmpty())
     {
@@ -224,6 +226,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
 KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project )
 {
+    CMakeFolderItem* m_rootItem;
     KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();
     QString folderUrl(cmakeInfoFile.toLocalFile());
@@ -237,11 +240,20 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     }
     else
     {
+        VariableMap vm=m_varsDef;
+        QStringList mpath=m_modulePathDef;
+        
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), "CMake");
-        group.writeEntry("CMakeDir", m_modulePath);
+        if(group.hasKey("CMakeDir"))
+            mpath=group.readEntry("CMakeDir", QStringList());
+        else
+            group.writeEntry("CMakeDir", mpath);
         
-        m_vars.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
+        vm.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
+        m_macrosPerProject[project]=MacroMap();
+        m_modulePathPerProject[project]=mpath;
+        m_varsPerProject[project]=vm;
         m_rootItem = new CMakeFolderItem(project, "/", 0 );
     }
     return m_rootItem;

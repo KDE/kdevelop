@@ -76,7 +76,6 @@ CMakePreferences::~CMakePreferences()
 
 void CMakePreferences::load()
 {
-    //We do not want it to retrieve and save info for us
     ProjectKCModule<CMakeSettings>::load();
 //     kDebug(9032) << "********loading";
 
@@ -95,7 +94,6 @@ void CMakePreferences::load()
 
 void CMakePreferences::save()
 {
-    //We do not want it to retrieve and save info for us
     ProjectKCModule<CMakeSettings>::save();
 //     kDebug(9032) << "*******saving";
     QStringList bDirs;
