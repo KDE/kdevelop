@@ -1,3 +1,4 @@
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 add_definitions ( -DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -14,7 +15,7 @@ set(runner_SRCS
     runner.cpp
 )
 
-kde4_add_test_executable(runner ${runner_SRCS})
+kde4_add_executable(runner TEST ${runner_SRCS})
 target_link_libraries(runner ${KDE4_KDECORE_LIBS} kdevautomakeparser ${KDE4_KIO_LIBS})
 
 
@@ -32,7 +33,7 @@ set(viewer_UI
 )
 
 kde4_add_ui3_files(viewer_SRCS ${viewer_UI})
-kde4_add_test_executable(viewer ${viewer_SRCS})
+kde4_add_executable(viewer TEST ${viewer_SRCS})
 target_link_libraries(viewer ${KDE4_KDECORE_LIBS} kdevautomakeparser ${KDE4_KIO_LIBS})
 
 
