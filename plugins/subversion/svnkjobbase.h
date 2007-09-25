@@ -45,7 +45,7 @@ public:
     SvnKJobBase( SvnKJobBase::JobType type, SubversionCore *parent );
     virtual ~SvnKJobBase();
 
-    JobStatus status();
+    JobStatus status() const;
 
     void setResult( const QVariant &result );
     virtual QVariant fetchResults();

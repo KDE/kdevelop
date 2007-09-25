@@ -21,8 +21,8 @@ Boston, MA 02110-1301, USA.
 #define ENVIRONMENTGROUPLIST_H
 
 #include <utilexport.h>
+#include <ksharedconfig.h>
 
-class KSharedConfigPtr;
 class KConfig;
 template <typename T1, typename T2> class QMap;
 class QString;

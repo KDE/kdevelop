@@ -178,7 +178,7 @@ SvnKJobBase::~SvnKJobBase()
     kDebug(9500) << "SvnKJobBase::Destructor: end cleanup";
 }
 
-KDevelop::VcsJob::JobStatus SvnKJobBase::status()
+KDevelop::VcsJob::JobStatus SvnKJobBase::status() const
 {
     if( !error() ){
         return KDevelop::VcsJob::JobSucceeded;

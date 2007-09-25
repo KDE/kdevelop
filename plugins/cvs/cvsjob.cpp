@@ -211,7 +211,7 @@ QVariant CvsJob::fetchResults()
     return output();
 }
 
-KDevelop::VcsJob::JobStatus CvsJob::status()
+KDevelop::VcsJob::JobStatus CvsJob::status() const
 {
     if (d->isRunning)
         return KDevelop::VcsJob::JobRunning;

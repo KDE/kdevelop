@@ -102,7 +102,7 @@ public:
      * @return the status of the job
      * @see JobStatus
      */
-    virtual JobStatus status() = 0;
+    virtual JobStatus status() const = 0;
 
     /**
      * Used to find out about the type of job

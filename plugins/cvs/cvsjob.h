@@ -71,7 +71,7 @@ public:
 
     // Begin:  KDevelop::VcsJob
     virtual QVariant fetchResults();
-    virtual KDevelop::VcsJob::JobStatus status();
+    virtual KDevelop::VcsJob::JobStatus status() const;
     // End:  KDevelop::VcsJob
 
 public slots:
