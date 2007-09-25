@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KApp4
+Exec=kapp4 %i -caption "%c"
+Icon=kapp4
+Type=Application
+DocPath=kapp4/kapp4.html
+GenericName=A KDE4 Application
+Terminal=0
+

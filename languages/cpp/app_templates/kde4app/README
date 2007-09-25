@@ -1,0 +1,15 @@
+!!!!!ATTENTION!!!!!
+
+Before starting the build you may need to setup the KDE4 environment variables.
+To do this open Project->Project Options and then look at the "Run" and the "Make" 
+pages. Each of these two has an environment variables widget in which you have
+to fill in the right values for the variables already listed.
+
+After setting up the variables you'll also need to run cmake inside the build
+directory. This can not be done by kdevelop as a KDE4 environment is needed
+when running cmake to find KDE4. Open the integrated konsole and change to the build
+subdirectory. Then setup a KDE4 environment and run "cmake ../".
+
+More information how to setup a KDE4 development environment can be found on
+http://techbase.kde.org/Getting_Started/Increased_Productivity_in_KDE4_with_Scripts
+

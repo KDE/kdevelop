@@ -1,0 +1,13 @@
+# KDevelop Custom Project File List
+CMakeLists.txt
+main.cpp
+prefs_base.ui
+settings.kcfgc
+%{APPNAMELC}.cpp
+%{APPNAMELC}.desktop
+%{APPNAMELC}.h
+%{APPNAMELC}.kcfg
+%{APPNAMELC}ui.rc
+%{APPNAMELC}view.cpp
+%{APPNAMELC}view.h
+%{APPNAMELC}view_base.ui
