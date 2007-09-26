@@ -40,6 +40,7 @@ public:
   virtual rpp::pp_macro* retrieveMacro( const KDevelop::HashedString& name ) const;
 
   void setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile );
+  KSharedPtr<Cpp::EnvironmentFile> environmentFile() const;
 
   void swapMacros( Environment* parentEnvironment );
 

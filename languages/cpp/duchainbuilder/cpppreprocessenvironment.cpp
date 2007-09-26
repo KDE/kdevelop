@@ -52,6 +52,10 @@ rpp::pp_macro* CppPreprocessEnvironment::retrieveMacro(const KDevelop::HashedStr
     return ret;
 }
 
+KSharedPtr<Cpp::EnvironmentFile> CppPreprocessEnvironment::environmentFile() const {
+  return m_environmentFile;
+}
+
 void CppPreprocessEnvironment::setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile ) {
     m_environmentFile = environmentFile;
 }

@@ -46,7 +46,7 @@ public:
 class pp_macro_expander
 {
 public:
-  explicit pp_macro_expander(pp* engine, pp_frame* frame = 0);
+  explicit pp_macro_expander(pp* engine, pp_frame* frame = 0, bool inHeaderSection = false);
 
   QString resolve_formal(const QString& name);
 

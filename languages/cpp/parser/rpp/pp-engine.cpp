@@ -38,7 +38,7 @@ using namespace rpp;
 
 pp::pp(Preprocessor* preprocessor)
   : m_environment(new Environment(this))
-  , expand(this)
+  , expand(this, 0, true)
   , m_preprocessor(preprocessor)
   , nextToken(0)
   , haveNextToken(false)
@@ -79,14 +79,14 @@ void pp::reportError (const QString &fileName, int line, int column, const QStri
   _M_error_messages.append (msg);
 }
 
-QString pp::processFile(const QString& input, StringType type)
+QString pp::processFile(const QString& fileName, StringType type, const QString& data)
 {
   if ( type == File  )
   {
-    QFile file(input);
+    QFile file(fileName);
     if (file.open(QIODevice::ReadOnly))
     {
-      m_files.push(input);
+      m_files.push(fileName);
 
       QByteArray contents = file.readAll();
       QString contentsDecoded = QString::fromUtf8(contents);
@@ -105,18 +105,18 @@ QString pp::processFile(const QString& input, StringType type)
       return result;
     }
 
-    kWarning() << "file '" << input << "' not found!" ;
+    kWarning() << "file '" << fileName << "' not found!" ;
     return QString();
   }
   else
   {
     QString result;
     // Guestimate as to how much expansion will occur
-    result.reserve(int(input.length() * 1.2));
-    m_files.push("<internal>");
+    result.reserve(int(data.length() * 1.2));
+    m_files.push(fileName);
 
     {
-      Stream is(&const_cast<QString&>(input));
+      Stream is(&const_cast<QString&>(data));
       Stream rs(&result);
       operator () (is, rs);
     }

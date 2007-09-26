@@ -368,7 +368,7 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 
   preprocessor.environment()->enterBlock(fileMacros);
 
-  QString ret = preprocessor.processFile(QString(sourceToParse.readAll()), rpp::pp::Data);
+  QString ret = preprocessor.processFile(url.prettyUrl(), rpp::pp::Data, QString(sourceToParse.readAll()));
 
   preprocessor.environment()->leaveBlock();
 

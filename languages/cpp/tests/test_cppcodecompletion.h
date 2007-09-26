@@ -72,7 +72,8 @@ public:
     DumpNone = 0,
     DumpAST = 1,
     DumpDUChain = 2,
-    DumpType = 4
+    DumpType = 4,
+    DumpAll = 1+2+4
   };
   Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 

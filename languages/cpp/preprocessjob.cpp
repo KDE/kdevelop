@@ -141,6 +141,13 @@ void PreprocessJob::run()
         m_environmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
     }
 
+    if(m_contentEnvironmentFile) { //Copy some information from the environment-file to its content-part
+        m_contentEnvironmentFile->setModificationRevision(m_environmentFile->modificationRevision());
+
+        ///@todo think about this. Actually a m_contentEnvironmentFile may be accumulated using different include-paths.
+        m_contentEnvironmentFile->setIncludePaths(m_environmentFile->includePaths());
+    }
+
     kDebug( 9007 ) << "===-- PREPROCESSING --===> "
     << parentJob()->document().fileName()
     << "<== readFromDisk:" << readFromDisk
@@ -181,7 +188,7 @@ void PreprocessJob::run()
     preprocessor.setEnvironment( m_currentEnvironment );
     preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);
 
-    QString result = preprocessor.processFile(contents, rpp::pp::Data);
+    QString result = preprocessor.processFile(parentJob()->document().prettyUrl(), rpp::pp::Data, contents);
 
     parentJob()->parseSession()->setContents( result.toUtf8() );
     parentJob()->setEnvironmentFile( m_environmentFile.data() );
@@ -198,7 +205,7 @@ void PreprocessJob::run()
         //If we are included from another preprocessor, give it back the modified macros,
         parentPreprocessor->m_currentEnvironment->swapMacros( m_currentEnvironment );
         //Merge include-file-set, defined macros, used macros, and string-set
-        parentPreprocessor->m_environmentFile->merge(*m_environmentFile);
+        parentPreprocessor->m_currentEnvironment->environmentFile()->merge(*m_environmentFile);
     }else{
 /*        kDebug(9007) << "Macros:";
         for( rpp::Environment::EnvironmentMap::const_iterator it = m_currentEnvironment->environment().begin(); it != m_currentEnvironment->environment().end(); ++it ) {
@@ -212,6 +219,7 @@ void PreprocessJob::run()
 
 void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
 {
+    kDebug() << "PreprocessJob::headerSectionEnded";
     if( m_contentEnvironmentFile ) {
         KUrl u = parentJob()->document();
 
@@ -291,7 +299,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             Cpp::EnvironmentFile* environmentFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
             if( environmentFile ) {
                 m_currentEnvironment->merge( environmentFile->definedMacros() );
-                m_environmentFile->merge( *environmentFile );
+                m_currentEnvironment->environmentFile()->merge( *environmentFile );
             } else {
                 kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support";
             }

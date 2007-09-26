@@ -209,7 +209,11 @@ public:
 
   Value eval_expression (Stream& input);
 
-  QString processFile(const QString& input, StringType);
+  /**
+   * If @param stringType is Data, @param data must be set.
+   * The file-name is needed so macros can be correctly marked.
+   * */
+  QString processFile(const QString& fileName, StringType stringType, const QString& data = QString());
   QString processFile(QIODevice* input);
 
   void operator () (Stream& input, Stream& output);

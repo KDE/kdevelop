@@ -24,6 +24,7 @@
 #include <duchainlock.h>
 #include <topducontext.h>
 #include <duchain/typesystem.h>
+#include <duchain/forwarddeclaration.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
@@ -31,7 +32,6 @@
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
-
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -457,15 +457,17 @@ void TestCppCodeCompletion::testHeaderSections() {
 void TestCppCodeCompletion::testForwardDeclaration()
 {
   addInclude( "testdeclaration.h", "class Test{ };" );
-  QByteArray method("class Test; #include \"testdeclaration.h\"\n class Test; ");
+  QByteArray method("#include \"testdeclaration.h\"\n class Test; ");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
 
   Declaration* decl = findDeclaration(top, Identifier("Test"), top->textRange().end());
   QVERIFY(decl);
+  QVERIFY(decl->abstractType());
+  QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
   QVERIFY(!decl->isForwardDeclaration());
   
   release(top);
@@ -530,7 +532,7 @@ QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*
     if( parent )
       preprocessor.environment()->swapMacros(parent->environment());
     
-    QString result = preprocessor.processFile(text, rpp::pp::Data);
+    QString result = preprocessor.processFile("<test>", rpp::pp::Data, text);
 
         //Merge include-file-set, defined macros, used macros, and string-set
 //         parentPreprocessor->m_lexedFile->merge(*m_lexedFile);

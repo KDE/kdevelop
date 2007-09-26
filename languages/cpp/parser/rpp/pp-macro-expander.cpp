@@ -64,10 +64,10 @@ QString pp_macro_expander::resolve_formal(const QString& name)
   return QString();
 }
 
-pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame)
+pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderSection)
   : m_engine(engine)
   , m_frame(frame)
-  , m_in_header_section(true)
+  , m_in_header_section(inHeaderSection)
 {
 }
 
