@@ -3,7 +3,7 @@
 Name=KDE4 Application framework
 Icon=kde4app.png
 Category=C++/KDE4
-Comment=Generates a simple KDE4 application with one toplevel window, menus and toolbars. 
+Comment=Generates a simple KDE4 application with one toplevel window, menus and toolbars.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/README
 Archive=kde4app.tar.gz
