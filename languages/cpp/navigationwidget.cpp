@@ -29,6 +29,7 @@
 #include <duchain/declaration.h>
 #include <duchain/definition.h>
 #include <duchain/ducontext.h>
+#include <duchain/duchainlock.h>
 #include <duchain/typesystem.h>
 #include <duchain/functiondeclaration.h>
 #include <duchain/forwarddeclaration.h>
@@ -606,6 +607,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
           doc = action.decl->url();
           cursor = action.decl->textRange().start();
         }
+        
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
         QMetaObject::invokeMethod( CppLanguageSupport::self()->core()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
         break;
@@ -764,7 +766,8 @@ void NavigationWidget::update() {
 }
 
 void NavigationWidget::anchorClicked(const QUrl& url) {
-  m_context->acceptLink(url.toString());
+  DUChainReadLocker lock( DUChain::lock() );
+  setContext( m_context->acceptLink(url.toString()) );
 }
 
 void NavigationWidget::targetDestroyed(QObject*) {
