@@ -69,7 +69,12 @@ public:
      */
 
     /**
-     * Is the given location under version control?
+     * Is the given @p localLocation under version control? This checks wether
+     * the @p localLocation is under control of the versioning system or not.
+     * It does not only check wether the @p localLocation lies in a version
+     * controlled directory
+     *
+     * @returns true if the version control system knows the given @p localLocation
      */
     virtual bool isVersionControlled( const KUrl& localLocation ) = 0;
 
