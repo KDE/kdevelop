@@ -56,6 +56,7 @@ namespace Cpp {
       static QString shortDescription(const IncludeItem& includeItem);
       
     private slots:
+      void anchorClicked(const QUrl&);
       void targetDestroyed(QObject*);
     private:
 

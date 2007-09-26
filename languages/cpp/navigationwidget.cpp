@@ -736,8 +736,10 @@ void NavigationWidget::initBrowser(int height) {
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
   m_browser->resize(height, 100);
+  static_cast<KTextBrowser&>(*m_browser).setNotifyClick(true);
 
   connect( m_browser, SIGNAL(destroyed(QObject*)), this, SLOT(targetDestroyed(QObject*)) );
+  connect( m_browser, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(anchorClicked(const QUrl&)) );
 }
 
 NavigationWidget::~NavigationWidget() {
@@ -761,6 +763,9 @@ void NavigationWidget::update() {
   m_browser->verticalScrollBar()->setValue(scrollPos);
 }
 
+void NavigationWidget::anchorClicked(const QUrl& url) {
+  m_context->acceptLink(url.toString());
+}
 
 void NavigationWidget::targetDestroyed(QObject*) {
   m_browser = 0;
