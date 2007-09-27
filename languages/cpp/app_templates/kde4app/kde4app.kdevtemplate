@@ -1,9 +1,21 @@
 # KDE Config File
 [General]
 Name=KDE4 Application framework
+Name[el]=Πλαίσιο εφαρμογής του KDE4
+Name[es]=Infraestructura de aplicación para KDE4
+Name[nds]=KDE4-Programmrahmenwark
+Name[pt]=Plataforma de aplicações do KDE4
+Name[pt_BR]=Plataforma de aplicações do KDE4
+Name[sv]=KDE 4-programramverk
 Icon=kde4app.png
 Category=C++/KDE4
 Comment=Generates a simple KDE4 application with one toplevel window, menus and toolbars.
+Comment[el]=Δημιουργεί μια απλή εφαρμογή του KDE4 με ένα ανώτερο παράθυρο, μενού, και γραμμές εργαλείων.
+Comment[es]=Genera una sencilla aplicación para KDE4 con una ventana principal, menús y barras de herramientas.
+Comment[nds]=Stellt en eenfach KDE4-Programm mit een böverst Finster, Menüs un Warktüüchbalkens op.
+Comment[pt]=Gera uma aplicação para KDE4 simples, com uma janela de topo, menus e barras de ferramentas.
+Comment[pt_BR]=Gera uma aplicação para KDE4 simples, com uma janela de topo, menus e barras de ferramentas.
+Comment[sv]=Skapar ett enkelt KDE 4-program med ett toppnivåfönster, menyer och verktygsrader.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/README
 Archive=kde4app.tar.gz
@@ -96,3 +108,9 @@ Dir=%{dest}/build
 [MSG]
 Type=message
 Comment=A KDE4 Application was created at %{dest}
+Comment[el]=Μια εφαρμογή KDE4 δημιουργήθηκε στο %{dest}
+Comment[es]=Una aplicación para KDE4 ha sido creada en %{dest}
+Comment[nds]=In %{dest} wöör en KDE4-Programm opstellt
+Comment[pt]=Foi criada uma aplicação do KDE4 em %{dest}
+Comment[pt_BR]=Foi criada uma aplicação do KDE4 em %{dest}
+Comment[sv]=Ett KDE 4-program skapades i %{dest}

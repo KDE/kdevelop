@@ -1,10 +1,18 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KApp4
+Name[nds]=KProg4
+Name[sv]=KDE 4-program
 Exec=kapp4 %i -caption "%c"
 Icon=kapp4
 Type=Application
 DocPath=kapp4/kapp4.html
 GenericName=A KDE4 Application
+GenericName[el]=Μία εφαρμογή του KDE4
+GenericName[es]=Una aplicación para KDE4
+GenericName[nds]=En KDE4-Programm
+GenericName[pt]=Uma Aplicação do KDE4
+GenericName[pt_BR]=Uma Aplicação do KDE4
+GenericName[sv]=Ett KDE 4-program
 Terminal=0
 
