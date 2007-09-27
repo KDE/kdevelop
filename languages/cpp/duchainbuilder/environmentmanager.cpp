@@ -351,9 +351,9 @@ QList<Problem>  EnvironmentFile::problems() const {
   return m_problems;
 }
 
-void EnvironmentFile::setStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
+void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
   QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
-  m_strings = EnvironmentManager::m_stringRepository.createSet(strings);
+  m_strings += EnvironmentManager::m_stringRepository.createSet(strings);
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file

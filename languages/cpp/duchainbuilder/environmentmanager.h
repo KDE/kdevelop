@@ -130,7 +130,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
     EnvironmentFile( const KUrl& url, EnvironmentManager* manager );
 
-    void setStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
+    void addStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 
     void addDefinedMacro( const rpp::pp_macro& macro  );
 

@@ -27,8 +27,9 @@ CppPreprocessEnvironment::~CppPreprocessEnvironment() {
 void CppPreprocessEnvironment::finish() {
     if(!m_finished) {
         if(m_environmentFile)
-            m_environmentFile->setStrings(m_strings);
+            m_environmentFile->addStrings(m_strings);
         m_finished = true;
+        m_strings.clear();
     }
 }
 
@@ -58,6 +59,7 @@ KSharedPtr<Cpp::EnvironmentFile> CppPreprocessEnvironment::environmentFile() con
 
 void CppPreprocessEnvironment::setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile ) {
     m_environmentFile = environmentFile;
+    m_finished = false;
 }
 
 void CppPreprocessEnvironment::swapMacros( Environment* parentEnvironment ) {
