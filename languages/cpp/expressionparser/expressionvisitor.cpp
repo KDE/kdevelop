@@ -540,7 +540,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
       AbstractType::Ptr thisType;
 
-      DUContext* context = m_currentContext;
+      DUContext* context = m_currentContext; //Here we find the context of the function-declaration/definition we're currently in
       while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
       { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
         context = context->parentContext();
@@ -552,7 +552,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       if( context->owner() && context->owner()->asDefinition() )
       {
         //If we are in a definition, move the classContext to the declaration's classContext, and take the type from there
-        Q_ASSERT(context->owner()->asDefinition()->declaration());
+        if(!context->owner()->asDefinition()->declaration()) {
+          problem(node, "No declaration for definition");
+          return;
+        }
         
         functionDeclaration = context->owner()->asDefinition()->declaration();
       }
