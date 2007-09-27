@@ -122,12 +122,16 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     if( topCtx->parsingEnvironmentFile() ) {
       IdentifiedFile file( topCtx->parsingEnvironmentFile()->identity() );
 
+      KUrl url = file.url();
+      if(topCtx->flags() & TopDUContext::ProxyContextFlag)
+        url.addPath("_[proxy]_");
+      
       //Find the context this one is derived from. If there is one, connect it with a line, and shorten the url.
-      if( m_hadVersions.contains(file.url()) ) {
-        stream << shortLabel(context) << " -> " << m_hadVersions[file.url()] << "[color=blue,label=\"version\"];\n";
+      if( m_hadVersions.contains(url) ) {
+        stream << shortLabel(context) << " -> " << m_hadVersions[url] << "[color=blue,label=\"version\"];\n";
         file = IdentifiedFile( KUrl(file.url().fileName()), file.identity() );
       } else {
-        m_hadVersions[file.url()] = shortLabel(context);
+        m_hadVersions[url] = shortLabel(context);
       }
       
       label = file.toString();
