@@ -304,28 +304,28 @@ QStringList Scope::variableValuesForOp( const QString& variable , const QString&
     return result;
 }
 
-QStringList Scope::variableValues( const QString& variable, bool checkIncParent )
+QStringList Scope::variableValues( const QString& variable, bool checkIncParent, bool fetchFromParent )
 {
     QStringList result;
 
     if ( !m_root )
         return result;
 
-    if( m_varCache.contains( variable ) && ( checkIncParent || scopeType() != Scope::IncludeScope ) )
+    if( m_varCache.contains( variable ) && fetchFromParent && ( checkIncParent || scopeType() != Scope::IncludeScope ) )
     {
         return m_varCache[variable];
     }
 
-    calcValuesFromStatements( variable, result, checkIncParent );
+    calcValuesFromStatements( variable, result, checkIncParent, 0, fetchFromParent );
     result = cleanStringList(result);
-    if( scopeType() != Scope::IncludeScope || checkIncParent )
+    if( ( scopeType() != Scope::IncludeScope || checkIncParent  ) && fetchFromParent )
     {
         m_varCache[ variable ] = result;
     }
     return result;
 }
 
-void Scope::calcValuesFromStatements( const QString& variable, QStringList& result, bool checkIncParent, QMake::AST* stopHere ) const
+void Scope::calcValuesFromStatements( const QString& variable, QStringList& result, bool checkIncParent, QMake::AST* stopHere, bool fetchFromParent ) const
 {
     if( !m_root )
         return;
@@ -338,13 +338,13 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
         result = m_defaultopts->variableValues(variable);
     }
 
-    if ( scopeType() == FunctionScope || scopeType() == SimpleScope )
+    if ( ( scopeType() == FunctionScope || scopeType() == SimpleScope ) && fetchFromParent )
     {
         m_parent->calcValuesFromStatements( variable, result, checkIncParent, this->m_root );
     }
-    else if ( scopeType() == IncludeScope && checkIncParent )
+    else if ( scopeType() == IncludeScope && checkIncParent && fetchFromParent )
     {
-        m_parent->calcValuesFromStatements( variable, result , this->m_incast );
+        m_parent->calcValuesFromStatements( variable, result, true, this->m_incast );
     }
 
     QValueList<QMake::AST*>::const_iterator it;
@@ -1209,14 +1209,14 @@ QString Scope::resolveVariables( const QString& value, QMake::AST* stopHere ) co
     return resolveVariables(QStringList(value),  stopHere).front();
 }
 
-QStringList Scope::variableValues( const QString& variable, QMake::AST* stopHere ) const
+QStringList Scope::variableValues( const QString& variable, QMake::AST* stopHere, bool fetchFromParent ) const
 {
     QStringList result;
 
     if ( !m_root )
         return result;
 
-    calcValuesFromStatements( variable, result, true, stopHere );
+    calcValuesFromStatements( variable, result, true, stopHere, fetchFromParent );
     result = cleanStringList(result);
     return result;
 }
@@ -1289,14 +1289,14 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
     QString header = "";
     if( variableValues("TEMPLATE",false ).findIndex("subdirs") == -1 )
     {
-        values = variableValues( "INSTALLS" ,false );
+        values = variableValues( "INSTALLS" ,false, false );
         QStringList::const_iterator it;
         for ( it = values.begin(); it != values.end(); ++it )
         {
             if ( ( *it ) == "target" )
                 continue;
 
-            QStringList files = variableValues( *it + ".files" ,false );
+            QStringList files = variableValues( *it + ".files" ,false, false );
             QStringList::iterator filesit = files.begin();
             for ( ;filesit != files.end(); ++filesit )
             {
@@ -1321,7 +1321,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             }
         }
 
-        values = variableValues( "LEXSOURCES" ,false );
+        values = variableValues( "LEXSOURCES" ,false, false );
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1329,7 +1329,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             res.insert( QDir::cleanDirPath( file ) );
         }
 
-        values = variableValues( "YACCSOURCES" ,false );
+        values = variableValues( "YACCSOURCES" ,false, false );
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1337,7 +1337,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             res.insert( QDir::cleanDirPath( file ) );
         }
 
-        values = variableValues( "DISTFILES" ,false );
+        values = variableValues( "DISTFILES" ,false, false );
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1362,7 +1362,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
 
         if ( isQt4Project() )
         {
-            values = variableValues( "RESOURCES" ,false );
+            values = variableValues( "RESOURCES" ,false, false );
             for ( it = values.begin(); it != values.end(); ++it )
             {
                 file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1370,7 +1370,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
                 res.insert( QDir::cleanDirPath( file ) );
             }
         }
-        values = variableValues( "IMAGES" ,false );
+        values = variableValues( "IMAGES" ,false, false );
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1378,7 +1378,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             res.insert( QDir::cleanDirPath( file ) );
         }
 
-        values = variableValues( "TRANSLATIONS" ,false );
+        values = variableValues( "TRANSLATIONS" ,false, false );
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1386,7 +1386,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             res.insert( QDir::cleanDirPath( file ) );
         }
 
-        values = variableValues( "IDLS" ,false );
+        values = variableValues( "IDLS" ,false, false );
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1396,7 +1396,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
 
         if ( m_part->isTMakeProject() )
         {
-            values = variableValues( "INTERFACES" ,false );
+            values = variableValues( "INTERFACES" ,false, false );
             for ( it = values.begin(); it != values.end(); ++it )
             {
                 file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1408,7 +1408,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         }
         else
         {
-            values = variableValues( "FORMS" ,false );
+            values = variableValues( "FORMS" ,false, false );
             for ( it = values.begin(); it != values.end(); ++it )
             {
                 file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1434,7 +1434,8 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             }
         }
 
-        values = variableValues( "SOURCES" ,false );
+        values = variableValues( "SOURCES" ,false, false );
+        kdDebug(9024)  << "scope:" << scopeType() << " found values: " << values << endl;
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1442,7 +1443,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             res.insert( QDir::cleanDirPath( file ) );
         }
 
-        values = variableValues( "HEADERS" ,false );
+        values = variableValues( "HEADERS" ,false, false );
         for ( it = values.begin(); it != values.end(); ++it )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
@@ -1464,6 +1465,7 @@ QStringList Scope::allFiles( const QString& projectDir )
     allFiles( projectDir, files );
     for( std::set<QString>::const_iterator it = files.begin(); it != files.end() ; ++it )
         result.append( *it );
+    kdDebug(9024) << "all files: " << result << endl;
     return result;
 }
 
