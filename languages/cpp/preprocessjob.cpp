@@ -58,6 +58,7 @@ PreprocessJob::PreprocessJob(CPPParseJob * parent)
     , m_currentEnvironment(0)
     , m_environmentFile( new Cpp::EnvironmentFile( parent->document(), 0 ) )
     , m_success(true)
+    , m_headerSectionEnded(false)
 {
     m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
     if(CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching())
@@ -197,6 +198,11 @@ void PreprocessJob::run()
     parentJob()->setEnvironmentFile( m_environmentFile.data() );
 
     m_currentEnvironment->finish();
+
+    if(!m_headerSectionEnded) {
+        kDebug() << parentJob()->document().prettyUrl() << ": header-section was note ended";
+        headerSectionEnded();
+    }
     
     if( m_contentEnvironmentFile ) {
         m_environmentFile->merge(*m_contentEnvironmentFile);
@@ -221,7 +227,15 @@ void PreprocessJob::run()
 
 void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
 {
-    kDebug() << "PreprocessJob::headerSectionEnded";
+    if(headerSectionEnded())
+        stream.toEnd();
+}
+
+bool PreprocessJob::headerSectionEnded() {
+    bool ret = false;
+    m_headerSectionEnded = true;
+    kDebug() << parentJob()->document() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section";
+    
     if( m_contentEnvironmentFile ) {
         KUrl u = parentJob()->document();
 
@@ -237,7 +251,7 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
                 //We can completely re-use the specialized context
                 m_contentEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
 
-                stream.toEnd();
+                ret = true;
                 parentJob()->setUseContentContext(true);
                 Q_ASSERT(m_contentEnvironmentFile);
             } else {
@@ -245,16 +259,17 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
                 //We will re-use the specialized context, but it needs updating. So we keep processing here.
             }
             //content->parsingEnvironmentFile()->setFlags(content); //It may happen here that a proxy-context is transformed into a normal one
-        } else if(content) {
-            kDebug() << "Found a matching content-context that is a proxy-context for " << u << ", ignoring it.";
         } else {
             //We need to process the content ourselves
+            kDebug() << "could not find a matching content-context";
         }
 
+        m_currentEnvironment->finish();
+        
         m_currentEnvironment->setEnvironmentFile(m_contentEnvironmentFile);
     }
+    return ret;
 }
-
 
 rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath)
 {

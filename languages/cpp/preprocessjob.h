@@ -66,6 +66,8 @@ public:
      * */
     static KDevelop::ParsingEnvironment* createStandardEnvironment();
 private:
+    //Returns whether the input-stream should be stopped
+    bool headerSectionEnded();
     bool checkAbort();
 
     CppPreprocessEnvironment* m_currentEnvironment;
@@ -73,6 +75,7 @@ private:
     //If simplified matching is used, a separate EnvironmentFile is used for the content, as opposed to the #include statements.
     KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
     bool m_success;
+    bool m_headerSectionEnded;
 };
 
 #endif

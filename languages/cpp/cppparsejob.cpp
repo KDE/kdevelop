@@ -234,6 +234,16 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 {
 }
 
+///If @param ctx is a proxy-context, returns the target-context. Else returns ctx. @warning du-chain must be locked
+TopDUContext* contentFromProxy(TopDUContext* ctx) {
+    if( ctx->flags() & TopDUContext::ProxyContextFlag ) {
+        Q_ASSERT(ctx->importedParentContexts().count() == 1);
+        return dynamic_cast<TopDUContext*>(ctx->importedParentContexts().first().data());
+    }else{
+        return ctx;
+    }
+}
+
 void CPPInternalParseJob::run()
 {
     kDebug( 9007 ) << "===-- PARSING --===> "
@@ -294,15 +304,27 @@ void CPPInternalParseJob::run()
         QList<DUContext*> chains;
         QList<DUContext*> temporaryChains;
 
-        foreach ( TopDUContext* context, parentJob()->includedFiles() )
-            chains << context;
+        ///Here we count together all files that were included while this parse-run. If we are updating, and have parsed the document completely, we can remove all contexts urls that do not match this.
+        QSet<KUrl> encounteredIncludeUrls;
+
+        {
+            DUChainReadLocker lock(DUChain::lock());
+            ///We directly insert the content-contexts, to create a cleaner structure. Else the tree would be cluttered and redundant.
+            foreach ( TopDUContext* context, parentJob()->includedFiles() ) {
+                chains << contentFromProxy(context);
+                encounteredIncludeUrls << context->url();
+            }
+        }
+
         
         if( parentJob()->parentPreprocessor() ) {
             DUChainReadLocker lock(DUChain::lock());
             //Temporarily insert the parent's chains here, so forward-declarations can be resolved and types can be used, as it should be.
             //In theory, we would need to insert the whole until-now parsed part of the parent, but that's not possible because preprocessing and parsing are
             //separate steps. So we simply assume that the includes are at the top of the file.
-            foreach ( TopDUContext* context, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
+            foreach ( TopDUContext* topContext, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
+                //As above, we work with the content-contexts.
+                TopDUContext* context = contentFromProxy(topContext);
                 if( !chains.contains(context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(context)) ) {
                     chains << context;
                     temporaryChains << context;
@@ -329,6 +351,19 @@ void CPPInternalParseJob::run()
 
                 DeclarationBuilder declarationBuilder(&editor);
                 topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updating, !(bool)parentJob()->contentContext());
+
+                if(updating) {
+                    DUChainWriteLocker l(DUChain::lock());
+                    //We have updated a context. Now remove all headers that were not encountered while this parse(maybe one was removed)
+                    ///@todo What if a header was found in another path? Then it will be removed here.
+                    QList<DUContextPointer> imports = topContext->importedParentContexts();
+                    foreach(DUContextPointer ctx, imports) {
+                        if(ctx.data() && !encounteredIncludeUrls.contains(ctx->url())) {
+                            topContext->removeImportedParentContext(ctx.data());
+                            kDebug() << "removing not encountered import " << ctx->url();
+                        }
+                    }
+                }
                 
                 if (parentJob()->abortRequested())
                     return parentJob()->abortJob();
