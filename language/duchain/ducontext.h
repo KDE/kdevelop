@@ -371,8 +371,12 @@ public:
    * Used exclusively by Declaration, do not use this.
    * */
   void changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to );
-  
-protected:
+
+  ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
+  /// Declaration search implementation
+  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, SearchFlags flags ) const;
+
+  protected:
   /**
    * After one scope was searched, this function is asked whether more results should be collected. Override it, for example to collect overloaded functions.
    * The default-implementation returns true as soon as decls is not empty.
@@ -388,9 +392,6 @@ protected:
 
   virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags flags ) const;
 
-  /// Declaration search implementation
-  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, SearchFlags flags ) const;
-  
   /// Context search implementation
   virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 

@@ -24,6 +24,8 @@ namespace KDevelop
 class IdentifiedFilePrivate
 {
 public:
+  IdentifiedFilePrivate() : m_identity(0) {
+  }
   KUrl m_url;
   uint m_identity;
 };
@@ -31,7 +33,6 @@ public:
 IdentifiedFile::IdentifiedFile()
   : d(new IdentifiedFilePrivate)
 {
-  d->m_identity = 0;
 }
 
 IdentifiedFile::IdentifiedFile( const KUrl& url , uint identity )
@@ -111,7 +112,7 @@ void ParsingEnvironmentManager::addFile( ParsingEnvironmentFile* /*file*/ ) {
 void ParsingEnvironmentManager::removeFile( ParsingEnvironmentFile* /*file*/ ) {
 }
 
-ParsingEnvironmentFile* ParsingEnvironmentManager::find( const KUrl& /*url*/, const ParsingEnvironment* /*environment*/ ) {
+ParsingEnvironmentFile* ParsingEnvironmentManager::find( const KUrl& /*url*/, const ParsingEnvironment* /*environment*/, ParsingEnvironmentFileAcceptor* ) {
   return 0;
 }
 

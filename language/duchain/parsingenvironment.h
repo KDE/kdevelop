@@ -63,6 +63,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile
 
     ///Gives a short description(url identity)
     QString toString() const;
+
 private:
   class IdentifiedFilePrivate* const d;
 };
@@ -146,6 +147,13 @@ private:
 
 typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
 
+///Used decide from outside whether a matching ParsingEnvironmentFile should be returned by ParsingEnvironmentManager::find.
+struct ParsingEnvironmentFileAcceptor {
+  virtual bool accept(const ParsingEnvironmentFile& file) = 0;
+  virtual ~ParsingEnvironmentFileAcceptor() {
+  };
+};
+
 /**
  * This class is responsible for managing parsing-environments and
  * especialla a whole set of ParsingEnvironmentFile instances.
@@ -172,8 +180,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
 
     /**
      * Search for the availability of a file parsed in a given environment
+     * @param accepter For each found matching file, accepter->accept(..) should be called to
+     * decide whether to return the file, or search on. If it is zero, the first match should be returned.
      * */
-    virtual ParsingEnvironmentFile* find( const KUrl& url, const ParsingEnvironment* environment );
+    virtual ParsingEnvironmentFile* find( const KUrl& url, const ParsingEnvironment* environment, ParsingEnvironmentFileAcceptor* acceptor = 0 );
 private:
   class ParsingEnvironmentFilePrivate const *d;
 };

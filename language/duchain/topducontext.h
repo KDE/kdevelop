@@ -83,11 +83,15 @@ public:
      * A language-specific flag used by C++ to mark one context as a proxy of another.
      * If this flag is set on a context, the first imported context should be used for any computations
      * like searches, listing, etc. instead of using this context.
-     * 
+     *
      * Note: This flag does not directly change the behavior of the language-independent du-chain.
      * */
     ProxyContextFlag = 1,
-    LastFlag = 1
+    /**
+     * Placeholder used in searching-functions, when the flag should simply be ignored.
+     * */
+    AnyFlag=2,
+    LastFlag
   };
   
   /**

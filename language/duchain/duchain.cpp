@@ -100,9 +100,14 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  kDebug(9505) << "duchain: adding document" << document.toString();
+  kDebug(9505) << "duchain: adding document" << document.toString() << " " << chain;
   Q_ASSERT(chain);
 
+  if(chainForDocument(document)) {
+    ///@todo practically this will result in lost memory, we will currently never delete the overwritten chain. Care about such stuff.
+    kDebug(9505) << "duchain: error: A document with the same identity is already in the du-chain";
+  }
+  
   {
     ///Remove obsolete versions of the document
     IdentifiedFile firstDoc( document.url(), 0 );
@@ -137,11 +142,12 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
     //This is just for debugging, and should be disabled later.
     int realChainCount = 0;
     int proxyChainCount = 0;
-    for(QMap<IdentifiedFile, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chains.begin(); it != sdDUChainPrivate->m_chains.end(); ++it)
+    for(QMap<IdentifiedFile, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chains.begin(); it != sdDUChainPrivate->m_chains.end(); ++it) {
       if((*it)->flags() & TopDUContext::ProxyContextFlag)
         ++proxyChainCount;
       else
         ++realChainCount;
+    }
         
     kDebug() << "new count of real chains: " << realChainCount << " proxy-chains: " << proxyChainCount << endl;
   }
@@ -226,10 +232,31 @@ QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
   return chains;
 }
 
-TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment ) const {
+TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
+
+  //Use this struct to search for context that match the specified flags
+  struct FlagFileAcceptor : public ParsingEnvironmentFileAcceptor {
+    TopDUContext::Flags searchFlags;
+    FlagFileAcceptor(TopDUContext::Flags f) : searchFlags(f) {
+    }
+    virtual bool accept(const ParsingEnvironmentFile& file) {
+      if(searchFlags == TopDUContext::AnyFlag)
+        return true;
+      else {
+        TopDUContext* ctx = DUChain::self()->chainForDocument(file.identity());
+        if(ctx && ctx->flags() == searchFlags)
+          return true;
+        else
+          return false;
+      }
+    }
+  };
+
+  FlagFileAcceptor acceptor(flags);
+  
   QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(environment->type());
   if( it != sdDUChainPrivate->m_managers.end() ) {
-    ParsingEnvironmentFilePointer file( (*it)->find(document, environment) );
+    ParsingEnvironmentFilePointer file( (*it)->find(document, environment, &acceptor) );
     if( !file )
       return 0;
 

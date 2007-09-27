@@ -24,6 +24,8 @@
 #include <languageexport.h>
 #include <duchainobserver.h>
 
+#include "topducontext.h"
+
 class KUrl;
 
 namespace KDevelop
@@ -65,8 +67,10 @@ public:
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
+   * @param flags If this is TopDUContext::AnyFlag, context-flags will be ignored while searching.
+   *              Else a context will be searched that exactly matches the given flags.
    * */
-  TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment) const;
+  TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
 
   /// Only used for debugging at the moment
   QList<KUrl> documents() const;
