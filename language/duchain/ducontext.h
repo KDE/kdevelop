@@ -384,8 +384,9 @@ public:
   virtual bool foundEnough( const QList<Declaration*>& decls ) const;
   /**
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
+   * @param hadUrls is used to count together all contexts that already were visited, so they are not visited again.
    */
-  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, bool searchInParents = true, int currentDepth = 0) const;
+  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, bool searchInParents = true, int currentDepth = 0) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
