@@ -188,11 +188,18 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
     const KUrl::List& includePaths() const;
     void setIncludePaths( const KUrl::List& paths );
-  
+
+    /**
+     * The identity-value usually only depends on the content of the environment-information. This can be used to separate environments that have the same content.
+     * For example a content-environment from a proxy-environment.
+     * */
+    void setIdentityOffset(uint offset);
+    
   private:
     virtual int type() const;
 
     friend class EnvironmentManager;
+    uint m_identityOffset;
     KUrl m_url;
     KUrl::List m_includePaths;
     KDevelop::HashedString m_hashedUrl;
@@ -259,7 +266,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     /**
      * Search for the availability of a file parsed in a given environment
      * */
-    virtual KDevelop::ParsingEnvironmentFile* find( const KUrl& url, const KDevelop::ParsingEnvironment* environment );
+    virtual KDevelop::ParsingEnvironmentFile* find( const KUrl& url, const KDevelop::ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
 
   private:
     virtual int type() const;
@@ -270,8 +277,8 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, pub
     bool hasSourceChanged( const EnvironmentFile& file ) const;///Returns true if the file itself, or any of its dependencies was modified.
 
     ///Returns zero if no fitting file is available for the given Environment
-    EnvironmentFilePointer lexedFile( const KDevelop::HashedString& fileName, const rpp::Environment* environment );
-    EnvironmentFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment );
+    EnvironmentFilePointer lexedFile( const KDevelop::HashedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
+    EnvironmentFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
 
     void addEnvironmentFile( const EnvironmentFilePointer& file );
     void removeEnvironmentFile( const EnvironmentFilePointer& file );

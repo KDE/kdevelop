@@ -60,6 +60,9 @@ PreprocessJob::PreprocessJob(CPPParseJob * parent)
     , m_success(true)
 {
     m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
+    if(CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching())
+        //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
+        m_environmentFile->setIdentityOffset(1);
 }
 
 KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
@@ -144,7 +147,7 @@ void PreprocessJob::run()
     if(m_contentEnvironmentFile) { //Copy some information from the environment-file to its content-part
         m_contentEnvironmentFile->setModificationRevision(m_environmentFile->modificationRevision());
 
-        ///@todo think about this. Actually a m_contentEnvironmentFile may be accumulated using different include-paths.
+        ///@todo think about this. Actually a m_contentEnvironmentFile may be accumulated using different include-paths(many different includes are added into it).
         m_contentEnvironmentFile->setIncludePaths(m_environmentFile->includePaths());
     }
 
@@ -178,10 +181,10 @@ void PreprocessJob::run()
     {
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-        parentJob()->setUpdatingContext( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment) );
-        if( m_contentEnvironmentFile && parentJob()->updatingContext() && !(parentJob()->updatingContext()->flags() & KDevelop::TopDUContext::ProxyContextFlag) ) {
-            parentJob()->setUpdatingContext(0);
-            kDebug() << "Warning: Cannot update a non-proxy context with a proxy-context";
+        parentJob()->setUpdatingContext( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_contentEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
+        if( m_contentEnvironmentFile && parentJob()->updatingContext() ) {
+            //Must be true, because we explicity passed the flag to chaonForDocument
+            Q_ASSERT((parentJob()->updatingContext()->flags() & KDevelop::TopDUContext::ProxyContextFlag));
         }
     }
 
@@ -197,7 +200,6 @@ void PreprocessJob::run()
     
     if( m_contentEnvironmentFile ) {
         m_environmentFile->merge(*m_contentEnvironmentFile);
-        //Q_ASSERT(m_contentEnvironmentFile->identity().flags() & IdentifiedFile::Content);
         parentJob()->setContentEnvironmentFile(m_contentEnvironmentFile.data());
     }
     
@@ -225,8 +227,9 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
 
         ///Find a matching content-context
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock()); //Write-lock because of setFlags below
-        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment);
-        if(content && (content->flags() & KDevelop::TopDUContext::ProxyContextFlag)) {
+        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
+        if(content) {
+            Q_ASSERT(!(content->flags() & KDevelop::TopDUContext::ProxyContextFlag));
             //We have found a content-context that we can use
             parentJob()->setContentContext(content);
 
@@ -287,7 +290,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
         {
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-            includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment);
+            includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, m_contentEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag);
         }
 
         if( includedContext ) {

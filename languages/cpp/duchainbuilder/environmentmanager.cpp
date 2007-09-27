@@ -110,11 +110,11 @@ void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& fi
   ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: new count of cached instances for the file:" << cnt  );
 }
 
-EnvironmentFilePointer EnvironmentManager::lexedFile( const KUrl& url, const rpp::Environment* environment )  {
-  return lexedFile( HashedString( url.prettyUrl( KUrl::RemoveTrailingSlash )), environment );
+EnvironmentFilePointer EnvironmentManager::lexedFile( const KUrl& url, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* acceptor )  {
+  return lexedFile( HashedString( url.prettyUrl( KUrl::RemoveTrailingSlash )), environment, acceptor );
 }
 
-EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, const rpp::Environment* environment ) {
+EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* acceptor ) {
   initFileModificationCache();
   std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( fileName );
 
@@ -139,6 +139,12 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
 
   while ( files.first != files.second ) {
     const EnvironmentFile& file( *( *( files.first ) ).second );
+
+    if(acceptor && !acceptor->accept(*( *files.first ).second)) {
+      ++files.first;
+      continue;
+    }
+    
     bool success = true;
     //Make sure that none of the macros stored in the driver affect the file in a different way than the one before
    
@@ -189,7 +195,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     }
 
     if ( success ) {
-      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: Using cached file " << fileName.str()  );
+      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: Using cached file " << fileName.str() );
       (*files.first).second->access();
       return ( *files.first ).second;
     }
@@ -256,7 +262,7 @@ void EnvironmentManager::erase( const CacheNode* node ) {
   ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url()  );
 }
 
-EnvironmentFile::EnvironmentFile( const KUrl& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex) {
+EnvironmentFile::EnvironmentFile( const KUrl& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex) {
   QFileInfo fileInfo( fileName.path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
   ifDebug( kDebug(9007) << "EnvironmentFile::EnvironmentFile: created for" << fileName << "modification-time:" << m_modificationTime  );
@@ -383,11 +389,17 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 }
 
 size_t EnvironmentFile::hash() const {
-  return m_usedMacros.valueHash() + m_usedMacros.idHash() + m_definedMacros.idHash() + m_definedMacros.valueHash() /*+ m_strings.hash()*/; ///@todo is the string-hash needed here?
+  ///@todo remove the (size_t)(this), it is just temporary to make them unique, bit will not work with serialization to disk.
+  ///Instead, create a hash over the contained strings, and make sure the other hashes work reliably.
+  return m_usedMacros.valueHash() + m_usedMacros.idHash() + m_definedMacros.idHash() + m_definedMacros.valueHash() + (size_t)(this)/*+ m_strings.hash()*/; ///@todo is the string-hash needed here?
+}
+
+void EnvironmentFile::setIdentityOffset(uint offset) {
+  m_identityOffset = offset;
 }
 
 IdentifiedFile EnvironmentFile::identity() const {
-  return IdentifiedFile(m_url, (uint)hash());
+  return IdentifiedFile(m_url, (uint)hash() + m_identityOffset);
 }
 
 int EnvironmentFile::type() const {
@@ -432,13 +444,13 @@ void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
 /**
  * Search for the availability of a file parsed in a given environment
  * */
-KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const KUrl& url, const ParsingEnvironment* environment ) {
+KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const KUrl& url, const ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter ) {
   const rpp::Environment* env = dynamic_cast<const rpp::Environment*>(environment);
   if( !env ) {
     kDebug(9007) << "EnvironmentManager::find() called with a wrong environment of type" << environment->type();
     return 0;
   }
-  return lexedFile( url, env ).data();
+  return lexedFile( url, env, accepter ).data();
 }
 
 

@@ -288,6 +288,8 @@ void CPPInternalParseJob::run()
             environmentFile = parentJob()->contentEnvironmentFile();
             //Q_ASSERT(environmentFile->identity().flags() & IdentifiedFile::Content);
         }
+
+        //If simplified environment-matching is used, we now only care about the content-context, until we create the proxy-context in the end.
         
         QList<DUContext*> chains;
         QList<DUContext*> temporaryChains;
@@ -375,7 +377,8 @@ void CPPInternalParseJob::run()
             }
 
             Q_ASSERT(topContext);
-            
+
+            //If we are using simplified environment-matching, create a proxy-context that represents the parsed content-context environment-wise
             if( parentJob()->contentEnvironmentFile() ) {
                 ContextBuilder builder(&editor);
                 topContext = builder.buildProxyContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), topContext, parentJob()->updatingContext().data());

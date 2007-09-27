@@ -71,6 +71,18 @@ pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderS
 {
 }
 
+//A header-section ends when the first non-directive and non-comment occurs
+#define check_header_section \
+  if( m_in_header_section ) \
+  { \
+     \
+    m_in_header_section = false; \
+    m_engine->preprocessor()->headerSectionEnded(input); \
+    if( input.atEnd() ) \
+      continue; \
+  } \
+
+
 void pp_macro_expander::operator()(Stream& input, Stream& output)
 {
   skip_blanks(input, output);
@@ -81,15 +93,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
     {
       skip_comment_or_divop(input, output, true);
     }else{
-      if( m_in_header_section )
-      {
-        //A header-section ends when the first non-directive and non-comment occurs
-        m_in_header_section = false;
-        m_engine->preprocessor()->headerSectionEnded(input);
-        if( input.atEnd() )
-          continue;
-      }
-      
       if (input == '\n')
       {
         output << input;
@@ -135,10 +138,14 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       }
       else if (input == '\"')
       {
+        check_header_section
+        
         skip_string_literal(input, output);
       }
       else if (input == '\'')
       {
+        check_header_section
+        
         skip_char_literal(input, output);
       }
       else if (input.current().isSpace())
@@ -153,10 +160,14 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       }
       else if (input.current().isNumber())
       {
+        check_header_section
+        
         skip_number (input, output);
       }
       else if (input.current().isLetter() || input == '_')
       {
+        check_header_section
+        
         QString name = skip_identifier (input);
 
         // search for the paste token

@@ -146,10 +146,17 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext.data();
 
+    CppDUContext<TopDUContext>* cppContext = 0;
+    
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: recompiling";
 
       Q_ASSERT(topLevelContext->textRangePtr());
+      
+      Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
+      cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
+
+      cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
 
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
     } else {
@@ -159,13 +166,13 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
       topLevelContext = new CppDUContext<TopDUContext>(range, const_cast<Cpp::EnvironmentFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
 
+      Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
+      cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
+
+      cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
+      
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
     }
-
-    Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
-    CppDUContext<TopDUContext>* cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
-
-    cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
 
     if(content) {
       cppContext->addImportedParentContext(content.data());
