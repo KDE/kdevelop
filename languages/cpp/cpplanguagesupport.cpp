@@ -210,6 +210,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 {
     KUrl::List allPaths;
 
+    KUrl buildDirectory;
+    KUrl projectDirectory;
+    
     foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
         KDevelop::ProjectFileItem *file = project->fileForUrl(source);
         if (!file) {
@@ -222,6 +225,12 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             continue;
         }
 
+        projectDirectory = project->folder();
+        buildDirectory = buildManager->buildDirectory(project->projectItem());
+
+        if(projectDirectory == buildDirectory)
+            projectDirectory = buildDirectory = KUrl();
+        
         KUrl::List dirs = buildManager->includeDirectories(file);
 
         foreach( KUrl dir, dirs ) {
@@ -233,6 +242,12 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
     if( allPaths.isEmpty() ) {
         //Fallback-search using include-path resolver
 
+        if(!buildDirectory.isEmpty()) {
+            ///@todo remote directories?
+            m_includeResolver->setOutOfSourceBuildSystem(projectDirectory.path(), buildDirectory.path());
+        } else {
+            m_includeResolver->resetOutOfSourceBuild();
+        }
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
             foreach( QString res, result.paths ) {

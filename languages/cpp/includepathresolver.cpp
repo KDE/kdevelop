@@ -535,7 +535,11 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   return ret;
 }
 
-void IncludePathResolver::setOutOfSourceBuildSystem( const QString& source, const QString& build ) {
+void IncludePathResolver::resetOutOfSourceBuild() {
+  m_outOfSource = false;
+}
+
+  void IncludePathResolver::setOutOfSourceBuildSystem( const QString& source, const QString& build ) {
   m_outOfSource = true;
   m_source = source;
   m_build = build;

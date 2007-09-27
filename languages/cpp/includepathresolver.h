@@ -50,6 +50,8 @@ namespace CppTools {
       PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory );
       ///source and build must be absolute paths
       void setOutOfSourceBuildSystem( const QString& source, const QString& build );
+      ///resets to in-source build system
+      void resetOutOfSourceBuild();
     private:
       bool m_isResolving;
       struct CacheEntry {
