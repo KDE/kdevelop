@@ -399,7 +399,7 @@ class CppDUContext : public BaseContext {
       return templateDecl->instantiate( templateArguments );
     }
 
-    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, bool searchInParents, int currentDepth) const
+    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, bool searchInParents, int currentDepth) const
     {
       if( m_instantiatedFrom )
       {
@@ -414,7 +414,7 @@ class CppDUContext : public BaseContext {
           this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), true, temp, DUContext::NoFiltering );
       }
 
-      return BaseContext::mergeDeclarationsInternal(definitions, position, searchInParents, currentDepth);
+      return BaseContext::mergeDeclarationsInternal(definitions, position, hadContexts, searchInParents, currentDepth);
     }
 
     CppDUContext<BaseContext>* m_instantiatedFrom;
