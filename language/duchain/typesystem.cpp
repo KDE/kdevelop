@@ -828,4 +828,4 @@ uint ArrayType::hash() const
 
 }
 
-// kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
