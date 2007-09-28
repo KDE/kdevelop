@@ -149,7 +149,7 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
         ++realChainCount;
     }
         
-    kDebug() << "new count of real chains: " << realChainCount << " proxy-chains: " << proxyChainCount << endl;
+    kDebug(9505) << "new count of real chains: " << realChainCount << " proxy-chains: " << proxyChainCount << endl;
   }
   chain->setInDuChain(true);
   addToEnvironmentManager(chain);
@@ -200,7 +200,7 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) cons
       for( ; it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); ++it )
         ++count;
       if( count > 1 )
-        kDebug() << "found " << count << " chains for " << document.url();
+        kDebug(9505) << "found " << count << " chains for " << document.url();
 
     }
     // Match any parsed version of this document
@@ -212,7 +212,7 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) cons
   } else if (sdDUChainPrivate->m_chains.contains(document))
     return sdDUChainPrivate->m_chains[document];
 
-  kDebug() << "No chain found for document " << document.toString() << endl;
+  kDebug(9505) << "No chain found for document " << document.toString() << endl;
     
   return 0;
 }

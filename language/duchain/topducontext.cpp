@@ -218,7 +218,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
               if( alias->importIdentifier().count() )
                 applyAliases(temp, newCurrentIdentifiers, alias->textRange().start(), canBeNamespace, alias->importIdentifier().count(), pos+1);
               else
-                kDebug() << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << " is \"" << alias->importIdentifier() << "\"";
+                kDebug(9505) << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << " is \"" << alias->importIdentifier() << "\"";
             }
           }
         }
@@ -251,7 +251,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
               if( alias->importIdentifier().count() )
                 applyAliases(temp, newCurrentIdentifiers, alias->textRange().start(), canBeNamespace, alias->importIdentifier().count(), pos+1);
               else
-                kDebug() << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << "\" is \"" << alias->importIdentifier() << "\"";
+                kDebug(9505) << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << "\" is \"" << alias->importIdentifier() << "\"";
             }
           }
         }

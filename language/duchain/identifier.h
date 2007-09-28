@@ -88,7 +88,7 @@ public:
   bool isEmpty() const;
   
   /**
-    * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.
+    * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
   inline friend kdbgstream& operator<< (kdbgstream& s, const Identifier& identifier) {
     s << identifier.toString();
@@ -180,7 +180,7 @@ public:
   bool beginsWith(const QualifiedIdentifier& other) const;
 
   /**
-    * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.
+    * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
   inline friend kdbgstream& operator<< (kdbgstream& s, const QualifiedIdentifier& identifier) {
     s << identifier.toString();
