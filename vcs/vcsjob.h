@@ -83,7 +83,8 @@ public:
         JobRunning,
         JobSucceeded,
         JobCanceled,
-        JobFailed
+        JobFailed,
+	JobNotStarted
     };
 
     /**
