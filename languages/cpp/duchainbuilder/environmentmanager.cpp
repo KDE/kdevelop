@@ -156,7 +156,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     for( ; conflictIt; ++conflictIt) {
       rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().find(*conflictIt);
       if(rit == environment->environment().end()) {
-        kDebug() << "Found environment-macro name, but not the fitting macro: " << (*conflictIt).str();
+        kDebug(9007) << "Found environment-macro name, but not the fitting macro: " << (*conflictIt).str();
         continue;
       }
       rpp::Environment::EnvironmentMap::const_iterator it = rit;

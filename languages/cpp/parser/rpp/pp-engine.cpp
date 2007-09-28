@@ -34,7 +34,7 @@
 
 using namespace rpp;
 
-#define RETURN_ON_FAIL(x) if(!(x)) { ++input; kDebug() << "Preprocessor: Condition not satisfied"; return; }
+#define RETURN_ON_FAIL(x) if(!(x)) { ++input; kDebug(9007) << "Preprocessor: Condition not satisfied"; return; }
 
 pp::pp(Preprocessor* preprocessor)
   : m_environment(new Environment(this))

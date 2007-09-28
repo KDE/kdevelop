@@ -367,9 +367,9 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   if(line.count('"') == 2 || line.endsWith('>'))
     return; //We are behind a complete include-directive
 
-  kDebug() << "include line: " << line;
+  kDebug(9007) << "include line: " << line;
   line = line.mid(8).trimmed(); //Strip away the #include
-  kDebug() << "trimmed include line: " << line;
+  kDebug(9007) << "trimmed include line: " << line;
 
   if(!line.startsWith('<') && !line.startsWith('"'))
     return; //We are not behind the beginning of a path-specification
@@ -380,12 +380,12 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   
   line = line.mid(1);
 
-  kDebug() << "extract prefix from " << line;
+  kDebug(9007) << "extract prefix from " << line;
   //Extract the prefix-path
   KUrl u(line);
   u.setFileName(QString());
   QString prefixPath = u.path();
-  kDebug() << "extracted prefix " << prefixPath;
+  kDebug(9007) << "extracted prefix " << prefixPath;
   
   LOCKDUCHAIN;
   if(!m_duContext)

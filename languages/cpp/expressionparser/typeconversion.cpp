@@ -68,7 +68,7 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
     problem( from, to, "one type is invalid" );
     return 0;
   }
-  //kDebug() << "Checking conversion from " << from->toString() << " to " << to->toString();
+  //kDebug(9007) << "Checking conversion from " << from->toString() << " to " << to->toString();
   CppReferenceType* fromReference = dynamic_cast<CppReferenceType*>(from.data());
   if( fromReference )
     fromLValue = true;

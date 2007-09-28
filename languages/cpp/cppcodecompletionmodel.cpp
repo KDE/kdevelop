@@ -95,7 +95,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   TopDUContext* top = 0;
   
   if( !KDevelop::DUChain::lock()->lockForRead(400) ) {
-    kDebug() << "could not lock du-chain in time" << endl;
+    kDebug(9007) << "could not lock du-chain in time" << endl;
     return;
   }
   
@@ -104,7 +104,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   delete env;
 
   if( !top ) {
-    kDebug() << "Could not find perfectly matching version of " << url << " for completion";
+    kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
     top = DUChain::self()->chainForDocument(url);
   }
 

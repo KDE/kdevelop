@@ -179,7 +179,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
       cppContext->addImportedParentContext(content.data());
     } else {
       ///This happens if a content-context is deleted from the du-chain during the time that the du-chain is not locked by this thread
-      kDebug() << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << u;
+      kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << u;
     }
   }
 
@@ -191,7 +191,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   m_compilingContexts = true;
 
   if(updateContext && (updateContext->flags() & TopDUContext::ProxyContextFlag)) {
-    kDebug() << "updating a context " << file->identity() << " from a proxy-context to a content-context";
+    kDebug(9007) << "updating a context " << file->identity() << " from a proxy-context to a content-context";
     updateContext->setFlags((TopDUContext::Flags)( updateContext->flags() & (~TopDUContext::ProxyContextFlag))); //It is possible to upgrade a proxy-context to a content-context
   }
   
@@ -276,7 +276,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 /*     if( m_recompiling ) {
       DumpChain dump;
       dump.dump(topLevelContext);
-      kDebug() << dump.dotGraph(topLevelContext);
+      kDebug(9007) << dump.dotGraph(topLevelContext);
      }*/
   }
 

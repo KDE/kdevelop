@@ -200,7 +200,7 @@ void PreprocessJob::run()
     m_currentEnvironment->finish();
 
     if(!m_headerSectionEnded) {
-        kDebug() << parentJob()->document().prettyUrl() << ": header-section was note ended";
+        kDebug(9007) << parentJob()->document().prettyUrl() << ": header-section was note ended";
         headerSectionEnded();
     }
     
@@ -234,7 +234,7 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
 bool PreprocessJob::headerSectionEnded() {
     bool ret = false;
     m_headerSectionEnded = true;
-    kDebug() << parentJob()->document() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section";
+    kDebug(9007) << parentJob()->document() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section";
     
     if( m_contentEnvironmentFile ) {
         KUrl u = parentJob()->document();
@@ -255,13 +255,13 @@ bool PreprocessJob::headerSectionEnded() {
                 parentJob()->setUseContentContext(true);
                 Q_ASSERT(m_contentEnvironmentFile);
             } else {
-                kDebug() << "updating content-context";
+                kDebug(9007) << "updating content-context";
                 //We will re-use the specialized context, but it needs updating. So we keep processing here.
             }
             //content->parsingEnvironmentFile()->setFlags(content); //It may happen here that a proxy-context is transformed into a normal one
         } else {
             //We need to process the content ourselves
-            kDebug() << "could not find a matching content-context";
+            kDebug(9007) << "could not find a matching content-context";
         }
 
         m_currentEnvironment->finish();

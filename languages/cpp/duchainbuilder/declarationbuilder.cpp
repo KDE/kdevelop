@@ -555,7 +555,7 @@ void DeclarationBuilder::closeDeclaration()
         currentDeclaration()->setInternalContext(m_lastContext);
         
         if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )
-          kDebug() << "Warning: Range was invalidated" << endl;
+          kDebug(9007) << "Warning: Range was invalidated" << endl;
         
         m_lastContext = 0;
       }
@@ -619,7 +619,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
             copyCppClass(realClass.data(), forwardClass.data());
             newLastType = forward->abstractType();
           } else {
-            kDebug() << "Problem while forward-declaration resolution";
+            kDebug(9007) << "Problem while forward-declaration resolution";
           }
 
           //Update instantiations in case of template forward-declarations
@@ -643,7 +643,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
                 //Copy the class from real into the forward-declaration's instance
                 copyCppClass(realClass.data(), forwardClass.data());
               } else {
-                kDebug() << "Bad types involved in formward-declaration";
+                kDebug(9007) << "Bad types involved in formward-declaration";
               }
             }
           }
@@ -665,7 +665,7 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
   QList<DUContext*> contexts = currentContext()->findContexts(DUContext::Namespace, identifier, position);
   if( contexts.isEmpty() ) {
     //Failed to resolve namespace
-    kDebug() << "Failed to resolve namespace \"" << identifier << "\"";
+    kDebug(9007) << "Failed to resolve namespace \"" << identifier << "\"";
     QualifiedIdentifier ret = identifier;
     ret.setExplicitlyGlobal(true);
     Q_ASSERT(ret.count());
@@ -687,7 +687,7 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
     DUChainReadLocker lock(DUChain::lock());
     if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
       ///@todo report problem
-      kDebug() << "Namespace-import used in non-global scope" << endl;
+      kDebug(9007) << "Namespace-import used in non-global scope" << endl;
       return;
     }
   }
@@ -711,7 +711,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
     DUChainReadLocker lock(DUChain::lock());
     if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
       ///@todo report problem
-      kDebug() << "Namespace-alias used in non-global scope" << endl;
+      kDebug(9007) << "Namespace-alias used in non-global scope" << endl;
     }
   }
   
