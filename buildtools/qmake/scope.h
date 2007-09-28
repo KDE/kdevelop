@@ -65,7 +65,7 @@ public:
 
     // Fetch the variable values by running over the statements and adding/removing/setting
     // as the encountered op's say, begin with the parent projects variableValues list
-    QStringList variableValues( const QString& variable, bool checkIncParent = true );
+    QStringList variableValues( const QString& variable, bool checkIncParent = true, bool fetchFromParent = true );
 
     // Remove a variable+Op combination from the scope, if existant
     void removeVariable( const QString& var, const QString& op );
@@ -217,7 +217,7 @@ private:
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
     // using the given list as startvalue
     // Changes the list using the +=, -=, = operations accordingly
-    void calcValuesFromStatements( const QString& variable, QStringList& result, bool, QMake::AST* stopHere = 0 ) const;
+    void calcValuesFromStatements( const QString& variable, QStringList& result, bool, QMake::AST* stopHere = 0, bool fetchFromParent = true ) const;
 
     // Check wether the two operators are compatible
     static bool isCompatible( const QString& op1, const QString& op2);
@@ -235,7 +235,7 @@ private:
     QStringList lookupVariable( const QString& var );
 
     QStringList resolveVariables( const QStringList&, QMake::AST* = 0 ) const;
-    QStringList variableValues( const QString& variable, QMake::AST* ) const;
+    QStringList variableValues( const QString& variable, QMake::AST*, bool fetchFromParent = true ) const;
     QString resolveVariables( const QString& , QMake::AST* ) const;
 
     // This function determines the currently used String for fileending, it can be \n, \r or \r\n
