@@ -284,7 +284,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
-    kWarning() << file->url() << "Previous parameter declaration context didn't get used??" ;
+    kWarning(9007) << file->url() << "Previous parameter declaration context didn't get used??" ;
     DumpChain dump;
     dump.dump(topLevelContext);
     m_importedParentContexts.clear();
@@ -415,7 +415,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       if (classContexts.count() == 1)
         m_importedParentContexts.append(classContexts.first());
       else if (classContexts.count() > 1) {
-        kWarning() << "Muliple class contexts for" << functionName.toString() << "- shouldn't happen!" ;
+        kWarning(9007) << "Muliple class contexts for" << functionName.toString() << "- shouldn't happen!" ;
         foreach (DUContext* classContext, classContexts) {
           kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->textRange() << "in" << classContext->url();
         }

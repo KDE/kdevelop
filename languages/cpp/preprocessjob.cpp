@@ -347,10 +347,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     }
 
         /*} else {
-            kWarning() << "Language support disappeared!!" ;
+            kWarning(9007) << "Language support disappeared!!" ;
         }
     } else {
-        kWarning() << "Parent job disappeared!!" ;
+        kWarning(9007) << "Parent job disappeared!!" ;
     }*/
 
     return 0;
@@ -368,7 +368,7 @@ bool PreprocessJob::checkAbort()
 
     } else {
         // What... the parent job got deleted??
-        kWarning() << "Parent job disappeared!!" ;
+        kWarning(9007) << "Parent job disappeared!!" ;
         m_success = false;
         setFinished(true);
         return true;

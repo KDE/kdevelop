@@ -130,7 +130,7 @@ void UseBuilder::newUse(NameAST* name)
       declarations.first()->addUse(newUse);
     else
       currentContext()->addOrphanUse(newUse);
-      //kWarning() << "Could not find definition for identifier" << id << "at" << *use ;
+      //kWarning(9007) << "Could not find definition for identifier" << id << "at" << *use ;
   }
 }
 

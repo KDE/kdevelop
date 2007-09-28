@@ -67,7 +67,7 @@ void Environment::visitBlock(MacroBlock* block, int depth)
 {
   if (depth++ > 100) {
     // TODO detect recursion?
-    kWarning() << "Likely cyclic include, aborting macro replay at depth 100" ;
+    kWarning(9007) << "Likely cyclic include, aborting macro replay at depth 100" ;
     return;
   }
 

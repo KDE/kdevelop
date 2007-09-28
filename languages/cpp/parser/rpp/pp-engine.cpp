@@ -105,7 +105,7 @@ QString pp::processFile(const QString& fileName, StringType type, const QString&
       return result;
     }
 
-    kWarning() << "file '" << fileName << "' not found!" ;
+    kWarning(9007) << "file '" << fileName << "' not found!" ;
     return QString();
   }
   else
@@ -391,7 +391,7 @@ void pp::operator () (Stream& input, Stream& output)
   }
 
   if (iflevel != previousIfLevel) {
-    kWarning() << "Unterminated #if statement" ;
+    kWarning(9007) << "Unterminated #if statement" ;
   }
 }
 
@@ -561,7 +561,7 @@ Value pp::eval_primary(Stream& input)
 
       if (token != TOKEN_IDENTIFIER)
       {
-        kWarning() << "expected ``identifier'' found:" << char(token) ;
+        kWarning(9007) << "expected ``identifier'' found:" << char(token) ;
         break;
       }
 
@@ -574,7 +574,7 @@ Value pp::eval_primary(Stream& input)
 
       if (expect_paren) {
         if (token != ')')
-          kWarning() << "expected ``)''" ;
+          kWarning(9007) << "expected ``)''" ;
         else
           accept_token();
       }
@@ -600,7 +600,7 @@ Value pp::eval_primary(Stream& input)
       token = next_token(input);
 
       if (token != ')')
-        kWarning() << "expected ``)'' =" << char(token) ;
+        kWarning(9007) << "expected ``)'' =" << char(token) ;
       else
         accept_token();
 
@@ -629,7 +629,7 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else if (token == '/') {
       if (value.is_zero()) {
-        kWarning() << "division by zero" ;
+        kWarning(9007) << "division by zero" ;
         result.set_long(0);
 
       } else {
@@ -638,7 +638,7 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else {
       if (value.is_zero()) {
-        kWarning() << "division by zero" ;
+        kWarning(9007) << "division by zero" ;
         result.set_long(0);
 
       } else {
@@ -872,7 +872,7 @@ Value pp::eval_constant_expression(Stream& input)
     }
     else
     {
-      kWarning() << "expected ``:'' =" << int (token) ;
+      kWarning(9007) << "expected ``:'' =" << int (token) ;
       result = left_value;
     }
   }
@@ -930,7 +930,7 @@ void pp::handle_else(int sourceLine)
 {
   if (iflevel == 0 && !skipping ())
   {
-    kWarning() << "#else without #if" ;
+    kWarning(9007) << "#else without #if" ;
   }
   else if (iflevel > 0 && _M_skipping[iflevel - 1])
   {
@@ -951,7 +951,7 @@ void pp::handle_elif(Stream& input)
 
   if (iflevel == 0 && !skipping())
   {
-    kWarning() << "#else without #if" ;
+    kWarning(9007) << "#else without #if" ;
   }
   else
   {

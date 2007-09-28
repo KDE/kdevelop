@@ -173,7 +173,7 @@ CppIntegralType::Ptr TypeRepository::getIntegral(int index, int cv) const
 AbstractType::Ptr TypeRepository::registerType(AbstractType::Ptr input)
 {
   if (!input) {
-    kWarning() << "Asked to register a null type." ;
+    kWarning(9007) << "Asked to register a null type." ;
     return input;
   }
 
