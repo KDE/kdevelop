@@ -40,7 +40,7 @@ public:
 
         foreach( SvnStatusHolder _holder, holderList ){
 
-            int stat = KDevelop::Unknown;
+            int stat = KDevelop::ItemUnknown;
             if( _holder.textStatus == svn_wc_status_normal &&
                 _holder.propStatus == svn_wc_status_normal){
 
