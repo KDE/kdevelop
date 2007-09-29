@@ -28,6 +28,70 @@
 namespace KDevelop
 {
 
+class VcsStatusInfoPrivate
+{
+public:
+    int state;
+    KUrl url;
+};
+
+VcsStatusInfo::VcsStatusInfo()
+    : d( new VcsStatusInfoPrivate)
+{
+    d->state = VcsStatusInfo::ItemUnknown;
+}
+
+VcsStatusInfo::~VcsStatusInfo()
+{
+    delete d;
+}
+
+VcsStatusInfo::VcsStatusInfo( const VcsStatusInfo& rhs )
+    : d(new VcsStatusInfoPrivate)
+{
+    d->state = rhs.d->state;
+    d->url = rhs.d->url;
+}
+
+VcsStatusInfo& VcsStatusInfo::operator=( const VcsStatusInfo& rhs)
+{
+    if(this == &rhs)
+        return *this;
+    d->state = rhs.d->state;
+    d->url = rhs.d->url;
+    return *this;
+}
+
+void VcsStatusInfo::setUrl( const KUrl& url )
+{
+    d->url = url;
+}
+
+void VcsStatusInfo::setExtendedState( int newstate )
+{
+    d->state = newstate;
+}
+
+void VcsStatusInfo::setState( VcsStatusInfo::State state )
+{
+    d->state = state;
+}
+
+int VcsStatusInfo::extendedState() const
+{
+    return d->state;
+}
+
+KUrl VcsStatusInfo::url() const
+{
+    return d->url;
+}
+
+VcsStatusInfo::State VcsStatusInfo::state() const
+{
+    return VcsStatusInfo::State(d->state);
+}
+
 class VcsMappingPrivate
 {
     public:

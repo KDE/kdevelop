@@ -23,6 +23,9 @@
 #define VCSHELPERS_H
 
 #include <QtCore/QVariant>
+
+#include <kurl.h>
+
 #include <vcsexport.h>
 
 class QString;
@@ -31,18 +34,40 @@ class QStringList;
 namespace KDevelop
 {
 
-/**
- * Status of a local file
- */
-enum VcsState
+class VcsStatusInfo
 {
-    ItemUnknown             /**<No VCS information about a file is known (or file is not under VCS control).*/,
-    ItemUpToDate        /**<Item was updated or it is already at up to date version.*/,
-    ItemAdded           /**<Item was added to the repository but not committed.*/,
-    ItemModified        /**<Item was modified locally.*/,
-    ItemDeleted         /**<Item is scheduled to be deleted. */,
-    ItemHasConflicts    /**<Local version has conflicts that need to be resolved before commit.*/
+public:
+    /**
+     * Status of a local file
+     */
+    enum State
+    {
+        ItemUnknown      = 0   /**<No VCS information about a file is known (or file is not under VCS control).*/,
+        ItemUpToDate     = 1   /**<Item was updated or it is already at up to date version.*/,
+        ItemAdded        = 2   /**<Item was added to the repository but not committed.*/,
+        ItemModified     = 3   /**<Item was modified locally.*/,
+        ItemDeleted      = 4   /**<Item is scheduled to be deleted. */,
+        ItemHasConflicts = 5   /**<Local version has conflicts that need to be resolved before commit.*/,
+	ItemUserState    = 1000 /**special states for individual vcs implementations should use this as base.*/
+    };
+
+    VcsStatusInfo();
+    virtual ~VcsStatusInfo();
+    VcsStatusInfo(const VcsStatusInfo&);
+
+    KUrl url() const;
+    void setUrl( const KUrl& );
+
+    VcsStatusInfo::State state() const;
+    void setState( VcsStatusInfo::State ); 
+
+    int extendedState() const;
+    void setExtendedState( int ); 
+    VcsStatusInfo& operator=( const VcsStatusInfo& rhs);
+private:
+    class VcsStatusInfoPrivate* d;
 };
+
 
 /**
  * Small container class that has a mapping of
@@ -79,6 +104,7 @@ private:
 }
 
 Q_DECLARE_METATYPE( KDevelop::VcsMapping )
+Q_DECLARE_METATYPE( KDevelop::VcsStatusInfo )
 
 #endif
 

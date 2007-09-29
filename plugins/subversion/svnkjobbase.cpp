@@ -40,25 +40,25 @@ public:
 
         foreach( SvnStatusHolder _holder, holderList ){
 
-            int stat = KDevelop::ItemUnknown;
+            int stat = KDevelop::VcsStatusInfo::ItemUnknown;
             if( _holder.textStatus == svn_wc_status_normal &&
                 _holder.propStatus == svn_wc_status_normal){
 
-                stat = KDevelop::ItemUpToDate;
+                stat = KDevelop::VcsStatusInfo::ItemUpToDate;
             }
             else if( _holder.textStatus == svn_wc_status_added ){
-                stat = KDevelop::ItemAdded;
+                stat = KDevelop::VcsStatusInfo::ItemAdded;
             }
             else if( _holder.textStatus == svn_wc_status_modified ||
                      _holder.propStatus == svn_wc_status_modified ){
-                stat = KDevelop::ItemModified;
+                stat = KDevelop::VcsStatusInfo::ItemModified;
             }
             else if( _holder.textStatus == svn_wc_status_deleted ){
-                stat = KDevelop::ItemDeleted;
+                stat = KDevelop::VcsStatusInfo::ItemDeleted;
             }
             else if( _holder.textStatus == svn_wc_status_conflicted ||
                      _holder.propStatus == svn_wc_status_conflicted ){
-                stat = KDevelop::ItemHasConflicts;
+                stat = KDevelop::VcsStatusInfo::ItemHasConflicts;
             }
 
             QVariant statVar( stat );
