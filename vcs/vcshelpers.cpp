@@ -62,6 +62,16 @@ VcsStatusInfo& VcsStatusInfo::operator=( const VcsStatusInfo& rhs)
     return *this;
 }
 
+bool VcsStatusInfo::operator==( const KDevelop::VcsStatusInfo& rhs) const
+{
+    return ( d->state == rhs.d->state && d->url == rhs.d->url );
+}
+
+bool VcsStatusInfo::operator!=( const KDevelop::VcsStatusInfo& rhs) const
+{
+    return !(operator==(rhs));
+}
+
 void VcsStatusInfo::setUrl( const KUrl& url )
 {
     d->url = url;

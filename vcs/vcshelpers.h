@@ -34,7 +34,7 @@ class QStringList;
 namespace KDevelop
 {
 
-class VcsStatusInfo
+class KDEVPLATFORMVCS_EXPORT VcsStatusInfo
 {
 public:
     /**
@@ -64,6 +64,9 @@ public:
     int extendedState() const;
     void setExtendedState( int ); 
     VcsStatusInfo& operator=( const VcsStatusInfo& rhs);
+    bool operator==( const KDevelop::VcsStatusInfo& rhs) const;
+    bool operator!=( const KDevelop::VcsStatusInfo& rhs) const;
+
 private:
     class VcsStatusInfoPrivate* d;
 };
