@@ -36,7 +36,7 @@ namespace KDevelop
  */
 enum VcsState
 {
-    Unknown             /**<No VCS information about a file is known (or file is not under VCS control).*/,
+    ItemUnknown             /**<No VCS information about a file is known (or file is not under VCS control).*/,
     ItemUpToDate        /**<Item was updated or it is already at up to date version.*/,
     ItemAdded           /**<Item was added to the repository but not committed.*/,
     ItemModified        /**<Item was modified locally.*/,
