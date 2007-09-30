@@ -26,15 +26,6 @@
 
 #include "qmakeprojectfile.h"
 
-QMakeProjectItem::QMakeProjectItem( KDevelop::IProject* project, QMakeProjectFile* scope,
-                                const QString& name, const KUrl& url, QStandardItem* parent )
-: KDevelop::ProjectItem( project, name, parent ), QMakeFolderItem( project, scope, url )
-{
-}
-
-QMakeProjectItem::~QMakeProjectItem()
-{
-}
 
 QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, QMakeProjectFile* scope,
                                 const KUrl& url, QStandardItem* parent )
