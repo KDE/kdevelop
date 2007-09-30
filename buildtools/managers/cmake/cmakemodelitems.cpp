@@ -24,7 +24,7 @@
 #include <iproject.h>
 
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
-    : KDevelop::ProjectFolderItem( project, name, item )
+    : KDevelop::ProjectBuildFolderItem( project, name, item )
 {}
 
 CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item)

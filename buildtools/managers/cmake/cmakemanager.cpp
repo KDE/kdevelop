@@ -129,6 +129,42 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectFolderItem *item) cons
     return path;
 }
 
+KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *project )
+{
+    CMakeFolderItem* m_rootItem;
+    KUrl cmakeInfoFile(project->projectFileUrl());
+    cmakeInfoFile = cmakeInfoFile.upUrl();
+    QString folderUrl(cmakeInfoFile.toLocalFile());
+    cmakeInfoFile.addPath("CMakeLists.txt");
+
+    kDebug(9032) << "file is" << cmakeInfoFile.path();
+    if ( !cmakeInfoFile.isLocalFile() )
+    {
+        //FIXME turn this into a real warning
+        kWarning(9032) << "not a local file. CMake support doesn't handle remote projects" ;
+    }
+    else
+    {
+        VariableMap vm=m_varsDef;
+        QStringList mpath=m_modulePathDef;
+        
+        KSharedConfig::Ptr cfg = project->projectConfiguration();
+        KConfigGroup group(cfg.data(), "CMake");
+        if(group.hasKey("CMakeDir"))
+            mpath=group.readEntry("CMakeDir", QStringList());
+        else
+            group.writeEntry("CMakeDir", mpath);
+        
+        vm.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
+        m_macrosPerProject[project]=MacroMap();
+        m_modulePathPerProject[project]=mpath;
+        m_varsPerProject[project]=vm;
+        m_rootItem = new CMakeFolderItem(project, folderUrl, 0 );
+        m_rootItem->setProjectRoot(true);
+    }
+    return m_rootItem;
+}
+
 QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
@@ -222,41 +258,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         }
     }
     return folderList;
-}
-
-KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *project )
-{
-    CMakeFolderItem* m_rootItem;
-    KUrl cmakeInfoFile(project->projectFileUrl());
-    cmakeInfoFile = cmakeInfoFile.upUrl();
-    QString folderUrl(cmakeInfoFile.toLocalFile());
-    cmakeInfoFile.addPath("CMakeLists.txt");
-
-    kDebug(9032) << "file is" << cmakeInfoFile.path();
-    if ( !cmakeInfoFile.isLocalFile() )
-    {
-        //FIXME turn this into a real warning
-        kWarning(9032) << "not a local file. CMake support doesn't handle remote projects" ;
-    }
-    else
-    {
-        VariableMap vm=m_varsDef;
-        QStringList mpath=m_modulePathDef;
-        
-        KSharedConfig::Ptr cfg = project->projectConfiguration();
-        KConfigGroup group(cfg.data(), "CMake");
-        if(group.hasKey("CMakeDir"))
-            mpath=group.readEntry("CMakeDir", QStringList());
-        else
-            group.writeEntry("CMakeDir", mpath);
-        
-        vm.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
-        m_macrosPerProject[project]=MacroMap();
-        m_modulePathPerProject[project]=mpath;
-        m_varsPerProject[project]=vm;
-        m_rootItem = new CMakeFolderItem(project, "/", 0 );
-    }
-    return m_rootItem;
 }
 
 QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const

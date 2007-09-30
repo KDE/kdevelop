@@ -39,7 +39,6 @@ class MakeOutputDelegate;
 
 namespace KDevelop {
 class ProjectBaseItem;
-class ProjectItem;
 class CommandExecutor;
 }
 

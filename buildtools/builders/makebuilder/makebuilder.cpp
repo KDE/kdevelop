@@ -111,8 +111,7 @@ void MakeBuilder::cleanupModel( int id )
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
 {
     kDebug(9038) << "Building with make";
-    if( ! (dom->type() == KDevelop::ProjectBaseItem::Project ||
-           dom->type() == KDevelop::ProjectBaseItem::Target ||
+    if( ! (dom->type() == KDevelop::ProjectBaseItem::Target ||
            dom->type() == KDevelop::ProjectBaseItem::BuildFolder ) )
         return false;
 
@@ -196,9 +195,9 @@ void MakeBuilder::commandFailed(int id)
 KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
 {
     KUrl buildDir;
-    if( item->type() == KDevelop::ProjectBaseItem::Project )
+    if( item->type() == KDevelop::ProjectBaseItem::BuildFolder )
     {
-        KDevelop::ProjectItem* prjitem = static_cast<KDevelop::ProjectItem*>(item);
+        KDevelop::ProjectBuildFolderItem* prjitem = static_cast<KDevelop::ProjectBuildFolderItem*>(item);
         KDevelop::IBuildSystemManager *bldMan = prjitem->project()->buildSystemManager();
         if( bldMan )
             buildDir = bldMan->buildDirectory( prjitem ); // the correct build dir
@@ -211,7 +210,7 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
         KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
         // get top build directory, specified by build system manager
         KDevelop::IBuildSystemManager *bldMan = targetItem->project()->buildSystemManager();
-        KDevelop::ProjectItem *prjItem = targetItem->project()->projectItem();
+        KDevelop::ProjectFolderItem *prjItem = targetItem->project()->projectItem();
         KUrl topBldDir;
         // ### buildDirectory only takes ProjectItem as an argument. Why it can't be
         // any ProjectBaseItem?? This will make the algorithms belows much easier
@@ -242,8 +241,7 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
         else
         {
             if( targetItem->parent()->type() == KDevelop::ProjectBaseItem::Folder ||
-                targetItem->parent()->type() == KDevelop::ProjectBaseItem::BuildFolder ||
-                targetItem->parent()->type() == KDevelop::ProjectBaseItem::Project )
+                targetItem->parent()->type() == KDevelop::ProjectBaseItem::BuildFolder )
             {
                 KDevelop::ProjectFolderItem *parentOfTarget =
                         static_cast<KDevelop::ProjectFolderItem*>( targetItem->parent() );
@@ -280,7 +278,7 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
         KDevelop::ProjectBuildFolderItem *bldFolderItem = static_cast<KDevelop::ProjectBuildFolderItem*>(item);
         // get top build directory, specified by build system manager
         KDevelop::IBuildSystemManager *bldMan = bldFolderItem->project()->buildSystemManager();
-        KDevelop::ProjectItem *prjItem = bldFolderItem->project()->projectItem();
+        KDevelop::ProjectFolderItem *prjItem = bldFolderItem->project()->projectItem();
         KUrl topBldDir;
         if( !prjItem || !bldMan )
         {
@@ -345,8 +343,7 @@ QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
         KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
         cmdline << targetItem->text();
     }
-    else if( item->type() == KDevelop::ProjectBaseItem::Project ||
-             item->type() == KDevelop::ProjectBaseItem::BuildFolder )
+    else if( item->type() == KDevelop::ProjectBaseItem::BuildFolder )
     {
         QString target = builderGroup.readEntry("Default Target", QString());
         if( !target.isEmpty() )

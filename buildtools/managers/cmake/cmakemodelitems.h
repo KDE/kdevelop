@@ -38,7 +38,7 @@ class IProject;
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectFolderItem
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
     public:
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
