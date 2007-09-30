@@ -88,7 +88,7 @@ public:
      * only active for directories
      */
     virtual VcsJob* add( const KUrl::List& localLocations,
-                         RecursionMode recursion ) = 0;
+                         RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * removes a local file/dir from the list of versioned files
@@ -112,7 +112,7 @@ public:
      * active for directories
      */
     virtual VcsJob* status( const KUrl::List& localLocations,
-                            RecursionMode recursion ) = 0;
+                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
     /**
      * gives the revision of file/dir, that is the revision to which this files
      * was updated when update() was run the last time
@@ -140,7 +140,7 @@ public:
      * unedit() (if not a no-op) is implied.
      */
     virtual VcsJob* revert( const KUrl::List& localLocations,
-                            RecursionMode recursion ) = 0;
+                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * fetches the latest changes from the repository, if there are
@@ -154,14 +154,14 @@ public:
      */
     virtual VcsJob* update( const KUrl::List& localLocations,
                             const VcsRevision& rev,
-                            RecursionMode recursion ) = 0;
+                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * Checks in the changes of the given file(s)/dir(s) into the repository
      */
     virtual VcsJob* commit( const QString& message,
                             const KUrl::List& localLocations,
-                            RecursionMode recursion ) = 0;
+                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * Retrieves a diff between the two locations at the given revisions
@@ -270,7 +270,7 @@ public:
      */
     virtual VcsJob* import( const KUrl& localLocation,
                             const QString& repositoryLocation,
-                            RecursionMode recursion ) = 0;
+                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * Checks out files or dirs from a repository into a local directory
