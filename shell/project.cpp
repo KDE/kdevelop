@@ -259,9 +259,12 @@ bool Project::open( const KUrl& projectFileUrl )
     if ( d->manager && iface )
     {
 //         ProjectModel* model = Core::self()->projectController()->projectModel();
-           d->topItem = iface->import( this );
+        d->topItem = iface->import( this );
+        if( !d->topItem )
+        {
+            return false;
+        }
 //         model->insertRow( model->rowCount(), d->topItem );
-
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
         importJob->start(); //be asynchronous
@@ -349,7 +352,7 @@ ProjectFileItem *Project::fileForUrl(const KUrl& url) const
             u = top->url();
             if ( u.isParentOf( url ) )
             {
-                ProjectFolderItem *parent = 0L;
+                ProjectFolderItem *parent = 0;
                 QList<ProjectFolderItem*> folder_list = top->folderList();
                 foreach( ProjectFolderItem *folder, folder_list )
                 {
@@ -368,6 +371,19 @@ ProjectFileItem *Project::fileForUrl(const KUrl& url) const
                         {
                             return file; //we found it
                             break;
+                        }
+                    }
+                    QList<ProjectTargetItem*> target_list = top->targetList();
+                    foreach( ProjectTargetItem *target, target_list )
+                    {
+                        QList<ProjectFileItem*> targetfile_list = target->fileList();
+                        foreach( ProjectFileItem *file, targetfile_list )
+                        {
+                            if ( file->url() == url )
+                            {
+                                return file; //we found it
+                                break;
+                            }
                         }
                     }
                     return 0; //not in the project
