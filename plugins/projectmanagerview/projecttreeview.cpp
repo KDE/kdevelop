@@ -53,7 +53,7 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPart *part, QWidget *parent 
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
 }
 
 void ProjectTreeView::setSelectionModel( QItemSelectionModel* newmodel )
@@ -153,7 +153,7 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
 
     if ( item && item->file() )
     {
-        emit activateURL( item->file()->url() );
+        emit activateUrl( item->file()->url() );
     }
 }
 

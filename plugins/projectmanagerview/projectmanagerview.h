@@ -38,7 +38,7 @@ class ProjectManagerView: public QWidget
         ProjectManagerViewPart *part() const;
 
     private:
-        Q_PRIVATE_SLOT( d, void pressed( const QModelIndex & index ) )
+        Q_PRIVATE_SLOT( d, void openUrl( const KUrl& ) )
         Q_PRIVATE_SLOT( d, void fileCreated( const QString &fileName ) )
         Q_PRIVATE_SLOT( d, void fileDirty( const QString &fileName ) )
         Q_PRIVATE_SLOT( d, void fileDeleted( const QString &fileName ) )

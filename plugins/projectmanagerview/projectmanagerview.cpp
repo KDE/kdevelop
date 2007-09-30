@@ -70,15 +70,9 @@ public:
         Q_UNUSED(fileName)
     }
 
-    void pressed( const QModelIndex & index )
+    void openUrl( const KUrl& url )
     {
-        QStandardItem* item = m_part->core()->projectController()->projectModel()->itemFromIndex( index );
-        if ( item->type() == ProjectBaseItem::File )
-        {
-            ProjectBaseItem* projectItem = dynamic_cast<ProjectBaseItem*>( item );
-            if ( projectItem && projectItem->file() )
-                m_part->core()->documentController()->openDocument( projectItem->file()->url() );
-        }
+        m_part->core()->documentController()->openDocument( url );
     }
     void buildCurrentProject()
     {
@@ -105,11 +99,9 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     d->m_projectOverview->setItemDelegate( delegate );
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
     vbox->addWidget( d->m_projectOverview );
-        //   connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
-    connect( d->m_projectOverview, SIGNAL( pressed( QModelIndex ) ),
-             this, SLOT( pressed( QModelIndex ) ) );
-    connect( d->m_projectOverview, SIGNAL( currentChanged( ProjectBaseItem* ) ),
-           d->m_part->core()->projectController(), SLOT(changeCurrentProject( ProjectBaseItem* ) ) );
+    connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
+    connect( d->m_projectOverview, SIGNAL( currentChanged( KDevelop::ProjectBaseItem* ) ),
+           d->m_part->core()->projectController(), SLOT(changeCurrentProject( KDevelop::ProjectBaseItem* ) ) );
 
 
 #ifdef WITH_PROJECT_DETAILS
@@ -118,9 +110,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     d->m_projectDetails->setWhatsThis( i18n( "Project Details" ) );
     vbox->add( d->m_projectDetails );
 
-        //   connect(m_projectDetails, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
-    connect( d->m_projectDetails, SIGNAL( pressed( QModelIndex ) ),
-             this, SLOT( pressed( QModelIndex ) ) );
+    connect(m_projectDetails, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
     connect( d->m_projectOverview->selectionModel(), SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
              d->m_projectDetails, SLOT( setRootIndex( QModelIndex ) ) );
 #endif

@@ -57,7 +57,7 @@ class ProjectTreeView: public QTreeView
         virtual void reset();
 
     Q_SIGNALS:
-        void activateURL( const KUrl &url );
+        void activateUrl( const KUrl &url );
         void currentChanged( KDevelop::ProjectBaseItem *item );
 
     protected Q_SLOTS:
