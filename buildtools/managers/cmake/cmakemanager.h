@@ -37,7 +37,6 @@ class QObject;
 namespace KDevelop
 {
     class IProject;
-    class ProjectItem;
     class ProjectFolderItem;
     class ProjectBaseItem;
     class ProjectFileItem;
@@ -59,8 +58,8 @@ public:
     virtual ~CMakeProjectManager();
     virtual Features features() const { return Features(Folders | Targets | Files); }
 //     virtual KDevelop::IProject* project() const;
-    virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const;
-    virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
+    virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
+    virtual KUrl buildDirectory(KDevelop::ProjectFolderItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QMap<QString,QString> preprocessorDefines(KDevelop::ProjectBaseItem *) const { return QMap<QString,QString>(); }
 
@@ -89,9 +88,9 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets() const;
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    virtual KDevelop::ProjectItem* import( KDevelop::IProject *project );
+    virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
 
-    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
+    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
 
 private:
     QStringList guessCMakeModulesDirectories(const QString& cmakeBin) const;

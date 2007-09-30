@@ -118,7 +118,7 @@ CMakeProjectManager::~CMakeProjectManager()
     //delete m_rootItem;
 }
 
-KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
+KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectFolderItem *item) const
 {
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
@@ -224,7 +224,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     return folderList;
 }
 
-KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project )
+KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *project )
 {
     CMakeFolderItem* m_rootItem;
     KUrl cmakeInfoFile(project->projectFileUrl());
@@ -279,7 +279,7 @@ KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *it
     return folder->includeDirectories();
 }
 
-KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectItem *) const
+KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectFolderItem *) const
 {
     return m_builder;
 }
