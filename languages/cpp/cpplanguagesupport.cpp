@@ -73,6 +73,11 @@
 
 //#define DEBUG
 
+//When this is enabled, the include-path-resolver will always be issued,
+//and the returned include-path compared to the one returned by the build-manager.
+//Set it to 1 to debug build-managers.
+#define DEBUG_INCLUDE_PATHS 1
+
 using namespace KDevelop;
 
 CppLanguageSupport* CppLanguageSupport::m_self = 0;
@@ -212,6 +217,8 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 
     KUrl buildDirectory;
     KUrl projectDirectory;
+
+    bool gotPathsFromManager = false;
     
     foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
         KDevelop::ProjectFileItem *file = project->fileForUrl(source);
@@ -225,6 +232,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             continue;
         }
 
+        
         projectDirectory = project->folder();
         buildDirectory = buildManager->buildDirectory(project->projectItem());
 
@@ -233,13 +241,17 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         
         KUrl::List dirs = buildManager->includeDirectories(file);
 
+        gotPathsFromManager = true;
+        
+        kDebug() << "Got " << dirs.count() << " include-paths from build-manager";
+
         foreach( KUrl dir, dirs ) {
             dir.adjustPath(KUrl::AddTrailingSlash);
             allPaths << dir;
         }
     }
 
-    if( allPaths.isEmpty() ) {
+    if( allPaths.isEmpty() || DEBUG_INCLUDE_PATHS ) {
         //Fallback-search using include-path resolver
 
         if(!buildDirectory.isEmpty()) {
@@ -250,10 +262,34 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         }
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
         if (result) {
-            foreach( QString res, result.paths ) {
-                KUrl r(res);
-                r.adjustPath(KUrl::AddTrailingSlash);
-                allPaths << r;
+            bool hadMissingPath = false;
+            if( !gotPathsFromManager ) {
+                foreach( QString res, result.paths ) {
+                    KUrl r(res);
+                    r.adjustPath(KUrl::AddTrailingSlash);
+                    allPaths << r;
+                }
+            } else {
+                //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
+                foreach( QString res, result.paths ) {
+                    
+                    KUrl r(res);
+                    r.adjustPath(KUrl::AddTrailingSlash);
+                    
+                    if( !allPaths.contains(r) ) {
+                        hadMissingPath = true;
+                        allPaths << r;
+                        kDebug() << "Include-path was missing in list returned by build-manager, adding it: " << r.prettyUrl();
+                    }
+                }
+                
+                if( hadMissingPath ) {
+                    QString paths;
+                    foreach( const KUrl& u, allPaths ) {
+                        paths += u.prettyUrl() + "\n";
+                    }
+                    kDebug() << "Include-paths returned by build-manager:\n" << paths << "\nEnd of list";
+                }
             }
         }else{
             kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
