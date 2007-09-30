@@ -115,7 +115,7 @@ void QMakeBuilder::cleanupModel( int id )
 bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     kDebug(9039) << "Building";
-    if( dom->type() != KDevelop::ProjectBaseItem::Project )
+    if( dom->type() != KDevelop::ProjectBaseItem::BuildFolder )
         return false;
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
