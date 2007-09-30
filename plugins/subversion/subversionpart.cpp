@@ -33,7 +33,7 @@ extern "C" {
 }
 
 #include "ibasicversioncontrol.h"
-#include "vcshelpers.h"
+#include "vcsmapping.h"
 
 #include <iuicontroller.h>
 #include <icore.h>

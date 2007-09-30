@@ -8,7 +8,8 @@ set(kdevplatformvcs_LIB_SRCS
     vcsannotation.cpp
     vcsdiff.cpp
     vcsevent.cpp
-    vcshelpers.cpp
+    vcsmapping.cpp
+    vcsstatusinfo.cpp
 )
 
 
@@ -24,7 +25,8 @@ install(FILES
     vcsannotation.h
     vcsdiff.h
     vcsevent.h
-    vcshelpers.h
+    vcsstatusinfo.h
+    vcsmapping.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs
 )
 

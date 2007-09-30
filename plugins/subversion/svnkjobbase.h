@@ -11,7 +11,8 @@
 #ifndef SVNKJOB_H
 #define SVNKJOB_H
 
-#include "vcshelpers.h"
+#include "vcsmapping.h"
+#include "vcsstatusinfo.h"
 #include "vcsjob.h"
 
 class SubversionThread;

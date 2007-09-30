@@ -12,7 +12,7 @@
 #define SUBVERSIONPART_H
 
 #include "ibasicversioncontrol.h"
-#include "vcshelpers.h"
+#include "vcsmapping.h"
 #include <iplugin.h>
 #include "subversioncore.h"
 #include <qwidget.h>

@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "vcshelpers.h"
+#include "vcsstatusinfo.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QPair>
@@ -102,69 +102,6 @@ VcsStatusInfo::State VcsStatusInfo::state() const
     return VcsStatusInfo::State(d->state);
 }
 
-class VcsMappingPrivate
-{
-    public:
-        QMap<QString,QPair<QString, VcsMapping::MappingFlag> > mapping;
-};
-
-VcsMapping::VcsMapping()
-    : d(new VcsMappingPrivate)
-{
-}
-
-VcsMapping::~VcsMapping()
-{
-    delete d;
-}
-
-VcsMapping::VcsMapping( const VcsMapping& rhs )
-    : d(new VcsMappingPrivate)
-{
-    d->mapping = rhs.d->mapping;
-}
-
-void VcsMapping::addMapping( const QString& sourceLocation,
-                    const QString& destinationLocation,
-                    VcsMapping::MappingFlag recursion )
-{
-    QPair<QString,VcsMapping::MappingFlag> val = qMakePair(destinationLocation,recursion);
-    d->mapping[sourceLocation] = val;
-}
-
-void VcsMapping::removeMapping( const QString& sourceLocation)
-{
-    if( d->mapping.contains(sourceLocation) )
-        d->mapping.remove(sourceLocation);
-}
-
-QStringList VcsMapping::sourceLocations() const
-{
-    return d->mapping.keys();
-}
-
-QString VcsMapping::destinationLocation( const QString& sourceLocation ) const
-{
-    if( d->mapping.contains( sourceLocation ) )
-        return d->mapping[sourceLocation].first;
-    return QString();
-}
-
-VcsMapping::MappingFlag VcsMapping::mappingFlag( const QString& sourceLocation ) const
-{
-    if( d->mapping.contains( sourceLocation ) )
-        return d->mapping[sourceLocation].second;
-    return NonRecursive;
-}
-
-
-VcsMapping& VcsMapping::operator=( const VcsMapping& rhs)
-{
-    if(this == &rhs)
-        return *this;
-    d->mapping = rhs.d->mapping;
-    return *this;
-}
 
 }
 

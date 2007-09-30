@@ -9,6 +9,7 @@ find_package(ZLIB REQUIRED)
 include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
+include (MacroLogFeature)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
