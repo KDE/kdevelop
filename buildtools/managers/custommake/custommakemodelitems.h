@@ -24,6 +24,7 @@ template<typename T1,typename T2> class QPair;
 template<typename T1> class QList;
 class QString;
 class CustomMakeTreeSynchronizer;
+class CustomMakeManager;
 
 class CustomMakeTargetItem : public KDevelop::ProjectTargetItem
 {
@@ -41,11 +42,11 @@ private:
 
 };
 
-class CustomMakeProjectItem : public KDevelop::ProjectItem
+class CustomMakeFolderItem : public KDevelop::ProjectFolderItem
 {
 public:
-    CustomMakeProjectItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent = 0 );
-    virtual ~CustomMakeProjectItem();
+    CustomMakeFolderItem( CustomMakeManager*, KDevelop::IProject* project, const KUrl& , QStandardItem *parent = 0 );
+    virtual ~CustomMakeFolderItem();
 
     // watcher is reentrant. Only project parsing thread can call the methods of Watcher.
     // No locking is required because parsing thread is the only one to access this.

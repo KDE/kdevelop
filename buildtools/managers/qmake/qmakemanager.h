@@ -40,7 +40,6 @@ class QMakeMkSpecs;
 namespace KDevelop
 {
 class IProject;
-class ProjectItem;
 class ProjectFolderItem;
 class ProjectBaseItem;
 class ProjectFileItem;
@@ -59,8 +58,8 @@ public:
     virtual ~QMakeProjectManager();
 
     virtual Features features() const { return Features(Folders | Targets | Files); }
-    virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectItem*) const;
-    virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
+    virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectFolderItem*) const;
+    virtual KUrl buildDirectory(KDevelop::ProjectFolderItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
     virtual QMap<QString,QString> preprocessorDefines(KDevelop::ProjectBaseItem*) const { return QMap<QString,QString>(); }
 
@@ -75,10 +74,10 @@ public:
     virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*,
                                        KDevelop::ProjectTargetItem* ) { return false; }
 
-    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectItem*) const;
+    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    virtual KDevelop::ProjectItem* import( KDevelop::IProject* );
+    virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* );
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl&,
             KDevelop::ProjectFolderItem* ) { return 0; }

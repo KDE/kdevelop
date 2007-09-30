@@ -37,20 +37,18 @@ QList<QPair<QString, QString> > CustomMakeTargetItem::defines() const
 
 ///////////////////////////////////////////////////////////////
 
-CustomMakeProjectItem::CustomMakeProjectItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent )
-    : KDevelop::ProjectItem( project, name, parent )
+CustomMakeFolderItem::CustomMakeFolderItem( CustomMakeManager* manager, KDevelop::IProject* project, const KUrl& url, QStandardItem *parent )
+    : KDevelop::ProjectFolderItem( project, url, parent )
 {
-    KDevelop::IProjectFileManager *fileMan = project->projectFileManager();
-    CustomMakeManager *manager = dynamic_cast<CustomMakeManager*>(fileMan);
     m_watcher = new CustomMakeTreeSynchronizer( manager );
 }
 
-CustomMakeProjectItem::~CustomMakeProjectItem()
+CustomMakeFolderItem::~CustomMakeFolderItem()
 {
     delete m_watcher;
 }
 
-CustomMakeTreeSynchronizer* CustomMakeProjectItem::fsWatcher()
+CustomMakeTreeSynchronizer* CustomMakeFolderItem::fsWatcher()
 {
     return m_watcher;
 }

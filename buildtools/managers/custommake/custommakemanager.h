@@ -44,7 +44,7 @@ public:
     /**
      * Provide access to the builder
      */
-    virtual KDevelop::IProjectBuilder* builder( KDevelop::ProjectItem*) const;
+    virtual KDevelop::IProjectBuilder* builder( KDevelop::ProjectFolderItem*) const;
 
     /**
      * Provide a list of include directories.
@@ -95,7 +95,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
+    virtual KUrl buildDirectory(KDevelop::ProjectFolderItem*) const;
 
     /**
      * Get a list of all the targets in this project
@@ -106,7 +106,7 @@ public:
      * @return The list of targets for this project
      * @todo implement
      */
-    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectItem*) const;
+    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -120,7 +120,7 @@ public:
      * This method creates the root item from the file @arg fileName
      * @return The created item
      */
-    virtual KDevelop::ProjectItem *import(KDevelop::IProject *project);
+    virtual KDevelop::ProjectFolderItem *import(KDevelop::IProject *project);
 
     /**
      * Add a folder to the project

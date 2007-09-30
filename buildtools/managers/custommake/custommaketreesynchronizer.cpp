@@ -164,8 +164,8 @@ void CustomMakeTreeSynchronizer::fileChanged( const QString& file, KDevelop::Pro
     if( info.exists() == false )
     {
         // Makefile deleted
-        KDevelop::ProjectItem *prjitem = project->projectItem();
-        CustomMakeProjectItem *cmpi = dynamic_cast<CustomMakeProjectItem*>( prjitem );
+        KDevelop::ProjectFolderItem *prjitem = project->projectItem();
+        CustomMakeFolderItem *cmpi = dynamic_cast<CustomMakeFolderItem*>( prjitem );
         cmpi->fsWatcher()->removeFile( file );
         int makefileRow = makefileItem->row();
         parentFolder->removeRow( makefileRow );

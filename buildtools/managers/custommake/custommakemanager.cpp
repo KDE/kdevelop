@@ -107,7 +107,7 @@ CustomMakeManager::~CustomMakeManager()
     delete d;
 }
 
-IProjectBuilder* CustomMakeManager::builder(KDevelop::ProjectItem*) const
+IProjectBuilder* CustomMakeManager::builder(KDevelop::ProjectFolderItem*) const
 {
     return d->m_builder;
 }
@@ -149,12 +149,12 @@ bool CustomMakeManager::removeFileFromTarget(KDevelop::ProjectFileItem *file, KD
     return false;
 }
 
-KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectItem* item) const
+KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectFolderItem* item) const
 {
     return item->project()->folder();
 }
 
-QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectItem*) const
+QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem*) const
 {
     QList<ProjectTargetItem*> ret;
     return ret;
@@ -167,8 +167,8 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
 
     QFileInfoList entries = dir.entryInfoList();
 
-    KDevelop::ProjectItem *prjitem = item->project()->projectItem();
-    CustomMakeProjectItem *topItem = dynamic_cast<CustomMakeProjectItem*>( prjitem );
+    KDevelop::ProjectFolderItem *prjitem = item->project()->projectItem();
+    CustomMakeFolderItem *topItem = dynamic_cast<CustomMakeFolderItem*>( prjitem );
 
     // fill subfolders
     for ( int i = 0; i < entries.count(); ++i )
@@ -226,11 +226,12 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
     return folder_list;
 }
 
-KDevelop::ProjectItem* CustomMakeManager::import(KDevelop::IProject *project)
+KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *project)
 {
     if( !project ) return NULL;
-//     return new KDevelop::ProjectItem( project, project->folder().pathOrUrl(), NULL );
-    CustomMakeProjectItem *item = new CustomMakeProjectItem( project, project->name(), NULL );
+//     return new KDevelop::ProjectFolderItem( project, project->folder().pathOrUrl(), NULL );
+    CustomMakeFolderItem *item = new CustomMakeFolderItem( this, project, project->folder(), NULL );
+    item->setProjectRoot( true );
     item->fsWatcher()->addDirectory( project->folder().toLocalFile(), item );
 
     return item;
@@ -296,7 +297,7 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
     }
 
     QList<QAction*> actions;
-    if( KDevelop::ProjectItem *prjItem = baseitem->projectItem() )
+    if( KDevelop::ProjectFolderItem *prjItem = dynamic_cast<KDevelop::ProjectFolderItem*>( baseitem ) )
     {
         QAction* prjBldAction = new QAction( i18n( "Build this project" ), this );
         d->m_ctxItem = prjItem;
