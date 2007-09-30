@@ -80,11 +80,11 @@ public:
      */
     enum JobStatus
     {
-        JobRunning,
-        JobSucceeded,
-        JobCanceled,
-        JobFailed,
-	JobNotStarted
+        JobRunning = 0,
+        JobSucceeded = 1,
+        JobCanceled = 2 ,
+        JobFailed = 3,
+        JobNotStarted = 4
     };
 
     /**
