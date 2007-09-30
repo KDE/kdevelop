@@ -32,7 +32,6 @@
 #include <QtDBus/QtDBus>
 #include <QStandardItemModel>
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
@@ -71,7 +70,7 @@ public:
     KTemporaryFile* tmp;
     IPlugin* manager;
 //     IPersistentHash persistentHash;
-    ProjectItem* topItem;
+    ProjectFolderItem* topItem;
     QString name;
     KSharedConfig::Ptr m_cfg;
     IProject *project;
@@ -260,7 +259,7 @@ bool Project::open( const KUrl& projectFileUrl )
     if ( d->manager && iface )
     {
 //         ProjectModel* model = Core::self()->projectController()->projectModel();
-        d->topItem = iface->import( this );
+           d->topItem = iface->import( this );
 //         model->insertRow( model->rowCount(), d->topItem );
 
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
@@ -438,7 +437,7 @@ KUrl Project::developerFileUrl() const
     return d->developerFileUrl;
 }
 
-ProjectItem* Project::projectItem() const
+ProjectFolderItem* Project::projectItem() const
 {
     return d->topItem;
 }

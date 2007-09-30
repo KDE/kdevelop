@@ -36,7 +36,6 @@ namespace KDevelop
 {
 
 class IProject;
-class ProjectItem;
 class ProjectBaseItem;
 class ProjectFolderItem;
 class ProjectFileItem;
@@ -85,7 +84,7 @@ public:
      * This method creates the root item from the file @arg fileName
      * @return The created item
      */
-    virtual ProjectItem *import(IProject *project) = 0;
+    virtual ProjectFolderItem *import(IProject *project) = 0;
 
     /**
      * Add a folder to the project

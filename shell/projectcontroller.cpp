@@ -262,7 +262,7 @@ bool ProjectController::projectImportingFinished( IProject* project )
     pluglist.append( managerPlugin );
     d->m_projectPlugins.insert( project, pluglist );
 
-    ProjectItem *topItem = project->projectItem();
+    ProjectFolderItem *topItem = project->projectItem();
     ProjectModel *model = projectModel();
     model->insertRow( model->rowCount(), topItem );
 

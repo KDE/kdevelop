@@ -43,8 +43,8 @@ namespace KDevelop
 class IPlugin;
 class IProjectFileManager;
 class IBuildSystemManager;
-class ProjectItem;
 class ProjectFileItem;
+class ProjectFolderItem;
 
 /**
  * \brief Object which represents a KDevelop project
@@ -89,7 +89,7 @@ public:
     /**
      * With this the top-level project item can be retrieved
      */
-    virtual ProjectItem* projectItem() const = 0;
+    virtual ProjectFolderItem* projectItem() const = 0;
 
     /** Get a list of all files in the project */
     virtual int fileCount() const = 0;

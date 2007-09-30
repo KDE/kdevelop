@@ -42,7 +42,6 @@ namespace KDevelop
 
 class IProjectFileManager;
 class IBuildSystemManager;
-class ProjectItem;
 class ProjectFileItem;
 class PersistentHash;
 
@@ -131,7 +130,7 @@ public Q_SLOTS:
     /**
      * With this the top-level project item can be retrieved
      */
-    ProjectItem* projectItem() const;
+    ProjectFolderItem* projectItem() const;
 
     /**
      * Find the url relative to the project directory equivalent to @a absoluteUrl.

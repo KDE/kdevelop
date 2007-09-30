@@ -171,7 +171,8 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
     if( items.count() == 1 )
     {
         KDevelop::ProjectBaseItem *item = items.first();
-        if ( KDevelop::ProjectItem *prjitem = item->projectItem() )
+	KDevelop::ProjectFolderItem *prjitem = item->folder();
+        if ( prjitem && prjitem->isProjectRoot())
         {
             QAction* close = new QAction( i18n( "Close this project" ), this );
             d->ctxProjectList.clear();
@@ -213,7 +214,8 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         QList< KDevelop::IProject* > projectlist;
         foreach( KDevelop::ProjectBaseItem *baseitem, items )
         {
-            if( KDevelop::ProjectItem *prjitem = baseitem->projectItem() )
+	    KDevelop::ProjectFolderItem *prjitem = baseitem->folder();
+            if( prjitem && prjitem->isProjectRoot())
             {
                 projectlist << prjitem->project();
             }
@@ -258,7 +260,7 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
     if( !item )
         return;
     IProject* project = item->project();
-    ProjectItem* prjitem = project->projectItem();
+    ProjectFolderItem* prjitem = project->projectItem();
     IPlugin* fmgr = project->managerPlugin();
     IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
     if( mgr )

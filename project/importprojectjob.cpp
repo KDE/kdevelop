@@ -42,8 +42,7 @@ ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *i
     d->m_importer = importer;
     ProjectFolderItem *folderItem = 0;
     if ( folder->type() == ProjectBaseItem::Folder ||
-         folder->type() == ProjectBaseItem::BuildFolder ||
-         folder->type() == ProjectBaseItem::Project )
+         folder->type() == ProjectBaseItem::BuildFolder)
     {
         folderItem = dynamic_cast<ProjectFolderItem*>( folder );
     }

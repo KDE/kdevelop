@@ -1,6 +1,7 @@
     /* This file is part of KDevelop
     Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+    Copyright 2007 Aleix Pol <aleixpol@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -36,7 +37,6 @@ class IProject;
 class ProjectFolderItem;
 class ProjectBuildFolderItem;
 class ProjectFileItem;
-class ProjectItem;
 class ProjectTargetItem;
 
 /**
@@ -64,7 +64,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
         {
             Folder = QStandardItem::UserType,
             File,
-            Project,
             Target,
             BuildFolder
         };
@@ -80,9 +79,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /** @returns If this item is a file, it returns a pointer to the file, otherwise returns a 0 pointer. */
         virtual ProjectFileItem *file() const;
-
-        /** @returns If this item is a project root, it returns a pointer to the project root item, otherwise returns a 0 pointer. */
-        virtual ProjectItem* projectItem() const;
 
         /**  @param parent sets the item parent to @p parent */
         void setParent( QStandardItem* parent);
@@ -104,7 +100,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 };
 
 /**
- * Implementation of the ProjectItem interface that is specific to a
+ * Implementation of the ProjectBaseItem interface that is specific to a
  * folder
  */
 class ProjectFolderItemPrivate;
@@ -127,6 +123,12 @@ public:
     void setUrl( const KUrl& );
 
     virtual void setIcon();
+
+    /** Returns whether it is the project root folder */
+    bool isProjectRoot() const;
+
+    /** Sets whether it is the project root folder and sets the project name to the item */
+    void setProjectRoot(bool isRoot);
 
 protected:
     ProjectFolderItem( ProjectFolderItemPrivate& );
@@ -168,27 +170,6 @@ protected:
 private:
     Q_DECLARE_PRIVATE(ProjectBuildFolderItem)
 };
-
-/**
- * Special folder, the project root folder
- */
-class ProjectItemPrivate;
-class KDEVPLATFORMPROJECT_EXPORT ProjectItem: public ProjectBuildFolderItem
-{
-    public:
-        ProjectItem( IProject*, const QString &name, QStandardItem *parent = 0 );
-        virtual ~ProjectItem();
-
-        int type() const;
-
-        ProjectItem* projectItem() const;
-    protected:
-        ProjectItem( ProjectItemPrivate& );
-    private:
-        Q_DECLARE_PRIVATE(ProjectItem)
-};
-
-
 
 /**
  * Object which represents a target in a build system.

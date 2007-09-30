@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+    Copyright 2007 Aleix Pol <aleixpol@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -47,6 +48,7 @@ class ProjectFolderItemPrivate : public ProjectBaseItemPrivate
 {
 public:
     KUrl m_url;
+    bool m_isProjectRoot;
 };
 
 class ProjectBuildFolderItemPrivate : public ProjectFolderItemPrivate
@@ -60,10 +62,6 @@ class ProjectFileItemPrivate : public ProjectBaseItemPrivate
 {
 public:
     KUrl m_url;
-};
-
-class ProjectItemPrivate : public ProjectBuildFolderItemPrivate
-{
 };
 
 class ProjectTargetItemPrivate : public ProjectBaseItemPrivate
@@ -125,11 +123,6 @@ ProjectFileItem *ProjectBaseItem::file() const
     return 0;
 }
 
-ProjectItem *ProjectBaseItem::projectItem() const
-{
-    return 0;
-}
-
 QList<ProjectFolderItem*> ProjectBaseItem::folderList() const
 {
     QList<ProjectFolderItem*> lst;
@@ -179,35 +172,6 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
 
     }
     return lst;
-}
-
-ProjectItem::ProjectItem( ProjectItemPrivate& dd )
-    : ProjectBuildFolderItem( dd )
-{
-}
-
-ProjectItem::ProjectItem( IProject * project, const QString & name, QStandardItem * parent )
-    : ProjectBuildFolderItem( *new ProjectItemPrivate )
-{
-    Q_D(ProjectItem);
-    d->project = project;
-    setUrl( project->folder() );
-    setParent( parent );
-    setText( name );
-}
-
-ProjectItem::~ ProjectItem( )
-{
-}
-
-ProjectItem *ProjectItem::projectItem() const
-{
-    return const_cast<ProjectItem*>(this);
-}
-
-int ProjectItem::type( ) const
-{
-    return Project;
 }
 
 ProjectModel::ProjectModel( QObject *parent )
@@ -338,6 +302,19 @@ QHash<QString, QString> ProjectBuildFolderItem::environment() const
 void ProjectBuildFolderItem::setIcon()
 {
     QStandardItem::setIcon( KIcon("folder-development") );
+}
+
+void ProjectFolderItem::setProjectRoot(bool isRoot)
+{
+	Q_D(ProjectFolderItem);
+	d->m_isProjectRoot=isRoot;
+	setText(project()->name());
+}
+
+bool ProjectFolderItem::isProjectRoot() const
+{
+	Q_D(const ProjectFolderItem);
+	return d->m_isProjectRoot;
 }
 
 ProjectFileItem::ProjectFileItem( ProjectFileItemPrivate& dd)

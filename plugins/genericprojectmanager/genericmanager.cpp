@@ -119,9 +119,11 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     return folder_list;
 }
 
-KDevelop::ProjectItem *GenericProjectManager::import( KDevelop::IProject *project )
+KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *project )
 {
-    return new KDevelop::ProjectItem( project, project->name(), 0 );;
+    KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, KUrl("/"), 0 );
+    projectRoot->setProjectRoot(true);
+    return projectRoot;
 }
 
 KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,

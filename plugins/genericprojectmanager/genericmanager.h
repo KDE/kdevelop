@@ -61,7 +61,7 @@ public:
     virtual bool renameFile( KDevelop::ProjectFileItem *file, const KUrl& url );
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem *item );
-    virtual KDevelop::ProjectItem *import( KDevelop::IProject *project );
+    virtual KDevelop::ProjectFolderItem *import( KDevelop::IProject *project );
 
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);

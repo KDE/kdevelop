@@ -53,7 +53,7 @@ public:
     /**
      * Provide access to the builder
      */
-    virtual IProjectBuilder* builder(ProjectItem*) const = 0;
+    virtual IProjectBuilder* builder(ProjectFolderItem*) const = 0;
 
     /**
      * Provide a list of include directories.
@@ -91,7 +91,7 @@ public:
      * @return The list of targets for this project
      * @todo implement
      */
-    virtual QList<ProjectTargetItem*> targets(ProjectItem*) const = 0;
+    virtual QList<ProjectTargetItem*> targets(ProjectFolderItem*) const = 0;
 
     /**
      * Add a file to a target
@@ -113,7 +113,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory(ProjectItem*) const = 0;
+    virtual KUrl buildDirectory(ProjectFolderItem*) const = 0;
 
 
 };
