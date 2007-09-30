@@ -34,6 +34,19 @@ class QStringList;
 namespace KDevelop
 {
 
+/**
+ *
+ * Class that encapsulates status information
+ * for one local url.
+ *
+ * The extendedState functions allow to transport
+ * extended status information
+ *
+ * Note for VCS implementations:
+ * If you want to use this class in queued signal/slot connections
+ * you should call qRegisterMetaType<KDevelop::VcsStatusInfo>()
+ * in the constructor of the plugin class
+ */
 class KDEVPLATFORMVCS_EXPORT VcsStatusInfo
 {
 public:
@@ -55,7 +68,15 @@ public:
     virtual ~VcsStatusInfo();
     VcsStatusInfo(const VcsStatusInfo&);
 
+    /**
+     * retrieves the url of this status information item
+     * @return the url
+     */
     KUrl url() const;
+    /**
+     * Change the url of this status information item
+     * @param url the url
+     */
     void setUrl( const KUrl& );
 
     VcsStatusInfo::State state() const;
@@ -63,6 +84,7 @@ public:
 
     int extendedState() const;
     void setExtendedState( int ); 
+
     VcsStatusInfo& operator=( const VcsStatusInfo& rhs);
     bool operator==( const KDevelop::VcsStatusInfo& rhs) const;
     bool operator!=( const KDevelop::VcsStatusInfo& rhs) const;
