@@ -154,6 +154,7 @@ KDevelop::ProjectFolderItem* QMakeProjectManager::import( KDevelop::IProject* pr
         kDebug(9024) << "top-level scope with variables:" << scope->variables();
         QMakeFolderItem* item = new QMakeFolderItem( project, scope, project->folder() );
         item->setProjectRoot( true );
+	return item;
     }
     return 0;
 }
