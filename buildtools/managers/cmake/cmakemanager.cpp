@@ -268,7 +268,7 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
-    while(!folder && folder->parent()!=0)
+    while(folder && folder->parent()!=0)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
     }
