@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KDE4 Application framework
+Name[de]=KDE 4-Anwendungsgrundgerüst
 Name[el]=Πλαίσιο εφαρμογής του KDE4
 Name[es]=Infraestructura de aplicación para KDE4
 Name[nds]=KDE4-Programmrahmenwark
@@ -10,6 +11,7 @@ Name[sv]=KDE 4-programramverk
 Icon=kde4app.png
 Category=C++/KDE4
 Comment=Generates a simple KDE4 application with one toplevel window, menus and toolbars.
+Comment[de]=Erstellt eine einfache KDE 4-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten.
 Comment[el]=Δημιουργεί μια απλή εφαρμογή του KDE4 με ένα ανώτερο παράθυρο, μενού, και γραμμές εργαλείων.
 Comment[es]=Genera una sencilla aplicación para KDE4 con una ventana principal, menús y barras de herramientas.
 Comment[nds]=Stellt en eenfach KDE4-Programm mit een böverst Finster, Menüs un Warktüüchbalkens op.
@@ -108,6 +110,7 @@ Dir=%{dest}/build
 [MSG]
 Type=message
 Comment=A KDE4 Application was created at %{dest}
+Comment[de]=Eine KDE 4-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή KDE4 δημιουργήθηκε στο %{dest}
 Comment[es]=Una aplicación para KDE4 ha sido creada en %{dest}
 Comment[nds]=In %{dest} wöör en KDE4-Programm opstellt
