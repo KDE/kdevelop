@@ -79,7 +79,6 @@ public Q_SLOTS:
     void configureToolbars();
     void newToolbarConfig();
 
-    void keyBindings();
     void configureNotifications();
     void configureEditors();
     void settingsDialog();

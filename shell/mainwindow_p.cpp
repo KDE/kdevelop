@@ -156,12 +156,7 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( action->text() );
     action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
-    action = KStandardAction::keyBindings(
-                 this, SLOT( keyBindings() ),
-                 actionCollection());
-    actionCollection()->addAction( "settings_configure_shortcuts", action );
-    action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you configure shortcut keys." ) ) );
+    actionCollection()->addAction( KStandardAction::KeyBindings, m_mainWindow->guiFactory(), SLOT( configureShortcuts() ) );
 
     action = KStandardAction::configureToolbars(
                  this, SLOT( configureToolbars() ),

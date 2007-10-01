@@ -117,9 +117,6 @@ void MainWindowPrivate::configureEditors()
     editor->configDialog( this );*/
 }
 
-void MainWindowPrivate::keyBindings()
-{}
-
 void MainWindowPrivate::newWindow()
 {
     Core::self()->uiController()->switchToArea(m_mainWindow->area()->objectName(), UiController::NewWindow);
