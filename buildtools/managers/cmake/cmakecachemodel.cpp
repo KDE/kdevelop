@@ -159,7 +159,19 @@ bool CMakeCacheModel::writeBack(const KUrl & path) const
     return true;
 }
 
+QString CMakeCacheModel::value(const QString & varName) const
+{
+    for(int i=0; i<rowCount(); i++)
+    {
+        QStandardItem* name = item(i, 0);
+        if(name->text()==varName) {
+            QStandardItem* valu = item(i, 2);
+            return valu->text();
+        }
+    }
+    return QString();
+}
+
 #include "cmakecachemodel.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on;
-

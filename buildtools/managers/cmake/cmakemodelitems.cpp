@@ -50,6 +50,7 @@ KUrl::List CMakeFolderItem::includeDirectories() const
         urls += folder->includeDirectories();
         folder = dynamic_cast<CMakeFolderItem*>(folder->parent());
     }
+    kDebug(9032) << "include directories: " << url() << urls;
     return urls;
 }
 

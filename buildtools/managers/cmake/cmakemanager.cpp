@@ -99,12 +99,12 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_varsDef.insert("CMAKE_SYSTEM_VERSION", QStringList(sysVersion));
     m_varsDef.insert("CMAKE_SYSTEM", QStringList(sysName+'-'+sysVersion));
     m_varsDef.insert("CMAKE_SYSTEM_PROCESSOR", QStringList(sysProcessor));
-#ifdef Q_WS_X11
-    m_varsDef.insert("LINUX", QStringList("TRUE"));
-#endif
-#ifdef Q_WS_MAC //NOTE: maybe should use __APPLE__
-    m_varsDef.insert("APPLE", QStringList("TRUE"));
-#endif
+    #ifdef Q_WS_X11
+        m_varsDef.insert("LINUX", QStringList("TRUE"));
+    #endif
+    #ifdef Q_WS_MAC //NOTE: maybe should use __APPLE__
+        m_varsDef.insert("APPLE", QStringList("TRUE"));
+    #endif
 #endif
 
 #ifdef Q_WS_WIN
@@ -265,19 +265,50 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
     return m_targets;
 }
 
+KUrl::List resolveSystemDirs(KDevelop::IProject* project, const KUrl::List& dirs)
+{
+    KSharedConfig::Ptr cfg = project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "CMake");
+    QString bindir=group.readEntry("CurrentBuildDir", QString());
+    QString instdir=group.readEntry("CurrentBuildDir", QString());
+    
+    //FIXME: I wonder how i could do it better
+    KUrl::List newList;
+    foreach(KUrl u, dirs)
+    {
+        QString s=u.toLocalFile();
+        kDebug() << "replace? " << s;
+        if(s.startsWith(QString::fromUtf8("#[bin_dir]"))) {
+            s=s.replace("#[bin_dir]", bindir);
+            u=KUrl(s);
+            kDebug() << "bindir" << u;
+        } else if(s.startsWith(QString::fromUtf8("#[install_dir]"))) {
+            s=s.replace("#[install_dir]", bindir);
+            u=KUrl(s);
+            kDebug() << "installdir" << u;
+        }
+        newList.append(u);
+    }
+    return newList;
+}
+
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
-    while(folder && folder->parent()!=0)
+    CMakeFolderItem* folder=0;
+    kDebug(9032) << "Querying inc dirs for " << item;
+    while(!folder && item)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
+        item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
+        kDebug() << "Looking for a folder: " << folder << item;
     }
 
     if(!folder)
         return KUrl::List();
 
-    kDebug(9032) << "Include directories!" << folder->includeDirectories();
-    return folder->includeDirectories();
+    KUrl::List l = resolveSystemDirs(item->project(), folder->includeDirectories());
+    kDebug(9032) << "Include directories!" << l;
+    return l;
 }
 
 KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectFolderItem *) const

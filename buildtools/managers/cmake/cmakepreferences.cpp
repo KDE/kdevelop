@@ -106,6 +106,7 @@ void CMakePreferences::save()
     KConfigGroup group(m_cfg.data(), "CMake");
     group.writeEntry("BuildDirs", bDirs);
     group.writeEntry("CurrentBuildDir", m_prefsUi->buildDirs->currentText());
+    group.writeEntry("CurrentInstallDir", m_currentModel->value("CMAKE_INSTALL_PREFIX"));
     m_currentModel->writeDown();
     m_cfg->sync();
 }

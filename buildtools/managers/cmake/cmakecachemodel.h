@@ -40,6 +40,8 @@ class CMakeCacheModel : public QStandardItemModel
         bool changed() const { return m_changed; }
         bool writeDown() const { return writeBack(m_filePath); }
         int internal() const { return m_internalBegin; }
+        
+        QString value(const QString& name) const;
     private slots:
         void edited() { m_changed=true; }
     private:
