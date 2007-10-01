@@ -30,15 +30,15 @@ namespace KDevelop
 class VcsRevisionPrivate
 {
     public:
-        QString value;
+        QVariant value;
         VcsRevision::RevisionType type;
-        VcsRevision::RevisionSpecialType specialType;
         QMap<QString,QVariant> internalValues;
 };
 
 VcsRevision::VcsRevision()
     : d(new VcsRevisionPrivate)
 {
+    d->type = VcsRevision::Invalid;
 }
 
 VcsRevision::VcsRevision( const VcsRevision& rhs )
@@ -47,7 +47,6 @@ VcsRevision::VcsRevision( const VcsRevision& rhs )
     d->value = rhs.d->value;
     d->internalValues = rhs.d->internalValues;
     d->type = rhs.d->type;
-    d->specialType = rhs.d->specialType;
 }
 
 VcsRevision::~VcsRevision()
@@ -60,13 +59,12 @@ VcsRevision& VcsRevision::operator=( const VcsRevision& rhs)
     if(this == &rhs)
         return *this;
     d->value = rhs.d->value;
-    d->specialType = rhs.d->specialType;
     d->type = rhs.d->type;
     d->internalValues = rhs.d->internalValues;
     return *this;
 }
 
-void VcsRevision::setRevisionValue( const QString& rev, VcsRevision::RevisionType type )
+void VcsRevision::setRevisionValue( const QVariant& rev, VcsRevision::RevisionType type )
 {
     d->value = rev;
     d->type = type;
@@ -77,7 +75,7 @@ VcsRevision::RevisionType VcsRevision::revisionType() const
     return d->type;
 }
 
-QString VcsRevision::revisionValue() const
+QVariant VcsRevision::revisionValue() const
 {
     return d->value;
 }
@@ -108,10 +106,10 @@ void VcsRevision::setType( RevisionType t)
 
 void VcsRevision::setSpecialType( RevisionSpecialType t)
 {
-    d->specialType = t;
+    d->value = QVariant(t);
 }
 
-void VcsRevision::setValue( const QString& v )
+void VcsRevision::setValue( const QVariant& v )
 {
     d->value = v;
 }

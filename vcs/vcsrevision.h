@@ -48,16 +48,17 @@ public:
         Special = 0         /**<One of the special versions in RevisionSpecialType.*/,
         GlobalNumber = 1    /**<Global repository version when item was last changed.*/,
         FileNumber = 2      /**<Item's independent version number.*/,
-        Date = 3,
-	UserType = 1000
+        Date = 3,           /**<The date of the revision to check out*/
+	Invalid = 4         /**<The type is not set, this is an invalid revision.*/,
+	UserType = 1000     /**<This should be used by subclasses as base for their own types.*/
     };
     enum RevisionSpecialType
     {
-        Head = 0            /**<Latest revision in the repository.*/,
-        Working = 1        /**<The local copy (including any changes made).*/,
-        Base = 2           /**<The repository source of the local copy.*/,
-        Previous = 3        /**<The version prior the other one (only valid in functions that take two revisions).*/,
-        UserSpecialType = 1000
+        Head = 0                   /**<Latest revision in the repository.*/,
+        Working = 1                /**<The local copy (including any changes made).*/,
+        Base = 2                   /**<The repository source of the local copy.*/,
+        Previous = 3               /**<The version prior the other one (only valid in functions that take two revisions).*/,
+        UserSpecialType = 1000     /**<This should be used by subclasses as base for their own special types.*/
     };
 
     VcsRevision();
@@ -70,7 +71,7 @@ public:
     /**
      * Set the value of this revision
      */
-    void setRevisionValue( const QString& rev, RevisionType type );
+    void setRevisionValue( const QVariant& rev, RevisionType type );
 
     /**
      * returns the type of the revision
@@ -79,8 +80,15 @@ public:
 
     /**
      * return the value of this revision
+     * The actualy content depends on the type of this revision, the possible
+     * combinations are:
+     *
+     * FileNumber/GlobalNumber -> qlonglong
+     * RevisionSpecialType     -> int that can be used to create a RevisionSpecialType
+     * Date                    -> QDateTime
+     *
      */
-    QString revisionValue() const;
+    QVariant revisionValue() const;
 
 protected:
     /**
@@ -102,7 +110,7 @@ protected:
      */
     void setType( RevisionType t);
     void setSpecialType( RevisionSpecialType t);
-    void setValue( const QString& );
+    void setValue( const QVariant& );
 
 private:
     class VcsRevisionPrivate* const d;
@@ -111,6 +119,7 @@ private:
 }
 
 Q_DECLARE_METATYPE(KDevelop::VcsRevision)
+Q_DECLARE_METATYPE(KDevelop::VcsRevision::RevisionSpecialType)
 
 #endif
 

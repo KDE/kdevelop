@@ -93,13 +93,13 @@ QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
             break;
 
         case KDevelop::VcsRevision::FileNumber:
-            if (!rev.revisionValue().isEmpty())
-                str = "-r"+rev.revisionValue();
+            if (rev.revisionValue().isValid())
+                str = "-r"+rev.revisionValue().toInt();
             break;
 
         case KDevelop::VcsRevision::Date:
-            if (!rev.revisionValue().isEmpty())
-                str = "-D"+rev.revisionValue();
+            if (rev.revisionValue().isValid())
+                str = "-D"+rev.revisionValue().toDateTime().toString( Qt::ISODate );
             break;
 
         case KDevelop::VcsRevision::GlobalNumber: // !! NOT SUPPORTED BY CVS !!

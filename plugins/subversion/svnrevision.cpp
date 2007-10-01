@@ -21,20 +21,21 @@ SvnRevision::SvnRevision()
 void SvnRevision::fromVcsRevision( const KDevelop::VcsRevision &vcsRev )
 {
     KDevelop::VcsRevision::RevisionType vcsRevType = vcsRev.revisionType();
-    QString revVal = vcsRev.revisionValue();
+    QVariant revVal = vcsRev.revisionValue();
 
     if( vcsRevType == KDevelop::VcsRevision::Special ){
 
-        if( revVal.compare("HEAD", Qt::CaseInsensitive ) == 0 ){
+        KDevelop::VcsRevision::RevisionSpecialType val = KDevelop::VcsRevision::RevisionSpecialType( revVal.toInt() );
+        if( val == KDevelop::VcsRevision::Head ) {
             setKey( HEAD );
         }
-        else if( revVal.compare("WORKING", Qt::CaseInsensitive ) == 0 ){
+        else if( val == KDevelop::VcsRevision::Working ) {
             setKey( WORKING );
         }
-        else if( revVal.compare("BASE", Qt::CaseInsensitive ) == 0 ){
-            setKey( BASE );
+        else if( val == KDevelop::VcsRevision::Base ) {
+            setKey( BASE ); 
         }
-        else if( revVal.compare("PREVIOUS", Qt::CaseInsensitive ) == 0){
+        else if( val == KDevelop::VcsRevision::Previous ) {
             setKey( PREV );
         }
     }
@@ -42,7 +43,7 @@ void SvnRevision::fromVcsRevision( const KDevelop::VcsRevision &vcsRev )
         setNumber( revVal.toInt() );
     }
     else if( type == KDevelop::VcsRevision::Date ){
-        setDate( QDateTime::fromString( revVal, Qt::ISODate) );
+        setDate( revVal.toDateTime() );
     }
     else{
         // invalid rev.
