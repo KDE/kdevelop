@@ -4,6 +4,7 @@ add_subdirectory(filemanager)
 add_subdirectory(projectmanagerview)
 add_subdirectory(genericprojectmanager)
 add_subdirectory(standardoutputview)
+add_subdirectory(quickopen)
 macro_optional_add_subdirectory(snippet)
 macro_optional_add_subdirectory(cvs)
 

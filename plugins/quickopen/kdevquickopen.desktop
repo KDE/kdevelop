@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin allows quick access to project files and language-items like classes/functions.
+Comment[x-test]=xxThis plugin allows quick access to project files and language-items like classes or functions.xx
+Name=KDevQuickopen
+Name[x-test]=xxKDevQuickopenxx
+GenericName=Quickopen
+GenericName[x-test]=xxQuickopenxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevquickopen
+X-KDevelop-Version=4
+X-KDevelop-Category=Global
+X-KDevelop-Properties=DUChainNavigation
+X-KDE-PluginInfo-Name=kdevquickopen
+X-KDE-PluginInfo-Author=David Nolden
+X-KDE-PluginInfo-License=GPL
