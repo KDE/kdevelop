@@ -37,14 +37,6 @@ private:
     QMakeProjectFile* m_projectFile;
 };
 
-
-class QMakeProjectItem : public KDevelop::ProjectItem, public QMakeFolderItem
-{
-public:
-    QMakeProjectItem( KDevelop::IProject*, QMakeProjectFile*, const QString&, const KUrl&, QStandardItem* parent = 0 );
-    virtual ~QMakeProjectItem();
-};
-
 class QMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:

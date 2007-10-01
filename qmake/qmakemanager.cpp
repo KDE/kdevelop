@@ -65,9 +65,9 @@ QMakeProjectManager::~QMakeProjectManager()
 
 }
 
-KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectItem* project) const
+KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectFolderItem* project) const
 {
-    return project->project()->folder();
+    return project->url();
 }
 
 QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
@@ -110,7 +110,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     return folderList;
 }
 
-KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project )
+KDevelop::ProjectFolderItem* QMakeProjectManager::import( KDevelop::IProject* project )
 {
     KUrl dirName = project->folder();
     if( !dirName.isLocalFile() )
@@ -142,25 +142,30 @@ KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project 
         QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
         mkspecs->read();
         QMakeCache* cache = findQMakeCache( projecturl.path() );
-        cache->setMkSpecs( mkspecs );
-        cache->read();
         QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
         scope->setMkSpecs( mkspecs );
-        scope->setQMakeCache( cache );
+	if( cache )
+	{
+            cache->setMkSpecs( mkspecs );
+            cache->read();
+            scope->setQMakeCache( cache );
+	}
         scope->read();
         kDebug(9024) << "top-level scope with variables:" << scope->variables();
-        return new QMakeProjectItem( project, scope, project->name(), project->folder() );
+        QMakeFolderItem* item = new QMakeFolderItem( project, scope, project->folder() );
+        item->setProjectRoot( true );
+	return item;
     }
     return 0;
 }
 
-QList<KDevelop::ProjectTargetItem*> QMakeProjectManager::targets(KDevelop::ProjectItem* item) const
+QList<KDevelop::ProjectTargetItem*> QMakeProjectManager::targets(KDevelop::ProjectFolderItem* item) const
 {
     Q_UNUSED(item)
     return QList<KDevelop::ProjectTargetItem*>();
 }
 
-KDevelop::IProjectBuilder* QMakeProjectManager::builder(KDevelop::ProjectItem*) const
+KDevelop::IProjectBuilder* QMakeProjectManager::builder(KDevelop::ProjectFolderItem*) const
 {
     return m_builder;
 }
