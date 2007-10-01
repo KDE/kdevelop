@@ -65,10 +65,10 @@ QuickopenPart::QuickopenPart(QObject *parent,
     actions->addAction("Quickopen File", quickOpenFile);
     actions->addAction("Quickopen Function", quickOpenFunction);
 
-    connect(quickOpen, SIGNAL("triggered(Qt::MouseButtons, Qt::KeyboardModifiers)"), this, SLOT("quickOpen()"));
-    connect(quickOpenClass, SIGNAL("triggered(Qt::MouseButtons, Qt::KeyboardModifiers)"), this, SLOT("quickOpenClass()"));
-    connect(quickOpenFunction, SIGNAL("triggered(Qt::MouseButtons, Qt::KeyboardModifiers)"), this, SLOT("quickOpenFunction()"));
-    connect(quickOpenFile, SIGNAL("triggered(Qt::MouseButtons, Qt::KeyboardModifiers)"), this, SLOT("quickOpenFile()"));
+    connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
+    connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
+    connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
+    connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 }
 
 QuickopenPart::~QuickopenPart()
@@ -81,7 +81,6 @@ void QuickopenPart::unload()
 
 void QuickopenPart::quickOpen()
 {
-  Q_ASSERT(0);
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
   d->setAttribute( Qt::WA_DeleteOnClose, true );
   Ui::Quickopen o;
