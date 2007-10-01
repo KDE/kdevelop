@@ -83,19 +83,19 @@ int stringToPort( const QString& txt );
 QIcon iconFromLevel( LogLevel level ) {
   switch ( level ) {
     case Error:
-      return IconCache::getIconStatic( "remove", K3Icon::Small );
+      return IconCache::getIconStatic( "remove", KIconLoader::Small );
       break;
     case Info:
-      return IconCache::getIconStatic( "ok", K3Icon::Small );
+      return IconCache::getIconStatic( "ok", KIconLoader::Small );
       break;
     case Warning:
-      return IconCache::getIconStatic( "fileclose", K3Icon::Small );
+      return IconCache::getIconStatic( "fileclose", KIconLoader::Small );
       break;
     case Debug:
-      return IconCache::getIconStatic( "log", K3Icon::Small );
+      return IconCache::getIconStatic( "log", KIconLoader::Small );
       break;
     default:
-      return IconCache::getIconStatic( "unknown", K3Icon::Small );
+      return IconCache::getIconStatic( "unknown", KIconLoader::Small );
   }
 }
 
@@ -825,7 +825,7 @@ void KDevTeamwork::guiServerDisconnected( Teamwork::ClientSessionDesc /*session*
   kDebug(9500) << "disconnecting server is not in list:" << desc;
 }
 
-QIcon KDevTeamwork::iconFromUser( User* user, K3Icon::Group size ) {
+QIcon KDevTeamwork::iconFromUser( User* user, KIconLoader::Group size ) {
   KDevTeamworkUserPointer::Locked u( dynamic_cast<KDevTeamworkUser*>( user ) );
   if ( !u )
     return m_icons->getIcon( "remove", size );
@@ -854,7 +854,7 @@ void KDevTeamwork::updateTimeout() {
         SessionPointer s = l->online().session();
 
         if ( s && s.unsafe() ->isOk() ) {
-          icon = iconFromUser( l, K3Icon::Toolbar );
+          icon = iconFromUser( l, KIconLoader::Toolbar );
         } else {
           model->removeRow( a );
           continue;
@@ -862,11 +862,11 @@ void KDevTeamwork::updateTimeout() {
 
       } else {
         err( "user-pointer contained in developer-list could not be locked" );
-        icon = m_icons->getIcon( "filecose", K3Icon::Toolbar );
+        icon = m_icons->getIcon( "filecose", KIconLoader::Toolbar );
       }
     } else {
       err( "wrong data in the developers-list" );
-      icon = m_icons->getIcon( "filecose", K3Icon::Toolbar );
+      icon = m_icons->getIcon( "filecose", KIconLoader::Toolbar );
     }
     model->setData( i, icon, Qt::DecorationRole );
   }

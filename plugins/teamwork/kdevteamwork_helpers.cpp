@@ -78,15 +78,15 @@ void SafeTeamworkEmitter::updateMessageInfo( const MessagePointer& msg ) {
   emit signalUpdateMessageInfo( msg );
 }
 
-QIcon IconCache::operator () ( const QString& name, K3Icon::Group grp ) {
+QIcon IconCache::operator () ( const QString& name, KIconLoader::Group grp ) {
   return getIcon( name, grp );
 }
 
-QIcon IconCache::getIconStatic( QString name, K3Icon::Group grp ) {
+QIcon IconCache::getIconStatic( QString name, KIconLoader::Group grp ) {
   return IconCache::instance() ->getIcon( name, grp );
 }
 
-QIcon IconCache::getIcon( QString name, K3Icon::Group grp ) {
+QIcon IconCache::getIcon( QString name, KIconLoader::Group grp ) {
   {
     QMap<QString, QString>::iterator it = maps_.find( name );
 
@@ -94,7 +94,7 @@ QIcon IconCache::getIcon( QString name, K3Icon::Group grp ) {
       name = *it;
   }
 
-  QPair<QString, K3Icon::Group> pos( name, grp );
+  QPair<QString, KIconLoader::Group> pos( name, grp );
   IconMap::iterator it = m_icons.find( pos );
   if ( it != m_icons.end() ) {
     return * it;

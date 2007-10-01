@@ -50,18 +50,18 @@ typedef SharedPtr<SafeTeamworkEmitter> SafeTeamworkEmitterPointer;
 
 
 class IconCache {
-    typedef QMap<QPair<QString, K3Icon::Group>, QIcon> IconMap;
+    typedef QMap<QPair<QString, KIconLoader::Group>, QIcon> IconMap;
     QMap<QString, QString> maps_;
     IconMap m_icons;
     static IconCache* m_instance;
   public:
     IconCache();
 
-    QIcon operator () ( const QString& name, K3Icon::Group grp = K3Icon::Small );
+    QIcon operator () ( const QString& name, KIconLoader::Group grp = KIconLoader::Small );
 
-    static QIcon getIconStatic( QString name, K3Icon::Group grp = K3Icon::Small );
+    static QIcon getIconStatic( QString name, KIconLoader::Group grp = KIconLoader::Small );
 
-    QIcon getIcon( QString name, K3Icon::Group grp = K3Icon::Small );
+    QIcon getIcon( QString name, KIconLoader::Group grp = KIconLoader::Small );
 
     static IconCache* instance();
 };

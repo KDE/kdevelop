@@ -36,7 +36,7 @@ void KDevTeamworkUser::setSession( const SessionPointer& sess ) {
 	emit userStateChanged( this );
 }
 
-QIcon KDevTeamworkUser::icon( K3Icon::Group size ) {
+QIcon KDevTeamworkUser::icon( KIconLoader::Group size ) {
 	SessionPointer s = online().session();
 
 	if( s && s.unsafe()->isOk() ) {

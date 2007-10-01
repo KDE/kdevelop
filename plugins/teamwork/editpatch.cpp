@@ -491,7 +491,7 @@ void EditPatch::slotEditFileNameChanged( const QString& str ) {
     m_editPatch.type->setText( mt->name() );
   }
 
-  m_editPatch.mimetype->setPixmap( m_parent->teamwork() ->icons().getIcon( mt->iconName(), K3Icon::Desktop ).pixmap( 16, 16 ) );
+  m_editPatch.mimetype->setPixmap( m_parent->teamwork() ->icons().getIcon( mt->iconName(), KIconLoader::Desktop ).pixmap( 16, 16 ) );
 
   m_editPatch.mimetype->setText( txt );
   m_editPatch.command->setText( "" );

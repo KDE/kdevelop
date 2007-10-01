@@ -81,7 +81,7 @@ class KDevTeamwork : public QObject {
 
     void err( const QString& str );
 
-    QIcon iconFromUser( User* user, K3Icon::Group size = K3Icon::Small );
+    QIcon iconFromUser( User* user, KIconLoader::Group size = KIconLoader::Small );
 
     ///Starts the update-timer for the developer-lists
     void startUpdateTimer();

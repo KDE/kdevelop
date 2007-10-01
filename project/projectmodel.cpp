@@ -259,7 +259,7 @@ void ProjectFolderItem::setUrl( const KUrl& url )
 
 void ProjectFolderItem::setIcon()
 {
-    QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
+    QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, KIconLoader::Small ) );
 }
 
 ProjectBuildFolderItem::ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& dd )
@@ -356,7 +356,7 @@ ProjectFileItem *ProjectFileItem::file() const
 
 void ProjectFileItem::setIcon()
 {
-    QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
+    QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, KIconLoader::Small ) );
 }
 
 ProjectTargetItem::ProjectTargetItem( ProjectTargetItemPrivate& dd)

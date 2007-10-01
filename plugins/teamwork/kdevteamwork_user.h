@@ -39,7 +39,7 @@ class KDevTeamworkUser : public QObject, public User {
 
     virtual void setSession( const SessionPointer& sess );
 
-    QIcon icon( K3Icon::Group = K3Icon::Small );
+    QIcon icon( KIconLoader::Group = KIconLoader::Small );
 
     QString toolTip();
 
