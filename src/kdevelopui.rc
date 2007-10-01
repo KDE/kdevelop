@@ -122,7 +122,7 @@
     <Action name="settings_statusbar"/>
     <DefineGroup name="show_merge" />
     <Separator />
-    <Action name="settings_configure_shortcuts" />
+    <Action name="options_configure_keybinding" />
     <Action name="set_configure_toolbars" />
     <Action name="settings_configure_notifications" />
     <Action name="settings_configure_editors" />
