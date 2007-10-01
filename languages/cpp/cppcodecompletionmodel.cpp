@@ -77,7 +77,7 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   QString allIconNames = "CVprotected_var CVprivate_var protected_union protected_enum private_struct CVprotected_slot private_enum CVprotected_signal CVprivate_slot protected_class private_class private_union protected_function private_function signal CVpublic_var enum class CVpublic_slot union typedef function struct protected_field private_field field";
 
   foreach( QString iconName, allIconNames.split(" ") )
-    m_icons[iconName] = KIconLoader::global()->loadIcon(iconName, K3Icon::Small);
+    m_icons[iconName] = KIconLoader::global()->loadIcon(iconName, KIconLoader::Small);
   
 }
 
