@@ -18,13 +18,15 @@
 ChooseSubprojectDlg::ChooseSubprojectDlg(TrollProjectWidget *widget, QWidget* parent, const char* name, bool modal, WFlags fl)
     : ChooseSubprojectDlgBase(parent,name, modal,fl), m_widget(widget)
 {
-    ChooseItem *it = new ChooseItem(m_widget->m_rootSubproject, subprojects_view, m_widget->m_rootSubproject->text(0));
-    it->setPixmap(0, *(m_widget->m_rootSubproject->pixmap(0)));
-    it->setOpen(true);
-    fillSubprojectsView(it);
-
     connect(subprojects_view, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(itemSelected(QListViewItem *)));
-    subprojects_view->setSelected(it, true);
+    if( m_widget->m_rootSubproject)
+    {
+        ChooseItem *it = new ChooseItem(m_widget->m_rootSubproject, subprojects_view, m_widget->m_rootSubproject->text(0));
+        it->setPixmap(0, *(m_widget->m_rootSubproject->pixmap(0)));
+        it->setOpen(true);
+        fillSubprojectsView(it);
+        subprojects_view->setSelected(it, true);
+    }
 }
 
 ChooseSubprojectDlg::~ChooseSubprojectDlg()

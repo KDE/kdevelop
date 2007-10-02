@@ -342,18 +342,25 @@ void TrollProjectWidget::openProject( const QString &dirName )
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 
     m_rootScope = new Scope( proname, m_part );
-
-    m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
-
-
-    m_rootSubproject->setOpen( true );
-    if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).findIndex("subdirs") != -1 )
+    if( m_rootScope->scopeType() != Scope::InvalidScope )
     {
-        overview->setSelected( m_rootSubproject->firstChild(), true );
-    }
-    else
+
+        m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
+
+
+        m_rootSubproject->setOpen( true );
+        if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).findIndex("subdirs") != -1 )
+        {
+            overview->setSelected( m_rootSubproject->firstChild(), true );
+        }
+        else
+        {
+            overview->setSelected( m_rootSubproject, true );
+        }
+    }else
     {
-        overview->setSelected( m_rootSubproject, true );
+        delete m_rootScope;
+        m_rootScope = 0;
     }
 //     kdDebug(9024) << "Adding " << allFiles().count() << " Files" << endl;
 //     kdDebug(9024) << allFiles() << endl;
@@ -375,6 +382,8 @@ void TrollProjectWidget::closeProject()
 
 QStringList TrollProjectWidget::allFiles()
 {
+    if( !m_rootScope )
+        return QStringList();
     if( m_filesCached )
         return m_allFilesCache;
     m_allFilesCache = m_rootScope->allFiles( m_rootScope->projectDir() );
@@ -2177,6 +2186,8 @@ void TrollProjectWidget::createMakefileIfMissing( const QString &dir, QMakeScope
 
 QMakeScopeItem* TrollProjectWidget::findSubprojectForPath( const QString& relPath )
 {
+    if( !m_rootSubproject )
+        return 0;
     QStringList dirs = QStringList::split("/", relPath);
     QMakeScopeItem* pitem = static_cast<QMakeScopeItem*>(m_rootSubproject);
     for( QStringList::iterator it = dirs.begin(); it != dirs.end(); ++it)
@@ -2204,6 +2215,9 @@ QPtrList<QMakeScopeItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi
 
 void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, QMakeScopeItem * item, QString absFilePath )
 {
+    if( !item )
+        return;
+
     QDir d( item->scope->projectDir() );
 
     QStringList vars = item->scope->variableValues( "SOURCES" );
