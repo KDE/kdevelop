@@ -170,10 +170,9 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
     f = item.completionContext->functions()[item.listOffset];
   
   int textFormatStart = 0;
-  QTextFormat normalFormat;
-  QTextFormat highlightFormat(normalFormat);
-  highlightFormat.setBackground(Qt::yellow);
-  
+  QTextFormat normalFormat(QTextFormat::CharFormat);
+  QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
+
   AbstractFunctionDeclaration* decl = dynamic_cast<AbstractFunctionDeclaration*>(dec);
   CppFunctionType::Ptr functionType = dec->type<CppFunctionType>();
   if (functionType && decl) {
@@ -200,12 +199,10 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
         if( highlighting && ret.length() != textFormatStart )
         {
           *highlighting <<  QVariant(textFormatStart);
-          *highlighting << QVariant(ret.length());
-          *highlighting << normalFormat;
+          *highlighting << QVariant(ret.length() - textFormatStart);
+          *highlighting << QVariant(normalFormat);
           textFormatStart = ret.length();
         }
-        ///@todo use real highlighting instead of this ugly sign
-        ret += "    > "; //Currently highlighting does not work, so we highlight the item using this ugly sign
       }
       
       if (argument)
@@ -218,11 +215,10 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       
       if( f.function.isValid() && num == f.matchedArguments  )
       {
-        ret += " <    "; //Currently highlighting does not work, so we highlight the item using this ugly sign
         if( highlighting && ret.length() != textFormatStart )
         {
           *highlighting <<  QVariant(textFormatStart);
-          *highlighting << QVariant(ret.length());
+          *highlighting << QVariant(ret.length() - textFormatStart);
           *highlighting << highlightFormat;
           textFormatStart = ret.length();
         }
@@ -505,10 +501,11 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       break;
     case HighlightingMethod:
     if( index.column() == Arguments ) {
-      if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+      if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
         return QVariant(CustomHighlighting);
-      else
+      } else {
         return QVariant();
+      }
       break;
     }
     break;
