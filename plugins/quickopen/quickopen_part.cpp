@@ -79,7 +79,7 @@ void QuickopenPart::unload()
 {
 }
 
-void QuickopenPart::quickOpen()
+void QuickopenPart::showQuickOpen( ModelTypes modes )
 {
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
   d->setAttribute( Qt::WA_DeleteOnClose, true );
@@ -88,19 +88,24 @@ void QuickopenPart::quickOpen()
   d->show();
 }
 
+void QuickopenPart::quickOpen()
+{
+  showQuickOpen( All );
+}
+
 void QuickopenPart::quickOpenFile()
 {
-  quickOpen();
+  showQuickOpen( Files );
 }
 
 void QuickopenPart::quickOpenFunction()
 {
-  quickOpen();
+  showQuickOpen( Functions );
 }
 
 void QuickopenPart::quickOpenClass()
 {
-  quickOpen();
+  showQuickOpen( Classes );
 }
 
 #include "quickopen_part.moc"

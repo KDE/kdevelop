@@ -35,7 +35,20 @@ public:
 
     // KDevelop::Plugin methods
     virtual void unload();
+    
+    enum ModelTypes {
+      Files = 1,
+      Functions = 2,
+      Classes = 4,
+      All = Files + Functions + Classes
+    };
 
+    /**
+     * Shows the quickopen dialog with the specified Model-types
+     * @param modes A combination of ModelTypes
+     * */
+    void showQuickOpen( ModelTypes modes = All );
+    
 public slots:
     void quickOpen();
     void quickOpenFile();
