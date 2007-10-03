@@ -36,6 +36,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/namespacealiasdeclaration.cpp
     duchain/dumpdotgraph.cpp
     duchain/contextowner.cpp
+    interfaces/iquickopendataprovider.cpp
 )
 
 

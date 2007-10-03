@@ -1,8 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2006 Adam Treat <treat@kde.org>
- * Copyright 2006 Hamish Rodda <rodda@kde.org>
+ * Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -38,32 +37,37 @@
 #include <iuicontroller.h>
 
 #include "ui_quickopen.h"
+#include "quickopenmodel.h"
 
-K_PLUGIN_FACTORY(KDevQuickopenFactory, registerPlugin<QuickopenPart>(); )
-K_EXPORT_PLUGIN(KDevQuickopenFactory("kdevquickopen"))
+K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPart>(); )
+K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
 
-QuickopenPart::QuickopenPart(QObject *parent,
+QuickOpenPart::QuickOpenPart(QObject *parent,
                                  const QVariantList&)
-    : KDevelop::IPlugin(KDevQuickopenFactory::componentData(), parent)
+    : KDevelop::IPlugin(KDevQuickOpenFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
     setXMLFile( "kdevquickopen.rc" );
-    ///@todo register shortcuts in all main-windows+-
-    KActionCollection* actions = core()->uiController()->activeMainWindow()->actionCollection();
-    KAction* quickOpen = new KAction("Quickopen", this);
-    KAction* quickOpenFile = new KAction("Quickopen File",this);
-    KAction* quickOpenClass = new KAction("Quickopen Class",this);
-    KAction* quickOpenFunction = new KAction("Quickopen Function",this);
+    ///@todo Make the whole thing work using the own action-collection, it simply doesn't
+    m_model = new QuickOpenModel();
 
-    ///@todo are these configurable now?
-    quickOpen->setShortcut( KShortcut( QKeySequence( Qt::CTRL | Qt::ALT | Qt::Key_Q ) ) );
-    quickOpenClass->setShortcut( KShortcut( QKeySequence( Qt::CTRL | Qt::ALT | Qt::Key_C ) ) );
-    quickOpenFunction->setShortcut( KShortcut( QKeySequence( Qt::CTRL | Qt::ALT | Qt::Key_M ) ) );
-    quickOpenFile->setShortcut( KShortcut( QKeySequence( Qt::CTRL | Qt::ALT | Qt::Key_O ) ) );
+    KActionCollection* actions = actionCollection();
 
-    actions->addAction("Quickopen", quickOpen);
-    actions->addAction("Quickopen Class", quickOpenClass);
-    actions->addAction("Quickopen File", quickOpenFile);
-    actions->addAction("Quickopen Function", quickOpenFunction);
+    ///@todo All the locally created actions do not work,, also not if they are put into actionCollection()
+    QAction* quickOpen = actions->addAction("quick_open");
+    QAction* quickOpenFile = actions->addAction("quick_open_file");
+    QAction* quickOpenClass = actions->addAction("quick_open_class");
+    QAction* quickOpenFunction = actions->addAction("quick_open_function");
+
+    quickOpen->setText( i18n("&Quick Open") );
+    quickOpenClass->setText( i18n("Quick Open &Class") );
+    quickOpenFunction->setText( i18n("Quick Open &Function") );
+    quickOpenFile->setText( i18n("Quick Open &File") );
+    
+    quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
+    quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
+    quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
+    quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
 
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
@@ -71,42 +75,56 @@ QuickopenPart::QuickopenPart(QObject *parent,
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 }
 
-QuickopenPart::~QuickopenPart()
+QuickOpenPart::~QuickOpenPart()
+{
+  delete m_model;
+}
+
+void QuickOpenPart::unload()
 {
 }
 
-void QuickopenPart::unload()
-{
-}
-
-void QuickopenPart::showQuickOpen( ModelTypes modes )
+void QuickOpenPart::showQuickOpen( ModelTypes modes )
 {
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
   d->setAttribute( Qt::WA_DeleteOnClose, true );
-  Ui::Quickopen o;
+  Ui::QuickOpen o;
   o.setupUi( d );
+  m_model->restart();
+  o.list->setModel( m_model );
   d->show();
 }
 
-void QuickopenPart::quickOpen()
+void QuickOpenPart::quickOpen()
 {
   showQuickOpen( All );
 }
 
-void QuickopenPart::quickOpenFile()
+void QuickOpenPart::quickOpenFile()
 {
   showQuickOpen( Files );
 }
 
-void QuickopenPart::quickOpenFunction()
+void QuickOpenPart::quickOpenFunction()
 {
   showQuickOpen( Functions );
 }
 
-void QuickopenPart::quickOpenClass()
+void QuickOpenPart::quickOpenClass()
 {
   showQuickOpen( Classes );
 }
+
+void QuickOpenPart::registerProvider( const QString& name, KDevelop::IQuickOpenDataProvider* provider )
+{
+  m_model->registerProvider( name, provider );
+}
+
+bool QuickOpenPart::removeProvider( KDevelop::IQuickOpenDataProvider* provider )
+{
+  m_model->removeProvider( provider );
+}
+
 
 #include "quickopen_part.moc"
 

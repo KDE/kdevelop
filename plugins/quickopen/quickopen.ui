@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>Quickopen</class>
- <widget class="QDialog" name="Quickopen" >
+ <class>QuickOpen</class>
+ <widget class="QDialog" name="QuickOpen" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -185,7 +185,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Quickopen</receiver>
+   <receiver>QuickOpen</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -201,7 +201,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Quickopen</receiver>
+   <receiver>QuickOpen</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >

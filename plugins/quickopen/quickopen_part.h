@@ -23,15 +23,21 @@
 #define QUICKOPEN_PART_H
 
 #include <iplugin.h>
+#include <iquickopen.h>
 #include <QtCore/QVariant>
 
-class QuickopenPart : public KDevelop::IPlugin
+#include <iquickopendataprovider.h>
+
+class QuickOpenModel;
+
+class QuickOpenPart : public KDevelop::IPlugin, public KDevelop::IQuickOpen
 {
     Q_OBJECT
+    Q_INTERFACES( KDevelop::IQuickOpen )
 
 public:
-    QuickopenPart(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~QuickopenPart();
+    QuickOpenPart( QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~QuickOpenPart();
 
     // KDevelop::Plugin methods
     virtual void unload();
@@ -48,12 +54,19 @@ public:
      * @param modes A combination of ModelTypes
      * */
     void showQuickOpen( ModelTypes modes = All );
+
+    virtual void registerProvider( const QString& name, KDevelop::IQuickOpenDataProvider* provider );
+
+    virtual bool removeProvider( KDevelop::IQuickOpenDataProvider* provider );
     
 public slots:
     void quickOpen();
     void quickOpenFile();
     void quickOpenFunction();
     void quickOpenClass();
+    
+  private:
+    QuickOpenModel* m_model;
 };
 
 #endif // DUCHAINVIEW_PART_H
