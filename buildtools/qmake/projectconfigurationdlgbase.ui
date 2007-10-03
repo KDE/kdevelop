@@ -561,7 +561,7 @@
                                     <cstring>exceptionCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Eceptions </string>
+                                    <string>Exceptions </string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="2">
