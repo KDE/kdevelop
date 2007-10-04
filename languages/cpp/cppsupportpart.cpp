@@ -1538,7 +1538,6 @@ void CppSupportPart::slotParseFiles()
 	// When the project is closed, the language support plugin is destroyed
 	// and as a consequence, the timer job signal never arrives at this method
 
-	Q_ASSERT( _jd );
 	if ( !_jd ) return; // how can this possibly happen?!
 
 	if ( _jd->cycle == 0 && !m_projectClosed && _jd->it != _jd->files.end() )
