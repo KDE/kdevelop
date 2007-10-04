@@ -24,10 +24,13 @@
 #include <QAbstractItemModel>
 
 #include "quickopendataprovider.h"
+#include "expandingtree/expandingwidgetmodel.h"
 
-class QuickOpenModel : public QAbstractItemModel {
+class QuickOpenModel : public ExpandingWidgetModel {
   Q_OBJECT;
   public:
+    QuickOpenModel( QWidget* parent );
+    
     void registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider );
 
     /**
@@ -44,12 +47,27 @@ class QuickOpenModel : public QAbstractItemModel {
     int rowCount( const QModelIndex& ) const;
     int columnCount( const QModelIndex& ) const;
     QVariant data( const QModelIndex&, int ) const;
+
+    //The expandingwidgetmodel needs access to the tree-view
+    void setTreeView( QTreeView* view );
+  public slots:
+    void textChanged( const QString& str );
   private slots:
     void destroyed( QObject* obj );
   
   private:
+    virtual QTreeView* treeView() const;
+    
+    virtual bool indexIsItem(const QModelIndex& index) const;
+    
+    virtual int contextMatchQuality(const QModelIndex & index) const;
+
+    KDevelop::QuickOpenDataPointer getItem( int row ) const;
+    
     typedef QList<KDevelop::QuickOpenDataPointer> DataList;
     mutable DataList m_cachedData;
+
+    QTreeView* m_treeView;
     
     typedef QMultiMap< QString, KDevelop::QuickOpenDataProviderBase* > ProviderMap;
     ProviderMap m_providers;

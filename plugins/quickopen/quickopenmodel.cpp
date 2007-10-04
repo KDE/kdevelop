@@ -18,6 +18,14 @@
 
 #include "quickopenmodel.h"
 
+#include <kdebug.h>
+
+using namespace KDevelop;
+
+QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent )
+{
+}
+
 void QuickOpenModel::registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_providers.insert( type, provider );
@@ -36,13 +44,25 @@ bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provid
   return false;
 }
 
+void QuickOpenModel::textChanged( const QString& str )
+{
+  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
+    provider->setFilterText( str );
+  
+  m_cachedData.clear();
+  clearExpanding();
+  reset();
+}
+
 void QuickOpenModel::restart()
 {
   foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
     provider->reset();
   
-  reset();
   m_cachedData.clear();
+  clearExpanding();
+
+  reset();
 }
 
 void QuickOpenModel::destroyed( QObject* obj )
@@ -60,8 +80,11 @@ QModelIndex QuickOpenModel::parent( const QModelIndex& ) const
   return QModelIndex();
 }
 
-int QuickOpenModel::rowCount( const QModelIndex& ) const
+int QuickOpenModel::rowCount( const QModelIndex& i ) const
 {
+  if( i.isValid() )
+    return 0;
+  
   int count = 0;
   foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
     count += provider->itemCount();
@@ -76,5 +99,56 @@ int QuickOpenModel::columnCount( const QModelIndex& ) const
 
 QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 {
-  return QVariant();
+  QuickOpenDataPointer d = getItem( index.row() );
+
+  if( !d )
+    return QVariant();
+
+  switch( role ) {
+    case Qt::DisplayRole:
+      return d->text();
+  }
+  
+  return ExpandingWidgetModel::data( index, role );
+}
+
+QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
+  ///@todo mix all the models alphabetically here. For now, they are simply ordered.
+
+  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers ) {
+    if( row < provider->itemCount() )
+    {
+      QList<QuickOpenDataPointer> items = provider->data( row, row+1 );
+      
+      if( items.isEmpty() )
+      {
+        kWarning() << "Provider returned no item";
+        return QuickOpenDataPointer();
+      } else {
+        return items.first();
+      }
+    } else {
+      row -= provider->itemCount();
+    }
+  }
+
+  kWarning() << "No item for row " <<  row;
+
+  return QuickOpenDataPointer();
+}
+
+QTreeView* QuickOpenModel::treeView() const {
+  return m_treeView;
+}
+
+bool QuickOpenModel::indexIsItem(const QModelIndex& index) const {
+  return true;
+}
+
+void QuickOpenModel::setTreeView( QTreeView* view ) {
+  m_treeView = view;
+}
+
+int QuickOpenModel::contextMatchQuality(const QModelIndex & index) const {
+  return -1;
 }

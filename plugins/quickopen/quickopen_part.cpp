@@ -49,7 +49,7 @@ QuickOpenPart::QuickOpenPart(QObject *parent,
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
     setXMLFile( "kdevquickopen.rc" );
     ///@todo Make the whole thing work using the own action-collection, it simply doesn't
-    m_model = new QuickOpenModel();
+    m_model = new QuickOpenModel( 0 );
 
     KActionCollection* actions = actionCollection();
 
@@ -91,11 +91,22 @@ void QuickOpenPart::showQuickOpen( ModelTypes modes )
 {
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
   d->setAttribute( Qt::WA_DeleteOnClose, true );
+  
   Ui::QuickOpen o;
   o.setupUi( d );
+  o.list->header()->hide();
+  o.list->setRootIsDecorated( false );
+
+  connect( o.searchLine, SIGNAL(textChanged( const QString& )), m_model, SLOT(textChanged( const QString& )) );
+  
   m_model->restart();
+  m_model->setTreeView( o.list );
+  
   o.list->setModel( m_model );
+  
   d->show();
+  
+  m_model->setTreeView( 0 );
 }
 
 void QuickOpenPart::quickOpen()
