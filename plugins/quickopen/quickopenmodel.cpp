@@ -18,9 +18,9 @@
 
 #include "quickopenmodel.h"
 
-void QuickOpenModel::registerProvider( const QString& name, KDevelop::QuickOpenDataProviderBase* provider )
+void QuickOpenModel::registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
 {
-  m_providers.insert( name, provider );
+  m_providers.insert( type, provider );
   connect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
 }
 
@@ -39,7 +39,7 @@ bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provid
 void QuickOpenModel::restart()
 {
   foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
-    provider->clearFilterText();
+    provider->reset();
   
   reset();
   m_cachedData.clear();

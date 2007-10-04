@@ -37,11 +37,13 @@ public:
 
     /**
      * Registers a new provider under a specified name.
-     * There may be multiple providers with the same name, they will be used simultaneously in that case.
-     * @param name Name of the provider, Example: "Files". The name will be shown in the GUI, so should be translated.
+     * There may be multiple providers with the same type/scope, they will be used simultaneously in that case.
+     * type and scope will be shown in the GUI, so they should be translated.
+     * @param scope Scope of the provided data, Examples: "Project", "Imports", etc.
+     * @param type Type of the provided data, Examples: "Files", "Functiosn", "Classes", etc.
      * @param provider The provider. It does not need to be explicitly removed before its destruction.
      * */
-    virtual void registerProvider( const QString& name, QuickOpenDataProviderBase* provider ) = 0;
+    virtual void registerProvider( const QString& scope, const QString& type, QuickOpenDataProviderBase* provider ) = 0;
 
     /**
      * Remove provider.

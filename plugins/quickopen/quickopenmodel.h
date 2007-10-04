@@ -28,13 +28,7 @@
 class QuickOpenModel : public QAbstractItemModel {
   Q_OBJECT;
   public:
-    /**
-     * Registers a new provider under a specified name.
-     * There may be multiple models with the same name.
-     * @param name Name of the provider, Example: "Files". The name will be shown in the GUI, so should be translated.
-     * @param provider The provider. It does not need to be explicitly removed before its destruction.
-     * */
-    void registerProvider( const QString& name, KDevelop::QuickOpenDataProviderBase* provider );
+    void registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider );
 
     /**
      * Remove provider.

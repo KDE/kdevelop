@@ -55,7 +55,7 @@ public:
      * */
     void showQuickOpen( ModelTypes modes = All );
 
-    virtual void registerProvider( const QString& name, KDevelop::QuickOpenDataProviderBase* provider );
+    virtual void registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider );
 
     virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
     

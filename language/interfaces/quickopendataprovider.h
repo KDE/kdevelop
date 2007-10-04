@@ -69,12 +69,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * For efficiency, all changes to the filter-text are provided by the following 3 difference-operations.
      * */
     
-    ///New search-text was appended
-    virtual void appendFilterText( const QString& text ) = 0;
-    ///Search-text of length @param length was removed at the end
-    virtual void removeFilterText( int length ) = 0;
-    ///Filter-text should be completely reset
-    virtual void clearFilterText() = 0;
+    /**
+     * Search-text was changed.
+     * This is called whenever the search-text was changed, and the UI should be updated.
+     * Store the text to track the exact difference.
+     * */
+    virtual void setFilterText( const QString& text ) = 0;
+    ///Filter-text should be completely reset and the context re-computed.
+    virtual void reset() = 0;
 
     ///Returns the count of items this provider currently represents
     virtual uint itemCount() const = 0;
@@ -94,6 +96,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * */
     virtual QList<QuickOpenDataPointer> data( uint start, uint end ) const = 0;
 };
+
 
 }
 

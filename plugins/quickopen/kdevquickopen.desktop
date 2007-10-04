@@ -13,6 +13,7 @@ X-KDE-Library=kdevquickopen
 X-KDevelop-Version=4
 X-KDevelop-Category=Global
 X-KDevelop-Properties=DUChainNavigation
+X-KDevelop-Interfaces=org.kdevelop.IQuickOpen
 X-KDE-PluginInfo-Name=kdevquickopen
 X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=GPL
