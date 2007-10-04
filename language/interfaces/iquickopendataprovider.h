@@ -25,7 +25,7 @@
 #include <QObject>
 
 #include <ksharedptr.h>
-
+#include <languageexport.h>
 class QString;
 class QStringList;
 
@@ -60,7 +60,7 @@ typedef KSharedPtr<IQuickOpenData> QuickOpenDataPointer;
  * After refiltering
  * */
 
-class IQuickOpenDataProvider : public QObject {
+class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenDataProvider : public QObject {
   Q_OBJECT;
   public:
     virtual ~IQuickOpenDataProvider();
