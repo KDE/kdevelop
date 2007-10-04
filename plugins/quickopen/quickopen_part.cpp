@@ -73,6 +73,9 @@ QuickOpenPart::QuickOpenPart(QObject *parent,
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
+
+    ///Hijack another action, can be removed once the actions above work
+    connect(core()->uiController()->activeMainWindow()->actionCollection()->action("split_horizontal"), SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
 }
 
 QuickOpenPart::~QuickOpenPart()
