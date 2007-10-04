@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>914</width>
-            <height>568</height>
+            <width>839</width>
+            <height>622</height>
         </rect>
     </property>
     <property name="caption">
@@ -30,26 +30,26 @@
                 <attribute name="title">
                     <string>&amp;Code Completion</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>groupBox4</cstring>
+                            <cstring>layout11</cstring>
                         </property>
-                        <property name="title">
-                            <string>Code Completion Options</string>
-                        </property>
-                        <grid>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                            <widget class="QGroupBox">
                                 <property name="name">
-                                    <cstring>layout18</cstring>
+                                    <cstring>groupBox4</cstring>
                                 </property>
-                                <hbox>
+                                <property name="title">
+                                    <string>Code Completion Options</string>
+                                </property>
+                                <vbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
@@ -59,7 +59,7 @@
                                         </property>
                                         <property name="sizePolicy">
                                             <sizepolicy>
-                                                <hsizetype>7</hsizetype>
+                                                <hsizetype>1</hsizetype>
                                                 <vsizetype>0</vsizetype>
                                                 <horstretch>1</horstretch>
                                                 <verstretch>0</verstretch>
@@ -68,6 +68,9 @@
                                         <property name="text">
                                             <string>A&amp;utomatic code completion:</string>
                                         </property>
+                                        <property name="accel">
+                                            <string>Alt+U</string>
+                                        </property>
                                         <property name="checked">
                                             <bool>true</bool>
                                         </property>
@@ -75,143 +78,406 @@
                                             <string>Offer options to complete what you are typing.</string>
                                         </property>
                                     </widget>
-                                    <spacer>
+                                    <widget class="QLayoutWidget">
                                         <property name="name">
-                                            <cstring>spacer14</cstring>
+                                            <cstring>layout13</cstring>
                                         </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>31</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="KIntNumInput">
-                                        <property name="name">
-                                            <cstring>inputCodeCompletion</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>How long after a key press to offer suggestions</string>
-                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <spacer>
+                                                <property name="name">
+                                                    <cstring>spacer14</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Horizontal</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Fixed</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>30</width>
+                                                        <height>20</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                            <widget class="KIntNumInput">
+                                                <property name="name">
+                                                    <cstring>inputCodeCompletion</cstring>
+                                                </property>
+                                                <property name="sizePolicy">
+                                                    <sizepolicy>
+                                                        <hsizetype>1</hsizetype>
+                                                        <vsizetype>0</vsizetype>
+                                                        <horstretch>0</horstretch>
+                                                        <verstretch>0</verstretch>
+                                                    </sizepolicy>
+                                                </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>How long after a key press to offer suggestions</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel1</cstring>
+                                                </property>
+                                                <property name="sizePolicy">
+                                                    <sizepolicy>
+                                                        <hsizetype>1</hsizetype>
+                                                        <vsizetype>5</vsizetype>
+                                                        <horstretch>0</horstretch>
+                                                        <verstretch>0</verstretch>
+                                                    </sizepolicy>
+                                                </property>
+                                                <property name="text">
+                                                    <string>msec</string>
+                                                </property>
+                                            </widget>
+                                        </hbox>
                                     </widget>
-                                    <widget class="QLabel">
+                                    <widget class="QCheckBox">
                                         <property name="name">
-                                            <cstring>textLabel1</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>5</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
+                                            <cstring>checkListGlobalItems</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>msec</string>
+                                            <string>List &amp;global items when
+performing automatic completion</string>
                                         </property>
+                                        <property name="accel">
+                                            <string>Alt+G</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>When this is checked, members of all 
+higher namespaces will be included in 
+the completion-list while performing 
+automatic completion. 
+
+This may bloat the completion-list 
+and create a significant delay.</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>When this is checked, members of all 
+higher namespaces will be included in 
+the completion-list while performing 
+automatic completion. 
+
+This may bloat the completion-list 
+and create a significant delay.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkCompleteReturnType</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Do complete member-type-evaluation</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+D</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Completely evaluate member-types of 
+template-classes (this includes types 
+of member-variables and return-types 
+of member-functions) in the 
+completion-box.</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Completely evaluate member-types of 
+template-classes (this includes types 
+of member-variables and return-types 
+of member-functions) in the 
+completion-box.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkCompleteArgumentType</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Do complete argument-type-e&amp;valuation</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+V</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Completely evaluate the function-argument-types 
+of template-class member-functions in the 
+completion-box.</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Completely evaluate the function-argument-types 
+of template-class member-functions in the 
+completion-box.</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QGroupBox">
+                                <property name="name">
+                                    <cstring>groupBox8_2</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Argument Hint Options</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkAutomaticArgumentsHint</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Auto&amp;matic arguments hint:</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+M</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout14</cstring>
+                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <spacer>
+                                                <property name="name">
+                                                    <cstring>spacer15</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Horizontal</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Fixed</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>30</width>
+                                                        <height>20</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                            <widget class="KIntNumInput">
+                                                <property name="name">
+                                                    <cstring>inputArgumentsHint</cstring>
+                                                </property>
+                                                <property name="sizePolicy">
+                                                    <sizepolicy>
+                                                        <hsizetype>1</hsizetype>
+                                                        <vsizetype>0</vsizetype>
+                                                        <horstretch>0</horstretch>
+                                                        <verstretch>0</verstretch>
+                                                    </sizepolicy>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel1_2</cstring>
+                                                </property>
+                                                <property name="sizePolicy">
+                                                    <sizepolicy>
+                                                        <hsizetype>1</hsizetype>
+                                                        <vsizetype>5</vsizetype>
+                                                        <horstretch>0</horstretch>
+                                                        <verstretch>0</verstretch>
+                                                    </sizepolicy>
+                                                </property>
+                                                <property name="text">
+                                                    <string>msec</string>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkShowCommentInArgumentHint</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Show comment with
+argument hint</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout12</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>buttonGroup6</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Incremental Parsing</string>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>radioButton13</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Do not process included headers</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton" row="2" column="0">
+                                        <property name="name">
+                                            <cstring>checkParseMissingHeaders</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Preprocess and parse included 
+headers into a database(experimental)</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Parse preprocessed headers that are not part of this project 
+into a special completion-database. To reparse the headers delete
+the database and reopen the project.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton" row="1" column="0">
+                                        <property name="name">
+                                            <cstring>checkPreprocessIncludedHeaders</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Preprocess included headers
+(collect macros and visibility-information)</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Try to locate all included files and preprocess them. 
+This makes macros and imported namespaces work correctly, and allows KDevelop
+to know what code-items are visible from within which file.
+Note: Parsing may become very slow when this is enabled
+(It will become faster after some time).</string>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                            <widget class="QGroupBox">
+                                <property name="name">
+                                    <cstring>groupBox5</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Code Completion Databases</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Code Completion Databases&lt;/b&gt; are used to store the parsed headers for external libraries, to allow code completion for non-project classes and methods.</string>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QListView">
+                                        <column>
+                                            <property name="text">
+                                                <string>Column 1</string>
+                                            </property>
+                                            <property name="clickable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="resizable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </column>
+                                        <property name="name">
+                                            <cstring>advancedOptions</cstring>
+                                        </property>
+                                        <property name="rootIsDecorated">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="resizeMode">
+                                            <enum>LastColumn</enum>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout6</cstring>
+                                        </property>
+                                        <vbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <spacer>
+                                                <property name="name">
+                                                    <cstring>spacer12</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Vertical</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Expanding</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>20</width>
+                                                        <height>31</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                            <widget class="QPushButton">
+                                                <property name="name">
+                                                    <cstring>newPCSButton</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>&amp;Add...</string>
+                                                </property>
+                                                <property name="whatsThis" stdset="0">
+                                                    <string>Click to start the Code Completion database creation wizard.</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QPushButton">
+                                                <property name="name">
+                                                    <cstring>removePCSButton</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>&amp;Delete</string>
+                                                </property>
+                                            </widget>
+                                            <spacer>
+                                                <property name="name">
+                                                    <cstring>spacer13</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Vertical</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Expanding</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>20</width>
+                                                        <height>31</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                        </vbox>
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="0">
-                                <property name="name">
-                                    <cstring>checkCompleteArgumentType</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Do complete argument-type-e&amp;valuation</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Completely evaluate the function-argument-types 
-of template-class member-functions in the 
-completion-box.</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Completely evaluate the function-argument-types 
-of template-class member-functions in the 
-completion-box.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="0">
-                                <property name="name">
-                                    <cstring>checkCompleteReturnType</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Do complete member-type-evaluation</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Completely evaluate member-types of 
-template-classes (this includes types 
-of member-variables and return-types 
-of member-functions) in the 
-completion-box.</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Completely evaluate member-types of 
-template-classes (this includes types 
-of member-variables and return-types 
-of member-functions) in the 
-completion-box.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="0">
-                                <property name="name">
-                                    <cstring>checkListGlobalItems</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>List &amp;global items when performing automatic completion</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>When this is checked, members of all 
-higher namespaces will be included in 
-the completion-list while performing 
-automatic completion. 
-
-This may bloat the completion-list 
-and create a significant delay.</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>When this is checked, members of all 
-higher namespaces will be included in 
-the completion-list while performing 
-automatic completion. 
-
-This may bloat the completion-list 
-and create a significant delay.</string>
-                                </property>
-                            </widget>
-                        </grid>
+                        </hbox>
                     </widget>
-                    <spacer row="3" column="0">
-                        <property name="name">
-                            <cstring>spacer15_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="3">
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>groupBox9_2</cstring>
                         </property>
@@ -300,253 +566,24 @@ if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox" row="0" column="2">
+                    <spacer>
                         <property name="name">
-                            <cstring>groupBox8_2</cstring>
+                            <cstring>spacer15_2</cstring>
                         </property>
-                        <property name="title">
-                            <string>Argument Hint Options</string>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout19</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkAutomaticArgumentsHint</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Auto&amp;matic arguments hint:</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer15</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>31</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="KIntNumInput">
-                                        <property name="name">
-                                            <cstring>inputArgumentsHint</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>textLabel1_2</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>5</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>msec</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>checkShowCommentInArgumentHint</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show comment with argument hint</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <widget class="QButtonGroup" row="1" column="0">
-                        <property name="name">
-                            <cstring>buttonGroup6</cstring>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
                         </property>
-                        <property name="title">
-                            <string>Incremental Parsing</string>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
+                            </size>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QRadioButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>radioButton13</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Do not process included headers</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="2" column="0">
-                                <property name="name">
-                                    <cstring>checkParseMissingHeaders</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Preprocess and parse included 
-headers into a database(experimental)</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Parse preprocessed headers that are not part of this project 
-into a special completion-database. To reparse the headers delete
-the database and reopen the project.</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>checkPreprocessIncludedHeaders</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Preprocess included headers
-(collect macros and visibility-information)</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Try to locate all included files and preprocess them. 
-This makes macros and imported namespaces work correctly, and allows KDevelop
-to know what code-items are visible from within which file.
-Note: Parsing may become very slow when this is enabled
-(It will become faster after some time).</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QGroupBox" row="1" column="1" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>groupBox5</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Code Completion Databases</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>&lt;b&gt;Code Completion Databases&lt;/b&gt; are used to store the parsed headers for external libraries, to allow code completion for non-project classes and methods.</string>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Column 1</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>advancedOptions</cstring>
-                                </property>
-                                <property name="rootIsDecorated">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout6</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer12</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>31</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>newPCSButton</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Add...</string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to start the Code Completion database creation wizard.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>removePCSButton</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Delete</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer13</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>31</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
-                    </widget>
-                </grid>
+                    </spacer>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -1506,6 +1543,8 @@ you right click on a variable in a header file.</string>
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
@@ -1764,28 +1803,14 @@ you right click on a variable in a header file.</string>
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>
