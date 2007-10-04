@@ -26,7 +26,7 @@
 #include <iquickopen.h>
 #include <QtCore/QVariant>
 
-#include <iquickopendataprovider.h>
+#include <quickopendataprovider.h>
 
 class QuickOpenModel;
 
@@ -55,9 +55,9 @@ public:
      * */
     void showQuickOpen( ModelTypes modes = All );
 
-    virtual void registerProvider( const QString& name, KDevelop::IQuickOpenDataProvider* provider );
+    virtual void registerProvider( const QString& name, KDevelop::QuickOpenDataProviderBase* provider );
 
-    virtual bool removeProvider( KDevelop::IQuickOpenDataProvider* provider );
+    virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
     
 public slots:
     void quickOpen();

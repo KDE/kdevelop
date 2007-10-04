@@ -23,7 +23,7 @@
 #include <QString>
 #include <QAbstractItemModel>
 
-#include "iquickopendataprovider.h"
+#include "quickopendataprovider.h"
 
 class QuickOpenModel : public QAbstractItemModel {
   Q_OBJECT;
@@ -34,14 +34,14 @@ class QuickOpenModel : public QAbstractItemModel {
      * @param name Name of the provider, Example: "Files". The name will be shown in the GUI, so should be translated.
      * @param provider The provider. It does not need to be explicitly removed before its destruction.
      * */
-    void registerProvider( const QString& name, KDevelop::IQuickOpenDataProvider* provider );
+    void registerProvider( const QString& name, KDevelop::QuickOpenDataProviderBase* provider );
 
     /**
      * Remove provider.
      * @param provider The provider to remove
      * @return Whether a provider was removed. If false, the provider was not attached.
      * */
-    bool removeProvider( KDevelop::IQuickOpenDataProvider* provider );
+    bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
 
     void restart();
 
@@ -57,7 +57,7 @@ class QuickOpenModel : public QAbstractItemModel {
     typedef QList<KDevelop::QuickOpenDataPointer> DataList;
     mutable DataList m_cachedData;
     
-    typedef QMultiMap< QString, KDevelop::IQuickOpenDataProvider* > ProviderMap;
+    typedef QMultiMap< QString, KDevelop::QuickOpenDataProviderBase* > ProviderMap;
     ProviderMap m_providers;
 };
 

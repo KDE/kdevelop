@@ -19,17 +19,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "iquickopendataprovider.h"
+#include "quickopendataprovider.h"
 
 namespace KDevelop {
-  IQuickOpenData::~IQuickOpenData() {
+  QuickOpenDataBase::~QuickOpenDataBase() {
   }
   
-  QList<QVariant> IQuickOpenData::highlighting() const {
+  QList<QVariant> QuickOpenDataBase::highlighting() const {
   }
 
-  IQuickOpenDataProvider::~IQuickOpenDataProvider() {
+  QuickOpenDataProviderBase::~QuickOpenDataProviderBase() {
   }
 }
 
-#include "iquickopendataprovider.moc"
+#include "quickopendataprovider.moc"

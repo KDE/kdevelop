@@ -17,15 +17,14 @@
 */
 
 #include "quickopenmodel.h"
-#include "iquickopendataprovider.h"
 
-void QuickOpenModel::registerProvider( const QString& name, KDevelop::IQuickOpenDataProvider* provider )
+void QuickOpenModel::registerProvider( const QString& name, KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_providers.insert( name, provider );
   connect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
 }
 
-bool QuickOpenModel::removeProvider( KDevelop::IQuickOpenDataProvider* provider )
+bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
 {
   for( ProviderMap::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
     if( *it == provider ) {
@@ -39,7 +38,7 @@ bool QuickOpenModel::removeProvider( KDevelop::IQuickOpenDataProvider* provider 
 
 void QuickOpenModel::restart()
 {
-  foreach( KDevelop::IQuickOpenDataProvider* provider, m_providers )
+  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
     provider->clearFilterText();
   
   reset();
@@ -48,7 +47,7 @@ void QuickOpenModel::restart()
 
 void QuickOpenModel::destroyed( QObject* obj )
 {
-  removeProvider( dynamic_cast<KDevelop::IQuickOpenDataProvider*>(obj) );
+  removeProvider( dynamic_cast<KDevelop::QuickOpenDataProviderBase*>(obj) );
 }
 
 QModelIndex QuickOpenModel::index( int row, int column, const QModelIndex& parent) const
@@ -64,7 +63,7 @@ QModelIndex QuickOpenModel::parent( const QModelIndex& ) const
 int QuickOpenModel::rowCount( const QModelIndex& ) const
 {
   int count = 0;
-  foreach( KDevelop::IQuickOpenDataProvider* provider, m_providers )
+  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
     count += provider->itemCount();
 
   return count;

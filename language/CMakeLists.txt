@@ -36,7 +36,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/namespacealiasdeclaration.cpp
     duchain/dumpdotgraph.cpp
     duchain/contextowner.cpp
-    interfaces/iquickopendataprovider.cpp
+    interfaces/quickopendataprovider.cpp
 )
 
 
@@ -56,6 +56,8 @@ install(FILES
 install(FILES
     interfaces/ilanguagesupport.h
     interfaces/icodehighlighting.h
+    interfaces/quickopendataprovider.h
+    interfaces/iquickopen.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces
 )
 

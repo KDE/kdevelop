@@ -34,9 +34,9 @@ namespace KDevelop {
 /**
  * Reimplement his to represent single entries within the quickopen list.
  * */
-class IQuickOpenData : public KShared {
+class QuickOpenDataBase : public KShared {
   public:
-    virtual ~IQuickOpenData();
+    virtual ~QuickOpenDataBase();
 
     ///Return the text to be shown in the list for this item
     virtual QString text() const = 0;
@@ -51,7 +51,7 @@ class IQuickOpenData : public KShared {
     virtual QList<QVariant> highlighting() const;
 };
 
-typedef KSharedPtr<IQuickOpenData> QuickOpenDataPointer;
+typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;
 
 /**
  * Use this interface to provide custom quickopen-data to the quickopen-widget.
@@ -60,10 +60,10 @@ typedef KSharedPtr<IQuickOpenData> QuickOpenDataPointer;
  * After refiltering
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenDataProvider : public QObject {
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
   Q_OBJECT;
   public:
-    virtual ~IQuickOpenDataProvider();
+    virtual ~QuickOpenDataProviderBase();
 
     /**
      * For efficiency, all changes to the filter-text are provided by the following 3 difference-operations.
@@ -86,7 +86,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenDataProvider : public QObject {
      * quickopen list.
      *
      * For performance-reasons the underlying models should
-     * create the IQuickOpenData items on demand, because only
+     * create the QuickOpenDataBase items on demand, because only
      * those that will really be shown will be requested.
      * 
      * @param start First item to be returned

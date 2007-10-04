@@ -25,7 +25,7 @@
 namespace KDevelop
 {
 
-class IQuickOpenDataProvider;
+class QuickOpenDataProviderBase;
 
 /**
  * Interface to quickopen
@@ -41,14 +41,14 @@ public:
      * @param name Name of the provider, Example: "Files". The name will be shown in the GUI, so should be translated.
      * @param provider The provider. It does not need to be explicitly removed before its destruction.
      * */
-    virtual void registerProvider( const QString& name, IQuickOpenDataProvider* provider ) = 0;
+    virtual void registerProvider( const QString& name, QuickOpenDataProviderBase* provider ) = 0;
 
     /**
      * Remove provider.
      * @param provider The provider to remove
      * @return Whether a provider was removed. If false, the provider was not attached.
      * */
-    virtual bool removeProvider( IQuickOpenDataProvider* provider ) = 0;
+    virtual bool removeProvider( QuickOpenDataProviderBase* provider ) = 0;
 };
 
 }

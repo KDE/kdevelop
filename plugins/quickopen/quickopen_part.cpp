@@ -115,12 +115,12 @@ void QuickOpenPart::quickOpenClass()
   showQuickOpen( Classes );
 }
 
-void QuickOpenPart::registerProvider( const QString& name, KDevelop::IQuickOpenDataProvider* provider )
+void QuickOpenPart::registerProvider( const QString& name, KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_model->registerProvider( name, provider );
 }
 
-bool QuickOpenPart::removeProvider( KDevelop::IQuickOpenDataProvider* provider )
+bool QuickOpenPart::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_model->removeProvider( provider );
 }
