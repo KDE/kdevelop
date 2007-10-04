@@ -118,7 +118,7 @@ public:
     {
         if (m_view->isBusy())
             return;
-        m_model->dirLister()->openUrl(url, false, true);
+        m_model->dirLister()->openUrl(url, KDirLister::Reload);
     }
 
     void goToUrl(const QString &url)
