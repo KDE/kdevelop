@@ -12,6 +12,7 @@ Name[pt_BR]=Modelo de Autotools Vazio
 Name[sr]=Празан шаблон Autotools-а
 Name[sr@Latn]=Prazan šablon Autotools-a
 Name[sv]=Tom mall för Autotools
+Name[zh_TW]=空的 Autotools 樣板
 Icon=automakeempty.png
 Category=C++/Automake project
 Comment=Generate an empty Automake based application

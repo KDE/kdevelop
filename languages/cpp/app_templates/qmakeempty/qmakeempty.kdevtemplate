@@ -12,6 +12,7 @@ Name[pt_BR]=Modelo do QMake Vazio
 Name[sr]=Празан шаблон QMake-а
 Name[sr@Latn]=Prazan šablon QMake-a
 Name[sv]=Tom Qmake-mall
+Name[zh_TW]=空的 QMake 樣本
 Icon=qmakeempty.png
 Category=C++/QMake project
 Comment=Generate an empty QMake based application (crossplatform compatible) - Needs Qt
@@ -26,6 +27,7 @@ Comment[pt_BR]=Gera uma aplicação vazia baseada no QMake (compatível com vár
 Comment[sr]=Прави празан шаблон на основи QMake-а (прекоплатформски компатибилан) — захтева Qt
 Comment[sr@Latn]=Pravi prazan šablon na osnovi QMake-a (prekoplatformski kompatibilan) — zahteva Qt
 Comment[sv]=Skapar ett tomt Qmake-baserat program (fungerar på andra plattformar). Kräver Qt.
+Comment[zh_TW]=產生一個空的以 QMake 為基礎的（跨平台相容）應用程式─需要 Qt
 FileTemplates=h,CStyle,cpp,CStyle
 Archive=qmakeempty.tar.gz
 
@@ -53,6 +55,7 @@ Comment[pt_BR]=Foi criada uma aplicação baseada no Qmake em %{dest}
 Comment[sr]=Програм на основу QMake-а направљен је у %{dest}
 Comment[sr@Latn]=Program na osnovu QMake-a napravljen je u %{dest}
 Comment[sv]=Ett Qmake-baserat program skapades i %{dest}
+Comment[zh_TW]=一個以 Qmake 為基礎的應用程式已建立於 %{dest}
 
 [QMAKE]
 Type=value
@@ -70,6 +73,7 @@ Comment[pt_BR]=Localização Absoluta do QMake.
 Comment[sr]=Апсолутна путања до QMake-а.
 Comment[sr@Latn]=Apsolutna putanja do QMake-a.
 Comment[sv]=Absolut sökväg till Qmake.
+Comment[zh_TW]=QMake 的絕對路徑
 Default=
 
 [DESIGNER]
@@ -88,4 +92,5 @@ Comment[pt_BR]=Localização Absoluta do Designer.
 Comment[sr]=Апсолутна путања до Designer-а.
 Comment[sr@Latn]=Apsolutna putanja do Designer-a.
 Comment[sv]=Absolut sökväg till Designer.
+Comment[zh_TW]=設計家（Designer）的絕對路徑
 Default=

@@ -12,6 +12,7 @@ Name[pt_BR]=Modelo de Makefile Personalizada Vazio
 Name[sr]=Празан шаблон посебног справифајла
 Name[sr@Latn]=Prazan šablon posebnog spravifajla
 Name[sv]=Tom mall för egen byggfil
+Name[zh_TW]=空的自訂 Makefile 樣板
 Icon=makefileempty.png
 Category=C++
 Comment=Generate an empty Custom Makefile based application
@@ -59,4 +60,5 @@ Comment[pt_BR]=Foi criada uma aplicação baseada em Makefile's personalizadas e
 Comment[sr]=Програм на основу посебног справифајла направљен је у %{dest}
 Comment[sr@Latn]=Program na osnovu posebnog spravifajla napravljen je u %{dest}
 Comment[sv]=Ett program baserat på en egen byggfil skapades i %{dest}
+Comment[zh_TW]=一個以自訂 Makefile 為基礎的應用程式已建立於 %{dest}
 

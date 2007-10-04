@@ -15,6 +15,7 @@ Name[pt_BR]=Interface de Abertura Rápida
 Name[sr]=Интерфејс брзог отварања
 Name[sr@Latn]=Interfejs brzog otvaranja
 Name[sv]=Snabböppningsgränssnitt
+Name[zh_TW]=快速開啟介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
@@ -37,6 +38,7 @@ Name[pt_BR]=Interface de Abertura Rápida
 Name[sr]=Интерфејс брзог отварања
 Name[sr@Latn]=Interfejs brzog otvaranja
 Name[sv]=Snabböppningsgränssnitt
+Name[zh_TW]=快速開啟介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
