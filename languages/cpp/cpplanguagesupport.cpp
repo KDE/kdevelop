@@ -47,7 +47,8 @@
 #include <ilanguagecontroller.h>
 #include <iprojectcontroller.h>
 #include <ibuildsystemmanager.h>
-
+#include <iquickopen.h>
+#include <iplugincontroller.h>
 #include <projectmodel.h>
 #include <backgroundparser.h>
 #include <duchain.h>
@@ -70,6 +71,7 @@
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
+#include "quickopen.h"
 
 //#define DEBUG
 
@@ -94,6 +96,15 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
 
+    m_quickOpenDataProvider = new IncludeFileDataProvider();
+
+    IQuickOpen* quickOpen = core()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
+
+    if( quickOpen )
+        quickOpen->registerProvider( i18n("Imports"), i18n("Files"), m_quickOpenDataProvider );
+    else
+        kWarning() << "Quickopen not found";
+    
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
     m_standardMacros = new Cpp::MacroSet;
@@ -141,6 +152,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 CppLanguageSupport::~CppLanguageSupport()
 {
     m_self = 0;
+
+    delete m_quickOpenDataProvider;
+    
     // Remove any documents waiting to be parsed from the background paser.
     core()->languageController()->backgroundParser()->clear(this);
 

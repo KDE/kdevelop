@@ -30,6 +30,7 @@ class CppHighlighting;
 class CppCodeCompletion;
 class AST;
 class TranslationUnitAST;
+class IncludeFileDataProvider;
 
 namespace KParts { class Part; }
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; }
@@ -88,6 +89,7 @@ private:
     Cpp::MacroSet *m_standardMacros;
     QStringList *m_standardIncludePaths;
     CppTools::IncludePathResolver *m_includeResolver;
+    IncludeFileDataProvider* m_quickOpenDataProvider;
 };
 
 #endif
