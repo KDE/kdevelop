@@ -36,6 +36,7 @@
 #include "iqmakebuilder.h"
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kdebug.h>
 #include <projectmodel.h>
 
 #include "qmakemodelitems.h"
