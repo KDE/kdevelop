@@ -24,8 +24,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kio/job.h>
 #include <kio/netaccess.h>
-
 namespace KDevelop
 {
 
@@ -212,7 +212,8 @@ KUrl::List Profile::resources(const QString &nameFilter)
 void Profile::addResource(const KUrl &url)
 {
     QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevplatform/profiles"+dirName(), true);
-    KIO::NetAccess::file_copy(url, KUrl(saveLocation), -1, true);
+    KIO::FileCopyJob * job = KIO::file_copy(url, KUrl(saveLocation), -1, KIO::Overwrite);
+    job->exec();
 }
 
 QList<Profile*> Profile::children() const
