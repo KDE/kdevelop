@@ -20,6 +20,7 @@
 
 #include "cmakebuilddircreator.h"
 #include <QScrollBar>
+#include <kdebug.h>
 #include "ui_cmakebuilddircreator.h"
 
 CMakeBuildDirCreator::CMakeBuildDirCreator(const QString& srcDir, QWidget* parent, Qt::WindowFlags f)

@@ -17,6 +17,8 @@
 #include <ktar.h>
 #endif //Q_WS_WIN
 #include <kurl.h>
+#include <kdebug.h>
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
