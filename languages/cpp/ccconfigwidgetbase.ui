@@ -68,9 +68,6 @@
                                         <property name="text">
                                             <string>A&amp;utomatic code completion:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+U</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>true</bool>
                                         </property>
@@ -145,9 +142,6 @@
                                             <string>List &amp;global items when
 performing automatic completion</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+G</string>
-                                        </property>
                                         <property name="toolTip" stdset="0">
                                             <string>When this is checked, members of all 
 higher namespaces will be included in 
@@ -174,9 +168,6 @@ and create a significant delay.</string>
                                         <property name="text">
                                             <string>&amp;Do complete member-type-evaluation</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+D</string>
-                                        </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Completely evaluate member-types of 
 template-classes (this includes types 
@@ -198,9 +189,6 @@ completion-box.</string>
                                         </property>
                                         <property name="text">
                                             <string>Do complete argument-type-e&amp;valuation</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+V</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Completely evaluate the function-argument-types 
@@ -232,9 +220,6 @@ completion-box.</string>
                                         </property>
                                         <property name="text">
                                             <string>Auto&amp;matic arguments hint:</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+M</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -502,9 +487,6 @@ Note: Parsing may become very slow when this is enabled
                                 </property>
                                 <property name="text">
                                     <string>Advanced include-path resolution using make(e&amp;xperimental)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+X</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Try to resolve the include-path by getting the command that would be used 
