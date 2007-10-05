@@ -11,6 +11,7 @@
 #include "importdialog.h"
 
 #include <KMessageBox>
+#include <kdebug.h>
 
 #include "cvspart.h"
 #include "cvsproxy.h"

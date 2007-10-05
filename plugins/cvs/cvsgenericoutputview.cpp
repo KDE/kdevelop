@@ -10,6 +10,8 @@
 
 #include "cvsgenericoutputview.h"
 
+#include <kdebug.h>
+
 #include "cvsjob.h"
 
 CvsGenericOutputView::CvsGenericOutputView(CvsPart *part, CvsJob* job, QWidget* parent)

@@ -11,6 +11,7 @@
 #include "cvsmainview.h"
 
 #include <KLocale>
+#include <kdebug.h>
 
 #include "cvspart.h"
 #include "cvsjob.h"

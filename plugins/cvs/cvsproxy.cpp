@@ -12,10 +12,12 @@
 
 #include <QFileInfo>
 #include <QDir>
+#include <QDateTime>
 #include <KLocale>
 #include <KUrl>
 #include <KMessageBox>
 #include <kshell.h>
+#include <kdebug.h>
 
 #include "cvsjob.h"
 

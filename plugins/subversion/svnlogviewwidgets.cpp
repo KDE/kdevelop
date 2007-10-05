@@ -21,6 +21,7 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kurl.h>
+#include <kdebug.h>
 #include <QList>
 #include <QVariant>
 #include <QModelIndex>

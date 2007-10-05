@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "projectconfigskeleton.h"
 #include "iproject.h"
 
+#include <kdebug.h>
 #include <kio/netaccess.h>
 
 namespace KDevelop
@@ -49,7 +50,7 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfig::Ptr config )
 void ProjectConfigSkeleton::setDeveloperTempFile( const QString& cfg )
 {
     d->m_developerTempFile = cfg;
-    config()->setExtraConfigFiles( QStringList() << cfg );
+    config()->addConfigSources( QStringList() << cfg );
     config()->reparseConfiguration();
     readConfig();
 }

@@ -22,6 +22,7 @@
 #include <KActionCollection>
 #include <KMessageBox>
 #include <KUrl>
+#include <kdebug.h>
 
 
 #include <iuicontroller.h>

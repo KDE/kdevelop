@@ -24,7 +24,8 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QString>
 
 #include <ksharedconfig.h>
-
+#include <kconfiggroup.h>
+#include <kdebug.h>
 
 namespace KDevelop
 {

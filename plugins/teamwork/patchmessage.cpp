@@ -194,7 +194,7 @@ void PatchData::saveInternal( OutArchive& arch, const uint /*version*/ ) {
         throw ( "the file \"" + url.prettyUrl() + "\" seems not to exist, or is not accessible" );
 
       auto_ptr<KIO::TransferJob> transfer( KIO::get
-                                             ( url, false, false ) );
+                                             ( url, KIO::NoReload, KIO::HideProgressInfo ) );
       if ( !transfer.get() )
         throw ( "could not create transfer-job for reading " + url.prettyUrl() );
       //transfer->setWindow( (QWidget*)KDevApi::self()->mainWindow()->main() );

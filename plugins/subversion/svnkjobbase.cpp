@@ -19,8 +19,10 @@
 #include "vcsannotation.h"
 #include "vcsdiff.h"
 #include <klocale.h>
+#include <kdebug.h>
 #include <QVariant>
 #include <QMap>
+#include <QTextStream>
 #include <QFile>
 
 class SvnKJobBase::Private

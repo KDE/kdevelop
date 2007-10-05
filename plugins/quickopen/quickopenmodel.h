@@ -27,7 +27,7 @@
 #include "expandingtree/expandingwidgetmodel.h"
 
 class QuickOpenModel : public ExpandingWidgetModel {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     QuickOpenModel( QWidget* parent );
     

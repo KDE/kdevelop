@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <klocale.h>
 #include <ktemporaryfile.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
 
 #include "shellextension.h"
 #include "partcontroller.h"

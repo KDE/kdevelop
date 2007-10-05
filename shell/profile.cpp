@@ -25,6 +25,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kio/job.h>
+#include <kconfiggroup.h>
 #include <kio/netaccess.h>
 namespace KDevelop
 {

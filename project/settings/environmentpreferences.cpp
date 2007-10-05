@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <kpluginloader.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 #include "environmentwidget.h"
 #include "projectconfigskeleton.h"
