@@ -488,7 +488,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   ///STEP 2: Search the output for include-paths
   QRegExp validRx( "\\b([cg]\\+\\+|gcc)" );
   if( validRx.search( fullOutput ) == -1 )
-    return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"").arg(workingDirectory).arg( source.getCommand(file, makeParameters) ).arg(fullOutput) );
+    return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\" Output: \"%3\"").arg(workingDirectory).arg( source.getCommand(file, makeParameters) ).arg(fullOutput) );
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;
