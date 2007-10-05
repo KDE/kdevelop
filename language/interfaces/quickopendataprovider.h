@@ -61,7 +61,7 @@ typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;
  * */
 
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     virtual ~QuickOpenDataProviderBase();
 
