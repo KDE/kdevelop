@@ -20,12 +20,14 @@
  */
 
 #include "quickopendataprovider.h"
+#include <QVariant>
 
 namespace KDevelop {
   QuickOpenDataBase::~QuickOpenDataBase() {
   }
   
   QList<QVariant> QuickOpenDataBase::highlighting() const {
+    return QList<QVariant>();
   }
 
   QuickOpenDataProviderBase::~QuickOpenDataProviderBase() {

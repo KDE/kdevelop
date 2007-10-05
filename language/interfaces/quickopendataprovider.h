@@ -32,9 +32,9 @@ class QStringList;
 namespace KDevelop {
 
 /**
- * Reimplement his to represent single entries within the quickopen list.
+ * Reimplement this to represent single entries within the quickopen list.
  * */
-class QuickOpenDataBase : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
   public:
     virtual ~QuickOpenDataBase();
 
