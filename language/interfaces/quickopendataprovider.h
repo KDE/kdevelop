@@ -58,6 +58,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
      * no icon will be shown.
      * */
     virtual QIcon icon() const;
+
+    /**
+     * Is called when the item should be executed.
+     *
+     * @param filterText Current content of the quickopen-dialogs filter line-edit.
+     *                   If this is changed, and false is returned, the content of the
+     *                   line-edit will be changed according to the new text.
+     * @return Whether the dialog should be closed.
+     * */
+    virtual bool execute( QString& filterText ) = 0;
 };
 
 typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;

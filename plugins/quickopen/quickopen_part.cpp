@@ -24,6 +24,8 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QHeaderView>
 #include <QDialog>
+#include <QKeyEvent>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -41,6 +43,88 @@
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPart>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
+
+    /**
+ * Will be deleted once the parent is deleted.
+ * The parent must be a dialog.
+ * */
+class UIHandler : public QObject {
+  Q_OBJECT;
+  public:
+  UIHandler( QDialog* d, QuickOpenModel* model ) : QObject( d ), m_dialog(d), m_model(model) {
+    
+    o.setupUi( d );
+    o.list->header()->hide();
+    o.list->setRootIsDecorated( false );
+
+    o.searchLine->installEventFilter( this );
+    
+    connect( o.searchLine, SIGNAL(textChanged( const QString& )), m_model, SLOT(textChanged( const QString& )) );
+    connect( d, SIGNAL(accepted()), this, SLOT(accept()) );
+    
+    m_model->restart();
+    m_model->setTreeView( o.list );
+    
+    o.list->setModel( m_model );
+
+    d->show();
+  }
+
+  private slots:
+    void accept() {
+      kDebug() << "accepting";
+      QString filterText = o.searchLine->text();
+      m_model->execute( o.list->currentIndex(), filterText );
+    }
+  
+  private:
+  
+
+  virtual bool eventFilter ( QObject * watched, QEvent * event )
+  {
+    if( watched == o.searchLine ) {
+      if( event->type() == QEvent::KeyPress  ) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+
+        switch( keyEvent->key() ) {
+          case Qt::Key_Down:
+            QApplication::sendEvent( o.list, event );
+            return true;
+          case Qt::Key_Up:
+            QApplication::sendEvent( o.list, event );
+            return true;
+          case Qt::Key_Left: {
+            //Expand/unexpand
+            return false;
+          }
+          case Qt::Key_Right: {
+            //Expand/unexpand
+            return false;
+          }
+          case Qt::Key_Enter: {
+            kDebug() << "execute";
+            QString filterText = o.searchLine->text();
+            if( m_model->execute( o.list->currentIndex(), filterText ) ) {
+              m_dialog->deleteLater();
+            } else {
+              //Maybe the filter-text was changed:
+              if( filterText != o.searchLine->text() ) {
+                o.searchLine->setText( filterText );
+              }
+            }
+            return true;
+          }
+        }
+      }
+    }
+    
+    return false;
+  }
+
+  QDialog* m_dialog; //Warning: m_dialog is also the parent
+  Ui::QuickOpen o;
+  QuickOpenModel* m_model;
+};
 
 QuickOpenPart::QuickOpenPart(QObject *parent,
                                  const QVariantList&)
@@ -89,25 +173,16 @@ void QuickOpenPart::unload()
 
 void QuickOpenPart::showQuickOpen( ModelTypes modes )
 {
+  kDebug() <<  "showing quickopen";
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
+
   d->setAttribute( Qt::WA_DeleteOnClose, true );
   
-  Ui::QuickOpen o;
-  o.setupUi( d );
-  o.list->header()->hide();
-  o.list->setRootIsDecorated( false );
-
-  connect( o.searchLine, SIGNAL(textChanged( const QString& )), m_model, SLOT(textChanged( const QString& )) );
-  
-  m_model->restart();
-  m_model->setTreeView( o.list );
-  
-  o.list->setModel( m_model );
-  
-  d->show();
+  UIHandler* u = new UIHandler( d, m_model );
   
   m_model->setTreeView( 0 );
 }
+
 
 void QuickOpenPart::quickOpen()
 {

@@ -48,6 +48,17 @@ class QuickOpenModel : public ExpandingWidgetModel {
     int columnCount( const QModelIndex& ) const;
     QVariant data( const QModelIndex&, int ) const;
 
+    /**
+     * Tries to execute the item currently selected.
+     * Returns true if the quickopen-dialog should be closed.
+     * @param filterText Should be the current content of the filter line-edit.
+     *
+     * If this returns false, and filterText was changed, the change must be put
+     * into the line-edit. That way items may execute by changing the content
+     * of the line-edit.
+     * */
+    bool execute( const QModelIndex& index, QString& filterText );
+    
     //The expandingwidgetmodel needs access to the tree-view
     void setTreeView( QTreeView* view );
   public slots:

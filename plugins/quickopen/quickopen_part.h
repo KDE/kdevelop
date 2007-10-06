@@ -27,6 +27,7 @@
 #include <QtCore/QVariant>
 
 #include <quickopendataprovider.h>
+#include "ui_quickopen.h"
 
 class QuickOpenModel;
 
@@ -66,6 +67,7 @@ public slots:
     void quickOpenClass();
     
   private:
+
     QuickOpenModel* m_model;
 };
 

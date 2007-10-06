@@ -155,3 +155,22 @@ void QuickOpenModel::setTreeView( QTreeView* view ) {
 int QuickOpenModel::contextMatchQuality(const QModelIndex & index) const {
   return -1;
 }
+
+bool QuickOpenModel::execute( const QModelIndex& index, QString& filterText )
+{
+  kDebug() << "executing model";
+  if( !index.isValid() ) {
+    kWarning() << "Invalid index executed";
+    return false;
+  }
+  
+  QuickOpenDataPointer item = getItem( index.row() );
+
+  if( item ) {
+    return item->execute( filterText );
+  }else{
+    kWarning() << "Got no item for row " << index.row() << " ";
+  }
+
+  return false;
+}
