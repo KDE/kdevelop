@@ -71,6 +71,24 @@ public slots:
     QuickOpenModel* m_model;
 };
 
+class QuickOpenWidgetHandler : public QObject {
+  Q_OBJECT;
+  public:
+  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model );
+  
+  private slots:
+  void accept();
+  void textChanged( const QString& str );
+  
+  private:
+  void callRowSelected();
+  
+  virtual bool eventFilter ( QObject * watched, QEvent * event );
+  QDialog* m_dialog; //Warning: m_dialog is also the parent
+  Ui::QuickOpen o;
+  QuickOpenModel* m_model;
+};
+
 #endif // DUCHAINVIEW_PART_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
