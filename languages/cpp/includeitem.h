@@ -28,7 +28,7 @@ struct IncludeItem {
   bool isDirectory;
   ///The name of this include-item, starting behind basePath.
   QString name;
-  ///The path this item was/is included from.
+  ///basePath + name = Absolute path of file
   KUrl basePath;
   ///Which path in the include-path was used to find this item?
   int pathNumber;

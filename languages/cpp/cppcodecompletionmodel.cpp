@@ -59,6 +59,37 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+TopDUContext* getCompletionContext( const KUrl& url )
+{
+  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
+  KDevelop::TopDUContext* top = KDevelop::DUChain::self()->chainForDocument(url, env);
+  delete env;
+
+  if( !top ) {
+    kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
+    top = DUChain::self()->chainForDocument(url);
+  }
+
+  if(top && top->flags() & TopDUContext::ProxyContextFlag)
+  {
+    if(!top->importedParentContexts().isEmpty())
+    {
+      if(top->importedParentContexts().count() != 1)
+        kDebug(9007) << "WARNING: Proxy-context has more than one content-contexts, this should never happen";
+      
+      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
+      
+      if(!top)
+        kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
+      
+    } else {
+      kDebug(9007) << "ERROR: Proxy-context has no content-context";
+    }
+  }
+  
+  return top;
+}
+
 //Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
 AbstractType::Ptr effectiveType( Declaration* decl )
 {
@@ -92,38 +123,13 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   m_navigationWidgets.clear();
 
   KUrl url = view->document()->url();
-  TopDUContext* top = 0;
   
   if( !KDevelop::DUChain::lock()->lockForRead(400) ) {
     kDebug(9007) << "could not lock du-chain in time" << endl;
     return;
   }
-  
-  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
-  top = KDevelop::DUChain::self()->chainForDocument(url, env);
-  delete env;
 
-  if( !top ) {
-    kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
-    top = DUChain::self()->chainForDocument(url);
-  }
-
-  if(top && top->flags() & TopDUContext::ProxyContextFlag)
-  {
-    if(!top->importedParentContexts().isEmpty())
-    {
-      if(top->importedParentContexts().count() != 1)
-        kDebug(9007) << "WARNING: Proxy-context has more than one content-contexts, this should never happen";
-      
-      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
-      
-      if(!top)
-        kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
-      
-    } else {
-      kDebug(9007) << "ERROR: Proxy-context has no content-context";
-    }
-  }
+  TopDUContext* top = getCompletionContext( url );
   
   if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;

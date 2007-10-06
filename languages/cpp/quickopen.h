@@ -23,16 +23,19 @@
 #define CPP_QUICKOPEN_H
 
 #include <quickopendataprovider.h>
+#include <quickopenfilter.h>
 #include <kurl.h>
+#include <duchainpointer.h>
+#include "includeitem.h"
 
 class IncludeFileData : public KDevelop::QuickOpenDataBase {
   public:
-    IncludeFileData( const KUrl& file, bool isDir = false );
+    IncludeFileData( const Cpp::IncludeItem& item );
     
     virtual QString text() const;
     virtual QString htmlDescription() const;
   private:
-    KUrl m_file;
+    Cpp::IncludeItem m_item;
     bool m_isDirectory;
 };
 
@@ -42,14 +45,23 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
  * also searches sub-directories if the typed text wants it.
  * */
 
-class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase {
+class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::Filter<Cpp::IncludeItem> {
   public:
     virtual void setFilterText( const QString& text );
     virtual void reset();
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
+  private slots:
+    void documentDestroyed( QObject* obl );
   private:
-    QString m_oldText;
+
+    //Reimplemented from Filter<..>
+    virtual QString itemText( const Cpp::IncludeItem& data ) const;
+
+    KUrl m_baseUrl;
+    QString m_lastSearchedPrefix;
+    
+    KDevelop::DUContextPointer m_duContext;
 };
 
 #endif
