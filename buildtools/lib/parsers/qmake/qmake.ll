@@ -179,6 +179,14 @@ cont              \\{ws}*{newline}
     return Parser::token::token::COLON;
 }
 
+
+<vallist>{ws}{newline} {
+    BEGIN(INITIAL);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    setLineEndingFromString( mylval->value );
+    return Parser::token::token::NEWLINE;
+}
+
 <vallist,INITIAL>{newline} {
     BEGIN(INITIAL);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
