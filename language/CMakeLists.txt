@@ -57,6 +57,7 @@ install(FILES
     interfaces/ilanguagesupport.h
     interfaces/icodehighlighting.h
     interfaces/quickopendataprovider.h
+    interfaces/quickopenfilter.h
     interfaces/iquickopen.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces
 )

@@ -22,9 +22,14 @@
 #include "quickopendataprovider.h"
 #include <QVariant>
 
+#include <QIcon>
+
 namespace KDevelop {
   QuickOpenDataBase::~QuickOpenDataBase() {
   }
+    QIcon QuickOpenDataBase::icon() const {
+      return QIcon();
+    }
   
   QList<QVariant> QuickOpenDataBase::highlighting() const {
     return QList<QVariant>();

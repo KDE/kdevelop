@@ -26,8 +26,10 @@
 
 #include <ksharedptr.h>
 #include <languageexport.h>
+
 class QString;
 class QStringList;
+class QIcon;
 
 namespace KDevelop {
 
@@ -49,6 +51,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
      * special highlighting will be applied.
      * */
     virtual QList<QVariant> highlighting() const;
+
+    /**
+     * May return an icon to mark the item in the quickopen-list.
+     * The standard-implementation returns an invalid item, which means that
+     * no icon will be shown.
+     * */
+    virtual QIcon icon() const;
 };
 
 typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;
@@ -56,8 +65,8 @@ typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;
 /**
  * Use this interface to provide custom quickopen-data to the quickopen-widget.
  *
- * One general assumption is always made:
- * After refiltering
+ * If possible, you should use KDevelop::Filter (@file quickopenfilter.h )
+ * to implement the actual filtering, so it is consistent.
  * */
 
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {

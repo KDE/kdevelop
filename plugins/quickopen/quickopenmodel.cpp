@@ -18,6 +18,7 @@
 
 #include "quickopenmodel.h"
 
+#include <ktexteditor/codecompletionmodel.h>
 #include <kdebug.h>
 
 using namespace KDevelop;
@@ -107,6 +108,8 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
   switch( role ) {
     case Qt::DisplayRole:
       return d->text();
+    case KTextEditor::CodeCompletionModel::ItemSelected:
+      return d->htmlDescription();
   }
   
   return ExpandingWidgetModel::data( index, role );
