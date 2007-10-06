@@ -46,6 +46,23 @@ QString IncludeFileData::text() const
   return m_item.name;
 }
 
+bool IncludeFileData::execute( QString& filterText ) {
+  if( m_item.isDirectory ) {
+    //Change the filter-text to match the sub-directory
+    KUrl u( filterText );
+    u.setFileName( m_item.name );
+    filterText = u.path( KUrl::AddTrailingSlash );
+    return false;
+  } else {
+    KUrl u( m_item.basePath );
+    u.addPath( m_item.name );
+    CppLanguageSupport::self()->core()->documentController()->openDocument( u );
+
+    return true;
+  }
+}
+
+
 QString IncludeFileData::htmlDescription() const
 {
   KUrl path = m_item.basePath;

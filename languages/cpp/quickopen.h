@@ -34,6 +34,9 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
     
     virtual QString text() const;
     virtual QString htmlDescription() const;
+
+    bool execute( QString& filterText );
+    
   private:
     Cpp::IncludeItem m_item;
     bool m_isDirectory;
