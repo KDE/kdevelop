@@ -72,7 +72,7 @@ public slots:
 };
 
 class QuickOpenWidgetHandler : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
   public:
   /**
    * @param initialItems List of items that should initially be enabled in the quickopen-list. If empty, all are enabled.

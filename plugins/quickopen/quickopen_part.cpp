@@ -36,6 +36,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kshortcut.h>
+#include <kdebug.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
