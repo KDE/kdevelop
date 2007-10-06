@@ -38,117 +38,53 @@
      <item>
       <layout class="QHBoxLayout" >
        <item>
-        <widget class="KButtonGroup" name="scopeGroup" >
+        <widget class="QGroupBox" name="scopeGroup" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
          </property>
          <property name="title" >
           <string>Scope:</string>
          </property>
-         <layout class="QVBoxLayout" >
-          <property name="leftMargin" >
-           <number>3</number>
-          </property>
-          <property name="topMargin" >
-           <number>3</number>
-          </property>
-          <property name="rightMargin" >
-           <number>3</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>3</number>
-          </property>
-          <item>
-           <widget class="QRadioButton" name="scopeEverything" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>&amp;Everything</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="scopeOpenProjects" >
-            <property name="text" >
-             <string>Open &amp;projects</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="scopeTranslationUnit" >
-            <property name="text" >
-             <string>&amp;Translation unit</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="alignment" >
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="KButtonGroup" name="itemsGroup" >
+        <widget class="QGroupBox" name="itemsGroup" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize" >
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="title" >
           <string>Items:</string>
          </property>
-         <layout class="QVBoxLayout" >
-          <property name="leftMargin" >
-           <number>3</number>
-          </property>
-          <property name="topMargin" >
-           <number>3</number>
-          </property>
-          <property name="rightMargin" >
-           <number>3</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>3</number>
-          </property>
-          <item>
-           <widget class="QRadioButton" name="itemsFiles" >
-            <property name="text" >
-             <string>&amp;Files</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="itemsClasses" >
-            <property name="text" >
-             <string>&amp;Classes</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="itemsFunctions" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>Fu&amp;nctions</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="alignment" >
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -168,12 +104,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KButtonGroup</class>
-   <extends>QGroupBox</extends>
-   <header>kbuttongroup.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>ExpandingTree</class>
    <extends>QTreeView</extends>

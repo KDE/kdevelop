@@ -25,18 +25,48 @@ using namespace KDevelop;
 
 QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent )
 {
+  
+}
+
+QStringList QuickOpenModel::allScopes() const
+{
+  QStringList scopes;
+  foreach( const ProviderEntry& provider, m_providers )
+    if( !scopes.contains( provider.scope ) )
+      scopes << provider.scope;
+  
+  return scopes;
+}
+
+QStringList QuickOpenModel::allTypes() const
+{
+  QStringList types;
+  foreach( const ProviderEntry& provider, m_providers )
+    if( !types.contains( provider.type ) )
+      types << provider.type;
+  
+  return types;
 }
 
 void QuickOpenModel::registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
 {
-  m_providers.insert( type, provider );
+  ProviderEntry e;
+  e.scope = scope;
+  e.type = type;
+  e.provider = provider;
+  
+  m_providers.insert( type, e );
+  
   connect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
+
+  restart();
 }
 
 bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
 {
+  restart();
   for( ProviderMap::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
-    if( *it == provider ) {
+    if( (*it).provider == provider ) {
       m_providers.erase( it );
       disconnect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
       return true;
@@ -45,10 +75,27 @@ bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provid
   return false;
 }
 
+void QuickOpenModel::enableProviders( const QStringList& items, const QStringList& scopes )
+{
+  kDebug() << "params " << items << " " << scopes;
+  for( ProviderMap::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
+    if( ( scopes.isEmpty() || scopes.contains( (*it).scope ) ) && ( items.contains( (*it).type ) || items.isEmpty() ) ) {
+      kDebug() << "enabling " << (*it).type << " " << (*it).scope;
+      (*it).enabled = true;
+    } else {
+      kDebug() << "disabling " << (*it).type << " " << (*it).scope;
+      (*it).enabled = false;
+    }
+  }
+  
+  restart();
+}
+
 void QuickOpenModel::textChanged( const QString& str )
 {
-  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
-    provider->setFilterText( str );
+  foreach( const ProviderEntry& provider, m_providers )
+    if( provider.enabled )
+      provider.provider->setFilterText( str );
   
   m_cachedData.clear();
   clearExpanding();
@@ -57,8 +104,9 @@ void QuickOpenModel::textChanged( const QString& str )
 
 void QuickOpenModel::restart()
 {
-  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
-    provider->reset();
+  foreach( const ProviderEntry& provider, m_providers )
+    if( provider.enabled )
+      provider.provider->reset();
   
   m_cachedData.clear();
   clearExpanding();
@@ -87,8 +135,9 @@ int QuickOpenModel::rowCount( const QModelIndex& i ) const
     return 0;
   
   int count = 0;
-  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers )
-    count += provider->itemCount();
+  foreach( const ProviderEntry& provider, m_providers )
+    if( provider.enabled )
+      count += provider.provider->itemCount();
 
   return count;
 }
@@ -118,10 +167,12 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
   ///@todo mix all the models alphabetically here. For now, they are simply ordered.
 
-  foreach( KDevelop::QuickOpenDataProviderBase* provider, m_providers ) {
-    if( row < provider->itemCount() )
+  foreach( const ProviderEntry& provider, m_providers ) {
+    if( !provider.enabled )
+      continue;
+    if( row < provider.provider->itemCount() )
     {
-      QList<QuickOpenDataPointer> items = provider->data( row, row+1 );
+      QList<QuickOpenDataPointer> items = provider.provider->data( row, row+1 );
       
       if( items.isEmpty() )
       {
@@ -131,7 +182,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
         return items.first();
       }
     } else {
-      row -= provider->itemCount();
+      row -= provider.provider->itemCount();
     }
   }
 

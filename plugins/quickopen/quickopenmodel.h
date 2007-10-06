@@ -40,6 +40,20 @@ class QuickOpenModel : public ExpandingWidgetModel {
      * */
     bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
 
+    ///Returns a list of all scopes that a registered through some providers
+    QStringList allScopes() const;
+    ///Returns a list of all types that a registered through some providers
+    QStringList allTypes() const;
+
+    /**
+     * @param items The list of items that should be used.
+     * @param scopesThe list of scopes that should be used.
+     
+    * When this is called, the state is restart()ed.
+     * */
+    void enableProviders( const QStringList& items, const QStringList& scopes );
+    
+    ///Reset all providers, unexpand everything, empty caches.
     void restart();
 
     QModelIndex index( int, int, const QModelIndex& parent ) const;
@@ -58,7 +72,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
      * of the line-edit.
      * */
     bool execute( const QModelIndex& index, QString& filterText );
-    
+
     //The expandingwidgetmodel needs access to the tree-view
     void setTreeView( QTreeView* view );
   public slots:
@@ -79,8 +93,16 @@ class QuickOpenModel : public ExpandingWidgetModel {
     mutable DataList m_cachedData;
 
     QTreeView* m_treeView;
+
+    struct ProviderEntry {
+      ProviderEntry() : enabled(false) {
+      }
+      bool enabled;
+      QString scope, type;
+      KDevelop::QuickOpenDataProviderBase* provider;
+    };
     
-    typedef QMultiMap< QString, KDevelop::QuickOpenDataProviderBase* > ProviderMap;
+    typedef QMultiMap< QString, ProviderEntry > ProviderMap;
     ProviderMap m_providers;
 };
 

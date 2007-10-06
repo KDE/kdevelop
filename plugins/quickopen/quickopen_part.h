@@ -74,11 +74,17 @@ public slots:
 class QuickOpenWidgetHandler : public QObject {
   Q_OBJECT;
   public:
-  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model );
+  /**
+   * @param initialItems List of items that should initially be enabled in the quickopen-list. If empty, all are enabled.
+   * @param initialScopes List of scopes that should initially be enabled in the quickopen-list. If empty, all are enabled.
+   * */
+  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes );
   
   private slots:
   void accept();
   void textChanged( const QString& str );
+  void updateProviders();
+  void doubleClicked ( const QModelIndex & index );
   
   private:
   void callRowSelected();

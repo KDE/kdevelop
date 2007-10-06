@@ -26,7 +26,9 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QCheckBox>
 
+#include <kbuttongroup.h>
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -44,17 +46,57 @@
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPart>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
 
-QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model ) : QObject( d ), m_dialog(d), m_model(model) {
+QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes ) : QObject( d ), m_dialog(d), m_model(model) {
 
   o.setupUi( d );
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
 
+  QStringList allTypes = m_model->allTypes();
+  QStringList allScopes = m_model->allScopes();
+
+  QVBoxLayout *itemsLayout = new QVBoxLayout;
+  
+  foreach( QString type, allTypes )
+  {
+    QCheckBox* check = new QCheckBox( type );
+    itemsLayout->addWidget( check );
+
+    if( initialItems.isEmpty() || initialItems.contains( type ) )
+      check->setCheckState( Qt::Checked );
+  
+    connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
+  }
+
+  itemsLayout->addStretch( 1 );
+  o.itemsGroup->setLayout( itemsLayout );
+    
+  QVBoxLayout *scopesLayout = new QVBoxLayout;
+  
+  foreach( QString scope, allScopes )
+  {
+    QCheckBox* check = new QCheckBox( scope );
+    scopesLayout->addWidget( check );
+    
+    if( initialScopes.isEmpty() || initialScopes.contains( scope ) )
+      check->setCheckState( Qt::Checked );
+  
+    connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
+  }
+
+  scopesLayout->addStretch( 1 );
+  o.scopeGroup->setLayout( scopesLayout );
+  
   o.searchLine->installEventFilter( this );
+  o.list->installEventFilter( this );
 
   connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
   connect( d, SIGNAL(accepted()), this, SLOT(accept()) );
 
+  connect( o.list, SIGNAL(doubleClicked( const QModelIndex& )), this, SLOT(doubleClicked( const QModelIndex& )) );
+  
+  updateProviders();
+  
   m_model->restart();
   m_model->setTreeView( o.list );
 
@@ -62,6 +104,30 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
 
   d->show();
 }
+
+void QuickOpenWidgetHandler::updateProviders() {
+  QStringList checkedItems;
+  QStringList checkedScopes;
+  
+  foreach( QObject* obj, o.itemsGroup->children() ) {
+    QCheckBox* box = qobject_cast<QCheckBox*>( obj );
+    if( box ) {
+      if( box->checkState() == Qt::Checked )
+        checkedItems << box->text().remove('&');
+    }
+  }
+  
+  foreach( QObject* obj, o.scopeGroup->children() ) {
+    QCheckBox* box = qobject_cast<QCheckBox*>( obj );
+    if( box ) {
+      if( box->checkState() == Qt::Checked )
+        checkedScopes << box->text().remove('&');
+    }
+  }
+
+  m_model->enableProviders( checkedItems, checkedScopes );
+}
+
 
 void QuickOpenWidgetHandler::textChanged( const QString& str ) {
   m_model->textChanged( str );
@@ -87,42 +153,52 @@ void QuickOpenWidgetHandler::accept() {
   m_model->execute( o.list->currentIndex(), filterText );
 }
 
+void QuickOpenWidgetHandler::doubleClicked ( const QModelIndex & index ) {
+  QString filterText = o.searchLine->text();
+  if(  m_model->execute( index, filterText ) )
+    m_dialog->close();
+  else if( filterText != o.searchLine->text() )
+    o.searchLine->setText( filterText );
+}
+
+
 bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
 {
-  if( watched == o.searchLine ) {
-    if( event->type() == QEvent::KeyPress  ) {
-      QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+  if( event->type() == QEvent::KeyPress  ) {
+    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
-      switch( keyEvent->key() ) {
-        case Qt::Key_Down:
-        case Qt::Key_Up:
-        case Qt::Key_PageUp:
-        case Qt::Key_PageDown:
-        case Qt::Key_End:
-        case Qt::Key_Home:
-          QApplication::sendEvent( o.list, event );
-          callRowSelected();
-          return true;
-        case Qt::Key_Left: {
-          //Expand/unexpand
+    switch( keyEvent->key() ) {
+      case Qt::Key_Down:
+      case Qt::Key_Up:
+      case Qt::Key_PageUp:
+      case Qt::Key_PageDown:
+      case Qt::Key_End:
+      case Qt::Key_Home:
+        if(watched == o.list )
           return false;
-        }
-        case Qt::Key_Right: {
-          //Expand/unexpand
-          return false;
-        }
-        case Qt::Key_Enter: {
-          QString filterText = o.searchLine->text();
-          if( m_model->execute( o.list->currentIndex(), filterText ) ) {
-            m_dialog->deleteLater();
-          } else {
-            //Maybe the filter-text was changed:
-            if( filterText != o.searchLine->text() ) {
-              o.searchLine->setText( filterText );
-            }
+        QApplication::sendEvent( o.list, event );
+        callRowSelected();
+        return true;
+      case Qt::Key_Left: {
+        //Expand/unexpand
+        return false;
+      }
+      case Qt::Key_Right: {
+        //Expand/unexpand
+        return false;
+      }
+      case Qt::Key_Return:
+      case Qt::Key_Enter: {
+        QString filterText = o.searchLine->text();
+        if( m_model->execute( o.list->currentIndex(), filterText ) ) {
+          m_dialog->close();
+        } else {
+          //Maybe the filter-text was changed:
+          if( filterText != o.searchLine->text() ) {
+            o.searchLine->setText( filterText );
           }
-          return true;
         }
+        return true;
       }
     }
   }
@@ -181,8 +257,18 @@ void QuickOpenPart::showQuickOpen( ModelTypes modes )
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
 
   d->setAttribute( Qt::WA_DeleteOnClose, true );
+
+  QStringList initialItems;
+  if( modes & All ) {
+  } else if( modes & Files ) {
+    initialItems << i18n("Files");
+  } else if( modes & Functions ) {
+    initialItems << i18n("Functions");
+  } else if( modes & Classes ) {
+    initialItems << i18n("Classes");
+  }
   
-  QuickOpenWidgetHandler* u = new QuickOpenWidgetHandler( d, m_model );
+  QuickOpenWidgetHandler* u = new QuickOpenWidgetHandler( d, m_model, initialItems, QStringList() );
   
   m_model->setTreeView( 0 );
 }
