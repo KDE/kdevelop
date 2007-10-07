@@ -303,6 +303,7 @@ void QuickOpenPart::registerProvider( const QString& scope, const QString& type,
 bool QuickOpenPart::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_model->removeProvider( provider );
+  return true;
 }
 
 
