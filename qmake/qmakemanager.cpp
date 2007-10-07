@@ -29,6 +29,7 @@
 #include <kurl.h>
 #include <kio/job.h>
 #include <kprocess.h>
+#include <kdebug.h>
 
 #include <icore.h>
 #include <iplugincontroller.h>
