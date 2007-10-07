@@ -507,12 +507,13 @@ void SimpleMainWindow::gotoPreviousWindow()
 
 void SimpleMainWindow::gotoFirstWindow()
 {
-    m_activeTabWidget->setCurrentPage(0);
+    //@TODO: implement me
 }
 
 void SimpleMainWindow::gotoLastWindow()
 {
-    m_activeTabWidget->setCurrentPage(m_activeTabWidget->count() - 1);
+
+    //@TODO: implement me
 }
 
 void SimpleMainWindow::slotCoreInitialized()
