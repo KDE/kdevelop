@@ -8,9 +8,9 @@ Compiling instructions: http://www.kdevelop.org/index.html?filename=HEAD/branche
 
 KDevelop Platform API Documentation
 -------------------------------------
-API documentation is available from http://api.kde.org/4.0-api/kdevplatform-apidocs/index.html
+API documentation is available from http://api.kde.org/4.0-api/kdevelop-apidocs/index.html
 
-To build it by yourself, make sure you have KDE API documentation installed.
+To build it by yourself, make sure you have the kdelibs source available
 Run
 kdelibs/doc/api/doxygen.sh --doxdatadir=kdelibs/doc/common ./
 in the KDevelop top source directory to generate the API documentation. kdelibs
