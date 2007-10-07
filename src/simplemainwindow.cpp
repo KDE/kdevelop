@@ -507,13 +507,12 @@ void SimpleMainWindow::gotoPreviousWindow()
 
 void SimpleMainWindow::gotoFirstWindow()
 {
-    //@TODO: implement me
+    //@TODO: Implement me
 }
 
 void SimpleMainWindow::gotoLastWindow()
 {
-
-    //@TODO: implement me
+    //@TODO: Implement me
 }
 
 void SimpleMainWindow::slotCoreInitialized()
