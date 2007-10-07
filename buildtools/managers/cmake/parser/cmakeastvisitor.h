@@ -1,3 +1,4 @@
+
 /* KDevelop CMake Support
  *
  * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
@@ -47,6 +48,7 @@ class FindLibraryAst;
 class FindFileAst;
 class IfAst;
 class ExecProgramAst;
+class ExecuteProcessAst;
 class FileAst;
 class MessageAst;
 class MathAst;
@@ -79,6 +81,7 @@ class CMakeAstVisitor {
         virtual int visit( const IncludeAst * ) = 0;
         virtual int visit( const SetAst * ) = 0;
         virtual int visit( const ProjectAst * ) = 0;
+	virtual int visit( const ExecuteProcessAst * ) = 0;
         virtual int visit( const IncludeDirectoriesAst * ) = 0;
         virtual int visit( const MacroCallAst * ) = 0;
         virtual int visit( const FindPackageAst * ) = 0;

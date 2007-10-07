@@ -321,12 +321,14 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
     KUrl bin(cmakeBin);
     bin=bin.upUrl();
     bin=bin.upUrl();
-    bin.cd("share/cmake-2.4/Modules");
-//     QStringList env = CMakeProjectVisitor::envVarDirectories("CMAKEDIR");
-// 
-//     QStringList::iterator it=env.begin();
-//     for(; it!=env.end(); ++it)
-//         *it += "/Modules";
+    
+    QString version=executeProcess(cmakeBin, QStringList("--version"));
+    QRegExp rx("[a-z* ]*([0-9.]*)-[0-9]*");
+    rx.indexIn(version);
+    QString versionNumber = rx.capturedTexts()[1];
+    
+    bin.cd(QString("share/cmake-%1/Modules").arg(versionNumber));
+
     kDebug(9032) << "guessing: " << bin.toLocalFile();
     return QStringList(bin.toLocalFile());
 }

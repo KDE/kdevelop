@@ -1,3 +1,4 @@
+
 /* KDevelop CMake Support
  *
  * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
@@ -218,7 +219,7 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //FIXME: Must deal with ENV{something} case
-    m_vars->insert(set->variableName(), resolveVariables(set->values(), m_vars));
+    m_vars->insert(set->variableName(), set->values());
     kDebug(9032) << "set:" << set->variableName() << "=" << m_vars->value(set->variableName()) << "...";
     return 1;
 }
@@ -334,7 +335,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     if(!haveToFind(pack->name()))
         return 1;
     const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
-    kDebug(9032) << "Find:" << pack->name() << "package.";
+    kDebug(9032) << "Find:" << pack->name() << "package." << m_modulePath;
 
     QString possib=pack->name();
     if(!possib.endsWith(".cmake"))
@@ -379,7 +380,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     if(!haveToFind(fprog->variableName()))
         return 1;
 
-    QStringList modulePath = resolveVariables(fprog->path(), m_vars);
+    QStringList modulePath = fprog->path();
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("PATH");
 
@@ -402,8 +403,8 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         return 1;
 
     bool error=false;
-    QStringList locationOptions = resolveVariables(fpath->path(), m_vars);
-    QStringList path, files=resolveVariables(fpath->filenames(), m_vars);
+    QStringList locationOptions = fpath->path();
+    QStringList path, files=fpath->filenames();
 
     kDebug(9032) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(QString p, files) {
@@ -430,8 +431,8 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         return 1;
 
     bool error=false;
-    QStringList locationOptions = resolveVariables(flib->path(), m_vars);
-    QStringList path, files=resolveVariables(flib->filenames(), m_vars);
+    QStringList locationOptions = flib->path();
+    QStringList path, files=flib->filenames();
 
     kDebug(9032) << "Find Library:" << flib->filenames();
     foreach(QString p, files) {
@@ -694,6 +695,51 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
     }
     return 1;
 }
+
+int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
+{
+    kDebug(9032) << "executing... " << exec->commands();
+    QList<KProcess*> procs;
+    foreach(QStringList args, exec->commands())
+    {
+        KProcess *p=new KProcess(), *prev=0;
+        if(!procs.isEmpty())
+        {
+            prev=procs.last();
+        }
+        p->setWorkingDirectory(exec->workingDirectory());
+        p->setOutputChannelMode(KProcess::MergedChannels);
+        QString execName=args.takeFirst();;
+        p->setProgram(execName, args);
+        p->start();
+        procs.append(p);
+        kDebug(9032) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+        
+        if(prev)
+        {
+            prev->setStandardOutputProcess(p);
+        }
+    }
+
+    foreach(KProcess* p, procs) {
+        if(!p->waitForFinished())
+        {
+            kDebug(9032) << "failed to execute:" << p;
+        }
+    }
+
+    if(!exec->outputVariable().isEmpty())
+    {
+        QByteArray b = procs.last()->readAllStandardOutput();
+        QString t;
+        t.prepend(b.trimmed());
+        m_vars->insert(exec->outputVariable(), QStringList(t.trimmed()));
+        kDebug(9032) << "executed " << exec->outputVariable() << "=" << t;
+    }
+    qDeleteAll(procs);
+    return 1;
+}
+
 
 int CMakeProjectVisitor::visit(const FileAst *file)
 {

@@ -882,9 +882,10 @@ bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         OutputFile,
         ErrorFile
     };
-    Action act;
+    Action act=None;
     foreach(CMakeFunctionArgument a, func.arguments) {
         QString val=a.value.toLower();
+        Action actAnt=act;
         if(val=="command") {
             m_commands.append(QStringList());
             act=Cmd;
@@ -904,47 +905,59 @@ bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             act=OutputFile;
         else if(val=="error_file")
             act=ErrorFile;
-        else { 
+        else if(val=="output_quiet")
+        {
+            m_isOutputQuiet=true;
             act=None;
-            if(val=="output_quiet")
-                m_isOutputQuiet=true;
-            else if(val=="error_quiet")
-                m_isErrorQuiet=true;
-            else if(val=="output_strip_trailing_whitespace")
-                m_isOutputStrip=true;
-            else if(val=="error_strip_trailing_whitespace")
-                m_isErrorStrip=true;
         }
+        else if(val=="error_quiet")
+        {
+            m_isErrorQuiet=true;
+            act=None;
+        }
+        else if(val=="output_strip_trailing_whitespace")
+        {
+            m_isOutputStrip=true;
+            act=None;
+        }
+        else if(val=="error_strip_trailing_whitespace")
+        {
+            m_isErrorStrip=true;
+            act=None;
+        }
+        if(act!=actAnt)
+            val.clear();
         
         switch(act) {
             case None:
-                return false;
+                break;
             case Cmd:
-                m_commands.last().append(val);
+                if(!val.isEmpty())
+                    m_commands.last().append(a.value);
                 break;
             case WorkDir:
-                m_workingDirectory=val;
+                m_workingDirectory=a.value;
                 break;
             case Timeout:
                 m_timeout=val.toFloat();
                 break;
             case ResultVar:
-                m_resultVariable=val;
+                m_resultVariable=a.value;
                 break;
             case OutputVar:
-                m_outputVariable=val;
+                m_outputVariable=a.value;
                 break;
             case ErrorVar:
-                m_errorVariable=val;
+                m_errorVariable=a.value;
                 break;
             case InputFile:
-                m_inputFile=val;
+                m_inputFile=a.value;
                 break;
             case OutputFile:
-                m_outputFile=val;
+                m_outputFile=a.value;
                 break;
             case ErrorFile:
-                m_errorFile=val;
+                m_errorFile=a.value;
                 break;
         }
     }
