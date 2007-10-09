@@ -15,6 +15,7 @@
 #include <KJob>
 
 #include <ibasicversioncontrol.h>
+#include <vcslocation.h>
 #include <iplugin.h>
 #include <qobject.h>
 
@@ -61,15 +62,18 @@ public:
     virtual KDevelop::VcsJob* commit( const QString& message,
                 const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* diff( const QVariant& localOrRepoLocationSrc,
-                const QVariant& localOrRepoLocationDst,
+    virtual KDevelop::VcsJob* diff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
+                const KDevelop::VcsLocation& localOrRepoLocationDst,
                 const KDevelop::VcsRevision& srcRevision,
                 const KDevelop::VcsRevision& dstRevision,
-                KDevelop::VcsDiff::Type );
-    virtual KDevelop::VcsJob* showDiff( const QVariant& localOrRepoLocationSrc,
-                const QVariant& localOrRepoLocationDst,
+                KDevelop::VcsDiff::Type,
+                KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive );
+    virtual KDevelop::VcsJob* showDiff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
+                const KDevelop::VcsLocation& localOrRepoLocationDst,
                 const KDevelop::VcsRevision& srcRevision,
-                const KDevelop::VcsRevision& dstRevision );
+                const KDevelop::VcsRevision& dstRevision,
+                KDevelop::VcsDiff::Type,
+                KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive  );
     virtual KDevelop::VcsJob* log( const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev,
                 unsigned long limit );
@@ -82,8 +86,8 @@ public:
                 const KDevelop::VcsRevision& rev );
     virtual KDevelop::VcsJob* showAnnotate( const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev );
-    virtual KDevelop::VcsJob* merge( const QVariant& localOrRepoLocationSrc,
-                const QVariant& localOrRepoLocationDst,
+    virtual KDevelop::VcsJob* merge( const KDevelop::VcsLocation& localOrRepoLocationSrc,
+                const KDevelop::VcsLocation& localOrRepoLocationDst,
                 const KDevelop::VcsRevision& srcRevision,
                 const KDevelop::VcsRevision& dstRevision,
                 const KUrl& localLocation );

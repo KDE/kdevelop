@@ -12,6 +12,7 @@
 #define SUBVERSIONPART_H
 
 #include "ibasicversioncontrol.h"
+#include <vcslocation.h>
 #include "vcsmapping.h"
 #include <iplugin.h>
 #include "subversioncore.h"
@@ -69,16 +70,17 @@ public:
                             const KUrl::List& localLocations,
                             RecursionMode recursion );
 
-    VcsJob* diff( const QVariant& localOrRepoLocationSrc,
-                          const QVariant& localOrRepoLocationDst,
+    VcsJob* diff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
+                          const KDevelop::VcsLocation& localOrRepoLocationDst,
                           const VcsRevision& srcRevision,
                           const VcsRevision& dstRevision,
-                          VcsDiff::Type );
+                          VcsDiff::Type = VcsDiff::DiffUnified , RecursionMode recursion = Recursive );
 
-    VcsJob* showDiff( const QVariant& localOrRepoLocationSrc,
-                              const QVariant& localOrRepoLocationDst,
+    VcsJob* showDiff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
+                              const KDevelop::VcsLocation& localOrRepoLocationDst,
                               const VcsRevision& srcRevision,
-                              const VcsRevision& dstRevision );
+                              const VcsRevision& dstRevision,
+                              VcsDiff::Type = VcsDiff::DiffUnified, RecursionMode recursion = Recursive );
 
     VcsJob* log( const KUrl& localLocation,
                          const VcsRevision& rev,
@@ -97,8 +99,8 @@ public:
     VcsJob* showAnnotate( const KUrl& localLocation,
                                   const VcsRevision& rev );
 
-    VcsJob* merge( const QVariant& localOrRepoLocationSrc,
-                           const QVariant& localOrRepoLocationDst,
+    VcsJob* merge( const VcsLocation& localOrRepoLocationSrc,
+                           const VcsLocation& localOrRepoLocationDst,
                            const VcsRevision& srcRevision,
                            const VcsRevision& dstRevision,
                            const KUrl& localLocation );

@@ -18,10 +18,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "vcsdiff.h"
+#include <vcsdiff.h>
 
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
+#include <QtCore/QHash>
 
 namespace KDevelop
 {
@@ -29,11 +30,11 @@ namespace KDevelop
 class VcsDiffPrivate
 {
 public:
-    QByteArray firstBinary;
-    QByteArray secondBinary;
+    QHash<VcsLocation,QByteArray> leftBinaries;
+    QHash<VcsLocation,QByteArray> rightBinaries;
+    QHash<VcsLocation,QString> leftTexts;
+    QHash<VcsLocation,QString> rightTexts;
     QString diff;
-    QString firstText;
-    QString secondText;
     VcsDiff::Type type;
     VcsDiff::Content content;
 };
@@ -51,10 +52,10 @@ VcsDiff::~VcsDiff()
 VcsDiff::VcsDiff( const VcsDiff& rhs )
     : d(new VcsDiffPrivate)
 {
-    d->firstBinary = rhs.d->firstBinary;
-    d->secondBinary = rhs.d->secondBinary;
-    d->firstText = rhs.d->firstText;
-    d->secondText = rhs.d->secondText;
+    d->leftBinaries = rhs.d->leftBinaries;
+    d->rightBinaries = rhs.d->rightBinaries;
+    d->leftTexts = rhs.d->leftTexts;
+    d->rightTexts = rhs.d->rightTexts;
     d->diff = rhs.d->diff;
     d->type = rhs.d->type;
     d->content =  rhs.d->content;
@@ -70,24 +71,25 @@ VcsDiff::Content VcsDiff::contentType() const
     return d->content;
 }
 
-QByteArray VcsDiff::firstBinary() const
+QHash<VcsLocation, QByteArray> VcsDiff::leftBinaries() const
 {
-    return d->firstBinary;
+    return d->leftBinaries;
 }
 
-QByteArray VcsDiff::secondBinary() const
+QHash<VcsLocation, QByteArray> VcsDiff::rightBinaries() const
 {
-    return d->secondBinary;
+    return d->rightBinaries;
 }
 
-QString VcsDiff::firstText() const
+
+QHash<VcsLocation, QString> VcsDiff::leftTexts() const
 {
-    return d->firstText;
+    return d->leftTexts;
 }
 
-QString VcsDiff::secondText() const
+QHash<VcsLocation, QString> VcsDiff::rightTexts() const
 {
-    return d->secondText;
+    return d->rightTexts;
 }
 
 QString VcsDiff::diff() const
@@ -101,24 +103,44 @@ void VcsDiff::setDiff( const QString& s )
     d->diff = s;
 }
 
-void VcsDiff::setFirstBinary( const QByteArray& b )
+void VcsDiff::addLeftBinary( const VcsLocation& loc, const QByteArray& b )
 {
-    d->firstBinary = b;
+    d->leftBinaries[loc] = b;
 }
 
-void VcsDiff::setSecondBinary( const QByteArray& b )
+void VcsDiff::addRightBinary( const VcsLocation& loc, const QByteArray& b )
 {
-    d->secondBinary = b;
+    d->rightBinaries[loc] = b;
 }
 
-void VcsDiff::setFirstText( const QString& s )
+void VcsDiff::removeLeftBinary( const VcsLocation& loc )
 {
-    d->firstText = s;
+    d->leftBinaries.remove( loc );
 }
 
-void VcsDiff::setSecondText( const QString& s )
+void VcsDiff::removeRightBinary( const VcsLocation& loc )
 {
-    d->secondText = s;
+    d->rightBinaries.remove( loc );
+}
+
+void VcsDiff::addLeftText( const VcsLocation& loc, const QString& b )
+{
+    d->leftTexts[loc] = b;
+}
+
+void VcsDiff::addRightText( const VcsLocation& loc, const QString& b )
+{
+    d->rightTexts[loc] = b;
+}
+
+void VcsDiff::removeLeftText( const VcsLocation& loc )
+{
+    d->leftTexts.remove( loc );
+}
+
+void VcsDiff::removeRightText( const VcsLocation& loc )
+{
+    d->rightTexts.remove( loc );
 }
 
 void VcsDiff::setType( VcsDiff::Type t )
@@ -137,10 +159,10 @@ VcsDiff& VcsDiff::operator=( const VcsDiff& rhs)
         return *this;
     d->content = rhs.d->content;
     d->type = rhs.d->type;
-    d->secondText = rhs.d->secondText;
-    d->secondBinary = rhs.d->secondBinary;
-    d->firstText = rhs.d->firstText;
-    d->firstBinary = rhs.d->firstBinary;
+    d->leftBinaries = rhs.d->leftBinaries;
+    d->rightBinaries = rhs.d->rightBinaries;
+    d->leftTexts = rhs.d->leftTexts;
+    d->rightTexts = rhs.d->rightTexts;
     d->diff = rhs.d->diff;
     return *this;
 }

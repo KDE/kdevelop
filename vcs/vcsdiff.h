@@ -23,7 +23,8 @@
 #define VCSDIFF_H
 
 #include <vcsexport.h>
-#include <QtCore/QVariant>
+#include <vcslocation.h>
+#include <QtCore/QHash>
 
 class QString;
 class QByteArray;
@@ -70,25 +71,25 @@ public:
      * @returns the binary content of the first file of the difference or
      * an empty QByteArray if this is a textual diff
      */
-    QByteArray firstBinary() const;
+    QHash<KDevelop::VcsLocation, QByteArray> leftBinaries() const;
 
     /**
      * @returns the binary content of the second file of the difference or
      * an empty QByteArray if this is a textual diff
      */
-    QByteArray secondBinary() const;
+    QHash<KDevelop::VcsLocation, QByteArray> rightBinaries() const;
 
     /**
      * @returns the textual content of the first file of the difference or
      * an empty QString if this is a binary diff
      */
-    QString firstText() const;
+    QHash<KDevelop::VcsLocation, QString> leftTexts() const;
 
     /**
      * @returns the textual content of the second file of the difference or
      * an empty QString if this is a unified or binary diff
      */
-    QString secondText() const;
+    QHash<KDevelop::VcsLocation, QString> rightTexts() const;
 
     /**
      * @returns the difference between the first and the second file in
@@ -98,10 +99,16 @@ public:
     QString diff() const;
 
     void setDiff( const QString& );
-    void setFirstBinary( const QByteArray& );
-    void setSecondBinary( const QByteArray& );
-    void setFirstText( const QString& );
-    void setSecondText( const QString& );
+    void addLeftBinary( const KDevelop::VcsLocation&, const QByteArray& );
+    void removeLeftBinary( const KDevelop::VcsLocation& );
+    void addRightBinary( const KDevelop::VcsLocation&, const QByteArray& );
+    void removeRightBinary( const KDevelop::VcsLocation& );
+
+    void addLeftText( const KDevelop::VcsLocation&, const QString& );
+    void removeLeftText( const KDevelop::VcsLocation& );
+    void addRightText( const KDevelop::VcsLocation&, const QString& );
+    void removeRightText( const KDevelop::VcsLocation& );
+
     void setType( Type );
     void setContentType( Content );
     VcsDiff& operator=( const VcsDiff& rhs);

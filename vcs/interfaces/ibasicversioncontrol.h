@@ -34,6 +34,7 @@ namespace KDevelop
 
 class VcsJob;
 class VcsMapping;
+class VcsLocation;
 
 /**
  * This is the basic interface that all Version Control or Source Code Management
@@ -166,27 +167,27 @@ public:
     /**
      * Retrieves a diff between the two locations at the given revisions
      *
-     * The QVariant should either be a KUrl, which is assumed to be a local file
-     * or a QString which is assumed to define a repository path
-     *
-     * The diff is in unified diff format for text files
+     * The diff is in unified diff format for text files by default
      */
-    virtual VcsJob* diff( const QVariant& localOrRepoLocationSrc,
-                          const QVariant& localOrRepoLocationDst,
+    virtual VcsJob* diff( const VcsLocation& localOrRepoLocationSrc,
+                          const VcsLocation& localOrRepoLocationDst,
                           const VcsRevision& srcRevision,
                           const VcsRevision& dstRevision,
-                          VcsDiff::Type ) = 0;
+                          VcsDiff::Type = KDevelop::VcsDiff::DiffUnified,
+                          IBasicVersionControl::RecursionMode recursion
+                                       = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * Shows a diff between the two locations at the given revisions
      *
-     * The QVariant should either be a KUrl, which is assumed to be a local file
-     * or a QString which is assumed to define a repository path
      */
-    virtual VcsJob* showDiff( const QVariant& localOrRepoLocationSrc,
-                              const QVariant& localOrRepoLocationDst,
-                              const VcsRevision& srcRevision,
-                              const VcsRevision& dstRevision ) = 0;
+    virtual VcsJob* showDiff( const VcsLocation& localOrRepoLocationSrc,
+                          const VcsLocation& localOrRepoLocationDst,
+                          const VcsRevision& srcRevision,
+                          const VcsRevision& dstRevision,
+                          VcsDiff::Type = KDevelop::VcsDiff::DiffUnified,
+                          IBasicVersionControl::RecursionMode recursion
+                                       = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * Retrieve the history of a given local url
@@ -239,13 +240,10 @@ public:
     /**
      * merge/integrate the changes between src and dest into the given local file
      *
-     * The QVariant should either be a KUrl, which is assumed to be a local file
-     * or a QString which is assumed to define a repository path
-     *
      * Note: This might create conflicts in the file(s) that are changed
      */
-    virtual VcsJob* merge( const QVariant& localOrRepoLocationSrc,
-                           const QVariant& localOrRepoLocationDst,
+    virtual VcsJob* merge( const VcsLocation& localOrRepoLocationSrc,
+                           const VcsLocation& localOrRepoLocationDst,
                            const VcsRevision& srcRevision,
                            const VcsRevision& dstRevision,
                            const KUrl& localLocation ) = 0;

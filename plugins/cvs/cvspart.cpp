@@ -189,7 +189,7 @@ void CvsPart::slotDiff()
         KDevelop::VcsRevision revB;
         revB.setRevisionValue(dlg.revB(), KDevelop::VcsRevision::FileNumber);
 
-        KDevelop::VcsJob* j = diff(url.toLocalFile(), "", revA, revB, KDevelop::VcsDiff::DiffUnified);
+        KDevelop::VcsJob* j = diff(url, QString(""), revA, revB, KDevelop::VcsDiff::DiffUnified);
         CvsJob* job = dynamic_cast<CvsJob*>(j);
         if (job) {
             job->start();
@@ -481,15 +481,14 @@ KDevelop::VcsJob * CvsPart::commit(const QString & message, const KUrl::List & l
     return job;
 }
 
-KDevelop::VcsJob * CvsPart::showDiff(const QVariant & localOrRepoLocationSrc, const QVariant & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision)
+KDevelop::VcsJob * CvsPart::showDiff(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode  )
 {
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPart::diff(const QVariant & localOrRepoLocationSrc, const QVariant & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type )
+KDevelop::VcsJob * CvsPart::diff(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode )
 {
-    KUrl url(localOrRepoLocationSrc.toString());
-    CvsJob* job = d->m_proxy->diff (url, srcRevision, dstRevision, "");
+    CvsJob* job = d->m_proxy->diff (localOrRepoLocationSrc.localUrl(), srcRevision, dstRevision, "");
     return job;
 }
 
@@ -523,7 +522,7 @@ KDevelop::VcsJob * CvsPart::showAnnotate(const KUrl & localLocation, const KDeve
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPart::merge(const QVariant & localOrRepoLocationSrc, const QVariant & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, const KUrl & localLocation)
+KDevelop::VcsJob * CvsPart::merge(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, const KUrl & localLocation)
 {
     return NULL;
 }

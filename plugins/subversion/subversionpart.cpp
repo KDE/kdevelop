@@ -327,43 +327,28 @@ VcsJob* KDevSubversionPart::commit( const QString& message, const KUrl::List& lo
     return svncore()->createCommitJob( localLocations, message, recurse, false );
 }
 
-VcsJob* KDevSubversionPart::diff( const QVariant& src,
-                const QVariant& dst,
+VcsJob* KDevSubversionPart::diff( const KDevelop::VcsLocation& src,
+                const KDevelop::VcsLocation& dst,
                 const VcsRevision& srcRevision,
                 const VcsRevision& dstRevision,
-                VcsDiff::Type /*Always don't care*/ )
+                VcsDiff::Type /*Always don't care*/,
+                RecursionMode )
 {
     KUrl srcUrl, dstUrl;
-
-    if( src.canConvert<QString>() ){
-        srcUrl = KUrl( src.toString() );
-    }
-    else if( src.canConvert<KUrl>() ){
-        srcUrl = src.value<KUrl>();
-    }
-
-    if( dst.canConvert<QString>() ){
-        dstUrl = KUrl( dst.toString() );
-    }
-    else if( dst.canConvert<KUrl>() ){
-        dstUrl = dst.value<KUrl>();
-    }
-
-    if( !srcUrl.isValid() || !dstUrl.isValid() )
-        return 0;
 
     SvnRevision rev1, rev2, peg_rev; // peg_rev:unspecified
     rev1.fromVcsRevision( srcRevision );
     rev2.fromVcsRevision( dstRevision );
 
-    return svncore()->createDiffJob( srcUrl, dstUrl, peg_rev, rev1, rev2,
+    return svncore()->createDiffJob( src.localUrl(), dst.localUrl(), peg_rev, rev1, rev2,
                                      true, true, false, true );
 }
 
-VcsJob* KDevSubversionPart::showDiff( const QVariant& src,
-                const QVariant& dst,
+VcsJob* KDevSubversionPart::showDiff( const KDevelop::VcsLocation& src,
+                const KDevelop::VcsLocation& dst,
                 const VcsRevision& srcRevision,
-                const VcsRevision& dstRevision )
+                const VcsRevision& dstRevision,
+                          VcsDiff::Type, RecursionMode recursion )
 {
     // For diff action, not that special options which deserve its own dialog box.
     return diff( src, dst, srcRevision, dstRevision, VcsDiff::DiffDontCare );
@@ -423,8 +408,8 @@ VcsJob* KDevSubversionPart::showAnnotate( const KUrl& localLocation,
     return this->annotate( localLocation, rev );
 }
 
-VcsJob* KDevSubversionPart::merge( const QVariant& localOrRepoLocationSrc,
-            const QVariant& localOrRepoLocationDst,
+VcsJob* KDevSubversionPart::merge( const VcsLocation& localOrRepoLocationSrc,
+            const VcsLocation& localOrRepoLocationDst,
             const VcsRevision& srcRevision,
             const VcsRevision& dstRevision,
             const KUrl& localLocation )

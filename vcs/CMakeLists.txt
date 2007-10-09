@@ -6,6 +6,7 @@ set(kdevplatformvcs_LIB_SRCS
     vcsjob.cpp
     vcsrevision.cpp
     vcsannotation.cpp
+    vcslocation.cpp
     vcsdiff.cpp
     vcsevent.cpp
     vcsmapping.cpp
