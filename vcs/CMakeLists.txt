@@ -28,6 +28,7 @@ install(FILES
     vcsevent.h
     vcsstatusinfo.h
     vcsmapping.h
+    vcslocation.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs
 )
 
