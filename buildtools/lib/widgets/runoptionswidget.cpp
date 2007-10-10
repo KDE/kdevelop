@@ -99,7 +99,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
     autocompile_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autocompile", false));
     autoinstall_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autoinstall", false));
-    autokdesu_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autokdsu", false));
+    autokdesu_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autokdesu", false));
 }
 
 
