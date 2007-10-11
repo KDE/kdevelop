@@ -325,13 +325,13 @@ QStringList Scope::variableValues( const QString& variable, bool checkIncParent,
     return result;
 }
 
-void Scope::calcValuesFromStatements( const QString& variable, QStringList& result, bool checkIncParent, QMake::AST* stopHere, bool fetchFromParent ) const
+void Scope::calcValuesFromStatements( const QString& variable, QStringList& result, bool checkIncParent, QMake::AST* stopHere, bool fetchFromParent, bool setDefault ) const
 {
     if( !m_root )
         return;
 
     /* For variables that we don't know and which are not QT/CONFIG find the default value */
-    if( m_defaultopts
+    if( setDefault && m_defaultopts
         && m_defaultopts->variables().findIndex(variable) != -1
         && ( variable == "TEMPLATE" || variable == "QT" || KnownVariables.findIndex(variable) == -1 || variable == "CONFIG" ) )
     {
@@ -376,6 +376,42 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
                     {
                         if ( result.findIndex( *sit ) != -1 )
                             result.remove( *sit );
+                    }
+                }
+            }
+        }else if( ast->nodeType() == QMake::AST::IncludeAST )
+        {
+            QMake::IncludeAST* iast = static_cast<QMake::IncludeAST*>(ast);
+            QValueList<unsigned int> l = m_scopes.keys();
+            for( unsigned int i = 0; i < l.count(); ++i )
+            {
+                int num = l[ i ];
+                if( m_scopes.contains( num ) )
+                {
+                    Scope* s = m_scopes[num];
+                    if( s && s->scopeType() == IncludeScope && s->m_incast == iast )
+                    {
+                        s->calcValuesFromStatements( variable, result, false, 0, false, false );
+                    }
+                }
+            }
+
+        }else if( ast->nodeType() == QMake::AST::ProjectAST )
+        {
+            QMake::ProjectAST* past = static_cast<QMake::ProjectAST*>(ast);
+            if( past->isFunctionScope() || past->isScope() )
+            {
+                QValueList<unsigned int> l = m_scopes.keys();
+                for( unsigned int i = 0; i < l.count(); ++i )
+                {
+                    int num = l[ i ];
+                    if( m_scopes.contains( num ) )
+                    {
+                        Scope* s = m_scopes[num];
+                        if( s && s->m_root == past && s->m_root->scopedID == past->scopedID  )
+                        {
+                            s->calcValuesFromStatements( variable, result, false, 0, false, false );
+                        }
                     }
                 }
             }

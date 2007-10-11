@@ -217,7 +217,7 @@ private:
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
     // using the given list as startvalue
     // Changes the list using the +=, -=, = operations accordingly
-    void calcValuesFromStatements( const QString& variable, QStringList& result, bool, QMake::AST* stopHere = 0, bool fetchFromParent = true ) const;
+    void calcValuesFromStatements( const QString& variable, QStringList& result, bool, QMake::AST* stopHere = 0, bool fetchFromParent = true, bool setDefault = true ) const;
 
     // Check wether the two operators are compatible
     static bool isCompatible( const QString& op1, const QString& op2);
@@ -255,8 +255,6 @@ private:
 
     QString replaceWs(QString);
 
-    // All different subscopes of this scope, the key is the "position" at which the scope starts
-    QMap<QString, Scope*> m_subProjects;
 
     // The "position" inside the parent scope that this scope starts at
     unsigned int m_num;
