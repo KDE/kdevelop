@@ -105,6 +105,8 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
 
   o.list->setModel( m_model );
 
+  o.list->setColumnWidth( 0, 20 );
+  
   d->show();
 
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );

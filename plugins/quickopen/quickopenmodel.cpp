@@ -18,6 +18,8 @@
 
 #include "quickopenmodel.h"
 
+#include <QTreeView>
+
 #include <ktexteditor/codecompletionmodel.h>
 #include <kdebug.h>
 
@@ -119,9 +121,9 @@ void QuickOpenModel::destroyed( QObject* obj )
   removeProvider( dynamic_cast<KDevelop::QuickOpenDataProviderBase*>(obj) );
 }
 
-QModelIndex QuickOpenModel::index( int row, int column, const QModelIndex& parent) const
+QModelIndex QuickOpenModel::index( int row, int column, const QModelIndex& /*parent*/) const
 {
-  if( column >= 1 )
+  if( column >= columnCount() )
     return QModelIndex();
   return createIndex( row, column );
 }
@@ -144,9 +146,18 @@ int QuickOpenModel::rowCount( const QModelIndex& i ) const
   return count;
 }
 
-int QuickOpenModel::columnCount( const QModelIndex& ) const
+int QuickOpenModel::columnCount() const
 {
-  return 1;
+  return 2;
+}
+
+int QuickOpenModel::columnCount( const QModelIndex& index ) const
+{
+  if( index.parent().isValid() )
+    return 0;
+  else {
+    return columnCount();
+  }
 }
 
 QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
@@ -157,9 +168,6 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 
   switch( role ) {
-    case Qt::DisplayRole:
-      return d->text();
-    
     case KTextEditor::CodeCompletionModel::ItemSelected:
       return d->htmlDescription();
 
@@ -172,7 +180,33 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
       v.setValue<QWidget*>(w);
       return v;
     }
-    
+  }
+  
+  if( index.column() == 1 )
+  {
+    switch( role ) {
+      case Qt::DecorationRole:
+        return d->icon();
+      
+      case Qt::DisplayRole:
+        return d->text();
+    }
+  } else if( index.column() == 0 )
+  {
+    switch( role ) {
+      case Qt::DecorationRole:
+      {
+        if( isExpandable(index) ) {
+          //Show the expanded/unexpanded handles
+          cacheIcons();
+          if( isExpanded(index) ) {
+            return m_expandedIcon;
+          } else {
+            return m_collapsedIcon;
+          }
+        }
+      }
+    }
   }
   
   return ExpandingWidgetModel::data( index, role );
@@ -184,7 +218,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
   foreach( const ProviderEntry& provider, m_providers ) {
     if( !provider.enabled )
       continue;
-    if( row < provider.provider->itemCount() )
+    if( (uint)row < provider.provider->itemCount() )
     {
       QList<QuickOpenDataPointer> items = provider.provider->data( row, row+1 );
       
@@ -209,7 +243,7 @@ QTreeView* QuickOpenModel::treeView() const {
   return m_treeView;
 }
 
-bool QuickOpenModel::indexIsItem(const QModelIndex& index) const {
+bool QuickOpenModel::indexIsItem(const QModelIndex& /*index*/) const {
   return true;
 }
 
@@ -217,7 +251,7 @@ void QuickOpenModel::setTreeView( QTreeView* view ) {
   m_treeView = view;
 }
 
-int QuickOpenModel::contextMatchQuality(const QModelIndex & index) const {
+int QuickOpenModel::contextMatchQuality(const QModelIndex & /*index*/) const {
   return -1;
 }
 

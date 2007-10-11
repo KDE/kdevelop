@@ -59,6 +59,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     QModelIndex index( int, int, const QModelIndex& parent ) const;
     QModelIndex parent( const QModelIndex& ) const;
     int rowCount( const QModelIndex& ) const;
+    int columnCount() const;
     int columnCount( const QModelIndex& ) const;
     QVariant data( const QModelIndex&, int ) const;
 
