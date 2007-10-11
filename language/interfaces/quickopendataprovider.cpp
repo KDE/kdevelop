@@ -31,6 +31,14 @@ namespace KDevelop {
       return QIcon();
     }
   
+  bool QuickOpenDataBase::isExpandable() const {
+    return false;
+  }
+
+  QWidget* QuickOpenDataBase::expandingWidget() const {
+    return 0;
+  }
+  
   QList<QVariant> QuickOpenDataBase::highlighting() const {
     return QList<QVariant>();
   }

@@ -194,10 +194,28 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
         return true;
       case Qt::Key_Left: {
         //Expand/unexpand
+        QModelIndex row = o.list->selectionModel()->currentIndex();
+        if( row.isValid() ) {
+          row = row.sibling( row.row(), 0 );
+          
+          if( m_model->isExpanded( row ) ) {
+            m_model->setExpanded( row, false );
+            return true;
+          }
+        }
         return false;
       }
       case Qt::Key_Right: {
         //Expand/unexpand
+        QModelIndex row = o.list->selectionModel()->currentIndex();
+        if( row.isValid() ) {
+          row = row.sibling( row.row(), 0 );
+          
+          if( !m_model->isExpanded( row ) ) {
+            m_model->setExpanded( row, true );
+            return true;
+          }
+        }
         return false;
       }
       case Qt::Key_Return:

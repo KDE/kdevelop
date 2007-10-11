@@ -159,8 +159,20 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
   switch( role ) {
     case Qt::DisplayRole:
       return d->text();
+    
     case KTextEditor::CodeCompletionModel::ItemSelected:
       return d->htmlDescription();
+
+    case KTextEditor::CodeCompletionModel::IsExpandable:
+      return d->isExpandable();
+
+    case KTextEditor::CodeCompletionModel::ExpandingWidget: {
+      QVariant v;
+      QWidget* w =  d->expandingWidget();
+      v.setValue<QWidget*>(w);
+      return v;
+    }
+    
   }
   
   return ExpandingWidgetModel::data( index, role );

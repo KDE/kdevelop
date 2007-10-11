@@ -68,6 +68,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
      * @return Whether the dialog should be closed.
      * */
     virtual bool execute( QString& filterText ) = 0;
+
+    /**
+     * Return true here if this data-item should be expandable with
+     * an own embedded widget.
+     * The default-implementation returns false.
+     * */
+    virtual bool isExpandable() const;
+
+    /**
+     * This will be called if isExpandable() returns true.
+     *
+     * A widget should be returned that will be embedded into the quickopen-list.
+     * The widget will be owned by the quickopen-list and will be deleted at will.
+     * 
+     * The default-implementation returns 0, which means no widget will be shown.
+     * */
+    virtual QWidget* expandingWidget() const;
 };
 
 typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;

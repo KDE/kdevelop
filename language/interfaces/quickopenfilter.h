@@ -50,6 +50,8 @@ namespace KDevelop {
 template<class Item>
 class Filter {
   public:
+    virtual ~Filter() {
+    }
     ///Clears the filter, but not the data.
     void clear() {
       m_filtered = m_items;
