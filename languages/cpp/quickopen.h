@@ -36,7 +36,10 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
     virtual QString htmlDescription() const;
 
     bool execute( QString& filterText );
-    
+
+    virtual bool isExpandable() const;
+    virtual QWidget* expandingWidget() const;
+
   private:
     Cpp::IncludeItem m_item;
     bool m_isDirectory;

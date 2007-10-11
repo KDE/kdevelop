@@ -31,6 +31,7 @@
 
 #include <duchainlock.h>
 
+#include "navigationwidget.h"
 #include "cppcodecompletionmodel.h"
 #include "cpplanguagesupport.h"
 
@@ -62,6 +63,14 @@ bool IncludeFileData::execute( QString& filterText ) {
   }
 }
 
+bool IncludeFileData::isExpandable() const {
+  return true;
+}
+
+QWidget* IncludeFileData::expandingWidget() const {
+  DUChainReadLocker lock( DUChain::lock() );
+  return (new NavigationWidget( m_item ))->view();
+}
 
 QString IncludeFileData::htmlDescription() const
 {
