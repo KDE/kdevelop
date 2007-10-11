@@ -252,27 +252,24 @@ QuickOpenPart::QuickOpenPart(QObject *parent,
 
     ///@todo All the locally created actions do not work,, also not if they are put into actionCollection()
     QAction* quickOpen = actions->addAction("quick_open");
-    QAction* quickOpenFile = actions->addAction("quick_open_file");
-    QAction* quickOpenClass = actions->addAction("quick_open_class");
-    QAction* quickOpenFunction = actions->addAction("quick_open_function");
-
     quickOpen->setText( i18n("&Quick Open") );
-    quickOpenClass->setText( i18n("Quick Open &Class") );
-    quickOpenFunction->setText( i18n("Quick Open &Function") );
-    quickOpenFile->setText( i18n("Quick Open &File") );
-    
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
-    quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
-    quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
-    quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
-
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
-    connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
-    connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
+    
+    QAction* quickOpenFile = actions->addAction("quick_open_file");
+    quickOpenFile->setText( i18n("Quick Open &File") );
+    quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 
-    ///Hijack another action, can be removed once the actions above work
-    connect(core()->uiController()->activeMainWindow()->actionCollection()->action("split_horizontal"), SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
+    QAction* quickOpenClass = actions->addAction("quick_open_class");
+    quickOpenClass->setText( i18n("Quick Open &Class") );
+    quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
+    connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
+
+    QAction* quickOpenFunction = actions->addAction("quick_open_function");
+    quickOpenFunction->setText( i18n("Quick Open &Function") );
+    quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
+    connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 }
 
 QuickOpenPart::~QuickOpenPart()

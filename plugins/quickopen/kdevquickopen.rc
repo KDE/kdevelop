@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KDevQuickopen" version="1">
 <MenuBar>
-  <Menu name="tools"><text>&amp;Tools</text>
+  <Menu name="navigation"><text>&amp;Navigation</text>
     <Action name="quick_open"/>
     <Action name="quick_open_file"/>
     <Action name="quick_open_class"/>
