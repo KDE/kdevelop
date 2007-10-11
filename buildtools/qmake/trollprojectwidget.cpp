@@ -2135,30 +2135,6 @@ QString TrollProjectWidget::constructMakeCommandLine( Scope* s )
     return cmdline;
 }
 
-void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & target )
-{
-    m_part->partController() ->saveAllFiles();
-
-    QDomDocument &dom = *( m_part->projectDom() );
-
-    if ( target == "clean" )
-    {
-        QString cmdline = DomUtil::readEntry( dom, "/kdevtrollproject/make/makebin" );
-        if ( cmdline.isEmpty() )
-            cmdline = MAKE_COMMAND;
-        cmdline += " clean";
-        QString dircmd = "cd " + KProcess::quote( dir ) + " && ";
-        cmdline.prepend( m_part->makeEnvironment() );
-        m_part->makeFrontend() ->queueCommand( dir, dircmd + cmdline );
-    }
-
-    QString cmdline = constructMakeCommandLine() + " " + target;
-
-    QString dircmd = "cd " + KProcess::quote( dir ) + " && ";
-
-    cmdline.prepend( m_part->makeEnvironment() );
-    m_part->makeFrontend() ->queueCommand( dir, dircmd + cmdline );
-}
 
 void TrollProjectWidget::createMakefileIfMissing( const QString &dir, QMakeScopeItem *item )
 {

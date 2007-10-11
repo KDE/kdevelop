@@ -150,7 +150,7 @@ private:
     GroupItem* getInstallRoot( QMakeScopeItem *item );
     GroupItem* getInstallObject( QMakeScopeItem *item, const QString& objectname );
     QString constructMakeCommandLine( Scope* s = 0 );
-    void startMakeCommand( const QString &dir, const QString &target );
+
     void createMakefileIfMissing( const QString &dir, QMakeScopeItem *item );
 
     void runQMakeRecursive( QMakeScopeItem* proj);
