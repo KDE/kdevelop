@@ -73,8 +73,10 @@ QString IncludeFileData::htmlDescription() const
   else
     ret = path.prettyUrl();
   
-  ret += "</br>";
+  ret += "<br/>";
   ret += i18n( "Found in %1th include-path", m_item.pathNumber );
+
+  return ret;
 }
 
 void IncludeFileDataProvider::setFilterText( const QString& text )
@@ -148,7 +150,7 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
 
   const QList<Cpp::IncludeItem>& items( filteredItems() );
   
-  if( end > items.count() )
+  if( end > (uint)items.count() )
     end = items.count();
   
   for( uint a = start; a < end; a++ )
