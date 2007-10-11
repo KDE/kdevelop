@@ -79,8 +79,10 @@ class QuickOpenWidgetHandler : public QObject {
    * @param initialScopes List of scopes that should initially be enabled in the quickopen-list. If empty, all are enabled.
    * */
   QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes );
+  ~QuickOpenWidgetHandler();
   
   private slots:
+  void currentChanged( const QModelIndex& current, const QModelIndex& previous );
   void accept();
   void textChanged( const QString& str );
   void updateProviders();

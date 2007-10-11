@@ -33,7 +33,11 @@
       </widget>
      </item>
      <item>
-      <widget class="ExpandingTree" name="list" />
+      <widget class="ExpandingTree" name="list" >
+       <property name="focusPolicy" >
+        <enum>Qt::NoFocus</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" >

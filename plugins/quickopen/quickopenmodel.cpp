@@ -121,6 +121,8 @@ void QuickOpenModel::destroyed( QObject* obj )
 
 QModelIndex QuickOpenModel::index( int row, int column, const QModelIndex& parent) const
 {
+  if( column >= 1 )
+    return QModelIndex();
   return createIndex( row, column );
 }
 

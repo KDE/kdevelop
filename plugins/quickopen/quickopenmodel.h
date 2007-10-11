@@ -75,14 +75,14 @@ class QuickOpenModel : public ExpandingWidgetModel {
 
     //The expandingwidgetmodel needs access to the tree-view
     void setTreeView( QTreeView* view );
+    
+    virtual QTreeView* treeView() const;
   public slots:
     void textChanged( const QString& str );
   private slots:
     void destroyed( QObject* obj );
   
   private:
-    virtual QTreeView* treeView() const;
-    
     virtual bool indexIsItem(const QModelIndex& index) const;
     
     virtual int contextMatchQuality(const QModelIndex & index) const;

@@ -41,6 +41,7 @@
 #include <icore.h>
 #include <iuicontroller.h>
 
+#include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
 #include "quickopenmodel.h"
 
@@ -52,6 +53,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
   o.setupUi( d );
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
+  o.list->setItemDelegate( new ExpandingDelegate( m_model, o.list ) );
 
   QStringList allTypes = m_model->allTypes();
   QStringList allScopes = m_model->allScopes();
@@ -104,6 +106,14 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
   o.list->setModel( m_model );
 
   d->show();
+
+  connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
+  connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
+}
+
+QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
+  if( m_model->treeView() == o.list )
+    m_model->setTreeView( 0 );
 }
 
 void QuickOpenWidgetHandler::updateProviders() {
@@ -140,13 +150,15 @@ void QuickOpenWidgetHandler::textChanged( const QString& str ) {
 }
 
 void QuickOpenWidgetHandler::callRowSelected() {
-  return; ///@todo re-enable once it doesn't crash
-  kDebug() << "callRowSelected";
   QModelIndex currentIndex = o.list->selectionModel()->currentIndex();
   if( currentIndex.isValid() )
     m_model->rowSelected( currentIndex );
   else
     kDebug() << "current index is not valid";
+}
+
+void QuickOpenWidgetHandler::currentChanged( const QModelIndex& /*current*/, const QModelIndex& /*previous */) {
+  callRowSelected();
 }
 
 void QuickOpenWidgetHandler::accept() {
@@ -178,7 +190,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
         if(watched == o.list )
           return false;
         QApplication::sendEvent( o.list, event );
-        callRowSelected();
+      //callRowSelected();
         return true;
       case Qt::Key_Left: {
         //Expand/unexpand
@@ -269,9 +281,7 @@ void QuickOpenPart::showQuickOpen( ModelTypes modes )
     initialItems << i18n("Classes");
   }
   
-  QuickOpenWidgetHandler* u = new QuickOpenWidgetHandler( d, m_model, initialItems, QStringList() );
-  
-  m_model->setTreeView( 0 );
+  new QuickOpenWidgetHandler( d, m_model, initialItems, QStringList() );
 }
 
 
