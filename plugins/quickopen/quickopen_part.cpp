@@ -322,7 +322,7 @@ void QuickOpenPart::quickOpenClass()
   showQuickOpen( Classes );
 }
 
-void QuickOpenPart::registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
+void QuickOpenPart::registerProvider( const QStringList& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_model->registerProvider( scope, type, provider );
 }

@@ -34,8 +34,9 @@ QStringList QuickOpenModel::allScopes() const
 {
   QStringList scopes;
   foreach( const ProviderEntry& provider, m_providers )
-    if( !scopes.contains( provider.scope ) )
-      scopes << provider.scope;
+    foreach( const QString& scope, provider.scopes )
+      if( !scopes.contains( scope ) )
+        scopes << scope;
   
   return scopes;
 }
@@ -50,10 +51,10 @@ QStringList QuickOpenModel::allTypes() const
   return types;
 }
 
-void QuickOpenModel::registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
+void QuickOpenModel::registerProvider( const QStringList& scopes, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
 {
   ProviderEntry e;
-  e.scope = scope;
+  e.scopes = QSet<QString>::fromList(scopes);
   e.type = type;
   e.provider = provider;
   
@@ -77,15 +78,17 @@ bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provid
   return false;
 }
 
-void QuickOpenModel::enableProviders( const QStringList& items, const QStringList& scopes )
+void QuickOpenModel::enableProviders( const QStringList& items, const QStringList& _scopes )
 {
+  QSet<QString> scopes = QSet<QString>::fromList( _scopes );
   kDebug() << "params " << items << " " << scopes;
   for( ProviderMap::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
-    if( ( scopes.isEmpty() || scopes.contains( (*it).scope ) ) && ( items.contains( (*it).type ) || items.isEmpty() ) ) {
-      kDebug() << "enabling " << (*it).type << " " << (*it).scope;
+    if( ( scopes.isEmpty() || !scopes.intersect( (*it).scopes ).isEmpty() ) && ( items.contains( (*it).type ) || items.isEmpty() ) ) {
+      kDebug() << "enabling " << (*it).type << " " << (*it).scopes;
       (*it).enabled = true;
+      (*it).provider->enableScopes( _scopes );
     } else {
-      kDebug() << "disabling " << (*it).type << " " << (*it).scope;
+      kDebug() << "disabling " << (*it).type << " " << (*it).scopes;
       (*it).enabled = false;
     }
   }

@@ -131,6 +131,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * @param end Return items until here. end <= itemCount()
      * */
     virtual QList<QuickOpenDataPointer> data( uint start, uint end ) const = 0;
+
+    /**
+     * If the data-provider supports multiple different scopes, this will be called
+     * with the enabled scopes.
+     * If the data-provider supports only one scope, this can be ignored.
+     * The list contains all scopes, even those that are not supported by this provider.
+     * */
+    virtual void enableScopes( const QStringList& scopes );
 };
 
 

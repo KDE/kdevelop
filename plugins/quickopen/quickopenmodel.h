@@ -22,6 +22,7 @@
 #include <QMultiMap>
 #include <QString>
 #include <QAbstractItemModel>
+#include <QSet>
 
 #include "quickopendataprovider.h"
 #include "expandingtree/expandingwidgetmodel.h"
@@ -31,7 +32,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
   public:
     QuickOpenModel( QWidget* parent );
     
-    void registerProvider( const QString& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider );
+    void registerProvider( const QStringList& scopes, const QString& type, KDevelop::QuickOpenDataProviderBase* provider );
 
     /**
      * Remove provider.
@@ -99,7 +100,8 @@ class QuickOpenModel : public ExpandingWidgetModel {
       ProviderEntry() : enabled(false) {
       }
       bool enabled;
-      QString scope, type;
+      QSet<QString> scopes;
+      QString type;
       KDevelop::QuickOpenDataProviderBase* provider;
     };
     
