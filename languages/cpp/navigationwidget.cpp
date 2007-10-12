@@ -511,7 +511,7 @@ class NavigationContext : public KShared {
           if( fileEnd != -1 ) {
             QString file = text.mid( pos, fileEnd - pos );
             pos = fileEnd + 1;
-            makeLink( file, file, NavigationAction( KUrl(file), KTextEditor::Cursor() ) );
+            makeLink( KUrl(file).fileName(), file, NavigationAction( KUrl(file), KTextEditor::Cursor() ) );
           }
         }
         
