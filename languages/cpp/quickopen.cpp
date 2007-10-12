@@ -143,7 +143,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   foreach( const KUrl& u, inclusionPath )
     htmlPrefix += i18n("Included from") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.prettyUrl()) + "<br/>";
 
-  QString htmlSuffix  "<br/>" + i18n( "Found in %1th include-path", m_item.pathNumber );
+  QString htmlSuffix = "<br/>" + i18n( "Found in %1th include-path", m_item.pathNumber );
   
   return (new NavigationWidget( m_item, htmlPrefix, htmlSuffix ))->view();
 }
@@ -269,5 +269,17 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
 QString IncludeFileDataProvider::itemText( const Cpp::IncludeItem& data ) const
 {
   return data.name;
+}
+
+QStringList IncludeFileDataProvider::scopes() {
+  QStringList ret;
+  ret << i18n("Imports");
+  ret << i18n("Possible Imports");
+  ret << i18n("Importers");
+  ret << i18n("Project");
+  return ret;
+}
+
+void IncludeFileDataProvider::enableScopes( const QStringList& scopes ) {
 }
 

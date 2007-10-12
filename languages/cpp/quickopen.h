@@ -60,10 +60,14 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual void reset();
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
+    virtual void enableScopes( const QStringList& scopes );
+
+    ///Returns all scopes supported by this data-provider
+    static QStringList scopes();
   private slots:
     void documentDestroyed( QObject* obl );
   private:
-
+  
     //Reimplemented from Filter<..>
     virtual QString itemText( const Cpp::IncludeItem& data ) const;
 
