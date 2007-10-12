@@ -30,7 +30,8 @@
 
 class IncludeFileData : public KDevelop::QuickOpenDataBase {
   public:
-    IncludeFileData( const Cpp::IncludeItem& item );
+    /// includedFrom is zero if the file is not included into the current document
+  IncludeFileData( const Cpp::IncludeItem& item, const KDevelop::TopDUContextPointer& includedFrom );
     
     virtual QString text() const;
     virtual QString htmlDescription() const;
@@ -40,9 +41,11 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
     virtual bool isExpandable() const;
     virtual QWidget* expandingWidget() const;
 
+    virtual QIcon icon() const;
   private:
     Cpp::IncludeItem m_item;
     bool m_isDirectory;
+    KDevelop::TopDUContextPointer m_includedFrom;
 };
 
 /**
@@ -67,7 +70,7 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     KUrl m_baseUrl;
     QString m_lastSearchedPrefix;
     
-    KDevelop::DUContextPointer m_duContext;
+    KDevelop::TopDUContextPointer m_duContext;
 };
 
 #endif

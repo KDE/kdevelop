@@ -22,8 +22,10 @@
 #include "quickopen.h"
 
 #include <QDir>
+#include <QIcon>
 
 #include <klocale.h>
+#include <kiconloader.h>
 #include <idocumentcontroller.h>
 #include <icore.h>
 #include <idocument.h>
@@ -38,8 +40,38 @@
 using namespace KDevelop;
 using namespace Cpp;
 
+///Finds the shortest path through the imports to a given included file
+QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import ) {
 
-IncludeFileData::IncludeFileData( const IncludeItem& item ) : m_item(item) {
+  QList<KUrl> ret;
+  
+  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->textRange().end() ) )
+    return ret;
+  
+  if( context == import ) {
+    ret << import->url();
+    return ret;
+  }
+  
+  QList<DUContextPointer> imports = context->importedParentContexts();
+  
+  foreach( DUContextPointer i, imports ) {
+    if( !i )
+      continue;
+    
+    QList<KUrl> ret2 = getInclusionPath( i.data(), import );
+
+    if( !ret2.isEmpty() && ( ret.isEmpty() || ret.count() > ret2.count() ) )
+      ret = ret2;
+  }
+
+  if( !ret.isEmpty() )
+    ret.push_front( context->url() );
+  
+  return ret;
+}
+
+IncludeFileData::IncludeFileData( const IncludeItem& item, const TopDUContextPointer& includedFrom ) : m_item(item), m_includedFrom(includedFrom) {
 }
 
 QString IncludeFileData::text() const
@@ -63,11 +95,44 @@ bool IncludeFileData::execute( QString& filterText ) {
   }
 }
 
+QIcon IncludeFileData::icon() const {
+  ///@todo Better icons?
+  static QIcon standardIcon = KIconLoader::global()->loadIcon( "CTdisconnected_parents", KIconLoader::Small );
+  static QIcon includedIcon = KIconLoader::global()->loadIcon( "CTparents", KIconLoader::Small );
+
+  if( m_includedFrom ) {
+    return includedIcon;
+  } else
+    return standardIcon;
+}
+
 bool IncludeFileData::isExpandable() const {
   return true;
 }
 
 QWidget* IncludeFileData::expandingWidget() const {
+//     QList<KUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
+// 
+//   if( m_duContext )
+//   {
+//     KUrl u = items[a].basePath;
+//     u.addPath( items[a].name );
+// 
+//     QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
+// 
+//     foreach( TopDUContext* t, allChains )
+//     {
+//       Q_ASSERT( dynamic_cast<TopDUContext*>( m_duContext.data() ) );
+//       if( static_cast<TopDUContext*>( m_duContext.data() )->imports( t, m_duContext->textRange().end() ) )
+//       {
+//         QList<KUrl> inclusion = getInclusionPath( m_duContext.data(), t );
+// 
+//         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
+//           inclusionPath = inclusion;
+//       }
+//     }
+//   }
+
   DUChainReadLocker lock( DUChain::lock() );
   return (new NavigationWidget( m_item ))->view();
 }
@@ -82,7 +147,7 @@ QString IncludeFileData::htmlDescription() const
   else
     ret = path.prettyUrl();
   
-  ret += "<br/>";
+  ret += "<br>";
   ret += i18n( "Found in %1th include-path", m_item.pathNumber );
 
   return ret;
@@ -130,7 +195,7 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
 void IncludeFileDataProvider::reset()
 {
   m_lastSearchedPrefix = QString();
-  m_duContext = DUContextPointer();
+  m_duContext = TopDUContextPointer();
   m_baseUrl = KUrl();
   
   IDocument* doc = CppLanguageSupport::self()->core()->documentController()->activeDocument();
@@ -141,7 +206,7 @@ void IncludeFileDataProvider::reset()
 
     {
       DUChainReadLocker lock( DUChain::lock() );
-      m_duContext = DUContextPointer( getCompletionContext( doc->url() ) );
+      m_duContext = TopDUContextPointer( getCompletionContext( doc->url() ) );
     }
   }
   
@@ -162,8 +227,32 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
   if( end > (uint)items.count() )
     end = items.count();
   
+  DUChainReadLocker lock( DUChain::lock() );
+  
   for( uint a = start; a < end; a++ )
-    ret << QuickOpenDataPointer( new IncludeFileData( items[a] ) );
+  {
+    //Find out whether the url is included into the current file
+    bool isIncluded = false;
+    
+    if( m_duContext )
+    {
+      KUrl u = items[a].basePath;
+      u.addPath( items[a].name );
+      
+      QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
+
+      foreach( TopDUContext* t, allChains )
+      {
+        if( m_duContext.data()->imports( t, m_duContext->textRange().end() ) )
+        {
+          isIncluded = true;
+          break;
+        }
+      }
+    }
+    
+    ret << QuickOpenDataPointer( new IncludeFileData( items[a], isIncluded ? m_duContext : TopDUContextPointer() ) );
+  }
   
   return ret;
 }
