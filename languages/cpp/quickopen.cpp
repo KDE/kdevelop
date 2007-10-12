@@ -45,8 +45,8 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
 
   QList<KUrl> ret;
   
-  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->textRange().end() ) )
-    return ret;
+/*  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->textRange().end() ) )
+    return ret;*/
   
   if( context == import ) {
     ret << import->url();
@@ -111,30 +111,41 @@ bool IncludeFileData::isExpandable() const {
 }
 
 QWidget* IncludeFileData::expandingWidget() const {
-//     QList<KUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
-// 
-//   if( m_duContext )
-//   {
-//     KUrl u = items[a].basePath;
-//     u.addPath( items[a].name );
-// 
-//     QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
-// 
-//     foreach( TopDUContext* t, allChains )
-//     {
-//       Q_ASSERT( dynamic_cast<TopDUContext*>( m_duContext.data() ) );
-//       if( static_cast<TopDUContext*>( m_duContext.data() )->imports( t, m_duContext->textRange().end() ) )
-//       {
-//         QList<KUrl> inclusion = getInclusionPath( m_duContext.data(), t );
-// 
-//         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
-//           inclusionPath = inclusion;
-//       }
-//     }
-//   }
-
   DUChainReadLocker lock( DUChain::lock() );
-  return (new NavigationWidget( m_item ))->view();
+  
+  QList<KUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
+
+  if( m_includedFrom )
+  {
+    KUrl u = m_item.basePath;
+    u.addPath( m_item.name );
+
+    QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
+
+    foreach( TopDUContext* t, allChains )
+    {
+      Q_ASSERT( dynamic_cast<TopDUContext*>( m_includedFrom.data() ) );
+      if( static_cast<TopDUContext*>( m_includedFrom.data() )->imports( t, m_includedFrom->textRange().end() ) )
+      {
+        QList<KUrl> inclusion = getInclusionPath( m_includedFrom.data(), t );
+
+        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
+          inclusionPath = inclusion;
+      }
+    }
+  }
+
+  if( !inclusionPath.isEmpty() )
+    inclusionPath.pop_back(); //Remove the file itself from the list
+  
+  QString htmlPrefix;
+
+  foreach( const KUrl& u, inclusionPath )
+    htmlPrefix += i18n("Included from") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.prettyUrl()) + "<br/>";
+
+  QString htmlSuffix  "<br/>" + i18n( "Found in %1th include-path", m_item.pathNumber );
+  
+  return (new NavigationWidget( m_item, htmlPrefix, htmlSuffix ))->view();
 }
 
 QString IncludeFileData::htmlDescription() const
@@ -142,14 +153,12 @@ QString IncludeFileData::htmlDescription() const
   KUrl path = m_item.basePath;
   path.addPath( m_item.name );
   QString ret;
+  
   if( m_item.isDirectory )
     ret = QString( i18n("Directory %1", path.prettyUrl()) );
   else
     ret = path.prettyUrl();
   
-  ret += "<br>";
-  ret += i18n( "Found in %1th include-path", m_item.pathNumber );
-
   return ret;
 }
 
