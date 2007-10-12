@@ -39,10 +39,10 @@ public:
     : m_inDuChain(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
   {
   }
-  bool imports(TopDUContext* origin, int depth) const
+  bool imports(const TopDUContext* origin, int depth) const
   {
     if(depth == 0) {
-      QHash<TopDUContext*, bool>::const_iterator it = m_importsCache.find(origin);
+      QHash<const TopDUContext*, bool>::const_iterator it = m_importsCache.find(origin);
       if(it != m_importsCache.end()) {
         return *it;
       }
@@ -86,7 +86,7 @@ public:
   TopDUContext::Flags m_flags;
   TopDUContext* m_ctxt;
   ParsingEnvironmentFilePointer m_file;
-  mutable QHash<TopDUContext*, bool> m_importsCache;
+  mutable QHash<const TopDUContext*, bool> m_importsCache;
 };
 
 TopDUContext::TopDUContext(KTextEditor::Range* range, ParsingEnvironmentFile* file)
@@ -319,7 +319,7 @@ bool TopDUContext::deleting() const
   return d->m_deleting;
 }
 
-bool TopDUContext::imports(TopDUContext * origin, const KTextEditor::Cursor& position) const
+bool TopDUContext::imports(const TopDUContext * origin, const KTextEditor::Cursor& position) const
 {
   ENSURE_CAN_READ
 

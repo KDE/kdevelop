@@ -75,7 +75,7 @@ public:
    *
    * \note you must be holding a read but not a write chain lock when you access this function.
    */
-  virtual bool imports(TopDUContext* origin, const KTextEditor::Cursor& position) const;
+  virtual bool imports(const TopDUContext* origin, const KTextEditor::Cursor& position) const;
 
   enum Flags {
     NoFlags = 0,
