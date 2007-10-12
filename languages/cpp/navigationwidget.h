@@ -39,8 +39,19 @@ namespace Cpp {
   class NavigationWidget : public QObject {
     Q_OBJECT
     public:
-      NavigationWidget(KDevelop::DeclarationPointer declaration);
-      NavigationWidget(const IncludeItem& includeItem);
+      /**
+       * @param htmlPrefix and @param htmlSuffix can be used to add own text before/behind the
+       * normal text in the navigation-widget.
+       * The texts may contain links to files, using a simple special Syntax:
+       * KDEV_FILE_LINK{File}. Every occurence of KDEV_FILE_LINK will be replaced.
+       * */
+      NavigationWidget(KDevelop::DeclarationPointer declaration, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
+      /**
+       * @param htmlPrefix and @param htmlSuffix can be used to add own text before/behind the
+       * normal text in the navigation-widget.
+       * The texts may contain links to files, see above.
+       * */
+      NavigationWidget(const IncludeItem& includeItem, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
       ~NavigationWidget();
       QWidget* view() const;
 

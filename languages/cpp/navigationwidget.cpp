@@ -178,6 +178,11 @@ class NavigationContext : public KShared {
       Q_ASSERT(m_selectedLink >= 0);
     }
 
+    void setPrefixSuffix( const QString& prefix, const QString& suffix ) {
+      m_prefix = prefix;
+      m_suffix = suffix;
+    }
+
     NavigationContextPointer accept() {
       if( m_selectedLink >= 0 &&  m_selectedLink < m_linkCount )
       {
@@ -239,6 +244,8 @@ class NavigationContext : public KShared {
       m_linkCount = 0;
       m_currentText  = "<html><body><p><small><small>";
 
+      addExternalText(m_prefix);
+      
       if( shorten && !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
         if( comment.length() > 60 ) {
@@ -478,6 +485,8 @@ class NavigationContext : public KShared {
         }
       }
       //m_currentText += "<br />";
+
+      addExternalText(m_suffix);
       
       m_currentText += "</small></small></p></body></html>";
 
@@ -488,6 +497,30 @@ class NavigationContext : public KShared {
 
     NavigationContextPointer execute(NavigationAction& action);
 
+    void addExternalText( const QString& text ) {
+      int lastPos = 0;
+      int pos = 0;
+      QString fileMark = "KDEV_FILE_LINK{";
+      while( pos < text.length() && (pos = text.indexOf( fileMark, pos)) != -1 ) {
+        m_currentText += text.mid(lastPos, pos-lastPos);
+
+        pos += fileMark.length();
+
+        if( pos != text.length() ) {
+          int fileEnd = text.indexOf('}', pos);
+          if( fileEnd != -1 ) {
+            QString file = text.mid( pos, fileEnd - pos );
+            pos = fileEnd + 1;
+            makeLink( file, file, NavigationAction( KUrl(file), KTextEditor::Cursor() ) );
+          }
+        }
+        
+        lastPos = pos;
+      }
+      
+      m_currentText += text.mid(lastPos, text.length()-lastPos);
+    }
+  
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
     void eventuallyMakeTypeLinks( const AbstractType* type ) {
       if( !type ) {
@@ -551,7 +584,6 @@ class NavigationContext : public KShared {
       
       m_currentText += "<a href=\"" + targetId + "\">" + str + "</a>";
 
-
       if( m_selectedLink == m_linkCount )
         m_selectedLinkAction = action;
 
@@ -574,6 +606,7 @@ class NavigationContext : public KShared {
     QMap<QString, NavigationAction> m_links;
     QMap<int, NavigationAction> m_intLinks;
     NavigationContext* m_previousContext;
+    QString m_prefix, m_suffix;
 };
 
 NavigationContextPointer NavigationContext::execute(NavigationAction& action)
@@ -628,7 +661,9 @@ public:
   IncludeNavigationContext(const IncludeItem& item) : NavigationContext(0), m_item(item) {
   }
   virtual QString html(bool shorten) {
-    m_currentText  = "<html><body><p><small><small>";      m_linkCount = 0;
+    m_currentText  = "<html><body><p><small><small>";
+    m_linkCount = 0;
+    addExternalText(m_prefix);
 
     KUrl u(m_item.basePath);
     u.addPath(m_item.name);
@@ -662,6 +697,8 @@ public:
     }else if(duchains.isEmpty()) {
       m_currentText += i18n("not parsed yet");
     }
+
+    addExternalText(m_suffix);
     
     m_currentText += "</small></small></p></body></html>";
     return m_currentText;
@@ -716,20 +753,22 @@ private:
   IncludeItem m_item;
 };
 
-NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration) : m_declaration(declaration)
+NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, const QString& htmlPrefix, const QString& htmlSuffix) : m_declaration(declaration)
 {
   initBrowser(400);
 
   //The first context is registered so it is kept alive by the shared-pointer mechanism
   m_startContext = NavigationContextPointer(new NavigationContext(declaration));
+  m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
   setContext( m_startContext );
 }
 
-NavigationWidget::NavigationWidget(const IncludeItem& includeItem) {
+NavigationWidget::NavigationWidget(const IncludeItem& includeItem, const QString& htmlPrefix, const QString& htmlSuffix) {
   initBrowser(200);
   
 //The first context is registered so it is kept alive by the shared-pointer mechanism
   m_startContext = NavigationContextPointer(new IncludeNavigationContext(includeItem));
+  m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
   setContext( m_startContext );
 }
 
