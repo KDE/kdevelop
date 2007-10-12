@@ -90,7 +90,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
 
     KDevelop::QuickOpenDataPointer getItem( int row ) const;
     
-    typedef QList<KDevelop::QuickOpenDataPointer> DataList;
+    typedef QHash<uint, KDevelop::QuickOpenDataPointer> DataList;
     mutable DataList m_cachedData;
 
     QTreeView* m_treeView;

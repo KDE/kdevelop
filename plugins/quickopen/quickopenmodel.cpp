@@ -215,6 +215,9 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
   ///@todo mix all the models alphabetically here. For now, they are simply ordered.
 
+  if( m_cachedData.contains( row ) )
+    return m_cachedData[row];
+  
   foreach( const ProviderEntry& provider, m_providers ) {
     if( !provider.enabled )
       continue;
@@ -227,6 +230,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
         kWarning() << "Provider returned no item";
         return QuickOpenDataPointer();
       } else {
+        m_cachedData[row] = items.first();
         return items.first();
       }
     } else {
