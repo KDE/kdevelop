@@ -30,7 +30,10 @@
 
 class IncludeFileData : public KDevelop::QuickOpenDataBase {
   public:
-    /// includedFrom is zero if the file is not included into the current document
+    /**
+     * includedFrom is zero if the file is not included into the current document
+     * In case of importers(marked by item.pathNumber == -1), includedFrom should be the context of the current open document.
+     * */
   IncludeFileData( const Cpp::IncludeItem& item, const KDevelop::TopDUContextPointer& includedFrom );
     
     virtual QString text() const;
@@ -56,6 +59,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
 
 class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::Filter<Cpp::IncludeItem> {
   public:
+    IncludeFileDataProvider();
     virtual void setFilterText( const QString& text );
     virtual void reset();
     virtual uint itemCount() const;
@@ -73,7 +77,12 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
 
     KUrl m_baseUrl;
     QString m_lastSearchedPrefix;
-    
+
+    bool m_allowImports, m_allowPossibleImports, m_allowImporters;
+
+    ///Cache for all documents that import the current one
+    KUrl::List m_importers;
+  
     KDevelop::TopDUContextPointer m_duContext;
 };
 

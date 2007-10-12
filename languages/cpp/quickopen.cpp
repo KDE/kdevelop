@@ -23,6 +23,7 @@
 
 #include <QDir>
 #include <QIcon>
+#include <QSet>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -71,6 +72,17 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
   return ret;
 }
 
+void collectImporters( QSet<KUrl>& importers, DUContext* ctx )
+{
+  if( importers.contains( ctx->url() ) )
+    return;
+  
+  importers.insert( ctx->url() );
+
+  foreach( DUContext* ctx, ctx->importedChildContexts() )
+    collectImporters( importers, ctx );
+}
+
 IncludeFileData::IncludeFileData( const IncludeItem& item, const TopDUContextPointer& includedFrom ) : m_item(item), m_includedFrom(includedFrom) {
 }
 
@@ -99,10 +111,13 @@ QIcon IncludeFileData::icon() const {
   ///@todo Better icons?
   static QIcon standardIcon = KIconLoader::global()->loadIcon( "CTdisconnected_parents", KIconLoader::Small );
   static QIcon includedIcon = KIconLoader::global()->loadIcon( "CTparents", KIconLoader::Small );
+  static QIcon importerIcon = KIconLoader::global()->loadIcon( "CTchildren", KIconLoader::Small );
 
-  if( m_includedFrom ) {
+  if( m_item.pathNumber == -1 )
+    return importerIcon;
+  else if( m_includedFrom )
     return includedIcon;
-  } else
+  else
     return standardIcon;
 }
 
@@ -113,10 +128,13 @@ bool IncludeFileData::isExpandable() const {
 QWidget* IncludeFileData::expandingWidget() const {
   DUChainReadLocker lock( DUChain::lock() );
   
+  QString htmlPrefix, htmlSuffix;
+  
   QList<KUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
 
-  if( m_includedFrom )
+  if( m_includedFrom && m_item.pathNumber != -1 )
   {
+    //Find the trace from m_includedFrom to the this file
     KUrl u = m_item.basePath;
     u.addPath( m_item.name );
 
@@ -124,8 +142,7 @@ QWidget* IncludeFileData::expandingWidget() const {
 
     foreach( TopDUContext* t, allChains )
     {
-      Q_ASSERT( dynamic_cast<TopDUContext*>( m_includedFrom.data() ) );
-      if( static_cast<TopDUContext*>( m_includedFrom.data() )->imports( t, m_includedFrom->textRange().end() ) )
+      if( m_includedFrom.data()->imports( t, m_includedFrom->textRange().end() ) )
       {
         QList<KUrl> inclusion = getInclusionPath( m_includedFrom.data(), t );
 
@@ -133,17 +150,38 @@ QWidget* IncludeFileData::expandingWidget() const {
           inclusionPath = inclusion;
       }
     }
+  }else if( m_item.pathNumber == -1 && m_includedFrom )
+  {
+    //Find the trace from this file to m_includedFrom
+    KUrl u = m_item.basePath;
+    u.addPath( m_item.name );
+
+    QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
+
+    foreach( TopDUContext* t, allChains )
+    {
+      if( t->imports( m_includedFrom.data(), m_includedFrom->textRange().end() ) )
+      {
+        QList<KUrl> inclusion = getInclusionPath( t, m_includedFrom.data() );
+
+        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
+          inclusionPath = inclusion;
+      }
+    }
   }
 
-  if( !inclusionPath.isEmpty() )
-    inclusionPath.pop_back(); //Remove the file itself from the list
+  if( m_item.pathNumber == -1 ) {
+    htmlPrefix = i18n("This file imports the current open document<br/>");
+  } else {
+    if( !inclusionPath.isEmpty() )
+      inclusionPath.pop_back(); //Remove the file itself from the list
+    
+    htmlSuffix = "<br/>" + i18n( "Found in %1th include-path", m_item.pathNumber );
+    
+  }
   
-  QString htmlPrefix;
-
   foreach( const KUrl& u, inclusionPath )
-    htmlPrefix += i18n("Included from") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.prettyUrl()) + "<br/>";
-
-  QString htmlSuffix = "<br/>" + i18n( "Found in %1th include-path", m_item.pathNumber );
+    htmlPrefix += i18n("Included through") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.prettyUrl()) + "<br/>";
   
   return (new NavigationWidget( m_item, htmlPrefix, htmlSuffix ))->view();
 }
@@ -160,6 +198,9 @@ QString IncludeFileData::htmlDescription() const
     ret = path.prettyUrl();
   
   return ret;
+}
+
+IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
 }
 
 void IncludeFileDataProvider::setFilterText( const QString& text )
@@ -191,8 +232,23 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
     if( !m_lastSearchedPrefix.isEmpty() || text.isEmpty() ) {
       ///We were searching in a sub-path, but are not any more, or we are initializing the search with an empty text.
       m_lastSearchedPrefix = QString();
+
+      QList<IncludeItem> allIncludeItems;
+
+      if( m_allowImports )
+        allIncludeItems = CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString() );
+
+      foreach( KUrl u, m_importers ) {
+        IncludeItem i;
+        i.isDirectory = false;
+        i.name = u.fileName();
+        u.setFileName(QString());
+        i.basePath = u;
+        i.pathNumber = -1; //We mark this as an importer by putting pathNumber to -1
+        allIncludeItems << i;
+      }
       
-      setItems( CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString() ) );
+      setItems( allIncludeItems );
     }
 
     filterText = text;
@@ -206,6 +262,7 @@ void IncludeFileDataProvider::reset()
   m_lastSearchedPrefix = QString();
   m_duContext = TopDUContextPointer();
   m_baseUrl = KUrl();
+  m_importers.clear();
   
   IDocument* doc = CppLanguageSupport::self()->core()->documentController()->activeDocument();
 
@@ -216,6 +273,15 @@ void IncludeFileDataProvider::reset()
     {
       DUChainReadLocker lock( DUChain::lock() );
       m_duContext = TopDUContextPointer( getCompletionContext( doc->url() ) );
+
+      if( m_allowImporters && m_duContext ) {
+        QSet<KUrl> importers;
+
+        collectImporters( importers, m_duContext.data() );
+
+        foreach( const KUrl& u,  importers )
+          m_importers << u;
+      }
     }
   }
   
@@ -242,12 +308,12 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
   {
     //Find out whether the url is included into the current file
     bool isIncluded = false;
-    
+
     if( m_duContext )
     {
       KUrl u = items[a].basePath;
       u.addPath( items[a].name );
-      
+
       QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
       foreach( TopDUContext* t, allChains )
@@ -259,8 +325,9 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
         }
       }
     }
-    
-    ret << QuickOpenDataPointer( new IncludeFileData( items[a], isIncluded ? m_duContext : TopDUContextPointer() ) );
+
+    //If it is an importer(marked by pathNumber -1), give m_duContext so we can search the inclusion-path later
+    ret << QuickOpenDataPointer( new IncludeFileData( items[a], ( isIncluded || items[a].pathNumber == -1 ) ? m_duContext : TopDUContextPointer() ) );
   }
   
   return ret;
@@ -274,12 +341,14 @@ QString IncludeFileDataProvider::itemText( const Cpp::IncludeItem& data ) const
 QStringList IncludeFileDataProvider::scopes() {
   QStringList ret;
   ret << i18n("Imports");
-  ret << i18n("Possible Imports");
+/*  ret << i18n("Possible Imports");*/
   ret << i18n("Importers");
-  ret << i18n("Project");
   return ret;
 }
 
 void IncludeFileDataProvider::enableScopes( const QStringList& scopes ) {
+  m_allowImports = scopes.contains( i18n("Imports") );
+/*  m_allowPossibleImports = scopes.contains( i18n("Possible Imports") );*/
+  m_allowImporters = scopes.contains( i18n("Importers") );
 }
 
