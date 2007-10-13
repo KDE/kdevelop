@@ -1330,12 +1330,12 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
         return;
     }
 
-    KMessageBox::warningYesNo(
+    KMessageBox::information(
         0,
         i18n("<b>Debugger error</b>"
              "<p>Debugger reported the following error:"
              "<p><tt>") + result["msg"].literal(),
-        i18n("Debugger error"), KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
+        i18n("Debugger error"), "gdb_error");
 
     // Error most likely means that some change made in GUI
     // was not communicated to the gdb, so GUI is now not
