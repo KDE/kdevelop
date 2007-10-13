@@ -55,7 +55,7 @@
 using namespace std;
 #endif
 
-#define VERBOSE
+//#define VERBOSE
 
 #if defined(TEST) || defined(VERBOSE)
 #define ifTest(x) x
