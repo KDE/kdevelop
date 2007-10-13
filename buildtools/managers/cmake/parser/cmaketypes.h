@@ -1,6 +1,8 @@
 #ifndef CMAKE_DEFINES_H
 #define CMAKE_DEFINES_H
 
+#include "cmakelistsparser.h"
+
 struct Macro
 {
     QString name;

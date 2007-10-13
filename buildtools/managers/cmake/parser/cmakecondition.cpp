@@ -105,13 +105,13 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 
 bool CMakeCondition::isTrue(const QString& varName) const
 {
-    kDebug(9032) << "+++++++ isTrue: " << varName;
+    qDebug() << "+++++++ isTrue: " << varName;
     
     if(m_vars->contains(varName))
     {
         const QStringList valu=m_vars->value(varName);
 
-//         kDebug(9032) << "Checking" << varName << "is true";
+//         qDebug() << "Checking" << varName << "is true";
         QString val = valu.join(";").toUpper();
         return !val.isEmpty() && val!="0" && val!="N" && val!="NO" && val!="OFF" && val!="FALSE" && val!="NOTFOUND" && !val.endsWith("_NOTFOUND");
     }
@@ -123,6 +123,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
 {
     bool done=false;
     it--;
+    qDebug() << "it" << *it;
     while(!done && it!=itStop)
     {
         conditionToken c = typeName(*it);
@@ -130,6 +131,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
         if(!done)
             it--;
     }
+    qDebug() << "it2" << *it << *itStop;
     return it;
 }
 
@@ -142,15 +144,17 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
-//         kDebug(9032) << "operator" << *it2 << c << "..." << variable;
+//         qDebug() << "operator" << *it2 << c << "..." << variable;
         QString cmd;
         
-        if(c==variable && it2==itBegin) { //we will only find variables in the first case
+        if(c==variable && it2==itBegin)
+        { //we will only find variables in the first case
             last = isTrue(*it2);
-        } else {
+        }
+        else
+        {
             last = isTrue(*(it2+1));
         }
-        
         switch(c)
         {
             case NOT:
@@ -158,7 +162,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
                 break;
             case COMMAND:
-                //FIXME: On unix, don't know how to do in windows
                 cmd = CMakeProjectVisitor::findFile(*(it2+1),
                         CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
                 last = !cmd.isEmpty();
@@ -167,8 +170,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case EXISTS:
             {
                 QString v=*(it2+1);
+                qDebug() << "EXISTS" << v << *it2;
                 if(v.isEmpty())
-                    kDebug(9032) << "error: no";
+                    qDebug() << "error: no";
                 else
                 {
                     last=false;
@@ -176,10 +180,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                     if(f.exists())
                     {
                         last=true;
-                        break;
                     }
                 }
-//                 kDebug(9032) << "EXISTS!!!!" << last << "_" << v;
                 itEnd=it2-1;
             }   break;
             case IS_DIRECTORY: {
@@ -252,7 +254,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             default:
-                kDebug(9032) << "unrecog:" << *it2;
+                qDebug() << "unrecog:" << *it2;
                 break;
         }
     }
@@ -262,6 +264,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 bool CMakeCondition::condition(const QStringList &expression) const
 {
     bool ret = evaluateCondition(expression.constBegin(), expression.constEnd());
-    kDebug(9032) << "condition" << expression << "=>" << ret;
+    qDebug() << "condition" << expression << "=>" << ret;
     return ret;
 }

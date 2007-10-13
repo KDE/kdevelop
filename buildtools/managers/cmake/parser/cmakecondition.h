@@ -23,7 +23,7 @@
 
 #include "cmakeprojectvisitor.h"
 
-class CMakeCondition
+class KDEVCMAKECOMMON_EXPORT CMakeCondition
 {
     public:
         CMakeCondition(const VariableMap* vars);

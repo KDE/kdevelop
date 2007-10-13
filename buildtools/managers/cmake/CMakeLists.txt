@@ -18,11 +18,11 @@ set( cmakecommon_SRCS
   parser/astfactory.cpp
   parser/cmakelistsparser.cpp
   parser/cmakeast.cpp
+  parser/cmakecondition.cpp
+  parser/cmakeprojectvisitor.cpp 
  )
 
 set( cmakemanager_SRCS
-  parser/cmakeprojectvisitor.cpp #must move them to cmakecommon
-  parser/cmakecondition.cpp
   cmakemanager.cpp
 )
 

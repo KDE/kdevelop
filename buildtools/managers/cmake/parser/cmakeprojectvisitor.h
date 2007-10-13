@@ -31,7 +31,7 @@
 
 class CMakeFunctionDesc;
 
-class CMakeProjectVisitor : CMakeAstVisitor
+class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
     public:
         explicit CMakeProjectVisitor(const QString& root);
