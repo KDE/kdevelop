@@ -1271,7 +1271,13 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
             if( pos > -1 )
             {
                 if( !variables.contains( re.cap(1) ) )
+                {
                     variables[re.cap(1)] = resolveVariables( variableValues( re.cap(1), stopHere ) );
+                    if( variables[re.cap(1)].isEmpty() && re.cap(1) == "TARGET" )
+                    {
+                        variables[re.cap(1)] = QFileInfo( fileName() ).baseName();
+                    }
+                }
                 pos += re.matchedLength();
             }
         }
@@ -1283,7 +1289,13 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
             if( pos > -1 )
             {
                 if( !variables.contains( re.cap(1) ) )
+                {
                     variables[re.cap(1)] = resolveVariables( variableValues( re.cap(1), stopHere ) );
+                    if( variables[re.cap(1)].isEmpty() && re.cap(1) == "TARGET" )
+                    {
+                        variables[re.cap(1)] = QFileInfo( fileName() ).baseName();
+                    }
+                }
                 pos += re.matchedLength();
             }
         }
