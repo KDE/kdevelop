@@ -512,7 +512,7 @@ void SimpleMainWindow::gotoFirstWindow()
 
 void SimpleMainWindow::gotoLastWindow()
 {
-    //@TODO: Implement me
+    //@TODO: implement me
 }
 
 void SimpleMainWindow::slotCoreInitialized()
