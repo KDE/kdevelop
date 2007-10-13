@@ -41,7 +41,9 @@ public:
   }
   bool imports(const TopDUContext* origin, int depth) const
   {
-    if(depth == 0) {
+    const bool alwaysCache = true;
+    
+    if(alwaysCache || depth == 0) {
       QHash<const TopDUContext*, bool>::const_iterator it = m_importsCache.find(origin);
       if(it != m_importsCache.end()) {
         return *it;
@@ -63,14 +65,14 @@ public:
       Q_ASSERT(dynamic_cast<TopDUContext*>((*it).data()));
       TopDUContext* top = static_cast<TopDUContext*>((*it).data());
       if (top == origin) {
-        if(depth == 0) {
+        if(alwaysCache || depth == 0) {
           m_importsCache[origin] = true;
         }
         return true;
       }
 
       if (top->d->imports(origin, depth + 1)) {
-        if(depth == 0) {
+        if(alwaysCache || depth == 0) {
           m_importsCache[origin] = true;
         }
         return true;
