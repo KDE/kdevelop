@@ -55,7 +55,9 @@
 using namespace std;
 #endif
 
-#ifdef TEST
+#define VERBOSE
+
+#if defined(TEST) || defined(VERBOSE)
 #define ifTest(x) x
 #else
 #define ifTest(x)
@@ -69,9 +71,15 @@ namespace CppTools {
   class FileModificationTimeWrapper {
     public:
       ///@param files list of files that should be fake-modified(modtime will be set to current time)
-      FileModificationTimeWrapper( const QStringList& files = QStringList() ) : m_newTime( time(0) ) {
+      FileModificationTimeWrapper( const QStringList& files = QStringList(), const QString& workingDirectory = QString() ) : m_newTime( time(0) )
+      {
+        QString oldCurrent = QDir::currentPath();
+
+        if( !workingDirectory.isEmpty() )
+          QDir::setCurrent( workingDirectory );
+        
         for( QStringList::const_iterator it = files.begin(); it != files.end(); ++it ) {
-          ifTest( cout << "touching" << (*it).toUtf8().constData() << endl );
+          ifTest( cout << "touching " << (*it).toUtf8().constData() << endl );
           struct stat s;
           if( stat( (*it).toLocal8Bit().constData(), &s ) == 0 ) {
             ///Success
@@ -89,6 +97,9 @@ namespace CppTools {
             }
           }
         }
+        
+        if( !workingDirectory.isEmpty() )
+          QDir::setCurrent( oldCurrent );
       }
 
       //Not used yet, might be used to return LD_PRELOAD=.. FAKE_MODIFIED=.. etc. later
@@ -206,6 +217,7 @@ using namespace CppTools;
 bool IncludePathResolver::executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const
 {
   ifTest( cout << "executing " << command.toUtf8().constData() << endl );
+  ifTest( cout << "in " << workingDirectory.toUtf8().constData() << endl );
 
   KProcess proc;
   proc.setWorkingDirectory(workingDirectory);
@@ -244,7 +256,7 @@ KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
   return KUrl(wd);
 }
 
-PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& workingDirectory ) {
+PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& _workingDirectory ) {
 
   struct Enabler {
     bool& b;
@@ -261,6 +273,18 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   Enabler e( m_isResolving );
 
+  //Make the working-directory absolute
+  QString workingDirectory = _workingDirectory;
+  
+  if( KUrl(workingDirectory).isRelative() ) {
+    KUrl u( QDir::currentPath() );
+    u.addPath( workingDirectory );
+    workingDirectory = u.path();
+  } else
+    workingDirectory = _workingDirectory;
+
+  cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data();
+  
   ///STEP 1: CACHING
   QDir dir( workingDirectory );
   dir = QDir( mapToBuild(dir.absolutePath()).toLocalFile() );
@@ -304,7 +328,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   QString absoluteFile = file;
   if( !file.startsWith('/') )
-    absoluteFile = dir.path() + '/' + file;
+    absoluteFile = workingDirectory + '/' + file;
   KUrl u( absoluteFile );
   u.cleanPath();
   absoluteFile = u.path();
@@ -337,7 +361,11 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   //Try for each possible target
   for( QStringList::const_iterator it = possibleTargets.begin(); it != possibleTargets.end(); ++it ) {
     res = resolveIncludePathInternal( absoluteFile, wd, *it, source );
-    if( res ) break;
+    if( res ) {
+      break;
+    } else {
+      ifTest( cout << "Try for possible target " << (*it).toLocal8Bit().data() << " failed: " << res.longErrorMessage.toLocal8Bit().data() << endl; )
+    }
   }
   if( res ) {
     QMutexLocker l( &m_cacheMutex );
@@ -395,10 +423,11 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   QString processStdout;
 
   QStringList touchFiles;
-  if( source.shouldTouchFiles() )
+  if( source.shouldTouchFiles() ) {
     touchFiles << file;
+  }
 
-  FileModificationTimeWrapper touch( touchFiles );
+  FileModificationTimeWrapper touch( touchFiles, workingDirectory );
 
   QString fullOutput;
   PathResolutionResult res = getFullOutput( source.getCommand( file, makeParameters ), workingDirectory, fullOutput );
@@ -434,9 +463,14 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
           prefix.truncate( prefix.length() - 2 );
         else if( prefix.endsWith( ';' ) )
           prefix.truncate( prefix.length() - 1 );
+
         ///Now test if what we have as prefix is a simple "cd /foo/bar" call.
-        if( prefix.startsWith( "cd ") && !prefix.contains( ';') && !prefix.contains("&&") ) {
-          newWorkingDirectory = prefix.right( prefix.length() - 3 ).trimmed();
+        
+        //In cases like "cd /media/data/kdedev/4.0/build/kdevelop && cd /media/data/kdedev/4.0/build/kdevelop"
+        //We use the second directory. For t hat reason we search for the last index of "cd "
+        int cdIndex = prefix.lastIndexOf( "cd ");
+        if( cdIndex != -1 ) {
+          newWorkingDirectory = prefix.right( prefix.length() - 3 - cdIndex ).trimmed();
           if( !newWorkingDirectory.startsWith('/') )
             newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
           KUrl u( newWorkingDirectory );
