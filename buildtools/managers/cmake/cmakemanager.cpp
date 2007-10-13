@@ -88,6 +88,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
     m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
     m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
+    m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd)));
 
 #if defined(Q_WS_X11) || defined(Q_WS_MAC) //If it has uname :)
     QString sysName=executeProcess("uname", QStringList("-s"));
@@ -316,11 +317,17 @@ KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectFolder
     return m_builder;
 }
 
-QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin) const
+QString CMakeProjectManager::guessCMakeRoot(const QString& cmakeBin)
 {
     KUrl bin(cmakeBin);
     bin=bin.upUrl();
     bin=bin.upUrl();
+    return bin.toLocalFile();
+}
+
+QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin)
+{
+    KUrl bin(guessCMakeRoot(cmakeBin));
     
     QString version=executeProcess(cmakeBin, QStringList("--version"));
     QRegExp rx("[a-z* ]*([0-9.]*)-[0-9]*");

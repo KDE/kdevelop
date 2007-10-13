@@ -345,4 +345,3 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
     return true;
 }
 
-

@@ -93,7 +93,8 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
 
 private:
-    QStringList guessCMakeModulesDirectories(const QString& cmakeBin) const;
+    static QStringList guessCMakeModulesDirectories(const QString& cmakeBin);
+    static QString guessCMakeRoot(const QString& cmakeBin);
 
     VariableMap m_varsDef;
     QStringList m_modulePathDef;

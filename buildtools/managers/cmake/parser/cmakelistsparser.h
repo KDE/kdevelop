@@ -57,12 +57,12 @@ Q_DECLARE_METATYPE( CMakeFunctionDesc )
 
 struct CMakeFunctionArgument
 {
-    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {}
+    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {unescapeValue();}
     CMakeFunctionArgument(const CMakeFunctionArgument& r):
-        value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line), column(r.column) {}
+            value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line), column(r.column) {unescapeValue();}
     CMakeFunctionArgument(const QString& v, bool q = false,
                           const QString& file = QString(), quint32 l = 0, quint32 c=0)
-        : value(v), quoted(q), filePath(file), line(l), column(c) {}
+        : value(v), quoted(q), filePath(file), line(l), column(c) { unescapeValue(); }
     bool operator == (const CMakeFunctionArgument& r) const
     {
         return (this->value == r.value) && (this->quoted == r.quoted);
@@ -77,6 +77,8 @@ struct CMakeFunctionArgument
     {
         return !(*this == r);
     }
+    
+    void unescapeValue() {value=value.replace("\\\\", "\\");}
 
     QString value;
     bool quoted;

@@ -105,7 +105,7 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 
 bool CMakeCondition::isTrue(const QString& varName) const
 {
-    kDebug(9032) << "++++++++++++++++++++++ isTrue: " << varName;
+    kDebug(9032) << "+++++++ isTrue: " << varName;
     
     if(m_vars->contains(varName))
     {
@@ -142,7 +142,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
-        kDebug(9032) << "operator" << *it2 << c << "..." << variable;
+//         kDebug(9032) << "operator" << *it2 << c << "..." << variable;
         QString cmd;
         
         if(c==variable && it2==itBegin) { //we will only find variables in the first case

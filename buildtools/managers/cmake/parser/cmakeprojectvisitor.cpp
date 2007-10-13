@@ -362,7 +362,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
     }
     m_vars->insert(pack->name()+"_FOUND", QStringList());
-    kDebug(9032) << "Found:" << pack->name() << ". Exit";
+    kDebug(9032) << "Exit. Found:" << pack->name();
     return 1;
 }
 
@@ -370,8 +370,8 @@ bool CMakeProjectVisitor::haveToFind(const QString &varName)
 {
     if(m_vars->contains(varName+"_FOUND"))
         return false;
-    else if(m_vars->contains(varName+"_NOTFOUND"))
-        m_vars->remove(varName+"_NOTFOUND");
+    else if(m_vars->contains(varName+"-NOTFOUND"))
+        m_vars->remove(varName+"-NOTFOUND");
     return true;
 }
 
@@ -387,11 +387,17 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     kDebug(9032) << "Find:" << fprog->variableName() << "program"/* into" << modulePath<<":"<< fprog->path()*/;
     QStringList paths;
     foreach(QString file, fprog->filenames())
-        paths+=findFile(file, modulePath);
+    {
+        QString path=findFile(file, modulePath);
+        if(!path.isEmpty()) {
+            paths+=path;
+            break;
+        }
+    }
     if(!paths.isEmpty())
         m_vars->insert(fprog->variableName(), paths);
     else
-        m_vars->insert(fprog->variableName()+"_NOTFOUND", QStringList());
+        m_vars->insert(fprog->variableName()+"-NOTFOUND", QStringList());
 
     kDebug(9032) << "FindProgram:" << fprog->variableName() << "=" << m_vars->value(fprog->variableName()) << modulePath;
     return 1;
@@ -417,11 +423,16 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         }
     }
 
-    if(!path.isEmpty()) {
+    if(!path.isEmpty())
+    {
         m_vars->insert(fpath->variableName(), QStringList(path));
-    } else
+    }
+    else
+    {
         kDebug(9032) << "Not found";
-//     m_vars->insert(fpath->variableName()+"_NOTFOUND", QStringList());
+    }
+    kDebug(9032) << "Find path: " << fpath->variableName() << m_vars->value(fpath->variableName());
+//     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
     return 1;
 }
 
@@ -449,7 +460,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         m_vars->insert(flib->variableName(), QStringList(path));
     } else
         kDebug(9032) << "Library" << flib->filenames() << "not found";
-//     m_vars->insert(fpath->variableName()+"_NOTFOUND", QStringList());
+//     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
     return 1;
 }
 
@@ -477,7 +488,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         m_vars->insert(ffile->variableName(), QStringList(path));
     } else
         kDebug(9032) << "File" << ffile->filenames() << "not found";
-//     m_vars->insert(fpath->variableName()+"_NOTFOUND", QStringList());
+//     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
     return 1;
 }
 
@@ -979,17 +990,26 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 case StringAst::MATCH:
                     foreach(QString in, sast->input())
                     {
-                        rx.indexIn(in);
-                        res += rx.capturedTexts();
+                        int match=rx.indexIn(in);
+                        if(match>=0) {
+                            res = QStringList(in.mid(match, rx.matchedLength()));
+                            break;
+                        }
                     }
                     break;
-                case StringAst::MATCHALL: //TODO
-                    kDebug(9032) << "Error! String feature MATCHALL not supported!";
+                case StringAst::MATCHALL:
+                    foreach(QString in, sast->input())
+                    {
+                        int match=rx.indexIn(in);
+                        if(match>0) {
+                            res += in.mid(match, rx.matchedLength());
+                        }
+                    }
                     break;
                 case StringAst::REGEX_REPLACE:
                 {
                     QRegExp rx(sast->regex());
-                    QStringList res;
+                    kDebug(9032) << "REGEX REPLACE" << sast->input() << sast->regex() << sast->replace();
                     if(sast->replace().startsWith('\\'))
                     {
                         rx.indexIn(sast->input()[0]);
@@ -1010,13 +1030,13 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                         }
                     }
                     kDebug(9032) << "ret: " << res << " << string(regex replace " << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
-                    m_vars->insert(sast->outputVariable(), res);
                 }
                     break;
                 default:
                     kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();
                     break;
             }
+            kDebug(9032) << "String " << res;
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }
             break;
