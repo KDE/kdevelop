@@ -166,7 +166,7 @@ void Breakpoint::setBreakpoint(GDBController* controller)
     controller->addCommandBeforeRun(
         new GDBCommand(dbgSetCommand(),                        
                        this,
-                       &Breakpoint::handleSet));
+                       &Breakpoint::handleSet, true));
 }
 
 
