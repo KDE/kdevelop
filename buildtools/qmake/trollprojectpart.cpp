@@ -508,7 +508,7 @@ QString TrollProjectPart::mainProgram() const
 
     QDomDocument &dom = *projectDom();
 
-    if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", true) )
+    if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", false) )
     {
         QString DomMainProgram = DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
 

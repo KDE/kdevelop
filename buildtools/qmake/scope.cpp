@@ -1263,7 +1263,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
     QMap<QString, QStringList> variables;
     for( QStringList::iterator it = result.begin(); it != result.end(); ++it )
     {
-        QRegExp re("\\$\\$([^{}\\) /]*)( |\\\\)|/|$)");
+        QRegExp re("\\$\\$([^{}\\) /]*)( |\\)|/|$)");
         int pos = 0;
         while( pos >= 0 )
         {

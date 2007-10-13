@@ -495,6 +495,7 @@ QString TrollProjectWidget::getCurrentDestDir()
 {
     if ( !m_shownSubproject )
         return "";
+    QStringList destdir = m_shownSubproject->scope->variableValues( "DESTDIR" );
     return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "DESTDIR" ).front());
 }
 
@@ -508,7 +509,10 @@ QString TrollProjectWidget::getCurrentOutputFilename()
         return exe.replace( QRegExp( "\\.pro$" ), "" );
     }
     else
+    {
+        QStringList target = m_shownSubproject->scope->variableValues( "TARGET" );
         return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET" ).front());
+    }
 }
 
 void TrollProjectWidget::cleanDetailView( QMakeScopeItem *item )
@@ -683,6 +687,7 @@ void TrollProjectWidget::slotExecuteTarget()
     //  m_part->appFrontend()->startAppCommand(dircmd +"./"+program,true);
 
     bool inTerminal = DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/run/terminal" );
+
     m_part->appFrontend() ->startAppCommand( subprojectDirectory() + QString( QChar( QDir::separator() ) ) + getCurrentDestDir(), program, inTerminal );
 
 }
