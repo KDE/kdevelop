@@ -290,7 +290,10 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                     KUrl r(res);
                     r.adjustPath(KUrl::AddTrailingSlash);
                     
-                    if( !allPaths.contains(r) ) {
+                    KUrl r2(res);
+                    r2.adjustPath(KUrl::RemoveTrailingSlash);
+                    
+                    if( !allPaths.contains(r) && !allPaths.contains(r2) ) {
                         hadMissingPath = true;
                         allPaths << r;
                         kDebug() << "Include-path was missing in list returned by build-manager, adding it: " << r.prettyUrl();
@@ -302,7 +305,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                     foreach( const KUrl& u, allPaths ) {
                         paths += u.prettyUrl() + "\n";
                     }
-                    kDebug() << "Include-paths returned by build-manager:\n" << paths << "\nEnd of list";
+                    kDebug() << "Total list of include-paths:\n" << paths << "\nEnd of list";
                 }
             }
         }else{
