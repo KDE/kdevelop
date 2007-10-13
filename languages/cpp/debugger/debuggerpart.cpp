@@ -652,10 +652,10 @@ bool DebuggerPart::startDebugger()
         }
         if( !info.exists() )
         {
-            KMessageBox::warningYesNo(
+            KMessageBox::information(
                 mainWindow()->main(),
                 i18n("Could not locate the debugging shell '%1'.").arg( shell_without_args ),
-                i18n("Debugging Shell Not Found"),KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error" );
+                i18n("Debugging Shell Not Found"), "gdb_error" );
             return false;
         }
     }
@@ -761,12 +761,12 @@ void DebuggerPart::slotDebuggerAbnormalExit()
 {
     mainWindow()->raiseView(gdbOutputWidget);
 
-    KMessageBox::warningYesNo(
+    KMessageBox::information(
         mainWindow()->main(),
         i18n("<b>GDB exited abnormally</b>"
              "<p>This is likely a bug in GDB. "
              "Examine the gdb output window and then stop the debugger"),
-        i18n("GDB exited abnormally"), KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
+        i18n("GDB exited abnormally"), "gdb_error");
 
     // Note: we don't stop the debugger here, becuse that will hide gdb
     // window and prevent the user from finding the exact reason of the

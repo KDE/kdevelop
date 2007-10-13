@@ -758,12 +758,12 @@ void VariableTree::frameIdReady(const QValueVector<QString>& lines)
     }
     else
     {
-        KMessageBox::warningYesNo(
+        KMessageBox::information(
             0,
             "<b>Can't get frame id</b>"
             "Could not found frame id from output of 'info frame'. "
             "Further debugging can be unreliable. ",
-            i18n("Internal error"), KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
+            i18n("Internal error"),  "gdb_error");
     }
 
     if (frameIdChanged)
@@ -895,10 +895,10 @@ void VarItem::handleCliPrint(const QValueVector<QString>& lines)
         {
             // FIXME: merge all output lines together.
             // FIXME: add 'debuggerError' to debuggerpart.
-            KMessageBox::warningYesNo(
+            KMessageBox::information(
                 0,
                 i18n("<b>Debugger error</b><br>") + lines[1],
-                i18n("Debugger error"), KStdGuiItem::ok(), KStdGuiItem::cont(), "gdb_error");
+                i18n("Debugger error"), "gdb_error");
         }
     }
 }
