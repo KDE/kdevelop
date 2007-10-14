@@ -46,13 +46,13 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
 
   QList<KUrl> ret;
   
-/*  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->textRange().end() ) )
-    return ret;*/
-  
   if( context == import ) {
     ret << import->url();
     return ret;
   }
+  
+  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->textRange().end() ) )
+    return ret;
   
   QList<DUContextPointer> imports = context->importedParentContexts();
   
