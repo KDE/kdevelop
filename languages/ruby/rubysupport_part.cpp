@@ -688,7 +688,7 @@ void RubySupportPart::slotSwitchToController()
         else
             switchTo = name;
     }
-    else if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    else if (ext == "rjs" || ext == "rxml" || ext == "rhtml" || ext == "js.rjs" || ext == "xml.builder" || ext == "html.erb")
     {
         //this is a view, we need to find the directory of this view and try to find
         //the controller basing on the directory information
@@ -721,7 +721,7 @@ void RubySupportPart::slotSwitchToTest()
     QString name = file.baseName();
     QString switchTo = "";
 
-    if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    if (ext == "rjs" || ext == "rxml" || ext == "rhtml" || ext == "js.rjs" || ext == "xml.builder" || ext == "html.erb")
     {
         //this is a view already, let's show the list of all views for this model
         switchTo = file.dir().dirName();
@@ -770,7 +770,7 @@ void RubySupportPart::slotSwitchToModel()
     QString name = file.baseName();
     QString switchTo = "";
 
-    if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    if (ext == "rjs" || ext == "rxml" || ext == "rhtml" || ext == "js.rjs" || ext == "xml.builder" || ext == "html.erb")
     {
         //this is a view already, let's show the list of all views for this model
         switchTo = file.dir().dirName();
@@ -809,7 +809,7 @@ void RubySupportPart::slotSwitchToView()
     QString name = file.baseName();
     QString switchTo = "";
 
-    if (ext == "rjs" || ext == "rxml" || ext == "rhtml")
+    if (ext == "rjs" || ext == "rxml" || ext == "rhtml" || ext == "js.rjs" || ext == "xml.builder" || ext == "html.erb")
     {
         //this is a view already, let's show the list of all views for this model
         switchTo = file.dir().dirName();

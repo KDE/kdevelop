@@ -73,7 +73,7 @@ const char *filepatterns[] = {
     "*.pl",
     "*.pp,*.pas",
     "*.py",
-    "*.js,*.css,*.yml,*.rb,*.rhtml,*.rjs,*.rxml",
+    "*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder",
     "CMakeLists.txt,*.cmake",
     "*",
     0

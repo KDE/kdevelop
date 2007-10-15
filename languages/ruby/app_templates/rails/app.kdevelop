@@ -18,7 +18,7 @@
  </general>
  <kdevscriptproject>
   <general>
-		<includepatterns>*.rb,*.rhtml,*.rxml,*.rjs,*.css,*.js</includepatterns>
+		<includepatterns>*.rb,*.rhtml,*.rxml,*.rjs,*.css,*.js,*.html.erb,*.js.rjs,*.xml.builder</includepatterns>
 		<excludepatterns>*~</excludepatterns>
   </general>
  </kdevscriptproject>
@@ -27,9 +27,9 @@
 	   <group pattern="*.rb" name="Scripts" />
 	   <group pattern="*.css" name="StyleSheets" />
 	   <group pattern="*.js" name="JavaScripts" />
-	   <group pattern="*.rhtml" name="Views" />
-	   <group pattern="*.rxml" name="BuilderTemplates" />
-	   <group pattern="*.rjs" name="Ruby JavaScript" />
+	   <group pattern="*.rhtml,*.html.erb" name="Views" />
+	   <group pattern="*.rxml,*.xml.builder" name="BuilderTemplates" />
+	   <group pattern="*.rjs,*.js.rjs" name="Ruby JavaScript" />
 	   <group pattern="*.yml" name="Config" />
 	   <group pattern="*.gif,*.jpg,*.png,*.ico" name="Images" />
 	   <group pattern="*.html,*.cgi,*.fcgi,*.txt" name="Public" />
@@ -87,8 +87,11 @@
     <useglobaltypes>
 			<type ext="rb"/>
 			<type ext="rhtml"/>
+			<type ext="html.erb"/>
 			<type ext="rxml"/>
+			<type ext="xml.builder"/>
 			<type ext="rjs"/>
+			<type ext="js.rjs"/>
 			<type ext="css"/>
 			<type ext="js"/>
     </useglobaltypes>
