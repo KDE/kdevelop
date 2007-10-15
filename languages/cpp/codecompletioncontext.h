@@ -163,6 +163,16 @@ namespace Cpp {
       void log( const QString& str ) const;
       ///Returns whether the given strings ends with an overloaded operator that can form a parent-context
       bool endsWithOperator( const QString& str ) const;
+      /**
+       * Returns the function-name operator expressen for the operator the given string ends with
+       *
+       * Example: For "bla[" it returns "[]"
+       * */
+      QString getEndOperatorFunction( const QString& str ) const;
+      /**
+       * Returns the exact end of the string that is an operator.
+       * Example: For "bla[" it returns "["
+       * */
       QString getEndOperator( const QString& str ) const;
       ///Should map a position in m_text to a position in the underlying document
       MemberAccessOperation m_memberAccessOperation;

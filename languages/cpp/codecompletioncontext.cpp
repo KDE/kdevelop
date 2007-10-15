@@ -87,7 +87,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     m_valid = false;
     return;
   }
-  log( "Computing context" );
+  //log( "Computing context for " + text );
 
   {
     //Since include-file completion has nothing in common with the other completion-types, process it within a separate function
@@ -145,8 +145,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     }
     m_memberAccessOperation = FunctionCallAccess;
     m_contextType = BinaryOperatorFunctionCall;
-    m_operator = getEndOperator(m_text);
-    m_text = m_text.left( m_text.length() - m_operator.length() );
+    m_operator = getEndOperatorFunction(m_text);
+    m_text = m_text.left( m_text.length() - getEndOperator(m_text).length() );
   }
 
   if( m_text.endsWith('(') ) {
@@ -190,6 +190,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   m_expression = m_text.mid(start_expr).trimmed();
 
+  kDebug() << start_expr << " found expression: " << m_expression << " in text: " << m_text;
+  
   QString expressionPrefix = Utils::stripFinalWhitespace( m_text.left(start_expr) );
 
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
@@ -235,6 +237,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ExpressionParser expressionParser;
 
+  kDebug() << "expression: " << expr;
+  
   if( !expr.trimmed().isEmpty() ) {
     m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
     if( !m_expressionResult.isValid() ) {
@@ -336,7 +340,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   if( m_contextType == BinaryOperatorFunctionCall ) {
 
     if( !m_expressionResult.instance ) {
-      log( "tried to apply an operator to a non-instance" );
+      log( "tried to apply an operator to a non-instance: " + m_expressionResult.toString() );
       m_valid = false;
       return;
     }
@@ -464,8 +468,12 @@ QString CodeCompletionContext::getEndOperator( const QString& str ) const {
 
   for( QStringList::const_iterator it = allowedOperators.begin(); it != allowedOperators.end(); ++it )
     if( str.endsWith(*it) )
-      return originalOperator(*it);
+      return *it;
   return QString();
+}
+
+QString CodeCompletionContext::getEndOperatorFunction( const QString& str ) const {
+  return originalOperator( getEndOperator( str ) );
 }
 
 bool CodeCompletionContext::endsWithOperator( const QString& str ) const {
