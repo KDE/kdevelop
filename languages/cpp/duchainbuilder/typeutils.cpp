@@ -158,6 +158,9 @@ namespace TypeUtils {
   bool isPublicBaseClass( const CppClassType* c, CppClassType* base, int* baseConversionLevels ) {
     if( baseConversionLevels )
       *baseConversionLevels = 0;
+
+    if( c->equals( base ) )
+      return true;
     
     foreach( const CppClassType::BaseClassInstance& b, c->baseClasses() )
     {
@@ -165,10 +168,10 @@ namespace TypeUtils {
         ++ (*baseConversionLevels);
       //kDebug(9007) << "public base of" << c->toString() << "is" << b.baseClass->toString();
       if( b.access != KDevelop::Declaration::Private ) {
-        if( b.baseClass.data() == base )
-          return true;
+        int nextBaseConversion = 0;
         if( const CppClassType* c = dynamic_cast<const CppClassType*>(b.baseClass.data()) )
-          if( isPublicBaseClass( c, base ) )
+          if( isPublicBaseClass( c, base, &nextBaseConversion ) )
+            *baseConversionLevels += nextBaseConversion;
             return true;
       }
       if( baseConversionLevels )
