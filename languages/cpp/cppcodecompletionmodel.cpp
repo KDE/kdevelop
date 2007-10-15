@@ -194,16 +194,47 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
     ret = "(";
     bool first = true;
     int num = 0;
+
+    const QList<Cpp::ViableFunction::ParameterConversion>& conversions = f.function.parameterConversions();
+    QList<Cpp::ViableFunction::ParameterConversion>::const_iterator parameterConversion = conversions.begin();
+    
     foreach (const AbstractType::Ptr& argument, functionType->arguments()) {
       if (first)
         first = false;
       else
         ret += ", ";
 
-      if( f.function.isValid() && num == f.matchedArguments )
+      bool doHighlight = false;
+      QTextFormat doFormat = normalFormat;
+
+      if( ( f.function.isValid() && num == f.matchedArguments ) )
+      {
+        doHighlight = true;
+        doFormat = highlightFormat;
+        
+      } else if( num < f.matchedArguments )
+      {
+        doHighlight = true;
+        doFormat = QTextFormat( QTextFormat::CharFormat );
+
+        if( parameterConversion != conversions.end() ) {
+          //Interpolate the color
+          quint64 badMatchColor = 0xff7777ff; //Full blue
+          quint64 goodMatchColor = 0xff77ff77; //Full green
+
+          uint totalColor = (badMatchColor*(Cpp::MaximumConversionResult-(*parameterConversion).rank) + goodMatchColor*(*parameterConversion).rank)/Cpp::MaximumConversionResult;
+          
+          doFormat.setBackground( QBrush(totalColor) );
+
+          ++parameterConversion;
+        }
+      }
+      
+      if( doHighlight )
       {
         if( highlighting && ret.length() != textFormatStart )
         {
+          //Add a default-highlighting for the passed text
           *highlighting <<  QVariant(textFormatStart);
           *highlighting << QVariant(ret.length() - textFormatStart);
           *highlighting << QVariant(normalFormat);
@@ -219,13 +250,13 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       if( paramNameIt != paramNames.end() && !(*paramNameIt).isEmpty() )
         ret += " " + *paramNameIt;
       
-      if( f.function.isValid() && num == f.matchedArguments  )
+      if( doHighlight  )
       {
         if( highlighting && ret.length() != textFormatStart )
         {
           *highlighting <<  QVariant(textFormatStart);
           *highlighting << QVariant(ret.length() - textFormatStart);
-          *highlighting << highlightFormat;
+          *highlighting << doFormat;
           textFormatStart = ret.length();
         }
       }
