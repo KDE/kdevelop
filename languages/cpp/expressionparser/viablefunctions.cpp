@@ -135,3 +135,7 @@ uint ViableFunction::worstConversion() const {
   else
     return ret;
 }
+
+const QList<ViableFunction::ParameterConversion>& ViableFunction::parameterConversions() const {
+  return m_parameterConversions;
+}

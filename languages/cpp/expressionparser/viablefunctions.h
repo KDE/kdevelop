@@ -64,16 +64,21 @@ namespace Cpp {
 
     KDevelop::DeclarationPointer declaration() const;
 
-    private:
     struct ParameterConversion {
       ParameterConversion(int _rank=0, int _baseConversionLevels=0) : rank(_rank), baseConversionLevels(_baseConversionLevels) {
       }
 
       inline bool operator<(const ParameterConversion& rhs) const;
-      
-      int rank; ///@see TypeConversion::ConversionRank
+
+      ///The maximum value of rank is TypeConversion::MaximumConversionResult @see TypeConversion::ConversionRank
+      int rank;
       int baseConversionLevels; ///@see TypeConversion::baseConversionLevels
     };
+
+    ///Returns a list of structures that describe the conversion needed for each parameter of the function
+    const QList<ParameterConversion>& parameterConversions() const;
+    
+    private:
     QList<ParameterConversion> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
     KSharedPtr<CppFunctionType> m_type;
