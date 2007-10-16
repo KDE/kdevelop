@@ -17,7 +17,7 @@
 */
 
 #include "typeutils.h"
-#include "duchainbuilder/cpptypes.h"
+#include "cppduchain/cpptypes.h"
 #include "duchain/ducontext.h"
 #include "duchain/forwarddeclaration.h"
 #include "duchain/classfunctiondeclaration.h"

@@ -32,10 +32,10 @@
 #include <khtmlview.h>
 
 
-#include "duchainbuilder/cppduchain.h"
-#include "duchainbuilder/typeutils.h"
+#include "cppduchain/cppduchain.h"
+#include "cppduchain/typeutils.h"
 
-#include "expressionparser/overloadresolutionhelper.h"
+#include "cppduchain/overloadresolutionhelper.h"
 
 #include <declaration.h>
 #include "cpptypes.h"

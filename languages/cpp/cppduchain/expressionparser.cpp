@@ -19,10 +19,10 @@
 #include "expressionparser.h"
 
 #include <duchain.h>
-#include "duchainbuilder/usebuilder.h"
-#include "duchainbuilder/declarationbuilder.h"
-#include "duchainbuilder/dumpchain.h"
-#include "duchainbuilder/dumptypes.h"
+#include "cppduchain/usebuilder.h"
+#include "cppduchain/declarationbuilder.h"
+#include "cppduchain/dumpchain.h"
+#include "cppduchain/dumptypes.h"
 #include <declaration.h>
 
 #include "ducontext.h"

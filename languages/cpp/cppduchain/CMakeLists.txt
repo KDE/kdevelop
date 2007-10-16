@@ -1,14 +1,16 @@
+########### next target ###############
 
 add_subdirectory(tests)
 
 include_directories(
     ${CMAKE_TOP_BUILD_DIR}
+    ${KDEVPLATFORM_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/languages/cpp
 )
 
 ########### next target ###############
 
-set(kdevcppduchainbuilder_LIB_SRCS
+set(kdevcppduchain_LIB_SRCS
     contextbuilder.cpp
     declarationbuilder.cpp
     typebuilder.cpp
@@ -29,25 +31,28 @@ set(kdevcppduchainbuilder_LIB_SRCS
     templatedeclaration.cpp
     setrepository.cpp
     cpppreprocessenvironment.cpp
+    expressionparser.cpp
+    expressionvisitor.cpp
+    typeconversion.cpp
+    overloadresolution.cpp
+    viablefunctions.cpp
+    overloadresolutionhelper.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
-kde4_add_library(kdev4cppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})
-target_link_libraries(kdev4cppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY} kdev4cppparser)
-install(TARGETS kdev4cppduchainbuilder DESTINATION ${LIB_INSTALL_DIR} )
+
+kde4_add_library(kdev4cppduchain SHARED ${kdevcppduchain_LIB_SRCS})
+target_link_libraries(kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY} kdev4cppparser kdev4cppduchainbuilder)
+install(TARGETS kdev4cppduchain DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
 # install(FILES
-#     contextbuilder.h
-#     cppeditorintegrator.h
-#     cpptypes.h
-#     declarationbuilder.h
-#     dumpchain.h
-#     typebuilder.h
-#     typerepository.h
-#     usebuilder.h
-#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/duchainbuilder
+#     expressionparser.h
+#     expressionvisitor.h
+#     typeconversion.h
+#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/expressionparser
+#
 # )

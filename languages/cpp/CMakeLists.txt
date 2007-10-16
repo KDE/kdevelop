@@ -5,8 +5,7 @@ include_directories(${CMAKE_TOP_BUILD_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
     ${KDEVPLATFORM_INCLUDE_DIR}/editor
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
-    ${CMAKE_SOURCE_DIR}/languages/cpp/duchainbuilder
-    ${CMAKE_SOURCE_DIR}/languages/cpp/expressionparser
+    ${CMAKE_SOURCE_DIR}/languages/cpp/cppduchain
     ${KDEVPLATFORM_INCLUDE_DIR}/project
     ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
     ${KDEVPLATFORM_INCLUDE_DIR}/language
@@ -17,9 +16,8 @@ include_directories(${CMAKE_TOP_BUILD_DIR}
 )
 
 add_subdirectory(parser)
-add_subdirectory(duchainbuilder)
+add_subdirectory(cppduchain)
 add_subdirectory(app_templates)
-add_subdirectory(expressionparser)
 add_subdirectory(tests)
 
 ########### next target ###############
@@ -53,7 +51,7 @@ install(TARGETS kdev_includepathresolver DESTINATION ${BIN_INSTALL_DIR} )
 
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY}
-    ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cppduchainbuilder kdev4cppexpressionparser kdev4cpprpp
+    ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cppduchain kdev4cpprpp
     ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARY} khtml
     ${KDE4_KDECORE_LIBS}
 )

@@ -17,11 +17,11 @@
 */
 
 #include "viablefunctions.h"
-#include "duchainbuilder/typeutils.h"
+#include "cppduchain/typeutils.h"
 #include "duchain/ducontext.h"
 #include "duchain/declaration.h"
 #include "duchain/classfunctiondeclaration.h"
-#include "duchainbuilder/cpptypes.h"
+#include "cppduchain/cpptypes.h"
 
 using namespace Cpp;
 

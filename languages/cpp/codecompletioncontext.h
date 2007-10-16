@@ -22,10 +22,10 @@
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
 #include <duchain/duchainpointer.h>
-#include "expressionparser/typeconversion.h"
-#include "expressionparser/expressionparser.h"
-#include "expressionparser/viablefunctions.h"
-#include "expressionparser/overloadresolutionhelper.h"
+#include "cppduchain/typeconversion.h"
+#include "cppduchain/expressionparser.h"
+#include "cppduchain/viablefunctions.h"
+#include "cppduchain/overloadresolutionhelper.h"
 #include <typesystem.h>
 #include "includeitem.h"
 

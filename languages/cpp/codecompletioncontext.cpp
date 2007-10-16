@@ -24,10 +24,10 @@
 #include <classfunctiondeclaration.h>
 #include <duchainlock.h>
 #include "stringhelpers.h"
-#include "duchainbuilder/cppduchain.h"
-#include "duchainbuilder/typeutils.h"
-#include "expressionparser/overloadresolution.h"
-#include "expressionparser/viablefunctions.h"
+#include "cppduchain/cppduchain.h"
+#include "cppduchain/typeutils.h"
+#include "cppduchain/overloadresolution.h"
+#include "cppduchain/viablefunctions.h"
 #include "cpptypes.h"
 #include "safetycounter.h"
 #include "cpplanguagesupport.h"
