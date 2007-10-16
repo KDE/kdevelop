@@ -31,7 +31,7 @@ class KDEVCPPPARSER_EXPORT NameCompiler: protected DefaultVisitor
 public:
   NameCompiler(ParseSession* session);
 
-  void run(NameAST *node) { m_typeSpecifier = 0; internal_run(node); }
+  void run(NameAST *node);
   void run(UnqualifiedNameAST *node) { m_typeSpecifier = 0; internal_run(node); }
 
   QString name() const { return _M_name.toString(); }

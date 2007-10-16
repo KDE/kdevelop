@@ -105,3 +105,8 @@ const QualifiedIdentifier& NameCompiler::identifier() const
 {
   return _M_name;
 }
+
+void NameCompiler::run(NameAST *node)
+{
+  m_typeSpecifier = 0; internal_run(node); _M_name.setExplicitlyGlobal( node->global );
+}
