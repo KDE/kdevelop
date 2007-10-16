@@ -827,9 +827,12 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
     QString projectdir = spitem->scope->projectDir();
 
     KURLRequesterDlg dialog( i18n( "Add Subproject" ), i18n( "Please enter a name for the subproject: " ), this, 0 );
-    dialog.urlRequester() ->setMode( KFile::Directory | KFile::Files | KFile::LocalOnly );
-    dialog.urlRequester() ->setURL( QString::null );
-    dialog.urlRequester() ->completionObject() ->setDir( projectdir );
+    KURLRequester* req = dialog.urlRequester();
+    req->setMode( KFile::Directory | KFile::File | KFile::LocalOnly );
+    req->setFilter( "*.pro|QMake Project Files (*.pro)" );
+    req->setURL( QString() );
+    req->fileDialog()->setURL( KURL::fromPathOrURL( projectdir ) );
+    req->completionObject() ->setDir( projectdir );
 
     if ( dialog.exec() == QDialog::Accepted && !dialog.urlRequester() ->url().isEmpty() )
     {
@@ -864,7 +867,7 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
         }else
         {
             QString realdir = spitem->scope->resolveVariables( subdirname );
-            QFile f( projectdir+"/"+realdir+".pro" );
+            QFile f( projectdir+"/"+realdir );
             f.open( IO_WriteOnly );
             f.close();
         }
