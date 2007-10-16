@@ -1,3 +1,6 @@
+2007-10-16  Richard Dale  <rdale@foton.es>
+* Added Rails 2.0 file type suffixes; .html.erb, .js.rjs and .xml.builder
+
 2006-12-13 Matt Rogers <mattr@kde.org>
 	* KDevelop 3.4 RC 2 (with many more things than listed here)
 
