@@ -58,6 +58,11 @@ Range CppEditorIntegrator::findRange( AST * node, RangeEdge edge )
   return Range(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge));
 }
 
+Range CppEditorIntegrator::findRange( size_t start_token, size_t end_token )
+{
+  return Range(findPosition(start_token, FrontEdge), findPosition(end_token - 1, BackEdge));
+}
+
 Range CppEditorIntegrator::findRange(AST* from, AST* to)
 {
   return Range(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge));

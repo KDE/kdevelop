@@ -52,8 +52,8 @@ public:
   KTextEditor::Cursor findPosition(const Token& token, Edge edge = BackEdge) const;
 
   /**
-   * Finds the location and \a file where the given \a token was parsed from.  This function
-   * does not change any of the CppEditorIntegrator's state.
+   * Finds the location and \a file where the given \a token was parsed from.
+   * This function does not change any of the CppEditorIntegrator's state.
    *
    * \param token token to locate
    * \param edge set to FrontEdge to return the start position of the token, BackEdge to return the end position.
@@ -65,53 +65,45 @@ public:
   using KDevelop::EditorIntegrator::createRange;
 
   /**
-   * Create a new text range encompassing the given AST \a node.
-   * The returned range will become the new currentRange().
+   * Create a range encompassing the given AST \a node.
+   * This function does not change any of the CppEditorIntegrator's state.
    *
-   * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
-   *
-   * \returns the newly created smart range.
    * \overload
    */
   KTextEditor::Range findRange(AST* node, RangeEdge = OuterEdge);
 
   /**
-   * Create a new text range encompassing the given AST nodes.
-   * The returned range will become the new currentRange().
+   * Create a range encompassing the given AST \a nodes.
+   * This function does not change any of the CppEditorIntegrator's state.
    *
-   * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
-   *
-   * \returns the newly created smart range.
    * \overload
    */
   KTextEditor::Range findRange(AST* from, AST* to);
 
   /**
-   * Create a new start range encompassing the given AST \a token.
-   * The returned range will become the new currentRange().
+   * Create a range encompassing the given AST \a token.
+   * This function does not change any of the CppEditorIntegrator's state.
    *
-   * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
-   *
-   * \returns the newly created smart range.
    * \overload
    */
   KTextEditor::Range findRange(const Token& token);
 
   /**
-   * Create a new start range encompassing the given AST \a token.
-   * The returned range will become the new currentRange().
+   * Create a range encompassing the given AST \a token.
+   * This function does not change any of the CppEditorIntegrator's state.
    *
-   * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
-   *
-   * \returns the newly created smart range.
    * \overload
    */
   KTextEditor::Range findRange(std::size_t token);
 
+  /**
+   * Create a range encompassing the given AST \a tokens.
+   * This function does not change any of the CppEditorIntegrator's state.
+   *
+   * \overload
+   */
+  KTextEditor::Range findRange(std::size_t start_token, std::size_t end_token);
+  
   /**
    * Retrieve the string represented by a token.
    */
