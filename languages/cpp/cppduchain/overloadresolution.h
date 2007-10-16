@@ -47,8 +47,20 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
       }
       Parameter( AbstractType* t, bool isLValue ) : type(t), lValue( isLValue ) {
       }
-      AbstractType* type;
+      AbstractType::Ptr type;
       bool lValue;
+
+      ///duchain must be locked
+      QString toString() const {
+        QString ret;
+        if(lValue)
+          ret += "lvalue ";
+        if(type)
+          ret += type->toString();
+        else
+          ret += "<notype>";
+        return ret;
+      }
     };
     
     struct ParameterList {

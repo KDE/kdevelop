@@ -41,6 +41,11 @@ public:
    */
   void buildUses(AST *node);
 
+  /**
+   * @param decl May be zero for not found declarations
+   * */
+  void newUse(std::size_t start_token, std::size_t end_token, KDevelop::Declaration* decl);
+
 protected:
   virtual void openContext(KDevelop::DUContext* newContext);
   virtual void closeContext();
@@ -48,7 +53,13 @@ protected:
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);
   virtual void visitMemInitializer(MemInitializerAST *);
 
+  virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) ;
+  virtual void visitExpressionStatement(ExpressionStatementAST *) ;
+  
 private:
+
+  void visitExpression(AST* node);
+  
   /// Register a new use
   void newUse(NameAST* name);
 

@@ -943,15 +943,17 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       return;
     }
 
-    LOCKDUCHAIN;
-    ///@todo cv-qualifiers
-    CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::CVNone) );
-    p->setBaseType( m_lastType );
+    {
+      LOCKDUCHAIN;
+      ///@todo cv-qualifiers
+      CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::CVNone) );
+      p->setBaseType( m_lastType );
 
-    m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
-    
-    
-    m_lastInstance = Instance(true);
+      m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
+      
+      
+      m_lastInstance = Instance(true);
+    }
 
     
     if( m_lastType )
@@ -1160,7 +1162,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     int paramNum = 1;
     bool fail = false;
     for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.begin(); it != m_parameters.end(); ++it ) {
-      if( (*it).type == 0 ) {
+      if( !(*it).type ) {
         problem(node, QString("parameter %1 could not be evaluated").arg(paramNum) );
         fail = true;
         paramNum++;
@@ -1185,6 +1187,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
+      QString params;
+      foreach(const OverloadResolver::Parameter& param, m_parameters)
+        params << param.toString();
+      
       problem(node, "Could not find a function that matches the parameters. Using first candidate function.");
       fail = true;
     }
