@@ -58,7 +58,7 @@ class KDevDocumentViewPartFactory: public KDevelop::IToolViewFactory
                     view, SLOT( closed( KDevelop::IDocument* ) ) );
             QObject::connect( docController,
                     SIGNAL( documentContentChanged( KDevelop::IDocument* ) ),
-                    view, SLOT( contentChanged( KDevelop::Document* ) ) );
+                    view, SLOT( contentChanged( KDevelop::IDocument* ) ) );
             QObject::connect( docController,
                     SIGNAL( documentStateChanged( KDevelop::IDocument* ) ),
                     view, SLOT( stateChanged( KDevelop::IDocument* ) ) );
