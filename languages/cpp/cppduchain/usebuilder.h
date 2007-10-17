@@ -56,6 +56,19 @@ protected:
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) ;
   virtual void visitExpressionStatement(ExpressionStatementAST *) ;
   
+  virtual void visitBinaryExpression(BinaryExpressionAST *) ;
+  virtual void visitCastExpression(CastExpressionAST *) ;
+  virtual void visitConditionalExpression(ConditionalExpressionAST *) ;
+  virtual void visitCppCastExpression(CppCastExpressionAST *) ;
+  //virtual void visitDeleteExpression(DeleteExpressionAST *) ;
+  //virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
+  virtual void visitNewExpression(NewExpressionAST *) ;
+  virtual void visitPostfixExpression(PostfixExpressionAST *) ;
+  virtual void visitSizeofExpression(SizeofExpressionAST *) ;
+  virtual void visitSubscriptExpression(SubscriptExpressionAST *) ;
+  //virtual void visitThrowExpression(ThrowExpressionAST *) ;
+  virtual void visitUnaryExpression(UnaryExpressionAST *) ;
+  
 private:
 
   void visitExpression(AST* node);

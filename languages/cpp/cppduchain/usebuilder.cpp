@@ -162,12 +162,44 @@ void UseBuilder::closeContext()
 }
 
 void UseBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST * exp) {
-  visitExpression(exp);
+  if( exp->expressionChosen )
+    visitExpression(exp->expression);
+  else
+    UseBuilderBase::visitExpressionOrDeclarationStatement(exp);
 }
 
 void UseBuilder::visitExpressionStatement(ExpressionStatementAST * exp) {
   visitExpression(exp);
 }
+
+void UseBuilder::visitBinaryExpression(BinaryExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitCastExpression(CastExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitConditionalExpression(ConditionalExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitCppCastExpression(CppCastExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitNewExpression(NewExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitPostfixExpression(PostfixExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitSizeofExpression(SizeofExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitSubscriptExpression(SubscriptExpressionAST * exp) {
+  visitExpression(exp);
+}
+void UseBuilder::visitUnaryExpression(UnaryExpressionAST * exp) {
+  visitExpression(exp);
+}
+
 
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
