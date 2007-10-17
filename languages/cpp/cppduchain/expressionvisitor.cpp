@@ -335,8 +335,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
         PointerType* pnt = dynamic_cast<PointerType*>( realType(base) );
         if( pnt ) {
-          kDebug(9007) << "got type:" << pnt->toString();
-          kDebug(9007) << "base-type:" << pnt->baseType()->toString();
+/*          kDebug(9007) << "got type:" << pnt->toString();
+          kDebug(9007) << "base-type:" << pnt->baseType()->toString();*/
           
           isConst = isConstant(pnt);
           //It is a pointer, reduce the pointer-depth by one
@@ -430,8 +430,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     
     m_lastType = 0;
     m_lastInstance = Instance();
-    
-    ///@todo Check if this node represents a use, if yes take the declaration from that use(we don't need to search then)
+    m_lastDeclarations.clear();
+
     NameCompiler nameC( m_session );
     nameC.run(node);
 
@@ -440,16 +440,29 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       return;
     }
 
-    {
+    QualifiedIdentifier identifier = nameC.identifier();
+
+    ///@todo It would be better if the parser would treat true and false exactly
+    ///like constant-integer expressions, storing them in a primary expression.
+    static QualifiedIdentifier trueIdentifier("true");
+    static QualifiedIdentifier falseIdentifier("false");
+
+    if( identifier == trueIdentifier || identifier == falseIdentifier ) {
+      ///We have a boolean constant, we need to catch that here
+      LOCKDUCHAIN;
+      m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeBool, CppIntegralType::ModifierNone)) );
+      m_lastInstance = Instance(true);
+      static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue( identifier == trueIdentifier );
+    } else {
       LOCKDUCHAIN;
 
       int line, column;
       QString file;
-      
+
       m_session->positionAt( m_session->token_stream->position(node->start_token), &line, &column, &file );
 
       ///@todo reenable(first make sure the conversion works properly)
-      m_lastDeclarations = m_currentContext->findDeclarations(nameC.identifier() );//, KTextEditor::Cursor(line, column) ); 
+      m_lastDeclarations = m_currentContext->findDeclarations( identifier );//, KTextEditor::Cursor(line, column) );
       if( m_lastDeclarations.isEmpty() ) {
         problem( node, QString("could not find declaration of %1").arg( nameC.identifier().toString() ) );
       } else {
@@ -464,10 +477,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
           m_lastInstance = Instance(false);
       }
     }
-
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }
+  
   
   /** Primary expressions just forward to their encapsulated expression
    *
@@ -487,7 +500,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     if( !node->literal && !node->sub_expression && !node->expression_statement && !node->name )
     {
-      if( isNumber(tokenFromIndex(node->start_token).symbol()) )
+      QString symbol = tokenFromIndex(node->start_token).symbol();
+      
+      if( isNumber(symbol) )
       {
         QString num;
         for( size_t a = node->start_token; a < node->end_token; a++ )
@@ -705,28 +720,52 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
        * */
       if( leftType && leftInstance) {
         m_parameters << OverloadResolver::Parameter(leftType.data(), isLValue( leftType, leftInstance ) );
+
+        //LOCKDUCHAIN;
+        //kDebug() << "Adding parameter from left: " << (leftType.data() ? leftType->toString() : QString("<notype>"));
       } else {
-        problem(node->left_expression, "left operand of binary ','-expression is no type-instance" );
-        m_parameters << OverloadResolver::Parameter(0, false);
+        //If neither leftType nor leftInstance are true, the expression was probably another binary
+        //expression that has put the types/instances into m_parameters and returns nothing.
+        if( leftType || leftInstance ) {
+          if( leftType )
+            problem( node->left_expression, "left operand of binary ','-expression is no type-instance" );
+          else
+            problem( node->left_expression, "left operand of binary ','-expression could not be evaluated" );
+          
+          m_parameters << OverloadResolver::Parameter(0, false);
+          //LOCKDUCHAIN;
+          //kDebug() << "Adding empty from left";
+        }
       }
 
       if( rightType && rightInstance) {
         m_parameters << OverloadResolver::Parameter(rightType.data(), isLValue( rightType, rightInstance ) );
+        //LOCKDUCHAIN;
+        //kDebug() << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
       } else {
-        problem(node->right_expression, "right operand of binary ','-expression is no type-instance" );
-        m_parameters << OverloadResolver::Parameter(0, false);
+        //If neither leftType nor leftInstance are true, the expression was probably another binary
+        //expression that has put the types/instances into m_parameters and returns nothing.
+        if( rightType || rightInstance ) {
+          if( rightType )
+            problem( node->right_expression, "right operand of binary ','-expression is no type-instance" );
+          else
+            problem( node->right_expression, "right operand of binary ','-expression could not be evaluated" );
+          
+          m_parameters << OverloadResolver::Parameter(0, false);
+          //kDebug() << "Adding empty from right";
+        }
       }
       
       clearLast();
+      return;
     }
     
-
-    if( !leftInstance ) {
+    if( !leftInstance && !leftType ) {
       problem( node, "left operand of binary expression could not be evaluated" );
       return;
     }
     
-    if( !rightInstance ) {
+    if( !rightInstance && !rightType ) {
       problem( node, "right operand of binary expression could not be evaluated" );
       m_lastInstance = leftInstance;
       m_lastType = leftType;
@@ -734,7 +773,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     }
 
     switch( tokenFromIndex(node->op).kind ) {
-      ///@todo implement all the other binary expressions
       case Token_assign:
       default:
       {
@@ -755,9 +793,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
             if( functions.first().function.isViable() && function ) {
               success = true;
               m_lastType = function->returnType();
-              m_lastInstance = Instance(true);
+              m_lastInstance = Instance(function->declaration());
             }else{
-              problem(node, QString("Found no viable operator-function"));
+              //Do not complain here, because we do not check for builtin operators
+              //problem(node, "No fitting operator. found" );
+              //problem(node, QString("Found no viable operator-function"));
             }
           }else{
             //Do not complain here, because we do not check for builtin operators
@@ -775,7 +815,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       }
       break;
     };
-    
+
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }
@@ -926,6 +966,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   }
 
   void ExpressionVisitor::visitNewExpression(NewExpressionAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
     clearLast();
     visit( node->expression );
     clearLast();
@@ -1148,22 +1189,27 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
      * node->arguments contains them, using recursive binary expressions
      * */
     QList<Declaration*> declarations = m_lastDeclarations;
-    
+
+    QList<OverloadResolver::Parameter> oldParams = m_parameters;
     m_parameters.clear();
+    //kDebug() << "clearing parameters";
 
     clearLast();
     visit(node->arguments);
 
     //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
-    if( m_lastType )
+    if( m_lastType ) {
       m_parameters << OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) );
+      //LOCKDUCHAIN;
+      //kDebug() << "adding last parameter: " << (m_lastType.data() ? m_lastType->toString() : QString("<notype>"));
+    }
     
     //Check if all parameters could be evaluated
     int paramNum = 1;
     bool fail = false;
     for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.begin(); it != m_parameters.end(); ++it ) {
       if( !(*it).type ) {
-        problem(node, QString("parameter %1 could not be evaluated").arg(paramNum) );
+        problem( node, QString("parameter %1 could not be evaluated").arg(paramNum) );
         fail = true;
         paramNum++;
       }
@@ -1173,7 +1219,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     if( !declarations.isEmpty() && declarations.first()->type<CppClassType>() && declarations.first()->kind() == Declaration::Type ) {
       //If a type was found, simply assume that it is constructed. We do not need more checks for it.
       m_lastType = declarations.first()->abstractType();
-      m_lastInstance = Instance(true);
+      m_lastInstance = Instance(declarations.first());
+      m_parameters = oldParams;
+      //kDebug() << "resetting old parameters of size " << oldParams.size();
       return;
     }
 
@@ -1189,9 +1237,18 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
       QString params;
       foreach(const OverloadResolver::Parameter& param, m_parameters)
-        params << param.toString();
+        params += param.toString() + ", ";
       
-      problem(node, "Could not find a function that matches the parameters. Using first candidate function.");
+      QString candidates;
+      foreach(Declaration* decl, declarations) {
+        int defaultParamCount = 0;
+        if( AbstractFunctionDeclaration* aDec = dynamic_cast<AbstractFunctionDeclaration*>(decl) )
+          defaultParamCount = aDec->defaultParameters().count();
+        
+        candidates += decl->toString() + QString(" default-params: %1").arg(defaultParamCount) + '\n';
+      }
+      
+      problem(node, QString("Could not find a function that matches the parameters. Using first candidate function. Parameters: %1 Candidates: %2").arg(params).arg(candidates));
       fail = true;
     }
 
@@ -1200,7 +1257,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       chosenFunction = declarations.front();
     }
 
-    m_parameters.clear();
+    m_parameters = oldParams;
+    //kDebug() << "Resetting old parameters of size " << oldParams.size();
+    
 
     clearLast();
     
@@ -1209,7 +1268,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       problem( node, QString( "could not find a matching function for function-call" ) );
     } else {
       m_lastType = functionType->returnType();
-      m_lastInstance = Instance(true);
+      m_lastInstance = Instance(chosenFunction);
     }
   }
   
@@ -1291,6 +1350,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   }
   
   void ExpressionVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)  {
+    ///@todo implement
     problem(node, "node-type cannot be parsed");
   }
   
