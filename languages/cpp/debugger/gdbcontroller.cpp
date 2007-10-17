@@ -1539,13 +1539,17 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
                 parseCliLine(s.message);
 
-
                 static QRegExp print_output("^\\$(\\d+) = ");
                 if (print_output.search(s.message) != -1)
                 {
                     kdDebug(9012) << "Found 'print' output: " << s.message << "\n";
                     print_command_result = s.message.ascii();
                 }
+
+                /* This is output from the program.  Route it to
+                   the Application window.  */
+                if (s.reason == '@')
+                    emit ttyStderr(s.message.ascii());
 
                 break;
             }
