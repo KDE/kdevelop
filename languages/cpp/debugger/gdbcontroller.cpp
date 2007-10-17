@@ -649,6 +649,9 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
         KMessageBox::information(0, i18n("gdb message:\n")+msg,"Warning", "gdb_error");
 
     emit dbgStatus (msg, state_);
+    /* Also show message in gdb window, so that users who
+       prefer to look at gdb window know what's up.  */
+    emit gdbUserCommandStdout(msg.ascii());
 }
 
 void GDBController::parseCliLine(const QString& line)
@@ -824,7 +827,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
         emit gdbUserCommandStdout(
             QString( "/bin/sh -c " + shell + " " + gdb
                      + " " + application
-                     + " --interpreter=mi2 -quiet" ).latin1());
+                     + " --interpreter=mi2 -quiet\n" ).latin1());
     }
     else
     {
@@ -832,7 +835,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
                      << "-interpreter=mi2" << "-quiet";
         emit gdbUserCommandStdout(
             QString( gdb + " " + application +
-                     " --interpreter=mi2 -quiet" ).latin1());
+                     " --interpreter=mi2 -quiet\n" ).latin1());
     }
 
     if (!dbgProcess_->start( KProcess::NotifyOnExit,
@@ -851,6 +854,8 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
 
     setStateOff(s_dbgNotStarted);
     emit dbgStatus ("", state_);
+
+    saw_gdb_prompt_ = false;
 
     // Initialise gdb. At this stage gdb is sitting wondering what to do,
     // and to whom. Organise a few things, then set up the tty for the application,
@@ -1516,7 +1521,15 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
             case GDBMI::Record::Stream: {
 
                 GDBMI::StreamRecord& s = dynamic_cast<GDBMI::StreamRecord&>(*r);
-                if (!currentCmd_ || currentCmd_->isUserCommand())
+                /* The way current code works is that we start gdb,
+                   and immediately send commands to it without waiting for
+                   a prompt.  As result, when we return back to the event
+                   loop and read the first line from GDB, currentCmd_ is
+                   already set.  But really, we want to output everything
+                   that gdb prints prior to prompt -- it might be
+                   output from user's .gdbinit that user cares about.  */
+                if (!saw_gdb_prompt_ 
+                    || !currentCmd_ || currentCmd_->isUserCommand())
                     emit gdbUserCommandStdout(s.message.ascii());
                 else
                     emit gdbInternalCommandStdout(s.message.ascii());
@@ -1539,6 +1552,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
 
             case GDBMI::Record::Prompt:
+                saw_gdb_prompt_ = true;
                 break;
             }
         }

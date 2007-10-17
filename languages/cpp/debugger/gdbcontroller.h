@@ -132,6 +132,7 @@ public:
                const QString& run_directory, 
                const QString &application, 
                const QString& run_arguments);
+    void start2();
 
     int qtVersion() const;
 
@@ -341,6 +342,8 @@ private:
     /** Commands issues as result of the 'program_state_changed'
         event. */
     std::set<GDBCommand*> stateReloadingCommands_;
+
+    bool saw_gdb_prompt_;
 };
 
 }
