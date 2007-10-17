@@ -280,17 +280,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     if (checkAbort())
         return 0;
 
-/*    if (CPPParseJob* parent = parentJob()) {
-        VALGRIND_CHECK_MEM_IS_DEFINED(parent, sizeof(CPPParseJob));
-
-        if (CppLanguageSupport* lang = parent->cpp()) {
-            VALGRIND_CHECK_MEM_IS_DEFINED(lang, sizeof(CppLanguageSupport)); */
-
-//     IncludeFileList::const_iterator it = parentJob()->includedFiles().find(fileName);
-//     if (it != parentJob()->includedFiles().constEnd()) {
-//         // The file has already been parsed.
-//         return 0;
-//     }
     kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": searching for include" << fileName;
 
     KUrl localPath(parentJob()->document());
