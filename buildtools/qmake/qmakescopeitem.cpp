@@ -337,8 +337,13 @@ QString QMakeScopeItem::relativePath()
         return "";
     if( scope->scopeType() == Scope::ProjectScope )
     {
-        return URLUtil::getRelativePath( m_widget->projectDirectory(), scope->projectDir() );
-
+        if( scope->parent() && scope->parent()->variableValues("SUBDIRS").contains( URLUtil::relativePathToFile( scope->parent()->projectDir(), scope->projectDir()+"/"+scope->fileName() ) ) )
+        {
+            return URLUtil::relativePathToFile( scope->parent()->projectDir(), scope->projectDir()+"/"+scope->fileName() );
+        }else
+        {
+            return URLUtil::getRelativePath( m_widget->projectDirectory(), scope->projectDir() );
+        }
     }else
         return static_cast<QMakeScopeItem*>( parent() ) ->relativePath();
 //     if( !scope->parent() )

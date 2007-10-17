@@ -52,7 +52,7 @@
 #include "urlutil.h"
 
 InsideCheckListItem::InsideCheckListItem( QListView *parent, QMakeScopeItem *item, ProjectConfigurationDlg *config ) :
-        QCheckListItem( parent, item->relativePath().right( item->relativePath().length() - 1 ), QCheckListItem::CheckBox )
+        QCheckListItem( parent, item->relativePath().endsWith("/") ? item->relativePath().right( item->relativePath().length() - 1 ) : item->relativePath(), QCheckListItem::CheckBox )
 {
     prjItem = item;
     m_config = config;
@@ -1069,6 +1069,11 @@ void ProjectConfigurationDlg::updateIncludeControl()
     for( QStringList::const_iterator it = intIncList.begin(); it != intIncList.end(); ++it )
     {
         insideinc_listview->insertItem( items[*it] );
+        items.remove(*it);
+    }
+    for( QMap<QString,InsideCheckListItem*>::ConstIterator it3 = items.begin(); it3 != items.end(); it3++ )
+    {
+        insideinc_listview->insertItem( it3.data() );
     }
 }
 
@@ -1097,11 +1102,13 @@ void ProjectConfigurationDlg::updateLibControls()
             {
                 // create lib string
                 QString tmpLib = item->getLibAddObject( myProjectItem->scope->projectDir() );
+
                 InsideCheckListItem * newItem = new InsideCheckListItem( insidelib_listview,
                                                 insidelib_listview->lastItem(), item, this );
                 insidelib_listview->takeItem( newItem );
                 items[tmpLib] = newItem;
                 QString tmpLibDir = item->getLibAddPath( myProjectItem->scope->projectDir() );
+                kdDebug(9024) << "lib:" << tmpLib << " dir:" << tmpLibDir << "|" << libList << endl;
                 if ( libList.findIndex( "-L" + tmpLibDir ) != -1 )
                 {
                     libList.remove( "-L" + tmpLibDir );
@@ -1135,7 +1142,12 @@ void ProjectConfigurationDlg::updateLibControls()
         if( !lib.startsWith( "-L" ) )
         {
             insidelib_listview->insertItem( items[lib] );
+            items.remove(lib);
         }
+    }
+    for( QMap<QString,InsideCheckListItem*>::ConstIterator it3 = items.begin(); it3 != items.end(); it3++ )
+    {
+        insidelib_listview->insertItem( it3.data() );
     }
 }
 
@@ -1181,8 +1193,7 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
     //add all other prj in itemList unchecked
 
     extDeps_view->clear();
-    QStringList::Iterator it1 = depsList.begin();
-    for ( ;it1 != depsList.end();++it1 )
+    for ( QStringList::Iterator it1 = depsList.begin();it1 != depsList.end();++it1 )
     {
         intDepList << *it1;
         new QListViewItem( extDeps_view, extDeps_view->lastItem(), ( *it1 ) );
@@ -1192,8 +1203,13 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
     for( QStringList::const_iterator it = intDepList.begin(); it != intDepList.end(); ++it )
     {
         intDeps_view->insertItem( items[*it] );
+        items.remove(*it);
     }
 
+    for( QMap<QString,InsideCheckListItem*>::ConstIterator it2 = items.begin(); it2 != items.end(); it2++ )
+    {
+        intDeps_view->insertItem( it2.data() );
+    }
 }
 
 
