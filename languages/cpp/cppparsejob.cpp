@@ -341,7 +341,7 @@ void CPPInternalParseJob::run()
             editor.setCurrentUrl(parentJob()->document());
 
             // Translate the cursors we generate with edits that have happened since retrieval of the document source.
-            if (editor.smart() && parentJob()->revisionToken() != -1)
+            if (editor.smart() && parentJob()->revisionToken() > 0)
               editor.smart()->useRevision(parentJob()->revisionToken());
             
             if( !parentJob()->useContentContext() )
