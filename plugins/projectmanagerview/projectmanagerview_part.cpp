@@ -277,7 +277,7 @@ void ProjectManagerViewPart::slotCloseProject()
     {
         core()->projectController()->closeProject( project );
     }
-    d->ctxProjectList.clear();
+    //d->ctxProjectList.clear();
 }
 
 #include "projectmanagerview_part.moc"
