@@ -5,7 +5,7 @@
 __author__ = "David Nolden<david.kde@art-master.de>,  Ka-Ping Yee <ping@lfw.org>"
 __version__ = "6 April 2006"
 
-import sys, imp, os, stat, re, types
+import sys, imp, os, stat, re, types, cgi
 from repr import Repr
 from string import expandtabs, find, join, lower, split, strip, rstrip
 import pydoc
@@ -69,7 +69,7 @@ def writedocs(path, pkgpath='', depth=0, notprocessed=[]):
         if(len(notprocessed) != 0):
             print "<br> the following paths were not processed because they are deeper than the maximum depth of " + str(__maxdepth) + ":<br>"
             for x in notprocessed:
-                print x + "    "
+                print cgi.escape(x) + "    <br>"
 
 def writedoc(key,top=False):
     """Write HTML documentation to a file in the current directory."""
@@ -81,8 +81,8 @@ def writedoc(key,top=False):
             '#ffffff', '#7799ee')
         builtins = []
         for name in sys.builtin_module_names:
-            builtins.append('<a href="%s">%s</a>' % (name, name))
-        indices = ['<p>Built-in modules: ' + join(builtins, ', ')]
+            builtins.append('<a href="%s">%s</a>' % (cgi.escape(name,quote=True), cgi.escape(name)))
+        indices = ['<p>Built-in modules: ' + cgi.escape(join(builtins, ', '))]
         seen = {}
         for dir in pydoc.pathdirs():
             indices.append(pydoc.html.index(dir, seen))
@@ -92,7 +92,8 @@ def writedoc(key,top=False):
     if(type(key) != types.ModuleType):
         object = pydoc.locate(key)
         if(object == None and top):
-            print "could not locate module/object for key "+key + "<br><a href=\"pydoc:modules\">go to index</a>";
+            print "could not locate module/object for key " + \
+                   cgi.escape(key) + "<br><a href=\"pydoc:modules\">go to index</a>";
     else:
         object = key
             
@@ -108,6 +109,10 @@ if __name__ == '__main__':
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'k:p:w')
 
+        print "<html>"
+        print "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"
+        print "</head><body>"
+
         if args:
             for arg in args:
                 try:
@@ -118,7 +123,7 @@ if __name__ == '__main__':
                     writedoc(arg, True)
                 except pydoc.ErrorDuringImport, value:
                     print 'problem in %s - %s' % (
-                        value.filename, str(value.exc))
+                        cgi.escape(value.filename), cgi.escape(value.exc))
         else:
                 raise BadUsage
 
