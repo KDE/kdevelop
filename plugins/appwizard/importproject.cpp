@@ -108,8 +108,6 @@ void ImportProject::importProject(QFile& file)
     QTextStream ts(&file);
     ts << "[Project]" << endl;
     ts << "Manager=" << manager() << endl;
-    ts << "PrimaryLanguage=" << primaryLanguage() << endl;
-    ts << "ManagementView=KDevProjectManagerView";
 }
 
 QString ImportProject::manager() const
@@ -127,21 +125,6 @@ QString ImportProject::manager() const
             return "";
     }
 }
-
-QString ImportProject::primaryLanguage() const
-{
-    switch (primaryLanguageCombo->currentIndex()) {
-        case 0:
-            return "C++";
-        case 1:
-            return "Java";
-        case 2:
-            return "C#";
-        default:
-            return "";
-    }
-}
-
 
 // Checks if the directory dir and all of its subdirectories
 // (one level recursion) have files that follow patterns
@@ -180,9 +163,9 @@ void ImportProject::dirChanged()
         QDir dir = projectUrl.path();
 
         // Automake based?
-        if ( dir.exists("configure.in.in")|| dir.exists("configure.ac")|| dir.exists("configure.in")) {
-            buildSystemCombo->setCurrentIndex(2);
-        }
+//         if ( dir.exists("configure.in.in")|| dir.exists("configure.ac")|| dir.exists("configure.in")) {
+//             buildSystemCombo->setCurrentIndex(2);
+//         }
 
         // QMake based?
         if (!dir.entryList(QStringList() << "*.pro").isEmpty()) {
@@ -194,29 +177,8 @@ void ImportProject::dirChanged()
             buildSystemCombo->setCurrentIndex(0);
         }
 
-        // C++?
-        if (dirHasFiles(dir, "*.cpp,*.c++,*.cxx,*.C,*.cc,*.ocl")) {
-            primaryLanguageCombo->setCurrentIndex(0);
-        }
     }
 
-    // Fortran?
-    /*if (dirHasFiles(dir, "*.f77,*.f,*.for,*.ftn")) {
-        setProjectType("fortran");
-        return;
-    }
-
-    // Python?
-    if (dirHasFiles(dir, "*.py")) {
-        setProjectType("python");
-        return;
-    }
-
-    // Perl?
-    if (dirHasFiles(dir, "*.pl,*.pm")) {
-        setProjectType("perl");
-        return;
-    }*/
 }
 
 /*
