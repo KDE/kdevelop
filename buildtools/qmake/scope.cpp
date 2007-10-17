@@ -686,6 +686,7 @@ bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
             Scope* project = m_scopes[ num ];
             if( !project )
                 return false;
+
             QString projdir = project->scopeName();
             if ( deleteSubdir )
             {
@@ -707,6 +708,10 @@ bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
                         if( !projdir.rmdir( dir ) )
                             kdDebug( 9024 ) << "Couldn't delete " << dir << " from " << projdir.absPath() << endl;
                     }
+                }else
+                {
+                    QDir d( project->projectDir() );
+                    kdDebug(9024) << "removed subproject?:" << d.remove( dir ) << endl;
                 }
             }
             QValueList<QMake::AST*>::iterator foundit = findExistingVariable( "SUBDIRS" );
