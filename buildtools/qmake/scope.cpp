@@ -1147,8 +1147,8 @@ bool Scope::listsEqual(const QStringList& l1, const QStringList& l2)
 {
     QStringList left = l1;
     QStringList right = l2;
-    left.sort();
-    right.sort();
+//     left.sort();
+//     right.sort();
     return (left == right);
 }
 

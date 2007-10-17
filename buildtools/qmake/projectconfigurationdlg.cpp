@@ -1032,6 +1032,8 @@ void ProjectConfigurationDlg::updateIncludeControl()
     outsideinc_listview->clear();
 
     QStringList incList = myProjectItem->scope->variableValues( "INCLUDEPATH" );
+    QStringList intIncList = incList;
+    QMap<QString, InsideCheckListItem*> items;
     QPtrList <QMakeScopeItem> itemList = getAllProjects();
     QMakeScopeItem *item = itemList.first();
     while ( item )
@@ -1044,6 +1046,7 @@ void ProjectConfigurationDlg::updateIncludeControl()
             InsideCheckListItem *newItem = new InsideCheckListItem( insideinc_listview,
                                            insideinc_listview->lastItem(), item, this );
 
+            items[tmpInc] = newItem;
             if ( incList.findIndex( tmpInc ) != -1 )
             {
                 incList.remove( tmpInc );
@@ -1060,7 +1063,12 @@ void ProjectConfigurationDlg::updateIncludeControl()
     QStringList::Iterator it1 = incList.begin();
     for ( ;it1 != incList.end();++it1 )
     {
+        intIncList.remove(*it1);
         new QListViewItem( outsideinc_listview, outsideinc_listview->lastItem(), ( *it1 ) );
+    }
+    for( QStringList::const_iterator it = intIncList.begin(); it != intIncList.end(); ++it )
+    {
+        insideinc_listview->insertItem( items[*it] );
     }
 }
 
@@ -1078,6 +1086,8 @@ void ProjectConfigurationDlg::updateLibControls()
     //update librarys
     //temp strlist
     QStringList libList = myProjectItem->scope->variableValues( "LIBS" );
+    QStringList intLibList = libList;
+    QMap<QString, InsideCheckListItem*> items;
     QMakeScopeItem* item = itemList.first();
     while ( item )
     {
@@ -1089,9 +1099,9 @@ void ProjectConfigurationDlg::updateLibControls()
                 QString tmpLib = item->getLibAddObject( myProjectItem->scope->projectDir() );
                 InsideCheckListItem * newItem = new InsideCheckListItem( insidelib_listview,
                                                 insidelib_listview->lastItem(), item, this );
+                insidelib_listview->takeItem( newItem );
+                items[tmpLib] = newItem;
                 QString tmpLibDir = item->getLibAddPath( myProjectItem->scope->projectDir() );
-                kdDebug(9024) << "lib path:" << tmpLib << endl;
-                kdDebug(9024) << "lib dir:" << tmpLibDir << endl;
                 if ( libList.findIndex( "-L" + tmpLibDir ) != -1 )
                 {
                     libList.remove( "-L" + tmpLibDir );
@@ -1110,11 +1120,21 @@ void ProjectConfigurationDlg::updateLibControls()
     QStringList::Iterator it1 = libList.begin();
     for ( ;it1 != libList.end();++it1 )
     {
+        intLibList.remove( *it1 );
         if ( ( *it1 ).startsWith( "-L" ) )
             new QListViewItem( outsidelibdir_listview, outsidelibdir_listview->lastItem(), ( *it1 ).mid( 2 ) );
         else
         {
             new QListViewItem( outsidelib_listview, outsidelib_listview->lastItem(), ( *it1 ) );
+        }
+    }
+
+    for( QStringList::const_iterator it = intLibList.begin(); it != intLibList.end(); ++it )
+    {
+        QString lib = *it;
+        if( !lib.startsWith( "-L" ) )
+        {
+            insidelib_listview->insertItem( items[lib] );
         }
     }
 }
@@ -1129,6 +1149,8 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
     extDeps_view->clear();
 
     QStringList depsList = myProjectItem->scope->variableValues( "TARGETDEPS" );
+    QStringList intDepList = depsList;
+    QMap<QString,InsideCheckListItem*> items;
     QMakeScopeItem *item = itemList.first();
     while ( item )
     {
@@ -1145,6 +1167,7 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
             else
                 tmpLib = item->getApplicationObject( myProjectItem->scope->projectDir() );
             InsideCheckListItem * newItem = new InsideCheckListItem( intDeps_view, intDeps_view->lastItem(), item, this );
+            items[tmpLib] = newItem;
             if ( depsList.findIndex( tmpLib ) != -1 )
             {
                 depsList.remove( tmpLib );
@@ -1161,8 +1184,16 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
     QStringList::Iterator it1 = depsList.begin();
     for ( ;it1 != depsList.end();++it1 )
     {
+        intDepList << *it1;
         new QListViewItem( extDeps_view, extDeps_view->lastItem(), ( *it1 ) );
     }
+
+
+    for( QStringList::const_iterator it = intDepList.begin(); it != intDepList.end(); ++it )
+    {
+        intDeps_view->insertItem( items[*it] );
+    }
+
 }
 
 

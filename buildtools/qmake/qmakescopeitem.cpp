@@ -336,8 +336,10 @@ QString QMakeScopeItem::relativePath()
     if( !scope || !scope->parent() )
         return "";
     if( scope->scopeType() == Scope::ProjectScope )
+    {
         return URLUtil::getRelativePath( m_widget->projectDirectory(), scope->projectDir() );
-    else
+
+    }else
         return static_cast<QMakeScopeItem*>( parent() ) ->relativePath();
 //     if( !scope->parent() )
 //         return "";
@@ -766,11 +768,19 @@ void QMakeScopeItem::updateValues( const QString& var, const QStringList& values
     }
     for( QStringList::const_iterator it = values.begin(); it != values.end(); ++it )
     {
-        if ( curValues.findIndex( *it ) == -1 )
+        if ( scopeValues.findIndex( *it ) != -1 )
         {
-            scope->addToPlusOp( var, QStringList( *it ) );
+            scopeValues.remove(*it);
         }
     }
+    kdDebug(9024) << "--------------" << var << "------------------" << endl;
+    kdDebug(9024) << "values: " << values << "| scope:" << scopeValues << endl;
+    scopeValues += values;
+    kdDebug(9024) << "values: " << values << "| scope:" << scopeValues << endl;
+    scope->setPlusOp( var, scopeValues );
+    QStringList tmp = scope->variableValuesForOp( var, "+=" );
+    kdDebug(9024) << "result:" << tmp << endl;
+    kdDebug(9024) << "---------------------------------------" << endl;
 }
 
 QMakeScopeItem* QMakeScopeItem::projectFileItem()
