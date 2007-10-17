@@ -29,6 +29,7 @@ public:
 
 private slots:
     void slotNewProject();
+    void slotImportProject();
 
 private:
     QString createProject(ProjectSelectionPage *selectionPage);

@@ -38,6 +38,7 @@
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
 #include "projecttemplatesmodel.h"
+#include "importproject.h"
 
 K_PLUGIN_FACTORY(AppWizardFactory,
     registerPlugin<AppWizardPart>();
@@ -66,6 +67,12 @@ AppWizardPart::AppWizardPart(QObject *parent, const QVariantList &)
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.</p>") );
 
+    action = actionCollection()->addAction( "project_import" );
+    action->setIcon(KIcon("project-import"));
+    action->setText(i18n( "&Import Existing Project..." ));
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotImportProject() ) );
+    action->setToolTip( i18n( "Import existing project" ) );
+
     m_templatesModel = new ProjectTemplatesModel(this);
 }
 
@@ -87,6 +94,12 @@ void AppWizardPart::slotNewProject()
         if (!project.isEmpty())
             core()->projectController()->openProject(KUrl::fromPath(project));
     }
+}
+
+void AppWizardPart::slotImportProject()
+{
+    ImportProject import(this, QApplication::activeWindow());
+    import.exec();
 }
 
 QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)

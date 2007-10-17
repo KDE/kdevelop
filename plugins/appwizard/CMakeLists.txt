@@ -9,10 +9,12 @@ set(kdevappwizard_PART_SRCS
     projectselectionpage.cpp
     projecttemplatesmodel.cpp
     projecttemplateitem.cpp
+    importproject.cpp
 )
 
 set(kdevappwizard_PART_UI
     projectselectionpage.ui
+    importproject.ui
 )
 
 kde4_add_ui_files(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
