@@ -246,17 +246,23 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
 void FileManager::setupActions()
 {
     KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
+    action->setShortcutContext(Qt::WidgetShortcut);
     d->addToolButton(action);
+    addAction(action);
 
     action = KStandardAction::home(this, SLOT(goHome()), this);
+    action->setShortcutContext(Qt::WidgetShortcut);
     d->addToolButton(action);
+    addAction(action);
 
     action = new KAction(this);
+    action->setShortcutContext(Qt::WidgetShortcut);
     action->setIcon(KIcon("folder-new"));
     action->setText(i18n("New Folder..."));
     action->setToolTip(i18n("New Folder"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
     d->addToolButton(action);
+    addAction(action);
 }
 
 #include "filemanager.moc"
