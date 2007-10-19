@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>QuickOpenDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -122,22 +122,10 @@
 </widget>
 <connections>
     <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>QuickOpenDialogBase</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
         <sender>buttonCancel</sender>
         <signal>clicked()</signal>
         <receiver>QuickOpenDialogBase</receiver>
         <slot>reject()</slot>
-    </connection>
-    <connection>
-        <sender>itemList</sender>
-        <signal>returnPressed(QListBoxItem*)</signal>
-        <receiver>QuickOpenDialogBase</receiver>
-        <slot>slotExecuted(QListBoxItem*)</slot>
     </connection>
     <connection>
         <sender>buttonOk</sender>
@@ -163,6 +151,12 @@
         <receiver>QuickOpenDialogBase</receiver>
         <slot>slotTextChanged(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>itemList</sender>
+        <signal>returnPressed(QListBoxItem*)</signal>
+        <receiver>QuickOpenDialogBase</receiver>
+        <slot>slotReturnPressed()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>nameEdit</tabstop>
@@ -171,10 +165,10 @@
     <tabstop>buttonCancel</tabstop>
 </tabstops>
 <slots>
-    <slot>slotTextChanged(const QString&amp;)</slot>
+    <slot>slotTextChanged( const QString &amp; )</slot>
+    <slot>executed( QListBoxItem * )</slot>
+    <slot>slotExecuted( QListBoxItem * )</slot>
     <slot>slotReturnPressed()</slot>
-    <slot>executed(QListBoxItem*)</slot>
-    <slot>slotExecuted(QListBoxItem*)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

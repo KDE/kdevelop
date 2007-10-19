@@ -47,6 +47,7 @@ QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, QWidget* parent, c
 
     itemList->insertStringList( m_items );
     itemList->setCurrentItem(0);
+    itemList->setSelectionMode(QListBox::Extended);
 }
 
 QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, const KURL::List & urls, QWidget* parent, const char* name, bool modal, WFlags fl)
@@ -97,7 +98,22 @@ void QuickOpenFileDialog::slotExecuted( QListBoxItem* item )
 void QuickOpenFileDialog::slotReturnPressed( )
 {
     maybeUpdateSelection();
-    slotExecuted( itemList->selectedItem() );
+
+    for (int i = 0; i < itemList->count(); ++i)
+    {
+        if (itemList->isSelected(i))
+        {
+            if (m_hasFullPaths)
+            {
+                m_part->partController()->editDocument(KURL::fromPathOrURL(itemList->item(i)->text()));
+            }
+            else
+            {
+                m_part->partController()->editDocument(KURL::fromPathOrURL(m_part->project()->projectDirectory() + "/" + itemList->item(i)->text()));
+            }
+        }
+    }
+    accept();
 }
 
 #include "quickopenfiledialog.moc"
