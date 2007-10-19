@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <QtCore/QStack>
 #include <QtCore/QString>
+#include "parserexport.h"
 
 class QString;
 class kdev_pg_location_table;
@@ -33,7 +34,7 @@ namespace QMake
 
 class parser;
 
-class Lexer {
+class KDEVQMAKEPARSER_EXPORT Lexer {
 public:
     Lexer(parser* _parser, const QString& contents);
 
