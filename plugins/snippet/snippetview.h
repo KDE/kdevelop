@@ -81,6 +81,11 @@ public slots:
      */
     void slotCreateSubRepo();
 
+    /**
+     * Clears the filter input field
+     */
+    void slotClearFilter();
+
 signals:
     /**
      * This signal gets emitted whenever the user requests a contextmenu.
