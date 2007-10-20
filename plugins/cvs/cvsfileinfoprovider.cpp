@@ -70,8 +70,6 @@ QList< KDevelop::VcsFileInfo > CvsFileInfoProvider::requestStatusSync(const KUrl
 
 void CvsFileInfoProvider::slotJobFinished(KJob * job)
 {
-    kDebug(9500) ;
-
     if ( job->error() )
     {
         return;

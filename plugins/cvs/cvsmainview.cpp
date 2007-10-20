@@ -11,7 +11,7 @@
 #include "cvsmainview.h"
 
 #include <KLocale>
-#include <kdebug.h>
+#include <KDebug>
 
 #include "cvspart.h"
 #include "cvsjob.h"
@@ -49,13 +49,12 @@ CvsMainView::CvsMainView( CvsPart *part, QWidget* parent )
 
 CvsMainView::~CvsMainView()
 {
-    kDebug(9500) ;
     delete m_mainview;
 }
 
 void CvsMainView::slotAddTab(QWidget * tab, const QString& label)
 {
-    kDebug(9500) << label;
+    kDebug(9500) << "adding tab:" << label;
 
     int idx = tabwidget->addTab( tab, label );
     tabwidget->setCurrentIndex(idx);
@@ -66,7 +65,6 @@ void CvsMainView::slotAddTab(QWidget * tab, const QString& label)
 
 void CvsMainView::slotJobFinished(KJob * job)
 {
-    kDebug(9500) ;
     m_mainview->slotJobFinished(job);
     tabwidget->setCurrentIndex(0);
 }

@@ -11,7 +11,7 @@
 #include "checkoutdialog.h"
 
 #include <KMessageBox>
-#include <kdebug.h>
+#include <KDebug>
 
 #include "cvspart.h"
 #include "cvsjob.h"

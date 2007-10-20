@@ -35,13 +35,10 @@ LogView::LogView(CvsPart* part, CvsJob* job, QWidget *parent)
 
 LogView::~LogView()
 {
-    kDebug(9500) ;
 }
 
 void LogView::slotJobFinished(KJob* job)
 {
-    kDebug(9500) ;
-
     if ( job->error() )
     {
         textbrowser->append( i18n("Listing the files's log failed") );

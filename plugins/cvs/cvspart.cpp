@@ -22,7 +22,6 @@
 #include <KActionCollection>
 #include <KMessageBox>
 #include <KUrl>
-#include <kdebug.h>
 
 
 #include <iuicontroller.h>
@@ -83,8 +82,6 @@ CvsPart::CvsPart( QObject *parent, const QVariantList & )
 
 CvsPart::~CvsPart()
 {
-    kDebug(9500);
-
     delete d;
 }
 

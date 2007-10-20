@@ -34,13 +34,10 @@ EditorsView::EditorsView(CvsPart* part, CvsJob* job, QWidget *parent)
 
 EditorsView::~EditorsView()
 {
-    kDebug(9500) ;
 }
 
 void EditorsView::slotJobFinished(KJob* job)
 {
-    kDebug(9500) ;
-
     if ( job->error() )
     {
         textbrowser->append( i18n("Listing editors failed") );

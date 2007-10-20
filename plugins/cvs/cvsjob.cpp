@@ -57,7 +57,6 @@ CvsJob::CvsJob(QObject* parent)
 
 CvsJob::~CvsJob()
 {
-    kDebug(9500);
     delete d;
 }
 
@@ -171,8 +170,6 @@ void CvsJob::cancel()
 
 void CvsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    kDebug(9500);
-
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
 
