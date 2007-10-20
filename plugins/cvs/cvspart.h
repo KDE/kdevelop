@@ -38,6 +38,7 @@ friend class CvsProxy;
 public:
     CvsPart( QObject *parent, const QVariantList & args = QVariantList() );
     virtual ~CvsPart();
+
     // Begin:  KDevelop::IBasicVersionControl
     virtual bool isVersionControlled( const KUrl& localLocation );
     virtual KDevelop::VcsJob* repositoryLocation( const KUrl& localLocation );

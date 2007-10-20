@@ -356,6 +356,8 @@ void CvsPart::slotStatus()
     }
 }
 
+// Begin:  KDevelop::IBasicVersionControl
+
 bool CvsPart::isVersionControlled(const KUrl & localLocation)
 {
     return d->m_proxy->isValidDirectory(localLocation);
@@ -424,7 +426,19 @@ KDevelop::VcsJob * CvsPart::edit(const KUrl & localLocation)
 
 KDevelop::VcsJob * CvsPart::copy(const KUrl & localLocationSrc, const KUrl & localLocationDstn)
 {
-    return NULL;
+    bool ok = QFile::copy(localLocationSrc.path(), localLocationDstn.path());
+    if (!ok) {
+        return NULL;
+    }
+
+    QFileInfo infoDstn( localLocationDstn.toLocalFile() );
+    KUrl::List listDstn;
+    listDstn << localLocationDstn;
+
+    CvsJob* job = d->m_proxy->add( infoDstn.absolutePath(),
+                                   listDstn, true);
+
+    return job;
 }
 
 KDevelop::VcsJob * CvsPart::move(const KUrl & localLocationSrc, const KUrl & localLocationDst)
@@ -541,6 +555,8 @@ KDevelop::VcsJob * CvsPart::checkout(const KDevelop::VcsMapping & mapping)
 {
     return NULL;
 }
+
+// End:  KDevelop::IBasicVersionControl
 
 #include "cvspart.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
