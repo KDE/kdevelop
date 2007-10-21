@@ -57,6 +57,8 @@ public:
 
     bool operator==( const KDevelop::VcsLocation& );
 
+    bool isValid() const;
+
 private:
     class VcsLocationPrivate* d;
 };
@@ -85,4 +87,3 @@ Q_DECLARE_METATYPE( KDevelop::VcsLocation )
 
 #endif
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

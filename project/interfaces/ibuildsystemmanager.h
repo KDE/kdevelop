@@ -126,6 +126,5 @@ KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBuildSystemManager, "org.kdevelo
 Q_DECLARE_INTERFACE( KDevelop::IBuildSystemManager, "org.kdevelop.IBuildSystemManager" )
 
 #endif
-//kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
 
 

@@ -543,4 +543,3 @@ View *AreaOperationTest::findNamedView(Area *area, const QString &name)
 KDEVTEST_MAIN(AreaOperationTest)
 #include "areaoperationtest.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

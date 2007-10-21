@@ -166,4 +166,3 @@ KDevelop::VcsFileInfo::VcsFileState CvsFileInfoProvider::String2EnumState(const 
 }
 
 #include "cvsfileinfoprovider.moc"
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

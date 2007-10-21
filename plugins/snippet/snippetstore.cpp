@@ -78,4 +78,3 @@ void SnippetStore::remove(SnippetRepository* repo)
 }
 
 #include "snippetstore.moc"
-// kate: space-indent on; indent-width 4; tab-width 4; indent-mode cstyle; replace-tabs on; auto-insert-doxygen on;

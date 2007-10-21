@@ -72,4 +72,3 @@ private:
 
 #endif
 
-// kate: space-indent on; indent-width 4; indent-mode cstyle; replace-tabs on; auto-insert-doxygen on;

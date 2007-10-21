@@ -124,7 +124,7 @@ Q_SIGNALS:
      * the plugin and the operation, it may be emitted only once when all
      * results are ready, or several times.
      */
-    void resultsReady( VcsJob* );
+    void resultsReady( KDevelop::VcsJob* );
 
 private:
     class VcsJobPrivate* const d;
@@ -134,4 +134,3 @@ private:
 
 #endif
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

@@ -78,4 +78,3 @@ void ControllerTest::testNamedAreas()
 #include "controllertest.moc"
 KDEVTEST_MAIN(ControllerTest)
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

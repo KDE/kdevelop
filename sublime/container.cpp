@@ -119,4 +119,3 @@ View *Container::viewForWidget(QWidget *w) const
 
 #include "container.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

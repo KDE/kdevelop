@@ -92,5 +92,4 @@ KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutpu
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )
 
 #endif
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
 

@@ -112,4 +112,3 @@ void Example1Main::updateTitle(Sublime::Area *area)
 
 #include "example1main.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

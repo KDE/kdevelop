@@ -210,4 +210,3 @@ QModelIndex AggregateModel::index(int row, int column, const QModelIndex &parent
 
 #include "aggregatemodel.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

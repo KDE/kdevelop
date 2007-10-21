@@ -99,4 +99,3 @@ View *Document::newView(Document *doc)
 
 #include "document.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

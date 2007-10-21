@@ -556,4 +556,3 @@ KDevelop::VcsJob * CvsPart::checkout(const KDevelop::VcsMapping & mapping)
 // End:  KDevelop::IBasicVersionControl
 
 #include "cvspart.moc"
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

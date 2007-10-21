@@ -25,4 +25,3 @@ SnippetVariables::SnippetVariables(SnippetVariableModel* model, QWidget *parent)
 
 #include "snippetvariablesubst.moc"
 
-// kate: space-indent on; indent-width 4; indent-mode cstyle; replace-tabs on; auto-insert-doxygen on;

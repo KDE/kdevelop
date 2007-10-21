@@ -407,4 +407,3 @@ CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool r
 }
 
 #include "cvsproxy.moc"
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

@@ -89,6 +89,14 @@ VcsLocation::LocationType VcsLocation::type() const
     return d->m_type;
 }
 
+bool VcsLocation::isValid() const
+{
+    return( ( d->m_localUrl.isValid() 
+              && d->m_type == VcsLocation::LocalLocation ) 
+            || ( !d->m_repoLocation.isEmpty()
+               && d->m_type == VcsLocation::RepositoryLocation ) );
+}
+
 void VcsLocation::setLocalUrl( const KUrl& url )
 {
     d->m_repoLocation = QString();
@@ -111,4 +119,3 @@ bool VcsLocation::operator==( const KDevelop::VcsLocation& rhs )
 
 }
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
