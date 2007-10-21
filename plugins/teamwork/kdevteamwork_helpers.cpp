@@ -51,7 +51,7 @@ IconCache::IconCache() {
 	maps_[ "collaboration_file" ] = "completion";
 	maps_[ "collaboration_file_disabled" ] = "remove";
 	maps_[ "collaboration_file_dead" ] = "fileclose";
-	maps_[ "collaboration_session" ] = "switchuser";
+	maps_[ "collaboration_session" ] = "system-switch-user";
 	maps_[ "collaboration_session_finished" ] = "remove";
 	maps_[ "collaboration_session_connectionlost" ] = "fileclose";
 
