@@ -442,4 +442,3 @@ _Target model_dynamic_cast(_Source item)
 
 #endif // CPPTYPES_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

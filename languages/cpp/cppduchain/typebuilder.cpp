@@ -560,7 +560,6 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
   return ret;
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
 
 void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* node, DelayedType::Kind kind) {
   DelayedType::Ptr type(new DelayedType());

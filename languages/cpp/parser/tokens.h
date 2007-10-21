@@ -139,4 +139,3 @@ KDEVCPPPARSER_EXPORT char const *token_name(int token);
 
 #endif
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

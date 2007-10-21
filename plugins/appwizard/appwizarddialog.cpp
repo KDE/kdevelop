@@ -20,4 +20,3 @@ AppWizardDialog::AppWizardDialog(QWidget *parent, Qt::WFlags flags)
     KDialog::showButton(User3, false);
 }
 
-// kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

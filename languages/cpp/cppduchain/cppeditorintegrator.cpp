@@ -83,4 +83,3 @@ ParseSession * CppEditorIntegrator::parseSession() const
   return m_session;
 }
 
-// kate: indent-width 2;

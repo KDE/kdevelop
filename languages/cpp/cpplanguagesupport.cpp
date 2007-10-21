@@ -469,4 +469,3 @@ Cpp::EnvironmentManager* CppLanguageSupport::environmentManager() const {
 
 #include "cpplanguagesupport.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

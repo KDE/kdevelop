@@ -111,5 +111,4 @@ private:
 
 #endif // PP_ENVIRONMENT_H
 
-// kate: indent-width 2;
 

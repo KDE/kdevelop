@@ -133,4 +133,3 @@ private:
 
 #endif // DECLARATIONBUILDER_H
 
-// kate: indent-width 2;

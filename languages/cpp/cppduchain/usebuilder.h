@@ -82,4 +82,3 @@ private:
 
 #endif // USEBUILDER_H
 
-// kate: indent-width 2;

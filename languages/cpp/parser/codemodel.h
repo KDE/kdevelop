@@ -715,4 +715,3 @@ _Target model_dynamic_cast(_Source item)
 }
 #endif // CODEMODEL_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

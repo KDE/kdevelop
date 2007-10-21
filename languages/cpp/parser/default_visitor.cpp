@@ -450,4 +450,3 @@ void DefaultVisitor::visitWinDeclSpec(WinDeclSpecAST *)
   // nothing to do
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

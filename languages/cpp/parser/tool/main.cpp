@@ -110,4 +110,3 @@ int main(int, char *argv[])
   return parsed ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

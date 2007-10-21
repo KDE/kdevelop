@@ -131,4 +131,3 @@ QualifiedIdentifier TypeCompiler::identifier() const
   return _M_type;
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

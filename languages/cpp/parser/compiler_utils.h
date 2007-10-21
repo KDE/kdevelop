@@ -37,4 +37,3 @@ TypeInfo typeDescription(TypeSpecifierAST *type_specifier, DeclaratorAST *declar
 
 #endif // COMPILER_UTILS_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

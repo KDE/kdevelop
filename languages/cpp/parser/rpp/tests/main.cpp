@@ -63,4 +63,3 @@ int main (int /*argc*/, char *argv[])
   return EXIT_SUCCESS;
 }
 
-// kate: indent-width 2;

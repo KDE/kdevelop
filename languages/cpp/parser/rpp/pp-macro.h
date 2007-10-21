@@ -99,4 +99,3 @@ inline uint qHash( const rpp::pp_macro& m ) {
 
 #endif // PP_MACRO_H
 
-// kate: indent-width 2;

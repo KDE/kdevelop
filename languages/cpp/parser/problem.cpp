@@ -74,4 +74,3 @@ void Problem::setColumn(int column)
   d->column = column;
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

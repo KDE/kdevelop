@@ -91,5 +91,4 @@ inline const ListNode<Tp> *snoc(const ListNode<Tp> *list,
 
 #endif // FASTLIST_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
 

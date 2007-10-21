@@ -183,4 +183,3 @@ void FileAstTest::testBadParse_data()
 }
 
 #include "cmake_fileast_test.moc"
-//kate: space-indent on; indent-width 4; replace-tabs on; tab-width 4; auto-insert-doxygen on; indent-mode csands;

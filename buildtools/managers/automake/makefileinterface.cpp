@@ -452,5 +452,4 @@ QStringList MakefileInterface::valuesForId( const QString& id, AutoMake::Project
 }
 #include "makefileinterface.moc"
 
-// kate: space-indent on; indent-width 4; auto-insert-doxygen on; replace-tabs on; indent-mode cstyle;
 

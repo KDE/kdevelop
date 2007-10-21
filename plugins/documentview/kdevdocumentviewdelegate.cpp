@@ -88,4 +88,3 @@ QSize KDevDocumentViewDelegate::sizeHint( const QStyleOptionViewItem &opt, const
 
 #include "kdevdocumentviewdelegate.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

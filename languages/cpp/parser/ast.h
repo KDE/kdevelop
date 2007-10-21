@@ -880,4 +880,3 @@ _Tp ast_cast(AST *item)
 
 #endif // AST_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

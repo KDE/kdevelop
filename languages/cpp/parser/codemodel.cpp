@@ -905,5 +905,4 @@ void _MemberModelItem::setMutable(bool isMutable)
   _M_isMutable = isMutable;
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
 

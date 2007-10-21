@@ -75,4 +75,3 @@ void CppCodeCompletion::documentLoaded(KParts::Part* document)
 
 #include "cppcodecompletion.moc"
 
-// kate: space-indent on; indent-width 2; replace-tabs on

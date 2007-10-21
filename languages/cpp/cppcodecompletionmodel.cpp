@@ -852,4 +852,3 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
 
 #include "cppcodecompletionmodel.moc"
 
-// kate: space-indent on; indent-width 2; replace-tabs on

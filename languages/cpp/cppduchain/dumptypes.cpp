@@ -101,7 +101,6 @@ void DumpTypes::endVisit(const ArrayType *)
 {
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
 
 bool DumpTypes::seen(const AbstractType * type)
 {

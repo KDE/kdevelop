@@ -290,5 +290,4 @@ private:
 
 #endif // PP_ENGINE_H
 
-// kate: indent-width 2;
 

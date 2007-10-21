@@ -41,4 +41,3 @@ KDEV_DECLARE_EXTENSION_INTERFACE( ICMakeBuilder, "org.kdevelop.ICMakeBuilder" )
 Q_DECLARE_INTERFACE( ICMakeBuilder, "org.kdevelop.ICMakeBuilder" )
 
 #endif
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

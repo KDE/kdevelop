@@ -118,4 +118,3 @@ private:
 
 #endif // EDITORINTEGRATOR_H
 
-// kate: indent-width 2;

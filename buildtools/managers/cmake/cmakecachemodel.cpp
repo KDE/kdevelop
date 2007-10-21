@@ -174,4 +174,3 @@ QString CMakeCacheModel::value(const QString & varName) const
 
 #include "cmakecachemodel.moc"
 
-//kate: space-indent on; indent-width 4; replace-tabs on;

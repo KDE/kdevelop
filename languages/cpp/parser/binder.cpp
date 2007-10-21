@@ -645,4 +645,3 @@ void Binder::setPositionAt(_CodeModelItem *item, AST *ast)
   item->setEndPosition(KTextEditor::Cursor(endLine, endColumn));
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

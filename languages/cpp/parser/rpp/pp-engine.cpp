@@ -1231,4 +1231,3 @@ QString pp::currentFile() const
   return "<internal>";
 }
 
-// kate: indent-width 2;

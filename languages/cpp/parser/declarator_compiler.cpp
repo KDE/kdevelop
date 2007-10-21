@@ -115,4 +115,3 @@ void DeclaratorCompiler::visitParameterDeclaration(ParameterDeclarationAST *node
   _M_parameters.append(p);
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

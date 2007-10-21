@@ -226,7 +226,6 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
 
 #include "cpphighlighting.moc"
 
-// kate: space-indent on; indent-width 2; replace-tabs on
 
 CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) const
 {

@@ -304,7 +304,6 @@ CppClassType::CppClassType(Declaration::CVSpecs spec)
 {
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
 
 CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, CppConstantIntegralType::TypeModifiers modifiers) : CppIntegralType(type, modifiers) {
 }

@@ -99,7 +99,6 @@ void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
     }
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
 
 const QualifiedIdentifier& NameCompiler::identifier() const
 {

@@ -39,4 +39,3 @@ TypeInfo CompilerUtils::typeDescription(TypeSpecifierAST *type_specifier, Declar
   return typeInfo;
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

@@ -39,4 +39,3 @@ inline void *pool::allocate(std::size_t __size)
 
 #endif // MEMORYPOOL_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

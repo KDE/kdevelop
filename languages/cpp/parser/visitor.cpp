@@ -109,4 +109,3 @@ void Visitor::visit(AST *node)
     (this->*_S_table[node->kind])(node);
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

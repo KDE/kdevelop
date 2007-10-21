@@ -94,4 +94,3 @@ private:
 
 #endif // PP_SCANNER_H
 
-// kate: indent-width 2;

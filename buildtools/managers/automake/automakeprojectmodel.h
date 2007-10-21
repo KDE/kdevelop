@@ -87,5 +87,4 @@ public:
 };
 
 #endif // AUTOMAKEPROJECTMODEL_H
-// kate: indent-mode csands; space-indent on; indent-width 4; replace-tabs on;
 

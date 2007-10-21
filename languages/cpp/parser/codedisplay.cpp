@@ -173,4 +173,3 @@ QIcon CodeDisplay::loadIcon( const QString & name )
     return QIcon(KStandardDirs::locate("appdata", QString("pics/%1.png").arg(name)));
 }
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

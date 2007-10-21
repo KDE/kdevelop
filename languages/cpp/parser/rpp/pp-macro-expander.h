@@ -77,4 +77,3 @@ private:
 
 #endif // PP_MACRO_EXPANDER_H
 
-// kate: indent-width 2;

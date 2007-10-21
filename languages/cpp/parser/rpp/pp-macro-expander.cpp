@@ -351,4 +351,3 @@ void pp_macro_expander::skip_argument_variadics (const QList<QString>& __actuals
             && (__actuals.size() + 1) == __macro->formals.size());
 }
 
-// kate: indent-width 2;

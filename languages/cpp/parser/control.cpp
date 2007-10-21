@@ -44,4 +44,3 @@ void Control::reportProblem(const Problem &problem)
   _M_problems.append(problem);
 }
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

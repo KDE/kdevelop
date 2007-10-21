@@ -280,4 +280,3 @@ void QtDesignerPlugin::activateDocument( KDevelop::IDocument* doc )
 }
 
 #include "qtdesignerplugin.moc"
-//kate: space-indent on; indent-width 4; replace-tabs on; indent-mode cstyle;

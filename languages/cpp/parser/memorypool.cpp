@@ -18,4 +18,3 @@
 
 #include "memorypool.h"
 
-// kate: space-indent on; indent-width 2; replace-tabs on;

@@ -199,4 +199,3 @@ protected:
 
 #endif // CONTEXTBUILDER_H
 
-// kate: indent-width 2;
