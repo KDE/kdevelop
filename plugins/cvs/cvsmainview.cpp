@@ -38,7 +38,7 @@ CvsMainView::CvsMainView( CvsPart *part, QWidget* parent )
 
     // add a close button as corner widget
     m_closeButton = new QToolButton(tabwidget);
-    m_closeButton->setIcon( KIcon( "tab-remove" ) );
+    m_closeButton->setIcon( KIcon( "tab-close" ) );
     m_closeButton->adjustSize();
     m_closeButton->setAutoRaise(true);
     m_closeButton->setEnabled(false);

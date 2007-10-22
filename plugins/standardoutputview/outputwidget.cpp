@@ -39,7 +39,7 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     m_closeButton = new QToolButton( this );
     connect( m_closeButton, SIGNAL( clicked() ),
              this, SLOT( closeActiveView() ) );
-    m_closeButton->setIcon( KIcon("tab-remove") );
+    m_closeButton->setIcon( KIcon("tab-close") );
     m_closeButton->adjustSize();
     m_closeButton->setToolTip( i18n( "Close the currently active output view") );
     setCornerWidget( m_closeButton, Qt::TopRightCorner );
