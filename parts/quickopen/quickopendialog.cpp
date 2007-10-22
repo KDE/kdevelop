@@ -20,7 +20,7 @@
 
 #include <qapplication.h>
 #include <qregexp.h>
- 
+
 #include <klistbox.h>
 #include <klineedit.h>
 #include <kdebug.h>
@@ -39,7 +39,7 @@ QuickOpenDialog::~QuickOpenDialog()
 {
 }
 
-void QuickOpenDialog::slotTextChanged(const QString & text)
+void QuickOpenDialog::slotTextChanged(const QString &)
 {
     m_typeTimeout.start( 100, true );
 }
@@ -53,6 +53,7 @@ void QuickOpenDialog::slotTextChangedDelayed()
 {
     itemList->clear();
     itemList->insertStringList( wildCardCompletion( nameEdit->text() ) );
+    itemList->setSelected(0, true);
     itemList->setCurrentItem(0);
 }
 
@@ -66,25 +67,17 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
         QKeyEvent *ke = (QKeyEvent*)e;
         if (ke->key() == Key_Up)
         {
-            int i = itemList->currentItem();
-            if (--i >= 0)
-            {
-                itemList->setCurrentItem(i);
-                nameEdit->blockSignals(true);
-                itemSelectionChanged();
-                nameEdit->blockSignals(false);
-            }
+            QApplication::sendEvent(itemList, e);
+            nameEdit->blockSignals(true);
+            itemSelectionChanged();
+            nameEdit->blockSignals(false);
             return true;
         } else if (ke->key() == Key_Down)
         {
-            int i = itemList->currentItem();
-            if ( ++i < int(itemList->count()) ) 
-            {
-                itemList->setCurrentItem(i);
-                nameEdit->blockSignals(true);
-                itemSelectionChanged();
-                nameEdit->blockSignals(false);
-            }
+            QApplication::sendEvent(itemList, e);
+            nameEdit->blockSignals(true);
+            itemSelectionChanged();
+            nameEdit->blockSignals(false);
             return true;
         } else if ((ke->key() == Key_Next) || (ke->key() == Key_Prior))
         {
@@ -95,7 +88,7 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
         }
     }
 
-    return QWidget::eventFilter(watched, e);    
+    return QWidget::eventFilter(watched, e);
 }
 
 void QuickOpenDialog::selectClassViewItem(ItemDom item)
