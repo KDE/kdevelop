@@ -299,3 +299,5 @@ QStringList QMakeFile::resolveVariables( const QString& value ) const
     return ret;
 }
 
+//kate: hl c++;
+
