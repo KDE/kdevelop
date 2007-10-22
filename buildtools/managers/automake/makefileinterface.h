@@ -99,3 +99,4 @@ private:
 
 #endif
 
+//kate: hl c++;

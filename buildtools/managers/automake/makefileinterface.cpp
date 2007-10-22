@@ -453,3 +453,4 @@ QStringList MakefileInterface::valuesForId( const QString& id, AutoMake::Project
 #include "makefileinterface.moc"
 
 
+//kate: hl c++;
