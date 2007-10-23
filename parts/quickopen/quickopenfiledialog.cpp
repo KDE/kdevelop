@@ -47,8 +47,7 @@ QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, QWidget* parent, c
 
     itemList->setSelectionMode( QListBox::Extended );
     itemList->insertStringList( m_items );
-    itemList->setSelected(0, true);
-    itemList->setCurrentItem(0);
+    setFirstItemSelected();
 }
 
 QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, const KURL::List & urls, QWidget* parent, const char* name, bool modal, WFlags fl)
@@ -75,8 +74,7 @@ QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, const KURL::List &
 
     itemList->setSelectionMode( QListBox::Extended );
     itemList->insertStringList( m_items );
-    itemList->setSelected(0, true);
-    itemList->setCurrentItem(0);
+    setFirstItemSelected();
 }
 
 QuickOpenFileDialog::~QuickOpenFileDialog()

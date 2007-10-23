@@ -40,15 +40,16 @@ public:
   virtual ~QuickOpenDialog();
 
   virtual bool eventFilter(QObject *watched, QEvent *e);
-  
-  void selectClassViewItem(ItemDom item); 
-  
+
+  void selectClassViewItem(ItemDom item);
+
 public slots:
   virtual void slotTextChanged(const QString&);
   virtual void slotTextChangedDelayed();
 
 protected:
     void maybeUpdateSelection();
+    void setFirstItemSelected();
     virtual void itemSelectionChanged();
     void QStringList_unique( QStringList & list );
     QStringList wildCardCompletion( const QString & text );

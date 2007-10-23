@@ -46,15 +46,27 @@ void QuickOpenDialog::slotTextChanged(const QString &)
 
 void QuickOpenDialog::maybeUpdateSelection() {
     if( m_typeTimeout.isActive() )
+    {
+        m_typeTimeout.stop();
         slotTextChangedDelayed();
+    }
+}
+
+void QuickOpenDialog::setFirstItemSelected()
+{
+    // Make sure the list has a current item or our event will not be handled properly.
+    itemList->setCurrentItem(0);
+    // We are doing this indirectly because the event handler does things for multiple
+    // selections we cannot do through the public interface.
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Home, 0, 0);
+    QApplication::sendEvent(itemList, &e);
 }
 
 void QuickOpenDialog::slotTextChangedDelayed()
 {
     itemList->clear();
     itemList->insertStringList( wildCardCompletion( nameEdit->text() ) );
-    itemList->setSelected(0, true);
-    itemList->setCurrentItem(0);
+    setFirstItemSelected();
 }
 
 bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
