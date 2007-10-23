@@ -2532,7 +2532,6 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			if( !canUpdate ) {  ///If the current model could be updated, do not emit addedSourceInfo(..) and remove the units from the parser, because nobody will be using them
 				QStringList l = files.res;
 				while(!l.isEmpty() ) {
-					emit addedSourceInfo( l.front() );
 					emit aboutToRemoveSourceInfo( l.front() );
 					emit removedSourceInfo( l.front() );
 					emit addedSourceInfo( l.front() );
