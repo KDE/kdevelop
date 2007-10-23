@@ -27,7 +27,7 @@ using namespace KDevelop;
 
 QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent )
 {
-  
+
 }
 
 QStringList QuickOpenModel::allScopes() const
@@ -37,7 +37,7 @@ QStringList QuickOpenModel::allScopes() const
     foreach( const QString& scope, provider.scopes )
       if( !scopes.contains( scope ) )
         scopes << scope;
-  
+
   return scopes;
 }
 
@@ -47,7 +47,7 @@ QStringList QuickOpenModel::allTypes() const
   foreach( const ProviderEntry& provider, m_providers )
     if( !types.contains( provider.type ) )
       types << provider.type;
-  
+
   return types;
 }
 
@@ -57,9 +57,9 @@ void QuickOpenModel::registerProvider( const QStringList& scopes, const QString&
   e.scopes = QSet<QString>::fromList(scopes);
   e.type = type;
   e.provider = provider;
-  
+
   m_providers.insert( type, e );
-  
+
   connect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
 
   restart();
@@ -92,7 +92,7 @@ void QuickOpenModel::enableProviders( const QStringList& items, const QStringLis
       (*it).enabled = false;
     }
   }
-  
+
   restart();
 }
 
@@ -101,7 +101,7 @@ void QuickOpenModel::textChanged( const QString& str )
   foreach( const ProviderEntry& provider, m_providers )
     if( provider.enabled )
       provider.provider->setFilterText( str );
-  
+
   m_cachedData.clear();
   clearExpanding();
   reset();
@@ -110,9 +110,9 @@ void QuickOpenModel::textChanged( const QString& str )
 void QuickOpenModel::restart()
 {
   foreach( const ProviderEntry& provider, m_providers )
-    if( provider.enabled )
+    if( provider.enabled && provider.provider )
       provider.provider->reset();
-  
+
   m_cachedData.clear();
   clearExpanding();
 
@@ -140,7 +140,7 @@ int QuickOpenModel::rowCount( const QModelIndex& i ) const
 {
   if( i.isValid() )
     return 0;
-  
+
   int count = 0;
   foreach( const ProviderEntry& provider, m_providers )
     if( provider.enabled )
@@ -184,13 +184,13 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
       return v;
     }
   }
-  
+
   if( index.column() == 1 )
   {
     switch( role ) {
       case Qt::DecorationRole:
         return d->icon();
-      
+
       case Qt::DisplayRole:
         return d->text();
     }
@@ -211,7 +211,7 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
       }
     }
   }
-  
+
   return ExpandingWidgetModel::data( index, role );
 }
 
@@ -220,14 +220,14 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
 
   if( m_cachedData.contains( row ) )
     return m_cachedData[row];
-  
+
   foreach( const ProviderEntry& provider, m_providers ) {
     if( !provider.enabled )
       continue;
     if( (uint)row < provider.provider->itemCount() )
     {
       QList<QuickOpenDataPointer> items = provider.provider->data( row, row+1 );
-      
+
       if( items.isEmpty() )
       {
         kWarning() << "Provider returned no item";
@@ -269,7 +269,7 @@ bool QuickOpenModel::execute( const QModelIndex& index, QString& filterText )
     kWarning() << "Invalid index executed";
     return false;
   }
-  
+
   QuickOpenDataPointer item = getItem( index.row() );
 
   if( item ) {
