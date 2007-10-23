@@ -471,8 +471,7 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
     const ListNode<ExpressionAST*> *it = node->array_dimensions->toFront(), *end = it;
 
     do {
-      if (it->element)
-        visitArrayExpression(it->element);
+      visitArrayExpression(it->element);
       it = it->next;
     } while (it != end);
   }
@@ -509,8 +508,10 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
   
   {
     DUChainReadLocker lock(DUChain::lock());
-    expression->ducontext = currentContext();
-    res = parser.evaluateType( expression, m_editor->parseSession() );
+    if(expression) {
+      expression->ducontext = currentContext();
+      res = parser.evaluateType( expression, m_editor->parseSession() );
+    }
   
     CppArrayType::Ptr array(new CppArrayType());
     array->setElementType(lastType());

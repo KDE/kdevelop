@@ -240,6 +240,44 @@ void TestExpressionParser::testArray() {
   release(top);
 }
 
+void TestExpressionParser::testDynamicArray() {
+  QByteArray method("struct Bla { int val; } blaArray[] = { {5} };");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Cpp::ExpressionParser parser;
+  
+  {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("Bla", top);
+
+    QVERIFY(result.isValid());
+    QVERIFY(dynamic_cast<CppClassType*>(result.type.data()));
+
+    QCOMPARE(result.toString(), QString("Bla"));
+  }
+  
+  {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("blaArray", top);
+
+    QVERIFY(result.isValid());
+    QVERIFY(result.instance);
+    kDebug() << result.toString();
+    kDebug() << typeid(*result.type.data()).name();
+    QVERIFY(dynamic_cast<CppArrayType*>(result.type.data()));
+  }
+  
+  {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("blaArray[5].val", top);
+
+    QVERIFY(result.isValid());
+    QVERIFY(dynamic_cast<CppIntegralType*>(result.type.data()));
+  }
+
+  release(top);
+}
+
 void TestExpressionParser::testSmartPointer() {
   QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
 

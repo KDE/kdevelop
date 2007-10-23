@@ -61,6 +61,7 @@ private slots:
   void testOperators();
   void testThis();
   void testArray();
+  void testDynamicArray();
 
 public:
   enum DumpArea {
