@@ -206,26 +206,50 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
+  m_currentEnumeratorValue = 0;
+  
   openType(CppEnumerationType::Ptr(new CppEnumerationType()), node);
 
   TypeBuilderBase::visitEnumSpecifier(node);
-
+  
   closeType();
 }
 
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 {
-  /*bool ok = false;
-  if (CppEnumerationType::Ptr parent = currentType<CppEnumerationType>()) {
-    CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
-    openType(enumerator, node);
-    ok = true;
-  }*/
+  if(node->expression) {
+    Cpp::ExpressionParser parser;
 
+    Cpp::ExpressionEvaluationResult res;
+    
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      node->expression->ducontext = currentContext();
+      res = parser.evaluateType( node->expression, m_editor->parseSession() );
+    }
+    if (res.isValid() && res.instance && dynamic_cast<CppConstantIntegralType*>(res.type.data())) {
+      CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(res.type.data());
+      m_currentEnumeratorValue = (int)type->value<long long>();
+    } else {
+      ///@todo Report problem, bad expression
+    }
+  }
+  
+//   if (CppEnumerationType::Ptr parent = currentType<CppEnumerationType>()) {
+//     CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
+//     openType(enumerator, node);
+//     ok = true;
+//   }
+
+  CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
+  openType(enumerator, node);
+  enumerator->setValue<long long>(m_currentEnumeratorValue);
+  
   TypeBuilderBase::visitEnumerator(node);
 
-  //if (ok)
-    //closeType();
+  closeType();
+
+  ++m_currentEnumeratorValue;
 }
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)

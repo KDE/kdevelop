@@ -115,6 +115,8 @@ protected:
   KDevelop::AbstractType::Ptr m_lastType;
 
   QList<KDevelop::AbstractType::Ptr> m_topTypes;
+
+  int m_currentEnumeratorValue;
 };
 
 #endif // TYPEBUILDER_H

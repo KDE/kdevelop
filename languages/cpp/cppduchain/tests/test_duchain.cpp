@@ -458,6 +458,63 @@ void TestDUChain::testDeclareFor()
   release(top);
 }
 
+void TestDUChain::testEnum()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 };");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 6);
+  
+  Declaration* decl = findDeclaration(top, Identifier("Enum"));
+  QVERIFY(decl);
+  QVERIFY(dynamic_cast<CppEnumerationType*>(decl->abstractType().data()));
+  CppEnumerationType* en = static_cast<CppEnumerationType*>(decl->abstractType().data());
+  QVERIFY(en->declaration());
+  QCOMPARE(en->identifier(), QualifiedIdentifier("Enum"));
+
+  {
+    decl = findDeclaration(top, QualifiedIdentifier("Value1"));
+    QVERIFY(decl);
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
+    CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+    QCOMPARE((int)en->value<long long>(), 5);
+  
+    decl = findDeclaration(top, Identifier("value2"));
+    QVERIFY(decl);
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
+    en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+    QCOMPARE((int)en->value<long long>(), 6);
+  }
+  decl = findDeclaration(top, Identifier("Enum2"));
+  QVERIFY(decl);
+  QVERIFY(dynamic_cast<CppEnumerationType*>(decl->abstractType().data()));
+  en = static_cast<CppEnumerationType*>(decl->abstractType().data());
+  QVERIFY(en->declaration());
+  QCOMPARE(en->identifier(), QualifiedIdentifier("Enum2"));
+  
+  {
+    decl = findDeclaration(top, Identifier("Value21"));
+    QVERIFY(decl);
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
+    CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+    QCOMPARE((int)en->value<long long>(), 0);
+  
+    decl = findDeclaration(top, Identifier("value22"));
+    QVERIFY(decl);
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
+    en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+    QCOMPARE((int)en->value<long long>(), 1);
+  }
+  release(top);
+}
+
 void TestDUChain::testDeclareStruct()
 {
   TEST_FILE_PARSE_ONLY

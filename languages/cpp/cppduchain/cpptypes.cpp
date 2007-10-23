@@ -293,9 +293,9 @@ CppTypeAliasType::CppTypeAliasType()
 {
 }
 
-/*CppEnumeratorType::CppEnumeratorType()
+CppEnumeratorType::CppEnumeratorType() : CppConstantIntegralType(TypeInt)
 {
-}*/
+}
 
 CppClassType::CppClassType(Declaration::CVSpecs spec)
   : CppCVType(spec)
@@ -596,6 +596,10 @@ CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec)
   setCV(spec);
 }
 
+QString CppEnumerationType::toString() const
+{
+  return "enum " + identifier().toString();
+}
 /*uint CppEnumerationType::hash() const
 {
   return reinterpret_cast<long>(this);
@@ -721,11 +725,6 @@ QString CppFunctionType::mangled() const
 QString CppArrayType::mangled() const
 {
   return QString("A%1%2").arg(dimension()).arg(elementType() ? elementType()->mangled() : QString());
-}
-
-QString CppEnumerationType::mangled() const
-{
-  return idMangled();
 }
 
 TemplateParameterDeclaration* CppTemplateParameterType::declaration() const {

@@ -309,7 +309,7 @@ DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* ran
       return new DeclarationType(range, (KDevelop::Declaration::Scope)scope, currentContext());
 }
 
-Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition, bool isNamespaceAlias, const Identifier& aliasName)
+Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition, bool isNamespaceAlias, const Identifier& customName)
 {
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -344,8 +344,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
         visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
     }
-  } else if( isNamespaceAlias ) {
-    id = QualifiedIdentifier(aliasName);
+  } else {
+    id = QualifiedIdentifier(customName);
   }
 
   Identifier lastId;
@@ -412,8 +412,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
 
   if (!declaration) {
-    if( recompiling() )
-      kDebug(9007) << "creating new declaration while recompiling: " << lastId << "(" << newRange << ")" << endl;
+/*    if( recompiling() )
+      kDebug(9007) << "creating new declaration while recompiling: " << lastId << "(" << newRange << ")" << endl;*/
     Range* prior = m_editor->currentRange();
     Range* range = m_editor->createRange(newRange);
     
@@ -424,7 +424,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
     if( isNamespaceAlias ) {
       declaration = new NamespaceAliasDeclaration(range, scope, currentContext());
-      declaration->setIdentifier(aliasName);
+      declaration->setIdentifier(customName);
     } else if (isForward) {
       declaration = specialDeclaration<ForwardDeclaration>(range, scope);
 
@@ -443,13 +443,14 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       declaration = specialDeclaration<Declaration>(range, scope );
     }
 
-    if (name) {
+    if (!isNamespaceAlias) {
       // FIXME this can happen if we're defining a staticly declared variable
       //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
-      Q_ASSERT(!id.isEmpty());
+      if(id.isEmpty())
+        kWarning() << "empty id";
       declaration->setIdentifier(id.last());
     }
-
+    
     declaration->setDeclarationIsDefinition(isDefinition);
 
     if (currentContext()->type() == DUContext::Class) {
@@ -499,7 +500,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     }
 
   }
-
+  
   declaration->setComment(m_lastComment);
   m_lastComment = QString();
 
@@ -579,6 +580,25 @@ void DeclarationBuilder::visitTypedef(TypedefAST *def)
   m_inTypedef = true;
   DeclarationBuilderBase::visitTypedef(def);
   m_inTypedef = false;
+}
+
+void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
+{
+  openDefinition(node->name, node);
+
+  DeclarationBuilderBase::visitEnumSpecifier(node);
+
+  closeDeclaration();
+}
+
+void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
+{
+  Identifier id(m_editor->parseSession()->token_stream->token(node->id).symbol());
+  DeclarationBuilder::openDeclaration(0, node, false, false, true, false, id);
+
+  DeclarationBuilderBase::visitEnumerator(node);
+
+  closeDeclaration();
 }
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)

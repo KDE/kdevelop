@@ -329,21 +329,13 @@ private:
   KDevelop::AbstractType::Ptr m_type;
 };
 
-/*class CppEnumeratorType : public IntegralType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppEnumeratorType : public CppConstantIntegralType
 {
 public:
   typedef KSharedPtr<CppEnumeratorType> Ptr;
 
   CppEnumeratorType();
-
-  QString value() const;
-  void setValue(const QString &value);
-
-  virtual uint hash() const;
-
-private:
-  QString m_value;
-};*/
+};
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppEnumerationType : public CppIntegralType, public KDevelop::IdentifiedType
 {
@@ -356,8 +348,8 @@ public:
   virtual AbstractType* clone() const;
   
   virtual bool equals(const AbstractType* rhs) const;
-  
-  virtual QString mangled() const;
+
+  virtual QString toString() const;
 };
 
 class KDEVCPPDUCHAINBUILDER_EXPORT CppArrayType : public KDevelop::ArrayType
