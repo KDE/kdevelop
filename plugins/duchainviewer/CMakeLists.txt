@@ -16,6 +16,7 @@ include_directories(
 set(kdevduchainview_PART_SRCS
     duchainmodel.cpp
     duchainview_part.cpp
+    duchaintree.cpp
 )
 
 kde4_add_plugin(kdevduchainview ${kdevduchainview_PART_SRCS})

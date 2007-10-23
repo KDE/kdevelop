@@ -22,9 +22,7 @@
 
 #include "duchainview_part.h"
 #include "duchainmodel.h"
-
-#include <QtGui/QTreeView>
-#include <QtGui/QHeaderView>
+#include "duchaintree.h"
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -44,12 +42,7 @@ public:
 
     virtual QWidget* create(QWidget *parent = 0)
     {
-        QTreeView* view = new QTreeView(parent);
-        view->setObjectName("DUChain Viewer Tree");
-        view->setWindowTitle(i18n("Definition-Use Chain"));
-        view->setModel(m_part->model());
-        view->header()->hide();
-        QObject::connect(m_part->model(), SIGNAL(modelReset()), view, SLOT(reset()));
+        QTreeView* view = new DUChainTree(parent, m_part);
         QObject::connect(view, SIGNAL(doubleClicked(const QModelIndex &)), m_part->model(), SLOT(doubleClicked(const QModelIndex &)));
         return view;
     }

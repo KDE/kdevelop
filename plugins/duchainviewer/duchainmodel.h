@@ -58,6 +58,8 @@ public:
 
   void setTopContext(KDevelop::TopDUContext* context);
 
+  KDevelop::DUChainBase* objectForIndex(const QModelIndex& index) const;
+
 public Q_SLOTS:
   void documentActivated(KDevelop::IDocument* document);
   void parseJobFinished(KDevelop::ParseJob* job);
@@ -82,7 +84,6 @@ private slots:
 private:
   DUChainViewPart* part() const;
   
-  KDevelop::DUChainBase* objectForIndex(const QModelIndex& index) const;
   int findInsertIndex(QList<KDevelop::DUChainBase*>& list, KDevelop::DUChainBase* object) const;
 
   template <typename T>

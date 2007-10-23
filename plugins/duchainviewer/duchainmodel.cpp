@@ -43,6 +43,8 @@
 #include "duchainlock.h"
 #include "duchainpointer.h"
 
+//#include "modeltest.h"
+
 using namespace KTextEditor;
 using namespace KDevelop;
 
@@ -59,6 +61,7 @@ DUChainModel::DUChainModel(DUChainViewPart* parent)
 {
   DUChainWriteLocker writeLock(DUChain::lock());
   DUChain::self()->addObserver(this);
+  //new ModelTest(this);
   connect( part()->core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 }
 
@@ -77,14 +80,14 @@ void DUChainModel::parseJobFinished(KDevelop::ParseJob* job)
     lock.unlock();
     setTopContext(job->duChain());
   }
-  
+
 }
 
 void DUChainModel::documentActivated(KDevelop::IDocument* document)
 {
   if (document) {
     TopDUContext* chain = DUChain::self()->chainForDocument(document->url());
-    if (chain)
+    if (chain && chain != m_chain)
       setTopContext(chain);
     else {
       QMutexLocker lock(&m_mutex);
@@ -96,13 +99,13 @@ void DUChainModel::documentActivated(KDevelop::IDocument* document)
 void DUChainModel::setTopContext(TopDUContext* context)
 {
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
+  //QMutexLocker lock(&m_mutex);
 
   if( context )
     m_document = context->url();
   else
     m_document = KUrl();
-  
+
   if (m_chain != context)
     m_chain = context;
 
@@ -133,14 +136,14 @@ QModelIndex DUChainModel::index(int row, int column, const QModelIndex & parent)
     return QModelIndex();
 
   if (!parent.isValid()) {
-    if (row > 0)
+    if (parent.row() > 0 || parent.column() > 0)
       return QModelIndex();
 
     return createIndex(row, column, m_chain);
   }
 
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
+  //QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(parent);
   if (!base)
@@ -163,7 +166,7 @@ QModelIndex DUChainModel::parent(const QModelIndex & index) const
     return QModelIndex();
 
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
+  //QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(index);
   if (!base)
@@ -198,7 +201,7 @@ QVariant DUChainModel::data(const QModelIndex& index, int role) const
     return QVariant();
 
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
+  //QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(index);
   if (!base)
@@ -249,11 +252,14 @@ QVariant DUChainModel::data(const QModelIndex& index, int role) const
 
 int DUChainModel::rowCount(const QModelIndex & parent) const
 {
+  if (!m_chain)
+    return 0;
+
   if (!parent.isValid())
     return 1;
 
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
+  //QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(parent);
   if (!base)
@@ -287,7 +293,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
   QList<DUChainBase*>* list = 0;
 
   if (DUContext* context = dynamic_cast<DUContext*>(parent)) {
-    
+
     QList<DUContext*> importedParentContextsData;
     foreach( DUContextPointer p, context->importedParentContexts() )
       if( p.data() )
@@ -366,7 +372,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
     //kDebug(9500) << "No child items for definitions or uses";
   }
 
-  m_objectLists.insert(parent, list);
+  m_objectLists.insert(proxy? proxy : parent, list);
 
   return list;
 }
@@ -376,7 +382,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
   if (!parent.isValid())
     return true;
 
-  QMutexLocker lock(&m_mutex);
+  //QMutexLocker lock(&m_mutex);
   DUChainReadLocker readLock(DUChain::lock());
 
   DUChainBase* base = objectForIndex(parent);
@@ -401,7 +407,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
 
 void DUChainModel::contextChanged(DUContext * context, Modification change, Relationship relationship, DUChainBase * relatedObject)
 {
-  QMutexLocker lock(&m_mutex);
+  //QMutexLocker lock(&m_mutex);
 
   if (!m_objectLists.contains(context) || !m_modelRow.contains(context))
     return;
@@ -422,7 +428,7 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
           setTopContext(0);
           return;
         }
-          
+
 
         case Change: {
           int index = list->indexOf(relatedObject);
@@ -489,7 +495,7 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
     DUContext* ctx = dynamic_cast<DUContext*>(base);
     if( base && !ctx && dynamic_cast<Declaration*>(base) )
       ctx = static_cast<Declaration*>(base)->internalContext();
-    
+
     if(ctx) {
       KTemporaryFile tempFile;
 
@@ -506,8 +512,8 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
         suffix = suffix.replace(' ', '_');
         suffix += ".temp.dot";
         tempFile.setSuffix( suffix );
-      
-      
+
+
         if( tempFile.open() ) {
           DumpDotGraph dump;
           tempFile.write( dump.dotGraph( ctx ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
@@ -530,7 +536,7 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
           KMessageBox::error(0, i18n("Could not open %1 with kgraphviewer or dotty.", fileName));
         }
       }
-      
+
     }
   }
 }
