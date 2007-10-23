@@ -395,12 +395,14 @@ QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
 QString QMakeScopeItem::getApplicationObject( QString basePath )
 {
     QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
-    if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
+    QString destdir = scope->resolveVariables( scope->variableValues( "DESTDIR" ).front() );
+
+    if ( !destdir.isEmpty() )
     {
-        if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-            tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+        if ( QDir::isRelativePath( destdir ) )
+            tmpPath += QString( QChar( QDir::separator() ) ) + destdir;
         else
-            tmpPath = scope->variableValues( "DESTDIR" ).front();
+            tmpPath = destdir;
     }
     else
     {
@@ -409,19 +411,22 @@ QString QMakeScopeItem::getApplicationObject( QString basePath )
 
     tmpPath = QDir::cleanDirPath( tmpPath );
 
-    if ( scope->variableValues( "TARGET" ).front().isEmpty() )
+    QString target = scope->resolveVariables( scope->variableValues( "TARGET" ).front() );
+
+    if ( target.isEmpty() )
         return tmpPath + QString( QChar( QDir::separator() ) ) + scope->projectName();
     else
-        return tmpPath + QString( QChar( QDir::separator() ) ) + scope->variableValues( "TARGET" ).front();
+        return tmpPath + QString( QChar( QDir::separator() ) ) + target;
 }
 
 QString QMakeScopeItem::getLibAddObject( QString basePath )
 {
     if ( scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
     {
-        if ( !scope->variableValues( "TARGET" ).front().isEmpty() )
+        QString target = scope->resolveVariables( scope->variableValues( "TARGET" ).front() );
+        if ( !target.isEmpty() )
         {
-            return ( "-l" + scope->variableValues( "TARGET" ).front() );
+            return ( "-l" + target );
         }
         else
         {
@@ -432,12 +437,13 @@ QString QMakeScopeItem::getLibAddObject( QString basePath )
             || scope->variableValues("TEMPLATE").findIndex("lib") != -1 )
     {
         QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
-        if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
+        QString destdir = scope->resolveVariables( scope->variableValues( "DESTDIR" ).front() );
+        if ( !destdir.isEmpty() )
         {
-            if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-                tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+            if ( QDir::isRelativePath( destdir ) )
+                tmpPath += QString( QChar( QDir::separator() ) ) + destdir;
             else
-                tmpPath = scope->variableValues( "DESTDIR" ).front();
+                tmpPath = destdir;
         }
         else
         {
@@ -447,9 +453,10 @@ QString QMakeScopeItem::getLibAddObject( QString basePath )
         tmpPath = QDir::cleanDirPath( tmpPath );
 
         QString libString;
-        if ( !scope->variableValues( "TARGET" ).front().isEmpty() )
+        QString target = scope->resolveVariables( scope->variableValues( "TARGET" ).front() );
+        if ( !target.isEmpty() )
         {
-            libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + scope->variableValues( "TARGET" ).front() + ".a";
+            libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + target + ".a";
 
         }
         else
@@ -469,12 +476,13 @@ QString QMakeScopeItem::getLibAddPath( QString basePath )
     if ( scope->variableValues( "CONFIG" ).findIndex( "dll" ) == -1 ) return ( "" );
 
     QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
-    if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
+    QString destdir = scope->resolveVariables( scope->variableValues( "DESTDIR" ).front() );
+    if ( !destdir.isEmpty() )
     {
-        if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-            tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+        if ( QDir::isRelativePath( destdir ) )
+            tmpPath += QString( QChar( QDir::separator() ) ) + destdir;
         else
-            tmpPath = scope->variableValues( "DESTDIR" ).front();
+            tmpPath = destdir;
     }
     else
     {
