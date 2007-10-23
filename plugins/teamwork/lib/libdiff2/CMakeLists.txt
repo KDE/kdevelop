@@ -21,7 +21,7 @@ set(diff2_PART_SRCS
 
 kde4_add_library(diff2 ${diff2_PART_SRCS})
 
-target_link_libraries(diff2  ${KDE4_KDEUI_LIBS} )
+target_link_libraries(diff2  ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(diff2 PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
