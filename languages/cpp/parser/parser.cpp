@@ -592,7 +592,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
             if( mcomment )
               addComment(ast, mcomment);
 
-            preparseLineComments(--ast->end_token);
+            preparseLineComments(ast->end_token-1);
             
             if( m_commentStore.hasComment() )
               addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
@@ -605,7 +605,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
               if( mcomment )
                 addComment(node, mcomment);
               
-              preparseLineComments(--node->end_token);
+              preparseLineComments(node->end_token-1);
 
               if( m_commentStore.hasComment() )
                 addComment( node, m_commentStore.takeCommentInRange( lineFromTokenNumber( --node->end_token ) ) );
@@ -905,7 +905,7 @@ bool Parser::parseTypedef(DeclarationAST *&node)
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
-  preparseLineComments( --ast->end_token );
+  preparseLineComments( ast->end_token-1 );
 
   if( m_commentStore.hasComment() )
     addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
@@ -1534,6 +1534,7 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
   EnumeratorAST *enumerator = 0;
   if (parseEnumerator(enumerator))
     {
+      
       ast->enumerators = snoc(ast->enumerators, enumerator, session->mempool);
 
       while (session->token_stream->lookAhead() == ',')
@@ -2067,7 +2068,7 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
       if( mcomment )
         addComment(ast,mcomment);
       
-      preparseLineComments(--ast->end_token);
+      preparseLineComments(ast->end_token-1);
 
       if( m_commentStore.hasComment() )
         addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
@@ -2084,7 +2085,7 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
         if( mcomment )
           addComment(node, mcomment);
 
-        preparseLineComments(--node->end_token);
+        preparseLineComments(node->end_token-1);
 
         if( m_commentStore.hasComment() )
           addComment( node, m_commentStore.takeCommentInRange( lineFromTokenNumber( --node->end_token ) ) );
@@ -2203,7 +2204,7 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
   if( m_commentStore.hasComment() )
     addComment( node, m_commentStore.takeFirstComment() );
   
-  preparseLineComments( --ast->end_token );
+  preparseLineComments( ast->end_token-1 );
 
   if( m_commentStore.hasComment() )
     addComment( node, m_commentStore.takeCommentInRange( lineFromTokenNumber(--ast->end_token) ) );
