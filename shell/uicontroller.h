@@ -63,8 +63,8 @@ public:
     Sublime::Controller* controller();
 
 private:
-    Q_PRIVATE_SLOT(d, void widgetChanged(QWidget*,QWidget*))
     class UiControllerPrivate* const d;
+    Q_PRIVATE_SLOT(d, void widgetChanged(QWidget*,QWidget*))
 };
 
 }

@@ -155,6 +155,11 @@ struct DocumentControllerPrivate {
     QList<HistoryEntry> forwardHistory;
     bool isJumping;
 
+    KAction* saveAll;
+    KAction* revertAll;
+    KAction* closeAll;
+    KAction* closeAllOthers;
+    
 /*    HistoryEntry createHistoryEntry();
     void addHistoryEntry();
     void jumpTo( const HistoryEntry & );*/
@@ -181,13 +186,46 @@ void DocumentController::setupActions()
     KActionCollection * ac =
         Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    QAction *action;
+    KAction *action;
 
-    action = ac->addAction( "file_open" );
+    action = static_cast<KAction*>(ac->addAction( "file_open" ));
+    action->setIcon(KIcon("file_open"));
     action->setText(i18n( "&Open File..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( chooseDocument() ) );
     action->setToolTip( i18n( "Open file" ) );
     action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
+
+    action = d->saveAll = static_cast<KAction*>(ac->addAction( "file_save_all" ));
+    action->setIcon(KIcon("document-save"));
+    action->setText(i18n( "Save Al&l" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotSaveAllDocuments() ) );
+    action->setToolTip( i18n( "Save all open documents" ) );
+    action->setWhatsThis( i18n( "<b>Save all documents</b><p>Save all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setEnabled(false);
+
+    action = d->revertAll = static_cast<KAction*>(ac->addAction( "file_revert_all" ));
+    action->setIcon(KIcon("document-revert"));
+    action->setText(i18n( "Rever&t All" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( reloadAllDocuments() ) );
+    action->setToolTip( i18n( "Revert all open documents" ) );
+    action->setWhatsThis( i18n( "<b>Revert all documents</b><p>Revert all open documents, returning to the previously saved state.</p>" ) );
+    action->setEnabled(false);
+
+    action = d->closeAll = static_cast<KAction*>(ac->addAction( "file_close_all" ));
+    action->setIcon(KIcon("window-close"));
+    action->setText(i18n( "Clos&e All" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllDocuments() ) );
+    action->setToolTip( i18n( "Close all open documents" ) );
+    action->setWhatsThis( i18n( "<b>Close all documents</b><p>Close all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setEnabled(false);
+
+    action = d->closeAllOthers = static_cast<KAction*>(ac->addAction( "file_closeother" ));
+    action->setIcon(KIcon("window-close"));
+    action->setText(i18n( "Close All Ot&hers" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllOtherDocuments() ) );
+    action->setToolTip( i18n( "Close all other documents" ) );
+    action->setWhatsThis( i18n( "<b>Close all other documents</b><p>Close all open documents, with the exception of the currently active document.</p>" ) );
+    action->setEnabled(false);
 }
 
 void DocumentController::setEncoding( const QString &encoding )
@@ -324,6 +362,11 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     if (activate == IDocumentController::ActivateOnOpen)
         emit documentActivated( doc );
 
+    d->saveAll->setEnabled(true);
+    d->revertAll->setEnabled(true);
+    d->closeAll->setEnabled(true);
+    d->closeAllOthers->setEnabled(true);
+
     return doc;
 }
 
@@ -336,6 +379,13 @@ void DocumentController::closeDocument( const KUrl &url )
     //document will be self-destructed and removeDocument() slot will catch that
     //and clean up internal data structures
     d->documents[url]->close();
+
+    if (d->documents.isEmpty()) {
+        d->saveAll->setEnabled(false);
+        d->revertAll->setEnabled(false);
+        d->closeAll->setEnabled(false);
+        d->closeAllOthers->setEnabled(false);
+    }
 }
 
 IDocument * DocumentController::documentForUrl( const KUrl & url ) const
@@ -365,6 +415,36 @@ QList<IDocument*> DocumentController::openDocuments() const
 void DocumentController::activateDocument( IDocument * document )
 {
     openDocument(document->url());
+}
+
+void DocumentController::slotSaveAllDocuments()
+{
+    saveAllDocuments();
+}
+
+void DocumentController::saveAllDocuments(IDocument::DocumentSaveMode mode)
+{
+    foreach (IDocument* doc, d->documents)
+        doc->save(mode);
+}
+
+void DocumentController::reloadAllDocuments()
+{
+    foreach (IDocument* doc, d->documents)
+        doc->reload();
+}
+
+void DocumentController::closeAllDocuments()
+{
+    foreach (IDocument* doc, d->documents)
+        doc->close();
+}
+
+void DocumentController::closeAllOtherDocuments()
+{
+    foreach (IDocument* doc, d->documents)
+        if (doc != activeDocument())
+            doc->close();
 }
 
 IDocument* DocumentController::activeDocument() const

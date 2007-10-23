@@ -26,9 +26,10 @@
 
 #include <interfacesexport.h>
 
+#include "idocument.h"
+
 namespace KDevelop {
 
-class IDocument;
 class ICore;
 
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentFactory {
@@ -70,6 +71,8 @@ public:
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
+    virtual void saveAllDocuments(IDocument::DocumentSaveMode mode = IDocument::Default) = 0;
+
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
@@ -78,6 +81,8 @@ public Q_SLOTS:
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
             DocumentActivation activate = ActivateOnOpen ) = 0;
+
+    virtual void closeAllDocuments() = 0;
 
 Q_SIGNALS:
     /**Emitted when the document has been activated.*/

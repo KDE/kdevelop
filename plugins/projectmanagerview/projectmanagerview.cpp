@@ -76,6 +76,8 @@ public:
     }
     void buildCurrentProject()
     {
+        m_part->core()->documentController()->saveAllDocuments(IDocument::Silent);
+
         ProjectBaseItem* item = m_part->core()->projectController()->projectModel()->item(
                 m_projectOverview->selectionModel()->currentIndex() );
         if( item )
