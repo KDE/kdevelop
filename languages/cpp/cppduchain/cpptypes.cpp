@@ -308,11 +308,66 @@ CppClassType::CppClassType(Declaration::CVSpecs spec)
 CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, CppConstantIntegralType::TypeModifiers modifiers) : CppIntegralType(type, modifiers) {
 }
 
-void CppConstantIntegralType::setValue(size_t value) {
+template<>
+void CppConstantIntegralType::setValue<long long>(long long value) {
+  if((typeModifiers() & ModifierUnsigned))
+    kWarning() << "setValue(signed) called on unsigned type";
   m_value = value;
 }
-size_t CppConstantIntegralType::value() const {
+
+template<>
+void CppConstantIntegralType::setValue<unsigned long long>(unsigned long long value) {
+  if(!(typeModifiers() & ModifierUnsigned))
+    kWarning() << "setValue(unsigned) called on not unsigned type";
+  m_value = (long long)value;
+}
+
+template<>
+void CppConstantIntegralType::setValue<float>(float value) {
+  if(integralType() != TypeFloat)
+    kWarning() << "setValue(float) called on non-float type";
+  memcpy(&m_value, &value, sizeof(float));
+}
+
+template<>
+void CppConstantIntegralType::setValue<double>(double value) {
+  if(integralType() != TypeDouble)
+    kWarning() << "setValue(double) called on non-double type";
+  memcpy(&m_value, &value, sizeof(double));
+}
+
+template<>
+long long CppConstantIntegralType::value<long long>() const {
+  if((typeModifiers() & ModifierUnsigned))
+    kWarning() << "value<signed> called on unsigned type";
   return m_value;
+}
+
+template<>
+unsigned long long CppConstantIntegralType::value<unsigned long long>() const {
+  if(!(typeModifiers() & ModifierUnsigned))
+    kWarning() << "value<unsigned> called on not unsigned type";
+  return (unsigned long long)m_value;
+}
+
+template<>
+float CppConstantIntegralType::value<float>() const {
+  if(integralType() != TypeFloat)
+    kWarning() << "value<float> called on non-float type";
+
+  float value;
+  memcpy(&value, &m_value, sizeof(float));
+  return value;
+}
+
+template<>
+double CppConstantIntegralType::value<double>() const {
+  if(integralType() != TypeDouble)
+    kWarning() << "value<double> called on non-double type";
+
+  double value;
+  memcpy(&value, &m_value, sizeof(double));
+  return value;
 }
 
 QString CppConstantIntegralType::toString() const {
@@ -328,9 +383,9 @@ QString CppConstantIntegralType::toString() const {
     case TypeInt:
       return (typeModifiers() & ModifierUnsigned) ? QString("%1u").arg((uint)m_value) : QString("%1").arg((int)m_value);
     case TypeFloat:
-      return QString("%1").arg( *((float*)&m_value) );
+      return QString("%1").arg( value<float>() );
     case TypeDouble:
-      return QString("%1").arg( *((float*)&m_value) );
+      return QString("%1").arg( value<double>() );
     case TypeVoid:
       return "void";
   }

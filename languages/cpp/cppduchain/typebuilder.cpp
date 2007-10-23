@@ -34,7 +34,7 @@
 #include <declaration.h>
 #include "typerepository.h"
 #include "declarationbuilder.h"
-
+#include "expressionparser.h"
 //#define DEBUG
 
 #ifdef DEBUG
@@ -503,28 +503,28 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
 {
   bool typeOpened = false;
 
-  // TODO need generic expression evaluator...
-  switch (expression->kind) {
-    case AST::Kind_PrimaryExpression: {
-      PrimaryExpressionAST* primary = static_cast<PrimaryExpressionAST*>(expression);
-      if (primary->token) {
-        QString token = m_editor->tokenToString(primary->token);
-        bool ok;
-        int arrayDimension = token.toInt(&ok);
-        if (ok) {
-          // Phew...
-          ArrayType::Ptr array(new ArrayType());
-          array->setElementType(lastType());
-          array->setDimension(arrayDimension);
-          openType(array, expression);
-          typeOpened = true;
-        }
-        break;
-      }
-    }
-  }
+  Cpp::ExpressionParser parser;
 
-  visit(expression);
+  Cpp::ExpressionEvaluationResult res;
+  
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    expression->ducontext = currentContext();
+    res = parser.evaluateType( expression, m_editor->parseSession() );
+  
+    CppArrayType::Ptr array(new CppArrayType());
+    array->setElementType(lastType());
+
+    if( res.isValid() && dynamic_cast<CppConstantIntegralType*>(res.type.data()) ) {
+      CppConstantIntegralType* value = static_cast<CppConstantIntegralType*>( res.type.data() );
+      array->setDimension(value->value<long long>());
+    } else {
+      array->setDimension(0);
+    }
+    
+    openType(array, expression);
+    typeOpened = true;
+  }
 
   if (typeOpened)
     closeType();

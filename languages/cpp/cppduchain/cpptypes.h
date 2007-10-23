@@ -133,19 +133,34 @@ class KDEVCPPDUCHAINBUILDER_EXPORT CppConstantIntegralType : public CppIntegralT
 public:
   typedef KSharedPtr<CppConstantIntegralType> Ptr;
 
-  size_t value() const;
-  
-  void setValue(size_t value);
-  
+  /**The types and modifiers are not changed!
+   
+  * Implemented versions are:
+   * setValue<long long>(),setValue<unsigned long long>(), setValue<float>(), setValue<double>()
+   *
+   * */
+  template<class ValueType>
+  void setValue(ValueType value);
+
+  /**
+   * For booleans, the value is 1 for true, and 0 for false.
+   * All signed values should be retrieved and set through value(),
+   * unsigned ones through unsignedValue().
+   *
+   * Implemented versions are:
+   * value<long long>(),value<unsigned long long>(), value<float>(), value<double>()
+   * 
+   * */
+  template<class Type>
+  Type value() const;
+
   virtual QString toString() const;
 
   virtual AbstractType* clone() const;
 
   CppConstantIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
-protected:
-
 private:
-  size_t m_value;
+  long long m_value;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)

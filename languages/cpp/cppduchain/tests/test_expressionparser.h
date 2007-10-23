@@ -60,6 +60,7 @@ private slots:
   void cleanupTestCase();
   void testOperators();
   void testThis();
+  void testArray();
 
 public:
   enum DumpArea {

@@ -452,7 +452,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       LOCKDUCHAIN;
       m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeBool, CppIntegralType::ModifierNone)) );
       m_lastInstance = Instance(true);
-      static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue( identifier == trueIdentifier );
+      static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<long long>( identifier == trueIdentifier );
     } else {
       LOCKDUCHAIN;
 
@@ -510,21 +510,24 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         
         
         LOCKDUCHAIN;
-        if( num.indexOf('.') != -1 || num.endsWith('f') ) {
-          float f[5];
+        if( num.indexOf('.') != -1 || num.endsWith('f') || num.endsWith('d') ) {
+          double val = 0;
           bool ok = false;
           while( !num.isEmpty() && !ok ) {
-            f[2] = num.toFloat(&ok);
+            val = num.toDouble(&ok);
             num.truncate(num.length()-1);
           }
 
-          size_t val = *( (size_t*)(&f[2]));
-          
-          m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeFloat, CppIntegralType::ModifierNone)));
-          static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue(val);
-        } else {
-          int val;
 
+          if( num.endsWith('f') ) {
+            m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeFloat, CppIntegralType::ModifierNone)));
+            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<float>((float)val);
+          } else {
+            m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeDouble, CppIntegralType::ModifierNone)));
+            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<double>(val);
+          }
+        } else {
+          long long val;
           CppIntegralType::TypeModifier mod = CppIntegralType::ModifierNone;
 
           if( num.endsWith("u") )
@@ -532,12 +535,16 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
           
           bool ok = false;
           while( !num.isEmpty() && !ok ) {
-            val = num.toInt(&ok);
+            val = num.toLongLong(&ok);
             num.truncate(num.length()-1);
           }
           
           m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeInt, mod)));
-          static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue(val);
+
+          if( mod & CppIntegralType::ModifierUnsigned )
+            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<unsigned long long>(val);
+          else
+            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<long long>(val);
         }
         m_lastInstance = Instance(true);
         
@@ -688,6 +695,99 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     visitSubExpressions( node, node->sub_expressions );
   }
 
+/** A helper-class for evaluating constant binary expressions under different types(int, float, etc.) */
+template<class Type>
+struct ConstantBinaryExpressionEvaluator {
+
+  Type endValue;
+
+  CppIntegralType::IntegralTypes type;
+  CppIntegralType::TypeModifiers modifier;
+
+  /**
+   * Writes the results into endValue, type, and modifier.
+   * */
+  ConstantBinaryExpressionEvaluator( int tokenKind, CppConstantIntegralType* left, CppConstantIntegralType* right ) {
+    endValue = 0;
+    type = left->integralType(); ///@todo choose the resulting type better
+    modifier = left->typeModifiers();
+    switch( tokenKind ) {
+      case '+':
+        endValue = left->value<Type>() + right->value<Type>();
+      break;
+      case '-':
+        endValue = left->value<Type>() - right->value<Type>();
+      break;
+      case '*':
+        endValue = left->value<Type>() * right->value<Type>();
+      break;
+      case '/':
+        endValue = left->value<Type>() / right->value<Type>();
+      break;
+      case '%':
+        endValue = left->value<Type>() % right->value<Type>();
+      break;
+      case '^':
+        endValue = left->value<Type>() ^ right->value<Type>();
+      break;
+      case '&':
+        endValue = left->value<Type>() & right->value<Type>();
+      break;
+      case '|':
+        endValue = left->value<Type>() | right->value<Type>();
+      break;
+      case '~':
+        //endValue = left->value<Type>() ~ right->value<Type>();
+      break;
+      case '!':
+        //endValue = left->value<Type>() ! right->value<Type>();
+      break;
+      case '=':
+        endValue = right->value<Type>();
+      break;
+      case '<':
+        endValue = left->value<Type>() < right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+      case '>':
+        endValue = left->value<Type>() > right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+      case Token_assign:
+        endValue = right->value<Type>();
+      break;
+      case Token_shift:
+        ///@todo shift-direction?
+        endValue = left->value<Type>() << right->value<Type>();
+      break;
+      case Token_eq:
+        endValue = left->value<Type>() == right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+      case Token_not_eq:
+        endValue = left->value<Type>() != right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+      case Token_leq:
+        endValue = left->value<Type>() <= right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+      case Token_geq:
+        endValue = left->value<Type>() >= right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+      case Token_and:
+        endValue = left->value<Type>() && right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+      case Token_or:
+        endValue = left->value<Type>() || right->value<Type>();
+        type = CppIntegralType::TypeBool;
+      break;
+    }
+  }
+};
+
   /**
    *
    * partially have test **/
@@ -772,49 +872,67 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       return;
     }
 
-    switch( tokenFromIndex(node->op).kind ) {
-      case Token_assign:
-      default:
-      {
-        QString op = operatorNameFromTokenKind(tokenFromIndex(node->op).kind);
+    if( rightInstance && leftInstance && rightType && leftType &&
+        dynamic_cast<CppConstantIntegralType*>(rightType.data()) &&
+        dynamic_cast<CppConstantIntegralType*>(leftType.data()) ) {
+        //Constantly evaluate integral expressions
+        CppConstantIntegralType* left = static_cast<CppConstantIntegralType*>(leftType.data());
+        CppConstantIntegralType* right = static_cast<CppConstantIntegralType*>(rightType.data());
 
-        bool success = false;
-        if( !op.isEmpty() )
+        LOCKDUCHAIN;
+
+        ///@todo respect float, unsigned, etc.
+        ConstantBinaryExpressionEvaluator<long long> evaluator( tokenFromIndex(node->op).kind, left, right );
+
+        m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(evaluator.type, evaluator.modifier)) );
+        static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue( evaluator.endValue );
+    
+        m_lastInstance = Instance(true);
+      } else {
+      switch( tokenFromIndex(node->op).kind ) {
+        case Token_assign:
+        default:
         {
-          LOCKDUCHAIN;
-          OverloadResolutionHelper helper(m_currentContext);
-          helper.setOperator( OverloadResolver::Parameter(leftType.data(), isLValue( leftType, leftInstance ) ), op );
-          helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType.data(), isLValue( rightType, rightInstance ) ) ) );
-          QList<OverloadResolutionFunction> functions = helper.resolve(false);
+          QString op = operatorNameFromTokenKind(tokenFromIndex(node->op).kind);
 
-          if( !functions.isEmpty() )
+          bool success = false;
+          if( !op.isEmpty() )
           {
-            CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
-            if( functions.first().function.isViable() && function ) {
-              success = true;
-              m_lastType = function->returnType();
-              m_lastInstance = Instance(function->declaration());
+            LOCKDUCHAIN;
+            OverloadResolutionHelper helper(m_currentContext);
+            helper.setOperator( OverloadResolver::Parameter(leftType.data(), isLValue( leftType, leftInstance ) ), op );
+            helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType.data(), isLValue( rightType, rightInstance ) ) ) );
+            QList<OverloadResolutionFunction> functions = helper.resolve(false);
+
+            if( !functions.isEmpty() )
+            {
+              CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+              if( functions.first().function.isViable() && function ) {
+                success = true;
+                m_lastType = function->returnType();
+                m_lastInstance = Instance(function->declaration());
+              }else{
+                //Do not complain here, because we do not check for builtin operators
+                //problem(node, "No fitting operator. found" );
+                //problem(node, QString("Found no viable operator-function"));
+              }
             }else{
               //Do not complain here, because we do not check for builtin operators
               //problem(node, "No fitting operator. found" );
-              //problem(node, QString("Found no viable operator-function"));
             }
-          }else{
-            //Do not complain here, because we do not check for builtin operators
-            //problem(node, "No fitting operator. found" );
+            //Find an overloaded binary operator
+          } else {
+            problem(node, "not implemented binary expression" );
           }
-          //Find an overloaded binary operator
-        } else {
-          problem(node, "not implemented binary expression" );
-        }
 
-        if( !success ) {
-          m_lastType = leftType;
-          m_lastInstance = leftInstance;
+          if( !success ) {
+            m_lastType = leftType;
+            m_lastInstance = leftInstance;
+          }
         }
+        break;
       }
-      break;
-    };
+    }
 
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
