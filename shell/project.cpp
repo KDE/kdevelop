@@ -234,7 +234,7 @@ bool Project::open( const KUrl& projectFileUrl )
     }
 
     d->m_cfg = KSharedConfig::openConfig( d->projectTempFile );
-    d->m_cfg->setExtraConfigFiles( QStringList() << d->developerTempFile );
+    d->m_cfg->addConfigSources( QStringList() << d->developerTempFile );
 
     KConfigGroup projectGroup( d->m_cfg, "Project" );
 

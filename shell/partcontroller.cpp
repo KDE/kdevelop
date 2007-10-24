@@ -111,7 +111,7 @@ PartController::PartController(Core *core, QWidget *toplevel)
     //     d->m_textTypes = config->readEntry( "TextTypes", QStringList() );
     //
     //     config ->setGroup( "Editor" );
-    //     d->m_editor = config->readPathEntry( "EmbeddedKTextEditor" );
+    //     d->m_editor = config->readPathEntry( "EmbeddedKTextEditor", QString() );
 }
 
 PartController::~PartController()
