@@ -460,10 +460,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       QString file;
 
       m_session->positionAt( m_session->token_stream->position(node->start_token), &line, &column, &file );
-      if( !m_currentContext->url().equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) ) {
-        kDebug() << "file mismatch: " << file << m_currentContext->url().toLocalFile();
+      if( !m_currentContext->url().equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
         line = column = -1;
-      }
+      
 
       ///@todo reenable(first make sure the conversion works properly)
       m_lastDeclarations = m_currentContext->findDeclarations( identifier, KTextEditor::Cursor(line, column) );
