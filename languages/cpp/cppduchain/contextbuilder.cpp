@@ -635,6 +635,22 @@ void ContextBuilder::visitUsing(UsingAST* node)
   DefaultVisitor::visitUsing(node);
 }
 
+/**
+ * This class is used to decide whether something is an expression or a declaration
+ * Maybe using it is overkill
+ * @todo Check how to do the test fast and correctly
+ * */
+class VerifyExpressionVisitor : public Cpp::ExpressionVisitor {
+  public:
+    VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session), result(true) {
+    }
+    virtual void problem(AST* node, const QString& str) {
+      result = false;
+    }
+
+    bool result;
+};
+
 class IdentifierVerifier : public DefaultVisitor
 {
 public:
@@ -649,11 +665,34 @@ public:
   bool result;
   Cursor cursor;
 
+  void visitPostfixExpression(PostfixExpressionAST* node)
+  {
+    if( node->expression && node->expression->kind == AST::Kind_PrimaryExpression &&
+        node->sub_expressions ) {
+      const ListNode<ExpressionAST*> *it = node->sub_expressions->toFront(), *end = it;
+      if( it->element && it->element->kind == AST::Kind_FunctionCall && it->next == end ) {
+        ///Special-case: We have a primary expression with a function-call, always treat that as an expression.
+        kDebug() << "accepting special-case";
+        return;
+      }
+    }
+    //First evaluate the primary expression, and then pass the result from sub-expression to sub-expression through m_lastType
+
+    visit(node->expression);
+
+    if( !node->sub_expressions )
+      return;
+    visitNodes( this, node->sub_expressions );
+  }
+  
   virtual void visitName (NameAST * node)
   {
     if (result)
-      if (!builder->currentContext()->findDeclarations(builder->identifierForName(node), cursor).isEmpty())
+      if (!builder->currentContext()->findDeclarations(builder->identifierForName(node), cursor).isEmpty()) {
+      kDebug() << "not found: " << builder->identifierForName(node).toString();
         result = false;
+      }else{
+      }
   }
 };
 
@@ -676,6 +715,10 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     case DUContext::Other:
       if (m_compilingContexts) {
         DUChainReadLocker lock(DUChain::lock());
+/*        VerifyExpressionVisitor iv(m_editor->parseSession());
+        
+        node->expression->ducontext = currentContext();
+        iv.parse(node->expression);*/
         IdentifierVerifier iv(this, m_editor->findPosition(node->start_token));
         iv.visit(node->expression);
         //kDebug(9007) << m_editor->findPosition(node->start_token) << "IdentifierVerifier returned" << iv.result;
