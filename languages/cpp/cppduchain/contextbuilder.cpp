@@ -689,7 +689,6 @@ public:
   {
     if (result)
       if (!builder->currentContext()->findDeclarations(builder->identifierForName(node), cursor).isEmpty()) {
-      kDebug() << "not found: " << builder->identifierForName(node).toString();
         result = false;
       }else{
       }
