@@ -464,7 +464,7 @@ void TestDUChain::testEnum()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 };");
+  QByteArray method("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 = 0x02 };");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -510,7 +510,7 @@ void TestDUChain::testEnum()
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
-    QCOMPARE((int)en->value<long long>(), 1);
+    QCOMPARE((int)en->value<long long>(), 2);
   }
   release(top);
 }
