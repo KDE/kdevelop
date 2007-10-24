@@ -41,9 +41,7 @@ namespace Cpp {
     /**
      * Is it a valid function?
      * */
-    bool isValid() const {
-      return m_type && m_declaration;
-    }
+    bool isValid() const;
 
     /**
      * @param partial If this is true, the function is treated as if it had max. as many parameters as are given, so a match with only a part of the parameters is possible.

@@ -43,6 +43,10 @@ KDevelop::DeclarationPointer ViableFunction::declaration() const {
   return m_declaration;
 }
 
+bool ViableFunction::isValid() const {
+  return m_type && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());;
+}
+
 void ViableFunction::matchParameters( const OverloadResolver::ParameterList& params, bool partial ) {
   if( !isValid() )
     return;
