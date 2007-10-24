@@ -338,15 +338,15 @@ void CppConstantIntegralType::setValue<double>(double value) {
 
 template<>
 long long CppConstantIntegralType::value<long long>() const {
-  if((typeModifiers() & ModifierUnsigned))
-    kWarning() << "value<signed> called on unsigned type";
+/*  if((typeModifiers() & ModifierUnsigned))
+    kWarning() << "value<signed> called on unsigned type";*/
   return m_value;
 }
 
 template<>
 unsigned long long CppConstantIntegralType::value<unsigned long long>() const {
-  if(!(typeModifiers() & ModifierUnsigned))
-    kWarning() << "value<unsigned> called on not unsigned type";
+/*  if(!(typeModifiers() & ModifierUnsigned))
+    kWarning() << "value<unsigned> called on not unsigned type";*/
   return (unsigned long long)m_value;
 }
 
