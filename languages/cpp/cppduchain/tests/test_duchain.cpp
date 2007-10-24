@@ -900,30 +900,32 @@ void TestDUChain::testDeclareUsingNamespace()
 }
 
 void TestDUChain::testFunctionDefinition() {
-  QByteArray text("class A { char at(B* b); }; \n char A::at(B* b) {} ");
+  QByteArray text("class B{}; class A { char at(B* b); }; \n char A::at(B* b) {B* b; at(b); } ");
 
-  DUContext* top = parse(text, DumpNone);
+  DUContext* top = parse(text, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->childContexts().count(), 3);
-  QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts().count(), 4);
+  QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
 
-  Declaration* atInA = top->childContexts()[0]->localDeclarations()[0];
+  Declaration* atInA = top->childContexts()[1]->localDeclarations()[0];
   
   QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(atInA));
 
-  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 2);
   QCOMPARE(top->localDefinitions().count(), 1);
 
-  QCOMPARE(top->localDefinitions()[0]->declaration(), top->childContexts()[0]->localDeclarations()[0]);
-  QCOMPARE(top->localDefinitions()[0], top->childContexts()[0]->localDeclarations()[0]->definition());
+  QCOMPARE(top->localDefinitions()[0]->declaration(), top->childContexts()[1]->localDeclarations()[0]);
+  QCOMPARE(top->localDefinitions()[0], top->childContexts()[1]->localDeclarations()[0]->definition());
 
-  QCOMPARE(top->childContexts()[2]->owner()->asDefinition(), top->localDefinitions()[0]);
+  QCOMPARE(top->childContexts()[3]->owner()->asDefinition(), top->localDefinitions()[0]);
   
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
-  
+
+  QVERIFY(top->localDefinitions()[0]->internalContext());
+  QCOMPARE(top->localDefinitions()[0]->internalContext()->localDeclarations().count(), 1);
   
   ///How exactly should this look now?
 /*  QCOMPARE(top->localDeclarations().count(), 2);
