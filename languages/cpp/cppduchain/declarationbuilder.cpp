@@ -446,8 +446,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     if (!isNamespaceAlias) {
       // FIXME this can happen if we're defining a staticly declared variable
       //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
-      if(id.isEmpty())
-        kWarning() << "empty id";
+/*      if(id.isEmpty())
+        kWarning() << "empty id";*/
       declaration->setIdentifier(id.last());
     }
     
