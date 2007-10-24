@@ -530,15 +530,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
           long long val;
           CppIntegralType::TypeModifier mod = CppIntegralType::ModifierNone;
 
-          if( num.endsWith("u") )
+          if( num.endsWith("u") || ( num.length() > 1 && num[1] == 'x' ) )
             mod = CppIntegralType::ModifierUnsigned;
-          
+
           bool ok = false;
           while( !num.isEmpty() && !ok ) {
-            val = num.toLongLong(&ok);
+            val = num.toLongLong(&ok, 0);
             num.truncate(num.length()-1);
           }
-          
+
           m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeInt, mod)));
 
           if( mod & CppIntegralType::ModifierUnsigned )
