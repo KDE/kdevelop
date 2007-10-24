@@ -64,7 +64,7 @@ QString ClassFunctionDeclaration::toString() const {
 
   KSharedPtr<FunctionType> function = type<FunctionType>();
   Q_ASSERT(function);
-  return QString("%1 %2 %3").arg(function->toString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->toString( FunctionType::SignatureArguments ));
+  return QString("member-function %1 %2 %3").arg(function->toString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->toString( FunctionType::SignatureArguments ));
 }
 
 
