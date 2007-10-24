@@ -92,7 +92,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent )
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
     directoryRequester->comboBox()->setEditable( true );
-    directoryRequester->comboBox()->addItems(cg.readPathListEntry("LastSearchPaths"));
+    directoryRequester->comboBox()->addItems(cg.readPathEntry("LastSearchPaths", QStringList()));
     directoryRequester->setPath( QDir::homePath() );
     directoryRequester->fileDialog()->setUrl( KUrl( QDir::homePath() ) );
     directoryRequester->completionObject()->setDir( QDir::homePath() );

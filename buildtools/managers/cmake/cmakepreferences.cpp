@@ -80,7 +80,7 @@ void CMakePreferences::load()
 //     kDebug(9032) << "********loading";
 
     KConfigGroup group(m_cfg.data(), "CMake");
-    QStringList bDirs=group.readPathListEntry("BuildDirs");
+    QStringList bDirs=group.readPathEntry("BuildDirs", QStringList());
     m_prefsUi->buildDirs->addItems(bDirs);
 
     QString current=group.readEntry("CurrentBuildDir");

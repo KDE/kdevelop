@@ -191,7 +191,7 @@ bool ProjectManager::loadDefaultProject()
 {
   KSharedConfig::Ptr config = KGlobal::config();
   config->setGroup("General Options");
-  QString project = config->readPathEntry("Last Project");
+  QString project = config->readPathEntry("Last Project", QString());
   bool readProject = config->readEntry("Read Last Project On Startup", true);
   if (!project.isEmpty() && readProject)
   {
