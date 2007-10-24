@@ -109,6 +109,7 @@ private:
 
   KDevelop::AbstractType::Ptr typeVoid;
   KDevelop::AbstractType::Ptr typeInt;
+  KDevelop::AbstractType::Ptr typeShort;
 
   bool testFileParseOnly;
 };

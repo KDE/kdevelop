@@ -147,6 +147,7 @@ void TestDUChain::initTestCase()
 
   typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
   typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
+  typeShort = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierShort));
 }
 
 void TestDUChain::cleanupTestCase()
@@ -521,7 +522,7 @@ void TestDUChain::testDeclareStruct()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; }; A instance;");
+  QByteArray method("struct A { short i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; }; A instance;");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -541,7 +542,7 @@ void TestDUChain::testDeclareStruct()
   QCOMPARE(defStructA->uses().count(), 0);
   QVERIFY(defStructA->type<CppClassType>());
   QCOMPARE(defStructA->type<CppClassType>()->elements().count(), 3);
-  QCOMPARE(defStructA->type<CppClassType>()->elements().first(), typeInt);
+  QCOMPARE(defStructA->type<CppClassType>()->elements().first(), typeShort);
   QVERIFY(CppFunctionType::Ptr::dynamicCast(defStructA->type<CppClassType>()->elements()[1]));
   QCOMPARE(defStructA->type<CppClassType>()->classType(), CppClassType::Struct);
 

@@ -355,6 +355,9 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       it = it->next;
     } while (it != end);
 
+    if(type == CppIntegralType::TypeNone)
+      type = CppIntegralType::TypeInt; //Happens, example: "unsigned short"
+    
     CppIntegralType::Ptr integral = TypeRepository::self()->integral(type, modifiers, parseConstVolatile(node->cv));
     if (integral) {
       openedType = true;
