@@ -456,17 +456,22 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     } else {
       LOCKDUCHAIN;
 
-      int line, column;
+      int line = -1, column = -1;
       QString file;
 
       m_session->positionAt( m_session->token_stream->position(node->start_token), &line, &column, &file );
+      if( !m_currentContext->url().equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) ) {
+        kDebug() << "file mismatch: " << file << m_currentContext->url().toLocalFile();
+        line = column = -1;
+      }
 
       ///@todo reenable(first make sure the conversion works properly)
-      m_lastDeclarations = m_currentContext->findDeclarations( identifier );//, KTextEditor::Cursor(line, column) );
+      m_lastDeclarations = m_currentContext->findDeclarations( identifier, KTextEditor::Cursor(line, column) );
       if( m_lastDeclarations.isEmpty() ) {
         problem( node, QString("could not find declaration of %1").arg( nameC.identifier().toString() ) );
       } else {
         m_lastType = m_lastDeclarations.first()->abstractType();
+        //kDebug() << "found declaration: " << m_lastDeclarations.first()->toString();
 
         ///If the found declaration declares a type, this is a type-expression and m_lastInstance should be zero.
         ///The declaration declares a type if its abstractType's declaration is that declaration. Else it is an insantiation, and m_lastType should be filled.
@@ -971,11 +976,11 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
             break;
           }
           default:
-            if( left->typeModifiers() & CppIntegralType::ModifierSigned || ! (left->typeModifiers() & CppIntegralType::ModifierUnsigned) ) {
-              ConstantBinaryExpressionEvaluator<long long> evaluator( tokenFromIndex(node->op).kind, left, right);
+            if( left->typeModifiers() & CppIntegralType::ModifierUnsigned ) {
+              ConstantBinaryExpressionEvaluator<unsigned long long> evaluator( tokenFromIndex(node->op).kind, left, right);
               m_lastType = evaluator.createType();
             } else {
-              ConstantBinaryExpressionEvaluator<unsigned long long> evaluator( tokenFromIndex(node->op).kind, left, right);
+              ConstantBinaryExpressionEvaluator<long long> evaluator( tokenFromIndex(node->op).kind, left, right);
               m_lastType = evaluator.createType();
             }
             break;
@@ -1350,11 +1355,11 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
               break;
             }
             default:
-              if( constantIntegral->typeModifiers() & CppIntegralType::ModifierSigned || ! (constantIntegral->typeModifiers() & CppIntegralType::ModifierUnsigned) ) {
-                ConstantUnaryExpressionEvaluator<long long> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
+              if( constantIntegral->typeModifiers() & CppIntegralType::ModifierUnsigned ) {
+                ConstantUnaryExpressionEvaluator<unsigned long long> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
                 m_lastType = evaluator.createType();
               } else {
-                ConstantUnaryExpressionEvaluator<unsigned long long> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
+                ConstantUnaryExpressionEvaluator<long long> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
                 m_lastType = evaluator.createType();
               }
               break;
@@ -1554,8 +1559,9 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
         problem(node, QString("Found no subscript-function"));
       }
       
-      if( !functions.first().function.isViable() )
-        problem(node, QString("Found no viable subscript-function"));
+      if( !functions.first().function.isViable() ) {
+        problem(node, QString("Found no viable subscript-function, chosen function: %1").arg(functions.first().function.declaration() ? functions.first().function.declaration()->toString() : QString()));
+      }
         
     }else{
       //Do not complain here, because we do not check for builtin operators
