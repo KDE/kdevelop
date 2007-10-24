@@ -282,6 +282,11 @@ QString reverse( const QString& str ) {
 }
 
 void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
+  //Blank out everything that can confuse the bracket-matching algorithm
+  str.replace("<<", "__");
+  str.replace(">>", "__");
+  str.replace("\\\"", "__");
+  str.replace("->", "__");
   QString reversed = reverse( str.left(argumentsStart) );
   //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
   SafetyCounter s( 1000 );
