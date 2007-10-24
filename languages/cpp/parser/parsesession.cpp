@@ -160,3 +160,8 @@ void ParseSession::setContents(const QByteArray & contents, const KTextEditor::C
   m_contents = contents;
   m_contentOffset = offset;
 }
+
+void ParseSession::setUrl(const KUrl& url)
+{
+  m_url = url;
+}

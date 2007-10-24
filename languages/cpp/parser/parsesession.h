@@ -28,6 +28,7 @@
 
 #include <cppparserexport.h>
 #include <ksharedptr.h>
+#include <kurl.h>
 
 namespace Cpp {
   class EnvironmentFile;
@@ -57,6 +58,8 @@ public:
 
   void setContents(const QByteArray& contents, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
 
+  void setUrl(const KUrl& url);
+  
   const char *contents() const;
   std::size_t size() const;
   pool* mempool;
@@ -65,6 +68,7 @@ public:
   LocationTable* line_table;
   rpp::MacroBlock* macros;
   KTextEditor::Cursor m_contentOffset;
+  KUrl m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:
   void extract_line(int offset, int *line, QString *filename) const;
