@@ -1065,6 +1065,72 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     }
   }
 
+  void ExpressionVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
+  {
+    clearLast();
+    
+    if (node->integrals) {
+      CppIntegralType::IntegralTypes type = CppIntegralType::TypeNone;
+      CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone;
+
+      const ListNode<std::size_t> *it = node->integrals->toFront();
+      const ListNode<std::size_t> *end = it;
+      do {
+        int kind = m_session->token_stream->kind(it->element);
+        switch (kind) {
+          case Token_char:
+            type = CppIntegralType::TypeChar;
+            break;
+          case Token_wchar_t:
+            type = CppIntegralType::TypeWchar_t;
+            break;
+          case Token_bool:
+            type = CppIntegralType::TypeBool;
+            break;
+          case Token_short:
+            modifiers |= CppIntegralType::ModifierShort;
+            break;
+          case Token_int:
+            type = CppIntegralType::TypeInt;
+            break;
+          case Token_long:
+            if (modifiers & CppIntegralType::ModifierLong)
+              modifiers |= CppIntegralType::ModifierLongLong;
+            else
+              modifiers |= CppIntegralType::ModifierLong;
+            break;
+          case Token_signed:
+            modifiers |= CppIntegralType::ModifierSigned;
+            break;
+          case Token_unsigned:
+            modifiers |= CppIntegralType::ModifierUnsigned;
+            break;
+          case Token_float:
+            type = CppIntegralType::TypeFloat;
+            break;
+          case Token_double:
+            type = CppIntegralType::TypeDouble;
+            break;
+          case Token_void:
+            type = CppIntegralType::TypeVoid;
+            break;
+        }
+
+        it = it->next;
+      } while (it != end);
+
+      if(type == CppIntegralType::TypeNone)
+        type = CppIntegralType::TypeInt; //Happens, example: "unsigned short"
+
+      CppIntegralType::Ptr integral = TypeRepository::self()->integral(type, modifiers/*, parseConstVolatile(node->cv)*/);
+      if (integral)
+        m_lastType = AbstractType::Ptr(integral.data());
+    } else {
+      visitTypeSpecifier(node);
+    }
+  }
+  
+
   //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
   void ExpressionVisitor::visitDeclarator(DeclaratorAST* node)  {
     if( !m_lastType ) {
@@ -1117,7 +1183,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
 
     //Visit declarator and type-specifier, which should build the type
     if( node->type_id ) {
-      visitTypeSpecifier(node->type_id->type_specifier);
+      visit(node->type_id->type_specifier);
       visit(node->type_id->declarator);
     }
     if( !m_lastType ) {
@@ -1167,7 +1233,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
 
     //Visit declarator and type-specifier, which should build the type
     if( node->type_id ) {
-      visitTypeSpecifier(node->type_id->type_specifier);
+      visit(node->type_id->type_specifier);
       visit(node->type_id->declarator);
     }
     if( !m_lastType ) {
@@ -1189,10 +1255,10 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
 
     //Visit declarator and type-specifier, which should build the type
     if( node->type_id ) {
-      visitTypeSpecifier(node->type_id->type_specifier);
+      visit(node->type_id->type_specifier);
       visit(node->type_id->declarator);
     } else if( node->new_type_id ) {
-      visitTypeSpecifier(node->new_type_id->type_specifier);
+      visit(node->new_type_id->type_specifier);
       visit(node->new_type_id->new_declarator);
     }
     if( !m_lastType ) {
@@ -1676,7 +1742,6 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
   void ExpressionVisitor::visitParameterDeclaration(ParameterDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitReturnStatement(ReturnStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitSwitchStatement(SwitchStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTemplateArgument(TemplateArgumentAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTemplateDeclaration(TemplateDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }

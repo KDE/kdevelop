@@ -654,6 +654,14 @@ void TestExpressionParser::testCasts() {
   QCOMPARE(result.type->toString(), QString("Cont2*"));
   lock.unlock();
   
+  result = parser.evaluateType( "(int*)new Cont2[5]", testContext );
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QVERIFY(result.type);
+  QCOMPARE(result.type->toString(), QString("int*"));
+  lock.unlock();
+  
   lock.lock();
   release(c);
 }
