@@ -21,13 +21,14 @@
 
 #include "binder.h"
 #include <string>
+#include <cstring>
 
 typedef unsigned char uchar;
 namespace Tree {
 
 template <class Out>
 void printId( Out& out, const uchar* const id ) {
-  for ( uint i = 0; i < strlen( ( char* ) id ); ++i ) {
+  for ( uint i = 0; i < std::strlen( ( char* ) id ); ++i ) {
     if ( i )
       out << ".";
     out << ( int ) id[ i ];
