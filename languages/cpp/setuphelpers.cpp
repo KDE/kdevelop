@@ -99,6 +99,20 @@ bool setupStandardIncludePaths(QStringList& includePaths)
 
 bool setupStandardMacros(Cpp::MacroSet& macros)
 {
+    //Add some macros to be compatible with the gnu c++ compiler
+    {
+      //Used in several headers like sys/time.h
+      rpp::pp_macro m("__restrict");
+      macros.addMacro( m );
+    }
+    {
+      //Used in several headers like sys/time.h
+      rpp::pp_macro m("__const");
+      m.definition = "const";
+      macros.addMacro( m );
+    }
+
+    //Get standard macros from gcc
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
     proc.setTextModeEnabled(true);
