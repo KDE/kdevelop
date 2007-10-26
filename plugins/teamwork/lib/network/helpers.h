@@ -16,6 +16,7 @@
 
 #include "networkfwd.h"
 #include <vector>
+#include <string>
 #include <cstdlib>
 
 
