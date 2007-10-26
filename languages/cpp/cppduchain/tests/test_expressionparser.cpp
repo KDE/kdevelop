@@ -45,6 +45,8 @@
 #include "expressionparser.h"
 #include "classfunctiondeclaration.h"
 
+#include <typeinfo>
+
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
