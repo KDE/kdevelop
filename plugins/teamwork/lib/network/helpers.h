@@ -13,8 +13,11 @@
 
 #ifndef TEAMWORK_HELPERS
 #define TEAMWORK_HELPERS
+
 #include "networkfwd.h"
 #include <vector>
+#include <cstdlib>
+
 
 namespace Teamwork {
 
