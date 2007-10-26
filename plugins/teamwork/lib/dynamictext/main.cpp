@@ -829,7 +829,7 @@ void verifyOffsets() {
 }
 
 
-int main( int /* argc */, char /**argv[]*/ ) {
+int main( int /* argc */, char** /*argv*/ ) {
   verifyDynamicText();
   verifySumTree();
   verifyFlexibleText();
