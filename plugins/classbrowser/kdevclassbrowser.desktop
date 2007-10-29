@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin provides a browsable model of the currently parsed classes and other items.
+Name=KDevClassBrowser
+GenericName=Class Browser
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevclassbrowser
+X-KDevelop-Version=4
+X-KDevelop-Category=Project
+X-KDevelop-Properties=ClassBrowser
+X-KDE-PluginInfo-Name=kdevclassbrowser
+X-KDE-PluginInfo-Author=Hamish Rodda
+X-KDE-PluginInfo-License=LGPL
