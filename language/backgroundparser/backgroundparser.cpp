@@ -245,7 +245,7 @@ void BackgroundParser::saveSettings(bool projectIsLoaded)
 
 void BackgroundParser::addDocument(const KUrl& url)
 {
-    kDebug(9505) << "BackgroundParser::addDocument";
+    kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
     QMutexLocker lock(&d->m_mutex);
     {
         Q_ASSERT(url.isValid());
