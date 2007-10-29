@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevCMakeBuilder
-Name[el]=KDevMakeBuilder
 Name[sv]=KDevelop CMake-byggverktyg
 Name[x-test]=xxKDevCMakeBuilderxx
 Comment=Builds CMake Projects
