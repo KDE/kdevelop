@@ -153,6 +153,8 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
   }
   chain->setInDuChain(true);
   addToEnvironmentManager(chain);
+
+  contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
 }
 
 void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
