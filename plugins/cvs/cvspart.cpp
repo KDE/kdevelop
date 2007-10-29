@@ -22,6 +22,7 @@
 #include <KActionCollection>
 #include <KMessageBox>
 #include <KUrl>
+#include <KAction>
 
 
 #include <iuicontroller.h>
@@ -93,7 +94,7 @@ CvsProxy* CvsPart::proxy()
 
 void CvsPart::setupActions()
 {
-    QAction *action;
+    KAction *action;
 
     action = actionCollection()->addAction("cvs_log");
     action->setText(i18n("Show log"));
@@ -146,7 +147,6 @@ void CvsPart::setupActions()
     action = actionCollection()->addAction("cvs_status");
     action->setText(i18n("Status..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStatus()));
-
 }
 
 const KUrl CvsPart::urlFocusedDocument() const

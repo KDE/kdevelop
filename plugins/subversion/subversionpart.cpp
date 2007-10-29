@@ -49,6 +49,7 @@ extern "C" {
 #include <kactioncollection.h>
 #include <ktempdir.h>
 #include <qwidget.h>
+#include <kaction.h>
 
 #include <QPointer>
 #include <QDir>
@@ -99,7 +100,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QVariantList & )
 
     setXMLFile("kdevsubversion.rc");
 
-    QAction *action;
+    KAction *action;
 
     action = actionCollection()->addAction("svn_add");
     action->setText(i18n("Add to version control..."));

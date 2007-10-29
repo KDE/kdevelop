@@ -42,6 +42,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 
 #include <QtCore/QDebug>
 #include <QtGui/QVBoxLayout>
@@ -135,7 +136,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
 
-    QAction* action = d->m_part->actionCollection()->addAction( "project_build" );
+    KAction* action = d->m_part->actionCollection()->addAction( "project_build" );
     action->setText(i18n( "Build Selected Project" ) );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( buildCurrentProject() ) );
     action->setToolTip( i18n( "Build Selected Project" ) );

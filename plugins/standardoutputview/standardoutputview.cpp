@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 
 K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
 K_EXPORT_PLUGIN(StandardOutputViewFactory("kdevstandardoutputview"))
@@ -89,7 +90,7 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
 
     setXMLFile("kdevstandardoutputview.rc");
     // setup actions
-    QAction *action;
+    KAction *action;
 
     action = actionCollection()->addAction("next_error");
     action->setText("Next");
