@@ -105,13 +105,13 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 
 bool CMakeCondition::isTrue(const QString& varName) const
 {
-    qDebug() << "+++++++ isTrue: " << varName;
+    kDebug(9032) << "+++++++ isTrue: " << varName;
     
     if(m_vars->contains(varName))
     {
         const QStringList valu=m_vars->value(varName);
 
-//         qDebug() << "Checking" << varName << "is true";
+//         kDebug(9032) << "Checking" << varName << "is true";
         QString val = valu.join(";").toUpper();
         return !val.isEmpty() && val!="0" && val!="N" && val!="NO" && val!="OFF" && val!="FALSE" && val!="NOTFOUND" && !val.endsWith("_NOTFOUND");
     }
@@ -123,7 +123,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
 {
     bool done=false;
     it--;
-    qDebug() << "it" << *it;
+    kDebug(9032) << "it" << *it;
     while(!done && it!=itStop)
     {
         conditionToken c = typeName(*it);
@@ -131,7 +131,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
         if(!done)
             it--;
     }
-    qDebug() << "it2" << *it << *itStop;
+    kDebug(9032) << "it2" << *it << *itStop;
     return it;
 }
 
@@ -144,7 +144,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
-//         qDebug() << "operator" << *it2 << c << "..." << variable;
+//         kDebug(9032) << "operator" << *it2 << c << "..." << variable;
         QString cmd;
         
         if(c==variable && it2==itBegin)
@@ -170,9 +170,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case EXISTS:
             {
                 QString v=*(it2+1);
-                qDebug() << "EXISTS" << v << *it2;
+                kDebug(9032) << "EXISTS" << v << *it2;
                 if(v.isEmpty())
-                    qDebug() << "error: no";
+                    kDebug(9032) << "error: no";
                 else
                 {
                     last=false;
@@ -254,7 +254,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             default:
-                qDebug() << "unrecog:" << *it2;
+                kDebug(9032) << "unrecog:" << *it2;
                 break;
         }
     }
@@ -264,6 +264,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 bool CMakeCondition::condition(const QStringList &expression) const
 {
     bool ret = evaluateCondition(expression.constBegin(), expression.constEnd());
-    qDebug() << "condition" << expression << "=>" << ret;
+    kDebug(9032) << "condition" << expression << "=>" << ret;
     return ret;
 }

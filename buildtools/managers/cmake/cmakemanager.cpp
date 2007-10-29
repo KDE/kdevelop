@@ -278,15 +278,15 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const KUrl::List& dirs
     foreach(KUrl u, dirs)
     {
         QString s=u.toLocalFile();
-        kDebug() << "replace? " << s;
+        kDebug(9032) << "replace? " << s;
         if(s.startsWith(QString::fromUtf8("#[bin_dir]"))) {
             s=s.replace("#[bin_dir]", bindir);
             u=KUrl(s);
-            kDebug() << "bindir" << u;
+            kDebug(9032) << "bindir" << u;
         } else if(s.startsWith(QString::fromUtf8("#[install_dir]"))) {
             s=s.replace("#[install_dir]", bindir);
             u=KUrl(s);
-            kDebug() << "installdir" << u;
+            kDebug(9032) << "installdir" << u;
         }
         newList.append(u);
     }
@@ -301,7 +301,7 @@ KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *it
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
         item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
-        kDebug() << "Looking for a folder: " << folder << item;
+        kDebug(9032) << "Looking for a folder: " << folder << item;
     }
 
     if(!folder)

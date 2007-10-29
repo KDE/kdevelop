@@ -177,7 +177,7 @@ void CMakePreferences::showInternal(int state)
 void CMakePreferences::buildDirChanged(const QString &str)
 {
     updateCache(str);
-    kDebug() << "Emitting changed signal for cmake kcm";
+    kDebug(9032) << "Emitting changed signal for cmake kcm";
     emit changed(true);
 }
 
@@ -187,7 +187,7 @@ void CMakePreferences::createBuildDir()
     //TODO: if there is information, use it to initialize the dialog
     if(bdCreator.exec()) {
         m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile());
-        kDebug() << "Emitting changed signal for cmake kcm";
+        kDebug(9032) << "Emitting changed signal for cmake kcm";
         emit changed(true);
     }
     //TODO: Save it for next runs
