@@ -15,6 +15,7 @@ Comment[pt]=Este 'plugin' mostra uma visão gráfico do modelo de código produz
 Comment[pt_BR]=Este 'plugin' mostra uma visão gráfico do modelo de código produzido pela componente da linguagem.
 Comment[sv]=Insticksprogrammet visar en grafisk vy av kodmodellen som skapats av språkdelen.
 Comment[x-test]=xxThis plugin displays a graphical view of the codemodel produced by the language part.xx
+Comment[zh_CN]=此插件可根据语言部件显示代码模型的视图。
 Comment[zh_TW]=這個外掛程式顯示此語言部件產生的程式模組的圖形檢視。
 Name=Code View
 Name[de]=Code-Ansicht

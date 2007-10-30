@@ -15,6 +15,7 @@ Comment[pt]=Este 'plugin' mostra uma visão gráfica de todos os documentos carr
 Comment[pt_BR]=Este 'plugin' mostra uma visão gráfica de todos os documentos carregados de momento e separa-os por tipo MIME.
 Comment[sv]=Insticksprogrammet visar en grafisk vy av alla dokument som för närvarande har laddats och delar upp dem enligt Mime-typ.
 Comment[x-test]=xxThis plugin displays a graphical view of all documents currently loaded and separates them by mimetype.xx
+Comment[zh_CN]=此插件可显示所有当前装入文档的视图，并根据 MIME 类型互相分隔。
 Comment[zh_TW]=這個外掛程式顯示目前載入並依 MIME 型態分類的文件的圖形檢視。
 Name=Document View
 Name[de]=Dokumentansicht
