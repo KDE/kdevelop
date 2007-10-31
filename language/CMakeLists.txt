@@ -36,6 +36,8 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/namespacealiasdeclaration.cpp
     duchain/dumpdotgraph.cpp
     duchain/contextowner.cpp
+    duchain/duchainobserver.cpp
+    duchain/duchainutils.cpp
     interfaces/quickopendataprovider.cpp
 )
 
@@ -96,5 +98,6 @@ install(FILES
     duchain/namespacealiasdeclaration.h
     duchain/dumpdotgraph.h
     duchain/contextowner.h
+    duchain/duchainutils.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )

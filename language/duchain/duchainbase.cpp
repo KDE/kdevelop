@@ -24,14 +24,14 @@ namespace KDevelop
 
 
 DUChainBase::DUChainBase(KTextEditor::Range* range)
-  : KDevelop::DocumentRangeObject(range), m_ptr( new DUChainPointerData(this) )
+  : KDevelop::DocumentRangeObject(range), m_ptr( 0L )
 {
-  m_ptr->m_base = this;
 }
 
 DUChainBase::~DUChainBase()
 {
-  m_ptr->m_base = 0;
+  if (m_ptr)
+    m_ptr->m_base = 0;
 }
 
 TopDUContext* DUChainBase::topContext() const
@@ -39,7 +39,13 @@ TopDUContext* DUChainBase::topContext() const
   return 0;
 }
 
-DUChainBasePointer DUChainBase::weakPointer() {
+const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
+{
+  if (!m_ptr) {
+    m_ptr = new DUChainPointerData(const_cast<DUChainBase*>(this));
+    m_ptr->m_base = const_cast<DUChainBase*>(this);
+  }
+
   return m_ptr;
 }
 

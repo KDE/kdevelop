@@ -23,6 +23,7 @@
 #include "classbrowserpart.h"
 
 #include <QTreeView>
+#include <QHeaderView>
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -45,6 +46,9 @@ public:
   virtual QWidget* create(QWidget *parent = 0)
   {
     QTreeView* view = new QTreeView(parent /*, m_part*/);
+    view->setObjectName("Class Browser Tree");
+    view->setWindowTitle(i18n("Class Browser"));
+    view->header()->hide();
     view->setModel(m_part->model());
     //QObject::connect(view, SIGNAL(doubleClicked(const QModelIndex &)), m_part->model(), SLOT(doubleClicked(const QModelIndex &)));
     return view;

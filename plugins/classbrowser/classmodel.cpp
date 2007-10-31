@@ -41,8 +41,9 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "duchainpointer.h"
+#include "duchainutils.h"
 
-//#include "modeltest.h"
+#include "modeltest.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -50,13 +51,13 @@ using namespace KDevelop;
 ClassModel::ClassModel(ClassBrowserPart* parent)
   : QAbstractItemModel(parent)
 {
-  connect(this, SIGNAL(scheduleAddition(DUContext*)), this, SLOT(slotScheduleAddition(DUContext*)), Qt::QueuedConnection);
-  connect(this, SIGNAL(scheduleRemoval(DUContext*)), this, SLOT(slotScheduleRemoval(DUContext*)), Qt::QueuedConnection);
-  
-  DUChainWriteLocker writeLock(DUChain::lock());
-  DUChain::self()->addObserver(this);
   //new ModelTest(this);
-  connect( part()->core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
+
+  bool success = connect(DUChain::self()->notifier(), SIGNAL(contextChanged(KDevelop::DUContextPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(contextChanged(KDevelop::DUContextPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
+  success &= connect(DUChain::self()->notifier(), SIGNAL(declarationChanged(KDevelop::DeclarationPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(declarationChanged(KDevelop::DeclarationPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
+  success &= connect(DUChain::self()->notifier(), SIGNAL(definitionChanged(KDevelop::DefinitionPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(definitionChanged(KDevelop::DefinitionPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
+  success &= connect(DUChain::self()->notifier(), SIGNAL(useChanged(KDevelop::UsePointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(useChanged(KDevelop::UsePointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
+  Q_ASSERT(success);
 }
 
 ClassBrowserPart* ClassModel::part() const {
@@ -65,6 +66,7 @@ ClassBrowserPart* ClassModel::part() const {
 
 ClassModel::~ClassModel()
 {
+  qDeleteAll(m_topObjects);
 }
 
 int ClassModel::columnCount(const QModelIndex & parent) const
@@ -74,9 +76,22 @@ int ClassModel::columnCount(const QModelIndex & parent) const
   return 1;
 }
 
-DUChainBase* ClassModel::objectForIndex(const QModelIndex& index) const
+DUChainBasePointer* ClassModel::objectForIndex(const QModelIndex& index) const
 {
-  return static_cast<DUChainBase*>(index.internalPointer());
+  return static_cast<DUChainBasePointer*>(index.internalPointer());
+}
+
+QModelIndex ClassModel::createIndex(int row, int column, KDevelop::DUChainBase* object) const
+{
+  if (!m_knownObjects.contains(object))
+    m_knownObjects.insert(object, new DUChainBasePointer(object->weakPointer()));
+
+  return QAbstractItemModel::createIndex(row, column, m_knownObjects[object]);
+}
+
+QModelIndex ClassModel::createIndex(int row, int column, KDevelop::DUChainBasePointer* pointer) const
+{
+  return QAbstractItemModel::createIndex(row, column, pointer);
 }
 
 QModelIndex ClassModel::index(int row, int column, const QModelIndex & parent) const
@@ -85,7 +100,6 @@ QModelIndex ClassModel::index(int row, int column, const QModelIndex & parent) c
     return QModelIndex();
 
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
 
   if (!parent.isValid()) {
     if (row < m_topObjects.count())
@@ -94,21 +108,21 @@ QModelIndex ClassModel::index(int row, int column, const QModelIndex & parent) c
     return QModelIndex();
   }
 
-  DUChainBase* base = objectForIndex(parent);
+  DUChainBasePointer* base = objectForIndex(parent);
   if (!base)
     return QModelIndex();
 
-  if (DUContext* context = dynamic_cast<DUContext*>(base)) {
+  if (DUContext* context = dynamic_cast<DUContext*>(base->data())) {
     switch (context->type()) {
       case DUContext::Class: {
-        if (row < context->childContexts().count())
-          return createIndex(row, column, context->childContexts().at(row));
-        int rowOffset = context->childContexts().count();
-        if (row - rowOffset < context->localDeclarations().count())
-          return createIndex(row, column, context->localDeclarations().at(row - rowOffset));
-        rowOffset += context->localDeclarations().count();
+        if (row < context->localDeclarations().count())
+          return createIndex(row, column, context->localDeclarations().at(row));
+
+        int rowOffset = context->localDeclarations().count();
+
         if (row - rowOffset < context->localDefinitions().count())
           return createIndex(row, column, context->localDefinitions().at(row - rowOffset));
+
         return QModelIndex();
       }
     }
@@ -120,19 +134,18 @@ QModelIndex ClassModel::index(int row, int column, const QModelIndex & parent) c
 int ClassModel::rowCount(const QModelIndex & parent) const
 {
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
 
   if (!parent.isValid())
     return m_topObjects.count();
 
-  DUChainBase* base = objectForIndex(parent);
+  DUChainBasePointer* base = objectForIndex(parent);
   if (!base)
     return 0;
 
-  if (DUContext* context = dynamic_cast<DUContext*>(base)) {
+  if (DUContext* context = dynamic_cast<DUContext*>(base->data())) {
     switch (context->type()) {
       case DUContext::Class: {
-        return context->childContexts().count() + context->localDeclarations().count();
+        return context->localDeclarations().count() + context->localDefinitions().count();
       }
     }
   }
@@ -146,26 +159,31 @@ QModelIndex ClassModel::parent(const QModelIndex & index) const
     return QModelIndex();
 
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
 
-  DUChainBase* base = objectForIndex(index);
-  if (!base)
+  DUChainBasePointer* base = objectForIndex(index);
+  if (!base || !base->data())
     return QModelIndex();
 
-  if (DUContext* context = dynamic_cast<DUContext*>(base))
-    if (context->parentContext())
-      return createIndex(context->parentContext()->childContexts().indexOf(context), 0, context->parentContext());
-    else
-      return QModelIndex();
+  if (DUContext* context = dynamic_cast<DUContext*>(base->data()))
+    return QModelIndex();
 
-  else if (Declaration* dec = dynamic_cast<Declaration*>(base))
-    return createIndex(dec->context()->childContexts().count() + dec->context()->localDeclarations().indexOf(dec), 0, dec->context());
+  else if (Declaration* dec = dynamic_cast<Declaration*>(base->data()))
+    return contextIndex(dec->context());
 
-  else if (Definition* def = dynamic_cast<Definition*>(base))
-    return createIndex(def->context()->childContexts().count() + def->context()->localDeclarations().count() + def->context()->localDefinitions().indexOf(def), 0, def->context());
+  else if (Definition* def = dynamic_cast<Definition*>(base->data()))
+    return contextIndex(def->context());
 
   // Shouldn't really hit this
   Q_ASSERT(false);
+  return QModelIndex();
+}
+
+QModelIndex ClassModel::contextIndex(DUContext* context) const
+{
+  Q_ASSERT(context);
+  if (DUChainBasePointer* pointer = m_knownObjects[context])
+    return createIndex(m_topObjects.indexOf(pointer), 0, context);
+
   return QModelIndex();
 }
 
@@ -175,16 +193,33 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
     return QVariant();
 
   DUChainReadLocker readLock(DUChain::lock());
-  QMutexLocker lock(&m_mutex);
 
-  DUChainBase* base = objectForIndex(index);
+  DUChainBasePointer* basep = objectForIndex(index);
+  if (!basep)
+    return QVariant();
+
+  DUChainBase* base = basep->data();
   if (!base)
     return QVariant();
 
   if (DUContext* context = dynamic_cast<DUContext*>(base)) {
-    switch (role) {
-      case Qt::DisplayRole:
-        return i18n("Context: %1", context->localScopeIdentifier().toString());
+    if (context->owner()) {
+      if (Definition* definition = context->owner()->asDefinition()) {
+        switch (role) {
+          case Qt::DisplayRole:
+            return definition->declaration()->identifier().toString();
+          case Qt::DecorationRole:
+            return DUChainUtils::iconForDeclaration(definition->declaration());
+        }
+
+      } else if (Declaration* declaration = context->owner()->asDeclaration()) {
+        switch (role) {
+          case Qt::DisplayRole:
+            return declaration->identifier().toString();
+          case Qt::DecorationRole:
+            return DUChainUtils::iconForDeclaration(declaration);
+        }
+      }
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
@@ -215,31 +250,48 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
   return QVariant();
 }
 
-void ClassModel::contextChanged(DUContext * context, Modification change, Relationship relationship, DUChainBase * relatedObject)
+void ClassModel::contextChanged(DUContextPointer context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
 {
+  Q_UNUSED(change);
   Q_UNUSED(relationship);
+  Q_UNUSED(relatedObject);
 
-  QMutexLocker lock(&m_mutex);
+  DUChainReadLocker readLock(DUChain::lock());
 
-  if (!context) {
-    switch (change) {
-      case Deletion:
-      case Removal:
-        if (m_topObjects.contains(context))
-          scheduleRemoval(context);
-        break;
-
-      case Change:
-        break;
-
-      case Addition:
-        scheduleAddition(context);
-        break;
+  switch (change) {
+    case DUChainObserver::Deletion:
+    case DUChainObserver::Removal: {
+      int i = 0;
+      foreach (DUChainBasePointer* base, m_topObjects) {
+        if (*base == relatedObject) {
+          beginRemoveRows(QModelIndex(), i, i);
+          delete m_topObjects.takeAt(i);
+          endRemoveRows();
+          break;
+        }
+        ++i;
+      }
+      break;
     }
+
+    case DUChainObserver::Change:
+      break;
+
+    case DUChainObserver::Addition:
+      if (DUContext* newContext = dynamic_cast<DUContext*>(relatedObject.data())) {
+        if (newContext->type() == DUContext::Class && newContext->owner()) {
+          beginInsertRows(QModelIndex(), m_topObjects.count(), m_topObjects.count());
+          DUChainBasePointer* bp = new DUChainBasePointer(relatedObject);
+          m_knownObjects.insert(relatedObject.data(), bp);
+          m_topObjects.append(bp);
+          endInsertRows();
+        }
+      }
+      break;
   }
 }
 
-void ClassModel::declarationChanged(Declaration * declaration, Modification change, Relationship relationship, DUChainBase * relatedObject)
+void ClassModel::declarationChanged(DeclarationPointer declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
 {
   Q_UNUSED(declaration);
   Q_UNUSED(change);
@@ -247,7 +299,7 @@ void ClassModel::declarationChanged(Declaration * declaration, Modification chan
   Q_UNUSED(relatedObject);
 }
 
-void ClassModel::definitionChanged(Definition * definition, Modification change, Relationship relationship, DUChainBase * relatedObject)
+void ClassModel::definitionChanged(DefinitionPointer definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
 {
   Q_UNUSED(definition);
   Q_UNUSED(change);
@@ -255,30 +307,12 @@ void ClassModel::definitionChanged(Definition * definition, Modification change,
   Q_UNUSED(relatedObject);
 }
 
-void ClassModel::useChanged(Use * use, Modification change, Relationship relationship, DUChainBase * relatedObject)
+void ClassModel::useChanged(UsePointer use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
 {
   Q_UNUSED(use);
   Q_UNUSED(change);
   Q_UNUSED(relationship);
   Q_UNUSED(relatedObject);
-}
-
-void ClassModel::slotScheduleAddition(KDevelop::DUContext* context)
-{
-  QMutexLocker lock(&m_mutex);
-  int index = m_topObjects.count();
-  beginInsertRows(QModelIndex(), index, index);
-  m_topObjects.append(context);
-  endInsertRows();
-}
-
-void ClassModel::slotScheduleRemoval(KDevelop::DUContext* context)
-{
-  QMutexLocker lock(&m_mutex);
-  int index = m_topObjects.indexOf(context);
-  beginRemoveRows(QModelIndex(), index, index);
-  m_topObjects.removeAt(index);
-  endRemoveRows();
 }
 
 #include "classmodel.moc"

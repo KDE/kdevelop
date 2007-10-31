@@ -74,8 +74,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
     Q_DISABLE_COPY(DUChainPointerData)
 };
 
-typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
-
 /**
  * A smart-pointer similar class that conveniently wraps around DUChainPointerData without
  * too many dynamic casts.
@@ -87,18 +85,37 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
 
   template<class Type>
   class DUChainPointer {
+    template<class OtherType>
+    friend class DUChainPointer;
+
     public:
-    DUChainPointer() : d(DUChainBasePointer(0)) {
+    DUChainPointer() : d(KSharedPtr<DUChainPointerData>(0)) {
+    }
+
+    DUChainPointer(const DUChainPointer& rhs)
+      : d(rhs.d)
+    {
     }
 
     ///This constructor includes dynamic casting. If the object cannot be casted to the type, the constructed DUChainPointer will have value zero.
     template<class OtherType>
-    DUChainPointer( OtherType* rhs ) {
+    explicit DUChainPointer( OtherType* rhs ) {
       if( dynamic_cast<Type*>(rhs) )
         d = rhs->weakPointer();
     }
 
-    DUChainPointer( Type* rhs ) {
+    template<class OtherType>
+    explicit DUChainPointer( DUChainPointer<OtherType> rhs ) {
+      if( dynamic_cast<Type*>(rhs.data()) )
+        d = rhs.d;
+    }
+
+    explicit DUChainPointer( KSharedPtr<DUChainPointerData> rhs ) {
+      if( dynamic_cast<Type*>(rhs->base()) )
+        d = rhs;
+    }
+
+    explicit DUChainPointer( Type* rhs ) {
       if( rhs )
         d = rhs->weakPointer();
     }
@@ -150,9 +167,10 @@ typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
     }
 
     private:
-      DUChainBasePointer d;
+      KSharedPtr<DUChainPointerData> d;
   };
 
+  typedef DUChainPointer<DUChainBase> DUChainBasePointer;
   typedef DUChainPointer<DUContext> DUContextPointer;
   typedef DUChainPointer<TopDUContext> TopDUContextPointer;
   typedef DUChainPointer<Declaration> DeclarationPointer;

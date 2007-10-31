@@ -32,9 +32,6 @@ class TopDUContext;
 class DUChainBase;
 class DUChainPointerData;
 
-///Use DUChainPointer instead of Declaration* etc. to store du-chain object pointers for a longer time
-///To have it even simpler: @file specialpointer.h
-typedef KSharedPtr<DUChainPointerData> DUChainBasePointer;
 
 /**
  * Base class for definition-use chain objects.
@@ -51,9 +48,10 @@ public:
    * Returns a special pointer that can be used to track the existence of a du-chain object across locking-cycles.
    * @see DUChainPointerData
    * */
-  DUChainBasePointer weakPointer();
+  const KSharedPtr<DUChainPointerData>& weakPointer() const;
+
 private:
-  DUChainBasePointer m_ptr;
+  mutable KSharedPtr<DUChainPointerData> m_ptr;
 };
 }
 

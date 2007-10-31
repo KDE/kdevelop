@@ -19,6 +19,10 @@
 #ifndef DUCHAINOBSERVER_H
 #define DUCHAINOBSERVER_H
 
+#include <QtCore/QObject>
+
+#include "duchainpointer.h"
+
 namespace KDevelop
 {
 
@@ -31,11 +35,16 @@ class Use;
 /**
  * Abstract class for observers of the definition-use chain to receive
  * feedback on changes.
+ *
+ * \todo change name to DUChainNotifier ?
  */
-class DUChainObserver
+class DUChainObserver : public QObject
 {
+  Q_OBJECT
+  friend class DUChain;
+
 public:
-  virtual ~DUChainObserver() {}
+  virtual ~DUChainObserver();
 
   enum Modification {
     Addition,
@@ -76,14 +85,16 @@ public:
     NotApplicable
   };
 
-  virtual void contextChanged(DUContext* context, Modification change, Relationship relationship, DUChainBase* relatedObject = 0) = 0;
+Q_SIGNALS:
+  void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
-  virtual void declarationChanged(Declaration* declaration, Modification change, Relationship relationship, DUChainBase* relatedObject = 0) = 0;
+  void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
-  virtual void definitionChanged(Definition* definition, Modification change, Relationship relationship, DUChainBase* relatedObject = 0) = 0;
+  void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
-  virtual void useChanged(Use* use, Modification change, Relationship relationship, DUChainBase* relatedObject = 0) = 0;
+  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 };
+
 }
 
 #endif // DUCHAINOBSERVER_H

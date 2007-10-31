@@ -518,7 +518,7 @@ void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
     return;
   }
   
-  if (d->m_importedParentContexts.contains(context))
+  if (d->m_importedParentContexts.contains(DUContextPointer(context)))
     return;
 
   if( !anonymous ) {
@@ -531,11 +531,11 @@ void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
     if( !parent )
       continue;
     if (context->textRange().start() < parent->textRange().start()) {
-      d->m_importedParentContexts.insert(i, context);
+      d->m_importedParentContexts.insert(i, DUContextPointer(context));
       return;
     }
   }
-  d->m_importedParentContexts.append(context);
+  d->m_importedParentContexts.append(DUContextPointer(context));
 
   DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
@@ -544,7 +544,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
 {
   ENSURE_CAN_WRITE
 
-  d->m_importedParentContexts.removeAll(context);
+  d->m_importedParentContexts.removeAll(DUContextPointer(context));
 
   if( !context )
     return;

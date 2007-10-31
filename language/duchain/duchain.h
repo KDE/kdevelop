@@ -93,9 +93,8 @@ public:
    */
   static DUChainLock* lock();
 
-  QList<DUChainObserver*> observers() const;
-  void addObserver(DUChainObserver* observer);
-  void removeObserver(DUChainObserver* observer);
+  /// Returns the object which emits signals regarding duchain changes
+  static DUChainObserver* notifier();
 
   // Distribute the notifications
   static void contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
@@ -118,6 +117,7 @@ public:
 
 public Q_SLOTS:
   void removeDocumentChain(const IdentifiedFile& document);
+  void deleteDUChainObject(DUChainBase* object);
 
 private:
   void addToEnvironmentManager( TopDUContext * chain );

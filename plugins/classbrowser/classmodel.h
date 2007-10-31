@@ -37,9 +37,10 @@ namespace KDevelop {
  class TopDUContext;
  class IDocument;
  class ParseJob;
+ class DUContext;
 }
 
-class ClassModel : public QAbstractItemModel, public KDevelop::DUChainObserver
+class ClassModel : public QAbstractItemModel
 {
   Q_OBJECT
 
@@ -54,28 +55,23 @@ public:
   virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
   virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
 
-  // Definition use chain observer implementation
-  virtual void contextChanged(KDevelop::DUContext* context, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-  virtual void declarationChanged(KDevelop::Declaration* declaration, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-  virtual void definitionChanged(KDevelop::Definition* definition, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-  virtual void useChanged(KDevelop::Use* use, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-
-private:
-Q_SIGNALS:
-  void scheduleAddition(KDevelop::DUContext* context);
-  void scheduleRemoval(KDevelop::DUContext* context);
-
 private Q_SLOTS:
-  void slotScheduleAddition(KDevelop::DUContext* context);
-  void slotScheduleRemoval(KDevelop::DUContext* context);
+  // Definition use chain observer implementation
+  void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
 private:
   ClassBrowserPart* part() const;
 
-  KDevelop::DUChainBase* objectForIndex(const QModelIndex& index) const;
+  KDevelop::DUChainBasePointer* objectForIndex(const QModelIndex& index) const;
+  QModelIndex createIndex(int row, int column, KDevelop::DUChainBase* object) const;
+  QModelIndex createIndex(int row, int column, KDevelop::DUChainBasePointer* object) const;
+  QModelIndex contextIndex(KDevelop::DUContext* context) const;
 
-  mutable QMutex m_mutex;
-  mutable QList<KDevelop::DUChainBase*> m_topObjects;
+  QList<KDevelop::DUChainBasePointer*> m_topObjects;
+  mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBasePointer*> m_knownObjects;
 };
 
 #endif

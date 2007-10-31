@@ -16,6 +16,7 @@ include_directories(
 set(kdevclassbrowser_PART_SRCS
     classbrowserpart.cpp
     classmodel.cpp
+    modeltest.cpp
 )
 
 kde4_add_plugin(kdevclassbrowser ${kdevclassbrowser_PART_SRCS})

@@ -19,12 +19,18 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
+#include <QCoreApplication>
+
 #include <kglobal.h>
 
 #include "editorintegrator.h"
 
 #include "topducontext.h"
 #include "parsingenvironment.h"
+#include "declaration.h"
+#include "definition.h"
+#include "use.h"
+#include "abstractfunctiondeclaration.h"
 
 namespace KDevelop
 {
@@ -32,12 +38,26 @@ namespace KDevelop
 class DUChainPrivate
 {
 public:
+  DUChainPrivate()
+  {
+    qRegisterMetaType<DUChainBasePointer>("KDevelop::DUChainBasePointer");
+    qRegisterMetaType<DUContextPointer>("KDevelop::DUContextPointer");
+    qRegisterMetaType<TopDUContextPointer>("KDevelop::TopDUContextPointer");
+    qRegisterMetaType<DeclarationPointer>("KDevelop::DeclarationPointer");
+    qRegisterMetaType<UsePointer>("KDevelop::UsePointer");
+    qRegisterMetaType<DefinitionPointer>("KDevelop::DefinitionPointer");
+    qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
+    qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
+    qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");
+      
+    notifier = new DUChainObserver();
+  }
+
   DUChain instance;
   DUChainLock lock;
   QMap<IdentifiedFile, TopDUContext*> m_chains;
-  QList<DUChainObserver*> m_observers;
   QMap<int,ParsingEnvironmentManager*> m_managers;
-
+  DUChainObserver* notifier;
 
   ParsingEnvironmentManager* managerForType(int type)
   {
@@ -48,7 +68,6 @@ public:
     else
       return 0;
   }
-  
 };
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
@@ -283,70 +302,34 @@ void DUChain::clear()
   sdDUChainPrivate->m_chains.clear();
 }
 
-QList< DUChainObserver * > DUChain::observers() const
+DUChainObserver* DUChain::notifier()
 {
-  ENSURE_CHAIN_READ_LOCKED
-
-  return sdDUChainPrivate->m_observers;
+  return sdDUChainPrivate->notifier;
 }
-
-void DUChain::addObserver(DUChainObserver * observer)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  Q_ASSERT(!sdDUChainPrivate->m_observers.contains(observer));
-  sdDUChainPrivate->m_observers.append(observer);
-}
-
-void DUChain::removeObserver(DUChainObserver * observer)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  sdDUChainPrivate->m_observers.removeAll(observer);
-}
-
-///This mutex is used to make sure that only one observer-callback is called at a time
-///That is needed because addDeclaration(..) can be called from multiple threads simultaneuously, triggering multiple observer-callbacks.
-QMutex duChainObserverMutex(QMutex::Recursive);
 
 void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  if( !sdDUChainPrivate->m_observers.isEmpty() )
-  {
-    QMutexLocker l(&duChainObserverMutex);
-    foreach (DUChainObserver* observer, self()->observers())
-      observer->contextChanged(context, change, relationship, relatedObject);
-  }
+  emit sdDUChainPrivate->notifier->contextChanged(DUContextPointer(context), change, relationship, DUChainBasePointer(relatedObject));
 }
 
 void DUChain::declarationChanged(Declaration* declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  if( !sdDUChainPrivate->m_observers.isEmpty() )
-  {
-    QMutexLocker l(&duChainObserverMutex);
-    foreach (DUChainObserver* observer, self()->observers())
-      observer->declarationChanged(declaration, change, relationship, relatedObject);
-  }
+  emit sdDUChainPrivate->notifier->declarationChanged(DeclarationPointer(declaration), change, relationship, DUChainBasePointer(relatedObject));
 }
 
 void DUChain::definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  if( !sdDUChainPrivate->m_observers.isEmpty() )
-  {
-    QMutexLocker l(&duChainObserverMutex);
-    foreach (DUChainObserver* observer, self()->observers())
-      observer->definitionChanged(definition, change, relationship, relatedObject);
-  }
+  emit sdDUChainPrivate->notifier->definitionChanged(DefinitionPointer(definition), change, relationship, DUChainBasePointer(relatedObject));
 }
 
 void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
-  if( !sdDUChainPrivate->m_observers.isEmpty() )
-  {
-    QMutexLocker l(&duChainObserverMutex);
-    foreach (DUChainObserver* observer, self()->observers())
-      observer->useChanged(use, change, relationship, relatedObject);
-  }
+  emit sdDUChainPrivate->notifier->useChanged(UsePointer(use), change, relationship, DUChainBasePointer(relatedObject));
+}
+
+void DUChain::deleteDUChainObject(DUChainBase* object)
+{
+  delete object;
 }
 
 void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {

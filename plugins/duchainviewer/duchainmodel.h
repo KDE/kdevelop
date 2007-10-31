@@ -44,11 +44,13 @@ class ProxyObject : public KDevelop::DUChainBase
 public:
   ProxyObject(KDevelop::DUChainBase* _parent, KDevelop::DUChainBase* _object);
 
+  virtual void preDelete() {};
+  
   KDevelop::DUChainBase* parent;
   KDevelop::DUChainBase* object;
 };
 
-class DUChainModel : public QAbstractItemModel, public KDevelop::DUChainObserver
+class DUChainModel : public QAbstractItemModel
 {
   Q_OBJECT
 
@@ -56,9 +58,9 @@ public:
   DUChainModel(DUChainViewPart* parent);
   virtual ~DUChainModel();
 
-  void setTopContext(KDevelop::TopDUContext* context);
+  void setTopContext(KDevelop::TopDUContextPointer context);
 
-  KDevelop::DUChainBase* objectForIndex(const QModelIndex& index) const;
+  KDevelop::DUChainBasePointer* objectForIndex(const QModelIndex& index) const;
 
 public Q_SLOTS:
   void documentActivated(KDevelop::IDocument* document);
@@ -72,25 +74,21 @@ public:
   virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
   //virtual bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
 
-  // Definition use chain observer implementation
-  virtual void contextChanged(KDevelop::DUContext* context, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-  virtual void declarationChanged(KDevelop::Declaration* declaration, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-  virtual void definitionChanged(KDevelop::Definition* definition, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-  virtual void useChanged(KDevelop::Use* use, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
-
 private slots:
   void doubleClicked ( const QModelIndex & index );
     
+  // Watch definition use chain changes
+  void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+
 private:
   DUChainViewPart* part() const;
   
-  int findInsertIndex(QList<KDevelop::DUChainBase*>& list, KDevelop::DUChainBase* object) const;
+  int findInsertIndex(QList<KDevelop::DUChainBasePointer*>& list, KDevelop::DUChainBase* object) const;
 
-  template <typename T>
-  QModelIndex createParentIndex(T* type) const
-  {
-    return createIndex(m_modelRow[type], 0, type);
-  }
+  QModelIndex createParentIndex(KDevelop::DUChainBasePointer* type) const;
 
   template <typename T>
   KTextEditor::Cursor nextItem(QListIterator<T*>& it, bool initialise) const
@@ -124,18 +122,20 @@ private:
   {
     KDevelop::DUChainBase* target = item(it);
     KDevelop::DUChainBase* proxy = new ProxyObject(parent, target);
-    m_proxyObjects.insert(target, proxy);
+    m_proxyObjects.insert(target, createPointerForObject(proxy));
     return proxy;
   }
 
-  QList<KDevelop::DUChainBase*>* childItems(KDevelop::DUChainBase* parent) const;
+  QList<KDevelop::DUChainBasePointer*>* childItems(KDevelop::DUChainBasePointer* parent) const;
+  KDevelop::DUChainBasePointer* pointerForObject(KDevelop::DUChainBase* object) const;
+  KDevelop::DUChainBasePointer* createPointerForObject(KDevelop::DUChainBase* object) const;
 
-  KDevelop::TopDUContext* m_chain;
+  KDevelop::TopDUContextPointer m_chain;
   KUrl m_document;
-  mutable QMutex m_mutex;
-  mutable QHash<KDevelop::DUChainBase*, QList<KDevelop::DUChainBase*>* > m_objectLists;
-  mutable QHash<KDevelop::DUChainBase*, int > m_modelRow;
-  mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBase*> m_proxyObjects;
+  mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBasePointer*> m_knownObjects;
+  mutable QHash<KDevelop::DUChainBasePointer*, QList<KDevelop::DUChainBasePointer*>* > m_objectLists;
+  mutable QHash<KDevelop::DUChainBasePointer*, int > m_modelRow;
+  mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBasePointer*> m_proxyObjects;
 };
 
 #endif
