@@ -172,7 +172,7 @@ void TestCppCodeCompletion::testCompletionContext() {
   lock.unlock();
   {
     ///Test whether a recursive function-call context is created correctly
-    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(context, "; globalFunction(globalFunction(globalHonk, " ) );
+    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(DUContextPointer(context)), "; globalFunction(globalFunction(globalHonk, " ) );
     Cpp::CodeCompletionContext& c(*cptr);
     QVERIFY( c.isValid() );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
@@ -215,7 +215,7 @@ void TestCppCodeCompletion::testCompletionContext() {
   
   {
     ///The context is a function, and there is no prefix-expression, so it should be normal completion.
-    Cpp::CodeCompletionContext c( context, "{" );
+    Cpp::CodeCompletionContext c(DUContextPointer(context), "{" );
     QVERIFY( c.isValid() );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );
@@ -341,7 +341,7 @@ void TestCppCodeCompletion::testInclude() {
 
   ///The following test tests the expression-parser, but it is here because the other tests depend on it
   lock.unlock();
-  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "globalHonk.erna", c );
+  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "globalHonk.erna", DUContextPointer( c ) );
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -352,7 +352,7 @@ void TestCppCodeCompletion::testInclude() {
   
   ///Test overload-resolution 
   lock.unlock();
-  result = parser.evaluateType( "globalClass.function(globalHeinz)", c );
+  result = parser.evaluateType( "globalClass.function(globalHeinz)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -361,7 +361,7 @@ void TestCppCodeCompletion::testInclude() {
   QCOMPARE(result.type->toString(), QString("Heinz"));
   
   lock.unlock();
-  result = parser.evaluateType( "globalClass.function(globalHonk.erna)", c );
+  result = parser.evaluateType( "globalClass.function(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -371,7 +371,7 @@ void TestCppCodeCompletion::testInclude() {
 
   //No matching function for type Honk. Since the expression-parser is not set to "strict", it returns any found function with the right name.
   lock.unlock();
-  result = parser.evaluateType( "globalClass.function(globalHonk)", c );
+  result = parser.evaluateType( "globalClass.function(globalHonk)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -381,7 +381,7 @@ void TestCppCodeCompletion::testInclude() {
   
   
   lock.unlock();
-  result = parser.evaluateType( "globalFunction(globalHeinz)", c );
+  result = parser.evaluateType( "globalFunction(globalHeinz)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -390,7 +390,7 @@ void TestCppCodeCompletion::testInclude() {
   QCOMPARE(result.type->toString(), QString("Heinz"));
   lock.unlock();
   
-  result = parser.evaluateType( "globalFunction(globalHonk.erna)", c );
+  result = parser.evaluateType( "globalFunction(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());

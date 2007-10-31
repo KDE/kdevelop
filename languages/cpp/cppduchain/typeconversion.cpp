@@ -435,7 +435,8 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
         }
       }
       
-      OverloadResolver resolver( getInternalContext( toClass->declaration() ) );
+      KDevelop::DUContextPointer ptr(getInternalContext( toClass->declaration() ));
+      OverloadResolver resolver( ptr );
       Declaration* function = resolver.resolveConstructor( OverloadResolver::Parameter( from.data(), fromLValue ), true, true );
       
       if( function )

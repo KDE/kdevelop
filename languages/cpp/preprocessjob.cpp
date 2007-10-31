@@ -182,7 +182,7 @@ void PreprocessJob::run()
     {
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-        parentJob()->setUpdatingContext( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_contentEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
+        parentJob()->setUpdatingContext( KDevelop::TopDUContextPointer( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_contentEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) ) );
         if( m_contentEnvironmentFile && parentJob()->updatingContext() ) {
             //Must be true, because we explicity passed the flag to chaonForDocument
             Q_ASSERT((parentJob()->updatingContext()->flags() & KDevelop::TopDUContext::ProxyContextFlag));
@@ -246,7 +246,7 @@ bool PreprocessJob::headerSectionEnded() {
         if(content) {
             Q_ASSERT(!(content->flags() & KDevelop::TopDUContext::ProxyContextFlag));
             //We have found a content-context that we can use
-            parentJob()->setContentContext(content);
+            parentJob()->setContentContext(KDevelop::TopDUContextPointer(content));
 
             if( content->parsingEnvironmentFile()->modificationRevision() == KDevelop::EditorIntegrator::modificationRevision(parentJob()->document()) ) {
                 //We can completely re-use the specialized context

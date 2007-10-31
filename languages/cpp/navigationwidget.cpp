@@ -428,7 +428,7 @@ class NavigationContext : public KShared {
           {
             Declaration* decl = m_declaration->context()->owner()->asDeclaration();
             m_currentText += labelHighlight(i18n("Container: "));
-            makeLink( declarationName(decl), decl, NavigationAction::NavigateDeclaration );
+            makeLink( declarationName(decl), DeclarationPointer(decl), NavigationAction::NavigateDeclaration );
             m_currentText += " ";
           } else {
             QualifiedIdentifier parent = identifier;
@@ -532,7 +532,7 @@ class NavigationContext : public KShared {
 
         if( idType ) {
           if( idType->declaration() ) {
-            makeLink( type->toString(), idType->declaration(), NavigationAction::NavigateDeclaration );
+            makeLink( type->toString(), DeclarationPointer(idType->declaration()), NavigationAction::NavigateDeclaration );
           } else {
             m_currentText += Qt::escape(type->toString());
           }
@@ -658,7 +658,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
 
 class IncludeNavigationContext : public NavigationContext {
 public:
-  IncludeNavigationContext(const IncludeItem& item) : NavigationContext(0), m_item(item) {
+  IncludeNavigationContext(const IncludeItem& item) : NavigationContext(DeclarationPointer(0)), m_item(item) {
   }
   virtual QString html(bool shorten) {
     m_currentText  = "<html><body><p><small><small>";
@@ -736,7 +736,7 @@ private:
             first = false;
           
           m_currentText += indent + declarationKind(*declarationIterator) + " ";
-          makeLink((*declarationIterator)->qualifiedIdentifier().toString(), *declarationIterator, NavigationAction::NavigateDeclaration);
+          makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
         }
         ++declarationIterator;
       } else {

@@ -42,6 +42,7 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include <duchain.h>
+#include <duchainpointer.h>
 #include <duchainlock.h>
 #include <dumpdotgraph.h>
 #include "dumpchain.h"
@@ -325,7 +326,8 @@ void CPPInternalParseJob::run()
             foreach ( TopDUContext* topContext, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
                 //As above, we work with the content-contexts.
                 TopDUContext* context = contentFromProxy(topContext);
-                if( !chains.contains(context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(context)) ) {
+		DUContextPointer ptr(context);
+                if( !chains.contains(context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(ptr)) ) {
                     chains << context;
                     temporaryChains << context;
                 }
@@ -350,7 +352,8 @@ void CPPInternalParseJob::run()
                 kDebug( 9007 ) << "building duchain";
 
                 DeclarationBuilder declarationBuilder(&editor);
-                topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updating, !(bool)parentJob()->contentContext());
+		TopDUContextPointer updatingptr(updating);
+                topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updatingptr, !(bool)parentJob()->contentContext());
 
                 if(updating) {
                     DUChainWriteLocker l(DUChain::lock());
@@ -416,7 +419,8 @@ void CPPInternalParseJob::run()
             //If we are using simplified environment-matching, create a proxy-context that represents the parsed content-context environment-wise
             if( parentJob()->contentEnvironmentFile() ) {
                 ContextBuilder builder(&editor);
-                topContext = builder.buildProxyContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), topContext, parentJob()->updatingContext().data());
+		TopDUContextPointer ptr(topContext);
+                topContext = builder.buildProxyContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), ptr, parentJob()->updatingContext());
             }
 
             parentJob()->setDuChain(topContext);

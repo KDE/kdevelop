@@ -997,7 +997,8 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
           if( !op.isEmpty() )
           {
             LOCKDUCHAIN;
-            OverloadResolutionHelper helper(m_currentContext);
+            KDevelop::DUContextPointer ptr(m_currentContext);
+            OverloadResolutionHelper helper(ptr);
             helper.setOperator( OverloadResolver::Parameter(leftType.data(), isLValue( leftType, leftInstance ) ), op );
             helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType.data(), isLValue( rightType, rightInstance ) ) ) );
             QList<OverloadResolutionFunction> functions = helper.resolve(false);
@@ -1437,7 +1438,8 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
         if( !op.isEmpty() )
         {
           LOCKDUCHAIN;
-          OverloadResolutionHelper helper(m_currentContext);
+          KDevelop::DUContextPointer ptr(m_currentContext);
+          OverloadResolutionHelper helper(ptr);
           helper.setOperator( OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) ), op );
 
           //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) ) );
@@ -1536,7 +1538,8 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
 
     //Resolve functions
     Declaration* chosenFunction = 0;
-    OverloadResolver resolver( m_currentContext );
+    KDevelop::DUContextPointer ptr(m_currentContext);
+    OverloadResolver resolver( ptr );
 
     if( !fail ) {
       chosenFunction = resolver.resolveList(m_parameters, declarations);
@@ -1607,7 +1610,8 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
 
     LOCKDUCHAIN;
 
-    OverloadResolutionHelper helper(m_currentContext);
+    KDevelop::DUContextPointer ptr(m_currentContext);
+    OverloadResolutionHelper helper(ptr);
     helper.setOperator( OverloadResolver::Parameter(masterType.data(), isLValue( masterType, masterInstance ) ), "[]" );
 
     QList<OverloadResolutionFunction> functions = helper.resolve(false);
@@ -1671,7 +1675,8 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       if( !op.isEmpty() )
       {
         LOCKDUCHAIN;
-        OverloadResolutionHelper helper(m_currentContext);
+        KDevelop::DUContextPointer ptr(m_currentContext);
+        OverloadResolutionHelper helper(ptr);
         helper.setOperator( OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) ), op );
 
         //Overloaded postfix operators have one additional int parameter

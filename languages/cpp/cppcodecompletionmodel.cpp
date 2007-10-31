@@ -435,7 +435,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     case IsExpandable:
       return QVariant(true);
     case ExpandingWidget: {
-      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(dec);
+      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(DeclarationPointer(dec));
       m_navigationWidgets[&item] = nav;
 
        QVariant v;
@@ -676,7 +676,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
       if( !containers.isEmpty() ) {
         foreach(DUContext* ctx, containers)
           foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), false) ) )
-            m_declarations << CompletionItem( decl.first, completionContext, decl.second );
+            m_declarations << CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second );
       } else {
         kDebug(9007) << "CppCodeCompletionModel::setContext: bad container-type";
       }
@@ -696,7 +696,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
       //Show all visible declarations
       m_declarations.clear();
       foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( m_context->allDeclarations(m_context->type() == DUContext::Class ? m_context->textRange().end() : position) ) )
-        m_declarations << CompletionItem( decl.first, completionContext, decl.second );
+        m_declarations << CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second );
       kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible:" << m_declarations.count();
     }
 
