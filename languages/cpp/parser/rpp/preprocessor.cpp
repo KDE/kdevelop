@@ -41,7 +41,7 @@ QString Preprocessor::processString(const QString& string)
 {
     pp proc(this);
 
-    QString ret = proc.processFile(string, pp::Data);
+    QString ret = proc.processFile("anonymous", pp::Data, string);
 
     proc.environment()->cleanup();
 
