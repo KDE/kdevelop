@@ -137,7 +137,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
 
 bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd) const
 {
-    bool last, done=false;
+    bool last = false, done=false;
     while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
