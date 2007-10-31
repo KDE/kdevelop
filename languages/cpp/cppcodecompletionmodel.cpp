@@ -53,6 +53,7 @@
 #include "codecompletioncontext.h"
 #include "navigationwidget.h"
 #include "preprocessjob.h"
+#include <duchainutils.h>
 
 
 using namespace KTextEditor;
@@ -105,11 +106,6 @@ AbstractType::Ptr effectiveType( Declaration* decl )
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel(parent)
 {
-  QString allIconNames = "CVprotected_var CVprivate_var protected_union protected_enum private_struct CVprotected_slot private_enum CVprotected_signal CVprivate_slot protected_class private_class private_union protected_function private_function signal CVpublic_var enum class CVpublic_slot union typedef function struct protected_field private_field field";
-
-  foreach( QString iconName, allIconNames.split(" ") )
-    m_icons[iconName] = KIconLoader::global()->loadIcon(iconName, KIconLoader::Small);
-  
 }
 
 CppCodeCompletionModel::~CppCodeCompletionModel()
@@ -557,45 +553,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     break;
     case Qt::DecorationRole:
     case CompletionRole: {
-      CompletionProperties p;
-      if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(dec)) {
-        switch (member->accessPolicy()) {
-          case Declaration::Public:
-            p |= Public;
-            break;
-          case Declaration::Protected:
-            p |= Protected;
-            break;
-          case Declaration::Private:
-            p |= Private;
-            break;
-        }
-
-        if (member->isStatic())
-          p |= Static;
-        if (member->isAuto())
-          ;//TODO
-        if (member->isFriend())
-          p |= Friend;
-        if (member->isRegister())
-          ;//TODO
-        if (member->isExtern())
-          ;//TODO
-        if (member->isMutable())
-          ;//TODO
-      }
-
-      if (AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
-        if (function->isVirtual())
-          p |= Virtual;
-        if (function->isInline())
-          p |= Inline;
-        if (function->isExplicit())
-          ;//TODO
-      }
-
-      if( dec->isTypeAlias() )
-        p |= TypeAlias;
+      CompletionProperties p = DUChainUtils::completionProperties(dec);
 
       if (dec->abstractType()) {
         if (CppCVType* cv = dynamic_cast<CppCVType*>(dec->abstractType().data())) {
@@ -607,19 +565,11 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
         switch (dec->abstractType()->whichType()) {
           case AbstractType::TypeIntegral:
-            if (dec->type<CppEnumerationType>())
+            if (dec->type<CppEnumerationType>()) {
+              // Remove variable bit set in DUChainUtils
+              p &= ~Variable;
               p |= Enum;
-            else
-              p |= Variable;
-            break;
-          case AbstractType::TypePointer:
-            p |= Variable;
-            break;
-          case AbstractType::TypeReference:
-            p |= Variable;
-            break;
-          case AbstractType::TypeFunction:
-            p |= Function;
+            }
             break;
           case AbstractType::TypeStructure:
             if (CppClassType::Ptr classType =  dec->type<CppClassType>())
@@ -628,103 +578,27 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
                   p |= Class;
                   break;
                 case CppClassType::Struct:
+                  // Remove class bit set in DUChainUtils
+                  p &= ~Class;
                   p |= Struct;
                   break;
                 case CppClassType::Union:
+                  // Remove class bit set in DUChainUtils
+                  p &= ~Class;
                   p |= Union;
                   break;
               }
             break;
-          case AbstractType::TypeArray:
-            p |= Variable;
-            break;
-          case AbstractType::TypeAbstract:
-            // TODO
-            break;
         }
-
-        if( dec->kind() == Declaration::Instance )
-          p |= Variable;
       }
-
-      /*
-      LocalScope      = 0x80000,
-      NamespaceScope  = 0x100000,
-      GlobalScope     = 0x200000,
-      */
-      if( dec->context()->type() == DUContext::Global )
-        p |= GlobalScope;
-      else if( dec->context()->type() == DUContext::Namespace )
-        p |= NamespaceScope;
-      else if( dec->context()->type() != DUContext::Class )
-        p |= LocalScope;
 
       if( role == CompletionRole ) {
         return (int)p;
+
       } else {
-        ///Assign mini-icons
-        QString iconName;
-
-        if( (p & Variable) )
-          iconName = "CVprotected_var";
-        else if( (p & Variable) && (p & Protected) )
-          iconName = "CVprotected_var";
-        else if( (p & Variable) && (p & Private) )
-          iconName = "CVprivate_var";
-        else if( (p & Union) && (p & Protected) )
-          iconName = "protected_union";
-        else if( (p & Enum) && (p & Protected) )
-          iconName = "protected_enum";
-        else if( (p & Struct) && (p & Private) )
-          iconName = "private_struct";
-        else if( (p & Slot) && (p & Protected) )
-          iconName = "CVprotected_slot";
-        else if( (p & Enum) && (p & Private) )
-          iconName = "private_enum";
-        else if( (p & Signal) && (p & Protected) )
-          iconName = "CVprotected_signal";
-        else if( (p & Slot) && (p & Private) )
-          iconName = "CVprivate_slot";
-        else if( (p & Class) && (p & Protected) )
-          iconName = "protected_class";
-        else if( (p & Class) && (p & Private) )
-          iconName = "private_class";
-        else if( (p & Union) && (p & Private) )
-          iconName = "private_union";
-        else if( (p & TypeAlias) && ((p & Const) /*||  (p & Volatile)*/) )
-          iconName = "CVtypedef";
-        else if( (p & Function) && (p & Protected) )
-          iconName = "protected_function";
-        else if( (p & Function) && (p & Private) )
-          iconName = "private_function";
-        else if( p & Signal )
-          iconName = "signal";
-        else if( p & Variable )
-          iconName = "CVpublic_var";
-        else if( p & Enum )
-          iconName = "enum";
-        else if( p & Class )
-          iconName = "class";
-        else if( p & Slot )
-          iconName = "CVpublic_slot";
-        else if( p & Union )
-          iconName = "union";
-        else if( p & TypeAlias )
-          iconName = "typedef";
-        else if( p & Function )
-          iconName = "function";
-        else if( p & Struct )
-          iconName = "struct";
-        else if( p & Protected )
-          iconName = "protected_field";
-        else if( p & Private )
-          iconName = "private_field";
-        else
-          iconName = "field";
-
         if( index.column() == Icon ) {
           lock.unlock();
-          return QVariant( m_icons[iconName] );
+          return DUChainUtils::iconForProperties(p);
         }
         break;
 

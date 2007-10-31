@@ -87,7 +87,6 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     
     mutable CompletionItem m_currentMatchContext;
     
-    QMap<QString, QIcon> m_icons;
     mutable QMap<const CompletionItem*, QPointer<Cpp::NavigationWidget> > m_navigationWidgets;
     QList< CompletionItem > m_declarations;
 };
