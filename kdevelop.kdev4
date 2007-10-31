@@ -1,5 +1,3 @@
-[CMake]
-CMakeDir=/usr/share/cmake-2.4/Modules
-
 [Project]
+Name=KDevelop
 Manager=KDevCMakeManager
