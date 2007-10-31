@@ -225,13 +225,17 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return i18n("Declaration: %1", dec->identifier().toString());
+        return dec->identifier().toString();
+      case Qt::DecorationRole:
+        return DUChainUtils::iconForDeclaration(dec);
     }
 
   } else if (Definition* def = dynamic_cast<Definition*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return i18n("Definition: %1", def->declaration()->identifier().toString());
+        return def->declaration()->identifier().toString();
+      case Qt::DecorationRole:
+        return DUChainUtils::iconForDeclaration(def->declaration());
     }
 
   } else if (Use* use = dynamic_cast<Use*>(base)) {
