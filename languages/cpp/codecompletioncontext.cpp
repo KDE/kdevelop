@@ -28,11 +28,25 @@
 #include "cppduchain/typeutils.h"
 #include "cppduchain/overloadresolution.h"
 #include "cppduchain/viablefunctions.h"
+#include "cppduchain/environmentmanager.h"
 #include "cpptypes.h"
 #include "safetycounter.h"
 #include "cpplanguagesupport.h"
+#include "parser/rpp/pp-engine.h"
+#include "parser/rpp/preprocessor.h"
+#include "parser/rpp/pp-environment.h"
+#include "parser/rpp/pp-macro.h"
+#include "parser/problem.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
+
+//#define DEBUG
+
+#ifdef DEBUG
+#define ifDebug(x) x
+#else
+#define ifDebug(x)
+#endif
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -54,6 +68,51 @@ class PushValue {
 
 typedef PushValue<int> IntPusher;
 
+/**
+ * Preprocess the given string using the macros from given EnvironmentFile up to the given line
+ * If line is -1, all macros are respected.
+ * This is a quite slow operation, because thousands of macros need to be shuffled around.
+ * 
+ * @todo maybe implement a version of rpp::Environment that directly works on EnvironmentFile,
+ * without needing to copy all macros.
+ * */
+QString preprocess( const QString& text, const Cpp::EnvironmentFilePointer& file, int line ) {
+
+  rpp::Preprocessor preprocessor;
+  rpp::pp pp(&preprocessor);
+
+  {
+    LOCKDUCHAIN;
+/*    kDebug() << "defined macros: " << file->definedMacros().size();*/
+    //Copy in all macros from the file
+    for( MacroSet::Macros::const_iterator it = file->definedMacros().macros().begin(); it != file->definedMacros().macros().end(); ++it ) {
+      if( line == -1 || line > (*it).sourceLine || !(file->url().equals( KUrl((*it).file) ) ) ) {
+        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
+/*        kDebug() << "adding macro " << (*it).name.str();*/
+      } else {
+/*        kDebug() << "leaving macro " << (*it).name.str();*/
+      }
+    }
+/*    kDebug() << "used macros: " << file->usedMacros().size();*/
+    for( MacroSet::Macros::const_iterator it = file->usedMacros().macros().begin(); it != file->usedMacros().macros().end(); ++it ) {
+      if( line == -1 || line > (*it).sourceLine || !(file->url().equals( KUrl((*it).file) ) ) ) {
+        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
+/*        kDebug() << "adding macro " << (*it).name.str();*/
+      } else {
+/*        kDebug() << "leaving macro " << (*it).name.str();*/
+      }
+    }
+  }
+
+  kDebug() << "text before preprocessing: " << text;
+  QString ret = pp.processFile("anonymous", rpp::pp::Data, text);
+  kDebug() << "text after preprocessing: " << ret;
+  pp.environment()->cleanup();
+  
+  return ret;
+}
+
+///Extracts the last line from the given string
 QString extractLastLine(const QString& str) {
   int prevLineEnd = str.lastIndexOf('\n');
   if(prevLineEnd != -1)
@@ -72,7 +131,7 @@ int CodeCompletionContext::depth() const {
 
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_depth(depth),  m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions, int line ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_depth(depth),  m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
 {
   IntPusher( completionRecursionDepth, completionRecursionDepth+1 );
 
@@ -104,14 +163,14 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     return;
   }
 
-  //log( "non-processed text: " + m_text );
-  preprocessText();
+  ifDebug( log( "non-processed text: " + m_text ); )
+   preprocessText( line );
 
-  m_text = Utils::clearComments( m_text );
-  m_text = Utils::clearStrings( m_text );
-  m_text = Utils::stripFinalWhitespace( m_text );
+   m_text = Utils::clearComments( m_text );
+   m_text = Utils::clearStrings( m_text );
+   m_text = Utils::stripFinalWhitespace( m_text );
 
-  //log( "processed text: " + m_text );
+  ifDebug( log( "processed text: " + m_text ); )
 
   ///@todo template-parameters
 
@@ -189,11 +248,11 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   int start_expr = Utils::expressionAt( m_text, m_text.length() );
 
   m_expression = m_text.mid(start_expr).trimmed();
-
-  kDebug() << start_expr << " found expression: " << m_expression << " in text: " << m_text;
   
   QString expressionPrefix = Utils::stripFinalWhitespace( m_text.left(start_expr) );
 
+  ifDebug( log( "expressionPrefix: " + expressionPrefix ); )
+    
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
   if( expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
@@ -202,6 +261,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     //Find out which argument-number this expression is, and compute the beginning of the parent function-call(parentContextLast)
     QStringList otherArguments;
     int parentContextEnd = expressionPrefix.length();
+    
     Utils::skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
 
     QString parentContextText = expressionPrefix.left(parentContextEnd);
@@ -235,12 +295,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     expr = expr.right( expr.length() - 5 );
   }
 
-  ExpressionParser expressionParser;
+  ExpressionParser expressionParser/*(false, true)*/;
 
-  kDebug() << "expression: " << expr;
+  ifDebug( kDebug() << "expression: " << expr; )
   
   if( !expr.trimmed().isEmpty() ) {
     m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
+    ifDebug( kDebug() << "expression result: " << m_expressionResult.toString(); )
     if( !m_expressionResult.isValid() ) {
       if( m_memberAccessOperation != StaticMemberChoose ) {
         log( QString("expression \"%1\" could not be evaluated").arg(expr) );
@@ -489,9 +550,15 @@ QList<KDevelop::AbstractType::Ptr> CodeCompletionContext::additionalMatchTypes()
   return ret;
 }
 
-void CodeCompletionContext::preprocessText() {
-  ///@todo implement, preprocess m_text in m_duContext at m_position
-  ///All macros can be found in the context's EnvironmentFile, in definedMacros() together with usedMacros()
+void CodeCompletionContext::preprocessText( int line ) {
+  
+  LOCKDUCHAIN;
+  
+  if( m_duContext ) {
+  m_text = preprocess( m_text, Cpp::EnvironmentFilePointer( dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()) ), line );
+  }else{
+    kWarning() << "error: no ducontext";
+  }
 }
 
 CodeCompletionContext::MemberAccessOperation CodeCompletionContext::memberAccessOperation() const {

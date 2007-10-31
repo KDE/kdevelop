@@ -82,8 +82,9 @@ namespace Cpp {
        * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context, and ending at the position where completion should start
        * @warning The du-chain must be unlocked when this is called
        * @param knownArgumentExpressions has no effect when firstContext is set
+       * @param line Optional line that will be used to filter the macros
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0, const QStringList& knownArgumentExpressions = QStringList() );
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
       ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
@@ -158,7 +159,7 @@ namespace Cpp {
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();
       ///Should preprocess the given text(replace macros with their body etc.)
-      void preprocessText();
+      void preprocessText( int line );
       void processIncludeDirective(QString line);
       void log( const QString& str ) const;
       ///Returns whether the given strings ends with an overloaded operator that can form a parent-context
