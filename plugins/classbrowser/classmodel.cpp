@@ -43,7 +43,7 @@
 #include "duchainpointer.h"
 #include "duchainutils.h"
 
-#include "modeltest.h"
+//#include "modeltest.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
