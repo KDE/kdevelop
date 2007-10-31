@@ -165,7 +165,8 @@ void TestCppCodeCompletion::testCompletionContext() {
       
   DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
-  
+
+  QVERIFY(context->childContexts().count());
   DUContext* testContext = context->childContexts()[0];
   QCOMPARE( testContext->type(), DUContext::Function );
 
