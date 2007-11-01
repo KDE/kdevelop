@@ -51,6 +51,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChain : public QObject
 
 public:
   /**
+   * Return a list of all chains available
+   */
+  QList<TopDUContext*> allChains() const;
+
+  /**
    * Return any chain for the given document
    * */
   TopDUContext* chainForDocument(const KUrl& document) const;

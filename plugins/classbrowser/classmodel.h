@@ -53,40 +53,35 @@ public:
   virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex & index) const;
   virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
   virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
 
 private Q_SLOTS:
   // Definition use chain observer implementation
-  /*void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-  void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-  void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);*/
   void branchAdded(KDevelop::DUContextPointer context);
 
 private:
+  class Node;
+
   ClassBrowserPart* part() const;
 
-  void contextAdded(KDevelop::DUContext* context);
+  void contextAdded(Node* parent, KDevelop::DUContext* context);
 
-  KDevelop::DUChainBasePointer* objectForIndex(const QModelIndex& index) const;
-  QModelIndex createIndex(int row, int column, KDevelop::DUChainBase* object) const;
-  QModelIndex createIndex(int row, int column, KDevelop::DUChainBasePointer* object) const;
-  QModelIndex contextIndex(KDevelop::DUContext* context) const;
+  Node* objectForIndex(const QModelIndex& index) const;
 
-  template <class T>
-  KDevelop::DUChainBasePointer* createPointer(T* object) const
-  {
-    if (m_knownObjects.contains(object))
-      return m_knownObjects[object];
+  void addTopLevelToList(KDevelop::DUContext* context, QList<Node*>* list, Node* parent, bool first = true) const;
 
-    KDevelop::DUChainBasePointer* p = new KDevelop::DUChainBasePointer(object);
-    m_knownObjects.insert(object, p);
+  QList<Node*>* childItems(Node* parent) const;
+  KDevelop::DUContext* trueParent(KDevelop::DUContext* parent) const;
 
-    return p;
-  }
+  Node* pointer(KDevelop::DUChainBase* object) const;
+  Node* createPointer(KDevelop::DUChainBase* object, Node* parent) const;
 
-  QList<KDevelop::DUChainBasePointer*> m_topObjects;
-  mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBasePointer*> m_knownObjects;
+  static bool orderItems(ClassModel::Node* p1, ClassModel::Node* p2);
+
+  mutable QList<Node*>* m_topList;
+  mutable QHash<KDevelop::DUChainBase*, Node*> m_knownObjects;
+  mutable QHash<Node*, QList<Node*>* > m_lists;
 };
 
 #endif

@@ -91,6 +91,11 @@ DUChainLock* DUChain::lock()
   return &sdDUChainPrivate->lock;
 }
 
+QList<TopDUContext*> DUChain::allChains() const
+{
+  return sdDUChainPrivate->m_chains.values();
+}
+
 void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file ) {
   ENSURE_CHAIN_WRITE_LOCKED
 
