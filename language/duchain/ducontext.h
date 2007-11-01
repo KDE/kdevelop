@@ -318,6 +318,12 @@ public:
   QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), SearchFlags flags = NoSearchFlags) const;
 
   /**
+   * Iterates the tree to see if the provided \a context is a subcontext of this context.
+   * \returns true if \a context is a subcontext, otherwise false.
+   */
+  bool parentContextOf(DUContext* context) const;
+  
+  /**
    * Return a list of all reachable declarations for a given cursor \a position in a given \a url.
    *
    * \param location the text position to search for

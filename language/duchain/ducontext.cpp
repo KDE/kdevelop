@@ -67,7 +67,7 @@ void DUContextPrivate::addUse(Use* use)
 {
   m_uses.append(use);
 
-  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::Uses, use);
+  //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::Uses, use);
 }
 
 void DUContextPrivate::addDeclarationToHash(const Identifier& identifier, Declaration* declaration)
@@ -91,7 +91,7 @@ void DUContextPrivate::removeUse(Use* use)
   Q_ASSERT(m_uses.contains(use));
   m_uses.removeAll(use);
 
-  DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::Uses, use);
+  //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::Uses, use);
 }
 
 void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
@@ -117,7 +117,7 @@ void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
     addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
   }
 
-  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
+  //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
 }
 
 bool DUContextPrivate::removeDeclaration(Declaration* declaration)
@@ -127,7 +127,7 @@ bool DUContextPrivate::removeDeclaration(Declaration* declaration)
   removeDeclarationFromHash(declaration->identifier(), declaration);
   
   if( m_localDeclarations.removeAll(declaration) ) {
-    DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
+    //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
     return true;
   }else {
     return false;
@@ -159,7 +159,7 @@ void DUContextPrivate::addChildContext( DUContext * context )
     context->d->m_parentContext = m_context;
   }
 
-  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
+  //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
 }
 
 bool DUContextPrivate::removeChildContext( DUContext* context ) {
@@ -176,14 +176,15 @@ void DUContextPrivate::addImportedChildContext( DUContext * context )
 
   m_importedChildContexts.append(context);
 
-  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
+  //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
 }
 
 //Can also be called with a context that is not in the list
 void DUContextPrivate::removeImportedChildContext( DUContext * context )
 {
-  if( m_importedChildContexts.removeAll(context) != 0 )
-    DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
+  m_importedChildContexts.removeAll(context);
+  //if( != 0 )
+    //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
 }
 
 int DUContext::depth() const
@@ -239,7 +240,7 @@ DUContext::~DUContext( )
   foreach (Use* use, useList)
     use->setContext(0);
 
-  DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+  //DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
   delete d;
 }
 
@@ -537,7 +538,7 @@ void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
   }
   d->m_importedParentContexts.append(DUContextPointer(context));
 
-  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
+  //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
 
 void DUContext::removeImportedParentContext( DUContext * context )
@@ -551,7 +552,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
   
   context->d->removeImportedChildContext(this);
 
-  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
+  //DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
 }
 
 const QList<DUContext*>& DUContext::importedChildContexts() const
@@ -578,6 +579,18 @@ DUContext * DUContext::findContext( const KTextEditor::Cursor& position, DUConte
     }
 
   return 0;
+}
+
+bool DUContext::parentContextOf(DUContext* context) const
+{
+  if (this == context)
+    return true;
+
+  foreach (DUContext* child, childContexts())
+    if (child->parentContextOf(context))
+      return true;
+
+  return false;
 }
 
 QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier) const
@@ -701,7 +714,7 @@ void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
 
   d->m_scopeIdentifier = identifier;
 
-  DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
+  //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
 const QualifiedIdentifier & DUContext::localScopeIdentifier() const
@@ -724,7 +737,7 @@ void DUContext::setType(ContextType type)
 
   d->m_contextType = type;
 
-  DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
+  //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
 
 QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position, SearchFlags flags) const
@@ -897,7 +910,7 @@ Definition* DUContext::addDefinition(Definition* definition)
 
   d->m_localDefinitions.append(definition);
 
-  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::LocalDefinitions, definition);
+  //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::LocalDefinitions, definition);
 
   return definition;
 }
@@ -908,7 +921,7 @@ Definition* DUContext::takeDefinition(Definition* definition)
 
   d->m_localDefinitions.removeAll(definition);
 
-  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::LocalDefinitions, definition);
+  //DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::LocalDefinitions, definition);
 
   return definition;
 }

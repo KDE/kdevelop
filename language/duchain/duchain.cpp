@@ -173,7 +173,8 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
   chain->setInDuChain(true);
   addToEnvironmentManager(chain);
 
-  contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
+  //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
+  branchAdded(chain);
 }
 
 void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
@@ -307,7 +308,7 @@ DUChainObserver* DUChain::notifier()
   return sdDUChainPrivate->notifier;
 }
 
-void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
+/*void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
   emit sdDUChainPrivate->notifier->contextChanged(DUContextPointer(context), change, relationship, DUChainBasePointer(relatedObject));
 }
@@ -325,6 +326,11 @@ void DUChain::definitionChanged(Definition* definition, DUChainObserver::Modific
 void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
 {
   emit sdDUChainPrivate->notifier->useChanged(UsePointer(use), change, relationship, DUChainBasePointer(relatedObject));
+}*/
+
+void DUChain::branchAdded(DUContext* context)
+{
+  emit sdDUChainPrivate->notifier->branchAdded(DUContextPointer(context));
 }
 
 void DUChain::deleteDUChainObject(DUChainBase* object)

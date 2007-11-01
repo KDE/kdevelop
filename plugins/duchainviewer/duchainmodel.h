@@ -76,16 +76,13 @@ public:
 
 private slots:
   void doubleClicked ( const QModelIndex & index );
-    
+
   // Watch definition use chain changes
-  void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-  void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-  void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void branchAdded(KDevelop::DUContextPointer context);
 
 private:
   DUChainViewPart* part() const;
-  
+
   int findInsertIndex(QList<KDevelop::DUChainBasePointer*>& list, KDevelop::DUChainBase* object) const;
 
   QModelIndex createParentIndex(KDevelop::DUChainBasePointer* type) const;

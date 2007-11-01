@@ -37,14 +37,14 @@ void DefinitionPrivate::setDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (m_declaration)
-    DUChain::definitionChanged(m_definition, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, m_declaration);
+  //if (m_declaration)
+    //DUChain::definitionChanged(m_definition, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, m_declaration);
 
   // TODO if declaration is 0, highlight as definition without declaration
   m_declaration = declaration;
 
-  if (m_declaration)
-    DUChain::definitionChanged(m_definition, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, m_declaration);
+  //if (m_declaration)
+    //DUChain::definitionChanged(m_definition, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, m_declaration);
 }
 
 Definition::Definition(KTextEditor::Range* range, DUContext* context)
@@ -64,7 +64,7 @@ Definition::~Definition()
   if (Declaration* dec = declaration())
     dec->setDefinition(0);
 
-  DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+  //DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
   delete d;
 }
 
@@ -81,14 +81,14 @@ void Definition::setContext(DUContext* context)
 
   if (d->m_context) {
     d->m_context->takeDefinition(this);
-    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
+    //DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
   }
 
   d->m_context = context;
 
   if (d->m_context) {
     d->m_context->addDefinition(this);
-    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
+    //DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
   }
 }
 

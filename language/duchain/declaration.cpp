@@ -136,7 +136,7 @@ Declaration::~Declaration()
 
   setAbstractType(AbstractType::Ptr());
 
-  DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+  //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
   delete d;
 }
 
@@ -155,7 +155,7 @@ void Declaration::removeUse( Use* use )
   use->d->setDeclaration(0L);
   d->m_uses.removeAll(use);
 
-  DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Uses, use);
+  //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Uses, use);
 }
 
 void Declaration::addUse( Use* use )
@@ -165,7 +165,7 @@ void Declaration::addUse( Use* use )
   use->d->setDeclaration(this);
   d->m_uses.append(use);
 
-  DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Uses, use);
+  //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Uses, use);
 }
 
 const QList< Use* > & Declaration::uses( ) const
@@ -191,7 +191,7 @@ void Declaration::setIdentifier(const Identifier& identifier)
 
   d->m_identifier = identifier;
   
-  DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
+  //DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
 AbstractType::Ptr Declaration::abstractType( ) const
@@ -205,13 +205,13 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 {
   ENSURE_CAN_WRITE
 
-  if (d->m_type)
-    DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
+  //if (d->m_type)
+    //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
 
   d->m_type = type;
 
-  if (d->m_type)
-    DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
+  //if (d->m_type)
+    //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
 Declaration::Scope Declaration::scope( ) const
@@ -257,8 +257,8 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   if (d->m_context) {
     if( !d->m_anonymousInContext ) {
-      if( d->m_context->d->removeDeclaration(this) )
-        DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
+      d->m_context->d->removeDeclaration(this);// if( )
+        //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
     }
   }
 
@@ -268,7 +268,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   if (d->m_context) {
     if(!d->m_anonymousInContext) {
       d->m_context->d->addDeclaration(this);
-      DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
+      //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
     }
   }
 }
@@ -344,7 +344,7 @@ void Declaration::setDefinition(Definition* definition)
   if (d->m_definition) {
     d->m_definition->d->setDeclaration(0);
 
-    DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, d->m_definition);
+    //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, d->m_definition);
   }
 
   d->m_definition = definition;
@@ -353,7 +353,7 @@ void Declaration::setDefinition(Definition* definition)
     d->m_definition->d->setDeclaration(this);
     d->m_isDefinition = false;
 
-    DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, d->m_definition);
+    //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, d->m_definition);
   }
 }
 

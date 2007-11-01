@@ -57,18 +57,33 @@ public:
 
 private Q_SLOTS:
   // Definition use chain observer implementation
-  void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  /*void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
   void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
   void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);*/
+  void branchAdded(KDevelop::DUContextPointer context);
 
 private:
   ClassBrowserPart* part() const;
+
+  void contextAdded(KDevelop::DUContext* context);
 
   KDevelop::DUChainBasePointer* objectForIndex(const QModelIndex& index) const;
   QModelIndex createIndex(int row, int column, KDevelop::DUChainBase* object) const;
   QModelIndex createIndex(int row, int column, KDevelop::DUChainBasePointer* object) const;
   QModelIndex contextIndex(KDevelop::DUContext* context) const;
+
+  template <class T>
+  KDevelop::DUChainBasePointer* createPointer(T* object) const
+  {
+    if (m_knownObjects.contains(object))
+      return m_knownObjects[object];
+
+    KDevelop::DUChainBasePointer* p = new KDevelop::DUChainBasePointer(object);
+    m_knownObjects.insert(object, p);
+
+    return p;
+  }
 
   QList<KDevelop::DUChainBasePointer*> m_topObjects;
   mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBasePointer*> m_knownObjects;

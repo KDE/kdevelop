@@ -62,10 +62,7 @@ DUChainModel::DUChainModel(DUChainViewPart* parent)
   //new ModelTest(this);
   connect( part()->core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
-  bool success = connect(DUChain::self()->notifier(), SIGNAL(contextChanged(KDevelop::DUContextPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(contextChanged(KDevelop::DUContextPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
-  success &= connect(DUChain::self()->notifier(), SIGNAL(declarationChanged(KDevelop::DeclarationPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(declarationChanged(KDevelop::DeclarationPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
-  success &= connect(DUChain::self()->notifier(), SIGNAL(definitionChanged(KDevelop::DefinitionPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(definitionChanged(KDevelop::DefinitionPointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
-  success &= connect(DUChain::self()->notifier(), SIGNAL(useChanged(KDevelop::UsePointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), SLOT(useChanged(KDevelop::UsePointer, KDevelop::DUChainObserver::Modification, KDevelop::DUChainObserver::Relationship, KDevelop::DUChainBasePointer)), Qt::QueuedConnection);
+  bool success = connect(DUChain::self()->notifier(), SIGNAL(branchAdded(KDevelop::DUContextPointer)), SLOT(branchAdded(KDevelop::DUContextPointer)), Qt::QueuedConnection);
   Q_ASSERT(success);
 }
 
@@ -411,21 +408,40 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
   return false;
 }*/
 
-void DUChainModel::contextChanged(DUContextPointer contextp, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
+void DUChainModel::branchAdded(DUContextPointer context)
 {
-  if (!m_knownObjects.contains(contextp.data()))
+  DUChainReadLocker readLock(DUChain::lock());
+
+  if (!context)
     return;
 
-  DUChainBasePointer* context = pointerForObject(contextp.data());
-
-  if (!m_objectLists.contains(context) || !m_modelRow.contains(context))
+  if (!m_chain || !m_chain->parentContextOf(context.data()))
     return;
 
-  QList<DUChainBasePointer*>* list = m_objectLists[context];
+  DUChainBasePointer* parent = pointerForObject(context->parentContext());
 
-  DUChainBasePointer* ro = createPointerForObject(relatedObject.data());
+  if (!parent || !m_objectLists.contains(parent) || !m_modelRow.contains(parent))
+    // No entry for parent, ok - it will be created if the view interrogates for it
+    return;
 
-  switch (relationship) {
+  QList<DUChainBasePointer*>* list = childItems(parent);
+
+  DUChainBasePointer* contextPointer = createPointerForObject(context.data());
+
+  int index = findInsertIndex(*list, context.data());
+
+  if (list->at(index) == contextPointer)
+    // Already added...
+    return;
+
+  beginInsertRows(createIndex(m_modelRow[parent], 0, parent), index, index);
+  list->insert(index, contextPointer);
+  endInsertRows();
+
+  // Don't worry about children, they will be queried for if the view needs it
+}
+
+/*switch (relationship) {
     case DUChainObserver::ChildContexts:
       switch (change) {
         case DUChainObserver::Deletion:
@@ -454,21 +470,7 @@ void DUChainModel::contextChanged(DUContextPointer contextp, DUChainObserver::Mo
             break;
           // else fallthrough
         }
-
-        case DUChainObserver::Addition: {
-          int index = findInsertIndex(*list, ro->data());
-          beginInsertRows(createIndex(m_modelRow[context], 0, context), index, index);
-          list->insert(index, ro);
-          endInsertRows();
-          break;
-        }
-      }
-      break;
-
-    default:
-      break;
-  }
-}
+*/
 
 KDevelop::DUChainBasePointer* DUChainModel::pointerForObject(KDevelop::DUChainBase* object) const
 {
@@ -496,30 +498,6 @@ KDevelop::DUChainBasePointer* DUChainModel::createPointerForObject(KDevelop::DUC
 QModelIndex DUChainModel::createParentIndex(DUChainBasePointer* type) const
 {
   return createIndex(m_modelRow[type], 0, type);
-}
-
-void DUChainModel::declarationChanged(DeclarationPointer declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
-{
-  Q_UNUSED(declaration);
-  Q_UNUSED(change);
-  Q_UNUSED(relationship);
-  Q_UNUSED(relatedObject);
-}
-
-void DUChainModel::definitionChanged(DefinitionPointer definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
-{
-  Q_UNUSED(definition);
-  Q_UNUSED(change);
-  Q_UNUSED(relationship);
-  Q_UNUSED(relatedObject);
-}
-
-void DUChainModel::useChanged(UsePointer use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBasePointer relatedObject)
-{
-  Q_UNUSED(use);
-  Q_UNUSED(change);
-  Q_UNUSED(relationship);
-  Q_UNUSED(relatedObject);
 }
 
 int DUChainModel::findInsertIndex(QList<DUChainBasePointer*>& list, DUChainBase* object) const
