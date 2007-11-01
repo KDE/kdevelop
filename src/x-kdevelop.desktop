@@ -20,5 +20,5 @@ Comment[zh_TW]=KDevelop 4 專案檔
 DefaultApp=kdevelop
 Icon=kdevelop_project
 Type=MimeType
-MimeType=application/x-kdevelop
+MimeType=application/x-kdevelop;
 Patterns=*.kdev4;
