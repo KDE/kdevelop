@@ -104,9 +104,7 @@ QString preprocess( const QString& text, const Cpp::EnvironmentFilePointer& file
     }
   }
 
-  kDebug(9007) << "text before preprocessing: " << text;
   QString ret = pp.processFile("anonymous", rpp::pp::Data, text);
-  kDebug(9007) << "text after preprocessing: " << ret;
   pp.environment()->cleanup();
   
   return ret;
