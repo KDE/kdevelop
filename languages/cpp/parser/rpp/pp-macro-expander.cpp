@@ -254,6 +254,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         skip_whitespaces(input, devnull());
 
+        //In case expansion fails, we can skip back to this position
+        int openingPosition = input.pos();
+        int openingPositionLine = input.inputLineNumber();
+        
         // function like macro
         if (input.atEnd() || input != '(')
         {
@@ -310,6 +314,16 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           }
         }
 
+        if( input != ')' ) {
+          //Failed to expand the macro. Output the macro name and continue normal
+          //processing behind it.(Code completion depends on this behavior when expanding
+          //incomplete input-lines)
+          output << name;
+          input.seek(openingPosition);
+          input.setInputLineNumber(openingPositionLine);
+          kDebug() << "seeking back";
+          continue;
+        }
         //Q_ASSERT(!input.atEnd() && input == ')');
 
         ++input; // skip ')'
