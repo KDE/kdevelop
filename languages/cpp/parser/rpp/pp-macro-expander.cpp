@@ -321,7 +321,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           output << name;
           input.seek(openingPosition);
           input.setInputLineNumber(openingPositionLine);
-          kDebug() << "seeking back";
           continue;
         }
         //Q_ASSERT(!input.atEnd() && input == ')');
