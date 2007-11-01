@@ -52,6 +52,7 @@ namespace Cpp
   
   /**
    * Helps searching and revolving functions or operator-functions in a unified way, partially or completely.
+   * The du-chain must be locked for the whole lifetime of this object.
    * */
   class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolutionHelper {
     public:

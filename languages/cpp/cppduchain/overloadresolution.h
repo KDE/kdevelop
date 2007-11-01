@@ -37,7 +37,7 @@ using namespace KDevelop;
   class ViableFunction;
 /**
  * Models overloaded function resolution
- * du-chain must be locked whenever this class is used
+ * The du-chain must be locked for the whole lifetime of this object.
  * */
 class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
   public:
