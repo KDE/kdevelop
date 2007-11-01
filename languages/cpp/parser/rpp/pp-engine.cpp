@@ -984,7 +984,7 @@ void pp::handle_endif(Stream& output)
 {
   if (iflevel == 0 && !skipping())
   {
-    kFatal() << "#endif without #if at output line" << output.outputLineNumber() << endl;
+    kWarning() << "#endif without #if at output line" << output.outputLineNumber() << endl;
   }
   else
   {

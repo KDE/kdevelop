@@ -234,7 +234,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
       if(m_dumpProblems)
         Cpp::ExpressionVisitor::problem(node, str);
       else
-        kDebug() << "problem";
+        kDebug(9007) << "problem";
     }
 
     UseBuilder* m_builder;

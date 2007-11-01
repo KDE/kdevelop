@@ -470,7 +470,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         problem( node, QString("could not find declaration of %1").arg( nameC.identifier().toString() ) );
       } else {
         m_lastType = m_lastDeclarations.first()->abstractType();
-        //kDebug() << "found declaration: " << m_lastDeclarations.first()->toString();
+        //kDebug(9007) << "found declaration: " << m_lastDeclarations.first()->toString();
 
         ///If the found declaration declares a type, this is a type-expression and m_lastInstance should be zero.
         ///The declaration declares a type if its abstractType's declaration is that declaration. Else it is an insantiation, and m_lastType should be filled.
@@ -901,7 +901,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
         m_parameters << OverloadResolver::Parameter(leftType.data(), isLValue( leftType, leftInstance ) );
 
         //LOCKDUCHAIN;
-        //kDebug() << "Adding parameter from left: " << (leftType.data() ? leftType->toString() : QString("<notype>"));
+        //kDebug(9007) << "Adding parameter from left: " << (leftType.data() ? leftType->toString() : QString("<notype>"));
       } else {
         //If neither leftType nor leftInstance are true, the expression was probably another binary
         //expression that has put the types/instances into m_parameters and returns nothing.
@@ -913,14 +913,14 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
           
           m_parameters << OverloadResolver::Parameter(0, false);
           //LOCKDUCHAIN;
-          //kDebug() << "Adding empty from left";
+          //kDebug(9007) << "Adding empty from left";
         }
       }
 
       if( rightType && rightInstance) {
         m_parameters << OverloadResolver::Parameter(rightType.data(), isLValue( rightType, rightInstance ) );
         //LOCKDUCHAIN;
-        //kDebug() << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
+        //kDebug(9007) << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
       } else {
         //If neither leftType nor leftInstance are true, the expression was probably another binary
         //expression that has put the types/instances into m_parameters and returns nothing.
@@ -931,7 +931,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
             problem( node->right_expression, "right operand of binary ','-expression could not be evaluated" );
           
           m_parameters << OverloadResolver::Parameter(0, false);
-          //kDebug() << "Adding empty from right";
+          //kDebug(9007) << "Adding empty from right";
         }
       }
       
@@ -1503,7 +1503,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
 
     QList<OverloadResolver::Parameter> oldParams = m_parameters;
     m_parameters.clear();
-    //kDebug() << "clearing parameters";
+    //kDebug(9007) << "clearing parameters";
 
     clearLast();
     visit(node->arguments);
@@ -1512,7 +1512,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     if( m_lastType ) {
       m_parameters << OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) );
       //LOCKDUCHAIN;
-      //kDebug() << "adding last parameter: " << (m_lastType.data() ? m_lastType->toString() : QString("<notype>"));
+      //kDebug(9007) << "adding last parameter: " << (m_lastType.data() ? m_lastType->toString() : QString("<notype>"));
     }
     
     //Check if all parameters could be evaluated
@@ -1532,7 +1532,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       m_lastType = declarations.first()->abstractType();
       m_lastInstance = Instance(declarations.first());
       m_parameters = oldParams;
-      //kDebug() << "resetting old parameters of size " << oldParams.size();
+      //kDebug(9007) << "resetting old parameters of size " << oldParams.size();
       return;
     }
 
@@ -1570,7 +1570,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     }
 
     m_parameters = oldParams;
-    //kDebug() << "Resetting old parameters of size " << oldParams.size();
+    //kDebug(9007) << "Resetting old parameters of size " << oldParams.size();
     
 
     clearLast();

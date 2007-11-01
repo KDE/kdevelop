@@ -326,7 +326,7 @@ void CPPInternalParseJob::run()
             foreach ( TopDUContext* topContext, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
                 //As above, we work with the content-contexts.
                 TopDUContext* context = contentFromProxy(topContext);
-		DUContextPointer ptr(context);
+                DUContextPointer ptr(context);
                 if( !chains.contains(context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(ptr)) ) {
                     chains << context;
                     temporaryChains << context;
@@ -352,7 +352,7 @@ void CPPInternalParseJob::run()
                 kDebug( 9007 ) << "building duchain";
 
                 DeclarationBuilder declarationBuilder(&editor);
-		TopDUContextPointer updatingptr(updating);
+                TopDUContextPointer updatingptr(updating);
                 topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updatingptr, !(bool)parentJob()->contentContext());
 
                 if(updating) {
@@ -363,7 +363,7 @@ void CPPInternalParseJob::run()
                     foreach(DUContextPointer ctx, imports) {
                         if(ctx.data() && !encounteredIncludeUrls.contains(ctx->url())) {
                             topContext->removeImportedParentContext(ctx.data());
-                            kDebug() << "removing not encountered import " << ctx->url();
+                            kDebug(9007) << "removing not encountered import " << ctx->url();
                         }
                     }
                 }
@@ -419,7 +419,7 @@ void CPPInternalParseJob::run()
             //If we are using simplified environment-matching, create a proxy-context that represents the parsed content-context environment-wise
             if( parentJob()->contentEnvironmentFile() ) {
                 ContextBuilder builder(&editor);
-		TopDUContextPointer ptr(topContext);
+                TopDUContextPointer ptr(topContext);
                 topContext = builder.buildProxyContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), ptr, parentJob()->updatingContext());
             }
 

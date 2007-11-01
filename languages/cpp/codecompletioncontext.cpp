@@ -83,30 +83,30 @@ QString preprocess( const QString& text, const Cpp::EnvironmentFilePointer& file
 
   {
     LOCKDUCHAIN;
-/*    kDebug() << "defined macros: " << file->definedMacros().size();*/
+/*    kDebug(9007) << "defined macros: " << file->definedMacros().size();*/
     //Copy in all macros from the file
     for( MacroSet::Macros::const_iterator it = file->definedMacros().macros().begin(); it != file->definedMacros().macros().end(); ++it ) {
       if( line == -1 || line > (*it).sourceLine || !(file->url().equals( KUrl((*it).file) ) ) ) {
         pp.environment()->setMacro( new rpp::pp_macro( *it ) );
-/*        kDebug() << "adding macro " << (*it).name.str();*/
+/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
       } else {
-/*        kDebug() << "leaving macro " << (*it).name.str();*/
+/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
       }
     }
-/*    kDebug() << "used macros: " << file->usedMacros().size();*/
+/*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
     for( MacroSet::Macros::const_iterator it = file->usedMacros().macros().begin(); it != file->usedMacros().macros().end(); ++it ) {
       if( line == -1 || line > (*it).sourceLine || !(file->url().equals( KUrl((*it).file) ) ) ) {
         pp.environment()->setMacro( new rpp::pp_macro( *it ) );
-/*        kDebug() << "adding macro " << (*it).name.str();*/
+/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
       } else {
-/*        kDebug() << "leaving macro " << (*it).name.str();*/
+/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
       }
     }
   }
 
-  kDebug() << "text before preprocessing: " << text;
+  kDebug(9007) << "text before preprocessing: " << text;
   QString ret = pp.processFile("anonymous", rpp::pp::Data, text);
-  kDebug() << "text after preprocessing: " << ret;
+  kDebug(9007) << "text after preprocessing: " << ret;
   pp.environment()->cleanup();
   
   return ret;
@@ -297,11 +297,11 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ExpressionParser expressionParser/*(false, true)*/;
 
-  ifDebug( kDebug() << "expression: " << expr; )
+  ifDebug( kDebug(9007) << "expression: " << expr; )
   
   if( !expr.trimmed().isEmpty() ) {
     m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
-    ifDebug( kDebug() << "expression result: " << m_expressionResult.toString(); )
+    ifDebug( kDebug(9007) << "expression result: " << m_expressionResult.toString(); )
     if( !m_expressionResult.isValid() ) {
       if( m_memberAccessOperation != StaticMemberChoose ) {
         log( QString("expression \"%1\" could not be evaluated").arg(expr) );
