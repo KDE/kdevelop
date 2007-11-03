@@ -147,7 +147,6 @@
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
 </includehints>
 </UI>

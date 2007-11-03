@@ -160,4 +160,8 @@
     <slot>buttonPressedOnItem( int button, QListViewItem * item, const QPoint &amp; pos, int c )</slot>
 </slots>
 <layoutdefaults spacing="1" margin="1"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>
