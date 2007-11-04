@@ -383,23 +383,34 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
     return QVariant();
 
   if (DUContext* context = dynamic_cast<DUContext*>(base)) {
-    if (context->owner()) {
-      if (Definition* definition = context->owner()->asDefinition()) {
-        switch (role) {
-          case Qt::DisplayRole:
-            return definition->declaration()->identifier().toString();
-          case Qt::DecorationRole:
-            return DUChainUtils::iconForDeclaration(definition->declaration());
+    switch (context->type()) {
+      case DUContext::Class:
+        if (context->owner()) {
+          if (Definition* definition = context->owner()->asDefinition()) {
+            switch (role) {
+              case Qt::DisplayRole:
+                return definition->declaration()->identifier().toString();
+              case Qt::DecorationRole:
+                return DUChainUtils::iconForDeclaration(definition->declaration());
+            }
+
+          } else if (Declaration* declaration = context->owner()->asDeclaration()) {
+            switch (role) {
+              case Qt::DisplayRole:
+                return declaration->identifier().toString();
+              case Qt::DecorationRole:
+                return DUChainUtils::iconForDeclaration(declaration);
+            }
+          }
         }
 
-      } else if (Declaration* declaration = context->owner()->asDeclaration()) {
+      case DUContext::Namespace:
         switch (role) {
           case Qt::DisplayRole:
-            return declaration->identifier().toString();
+            return context->localScopeIdentifier().toString();
           case Qt::DecorationRole:
-            return DUChainUtils::iconForDeclaration(declaration);
+            return KIcon("namespace");
         }
-      }
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
