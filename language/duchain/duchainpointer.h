@@ -19,6 +19,8 @@
 #ifndef DUCHAINPOINTER_H
 #define DUCHAINPOINTER_H
 
+#include <QMetaType>
+
 #include <ksharedptr.h>
 #include <languageexport.h>
 
@@ -178,5 +180,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
   typedef DUChainPointer<Definition> DefinitionPointer;
   typedef DUChainPointer<AbstractFunctionDeclaration> FunctionDeclarationPointer;
 }
+
+Q_DECLARE_METATYPE( KDevelop::DUChainBasePointer )
 
 #endif
