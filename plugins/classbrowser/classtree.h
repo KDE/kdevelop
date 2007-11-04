@@ -44,8 +44,13 @@ public:
 
   class ClassModel* model();
 
+protected:
+  virtual void contextMenuEvent(QContextMenuEvent* e);
+
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
+  void openDeclaration();
+  void openDefinition();
 
 private:
   ClassBrowserPart* m_part;

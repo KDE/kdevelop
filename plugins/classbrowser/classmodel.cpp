@@ -494,6 +494,44 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
 }
 */
 
+Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer) const
+{
+  if (!pointer)
+    return 0L;
+
+  if (Declaration* declaration = dynamic_cast<Declaration*>(pointer.data())) {
+    return declaration;
+
+  } else if (Definition* d = dynamic_cast<Definition*>(pointer.data())) {
+    return d->declaration();
+
+  } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
+    if (context->owner())
+      if (Definition* definition = context->owner()->asDefinition())
+        return definition->declaration();
+      else
+        return context->owner()->asDeclaration();
+  }
+
+  return 0L;
+}
+
+Definition* ClassModel::definitionForObject(const DUChainBasePointer& pointer) const
+{
+  if (!pointer)
+    return 0L;
+
+  if (Definition* d = dynamic_cast<Definition*>(pointer.data())) {
+    return d;
+
+  } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
+    if (context->owner())
+      return context->owner()->asDefinition();
+  }
+
+  return 0L;
+}
+
 #include "classmodel.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

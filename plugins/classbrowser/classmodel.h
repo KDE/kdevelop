@@ -67,6 +67,9 @@ public:
 
   Node* objectForIndex(const QModelIndex& index) const;
 
+  KDevelop::Declaration* declarationForObject(const KDevelop::DUChainBasePointer& pointer) const;
+  KDevelop::Definition* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
+
 public:
   virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
   virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
