@@ -186,13 +186,14 @@ protected:
 
   //Here all valid declarations/uses/... will be collected
   QSet<KDevelop::DUChainBase*> m_encountered;
+
   QStack<KDevelop::DUContext*> m_contextStack;
-  int m_nextContextIndex;
+  QStack<int> m_nextContextStack;
+  
   KDevelop::DUContext* m_lastContext; //Last context that was opened
 
   inline int& nextContextIndex() { return m_nextContextStack.top(); }
 
-  QStack<int> m_nextContextStack;
 
   QList<KDevelop::DUContext*> m_importedParentContexts;
 };

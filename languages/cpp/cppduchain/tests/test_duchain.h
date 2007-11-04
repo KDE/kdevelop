@@ -82,6 +82,7 @@ private slots:
   void testEnum();
    
   void testCStruct();
+  void testCStruct2();
 
 public:
   enum DumpArea {

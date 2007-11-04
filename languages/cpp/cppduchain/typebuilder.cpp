@@ -46,12 +46,12 @@
 using namespace KDevelop;
 
 TypeBuilder::TypeBuilder(ParseSession* session)
-  : TypeBuilderBase(session)
+  : TypeBuilderBase(session), m_declarationHasInitDeclarators(false)
 {
 }
 
 TypeBuilder::TypeBuilder(CppEditorIntegrator * editor)
-  : TypeBuilderBase(editor)
+  : TypeBuilderBase(editor), m_declarationHasInitDeclarators(false)
 {
 }
 
@@ -424,7 +424,9 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   m_lastType = 0;
 
   // Reimplement default visitor
+  m_declarationHasInitDeclarators = (bool)node->init_declarators;
   visit(node->type_specifier);
+  m_declarationHasInitDeclarators = false;
 
   AbstractType::Ptr baseType = m_lastType;
 
@@ -610,6 +612,12 @@ void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
   
   closeType();
 }
+
+void TypeBuilder::injectType(const AbstractType::Ptr& type, AST* node) {
+  openType(type, node);
+  closeType();
+}
+
 
 void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
 {

@@ -51,6 +51,9 @@
 
 #include "rpp/preprocessor.h"
 
+//Uncomment the following line to get additional output from the string-repository test
+//#define DEBUG_STRINGREPOSITORY
+
 using namespace KTextEditor;
 using namespace TypeUtils;
 using namespace KDevelop;
@@ -609,7 +612,7 @@ void TestDUChain::testCStruct()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("struct A { }; struct A instance; typedef struct { int a; } B, *BPointer;");
+  QByteArray method("struct A {int i; }; struct A instance; typedef struct { int a; } B, *BPointer;");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -617,10 +620,38 @@ void TestDUChain::testCStruct()
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 2);
-  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(top->localDeclarations().count(), 5);
 
   QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
   QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);
+  
+  release(top);
+}
+
+void TestDUChain::testCStruct2()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+   
+  QByteArray method("struct A {struct C c; }; struct C { int v; };");
+
+  /* Expected result: the elaborated type-specifier "struct C" within the declaration "struct A" should create a new global declaration.
+  */
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 3); //3 declarations because the elaborated type-specifier "struct C" creates a forward-declaration on the global scope
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->abstractType(), top->localDeclarations()[1]->abstractType());
+           
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance); /*QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
+  QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);*/
   
   release(top);
 }
@@ -902,7 +933,7 @@ void TestDUChain::testDeclareUsingNamespace()
 void TestDUChain::testFunctionDefinition() {
   QByteArray text("class B{}; class A { char at(B* b); }; \n char A::at(B* b) {B* b; at(b); } ");
 
-  DUContext* top = parse(text, DumpAll);
+  DUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1584,11 +1615,13 @@ void TestDUChain::testHashedStringRepository() {
         Q_ASSERT(_intersection.stdSet() == _realIntersection);
       }
     }
+#ifdef DEBUG_STRINGREPOSITORY
     kDebug() << "cycle " << cycle;
   kDebug() << "Clock-cycles needed for set-building: repository-set: " << repositoryClockTime << " generic-set: " << genericClockTime;
   kDebug() << "Clock-cycles needed for intersection: repository-sets: " << repositoryIntersectionClockTime << " generic-set: " << genericIntersectionClockTime << " QSet: " << qsetIntersectionClockTime;
   kDebug() << "Clock-cycles needed for union: repository-sets: " << repositoryUnionClockTime << " generic-set: " << genericUnionClockTime;
   kDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime << " generic-set: " << genericDifferenceClockTime;
+#endif
   }
 
 }

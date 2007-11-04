@@ -86,6 +86,13 @@ protected:
 
   virtual void addBaseType( CppClassType::BaseClassInstance base );
 
+  bool m_declarationHasInitDeclarators; //Is set when processing the type-specifiers within SimpleDeclarationASTs, to change the behavior for elaborated type-specifiers.
+
+  /**Simulates that the given type was created.
+   * After calling, the given type will be the last type.
+   * */
+  void injectType(const AbstractType::Ptr& type, AST* node);
+  
   private:
   template <class T>
   void openType(KSharedPtr<T> type, AST* node)

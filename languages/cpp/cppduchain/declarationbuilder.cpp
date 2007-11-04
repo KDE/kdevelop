@@ -758,12 +758,69 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
     QualifiedIdentifier id = identifierForName(node->name);
 
     int kind = m_editor->parseSession()->token_stream->kind(node->type);
+
+    bool forwardDeclarationGlobal = false;
+
+    if(m_declarationHasInitDeclarators) {
+      /**This is an elaborated type-specifier
+       *
+       * See iso c++ draft 3.3.4 for details.
+       * Said shortly it means:
+       * - Search for an existing declaration of the type. If it is found,
+       *   it will be used, and we don't need to create a declaration.
+       * - If it is not found, create a forward-declaration in the global scope.
+       * - @todo While searching for the existing declarations, non-fitting overloaded names should be ignored.
+       * */
+      QList<Declaration*> declarations;
+      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      
+      {
+        DUChainReadLocker lock(DUChain::lock());
+
+        declarations = currentContext()->findDeclarations( id, pos);
+
+        if(declarations.isEmpty()) {
+          //We haven't found a declaration, so insert a forward-declaration in the global scope
+          forwardDeclarationGlobal = true;
+        }else{
+          //We have found a declaration. Do not create a new one, instead use the declarations type.
+          if(declarations.first()->abstractType()) {
+            //This belongs into the type-builder, but it's much easier to do here, since we already have all the information
+            ///@todo See above, only search for fitting declarations(of structure/enum/class/union type)
+            injectType(AbstractType::Ptr(declarations.first()->abstractType().data()), node);
+            return;
+          }else{
+            kDebug() << "Error: Bad declaration";
+          }
+        }
+      }
+    }
+    
     // Create forward declaration
     switch (kind) {
       case Token_class:
       case Token_struct:
       case Token_union:
+      
+        if(forwardDeclarationGlobal) {
+          //Open the global context, so it is currentContext() and we can insert the forward-declaration there
+
+          DUContext* globalCtx;
+          {
+            DUChainReadLocker lock(DUChain::lock());
+            globalCtx = currentContext();
+            while(globalCtx && globalCtx->type() != DUContext::Global)
+              globalCtx = globalCtx->parentContext();
+            Q_ASSERT(globalCtx);
+          }
+          openContext(globalCtx);
+        }
+        
         openForwardDeclaration(node->name, node);
+
+        if(forwardDeclarationGlobal)
+          closeContext();
+
         openedDeclaration = true;
         break;
       case Token_enum:
