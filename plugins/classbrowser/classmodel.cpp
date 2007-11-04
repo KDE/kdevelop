@@ -39,24 +39,12 @@
 #include "parsingenvironment.h"
 #include "duchain.h"
 #include "duchainlock.h"
-#include "duchainpointer.h"
 #include "duchainutils.h"
 
 //#include "modeltest.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
-
-class ClassModel::Node : public DUChainBasePointer
-{
-  public:
-    Node(DUChainBase* p, Node* parent) : DUChainBasePointer(p), m_parent(parent) {}
-
-    Node* parent() const { return m_parent; }
-
-  private:
-    Node* m_parent;
-}; 
 
 ClassModel::ClassModel(ClassBrowserPart* parent)
   : QAbstractItemModel(parent)
@@ -239,7 +227,9 @@ QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
   if (parent) {
     if (DUContext* parentContext = dynamic_cast<DUContext*>(parent->data()))
       addTopLevelToList(parentContext, list, parent);
-    // TODO more here?
+
+    foreach (DUContextPointer nsContext, parent->namespaceContexts())
+      addTopLevelToList(nsContext.data(), list, parent);
 
   } else {
     foreach (TopDUContext* chain, DUChain::self()->allChains())
@@ -264,9 +254,28 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
         if (child->owner())
           list->append(createPointer(child, parent));
         break;
-      case DUContext::Namespace:
-        list->append(createPointer(child, parent));
+
+      /*case DUContext::Namespace: {
+        Node* ns;
+        if (m_namespaces.contains(child->scopeIdentifier())) {
+          kDebug() << "Found namespace" << child->scopeIdentifier().toString() << ", adding to items";
+          ns = m_namespaces[child->scopeIdentifier()];
+
+        } else {
+          ns = createPointer(child, parent);
+          m_namespaces.insert(child->scopeIdentifier(), ns);
+          kDebug() << "New namespace" << child->scopeIdentifier().toString();
+        }
+
+        // FIXME must emit changes here??
+        ns->addNamespaceContext(DUContextPointer(child));
+
+        if (!list->contains(ns))
+          list->append(ns);
+
         break;
+      }*/
+
       default:
         addTopLevelToList(child, list, parent, false);
         break;
@@ -415,8 +424,12 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
     switch (role) {
-      case Qt::DisplayRole:
-        return dec->identifier().toString();
+      case Qt::DisplayRole: {
+        QString ret = dec->identifier().toString();
+        if (FunctionType::Ptr type = dec->type<FunctionType>())
+          ret += type->toString(FunctionType::SignatureArguments);
+        return ret;
+      }
       //case Qt::DecorationRole:
         //return DUChainUtils::iconForDeclaration(dec);
     }

@@ -28,8 +28,10 @@
 #include <ktexteditor/cursor.h>
 #include <kurl.h>
 
-#include "duchainbase.h"
-#include "duchainobserver.h"
+#include <duchainbase.h>
+#include <duchainobserver.h>
+#include <identifier.h>
+#include <duchainpointer.h>
 
 class ClassBrowserPart;
 
@@ -48,6 +50,23 @@ public:
   ClassModel(ClassBrowserPart* parent);
   virtual ~ClassModel();
 
+  class Node : public KDevelop::DUChainBasePointer
+  {
+    public:
+      Node(KDevelop::DUChainBase* p, Node* parent) : KDevelop::DUChainBasePointer(p), m_parent(parent) {}
+
+      Node* parent() const { return m_parent; }
+
+      const QList<KDevelop::DUContextPointer>& namespaceContexts() const { return m_namespaceContexts; }
+      void addNamespaceContext(const KDevelop::DUContextPointer& context) { m_namespaceContexts.append(context); }
+
+    private:
+      Node* m_parent;
+      QList<KDevelop::DUContextPointer> m_namespaceContexts;
+  };
+
+  Node* objectForIndex(const QModelIndex& index) const;
+
 public:
   virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
   virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
@@ -61,13 +80,9 @@ private Q_SLOTS:
   void branchAdded(KDevelop::DUContextPointer context);
 
 private:
-  class Node;
-
   ClassBrowserPart* part() const;
 
   void contextAdded(Node* parent, KDevelop::DUContext* context);
-
-  Node* objectForIndex(const QModelIndex& index) const;
 
   void addTopLevelToList(KDevelop::DUContext* context, QList<Node*>* list, Node* parent, bool first = true) const;
 
@@ -82,6 +97,7 @@ private:
   mutable QList<Node*>* m_topList;
   mutable QHash<KDevelop::DUChainBase*, Node*> m_knownObjects;
   mutable QHash<Node*, QList<Node*>* > m_lists;
+  mutable QHash<KDevelop::QualifiedIdentifier, Node*> m_namespaces;
 };
 
 #endif

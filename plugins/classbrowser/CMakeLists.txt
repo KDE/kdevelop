@@ -16,6 +16,7 @@ include_directories(
 set(kdevclassbrowser_PART_SRCS
     classbrowserpart.cpp
     classmodel.cpp
+    classtree.cpp
 #modeltest.cpp
 )
 

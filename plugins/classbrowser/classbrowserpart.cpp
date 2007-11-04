@@ -22,9 +22,6 @@
 
 #include "classbrowserpart.h"
 
-#include <QTreeView>
-#include <QHeaderView>
-
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -34,6 +31,7 @@
 #include <idocumentcontroller.h>
 
 #include "classmodel.h"
+#include "classtree.h"
 
 K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPart>(); )
 K_EXPORT_PLUGIN(KDevClassBrowserFactory("kdevclassbrowser"))
@@ -45,13 +43,7 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    QTreeView* view = new QTreeView(parent /*, m_part*/);
-    view->setObjectName("Class Browser Tree");
-    view->setWindowTitle(i18n("Class Browser"));
-    view->header()->hide();
-    view->setModel(m_part->model());
-    //QObject::connect(view, SIGNAL(doubleClicked(const QModelIndex &)), m_part->model(), SLOT(doubleClicked(const QModelIndex &)));
-    return view;
+    return new ClassTree(parent, m_part);
   }
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
