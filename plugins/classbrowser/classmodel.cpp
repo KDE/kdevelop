@@ -390,16 +390,16 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
             switch (role) {
               case Qt::DisplayRole:
                 return definition->declaration()->identifier().toString();
-              case Qt::DecorationRole:
-                return DUChainUtils::iconForDeclaration(definition->declaration());
+              //case Qt::DecorationRole:
+                //return DUChainUtils::iconForDeclaration(definition->declaration());
             }
 
           } else if (Declaration* declaration = context->owner()->asDeclaration()) {
             switch (role) {
               case Qt::DisplayRole:
                 return declaration->identifier().toString();
-              case Qt::DecorationRole:
-                return DUChainUtils::iconForDeclaration(declaration);
+              //case Qt::DecorationRole:
+                //return DUChainUtils::iconForDeclaration(declaration);
             }
           }
         }
@@ -408,8 +408,8 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
         switch (role) {
           case Qt::DisplayRole:
             return context->localScopeIdentifier().toString();
-          case Qt::DecorationRole:
-            return KIcon("namespace");
+          //case Qt::DecorationRole:
+            //return KIcon("namespace");
         }
     }
 
@@ -417,16 +417,16 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
     switch (role) {
       case Qt::DisplayRole:
         return dec->identifier().toString();
-      case Qt::DecorationRole:
-        return DUChainUtils::iconForDeclaration(dec);
+      //case Qt::DecorationRole:
+        //return DUChainUtils::iconForDeclaration(dec);
     }
 
   } else if (Definition* def = dynamic_cast<Definition*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
         return def->declaration()->identifier().toString();
-      case Qt::DecorationRole:
-        return DUChainUtils::iconForDeclaration(def->declaration());
+      //case Qt::DecorationRole:
+        //return DUChainUtils::iconForDeclaration(def->declaration());
     }
 
   } else {
