@@ -399,7 +399,7 @@ void TestDUChain::testDeclareFor()
 
   //                 0         1         2         3         4         5
   //                 012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; } }");
+  QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; int i5[5]; i5[i] = 1; } }");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -434,7 +434,7 @@ void TestDUChain::testDeclareFor()
   QVERIFY(forCtx->parentContext());
   QCOMPARE(forCtx->importedParentContexts().count(), 1);
   QCOMPARE(forCtx->childContexts().count(), 2);
-  QCOMPARE(forCtx->localDeclarations().count(), 0);
+  QCOMPARE(forCtx->localDeclarations().count(), 1);
   QVERIFY(forCtx->localScopeIdentifier().isEmpty());
 
   DUContext* forParamCtx = forCtx->importedParentContexts().first().data();
@@ -446,7 +446,7 @@ void TestDUChain::testDeclareFor()
 
   Declaration* defI = forParamCtx->localDeclarations().first();
   QCOMPARE(defI->identifier(), Identifier("i"));
-  QCOMPARE(defI->uses().count(), 3);
+  QCOMPARE(defI->uses().count(), 4);
 
   QCOMPARE(findDeclaration(forCtx, defI->identifier()), defI);
 

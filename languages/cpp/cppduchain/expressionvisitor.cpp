@@ -212,6 +212,7 @@ void ExpressionVisitor::parse( AST* ast ) {
   m_lastInstance = Instance();
   Q_ASSERT(ast->ducontext);
   visit(ast);
+  flushUse();
 }
 
 void ExpressionVisitor::problem( AST* node, const QString& str ) {
@@ -230,11 +231,7 @@ ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
   return m_lastInstance;
 }
 
-/** Find the member in the declaration's du-chain.
- *
- * @todo make this deal with klass->ParentClass::member
- * @todo make this deal with parent-classes
- **/
+/** Find the member in the declaration's du-chain. **/
 void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const QualifiedIdentifier& member, bool isConst, bool postProblem ) {
     
     ///have test
@@ -343,11 +340,12 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
           base = pnt->baseType();
           baseInstance = Instance(getDeclaration(node, base));
         } else {
-          findMember( node, base, QualifiedIdentifier("operator->") );
+          findMember( node, base, QualifiedIdentifier("operator->") ); ///@todo respect const
           if( !m_lastType ) {
             problem( node, "no overloaded operator-> found" );
             return;
           }
+          
           getReturnValue(node);
           if( !m_lastType ) {
             problem( node, "could not get return-type of operator->" );
@@ -358,9 +356,16 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
             clearLast();
             return;
           }
-          
+
           base = m_lastType;
           baseInstance = m_lastInstance;
+
+          if( !m_lastDeclarations.isEmpty() ) {
+            DeclarationPointer decl(m_lastDeclarations.first());
+            lock.unlock();
+            newUse( node, node->op, node->op+1, decl );
+          }
+          
           clearLast();
         }
       }
@@ -375,8 +380,12 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     findMember( node, base, nameC.identifier() );
     
-    if( m_lastType )
+    if( m_lastType ) {
+      if( !m_lastDeclarations.isEmpty() )
+        newUse( node, node->name->start_token, node->name->end_token, DeclarationPointer(m_lastDeclarations.first()) ); ///@todo Make safe
+      
       expressionType( node, m_lastType, m_lastInstance );
+    }
   }
 
 
@@ -428,9 +437,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     
-    m_lastType = 0;
-    m_lastInstance = Instance();
-    m_lastDeclarations.clear();
+    clearLast();
 
     NameCompiler nameC( m_session );
     nameC.run(node);
@@ -463,8 +470,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       if( !m_currentContext->url().equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
         line = column = -1;
       
-
-      ///@todo reenable(first make sure the conversion works properly)
       m_lastDeclarations = m_currentContext->findDeclarations( identifier, KTextEditor::Cursor(line, column) );
       if( m_lastDeclarations.isEmpty() ) {
         problem( node, QString("could not find declaration of %1").arg( nameC.identifier().toString() ) );
@@ -479,6 +484,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
           m_lastInstance = Instance( m_lastDeclarations.first() );
         else
           m_lastInstance = Instance(false);
+
+        if( !m_lastDeclarations.isEmpty() ) {
+          DeclarationPointer decl( m_lastDeclarations.first() );
+          lock.unlock();
+          kDebug() << "creating use for " << identifier.toString() << " at " << node->start_token << node->end_token;
+          newUse( node, node->start_token, node->end_token, decl );
+        }
       }
     }
     if( m_lastType )
@@ -1010,6 +1022,9 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
                 success = true;
                 m_lastType = function->returnType();
                 m_lastInstance = Instance(function->declaration());
+                
+                lock.unlock();
+                newUse( node, node->op, node->op+1, functions.first().function.declaration() );
               }else{
                 //Do not complain here, because we do not check for builtin operators
                 //problem(node, "No fitting operator. found" );
@@ -1058,6 +1073,10 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       {
         m_lastType = decls.first()->abstractType();
         m_lastInstance = Instance(false);
+
+        DeclarationPointer decl( decls.first() );
+        lock.unlock();
+        newUse( ast, ast->start_token, ast->end_token, decl );
       } else {
         problem(ast, "Resolved declaration is not a type");
       }
@@ -1380,10 +1399,17 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
         //Get return-value of operator*
         findMember(node, m_lastType, QualifiedIdentifier("operator*") );
         if( !m_lastType ) {
-          problem( node, "no overloaded operator-> found" );
+          problem( node, "no overloaded operator* found" );
           return;
         }
+        
         getReturnValue(node);
+        
+        if( !m_lastDeclarations.isEmpty() ) {
+          DeclarationPointer decl( m_lastDeclarations.first() );
+          lock.unlock();
+          newUse( node, node->op, node->op+1, decl );
+        }
       }
     }
     break;
@@ -1451,6 +1477,9 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
             if( functions.first().function.isViable() && function ) {
               m_lastType = function->returnType();
               m_lastInstance = Instance(true);
+
+              lock.unlock();
+              newUse( node, node->op, node->op+1, functions.first().function.declaration() );
             }else{
               problem(node, QString("Found no viable function"));
             }
@@ -1485,7 +1514,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     }
 
     m_lastType = f->returnType();
-    m_lastInstance = Instance(getDeclaration(node, m_lastType));
+    m_lastInstance = Instance(f->declaration());//Mark instances of function return-types with the function they were returned by
   }
   
   void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
@@ -1505,12 +1534,16 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     m_parameters.clear();
     //kDebug(9007) << "clearing parameters";
 
+    //Backup the current use and invalidate it, we will update and create it after overload-resolution
+    CurrentUse oldCurrentUse = m_currentUse;
+    m_currentUse.isValid = false;
+    
     clearLast();
     visit(node->arguments);
 
     //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
     if( m_lastType ) {
-      m_parameters << OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) );
+      m_parameters << OverloadResolver::Parameter( m_lastType.data(), isLValue( m_lastType, m_lastInstance ) );
       //LOCKDUCHAIN;
       //kDebug(9007) << "adding last parameter: " << (m_lastType.data() ? m_lastType->toString() : QString("<notype>"));
     }
@@ -1529,6 +1562,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
 
     if( !declarations.isEmpty() && declarations.first()->type<CppClassType>() && declarations.first()->kind() == Declaration::Type ) {
       //If a type was found, simply assume that it is constructed. We do not need more checks for it.
+      ///@todo resolve the constructor, so the code-flow is modeled better
       m_lastType = declarations.first()->abstractType();
       m_lastInstance = Instance(declarations.first());
       m_parameters = oldParams;
@@ -1572,7 +1606,6 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     m_parameters = oldParams;
     //kDebug(9007) << "Resetting old parameters of size " << oldParams.size();
     
-
     clearLast();
     
     CppFunctionType* functionType = dynamic_cast<CppFunctionType*>( chosenFunction->abstractType().data() );
@@ -1582,10 +1615,19 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       m_lastType = functionType->returnType();
       m_lastInstance = Instance(chosenFunction);
     }
+
+    //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.
+    DeclarationPointer decl(chosenFunction);
+    lock.unlock();
+    newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
+
+    if( m_lastType )
+      expressionType( node, m_lastType, m_lastInstance );
   }
   
   void ExpressionVisitor::visitSubscriptExpression(SubscriptExpressionAST* node)
   {
+    ///@todo create use
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     
     Instance masterInstance = m_lastInstance;
@@ -1600,8 +1642,12 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       LOCKDUCHAIN;
 
       //If the type the subscript-operator is applied on is a pointer, dereference it
-      if( dereferenceLastPointer(node) )
+      if( dereferenceLastPointer(node) ) {
+        //Make visit the sub-expression, so uses are built
+        lock.unlock();
+        visit(node->subscript);
         return;
+      }
     }
 
     clearLast();
@@ -1694,13 +1740,16 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
           }else{
             problem(node, QString("Found no viable function"));
           }
+
+          lock.unlock();
+          newUse( node, node->op, node->op+1, functions.first().function.declaration() );
         }else{
           //Do not complain here, because we do not check for builtin operators
           //problem(node, "No fitting operator. found" );
         }
       }
     }
-    
+
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }

@@ -206,29 +206,32 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   }
   private:
 
-    virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance instance )
-    {
-      std::size_t start = node->start_token, end = node->end_token;
-
-      if(start < m_lastEndToken)
-        start = m_lastEndToken;
-
-      if(start > end) {
-        //We are expecting the processing from left to right atm, which is not right. We should be more precise.
-        problem(node, QString("Use-range overlap, m_lastEndToken: %1 node-start: %2 node-end: %3" ).arg(m_lastEndToken).arg(node->start_token).arg(node->end_token));
-        return;
-      }
-
-      Declaration* decl = instance.declaration;
-      if(!decl && dynamic_cast<const IdentifiedType*>(type.data()))
-        decl = dynamic_cast<const IdentifiedType*>(type.data())->declaration();
-
-      if(type && !dynamic_cast<const IdentifiedType*>(type.data())) {
-        //Non-identified types do not have declarations, and can be integer-, string-literals, etc.
-      } else {
-        m_builder->newUse(start, end, decl);
-      }
+  virtual void usingDeclaration( AST* /*node*/, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl ) {
+      m_builder->newUse(start_token, end_token, decl.data());
     }
+//     virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance instance )
+//     {
+//       std::size_t start = node->start_token, end = node->end_token;
+// 
+//       if(start < m_lastEndToken)
+//         start = m_lastEndToken;
+// 
+//       if(start > end) {
+//         //We are expecting the processing from left to right atm, which is not right. We should be more precise.
+//         problem(node, QString("Use-range overlap, m_lastEndToken: %1 node-start: %2 node-end: %3" ).arg(m_lastEndToken).arg(node->start_token).arg(node->end_token));
+//         return;
+//       }
+// 
+//       Declaration* decl = instance.declaration;
+//       if(!decl && dynamic_cast<const IdentifiedType*>(type.data()))
+//         decl = dynamic_cast<const IdentifiedType*>(type.data())->declaration();
+// 
+//       if(!instance.declaration && type && !dynamic_cast<const IdentifiedType*>(type.data())) {
+//         //Non-identified types do not have declarations, and can be integer-, string-literals, etc.
+//       } else {
+//         m_builder->newUse(start, end, decl);
+//       }
+//     }
 
     virtual void problem(AST* node, const QString& str) {
       if(m_dumpProblems)

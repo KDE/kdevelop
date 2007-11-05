@@ -20,6 +20,7 @@
 #define EXPRESSIONVISITOR_H
 
 #include <typesystem.h>
+#include <duchain/declaration.h>
 #include "visitor.h"
 #include "cppexpressionparserexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */
@@ -103,6 +104,11 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
       Q_UNUSED(node) Q_UNUSED(type) Q_UNUSED(instance)
     }
 
+  /** The duchain is not locked when this is called */
+  virtual void usingDeclaration( AST* node, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl ) {
+    Q_UNUSED(node) Q_UNUSED(start_token) Q_UNUSED(end_token) Q_UNUSED(decl)
+    }
+  
     /** Called when there is a problem, with a string for that problem.
      * The default-implementation dumps all relevant information to
      * kdDebug.
@@ -112,6 +118,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     virtual void problem( AST* node, const QString& str );
 
   private:
+
     bool m_strict;
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
@@ -123,6 +130,35 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     //When a parameter could not be evaluated, this will hold a parameter with null-value type
     QList<OverloadResolver::Parameter> m_parameters;
 
+    /**
+     * Calls usingDeclaration(..) for any delayed uses, and registers a new use in m_currentUse.
+     * The whole sense of this thing is to allow updating an earlier created use in a later AST, like necessary because of overload-resolution.
+     * Must be called when the du-chain is not locked.
+     * */
+    void newUse( AST* node, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl ) {
+      flushUse();
+      m_currentUse.isValid = true;
+      m_currentUse.node = node;
+      m_currentUse.start_token = start_token;
+      m_currentUse.end_token = end_token;
+      m_currentUse.declaration = decl;
+    }
+
+    void flushUse() {
+      if( m_currentUse.isValid )
+        usingDeclaration( m_currentUse.node, m_currentUse.start_token, m_currentUse.end_token, m_currentUse.declaration );
+      m_currentUse.isValid = false;
+    }
+    
+    struct CurrentUse {
+      CurrentUse() : isValid(false), start_token(0), end_token(0) {
+      }
+      bool isValid;
+      AST* node;
+      size_t start_token, end_token;
+      KDevelop::DeclarationPointer declaration;
+    } m_currentUse; //This is used to temporarily delay the calling of usingDeclaration.
+  
     ParseSession* m_session;
     KDevelop::DUContext* m_currentContext;
 
