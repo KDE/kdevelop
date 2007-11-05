@@ -70,6 +70,9 @@ public:
   KDevelop::Declaration* declarationForObject(const KDevelop::DUChainBasePointer& pointer) const;
   KDevelop::Definition* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
 
+public Q_SLOTS:
+  void setFilterDocument(KDevelop::IDocument* document);
+
 public:
   virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
   virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
@@ -85,6 +88,8 @@ private Q_SLOTS:
 private:
   ClassBrowserPart* part() const;
 
+  void resetModel();
+  
   void contextAdded(Node* parent, KDevelop::DUContext* context);
 
   void addTopLevelToList(KDevelop::DUContext* context, QList<Node*>* list, Node* parent, bool first = true) const;
@@ -94,6 +99,7 @@ private:
 
   Node* pointer(KDevelop::DUChainBase* object) const;
   Node* createPointer(KDevelop::DUChainBase* object, Node* parent) const;
+  Node* createPointer(KDevelop::DUContext* context, Node* parent) const;
 
   static bool orderItems(ClassModel::Node* p1, ClassModel::Node* p2);
 
@@ -101,6 +107,8 @@ private:
   mutable QHash<KDevelop::DUChainBase*, Node*> m_knownObjects;
   mutable QHash<Node*, QList<Node*>* > m_lists;
   mutable QHash<KDevelop::QualifiedIdentifier, Node*> m_namespaces;
+
+  KDevelop::IDocument* m_filterDocument;
 };
 
 #endif

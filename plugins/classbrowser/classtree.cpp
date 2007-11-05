@@ -1,7 +1,8 @@
 /*
  * KDevelop Class viewer
  *
- * Copyright (c) 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright (c) 2006-2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2006 Adam Treat <treat@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -25,6 +26,10 @@
 #include <QMenu>
 #include <QCursor>
 #include <QContextMenuEvent>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QToolButton>
 
 #include <klocale.h>
 
@@ -45,13 +50,82 @@
 
 using namespace KDevelop;
 
+ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPart* part)
+  : QWidget(parent)
+  , m_part(part)
+  , m_tree(new ClassTree(this, part))
+  , m_currentMode(ModeNone)
+{
+  setObjectName("Class Browser Tree");
+  setWindowTitle(i18n("Class Browser"));
+
+  QFrame *toolBar = new QFrame( this );
+  toolBar->setFrameShape( QFrame::StyledPanel );
+  toolBar->setFrameShadow( QFrame::Raised );
+
+  QToolButton *mode = new QToolButton( toolBar );
+  mode->setText( i18n( "Mode" ) );
+  mode->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
+  mode->setArrowType( Qt::DownArrow );
+  mode->setPopupMode( QToolButton::InstantPopup );
+  QMenu *modeMenu = new QMenu( i18n( "Mode" ) );
+  QActionGroup* ag = new QActionGroup(modeMenu);
+  ag->setExclusive(true);
+  QAction *currentdoc = ag->addAction( i18n( "&Current Document" ) );
+  currentdoc->setData(ModeCurrentDocument);
+  currentdoc->trigger();
+  QAction* project = ag->addAction( i18n( "&Project" ) );
+  project->setData(ModeProject);
+  QAction* all = ag->addAction( i18n( "&All" ) );
+  all->setData(ModeAll);
+  modeMenu->addActions(ag->actions());
+  mode->setMenu( modeMenu );
+
+  connect( ag, SIGNAL( triggered(QAction*) ), this, SLOT( setMode(QAction*) ) );
+
+  QToolButton *filter = new QToolButton( toolBar );
+  filter->setText( i18n( "Filter" ) );
+  filter->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
+  filter->setArrowType( Qt::DownArrow );
+  filter->setPopupMode( QToolButton::InstantPopup );
+  QMenu *filterMenu = new QMenu( i18n( "Filter" ) );
+
+  /*QMap<QString, int> kindFilterList = model()->kindFilterList();
+  QMap<QString, int>::ConstIterator kind = kindFilterList.begin();
+  for ( ; kind != kindFilterList.end(); ++kind )
+  {
+      QAction *action = filterMenu->addAction( kind.key() );
+      action->setData( kind.value() );
+      action->setCheckable( true );
+      connect( action, SIGNAL( triggered() ), this, SLOT( filterKind() ) );
+  }*/
+  filter->setMenu( filterMenu );
+
+  QHBoxLayout *hbox = new QHBoxLayout( toolBar );
+  //hbox->setMargin( 2 );
+  hbox->addWidget( mode );
+  hbox->addWidget( filter );
+  hbox->addStretch( 1 );
+
+  toolBar->setLayout( hbox );
+
+  QVBoxLayout* vbox = new QVBoxLayout(this);
+  vbox->addWidget( toolBar );
+  vbox->addWidget( m_tree );
+  setLayout( vbox );
+
+  setWhatsThis( i18n( "Code View" ) );
+}
+
+ClassWidget::~ClassWidget()
+{
+}
+
 ClassTree::ClassTree(QWidget* parent, ClassBrowserPart* part)
   : QTreeView(parent)
   , m_part(part)
 {
-  setObjectName("Class Browser Tree");
-  setWindowTitle(i18n("Class Browser"));
-  setModel(m_part->model());
+  setModel(model());
   header()->hide();
 
   connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
@@ -61,9 +135,42 @@ ClassTree::~ClassTree()
 {
 }
 
+ClassModel* ClassWidget::model()
+{
+  return m_part->model();
+}
+
 ClassModel* ClassTree::model()
 {
   return m_part->model();
+}
+
+void ClassWidget::setMode(QAction* action)
+{
+  Modes newMode = static_cast<Modes>(action->data().toInt());
+
+  if (newMode != m_currentMode) {
+    switch (m_currentMode) {
+      case ModeCurrentDocument:
+        model()->setFilterDocument(0L);
+        disconnect(m_part->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
+        break;
+
+      default:
+        break;
+    }
+
+    m_currentMode = newMode;
+
+    switch (m_currentMode) {
+      case ModeCurrentDocument:
+        model()->setFilterDocument(m_part->core()->documentController()->activeDocument());
+        connect(m_part->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 void ClassTree::contextMenuEvent(QContextMenuEvent* e)

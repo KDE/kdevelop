@@ -28,6 +28,7 @@
 #include "duchain.h"
 #include "classmemberdeclaration.h"
 #include "typesystem.h"
+#include "kiconloader.h"
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -115,60 +116,87 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
   return p;
 }
 
-KIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
+QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
 {
+  // HACK HACK HACK workaround KIconLoader bug
+
+  static QString allIconNames = "CVprotected_var CVprivate_var protected_union protected_enum private_struct CVprotected_slot private_enum CVprotected_signal CVprivate_slot protected_class private_class private_union protected_function private_function signal CVpublic_var enum class CVpublic_slot union typedef function struct protected_field private_field field";
+
+  static QMap<QString, QIcon> icons;
+
+  if (icons.isEmpty())
+    foreach( QString iconName, allIconNames.split(" ") )
+      icons.insert(iconName, KIconLoader::global()->loadIcon(iconName, KIconLoader::Small));
+
   QString iconName;
 
   if( (p & CodeCompletionModel::Variable) )
-    iconName = "CVprotected_var";
-  else if( (p & CodeCompletionModel::Variable) && (p & CodeCompletionModel::Protected) )
-    iconName = "CVprotected_var";
-  else if( (p & CodeCompletionModel::Variable) && (p & CodeCompletionModel::Private) )
-    iconName = "CVprivate_var";
+    if( (p & CodeCompletionModel::Protected) )
+      iconName = "CVprotected_var";
+    else if( p & CodeCompletionModel::Private )
+      iconName = "CVprivate_var";
+    else
+      iconName = "CVpublic_var";
+
   else if( (p & CodeCompletionModel::Union) && (p & CodeCompletionModel::Protected) )
     iconName = "protected_union";
-  else if( (p & CodeCompletionModel::Enum) && (p & CodeCompletionModel::Protected) )
-    iconName = "protected_enum";
-  else if( (p & CodeCompletionModel::Struct) && (p & CodeCompletionModel::Private) )
-    iconName = "private_struct";
-  else if( (p & CodeCompletionModel::Slot) && (p & CodeCompletionModel::Protected) )
-    iconName = "CVprotected_slot";
-  else if( (p & CodeCompletionModel::Enum) && (p & CodeCompletionModel::Private) )
-    iconName = "private_enum";
-  else if( (p & CodeCompletionModel::Signal) && (p & CodeCompletionModel::Protected) )
-    iconName = "CVprotected_signal";
-  else if( (p & CodeCompletionModel::Slot) && (p & CodeCompletionModel::Private) )
-    iconName = "CVprivate_slot";
-  else if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Protected) )
-    iconName = "protected_class";
-  else if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Private) )
-    iconName = "private_class";
-  else if( (p & CodeCompletionModel::Union) && (p & CodeCompletionModel::Private) )
-    iconName = "private_union";
-  else if( (p & CodeCompletionModel::TypeAlias) && ((p & CodeCompletionModel::Const) /*||  (p & CodeCompletionModel::Volatile)*/) )
-    iconName = "CVtypedef";
-  else if( (p & CodeCompletionModel::Function) && (p & CodeCompletionModel::Protected) )
-    iconName = "protected_function";
-  else if( (p & CodeCompletionModel::Function) && (p & CodeCompletionModel::Private) )
-    iconName = "private_function";
-  else if( p & CodeCompletionModel::Signal )
-    iconName = "signal";
-  else if( p & CodeCompletionModel::Variable )
-    iconName = "CVpublic_var";
+
   else if( p & CodeCompletionModel::Enum )
-    iconName = "enum";
-  else if( p & CodeCompletionModel::Class )
-    iconName = "class";
-  else if( p & CodeCompletionModel::Slot )
-    iconName = "CVpublic_slot";
-  else if( p & CodeCompletionModel::Union )
-    iconName = "union";
-  else if( p & CodeCompletionModel::TypeAlias )
-    iconName = "typedef";
-  else if( p & CodeCompletionModel::Function )
-    iconName = "function";
+    if( p & CodeCompletionModel::Protected )
+      iconName = "protected_enum";
+    else if( p & CodeCompletionModel::Private )
+      iconName = "private_enum";
+    else
+      iconName = "enum";
+
   else if( p & CodeCompletionModel::Struct )
-    iconName = "struct";
+    if( p & CodeCompletionModel::Private )
+      iconName = "private_struct";
+    else
+      iconName = "struct";
+
+  else if( p & CodeCompletionModel::Slot )
+    if( p & CodeCompletionModel::Protected )
+      iconName = "CVprotected_slot";
+    else if( p & CodeCompletionModel::Private )
+      iconName = "CVprivate_slot";
+    else
+      iconName = "CVpublic_slot";
+
+  else if( p & CodeCompletionModel::Signal )
+    if( p & CodeCompletionModel::Protected )
+      iconName = "CVprotected_signal";
+    else
+      iconName = "signal";
+
+  else if( p & CodeCompletionModel::Class )
+    if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Protected) )
+      iconName = "protected_class";
+    else if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Private) )
+      iconName = "private_class";
+    else
+      iconName = "class";
+
+  else if( p & CodeCompletionModel::Union )
+    if( p & CodeCompletionModel::Private )
+      iconName = "private_union";
+    else
+      iconName = "union";
+
+  else if( p & CodeCompletionModel::TypeAlias )
+    if ((p & CodeCompletionModel::Const) /*||  (p & CodeCompletionModel::Volatile)*/)
+      iconName = "CVtypedef";
+    else
+      iconName = "typedef";
+
+  else if( p & CodeCompletionModel::Function )
+    if( p & CodeCompletionModel::Protected )
+      iconName = "protected_function";
+    else if( p & CodeCompletionModel::Private )
+      iconName = "private_function";
+    else
+      iconName = "function";
+
   else if( p & CodeCompletionModel::Protected )
     iconName = "protected_field";
   else if( p & CodeCompletionModel::Private )
@@ -176,10 +204,10 @@ KIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
   else
     iconName = "field";
 
-  return KIcon(iconName);
+  return icons[iconName];
 }
 
-KIcon DUChainUtils::iconForDeclaration(Declaration* dec)
+QIcon DUChainUtils::iconForDeclaration(Declaration* dec)
 {
   return iconForProperties(completionProperties(dec));
 }

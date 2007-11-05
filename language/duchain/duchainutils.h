@@ -34,8 +34,8 @@ class Declaration;
 
 namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::CodeCompletionModel::CompletionProperties completionProperties(Declaration* dec);
-  KDEVPLATFORMLANGUAGE_EXPORT KIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
-  KDEVPLATFORMLANGUAGE_EXPORT KIcon iconForDeclaration(Declaration* dec);
+  KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
+  KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(Declaration* dec);
 }
 
 }

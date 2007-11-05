@@ -34,6 +34,33 @@ namespace KDevelop {
  class IDocument;
 }
 
+class ClassWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  ClassWidget(QWidget* parent, ClassBrowserPart* part);
+  virtual ~ClassWidget();
+
+  class ClassModel* model();
+
+  enum Modes {
+    ModeCurrentDocument,
+    ModeProject,
+    ModeAll,
+    ModeNone // special, for startup only
+  };
+
+private Q_SLOTS:
+  void setMode(QAction* action);
+
+private:
+  ClassBrowserPart* m_part;
+
+  class ClassTree* m_tree;
+  Modes m_currentMode;
+};
+
 class ClassTree : public QTreeView
 {
   Q_OBJECT
@@ -42,7 +69,7 @@ public:
   ClassTree(QWidget* parent, ClassBrowserPart* part);
   virtual ~ClassTree();
 
-  class ClassModel* model();
+  ClassModel* model();
 
 protected:
   virtual void contextMenuEvent(QContextMenuEvent* e);

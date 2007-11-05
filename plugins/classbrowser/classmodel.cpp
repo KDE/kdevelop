@@ -49,6 +49,7 @@ using namespace KDevelop;
 ClassModel::ClassModel(ClassBrowserPart* parent)
   : QAbstractItemModel(parent)
   , m_topList(0L)
+  , m_filterDocument(0L)
 {
   //new ModelTest(this);
 
@@ -65,6 +66,27 @@ ClassModel::~ClassModel()
   delete m_topList;
   qDeleteAll(m_lists);
   qDeleteAll(m_knownObjects);
+}
+
+void ClassModel::resetModel()
+{
+  delete m_topList;
+  m_topList = 0L;
+  qDeleteAll(m_lists);
+  m_lists.clear();
+  qDeleteAll(m_knownObjects);
+  m_knownObjects.clear();
+  m_namespaces.clear();
+
+  reset();
+}
+
+void ClassModel::setFilterDocument(KDevelop::IDocument* document)
+{
+  if (m_filterDocument != document) {
+    m_filterDocument = document;
+    resetModel();
+  }
 }
 
 int ClassModel::columnCount(const QModelIndex & parent) const
@@ -248,23 +270,26 @@ QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
 
 void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node* parent, bool first) const
 {
-  foreach (DUContext* child, context->childContexts())
+  foreach (DUContext* child, context->childContexts()) {
+    if (m_filterDocument && child->url() != m_filterDocument->url())
+      continue;
+
     switch (child->type()) {
       case DUContext::Class:
         if (child->owner())
           list->append(createPointer(child, parent));
         break;
 
-      /*case DUContext::Namespace: {
+      case DUContext::Namespace: {
         Node* ns;
         if (m_namespaces.contains(child->scopeIdentifier())) {
-          kDebug() << "Found namespace" << child->scopeIdentifier().toString() << ", adding to items";
           ns = m_namespaces[child->scopeIdentifier()];
+
+          if (list->contains(ns))
+            break;
 
         } else {
           ns = createPointer(child, parent);
-          m_namespaces.insert(child->scopeIdentifier(), ns);
-          kDebug() << "New namespace" << child->scopeIdentifier().toString();
         }
 
         // FIXME must emit changes here??
@@ -274,19 +299,22 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
           list->append(ns);
 
         break;
-      }*/
+      }
 
       default:
         addTopLevelToList(child, list, parent, false);
         break;
     }
+  }
 
   if (first) {
     foreach (Declaration* declaration, context->localDeclarations())
-      list->append(createPointer(declaration, parent));
+      if (!m_filterDocument || declaration->url() == m_filterDocument->url())
+        list->append(createPointer(declaration, parent));
 
     foreach (Definition* definition, context->localDefinitions())
-      list->append(createPointer(definition, parent));
+      if (!m_filterDocument || definition->url() == m_filterDocument->url())
+        list->append(createPointer(definition, parent));
   }
 }
 
@@ -317,7 +345,20 @@ void ClassModel::branchAdded(DUContextPointer context)
 
 void ClassModel::contextAdded(Node* parent, DUContext* context)
 {
+  if (parent && !m_lists.contains(parent))
+    // The parent node is not yet discovered, it will be figured out later if needed
+    return;
+
+  if (m_filterDocument && context->url() != m_filterDocument->url())
+    return;
+
   if ((context->type() == DUContext::Class && context->owner()) || context->type() == DUContext::Namespace) {
+    if (context->type() == DUContext::Namespace) {
+      if (m_namespaces.contains(context->scopeIdentifier()))
+        // This namespace is already known
+        return;
+    }
+
     QList<Node*>* list = childItems(parent);
     if (!list) {
       kWarning() << "Could not find list of child objects for" << parent;
@@ -325,7 +366,7 @@ void ClassModel::contextAdded(Node* parent, DUContext* context)
     }
 
     Node* contextPointer = createPointer(context, parent);
-    
+
     QList<Node*>::Iterator it = qUpperBound(list->begin(), list->end(), contextPointer, orderItems);
 
     int index = 0;
@@ -350,6 +391,20 @@ ClassModel::Node* ClassModel::pointer(DUChainBase* object) const
     ret = m_knownObjects[object];
 
   return ret;
+}
+
+ClassModel::Node* ClassModel::createPointer(DUContext* context, Node* parent) const
+{
+  if (context->type() == DUContext::Namespace) {
+    Q_ASSERT(!m_namespaces.contains(context->scopeIdentifier()));
+
+    Node* n = createPointer(static_cast<DUChainBase*>(context), parent);
+    m_namespaces.insert(context->scopeIdentifier(), n);
+
+    return n;
+  }
+
+  return createPointer(static_cast<DUChainBase*>(context), parent);
 }
 
 ClassModel::Node* ClassModel::createPointer(DUChainBase* object, Node* parent) const
@@ -399,16 +454,16 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
             switch (role) {
               case Qt::DisplayRole:
                 return definition->declaration()->identifier().toString();
-              //case Qt::DecorationRole:
-                //return DUChainUtils::iconForDeclaration(definition->declaration());
+              case Qt::DecorationRole:
+                return DUChainUtils::iconForDeclaration(definition->declaration());
             }
 
           } else if (Declaration* declaration = context->owner()->asDeclaration()) {
             switch (role) {
               case Qt::DisplayRole:
                 return declaration->identifier().toString();
-              //case Qt::DecorationRole:
-                //return DUChainUtils::iconForDeclaration(declaration);
+              case Qt::DecorationRole:
+                return DUChainUtils::iconForDeclaration(declaration);
             }
           }
         }
@@ -417,8 +472,8 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
         switch (role) {
           case Qt::DisplayRole:
             return context->localScopeIdentifier().toString();
-          //case Qt::DecorationRole:
-            //return KIcon("namespace");
+          case Qt::DecorationRole:
+            return KIcon("namespace");
         }
     }
 
@@ -430,16 +485,19 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
           ret += type->toString(FunctionType::SignatureArguments);
         return ret;
       }
-      //case Qt::DecorationRole:
-        //return DUChainUtils::iconForDeclaration(dec);
+      case Qt::DecorationRole:
+        return DUChainUtils::iconForDeclaration(dec);
     }
 
   } else if (Definition* def = dynamic_cast<Definition*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
-        return def->declaration()->identifier().toString();
-      //case Qt::DecorationRole:
-        //return DUChainUtils::iconForDeclaration(def->declaration());
+        if (def->declaration())
+          return def->declaration()->identifier().toString();
+        else
+          return i18n("<No declaration for definition>");
+      case Qt::DecorationRole:
+        return DUChainUtils::iconForDeclaration(def->declaration());
     }
 
   } else {
@@ -451,48 +509,6 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
 
   return QVariant();
 }
-
-/*void ClassModel::contextChanged(DUContextPointer context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, Node relatedObject)
-{
-  Q_UNUSED(change);
-  Q_UNUSED(relationship);
-  Q_UNUSED(relatedObject);
-
-  DUChainReadLocker readLock(DUChain::lock());
-
-  switch (change) {
-    case DUChainObserver::Deletion:
-    case DUChainObserver::Removal: {
-      int i = 0;
-      foreach (Node* base, m_topObjects) {
-        if (*base == relatedObject) {
-          beginRemoveRows(QModelIndex(), i, i);
-          delete m_topObjects.takeAt(i);
-          endRemoveRows();
-          break;
-        }
-        ++i;
-      }
-      break;
-    }
-
-    case DUChainObserver::Change:
-      break;
-
-    case DUChainObserver::Addition:
-      if (DUContext* newContext = dynamic_cast<DUContext*>(relatedObject.data())) {
-        if (newContext->type() == DUContext::Class && newContext->owner()) {
-          beginInsertRows(QModelIndex(), m_topObjects.count(), m_topObjects.count());
-          Node* bp = new Node(relatedObject);
-          m_knownObjects.insert(relatedObject.data(), bp);
-          m_topObjects.append(bp);
-          endInsertRows();
-        }
-      }
-      break;
-  }
-}
-*/
 
 Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer) const
 {

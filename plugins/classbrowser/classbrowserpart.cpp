@@ -43,7 +43,7 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    return new ClassTree(parent, m_part);
+    return new ClassWidget(parent, m_part);
   }
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
