@@ -239,29 +239,52 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
   QString s1, s2;
 
   if (DUContext* d = dynamic_cast<DUContext*>(p1->data())) {
+    if (dynamic_cast<Declaration*>(p2->data()))
+      return true;
+
+    if (dynamic_cast<Definition*>(p2->data()))
+      return true;
+
+    if (DUContext* d2 = dynamic_cast<DUContext*>(p2->data())) {
+      if (d2->type() != d->type())
+        if (d->type() == DUContext::Namespace)
+          return true;
+        else
+          return false;
+    }
+
     if (d->owner())
       if (Definition* definition = d->owner()->asDefinition()) {
-        s1 = definition->declaration()->identifier().toString();
+        if (Declaration* declaration = definition->asDeclaration())
+          s1 = declaration->identifier().toString();
 
       } else if (Declaration* declaration = d->owner()->asDeclaration()) {
         s1 = declaration->identifier().toString();
       }
 
   } else if (Declaration* d = dynamic_cast<Declaration*>(p1->data())) {
+    if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
+      return false;
+
     s1 = d->identifier().toString();
 
   } else if (Definition* d = dynamic_cast<Definition*>(p1->data())) {
+    if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
+      return false;
+
     s1 = d->declaration()->identifier().toString();
   }
 
   if (DUContext* d = dynamic_cast<DUContext*>(p2->data())) {
     if (d->owner())
       if (Definition* definition = d->owner()->asDefinition()) {
-        s2 = definition->declaration()->identifier().toString();
+        if (Declaration* declaration = definition->asDeclaration())
+          s2 = declaration->identifier().toString();
 
       } else if (Declaration* declaration = d->owner()->asDeclaration()) {
         s2 = declaration->identifier().toString();
       }
+
   } else if (Declaration* d = dynamic_cast<Declaration*>(p2->data())) {
     s2 = d->identifier().toString();
 
@@ -298,7 +321,7 @@ QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
       addTopLevelToList(chain, list, parent);
   }
 
-  //qSort(list->begin(), list->end(), orderItems);
+  qSort(list->begin(), list->end(), orderItems);
 
   if (!parent)
     m_topList = list;
@@ -393,16 +416,16 @@ void ClassModel::contextAdded(Node* parent, DUContext* context)
     return;
 
   if ((context->type() == DUContext::Class && context->owner()) || context->type() == DUContext::Namespace) {
-    if (context->type() == DUContext::Namespace) {
-      if (m_namespaces.contains(context->scopeIdentifier()))
-        // This namespace is already known
-        return;
-    }
-
     QList<Node*>* list = childItems(parent);
     if (!list) {
       kWarning() << "Could not find list of child objects for" << parent;
       return;
+    }
+
+    if (context->type() == DUContext::Namespace) {
+      if (m_namespaces.contains(context->scopeIdentifier()))
+        // This namespace is already known
+        return;
     }
 
     Node* contextPointer = createPointer(context, parent);
