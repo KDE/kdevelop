@@ -236,8 +236,6 @@ QModelIndex ClassModel::parent(const QModelIndex & index) const
 
 bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
 {
-  QString s1, s2;
-
   if (DUContext* d = dynamic_cast<DUContext*>(p1->data())) {
     if (dynamic_cast<Declaration*>(p2->data()))
       return true;
@@ -253,46 +251,19 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
           return false;
     }
 
-    if (d->owner())
-      if (Definition* definition = d->owner()->asDefinition()) {
-        if (Declaration* declaration = definition->asDeclaration())
-          s1 = declaration->identifier().toString();
-
-      } else if (Declaration* declaration = d->owner()->asDeclaration()) {
-        s1 = declaration->identifier().toString();
-      }
-
   } else if (Declaration* d = dynamic_cast<Declaration*>(p1->data())) {
     if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
       return false;
 
-    s1 = d->identifier().toString();
-
   } else if (Definition* d = dynamic_cast<Definition*>(p1->data())) {
     if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
       return false;
-
-    s1 = d->declaration()->identifier().toString();
   }
 
-  if (DUContext* d = dynamic_cast<DUContext*>(p2->data())) {
-    if (d->owner())
-      if (Definition* definition = d->owner()->asDefinition()) {
-        if (Declaration* declaration = definition->asDeclaration())
-          s2 = declaration->identifier().toString();
+  QString s1 = ClassModel::data(p1).toString();
+  QString s2 = ClassModel::data(p2).toString();
 
-      } else if (Declaration* declaration = d->owner()->asDeclaration()) {
-        s2 = declaration->identifier().toString();
-      }
-
-  } else if (Declaration* d = dynamic_cast<Declaration*>(p2->data())) {
-    s2 = d->identifier().toString();
-
-  } else if (Definition* d = dynamic_cast<Definition*>(p2->data())) {
-    s2 = d->declaration()->identifier().toString();
-  }
-
-  return QString::localeAwareCompare(s1, s2);
+  return QString::localeAwareCompare(s1, s2) < 0;
 }
 
 QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
@@ -435,6 +406,8 @@ void ClassModel::contextAdded(Node* parent, DUContext* context)
     int index = 0;
     if (it != list->end())
       index = list->indexOf(*it);
+    else
+      index = list->count();
 
     beginInsertRows(QModelIndex(), index, index);
     list->insert(index, contextPointer);
@@ -499,13 +472,15 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
   if (!index.isValid())
     return QVariant();
 
+  Node* basep = objectForIndex(index);
+  return data(basep, role);
+}
+
+QVariant ClassModel::data(Node* node, int role)
+{
   DUChainReadLocker readLock(DUChain::lock());
 
-  Node* basep = objectForIndex(index);
-  if (!basep)
-    return QVariant();
-
-  DUChainBase* base = basep->data();
+  DUChainBase* base = node->data();
   if (!base)
     return QVariant();
 
@@ -573,6 +548,7 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
 
   return QVariant();
 }
+
 
 Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer) const
 {

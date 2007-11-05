@@ -91,6 +91,8 @@ private:
   ClassBrowserPart* part() const;
 
   void resetModel();
+
+  static QVariant data(Node* node, int role = Qt::DisplayRole);
   
   void contextAdded(Node* parent, KDevelop::DUContext* context);
 
