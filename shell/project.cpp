@@ -178,7 +178,7 @@ const KUrl& Project::folder() const
 
 bool Project::open( const KUrl& projectFileUrl )
 {
-    KIO::StatJob* statJob = KIO::stat( projectFileUrl );
+    KIO::StatJob* statJob = KIO::stat( projectFileUrl, KIO::HideProgressInfo );
     if ( !statJob->exec() ) //be sync for right now
     {
         KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
@@ -192,11 +192,11 @@ bool Project::open( const KUrl& projectFileUrl )
                                   + ".kdev4/"
                                   + projectFileUrl.fileName() );
 
-    statJob = KIO::stat( d->developerFileUrl );
+    statJob = KIO::stat( d->developerFileUrl, KIO::HideProgressInfo );
     if( !statJob->exec() )
     {
         KUrl dir = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) + ".kdev4");
-        statJob = KIO::stat( dir );
+        statJob = KIO::stat( dir, KIO::HideProgressInfo );
         if( !statJob->exec() )
         {
             KIO::SimpleJob* mkdirJob = KIO::mkdir( dir );
@@ -222,7 +222,7 @@ bool Project::open( const KUrl& projectFileUrl )
 
     }
 
-    statJob = KIO::stat( d->developerFileUrl );
+    statJob = KIO::stat( d->developerFileUrl, KIO::HideProgressInfo );
     if( !statJob->exec() || !KIO::NetAccess::download( d->developerFileUrl, d->developerTempFile,
             Core::self()->uiController()->activeMainWindow() ) )
     {
