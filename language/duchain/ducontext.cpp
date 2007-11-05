@@ -55,12 +55,15 @@ DUContextPrivate::DUContextPrivate( DUContext* d)
 }
 
 bool DUContextPrivate::isThisImportedBy(const DUContext* context) const {
+  if( this == context->d )
+    return true;
+  
   foreach( const DUContext* ctx, m_importedChildContexts ) {
     if( ctx->d->isThisImportedBy(context) )
       return true;
   }
   
-  return this == context->d;
+  return false;
 }
 
 void DUContextPrivate::addUse(Use* use)
