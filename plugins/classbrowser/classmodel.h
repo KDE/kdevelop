@@ -70,6 +70,8 @@ public:
   KDevelop::Declaration* declarationForObject(const KDevelop::DUChainBasePointer& pointer) const;
   KDevelop::Definition* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
 
+  void setFilterByProject(bool filterByProject);
+  
 public Q_SLOTS:
   void setFilterDocument(KDevelop::IDocument* document);
 
@@ -101,14 +103,19 @@ private:
   Node* createPointer(KDevelop::DUChainBase* object, Node* parent) const;
   Node* createPointer(KDevelop::DUContext* context, Node* parent) const;
 
+  // returns true if object should not be displayed
+  bool filterObject(KDevelop::DUChainBase* object) const;
+
   static bool orderItems(ClassModel::Node* p1, ClassModel::Node* p2);
 
   mutable QList<Node*>* m_topList;
   mutable QHash<KDevelop::DUChainBase*, Node*> m_knownObjects;
   mutable QHash<Node*, QList<Node*>* > m_lists;
   mutable QHash<KDevelop::QualifiedIdentifier, Node*> m_namespaces;
+  mutable QMap<KUrl, bool> m_inProject;
 
   KDevelop::IDocument* m_filterDocument;
+  bool m_filterProject;
 };
 
 #endif

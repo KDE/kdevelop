@@ -54,7 +54,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPart* part)
   : QWidget(parent)
   , m_part(part)
   , m_tree(new ClassTree(this, part))
-  , m_currentMode(ModeNone)
+  , m_currentMode(ModeProject)
 {
   setObjectName("Class Browser Tree");
   setWindowTitle(i18n("Class Browser"));
@@ -73,9 +73,9 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPart* part)
   ag->setExclusive(true);
   QAction *currentdoc = ag->addAction( i18n( "&Current Document" ) );
   currentdoc->setData(ModeCurrentDocument);
-  currentdoc->trigger();
   QAction* project = ag->addAction( i18n( "&Project" ) );
   project->setData(ModeProject);
+  project->trigger();
   QAction* all = ag->addAction( i18n( "&All" ) );
   all->setData(ModeAll);
   modeMenu->addActions(ag->actions());
@@ -156,6 +156,10 @@ void ClassWidget::setMode(QAction* action)
         disconnect(m_part->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
         break;
 
+      case ModeProject:
+        model()->setFilterByProject(false);
+        break;
+
       default:
         break;
     }
@@ -167,6 +171,11 @@ void ClassWidget::setMode(QAction* action)
         model()->setFilterDocument(m_part->core()->documentController()->activeDocument());
         connect(m_part->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
         break;
+
+      case ModeProject:
+        model()->setFilterByProject(true);
+        break;
+
       default:
         break;
     }

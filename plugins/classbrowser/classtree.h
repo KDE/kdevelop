@@ -47,8 +47,7 @@ public:
   enum Modes {
     ModeCurrentDocument,
     ModeProject,
-    ModeAll,
-    ModeNone // special, for startup only
+    ModeAll
   };
 
 private Q_SLOTS:

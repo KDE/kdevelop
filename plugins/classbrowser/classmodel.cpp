@@ -29,6 +29,9 @@
 #include "idocument.h"
 #include "icore.h"
 #include "ilanguagecontroller.h"
+#include "iprojectcontroller.h"
+#include "iproject.h"
+
 #include "backgroundparser/backgroundparser.h"
 #include "backgroundparser/parsejob.h"
 
@@ -50,6 +53,7 @@ ClassModel::ClassModel(ClassBrowserPart* parent)
   : QAbstractItemModel(parent)
   , m_topList(0L)
   , m_filterDocument(0L)
+  , m_filterProject(true)
 {
   //new ModelTest(this);
 
@@ -84,9 +88,45 @@ void ClassModel::resetModel()
 void ClassModel::setFilterDocument(KDevelop::IDocument* document)
 {
   if (m_filterDocument != document) {
+    m_filterProject = false;
     m_filterDocument = document;
     resetModel();
   }
+}
+
+void ClassModel::setFilterByProject(bool filterByProject)
+{
+  if (m_filterProject != filterByProject) {
+    m_filterProject = filterByProject;
+    resetModel();
+  }
+}
+
+bool ClassModel::filterObject(DUChainBase* object) const
+{
+  if (m_filterDocument)
+    return m_filterDocument && object->url() != m_filterDocument->url();
+
+  if (m_filterProject) {
+    if (m_inProject.contains(object->url()))
+      return m_inProject[object->url()];
+
+    bool ret = !part()->core()->projectController()->findProjectForUrl(object->url());
+
+    if (ret)
+      foreach (IProject* project,  part()->core()->projectController()->projects()) {
+        if (project->folder().isParentOf(object->url())) {
+          ret = false;
+          break;
+        }
+      }
+
+    //kDebug() << "Is file" << object->url().prettyUrl() << "in a project?" << !ret;
+    m_inProject.insert(object->url(), ret);
+    return ret;
+  }
+
+  return false;
 }
 
 int ClassModel::columnCount(const QModelIndex & parent) const
@@ -271,7 +311,7 @@ QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
 void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node* parent, bool first) const
 {
   foreach (DUContext* child, context->childContexts()) {
-    if (m_filterDocument && child->url() != m_filterDocument->url())
+    if (filterObject(child))
       continue;
 
     switch (child->type()) {
@@ -309,11 +349,11 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
 
   if (first) {
     foreach (Declaration* declaration, context->localDeclarations())
-      if (!m_filterDocument || declaration->url() == m_filterDocument->url())
+      if (!filterObject(declaration))
         list->append(createPointer(declaration, parent));
 
     foreach (Definition* definition, context->localDefinitions())
-      if (!m_filterDocument || definition->url() == m_filterDocument->url())
+      if (!filterObject(definition))
         list->append(createPointer(definition, parent));
   }
 }
@@ -349,7 +389,7 @@ void ClassModel::contextAdded(Node* parent, DUContext* context)
     // The parent node is not yet discovered, it will be figured out later if needed
     return;
 
-  if (m_filterDocument && context->url() != m_filterDocument->url())
+  if (filterObject(context))
     return;
 
   if ((context->type() == DUContext::Class && context->owner()) || context->type() == DUContext::Namespace) {
@@ -497,7 +537,8 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
         else
           return i18n("<No declaration for definition>");
       case Qt::DecorationRole:
-        return DUChainUtils::iconForDeclaration(def->declaration());
+        if (def->declaration())
+          return DUChainUtils::iconForDeclaration(def->declaration());
     }
 
   } else {
