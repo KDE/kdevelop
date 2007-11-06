@@ -24,6 +24,8 @@
 #include <kgenericfactory.h>
 
 #include "projectconfig.h"
+#include "core.h"
+#include "projectcontroller.h"
 
 #include "ui_projectsettings.h"
 
@@ -56,6 +58,8 @@ ProjectPreferences::~ProjectPreferences( )
 void ProjectPreferences::save()
 {
     KCModule::save();
+
+    Core::self()->projectControllerInternal()->loadSettings(false);
 }
 
 void ProjectPreferences::load()

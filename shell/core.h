@@ -23,7 +23,6 @@
 #include <shellexport.h>
 #include <icore.h>
 
-
 namespace KDevelop {
 
 class UiController;

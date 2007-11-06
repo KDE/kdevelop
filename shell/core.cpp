@@ -117,6 +117,7 @@ Core::~Core()
 
 void Core::cleanup()
 {
+    d->projectController->cleanup();
     d->pluginController->cleanup();
 }
 

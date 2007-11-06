@@ -61,9 +61,9 @@ class ProjectControllerPrivate
 public:
     QList<IProject*> m_projects;
     QMap< IProject*, QList<IPlugin*> > m_projectPlugins;
-    QMap< IProject*, QAction* > m_configActions;
+    QMap< IProject*, QPointer<QAction> > m_configActions;
     IPlugin* m_projectPart;
-    KRecentFilesAction *m_recentAction;
+    QPointer<KRecentFilesAction> m_recentAction;
     KActionMenu *m_projectConfigAction;
     QSignalMapper *m_signalMapper;
     Core* m_core;
@@ -211,8 +211,8 @@ void ProjectController::loadSettings( bool projectIsLoaded )
 
     KConfigGroup config(KGlobal::config(), "Project Manager");
 
-    d->reopenProjectsOnStartup = config.readEntry("reopenProjectsOnStartup", false);
-    d->parseAllProjectSources = config.readEntry("parseAllProjectSources", false);
+    d->reopenProjectsOnStartup = config.readEntry("Reopen Projects On Startup", false);
+    d->parseAllProjectSources = config.readEntry("Parse All Project Sources", false);
 }
 
 void ProjectController::saveSettings( bool projectIsLoaded )
@@ -362,12 +362,14 @@ bool ProjectController::closeProject( IProject* proj )
 
     if (d->m_core->uiControllerInternal()->defaultMainWindow())
     {
-        KActionCollection * ac = d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
-        QAction * action;
+        if (MainWindow* mw = d->m_core->uiControllerInternal()->defaultMainWindow()) {
+            KActionCollection * ac = mw->actionCollection();
+            QAction * action;
 
-        action = ac->action( "project_close" );
-        if( action )
-            action->setEnabled( false );
+            action = ac->action( "project_close" );
+            if( action )
+                action->setEnabled( false );
+        }
     }
 
     // close all opened files.
@@ -379,8 +381,8 @@ bool ProjectController::closeProject( IProject* proj )
     }
 
     // delete project setting menu and its dialog.
-    QAction *configAction = d->m_configActions.take( proj );
-    delete configAction; configAction = 0;
+    QPointer<QAction> configAction = d->m_configActions.take( proj );
+    delete configAction;
     if( d->m_cfgDlgs.contains(proj) )
     {
         KSettings::Dialog *dlg = d->m_cfgDlgs.take(proj);
@@ -418,7 +420,8 @@ bool ProjectController::closeProject( IProject* proj )
     proj->close();
     proj->deleteLater(); //be safe when deleting
     d->m_projects.removeAll( proj );
-    d->m_recentAction->setCurrentAction( 0 );
+    if (d->m_recentAction)
+        d->m_recentAction->setCurrentAction( 0 );
 //     d->m_isLoaded = false;
 
     // Unloading (and thus deleting) these plugins is not a good idea just yet

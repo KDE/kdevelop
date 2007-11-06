@@ -36,6 +36,7 @@ Boston, MA 02110-1301, USA.
 #include "shellextension.h"
 #include "partcontroller.h"
 #include "plugincontroller.h"
+#include "uicontroller.h"
 
 namespace KDevelop
 {
@@ -73,6 +74,7 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
 MainWindow::~ MainWindow()
 {
     delete d;
+    Core::self()->uiControllerInternal()->mainWindowDeleted(this);
 }
 
 // TODO why doesn't called automatically when the settings are changed??

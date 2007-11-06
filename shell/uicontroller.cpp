@@ -119,6 +119,15 @@ UiController::~UiController()
     delete d;
 }
 
+void UiController::mainWindowDeleted(MainWindow* mw)
+{
+    if (d->defaultMainWindow == mw)
+        d->defaultMainWindow = 0L;
+
+    if (d->activeSublimeWindow == mw)
+        d->activeSublimeWindow = 0L;
+}
+
 void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
     Q_UNUSED( switchMode );

@@ -36,6 +36,8 @@ class KDEVPLATFORMSHELL_EXPORT ProjectController : public IProjectController
 {
     Q_OBJECT
     friend class Core;
+    friend class ProjectPreferences;
+
 public:
     ProjectController( Core* core );
     virtual ~ProjectController();

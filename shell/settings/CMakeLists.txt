@@ -61,7 +61,7 @@ set( projectsettings_cfg_UI
 kde4_add_ui_files( projectsettings_cfg_SRCS ${projectsettings_cfg_UI} )
 kde4_add_kcfg_files( projectsettings_cfg_SRCS projectconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_projectsettings ${projectsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_projectsettings ${KDE4_KUTILS_LIBS} )
+target_link_libraries( kcm_kdev_projectsettings ${KDE4_KUTILS_LIBS} kdevplatformshell)
 
 install( TARGETS kcm_kdev_projectsettings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_projectsettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
