@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Project Manager">
+    <entry name="reopenProjectsOnStartup" key="Reopen Projects On Startup" type="Bool">
+        <default>false</default>
+        <label>Open the last project(s) that were loaded on startup</label>
+        <whatsthis>If this option is set, KDevelop will reopen the project(s) that
+        were open when KDevelop was closed. If this option is not set, no project
+        will be loaded during KDevelop startup</whatsthis>
+    </entry>
+    <entry name="parseAllProjectSources" key="Parse All Project Sources" type="Bool" default="false">
+        <default>false</default>
+        <label>Schedule all project source code to be parsed by the language support in the background</label>
+        <whatsthis>If this option is set, KDevelop will shedule all source code
+        found by the current build system for parsing by the appropriate language
+        support part.  This will enable more complete language support, but may
+        be slower.</whatsthis>
+    </entry>
+  </group>
+</kcfg>

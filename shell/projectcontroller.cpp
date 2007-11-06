@@ -50,6 +50,8 @@ Boston, MA 02110-1301, USA.
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
+#include "ilanguagecontroller.h"
+#include "backgroundparser.h"
 
 namespace KDevelop
 {
@@ -68,6 +70,10 @@ public:
 //     IProject* m_currentProject;
     ProjectModel* model;
     QMap<IProject*, KSettings::Dialog*> m_cfgDlgs;
+
+    bool reopenProjectsOnStartup;
+    bool parseAllProjectSources;
+
     void projectConfig( QObject * obj )
     {
         if( !obj )
@@ -119,6 +125,8 @@ public:
 ProjectController::ProjectController( Core* core )
         : IProjectController( core ), d( new ProjectControllerPrivate )
 {
+    d->reopenProjectsOnStartup = false;
+    d->parseAllProjectSources = false;
     d->m_core = core;
     d->m_projectPart = 0;
     d->m_signalMapper = new QSignalMapper( this );
@@ -127,6 +135,17 @@ ProjectController::ProjectController( Core* core )
 //     d->m_currentProject = 0;
     d->model = new ProjectModel();
     setupActions();
+
+    loadSettings(false);
+
+    if (d->reopenProjectsOnStartup) {
+        KSharedConfig * config = KGlobal::config().data();
+        KConfigGroup group = config->group( "General Options" );
+        QList<KUrl> openProjects = group.readEntry( "Open Projects", QList<KUrl>() );
+
+        foreach (const KUrl& url, openProjects)
+            openProject(url);
+    }
 }
 
 void ProjectController::setupActions()
@@ -173,13 +192,27 @@ ProjectController::~ProjectController()
 
 void ProjectController::cleanup()
 {
-    foreach( IProject* project, d->m_projects )
+    KSharedConfig * config = KGlobal::config().data();
+    KConfigGroup group = config->group( "General Options" );
+
+    QList<KUrl> openProjects;
+
+    foreach( IProject* project, d->m_projects ) {
+        openProjects.append(project->projectFileUrl());
         closeProject( project );
+    }
+
+    group.writeEntry( "Open Projects", openProjects );
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )
 {
-    Q_UNUSED( projectIsLoaded );
+    Q_UNUSED(projectIsLoaded)
+
+    KConfigGroup config(KGlobal::config(), "Project Manager");
+
+    d->reopenProjectsOnStartup = config.readEntry("reopenProjectsOnStartup", false);
+    d->parseAllProjectSources = config.readEntry("parseAllProjectSources", false);
 }
 
 void ProjectController::saveSettings( bool projectIsLoaded )
@@ -286,6 +319,17 @@ bool ProjectController::projectImportingFinished( IProject* project )
     d->m_signalMapper->setMapping( qa, project );
     d->m_projectConfigAction->addAction( qa );
     emit projectOpened( project );
+
+    if (d->parseAllProjectSources) {
+        // Add the project files to the background parser to be parsed.
+        KUrl::List urlList;
+        QList<ProjectFileItem*> files = project->files();
+        foreach ( ProjectFileItem* file, files )
+        {
+            urlList.append( file->url() );
+        }
+        Core::self()->languageController()->backgroundParser()->addDocumentList( urlList );
+    }
 
     return true;
 }

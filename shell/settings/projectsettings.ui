@@ -1,0 +1,55 @@
+<ui version="4.0" >
+ <class>ProjectSettings</class>
+ <widget class="QWidget" name="ProjectSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>514</width>
+    <height>408</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form2</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QCheckBox" name="kcfg_reopenProjectsOnStartup" >
+     <property name="text" >
+      <string>&amp;Reopen projects on startup</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+A</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="kcfg_parseAllProjectSources" >
+     <property name="text" >
+      <string>&amp;Schedule all project source files for parsing by the background parser</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>457</width>
+       <height>291</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

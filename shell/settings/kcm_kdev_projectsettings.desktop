@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_projectsettings
+X-KDE-FactoryName=kcm_kdev_projectsettings
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevelop
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=Project
+Name[x-test]=xxProjectxx
+Comment=Configure Project settings
+Comment[x-test]=xxConfigure Project settingsxx
+

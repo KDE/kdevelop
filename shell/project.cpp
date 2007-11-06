@@ -53,8 +53,6 @@
 #include "projectmodel.h"
 #include "iplugincontroller.h"
 #include "uicontroller.h"
-#include "ilanguagecontroller.h"
-#include "backgroundparser.h"
 
 namespace KDevelop
 {
@@ -108,18 +106,6 @@ public:
     void importDone( KJob* )
     {
         Core::self()->projectControllerInternal()->projectImportingFinished( project );
-
-        // Add the project files to the baackground parse to be parsed.
-/*        if ( topItem )
-        {
-            KUrl::List urlList;
-            QList<ProjectFileItem*> files = recurseFiles( topItem );
-            foreach ( ProjectFileItem* file, files )
-            {
-                urlList.append( file->url() );
-            }
-            Core::self()->languageController()->backgroundParser()->addDocumentList( urlList );
-        }*/
     }
 };
 
