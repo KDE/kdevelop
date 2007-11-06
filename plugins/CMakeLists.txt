@@ -8,6 +8,7 @@ add_subdirectory(quickopen)
 macro_optional_add_subdirectory(snippet)
 macro_optional_add_subdirectory(cvs)
 add_subdirectory(classbrowser)
+add_subdirectory(problemreporter)
 
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     find_package(Commoncpp)

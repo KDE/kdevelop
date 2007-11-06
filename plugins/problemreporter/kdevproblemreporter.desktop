@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin provides a browsable model of the currently parsed classes and other items.
+Name=KDevProblemReporter
+GenericName=Class Browser
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevproblemreporter
+X-KDevelop-Version=4
+X-KDevelop-Category=Global
+X-KDevelop-Properties=ProblemReporter,CodeNavigation
+X-KDE-PluginInfo-Name=kdevproblemreporter
+X-KDE-PluginInfo-Author=Hamish Rodda
+X-KDE-PluginInfo-License=LGPL
