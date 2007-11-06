@@ -1,8 +1,7 @@
 /*
  * KDevelop Problem Reporter
  *
- * Copyright 2006 Adam Treat <treat@kde.org>
- * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
+ * Copyright (c) 2007 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -20,27 +19,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CLASSBROWSERPART_H
-#define CLASSBROWSERPART_H
+#ifndef DUCHAINTREE_H
+#define DUCHAINTREE_H
 
-#include <iplugin.h>
-#include <QtCore/QVariant>
+#include <QtGui/QTreeWidget>
 
-class ProblemReporterPart : public KDevelop::IPlugin
+#include <KUrl>
+#include <KTextEditor/Range>
+
+class ProblemReporterPart;
+
+class ProblemWidget : public QTreeWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    ProblemReporterPart(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ProblemReporterPart();
+public:
+  ProblemWidget(QWidget* parent, ProblemReporterPart* part);
+  virtual ~ProblemWidget();
 
-    // KDevelop::Plugin methods
-    virtual void unload();
+private Q_SLOTS:
+  void problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem);
 
-  private:
-    class ProblemReporterFactory* m_factory;
+  void itemActivated(QTreeWidgetItem* item);
+
+private:
+  ProblemReporterPart* m_part;
 };
 
-#endif // CLASSBROWSERPART_H
+#endif
 
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+// kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

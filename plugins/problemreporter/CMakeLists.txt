@@ -15,6 +15,7 @@ include_directories(
 
 set(kdevproblemreporter_PART_SRCS
     problemreporterpart.cpp
+    problemwidget.cpp
 )
 
 kde4_add_plugin(kdevproblemreporter ${kdevproblemreporter_PART_SRCS})

@@ -1,5 +1,5 @@
 /*
- * This file is part of KDevelop
+ * KDevelop Problem Reporter
  *
  * Copyright 2006 Adam Treat <treat@kde.org>
  * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
@@ -22,7 +22,7 @@
 
 #include "problemreporterpart.h"
 
-#include <QListWidget>
+#include <QTreeWidget>
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -32,8 +32,12 @@
 #include <iuicontroller.h>
 #include <idocumentcontroller.h>
 
+#include "problemwidget.h"
+
 K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPart>(); )
 K_EXPORT_PLUGIN(KDevProblemReporterFactory("kdevproblemreporter"))
+
+using namespace KDevelop;
 
 class ProblemReporterFactory: public KDevelop::IToolViewFactory
 {
@@ -42,16 +46,7 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    // Should do it at some point, may as well be now
-    QMutableListIterator< QPointer<QListWidget> > it = m_lists;
-    while (it.hasNext()) {
-      if (!it.next())
-        it.remove();
-    }
-
-    QListWidget* list = new QListWidget(parent);
-    m_lists.append(list);
-    return list;
+    return new ProblemWidget(parent, m_part);
   }
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -61,7 +56,6 @@ public:
 
 private:
   ProblemReporterPart *m_part;
-  QList< QPointer<QListWidget> > m_lists;
 };
 
 ProblemReporterPart::ProblemReporterPart(QObject *parent, const QVariantList&)
@@ -70,8 +64,6 @@ ProblemReporterPart::ProblemReporterPart(QObject *parent, const QVariantList&)
 {
   core()->uiController()->addToolView(i18n("Problem Reporter"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
-
-  //connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_model, SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
 ProblemReporterPart::~ProblemReporterPart()

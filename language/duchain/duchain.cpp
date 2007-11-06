@@ -49,6 +49,7 @@ public:
     qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
     qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
     qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");
+    qRegisterMetaType<KTextEditor::Range>("KTextEditor::Range");
       
     notifier = new DUChainObserver();
   }
@@ -336,6 +337,11 @@ void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChain
 void DUChain::branchAdded(DUContext* context)
 {
   emit sdDUChainPrivate->notifier->branchAdded(DUContextPointer(context));
+}
+
+void DUChain::problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem)
+{
+  emit sdDUChainPrivate->notifier->problemEncountered(url, range, problem);
 }
 
 void DUChain::deleteDUChainObject(DUChainBase* object)

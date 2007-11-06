@@ -109,6 +109,8 @@ public:
 
   static void branchAdded(DUContext* context);
 
+  static void problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem);
+
   /**
    * @see ParsingEnvironmentManager
    * */

@@ -21,6 +21,10 @@
 
 #include <QtCore/QObject>
 
+#include <KUrl>
+
+#include <KTextEditor/Range>
+
 #include "duchainpointer.h"
 
 namespace KDevelop
@@ -95,6 +99,8 @@ Q_SIGNALS:
   void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);*/
 
   void branchAdded(KDevelop::DUContextPointer context);
+
+  void problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem);
 };
 
 }
