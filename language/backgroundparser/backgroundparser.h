@@ -80,6 +80,16 @@ public:
      */
     ParserDependencyPolicy* dependencyPolicy() const;
 
+    /**
+     * Set how many ThreadWeaver threads the background parser should set up and use.
+     */
+    void setThreadCount(int threadCount);
+
+    /**
+     * Set the delay in miliseconds before the background parser starts parsing.
+     */
+    void setDelay(int miliseconds);
+    
 Q_SIGNALS:
     ///Emitted whenever a document parse-job has finished. The job contains the du-chain(if one was created) etc.
     void parseJobFinished(KDevelop::ParseJob* job);

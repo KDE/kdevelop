@@ -340,6 +340,22 @@ ParseJob* BackgroundParser::parseJobForDocument(const KUrl& document) const
     return 0;
 }
 
+void BackgroundParser::setThreadCount(int threadCount)
+{
+    if (d->m_threads != threadCount) {
+        d->m_threads = threadCount;
+        d->m_weaver.setMaximumNumberOfThreads(d->m_threads);
+    }
+}
+
+void BackgroundParser::setDelay(int miliseconds)
+{
+    if (d->m_delay != miliseconds) {
+        d->m_delay = miliseconds;
+        d->m_timer.setInterval(d->m_delay);
+    }
+}
+
 }
 
 #include "backgroundparser.moc"
