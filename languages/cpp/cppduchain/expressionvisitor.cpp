@@ -488,7 +488,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         if( !m_lastDeclarations.isEmpty() ) {
           DeclarationPointer decl( m_lastDeclarations.first() );
           lock.unlock();
-          kDebug() << "creating use for " << identifier.toString() << " at " << node->start_token << node->end_token;
+          kDebug(9007) << "creating use for " << identifier.toString() << " at " << node->start_token << node->end_token;
           newUse( node, node->start_token, node->end_token, decl );
         }
       }
