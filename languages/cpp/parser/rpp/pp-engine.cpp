@@ -26,6 +26,8 @@
 
 #include <kdebug.h>
 
+#include <duchain.h>
+
 #include "pp-internal.h"
 #include "preprocessor.h"
 #include "pp-environment.h"
@@ -391,7 +393,7 @@ void pp::operator () (Stream& input, Stream& output)
   }
 
   if (iflevel != previousIfLevel) {
-    kWarning(9007) << "Unterminated #if statement" ;
+    KDevelop::DUChain::problemEncountered(m_files.top(), KTextEditor::Range(KTextEditor::Cursor(input.inputLineNumber(), 0), 0), "Unterminated #if statement");
   }
 }
 
