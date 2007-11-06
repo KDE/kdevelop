@@ -25,6 +25,7 @@
 #include <QTextStream>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <duchain.h>
 
@@ -68,17 +69,6 @@ void pp::clearErrorMessages ()
 
 Preprocessor* pp::preprocessor() {
   return m_preprocessor;
-}
-
-void pp::reportError (const QString &fileName, int line, int column, const QString &message)
-{
-  ErrorMessage msg;
-  msg.setFileName (fileName);
-  msg.setLine (line);
-  msg.setColumn (column);
-  msg.setMessage (message);
-
-  _M_error_messages.append (msg);
 }
 
 QString pp::processFile(const QString& fileName, StringType type, const QString& data)
@@ -271,7 +261,7 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
       return handle_else(input.inputLineNumber());
 
     case PP_ENDIF:
-      return handle_endif(output);
+      return handle_endif(input, output);
 
     case PP_IF:
       return handle_if(input);
@@ -393,20 +383,20 @@ void pp::operator () (Stream& input, Stream& output)
   }
 
   if (iflevel != previousIfLevel) {
-    KDevelop::DUChain::problemEncountered(m_files.top(), KTextEditor::Range(KTextEditor::Cursor(input.inputLineNumber(), 0), 0), "Unterminated #if statement");
+    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), "Unterminated #if statement");
   }
 }
 
 void pp::checkMarkNeeded(Stream& input, Stream& output)
 {
   if (input.inputLineNumber() != output.outputLineNumber() && !output.isNull())
-    output.mark(m_files.top(), input.inputLineNumber());
+    output.mark(currentFileName(), input.inputLineNumber());
 }
 
 void pp::handle_define (Stream& input)
 {
   pp_macro* macro = new pp_macro();
-  macro->file = m_files.top();
+  macro->file = currentFileName();
   QString definition;
 
   skip_blanks (input, devnull());
@@ -563,7 +553,7 @@ Value pp::eval_primary(Stream& input)
 
       if (token != TOKEN_IDENTIFIER)
       {
-        kWarning(9007) << "expected ``identifier'' found:" << char(token) ;
+        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 1), i18n("expected ``identifier'' found: %1", char(token)));
         break;
       }
 
@@ -576,7 +566,7 @@ Value pp::eval_primary(Stream& input)
 
       if (expect_paren) {
         if (token != ')')
-          kWarning(9007) << "expected ``)''" ;
+          KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("expected ``)''"));
         else
           accept_token();
       }
@@ -602,7 +592,7 @@ Value pp::eval_primary(Stream& input)
       token = next_token(input);
 
       if (token != ')')
-        kWarning(9007) << "expected ``)'' =" << char(token) ;
+        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 1), i18n("expected ``)'' = %1", char(token)));
       else
         accept_token();
 
@@ -631,7 +621,7 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else if (token == '/') {
       if (value.is_zero()) {
-        kWarning(9007) << "division by zero" ;
+        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("division by zero"));
         result.set_long(0);
 
       } else {
@@ -640,7 +630,7 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else {
       if (value.is_zero()) {
-        kWarning(9007) << "division by zero" ;
+        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("division by zero"));
         result.set_long(0);
 
       } else {
@@ -874,7 +864,7 @@ Value pp::eval_constant_expression(Stream& input)
     }
     else
     {
-      kWarning(9007) << "expected ``:'' =" << int (token) ;
+      KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 1), i18n("expected ``:'' = %1", int(token)));
       result = left_value;
     }
   }
@@ -932,7 +922,7 @@ void pp::handle_else(int sourceLine)
 {
   if (iflevel == 0 && !skipping ())
   {
-    kWarning(9007) << "#else without #if" ;
+    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(KTextEditor::Cursor(sourceLine, 0), 0), i18n("#else without #if"));
   }
   else if (iflevel > 0 && _M_skipping[iflevel - 1])
   {
@@ -953,7 +943,7 @@ void pp::handle_elif(Stream& input)
 
   if (iflevel == 0 && !skipping())
   {
-    kWarning(9007) << "#else without #if" ;
+    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("#else without #if"));
   }
   else
   {
@@ -982,11 +972,11 @@ void pp::handle_elif(Stream& input)
 }
 
 
-void pp::handle_endif(Stream& output)
+void pp::handle_endif(Stream& input, Stream& output)
 {
   if (iflevel == 0 && !skipping())
   {
-    kWarning() << "#endif without #if at output line" << output.outputLineNumber() << endl;
+    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("#endif without #if at output line %1", output.outputLineNumber()));
   }
   else
   {
@@ -1030,7 +1020,7 @@ void pp::handle_undef(Stream& input)
   RETURN_ON_FAIL(!macro_name.isEmpty());
 
   pp_macro* macro = new pp_macro();
-  macro->file = m_files.top();
+  macro->file = currentFileName();
   macro->name = macro_name;
 
   macro->defined = false;
@@ -1227,7 +1217,7 @@ void pp::setEnvironment(Environment* env)
 QString pp::currentFile() const
 {
   if (m_files.count())
-    return m_files.top();
+    return currentFileName();
 
   Q_ASSERT(false);
   return "<internal>";

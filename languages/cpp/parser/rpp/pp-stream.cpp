@@ -33,6 +33,7 @@ Stream::Stream()
   , m_pos(0)
   , m_inputLine(0)
   , m_outputLine(0)
+  , m_inputLineStartedAt(0)
 {
 }
 
@@ -42,6 +43,7 @@ Stream::Stream( QString * string, QIODevice::OpenMode openMode )
   , m_pos(0)
   , m_inputLine(0)
   , m_outputLine(0)
+  , m_inputLineStartedAt(0)
 {
   Q_UNUSED(openMode);
   c = m_string->constData();
@@ -142,6 +144,11 @@ int Stream::inputLineNumber() const
   return m_inputLine;
 }
 
+KTextEditor::Cursor Stream::inputPosition() const
+{
+  return KTextEditor::Cursor(inputLineNumber(), m_pos - m_inputLineStartedAt);
+}
+
 void Stream::setOutputLineNumber(int line)
 {
   m_outputLine = line;
@@ -156,10 +163,11 @@ void Stream::mark(const QString& filename, int inputLineNumber)
 void Stream::reset( )
 {
   c = m_string->constData();
-  m_inputLine = m_outputLine = m_pos = 0;
+  m_inputLineStartedAt = m_inputLine = m_outputLine = m_pos = 0;
 }
 
 void rpp::Stream::setInputLineNumber(int line)
 {
   m_inputLine = line;
+  m_inputLineStartedAt = m_pos;
 }

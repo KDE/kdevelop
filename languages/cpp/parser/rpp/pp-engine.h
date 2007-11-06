@@ -205,7 +205,7 @@ public:
   QList<ErrorMessage> errorMessages () const;
   void clearErrorMessages ();
 
-  void reportError (const QString &fileName, int line, int column, const QString &message);
+  inline QString currentFileName () const { return m_files.top(); }
 
   Value eval_expression (Stream& input);
 
@@ -275,7 +275,7 @@ private:
 
   void handle_elif(Stream& input);
 
-  void handle_endif(Stream& input);
+  void handle_endif(Stream& input, Stream& input);
 
   void handle_ifdef(bool check_undefined, Stream& input);
 

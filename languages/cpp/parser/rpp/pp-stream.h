@@ -25,6 +25,8 @@
 
 #include <QtCore/QIODevice>
 
+#include <KTextEditor/Cursor>
+
 namespace rpp {
 
 /**
@@ -55,7 +57,7 @@ class KDEVCPPRPP_EXPORT Stream
     void rewind(int offset = 1);
 
     /// \warning the input and output lines are not updated when calling this function.
-    ///          if you're seek()ing over a line boundary, you'll need to fix the line
+    ///          if you're seek()ing over a line boundary, you'll need to fix the line and column
     ///          numbers.
     void seek(int offset);
 
@@ -84,6 +86,8 @@ class KDEVCPPRPP_EXPORT Stream
     /// Use this to preserve the line number when passing generated streams
     void setInputLineNumber(int line);
 
+    KTextEditor::Cursor inputPosition() const;
+
     int outputLineNumber() const;
     void setOutputLineNumber(int line);
     void mark(const QString& filename, int inputLineNumber);
@@ -100,6 +104,7 @@ class KDEVCPPRPP_EXPORT Stream
     bool m_isNull;
     int m_pos;
     int m_inputLine, m_outputLine;
+    int m_inputLineStartedAt;
     //QString output;
 };
 

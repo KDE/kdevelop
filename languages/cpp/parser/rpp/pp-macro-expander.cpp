@@ -25,6 +25,9 @@
 #include <QTime>
 
 #include <kdebug.h>
+#include <klocale.h>
+
+#include <duchain.h>
 
 #include "pp-internal.h"
 #include "pp-engine.h"
@@ -39,7 +42,7 @@ pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<QString>& __actuals)
 {
 }
 
-QString pp_macro_expander::resolve_formal(const QString& name)
+QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
 {
   Q_ASSERT(!name.isEmpty());
 
@@ -55,7 +58,7 @@ QString pp_macro_expander::resolve_formal(const QString& name)
       if (index < m_frame->actuals.size())
         return m_frame->actuals[index];
       else
-        kWarning(9007) << "Call to macro" << name << "missing argument number" << index ;
+        KDevelop::DUChain::problemEncountered(m_engine->currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("Call to macro %1 missing argument number %2", name, index));
         // Triggers on deflate.c
         //Q_ASSERT(0); // internal error?
     }
@@ -107,7 +110,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         skip_blanks(++input, output);
 
         QString identifier = skip_identifier(input);
-        QString formal = resolve_formal(identifier);
+        QString formal = resolve_formal(identifier, input);
 
         if (!formal.isEmpty()) {
           Stream is(&formal);
@@ -187,7 +190,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         Q_ASSERT(name.length() >= 0 && name.length() < 512);
 
-        QString actual = resolve_formal(name);
+        QString actual = resolve_formal(name, input);
         if (!actual.isEmpty()) {
           output << actual;
           continue;
