@@ -69,7 +69,7 @@ void ProblemWidget::problemEncountered(const KUrl& url, const KTextEditor::Range
 {
   QTreeWidgetItem* item = new QTreeWidgetItem(this);
   item->setText(0, url.prettyUrl());
-  item->setText(1, QString::number(range.start().line()));
+  item->setText(1, QString::number(range.start().line() + 1));
   item->setText(2, QString::number(range.start().column()));
   item->setText(3, problem);
 }
@@ -77,7 +77,7 @@ void ProblemWidget::problemEncountered(const KUrl& url, const KTextEditor::Range
 void ProblemWidget::itemActivated(QTreeWidgetItem* item)
 {
   KUrl url = item->text(0);
-  KTextEditor::Cursor cursor(item->text(1).toInt(), item->text(2).toInt());
+  KTextEditor::Cursor cursor(item->text(1).toInt() - 1, item->text(2).toInt());
 
   m_part->core()->documentController()->openDocument(url, cursor);
 }
