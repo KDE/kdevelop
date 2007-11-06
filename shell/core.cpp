@@ -59,6 +59,7 @@ struct CorePrivate {
 
         uiController->initialize();
         languageController->initialize();
+        projectController->initialize();
 
         pluginController->loadPlugins( PluginController::Global );
 

@@ -137,15 +137,6 @@ ProjectController::ProjectController( Core* core )
     setupActions();
 
     loadSettings(false);
-
-    if (d->reopenProjectsOnStartup) {
-        KSharedConfig * config = KGlobal::config().data();
-        KConfigGroup group = config->group( "General Options" );
-        QList<KUrl> openProjects = group.readEntry( "Open Projects", QList<KUrl>() );
-
-        foreach (const KUrl& url, openProjects)
-            openProject(url);
-    }
 }
 
 void ProjectController::setupActions()
@@ -195,14 +186,26 @@ void ProjectController::cleanup()
     KSharedConfig * config = KGlobal::config().data();
     KConfigGroup group = config->group( "General Options" );
 
-    QList<KUrl> openProjects;
+    KUrl::List openProjects;
 
     foreach( IProject* project, d->m_projects ) {
         openProjects.append(project->projectFileUrl());
         closeProject( project );
     }
 
-    group.writeEntry( "Open Projects", openProjects );
+    group.writeEntry( "Open Projects", openProjects.toStringList() );
+}
+
+void ProjectController::initialize()
+{
+    if (d->reopenProjectsOnStartup) {
+        KSharedConfig * config = KGlobal::config().data();
+        KConfigGroup group = config->group( "General Options" );
+        KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
+
+        foreach (const KUrl& url, openProjects)
+            openProject(url);
+    }
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )

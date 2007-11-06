@@ -36,6 +36,7 @@ class KDEVPLATFORMSHELL_EXPORT ProjectController : public IProjectController
 {
     Q_OBJECT
     friend class Core;
+    friend class CorePrivate;
     friend class ProjectPreferences;
 
 public:
@@ -74,6 +75,7 @@ private:
     void setupActions();
     void cleanup();
     bool loadProjectPart();
+    void initialize();
 
 private:
     Q_PRIVATE_SLOT(d, void projectConfig( QObject* ) )
