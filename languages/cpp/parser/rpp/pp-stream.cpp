@@ -37,13 +37,13 @@ Stream::Stream()
 {
 }
 
-Stream::Stream( QString * string, QIODevice::OpenMode openMode )
+Stream::Stream( QString * string, const KTextEditor::Cursor& inputOffset, QIODevice::OpenMode openMode )
   : m_string(string)
   , m_isNull(false)
   , m_pos(0)
-  , m_inputLine(0)
+  , m_inputLine(inputOffset.line())
   , m_outputLine(0)
-  , m_inputLineStartedAt(0)
+  , m_inputLineStartedAt(-inputOffset.column())
 {
   Q_UNUSED(openMode);
   c = m_string->constData();
@@ -139,14 +139,15 @@ bool Stream::isNull() const
   return m_isNull;
 }
 
-int Stream::inputLineNumber() const
-{
-  return m_inputLine;
-}
-
 KTextEditor::Cursor Stream::inputPosition() const
 {
-  return KTextEditor::Cursor(inputLineNumber(), m_pos - m_inputLineStartedAt);
+  return KTextEditor::Cursor(m_inputLine, m_pos - m_inputLineStartedAt);
+}
+
+void Stream::setInputPosition(const KTextEditor::Cursor& position)
+{
+  m_inputLine = position.line();
+  m_inputLineStartedAt = m_pos - position.column();
 }
 
 void Stream::setOutputLineNumber(int line)
@@ -164,10 +165,4 @@ void Stream::reset( )
 {
   c = m_string->constData();
   m_inputLineStartedAt = m_inputLine = m_outputLine = m_pos = 0;
-}
-
-void rpp::Stream::setInputLineNumber(int line)
-{
-  m_inputLine = line;
-  m_inputLineStartedAt = m_pos;
 }

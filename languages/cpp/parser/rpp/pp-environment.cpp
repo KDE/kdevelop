@@ -72,7 +72,7 @@ void Environment::visitBlock(MacroBlock* block, int depth)
   }
 
   if (!block->condition.isEmpty()) {
-    Stream cs(&block->condition);
+    Stream cs(&block->condition, KTextEditor::Cursor());
     Value result = m_preprocessor->eval_expression(cs);
     if (result.is_zero()) {
       if (block->elseBlock)

@@ -40,7 +40,7 @@ class KDEVCPPRPP_EXPORT Stream
 
   public:
     Stream();
-    explicit Stream( QString * string, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
+    explicit Stream( QString * string, const KTextEditor::Cursor& inputOffset = KTextEditor::Cursor(), QIODevice::OpenMode openMode = QIODevice::ReadWrite );
     virtual ~Stream();
 
     bool isNull() const;
@@ -71,8 +71,10 @@ class KDEVCPPRPP_EXPORT Stream
       if (c == end)
         return *this;
 
-      if (*c == newline)
+      if (*c == newline) {
         ++m_inputLine;
+        m_inputLineStartedAt = m_pos + 1;
+      }
 
       ++c;
       ++m_pos;
@@ -82,11 +84,8 @@ class KDEVCPPRPP_EXPORT Stream
 
     Stream& operator--();
 
-    int inputLineNumber() const;
-    /// Use this to preserve the line number when passing generated streams
-    void setInputLineNumber(int line);
-
     KTextEditor::Cursor inputPosition() const;
+    void setInputPosition(const KTextEditor::Cursor& position);
 
     int outputLineNumber() const;
     void setOutputLineNumber(int line);

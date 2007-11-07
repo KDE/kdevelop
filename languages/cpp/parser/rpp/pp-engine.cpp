@@ -258,7 +258,7 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
       return handle_elif(input);
 
     case PP_ELSE:
-      return handle_else(input.inputLineNumber());
+      return handle_else(input.inputPosition().line());
 
     case PP_ENDIF:
       return handle_endif(input, output);
@@ -281,6 +281,8 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
 {
   if (input.current().isLetter() || input == '_') {
     pp_macro_expander expand_include(this);
+
+    KTextEditor::Cursor inputPosition = input.inputPosition();
     QString includeString;
     {
       Stream cs(&includeString);
@@ -290,7 +292,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     skip_blanks(input, devnull());
     RETURN_ON_FAIL(!includeString.isEmpty() && (includeString.startsWith('<') || includeString.startsWith('"')));
 
-    Stream newInput(&includeString);
+    Stream newInput(&includeString, inputPosition);
     handle_include(skip_current_path, newInput, output);
     return;
   }
@@ -308,7 +310,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     ++input;
   }
 
-  Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputLineNumber(), skip_current_path);
+  Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputPosition().line(), skip_current_path);
   if (include && !include->atEnd()) {
     m_files.push(includeName);
 
@@ -317,7 +319,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     operator()(*include, output);
 
     // restore the file name and sync the buffer
-    output.mark(m_files.pop(), input.inputLineNumber());
+    output.mark(m_files.pop(), input.inputPosition().line());
   }
 
   delete include;
@@ -359,13 +361,15 @@ void pp::operator () (Stream& input, Stream& output)
 
       skip_blanks(input, devnull());
 
+      KTextEditor::Cursor inputPosition = input.inputPosition();
+      
       QString skipped;
       {
         Stream ss(&skipped);
         skip (input, ss);
       }
 
-      Stream ss(&skipped);
+      Stream ss(&skipped, inputPosition);
       handle_directive(directive, ss, output);
 
     } else if (input == '\n') {
@@ -389,8 +393,8 @@ void pp::operator () (Stream& input, Stream& output)
 
 void pp::checkMarkNeeded(Stream& input, Stream& output)
 {
-  if (input.inputLineNumber() != output.outputLineNumber() && !output.isNull())
-    output.mark(currentFileName(), input.inputLineNumber());
+  if (input.inputPosition().line() != output.outputLineNumber() && !output.isNull())
+    output.mark(currentFileName(), input.inputPosition().line());
 }
 
 void pp::handle_define (Stream& input)
@@ -886,15 +890,17 @@ void pp::handle_if (Stream& input)
   {
     pp_macro_expander expand_condition(this);
     skip_blanks(input, devnull());
+
+    KTextEditor::Cursor inputPosition = input.inputPosition();
     QString condition;
     {
       Stream cs(&condition);
       expand_condition(input, cs);
     }
 
-    environment()->enterBlock(input.inputLineNumber(), condition);
+    environment()->enterBlock(input.inputPosition().line(), condition);
 
-    Stream cs(&condition);
+    Stream cs(&condition, inputPosition);
     Value result = eval_expression(cs);
 
     _M_true_test[iflevel] = !result.is_zero();
@@ -910,7 +916,7 @@ void pp::handle_if (Stream& input)
       expand_condition(input, cs);
     }
 
-    environment()->enterBlock(input.inputLineNumber(), condition);
+    environment()->enterBlock(input.inputPosition().line(), condition);
 
     _M_true_test[iflevel] = true;
     _M_skipping[iflevel] = true;
@@ -949,17 +955,19 @@ void pp::handle_elif(Stream& input)
   {
     pp_macro_expander expand_condition(this);
     skip_blanks(input, devnull());
+
+    KTextEditor::Cursor inputPosition = input.inputPosition();
     QString condition;
     {
       Stream cs(&condition);
       expand_condition(input, cs);
     }
 
-    environment()->elseBlock(input.inputLineNumber(), condition);
+    environment()->elseBlock(input.inputPosition().line(), condition);
 
     if (!_M_true_test[iflevel] && !_M_skipping[iflevel - 1])
     {
-      Stream cs(&condition);
+      Stream cs(&condition, inputPosition);
       Value result = eval_expression(cs);
       _M_true_test[iflevel] = !result.is_zero();
       _M_skipping[iflevel] = result.is_zero();
@@ -994,7 +1002,7 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 {
   QString macro_name = skip_identifier(input);
 
-  environment()->enterBlock(input.inputLineNumber(), QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name));
+  environment()->enterBlock(input.inputPosition().line(), QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name));
 
   if (test_if_level())
   {

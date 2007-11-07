@@ -110,10 +110,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         skip_blanks(++input, output);
 
         QString identifier = skip_identifier(input);
+
+        KTextEditor::Cursor inputPosition = input.inputPosition();
         QString formal = resolve_formal(identifier, input);
 
         if (!formal.isEmpty()) {
-          Stream is(&formal);
+          Stream is(&formal, inputPosition);
           skip_whitespaces(is, devnull());
 
           output << '\"';
@@ -204,7 +206,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           m_engine->setHideNextMacro(name == "defined");
 
           if (name == "__LINE__")
-            output << QString::number(input.inputLineNumber());
+            output << QString::number(input.inputPosition().line());
           else if (name == "__FILE__")
             output << '"' << m_engine->currentFile() << '"';
           else if (name == "__DATE__")
@@ -224,8 +226,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             macro->hidden = true;
 
             pp_macro_expander expand_macro(m_engine);
-            Stream ms(&macro->definition, QIODevice::ReadOnly);
-            ms.setInputLineNumber(input.inputLineNumber());
+            Stream ms(&macro->definition, input.inputPosition(), QIODevice::ReadOnly);
             QString expanded;
             {
               Stream es(&expanded);
@@ -234,7 +235,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
             if (!expanded.isEmpty())
             {
-              Stream es(&expanded);
+              Stream es(&expanded, input.inputPosition());
               skip_whitespaces(es, devnull());
               QString identifier = skip_identifier(es);
 
@@ -259,7 +260,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         //In case expansion fails, we can skip back to this position
         int openingPosition = input.pos();
-        int openingPositionLine = input.inputLineNumber();
+        KTextEditor::Cursor openingPositionCursor = input.inputPosition();
         
         // function like macro
         if (input.atEnd() || input != '(')
@@ -286,8 +287,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           {
             QString newActual;
             {
-              Stream as(&actual);
-              as.setInputLineNumber(input.inputLineNumber());
+              Stream as(&actual, input.inputPosition());
               Stream nas(&newActual);
               expand_actual(as, nas);
             }
@@ -302,6 +302,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input; // skip ','
 
           {
+            KTextEditor::Cursor inputPosition = input.inputPosition();
             {
               Stream as(&actual);
               skip_argument_variadics(actuals, macro, input, as);
@@ -309,7 +310,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
             QString newActual;
             {
-              Stream as(&actual);
+              Stream as(&actual, inputPosition);
               Stream nas(&newActual);
               expand_actual(as, nas);
             }
@@ -323,7 +324,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           //incomplete input-lines)
           output << name;
           input.seek(openingPosition);
-          input.setInputLineNumber(openingPositionLine);
+          input.setInputPosition(openingPositionCursor);
           continue;
         }
         //Q_ASSERT(!input.atEnd() && input == ')');
@@ -338,8 +339,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         pp_frame frame(macro, actuals);
         pp_macro_expander expand_macro(m_engine, &frame);
         macro->hidden = true;
-        Stream ms(&macro->definition, QIODevice::ReadOnly);
-        ms.setInputLineNumber(input.inputLineNumber());
+        Stream ms(&macro->definition, input.inputPosition(), QIODevice::ReadOnly);
         expand_macro(ms, output);
         macro->hidden = false;
 
