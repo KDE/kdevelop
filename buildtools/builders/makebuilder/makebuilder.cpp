@@ -69,8 +69,8 @@ MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
-        connect( i, SIGNAL( viewRemoved( const QString& ) ),
-                 this, SLOT( cleanupModel( const QString& ) ) );
+        connect( i, SIGNAL( viewRemoved( int ) ),
+                 this, SLOT( cleanupModel( int ) ) );
     }
 
 }
