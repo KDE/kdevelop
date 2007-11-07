@@ -24,15 +24,15 @@
 namespace KDevelop {
 
 QString shortLabel(KDevelop::DUContext* context) {
-  return QString("q%1").arg((unsigned long long)context);
+  return QString("q%1").arg((quint64)context);
 }
 
 QString shortLabel(KDevelop::Declaration* declaration) {
-  return QString("q%1").arg((unsigned long long)declaration);
+  return QString("q%1").arg((quint64)declaration);
 }
 
 QString shortLabel(KDevelop::Definition* definition) {
-  return QString("q%1").arg((unsigned long long)definition);
+  return QString("q%1").arg((quint64)definition);
 }
 
 QString rangeToString( const KTextEditor::Range& r ) {
