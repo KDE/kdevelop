@@ -1,0 +1,70 @@
+/*
+  Copyright 2007 Hamish Rodda <rodda@kde.org>
+
+  Permission to use, copy, modify, distribute, and sell this software and its
+  documentation for any purpose is hereby granted without fee, provided that
+  the above copyright notice appear in all copies and that both that
+  copyright notice and this permission notice appear in supporting
+  documentation.
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+  KDEVELOP TEAM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+  AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+#include <pp-location.h>
+
+using namespace rpp;
+
+LocationTable::LocationTable()
+{
+  anchor(0, KTextEditor::Cursor(0,0));
+}
+
+void LocationTable::anchor(std::size_t offset, KTextEditor::Cursor cursor)
+{
+  m_currentOffset = m_offsetTable.insert(offset, cursor);
+}
+
+KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
+{
+  // Look nearby for a match first
+  QMap<std::size_t, KTextEditor::Cursor>::ConstIterator constEnd = m_offsetTable.constEnd();
+
+  if (m_currentOffset != constEnd) {
+    std::size_t current = m_currentOffset.key();
+    bool checkForwards = (current < offset);
+    // TODO check for optimal number of iterations
+    for (int i = 0; i < 5; ++i) {
+      if (checkForwards) {
+        ++m_currentOffset;
+        if (m_currentOffset != constEnd) {
+          if (m_currentOffset.key() > offset) {
+            // Gone forwards too much, but one back is correct
+            --m_currentOffset;
+            return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
+          }
+        }
+
+      } else {
+        ++m_currentOffset;
+        if (m_currentOffset != constEnd) {
+          if (m_currentOffset.key() < offset) {
+            // Correct position :)
+            return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
+          }
+        }
+      }
+    }
+  }
+
+  m_currentOffset = qLowerBound(m_offsetTable, offset);
+  Q_ASSERT(m_currentOffset != constEnd);
+  return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
+}
