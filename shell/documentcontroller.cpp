@@ -156,10 +156,10 @@ struct DocumentControllerPrivate {
     QList<HistoryEntry> forwardHistory;
     bool isJumping;
 
-    KAction* saveAll;
-    KAction* revertAll;
-    KAction* closeAll;
-    KAction* closeAllOthers;
+    QPointer<KAction> saveAll;
+    QPointer<KAction> revertAll;
+    QPointer<KAction> closeAll;
+    QPointer<KAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
     
 /*    HistoryEntry createHistoryEntry();
@@ -396,10 +396,14 @@ void DocumentController::closeDocument( const KUrl &url )
     d->documents[url]->close();
 
     if (d->documents.isEmpty()) {
-        d->saveAll->setEnabled(false);
-        d->revertAll->setEnabled(false);
-        d->closeAll->setEnabled(false);
-        d->closeAllOthers->setEnabled(false);
+        if (d->saveAll)
+            d->saveAll->setEnabled(false);
+        if (d->revertAll)
+            d->revertAll->setEnabled(false);
+        if (d->closeAll)
+            d->closeAll->setEnabled(false);
+        if (d->closeAllOthers)
+            d->closeAllOthers->setEnabled(false);
     }
 }
 
