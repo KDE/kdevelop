@@ -86,8 +86,8 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
 {
     d->factory = new KDevProjectManagerViewFactory( this );
     d->contextMenuMapper = new QSignalMapper( this );
-    connect( d->contextMenuMapper, SIGNAL( mapped( const QString& ) ),
-             this, SLOT( executeContextMenuAction( const QString& ) ) );
+    //connect( d->contextMenuMapper, SIGNAL( mapped( const QString& ) ),
+             //this, SLOT( executeContextMenuAction( const QString& ) ) );
     core()->uiController()->addToolView( "Project Manager", d->factory );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }

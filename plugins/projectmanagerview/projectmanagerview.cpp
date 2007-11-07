@@ -103,8 +103,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
     vbox->addWidget( d->m_projectOverview );
     connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
-    connect( d->m_projectOverview, SIGNAL( currentChanged( KDevelop::ProjectBaseItem* ) ),
-           d->m_part->core()->projectController(), SLOT(changeCurrentProject( KDevelop::ProjectBaseItem* ) ) );
+    //connect( d->m_projectOverview, SIGNAL( currentChanged( KDevelop::ProjectBaseItem* ) ),
+           //d->m_part->core()->projectController(), SLOT(changeCurrentProject( KDevelop::ProjectBaseItem* ) ) );
 
 
 #ifdef WITH_PROJECT_DETAILS
