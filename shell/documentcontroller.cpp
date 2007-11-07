@@ -400,19 +400,6 @@ void DocumentController::fileClose()
 {
     if (activeDocument())
         activeDocument()->close();
-
-    if (d->documents.isEmpty()) {
-        if (d->saveAll)
-            d->saveAll->setEnabled(false);
-        if (d->revertAll)
-            d->revertAll->setEnabled(false);
-        if (d->close)
-            d->close->setEnabled(false);
-        if (d->closeAll)
-            d->closeAll->setEnabled(false);
-        if (d->closeAllOthers)
-            d->closeAllOthers->setEnabled(false);
-    }
 }
 
 void DocumentController::closeDocument( const KUrl &url )
@@ -424,6 +411,11 @@ void DocumentController::closeDocument( const KUrl &url )
     //document will be self-destructed and removeDocument() slot will catch that
     //and clean up internal data structures
     d->documents[url]->close();
+}
+
+void DocumentController::notifyDocumentClosed(IDocument* doc)
+{
+    d->documents.remove(doc->url());
 
     if (d->documents.isEmpty()) {
         if (d->saveAll)
@@ -437,11 +429,6 @@ void DocumentController::closeDocument( const KUrl &url )
         if (d->closeAllOthers)
             d->closeAllOthers->setEnabled(false);
     }
-}
-
-void DocumentController::notifyDocumentClosed(IDocument* doc)
-{
-    d->documents.remove(doc->url());
 
     emit documentClosed(doc);
 }
