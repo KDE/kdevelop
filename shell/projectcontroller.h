@@ -79,6 +79,7 @@ private:
 
 private:
     Q_PRIVATE_SLOT(d, void projectConfig( QObject* ) )
+    Q_PRIVATE_SLOT(d, void unloadAllProjectPlugins() )
     class ProjectControllerPrivate* const d;
 };
 

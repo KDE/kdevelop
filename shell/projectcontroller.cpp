@@ -74,6 +74,11 @@ public:
     bool reopenProjectsOnStartup;
     bool parseAllProjectSources;
 
+    void unloadAllProjectPlugins()
+    {
+        m_core->pluginController()->unloadPlugins( IPluginController::Project );
+    }
+
     void projectConfig( QObject * obj )
     {
         if( !obj )
@@ -429,7 +434,9 @@ bool ProjectController::closeProject( IProject* proj )
     // as we're being called by the view part and it gets deleted when we unload the plugin(s)
     // TODO: find a better place to unload
     if( d->m_projects.isEmpty() )
-        d->m_core->pluginController()->unloadPlugins( IPluginController::Project );
+    {
+        connect( proj, SIGNAL(destroyed(QObject*) ), this, SLOT(unloadAllProjectPlugins()) );
+    }
 
 
     emit projectClosed( proj );

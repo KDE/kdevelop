@@ -196,7 +196,7 @@ void PluginController::unloadPlugin( const QString & pluginId )
     if( IPlugin *thePlugin = plugin( pluginId ) )
     {
         thePlugin->unload();
-        delete thePlugin;
+        thePlugin->deleteLater();
     }
 }
 
