@@ -184,6 +184,7 @@ int CMakeProjectVisitor::visit(const ProjectAst *project)
 
     m_vars->insert("PROJECT_NAME", QStringList(project->projectName()));
     m_vars->insert("PROJECT_SOURCE_DIR", QStringList(m_root));
+    m_vars->insert(QString("%1_SOURCE_DIR").arg(m_projectName), QStringList(m_root));
     return 1;
 }
 
