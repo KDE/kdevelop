@@ -123,7 +123,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 
 void KDevDocumentView::activated( KDevelop::IDocument* document )
 {
-    setCurrentIndex( m_doc2index[ document ] );
+    setCurrentIndex( m_documentModel->indexFromItem( m_doc2index[ document ] ) );
 }
 
 void KDevDocumentView::saved( KDevelop::IDocument* )
@@ -147,27 +147,27 @@ void KDevDocumentView::loaded( KDevelop::IDocument* document )
         KDevFileItem * fileItem = new KDevFileItem( document->url() );
         mimeItem->setChild( mimeItem->rowCount(), fileItem );
         setCurrentIndex( m_documentModel->indexFromItem( fileItem ) );
-        m_doc2index[ document ] = m_documentModel->indexFromItem( fileItem );
+        m_doc2index[ document ] = fileItem;
     }
 }
 
 void KDevDocumentView::closed( KDevelop::IDocument* document )
 {
-    QModelIndex fileIndex = m_doc2index[ document ];
-    if ( !fileIndex.isValid() )
-        return ;
+    KDevFileItem* file = m_doc2index[ document ];
+    if ( !file )
+        return;
 
-    QModelIndex mimeIndex = m_documentModel->parent( fileIndex );
-    if ( !mimeIndex.isValid() )
-        return ;
+    QStandardItem* mimeItem = file->parent();
 
-    m_documentModel->takeItem( fileIndex.row() );
-    m_doc2index.remove( document );
+    qDeleteAll(mimeItem->takeRow(m_documentModel->indexFromItem(file).row()));
 
-    if ( m_documentModel->hasChildren( mimeIndex ) )
-        return ;
+    m_doc2index.remove(document);
 
-    m_documentModel->takeItem( mimeIndex.row() );
+    if ( mimeItem->hasChildren() )
+        return;
+
+    qDeleteAll(m_documentModel->takeRow(m_documentModel->indexFromItem(mimeItem).row()));
+
     doItemsLayout();
 }
 
@@ -178,8 +178,7 @@ void KDevDocumentView::contentChanged( KDevelop::IDocument* )
 
 void KDevDocumentView::stateChanged( KDevelop::IDocument* document )
 {
-    KDevDocumentItem * documentItem = static_cast<KDevDocumentItem*>(
-        m_documentModel->itemFromIndex( m_doc2index[ document ] ) );
+    KDevDocumentItem * documentItem = m_doc2index[ document ];
 
     if ( documentItem && documentItem->documentState() != document->state() )
         documentItem->setDocumentState( document->state() );
