@@ -701,7 +701,7 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
                 // checkout only can be done under the non-vcs dir.
                 d->m_ctxUrlList << folderItem->url();
                 QList<QAction*> actions;
-                QAction *action = new QAction(i18n("Checkout.."), this);
+                KAction *action = new KAction(i18n("Checkout.."), this);
                 connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
                 actions << action;
                 return qMakePair( QString("Subversion"), actions );
@@ -727,65 +727,65 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
         d->m_ctxUrlList = ctxUrlList;
 
         QList<QAction*> actions;
-        QAction *action;
+        KAction *action;
 
-        action = new QAction(i18n("Commit..."), this);
+        action = new KAction(i18n("Commit..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
         actions << action;
 
-        action = new QAction(i18n("Add to SVN"), this);
+        action = new KAction(i18n("Add to SVN"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
         actions << action;
 
-        action = new QAction(i18n("Remove from SVN"), this);
+        action = new KAction(i18n("Remove from SVN"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
         actions << action;
 
-        action = new QAction(i18n("Update.."), this);
+        action = new KAction(i18n("Update.."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
         actions << action;
 
-        action = new QAction(i18n("Log View..."), this);
+        action = new KAction(i18n("Log View..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
         actions << action;
 
-        action = new QAction(i18n("Blame/Annotate..."), this);
+        action = new KAction(i18n("Blame/Annotate..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
         actions << action;
 
-        action = new QAction(i18n("Cat..."), this);
+        action = new KAction(i18n("Cat..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCat()) );
         actions << action;
 
-        action = new QAction(i18n("Revert..."), this);
+        action = new KAction(i18n("Revert..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
         actions << action;
 
-        action = new QAction("Diff to HEAD", this);
+        action = new KAction("Diff to HEAD", this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
         actions << action;
 
-        action = new QAction("Diff to BASE", this);
+        action = new KAction("Diff to BASE", this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
         actions << action;
 
-        action = new QAction(i18n("Diff to..."), this);
+        action = new KAction(i18n("Diff to..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
         actions << action;
 
-        action = new QAction(i18n("Information..."), this);
+        action = new KAction(i18n("Information..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxInfo()) );
         actions << action;
 
-        action = new QAction(i18n("Status..."), this);
+        action = new KAction(i18n("Status..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
         actions << action;
 
-        action = new QAction(i18n("Copy..."), this);
+        action = new KAction(i18n("Copy..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCopy()) );
         actions << action;
 
-        action = new QAction(i18n("Move..."), this);
+        action = new KAction(i18n("Move..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxMove()) );
         actions << action;
 
