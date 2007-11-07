@@ -18,6 +18,8 @@
 
 #include "parsesession.h"
 
+#include "rpp/pp-location.h"
+
 #include "lexer.h"
 #include "memorypool.h"
 #include "problem.h"
@@ -27,8 +29,7 @@
 ParseSession::ParseSession()
   : mempool(new pool)
   , token_stream(0)
-  , location_table(0)
-  , line_table(0)
+  , m_locationTable(0)
 {
 }
 
@@ -36,113 +37,16 @@ ParseSession::~ParseSession()
 {
   delete mempool;
   delete token_stream;
-  delete location_table;
-  delete line_table;
+  delete m_locationTable;
 }
 
-void ParseSession::positionAt(std::size_t offset, int *line, int *column,
-                       QString *filename) const
+KTextEditor::Cursor ParseSession::positionAt(std::size_t offset) const
 {
-  int ppline, ppcolumn;
-  // Retrieve the line of the first preprocessor statement before this offset
-  line_table->positionAt(offset, &ppline, &ppcolumn);
+  Q_ASSERT(m_locationTable);
 
-  int base_line = 1;
+  // FIXME shouldn't just add the column offset...??
 
-  // Extract the actual line number and filename from the preprocessor statement
-  extract_line((*line_table)[ppline-1], &base_line, filename);
-
-  int line2, column2;
-  // Retrieve the line (and column) of the preprocessor statement above
-  location_table->positionAt((*line_table)[ppline-1], &line2, &column2);
-
-  // Retrieve the line and column of the offset in the non-preprocessed source
-  location_table->positionAt(offset, line, column);
-
-  /*
-    NPPL == non-preprocessed line
-    NPPL =
-      actual line of the first preceding preprocessor statement +
-      NPPL of the token - (NPPL of the first preceding preprocessor statement + 1 to account for the preprocessor statement)
-  */
-  //kDebug(9007) << offset << ": line" << (base_line + *line - line2  - 1) << ", column" << *column << "==" << base_line << "+" << *line << "-" << line2 << "- 1";
-  *line = base_line + *line - line2  - 1;
-
-  if (*filename == "<internal>") {
-    filename->clear();
-    *line += m_contentOffset.line();
-    *column += m_contentOffset.column();
-  }
-}
-
-void ParseSession::extract_line(int offset, int *line, QString *filename) const
-{
-  const char *cursor = contents() + offset;
-
-  if (*cursor != '#')
-    {
-      // nothing to do
-      return;
-    }
-
-  ++cursor; // skip '#'
-  {
-  // apaku: this using is needed for MSVC, Else it complains about isspace not being a member of std. I'll trz to fix that.
-  using namespace std;
-  if (isspace(*cursor) && std::isdigit(*(cursor + 1)))
-    {
-      ++cursor;
-      char buffer[1024], *cp = buffer;
-      do { *cp++ = *cursor++; }  // ### FIXME unsafe!
-      while (std::isdigit(*cursor));
-      *cp = '\0';
-      int line_number = strtol(buffer, 0, 0);
-
-      if (! isspace(*cursor))
-        {
-          /*Problem p = createProblem();
-          p.setMessage("expected white space");
-          control->reportProblem(p);*/
-          goto skip_line;
-        }
-
-      ++cursor; // skip the white space
-
-      if (*cursor != '"')
-        {
-          /*Problem p = createProblem();
-          p.setMessage("expected \"");
-          control->reportProblem(p);*/
-          goto skip_line;
-        }
-
-      ++cursor;
-
-      cp = buffer;
-      while (*cursor && *cursor != '"')
-      { *cp++ = *cursor++; } // ### FIXME unsafe!
-      *cp = '\0';
-
-      if (*cursor != '"')
-        {
-          /*Problem p = createProblem();
-          p.setMessage("expected \"");
-          control->reportProblem(p);*/
-          goto skip_line;
-        }
-
-      ++cursor;
-
-      *filename = buffer;
-      *line = line_number;
-      //kDebug(9007) << "filename:" << buffer << "line:" << line;
-      return;
-    }
-	}
-skip_line:
-  // skip the line
-  while (*cursor && *cursor != '\n')
-    ++cursor;
+  return m_locationTable->positionForOffset(offset) + m_contentOffset;
 }
 
 std::size_t ParseSession::size() const
@@ -155,10 +59,18 @@ const char * ParseSession::contents() const
   return m_contents.constData();
 }
 
-void ParseSession::setContents(const QByteArray & contents, const KTextEditor::Cursor& offset)
+void ParseSession::setContents(const QByteArray & contents, rpp::LocationTable* locationTable, const KTextEditor::Cursor& offset)
 {
   m_contents = contents;
   m_contentOffset = offset;
+  m_locationTable = locationTable;
+}
+
+void ParseSession::setContentsAndGenerateLocationTable(const QByteArray & contents, const KTextEditor::Cursor& offset)
+{
+  m_contents = contents;
+  m_contentOffset = offset;
+  m_locationTable = new rpp::LocationTable(m_contents);
 }
 
 void ParseSession::setUrl(const KUrl& url)

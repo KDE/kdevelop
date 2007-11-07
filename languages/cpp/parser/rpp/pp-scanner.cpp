@@ -107,13 +107,19 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
         return;
     }
 
-    if (outputText)
+    if (outputText) {
       output << input;
-    else if (input == '\n')
+      ++input;
+
+    } else if (input == '\n') {
       output << '\n';
-    else
+      ++input;
+      output.mark(input.inputPosition());
+
+    } else {
       output << ' ';
-    ++input;
+      ++input;
+    }
   }
 }
 
@@ -253,11 +259,11 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
       continue;
 
     } else if (input.current().isLetter() || input == '_') {
-      output << skip_identifier(input);
+      output.appendString(input, skip_identifier(input));
       continue;
 
     } else if (input.current().isNumber()) {
-      output << skip_number(input);
+      output.appendString(input, skip_number(input));
       continue;
 
     }

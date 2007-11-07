@@ -128,14 +128,6 @@ void Lexer::tokenize(ParseSession* _session)
 
   cursor = session->contents();
 
-  session->location_table->resize(1024);
-  (*session->location_table)[0] = 0;
-  session->location_table->current_line = 1;
-
-  session->line_table->resize(1024);
-  (*session->line_table)[0] = 0;
-  session->line_table->current_line = 1;
-
   do {
     if (index == session->token_stream->size())
       session->token_stream->resize(session->token_stream->size() * 2);
@@ -208,11 +200,6 @@ void Lexer::initialize_scan_table()
 
 void Lexer::scan_preprocessor()
 {
-  if (session->line_table->current_line == session->line_table->size())
-    session->line_table->resize(session->line_table->current_line * 2);
-
-  (*session->line_table)[session->line_table->current_line++] = (cursor - session->contents());
-
   while (*cursor && *cursor != '\n')
     ++cursor;
 
@@ -302,10 +289,6 @@ void Lexer::scan_string_constant()
 
 void Lexer::scan_newline()
 {
-  if (session->location_table->current_line == session->location_table->size())
-    session->location_table->resize(session->location_table->current_line * 2);
-
-  (*session->location_table)[session->location_table->current_line++] = (cursor - session->contents());
   ++cursor;
 }
 
@@ -797,40 +780,6 @@ void Lexer::scan_invalid_input()
   control->reportProblem(p);
 
   ++cursor;
-}
-
-void LocationTable::positionAt(std::size_t offset,
-                               int *line, int *column) const
-{
-  int first = 0;
-  // len is assigned the position 1 past the current set position
-  int len = current_line;
-  int half;
-  int middle;
-
-  while (len > 0)
-    {
-      // Half of the way through the array
-      half = len >> 1;
-      // The starting point
-      middle = first;
-
-      middle += half;
-
-      if (lines[middle] < offset)
-        {
-          first = middle;
-          ++first;
-          len = len - half - 1;
-        }
-      else
-        len = half;
-    }
-
-  *line = std::max(first, 1);
-  *column = offset - lines[*line - 1] - 1;
-  if( *column < 0 )
-    *column = 0;
 }
 
 void Lexer::scanKeyword0()
@@ -1859,13 +1808,9 @@ Problem Lexer::createProblem() const
 
   Problem p; // ### fill me
 
-  int line = 0, column = 0;
-  QString fileName;
-
-  session->positionAt(index - 1, &line, &column, &fileName);
-  p.setLine(line);
-  p.setColumn(column);
-  p.setFileName(fileName);
+  KTextEditor::Cursor position = session->positionAt(index - 1);
+  p.setLine(position.line());
+  p.setColumn(position.column());
 
   return p;
 }

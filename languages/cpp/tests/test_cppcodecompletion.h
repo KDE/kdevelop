@@ -43,6 +43,7 @@ class DUContext;
 
 namespace rpp {
   class pp;
+  class LocationTable;
 }
 
 class TestPreprocessor;
@@ -81,7 +82,7 @@ private:
   friend class TestPreprocessor;
 
   //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed
-  QString preprocess( const QString& text, QList<KDevelop::DUContext*>& included, rpp::pp* parent = 0, bool stopAfterHeaders = false );
+  QString preprocess( const QString& text, QList<KDevelop::DUContext*>& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, rpp::LocationTable** returnLocationTable = 0L );
   
   KDevelop::DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
 

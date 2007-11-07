@@ -437,11 +437,11 @@ void TestCppCodeCompletion::testHeaderSections() {
   QCOMPARE(preprocess("#include \"someHeader.h\"\nHello", includes, 0, false), QString("\nHello"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
-  
+
   QCOMPARE(preprocess("#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, false), QString("\n\nHello"));
   QCOMPARE(includes.count(), 2);
   includes.clear();
-  
+
   QCOMPARE(preprocess("#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, true), QString("\n\n"));
   QCOMPARE(includes.count(), 2);
   includes.clear();
@@ -521,7 +521,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
   }
 };
 
-QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*>& included, rpp::pp* parent, bool stopAfterHeaders ) {
+QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*>& included, rpp::pp* parent, bool stopAfterHeaders, rpp::LocationTable** returnLocationTable ) {
   TestPreprocessor ppc( this, included, stopAfterHeaders );
 
     rpp::pp preprocessor(&ppc);
@@ -535,6 +535,9 @@ QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*
     
     QString result = preprocessor.processFile("<test>", rpp::pp::Data, text);
 
+    if (returnLocationTable)
+      *returnLocationTable = preprocessor.environment()->takeLocationTable();
+    
         //Merge include-file-set, defined macros, used macros, and string-set
 //         parentPreprocessor->m_lexedFile->merge(*m_lexedFile);
   
@@ -554,7 +557,11 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
    QList<DUContext*> included;
    QList<DUContext*> temporaryIncluded;
 
-  session->setContents( preprocess( QString::fromUtf8(unit), included, parent ).toUtf8() );
+  rpp::LocationTable* locationTable;
+   
+  QByteArray source = preprocess( QString::fromUtf8(unit), included, parent, false, &locationTable ).toUtf8();
+
+  session->setContents( source, locationTable );
 
     if( parent ) {
       //Temporarily insert all files parsed previously by the parent, so forward-declarations can be resolved etc.

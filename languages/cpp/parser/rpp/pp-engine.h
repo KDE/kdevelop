@@ -123,33 +123,6 @@ class KDEVCPPRPP_EXPORT pp
   QStack<QString> m_files;
   Preprocessor* m_preprocessor;
 
-  class ErrorMessage
-  {
-    int _M_line;
-    int _M_column;
-    QString _M_fileName;
-    QString _M_message;
-
-  public:
-    ErrorMessage ():
-      _M_line (0),
-      _M_column (0) {}
-
-    inline int line () const { return _M_line; }
-    inline void setLine (int line) { _M_line = line; }
-
-    inline int column () const { return _M_column; }
-    inline void setColumn (int column) { _M_column = column; }
-
-    inline QString fileName () const { return _M_fileName; }
-    inline void setFileName (const QString &fileName) { _M_fileName = fileName; }
-
-    inline QString message () const { return _M_message; }
-    inline void setMessage (const QString &message) { _M_message = message; }
-  };
-
-  QList<ErrorMessage> _M_error_messages;
-
   enum { MAX_LEVEL = 512 };
   int _M_skipping[MAX_LEVEL];
   int _M_true_test[MAX_LEVEL];
@@ -202,8 +175,6 @@ public:
   Preprocessor* preprocessor();
 
   enum StringType { File, Data };
-  QList<ErrorMessage> errorMessages () const;
-  void clearErrorMessages ();
 
   inline QString currentFileName () const { return m_files.top(); }
 

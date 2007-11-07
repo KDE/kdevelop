@@ -65,10 +65,10 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   }
 
   if( statement ) {
-      session->setContents('{' + unit + ";}");
+      session->setContentsAndGenerateLocationTable('{' + unit + ";}");
       ast = parser.parseStatement(session);
   } else {
-      session->setContents(unit);
+      session->setContentsAndGenerateLocationTable(unit);
       ast = parser.parse(session);
       ((TranslationUnitAST*)ast)->session = session;
   }

@@ -35,6 +35,7 @@ namespace rpp {
 
 class pp_macro;
 class pp;
+class LocationTable;
 
 class KDEVCPPRPP_EXPORT MacroBlock
 {
@@ -99,12 +100,16 @@ public:
   //Faster access then allMacros(..), because nothing is copied
   const EnvironmentMap& environment() const; //krazy:exclude=constref
 
+  LocationTable* locationTable() const;
+  LocationTable* takeLocationTable();
+
 private:
   EnvironmentMap m_environment;
 
   QStack<MacroBlock*> m_blocks;
   bool m_replaying;
   pp* m_preprocessor;
+  LocationTable* m_locationTable;
 };
 
 }

@@ -36,9 +36,8 @@ namespace Cpp {
 
 class pool;
 class TokenStream;
-class LocationTable;
 
-namespace rpp { class MacroBlock; }
+namespace rpp { class MacroBlock; class LocationTable; }
 
 /// Contains everything needed to keep an AST useful once the rest of the parser
 /// has gone away.
@@ -49,14 +48,16 @@ public:
   ~ParseSession();
 
   /**
-   * Return the position (\a line%, \a column%) of the \a offset in \a filename
+   * Return the position of the preprocessed source \a offset in the original source
    *
-   * \note the line starts from 0.
+   * \note the return line starts from 0, not 1.
    */
-  void positionAt(std::size_t offset, int *line, int *column,
-                  QString *filename) const;
+  KTextEditor::Cursor positionAt(std::size_t offset) const;
 
-  void setContents(const QByteArray& contents, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
+  void setContents(const QByteArray& contents, rpp::LocationTable* locationTable, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
+
+  /// Unweildy name, but we want to be clear here, if there is already a location table, this would be the wrong setup function to call
+  void setContentsAndGenerateLocationTable(const QByteArray& contents, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
 
   void setUrl(const KUrl& url);
   
@@ -64,15 +65,13 @@ public:
   std::size_t size() const;
   pool* mempool;
   TokenStream* token_stream;
-  LocationTable* location_table; //Maps line-numbers to positions in the document
-  LocationTable* line_table;
   rpp::MacroBlock* macros;
   KTextEditor::Cursor m_contentOffset;
   KUrl m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:
-  void extract_line(int offset, int *line, QString *filename) const;
   QByteArray m_contents;
+  rpp::LocationTable* m_locationTable;
 };
 
 #endif

@@ -55,63 +55,6 @@ public:
   } extra;
 };
 
-/**
- * A class which holds an array of input buffer offsets
- * for use in translating from a line number to an input
- * buffer position.
- *
- * A line number may not necessarily represent the input
- * buffer line numbers; it depends on how the class is used.
- */
-class LocationTable
-{
-private:
-  LocationTable(const LocationTable &source);
-  void operator = (const LocationTable &source);
-
-public:
-  inline LocationTable(std::size_t size = 1024)
-    : lines(0),
-      line_count(0),
-      current_line(0)
-  {
-    resize(size);
-  }
-
-  inline ~LocationTable()
-  {
-    free(lines);
-  }
-
-  inline std::size_t size() const
-  { return line_count; }
-
-  void resize(std::size_t size)
-  {
-    Q_ASSERT(size > 0);
-    lines = (std::size_t*) ::realloc(lines, sizeof(std::size_t) * size);
-    line_count = size;
-  }
-
-  /**
-   * Returns the \a line and \a column of the given \a offset in this table.
-   */
-  void positionAt(std::size_t offset, int *line, int *column) const;
-
-  inline std::size_t &operator[](int index)
-  { return lines[index]; }
-
-private:
-  /// An array of input buffer offsets
-  std::size_t *lines;
-  /// The size of the allocated array
-  std::size_t line_count;
-  /// The index to the next index in the lines array
-  std::size_t current_line;
-
-  friend class Lexer;
-};
-
 /**Stream of tokens found by lexer.
 Internally works like an array of @ref Token continuosly allocated.
 All tokens are destructed when this stream is deleted.

@@ -199,8 +199,6 @@ public:
   void rewind(size_t position);
   // private:
   TokenStream* token_stream;
-  LocationTable* location_table;
-  LocationTable line_table;
 
   bool block_errors(bool block);
 

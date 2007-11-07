@@ -108,8 +108,7 @@ Comment Parser::comment() {
 
 void Parser::preparseLineComments( int tokenNumber ) {
   const Token& token( (*session->token_stream)[tokenNumber] );
-  int tokenLine = -1;
-  int tokenColumn = -1;
+  KTextEditor::Cursor tokenPosition = KTextEditor::Cursor::invalid();
 
   for( int a = 0; a < 40; a++ ) {
       if( !session->token_stream->lookAhead(a) ) break;
@@ -117,15 +116,14 @@ void Parser::preparseLineComments( int tokenNumber ) {
         //Make sure the token's line is before the searched token's line
         const Token& commentToken( (*session->token_stream)[session->token_stream->cursor() + a] );
 
-        if( tokenLine == -1 ) //Get the token line. Only on-demand, because it's not cheap.
-          session->location_table->positionAt(token.position, &tokenLine, &tokenColumn );
+        if( !tokenPosition.isValid() ) //Get the token line. Only on-demand, because it's not cheap.
+          tokenPosition = session->positionAt(token.position);
 
-        int commentLine, commentColumn;
-        session->location_table->positionAt( commentToken.position, &commentLine, &commentColumn );
+        KTextEditor::Cursor commentPosition = session->positionAt( commentToken.position );
 
-        if( commentLine < tokenLine ) {
+        if( commentPosition.line() < tokenPosition.line() ) {
             continue;
-        } else if( commentLine == tokenLine ) {
+        } else if( commentPosition.line() == tokenPosition.line() ) {
             processComment( a );
         } else {
             //Too far
@@ -137,9 +135,7 @@ void Parser::preparseLineComments( int tokenNumber ) {
 
 int Parser::lineFromTokenNumber( size_t tokenNumber ) const {
   const Token& token( (*session->token_stream)[tokenNumber] );
-  int commentLine, commentColumn;
-  session->location_table->positionAt( token.position, &commentLine, &commentColumn );
-  return commentLine;
+  return session->positionAt( token.position ).line();
 }
 
 
@@ -147,8 +143,8 @@ void Parser::processComment( int offset, int line ) {
   const Token& commentToken( (*session->token_stream)[session->token_stream->cursor() + offset] );
   Q_ASSERT(commentToken.kind == Token_comment);
   if( line == -1 ) {
-    int commentColumn;
-    session->location_table->positionAt( commentToken.position, &line, &commentColumn );
+    KTextEditor::Cursor position = session->positionAt( commentToken.position );
+    line = position.line();
   }
 
   m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
@@ -167,12 +163,6 @@ TranslationUnitAST *Parser::parse(ParseSession* _session)
   if (!session->token_stream)
     session->token_stream = new TokenStream;
 
-  if (!session->location_table)
-    session->location_table = new LocationTable;
-
-  if (!session->line_table)
-    session->line_table = new LocationTable;
-
   lexer.tokenize(session);
   advance(); // skip the first token
 
@@ -188,12 +178,6 @@ StatementAST *Parser::parseStatement(ParseSession* _session)
 
   if (!session->token_stream)
     session->token_stream = new TokenStream;
-
-  if (!session->location_table)
-    session->location_table = new LocationTable;
-
-  if (!session->line_table)
-    session->line_table = new LocationTable;
 
   lexer.tokenize(session);
   advance(); // skip the first token
@@ -271,17 +255,14 @@ void Parser::reportError(const QString& msg)
     {
       ++_M_problem_count;
 
-      int line, column;
       QString fileName;
 
       std::size_t tok = session->token_stream->cursor();
-      session->positionAt(session->token_stream->position(tok),
-                       &line, &column, &fileName);
+      KTextEditor::Cursor position = session->positionAt(session->token_stream->position(tok));
 
       Problem p;
-      p.setFileName(fileName);
-      p.setLine(line);
-      p.setColumn(column);
+      p.setLine(position.line());
+      p.setColumn(position.column());
       p.setMessage(msg);
 
       control->reportProblem(p);

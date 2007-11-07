@@ -25,19 +25,26 @@
 
 #include <KTextEditor/Cursor>
 
+#include <cppparserexport.h>
+
 namespace rpp {
 
-class LocationTable
+class KDEVCPPRPP_EXPORT LocationTable
 {
   public:
     LocationTable();
+
+    /// Generates the location table from the byte array's contents
+    LocationTable(const QByteArray& contents);
 
     void anchor(std::size_t offset, KTextEditor::Cursor cursor);
 
     KTextEditor::Cursor positionForOffset(std::size_t offset) const;
 
+    void dump() const;
+    
   private:
-    mutable QMap<std::size_t, KTextEditor::Cursor> m_offsetTable;
+    QMap<std::size_t, KTextEditor::Cursor> m_offsetTable;
     mutable QMap<std::size_t, KTextEditor::Cursor>::ConstIterator m_currentOffset;
 };
 

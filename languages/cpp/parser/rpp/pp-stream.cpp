@@ -22,6 +22,8 @@
 
 #include <kdebug.h>
 
+#include "pp-location.h"
+
 using namespace rpp;
 
 const QChar Stream::newline('\n');
@@ -32,20 +34,31 @@ Stream::Stream()
   , m_isNull(true)
   , m_pos(0)
   , m_inputLine(0)
-  , m_outputLine(0)
   , m_inputLineStartedAt(0)
+  , m_locationTable(0L)
 {
 }
 
-Stream::Stream( QString * string, const KTextEditor::Cursor& inputOffset, QIODevice::OpenMode openMode )
+Stream::Stream( QString * string, const KTextEditor::Cursor& offset )
   : m_string(string)
   , m_isNull(false)
   , m_pos(0)
-  , m_inputLine(inputOffset.line())
-  , m_outputLine(0)
-  , m_inputLineStartedAt(-inputOffset.column())
+  , m_inputLine(offset.line())
+  , m_inputLineStartedAt(-offset.column())
+  , m_locationTable(0L)
 {
-  Q_UNUSED(openMode);
+  c = m_string->constData();
+  end = m_string->constData() + m_string->length();
+}
+
+Stream::Stream( QString * string, LocationTable* table )
+  : m_string(string)
+  , m_isNull(false)
+  , m_pos(0)
+  , m_inputLine(0)
+  , m_inputLineStartedAt(0)
+  , m_locationTable(table)
+{
   c = m_string->constData();
   end = m_string->constData() + m_string->length();
 }
@@ -107,31 +120,62 @@ void Stream::seek(int offset)
   }
 }
 
-Stream& Stream::operator<< ( QChar c )
+Stream & Stream::operator<< ( const QChar& c )
 {
+  // Keep in sync with below
   if (!isNull()) {
-    if (c == newline)
-      ++m_outputLine;
+    ++m_pos;
+
+    if (c == newline) {
+      ++m_inputLine;
+      m_inputLineStartedAt = m_pos;
+    }
 
     m_string->append(c);
-    ++m_pos;
   }
   return *this;
 }
 
-Stream& Stream::operator<< ( const QString & string )
+Stream& Stream::operator<< ( const Stream& input )
+{
+  const QChar c = input;
+
+  // Keep in sync with above
+  if (!isNull()) {
+    ++m_pos;
+
+    if (c == newline) {
+      ++m_inputLine;
+      m_inputLineStartedAt = m_pos;
+      mark(KTextEditor::Cursor(input.inputPosition().line() + 1, 0));
+    }
+
+    m_string->append(c);
+  }
+  return *this;
+}
+
+Stream& Stream::appendString( const Stream& input, const QString & string )
 {
   if (!isNull()) {
-    m_outputLine += string.count(newline);
-    m_string->append(string);
+    int extraLines = 0;
+    for (int i = 0; i < string.length(); ++i) {
+      if (string.at(i) == newline) {
+        m_pos += i + 1;
+        mark(KTextEditor::Cursor(input.inputPosition().line() + ++extraLines, 0));
+        m_pos -= i + 1;
+      }
+    }
+
     m_pos += string.length();
+
+    // TODO check correctness
+    m_inputLineStartedAt = m_pos - (string.length() - string.lastIndexOf(newline));
+    m_string->append(string);
+
+    mark(input.inputPosition());
   }
   return *this;
-}
-
-int Stream::outputLineNumber() const
-{
-  return m_outputLine;
 }
 
 bool Stream::isNull() const
@@ -150,19 +194,14 @@ void Stream::setInputPosition(const KTextEditor::Cursor& position)
   m_inputLineStartedAt = m_pos - position.column();
 }
 
-void Stream::setOutputLineNumber(int line)
+void Stream::mark(const KTextEditor::Cursor& position)
 {
-  m_outputLine = line;
-}
-
-void Stream::mark(const QString& filename, int inputLineNumber)
-{
-  m_string->append(QString("# %1 \"%2\"\n").arg(inputLineNumber).arg(filename.isEmpty() ? QString("<internal>") : filename));
-  setOutputLineNumber(inputLineNumber);
+  if (m_locationTable)
+    m_locationTable->anchor(m_pos, position);
 }
 
 void Stream::reset( )
 {
   c = m_string->constData();
-  m_inputLineStartedAt = m_inputLine = m_outputLine = m_pos = 0;
+  m_inputLineStartedAt = m_inputLine = m_pos = 0;
 }

@@ -43,13 +43,7 @@ Cursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 
 Cursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
-  int line, column;
-  QString fileName;
-
-  m_session->positionAt((edge == BackEdge) ? token.position + token.size : token.position,
-                       &line, &column, &fileName);
-
-  return Cursor(line, column);
+  return m_session->positionAt((edge == BackEdge) ? token.position + token.size : token.position);
 }
 
 Range CppEditorIntegrator::findRange( AST * node, RangeEdge edge )

@@ -478,7 +478,7 @@ void HeaderGenerator::run()
         Control control;
 
         ParseSession session;
-        session.setContents(contents);
+        session.setContents(contents, preprocessor.environment()->takeLocationTable());
 
         Parser parser(&control);
         TranslationUnitAST* ast = parser.parse(&session);

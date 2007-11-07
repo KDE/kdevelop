@@ -194,7 +194,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         QString actual = resolve_formal(name, input);
         if (!actual.isEmpty()) {
-          output << actual;
+          output.appendString(input, actual);
           continue;
         }
 
@@ -206,15 +206,15 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           m_engine->setHideNextMacro(name == "defined");
 
           if (name == "__LINE__")
-            output << QString::number(input.inputPosition().line());
+            output.appendString(input, QString::number(input.inputPosition().line()));
           else if (name == "__FILE__")
-            output << '"' << m_engine->currentFile() << '"';
+            output.appendString(input, QString("\"%1\"").arg(m_engine->currentFile()));
           else if (name == "__DATE__")
-            output << QDate::currentDate().toString("MMM dd yyyy");
+            output.appendString(input, QDate::currentDate().toString("MMM dd yyyy"));
           else if (name == "__TIME__")
-            output << QTime::currentTime().toString("hh:mm:ss");
+            output.appendString(input, QTime::currentTime().toString("hh:mm:ss"));
           else
-            output << name;
+            output.appendString(input, name);
           continue;
         }
 
@@ -226,7 +226,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             macro->hidden = true;
 
             pp_macro_expander expand_macro(m_engine);
-            Stream ms(&macro->definition, input.inputPosition(), QIODevice::ReadOnly);
+            Stream ms(&macro->definition, input.inputPosition());
             QString expanded;
             {
               Stream es(&expanded);
@@ -243,7 +243,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier)) && m2->defined) {
                 m = m2;
               } else {
-                output << expanded;
+                output.appendString(input, expanded);
               }
             }
 
@@ -265,7 +265,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         // function like macro
         if (input.atEnd() || input != '(')
         {
-          output << name;
+          output.appendString(input, name);
           continue;
         }
 
@@ -322,7 +322,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           //Failed to expand the macro. Output the macro name and continue normal
           //processing behind it.(Code completion depends on this behavior when expanding
           //incomplete input-lines)
-          output << name;
+          output.appendString(input, name);
           input.seek(openingPosition);
           input.setInputPosition(openingPositionCursor);
           continue;
@@ -339,7 +339,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         pp_frame frame(macro, actuals);
         pp_macro_expander expand_macro(m_engine, &frame);
         macro->hidden = true;
-        Stream ms(&macro->definition, input.inputPosition(), QIODevice::ReadOnly);
+        Stream ms(&macro->definition, input.inputPosition());
         expand_macro(ms, output);
         macro->hidden = false;
 

@@ -29,6 +29,8 @@
 
 namespace rpp {
 
+class LocationTable;
+
 /**
  * Stream designed for character-at-a-time processing
  *
@@ -40,7 +42,8 @@ class KDEVCPPRPP_EXPORT Stream
 
   public:
     Stream();
-    explicit Stream( QString * string, const KTextEditor::Cursor& inputOffset = KTextEditor::Cursor(), QIODevice::OpenMode openMode = QIODevice::ReadWrite );
+    explicit Stream( QString * string, const KTextEditor::Cursor& offset = KTextEditor::Cursor() );
+    explicit Stream( QString * string, LocationTable* table );
     virtual ~Stream();
 
     bool isNull() const;
@@ -87,12 +90,11 @@ class KDEVCPPRPP_EXPORT Stream
     KTextEditor::Cursor inputPosition() const;
     void setInputPosition(const KTextEditor::Cursor& position);
 
-    int outputLineNumber() const;
-    void setOutputLineNumber(int line);
-    void mark(const QString& filename, int inputLineNumber);
+    void mark(const KTextEditor::Cursor& position);
 
-    Stream & operator<< ( QChar c );
-    Stream & operator<< ( const QString & string );
+    Stream & operator<< ( const QChar& c );
+    Stream & operator<< ( const Stream& input );
+    Stream& appendString( const Stream& input, const QString & string );
 
   private:
     Q_DISABLE_COPY(Stream)
@@ -102,8 +104,9 @@ class KDEVCPPRPP_EXPORT Stream
     const QChar* end;
     bool m_isNull;
     int m_pos;
-    int m_inputLine, m_outputLine;
+    int m_inputLine;
     int m_inputLineStartedAt;
+    LocationTable* m_locationTable;
     //QString output;
 };
 

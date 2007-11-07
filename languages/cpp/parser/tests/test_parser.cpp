@@ -234,7 +234,7 @@ private slots:
     QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("beforeTest\n(testBehind)"));
   }
 
-  void testParseFile()
+  /*void testParseFile()
   {
      QFile file(TEST_FILE);
      QVERIFY(file.open(QFile::ReadOnly));
@@ -247,7 +247,7 @@ private slots:
      TranslationUnitAST* ast = parser.parse(&session);
      QVERIFY(ast != 0);
      QVERIFY(ast->declarations != 0);
-   }
+   }*/
 
 private:
   ParseSession* lastSession;
@@ -256,7 +256,7 @@ private:
   {
     Parser parser(&control);
     lastSession = new ParseSession();
-    lastSession->setContents(unit);
+    lastSession->setContentsAndGenerateLocationTable(unit);
     return  parser.parse(lastSession);
   }
 

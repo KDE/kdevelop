@@ -24,6 +24,7 @@
 
 #include "preprocessor.h"
 #include "pp-environment.h"
+#include "pp-location.h"
 
 using namespace rpp;
 
@@ -57,6 +58,8 @@ int main (int /*argc*/, char *argv[])
   for (int i = 0; i < resultLines.count(); ++i)
     kDebug(9007) << i << ":" << resultLines[i];
 
+  preprocess.environment()->locationTable()->dump();
+  
   /*foreach (const Preprocessor::MacroItem& macro, p.macros())
     kDebug(9007) << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")";*/
 

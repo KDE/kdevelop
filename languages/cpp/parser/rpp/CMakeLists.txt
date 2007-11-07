@@ -11,6 +11,7 @@ set(kdevcpprpp_LIB_SRCS
     pp-engine.cpp
     pp-internal.cpp
     pp-environment.cpp
+    pp-location.cpp
     preprocessor.cpp
 )
 

@@ -26,17 +26,32 @@
 
 #include "pp-macro.h"
 #include "pp-engine.h"
+#include "pp-location.h"
 
 using namespace rpp;
 
 Environment::Environment(pp* preprocessor)
   : m_replaying(false)
   , m_preprocessor(preprocessor)
+  , m_locationTable(new LocationTable)
 {
 }
 
 Environment::~Environment()
 {
+  delete m_locationTable;
+}
+
+LocationTable* Environment::locationTable() const
+{
+  return m_locationTable;
+}
+
+LocationTable* Environment::takeLocationTable()
+{
+  LocationTable* ret = m_locationTable;
+  m_locationTable = new LocationTable;
+  return ret;
 }
 
 MacroBlock* Environment::firstBlock() const

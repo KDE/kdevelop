@@ -20,6 +20,8 @@
 
 #include <pp-location.h>
 
+#include <kdebug.h>
+
 using namespace rpp;
 
 LocationTable::LocationTable()
@@ -27,8 +29,26 @@ LocationTable::LocationTable()
   anchor(0, KTextEditor::Cursor(0,0));
 }
 
+LocationTable::LocationTable(const QByteArray& contents)
+{
+  anchor(0, KTextEditor::Cursor(0,0));
+
+  const QChar newline = '\n';
+  int line = 0;
+
+  for (std::size_t i = 0; i < contents.size(); ++i)
+    if (contents.at(i) == newline)
+      anchor(i + 1, KTextEditor::Cursor(++line, 0));
+}
+
 void LocationTable::anchor(std::size_t offset, KTextEditor::Cursor cursor)
 {
+  if (cursor.column()) {
+    // Check to see if it's different to what we already know
+    if (positionForOffset(offset) == cursor)
+      return;
+  }
+  
   m_currentOffset = m_offsetTable.insert(offset, cursor);
 }
 
@@ -50,6 +70,9 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
             --m_currentOffset;
             return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
           }
+
+        } else {
+          break;
         }
 
       } else {
@@ -59,12 +82,25 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
             // Correct position :)
             return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
           }
+        } else {
+          break;
         }
       }
     }
   }
 
-  m_currentOffset = qLowerBound(m_offsetTable, offset);
-  Q_ASSERT(m_currentOffset != constEnd);
+  m_currentOffset = m_offsetTable.lowerBound(offset);
+  if (m_currentOffset == constEnd)
+    --m_currentOffset;
   return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
+}
+
+void LocationTable::dump() const
+{
+  QMapIterator<std::size_t, KTextEditor::Cursor> it = m_offsetTable;
+  kDebug() << "Location Table:";
+  while (it.hasNext()) {
+    it.next();
+    kDebug() << it.key() << " => " << it.value();
+  }
 }

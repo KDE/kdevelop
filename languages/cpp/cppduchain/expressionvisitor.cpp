@@ -463,14 +463,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     } else {
       LOCKDUCHAIN;
 
-      int line = -1, column = -1;
-      QString file;
-
-      m_session->positionAt( m_session->token_stream->position(node->start_token), &line, &column, &file );
+      KTextEditor::Cursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
       if( !m_currentContext->url().equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
-        line = column = -1;
-      
-      m_lastDeclarations = m_currentContext->findDeclarations( identifier, KTextEditor::Cursor(line, column) );
+        position = position.invalid();
+
+      m_lastDeclarations = m_currentContext->findDeclarations( identifier, position );
       if( m_lastDeclarations.isEmpty() ) {
         problem( node, QString("could not find declaration of %1").arg( nameC.identifier().toString() ) );
       } else {

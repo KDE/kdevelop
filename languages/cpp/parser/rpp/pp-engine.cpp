@@ -32,6 +32,7 @@
 #include "pp-internal.h"
 #include "preprocessor.h"
 #include "pp-environment.h"
+#include "pp-location.h"
 
 #define PP_NO_SMART_HEADER_PROTECTION
 
@@ -57,16 +58,6 @@ pp::~pp()
   delete m_environment;
 }
 
-QList<pp::ErrorMessage> pp::errorMessages () const
-{
-  return _M_error_messages;
-}
-
-void pp::clearErrorMessages ()
-{
-  _M_error_messages.clear ();
-}
-
 Preprocessor* pp::preprocessor() {
   return m_preprocessor;
 }
@@ -89,7 +80,7 @@ QString pp::processFile(const QString& fileName, StringType type, const QString&
       result.reserve(int(contents.length() * 1.2));
 
       {
-        Stream rs(&result);
+        Stream rs(&result, m_environment->locationTable());
         operator () (is, rs);
       }
 
@@ -109,7 +100,7 @@ QString pp::processFile(const QString& fileName, StringType type, const QString&
 
     {
       Stream is(&const_cast<QString&>(data));
-      Stream rs(&result);
+      Stream rs(&result, m_environment->locationTable());
       operator () (is, rs);
     }
 
@@ -131,7 +122,7 @@ QString pp::processFile(QIODevice* device)
     QTextStream input(device);
     QString contents = input.readAll();
     Stream is(&contents);
-    Stream rs(&result);
+    Stream rs(&result, m_environment->locationTable());
     operator () (is, rs);
   }
 
@@ -311,7 +302,9 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
   }
 
   Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputPosition().line(), skip_current_path);
-  if (include && !include->atEnd()) {
+  Q_ASSERT(!include);
+
+  /*if (include && !include->atEnd()) {
     m_files.push(includeName);
 
     output.mark(includeName, 0);
@@ -320,7 +313,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
 
     // restore the file name and sync the buffer
     output.mark(m_files.pop(), input.inputPosition().line());
-  }
+  }*/
 
   delete include;
 }
@@ -373,7 +366,6 @@ void pp::operator () (Stream& input, Stream& output)
       handle_directive(directive, ss, output);
 
     } else if (input == '\n') {
-      checkMarkNeeded(input, output);
       output << input;
       ++input;
 
@@ -381,7 +373,7 @@ void pp::operator () (Stream& input, Stream& output)
       skip (input, devnull());
 
     } else {
-      checkMarkNeeded(input, output);
+      output.mark(input.inputPosition());
       expand (input, output);
     }
   }
@@ -389,12 +381,6 @@ void pp::operator () (Stream& input, Stream& output)
   if (iflevel != previousIfLevel) {
     KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), "Unterminated #if statement");
   }
-}
-
-void pp::checkMarkNeeded(Stream& input, Stream& output)
-{
-  if (input.inputPosition().line() != output.outputLineNumber() && !output.isNull())
-    output.mark(currentFileName(), input.inputPosition().line());
 }
 
 void pp::handle_define (Stream& input)
@@ -984,7 +970,7 @@ void pp::handle_endif(Stream& input, Stream& output)
 {
   if (iflevel == 0 && !skipping())
   {
-    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("#endif without #if at output line %1", output.outputLineNumber()));
+    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("#endif without #if at output line %1", m_environment->locationTable()->positionForOffset(output.pos()).line()));
   }
   else
   {

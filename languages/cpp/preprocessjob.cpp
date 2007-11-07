@@ -194,7 +194,7 @@ void PreprocessJob::run()
 
     QString result = preprocessor.processFile(parentJob()->document().prettyUrl(), rpp::pp::Data, contents);
 
-    parentJob()->parseSession()->setContents( result.toUtf8() );
+    parentJob()->parseSession()->setContents( result.toUtf8(), m_currentEnvironment->takeLocationTable() );
     parentJob()->parseSession()->setUrl( parentJob()->document() );
     parentJob()->setEnvironmentFile( m_environmentFile.data() );
 

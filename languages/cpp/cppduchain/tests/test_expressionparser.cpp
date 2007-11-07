@@ -767,7 +767,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
-  session->setContents(unit);
+  session->setContentsAndGenerateLocationTable(unit);
 
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);
