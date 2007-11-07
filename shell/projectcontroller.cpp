@@ -376,11 +376,9 @@ bool ProjectController::closeProject( IProject* proj )
     }
 
     // close all opened files.
-    QList<ProjectFileItem *> fileList = proj->files();
-    Q_FOREACH( ProjectFileItem *_fileItem, fileList )
+    Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
     {
-        kDebug(9501) << "Closing url" << _fileItem->url();
-        Core::self()->documentControllerInternal()->closeDocument( _fileItem->url() );
+        Core::self()->documentControllerInternal()->closeDocument( fileItem->url() );
     }
 
     // delete project setting menu and its dialog.
