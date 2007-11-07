@@ -72,22 +72,16 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 class ProjectManagerViewPartPrivate
 {
 public:
-    ProjectManagerViewPartPrivate() : build_objectname("projectmanagerview_buildaction")
+    ProjectManagerViewPartPrivate()
     {}
     KDevProjectManagerViewFactory *factory;
-    QMap<QString, Context*> contexts;
-    QSignalMapper* contextMenuMapper;
-    const QString build_objectname;
-    QList<IProject*> ctxProjectList;
+    QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPartPrivate)
 {
     d->factory = new KDevProjectManagerViewFactory( this );
-    d->contextMenuMapper = new QSignalMapper( this );
-    //connect( d->contextMenuMapper, SIGNAL( mapped( const QString& ) ),
-             //this, SLOT( executeContextMenuAction( const QString& ) ) );
     core()->uiController()->addToolView( "Project Manager", d->factory );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
@@ -97,65 +91,11 @@ ProjectManagerViewPart::~ProjectManagerViewPart()
     delete d;
 }
 
-void ProjectManagerViewPart::openURL( const KUrl &url )
-{
-    core()->documentController()->openDocument( url );
-}
-
-// ProjectFolderItem *ProjectManagerViewPart::activeFolder()
-// {
-//     return m_projectOverview->currentFolderItem();
-// }
-//
-// ProjectTargetItem *ProjectManagerViewPart::activeTarget()
-// {
-//     return m_projectOverview->currentTargetItem();
-// }
-//
-// ProjectFileItem * ProjectManagerViewPart::activeFile()
-// {
-//     return m_projectOverview->currentFileItem();
-// }
-
-bool ProjectManagerViewPart::computeChanges( const QStringList &oldFileList, const QStringList &newFileList )
-{
-    QMap<QString, bool> oldFiles, newFiles;
-
-    for ( QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it )
-        oldFiles.insert( *it, true );
-
-    for ( QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it )
-        newFiles.insert( *it, true );
-
-    // created files: oldFiles - newFiles
-    for ( QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it )
-        newFiles.remove( *it );
-
-    // removed files: newFiles - oldFiles
-    for ( QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it )
-        oldFiles.remove( *it );
-    /* FIXME port me!
-      if (!newFiles.isEmpty())
-        emit addedFilesToProject(newFiles.keys());
-
-      if (!oldFiles.isEmpty())
-        emit removedFilesFromProject(oldFiles.keys());
-    */
-    return false; //FIXME
-}
-
-void ProjectManagerViewPart::updateDetails( ProjectBaseItem * )
-{}
-
 void ProjectManagerViewPart::unload()
 {
     core()->uiController()->removeToolView(d->factory);
 }
 
-// If requested for one KDevelop::ProjectItem, context menu is "close this project"
-// Else if requested for multiples of items, check the type of project base items.
-// If everything is ProjectItem, context menu is "close selected projects"
-// Else if requested for different item types, there is no context menu.
 QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActions( KDevelop::Context* context )
 {
     if( context->type() != KDevelop::Context::ProjectItemContext )
@@ -168,92 +108,37 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
     if( items.isEmpty() )
         return IPlugin::requestContextMenuActions( context );
 
-    if( items.count() == 1 )
+    bool closeProjectsAdded = false;
+    bool buildTargetsAdded = false;
+    foreach( ProjectBaseItem* item, items )
     {
-        KDevelop::ProjectBaseItem *item = items.first();
-	KDevelop::ProjectFolderItem *prjitem = item->folder();
-        if ( prjitem && prjitem->isProjectRoot())
+        d->ctxProjectItemList << item;
+        KDevelop::ProjectFolderItem *prjitem = dynamic_cast<KDevelop::ProjectFolderItem*>(item);
+        if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
-            QAction* close = new QAction( i18n( "Close this project" ), this );
-            d->ctxProjectList.clear();
-            d->ctxProjectList << prjitem->project();
-            connect( close, SIGNAL(triggered()), this, SLOT(slotCloseProject()), Qt::QueuedConnection );
+            KAction* close = new KAction( i18n( "Close projects" ), this );
+            connect( close, SIGNAL(triggered()), this, SLOT(slotCloseProjects()) );
             actions << close;
+            closeProjectsAdded = true;
         }
         else if ( KDevelop::ProjectFolderItem *folder = item->folder() )
         {
-            actions << new QAction( i18n( "Folder: %1", folder->url().directory() ), this );
-//             QAction* buildaction = new QAction( i18n( "Build this project" ), this );
-//             buildaction->setObjectName(d->build_objectname);
-//             d->contextMenuMapper->setMapping( buildaction, buildaction->objectName() );
-//             d->contexts[buildaction->objectName()] = context;
-//             connect( buildaction, SIGNAL(triggered() ), d->contextMenuMapper, SLOT( map() ) );
-//             actions << buildaction;
         }
         else if ( KDevelop::ProjectFileItem *file = item->file() )
         {
-            actions << new QAction( i18n( "File: %1", file->url().fileName() ), this );
         }
-        else if ( KDevelop::ProjectTargetItem *target = item->target() )
+        else if ( !buildTargetsAdded && item->target() )
         {
-            actions << new QAction( i18n( "Target: %1", target->text() ), this );
-
-//             QAction* targetBldAction = new QAction( i18n( "Build this target" ), this );
-//             targetBldAction->setObjectName( d->build_objectname );
-//             d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
-//             d->contexts[ targetBldAction->objectName() ] = context;
-//             connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
-//             actions << targetBldAction;
-        }
-        return qMakePair(QString("Project Management"), actions);
-    } // end of items.count() == 1
-
-    if( items.count() > 1 )
-    {
-        bool otherItemDetected = false;
-        QList< KDevelop::IProject* > projectlist;
-        foreach( KDevelop::ProjectBaseItem *baseitem, items )
-        {
-	    KDevelop::ProjectFolderItem *prjitem = baseitem->folder();
-            if( prjitem && prjitem->isProjectRoot())
-            {
-                projectlist << prjitem->project();
-            }
-            else
-            {
-                otherItemDetected = true;
-                break;
-            }
-        }
-
-        if( otherItemDetected )
-            return qMakePair(QString("Project Management"), actions);
-        else
-        {
-            QAction *closeAll = new QAction( i18n("Close selected projects"), this );
-            d->ctxProjectList = projectlist;
-            connect( closeAll, SIGNAL(triggered()), this, SLOT(slotCloseProject()), Qt::QueuedConnection );
-            actions << closeAll;
-            return qMakePair(QString("Project Management"), actions);
+            KDevelop::ProjectTargetItem* target = item->target();
+            KAction* action = new KAction( i18n( "Build targets" ), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT(slotBuildProjects()) );
+            actions << action;
+            buildTargetsAdded = true;
         }
     }
-    // shouldn't reach here
-    return IPlugin::requestContextMenuActions( context );
+    return qMakePair(QString("Project Management"), actions);
 }
 
-// Currently not used, since build context menu is plugged by each buildsystem managers.
-// void ProjectManagerViewPart::executeContextMenuAction( const QString& objectname )
-// {
-//     if( !d->contexts.contains(objectname) )
-//         return;
-//     Context* ctxt = d->contexts[objectname];
-//     if( ctxt && objectname == d->build_objectname &&
-//         ctxt->type() == KDevelop::Context::ProjectItemContext )
-//     {
-//         ProjectItemContext* prjctxt = dynamic_cast<ProjectItemContext*>(ctxt);
-//         executeProjectBuilder( prjctxt->item() );
-//     }
-// }
 
 void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* item )
 {
@@ -271,13 +156,26 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
     }
 }
 
-void ProjectManagerViewPart::slotCloseProject()
+void ProjectManagerViewPart::slotCloseProjects()
 {
-    foreach( IProject *project, d->ctxProjectList )
+    kDebug() << "Closing projects:" << d->ctxProjectItemList.count();
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        core()->projectController()->closeProject( project );
+        kDebug() << "Closing project:" << item->text();
+        KDevelop::ProjectFolderItem *prjitem = dynamic_cast<KDevelop::ProjectFolderItem*>(item);
+        if ( prjitem && prjitem->isProjectRoot() )
+        {
+            core()->projectController()->closeProject( prjitem->project() );
+        }
     }
-    //d->ctxProjectList.clear();
+}
+
+void ProjectManagerViewPart::slotBuildProjects()
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        executeProjectBuilder( item );
+    }
 }
 
 #include "projectmanagerview_part.moc"

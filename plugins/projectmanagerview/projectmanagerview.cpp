@@ -75,17 +75,6 @@ public:
     {
         m_part->core()->documentController()->openDocument( url );
     }
-    void buildCurrentProject()
-    {
-        m_part->core()->documentController()->saveAllDocuments(IDocument::Silent);
-
-        ProjectBaseItem* item = m_part->core()->projectController()->projectModel()->item(
-                m_projectOverview->selectionModel()->currentIndex() );
-        if( item )
-        {
-            m_part->executeProjectBuilder( item );
-        }
-    }
 };
 
 ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent )
@@ -135,12 +124,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
-
-    KAction* action = d->m_part->actionCollection()->addAction( "project_build" );
-    action->setText(i18n( "Build Selected Project" ) );
-    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( buildCurrentProject() ) );
-    action->setToolTip( i18n( "Build Selected Project" ) );
-    action->setWhatsThis( i18n( "<b>Build Selected Project</b><p>Builds the currently selected project.</p>" ) );
 }
 
 ProjectManagerView::~ProjectManagerView()

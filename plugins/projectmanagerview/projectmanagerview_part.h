@@ -41,46 +41,21 @@ class ProjectManagerViewPart: public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    enum RefreshPolicy
-    {
-        Refresh,
-        NoRefresh,
-        ForceRefresh
-    };
 
 public:
     ProjectManagerViewPart(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ProjectManagerViewPart();
 
-//     ProjectFolderItem *activeFolder();
-//     ProjectTargetItem *activeTarget();
-//     ProjectFileItem *activeFile();
-
     // Plugin methods
     virtual void unload();
 
     QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
-
-
-    void executeProjectBuilder( KDevelop::ProjectBaseItem* );
-
-Q_SIGNALS:
-    void refresh();
-    void addedProjectItem(KDevelop::ProjectBaseItem *dom);
-    void aboutToRemoveProjectItem(KDevelop::ProjectBaseItem *dom);
-
-public Q_SLOTS:
-    void openURL(const KUrl &url);
-//     void executeContextMenuAction( const QString& objectname );
-    void updateDetails(KDevelop::ProjectBaseItem *item);
-
-protected:
-    bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
-
 protected Q_SLOTS:
-    void slotCloseProject();
+    void slotCloseProjects();
+    void slotBuildProjects();
 
 private:
+    void executeProjectBuilder( KDevelop::ProjectBaseItem* );
     class ProjectManagerViewPartPrivate* const d;
 
 };
