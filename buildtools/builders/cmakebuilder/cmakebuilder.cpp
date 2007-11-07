@@ -77,8 +77,8 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
         IMakeBuilder* view = i->extension<IMakeBuilder>();
         if( view )
         {
-            connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(built(KDevelop::ProjectBaseItem*)));
-            connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SLOT(failed(KDevelop::ProjectBaseItem*)));
+            connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SIGNAL(built(KDevelop::ProjectBaseItem*)));
+            connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
         }
     }
 }
