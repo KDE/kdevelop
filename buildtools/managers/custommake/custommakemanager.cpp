@@ -299,14 +299,14 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
     QList<QAction*> actions;
     if( KDevelop::ProjectFolderItem *prjItem = dynamic_cast<KDevelop::ProjectFolderItem*>( baseitem ) )
     {
-        QAction* prjBldAction = new QAction( i18n( "Build this project" ), this );
+        KAction* prjBldAction = new KAction( i18n( "Build this project" ), this );
         d->m_ctxItem = prjItem;
         connect( prjBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
         actions << prjBldAction;
     }
     else if( KDevelop::ProjectTargetItem *targetItem = baseitem->target() )
     {
-        QAction* targetBldAction = new QAction( i18n( "Build this target" ), this );
+        KAction* targetBldAction = new KAction( i18n( "Build this target" ), this );
 //         targetBldAction->setObjectName( d->build_objectname );
 //         d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
 //         d->contexts[ targetBldAction->objectName() ] = context;
@@ -317,7 +317,7 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
     }
     else if( baseitem->type() == KDevelop::ProjectBaseItem::BuildFolder )
     {
-        QAction *bldFolderAction = new QAction( i18n( "Build this directory" ), this );
+        KAction *bldFolderAction = new KAction( i18n( "Build this directory" ), this );
         d->m_ctxItem = baseitem;
         connect( bldFolderAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
         actions << bldFolderAction;
