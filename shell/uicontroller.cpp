@@ -262,3 +262,4 @@ KParts::MainWindow *UiController::activeMainWindow()
 
 }
 
+#include "uicontroller.moc"

@@ -30,6 +30,8 @@ class Core;
 class MainWindow;
 
 class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public IUiController {
+    Q_OBJECT
+    
 public:
     UiController(Core *core);
     virtual ~UiController();
