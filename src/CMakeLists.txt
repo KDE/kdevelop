@@ -23,6 +23,19 @@ target_link_libraries(kdevelop ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_SHELL_LIBRARY
 install(TARGETS kdevelop DESTINATION ${BIN_INSTALL_DIR} )
 
 
+########### next target ###############
+
+set(testicons_SRCS
+    testicons.cpp
+)
+
+
+#kde4_add_executable(kdevtesticons ${testicons_SRCS})
+#target_link_libraries(kdevtesticons ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_SHELL_LIBRARY} ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} )
+#install(TARGETS kdevtesticons DESTINATION ${BIN_INSTALL_DIR} )
+
+
+
 ########### install files ###############
 
 install( FILES kdeveloprc DESTINATION ${CONFIG_INSTALL_DIR} )
