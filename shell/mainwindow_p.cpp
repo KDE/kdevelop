@@ -232,14 +232,6 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( i18n( "New File" ) );
     action->setWhatsThis( i18n( "<b>New File</b><p>Creates an empty file.</p>" ) );
 
-    action = actionCollection()->addAction( "file_close" );
-    action->setIcon(KIcon("window-close"));
-    action->setShortcut( Qt::CTRL + Qt::Key_W );
-    action->setText( i18n( "&Close File" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
-    action->setToolTip( i18n( "Close File" ) );
-    action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file.</p>" ) );
-
     action = actionCollection()->addAction( "add_toolview" );
     action->setIcon(KIcon("window-new"));
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );

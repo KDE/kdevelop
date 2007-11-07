@@ -158,6 +158,7 @@ struct DocumentControllerPrivate {
 
     QPointer<KAction> saveAll;
     QPointer<KAction> revertAll;
+    QPointer<KAction> close;
     QPointer<KAction> closeAll;
     QPointer<KAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
@@ -191,7 +192,7 @@ void DocumentController::setupActions()
 
     KAction *action;
 
-    action = static_cast<KAction*>(ac->addAction( "file_open" ));
+    action = ac->addAction( "file_open" );
     action->setIcon(KIcon("file_open"));
     action->setText(i18n( "&Open File..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( chooseDocument() ) );
@@ -203,7 +204,7 @@ void DocumentController::setupActions()
     d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
     d->fileOpenRecent->loadEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
 
-    action = d->saveAll = static_cast<KAction*>(ac->addAction( "file_save_all" ));
+    action = d->saveAll = ac->addAction( "file_save_all" );
     action->setIcon(KIcon("document-save"));
     action->setText(i18n( "Save Al&l" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( slotSaveAllDocuments() ) );
@@ -211,7 +212,7 @@ void DocumentController::setupActions()
     action->setWhatsThis( i18n( "<b>Save all documents</b><p>Save all open documents, prompting for additional information when necessary.</p>" ) );
     action->setEnabled(false);
 
-    action = d->revertAll = static_cast<KAction*>(ac->addAction( "file_revert_all" ));
+    action = d->revertAll = ac->addAction( "file_revert_all" );
     action->setIcon(KIcon("document-revert"));
     action->setText(i18n( "Rever&t All" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( reloadAllDocuments() ) );
@@ -219,7 +220,16 @@ void DocumentController::setupActions()
     action->setWhatsThis( i18n( "<b>Revert all documents</b><p>Revert all open documents, returning to the previously saved state.</p>" ) );
     action->setEnabled(false);
 
-    action = d->closeAll = static_cast<KAction*>(ac->addAction( "file_close_all" ));
+    action = d->close = ac->addAction( "file_close" );
+    action->setIcon(KIcon("window-close"));
+    action->setShortcut( Qt::CTRL + Qt::Key_W );
+    action->setText( i18n( "&Close File" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
+    action->setToolTip( i18n( "Close File" ) );
+    action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file.</p>" ) );
+    action->setEnabled(false);
+
+    action = d->closeAll = ac->addAction( "file_close_all" );
     action->setIcon(KIcon("window-close"));
     action->setText(i18n( "Clos&e All" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllDocuments() ) );
@@ -227,7 +237,7 @@ void DocumentController::setupActions()
     action->setWhatsThis( i18n( "<b>Close all documents</b><p>Close all open documents, prompting for additional information when necessary.</p>" ) );
     action->setEnabled(false);
 
-    action = d->closeAllOthers = static_cast<KAction*>(ac->addAction( "file_closeother" ));
+    action = d->closeAllOthers = ac->addAction( "file_closeother" );
     action->setIcon(KIcon("window-close"));
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllOtherDocuments() ) );
@@ -379,10 +389,30 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
     d->saveAll->setEnabled(true);
     d->revertAll->setEnabled(true);
+    d->close->setEnabled(true);
     d->closeAll->setEnabled(true);
     d->closeAllOthers->setEnabled(true);
 
     return doc;
+}
+
+void DocumentController::fileClose()
+{
+    if (activeDocument())
+        activeDocument()->close();
+
+    if (d->documents.isEmpty()) {
+        if (d->saveAll)
+            d->saveAll->setEnabled(false);
+        if (d->revertAll)
+            d->revertAll->setEnabled(false);
+        if (d->close)
+            d->close->setEnabled(false);
+        if (d->closeAll)
+            d->closeAll->setEnabled(false);
+        if (d->closeAllOthers)
+            d->closeAllOthers->setEnabled(false);
+    }
 }
 
 void DocumentController::closeDocument( const KUrl &url )
@@ -400,11 +430,20 @@ void DocumentController::closeDocument( const KUrl &url )
             d->saveAll->setEnabled(false);
         if (d->revertAll)
             d->revertAll->setEnabled(false);
+        if (d->close)
+            d->close->setEnabled(false);
         if (d->closeAll)
             d->closeAll->setEnabled(false);
         if (d->closeAllOthers)
             d->closeAllOthers->setEnabled(false);
     }
+}
+
+void DocumentController::notifyDocumentClosed(IDocument* doc)
+{
+    d->documents.remove(doc->url());
+
+    emit documentClosed(doc);
 }
 
 IDocument * DocumentController::documentForUrl( const KUrl & url ) const

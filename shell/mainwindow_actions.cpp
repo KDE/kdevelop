@@ -153,14 +153,6 @@ void MainWindowPrivate::fileNew()
     Core::self()->uiControllerInternal()->openEmptyDocument();
 }
 
-void MainWindowPrivate::fileClose()
-{
-    Sublime::View *view = m_mainWindow->activeView();
-    if (!view)
-        return;
-    m_mainWindow->area()->removeView(view);
-}
-
 void MainWindowPrivate::viewAddNewToolView()
 {
     Core::self()->uiControllerInternal()->addNewToolView(m_mainWindow);

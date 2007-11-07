@@ -80,6 +80,8 @@ public:
 
     virtual void saveAllDocuments(IDocument::DocumentSaveMode mode = IDocument::Silent);
 
+    void notifyDocumentClosed(IDocument* doc);
+
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.
@@ -90,6 +92,7 @@ public Q_SLOTS:
             DocumentActivation activate = IDocumentController::ActivateOnOpen );
 
     virtual void closeDocument( const KUrl &url );
+    void fileClose();
     void slotSaveAllDocuments();
     virtual void closeAllDocuments();
     void closeAllOtherDocuments();

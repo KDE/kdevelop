@@ -25,7 +25,7 @@
 #include "core.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
-#include "idocumentcontroller.h"
+#include "documentcontroller.h"
 
 namespace KDevelop {
 
@@ -89,7 +89,7 @@ bool PartDocument::save(DocumentSaveMode /*mode*/)
 
 void PartDocument::close()
 {
-    //close all views and then delete ourselves
+    //close all views and then delete ourself
     ///@todo test this
     foreach (Sublime::Area *area, Core::self()->uiControllerInternal()->areas())
     {
@@ -98,6 +98,11 @@ void PartDocument::close()
             if (views().contains(view))
                 area->removeView(view);
     }
+
+    Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
+
+    // Here we go...
+    delete this;
 }
 
 void PartDocument::reload()

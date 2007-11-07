@@ -60,7 +60,6 @@ public Q_SLOTS:
 
     //actions
     void fileNew();
-    void fileClose();
 
     void gotoNextWindow();
     void gotoPreviousWindow();
