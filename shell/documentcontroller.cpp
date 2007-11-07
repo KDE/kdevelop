@@ -33,6 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <kfiledialog.h>
 #include <kactioncollection.h>
 #include <klocale.h>
+#include <krecentfilesaction.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -159,6 +160,7 @@ struct DocumentControllerPrivate {
     KAction* revertAll;
     KAction* closeAll;
     KAction* closeAllOthers;
+    KRecentFilesAction* fileOpenRecent;
     
 /*    HistoryEntry createHistoryEntry();
     void addHistoryEntry();
@@ -178,6 +180,7 @@ DocumentController::DocumentController( QObject *parent )
 
 DocumentController::~DocumentController()
 {
+    d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
     delete d;
 }
 
@@ -194,6 +197,11 @@ void DocumentController::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( chooseDocument() ) );
     action->setToolTip( i18n( "Open file" ) );
     action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
+
+    d->fileOpenRecent = KStandardAction::openRecent(this, SLOT(slotOpenDocument(const KUrl&)), this);
+    ac->addAction(d->fileOpenRecent->objectName(), d->fileOpenRecent);
+    d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
+    d->fileOpenRecent->loadEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
 
     action = d->saveAll = static_cast<KAction*>(ac->addAction( "file_save_all" ));
     action->setIcon(KIcon("document-save"));
@@ -236,6 +244,11 @@ void DocumentController::setEncoding( const QString &encoding )
 QString KDevelop::DocumentController::encoding() const
 {
     return d->presetEncoding;
+}
+
+void DocumentController::slotOpenDocument(const KUrl &url)
+{
+    openDocument(url);
 }
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
@@ -354,6 +367,8 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     {
         doc->setCursorPosition( cursor );
     }
+
+    d->fileOpenRecent->addUrl( url );
 
     // Deferred signals, wait until it's all ready first
     if( emitLoaded )

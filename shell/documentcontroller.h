@@ -95,6 +95,9 @@ public Q_SLOTS:
     void closeAllOtherDocuments();
     void reloadAllDocuments();
 
+private Q_SLOTS:
+    virtual void slotOpenDocument(const KUrl &url);
+
 private:
     void setupActions();
     Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
