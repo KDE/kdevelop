@@ -205,7 +205,6 @@ void ProjectManagerViewPart::buildProjects()
         QTreeWidgetItem* item = new QTreeWidgetItem( 0 );
         item->setCheckState( 0, Qt::Checked );
         item->setText( 1, project->name() );
-        item->setData( 0, Qt::UserRole, qVariantFromValue( project->folder() ) );
         ui.projectlist->addTopLevelItem( item );
     }
     if( dlg.exec() == QDialog::Accepted )
@@ -213,7 +212,7 @@ void ProjectManagerViewPart::buildProjects()
         QTreeWidgetItemIterator it( ui.projectlist, QTreeWidgetItemIterator::Checked );
         while( *it )
         {
-            IProject* project = core()->projectController()->findProjectForUrl( qVariantValue<KUrl>( (*it)->data(0, Qt::UserRole ) ) );
+            IProject* project = core()->projectController()->findProjectByName( (*it)->text(1) );
             if( project )
             {
                 executeProjectBuilder( project->projectItem() );
