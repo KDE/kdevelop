@@ -74,6 +74,7 @@ public:
     void setDocumentState( KDevelop::IDocument::DocumentState state )
     {
         m_documentState = state;
+        setIcon(icon());
     }
 
 private:
