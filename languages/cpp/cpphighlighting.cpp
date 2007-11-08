@@ -79,15 +79,18 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
 
     switch (type) {
       case UnknownType:
-        a->setForeground(QColor(0xBF3E0D));
+        // Chocolate orange
+        a->setForeground(QColor(0xA0320A));
         break;
 
       case ArgumentType:
-        a->setBackground(QColor(Qt::green).light(175));
+        // Steel
+        a->setBackground(QColor(0x435361));
         break;
 
       case ClassType: {
-        a->setForeground(Qt::blue);
+        // Scarlet
+        a->setForeground(QColor(0x7B0859));
 
         KTextEditor::Attribute::Ptr e(new KTextEditor::Attribute());
         e->setForeground(QColor(0x005500));
@@ -101,39 +104,48 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         // fallthrough
 
       case FunctionType:
-        a->setBackground(QColor(Qt::blue).light(175));
+        // Navy blue
+        a->setForeground(QColor(0x21005A));
         break;
 
       case MemberVariableType:
-        a->setForeground(QColor(0xFF800D));
+        // Dark Burple (blue / purple)
+        a->setForeground(QColor(0x443069));
         break;
 
       case LocalVariableType:
-        a->setForeground(QColor(0xA04F2C));
+        // Dark aquamarine
+        a->setForeground(QColor(0x0C4D3C));
         break;
 
       case FunctionVariableType:
-        a->setForeground(QColor(0x1F88A7));
+        // Less dark navy blue
+        a->setForeground(QColor(0x300085));
         break;
 
       case NamespaceVariableType:
-        a->setForeground(QColor(0xD568FD));
+        // Rose
+        a->setForeground(QColor(0x9F3C5F));
         break;
 
       case GlobalVariableType:
-        a->setForeground(QColor(0x1FCB4A));
+        // Grass green
+        a->setForeground(QColor(0x12762B));
         break;
 
       case NamespaceType:
-        a->setForeground(QColor(Qt::blue).dark());
+        // Dark rose
+        a->setForeground(QColor(0x6B2840));
         break;
 
       case ErrorVariableType:
-        a->setForeground(Qt::red);
+        // Slightly less intense red
+        a->setForeground(QColor(0x9F3C5F));
         break;
 
       case ForwardDeclarationType:
-        a->setForeground(QColor(0x5C005C));
+        // Gray
+        a->setForeground(QColor(0x5C5C5C));
         break;
 
       case ScopeType:
@@ -153,6 +165,7 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         break;
 
       case DeclarationContext:
+        //a->setFontBold();
         a->setFontUnderline(true);
         break;
 
