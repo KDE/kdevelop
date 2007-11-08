@@ -32,11 +32,14 @@
 #include "importprojectjob.h"
 #include "context.h"
 
+#include "ui_builddialog.h"
+
 #include <kservicetypetrader.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <klocale.h>
+#include <kdialog.h>
 #include <kaboutdata.h>
 #include <kplugininfo.h>
 
@@ -46,6 +49,8 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QTimer>
 #include <QtCore/QList>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QTreeWidgetItem>
 #include <QtCore/QSignalMapper>
 
 using namespace KDevelop;
@@ -78,6 +83,7 @@ public:
     KDevProjectManagerViewFactory *factory;
     QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
     KAction* m_buildAll;
+    KAction* m_build;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
@@ -86,9 +92,12 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( "Project Manager", d->factory );
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
-    d->m_buildAll->setShortcut( Qt::Key_F8 );
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
+    d->m_build = new KAction( i18n("Build..."), this );
+    d->m_build->setShortcut( Qt::Key_F8 );
+    connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjects()) );
+    actionCollection()->addAction( "project_build", d->m_build );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
@@ -137,7 +146,7 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         {
             KDevelop::ProjectTargetItem* target = item->target();
             KAction* action = new KAction( i18n( "Build targets" ), this );
-            connect( action, SIGNAL( triggered() ), this, SLOT(buildProjects()) );
+            connect( action, SIGNAL( triggered() ), this, SLOT(buildProjectsFromContextMenu()) );
             actions << action;
             buildTargetsAdded = true;
         }
@@ -164,23 +173,53 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
 
 void ProjectManagerViewPart::closeProjects()
 {
-    kDebug(9511) << "Closing projects:" << d->ctxProjectItemList.count();
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        kDebug(9511) << "Closing project:" << item->text();
         KDevelop::ProjectFolderItem *prjitem = dynamic_cast<KDevelop::ProjectFolderItem*>(item);
         if ( prjitem && prjitem->isProjectRoot() )
         {
             core()->projectController()->closeProject( prjitem->project() );
         }
     }
+    d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPart::buildProjects()
+void ProjectManagerViewPart::buildProjectsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         executeProjectBuilder( item );
+    }
+    d->ctxProjectItemList.clear();
+}
+
+void ProjectManagerViewPart::buildProjects()
+{
+    KDialog dlg;
+    dlg.setButtons( KDialog::Ok | KDialog::Cancel );
+    dlg.setButtonText( KDialog::Ok, i18n("Build") );
+    Ui::BuildDialog ui;
+    ui.setupUi( dlg.mainWidget() );
+    foreach( KDevelop::IProject* project, core()->projectController()->projects() )
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem( 0 );
+        item->setCheckState( 0, Qt::Checked );
+        item->setText( 1, project->name() );
+        item->setData( 0, Qt::UserRole, qVariantFromValue( project->folder() ) );
+        ui.projectlist->addTopLevelItem( item );
+    }
+    if( dlg.exec() == QDialog::Accepted )
+    {
+        QTreeWidgetItemIterator it( ui.projectlist, QTreeWidgetItemIterator::Checked );
+        while( *it )
+        {
+            IProject* project = core()->projectController()->findProjectForUrl( qVariantValue<KUrl>( (*it)->data(0, Qt::UserRole ) ) );
+            if( project )
+            {
+                executeProjectBuilder( project->projectItem() );
+            }
+            ++it;
+        }
     }
 }
 
@@ -188,7 +227,6 @@ void ProjectManagerViewPart::buildAllProjects()
 {
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
-        kDebug(9511) << "Building" << project->name();
         executeProjectBuilder( project->projectItem() );
     }
 }

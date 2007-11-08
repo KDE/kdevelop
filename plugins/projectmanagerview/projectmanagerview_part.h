@@ -52,6 +52,7 @@ public:
     QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
 protected Q_SLOTS:
     void closeProjects();
+    void buildProjectsFromContextMenu();
     void buildProjects();
     void buildAllProjects();
 
