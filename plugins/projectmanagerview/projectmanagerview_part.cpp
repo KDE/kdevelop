@@ -84,6 +84,7 @@ public:
     QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
     KAction* m_buildAll;
     KAction* m_build;
+    KAction* m_recentBuilds;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
@@ -200,6 +201,7 @@ void ProjectManagerViewPart::buildProjects()
     dlg.setButtonText( KDialog::Ok, i18n("Build") );
     Ui::BuildDialog ui;
     ui.setupUi( dlg.mainWidget() );
+    ui.projectlist->setFocus();
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( 0 );
@@ -207,6 +209,7 @@ void ProjectManagerViewPart::buildProjects()
         item->setText( 1, project->name() );
         ui.projectlist->addTopLevelItem( item );
     }
+    ui.projectlist->setCurrentItem( ui.projectlist->topLevelItem( 0 ) );
     if( dlg.exec() == QDialog::Accepted )
     {
         QTreeWidgetItemIterator it( ui.projectlist, QTreeWidgetItemIterator::Checked );
