@@ -63,7 +63,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const QVariantList & )
     connect( m_grepdlg, SIGNAL(search()), this, SLOT(searchActivated()) );
 
 
-    QAction *action = actionCollection()->addAction("edit_grep");
+    KAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find in Fi&les..."));
     action->setShortcut( QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F) );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotGrep()));
