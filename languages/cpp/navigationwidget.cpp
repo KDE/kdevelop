@@ -568,7 +568,7 @@ class NavigationContext : public KShared {
     void makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType )
     {
       NavigationAction action( declaration, actionType );
-      QString targetId = QString("%1").arg((unsigned long long)declaration.data());
+      QString targetId = QString("%1").arg((quint64)declaration.data());
       makeLink(name, targetId, action);
     }
 

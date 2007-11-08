@@ -136,7 +136,7 @@ public:
   /**The types and modifiers are not changed!
    
   * Implemented versions are:
-   * setValue<long long>(),setValue<unsigned long long>(), setValue<float>(), setValue<double>()
+   * setValue<qint64>(),setValue<quint64>(), setValue<float>(), setValue<double>()
    *
    * */
   template<class ValueType>
@@ -148,7 +148,7 @@ public:
    * unsigned ones through unsignedValue().
    *
    * Implemented versions are:
-   * value<long long>(),value<unsigned long long>(), value<float>(), value<double>()
+   * value<qint64>(),value<quint64>(), value<float>(), value<double>()
    * 
    * */
   template<class Type>
@@ -160,7 +160,7 @@ public:
 
   CppConstantIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
 private:
-  long long m_value;
+  qint64 m_value;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)

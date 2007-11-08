@@ -309,17 +309,17 @@ CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, CppConstant
 }
 
 template<>
-void CppConstantIntegralType::setValue<long long>(long long value) {
+void CppConstantIntegralType::setValue<qint64>(qint64 value) {
   if((typeModifiers() & ModifierUnsigned))
     kWarning() << "setValue(signed) called on unsigned type";
   m_value = value;
 }
 
 template<>
-void CppConstantIntegralType::setValue<unsigned long long>(unsigned long long value) {
+void CppConstantIntegralType::setValue<quint64>(quint64 value) {
   if(!(typeModifiers() & ModifierUnsigned))
     kWarning() << "setValue(unsigned) called on not unsigned type";
-  m_value = (long long)value;
+  m_value = (qint64)value;
 }
 
 template<>
@@ -337,17 +337,17 @@ void CppConstantIntegralType::setValue<double>(double value) {
 }
 
 template<>
-long long CppConstantIntegralType::value<long long>() const {
+qint64 CppConstantIntegralType::value<qint64>() const {
 /*  if((typeModifiers() & ModifierUnsigned))
     kWarning() << "value<signed> called on unsigned type";*/
   return m_value;
 }
 
 template<>
-unsigned long long CppConstantIntegralType::value<unsigned long long>() const {
+quint64 CppConstantIntegralType::value<quint64>() const {
 /*  if(!(typeModifiers() & ModifierUnsigned))
     kWarning() << "value<unsigned> called on not unsigned type";*/
-  return (unsigned long long)m_value;
+  return (quint64)m_value;
 }
 
 template<>

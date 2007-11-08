@@ -488,13 +488,13 @@ void TestDUChain::testEnum()
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
-    QCOMPARE((int)en->value<long long>(), 5);
+    QCOMPARE((int)en->value<qint64>(), 5);
   
     decl = findDeclaration(top, Identifier("value2"));
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
-    QCOMPARE((int)en->value<long long>(), 6);
+    QCOMPARE((int)en->value<qint64>(), 6);
   }
   decl = findDeclaration(top, Identifier("Enum2"));
   QVERIFY(decl);
@@ -508,13 +508,13 @@ void TestDUChain::testEnum()
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
-    QCOMPARE((int)en->value<long long>(), 0);
+    QCOMPARE((int)en->value<qint64>(), 0);
   
     decl = findDeclaration(top, Identifier("value22"));
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
-    QCOMPARE((int)en->value<long long>(), 2);
+    QCOMPARE((int)en->value<qint64>(), 2);
   }
   release(top);
 }

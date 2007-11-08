@@ -459,7 +459,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       LOCKDUCHAIN;
       m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeBool, CppIntegralType::ModifierNone)) );
       m_lastInstance = Instance(true);
-      static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<long long>( identifier == trueIdentifier );
+      static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<qint64>( identifier == trueIdentifier );
     } else {
       LOCKDUCHAIN;
 
@@ -540,7 +540,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
             static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<double>(val);
           }
         } else {
-          long long val;
+          qint64 val;
           CppIntegralType::TypeModifier mod = CppIntegralType::ModifierNone;
 
           if( num.endsWith("u") || ( num.length() > 1 && num[1] == 'x' ) )
@@ -555,9 +555,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
           m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeInt, mod)));
 
           if( mod & CppIntegralType::ModifierUnsigned )
-            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<unsigned long long>(val);
+            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<quint64>(val);
           else
-            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<long long>(val);
+            static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<qint64>(val);
         }
         m_lastInstance = Instance(true);
         
@@ -985,10 +985,10 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
           }
           default:
             if( left->typeModifiers() & CppIntegralType::ModifierUnsigned ) {
-              ConstantBinaryExpressionEvaluator<unsigned long long> evaluator( tokenFromIndex(node->op).kind, left, right);
+              ConstantBinaryExpressionEvaluator<quint64> evaluator( tokenFromIndex(node->op).kind, left, right);
               m_lastType = evaluator.createType();
             } else {
-              ConstantBinaryExpressionEvaluator<long long> evaluator( tokenFromIndex(node->op).kind, left, right);
+              ConstantBinaryExpressionEvaluator<qint64> evaluator( tokenFromIndex(node->op).kind, left, right);
               m_lastType = evaluator.createType();
             }
             break;
@@ -1445,10 +1445,10 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
             }
             default:
               if( constantIntegral->typeModifiers() & CppIntegralType::ModifierUnsigned ) {
-                ConstantUnaryExpressionEvaluator<unsigned long long> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
+                ConstantUnaryExpressionEvaluator<quint64> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
                 m_lastType = evaluator.createType();
               } else {
-                ConstantUnaryExpressionEvaluator<long long> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
+                ConstantUnaryExpressionEvaluator<qint64> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
                 m_lastType = evaluator.createType();
               }
               break;

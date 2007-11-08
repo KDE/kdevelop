@@ -229,7 +229,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     }
     if (res.isValid() && res.instance && dynamic_cast<CppConstantIntegralType*>(res.type.data())) {
       CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(res.type.data());
-      m_currentEnumeratorValue = (int)type->value<long long>();
+      m_currentEnumeratorValue = (int)type->value<qint64>();
     } else {
       ///@todo Report problem, bad expression
     }
@@ -243,7 +243,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 
   CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
   openType(enumerator, node);
-  enumerator->setValue<long long>(m_currentEnumeratorValue);
+  enumerator->setValue<qint64>(m_currentEnumeratorValue);
   
   TypeBuilderBase::visitEnumerator(node);
 
@@ -547,7 +547,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
 
     if( res.isValid() && dynamic_cast<CppConstantIntegralType*>(res.type.data()) ) {
       CppConstantIntegralType* value = static_cast<CppConstantIntegralType*>( res.type.data() );
-      array->setDimension(value->value<long long>());
+      array->setDimension(value->value<qint64>());
     } else {
       array->setDimension(0);
     }

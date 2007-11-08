@@ -98,7 +98,7 @@ namespace TypeUtils {
 
   bool isNullType( AbstractType* t ) {
     CppConstantIntegralType* integral = dynamic_cast<CppConstantIntegralType*>(t);
-    if( integral && integral->integralType() == CppIntegralType::TypeInt && integral->value<long long>() == 0 )
+    if( integral && integral->integralType() == CppIntegralType::TypeInt && integral->value<qint64>() == 0 )
       return true;
     else
       return false;
