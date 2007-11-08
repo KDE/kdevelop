@@ -50,17 +50,8 @@ struct TextDocumentPrivate {
     void newDocumentStatus(KTextEditor::Document *document)
     {
         bool dirty = (state == IDocument::Dirty || state == IDocument::DirtyAndModified);
-        if (document->isModified())
-            if (dirty)
-                state = IDocument::DirtyAndModified;
-            else
-                state = IDocument::Modified;
-        else
-            if (dirty)
-                state = IDocument::Dirty;
-            else
-                state = IDocument::Clean;
-        m_textDocument->notifyStateChanged();
+
+        setStatus(document, dirty);
     }
 
     void textChanged(KTextEditor::Document *document)
@@ -83,6 +74,11 @@ struct TextDocumentPrivate {
                 break;
         }
 
+        setStatus(document, dirty);
+    }
+
+    void setStatus(KTextEditor::Document* document, bool dirty)
+    {
         if (document->isModified())
             if (dirty)
                 state = IDocument::DirtyAndModified;
@@ -96,6 +92,7 @@ struct TextDocumentPrivate {
 
         m_textDocument->notifyStateChanged();
     }
+
 
 private:
     TextDocument *m_textDocument;
