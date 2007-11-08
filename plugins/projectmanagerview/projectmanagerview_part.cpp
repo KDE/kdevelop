@@ -21,7 +21,7 @@
 #include "projectmodel.h"
 #include "projectmanagerview.h"
 #include "icore.h"
-// #include "kdevconfig.h"
+
 #include "iproject.h"
 #include "iprojectfilemanager.h"
 #include "ibuildsystemmanager.h"
@@ -35,6 +35,7 @@
 #include <kservicetypetrader.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kplugininfo.h>
@@ -76,6 +77,7 @@ public:
     {}
     KDevProjectManagerViewFactory *factory;
     QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
+    KAction* m_buildAll;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
@@ -83,6 +85,10 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
 {
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( "Project Manager", d->factory );
+    d->m_buildAll = new KAction( i18n("Build all Projects"), this );
+    d->m_buildAll->setShortcut( Qt::Key_F8 );
+    connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
+    actionCollection()->addAction( "project_buildall", d->m_buildAll );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
@@ -158,10 +164,10 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
 
 void ProjectManagerViewPart::slotCloseProjects()
 {
-    kDebug() << "Closing projects:" << d->ctxProjectItemList.count();
+    kDebug(9511) << "Closing projects:" << d->ctxProjectItemList.count();
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        kDebug() << "Closing project:" << item->text();
+        kDebug(9511) << "Closing project:" << item->text();
         KDevelop::ProjectFolderItem *prjitem = dynamic_cast<KDevelop::ProjectFolderItem*>(item);
         if ( prjitem && prjitem->isProjectRoot() )
         {
@@ -175,6 +181,15 @@ void ProjectManagerViewPart::slotBuildProjects()
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         executeProjectBuilder( item );
+    }
+}
+
+void ProjectManagerViewPart::buildAllProjects()
+{
+    foreach( KDevelop::IProject* project, core()->projectController()->projects() )
+    {
+        kDebug(9511) << "Building" << project->name();
+        executeProjectBuilder( project->projectItem() );
     }
 }
 

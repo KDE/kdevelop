@@ -53,6 +53,7 @@ public:
 protected Q_SLOTS:
     void slotCloseProjects();
     void slotBuildProjects();
+    void buildAllProjects();
 
 private:
     void executeProjectBuilder( KDevelop::ProjectBaseItem* );
