@@ -94,7 +94,7 @@ class KDEVCPPRPP_EXPORT Stream
 
     Stream & operator<< ( const QChar& c );
     Stream & operator<< ( const Stream& input );
-    Stream& appendString( const Stream& input, const QString & string );
+    Stream& appendString( const KTextEditor::Cursor& position, const QString & string );
 
   private:
     Q_DISABLE_COPY(Stream)

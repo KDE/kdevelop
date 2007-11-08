@@ -259,11 +259,13 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
       continue;
 
     } else if (input.current().isLetter() || input == '_') {
-      output.appendString(input, skip_identifier(input));
+      KTextEditor::Cursor inputPosition = input.inputPosition();
+      output.appendString(inputPosition, skip_identifier(input));
       continue;
 
     } else if (input.current().isNumber()) {
-      output.appendString(input, skip_number(input));
+      KTextEditor::Cursor inputPosition = input.inputPosition();
+      output.appendString(inputPosition, skip_number(input));
       continue;
 
     }

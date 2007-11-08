@@ -173,6 +173,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       {
         check_header_section
         
+        KTextEditor::Cursor inputPosition = input.inputPosition();
         QString name = skip_identifier (input);
 
         // search for the paste token
@@ -192,9 +193,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         Q_ASSERT(name.length() >= 0 && name.length() < 512);
 
+        KTextEditor::Cursor inputPosition2 = input.inputPosition();
         QString actual = resolve_formal(name, input);
         if (!actual.isEmpty()) {
-          output.appendString(input, actual);
+          output.appendString(inputPosition2, actual);
           continue;
         }
 
@@ -206,15 +208,15 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           m_engine->setHideNextMacro(name == "defined");
 
           if (name == "__LINE__")
-            output.appendString(input, QString::number(input.inputPosition().line()));
+            output.appendString(inputPosition, QString::number(input.inputPosition().line()));
           else if (name == "__FILE__")
-            output.appendString(input, QString("\"%1\"").arg(m_engine->currentFile()));
+            output.appendString(inputPosition, QString("\"%1\"").arg(m_engine->currentFile()));
           else if (name == "__DATE__")
-            output.appendString(input, QDate::currentDate().toString("MMM dd yyyy"));
+            output.appendString(inputPosition, QDate::currentDate().toString("MMM dd yyyy"));
           else if (name == "__TIME__")
-            output.appendString(input, QTime::currentTime().toString("hh:mm:ss"));
+            output.appendString(inputPosition, QTime::currentTime().toString("hh:mm:ss"));
           else
-            output.appendString(input, name);
+            output.appendString(inputPosition, name);
           continue;
         }
 
@@ -243,7 +245,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier)) && m2->defined) {
                 m = m2;
               } else {
-                output.appendString(input, expanded);
+                output.appendString(inputPosition, expanded);
               }
             }
 
@@ -265,7 +267,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         // function like macro
         if (input.atEnd() || input != '(')
         {
-          output.appendString(input, name);
+          output.appendString(inputPosition, name);
           continue;
         }
 
@@ -322,7 +324,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           //Failed to expand the macro. Output the macro name and continue normal
           //processing behind it.(Code completion depends on this behavior when expanding
           //incomplete input-lines)
-          output.appendString(input, name);
+          output.appendString(inputPosition, name);
           input.seek(openingPosition);
           input.setInputPosition(openingPositionCursor);
           continue;

@@ -90,8 +90,11 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
   }
 
   m_currentOffset = m_offsetTable.lowerBound(offset);
-  if (m_currentOffset == constEnd)
+  //kDebug() << k_funcinfo << offset << "found" << m_currentOffset.key();
+  if (m_currentOffset.key() != offset)
     --m_currentOffset;
+
+  Q_ASSERT(m_currentOffset != constEnd);
   return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
 }
 

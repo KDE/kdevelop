@@ -155,14 +155,16 @@ Stream& Stream::operator<< ( const Stream& input )
   return *this;
 }
 
-Stream& Stream::appendString( const Stream& input, const QString & string )
+Stream& Stream::appendString( const KTextEditor::Cursor& position, const QString & string )
 {
   if (!isNull()) {
+    mark(position);
+
     int extraLines = 0;
     for (int i = 0; i < string.length(); ++i) {
       if (string.at(i) == newline) {
         m_pos += i + 1;
-        mark(KTextEditor::Cursor(input.inputPosition().line() + ++extraLines, 0));
+        mark(KTextEditor::Cursor(position.line() + ++extraLines, 0));
         m_pos -= i + 1;
       }
     }
@@ -172,8 +174,6 @@ Stream& Stream::appendString( const Stream& input, const QString & string )
     // TODO check correctness
     m_inputLineStartedAt = m_pos - (string.length() - string.lastIndexOf(newline));
     m_string->append(string);
-
-    mark(input.inputPosition());
   }
   return *this;
 }
