@@ -41,6 +41,7 @@
 #include <kmessagebox.h>
 #include <kio/jobclasses.h>
 #include <ktemporaryfile.h>
+#include <kdebug.h>
 
 #include "iprojectfilemanager.h"
 #include "ibuildsystemmanager.h"
@@ -300,7 +301,7 @@ void Project::close()
 
 bool Project::inProject( const KUrl& url ) const
 {
-    return fileForUrl( url ) != 0;
+    return ( fileForUrl( url ) != 0 || url.cmp( d->topItem->url(), true ) );
 }
 
 ProjectFileItem* Project::fileAt( int num ) const
@@ -330,6 +331,14 @@ ProjectFileItem *Project::fileForUrl(const KUrl& url) const
     KUrl u = d->topItem->url();
     if ( u.protocol() != url.protocol() || u.host() != url.host() )
         return 0;
+
+    foreach( ProjectFileItem* file, d->topItem->fileList() )
+    {
+        if( file->url() == url )
+        {
+            return file;
+        }
+    }
 
     foreach( ProjectFolderItem* top, d->topItem->folderList() )
     {
