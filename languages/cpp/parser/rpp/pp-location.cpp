@@ -63,12 +63,16 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
     // TODO check for optimal number of iterations
     for (int i = 0; i < 5; ++i) {
       if (checkForwards) {
+        if (m_currentOffset + 1 == constEnd)
+          // Special case
+          goto done;
+
         ++m_currentOffset;
         if (m_currentOffset != constEnd) {
           if (m_currentOffset.key() > offset) {
             // Gone forwards too much, but one back is correct
             --m_currentOffset;
-            return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
+            goto done;
           }
 
         } else {
@@ -76,11 +80,15 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
         }
 
       } else {
+        if (m_currentOffset == m_offsetTable.constBegin())
+          // Special case
+          goto done;
+
         ++m_currentOffset;
         if (m_currentOffset != constEnd) {
           if (m_currentOffset.key() < offset) {
             // Correct position :)
-            return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
+            goto done;
           }
         } else {
           break;
@@ -94,9 +102,10 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
   if (m_currentOffset == constEnd)
     --m_currentOffset;
   
-  if (m_currentOffset.key() != offset)
+  if (m_currentOffset.key() > offset)
     --m_currentOffset;
 
+  done:
   Q_ASSERT(m_currentOffset != constEnd);
   return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
 }
