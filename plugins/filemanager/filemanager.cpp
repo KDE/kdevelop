@@ -119,6 +119,7 @@ public:
         if (m_view->isBusy())
             return;
         m_model->dirLister()->openUrl(url, KDirLister::Reload);
+        m_urlBox->setUrl(url.url());
     }
 
     void goToUrl(const QString &url)
@@ -160,6 +161,15 @@ public:
         t->setDefaultAction(action);
         m_toolBar->setMinimumHeight(t->sizeHint().height());
         m_toolBar->layout()->addWidget(t);
+    }
+
+    void syncCurrentDocumentDirectory()
+    {
+        KDevelop::IDocument *doc = m_part->core()->documentController()->activeDocument();
+        if ( doc )
+        {
+            goToUrl(doc->url().upUrl());
+        }
     }
 };
 
@@ -263,6 +273,12 @@ void FileManager::setupActions()
     connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
     d->addToolButton(action);
     addAction(action);
+
+    action = new KAction(this);
+    action->setText(i18n("Current Document Directory"));
+    action->setIcon(KIcon("dirsync"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
+    d->addToolButton(action);
 }
 
 #include "filemanager.moc"

@@ -49,6 +49,7 @@ private:
     Q_PRIVATE_SLOT(d, void openFile(const KFileItem &fileItem))
 
     Q_PRIVATE_SLOT(d, void urlChanged(const QModelIndex &index))
+    Q_PRIVATE_SLOT(d, void syncCurrentDocumentDirectory())
 
     struct FileManagerPrivate* const d;
 
