@@ -123,7 +123,7 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
             KAction* close = new KAction( i18n( "Close projects" ), this );
-            connect( close, SIGNAL(triggered()), this, SLOT(slotCloseProjects()) );
+            connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
             actions << close;
             closeProjectsAdded = true;
         }
@@ -137,7 +137,7 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         {
             KDevelop::ProjectTargetItem* target = item->target();
             KAction* action = new KAction( i18n( "Build targets" ), this );
-            connect( action, SIGNAL( triggered() ), this, SLOT(slotBuildProjects()) );
+            connect( action, SIGNAL( triggered() ), this, SLOT(buildProjects()) );
             actions << action;
             buildTargetsAdded = true;
         }
@@ -162,7 +162,7 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
     }
 }
 
-void ProjectManagerViewPart::slotCloseProjects()
+void ProjectManagerViewPart::closeProjects()
 {
     kDebug(9511) << "Closing projects:" << d->ctxProjectItemList.count();
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
@@ -176,7 +176,7 @@ void ProjectManagerViewPart::slotCloseProjects()
     }
 }
 
-void ProjectManagerViewPart::slotBuildProjects()
+void ProjectManagerViewPart::buildProjects()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
