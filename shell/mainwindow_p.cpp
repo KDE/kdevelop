@@ -106,7 +106,7 @@ void MainWindowPrivate::setupActions()
 {
     KStandardAction::quit( m_mainWindow, SLOT( close() ), actionCollection() );
 
-    QAction *action;
+    KAction *action;
 
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1", app );

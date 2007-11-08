@@ -24,12 +24,88 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop {
 
+void MainWindowPrivate::gotoNextArea()
+{
+    UiController* ui = Core::self()->uiControllerInternal();
+    
+    int i = 0;
+
+    if (Sublime::Area* a = ui->activeArea())
+        i = ui->areas().indexOf(a);
+
+    ++i;
+
+    if (i >= ui->areas().count())
+        i = 0;
+
+    if (i < ui->areas().count())
+        if (Sublime::Area* a = ui->activeArea())
+            ui->showArea(a, ui->activeSublimeWindow());
+}
+
+void MainWindowPrivate::gotoPreviousArea()
+{
+    UiController* ui = Core::self()->uiControllerInternal();
+
+    int i = ui->areas().count();
+
+    if (Sublime::Area* a = ui->activeArea())
+        i = ui->areas().indexOf(a);
+
+    --i;
+
+    if (i < 0)
+        i = ui->areas().count() - 1;
+
+    if (i >= 0)
+        if (Sublime::Area* a = ui->areas().at(i))
+            ui->showArea(a, ui->activeSublimeWindow());
+}
+
 void MainWindowPrivate::gotoNextWindow()
 {
+    UiController* ui = Core::self()->uiControllerInternal();
+
+    if( !ui->activeSublimeWindow() )
+        return;
+
+    Sublime::Area* activeArea = ui->activeArea();
+    if (!activeArea)
+        return;
+
+    Sublime::View* activeView = ui->activeSublimeWindow()->activeView();
+
+    Sublime::AreaIndex* index = activeArea->indexOf(activeView);
+    int viewIndex = index->views().indexOf(activeView);
+    ++viewIndex;
+    if (viewIndex >= index->views().count())
+        viewIndex = 0;
+
+    if (viewIndex < index->views().count())
+        ui->activeSublimeWindow()->activateView(index->views().at(viewIndex));
 }
 
 void MainWindowPrivate::gotoPreviousWindow()
 {
+    UiController* ui = Core::self()->uiControllerInternal();
+
+    if( !ui->activeSublimeWindow() )
+        return;
+
+    Sublime::Area* activeArea = ui->activeArea();
+    if (!activeArea)
+        return;
+
+    Sublime::View* activeView = ui->activeSublimeWindow()->activeView();
+
+    Sublime::AreaIndex* index = activeArea->indexOf(activeView);
+    int viewIndex = index->views().indexOf(activeView);
+    --viewIndex;
+    if (viewIndex < 0)
+        viewIndex = index->views().count() - 1;
+
+    if (viewIndex >= 0)
+        ui->activeSublimeWindow()->activateView(index->views().at(viewIndex));
 }
 
 void MainWindowPrivate::gotoFirstWindow()
