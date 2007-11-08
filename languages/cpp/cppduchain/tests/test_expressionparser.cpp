@@ -281,14 +281,17 @@ void TestExpressionParser::testDynamicArray() {
 }
 
 void TestExpressionParser::testSmartPointer() {
-  QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
+  QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {}; template<class Target> SmartPointer<Target> cast() {}; T& operator*() {};  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
+  //QByteArray method("template<class T> struct SmartPointer { template<class Target> void cast() {}; } ; ");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
   
   DUChainWriteLocker lock(DUChain::lock());
 
   Cpp::ExpressionParser parser;
 
+  QVERIFY(top->localDeclarations()[0]->internalContext());
+  
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[3]->abstractType().data());
   QVERIFY(idType);
   QCOMPARE(idType->declaration()->context(), KDevelop::DUContextPointer(top).data());
@@ -332,6 +335,11 @@ void TestExpressionParser::testSmartPointer() {
   result = parser.evaluateType( "bPointer->i", KDevelop::DUContextPointer(top));
   QVERIFY(result.instance);
   QCOMPARE(result.type->toString(), QString("int"));
+  
+/*  result = parser.evaluateType( "bPointer->cast<B>()->i", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.instance);
+  QCOMPARE(result.type->toString(), QString("int"));*/
   
   release(top);
 }

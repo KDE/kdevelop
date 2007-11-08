@@ -136,6 +136,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
 
       decl->setDefaultParameter(defaultParam);
     }
+    closeDeclaration();
   } else {
     kDebug(9007) << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing";
   }
