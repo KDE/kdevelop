@@ -251,7 +251,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     StructureType* structureType = dynamic_cast<StructureType*>( base.data() );
     
     if( !structureType || !idType ) {
-      problem( node, QString("findMember called on non-identified or non-structure type \"%1\"").arg(base->toString()) );
+      problem( node, QString("findMember called on non-identified or non-structure type \"%1\"").arg(base ? base->toString() : "<type disappeared>") );
       return;
     }
 
