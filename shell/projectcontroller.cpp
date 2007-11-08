@@ -113,12 +113,12 @@ public:
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
-	kDebug(9501) << "managerplugin:" << project->managerPlugin();
+        kDebug(9501) << "managerplugin:" << project->managerPlugin();
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); it++ )
         {
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
-	    kDebug(9501) << "Checking plugin:" << plugin << "with iface" << iface;
+            kDebug(9501) << "Checking plugin:" << plugin << "with iface" << iface;
             if( !iface || plugin == project->managerPlugin() )
                 pluginnames << m_core->pluginController()->pluginInfo( plugin ).pluginName();
         }
@@ -482,6 +482,18 @@ IProject* ProjectController::findProjectForUrl( const KUrl& url ) const
     {
         if( proj->inProject( url ) )
             return proj;
+    }
+    return 0;
+}
+
+IProject* ProjectController::findProjectByName( const QString& name )
+{
+    Q_FOREACH( IProject* proj, d->m_projects )
+    {
+        if( proj->name() == name )
+        {
+            return proj;
+        }
     }
     return 0;
 }

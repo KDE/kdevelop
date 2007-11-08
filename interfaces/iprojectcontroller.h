@@ -46,8 +46,7 @@ public:
     virtual QList<IProject*> projects() const = 0;
 
     virtual ProjectModel* projectModel() = 0;
-//     virtual IProject* currentProject() const = 0;
-
+    virtual IProject* findProjectByName( const QString& name ) = 0;
     virtual IProject* findProjectForUrl( const KUrl& ) const = 0;
 
 public Q_SLOTS:

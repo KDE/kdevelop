@@ -48,7 +48,7 @@ public:
     virtual QList<IProject*> projects() const;
 
     virtual ProjectModel* projectModel();
-
+    virtual IProject* findProjectByName( const QString& name );
     IProject* findProjectForUrl( const KUrl& ) const;
 
 //     IProject* currentProject() const;
