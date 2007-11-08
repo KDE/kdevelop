@@ -118,16 +118,6 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
 
 QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
 {
-  // HACK HACK HACK workaround KIconLoader bug
-
-  static QString allIconNames = "CVprotected_var CVprivate_var protected_union protected_enum private_struct CVprotected_slot private_enum CVprotected_signal CVprivate_slot protected_class private_class private_union protected_function private_function signal CVpublic_var enum class CVpublic_slot union typedef function struct protected_field private_field field";
-
-  static QMap<QString, QIcon> icons;
-
-  if (icons.isEmpty())
-    foreach( QString iconName, allIconNames.split(" ") )
-      icons.insert(iconName, KIconLoader::global()->loadIcon(iconName, KIconLoader::Small));
-
   QString iconName;
 
   if( (p & CodeCompletionModel::Variable) )
@@ -204,7 +194,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
   else
     iconName = "field";
 
-  return icons[iconName];
+  return KIcon(iconName);
 }
 
 QIcon DUChainUtils::iconForDeclaration(Declaration* dec)
