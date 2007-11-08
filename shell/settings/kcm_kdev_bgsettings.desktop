@@ -7,8 +7,8 @@ ServiceTypes=KCModule
 X-KDE-ModuleType=Library
 X-KDE-Library=kcm_kdev_bgsettings
 X-KDE-FactoryName=kcm_kdev_bgsettings
-X-KDE-ParentApp=kdevelop
-X-KDE-ParentComponents=kdevelop
+X-KDE-ParentApp=kdevplatform
+X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Background Parser
