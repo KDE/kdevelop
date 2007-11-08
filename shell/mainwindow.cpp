@@ -37,6 +37,7 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "uicontroller.h"
+#include "idocumentcontroller.h"
 
 namespace KDevelop
 {
@@ -131,9 +132,10 @@ void MainWindow::initialize()
         d, SLOT(activePartChanged(KParts::Part*)));
     connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
         d, SLOT(changeActiveView(Sublime::View*)));
-/*    connect( Core::documentController(), SIGNAL( documentActivated( Document* ) ),
-             d, SLOT( documentActivated( Document* ) ) );
-    connect( Core::projectController(), SIGNAL( projectOpened() ),
+    connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
+    connect(Core::self()->documentController(), SIGNAL(documentStateChanged(KDevelop::IDocument*)), SLOT(documentStateChanged(KDevelop::IDocument*)));
+    connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
+    /*connect( Core::projectController(), SIGNAL( projectOpened() ),
              d, SLOT( projectOpened() ) );
     connect( Core::projectController(), SIGNAL( projectClosed() ),
              d, SLOT( projectClosed() ) );*/
@@ -164,6 +166,21 @@ void MainWindow::setVisible( bool visible )
 bool MainWindow::queryClose()
 {
     return Sublime::MainWindow::queryClose();
+}
+
+void MainWindow::documentActivated( IDocument* document )
+{
+    setCaption(document->url().prettyUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
+}
+
+void MainWindow::documentStateChanged( IDocument* document )
+{
+    setCaption(document->url().prettyUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
+}
+
+void MainWindow::documentClosed( IDocument* document )
+{
+    setCaption(QString(), false);
 }
 
 }

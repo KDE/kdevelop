@@ -34,7 +34,7 @@ namespace KDevelop
 {
 
 class Context;
-
+class IDocument;
 
 /**
 KDevelop main window.
@@ -68,6 +68,11 @@ protected Q_SLOTS:
 protected:
     virtual void initialize();
     virtual void cleanup();
+
+private Q_SLOTS:
+    void documentActivated( KDevelop::IDocument* document );
+    void documentStateChanged( KDevelop::IDocument* document );
+    void documentClosed( KDevelop::IDocument* document );
 
 private:
     class MainWindowPrivate *d;

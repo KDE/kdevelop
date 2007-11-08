@@ -49,10 +49,17 @@ struct TextDocumentPrivate {
 
     void newDocumentStatus(KTextEditor::Document *document)
     {
+        bool dirty = (state == IDocument::Dirty || state == IDocument::DirtyAndModified);
         if (document->isModified())
-            state = IDocument::Clean;
+            if (dirty)
+                state = IDocument::DirtyAndModified;
+            else
+                state = IDocument::Modified;
         else
-            state = IDocument::Dirty;
+            if (dirty)
+                state = IDocument::Dirty;
+            else
+                state = IDocument::Clean;
         m_textDocument->notifyStateChanged();
     }
 
@@ -64,19 +71,29 @@ struct TextDocumentPrivate {
     void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
         KTextEditor::ModificationInterface::ModifiedOnDiskReason reason)
     {
+        bool dirty = false;
         switch (reason)
         {
             case KTextEditor::ModificationInterface::OnDiskUnmodified:
-                if (!document->isModified())
-                    state = IDocument::Clean;
-                else
-                    state = IDocument::Dirty;
                 break;
             case KTextEditor::ModificationInterface::OnDiskModified:
             case KTextEditor::ModificationInterface::OnDiskCreated:
             case KTextEditor::ModificationInterface::OnDiskDeleted:
-                state = IDocument::DirtyAndModified;
+                dirty = true;
+                break;
         }
+
+        if (document->isModified())
+            if (dirty)
+                state = IDocument::DirtyAndModified;
+            else
+                state = IDocument::Modified;
+        else
+            if (dirty)
+                state = IDocument::Dirty;
+            else
+                state = IDocument::Clean;
+
         m_textDocument->notifyStateChanged();
     }
 
@@ -204,7 +221,7 @@ bool TextDocument::save(DocumentSaveMode mode)
 
 IDocument::DocumentState TextDocument::state() const
 {
-    return Clean;
+    return d->state;
 }
 
 void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
