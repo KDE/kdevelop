@@ -235,6 +235,11 @@ private:
     Q_DECLARE_PRIVATE(ProjectFileItem)
 };
 
+/**
+ * Class providing some convenience methods for accessing the project model
+ * @TODO: maybe switch to QAbstractItemModel, would make the implementation
+ *        for at least the checkbox-behaviour easier
+ */
 class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
 {
     Q_OBJECT

@@ -361,7 +361,7 @@ bool ProjectFolderItem::isProjectRoot() const
 ProjectFileItem::ProjectFileItem( ProjectFileItemPrivate& dd)
     : ProjectBaseItem(dd)
 {
-    setCheckable( false );
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
 
 ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandardItem * parent )
@@ -372,7 +372,7 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandar
     d->m_url = file;
     setText( file.fileName() );
     setParent( parent );
-    setCheckable( false );
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
 
 const KUrl & ProjectFileItem::url( ) const
