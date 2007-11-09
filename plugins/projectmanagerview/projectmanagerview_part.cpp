@@ -84,7 +84,6 @@ public:
     QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
     KAction* m_buildAll;
     KAction* m_build;
-    KAction* m_recentBuilds;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
@@ -95,9 +94,9 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
-    d->m_build = new KAction( i18n("Build..."), this );
+    d->m_build = new KAction( i18n("Build"), this );
     d->m_build->setShortcut( Qt::Key_F8 );
-    connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjects()) );
+    connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjectItems()) );
     actionCollection()->addAction( "project_build", d->m_build );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
@@ -167,6 +166,7 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
     if( mgr )
     {
         IProjectBuilder* builder = mgr->builder( prjitem );
+        kDebug(9511) << "Building item:" << item->text();
         if( builder)
           builder->build( item );
     }
@@ -194,42 +194,53 @@ void ProjectManagerViewPart::buildProjectsFromContextMenu()
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPart::buildProjects()
-{
-    KDialog dlg;
-    dlg.setButtons( KDialog::Ok | KDialog::Cancel );
-    dlg.setButtonText( KDialog::Ok, i18n("Build") );
-    Ui::BuildDialog ui;
-    ui.setupUi( dlg.mainWidget() );
-    ui.projectlist->setFocus();
-    foreach( KDevelop::IProject* project, core()->projectController()->projects() )
-    {
-        QTreeWidgetItem* item = new QTreeWidgetItem( 0 );
-        item->setCheckState( 0, Qt::Checked );
-        item->setText( 1, project->name() );
-        ui.projectlist->addTopLevelItem( item );
-    }
-    ui.projectlist->setCurrentItem( ui.projectlist->topLevelItem( 0 ) );
-    if( dlg.exec() == QDialog::Accepted )
-    {
-        QTreeWidgetItemIterator it( ui.projectlist, QTreeWidgetItemIterator::Checked );
-        while( *it )
-        {
-            IProject* project = core()->projectController()->findProjectByName( (*it)->text(1) );
-            if( project )
-            {
-                executeProjectBuilder( project->projectItem() );
-            }
-            ++it;
-        }
-    }
-}
-
 void ProjectManagerViewPart::buildAllProjects()
 {
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
         executeProjectBuilder( project->projectItem() );
+    }
+}
+
+void ProjectManagerViewPart::buildProjectItems()
+{
+    KDevelop::ProjectModel* model = core()->projectController()->projectModel();
+    for( int row = 0; row < model->rowCount(); row++ )
+    {
+        if( model->item( row )->checkState() == Qt::Checked )
+        {
+            executeProjectBuilder( dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) ) );
+        }else if( model->item( row )->checkState() == Qt::PartiallyChecked )
+        {
+            recurseAndBuild( dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) ) );
+        }
+    }
+}
+
+void ProjectManagerViewPart::recurseAndBuild( KDevelop::ProjectBaseItem* item )
+{
+    if( item->folder() )
+    {
+        if( item->checkState() == Qt::PartiallyChecked )
+        {
+            foreach( KDevelop::ProjectFolderItem* folderItem, item->folderList() )
+            {
+                recurseAndBuild( folderItem );
+            }
+            foreach( KDevelop::ProjectTargetItem* targetItem, item->targetList() )
+            {
+                if( targetItem->checkState() == Qt::Checked )
+                {
+                    executeProjectBuilder( targetItem );
+                }
+            }
+        }else if( item->checkState() == Qt::Checked )
+        {
+            executeProjectBuilder( item );
+        }
+    }else if( item->target() && item->checkState() == Qt::Checked )
+    {
+        executeProjectBuilder( item );
     }
 }
 

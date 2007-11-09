@@ -53,11 +53,12 @@ public:
 protected Q_SLOTS:
     void closeProjects();
     void buildProjectsFromContextMenu();
-    void buildProjects();
+    void buildProjectItems();
     void buildAllProjects();
 
 private:
     void executeProjectBuilder( KDevelop::ProjectBaseItem* );
+    void recurseAndBuild( KDevelop::ProjectBaseItem* item );
     class ProjectManagerViewPartPrivate* const d;
 
 };
