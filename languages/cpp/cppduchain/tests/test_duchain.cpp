@@ -1224,7 +1224,7 @@ void TestDUChain::testTemplates() {
 void TestDUChain::testTemplateDefaultParameters() {
   QByteArray method("struct S {} ; namespace std { template<class T> class Template1 { }; } template<class _TT, typename TT2 = std::Template1<_TT> > class Template2 { typedef TT2 T1; };");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1240,7 +1240,7 @@ void TestDUChain::testTemplateDefaultParameters() {
 void TestDUChain::testTemplates2() {
   QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> class Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; };");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1256,7 +1256,7 @@ void TestDUChain::testTemplates2() {
 void TestDUChain::testTemplatesRebind() {
   QByteArray method("struct A {}; struct S {typedef A Value;} ; template<class TT> class Base { template<class T> struct rebind { typedef Base<T> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other::Type MemberType; MemberType member; Base<T>::template rebind<T>::other::Type member2; T::Value value; }; };");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1284,7 +1284,7 @@ void TestDUChain::testTemplatesRebind() {
 void TestDUChain::testTemplatesRebind2() {
   QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Class { T::Value value; }; };");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
