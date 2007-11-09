@@ -36,7 +36,7 @@ public:
     /**
      * Return a name for the status object
      */
-    virtual QString statusName() const = 0L;
+    virtual QString statusName() const = 0;
     
 Q_SIGNALS:
     /**
