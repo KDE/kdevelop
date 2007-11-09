@@ -106,7 +106,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
     Incrementer inc(&depth_counter);
     if( depth_counter > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
-    return const_cast<AbstractType*>(type); ///@todo remove const_cast;
+      return const_cast<AbstractType*>(type); ///@todo remove const_cast;
     }
     
     const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
@@ -292,9 +292,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     
     ///Now the created context is already partially functional and can be used for searching(not the instantiated template-params yet though)
     
-    if(context->type() == KDevelop::DUContext::Template && !templateArguments.isEmpty()) { //templateArguments may be empty, that means that only copying should happen.
+    if(context->type() == KDevelop::DUContext::Template ) { //templateArguments may be empty, that means that only copying should happen.
       ///Specialize the local template-declarations
-
       QList<ExpressionEvaluationResult>::const_iterator currentArgument = templateArguments.begin();
       
       foreach(Declaration* decl, context->localDeclarations())
@@ -312,7 +311,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
         } else {
           //templateDecl->defaultParameter()
           ///@todo Use default-parameters! Use the expression-parser here to resolve the default-parameters(If the default-parameter is not a valid qualified identifier)
-          kDebug(9007) << "missing template-argument";
         }
         ///This inserts the copied declaration into the copied context
         declCopy->setContext(contextCopy);
@@ -371,10 +369,12 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
   ///Since now the context is accessible through the du-chain, so it must not be changed any more.
     
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
+    
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instantiatedDeclaration->abstractType().data());
 
     ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
-    AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext );
+      ///@todo think whether the commented-out part in the following should be uncommented
+    AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), /*instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() :*/ parentContext );
 
     if( changedType == instantiatedDeclaration->abstractType() )
       if( idType && idType->declaration() == instantiatedFrom ) { //We must clone it, so we can change IdentifiedType::declaration
@@ -394,6 +394,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
 ///@todo Use explicitly declared specializations
 Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments )
 {
+  foreach(const ExpressionEvaluationResult& res, templateArguments)
+  
   if( ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(this) ) {
     TemplateDeclaration* resolvedTemplate = dynamic_cast<TemplateDeclaration*>(forward->resolved());
     if( resolvedTemplate )
@@ -420,7 +422,7 @@ Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationR
   instantiateDeclarationContext( decl->context(), decl->internalContext(), templateArguments, clone, decl );
 
   cloneTemplateDecl->setInstantiatedFrom(this, templateArguments);
-  
+
   return clone;
 }
 

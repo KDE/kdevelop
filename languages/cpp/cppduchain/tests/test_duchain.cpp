@@ -1230,7 +1230,31 @@ void TestDUChain::testTemplates2() {
 
   Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
   QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"));
   kDebug() << memberDecl->toString();
+  
+  release(top);
+}
+
+void TestDUChain::testTemplatesRebind() {
+  QByteArray method("struct A {}; struct S {} ; template<class TT> class Base { template<class T> struct rebind { typedef Base<T> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other::Type MemberType; MemberType member; Base<T>::template rebind<T>::other::Type member2; }; };");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
+  QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("S"));
+  kDebug() << memberDecl->toString();
+  
+  Declaration* member2Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::member2"));
+  QVERIFY(member2Decl);
+  QVERIFY(member2Decl->abstractType());
+  QCOMPARE(member2Decl->abstractType()->toString(), QString("S"));
+  kDebug() << member2Decl->toString();
   
   release(top);
 }
