@@ -301,7 +301,7 @@ void Project::close()
 
 bool Project::inProject( const KUrl& url ) const
 {
-    return ( fileForUrl( url ) != 0 || url.cmp( d->topItem->url(), true ) );
+    return ( fileForUrl( url ) != 0 || url.equals( d->topItem->url(), KUrl::CompareWithoutTrailingSlash ) );
 }
 
 ProjectFileItem* Project::fileAt( int num ) const
