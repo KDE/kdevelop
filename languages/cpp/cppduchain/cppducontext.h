@@ -67,6 +67,7 @@ While construction:
 #include <duchain/duchain.h>
 #include <duchain/topducontext.h>
 #include <duchain/classfunctiondeclaration.h>
+#include <duchain/namespacealiasdeclaration.h>
 #include "typeutils.h"
 #include "cpptypes.h"
 #include "templatedeclaration.h"
@@ -215,6 +216,16 @@ class CppDUContext : public BaseContext {
         } else
           scopeContext->findDeclarationsInternal( toList(currentLookup), scopeContext->url() == this->url() ? position : scopeContext->textRange().end(), dataType, tempDecls, flags | BaseContext::DontSearchInParent | BaseContext::LanguageSpecificFlag1 );
 
+        if( !tempDecls.isEmpty() && num < identifier.count()-1 ) { //Filter out intermediate namespace alias declarations, those are applied from within the du-chain.
+          for( QList<Declaration*>::iterator it = tempDecls.begin(); it != tempDecls.end();  ) {
+            if( dynamic_cast<NamespaceAliasDeclaration*>(*it) && num < identifier.count()-1 ) {
+              it = tempDecls.erase(it);
+            } else {
+                ++it;
+            }
+            
+          }
+        }
         
         if( !tempDecls.isEmpty() ) {
           //We have found a part of the scope
