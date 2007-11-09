@@ -246,7 +246,7 @@ private:
 
   void handle_elif(Stream& input);
 
-  void handle_endif(Stream& input, Stream& input);
+  void handle_endif(Stream& input, Stream& output);
 
   void handle_ifdef(bool check_undefined, Stream& input);
 
