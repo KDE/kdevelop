@@ -255,7 +255,7 @@ void CPPInternalParseJob::run()
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
-    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(thread()));
+    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
     Parser parser( new Control() );
 

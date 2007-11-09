@@ -97,7 +97,7 @@ void PreprocessJob::run()
         }
     }
 
-    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(thread()));
+    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
     parentJob()->setReadFromDisk(readFromDisk);
