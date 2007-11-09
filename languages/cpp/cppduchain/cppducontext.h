@@ -160,14 +160,17 @@ class CppDUContext : public BaseContext {
       
       //Only do the piece-by-piece lookup when templates are involved.
       //Push all earlier non-template parts on the lookup-identifier, and continue behind them.
-      for( int a = 0; a < identifier.count()-1; a++ ) {
-        if( identifier.at(a).templateIdentifiers().isEmpty() ) {
-          num = a+1;
-          currentLookup.push(identifier.at(a));
-        }else{
-          break;
-        }
-      }
+      /** The lookup needs to be piecewise always, because we may need to instantiate an earlier part of the scope
+       * @todo Maybe only do this when searching from within a template
+       * */
+//       for( int a = 0; a < identifier.count()-1; a++ ) {
+//         if( identifier.at(a).templateIdentifiers().isEmpty() ) {
+//           num = a+1;
+//           currentLookup.push(identifier.at(a));
+//         }else{
+//           break;
+//         }
+//       }
 
       for( ; num < identifier.count(); num++ )
       {

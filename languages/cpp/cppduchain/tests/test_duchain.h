@@ -73,6 +73,7 @@ private slots:
   void testTemplates();
   void testTemplates2();
   void testTemplatesRebind();
+  void testTemplatesRebind2();
   void testTemplateDefaultParameters();
   void testFunctionTemplates();
   void testSpecializedTemplates();
