@@ -416,10 +416,16 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
     QList<IPlugin*> plugins;
     foreach (const KPluginInfo &info, infos)
     {
+        IPlugin* plugin;
         if( d->plugins.contains( info ) )
-            plugins << d->loadedPlugins[ info ];
+            plugin = d->loadedPlugins[ info ];
         else
-            plugins << loadPluginInternal( info.pluginName() );
+            plugin = loadPluginInternal( info.pluginName() );
+
+        if (plugin)
+            plugins << plugin;
+        else
+            kWarning(9501) << "Null plugin retrieved! Loading error?";
     }
     return plugins;
 }
