@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2007 Kris Wong <kris.p.wong@gmail.com>
+    Copyright 2007 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,13 +25,12 @@
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
+#include <QTime>
 
 // Uncomment the following to turn on verbose locking information
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
 
-#ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
 #include <kdebug.h>
-#endif
 
 namespace KDevelop
 {
@@ -61,6 +61,12 @@ public:
     return ownReaderRecursion;
   }
   
+  void auditTime() const {
+    int ms = m_lockTime.elapsed();
+    if (ms > 100)
+      kWarning(9007) << "Long lock time:" << ms << "miliseconds.";
+  }
+
   QMutex m_mutex;
   Qt::HANDLE m_writer;
 
@@ -71,6 +77,7 @@ public:
   typedef QHash<Qt::HANDLE,int> ReaderMap;
   ReaderMap m_readers;
   
+  QTime m_lockTime;
 };
 
 class DUChainReadLockerPrivate
@@ -132,8 +139,10 @@ bool DUChainLock::lockForRead(unsigned int timeout)
     locked = true;
   }
 
-  if(locked)
+  if(locked) {
     ++d->m_totalReaderRecursion;
+    d->m_lockTime.start();
+  }
 
   lock.unlock();
   
@@ -164,6 +173,8 @@ void DUChainLock::releaseReadLock()
 
 /*  if( *it == 0 )
     d->m_readers.erase(it); //Maybe it would even be wise simply leaving it there*/
+
+  d->auditTime();
 }
 
 bool DUChainLock::currentThreadHasReadLock()
@@ -204,6 +215,7 @@ bool DUChainLock::lockForWrite()
     d->m_writer = QThread::currentThreadId();
     ++d->m_writerRecursion;
     locked = true;
+    d->m_lockTime.start();
   }
 
   return locked;
@@ -223,6 +235,8 @@ void DUChainLock::releaseWriteLock()
   
   if( !d->m_writerRecursion )
     d->m_writer = 0;
+
+  d->auditTime();
 }
 
 bool DUChainLock::currentThreadHasWriteLock()
