@@ -25,6 +25,7 @@
 
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
+#include "expressionparser.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -47,7 +48,6 @@ struct Incrementer {
 
 uint qHash( const ExpressionEvaluationResult& key )
 {
-  ///@todo Currently ExpressionEvaluationResult is not accessible because of the library it is in. Fix that, and use its content here.
   uint ret = 0/*11*key.isLValue() + 13*key.instance.isInstance + 17*(quint64)key.instance.declaration*/;
   
   if( key.type )
@@ -142,7 +142,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
 };
 
 bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
- return left.type == right.type; ///@todo use the other parts
+ return left.type == right.type && left.instance.isInstance == right.instance.isInstance;
 }
 
 uint qHash( const QList<ExpressionEvaluationResult>& key ) {
@@ -261,7 +261,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     instantiatedDeclaration->setContext(parentContext, true);
 
     if( !templateArguments.isEmpty() ) {
-      ///Change the identifier to reflect the set template-arguments @todo use default-parameters
+      ///Change the identifier to reflect the set template-arguments
+      ///@todo maybe use default-parameters here. It would look less nice, but would be more correct.
       KDevelop::Identifier id = instantiatedDeclaration->identifier();
       foreach(Cpp::ExpressionEvaluationResult expr, templateArguments) {
         KDevelop::IdentifiedType* idType = dynamic_cast<KDevelop::IdentifiedType*>(expr.type.data());
@@ -309,8 +310,22 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           
           ++currentArgument;
         } else {
-          //templateDecl->defaultParameter()
-          ///@todo Use default-parameters! Use the expression-parser here to resolve the default-parameters(If the default-parameter is not a valid qualified identifier)
+          if( !templateDecl->defaultParameter().isEmpty() ) {
+            kDebug() << "instantiating default-parameter" << templateDecl->defaultParameter().toString();
+            bool isValidIdentifier = true; ///@todo test whether it is a valid identifier
+            if( isValidIdentifier ) {
+              QList<Declaration*> decls = contextCopy->findDeclarations(templateDecl->defaultParameter());
+              if( !decls.isEmpty() ) {
+                declCopy->setAbstractType( decls.front()->abstractType() );
+              } else {
+                kDebug(9007) << "Failed to resolve default-parameter" << templateDecl->defaultParameter().toString();
+              }
+            } else {
+              ExpressionParser p(false, true);
+              ExpressionEvaluationResult res = p.evaluateType( (templateDecl->defaultParameter().toString() +" ").toUtf8(), DUContextPointer(contextCopy) );
+              declCopy->setAbstractType( res.type );
+            }
+          }
         }
         ///This inserts the copied declaration into the copied context
         declCopy->setContext(contextCopy);

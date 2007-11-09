@@ -104,7 +104,6 @@ DUContext* DeclarationBuilder::buildSubDeclarations(const KUrl& url, AST *node, 
 
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   TypeBuilder::visitTemplateParameter(ast);
-
   if( ast->type_parameter && ast->type_parameter->name ) {
     ///@todo deal with all the other stuff the AST may contain
     Declaration* dec = openDeclaration(ast->type_parameter->name, ast);
@@ -118,7 +117,21 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
       kDebug(9007) << "bad last type";
     }
 
+    if( ast->type_parameter && ast->type_parameter->type_id ) {
+      //Extract default type-parameter
+      QualifiedIdentifier defaultParam;
+      
+      QString str;
+      ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
+      str += stringFromSessionTokens( m_editor->parseSession(), ast->type_parameter->type_id->start_token, ast->type_parameter->type_id->end_token );
+
+      defaultParam = QualifiedIdentifier(str);
+
+      decl->setDefaultParameter(defaultParam);
+    }
+    
     if( ast->parameter_declaration ) {
+      //Extract default parameters(not tested)
       QualifiedIdentifier defaultParam;
       if( ast->parameter_declaration->type_specifier ) {
         TypeCompiler tc(m_editor->parseSession());

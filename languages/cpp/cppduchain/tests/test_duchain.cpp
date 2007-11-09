@@ -1221,6 +1221,22 @@ void TestDUChain::testTemplates() {
   release(top);
 }
 
+void TestDUChain::testTemplateDefaultParameters() {
+  QByteArray method("struct S {} ; template<class T> class Template1 { }; template<class TT, class TT2 = Template1<TT> > class Template2 { typedef TT2 T1; };");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Template2<S>::T1"));
+  QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("Template1< S >"));
+  kDebug() << memberDecl->toString();
+  
+  release(top);
+}
+
 void TestDUChain::testTemplates2() {
   QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> class Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; };");
 
