@@ -38,7 +38,6 @@ class DocumentRangeObjectPrivate
         , m_url(0)
     {}
 
-    mutable QMutex m_rangeMutex;
     KTextEditor::Range* m_range;
     DocumentRangeObject::RangeOwning m_ownsRange;
     KUrl* m_url;
@@ -87,7 +86,7 @@ void DocumentRangeObject::setTextRange( KTextEditor::Range * range, RangeOwning 
 {
     Q_ASSERT(range);
 
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
 
     if (d->m_range == range)
         return;
@@ -119,26 +118,30 @@ void DocumentRangeObject::setTextRange( KTextEditor::Range * range, RangeOwning 
 
 const Range& DocumentRangeObject::textRange( ) const
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
     return *d->m_range;
 }
 
 void DocumentRangeObject::setRange(const KTextEditor::Range& range)
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
     *d->m_range = range;
 }
 
 const DocumentRange DocumentRangeObject::textDocRange() const
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
     return *static_cast<DocumentRange*>(d->m_range);
 }
 
 KUrl DocumentRangeObject::url() const
 {
-    QMutexLocker lock(&d->m_rangeMutex);
-    return url(d->m_range);
+    QMutexLocker lock(&m_mutex);
+
+    // FIXME replace with deep copy function if available
+    KUrl ret;
+    ret.setUrl(url(d->m_range).url());
+    return ret;
 }
 
 KUrl DocumentRangeObject::url( const KTextEditor::Range * range )
@@ -146,12 +149,12 @@ KUrl DocumentRangeObject::url( const KTextEditor::Range * range )
     if (range->isSmartRange())
         return static_cast<const SmartRange*>(range)->document()->url();
     else
-        return static_cast<const DocumentRange*>(range)->document();
+        return static_cast<const DocumentRange*>(range)->document().url();
 }
 
 SmartRange* DocumentRangeObject::smartRange() const
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
 
     if (d->m_range->isSmartRange())
         return static_cast<SmartRange*>(d->m_range);
@@ -161,19 +164,19 @@ SmartRange* DocumentRangeObject::smartRange() const
 
 bool DocumentRangeObject::contains(const DocumentCursor& cursor) const
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
         return url(d->m_range) == cursor.document() && d->m_range->contains(cursor);
 }
 
 Range* DocumentRangeObject::textRangePtr() const
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
         return d->m_range;
 }
 
 void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
     Q_ASSERT(range == d->m_range);
     Q_ASSERT(d->m_url);
     //Q_ASSERT(false);
@@ -183,7 +186,7 @@ void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 
 KTextEditor::Range* DocumentRangeObject::takeRange()
 {
-    QMutexLocker lock(&d->m_rangeMutex);
+    QMutexLocker lock(&m_mutex);
 
     KTextEditor::Range* ret = d->m_range;
 

@@ -17,6 +17,9 @@
 */
 
 #include "duchainbase.h"
+
+#include <QMutexLocker>
+
 #include "duchainpointer.h"
 
 namespace KDevelop
@@ -41,6 +44,8 @@ TopDUContext* DUChainBase::topContext() const
 
 const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
 {
+  QMutexLocker lock(&m_mutex);
+
   if (!m_ptr) {
     m_ptr = new DUChainPointerData(const_cast<DUChainBase*>(this));
     m_ptr->m_base = const_cast<DUChainBase*>(this);
