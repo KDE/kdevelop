@@ -237,22 +237,23 @@ private:
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
 {
-        Q_OBJECT
-    public:
-        ProjectModel( QObject *parent = 0 );
-        virtual ~ProjectModel();
+    Q_OBJECT
+public:
+    ProjectModel( QObject *parent = 0 );
+    virtual ~ProjectModel();
 
-        using QStandardItemModel::item;
-        ProjectBaseItem *item( const QModelIndex &index ) const;
+    using QStandardItemModel::item;
+    ProjectBaseItem *item( const QModelIndex &index ) const;
 
-        void resetModel();
+    void resetModel();
 
-        virtual void fetchMore( const QModelIndex &parent );
-        virtual bool canFetchMore( const QModelIndex & parent ) const;
+    virtual void fetchMore( const QModelIndex &parent );
+    virtual bool canFetchMore( const QModelIndex & parent ) const;
 
-    private:
-        class ProjectModelPrivate* const d;
+private:
+    class ProjectModelPrivate* const d;
 
+    Q_PRIVATE_SLOT(d, void projectItemChanged( QStandardItem* ))
 };
 
 }
