@@ -104,6 +104,8 @@ void ClassModel::setFilterByProject(bool filterByProject)
 
 bool ClassModel::filterObject(DUChainBase* object) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   if (m_filterDocument)
     return m_filterDocument && object->url() != m_filterDocument->url();
 
@@ -304,6 +306,8 @@ QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
 
 void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node* parent, bool first) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   foreach (DUContext* child, context->childContexts()) {
     if (filterObject(child))
       continue;
@@ -354,6 +358,8 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
 
 DUContext* ClassModel::trueParent(DUContext* parent) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   while (parent) {
     switch (parent->type()) {
       case DUContext::Class:
@@ -379,6 +385,8 @@ void ClassModel::branchAdded(DUContextPointer context)
 
 void ClassModel::contextAdded(Node* parent, DUContext* context)
 {
+  ENSURE_CHAIN_READ_LOCKED
+  
   if (parent && !m_lists.contains(parent))
     // The parent node is not yet discovered, it will be figured out later if needed
     return;
@@ -431,6 +439,8 @@ ClassModel::Node* ClassModel::pointer(DUChainBase* object) const
 
 ClassModel::Node* ClassModel::createPointer(DUContext* context, Node* parent) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+      
   if (context->type() == DUContext::Namespace) {
     Q_ASSERT(!m_namespaces.contains(context->scopeIdentifier()));
 
@@ -445,6 +455,8 @@ ClassModel::Node* ClassModel::createPointer(DUContext* context, Node* parent) co
 
 ClassModel::Node* ClassModel::createPointer(DUChainBase* object, Node* parent) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+      
   Node* ret;
 
   if (!m_knownObjects.contains(object)) {
@@ -454,15 +466,6 @@ ClassModel::Node* ClassModel::createPointer(DUChainBase* object, Node* parent) c
   } else {
     ret = m_knownObjects[object];
   }
-
-  /*if (dynamic_cast<DUContext*>(object))
-    kDebug() << k_funcinfo << "Context" << object << ret;
-
-  else if (dynamic_cast<Declaration*>(object))
-    kDebug() << k_funcinfo << "Declaration" << object << ret;
-
-  else if (dynamic_cast<Definition*>(object))
-    kDebug() << k_funcinfo << "Definition" << object << ret;*/
 
   return ret;
 }
@@ -552,6 +555,8 @@ QVariant ClassModel::data(Node* node, int role)
 
 Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+      
   if (!pointer)
     return 0L;
 
@@ -574,6 +579,8 @@ Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer)
 
 Definition* ClassModel::definitionForObject(const DUChainBasePointer& pointer) const
 {
+  ENSURE_CHAIN_READ_LOCKED
+      
   if (!pointer)
     return 0L;
 
