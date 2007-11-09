@@ -1221,6 +1221,20 @@ void TestDUChain::testTemplates() {
   release(top);
 }
 
+void TestDUChain::testTemplates2() {
+  QByteArray method("struct S {} ; template<class TT> class Base { typedef TT& referenceType; }; template<class T> class Class : public Base<T> { typedef typename Base::referenceType reference; reference member; };");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
+  QVERIFY(memberDecl);
+  kDebug() << memberDecl->toString();
+  
+  release(top);
+}
+
 void TestDUChain::testForwardDeclaration()
 {
   QByteArray method("class Test; Test t; class Test {int i; class SubTest; }; Test::SubTest t2; class Test::SubTest{ int i;};");

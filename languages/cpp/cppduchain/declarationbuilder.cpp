@@ -748,6 +748,14 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
 
 void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
+  int kind = m_editor->parseSession()->token_stream->kind(node->type);
+  
+  if( kind == Token_typename ) {
+    //typename is completely handled by the type-builder
+    DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
+    return;
+  }
+  
   //For now completely ignore friend-class specifiers, because those currently are wrongly parsed as forward-declarations.
   if( !m_storageSpecifiers.isEmpty() && (m_storageSpecifiers.top() & ClassMemberDeclaration::FriendSpecifier) )
     return;
@@ -757,8 +765,6 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
   if (node->name) {
     //Do not store new template-declarations if there is already known ones for the same type
     QualifiedIdentifier id = identifierForName(node->name);
-
-    int kind = m_editor->parseSession()->token_stream->kind(node->type);
 
     bool forwardDeclarationGlobal = false;
 
@@ -825,8 +831,6 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
         openedDeclaration = true;
         break;
       case Token_enum:
-      case Token_typename:
-        // TODO what goes here...?
         break;
     }
   }

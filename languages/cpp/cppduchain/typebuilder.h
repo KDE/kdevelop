@@ -92,6 +92,9 @@ protected:
    * After calling, the given type will be the last type.
    * */
   void injectType(const AbstractType::Ptr& type, AST* node);
+
+  ///Returns whether a type was opened
+  bool openTypeFromName(NameAST* name);
   
   private:
   template <class T>

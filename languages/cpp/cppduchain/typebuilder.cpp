@@ -256,6 +256,19 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
   AbstractType::Ptr type;
 
+  int kind = m_editor->parseSession()->token_stream->kind(node->type);
+
+  if( kind == Token_typename ) {
+    //For typename, just find the type and return
+    bool openedType = openTypeFromName(node->name);
+    
+    TypeBuilderBase::visitElaboratedTypeSpecifier(node);
+
+    if(openedType)
+      closeType();
+    return;
+  }
+  
   if (node->name) {
     {
       DUChainReadLocker lock(DUChain::lock());
@@ -272,8 +285,6 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
       }
     }
     
-    
-    int kind = m_editor->parseSession()->token_stream->kind(node->type);
     switch (kind) {
       case Token_class:
       case Token_struct:
@@ -365,27 +376,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     }
 
   } else if (node->name) {
-    QualifiedIdentifier id = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-    DUChainReadLocker lock(DUChain::lock());
-    
-    QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), DUContext::NoUndefinedTemplateParams);
-    
-    if (!dec.isEmpty() && dec.front()->abstractType()) {
-      ///@todo only functions may have multiple declarations here
-      ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
-      //kDebug(9007) << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();
-       openedType = true;
-       openType(dec.front()->abstractType(), node);
-    } else {
-      ///@todo What about position?
-
-      //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
-     openedType = true;
-     openDelayedType(id, node, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
-
-     ifDebug( if(templateDeclarationDepth() != 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
-    }
+    openedType = openTypeFromName(node->name);
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
@@ -393,6 +384,34 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   if (openedType)
     closeType();
 }
+
+bool TypeBuilder::openTypeFromName(NameAST* name) {
+  QualifiedIdentifier id = identifierForName(name);
+  KTextEditor::Cursor pos = m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
+  DUChainReadLocker lock(DUChain::lock());
+
+  bool openedType = false;
+  
+  QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), DUContext::NoUndefinedTemplateParams);
+
+  if (!dec.isEmpty() && dec.front()->abstractType()) {
+    ///@todo only functions may have multiple declarations here
+    ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
+    //kDebug(9007) << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();
+     openedType = true;
+     openType(dec.front()->abstractType(), name);
+  } else {
+    ///@todo What about position?
+
+    //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
+   openedType = true;
+   openDelayedType(id, name, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
+
+   ifDebug( if(templateDeclarationDepth() != 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+  }
+  return openedType;
+}
+
 
 DUContext* TypeBuilder::searchContext() {
   DUChainReadLocker lock(DUChain::lock());
