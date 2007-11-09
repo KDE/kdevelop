@@ -38,6 +38,7 @@ Boston, MA 02110-1301, USA.
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "idocumentcontroller.h"
+#include "statusbar.h"
 
 namespace KDevelop
 {
@@ -67,7 +68,6 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
 
     setStandardToolBarMenuEnabled( true );
     d->setupActions();
-//     setStatusBar( new KDevelop::StatusBar( this ) );
 
     setXMLFile( ShellExtension::getInstance() ->xmlFile() );
 }
@@ -124,10 +124,11 @@ void MainWindow::saveSettings()
 
 void MainWindow::initialize()
 {
+    setStatusBar(new KDevelop::StatusBar(this));
     createGUI(0);
     Core::self()->partManager()->addManagedTopLevelWidget(this);
-    connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(IPlugin*)),
-             d, SLOT(addPlugin(IPlugin*)));
+    connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
+             d, SLOT(addPlugin(KDevelop::IPlugin*)));
     connect( Core::self()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
         d, SLOT(activePartChanged(KParts::Part*)));
     connect( this, SIGNAL(activeViewChanged(Sublime::View*)),

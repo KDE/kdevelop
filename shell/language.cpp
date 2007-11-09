@@ -67,6 +67,8 @@ ILanguageSupport *Language::languageSupport()
 
 QMutex *Language::parseMutex(QThread *thread) const
 {
+    Q_ASSERT(thread);
+
     QMutexLocker lock(&d->mutexMutex);
 
     if (!d->parseMutexes.contains(thread)) {

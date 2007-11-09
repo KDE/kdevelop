@@ -34,6 +34,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <klocale.h>
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
@@ -63,6 +64,8 @@ public:
         m_timer.setSingleShot(true);
         m_delay = 500;
         m_threads = 1;
+        m_doneParseJobs = 0;
+        m_maxParseJobs = 0;
 
         ThreadWeaver::setDebugLevel(true, 1);
 
@@ -125,6 +128,8 @@ public:
 
                     m_parseJobs.insert(url, job);
                     jobs.append(job);
+
+                    ++m_maxParseJobs;
                 }
 
                 p = false; // Don't parse for next time.
@@ -145,6 +150,8 @@ public:
                 m_documents.erase(it++);
             }
         }
+
+        m_parser->updateProgressBar();
     }
 
     void loadSettings()
@@ -205,6 +212,9 @@ public:
     ParserDependencyPolicy m_dependencyPolicy;
 
     QMutex m_mutex;
+
+    int m_maxParseJobs;
+    int m_doneParseJobs;
 };
 
 
@@ -216,6 +226,11 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
 BackgroundParser::~BackgroundParser()
 {
     delete d;
+}
+
+QString BackgroundParser::statusName() const
+{
+    return i18n("Background Parser");
 }
 
 void BackgroundParser::clear(QObject* parent)
@@ -311,17 +326,36 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
         // Use a delayed delete to make sure the weaver has finished up.
         // TODO: There has to be a better way to do this.
         QTimer::singleShot(100, parseJob, SLOT(deleteLater()));
+
+        ++d->m_doneParseJobs;
+        emit showProgress(0, d->m_maxParseJobs, d->m_doneParseJobs);
     }
 }
 
 void BackgroundParser::suspend()
 {
     d->suspend();
+
+    emit hideProgress();
 }
 
 void BackgroundParser::resume()
 {
     d->resume();
+
+    updateProgressBar();
+}
+
+void BackgroundParser::updateProgressBar()
+{
+    if (d->m_doneParseJobs == d->m_maxParseJobs) {
+        d->m_doneParseJobs = 0;
+        d->m_maxParseJobs = 0;
+        emit hideProgress();
+
+    } else {
+        emit showProgress(0, d->m_maxParseJobs, d->m_doneParseJobs);
+    }
 }
 
 ParserDependencyPolicy* BackgroundParser::dependencyPolicy() const

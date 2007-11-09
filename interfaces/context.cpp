@@ -125,36 +125,6 @@ KUrl::List FileContext::urls() const
     return d->m_urls;
 }
 
-// Disabled until we have a code-model or duchain-model
-// class CodeItemContext::Private
-// {
-// public:
-//     Private( const CodeItem* item ) : m_item( item )
-//     {}
-//
-//     const CodeItem* m_item;
-// };
-//
-// CodeItemContext::CodeItemContext( const CodeItem* item )
-//         : Context(), d( new Private( item ) )
-// {}
-//
-// CodeItemContext::~CodeItemContext()
-// {
-//     delete d;
-//     d = 0;
-// }
-//
-// int CodeItemContext::type() const
-// {
-//     return Context::CodeItemContext;
-// }
-//
-// const CodeItem* CodeItemContext::item() const
-// {
-//     return d->m_item;
-// }
-
 class ProjectItemContextPrivate
 {
 public:

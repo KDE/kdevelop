@@ -51,7 +51,7 @@ public:
     void setupActions();
 
 public Q_SLOTS:
-    void addPlugin( IPlugin *plugin );
+    void addPlugin( KDevelop::IPlugin *plugin );
     void removePlugin( IPlugin *plugin );
 
     void activePartChanged(KParts::Part *part);

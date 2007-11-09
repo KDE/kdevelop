@@ -32,6 +32,7 @@
 #include <kurl.h>
 
 #include <languageexport.h>
+#include <istatus.h>
 
 class QMutex;
 
@@ -53,12 +54,16 @@ class ILanguageController;
 class ParseJob;
 class ParserDependencyPolicy;
 
-class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus
 {
     Q_OBJECT
+    Q_INTERFACES( KDevelop::IStatus )
+
 public:
     BackgroundParser(ILanguageController *languageController);
     ~BackgroundParser();
+
+    virtual QString statusName() const;
 
     /**
      * Abort or dequeue all current running jobs with the specified @p parent.
@@ -93,7 +98,13 @@ public:
 Q_SIGNALS:
     ///Emitted whenever a document parse-job has finished. The job contains the du-chain(if one was created) etc.
     void parseJobFinished(KDevelop::ParseJob* job);
-        
+
+    // Implementations of IStatus signals
+    void clearMessage();
+    void showMessage(const QString & message, int timeout = 0);
+    void hideProgress();
+    void showProgress(int minimum, int maximum, int value);
+
 public Q_SLOTS:
 
     /**
@@ -125,6 +136,8 @@ public Q_SLOTS:
      * Forces the current queue to be parsed.
      */
     void parseDocuments();
+
+    void updateProgressBar();
 
 protected:
     void loadSettings(bool projectIsLoaded);

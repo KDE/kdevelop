@@ -30,6 +30,7 @@ set(kdevplatformshell_LIB_SRCS
     documentcontroller.cpp
     languagecontroller.cpp
     language.cpp
+    statusbar.cpp
 )
 
 

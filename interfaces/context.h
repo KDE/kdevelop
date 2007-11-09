@@ -42,7 +42,6 @@ template <typename T> class QList;
 
 namespace KDevelop
 {
-// class CodeItem;
 class ProjectBaseItem;
 
 /**
@@ -177,33 +176,6 @@ private:
     FileContext( const FileContext & );
     FileContext &operator=( const FileContext & );
 };
-
-/**
-A context for CodeItem's.
- */
-// Disabled until we have a code-model or duchain-model
-//  class KDEVPLATFORMINTERFACES_EXPORT CodeItemContext: public Context
-// {
-// public:
-//     /**Builds the context.
-//     @param item The item to build the context from.*/
-//     CodeItemContext( const CodeItem* item );
-//
-//     /**Destructor.*/
-//     virtual ~CodeItemContext();
-//
-//     virtual int type() const;
-//
-//     /**@return The code model item for the selected item.*/
-//     const CodeItem* item() const;
-//
-// private:
-//     class Private;
-//     Private *d;
-//
-//     CodeItemContext( const CodeItemContext & );
-//     CodeItemContext &operator=( const CodeItemContext & );
-// };
 
 /**
 A context for ProjectItem's.
