@@ -1222,7 +1222,7 @@ void TestDUChain::testTemplates() {
 }
 
 void TestDUChain::testTemplates2() {
-  QByteArray method("struct S {} ; template<class TT> class Base { typedef TT& referenceType; }; template<class T> class Class : public Base<T> { typedef typename Base::referenceType reference; reference member; };");
+  QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> class Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; };");
 
   DUContext* top = parse(method, DumpAll);
 
