@@ -460,7 +460,7 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
     AbstractType::Ptr typeCopy;
     if( delayedType )
       ///The type itself is a delayed type, resolve it
-      typeCopy = resolver.exchange( type.data() );
+      ;//typeCopy = resolver.exchange( type.data() );
     else {
       ///Resolve involved delayed types, now hopefully we know the template-parameters
       typeCopy = AbstractType::Ptr( type->clone() );
