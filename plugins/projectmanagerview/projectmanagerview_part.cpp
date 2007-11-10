@@ -32,7 +32,7 @@
 #include "importprojectjob.h"
 #include "context.h"
 
-#include "ui_builddialog.h"
+//#include "ui_builddialog.h"
 
 #include <kservicetypetrader.h>
 #include <kgenericfactory.h>
@@ -188,6 +188,9 @@ void ProjectManagerViewPart::executeBuild( KDevelop::ProjectBaseItem* item )
 {
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Building item:" << item->text();
+
+    core()->documentController()->saveAllDocuments(IDocument::Silent);
+
     if( builder )
         builder->build( item );
 }
@@ -204,6 +207,9 @@ void ProjectManagerViewPart::executeInstall( KDevelop::ProjectBaseItem* item )
 {
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Installing item:" << item->text();
+
+    core()->documentController()->saveAllDocuments(IDocument::Silent);
+
     if( builder )
         builder->install( item );
 }
