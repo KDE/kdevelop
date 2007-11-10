@@ -53,7 +53,6 @@ void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEdito
   Q_UNUSED(document);
 
   if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
-    cc->setAutomaticInvocationEnabled(true);
     cc->registerCompletionModel(m_model);
     kDebug(9007) << "Registered completion model";
   }
