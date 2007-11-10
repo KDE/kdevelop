@@ -32,8 +32,6 @@
 #include "importprojectjob.h"
 #include "context.h"
 
-//#include "ui_builddialog.h"
-
 #include <kservicetypetrader.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
