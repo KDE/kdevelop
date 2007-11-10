@@ -109,11 +109,13 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStand
     Q_D(ProjectBaseItem);
     d->project = project;
     setParent( parent );
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
 
 ProjectBaseItem::ProjectBaseItem( ProjectBaseItemPrivate& dd)
     : d_ptr(&dd)
 {
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
 
 ProjectBaseItem::~ProjectBaseItem()
@@ -140,7 +142,7 @@ void ProjectBaseItem::setIcon()
 
 void ProjectBaseItem::add( ProjectBaseItem* item )
 {
-    setChild( rowCount(), item );
+    appendRow( item );
 }
 
 ProjectFolderItem *ProjectBaseItem::folder() const
