@@ -153,8 +153,14 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         else if ( !buildTargetsAdded && item->target() )
         {
             KDevelop::ProjectTargetItem* target = item->target();
-            KAction* action = new KAction( i18n( "Build targets" ), this );
+            KAction* action = new KAction( i18n( "Build target(s)" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(buildProjectsFromContextMenu()) );
+            actions << action;
+            action = new KAction( i18n( "Install target(s)" ), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT(installProjectsFromContextMenu()) );
+            actions << action;
+            action = new KAction( i18n( "Clean target(s)" ), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT(cleanProjectsFromContextMenu()) );
             actions << action;
             buildTargetsAdded = true;
         }
@@ -211,6 +217,25 @@ void ProjectManagerViewPart::closeProjects()
         {
             core()->projectController()->closeProject( prjitem->project() );
         }
+    }
+    d->ctxProjectItemList.clear();
+}
+
+
+void ProjectManagerViewPart::installProjectsFromContextMenu()
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        executeInstall( item );
+    }
+    d->ctxProjectItemList.clear();
+}
+
+void ProjectManagerViewPart::cleanProjectsFromContextMenu()
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        executeClean( item );
     }
     d->ctxProjectItemList.clear();
 }
