@@ -33,6 +33,7 @@ class ProjectBuilder;
 class ProjectFileItem;
 class ProjectFolderItem;
 class ProjectTargetItem;
+class IProjectBuilder;
 }
 
 class ProjectManagerView;
@@ -54,11 +55,17 @@ protected Q_SLOTS:
     void closeProjects();
     void buildProjectsFromContextMenu();
     void buildProjectItems();
+    void installProjectItems();
+    void cleanProjectItems();
     void buildAllProjects();
 
 private:
-    void executeProjectBuilder( KDevelop::ProjectBaseItem* );
-    void recurseAndBuild( KDevelop::ProjectBaseItem* item );
+    void executeBuild( KDevelop::ProjectBaseItem* );
+    void executeClean( KDevelop::ProjectBaseItem* );
+    void executeInstall( KDevelop::ProjectBaseItem* );
+    KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
+    QList<KDevelop::ProjectBaseItem*> getCheckedItems();
+    QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
     class ProjectManagerViewPartPrivate* const d;
 
 };

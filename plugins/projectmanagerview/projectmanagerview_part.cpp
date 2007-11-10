@@ -84,6 +84,8 @@ public:
     QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
     KAction* m_buildAll;
     KAction* m_build;
+    KAction* m_install;
+    KAction* m_clean;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
@@ -98,6 +100,12 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
     d->m_build->setShortcut( Qt::Key_F8 );
     connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjectItems()) );
     actionCollection()->addAction( "project_build", d->m_build );
+    d->m_install = new KAction( i18n("Install"), this );
+    connect( d->m_install, SIGNAL(triggered()), this, SLOT(installProjectItems()) );
+    actionCollection()->addAction( "project_install", d->m_install );
+    d->m_clean = new KAction( i18n("Clean"), this );
+    connect( d->m_clean, SIGNAL(triggered()), this, SLOT(cleanProjectItems()) );
+    actionCollection()->addAction( "project_clean", d->m_clean );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
@@ -155,21 +163,43 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
 }
 
 
-void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* item )
+KDevelop::IProjectBuilder* ProjectManagerViewPart::getProjectBuilder( KDevelop::ProjectBaseItem* item )
 {
     if( !item )
-        return;
+        return 0;
     IProject* project = item->project();
     ProjectFolderItem* prjitem = project->projectItem();
     IPlugin* fmgr = project->managerPlugin();
     IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
     if( mgr )
     {
-        IProjectBuilder* builder = mgr->builder( prjitem );
-        kDebug(9511) << "Building item:" << item->text();
-        if( builder)
-          builder->build( item );
+        return mgr->builder( prjitem );
     }
+    return 0;
+}
+
+void ProjectManagerViewPart::executeBuild( KDevelop::ProjectBaseItem* item )
+{
+    IProjectBuilder* builder = getProjectBuilder( item );
+    kDebug(9511) << "Building item:" << item->text();
+    if( builder )
+        builder->build( item );
+}
+
+void ProjectManagerViewPart::executeClean( KDevelop::ProjectBaseItem* item )
+{
+    IProjectBuilder* builder = getProjectBuilder( item );
+    kDebug(9511) << "Cleaning item:" << item->text();
+    if( builder )
+        builder->clean( item );
+}
+
+void ProjectManagerViewPart::executeInstall( KDevelop::ProjectBaseItem* item )
+{
+    IProjectBuilder* builder = getProjectBuilder( item );
+    kDebug(9511) << "Installing item:" << item->text();
+    if( builder )
+        builder->install( item );
 }
 
 void ProjectManagerViewPart::closeProjects()
@@ -189,7 +219,7 @@ void ProjectManagerViewPart::buildProjectsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        executeProjectBuilder( item );
+        executeBuild( item );
     }
     d->ctxProjectItemList.clear();
 }
@@ -198,50 +228,80 @@ void ProjectManagerViewPart::buildAllProjects()
 {
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
-        executeProjectBuilder( project->projectItem() );
+        executeBuild( project->projectItem() );
+    }
+}
+
+QList<KDevelop::ProjectBaseItem*> ProjectManagerViewPart::getCheckedItems()
+{
+    KDevelop::ProjectModel* model = core()->projectController()->projectModel();
+    QList<KDevelop::ProjectBaseItem*> items;
+    for( int row = 0; row < model->rowCount(); row++ )
+    {
+        if( model->item( row )->checkState() == Qt::Checked )
+        {
+            items << dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) );
+        }else if( model->item( row )->checkState() == Qt::PartiallyChecked )
+        {
+            items += recurseAndFetchCheckedItems(
+                    dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) ) );
+        }
+    }
+    return items;
+}
+
+void ProjectManagerViewPart::installProjectItems()
+{
+    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    {
+        executeInstall( item );
+    }
+}
+
+void ProjectManagerViewPart::cleanProjectItems()
+{
+    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    {
+        executeInstall( item );
     }
 }
 
 void ProjectManagerViewPart::buildProjectItems()
 {
-    KDevelop::ProjectModel* model = core()->projectController()->projectModel();
-    for( int row = 0; row < model->rowCount(); row++ )
+    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
     {
-        if( model->item( row )->checkState() == Qt::Checked )
-        {
-            executeProjectBuilder( dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) ) );
-        }else if( model->item( row )->checkState() == Qt::PartiallyChecked )
-        {
-            recurseAndBuild( dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) ) );
-        }
+        executeBuild( item );
     }
 }
 
-void ProjectManagerViewPart::recurseAndBuild( KDevelop::ProjectBaseItem* item )
+QList<KDevelop::ProjectBaseItem*>
+ProjectManagerViewPart::recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item )
 {
+    QList<KDevelop::ProjectBaseItem*> items;
     if( item->folder() )
     {
         if( item->checkState() == Qt::PartiallyChecked )
         {
             foreach( KDevelop::ProjectFolderItem* folderItem, item->folderList() )
             {
-                recurseAndBuild( folderItem );
+                items += recurseAndFetchCheckedItems( folderItem );
             }
             foreach( KDevelop::ProjectTargetItem* targetItem, item->targetList() )
             {
                 if( targetItem->checkState() == Qt::Checked )
                 {
-                    executeProjectBuilder( targetItem );
+                    items << targetItem;
                 }
             }
         }else if( item->checkState() == Qt::Checked )
         {
-            executeProjectBuilder( item );
+            items << item;
         }
     }else if( item->target() && item->checkState() == Qt::Checked )
     {
-        executeProjectBuilder( item );
+        items << item;
     }
+    return items;
 }
 
 #include "projectmanagerview_part.moc"
