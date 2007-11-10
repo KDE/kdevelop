@@ -23,7 +23,7 @@
 #include <QList>
 #include <QVector>
 #include <QDomDocument>
-
+#include <QDir>
 #include <QtDesigner/QExtensionFactory>
 
 #include <KUrl>
@@ -327,6 +327,7 @@ QString CMakeProjectManager::guessCMakeRoot(const QString& cmakeBin)
 
 QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin)
 {
+    QString ret;
     KUrl bin(guessCMakeRoot(cmakeBin));
     
     QString version=executeProcess(cmakeBin, QStringList("--version"));
@@ -336,8 +337,17 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
     
     bin.cd(QString("share/cmake-%1/Modules").arg(versionNumber));
 
+    ret=bin.toLocalFile();
+    QDir d(ret);
+    if(!d.exists(ret)) {
+        KUrl std(bin);
+        std.upUrl(); std.upUrl();
+        std.cd("cmake/Modules");
+        ret=std.toLocalFile();
+    }
+    
     kDebug(9032) << "guessing: " << bin.toLocalFile();
-    return QStringList(bin.toLocalFile());
+    return QStringList(ret);
 }
 
 #include "cmakemanager.moc"

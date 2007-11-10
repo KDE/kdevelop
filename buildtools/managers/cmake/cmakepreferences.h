@@ -51,7 +51,7 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
         void cacheEdited(QStandardItem * ) { emit changed(true); }
         void buildDirChanged(const QString &);
         void createBuildDir();
-        void toggleAdvanced(bool v);
+        void showAdvanced(bool v);
     private:
         KUrl m_srcFolder;
         KSharedConfig::Ptr m_cfg;

@@ -52,7 +52,8 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
             this, SLOT(showInternal ( int )));
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()),
             this, SLOT(createBuildDir()));
-    connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(toggleAdvanced(bool)));
+    connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
+    m_prefsUi->showAdvanced->setChecked(false);
     showInternal(m_prefsUi->showInternal->checkState());
     m_srcFolder=KUrl(args[0].toString());
     m_srcFolder=m_srcFolder.upUrl();
@@ -64,11 +65,8 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
             break;
         }
     }
-//     kDebug(9032) << "cfgs" << args;
+    showAdvanced(false);
     load();
-    
-    m_prefsUi->showAdvanced->setChecked(false);
-    toggleAdvanced(false);
 }
 
 CMakePreferences::~CMakePreferences()
@@ -193,7 +191,7 @@ void CMakePreferences::createBuildDir()
     //TODO: Save it for next runs
 }
 
-void CMakePreferences::toggleAdvanced(bool v)
+void CMakePreferences::showAdvanced(bool v)
 {
     kDebug(9032) << "toggle pressed: " << v;
     m_prefsUi->advancedBox->setHidden(!v);
