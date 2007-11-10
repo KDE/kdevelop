@@ -3,6 +3,7 @@ add_subdirectory(tests)
 include_directories( ${KDE4_INCLUDES}
     ${CMAKE_SOURCE_DIR}/util
     ${CMAKE_SOURCE_DIR}/interfaces
+    ${CMAKE_SOURCE_DIR}/project
     ${CMAKE_SOURCE_DIR}/vcs
     ${CMAKE_SOURCE_DIR}/vcs/interfaces
 )
@@ -43,9 +44,10 @@ kde4_add_plugin(kdevcvs ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
 	${KDE4_KDECORE_LIBS}
-    kdevplatformutil
+	kdevplatformutil
 	kdevplatforminterfaces
 	kdevplatformvcs
+	kdevplatformproject
 )
 
 install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR} )

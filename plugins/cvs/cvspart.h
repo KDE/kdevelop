@@ -39,6 +39,9 @@ public:
     CvsPart( QObject *parent, const QVariantList & args = QVariantList() );
     virtual ~CvsPart();
 
+    // From KDevelop::IPlugin
+    QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+
     // Begin:  KDevelop::IBasicVersionControl
     virtual bool isVersionControlled( const KUrl& localLocation );
     virtual KDevelop::VcsJob* repositoryLocation( const KUrl& localLocation );
@@ -105,17 +108,21 @@ public:
     const KUrl urlFocusedDocument() const;
 
 public slots:
-    void slotLog();
-    void slotDiff();
+    // slots for context menu
+    void ctxCommit();
+    void ctxAdd();
+    void ctxRemove();
+    void ctxUpdate();
+    void ctxLog();
+    void ctxAnnotate();
+    void ctxRevert();
+    void ctxDiff();
+
+    // slots for menu
     void slotEdit();
     void slotUnEdit();
     void slotEditors();
-    void slotAdd();
-    void slotRemove();
-    void slotCommit();
-    void slotUpdate();
     void slotImport();
-    void slotAnnotate();
     void slotCheckout();
     void slotStatus();
 

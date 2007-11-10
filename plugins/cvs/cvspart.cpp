@@ -25,8 +25,10 @@
 #include <KAction>
 
 
+#include <projectmodel.h>
 #include <iuicontroller.h>
 #include <icore.h>
+#include <context.h>
 
 #include "cvsmainview.h"
 #include "cvsproxy.h"
@@ -63,6 +65,7 @@ class CvsPartPrivate {
 public:
     KDevCvsViewFactory* m_factory;
     QPointer<CvsProxy> m_proxy;
+    KUrl::List m_ctxUrlList;
 };
 
 CvsPart::CvsPart( QObject *parent, const QVariantList & )
@@ -96,14 +99,6 @@ void CvsPart::setupActions()
 {
     KAction *action;
 
-    action = actionCollection()->addAction("cvs_log");
-    action->setText(i18n("Show log"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotLog()));
-
-    action = actionCollection()->addAction("cvs_diff");
-    action->setText(i18n("Show differences..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotDiff()));
-
     action = actionCollection()->addAction("cvs_edit");
     action->setText(i18n("Edit..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotEdit()));
@@ -116,29 +111,9 @@ void CvsPart::setupActions()
     action->setText(i18n("Show Editors..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotEditors()));
 
-    action = actionCollection()->addAction("cvs_add");
-    action->setText(i18n("Add Files..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAdd()));
-
-    action = actionCollection()->addAction("cvs_remove");
-    action->setText(i18n("Remove Files..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotRemove()));
-
-    action = actionCollection()->addAction("cvs_commit");
-    action->setText(i18n("Commit Files..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCommit()));
-
-    action = actionCollection()->addAction("cvs_update");
-    action->setText(i18n("Update Files..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotUpdate()));
-
     action = actionCollection()->addAction("cvs_import");
     action->setText(i18n("Import Directory..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotImport()));
-
-    action = actionCollection()->addAction("cvs_annotate");
-    action->setText(i18n("Annotate..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAnnotate()));
 
     action = actionCollection()->addAction("cvs_checkout");
     action->setText(i18n("Checkout..."));
@@ -161,40 +136,6 @@ const KUrl CvsPart::urlFocusedDocument() const
     return KUrl();
 }
 
-void CvsPart::slotLog()
-{
-    KUrl url = urlFocusedDocument();
-    KDevelop::VcsRevision rev;
-    KDevelop::VcsJob* j = log( url, rev, 0 );
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        job->start();
-        LogView* view = new LogView(this, job);
-        emit addNewTabToMainView( view, i18n("Log") );
-    }
-}
-
-void CvsPart::slotDiff()
-{
-    KUrl url = urlFocusedDocument();
-    DiffOptionsDialog dlg(0, url);
-
-    if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::VcsRevision revA;
-        revA.setRevisionValue(dlg.revA(), KDevelop::VcsRevision::FileNumber);
-
-        KDevelop::VcsRevision revB;
-        revB.setRevisionValue(dlg.revB(), KDevelop::VcsRevision::FileNumber);
-
-        KDevelop::VcsJob* j = diff(url, QString(""), revA, revB, KDevelop::VcsDiff::DiffUnified);
-        CvsJob* job = dynamic_cast<CvsJob*>(j);
-        if (job) {
-            job->start();
-            CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
-            emit addNewTabToMainView( view, i18n("Diff") );
-        }
-    }
-}
 
 void CvsPart::slotEdit()
 {
@@ -222,72 +163,6 @@ void CvsPart::slotUnEdit()
     }
 }
 
-void CvsPart::slotAdd()
-{
-    KUrl url = urlFocusedDocument();
-    KUrl::List urls;
-    urls << url;
-
-    KDevelop::VcsJob* j = add(urls, KDevelop::IBasicVersionControl::Recursive);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
-    }
-}
-
-void CvsPart::slotRemove()
-{
-    KUrl url = urlFocusedDocument();
-    KUrl::List urls;
-    urls << url;
-
-    KDevelop::VcsJob* j = remove(urls);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
-    }
-}
-
-void CvsPart::slotCommit()
-{
-    KUrl url = urlFocusedDocument();
-    KUrl::List urls;
-    urls << url;
-
-    KDevelop::VcsJob* j = commit("", urls, KDevelop::IBasicVersionControl::Recursive);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
-    }
-}
-
-void CvsPart::slotUpdate()
-{
-    KUrl url = urlFocusedDocument();
-    KUrl::List urls;
-    urls << url;
-
-    UpdateOptionsDialog dlg;
-    if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::VcsJob* j = update(urls,
-                                     dlg.revision(),
-                                     KDevelop::IBasicVersionControl::Recursive);
-        CvsJob* job = dynamic_cast<CvsJob*>(j);
-        if (job) {
-            connect(job, SIGNAL( result(KJob*) ),
-                    this, SIGNAL( jobFinished(KJob*) ));
-            job->start();
-        }
-    }
-}
-
-
 void CvsPart::slotEditors()
 {
     KUrl url = urlFocusedDocument();
@@ -313,22 +188,6 @@ void CvsPart::slotImport()
     ///@todo implement me
 }
 
-void CvsPart::slotAnnotate()
-{
-    KUrl url = urlFocusedDocument();
-
-    /// @todo let user pick annotate revision
-    KDevelop::VcsRevision rev;
-
-    KDevelop::VcsJob* j = annotate(url, rev);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
-        emit addNewTabToMainView( view, i18n("Annotate") );
-        job->start();
-    }
-}
-
 void CvsPart::slotCheckout()
 {
     ///@todo don't use proxy directly; use interface instead
@@ -352,6 +211,193 @@ void CvsPart::slotStatus()
         job->start();
     }
 }
+
+
+
+QPair<QString,QList<QAction*> > CvsPart::requestContextMenuActions(KDevelop::Context* context)
+{
+    // First we need to convert the data from the context* into something we can work with
+    // This means we have to pull the KUrls out of the given list of items.
+    KUrl::List ctxUrlList;
+
+    // For now we only support the contextmenu from the ProjectView plugin.
+    // If, in future, further types should be supported, just add an else-if for that type here
+    if( context->type() == KDevelop::Context::ProjectItemContext ) {
+        KDevelop::ProjectItemContext *itemCtx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
+        QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
+
+        foreach( KDevelop::ProjectBaseItem* _item, baseItemList ) {
+            if( _item->folder() ){
+                KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(_item);
+                ctxUrlList << folderItem->url();
+            }
+            else if( _item->file() ){
+                KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(_item);
+                ctxUrlList << fileItem->url();
+            }
+        }
+    } else {
+        // Unsupported context type
+        return KDevelop::IPlugin::requestContextMenuActions( context );
+    }
+
+    if( ctxUrlList.isEmpty() )
+        return KDevelop::IPlugin::requestContextMenuActions( context );
+
+    // OK. If we made it until here, the requested context type is supported and at least one item 
+    // was given. Now let's store the items in d->m_ctxUrlList and create the menu.
+
+    d->m_ctxUrlList = ctxUrlList;
+
+    QList<QAction*> actions;
+    KAction *action;
+
+    action = new KAction(i18n("Commit..."), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+    actions << action;
+
+    action = new KAction(i18n("Add"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+    actions << action;
+
+    action = new KAction(i18n("Remove"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+    actions << action;
+
+    action = new KAction(i18n("Update.."), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+    actions << action;
+
+    action = new KAction(i18n("Log View"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
+    actions << action;
+
+    action = new KAction(i18n("Annotate"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxAnnotate()) );
+    actions << action;
+
+    action = new KAction(i18n("Revert"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
+    actions << action;
+
+    action = new KAction("Diff...", this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
+    actions << action;
+
+    return qMakePair( QString("CVS"), actions );
+}
+
+
+void CvsPart::ctxCommit()
+{
+    KDevelop::VcsJob* j = commit("", d->m_ctxUrlList, KDevelop::IBasicVersionControl::Recursive);
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SIGNAL( jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
+void CvsPart::ctxAdd()
+{
+    KDevelop::VcsJob* j = add(d->m_ctxUrlList, KDevelop::IBasicVersionControl::Recursive);
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SIGNAL( jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
+void CvsPart::ctxRemove()
+{
+    KDevelop::VcsJob* j = remove(d->m_ctxUrlList);
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SIGNAL( jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
+void CvsPart::ctxUpdate()
+{
+    UpdateOptionsDialog dlg;
+    if (dlg.exec() == QDialog::Accepted) {
+        KDevelop::VcsJob* j = update(d->m_ctxUrlList,
+                                     dlg.revision(),
+                                     KDevelop::IBasicVersionControl::Recursive);
+        CvsJob* job = dynamic_cast<CvsJob*>(j);
+        if (job) {
+            connect(job, SIGNAL( result(KJob*) ),
+                    this, SIGNAL( jobFinished(KJob*) ));
+            job->start();
+        }
+    }
+}
+
+void CvsPart::ctxLog()
+{
+    KDevelop::VcsRevision rev;
+    KDevelop::VcsJob* j = log( d->m_ctxUrlList.first(), rev, 0 );
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        job->start();
+        LogView* view = new LogView(this, job);
+        emit addNewTabToMainView( view, i18n("Log") );
+    }
+}
+
+void CvsPart::ctxAnnotate()
+{
+    /// @todo let user pick annotate revision
+    KDevelop::VcsRevision rev;
+
+    KDevelop::VcsJob* j = annotate(d->m_ctxUrlList.first(), rev);
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
+        emit addNewTabToMainView( view, i18n("Annotate") );
+        job->start();
+    }
+}
+
+void CvsPart::ctxRevert()
+{
+    KDevelop::VcsJob* j = revert(d->m_ctxUrlList,
+                                    KDevelop::IBasicVersionControl::Recursive);
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SIGNAL( jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
+void CvsPart::ctxDiff()
+{
+    KUrl url = d->m_ctxUrlList.first();
+    DiffOptionsDialog dlg(0, url);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        KDevelop::VcsRevision revA;
+        revA.setRevisionValue(dlg.revA(), KDevelop::VcsRevision::FileNumber);
+
+        KDevelop::VcsRevision revB;
+        revB.setRevisionValue(dlg.revB(), KDevelop::VcsRevision::FileNumber);
+
+        KDevelop::VcsJob* j = diff(url, QString(""), revA, revB, KDevelop::VcsDiff::DiffUnified);
+        CvsJob* job = dynamic_cast<CvsJob*>(j);
+        if (job) {
+            job->start();
+            CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
+            emit addNewTabToMainView( view, i18n("Diff") );
+        }
+    }
+}
+
+
 
 // Begin:  KDevelop::IBasicVersionControl
 
