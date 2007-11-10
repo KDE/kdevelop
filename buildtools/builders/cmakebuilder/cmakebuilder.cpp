@@ -138,6 +138,13 @@ bool CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return false;
 }
 
+bool CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
+{
+    Q_UNUSED( dom )
+    return false;
+}
+
+
 void CMakeBuilder::completed(int id)
 {
     kDebug(9032) << "command finished" << id;

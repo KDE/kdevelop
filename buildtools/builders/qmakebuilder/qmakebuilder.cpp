@@ -169,6 +169,12 @@ bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return false;
 }
 
+bool QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
+{
+    Q_UNUSED( dom )
+    return false;
+}
+
 void QMakeBuilder::completed(int id)
 {
     kDebug(9039) << "command finished" << id;

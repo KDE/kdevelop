@@ -176,6 +176,13 @@ bool MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
     return false;
 }
 
+bool MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
+{
+    Q_UNUSED(dom);
+    return false;
+}
+
+
 void MakeBuilder::commandFinished(int id)
 {
     if( m_items.contains(id) )

@@ -73,10 +73,13 @@ public:
      */
     virtual bool build(KDevelop::ProjectBaseItem *dom);
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
+    virtual bool install(KDevelop::ProjectBaseItem *dom);
 
 Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem* );
     void failed( KDevelop::ProjectBaseItem* );
+    void installed(KDevelop::ProjectBaseItem*);
+    void cleaned(KDevelop::ProjectBaseItem*);
 
 private Q_SLOTS:
     void commandFinished(int id);
