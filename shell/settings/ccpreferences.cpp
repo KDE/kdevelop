@@ -1,6 +1,7 @@
 /* KDevelop Project Settings
 *
 * Copyright 2006  Matt Rogers <mattr@kde.org>
+* Copyright 2007  Hamish Rodda <rodda@kde.org>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -17,7 +18,8 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 * 02110-1301, USA.
 */
-#include "bgpreferences.h"
+
+#include "ccpreferences.h"
 
 #include <QVBoxLayout>
 
@@ -27,24 +29,23 @@
 #include "ilanguagecontroller.h"
 #include "backgroundparser.h"
 
-#include "bgconfig.h"
+#include "ccconfig.h"
 
-#include "ui_bgsettings.h"
+#include "ui_ccsettings.h"
 
 namespace KDevelop
 {
 
-K_PLUGIN_FACTORY(BGPreferencesFactory, registerPlugin<BGPreferences>();)
-K_EXPORT_PLUGIN(BGPreferencesFactory("kcm_kdev_bgsettings"))
+K_PLUGIN_FACTORY(CCPreferencesFactory, registerPlugin<CCPreferences>();)
+K_EXPORT_PLUGIN(CCPreferencesFactory("kcm_kdev_ccsettings"))
 
 
-BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )
- : KCModule( BGPreferencesFactory::componentData(), parent, args )
+CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
+ : KCModule( CCPreferencesFactory::componentData(), parent, args )
 {
-
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
-    preferencesDialog = new Ui::BGSettings;
+    preferencesDialog = new Ui::CCSettings;
     preferencesDialog->setupUi( w );
 
     preferencesDialog->kcfg_delay->setRange( 0, 5000, true );
@@ -52,17 +53,17 @@ BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )
 
     l->addWidget( w );
 
-    addConfig( BGSettings::self(), w );
+    addConfig( CCSettings::self(), w );
 
     load();
 }
 
-BGPreferences::~BGPreferences( )
+CCPreferences::~CCPreferences( )
 {
     delete preferencesDialog;
 }
 
-void BGPreferences::save()
+void CCPreferences::save()
 {
     KCModule::save();
 
@@ -73,10 +74,9 @@ void BGPreferences::save()
 
     Core::self()->languageController()->backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
     Core::self()->languageController()->backgroundParser()->setThreadCount( preferencesDialog->kcfg_threads->value() );
-
 }
 
 }
 
-#include "bgpreferences.moc"
+#include "ccpreferences.moc"
 
