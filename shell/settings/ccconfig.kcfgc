@@ -1,0 +1,6 @@
+File=ccconfig.kcfg
+ClassName=CCSettings
+Singleton=true
+UseEnumTypes=true
+SetUserTexts=true
+ItemAccessors=true

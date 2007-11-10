@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVBGPREFERENCES_H
-#define KDEVBGPREFERENCES_H
+#ifndef KDEVCCPREFERENCES_H
+#define KDEVCCPREFERENCES_H
 
 #include <kcmodule.h>
 
@@ -29,18 +29,18 @@
 
 namespace Ui
 {
-class BGSettings;
+class CCSettings;
 }
 
 namespace KDevelop
 {
 
-class BGPreferences : public KCModule
+class CCPreferences : public KCModule
 {
     Q_OBJECT
 public:
-    BGPreferences( QWidget *parent, const QVariantList &args );
-    virtual ~BGPreferences();
+    CCPreferences( QWidget *parent, const QVariantList &args );
+    virtual ~CCPreferences();
 
     virtual void save();
 
@@ -51,7 +51,7 @@ public:
     }
 
 private:
-    Ui::BGSettings *preferencesDialog;
+    Ui::CCSettings *preferencesDialog;
 
 };
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Code Completion">
+    <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
+    <default>true</default>
+    </entry>
+  </group>
+</kcfg>
