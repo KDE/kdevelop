@@ -41,11 +41,14 @@ public:
 
     virtual ~IProjectBuilder();
 
+    virtual bool install(ProjectBaseItem* item) = 0;
     virtual bool build(ProjectBaseItem *dom) = 0;
     virtual bool clean(ProjectBaseItem *dom) = 0;
 
 Q_SIGNALS:
     void built(ProjectBaseItem *dom);
+    void installed(ProjectBaseItem*);
+    void cleaned(ProjectBaseItem*);
     void failed(ProjectBaseItem *dom);
 };
 
