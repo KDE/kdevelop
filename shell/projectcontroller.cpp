@@ -69,7 +69,7 @@ public:
     Core* m_core;
 //     IProject* m_currentProject;
     ProjectModel* model;
-    QMap<IProject*, KSettings::Dialog*> m_cfgDlgs;
+    QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
 
     bool reopenProjectsOnStartup;
     bool parseAllProjectSources;
@@ -390,10 +390,7 @@ bool ProjectController::closeProject( IProject* proj )
     QPointer<QAction> configAction = d->m_configActions.take( proj );
     delete configAction;
     if( d->m_cfgDlgs.contains(proj) )
-    {
-        KSettings::Dialog *dlg = d->m_cfgDlgs.take(proj);
-        delete dlg;
-    }
+        delete d->m_cfgDlgs.take(proj);
 
     // start project manager that is used by this project. If that manager is being used
     // by other project also, don't unload that manager.

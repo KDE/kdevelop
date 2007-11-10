@@ -4,7 +4,7 @@
   <kcfgfile name="kdeveloprc"/>
   <group name="Code Completion">
     <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
-    <default>true</default>
+    <default>false</default>
     </entry>
   </group>
 </kcfg>

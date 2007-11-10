@@ -22,10 +22,12 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kconfiggroup.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/modificationinterface.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 #include <sublime/mainwindow.h>
 
@@ -116,6 +118,8 @@ KTextEditor::Document *TextDocument::textDocument() const
 
 QWidget *TextDocument::createViewWidget(QWidget *parent)
 {
+    KTextEditor::View* view = 0L;
+
     if (!d->document)
     {
         d->document = Core::self()->partManagerInternal()->createTextPart(url(),
@@ -135,9 +139,21 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
 
-        return d->document->widget();
+        view = qobject_cast<KTextEditor::View*>(d->document->widget());
+        Q_ASSERT(view);
     }
-    return d->document->createView(parent);
+
+    if (!view)
+        view = d->document->createView(parent);
+
+    if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)) {
+        KConfigGroup group(KGlobal::config(), "Code Completion");
+        bool automaticInvocation = group.readEntry( "Automatic Invocation", false );
+
+        cc->setAutomaticInvocationEnabled(automaticInvocation);
+    }
+
+    return view;
 }
 
 KParts::Part *TextDocument::partForView(QWidget *view) const

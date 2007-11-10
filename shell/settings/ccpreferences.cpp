@@ -25,13 +25,19 @@
 
 #include <kgenericfactory.h>
 
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/codecompletioninterface.h>
+
 #include "core.h"
-#include "ilanguagecontroller.h"
-#include "backgroundparser.h"
+#include "idocumentcontroller.h"
+#include "idocument.h"
 
 #include "ccconfig.h"
 
 #include "ui_ccsettings.h"
+
+using namespace KTextEditor;
 
 namespace KDevelop
 {
@@ -47,9 +53,6 @@ CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
     QWidget* w = new QWidget;
     preferencesDialog = new Ui::CCSettings;
     preferencesDialog->setupUi( w );
-
-    preferencesDialog->kcfg_delay->setRange( 0, 5000, true );
-    preferencesDialog->kcfg_threads->setRange( 1, 32, true );
 
     l->addWidget( w );
 
@@ -67,13 +70,11 @@ void CCPreferences::save()
 {
     KCModule::save();
 
-    if ( preferencesDialog->kcfg_enable->isChecked() )
-        Core::self()->languageController()->backgroundParser()->resume();
-    else
-        Core::self()->languageController()->backgroundParser()->suspend();
-
-    Core::self()->languageController()->backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
-    Core::self()->languageController()->backgroundParser()->setThreadCount( preferencesDialog->kcfg_threads->value() );
+    foreach (KDevelop::IDocument* doc, Core::self()->documentController()->openDocuments())
+        if (Document* textDoc = doc->textDocument())
+            foreach (View* view, textDoc->views())
+                if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
+                    cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
 }
 
 }

@@ -52,7 +52,6 @@ public:
 
 private:
     Ui::CCSettings *preferencesDialog;
-
 };
 
 }

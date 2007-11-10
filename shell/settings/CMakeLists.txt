@@ -48,6 +48,24 @@ target_link_libraries( kcm_kdev_bgsettings ${KDE4_KUTILS_LIBS} kdevplatformshell
 install( TARGETS kcm_kdev_bgsettings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_bgsettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
+########### Background Parser
+
+set( ccsettings_cfg_SRCS
+    ccpreferences.cpp
+)
+
+set( ccsettings_cfg_UI
+    ccsettings.ui
+)
+
+kde4_add_ui_files( ccsettings_cfg_SRCS ${ccsettings_cfg_UI} )
+kde4_add_kcfg_files( ccsettings_cfg_SRCS ccconfig.kcfgc )
+kde4_add_plugin( kcm_kdev_ccsettings ${ccsettings_cfg_SRCS} )
+target_link_libraries( kcm_kdev_ccsettings ${KDE4_KUTILS_LIBS} kdevplatformshell )
+
+install( TARGETS kcm_kdev_ccsettings DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( FILES kcm_kdev_ccsettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+
 ########### Project Configuration
 
 set( projectsettings_cfg_SRCS
