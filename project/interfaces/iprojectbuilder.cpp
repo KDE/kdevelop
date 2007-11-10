@@ -24,5 +24,15 @@ namespace KDevelop
 IProjectBuilder::~IProjectBuilder()
 {
 }
+
+
+bool IProjectBuilder::configure(IProject*)
+{
+}
+
+bool IProjectBuilder::prune(IProject*)
+{
+}
+
 }
 
