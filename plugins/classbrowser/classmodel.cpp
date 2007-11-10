@@ -174,7 +174,10 @@ bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
 
   Node* parent = objectForIndex(parentIndex);
   if (!parent)
-    return childItems(parent);
+    if (QList<Node*>* children = childItems(parent))
+      return children->count();
+    else
+      return false;
 
   if (!*parent)
     return false;
@@ -192,7 +195,10 @@ bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
   if (context->childContexts().isEmpty())
     return false;
 
-  return childItems(parent);
+  if (QList<Node*>* children = childItems(parent))
+    return children->count();
+  else
+    return false;
 }
 
 int ClassModel::rowCount(const QModelIndex & parentIndex) const
