@@ -678,7 +678,7 @@ void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEdi
           foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), false) ) )
             m_declarations << CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second );
       } else {
-        kDebug(9007) << "CppCodeCompletionModel::setContext: bad container-type";
+        kDebug(9007) << "CppCodeCompletionModel::setContext: no container-type";
       }
     } else if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess ) {
       //Include-file completion
