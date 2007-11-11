@@ -57,7 +57,7 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),
       m_failedMapper( new QSignalMapper( this ) ),
       m_completedMapper( new QSignalMapper( this ) ),
-      m_dirty(true)
+      m_dirty(true), m_builder( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( ICMakeBuilder )
@@ -74,11 +74,13 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
     {
-        IMakeBuilder* view = i->extension<IMakeBuilder>();
-        if( view )
+        m_builder = i->extension<IMakeBuilder>();
+        if( m_builder )
         {
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SIGNAL(built(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
+            connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
+            connect(i, SIGNAL(installed(KDevelop::ProjectBaseItem*)), this, SIGNAL(installed(KDevelop::ProjectBaseItem*)));
         }
     }
 }
@@ -115,32 +117,31 @@ void CMakeBuilder::cleanupModel( int id )
 
 bool CMakeBuilder::build(KDevelop::ProjectBaseItem *item)
 {
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
-    if( i )
+    if( m_builder )
     {
-        IMakeBuilder* builder = i->extension<IMakeBuilder>();
-        if( builder )
-        {
-            kDebug(9032) << "Building with make";
-            return builder->build(item);
-        }
-        else
-            kDebug(9032) << "Make builder not with extension";
+        kDebug(9032) << "Building with make";
+        return m_builder->build(item);
     }
-    else
-        kDebug(9032) << "Make builder not found";
     return false;
 }
 
 bool CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
-    Q_UNUSED( dom )
+    if( m_builder )
+    {
+        kDebug(9032) << "Cleaning with make";
+        return m_builder->clean(dom);
+    }
     return false;
 }
 
 bool CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
-    Q_UNUSED( dom )
+    if( m_builder )
+    {
+        kDebug(9032) << "Installing with make";
+        return m_builder->install(dom);
+    }
     return false;
 }
 

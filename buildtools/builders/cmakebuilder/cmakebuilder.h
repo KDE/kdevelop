@@ -31,6 +31,7 @@
 class QStringList;
 class QSignalMapper;
 class KDialog;
+class IMakeBuilder;
 namespace KDevelop{
     class ProjectBaseItem;
     class CommandExecutor;
@@ -78,6 +79,7 @@ private:
     KUrl m_installPrefix;
     QString m_buildType;
     bool m_dirty;
+    IMakeBuilder* m_builder;
 };
 
 #endif // CMAKEBUILDER_H
