@@ -341,9 +341,10 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
     QDir d(ret);
     if(!d.exists(ret)) {
         KUrl std(bin);
-        std.upUrl(); std.upUrl();
+        std = std.upUrl(); std = std.upUrl();
         std.cd("cmake/Modules");
         ret=std.toLocalFile();
+        bin = std;
     }
 
     kDebug(9032) << "guessing: " << bin.toLocalFile();
