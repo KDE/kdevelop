@@ -113,7 +113,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory(ProjectFolderItem*) const = 0;
+    virtual KUrl buildDirectory(ProjectBaseItem*) const = 0;
 
 
 };
