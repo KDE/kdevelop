@@ -182,7 +182,11 @@ class CppDUContext : public BaseContext {
         QList<Cpp::ExpressionEvaluationResult> templateArgumentTypes;
 
         for( int a = 0; a < currentIdentifier.templateIdentifiers().size(); a++ ) {
-          QList<KDevelop::Declaration*> decls = BaseContext::findDeclarations( currentIdentifier.templateIdentifiers().at(a) );
+          QList<KDevelop::Declaration*> decls;
+
+          if( !currentIdentifier.templateIdentifiers().at(a).isExpression() )
+            decls = BaseContext::findDeclarations( currentIdentifier.templateIdentifiers().at(a) );
+          
           if( !decls.isEmpty() ) {
             Cpp::ExpressionEvaluationResult res;
             res.type = decls.front()->abstractType();
@@ -194,10 +198,11 @@ class CppDUContext : public BaseContext {
             
             templateArgumentTypes << res;
           }else{
-            ///@todo Let the expression-parser handle the thing. This will allow evaluating integral expressions like "1 - 1" and such
-            ///problem: the du-chain is already locked
-            templateArgumentTypes << Cpp::ExpressionEvaluationResult();
-            kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << endl;
+            ExpressionParser p;
+            ExpressionEvaluationResult res = p.evaluateType( currentIdentifier.templateIdentifiers().at(a).toString().toUtf8(), DUContextPointer(const_cast<CppDUContext*>(this)) );
+            templateArgumentTypes << res;
+            if( !res.isValid() )
+              kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString() << endl;
           }
         }
 
@@ -223,7 +228,6 @@ class CppDUContext : public BaseContext {
             } else {
                 ++it;
             }
-            
           }
         }
         
@@ -324,7 +328,7 @@ class CppDUContext : public BaseContext {
       
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, flags );
 
-        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount; )
+        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position; )
         
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params
