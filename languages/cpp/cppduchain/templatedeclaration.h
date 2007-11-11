@@ -40,8 +40,17 @@ namespace Cpp {
   class ExpressionEvaluationResult;
 }
 
-uint qHash( const Cpp::ExpressionEvaluationResult& key );
-uint qHash( const QList<Cpp::ExpressionEvaluationResult>& key );
+struct InstantiationKey {
+  ///Template-arguments
+  InstantiationKey() {
+  }
+  explicit InstantiationKey( const QList<Cpp::ExpressionEvaluationResult>& _args ) : args(_args) {
+  }
+  QList<Cpp::ExpressionEvaluationResult> args;
+  bool operator==(const InstantiationKey & rhs) const;
+};
+
+uint qHash( const InstantiationKey& );
 
 namespace Cpp {
   template<class Base>
@@ -50,7 +59,7 @@ namespace Cpp {
   //Represents the template-part of a template-class'es or template-function's template-part
   class KDEVCPPDUCHAINBUILDER_EXPORT TemplateDeclaration {
     public:
-      typedef QHash<QList<ExpressionEvaluationResult>, TemplateDeclaration*> InstantiationsHash;
+      typedef QHash<InstantiationKey, TemplateDeclaration*> InstantiationsHash;
       
       ///Copy-constructor for cloning
       TemplateDeclaration(const TemplateDeclaration& rhs);
@@ -91,7 +100,7 @@ namespace Cpp {
       KDevelop::DUContextPointer m_parameterContext;
       TemplateDeclaration* m_instantiatedFrom;
       TemplateDeclaration* m_specializedFrom; 
-      QList<ExpressionEvaluationResult> m_instantiatedWith;
+      InstantiationKey m_instantiatedWith;
 
       static QMutex instantiationsMutex;
       ///Every access to m_instantiations must be serialized through instantiationsMutex!

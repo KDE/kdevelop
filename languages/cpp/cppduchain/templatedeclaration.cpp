@@ -48,15 +48,32 @@ struct Incrementer {
 
 uint qHash( const ExpressionEvaluationResult& key )
 {
-  uint ret = 0/*11*key.isLValue() + 13*key.instance.isInstance + 17*(quint64)key.instance.declaration*/;
-  
+  uint ret = 13*key.instance.isInstance;// + 17*(quint64)key.instance.declaration*/;
+
   if( key.type )
-    return qHash(key.type);
+    ret += qHash(key.type->toString()); ///@todo Expensive
+  
+/*  if( key.type )
+    return qHash(key.type);*/
   
   return ret;
 }
 
+uint qHash( const QList<ExpressionEvaluationResult>& key ) {
+  uint ret = 0;
+  foreach( const ExpressionEvaluationResult& expr, key )
+    ret = qHash(expr) + ret * 7;
+  return ret;
+}
 
+bool InstantiationKey::operator==(const InstantiationKey & rhs) const
+{
+  return qHash(args) == qHash(rhs.args);
+}
+
+uint qHash( const InstantiationKey& key ) {
+  return qHash( key.args );
+}
 
 ///Finds out whether any DelayedType's are involved in a given type(It searches return-values, argument-types, base-classes, etc.)
 struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
@@ -104,7 +121,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   virtual AbstractType* exchange( const AbstractType* type )
   {
     Incrementer inc(&depth_counter);
-    if( depth_counter > 30 ) {
+    if( depth_counter > 6 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return const_cast<AbstractType*>(type); ///@todo remove const_cast;
     }
@@ -112,9 +129,21 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
     const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
 
     if( delayedType && delayedType->kind() == DelayedType::Delayed ) {
-      QList<Declaration*> decls = searchContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
-      if( !decls.isEmpty() ) {
-        return decls.front()->abstractType().data();
+
+      if( !delayedType->qualifiedIdentifier().isExpression() ) {
+        QList<Declaration*> decls = searchContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
+        if( !decls.isEmpty() ) {
+          return decls.front()->abstractType().data();
+        }
+      } else {
+        ///Resolve delayed expression, for example static numeric expressions
+          ExpressionParser p;
+          ExpressionEvaluationResult res = p.evaluateType( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)) );
+
+          ///@todo make this nicer
+          keepAlive = res.type; //Since the API uses AbstractType*, use keepAlive to make sure the type cannot be deleted
+          return res.type.data();
+        
       }
     }else{
       if( containsDelayedType(type) )
@@ -139,17 +168,12 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   virtual bool exchangeMembers() const {
     return false;
   }
+  private:
+    AbstractType::Ptr keepAlive;
 };
 
 bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
  return left.type == right.type && left.instance.isInstance == right.instance.isInstance;
-}
-
-uint qHash( const QList<ExpressionEvaluationResult>& key ) {
-  uint ret = 0;
-  foreach( const ExpressionEvaluationResult& expr, key )
-    ret = qHash(expr) + ret * 7;
-  return ret;
 }
 
 namespace Cpp {
@@ -226,8 +250,8 @@ void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const Q
   if( m_instantiatedFrom )
     m_instantiatedFrom->m_instantiations.remove(m_instantiatedWith);
   m_instantiatedFrom = from;
-  m_instantiatedWith = templateArguments;
-  from->m_instantiations.insert(templateArguments, this);
+  m_instantiatedWith.args = templateArguments;
+  from->m_instantiations.insert(m_instantiatedWith, this);
 }
 
 bool TemplateDeclaration::isInstantiatedFrom(const TemplateDeclaration* other) const {
@@ -293,7 +317,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     
     ///Now the created context is already partially functional and can be used for searching(not the instantiated template-params yet though)
     
-    if(context->type() == KDevelop::DUContext::Template ) { //templateArguments may be empty, that means that only copying should happen.
+    if( context->type() == KDevelop::DUContext::Template ) { //templateArguments may be empty, that means that only copying should happen.
       ///Specialize the local template-declarations
       QList<ExpressionEvaluationResult>::const_iterator currentArgument = templateArguments.begin();
       
@@ -311,7 +335,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           ++currentArgument;
         } else {
           if( !templateDecl->defaultParameter().isEmpty() ) {
-            kDebug() << "instantiating default-parameter" << templateDecl->defaultParameter().toString();
             bool isValidIdentifier = true; ///@todo test whether it is a valid identifier
             if( isValidIdentifier ) {
               QList<Declaration*> decls = contextCopy->findDeclarations(templateDecl->defaultParameter());
@@ -321,7 +344,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
                 kDebug(9007) << "Failed to resolve default-parameter" << templateDecl->defaultParameter().toString();
               }
             } else {
-              ExpressionParser p(false, true);
+              ExpressionParser p;
               ExpressionEvaluationResult res = p.evaluateType( (templateDecl->defaultParameter().toString() +" ").toUtf8(), DUContextPointer(contextCopy) );
               declCopy->setAbstractType( res.type );
             }
@@ -382,8 +405,10 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
   if( contextCopy )
     contextCopy->setInstantiatedFrom(dynamic_cast<CppDUContext<DUContext>*>(context), templateArguments);
   ///Since now the context is accessible through the du-chain, so it must not be changed any more.
-    
+
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
+
+    ///Resolve all involved delayed types
     
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instantiatedDeclaration->abstractType().data());
 
@@ -419,10 +444,11 @@ Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationR
   
   {
     QMutexLocker l(&instantiationsMutex);
-    InstantiationsHash::const_iterator it;
-    it = m_instantiations.find(templateArguments);
-    if( it != m_instantiations.end() )
+   InstantiationsHash::const_iterator it;
+    it = m_instantiations.find( InstantiationKey(templateArguments) );
+    if( it != m_instantiations.end() ) {
       return dynamic_cast<Declaration*>(*it);
+    }
   }
 
   
@@ -460,7 +486,7 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
     AbstractType::Ptr typeCopy;
     if( delayedType )
       ///The type itself is a delayed type, resolve it
-      ;//typeCopy = resolver.exchange( type.data() );
+      typeCopy = resolver.exchange( type.data() );
     else {
       ///Resolve involved delayed types, now hopefully we know the template-parameters
       typeCopy = AbstractType::Ptr( type->clone() );
@@ -477,7 +503,7 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
 }
 
 const QList<ExpressionEvaluationResult>& TemplateDeclaration::instantiatedWith() const {
-  return m_instantiatedWith;
+  return m_instantiatedWith.args;
 }
 
 TemplateDeclaration::InstantiationsHash TemplateDeclaration::instantiations() const {
