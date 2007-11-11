@@ -786,6 +786,7 @@ void ContextBuilder::addImportedContexts()
     }
 
     m_importedParentContexts.clear();
+    m_lastContext = 0;
   }
 }
 
