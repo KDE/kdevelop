@@ -56,6 +56,7 @@ private slots:
   void testSmartPointer();
   void testCasts();
   void testBaseClasses();
+  void testTemplatesSimple();
   void testTemplates();
   void cleanupTestCase();
   void testOperators();

@@ -69,6 +69,7 @@ private slots:
   void testDeclareNamespace();
   void testDeclareUsingNamespace();
   void testDeclareUsingNamespace2();
+  void testTemplateEnums();
   void testTypedef();
   void testTemplates();
   void testTemplates2();
@@ -76,6 +77,7 @@ private slots:
   void testTemplatesRebind2();
   void testTemplateDefaultParameters();
   void testFunctionTemplates();
+  void testContextAssignment();
   void testSpecializedTemplates();
   void testFunctionDefinition();
   void testBaseClasses();

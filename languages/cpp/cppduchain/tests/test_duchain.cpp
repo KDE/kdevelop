@@ -1060,6 +1060,24 @@ void TestDUChain::testTypedef() {
   release(top);
 }
 
+void TestDUChain::testContextAssignment() {
+  QByteArray text("template<class A>class Class { enum{ Bla = A::a }; }; ");
+  DUContext* top = parse(text, DumpAll);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 1);
+
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->owner(), top->localDeclarations()[0]);
+
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 2);
+  
+  QCOMPARE((void*)top->childContexts()[0]->owner(), (void*)0);
+  QCOMPARE((void*)top->childContexts()[1]->localDeclarations()[0]->internalContext(), (void*)0);
+
+  release(top);
+}
+
 void TestDUChain::testSpecializedTemplates() {
   QByteArray text("class A{}; class B{}; class C{}; template<class T,class T2> class E{typedef A Type1;}; template<class T2> class E<A,T2> { typedef B Type2;}; template<class T2> class E<T2,A> { typedef C Type3; };");
   DUContext* top = parse(text, DumpNone);
@@ -1085,6 +1103,56 @@ void TestDUChain::testSpecializedTemplates() {
   
   release(top);
 }
+
+int value( const AbstractType::Ptr& type ) {
+  const CppConstantIntegralType* integral = dynamic_cast<const CppConstantIntegralType*>(type.data());
+  if( integral )
+    return (int)integral->value<qint64>();
+  else
+    return 0;
+}
+
+void TestDUChain::testTemplateEnums()
+{
+  QByteArray text("class A {enum { Val = 5}; }; class B { enum{ Val = 7 }; }; template<class C, int i> class Test { enum { TempVal = C::Val, Num = i, Sum = TempVal + i }; };");
+  DUContext* top = parse(text, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 3);
+  Declaration* ADecl = top->localDeclarations()[0];
+  Declaration* BDecl = top->localDeclarations()[1];
+  Declaration* testDecl = top->localDeclarations()[2];
+
+  TemplateDeclaration* templateTestDecl = dynamic_cast<TemplateDeclaration*>(testDecl);
+  QVERIFY(templateTestDecl);
+
+  Declaration* tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::TempVal") );
+  QVERIFY(tempDecl);
+  QCOMPARE(value(tempDecl->abstractType()), 5);
+  
+  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Num") );
+  QVERIFY(tempDecl);
+  QCOMPARE(value(tempDecl->abstractType()), 3);
+
+  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Sum") );
+  QVERIFY(tempDecl->abstractType());
+  QCOMPARE(value(tempDecl->abstractType()), 8);
+  
+  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::TempVal") );
+  QVERIFY(tempDecl->abstractType());
+  QCOMPARE(value(tempDecl->abstractType()), 7);
+
+  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::Num") );
+  QVERIFY(tempDecl->abstractType());
+  QCOMPARE(value(tempDecl->abstractType()), 9);
+
+  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::Sum") );
+  QVERIFY(tempDecl->abstractType());
+  QCOMPARE(value(tempDecl->abstractType()), 16);
+  
+  release(top);
+}
+
 void TestDUChain::testFunctionTemplates() {
   QByteArray method("template<class T> T test(const T& t) {};");
 

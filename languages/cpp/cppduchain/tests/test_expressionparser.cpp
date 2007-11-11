@@ -163,7 +163,7 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
   return 0;
 }
 
-void TestExpressionParser::testTemplates() {
+void TestExpressionParser::testTemplatesSimple() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> B;");
 
   DUContext* top = parse(method, DumpNone);
@@ -197,9 +197,52 @@ void TestExpressionParser::testTemplates() {
   QCOMPARE(classC->importedParentContexts().count(), 0);
   QCOMPARE(classC->localScopeIdentifier(), QualifiedIdentifier("C"));
 
-/*  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
-  QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
-  QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);*/
+  release(top);
+}
+
+void TestExpressionParser::testTemplates() {
+  QByteArray method("class A{}; template<class T, int val> struct Container {typedef Container<T> SelfType; enum{ Value = val }; T member; T operator*() const {}; }; Container<A> c;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* defClassA = top->localDeclarations()[0];
+  QCOMPARE(defClassA->identifier(), Identifier("A"));
+  QVERIFY(defClassA->type<CppClassType>());
+
+  Declaration* container = top->localDeclarations()[1];
+  QCOMPARE(container->identifier(), Identifier("Container"));
+  QVERIFY(container->type<CppClassType>());
+
+  Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(container);
+  QVERIFY(templateDecl);
+
+  
+  Cpp::ExpressionParser parser;
+  
+  {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("c.member", KDevelop::DUContextPointer(top));
+
+    QVERIFY(result.isValid());
+    QVERIFY(dynamic_cast<CppClassType*>(result.type.data()));
+
+    QVERIFY(!result.allDeclarations.isEmpty());
+    QVERIFY(dynamic_cast<IdentifiedType*>(result.type.data()));
+    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.data())->declaration(), defClassA);
+  }
+  
+  {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("*c", KDevelop::DUContextPointer(top));
+
+    QVERIFY(result.isValid());
+    QVERIFY(dynamic_cast<CppClassType*>(result.type.data()));
+
+    QVERIFY(!result.allDeclarations.isEmpty());
+    QVERIFY(dynamic_cast<IdentifiedType*>(result.type.data()));
+    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.data())->declaration(), defClassA);
+  }
+  
   release(top);
 }
 
@@ -284,7 +327,7 @@ void TestExpressionParser::testSmartPointer() {
   QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {}; template<class Target> SmartPointer<Target> cast() {}; T& operator*() {};  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
   //QByteArray method("template<class T> struct SmartPointer { template<class Target> void cast() {}; } ; ");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
   
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -511,7 +554,7 @@ void TestExpressionParser::testThis() {
   TEST_FILE_PARSE_ONLY
   
   QByteArray text("class A{ void test() { } void test2() const { }; void extTest(); }; void A::extTest() {}");
-  DUContext* top = parse( text, DumpAll );//DumpNone /*DumpDUChain | DumpAST */);
+  DUContext* top = parse( text, DumpNone);//DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
   
   QCOMPARE(top->childContexts().count(), 3);
@@ -680,7 +723,7 @@ void TestExpressionParser::testOperators() {
   TEST_FILE_PARSE_ONLY
       
   QByteArray test = "struct Cont2 {operator[] {}; operator()() {};}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
-  DUContext* ctx = parse( test, DumpAll );
+  DUContext* ctx = parse( test, DumpNone );
   DUChainWriteLocker lock(DUChain::lock());
   
   QCOMPARE(ctx->childContexts().count(), 5);
@@ -710,7 +753,7 @@ void TestExpressionParser::testOperators() {
 
   lock.unlock();
 
-  Cpp::ExpressionParser parser(false, true);
+  Cpp::ExpressionParser parser;
 
   //Reenable this once the type-parsing system etc. is fixed
   
