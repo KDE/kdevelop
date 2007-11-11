@@ -66,7 +66,8 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
     };
 
     /**
-     * Will parse the tree and call expressionType(..) for each successfully evaluated type
+     * Will parse the tree and call expressionType(..) for each successfully evaluated type.
+     * A DelayedType is created for possible static expressions that use non-assigned template-arguments, so they can be re-evaluated later.
      * @param ast the syntax-tree to evaluate. The context must already be built, the given AST needs to have a filled ducontext.
      **/
     void parse( AST* ast );
@@ -170,6 +171,8 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionVisitor : public Visitor {
   ///Returns whether the given type and instance-info are an lvalue
   bool isLValue( const AbstractType::Ptr& type, const Instance& instance );
 
+  ///Creates a delayed type that refers to the expression within the given node. Sets the type as m_lastType
+  void createDelayedType( AST* node );
 
   /**
    * Returns the dereferenced type(example: ReferenceType(PointerType) -> PointerType)

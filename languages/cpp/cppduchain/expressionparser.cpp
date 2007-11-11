@@ -124,6 +124,13 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
 }
 
 ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session) {
+  
+  if (m_debug) {
+    DumpChain dumper;
+    kDebug(9007) << "===== AST:";
+    dumper.dump(ast, session);
+  }
+  
   ExpressionEvaluationResult ret;
   ExpressionVisitor v(session, m_strict);
   v.parse( ast );
