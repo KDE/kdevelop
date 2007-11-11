@@ -166,6 +166,8 @@ void MainWindow::setVisible( bool visible )
 
 bool MainWindow::queryClose()
 {
+    Core::self()->documentController()->saveAllDocuments();
+
     return Sublime::MainWindow::queryClose();
 }
 
