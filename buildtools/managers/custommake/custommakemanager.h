@@ -95,7 +95,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory(KDevelop::ProjectFolderItem*) const;
+    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
 
     /**
      * Get a list of all the targets in this project

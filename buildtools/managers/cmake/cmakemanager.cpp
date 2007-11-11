@@ -94,7 +94,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     QString sysName=executeProcess("uname", QStringList("-s"));
     QString sysVersion=executeProcess("uname", QStringList("-r"));
     QString sysProcessor=executeProcess("uname", QStringList("-p"));
-    
+
     m_varsDef.insert("UNIX", QStringList("TRUE"));
     m_varsDef.insert("CMAKE_SYSTEM_NAME", QStringList(sysName));
     m_varsDef.insert("CMAKE_SYSTEM_VERSION", QStringList(sysVersion));
@@ -119,7 +119,7 @@ CMakeProjectManager::~CMakeProjectManager()
     //delete m_rootItem;
 }
 
-KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectFolderItem *item) const
+KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
@@ -148,14 +148,14 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     {
         VariableMap vm=m_varsDef;
         QStringList mpath=m_modulePathDef;
-        
+
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), "CMake");
         if(group.hasKey("CMakeDir"))
             mpath=group.readEntry("CMakeDir", QStringList());
         else
             group.writeEntry("CMakeDir", mpath);
-        
+
         vm.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
         m_macrosPerProject[project]=MacroMap();
         m_modulePathPerProject[project]=mpath;
@@ -272,7 +272,7 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const KUrl::List& dirs
     KConfigGroup group(cfg.data(), "CMake");
     QString bindir=group.readEntry("CurrentBuildDir", QString());
     QString instdir=group.readEntry("CurrentBuildDir", QString());
-    
+
     //FIXME: I wonder how i could do it better
     KUrl::List newList;
     foreach(KUrl u, dirs)
@@ -329,12 +329,12 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
 {
     QString ret;
     KUrl bin(guessCMakeRoot(cmakeBin));
-    
+
     QString version=executeProcess(cmakeBin, QStringList("--version"));
     QRegExp rx("[a-z* ]*([0-9.]*)-[0-9]*");
     rx.indexIn(version);
     QString versionNumber = rx.capturedTexts()[1];
-    
+
     bin.cd(QString("share/cmake-%1/Modules").arg(versionNumber));
 
     ret=bin.toLocalFile();
@@ -345,7 +345,7 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
         std.cd("cmake/Modules");
         ret=std.toLocalFile();
     }
-    
+
     kDebug(9032) << "guessing: " << bin.toLocalFile();
     return QStringList(ret);
 }

@@ -149,7 +149,7 @@ bool CustomMakeManager::removeFileFromTarget(KDevelop::ProjectFileItem *file, KD
     return false;
 }
 
-KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectFolderItem* item) const
+KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
 {
     return item->project()->folder();
 }

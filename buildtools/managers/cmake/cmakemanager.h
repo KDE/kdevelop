@@ -59,7 +59,7 @@ public:
     virtual Features features() const { return Features(Folders | Targets | Files); }
 //     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
-    virtual KUrl buildDirectory(KDevelop::ProjectFolderItem*) const;
+    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QMap<QString,QString> preprocessorDefines(KDevelop::ProjectBaseItem *) const { return QMap<QString,QString>(); }
 
@@ -101,7 +101,7 @@ private:
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
-    
+
     ICMakeBuilder* m_builder;
     QList<KDevelop::ProjectTargetItem*> m_targets;
 };

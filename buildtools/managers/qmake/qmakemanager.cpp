@@ -66,9 +66,22 @@ QMakeProjectManager::~QMakeProjectManager()
 
 }
 
-KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectFolderItem* project) const
+KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem* project) const
 {
-    return project->url();
+    if( project->folder() )
+        return project->folder()->url();
+    else if( project->parent() )
+    {
+        KDevelop::ProjectBaseItem* base = static_cast<KDevelop::ProjectBaseItem*>(project->parent());
+        if( base->type() == KDevelop::ProjectBaseItem::Target )
+        {
+            return static_cast<KDevelop::ProjectFolderItem*>(base->parent())->url();
+        }else
+        {
+            return static_cast<KDevelop::ProjectFolderItem*>(base)->url();
+        }
+    }
+    return KUrl();
 }
 
 QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
