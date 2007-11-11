@@ -59,7 +59,7 @@ public:
 
     virtual Features features() const { return Features(Folders | Targets | Files); }
     virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectFolderItem*) const;
-    virtual KUrl buildDirectory(KDevelop::ProjectFolderItem*) const;
+    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
     virtual QMap<QString,QString> preprocessorDefines(KDevelop::ProjectBaseItem*) const { return QMap<QString,QString>(); }
 
