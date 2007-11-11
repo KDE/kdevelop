@@ -64,6 +64,12 @@
 | | | /ExpressionStatement[(45) (0, 102)
 */
 
+/**
+ * @todo Deal DelayedType correctly everywhere.
+ * When a DelayedType is encountered, it should be filled with the
+ * appropriate expression to compute the type/value later on.
+ * */
+
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 #define MUST_HAVE(X) if(!X) { problem( node, "no " # X ); return; }
 
@@ -485,7 +491,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         if( !m_lastDeclarations.isEmpty() ) {
           DeclarationPointer decl( m_lastDeclarations.first() );
           lock.unlock();
-          kDebug(9007) << "creating use for " << identifier.toString() << " at " << node->start_token << node->end_token;
           newUse( node, node->start_token, node->end_token, decl );
         }
       }
@@ -876,6 +881,19 @@ template<>
 void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left ){
 }
 
+void ExpressionVisitor::createDelayedType( AST* node ) {
+  DelayedType::Ptr type(new DelayedType());
+  QString id;
+  for( size_t s = node->start_token; s < node->end_token; ++s )
+    id += m_session->token_stream->token(s).symbol();
+
+  QualifiedIdentifier ident( id );
+  ident.setIsExpression( true );
+  type->setQualifiedIdentifier( ident );
+  m_lastType = AbstractType::Ptr( type.data() );
+}
+
+
   /**
    *
    * partially have test **/
@@ -959,6 +977,13 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       m_lastType = leftType;
       return;
     }
+
+    if( dynamic_cast<DelayedType*>(rightType.data()) || dynamic_cast<DelayedType*>(leftType.data()) ) {
+      m_lastInstance = Instance(true);
+      createDelayedType(node);
+      return;
+    }
+    
 
     if( rightInstance && leftInstance && rightType && leftType &&
         dynamic_cast<CppConstantIntegralType*>(rightType.data()) &&
@@ -1310,14 +1335,40 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     //Also visit the not interesting parts, so they are evaluated
     clearLast();
     visit(node->condition);
+    
+    if( dynamic_cast<DelayedType*>(m_lastType.data()) ) {
+      //Store the expression so it's evaluated later
+      m_lastInstance = Instance(true);
+      createDelayedType(node);
+      return;
+    }
+
+    AbstractType::Ptr conditionType = m_lastType;
+    
     clearLast();
     visit(node->left_expression);
+    AbstractType::Ptr leftType = m_lastType;
     clearLast();
 
+    
     ///@todo test if result of right expression can be converted to the result of the right expression. If not, post a problem(because c++ wants it that way)
 
     //Since both possible results of a conditional expression must have the same type, we only consider the right one here
     visit(node->right_expression);
+
+    {
+      LOCKDUCHAIN;
+      if( CppConstantIntegralType* condition = dynamic_cast<CppConstantIntegralType*>( conditionType.data() ) ) {
+        ///For constant integral types, the condition could be evaluated, so we choose the correct result.
+        if( condition->value<quint64>() == 0 ) {
+          ///The right expression is the correct one, so do nothing
+        } else {
+          ///Condition is true, so we choose the left expression value/type
+          m_lastType = leftType;
+        }
+      }
+    }
+    
     
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
@@ -1384,6 +1435,13 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     if( !m_lastInstance || !m_lastType ) {
       clearLast();
       problem(node, "Tried to evaluate unary expression on a non-instance item" );
+      return;
+    }
+
+    if( dynamic_cast<DelayedType*>(m_lastType.data()) ) {
+      //Store the expression so it's evaluated later
+      m_lastInstance = Instance(true);
+      createDelayedType(node);
       return;
     }
     
@@ -1642,7 +1700,15 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       if( dereferenceLastPointer(node) ) {
         //Make visit the sub-expression, so uses are built
         lock.unlock();
-        visit(node->subscript);
+        
+        masterInstance = m_lastInstance;
+        masterType = m_lastType;
+        
+        visit(node->subscript); //Visit so uses are built
+        clearLast();
+        
+        m_lastType = masterType;
+        m_lastInstance = masterInstance;
         return;
       }
     }
@@ -1657,6 +1723,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
     OverloadResolutionHelper helper(ptr);
     helper.setOperator( OverloadResolver::Parameter(masterType.data(), isLValue( masterType, masterInstance ) ), "[]" );
 
+    helper.setKnownParameters( OverloadResolver::Parameter( m_lastType.data(), isLValue( m_lastType, m_lastInstance ) ) );
     QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
     if( !functions.isEmpty() )
@@ -1676,6 +1743,7 @@ void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKi
       }
         
     }else{
+      clearLast();
       //Do not complain here, because we do not check for builtin operators
       //problem(node, "No fitting operator. found" );
     }
