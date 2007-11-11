@@ -129,5 +129,8 @@ protected:
   int m_currentEnumeratorValue;
 };
 
+///Helper-function that extracts the text from start_token until end_token
+QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token );
+
 #endif // TYPEBUILDER_H
 

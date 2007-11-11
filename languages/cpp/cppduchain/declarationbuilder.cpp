@@ -67,12 +67,6 @@ void copyCppClass( const CppClassType* from, CppClassType* to )
   to->close();
 }
 
-QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
-    int startPosition = session->token_stream->position(start_token);
-    int endPosition = session->token_stream->position(end_token);
-    return QString::fromUtf8( QByteArray(session->contents() + startPosition, endPosition - startPosition) ); ///@todo Exact encoding?
-}
-
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
   : DeclarationBuilderBase(session), m_inTypedef(false)
 {
@@ -666,7 +660,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
             for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
             {
-              Declaration* realInstance = currentTemplate->instantiate(it.key());
+              Declaration* realInstance = currentTemplate->instantiate(it.key().args);
               Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
               //Now change the type of forwardInstance so it matches the type of realInstance
               CppClassType::Ptr realClass = realInstance->type<CppClassType>();

@@ -23,6 +23,7 @@
 #include <identifier.h>
 #include <duchain.h>
 #include <forwarddeclaration.h>
+#include <templateparameterdeclaration.h>
 #include <duchainlock.h>
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
@@ -44,6 +45,12 @@
 #endif
 
 using namespace KDevelop;
+
+QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
+    int startPosition = session->token_stream->position(start_token);
+    int endPosition = session->token_stream->position(end_token);
+    return QString::fromUtf8( QByteArray(session->contents() + startPosition, endPosition - startPosition) ); ///@todo Exact encoding?
+}
 
 TypeBuilder::TypeBuilder(ParseSession* session)
   : TypeBuilderBase(session), m_declarationHasInitDeclarators(false)
@@ -217,21 +224,46 @@ void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 {
+  bool openedType = false;
+  
   if(node->expression) {
     Cpp::ExpressionParser parser;
 
     Cpp::ExpressionEvaluationResult res;
     
-    {
-      DUChainReadLocker lock(DUChain::lock());
-      node->expression->ducontext = currentContext();
-      res = parser.evaluateType( node->expression, m_editor->parseSession() );
-    }
-    if (res.isValid() && res.instance && dynamic_cast<CppConstantIntegralType*>(res.type.data())) {
-      CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(res.type.data());
-      m_currentEnumeratorValue = (int)type->value<qint64>();
+    DUChainReadLocker lock(DUChain::lock());
+    node->expression->ducontext = currentContext();
+    res = parser.evaluateType( node->expression, m_editor->parseSession() );
+    
+    bool delay = false;
+
+    //Delay the type-resolution of template-parameters
+    if( !res.allDeclarations.isEmpty() && dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front()) )
+      delay = true;
+    
+    if ( !delay && res.isValid() && res.instance ) {
+      if( dynamic_cast<CppConstantIntegralType*>(res.type.data()) ) {
+        CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(res.type.data());
+        m_currentEnumeratorValue = (int)type->value<qint64>();
+      } else if( dynamic_cast<DelayedType*>(res.type.data()) ) {
+        DelayedType* type = static_cast<DelayedType*>(res.type.data());
+        openType(AbstractType::Ptr(type), node); ///@todo Make this an enumerator-type that holds the same information
+        openedType = true;
+      }
     } else {
-      ///@todo Report problem, bad expression
+      if( delay || templateDeclarationDepth() > 0 ) {
+        QString str;
+        ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
+        str += stringFromSessionTokens( m_editor->parseSession(), node->expression->start_token, node->expression->end_token );
+
+        QualifiedIdentifier id( str.trimmed() );
+        id.setIsExpression( true );
+
+        openDelayedType(id, node, DelayedType::Delayed);
+        openedType = true;
+      } else {
+        ///@todo Report problem, bad expression
+      }
     }
   }
   
@@ -241,9 +273,12 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 //     ok = true;
 //   }
 
-  CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
-  openType(enumerator, node);
-  enumerator->setValue<qint64>(m_currentEnumeratorValue);
+  if(!openedType) {
+    openedType = true;
+    CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
+    openType(enumerator, node);
+    enumerator->setValue<qint64>(m_currentEnumeratorValue);
+  }
   
   TypeBuilderBase::visitEnumerator(node);
 
