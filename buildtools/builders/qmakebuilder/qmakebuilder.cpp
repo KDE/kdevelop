@@ -52,32 +52,36 @@ K_EXPORT_PLUGIN(QMakeBuilderFactory("kdevqmakebuilder"))
 QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent),
       m_failedMapper( new QSignalMapper( this ) ),
-      m_completedMapper( new QSignalMapper( this ) )
+      m_qmakeCompletedMapper( new QSignalMapper( this ) ), m_makeBuilder( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IQMakeBuilder )
-    m_failedMapper = new QSignalMapper(this);
     connect(m_failedMapper, SIGNAL(mapped( int )),
             this, SLOT(errored( int)));
-    m_completedMapper = new QSignalMapper(this);
-    connect(m_completedMapper, SIGNAL(mapped( int )),
-            this, SLOT(completed( int )));
+    connect(m_qmakeCompletedMapper, SIGNAL(mapped( int )),
+            this, SLOT(qmakeCompleted( int )));
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
         connect( i, SIGNAL( viewRemoved( int ) ),
                  this, SLOT( cleanupModel( int ) ) );
     }
-    i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
-    if( i )
+    m_makeBuilder = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
+    if( m_makeBuilder )
     {
-        IMakeBuilder* view = i->extension<IMakeBuilder>();
-        if( view )
+        IMakeBuilder* mbuilder = m_makeBuilder->extension<IMakeBuilder>();
+        if( mbuilder )
         {
-            connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)),
-                this, SLOT(built(KDevelop::ProjectBaseItem*)));
-            connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)),
-                this, SLOT(failed(KDevelop::ProjectBaseItem*)));
+            connect( m_makeBuilder, SIGNAL( built( KDevelop::ProjectBaseItem* ) ),
+                this, SIGNAL( built( KDevelop::ProjectBaseItem* ) ) );
+            connect( m_makeBuilder, SIGNAL( cleaned( KDevelop::ProjectBaseItem* ) ),
+                this, SIGNAL( cleaned( KDevelop::ProjectBaseItem* ) ) );
+            connect( m_makeBuilder, SIGNAL( installed( KDevelop::ProjectBaseItem* ) ),
+                this, SIGNAL( installed( KDevelop::ProjectBaseItem* ) ) );
+            connect( m_makeBuilder, SIGNAL( failed( KDevelop::ProjectBaseItem* ) ),
+                this, SIGNAL( failed( KDevelop::ProjectBaseItem* ) ) );
+            connect( m_makeBuilder, SIGNAL( makeTargetBuilt( KDevelop::ProjectBaseItem*, const QString& ) ),
+                this, SIGNAL( distcleanCompleted( KDevelop::ProjectBaseItem*, const QString& ) ) );
         }
     }
 }
@@ -94,7 +98,7 @@ void QMakeBuilder::cleanupModel( int id )
         kDebug(9039) << "do some cleanup";
         KDevelop::OutputModel* model = m_models[id];
         KDevelop::CommandExecutor* cmd = m_cmds[id];
-        foreach( KDevelop::IProject* p, m_ids.keys() )
+        foreach( KDevelop::ProjectBaseItem* p, m_ids.keys() )
         {
             if( m_ids[p] == id )
             {
@@ -106,16 +110,45 @@ void QMakeBuilder::cleanupModel( int id )
         m_cmds.remove(id);
         m_items.remove(id);
         m_failedMapper->removeMappings(cmd);
-        m_completedMapper->removeMappings(cmd);
+        m_qmakeCompletedMapper->removeMappings(cmd);
         delete model;
         delete cmd;
     }
 }
 
+bool QMakeBuilder::prune( KDevelop::IProject* project )
+{
+    kDebug(9039) << "Distcleaning";
+    if( m_makeBuilder )
+    {
+        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        if( builder )
+        {
+            kDebug(9039) << "Distcleaning with make";
+            return builder->executeMakeTarget(project->projectItem(), "distclean");
+        }
+    }
+    return false;
+}
+
 bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     kDebug(9039) << "Building";
-    if( dom->type() != KDevelop::ProjectBaseItem::BuildFolder )
+    if( m_makeBuilder )
+    {
+        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        if( builder )
+        {
+            kDebug(9039) << "Building with make";
+            return builder->build(dom);
+        }
+    }
+    return false;
+}
+
+bool QMakeBuilder::configure( KDevelop::IProject* project )
+{
+    if( !project )
         return false;
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
@@ -125,37 +158,31 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         {
 
             int id;
-            if( m_ids.contains( dom->project() ) )
+            if( m_ids.contains( project->projectItem() ) )
             {
-                id = m_ids[dom->project()];
+                id = m_ids[project->projectItem()];
                 m_models[id]->clear();
                 if( m_cmds.contains(id) )
                     delete m_cmds[id];
             }else
             {
-                id = view->registerView(i18n("QMake: %1", dom->project()->name() ) );
-                m_ids[dom->project()] = id;
+                id = view->registerView(i18n("QMake: %1", project->name() ) );
+                m_ids[project->projectItem()] = id;
                 m_models[id] = new KDevelop::OutputModel(this);
                 view->setModel( id, m_models[id] );
             }
-            m_items[id] = dom;
-            QString cmd;
-            KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
-            KConfigGroup group(cfg.data(), "QMake Builder");
-            kDebug(9039) << "Reading setting:" << group.readEntry("QMake Binary");
-            KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
-//             kDebug(9039) << v << v.type() << v.userType();
-            cmd = v.toLocalFile();
+            m_items[id] = project->projectItem();
+            QString cmd = qmakeBinary( project );
             m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
             connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
                     m_models[id], SLOT(appendLines(const QStringList&) ) );
             connect(m_cmds[id], SIGNAL(receivedStandardOutput(const QStringList&)),
                     m_models[id], SLOT(appendLines(const QStringList&) ) );
             m_failedMapper->setMapping( m_cmds[id], id );
-            m_completedMapper->setMapping( m_cmds[id], id );
-            m_cmds[id]->setWorkingDirectory( dom->project()->folder().toLocalFile() );
-            connect( m_cmds[id], SIGNAL( failed() ), m_failedMapper, SLOT(map()));
-            connect( m_cmds[id], SIGNAL( completed() ), m_completedMapper, SLOT(map()));
+            m_qmakeCompletedMapper->setMapping( m_cmds[id], id );
+            m_cmds[id]->setWorkingDirectory( project->folder().toLocalFile() );
+            connect( m_cmds[id], SIGNAL( failed() ), m_failedMapper, SLOT( map() ) );
+            connect( m_cmds[id], SIGNAL( completed() ), m_qmakeCompletedMapper, SLOT( map() ) );
             m_cmds[id]->start();
             return true;
         }
@@ -163,34 +190,47 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
     return false;
 }
 
+
 bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
-    Q_UNUSED( dom )
+    kDebug(9039) << "Cleaning";
+    if( m_makeBuilder )
+    {
+        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        if( builder )
+        {
+            kDebug(9039) << "Cleaning with make";
+            return builder->clean(dom);
+        }
+    }
     return false;
 }
 
 bool QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
-    Q_UNUSED( dom )
+    kDebug(9039) << "Installing";
+    if( m_makeBuilder )
+    {
+        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        if( builder )
+        {
+            kDebug(9039) << "Installing with make";
+            return builder->install(dom);
+        }
+    }
     return false;
 }
 
-void QMakeBuilder::completed(int id)
+
+void QMakeBuilder::distcleanCompleted( KDevelop::ProjectBaseItem* item, const QString& )
 {
-    kDebug(9039) << "command finished" << id;
-    if( m_items.contains(id))
-    {
-        IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
-        if( i )
-        {
-            IMakeBuilder* builder = i->extension<IMakeBuilder>();
-            if( builder )
-            {
-                kDebug(9039) << "Building with make";
-                builder->build(m_items[id]);
-            }else kDebug(9039) << "Make builder not with extension";
-        } else kDebug(9039) << "Make builder not found";
-    }
+    emit pruned( item );
+}
+
+void QMakeBuilder::qmakeCompleted(int id)
+{
+    if( m_items.contains( id ) )
+        emit configured( m_items[id] );
 }
 
 void QMakeBuilder::errored(int id)
