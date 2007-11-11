@@ -84,6 +84,8 @@ public:
     KAction* m_build;
     KAction* m_install;
     KAction* m_clean;
+    KAction* m_configure;
+    KAction* m_prune;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
@@ -104,6 +106,12 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
     d->m_clean = new KAction( i18n("Clean"), this );
     connect( d->m_clean, SIGNAL(triggered()), this, SLOT(cleanProjectItems()) );
     actionCollection()->addAction( "project_clean", d->m_clean );
+    d->m_configure = new KAction( i18n("Configure"), this );
+    connect( d->m_configure, SIGNAL(triggered()), this, SLOT(configureProjectItems()) );
+    actionCollection()->addAction( "project_configure", d->m_configure );
+    d->m_prune = new KAction( i18n("Prune"), this );
+    connect( d->m_prune, SIGNAL(triggered()), this, SLOT(pruneProjectItems()) );
+    actionCollection()->addAction( "project_prune", d->m_prune );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
@@ -212,6 +220,30 @@ void ProjectManagerViewPart::executeInstall( KDevelop::ProjectBaseItem* item )
         builder->install( item );
 }
 
+
+void ProjectManagerViewPart::executeConfigure( KDevelop::IProject* item )
+{
+    IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
+    kDebug(9511) << "Configuring item:" << item->name();
+
+    core()->documentController()->saveAllDocuments(IDocument::Silent);
+
+    if( builder )
+        builder->configure( item );
+}
+
+void ProjectManagerViewPart::executePrune( KDevelop::IProject* item )
+{
+    IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
+    kDebug(9511) << "Pruning item:" << item->name();
+
+    core()->documentController()->saveAllDocuments(IDocument::Silent);
+
+    if( builder )
+        builder->prune( item );
+}
+
+
 void ProjectManagerViewPart::closeProjects()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
@@ -287,11 +319,37 @@ void ProjectManagerViewPart::installProjectItems()
     }
 }
 
+void ProjectManagerViewPart::pruneProjectItems()
+{
+    QSet<KDevelop::IProject*> projects;
+    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    {
+        projects << item->project();
+    }
+    foreach( KDevelop::IProject* project, projects )
+    {
+        executePrune( project );
+    }
+}
+
+void ProjectManagerViewPart::configureProjectItems()
+{
+    QSet<KDevelop::IProject*> projects;
+    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    {
+        projects << item->project();
+    }
+    foreach( KDevelop::IProject* project, projects )
+    {
+        executeConfigure( project );
+    }
+}
+
 void ProjectManagerViewPart::cleanProjectItems()
 {
     foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
     {
-        executeInstall( item );
+        executeClean( item );
     }
 }
 
