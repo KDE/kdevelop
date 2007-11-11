@@ -143,6 +143,15 @@ public:
   void setExplicitlyGlobal(bool eg);
   bool isQualified() const;
 
+  ///A flag that can be set by setIsExpression
+  bool isExpression() const;
+  /**
+   * Set the expression-flag, that can be retrieved by isExpression().
+   * This flag is not respected while creating the hash-value and while operator==() comparison.
+   * It is respected while isSame(..) comparison.
+   * */
+  void setIsExpression(bool);
+  
   QString toString(bool ignoreExplicitlyGlobal = false) const;
   QStringList toStringList() const;
 
@@ -161,9 +170,15 @@ public:
   //The returned identifier will have explicitlyGlobal() set to false
   QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
 
+  /**
+   * A more complex comparison than operator==(..).
+   * It does respect the isExpression() flag, and optionally the explicitlyGlobal flag.
+   * */
   bool isSame(const QualifiedIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
   
-  ///The comparison-operators do not respect explicitlyGlobal, they only respect the real scope. This is for convenient use in hash-tables etc.
+  /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
+   * This is for convenient use in hash-tables etc.
+   * */
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);

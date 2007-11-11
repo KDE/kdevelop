@@ -408,7 +408,7 @@ public:
   typedef KSharedPtr<DelayedType> Ptr;
 
   enum Kind {
-    Delayed, //The type should be resolved later
+    Delayed, //The type should be resolved later. This is the default.
     Unresolved //The type could not be resolved
   };
   

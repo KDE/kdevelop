@@ -64,10 +64,11 @@ private:
 class QualifiedIdentifierPrivate : public KShared
 {
 public:
-  QualifiedIdentifierPrivate() : m_hash(0) {
+  QualifiedIdentifierPrivate() : m_hash(0), m_explicitlyGlobal(false), m_isExpression(false) {
   }
   QList<Identifier> m_identifiers;
-  bool m_explicitlyGlobal;
+  bool m_explicitlyGlobal:1;
+  bool m_isExpression:1;
   mutable uint m_hash;
 
   //Constructs m_identifiers
@@ -283,7 +284,6 @@ QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
 QualifiedIdentifier::QualifiedIdentifier()
   : d(new QualifiedIdentifierPrivate)
 {
-  d-> m_explicitlyGlobal = false;
 }
 
 QualifiedIdentifier::~QualifiedIdentifier() {
@@ -405,6 +405,17 @@ QualifiedIdentifier QualifiedIdentifier::strip(const QualifiedIdentifier & unwan
   return ret;
 }
 
+bool QualifiedIdentifier::isExpression() const
+{
+  return d->m_isExpression;
+}
+
+void QualifiedIdentifier::setIsExpression(bool is)
+{
+  prepareWrite();
+  d->m_isExpression = is;
+}
+
 bool QualifiedIdentifier::explicitlyGlobal() const
 {
   // True if started with "::"
@@ -414,7 +425,6 @@ bool QualifiedIdentifier::explicitlyGlobal() const
 void QualifiedIdentifier::setExplicitlyGlobal(bool eg)
 {
   prepareWrite();
-  
   d->m_explicitlyGlobal = eg;
 }
 
@@ -424,6 +434,9 @@ bool QualifiedIdentifier::isSame(const QualifiedIdentifier& rhs, bool ignoreExpl
     return true;
 
   if (!ignoreExplicitlyGlobal && (explicitlyGlobal() != rhs.explicitlyGlobal()))
+    return false;
+
+  if( isExpression() != rhs.isExpression() )
     return false;
   
   return hash() == rhs.hash();
@@ -586,6 +599,7 @@ void QualifiedIdentifier::clear()
   prepareWrite();
   d->m_identifiers.clear();
   d->m_explicitlyGlobal = false;
+  d->m_isExpression = false;
 }
 
 
