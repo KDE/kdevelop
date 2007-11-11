@@ -50,6 +50,14 @@ class MakeBuilder: public KDevelop::IPlugin, public IMakeBuilder
     Q_OBJECT
     Q_INTERFACES( IMakeBuilder )
     Q_INTERFACES( KDevelop::IProjectBuilder )
+private:
+    enum CommandType
+    {
+        BuildCommand,
+        CleanCommand,
+        CustomTargetCommand,
+        InstallCommand
+    };
 public:
     explicit MakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~MakeBuilder();
@@ -75,11 +83,15 @@ public:
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
     virtual bool install(KDevelop::ProjectBaseItem *dom);
 
+    virtual bool executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname );
+    bool runMake( KDevelop::ProjectBaseItem*, CommandType, const QString& = QString() );
+
 Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem* );
     void failed( KDevelop::ProjectBaseItem* );
     void installed(KDevelop::ProjectBaseItem*);
     void cleaned(KDevelop::ProjectBaseItem*);
+    void makeTargetBuilt( KDevelop::ProjectBaseItem* item, const QString& targetname );
 
 private Q_SLOTS:
     void commandFinished(int id);
@@ -87,18 +99,20 @@ private Q_SLOTS:
     void cleanupModel( int id );
 
 private:
-    QStringList computeBuildCommand(KDevelop::ProjectBaseItem *item);
+    QStringList computeBuildCommand(KDevelop::ProjectBaseItem *item, const QString& = QString() );
     KUrl computeBuildDir( KDevelop::ProjectBaseItem* item );
     QMap<QString, QString> environmentVars( KDevelop::ProjectBaseItem* item );
 
 private:
-    QMap< KDevelop::IProject*, int > m_ids;
+    QMap< KDevelop::ProjectBaseItem*, int > m_ids;
+    QMap< int, CommandType > m_commandTypes;
     QMap< int, KDevelop::CommandExecutor* > m_commands;
     QMap< int, KDevelop::ProjectBaseItem* > m_items;
     QMap< int, MakeOutputModel* > m_models;
     QMap< int, MakeOutputDelegate* > m_delegates;
-    QSignalMapper* errorMapper;
-    QSignalMapper* successMapper;
+    QMap< int, QString> m_customTargets;
+    QSignalMapper* m_errorMapper;
+    QSignalMapper* m_successMapper;
 };
 
 #endif // KDEVMAKEBUILDER_H

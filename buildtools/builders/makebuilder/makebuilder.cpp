@@ -60,11 +60,11 @@ MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
-    errorMapper = new QSignalMapper(this);
-    successMapper = new QSignalMapper(this);
-    connect(errorMapper, SIGNAL(mapped(int)),
+    m_errorMapper = new QSignalMapper(this);
+    m_successMapper = new QSignalMapper(this);
+    connect(m_errorMapper, SIGNAL(mapped(int)),
             this, SLOT(commandFailed(int) ));
-    connect(successMapper, SIGNAL(mapped(int)),
+    connect(m_successMapper, SIGNAL(mapped(int)),
             this, SLOT(commandFinished(int) ));
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
@@ -88,7 +88,7 @@ void MakeBuilder::cleanupModel( int id )
         MakeOutputModel* model = m_models[id];
         KDevelop::CommandExecutor* cmd = m_commands[id];
         MakeOutputDelegate* delegate = m_delegates[id];
-        foreach( KDevelop::IProject* p, m_ids.keys() )
+        foreach( KDevelop::ProjectBaseItem* p, m_ids.keys() )
         {
             if( m_ids[p] == id )
             {
@@ -100,8 +100,8 @@ void MakeBuilder::cleanupModel( int id )
         m_models.remove(id);
         m_commands.remove(id);
         m_items.remove(id);
-        errorMapper->removeMappings(cmd);
-        successMapper->removeMappings(cmd);
+        m_errorMapper->removeMappings(cmd);
+        m_successMapper->removeMappings(cmd);
         delete model;
         delete delegate;
         delete cmd;
@@ -110,76 +110,17 @@ void MakeBuilder::cleanupModel( int id )
 
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
 {
-    kDebug(9037) << "Building with make";
-    if( ! (dom->type() == KDevelop::ProjectBaseItem::Target ||
-           dom->type() == KDevelop::ProjectBaseItem::BuildFolder ) )
-        return false;
-
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-    if( i )
-    {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-        if( view )
-        {
-            KUrl buildDir = computeBuildDir( dom );
-            if( !buildDir.isValid() )
-                return false;
-            QStringList cmd = computeBuildCommand( dom );
-            if( cmd.isEmpty() )
-                return false;
-            int id;
-            if( m_ids.contains(dom->project()) )
-            {
-                id = m_ids[dom->project()];
-                m_models[id]->clear();
-            }else
-            {
-                id = view->registerView(i18n("Make: %1", dom->project()->name() ) );
-                m_ids[dom->project()] = id;
-                m_models[id] = new MakeOutputModel(this, this);
-                m_delegates[id] = new MakeOutputDelegate(this);
-                view->setModel(id, m_models[id]);
-                view->setDelegate(id, m_delegates[id]);
-            }
-            m_models[id]->appendRow( new QStandardItem( cmd.join(" ") ) );
-
-            if( m_commands.contains(id) )
-                delete m_commands[id];
-
-            m_commands[id] = new KDevelop::CommandExecutor(cmd.first());
-            m_commands[id]->setWorkingDirectory(buildDir.toLocalFile() );
-            cmd.pop_front();
-            m_commands[id]->setArguments( cmd );
-            QMap<QString, QString> envMap = environmentVars( dom );
-            m_commands[id]->setEnvironment( envMap );
-
-            connect(m_commands[id], SIGNAL(receivedStandardOutput(const QStringList&)),
-                    m_models[id], SLOT(addStandardOutput(const QStringList&)));
-            connect(m_commands[id], SIGNAL(receivedStandardError(const QStringList&)),
-                    m_models[id], SLOT(addStandardError(const QStringList&)));
-
-            connect( m_commands[id], SIGNAL( failed() ), errorMapper, SLOT( map() ) );
-            connect( m_commands[id], SIGNAL( completed() ), successMapper, SLOT( map() ) );
-            errorMapper->setMapping( m_commands[id], id );
-            successMapper->setMapping( m_commands[id], id );
-            kDebug(9037) << "Starting build:" << cmd << "Build directory" << buildDir;
-            m_commands[id]->start();
-            return true;
-        } // end of if(view)
-    }
-    return false;
+    return runMake( dom, MakeBuilder::BuildCommand );
 }
 
 bool MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
 {
-    Q_UNUSED(dom);
-    return false;
+    return runMake( dom, CleanCommand, "clean" );
 }
 
 bool MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
 {
-    Q_UNUSED(dom);
-    return false;
+    return runMake( dom, InstallCommand, "install" );
 }
 
 
@@ -187,7 +128,21 @@ void MakeBuilder::commandFinished(int id)
 {
     if( m_items.contains(id) )
     {
-        emit built( m_items[id] );
+        switch( m_commandTypes[id] )
+        {
+            case BuildCommand:
+                emit built( m_items[id] );
+                break;
+            case InstallCommand:
+                emit installed( m_items[id] );
+                break;
+            case CleanCommand:
+                emit cleaned( m_items[id] );
+                break;
+            case CustomTargetCommand:
+                emit makeTargetBuilt( m_items[id], m_customTargets[id] );
+                break;
+        }
     }
 }
 
@@ -202,114 +157,27 @@ void MakeBuilder::commandFailed(int id)
 KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
 {
     KUrl buildDir;
-    if( item->type() == KDevelop::ProjectBaseItem::BuildFolder )
+    KDevelop::IBuildSystemManager *bldMan = item->project()->buildSystemManager();
+    if( bldMan )
+        buildDir = bldMan->buildDirectory( item ); // the correct build dir
+    else
     {
-        KDevelop::ProjectBuildFolderItem* prjitem = static_cast<KDevelop::ProjectBuildFolderItem*>(item);
-        KDevelop::IBuildSystemManager *bldMan = prjitem->project()->buildSystemManager();
-        if( bldMan )
-            buildDir = bldMan->buildDirectory( prjitem ); // the correct build dir
-        else
-            buildDir = prjitem->url();
-    }
-
-    else if( item->type() == KDevelop::ProjectBaseItem::Target )
-    {
-        KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
-        // get top build directory, specified by build system manager
-        KDevelop::IBuildSystemManager *bldMan = targetItem->project()->buildSystemManager();
-        KDevelop::ProjectFolderItem *prjItem = targetItem->project()->projectItem();
-        KUrl topBldDir;
-        // ### buildDirectory only takes ProjectItem as an argument. Why it can't be
-        // any ProjectBaseItem?? This will make the algorithms belows much easier
-        if( prjItem )
+        switch( item->type() )
         {
-            if( bldMan )
-                topBldDir = bldMan->buildDirectory( prjItem ); // the correct build dir
-            else
-            {
-                kDebug(9037) << "Warning: fail to get build manager";
-                topBldDir = prjItem->url();
-            }
+            case KDevelop::ProjectBaseItem::Folder:
+            case KDevelop::ProjectBaseItem::BuildFolder:
+                return static_cast<KDevelop::ProjectFolderItem*>(item)->url();
+                break;
+            case KDevelop::ProjectBaseItem::Target:
+            case KDevelop::ProjectBaseItem::File:
+                buildDir = computeBuildDir( static_cast<KDevelop::ProjectBaseItem*>( item->parent() ) );
+                break;
         }
-        else
-        {
-            // just set to top project dir, since we can't call buildDirectory without ProjectItem
-            kDebug(9037) << "Warning: fail to retrieve KDevelop::ProjectItem";
-            topBldDir = targetItem->project()->folder();
-        }
-
-        // now compute relative directory: itemDir - topProjectDir,
-        // and append the difference to top_build_dir found above.
-        if( targetItem->parent() == NULL )
-        {
-            // This case shouldn't happen. Just set to project top build dir.
-            buildDir = topBldDir;
-        }
-        else
-        {
-            if( targetItem->parent()->type() == KDevelop::ProjectBaseItem::Folder ||
-                targetItem->parent()->type() == KDevelop::ProjectBaseItem::BuildFolder )
-            {
-                KDevelop::ProjectFolderItem *parentOfTarget =
-                        static_cast<KDevelop::ProjectFolderItem*>( targetItem->parent() );
-                KUrl itemDir = parentOfTarget->url();
-
-                QString relative;
-                if( prjItem )
-                {
-                    // desired case
-                    KUrl rootUrl = prjItem->url();
-                    rootUrl.adjustPath(KUrl::AddTrailingSlash);
-                    relative = KUrl::relativeUrl( rootUrl, itemDir );
-                }
-                else
-                {
-                    KUrl topProjectDir = targetItem->project()->folder();
-                    topProjectDir.adjustPath(KUrl::AddTrailingSlash);
-                    relative = KUrl::relativeUrl( topProjectDir, itemDir );
-                }
-
-                buildDir = topBldDir;
-                buildDir.addPath( relative );
-            }
-            else
-            {
-                // This case shouldn't happen too. Just set to top build dir.
-                buildDir = topBldDir;
-            }
-        }
-    } // end of else if( type() == ProjectTargetItem )
-
-    else if( item->type() == KDevelop::ProjectBaseItem::BuildFolder )
-    {
-        KDevelop::ProjectBuildFolderItem *bldFolderItem = static_cast<KDevelop::ProjectBuildFolderItem*>(item);
-        // get top build directory, specified by build system manager
-        KDevelop::IBuildSystemManager *bldMan = bldFolderItem->project()->buildSystemManager();
-        KDevelop::ProjectFolderItem *prjItem = bldFolderItem->project()->projectItem();
-        KUrl topBldDir;
-        if( !prjItem || !bldMan )
-        {
-            // can't find top build dir. Just set to item's url
-            buildDir = bldFolderItem->url();
-            return buildDir;
-        }
-        else
-        {
-            topBldDir = bldMan->buildDirectory( prjItem ); // the correct build dir
-        }
-        // now compute rel_dir between prjItem::url() and buildfolderItem::url()
-        QString relative;
-        KUrl rootUrl = prjItem->url();
-        rootUrl.adjustPath(KUrl::AddTrailingSlash);
-        relative = KUrl::relativeUrl( rootUrl, bldFolderItem->url() );
-        // and append that difference to top_build_dir found above.
-        buildDir = topBldDir;
-        buildDir.addPath( relative );
     }
     return buildDir;
 }
 
-QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
+QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item, const QString& overrideTarget )
 {
     QStringList cmdline;
 //     QString cmdline = DomUtil::readEntry(dom, makeTool);
@@ -345,23 +213,23 @@ QStringList MakeBuilder::computeBuildCommand( KDevelop::ProjectBaseItem *item )
         cmdline << extraOptions;
     }
 
-    if( item->type() == KDevelop::ProjectBaseItem::Target )
+    if( overrideTarget.isEmpty() )
     {
-        KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
-        cmdline << targetItem->text();
-    }
-    else if( item->type() == KDevelop::ProjectBaseItem::BuildFolder )
+        if( item->type() == KDevelop::ProjectBaseItem::Target )
+        {
+            KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
+            cmdline << targetItem->text();
+        }
+        else if( item->type() == KDevelop::ProjectBaseItem::BuildFolder )
+        {
+            QString target = builderGroup.readEntry("Default Target", QString());
+            if( !target.isEmpty() )
+                cmdline << target;
+        }
+    }else
     {
-        QString target = builderGroup.readEntry("Default Target", QString());
-        if( !target.isEmpty() )
-            cmdline << target;
+        cmdline << overrideTarget;
     }
-
-//     Q_ASSERT(item->folder());
-
-//     cmdline.prepend("&&");
-//     cmdline.prepend( item->folder()->text() );
-//     cmdline.prepend("cd");
 
     return cmdline;
 }
@@ -394,6 +262,84 @@ QMap<QString, QString> MakeBuilder::environmentVars( KDevelop::ProjectBaseItem* 
     }
 
     return retMap;
+}
+
+bool MakeBuilder::executeMakeTarget(KDevelop::ProjectBaseItem* item,
+                                    const QString& targetname )
+{
+    return runMake( item, MakeBuilder::CustomTargetCommand, targetname );
+}
+
+bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  const QString& overrideTarget )
+{
+    kDebug(9037) << "Building with make" << c << overrideTarget;
+
+    if( item->type() == KDevelop::ProjectBaseItem::File )
+        return false;
+
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    if( i )
+    {
+        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        if( view )
+        {
+            KUrl buildDir = computeBuildDir( item );
+            if( !buildDir.isValid() )
+                return false;
+            QStringList cmd = computeBuildCommand( item, overrideTarget );
+            if( cmd.isEmpty() )
+                return false;
+            int id;
+            if( m_ids.contains(item) )
+            {
+                id = m_ids[item];
+                m_models[id]->clear();
+            }else
+            {
+                QString target;
+                if( !overrideTarget.isEmpty() )
+                {
+                    target = overrideTarget;
+                }else
+                {
+                    item->text();
+                }
+                id = view->registerView(i18n("Make: %1", target ) );
+                m_ids[item] = id;
+                m_models[id] = new MakeOutputModel(this, this);
+                m_delegates[id] = new MakeOutputDelegate(this);
+                view->setModel(id, m_models[id]);
+                view->setDelegate(id, m_delegates[id]);
+            }
+            m_models[id]->appendRow( new QStandardItem( cmd.join(" ") ) );
+
+            if( m_commands.contains(id) )
+                delete m_commands[id];
+
+            m_commands[id] = new KDevelop::CommandExecutor(cmd.first());
+            m_commands[id]->setWorkingDirectory(buildDir.toLocalFile() );
+            cmd.pop_front();
+            m_commands[id]->setArguments( cmd );
+            QMap<QString, QString> envMap = environmentVars( item );
+            m_commands[id]->setEnvironment( envMap );
+
+            connect(m_commands[id], SIGNAL(receivedStandardOutput(const QStringList&)),
+                    m_models[id], SLOT(addStandardOutput(const QStringList&)));
+            connect(m_commands[id], SIGNAL(receivedStandardError(const QStringList&)),
+                    m_models[id], SLOT(addStandardError(const QStringList&)));
+
+            connect( m_commands[id], SIGNAL( failed() ), m_errorMapper, SLOT( map() ) );
+            connect( m_commands[id], SIGNAL( completed() ), m_successMapper, SLOT( map() ) );
+            m_errorMapper->setMapping( m_commands[id], id );
+            m_successMapper->setMapping( m_commands[id], id );
+            kDebug(9037) << "Starting build:" << cmd << "Build directory" << buildDir;
+            m_commandTypes[id] = c;
+            m_customTargets[id] = overrideTarget;
+            m_commands[id]->start();
+            return true;
+        } // end of if(view)
+    }
+    return false;
 }
 
 #include "makebuilder.moc"

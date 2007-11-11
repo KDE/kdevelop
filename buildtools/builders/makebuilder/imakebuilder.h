@@ -36,7 +36,10 @@ class IMakeBuilder : public KDevelop::IProjectBuilder
 public:
 
     virtual ~IMakeBuilder() {}
-
+    virtual bool executeMakeTarget(KDevelop::ProjectBaseItem* item,
+                                   const QString& targetname ) = 0;
+signals:
+    void makeTargetBuilt( KDevelop::ProjectBaseItem* item, const QString& targetname );
 };
 
 KDEV_DECLARE_EXTENSION_INTERFACE( IMakeBuilder, "org.kdevelop.IMakeBuilder" )
