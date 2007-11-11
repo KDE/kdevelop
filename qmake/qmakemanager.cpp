@@ -225,7 +225,7 @@ QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
 
 QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* project ) const
 {
-    if( !project->folder().isLocalFile() )
+    if( !project->folder().isLocalFile() || !m_builder )
         return QHash<QString,QString>();
 
     QHash<QString,QString> hash;
@@ -256,7 +256,6 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* proj
 
 QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) const
 {
-
     QDir curdir( QFileInfo( projectfile ).canonicalPath() );
     while( !curdir.exists(".qmake.cache") && !curdir.isRoot() )
     {
