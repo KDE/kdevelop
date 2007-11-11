@@ -186,7 +186,8 @@ void DumpChain::dump( DUContext * context, bool imported )
     foreach (Declaration* dec, context->localDeclarations()) {
       
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
-      kDebug(9007) << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec->textRangePtr() << " " << &dec->textRangePtr()->start() << " " << dec->textRange() << "," << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
+      
+      kDebug(9007) << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->textRange() << "," << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
       if (dec->definition())
         kDebug(9007) << QString((indent+1) * 2 + 1, ' ') << "Definition:" << dec->definition()->textRange();
       foreach (Use* use, dec->uses())
