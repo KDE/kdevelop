@@ -1153,6 +1153,40 @@ void TestDUChain::testTemplateEnums()
   release(top);
 }
 
+void TestDUChain::testIntegralTemplates()
+{
+  QByteArray text("template<class T> class A { T i; }; ");
+  DUContext* top = parse(text, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts().count(), 2);
+  Declaration* ADecl = top->localDeclarations()[0];
+
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  Declaration* dec = findDeclaration( top, QualifiedIdentifier( "A<int>::i") );
+  QVERIFY(dec);
+  CppIntegralType* integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
+  QVERIFY( integral );
+  QCOMPARE( integral->integralType(), CppIntegralType::TypeInt );
+  
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  dec = findDeclaration( top, QualifiedIdentifier( "A<unsigned int>::i") );
+  integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
+  QVERIFY( integral );
+  QCOMPARE( integral->integralType(), CppIntegralType::TypeInt );
+  QCOMPARE( integral->typeModifiers(), CppIntegralType::ModifierUnsigned );
+  
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  dec = findDeclaration( top, QualifiedIdentifier( "A<long double>::i") );
+  integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
+  QVERIFY( integral );
+  QCOMPARE( integral->integralType(), CppIntegralType::TypeDouble );
+  QCOMPARE( integral->typeModifiers(), CppIntegralType::ModifierLong );
+  
+  release(top);
+}
+
 void TestDUChain::testFunctionTemplates() {
   QByteArray method("template<class T> T test(const T& t) {};");
 
