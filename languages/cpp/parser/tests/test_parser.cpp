@@ -113,7 +113,7 @@ private slots:
     pool mem_pool;
     TranslationUnitAST *ast = parse(stuff, &mem_pool);
     QVERIFY(ast->declarations == 0);
-    QCOMPARE(control.problemCount(), 5);
+    QCOMPARE(control.problems().count(), 5);
   }
 
   void testParseMethod()

@@ -29,14 +29,9 @@ Control::~Control()
 {
 }
 
-int Control::problemCount() const
+const QList<KDevelop::Problem>& Control::problems() const
 {
-  return _M_problems.count();
-}
-
-KDevelop::Problem Control::problem(int index) const
-{
-  return _M_problems.at(index);
+  return _M_problems;
 }
 
 void Control::reportProblem(const KDevelop::Problem &problem)

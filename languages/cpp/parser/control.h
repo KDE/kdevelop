@@ -38,10 +38,7 @@ public:
   Control();
   ~Control();
 
-  /**@return the number of problems encountered during parsing.*/
-  int problemCount() const;
-  /**@return the problem by its index.*/
-  KDevelop::Problem problem(int index) const;
+  const QList<KDevelop::Problem>& problems() const;
 
   /**Adds a problem to the list of problems.*/
   void reportProblem(const KDevelop::Problem &problem);

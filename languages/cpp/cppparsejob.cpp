@@ -257,20 +257,28 @@ void CPPInternalParseJob::run()
 
     QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
-    Parser parser( new Control() );
+    TranslationUnitAST* ast = 0L;
 
-    TranslationUnitAST* ast = parser.parse( parentJob()->parseSession() );
-
-    if (parentJob()->abortRequested())
-        return parentJob()->abortJob();
-
-    if ( ast )
     {
-//         ast->language = parentJob()->cpp();
-        ast->session = parentJob()->parseSession();
-    }
+      Control control;
+      Parser parser(&control);
 
-    parentJob()->setAST(ast);
+      ast = parser.parse( parentJob()->parseSession() );
+
+      if (parentJob()->abortRequested())
+          return parentJob()->abortJob();
+
+      if ( ast )
+      {
+  //         ast->language = parentJob()->cpp();
+          ast->session = parentJob()->parseSession();
+      }
+
+      foreach (const KDevelop::Problem& p, control.problems())
+        KDevelop::DUChain::problemEncountered(p);
+
+      parentJob()->setAST(ast);
+    }
 
     if ( ast )
     {
