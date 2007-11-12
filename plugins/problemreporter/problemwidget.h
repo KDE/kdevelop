@@ -22,14 +22,16 @@
 #ifndef DUCHAINTREE_H
 #define DUCHAINTREE_H
 
-#include <QtGui/QTreeWidget>
+#include <QtGui/QTreeView>
 
 #include <KUrl>
 #include <KTextEditor/Range>
 
+#include <iproblem.h>
+
 class ProblemReporterPart;
 
-class ProblemWidget : public QTreeWidget
+class ProblemWidget : public QTreeView
 {
   Q_OBJECT
 
@@ -37,10 +39,12 @@ public:
   ProblemWidget(QWidget* parent, ProblemReporterPart* part);
   virtual ~ProblemWidget();
 
-private Q_SLOTS:
-  void problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem);
+  class ProblemModel* model() const;
 
-  void itemActivated(QTreeWidgetItem* item);
+private Q_SLOTS:
+  void problemEncountered(KDevelop::Problem problem);
+
+  void itemActivated(const QModelIndex& index);
 
 private:
   ProblemReporterPart* m_part;

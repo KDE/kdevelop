@@ -30,8 +30,6 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT ICodeCompletion {
 public:
     virtual ~ICodeCompletion() {}
-
-    
 };
 
 }

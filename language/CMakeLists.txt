@@ -39,6 +39,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
     interfaces/quickopendataprovider.cpp
+    interfaces/iproblem.cpp
 )
 
 
@@ -61,6 +62,7 @@ install(FILES
     interfaces/quickopendataprovider.h
     interfaces/quickopenfilter.h
     interfaces/iquickopen.h
+    interfaces/iproblem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces
 )
 

@@ -26,6 +26,7 @@
 #include <KTextEditor/Range>
 
 #include "duchainpointer.h"
+#include "iproblem.h"
 
 namespace KDevelop
 {
@@ -100,7 +101,7 @@ Q_SIGNALS:
 
   void branchAdded(KDevelop::DUContextPointer context);
 
-  void problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem);
+  void problemEncountered(KDevelop::Problem problem);
 };
 
 }

@@ -54,6 +54,7 @@ Declaration* NamespaceAliasDeclaration::clone() const {
 
 void NamespaceAliasDeclaration::setAbstractType(AbstractType::Ptr type) {
   //A namespace-import does not have a type, so ignore any set type
+  Q_UNUSED(type);
 }
 
 QString NamespaceAliasDeclaration::toString() const {

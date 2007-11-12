@@ -25,6 +25,7 @@
 #include <duchainobserver.h>
 
 #include "topducontext.h"
+#include "iproblem.h"
 
 class KUrl;
 
@@ -109,7 +110,7 @@ public:
 
   static void branchAdded(DUContext* context);
 
-  static void problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem);
+  static void problemEncountered(KDevelop::Problem problem);
 
   /**
    * @see ParsingEnvironmentManager

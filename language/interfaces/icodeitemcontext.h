@@ -41,7 +41,7 @@ namespace KDevelop
 /**
 A context for DUChain objects.
  */
-class KDEVPLATFORMINTERFACES_EXPORT CodeItemContext: public Context
+class KDEVPLATFORMLANGUAGE_EXPORT CodeItemContext: public Context
 {
 public:
     /**Builds the context.

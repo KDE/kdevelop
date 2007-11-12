@@ -44,44 +44,51 @@
 #include "duchainobserver.h"
 
 #include "problemreporterpart.h"
+#include "problemmodel.h"
+
+//#include "modeltest.h"
 
 using namespace KDevelop;
 
 ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPart* part)
-  : QTreeWidget(parent)
+  : QTreeView(parent)
   , m_part(part)
 {
   setObjectName("Problem Reporter Tree");
   setWindowTitle(i18n("Problem Reporter"));
-  setHeaderLabels(QStringList() << i18n("File") << i18n("Line") << i18n("Column") << i18n("Problem"));
   setRootIsDecorated(false);
   setWhatsThis( i18n( "Problem Reporter" ) );
+  setModel(new ProblemModel(m_part));
 
-  connect(this, SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(itemActivated(QTreeWidgetItem*)));
-  connect(DUChain::self()->notifier(), SIGNAL(problemEncountered(const KUrl&, const KTextEditor::Range&, const QString&)), SLOT(problemEncountered(const KUrl&, const KTextEditor::Range&, const QString&)));
+  //new ModelTest(model());
+
+  connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
+  bool success = connect(DUChain::self()->notifier(), SIGNAL(problemEncountered(KDevelop::Problem)), SLOT(problemEncountered(KDevelop::Problem)), Qt::QueuedConnection);
+  Q_ASSERT(success);
 }
 
 ProblemWidget::~ProblemWidget()
 {
 }
 
-void ProblemWidget::problemEncountered(const KUrl& url, const KTextEditor::Range& range, const QString& problem)
+void ProblemWidget::problemEncountered(Problem problem)
 {
-  QTreeWidgetItem* item = new QTreeWidgetItem(this);
-  item->setText(0, url.prettyUrl());
-  item->setText(1, QString::number(range.start().line() + 1));
-  item->setText(2, QString::number(range.start().column()));
-  item->setText(3, problem);
+  model()->addProblem(new Problem(problem));
 }
 
-void ProblemWidget::itemActivated(QTreeWidgetItem* item)
+void ProblemWidget::itemActivated(const QModelIndex& index)
 {
-  KUrl url = item->text(0);
-  KTextEditor::Cursor cursor(item->text(1).toInt() - 1, item->text(2).toInt());
+  if (!index.isValid())
+    return;
 
-  m_part->core()->documentController()->openDocument(url, cursor);
+  KDevelop::Problem* problem = model()->problemForIndex(index);
+
+  m_part->core()->documentController()->openDocument(problem->finalLocation().document(), problem->finalLocation().start());
 }
 
-// kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+ProblemModel * ProblemWidget::model() const
+{
+  return static_cast<ProblemModel*>(QTreeView::model());
+}
 
 #include "problemwidget.moc"
