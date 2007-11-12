@@ -20,6 +20,8 @@
 
 #include "templatedeclaration.h"
 
+#include <qatomic.h>
+
 #include <duchain/declaration.h>
 #include <duchain/forwarddeclaration.h>
 
@@ -34,16 +36,18 @@ QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
-struct Incrementer {
-  Incrementer(int* cnt ) : c(cnt) {
-    ++*cnt;
+///@todo This is non-public API of Qt. Once we depend on Qt 4.4, re-implement this using the public API(Seems like it will have atomic counter support).
+///We need this so we don't crash.
+struct AtomicIncrementer {
+  AtomicIncrementer( volatile int* cnt ) : c(cnt) {
+    q_atomic_increment(cnt);
   }
 
-  ~Incrementer() {
-    --*c;
+  ~AtomicIncrementer() {
+    q_atomic_decrement(c);
   }
 
-  int* c;
+  volatile int* c;
 };
 
 uint qHash( const ExpressionEvaluationResult& key )
@@ -113,15 +117,15 @@ const DelayedType* containsDelayedType(const AbstractType* type)
 ///Replaces any DelayedType's in interesting positions with their resolved versions, if they can be resolved.
 struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   const KDevelop::DUContext* searchContext;
-  int depth_counter;
+  static int depth_counter;
 
-  DelayedTypeResolver(const KDevelop::DUContext* _searchContext) : searchContext(_searchContext), depth_counter(0) {
+  DelayedTypeResolver(const KDevelop::DUContext* _searchContext) : searchContext(_searchContext) {
   }
 
   virtual AbstractType* exchange( const AbstractType* type )
   {
-    Incrementer inc(&depth_counter);
-    if( depth_counter > 6 ) {
+    AtomicIncrementer inc(&depth_counter);
+    if( depth_counter > 20 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return const_cast<AbstractType*>(type); ///@todo remove const_cast;
     }
@@ -171,6 +175,8 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   private:
     AbstractType::Ptr keepAlive;
 };
+
+int DelayedTypeResolver::depth_counter = 0;
 
 bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
  return left.type == right.type && left.instance.isInstance == right.instance.isInstance;
