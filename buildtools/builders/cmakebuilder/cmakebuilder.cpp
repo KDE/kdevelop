@@ -33,6 +33,7 @@
 #include <iproject.h>
 #include <icore.h>
 #include <iplugincontroller.h>
+#include <ibuildsystemmanager.h>
 #include <ioutputview.h>
 #include <outputmodel.h>
 #include <commandexecutor.h>
@@ -97,7 +98,7 @@ void CMakeBuilder::cleanupModel( int id )
         kDebug(9032) << "do some cleanup";
         KDevelop::OutputModel* model = m_models[id];
         KDevelop::CommandExecutor* cmd = m_cmds[id];
-        foreach( KDevelop::IProject* p, m_ids.keys() )
+        foreach( KDevelop::ProjectBaseItem* p, m_ids.keys() )
         {
             if( m_ids[p] == id )
             {
@@ -155,6 +156,80 @@ void CMakeBuilder::errored(int id)
 {
     if( m_items.contains(id))
         emit failed(m_items[id]);
+}
+
+bool CMakeBuilder::configure( KDevelop::IProject* project )
+{
+    if( !project )
+        return false;
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    if( i )
+    {
+        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        if( view )
+        {
+
+            int id;
+            if( m_ids.contains( project->projectItem() ) )
+            {
+                id = m_ids[project->projectItem()];
+                m_models[id]->clear();
+                if( m_cmds.contains(id) )
+                    delete m_cmds[id];
+            }else
+            {
+                id = view->registerView(i18n("CMake: %1", project->name() ) );
+                m_ids[project->projectItem()] = id;
+                m_models[id] = new KDevelop::OutputModel(this);
+                view->setModel( id, m_models[id] );
+            }
+            m_items[id] = project->projectItem();
+            QString cmd = cmakeBinary( project );
+            m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
+            connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
+                    m_models[id], SLOT(appendLines(const QStringList&) ) );
+            connect(m_cmds[id], SIGNAL(receivedStandardOutput(const QStringList&)),
+                    m_models[id], SLOT(appendLines(const QStringList&) ) );
+            m_failedMapper->setMapping( m_cmds[id], id );
+            m_completedMapper->setMapping( m_cmds[id], id );
+            m_cmds[id]->setWorkingDirectory( buildDir( project ).toLocalFile() );
+            m_cmds[id]->setArguments( cmakeArguments( project ) );
+            connect( m_cmds[id], SIGNAL( failed() ), m_failedMapper, SLOT( map() ) );
+            connect( m_cmds[id], SIGNAL( completed() ), m_completedMapper, SLOT( map() ) );
+            m_cmds[id]->start();
+            return true;
+        }
+    }
+    return false;
+}
+
+QString CMakeBuilder::cmakeBinary( KDevelop::IProject* project )
+{
+    KSharedConfig::Ptr cfg = project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "CMake");
+    KUrl v = group.readEntry("Current CMake Binary", KUrl( "file:///usr/bin/cmake" ) );
+    return v.toLocalFile();
+}
+
+KUrl CMakeBuilder::buildDir( KDevelop::IProject* project )
+{
+    KDevelop::IBuildSystemManager* manager = project->buildSystemManager();
+    if( manager )
+    {
+        return manager->buildDirectory( project->projectItem() );
+    }
+    return project->folder();
+}
+
+QStringList CMakeBuilder::cmakeArguments( KDevelop::IProject* project )
+{
+    QStringList args;
+    KSharedConfig::Ptr cfg = project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "CMake");
+    args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(group.readEntry("CurrentInstallDir", "/usr/local"));
+    args << QString("-DCMAKE_BUILD_TYPE=%1").arg(group.readEntry("CurrentBuildType", "Release"));
+    args << project->folder().toLocalFile();
+    return args;
 }
 
 #include "cmakebuilder.moc"

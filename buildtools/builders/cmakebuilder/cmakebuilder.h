@@ -54,8 +54,9 @@ public:
     virtual bool build(KDevelop::ProjectBaseItem *dom);
     virtual bool install(KDevelop::ProjectBaseItem *dom);
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
+    virtual bool configure(KDevelop::IProject*);
 
-    bool updateConfig( KDevelop::IProject* project );
+//     bool updateConfig( KDevelop::IProject* project );
 
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
@@ -67,17 +68,16 @@ private Q_SLOTS:
     void errored( int id );
     void cleanupModel( int id );
 private:
-    QMap< KDevelop::IProject*, int > m_ids;
+    QStringList cmakeArguments( KDevelop::IProject* project );
+    KUrl buildDir( KDevelop::IProject* project );
+    QString cmakeBinary( KDevelop::IProject* project );
+    QMap< KDevelop::ProjectBaseItem*, int > m_ids;
     QMap< int, KDevelop::CommandExecutor* > m_cmds;
     QMap< int, KDevelop::ProjectBaseItem* > m_items;
     QMap< int, KDevelop::OutputModel* > m_models;
     QSignalMapper* m_failedMapper;
     QSignalMapper* m_completedMapper;
 
-    KUrl m_buildDirectory;
-    KUrl m_cmakeBinary;
-    KUrl m_installPrefix;
-    QString m_buildType;
     bool m_dirty;
     IMakeBuilder* m_builder;
 };
