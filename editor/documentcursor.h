@@ -56,12 +56,15 @@ public:
     DocumentCursor(KTextEditor::Cursor* cursor);
 
     DocumentCursor(const DocumentCursor& copy);
+    DocumentCursor();
 
     /// Returns the associated document.
     const KUrl& document() const;
 
     /// Sets the associated document.
     void setDocument(const KUrl& document);
+
+    DocumentCursor& operator=(const DocumentCursor& rhs);
 
 private:
     class DocumentCursorPrivate* const d;

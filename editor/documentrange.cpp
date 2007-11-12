@@ -33,6 +33,11 @@ public:
     QList<DocumentRange*> m_childRanges;
 };
 
+DocumentRange::DocumentRange()
+    : d( new DocumentRangePrivate( KUrl() ) )
+{
+}
+
 DocumentRange::DocumentRange(const KUrl& document, const KTextEditor::Cursor& start,
         const KTextEditor::Cursor& end, KTextEditor::Range* parent)
     : Range(start, end), d( new DocumentRangePrivate( document ) )
@@ -106,6 +111,12 @@ void DocumentRange::setParentRange(KTextEditor::Range* parent)
 Range* DocumentRange::parentRange() const
 {
     return d->m_parentRange;
+}
+
+DocumentRange& DocumentRange::operator=(const DocumentRange& rhs)
+{
+    *d = *rhs.d;
+    return *this;
 }
 
 }

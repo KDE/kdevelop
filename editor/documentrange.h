@@ -37,6 +37,7 @@ namespace KDevelop
 class KDEVPLATFORMEDITOR_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
+    DocumentRange();
     DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
     explicit DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
     DocumentRange(const DocumentRange& copy);
@@ -52,6 +53,8 @@ public:
     void setParentRange(KTextEditor::Range* parent);
 
     const QList<DocumentRange*>& childRanges() const;
+
+    DocumentRange& operator=(const DocumentRange& rhs);
 
 private:
     class DocumentRangePrivate* const d;

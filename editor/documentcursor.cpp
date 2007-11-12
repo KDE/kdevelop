@@ -64,6 +64,11 @@ DocumentCursor::DocumentCursor(const DocumentCursor& copy)
 {
 }
 
+DocumentCursor::DocumentCursor()
+    : d( new DocumentCursorPrivate( KUrl() ) )
+{
+}
+
 DocumentCursor::~DocumentCursor()
 {
     delete d;
@@ -77,6 +82,13 @@ const KUrl& DocumentCursor::document() const
 void DocumentCursor::setDocument(const KUrl& document)
 {
     d->m_document = document;
+}
+
+DocumentCursor& DocumentCursor::operator=(const DocumentCursor& rhs)
+{
+    Cursor::operator=(rhs);
+    setDocument(rhs.document());
+    return *this;
 }
 
 }
