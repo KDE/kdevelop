@@ -1,7 +1,7 @@
 /*
  * KDevelop C++ Code Completion Support
  *
- * Copyright 2006 Hamish Rodda <rodda@kde.org>
+ * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -54,7 +54,7 @@
 #include "navigationwidget.h"
 #include "preprocessjob.h"
 #include <duchainutils.h>
-
+#include "cppcodecompletionworker.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -105,35 +105,54 @@ AbstractType::Ptr effectiveType( Declaration* decl )
 
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel(parent)
+  , m_mutex(new QMutex)
+  , m_worker(new CodeCompletionWorker(this))
 {
+  qRegisterMetaType<CompletionItem>("CppCodeCompletionModel::CompletionItem");
+  qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
+
+  connect(this, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
+  connect(m_worker, SIGNAL(foundDeclaration(CppCodeCompletionModel::CompletionItem, void*)), this, SLOT(foundDeclaration(CppCodeCompletionModel::CompletionItem, void*)), Qt::QueuedConnection);
+
+  m_worker->start();
 }
 
 CppCodeCompletionModel::~CppCodeCompletionModel()
 {
+  // Let it leak...??
+  m_worker->setParent(0L);
+  m_worker->quit();
+
+  delete m_mutex;
 }
 
 void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
 {
   Q_UNUSED(invocationType)
-  
+
   m_navigationWidgets.clear();
+  m_declarations.clear();
+
+  reset();
+
+  m_worker->abortCurrentCompletion();
 
   KUrl url = view->document()->url();
-  
+
   if( !KDevelop::DUChain::lock()->lockForRead(400) ) {
     kDebug(9007) << "could not lock du-chain in time" << endl;
     return;
   }
 
   TopDUContext* top = getCompletionContext( url );
-  
+
   if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;
 
     if( top->parsingEnvironmentFile()->modificationRevision() != EditorIntegrator::modificationRevision(url) ) {
       kDebug(9007) << "Found context is not current. Its revision is " << top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << EditorIntegrator::modificationRevision(url);
     }
-    
+
     DUContextPointer thisContext;
     {
       thisContext = top->findContextAt(range.start());
@@ -153,12 +172,35 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     }
 
     DUChain::lock()->releaseReadLock();
-    
-    setContext(thisContext, range.start(), view);
+
+    emit completionsNeeded(thisContext, range.start(), view);
+
   } else {
     kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
     DUChain::lock()->releaseReadLock();
   }
+}
+
+void CppCodeCompletionModel::foundDeclaration(CompletionItem item, void* completionContext)
+{
+  if (completionContext == m_completionContext.data()) {
+    beginInsertRows(QModelIndex(), m_declarations.count(), m_declarations.count());
+    m_declarations << item;
+    endInsertRows();
+  }
+}
+
+
+void CppCodeCompletionModel::setCompletionContext(KSharedPtr<Cpp::CodeCompletionContext> completionContext)
+{
+  QMutexLocker lock(m_mutex);
+  m_completionContext = completionContext;
+}
+
+KSharedPtr<Cpp::CodeCompletionContext> CppCodeCompletionModel::completionContext() const
+{
+  QMutexLocker lock(m_mutex);
+  return m_completionContext;
 }
 
 void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QString& ret, QList<QVariant>* highlighting ) const
@@ -361,7 +403,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
   Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].declaration.data() );
   if (!dec) {
-    if(m_completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess)
+    if(completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess)
       return getIncludeData(index, role);
   
     kDebug(9007) <<  "code-completion model item" << dataIndex << ": Du-chain item is deleted";
@@ -630,99 +672,4 @@ int CppCodeCompletionModel::rowCount ( const QModelIndex & parent ) const
   return m_declarations.count();
 }
 
-void CppCodeCompletionModel::setContext(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view)
-{
-  m_context = context;
-  Q_ASSERT(m_context);
-  //@todo move completion-context-building into another thread
-
-  m_declarations.clear();
-
-  //Compute the text we should complete on
-  KTextEditor::Document* doc = view->document();
-  if( !doc ) {
-    kDebug(9007) << "No document for completion";
-    return;
-  }
-
-  KTextEditor::Range range;
-  QString text;
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    range = KTextEditor::Range(context->textRange().start(), position);
-
-    text = doc->text(range);
-  }
-
-  if( text.isEmpty() ) {
-    kDebug(9007) << "no text for context";
-    return;
-  }
-
-  if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
-    text += '\n';
-
-  Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, text ) );
-  m_completionContext = completionContext;
-
-  typedef QPair<Declaration*, int> DeclarationDepthPair;
-  
-  if( completionContext->isValid() ) {
-    DUChainReadLocker lock(DUChain::lock());
-
-    if( completionContext->memberAccessContainer().isValid() ||completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
-    {
-      QList<DUContext*> containers = completionContext->memberAccessContainers();
-      if( !containers.isEmpty() ) {
-        foreach(DUContext* ctx, containers)
-          foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), false) ) )
-            m_declarations << CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second );
-      } else {
-        kDebug(9007) << "CppCodeCompletionModel::setContext: no container-type";
-      }
-    } else if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess ) {
-      //Include-file completion
-      m_declarations.clear();
-      int cnt = 0;
-      QList<Cpp::IncludeItem> allIncludeItems = completionContext->includeItems();
-      foreach(const Cpp::IncludeItem& includeItem, allIncludeItems) {
-        CompletionItem completionItem;
-        completionItem.includeItem = includeItem;
-        m_declarations << completionItem;
-        ++cnt;
-      }
-      kDebug(9007) << "Added " << cnt << " include-files to completion-list";
-    } else {
-      //Show all visible declarations
-      m_declarations.clear();
-      foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( m_context->allDeclarations(m_context->type() == DUContext::Class ? m_context->textRange().end() : position) ) )
-        m_declarations << CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second );
-      kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible:" << m_declarations.count();
-    }
-
-    ///Find all recursive function-calls that should be shown as call-tips
-    Cpp::CodeCompletionContext::Ptr parentContext = completionContext;
-    do {
-      parentContext = parentContext->parentContext();
-      if( parentContext ) {
-        if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-          int num = 0;
-          foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
-            m_declarations << CompletionItem( function.function.declaration(), parentContext, 0, num );
-            ++num;
-          }
-        } else {
-          kDebug(9007) << "parent-context has non function-call access type";
-        }
-      }
-    } while( parentContext );
-  } else {
-    kDebug(9007) << "CppCodeCompletionModel::setContext: Invalid code-completion context";
-  }
-
-  // TODO maybe one day just behave like a nice model and call insert rows etc.
-  reset();
-}
-
 #include "cppcodecompletionmodel.moc"
-

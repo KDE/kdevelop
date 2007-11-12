@@ -1,7 +1,7 @@
 /*
  * KDevelop C++ Code Completion Support
  *
- * Copyright 2006 Hamish Rodda <rodda@kde.org>
+ * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -33,6 +33,7 @@
 
 class QIcon;
 class QString;
+class QMutex;
 
 namespace KDevelop
 {
@@ -45,6 +46,8 @@ namespace Cpp {
   class NavigationWidget;
 }
 
+class CodeCompletionWorker;
+
 class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
 {
   Q_OBJECT
@@ -52,8 +55,6 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
   public:
     CppCodeCompletionModel(QObject* parent);
     virtual ~CppCodeCompletionModel();
-
-    void setContext(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
 
     virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
 
@@ -64,12 +65,9 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
-  private:
-    KDevelop::DUContextPointer m_context;
-    KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
-    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
-
-
+    void setCompletionContext(KSharedPtr<Cpp::CodeCompletionContext> completionContext);
+    KSharedPtr<Cpp::CodeCompletionContext> completionContext() const;
+    
     struct CompletionItem {
       CompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), inheritanceDepth(_inheritanceDepth), listOffset(_listOffset) {
       }
@@ -83,14 +81,26 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
       Cpp::IncludeItem includeItem;
     };
 
+  Q_SIGNALS:
+    void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
+
+  private Q_SLOTS:
+    void foundDeclaration(CppCodeCompletionModel::CompletionItem item, void* completionContext);
+    
+  private:
+    KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
+    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
+
     void createArgumentList(const CompletionItem& item, QString& ret, QList<QVariant>* highlighting ) const;
     
     mutable CompletionItem m_currentMatchContext;
     
     mutable QMap<const CompletionItem*, QPointer<Cpp::NavigationWidget> > m_navigationWidgets;
     QList< CompletionItem > m_declarations;
-};
 
+    QMutex* m_mutex;
+    CodeCompletionWorker* m_worker;
+};
 
 /**
  * There may be multiple differnt parsed versions of a document available in the du-chain.

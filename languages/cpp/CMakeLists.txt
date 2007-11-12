@@ -29,6 +29,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpphighlighting.cpp
     cppcodecompletion.cpp
     cppcodecompletionmodel.cpp
+    cppcodecompletionworker.cpp
     codecompletioncontext.cpp
     stringhelpers.cpp
     includepathresolver.cpp
