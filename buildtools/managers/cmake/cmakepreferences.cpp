@@ -103,6 +103,7 @@ void CMakePreferences::save()
 
     KConfigGroup group(m_cfg.data(), "CMake");
     group.writeEntry("BuildDirs", bDirs);
+    group.writeEntry("Current CMake Binary", m_currentModel->value("CMAKE_COMMAND") );
     group.writeEntry("CurrentBuildDir", m_prefsUi->buildDirs->currentText());
     group.writeEntry("CurrentInstallDir", m_currentModel->value("CMAKE_INSTALL_PREFIX"));
     group.writeEntry("CurrentBuildType", m_currentModel->value("CMAKE_BUILD_TYPE"));
