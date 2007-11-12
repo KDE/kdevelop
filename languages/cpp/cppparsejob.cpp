@@ -2,6 +2,7 @@
 * This file is part of KDevelop
 *
 * Copyright 2006 Adam Treat <treat@kde.org>
+* Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -282,16 +283,9 @@ void CPPInternalParseJob::run()
 
     if ( ast )
     {
-//         CodeModel* model = new CodeModel;
-//         Binder binder( model, parentJob()->parseSession() );
-//         binder.run( parentJob()->document(), ast );
-
         if (parentJob()->abortRequested())
             return parentJob()->abortJob();
 
-//         parentJob()->setCodeModel(model);
-
-        
         //If we are building a separate content-context
         TopDUContext* updating = parentJob()->updatingContext().data();
         Cpp::EnvironmentFilePointer environmentFile(parentJob()->environmentFile());
@@ -442,8 +436,8 @@ void CPPInternalParseJob::run()
         // Debug output...
 
         if ( !parentJob()->parentPreprocessor() ) {
-            DUChainReadLocker lock(DUChain::lock());
-/*            kDebug( 9007 ) << "================== duchain ==================";
+/*            DUChainReadLocker lock(DUChain::lock());
+            kDebug( 9007 ) << "================== duchain ==================";
             DumpChain dump;
             //dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);
