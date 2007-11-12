@@ -1824,10 +1824,19 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
     problem(node, "node-type cannot be parsed");
   }
   
+  void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  {
+    ///Simple type-specifiers like "int" are parsed as SimpleDeclarationAST, so treat them here.
+    visit( node->type_specifier );
+  }
+  
+  void ExpressionVisitor::visitDeclarationStatement(DeclarationStatementAST* node)  {
+    ///Simple type-specifiers like "int" are parsed as SimpleDeclarationAST, so treat them here.
+    visit( node->declaration );
+  }
+  
   ///Nodes that are invalid inside an expression:
   void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitDeleteExpression(DeleteExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -1839,7 +1848,6 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
   void ExpressionVisitor::visitClassSpecifier(ClassSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
 
   void ExpressionVisitor::visitCtorInitializer(CtorInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitDeclarationStatement(DeclarationStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitDoStatement(DoStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitEnumSpecifier(EnumSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
