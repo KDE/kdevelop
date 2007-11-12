@@ -74,6 +74,10 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
 
 MainWindow::~ MainWindow()
 {
+    if (memberList().count() == 1)
+        // We're closing down...
+        Core::self()->deinitialize();
+
     delete d;
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);
 }

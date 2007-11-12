@@ -179,9 +179,13 @@ DocumentController::DocumentController( QObject *parent )
     setupActions();
 }
 
-DocumentController::~DocumentController()
+void DocumentController::deinitialize()
 {
     d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+}
+
+DocumentController::~DocumentController()
+{
     delete d;
 }
 

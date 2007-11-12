@@ -82,6 +82,8 @@ public:
 
     void notifyDocumentClosed(IDocument* doc);
 
+    void deinitialize();
+
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.

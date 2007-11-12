@@ -77,6 +77,8 @@ public:
     /** @return document controller */
     DocumentController *documentControllerInternal();
 
+    void deinitialize();
+    
 protected:
     void cleanup();
 

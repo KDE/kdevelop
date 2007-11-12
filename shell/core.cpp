@@ -68,6 +68,10 @@ struct CorePrivate {
 
         uiController->defaultMainWindow()->show();
     }
+    void deinitialize()
+    {
+        documentController->deinitialize();
+    }
     ~CorePrivate()
     {
         delete projectController;
@@ -95,6 +99,11 @@ void Core::initialize()
 
     m_self = new Core();
     m_self->d->initialize();
+}
+
+void KDevelop::Core::deinitialize()
+{
+    d->deinitialize();
 }
 
 Core *KDevelop::Core::self()
