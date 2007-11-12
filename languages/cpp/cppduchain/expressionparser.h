@@ -98,22 +98,33 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
 
     explicit ExpressionParser( bool strict = false, bool debug = false );
     /**
-     * Evaluates the type of an expression given as a string within a given context
+     * Evaluates the type of an expression given as a string within a given context.
+     * The expression can either be a simple type-id, or a valid C++ expression.
+     * If the expression may either represent a type-id, or an expression, the type-id is chosen, unless forceExpression is true.
      *
+     * Unfortunately, the parser accepts some expressions like "d->bla = 5" as type-ids with the name "d", so forceExpression
+     * should be used whenever possible.
+     *
+     * This function should be perfect for places in C++ where either a type-id, or a static expression are allowed, like template-arguments.
+     * 
      * @param exp The expression to evaluate
      * @param context the context within which the expression should be evaluated
-     * @param statement whether the text should be parsed as a statement. If this is false, the text will need to be a valid translation-unit.
+     * @param forceExpression do not consider the expression to be a type-id
      * @param debug whether additional output to kdDebug should be issued
      *
-     * Note: Even expressions that create sub-contexts should work,
-     * Example:
-     * "int i; i += 5;"
+     * 
     */
-    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContextPointer context, bool statement = true );
+    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContextPointer context, bool forceExpression = false );
+
+    /**
+     * Same as evaluateType, except that it does not consider type-ids, only expressions.
+     * Equivalent with calling evaluateType(.., .., true), but should be preferred for better overview.
+     * */
+    ExpressionEvaluationResult evaluateExpression( const QByteArray& expression, DUContextPointer context );
     /**
      * Evaluates the type of an expression given as an AST.
      *
-     * @param ast the AST. Its context must be built already(context-member filled).
+     * @param ast the AST. Its context must be built already, the context-member must be filled.
      * @param debug whether additional output to kdDebug should be issued
     */
     ExpressionEvaluationResult evaluateType( AST* ast, ParseSession* session );

@@ -786,8 +786,8 @@ void ContextBuilder::addImportedContexts()
     }
 
     m_importedParentContexts.clear();
-    m_lastContext = 0;
   }
+  m_lastContext = 0;
 }
 
 void ContextBuilder::visitIfStatement(IfStatementAST* node)

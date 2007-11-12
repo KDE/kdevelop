@@ -198,9 +198,10 @@ class CppDUContext : public BaseContext {
             
             templateArgumentTypes << res;
           }else{
-            ExpressionParser p;
-            ExpressionEvaluationResult res = p.evaluateType( currentIdentifier.templateIdentifiers().at(a).toString().toUtf8(), DUContextPointer(const_cast<CppDUContext*>(this)) );
+            ExpressionParser p ifDebug( (false,true) ); //If additional debugging-output is enabled, show the evaluated expressions
+            ExpressionEvaluationResult res = p.evaluateType( currentIdentifier.templateIdentifiers().at(a).toString().toUtf8(), DUContextPointer(const_cast<CppDUContext*>(this)), currentIdentifier.templateIdentifiers().at(a).isExpression() );
             templateArgumentTypes << res;
+            ifDebug( kDebug() << "evaluated template-parameter" << res.toString(); )
             if( !res.isValid() )
               kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString() << endl;
           }

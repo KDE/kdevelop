@@ -1350,7 +1350,12 @@ void TestDUChain::testTemplates2() {
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"));
+  
+  memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S*>::member"));
+  QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
   kDebug() << memberDecl->toString();
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("S*&"));
   
   release(top);
 }

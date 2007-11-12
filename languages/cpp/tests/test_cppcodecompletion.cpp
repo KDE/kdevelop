@@ -342,7 +342,7 @@ void TestCppCodeCompletion::testInclude() {
 
   ///The following test tests the expression-parser, but it is here because the other tests depend on it
   lock.unlock();
-  Cpp::ExpressionEvaluationResult result = parser.evaluateType( "globalHonk.erna", DUContextPointer( c ) );
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "globalHonk.erna", DUContextPointer( c ) );
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -353,7 +353,7 @@ void TestCppCodeCompletion::testInclude() {
   
   ///Test overload-resolution 
   lock.unlock();
-  result = parser.evaluateType( "globalClass.function(globalHeinz)", DUContextPointer(c));
+  result = parser.evaluateExpression( "globalClass.function(globalHeinz)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -362,7 +362,7 @@ void TestCppCodeCompletion::testInclude() {
   QCOMPARE(result.type->toString(), QString("Heinz"));
   
   lock.unlock();
-  result = parser.evaluateType( "globalClass.function(globalHonk.erna)", DUContextPointer(c));
+  result = parser.evaluateExpression( "globalClass.function(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -372,7 +372,7 @@ void TestCppCodeCompletion::testInclude() {
 
   //No matching function for type Honk. Since the expression-parser is not set to "strict", it returns any found function with the right name.
   lock.unlock();
-  result = parser.evaluateType( "globalClass.function(globalHonk)", DUContextPointer(c));
+  result = parser.evaluateExpression( "globalClass.function(globalHonk)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -382,7 +382,7 @@ void TestCppCodeCompletion::testInclude() {
   
   
   lock.unlock();
-  result = parser.evaluateType( "globalFunction(globalHeinz)", DUContextPointer(c));
+  result = parser.evaluateExpression( "globalFunction(globalHeinz)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
@@ -391,7 +391,7 @@ void TestCppCodeCompletion::testInclude() {
   QCOMPARE(result.type->toString(), QString("Heinz"));
   lock.unlock();
   
-  result = parser.evaluateType( "globalFunction(globalHonk.erna)", DUContextPointer(c));
+  result = parser.evaluateExpression( "globalFunction(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());

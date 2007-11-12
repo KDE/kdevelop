@@ -142,7 +142,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
       } else {
         ///Resolve delayed expression, for example static numeric expressions
           ExpressionParser p;
-          ExpressionEvaluationResult res = p.evaluateType( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)) );
+          ExpressionEvaluationResult res = p.evaluateExpression( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)) );
 
           ///@todo make this nicer
           keepAlive = res.type; //Since the API uses AbstractType*, use keepAlive to make sure the type cannot be deleted
@@ -341,19 +341,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           ++currentArgument;
         } else {
           if( !templateDecl->defaultParameter().isEmpty() ) {
-            bool isValidIdentifier = true; ///@todo test whether it is a valid identifier
-            if( isValidIdentifier ) {
-              QList<Declaration*> decls = contextCopy->findDeclarations(templateDecl->defaultParameter());
-              if( !decls.isEmpty() ) {
-                declCopy->setAbstractType( decls.front()->abstractType() );
-              } else {
-                kDebug(9007) << "Failed to resolve default-parameter" << templateDecl->defaultParameter().toString();
-              }
-            } else {
-              ExpressionParser p;
-              ExpressionEvaluationResult res = p.evaluateType( (templateDecl->defaultParameter().toString() +" ").toUtf8(), DUContextPointer(contextCopy) );
-              declCopy->setAbstractType( res.type );
-            }
+            ExpressionParser p;
+            ExpressionEvaluationResult res = p.evaluateType( (templateDecl->defaultParameter().toString() +" ").toUtf8(), DUContextPointer(contextCopy) );
+            declCopy->setAbstractType( res.type );
           }
         }
         ///This inserts the copied declaration into the copied context

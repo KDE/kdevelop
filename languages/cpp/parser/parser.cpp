@@ -187,6 +187,29 @@ StatementAST *Parser::parseStatement(ParseSession* _session)
   return ast;
 }
 
+AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
+{
+  _M_block_errors = false;
+  session = _session;
+
+  if (!session->token_stream)
+    session->token_stream = new TokenStream;
+
+  lexer.tokenize(session);
+  advance(); // skip the first token
+
+  TypeIdAST *ast = 0;
+  if (!forceExpression)
+    parseTypeId(ast);
+  if(!ast) {
+    ExpressionAST* ast = 0;
+    parseExpression(ast);
+    return ast;
+  }
+    
+  return ast;
+}
+
 bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 {
   if (session->token_stream->lookAhead() != Token_identifier)

@@ -42,7 +42,7 @@ using namespace KDevelop;
 ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, bool statement ) {
+ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, bool forceExpression ) {
 
   if( m_debug )
     kDebug(9007) << "==== .Evaluating ..:" << endl << unit;
@@ -64,15 +64,16 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     type = context->type();
   }
 
-  if( statement ) {
-      session->setContentsAndGenerateLocationTable('{' + unit + ";}");
-      ast = parser.parseStatement(session);
-  } else {
-      session->setContentsAndGenerateLocationTable(unit);
-      ast = parser.parse(session);
-      ((TranslationUnitAST*)ast)->session = session;
-  }
+  session->setContentsAndGenerateLocationTable(unit);
 
+  ast = parser.parseTypeOrExpression(session, forceExpression);
+
+  if(!ast) {
+    kDebug() << "Failed to parse \"" << unit << "\"";
+    delete session;
+    return ExpressionEvaluationResult();
+  }
+  
   if (m_debug) {
     kDebug(9007) << "===== AST:";
     dumper.dump(ast, session);
@@ -123,7 +124,11 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   return ret;
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session) {
+ExpressionEvaluationResult ExpressionParser::evaluateExpression( const QByteArray& expression, DUContextPointer context ) {
+  return evaluateType( expression, context, true );
+}
+
+ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session ) {
   
   if (m_debug) {
     DumpChain dumper;

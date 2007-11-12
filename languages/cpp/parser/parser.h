@@ -63,6 +63,14 @@ public:
    * start at least with "{", and end with ";}"
    **/
   StatementAST *parseStatement(ParseSession* session);
+
+  /**
+   * Nearly the same as parseStatement, except that it parses the content as a type-id if possible,
+   * if that fails, as an expression. This is perfect for parsing template-arguements.
+   * The input can be as simple as "A" or "A::a+2"
+   * @param forceExpression If this is true, the text will not be considered to be a type-id, only an expression.
+   * */
+  AST *parseTypeOrExpression(ParseSession* session, bool forceExpression = false);
   /**@return the problem count.*/
   int problemCount() const { return _M_problem_count; }
 

@@ -1080,6 +1080,8 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
   
   void ExpressionVisitor::visitTypeSpecifier(TypeSpecifierAST* ast)
   {
+    PushPositiveContext pushContext( m_currentContext, ast->ducontext );
+    
     ///@todo cv-qualifiers
     clearLast();
     
@@ -1091,17 +1093,18 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
 
     if( !decls.isEmpty() )
     {
-      if( decls.first()->kind() == Declaration::Type )
-      {
-        m_lastType = decls.first()->abstractType();
-        m_lastInstance = Instance(false);
+      m_lastDeclarations = decls;
+      m_lastType = decls.first()->abstractType();
 
-        DeclarationPointer decl( decls.first() );
-        lock.unlock();
-        newUse( ast, ast->start_token, ast->end_token, decl );
-      } else {
-        problem(ast, "Resolved declaration is not a type");
-      }
+      if( decls.first()->kind() == Declaration::Type )
+        m_lastInstance = Instance(false);
+      else
+        ///Allow non-types, because we sometimes don't know whether something is a type or not, and it may get parsed as a type.
+        m_lastInstance = Instance(decls.first());
+
+      DeclarationPointer decl( decls.first() );
+      lock.unlock();
+      newUse( ast, ast->start_token, ast->end_token, decl );
     } else {
       problem(ast, "Could not resolve type");
     }
@@ -1109,6 +1112,8 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
 
   void ExpressionVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
   {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
     clearLast();
     
     if (node->integrals) {
@@ -1175,6 +1180,8 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
 
   //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
   void ExpressionVisitor::visitDeclarator(DeclaratorAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
     if( !m_lastType ) {
       problem(node, "Declarator used without type");
       return;
@@ -1199,6 +1206,8 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
   }
 
   void ExpressionVisitor::visitNewDeclarator(NewDeclaratorAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
     if( !m_lastType ) {
       problem(node, "Declarator used without type");
       return;
@@ -1223,11 +1232,9 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
     visit( node->expression );
     clearLast();
 
-    //Visit declarator and type-specifier, which should build the type
-    if( node->type_id ) {
-      visit(node->type_id->type_specifier);
-      visit(node->type_id->declarator);
-    }
+    if( node->type_id )
+      visit(node->type_id);
+    
     if( !m_lastType ) {
       problem(node, "Could not resolve type");
       return;
@@ -1242,6 +1249,8 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
   }  
   //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
   void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node) {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
     if( !m_lastType ) {
       problem(node, "Pointer-operator used without type");
       return;
@@ -1270,7 +1279,9 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
     
     //Visit the expression just so it is evaluated and expressionType(..) eventually called, the result will not be used here
     clearLast();
+    
     visit( node->expression );
+    
     clearLast();
 
     //Visit declarator and type-specifier, which should build the type
@@ -1381,6 +1392,7 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     clearLast();
     visit(node->expression);
+    kDebug() << "expression kind" << node->kind;
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }
@@ -1749,24 +1761,29 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
     }
   }
   
-  void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* /*node*/)  {
+  void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  {
     LOCKDUCHAIN;
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
     m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
     m_lastInstance = Instance(true);
   }
   
-  void ExpressionVisitor::visitCondition(ConditionAST* /*node*/)  {
+  void ExpressionVisitor::visitCondition(ConditionAST* node)  {
     LOCKDUCHAIN;
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
     m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeBool, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
     m_lastInstance = Instance(true);
   }
   
-  void ExpressionVisitor::visitTypeId(TypeIdAST* /*node*/)  {
-    
+  void ExpressionVisitor::visitTypeId(TypeIdAST* type_id)  {
+    PushPositiveContext pushContext( m_currentContext, type_id->ducontext );
+    visit(type_id->type_specifier);
+    visit(type_id->declarator);
   }
   
   void ExpressionVisitor::visitStringLiteral(StringLiteralAST* node)  {
     LOCKDUCHAIN;
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
     CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::Const) );
     p->setBaseType( AbstractType::Ptr(TypeRepository::self()->integral(CppIntegralType::TypeChar, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data()) );
     
@@ -1775,6 +1792,9 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
   }
   
   void ExpressionVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)  {
+
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
     ///post-fix increment/decrement like "i++" or "i--"
     ///This does neither change the evaluated value, nor the type(except for overloaded operators)
 
@@ -1825,11 +1845,13 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
   }
   
   void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
     ///Simple type-specifiers like "int" are parsed as SimpleDeclarationAST, so treat them here.
     visit( node->type_specifier );
   }
   
   void ExpressionVisitor::visitDeclarationStatement(DeclarationStatementAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
     ///Simple type-specifiers like "int" are parsed as SimpleDeclarationAST, so treat them here.
     visit( node->declaration );
   }

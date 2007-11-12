@@ -220,7 +220,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     ExpressionParser expressionParser;
 
     for( QStringList::const_iterator it = m_knownArgumentExpressions.begin(); it != m_knownArgumentExpressions.end(); ++it )
-      m_knownArgumentTypes << expressionParser.evaluateType( (*it).toUtf8(), m_duContext );
+      m_knownArgumentTypes << expressionParser.evaluateExpression( (*it).toUtf8(), m_duContext );
   }
 
   ///Now find out where the expression starts
@@ -298,7 +298,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   ifDebug( kDebug(9007) << "expression: " << expr; )
   
   if( !expr.trimmed().isEmpty() ) {
-    m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
+    m_expressionResult = expressionParser.evaluateExpression( expr.toUtf8(), m_duContext );
     ifDebug( kDebug(9007) << "expression result: " << m_expressionResult.toString(); )
     if( !m_expressionResult.isValid() ) {
       if( m_memberAccessOperation != StaticMemberChoose ) {
