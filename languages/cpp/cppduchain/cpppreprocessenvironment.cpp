@@ -13,7 +13,7 @@
 
 #include "cpppreprocessenvironment.h"
 #include <hashedstring.h>
-#include "parser/problem.h"
+#include <iproblem.h>
 
 CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::m_stringRepository, &Cpp::EnvironmentManager::m_stringRepositoryMutex), m_environmentFile(environmentFile) {
     //If this is included from another preprocessed file, take the current macro-set from there.

@@ -28,6 +28,8 @@
 #include <QtCore/QStack>
 #include <cppparserexport.h>
 
+#include <iproblem.h>
+
 #include "pp-macro.h"
 #include "pp-macro-expander.h"
 #include "pp-scanner.h"
@@ -122,6 +124,7 @@ class KDEVCPPRPP_EXPORT pp
   pp_skip_number skip_number;
   QStack<QString> m_files;
   Preprocessor* m_preprocessor;
+  QList<KDevelop::Problem> m_problems;
 
   enum { MAX_LEVEL = 512 };
   int _M_skipping[MAX_LEVEL];
@@ -199,6 +202,9 @@ public:
   void setEnvironment(Environment* env);
 
   QString currentFile() const;
+
+  const QList<KDevelop::Problem>& problems() const;
+  void problemEncountered(const KDevelop::Problem& problem);
 
 private:
   int skipping() const;

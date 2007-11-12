@@ -24,10 +24,11 @@
 #include <QtCore/QString>
 #include <cstdlib>
 
+#include <iproblem.h>
+
 struct NameSymbol;
 class Lexer;
 class Control;
-class Problem;
 class ParseSession;
 
 typedef void (Lexer::*scan_fun_ptr)();
@@ -223,7 +224,7 @@ private:
   void scan_tilde();
   void scan_EOF();
 
-  Problem createProblem() const;
+  KDevelop::Problem createProblem() const;
 
 private:
   Control *control;

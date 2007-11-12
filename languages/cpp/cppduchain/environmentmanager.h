@@ -29,6 +29,7 @@
 
 #include <parsingenvironment.h>
 #include <editorintegrator.h>
+#include <iproblem.h>
 
 #include "cppduchainbuilderexport.h"
 #include "macroset.h"
@@ -115,8 +116,6 @@ namespace rpp {
   class Environment;
 }
 
-class Problem;
-
 namespace Cpp {
 
 typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash>::Iterator StringSetIterator;
@@ -145,9 +144,9 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
 
     Utils::Set strings() const;
     
-    void addProblem( const Problem& p );
+    void addProblem( const KDevelop::Problem& p );
 
-    QList<Problem>  problems() const;
+    QList<KDevelop::Problem>  problems() const;
 
     //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
     void merge( const EnvironmentFile& file );
@@ -209,7 +208,7 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
     MacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
     MacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
     Cpp::StringSetRepository::LazySet m_definedMacroNames;
-    QList<Problem> m_problems;
+    QList<KDevelop::Problem> m_problems;
     QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
     /*
     Needed data:

@@ -60,6 +60,7 @@ public:
   void setContentsAndGenerateLocationTable(const QByteArray& contents, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
 
   void setUrl(const KUrl& url);
+  const KUrl& url() const;
   
   const char *contents() const;
   std::size_t size() const;

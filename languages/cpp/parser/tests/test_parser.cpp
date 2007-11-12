@@ -73,18 +73,6 @@ private slots:
 //     QCOMPARE(control.lookupType(n2), (Type*)0);
 //   }
 
-  void testProblems()
-  {
-    Problem p;
-    p.setColumn(1);
-    p.setLine(1);
-    p.setFileName("foo.cpp");
-    p.setMessage("The Problem");
-    Control c;
-    c.reportProblem(p);
-    QCOMPARE(p.message(), c.problem(0).message());
-  }
-
   void testTokenTable()
   {
     QCOMPARE(token_name(Token_EOF), "eof");

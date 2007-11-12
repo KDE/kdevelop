@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <duchain.h>
+#include <iproblem.h>
 
 #include "pp-internal.h"
 #include "pp-engine.h"
@@ -57,10 +57,14 @@ QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
     if (name == formals[index]) {
       if (index < m_frame->actuals.size())
         return m_frame->actuals[index];
-      else
-        KDevelop::DUChain::problemEncountered(m_engine->currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("Call to macro %1 missing argument number %2", name, index));
+      else {
+        KDevelop::Problem problem;
+        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+        problem.setDescription(i18n("Call to macro %1 missing argument number %2", name, index));
+        m_engine->problemEncountered(problem);
         // Triggers on deflate.c
         //Q_ASSERT(0); // internal error?
+      }
     }
   }
 

@@ -260,10 +260,9 @@ void Parser::reportError(const QString& msg)
       std::size_t tok = session->token_stream->cursor();
       KTextEditor::Cursor position = session->positionAt(session->token_stream->position(tok));
 
-      Problem p;
-      p.setLine(position.line());
-      p.setColumn(position.column());
-      p.setMessage(msg);
+      KDevelop::Problem p;
+      p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position, 0)));
+      p.setDescription(msg);
 
       control->reportProblem(p);
     }

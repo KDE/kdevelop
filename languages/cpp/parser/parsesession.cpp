@@ -22,7 +22,7 @@
 
 #include "lexer.h"
 #include "memorypool.h"
-#include "problem.h"
+#include <iproblem.h>
 
 #include <cctype>
 
@@ -76,4 +76,9 @@ void ParseSession::setContentsAndGenerateLocationTable(const QByteArray & conten
 void ParseSession::setUrl(const KUrl& url)
 {
   m_url = url;
+}
+
+const KUrl & ParseSession::url() const
+{
+  return m_url;
 }

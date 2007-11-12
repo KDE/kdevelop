@@ -34,12 +34,12 @@ int Control::problemCount() const
   return _M_problems.count();
 }
 
-Problem Control::problem(int index) const
+KDevelop::Problem Control::problem(int index) const
 {
   return _M_problems.at(index);
 }
 
-void Control::reportProblem(const Problem &problem)
+void Control::reportProblem(const KDevelop::Problem &problem)
 {
   _M_problems.append(problem);
 }

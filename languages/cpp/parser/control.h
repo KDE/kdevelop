@@ -21,7 +21,7 @@
 
 #include "symbol.h"
 #include "memorypool.h"
-#include "problem.h"
+#include <iproblem.h>
 #include <cppparserexport.h>
 
 #include <QtCore/QHash>
@@ -41,17 +41,17 @@ public:
   /**@return the number of problems encountered during parsing.*/
   int problemCount() const;
   /**@return the problem by its index.*/
-  Problem problem(int index) const;
+  KDevelop::Problem problem(int index) const;
 
   /**Adds a problem to the list of problems.*/
-  void reportProblem(const Problem &problem);
+  void reportProblem(const KDevelop::Problem &problem);
 
   inline bool skipFunctionBody() const { return _M_skip_function_body; }
   inline void setSkipFunctionBody(bool skip) { _M_skip_function_body = skip; }
 
 private:
   bool _M_skip_function_body;
-  QList<Problem> _M_problems;
+  QList<KDevelop::Problem> _M_problems;
 };
 
 #endif // CONTROL_H

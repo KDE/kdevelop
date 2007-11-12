@@ -16,7 +16,7 @@
 #include <kdebug.h>
 #include "rpp/pp-macro.h"
 #include "rpp/pp-environment.h"
-#include "problem.h"
+#include <iproblem.h>
 #include "cpppreprocessenvironment.h"
 
 //#define LEXERCACHE_DEBUG

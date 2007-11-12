@@ -44,7 +44,7 @@
 
 #include "cpplanguagesupport.h"
 #include "cppparsejob.h"
-#include "problem.h"
+#include <iproblem.h>
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 #include "parser/rpp/pp-engine.h"
@@ -193,6 +193,9 @@ void PreprocessJob::run()
     preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);
 
     QString result = preprocessor.processFile(parentJob()->document().prettyUrl(), rpp::pp::Data, contents);
+
+    foreach (const KDevelop::Problem& p, preprocessor.problems())
+      KDevelop::DUChain::problemEncountered(p);
 
     parentJob()->parseSession()->setContents( result.toUtf8(), m_currentEnvironment->takeLocationTable() );
     parentJob()->parseSession()->setUrl( parentJob()->document() );

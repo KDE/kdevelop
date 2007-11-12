@@ -36,7 +36,7 @@
 #include "parser/rpp/preprocessor.h"
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-macro.h"
-#include "parser/problem.h"
+#include <iproblem.h>
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 

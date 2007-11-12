@@ -205,8 +205,8 @@ void Lexer::scan_preprocessor()
 
   if (*cursor != '\n')
     {
-      Problem p = createProblem();
-      p.setMessage("expected end of line");
+      KDevelop::Problem p = createProblem();
+      p.setDescription("expected end of line");
       control->reportProblem(p);
     }
 }
@@ -220,8 +220,8 @@ void Lexer::scan_char_constant()
     {
        if (*cursor == '\n')
         {
-          Problem p = createProblem();
-          p.setMessage("unexpected new line");
+          KDevelop::Problem p = createProblem();
+          p.setDescription("unexpected new line");
           control->reportProblem(p);
           break;
         }
@@ -234,8 +234,8 @@ void Lexer::scan_char_constant()
 
   if (*cursor != '\'')
     {
-      Problem p = createProblem();
-      p.setMessage("expected '");
+      KDevelop::Problem p = createProblem();
+      p.setDescription("expected '");
       control->reportProblem(p);
     }
   else
@@ -258,8 +258,8 @@ void Lexer::scan_string_constant()
     {
        if (*cursor == '\n')
         {
-          Problem p = createProblem();
-          p.setMessage("unexpected new line");
+          KDevelop::Problem p = createProblem();
+          p.setDescription("unexpected new line");
           control->reportProblem(p);
           break;
         }
@@ -272,8 +272,8 @@ void Lexer::scan_string_constant()
 
   if (*cursor != '"')
     {
-      Problem p = createProblem();
-      p.setMessage("expected \"");
+      KDevelop::Problem p = createProblem();
+      p.setDescription("expected \"");
       control->reportProblem(p);
     }
   else
@@ -775,8 +775,8 @@ void Lexer::scan_EOF()
 
 void Lexer::scan_invalid_input()
 {
-  Problem p = createProblem();
-  p.setMessage("invalid input");
+  KDevelop::Problem p = createProblem();
+  p.setDescription("invalid input");
   control->reportProblem(p);
 
   ++cursor;
@@ -1802,15 +1802,15 @@ void Lexer::scanKeyword16()
   (*session->token_stream)[index++].kind = Token_identifier;
 }
 
-Problem Lexer::createProblem() const
+KDevelop::Problem Lexer::createProblem() const
 {
   Q_ASSERT(index > 0);
 
-  Problem p; // ### fill me
+  KDevelop::Problem p; // ### fill me
 
   KTextEditor::Cursor position = session->positionAt(index - 1);
-  p.setLine(position.line());
-  p.setColumn(position.column());
+
+  p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position, 1)));
 
   return p;
 }

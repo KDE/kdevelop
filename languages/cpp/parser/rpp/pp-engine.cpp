@@ -379,7 +379,10 @@ void pp::operator () (Stream& input, Stream& output)
   }
 
   if (iflevel != previousIfLevel) {
-    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), "Unterminated #if statement");
+    KDevelop::Problem problem;
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+    problem.setDescription(i18n("Unterminated #if statement"));
+    problemEncountered(problem);
   }
 }
 
@@ -543,7 +546,10 @@ Value pp::eval_primary(Stream& input)
 
       if (token != TOKEN_IDENTIFIER)
       {
-        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 1), i18n("expected ``identifier'' found: %1", char(token)));
+        KDevelop::Problem problem;
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 1)));
+        problem.setDescription(i18n("expected ``identifier'' found: %1", char(token)));
+        problemEncountered(problem);
         break;
       }
 
@@ -555,10 +561,14 @@ Value pp::eval_primary(Stream& input)
       token = next_token(input); // skip '('
 
       if (expect_paren) {
-        if (token != ')')
-          KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("expected ``)''"));
-        else
+        if (token != ')') {
+          KDevelop::Problem problem;
+          problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+          problem.setDescription(i18n("expected ``)''"));
+          problemEncountered(problem);
+        } else {
           accept_token();
+        }
       }
       break;
 
@@ -581,10 +591,14 @@ Value pp::eval_primary(Stream& input)
       result = eval_constant_expression(input);
       token = next_token(input);
 
-      if (token != ')')
-        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 1), i18n("expected ``)'' = %1", char(token)));
-      else
+      if (token != ')') {
+        KDevelop::Problem problem;
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 1)));
+        problem.setDescription(i18n("expected ``)'' = %1", char(token)));
+        problemEncountered(problem);
+      } else {
         accept_token();
+      }
 
       break;
 
@@ -611,7 +625,10 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else if (token == '/') {
       if (value.is_zero()) {
-        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("division by zero"));
+        KDevelop::Problem problem;
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+        problem.setDescription(i18n("Division by zero"));
+        problemEncountered(problem);
         result.set_long(0);
 
       } else {
@@ -620,7 +637,10 @@ Value pp::eval_multiplicative(Stream& input)
 
     } else {
       if (value.is_zero()) {
-        KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("division by zero"));
+        KDevelop::Problem problem;
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+        problem.setDescription(i18n("Division by zero"));
+        problemEncountered(problem);
         result.set_long(0);
 
       } else {
@@ -854,7 +874,10 @@ Value pp::eval_constant_expression(Stream& input)
     }
     else
     {
-      KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 1), i18n("expected ``:'' = %1", int(token)));
+      KDevelop::Problem problem;
+      problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 1)));
+      problem.setDescription(i18n("expected ``:'' = %1", int(token)));
+      problemEncountered(problem);
       result = left_value;
     }
   }
@@ -914,7 +937,10 @@ void pp::handle_else(int sourceLine)
 {
   if (iflevel == 0 && !skipping ())
   {
-    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(KTextEditor::Cursor(sourceLine, 0), 0), i18n("#else without #if"));
+    KDevelop::Problem problem;
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(KTextEditor::Cursor(sourceLine, 0), 0)));
+    problem.setDescription(i18n("#else without #if"));
+    problemEncountered(problem);
   }
   else if (iflevel > 0 && _M_skipping[iflevel - 1])
   {
@@ -935,7 +961,10 @@ void pp::handle_elif(Stream& input)
 
   if (iflevel == 0 && !skipping())
   {
-    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("#else without #if"));
+    KDevelop::Problem problem;
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+    problem.setDescription(i18n("#else without #if"));
+    problemEncountered(problem);
   }
   else
   {
@@ -970,7 +999,10 @@ void pp::handle_endif(Stream& input, Stream& output)
 {
   if (iflevel == 0 && !skipping())
   {
-    KDevelop::DUChain::problemEncountered(currentFileName(), KTextEditor::Range(input.inputPosition(), 0), i18n("#endif without #if at output line %1", m_environment->locationTable()->positionForOffset(output.pos()).line()));
+    KDevelop::Problem problem;
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+    problem.setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->positionForOffset(output.pos()).line()));
+    problemEncountered(problem);
   }
   else
   {
@@ -1215,5 +1247,15 @@ QString pp::currentFile() const
 
   Q_ASSERT(false);
   return "<internal>";
+}
+
+const QList< KDevelop::Problem > & rpp::pp::problems() const
+{
+  return m_problems;
+}
+
+void rpp::pp::problemEncountered(const KDevelop::Problem & problem)
+{
+  m_problems.append(problem);
 }
 
