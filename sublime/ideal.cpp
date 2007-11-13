@@ -380,6 +380,8 @@ void IdealButtonBarWidget::reposition(QWidget *widget)
     QPoint pos;
     QSize size = widget->size();
 
+    QRect geom = parentWidget()->internalCentralWidget()->geometry();
+    
     switch (_area) {
     case TopButtonBarArea:
         Q_ASSERT(0);
@@ -391,8 +393,8 @@ void IdealButtonBarWidget::reposition(QWidget *widget)
             size.setHeight(height);
         else
             size.setHeight(widget->sizeHint().height());
-        size.setWidth(width());
-        pos = geometry().topLeft() - QPoint(0, size.height());
+        size.setWidth(parentWidget()->internalCentralWidget()->width());
+        pos = geom.bottomLeft() - QPoint(0, size.height());
     } break;
     
     case LeftButtonBarArea: {
@@ -401,8 +403,8 @@ void IdealButtonBarWidget::reposition(QWidget *widget)
             size.setWidth(width);
         else
             size.setWidth(widget->sizeHint().width());
-        size.setHeight(height());
-        pos = geometry().topRight();
+        size.setHeight(parentWidget()->internalCentralWidget()->height());
+        pos = geom.topLeft();
     } break;
     
     case RightButtonBarArea: {
@@ -411,8 +413,8 @@ void IdealButtonBarWidget::reposition(QWidget *widget)
             size.setWidth(width);
         else
             size.setWidth(widget->sizeHint().width());
-        size.setHeight(height());
-        pos = geometry().topLeft() - QPoint(size.width(), 0);
+        size.setHeight(parentWidget()->internalCentralWidget()->height());
+        pos = geom.topRight() - QPoint(size.width(), 0);
     } break;
 
     }
@@ -1170,6 +1172,11 @@ int Sublime::IdealMainLayout::widthForRole(Role role) const
 IdealMainLayout * Sublime::IdealMainWidget::mainLayout() const
 {
     return m_mainLayout;
+}
+
+IdealCentralWidget * Sublime::IdealMainWidget::internalCentralWidget() const
+{
+    return mainWidget;
 }
 
 #include "ideal.moc"

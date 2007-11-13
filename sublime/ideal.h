@@ -193,6 +193,7 @@ public:
     void anchorDockWidget(QDockWidget* widget, bool anchor);
 
     IdealMainLayout* mainLayout() const;
+    IdealCentralWidget* internalCentralWidget() const;
 
 public Q_SLOTS:
     void anchorDockWidget(bool checked);
