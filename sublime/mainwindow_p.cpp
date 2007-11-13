@@ -114,17 +114,18 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
         KAcceleratorManager::setNoAccel(dock);
 
         dock->setWidget(view->widget());
+
         d->idealDocks[view] = dock;
 
         switch (position) {
             case Left:
-                d->leftBarWidget->addWidget(dock, view->document()->title());
+                d->leftBarWidget->addWidget(dock);
                 break;
             case Right:
-                d->rightBarWidget->addWidget(dock, view->document()->title());
+                d->rightBarWidget->addWidget(dock);
                 break;
             case Bottom:
-                d->bottomBarWidget->addWidget(dock, view->document()->title());
+                d->bottomBarWidget->addWidget(dock);
                 break;
             case AllPositions:
             case Top:

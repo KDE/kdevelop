@@ -29,6 +29,7 @@ IdealToolButton::IdealToolButton(IdealButtonBarArea area, QWidget *parent)
     : QToolButton(parent), _area(area)
 {
     setCheckable(true);
+    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     if (orientation() == Qt::Vertical)
         setFixedWidth(DefaultButtonSize);
@@ -239,11 +240,12 @@ IdealButtonBarWidget::IdealButtonBarWidget(IdealButtonBarArea area, QWidget *par
     (void) new IdealButtonBarLayout(orientation(), this);
 }
 
-QAction *IdealButtonBarWidget::addWidget(QDockWidget *dock, const QString &text)
+QAction *IdealButtonBarWidget::addWidget(QDockWidget *dock)
 {
     QWidgetAction *action = new QWidgetAction(this);
     action->setCheckable(true);
-    action->setText(text);
+    action->setText(dock->widget()->windowTitle());
+    action->setIcon(dock->widget()->windowIcon());
 
     dock->setAutoFillBackground(true);
     //dock->setFocusProxy(widget);

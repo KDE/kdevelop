@@ -32,6 +32,7 @@
 #include <QToolButton>
 
 #include <klocale.h>
+#include <kicon.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -58,6 +59,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPart* part)
 {
   setObjectName("Class Browser Tree");
   setWindowTitle(i18n("Class Browser"));
+  setWindowIcon(KIcon("class"));
 
   QFrame *toolBar = new QFrame( this );
   toolBar->setFrameShape( QFrame::StyledPanel );

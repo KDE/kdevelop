@@ -104,7 +104,7 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(IdealButtonBarArea area, QWidget *parent = 0);
 
-    QAction *addWidget(QDockWidget *widget, const QString &text);
+    QAction *addWidget(QDockWidget *widget);
 
     Qt::Orientation orientation() const;
 
