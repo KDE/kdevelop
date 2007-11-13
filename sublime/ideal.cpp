@@ -385,23 +385,36 @@ void IdealButtonBarWidget::reposition(QWidget *widget)
         Q_ASSERT(0);
         break;
     
-    case BottomButtonBarArea:
+    case BottomButtonBarArea: {
+        int height = parentWidget()->mainLayout()->widthForRole(IdealMainLayout::Bottom);
+        if (height != -1)
+            size.setHeight(height);
+        else
+            size.setHeight(widget->sizeHint().height());
         size.setWidth(width());
-        size.setHeight(200); // ### testing
         pos = geometry().topLeft() - QPoint(0, size.height());
-        break;
+    } break;
     
-    case LeftButtonBarArea:
+    case LeftButtonBarArea: {
+        int width = parentWidget()->mainLayout()->widthForRole(IdealMainLayout::Left);
+        if (width != -1)
+            size.setWidth(width);
+        else
+            size.setWidth(widget->sizeHint().width());
         size.setHeight(height());
-        size.setWidth(200); // ### testing
         pos = geometry().topRight();
-        break;
+    } break;
     
-    case RightButtonBarArea:
+    case RightButtonBarArea: {
+        int width = parentWidget()->mainLayout()->widthForRole(IdealMainLayout::Right);
+        if (width != -1)
+            size.setWidth(width);
+        else
+            size.setWidth(widget->sizeHint().width());
         size.setHeight(height());
-        size.setWidth(200); // ### testing
         pos = geometry().topLeft() - QPoint(size.width(), 0);
-        break;
+    } break;
+
     }
     
     widget->setGeometry(QRect(pos, size));
@@ -528,8 +541,8 @@ IdealMainWidget::IdealMainWidget(QWidget * parent)
 
     mainWidget = new IdealCentralWidget(this);
 
-    mainLayout = new IdealMainLayout(mainWidget);
-    mainWidget->setLayout(mainLayout);
+    m_mainLayout = new IdealMainLayout(mainWidget);
+    mainWidget->setLayout(m_mainLayout);
 
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(0);
@@ -583,7 +596,7 @@ void IdealMainWidget::removeWidget(QDockWidget * dock)
 
 void IdealMainWidget::setCentralWidget(QWidget * widget)
 {
-    mainLayout->addWidget(IdealMainLayout::Central, widget);
+    m_mainLayout->addWidget(IdealMainLayout::Central, widget);
 }
 
 void IdealMainWidget::anchorDockWidget(bool checked)
@@ -600,9 +613,9 @@ void Sublime::IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
         case Qt::LeftDockWidgetArea:
             if (anchor) {
                 leftBarWidget->closeAll();
-                mainLayout->addWidget(IdealMainLayout::Left, dock);
+                m_mainLayout->addWidget(IdealMainLayout::Left, dock);
             } else {
-                mainLayout->removeWidget(IdealMainLayout::Left);
+                m_mainLayout->removeWidget(IdealMainLayout::Left);
                 leftBarWidget->showWidget(dock);
             }
             break;
@@ -610,9 +623,9 @@ void Sublime::IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
         case Qt::RightDockWidgetArea:
             if (anchor) {
                 rightBarWidget->closeAll();
-                mainLayout->addWidget(IdealMainLayout::Right, dock);
+                m_mainLayout->addWidget(IdealMainLayout::Right, dock);
             } else {
-                mainLayout->removeWidget(IdealMainLayout::Right);
+                m_mainLayout->removeWidget(IdealMainLayout::Right);
                 rightBarWidget->showWidget(dock);
             }
             break;
@@ -620,9 +633,9 @@ void Sublime::IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
         case Qt::BottomDockWidgetArea:
             if (anchor) {
                 bottomBarWidget->closeAll();
-                mainLayout->addWidget(IdealMainLayout::Bottom, dock);
+                m_mainLayout->addWidget(IdealMainLayout::Bottom, dock);
             } else {
-                mainLayout->removeWidget(IdealMainLayout::Bottom);
+                m_mainLayout->removeWidget(IdealMainLayout::Bottom);
                 bottomBarWidget->showWidget(dock);
             }
             break;
@@ -630,9 +643,9 @@ void Sublime::IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
         case Qt::TopDockWidgetArea:
             if (anchor) {
                 topBarWidget->closeAll();
-                mainLayout->addWidget(IdealMainLayout::Top, dock);
+                m_mainLayout->addWidget(IdealMainLayout::Top, dock);
             } else {
-                mainLayout->removeWidget(IdealMainLayout::Top);
+                m_mainLayout->removeWidget(IdealMainLayout::Top);
                 topBarWidget->showWidget(dock);
             }
             break;
@@ -1018,6 +1031,10 @@ IdealCentralWidget::~ IdealCentralWidget()
 
 void IdealCentralWidget::paintEvent(QPaintEvent * event)
 {
+    return;
+    
+    Q_UNUSED(event);
+    
     QPainter p(this);
     //p.fillRect(event->rect(), Qt::red);
 
@@ -1140,6 +1157,19 @@ bool Sublime::IdealDockWidgetTitle::isAnchored() const
 void Sublime::IdealDockWidgetTitle::setAnchored(bool anchored)
 {
     m_anchor->setChecked(anchored);
+}
+
+int Sublime::IdealMainLayout::widthForRole(Role role) const
+{
+    if (m_sizes.contains(role))
+        return m_sizes[role];
+
+    return -1;
+}
+
+IdealMainLayout * Sublime::IdealMainWidget::mainLayout() const
+{
+    return m_mainLayout;
 }
 
 #include "ideal.moc"

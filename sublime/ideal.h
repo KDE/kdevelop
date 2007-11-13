@@ -192,6 +192,8 @@ public:
 
     void anchorDockWidget(QDockWidget* widget, bool anchor);
 
+    IdealMainLayout* mainLayout() const;
+
 public Q_SLOTS:
     void anchorDockWidget(bool checked);
     
@@ -202,7 +204,7 @@ private:
     IdealButtonBarWidget *topBarWidget;
 
     IdealCentralWidget* mainWidget;
-    class IdealMainLayout* mainLayout;
+    class IdealMainLayout* m_mainLayout;
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
 };
@@ -233,6 +235,7 @@ public:
     QWidget* removeWidget(Role role);
 
     int splitterWidth() const;
+    int widthForRole(Role role) const;
 
     virtual QSize minimumSize() const;
 
