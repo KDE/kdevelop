@@ -1340,7 +1340,7 @@ void TestDUChain::testTemplateDefaultParameters() {
 }
 
 void TestDUChain::testTemplates2() {
-  QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> class Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; };");
+  QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> struct Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; }; Class<S*> instance;");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -1356,6 +1356,12 @@ void TestDUChain::testTemplates2() {
   QVERIFY(memberDecl->abstractType());
   kDebug() << memberDecl->toString();
   QCOMPARE(memberDecl->abstractType()->toString(), QString("S*&"));
+
+  memberDecl = findDeclaration(top, QualifiedIdentifier("instance"));
+  QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
+  kDebug() << memberDecl->toString();
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("Class< S* >"));
   
   release(top);
 }

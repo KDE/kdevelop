@@ -50,7 +50,7 @@ protected:
   virtual void visitTemplateArgument(TemplateArgumentAST *node);
 
   void internal_run(AST *node);
-  QString decode_operator(OperatorAST* ast) const;
+  QString decode(AST* ast) const;
 
 private:
   ParseSession* m_session;

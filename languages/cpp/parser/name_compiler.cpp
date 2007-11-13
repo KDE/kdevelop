@@ -33,7 +33,7 @@ NameCompiler::NameCompiler(ParseSession* session)
 {
 }
 
-QString NameCompiler::decode_operator(OperatorAST* ast) const
+QString NameCompiler::decode(AST* ast) const
 {
   QString ret;
   for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
@@ -68,7 +68,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
       tmp_name += QLatin1String("operator");
 
       if (op_id->op && op_id->op->op)
-        tmp_name +=  decode_operator(op_id->op);
+        tmp_name +=  decode(op_id->op);
       else
         tmp_name += QLatin1String("{...cast...}");
 
@@ -91,14 +91,8 @@ TypeSpecifierAST* NameCompiler::lastTypeSpecifier() const {
 
 void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
 {
-  if (node->type_id && node->type_id->type_specifier)
-    {
-      TypeCompiler type_cc(m_session);
-      type_cc.run(node->type_id->type_specifier);
-      m_currentIdentifier.appendTemplateIdentifier(QualifiedIdentifier(type_cc.identifier()));
-    }
+  m_currentIdentifier.appendTemplateIdentifier(QualifiedIdentifier(decode(node)));
 }
-
 
 const QualifiedIdentifier& NameCompiler::identifier() const
 {
