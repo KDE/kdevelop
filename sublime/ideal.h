@@ -153,6 +153,9 @@ public:
 
 Q_SIGNALS:
     void anchor(bool anchor);
+
+private Q_SLOTS:
+    void slotAnchor(bool anchor);
     
 private:
     Qt::Orientation m_orientation;

@@ -507,7 +507,7 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
     m_anchor->setFocusPolicy(Qt::NoFocus);
     m_anchor->setIcon(KIcon("document-decrypt"));
     m_anchor->setCheckable(true);
-    connect(m_anchor, SIGNAL(clicked(bool)), this, SIGNAL(anchor(bool)));
+    connect(m_anchor, SIGNAL(clicked(bool)), SLOT(slotAnchor(bool)));
     layout->addWidget(m_anchor);
 
     /*QToolButton* floatb = new QToolButton(this);
@@ -524,6 +524,30 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
 
 IdealDockWidgetTitle::~ IdealDockWidgetTitle()
 {
+}
+
+bool Sublime::IdealDockWidgetTitle::isAnchored() const
+{
+    return m_anchor->isChecked();
+}
+
+void Sublime::IdealDockWidgetTitle::setAnchored(bool anchored)
+{
+    m_anchor->setChecked(anchored);
+    if (anchored)
+        m_anchor->setIcon(KIcon("document-encrypt"));
+    else
+        m_anchor->setIcon(KIcon("document-decrypt"));
+}
+
+void Sublime::IdealDockWidgetTitle::slotAnchor(bool anchored)
+{
+    if (anchored)
+        m_anchor->setIcon(KIcon("document-encrypt"));
+    else
+        m_anchor->setIcon(KIcon("document-decrypt"));
+
+    emit anchor(anchored);
 }
 
 IdealMainWidget::IdealMainWidget(QWidget * parent)
@@ -803,7 +827,7 @@ void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
         m_hint = QSize(minHeight, minWidth);
     }
 
-    kDebug() << "min" << m_min << "hint" << m_hint;
+    //kDebug() << "min" << m_min << "hint" << m_hint;
 
     int x = rect.x() + margin();
     int y = rect.y() + margin();
@@ -1149,16 +1173,6 @@ void Sublime::IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role
 IdealMainWidget * Sublime::IdealButtonBarWidget::parentWidget() const
 {
     return static_cast<IdealMainWidget *>(QWidget::parentWidget());
-}
-
-bool Sublime::IdealDockWidgetTitle::isAnchored() const
-{
-    return m_anchor->isChecked();
-}
-
-void Sublime::IdealDockWidgetTitle::setAnchored(bool anchored)
-{
-    m_anchor->setChecked(anchored);
 }
 
 int Sublime::IdealMainLayout::widthForRole(Role role) const
