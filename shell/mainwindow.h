@@ -62,7 +62,7 @@ protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
     virtual bool queryClose();
 
-protected Q_SLOTS:
+public Q_SLOTS:
     virtual void loadSettings();
     virtual void saveSettings();
 protected:

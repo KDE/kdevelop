@@ -33,11 +33,12 @@ namespace Ui{
 
 class UiPreferences : public KCModule
 {
-
     public:
         explicit UiPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
 
         ~UiPreferences();
+
+        virtual void save();
 
 
     private:

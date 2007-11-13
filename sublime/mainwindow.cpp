@@ -172,5 +172,24 @@ void MainWindow::setVerticalToolViewTitleBarMode( VerticalTitleBarMode mode )
 
 }
 
+Sublime::MainWindow::UserInterfaceStyle Sublime::MainWindow::userInterfaceStyle() const
+{
+    return d->m_uistyle;
+}
+
+void Sublime::MainWindow::setUserInterfaceStyle(UserInterfaceStyle style)
+{
+    if (d->m_uistyle == style)
+        return;
+
+    d->m_uistyle = style;
+
+    if (d->area) {
+        Area* a = d->area;
+        clearArea();
+        setArea(a);
+    }
+}
+
 #include "mainwindow.moc"
 

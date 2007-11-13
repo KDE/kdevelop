@@ -59,9 +59,17 @@ public:
         UseVerticalTabs
     };
 
+    enum UserInterfaceStyle {
+        Ideal,
+        QtDockwidget
+    };
+
     /**Creates a mainwindow and adds it to the controller.*/
     explicit MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
     ~MainWindow();
+
+    UserInterfaceStyle userInterfaceStyle() const;
+    void setUserInterfaceStyle(UserInterfaceStyle style);
 
     /**@return the menu to switch areas within this mainwindow.*/
     QMenu *areaSwitcherMenu();

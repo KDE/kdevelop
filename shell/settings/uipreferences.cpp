@@ -25,8 +25,13 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
+#include "core.h"
+#include "../mainwindow.h"
+#include "uicontroller.h"
 #include "ui_uiconfig.h"
 #include "uiconfig.h"
+
+using namespace KDevelop;
 
 K_PLUGIN_FACTORY(UiPreferencesFactory, registerPlugin<UiPreferences>();)
 K_EXPORT_PLUGIN(UiPreferencesFactory("kcm_kdev_uisettings"))
@@ -46,5 +51,13 @@ UiPreferences::UiPreferences(QWidget* parent, const QVariantList& args )
 
 UiPreferences::~UiPreferences()
 {}
+
+void UiPreferences::save()
+{
+    KCModule::save();
+
+    // TODO: tell all main windows, when api available
+    static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->loadSettings();
+}
 
 

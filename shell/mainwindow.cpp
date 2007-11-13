@@ -87,6 +87,10 @@ void MainWindow::loadSettings()
 {
     kDebug(9501) << "Loading Settings";
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
+
+    // Ideal default
+    setUserInterfaceStyle(static_cast<Sublime::MainWindow::UserInterfaceStyle>(cg.readEntry("UserInterfaceStyle", 0)));
+
     bool verticaltabs = cg.readEntry( "Use Vertical Tabs", true );
     bool verticaltitle = cg.readEntry( "Use Vertical TitleBar", true );
 

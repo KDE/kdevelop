@@ -3,6 +3,8 @@
 <kcfg>
   <kcfgfile/>
   <group name="UiSettings">
+        <entry name="UserInterfaceStyle" key="UserInterfaceStyle" type="Int">
+        </entry>
         <entry name="VerticalTabs" key="Use Vertical Tabs" type="Bool">
             <default>true</default>
         </entry>

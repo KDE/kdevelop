@@ -12,8 +12,36 @@
   <property name="windowTitle" >
    <string>User Interface</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
+  <layout class="QVBoxLayout" >
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QLabel" name="label_6" >
+       <property name="text" >
+        <string>&amp;User Interface Style</string>
+       </property>
+       <property name="buddy" >
+        <cstring>kcfg_UserInterfaceStyle</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="kcfg_UserInterfaceStyle" >
+       <item>
+        <property name="text" >
+         <string>Ideal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Qt Docking</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Dockwindow Behaviour</string>
@@ -225,7 +253,7 @@ Horizontal Docks:</string>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
+   <item>
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -233,7 +261,7 @@ Horizontal Docks:</string>
      <property name="sizeHint" >
       <size>
        <width>503</width>
-       <height>71</height>
+       <height>21</height>
       </size>
      </property>
     </spacer>
