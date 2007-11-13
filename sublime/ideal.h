@@ -112,6 +112,8 @@ public:
     QAction *addWidget(QDockWidget *widget);
     void showWidget(QDockWidget* widget);
 
+    IdealMainWidget* parentWidget() const;
+
     Qt::Orientation orientation() const;
 
 public Q_SLOTS:
@@ -119,6 +121,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void _k_showWidget(bool checked);
+    void anchor(bool anchor);
 
 protected:
     void reposition();
@@ -133,6 +136,8 @@ private:
     IdealButtonBarArea _area;
     QHash<QWidgetAction *, IdealToolButton *> _buttons;
     QSplitter* resizeHandle;
+    QDockWidget* m_currentlyShown;
+    bool m_anchored;
 };
 
 class IdealDockWidgetTitle : public QWidget
@@ -140,12 +145,21 @@ class IdealDockWidgetTitle : public QWidget
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, IdealMainWidget* main);
+    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent);
     virtual ~IdealDockWidgetTitle();
 
+    bool isAnchored() const;
+    void setAnchored(bool anchored);
+
+Q_SIGNALS:
+    void anchor(bool anchor);
+    
 private:
     Qt::Orientation m_orientation;
+    QToolButton* m_anchor;
 };
+
+class IdealMainLayout;
 
 class IdealCentralWidget : public QWidget
 {
@@ -154,6 +168,8 @@ class IdealCentralWidget : public QWidget
 public:
     IdealCentralWidget(IdealMainWidget* parent);
     virtual ~IdealCentralWidget();
+
+    IdealMainLayout* idealLayout() const;
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
@@ -173,6 +189,8 @@ public:
 
     // TODO can move the object filter here with judicious focusProxy?
     void centralWidgetFocused();
+
+    void anchorDockWidget(QDockWidget* widget, bool anchor);
 
 public Q_SLOTS:
     void anchorDockWidget(bool checked);
@@ -199,6 +217,10 @@ public:
         Right,
         Bottom,
         Top,
+        LeftSplitter,
+        RightSplitter,
+        BottomSplitter,
+        TopSplitter,
         Central
     };
 
@@ -207,7 +229,10 @@ public:
     virtual ~IdealMainLayout();
 
     void addWidget(Role role, QWidget* widget);
+    QLayoutItem* itemForRole(Role role);
     QWidget* removeWidget(Role role);
+
+    int splitterWidth() const;
 
     virtual QSize minimumSize() const;
 
@@ -228,8 +253,23 @@ public:
 protected:
     void doLayout(const QRect &rect, bool updateGeometry = true) const;
 
+private Q_SLOTS:
+    void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
+    
 private:
-    QMap<Role, QLayoutItem *> m_items;
+    /*class IdealLayoutItem : public QWidgetItem
+    {
+    public:
+        IdealLayoutItem(QWidget* widget) : QWidgetItem(widget), m_thickness(-1) {}
+        void setThickness(int thickness) { m_thickness = thickness; }
+        void offsetThickness(int thickness) { m_thickness += thickness; }
+        inline int thicknes() { return m_thickness; }
+    private:
+        int m_thickness;
+    };*/
+
+    QMap<Role, QWidgetItem*> m_items;
+    QHash<Role, int> m_sizes;
     mutable bool m_layoutDirty;
     mutable QSize m_min, m_hint;
 };
@@ -244,6 +284,30 @@ protected:
     void moveEvent(QMoveEvent* event);
     void resizeEvent(QResizeEvent* event);
 };*/
+
+class IdealSplitterHandle : public QWidget
+{
+    Q_OBJECT
+
+public:
+    IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole);
+
+Q_SIGNALS:
+    void resize(int thickness, IdealMainLayout::Role resizeRole);
+    
+protected:
+    virtual void paintEvent(QPaintEvent* event);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event);
+
+private:
+    inline int convert(const QPoint& pos) const { return m_orientation == Qt::Horizontal ? pos.y() : pos.x(); }
+
+    Qt::Orientation m_orientation;
+    bool m_hover;
+    int m_dragStart;
+    IdealMainLayout::Role m_resizeRole;
+};
 
 }
 

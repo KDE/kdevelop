@@ -255,6 +255,8 @@ IdealButtonBarWidget::IdealButtonBarWidget(IdealButtonBarArea area, IdealMainWid
     : QWidget(parent)
     , _area(area)
     , resizeHandle(new QSplitter(orientation(), this))
+    , m_currentlyShown(0)
+    , m_anchored(false)
 {
     (void) new IdealButtonBarLayout(orientation(), this);
 }
@@ -269,8 +271,11 @@ QAction *IdealButtonBarWidget::addWidget(QDockWidget *dock)
     dock->setAutoFillBackground(true);
     //dock->setFocusProxy(widget);
 
-    if (!dock->titleBarWidget())
-        dock->setTitleBarWidget(new IdealDockWidgetTitle(orientation(), dock, static_cast<IdealMainWidget*>(parent())));
+    if (!dock->titleBarWidget()) {
+        IdealDockWidgetTitle* title = new IdealDockWidgetTitle(orientation(), dock);
+        dock->setTitleBarWidget(title);
+        connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
+    }
 
     action->setDefaultWidget(dock);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(_k_showWidget(bool)));
@@ -304,15 +309,32 @@ void IdealButtonBarWidget::_k_showWidget(bool checked)
 {
     Q_ASSERT(parentWidget() != 0);
 
-    closeAll();
+    QWidgetAction *action = qobject_cast<QWidgetAction *>(sender());
+    Q_ASSERT(action);
 
-    if (! checked) // nothing to do
-        return;
+    QDockWidget *widget = static_cast<QDockWidget*>(action->defaultWidget());
+    Q_ASSERT(widget);
 
-    if (QWidgetAction *action = qobject_cast<QWidgetAction *>(sender())) {
-        if (QWidget *widget = action->defaultWidget()) {
-            if (widget->parentWidget() != parentWidget())
-                widget->setParent(parentWidget()); // ### dangerous
+    if (m_currentlyShown && (m_currentlyShown != widget || !checked)) {
+        if (m_currentlyShown && m_anchored)
+            parentWidget()->anchorDockWidget(m_currentlyShown, false);
+
+        m_currentlyShown->close();
+
+        m_currentlyShown = 0;
+
+    }
+
+    if (checked) {
+        m_currentlyShown = widget;
+
+        if (m_anchored) {
+            static_cast<IdealDockWidgetTitle*>(widget->titleBarWidget())->setAnchored(true);
+            parentWidget()->anchorDockWidget(widget, true);
+
+        } else {
+            if (widget->parent() != parentWidget())
+                widget->setParent(parentWidget());
 
             reposition(widget);
             widget->raise();
@@ -322,7 +344,15 @@ void IdealButtonBarWidget::_k_showWidget(bool checked)
     }
 }
 
-void Sublime::IdealButtonBarWidget::showWidget(QDockWidget * widget)
+void Sublime::IdealButtonBarWidget::anchor(bool anchor)
+{
+    if (m_anchored != anchor) {
+        m_anchored = anchor;
+        parentWidget()->anchorDockWidget(m_currentlyShown, m_anchored);
+    }
+}
+
+void IdealButtonBarWidget::showWidget(QDockWidget * widget)
 {
     if (widget->parentWidget() != parentWidget())
         widget->setParent(parentWidget()); // ### dangerous
@@ -436,7 +466,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     }
 }
 
-IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget * parent, IdealMainWidget* main)
+IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget * parent)
     : QWidget(parent)
     , m_orientation(orientation)
 {
@@ -458,12 +488,12 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
 
     layout->addStretch();
 
-    QToolButton* anchor = new QToolButton(this);
-    anchor->setFocusPolicy(Qt::NoFocus);
-    anchor->setIcon(KIcon("document-decrypt"));
-    anchor->setCheckable(true);
-    connect(anchor, SIGNAL(clicked(bool)), main, SLOT(anchorDockWidget(bool)));
-    layout->addWidget(anchor);
+    m_anchor = new QToolButton(this);
+    m_anchor->setFocusPolicy(Qt::NoFocus);
+    m_anchor->setIcon(KIcon("document-decrypt"));
+    m_anchor->setCheckable(true);
+    connect(m_anchor, SIGNAL(clicked(bool)), this, SIGNAL(anchor(bool)));
+    layout->addWidget(m_anchor);
 
     /*QToolButton* floatb = new QToolButton(this);
     floatb->setFocusPolicy(Qt::NoFocus);
@@ -559,12 +589,16 @@ void IdealMainWidget::setCentralWidget(QWidget * widget)
 void IdealMainWidget::anchorDockWidget(bool checked)
 {
     QDockWidget* dock = static_cast<QDockWidget*>(sender()->parent()->parent());
+    anchorDockWidget(dock, checked);
+}
 
+void Sublime::IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
+{
     Q_ASSERT(docks.contains(dock));
 
     switch (docks[dock]) {
         case Qt::LeftDockWidgetArea:
-            if (checked) {
+            if (anchor) {
                 leftBarWidget->closeAll();
                 mainLayout->addWidget(IdealMainLayout::Left, dock);
             } else {
@@ -574,7 +608,7 @@ void IdealMainWidget::anchorDockWidget(bool checked)
             break;
 
         case Qt::RightDockWidgetArea:
-            if (checked) {
+            if (anchor) {
                 rightBarWidget->closeAll();
                 mainLayout->addWidget(IdealMainLayout::Right, dock);
             } else {
@@ -584,7 +618,7 @@ void IdealMainWidget::anchorDockWidget(bool checked)
             break;
 
         case Qt::BottomDockWidgetArea:
-            if (checked) {
+            if (anchor) {
                 bottomBarWidget->closeAll();
                 mainLayout->addWidget(IdealMainLayout::Bottom, dock);
             } else {
@@ -594,7 +628,7 @@ void IdealMainWidget::anchorDockWidget(bool checked)
             break;
             
         case Qt::TopDockWidgetArea:
-            if (checked) {
+            if (anchor) {
                 topBarWidget->closeAll();
                 mainLayout->addWidget(IdealMainLayout::Top, dock);
             } else {
@@ -683,32 +717,32 @@ void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
 
         if (QLayoutItem* item = m_items[Left]) {
             const QSize itemSizeHint = item->minimumSize();
-            minWidth += itemSizeHint.width();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height());
+            minWidth += itemSizeHint.width() + splitterWidth();
+            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Right]) {
             const QSize itemSizeHint = item->minimumSize();
-            minWidth += itemSizeHint.width();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height());
+            minWidth += itemSizeHint.width() + splitterWidth();
+            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Top]) {
             const QSize itemSizeHint = item->minimumSize();
-            minHeight = itemSizeHint.height();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width());
+            minHeight = itemSizeHint.height() + splitterWidth();
+            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Bottom]) {
             const QSize itemSizeHint = item->minimumSize();
-            minHeight += itemSizeHint.height();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width());
+            minHeight += itemSizeHint.height() + splitterWidth();
+            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Central]) {
             const QSize itemSizeHint = item->minimumSize();
-            minHeight += qMax(softMinHeight, itemSizeHint.height());
-            minWidth += qMax(softMinWidth, itemSizeHint.width());
+            minHeight += qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
+            minWidth += qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
         }
 
         m_min = QSize(minHeight, minWidth);
@@ -723,36 +757,38 @@ void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
 
         if (QLayoutItem* item = m_items[Left]) {
             const QSize itemSizeHint = item->sizeHint();
-            minWidth += itemSizeHint.width();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height());
+            minWidth += itemSizeHint.width() + splitterWidth();
+            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Right]) {
             const QSize itemSizeHint = item->sizeHint();
-            minWidth += itemSizeHint.width();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height());
+            minWidth += itemSizeHint.width() + splitterWidth();
+            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Top]) {
             const QSize itemSizeHint = item->sizeHint();
-            minHeight = itemSizeHint.height();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width());
+            minHeight = itemSizeHint.height() + splitterWidth();
+            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Bottom]) {
             const QSize itemSizeHint = item->sizeHint();
-            minHeight += itemSizeHint.height();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width());
+            minHeight += itemSizeHint.height() + splitterWidth();
+            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
         }
 
         if (QLayoutItem* item = m_items[Central]) {
             const QSize itemSizeHint = item->sizeHint();
-            minHeight += qMax(softMinHeight, itemSizeHint.height());
-            minWidth += qMax(softMinWidth, itemSizeHint.width());
+            minHeight += qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
+            minWidth += qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
         }
 
         m_hint = QSize(minHeight, minWidth);
     }
+
+    kDebug() << "min" << m_min << "hint" << m_hint;
 
     int x = rect.x() + margin();
     int y = rect.y() + margin();
@@ -763,70 +799,101 @@ void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
     //width = qMax(width, m_min.width());
 
     if (QLayoutItem* item = m_items[Left]) {
-        const QSize itemSizeHint = item->sizeHint();
-        int hintWidth = itemSizeHint.width();
-        if (hintWidth > width) {
-            hintWidth = item->minimumSize().width();
+        int hintWidth;
+        if (m_sizes.contains(Left)) {
+            hintWidth = m_sizes[Left];
 
-            if (hintWidth > width)
-                width = hintWidth;
+        } else {
+            const QSize itemSizeHint = item->sizeHint();
+            hintWidth = itemSizeHint.width() + splitterWidth();
+            if (hintWidth + splitterWidth() > width) {
+                hintWidth = item->minimumSize().width();
+
+                if (hintWidth + splitterWidth() > width)
+                    width = hintWidth + splitterWidth();
+            }
         }
 
         if (updateGeometry) {
             item->setGeometry(QRect(x, y, hintWidth, height));
+            m_items[LeftSplitter]->setGeometry(QRect(x + hintWidth, y, splitterWidth(), height));
         }
 
-        x += hintWidth;
-        width -= hintWidth;
+        x += hintWidth + splitterWidth();
+        width -= hintWidth + splitterWidth();
     }
 
     if (QLayoutItem* item = m_items[Right]) {
-        const QSize itemSizeHint = item->sizeHint();
-        int hintWidth = itemSizeHint.width();
-        if (hintWidth > width) {
-            hintWidth = item->minimumSize().width();
+        int hintWidth;
+        if (m_sizes.contains(Right)) {
+            hintWidth = m_sizes[Right];
 
-            if (hintWidth > width)
-                width = hintWidth;
+        } else {
+            const QSize itemSizeHint = item->sizeHint();
+            hintWidth = itemSizeHint.width();
+            if (hintWidth + splitterWidth() > width) {
+                hintWidth = item->minimumSize().width();
+
+                if (hintWidth + splitterWidth() > width)
+                    width = hintWidth + splitterWidth();
+            }
         }
 
-        if (updateGeometry)
+        if (updateGeometry) {
             item->setGeometry(QRect(x + width - hintWidth, y, hintWidth, height));
+            m_items[RightSplitter]->setGeometry(QRect(x + width - hintWidth - splitterWidth(), y, splitterWidth(), height));
+        }
 
-        width -= hintWidth;
+        width -= hintWidth + splitterWidth();
     }
 
     if (QLayoutItem* item = m_items[Top]) {
-        const QSize itemSizeHint = item->sizeHint();
-        int hintHeight = itemSizeHint.height();
-        if (hintHeight > height) {
-            hintHeight = item->minimumSize().height();
+        int hintHeight;
+        if (m_sizes.contains(Top)) {
+            hintHeight = m_sizes[Top];
 
-            if (hintHeight > height)
-                height = hintHeight;
+        } else {
+            const QSize itemSizeHint = item->sizeHint();
+            hintHeight = itemSizeHint.height();
+            if (hintHeight + splitterWidth() > height) {
+                hintHeight = item->minimumSize().height();
+
+                if (hintHeight + splitterWidth() > height)
+                    height = hintHeight + splitterWidth();
+            }
         }
 
-        if (updateGeometry)
+        if (updateGeometry) {
             item->setGeometry(QRect(x, y, width, hintHeight));
+            m_items[TopSplitter]->setGeometry(QRect(x + hintHeight, y, splitterWidth(), hintHeight));
+        }
 
-        y += hintHeight;
-        height -= hintHeight;
+        y += hintHeight + splitterWidth();
+        height -= hintHeight + splitterWidth();
     }
 
     if (QLayoutItem* item = m_items[Bottom]) {
-        const QSize itemSizeHint = item->sizeHint();
-        int hintHeight = itemSizeHint.height();
-        if (hintHeight > height) {
-            hintHeight = item->minimumSize().height();
+        int hintHeight;
+        if (m_sizes.contains(Bottom)) {
+            hintHeight = m_sizes[Bottom];
 
-            if (hintHeight > height)
-                height = hintHeight;
+        } else {
+            const QSize itemSizeHint = item->sizeHint();
+            hintHeight = itemSizeHint.height();
+            if (hintHeight + splitterWidth() > height) {
+                hintHeight = item->minimumSize().height();
+
+                if (hintHeight + splitterWidth() > height)
+                    height = hintHeight + splitterWidth();
+            }
         }
 
-        if (updateGeometry)
+        if (updateGeometry) {
             item->setGeometry(QRect(x, y + height - hintHeight, width, hintHeight));
+            m_items[BottomSplitter]->setGeometry(QRect(x, y + height - hintHeight - splitterWidth(), width, splitterWidth()));
+        }
 
-        height -= hintHeight;
+        height -= hintHeight + splitterWidth();
     }
 
     if (QLayoutItem* item = m_items[Central]) {
@@ -855,7 +922,7 @@ void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
 void IdealMainLayout::addWidget(Role role, QWidget * widget)
 {
     if (m_items.contains(role))
-        delete m_items.take(role);
+        removeWidget(role);
 
     if (widget->parent() != parentWidget()) {
         widget->setParent(parentWidget());
@@ -866,7 +933,39 @@ void IdealMainLayout::addWidget(Role role, QWidget * widget)
 
     m_items.insert(role, new QWidgetItem(widget));
 
-    doLayout(geometry());
+    invalidate();
+
+    IdealSplitterHandle* splitter = 0;
+
+    switch (role) {
+        case Left:
+            splitter = new IdealSplitterHandle(Qt::Vertical, parentWidget(), Left);
+            m_items.insert(LeftSplitter, new QWidgetItem(splitter));
+            break;
+
+        case Right:
+            splitter = new IdealSplitterHandle(Qt::Vertical, parentWidget(), Right);
+            m_items.insert(RightSplitter, new QWidgetItem(splitter));
+            break;
+
+        case Bottom:
+            splitter = new IdealSplitterHandle(Qt::Horizontal, parentWidget(), Bottom);
+            m_items.insert(BottomSplitter, new QWidgetItem(splitter));
+            break;
+
+        case Top:
+            splitter = new IdealSplitterHandle(Qt::Horizontal, parentWidget(), Top);
+            m_items.insert(TopSplitter, new QWidgetItem(splitter));
+            break;
+
+        default:
+            break;
+    }
+
+    if (splitter) {
+        connect(splitter, SIGNAL(resize(int, IdealMainLayout::Role)), SLOT(resizeWidget(int, IdealMainLayout::Role)));
+        splitter->show();
+    }
 }
 
 QWidget* IdealMainLayout::removeWidget(Role role)
@@ -876,7 +975,28 @@ QWidget* IdealMainLayout::removeWidget(Role role)
     QWidget* widget = m_items[role]->widget();
     delete m_items.take(role);
 
-    doLayout(geometry());
+    switch (role) {
+        case Left:
+            delete m_items[LeftSplitter]->widget();
+            delete m_items.take(LeftSplitter);
+            break;
+        case Right:
+            delete m_items[RightSplitter]->widget();
+            delete m_items.take(RightSplitter);
+            break;
+        case Bottom:
+            delete m_items[BottomSplitter]->widget();
+            delete m_items.take(BottomSplitter);
+            break;
+        case Top:
+            delete m_items[TopSplitter]->widget();
+            delete m_items.take(TopSplitter);
+            break;
+        default:
+            break;
+    }
+
+    invalidate();
 
     return widget;
 }
@@ -884,6 +1004,7 @@ QWidget* IdealMainLayout::removeWidget(Role role)
 void IdealMainLayout::invalidate()
 {
     m_layoutDirty = true;
+    QLayout::invalidate();
 }
 
 IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
@@ -897,31 +1018,128 @@ IdealCentralWidget::~ IdealCentralWidget()
 
 void IdealCentralWidget::paintEvent(QPaintEvent * event)
 {
-    return;
-
     QPainter p(this);
-    p.fillRect(event->rect(), Qt::red);
+    //p.fillRect(event->rect(), Qt::red);
 
-    if (layout())
+    if (false && layout())
         for (int i = 0; i < layout()->count(); ++i)
             p.drawRect(layout()->itemAt(i)->geometry());
 }
 
-/*Sublime::IdealDockWidget::IdealDockWidget(const QString & title, QWidget * parent)
+/*IdealDockWidget::IdealDockWidget(const QString & title, QWidget * parent)
     : QDockWidget(title, parent)
 {
 }
 
-void Sublime::IdealDockWidget::resizeEvent(QResizeEvent * event)
+void IdealDockWidget::resizeEvent(QResizeEvent * event)
 {
     if (event->oldSize() != event->size())
         kDebug() << "Resized dock" << this << "from" << event->oldSize() << "to" << event->size();
 }
 
-void Sublime::IdealDockWidget::moveEvent(QMoveEvent * event)
+void IdealDockWidget::moveEvent(QMoveEvent * event)
 {
     if (event->oldPos() != event->pos())
         kDebug() << "Moved dock" << this << "from" << event->oldPos() << "to" << event->pos();
 }*/
+
+QLayoutItem* IdealMainLayout::itemForRole(Role role)
+{
+    if (m_items.contains(role))
+        return m_items[role];
+
+    return 0;
+}
+
+IdealMainLayout * IdealCentralWidget::idealLayout() const
+{
+    return static_cast<IdealMainLayout*>(layout());
+}
+
+int IdealMainLayout::splitterWidth() const
+{
+    return parentWidget()->style()->pixelMetric(QStyle::PM_SplitterWidth, 0, parentWidget());
+}
+
+IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole)
+    : QWidget(parent)
+    , m_orientation(orientation)
+    , m_hover(false)
+    , m_resizeRole(resizeRole)
+{
+    setCursor(orientation == Qt::Horizontal ? Qt::SplitVCursor : Qt::SplitHCursor);
+    setMouseTracking(true);
+}
+
+void IdealSplitterHandle::paintEvent(QPaintEvent * event)
+{
+    Q_UNUSED(event)
+
+    QPainter p(this);
+    QStyleOption so(0);
+    so.rect = rect();
+    so.palette = palette();
+    so.state = QStyle::State_Horizontal;
+    if (m_hover)
+        so.state |= QStyle::State_MouseOver;
+    so.state |= QStyle::State_Enabled;
+
+    style()->drawControl(QStyle::CE_Splitter, &so, &p, this);
+}
+
+void IdealSplitterHandle::mouseMoveEvent(QMouseEvent * event)
+{
+    bool hover = rect().contains(event->pos());
+    if (m_hover != hover) {
+        m_hover = hover;
+        update();
+    }
+
+    if (!(event->buttons() & Qt::LeftButton))
+        return;
+
+    int thickness = convert(parentWidget()->mapFromGlobal(event->globalPos())) - m_dragStart;
+
+    switch (m_resizeRole) {
+        case IdealMainLayout::Right:
+            thickness = parentWidget()->size().width() - thickness;
+            break;
+        case IdealMainLayout::Bottom:
+            thickness = parentWidget()->size().height() - thickness;
+            break;
+        default:
+            break;
+    }
+
+    emit resize(thickness, m_resizeRole);
+}
+
+void IdealSplitterHandle::mousePressEvent(QMouseEvent * event)
+{
+    if (event->button() == Qt::LeftButton)
+        m_dragStart = convert(event->pos());
+}
+
+void Sublime::IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role resizeRole)
+{
+    m_sizes[resizeRole] = thickness;
+
+    invalidate();
+}
+
+IdealMainWidget * Sublime::IdealButtonBarWidget::parentWidget() const
+{
+    return static_cast<IdealMainWidget *>(QWidget::parentWidget());
+}
+
+bool Sublime::IdealDockWidgetTitle::isAnchored() const
+{
+    return m_anchor->isChecked();
+}
+
+void Sublime::IdealDockWidgetTitle::setAnchored(bool anchored)
+{
+    m_anchor->setChecked(anchored);
+}
 
 #include "ideal.moc"
