@@ -32,6 +32,19 @@ namespace KDevelop
 
 /**
  * Encapsulates a vcs revision number, date or range of revisions
+ *
+ * The type of the QVariant value depends on the type of the revision,
+ * the following table lists the standard types and the according datatype
+ * in the qvariant:
+ *
+ * <table>
+ * <tr><th>Revision type</th><th>QVariant type</th></tr>
+ * <tr><td>GlobalNumber</td><td>qlonglong</td></tr>
+ * <tr><td>FileNumber</td><td>qlonglong</td></tr>
+ * <tr><td>Date</td><td>QDateTime</td></tr>
+ * <tr><td>Special</td><td>KDevelop::VcsRevision::RevisionSpecialType</td></tr>
+ * </table>
+ *
  */
 class KDEVPLATFORMVCS_EXPORT VcsRevision
 {
