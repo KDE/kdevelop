@@ -86,6 +86,8 @@ public:
 
     virtual int count() const;
 
+    virtual void invalidate();
+
 protected:
     int doVerticalLayout(const QRect &rect, bool updateGeometry = true) const;
 
@@ -95,6 +97,9 @@ private:
     QList<QLayoutItem *> _items;
     Qt::Orientation _orientation;
     int _height;
+    mutable bool m_minSizeDirty : 1;
+    mutable bool m_layoutDirty : 1;
+    mutable QSize m_min;
 };
 
 class IdealButtonBarWidget: public QWidget
@@ -102,9 +107,10 @@ class IdealButtonBarWidget: public QWidget
     Q_OBJECT
 
 public:
-    IdealButtonBarWidget(IdealButtonBarArea area, QWidget *parent = 0);
+    IdealButtonBarWidget(IdealButtonBarArea area, class IdealMainWidget *parent = 0);
 
     QAction *addWidget(QDockWidget *widget);
+    void showWidget(QDockWidget* widget);
 
     Qt::Orientation orientation() const;
 
@@ -129,33 +135,115 @@ private:
     QSplitter* resizeHandle;
 };
 
-class IdealDockWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    IdealDockWidget(const QString& title, QWidget * parent = 0, Qt::WindowFlags flags = 0);
-    IdealDockWidget(QWidget * parent = 0, Qt::WindowFlags flags = 0);
-
-    virtual ~IdealDockWidget();
-
-private:
-    class IdealDockWidgetPrivate;
-    IdealDockWidgetPrivate* const d;
-};
-
 class IdealDockWidgetTitle : public QWidget
 {
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent);
+    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, IdealMainWidget* main);
     virtual ~IdealDockWidgetTitle();
 
 private:
-    class IdealDockWidgetTitlePrivate;
-    IdealDockWidgetTitlePrivate* const d;
+    Qt::Orientation m_orientation;
 };
+
+class IdealCentralWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    IdealCentralWidget(IdealMainWidget* parent);
+    virtual ~IdealCentralWidget();
+
+protected:
+    virtual void paintEvent(QPaintEvent* event);
+};
+
+class IdealMainWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    IdealMainWidget(QWidget* parent);
+
+    void addWidget(Qt::DockWidgetArea area, QDockWidget* dock);
+    void removeWidget(QDockWidget* dock);
+
+    void setCentralWidget(QWidget* widget);
+
+    // TODO can move the object filter here with judicious focusProxy?
+    void centralWidgetFocused();
+
+public Q_SLOTS:
+    void anchorDockWidget(bool checked);
+    
+private:
+    IdealButtonBarWidget *leftBarWidget;
+    IdealButtonBarWidget *rightBarWidget;
+    IdealButtonBarWidget *bottomBarWidget;
+    IdealButtonBarWidget *topBarWidget;
+
+    IdealCentralWidget* mainWidget;
+    class IdealMainLayout* mainLayout;
+
+    QMap<QDockWidget*, Qt::DockWidgetArea> docks;
+};
+
+class IdealMainLayout : public QLayout
+{
+    Q_OBJECT
+
+public:
+    enum Role {
+        Left,
+        Right,
+        Bottom,
+        Top,
+        Central
+    };
+
+    IdealMainLayout(QWidget *parent = 0);
+
+    virtual ~IdealMainLayout();
+
+    void addWidget(Role role, QWidget* widget);
+    QWidget* removeWidget(Role role);
+
+    virtual QSize minimumSize() const;
+
+    virtual QSize sizeHint() const;
+
+    virtual void setGeometry(const QRect &rect);
+
+    virtual void addItem(QLayoutItem *item);
+
+    virtual QLayoutItem* itemAt(int index) const;
+
+    virtual QLayoutItem* takeAt(int index);
+
+    virtual int count() const;
+
+    virtual void invalidate();
+
+protected:
+    void doLayout(const QRect &rect, bool updateGeometry = true) const;
+
+private:
+    QMap<Role, QLayoutItem *> m_items;
+    mutable bool m_layoutDirty;
+    mutable QSize m_min, m_hint;
+};
+
+/*class IdealDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    IdealDockWidget(const QString& title, QWidget* parent);
+
+protected:
+    void moveEvent(QMoveEvent* event);
+    void resizeEvent(QResizeEvent* event);
+};*/
 
 }
 

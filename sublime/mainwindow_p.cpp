@@ -117,21 +117,7 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
 
         d->idealDocks[view] = dock;
 
-        switch (position) {
-            case Left:
-                d->leftBarWidget->addWidget(dock);
-                break;
-            case Right:
-                d->rightBarWidget->addWidget(dock);
-                break;
-            case Bottom:
-                d->bottomBarWidget->addWidget(dock);
-                break;
-            case AllPositions:
-            case Top:
-                // TODO ?
-                break;
-        }
+        d->idealMainWidget->addWidget(d->positionToDockArea(position), dock);
     }
     return Area::ContinueWalker;
 }
@@ -225,7 +211,14 @@ void MainWindowPrivate::clearArea()
     }
     foreach (QDockWidget *dock, docks)
     {
-        m_mainWindow->removeDockWidget(dock);
+        switch (m_uistyle) {
+            case Sublime::MainWindow::Ideal:
+                idealMainWidget->removeWidget(dock);
+                break;
+            case Sublime::MainWindow::QtDockwidget:
+                m_mainWindow->removeDockWidget(dock);
+                break;
+        }
         delete dock;
     }
     docks.clear();
@@ -246,25 +239,14 @@ void MainWindowPrivate::clearArea()
 
 void MainWindowPrivate::recreateCentralWidget()
 {
-    leftBarWidget = new IdealButtonBarWidget(LeftButtonBarArea);
-    rightBarWidget = new IdealButtonBarWidget(RightButtonBarArea);
-    bottomBarWidget = new IdealButtonBarWidget(BottomButtonBarArea);
+    idealMainWidget = new IdealMainWidget(m_mainWindow);
+    m_mainWindow->setCentralWidget(idealMainWidget);
 
-    mainWidget = new QWidget(m_mainWindow);
-    m_mainWindow->setCentralWidget(mainWidget);
+    centralWidget = new QWidget();
+    idealMainWidget->setCentralWidget(centralWidget);
 
-    QGridLayout *grid = new QGridLayout(mainWidget);
-    grid->setMargin(0);
-    grid->setSpacing(0);
-
-    centralWidget = new QWidget(mainWidget);
-    QVBoxLayout* vbl = new QVBoxLayout(centralWidget);
-    centralWidget->setLayout(vbl);
-
-    grid->addWidget(leftBarWidget, 0, 0);
-    grid->addWidget(centralWidget, 0, 1);
-    grid->addWidget(rightBarWidget, 0, 2);
-    grid->addWidget(bottomBarWidget, 1, 0, 1, 3);
+    QVBoxLayout* layout = new QVBoxLayout(centralWidget);
+    centralWidget->setLayout(layout);
 }
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*view*/)
@@ -453,11 +435,9 @@ void MainWindowPrivate::applyVerticalTitleBarMode()
 
 bool MainWindowPrivate::eventFilter(QObject *, QEvent *event)
 {
-    if (event->type() == QEvent::FocusIn) {
-        leftBarWidget->closeAll();
-        rightBarWidget->closeAll();
-        bottomBarWidget->closeAll();
-    }
+    if (event->type() == QEvent::FocusIn)
+        idealMainWidget->centralWidgetFocused();
+
     return false;
 }
 

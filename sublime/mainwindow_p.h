@@ -38,7 +38,7 @@ class View;
 class Container;
 class Controller;
 class AreaIndex;
-class IdealButtonBarWidget;
+class IdealMainWidget;
 
 class MainWindowPrivate: public QObject {
     Q_OBJECT
@@ -93,16 +93,13 @@ public:
     View *activeView;
     View *activeToolView;
 
-    QWidget *mainWidget;
     QWidget *centralWidget;
 
     Sublime::MainWindow::VerticalTabsMode m_verticalTabsMode;
     Sublime::MainWindow::VerticalTitleBarMode m_verticalTitleBarMode;
     Sublime::MainWindow::UserInterfaceStyle m_uistyle;
 
-    IdealButtonBarWidget *leftBarWidget;
-    IdealButtonBarWidget *rightBarWidget;
-    IdealButtonBarWidget *bottomBarWidget;
+    IdealMainWidget *idealMainWidget;
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
