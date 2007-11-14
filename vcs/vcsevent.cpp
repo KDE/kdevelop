@@ -87,7 +87,7 @@ void VcsItemEvent::setRepositoryLocation( const QString& l )
     d->location = l;
 }
 
-void VcsItemEvent::setRepositorCopySourceLocation( const QString& l )
+void VcsItemEvent::setRepositoryCopySourceLocation( const QString& l )
 {
     d->sourceLocation = l;
 }
@@ -97,7 +97,7 @@ void VcsItemEvent::setRevision( const KDevelop::VcsRevision& rev )
     d->revision = rev;
 }
 
-void VcsItemEvent::setRepositorCopySourceRevision( const KDevelop::VcsRevision& rev )
+void VcsItemEvent::setRepositoryCopySourceRevision( const KDevelop::VcsRevision& rev )
 {
     d->sourceRevision = rev;
 }
