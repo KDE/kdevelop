@@ -71,6 +71,7 @@ public:
         Working = 1                /**<The local copy (including any changes made).*/,
         Base = 2                   /**<The repository source of the local copy.*/,
         Previous = 3               /**<The version prior the other one (only valid in functions that take two revisions).*/,
+	Start = 4,                 /**<The first commit in a repository.*/,
         UserSpecialType = 1000     /**<This should be used by subclasses as base for their own special types.*/
     };
 
