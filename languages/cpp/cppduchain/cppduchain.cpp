@@ -104,7 +104,7 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
     ///May have been forward-declared anywhere
     QualifiedIdentifier totalId = context->scopeIdentifier();
     totalId += identifier;
-    return context->findDeclarations(identifier, position);
+    return context->findDeclarations(totalId, position);
   }else{
     ///Only search locally within this context
     return context->findLocalDeclarations(identifier, position);

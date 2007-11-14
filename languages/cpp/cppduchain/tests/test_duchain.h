@@ -84,6 +84,7 @@ private slots:
   void testBaseClasses();
   void testForwardDeclaration();
   void testForwardDeclaration2();
+  void testForwardDeclaration3();
   void testTemplateForwardDeclaration();
   void testHashedStringRepository();
   void testEnum();

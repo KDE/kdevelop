@@ -1504,6 +1504,50 @@ void TestDUChain::testForwardDeclaration2()
   release(top);
 }
 
+void TestDUChain::testForwardDeclaration3()
+{
+  QByteArray method("namespace B {class Test;} B::Test t; namespace B { class Test {int i; class SubTest; };} B::Test::SubTest t2; namespace B {class Test::SubTest{ int i;};}");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 3);
+
+  QVERIFY(dynamic_cast<ForwardDeclaration*>(top->childContexts()[0]->localDeclarations()[0]));
+
+  ForwardDeclaration* forwardDecl = static_cast<ForwardDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
+  QVERIFY(forwardDecl->resolved());
+  QCOMPARE(forwardDecl->resolved(), top->childContexts()[1]->localDeclarations()[0]);
+  
+  CppClassType* type1 = top->childContexts()[0]->localDeclarations()[0]->type<CppClassType>().data();
+  CppClassType* type2 = top->localDeclarations()[0]->type<CppClassType>().data();
+  CppClassType* type3 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>().data();
+  CppClassType* type4 = top->localDeclarations()[1]->type<CppClassType>().data();
+  CppClassType* type5 = top->childContexts()[2]->localDeclarations()[0]->type<CppClassType>().data();
+
+  
+  QVERIFY(type1);
+  QVERIFY(type2);
+  QVERIFY(type3);
+  QVERIFY(type4);
+  QVERIFY(type5);
+
+  Declaration* TestDecl = top->childContexts()[1]->localDeclarations()[0];
+  QVERIFY(TestDecl->internalContext());
+  QCOMPARE(TestDecl->internalContext()->localDeclarations().count(), 2);
+  CppClassType* subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>().data();
+
+  QCOMPARE(type1, type2);
+  kDebug() << type2->toString() << type3->toString();
+  QCOMPARE(type2, type3);
+  QCOMPARE(subType, type4);
+  QCOMPARE(type4, type5);
+  
+  release(top);
+}
+
 void TestDUChain::testTemplateForwardDeclaration()
 {
   QByteArray method("class B{}; template<class T>class Test; Test<B> t; template<class T>class Test {}; ");
