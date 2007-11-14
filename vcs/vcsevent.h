@@ -55,7 +55,7 @@ public:
         Modified         = 1<<2 /**<Item was modified, for example by editing.*/,
         Copied           = 1<<3 /**<Item was copied.*/,
         Merged           = 1<<4 /**<Item had changes merged into it.*/,
-        ContentsModified = 1<<5 /**<Directory was not changed (only contents changed).*/
+        ContentsModified = 1<<5 /**<Directory was not changed (only contents changed).*/,
         Replaced         = 1<<6 /**<Item was replaced.*/
     };
     Q_DECLARE_FLAGS( Actions, Action )
@@ -71,9 +71,9 @@ public:
     Actions actions() const;
 
     void setRepositoryLocation( const QString& );
-    void setRepositorCopySourceLocation( const QString& );
+    void setRepositoryCopySourceLocation( const QString& );
     void setRevision( const KDevelop::VcsRevision& );
-    void setRepositorCopySourceRevision( const KDevelop::VcsRevision& );
+    void setRepositoryCopySourceRevision( const KDevelop::VcsRevision& );
     void setActions( Actions );
 
     VcsItemEvent& operator=( const VcsItemEvent& rhs);
