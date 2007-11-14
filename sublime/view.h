@@ -21,7 +21,7 @@
 
 #include <QtCore/QObject>
 
-#include <sublimeexport.h>
+#include <sublime/sublimeexport.h>
 
 namespace Sublime {
 
@@ -46,6 +46,11 @@ public:
     virtual QWidget *widget(QWidget *parent = 0);
     /**@return true if this view has an initialized widget.*/
     bool hasWidget() const;
+
+    void requestRaise();
+    
+Q_SIGNALS:
+    void raise(Sublime::View*);
 
 protected:
     View(Document *doc);

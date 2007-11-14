@@ -29,6 +29,7 @@ namespace KParts {
 }
 namespace Sublime{
     class Controller;
+    class View;
 }
 
 namespace KDevelop {
@@ -40,7 +41,7 @@ public:
     virtual ~IToolViewFactory() {}
     virtual QWidget* create(QWidget *parent = 0) = 0;
     virtual Qt::DockWidgetArea defaultPosition(const QString &areaName) = 0;
-
+    virtual void viewCreated(Sublime::View* view);
 };
 
 class KDEVPLATFORMINTERFACES_EXPORT IUiController {

@@ -63,7 +63,6 @@ public:
         }
     }
 
-
     Sublime::Area *defaultArea;
     Core *core;
     MainWindow* defaultMainWindow;
@@ -147,8 +146,18 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     kDebug(9501) ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
-    d->defaultArea->addToolView(doc->createView(),
+    Sublime::View* view = doc->createView();
+    d->defaultArea->addToolView(view,
         Sublime::dockAreaToPosition(factory->defaultPosition(d->defaultArea->objectName())));
+
+    connect(view, SIGNAL(raise(Sublime::View*)), SLOT(raiseToolView(Sublime::View*)));
+
+    factory->viewCreated(view);
+}
+
+void KDevelop::UiController::raiseToolView(Sublime::View * view)
+{
+    d->defaultArea->raiseToolView(view);
 }
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
@@ -158,12 +167,11 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     Sublime::ToolDocument *doc = d->factoryDocuments[factory];
 
     ///@todo adymo: on document deletion all its views shall be also deleted
-    foreach (Sublime::View *view, doc->views())
-#ifdef __GNUC__
-#warning removeToolView deletes view - once per area (CID 3303)
-#endif
+    foreach (Sublime::View *view, doc->views()) {
         foreach (Sublime::Area *area, areas())
             area->removeToolView(view);
+        delete view;
+    }
 
     d->factoryDocuments.remove(factory);
     delete doc;

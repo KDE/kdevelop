@@ -105,8 +105,9 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(Qt::DockWidgetArea area, class IdealMainWidget *parent = 0);
 
-    QAction *addWidget(const QString& title, QDockWidget *widget);
+    QWidgetAction *addWidget(const QString& title, QDockWidget *widget);
     void showWidget(QDockWidget* widget);
+    void removeAction(QWidgetAction* action);
 
     IdealMainWidget* parentWidget() const;
 
@@ -134,11 +135,11 @@ class IdealDockWidgetTitle : public QWidget
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, QAction* showAction);
+    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, QWidgetAction* showAction);
     virtual ~IdealDockWidgetTitle();
 
     bool isAnchored() const;
-    void setAnchored(bool anchored);
+    void setAnchored(bool anchored, bool emitSignals);
 
 Q_SIGNALS:
     void anchor(bool anchor);
@@ -177,7 +178,6 @@ public:
     QLayoutItem* itemForRole(Role role);
     QWidget* removeWidget(Role role, bool keepSplitter = false);
     void removeUnanchored();
-    void showLastWidget(Role role, bool show);
 
     int splitterWidth() const;
     int widthForRole(Role role) const;
@@ -200,7 +200,10 @@ public:
 
     virtual void invalidate();
 
-    QWidget* lastDockWidget() const;
+    QDockWidget* lastDockWidget() const;
+    QDockWidget* lastDockWidget(IdealMainLayout::Role role) const;
+
+    IdealMainWidget* mainWidget() const;
 
 public Q_SLOTS:
     void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
@@ -223,6 +226,7 @@ private:
     QHash<Role, Settings> m_settings;
     mutable bool m_layoutDirty, m_sizeHintDirty, m_minDirty;
     mutable QSize m_min, m_hint;
+    int m_splitterWidth;
     QPointer<QWidget> m_lastDockWidget;
 };
 
@@ -240,6 +244,8 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
 };
 
+class View;
+
 class IdealMainWidget : public QWidget
 {
     Q_OBJECT
@@ -247,15 +253,21 @@ class IdealMainWidget : public QWidget
 public:
     IdealMainWidget(QWidget* parent, KActionCollection* ac);
 
-    void addWidget(Qt::DockWidgetArea area, const QString& title, QDockWidget* dock);
-    void removeWidget(QDockWidget* dock);
-
+    // Public api
     void setCentralWidget(QWidget* widget);
+    QWidgetAction* actionForView(View* view) const;
+    void addView(Qt::DockWidgetArea area, View* View);
+    void raiseView(View* view);
+    void removeView(View* view);
+
+    // Internal api
 
     // TODO can move the object filter here with judicious focusProxy?
     void centralWidgetFocused();
 
     void showDockWidget(QDockWidget* widget, bool show);
+    void showDock(IdealMainLayout::Role role, bool show);
+
     void anchorDockWidget(QDockWidget* widget, bool anchor);
 
     IdealMainLayout* mainLayout() const;
@@ -265,10 +277,16 @@ public:
 
     QWidget* firstWidget(IdealMainLayout::Role role) const;
 
+    IdealButtonBarWidget* barForRole(IdealMainLayout::Role role) const;
+
+    void setAnchorActionStatus(bool checked);
+
 public Q_SLOTS:
     void showLeftDock(bool show);
     void showRightDock(bool show);
     void showBottomDock(bool show);
+    void showTopDock(bool show);
+    void hideAllDocks();
     void anchorCurrentDock(bool anchor);
 
 private:
@@ -277,14 +295,14 @@ private:
     IdealButtonBarWidget *bottomBarWidget;
     IdealButtonBarWidget *topBarWidget;
 
-    KAction* m_raiseLeftDock;
-    KAction* m_raiseRightDock;
-    KAction* m_raiseBottomDock;
+    KAction* m_anchorCurrentDock;
 
     IdealCentralWidget* mainWidget;
     class IdealMainLayout* m_mainLayout;
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
+    QMap<View*, QWidgetAction*> views;
+    QMap<QDockWidget*, QWidgetAction*> actions;
 };
 
 class IdealSplitterHandle : public QWidget

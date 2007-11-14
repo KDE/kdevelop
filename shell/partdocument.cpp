@@ -94,9 +94,11 @@ void PartDocument::close()
     foreach (Sublime::Area *area, Core::self()->uiControllerInternal()->areas())
     {
         QList<Sublime::View*> areaViews = area->views();
-        foreach (Sublime::View *view, areaViews)
+        foreach (Sublime::View *view, areaViews) {
             if (views().contains(view))
                 area->removeView(view);
+            delete view;
+        }
     }
 
     Core::self()->documentControllerInternal()->notifyDocumentClosed(this);

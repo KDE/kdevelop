@@ -142,15 +142,15 @@ void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
-void Area::removeView(View *view)
+View* Area::removeView(View *view)
 {
     AreaIndex *index = indexOf(view);
     if (!index)
-        return;
+        return 0;
 
     emit aboutToRemoveView(index, view);
     index->remove(view);
-    delete view;
+    return view;
 }
 
 AreaIndex *Area::indexOf(View *view)
@@ -173,15 +173,20 @@ void Area::addToolView(View *view, Position defaultPosition)
     emit toolViewAdded(view, defaultPosition);
 }
 
-void Area::removeToolView(View *view)
+void Sublime::Area::raiseToolView(View * toolView)
+{
+    emit requestToolViewRaise(toolView);
+}
+
+View* Area::removeToolView(View *view)
 {
     if (!d->toolViews.contains(view))
-        return;
+        return 0;
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
-    delete view;
+    return view;
 }
 
 QList<View*> &Area::toolViews() const
@@ -219,4 +224,3 @@ void Area::setTitle(const QString &title)
 }
 
 #include "area.moc"
-

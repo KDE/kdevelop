@@ -60,7 +60,7 @@ void Example2Main::close()
 {
     if (!activeView() || area()->views().count() == 1)
         return;
-    area()->removeView(activeView());
+    delete area()->removeView(activeView());
 }
 
 #include "example2main.moc"

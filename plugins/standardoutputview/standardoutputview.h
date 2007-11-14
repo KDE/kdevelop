@@ -71,6 +71,7 @@ Q_SIGNALS:
 
 private:
     class StandardOutputViewPrivate* const d;
+    friend class StandardOutputViewViewFactory;
 };
 
 #endif // STANDARDOUTPUTVIEW_H

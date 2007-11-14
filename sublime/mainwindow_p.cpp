@@ -93,31 +93,10 @@ Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sub
 
 Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view, Sublime::Position position)
 {
-    if (!d->idealDocks.contains(view))
+    if (!d->idealViews.contains(view))
     {
-        QDockWidget *dock = new QDockWidget(view->document()->title(), d->m_mainWindow);
-        if( d->m_verticalTitleBarMode ==  Sublime::MainWindow::AllDocks )
-        {
-            dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
-        }
-        else if( ( position == Sublime::Bottom || position == Sublime::Top )
-                    && d->m_verticalTitleBarMode == Sublime::MainWindow::HorizontalDocks )
-        {
-            dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
-        }else if ( ( position == Sublime::Left || position == Sublime::Right )
-                    && d->m_verticalTitleBarMode == Sublime::MainWindow::VerticalDocks  )
-        {
-            dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
-        }
-
-        d->docks.append(dock);
-        KAcceleratorManager::setNoAccel(dock);
-
-        dock->setWidget(view->widget());
-
-        d->idealDocks[view] = dock;
-
-        d->idealMainWidget->addWidget(d->positionToDockArea(position), view->document()->title(), dock);
+        d->idealViews << view;
+        d->idealMainWidget->addView(d->positionToDockArea(position), view);
     }
     return Area::ContinueWalker;
 }
@@ -206,23 +185,21 @@ void MainWindowPrivate::clearArea()
     //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
     foreach (View *view, area->toolViews())
     {
+        if (m_uistyle == Sublime::MainWindow::Ideal)
+            idealMainWidget->removeView(view);
+
         if (view->hasWidget())
             view->widget()->setParent(0);
     }
-    foreach (QDockWidget *dock, docks)
-    {
-        switch (m_uistyle) {
-            case Sublime::MainWindow::Ideal:
-                idealMainWidget->removeWidget(dock);
-                break;
-            case Sublime::MainWindow::QtDockwidget:
-                m_mainWindow->removeDockWidget(dock);
-                break;
+
+    if (m_uistyle == Sublime::MainWindow::QtDockwidget)
+        foreach (QDockWidget *dock, docks) {
+            m_mainWindow->removeDockWidget(dock);
+            delete dock;
         }
-        delete dock;
-    }
+
     docks.clear();
-    idealDocks.clear();
+    idealViews.clear();
     viewDocks.clear();
 
     //reparent all view widgets to 0 to prevent their deletion together with central
@@ -267,6 +244,11 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*vi
         delete container;
     }
     area->walkViews(viewCreator, index);
+}
+
+void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
+{
+    idealMainWidget->raiseView(view);
 }
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)

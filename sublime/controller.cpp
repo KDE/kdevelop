@@ -127,6 +127,8 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
     MainWindowOperator::setArea(mainWindow, areaToShow);
     connect(areaToShow, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         mainWindow, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(areaToShow, SIGNAL(requestToolViewRaise(Sublime::View*)),
+        mainWindow, SLOT(raiseToolView(Sublime::View*)));
     connect(areaToShow, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
         mainWindow, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
     connect(areaToShow, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),

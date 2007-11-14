@@ -102,6 +102,7 @@ void OutputWidget::changeModel( int id )
         connect( listview, SIGNAL(activated(const QModelIndex&)),
                  this, SLOT( activate(const QModelIndex&) ) );
         addTab( listview, m_outputView->registeredTitle(id) );
+        setCurrentWidget( listview );
     }
 }
 

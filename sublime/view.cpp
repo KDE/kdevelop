@@ -53,7 +53,11 @@ bool View::hasWidget() const
     return d->widget != 0;
 }
 
+void Sublime::View::requestRaise()
+{
+    emit raise(this);
+}
+
 }
 
 #include "view.moc"
-

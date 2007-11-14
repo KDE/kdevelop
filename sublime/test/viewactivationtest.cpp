@@ -164,13 +164,13 @@ void ViewActivationTest::testActivationAfterViewRemoval()
     QCOMPARE(mw.activeView(), view211);
 
     //check what happens if we remove a view which is not the only one in container
-    area->removeView(view211);
+    delete area->removeView(view211);
     QCOMPARE(mw.activeView(), view212);
 
     //check what happens if we remove a view which is alone in container
     mw.activateView(view231);
     QCOMPARE(mw.activeView(), view231);
-    area->removeView(view231);
+    delete area->removeView(view231);
     QCOMPARE(mw.activeView(), view221);
 }
 

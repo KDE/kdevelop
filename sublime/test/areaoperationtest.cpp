@@ -341,7 +341,7 @@ void AreaOperationTest::testSimpleViewAdditionAndDeletion()
 "), 1, 1);
 
     //now remove view and check that area is valid
-    m_area1->removeView(view);
+    delete m_area1->removeView(view);
 
     checkAreaViewsDisplay(&mw, m_area1, QString("\n\
 [ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n\
@@ -350,7 +350,7 @@ void AreaOperationTest::testSimpleViewAdditionAndDeletion()
     //now remove all other views one by one and leave an empty container
     QList<View*> list(m_area1->views());
     foreach (View *view, list)
-        m_area1->removeView(view);
+        delete m_area1->removeView(view);
 
     checkAreaViewsDisplay(&mw, m_area1, QString("\n\
 [ horizontal splitter ]\n\
@@ -393,7 +393,7 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
 "), 5, 8+1);
 
     //now delete view221
-    area->removeView(view221);
+    delete area->removeView(view221);
 
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ vertical splitter ]\n\
@@ -407,7 +407,7 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
 
     //remove one more view, this time the one inside non-empty container
     View *view211 = findNamedView(area, "view2.1.1");
-    m_area2->removeView(view211);
+    delete m_area2->removeView(view211);
 
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ vertical splitter ]\n\
@@ -420,7 +420,7 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
 "), 4, 6+1);
 
     //and now remove all remaining views one by one
-    m_area2->removeView(findNamedView(area, "view2.1.2"));
+    delete m_area2->removeView(findNamedView(area, "view2.1.2"));
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ vertical splitter ]\n\
     [ view2.4.1 ]\n\
@@ -429,19 +429,19 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
         [ view2.3.1 ]\n\
 "), 3, 4+1);
 
-    m_area2->removeView(findNamedView(area, "view2.4.1"));
+    delete m_area2->removeView(findNamedView(area, "view2.4.1"));
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ horizontal splitter ]\n\
     [ view2.5.1 ]\n\
     [ view2.3.1 ]\n\
 "), 2, 2+1);
 
-    m_area2->removeView(findNamedView(area, "view2.5.1"));
+    delete m_area2->removeView(findNamedView(area, "view2.5.1"));
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ view2.3.1 ]\n\
 "), 1, 1);
 
-    m_area2->removeView(findNamedView(area, "view2.3.1"));
+    delete m_area2->removeView(findNamedView(area, "view2.3.1"));
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ horizontal splitter ]\n\
 "), 0, 1);

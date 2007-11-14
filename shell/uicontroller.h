@@ -66,8 +66,12 @@ public:
 
     void mainWindowDeleted(MainWindow* mw);
 
+public Q_SLOTS:
+    void raiseToolView(Sublime::View * view);
+
 private:
     class UiControllerPrivate* const d;
+    friend class UiControllerPrivate;
     Q_PRIVATE_SLOT(d, void widgetChanged(QWidget*,QWidget*))
 };
 

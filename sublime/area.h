@@ -75,8 +75,8 @@ public:
     /**Adds the @p view to the area splitting the @p viewToSplit using
     given @p orientation.*/
     void addView(View *view, View *viewToSplit, Qt::Orientation orientation);
-    /**Removes the @p view from the area. Also deletes the view.*/
-    void removeView(View *view);
+    /**Removes the @p view from the area.*/
+    View* removeView(View *view);
     /**@return the list of all views in this area in no particular order. To
     process the views in ordered manner (tree walk) use @ref walkViews method.
     This method is added only for convenience.*/
@@ -92,8 +92,10 @@ public:
     the proper position for the toolview when necessary. If it has no configuration
     for this view, it will use @p defaultPosition.*/
     void addToolView(View *toolView, Position defaultPosition);
-    /**Removes the toolview from the area. Also deletes the toolview.*/
-    void removeToolView(View *toolView);
+    /**Removes the toolview from the area.*/
+    View* removeToolView(View *toolView);
+    /**Raise tool view.*/
+    void raiseToolView(View *toolView);
     /**@return the list of toolviews in the area. No particular sort order is guaranteed.*/
     QList<View*> &toolViews() const;
     /**@return the current position of @p toolView in the area.*/
@@ -159,6 +161,8 @@ Q_SIGNALS:
     void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*);
     /**Emitted when a new toolview is added to the area.*/
     void toolViewAdded(Sublime::View*, Sublime::Position);
+    /**Emitted when a toolview is requesting to be raised.*/
+    void requestToolViewRaise(Sublime::View*);
     /**Emitted when a toolview is going to be removed from the area.*/
     void aboutToRemoveToolView(Sublime::View*, Sublime::Position);
 

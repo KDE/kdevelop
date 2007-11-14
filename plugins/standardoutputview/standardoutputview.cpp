@@ -38,9 +38,22 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
+#include "sublime/view.h"
+
 K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
 K_EXPORT_PLUGIN(StandardOutputViewFactory("kdevstandardoutputview"))
 
+class StandardOutputViewPrivate
+{
+public:
+    class StandardOutputViewViewFactory* m_factory;
+    QMap<int, QAbstractItemModel* > m_models;
+    QMap<int, QAbstractItemDelegate* > m_delegates;
+    QMap<int, QString> m_titles;
+    QList<int> m_ids;
+    QMap<int, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
+    QList<Sublime::View*> m_views;
+};
 
 class StandardOutputViewViewFactory : public KDevelop::IToolViewFactory{
 public:
@@ -65,19 +78,13 @@ public:
     {
         return Qt::BottomDockWidgetArea;
     }
+
+    virtual void viewCreated(Sublime::View* view)
+    {
+        m_part->d->m_views << view;
+    }
 private:
     StandardOutputView *m_part;
-};
-
-class StandardOutputViewPrivate
-{
-public:
-    StandardOutputViewViewFactory* m_factory;
-    QMap<int, QAbstractItemModel* > m_models;
-    QMap<int, QAbstractItemDelegate* > m_delegates;
-    QMap<int, QString> m_titles;
-    QList<int> m_ids;
-    QMap<int, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
@@ -122,6 +129,10 @@ int StandardOutputView::registerView( const QString& title,
     d->m_titles[newid] = title;
     d->m_models[newid] = 0;
     d->m_behaviours[newid] = behaviour;
+
+    foreach (Sublime::View* view, d->m_views)
+        view->requestRaise();
+
     return newid;
 }
 

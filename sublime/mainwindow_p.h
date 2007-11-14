@@ -21,6 +21,7 @@
 
 #include <QMap>
 #include <QObject>
+#include <QSet>
 
 #include "area.h"
 #include "sublimedefs.h"
@@ -87,7 +88,7 @@ public:
     Area *area;
     QList<QDockWidget*> docks;
     QMap<View*, QDockWidget*> viewDocks;
-    QMap<View*, QWidget*> idealDocks;
+    QSet<View*> idealViews;
     QMap<View*, Container*> viewContainers;
 
     View *activeView;
@@ -103,6 +104,7 @@ public:
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
+    void raiseToolView(Sublime::View* view);
     void aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view);
     void toolViewAdded(Sublime::View *toolView, Sublime::Position position);
     void aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position position);

@@ -29,3 +29,8 @@ IUiController::~IUiController()
 }
 
 }
+
+void KDevelop::IToolViewFactory::viewCreated(Sublime::View * view)
+{
+    Q_UNUSED(view)
+}
