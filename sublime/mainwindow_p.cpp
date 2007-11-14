@@ -117,7 +117,7 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
 
         d->idealDocks[view] = dock;
 
-        d->idealMainWidget->addWidget(d->positionToDockArea(position), dock);
+        d->idealMainWidget->addWidget(d->positionToDockArea(position), view->document()->title(), dock);
     }
     return Area::ContinueWalker;
 }
@@ -239,7 +239,7 @@ void MainWindowPrivate::clearArea()
 
 void MainWindowPrivate::recreateCentralWidget()
 {
-    idealMainWidget = new IdealMainWidget(m_mainWindow);
+    idealMainWidget = new IdealMainWidget(m_mainWindow, m_mainWindow->actionCollection());
     m_mainWindow->setCentralWidget(idealMainWidget);
 
     centralWidget = new QWidget();

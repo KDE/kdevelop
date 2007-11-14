@@ -24,6 +24,9 @@
 
 #include <QtGui>
 
+class KAction;
+class KActionCollection;
+
 namespace Sublime {
 
 enum IdealButtonBarArea { // ### move me
@@ -109,13 +112,15 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(IdealButtonBarArea area, class IdealMainWidget *parent = 0);
 
-    QAction *addWidget(QDockWidget *widget);
+    QAction *addWidget(const QString& title, QDockWidget *widget);
     void showWidget(QDockWidget* widget);
 
     IdealMainWidget* parentWidget() const;
 
     Qt::Orientation orientation() const;
 
+    void showLast();
+    
 public Q_SLOTS:
     void closeAll();
 
@@ -137,6 +142,7 @@ private:
     QHash<QWidgetAction *, IdealToolButton *> _buttons;
     QSplitter* resizeHandle;
     QDockWidget* m_currentlyShown;
+    QDockWidget* m_lastShown;
     bool m_anchored;
 };
 
@@ -183,9 +189,9 @@ class IdealMainWidget : public QWidget
     Q_OBJECT
 
 public:
-    IdealMainWidget(QWidget* parent);
+    IdealMainWidget(QWidget* parent, KActionCollection* ac);
 
-    void addWidget(Qt::DockWidgetArea area, QDockWidget* dock);
+    void addWidget(Qt::DockWidgetArea area, const QString& title, QDockWidget* dock);
     void removeWidget(QDockWidget* dock);
 
     void setCentralWidget(QWidget* widget);
@@ -200,12 +206,19 @@ public:
 
 public Q_SLOTS:
     void anchorDockWidget(bool checked);
+    void showLeftDock(bool show);
+    void showRightDock(bool show);
+    void showBottomDock(bool show);
     
 private:
     IdealButtonBarWidget *leftBarWidget;
     IdealButtonBarWidget *rightBarWidget;
     IdealButtonBarWidget *bottomBarWidget;
     IdealButtonBarWidget *topBarWidget;
+
+    KAction* m_raiseLeftDock;
+    KAction* m_raiseRightDock;
+    KAction* m_raiseBottomDock;
 
     IdealCentralWidget* mainWidget;
     class IdealMainLayout* m_mainLayout;

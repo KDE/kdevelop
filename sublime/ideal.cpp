@@ -23,6 +23,9 @@
 
 #include <KIcon>
 #include <kdebug.h>
+#include <klocale.h>
+#include <KActionCollection>
+#include <KAction>
 
 using namespace Sublime;
 
@@ -256,16 +259,17 @@ IdealButtonBarWidget::IdealButtonBarWidget(IdealButtonBarArea area, IdealMainWid
     , _area(area)
     , resizeHandle(new QSplitter(orientation(), this))
     , m_currentlyShown(0)
+    , m_lastShown(0)
     , m_anchored(false)
 {
     (void) new IdealButtonBarLayout(orientation(), this);
 }
 
-QAction *IdealButtonBarWidget::addWidget(QDockWidget *dock)
+QAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock)
 {
     QWidgetAction *action = new QWidgetAction(this);
     action->setCheckable(true);
-    action->setText(dock->widget()->windowTitle());
+    action->setText(title);
     action->setIcon(dock->widget()->windowIcon());
 
     dock->setAutoFillBackground(true);
@@ -314,6 +318,8 @@ void IdealButtonBarWidget::_k_showWidget(bool checked)
 
     QDockWidget *widget = static_cast<QDockWidget*>(action->defaultWidget());
     Q_ASSERT(widget);
+
+    m_lastShown = m_currentlyShown;
 
     if (m_currentlyShown && (m_currentlyShown != widget || !checked)) {
         if (m_currentlyShown && m_anchored)
@@ -550,7 +556,7 @@ void IdealDockWidgetTitle::slotAnchor(bool anchored)
     emit anchor(anchored);
 }
 
-IdealMainWidget::IdealMainWidget(QWidget * parent)
+IdealMainWidget::IdealMainWidget(QWidget * parent, KActionCollection* ac)
     : QWidget(parent)
 {
     leftBarWidget = new IdealButtonBarWidget(LeftButtonBarArea);
@@ -579,25 +585,43 @@ IdealMainWidget::IdealMainWidget(QWidget * parent)
     grid->addWidget(bottomBarWidget, 2, 0, 1, 3);
     grid->addWidget(topBarWidget, 0, 0, 1, 3);
     setLayout(grid);
+
+    m_raiseLeftDock = new KAction(i18n("Show Left Dock"), this);
+    m_raiseLeftDock->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_L);
+    m_raiseLeftDock->setCheckable(true);
+    connect(m_raiseLeftDock, SIGNAL(triggered(bool)), SLOT(showLeftDock(bool)));
+    ac->addAction("switch_left_dock", m_raiseLeftDock);
+
+    m_raiseRightDock = new KAction(i18n("Switch Right Dock"), this);
+    m_raiseRightDock->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_R);
+    m_raiseRightDock->setCheckable(true);
+    connect(m_raiseRightDock, SIGNAL(triggered(bool)), SLOT(showRightDock(bool)));
+    ac->addAction("switch_right_dock", m_raiseRightDock);
+
+    m_raiseBottomDock = new KAction(i18n("Switch Bottom Dock"), this);
+    m_raiseBottomDock->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_B);
+    m_raiseBottomDock->setCheckable(true);
+    connect(m_raiseBottomDock, SIGNAL(triggered(bool)), SLOT(showBottomDock(bool)));
+    ac->addAction("switch_bottom_dock", m_raiseBottomDock);
 }
 
-void IdealMainWidget::addWidget(Qt::DockWidgetArea area, QDockWidget * dock)
+void IdealMainWidget::addWidget(Qt::DockWidgetArea area, const QString& title, QDockWidget * dock)
 {
     switch (area) {
         case Qt::LeftDockWidgetArea:
-            leftBarWidget->addWidget(dock);
+            leftBarWidget->addWidget(title, dock);
             leftBarWidget->show();
             break;
         case Qt::RightDockWidgetArea:
-            rightBarWidget->addWidget(dock);
+            rightBarWidget->addWidget(title, dock);
             rightBarWidget->show();
             break;
         case Qt::BottomDockWidgetArea:
-            bottomBarWidget->addWidget(dock);
+            bottomBarWidget->addWidget(title, dock);
             bottomBarWidget->show();
             break;
         case Qt::TopDockWidgetArea:
-            topBarWidget->addWidget(dock);
+            topBarWidget->addWidget(title, dock);
             topBarWidget->show();
             break;
         default:
@@ -1191,6 +1215,19 @@ IdealMainLayout * IdealMainWidget::mainLayout() const
 IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
 {
     return mainWidget;
+}
+
+void Sublime::IdealMainWidget::showLeftDock(bool show)
+{
+    
+}
+
+void Sublime::IdealMainWidget::showBottomDock(bool show)
+{
+}
+
+void Sublime::IdealMainWidget::showRightDock(bool show)
+{
 }
 
 #include "ideal.moc"
