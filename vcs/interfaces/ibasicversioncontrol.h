@@ -44,10 +44,6 @@ class VcsLocation;
  * offer functionality that works solely on the server see the
  * IRepositoryVersionControl interface
  *
- * Note: The showXXX methods <b>always</b> create a GUI element for the result,
- * while the non-show versions allow to retrieve the result of the action
- * via the VcsJob class
- *
  */
 
 class IBasicVersionControl
@@ -178,18 +174,6 @@ public:
                                        = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
-     * Shows a diff between the two locations at the given revisions
-     *
-     */
-    virtual VcsJob* showDiff( const VcsLocation& localOrRepoLocationSrc,
-                          const VcsLocation& localOrRepoLocationDst,
-                          const VcsRevision& srcRevision,
-                          const VcsRevision& dstRevision,
-                          VcsDiff::Type = KDevelop::VcsDiff::DiffUnified,
-                          IBasicVersionControl::RecursionMode recursion
-                                       = KDevelop::IBasicVersionControl::Recursive ) = 0;
-
-    /**
      * Retrieve the history of a given local url
      *
      * @param rev List @p rev and earlier. The default is HEAD.
@@ -212,14 +196,6 @@ public:
                          const VcsRevision& limit ) = 0;
 
     /**
-     * Show the history of a given local url
-     *
-     * @param rev List @p rev and earlier. The default is HEAD.
-     */
-    virtual VcsJob* showLog( const KUrl& localLocation,
-                             const VcsRevision& rev ) = 0;
-
-    /**
      * Annotate each line of the given local url at the given revision
      * with information about who changed it and when.
      * @param localLocation local file that should be annotated.
@@ -227,15 +203,6 @@ public:
      */
     virtual VcsJob* annotate( const KUrl& localLocation,
                               const VcsRevision& rev ) = 0;
-
-    /**
-     * Annotate each line of the given local url at the given revision
-     * with information about who changed it and when and show the information.
-     * @param localLocation local file that should be annotated.
-     * @param rev Revision that should be annotated.
-     */
-    virtual VcsJob* showAnnotate( const KUrl& localLocation,
-                                  const VcsRevision& rev ) = 0;
 
     /**
      * merge/integrate the changes between src and dest into the given local file

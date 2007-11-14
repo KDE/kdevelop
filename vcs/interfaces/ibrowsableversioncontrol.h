@@ -62,14 +62,6 @@ public:
                          const VcsRevision& limit ) = 0;
 
     /**
-     * Show the history of the repository location
-     *
-     * @param rev List @p rev and earlier. The default is HEAD.
-     */
-    virtual VcsJob* showLog( const QString& repoLocation,
-                             const VcsRevision& rev ) = 0;
-
-    /**
      * Get the changes made by a particular revision
      *
      * @param rev Show information about the revision @p rev.
@@ -85,21 +77,6 @@ public:
                             const QString& repoLocation ) = 0;
 
     /**
-     * Show the changes made by a particular revision
-     *
-     * @param rev Show information about the revision @p rev.
-     * @param repoLocation Any repository path that specifies what VCS server
-     * is to be queried. For VCS's that support global versioning, the actual
-     * path is unimportant (and ignored), as long as it contains the repoitory
-     * root. Otherwise look up the change associated with the requested path.
-     *
-     * @note VcsRevision objects with type VcsRevision::FileNumber may store the
-     * associated path internally, in which case @p repoLocation may be ignored.
-     */
-    virtual VcsJob* showChange( const VcsRevision& rev,
-                                const QString& repoLocation ) = 0;
-
-    /**
      * Retrieve a list of entries in the given repository location
      */
     virtual VcsJob* ls( const QString& repoLocation, const VcsRevision& rev ) = 0;
@@ -109,17 +86,6 @@ public:
      */
     virtual VcsJob* cat( const QString& repoLocation, const VcsRevision& rev ) = 0;
 
-
-    /**
-     * Retrieve a list of entries in the given repository location
-     */
-    virtual VcsJob* showLs( const QString& repoLocation, const VcsRevision& rev ) = 0;
-
-    /**
-     * Retrieve a file from the repository without checking it out
-     */
-    virtual VcsJob* showCat( const QString& repoLocation, const VcsRevision& rev ) = 0;
-};
 
 }
 
