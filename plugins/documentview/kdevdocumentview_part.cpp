@@ -79,7 +79,7 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const QVariantList&
 
     factory = new KDevDocumentViewPartFactory( this );
 
-    core()->uiController()->addToolView( "Document View", factory );
+    core()->uiController()->addToolView( i18n("Documents"), factory );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
