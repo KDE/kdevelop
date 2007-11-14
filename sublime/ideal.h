@@ -119,20 +119,13 @@ public:
 
     Qt::Orientation orientation() const;
 
-    void showLast();
-    
-public Q_SLOTS:
-    void closeAll();
-
 private Q_SLOTS:
-    void _k_showWidget(bool checked);
+    void showWidget(bool checked);
     void anchor(bool anchor);
 
+    void actionToggled(bool state);
+
 protected:
-    void reposition();
-
-    void reposition(QWidget *widget);
-
     virtual void resizeEvent(QResizeEvent *event);
 
     virtual void actionEvent(QActionEvent *event);
@@ -140,10 +133,7 @@ protected:
 private:
     IdealButtonBarArea _area;
     QHash<QWidgetAction *, IdealToolButton *> _buttons;
-    QSplitter* resizeHandle;
-    QDockWidget* m_currentlyShown;
-    QDockWidget* m_lastShown;
-    bool m_anchored;
+    QActionGroup* _actions;
 };
 
 class IdealDockWidgetTitle : public QWidget
@@ -151,7 +141,7 @@ class IdealDockWidgetTitle : public QWidget
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent);
+    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, QAction* showAction);
     virtual ~IdealDockWidgetTitle();
 
     bool isAnchored() const;
@@ -159,6 +149,7 @@ public:
 
 Q_SIGNALS:
     void anchor(bool anchor);
+    void close();
 
 private Q_SLOTS:
     void slotAnchor(bool anchor);
@@ -168,7 +159,76 @@ private:
     QToolButton* m_anchor;
 };
 
-class IdealMainLayout;
+class IdealMainLayout : public QLayout
+{
+    Q_OBJECT
+
+public:
+    enum Role {
+        Left,
+        Right,
+        Bottom,
+        Top,
+        LeftSplitter,
+        RightSplitter,
+        BottomSplitter,
+        TopSplitter,
+        Central
+    };
+
+    IdealMainLayout(QWidget *parent = 0);
+
+    virtual ~IdealMainLayout();
+
+    void addWidget(QWidget* widget, Role role);
+    QLayoutItem* itemForRole(Role role);
+    QWidget* removeWidget(Role role, bool keepSplitter = false);
+    void removeUnanchored();
+    void showLastWidget(Role role, bool show);
+
+    int splitterWidth() const;
+    int widthForRole(Role role) const;
+
+    bool isAreaAnchored(Role role) const;
+
+    virtual QSize minimumSize() const;
+
+    virtual QSize sizeHint() const;
+
+    virtual void setGeometry(const QRect &rect);
+
+    virtual void addItem(QLayoutItem *item);
+
+    virtual QLayoutItem* itemAt(int index) const;
+
+    virtual QLayoutItem* takeAt(int index);
+
+    virtual int count() const;
+
+    virtual void invalidate();
+
+public Q_SLOTS:
+    void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
+    void anchorWidget(bool anchor, IdealMainLayout::Role resizeRole);
+
+protected:
+    void doLayout(const QRect &rect, bool updateGeometry = true) const;
+
+private:
+    struct Settings
+    {
+        Settings();
+
+        int width;
+        bool anchored;
+        QPointer<QWidget> last;
+    };
+
+    QMap<Role, QWidgetItem*> m_items;
+    QHash<Role, Settings> m_settings;
+    mutable bool m_layoutDirty;
+    mutable QSize m_min, m_hint;
+};
 
 class IdealCentralWidget : public QWidget
 {
@@ -199,17 +259,22 @@ public:
     // TODO can move the object filter here with judicious focusProxy?
     void centralWidgetFocused();
 
+    void showDockWidget(QDockWidget* widget, bool show);
     void anchorDockWidget(QDockWidget* widget, bool anchor);
 
     IdealMainLayout* mainLayout() const;
     IdealCentralWidget* internalCentralWidget() const;
 
+    void anchorDockWidget(bool checked, IdealButtonBarWidget* bar);
+
+    QWidget* firstWidget(IdealMainLayout::Role role) const;
+
 public Q_SLOTS:
-    void anchorDockWidget(bool checked);
+    //void anchorDockWidget(bool checked);
     void showLeftDock(bool show);
     void showRightDock(bool show);
     void showBottomDock(bool show);
-    
+
 private:
     IdealButtonBarWidget *leftBarWidget;
     IdealButtonBarWidget *rightBarWidget;
@@ -224,74 +289,6 @@ private:
     class IdealMainLayout* m_mainLayout;
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
-};
-
-class IdealMainLayout : public QLayout
-{
-    Q_OBJECT
-
-public:
-    enum Role {
-        Left,
-        Right,
-        Bottom,
-        Top,
-        LeftSplitter,
-        RightSplitter,
-        BottomSplitter,
-        TopSplitter,
-        Central
-    };
-
-    IdealMainLayout(QWidget *parent = 0);
-
-    virtual ~IdealMainLayout();
-
-    void addWidget(Role role, QWidget* widget);
-    QLayoutItem* itemForRole(Role role);
-    QWidget* removeWidget(Role role);
-
-    int splitterWidth() const;
-    int widthForRole(Role role) const;
-
-    virtual QSize minimumSize() const;
-
-    virtual QSize sizeHint() const;
-
-    virtual void setGeometry(const QRect &rect);
-
-    virtual void addItem(QLayoutItem *item);
-
-    virtual QLayoutItem* itemAt(int index) const;
-
-    virtual QLayoutItem* takeAt(int index);
-
-    virtual int count() const;
-
-    virtual void invalidate();
-
-protected:
-    void doLayout(const QRect &rect, bool updateGeometry = true) const;
-
-private Q_SLOTS:
-    void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
-    
-private:
-    /*class IdealLayoutItem : public QWidgetItem
-    {
-    public:
-        IdealLayoutItem(QWidget* widget) : QWidgetItem(widget), m_thickness(-1) {}
-        void setThickness(int thickness) { m_thickness = thickness; }
-        void offsetThickness(int thickness) { m_thickness += thickness; }
-        inline int thicknes() { return m_thickness; }
-    private:
-        int m_thickness;
-    };*/
-
-    QMap<Role, QWidgetItem*> m_items;
-    QHash<Role, int> m_sizes;
-    mutable bool m_layoutDirty;
-    mutable QSize m_min, m_hint;
 };
 
 /*class IdealDockWidget : public QDockWidget
