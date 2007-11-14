@@ -279,6 +279,7 @@ QAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock
         IdealDockWidgetTitle* title = new IdealDockWidgetTitle(orientation(), dock, action);
         dock->setTitleBarWidget(title);
         connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
+        //dock->setWindowOpacity(0.8);
     }
 
     action->setDefaultWidget(dock);
@@ -662,6 +663,8 @@ void IdealMainWidget::showDockWidget(QDockWidget * dock, bool show)
 IdealMainLayout::IdealMainLayout(QWidget * parent)
     : QLayout(parent)
     , m_layoutDirty(true)
+    , m_sizeHintDirty(true)
+    , m_minDirty(true)
 {
     setMargin(0);
 }
@@ -672,60 +675,7 @@ IdealMainLayout::~ IdealMainLayout()
 
 QSize IdealMainLayout::minimumSize() const
 {
-    if (m_layoutDirty)
-        doLayout(geometry());
-
-    return m_min;
-}
-
-QLayoutItem * IdealMainLayout::itemAt(int index) const
-{
-    if (index >= m_items.count())
-        return 0;
-
-    return *(m_items.begin() + index);
-}
-
-void IdealMainLayout::addItem(QLayoutItem * item)
-{
-    Q_UNUSED(item)
-
-    // Uh-oh...??
-    Q_ASSERT(false);
-}
-
-void IdealMainLayout::setGeometry(const QRect & rect)
-{
-    if (m_layoutDirty || rect != geometry()) {
-        doLayout(rect);
-        QLayout::setGeometry(rect);
-    }
-}
-
-QSize IdealMainLayout::sizeHint() const
-{
-    if (m_layoutDirty)
-        doLayout(geometry());
-
-    return m_hint;
-}
-
-QLayoutItem * IdealMainLayout::takeAt(int index)
-{
-    QLayoutItem* item = itemAt(index);
-    m_items.erase(m_items.begin() + index);
-    return item;
-}
-
-int IdealMainLayout::count() const
-{
-    return m_items.count();
-}
-
-void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
-{
-    // Calculate minimum size
-    {
+    if (m_minDirty) {
         int minHeight = 0;
         int softMinHeight = 0;
         int minWidth = 0;
@@ -762,10 +712,39 @@ void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
         }
 
         m_min = QSize(minHeight, minWidth);
+        m_minDirty = true;
     }
 
-    // Calculate the size hint
-    {
+    return m_min;
+}
+
+QLayoutItem * IdealMainLayout::itemAt(int index) const
+{
+    if (index >= m_items.count())
+        return 0;
+
+    return *(m_items.begin() + index);
+}
+
+void IdealMainLayout::addItem(QLayoutItem * item)
+{
+    Q_UNUSED(item)
+
+    // Uh-oh...??
+    Q_ASSERT(false);
+}
+
+void IdealMainLayout::setGeometry(const QRect & rect)
+{
+    if (m_layoutDirty || rect != geometry()) {
+        doLayout(rect);
+        QLayout::setGeometry(rect);
+    }
+}
+
+QSize IdealMainLayout::sizeHint() const
+{
+    if (m_sizeHintDirty) {
         int minHeight = 0;
         int softMinHeight = 0;
         int minWidth = 0;
@@ -802,10 +781,26 @@ void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
         }
 
         m_hint = QSize(minHeight, minWidth);
+        m_sizeHintDirty = false;
     }
 
-    //kDebug() << "min" << m_min << "hint" << m_hint;
+    return m_hint;
+}
 
+QLayoutItem * IdealMainLayout::takeAt(int index)
+{
+    QLayoutItem* item = itemAt(index);
+    m_items.erase(m_items.begin() + index);
+    return item;
+}
+
+int IdealMainLayout::count() const
+{
+    return m_items.count();
+}
+
+void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
+{
     int x = rect.x() + margin();
     int y = rect.y() + margin();
     int width = rect.width() - margin();
@@ -1051,6 +1046,8 @@ void IdealMainLayout::removeUnanchored()
 void IdealMainLayout::invalidate()
 {
     m_layoutDirty = true;
+    m_sizeHintDirty = true;
+    m_minDirty = true;
     QLayout::invalidate();
 }
 
@@ -1113,7 +1110,7 @@ void IdealSplitterHandle::paintEvent(QPaintEvent * event)
     QStyleOption so(0);
     so.rect = rect();
     so.palette = palette();
-    so.state = QStyle::State_Horizontal;
+    so.state = (m_orientation == Qt::Horizontal ? QStyle::State_None : QStyle::State_Horizontal);
     if (m_hover)
         so.state |= QStyle::State_MouseOver;
     so.state |= QStyle::State_Enabled;

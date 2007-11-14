@@ -221,7 +221,7 @@ private:
 
     QMap<Role, QWidgetItem*> m_items;
     QHash<Role, Settings> m_settings;
-    mutable bool m_layoutDirty;
+    mutable bool m_layoutDirty, m_sizeHintDirty, m_minDirty;
     mutable QSize m_min, m_hint;
     QPointer<QWidget> m_lastDockWidget;
 };
