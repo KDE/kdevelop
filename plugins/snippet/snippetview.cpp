@@ -55,6 +55,7 @@ SnippetView::SnippetView(SnippetPart* part, QWidget* parent)
 //     snippetTree->setModel( SnippetStore::instance() );
 
     snippetTree->header()->hide();
+    setWindowTitle( i18n("Snippets") );
 }
 
 SnippetView::~SnippetView()
