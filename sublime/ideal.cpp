@@ -29,7 +29,7 @@
 
 using namespace Sublime;
 
-IdealToolButton::IdealToolButton(IdealButtonBarArea area, QWidget *parent)
+IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     : QToolButton(parent), _area(area)
 {
     setCheckable(true);
@@ -43,7 +43,7 @@ IdealToolButton::IdealToolButton(IdealButtonBarArea area, QWidget *parent)
 
 Qt::Orientation IdealToolButton::orientation() const
 {
-    if (_area == LeftButtonBarArea || _area == RightButtonBarArea)
+    if (_area == Qt::LeftDockWidgetArea || _area == Qt::RightDockWidgetArea)
         return Qt::Vertical;
     
     return Qt::Horizontal;
@@ -63,7 +63,7 @@ QSize IdealToolButton::sizeHint() const
 
 void IdealToolButton::paintEvent(QPaintEvent *event)
 {
-    if (_area == TopButtonBarArea || _area == BottomButtonBarArea) {
+    if (_area == Qt::TopDockWidgetArea || _area == Qt::BottomDockWidgetArea) {
         QToolButton::paintEvent(event);
     } else {
         QStyleOptionToolButton opt;
@@ -79,7 +79,7 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
         
         QPainter p(this);
     
-        if (_area == LeftButtonBarArea) {
+        if (_area == Qt::LeftDockWidgetArea) {
             p.translate(0, height());
             p.rotate(-90);
         } else {
@@ -254,7 +254,7 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
     return y + currentLineHeight + margin();
 }
 
-IdealButtonBarWidget::IdealButtonBarWidget(IdealButtonBarArea area, IdealMainWidget *parent)
+IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWidget *parent)
     : QWidget(parent)
     , _area(area)
     , _actions(new QActionGroup(this))
@@ -292,7 +292,7 @@ QAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock
 
 Qt::Orientation IdealButtonBarWidget::orientation() const
 {
-    if (_area == LeftButtonBarArea || _area == RightButtonBarArea)
+    if (_area == Qt::LeftDockWidgetArea || _area == Qt::RightDockWidgetArea)
         return Qt::Vertical;
 
     return Qt::Horizontal;
@@ -340,7 +340,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             connect(button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)));
-            //connect(action->defaultWidget(), SIGNAL(visibilityChanged(bool)), button, SLOT(setChecked(bool)));
         }
     } break;
 
@@ -373,7 +372,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     }
 }
 
-void Sublime::IdealButtonBarWidget::actionToggled(bool state)
+void IdealButtonBarWidget::actionToggled(bool state)
 {
     QWidgetAction* action = qobject_cast<QWidgetAction*>(sender());
     Q_ASSERT(action);
@@ -412,7 +411,7 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
     m_anchor->setFocusPolicy(Qt::NoFocus);
     m_anchor->setIcon(KIcon("document-decrypt"));
     m_anchor->setCheckable(true);
-    connect(m_anchor, SIGNAL(clicked(bool)), SLOT(slotAnchor(bool)));
+    connect(m_anchor, SIGNAL(toggled(bool)), SLOT(slotAnchor(bool)));
     layout->addWidget(m_anchor);
 
     /*QToolButton* floatb = new QToolButton(this);
@@ -458,16 +457,16 @@ void IdealDockWidgetTitle::slotAnchor(bool anchored)
 IdealMainWidget::IdealMainWidget(QWidget * parent, KActionCollection* ac)
     : QWidget(parent)
 {
-    leftBarWidget = new IdealButtonBarWidget(LeftButtonBarArea);
+    leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea);
     leftBarWidget->hide();
 
-    rightBarWidget = new IdealButtonBarWidget(RightButtonBarArea);
+    rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea);
     rightBarWidget->hide();
 
-    bottomBarWidget = new IdealButtonBarWidget(BottomButtonBarArea);
+    bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea);
     bottomBarWidget->hide();
 
-    topBarWidget = new IdealButtonBarWidget(TopButtonBarArea);
+    topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea);
     topBarWidget->hide();
 
     mainWidget = new IdealCentralWidget(this);
@@ -502,6 +501,12 @@ IdealMainWidget::IdealMainWidget(QWidget * parent, KActionCollection* ac)
     m_raiseBottomDock->setCheckable(true);
     connect(m_raiseBottomDock, SIGNAL(triggered(bool)), SLOT(showBottomDock(bool)));
     ac->addAction("switch_bottom_dock", m_raiseBottomDock);
+
+    KAction* action = new KAction(i18n("Anchor Current Dock"), this);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_A);
+    action->setCheckable(true);
+    connect(action, SIGNAL(triggered(bool)), SLOT(anchorCurrentDock(bool)));
+    ac->addAction("anchor_current_dock", action);
 }
 
 void IdealMainWidget::addWidget(Qt::DockWidgetArea area, const QString& title, QDockWidget * dock)
@@ -563,7 +568,20 @@ void IdealMainWidget::setCentralWidget(QWidget * widget)
     m_mainLayout->addWidget(widget, IdealMainLayout::Central);
 }
 
-void Sublime::IdealMainWidget::anchorDockWidget(bool checked, IdealButtonBarWidget * bar)
+QWidget* Sublime::IdealMainLayout::lastDockWidget() const
+{
+    return m_lastDockWidget;
+}
+
+void IdealMainWidget::anchorCurrentDock(bool anchor)
+{
+    if (QDockWidget* dw = qobject_cast<QDockWidget*>(m_mainLayout->lastDockWidget())) {
+        IdealDockWidgetTitle* title = static_cast<IdealDockWidgetTitle*>(dw->titleBarWidget());
+        title->setAnchored(anchor);
+    }
+}
+
+void IdealMainWidget::anchorDockWidget(bool checked, IdealButtonBarWidget * bar)
 {
     if (bar == leftBarWidget)
         m_mainLayout->anchorWidget(checked, IdealMainLayout::Left);
@@ -602,7 +620,7 @@ void IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
     }
 }
 
-void Sublime::IdealMainWidget::showDockWidget(QDockWidget * dock, bool show)
+void IdealMainWidget::showDockWidget(QDockWidget * dock, bool show)
 {
     Q_ASSERT(docks.contains(dock));
 
@@ -971,8 +989,10 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
         splitter->show();
     }
 
-    if (role != Central)
+    if (role != Central) {
+        m_lastDockWidget = widget;
         m_settings[role].last = widget;
+    }
 
     widget->show();
     widget->setFocus();
@@ -1013,7 +1033,7 @@ QWidget* IdealMainLayout::removeWidget(Role role, bool keepSplitter)
     return widget;
 }
 
-void Sublime::IdealMainLayout::removeUnanchored()
+void IdealMainLayout::removeUnanchored()
 {
     if (m_items.contains(Left) && !m_settings[Left].anchored)
         removeWidget(Left);
@@ -1056,23 +1076,6 @@ void IdealCentralWidget::paintEvent(QPaintEvent * event)
         for (int i = 0; i < layout()->count(); ++i)
             p.drawRect(layout()->itemAt(i)->geometry());
 }
-
-/*IdealDockWidget::IdealDockWidget(const QString & title, QWidget * parent)
-    : QDockWidget(title, parent)
-{
-}
-
-void IdealDockWidget::resizeEvent(QResizeEvent * event)
-{
-    if (event->oldSize() != event->size())
-        kDebug() << "Resized dock" << this << "from" << event->oldSize() << "to" << event->size();
-}
-
-void IdealDockWidget::moveEvent(QMoveEvent * event)
-{
-    if (event->oldPos() != event->pos())
-        kDebug() << "Moved dock" << this << "from" << event->oldPos() << "to" << event->pos();
-}*/
 
 QLayoutItem* IdealMainLayout::itemForRole(Role role)
 {
@@ -1158,7 +1161,7 @@ void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role resizeRo
     invalidate();
 }
 
-void Sublime::IdealMainLayout::anchorWidget(bool anchor, IdealMainLayout::Role resizeRole)
+void IdealMainLayout::anchorWidget(bool anchor, IdealMainLayout::Role resizeRole)
 {
     m_settings[resizeRole].anchored = anchor;
 
@@ -1188,28 +1191,28 @@ IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
     return mainWidget;
 }
 
-void Sublime::IdealMainWidget::showLeftDock(bool show)
+void IdealMainWidget::showLeftDock(bool show)
 {
     m_mainLayout->showLastWidget(IdealMainLayout::Left, show);
 }
 
-void Sublime::IdealMainWidget::showBottomDock(bool show)
+void IdealMainWidget::showBottomDock(bool show)
 {
     m_mainLayout->showLastWidget(IdealMainLayout::Bottom, show);
 }
 
-void Sublime::IdealMainWidget::showRightDock(bool show)
+void IdealMainWidget::showRightDock(bool show)
 {
     m_mainLayout->showLastWidget(IdealMainLayout::Right, show);
 }
 
-Sublime::IdealMainLayout::Settings::Settings()
+IdealMainLayout::Settings::Settings()
 {
     width = 250;
     anchored = false;
 }
 
-void Sublime::IdealMainLayout::showLastWidget(Role role, bool show)
+void IdealMainLayout::showLastWidget(Role role, bool show)
 {
     if (!show) {
         if (m_items.contains(role))
@@ -1223,7 +1226,7 @@ void Sublime::IdealMainLayout::showLastWidget(Role role, bool show)
     }
 }
 
-QWidget * Sublime::IdealMainWidget::firstWidget(IdealMainLayout::Role role) const
+QWidget * IdealMainWidget::firstWidget(IdealMainLayout::Role role) const
 {
     switch (role) {
         case IdealMainLayout::Left:
@@ -1251,7 +1254,7 @@ QWidget * Sublime::IdealMainWidget::firstWidget(IdealMainLayout::Role role) cons
     }
 }
 
-bool Sublime::IdealMainLayout::isAreaAnchored(Role role) const
+bool IdealMainLayout::isAreaAnchored(Role role) const
 {
     return m_settings[role].anchored;
 }

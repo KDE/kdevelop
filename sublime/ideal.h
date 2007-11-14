@@ -29,13 +29,6 @@ class KActionCollection;
 
 namespace Sublime {
 
-enum IdealButtonBarArea { // ### move me
-    LeftButtonBarArea,
-    RightButtonBarArea,
-    TopButtonBarArea,
-    BottomButtonBarArea
-};
-
 class IdealToolButton: public QToolButton
 {
     Q_OBJECT
@@ -43,7 +36,7 @@ class IdealToolButton: public QToolButton
     enum { DefaultButtonSize = 20 };
 
 public:
-    IdealToolButton(IdealButtonBarArea area, QWidget *parent = 0);
+    IdealToolButton(Qt::DockWidgetArea area, QWidget *parent = 0);
 
     Qt::Orientation orientation() const;
 
@@ -53,7 +46,7 @@ protected:
     virtual void paintEvent(QPaintEvent *event);
 
 private:
-    IdealButtonBarArea _area;
+    Qt::DockWidgetArea _area;
 };
 
 class IdealButtonBarLayout: public QLayout
@@ -110,7 +103,7 @@ class IdealButtonBarWidget: public QWidget
     Q_OBJECT
 
 public:
-    IdealButtonBarWidget(IdealButtonBarArea area, class IdealMainWidget *parent = 0);
+    IdealButtonBarWidget(Qt::DockWidgetArea area, class IdealMainWidget *parent = 0);
 
     QAction *addWidget(const QString& title, QDockWidget *widget);
     void showWidget(QDockWidget* widget);
@@ -131,7 +124,7 @@ protected:
     virtual void actionEvent(QActionEvent *event);
 
 private:
-    IdealButtonBarArea _area;
+    Qt::DockWidgetArea _area;
     QHash<QWidgetAction *, IdealToolButton *> _buttons;
     QActionGroup* _actions;
 };
@@ -207,6 +200,8 @@ public:
 
     virtual void invalidate();
 
+    QWidget* lastDockWidget() const;
+
 public Q_SLOTS:
     void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
     void anchorWidget(bool anchor, IdealMainLayout::Role resizeRole);
@@ -228,6 +223,7 @@ private:
     QHash<Role, Settings> m_settings;
     mutable bool m_layoutDirty;
     mutable QSize m_min, m_hint;
+    QPointer<QWidget> m_lastDockWidget;
 };
 
 class IdealCentralWidget : public QWidget
@@ -270,10 +266,10 @@ public:
     QWidget* firstWidget(IdealMainLayout::Role role) const;
 
 public Q_SLOTS:
-    //void anchorDockWidget(bool checked);
     void showLeftDock(bool show);
     void showRightDock(bool show);
     void showBottomDock(bool show);
+    void anchorCurrentDock(bool anchor);
 
 private:
     IdealButtonBarWidget *leftBarWidget;
@@ -290,17 +286,6 @@ private:
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
 };
-
-/*class IdealDockWidget : public QDockWidget
-{
-    Q_OBJECT
-public:
-    IdealDockWidget(const QString& title, QWidget* parent);
-
-protected:
-    void moveEvent(QMoveEvent* event);
-    void resizeEvent(QResizeEvent* event);
-};*/
 
 class IdealSplitterHandle : public QWidget
 {
