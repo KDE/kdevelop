@@ -32,6 +32,7 @@
 #include <QToolButton>
 
 #include <klocale.h>
+#include <kicon.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -56,6 +57,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPart* part)
 {
   setObjectName("Problem Reporter Tree");
   setWindowTitle(i18n("Problem Reporter"));
+  setWindowIcon(KIcon("info"));
   setRootIsDecorated(false);
   setWhatsThis( i18n( "Problem Reporter" ) );
   setModel(new ProblemModel(m_part));

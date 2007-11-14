@@ -36,6 +36,7 @@
 OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     : KTabWidget( parent ), m_outputView(view)
 {
+    setWindowTitle(i18n("Output View"));
     m_closeButton = new QToolButton( this );
     connect( m_closeButton, SIGNAL( clicked() ),
              this, SLOT( closeActiveView() ) );

@@ -92,7 +92,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl)
 
     d->m_factory = new KDevSubversionViewFactory(this);
-    core()->uiController()->addToolView("Subversion", d->m_factory);
+    core()->uiController()->addToolView(i18n("Subversion"), d->m_factory);
     // init svn core
     d->m_impl = new SubversionCore(this, this);
     // init output tmp dir

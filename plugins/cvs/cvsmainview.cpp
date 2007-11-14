@@ -23,6 +23,7 @@ CvsMainView::CvsMainView( CvsPart *part, QWidget* parent )
    m_part(part)
 {
     Ui::CvsMainViewBase::setupUi(this);
+    setWindowTitle(i18n("CVS"));
 
     // CvsPart will notify when a job finished
     connect(m_part, SIGNAL(jobFinished(KJob*)),

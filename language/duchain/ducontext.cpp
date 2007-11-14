@@ -517,10 +517,10 @@ void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
 {
   ENSURE_CAN_WRITE
 
-  if( d->isThisImportedBy(context) ) {
-    kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url() << ") into " << this << " (" << url() << ")";
-    return;
-  }
+  //if( d->isThisImportedBy(context) ) {
+    //kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url() << ") into " << this << " (" << url() << ")";
+    //return;
+  //}
   
   if (d->m_importedParentContexts.contains(DUContextPointer(context)))
     return;

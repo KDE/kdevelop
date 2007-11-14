@@ -344,7 +344,7 @@ void IdealButtonBarWidget::_k_showWidget(bool checked)
     }
 }
 
-void Sublime::IdealButtonBarWidget::anchor(bool anchor)
+void IdealButtonBarWidget::anchor(bool anchor)
 {
     if (m_anchored != anchor) {
         m_anchored = anchor;
@@ -526,12 +526,12 @@ IdealDockWidgetTitle::~ IdealDockWidgetTitle()
 {
 }
 
-bool Sublime::IdealDockWidgetTitle::isAnchored() const
+bool IdealDockWidgetTitle::isAnchored() const
 {
     return m_anchor->isChecked();
 }
 
-void Sublime::IdealDockWidgetTitle::setAnchored(bool anchored)
+void IdealDockWidgetTitle::setAnchored(bool anchored)
 {
     m_anchor->setChecked(anchored);
     if (anchored)
@@ -540,7 +540,7 @@ void Sublime::IdealDockWidgetTitle::setAnchored(bool anchored)
         m_anchor->setIcon(KIcon("document-decrypt"));
 }
 
-void Sublime::IdealDockWidgetTitle::slotAnchor(bool anchored)
+void IdealDockWidgetTitle::slotAnchor(bool anchored)
 {
     if (anchored)
         m_anchor->setIcon(KIcon("document-encrypt"));
@@ -631,7 +631,7 @@ void IdealMainWidget::anchorDockWidget(bool checked)
     anchorDockWidget(dock, checked);
 }
 
-void Sublime::IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
+void IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
 {
     Q_ASSERT(docks.contains(dock));
 
@@ -1163,19 +1163,19 @@ void IdealSplitterHandle::mousePressEvent(QMouseEvent * event)
         m_dragStart = convert(event->pos());
 }
 
-void Sublime::IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role resizeRole)
+void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role resizeRole)
 {
     m_sizes[resizeRole] = thickness;
 
     invalidate();
 }
 
-IdealMainWidget * Sublime::IdealButtonBarWidget::parentWidget() const
+IdealMainWidget * IdealButtonBarWidget::parentWidget() const
 {
     return static_cast<IdealMainWidget *>(QWidget::parentWidget());
 }
 
-int Sublime::IdealMainLayout::widthForRole(Role role) const
+int IdealMainLayout::widthForRole(Role role) const
 {
     if (m_sizes.contains(role))
         return m_sizes[role];
@@ -1183,12 +1183,12 @@ int Sublime::IdealMainLayout::widthForRole(Role role) const
     return -1;
 }
 
-IdealMainLayout * Sublime::IdealMainWidget::mainLayout() const
+IdealMainLayout * IdealMainWidget::mainLayout() const
 {
     return m_mainLayout;
 }
 
-IdealCentralWidget * Sublime::IdealMainWidget::internalCentralWidget() const
+IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
 {
     return mainWidget;
 }

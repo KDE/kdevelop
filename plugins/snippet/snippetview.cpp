@@ -33,6 +33,8 @@ SnippetView::SnippetView(SnippetPart* part, QWidget* parent)
 {
     Ui::SnippetViewBase::setupUi(this);
 
+    setWindowTitle(i18n("Snippets"));
+
     tbClear->setIcon(KIcon("clear-left"));
     tbFilter->setIcon(KIcon("filter"));
 

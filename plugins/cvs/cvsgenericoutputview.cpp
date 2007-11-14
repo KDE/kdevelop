@@ -21,7 +21,6 @@ CvsGenericOutputView::CvsGenericOutputView(CvsPart *part, CvsJob* job, QWidget* 
         connect(job, SIGNAL( result(KJob*) ),
                 this, SLOT( slotJobFinished(KJob*) ));
     }
-    setWindowTitle( i18n("CVS") );
 }
 
 CvsGenericOutputView::~CvsGenericOutputView()

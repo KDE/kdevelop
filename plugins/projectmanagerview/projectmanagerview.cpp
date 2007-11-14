@@ -81,6 +81,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
         : QWidget( parent ),
         d(new ProjectManagerPrivate)
 {
+    setWindowTitle("Project Manager");
+
     d->m_part = _part;
     QVBoxLayout *vbox = new QVBoxLayout( this );
     vbox->setMargin( 0 );

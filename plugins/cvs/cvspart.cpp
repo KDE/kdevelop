@@ -76,7 +76,7 @@ CvsPart::CvsPart( QObject *parent, const QVariantList & )
     d = new CvsPartPrivate();
 
     d->m_factory = new KDevCvsViewFactory(this);
-    core()->uiController()->addToolView("CVS", d->m_factory);
+    core()->uiController()->addToolView(i18n("CVS"), d->m_factory);
 
     setXMLFile("kdevcvs.rc");
     setupActions();
