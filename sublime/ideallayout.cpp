@@ -445,6 +445,9 @@ void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
                             rect.setHeight(hintDimension + splitterWidth());
                     }
                     break;
+
+                default:
+                    break;
             }
         }
 
@@ -468,6 +471,9 @@ void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
                 item->setGeometry(QRect(rect.x(), rect.y() + rect.height() - hintDimension, rect.width(), hintDimension));
                 m_items[BottomSplitter]->setGeometry(QRect(rect.x(), rect.y() + rect.height() - hintDimension - splitterWidth(), rect.width(), splitterWidth()));
                 break;
+
+                default:
+                    break;
         }
 
         if (m_settings[role].anchored) {
@@ -486,6 +492,9 @@ void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
 
                 case Bottom:
                     rect.setHeight(rect.height() - hintDimension + splitterWidth());
+                    break;
+
+                default:
                     break;
             }
         }
