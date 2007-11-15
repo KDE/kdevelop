@@ -115,7 +115,7 @@ QWidgetAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget
     action->setIcon(dock->widget()->windowIcon());
 
     dock->setAutoFillBackground(true);
-    //dock->setFocusProxy(widget);
+    dock->setFocusProxy(dock->widget());
 
     if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)
         dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
@@ -125,7 +125,6 @@ QWidgetAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget
         dock->setTitleBarWidget(title);
         connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
         connect(title, SIGNAL(maximize(bool)), SLOT(maximize(bool)));
-        //dock->setWindowOpacity(0.8);
     }
 
     action->setDefaultWidget(dock);
@@ -589,6 +588,9 @@ void IdealSplitterHandle::paintEvent(QPaintEvent * event)
     Q_UNUSED(event)
 
     QPainter p(this);
+
+    p.fillRect(event->rect(), palette().color(backgroundRole()));
+
     QStyleOption so(0);
     so.rect = rect();
     so.palette = palette();
