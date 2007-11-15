@@ -176,6 +176,10 @@ public:
     /**
      * Retrieve the history of a given local url
      *
+     * The resulting VcsJob will emit the resultsReady signal every time new
+     * log events are available. The fetchResults method will return a QList<QVariant>
+     * where the QVariant is a KDevelop::VcsEvent.
+     *
      * @param rev List @p rev and earlier. The default is HEAD.
      * @param limit Restrict to the most recent @p limit entries. Note that the
      * limit is @e advisory and may be ignored.
@@ -186,6 +190,10 @@ public:
 
     /**
      * Retrieve the history of a given local url
+     *
+     * The resulting VcsJob will emit the resultsReady signal every time new
+     * log events are available. The fetchResults method will return a QList<QVariant>
+     * where the QVariant is a KDevelop::VcsEvent.
      *
      * @param rev List @p rev and earlier. The default is HEAD.
      * @param limit Do not show entries earlier than @p limit. Note that the
