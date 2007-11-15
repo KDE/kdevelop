@@ -97,7 +97,8 @@ public:
         RightSplitter,
         BottomSplitter,
         TopSplitter,
-        Central
+        Central,
+        None
     };
 
     IdealMainLayout(QWidget *parent = 0);
@@ -136,8 +137,9 @@ public:
     class IdealMainWidget* mainWidget() const;
 
 public Q_SLOTS:
-    void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
-    void anchorWidget(bool anchor, IdealMainLayout::Role resizeRole);
+    void resizeWidget(int thickness, IdealMainLayout::Role role);
+    void anchorWidget(bool anchor, IdealMainLayout::Role role);
+    void maximizeWidget(bool maximize, IdealMainLayout::Role role);
 
     void loadSettings();
 
@@ -166,6 +168,7 @@ private:
     int m_topOwnsTopRight;
     int m_bottomOwnsBottomLeft;
     int m_bottomOwnsBottomRight;
+    Role m_maximizedWidget;
 };
 
 IdealMainLayout::Role roleForArea(Qt::DockWidgetArea area);

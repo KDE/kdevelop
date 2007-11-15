@@ -31,7 +31,7 @@
 
 using namespace Sublime;
 
-IdealMainLayout::Role Sublime::roleForArea(Qt::DockWidgetArea area)
+IdealMainLayout::Role Sublime ::roleForArea(Qt::DockWidgetArea area)
 {
     switch (area) {
         case Qt::LeftDockWidgetArea:
@@ -52,7 +52,7 @@ IdealMainLayout::Role Sublime::roleForArea(Qt::DockWidgetArea area)
     }
 }
 
-Qt::DockWidgetArea Sublime::areaForRole(IdealMainLayout::Role role)
+Qt::DockWidgetArea Sublime ::areaForRole(IdealMainLayout::Role role)
 {
     switch (role) {
         case IdealMainLayout::Left:
@@ -254,6 +254,7 @@ IdealMainLayout::IdealMainLayout(QWidget * parent)
     , m_layoutDirty(true)
     , m_sizeHintDirty(true)
     , m_minDirty(true)
+    , m_maximizedWidget(None)
 {
     setMargin(0);
     m_splitterWidth = parent->style()->pixelMetric(QStyle::PM_SplitterWidth, 0, parentWidget());
@@ -393,6 +394,11 @@ int IdealMainLayout::count() const
 
 void IdealMainLayout::doLayout(QRect rect) const
 {
+    if (m_maximizedWidget != None) {
+        m_items[m_maximizedWidget]->setGeometry(rect);
+        return;
+    }
+
     if (m_topOwnsTopLeft)
         if (m_topOwnsTopRight)
             if (m_bottomOwnsBottomLeft)
@@ -465,7 +471,7 @@ void IdealMainLayout::doLayout(QRect rect) const
     m_layoutDirty = false;
 }
 
-void Sublime::IdealMainLayout::layout(Role role1, Role role2, Role role3, Role role4, QRect & rect) const
+void IdealMainLayout::layout(Role role1, Role role2, Role role3, Role role4, QRect & rect) const
 {
     layoutItem(role1, rect);
     layoutItem(role2, rect);
@@ -473,7 +479,7 @@ void Sublime::IdealMainLayout::layout(Role role1, Role role2, Role role3, Role r
     layoutItem(role4, rect);
 }
 
-void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
+void IdealMainLayout::layoutItem(Role role, QRect& rect) const
 {
     if (QLayoutItem* item = m_items[role]) {
         int hintDimension;
@@ -563,6 +569,9 @@ void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
 
 void IdealMainLayout::addWidget(QWidget * widget, Role role)
 {
+    if (m_maximizedWidget != None)
+        maximizeWidget(false, m_maximizedWidget);
+
     bool splitterKept = false;
     if (m_items.contains(role))
         splitterKept = removeWidget(role, true);
@@ -606,7 +615,8 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
 
     if (splitter) {
         connect(splitter, SIGNAL(resize(int, IdealMainLayout::Role)), SLOT(resizeWidget(int, IdealMainLayout::Role)));
-        splitter->show();
+        if (m_maximizedWidget == None)
+            splitter->show();
     }
 
     if (role != Central) {
@@ -622,6 +632,9 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
 
 QWidget* IdealMainLayout::removeWidget(Role role, bool keepSplitter)
 {
+    if (m_maximizedWidget == role)
+        maximizeWidget(false, m_maximizedWidget);
+
     Q_ASSERT(m_items.contains(role));
 
     QWidget* widget = m_items[role]->widget();
@@ -649,7 +662,6 @@ QWidget* IdealMainLayout::removeWidget(Role role, bool keepSplitter)
                 break;
         }
 
-    //invalidate();
     widget->hide();
 
     return widget;
@@ -691,16 +703,38 @@ int IdealMainLayout::splitterWidth() const
     return m_splitterWidth;
 }
 
-void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role resizeRole)
+void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
 {
-    m_settings[resizeRole].width = thickness;
+    m_settings[role].width = thickness;
 
     invalidate();
 }
 
-void IdealMainLayout::anchorWidget(bool anchor, IdealMainLayout::Role resizeRole)
+void IdealMainLayout::anchorWidget(bool anchor, IdealMainLayout::Role role)
 {
-    m_settings[resizeRole].anchored = anchor;
+    m_settings[role].anchored = anchor;
+
+    invalidate();
+}
+
+void IdealMainLayout::maximizeWidget(bool maximize, IdealMainLayout::Role role)
+{
+    if (maximize) {
+        m_maximizedWidget = role;
+
+        for (Role role = Left; role <= Central; role = static_cast<Role>(role + 1))
+            if (role != m_maximizedWidget)
+                if (m_items.contains(role))
+                    m_items[role]->widget()->hide();
+
+    } else {
+        for (Role role = Left; role <= Central; role = static_cast<Role>(role + 1))
+            if (role != m_maximizedWidget)
+                if (m_items.contains(role))
+                    m_items[role]->widget()->show();
+
+        m_maximizedWidget = None;
+    }
 
     invalidate();
 }
@@ -729,7 +763,7 @@ IdealMainWidget * IdealMainLayout::mainWidget() const
     return static_cast<IdealMainWidget*>(parentWidget()->parent());
 }
 
-void Sublime::IdealMainLayout::loadSettings()
+void IdealMainLayout::loadSettings()
 {
     KConfigGroup cg(KGlobal::config(), "UiSettings");
 

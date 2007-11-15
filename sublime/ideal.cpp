@@ -121,6 +121,7 @@ QWidgetAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget
         IdealDockWidgetTitle* title = new IdealDockWidgetTitle(orientation(), dock, action);
         dock->setTitleBarWidget(title);
         connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
+        connect(title, SIGNAL(maximize(bool)), SLOT(maximize(bool)));
         //dock->setWindowOpacity(0.8);
     }
 
@@ -168,6 +169,11 @@ void IdealButtonBarWidget::resizeEvent(QResizeEvent *event)
 void IdealButtonBarWidget::anchor(bool anchor)
 {
     parentWidget()->anchorDockWidget(anchor, this);
+}
+
+void IdealButtonBarWidget::maximize(bool maximized)
+{
+    parentWidget()->maximizeDockWidget(maximized, this);
 }
 
 void IdealButtonBarWidget::actionEvent(QActionEvent *event)
@@ -262,10 +268,12 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
     connect(m_anchor, SIGNAL(toggled(bool)), SLOT(slotAnchor(bool)));
     layout->addWidget(m_anchor);
 
-    /*QToolButton* floatb = new QToolButton(this);
-    floatb->setFocusPolicy(Qt::NoFocus);
-    floatb->setIcon(KIcon("exec"));
-    layout->addWidget(floatb);*/
+    m_maximize = new QToolButton(this);
+    m_maximize->setFocusPolicy(Qt::NoFocus);
+    m_maximize->setIcon(KIcon("arrow-up-double"));
+    m_maximize->setCheckable(true);
+    connect(m_maximize, SIGNAL(toggled(bool)), SLOT(slotMaximize(bool)));
+    layout->addWidget(m_maximize);
 
     QToolButton* close = new QToolButton(this);
     close->setFocusPolicy(Qt::NoFocus);
@@ -306,6 +314,21 @@ void IdealDockWidgetTitle::slotAnchor(bool anchored)
         m_anchor->setIcon(KIcon("document-decrypt"));
 
     emit anchor(anchored);
+}
+
+void IdealDockWidgetTitle::setMaximized(bool maximized)
+{
+    m_maximize->setChecked(maximized);
+}
+
+void IdealDockWidgetTitle::slotMaximize(bool maximized)
+{
+    if (maximized)
+        m_maximize->setIcon(KIcon("arrow-down-double"));
+    else
+        m_maximize->setIcon(KIcon("arrow-up-double"));
+
+    emit maximize(maximized);
 }
 
 IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
@@ -372,8 +395,16 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     m_anchorCurrentDock = action = new KAction(i18n("Anchor Current Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_A);
     action->setCheckable(true);
+    action->setEnabled(false);
     connect(action, SIGNAL(triggered(bool)), SLOT(anchorCurrentDock(bool)));
     ac->addAction("anchor_current_dock", action);
+
+    m_maximizeCurrentDock = action = new KAction(i18n("Maximize Current Dock"), this);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_M);
+    action->setCheckable(true);
+    action->setEnabled(false);
+    connect(action, SIGNAL(triggered(bool)), SLOT(maximizeCurrentDock(bool)));
+    ac->addAction("maximize_current_dock", action);
 }
 
 void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
@@ -446,20 +477,35 @@ void IdealMainWidget::anchorCurrentDock(bool anchor)
 {
     if (QDockWidget* dw = m_mainLayout->lastDockWidget()) {
         IdealDockWidgetTitle* title = static_cast<IdealDockWidgetTitle*>(dw->titleBarWidget());
+
+        if (!dw->isVisible())
+            return setAnchorActionStatus(title->isAnchored());
+
         title->setAnchored(anchor, true);
+    }
+}
+
+void IdealMainWidget::maximizeCurrentDock(bool maximized)
+{
+    if (QDockWidget* dw = m_mainLayout->lastDockWidget()) {
+        if (!dw->isVisible())
+            return setMaximizeActionStatus(false);
+
+        IdealDockWidgetTitle* title = static_cast<IdealDockWidgetTitle*>(dw->titleBarWidget());
+        title->setMaximized(maximized);
     }
 }
 
 void IdealMainWidget::anchorDockWidget(bool checked, IdealButtonBarWidget * bar)
 {
-    if (bar == leftBarWidget)
-        m_mainLayout->anchorWidget(checked, IdealMainLayout::Left);
-    else if (bar == rightBarWidget)
-        m_mainLayout->anchorWidget(checked, IdealMainLayout::Right);
-    else if (bar == topBarWidget)
-        m_mainLayout->anchorWidget(checked, IdealMainLayout::Top);
-    else if (bar == bottomBarWidget)
-        m_mainLayout->anchorWidget(checked, IdealMainLayout::Bottom);
+    m_mainLayout->anchorWidget(checked, roleForBar(bar));
+}
+
+void IdealMainWidget::maximizeDockWidget(bool checked, IdealButtonBarWidget * bar)
+{
+    m_mainLayout->maximizeWidget(checked, roleForBar(bar));
+
+    setMaximizeActionStatus(checked);
 }
 
 void IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
@@ -477,10 +523,25 @@ void IdealMainWidget::showDockWidget(QDockWidget * dock, bool show)
 
     static_cast<IdealDockWidgetTitle*>(dock->titleBarWidget())->setAnchored(m_mainLayout->isAreaAnchored(role), false);
 
-    if (show)
+    if (show) {
         m_mainLayout->addWidget(dock, role);
-    else
+
+        bool isMaximized = static_cast<IdealDockWidgetTitle*>(dock->titleBarWidget())->isMaximized();
+        if (isMaximized)
+            m_mainLayout->maximizeWidget(true, role);
+
+        setMaximizeActionStatus(isMaximized);
+        m_maximizeCurrentDock->setEnabled(true);
+        m_anchorCurrentDock->setEnabled(true);
+
+    } else {
         m_mainLayout->removeWidget(role);
+
+        setMaximizeActionStatus(false);
+
+        m_maximizeCurrentDock->setEnabled(false);
+        m_anchorCurrentDock->setEnabled(false);
+    }
 }
 
 IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
@@ -640,9 +701,26 @@ IdealButtonBarWidget* IdealMainWidget::barForRole(IdealMainLayout::Role role) co
             return bottomBarWidget;
 
         default:
+            Q_ASSERT(false);
             return 0;
     }
 }
+
+IdealMainLayout::Role IdealMainWidget::roleForBar(IdealButtonBarWidget* bar) const
+{
+    if (bar == leftBarWidget)
+        return IdealMainLayout::Left;
+    else if (bar == topBarWidget)
+        return IdealMainLayout::Top;
+    else if (bar == rightBarWidget)
+        return IdealMainLayout::Right;
+    else if (bar == bottomBarWidget)
+        return IdealMainLayout::Bottom;
+
+    Q_ASSERT(false);
+    return IdealMainLayout::Left;
+}
+
 
 QWidgetAction * IdealMainWidget::actionForView(View * view) const
 {
@@ -657,6 +735,18 @@ void IdealMainWidget::setAnchorActionStatus(bool checked)
     m_anchorCurrentDock->blockSignals(true);
     m_anchorCurrentDock->setChecked(checked);
     m_anchorCurrentDock->blockSignals(false);
+}
+
+bool IdealDockWidgetTitle::isMaximized() const
+{
+    return m_maximize->isChecked();
+}
+
+void IdealMainWidget::setMaximizeActionStatus(bool checked)
+{
+    m_maximizeCurrentDock->blockSignals(true);
+    m_maximizeCurrentDock->setChecked(checked);
+    m_maximizeCurrentDock->blockSignals(false);
 }
 
 #include "ideal.moc"

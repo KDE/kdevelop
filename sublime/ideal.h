@@ -71,6 +71,7 @@ public:
 private Q_SLOTS:
     void showWidget(bool checked);
     void anchor(bool anchor);
+    void maximize(bool maximized);
 
     void actionToggled(bool state);
 
@@ -96,16 +97,22 @@ public:
     bool isAnchored() const;
     void setAnchored(bool anchored, bool emitSignals);
 
+    bool isMaximized() const;
+    void setMaximized(bool maximized);
+
 Q_SIGNALS:
     void anchor(bool anchor);
+    void maximize(bool maximize);
     void close();
 
 private Q_SLOTS:
-    void slotAnchor(bool anchor);
-    
+    void slotAnchor(bool anchored);
+    void slotMaximize(bool maximized);
+
 private:
     Qt::Orientation m_orientation;
     QToolButton* m_anchor;
+    QToolButton* m_maximize;
 };
 
 class IdealCentralWidget : public QWidget
@@ -152,12 +159,15 @@ public:
     IdealCentralWidget* internalCentralWidget() const;
 
     void anchorDockWidget(bool checked, IdealButtonBarWidget* bar);
+    void maximizeDockWidget(bool checked, IdealButtonBarWidget* bar);
 
     QWidget* firstWidget(IdealMainLayout::Role role) const;
 
     IdealButtonBarWidget* barForRole(IdealMainLayout::Role role) const;
+    IdealMainLayout::Role roleForBar(IdealButtonBarWidget* bar) const;
 
     void setAnchorActionStatus(bool checked);
+    void setMaximizeActionStatus(bool checked);
 
 public Q_SLOTS:
     void showLeftDock(bool show);
@@ -166,6 +176,7 @@ public Q_SLOTS:
     void showTopDock(bool show);
     void hideAllDocks();
     void anchorCurrentDock(bool anchor);
+    void maximizeCurrentDock(bool maximized);
 
 private:
     IdealButtonBarWidget *leftBarWidget;
@@ -174,6 +185,7 @@ private:
     IdealButtonBarWidget *topBarWidget;
 
     KAction* m_anchorCurrentDock;
+    KAction* m_maximizeCurrentDock;
 
     IdealCentralWidget* mainWidget;
     class IdealMainLayout* m_mainLayout;
