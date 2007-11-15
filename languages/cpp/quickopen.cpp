@@ -183,7 +183,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   foreach( const KUrl& u, inclusionPath )
     htmlPrefix += i18n("Included through") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.prettyUrl()) + "<br/>";
   
-  return (new NavigationWidget( m_item, htmlPrefix, htmlSuffix ))->view();
+  return new NavigationWidget( m_item, htmlPrefix, htmlSuffix );
 }
 
 QString IncludeFileData::htmlDescription() const

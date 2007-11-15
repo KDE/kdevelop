@@ -18,7 +18,6 @@
 
 #include "navigationwidget.h"
 
-#include <ktextbrowser.h>
 #include <QMap>
 #include <QStringList>
 #include <QMetaObject>
@@ -773,22 +772,15 @@ NavigationWidget::NavigationWidget(const IncludeItem& includeItem, const QString
 }
 
 void NavigationWidget::initBrowser(int height) {
-  m_browser = new KTextBrowser();
-  m_browser->setOpenLinks(false);
-  m_browser->setOpenExternalLinks(false);
-  m_browser->resize(height, 100);
-  static_cast<KTextBrowser&>(*m_browser).setNotifyClick(true);
+  setOpenLinks(false);
+  setOpenExternalLinks(false);
+  resize(height, 100);
+  setNotifyClick(true);
 
-  connect( m_browser, SIGNAL(destroyed(QObject*)), this, SLOT(targetDestroyed(QObject*)) );
-  connect( m_browser, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(anchorClicked(const QUrl&)) );
+  connect( this, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(anchorClicked(const QUrl&)) );
 }
 
 NavigationWidget::~NavigationWidget() {
-  delete m_browser;
-}
-
-QWidget* NavigationWidget::view() const {
-  return m_browser;
 }
 
 void NavigationWidget::setContext(NavigationContextPointer context)
@@ -799,19 +791,14 @@ void NavigationWidget::setContext(NavigationContextPointer context)
 
 void NavigationWidget::update() {
   Q_ASSERT( m_context );
-  int scrollPos = m_browser->verticalScrollBar()->value();
-  m_browser->setHtml( m_context->html() );
-  m_browser->verticalScrollBar()->setValue(scrollPos);
+  int scrollPos = verticalScrollBar()->value();
+  setHtml( m_context->html() );
+  verticalScrollBar()->setValue(scrollPos);
 }
 
 void NavigationWidget::anchorClicked(const QUrl& url) {
   DUChainReadLocker lock( DUChain::lock() );
   setContext( m_context->acceptLink(url.toString()) );
-}
-
-void NavigationWidget::targetDestroyed(QObject*) {
-  m_browser = 0;
-  deleteLater();
 }
 
 void NavigationWidget::next() {

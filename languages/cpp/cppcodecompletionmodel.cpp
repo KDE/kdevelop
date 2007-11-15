@@ -338,7 +338,7 @@ QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int ro
       m_navigationWidgets[&completionItem] = nav;
 
        QVariant v;
-       v.setValue<QWidget*>((QWidget*)nav->view());
+       v.setValue<QWidget*>((QWidget*)nav);
        return v;
     }
     case AccessibilityNext:
@@ -481,7 +481,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       m_navigationWidgets[&item] = nav;
 
        QVariant v;
-       v.setValue<QWidget*>((QWidget*)nav->view());
+       v.setValue<QWidget*>((QWidget*)nav);
        return v;
     }
     case Qt::DisplayRole:
