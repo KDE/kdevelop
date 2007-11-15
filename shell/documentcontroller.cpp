@@ -47,68 +47,6 @@ Boston, MA 02110-1301, USA.
 
 #include <kplugininfo.h>
 
-/*
-
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#include <QMap>
-#include <QFile>
-#include <QDebug>
-#include <QLabel>
-#include <QLayout>
-#include <QCheckBox>
-#include <QRadioButton>
-
-#include <krun.h>
-#include <kmenu.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kmimetype.h>
-#include <kmimetypetrader.h>
-#include <klineedit.h>
-#include <kshortcut.h>
-#include <kdirwatch.h>
-#include <khtml_part.h>
-#include <kdeversion.h>
-#include <kmessagebox.h>
-#include <kfiledialog.h>
-#include <kxmlguiwindow.h>
-#include <kdialog.h>
-#include <kcompletion.h>
-#include <kiconloader.h>
-#include <kxmlguifactory.h>
-#include <kservicetypetrader.h>
-#include <ksqueezedtextlabel.h>
-#include <kencodingfiledialog.h>
-#include <krecentfilesaction.h>
-#include <ktoolbarpopupaction.h>
-#include <kstandardaction.h>
-
-#include <kio/netaccess.h>
-
-#include <kparts/part.h>
-#include <kparts/factory.h>
-#include <kparts/partmanager.h>
-#include <kparts/browserextension.h>
-
-#include <ktexteditor/view.h>
-#include <ktexteditor/editor.h>
-#include <ktexteditor/document.h>
-
-#include "kdevconfig.h"
-#include "kdevcontext.h"
-#include "kdevproject.h"
-#include "kdevmainwindow.h"
-#include "ui_mimewarningdialog.h"
-#include "kdevpartcontroller.h"
-#include "kdevlanguagesupport.h"
-#include "kdevbackgroundparser.h"
-*/
-
 namespace KDevelop
 {
 
