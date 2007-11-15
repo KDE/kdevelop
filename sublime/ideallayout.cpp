@@ -576,6 +576,10 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
     if (m_items.contains(role))
         splitterKept = removeWidget(role, true);
 
+    if (QDockWidget* dock = qobject_cast<QDockWidget*>(widget))
+        if (dock->isFloating())
+            dock->setFloating(false);
+    
     if (widget->parent() != parentWidget()) {
         widget->setParent(parentWidget());
         addChildWidget(widget);

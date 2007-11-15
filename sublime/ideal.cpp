@@ -117,8 +117,11 @@ QWidgetAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget
     dock->setAutoFillBackground(true);
     //dock->setFocusProxy(widget);
 
+    if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)
+        dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
+
     if (!dock->titleBarWidget()) {
-        IdealDockWidgetTitle* title = new IdealDockWidgetTitle(orientation(), dock, action);
+        IdealDockWidgetTitle* title = new IdealDockWidgetTitle(orientation() == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, dock, action);
         dock->setTitleBarWidget(title);
         connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
         connect(title, SIGNAL(maximize(bool)), SLOT(maximize(bool)));
@@ -245,18 +248,17 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
 {
     QBoxLayout* layout = 0;
     switch (m_orientation) {
-        case Qt::Horizontal:
+        case Qt::Vertical:
             layout = new QBoxLayout(QBoxLayout::BottomToTop, this);
             break;
-        case Qt::Vertical:
+        case Qt::Horizontal:
             layout = new QHBoxLayout(this);
             break;
     }
 
     setLayout(layout);
 
-    QLabel* title = new QLabel(this);
-    title->setText(parent->windowTitle());
+    QLabel* title = new IdealLabel(orientation, parent->windowTitle(), this);
     layout->addWidget(title);
 
     layout->addStretch();
@@ -747,6 +749,66 @@ void IdealMainWidget::setMaximizeActionStatus(bool checked)
     m_maximizeCurrentDock->blockSignals(true);
     m_maximizeCurrentDock->setChecked(checked);
     m_maximizeCurrentDock->blockSignals(false);
+}
+
+Sublime::IdealLabel::IdealLabel(Qt::Orientation orientation, const QString & text, QWidget * parent)
+    : QLabel(text, parent)
+    , m_orientation(orientation)
+{
+}
+
+void Sublime::IdealLabel::paintEvent(QPaintEvent * event)
+{
+    if (m_orientation == Qt::Horizontal)
+        return QLabel::paintEvent(event);
+
+    QRect rect = geometry();
+    int width = rect.width();
+    rect.setWidth(rect.height());
+    rect.setHeight(width);
+
+    QPixmap pix(rect.size());
+
+    QPainter painter(&pix);
+    painter.fillRect(pix.rect(), palette().color(backgroundRole()));
+
+    int align = QStyle::visualAlignment(layoutDirection(), alignment());
+
+    style()->drawItemText(&painter, pix.rect(), align, palette(), isEnabled(), text(), foregroundRole());
+    painter.end();
+
+    QPainter p(this);
+
+    p.translate(0, height());
+    p.rotate(-90);
+
+    p.drawPixmap(0, 0, pix);
+}
+
+QSize Sublime::IdealLabel::sizeHint() const
+{
+    QSize s = QLabel::sizeHint();
+
+    if (m_orientation == Qt::Vertical)
+        return QSize(s.height(), s.width());
+
+    return s;
+}
+
+QSize Sublime::IdealLabel::minimumSizeHint() const
+{
+    QSize s = QLabel::minimumSizeHint();
+
+    if (m_orientation == Qt::Vertical)
+        return QSize(s.height(), s.width());
+
+    return s;
+}
+
+int Sublime::IdealLabel::heightForWidth(int w) const
+{
+    Q_UNUSED(w)
+    return -1;
 }
 
 #include "ideal.moc"

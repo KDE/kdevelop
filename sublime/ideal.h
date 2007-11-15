@@ -53,6 +53,24 @@ private:
     Qt::DockWidgetArea _area;
 };
 
+class IdealLabel : public QLabel
+{
+    Q_OBJECT
+
+public:
+    IdealLabel(Qt::Orientation orientation, const QString& text, QWidget* parent);
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual int heightForWidth(int w) const;
+
+protected:
+    virtual void paintEvent(QPaintEvent *event);
+
+private:
+    Qt::Orientation m_orientation;
+};
+
 class IdealButtonBarWidget: public QWidget
 {
     Q_OBJECT
