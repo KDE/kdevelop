@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="40" name="kdevelop" >
+<kpartgui version="42" name="kdevelop" >
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
     <Action name="file_new"/>
@@ -110,10 +110,13 @@
     <Action name="split_vertical"/>
     <DefineGroup name="window_operations"/>
     <Separator/>
-    <Action name="switch_left_dock"/>
-    <Action name="switch_right_dock"/>
-    <Action name="switch_bottom_dock"/>
+    <Action name="show_left_dock"/>
+    <Action name="show_right_dock"/>
+    <Action name="show_top_dock"/>
+    <Action name="show_bottom_dock"/>
+    <Action name="hide_all_docks"/>
     <Action name="anchor_current_dock"/>
+    <Action name="maximize_current_dock"/>
     <Separator/>
     <Merge/>
   </Menu>
