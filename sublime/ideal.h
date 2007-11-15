@@ -24,6 +24,8 @@
 
 #include <QtGui>
 
+#include "ideallayout.h"
+
 class KAction;
 class KActionCollection;
 
@@ -47,55 +49,6 @@ protected:
 
 private:
     Qt::DockWidgetArea _area;
-};
-
-class IdealButtonBarLayout: public QLayout
-{
-    Q_OBJECT
-
-public:
-    IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent = 0);
-
-    virtual ~IdealButtonBarLayout();
-
-    void setHeight(int height);
-
-    inline Qt::Orientation orientation() const;
-
-    virtual Qt::Orientations expandingDirections() const;
-
-    virtual bool hasHeightForWidth() const;
-
-    virtual int heightForWidth(int width) const;
-
-    virtual QSize minimumSize() const;
-
-    virtual QSize sizeHint() const;
-
-    virtual void setGeometry(const QRect &rect);
-
-    virtual void addItem(QLayoutItem *item);
-
-    virtual QLayoutItem* itemAt(int index) const;
-
-    virtual QLayoutItem* takeAt(int index);
-
-    virtual int count() const;
-
-    virtual void invalidate();
-
-protected:
-    int doVerticalLayout(const QRect &rect, bool updateGeometry = true) const;
-
-    int doHorizontalLayout(const QRect &rect, bool updateGeometry = true) const;
-
-private:
-    QList<QLayoutItem *> _items;
-    Qt::Orientation _orientation;
-    int _height;
-    mutable bool m_minSizeDirty : 1;
-    mutable bool m_layoutDirty : 1;
-    mutable QSize m_min;
 };
 
 class IdealButtonBarWidget: public QWidget
@@ -151,83 +104,6 @@ private Q_SLOTS:
 private:
     Qt::Orientation m_orientation;
     QToolButton* m_anchor;
-};
-
-class IdealMainLayout : public QLayout
-{
-    Q_OBJECT
-
-public:
-    enum Role {
-        Left,
-        Right,
-        Bottom,
-        Top,
-        LeftSplitter,
-        RightSplitter,
-        BottomSplitter,
-        TopSplitter,
-        Central
-    };
-
-    IdealMainLayout(QWidget *parent = 0);
-
-    virtual ~IdealMainLayout();
-
-    void addWidget(QWidget* widget, Role role);
-    QLayoutItem* itemForRole(Role role);
-    QWidget* removeWidget(Role role, bool keepSplitter = false);
-    void removeUnanchored();
-
-    int splitterWidth() const;
-    int widthForRole(Role role) const;
-
-    bool isAreaAnchored(Role role) const;
-
-    virtual QSize minimumSize() const;
-
-    virtual QSize sizeHint() const;
-
-    virtual void setGeometry(const QRect &rect);
-
-    virtual void addItem(QLayoutItem *item);
-
-    virtual QLayoutItem* itemAt(int index) const;
-
-    virtual QLayoutItem* takeAt(int index);
-
-    virtual int count() const;
-
-    virtual void invalidate();
-
-    QDockWidget* lastDockWidget() const;
-    QDockWidget* lastDockWidget(IdealMainLayout::Role role) const;
-
-    IdealMainWidget* mainWidget() const;
-
-public Q_SLOTS:
-    void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
-    void anchorWidget(bool anchor, IdealMainLayout::Role resizeRole);
-
-protected:
-    void doLayout(const QRect &rect, bool updateGeometry = true) const;
-
-private:
-    struct Settings
-    {
-        Settings();
-
-        int width;
-        bool anchored;
-        QPointer<QWidget> last;
-    };
-
-    QMap<Role, QWidgetItem*> m_items;
-    QHash<Role, Settings> m_settings;
-    mutable bool m_layoutDirty, m_sizeHintDirty, m_minDirty;
-    mutable QSize m_min, m_hint;
-    int m_splitterWidth;
-    QPointer<QWidget> m_lastDockWidget;
 };
 
 class IdealCentralWidget : public QWidget

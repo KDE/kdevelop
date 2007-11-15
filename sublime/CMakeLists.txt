@@ -23,6 +23,7 @@ set(sublime_LIB_SRCS
     sublimedefs.cpp
     aggregatemodel.cpp
     ideal.cpp
+    ideallayout.cpp
 )
 
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
