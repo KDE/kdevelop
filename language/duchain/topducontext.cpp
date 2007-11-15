@@ -321,14 +321,19 @@ bool TopDUContext::deleting() const
   return d->m_deleting;
 }
 
-bool TopDUContext::imports(const TopDUContext * origin, const KTextEditor::Cursor& position) const
+bool TopDUContext::imports(const DUContext * origin, const KTextEditor::Cursor& position) const
 {
   ENSURE_CAN_READ
 
   Q_UNUSED(position);
   // TODO use position
 
-  return d->imports(origin, 0);
+  if( dynamic_cast<const TopDUContext*>(origin) ) {
+    return d->imports(static_cast<const TopDUContext*>(origin), 0);
+  } else {
+    kWarning() << "non top-context importet into top-context";
+    return DUContext::imports(origin, position);
+  }
  }
 
 void TopDUContext::addImportedParentContext(DUContext* context, bool anonymous) {

@@ -172,6 +172,11 @@ public:
   const QList<DUContextPointer>& importedParentContexts() const;
 
   /**
+   * Returns true if this context imports @param origin at any depth, else false.
+   * */
+  virtual bool imports(const DUContext* origin, const KTextEditor::Cursor& position = KTextEditor::Cursor()) const;
+  
+  /**
    * Adds an imported context.
    *
    * @param anonymous If this is true, the import will not be registered at the imported context. This allows du-chain contexts importing without having a write-lock.

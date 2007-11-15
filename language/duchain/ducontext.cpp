@@ -513,11 +513,19 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
   return ret;
 }
 
+bool DUContext::imports(const DUContext* origin, const KTextEditor::Cursor& position ) const
+{
+  ENSURE_CAN_READ
+  
+  return origin->d->isThisImportedBy(this);
+}
+
+
 void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
 {
   ENSURE_CAN_WRITE
 
-  if( d->isThisImportedBy(context) ) {
+  if( context->imports(this) ) {
     kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url() << ") into " << this << " (" << url() << ")";
     return;
   }
