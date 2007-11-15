@@ -34,6 +34,19 @@ class QIcon;
 namespace KDevelop {
 
 /**
+ * You can use this as additional base-class for your embedded widgets to get additional interaction
+ * */
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface {
+  public:
+    ///Is called when the keyboard-shortcut "next" is triggered on the widget, which currently is SHIFT+Right
+    virtual void next() = 0;
+    ///Is called when the keyboard-shortcut "previous" is triggered on the widget, which currently is SHIFT+Left
+    virtual void previous() = 0;
+    ///Is called when the keyboard-shortcut "accept" is triggered on the widget, which currently is SHIFT+Return
+    virtual void accept() = 0;
+};
+
+/**
  * Reimplement this to represent single entries within the quickopen list.
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
@@ -81,6 +94,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
      *
      * A widget should be returned that will be embedded into the quickopen-list.
      * The widget will be owned by the quickopen-list and will be deleted at will.
+     *
+     * If the widget can be dynamic_cast'ed to QuickOpenEmbeddedWidgetInterface,
+     * the additional interaction defined there will be possible.
      * 
      * The default-implementation returns 0, which means no widget will be shown.
      * */

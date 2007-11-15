@@ -196,39 +196,63 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
         return true;
       case Qt::Key_Left: {
         //Expand/unexpand
-        QModelIndex row = o.list->selectionModel()->currentIndex();
-        if( row.isValid() ) {
-          row = row.sibling( row.row(), 0 );
-          
-          if( m_model->isExpanded( row ) ) {
-            m_model->setExpanded( row, false );
-            return true;
+        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+          //Eventually Send action to the widget
+          if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
+              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( m_model->expandingWidget(o.list->selectionModel()->currentIndex()) ) ){
+            interface->previous();
+          }
+        } else {
+          QModelIndex row = o.list->selectionModel()->currentIndex();
+          if( row.isValid() ) {
+            row = row.sibling( row.row(), 0 );
+            
+            if( m_model->isExpanded( row ) ) {
+              m_model->setExpanded( row, false );
+              return true;
+            }
           }
         }
         return false;
       }
       case Qt::Key_Right: {
         //Expand/unexpand
-        QModelIndex row = o.list->selectionModel()->currentIndex();
-        if( row.isValid() ) {
-          row = row.sibling( row.row(), 0 );
-          
-          if( !m_model->isExpanded( row ) ) {
-            m_model->setExpanded( row, true );
-            return true;
+        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+          //Eventually Send action to the widget
+          if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
+              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( m_model->expandingWidget(o.list->selectionModel()->currentIndex()) ) ){
+            interface->next();
+          }
+        } else {
+          QModelIndex row = o.list->selectionModel()->currentIndex();
+          if( row.isValid() ) {
+            row = row.sibling( row.row(), 0 );
+            
+            if( !m_model->isExpanded( row ) ) {
+              m_model->setExpanded( row, true );
+              return true;
+            }
           }
         }
         return false;
       }
       case Qt::Key_Return:
       case Qt::Key_Enter: {
-        QString filterText = o.searchLine->text();
-        if( m_model->execute( o.list->currentIndex(), filterText ) ) {
-          m_dialog->close();
+        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+          //Eventually Send action to the widget
+          if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
+              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( m_model->expandingWidget(o.list->selectionModel()->currentIndex()) ) ){
+            interface->accept();
+          }
         } else {
-          //Maybe the filter-text was changed:
-          if( filterText != o.searchLine->text() ) {
-            o.searchLine->setText( filterText );
+          QString filterText = o.searchLine->text();
+          if( m_model->execute( o.list->currentIndex(), filterText ) ) {
+            m_dialog->close();
+          } else {
+            //Maybe the filter-text was changed:
+            if( filterText != o.searchLine->text() ) {
+              o.searchLine->setText( filterText );
+            }
           }
         }
         return true;
