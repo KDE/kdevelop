@@ -122,7 +122,6 @@ void MainWindow::loadSettings()
         setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
 
     Sublime::MainWindow::loadSettings();
-
 }
 
 void MainWindow::saveSettings()
@@ -191,6 +190,7 @@ void MainWindow::documentStateChanged( IDocument* document )
 
 void MainWindow::documentClosed( IDocument* document )
 {
+    Q_UNUSED(document);
     setCaption(QString(), false);
 }
 

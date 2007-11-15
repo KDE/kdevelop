@@ -106,6 +106,8 @@ Q_SIGNALS:
     void activeViewChanged(Sublime::View*);
     /**Emitted when the active toolview is changed.*/
     void activeToolViewChanged(Sublime::View*);
+    /**Emitted when the user interface settings have changed.*/
+    void settingsLoaded();
 
 protected:
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.

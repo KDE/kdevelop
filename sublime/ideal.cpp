@@ -30,6 +30,7 @@
 
 #include "view.h"
 #include "document.h"
+#include "mainwindow.h"
 
 using namespace Sublime;
 
@@ -307,7 +308,7 @@ void IdealDockWidgetTitle::slotAnchor(bool anchored)
     emit anchor(anchored);
 }
 
-IdealMainWidget::IdealMainWidget(QWidget * parent, KActionCollection* ac)
+IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     : QWidget(parent)
 {
     leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea);
@@ -326,6 +327,8 @@ IdealMainWidget::IdealMainWidget(QWidget * parent, KActionCollection* ac)
 
     m_mainLayout = new IdealMainLayout(mainWidget);
     mainWidget->setLayout(m_mainLayout);
+
+    connect(parent, SIGNAL(settingsLoaded()), m_mainLayout, SLOT(loadSettings()));
 
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(0);
@@ -500,7 +503,7 @@ void IdealCentralWidget::paintEvent(QPaintEvent * event)
 
     if (false && layout())
         for (int i = 0; i < layout()->count(); ++i)
-            p.drawRect(layout()->itemAt(i)->geometry());
+            p.fillRect(layout()->itemAt(i)->geometry(), Qt::red);
 }
 
 IdealMainLayout * IdealCentralWidget::idealLayout() const

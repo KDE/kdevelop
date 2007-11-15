@@ -139,8 +139,11 @@ public Q_SLOTS:
     void resizeWidget(int thickness, IdealMainLayout::Role resizeRole);
     void anchorWidget(bool anchor, IdealMainLayout::Role resizeRole);
 
+    void loadSettings();
+
 protected:
     void doLayout(QRect rect) const;
+    void layout(Role role1, Role role2, Role role3, Role role4, QRect& rect) const;
     void layoutItem(Role role, QRect& rect) const;
 
 private:
@@ -159,6 +162,10 @@ private:
     mutable QSize m_min, m_hint;
     int m_splitterWidth;
     QPointer<QWidget> m_lastDockWidget;
+    int m_topOwnsTopLeft;
+    int m_topOwnsTopRight;
+    int m_bottomOwnsBottomLeft;
+    int m_bottomOwnsBottomRight;
 };
 
 IdealMainLayout::Role roleForArea(Qt::DockWidgetArea area);

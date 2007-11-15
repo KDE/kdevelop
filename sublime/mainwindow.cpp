@@ -136,6 +136,7 @@ void MainWindow::loadSettings()
     KConfigGroup cg = KGlobal::config()->group(group);
     applyMainWindowSettings(cg);
 
+    emit settingsLoaded();
 }
 
 bool MainWindow::queryClose()

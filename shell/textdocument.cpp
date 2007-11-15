@@ -58,6 +58,7 @@ struct TextDocumentPrivate {
 
     void textChanged(KTextEditor::Document *document)
     {
+        Q_UNUSED(document);
         m_textDocument->notifyContentChanged();
     }
     

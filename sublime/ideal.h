@@ -31,6 +31,8 @@ class KActionCollection;
 
 namespace Sublime {
 
+class MainWindow;
+
 class IdealToolButton: public QToolButton
 {
     Q_OBJECT
@@ -127,7 +129,7 @@ class IdealMainWidget : public QWidget
     Q_OBJECT
 
 public:
-    IdealMainWidget(QWidget* parent, KActionCollection* ac);
+    IdealMainWidget(MainWindow* parent, KActionCollection* ac);
 
     // Public api
     void setCentralWidget(QWidget* widget);

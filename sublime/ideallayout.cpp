@@ -23,6 +23,10 @@
 
 #include <QDockWidget>
 
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KConfig>
+
 #include "ideal.h"
 
 using namespace Sublime;
@@ -253,6 +257,8 @@ IdealMainLayout::IdealMainLayout(QWidget * parent)
 {
     setMargin(0);
     m_splitterWidth = parent->style()->pixelMetric(QStyle::PM_SplitterWidth, 0, parentWidget());
+
+    loadSettings();
 }
 
 IdealMainLayout::~ IdealMainLayout()
@@ -387,10 +393,55 @@ int IdealMainLayout::count() const
 
 void IdealMainLayout::doLayout(QRect rect) const
 {
-    layoutItem(Left, rect);
-    layoutItem(Right, rect);
-    layoutItem(Top, rect);
-    layoutItem(Bottom, rect);
+    if (m_topOwnsTopLeft)
+        if (m_topOwnsTopRight)
+            if (m_bottomOwnsBottomLeft)
+                if (m_bottomOwnsBottomRight)
+                    layout(Top, Bottom, Left, Right, rect);
+                else
+                    layout(Top, Right, Bottom, Left, rect);
+            else
+                if (m_bottomOwnsBottomRight)
+                    layout(Top, Left, Bottom, Right, rect);
+                else
+                    layout(Top, Right, Left, Bottom, rect);
+        else
+            if (m_bottomOwnsBottomLeft)
+                if (m_bottomOwnsBottomRight)
+                    layout(Bottom, Right, Top, Left, rect);
+                else
+                    layout(Right, Top, Left, Bottom, rect);
+            else
+                if (m_bottomOwnsBottomRight)
+                    // TODO: this is not possible with current code
+                    layout(Top, Left, Bottom, Right, rect);
+                else
+                    layout(Right, Top, Left, Bottom, rect);
+    else
+        if (m_topOwnsTopRight)
+            if (m_bottomOwnsBottomLeft)
+                if (m_bottomOwnsBottomRight)
+                    layout(Bottom, Left, Top, Right, rect);
+                else
+                    layout(Left, Top, Right, Bottom, rect);
+            else
+                if (m_bottomOwnsBottomRight)
+                    layout(Left, Bottom, Top, Right, rect);
+                else
+                    layout(Right, Left, Bottom, Top, rect);
+        else
+            if (m_bottomOwnsBottomLeft)
+                if (m_bottomOwnsBottomRight)
+                    layout(Bottom, Right, Left, Top, rect);
+                else
+                    layout(Right, Bottom, Left, Top, rect);
+            else
+                if (m_bottomOwnsBottomRight)
+                    // TODO: this is not possible with current code
+                    layout(Left, Bottom, Right, Top, rect);
+                else
+                    layout(Right, Left, Bottom, Top, rect);
+
 
     if (QLayoutItem* item = m_items[Central]) {
         QSize itemSizeHint = item->sizeHint();
@@ -412,6 +463,14 @@ void IdealMainLayout::doLayout(QRect rect) const
     }
 
     m_layoutDirty = false;
+}
+
+void Sublime::IdealMainLayout::layout(Role role1, Role role2, Role role3, Role role4, QRect & rect) const
+{
+    layoutItem(role1, rect);
+    layoutItem(role2, rect);
+    layoutItem(role3, rect);
+    layoutItem(role4, rect);
 }
 
 void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
@@ -464,7 +523,7 @@ void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
 
             case Top:
                 item->setGeometry(QRect(rect.x(), rect.y(), rect.width(), hintDimension));
-                m_items[TopSplitter]->setGeometry(QRect(rect.x() + hintDimension, rect.y(), rect.width(), splitterWidth()));
+                m_items[TopSplitter]->setGeometry(QRect(rect.x(), rect.y() + hintDimension, rect.width(), splitterWidth()));
                 break;
 
             case Bottom:
@@ -483,7 +542,7 @@ void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
                     break;
 
                 case Right:
-                    rect.setWidth(rect.width() - hintDimension + splitterWidth());
+                    rect.setWidth(rect.width() - hintDimension - splitterWidth());
                     break;
 
                 case Top:
@@ -491,7 +550,7 @@ void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
                     break;
 
                 case Bottom:
-                    rect.setHeight(rect.height() - hintDimension + splitterWidth());
+                    rect.setHeight(rect.height() - hintDimension - splitterWidth());
                     break;
 
                 default:
@@ -668,6 +727,40 @@ bool IdealMainLayout::isAreaAnchored(Role role) const
 IdealMainWidget * IdealMainLayout::mainWidget() const
 {
     return static_cast<IdealMainWidget*>(parentWidget()->parent());
+}
+
+void Sublime::IdealMainLayout::loadSettings()
+{
+    KConfigGroup cg(KGlobal::config(), "UiSettings");
+
+    bool invalid = false;
+    
+    int topOwnsTopLeft = cg.readEntry("TopLeftCornerOwner", 0);
+    if (m_topOwnsTopLeft != topOwnsTopLeft) {
+        m_topOwnsTopLeft = topOwnsTopLeft;
+        invalid = true;
+    }
+
+    int topOwnsTopRight = cg.readEntry("TopRightCornerOwner", 0);
+    if (m_topOwnsTopRight != topOwnsTopRight) {
+        m_topOwnsTopRight = topOwnsTopRight;
+        invalid = true;
+    }
+
+    int bottomOwnsBottomLeft = cg.readEntry("BottomLeftCornerOwner", 0);
+    if (m_bottomOwnsBottomLeft != bottomOwnsBottomLeft) {
+        m_bottomOwnsBottomLeft = bottomOwnsBottomLeft;
+        invalid = true;
+    }
+
+    int bottomOwnsBottomRight = cg.readEntry("BottomRightCornerOwner", 0);
+    if (m_bottomOwnsBottomRight != bottomOwnsBottomRight) {
+        m_bottomOwnsBottomRight = bottomOwnsBottomRight;
+        invalid = true;
+    }
+
+    if (invalid)
+        invalidate();
 }
 
 #include "ideallayout.moc"

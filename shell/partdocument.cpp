@@ -128,6 +128,7 @@ void PartDocument::activate(Sublime::View *activeView)
 void PartDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
     //do nothing here
+    Q_UNUSED(cursor);
 }
 
 KUrl PartDocument::url() const
