@@ -140,7 +140,8 @@ public Q_SLOTS:
     void anchorWidget(bool anchor, IdealMainLayout::Role resizeRole);
 
 protected:
-    void doLayout(const QRect &rect, bool updateGeometry = true) const;
+    void doLayout(QRect rect) const;
+    void layoutItem(Role role, QRect& rect) const;
 
 private:
     struct Settings

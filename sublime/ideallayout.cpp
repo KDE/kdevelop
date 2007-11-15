@@ -385,142 +385,113 @@ int IdealMainLayout::count() const
     return m_items.count();
 }
 
-void IdealMainLayout::doLayout(const QRect & rect, bool updateGeometry) const
+void IdealMainLayout::doLayout(QRect rect) const
 {
-    int x = rect.x() + margin();
-    int y = rect.y() + margin();
-    int width = rect.width() - margin();
-    int height = rect.height() - margin();
-
-    //height = qMax(height, m_min.height());
-    //width = qMax(width, m_min.width());
-
-    if (QLayoutItem* item = m_items[Left]) {
-        int hintWidth;
-        if (m_settings[Left].width != -1) {
-            hintWidth = m_settings[Left].width;
-
-        } else {
-            const QSize itemSizeHint = item->sizeHint();
-            hintWidth = itemSizeHint.width() + splitterWidth();
-            if (hintWidth + splitterWidth() > width) {
-                hintWidth = item->minimumSize().width();
-
-                if (hintWidth + splitterWidth() > width)
-                    width = hintWidth + splitterWidth();
-            }
-        }
-
-        if (updateGeometry) {
-            item->setGeometry(QRect(x, y, hintWidth, height));
-            m_items[LeftSplitter]->setGeometry(QRect(x + hintWidth, y, splitterWidth(), height));
-        }
-
-        if (m_settings[Left].anchored) {
-            x += hintWidth + splitterWidth();
-            width -= hintWidth + splitterWidth();
-        }
-    }
-
-    if (QLayoutItem* item = m_items[Right]) {
-        int hintWidth;
-        if (m_settings[Right].width != -1) {
-            hintWidth = m_settings[Right].width;
-
-        } else {
-            const QSize itemSizeHint = item->sizeHint();
-            hintWidth = itemSizeHint.width();
-            if (hintWidth + splitterWidth() > width) {
-                hintWidth = item->minimumSize().width();
-
-                if (hintWidth + splitterWidth() > width)
-                    width = hintWidth + splitterWidth();
-            }
-        }
-
-        if (updateGeometry) {
-            item->setGeometry(QRect(x + width - hintWidth, y, hintWidth, height));
-            m_items[RightSplitter]->setGeometry(QRect(x + width - hintWidth - splitterWidth(), y, splitterWidth(), height));
-        }
-
-        if (m_settings[Right].anchored)
-            width -= hintWidth + splitterWidth();
-    }
-
-    if (QLayoutItem* item = m_items[Top]) {
-        int hintHeight;
-        if (m_settings[Top].width != -1) {
-            hintHeight = m_settings[Top].width;
-
-        } else {
-            const QSize itemSizeHint = item->sizeHint();
-            hintHeight = itemSizeHint.height();
-            if (hintHeight + splitterWidth() > height) {
-                hintHeight = item->minimumSize().height();
-
-                if (hintHeight + splitterWidth() > height)
-                    height = hintHeight + splitterWidth();
-            }
-        }
-
-        if (updateGeometry) {
-            item->setGeometry(QRect(x, y, width, hintHeight));
-            m_items[TopSplitter]->setGeometry(QRect(x + hintHeight, y, splitterWidth(), hintHeight));
-        }
-
-        if (m_settings[Top].anchored) {
-            y += hintHeight + splitterWidth();
-            height -= hintHeight + splitterWidth();
-        }
-    }
-
-    if (QLayoutItem* item = m_items[Bottom]) {
-        int hintHeight;
-        if (m_settings[Bottom].width != -1) {
-            hintHeight = m_settings[Bottom].width;
-
-        } else {
-            const QSize itemSizeHint = item->sizeHint();
-            hintHeight = itemSizeHint.height();
-            if (hintHeight + splitterWidth() > height) {
-                hintHeight = item->minimumSize().height();
-
-                if (hintHeight + splitterWidth() > height)
-                    height = hintHeight + splitterWidth();
-            }
-        }
-
-        if (updateGeometry) {
-            item->setGeometry(QRect(x, y + height - hintHeight, width, hintHeight));
-            m_items[BottomSplitter]->setGeometry(QRect(x, y + height - hintHeight - splitterWidth(), width, splitterWidth()));
-        }
-
-        if (m_settings[Bottom].anchored)
-            height -= hintHeight + splitterWidth();
-    }
+    layoutItem(Left, rect);
+    layoutItem(Right, rect);
+    layoutItem(Top, rect);
+    layoutItem(Bottom, rect);
 
     if (QLayoutItem* item = m_items[Central]) {
         QSize itemSizeHint = item->sizeHint();
-        if (itemSizeHint.height() > height) {
-            itemSizeHint.setHeight(qMax(item->minimumSize().height(), height));
+        if (itemSizeHint.height() > rect.height()) {
+            itemSizeHint.setHeight(qMax(item->minimumSize().height(), rect.height()));
 
-            if (itemSizeHint.height() > height)
-                height = itemSizeHint.height();
+            if (itemSizeHint.height() > rect.height())
+                rect.setHeight(itemSizeHint.height());
         }
 
-        if (itemSizeHint.width() > width) {
-            itemSizeHint.setWidth(qMax(item->minimumSize().width(), width));
+        if (itemSizeHint.width() > rect.width()) {
+            itemSizeHint.setWidth(qMax(item->minimumSize().width(), rect.width()));
 
-            if (itemSizeHint.width() > width)
-                width = itemSizeHint.width();
+            if (itemSizeHint.width() > rect.width())
+                rect.setWidth(itemSizeHint.width());
         }
 
-        if (updateGeometry)
-            item->setGeometry(QRect(x, y, width, height));
+        item->setGeometry(rect);
     }
 
     m_layoutDirty = false;
 }
+
+void Sublime::IdealMainLayout::layoutItem(Role role, QRect& rect) const
+{
+    if (QLayoutItem* item = m_items[role]) {
+        int hintDimension;
+        if (m_settings[role].width != -1) {
+            hintDimension = m_settings[role].width;
+
+        } else {
+            const QSize itemSize = item->sizeHint();
+            switch (role) {
+                case Left:
+                case Right:
+                    hintDimension = itemSize.width() + splitterWidth();
+                    if (hintDimension + splitterWidth() > rect.width()) {
+                        hintDimension = item->minimumSize().width();
+
+                        if (hintDimension + splitterWidth() > rect.width())
+                            rect.setWidth(hintDimension + splitterWidth());
+                    }
+                    break;
+
+                case Top:
+                case Bottom:
+                    hintDimension = itemSize.height();
+                    if (hintDimension + splitterWidth() > rect.height()) {
+                        hintDimension = item->minimumSize().height();
+
+                        if (hintDimension + splitterWidth() > rect.height())
+                            rect.setHeight(hintDimension + splitterWidth());
+                    }
+                    break;
+            }
+        }
+
+        switch (role) {
+            case Left:
+                item->setGeometry(QRect(rect.x(), rect.y(), hintDimension, rect.height()));
+                m_items[LeftSplitter]->setGeometry(QRect(rect.x() + hintDimension, rect.y(), splitterWidth(), rect.height()));
+                break;
+
+            case Right:
+                item->setGeometry(QRect(rect.x() + rect.width() - hintDimension, rect.y(), hintDimension, rect.height()));
+                m_items[RightSplitter]->setGeometry(QRect(rect.x() + rect.width() - hintDimension - splitterWidth(), rect.y(), splitterWidth(), rect.height()));
+                break;
+
+            case Top:
+                item->setGeometry(QRect(rect.x(), rect.y(), rect.width(), hintDimension));
+                m_items[TopSplitter]->setGeometry(QRect(rect.x() + hintDimension, rect.y(), rect.width(), splitterWidth()));
+                break;
+
+            case Bottom:
+                item->setGeometry(QRect(rect.x(), rect.y() + rect.height() - hintDimension, rect.width(), hintDimension));
+                m_items[BottomSplitter]->setGeometry(QRect(rect.x(), rect.y() + rect.height() - hintDimension - splitterWidth(), rect.width(), splitterWidth()));
+                break;
+        }
+
+        if (m_settings[role].anchored) {
+            switch (role) {
+                case Left:
+                    rect.setX(rect.x() + hintDimension + splitterWidth());
+                    break;
+
+                case Right:
+                    rect.setWidth(rect.width() - hintDimension + splitterWidth());
+                    break;
+
+                case Top:
+                    rect.setY(rect.y() + hintDimension + splitterWidth());
+                    break;
+
+                case Bottom:
+                    rect.setHeight(rect.height() - hintDimension + splitterWidth());
+                    break;
+            }
+        }
+    }
+}
+
 
 void IdealMainLayout::addWidget(QWidget * widget, Role role)
 {
