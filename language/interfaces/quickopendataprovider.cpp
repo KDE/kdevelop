@@ -25,6 +25,9 @@
 #include <QIcon>
 
 namespace KDevelop {
+  QuickOpenEmbeddedWidgetInterface::~QuickOpenEmbeddedWidgetInterface() {
+    }
+
   QuickOpenDataBase::~QuickOpenDataBase() {
   }
     QIcon QuickOpenDataBase::icon() const {

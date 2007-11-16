@@ -38,8 +38,7 @@ namespace KDevelop {
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface {
   public:
-    ///@warning Currently, as a workaround for a g++ bug, the following methods need to be slots in your implementation.
-    
+    virtual ~QuickOpenEmbeddedWidgetInterface();
     ///Is called when the keyboard-shortcut "next" is triggered on the widget, which currently is SHIFT+Right
     virtual void next() = 0;
     ///Is called when the keyboard-shortcut "previous" is triggered on the widget, which currently is SHIFT+Left
