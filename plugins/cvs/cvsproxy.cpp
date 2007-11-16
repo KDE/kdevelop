@@ -32,7 +32,7 @@ CvsProxy::~CvsProxy()
 
 void CvsProxy::slotResult(KJob* job)
 {
-    job->deleteLater();
+//     job->deleteLater();
 }
 
 bool CvsProxy::isValidDirectory(const KUrl & dirPath) const

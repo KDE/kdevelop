@@ -24,10 +24,6 @@ class CvsJob;
  * All the command line generation and job handling is done internally. The caller gets a CvsJob
  * object returned from the proxy and can then call it's start() method.
  *
- * @note The caller does not have to worry about deleting the KJob. The proxy
- *       connects a default slot to all jobs that he created. See slotResult().
- *       This slot calls deleteLater() on the CvsJob that just finised.
- *
  * Here is and example of how to user the proxy:
  * @code
  * CvsJob* job = proxy->editors( repo, urls );
