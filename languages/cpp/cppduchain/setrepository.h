@@ -20,7 +20,7 @@
 #include <list>
 #include <set>
 #include <vector>
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 /**
  * These set-repositories are optimized by the fact that they can only grow.
@@ -45,7 +45,7 @@ class BasicSetRepository;
 /**
  * This object is copyable
  * */
-class KDEVCPPDUCHAINBUILDER_EXPORT Set {
+class KDEVCPPDUCHAIN_EXPORT Set {
 public:
   class Iterator;
   
@@ -92,7 +92,7 @@ private:
  * The master-repository can only grow, never shrink.
  * */
 
-class KDEVCPPDUCHAINBUILDER_EXPORT BasicSetRepository {
+class KDEVCPPDUCHAIN_EXPORT BasicSetRepository {
 public:
   BasicSetRepository();
   ~BasicSetRepository();
@@ -152,7 +152,7 @@ private:
  * @param Hash Should be a functor-object with an operator() that returns the hash for a given T
  * */
 template<class T, class Hash>
-  class KDEVCPPDUCHAINBUILDER_EXPORT SetRepository : public BasicSetRepository {
+  class KDEVCPPDUCHAIN_EXPORT SetRepository : public BasicSetRepository {
   typedef __gnu_cxx::hash_map<T, Index, Hash> ElementHash; ///@todo use a pool allocator, @see rxx_allocator
 public:
   SetRepository() {

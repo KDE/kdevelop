@@ -23,7 +23,7 @@
 #include <duchain/duchainpointer.h>
 #include "typeconversion.h"
 #include <QList>
-#include "cppexpressionparserexport.h"
+#include "cppduchainexport.h"
 
 class CppFunctionType;
 
@@ -39,7 +39,7 @@ using namespace KDevelop;
  * Models overloaded function resolution
  * The du-chain must be locked for the whole lifetime of this object.
  * */
-class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolver {
+class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
   public:
 
     struct Parameter {

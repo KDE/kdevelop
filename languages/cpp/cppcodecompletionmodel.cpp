@@ -2,6 +2,7 @@
  * KDevelop C++ Code Completion Support
  *
  * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -468,7 +469,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     }
     return QVariant();
     case ArgumentHintDepth:
-      if( isArgumentHint )
+    if( isArgumentHint )
         return item.completionContext->depth();
       else
         return QVariant();

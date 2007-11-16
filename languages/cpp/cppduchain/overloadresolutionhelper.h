@@ -19,7 +19,7 @@
 #ifndef OVERLOADRESOLUTIONHELPER_H
 #define OVERLOADRESOLUTIONHELPER_H
 
-#include "cppexpressionparserexport.h"
+#include "cppduchainexport.h"
 #include <QPair>
 #include <QList>
 #include "overloadresolution.h"
@@ -35,7 +35,7 @@ namespace Cpp
 {
   class ViableFunction;
   
-  struct KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolutionFunction {
+  struct KDEVCPPDUCHAIN_EXPORT OverloadResolutionFunction {
     OverloadResolutionFunction();
     OverloadResolutionFunction( int _matchedArguments, const ViableFunction& _viable );
 
@@ -54,7 +54,7 @@ namespace Cpp
    * Helps searching and revolving functions or operator-functions in a unified way, partially or completely.
    * The du-chain must be locked for the whole lifetime of this object.
    * */
-  class KDEVCPPEXPRESSIONPARSER_EXPORT OverloadResolutionHelper {
+  class KDEVCPPDUCHAIN_EXPORT OverloadResolutionHelper {
     public:
     typedef QPair<OverloadResolver::ParameterList, KDevelop::Declaration*> DeclarationWithArgument;
 

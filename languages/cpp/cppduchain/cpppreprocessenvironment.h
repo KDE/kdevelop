@@ -17,7 +17,7 @@
 #include <duchain/parsingenvironment.h>
 #include "parser/rpp/pp-environment.h"
 #include "environmentmanager.h"
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 namespace Cpp {
 class MacroSet;
@@ -28,7 +28,7 @@ namespace KDevelop {
 class HashedString;
 }
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
+class KDEVCPPDUCHAIN_EXPORT CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
 public:
   CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile );
 

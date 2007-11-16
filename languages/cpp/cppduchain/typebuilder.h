@@ -22,7 +22,7 @@
 #include "contextbuilder.h"
 #include <typesystem.h>
 #include <declaration.h>
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 class CppClassType;
 class CppFunctionType;
@@ -41,7 +41,7 @@ typedef ContextBuilder TypeBuilderBase;
  * array types; parent classes will not have
  * their visitDeclarator function called.
  */
-class KDEVCPPDUCHAINBUILDER_EXPORT TypeBuilder: public TypeBuilderBase
+class KDEVCPPDUCHAIN_EXPORT TypeBuilder: public TypeBuilderBase
 {
 public:
   TypeBuilder(ParseSession* session);

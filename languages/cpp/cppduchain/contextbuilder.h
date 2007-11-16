@@ -30,7 +30,7 @@
 #include <identifier.h>
 #include <ducontext.h>
 #include <ksharedptr.h>
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 
 namespace KDevelop
@@ -54,7 +54,7 @@ namespace Cpp {
 /**
  * A class which iterates the AST to identify contexts.
  */
-class KDEVCPPDUCHAINBUILDER_EXPORT  ContextBuilder: protected DefaultVisitor
+class KDEVCPPDUCHAIN_EXPORT  ContextBuilder: protected DefaultVisitor
 {
   friend class IdentifierVerifier;
 

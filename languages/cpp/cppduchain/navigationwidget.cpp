@@ -193,7 +193,7 @@ class NavigationContext : public KShared {
 
     NavigationContextPointer acceptLink(const QString& link) {
       if( !m_links.contains(link) ) {
-        kDebug(9007) << "Executed unregistered link " << link;
+        kDebug(9007) << "Executed unregistered link " << link << endl;
         return NavigationContextPointer(this);
       }
 
@@ -614,7 +614,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
     return NavigationContextPointer(action.targetContext);
   
   if( !action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty()) ) {
-      kDebug(9007) << "Navigation-action has invalid declaration";
+      kDebug(9007) << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
   }
   qRegisterMetaType<KUrl>("KUrl");
@@ -622,7 +622,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
   
   switch( action.type ) {
     case NavigationAction::None:
-      kDebug(9007) << "Tried to execute an invalid action in navigation-widget";
+      kDebug(9007) << "Tried to execute an invalid action in navigation-widget" << endl;
       break;
     case NavigationAction::NavigateDeclaration:
     {
@@ -641,13 +641,13 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
         }
         
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
-        QMetaObject::invokeMethod( CppLanguageSupport::self()->core()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
+        QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
         break;
       }
       case NavigationAction::JumpToDefinition:
       //This is used to execute the slot delayed in the event-loop, so crashes are avoided
       if( action.decl->definition() ) {
-        QMetaObject::invokeMethod( CppLanguageSupport::self()->core()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, action.decl->definition()->url()), Q_ARG(KTextEditor::Cursor, action.decl->definition()->textRange().start()) );
+        QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, action.decl->definition()->url()), Q_ARG(KTextEditor::Cursor, action.decl->definition()->textRange().start()) );
       }
       break;
   }
@@ -802,18 +802,21 @@ void NavigationWidget::anchorClicked(const QUrl& url) {
 }
 
 void NavigationWidget::next() {
+  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   m_context->nextLink();
   update();
 }
 
 void NavigationWidget::previous() {
+  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   m_context->previousLink();
   update();
 }
 
 void NavigationWidget::accept() {
+  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   setContext( m_context->accept() );
 }
@@ -831,4 +834,3 @@ QString NavigationWidget::shortDescription(const IncludeItem& includeItem) {
 }
 
 #include "navigationwidget.moc"
-

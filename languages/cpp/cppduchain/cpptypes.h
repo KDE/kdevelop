@@ -30,7 +30,7 @@
 #include <typesystem.h>
 #include <declaration.h>
 #include <identifiedtype.h>
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 namespace KDevelop
 {
@@ -40,7 +40,7 @@ class Declaration;
 
 class TemplateParameterDeclaration;
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppCVType
+class KDEVCPPDUCHAIN_EXPORT CppCVType
 {
   friend class TypeRepository;
   friend class TypeBuilder;
@@ -73,7 +73,7 @@ private:
   bool m_volatile : 1;
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppIntegralType : public KDevelop::IntegralType, public CppCVType
+class KDEVCPPDUCHAIN_EXPORT CppIntegralType : public KDevelop::IntegralType, public CppCVType
 {
   friend class TypeRepository;
 
@@ -126,7 +126,7 @@ private:
 /**
  * An integral type that additionally has a constant value
  * */
-class KDEVCPPDUCHAINBUILDER_EXPORT CppConstantIntegralType : public CppIntegralType
+class KDEVCPPDUCHAIN_EXPORT CppConstantIntegralType : public CppIntegralType
 {
   friend class TypeRepository;
 
@@ -165,7 +165,7 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionType, public KDevelop::IdentifiedType, public CppCVType
+class KDEVCPPDUCHAIN_EXPORT CppFunctionType : public KDevelop::FunctionType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
@@ -192,7 +192,7 @@ public:
   virtual bool equals(const AbstractType* rhs) const;
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
+class KDEVCPPDUCHAIN_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppPointerType> Ptr;
@@ -209,7 +209,7 @@ public:
   //virtual uint hash() const;
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppReferenceType : public KDevelop::ReferenceType, public CppCVType
+class KDEVCPPDUCHAIN_EXPORT CppReferenceType : public KDevelop::ReferenceType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppReferenceType> Ptr;
@@ -226,7 +226,7 @@ public:
   //virtual uint hash() const;
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppClassType : public KDevelop::StructureType, public KDevelop::IdentifiedType, public CppCVType
+class KDEVCPPDUCHAIN_EXPORT CppClassType : public KDevelop::StructureType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
@@ -296,7 +296,7 @@ public:
   virtual QString toString() const;
 };*/
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppTypeAliasType : public KDevelop::AbstractType, public KDevelop::IdentifiedType, public CppCVType
+class KDEVCPPDUCHAIN_EXPORT CppTypeAliasType : public KDevelop::AbstractType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppTypeAliasType> Ptr;
@@ -329,7 +329,7 @@ private:
   KDevelop::AbstractType::Ptr m_type;
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppEnumeratorType : public CppConstantIntegralType
+class KDEVCPPDUCHAIN_EXPORT CppEnumeratorType : public CppConstantIntegralType
 {
 public:
   typedef KSharedPtr<CppEnumeratorType> Ptr;
@@ -337,7 +337,7 @@ public:
   CppEnumeratorType();
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppEnumerationType : public CppIntegralType, public KDevelop::IdentifiedType
+class KDEVCPPDUCHAIN_EXPORT CppEnumerationType : public CppIntegralType, public KDevelop::IdentifiedType
 {
 public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
@@ -352,7 +352,7 @@ public:
   virtual QString toString() const;
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT CppArrayType : public KDevelop::ArrayType
+class KDEVCPPDUCHAIN_EXPORT CppArrayType : public KDevelop::ArrayType
 {
 public:
   typedef KSharedPtr<CppArrayType> Ptr;
@@ -384,7 +384,7 @@ private:
  * will return the real set types as abstractType().
  * This means that when you encounter this type, it means that the template-parameter is not set.
  * */
-class KDEVCPPDUCHAINBUILDER_EXPORT CppTemplateParameterType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
+class KDEVCPPDUCHAIN_EXPORT CppTemplateParameterType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
 {
 public:
   typedef KSharedPtr<CppTemplateParameterType> Ptr;

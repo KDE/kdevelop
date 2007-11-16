@@ -26,6 +26,7 @@
 #include <duchainpointer.h>
 #include "includeitem.h"
 #include <quickopendataprovider.h>
+#include "cppduchainexport.h"
 
 class QWidget;
 class QTextBrowser;
@@ -38,7 +39,7 @@ namespace Cpp {
    * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
    * The duchain must be read-locked for most operations
    * */
-  class NavigationWidget : public KTextBrowser, public KDevelop::QuickOpenEmbeddedWidgetInterface {
+  class KDEVCPPDUCHAIN_EXPORT NavigationWidget : public KTextBrowser, public KDevelop::QuickOpenEmbeddedWidgetInterface {
     Q_OBJECT
     public:
       /**
@@ -63,13 +64,13 @@ namespace Cpp {
     
       static QString shortDescription(const IncludeItem& includeItem);
 
+    public slots:
       ///Keyboard-action "next"
       virtual void next();
       ///Keyboard-action "previous"
       virtual void previous();
       ///Keyboard-action "accept"
       virtual void accept();
-      
     private slots:
       void anchorClicked(const QUrl&);
     private:

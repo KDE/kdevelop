@@ -22,7 +22,7 @@
 
 
 #include "default_visitor.h"
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 class ParseSession;
 namespace KDevelop
@@ -30,7 +30,7 @@ namespace KDevelop
 class DUContext;
 }
 
-class KDEVCPPDUCHAINBUILDER_EXPORT DumpChain: protected DefaultVisitor
+class KDEVCPPDUCHAIN_EXPORT DumpChain: protected DefaultVisitor
 {
 public:
   DumpChain();

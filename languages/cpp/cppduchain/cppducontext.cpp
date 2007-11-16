@@ -17,9 +17,37 @@
 */
 
 #include "cppducontext.h"
+#include "navigationwidget.h"
 
 namespace Cpp {
 
 QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
+
+template<>
+QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix ) const {
+  if( decl == 0 ) {
+    IncludeItem i;
+    i.pathNumber = -1;
+    i.name = url().fileName();
+    i.isDirectory = false;
+    i.basePath = url().upUrl();
+    
+    return new NavigationWidget( i, htmlPrefix, htmlSuffix );
+  } else {
+    return new NavigationWidget( DeclarationPointer(decl), htmlPrefix, htmlSuffix );
+  }
+}
+
+template<>
+QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix) const {
+  if( decl == 0 ) {
+    if( owner() && owner()->asDeclaration() )
+      return new NavigationWidget( DeclarationPointer(owner()->asDeclaration()), htmlPrefix, htmlSuffix );
+    else
+      return 0;
+  } else {
+    return new NavigationWidget( DeclarationPointer(decl), htmlPrefix, htmlSuffix );
+  }
+}
 
 }

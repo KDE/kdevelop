@@ -25,7 +25,7 @@
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
 #include "visitor.h"
-#include "cppexpressionparserexport.h"
+#include "cppduchainexport.h"
 #include "expressionvisitor.h"
 
 class TranslationUnitAST;
@@ -43,7 +43,7 @@ using namespace KDevelop;
  * The functions in ExpressionEvaluationResult are inlined for now, so they can be used from within the duchainbuilder module
  * (It's a circular dependency)
  * */
-class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
+class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
   public:
     ExpressionEvaluationResult() {
     }
@@ -89,7 +89,7 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult {
 /**
  * A class that simplifies the usage of CppExpressionVisitor by eventually parsing the expression and using CppExpressionVisitor to evaluate its type
  **/
-class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
+class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
   public:
      /**
      * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.

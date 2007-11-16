@@ -20,14 +20,14 @@
 #define USEBUILDER_H
 
 #include "contextbuilder.h"
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 typedef ContextBuilder UseBuilderBase;
 
 /**
  * A class which iterates the AST to extract uses of definitions.
  */
-class KDEVCPPDUCHAINBUILDER_EXPORT  UseBuilder: public UseBuilderBase
+class KDEVCPPDUCHAIN_EXPORT  UseBuilder: public UseBuilderBase
 {
 public:
   UseBuilder(ParseSession* session);

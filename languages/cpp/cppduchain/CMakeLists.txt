@@ -37,6 +37,7 @@ set(kdevcppduchain_LIB_SRCS
     overloadresolution.cpp
     viablefunctions.cpp
     overloadresolutionhelper.cpp
+    navigationwidget.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
@@ -44,7 +45,7 @@ set(kdevcppduchain_LIB_SRCS
 #       to the plugin target
 
 kde4_add_library(kdev4cppduchain SHARED ${kdevcppduchain_LIB_SRCS})
-target_link_libraries(kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY} kdev4cppparser)
+target_link_libraries(kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY} kdev4cppparser)
 install(TARGETS kdev4cppduchain DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############

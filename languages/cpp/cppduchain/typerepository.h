@@ -24,13 +24,13 @@
 #include <QtCore/QMutex>
 
 #include "cpptypes.h"
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 namespace KDevelop {
   class QualifiedIdentifier;
 }
 
-class KDEVCPPDUCHAINBUILDER_EXPORT  TypeRepository
+class KDEVCPPDUCHAIN_EXPORT  TypeRepository
 {
 public:
   static TypeRepository* self();

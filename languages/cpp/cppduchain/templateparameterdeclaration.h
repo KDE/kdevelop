@@ -20,7 +20,7 @@
 #define TEMPLATEPARAMETERDECLARATION_H
 
 #include <declaration.h>
-#include <cppduchainbuilderexport.h>
+#include "cppduchainexport.h"
 
 namespace KDevelop {
   class QualifiedIdentifier;
@@ -33,7 +33,7 @@ namespace KDevelop {
 /**
  * Represents a single template-parameter definition
  */
-class KDEVCPPDUCHAINBUILDER_EXPORT TemplateParameterDeclaration : public KDevelop::Declaration
+class KDEVCPPDUCHAIN_EXPORT TemplateParameterDeclaration : public KDevelop::Declaration
 {
 public:
   TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs);

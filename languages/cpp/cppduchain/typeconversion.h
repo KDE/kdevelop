@@ -19,7 +19,7 @@
 #ifndef TYPECONVERSION_H
 #define TYPECONVERSION_H
 
-#include "cppexpressionparserexport.h"
+#include "cppduchainexport.h"
 #include "typesystem.h"
 
 namespace Cpp {
@@ -62,7 +62,7 @@ using namespace KDevelop;
  *
  * @todo ellipsis(functions with arbitrary count of arguments) cannot be respected because it is not parsed yet
  * */
-class KDEVCPPEXPRESSIONPARSER_EXPORT TypeConversion {
+class KDEVCPPDUCHAIN_EXPORT TypeConversion {
   public:
     virtual ~TypeConversion();
     /**

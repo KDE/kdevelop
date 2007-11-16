@@ -20,7 +20,7 @@
 #define DECLARATIONBUILDER_H
 
 #include "typebuilder.h"
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 #include <declaration.h>
 #include <duchainpointer.h>
 #include <classfunctiondeclaration.h>
@@ -35,7 +35,7 @@ typedef TypeBuilder DeclarationBuilderBase;
 /**
  * A class which iterates the AST to extract definitions of types.
  */
-class KDEVCPPDUCHAINBUILDER_EXPORT DeclarationBuilder: public DeclarationBuilderBase
+class KDEVCPPDUCHAIN_EXPORT DeclarationBuilder: public DeclarationBuilderBase
 {
 public:
   DeclarationBuilder(ParseSession* session);

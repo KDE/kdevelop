@@ -21,13 +21,13 @@
 #include <ext/hash_set>
 #include <duchain/hashedstring.h>
 #include <string>
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 class HashedStringSetData;
 class HashedStringSetGroup;
 
 ///This is a reference-counting string-set optimized for fast lookup of hashed strings
-class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSet {
+class KDEVCPPDUCHAIN_EXPORT HashedStringSet {
   public:
     HashedStringSet();
 
@@ -76,7 +76,7 @@ HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& 
 
 namespace __gnu_cxx {
 template<>
-struct KDEVCPPDUCHAINBUILDER_EXPORT hash<KDevelop::HashedString> {
+struct KDEVCPPDUCHAIN_EXPORT hash<KDevelop::HashedString> {
   KDevelop::HashType operator () ( const KDevelop::HashedString& str ) const {
     return str.hash();
   }
@@ -84,7 +84,7 @@ struct KDEVCPPDUCHAINBUILDER_EXPORT hash<KDevelop::HashedString> {
 }
 
 ///Used to find all registered HashedStringSet's that contain all strings given to findGroups(..)
-class KDEVCPPDUCHAINBUILDER_EXPORT HashedStringSetGroup {
+class KDEVCPPDUCHAIN_EXPORT HashedStringSetGroup {
   public:
     typedef std::set<unsigned int> ItemSet;
     void addSet( unsigned int id, const HashedStringSet& set );

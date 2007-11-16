@@ -21,7 +21,7 @@
 #include <identifier.h>
 #include <declaration.h>
 #include <duchainpointer.h>
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 
 using namespace Cpp;
@@ -29,7 +29,7 @@ using namespace KDevelop;
 
 namespace Cpp {
 
-KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier ) {
+KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier ) {
   QList<Declaration*> ret;
   ret += context->findLocalDeclarations( identifier );
   if( !ret.isEmpty() )
@@ -46,7 +46,7 @@ KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> findLocalDeclaration
   return ret;
 }
 
-KDEVCPPDUCHAINBUILDER_EXPORT  QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context ) {
+KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context ) {
   QList<Declaration*> ret;
   ret += context->localDeclarations();
   if( !ret.isEmpty() )

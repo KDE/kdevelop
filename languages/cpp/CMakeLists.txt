@@ -34,7 +34,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     stringhelpers.cpp
     includepathresolver.cpp
     setuphelpers.cpp
-    navigationwidget.cpp
     quickopen.cpp
 )
 

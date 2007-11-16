@@ -25,7 +25,7 @@
 
 #include <QList>
 #include <QPair>
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 namespace KTextEditor {
   class Cursor;
@@ -42,8 +42,8 @@ namespace Cpp {
  * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++.
  * Du-chain must be locked before.
  * */
-KDEVCPPDUCHAINBUILDER_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );
-KDEVCPPDUCHAINBUILDER_EXPORT QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context );
+KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );
+KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context );
 
 /**
  * Searches for declarations on the same level, either locally within the context, or namespace. \param identifier that will be declared in a given \param context
@@ -56,7 +56,7 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
  * Since in c++ one declaration with a name in one depth overloads deeper
  * declarations, they are hidden here.
  * */
-KDEVCPPDUCHAINBUILDER_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<KDevelop::Declaration*, int> >& declarations );
+KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<KDevelop::Declaration*, int> >& declarations );
 }
 
 #endif

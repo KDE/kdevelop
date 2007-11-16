@@ -20,7 +20,7 @@
 
 #include <QList>
 #include "overloadresolution.h"
-#include "cppexpressionparserexport.h"
+#include "cppduchainexport.h"
 #include <duchainpointer.h>
 
 
@@ -33,7 +33,7 @@ namespace KDevelop  {
 namespace Cpp {
   using namespace KDevelop;
 
-  class KDEVCPPEXPRESSIONPARSER_EXPORT ViableFunction {
+  class KDEVCPPDUCHAIN_EXPORT ViableFunction {
     public:
 
     explicit ViableFunction( Declaration* decl = 0, bool noUserDefinedConversion = false );

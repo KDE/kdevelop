@@ -25,7 +25,7 @@
 #include <duchain/declaration.h>
 #include <duchain/duchainpointer.h>
 #include "expressionparser.h"
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 
 
 namespace KTextEditor {
@@ -57,7 +57,7 @@ namespace Cpp {
   class CppDUContext;
   
   //Represents the template-part of a template-class'es or template-function's template-part
-  class KDEVCPPDUCHAINBUILDER_EXPORT TemplateDeclaration {
+  class KDEVCPPDUCHAIN_EXPORT TemplateDeclaration {
     public:
       typedef QHash<InstantiationKey, TemplateDeclaration*> InstantiationsHash;
       
@@ -115,7 +115,7 @@ namespace Cpp {
    * be a TemplateDeclaration.
    * */
   template<class BaseDeclaration>
-  class KDEVCPPDUCHAINBUILDER_EXPORT SpecialTemplateDeclaration : public BaseDeclaration, public TemplateDeclaration {
+  class KDEVCPPDUCHAIN_EXPORT SpecialTemplateDeclaration : public BaseDeclaration, public TemplateDeclaration {
     public:
     ///Copy-constructor for cloning
     SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(rhs), TemplateDeclaration(rhs) {
@@ -136,7 +136,7 @@ namespace Cpp {
     }
   };
 
-  bool KDEVCPPDUCHAINBUILDER_EXPORT isTemplateDeclaration(const KDevelop::Declaration*);
+  bool KDEVCPPDUCHAIN_EXPORT isTemplateDeclaration(const KDevelop::Declaration*);
 
   /**
    * If this is used to instantiate a declaration, it should be called BEFORE the Declaration's types DelayedType's are resolved,

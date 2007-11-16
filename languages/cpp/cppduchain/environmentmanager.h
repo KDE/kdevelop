@@ -31,7 +31,7 @@
 #include <editorintegrator.h>
 #include <iproblem.h>
 
-#include "cppduchainbuilderexport.h"
+#include "cppduchainexport.h"
 #include "macroset.h"
 #include "cachemanager.h"
 #include "setrepository.h"
@@ -124,7 +124,7 @@ typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash> StringSet
 class EnvironmentManager;
 class MacroSet;
 
-class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
+class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
     EnvironmentFile( const KUrl& url, EnvironmentManager* manager );
@@ -223,13 +223,13 @@ class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFile : public CacheNode, public KD
 
 typedef KSharedPtr<EnvironmentFile>  EnvironmentFilePointer;
 
-struct KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentFilePointerCompare {
+struct KDEVCPPDUCHAIN_EXPORT EnvironmentFilePointerCompare {
   bool operator() ( const EnvironmentFilePointer& lhs, const EnvironmentFilePointer& rhs ) const {
     return (*lhs) < (*rhs );
   }
 };
 
-class KDEVCPPDUCHAINBUILDER_EXPORT EnvironmentManager : public CacheManager, public KDevelop::ParsingEnvironmentManager {
+class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDevelop::ParsingEnvironmentManager {
   public:
     EnvironmentManager();
     virtual ~EnvironmentManager();
