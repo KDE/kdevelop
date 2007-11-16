@@ -27,6 +27,7 @@ ICore *ICore::m_self = 0;
 ICore::ICore(QObject *parent)
     : QObject(parent)
 {
+    Q_ASSERT(m_self == 0);
     m_self = this;
 }
 
