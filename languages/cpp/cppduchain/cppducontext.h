@@ -428,6 +428,8 @@ class CppDUContext : public BaseContext {
     virtual bool inDUChain() const {
       return m_instantiatedFrom || BaseContext::inDUChain();
     }
+
+    virtual QWidget* createNavigationWidget(Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix) const;
     
   private:
     QList<QualifiedIdentifier> toList( const QualifiedIdentifier& id ) const {
