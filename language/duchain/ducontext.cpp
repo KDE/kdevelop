@@ -1055,6 +1055,12 @@ TopDUContext* DUContext::topContext() const
   return 0;
 }
 
+QWidget* DUContext::createNavigationWidget(Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix) const
+{
+  return 0;
+}
+
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

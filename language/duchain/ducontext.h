@@ -30,6 +30,8 @@
 template<class T>
 class QSet;
 
+class QWidget;
+
 namespace KDevelop
 {
 
@@ -383,6 +385,22 @@ public:
    * */
   void changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to );
 
+  /**
+   * Can be specialized by languages to create a navigation/information-widget.
+   * Ideally, the widget would be based on KDevelop::QuickOpenEmbeddedWidgetInterface
+   * for user-interaction within the quickopen list.
+   *
+   * The returned widget will be owned by the caller.
+   *
+   * @param decl A member-declaration of this context the navigation-widget should be created for
+   * @param htmlPrefix Html-formatted text that should be prepended before any information shown by this widget
+   * @param htmlSuffux Html-formatted text that should be appended to any information shown by this widget
+   *
+   * Can return zero, which the default-implementation currently always does.
+   * */
+  virtual QWidget* createNavigationWidget(Declaration* decl = 0, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString()) const;
+
+  
   ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
   /// Declaration search implementation
   virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, SearchFlags flags ) const;
