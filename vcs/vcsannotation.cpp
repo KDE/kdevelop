@@ -69,32 +69,28 @@ int VcsAnnotation::lineCount() const
 
 QString VcsAnnotation::line( int linenum ) const
 {
-    int inum = linenum;
-    if( inum < d->lines.count() )
+    if( linenum < d->lines.count() )
         return d->lines.at( linenum );
     return QString();
 }
 
 VcsRevision VcsAnnotation::revision( int linenum ) const
 {
-    int inum = linenum;
-    if( inum < d->revisions.count() )
+    if( linenum < d->revisions.count() )
         return d->revisions.at( linenum );
     return VcsRevision();
 }
 
 QString VcsAnnotation::author( int linenum ) const
 {
-    int inum = linenum;
-    if( inum < d->authors.count() )
+    if( linenum < d->authors.count() )
         return d->authors.at( linenum );
     return QString();
 }
 
 QDateTime VcsAnnotation::date( int linenum ) const
 {
-    int inum = linenum;
-    if( inum < d->dates.count() )
+    if( linenum < d->dates.count() )
         return d->dates.at( linenum );
     return QDateTime();
 }
