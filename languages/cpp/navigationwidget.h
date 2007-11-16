@@ -63,13 +63,13 @@ namespace Cpp {
     
       static QString shortDescription(const IncludeItem& includeItem);
 
-    public slots:
       ///Keyboard-action "next"
       virtual void next();
       ///Keyboard-action "previous"
       virtual void previous();
       ///Keyboard-action "accept"
       virtual void accept();
+      
     private slots:
       void anchorClicked(const QUrl&);
     private:

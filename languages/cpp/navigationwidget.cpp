@@ -802,21 +802,18 @@ void NavigationWidget::anchorClicked(const QUrl& url) {
 }
 
 void NavigationWidget::next() {
-  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   m_context->nextLink();
   update();
 }
 
 void NavigationWidget::previous() {
-  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   m_context->previousLink();
   update();
 }
 
 void NavigationWidget::accept() {
-  DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   setContext( m_context->accept() );
 }
@@ -834,3 +831,4 @@ QString NavigationWidget::shortDescription(const IncludeItem& includeItem) {
 }
 
 #include "navigationwidget.moc"
+
