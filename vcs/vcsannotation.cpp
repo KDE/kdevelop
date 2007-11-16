@@ -62,12 +62,12 @@ KUrl VcsAnnotation::location() const
     return d->location;
 }
 
-unsigned int VcsAnnotation::lineCount() const
+int VcsAnnotation::lineCount() const
 {
     return d->lines.count();
 }
 
-QString VcsAnnotation::line( unsigned int linenum ) const
+QString VcsAnnotation::line( int linenum ) const
 {
     int inum = linenum;
     if( inum < d->lines.count() )
@@ -75,7 +75,7 @@ QString VcsAnnotation::line( unsigned int linenum ) const
     return QString();
 }
 
-VcsRevision VcsAnnotation::revision( unsigned int linenum ) const
+VcsRevision VcsAnnotation::revision( int linenum ) const
 {
     int inum = linenum;
     if( inum < d->revisions.count() )
@@ -83,7 +83,7 @@ VcsRevision VcsAnnotation::revision( unsigned int linenum ) const
     return VcsRevision();
 }
 
-QString VcsAnnotation::author( unsigned int linenum ) const
+QString VcsAnnotation::author( int linenum ) const
 {
     int inum = linenum;
     if( inum < d->authors.count() )
@@ -91,7 +91,7 @@ QString VcsAnnotation::author( unsigned int linenum ) const
     return QString();
 }
 
-QDateTime VcsAnnotation::date( unsigned int linenum ) const
+QDateTime VcsAnnotation::date( int linenum ) const
 {
     int inum = linenum;
     if( inum < d->dates.count() )
@@ -99,24 +99,13 @@ QDateTime VcsAnnotation::date( unsigned int linenum ) const
     return QDateTime();
 }
 
-void VcsAnnotation::setLines( const QStringList& l )
+void VcsAnnotation::addLine( const QString& text, const QString& author, 
+                             const QDateTime& date, const VcsRevision& revision )
 {
-    d->lines = l;
-}
-
-void VcsAnnotation::setAuthors( const QStringList& l )
-{
-    d->authors = l;
-}
-
-void VcsAnnotation::setDates( const QList<QDateTime>& l )
-{
-    d->dates = l;
-}
-
-void VcsAnnotation::setRevisions( const QList<KDevelop::VcsRevision>& l )
-{
-    d->revisions = l;
+    d->lines.append( text );
+    d->authors.append( author );
+    d->dates.append( date );
+    d->revisions.append( revision );
 }
 
 void VcsAnnotation::setLocation(const KUrl& u)

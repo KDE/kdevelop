@@ -53,32 +53,40 @@ public:
     /**
      * @return the number of lines in the file
      */
-    unsigned int lineCount() const;
+    int lineCount() const;
     /**
      * @param linenum the number of the line, counting from 0
      * @return the content of the specified line
      */
-    QString line( unsigned int linenum ) const;
+    QString line( int linenum ) const;
     /**
      * @param linenum the number of the line, counting from 0
      * @return the revision of the last change on the specified line
      */
-    VcsRevision revision( unsigned int linenum ) const;
+    VcsRevision revision( int linenum ) const;
     /**
      * @param linenum the number of the line, counting from 0
      * @return the author of the last change on the specified line
      */
-    QString author( unsigned int linenum ) const;
+    QString author( int linenum ) const;
     /**
      * @param linenum the number of the line, counting from 0
      * @return the date of the last change on the specified line
      */
-    QDateTime date( unsigned int linenum ) const;
+    QDateTime date( int linenum ) const;
 
-    void setLines( const QStringList& );
-    void setAuthors( const QStringList& );
-    void setDates( const QList<QDateTime>& );
-    void setRevisions( const QList<VcsRevision>& );
+    /**
+     * add a new line to the end of the list of lines using
+     * the parameters
+     *
+     * @param text the text of the line
+     * @param author the author of the last change to the line
+     * @param date the date of the last change to the line
+     * @param revision the revision of the last change to the line
+     *
+     */
+    void addLine( const QString& text, const QString& author, 
+                  const QDateTime& date, const VcsRevision& revision );
     void setLocation( const KUrl& );
 
     VcsAnnotation& operator=( const VcsAnnotation& rhs);
