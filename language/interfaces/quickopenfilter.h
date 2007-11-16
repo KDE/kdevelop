@@ -32,6 +32,9 @@
  *
  * The simplest way of using this is by reimplementing your data-provider
  * based on QuickOpenDataProviderBase and KDevelop::Filter<YourType>.
+ *
+ * YourType should be the type that holds all the information you need.
+ * The filter will hold the data, and you can access it through "items()".
  * 
  * What you need to do to use it:
  *
@@ -53,7 +56,7 @@ class Filter {
     virtual ~Filter() {
     }
     ///Clears the filter, but not the data.
-    void clear() {
+    void clearFilter() {
       m_filtered = m_items;
       m_oldFilterText = QString();
     }
@@ -61,7 +64,7 @@ class Filter {
     ///Clears the filter and sets new data. The filter-text will be lost.
     void setItems( const QList<Item>& data ) {
       m_items = data;
-      clear();
+      clearFilter();
     }
 
     const QList<Item>& items() const {

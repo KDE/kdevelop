@@ -38,6 +38,8 @@ namespace KDevelop {
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface {
   public:
+    ///@warning Currently, as a workaround for a g++ bug, the following methods need to be slots in your implementation.
+    
     ///Is called when the keyboard-shortcut "next" is triggered on the widget, which currently is SHIFT+Right
     virtual void next() = 0;
     ///Is called when the keyboard-shortcut "previous" is triggered on the widget, which currently is SHIFT+Left
@@ -127,10 +129,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * Store the text to track the exact difference.
      * */
     virtual void setFilterText( const QString& text ) = 0;
-    ///Filter-text should be completely reset and the context re-computed.
+    
+    /**
+     * Filter-text should be completely reset and the context re-computed.
+     * */
     virtual void reset() = 0;
 
-    ///Returns the count of items this provider currently represents
+    /**
+     * Returns the count of items this provider currently represents
+     * */
     virtual uint itemCount() const = 0;
 
     /**
