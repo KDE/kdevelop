@@ -57,6 +57,8 @@ public:
 
     QString smartError(); // subversion internal
 
+    virtual KDevelop::IPlugin* vcsPlugin() const;
+
     virtual void start();
 //     JobStatus exec();
 //     SvnUiDelegate* ui();

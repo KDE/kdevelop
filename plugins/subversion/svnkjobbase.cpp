@@ -10,6 +10,7 @@
 
 #include "svnkjobbase.h"
 #include "subversioncore.h"
+#include "subversionpart.h"
 #include "subversionthreads.h"
 #include "svnmodels.h"
 #include "vcsmapping.h"
@@ -25,12 +26,16 @@
 #include <QTextStream>
 #include <QFile>
 
+#include <iplugin.h>
+
 class SvnKJobBase::Private
 {
 public:
     SubversionThread *m_th;
     QVariant m_variant;
     bool m_validResult;
+
+    KDevelop::IPlugin* vcsplugin;
 
     // returns QVariant ( const QMap< QString, QVariant > ),
     // where innermost QVariant (which is template argument) is constructed with
@@ -164,6 +169,7 @@ SvnKJobBase::SvnKJobBase( SvnKJobBase::JobType type, SubversionCore *parent )
     setType( (VcsJob::JobType) type );
     d->m_validResult = false;
 
+    d->vcsplugin = parent->svnPart();
     // The forceful termination of thread causes deadlock in some cases.
     // Don't set Killable for a moment
     // setCapabilities( KJob::Killable );
@@ -294,5 +300,11 @@ bool SvnKJobBase::doKill()
     kDebug(9500) << "SvnKJobBase::doKill() return value :" << ret;
     return ret;
 }
+
+KDevelop::IPlugin* SvnKJobBase::vcsPlugin() const
+{
+    return d->vcsplugin;
+}
+
 
 #include "svnkjobbase.moc"

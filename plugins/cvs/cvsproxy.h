@@ -18,6 +18,11 @@
 
 class CvsJob;
 
+namespace KDevelop
+{
+class IPlugin;
+}
+
 /**
  * This proxy acts as a single point of entry for most of the common cvs commands.
  * It is very easy to use, as the caller does not have to deal which the CvsJob class directly.
@@ -45,7 +50,7 @@ class CvsProxy : public QObject
 {
     Q_OBJECT
 public:
-    CvsProxy(QObject* parent = 0);
+    CvsProxy(KDevelop::IPlugin* parent = 0);
     ~CvsProxy();
 
     bool isValidDirectory(const KUrl &dirPath) const;
@@ -97,6 +102,7 @@ private:
     };
     bool prepareJob(CvsJob* job, const QString& repository,
                     enum RequestedOperation op = CvsProxy::NormalOperation);
+    KDevelop::IPlugin* vcsplugin;
 };
 
 #endif

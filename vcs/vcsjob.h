@@ -33,6 +33,8 @@ class KUrl;
 namespace KDevelop
 {
 
+class IPlugin;
+
 /**
  * This class provides an extension of KJob to get various Vcs
  * specific information about the job. This includes the type, the state
@@ -111,6 +113,14 @@ public:
      * @return the type of job
      */
     JobType type();
+
+    /**
+     * Used to get at the version control plugin. The plugin
+     * can be used to get one of the interfaces to execute
+     * more vcs actions, depending on this jobs results 
+     * (like getting a diff for an entry in a log)
+     */
+    virtual KDevelop::IPlugin* vcsPlugin() const = 0;
 
 protected:
     /**

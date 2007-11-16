@@ -22,11 +22,11 @@
 #include <KLocale>
 
 #include "processlinemaker.h"
-
+#include <iplugin.h>
 
 struct CvsJob::Private
 {
-    Private() : isRunning(false), commMode(KProcess::SeparateChannels)
+    Private() : isRunning(false), commMode(KProcess::SeparateChannels), vcsplugin(0)
     {
         childproc = new KProcess;
         lineMaker = new KDevelop::ProcessLineMaker( childproc );
@@ -47,12 +47,14 @@ struct CvsJob::Private
     bool        isRunning;
     QStringList outputLines;
     KProcess::OutputChannelMode commMode;
+    KDevelop::IPlugin* vcsplugin;
 };
 
 
-CvsJob::CvsJob(QObject* parent)
+CvsJob::CvsJob(KDevelop::IPlugin* parent)
     : VcsJob(parent), d(new Private)
 {
+    d->vcsplugin = parent;
 }
 
 CvsJob::~CvsJob()
@@ -217,6 +219,11 @@ KDevelop::VcsJob::JobStatus CvsJob::status() const
         return KDevelop::VcsJob::JobFailed;
 
     return KDevelop::VcsJob::JobSucceeded;
+}
+
+KDevelop::IPlugin* CvsJob::vcsPlugin() const
+{
+    return d->vcsplugin;
 }
 
 #include "cvsjob.moc"

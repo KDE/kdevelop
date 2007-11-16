@@ -30,7 +30,7 @@ class CvsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    CvsJob(QObject* parent);
+    CvsJob(KDevelop::IPlugin* parent);
     virtual ~CvsJob();
 
     void clear();
@@ -72,6 +72,7 @@ public:
     // Begin:  KDevelop::VcsJob
     virtual QVariant fetchResults();
     virtual KDevelop::VcsJob::JobStatus status() const;
+    virtual KDevelop::IPlugin* vcsPlugin() const;
     // End:  KDevelop::VcsJob
 
 public slots:
