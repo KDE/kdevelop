@@ -22,13 +22,22 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop {
 
+ICore *ICore::m_self = 0;
+
 ICore::ICore(QObject *parent)
     : QObject(parent)
 {
+    m_self = this;
 }
 
 ICore::~ICore()
 {
+    m_self = 0;
+}
+
+ICore *ICore::self()
+{
+    return m_self;
 }
 
 }
