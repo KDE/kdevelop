@@ -193,7 +193,7 @@ class NavigationContext : public KShared {
 
     NavigationContextPointer acceptLink(const QString& link) {
       if( !m_links.contains(link) ) {
-        kDebug(9007) << "Executed unregistered link " << link << endl;
+        kDebug(9007) << "Executed unregistered link " << link;
         return NavigationContextPointer(this);
       }
 
@@ -614,7 +614,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
     return NavigationContextPointer(action.targetContext);
   
   if( !action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty()) ) {
-      kDebug(9007) << "Navigation-action has invalid declaration" << endl;
+      kDebug(9007) << "Navigation-action has invalid declaration";
       return NavigationContextPointer(this);
   }
   qRegisterMetaType<KUrl>("KUrl");
@@ -622,7 +622,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
   
   switch( action.type ) {
     case NavigationAction::None:
-      kDebug(9007) << "Tried to execute an invalid action in navigation-widget" << endl;
+      kDebug(9007) << "Tried to execute an invalid action in navigation-widget";
       break;
     case NavigationAction::NavigateDeclaration:
     {

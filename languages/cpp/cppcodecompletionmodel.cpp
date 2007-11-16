@@ -140,7 +140,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   KUrl url = view->document()->url();
 
   if( !KDevelop::DUChain::lock()->lockForRead(400) ) {
-    kDebug(9007) << "could not lock du-chain in time" << endl;
+    kDebug(9007) << "could not lock du-chain in time";
     return;
   }
 

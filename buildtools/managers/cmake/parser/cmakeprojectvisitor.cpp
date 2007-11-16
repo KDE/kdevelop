@@ -92,7 +92,7 @@ QString CMakeProjectVisitor::variableName(const QString &name, VariableType &typ
     QRegExp rx(exp);
     int idx = rx.indexIn(name);
     if(idx<0) {
-        kDebug(9032) << "error!!! I can't know that it is a variable:" << name << ". Report this bug, please." << endl ;
+        kDebug(9032) << "error!!! I can't know that it is a variable:" << name << ". Report this bug, please.";
     }
     int begin=name.indexOf('{', idx)+1;
     int end=name.indexOf('}', begin);

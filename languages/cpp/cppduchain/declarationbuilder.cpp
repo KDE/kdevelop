@@ -421,7 +421,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   if (!declaration) {
 /*    if( recompiling() )
-      kDebug(9007) << "creating new declaration while recompiling: " << lastId << "(" << newRange << ")" << endl;*/
+      kDebug(9007) << "creating new declaration while recompiling: " << lastId << "(" << newRange << ")";*/
     Range* prior = m_editor->currentRange();
     Range* range = m_editor->createRange(newRange);
     
@@ -563,7 +563,7 @@ void DeclarationBuilder::closeDeclaration()
         currentDeclaration()->setInternalContext(m_lastContext);
         
         if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )
-          kDebug(9007) << "Warning: Range was invalidated" << endl;
+          kDebug(9007) << "Warning: Range was invalidated";
         
         m_lastContext = 0;
       }
@@ -714,7 +714,7 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
     DUChainReadLocker lock(DUChain::lock());
     if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
       ///@todo report problem
-      kDebug(9007) << "Namespace-import used in non-global scope" << endl;
+      kDebug(9007) << "Namespace-import used in non-global scope";
       return;
     }
   }
@@ -738,7 +738,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
     DUChainReadLocker lock(DUChain::lock());
     if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
       ///@todo report problem
-      kDebug(9007) << "Namespace-alias used in non-global scope" << endl;
+      kDebug(9007) << "Namespace-alias used in non-global scope";
     }
   }
   

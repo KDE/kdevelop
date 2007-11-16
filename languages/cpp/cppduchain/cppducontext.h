@@ -109,7 +109,7 @@ class CppDUContext : public BaseContext {
     virtual void findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
       if( basicFlags & BaseContext::LanguageSpecificFlag1 ) {
-        //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
+        //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
         //We use LanguageSpecificFlag1 to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.
         BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, basicFlags );
         return;
@@ -143,7 +143,7 @@ class CppDUContext : public BaseContext {
     ///Overridden to take care of templates and other c++ specific things
     void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
     {
-      ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
+      ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 
       
       ///@todo maybe move parts of this logic directly into the du-chain
@@ -203,7 +203,7 @@ class CppDUContext : public BaseContext {
             templateArgumentTypes << res;
             ifDebug( kDebug() << "evaluated template-parameter" << res.toString(); )
             if( !res.isValid() )
-              kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString() << endl;
+              kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString();
           }
         }
 
@@ -245,7 +245,7 @@ class CppDUContext : public BaseContext {
                 if( dec )
                   ret << dec;
                 else
-                  kDebug(9007) << "Could not instantiate template-declaration" << endl;
+                  kDebug(9007) << "Could not instantiate template-declaration";
               }
             }
           }else{
@@ -255,7 +255,7 @@ class CppDUContext : public BaseContext {
             currentLookup.clear();
             if( tempDecls.size() == 1 ) {
             } else {
-              kDebug(9007) << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " multiple ambiguous declarations for scope " << currentLookup.toString() << endl;
+              kDebug(9007) << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " multiple ambiguous declarations for scope " << currentLookup.toString();
             }
             //Extract a context, maybe it would be enough only testing the first found declaration
             foreach( Declaration* decl, tempDecls ) {
@@ -267,7 +267,7 @@ class CppDUContext : public BaseContext {
               }
 
               if( !instanceDecl ) {
-                kDebug(9007) << "Could not instantiate context-declaration" << endl;
+                kDebug(9007) << "Could not instantiate context-declaration";
                 continue;
               }
 
@@ -288,7 +288,7 @@ class CppDUContext : public BaseContext {
                 break;
             }
             if( !scopeContext || scopeContext->type() != DUContext::Class ) {
-              kDebug(9007) << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString() << endl;
+              kDebug(9007) << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString();
               return;
 
             }
@@ -299,7 +299,7 @@ class CppDUContext : public BaseContext {
             //This is ok in the case that currentLookup stands for a namespace, because namespaces do not have a declaration.
             for( int a = 0; a < currentLookup.count(); a++ ) {
               if( templateArgumentTypes.count() != 0 ) {
-                kDebug(9007) << "CppDUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString() << endl;
+                kDebug(9007) << "CppDUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString();
                 return; //If one of the parts has a template-identifier, it cannot be a namespace
               }
             }
@@ -313,8 +313,8 @@ class CppDUContext : public BaseContext {
 
     virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, typename BaseContext::SearchFlags flags ) const
     {
-      ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\"" << endl; )
-      ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString() << endl; )
+      ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
+      ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString(); )
       /**
         - When searching local declarations:
          - Check whether they are already in the instantiated context, if yes return them
@@ -338,14 +338,14 @@ class CppDUContext : public BaseContext {
             if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) )
                || ( (dynamic_cast<ClassFunctionDeclaration*>(*it) && static_cast<ClassFunctionDeclaration*>(*it)->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
               it = ret.erase(it);
-              //kDebug(9007) << "filtered out 1 declaration" << endl;
+              //kDebug(9007) << "filtered out 1 declaration";
             } else {
               ++it;
             }
           }
         }
 
-        ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString() << endl; )
+        ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString(); )
         ifDebug( kDebug(9007) << "instantiated from:" << m_instantiatedFrom; )
         
         if( m_instantiatedFrom && ret.count() == retCount ) {
@@ -354,7 +354,7 @@ class CppDUContext : public BaseContext {
           ifDebug( kDebug(9007) << "searching base"; )
           m_instantiatedFrom->findLocalDeclarationsInternal( identifier, position, dataType, allowUnqualifiedMatch, decls, flags );
           
-          ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString() << endl; )
+          ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString(); )
           ifDebug( kDebug(9007) << "found" << decls.count() << "in base"; )
           foreach( Declaration* decl, decls ) {
             Declaration* copy = decl->clone();
@@ -445,7 +445,7 @@ class CppDUContext : public BaseContext {
       
       TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
       if( !templateDecl ) {
-        kDebug(9007) << "Tried to instantiate a non-template declaration" << endl;
+        kDebug(9007) << "Tried to instantiate a non-template declaration";
         return 0;
       }
 

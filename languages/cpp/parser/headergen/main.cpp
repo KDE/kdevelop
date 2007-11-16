@@ -419,7 +419,7 @@ rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type
     }
   }
 
-  kWarning() << "Did not find include" << fileName <<endl;//<< "in urls" << toTry << endl;//" in the following directories:" ;
+  kWarning() << "Did not find include" << fileName;//<< "in urls" << toTry << endl;//" in the following directories:" ;
   /*QDomNodeList include = folderElement.elementsByTagName("include");
   for (int i = 0; i < include.count(); ++i)
     kDebug(9007) << "" << include.at(i).toElement().text();*/
@@ -495,7 +495,7 @@ void HeaderGenerator::run()
 
           //printMacros(headerMacros[source.text()]);
 
-          //kFatal() << "bye :)" << endl;
+          //kFatal() << "bye :)";
         }
 
         if (false && source.text().endsWith("kkeydialog.h")) {
@@ -513,7 +513,7 @@ void HeaderGenerator::run()
           visitBlock(headerMacros[source.text()]);
           printMacros(preprocessor.environment());
 
-          //kFatal() << "bye :)" << endl;
+          //kFatal() << "bye :)";
         }
 
         foreach (const QString& className, hg.m_classes) {

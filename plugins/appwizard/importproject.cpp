@@ -98,7 +98,7 @@ void ImportProject::accept()
 
     QDialog::accept();
 
-    kDebug(9010) << "OPENING PROJECT: " << projectUrl << endl;
+    kDebug(9010) << "OPENING PROJECT: " << projectUrl;
 
     m_part->core()->projectController()->openProject(projectUrl);
 }
@@ -150,7 +150,7 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
 
 void ImportProject::dirChanged()
 {
-    kDebug(9010) << "ImportProject::dirChanged" << endl;
+    kDebug(9010) << "ImportProject::dirChanged";
     KUrl projectUrl = directory->url();
 
     if (!projectUrl.isValid() || !KIO::NetAccess::exists(projectUrl, KIO::NetAccess::SourceSide, QApplication::activeWindow()))

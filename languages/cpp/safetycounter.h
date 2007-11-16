@@ -44,9 +44,9 @@ struct SafetyCounter {
 	  if( !ret ) {
 			if( safetyCounter == maxSafetyCounter ) {
 #ifdef DEPTHBACKTRACE
-      	kDebug( 9007) << "WARNING: Safety-counter reached count > " << maxSafetyCounter << ", operation stopped" << endl;
+      	kDebug( 9007) << "WARNING: Safety-counter reached count > " << maxSafetyCounter << ", operation stopped";
 #endif
-		  	kDebug( 9007 ) << endl << kBacktrace() << endl;
+		  	kDebug( 9007 ) << endl << kBacktrace();
 			}
 	  }
     

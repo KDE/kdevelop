@@ -94,7 +94,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     DUChainReadLocker lock(DUChain::lock());
 
     if (!context) {
-      kDebug(9007) << "Completion context disappeared before completions could be calculated" << endl;
+      kDebug(9007) << "Completion context disappeared before completions could be calculated";
       return;
     }
 
