@@ -545,7 +545,7 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
       tempFile.setAutoRemove(false);
       QString fileName = tempFile.fileName();
       tempFile.close();
-      kDebug(9500) << "Wrote dot-graph of context " << ctx << " into " << fileName << endl;
+      kDebug(9500) << "Wrote dot-graph of context " << ctx << " into " << fileName;
       KProcess proc; ///@todo this is a simple hack. Maybe do it with mime-types etc.
       proc << "dotty" << fileName;
       if( !proc.startDetached() ) {
