@@ -31,7 +31,7 @@ set (
 
 kde4_add_ui_files(kdevquickopen_PART_SRCS ${kdevquickopen_UI})
 kde4_add_plugin(kdevquickopen ${kdevquickopen_PART_SRCS})
-target_link_libraries(kdevquickopen kdevplatformlanguage kdevplatforminterfaces ${KDEVPLATFORM_LANGUAGE_LIBRARY})
+target_link_libraries(kdevquickopen kdevplatformlanguage kdevplatforminterfaces ${KDEVPLATFORM_LANGUAGE_LIBRARY} kdevplatformproject)
 
 install(TARGETS kdevquickopen DESTINATION ${PLUGIN_INSTALL_DIR})
 
