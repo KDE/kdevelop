@@ -69,6 +69,7 @@ public slots:
   private:
 
     QuickOpenModel* m_model;
+    class ProjectFileDataProvider* m_projectFileData;
 };
 
 class QuickOpenWidgetHandler : public QObject {

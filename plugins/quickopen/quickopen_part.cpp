@@ -21,12 +21,14 @@
 
 #include "quickopen_part.h"
 
+#include <typeinfo>
 #include <QtGui/QTreeView>
 #include <QtGui/QHeaderView>
 #include <QDialog>
 #include <QKeyEvent>
 #include <QApplication>
 #include <QCheckBox>
+#include <QMetaObject>
 
 #include <kbuttongroup.h>
 #include <klocale.h>
@@ -44,6 +46,7 @@
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
 #include "quickopenmodel.h"
+#include "project_file_quickopen.h"
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPart>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
@@ -146,7 +149,7 @@ void QuickOpenWidgetHandler::textChanged( const QString& str ) {
   m_model->textChanged( str );
   
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
-  o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current );
+  o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
   
   callRowSelected();
 }
@@ -198,9 +201,17 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::ShiftModifier ) {
           //Eventually Send action to the widget
+          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
-              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( m_model->expandingWidget(o.list->selectionModel()->currentIndex()) ) ){
+              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->previous();
+            return true;
+          } else {
+            if( w ) {
+              QMetaObject::invokeMethod( w, "previous" );
+              kDebug() << "dynamic-cast fail" << typeid(*w).name();
+              return true;
+            }
           }
         } else {
           QModelIndex row = o.list->selectionModel()->currentIndex();
@@ -219,9 +230,18 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::ShiftModifier ) {
           //Eventually Send action to the widget
+          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
-              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( m_model->expandingWidget(o.list->selectionModel()->currentIndex()) ) ){
+              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
+          kDebug() << "dynamic-cast success";
             interface->next();
+            return true;
+          }else{
+            if( w ) {
+              QMetaObject::invokeMethod( w, "next" );
+              kDebug() << "dynamic-cast fail" << typeid(*w).name();
+              return true;
+            }
           }
         } else {
           QModelIndex row = o.list->selectionModel()->currentIndex();
@@ -240,9 +260,18 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
       case Qt::Key_Enter: {
         if( keyEvent->modifiers() == Qt::ShiftModifier ) {
           //Eventually Send action to the widget
+          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
-              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( m_model->expandingWidget(o.list->selectionModel()->currentIndex()) ) ){
+              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->accept();
+            return true;
+          } else {
+            ///@todo this is a bug in gcc or whatever, somehow it cannot dynamic_cast to the object. For now, workaround it using invokeMethod
+            if( w ) {
+              QMetaObject::invokeMethod( w, "accept" );
+              kDebug() << "dynamic-cast fail" << typeid(*w).name();
+              return true;
+            }
           }
         } else {
           QString filterText = o.searchLine->text();
@@ -294,11 +323,20 @@ QuickOpenPart::QuickOpenPart(QObject *parent,
     quickOpenFunction->setText( i18n("Quick Open &Function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
+
+    m_projectFileData = new ProjectFileDataProvider(core());
+
+    {
+      QStringList scopes;
+      scopes << i18n("Project");
+      m_model->registerProvider( scopes, i18n("Files"), m_projectFileData );
+    }
 }
 
 QuickOpenPart::~QuickOpenPart()
 {
   delete m_model;
+  delete m_projectFileData;
 }
 
 void QuickOpenPart::unload()

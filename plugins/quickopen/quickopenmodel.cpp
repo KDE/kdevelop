@@ -83,7 +83,8 @@ void QuickOpenModel::enableProviders( const QStringList& items, const QStringLis
   QSet<QString> scopes = QSet<QString>::fromList( _scopes );
   kDebug() << "params " << items << " " << scopes;
   for( ProviderMap::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
-    if( ( scopes.isEmpty() || !scopes.intersect( (*it).scopes ).isEmpty() ) && ( items.contains( (*it).type ) || items.isEmpty() ) ) {
+    kDebug() << "comparing" << (*it).scopes << (*it).type;
+    if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) && ( items.contains( (*it).type ) || items.isEmpty() ) ) {
       kDebug() << "enabling " << (*it).type << " " << (*it).scopes;
       (*it).enabled = true;
       (*it).provider->enableScopes( _scopes );
