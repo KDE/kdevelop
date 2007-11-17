@@ -145,7 +145,7 @@ void BreakpointTableRow::appendEmptyRow()
 
     ComplexEditCell* act = new ComplexEditCell(table());
     table()->setItem(row, Tracing, act);
-    QObject::connect(act, SIGNAL(edit(QTableItem*)), 
+    QObject::connect(act, SIGNAL(edit(QTableItem*)),
                      table()->parent(), SLOT(editTracing(QTableItem*)));
 }
 
@@ -169,7 +169,7 @@ void BreakpointTableRow::setRow()
         QString displayType = m_breakpoint->displayType();
         table()->setText(row(), Location, m_breakpoint->location());
 
-               
+
         QTableItem* ce = table()->item( row(), Tracing );
         ce->setText(breakpoint()->tracingEnabled() ? "Enabled" : "Disabled");
         // In case there's editor open in this cell, update it too.
@@ -224,9 +224,9 @@ controller_(controller)
     header->setLabel( Tracing,      i18n("Tracing") );
 
     QPopupMenu* newBreakpoint = new QPopupMenu(this);
-    newBreakpoint->insertItem(i18n("Code breakpoint", "Code"), 
+    newBreakpoint->insertItem(i18n("Code breakpoint", "Code"),
                               BP_TYPE_FilePos);
-    newBreakpoint->insertItem(i18n("Data breakpoint", "Data write"), 
+    newBreakpoint->insertItem(i18n("Data breakpoint", "Data write"),
                               BP_TYPE_Watchpoint);
     newBreakpoint->insertItem(i18n("Data read breakpoint", "Data read"),
                               BP_TYPE_ReadWatchpoint);
@@ -236,11 +236,11 @@ controller_(controller)
     m_ctxMenu->insertItem( i18n("New breakpoint", "New"),
                                 newBreakpoint);
     m_ctxMenu->insertItem( i18n( "Show text" ),    BW_ITEM_Show );
-    int edit_id = 
+    int edit_id =
         m_ctxMenu->insertItem( i18n( "Edit" ),    BW_ITEM_Edit );
     m_ctxMenu->setAccel(Qt::Key_Enter, edit_id);
     m_ctxMenu->insertItem( i18n( "Disable" ), BW_ITEM_Disable );
-    int del_id = 
+    int del_id =
         m_ctxMenu->insertItem( SmallIcon("breakpoint_delete"),
                                i18n( "Delete" ),  BW_ITEM_Delete );
     m_ctxMenu->setAccel(Qt::Key_Delete, del_id);
@@ -271,15 +271,16 @@ controller_(controller)
 //             this,          SLOT(slotEditBreakpoint()));
     connect( m_table,       SIGNAL(deletePressed()),
              this,          SLOT(slotRemoveBreakpoint()));
-    connect( m_table,       SIGNAL(insertPressed()),
-             this,          SLOT(slotAddBlankBreakpoint()));
+// This slot doesn't exist anymore
+//     connect( m_table,       SIGNAL(insertPressed()),
+//              this,          SLOT(slotAddBlankBreakpoint()));
 
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
     connect(controller, SIGNAL(event(GDBController::event_t)),
             this,       SLOT(slotEvent(GDBController::event_t)));
 
-    connect(controller, 
+    connect(controller,
             SIGNAL(watchpointHit(int, const QString&, const QString&)),
             this,
             SLOT(slotWatchpointHit(int, const QString&, const QString&)));
@@ -319,7 +320,7 @@ void GDBBreakpointWidget::slotRefreshBP(const KURL &filename)
         if (btr)
         {
             FilePosBreakpoint* bp = dynamic_cast<FilePosBreakpoint*>(btr->breakpoint());
-            if (bp && bp->hasFileAndLine() 
+            if (bp && bp->hasFileAndLine()
                 && (bp->fileName() == filename.path()))
                 emit refreshBPState(*bp);
         }
@@ -330,7 +331,7 @@ void GDBBreakpointWidget::slotBreakpointHit(int id)
 {
     BreakpointTableRow* br = findId(id);
 
-    // FIXME: should produce an message, this is most likely 
+    // FIXME: should produce an message, this is most likely
     // an error.
     if (!br)
         return;
@@ -340,14 +341,14 @@ void GDBBreakpointWidget::slotBreakpointHit(int id)
     if (b->tracingEnabled())
     {
         controller_->addCommand(
-            new CliCommand(("printf " 
+            new CliCommand(("printf "
                             + b->traceRealFormatString()).latin1(),
                            this,
                            &GDBBreakpointWidget::handleTracingPrintf));
-                           
-        controller_->addCommand(new 
+
+        controller_->addCommand(new
                             GDBCommand("-exec-continue"));
-        
+
     }
     else
     {
@@ -361,7 +362,7 @@ void GDBBreakpointWidget::slotWatchpointHit(int id,
 {
     BreakpointTableRow* br = findId(id);
 
-    // FIXME: should produce an message, this is most likely 
+    // FIXME: should produce an message, this is most likely
     // an error.
     if (!br)
         return;
@@ -370,7 +371,7 @@ void GDBBreakpointWidget::slotWatchpointHit(int id,
 
 
     KMessageBox::information(
-        0, 
+        0,
         i18n("<b>Data write breakpoint</b><br>"
              "Expression: %1<br>"
              "Address: 0x%2<br>"
@@ -379,7 +380,7 @@ void GDBBreakpointWidget::slotWatchpointHit(int id,
         .arg(b->varName())
         .arg(b->address(), 0, 16)
         .arg(oldValue)
-        .arg(newValue));    
+        .arg(newValue));
 }
 
 /***************************************************************************/
@@ -454,9 +455,9 @@ BreakpointTableRow* GDBBreakpointWidget::addBreakpoint(Breakpoint *bp)
 
     connect(bp, SIGNAL(modified(Breakpoint*)),
             this, SLOT(slotBreakpointModified(Breakpoint*)));
-    
+
     sendToGdb(*bp);
-                                              
+
     return btr;
 }
 
@@ -468,7 +469,7 @@ void GDBBreakpointWidget::removeBreakpoint(BreakpointTableRow* btr)
         return;
 
     // Pending but the debugger hasn't started processing this bp so
-    // we can just remove it.   
+    // we can just remove it.
     Breakpoint* bp = btr->breakpoint();
     // No gdb breakpoint, and no breakpoint addition command in the
     // queue. Just remove.
@@ -549,7 +550,7 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
             Breakpoint *bp = btr->breakpoint();
             bp->setActive(m_activeFlag, id);
             bp->setHits(b["times"].toInt());
-            if (b.hasField("ignore"))                
+            if (b.hasField("ignore"))
                 bp->setIgnoreCount(b["ignore"].toInt());
             else
                 bp->setIgnoreCount(0);
@@ -571,21 +572,21 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
                 if (b.hasField("fullname") && b.hasField("line"))
                 {
                     Breakpoint* bp = new FilePosBreakpoint(
-                        b["fullname"].literal(), 
+                        b["fullname"].literal(),
                         b["line"].literal().toInt());
 
                     bp->setActive(m_activeFlag, id);
                     bp->setActionAdd(false);
                     bp->setPending(false);
 
-                    new BreakpointTableRow(m_table, 
-                                           QTableItem::WhenCurrent, 
+                    new BreakpointTableRow(m_table,
+                                           QTableItem::WhenCurrent,
                                            bp);
 
                     emit publishBPState(*bp);
                 }
             }
-            
+
         }
     }
 
@@ -598,7 +599,7 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
             Breakpoint* bp = btr->breakpoint();
             if (!(bp->isActive(m_activeFlag)))
             {
-                // FIXME: need to review is this happens for 
+                // FIXME: need to review is this happens for
                 // as-yet unset breakpoint.
                 bp->removedInGdb();
             }
@@ -705,17 +706,17 @@ void GDBBreakpointWidget::slotRowDoubleClicked(int row, int col, int btn, const 
 void GDBBreakpointWidget::slotContextMenuShow( int row, int /*col*/, const QPoint &mousePos )
 {
     BreakpointTableRow *btr = (BreakpointTableRow *)m_table->item(row, Control );
-    
+
     if (btr == NULL)
     {
-        btr = (BreakpointTableRow *)m_table->item(m_table->currentRow(), 
+        btr = (BreakpointTableRow *)m_table->item(m_table->currentRow(),
                                                   Control );
     }
 
     if (btr != NULL)
     {
-        m_ctxMenu->setItemEnabled( 
-            BW_ITEM_Show, 
+        m_ctxMenu->setItemEnabled(
+            BW_ITEM_Show,
             btr->breakpoint()->hasFileAndLine());
 
         if (btr->breakpoint( )->isEnabled( ))
@@ -753,7 +754,7 @@ void GDBBreakpointWidget::slotContextMenuSelect( int item )
     BreakpointTableRow  *btr;
     Breakpoint          *bp;
     FilePosBreakpoint   *fbp;
-    
+
     row= m_table->currentRow( );
     if (row == -1)
         return;
@@ -777,7 +778,7 @@ void GDBBreakpointWidget::slotContextMenuSelect( int item )
                 m_table->editCell(row, col, false);
             break;
         case BW_ITEM_Disable:
-            
+
             bp->setEnabled( !bp->isEnabled( ) );
             btr->setRow( );
             sendToGdb( *bp );
@@ -792,7 +793,7 @@ void GDBBreakpointWidget::slotContextMenuSelect( int item )
         case BW_ITEM_EnableAll:
             for ( int row = 0; row < m_table->numRows(); row++ )
             {
-                BreakpointTableRow* btr = (BreakpointTableRow *) 
+                BreakpointTableRow* btr = (BreakpointTableRow *)
                     m_table->item(row, Control);
 
                 if (btr)
@@ -838,7 +839,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
         {
         case Enable:
         {
-            QCheckTableItem *item = 
+            QCheckTableItem *item =
                 (QCheckTableItem*)m_table->item ( row, Enable );
             bp->setEnabled(item->isChecked());
         }
@@ -851,7 +852,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
                 // GDB does not allow to change location of
                 // an existing breakpoint. So, need to remove old
                 // breakpoint and add another.
-                
+
                 // Announce to editor that breakpoit at its
                 // current location is dying.
                 bp->setActionDie();
@@ -859,7 +860,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
 
                 // However, we don't want the line in breakpoint
                 // widget to disappear and appear again.
-                    
+
                 // Emit delete command. This won't resync breakpoint
                 // table (unlike clearBreakpoint), so we won't have
                 // nasty effect where line in the table first disappears
@@ -871,7 +872,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
                 // Now add new breakpoint in gdb. It will correspond to
                 // the same 'Breakpoint' and 'BreakpointRow' objects in
                 // KDevelop is the previous, deleted, breakpoint.
-                
+
                 // Note: clears 'actionDie' implicitly.
                 bp->setActionAdd(true);
                 bp->setLocation(new_value);
@@ -898,7 +899,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
 
 
         // This is not needed for most changes, since we've
-        // just read a value from table cell to breakpoint, and 
+        // just read a value from table cell to breakpoint, and
         // setRow will write back the same value to the cell.
         // It's only really needed for tracing column changes,
         // where tracing config dialog directly changes breakpoint,
@@ -955,7 +956,7 @@ void GDBBreakpointWidget::slotBreakpointModified(Breakpoint* b)
         else
         {
             btr->setRow();
-        }        
+        }
     }
 }
 
@@ -977,14 +978,14 @@ void GDBBreakpointWidget::slotEvent(GDBController::event_t e)
         {
             for ( int row = 0; row < m_table->numRows(); row++ )
             {
-                BreakpointTableRow* btr = (BreakpointTableRow *) 
+                BreakpointTableRow* btr = (BreakpointTableRow *)
                     m_table->item(row, Control);
-                
+
                 if (btr)
                 {
                     Breakpoint* bp = btr->breakpoint();
                     if ( (bp->dbgId() == -1 ||  bp->isPending())
-                         && !bp->isDbgProcessing() 
+                         && !bp->isDbgProcessing()
                          && bp->isValid())
                     {
                         sendToGdb(*bp);
@@ -1004,7 +1005,7 @@ void GDBBreakpointWidget::slotEvent(GDBController::event_t e)
             }
         }
 
-    default:        
+    default:
         ;
     }
 }
@@ -1065,14 +1066,14 @@ void GDBBreakpointWidget::savePartialProjectSession(QDomElement* el)
         breakpointEl.setAttribute("location", bp->location(false));
         breakpointEl.setAttribute("enabled", bp->isEnabled());
         breakpointEl.setAttribute("condition", bp->conditional());
-        breakpointEl.setAttribute("tracingEnabled", 
+        breakpointEl.setAttribute("tracingEnabled",
                                   QString::number(bp->tracingEnabled()));
-        breakpointEl.setAttribute("traceFormatStringEnabled", 
-                                  QString::number(bp->traceFormatStringEnabled()));        
+        breakpointEl.setAttribute("traceFormatStringEnabled",
+                                  QString::number(bp->traceFormatStringEnabled()));
         breakpointEl.setAttribute("tracingFormatString",
                                   bp->traceFormatString());
 
-        QDomElement tracedExpressions = 
+        QDomElement tracedExpressions =
             domDoc.createElement("tracedExpressions");
 
         QStringList::const_iterator i, e;
@@ -1084,7 +1085,7 @@ void GDBBreakpointWidget::savePartialProjectSession(QDomElement* el)
             expr.setAttribute("value", *i);
             tracedExpressions.appendChild(expr);
         }
-        
+
         breakpointEl.appendChild(tracedExpressions);
 
         breakpointListEl.appendChild(breakpointEl);
@@ -1100,8 +1101,8 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
 {
     /** Eventually, would be best to make each breakpoint type handle loading/
         saving it's data. The only problem is that on load, we need to allocate
-        with new different objects, depending on type, and that requires some 
-        kind of global registry. Gotta find out if a solution for that exists in 
+        with new different objects, depending on type, and that requires some
+        kind of global registry. Gotta find out if a solution for that exists in
         KDE (Boost.Serialization is too much dependency, and rolling my own is
         boring).
     */
@@ -1154,14 +1155,14 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
                     breakpointEl.attribute("traceFormatStringEnabled", "0")
                     .toInt());
 
-                QDomNode tracedExpr = 
+                QDomNode tracedExpr =
                     breakpointEl.namedItem("tracedExpressions");
 
                 if (!tracedExpr.isNull())
                 {
                     QStringList l;
 
-                    for(QDomNode c = tracedExpr.firstChild(); !c.isNull(); 
+                    for(QDomNode c = tracedExpr.firstChild(); !c.isNull();
                         c = c.nextSibling())
                     {
                         QDomElement el = c.toElement();
@@ -1170,7 +1171,7 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
                     bp->setTracedExpressions(l);
                 }
 
-                // Now add the breakpoint. Don't try to check if 
+                // Now add the breakpoint. Don't try to check if
                 // breakpoint already exists.
                 // It's easy to check that breakpoint on the same
                 // line already exists, but it might have different condition,
@@ -1217,19 +1218,19 @@ QWidget* ComplexEditCell::createEditor() const
     label_ = new QLabel(text(), box, "label");
     label_->setBackgroundMode(Qt::PaletteHighlight);
     // Sorry for hardcode, but '2' is already hardcoded in
-    // Qt source, in QTableItem::paint. Since I don't want the 
-    // text to jump 2 pixels to the right when editor is activated, 
+    // Qt source, in QTableItem::paint. Since I don't want the
+    // text to jump 2 pixels to the right when editor is activated,
     // need to set the same indent for label.
     label_->setIndent(2);
     QPalette p = label_->palette();
 
-    p.setColor(QPalette::Active, QColorGroup::Foreground, 
+    p.setColor(QPalette::Active, QColorGroup::Foreground,
                table()->palette().active().highlightedText());
-    p.setColor(QPalette::Inactive, QColorGroup::Foreground, 
+    p.setColor(QPalette::Inactive, QColorGroup::Foreground,
                table()->palette().active().highlightedText());
 
     label_->setPalette(p);
-    
+
     QPushButton* b = new QPushButton("...", box);
     // This is exactly what is done in QDesigner source in the
     // similar context. Haven't had any success making the good look
