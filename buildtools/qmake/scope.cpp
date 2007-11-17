@@ -347,7 +347,6 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
         m_parent->calcValuesFromStatements( variable, result, true, this->m_incast );
     }
 
-    kdDebug(9024) << "Iterating ast, evaluating subscopes?" << evaluateSubScopes << endl;
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {

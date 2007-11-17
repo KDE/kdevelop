@@ -774,8 +774,10 @@ void QMakeScopeItem::updateValues( const QString& var, const QStringList& values
         if ( values.findIndex( *it ) == -1 )
         {
             if( scopeValues.findIndex( *it ) != -1 )
+            {
                 scope->removeFromPlusOp( var, QStringList( *it ) );
-            else
+                scopeValues.remove( *it );
+            }else
                 scope->addToMinusOp( var, QStringList( *it ) );
         }
     }
@@ -786,14 +788,14 @@ void QMakeScopeItem::updateValues( const QString& var, const QStringList& values
             scopeValues.remove(*it);
         }
     }
-    kdDebug(9024) << "--------------" << var << "------------------" << endl;
-    kdDebug(9024) << "values: " << values << "| scope:" << scopeValues << endl;
+//     kdDebug(9024) << "--------------" << var << "------------------" << endl;
+//     kdDebug(9024) << "values: " << values << "| scope:" << scopeValues << endl;
     scopeValues += values;
-    kdDebug(9024) << "values: " << values << "| scope:" << scopeValues << endl;
+//     kdDebug(9024) << "values: " << values << "| scope:" << scopeValues << endl;
     scope->setPlusOp( var, scopeValues );
-    QStringList tmp = scope->variableValuesForOp( var, "+=" );
-    kdDebug(9024) << "result:" << tmp << endl;
-    kdDebug(9024) << "---------------------------------------" << endl;
+//     QStringList tmp = scope->variableValuesForOp( var, "+=" );
+//     kdDebug(9024) << "result:" << tmp << endl;
+//     kdDebug(9024) << "---------------------------------------" << endl;
 }
 
 QMakeScopeItem* QMakeScopeItem::projectFileItem()
