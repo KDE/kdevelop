@@ -744,8 +744,11 @@ void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
   connect( doc, SIGNAL(fileNameChanged()),
     this, SLOT(slotDocumentUrlChanged()));
 
-  connect( doc->widget(), SIGNAL(dropEventPass(QDropEvent *)),
-    TopLevel::getInstance()->main(), SLOT(slotDropEvent(QDropEvent *)) );
+  if( doc->widget() )
+  {
+      connect( doc->widget(), SIGNAL(dropEventPass(QDropEvent *)),
+        TopLevel::getInstance()->main(), SLOT(slotDropEvent(QDropEvent *)) );
+  }
 
   if ( KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( doc->widget() ) )
   {
@@ -1735,7 +1738,7 @@ void PartController::addHistoryEntry( KParts::ReadOnlyPart * part )
 		{
 			m_backHistory.push_front( thisEntry );
 			m_backAction->setEnabled( true );
-	
+
 			m_forwardHistory.clear();
 			m_forwardAction->setEnabled( false );
 		}
