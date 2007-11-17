@@ -33,58 +33,64 @@ ProcessLineMaker::ProcessLineMaker( const KProcess* proc )
     
     connect(proc, SIGNAL(receivedStderr(KProcess*,char*,int)),
             this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-
-    connect(&stdouttimer, SIGNAL(timeout()),
-            this, SLOT(slotTimeoutStdout()) );
-
-    connect(&stderrtimer, SIGNAL(timeout()),
-            this, SLOT(slotTimeoutStderr()) );
 }
 
-void ProcessLineMaker::slotReceivedStdout( KProcess*, char *buffer, int )
+void ProcessLineMaker::slotReceivedStdout( const QString& s )
 {
-    stdouttimer.stop();
-    stdoutbuf += buffer; // It is zero-terminated
+    // Flush stderr buffer
+    if (!stderrbuf.isEmpty()) {
+        emit receivedStderrLine(stderrbuf);
+        stderrbuf = "";
+    }
+    
+    stdoutbuf += s;
     int pos;
     while ( (pos = stdoutbuf.find('\n')) != -1) {
-        QString line = QString::fromLocal8Bit(stdoutbuf, pos);
+        QString line = stdoutbuf.left(pos);
         emit receivedStdoutLine(line);
         stdoutbuf.remove(0, pos+1);
     }
-    if (!stdoutbuf.isEmpty())
-        stdouttimer.start(100, true);
 }
 
-void ProcessLineMaker::slotTimeoutStdout()
+void ProcessLineMaker::slotReceivedStdout( KProcess*, char *buffer, int buflen )
 {
-    emit receivedStdoutLine(QString::fromLocal8Bit(stdoutbuf));
-    stdoutbuf.truncate(0);
+    slotReceivedStdout( QString::fromLocal8Bit( buffer, buflen ) );
 }
 
-void ProcessLineMaker::slotReceivedStderr( KProcess*, char *buffer, int )
+void ProcessLineMaker::slotReceivedStdout( const char* buffer )
 {
-    stderrtimer.stop();
-    stderrbuf += buffer; // It is zero-terminated
+    slotReceivedStdout( QString::fromLocal8Bit( buffer ) );
+}
+
+void ProcessLineMaker::slotReceivedStderr( const QString& s )
+{
+    // Flush stdout buffer
+    if (!stdoutbuf.isEmpty()) {
+        emit receivedStdoutLine(stdoutbuf);
+        stdoutbuf = "";
+    }
+    
+    stderrbuf += s;
     int pos;
     while ( (pos = stderrbuf.find('\n')) != -1) {
-        QString line = QString::fromLocal8Bit(stderrbuf, pos);
+        QString line = stderrbuf.left(pos);
         emit receivedStderrLine(line);
         stderrbuf.remove(0, pos+1);
     }
-    if (!stderrbuf.isEmpty())
-        stderrtimer.start(100, true);
 }
 
-void ProcessLineMaker::slotTimeoutStderr()
+void ProcessLineMaker::slotReceivedStderr( KProcess*, char *buffer, int buflen )
 {
-    emit receivedStderrLine(QString::fromLocal8Bit(stderrbuf));
-    stderrbuf.truncate(0);
+    slotReceivedStderr( QString::fromLocal8Bit( buffer, buflen ) );
+}
+
+void ProcessLineMaker::slotReceivedStderr( const char* buffer )
+{
+    slotReceivedStderr( QString::fromLocal8Bit( buffer ) );
 }
 
 void ProcessLineMaker::clearBuffers( )
 {
-    stderrbuf.truncate(0);
-    stdoutbuf.truncate(0);
-    stdouttimer.stop();
-    stderrtimer.stop();
+	stderrbuf = "";
+	stdoutbuf = "";
 }

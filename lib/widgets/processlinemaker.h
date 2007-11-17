@@ -21,7 +21,6 @@
 #define _PROCESSLINEMAKER_H_
 
 #include <qobject.h>
-#include <qtimer.h>
 
 /**
 @file processlinemaker.h
@@ -43,21 +42,24 @@ public:
 	
 	void clearBuffers();
 
+public slots:
+	void slotReceivedStdout(const QString&);
+	void slotReceivedStderr(const QString&);
+
+	void slotReceivedStdout(const char*);
+	void slotReceivedStderr(const char*);
+
 protected slots:
 	void slotReceivedStdout(KProcess *, char *buffer, int buflen);
 	void slotReceivedStderr(KProcess *, char *buffer, int buflen);
-	void slotTimeoutStdout();
-	void slotTimeoutStderr();
         
 signals:
 	void receivedStdoutLine( const QString& line );
 	void receivedStderrLine( const QString& line );
         
 private:
-	QCString stdoutbuf;
-	QCString stderrbuf;
-	QTimer stdouttimer;
-	QTimer stderrtimer;
+	QString stdoutbuf;
+	QString stderrbuf;
 };
 
 #endif
