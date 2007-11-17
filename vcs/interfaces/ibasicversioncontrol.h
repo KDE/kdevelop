@@ -206,6 +206,14 @@ public:
     /**
      * Annotate each line of the given local url at the given revision
      * with information about who changed it and when.
+     *
+     * The job should return a QList<QVariant> where the QVariant wraps 
+     * a KDevelop::VcsAnnotationLine. The instance contains all information
+     * needed for the caller to construct a KDevelop::VcsAnnotation
+     *
+     * @see KDevelop::VcsAnnotation
+     * @see KDevelop::VcsAnnotationLine
+     *
      * @param localLocation local file that should be annotated.
      * @param rev Revision that should be annotated.
      */
