@@ -77,6 +77,12 @@ public:
    */
   virtual bool imports(const DUContext* origin, const KTextEditor::Cursor& position) const;
 
+  /**
+   * Returns the trace of imports from this context top the given target.
+   * The positions in the returned trace may be invalid.
+   * */
+  DUContext::ImportTrace importTrace(const TopDUContext* target) const;
+
   enum Flags {
     NoFlags = 0,
     /**
@@ -106,7 +112,7 @@ public:
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;
   
-  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, bool inImportedContext) const;
+  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, bool inImportedContext) const;
 
   /// Return those \a declarations that are visible in this document from \a position and are of the specified \a dataType
   QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const;

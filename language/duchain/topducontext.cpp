@@ -39,12 +39,13 @@ public:
     : m_inDuChain(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
   {
   }
-  bool imports(const TopDUContext* origin, int depth) const
+  
+  bool imports(const TopDUContext* target, int depth) const
   {
     const bool alwaysCache = true;
     
     if(alwaysCache || depth == 0) {
-      QHash<const TopDUContext*, bool>::const_iterator it = m_importsCache.find(origin);
+      QHash<const TopDUContext*, const TopDUContext*>::const_iterator it = m_importsCache.find(target);
       if(it != m_importsCache.end()) {
         return *it;
       }
@@ -64,32 +65,58 @@ public:
       }
       Q_ASSERT(dynamic_cast<TopDUContext*>((*it).data()));
       TopDUContext* top = static_cast<TopDUContext*>((*it).data());
-      if (top == origin) {
+      if (top == target) {
         if(alwaysCache || depth == 0) {
-          m_importsCache[origin] = true;
+          m_importsCache[target] = top;
         }
         return true;
       }
 
-      if (top->d->imports(origin, depth + 1)) {
+      if (top->d->imports(target, depth + 1)) {
         if(alwaysCache || depth == 0) {
-          m_importsCache[origin] = true;
+          m_importsCache[target] = top;
         }
         return true;
       }
     }
 
-    m_importsCache[origin] = false;
+    m_importsCache[target] = 0;
     return false;
   }
+
   bool m_hasUses  : 1;
   bool m_deleting : 1;
   bool m_inDuChain : 1;
   TopDUContext::Flags m_flags;
   TopDUContext* m_ctxt;
   ParsingEnvironmentFilePointer m_file;
-  mutable QHash<const TopDUContext*, bool> m_importsCache;
+  ///Maps from the target context to the next one in the import trace.
+  ///This can be used to reconstruct the import trace.
+  mutable QHash<const TopDUContext*, const TopDUContext*> m_importsCache;
 };
+
+DUContext::ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
+  {
+    DUContext::ImportTrace ret;
+
+    if(!d->imports(target, 0))
+      return ret;
+
+    const TopDUContext* nextContext = d->m_importsCache[target];
+    if(nextContext) {
+      DUContext::ImportTraceItem item;
+      item.position = DUContext::importPosition(nextContext);
+      item.ctx = this;
+      ret << item;
+
+      if(target != nextContext)
+        ret += nextContext->importTrace(target);
+    }else{
+      kWarning() << "inconsistent import-structure";
+    }
+    return ret;
+  }
+
 
 TopDUContext::TopDUContext(KTextEditor::Range* range, ParsingEnvironmentFile* file)
   : DUContext(range)
@@ -131,7 +158,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) const
   d->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 }
 
-void TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, bool inImportedContext) const
+void TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, bool inImportedContext) const
 {
   Q_UNUSED(inImportedContext);
 

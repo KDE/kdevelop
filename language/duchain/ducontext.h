@@ -174,6 +174,13 @@ public:
   const QList<DUContextPointer>& importedParentContexts() const;
 
   /**
+   * If the given context is directly imported into this one, and
+   * addImportedParentContext(..) was called with a valid cursor, this will return that position.
+   * Else an invalid cursor is returned.
+   * */
+  KTextEditor::Cursor importPosition(const DUContext* target) const;
+  
+  /**
    * Returns true if this context imports @param origin at any depth, else false.
    * */
   virtual bool imports(const DUContext* origin, const KTextEditor::Cursor& position = KTextEditor::Cursor()) const;
@@ -184,7 +191,7 @@ public:
    * @param anonymous If this is true, the import will not be registered at the imported context. This allows du-chain contexts importing without having a write-lock.
    * @param position Position where the context is imported. This is mainly important in C++ with included files.
    *
-   * If the context is already imported, only the line-number is updated.
+   * If the context is already imported, only the position is updated.
    * 
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
@@ -403,12 +410,20 @@ public:
    * */
   virtual QWidget* createNavigationWidget(Declaration* decl = 0, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString()) const;
 
+  ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
+  struct ImportTraceItem {
+    //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
+    const DUContext* ctx;
+    KTextEditor::Cursor position;
+  };
+  typedef QList<ImportTraceItem> ImportTrace;
   
   ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
   /// Declaration search implementation
-  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, SearchFlags flags ) const;
-
+  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  
   protected:
+
   /**
    * After one scope was searched, this function is asked whether more results should be collected. Override it, for example to collect overloaded functions.
    * The default-implementation returns true as soon as decls is not empty.
@@ -418,12 +433,12 @@ public:
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
    * @param hadUrls is used to count together all contexts that already were visited, so they are not visited again.
    */
-  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, bool searchInParents = true, int currentDepth = 0) const;
+  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, const ImportTrace& trace, bool searchInParents = true, int currentDepth = 0) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, SearchFlags flags ) const;
+  virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
 
   /// Context search implementation
   virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
