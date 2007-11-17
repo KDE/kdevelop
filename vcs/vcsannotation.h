@@ -115,6 +115,11 @@ public:
     int lineCount() const;
 
     /**
+     * retrieve the annotation line for the given number
+     */
+    VcsAnnotationLine line( int linenumber ) const;
+
+    /**
      * insert a new line to list of lines using
      * the parameters
      *

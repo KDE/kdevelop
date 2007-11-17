@@ -172,6 +172,11 @@ void VcsAnnotation::setLocation(const KUrl& u)
     d->location = u;
 }
 
+VcsAnnotationLine VcsAnnotation::line( int lineno ) const
+{
+    return d->lines[lineno];
+}
+
 VcsAnnotation& VcsAnnotation::operator=( const VcsAnnotation& rhs)
 {
     if(this == &rhs)
