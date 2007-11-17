@@ -167,13 +167,13 @@ struct SetNode : public KShared
   bool expandEnd(Index newEnd) {
     Q_ASSERT(newEnd >= end);
     
-    if(ref.value <= 1) {
+    if(ref <= 1) {
       if(right) {
         if(right->expandEnd(newEnd)) {
           end = newEnd;
           return true;
         }else{
-          if(ref.value <= 1) {
+          if(ref <= 1) {
             //We can expand by adding an intermediate node to the right.
             SetNode::Ptr newRight(new SetNode);
             newRight->left = right;
