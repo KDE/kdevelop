@@ -100,6 +100,16 @@ public:
     NoFiltering = 32           //Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default)
   };
 
+  ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
+  struct ImportTraceItem {
+    //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
+    const DUContext* ctx;
+    KTextEditor::Cursor position;
+  };
+  
+  typedef QList<ImportTraceItem> ImportTrace;
+  
+
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
   
 
@@ -410,14 +420,6 @@ public:
    * */
   virtual QWidget* createNavigationWidget(Declaration* decl = 0, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString()) const;
 
-  ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
-  struct ImportTraceItem {
-    //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
-    const DUContext* ctx;
-    KTextEditor::Cursor position;
-  };
-  typedef QList<ImportTraceItem> ImportTrace;
-  
   ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
   /// Declaration search implementation
   virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;

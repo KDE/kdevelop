@@ -510,6 +510,12 @@ void DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
 
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext()) {
+    if( type() == Namespace ) {
+      //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended
+      int oldCount = aliasedIdentifiers.count();
+      for(int a = 0; a < oldCount; a++)
+        aliasedIdentifiers << localScopeIdentifier() + aliasedIdentifiers[a];
+    }
     parentContext()->findDeclarationsInternal(aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, ret, trace, flags);
   }
 }
