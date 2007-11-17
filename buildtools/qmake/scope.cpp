@@ -304,7 +304,7 @@ QStringList Scope::variableValuesForOp( const QString& variable , const QString&
     return result;
 }
 
-QStringList Scope::variableValues( const QString& variable, bool checkIncParent, bool fetchFromParent )
+QStringList Scope::variableValues( const QString& variable, bool checkIncParent, bool fetchFromParent, bool evaluateSubScopes )
 {
     QStringList result;
 
@@ -316,7 +316,7 @@ QStringList Scope::variableValues( const QString& variable, bool checkIncParent,
         return m_varCache[variable];
     }
 
-    calcValuesFromStatements( variable, result, checkIncParent, 0, fetchFromParent );
+    calcValuesFromStatements( variable, result, checkIncParent, 0, fetchFromParent, true, evaluateSubScopes );
     result = cleanStringList(result);
     if( ( scopeType() != Scope::IncludeScope || checkIncParent  ) && fetchFromParent )
     {
@@ -325,7 +325,7 @@ QStringList Scope::variableValues( const QString& variable, bool checkIncParent,
     return result;
 }
 
-void Scope::calcValuesFromStatements( const QString& variable, QStringList& result, bool checkIncParent, QMake::AST* stopHere, bool fetchFromParent, bool setDefault ) const
+void Scope::calcValuesFromStatements( const QString& variable, QStringList& result, bool checkIncParent, QMake::AST* stopHere, bool fetchFromParent, bool setDefault, bool evaluateSubScopes ) const
 {
     if( !m_root )
         return;
@@ -347,6 +347,7 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
         m_parent->calcValuesFromStatements( variable, result, true, this->m_incast );
     }
 
+    kdDebug(9024) << "Iterating ast, evaluating subscopes?" << evaluateSubScopes << endl;
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {
@@ -379,28 +380,11 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
                     }
                 }
             }
-        }else if( ast->nodeType() == QMake::AST::IncludeAST )
+        }else if( evaluateSubScopes )
         {
-            QMake::IncludeAST* iast = static_cast<QMake::IncludeAST*>(ast);
-            QValueList<unsigned int> l = m_scopes.keys();
-            for( unsigned int i = 0; i < l.count(); ++i )
+            if( ast->nodeType() == QMake::AST::IncludeAST )
             {
-                int num = l[ i ];
-                if( m_scopes.contains( num ) )
-                {
-                    Scope* s = m_scopes[num];
-                    if( s && s->scopeType() == IncludeScope && s->m_incast == iast )
-                    {
-                        s->calcValuesFromStatements( variable, result, false, 0, false, false );
-                    }
-                }
-            }
-
-        }else if( ast->nodeType() == QMake::AST::ProjectAST )
-        {
-            QMake::ProjectAST* past = static_cast<QMake::ProjectAST*>(ast);
-            if( past->isFunctionScope() || past->isScope() )
-            {
+                QMake::IncludeAST* iast = static_cast<QMake::IncludeAST*>(ast);
                 QValueList<unsigned int> l = m_scopes.keys();
                 for( unsigned int i = 0; i < l.count(); ++i )
                 {
@@ -408,9 +392,30 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
                     if( m_scopes.contains( num ) )
                     {
                         Scope* s = m_scopes[num];
-                        if( s && s->m_root == past && s->m_root->scopedID == past->scopedID  )
+                        if( s && s->scopeType() == IncludeScope && s->m_incast == iast )
                         {
-                            s->calcValuesFromStatements( variable, result, false, 0, false, false );
+                            s->calcValuesFromStatements( variable, result, false, 0, false, false,  evaluateSubScopes );
+                        }
+                    }
+                }
+
+            }
+            else if( ast->nodeType() == QMake::AST::ProjectAST )
+            {
+                QMake::ProjectAST* past = static_cast<QMake::ProjectAST*>(ast);
+                if( past->isFunctionScope() || past->isScope() )
+                {
+                    QValueList<unsigned int> l = m_scopes.keys();
+                    for( unsigned int i = 0; i < l.count(); ++i )
+                    {
+                        int num = l[ i ];
+                        if( m_scopes.contains( num ) )
+                        {
+                            Scope* s = m_scopes[num];
+                            if( s && s->m_root == past && s->m_root->scopedID == past->scopedID  )
+                            {
+                                s->calcValuesFromStatements( variable, result, false, 0, false, false, evaluateSubScopes );
+                            }
                         }
                     }
                 }

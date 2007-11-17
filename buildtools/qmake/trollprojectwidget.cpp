@@ -495,23 +495,22 @@ QString TrollProjectWidget::getCurrentDestDir()
 {
     if ( !m_shownSubproject )
         return "";
-    QStringList destdir = m_shownSubproject->scope->variableValues( "DESTDIR" );
-    return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "DESTDIR" ).front());
+    QStringList destdir = m_shownSubproject->scope->variableValues( "DESTDIR", true, true, true );
+    return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "DESTDIR", true, true, true ).front());
 }
 
 QString TrollProjectWidget::getCurrentOutputFilename()
 {
     if ( !m_shownSubproject )
         return "";
-    if ( m_shownSubproject->scope->variableValues( "TARGET" ).isEmpty() )
+    if ( m_shownSubproject->scope->variableValues( "TARGET", true, true, true ).isEmpty() )
     {
         QString exe = m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->fileName());
         return exe.replace( QRegExp( "\\.pro$" ), "" );
     }
     else
     {
-        QStringList target = m_shownSubproject->scope->variableValues( "TARGET" );
-        return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET" ).front());
+        return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET", true, true, true ).front());
     }
 }
 
@@ -2114,7 +2113,7 @@ QString TrollProjectWidget::constructMakeCommandLine( Scope* s )
 {
     QString makeFileName;
     if ( s )
-        makeFileName = s->resolveVariables( s->variableValues( "MAKEFILE" ).front() );
+        makeFileName = s->resolveVariables( s->variableValues( "MAKEFILE", true, true, true ).front() );
 
     QDomDocument & dom = *( m_part->projectDom() );
 
@@ -2148,14 +2147,15 @@ void TrollProjectWidget::createMakefileIfMissing( const QString &dir, QMakeScope
 {
     QFileInfo fi;
     QFileInfo fi2;
-    if ( item->scope->variableValues( "MAKEFILE" ).isEmpty() )
+    kdDebug(9024) << "Makefile:" << item->scope->variableValues( "MAKEFILE", true, true, true ) << endl;
+    if ( item->scope->variableValues( "MAKEFILE", true, true, true ).isEmpty() )
     {
         fi.setFile( dir + QString( QChar( QDir::separator() ) ) + "Makefile" );
         fi2.setFile( dir + QString( QChar( QDir::separator() ) ) + "makefile" );
     }
     else
     {
-        QString realmf = item->scope->resolveVariables( item->scope->variableValues( "MAKEFILE" ).front() );
+        QString realmf = item->scope->resolveVariables( item->scope->variableValues( "MAKEFILE", true, true, true ).front() );
         fi.setFile( realmf );
         fi2.setFile( dir + QString( QChar( QDir::separator() ) ) + realmf );
     }

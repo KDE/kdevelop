@@ -65,7 +65,7 @@ public:
 
     // Fetch the variable values by running over the statements and adding/removing/setting
     // as the encountered op's say, begin with the parent projects variableValues list
-    QStringList variableValues( const QString& variable, bool checkIncParent = true, bool fetchFromParent = true );
+    QStringList variableValues( const QString& variable, bool checkIncParent = true, bool fetchFromParent = true, bool evaluateSubScopes = false );
 
     // Remove a variable+Op combination from the scope, if existant
     void removeVariable( const QString& var, const QString& op );
@@ -217,7 +217,7 @@ private:
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
     // using the given list as startvalue
     // Changes the list using the +=, -=, = operations accordingly
-    void calcValuesFromStatements( const QString& variable, QStringList& result, bool, QMake::AST* stopHere = 0, bool fetchFromParent = true, bool setDefault = true ) const;
+    void calcValuesFromStatements( const QString& variable, QStringList& result, bool, QMake::AST* stopHere = 0, bool fetchFromParent = true, bool setDefault = true, bool evaluateSubScopes = false ) const;
 
     // Check wether the two operators are compatible
     static bool isCompatible( const QString& op1, const QString& op2);
