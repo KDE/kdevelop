@@ -163,7 +163,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	updateSettingsFromConfig();
 
 	setTextFormat( Qt::RichText );
-	
+
 	if ( m_bLineWrapping )
 		setWordWrap(WidgetWidth);
 	else
@@ -207,8 +207,9 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	connect( horizontalScrollBar(), SIGNAL(sliderReleased()),
 	         this, SLOT(horizScrollingOff()) );
 
-	connect( m_part->partController(), SIGNAL(loadedFile(const KURL&)),
-	         this, SLOT(slotDocumentOpened(const KURL&)) );
+// this slot doesn't exist anymore
+// 	connect( m_part->partController(), SIGNAL(loadedFile(const KURL&)),
+// 	         this, SLOT(slotDocumentOpened(const KURL&)) );
 }
 
 MakeWidget::~MakeWidget()
@@ -314,8 +315,8 @@ void MakeWidget::copy()
 	for(int i = parafrom; i<=parato; i++)
 	   selection += text(i) + "\n";
 
-   	   
-	if(m_compilerOutputLevel == eShort || 
+
+	if(m_compilerOutputLevel == eShort ||
 	   m_compilerOutputLevel == eVeryShort )
 	{
 	   QRegExp regexp("<.*>");
@@ -327,14 +328,14 @@ void MakeWidget::copy()
 	  selection.remove(0, indexfrom);
 	  int removeend = text(parato).length() - indexto;
 
-	  selection.remove((selection.length()-1) -  removeend, removeend);	   
-	}		
-	   
+	  selection.remove((selection.length()-1) -  removeend, removeend);
+	}
+
 	selection.replace("&lt;","<");
 	selection.replace("&gt;",">");
 	selection.replace("&quot;","\"");
-	selection.replace("&amp;","&");	
-	   
+	selection.replace("&amp;","&");
+
 	kapp->clipboard()->setText(selection, QClipboard::Clipboard);
 }
 
@@ -598,7 +599,7 @@ void MakeWidget::displayPendingItem()
   // We call displayPendingItem once in insertItem
   // and the appends are handled directly in
   // appendToLastLine
-  if (!m_items.empty() 
+  if (!m_items.empty()
       && m_items.last() == m_pendingItem) return;
 
   m_items.push_back(m_pendingItem);
