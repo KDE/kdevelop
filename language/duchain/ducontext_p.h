@@ -23,6 +23,7 @@
 
 #include <QMutex>
 #include <QMultiHash>
+#include <QMap>
 
 #include "duchainpointer.h"
 
@@ -37,6 +38,8 @@ public:
   DUContextPointer m_parentContext;
   ContextOwner* m_owner;
   QList<DUContextPointer> m_importedParentContexts;
+  ///Contains the import-positions of those imported contexts that have a valid one
+  QMap<DUContextPointer, KTextEditor::Cursor> m_importedParentContextPositions;
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
 

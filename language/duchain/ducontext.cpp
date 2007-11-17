@@ -488,6 +488,11 @@ void DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
         if( !context )
           break;
 
+        QMap<DUContextPointer, KTextEditor::Cursor>::const_iterator it2 = d->m_importedParentContextPositions.find(*it);
+        if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
+          if( position < *it2 )
+            continue; ///Respect the import-positions
+        }
         context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->textRange().end(), dataType, ret, flags | InImportedParentContext);
       }
     }
@@ -521,7 +526,7 @@ bool DUContext::imports(const DUContext* origin, const KTextEditor::Cursor& posi
 }
 
 
-void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
+void DUContext::addImportedParentContext( DUContext * context, const KTextEditor::Cursor& position, bool anonymous )
 {
   ENSURE_CAN_WRITE
 
@@ -529,7 +534,11 @@ void DUContext::addImportedParentContext( DUContext * context, bool anonymous )
     kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url() << ") into " << this << " (" << url() << ")";
     return;
   }
-  
+
+  if( position.isValid() )
+    d->m_importedParentContextPositions[DUContextPointer(context)] = position;
+
+    
   if (d->m_importedParentContexts.contains(DUContextPointer(context)))
     return;
 
@@ -556,6 +565,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
 {
   ENSURE_CAN_WRITE
 
+  d->m_importedParentContextPositions.remove(DUContextPointer(context));
   d->m_importedParentContexts.removeAll(DUContextPointer(context));
 
   if( !context )

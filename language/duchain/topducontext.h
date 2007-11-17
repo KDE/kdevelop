@@ -19,8 +19,8 @@
 #ifndef TOPDUCONTEXT_H
 #define TOPDUCONTEXT_H
 
-#include <ducontext.h>
-#include <languageexport.h>
+#include "ducontext.h"
+#include "languageexport.h"
 #include <QtCore/QMutex>
 
 template< class T >
@@ -100,7 +100,7 @@ public:
   Flags flags() const;
   void setFlags(Flags f);
 
-  virtual void addImportedParentContext(DUContext* context, bool anonymous=false);
+  virtual void addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position = KTextEditor::Cursor(), bool anonymous=false);
   virtual void removeImportedParentContext(DUContext* context);
   
 protected:

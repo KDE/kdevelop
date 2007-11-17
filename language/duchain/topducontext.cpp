@@ -336,9 +336,9 @@ bool TopDUContext::imports(const DUContext * origin, const KTextEditor::Cursor& 
   }
  }
 
-void TopDUContext::addImportedParentContext(DUContext* context, bool anonymous) {
+void TopDUContext::addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position, bool anonymous) {
   d->m_importsCache.remove(static_cast<TopDUContext*>(context));
-  DUContext::addImportedParentContext(context, anonymous);
+  DUContext::addImportedParentContext(context, position, anonymous);
 }
 
 void TopDUContext::removeImportedParentContext(DUContext* context) {

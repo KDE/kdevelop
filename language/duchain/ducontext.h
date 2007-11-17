@@ -182,11 +182,14 @@ public:
    * Adds an imported context.
    *
    * @param anonymous If this is true, the import will not be registered at the imported context. This allows du-chain contexts importing without having a write-lock.
+   * @param position Position where the context is imported. This is mainly important in C++ with included files.
+   *
+   * If the context is already imported, only the line-number is updated.
    * 
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
-  virtual void addImportedParentContext(DUContext* context, bool anonymous = false);
+  virtual void addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position = KTextEditor::Cursor(), bool anonymous = false);
 
   /**
    * Removes a child context.
