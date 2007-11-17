@@ -21,7 +21,7 @@
 #include "vcsannotation.h"
 
 #include <QtCore/QDateTime>
-#include <QtCore/QStringList>
+#include <QtCore/QHash>
 #include "vcsrevision.h"
 #include <kurl.h>
 
@@ -31,12 +31,106 @@ namespace KDevelop
 class VcsAnnotationPrivate
 {
 public:
-    QList<QString> authors;
-    QList<QDateTime> dates;
-    QList<QString> lines;
+    QHash<int, VcsAnnotationLine> lines;
     KUrl location;
-    QList<VcsRevision> revisions;
 };
+
+class VcsAnnotationLinePrivate
+{
+public:
+    QString author;
+    QDateTime date;
+    QString text;
+    QString line;
+    VcsRevision revision;
+    int lineno;
+};
+
+VcsAnnotationLine::VcsAnnotationLine()
+    : d( new VcsAnnotationLinePrivate )
+{
+    d->lineno = -1;
+}
+
+VcsAnnotationLine::VcsAnnotationLine( const VcsAnnotationLine& rhs )
+    : d( new VcsAnnotationLinePrivate )
+{
+    d->author = rhs.d->author;
+    d->line = rhs.d->line;
+    d->revision = rhs.d->revision;
+    d->lineno = rhs.d->lineno;
+    d->date = rhs.d->date;
+    d->text = rhs.d->text;
+}
+
+VcsAnnotationLine::~VcsAnnotationLine()
+{
+    delete d;
+}
+
+int VcsAnnotationLine::lineNumber() const
+{
+    return d->lineno;
+}
+
+QString VcsAnnotationLine::text() const
+{
+    return d->text;
+}
+
+QString VcsAnnotationLine::author() const
+{
+    return d->author;
+}
+
+VcsRevision VcsAnnotationLine::revision() const
+{
+    return d->revision;
+}
+
+QDateTime VcsAnnotationLine::date() const
+{
+    return d->date;
+}
+
+void VcsAnnotationLine::setLineNumber( int lineno )
+{
+    d->lineno = lineno;
+}
+
+void VcsAnnotationLine::setText( const QString& text )
+{
+    d->text = text;
+}
+
+void VcsAnnotationLine::setAuthor( const QString& author )
+{
+    d->author = author;
+}
+
+void VcsAnnotationLine::setRevision( const VcsRevision& revision )
+{
+    d->revision = revision;
+}
+
+void VcsAnnotationLine::setDate( const QDateTime& date )
+{
+    d->date = date;
+}
+
+VcsAnnotationLine& VcsAnnotationLine::operator=( const VcsAnnotationLine& rhs)
+{
+    if(this == &rhs)
+        return *this;
+    d->author = rhs.d->author;
+    d->line = rhs.d->line;
+    d->revision = rhs.d->revision;
+    d->lineno = rhs.d->lineno;
+    d->date = rhs.d->date;
+    d->text = rhs.d->text;
+    return *this;
+}
+
 VcsAnnotation::VcsAnnotation()
     : d(new VcsAnnotationPrivate)
 {
@@ -45,11 +139,8 @@ VcsAnnotation::VcsAnnotation()
 VcsAnnotation::VcsAnnotation( const VcsAnnotation& rhs )
     : d(new VcsAnnotationPrivate)
 {
-    d->authors = rhs.d->authors;
-    d->dates = rhs.d->dates;
     d->lines = rhs.d->lines;
     d->location = rhs.d->location;
-    d->revisions = rhs.d->revisions;
 }
 
 VcsAnnotation::~VcsAnnotation()
@@ -67,41 +158,13 @@ int VcsAnnotation::lineCount() const
     return d->lines.count();
 }
 
-QString VcsAnnotation::line( int linenum ) const
+void VcsAnnotation::insertLine( int lineno, const VcsAnnotationLine& line )
 {
-    if( linenum < d->lines.count() )
-        return d->lines.at( linenum );
-    return QString();
-}
-
-VcsRevision VcsAnnotation::revision( int linenum ) const
-{
-    if( linenum < d->revisions.count() )
-        return d->revisions.at( linenum );
-    return VcsRevision();
-}
-
-QString VcsAnnotation::author( int linenum ) const
-{
-    if( linenum < d->authors.count() )
-        return d->authors.at( linenum );
-    return QString();
-}
-
-QDateTime VcsAnnotation::date( int linenum ) const
-{
-    if( linenum < d->dates.count() )
-        return d->dates.at( linenum );
-    return QDateTime();
-}
-
-void VcsAnnotation::addLine( const QString& text, const QString& author, 
-                             const QDateTime& date, const VcsRevision& revision )
-{
-    d->lines.append( text );
-    d->authors.append( author );
-    d->dates.append( date );
-    d->revisions.append( revision );
+    if( lineno < 0 )
+    {
+        return;
+    }
+    d->lines.insert( lineno, line );
 }
 
 void VcsAnnotation::setLocation(const KUrl& u)
@@ -113,11 +176,8 @@ VcsAnnotation& VcsAnnotation::operator=( const VcsAnnotation& rhs)
 {
     if(this == &rhs)
         return *this;
-    d->authors = rhs.d->authors;
-    d->revisions = rhs.d->revisions;
     d->location = rhs.d->location;
     d->lines = rhs.d->lines;
-    d->dates = rhs.d->dates;
     return *this;
 }
 

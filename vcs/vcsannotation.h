@@ -34,6 +34,65 @@ namespace KDevelop
 class VcsRevision;
 
 /**
+ * Annotation information for a line of a version controlled file
+ */
+class KDEVPLATFORMVCS_EXPORT VcsAnnotationLine
+{
+public:
+    VcsAnnotationLine();
+    VcsAnnotationLine( const VcsAnnotationLine& );
+    virtual ~VcsAnnotationLine();
+    /**
+     * @return the line number of this annotation line
+     */
+    int lineNumber() const;
+    /**
+     * @return the text of this line
+     */
+    QString text() const;
+    /**
+     * @return the author that last changed this line
+     */
+    QString author() const;
+    /**
+     * @return the revision this line was last changed
+     */
+    VcsRevision revision() const;
+    /**
+     * @return the date of the last change to this line
+     */
+    QDateTime date() const;
+    /**
+     * set the line number of this annotation line
+     * @param number the line number
+     */
+    void setLineNumber( int );
+    /**
+     * set the text of this annotation line
+     * @param text the text of the line
+     */
+    void setText( const QString& );
+    /**
+     * set the author of this annotation line
+     * @param author the author of the last change
+     */
+    void setAuthor( const QString& );
+    /**
+     * set the revision of this annotation line
+     * @param revision the revision of the last change
+     */
+    void setRevision( const VcsRevision& );
+    /**
+     * set the date of this annotation line
+     * @param date the date of the last change
+     */
+    void setDate( const QDateTime& );
+    VcsAnnotationLine& operator=( const VcsAnnotationLine& rhs);
+private:
+    class VcsAnnotationLinePrivate* d;
+};
+
+/**
  * Annotations for a local file.
  *
  * This class lets the user fetch information for each line of a local file,
@@ -54,39 +113,20 @@ public:
      * @return the number of lines in the file
      */
     int lineCount() const;
-    /**
-     * @param linenum the number of the line, counting from 0
-     * @return the content of the specified line
-     */
-    QString line( int linenum ) const;
-    /**
-     * @param linenum the number of the line, counting from 0
-     * @return the revision of the last change on the specified line
-     */
-    VcsRevision revision( int linenum ) const;
-    /**
-     * @param linenum the number of the line, counting from 0
-     * @return the author of the last change on the specified line
-     */
-    QString author( int linenum ) const;
-    /**
-     * @param linenum the number of the line, counting from 0
-     * @return the date of the last change on the specified line
-     */
-    QDateTime date( int linenum ) const;
 
     /**
-     * add a new line to the end of the list of lines using
+     * insert a new line to list of lines using
      * the parameters
      *
-     * @param text the text of the line
-     * @param author the author of the last change to the line
-     * @param date the date of the last change to the line
-     * @param revision the revision of the last change to the line
+     * @param lineno the line for which to insert the content
+     * @param line the annotation line that should be inserted
      *
      */
-    void addLine( const QString& text, const QString& author, 
-                  const QDateTime& date, const VcsRevision& revision );
+    void insertLine( int lineno, const VcsAnnotationLine& );
+
+    /**
+     * @param location the location of the file
+     */
     void setLocation( const KUrl& );
 
     VcsAnnotation& operator=( const VcsAnnotation& rhs);
@@ -97,6 +137,7 @@ private:
 }
 
 Q_DECLARE_METATYPE( KDevelop::VcsAnnotation )
+Q_DECLARE_METATYPE( KDevelop::VcsAnnotationLine )
 
 #endif
 

@@ -116,7 +116,13 @@ public:
         foreach( SvnBlameHolder _holder, thread->m_blameList ){
             KDevelop::VcsRevision rev;
             rev.setRevisionValue( QString::number( _holder.revNo ), KDevelop::VcsRevision::GlobalNumber );
-	    vcsAnn.addLine( _holder.contents, _holder.author, QDateTime::fromString( _holder.date, Qt::ISODate ), rev );
+            KDevelop::VcsAnnotationLine line;
+            line.setLineNumber( _holder.lineNo );
+            line.setRevision( rev );
+            line.setText( _holder.contents );
+            line.setAuthor( _holder.author );
+            line.setDate( QDateTime::fromString( _holder.date, Qt::ISODate ) );
+            vcsAnn.insertLine( _holder.lineNo, line );
         }
 
         vcsAnn.setLocation( KUrl() ); // TODO modify subversion plugin internal.
