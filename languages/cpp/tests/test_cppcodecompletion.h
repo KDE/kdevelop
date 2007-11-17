@@ -26,6 +26,7 @@
 #include <kurl.h>
 
 #include <ktexteditor/cursor.h>
+#include <contextbuilder.h>
 
 #include "parser.h"
 #include "control.h"
@@ -45,6 +46,8 @@ namespace rpp {
   class pp;
   class LocationTable;
 }
+
+using namespace KDevelop;
 
 class TestPreprocessor;
 
@@ -67,6 +70,8 @@ private slots:
   void testHeaderSections();
   void cleanupTestCase();
   void testForwardDeclaration();
+  void testAcrossHeaderReferences();
+  void testAcrossHeaderTemplateReferences();
 
 public:
   enum DumpArea {
@@ -82,7 +87,7 @@ private:
   friend class TestPreprocessor;
 
   //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed
-  QString preprocess( const QString& text, QList<KDevelop::DUContext*>& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, rpp::LocationTable** returnLocationTable = 0L );
+  QString preprocess( const QString& text, IncludeFileList& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, rpp::LocationTable** returnLocationTable = 0L );
   
   KDevelop::DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
 

@@ -278,8 +278,6 @@ bool PreprocessJob::headerSectionEnded() {
 rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath)
 {
     Q_UNUSED(type)
-    Q_UNUSED(sourceLine)
-
     
     if (checkAbort())
         return 0;
@@ -305,7 +303,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": took included file from the du-chain" << fileName;
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-            parentJob()->addIncludedFile(includedContext);
+            parentJob()->addIncludedFile(includedContext, sourceLine);
             KDevelop::ParsingEnvironmentFilePointer file = includedContext->parsingEnvironmentFile();
             Cpp::EnvironmentFile* environmentFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
             if( environmentFile ) {
@@ -332,7 +330,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
             // Add the included file.
             Q_ASSERT(slaveJob.duChain());
-            parentJob()->addIncludedFile(slaveJob.duChain());
+            parentJob()->addIncludedFile(slaveJob.duChain(), sourceLine);
         }
         kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
     } else {

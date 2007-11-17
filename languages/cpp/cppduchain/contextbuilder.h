@@ -51,6 +51,21 @@ namespace Cpp {
   typedef KSharedPtr<EnvironmentFile> EnvironmentFilePointer;
 }
 
+struct KDEVCPPDUCHAIN_EXPORT LineContextPair {
+  LineContextPair( KDevelop::TopDUContext* _context, int _sourceLine ) : context(_context), sourceLine(_sourceLine) {
+  }
+  KDevelop::TopDUContext* context;
+  int sourceLine;
+};
+
+typedef QList<LineContextPair> IncludeFileList;
+
+///@return Whether @param context is contained as a context in @param lineContexts
+bool KDEVCPPDUCHAIN_EXPORT containsContext( const QList<LineContextPair>& lineContexts, TopDUContext* context );
+
+///Removes @param context from the list
+void KDEVCPPDUCHAIN_EXPORT removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context );
+
 /**
  * A class which iterates the AST to identify contexts.
  */
@@ -77,7 +92,7 @@ public:
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    * \param removeOldImports Should old imports that are not in the includes-list be removed?
    */
-  KDevelop::TopDUContext* buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<KDevelop::DUContext*>* includes = 0, const TopDUContextPointer& updateContext = TopDUContextPointer(), bool removeOldImports = true);
+  KDevelop::TopDUContext* buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes = 0, const TopDUContextPointer& updateContext = TopDUContextPointer(), bool removeOldImports = true);
 
   /**
    * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,

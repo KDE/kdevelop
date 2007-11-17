@@ -31,6 +31,7 @@
 #include <ktexteditor/range.h>
 
 #include <duchainpointer.h>
+#include <contextbuilder.h>
 
 class PreprocessJob;
 class TranslationUnitAST;
@@ -45,8 +46,6 @@ namespace Cpp {
 namespace KDevelop {
     class TopDUContext;
 }
-
-typedef QList<KDevelop::TopDUContext*> IncludeFileList;
 
 class CPPParseJob : public KDevelop::ParseJob
 {
@@ -77,7 +76,7 @@ public:
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
 
-    void addIncludedFile(KDevelop::TopDUContext* duChain);
+    void addIncludedFile(KDevelop::TopDUContext* duChain, int sourceLine);
     const IncludeFileList& includedFiles() const;
 
     ///Returns the preprocessor-job that is parent of this job, or 0

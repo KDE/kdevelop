@@ -77,7 +77,7 @@ DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
 {
 }
 
-TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes, const TopDUContextPointer& updateContext, bool removeOldImports)
+TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const TopDUContextPointer& updateContext, bool removeOldImports)
 {
   TopDUContext* top = buildContexts(file, node, includes, updateContext, removeOldImports);
 

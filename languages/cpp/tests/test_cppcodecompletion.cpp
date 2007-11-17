@@ -428,7 +428,7 @@ void TestCppCodeCompletion::testHeaderSections() {
   addInclude( "someHeader.h", "\n" );
   addInclude( "otherHeader.h", "\n" );
       
-  QList<DUContext*> includes;
+  IncludeFileList includes;
 
   QCOMPARE(preprocess("#include \"someHeader.h\"\nHello", includes, 0, true), QString("\n"));
   QCOMPARE(includes.count(), 1);
@@ -474,6 +474,67 @@ void TestCppCodeCompletion::testForwardDeclaration()
   release(top);
 }
 
+void TestCppCodeCompletion::testAcrossHeaderReferences()
+{
+  addInclude( "acrossheader1.h", "class Test{ };" );
+  addInclude( "acrossheader2.h", "Test t;" );
+  QByteArray method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+
+  Declaration* decl = findDeclaration(top, Identifier("t"), top->textRange().end());
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
+  QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+  
+  release(top);
+}
+
+void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
+{
+  addInclude( "acrossheader1.h", "class Dummy { }; template<class B> class Test{ };" );
+  addInclude( "acrossheader2.h", "template<class B, class B2 = Test<B> > class Test2 : public Test<B>{ Test<B> bm; };" );
+  QByteArray method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n ");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+
+  {
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::B2"), top->textRange().end());
+    QVERIFY(decl);
+    QVERIFY(decl->abstractType());
+    QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+    QCOMPARE(decl->toString(), QString("Test<Dummy>"));
+  }
+  {
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::bm"), top->textRange().end());
+    QVERIFY(decl);
+    QVERIFY(decl->abstractType());
+    QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+    QCOMPARE(decl->toString(), QString("Test<Dummy>"));
+  }
+  {
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->textRange().end());
+    QVERIFY(decl);
+    QVERIFY(decl->abstractType());
+    CppClassType* classType = dynamic_cast<CppClassType*>(decl->abstractType().data());
+    QVERIFY(classType);
+    QCOMPARE(classType->baseClasses().count(), 1);
+    QVERIFY(classType->baseClasses()[0].baseClass);
+    const CppClassType* parentClassType = dynamic_cast<const CppClassType*>(classType->baseClasses()[0].baseClass.data());
+    QVERIFY(parentClassType);
+    QCOMPARE(parentClassType->toString(), QString("Test<Dummy>"));
+  }
+  
+  release(top);
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -492,11 +553,11 @@ void TestCppCodeCompletion::addInclude( const QString& identity, const QString& 
 struct TestPreprocessor : public rpp::Preprocessor {
 
   TestCppCodeCompletion* cc;
-  QList<DUContext*>& included;
+  IncludeFileList& included;
   rpp::pp* pp;
   bool stopAfterHeaders;
 
-  TestPreprocessor( TestCppCodeCompletion* _cc, QList<DUContext*>& _included, bool _stopAfterHeaders ) : cc(_cc), included(_included), pp(0), stopAfterHeaders(_stopAfterHeaders) {
+  TestPreprocessor( TestCppCodeCompletion* _cc, IncludeFileList& _included, bool _stopAfterHeaders ) : cc(_cc), included(_included), pp(0), stopAfterHeaders(_stopAfterHeaders) {
   }
   
   rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType type, int sourceLine, bool skipCurrentPath)
@@ -504,7 +565,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.find(fileName);
     if( it != cc->fakeIncludes.end() || !pp ) {
       kDebug(9007) << "parsing included file \"" << fileName << "\"";
-      included << cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp);
+      included << LineContextPair( dynamic_cast<TopDUContext*>(cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp)), sourceLine );
     } else {
       kDebug(9007) << "could not find include-file \"" << fileName << "\"";
     }
@@ -521,7 +582,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
   }
 };
 
-QString TestCppCodeCompletion::preprocess( const QString& text, QList<DUContext*>& included, rpp::pp* parent, bool stopAfterHeaders, rpp::LocationTable** returnLocationTable ) {
+QString TestCppCodeCompletion::preprocess( const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, rpp::LocationTable** returnLocationTable ) {
   TestPreprocessor ppc( this, included, stopAfterHeaders );
 
     rpp::pp preprocessor(&ppc);
@@ -554,7 +615,7 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
   ParseSession* session = new ParseSession();
    ;
 
-   QList<DUContext*> included;
+   IncludeFileList included;
    QList<DUContext*> temporaryIncluded;
 
   rpp::LocationTable* locationTable;
@@ -567,10 +628,10 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
       //Temporarily insert all files parsed previously by the parent, so forward-declarations can be resolved etc.
       TestPreprocessor* testPreproc = dynamic_cast<TestPreprocessor*>(parent->preprocessor());
       if( testPreproc ) {
-        foreach( DUContext* include, testPreproc->included ) {
-          if( !included.contains( include ) ) {
+        foreach( LineContextPair include, testPreproc->included ) {
+          if( !containsContext( included, include.context ) ) {
             included.push_front( include );
-            temporaryIncluded << include;
+            temporaryIncluded << include.context;
           }
         }
       } else {

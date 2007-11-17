@@ -42,6 +42,21 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
 
+bool containsContext( const QList<LineContextPair>& lineContexts, TopDUContext* context ) {
+  foreach( const LineContextPair& ctx, lineContexts )
+    if( ctx.context == context )
+      return true;
+  return false;
+}
+
+void removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context ) {
+  for( QList<LineContextPair>::iterator it = lineContexts.begin(); it != lineContexts.end(); ++it )
+    if( (*it).context == context ) {
+    lineContexts.erase(it);
+    return;
+    }
+}
+
 ///Retrieves the first and last item from a list
 template <class _Tp>
 void getFirstLast(AST** first, AST** last, const ListNode<_Tp> *nodes)
@@ -185,7 +200,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
   return topLevelContext;
 }
 
-TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, QList<DUContext*>* includes, const TopDUContextPointer& updateContext, bool removeOldImports)
+TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const TopDUContextPointer& updateContext, bool removeOldImports)
 {
   m_compilingContexts = true;
 
@@ -249,14 +264,14 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     node->ducontext = topLevelContext;
 
     if (includes) {
-      foreach (DUContextPointer parent, topLevelContext->importedParentContexts())
-        if (includes->contains(parent.data()))
-          includes->removeAll(parent.data());
-        else if( removeOldImports )
-          topLevelContext->removeImportedParentContext(parent.data());
+      if(removeOldImports) {
+        foreach (DUContextPointer parent, topLevelContext->importedParentContexts())
+          if (!containsContext(*includes, dynamic_cast<TopDUContext*>(parent.data())))
+            topLevelContext->removeImportedParentContext(parent.data());
+      }
 
-      foreach (DUContext* included, *includes)
-        topLevelContext->addImportedParentContext(included);
+      foreach (LineContextPair included, *includes)
+        topLevelContext->addImportedParentContext(included.context, KTextEditor::Cursor(included.sourceLine, 0));
     }
   }
 

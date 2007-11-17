@@ -138,6 +138,12 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         QList<Declaration*> decls = searchContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
         if( !decls.isEmpty() ) {
           return decls.front()->abstractType().data();
+        }else{
+          ///Failed to find in basic context, use the alternative one.
+/*          QList<Declaration*> decls = alternativeContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
+          if( !decls.isEmpty() ) {
+            return decls.front()->abstractType().data();
+          }*/
         }
       } else {
         ///Resolve delayed expression, for example static numeric expressions
@@ -359,12 +365,12 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
       if( importedContext->type() == KDevelop::DUContext::Template || importedContext->type() == KDevelop::DUContext::Function )
       {
         DUContext* ctx = instantiateDeclarationContext( parentContext, importedContext.data(), templateArguments, 0, 0);
-        contextCopy->addImportedParentContext( ctx, true );
+        contextCopy->addImportedParentContext( ctx, KTextEditor::Cursor(), true );
       }
       else
       {
         //Import all other imported contexts
-        contextCopy->addImportedParentContext( importedContext.data(), true );
+        contextCopy->addImportedParentContext( importedContext.data(), KTextEditor::Cursor(), true );
       }
     }
 
@@ -384,7 +390,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
             {
               if( baseClass->declaration() && baseClass->declaration()->internalContext() )
               {
-                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), true );
+                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), KTextEditor::Cursor(), true );
               }
             } else {
               kDebug(9007) << "Resolved bad base-class";

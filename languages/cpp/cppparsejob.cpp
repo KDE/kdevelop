@@ -189,8 +189,8 @@ CppLanguageSupport * CPPParseJob::cpp() const
         return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->cpp();
 }
 
-void CPPParseJob::addIncludedFile(KDevelop::TopDUContext* duChain) {
-    m_includedFiles.push_back(duChain);
+void CPPParseJob::addIncludedFile(KDevelop::TopDUContext* duChain, int sourceLine) {
+    m_includedFiles.push_back(LineContextPair(duChain, sourceLine));
 }
 
 void CPPParseJob::setEnvironmentFile( Cpp::EnvironmentFile* file ) {
@@ -237,10 +237,10 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 }
 
 ///If @param ctx is a proxy-context, returns the target-context. Else returns ctx. @warning du-chain must be locked
-TopDUContext* contentFromProxy(TopDUContext* ctx) {
-    if( ctx->flags() & TopDUContext::ProxyContextFlag ) {
-        Q_ASSERT(ctx->importedParentContexts().count() == 1);
-        return dynamic_cast<TopDUContext*>(ctx->importedParentContexts().first().data());
+LineContextPair contentFromProxy(LineContextPair ctx) {
+    if( ctx.context->flags() & TopDUContext::ProxyContextFlag ) {
+        Q_ASSERT(ctx.context->importedParentContexts().count() == 1);
+        return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().data()), ctx.sourceLine );
     }else{
         return ctx;
     }
@@ -304,7 +304,7 @@ void CPPInternalParseJob::run()
 
         //If simplified environment-matching is used, we now only care about the content-context, until we create the proxy-context in the end.
         
-        QList<DUContext*> chains;
+        QList<LineContextPair> chains;
         QList<DUContext*> temporaryChains;
 
         ///Here we count together all files that were included while this parse-run. If we are updating, and have parsed the document completely, we can remove all contexts urls that do not match this.
@@ -313,9 +313,9 @@ void CPPInternalParseJob::run()
         {
             DUChainReadLocker lock(DUChain::lock());
             ///We directly insert the content-contexts, to create a cleaner structure. Else the tree would be cluttered and redundant.
-            foreach ( TopDUContext* context, parentJob()->includedFiles() ) {
+            foreach ( LineContextPair context, parentJob()->includedFiles() ) {
                 chains << contentFromProxy(context);
-                encounteredIncludeUrls << context->url();
+                encounteredIncludeUrls << context.context->url();
             }
         }
 
@@ -325,13 +325,13 @@ void CPPInternalParseJob::run()
             //Temporarily insert the parent's chains here, so forward-declarations can be resolved and types can be used, as it should be.
             //In theory, we would need to insert the whole until-now parsed part of the parent, but that's not possible because preprocessing and parsing are
             //separate steps. So we simply assume that the includes are at the top of the file.
-            foreach ( TopDUContext* topContext, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
+            foreach ( LineContextPair topContext, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
                 //As above, we work with the content-contexts.
-                TopDUContext* context = contentFromProxy(topContext);
-                DUContextPointer ptr(context);
-                if( !chains.contains(context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(ptr)) ) {
+                LineContextPair context = contentFromProxy(topContext);
+                DUContextPointer ptr(context.context);
+                if( !containsContext(chains, context.context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(ptr)) ) {
                     chains << context;
-                    temporaryChains << context;
+                    temporaryChains << context.context;
                 }
             }
         }
@@ -393,8 +393,8 @@ void CPPInternalParseJob::run()
                 topContext = parentJob()->contentContext().data();
 
                 ///Add all our imports to the re-used context
-                foreach( DUContext* import, chains )
-                    topContext->addImportedParentContext(import);
+                foreach( const LineContextPair& import, chains )
+                    topContext->addImportedParentContext(import.context, KTextEditor::Cursor(import.sourceLine, 0));
                 if( !topContext ) {
                     kDebug( 9007 ) << "Context was deleted while parsing";
                     return;
@@ -412,7 +412,7 @@ void CPPInternalParseJob::run()
                 //Remove include-files we imported temporarily, because they are on the same level in reality
                 foreach ( DUContext* context, temporaryChains ) {
                     topContext->removeImportedParentContext(context);
-                    chains.removeAll(context);
+                    removeContext(chains, dynamic_cast<TopDUContext*>(context));
                 }
             }
 
