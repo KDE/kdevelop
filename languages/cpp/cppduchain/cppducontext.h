@@ -106,17 +106,17 @@ class CppDUContext : public BaseContext {
         delete instatiation;
     }
     
-    virtual void findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
+    virtual void findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
     {
       if( basicFlags & BaseContext::LanguageSpecificFlag1 ) {
         //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
         //We use LanguageSpecificFlag1 to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.
-        BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, basicFlags );
+        BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, trace, basicFlags );
         return;
       }
       
       for( QList<QualifiedIdentifier>::const_iterator it = identifiers.begin(); it != identifiers.end(); it++ )
-        findDeclarationsInternal(*it, position, dataType, ret, basicFlags);
+        findDeclarationsInternal(*it, position, dataType, ret, trace, basicFlags);
 
       //Remove all foward-declarations if there is a real declaration in the list
 
@@ -141,7 +141,7 @@ class CppDUContext : public BaseContext {
     }
     
     ///Overridden to take care of templates and other c++ specific things
-    void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, typename BaseContext::SearchFlags basicFlags ) const
+    void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 
@@ -152,7 +152,7 @@ class CppDUContext : public BaseContext {
       ///Since we cannot directly locate namespaces becase A) they have no declaration and b) they may be declared in multiple positions,
       ///we put qualified identifiers in the form of Namespace::...::Identifier together in currentLookup.
       QualifiedIdentifier currentLookup;
-      KDevelop::DUContext* scopeContext = 0; //The scope(class) we are searching in
+      KDevelop::DUContext* scopeContext = 0, *previousScopeContext = 0; //The scope(class) we are searching in
 
       //num is the part of the scope that's being looked up
       int num = 0;
@@ -217,10 +217,23 @@ class CppDUContext : public BaseContext {
         
         QList<Declaration*> tempDecls;
         if( !scopeContext ) {
-          BaseContext::findDeclarationsInternal( toList(currentLookup), position, dataType, tempDecls, flags | BaseContext::LanguageSpecificFlag1 );
+          BaseContext::findDeclarationsInternal( toList(currentLookup), position, dataType, tempDecls, trace, flags | BaseContext::LanguageSpecificFlag1 );
 
-        } else
-          scopeContext->findDeclarationsInternal( toList(currentLookup), scopeContext->url() == this->url() ? position : scopeContext->textRange().end(), dataType, tempDecls, flags | BaseContext::DontSearchInParent | BaseContext::LanguageSpecificFlag1 );
+        } else {
+          typename BaseContext::ImportTrace newTrace(trace);
+
+          //We need to build the inclusion-trace here, so template-parameters can be resolved nicely
+          TopDUContext* previousTopContext = previousScopeContext ? previousScopeContext->topContext() : this->topContext();
+          
+          if( previousTopContext != scopeContext->topContext() ) {
+            /*The top-context has changed, so we need to append the inclusion-path
+              from previousTopContext to scopeContext->topContext()
+              to newTrace */
+            newTrace += previousTopContext->importTrace(scopeContext->topContext());
+          }
+          
+          scopeContext->findDeclarationsInternal( toList(currentLookup), scopeContext->url() == this->url() ? position : scopeContext->textRange().end(), dataType, tempDecls, newTrace, flags | BaseContext::DontSearchInParent | BaseContext::LanguageSpecificFlag1 );
+        }
 
         if( !tempDecls.isEmpty() && num < identifier.count()-1 ) { //Filter out intermediate namespace alias declarations, those are applied from within the du-chain.
           for( QList<Declaration*>::iterator it = tempDecls.begin(); it != tempDecls.end();  ) {
@@ -271,6 +284,7 @@ class CppDUContext : public BaseContext {
                 continue;
               }
 
+              previousScopeContext = scopeContext;
               scopeContext = TypeUtils::getInternalContext(instanceDecl);
 
               if(!scopeContext || scopeContext->type() == DUContext::Template )
@@ -311,7 +325,7 @@ class CppDUContext : public BaseContext {
       }
     }
 
-    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, typename BaseContext::SearchFlags flags ) const
+    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags flags ) const
     {
       ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
       ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString(); )
@@ -327,7 +341,7 @@ class CppDUContext : public BaseContext {
 
         int retCount = ret.count();
       
-        BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, flags );
+        BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, trace, flags );
 
         ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position; )
         
@@ -352,7 +366,7 @@ class CppDUContext : public BaseContext {
           ///Search in the context this one was instantiated from
           QList<Declaration*> decls;
           ifDebug( kDebug(9007) << "searching base"; )
-          m_instantiatedFrom->findLocalDeclarationsInternal( identifier, position, dataType, allowUnqualifiedMatch, decls, flags );
+          m_instantiatedFrom->findLocalDeclarationsInternal( identifier, position, dataType, allowUnqualifiedMatch, decls, trace, flags );
           
           ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString(); )
           ifDebug( kDebug(9007) << "found" << decls.count() << "in base"; )
@@ -452,7 +466,7 @@ class CppDUContext : public BaseContext {
       return templateDecl->instantiate( templateArguments );
     }
 
-    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, bool searchInParents, int currentDepth) const
+    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, const typename BaseContext::ImportTrace& trace,  bool searchInParents, int currentDepth) const
     {
       if( m_instantiatedFrom )
       {
@@ -464,10 +478,10 @@ class CppDUContext : public BaseContext {
         //DUContext::mergeDeclarationsInternal will then get them.
         
         foreach( Declaration* baseDecls, m_instantiatedFrom->localDeclarations() )
-          this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), true, temp, DUContext::NoFiltering );
+          this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), true, temp, trace, DUContext::NoFiltering );
       }
 
-      return BaseContext::mergeDeclarationsInternal(definitions, position, hadContexts, searchInParents, currentDepth);
+      return BaseContext::mergeDeclarationsInternal(definitions, position, hadContexts, trace, searchInParents, currentDepth);
     }
 
     CppDUContext<BaseContext>* m_instantiatedFrom;
