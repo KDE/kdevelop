@@ -811,13 +811,33 @@ void TestDUChain::testDeclareNamespace()
   QCOMPARE(findDeclaration(testCtx,  QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(bar->uses().count(), 1);
   QCOMPARE(findDeclaration(top, bar->identifier()), bar2);
-  kDebug(9007) << "searching" << bar->qualifiedIdentifier().toString();
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
 
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
+  
+  release(top);
+}
+
+void TestDUChain::testSearchAcrossNamespace()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+  QByteArray method("namespace A { class B{}; } namespace Q{} namespace A{ B bla; }");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+  QVERIFY(top->childContexts()[2]->localDeclarations()[0]->abstractType());
+  QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[2]->localDeclarations()[0]->abstractType().data()));
   
   release(top);
 }
@@ -1062,7 +1082,7 @@ void TestDUChain::testTypedef() {
 
 void TestDUChain::testContextAssignment() {
   QByteArray text("template<class A>class Class { enum{ Bla = A::a }; }; ");
-  DUContext* top = parse(text, DumpAll);
+  DUContext* top = parse(text, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
 
   QCOMPARE(top->localDeclarations().count(), 1);
@@ -1308,12 +1328,12 @@ void TestDUChain::testTemplates() {
     QVERIFY(template1InstanceDecl2);
     QCOMPARE(template1InstanceDecl2->abstractType()->toString(), QString("C"));
     
-    kDebug(9007) << "searching for" << ident2.toString();
+/*    kDebug(9007) << "searching for" << ident2.toString();
     kDebug(9007) << "Part 1:" << ident2.at(0).toString() << "templates:" << ident2.at(0).templateIdentifiers().count();
-    kDebug(9007) << "Part 2:" << ident2.at(1).toString();
+    kDebug(9007) << "Part 2:" << ident2.at(1).toString();*/
     Declaration* template1InstanceDecl = findDeclaration(top, ident2);
     QVERIFY(template1InstanceDecl);
-    kDebug(9007) << "found:" << template1InstanceDecl->toString();
+/*    kDebug(9007) << "found:" << template1InstanceDecl->toString();*/
     QCOMPARE(template1InstanceDecl->abstractType()->toString(), QString("B"));
   }
   
@@ -1334,7 +1354,6 @@ void TestDUChain::testTemplateDefaultParameters() {
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("Template1< S >"));
-  kDebug() << memberDecl->toString();
   
   release(top);
 }
@@ -1346,23 +1365,27 @@ void TestDUChain::testTemplates2() {
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
+  Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("instance"));
+  QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("Class< S* >"));
+  
+/*  memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::Alloc<S>::referenceType"));
+  QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"));*/
+  
+  memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"));
   
+  
   memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S*>::member"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
-  kDebug() << memberDecl->toString();
   QCOMPARE(memberDecl->abstractType()->toString(), QString("S*&"));
 
-  memberDecl = findDeclaration(top, QualifiedIdentifier("instance"));
-  QVERIFY(memberDecl);
-  QVERIFY(memberDecl->abstractType());
-  kDebug() << memberDecl->toString();
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("Class< S* >"));
-  
   release(top);
 }
 
@@ -1377,19 +1400,16 @@ void TestDUChain::testTemplatesRebind() {
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("S"));
-  kDebug() << memberDecl->toString();
   
   Declaration* member2Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::member2"));
   QVERIFY(member2Decl);
   QVERIFY(member2Decl->abstractType());
   QCOMPARE(member2Decl->abstractType()->toString(), QString("S"));
-  kDebug() << member2Decl->toString();
   
   Declaration* member3Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::value"));
   QVERIFY(member3Decl);
   QVERIFY(member3Decl->abstractType());
   QCOMPARE(member3Decl->abstractType()->toString(), QString("A"));
-  kDebug() << member3Decl->toString();
   
   release(top);
 }
@@ -1405,7 +1425,6 @@ void TestDUChain::testTemplatesRebind2() {
   QVERIFY(member3Decl);
   QVERIFY(member3Decl->abstractType());
   QCOMPARE(member3Decl->abstractType()->toString(), QString("A"));
-  kDebug() << member3Decl->toString();
   
   release(top);
 }
@@ -1428,7 +1447,6 @@ void TestDUChain::testForwardDeclaration()
   CppClassType* type4 = top->localDeclarations()[3]->type<CppClassType>().data();
   CppClassType* type5 = top->localDeclarations()[4]->type<CppClassType>().data();
 
-  kDebug() << top->localDeclarations()[1]->abstractType()->toString();
 
   QCOMPARE(top->localDeclarations()[0]->kind(), Declaration::Type);
   QCOMPARE(top->localDeclarations()[1]->kind(), Declaration::Instance);
@@ -1436,7 +1454,6 @@ void TestDUChain::testForwardDeclaration()
   QCOMPARE(top->localDeclarations()[3]->kind(), Declaration::Instance);
   QCOMPARE(top->localDeclarations()[4]->kind(), Declaration::Type);
   QVERIFY(type1);
-  kDebug() << type1->toString();
   QVERIFY(type2);
   QVERIFY(type3);
   QVERIFY(type4);
@@ -1480,8 +1497,6 @@ void TestDUChain::testForwardDeclaration2()
   QCOMPARE(top->localDeclarations()[3]->kind(), Declaration::Type);
   QCOMPARE(top->localDeclarations()[4]->kind(), Declaration::Instance);
   QCOMPARE(top->localDeclarations()[5]->kind(), Declaration::Type);
-  
-  kDebug() << top->localDeclarations()[1]->abstractType()->toString();
   
   QVERIFY(type1);
   QVERIFY(type12);
@@ -1540,7 +1555,6 @@ void TestDUChain::testForwardDeclaration3()
   CppClassType* subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>().data();
 
   QCOMPARE(type1, type2);
-  kDebug() << type2->toString() << type3->toString();
   QCOMPARE(type2, type3);
   QCOMPARE(subType, type4);
   QCOMPARE(type4, type5);
@@ -1565,11 +1579,9 @@ void TestDUChain::testTemplateForwardDeclaration()
   CppClassType* type3 = top->localDeclarations()[3]->type<CppClassType>().data();
 
   QVERIFY(type1);
-  kDebug() << type1->toString();
   QVERIFY(type2);
   QVERIFY(type3);
 
-  kDebug() << type2->toString();
   TemplateDeclaration* temp2Decl = dynamic_cast<TemplateDeclaration*>(type2->declaration());
   QVERIFY(temp2Decl);
   TemplateDeclaration* temp3Decl = dynamic_cast<TemplateDeclaration*>(type3->declaration());
