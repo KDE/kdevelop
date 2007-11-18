@@ -23,6 +23,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
+#include <QtCore/QDateTime>
 
 namespace KDevelop
 {
@@ -117,6 +118,46 @@ void VcsRevision::setValue( const QVariant& v )
 bool VcsRevision::operator==( const KDevelop::VcsRevision& rhs ) const
 {
     return ( d->type == rhs.d->type && d->value == rhs.d->value && d->internalValues == rhs.d->internalValues );
+}
+
+QString VcsRevision::prettyValue() const
+{
+    switch( revisionType() )
+    {
+        case GlobalNumber:
+        case FileNumber:
+            return QString::number( revisionValue().toLongLong() );
+	    break;
+        case Special:
+	    switch( revisionValue().toInt() )
+	    {
+                case Head:
+                    return "Head";
+                    break;
+                case Base:
+                    return "Base";
+                    break;
+                case Working:
+                    return "Working";
+                    break;
+                case Previous:
+                    return "Previous";
+                    break;
+                case Start:
+                    return "Start";
+                    break;
+		default:
+                    return "User";
+                    break;
+	    }
+	    break;
+        case Date:
+            return revisionValue().toDateTime().toString( Qt::LocalDate );
+	    break;
+        default:
+	    return revisionValue().toString();
+	    break;
+    }
 }
 
 }

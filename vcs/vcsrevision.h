@@ -105,6 +105,14 @@ public:
      */
     QVariant revisionValue() const;
 
+    /**
+     * This returns the value of the revision, suitable for displaying to the
+     * user. For numbers it just returns the number converted to a string, for
+     * the special types it returns the literal value of the special type and
+     * for a datetime value it returns a localized string of the datetime value.
+     */
+    QString prettyValue() const;
+
     bool operator==( const KDevelop::VcsRevision&) const;
 protected:
     /**
