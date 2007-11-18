@@ -19,6 +19,7 @@
 #include "test_cppcodecompletion.h"
 
 #include <QtTest/QtTest>
+#include <typeinfo>
 
 #include <duchain.h>
 #include <duchainlock.h>
@@ -495,7 +496,7 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
 
 void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 {
-  addInclude( "acrossheader1.h", "class Dummy { }; template<class B> class Test{ };" );
+  addInclude( "acrossheader1.h", "class Dummy { }; template<class Q> class Test{ };" );
   addInclude( "acrossheader2.h", "template<class B, class B2 = Test<B> > class Test2 : public Test<B>{ Test<B> bm; };" );
   QByteArray method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n ");
 
@@ -505,18 +506,26 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 
 
   {
+    kDebug() << "top is" << top;
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Dummy"), top->textRange().end());
+    QVERIFY(decl);
+    QVERIFY(decl->abstractType());
+    QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+    QCOMPARE(decl->abstractType()->toString(), QString("Dummy"));
+  }
+  {
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::B2"), top->textRange().end());
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
-    QCOMPARE(decl->toString(), QString("Test<Dummy>"));
+    QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::bm"), top->textRange().end());
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
-    QCOMPARE(decl->toString(), QString("Test<Dummy>"));
+    QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->textRange().end());
@@ -526,9 +535,10 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(classType);
     QCOMPARE(classType->baseClasses().count(), 1);
     QVERIFY(classType->baseClasses()[0].baseClass);
+    kDebug() << typeid(*classType->baseClasses()[0].baseClass.data()).name();
     const CppClassType* parentClassType = dynamic_cast<const CppClassType*>(classType->baseClasses()[0].baseClass.data());
     QVERIFY(parentClassType);
-    QCOMPARE(parentClassType->toString(), QString("Test<Dummy>"));
+    QCOMPARE(parentClassType->toString(), QString("Test< Dummy >"));
   }
   
   release(top);
