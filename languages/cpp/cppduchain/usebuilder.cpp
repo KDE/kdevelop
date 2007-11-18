@@ -202,7 +202,7 @@ void UseBuilder::visitUnaryExpression(UnaryExpressionAST * exp) {
 
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
-  UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
+  UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session, DUContext::ImportTrace()), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
   }
   private:
 

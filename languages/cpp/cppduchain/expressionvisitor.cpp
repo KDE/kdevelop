@@ -20,7 +20,6 @@
 
 #include <duchainlock.h>
 #include <duchain.h>
-#include <ducontext.h>
 #include <parsesession.h>
 #include <declaration.h>
 #include <definition.h>
@@ -198,7 +197,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
 }
 
   
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, bool strict) : m_strict(strict), m_session(session), m_currentContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::DUContext::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_session(session), m_currentContext(0) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -473,7 +472,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       if( !m_currentContext->url().equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
         position = position.invalid();
 
-      m_lastDeclarations = m_currentContext->findDeclarations( identifier, position );
+      ///We use the more complex findDeclarationsInternal here so we can give m_inclusionTrace
+      m_lastDeclarations.clear();
+      QList<QualifiedIdentifier> identifiers;
+      identifiers << identifier;
+      m_currentContext->findDeclarationsInternal( identifiers, position.isValid() ? position : m_currentContext->textRange().end(), AbstractType::Ptr(), m_lastDeclarations, m_inclusionTrace, DUContext::NoSearchFlags );
       if( m_lastDeclarations.isEmpty() ) {
         problem( node, QString("could not find declaration of %1").arg( nameC.identifier().toString() ) );
       } else {
@@ -1089,7 +1092,11 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
     comp.run(ast);
     LOCKDUCHAIN;
 
-    QList<Declaration*> decls = m_currentContext->findDeclarations(comp.identifier());
+    QList<Declaration*> decls;
+    ///We use the more complex findDeclarationsInternal here so we can give m_inclusionTrace
+    QList<QualifiedIdentifier> identifiers;
+    identifiers << comp.identifier();
+    m_currentContext->findDeclarationsInternal( identifiers, m_currentContext->textRange().end(), AbstractType::Ptr(), decls, m_inclusionTrace, DUContext::NoSearchFlags );
 
     if( !decls.isEmpty() )
     {

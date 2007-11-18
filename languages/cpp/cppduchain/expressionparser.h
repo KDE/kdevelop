@@ -24,6 +24,7 @@
 #include <duchain/duchainpointer.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
+#include <duchain/ducontext.h>
 #include "visitor.h"
 #include "cppduchainexport.h"
 #include "expressionvisitor.h"
@@ -114,20 +115,20 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
      *
      * 
     */
-    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContextPointer context, bool forceExpression = false );
+    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContextPointer context, const KDevelop::DUContext::ImportTrace& trace = KDevelop::DUContext::ImportTrace(), bool forceExpression = false );
 
     /**
      * Same as evaluateType, except that it does not consider type-ids, only expressions.
      * Equivalent with calling evaluateType(.., .., true), but should be preferred for better overview.
      * */
-    ExpressionEvaluationResult evaluateExpression( const QByteArray& expression, DUContextPointer context );
+    ExpressionEvaluationResult evaluateExpression( const QByteArray& expression, DUContextPointer context, const KDevelop::DUContext::ImportTrace& trace = KDevelop::DUContext::ImportTrace() );
     /**
      * Evaluates the type of an expression given as an AST.
      *
      * @param ast the AST. Its context must be built already, the context-member must be filled.
      * @param debug whether additional output to kdDebug should be issued
     */
-    ExpressionEvaluationResult evaluateType( AST* ast, ParseSession* session );
+    ExpressionEvaluationResult evaluateType( AST* ast, ParseSession* session, const KDevelop::DUContext::ImportTrace& trace = KDevelop::DUContext::ImportTrace() );
 
   private:
     bool m_strict;

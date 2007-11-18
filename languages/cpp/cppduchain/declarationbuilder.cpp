@@ -660,7 +660,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
             for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
             {
-              Declaration* realInstance = currentTemplate->instantiate(it.key().args);
+              Declaration* realInstance = currentTemplate->instantiate(it.key().args, DUContext::ImportTrace());
               Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
               //Now change the type of forwardInstance so it matches the type of realInstance
               CppClassType::Ptr realClass = realInstance->type<CppClassType>();

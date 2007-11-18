@@ -233,7 +233,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     
     DUChainReadLocker lock(DUChain::lock());
     node->expression->ducontext = currentContext();
-    res = parser.evaluateType( node->expression, m_editor->parseSession() );
+    res = parser.evaluateType( node->expression, m_editor->parseSession(), DUContext::ImportTrace() );
     
     bool delay = false;
 
@@ -593,7 +593,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     DUChainReadLocker lock(DUChain::lock());
     if(expression) {
       expression->ducontext = currentContext();
-      res = parser.evaluateType( expression, m_editor->parseSession() );
+      res = parser.evaluateType( expression, m_editor->parseSession(), DUContext::ImportTrace() );
     }
   
     CppArrayType::Ptr array(new CppArrayType());

@@ -94,6 +94,10 @@ struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
     if( found ) return false;
     if( dynamic_cast<const DelayedType*>(type) )
       found = true;
+    if( const CppClassType* classType = dynamic_cast<const CppClassType*>(type) ) {
+        foreach( const CppClassType::BaseClassInstance& base, classType->baseClasses() )
+          visit( base.baseClass.data() );
+    }
     return !found;
   }
 
@@ -111,19 +115,31 @@ const DelayedType* containsDelayedType(const AbstractType* type)
   const PointerType* pType = dynamic_cast<const PointerType*>(type);
   const ReferenceType* rType = dynamic_cast<const ReferenceType*>(type);
   const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
+  const CppClassType* classType = dynamic_cast<const CppClassType*>(type);
   if( pType )
     return containsDelayedType(pType->baseType().data());
   if( rType )
     return containsDelayedType(rType->baseType().data());
+  if( classType ) {
+    foreach( const CppClassType::BaseClassInstance& base, classType->baseClasses() ) {
+      const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.data());
+      if( delayed )
+        return delayed;
+      else if( delayed = containsDelayedType( base.baseClass.data() ) )
+        return delayed;
+    }
+  }
   return delayedType;
 }
 
 ///Replaces any DelayedType's in interesting positions with their resolved versions, if they can be resolved.
 struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   const KDevelop::DUContext* searchContext;
+  
+  const KDevelop::DUContext::ImportTrace& inclusionTrace;
   static AtomicIncrementer::Int depth_counter;
 
-  DelayedTypeResolver(const KDevelop::DUContext* _searchContext) : searchContext(_searchContext) {
+  DelayedTypeResolver(const KDevelop::DUContext* _searchContext, const KDevelop::DUContext::ImportTrace& _inclusionTrace) : searchContext(_searchContext), inclusionTrace(_inclusionTrace) {
   }
 
   virtual AbstractType* exchange( const AbstractType* type )
@@ -133,32 +149,30 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return const_cast<AbstractType*>(type); ///@todo remove const_cast;
     }
-    
     const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
 
     if( delayedType && delayedType->kind() == DelayedType::Delayed ) {
-
       if( !delayedType->qualifiedIdentifier().isExpression() ) {
-        QList<Declaration*> decls = searchContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
+        QList<QualifiedIdentifier> identifiers;
+        identifiers << delayedType->qualifiedIdentifier();
+        QList<Declaration*> decls;
+        searchContext->findDeclarationsInternal( identifiers, searchContext->textRange().end(), AbstractType::Ptr(), decls, inclusionTrace, KDevelop::DUContext::NoUndefinedTemplateParams );
         if( !decls.isEmpty() ) {
           return decls.front()->abstractType().data();
-        }else{
-          ///Failed to find in basic context, use the alternative one.
-/*          QList<Declaration*> decls = alternativeContext->findDeclarations(delayedType->qualifiedIdentifier(), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), KDevelop::DUContext::NoUndefinedTemplateParams );
-          if( !decls.isEmpty() ) {
-            return decls.front()->abstractType().data();
-          }*/
         }
-      } else {
-        ///Resolve delayed expression, for example static numeric expressions
-          ExpressionParser p;
-          ExpressionEvaluationResult res = p.evaluateExpression( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)) );
-
-          ///@todo make this nicer
-          keepAlive = res.type; //Since the API uses AbstractType*, use keepAlive to make sure the type cannot be deleted
-          return res.type.data();
-        
       }
+      ///Resolution as type has failed, or is not appropriate.
+      ///Resolve delayed expression, for example static numeric expressions
+      ExpressionParser p;
+      ExpressionEvaluationResult res;
+      if( delayedType->qualifiedIdentifier().isExpression() )
+        res = p.evaluateExpression( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), inclusionTrace );
+      else
+        res = p.evaluateType( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), inclusionTrace );
+
+      ///@todo make this nicer
+      keepAlive = res.type; //Since the API uses AbstractType*, use keepAlive to make sure the type cannot be deleted
+      return res.type.data();
     }else{
       if( containsDelayedType(type) )
       {
@@ -173,7 +187,6 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         
         return typeCopy;
       }
-      
     }
     
     return const_cast<AbstractType*>(type); ///@todo remove const_cast;
@@ -294,7 +307,7 @@ bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
 }
 
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
-CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
+CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
 {
   if( instantiatedDeclaration ) {
     ///Move the instantiated declaration anonymously into the parent-context
@@ -350,10 +363,11 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           
           ++currentArgument;
         } else {
+          //Use the already available delayed-type resolution to resolve the value/type
           if( !templateDecl->defaultParameter().isEmpty() ) {
-            ExpressionParser p;
-            ExpressionEvaluationResult res = p.evaluateType( (templateDecl->defaultParameter().toString() +" ").toUtf8(), DUContextPointer(contextCopy) );
-            declCopy->setAbstractType( res.type );
+          DelayedType::Ptr delayed( new DelayedType() );
+          delayed->setQualifiedIdentifier( templateDecl->defaultParameter() );
+          declCopy->setAbstractType( resolveDelayedTypes( AbstractType::Ptr(delayed.data()), contextCopy, inclusionTrace ) );
           }
         }
         ///This inserts the copied declaration into the copied context
@@ -368,7 +382,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
         ///For functions, the Template-context is one level deeper(it is imported by the function-context) so also copy the function-context
       if( importedContext->type() == KDevelop::DUContext::Template || importedContext->type() == KDevelop::DUContext::Function )
       {
-        DUContext* ctx = instantiateDeclarationContext( parentContext, importedContext.data(), templateArguments, 0, 0);
+        DUContext* ctx = instantiateDeclarationContext( parentContext, inclusionTrace, importedContext.data(), templateArguments, 0, 0);
         contextCopy->addImportedParentContext( ctx, KTextEditor::Cursor(), true );
       }
       else
@@ -387,7 +401,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.data());
           if( delayed ) {
             ///Resolve the delayed type, and import the context
-            DelayedTypeResolver res(contextCopy);
+            DelayedTypeResolver res(contextCopy, inclusionTrace);
             AbstractType::Ptr newType( res.exchange(delayed) );
 
             if( CppClassType* baseClass = dynamic_cast<CppClassType*>(newType.data()) )
@@ -419,18 +433,18 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instantiatedDeclaration->abstractType().data());
 
     ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
-      ///@todo think whether the commented-out part in the following should be uncommented
-    AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), /*instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() :*/ parentContext );
 
-    if( changedType == instantiatedDeclaration->abstractType() )
-      if( idType && idType->declaration() == instantiatedFrom ) { //We must clone it, so we can change IdentifiedType::declaration
-        changedType = instantiatedDeclaration->abstractType()->clone();
+    AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, inclusionTrace );
 
-        IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
-        Q_ASSERT(changedIdType);
+    if( idType && idType->declaration() == instantiatedFrom ) {
+      if( changedType == instantiatedDeclaration->abstractType() )
+          changedType = instantiatedDeclaration->abstractType()->clone();
+      
+      IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
+      if( changedIdType )
         changedIdType->setDeclaration(instantiatedDeclaration);
-      }
-    
+    }
+
     instantiatedDeclaration->setAbstractType( changedType );
   }
   
@@ -438,14 +452,14 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
 }
 
 ///@todo Use explicitly declared specializations
-Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments )
+Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const DUContext::ImportTrace& inclusionTrace )
 {
   foreach(const ExpressionEvaluationResult& res, templateArguments)
   
   if( ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(this) ) {
     TemplateDeclaration* resolvedTemplate = dynamic_cast<TemplateDeclaration*>(forward->resolved());
     if( resolvedTemplate )
-      return resolvedTemplate->instantiate(templateArguments);
+      return resolvedTemplate->instantiate(templateArguments, inclusionTrace);
   }
   
   {
@@ -466,14 +480,14 @@ Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationR
   Q_ASSERT(cloneTemplateDecl);
   
   ///Now eventually create the virtual contexts
-  instantiateDeclarationContext( decl->context(), decl->internalContext(), templateArguments, clone, decl );
+  instantiateDeclarationContext( decl->context(), inclusionTrace, decl->internalContext(), templateArguments, clone, decl );
 
   cloneTemplateDecl->setInstantiatedFrom(this, templateArguments);
 
   return clone;
 }
 
-AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context ) {
+AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace ) {
   if( !type )
     return type;
 
@@ -483,11 +497,11 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
   type->accept(&search);
 
   DelayedType* delayedType = dynamic_cast<DelayedType*>(type.data());
-  
+
   if( search.found || delayedType ) {
     ///Delayed types were found. We must copy the whole type, and replace the delayed types.
 
-    DelayedTypeResolver resolver(context);
+    DelayedTypeResolver resolver(context, inclusionTrace);
 
     AbstractType::Ptr typeCopy;
     if( delayedType )

@@ -388,6 +388,8 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
 void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
   DUChainWriteLocker lock(DUChain::lock());
 
+  addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.
+  
   Q_ASSERT(currentContext()->type() == DUContext::Class);
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.baseClass.data());
   if( idType && idType->declaration() && idType->declaration()->internalContext() ) {
@@ -657,7 +659,7 @@ void ContextBuilder::visitUsing(UsingAST* node)
  * */
 class VerifyExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
-    VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session), result(true) {
+    VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session, DUContext::ImportTrace()), result(true) {
     }
     virtual void problem(AST* /*node*/, const QString& /*str*/) {
       result = false;

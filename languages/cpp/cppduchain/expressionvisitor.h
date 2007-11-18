@@ -21,6 +21,7 @@
 
 #include <typesystem.h>
 #include <duchain/declaration.h>
+#include <ducontext.h>
 #include "visitor.h"
 #include "cppduchainexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */
@@ -47,7 +48,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
     /**
      * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.
      * */
-    explicit ExpressionVisitor( ParseSession* session, bool strict = false );
+    explicit ExpressionVisitor( ParseSession* session, const KDevelop::DUContext::ImportTrace& inclusionTrace = KDevelop::DUContext::ImportTrace(), bool strict = false );
     ~ExpressionVisitor();
 
     struct Instance {
@@ -124,6 +125,8 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
 
+    KDevelop::DUContext::ImportTrace m_inclusionTrace;
+    
     //Whenever a list of declarations is queried, it is stored here. Especially in visitName(...) and findMember(...)
     QList<Declaration*> m_lastDeclarations;
 

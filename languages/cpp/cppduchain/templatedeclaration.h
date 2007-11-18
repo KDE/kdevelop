@@ -24,6 +24,7 @@
 
 #include <duchain/declaration.h>
 #include <duchain/duchainpointer.h>
+#include <duchain/ducontext.h>
 #include "expressionparser.h"
 #include "cppduchainexport.h"
 
@@ -79,7 +80,7 @@ namespace Cpp {
        *
        * If this is a forward-declaration, the returned declaration can return another declaration than this one on instantiatedFrom(..).
        * */
-      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments );
+      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const DUContext::ImportTrace& inclusionTrace );
 
       ///Returns true if this class is either is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
       bool isInstantiatedFrom(const TemplateDeclaration* other) const;
@@ -145,6 +146,7 @@ namespace Cpp {
    * The given context should be one that, on some level, imports a template-parameter-declaration context.
    * The given declaration will be registered anonymously, the same for the created contexts.
    * @param parentContext he parent-context everything should be created in(instantiatedDeclaration will be moved into that context anonymously)
+   * @param inclusionTrace a trace as used in findDeclarationsInternal(..)
    * @param context A du-context that will be copied and used as internal context for declaration. If this is zero, no context will be copied.
    * @param templateArguments The template-arguments that will be used to instantiate the input-context. If this is empty, the intersting context will be only copied without specialization.
    * @param instantiatedDeclaration The copied declaration this should belong to. If this is set, the created context will be made the given declaration's internal-context, and its parent-context will be set to the given context's parent-context. Also delayed types in the declaration will be resolved(The declaration will be changed)
@@ -152,12 +154,12 @@ namespace Cpp {
    *
    * The DU-Context must be read-locked but not write-locked when this is called.
    * */
-  CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom  );
+  CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom  );
 
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
-  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context );
+  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace );
 }
 
 #endif
