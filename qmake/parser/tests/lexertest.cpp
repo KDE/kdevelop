@@ -54,7 +54,7 @@ void LexerTest::varAssignment()
     {
         token = l.nextTokenKind();
         tokens << token;
-        begins << qulonglong(qulonglong(l.tokenBegin()));
+        begins << qulonglong(l.tokenBegin());
         ends << qulonglong(l.tokenEnd());
     }while( token != 0 );
     tokens.removeLast();
