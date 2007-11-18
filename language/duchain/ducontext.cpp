@@ -449,13 +449,13 @@ bool DUContext::foundEnough( const QList<Declaration*>& ret ) const {
     return false;
 }
 
-void DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & baseIdentifiers, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
+bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & baseIdentifiers, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
 {
   foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
       findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, trace, flags);
   
   if( foundEnough(ret) )
-    return;
+    return true;
 
   ///Step 1: Apply namespace-aliases and -imports
   QList<QualifiedIdentifier> aliasedIdentifiers;
@@ -500,13 +500,14 @@ void DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
             item.position = *it2;
             newTrace << item;
         }
-        context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->textRange().end(), dataType, ret, newTrace, flags | InImportedParentContext);
+        if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->textRange().end(), dataType, ret, newTrace, flags | InImportedParentContext) )
+          return false;
       }
     }
   }
   
   if( foundEnough(ret) )
-    return;
+    return true;
 
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext()) {
@@ -516,8 +517,9 @@ void DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
       for(int a = 0; a < oldCount; a++)
         aliasedIdentifiers << localScopeIdentifier() + aliasedIdentifiers[a];
     }
-    parentContext()->findDeclarationsInternal(aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, ret, trace, flags);
+    return parentContext()->findDeclarationsInternal(aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, ret, trace, flags);
   }
+  return true;
 }
 
 QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, SearchFlags flags) const

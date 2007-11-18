@@ -158,7 +158,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) const
   d->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 }
 
-void TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, bool inImportedContext) const
+bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, bool inImportedContext) const
 {
   Q_UNUSED(inImportedContext);
 
@@ -171,6 +171,7 @@ void TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& id
     QList<Declaration*> declarations = SymbolTable::self()->findDeclarations(identifier);
     ret += checkDeclarations(declarations, position, dataType);
   }
+  return true;
 }
 
 QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const

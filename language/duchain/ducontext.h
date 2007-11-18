@@ -432,8 +432,9 @@ public:
    * @param position A valid position, if in doubt use textRange().end()
    *
    * @warning position Must be valid!
+   * @return whether the search was successful. If it is false, it had to be stopped for special reasons(like some flags)
    * */
-  virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
   
   protected:
 
