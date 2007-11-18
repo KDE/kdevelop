@@ -1391,25 +1391,36 @@ void TestDUChain::testTemplates2() {
 
 void TestDUChain::testTemplatesRebind() {
   QByteArray method("struct A {}; struct S {typedef A Value;} ; template<class TT> class Base { template<class T> struct rebind { typedef Base<T> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other::Type MemberType; MemberType member; Base<T>::template rebind<T>::other::Type member2; T::Value value; }; };");
+  //QByteArray method("struct A {}; struct S {typedef A Value;} ; template<class TT> class Base { template<class Q> struct rebind { typedef Base<Q> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other MemberType; MemberType member; Base<T>::template rebind<T>::other member2; T::Value value; }; };");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
+  QCOMPARE(top->childContexts().count(), 6);
+  QCOMPARE(top->childContexts()[3]->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[3]->childContexts()[1]->localDeclarations().count(), 1);
+  {
+  Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type"));
+  QVERIFY(memberDecl);
+  QVERIFY(memberDecl->abstractType());
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("A"));
+  }
+  
   Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("S"));
   
-  Declaration* member2Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::member2"));
-  QVERIFY(member2Decl);
-  QVERIFY(member2Decl->abstractType());
-  QCOMPARE(member2Decl->abstractType()->toString(), QString("S"));
-  
   Declaration* member3Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::value"));
   QVERIFY(member3Decl);
   QVERIFY(member3Decl->abstractType());
   QCOMPARE(member3Decl->abstractType()->toString(), QString("A"));
+  
+  Declaration* member2Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::member2"));
+  QVERIFY(member2Decl);
+  QVERIFY(member2Decl->abstractType());
+  QCOMPARE(member2Decl->abstractType()->toString(), QString("S"));
   
   release(top);
 }
