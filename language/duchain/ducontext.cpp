@@ -560,7 +560,9 @@ void DUContext::addImportedParentContext( DUContext * context, const KTextEditor
     context->d->addImportedChildContext(this);
   }
 
-  for (int i = 0; i < d->m_importedParentContexts.count(); ++i) {
+  ///Do not sort the imported contexts by their own line-number, it makes no sense.
+  ///Contexts added first, aka template-contexts, should stay in first place, so they are searched first.
+/*  for (int i = 0; i < d->m_importedParentContexts.count(); ++i) {
     DUContext* parent = d->m_importedParentContexts.at(i).data();
     if( !parent )
       continue;
@@ -568,7 +570,7 @@ void DUContext::addImportedParentContext( DUContext * context, const KTextEditor
       d->m_importedParentContexts.insert(i, DUContextPointer(context));
       return;
     }
-  }
+  }*/
   d->m_importedParentContexts.append(DUContextPointer(context));
 
   //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);

@@ -422,6 +422,17 @@ public:
 
   ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
   /// Declaration search implementation
+  /**
+   * This is a more complex interface to the declaration search engine.
+   * Always prefer findDeclarations(..) when possible.
+   * Advantage of this interface:
+   * - You can search multiple identifiers at one time. However, those should be aliased identifiers for one single item, because
+   *   search might stop as soon as one item is found.
+   * - You can give an ImportTrace to correctly resolve template-paremeters.
+   * @param position A valid position, if in doubt use textRange().end()
+   *
+   * @warning position Must be valid!
+   * */
   virtual void findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
   
   protected:
