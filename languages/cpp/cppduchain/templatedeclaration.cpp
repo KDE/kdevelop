@@ -138,8 +138,9 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   
   const KDevelop::DUContext::ImportTrace& inclusionTrace;
   static AtomicIncrementer::Int depth_counter;
+  KDevelop::DUContext::SearchFlags searchFlags;
 
-  DelayedTypeResolver(const KDevelop::DUContext* _searchContext, const KDevelop::DUContext::ImportTrace& _inclusionTrace) : searchContext(_searchContext), inclusionTrace(_inclusionTrace) {
+  DelayedTypeResolver(const KDevelop::DUContext* _searchContext, const KDevelop::DUContext::ImportTrace& _inclusionTrace, KDevelop::DUContext::SearchFlags _searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams) : searchContext(_searchContext), inclusionTrace(_inclusionTrace), searchFlags(_searchFlags) {
   }
 
   virtual AbstractType* exchange( const AbstractType* type )
@@ -156,7 +157,12 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         QList<QualifiedIdentifier> identifiers;
         identifiers << delayedType->qualifiedIdentifier();
         QList<Declaration*> decls;
-        searchContext->findDeclarationsInternal( identifiers, searchContext->textRange().end(), AbstractType::Ptr(), decls, inclusionTrace, KDevelop::DUContext::NoUndefinedTemplateParams );
+        
+        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->textRange().end(), AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) ) {
+          kDebug() << "stopping exchange because template involved";
+          return const_cast<AbstractType*>(type);
+        }
+        
         if( !decls.isEmpty() ) {
           return decls.front()->abstractType().data();
         }
@@ -343,7 +349,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     if( instantiatedDeclaration )
       instantiatedDeclaration->setInternalContext(contextCopy);
 
-    
     ///Now the created context is already partially functional and can be used for searching(not the instantiated template-params yet though)
     
     if( context->type() == KDevelop::DUContext::Template ) { //templateArguments may be empty, that means that only copying should happen.
@@ -433,7 +438,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instantiatedDeclaration->abstractType().data());
 
     ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
-
     AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, inclusionTrace );
 
     if( idType && idType->declaration() == instantiatedFrom ) {
@@ -487,7 +491,7 @@ Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationR
   return clone;
 }
 
-AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace ) {
+AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace , KDevelop::DUContext::SearchFlags searchFlags ) {
   if( !type )
     return type;
 
@@ -501,7 +505,7 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
   if( search.found || delayedType ) {
     ///Delayed types were found. We must copy the whole type, and replace the delayed types.
 
-    DelayedTypeResolver resolver(context, inclusionTrace);
+    DelayedTypeResolver resolver(context, inclusionTrace, searchFlags);
 
     AbstractType::Ptr typeCopy;
     if( delayedType )

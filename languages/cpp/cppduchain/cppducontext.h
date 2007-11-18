@@ -106,17 +106,17 @@ class CppDUContext : public BaseContext {
         delete instatiation;
     }
     
-    virtual void findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
+    virtual bool findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
     {
       if( basicFlags & BaseContext::LanguageSpecificFlag1 ) {
         //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
         //We use LanguageSpecificFlag1 to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.
-        BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, trace, basicFlags );
-        return;
+        return BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, trace, basicFlags );
       }
       
       for( QList<QualifiedIdentifier>::const_iterator it = identifiers.begin(); it != identifiers.end(); it++ )
-        findDeclarationsInternal(*it, position, dataType, ret, trace, basicFlags);
+        if( !findDeclarationsInternal(*it, position, dataType, ret, trace, basicFlags) )
+          return false;
 
       //Remove all foward-declarations if there is a real declaration in the list
 
@@ -138,10 +138,11 @@ class CppDUContext : public BaseContext {
           if(!decl->isForwardDeclaration())
             ret << decl;
       }
+      return true;
     }
     
     ///Overridden to take care of templates and other c++ specific things
-    void findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& _trace, typename BaseContext::SearchFlags basicFlags ) const
+    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& _trace, typename BaseContext::SearchFlags basicFlags ) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 
@@ -190,10 +191,12 @@ class CppDUContext : public BaseContext {
           delayed->setQualifiedIdentifier( currentIdentifier.templateIdentifiers().at(a) );
           
           Cpp::ExpressionEvaluationResult res;
-          res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace );
+          res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace, BaseContext::NoSearchFlags );
           
-          if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<CppTemplateParameterType*>(res.type.data()) )
-            return;
+          if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<CppTemplateParameterType*>(res.type.data()) ) {
+            kDebug() << "breaking because template involved";
+            return false;
+          }
 
           templateArgumentTypes << res;
           
@@ -313,7 +316,7 @@ class CppDUContext : public BaseContext {
             }
             if( !scopeContext || scopeContext->type() != DUContext::Class ) {
               kDebug(9007) << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString();
-              return;
+              return true;
 
             }
           }
@@ -324,20 +327,21 @@ class CppDUContext : public BaseContext {
             for( int a = 0; a < currentLookup.count(); a++ ) {
               if( templateArgumentTypes.count() != 0 ) {
                 kDebug(9007) << "CppDUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString();
-                return; //If one of the parts has a template-identifier, it cannot be a namespace
+                return true; //If one of the parts has a template-identifier, it cannot be a namespace
               }
             }
           } else {
             //Final part of the scope not found
-            return;
+            return true;
           }
         }
       }
+      return true;
     }
 
     virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags flags ) const
     {
-      ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
+      ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "with parent" << this->parentContext() << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
       ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString(); )
       /**
         - When searching local declarations:

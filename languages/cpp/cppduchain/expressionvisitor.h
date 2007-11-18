@@ -175,7 +175,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
   bool isLValue( const AbstractType::Ptr& type, const Instance& instance );
 
   ///Creates a delayed type that refers to the expression within the given node. Sets the type as m_lastType
-  void createDelayedType( AST* node );
+  void createDelayedType( AST* node, bool expression = true );
 
   /**
    * Returns the dereferenced type(example: ReferenceType(PointerType) -> PointerType)

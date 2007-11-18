@@ -159,7 +159,7 @@ namespace Cpp {
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
-  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace );
+  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
 }
 
 #endif

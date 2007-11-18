@@ -491,6 +491,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         else
           m_lastInstance = Instance(false);
 
+        //A CppTemplateParameterType represents an unresolved template-parameter, so create a DelayedType instead.
+        if( dynamic_cast<CppTemplateParameterType*>(m_lastType.data()) )
+          createDelayedType(node, false);
+        
         if( !m_lastDeclarations.isEmpty() ) {
           DeclarationPointer decl( m_lastDeclarations.first() );
           lock.unlock();
@@ -884,14 +888,14 @@ template<>
 void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left ){
 }
 
-void ExpressionVisitor::createDelayedType( AST* node ) {
+void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   DelayedType::Ptr type(new DelayedType());
   QString id;
   for( size_t s = node->start_token; s < node->end_token; ++s )
     id += m_session->token_stream->token(s).symbol();
 
   QualifiedIdentifier ident( id );
-  ident.setIsExpression( true );
+  ident.setIsExpression( expression );
   type->setQualifiedIdentifier( ident );
   m_lastType = AbstractType::Ptr( type.data() );
 }
@@ -1109,6 +1113,9 @@ void ExpressionVisitor::createDelayedType( AST* node ) {
         ///Allow non-types, because we sometimes don't know whether something is a type or not, and it may get parsed as a type.
         m_lastInstance = Instance(decls.first());
 
+      if( dynamic_cast<CppTemplateParameterType*>(m_lastType.data()) )
+        createDelayedType(ast, false);
+      
       DeclarationPointer decl( decls.first() );
       lock.unlock();
       newUse( ast, ast->start_token, ast->end_token, decl );
