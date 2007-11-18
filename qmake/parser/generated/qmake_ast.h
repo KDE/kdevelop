@@ -45,7 +45,7 @@ namespace QMake
   struct variable_assignment_ast;
 
 
-  struct ast_node
+  struct  ast_node
     {
       enum ast_node_kind_enum {
         Kind_arg_list =  1000,
@@ -68,7 +68,7 @@ namespace QMake
       std::size_t end_token;
     };
 
-  struct arg_list_ast:  public ast_node
+  struct  arg_list_ast:  public ast_node
     {
       enum
       {
@@ -78,7 +78,7 @@ namespace QMake
       const list_node<value_ast *> *args_sequence;
     };
 
-  struct function_args_ast:  public ast_node
+  struct  function_args_ast:  public ast_node
     {
       enum
       {
@@ -88,7 +88,7 @@ namespace QMake
       arg_list_ast *args;
     };
 
-  struct item_ast:  public ast_node
+  struct  item_ast:  public ast_node
     {
       enum
       {
@@ -99,7 +99,7 @@ namespace QMake
       function_args_ast *func_args;
     };
 
-  struct op_ast:  public ast_node
+  struct  op_ast:  public ast_node
     {
       enum
       {
@@ -109,7 +109,7 @@ namespace QMake
       std::size_t optoken;
     };
 
-  struct or_op_ast:  public ast_node
+  struct  or_op_ast:  public ast_node
     {
       enum
       {
@@ -119,7 +119,7 @@ namespace QMake
       const list_node<item_ast *> *item_sequence;
     };
 
-  struct project_ast:  public ast_node
+  struct  project_ast:  public ast_node
     {
       enum
       {
@@ -129,7 +129,7 @@ namespace QMake
       const list_node<stmt_ast *> *stmts_sequence;
     };
 
-  struct scope_ast:  public ast_node
+  struct  scope_ast:  public ast_node
     {
       enum
       {
@@ -141,7 +141,7 @@ namespace QMake
       or_op_ast *or_op;
     };
 
-  struct scope_body_ast:  public ast_node
+  struct  scope_body_ast:  public ast_node
     {
       enum
       {
@@ -151,7 +151,7 @@ namespace QMake
       const list_node<stmt_ast *> *stmts_sequence;
     };
 
-  struct stmt_ast:  public ast_node
+  struct  stmt_ast:  public ast_node
     {
       enum
       {
@@ -165,7 +165,7 @@ namespace QMake
       scope_ast *scope;
     };
 
-  struct value_ast:  public ast_node
+  struct  value_ast:  public ast_node
     {
       enum
       {
@@ -175,7 +175,7 @@ namespace QMake
       std::size_t value;
     };
 
-  struct value_list_ast:  public ast_node
+  struct  value_list_ast:  public ast_node
     {
       enum
       {
@@ -185,7 +185,7 @@ namespace QMake
       const list_node<value_ast *> *list_sequence;
     };
 
-  struct variable_assignment_ast:  public ast_node
+  struct  variable_assignment_ast:  public ast_node
     {
       enum
       {

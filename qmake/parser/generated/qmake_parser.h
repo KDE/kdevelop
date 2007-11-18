@@ -12,7 +12,7 @@
 namespace QMake
   {
 
-  class parser
+  class  parser
     {
 
     public:

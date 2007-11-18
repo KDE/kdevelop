@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,55 +18,45 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef QMAKEFILE_H
-#define QMAKEFILE_H
+#ifndef VARIABLEREFERENCEPARSER_H
+#define VARIABLEREFERENCEPARSER_H
 
-#include "qmakeastdefaultvisitor.h"
-#include <QtCore/QStack>
-#include <kurl.h>
+#include <QList>
+#include <QMap>
+#include <QPair>
+#include <QString>
+#include <QStringList>
 
-namespace QMake
+class VariableInfo
 {
-    class ProjectAST;
-    class AssignmentAST;
-    class ValueAST;
-}
+    public:
+    enum VariableType
+    {
+        QMakeVariable,
+        ShellVariableResolveQMake,
+        ShellVariableResolveMake,
+        FunctionCall,
+        Invalid
+    };
 
-class Scope;
-class QMakeMkSpecs;
+        VariableInfo();
+        QList<QPair<int,int> > positions;
+        VariableType type;
+};
 
-class QMakeFile : QMake::ASTDefaultVisitor
+class VariableReferenceParser
 {
-public:
-    QMakeFile( const QString& file );
-    virtual ~QMakeFile();
-    virtual bool read();
-    QString absoluteDir() const;
-    QString absoluteFile() const;
-    QMake::ProjectAST* ast() const;
-
-    void visitAssignment( QMake::AssignmentAST* node );
-    void visitFunctionCall( QMake::FunctionCallAST* node );
-
-    QStringList variableValues(const QString&) const;
-    QStringList variables() const;
-    bool containsVariable( const QString& ) const;
-
-    static QStringList resolveShellGlobbing( const QString& absolutefile );
-    virtual QStringList resolveVariables( const QString& value ) const;
-
-
-protected:
-    QMap<QString, QStringList> m_variableValues;
-    QStringList resolveFileName( const QString& file ) const;
-    QString resolveToSingleFileName( const QString& file ) const;
-private:
-
-    QStringList getValueList( const QList<QMake::ValueAST*>& list ) const;
-    QMake::ProjectAST* m_ast;
-    QString m_projectFile;
+    public:
+        VariableReferenceParser();
+        void setContent( const QString& );
+        bool parse();
+        QStringList variableReferences() const;
+        VariableInfo variableInfo( const QString& ) const;
+    private:
+        void appendPosition( const QString&, int, int, VariableInfo::VariableType );
+        QString m_content;
+        QMap< QString, VariableInfo > m_variables;
 };
 
 #endif
 
-//kate: hl c++;

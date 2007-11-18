@@ -29,6 +29,7 @@
 #include <kurl.h>
 #include <kio/job.h>
 #include <kprocess.h>
+#include <kdebug.h>
 
 #include <icore.h>
 #include <iplugincontroller.h>
@@ -163,7 +164,12 @@ KDevelop::ProjectFolderItem* QMakeProjectManager::import( KDevelop::IProject* pr
         }
         QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
         scope->setMkSpecs( mkspecs );
-        scope->setQMakeCache( cache );
+	if( cache )
+	{
+            cache->setMkSpecs( mkspecs );
+            cache->read();
+            scope->setQMakeCache( cache );
+	}
         scope->read();
         kDebug(9024) << "top-level scope with variables:" << scope->variables();
         QMakeFolderItem* item = new QMakeFolderItem( project, scope, project->folder() );

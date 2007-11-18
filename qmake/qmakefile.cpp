@@ -28,6 +28,7 @@
 #include "qmakeast.h"
 #include "qmakedriver.h"
 #include "qmakeincludefile.h"
+#include "variablereferenceparser.h"
 
 //@TODO: Make the globbing stuff work with drives on win32
 
@@ -78,12 +79,12 @@ QStringList resolveShellGlobbingInternal( const QString& relativefile,
     return result;
 }
 
-QStringList getValueList( const QList<QMake::ValueAST*>& list )
+QStringList QMakeFile::getValueList( const QList<QMake::ValueAST*>& list ) const
 {
     QStringList result;
     foreach( QMake::ValueAST* v, list)
     {
-        result << v->value();
+        result += resolveVariables( v->value() );
     }
     return result;
 }
@@ -168,6 +169,7 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         }
         kDebug(9024) << "Reading Include file:" << argument;
         QMakeIncludeFile includefile( argument, m_variableValues );
+        includefile.setParent( this );
         bool read = includefile.read();
         if( read )
         {
@@ -279,9 +281,23 @@ QStringList QMakeFile::variables() const
     return m_variableValues.keys();
 }
 
-QString QMakeFile::resolveVariables( const QString& value ) const
+QStringList QMakeFile::resolveVariables( const QString& value ) const
 {
-    return value;
+    VariableReferenceParser parser;
+    parser.setContent( value );
+    if( !parser.parse() )
+    {
+        kWarning(9024) << "Couldn't parse" << value << "to replace variables in it";
+        return QStringList() << value;
+    }
+    QStringList ret;
+    ret << value;
+    foreach( QString variable, parser.variableReferences() )
+    {
+        VariableInfo vi = parser.variableInfo( variable );
+        kDebug(9024) << "Found variable reference:" << variable << vi.positions << vi.type;
+    }
+    return ret;
 }
 
 //kate: hl c++;

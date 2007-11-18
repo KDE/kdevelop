@@ -53,18 +53,15 @@ void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 
 bool QMakeProjectFile::read()
 {
+    foreach( QString var, m_mkspecs->variables() )
+    {
+        m_variableValues[var] = m_mkspecs->variableValues( var );
+    }
     if( m_cache )
     {
         foreach( QString var, m_cache->variables() )
         {
             m_variableValues[var] = m_cache->variableValues( var );
-        }
-    }else
-    {
-
-        foreach( QString var, m_mkspecs->variables() )
-        {
-            m_variableValues[var] = m_mkspecs->variableValues( var );
         }
     }
     return QMakeFile::read();
@@ -271,17 +268,19 @@ QMakeProjectFile::~QMakeProjectFile()
 {
 }
 
-
-QString QMakeProjectFile::resolveVariables( const QString& value ) const
+QStringList QMakeProjectFile::resolveVariables( const QString& value ) const
 {
-    QRegExp mkspecsvar("$$\\[([^\\]])\\]");
-    int pos = 0;
-    QString ret = value;
-    while( pos != -1 )
-    {
-        pos = mkspecsvar.indexIn( value, pos );
-        ret.replace( pos, mkspecsvar.matchedLength(), m_mkspecs->qmakeInternalVariable( mkspecsvar.cap(1) ) );
-    }
-    return ret;
+    QString mkspecresolved = m_mkspecs->resolveInternalQMakeVariables( value );
+    return QMakeFile::resolveVariables( mkspecresolved );
+}
+
+QMakeMkSpecs* QMakeProjectFile::mkSpecs() const
+{
+    return m_mkspecs;
+}
+
+QMakeCache* QMakeProjectFile::qmakeCache() const
+{
+    return m_cache;
 }
 

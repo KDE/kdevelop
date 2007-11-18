@@ -26,6 +26,7 @@ set(kdevqmakemanager_PART_SRCS
     qmakemkspecs.cpp
     qmakefile.cpp
     qmakecache.cpp
+    variablereferenceparser.cpp
 )
 
 
