@@ -107,6 +107,7 @@ void ImportProject::importProject(QFile& file)
 {
     QTextStream ts(&file);
     ts << "[Project]" << endl;
+    ts << "Name=" << projectName->text() << endl;
     ts << "Manager=" << manager() << endl;
 }
 
