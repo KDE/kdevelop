@@ -20,16 +20,14 @@ SvnCopyOptionDlg::SvnCopyOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info,
                                     QWidget *parent )
     : KDialog( parent ), m_reqUrl(reqUrl), m_info(info)
 {
-    QWidget *widget = new QWidget(this);
-    ui.setupUi(widget);
-    setMainWidget( widget );
+    ui.setupUi(mainWidget());
     setCaption( "Subversion Copy" );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
     ui.urlRadio->setChecked(true);
 
-    ui.revisionWidget->setKey( SvnRevision::HEAD );
-    ui.revisionWidget->enableType( SvnRevision::kind );
+    ui.revisionWidget->setKey( SvnRevision::Head );
+    ui.revisionWidget->enableType( SvnRevision::Kind );
 
     ui.reqEdit->setText( reqUrl.prettyUrl() );
 
@@ -62,13 +60,13 @@ KUrl SvnCopyOptionDlg::dest()
 void SvnCopyOptionDlg::srcAsUrlClicked()
 {
     if( m_info ){
-        ui.srcEdit->setText( m_info->URL );
-        KUrl srcUrl( m_info->URL );
+        ui.srcEdit->setUrl( m_info->url );
+        KUrl srcUrl( m_info->url );
         ui.destEdit->setUrl( srcUrl.upUrl() );
     }
 
-    QList<SvnRevision::RevKeyword> keylist;
-    keylist << SvnRevision::HEAD;
+    QList<SvnRevision::Keyword> keylist;
+    keylist << SvnRevision::Head;
     ui.revisionWidget->installKeys( keylist );
 }
 
@@ -80,8 +78,8 @@ void SvnCopyOptionDlg::srcAsPathClicked()
     KUrl destParent = srcUrl.upUrl();
     ui.destEdit->setPath( destParent.toLocalFile() );
 
-    QList<SvnRevision::RevKeyword> keylist;
-    keylist << SvnRevision::WORKING;
+    QList<SvnRevision::Keyword> keylist;
+    keylist << SvnRevision::Working;
     ui.revisionWidget->installKeys( keylist );
 }
 

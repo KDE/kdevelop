@@ -12,7 +12,7 @@
 #define SVN_CATWIDGETS_H
 
 #include <kdialog.h>
-#include "ui_uicatoptiondlg.h"
+#include "ui_catoptiondlg.h"
 class KUrl;
 class SvnRevision;
 

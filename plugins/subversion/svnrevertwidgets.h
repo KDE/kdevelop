@@ -12,7 +12,7 @@
 #define SVN_REVERTWIDGETS_H
 
 #include <kdialog.h>
-#include "ui_uirevertoptiondlg.h"
+#include "ui_revertoptiondlg.h"
 
 class KDevSubversionPart;
 

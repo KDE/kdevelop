@@ -1,0 +1,44 @@
+The code length of subversion plugin seems to be very long, but it's just because
+there are many kind of actions in subversion. If we separate and investigate
+one action, the architecture is simple.
+
+1. The GUI part
+
+For each context menu item a slot is called and creates a SvnBlameJob. This
+job is then started and will do the actual work on its own. Depending on the type
+of action it fetches the results and displays them in a GUI
+
+1a. Directly using the IBasicVersionControl Interface
+
+this is no different that 1., except that there's no slot. The caller of the IBVC
+interface is responsible for starting the job, connecting to its signals, delete
+it and fetch any results to display or work with them.
+
+2. The Jobs
+Each job has an SvnInternalJob subclass that does carries out the actual action
+in a separate thread. Both are connected in various ways, using queued connections,
+to fetch additional information (like ssl certificate trust, login/password) and
+to provide the result of the job.
+
+The Job classes use VcsJob and thus KJob as parent so their progress can be monitored
+with KJob Monitors in KDE.
+
+3. InternalJob subclass
+
+Executes the action requested usually by converting the parameters into
+types that are understood by the svn C++ client API and then just executing
+a call to svn::Client::XXX. Depending on the type of action a result is converted
+back to Qt types and send via a signal to the parent job (which is the KJob subclass)
+
+The threading is done via ThreadWeaver so queueing of jobs is done instead of
+spawning a new Thread for each and every action.
+
+4. Finishing
+
+When the internaljob's run() method is exited ThreadWeaver emits an apropriate signal
+which is connected to the Job subclass. This in turn changes its state and emits
+the apropriate KJob signals by calling the KJob methods for that.
+
+If the Job class received a result it will immediately emit a resultsReady signal and
+as soon as the result is fetched via fetchResults will remove the fetched results.
+

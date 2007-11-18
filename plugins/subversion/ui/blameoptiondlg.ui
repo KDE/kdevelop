@@ -1,0 +1,60 @@
+<ui version="4.0" >
+ <class>SvnBlameOptionDlg</class>
+ <widget class="QWidget" name="SvnBlameOptionDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>440</width>
+    <height>392</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Start Revision</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="SvnRevisionWidget" native="1" name="startRevWidget" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>End Revision</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="SvnRevisionWidget" native="1" name="endRevWidget" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>SvnRevisionWidget</class>
+   <extends>QWidget</extends>
+   <header>svnrevisionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >knuminput.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

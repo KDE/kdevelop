@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,20 +12,21 @@
 #ifndef SVN_BLAMEWIDGET_H
 #define SVN_BLAMEWIDGET_H
 
-#include "ui_uiblameoptiondlg.h"
-#include "ui_svnblamewidget.h"
+#include "ui_blameoptiondlg.h"
+#include "ui_blamewidget.h"
 #include "svnmodels.h"
 #include <kdialog.h>
 class SvnRevision;
+class QSortFilterProxyModel;
 
 class SvnBlameWidget : public QWidget, public Ui::SvnBlameWidget{
 public:
     SvnBlameWidget( QWidget *parent );
     virtual ~SvnBlameWidget();
-    void refreshWithNewData( QList<SvnBlameHolder> datalist );
+    void refreshWithNewData( const QList<SvnBlameHolder>& datalist );
 private:
-    BlameItem *m_item;
-    BlameTreeModel *m_blameModel;
+    SvnBlameModel *m_blameModel;
+    QSortFilterProxyModel* m_proxy;
 };
 
 // class SvnBlameFileSelectDlg : public KDialog {

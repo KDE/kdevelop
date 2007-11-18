@@ -15,11 +15,9 @@
 SvnPegDiffDialog::SvnPegDiffDialog( QWidget *parent )
     : KDialog(parent)
 {
-    QWidget *widget = new QWidget( this );
-    ui.setupUi( widget );
+    ui.setupUi( mainWidget() );
 
     // KDialog specific
-    setMainWidget( widget );
     setCaption( "Subversion Diff" );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
@@ -34,9 +32,9 @@ SvnPegDiffDialog::SvnPegDiffDialog( QWidget *parent )
 
     // set default revision
     m_startRev->setNumber(1);
-    m_startRev->enableType( SvnRevision::number );
-    m_endRev->setKey( SvnRevision::WORKING );
-    m_endRev->enableType( SvnRevision::kind );
+    m_startRev->enableType( SvnRevision::Number );
+    m_endRev->setKey( SvnRevision::Working );
+    m_endRev->enableType( SvnRevision::Kind );
 }
 
 SvnPegDiffDialog::~SvnPegDiffDialog()

@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include "svnrevertwidgets.h"
-#include "subversionpart.h"
+#include "svnpart.h"
 #include "svnmodels.h"
 #include <QList>
 #include <QTreeWidget>
@@ -19,9 +19,7 @@
 SvnRevertOptionDlg::SvnRevertOptionDlg( KDevSubversionPart *part, QWidget *parent )
     : KDialog(parent), m_part(part)
 {
-    QWidget *widget = new QWidget(this);
-    ui.setupUi(widget);
-    setMainWidget( widget );
+    ui.setupUi( mainWidget() );
     setCaption( i18n("Subversion Revert") );
     setButtons( KDialog::Ok | KDialog::Cancel );
 }

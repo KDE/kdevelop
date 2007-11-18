@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include "svnimportwidgets.h"
-#include "ui_svnimportdialog.h"
+#include "ui_importdialog.h"
 
 class SvnImportDialog::Private
 {
@@ -20,10 +20,8 @@ public:
 SvnImportDialog::SvnImportDialog( QWidget *parent )
     : KDialog( parent ), d( new Private )
 {
-    QWidget *widget = new QWidget( this );
-    d->ui.setupUi( widget );
-    
-    setMainWidget( widget );
+    d->ui.setupUi( mainWidget() );
+
     setCaption( i18n("Subversion Import") );
     setButtons( KDialog::Ok | KDialog::Cancel );
 

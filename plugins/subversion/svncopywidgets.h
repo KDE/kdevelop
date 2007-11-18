@@ -13,7 +13,7 @@
 
 #include <kdialog.h>
 #include "svnmodels.h"
-#include "ui_uicopyoptiondlg.h"
+#include "ui_copyoptiondlg.h"
 
 class KUrl;
 class SvnRevision;

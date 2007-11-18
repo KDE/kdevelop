@@ -16,17 +16,15 @@
 SvnCatOptionDlg::SvnCatOptionDlg( const KUrl &path, QWidget *parent )
     : KDialog( parent )
 {
-    QWidget *widget = new QWidget(this);
-    ui.setupUi(widget);
-    setMainWidget( widget );
+    ui.setupUi(mainWidget());
     setCaption( "Subversion Cat" );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
-    QList<SvnRevision::RevKeyword> keys;
-    keys << SvnRevision::HEAD << SvnRevision::BASE << SvnRevision::COMMITTED << SvnRevision::PREV;
+    QList<SvnRevision::Keyword> keys;
+    keys << SvnRevision::Head << SvnRevision::Base << SvnRevision::Committed << SvnRevision::Prev;
     ui.revisionWidget->installKeys(keys);
-    ui.revisionWidget->setKey( SvnRevision::HEAD );
-    ui.revisionWidget->enableType( SvnRevision::kind );
+    ui.revisionWidget->setKey( SvnRevision::Head );
+    ui.revisionWidget->enableType( SvnRevision::Kind );
 
     ui.urledit->setUrl( path );
 }

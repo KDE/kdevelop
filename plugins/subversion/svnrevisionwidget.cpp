@@ -19,9 +19,9 @@ SvnRevisionWidget::SvnRevisionWidget( QWidget *parent )
 {
     setupUi( this );
 
-    QList<SvnRevision::RevKeyword> keylist;
-    keylist << SvnRevision::HEAD << SvnRevision::BASE << SvnRevision::WORKING;
-    keylist << SvnRevision::PREV << SvnRevision::COMMITTED;
+    QList<SvnRevision::Keyword> keylist;
+    keylist << SvnRevision::Head << SvnRevision::Base << SvnRevision::Working;
+    keylist << SvnRevision::Prev << SvnRevision::Committed;
     installKeys( keylist );
 
     datetimeWidget->setDateTime( QDateTime::currentDateTime() );
@@ -39,7 +39,7 @@ SvnRevision SvnRevisionWidget::revision()
     }
     else if( revkindRadio->isChecked() ){
         QVariant data = kindCombo->itemData( kindCombo->currentIndex() );
-        SvnRevision::RevKeyword key = (SvnRevision::RevKeyword)(data.toInt());
+        SvnRevision::Keyword key = (SvnRevision::Keyword)(data.toInt());
         rev.setKey( key );
     }
     else if( revdateRadio->isChecked() ){
@@ -49,26 +49,28 @@ SvnRevision SvnRevisionWidget::revision()
     return rev;
 }
 
-void SvnRevisionWidget::installKeys( const QList<SvnRevision::RevKeyword> &keylist )
+void SvnRevisionWidget::installKeys( const QList<SvnRevision::Keyword> &keylist )
 {
     kindCombo->clear();
-    foreach( SvnRevision::RevKeyword _key, keylist )
+    foreach( SvnRevision::Keyword _key, keylist )
     {
         switch( _key ){
-            case SvnRevision::HEAD:
-                kindCombo->addItem( "HEAD", QVariant( (int)SvnRevision::HEAD ) );
+            case SvnRevision::Head:
+                kindCombo->addItem( "Head", QVariant( (int)SvnRevision::Head ) );
             break;
-            case SvnRevision::BASE:
-                kindCombo->addItem( "BASE", QVariant( (int)SvnRevision::BASE ) );
+            case SvnRevision::Base:
+                kindCombo->addItem( "Base", QVariant( (int)SvnRevision::Base ) );
             break;
-            case SvnRevision::WORKING:
-                kindCombo->addItem( "WORKING", QVariant( (int)SvnRevision::WORKING ) );
+            case SvnRevision::Working:
+                kindCombo->addItem( "Working", QVariant( (int)SvnRevision::Working ) );
             break;
-            case SvnRevision::PREV:
-                kindCombo->addItem( "PREV", QVariant( (int)SvnRevision::PREV ) );
+            case SvnRevision::Prev:
+                kindCombo->addItem( "Prev", QVariant( (int)SvnRevision::Prev ) );
             break;
-            case SvnRevision::COMMITTED:
-                kindCombo->addItem( "COMMITTED", QVariant( (int)SvnRevision::COMMITTED ) );
+            case SvnRevision::Committed:
+                kindCombo->addItem( "Committed", QVariant( (int)SvnRevision::Committed ) );
+            break;
+	    default:
             break;
         }
     }
@@ -79,7 +81,7 @@ void SvnRevisionWidget::setNumber( long revnum )
     numInput->setValue( revnum );
 }
 
-void SvnRevisionWidget::setKey( SvnRevision::RevKeyword keyword )
+void SvnRevisionWidget::setKey( SvnRevision::Keyword keyword )
 {
     int idx = kindCombo->findData( QVariant((int)keyword) );
     if( idx == -1 ) return;
@@ -87,16 +89,16 @@ void SvnRevisionWidget::setKey( SvnRevision::RevKeyword keyword )
 }
 
 // only enables specified type. disable all other type
-void SvnRevisionWidget::enableType( SvnRevision::RevType type )
+void SvnRevisionWidget::enableType( SvnRevision::Type type )
 {
     switch( type ){
-        case SvnRevision::number:
+        case SvnRevision::Number:
             revnumRadio->setChecked(true);
         break;
-        case SvnRevision::kind:
+        case SvnRevision::Kind:
             revkindRadio->setChecked(true);
         break;
-        case SvnRevision::date:
+        case SvnRevision::Date:
             revdateRadio->setChecked(true);
         break;
     }

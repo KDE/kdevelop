@@ -12,7 +12,7 @@
 #define SVN_CHECKOUTWIDGETS_H
 
 #include <kdialog.h>
-#include "ui_uicheckoutoptiondlg.h"
+#include "ui_checkoutoptiondlg.h"
 
 class KUrl;
 class SvnRevision;

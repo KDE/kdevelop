@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "svnoutputdelegate.h"
-#include "svnmodels.h"
+#include "svnoutputmodel.h"
 
 SvnOutputDelegate::SvnOutputDelegate( QObject* parent )
     : QItemDelegate(parent), conflictBrush( KColorScheme::View, KColorScheme::NegativeText )
@@ -36,4 +36,3 @@ void SvnOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     }
     QItemDelegate::paint(painter, opt, index);
 }
-

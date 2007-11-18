@@ -12,7 +12,7 @@
 #define SVNDIFFWIDGETS_H
 
 #include <kdialog.h>
-#include "ui_uidiffoptiondlg.h"
+#include "ui_diffoptiondlg.h"
 
 class SvnRevisionWidget;
 class KUrl;

@@ -23,9 +23,7 @@
 SvnCheckoutDialog::SvnCheckoutDialog( const KUrl &destDir, QWidget *parent )
     : KDialog( parent )
 {
-    QWidget *widget = new QWidget(this);
-    ui.setupUi( widget );
-    setMainWidget( widget );
+    ui.setupUi( mainWidget() );
     setButtons( KDialog::Ok | KDialog::Cancel );
     setWindowTitle( "Subversion Checkout" );
 
@@ -56,7 +54,7 @@ SvnRevision SvnCheckoutDialog::revision()
         ret.setNumber( ui.revNum->value() );
     }
     else if( ui.revkeyRadio->isChecked() ){
-        ret.setKey( SvnRevision::HEAD );
+        ret.setKey( SvnRevision::Head );
     }
     else if( ui.revdateRadio->isChecked() ){
         ret.setDate( ui.revDate->dateTime() );

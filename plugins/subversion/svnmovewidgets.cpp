@@ -18,9 +18,7 @@
 SvnMoveOptionDlg::SvnMoveOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info, QWidget *parent )
     : KDialog( parent ), m_reqUrl(reqUrl), m_info(info)
 {
-    QWidget *widget = new QWidget(this);
-    ui.setupUi(widget);
-    setMainWidget( widget );
+    ui.setupUi(mainWidget());
     setCaption( "Subversion Move" );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
@@ -54,8 +52,8 @@ bool SvnMoveOptionDlg::force()
 void SvnMoveOptionDlg::srcAsUrlClicked()
 {
     if( m_info ){
-        ui.srcEdit->setText( m_info->URL );
-        KUrl srcUrl( m_info->URL );
+        ui.srcEdit->setUrl( m_info->url );
+        KUrl srcUrl( m_info->url );
         ui.destEdit->setUrl( srcUrl.upUrl() );
     }
 }

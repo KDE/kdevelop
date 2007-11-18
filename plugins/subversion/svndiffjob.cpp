@@ -1,0 +1,431 @@
+/***************************************************************************
+ *   This file is part of KDevelop                                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+ ***************************************************************************/
+
+#include "svndiffjob.h"
+#include "svndiffjob_p.h"
+
+#include <QMutexLocker>
+#include <QWaitCondition>
+#include <QRegExp>
+#include <QStringList>
+#include <QFileInfo>
+
+#include <kdebug.h>
+#include <klocale.h>
+#include <ThreadWeaver.h>
+
+#include <vcsrevision.h>
+
+#include <svncpp/path.hpp>
+#include <svncpp/revision.hpp>
+
+#include "svnclient.h"
+#include "svncatjob.h"
+
+//@TODO: Handle raw diffs by using SvnCatJob to fetch both files/revisions
+
+SvnInternalDiffJob::SvnInternalDiffJob( SvnJobBase* parent )
+    : SvnInternalJobBase( parent ), m_recursive( true ),
+      m_ignoreAncestry( false ), m_ignoreContentType( false ),
+      m_noDiffOnDelete( false )
+{
+    m_pegRevision.setRevisionValue( KDevelop::VcsRevision::Head,
+                                    KDevelop::VcsRevision::Special );
+}
+
+void SvnInternalDiffJob::run()
+{
+    DiffJobHelper helper;
+    connect( &helper, SIGNAL( gotDiff( const QString& ) ),
+           this, SIGNAL( gotDiff( const QString& ) ), Qt::QueuedConnection );
+
+    initBeforeRun();
+
+    SvnClient cli(m_ctxt);
+    try
+    {
+
+        QString diff;
+        if( destination().isValid() )
+        {
+            QByteArray srcba;
+            if( source().type() == KDevelop::VcsLocation::LocalLocation )
+            {
+                KUrl url = source().localUrl();
+                if( url.isLocalFile() )
+                {
+                    srcba = url.path().toUtf8();
+                }else
+                {
+                    srcba = url.url().toUtf8();
+                }
+            }else
+            {
+                srcba = source().repositoryLocation().toUtf8();
+            }
+            QByteArray dstba;
+            if( destination().type() == KDevelop::VcsLocation::LocalLocation )
+            {
+                KUrl url = destination().localUrl();
+                if( url.isLocalFile() )
+                {
+                    dstba = url.path().toUtf8();
+                }else
+                {
+                    dstba = url.url().toUtf8();
+                }
+            }else
+            {
+                dstba = destination().repositoryLocation().toUtf8();
+            }
+            svn::Revision srcRev = createSvnCppRevisionFromVcsRevision( srcRevision() );
+            svn::Revision dstRev = createSvnCppRevisionFromVcsRevision( dstRevision() );
+            if( srcba.isEmpty() || ( dstba.isEmpty() && srcRev.kind() == svn_opt_revision_unspecified
+                && dstRev.kind() == svn_opt_revision_unspecified ) )
+            {
+                throw svn::ClientException( "Not enough information for a diff");
+            }
+            diff = cli.diff( svn::Path( srcba.data() ), srcRev, svn::Path( dstba.data() ),
+                             dstRev, recursive(), ignoreAncestry(),
+                             noDiffOnDelete(), ignoreContentType() );
+        }else
+        {
+            QByteArray srcba;
+            if( source().type() == KDevelop::VcsLocation::LocalLocation )
+            {
+                KUrl url = source().localUrl();
+                if( url.isLocalFile() )
+                {
+                    srcba = url.path().toUtf8();
+                }else
+                {
+                    srcba = url.url().toUtf8();
+                }
+            }else
+            {
+                srcba = source().repositoryLocation().toUtf8();
+            }
+            svn::Revision pegRev = createSvnCppRevisionFromVcsRevision( pegRevision() );
+            svn::Revision srcRev = createSvnCppRevisionFromVcsRevision( srcRevision() );
+            svn::Revision dstRev = createSvnCppRevisionFromVcsRevision( dstRevision() );
+            if( srcba.isEmpty() || pegRev.kind() == svn_opt_revision_unspecified
+                || dstRev.kind() == svn_opt_revision_unspecified
+                || srcRev.kind() == svn_opt_revision_unspecified)
+            {
+                throw svn::ClientException( "Not enough information for a diff");
+            }
+            //@TODO: Make sure there's no diff-cmd set via the users configuration file, can be done only via C api
+            diff = cli.diff( svn::Path( srcba.data() ), pegRev, srcRev,
+                             dstRev, recursive(), ignoreAncestry(),
+                             noDiffOnDelete(), ignoreContentType() );
+        }
+        helper.emitDiff( diff );
+
+    }catch( svn::ClientException ce )
+    {
+        kDebug(9510) << "Exception while doing a diff: "
+                << m_source.localUrl() << m_source.repositoryLocation() << m_srcRevision.prettyValue()
+                << m_destination.localUrl() << m_destination.repositoryLocation() << m_dstRevision.prettyValue()
+                << QString::fromUtf8( ce.message() );
+        setErrorMessage( QString::fromUtf8( ce.message() ) );
+        m_success = false;
+    }
+}
+
+
+void SvnInternalDiffJob::setSource( const KDevelop::VcsLocation& src )
+{
+    QMutexLocker l( m_mutex );
+    m_source = src;
+}
+void SvnInternalDiffJob::setDestination( const KDevelop::VcsLocation& dst )
+{
+    QMutexLocker l( m_mutex );
+    m_destination = dst;
+}
+void SvnInternalDiffJob::setSrcRevision( const KDevelop::VcsRevision& srcRev )
+{
+    QMutexLocker l( m_mutex );
+    m_srcRevision = srcRev;
+}
+void SvnInternalDiffJob::setDstRevision( const KDevelop::VcsRevision& dstRev )
+{
+    QMutexLocker l( m_mutex );
+    m_dstRevision = dstRev;
+}
+void SvnInternalDiffJob::setPegRevision( const KDevelop::VcsRevision& pegRev )
+{
+    QMutexLocker l( m_mutex );
+    m_pegRevision = pegRev;
+}
+void SvnInternalDiffJob::setRecursive( bool recursive )
+{
+    QMutexLocker l( m_mutex );
+    m_recursive = recursive;
+}
+void SvnInternalDiffJob::setIgnoreAncestry( bool ignoreAncestry )
+{
+    QMutexLocker l( m_mutex );
+    m_ignoreAncestry = ignoreAncestry;
+}
+void SvnInternalDiffJob::setIgnoreContentType( bool ignoreContentType )
+{
+    QMutexLocker l( m_mutex );
+    m_ignoreContentType = ignoreContentType;
+}
+void SvnInternalDiffJob::setNoDiffOnDelete( bool noDiffOnDelete )
+{
+    QMutexLocker l( m_mutex );
+    m_noDiffOnDelete = noDiffOnDelete;
+}
+
+bool SvnInternalDiffJob::recursive() const
+{
+    QMutexLocker l( m_mutex );
+    return m_recursive;
+}
+bool SvnInternalDiffJob::ignoreAncestry() const
+{
+    QMutexLocker l( m_mutex );
+    return m_ignoreAncestry;
+}
+bool SvnInternalDiffJob::ignoreContentType() const
+{
+    QMutexLocker l( m_mutex );
+    return m_ignoreContentType;
+}
+bool SvnInternalDiffJob::noDiffOnDelete() const
+{
+    QMutexLocker l( m_mutex );
+    return m_noDiffOnDelete;
+}
+KDevelop::VcsLocation SvnInternalDiffJob::source() const
+{
+    QMutexLocker l( m_mutex );
+    return m_source;
+}
+KDevelop::VcsLocation SvnInternalDiffJob::destination() const
+{
+    QMutexLocker l( m_mutex );
+    return m_destination;
+}
+KDevelop::VcsRevision SvnInternalDiffJob::srcRevision() const
+{
+    QMutexLocker l( m_mutex );
+    return m_srcRevision;
+}
+KDevelop::VcsRevision SvnInternalDiffJob::dstRevision() const
+{
+    QMutexLocker l( m_mutex );
+    return m_dstRevision;
+}
+KDevelop::VcsRevision SvnInternalDiffJob::pegRevision() const
+{
+    QMutexLocker l( m_mutex );
+    return m_pegRevision;
+}
+
+SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent )
+{
+    setType( KDevelop::VcsJob::Add );
+    m_job = new SvnInternalDiffJob( this );
+}
+
+QVariant SvnDiffJob::fetchResults()
+{
+    return qVariantFromValue( m_diff );
+}
+
+void SvnDiffJob::start()
+{
+
+    disconnect( m_job, SIGNAL( done( ThreadWeaver::Job* ) ), this, SLOT( internalJobDone( ThreadWeaver::Job* ) ) );
+    if( !m_job->source().isValid()
+         || ( !m_job->destination().isValid() &&
+                ( m_job->srcRevision().revisionType() == KDevelop::VcsRevision::Invalid
+                 || m_job->dstRevision().revisionType() == KDevelop::VcsRevision::Invalid ) )
+      )
+    {
+        internalJobFailed( m_job );
+        setErrorText( i18n( "Not enough information given to execute diff" ) );
+    }else
+    {
+        connect( m_job, SIGNAL( gotDiff( const QString& ) ),
+                 this, SLOT( setDiff( const QString& ) ),
+                 Qt::QueuedConnection );
+        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+    }
+}
+
+SvnInternalJobBase* SvnDiffJob::internalJob() const
+{
+    return m_job;
+}
+
+void SvnDiffJob::setSource( const KDevelop::VcsLocation& source )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setSource( source );
+}
+void SvnDiffJob::setDestination( const KDevelop::VcsLocation& destination )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setDestination( destination );
+}
+void SvnDiffJob::setPegRevision( const KDevelop::VcsRevision& pegRevision )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setPegRevision( pegRevision );
+}
+
+void SvnDiffJob::setSrcRevision( const KDevelop::VcsRevision& srcRevision )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setSrcRevision( srcRevision );
+}
+void SvnDiffJob::setDstRevision( const KDevelop::VcsRevision& dstRevision )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setDstRevision( dstRevision );
+}
+void SvnDiffJob::setRecursive( bool recursive )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setRecursive( recursive );
+}
+void SvnDiffJob::setIgnoreAncestry( bool ignoreAncestry )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setIgnoreAncestry( ignoreAncestry );
+}
+void SvnDiffJob::setIgnoreContentType( bool ignoreContentType )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setIgnoreContentType( ignoreContentType );
+}
+void SvnDiffJob::setNoDiffOnDelete( bool noDiffOnDelete )
+{
+    if( status() == KDevelop::VcsJob::JobNotStarted )
+        m_job->setNoDiffOnDelete( noDiffOnDelete );
+}
+
+void SvnDiffJob::setDiff( const QString& diff )
+{
+    m_diff = KDevelop::VcsDiff();
+    m_diff.setType( KDevelop::VcsDiff::DiffUnified );
+
+    m_diff.setContentType( KDevelop::VcsDiff::Text );
+    m_diff.setDiff( diff );
+
+    QRegExp fileRe("(?:^|\n)Index: ([^\n]+)\n");
+
+    QStringList paths;
+    int pos = 0;
+
+    while( ( pos = fileRe.indexIn( diff, pos ) ) != -1 )
+    {
+        paths << fileRe.cap(1);
+        pos += fileRe.matchedLength();
+    }
+
+    foreach( QString s, paths )
+    {
+        if( !s.isEmpty() )
+        {
+            SvnCatJob* job = new SvnCatJob( m_part );
+            KDevelop::VcsLocation l = m_job->source();
+            if( l.type() == KDevelop::VcsLocation::LocalLocation )
+            {
+                l.setLocalUrl( KUrl( s ) );
+            }else
+            {
+                QString repoLocation = KUrl( l.repositoryLocation() ).path();
+                QFileInfo fi( repoLocation );
+                if( s == fi.fileName() )
+                {
+                    l.setRepositoryLocation( l.repositoryLocation() );
+                }else
+                {
+                    l.setRepositoryLocation( l.repositoryLocation() + "/" + s );
+                }
+            }
+
+            job->setSource( l );
+            job->setPegRevision( m_job->pegRevision() );
+            job->setSrcRevision( m_job->srcRevision() );
+
+            m_catJobMap[job] = l;
+
+            connect( job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ), this, SLOT( addLeftText( KDevelop::VcsJob* ) ) );
+            connect( job, SIGNAL( result( KJob* ) ), this, SLOT( removeJob( KJob* ) ) );
+
+            job->start();
+        }
+    }
+}
+
+void SvnDiffJob::addLeftText( KDevelop::VcsJob* job )
+{
+    if( m_catJobMap.contains( job ) )
+    {
+        QVariant v = job->fetchResults();
+        m_diff.addLeftText( m_catJobMap[job], v.toString() );
+        m_catJobMap.remove(job);
+        job->deleteLater();
+    }
+    if( m_catJobMap.isEmpty() )
+    {
+        internalJobDone( m_job );
+        emit resultsReady( this );
+    }
+}
+
+void SvnDiffJob::removeJob( KJob* job )
+{
+    if( job->error() != 0 )
+    {
+        KDevelop::VcsJob* j = dynamic_cast<KDevelop::VcsJob*>( job );
+        if( j )
+        {
+            if( m_catJobMap.contains( j ) )
+            {
+                m_catJobMap.remove(j);
+                j->deleteLater();
+            }
+        }
+    }
+
+    if( m_catJobMap.isEmpty() )
+    {
+        internalJobDone( m_job );
+        emit resultsReady( this );
+    }
+}
+
+void SvnDiffJob::setDiffType( KDevelop::VcsDiff::Type type )
+{
+    m_diffType = type;
+}
+
+#include "svndiffjob.moc"
+#include "svndiffjob_p.moc"
+
+

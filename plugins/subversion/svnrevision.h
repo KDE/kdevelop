@@ -16,30 +16,27 @@ struct svn_opt_revision_t;
 #include <QDateTime>
 #include <QVariant>
 
-namespace KDevelop
-{
-class VcsRevision;
-}
+#include <vcsrevision.h>
 
 class SvnRevision
 {
 public:
-    /** To be used with setRevision( RevKeyword )
+    /** To be used with setRevision( Keyword )
      */
-    enum RevKeyword
+    enum Keyword
     {
-        UNSPECIFIED = 0,
-        COMMITTED = 1,
-        PREV  = 2,
-        BASE = 3,
-        WORKING = 4,
-        HEAD = 5
+        Unspecified = 0,
+        Committed = 1,
+        Prev  = 2,
+        Base = 3,
+        Working = 4,
+        Head = 5
     };
-    enum RevType
+    enum Type
     {
-        number = 0,
-        kind = 1,
-        date = 2
+	Number = KDevelop::VcsRevision::GlobalNumber,
+	Date = KDevelop::VcsRevision::Date,
+        Kind = KDevelop::VcsRevision::UserType+1
     };
 
     /// Construct InValid (Unspecified) Revision.
@@ -52,9 +49,9 @@ public:
     void setNumber( long int revnum );
 
     /** Specify revision as keyword. Supported string is
-     *  WORKING, BASE, HEAD, COMMITTED, PREV and UNSPECIFIED
+     *  Working, Base, Head, Committed, Prev and Unspecified
      */
-    void setKey( RevKeyword key );
+    void setKey( SvnRevision::Keyword key );
 
     /// Specify revision as date,time
     void setDate( const QDateTime& date );
@@ -68,13 +65,13 @@ public:
     bool isValid();
 
 private:
-    RevType type;
+    SvnRevision::Type type;
 
     long int revNum;
-    RevKeyword revKind;
+    SvnRevision::Keyword revKind;
     QDateTime revDate;
 };
 
-// Q_DECLARE_METATYPE(SvnUtils::SvnRevision::RevKeyword)
+// Q_DECLARE_METATYPE(SvnUtils::SvnRevision::Keyword)
 
 #endif

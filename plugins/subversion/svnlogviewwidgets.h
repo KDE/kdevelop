@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -10,10 +11,12 @@
 
 #ifndef SVN_LOGVIEWWIDGET
 #define SVN_LOGVIEWWIDGET
-#include "ui_svnlogviewwidget.h"
+#include "ui_logviewwidget.h"
 #include "svnmodels.h"
-#include "subversionpart.h"
+#include "svnpart.h"
 #include <kdialog.h>
+
+class QStandardItemModel;
 
 class QModelIndex;
 
@@ -23,7 +26,7 @@ class SvnLogviewWidget : public QWidget, public Ui::SvnLogviewWidget
 public:
     explicit SvnLogviewWidget( const KUrl &url, KDevSubversionPart *part, QWidget *parent );
     virtual ~SvnLogviewWidget();
-    void refreshWithNewData( QList<SvnLogHolder> datalist );
+    void refreshWithNewData( const QList<SvnLogHolder>& datalist );
 
 protected slots:
     void customContextMenuEvent( const QPoint &point );
@@ -35,9 +38,8 @@ protected slots:
 
 private:
     KDevSubversionPart *m_part;
-    LogItem *m_item;
-    LogviewTreeModel *m_logviewModel;
-    LogviewDetailedModel *m_logviewDetailedModel;
+    SvnLogModel *m_logviewModel;
+    SvnChangedPathModel *m_logviewDetailedModel;
 
     QModelIndex m_contextIndex;
     KUrl m_url;
@@ -61,23 +63,22 @@ private:
 
 };
 
-class SvnFileSelectWidget;
 class SvnFileSelectFromLogviewDlg : public KDialog
 {
     Q_OBJECT
 public:
     explicit SvnFileSelectFromLogviewDlg( const QString &title, QWidget *parent = 0L );
     virtual ~SvnFileSelectFromLogviewDlg();
-    void setCandidate( QStringList *modifies );
-    QString selected();
+    void setCandidate( SvnChangedPathModel* modifies );
+    SvnChangedPath selected();
 
 public Q_SLOTS:
     virtual void accept();
 
 private:
-    QStringList *m_candidates;
-    QString m_selected;
-    SvnFileSelectWidget *widget;
+    SvnChangedPathModel* m_candidates;
+    SvnChangedPath m_selected;
+    QListView* widget;
 };
 
 #endif

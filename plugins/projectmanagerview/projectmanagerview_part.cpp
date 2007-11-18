@@ -92,7 +92,7 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPartPrivate)
 {
     d->factory = new KDevProjectManagerViewFactory( this );
-    core()->uiController()->addToolView( "Project Manager", d->factory );
+    core()->uiController()->addToolView( i18n("Project Manager"), d->factory );
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );

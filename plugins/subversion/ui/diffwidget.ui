@@ -1,0 +1,37 @@
+<ui version="4.0" >
+ <class>DiffWidget</class>
+ <widget class="QWidget" name="DiffWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>625</width>
+    <height>376</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QLabel" name="revLabel" >
+     <property name="text" >
+      <string>Difference between revisions</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KTextEdit" name="diffDisplay" />
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

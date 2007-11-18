@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,66 +10,12 @@
  ***************************************************************************/
 
 #include "svnmodels.h"
-#include "subversionpart.h"
-#include "icore.h"
-#include "idocumentcontroller.h"
 
 extern "C"{
 #include <svn_wc.h>
 }
 
 #include <klocale.h>
-#include <kcolorscheme.h>
-
-#include <QtAlgorithms>
-#include <QModelIndex>
-#include <QStringList>
-
-QVariant SvnBlameHolder::variant( int col )
-{
-    switch( col ){
-        case 0:
-            return QString::number(lineNo);
-        case 1:
-            return QString::number(revNo);
-        case 2:
-            return author;
-        case 3:
-            return date.left(10);
-        case 4:
-            return contents;
-        default:
-            return QVariant();
-    }
-}
-
-//////////////////////////////////
-QVariant SvnLogHolder::variant(int col)
-{
-    switch( col ){
-        case 0:
-            return QString::number(rev);
-        case 1:
-            return author;
-        case 2:{
-//             QString prettyDate = date.left(16).replace(10, 1, ' ');
-//             return prettyDate;
-            return date.left(10);
-        }
-        case 3:
-            return logmsg;
-        case 4:
-            return pathlist;
-        default:
-            return QVariant();
-    }
-}
-//////////////////////////////////
-QVariant SvnStatusHolder::variant(int /*col*/)
-{
-    // TODO refactor this function.
-    return QVariant();
-}
 
 QString SvnStatusHolder::statusToString( int status )
 {
@@ -92,407 +39,249 @@ QString SvnStatusHolder::statusToString( int status )
     }
 }
 
-//////////////////////////////////
-bool TreeItemIface::intLessThan( SvnGenericHolder &h1, SvnGenericHolder &h2 )
+SvnBlameModel::SvnBlameModel( QObject* parent )
+    : QAbstractTableModel(parent)
 {
-    int h1Int = h1.variant(0).toInt();
-    int h2Int = h2.variant(0).toInt();
-    return (h1Int < h2Int) ;
 }
-bool TreeItemIface::intGreaterThan( SvnGenericHolder &h1, SvnGenericHolder &h2 )
+QVariant SvnBlameModel::data( const QModelIndex& index, int role ) const
 {
-    int h1Int = h1.variant(0).toInt();
-    int h2Int = h2.variant(0).toInt();
-    return (h1Int > h2Int) ;
-}
-/////////////////////////////////////////////////////
-template <class T>
-int ResultItem<T>::rowCount()
-{
-    return m_itemList.count();
-}
-template <class T>
-QVariant ResultItem<T>::data( int row, int col )
-{
-    if( row < 0 ) return QVariant();
-    if( row >= m_itemList.size() ) return QVariant();
-    T oneRow = m_itemList.value(row);
-    return oneRow.variant(col);
-}
-template <class T>
-void ResultItem<T>::sort( int /*column*/, Qt::SortOrder order )
-{
-    if( order == Qt::AscendingOrder )
-        qSort( m_itemList.begin(), m_itemList.end(), TreeItemIface::intLessThan );
-    else
-        qSort( m_itemList.begin(), m_itemList.end(), TreeItemIface::intGreaterThan );
-}
+    if( role != Qt::DisplayRole || !index.isValid() )
+        return QVariant();
 
-////////////////////////////////////////////////////
-// int ParentlessTreeModel::rowCount( const QModelIndex & parent ) const
-// {
-//     return rootItem->rowCount();
-// }
-// int ParentlessTreeModel::columnCount( const QModelIndex &  parent )const
-// {
-//     return rootItem->columnCount();
-// }
-// QVariant ParentlessTreeModel::data( const QModelIndex & index, int role )const
-// {
-//     if( role!= Qt::DisplayRole )
-//         return QVariant();
-// //     SvnGenericHolder holder = rootItem->itemList.value( index.row() );
-// //     return holder.variant( index.column() );
-//     return rootItem->data( index.row(), index.column() );
-// }
-Qt::ItemFlags ParentlessTreeModel::flags(const QModelIndex &/*index*/) const
-{
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable ;
-}
-QVariant ParentlessTreeModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
-{
-    if( orientation == Qt::Horizontal && role == Qt::DisplayRole )
-        return QString("");
+    int row = index.row();
+    if( row < 0 || row >= rowCount() )
+        return QVariant();
+
+    switch( index.column() )
+    {
+        case 0:
+            return m_blame[row].lineNo;
+            break;
+        case 1:
+            return m_blame[row].revNo;
+            break;
+        case 2:
+            return m_blame[row].author;
+            break;
+        case 3:
+            return m_blame[row].date;
+            break;
+        case 4:
+            return m_blame[row].contents;
+            break;
+        default:
+            break;
+    }
     return QVariant();
+}
 
-}
-QModelIndex ParentlessTreeModel::index( int row, int col, const QModelIndex &parent) const
+int SvnBlameModel::columnCount( const QModelIndex& parent ) const
 {
-    if ( !parent.isValid() ) // toplevel
-        return createIndex(row, col, 0);
-    return QModelIndex();
-
-}
-QModelIndex ParentlessTreeModel::parent( const QModelIndex &/*parent*/ ) const
-{
-    return QModelIndex();
-}
-// void ParentlessTreeModel::sort ( int column, Qt::SortOrder order )
-// {
-//     emit layoutAboutToBeChanged();
-//     rootItem->sort(column, order);
-//     emit layoutChanged();
-// }
-// void ParentlessTreeModel::setHolderList(QList<SvnGenericHolder> datalist)
-// {
-//     emit layoutAboutToBeChanged();
-//     rootItem->setHolderList( datalist );
-//     emit layoutChanged();
-// }
-// void ParentlessTreeModel::setNewItem( TreeItemIface* newItem )
-// {
-//     emit layoutAboutToBeChanged();
-//     rootItem = newItem;
-//     emit layoutChanged();
-// }
-void ParentlessTreeModel::prepareItemUpdate()
-{
-    emit layoutAboutToBeChanged();
-}
-void ParentlessTreeModel::finishedItemUpdate()
-{
-    emit layoutChanged();
-}
-//////////////////////////////////
-BlameTreeModel::BlameTreeModel( BlameItem *item, QObject */*parent*/ )
-    : ParentlessTreeModel ()
-{
-    rootItem = item;
-}
-BlameTreeModel::~BlameTreeModel()
-{}
-int BlameTreeModel::rowCount ( const QModelIndex & /*parent*/  ) const
-{
-    return rootItem->rowCount();
-}
-int BlameTreeModel::columnCount ( const QModelIndex & /*parent*/ ) const
-{
+    Q_UNUSED(parent)
     return 5;
 }
-QVariant BlameTreeModel::data( const QModelIndex & index, int role )const
+
+int SvnBlameModel::rowCount( const QModelIndex& parent ) const
 {
-    if( role!= Qt::DisplayRole || !index.isValid() )
+    Q_UNUSED(parent)
+    return m_blame.count();
+}
+QVariant SvnBlameModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if( orientation != Qt::Horizontal || role != Qt::DisplayRole )
         return QVariant();
-    if( index.column() == 0 ){
-        return QString("   ") + rootItem->data( index.row(), index.column() ).toString();
+    switch( section )
+    {
+        case 0:
+            return i18nc("line number in a text file", "Line");
+            break;
+        case 1:
+            return i18n("Revision");
+            break;
+        case 2:
+            return i18n("Author");
+            break;
+        case 3:
+            return i18n("Date");
+            break;
+        case 4:
+            return i18n("Contents");
+            break;
+        default:
+            break;
     }
-    //if revision is same with previous one, do not print revision number again
-    if( index.column() == 1 || index.column() == 2 || index.column() == 3){
-
-        if( index.row() == 0 )
-            return rootItem->data( 0, index.column() ).toString();
-
-        QString prevRev = rootItem->data( index.row() - 1, 1 ).toString();
-        QString currentRev = rootItem->data( index.row(), 1 ).toString();
-
-        if( prevRev == currentRev ){
-            return QVariant();
-        }
-        else{
-            return rootItem->data( index.row(), index.column() ).toString();
-        }
-
-    }
-    // case of lineNo and Contents
-    return rootItem->data( index.row(), index.column() );
+    return QVariant();
 }
-QVariant BlameTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
+
+void SvnBlameModel::setBlameList( const QList<SvnBlameHolder>& newlist )
 {
-    if( orientation == Qt::Horizontal && role == Qt::DisplayRole )
-        switch (section){
-            case 0:
-                return QString(i18nc("line number in a text file", "Line"));
-            case 1:
-                return QString(i18n("Rev"));
-            case 2:
-                return QString(i18n("Author"));
-            case 3:
-                return QString(i18n("Date"));
-            case 4:
-                return QString(i18n("Contents"));
-            default:
-                return QVariant();
-        };
+    m_blame = newlist;
+    reset();
+}
+
+SvnLogModel::SvnLogModel( QObject* parent )
+    : QAbstractTableModel(parent)
+{
+}
+QVariant SvnLogModel::data( const QModelIndex& index, int role ) const
+{
+    if( role != Qt::DisplayRole || !index.isValid() )
         return QVariant();
+
+    int row = index.row();
+    if( row < 0 || row >= rowCount() )
+        return QVariant();
+
+    switch( index.column() )
+    {
+        case 0:
+            return m_log[row].rev;
+            break;
+        case 1:
+            return m_log[row].author;
+            break;
+        case 2:
+            return m_log[row].date;
+            break;
+        case 3:
+            return m_log[row].logmsg;
+            break;
+        default:
+            break;
+    }
+    return QVariant();
 }
-void BlameTreeModel::sort ( int column, Qt::SortOrder order )
+int SvnLogModel::columnCount( const QModelIndex& parent ) const
 {
-    emit layoutAboutToBeChanged();
-    rootItem->sort(column, order);
-    emit layoutChanged();
-}
-/////////////////////////////////////////////////////////////////
-LogviewTreeModel::LogviewTreeModel( LogItem *item, QObject */*parent*/ )
-    : ParentlessTreeModel ( /*item, parent*/ )
-{
-    rootItem = item;
-}
-LogviewTreeModel::~LogviewTreeModel()
-{}
-int LogviewTreeModel::rowCount ( const QModelIndex & /*parent*/  ) const
-{
-    return rootItem->rowCount();
-}
-int LogviewTreeModel::columnCount ( const QModelIndex & /*parent*/ ) const
-{
+    Q_UNUSED(parent)
     return 4;
 }
-QVariant LogviewTreeModel::data( const QModelIndex & index, int role )const
+int SvnLogModel::rowCount( const QModelIndex& parent ) const
 {
-    if( role!= Qt::DisplayRole )
+    Q_UNUSED(parent)
+    return m_log.count();
+}
+QVariant SvnLogModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if( orientation != Qt::Horizontal || role != Qt::DisplayRole )
         return QVariant();
-    if( !index.isValid() )
-        return QVariant();
-
-    if( index.column() == 3 ){
-        //case of whitespace-stripped comment
-        return rootItem->data( index.row(), index.column() ).toString().simplified();
-    } else if ( index.column() == 0 ){
-        return QString("  ") + rootItem->data( index.row(), 0 ).toString();
-    }
-
-    return rootItem->data( index.row(), index.column() );
-}
-QVariant LogviewTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if( orientation == Qt::Horizontal && role == Qt::DisplayRole )
-        switch (section){
-            case 0:
-                return QString(i18n("Rev"));
-            case 1:
-                return QString(i18n("Author"));
-            case 2:
-                return QString(i18n("Date"));
-            case 3:
-                return QString(i18n("Comment"));
-            default:
-                return QVariant();
-        };
-    return QVariant();
-}
-void LogviewTreeModel::sort ( int column, Qt::SortOrder order )
-{
-    emit layoutAboutToBeChanged();
-    rootItem->sort(column, order);
-    emit layoutChanged();
-}
-long LogviewTreeModel::revision( const QModelIndex &index ) const
-{
-    bool conversionOk = true;
-    long revNo = rootItem->data( index.row(), 0 ).toString().toLong( &conversionOk );
-    if( !conversionOk )
-        return -1;
-    else
-        return revNo;
-}
-QStringList LogviewTreeModel::modifiedLists( const QModelIndex &index ) const
-{
-    QString pathlist = rootItem->data( index.row(), 4 ).toString();
-    QStringList ret = pathlist.split( "\n", QString::SkipEmptyParts );
-    return ret;
-}
-//////////////////////////////////
-LogviewDetailedModel::LogviewDetailedModel( LogItem *item, QObject *parent )
-    : QAbstractListModel(parent), m_item(item)
-{}
-LogviewDetailedModel::~LogviewDetailedModel()
-{}
-int LogviewDetailedModel::rowCount( const QModelIndex &index ) const
-{
-    Q_UNUSED(index)
-    return m_pathlist.count() + 1; // modified paths + log message
-}
-QVariant LogviewDetailedModel::data( const QModelIndex &index, int role ) const
-{
-    if( role!= Qt::DisplayRole )
-        return QVariant();
-    if( index.row() == rowCount()-1 ){
-        // case of last index. return commit message prepended with \n
-        return ( QString("\n") + m_item->data( m_activeRow, 3 ).toString() );
-    }
-    if( index.isValid() ){
-        // return modified path
-        return m_pathlist.at( index.row() );
+    switch( section )
+    {
+        case 0:
+            return i18n("Revision");
+            break;
+        case 1:
+            return i18n("Author");
+            break;
+        case 2:
+            return i18n("Date");
+            break;
+        case 3:
+            return i18n("Logmessage");
+            break;
+            break;
+        default:
+            break;
     }
     return QVariant();
 }
 
-void LogviewDetailedModel::setNewRevision( const QModelIndex &index )
+void SvnLogModel::setLogList( const QList<SvnLogHolder>& newlist )
 {
-    kDebug(9500) << "LogviewDetailedModel::setNewRevision";
-    emit layoutAboutToBeChanged();
-    m_activeRow = index.row();
-    m_pathlist =
-        m_item->data( m_activeRow, 4 ).toString().split( "\n", QString::SkipEmptyParts );
-    emit layoutChanged();
+    m_log = newlist;
+    reset();
 }
 
-/////////////////////////////////////////////////////
-
-SvnOutputItem::SvnOutputItem( const QString &path, const QString &msg )
-    : QStandardItem(msg)
-    , m_path(path), m_msg(msg), m_stop(false)
+SvnLogHolder SvnLogModel::logEntryForIndex( const QModelIndex& index ) const
 {
-    //conflict
-    if( m_msg.contains("Conflicted") ){
-        setData( QVariant( SvnOutputModel::Conflict ) );
-        m_stop = true;
-    }
-}
-
-SvnOutputItem::~SvnOutputItem()
-{}
-
-bool SvnOutputItem::stopHere()
-{
-    return m_stop;
-}
-
-SvnOutputModel::SvnOutputModel( KDevSubversionPart *part, QObject *parent )
-    : QStandardItemModel( parent )
-    , m_part(part)
-{}
-SvnOutputModel::~SvnOutputModel()
-{}
-
-void SvnOutputModel::activate( const QModelIndex& index )
-{
-    QStandardItem *item = itemFromIndex( index );
-    SvnOutputItem *svnItem = dynamic_cast<SvnOutputItem*>(item);
-    if(!item) return;
-
-    if( svnItem->m_path.isEmpty() )
-        return;
-
-    m_part->core()->documentController()->openDocument( KUrl(svnItem->m_path) );
-}
-
-QModelIndex SvnOutputModel::nextHighlightIndex( const QModelIndex& currentIdx )
-{
-    int rowCount = this->rowCount();
-
-    bool reachedEnd = false;
-
-    // determine from which index we should start
-    int i=0;
-    if( currentIdx.isValid() )
-        i = currentIdx.row();
-
-    if( i >= rowCount - 1 )
-        i = 0;
-    else
-        i++;
-
-    for( ; i < rowCount; i++ )
+    if( index.isValid() && index.row() >= 0 && index.row() < rowCount() )
     {
-        QStandardItem *stditem = item( i );
-        SvnOutputItem *outItem = dynamic_cast<SvnOutputItem*>( stditem );
-        if( outItem && outItem->stopHere() )
-        {
-            // yes. found.
-            QModelIndex modelIndex = outItem->index();
-            return modelIndex;
-        }
-
-        if( i >= rowCount - 1 ) // at the last index and couldn't find error yet.
-        {
-            if( reachedEnd )
-            {
-                break; // no matching item
-            }
-            else
-            {
-                reachedEnd = true;
-                i = -1; // search from index 0
-            }
-        }
+        return m_log[index.row()];
     }
-    return QModelIndex();
+    return SvnLogHolder();
 }
 
-QModelIndex SvnOutputModel::previousHighlightIndex( const QModelIndex& currentIdx )
+SvnChangedPathModel::SvnChangedPathModel( QObject* parent )
+    : QAbstractTableModel(parent)
 {
-    int rowCount = this->rowCount();
-
-    bool reachedFirst = false;
-
-    // determine from which index we should start
-    int i = rowCount -1;
-    if( currentIdx.isValid() )
-        i = currentIdx.row();
-
-    if( ( i > rowCount - 1 ) || ( i == 0 ) )
-        i = rowCount-1; // set to last index
-    else
-        i--;
-
-    for( ; i >= 0; i-- )
-    {
-        QStandardItem *stditem = item( i );
-        SvnOutputItem *outItem = dynamic_cast<SvnOutputItem*>( stditem );
-        if( outItem && outItem->stopHere() )
-        {
-            // yes. found.
-            QModelIndex modelIndex = outItem->index();
-            return modelIndex;
-        }
-        if( i <= 0 ) // at the last index and couldn't find error yet.
-        {
-            if( reachedFirst )
-            {
-                break; // no matching item
-            }
-            else
-            {
-                reachedFirst = true;
-                i = rowCount; // search from last index
-            }
-        }
-    }
-    return QModelIndex();
 }
+QVariant SvnChangedPathModel::data( const QModelIndex& index, int role ) const
+{
+    if( role != Qt::DisplayRole || !index.isValid() )
+        return QVariant();
+
+    int row = index.row();
+    if( row < 0 || row >= rowCount() )
+        return QVariant();
+
+    switch( index.column() )
+    {
+        case 0:
+            return m_changedPaths[row].path;
+            break;
+        case 1:
+            return m_changedPaths[row].action;
+            break;
+        case 2:
+            return m_changedPaths[row].copyFromPath;
+            break;
+        case 3:
+            return m_changedPaths[row].copyFromRevision;
+            break;
+        default:
+            break;
+    }
+    return QVariant();
+}
+int SvnChangedPathModel::columnCount( const QModelIndex& parent ) const
+{
+    Q_UNUSED(parent)
+    return 4;
+}
+int SvnChangedPathModel::rowCount( const QModelIndex& parent ) const
+{
+    Q_UNUSED(parent)
+    return m_changedPaths.count();
+}
+QVariant SvnChangedPathModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if( orientation != Qt::Horizontal || role != Qt::DisplayRole )
+        return QVariant();
+    switch( section )
+    {
+        case 0:
+            return i18n("Path");
+            break;
+        case 1:
+            return i18n("Action");
+            break;
+        case 2:
+            return i18n("From Path");
+            break;
+        case 3:
+            return i18n("From Revision");
+            break;
+        default:
+            break;
+    }
+    return QVariant();
+}
+
+void SvnChangedPathModel::setChangedPaths( const QList<SvnChangedPath>& newlist )
+{
+    m_changedPaths = newlist;
+    reset();
+}
+
+SvnChangedPath SvnChangedPathModel::changedPathForIndex( const QModelIndex& index ) const
+{
+    if( index.isValid() && index.row() >= 0 && index.row() < rowCount() )
+    {
+        return m_changedPaths[index.row()];
+    }
+    return SvnChangedPath();
+}
+
 
 #include "svnmodels.moc"
-
-
 

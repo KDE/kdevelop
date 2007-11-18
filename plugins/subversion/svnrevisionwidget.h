@@ -13,7 +13,7 @@
 
 #include <QWidget>
 #include "svnrevision.h"
-#include "ui_svnrevisionwidget.h"
+#include "ui_revisionwidget.h"
 
 class SvnRevisionWidget : public QWidget, public Ui::SvnRevisionWidget
 {
@@ -26,16 +26,16 @@ public:
     SvnRevision revision();
 
     /// Install revision types to combobox. Delete every previously registered keywords.
-    void installKeys( const QList<SvnRevision::RevKeyword> &keylist );
+    void installKeys( const QList<SvnRevision::Keyword> &keylist );
 
     /// Set revision number to int number input widget
     void setNumber( long revnum );
 
     /// Set revision keyword to combobox widget
-    void setKey( SvnRevision::RevKeyword keyword );
+    void setKey( SvnRevision::Keyword keyword );
 
     /// Enables specified type only. Disable all other type
-    void enableType( SvnRevision::RevType type );
+    void enableType( SvnRevision::Type type );
 };
 
 #endif

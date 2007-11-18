@@ -19,11 +19,14 @@ if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     endif(COMMONCPP2_FOUND AND Boost_FOUND  AND Boost_LIBS_FOUND)
 endif(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
 
+find_package(SvnCpp)
 find_package(SubversionLibrary)
-macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" )
-if(SUBVERSION_FOUND)
+
+macro_log_feature( SVNCPP_FOUND "SvnCpp" "Support for Subversion integration" "http://rapidsvn.tigris.org" FALSE "0.9.4" "The rapidsvn C++ library is needed for the Subversion support")
+macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" "The subversion libraries are needed for the Subversion support" )
+if(SUBVERSION_FOUND AND SVNCPP_FOUND)
     macro_optional_add_subdirectory(subversion)
-endif(SUBVERSION_FOUND)
+endif(SUBVERSION_FOUND AND SVNCPP_FOUND)
 
 macro_display_feature_log()
 

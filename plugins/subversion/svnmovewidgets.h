@@ -13,7 +13,7 @@
 
 #include <kdialog.h>
 #include "svnmodels.h"
-#include "ui_uimoveoptiondlg.h"
+#include "ui_moveoptiondlg.h"
 
 class KUrl;
 

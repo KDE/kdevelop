@@ -19,14 +19,12 @@
 SvnStatusOptionDlg::SvnStatusOptionDlg( const KUrl &path, QWidget *parent )
     : KDialog( parent )
 {
-    QWidget *widget = new QWidget(this);
-    ui.setupUi(widget);
-    setMainWidget( widget );
+    ui.setupUi(mainWidget());
     setCaption( "Subversion Status" );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
-    ui.revisionWidget->setKey( SvnRevision::HEAD );
-    ui.revisionWidget->enableType( SvnRevision::kind );
+    ui.revisionWidget->setKey( SvnRevision::Head );
+    ui.revisionWidget->enableType( SvnRevision::Kind );
     ui.urledit->setText( path.toLocalFile() );
 }
 

@@ -13,7 +13,7 @@
 
 #include <kdialog.h>
 #include <QTreeWidget>
-#include "ui_uistatusoptiondlg.h"
+#include "ui_statusoptiondlg.h"
 
 class SvnStatusHolder;
 template <typename T1, typename T2> class QMap;

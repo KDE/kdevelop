@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include "svnupdatewidget.h"
-#include "ui_uiupdateoptiondlg.h"
+#include "ui_updateoptiondlg.h"
 #include "svnrevision.h"
 #include <kurl.h>
 #include <QRadioButton>
@@ -28,17 +28,15 @@ public:
 SvnUpdateOptionDlg::SvnUpdateOptionDlg( QWidget *parent )
     : KDialog( parent ), d( new Private )
 {
-    QWidget *widget = new QWidget( this );
-    d->ui.setupUi( widget );
+    d->ui.setupUi( mainWidget() );
 
-    setMainWidget( widget );
     setCaption( i18n("Subversion Update") );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
-    QList<SvnRevision::RevKeyword> keys;
-    keys << SvnRevision::HEAD;
+    QList<SvnRevision::Keyword> keys;
+    keys << SvnRevision::Head;
     d->ui.revisionWidget->installKeys( keys );
-    d->ui.revisionWidget->enableType( SvnRevision::kind );
+    d->ui.revisionWidget->enableType( SvnRevision::Kind );
 }
 
 SvnUpdateOptionDlg::~SvnUpdateOptionDlg()
