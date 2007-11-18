@@ -37,6 +37,7 @@
 #include "iqmakebuilder.h"
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kdebug.h>
 #include <projectmodel.h>
 
 #include "qmakemodelitems.h"
@@ -66,9 +67,22 @@ QMakeProjectManager::~QMakeProjectManager()
 
 }
 
-KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectFolderItem* project) const
+KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem* project) const
 {
-    return project->url();
+    if( project->folder() )
+        return project->folder()->url();
+    else if( project->parent() )
+    {
+        KDevelop::ProjectBaseItem* base = static_cast<KDevelop::ProjectBaseItem*>(project->parent());
+        if( base->type() == KDevelop::ProjectBaseItem::Target )
+        {
+            return static_cast<KDevelop::ProjectFolderItem*>(base->parent())->url();
+        }else
+        {
+            return static_cast<KDevelop::ProjectFolderItem*>(base)->url();
+        }
+    }
+    return KUrl();
 }
 
 QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
@@ -212,7 +226,7 @@ QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
 
 QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* project ) const
 {
-    if( !project->folder().isLocalFile() )
+    if( !project->folder().isLocalFile() || !m_builder )
         return QHash<QString,QString>();
 
     QHash<QString,QString> hash;
@@ -243,7 +257,6 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* proj
 
 QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) const
 {
-
     QDir curdir( QFileInfo( projectfile ).canonicalPath() );
     while( !curdir.exists(".qmake.cache") && curdir.isRoot() )
     {

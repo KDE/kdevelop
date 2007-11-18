@@ -116,6 +116,7 @@ bool QMakeFile::read()
     }
     QMake::Driver d;
     d.readFile( m_projectFile );
+
     if( !d.parse( &m_ast ) )
     {
         kDebug( 9024 ) << "Couldn't parse project:" << m_projectFile;
