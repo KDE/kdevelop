@@ -114,4 +114,15 @@ void VcsRevision::setValue( const QVariant& v )
     d->value = v;
 }
 
+bool VcsRevision::operator==( const KDevelop::VcsRevision& rhs ) const
+{
+    return ( d->type == rhs.d->type && d->value == rhs.d->value && d->internalValues == rhs.d->internalValues );
 }
+
+}
+
+uint qHash( const KDevelop::VcsRevision& rev)
+{
+    return rev.revisionValue().toULongLong();
+}
+

@@ -50,6 +50,7 @@ class KDEVPLATFORMVCS_EXPORT VcsRevision
 {
 public:
 
+
     /**
      * @note Not all VCS's support both FileNumber and GlobalNumber. For those
      * that don't, asking for one may give you the other, therefore you should
@@ -104,6 +105,7 @@ public:
      */
     QVariant revisionValue() const;
 
+    bool operator==( const KDevelop::VcsRevision&) const;
 protected:
     /**
      * Get the keys that make up the internal data of this revision instance
@@ -126,6 +128,7 @@ protected:
     void setSpecialType( RevisionSpecialType t);
     void setValue( const QVariant& );
 
+
 private:
     class VcsRevisionPrivate* const d;
 };
@@ -134,6 +137,9 @@ private:
 
 Q_DECLARE_METATYPE(KDevelop::VcsRevision)
 Q_DECLARE_METATYPE(KDevelop::VcsRevision::RevisionSpecialType)
+
+KDEVPLATFORMVCS_EXPORT uint qHash( const KDevelop::VcsRevision& rev);
+
 
 #endif
 
