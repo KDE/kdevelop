@@ -7,6 +7,7 @@
 #include "qmakelexer.h"
 #include <kdebug.h>
 #include <QtCore/QString>
+#include <cstddef>
 
 namespace QMake
   {
@@ -19,7 +20,7 @@ namespace QMake
 
     do
       {
-        kind =  lexer.getNextTokenKind();
+        kind =  lexer.nextTokenKind();
 
         if  ( !kind ) // when the lexer returns 0, the end of file is reached
           kind =  parser::Token_EOF;
@@ -28,19 +29,19 @@ namespace QMake
         t.kind =  kind;
         if ( t.kind ==  parser::Token_EOF )
           {
-            t.begin =  m_contents.size();
-            t.end =  m_contents.size();
+            t.begin =  std::numeric_limits<std::size_t>::max();
+            t.end =  std::numeric_limits<std::size_t>::max();
           }
 
         else
           {
-            t.begin =  lexer.getTokenBegin();
-            t.end =  lexer.getTokenEnd();
+            t.begin =  lexer.tokenBegin();
+            t.end =  lexer.tokenEnd();
           }
 
         if ( m_debug )
           {
-            kDebug(9024) <<  kind <<  "(" <<  t.begin <<  "," <<  t.end <<  ")::" <<  tokenText(t.begin,  t.end) <<  "::";
+            kDebug(9024) <<  kind <<  "(" <<  t.begin <<  "," <<  t.end <<  ")::" <<  tokenText(t.begin,  t.end);
           }
 
       }

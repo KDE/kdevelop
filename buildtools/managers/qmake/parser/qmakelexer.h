@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <QtCore/QStack>
 #include <QtCore/QString>
+#include "parserexport.h"
 
 class QString;
 class kdev_pg_location_table;
@@ -33,13 +34,13 @@ namespace QMake
 
 class parser;
 
-class Lexer {
+class KDEVQMAKEPARSER_EXPORT Lexer {
 public:
     Lexer(parser* _parser, const QString& contents);
 
-    int getNextTokenKind();
-    std::size_t getTokenBegin() const;
-    std::size_t getTokenEnd() const;
+    int nextTokenKind();
+    std::size_t tokenBegin() const;
+    std::size_t tokenEnd() const;
 
 private:
     QString m_content;
@@ -53,12 +54,8 @@ private:
     void pushState(int state);
     void popState();
 
-    static bool isIdentifierCharacter(QChar* c);
-    static bool isBeginIdentifierCharacter(QChar* c);
-    static bool isEndIdentifierCharacter( QChar* c );
-    static bool isCont(QChar* c);
-
-    QChar* ignoreWhitespace(QChar* it);
+    QChar* ignoreWhitespaceAndComment(QChar* it);
+    void createNewline( int pos );
 
     QStack<int> mState;
     enum State

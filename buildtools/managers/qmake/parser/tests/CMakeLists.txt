@@ -36,3 +36,13 @@ target_link_libraries(qmake-scopetest
     ${KDE4_KDECORE_LIBS}
     kdev4qmakeparser
     )
+
+set(lexertest_SRCS lexertest.cpp)
+
+kde4_add_unit_test(qmake-lexertest ${lexertest_SRCS})
+target_link_libraries(qmake-lexertest
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdev4qmakeparser
+    )
+

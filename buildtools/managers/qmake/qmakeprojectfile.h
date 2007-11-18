@@ -23,6 +23,8 @@
 
 #include "qmakefile.h"
 
+class QMakeMkSpecs;
+
 template <typename T> class QList;
 
 class QMakeMkSpecs;
@@ -50,8 +52,10 @@ public:
     QString getTemplate() const;
 
     void setMkSpecs( QMakeMkSpecs* mkspecs );
+    QMakeMkSpecs* mkSpecs() const;
     void setQMakeCache( QMakeCache* cache );
-    QString resolveVariables( const QString& value ) const;
+    QMakeCache* qmakeCache() const;
+    QStringList resolveVariables( const QString& variable ) const;
 private:
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;
