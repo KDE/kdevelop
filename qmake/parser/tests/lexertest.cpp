@@ -54,8 +54,8 @@ void LexerTest::varAssignment()
     {
         token = l.nextTokenKind();
         tokens << token;
-        begins << l.tokenBegin();
-        ends << l.tokenEnd();
+        begins << qulonglong(qulonglong(l.tokenBegin()));
+        ends << qulonglong(l.tokenEnd());
     }while( token != 0 );
     tokens.removeLast();
     begins.removeLast();
@@ -229,8 +229,8 @@ void LexerTest::functions()
     {
         token = l.nextTokenKind();
         tokens << token;
-        begins << l.tokenBegin();
-        ends << l.tokenEnd();
+        begins << qulonglong(l.tokenBegin());
+        ends << qulonglong(l.tokenEnd());
     }while( token != 0 );
     tokens.removeLast();
     begins.removeLast();
@@ -340,8 +340,8 @@ void LexerTest::operators()
     {
         token = l.nextTokenKind();
         tokens << token;
-        begins << l.tokenBegin();
-        ends << l.tokenEnd();
+        begins << qulonglong(l.tokenBegin());
+        ends << qulonglong(l.tokenEnd());
     }while( token != 0 );
     tokens.removeLast();
     begins.removeLast();
@@ -433,8 +433,8 @@ void LexerTest::scope()
     {
         token = l.nextTokenKind();
         tokens << token;
-        begins << l.tokenBegin();
-        ends << l.tokenEnd();
+        begins << qulonglong(l.tokenBegin());
+        ends << qulonglong(l.tokenEnd());
     }while( token != 0 );
     tokens.removeLast();
     begins.removeLast();
