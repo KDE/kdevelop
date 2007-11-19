@@ -39,7 +39,7 @@ struct ProjectConfigSkeletonPrivate
 ProjectConfigSkeleton::ProjectConfigSkeleton( const QString & configname )
         : KConfigSkeleton( configname ), d( new ProjectConfigSkeletonPrivate )
 {
-    d->m_projectTempFile = configname;
+    d->m_developerTempFile = configname;
 }
 
 ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfig::Ptr config )
@@ -47,9 +47,9 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfig::Ptr config )
 {
 }
 
-void ProjectConfigSkeleton::setDeveloperTempFile( const QString& cfg )
+void ProjectConfigSkeleton::setProjectTempFile( const QString& cfg )
 {
-    d->m_developerTempFile = cfg;
+    d->m_projectTempFile = cfg;
     config()->addConfigSources( QStringList() << cfg );
     config()->reparseConfiguration();
     readConfig();
@@ -75,7 +75,8 @@ void ProjectConfigSkeleton::setDefaults()
         if( cfg.hasGroup( item->group() ) )
         {
             KConfigGroup grp = cfg.group( item->group() );
-            item->setProperty( grp.readEntry( item->key(), item->property() ) );
+	    if( grp.hasKey( item->key() ) )
+                item->setProperty( grp.readEntry( item->key(), item->property() ) );
         }
     }
 }
@@ -90,16 +91,13 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
         KConfig cfg( d->m_projectTempFile );
         Q_FOREACH( KConfigSkeletonItem* item, items() )
         {
-            kDebug(9503) << item->key() << "|" << item->property();
             item->swapDefault();
-            kDebug(9503) << item->key() << "|" << item->property();
-                KConfigGroup grp = cfg.group( item->group() );
-            kDebug( 9000 ) << grp.readEntry( item->key(), item->property() );
             if( cfg.hasGroup( item->group() ) )
             {
                 kDebug(9503) << "reading";
-//                 KConfigGroup grp = cfg.group( item->group() );
-                item->setProperty( grp.readEntry( item->key(), item->property() ) );
+                KConfigGroup grp = cfg.group( item->group() );
+		if( grp.hasKey( item->key() ) )
+                    item->setProperty( grp.readEntry( item->key(), item->property() ) );
             }
         }
     }else
@@ -111,7 +109,13 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
             if( cfg.hasGroup( item->group() ) )
             {
                 KConfigGroup grp = cfg.group( item->group() );
-                item->setProperty( grp.readEntry( item->key(), item->property() ) );
+		if( grp.hasKey( item->key() ) )
+                    item->setProperty( grp.readEntry( item->key(), item->property() ) );
+		else
+		{
+                    KConfigGroup grp = defCfg.group( item->group() );
+                    item->setProperty( grp.readEntry( item->key(), item->property() ) );
+		}
             }else
             {
                 KConfigGroup grp = defCfg.group( item->group() );

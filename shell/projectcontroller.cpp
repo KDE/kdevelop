@@ -102,8 +102,8 @@ public:
             m_cfgDlgs[proj] = new KSettings::Dialog( pluginsForPrj,
                                                      m_core->uiController()->activeMainWindow() );
             m_cfgDlgs[proj]->setKCMArguments( QStringList()
-                                              << proj->projectTempFile()
                                               << proj->developerTempFile()
+                                              << proj->projectTempFile()
                                               << proj->projectFileUrl().url()
                                               << proj->developerFileUrl().url() );
         }

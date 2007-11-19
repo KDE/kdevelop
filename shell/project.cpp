@@ -220,13 +220,17 @@ bool Project::open( const KUrl& projectFileUrl )
         d->tmp->close();
     }
 
-    d->m_cfg = KSharedConfig::openConfig( d->projectTempFile );
-    d->m_cfg->addConfigSources( QStringList() << d->developerTempFile );
+    kdDebug(9501) << "Creating KConfig object for project files" << d->developerTempFile << d->projectTempFile;
+    d->m_cfg = KSharedConfig::openConfig( d->developerTempFile );
+    d->m_cfg->addConfigSources( QStringList() << d->projectTempFile );
+    //This is currently needed as the above doesn't re-read the files it adds
+    d->m_cfg->reparseConfiguration();
 
     KConfigGroup projectGroup( d->m_cfg, "Project" );
 
     d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
     d->folder = projectFileUrl.directory();
+
     QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );
 
     //Get our importer

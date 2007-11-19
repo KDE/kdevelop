@@ -33,17 +33,17 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectConfigSkeleton: public KConfigSkeleton
 public:
 
     /**
-     * Constructs a new skeleton, the skeleton will write to the project
+     * Constructs a new skeleton, the skeleton will write to the developer
      * configuration file, which is by default located in projectdir/.kdev4
      * The defaults will be set from the project file, which is in the projectdir
      *
-     * @param configname The absolute filename of the project configuration file
+     * @param configname The absolute filename of the developer configuration file
      */
     ProjectConfigSkeleton( const QString & configname );
 
     virtual ~ProjectConfigSkeleton();
 
-    void setDeveloperTempFile( const QString& );
+    void setProjectTempFile( const QString& );
     void setProjectFileUrl( const QString& );
     void setDeveloperFileUrl( const QString& );
 protected:
@@ -54,7 +54,7 @@ private:
     /**
      * There's no way in KDE4 API to find out the file that the config object
      * was created from, so we can't apply defaults when using this
-     * constructory. Thus I'm making this private, so we can find out when
+     * constructors. Thus I'm making this private, so we can find out when
      * this constructor is used and see if we need to add appropriate API to
      * kdelibs
      */

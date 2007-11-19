@@ -56,7 +56,7 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantL
 
     // init kconfigskeleton
     d->m_skel = new ProjectConfigSkeleton( args.first().toString() );
-    d->m_skel->setDeveloperTempFile( args.at(1).toString() );
+    d->m_skel->setProjectTempFile( args.at(1).toString() );
     d->m_skel->setProjectFileUrl( args.at(2).toString() );
     d->m_skel->setDeveloperFileUrl( args.at(3).toString() );
 

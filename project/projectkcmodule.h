@@ -35,8 +35,8 @@ template <typename T> class ProjectKCModule : public KCModule
             : KCModule( componentData, parent, args )
         {
             Q_ASSERT( args.count() > 3 );
-            T::instance( args.first().toString() );
-            T::self()->setDeveloperTempFile( args.at(1).toString() );
+            T::instance( args.at(0).toString() );
+            T::self()->setProjectTempFile( args.at(1).toString() );
             T::self()->setProjectFileUrl( args.at(2).toString() );
             T::self()->setDeveloperFileUrl( args.at(3).toString() );
         }
