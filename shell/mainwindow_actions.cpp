@@ -76,6 +76,9 @@ void MainWindowPrivate::gotoNextWindow()
     Sublime::View* activeView = ui->activeSublimeWindow()->activeView();
 
     Sublime::AreaIndex* index = activeArea->indexOf(activeView);
+    if (!index)
+        return;
+
     int viewIndex = index->views().indexOf(activeView);
     ++viewIndex;
     if (viewIndex >= index->views().count())

@@ -132,7 +132,8 @@ public:
     virtual void invalidate();
 
     QDockWidget* lastDockWidget() const;
-    QDockWidget* lastDockWidget(IdealMainLayout::Role role) const;
+    QDockWidget* lastDockWidget(Role role) const;
+    Role lastDockWidgetRole() const;
 
     class IdealMainWidget* mainWidget() const;
 
@@ -147,8 +148,8 @@ protected:
     void doLayout(QRect rect) const;
     void layout(Role role1, Role role2, Role role3, Role role4, QRect& rect) const;
     void layoutItem(Role role, QRect& rect) const;
-    QSize sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
-    QSize minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
+    void sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
+    void minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
 
 private:
     struct Settings
@@ -166,6 +167,7 @@ private:
     mutable QSize m_min, m_hint;
     int m_splitterWidth;
     QPointer<QWidget> m_lastDockWidget;
+    Role m_lastDockWidgetRole;
     int m_topOwnsTopLeft;
     int m_topOwnsTopRight;
     int m_bottomOwnsBottomLeft;

@@ -404,6 +404,16 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     action->setEnabled(false);
     connect(action, SIGNAL(triggered(bool)), SLOT(maximizeCurrentDock(bool)));
     ac->addAction("maximize_current_dock", action);
+
+    action = new KAction(i18n("Select Next Dock"), this);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_Right);
+    connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
+    ac->addAction("select_next_dock", action);
+
+    action = new KAction(i18n("Select Previous Dock"), this);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_Left);
+    connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
+    ac->addAction("select_previous_dock", action);
 }
 
 void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
@@ -752,13 +762,13 @@ void IdealMainWidget::setMaximizeActionStatus(bool checked)
     m_maximizeCurrentDock->blockSignals(false);
 }
 
-Sublime::IdealLabel::IdealLabel(Qt::Orientation orientation, const QString & text, QWidget * parent)
+IdealLabel::IdealLabel(Qt::Orientation orientation, const QString & text, QWidget * parent)
     : QLabel(text, parent)
     , m_orientation(orientation)
 {
 }
 
-void Sublime::IdealLabel::paintEvent(QPaintEvent * event)
+void IdealLabel::paintEvent(QPaintEvent * event)
 {
     if (m_orientation == Qt::Horizontal)
         return QLabel::paintEvent(event);
@@ -786,7 +796,7 @@ void Sublime::IdealLabel::paintEvent(QPaintEvent * event)
     p.drawPixmap(0, 0, pix);
 }
 
-QSize Sublime::IdealLabel::sizeHint() const
+QSize IdealLabel::sizeHint() const
 {
     QSize s = QLabel::sizeHint();
 
@@ -796,7 +806,7 @@ QSize Sublime::IdealLabel::sizeHint() const
     return s;
 }
 
-QSize Sublime::IdealLabel::minimumSizeHint() const
+QSize IdealLabel::minimumSizeHint() const
 {
     QSize s = QLabel::minimumSizeHint();
 
@@ -806,18 +816,58 @@ QSize Sublime::IdealLabel::minimumSizeHint() const
     return s;
 }
 
-int Sublime::IdealLabel::heightForWidth(int w) const
+int IdealLabel::heightForWidth(int w) const
 {
     Q_UNUSED(w)
     return -1;
 }
 
-QDockWidget * Sublime::IdealButtonBarWidget::widgetForAction(QAction * action) const
+QDockWidget * IdealButtonBarWidget::widgetForAction(QAction * action) const
 {
     if (_widgets.contains(action))
         return _widgets[action];
 
     return 0;
+}
+
+void IdealMainWidget::selectNextDock()
+{
+    QDockWidget* dock = mainLayout()->lastDockWidget();
+    IdealMainLayout::Role role = mainLayout()->lastDockWidgetRole();
+
+    IdealButtonBarWidget* bar = barForRole(role);
+
+    int index = bar->actions().indexOf(actions[dock]);
+
+    if (index == -1 || index == bar->actions().count() - 1)
+        index = 0;
+    else
+        ++index;
+
+    if (index < bar->actions().count()) {
+        QAction* action = bar->actions().at(index);
+        action->setChecked(true);
+    }
+}
+
+void IdealMainWidget::selectPreviousDock()
+{
+    QDockWidget* dock = mainLayout()->lastDockWidget();
+    IdealMainLayout::Role role = mainLayout()->lastDockWidgetRole();
+
+    IdealButtonBarWidget* bar = barForRole(role);
+
+    int index = bar->actions().indexOf(actions[dock]);
+
+    if (index < 1)
+        index = bar->actions().count() - 1;
+    else
+        --index;
+
+    if (index < bar->actions().count()) {
+        QAction* action = bar->actions().at(index);
+        action->setChecked(true);
+    }
 }
 
 #include "ideal.moc"

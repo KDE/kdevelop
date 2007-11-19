@@ -198,6 +198,8 @@ public Q_SLOTS:
     void hideAllDocks();
     void anchorCurrentDock(bool anchor);
     void maximizeCurrentDock(bool maximized);
+    void selectNextDock();
+    void selectPreviousDock();
 
 private:
     IdealButtonBarWidget *leftBarWidget;

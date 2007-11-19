@@ -254,11 +254,12 @@ IdealMainLayout::IdealMainLayout(QWidget * parent)
     , m_layoutDirty(true)
     , m_sizeHintDirty(true)
     , m_minDirty(true)
-    , m_maximizedWidget(None)
+    , m_lastDockWidgetRole(Left)
     , m_topOwnsTopLeft(0)
     , m_topOwnsTopRight(0)
     , m_bottomOwnsBottomLeft(0)
     , m_bottomOwnsBottomRight(0)
+    , m_maximizedWidget(None)
 {
     setMargin(0);
     m_splitterWidth = parent->style()->pixelMetric(QStyle::PM_SplitterWidth, 0, parentWidget());
@@ -302,7 +303,7 @@ QSize IdealMainLayout::minimumSize() const
     return m_min;
 }
 
-QSize Sublime::IdealMainLayout::minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
+void IdealMainLayout::minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
 {
     if (QLayoutItem* item = m_items[role]) {
         const QSize itemSizeHint = item->minimumSize();
@@ -319,6 +320,9 @@ QSize Sublime::IdealMainLayout::minimumSize(Role role, int& minWidth, int& softM
                 if (m_settings[role].anchored)
                     minHeight += itemSizeHint.height() + splitterWidth();
                 softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
+                break;
+
+            default:
                 break;
         }
     }
@@ -380,7 +384,7 @@ QSize IdealMainLayout::sizeHint() const
     return m_hint;
 }
 
-QSize Sublime::IdealMainLayout::sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
+void IdealMainLayout::sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
 {
     if (QLayoutItem* item = m_items[role]) {
         const QSize itemSizeHint = item->sizeHint();
@@ -397,6 +401,9 @@ QSize Sublime::IdealMainLayout::sizeHint(Role role, int& minWidth, int& softMinW
                 if (m_settings[role].anchored)
                     minHeight += itemSizeHint.height() + splitterWidth();
                 softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
+                break;
+
+            default:
                 break;
         }
     }
@@ -648,6 +655,7 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
 
     if (role != Central) {
         m_lastDockWidget = widget;
+        m_lastDockWidgetRole = role;
         m_settings[role].last = widget;
         mainWidget()->setAnchorActionStatus(isAreaAnchored(role));
     }
@@ -822,6 +830,11 @@ void IdealMainLayout::loadSettings()
 
     if (invalid)
         invalidate();
+}
+
+IdealMainLayout::Role IdealMainLayout::lastDockWidgetRole() const
+{
+    return m_lastDockWidgetRole;
 }
 
 #include "ideallayout.moc"
