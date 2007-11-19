@@ -191,10 +191,9 @@ class CppDUContext : public BaseContext {
           delayed->setQualifiedIdentifier( currentIdentifier.templateIdentifiers().at(a) );
           
           Cpp::ExpressionEvaluationResult res;
-          res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace, BaseContext::NoSearchFlags );
+          res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags );
           
-          if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<CppTemplateParameterType*>(res.type.data()) ) {
-            kDebug() << "breaking because template involved";
+          if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && (dynamic_cast<CppTemplateParameterType*>(res.type.data()) || dynamic_cast<DelayedType*>(res.type.data())) ) {
             return false;
           }
 
