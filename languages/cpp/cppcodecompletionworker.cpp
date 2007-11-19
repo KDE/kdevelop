@@ -109,7 +109,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
           if (m_abort)
             return;
 
-          foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), false) ) )
+          foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), context->topContext(), false ) ) )
             emit foundDeclaration(CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data());
         }
       } else {
@@ -132,7 +132,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     } else {
       //Show all visible declarations
 
-      foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( context->allDeclarations(context->type() == DUContext::Class ? context->textRange().end() : position) ) ) {
+      foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( context->allDeclarations(context->type() == DUContext::Class ? context->textRange().end() : position, context->topContext()) ) ) {
         if (m_abort)
           return;
         emit foundDeclaration(CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data());
