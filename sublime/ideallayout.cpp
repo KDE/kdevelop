@@ -255,6 +255,10 @@ IdealMainLayout::IdealMainLayout(QWidget * parent)
     , m_sizeHintDirty(true)
     , m_minDirty(true)
     , m_maximizedWidget(None)
+    , m_topOwnsTopLeft(0)
+    , m_topOwnsTopRight(0)
+    , m_bottomOwnsBottomLeft(0)
+    , m_bottomOwnsBottomRight(0)
 {
     setMargin(0);
     m_splitterWidth = parent->style()->pixelMetric(QStyle::PM_SplitterWidth, 0, parentWidget());
