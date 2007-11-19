@@ -1391,9 +1391,8 @@ void TestDUChain::testTemplates2() {
 
 void TestDUChain::testTemplatesRebind() {
   QByteArray method("struct A {}; struct S {typedef A Value;} ; template<class TT> class Base { template<class T> struct rebind { typedef Base<T> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other::Type MemberType; MemberType member; Base<T>::template rebind<T>::other::Type member2; T::Value value; }; };");
-  //QByteArray method("struct A {}; struct S {typedef A Value;} ; template<class TT> class Base { template<class Q> struct rebind { typedef Base<Q> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other MemberType; MemberType member; Base<T>::template rebind<T>::other member2; T::Value value; }; };");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1426,12 +1425,17 @@ void TestDUChain::testTemplatesRebind() {
 }
 
 void TestDUChain::testTemplatesRebind2() {
-  QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Class { T::Value value; }; };");
+  QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Test { }; template<class T> class Class { typedef T::Value Value; T::Value value; typedef Test<Value> ValueClass; }; };");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
+  Declaration* member4Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass"));
+  QVERIFY(member4Decl);
+  QVERIFY(member4Decl->abstractType());
+  QCOMPARE(member4Decl->abstractType()->toString(), QString("Test< A >"));
+  
   Declaration* member3Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::value"));
   QVERIFY(member3Decl);
   QVERIFY(member3Decl->abstractType());
