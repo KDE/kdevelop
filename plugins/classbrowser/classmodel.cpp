@@ -529,7 +529,7 @@ QVariant ClassModel::data(Node* node, int role)
       case Qt::DisplayRole: {
         QString ret = dec->identifier().toString();
         if (FunctionType::Ptr type = dec->type<FunctionType>())
-          ret += type->toString(FunctionType::SignatureArguments);
+          ret += type->partToString(FunctionType::SignatureArguments);
         return ret;
       }
       case Qt::DecorationRole:

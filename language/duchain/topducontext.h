@@ -109,11 +109,10 @@ public:
   virtual void addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position = KTextEditor::Cursor(), bool anonymous=false);
   virtual void removeImportedParentContext(DUContext* context);
   
+  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;
   
-  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, bool inImportedContext) const;
-
   /// Return those \a declarations that are visible in this document from \a position and are of the specified \a dataType
   QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const;
 

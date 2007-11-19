@@ -305,7 +305,7 @@ public:
   virtual QString toString() const;
 
   ///Creates a string that represents the given part of the signature
-  virtual QString toString( SignaturePart sigPart ) const;
+  virtual QString partToString( SignaturePart sigPart ) const;
   
   //virtual uint hash() const;
 

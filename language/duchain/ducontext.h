@@ -251,19 +251,21 @@ public:
    *
    * \param identifier the identifier of the definition to search for
    * \param location the text position to search for
+   * \param topContext the top-context from where a completion is triggered. This is needed so delayed types(templates in C++) can be resolved in the correct context.
    * \param type the type to match, or null for no type matching.
    *
    * \returns the requested declaration if one was found, otherwise null.
    *
    * \warning this may return declarations which are not in this tree, you may need to lock them too...
    */
-  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position.
    *
    * \param identifier the identifier of the definition to search for
+   * \param topContext the top-context from where a completion is triggered. This is needed so delayed types(templates in C++) can be resolved in the correct context.
    * \param location the text position to search for
    *
    * \returns the requested declaration if one was found, otherwise null.
@@ -272,7 +274,7 @@ public:
    *
    * \overload
    */
-  QList<Declaration*> findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
@@ -354,6 +356,7 @@ public:
    * Return a list of all reachable declarations for a given cursor \a position in a given \a url.
    *
    * \param location the text position to search for
+   * \param topContext the top-context from where a completion is triggered. This is needed so delayed types(templates in C++) can be resolved in the correct context.
    * \param searchInParents should declarations from parent-contexts be listed? If false, only declarations from this and imported contexts will be returned.
    *
    * The returned declarations are paired together with their inheritance-depth, which is the count of steps
@@ -362,7 +365,7 @@ public:
    * 
    * \returns the requested declarations, if any were active at that location. Declarations propagated into this context(@see setPropagateDeclarations) are included.
    */
-  QList< QPair<Declaration*, int> > allDeclarations(const KTextEditor::Cursor& position, bool searchInParents=true) const;
+  QList< QPair<Declaration*, int> > allDeclarations(const KTextEditor::Cursor& position, const TopDUContext* topContext, bool searchInParents=true) const;
 
   /**
    * Return all declarations in this context that have the given \a identifier, without any filtering.

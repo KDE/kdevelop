@@ -578,7 +578,7 @@ void FunctionType::exchangeTypes( TypeExchanger* exchanger )
   d->m_returnType = exchanger->exchange(d->m_returnType.data());
 }
 
-QString FunctionType::toString( SignaturePart sigPart ) const {
+QString FunctionType::partToString( SignaturePart sigPart ) const {
   QString args;
   if( sigPart == SignatureArguments || sigPart == SignatureWhole )
   {
@@ -606,7 +606,7 @@ QString FunctionType::toString( SignaturePart sigPart ) const {
 
 QString FunctionType::toString() const
 {
-  return toString(SignatureWhole);
+  return partToString(SignatureWhole);
 }
 
 AbstractType::WhichType FunctionType::whichType() const

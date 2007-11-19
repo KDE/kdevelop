@@ -522,14 +522,14 @@ bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
   return true;
 }
 
-QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, SearchFlags flags) const
+QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, const TopDUContext* topContext, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
   QList<Declaration*> ret;
   QList<QualifiedIdentifier> identifiers;
   identifiers << identifier;
-  findDeclarationsInternal(identifiers, position.isValid() ? position : textRange().end(), dataType, ret, ImportTrace(), flags);
+  findDeclarationsInternal(identifiers, position.isValid() ? position : textRange().end(), dataType, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
   return ret;
 }
 
@@ -647,7 +647,7 @@ QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier
   return ret;
 }
 
-QList< QPair<Declaration*, int> > DUContext::allDeclarations(const KTextEditor::Cursor& position, bool searchInParents) const
+QList< QPair<Declaration*, int> > DUContext::allDeclarations(const KTextEditor::Cursor& position, const TopDUContext* topContext, bool searchInParents) const
 {
   ENSURE_CAN_READ
 
@@ -655,7 +655,7 @@ QList< QPair<Declaration*, int> > DUContext::allDeclarations(const KTextEditor::
 
   QHash<const DUContext*, bool> hadContexts;
   // Iterate back up the chain
-  mergeDeclarationsInternal(ret, type() == DUContext::Class ? KTextEditor::Cursor::invalid() : position, hadContexts, ImportTrace(), searchInParents);
+  mergeDeclarationsInternal(ret, type() == DUContext::Class ? KTextEditor::Cursor::invalid() : position, hadContexts, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), searchInParents);
 
   return ret;
 }
@@ -791,14 +791,14 @@ void DUContext::setType(ContextType type)
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
 
-QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position, SearchFlags flags) const
+QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position, const TopDUContext* topContext, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
   QList<Declaration*> ret;
   QList<QualifiedIdentifier> identifiers;
   identifiers << QualifiedIdentifier(identifier);
-  findDeclarationsInternal(identifiers, position.isValid() ? position : textRange().end(), AbstractType::Ptr(), ret, ImportTrace(), flags);
+  findDeclarationsInternal(identifiers, position.isValid() ? position : textRange().end(), AbstractType::Ptr(), ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
   return ret;
 }
 
