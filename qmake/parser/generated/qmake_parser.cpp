@@ -8,6 +8,7 @@
 #include <kdebug.h>
 #include <QtCore/QString>
 #include <cstddef>
+#include <limits>
 
 namespace QMake
   {
