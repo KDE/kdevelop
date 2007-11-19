@@ -78,13 +78,15 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(Qt::DockWidgetArea area, class IdealMainWidget *parent = 0);
 
-    QWidgetAction *addWidget(const QString& title, QDockWidget *widget);
+    QAction *addWidget(const QString& title, QDockWidget *widget);
     void showWidget(QDockWidget* widget);
-    void removeAction(QWidgetAction* action);
+    void removeAction(QAction* action);
 
     IdealMainWidget* parentWidget() const;
 
     Qt::Orientation orientation() const;
+
+    QDockWidget* widgetForAction(QAction* action) const;
 
 private Q_SLOTS:
     void showWidget(bool checked);
@@ -100,7 +102,8 @@ protected:
 
 private:
     Qt::DockWidgetArea _area;
-    QHash<QWidgetAction *, IdealToolButton *> _buttons;
+    QHash<QAction *, IdealToolButton *> _buttons;
+    QHash<QAction *, QDockWidget*> _widgets;
     QActionGroup* _actions;
 };
 
@@ -109,7 +112,7 @@ class IdealDockWidgetTitle : public QWidget
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, QWidgetAction* showAction);
+    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, QAction* showAction);
     virtual ~IdealDockWidgetTitle();
 
     bool isAnchored() const;
@@ -158,7 +161,7 @@ public:
 
     // Public api
     void setCentralWidget(QWidget* widget);
-    QWidgetAction* actionForView(View* view) const;
+    QAction* actionForView(View* view) const;
     void addView(Qt::DockWidgetArea area, View* View);
     void raiseView(View* view);
     void removeView(View* view);
@@ -209,8 +212,8 @@ private:
     class IdealMainLayout* m_mainLayout;
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
-    QMap<View*, QWidgetAction*> views;
-    QMap<QDockWidget*, QWidgetAction*> actions;
+    QMap<View*, QAction*> views;
+    QMap<QDockWidget*, QAction*> actions;
 };
 
 class IdealSplitterHandle : public QWidget

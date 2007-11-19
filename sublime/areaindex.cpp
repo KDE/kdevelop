@@ -31,7 +31,7 @@ namespace Sublime {
 
 struct AreaIndexPrivate {
     AreaIndexPrivate()
-        :parent(0), first(0), second(0)
+        :parent(0), first(0), second(0), orientation(Qt::Horizontal)
     {
     }
     ~AreaIndexPrivate()

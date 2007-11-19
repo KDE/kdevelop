@@ -72,7 +72,7 @@ QMenu *MainWindow::areaSwitcherMenu()
     return d->areaSwitcherMenu();
 }
 
-QList<QDockWidget*> MainWindow::toolDocks() const
+QList<View*> MainWindow::toolDocks() const
 {
     return d->docks;
 }
@@ -145,51 +145,6 @@ bool MainWindow::queryClose()
     return KParts::MainWindow::queryClose();
 }
 
-MainWindow::VerticalTabsMode MainWindow::verticalToolViewTabsMode()
-{
-    return d->m_verticalTabsMode;
-}
-
-void MainWindow::setVerticalToolViewTabsMode( Sublime::MainWindow::VerticalTabsMode tabmode )
-{
-    d->m_verticalTabsMode = tabmode;
-    kDebug(9504) << tabmode;
-    if( d->m_verticalTabsMode == MainWindow::UseVerticalTabs)
-        setDockOptions( dockOptions() | QMainWindow::VerticalTabs );
-    else if( dockOptions() & QMainWindow::VerticalTabs )
-        setDockOptions( dockOptions() ^ QMainWindow::VerticalTabs );
-}
-
-MainWindow::VerticalTitleBarMode MainWindow::verticalToolViewTitleBarMode()
-{
-    return d->m_verticalTitleBarMode;
-}
-
-void MainWindow::setVerticalToolViewTitleBarMode( VerticalTitleBarMode mode )
-{
-    d->m_verticalTitleBarMode = mode;
-    d->applyVerticalTitleBarMode();
-}
-
-}
-
-Sublime::MainWindow::UserInterfaceStyle Sublime::MainWindow::userInterfaceStyle() const
-{
-    return d->m_uistyle;
-}
-
-void Sublime::MainWindow::setUserInterfaceStyle(UserInterfaceStyle style)
-{
-    if (d->m_uistyle == style)
-        return;
-
-    d->m_uistyle = style;
-
-    if (d->area) {
-        Area* a = d->area;
-        clearArea();
-        setArea(a);
-    }
 }
 
 #include "mainwindow.moc"

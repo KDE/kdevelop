@@ -46,16 +46,7 @@ class MainWindowPrivate: public QObject {
 public:
     MainWindowPrivate(MainWindow *w);
 
-    /**Use this to create toolviews for an area.*/
-    class ToolViewCreator {
-    public:
-        ToolViewCreator(MainWindowPrivate *_d): d(_d) {}
-        Area::WalkerMode operator() (View *view, Sublime::Position position);
-    private:
-        MainWindowPrivate *d;
-    };
-
-    /**Use this to create ideal tool views for an area.*/
+    /**Use this to create tool views for an area.*/
     class IdealToolViewCreator {
     public:
         IdealToolViewCreator(MainWindowPrivate *_d): d(_d) {}
@@ -86,19 +77,13 @@ public:
 
     Controller *controller;
     Area *area;
-    QList<QDockWidget*> docks;
-    QMap<View*, QDockWidget*> viewDocks;
-    QSet<View*> idealViews;
+    QList<View*> docks;
     QMap<View*, Container*> viewContainers;
 
     View *activeView;
     View *activeToolView;
 
     QWidget *centralWidget;
-
-    Sublime::MainWindow::VerticalTabsMode m_verticalTabsMode;
-    Sublime::MainWindow::VerticalTitleBarMode m_verticalTitleBarMode;
-    Sublime::MainWindow::UserInterfaceStyle m_uistyle;
 
     IdealMainWidget *idealMainWidget;
 

@@ -213,7 +213,7 @@ void AreaOperationTest::checkArea1(MainWindow *mw)
 {
     Area *area = mw->area();
     //check that all docks have their widgets
-    foreach (QDockWidget *dock, mw->toolDocks())
+    foreach (View *dock, mw->toolDocks())
         QVERIFY(dock->widget() != 0);
     QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
 
@@ -240,7 +240,7 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
 {
     Area *area = mw->area();
     //check that all docks have their widgets
-    foreach (QDockWidget *dock, mw->toolDocks())
+    foreach (View *dock, mw->toolDocks())
         QVERIFY(dock->widget() != 0);
     QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
 
@@ -469,7 +469,7 @@ toolview1.4.1 [ right ]\n\
 "));
 
     //check that mainwindow has newly added toolview
-    foreach (QDockWidget *dock, mw.toolDocks())
+    foreach (View *dock, mw.toolDocks())
         QVERIFY(dock->widget() != 0);
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
 
@@ -486,7 +486,7 @@ toolview1.2.2 [ bottom ]\n\
 "));
 
     //check that mainwindow has newly added toolview
-    foreach (QDockWidget *dock, mw.toolDocks())
+    foreach (View *dock, mw.toolDocks())
         QVERIFY(dock->widget() != 0);
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
 }

@@ -3,14 +3,6 @@
 <kcfg>
   <kcfgfile/>
   <group name="UiSettings">
-        <entry name="UserInterfaceStyle" key="UserInterfaceStyle" type="Int">
-        </entry>
-        <entry name="VerticalTabs" key="Use Vertical Tabs" type="Bool">
-            <default>true</default>
-        </entry>
-        <entry name="VerticalTitleBar" key="Use Vertical TitleBar" type="Bool">
-            <default>true</default>
-        </entry>
         <entry name="TopLeftCornerOwner" key="TopLeftCornerOwner" type="Int">
         </entry>
         <entry name="TopRightCornerOwner" key="TopRightCornerOwner" type="Int">

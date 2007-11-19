@@ -47,35 +47,15 @@ controller->showArea(area, &w);
 class SUBLIME_EXPORT MainWindow: public KParts::MainWindow {
 Q_OBJECT
 public:
-    enum VerticalTitleBarMode{
-        NoDocks,
-        HorizontalDocks,
-        VerticalDocks,
-        AllDocks
-    };
-
-    enum VerticalTabsMode{
-        NoVerticalTabs,
-        UseVerticalTabs
-    };
-
-    enum UserInterfaceStyle {
-        Ideal,
-        QtDockwidget
-    };
-
     /**Creates a mainwindow and adds it to the controller.*/
     explicit MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
     ~MainWindow();
-
-    UserInterfaceStyle userInterfaceStyle() const;
-    void setUserInterfaceStyle(UserInterfaceStyle style);
 
     /**@return the menu to switch areas within this mainwindow.*/
     QMenu *areaSwitcherMenu();
 
     /**@return the list of dockwidgets that contain area's toolviews.*/
-    QList<QDockWidget*> toolDocks() const;
+    QList<View*> toolDocks() const;
     /**@return area which mainwindow currently shows or 0 if no area has been set.*/
     Area *area() const;
     /**@return controller for this mainwindow.*/
@@ -88,14 +68,6 @@ public:
 
     /**Shows the @p view and makes it active.*/
     void activateView(View *view);
-
-    /**Use vertical tabs instead of horizontal for the toolviews*/
-    VerticalTabsMode verticalToolViewTabsMode();
-    void setVerticalToolViewTabsMode( VerticalTabsMode );
-
-    /**Sets wether vertical titlebar should be used and on which toolviews*/
-    VerticalTitleBarMode verticalToolViewTitleBarMode();
-    void setVerticalToolViewTitleBarMode( VerticalTitleBarMode );
 
 Q_SIGNALS:
     /**Emitted before the area is cleared from this mainwindow.*/

@@ -33,6 +33,7 @@
 #include <sublime/tooldocument.h>
 
 #include "kdevtest.h"
+#include "kdebug.h"
 
 using namespace Sublime;
 
@@ -91,6 +92,7 @@ void ViewActivationTest::cleanup()
 void ViewActivationTest::testViewActivation()
 {
     MainWindow mw(controller);
+
     controller->showArea(area, &mw);
     //we should have an active view immediatelly after the area is shown
     QCOMPARE(mw.activeView(), view211);

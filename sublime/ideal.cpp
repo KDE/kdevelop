@@ -107,15 +107,12 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
     (void) new IdealButtonBarLayout(orientation(), this);
 }
 
-QWidgetAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock)
+QAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock)
 {
-    QWidgetAction *action = new QWidgetAction(this);
+    QAction *action = new QAction(this);
     action->setCheckable(true);
     action->setText(title);
     action->setIcon(dock->widget()->windowIcon());
-
-    dock->setAutoFillBackground(true);
-    dock->setFocusProxy(dock->widget());
 
     if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)
         dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
@@ -127,7 +124,7 @@ QWidgetAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget
         connect(title, SIGNAL(maximize(bool)), SLOT(maximize(bool)));
     }
 
-    action->setDefaultWidget(dock);
+    _widgets[action] = dock;
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showWidget(bool)));
 
     addAction(action);
@@ -136,8 +133,9 @@ QWidgetAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget
     return action;
 }
 
-void IdealButtonBarWidget::removeAction(QWidgetAction * action)
+void IdealButtonBarWidget::removeAction(QAction * action)
 {
+    _widgets.remove(action);
     delete _buttons.take(action);
 }
 
@@ -153,10 +151,10 @@ void IdealButtonBarWidget::showWidget(bool checked)
 {
     Q_ASSERT(parentWidget() != 0);
 
-    QWidgetAction *action = qobject_cast<QWidgetAction *>(sender());
+    QAction *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
-    QDockWidget *widget = qobject_cast<QDockWidget*>(action->defaultWidget());
+    QDockWidget *widget = _widgets[action];
     Q_ASSERT(widget);
 
     parentWidget()->showDockWidget(widget, checked);
@@ -180,7 +178,7 @@ void IdealButtonBarWidget::maximize(bool maximized)
 
 void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 {
-    QWidgetAction *action = qobject_cast<QWidgetAction *>(event->action());
+    QAction *action = qobject_cast<QAction *>(event->action());
     if (! action)
       return;
 
@@ -218,8 +216,8 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
       if (IdealToolButton *button = _buttons.value(action)) {
             button->setText(action->text());
             button->setIcon(action->icon());
-            Q_ASSERT(action->defaultWidget() != 0);
-            action->defaultWidget()->setWindowTitle(action->text());
+            Q_ASSERT(_widgets[action]);
+            _widgets[action]->setWindowTitle(action->text());
         }
     } break;
 
@@ -230,7 +228,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 
 void IdealButtonBarWidget::actionToggled(bool state)
 {
-    QWidgetAction* action = qobject_cast<QWidgetAction*>(sender());
+    QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     IdealToolButton* button = _buttons[action];
@@ -241,7 +239,7 @@ void IdealButtonBarWidget::actionToggled(bool state)
     button->blockSignals(false);
 }
 
-IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget * parent, QWidgetAction* showAction)
+IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget * parent, QAction* showAction)
     : QWidget(parent)
     , m_orientation(orientation)
 {
@@ -414,13 +412,17 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
 
     KAcceleratorManager::setNoAccel(dock);
 
-    dock->setWidget(view->widget());
+    dock->setWidget(view->widget(dock));
     dock->setWindowTitle(view->widget()->windowTitle());
+    dock->setAutoFillBackground(true);
+    dock->setFocusProxy(dock->widget());
 
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(area))) {
         actions[dock] = views[view] = bar->addWidget(view->document()->title(), dock);
         bar->show();
     }
+
+    dock->hide();
 
     docks[dock] = area;
 }
@@ -444,7 +446,7 @@ void IdealMainWidget::hideAllDocks()
 
 void IdealMainWidget::raiseView(View * view)
 {
-    QWidgetAction* action = views[view];
+    QAction* action = views[view];
     Q_ASSERT(action);
 
     action->setChecked(true);
@@ -454,19 +456,16 @@ void IdealMainWidget::removeView(View* view)
 {
     Q_ASSERT(views.contains(view));
 
-    QWidgetAction* action = views[view];
+    QAction* action = views[view];
 
-    QDockWidget* dock = qobject_cast<QDockWidget*>(action->defaultWidget());
+    QDockWidget* dock = qobject_cast<QDockWidget*>(view->widget()->parentWidget());
     Q_ASSERT(dock);
-
-    Q_ASSERT(docks.contains(dock));
 
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(docks[dock])))
         bar->removeAction(action);
 
     views.remove(view);
     actions.remove(dock);
-    delete dock;
 }
 
 void IdealMainWidget::setCentralWidget(QWidget * widget)
@@ -684,7 +683,7 @@ QWidget * IdealMainWidget::firstWidget(IdealMainLayout::Role role) const
 {
     if (IdealButtonBarWidget* button = barForRole(role))
         if (!button->actions().isEmpty())
-            return static_cast<QWidgetAction*>(button->actions().first())->defaultWidget();
+            return button->widgetForAction(button->actions().first());
 
     return 0;
 }
@@ -726,7 +725,7 @@ IdealMainLayout::Role IdealMainWidget::roleForBar(IdealButtonBarWidget* bar) con
 }
 
 
-QWidgetAction * IdealMainWidget::actionForView(View * view) const
+QAction * IdealMainWidget::actionForView(View * view) const
 {
     if (views.contains(view))
         return views[view];
@@ -811,6 +810,14 @@ int Sublime::IdealLabel::heightForWidth(int w) const
 {
     Q_UNUSED(w)
     return -1;
+}
+
+QDockWidget * Sublime::IdealButtonBarWidget::widgetForAction(QAction * action) const
+{
+    if (_widgets.contains(action))
+        return _widgets[action];
+
+    return 0;
 }
 
 #include "ideal.moc"

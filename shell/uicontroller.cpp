@@ -170,7 +170,7 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     foreach (Sublime::View *view, doc->views()) {
         foreach (Sublime::Area *area, areas())
             area->removeToolView(view);
-        delete view;
+        view->deleteLater();
     }
 
     d->factoryDocuments.remove(factory);
