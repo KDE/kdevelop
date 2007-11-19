@@ -269,34 +269,21 @@ IdealMainLayout::~ IdealMainLayout()
 QSize IdealMainLayout::minimumSize() const
 {
     if (m_minDirty) {
+        if (m_maximizedWidget != None) {
+            m_min = m_items[m_maximizedWidget]->minimumSize();
+            m_minDirty = false;
+            return m_min;
+        }
+
         int minHeight = 0;
         int softMinHeight = 0;
         int minWidth = 0;
         int softMinWidth = 0;
 
-        if (QLayoutItem* item = m_items[Left]) {
-            const QSize itemSizeHint = item->minimumSize();
-            minWidth += itemSizeHint.width() + splitterWidth();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
-        }
-
-        if (QLayoutItem* item = m_items[Right]) {
-            const QSize itemSizeHint = item->minimumSize();
-            minWidth += itemSizeHint.width() + splitterWidth();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
-        }
-
-        if (QLayoutItem* item = m_items[Top]) {
-            const QSize itemSizeHint = item->minimumSize();
-            minHeight = itemSizeHint.height() + splitterWidth();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
-        }
-
-        if (QLayoutItem* item = m_items[Bottom]) {
-            const QSize itemSizeHint = item->minimumSize();
-            minHeight += itemSizeHint.height() + splitterWidth();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
-        }
+        sizeHint(Left, minWidth, softMinWidth, minHeight, softMinHeight);
+        sizeHint(Right, minWidth, softMinWidth, minHeight, softMinHeight);
+        sizeHint(Top, minWidth, softMinWidth, minHeight, softMinHeight);
+        sizeHint(Bottom, minWidth, softMinWidth, minHeight, softMinHeight);
 
         if (QLayoutItem* item = m_items[Central]) {
             const QSize itemSizeHint = item->minimumSize();
@@ -309,6 +296,28 @@ QSize IdealMainLayout::minimumSize() const
     }
 
     return m_min;
+}
+
+QSize Sublime::IdealMainLayout::minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
+{
+    if (QLayoutItem* item = m_items[role]) {
+        const QSize itemSizeHint = item->minimumSize();
+        switch (role) {
+            case Left:
+            case Right:
+                if (m_settings[role].anchored)
+                    minWidth += itemSizeHint.width() + splitterWidth();
+                softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
+                break;
+
+            case Top:
+            case Bottom:
+                if (m_settings[role].anchored)
+                    minHeight += itemSizeHint.height() + splitterWidth();
+                softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
+                break;
+        }
+    }
 }
 
 QLayoutItem * IdealMainLayout::itemAt(int index) const
@@ -338,34 +347,21 @@ void IdealMainLayout::setGeometry(const QRect & rect)
 QSize IdealMainLayout::sizeHint() const
 {
     if (m_sizeHintDirty) {
+        if (m_maximizedWidget != None) {
+            m_hint = m_items[m_maximizedWidget]->sizeHint();
+            m_sizeHintDirty = false;
+            return m_hint;
+        }
+
         int minHeight = 0;
         int softMinHeight = 0;
         int minWidth = 0;
         int softMinWidth = 0;
 
-        if (QLayoutItem* item = m_items[Left]) {
-            const QSize itemSizeHint = item->sizeHint();
-            minWidth += itemSizeHint.width() + splitterWidth();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
-        }
-
-        if (QLayoutItem* item = m_items[Right]) {
-            const QSize itemSizeHint = item->sizeHint();
-            minWidth += itemSizeHint.width() + splitterWidth();
-            softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
-        }
-
-        if (QLayoutItem* item = m_items[Top]) {
-            const QSize itemSizeHint = item->sizeHint();
-            minHeight = itemSizeHint.height() + splitterWidth();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
-        }
-
-        if (QLayoutItem* item = m_items[Bottom]) {
-            const QSize itemSizeHint = item->sizeHint();
-            minHeight += itemSizeHint.height() + splitterWidth();
-            softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
-        }
+        sizeHint(Left, minWidth, softMinWidth, minHeight, softMinHeight);
+        sizeHint(Right, minWidth, softMinWidth, minHeight, softMinHeight);
+        sizeHint(Top, minWidth, softMinWidth, minHeight, softMinHeight);
+        sizeHint(Bottom, minWidth, softMinWidth, minHeight, softMinHeight);
 
         if (QLayoutItem* item = m_items[Central]) {
             const QSize itemSizeHint = item->sizeHint();
@@ -379,6 +375,29 @@ QSize IdealMainLayout::sizeHint() const
 
     return m_hint;
 }
+
+QSize Sublime::IdealMainLayout::sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
+{
+    if (QLayoutItem* item = m_items[role]) {
+        const QSize itemSizeHint = item->sizeHint();
+        switch (role) {
+            case Left:
+            case Right:
+                if (m_settings[role].anchored)
+                    minWidth += itemSizeHint.width() + splitterWidth();
+                softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
+                break;
+
+            case Top:
+            case Bottom:
+                if (m_settings[role].anchored)
+                    minHeight += itemSizeHint.height() + splitterWidth();
+                softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
+                break;
+        }
+    }
+}
+
 
 QLayoutItem * IdealMainLayout::takeAt(int index)
 {

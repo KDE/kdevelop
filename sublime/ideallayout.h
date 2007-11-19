@@ -147,6 +147,8 @@ protected:
     void doLayout(QRect rect) const;
     void layout(Role role1, Role role2, Role role3, Role role4, QRect& rect) const;
     void layoutItem(Role role, QRect& rect) const;
+    QSize sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
+    QSize minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
 
 private:
     struct Settings
