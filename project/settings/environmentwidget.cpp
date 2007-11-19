@@ -83,7 +83,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
 void EnvironmentWidget::loadSettings( KConfig* config )
 {
-    kDebug(9508) << "Loading groups from config";
+    kDebug(9503) << "Loading groups from config";
     m_groups.loadSettings( config );
 
     ui.activeCombo->clear();
@@ -99,6 +99,29 @@ void EnvironmentWidget::loadSettings( KConfig* config )
     int idx = ui.activeCombo->findText( m_groups.defaultGroup() );
     ui.activeCombo->blockSignals( false );
     ui.activeCombo->setCurrentIndex( idx );
+
+    QMap<QString,QString> variables = m_groups.variables( m_groups.defaultGroup() );
+    ui.variableTable->blockSignals( true );
+    foreach( QString varname, variables.keys() )
+    {
+        //Add it at the top?
+        int row = ui.variableTable->rowCount();
+        ui.variableTable->insertRow( row );
+
+        QTableWidgetItem * name = new QTableWidgetItem( varname );
+        setOverride( name );
+        ui.variableTable->setItem( row, 0, name );
+        name->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+        QTableWidgetItem * value = new QTableWidgetItem( variables[varname]  );
+        setOverride( value );
+        ui.variableTable->setItem( row, 1, value );
+
+        //Make sure it is visible
+        ui.variableTable->scrollToItem( name );
+    }
+    ui.variableTable->blockSignals( false );
+    ui.deleteButton->setEnabled( ui.variableTable->rowCount() > 0 );
 }
 
 void EnvironmentWidget::saveSettings( KConfig* config )
