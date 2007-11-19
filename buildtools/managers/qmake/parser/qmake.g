@@ -26,6 +26,7 @@
 [:
 
 #include <QtCore/QString>
+#include <limits>
 
 namespace QMake
 {
