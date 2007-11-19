@@ -121,7 +121,7 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
 
 KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *project )
 {
-    KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, KUrl("/"), 0 );
+    KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
     projectRoot->setProjectRoot(true);
     return projectRoot;
 }
