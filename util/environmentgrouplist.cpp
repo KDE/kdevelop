@@ -40,19 +40,17 @@ public:
 
 void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
-    kDebug(9508) << "Reading environment variables";
-    foreach( QString setting, cfg.readEntry( "Environment Variables", QStringList() ) )
+    d->m_defaultGroup = cfg.readEntry( "Default EnvironmentGroup", QString( "default" ) );
+    foreach( QString envgrpname, cfg.groupList() )
     {
-        QString profile_and_var = setting.section( '=', 0, 0 );
-        QString profile = profile_and_var.section( '%', 0, 0 );
-        QString var = profile_and_var.section( '%', 1, 1 );
-        QString value = setting.section( '=', 1 );
-        value = value.mid( 1, value.length() - 2 );
-        d->m_groups[ profile ].insert( var, value );
+        KConfigGroup envgrp( &cfg, envgrpname );
+        QMap<QString,QString> variables;
+        foreach( QString varname, envgrp.keyList() )
+        {
+            variables[varname] = envgrp.readEntry( varname, QString("") );
+        }
+        d->m_groups.insert( envgrpname, variables );
     }
-    d->m_defaultGroup = cfg.readEntry( "Default Environment Group", QString("default") );
-    kDebug(9508) << "default group" << d->m_defaultGroup;
-    kDebug(9508) << "groups:" << d->m_groups;
 
     // If the defaultgroup doesn't exist yet create it
     if( !d->m_groups.contains( d->m_defaultGroup ) )
@@ -64,15 +62,14 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
     cfg.writeEntry( "Default Environment Group", d->m_defaultGroup );
-    QStringList encodedsettings;
     foreach( QString group, d->m_groups.keys() )
     {
+        KConfigGroup envgrp( &cfg, group );
         foreach( QString var, d->m_groups[group].keys() )
         {
-            encodedsettings << group+'%'+var+"=\""+d->m_groups[group][var]+'"';
+            envgrp.writeEntry( var, d->m_groups[group][var] );
         }
     }
-    cfg.writeEntry( "Environment Variables", encodedsettings );
     cfg.sync();
 }
 
@@ -122,14 +119,14 @@ void EnvironmentGroupList::setDefaultGroup( const QString& group )
 
 void EnvironmentGroupList::saveSettings( KConfig* config ) const
 {
-    KConfigGroup cfg(config, "EnvironmentSettings" );
+    KConfigGroup cfg(config, "Environment Settings" );
     encode( cfg, d );
 }
 
 void EnvironmentGroupList::loadSettings( KConfig* config )
 {
     d->m_groups.clear();
-    KConfigGroup cfg(config, "EnvironmentSettings" );
+    KConfigGroup cfg(config, "Environment Settings" );
     decode( cfg, d );
 }
 
