@@ -278,11 +278,11 @@ class CppDUContext : public BaseContext {
             //Only a part of the scope found, keep on searching
 
             //Handle normal found declarations
-            currentLookup.clear();
             if( tempDecls.size() == 1 ) {
             } else {
-              kDebug(9007) << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " multiple ambiguous declarations for scope " << currentLookup.toString();
+              kDebug(9007) << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " ambiguous declarations for scope " << currentLookup.toString();
             }
+            currentLookup.clear();
             //Extract a context, maybe it would be enough only testing the first found declaration
             foreach( Declaration* decl, tempDecls ) {
               Declaration* instanceDecl = decl;
@@ -472,7 +472,7 @@ class CppDUContext : public BaseContext {
       
       TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
       if( !templateDecl ) {
-        kDebug(9007) << "Tried to instantiate a non-template declaration";
+        kDebug(9007) << "Tried to instantiate a non-template declaration" << decl->toString();
         return 0;
       }
 
