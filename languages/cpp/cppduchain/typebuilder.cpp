@@ -153,7 +153,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     QualifiedIdentifier baseClassIdentifier = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
     
-    QList<Declaration*> declarations = searchContext()->findDeclarations(baseClassIdentifier, pos, AbstractType::Ptr(), DUContext::NoUndefinedTemplateParams);
+    QList<Declaration*> declarations = searchContext()->findDeclarations(baseClassIdentifier, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
     bool openedType = false;
     if( !declarations.isEmpty() )
     {
@@ -427,7 +427,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name) {
 
   bool openedType = false;
   
-  QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), DUContext::NoUndefinedTemplateParams);
+  QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
 
   if (!dec.isEmpty() && dec.front()->abstractType()) {
     ///@todo only functions may have multiple declarations here
