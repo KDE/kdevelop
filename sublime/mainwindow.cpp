@@ -108,7 +108,7 @@ void MainWindow::activateView(View *view)
 void MainWindow::setActiveView(View *view)
 {
     d->activeView = view;
-    if (!view->widget()->hasFocus())
+    if (view && !view->widget()->hasFocus())
         view->widget()->setFocus();
     emit activeViewChanged(view);
 }

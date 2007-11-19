@@ -95,16 +95,17 @@ void PartDocument::close()
     {
         QList<Sublime::View*> areaViews = area->views();
         foreach (Sublime::View *view, areaViews) {
-            if (views().contains(view))
+            if (views().contains(view)) {
                 area->removeView(view);
-            view->deleteLater();
+                view->deleteLater();
+            }
         }
     }
 
     Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
 
     // Here we go...
-    delete this;
+    deleteLater();
 }
 
 void PartDocument::reload()

@@ -86,6 +86,9 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
+    if (!view)
+        return;
+
     IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
     if (doc)
     {

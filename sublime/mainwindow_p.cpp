@@ -203,7 +203,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         container->removeWidget(view->widget());
         //activate what is visible currently in the container if the removed view was active
         if (m_mainWindow->activeView() == view)
-            m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
+            return m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
     }
     else
     {
@@ -234,9 +234,11 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             //activate the current view in the remaining child
             Container *siblingContainer = qobject_cast<Container*>(siblingSplitter->widget(0));
             if (siblingContainer)
-                m_mainWindow->setActiveView(siblingContainer->viewForWidget(siblingContainer->currentWidget()));
+                return m_mainWindow->setActiveView(siblingContainer->viewForWidget(siblingContainer->currentWidget()));
         }
     }
+
+    m_mainWindow->setActiveView(0L);
 }
 
 void MainWindowPrivate::toolViewAdded(Sublime::View */*toolView*/, Sublime::Position position)
