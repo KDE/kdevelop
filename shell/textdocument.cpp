@@ -269,7 +269,7 @@ void TextDocument::close()
         }
     }
 
-    d->document->deleteLater();
+    //d->document->deleteLater();
 
     Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
 
