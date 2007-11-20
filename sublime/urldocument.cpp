@@ -36,7 +36,8 @@ struct UrlDocumentPrivate {
 UrlDocument::UrlDocument(Controller *controller, const KUrl &url)
     :Document(url.fileName(), controller), d( new UrlDocumentPrivate() )
 {
-    d->url = url;
+    // Deep copy please :)
+    d->url.setUrl(url.url());
 }
 
 UrlDocument::~UrlDocument()

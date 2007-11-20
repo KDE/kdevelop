@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@ class KUrl;
 namespace KDevelop
 {
 
+class IDocument;
 class TopDUContext;
 class DUChainLock;
 
@@ -127,8 +128,10 @@ public:
 
 public Q_SLOTS:
   void removeDocumentChain(const IdentifiedFile& document);
-  void deleteDUChainObject(DUChainBase* object);
 
+private Q_SLOTS:
+  void documentAboutToBeDeleted(KTextEditor::Document* doc);
+  
 private:
   void addToEnvironmentManager( TopDUContext * chain );
   void removeFromEnvironmentManager( TopDUContext * chain );

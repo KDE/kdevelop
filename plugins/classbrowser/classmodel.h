@@ -86,6 +86,7 @@ public:
 private Q_SLOTS:
   // Definition use chain observer implementation
   void branchAdded(KDevelop::DUContextPointer context);
+  void branchRemoved(KDevelop::DUContextPointer context, KDevelop::DUContextPointer parent);
 
 private:
   ClassBrowserPart* part() const;
@@ -95,6 +96,7 @@ private:
   static QVariant data(Node* node, int role = Qt::DisplayRole);
   
   void contextAdded(Node* parent, KDevelop::DUContext* context);
+  void contextRemoved(Node* parent, KDevelop::DUContext* context);
 
   void addTopLevelToList(KDevelop::DUContext* context, QList<Node*>* list, Node* parent, bool first = true) const;
 

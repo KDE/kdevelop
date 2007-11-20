@@ -37,6 +37,7 @@ public:
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;
+    virtual void close();
 
     virtual bool save(DocumentSaveMode mode = Default);
     virtual void reload();

@@ -95,8 +95,6 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
   QMutexLocker lock(mutex);
 
-  // TODO save smart stuff to non-smart cursors and ranges
-
   documents.remove(document->url());
 
   foreach (KTextEditor::Range* range, topRanges[document->url()])
@@ -104,6 +102,10 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
       range->toSmartRange()->removeWatcher(this);
 
   topRanges.remove(document->url());
+
+  lock.unlock();
+  
+  emit documentAboutToBeDeleted(document);
 }
 
 void EditorIntegratorStatic::rangeDeleted(KTextEditor::SmartRange * range)

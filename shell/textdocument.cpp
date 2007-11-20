@@ -30,6 +30,8 @@
 #include <ktexteditor/codecompletioninterface.h>
 
 #include <sublime/mainwindow.h>
+#include <sublime/area.h>
+#include <sublime/view.h>
 
 #include "core.h"
 #include "uicontroller.h"
@@ -251,6 +253,28 @@ void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 
     if (view)
         view->setCursorPosition(c);
+}
+
+void TextDocument::close()
+{
+    //close all views and then delete ourself
+    foreach (Sublime::Area *area, Core::self()->uiControllerInternal()->areas())
+    {
+        QList<Sublime::View*> areaViews = area->views();
+        foreach (Sublime::View *view, areaViews) {
+            if (views().contains(view)) {
+                area->removeView(view);
+                view->deleteLater();
+            }
+        }
+    }
+
+    d->document->deleteLater();
+
+    Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
+
+    // Here we go...
+    deleteLater();
 }
 
 }

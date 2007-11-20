@@ -1,5 +1,5 @@
 /* This  is part of KDevelop
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,8 @@
 
 #include <kglobal.h>
 
+#include <KTextEditor/Document>
+
 #include "editorintegrator.h"
 
 #include "topducontext.h"
@@ -31,6 +33,7 @@
 #include "definition.h"
 #include "use.h"
 #include "abstractfunctiondeclaration.h"
+#include "smartconverter.h"
 
 namespace KDevelop
 {
@@ -76,6 +79,7 @@ K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
 DUChain::DUChain()
 {
+  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
 }
 
 DUChain::~DUChain()
@@ -127,6 +131,8 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
 
   kDebug(9505) << "duchain: adding document" << document.toString() << " " << chain;
   Q_ASSERT(chain);
+  if (chain->smartRange())
+    Q_ASSERT(!chain->smartRange()->parentRange());
 
   if(chainForDocument(document)) {
     ///@todo practically this will result in lost memory, we will currently never delete the overwritten chain. Care about such stuff.
@@ -314,26 +320,6 @@ DUChainObserver* DUChain::notifier()
   return sdDUChainPrivate->notifier;
 }
 
-/*void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
-{
-  emit sdDUChainPrivate->notifier->contextChanged(DUContextPointer(context), change, relationship, DUChainBasePointer(relatedObject));
-}
-
-void DUChain::declarationChanged(Declaration* declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
-{
-  emit sdDUChainPrivate->notifier->declarationChanged(DeclarationPointer(declaration), change, relationship, DUChainBasePointer(relatedObject));
-}
-
-void DUChain::definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
-{
-  emit sdDUChainPrivate->notifier->definitionChanged(DefinitionPointer(definition), change, relationship, DUChainBasePointer(relatedObject));
-}
-
-void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
-{
-  emit sdDUChainPrivate->notifier->useChanged(UsePointer(use), change, relationship, DUChainBasePointer(relatedObject));
-}*/
-
 void DUChain::branchAdded(DUContext* context)
 {
   emit sdDUChainPrivate->notifier->branchAdded(DUContextPointer(context));
@@ -342,11 +328,6 @@ void DUChain::branchAdded(DUContext* context)
 void DUChain::problemEncountered(Problem problem)
 {
   emit sdDUChainPrivate->notifier->problemEncountered(problem);
-}
-
-void DUChain::deleteDUChainObject(DUChainBase* object)
-{
-  delete object;
 }
 
 void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
@@ -373,6 +354,19 @@ QList<KUrl> DUChain::documents() const
     ret << file.url();
   }
   return ret;
+}
+
+void DUChain::documentAboutToBeDeleted(KTextEditor::Document * doc)
+{
+    // Convert any smart chains to document chains
+    EditorIntegrator editor;
+    SmartConverter sc(&editor);
+
+    QList<TopDUContext*> chains = chainsForDocument(doc->url());
+
+    foreach (TopDUContext* chain, chains) {
+        sc.unconvertDUChain(chain);
+    }
 }
 
 }

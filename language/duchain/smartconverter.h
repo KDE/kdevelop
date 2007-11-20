@@ -31,9 +31,10 @@ class DUContext;
 class KDEVPLATFORMLANGUAGE_EXPORT SmartConverter
 {
 public:
-  SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl);
+  SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl = 0);
   ~SmartConverter();
   void convertDUChain(DUContext* context) const;
+  void unconvertDUChain(DUContext* context) const;
 
 private:
   class SmartConverterPrivate* const d;

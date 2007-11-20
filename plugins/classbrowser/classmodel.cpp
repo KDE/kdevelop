@@ -353,11 +353,11 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
 
   if (first) {
     foreach (Declaration* declaration, context->localDeclarations())
-      if (!filterObject(declaration))
+      if (declaration->isForwardDeclaration() && !filterObject(declaration))
         list->append(createPointer(declaration, parent));
 
     foreach (Definition* definition, context->localDefinitions())
-      if (!filterObject(definition))
+      if (definition->declaration() && !definition->declaration()->isForwardDeclaration() && !filterObject(definition))
         list->append(createPointer(definition, parent));
   }
 }
@@ -430,6 +430,46 @@ void ClassModel::contextAdded(Node* parent, DUContext* context)
   } else {
     foreach (DUContext* child, context->childContexts())
       contextAdded(parent, child);
+  }
+}
+
+void ClassModel::branchRemoved(DUContextPointer context, DUContextPointer parent)
+{
+  DUChainReadLocker readLock(DUChain::lock());
+
+  if (context)
+    contextRemoved(pointer(trueParent(parent.data())), context.data());
+}
+
+void ClassModel::contextRemoved(Node* parent, DUContext* context)
+{
+  ENSURE_CHAIN_READ_LOCKED
+  
+  if (parent && !m_lists.contains(parent))
+    // The parent node is not yet discovered, it will be figured out later if needed
+    return;
+
+  if (context->type() == DUContext::Class || context->type() == DUContext::Namespace) {
+    QList<Node*>* list = childItems(parent);
+    if (!list) {
+      kWarning() << "Could not find list of child objects for" << parent;
+      return;
+    }
+
+    Node* cn = pointer(context);
+    if (!cn) {
+      // Strange, not currently known
+      kWarning() << "Unknown context removal requested - why is it unknown?";
+      return;
+    }
+    
+    int index = list->indexOf(cn);
+    if (index == -1)
+      return;
+
+    beginRemoveRows(QModelIndex(), index, index);
+    list->removeAt(index);
+    endRemoveRows();
   }
 }
 

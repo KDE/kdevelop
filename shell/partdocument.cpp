@@ -102,6 +102,9 @@ void PartDocument::close()
         }
     }
 
+    foreach (KParts::Part* part, d->partForView.values())
+        part->deleteLater();
+
     Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
 
     // Here we go...

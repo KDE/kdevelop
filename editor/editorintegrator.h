@@ -237,6 +237,12 @@ public:
    * and if the document is loaded, the revision-number of it's content.
    * */
   static ModificationRevision modificationRevision(const KUrl& url);
+
+  /**
+   * Use this to connect to notifications provided by EditorIntegratorStatic.
+   */
+  static QObject* notifier();
+  
 private:
   static KDevelop::EditorIntegratorStatic *data();
   class EditorIntegratorPrivate* const d;

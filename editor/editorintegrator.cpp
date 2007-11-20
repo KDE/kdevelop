@@ -380,6 +380,9 @@ kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev) {
   return s;
 }
 
+QObject * EditorIntegrator::notifier()
+{
+    return data();
 }
 
-
+}
