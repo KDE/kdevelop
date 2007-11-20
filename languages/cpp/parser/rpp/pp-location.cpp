@@ -113,9 +113,9 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
 void LocationTable::dump() const
 {
   QMapIterator<std::size_t, KTextEditor::Cursor> it = m_offsetTable;
-  kDebug() << "Location Table:";
+  kDebug(9007) << "Location Table:";
   while (it.hasNext()) {
     it.next();
-    kDebug() << it.key() << " => " << it.value();
+    kDebug(9007) << it.key() << " => " << it.value();
   }
 }

@@ -1406,7 +1406,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     clearLast();
     visit(node->expression);
-    kDebug() << "expression kind" << node->kind;
+    kDebug(9007) << "expression kind" << node->kind;
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }

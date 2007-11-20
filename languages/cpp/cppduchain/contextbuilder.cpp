@@ -220,13 +220,17 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
     if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
       lock.unlock();
+      kWarning() << "Smartening Context!";
       smartenContext(topLevelContext);
       lock.lock();
       topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
     }
 
-    if( topLevelContext && topLevelContext->smartRange() )
-      Q_ASSERT(!topLevelContext->smartRange()->parentRange()); //Top-range must have no parent, else something is wrong with the structure
+    if( topLevelContext && topLevelContext->smartRange() && !(topLevelContext->flags() & TopDUContext::ProxyContextFlag))
+      if (topLevelContext->smartRange()->parentRange()) { //Top-range must have no parent, else something is wrong with the structure
+        kDebug() << *topLevelContext->smartRange() << "erroneously has a parent range" << *topLevelContext->smartRange()->parentRange();
+        Q_ASSERT(false);
+      }
     
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";

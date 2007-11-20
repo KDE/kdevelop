@@ -159,7 +159,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         QList<Declaration*> decls;
         
         if( !searchContext->findDeclarationsInternal( identifiers, searchContext->textRange().end(), AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) ) {
-          kDebug() << "stopping exchange because template involved";
+          kDebug(9007) << "stopping exchange because template involved";
           return const_cast<AbstractType*>(type);
         }
         

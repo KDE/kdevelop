@@ -76,6 +76,7 @@ public:
 
 private slots:
     void documentLoaded(KDevelop::IDocument*);
+    void documentClosed(KDevelop::IDocument*);
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
     void documentChanged( KDevelop::IDocument* document );

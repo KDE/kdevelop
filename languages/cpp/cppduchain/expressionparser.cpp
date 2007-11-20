@@ -69,7 +69,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   ast = parser.parseTypeOrExpression(session, forceExpression);
 
   if(!ast) {
-    kDebug() << "Failed to parse \"" << unit << "\"";
+    kDebug(9007) << "Failed to parse \"" << unit << "\"";
     delete session;
     return ExpressionEvaluationResult();
   }

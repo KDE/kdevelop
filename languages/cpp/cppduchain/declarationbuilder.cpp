@@ -804,7 +804,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
             injectType(AbstractType::Ptr(declarations.first()->abstractType().data()), node);
             return;
           }else{
-            kDebug() << "Error: Bad declaration";
+            kDebug(9007) << "Error: Bad declaration";
           }
         }
       }

@@ -287,7 +287,7 @@ void CPPInternalParseJob::run()
             return parentJob()->abortJob();
 
         //If we are building a separate content-context
-        TopDUContext* updating = parentJob()->updatingContext().data();
+        TopDUContextPointer updating = parentJob()->updatingContext();
         Cpp::EnvironmentFilePointer environmentFile(parentJob()->environmentFile());
 
         if( parentJob()->contentEnvironmentFile() )
@@ -354,8 +354,7 @@ void CPPInternalParseJob::run()
                 kDebug( 9007 ) << "building duchain";
 
                 DeclarationBuilder declarationBuilder(&editor);
-                TopDUContextPointer updatingptr(updating);
-                topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updatingptr, !(bool)parentJob()->contentContext());
+                topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updating, !(bool)parentJob()->contentContext());
 
                 if(updating) {
                     DUChainWriteLocker l(DUChain::lock());

@@ -205,6 +205,11 @@ void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
         core()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
+void CppLanguageSupport::documentClosed(KDevelop::IDocument *)
+{
+    kDebug( 9007 ) << "CppLanguageSupport::documentClosed";
+}
+
 KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
