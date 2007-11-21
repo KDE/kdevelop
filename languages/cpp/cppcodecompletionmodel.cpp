@@ -306,6 +306,8 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       }
       
       ++num;
+      if( paramNameIt != paramNames.end() )
+        ++paramNameIt;
     }
     ret += ')';
     if( functionType->isConstant() )
