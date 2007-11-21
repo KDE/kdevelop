@@ -50,7 +50,9 @@ UiPreferences::UiPreferences(QWidget* parent, const QVariantList& args )
 }
 
 UiPreferences::~UiPreferences()
-{}
+{
+    delete m_uiconfigUi;
+}
 
 void UiPreferences::save()
 {
