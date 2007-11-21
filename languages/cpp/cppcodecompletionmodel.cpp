@@ -493,7 +493,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         {
           QString indentation;
           int depth = item.inheritanceDepth;
-          if( depth > 1000 )
+          if( depth >= 1000 )
             depth-=1000;
           for( int a = 0; a < depth; a++ )
             indentation += " ";
