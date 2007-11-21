@@ -185,9 +185,14 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 void CppCodeCompletionModel::foundDeclarations(QList<CompletionItem> items, void* completionContext)
 {
   if (completionContext == m_completionContext.data()) {
-    beginInsertRows(QModelIndex(), m_declarations.count(), m_declarations.count());
-    m_declarations += items;
-    endInsertRows();
+    if( !m_declarations.isEmpty() ) {
+      beginInsertRows(QModelIndex(), m_declarations.count(), m_declarations.count() + items.count() - 1);
+      m_declarations += items;
+      endInsertRows();
+    } else {
+      m_declarations = items;
+      reset();
+    }
   }
 }
 
