@@ -109,11 +109,11 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   , m_mutex(new QMutex)
   , m_worker(new CodeCompletionWorker(this))
 {
-  qRegisterMetaType<CompletionItem>("CppCodeCompletionModel::CompletionItem");
+  qRegisterMetaType<QList<CompletionItem> >("QList<CppCodeCompletionModel::CompletionItem>");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 
   connect(this, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
-  connect(m_worker, SIGNAL(foundDeclaration(CppCodeCompletionModel::CompletionItem, void*)), this, SLOT(foundDeclaration(CppCodeCompletionModel::CompletionItem, void*)), Qt::QueuedConnection);
+  connect(m_worker, SIGNAL(foundDeclarations(QList<CppCodeCompletionModel::CompletionItem>, void*)), this, SLOT(foundDeclarations(QList<CppCodeCompletionModel::CompletionItem>, void*)), Qt::QueuedConnection);
 
   m_worker->start();
 }
@@ -182,11 +182,11 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   }
 }
 
-void CppCodeCompletionModel::foundDeclaration(CompletionItem item, void* completionContext)
+void CppCodeCompletionModel::foundDeclarations(QList<CompletionItem> items, void* completionContext)
 {
   if (completionContext == m_completionContext.data()) {
     beginInsertRows(QModelIndex(), m_declarations.count(), m_declarations.count());
-    m_declarations << item;
+    m_declarations += items;
     endInsertRows();
   }
 }

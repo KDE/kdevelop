@@ -23,6 +23,7 @@
 #define KDEVCPPCODECOMPLETIONWORKER_H
 
 #include <QThread>
+#include <QList>
 
 #include "cppcodecompletionmodel.h"
 
@@ -39,7 +40,7 @@ class CodeCompletionWorker : public QThread
     void abortCurrentCompletion();
 
   Q_SIGNALS:
-    void foundDeclaration(CppCodeCompletionModel::CompletionItem, void* completionContext);
+    void foundDeclarations(QList<CppCodeCompletionModel::CompletionItem>, void* completionContext);
 
   protected:
     virtual void run();

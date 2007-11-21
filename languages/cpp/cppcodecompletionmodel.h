@@ -85,7 +85,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
 
   private Q_SLOTS:
-    void foundDeclaration(CppCodeCompletionModel::CompletionItem item, void* completionContext);
+    void foundDeclarations(QList<CppCodeCompletionModel::CompletionItem> item, void* completionContext);
     
   private:
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;

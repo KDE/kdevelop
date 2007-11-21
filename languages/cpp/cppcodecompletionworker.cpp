@@ -101,6 +101,8 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     if (m_abort)
       return;
 
+    QList<CppCodeCompletionModel::CompletionItem> items;
+    
     if( completionContext->memberAccessContainer().isValid() ||completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
     {
       QList<DUContext*> containers = completionContext->memberAccessContainers();
@@ -110,7 +112,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
             return;
 
           foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), context->topContext(), false ) ) )
-            emit foundDeclaration(CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data());
+            items << CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data();
         }
       } else {
         kDebug(9007) << "CppCodeCompletionModel::setContext: no container-type";
@@ -125,7 +127,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
         CppCodeCompletionModel::CompletionItem completionItem;
         completionItem.includeItem = includeItem;
-        emit foundDeclaration(completionItem, completionContext.data());
+        items << completionItem;
         ++cnt;
       }
       kDebug(9007) << "Added " << cnt << " include-files to completion-list";
@@ -135,7 +137,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( context->allDeclarations(context->type() == DUContext::Class ? context->textRange().end() : position, context->topContext()) ) ) {
         if (m_abort)
           return;
-        emit foundDeclaration(CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data());
+        items << CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data();
       }
 
       kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible";
@@ -152,7 +154,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
         if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
           int num = 0;
           foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
-            emit foundDeclaration(CppCodeCompletionModel::CompletionItem( function.function.declaration(), parentContext, 0, num ), completionContext.data());
+            items << CppCodeCompletionModel::CompletionItem( function.function.declaration(), parentContext, 0, num ), completionContext.data();
             ++num;
           }
         } else {
@@ -160,6 +162,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
         }
       }
     } while( parentContext );
+    emit foundDeclarations( items, completionContext.data() );
   } else {
     kDebug(9007) << "CppCodeCompletionModel::setContext: Invalid code-completion context";
   }
