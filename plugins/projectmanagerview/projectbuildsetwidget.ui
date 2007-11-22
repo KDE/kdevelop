@@ -1,0 +1,58 @@
+<ui version="4.0" >
+ <class>ProjectBuildSetWidget</class>
+ <widget class="QWidget" name="ProjectBuildSetWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>576</width>
+    <height>487</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Build/Install/Clean</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="addItemButton" >
+       <property name="text" >
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="removeItemButton" >
+       <property name="text" >
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTreeView" name="itemView" >
+     <property name="alternatingRowColors" >
+      <bool>true</bool>
+     </property>
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="itemsExpandable" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

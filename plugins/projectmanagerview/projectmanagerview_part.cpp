@@ -18,19 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 #include "projectmanagerview_part.h"
-#include "projectmodel.h"
-#include "projectmanagerview.h"
-#include "icore.h"
 
-#include "iproject.h"
-#include "iprojectfilemanager.h"
-#include "ibuildsystemmanager.h"
-#include "iuicontroller.h"
-#include "idocumentcontroller.h"
-#include "iprojectbuilder.h"
-#include "iprojectcontroller.h"
-#include "importprojectjob.h"
-#include "context.h"
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtCore/QTimer>
+#include <QtCore/QList>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QTreeWidgetItem>
+#include <QtCore/QSignalMapper>
 
 #include <kservicetypetrader.h>
 #include <kgenericfactory.h>
@@ -43,13 +38,20 @@
 
 #include <kparts/componentfactory.h>
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTimer>
-#include <QtCore/QList>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
-#include <QtCore/QSignalMapper>
+#include "projectmodel.h"
+#include "icore.h"
+#include "iproject.h"
+#include "iprojectfilemanager.h"
+#include "ibuildsystemmanager.h"
+#include "iuicontroller.h"
+#include "idocumentcontroller.h"
+#include "iprojectbuilder.h"
+#include "iprojectcontroller.h"
+#include "importprojectjob.h"
+#include "context.h"
+
+#include "projectmanagerview.h"
+#include "projectbuildsetmodel.h"
 
 using namespace KDevelop;
 
@@ -86,6 +88,7 @@ public:
     KAction* m_clean;
     KAction* m_configure;
     KAction* m_prune;
+    ProjectBuildSetModel* buildSet;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
@@ -112,6 +115,7 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
     d->m_prune = new KAction( i18n("Prune"), this );
     connect( d->m_prune, SIGNAL(triggered()), this, SLOT(pruneProjectItems()) );
     actionCollection()->addAction( "project_prune", d->m_prune );
+    d->buildSet = new ProjectBuildSetModel( this );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
@@ -293,27 +297,9 @@ void ProjectManagerViewPart::buildAllProjects()
     }
 }
 
-QList<KDevelop::ProjectBaseItem*> ProjectManagerViewPart::getCheckedItems()
-{
-    KDevelop::ProjectModel* model = core()->projectController()->projectModel();
-    QList<KDevelop::ProjectBaseItem*> items;
-    for( int row = 0; row < model->rowCount(); row++ )
-    {
-        if( model->item( row )->checkState() == Qt::Checked )
-        {
-            items << dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) );
-        }else if( model->item( row )->checkState() == Qt::PartiallyChecked )
-        {
-            items += recurseAndFetchCheckedItems(
-                    dynamic_cast<KDevelop::ProjectBaseItem*>(model->item( row ) ) );
-        }
-    }
-    return items;
-}
-
 void ProjectManagerViewPart::installProjectItems()
 {
-    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
         executeInstall( item );
     }
@@ -322,7 +308,7 @@ void ProjectManagerViewPart::installProjectItems()
 void ProjectManagerViewPart::pruneProjectItems()
 {
     QSet<KDevelop::IProject*> projects;
-    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
         projects << item->project();
     }
@@ -335,7 +321,7 @@ void ProjectManagerViewPart::pruneProjectItems()
 void ProjectManagerViewPart::configureProjectItems()
 {
     QSet<KDevelop::IProject*> projects;
-    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
         projects << item->project();
     }
@@ -347,7 +333,7 @@ void ProjectManagerViewPart::configureProjectItems()
 
 void ProjectManagerViewPart::cleanProjectItems()
 {
-    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
         executeClean( item );
     }
@@ -355,41 +341,17 @@ void ProjectManagerViewPart::cleanProjectItems()
 
 void ProjectManagerViewPart::buildProjectItems()
 {
-    foreach( KDevelop::ProjectBaseItem* item, getCheckedItems() )
+    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
         executeBuild( item );
     }
 }
 
-QList<KDevelop::ProjectBaseItem*>
-ProjectManagerViewPart::recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item )
+ProjectBuildSetModel* ProjectManagerViewPart::buildSet()
 {
-    QList<KDevelop::ProjectBaseItem*> items;
-    if( item->folder() )
-    {
-        if( item->checkState() == Qt::PartiallyChecked )
-        {
-            foreach( KDevelop::ProjectFolderItem* folderItem, item->folderList() )
-            {
-                items += recurseAndFetchCheckedItems( folderItem );
-            }
-            foreach( KDevelop::ProjectTargetItem* targetItem, item->targetList() )
-            {
-                if( targetItem->checkState() == Qt::Checked )
-                {
-                    items << targetItem;
-                }
-            }
-        }else if( item->checkState() == Qt::Checked )
-        {
-            items << item;
-        }
-    }else if( item->target() && item->checkState() == Qt::Checked )
-    {
-        items << item;
-    }
-    return items;
+    return d->buildSet;
 }
+
 
 #include "projectmanagerview_part.moc"
 

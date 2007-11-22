@@ -19,13 +19,24 @@
 */
 
 #include "projectmanagerview.h"
-#include "projectmanagerview_part.h"
-#include "projectmodel.h"
-#include "projectmanagerdelegate.h"
-//#include "projectfilter.h"
-#include "projecttreeview.h"
 
 #include <QtGui/QHeaderView>
+#include <QtCore/QDebug>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QStandardItem>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QToolButton>
+
+#include <kxmlguiwindow.h>
+#include <kiconloader.h>
+#include <kmenu.h>
+#include <kdebug.h>
+#include <kurl.h>
+#include <klocale.h>
+#include <kactioncollection.h>
+#include <kaction.h>
+#include <kcombobox.h>
 
 #include "icore.h"
 #include "iprojectcontroller.h"
@@ -34,19 +45,12 @@
 #include "iproject.h"
 #include "ibuildsystemmanager.h"
 #include "iprojectbuilder.h"
-#include <kxmlguiwindow.h>
-// #include <kdevcontext.h>
-#include <kiconloader.h>
-#include <kmenu.h>
-#include <kdebug.h>
-#include <kurl.h>
-#include <klocale.h>
-#include <kactioncollection.h>
-#include <kaction.h>
+#include "projectmodel.h"
 
-#include <QtCore/QDebug>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QStandardItem>
+#include "projectbuildsetwidget.h"
+#include "projectmanagerview_part.h"
+#include "projectmanagerdelegate.h"
+#include "projecttreeview.h"
 
 using namespace KDevelop;
 
@@ -55,8 +59,11 @@ class ProjectManagerPrivate
 public:
     ProjectManagerViewPart *m_part;
     ProjectTreeView *m_projectOverview;
-    ProjectTreeView *m_projectDetails;
+    ProjectBuildSetWidget* m_buildView;
+    KComboBox* m_detailSwitcher;
+    QStackedWidget* m_detailStack;
     QStringList m_cachedFileList;
+    QToolButton* hideDetailsButton;
 
     void fileDirty( const QString &fileName )
     {
@@ -94,34 +101,39 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
     vbox->addWidget( d->m_projectOverview );
     connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
-    //connect( d->m_projectOverview, SIGNAL( currentChanged( KDevelop::ProjectBaseItem* ) ),
-           //d->m_part->core()->projectController(), SLOT(changeCurrentProject( KDevelop::ProjectBaseItem* ) ) );
+//     connect( d->m_projectOverview, SIGNAL( currentChanged( KDevelop::ProjectBaseItem* ) ),
+//              this, SLOT(currentItemChanged( KDevelop::ProjectBaseItem* ) ) );
 
+    QHBoxLayout* hbox = new QHBoxLayout();
+    vbox->addLayout( hbox );
 
-#ifdef WITH_PROJECT_DETAILS
-    d->m_projectDetails = new ProjectTreeView( part(), this );
-    d->m_projectDetails->setItemDelegate( delegate );
-    d->m_projectDetails->setWhatsThis( i18n( "Project Details" ) );
-    vbox->add( d->m_projectDetails );
+    d->m_detailSwitcher = new KComboBox( false, this );
+    d->m_detailSwitcher->insertItem( 0, i18n( "Buildset" ) );
+    hbox->addWidget( d->m_detailSwitcher );
 
-    connect(m_projectDetails, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
-    connect( d->m_projectOverview->selectionModel(), SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
-             d->m_projectDetails, SLOT( setRootIndex( QModelIndex ) ) );
-#endif
+    d->hideDetailsButton = new QToolButton( this );
+    d->hideDetailsButton->setIcon( KIcon( "arrow-down-double.png" ) );
+    connect( d->hideDetailsButton, SIGNAL( clicked() ),
+             this, SLOT( switchDetailView() ) );
+    hbox->addWidget( d->hideDetailsButton );
+
+    d->m_detailStack = new QStackedWidget( this );
+    vbox->addWidget( d->m_detailStack );
+
+    connect( d->m_detailSwitcher, SIGNAL( activated( int ) ),
+             d->m_detailStack, SLOT( setCurrentIndex( int ) ) );
+
+    d->m_buildView = new ProjectBuildSetWidget( this, d->m_part, d->m_detailStack );
+//     d->m_buildView->setItemDelegate( delegate );
+    d->m_buildView->setWhatsThis( i18n( "Build Items:" ) );
+    d->m_detailStack->insertWidget( 0, d->m_buildView );
 
     QAbstractItemModel *overviewModel = d->m_part->core()->projectController()->projectModel();
-
 
     d->m_projectOverview->setModel( overviewModel );
 
     d->m_projectOverview->setSelectionModel(
             new QItemSelectionModel( overviewModel, d->m_projectOverview ) );
-
-#ifdef WITH_PROJECT_DETAILS
-    QAbstractItemModel *detailsModel = m_projectModel;
-
-    d->m_projectDetails->setModel( detailsModel );
-#endif
 
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
@@ -136,6 +148,31 @@ ProjectManagerView::~ProjectManagerView()
 ProjectManagerViewPart *ProjectManagerView::part() const
 {
     return d->m_part;
+}
+
+QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
+{
+    QList<KDevelop::ProjectBaseItem*> items;
+    foreach( QModelIndex idx, d->m_projectOverview->selectionModel()->selectedIndexes() )
+    {
+        KDevelop::ProjectBaseItem* item = d->m_part->core()->projectController()->projectModel()->item( idx );
+        if( item )
+            items << item;
+    }
+    return items;
+}
+
+void ProjectManagerView::switchDetailView()
+{
+    if( d->m_detailStack->isHidden() )
+    {
+        d->hideDetailsButton->setIcon( KIcon( "arrow-down-double" ) );
+        d->m_detailStack->show();
+    }else
+    {
+        d->hideDetailsButton->setIcon( KIcon( "arrow-up-double" ) );
+        d->m_detailStack->hide();
+    }
 }
 
 #include "projectmanagerview.moc"

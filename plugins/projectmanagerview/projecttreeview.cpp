@@ -183,7 +183,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
 void ProjectTreeView::slotCurrentChanged( const QModelIndex &index )
 {
-    kDebug(9000) << "Changed model index";
+    kDebug(9511) << "Changed model index";
     if ( ProjectBaseItem *item = projectModel()->item( index ) )
     {
         emit currentChanged( item );

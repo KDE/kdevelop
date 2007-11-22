@@ -25,6 +25,7 @@
 #include <QtCore/QVariant>
 
 class KUrl;
+class ProjectBuildSetModel;
 
 namespace KDevelop
 {
@@ -52,6 +53,9 @@ public:
     virtual void unload();
 
     QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+
+    ProjectBuildSetModel* buildSet();
+
 protected Q_SLOTS:
     void closeProjects();
     void buildProjectsFromContextMenu();
@@ -71,7 +75,6 @@ private:
     void executePrune( KDevelop::IProject* );
     void executeConfigure( KDevelop::IProject* );
     KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
-    QList<KDevelop::ProjectBaseItem*> getCheckedItems();
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
     class ProjectManagerViewPartPrivate* const d;
 

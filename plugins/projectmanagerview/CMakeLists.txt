@@ -14,8 +14,12 @@ set(kdevprojectmanagerview_PART_SRCS
     projectmanagerview_part.cpp
     projectmanagerview.cpp
     projecttreeview.cpp
+    projectbuildsetwidget.cpp
     projectmanagerdelegate.cpp
+    projectbuildsetmodel.cpp
 )
+
+kde4_add_ui_files( kdevprojectmanagerview_PART_SRCS projectbuildsetwidget.ui )
 
 kde4_add_plugin(kdevprojectmanagerview ${kdevprojectmanagerview_PART_SRCS})
 target_link_libraries(kdevprojectmanagerview ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject ${KDE4_THREADWEAVER_LIBRARIES} )

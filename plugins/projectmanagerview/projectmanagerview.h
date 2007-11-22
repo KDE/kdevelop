@@ -23,26 +23,31 @@
 
 #include <QtGui/QWidget>
 
-
-
+namespace KDevelop
+{
+class ProjectBaseItem;
+}
 
 class ProjectManagerViewPart;
 
 class ProjectManagerView: public QWidget
 {
-        Q_OBJECT
-    public:
-        ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent );
-        virtual ~ProjectManagerView();
+    Q_OBJECT
+public:
+    ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent );
+    virtual ~ProjectManagerView();
 
-        ProjectManagerViewPart *part() const;
+    ProjectManagerViewPart *part() const;
 
-    private:
-        Q_PRIVATE_SLOT( d, void openUrl( const KUrl& ) )
-        Q_PRIVATE_SLOT( d, void fileCreated( const QString &fileName ) )
-        Q_PRIVATE_SLOT( d, void fileDirty( const QString &fileName ) )
-        Q_PRIVATE_SLOT( d, void fileDeleted( const QString &fileName ) )
-        class ProjectManagerPrivate* const d;
+    QList<KDevelop::ProjectBaseItem*> selectedItems() const;
+private slots:
+    void switchDetailView();
+private:
+    Q_PRIVATE_SLOT( d, void openUrl( const KUrl& ) )
+    Q_PRIVATE_SLOT( d, void fileCreated( const QString &fileName ) )
+    Q_PRIVATE_SLOT( d, void fileDirty( const QString &fileName ) )
+    Q_PRIVATE_SLOT( d, void fileDeleted( const QString &fileName ) )
+    class ProjectManagerPrivate* const d;
 };
 
 #endif // KDEVPROJECTMANAGER_H
