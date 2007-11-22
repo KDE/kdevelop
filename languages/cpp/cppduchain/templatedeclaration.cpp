@@ -491,7 +491,7 @@ Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationR
   return clone;
 }
 
-AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace , KDevelop::DUContext::SearchFlags searchFlags ) {
+AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext::SearchFlags searchFlags ) {
   if( !type )
     return type;
 

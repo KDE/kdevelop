@@ -1225,6 +1225,17 @@ void TestDUChain::testFunctionTemplates() {
   release(top);
 }
 
+void TestDUChain::testTemplateDependentClass() {
+  QByteArray method("class A {}; template<class T> class B { class Q{ typedef T Type; }; }; B<A>::Q::Type t;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  Declaration* d = findDeclaration(top, QualifiedIdentifier("t"));
+  QVERIFY(d);
+  QCOMPARE(d->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
+}
+
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 

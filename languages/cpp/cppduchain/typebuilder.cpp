@@ -61,6 +61,33 @@ TypeBuilder::TypeBuilder(CppEditorIntegrator * editor)
   : TypeBuilderBase(editor), m_declarationHasInitDeclarators(false)
 {
 }
+///DUChain must be locked
+bool isTemplateDependent(Declaration* decl) {
+  ///@todo Store this information somewhere, instead of recomputing it for each item
+  if( !decl )
+    return false;
+  if( dynamic_cast<CppTemplateParameterType*>(decl->abstractType().data()) )
+    return true;
+  
+  DUContext* ctx = decl->context();
+
+  while( ctx && ctx->type() != DUContext::Global && ctx->type() != DUContext::Namespace ) {
+    //Check if there is an imported template-context, which has an unresolved template-parameter
+    foreach( DUContextPointer importedCtx, ctx->importedParentContexts() ) {
+      if( !importedCtx )
+        continue;
+      if( importedCtx->type() == DUContext::Template ) {
+        foreach( Declaration* paramDecl, importedCtx->localDeclarations() ) {
+          CppTemplateParameterType* templateParamType = dynamic_cast<CppTemplateParameterType*>(paramDecl->abstractType().data());
+          if( templateParamType )
+            return true;
+        }
+      }
+    }
+    ctx = ctx->parentContext();
+  }
+  return false;
+}
 
 void TypeBuilder::supportBuild(AST *node, DUContext* context)
 {
@@ -151,28 +178,49 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     Q_ASSERT( klass );
     
     QualifiedIdentifier baseClassIdentifier = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-    
-    QList<Declaration*> declarations = searchContext()->findDeclarations(baseClassIdentifier, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
+
+    bool delay = false;
     bool openedType = false;
-    if( !declarations.isEmpty() )
-    {
-      if( declarations.count() > 1 )
-        kDebug(9007) << "found multiple declarations for" << baseClassIdentifier.toString();
+
+    if(!delay) {
+      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
       
-      foreach( Declaration* decl, declarations )
+      QList<Declaration*> declarations = searchContext()->findDeclarations(baseClassIdentifier, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
+      /**
+      * @todo If we somewhere within a template class/function declaration,
+      * we need to check here whether the found declaration is template-dependent.
+      * If it is, it needs to be delayed. Template-dependent means:
+      * - Does it contain any types that depend on an unresolved template-parameter?
+      *
+      * Until we correctly check for that, we need to make all types within template-classes delayed. This hurts.
+      * */
+      if( !declarations.isEmpty() )
       {
-        if( decl->kind() == Declaration::Type && decl->abstractType() && dynamic_cast<CppClassType*>(decl->abstractType().data()) )
+        if( declarations.count() > 1 )
+          kDebug(9007) << "found multiple declarations for" << baseClassIdentifier.toString();
+        
+        foreach( Declaration* decl, declarations )
         {
-          openType( decl->abstractType(), node );
-          openedType = true;
-          break;
+          if( decl->kind() == Declaration::Type && decl->abstractType() && dynamic_cast<CppClassType*>(decl->abstractType().data()) )
+          {
+            if( !templateDeclarationDepth() || !isTemplateDependent(decl) ) {
+              openType( decl->abstractType(), node );
+              openedType = true;
+            } else {
+              delay = true;
+            }
+            break;
+          }
         }
+      } else {
+        delay = true;
       }
-    } else {
+    }
+    
+    if(delay) {
         //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
        openedType = true;
-       openDelayedType(baseClassIdentifier, node, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
+       openDelayedType( baseClassIdentifier, node, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
     }
 
     if( openedType ) {
@@ -231,39 +279,38 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 
     Cpp::ExpressionEvaluationResult res;
     
-    DUChainReadLocker lock(DUChain::lock());
-    node->expression->ducontext = currentContext();
-    res = parser.evaluateType( node->expression, m_editor->parseSession(), DUContext::ImportTrace() );
-    
     bool delay = false;
 
-    //Delay the type-resolution of template-parameters
-    if( !res.allDeclarations.isEmpty() && dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front()) )
-      delay = true;
-    
-    if ( !delay && res.isValid() && res.instance ) {
-      if( dynamic_cast<CppConstantIntegralType*>(res.type.data()) ) {
-        CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(res.type.data());
-        m_currentEnumeratorValue = (int)type->value<qint64>();
-      } else if( dynamic_cast<DelayedType*>(res.type.data()) ) {
-        DelayedType* type = static_cast<DelayedType*>(res.type.data());
-        openType(AbstractType::Ptr(type), node); ///@todo Make this an enumerator-type that holds the same information
-        openedType = true;
-      }
-    } else {
-      if( delay || templateDeclarationDepth() > 0 ) {
-        QString str;
-        ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
-        str += stringFromSessionTokens( m_editor->parseSession(), node->expression->start_token, node->expression->end_token );
+    if(!delay) {
+      DUChainReadLocker lock(DUChain::lock());
+      node->expression->ducontext = currentContext();
+      res = parser.evaluateType( node->expression, m_editor->parseSession(), DUContext::ImportTrace() );
 
-        QualifiedIdentifier id( str.trimmed() );
-        id.setIsExpression( true );
+      //Delay the type-resolution of template-parameters
+      if( !res.allDeclarations.isEmpty() && (dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front()) || isTemplateDependent(res.allDeclarations.front())) )
+        delay = true;
 
-        openDelayedType(id, node, DelayedType::Delayed);
-        openedType = true;
-      } else {
-        ///@todo Report problem, bad expression
+      if ( !delay && res.isValid() && res.instance ) {
+        if( dynamic_cast<CppConstantIntegralType*>(res.type.data()) ) {
+          CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(res.type.data());
+          m_currentEnumeratorValue = (int)type->value<qint64>();
+        } else if( dynamic_cast<DelayedType*>(res.type.data()) ) {
+          DelayedType* type = static_cast<DelayedType*>(res.type.data());
+          openType(AbstractType::Ptr(type), node); ///@todo Make this an enumerator-type that holds the same information
+          openedType = true;
+        }
       }
+    }
+    if( delay || (!openedType && templateDeclarationDepth() != 0) ) {
+      QString str;
+      ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
+      str += stringFromSessionTokens( m_editor->parseSession(), node->expression->start_token, node->expression->end_token );
+
+      QualifiedIdentifier id( str.trimmed() );
+      id.setIsExpression( true );
+
+      openDelayedType(id, node, DelayedType::Delayed);
+      openedType = true;
     }
   }
   
@@ -422,27 +469,35 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
 bool TypeBuilder::openTypeFromName(NameAST* name) {
   QualifiedIdentifier id = identifierForName(name);
-  KTextEditor::Cursor pos = m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
-  DUChainReadLocker lock(DUChain::lock());
 
   bool openedType = false;
   
-  QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
+  bool delay = false;
 
-  if (!dec.isEmpty() && dec.front()->abstractType()) {
-    ///@todo only functions may have multiple declarations here
-    ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
-    //kDebug(9007) << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();
-     openedType = true;
-     openType(dec.front()->abstractType(), name);
-  } else {
+  if(!delay) {
+    KTextEditor::Cursor pos = m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    DUChainReadLocker lock(DUChain::lock());
+    QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
+
+    
+    if (!dec.isEmpty() && dec.front()->abstractType() && (!templateDeclarationDepth() || !isTemplateDependent(dec.front()))) {
+      ///@todo only functions may have multiple declarations here
+      ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
+      //kDebug(9007) << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();
+      openedType = true;
+      openType(dec.front()->abstractType(), name);
+    } else {
+      delay = true;
+    }
+  }
     ///@todo What about position?
 
+  if(delay) {
     //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
    openedType = true;
-   openDelayedType(id, name, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
+   openDelayedType(id, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
-   ifDebug( if(templateDeclarationDepth() != 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+   ifDebug( if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
   }
   return openedType;
 }

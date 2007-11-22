@@ -73,6 +73,7 @@ private slots:
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();
+  void testTemplateDependentClass();
   void testTemplates();
   void testTemplates2();
   void testTemplatesRebind();

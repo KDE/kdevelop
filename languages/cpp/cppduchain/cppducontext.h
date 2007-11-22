@@ -224,12 +224,14 @@ class CppDUContext : public BaseContext {
               prepend.pop();
             }
             allIdentifiers << currentLookup;
+            
             for( int a = trace.count()-1; a >= 0; --a ) {
               const DUContext::ImportTraceItem& traceItem(trace[a]);
               QList<Declaration*> decls;
               ///@todo Give a correctly modified trace(without the used items)
-              traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->textRange().end(), AbstractType::Ptr(), tempDecls, trace.mid(0,a), KDevelop::DUContext::NoUndefinedTemplateParams );
+              traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->textRange().end(), AbstractType::Ptr(), decls, trace.mid(0,a), KDevelop::DUContext::NoUndefinedTemplateParams );
               if( !decls.isEmpty() ) {
+                tempDecls = decls;
                 break;
               }
             }
