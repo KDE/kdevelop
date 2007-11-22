@@ -272,8 +272,7 @@ class CppDUContext : public BaseContext {
                 Declaration* dec = instantiateDeclaration(decl, templateArgumentTypes, trace);
                 if( dec )
                   ret << dec;
-                else
-                  kDebug(9007) << "Could not instantiate template-declaration";
+                ifDebug( else kDebug(9007) << "Could not instantiate template-declaration"; )
               }
             }
           }else{
@@ -474,7 +473,7 @@ class CppDUContext : public BaseContext {
       
       TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
       if( !templateDecl ) {
-        kDebug(9007) << "Tried to instantiate a non-template declaration" << decl->toString();
+        ifDebug( kDebug(9007) << "Tried to instantiate a non-template declaration" << decl->toString(); )
         return 0;
       }
 
