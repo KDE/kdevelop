@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="43" name="kdevelop" >
+<kpartgui version="44" name="kdevelop" >
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
     <Action name="file_new"/>
@@ -119,6 +119,7 @@
     <Action name="maximize_current_dock"/>
     <Action name="select_next_dock"/>
     <Action name="select_previous_dock"/>
+    <Action name="docks_submenu"/>
     <Separator/>
     <Merge/>
   </Menu>
