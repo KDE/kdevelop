@@ -41,9 +41,8 @@
 #include "ui_projectbuildsetwidget.h"
 
 ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
-                                              ProjectManagerViewPlugin* plugin,
                                               QWidget* parent )
-    : QWidget( parent ), m_view(view), m_plugin(plugin),
+    : QWidget( parent ), m_view(view),
      m_ui( new Ui::ProjectBuildSetWidget )
 {
     m_ui->setupUi( this );
@@ -59,8 +58,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
     connect( m_ui->removeItemButton, SIGNAL( clicked() ),
              this, SLOT( removeItems() ) );
 
-    kDebug(9511) << "setting model to:" << m_plugin->buildSet() << m_plugin;
-    m_ui->itemView->setModel( m_plugin->buildSet() );
+    m_ui->itemView->setModel( m_view->plugin()->buildSet() );
 
 }
 
@@ -73,7 +71,7 @@ void ProjectBuildSetWidget::addItems()
 {
     foreach( KDevelop::ProjectBaseItem* item, m_view->selectedItems() )
     {
-        m_plugin->buildSet()->addProjectItem( item );
+        m_view->plugin()->buildSet()->addProjectItem( item );
     }
 }
 
@@ -81,10 +79,10 @@ void ProjectBuildSetWidget::removeItems()
 {
     foreach( QModelIndex idx, m_ui->itemView->selectionModel()->selectedIndexes() )
     {
-        KDevelop::ProjectBaseItem* item = m_plugin->buildSet()->itemForIndex( idx );
+        KDevelop::ProjectBaseItem* item = m_view->plugin()->buildSet()->itemForIndex( idx );
         if( item )
         {
-            m_plugin->buildSet()->removeProjectItem( item );
+            m_view->plugin()->buildSet()->removeProjectItem( item );
         }
     }
 }

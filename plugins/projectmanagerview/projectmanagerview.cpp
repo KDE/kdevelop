@@ -123,7 +123,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     connect( d->m_detailSwitcher, SIGNAL( activated( int ) ),
              d->m_detailStack, SLOT( setCurrentIndex( int ) ) );
 
-    d->m_buildView = new ProjectBuildSetWidget( this, d->mplugin, d->m_detailStack );
+    d->m_buildView = new ProjectBuildSetWidget( this, d->m_detailStack );
 //     d->m_buildView->setItemDelegate( delegate );
     d->m_buildView->setWhatsThis( i18n( "Build Items:" ) );
     d->m_detailStack->insertWidget( 0, d->m_buildView );

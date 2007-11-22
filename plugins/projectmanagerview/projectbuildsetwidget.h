@@ -44,7 +44,7 @@ class ProjectBuildSetWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ProjectBuildSetWidget( ProjectManagerView* view, ProjectManagerViewPlugin* plugin, QWidget* parent );
+    ProjectBuildSetWidget( ProjectManagerView* view, QWidget* parent );
     ~ProjectBuildSetWidget();
 private slots:
     void addItems();
