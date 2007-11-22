@@ -28,16 +28,16 @@ namespace KDevelop
 class ProjectBaseItem;
 }
 
-class ProjectManagerViewPart;
+class ProjectManagerViewPlugin;
 
 class ProjectManagerView: public QWidget
 {
     Q_OBJECT
 public:
-    ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent );
+    ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidget *parent );
     virtual ~ProjectManagerView();
 
-    ProjectManagerViewPart *part() const;
+    ProjectManagerViewPlugin *part() const;
 
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
 private slots:

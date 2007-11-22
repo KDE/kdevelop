@@ -40,14 +40,14 @@ class IProject;
 
 class ProjectManagerView;
 
-class ProjectManagerViewPart: public KDevelop::IPlugin
+class ProjectManagerViewPlugin: public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
 
 public:
-    ProjectManagerViewPart(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ProjectManagerViewPart();
+    ProjectManagerViewPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~ProjectManagerViewPlugin();
 
     // Plugin methods
     virtual void unload();
@@ -76,7 +76,7 @@ private:
     void executeConfigure( KDevelop::IProject* );
     KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
-    class ProjectManagerViewPartPrivate* const d;
+    class ProjectManagerViewPluginPrivate* const d;
 
 };
 

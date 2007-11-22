@@ -17,7 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "projectmanagerview_part.h"
+#include "projectmanagerviewplugin.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
@@ -55,30 +55,30 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(ProjectManagerFactory, registerPlugin<ProjectManagerViewPart>(); )
+K_PLUGIN_FACTORY(ProjectManagerFactory, registerPlugin<ProjectManagerViewPlugin>(); )
 K_EXPORT_PLUGIN(ProjectManagerFactory("kdevprojectmanagerview"))
 
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {
     public:
-        KDevProjectManagerViewFactory( ProjectManagerViewPart *part ): m_part( part )
+        KDevProjectManagerViewFactory( ProjectManagerViewPlugin *part ): mplugin( part )
         {}
         virtual QWidget* create( QWidget *parent = 0 )
         {
-            return new ProjectManagerView( m_part, parent );
+            return new ProjectManagerView( mplugin, parent );
         }
         virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
         {
             return Qt::RightDockWidgetArea;
         }
     private:
-        ProjectManagerViewPart *m_part;
+        ProjectManagerViewPlugin *mplugin;
 };
 
-class ProjectManagerViewPartPrivate
+class ProjectManagerViewPluginPrivate
 {
 public:
-    ProjectManagerViewPartPrivate()
+    ProjectManagerViewPluginPrivate()
     {}
     KDevProjectManagerViewFactory *factory;
     QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
@@ -91,8 +91,8 @@ public:
     ProjectBuildSetModel* buildSet;
 };
 
-ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantList& )
-        : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPartPrivate)
+ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
+        : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
 {
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( i18n("Project Manager"), d->factory );
@@ -119,17 +119,17 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QVariantL
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
-ProjectManagerViewPart::~ProjectManagerViewPart()
+ProjectManagerViewPlugin::~ProjectManagerViewPlugin()
 {
     delete d;
 }
 
-void ProjectManagerViewPart::unload()
+void ProjectManagerViewPlugin::unload()
 {
     core()->uiController()->removeToolView(d->factory);
 }
 
-QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActions( KDevelop::Context* context )
+QPair<QString, QList<QAction*> > ProjectManagerViewPlugin::requestContextMenuActions( KDevelop::Context* context )
 {
     if( context->type() != KDevelop::Context::ProjectItemContext )
         return IPlugin::requestContextMenuActions( context );
@@ -179,7 +179,7 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
 }
 
 
-KDevelop::IProjectBuilder* ProjectManagerViewPart::getProjectBuilder( KDevelop::ProjectBaseItem* item )
+KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop::ProjectBaseItem* item )
 {
     if( !item )
         return 0;
@@ -194,7 +194,7 @@ KDevelop::IProjectBuilder* ProjectManagerViewPart::getProjectBuilder( KDevelop::
     return 0;
 }
 
-void ProjectManagerViewPart::executeBuild( KDevelop::ProjectBaseItem* item )
+void ProjectManagerViewPlugin::executeBuild( KDevelop::ProjectBaseItem* item )
 {
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Building item:" << item->text();
@@ -205,7 +205,7 @@ void ProjectManagerViewPart::executeBuild( KDevelop::ProjectBaseItem* item )
         builder->build( item );
 }
 
-void ProjectManagerViewPart::executeClean( KDevelop::ProjectBaseItem* item )
+void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
 {
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Cleaning item:" << item->text();
@@ -213,7 +213,7 @@ void ProjectManagerViewPart::executeClean( KDevelop::ProjectBaseItem* item )
         builder->clean( item );
 }
 
-void ProjectManagerViewPart::executeInstall( KDevelop::ProjectBaseItem* item )
+void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
 {
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Installing item:" << item->text();
@@ -225,7 +225,7 @@ void ProjectManagerViewPart::executeInstall( KDevelop::ProjectBaseItem* item )
 }
 
 
-void ProjectManagerViewPart::executeConfigure( KDevelop::IProject* item )
+void ProjectManagerViewPlugin::executeConfigure( KDevelop::IProject* item )
 {
     IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
     kDebug(9511) << "Configuring item:" << item->name();
@@ -236,7 +236,7 @@ void ProjectManagerViewPart::executeConfigure( KDevelop::IProject* item )
         builder->configure( item );
 }
 
-void ProjectManagerViewPart::executePrune( KDevelop::IProject* item )
+void ProjectManagerViewPlugin::executePrune( KDevelop::IProject* item )
 {
     IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
     kDebug(9511) << "Pruning item:" << item->name();
@@ -248,7 +248,7 @@ void ProjectManagerViewPart::executePrune( KDevelop::IProject* item )
 }
 
 
-void ProjectManagerViewPart::closeProjects()
+void ProjectManagerViewPlugin::closeProjects()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
@@ -262,7 +262,7 @@ void ProjectManagerViewPart::closeProjects()
 }
 
 
-void ProjectManagerViewPart::installProjectsFromContextMenu()
+void ProjectManagerViewPlugin::installProjectsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
@@ -271,7 +271,7 @@ void ProjectManagerViewPart::installProjectsFromContextMenu()
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPart::cleanProjectsFromContextMenu()
+void ProjectManagerViewPlugin::cleanProjectsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
@@ -280,7 +280,7 @@ void ProjectManagerViewPart::cleanProjectsFromContextMenu()
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPart::buildProjectsFromContextMenu()
+void ProjectManagerViewPlugin::buildProjectsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
@@ -289,7 +289,7 @@ void ProjectManagerViewPart::buildProjectsFromContextMenu()
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPart::buildAllProjects()
+void ProjectManagerViewPlugin::buildAllProjects()
 {
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
@@ -297,7 +297,7 @@ void ProjectManagerViewPart::buildAllProjects()
     }
 }
 
-void ProjectManagerViewPart::installProjectItems()
+void ProjectManagerViewPlugin::installProjectItems()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
@@ -305,7 +305,7 @@ void ProjectManagerViewPart::installProjectItems()
     }
 }
 
-void ProjectManagerViewPart::pruneProjectItems()
+void ProjectManagerViewPlugin::pruneProjectItems()
 {
     QSet<KDevelop::IProject*> projects;
     foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
@@ -318,7 +318,7 @@ void ProjectManagerViewPart::pruneProjectItems()
     }
 }
 
-void ProjectManagerViewPart::configureProjectItems()
+void ProjectManagerViewPlugin::configureProjectItems()
 {
     QSet<KDevelop::IProject*> projects;
     foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
@@ -331,7 +331,7 @@ void ProjectManagerViewPart::configureProjectItems()
     }
 }
 
-void ProjectManagerViewPart::cleanProjectItems()
+void ProjectManagerViewPlugin::cleanProjectItems()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
@@ -339,7 +339,7 @@ void ProjectManagerViewPart::cleanProjectItems()
     }
 }
 
-void ProjectManagerViewPart::buildProjectItems()
+void ProjectManagerViewPlugin::buildProjectItems()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
     {
@@ -347,11 +347,11 @@ void ProjectManagerViewPart::buildProjectItems()
     }
 }
 
-ProjectBuildSetModel* ProjectManagerViewPart::buildSet()
+ProjectBuildSetModel* ProjectManagerViewPlugin::buildSet()
 {
     return d->buildSet;
 }
 
 
-#include "projectmanagerview_part.moc"
+#include "projectmanagerviewplugin.moc"
 

@@ -19,7 +19,7 @@
 */
 
 #include "projecttreeview.h"
-#include "projectmanagerview_part.h"
+#include "projectmanagerviewplugin.h"
 #include "projectmodel.h"
 #include "context.h"
 #include "iplugincontroller.h"
@@ -40,13 +40,13 @@ class ProjectTreeViewPrivate
 {
 
     public:
-        ProjectManagerViewPart* m_part;
+        ProjectManagerViewPlugin* mplugin;
 };
 
-ProjectTreeView::ProjectTreeView( ProjectManagerViewPart *part, QWidget *parent )
+ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *part, QWidget *parent )
         : QTreeView( parent ), d( new ProjectTreeViewPrivate )
 {
-    d->m_part = part;
+    d->mplugin = part;
     header()->hide();
 
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -73,9 +73,9 @@ ProjectTreeView::~ProjectTreeView()
     delete d;
 }
 
-ProjectManagerViewPart *ProjectTreeView::part() const
+ProjectManagerViewPlugin *ProjectTreeView::part() const
 {
-    return d->m_part;
+    return d->mplugin;
 }
 
 void ProjectTreeView::reset()
@@ -175,7 +175,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         KMenu menu( this );
 
         KDevelop::ProjectItemContext context(itemlist);
-        d->m_part->core()->pluginController()->buildContextMenu(&context, &menu);
+        d->mplugin->core()->pluginController()->buildContextMenu(&context, &menu);
 
         menu.exec( mapToGlobal( pos ) );
     }

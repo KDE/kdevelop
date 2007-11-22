@@ -48,7 +48,7 @@
 #include "projectmodel.h"
 
 #include "projectbuildsetwidget.h"
-#include "projectmanagerview_part.h"
+#include "projectmanagerviewplugin.h"
 #include "projectmanagerdelegate.h"
 #include "projecttreeview.h"
 
@@ -57,7 +57,7 @@ using namespace KDevelop;
 class ProjectManagerPrivate
 {
 public:
-    ProjectManagerViewPart *m_part;
+    ProjectManagerViewPlugin *mplugin;
     ProjectTreeView *m_projectOverview;
     ProjectBuildSetWidget* m_buildView;
     KComboBox* m_detailSwitcher;
@@ -80,17 +80,17 @@ public:
 
     void openUrl( const KUrl& url )
     {
-        m_part->core()->documentController()->openDocument( url );
+        mplugin->core()->documentController()->openDocument( url );
     }
 };
 
-ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent )
+ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidget *parent )
         : QWidget( parent ),
         d(new ProjectManagerPrivate)
 {
     setWindowTitle("Project Manager");
 
-    d->m_part = _part;
+    d->mplugin = plugin;
     QVBoxLayout *vbox = new QVBoxLayout( this );
     vbox->setMargin( 0 );
 
@@ -123,12 +123,12 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     connect( d->m_detailSwitcher, SIGNAL( activated( int ) ),
              d->m_detailStack, SLOT( setCurrentIndex( int ) ) );
 
-    d->m_buildView = new ProjectBuildSetWidget( this, d->m_part, d->m_detailStack );
+    d->m_buildView = new ProjectBuildSetWidget( this, d->mplugin, d->m_detailStack );
 //     d->m_buildView->setItemDelegate( delegate );
     d->m_buildView->setWhatsThis( i18n( "Build Items:" ) );
     d->m_detailStack->insertWidget( 0, d->m_buildView );
 
-    QAbstractItemModel *overviewModel = d->m_part->core()->projectController()->projectModel();
+    QAbstractItemModel *overviewModel = d->mplugin->core()->projectController()->projectModel();
 
     d->m_projectOverview->setModel( overviewModel );
 
@@ -145,9 +145,9 @@ ProjectManagerView::~ProjectManagerView()
     delete d;
 }
 
-ProjectManagerViewPart *ProjectManagerView::part() const
+ProjectManagerViewPlugin *ProjectManagerView::part() const
 {
-    return d->m_part;
+    return d->mplugin;
 }
 
 QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
@@ -155,7 +155,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
     QList<KDevelop::ProjectBaseItem*> items;
     foreach( QModelIndex idx, d->m_projectOverview->selectionModel()->selectedIndexes() )
     {
-        KDevelop::ProjectBaseItem* item = d->m_part->core()->projectController()->projectModel()->item( idx );
+        KDevelop::ProjectBaseItem* item = d->mplugin->core()->projectController()->projectModel()->item( idx );
         if( item )
             items << item;
     }

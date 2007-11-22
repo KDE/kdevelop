@@ -26,7 +26,7 @@
 
 class QTreeView;
 class QToolButton;
-class ProjectManagerViewPart;
+class ProjectManagerViewPlugin;
 class QStringListModel;
 class ProjectManagerView;
 
@@ -44,13 +44,13 @@ class ProjectBuildSetWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ProjectBuildSetWidget( ProjectManagerView* view, ProjectManagerViewPart* plugin, QWidget* parent );
+    ProjectBuildSetWidget( ProjectManagerView* view, ProjectManagerViewPlugin* plugin, QWidget* parent );
     ~ProjectBuildSetWidget();
 private slots:
     void addItems();
     void removeItems();
 private:
-    ProjectManagerViewPart* m_plugin;
+    ProjectManagerViewPlugin* m_plugin;
     ProjectManagerView* m_view;
 
     Ui::ProjectBuildSetWidget* m_ui;

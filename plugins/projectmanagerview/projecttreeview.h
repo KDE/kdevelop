@@ -28,7 +28,7 @@ class KUrl;
 class QItemSelectionModel;
 
 
-class ProjectManagerViewPart;
+class ProjectManagerViewPlugin;
 namespace KDevelop
 {
 class ProjectModel;
@@ -42,10 +42,10 @@ class ProjectTreeView: public QTreeView
 {
         Q_OBJECT
     public:
-        ProjectTreeView( ProjectManagerViewPart *part, QWidget *parent );
+        ProjectTreeView( ProjectManagerViewPlugin *part, QWidget *parent );
         virtual ~ProjectTreeView();
 
-        ProjectManagerViewPart *part() const;
+        ProjectManagerViewPlugin *part() const;
         KDevelop::ProjectModel *projectModel() const;
 
         KDevelop::ProjectFolderItem *currentFolderItem() const;

@@ -34,14 +34,14 @@
 #include "projectmodel.h"
 #include "iproject.h"
 
-#include "projectmanagerview_part.h"
+#include "projectmanagerviewplugin.h"
 #include "projectmanagerview.h"
 #include "projectbuildsetmodel.h"
 
 #include "ui_projectbuildsetwidget.h"
 
 ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
-                                              ProjectManagerViewPart* plugin,
+                                              ProjectManagerViewPlugin* plugin,
                                               QWidget* parent )
     : QWidget( parent ), m_view(view), m_plugin(plugin),
      m_ui( new Ui::ProjectBuildSetWidget )
