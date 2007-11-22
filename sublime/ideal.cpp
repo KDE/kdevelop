@@ -262,14 +262,14 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
 
     m_anchor = new QToolButton(this);
     m_anchor->setFocusPolicy(Qt::NoFocus);
-    m_anchor->setIcon(KIcon("document-decrypt"));
+    m_anchor->setIcon(KIcon("object-unlocked"));
     m_anchor->setCheckable(true);
     connect(m_anchor, SIGNAL(toggled(bool)), SLOT(slotAnchor(bool)));
     layout->addWidget(m_anchor);
 
     m_maximize = new QToolButton(this);
     m_maximize->setFocusPolicy(Qt::NoFocus);
-    m_maximize->setIcon(KIcon("arrow-up-double"));
+    m_maximize->setIcon(KIcon("view-fullscreen"));
     m_maximize->setCheckable(true);
     connect(m_maximize, SIGNAL(toggled(bool)), SLOT(slotMaximize(bool)));
     layout->addWidget(m_maximize);
@@ -297,9 +297,9 @@ void IdealDockWidgetTitle::setAnchored(bool anchored, bool emitSignals)
 
     m_anchor->setChecked(anchored);
     if (anchored)
-        m_anchor->setIcon(KIcon("document-encrypt"));
+        m_anchor->setIcon(KIcon("object-locked"));
     else
-        m_anchor->setIcon(KIcon("document-decrypt"));
+        m_anchor->setIcon(KIcon("object-unlocked"));
 
     if (!emitSignals)
         m_anchor->blockSignals(false);
@@ -308,9 +308,9 @@ void IdealDockWidgetTitle::setAnchored(bool anchored, bool emitSignals)
 void IdealDockWidgetTitle::slotAnchor(bool anchored)
 {
     if (anchored)
-        m_anchor->setIcon(KIcon("document-encrypt"));
+        m_anchor->setIcon(KIcon("object-locked"));
     else
-        m_anchor->setIcon(KIcon("document-decrypt"));
+        m_anchor->setIcon(KIcon("object-unlocked"));
 
     emit anchor(anchored);
 }
@@ -323,9 +323,9 @@ void IdealDockWidgetTitle::setMaximized(bool maximized)
 void IdealDockWidgetTitle::slotMaximize(bool maximized)
 {
     if (maximized)
-        m_maximize->setIcon(KIcon("arrow-down-double"));
+        m_maximize->setIcon(KIcon("view-restore"));
     else
-        m_maximize->setIcon(KIcon("arrow-up-double"));
+        m_maximize->setIcon(KIcon("view-fullscreen"));
 
     emit maximize(maximized);
 }
