@@ -42,10 +42,10 @@ class ProjectTreeView: public QTreeView
 {
         Q_OBJECT
     public:
-        ProjectTreeView( ProjectManagerViewPlugin *part, QWidget *parent );
+        ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *parent );
         virtual ~ProjectTreeView();
 
-        ProjectManagerViewPlugin *part() const;
+        ProjectManagerViewPlugin *plugin() const;
         KDevelop::ProjectModel *projectModel() const;
 
         KDevelop::ProjectFolderItem *currentFolderItem() const;

@@ -1,4 +1,4 @@
-/* This file is part of KDevelop
+ /* This file is part of KDevelop
     Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 

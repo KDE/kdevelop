@@ -43,10 +43,10 @@ class ProjectTreeViewPrivate
         ProjectManagerViewPlugin* mplugin;
 };
 
-ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *part, QWidget *parent )
+ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *parent )
         : QTreeView( parent ), d( new ProjectTreeViewPrivate )
 {
-    d->mplugin = part;
+    d->mplugin = plugin;
     header()->hide();
 
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -73,7 +73,7 @@ ProjectTreeView::~ProjectTreeView()
     delete d;
 }
 
-ProjectManagerViewPlugin *ProjectTreeView::part() const
+ProjectManagerViewPlugin *ProjectTreeView::plugin() const
 {
     return d->mplugin;
 }

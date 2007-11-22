@@ -37,7 +37,7 @@ public:
     ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidget *parent );
     virtual ~ProjectManagerView();
 
-    ProjectManagerViewPlugin *part() const;
+    ProjectManagerViewPlugin *plugin() const;
 
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
 private slots:

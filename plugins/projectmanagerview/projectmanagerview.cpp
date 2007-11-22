@@ -96,7 +96,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
 
     ProjectManagerDelegate *delegate = new ProjectManagerDelegate( this );
 
-    d->m_projectOverview = new ProjectTreeView( part(), this );
+    d->m_projectOverview = new ProjectTreeView( plugin, this );
     d->m_projectOverview->setItemDelegate( delegate );
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
     vbox->addWidget( d->m_projectOverview );
@@ -145,7 +145,7 @@ ProjectManagerView::~ProjectManagerView()
     delete d;
 }
 
-ProjectManagerViewPlugin *ProjectManagerView::part() const
+ProjectManagerViewPlugin *ProjectManagerView::plugin() const
 {
     return d->mplugin;
 }

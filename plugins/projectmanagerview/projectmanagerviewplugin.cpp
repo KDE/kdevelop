@@ -61,7 +61,7 @@ K_EXPORT_PLUGIN(ProjectManagerFactory("kdevprojectmanagerview"))
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {
     public:
-        KDevProjectManagerViewFactory( ProjectManagerViewPlugin *part ): mplugin( part )
+        KDevProjectManagerViewFactory( ProjectManagerViewPlugin *plugin ): mplugin( plugin )
         {}
         virtual QWidget* create( QWidget *parent = 0 )
         {
