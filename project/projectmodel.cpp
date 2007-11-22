@@ -185,7 +185,6 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
 ProjectModel::ProjectModel( QObject *parent )
         : QStandardItemModel( parent ), d(0)
 {
-    connect(this, SIGNAL(itemChanged( QStandardItem* ) ), this, SLOT( projectItemChanged( QStandardItem* ) ) );
 }
 
 ProjectModel::~ProjectModel()
