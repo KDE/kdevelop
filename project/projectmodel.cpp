@@ -71,36 +71,7 @@ class ProjectTargetItemPrivate : public ProjectBaseItemPrivate
 class ProjectModelPrivate
 {
 public:
-    void projectItemChanged( QStandardItem* item )
-    {
-        ProjectBaseItem* projectItem = dynamic_cast<ProjectBaseItem*>( item );
-        if( projectItem )
-        {
-            if( projectItem->folder() || projectItem->target()  )
-            {
-                if( projectItem->folder() && projectItem->checkState() != Qt::PartiallyChecked )
-                {
-                    for( int i = 0; i < projectItem->rowCount(); i++ )
-                    {
-                        projectItem->child( i )->setCheckState( projectItem->checkState() );
-                    }
-                }
-                if( projectItem->parent() )
-                {
-                    for( int i = 0; i < projectItem->parent()->rowCount(); i++ )
-                    {
-                        QStandardItem* child = projectItem->parent()->child( i );
-                        if( child->checkState() != projectItem->checkState() )
-                        {
-                            projectItem->parent()->setCheckState( Qt::PartiallyChecked );
-                            return;
-                        }
-                        projectItem->parent()->setCheckState( projectItem->checkState() );
-                    }
-                }
-            }
-        }
-    }
+
 };
 
 ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStandardItem *parent )
@@ -262,15 +233,11 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStan
     d->m_url = dir;
     setParent(parent);
     setText( dir.fileName() );
-    setCheckable( true );
-    setTristate( true );
 }
 
 ProjectFolderItem::ProjectFolderItem( ProjectFolderItemPrivate& dd)
     : ProjectBaseItem( dd )
 {
-    setCheckable( true );
-    setTristate( true );
 }
 
 ProjectFolderItem::~ProjectFolderItem()
@@ -416,7 +383,6 @@ ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, QS
     d->project = project;
     setText( name );
     setParent( parent );
-    setCheckable( true );
 }
 
 int ProjectTargetItem::type() const

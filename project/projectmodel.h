@@ -257,8 +257,6 @@ public:
 
 private:
     class ProjectModelPrivate* const d;
-
-    Q_PRIVATE_SLOT(d, void projectItemChanged( QStandardItem* ))
 };
 
 }
