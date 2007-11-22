@@ -410,8 +410,23 @@ void TestExpressionParser::testSimpleExpression() {
   lock.unlock();
 
   Cpp::ExpressionParser parser;
+  Cpp::ExpressionEvaluationResult result;
 
-  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "c.a", KDevelop::DUContextPointer(testContext));
+  result = parser.evaluateType( "const Cont", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("Cont")); ///@todo Change this to "const Cont" once we parse const correctly
+  QVERIFY(!result.instance);
+  lock.unlock();
+  
+  result = parser.evaluateExpression( "Cont", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("Cont"));
+  QVERIFY(!result.instance);
+  lock.unlock();
+
+  result = parser.evaluateExpression( "c.a", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());   
   QVERIFY(result.instance);

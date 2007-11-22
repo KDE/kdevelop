@@ -1436,12 +1436,17 @@ void TestDUChain::testTemplatesRebind() {
 }
 
 void TestDUChain::testTemplatesRebind2() {
-  QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Test { }; template<class T> class Class { typedef T::Value Value; T::Value value; typedef Test<Value> ValueClass; }; };");
+  QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Test { }; template<class T> class Class { typedef T::Value Value; T::Value value; typedef Test<Value> ValueClass; Test<const Value> ValueClass2;}; };");
 
   DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
+  Declaration* member5Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass2"));
+  QVERIFY(member5Decl);
+  QVERIFY(member5Decl->abstractType());
+  QCOMPARE(member5Decl->abstractType()->toString(), QString("Test< A >")); ///@todo This will fail once we parse "const" correctly, change it to "Test< const A >" then
+  
   Declaration* member4Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass"));
   QVERIFY(member4Decl);
   QVERIFY(member4Decl->abstractType());

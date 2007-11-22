@@ -38,7 +38,7 @@ QString NameCompiler::decode(AST* ast) const
   QString ret;
   for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
     const Token &tk = m_session->token_stream->token(a);
-    ret += tk.symbol();
+    ret += tk.symbol() + " ";
   }
   return ret;
 }
