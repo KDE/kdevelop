@@ -27,6 +27,7 @@
 #include "ideallayout.h"
 
 class KAction;
+class KActionMenu;
 class KActionCollection;
 
 namespace Sublime {
@@ -78,7 +79,7 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(Qt::DockWidgetArea area, class IdealMainWidget *parent = 0);
 
-    QAction *addWidget(const QString& title, QDockWidget *widget);
+    KAction *addWidget(const QString& title, QDockWidget *widget);
     void showWidget(QDockWidget* widget);
     void removeAction(QAction* action);
 
@@ -186,9 +187,11 @@ public:
 
     IdealButtonBarWidget* barForRole(IdealMainLayout::Role role) const;
     IdealMainLayout::Role roleForBar(IdealButtonBarWidget* bar) const;
+    KAction* actionForRole(IdealMainLayout::Role role) const;
 
     void setAnchorActionStatus(bool checked);
     void setMaximizeActionStatus(bool checked);
+    void setShowDockStatus(IdealMainLayout::Role role, bool checked);
 
 public Q_SLOTS:
     void showLeftDock(bool show);
@@ -207,8 +210,13 @@ private:
     IdealButtonBarWidget *bottomBarWidget;
     IdealButtonBarWidget *topBarWidget;
 
+    KAction* m_showLeftDock;
+    KAction* m_showRightDock;
+    KAction* m_showBottomDock;
+    KAction* m_showTopDock;
     KAction* m_anchorCurrentDock;
     KAction* m_maximizeCurrentDock;
+    KActionMenu* m_docks;
 
     IdealCentralWidget* mainWidget;
     class IdealMainLayout* m_mainLayout;

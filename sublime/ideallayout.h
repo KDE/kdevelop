@@ -93,12 +93,7 @@ public:
         Right,
         Bottom,
         Top,
-        LeftSplitter,
-        RightSplitter,
-        BottomSplitter,
-        TopSplitter,
-        Central,
-        None
+        Central
     };
 
     IdealMainLayout(QWidget *parent = 0);
@@ -106,14 +101,19 @@ public:
     virtual ~IdealMainLayout();
 
     void addWidget(QWidget* widget, Role role);
-    QLayoutItem* itemForRole(Role role);
-    QWidget* removeWidget(Role role, bool keepSplitter = false);
+    void removeWidgets(Role role);
+    void removeWidget(QWidget* widget, Role role);
     void removeUnanchored();
 
     int splitterWidth() const;
     int widthForRole(Role role) const;
 
     bool isAreaAnchored(Role role) const;
+
+    /**
+     * Maximize the given \a widget, or disable any maximized widget if \a widget is null.
+     */
+    void maximizeWidget(QWidget* widget);
 
     virtual QSize minimumSize() const;
 
@@ -140,7 +140,6 @@ public:
 public Q_SLOTS:
     void resizeWidget(int thickness, IdealMainLayout::Role role);
     void anchorWidget(bool anchor, IdealMainLayout::Role role);
-    void maximizeWidget(bool maximize, IdealMainLayout::Role role);
 
     void loadSettings();
 
@@ -152,17 +151,45 @@ protected:
     void minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
 
 private:
-    struct Settings
-    {
-        Settings();
+    void createArea(Role role);
+    class IdealSplitterHandle* createSplitter(Role role, bool reverse = false);
+
+    class DockArea {
+    public:
+        DockArea(IdealMainLayout* layout, Role role);
+        ~DockArea();
+
+        int count() const;
+        QLayoutItem* itemAt(int index, int& at) const;
+        
+        const QList<QWidgetItem*> items() const;
+        QWidgetItem* first() const;
+        void addWidget(QWidget* widget);
+        void removeWidget(QWidget* widget);
+        void removeWidgets();
+
+        QWidgetItem* mainSplitter() const;
+        void setMainSplitter(QWidget* splitter);
+
+        void setVisible(bool visible, bool showMainSplitter = false, QWidget* maximizedWidget = 0);
+        void raise();
 
         int width;
         bool anchored;
         QPointer<QWidget> last;
+
+    private:
+        void removeMainSplitter();
+
+        IdealMainLayout* m_layout;
+        Role m_role;
+        QList<QWidgetItem*> m_items;
+        QList<int> m_heights;
+        QWidgetItem* m_mainSplitter;
+        QList<QWidgetItem*> m_subSplitters;
     };
 
-    QMap<Role, QWidgetItem*> m_items;
-    QHash<Role, Settings> m_settings;
+    QMap<Role, DockArea*> m_items;
     mutable bool m_layoutDirty, m_sizeHintDirty, m_minDirty;
     mutable QSize m_min, m_hint;
     int m_splitterWidth;
@@ -172,7 +199,8 @@ private:
     int m_topOwnsTopRight;
     int m_bottomOwnsBottomLeft;
     int m_bottomOwnsBottomRight;
-    Role m_maximizedWidget;
+    Role m_maximizedRole;
+    QWidget* m_maximizedWidget;
 };
 
 IdealMainLayout::Role roleForArea(Qt::DockWidgetArea area);

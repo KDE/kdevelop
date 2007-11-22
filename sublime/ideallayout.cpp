@@ -243,10 +243,7 @@ QDockWidget* IdealMainLayout::lastDockWidget() const
 
 QDockWidget * IdealMainLayout::lastDockWidget(IdealMainLayout::Role role) const
 {
-    if (m_settings.contains(role))
-        return qobject_cast<QDockWidget*>(m_settings[role].last);
-
-    return 0;
+    return qobject_cast<QDockWidget*>(m_items[role]->last);
 }
 
 IdealMainLayout::IdealMainLayout(QWidget * parent)
@@ -259,8 +256,14 @@ IdealMainLayout::IdealMainLayout(QWidget * parent)
     , m_topOwnsTopRight(0)
     , m_bottomOwnsBottomLeft(0)
     , m_bottomOwnsBottomRight(0)
-    , m_maximizedWidget(None)
+    , m_maximizedWidget(0)
 {
+    createArea(Left);
+    createArea(Right);
+    createArea(Top);
+    createArea(Bottom);
+    createArea(Central);
+
     setMargin(0);
     m_splitterWidth = parent->style()->pixelMetric(QStyle::PM_SplitterWidth, 0, parentWidget());
 
@@ -274,8 +277,8 @@ IdealMainLayout::~ IdealMainLayout()
 QSize IdealMainLayout::minimumSize() const
 {
     if (m_minDirty) {
-        if (m_maximizedWidget != None) {
-            m_min = m_items[m_maximizedWidget]->minimumSize();
+        if (m_maximizedWidget) {
+            m_min = m_maximizedWidget->minimumSize();
             m_minDirty = false;
             return m_min;
         }
@@ -290,7 +293,7 @@ QSize IdealMainLayout::minimumSize() const
         sizeHint(Top, minWidth, softMinWidth, minHeight, softMinHeight);
         sizeHint(Bottom, minWidth, softMinWidth, minHeight, softMinHeight);
 
-        if (QLayoutItem* item = m_items[Central]) {
+        if (QLayoutItem* item = m_items[Central]->first()) {
             const QSize itemSizeHint = item->minimumSize();
             minHeight += qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
             minWidth += qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
@@ -305,19 +308,19 @@ QSize IdealMainLayout::minimumSize() const
 
 void IdealMainLayout::minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
 {
-    if (QLayoutItem* item = m_items[role]) {
+    foreach (QLayoutItem* item, m_items[role]->items()) {
         const QSize itemSizeHint = item->minimumSize();
         switch (role) {
             case Left:
             case Right:
-                if (m_settings[role].anchored)
+                if (m_items[role]->anchored)
                     minWidth += itemSizeHint.width() + splitterWidth();
                 softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
                 break;
 
             case Top:
             case Bottom:
-                if (m_settings[role].anchored)
+                if (m_items[role]->anchored)
                     minHeight += itemSizeHint.height() + splitterWidth();
                 softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
                 break;
@@ -330,10 +333,31 @@ void IdealMainLayout::minimumSize(Role role, int& minWidth, int& softMinWidth, i
 
 QLayoutItem * IdealMainLayout::itemAt(int index) const
 {
-    if (index >= m_items.count())
-        return 0;
+    int at = 0;
+    if (QLayoutItem* item = m_items[Left]->itemAt(index, at))
+        return item;
 
-    return *(m_items.begin() + index);
+    index -= at;
+    at = 0;
+    if (QLayoutItem* item = m_items[Right]->itemAt(index, at))
+        return item;
+
+    index -= at;
+    at = 0;
+    if (QLayoutItem* item = m_items[Top]->itemAt(index, at))
+        return item;
+
+    index -= at;
+    at = 0;
+    if (QLayoutItem* item = m_items[Bottom]->itemAt(index, at))
+        return item;
+
+    index -= at;
+    at = 0;
+    if (QLayoutItem* item = m_items[Central]->itemAt(index, at))
+        return item;
+
+    return 0;
 }
 
 void IdealMainLayout::addItem(QLayoutItem * item)
@@ -355,8 +379,8 @@ void IdealMainLayout::setGeometry(const QRect & rect)
 QSize IdealMainLayout::sizeHint() const
 {
     if (m_sizeHintDirty) {
-        if (m_maximizedWidget != None) {
-            m_hint = m_items[m_maximizedWidget]->sizeHint();
+        if (m_maximizedWidget) {
+            m_hint = m_maximizedWidget->sizeHint();
             m_sizeHintDirty = false;
             return m_hint;
         }
@@ -371,7 +395,7 @@ QSize IdealMainLayout::sizeHint() const
         sizeHint(Top, minWidth, softMinWidth, minHeight, softMinHeight);
         sizeHint(Bottom, minWidth, softMinWidth, minHeight, softMinHeight);
 
-        if (QLayoutItem* item = m_items[Central]) {
+        if (QLayoutItem* item = m_items[Central]->first()) {
             const QSize itemSizeHint = item->sizeHint();
             minHeight += qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
             minWidth += qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
@@ -386,19 +410,19 @@ QSize IdealMainLayout::sizeHint() const
 
 void IdealMainLayout::sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
 {
-    if (QLayoutItem* item = m_items[role]) {
+    foreach (QLayoutItem* item, m_items[role]->items()) {
         const QSize itemSizeHint = item->sizeHint();
         switch (role) {
             case Left:
             case Right:
-                if (m_settings[role].anchored)
+                if (m_items[role]->anchored)
                     minWidth += itemSizeHint.width() + splitterWidth();
                 softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
                 break;
 
             case Top:
             case Bottom:
-                if (m_settings[role].anchored)
+                if (m_items[role]->anchored)
                     minHeight += itemSizeHint.height() + splitterWidth();
                 softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
                 break;
@@ -412,20 +436,23 @@ void IdealMainLayout::sizeHint(Role role, int& minWidth, int& softMinWidth, int&
 
 QLayoutItem * IdealMainLayout::takeAt(int index)
 {
-    QLayoutItem* item = itemAt(index);
-    m_items.erase(m_items.begin() + index);
-    return item;
+    Q_UNUSED(index)
+
+    // Uh-oh...??
+    Q_ASSERT(false);
+
+    return 0;
 }
 
 int IdealMainLayout::count() const
 {
-    return m_items.count();
+    return m_items[Left]->count() + m_items[Right]->count() + m_items[Top]->count() + m_items[Bottom]->count() + m_items[Central]->count();
 }
 
 void IdealMainLayout::doLayout(QRect rect) const
 {
-    if (m_maximizedWidget != None) {
-        m_items[m_maximizedWidget]->setGeometry(rect);
+    if (m_maximizedWidget) {
+        m_maximizedWidget->setGeometry(rect);
         return;
     }
 
@@ -479,7 +506,7 @@ void IdealMainLayout::doLayout(QRect rect) const
                     layout(Right, Left, Bottom, Top, rect);
 
 
-    if (QLayoutItem* item = m_items[Central]) {
+    if (QLayoutItem* item = m_items[Central]->first()) {
         QSize itemSizeHint = item->sizeHint();
         if (itemSizeHint.height() > rect.height()) {
             itemSizeHint.setHeight(qMax(item->minimumSize().height(), rect.height()));
@@ -511,10 +538,12 @@ void IdealMainLayout::layout(Role role1, Role role2, Role role3, Role role4, QRe
 
 void IdealMainLayout::layoutItem(Role role, QRect& rect) const
 {
-    if (QLayoutItem* item = m_items[role]) {
+    DockArea* area = m_items[role];
+
+    foreach (QLayoutItem* item, area->items()) {
         int hintDimension;
-        if (m_settings[role].width != -1) {
-            hintDimension = m_settings[role].width;
+        if (m_items[role]->width != -1) {
+            hintDimension = m_items[role]->width;
 
         } else {
             const QSize itemSize = item->sizeHint();
@@ -549,29 +578,29 @@ void IdealMainLayout::layoutItem(Role role, QRect& rect) const
         switch (role) {
             case Left:
                 item->setGeometry(QRect(rect.x(), rect.y(), hintDimension, rect.height()));
-                m_items[LeftSplitter]->setGeometry(QRect(rect.x() + hintDimension, rect.y(), splitterWidth(), rect.height()));
+                area->mainSplitter()->setGeometry(QRect(rect.x() + hintDimension, rect.y(), splitterWidth(), rect.height()));
                 break;
 
             case Right:
                 item->setGeometry(QRect(rect.x() + rect.width() - hintDimension, rect.y(), hintDimension, rect.height()));
-                m_items[RightSplitter]->setGeometry(QRect(rect.x() + rect.width() - hintDimension - splitterWidth(), rect.y(), splitterWidth(), rect.height()));
+                area->mainSplitter()->setGeometry(QRect(rect.x() + rect.width() - hintDimension - splitterWidth(), rect.y(), splitterWidth(), rect.height()));
                 break;
 
             case Top:
                 item->setGeometry(QRect(rect.x(), rect.y(), rect.width(), hintDimension));
-                m_items[TopSplitter]->setGeometry(QRect(rect.x(), rect.y() + hintDimension, rect.width(), splitterWidth()));
+                area->mainSplitter()->setGeometry(QRect(rect.x(), rect.y() + hintDimension, rect.width(), splitterWidth()));
                 break;
 
             case Bottom:
                 item->setGeometry(QRect(rect.x(), rect.y() + rect.height() - hintDimension, rect.width(), hintDimension));
-                m_items[BottomSplitter]->setGeometry(QRect(rect.x(), rect.y() + rect.height() - hintDimension - splitterWidth(), rect.width(), splitterWidth()));
+                area->mainSplitter()->setGeometry(QRect(rect.x(), rect.y() + rect.height() - hintDimension - splitterWidth(), rect.width(), splitterWidth()));
                 break;
 
                 default:
                     break;
         }
 
-        if (m_settings[role].anchored) {
+        if (m_items[role]->anchored) {
             switch (role) {
                 case Left:
                     rect.setX(rect.x() + hintDimension + splitterWidth());
@@ -596,15 +625,33 @@ void IdealMainLayout::layoutItem(Role role, QRect& rect) const
     }
 }
 
+IdealSplitterHandle* IdealMainLayout::createSplitter(Role role, bool reverse)
+{
+    IdealSplitterHandle* splitter = 0;
+
+    Qt::Orientation direction = ((role == Left || role == Right) ^ reverse) ? Qt::Vertical : Qt::Horizontal;
+
+    splitter = new IdealSplitterHandle(direction, parentWidget(), role);
+    addChildWidget(splitter);
+
+    connect(splitter, SIGNAL(resize(int, IdealMainLayout::Role)), SLOT(resizeWidget(int, IdealMainLayout::Role)));
+
+    return splitter;
+}
+
+void IdealMainLayout::createArea(Role role)
+{
+    DockArea* area = new DockArea(this, role);
+    m_items.insert(role, area);
+
+    if (role != Central)
+        area->setMainSplitter(createSplitter(role));
+}
 
 void IdealMainLayout::addWidget(QWidget * widget, Role role)
 {
-    if (m_maximizedWidget != None)
-        maximizeWidget(false, m_maximizedWidget);
-
-    bool splitterKept = false;
-    if (m_items.contains(role))
-        splitterKept = removeWidget(role, true);
+    if (m_maximizedWidget)
+        maximizeWidget(0);
 
     if (QDockWidget* dock = qobject_cast<QDockWidget*>(widget))
         if (dock->isFloating())
@@ -615,106 +662,54 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
         addChildWidget(widget);
     }
 
-    m_items.insert(role, new QWidgetItem(widget));
+    DockArea* area = m_items[role];
 
-    //invalidate();
+    area->addWidget(widget);
 
-    IdealSplitterHandle* splitter = 0;
-
-    if (!splitterKept)
-        switch (role) {
-            case Left:
-                splitter = new IdealSplitterHandle(Qt::Vertical, parentWidget(), Left);
-                m_items.insert(LeftSplitter, new QWidgetItem(splitter));
-                break;
-
-            case Right:
-                splitter = new IdealSplitterHandle(Qt::Vertical, parentWidget(), Right);
-                m_items.insert(RightSplitter, new QWidgetItem(splitter));
-                break;
-
-            case Bottom:
-                splitter = new IdealSplitterHandle(Qt::Horizontal, parentWidget(), Bottom);
-                m_items.insert(BottomSplitter, new QWidgetItem(splitter));
-                break;
-
-            case Top:
-                splitter = new IdealSplitterHandle(Qt::Horizontal, parentWidget(), Top);
-                m_items.insert(TopSplitter, new QWidgetItem(splitter));
-                break;
-
-            default:
-                break;
-        }
-
-    if (splitter) {
-        connect(splitter, SIGNAL(resize(int, IdealMainLayout::Role)), SLOT(resizeWidget(int, IdealMainLayout::Role)));
-        if (m_maximizedWidget == None)
-            splitter->show();
-    }
+    area->setVisible(true, !m_maximizedWidget);
 
     if (role != Central) {
         m_lastDockWidget = widget;
         m_lastDockWidgetRole = role;
-        m_settings[role].last = widget;
+        m_items[role]->last = widget;
         mainWidget()->setAnchorActionStatus(isAreaAnchored(role));
     }
 
-    widget->raise();
-    widget->show();
+    area->raise();
     widget->setFocus();
 }
 
-QWidget* IdealMainLayout::removeWidget(Role role, bool keepSplitter)
+void IdealMainLayout::removeWidgets(Role role)
 {
-    if (m_maximizedWidget == role)
-        maximizeWidget(false, m_maximizedWidget);
+    if (m_maximizedWidget)
+        // FIXME correct?
+        maximizeWidget(0);
 
-    Q_ASSERT(m_items.contains(role));
+    DockArea* area = m_items[role];
+    area->setVisible(false);
+}
 
-    QWidget* widget = m_items[role]->widget();
-    delete m_items.take(role);
-
-    if (!keepSplitter)
-        switch (role) {
-            case Left:
-                delete m_items[LeftSplitter]->widget();
-                delete m_items.take(LeftSplitter);
-                break;
-            case Right:
-                delete m_items[RightSplitter]->widget();
-                delete m_items.take(RightSplitter);
-                break;
-            case Bottom:
-                delete m_items[BottomSplitter]->widget();
-                delete m_items.take(BottomSplitter);
-                break;
-            case Top:
-                delete m_items[TopSplitter]->widget();
-                delete m_items.take(TopSplitter);
-                break;
-            default:
-                break;
-        }
-
-    widget->hide();
-
-    return widget;
+void IdealMainLayout::removeWidget(QWidget * widget, Role role)
+{
+    DockArea* area = m_items[role];
+    area->removeWidget(widget);
+    if (area->items().isEmpty())
+        area->setVisible(false, false);
 }
 
 void IdealMainLayout::removeUnanchored()
 {
-    if (m_items.contains(Left) && !m_settings[Left].anchored)
-        removeWidget(Left);
+    if (!m_items[Left]->anchored)
+        removeWidgets(Left);
 
-    if (m_items.contains(Right) && !m_settings[Right].anchored)
-        removeWidget(Right);
+    if (!m_items[Right]->anchored)
+        removeWidgets(Right);
 
-    if (m_items.contains(Top) && !m_settings[Top].anchored)
-        removeWidget(Top);
+    if (!m_items[Top]->anchored)
+        removeWidgets(Top);
 
-    if (m_items.contains(Bottom) && !m_settings[Bottom].anchored)
-        removeWidget(Bottom);
+    if (!m_items[Bottom]->anchored)
+        removeWidgets(Bottom);
 }
 
 void IdealMainLayout::invalidate()
@@ -725,14 +720,6 @@ void IdealMainLayout::invalidate()
     QLayout::invalidate();
 }
 
-QLayoutItem* IdealMainLayout::itemForRole(Role role)
-{
-    if (m_items.contains(role))
-        return m_items[role];
-
-    return 0;
-}
-
 int IdealMainLayout::splitterWidth() const
 {
     return m_splitterWidth;
@@ -740,35 +727,30 @@ int IdealMainLayout::splitterWidth() const
 
 void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
 {
-    m_settings[role].width = thickness;
+    m_items[role]->width = thickness;
 
     invalidate();
 }
 
 void IdealMainLayout::anchorWidget(bool anchor, IdealMainLayout::Role role)
 {
-    m_settings[role].anchored = anchor;
+    m_items[role]->anchored = anchor;
 
     invalidate();
 }
 
-void IdealMainLayout::maximizeWidget(bool maximize, IdealMainLayout::Role role)
+void IdealMainLayout::maximizeWidget(QWidget* widget)
 {
-    if (maximize) {
-        m_maximizedWidget = role;
+    m_maximizedWidget = widget;
 
+    if (m_maximizedWidget) {
         for (Role role = Left; role <= Central; role = static_cast<Role>(role + 1))
-            if (role != m_maximizedWidget)
-                if (m_items.contains(role))
-                    m_items[role]->widget()->hide();
+            m_items[role]->setVisible(false, false, m_maximizedWidget);
 
     } else {
         for (Role role = Left; role <= Central; role = static_cast<Role>(role + 1))
-            if (role != m_maximizedWidget)
-                if (m_items.contains(role))
-                    m_items[role]->widget()->show();
-
-        m_maximizedWidget = None;
+            if (!m_items[role]->items().isEmpty())
+                m_items[role]->setVisible(true, role != Central, m_maximizedWidget);
     }
 
     invalidate();
@@ -776,21 +758,12 @@ void IdealMainLayout::maximizeWidget(bool maximize, IdealMainLayout::Role role)
 
 int IdealMainLayout::widthForRole(Role role) const
 {
-    if (m_settings.contains(role))
-        return m_settings[role].width;
-
-    return -1;
-}
-
-IdealMainLayout::Settings::Settings()
-{
-    width = 250;
-    anchored = false;
+    return m_items[role]->width;
 }
 
 bool IdealMainLayout::isAreaAnchored(Role role) const
 {
-    return m_settings[role].anchored;
+    return m_items[role]->anchored;
 }
 
 IdealMainWidget * IdealMainLayout::mainWidget() const
@@ -835,6 +808,146 @@ void IdealMainLayout::loadSettings()
 IdealMainLayout::Role IdealMainLayout::lastDockWidgetRole() const
 {
     return m_lastDockWidgetRole;
+}
+
+QWidgetItem * IdealMainLayout::DockArea::mainSplitter() const
+{
+    return m_mainSplitter;
+}
+
+void IdealMainLayout::DockArea::setMainSplitter(QWidget* widget)
+{
+    m_mainSplitter = new QWidgetItem(widget);
+}
+
+IdealMainLayout::DockArea::DockArea(IdealMainLayout* layout, Role role)
+    : width(250)
+    , anchored(false)
+    , m_layout(layout)
+    , m_role(role)
+    , m_mainSplitter(0)
+{
+}
+
+void IdealMainLayout::DockArea::removeMainSplitter()
+{
+    if (m_mainSplitter) {
+        delete m_mainSplitter->widget();
+        delete m_mainSplitter;
+        m_mainSplitter = 0;
+    }
+}
+
+void IdealMainLayout::DockArea::setVisible(bool visible, bool showMainSplitter, QWidget* maximizedWidget)
+{
+    foreach (QLayoutItem* item, m_items) {
+        bool itemVisible = visible || item->widget() == maximizedWidget;
+        if (item->widget()->isVisible() != itemVisible)
+            item->widget()->setVisible(itemVisible);
+    }
+
+    if (m_mainSplitter) {
+        bool mainSplitterVisible = (visible && showMainSplitter && !maximizedWidget);
+        if (m_mainSplitter->widget()->isVisible() != mainSplitterVisible)
+            m_mainSplitter->widget()->setVisible(mainSplitterVisible);
+    }
+
+    bool subSplitterVisible = visible && !maximizedWidget;
+    foreach (QWidgetItem* item, m_subSplitters) {
+        if (item->widget()->isVisible() != subSplitterVisible)
+            item->widget()->setVisible(subSplitterVisible);
+    }
+}
+
+const QList< QWidgetItem * > IdealMainLayout::DockArea::items() const
+{
+    return m_items;
+}
+
+QWidgetItem * IdealMainLayout::DockArea::first() const
+{
+    Q_ASSERT(!m_items.isEmpty());
+    return m_items.first();
+}
+
+void IdealMainLayout::DockArea::addWidget(QWidget * widget)
+{
+    m_items.append(new QWidgetItem(widget));
+    m_heights.append(-1);
+
+    if (m_items.count() > 1)
+        m_subSplitters.append(new QWidgetItem(m_layout->createSplitter(m_role, true)));
+}
+
+void IdealMainLayout::DockArea::removeWidget(QWidget * widget)
+{
+    int index = 0;
+    while (index < m_items.count()) {
+        if (m_items.at(index)->widget() == widget)
+            break;
+        ++index;
+    }
+
+    Q_ASSERT(index < m_items.count());
+    Q_ASSERT(m_heights.count() == m_items.count());
+
+    QWidgetItem* item = m_items.takeAt(index);
+    item->widget()->hide();
+    delete item;
+
+    m_heights.removeAt(index);
+}
+
+IdealMainLayout::DockArea::~DockArea()
+{
+    removeMainSplitter();
+    removeWidgets();
+}
+
+void IdealMainLayout::DockArea::removeWidgets()
+{
+    for (int i = m_items.count() - 1; i >= 0; --i)
+        removeWidget(m_items.at(i)->widget());
+}
+
+int Sublime::IdealMainLayout::DockArea::count() const
+{
+    int count = 0;
+    if (m_mainSplitter)
+        ++count;
+    count += m_items.count();
+    count += m_subSplitters.count();
+    return count;
+}
+
+QLayoutItem * Sublime::IdealMainLayout::DockArea::itemAt(int index, int& at) const
+{
+    if (m_mainSplitter && index == 0)
+        return m_mainSplitter;
+
+    if (m_mainSplitter)
+        ++at;
+
+    if (index < m_items.count() + at)
+        return m_items.at(index - at);
+
+    at += m_items.count();
+    if (index < m_subSplitters.count())
+        return m_subSplitters.at(index - at);
+
+    return 0;
+}
+
+void Sublime::IdealMainLayout::DockArea::raise()
+{
+    foreach (QLayoutItem* item, m_items)
+        item->widget()->raise();
+
+    foreach (QLayoutItem* item, m_subSplitters)
+        item->widget()->raise();
+
+    if (m_mainSplitter)
+        m_mainSplitter->widget()->raise();
 }
 
 #include "ideallayout.moc"

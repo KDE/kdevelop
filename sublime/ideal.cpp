@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <KActionCollection>
-#include <KAction>
+#include <KActionMenu>
 #include <KAcceleratorManager>
 
 #include "view.h"
@@ -107,9 +107,9 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
     (void) new IdealButtonBarLayout(orientation(), this);
 }
 
-QAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock)
+KAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock)
 {
-    QAction *action = new QAction(this);
+    KAction *action = new KAction(this);
     action->setCheckable(true);
     action->setText(title);
     action->setIcon(dock->widget()->windowIcon());
@@ -362,28 +362,28 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     grid->addWidget(topBarWidget, 0, 0, 1, 3);
     setLayout(grid);
 
-    KAction* action = new KAction(i18n("Show Left Dock"), this);
+    KAction* action = m_showLeftDock = new KAction(i18n("Show Left Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_L);
     action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), SLOT(showLeftDock(bool)));
+    connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));
     ac->addAction("show_left_dock", action);
 
-    action = new KAction(i18n("Show Right Dock"), this);
+    m_showRightDock = action = new KAction(i18n("Show Right Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_R);
     action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), SLOT(showRightDock(bool)));
+    connect(action, SIGNAL(toggled(bool)), SLOT(showRightDock(bool)));
     ac->addAction("show_right_dock", action);
 
-    action = new KAction(i18n("Show Bottom Dock"), this);
+    m_showBottomDock = action = new KAction(i18n("Show Bottom Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_B);
     action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), SLOT(showBottomDock(bool)));
+    connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
     ac->addAction("show_bottom_dock", action);
 
-    action = new KAction(i18n("Show Top Dock"), this);
+    m_showTopDock = action = new KAction(i18n("Show Top Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_T);
     action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), SLOT(showTopDock(bool)));
+    connect(action, SIGNAL(toggled(bool)), SLOT(showTopDock(bool)));
     ac->addAction("show_top_dock", action);
 
     action = new KAction(i18n("Hide All Docks"), this);
@@ -395,14 +395,14 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_A);
     action->setCheckable(true);
     action->setEnabled(false);
-    connect(action, SIGNAL(triggered(bool)), SLOT(anchorCurrentDock(bool)));
+    connect(action, SIGNAL(toggled(bool)), SLOT(anchorCurrentDock(bool)));
     ac->addAction("anchor_current_dock", action);
 
     m_maximizeCurrentDock = action = new KAction(i18n("Maximize Current Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_M);
     action->setCheckable(true);
     action->setEnabled(false);
-    connect(action, SIGNAL(triggered(bool)), SLOT(maximizeCurrentDock(bool)));
+    connect(action, SIGNAL(toggled(bool)), SLOT(maximizeCurrentDock(bool)));
     ac->addAction("maximize_current_dock", action);
 
     action = new KAction(i18n("Select Next Dock"), this);
@@ -414,6 +414,9 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_Left);
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);
+
+    action = m_docks = new KActionMenu(i18n("Docks"), this);
+    ac->addAction("docks_submenu", action);
 }
 
 void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
@@ -428,7 +431,9 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     dock->setFocusProxy(dock->widget());
 
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(area))) {
-        actions[dock] = views[view] = bar->addWidget(view->document()->title(), dock);
+        KAction* action = bar->addWidget(view->document()->title(), dock);
+        actions[dock] = views[view] = action;
+        m_docks->addAction(action);
         bar->show();
     }
 
@@ -437,21 +442,32 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     docks[dock] = area;
 }
 
+KAction * Sublime::IdealMainWidget::actionForRole(IdealMainLayout::Role role) const
+{
+    switch (role) {
+        case IdealMainLayout::Left:
+        default:
+            return m_showLeftDock;
+        case IdealMainLayout::Right:
+            return m_showRightDock;
+        case IdealMainLayout::Top:
+            return m_showTopDock;
+        case IdealMainLayout::Bottom:
+            return m_showBottomDock;
+    }
+}
+
 void IdealMainWidget::centralWidgetFocused()
 {
     for (IdealMainLayout::Role role = IdealMainLayout::Left; role <= IdealMainLayout::Top; role = static_cast<IdealMainLayout::Role>(role + 1))
         if (!m_mainLayout->isAreaAnchored(role))
-            foreach (QAction* action, barForRole(role)->actions())
-                if (action->isChecked())
-                    action->toggle();
+            actionForRole(role)->setChecked(false);
 }
 
 void IdealMainWidget::hideAllDocks()
 {
     for (IdealMainLayout::Role role = IdealMainLayout::Left; role <= IdealMainLayout::Top; role = static_cast<IdealMainLayout::Role>(role + 1))
-        foreach (QAction* action, barForRole(role)->actions())
-            if (action->isChecked())
-                action->toggle();
+        actionForRole(role)->setChecked(false);
 }
 
 void IdealMainWidget::raiseView(View * view)
@@ -513,9 +529,15 @@ void IdealMainWidget::anchorDockWidget(bool checked, IdealButtonBarWidget * bar)
 
 void IdealMainWidget::maximizeDockWidget(bool checked, IdealButtonBarWidget * bar)
 {
-    m_mainLayout->maximizeWidget(checked, roleForBar(bar));
+    QDockWidget* widget = 0;
+    if (checked) {
+        IdealMainLayout::Role role = roleForBar(bar);
+        widget = mainLayout()->lastDockWidget(role);
+    }
 
-    setMaximizeActionStatus(checked);
+    m_mainLayout->maximizeWidget(widget);
+
+    setMaximizeActionStatus(widget);
 }
 
 void IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
@@ -538,20 +560,18 @@ void IdealMainWidget::showDockWidget(QDockWidget * dock, bool show)
 
         bool isMaximized = static_cast<IdealDockWidgetTitle*>(dock->titleBarWidget())->isMaximized();
         if (isMaximized)
-            m_mainLayout->maximizeWidget(true, role);
-
-        setMaximizeActionStatus(isMaximized);
-        m_maximizeCurrentDock->setEnabled(true);
-        m_anchorCurrentDock->setEnabled(true);
+            m_mainLayout->maximizeWidget(dock);
 
     } else {
-        m_mainLayout->removeWidget(role);
+        m_mainLayout->removeWidget(dock, role);
 
         setMaximizeActionStatus(false);
-
-        m_maximizeCurrentDock->setEnabled(false);
-        m_anchorCurrentDock->setEnabled(false);
     }
+
+    m_maximizeCurrentDock->setEnabled(show);
+    m_anchorCurrentDock->setEnabled(show);
+
+    setShowDockStatus(role, show);
 }
 
 IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
@@ -661,12 +681,19 @@ IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
 
 void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
 {
-    if (QDockWidget* widget = m_mainLayout->lastDockWidget(role))
-        if (actions.contains(widget))
-            return actions[widget]->setChecked(show);
+    if (show) {
+        if (QDockWidget* widget = m_mainLayout->lastDockWidget(role))
+            if (actions.contains(widget))
+                return actions[widget]->setChecked(show);
 
-    if (show && barForRole(role)->actions().count())
-        barForRole(role)->actions().first()->setChecked(show);
+        if (barForRole(role)->actions().count())
+            barForRole(role)->actions().first()->setChecked(show);
+
+    } else {
+        foreach (QAction* action, barForRole(role)->actions())
+            if (action->isChecked())
+                action->setChecked(false);
+    }
 }
 
 void IdealMainWidget::showLeftDock(bool show)
@@ -867,6 +894,16 @@ void IdealMainWidget::selectPreviousDock()
     if (index < bar->actions().count()) {
         QAction* action = bar->actions().at(index);
         action->setChecked(true);
+    }
+}
+
+void Sublime::IdealMainWidget::setShowDockStatus(IdealMainLayout::Role role, bool checked)
+{
+    KAction* action = actionForRole(role);
+    if (action->isChecked() != checked) {
+        action->blockSignals(true);
+        action->setChecked(checked);
+        action->blockSignals(false);
     }
 }
 
