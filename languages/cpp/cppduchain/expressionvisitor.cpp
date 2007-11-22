@@ -197,7 +197,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
 }
 
   
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::DUContext::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_session(session), m_currentContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::DUContext::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_inclusionTrace(inclusionTrace), m_session(session), m_currentContext(0) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
