@@ -95,6 +95,7 @@ private:
   KDevelop::Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false, bool isNamespaceAlias = false, const Identifier& customName = Identifier());
   /// Same as the above, but sets it as the definition too
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
+  void eventuallyAssignInternalContext();
   void closeDeclaration();
   void abortDeclaration();
 

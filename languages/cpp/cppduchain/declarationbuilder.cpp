@@ -531,28 +531,10 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
     currentDeclaration()->setType(type);
 }
 
-void DeclarationBuilder::closeDeclaration()
+void DeclarationBuilder::eventuallyAssignInternalContext()
 {
-  if (lastType() || m_lastContext) {
+  if (m_lastContext) {
     DUChainWriteLocker lock(DUChain::lock());
-
-    if(lastType()) {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
-      DelayedType* delayed = dynamic_cast<DelayedType*>(lastType().data());
-
-      //When the given type has no declaration yet, assume we are declaring it now.
-      //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
-      if( idType && idType->declaration() == 0 && !delayed )
-          idType->setDeclaration( currentDeclaration() );
-
-      //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
-      if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) )
-        currentDeclaration()->setKind(Declaration::Instance);
-      else
-        currentDeclaration()->setKind(Declaration::Type);
-
-      currentDeclaration()->setType(lastType());
-    }
 
     if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
       Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
@@ -569,8 +551,31 @@ void DeclarationBuilder::closeDeclaration()
       }
     }
   }
+}
 
+void DeclarationBuilder::closeDeclaration()
+{
+  if (lastType()) {
+    DUChainWriteLocker lock(DUChain::lock());
 
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
+    DelayedType* delayed = dynamic_cast<DelayedType*>(lastType().data());
+
+    //When the given type has no declaration yet, assume we are declaring it now.
+    //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
+    if( idType && idType->declaration() == 0 && !delayed )
+        idType->setDeclaration( currentDeclaration() );
+
+    //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
+    if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) )
+      currentDeclaration()->setKind(Declaration::Instance);
+    else
+      currentDeclaration()->setKind(Declaration::Type);
+
+    currentDeclaration()->setType(lastType());
+  }
+
+  eventuallyAssignInternalContext();
 
   //kDebug(9007) << "Mangled declaration:" << currentDeclaration()->mangledIdentifier();
 
@@ -621,6 +626,8 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   DeclarationBuilderBase::visitClassSpecifier(node);
 
+  eventuallyAssignInternalContext();
+  
   if( node->name ) {
     //Resolve forward-declarations
     DUChainWriteLocker lock(DUChain::lock());
