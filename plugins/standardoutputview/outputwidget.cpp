@@ -27,6 +27,7 @@
 #include <QtGui/QItemSelectionModel>
 #include <QtGui/QListView>
 #include <QtGui/QToolButton>
+#include <QtGui/QScrollBar>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,6 +45,18 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     m_closeButton->adjustSize();
     m_closeButton->setToolTip( i18n( "Close the currently active output view") );
     setCornerWidget( m_closeButton, Qt::TopRightCorner );
+
+    connect( this, SIGNAL( viewRemoved( int ) ),
+                m_outputView, SIGNAL( viewRemoved( int ) ) );
+    connect( m_outputView, SIGNAL( removeView( int ) ),
+                this, SLOT( removeView( int ) ) );
+    connect( this, SIGNAL( viewRemoved( int ) ),
+                m_outputView, SLOT( removeViewData( int ) ) );
+//  connect( this, SIGNAL( activated(const QModelIndex&) ),
+//              m_outputView, SIGNAL(activated(const QModelIndex&)) );
+    connect( m_outputView, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()) );
+    connect( m_outputView, SIGNAL(selectPrevItem()), this, SLOT(selectPrevItem()) );
+
     connect( m_outputView, SIGNAL( modelChanged( int ) ),
              this, SLOT( changeModel( int ) ) );
     connect( m_outputView, SIGNAL( delegateChanged( int ) ),
@@ -54,7 +67,6 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
         changeModel( id );
         changeDelegate( id );
     }
-
 }
 
 
@@ -64,44 +76,18 @@ void OutputWidget::changeDelegate( int id )
     if( m_listviews.contains( id ) )
         m_listviews[id]->setItemDelegate(m_outputView->registeredDelegate(id));
     else
-    {
-        kDebug(9500) << "creating listview";
-        QListView* listview = new QListView(this);
-        listview->setModel( m_outputView->registeredModel(id) );
-        listview->setItemDelegate(m_outputView->registeredDelegate(id));
-        listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-        m_listviews[id] = listview;
-        m_widgetMap[listview] = id;
-//         connect( listview, SIGNAL(activated(const QModelIndex&)),
-//                  this, SIGNAL(activated(const QModelIndex&)));
-        connect( listview, SIGNAL(clicked(const QModelIndex&)),
-                 this, SLOT(activate(const QModelIndex&)));
-        connect( listview, SIGNAL(activated(const QModelIndex&)),
-                 this, SLOT( activate(const QModelIndex&) ) );
-        addTab( listview, m_outputView->registeredTitle(id) );
-    }
+        createListView(id);
 }
 
 void OutputWidget::changeModel( int id )
 {
     kDebug(9500) << "model changed for id:" << id;
-    if( m_listviews.contains( id ) )
+    if( m_listviews.contains( id ) ) {
         m_listviews[id]->setModel(m_outputView->registeredModel(id));
+    }
     else
     {
-        kDebug(9500) << "creating listview";
-        QListView* listview = new QListView(this);
-        listview->setModel( m_outputView->registeredModel(id) );
-        listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-        m_listviews[id] = listview;
-        m_widgetMap[listview] = id;
-//         connect( listview, SIGNAL(activated(const QModelIndex&)),
-//                  this, SIGNAL(activated(const QModelIndex&)));
-        connect( listview, SIGNAL(clicked(const QModelIndex&)),
-                 this, SLOT(activate(const QModelIndex&)));
-        connect( listview, SIGNAL(activated(const QModelIndex&)),
-                 this, SLOT( activate(const QModelIndex&) ) );
-        addTab( listview, m_outputView->registeredTitle(id) );
+        QListView* listview = createListView(id);
         setCurrentWidget( listview );
     }
 }
@@ -197,6 +183,48 @@ void OutputWidget::activate(const QModelIndex& index)
     {
         iface->activate( index );
     }
+}
+
+QListView* OutputWidget::createListView(int id)
+{
+    kDebug(9500) << "creating listview";
+    QListView* listview = new QListView(this);
+    listview->setModel( m_outputView->registeredModel(id) );
+    listview->setItemDelegate(m_outputView->registeredDelegate(id));
+    listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    m_listviews[id] = listview;
+    m_widgetMap[listview] = id;
+//         connect( listview, SIGNAL(activated(const QModelIndex&)),
+//                  this, SIGNAL(activated(const QModelIndex&)));
+    connect( listview, SIGNAL(clicked(const QModelIndex&)),
+            this, SLOT(activate(const QModelIndex&)));
+    connect( listview, SIGNAL(activated(const QModelIndex&)),
+            this, SLOT( activate(const QModelIndex&) ) );
+
+    m_sliders[listview->verticalScrollBar()] = true;
+    connect( listview->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChanged(int, int)));
+    connect( listview->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
+
+    addTab( listview, m_outputView->registeredTitle(id) );
+    return listview;
+}
+
+void OutputWidget::valueChanged(int value)
+{
+    QScrollBar* slider = qobject_cast<QScrollBar*>(sender());
+    Q_ASSERT(slider);
+
+    // TODO remove value once output view closed, but not a mem usage so low priority
+    m_sliders[slider] = slider->maximum() == value;
+}
+
+void OutputWidget::rangeChanged(int min, int max)
+{
+    QScrollBar* slider = qobject_cast<QScrollBar*>(sender());
+    Q_ASSERT(slider);
+
+    if (m_sliders[slider])
+        slider->setValue(max);
 }
 
 #include "outputwidget.moc"

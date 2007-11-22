@@ -31,6 +31,7 @@ class OutputViewCommand;
 class QModelIndex;
 class QListView;
 class QToolButton;
+class QScrollBar;
 
 class OutputWidget : public KTabWidget
 {
@@ -45,16 +46,22 @@ class OutputWidget : public KTabWidget
         void selectNextItem();
         void selectPrevItem();
         void activate(const QModelIndex&);
+        void rangeChanged(int min, int max);
+        void valueChanged(int value);
 
     Q_SIGNALS:
         void viewRemoved( int );
 //         void activated( const QModelIndex& );
 
     private:
+        QListView* createListView(int id);
+        
         QMap<int, QListView*> m_listviews;
+        QMap<QScrollBar*, bool> m_sliders;
         QMap<QWidget*, int> m_widgetMap;
         StandardOutputView* m_outputView;
         QToolButton* m_closeButton;
+        bool m_atEndOfUpdatingView;
 };
 
 #endif

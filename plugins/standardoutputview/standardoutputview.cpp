@@ -60,19 +60,7 @@ public:
     StandardOutputViewViewFactory(StandardOutputView *part): m_part(part) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
-        Q_UNUSED(parent)
-        OutputWidget* l = new OutputWidget( parent, m_part);
-        QObject::connect( l, SIGNAL( viewRemoved( int ) ),
-                 m_part, SIGNAL( viewRemoved( int ) ) );
-        QObject::connect( m_part, SIGNAL( removeView( int ) ),
-                          l, SLOT( removeView( int ) ) );
-        QObject::connect( l, SIGNAL( viewRemoved( int ) ),
-                          m_part, SLOT( removeViewData( int ) ) );
-//         QObject::connect( l, SIGNAL( activated(const QModelIndex&) ),
-//                  m_part, SIGNAL(activated(const QModelIndex&)) );
-        QObject::connect( m_part, SIGNAL(selectNextItem()), l, SLOT(selectNextItem()) );
-        QObject::connect( m_part, SIGNAL(selectPrevItem()), l, SLOT(selectPrevItem()) );
-        return l;
+        return new OutputWidget( parent, m_part);
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
     {
