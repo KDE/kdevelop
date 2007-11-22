@@ -94,8 +94,7 @@ public:
 ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
 {
-    d->factory = new KDevProjectManagerViewFactory( this );
-    core()->uiController()->addToolView( i18n("Project Manager"), d->factory );
+    d->buildSet = new ProjectBuildSetModel( this );
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
@@ -115,8 +114,10 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_prune = new KAction( i18n("Prune"), this );
     connect( d->m_prune, SIGNAL(triggered()), this, SLOT(pruneProjectItems()) );
     actionCollection()->addAction( "project_prune", d->m_prune );
-    d->buildSet = new ProjectBuildSetModel( this );
     setXMLFile( "kdevprojectmanagerview.rc" );
+    d->factory = new KDevProjectManagerViewFactory( this );
+    core()->uiController()->addToolView( i18n("Project Manager"), d->factory );
+
 }
 
 ProjectManagerViewPlugin::~ProjectManagerViewPlugin()
