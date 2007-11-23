@@ -125,7 +125,7 @@ const DelayedType* containsDelayedType(const AbstractType* type)
       const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.data());
       if( delayed )
         return delayed;
-      else if( delayed = containsDelayedType( base.baseClass.data() ) )
+      else if( (delayed = containsDelayedType( base.baseClass.data() )) )
         return delayed;
     }
   }
@@ -458,7 +458,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
 ///@todo Use explicitly declared specializations
 Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const DUContext::ImportTrace& inclusionTrace )
 {
-  foreach(const ExpressionEvaluationResult& res, templateArguments)
+  //foreach(const ExpressionEvaluationResult& res, templateArguments)
   
   if( ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(this) ) {
     TemplateDeclaration* resolvedTemplate = dynamic_cast<TemplateDeclaration*>(forward->resolved());
