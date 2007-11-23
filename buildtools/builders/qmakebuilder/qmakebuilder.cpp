@@ -81,7 +81,7 @@ QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
             connect( m_makeBuilder, SIGNAL( failed( KDevelop::ProjectBaseItem* ) ),
                 this, SIGNAL( failed( KDevelop::ProjectBaseItem* ) ) );
             connect( m_makeBuilder, SIGNAL( makeTargetBuilt( KDevelop::ProjectBaseItem*, const QString& ) ),
-                this, SIGNAL( distcleanCompleted( KDevelop::ProjectBaseItem*, const QString& ) ) );
+                this, SIGNAL( pruned( KDevelop::ProjectBaseItem* ) ) );
         }
     }
 }
