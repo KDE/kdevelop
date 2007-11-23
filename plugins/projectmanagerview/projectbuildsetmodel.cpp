@@ -24,6 +24,7 @@
 
 #include <kurl.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "projectmodel.h"
 #include "iproject.h"
@@ -32,8 +33,11 @@ QString getFolder( KDevelop::ProjectBaseItem* item )
 {
     if( !item )
         return "";
-    if( item->type() == KDevelop::ProjectBaseItem::Folder )
+
+    if( item->type() == KDevelop::ProjectBaseItem::Folder
+          || item->type() == KDevelop::ProjectBaseItem::BuildFolder )
     {
+
         return item->project()->relativeUrl( item->folder()->url() ).path();
     }else
     {
