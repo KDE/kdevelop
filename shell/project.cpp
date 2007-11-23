@@ -229,7 +229,7 @@ bool Project::open( const KUrl& projectFileUrl )
     KConfigGroup projectGroup( d->m_cfg, "Project" );
 
     d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
-    d->folder = projectFileUrl.directory();
+    d->folder = projectFileUrl.directory( KUrl::AppendTrailingSlash );
 
     QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );
 
@@ -406,6 +406,7 @@ int Project::fileCount() const
 
 KUrl Project::relativeUrl( const KUrl& absolute ) const
 {
+    kDebug(9501) << "Creating relative url between: " << folder() << absolute;
     return KUrl::relativeUrl( folder(), absolute );
 }
 
