@@ -2,6 +2,7 @@
 Type=Service
 Name=KDevQt4Importer
 Name[de]=Qt4-PCS-Import (KDevelop)
+Name[fr]=KDevQtImporter
 Name[nds]=Qt4-PCS-Import (KDevelop)
 Name[sv]=KDevelop QT4-import
 Comment=KDevelop Qt4 PCS Importer
@@ -11,6 +12,7 @@ Comment[de]=Qt4-Import für persistenten Klassenspeicher
 Comment[el]=Εισαγωγέας PCS KDevelop Qt4
 Comment[es]=Importador PCS de Qt4 de KDevelop
 Comment[et]=KDevelopi Qt4 PCS importija
+Comment[fr]=Importation PCS de Qt4 pour KDevelop
 Comment[hu]=KDevelop Qt4 PCS-importáló
 Comment[it]=Importatore PCS di Qt4 di KDevelop
 Comment[ja]=KDevelop Qt4 PCS インポータ

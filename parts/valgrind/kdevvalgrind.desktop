@@ -9,6 +9,7 @@ Comment[de]=Valgrind ist ein Werkzeug zum Auffinden von Speicherverwaltungsprobl
 Comment[el]=Το Valgrind είναι ένα εργαλείο που βοηθά στην εύρεση προβλημάτων διαχείρισης μνήμης στα προγράμματα. http://valgrind.org/
 Comment[es]=Valgrind es una herramienta que le ayuda a encontrar problemas de gestión de memoria en los programas. http://valgrind.org/
 Comment[et]=Valgrind aitab leida programmides mälulekkeid ja muid mäluga seotud asju. http://valgrind.org/
+Comment[fr]=Valgrind est un outil qui vous aide à trouver les problèmes de gestion de la mémoire dans les programmes. http://valgrind.org/
 Comment[hu]=A Valgrind memóriakezelési hibák keresésére alkalmas program - http://valgrind.org
 Comment[it]=Valgrind è uno strumento che ti aiuta a trovare problemi di gestione della memoria nei programmi. http://valgrind.org/
 Comment[ja]=Valgrind は、プログラム内のメモリ管理問題を発見することを手助けするツールです。http://valgrind.org/
