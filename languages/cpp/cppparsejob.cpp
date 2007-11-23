@@ -275,8 +275,10 @@ void CPPInternalParseJob::run()
           ast->session = parentJob()->parseSession();
       }
 
-      foreach (const KDevelop::Problem& p, control.problems())
+      foreach (KDevelop::Problem p, control.problems()) {
+        p.setLocationStack(parentJob()->includeStack());
         KDevelop::DUChain::problemEncountered(p);
+      }
 
       parentJob()->setAST(ast);
     }
