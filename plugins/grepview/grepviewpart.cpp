@@ -347,7 +347,7 @@ void GrepViewPart::searchActivated()
     connect( xargsProc, SIGNAL(error( QProcess::ProcessError )),
              model, SLOT(slotFailed()) );
 
-    int id = m_view->registerView( m_grepdlg->patternString() );
+    int id = m_view->registerView( m_grepdlg->patternString(), KDevelop::IOutputView::AllowUserClose );
     m_view->setModel( id, model );
     m_view->setDelegate( id, delegate );
 

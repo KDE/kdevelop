@@ -304,7 +304,7 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
                 {
                     item->text();
                 }
-                id = view->registerView(i18n("Make: %1", target ) );
+                id = view->registerView(i18n("Make: %1", target), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
                 m_ids[item] = id;
                 m_models[id] = new MakeOutputModel(this, this);
                 m_delegates[id] = new MakeOutputDelegate(this);
