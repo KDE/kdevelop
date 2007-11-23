@@ -79,6 +79,9 @@ public:
     void addIncludedFile(KDevelop::TopDUContext* duChain, int sourceLine);
     const IncludeFileList& includedFiles() const;
 
+    const QStack<DocumentCursor>& includeStack() const;
+    void setIncludeStack(const QStack<DocumentCursor>& includeStack);
+
     ///Returns the preprocessor-job that is parent of this job, or 0
     PreprocessJob* parentPreprocessor() const;
 
@@ -114,11 +117,11 @@ public:
     void setContentContext( const KDevelop::TopDUContextPointer& context );
     ///If this is set, the contentContext should either be used without modification, or updated if it is outdated.
     KDevelop::TopDUContextPointer contentContext() const;
-    
+
     ///If this file was included from another, this contains the path within the search-paths that this file was found through
     KUrl includedFromPath() const;
     void setIncludedFromPath( const KUrl& path );
-    
+
     //Returns the master parse-job, which means the one that was not issued as an include-file
     const CPPParseJob* masterJob() const;
     CPPParseJob* masterJob();
@@ -140,11 +143,12 @@ private:
     //The following two members are used when simplified-matching is used, which means that one content-context and one specialized context will be used.
     KDevelop::TopDUContextPointer m_contentContext;
     KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
-    
+
     KUrl m_includedFromPath;
     mutable bool m_includePathsComputed;
     mutable KUrl::List m_includePaths; //Only a master-job has this set
     bool m_useContentContext;
+    QStack<DocumentCursor> m_includeStack;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job

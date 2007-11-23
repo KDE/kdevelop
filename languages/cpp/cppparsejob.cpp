@@ -486,5 +486,15 @@ void CPPInternalParseJob::setPriority(int priority)
     m_priority = priority;
 }
 
+const QStack< DocumentCursor > & CPPParseJob::includeStack() const
+{
+  return m_includeStack;
+}
+
+void CPPParseJob::setIncludeStack(const QStack< DocumentCursor > & includeStack)
+{
+  m_includeStack = includeStack;
+}
+
 #include "cppparsejob.moc"
 

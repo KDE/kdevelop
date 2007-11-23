@@ -194,8 +194,10 @@ void PreprocessJob::run()
 
     QString result = preprocessor.processFile(parentJob()->document().prettyUrl(), rpp::pp::Data, contents);
 
-    foreach (const KDevelop::Problem& p, preprocessor.problems())
+    foreach (KDevelop::Problem p, preprocessor.problems()) {
+      p.setLocationStack(parentJob()->includeStack());
       KDevelop::DUChain::problemEncountered(p);
+    }
 
     parentJob()->parseSession()->setContents( result.toUtf8(), m_currentEnvironment->takeLocationTable() );
     parentJob()->parseSession()->setUrl( parentJob()->document() );
@@ -286,8 +288,13 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
     KUrl localPath(parentJob()->document());
     localPath.setFileName(QString());
-    
-    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude(parentJob()->includePaths(), localPath, fileName, type, skipCurrentPath ? parentJob()->includedFromPath() : KUrl() );
+    QStack<DocumentCursor> includeStack = parentJob()->includeStack();
+
+    KUrl from;
+    if (skipCurrentPath)
+      from = parentJob()->includedFromPath();
+
+    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude(parentJob()->includePaths(), localPath, fileName, type, from );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
         kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile;
@@ -314,6 +321,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             }
         } else {
             kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": no fitting entry in du-chain, parsing";
+            
             /// Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the
             /// included file right here. Parallel parsing cannot be used here, because we need the
             /// macros before we can continue.
@@ -325,7 +333,12 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             ///The second parameter is zero because we are in a background-thread and we here
             ///cannot create a slave of the foreground cpp-support-part.
             CPPParseJob slaveJob(includedFile, 0, this);
+
             slaveJob.setIncludedFromPath(included.second);
+
+            includeStack.append(DocumentCursor(includedFile, KTextEditor::Cursor(sourceLine, 0)));
+            slaveJob.setIncludeStack(includeStack);
+
             slaveJob.parseForeground();
 
             // Add the included file.
