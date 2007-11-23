@@ -51,6 +51,7 @@ public:
      */
     const QStack<DocumentCursor>& locationStack() const;
     void addLocation(const DocumentCursor& cursor);
+    void setLocationStack(const QStack<DocumentCursor>& locationStack);
     void clearLocationStack();
 
     /**

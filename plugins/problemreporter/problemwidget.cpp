@@ -55,18 +55,18 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPart* part)
   : QTreeView(parent)
   , m_part(part)
 {
-  setObjectName("Problem Reporter Tree");
-  setWindowTitle(i18n("Problem Reporter"));
-  setWindowIcon(KIcon("info"));
-  setRootIsDecorated(false);
-  setWhatsThis( i18n( "Problem Reporter" ) );
-  setModel(new ProblemModel(m_part));
+    setObjectName("Problem Reporter Tree");
+    setWindowTitle(i18n("Problem Reporter"));
+    setWindowIcon(KIcon("info"));
+    setRootIsDecorated(true);
+    setWhatsThis( i18n( "Problem Reporter" ) );
+    setModel(new ProblemModel(m_part));
 
-  //new ModelTest(model());
+    //new ModelTest(model());
 
-  connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
-  bool success = connect(DUChain::self()->notifier(), SIGNAL(problemEncountered(KDevelop::Problem)), SLOT(problemEncountered(KDevelop::Problem)), Qt::QueuedConnection);
-  Q_ASSERT(success);
+    connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
+    bool success = connect(DUChain::self()->notifier(), SIGNAL(problemEncountered(KDevelop::Problem)), SLOT(problemEncountered(KDevelop::Problem)), Qt::QueuedConnection);
+    Q_ASSERT(success);
 }
 
 ProblemWidget::~ProblemWidget()
@@ -75,22 +75,25 @@ ProblemWidget::~ProblemWidget()
 
 void ProblemWidget::problemEncountered(Problem problem)
 {
-  model()->addProblem(new Problem(problem));
+    model()->addProblem(new Problem(problem));
 }
 
 void ProblemWidget::itemActivated(const QModelIndex& index)
 {
-  if (!index.isValid())
-    return;
+    if (!index.isValid())
+        return;
 
-  KDevelop::Problem* problem = model()->problemForIndex(index);
+    KDevelop::Problem* problem = model()->problemForIndex(index);
 
-  m_part->core()->documentController()->openDocument(problem->finalLocation().document(), problem->finalLocation().start());
+    if (!index.internalPointer())
+        m_part->core()->documentController()->openDocument(problem->finalLocation().document(), problem->finalLocation().start());
+    else
+        m_part->core()->documentController()->openDocument(problem->locationStack().at(index.row()).document(), problem->locationStack().at(index.row()));
 }
 
 ProblemModel * ProblemWidget::model() const
 {
-  return static_cast<ProblemModel*>(QTreeView::model());
+    return static_cast<ProblemModel*>(QTreeView::model());
 }
 
 #include "problemwidget.moc"

@@ -97,6 +97,11 @@ Problem& Problem::operator=(const Problem& rhs)
     return *this;
 }
 
+void KDevelop::Problem::setLocationStack(const QStack< DocumentCursor > & locationStack)
+{
+    d->locationStack = locationStack;
+}
+
 /*
   public QSharedData
   QSharedDataPointer<Data> d;
