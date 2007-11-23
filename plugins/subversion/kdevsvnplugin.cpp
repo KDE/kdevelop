@@ -101,7 +101,7 @@ KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     {
         m_outputdelegate = new SvnOutputDelegate( this );
         KDevelop::IOutputView* iface = plugin->extension<KDevelop::IOutputView>();
-        int id = iface->registerView( "Subversion" );
+        int id = iface->registerView( "Subversion", KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
         iface->setModel( id, m_outputmodel );
         iface->setDelegate( id, m_outputdelegate );
     }

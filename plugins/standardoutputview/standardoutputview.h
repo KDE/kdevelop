@@ -45,7 +45,7 @@ public:
     explicit StandardOutputView(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~StandardOutputView();
     int registerView( const QString& title,
-                          KDevelop::IOutputView::CloseBehaviour behaviour = AllowUserClose );
+                          KDevelop::IOutputView::Behaviours behaviour );
     void setModel( int id, QAbstractItemModel* );
 
     void setDelegate( int id, QAbstractItemDelegate* );
@@ -54,7 +54,7 @@ public:
     QAbstractItemDelegate* registeredDelegate( int ) const;
     QString registeredTitle( int id ) const;
     QList<int> registeredViews() const;
-    KDevelop::IOutputView::CloseBehaviour closeBehaviour( int id ) const;
+    KDevelop::IOutputView::Behaviours behaviour( int id ) const;
 public Q_SLOTS:
     void removeViewData( int );
 Q_SIGNALS:

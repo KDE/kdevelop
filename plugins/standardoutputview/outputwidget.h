@@ -57,7 +57,10 @@ class OutputWidget : public KTabWidget
         QListView* createListView(int id);
         
         QMap<int, QListView*> m_listviews;
-        QMap<QScrollBar*, bool> m_sliders;
+
+        // 0 == not at end, 1 == at end, 2 == no auto scroll
+        QMap<QScrollBar*, int> m_sliders;
+
         QMap<QWidget*, int> m_widgetMap;
         StandardOutputView* m_outputView;
         QToolButton* m_closeButton;

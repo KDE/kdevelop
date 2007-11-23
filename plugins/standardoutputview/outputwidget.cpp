@@ -117,7 +117,7 @@ void OutputWidget::closeActiveView()
     if( m_widgetMap.contains( widget ) )
     {
         int id = m_widgetMap[widget];
-        if( m_outputView->closeBehaviour( id ) == KDevelop::IOutputView::AllowUserClose )
+        if( m_outputView->behaviour( id ) & KDevelop::IOutputView::AllowUserClose )
         {
             removeView( id );
         }else kDebug(9500) << "OOops, the view is not user closeable";
@@ -201,7 +201,7 @@ QListView* OutputWidget::createListView(int id)
     connect( listview, SIGNAL(activated(const QModelIndex&)),
             this, SLOT( activate(const QModelIndex&) ) );
 
-    m_sliders[listview->verticalScrollBar()] = true;
+    m_sliders[listview->verticalScrollBar()] = (m_outputView->behaviour(id) & KDevelop::IOutputView::AutoScroll) ? 1 : 2;
     connect( listview->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChanged(int, int)));
     connect( listview->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 
@@ -215,15 +215,19 @@ void OutputWidget::valueChanged(int value)
     Q_ASSERT(slider);
 
     // TODO remove value once output view closed, but not a mem usage so low priority
-    m_sliders[slider] = slider->maximum() == value;
+    int atEnd = slider->maximum() == value ? 1 : 0;
+    if (m_sliders[slider] != 2)
+        m_sliders[slider] = atEnd;
 }
 
 void OutputWidget::rangeChanged(int min, int max)
 {
+    Q_UNUSED(min)
+
     QScrollBar* slider = qobject_cast<QScrollBar*>(sender());
     Q_ASSERT(slider);
 
-    if (m_sliders[slider])
+    if (m_sliders[slider] == 1)
         slider->setValue(max);
 }
 

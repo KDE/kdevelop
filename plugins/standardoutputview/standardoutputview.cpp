@@ -51,7 +51,7 @@ public:
     QMap<int, QAbstractItemDelegate* > m_delegates;
     QMap<int, QString> m_titles;
     QList<int> m_ids;
-    QMap<int, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
+    QMap<int, KDevelop::IOutputView::Behaviours> m_behaviours;
     QList<Sublime::View*> m_views;
 };
 
@@ -105,7 +105,7 @@ StandardOutputView::~StandardOutputView()
 }
 
 int StandardOutputView::registerView( const QString& title,
-                                          KDevelop::IOutputView::CloseBehaviour behaviour )
+                                          KDevelop::IOutputView::Behaviours behaviour )
 {
     int newid;
     if( d->m_ids.isEmpty() )
@@ -124,14 +124,14 @@ int StandardOutputView::registerView( const QString& title,
     return newid;
 }
 
-KDevelop::IOutputView::CloseBehaviour StandardOutputView::closeBehaviour( int id ) const
+KDevelop::IOutputView::Behaviours StandardOutputView::behaviour( int id ) const
 {
 
     if( d->m_titles.contains( id ) )
     {
         return d->m_behaviours[id];
     }
-    return KDevelop::IOutputView::AllowUserClose;
+    return KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll;
 }
 
 void StandardOutputView::setModel( int id, QAbstractItemModel* model )

@@ -23,6 +23,8 @@
 
 #include <iextension.h>
 
+#include <QFlags>
+
 class QString;
 class QAbstractItemModel;
 class QAbstractItemDelegate;
@@ -37,10 +39,12 @@ class IOutputView
 {
 public:
 
-    enum CloseBehaviour{
-        AllowUserClose = 1,
-        AlwaysShowView = 2
+    enum Behaviour {
+        AllowUserClose = 0x1,
+        AlwaysShowView = 0x2,
+        AutoScroll     = 0x4
     };
+    Q_DECLARE_FLAGS(Behaviours, Behaviour)
 
     virtual ~IOutputView() {}
 
@@ -50,7 +54,7 @@ public:
      * @returns an id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerView( const QString& title, CloseBehaviour = AllowUserClose ) = 0;
+    virtual int registerView( const QString& title, Behaviours ) = 0;
 
     /**
      * Sets the model of the registered view identified by id to model
@@ -87,6 +91,9 @@ Q_SIGNALS:
      */
     void viewRemoved( int id );
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)
+
 }
 KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutputView" )
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )
