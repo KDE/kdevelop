@@ -52,8 +52,8 @@
 using namespace KDevelop;
 
 ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPart* part)
-  : QTreeView(parent)
-  , m_part(part)
+    : QTreeView(parent)
+    , m_part(part)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problem Reporter"));
@@ -94,6 +94,14 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
 ProblemModel * ProblemWidget::model() const
 {
     return static_cast<ProblemModel*>(QTreeView::model());
+}
+
+void ProblemWidget::showEvent(QShowEvent * event)
+{
+    Q_UNUSED(event)
+
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
 }
 
 #include "problemwidget.moc"

@@ -24,6 +24,12 @@ using namespace KDevelop;
 class Problem::Private
 {
 public:
+    Private()
+        : source(Unknown)
+    {
+    }
+
+    Source source;
     DocumentRange finalLocation;
     QStack<DocumentCursor> locationStack;
     QString description;
@@ -97,9 +103,19 @@ Problem& Problem::operator=(const Problem& rhs)
     return *this;
 }
 
-void KDevelop::Problem::setLocationStack(const QStack< DocumentCursor > & locationStack)
+void Problem::setLocationStack(const QStack< DocumentCursor > & locationStack)
 {
     d->locationStack = locationStack;
+}
+
+Problem::Source Problem::source() const
+{
+    return d->source;
+}
+
+void Problem::setSource(Source source)
+{
+    d->source = source;
 }
 
 /*

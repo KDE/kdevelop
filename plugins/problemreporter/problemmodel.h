@@ -36,6 +36,15 @@ public:
     ProblemModel(ProblemReporterPart* parent);
     virtual ~ProblemModel();
 
+    enum Columns {
+        Error,
+        Source,
+        File,
+        Line,
+        Column,
+        LastColumn
+    };
+    
     void addProblem(KDevelop::Problem* problem);
     
     virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;

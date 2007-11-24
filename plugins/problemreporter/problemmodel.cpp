@@ -60,13 +60,30 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
         switch (role) {
             case Qt::DisplayRole:
                 switch (index.column()) {
-                    case 0:
+                    case Source:
+                        switch (p->source()) {
+                            case Problem::Unknown:
+                            default:
+                                return i18n("Unknown");
+                            case Problem::Disk:
+                                return i18n("Disk");
+                            case Problem::Preprocessor:
+                                return i18n("Preprocessor");
+                            case Problem::Lexer:
+                                return i18n("Lexer");
+                            case Problem::Parser:
+                                return i18n("Parser");
+                            case Problem::DUChainBuilder:
+                                return i18n("Definition-Use Chain");
+                        }
+                        break;
+                    case Error:
                         return p->description();
-                    case 1:
+                    case File:
                         return p->finalLocation().document().prettyUrl();
-                    case 2:
+                    case Line:
                         return QString::number(p->finalLocation().start().line() + 1);
-                    case 3:
+                    case Column:
                         return QString::number(p->finalLocation().start().column());
                 }
                 break;
@@ -82,13 +99,13 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
         switch (role) {
             case Qt::DisplayRole:
                 switch (index.column()) {
-                    case 0:
+                    case Error:
                         return i18n("In file included from:");
-                    case 1:
+                    case File:
                         return p->locationStack().at(index.row()).document().prettyUrl();
-                    case 2:
+                    case Line:
                         return QString::number(p->locationStack().at(index.row()).line() + 1);
-                    case 3:
+                    case Column:
                         return QString::number(p->locationStack().at(index.row()).column());
                 }
                 break;
@@ -111,7 +128,7 @@ QModelIndex ProblemModel::parent(const QModelIndex & index) const
 
 QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent) const
 {
-    if (row < 0 || column < 0 || column > 3)
+    if (row < 0 || column < 0 || column >= LastColumn)
         return QModelIndex();
 
     if (parent.isValid()) {
@@ -137,7 +154,7 @@ QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent)
 int ProblemModel::columnCount(const QModelIndex & parent) const
 {
     Q_UNUSED(parent)
-    return 4;
+    return LastColumn;
 }
 
 ProblemReporterPart * ProblemModel::part() const
@@ -168,13 +185,15 @@ QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int 
         return QVariant();
 
     switch (section) {
-        case 0:
+        case Source:
+            return i18n("Source");
+        case Error:
             return i18n("Problem");
-        case 1:
+        case File:
             return i18n("File");
-        case 2:
+        case Line:
             return i18n("Line");
-        case 3:
+        case Column:
             return i18n("Column");
     }
 

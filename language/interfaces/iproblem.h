@@ -40,6 +40,18 @@ public:
     Problem(const Problem& other);
     virtual ~Problem();
 
+    enum Source {
+        Unknown,
+        Disk,
+        Preprocessor,
+        Lexer,
+        Parser,
+        DUChainBuilder
+    };
+
+    Source source() const;
+    void setSource(Source source);
+    
     /**
      * Returns the final location where the error occurred.
      */

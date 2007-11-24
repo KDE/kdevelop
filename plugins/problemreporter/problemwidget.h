@@ -41,6 +41,9 @@ public:
 
   class ProblemModel* model() const;
 
+protected:
+  virtual void showEvent(QShowEvent* event);
+
 private Q_SLOTS:
   void problemEncountered(KDevelop::Problem problem);
 
