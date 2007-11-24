@@ -71,6 +71,9 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                 }
                 break;
 
+            case Qt::ToolTipRole:
+                return p->explanation();
+
             default:
                 break;
         }
@@ -133,6 +136,7 @@ QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent)
 
 int ProblemModel::columnCount(const QModelIndex & parent) const
 {
+    Q_UNUSED(parent)
     return 4;
 }
 
