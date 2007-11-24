@@ -61,11 +61,45 @@ void GrepOutputModel::activate( const QModelIndex &idx )
 
 QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex& currentIndex )
 {
+    int nextRow = currentIndex.row() + 1;
+    int rows = rowCount(currentIndex.parent());
+
+    while (nextRow != currentIndex.row()) {
+        QModelIndex idx = index(nextRow, currentIndex.column(), currentIndex.parent());
+        if (GrepOutputItem* item = dynamic_cast<GrepOutputItem*>(itemFromIndex(idx)))
+            if (item->data() == Text)
+                return idx;
+
+        ++nextRow;
+
+        if (nextRow >= rows)
+            if (currentIndex.row() == -1)
+                break;
+            else
+                nextRow = 0;
+    }
+
     return QModelIndex();
 }
 
 QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex& currentIndex )
 {
+    int prevRow = currentIndex.row() - 1;
+    int rows = rowCount(currentIndex.parent());
+
+    do {
+        if (prevRow < 0)
+            prevRow = rows - 1;
+
+        QModelIndex idx = index(prevRow, currentIndex.column(), currentIndex.parent());
+        if (GrepOutputItem* item = dynamic_cast<GrepOutputItem*>(itemFromIndex(idx)))
+            if (item->data() == Text)
+                return idx;
+
+        --prevRow;
+
+    } while (prevRow != currentIndex.row());
+
     return QModelIndex();
 }
 
