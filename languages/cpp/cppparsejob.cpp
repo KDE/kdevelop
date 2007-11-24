@@ -277,6 +277,7 @@ void CPPInternalParseJob::run()
 
       foreach (KDevelop::Problem p, control.problems()) {
         p.setLocationStack(parentJob()->includeStack());
+        p.setSource(KDevelop::Problem::Lexer);
         KDevelop::DUChain::problemEncountered(p);
       }
 

@@ -196,6 +196,7 @@ void PreprocessJob::run()
 
     foreach (KDevelop::Problem p, preprocessor.problems()) {
       p.setLocationStack(parentJob()->includeStack());
+      p.setSource(KDevelop::Problem::Preprocessor);
       KDevelop::DUChain::problemEncountered(p);
     }
 
