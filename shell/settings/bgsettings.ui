@@ -9,9 +9,6 @@
     <height>402</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form2</string>
-  </property>
   <layout class="QHBoxLayout" >
    <property name="margin" >
     <number>9</number>

@@ -9,17 +9,11 @@
     <height>408</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form2</string>
-  </property>
   <layout class="QVBoxLayout" >
    <item>
     <widget class="QCheckBox" name="kcfg_reopenProjectsOnStartup" >
      <property name="text" >
       <string>&amp;Reopen projects on startup</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+A</string>
      </property>
     </widget>
    </item>
