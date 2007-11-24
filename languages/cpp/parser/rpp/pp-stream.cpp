@@ -36,6 +36,7 @@ Stream::Stream()
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
   , m_locationTable(0L)
+  , m_originalInputPosition(KTextEditor::Cursor::invalid())
 {
 }
 
@@ -46,6 +47,7 @@ Stream::Stream( QString * string, const KTextEditor::Cursor& offset )
   , m_inputLine(offset.line())
   , m_inputLineStartedAt(-offset.column())
   , m_locationTable(0L)
+  , m_originalInputPosition(KTextEditor::Cursor::invalid())
 {
   c = m_string->constData();
   end = m_string->constData() + m_string->length();
@@ -58,6 +60,7 @@ Stream::Stream( QString * string, LocationTable* table )
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
   , m_locationTable(table)
+  , m_originalInputPosition(KTextEditor::Cursor::invalid())
 {
   c = m_string->constData();
   end = m_string->constData() + m_string->length();
@@ -105,7 +108,7 @@ const QChar& Stream::peek(int offset) const
   return *(c + offset);
 }
 
-int Stream::pos( ) const
+int Stream::offset( ) const
 {
   return m_pos;
 }
@@ -204,4 +207,22 @@ void Stream::reset( )
 {
   c = m_string->constData();
   m_inputLineStartedAt = m_inputLine = m_pos = 0;
+}
+
+QString rpp::Stream::stringFrom(int offset) const
+{
+  return m_string->mid(offset, m_pos);
+}
+
+KTextEditor::Cursor rpp::Stream::originalInputPosition() const
+{
+  if (m_originalInputPosition.isValid())
+    return m_originalInputPosition;
+
+  return inputPosition();
+}
+
+void rpp::Stream::setOriginalInputPosition(const KTextEditor::Cursor & position)
+{
+  m_originalInputPosition = position;
 }

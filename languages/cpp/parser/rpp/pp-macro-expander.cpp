@@ -59,11 +59,10 @@ QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
         return m_frame->actuals[index];
       else {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.inputPosition(), 0)));
+        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
         problem.setDescription(i18n("Call to macro %1 missing argument number %2", name, index));
+        problem.setExplanation(i18n("Formals: %1", formals.join(", ")));
         m_engine->problemEncountered(problem);
-        // Triggers on deflate.c
-        //Q_ASSERT(0); // internal error?
       }
     }
   }
@@ -116,10 +115,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         QString identifier = skip_identifier(input);
 
         KTextEditor::Cursor inputPosition = input.inputPosition();
+        KTextEditor::Cursor originalInputPosition = input.originalInputPosition();
         QString formal = resolve_formal(identifier, input);
 
         if (!formal.isEmpty()) {
           Stream is(&formal, inputPosition);
+          is.setOriginalInputPosition(originalInputPosition);
           skip_whitespaces(is, devnull());
 
           output << '\"';
@@ -181,7 +182,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         QString name = skip_identifier (input);
 
         // search for the paste token
-        int blankStart = input.pos();
+        int blankStart = input.offset();
         skip_blanks (input, devnull());
         if (!input.atEnd() && input == '#') {
           ++input;
@@ -233,6 +234,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
             pp_macro_expander expand_macro(m_engine);
             Stream ms(&macro->definition, input.inputPosition());
+            ms.setOriginalInputPosition(input.originalInputPosition());
             QString expanded;
             {
               Stream es(&expanded);
@@ -242,6 +244,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             if (!expanded.isEmpty())
             {
               Stream es(&expanded, input.inputPosition());
+              es.setOriginalInputPosition(input.originalInputPosition());
               skip_whitespaces(es, devnull());
               QString identifier = skip_identifier(es);
 
@@ -265,7 +268,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         skip_whitespaces(input, devnull());
 
         //In case expansion fails, we can skip back to this position
-        int openingPosition = input.pos();
+        int openingPosition = input.offset();
         KTextEditor::Cursor openingPositionCursor = input.inputPosition();
         
         // function like macro
@@ -280,7 +283,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         pp_macro_expander expand_actual(m_engine, m_frame);
 
-        int before = input.pos();
+        int before = input.offset();
         {
           actual.clear();
 
@@ -289,11 +292,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             skip_argument_variadics(actuals, macro, input, as);
           }
 
-          if (input.pos() != before)
+          if (input.offset() != before)
           {
             QString newActual;
             {
               Stream as(&actual, input.inputPosition());
+              as.setOriginalInputPosition(input.originalInputPosition());
               Stream nas(&newActual);
               expand_actual(as, nas);
             }
@@ -317,6 +321,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             QString newActual;
             {
               Stream as(&actual, inputPosition);
+              as.setOriginalInputPosition(input.originalInputPosition());
               Stream nas(&newActual);
               expand_actual(as, nas);
             }
@@ -346,6 +351,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         pp_macro_expander expand_macro(m_engine, &frame);
         macro->hidden = true;
         Stream ms(&macro->definition, input.inputPosition());
+        ms.setOriginalInputPosition(input.originalInputPosition());
         expand_macro(ms, output);
         macro->hidden = false;
 
@@ -363,11 +369,11 @@ void pp_macro_expander::skip_argument_variadics (const QList<QString>& __actuals
   int first;
 
   do {
-    first = input.pos();
+    first = input.offset();
     skip_argument(input, output);
 
   } while ( __macro->variadics
-            && first != input.pos()
+            && first != input.offset()
             && !input.atEnd()
             && input == '.'
             && (__actuals.size() + 1) == __macro->formals.size());

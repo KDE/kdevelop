@@ -52,9 +52,11 @@ class KDEVCPPRPP_EXPORT Stream
 
     void toEnd();
 
-    int pos() const;
+    int offset() const;
 
     const QChar& peek(int offset = 1) const;
+
+    QString stringFrom(int offset) const;
 
     /// Move back \a offset chars in the stream
     void rewind(int offset = 1);
@@ -90,6 +92,9 @@ class KDEVCPPRPP_EXPORT Stream
     KTextEditor::Cursor inputPosition() const;
     void setInputPosition(const KTextEditor::Cursor& position);
 
+    KTextEditor::Cursor originalInputPosition() const;
+    void setOriginalInputPosition(const KTextEditor::Cursor& position);
+
     void mark(const KTextEditor::Cursor& position);
 
     Stream & operator<< ( const QChar& c );
@@ -107,6 +112,7 @@ class KDEVCPPRPP_EXPORT Stream
     int m_inputLine;
     int m_inputLineStartedAt;
     LocationTable* m_locationTable;
+    KTextEditor::Cursor m_originalInputPosition;
     //QString output;
 };
 
