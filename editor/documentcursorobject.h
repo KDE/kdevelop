@@ -22,7 +22,7 @@
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/cursorfeedback.h>
 
-#include <documentcursor.h>
+#include "documentcursor.h"
 
 namespace KDevelop
 {

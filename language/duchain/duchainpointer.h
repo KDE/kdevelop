@@ -22,7 +22,7 @@
 #include <QMetaType>
 
 #include <ksharedptr.h>
-#include <languageexport.h>
+#include "../languageexport.h"
 
 //krazy:excludeall=dpointer
 
@@ -129,7 +129,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
     bool operator !=( const DUChainPointer<Type>& rhs ) const {
       return d.data() != rhs.d.data();
     }
-    
+
     ///Returns whether the pointed object is still existing
     operator bool() const {
       return d && d->base();
@@ -139,7 +139,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
       Q_ASSERT(d);
       return *static_cast<Type*>(d->base());
     }
-    
+
     Type* operator->() const {
       Q_ASSERT(d);
       return static_cast<Type*>(d->base());

@@ -21,7 +21,7 @@
 
 #include <QtCore/QDateTime>
 
-#include <languageexport.h>
+#include "../languageexport.h"
 #include <ksharedptr.h>
 #include <kurl.h>
 
@@ -140,7 +140,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared
      * If the time-stamp is invalid and the revision is 0, the file will be automatically deleted.
      * */
     virtual ModificationRevision modificationRevision() const = 0;
-    
+
 private:
   class ParsingEnvironmentFilePrivate const *d;
 };

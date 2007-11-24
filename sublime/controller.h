@@ -21,9 +21,9 @@
 
 #include <QtCore/QObject>
 
-#include <sublimeexport.h>
+#include "sublimeexport.h"
 
-#include <mainwindowoperator.h>
+#include "mainwindowoperator.h"
 
 
 namespace Sublime {

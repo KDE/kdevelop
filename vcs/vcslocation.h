@@ -22,7 +22,7 @@
 #ifndef KDEVVCSLOCATION_H
 #define KDEVVCSLOCATION_H
 
-#include <vcsexport.h>
+#include "vcsexport.h"
 #include <QtCore/QString>
 #include <kurl.h>
 

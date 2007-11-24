@@ -19,7 +19,7 @@
 #ifndef UICONTROLLER_H
 #define UICONTROLLER_H
 
-#include <shellexport.h>
+#include "shellexport.h"
 
 #include <iuicontroller.h>
 #include <sublime/controller.h>
@@ -31,7 +31,7 @@ class MainWindow;
 
 class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public IUiController {
     Q_OBJECT
-    
+
 public:
     UiController(Core *core);
     virtual ~UiController();

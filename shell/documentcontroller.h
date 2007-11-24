@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 
 #include <idocumentcontroller.h>
 
-#include <shellexport.h>
+#include "shellexport.h"
 
 namespace Sublime {
     class Document;

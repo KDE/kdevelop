@@ -24,8 +24,10 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include <documentcursor.h>
-#include <documentrange.h>
+#include "editorexport.h"
+
+#include "documentcursor.h"
+#include "documentrange.h"
 
 namespace KDevelop
 {
@@ -61,7 +63,7 @@ public:
     KTextEditor::SmartRange* smartRange() const;
 
     RangeOwning ownsRange() const;
-    
+
     KUrl url() const;
     static KUrl url(const KTextEditor::Range* range);
 

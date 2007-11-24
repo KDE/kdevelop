@@ -22,7 +22,7 @@
 #include <QtCore/QStringList>
 #include <kurl.h>
 
-#include <shellexport.h>
+#include "shellexport.h"
 
 namespace KDevelop
 {

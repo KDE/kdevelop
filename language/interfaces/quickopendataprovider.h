@@ -25,7 +25,7 @@
 #include <QObject>
 
 #include <ksharedptr.h>
-#include <languageexport.h>
+#include "../languageexport.h"
 
 class QString;
 class QStringList;
@@ -58,7 +58,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
     virtual QString text() const = 0;
 
     virtual QString htmlDescription() const = 0;
-    
+
     /**Can return Custom highlighting triplets as explained in
      * the kde header ktexteditor/codecompletionmodel.h
      * The default-implementation returns an empty list, which means no
@@ -98,7 +98,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
      *
      * If the widget can be dynamic_cast'ed to QuickOpenEmbeddedWidgetInterface,
      * the additional interaction defined there will be possible.
-     * 
+     *
      * The default-implementation returns 0, which means no widget will be shown.
      * */
     virtual QWidget* expandingWidget() const;
@@ -121,14 +121,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
     /**
      * For efficiency, all changes to the filter-text are provided by the following 3 difference-operations.
      * */
-    
+
     /**
      * Search-text was changed.
      * This is called whenever the search-text was changed, and the UI should be updated.
      * Store the text to track the exact difference.
      * */
     virtual void setFilterText( const QString& text ) = 0;
-    
+
     /**
      * Filter-text should be completely reset and the context re-computed.
      * */
@@ -148,7 +148,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * For performance-reasons the underlying models should
      * create the QuickOpenDataBase items on demand, because only
      * those that will really be shown will be requested.
-     * 
+     *
      * @param start First item to be returned
      * @param end Return items until here. end <= itemCount()
      * */

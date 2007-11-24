@@ -21,7 +21,7 @@
 #define __KDEVPARTCONTROLLER_H__
 
 #include <kparts/partmanager.h>
-#include <core.h>
+#include "core.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QHash>

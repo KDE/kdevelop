@@ -20,7 +20,7 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <shellexport.h>
+#include "shellexport.h"
 #include <icore.h>
 
 namespace KDevelop {
@@ -78,7 +78,7 @@ public:
     DocumentController *documentControllerInternal();
 
     void deinitialize();
-    
+
 protected:
     void cleanup();
 

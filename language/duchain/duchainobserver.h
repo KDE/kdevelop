@@ -26,7 +26,7 @@
 #include <KTextEditor/Range>
 
 #include "duchainpointer.h"
-#include "iproblem.h"
+#include "../interfaces/iproblem.h"
 
 namespace KDevelop
 {

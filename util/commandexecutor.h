@@ -23,7 +23,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QProcess>
-#include <utilexport.h>
+#include "utilexport.h"
 
 namespace KDevelop
 {

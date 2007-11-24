@@ -20,12 +20,12 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
-#include <languageexport.h>
+#include "../languageexport.h"
 
 #include <documentcursorobject.h>
-#include <identifier.h>
-#include <typesystem.h>
-#include <duchainbase.h>
+#include "identifier.h"
+#include "typesystem.h"
+#include "duchainbase.h"
 
 template<class T>
 class QSet;
@@ -58,7 +58,7 @@ typedef DUChainPointer<DUContext> DUContextPointer;
  * NOTE: A du-context can be freely edited as long as it's parent-context is zero.
  * In the moment the parent-context is set, the context may only be edited when it
  * is allowed to edited it's top-level context(@see TopLevelContext::inDUChain()
- * 
+ *
  * \todo change child relationships to a linked list within the context?
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
@@ -106,12 +106,12 @@ public:
     const DUContext* ctx;
     KTextEditor::Cursor position;
   };
-  
+
   typedef QList<ImportTraceItem> ImportTrace;
-  
+
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
-  
+
 
   ContextType type() const;
   void setType(ContextType type);
@@ -125,7 +125,7 @@ public:
    * Sets the declaration/definition, and also updates it's internal context(they are strictly paired together)
    * */
   void setOwner(ContextOwner* decl);
-  
+
   /**
    * Calculate the depth of this context, from the top level context in the file.
    */
@@ -189,12 +189,12 @@ public:
    * Else an invalid cursor is returned.
    * */
   KTextEditor::Cursor importPosition(const DUContext* target) const;
-  
+
   /**
    * Returns true if this context imports @param origin at any depth, else false.
    * */
   virtual bool imports(const DUContext* origin, const KTextEditor::Cursor& position = KTextEditor::Cursor()) const;
-  
+
   /**
    * Adds an imported context.
    *
@@ -202,7 +202,7 @@ public:
    * @param position Position where the context is imported. This is mainly important in C++ with included files.
    *
    * If the context is already imported, only the position is updated.
-   * 
+   *
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
@@ -225,7 +225,7 @@ public:
   void setPropagateDeclarations(bool propagate);
 
   bool isPropagateDeclarations() const;
-  
+
   /**
    * Returns the list of contexts importing this context.
    */
@@ -244,7 +244,7 @@ public:
 
   ///Returns true if this declaration is accessible through the du-chain, and thus cannot be edited without a du-chain write lock
   virtual bool inDUChain() const;
-  
+
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position, with the given type \a dataType.
@@ -279,7 +279,7 @@ public:
   /**
    * Returns the type of any \a identifier defined in this context, or
    * null if one is not found.
-   * 
+   *
    * Does not search imported parent-contexts(like base-classes).
    */
   QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, SearchFlags flags = NoSearchFlags) const;
@@ -351,7 +351,7 @@ public:
    * \returns true if \a context is a subcontext, otherwise false.
    */
   bool parentContextOf(DUContext* context) const;
-  
+
   /**
    * Return a list of all reachable declarations for a given cursor \a position in a given \a url.
    *
@@ -362,7 +362,7 @@ public:
    * The returned declarations are paired together with their inheritance-depth, which is the count of steps
    * to into other contexts that were needed to find the declaration. Declarations reached through a namespace- or global-context
    * are offsetted by 1000.
-   * 
+   *
    * \returns the requested declarations, if any were active at that location. Declarations propagated into this context(@see setPropagateDeclarations) are included.
    */
   QList< QPair<Declaration*, int> > allDeclarations(const KTextEditor::Cursor& position, const TopDUContext* topContext, bool searchInParents=true) const;
@@ -371,7 +371,7 @@ public:
    * Return all declarations in this context that have the given \a identifier, without any filtering.
    * */
   QList<Declaration*> allLocalDeclarations(const Identifier& identifier) const;
-  
+
   /**
    * Find the use which encompasses \a position, if one exists.
    */
@@ -438,7 +438,7 @@ public:
    * @return whether the search was successful. If it is false, it had to be stopped for special reasons(like some flags)
    * */
   virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
-  
+
   protected:
 
   /**

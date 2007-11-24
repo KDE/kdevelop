@@ -26,7 +26,7 @@
 
 #include <kurl.h>
 
-#include <vcsexport.h>
+#include "vcsexport.h"
 
 class QString;
 class QStringList;

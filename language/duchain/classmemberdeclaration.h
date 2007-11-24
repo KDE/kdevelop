@@ -21,8 +21,8 @@
 #ifndef CLASSMEMBERDECLARATION_H
 #define CLASSMEMBERDECLARATION_H
 
-#include <declaration.h>
-#include <languageexport.h>
+#include "declaration.h"
+#include "../languageexport.h"
 
 namespace KDevelop
 {
@@ -71,7 +71,7 @@ public:
   void setMutable(bool isMutable);
 
   virtual Declaration* clone() const;
-  
+
 private:
   class ClassMemberDeclarationPrivate* const d;
 };

@@ -28,7 +28,7 @@
 
 #include <iextension.h>
 
-#include <projectexport.h>
+#include "../projectexport.h"
 
 
 

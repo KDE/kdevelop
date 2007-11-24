@@ -19,7 +19,7 @@
 #ifndef KDEVDOCUMENTCURSOR_H
 #define KDEVDOCUMENTCURSOR_H
 
-#include <editorexport.h>
+#include "editorexport.h"
 
 #include <kurl.h>
 

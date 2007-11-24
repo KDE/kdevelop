@@ -23,7 +23,7 @@
 #include <QtCore/QList>
 
 
-#include <sublimeexport.h>
+#include "sublimeexport.h"
 
 class QWidget;
 

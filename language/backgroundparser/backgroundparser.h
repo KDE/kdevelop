@@ -31,7 +31,7 @@
 
 #include <kurl.h>
 
-#include <languageexport.h>
+#include "../languageexport.h"
 #include <istatus.h>
 
 class QMutex;
@@ -94,7 +94,7 @@ public:
      * Set the delay in miliseconds before the background parser starts parsing.
      */
     void setDelay(int miliseconds);
-    
+
 Q_SIGNALS:
     ///Emitted whenever a document parse-job has finished. The job contains the du-chain(if one was created) etc.
     void parseJobFinished(KDevelop::ParseJob* job);

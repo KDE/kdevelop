@@ -21,9 +21,9 @@
 
 #include <kurl.h>
 
-#include <sublimeexport.h>
+#include "sublimeexport.h"
 
-#include <document.h>
+#include "document.h"
 
 namespace Sublime {
 

@@ -22,7 +22,7 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 
-#include <interfacesexport.h>
+#include "interfacesexport.h"
 
 class KUrl;
 

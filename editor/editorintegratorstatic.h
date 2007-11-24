@@ -27,7 +27,7 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include <documentcursor.h>
+#include "documentcursor.h"
 
 namespace KTextEditor
 {
@@ -52,7 +52,7 @@ public:
 
 Q_SIGNALS:
   void documentAboutToBeDeleted(KTextEditor::Document* document);
-  
+
 public Q_SLOTS:
   /**
    * Removes the text editor \a document from the integrator.

@@ -21,9 +21,9 @@
 #ifndef CLASSFUNCTIONDECLARATION_H
 #define CLASSFUNCTIONDECLARATION_H
 
-#include <classmemberdeclaration.h>
-#include <abstractfunctiondeclaration.h>
-#include <languageexport.h>
+#include "classmemberdeclaration.h"
+#include "abstractfunctiondeclaration.h"
+#include "../languageexport.h"
 
 namespace KDevelop
 {
@@ -66,7 +66,7 @@ public:
   //bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
 
   virtual void setAbstractType(AbstractType::Ptr type);
-  
+
   virtual Declaration* clone() const;
 private:
   class ClassFunctionDeclarationPrivate* const d;

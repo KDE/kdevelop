@@ -23,7 +23,7 @@
 
 #include <QtCore/QList>
 
-#include <shellexport.h>
+#include "shellexport.h"
 
 namespace KDevelop {
 

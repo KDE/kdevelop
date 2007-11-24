@@ -24,7 +24,7 @@
 
 #include <kjob.h>
 
-#include <vcsexport.h>
+#include "vcsexport.h"
 
 class QVariant;
 class QString;
@@ -117,7 +117,7 @@ public:
     /**
      * Used to get at the version control plugin. The plugin
      * can be used to get one of the interfaces to execute
-     * more vcs actions, depending on this jobs results 
+     * more vcs actions, depending on this jobs results
      * (like getting a diff for an entry in a log)
      */
     virtual KDevelop::IPlugin* vcsPlugin() const = 0;

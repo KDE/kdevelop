@@ -21,10 +21,10 @@
 
 #include <QtCore/QObject>
 
-#include <sublimeexport.h>
+#include "sublimeexport.h"
 
-#include <areaindex.h>
-#include <sublimedefs.h>
+#include "areaindex.h"
+#include "sublimedefs.h"
 
 namespace Sublime {
 

@@ -22,8 +22,8 @@
 #ifndef VCSDIFF_H
 #define VCSDIFF_H
 
-#include <vcsexport.h>
-#include <vcslocation.h>
+#include "vcsexport.h"
+#include "vcslocation.h"
 #include <QtCore/QHash>
 
 class QString;

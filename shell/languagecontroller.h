@@ -22,7 +22,7 @@
 
 #include <ilanguagecontroller.h>
 
-#include <shellexport.h>
+#include "shellexport.h"
 
 namespace KParts {
 class Part;

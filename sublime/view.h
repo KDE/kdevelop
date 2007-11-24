@@ -21,7 +21,7 @@
 
 #include <QtCore/QObject>
 
-#include <sublime/sublimeexport.h>
+#include "sublimeexport.h"
 
 namespace Sublime {
 
@@ -48,7 +48,7 @@ public:
     bool hasWidget() const;
 
     void requestRaise();
-    
+
 Q_SIGNALS:
     void raise(Sublime::View*);
 

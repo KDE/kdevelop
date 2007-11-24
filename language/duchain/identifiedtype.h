@@ -21,8 +21,8 @@
 #ifndef IDENTIFIEDTYPE_H
 #define IDENTIFIEDTYPE_H
 
-#include <languageexport.h>
-#include <identifier.h>
+#include "../languageexport.h"
+#include "identifier.h"
 
 namespace KDevelop
 {
@@ -48,7 +48,7 @@ public:
   bool equals(const IdentifiedType* rhs) const;
 
   void clear();
-  
+
   Declaration* declaration() const;
   /**
    * You should be careful when setting this, because it also changes the meaning of the declaration.

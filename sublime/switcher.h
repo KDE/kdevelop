@@ -21,7 +21,7 @@
 
 #include <QtGui/QComboBox>
 
-#include <sublimeexport.h>
+#include "sublimeexport.h"
 
 namespace Sublime {
 

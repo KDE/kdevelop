@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #ifndef CONTEXTOWNER_H
 #define CONTEXTOWNER_H
 
-#include <languageexport.h>
+#include "../languageexport.h"
 
 namespace KDevelop
 {
@@ -44,16 +44,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ContextOwner {
 
   ///If this is a declaration, this returns the pointer, else zero.
   Declaration* asDeclaration();
-  
+
   ///If this is a definition, this returns the pointer, else zero.
   Definition* asDefinition();
-  
+
   ///If this is a declaration, this returns the pointer, else zero.
   const Declaration* asDeclaration() const;
-  
+
   ///If this is a definition, this returns the pointer, else zero.
   const Definition* asDefinition() const;
-  
+
   private:
     class ContextOwnerPrivate* const d;
 };

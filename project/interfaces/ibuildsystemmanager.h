@@ -22,8 +22,8 @@
 #ifndef IBUILDSYSTEMMANAGER_H
 #define IBUILDSYSTEMMANAGER_H
 
-#include <iprojectfilemanager.h>
-#include <projectexport.h>
+#include "iprojectfilemanager.h"
+#include "../projectexport.h"
 
 namespace KDevelop
 {

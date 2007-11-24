@@ -20,8 +20,8 @@
 #ifndef TYPESYSTEM_H
 #define TYPESYSTEM_H
 
-#include <identifier.h>
-#include <languageexport.h>
+#include "identifier.h"
+#include "../languageexport.h"
 #include <QtCore/QSet>
 
 #include <QtCore/QList>
@@ -134,7 +134,7 @@ public:
 
   ///Should return whether this type's content equals the given one
   virtual bool equals(const AbstractType* rhs) const = 0;
-  
+
   /**
    * Should create a clone of the source-type, with as much data copied as possible without breaking the du-chain.
    * */
@@ -194,7 +194,7 @@ public:
   virtual WhichType whichType() const;
 
   virtual AbstractType* clone() const;
-  
+
   virtual bool equals(const AbstractType* rhs) const;
 
 protected:
@@ -227,7 +227,7 @@ public:
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
-  
+
   virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -261,7 +261,7 @@ public:
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
-  
+
   virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
@@ -280,7 +280,7 @@ public:
     SignatureReturn, //When this is given, only a string that represents the return-type is returned
     SignatureArguments //When this is given, a string that represents the arguments like "(ARGTYPE1, ARGTYPE1, ..)" is returend
   };
-  
+
   FunctionType();
   FunctionType(const FunctionType& rhs);
   ~FunctionType();
@@ -301,12 +301,12 @@ public:
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
-  
+
   virtual QString toString() const;
 
   ///Creates a string that represents the given part of the signature
   virtual QString partToString( SignaturePart sigPart ) const;
-  
+
   //virtual uint hash() const;
 
   virtual WhichType whichType() const;
@@ -330,7 +330,7 @@ public:
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
-  
+
   const QList<AbstractType::Ptr>& elements () const;
 
   bool operator == (const StructureType &other) const;
@@ -366,7 +366,7 @@ public:
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
-  
+
   ArrayType();
   ~ArrayType();
 
@@ -411,7 +411,7 @@ public:
     Delayed, //The type should be resolved later. This is the default.
     Unresolved //The type could not be resolved
   };
-  
+
   DelayedType();
   virtual ~DelayedType();
 
@@ -426,7 +426,7 @@ public:
 
   Kind kind() const;
   void setKind(Kind kind);
-  
+
   virtual WhichType whichType() const;
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;

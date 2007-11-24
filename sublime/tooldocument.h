@@ -19,9 +19,9 @@
 #ifndef SUBLIMETOOLDOCUMENT_H
 #define SUBLIMETOOLDOCUMENT_H
 
-#include <document.h>
+#include "document.h"
 
-#include <sublimeexport.h>
+#include "sublimeexport.h"
 
 namespace Sublime {
 

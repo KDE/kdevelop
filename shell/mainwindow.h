@@ -25,10 +25,10 @@ Boston, MA 02110-1301, USA.
 
 #include <kxmlguiwindow.h>
 
-#include <core.h>
+#include "core.h"
 #include <sublime/mainwindow.h>
 
-#include <shellexport.h>
+#include "shellexport.h"
 
 namespace KDevelop
 {

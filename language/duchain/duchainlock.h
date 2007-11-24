@@ -19,7 +19,7 @@
 #ifndef DUCHAINLOCK_H
 #define DUCHAINLOCK_H
 
-#include <languageexport.h>
+#include "../languageexport.h"
 
 namespace KDevelop
 {
@@ -105,7 +105,7 @@ public:
    * has an arbitrary count of read- and write-locks acquired.
    */
   bool lockForRead();
-  
+
   /**
    * Releases a previously acquired read lock.
    */
@@ -122,7 +122,7 @@ public:
    *
    * Write locks are recursive. That means that they can by acquired by threads
    * that already have an arbitrary count of write-locks acquired.
-   * 
+   *
    * WARNING: Write-locks can NOT be acquired by threads that already have a read-lock.
    */
   bool lockForWrite();

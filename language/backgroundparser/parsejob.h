@@ -24,7 +24,7 @@
 
 #include <JobSequence.h>
 #include <kurl.h>
-#include <languageexport.h>
+#include "../languageexport.h"
 
 
 

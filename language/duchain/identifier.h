@@ -26,7 +26,7 @@
 
 #include <ksharedptr.h>
 #include <kdebug.h>
-#include <languageexport.h>
+#include "../languageexport.h"
 
 //We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
 //krazy:excludeall=dpointer
@@ -73,7 +73,7 @@ public:
    * Comparison ignoring the template-identifiers
    * */
   bool nameEquals(const Identifier& rhs) const;
-  
+
   const QList<QualifiedIdentifier>& templateIdentifiers() const;
   void appendTemplateIdentifier(const QualifiedIdentifier& identifier);
   void clearTemplateIdentifiers();
@@ -86,7 +86,7 @@ public:
   Identifier& operator=(const Identifier& rhs);
 
   bool isEmpty() const;
-  
+
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -107,7 +107,7 @@ private:
 
 /**
  * Represents a qualified identifier
- * 
+ *
  * QualifiedIdentifier has it's hash-values stored, so using the hash-values is very efficient.
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
@@ -151,7 +151,7 @@ public:
    * It is respected while isSame(..) comparison.
    * */
   void setIsExpression(bool);
-  
+
   QString toString(bool ignoreExplicitlyGlobal = false) const;
   QStringList toStringList() const;
 
@@ -163,7 +163,7 @@ public:
   //Nicer interfaces to merge
   QualifiedIdentifier operator+(const Identifier& rhs) const;
   QualifiedIdentifier& operator+=(const Identifier& rhs);
-  
+
   //Returns a QualifiedIdentifier with this one appended to the other. It is explicitly global if either this or base is.
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
   QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;
@@ -175,7 +175,7 @@ public:
    * It does respect the isExpression() flag, and optionally the explicitlyGlobal flag.
    * */
   bool isSame(const QualifiedIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
-  
+
   /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
    * */

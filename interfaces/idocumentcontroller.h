@@ -24,7 +24,7 @@
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
 
-#include <interfacesexport.h>
+#include "interfacesexport.h"
 
 #include "idocument.h"
 
@@ -104,7 +104,7 @@ Q_SIGNALS:
 
     /**This is emitted when the document content changed.*/
     void documentContentChanged( KDevelop::IDocument* document );
-    
+
     friend class IDocument;
 };
 

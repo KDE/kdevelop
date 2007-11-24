@@ -20,7 +20,7 @@
 #define IQUICKOPEN_H
 
 #include <iextension.h>
-#include <languageexport.h>
+#include "../languageexport.h"
 
 class QStringList;
 

@@ -22,7 +22,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QList>
 #include <QtCore/QAbstractItemModel>
-#include <sublimeexport.h>
+#include "sublimeexport.h"
 
 class QStandardItemModel;
 

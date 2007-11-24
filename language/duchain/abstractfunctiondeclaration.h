@@ -20,7 +20,7 @@
 #define ABSTRACTFUNCTIONDECLARATION_H
 
 #include <QtCore/QString>
-#include <languageexport.h>
+#include "../languageexport.h"
 
 namespace KDevelop
 {
@@ -74,7 +74,7 @@ public:
   const QList<QString>& parameterNames() const;
 
   void addParameterName(const QString& str);
-  
+
   private:
     AbstractFunctionDeclarationPrivate* const d;
 };

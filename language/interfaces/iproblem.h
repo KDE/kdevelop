@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEV_PROBLEM_H
 #define KDEV_PROBLEM_H
 
-#include <languageexport.h>
+#include "../languageexport.h"
 
 #include <QStack>
 

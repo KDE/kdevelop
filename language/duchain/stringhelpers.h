@@ -19,7 +19,7 @@
 #ifndef __DUCHAIN_STRINGHELPERS_H__
 #define __DUCHAIN_STRINGHELPERS_H__
 
-#include <languageexport.h>
+#include "../languageexport.h"
 
 #include <QtCore/QChar>
 
@@ -75,7 +75,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
     QString prefix() const;
 
     uint position() const;
-  
+
   private:
     class ParamIteratorPrivate* const d;
 };

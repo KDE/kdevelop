@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 
 #include <context.h>
 
-#include "duchainpointer.h"
+#include "../duchain/duchainpointer.h"
 
 namespace KDevelop
 {

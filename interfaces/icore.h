@@ -22,7 +22,7 @@ Boston, MA 02110-1301, USA.
 #define ICORE_H
 
 #include <QtCore/QObject>
-#include <interfacesexport.h>
+#include "interfacesexport.h"
 
 
 namespace KParts

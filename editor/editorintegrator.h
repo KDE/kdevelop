@@ -25,7 +25,8 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/smartrange.h>
 
-#include <documentcursor.h>
+#include "editorexport.h"
+#include "documentcursor.h"
 
 
 class QMutex;
@@ -42,7 +43,7 @@ namespace KDevelop
  * Use this to track changes to files, by storing the file-modification time and the editor-revision if applicable(@see KTextEditor::SmartInterface)
  *
  * All member-functions directly act on the two members, without additional logic.
- * 
+ *
  * Does not need a d-pointer, is only a container-class.
  * */
 struct KDEVPLATFORMEDITOR_EXPORT ModificationRevision
@@ -52,7 +53,7 @@ struct KDEVPLATFORMEDITOR_EXPORT ModificationRevision
   bool operator <( const ModificationRevision& rhs ) const;
 
   bool operator==( const ModificationRevision& rhs ) const;
-  
+
   bool operator!=( const ModificationRevision& rhs ) const;
 
   QString toString() const;
@@ -242,7 +243,7 @@ public:
    * Use this to connect to notifications provided by EditorIntegratorStatic.
    */
   static QObject* notifier();
-  
+
 private:
   static KDevelop::EditorIntegratorStatic *data();
   class EditorIntegratorPrivate* const d;

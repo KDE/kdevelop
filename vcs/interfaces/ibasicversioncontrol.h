@@ -24,8 +24,8 @@
 
 #include <iextension.h>
 #include <kurl.h>
-#include <vcsrevision.h>
-#include <vcsdiff.h>
+#include "../vcsrevision.h"
+#include "../vcsdiff.h"
 
 class QString;
 
@@ -207,7 +207,7 @@ public:
      * Annotate each line of the given local url at the given revision
      * with information about who changed it and when.
      *
-     * The job should return a QList<QVariant> where the QVariant wraps 
+     * The job should return a QList<QVariant> where the QVariant wraps
      * a KDevelop::VcsAnnotationLine. The instance contains all information
      * needed for the caller to construct a KDevelop::VcsAnnotation
      *

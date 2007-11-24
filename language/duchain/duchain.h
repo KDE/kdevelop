@@ -21,11 +21,11 @@
 
 #include <QtCore/QObject>
 
-#include <languageexport.h>
-#include <duchainobserver.h>
+#include "../languageexport.h"
+#include "duchainobserver.h"
 
 #include "topducontext.h"
-#include "iproblem.h"
+#include "../interfaces/iproblem.h"
 
 class KUrl;
 
@@ -131,7 +131,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
-  
+
 private:
   void addToEnvironmentManager( TopDUContext * chain );
   void removeFromEnvironmentManager( TopDUContext * chain );

@@ -26,7 +26,7 @@
 
 #include <kurl.h>
 
-#include <vcsexport.h>
+#include "vcsexport.h"
 
 class QString;
 class QStringList;
@@ -80,10 +80,10 @@ public:
     void setUrl( const KUrl& );
 
     VcsStatusInfo::State state() const;
-    void setState( VcsStatusInfo::State ); 
+    void setState( VcsStatusInfo::State );
 
     int extendedState() const;
-    void setExtendedState( int ); 
+    void setExtendedState( int );
 
     VcsStatusInfo& operator=( const VcsStatusInfo& rhs);
     bool operator==( const KDevelop::VcsStatusInfo& rhs) const;

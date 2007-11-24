@@ -20,8 +20,8 @@
 #define DEFINITION_H
 
 #include <documentrangeobject.h>
-#include <duchainbase.h>
-#include <languageexport.h>
+#include "duchainbase.h"
+#include "../languageexport.h"
 #include "contextowner.h"
 
 namespace KDevelop

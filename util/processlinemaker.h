@@ -22,7 +22,7 @@
 #define _PROCESSLINEMAKER_H_
 
 #include <QtCore/QObject>
-#include <utilexport.h>
+#include "utilexport.h"
 
 /**
 @file processlinemaker.h

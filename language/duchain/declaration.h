@@ -20,12 +20,12 @@
 #define DECLARATION_H
 
 #include <QtCore/QList>
-#include <languageexport.h>
+#include "../languageexport.h"
 
-#include <identifier.h>
+#include "identifier.h"
 #include <documentrangeobject.h>
-#include <typesystem.h>
-#include <duchainbase.h>
+#include "typesystem.h"
+#include "duchainbase.h"
 #include "contextowner.h"
 
 namespace KDevelop
@@ -39,7 +39,7 @@ class Definition;
 
 /**
  * Represents a single declaration in a definition-use chain.
- * 
+ *
  * NOTE: A du-context can be freely edited as long as it's parent-context is zero.
  * In the moment the parent-context is set, the context may only be edited when it
  * is allowed to edited it's top-level context(@see TopLevelContext::inDUChain()
@@ -70,7 +70,7 @@ public:
     Type, //A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};")
     Instance //An instance of a type is declared("MyClass m;")
   };
- 
+
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
   Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
@@ -90,7 +90,7 @@ public:
 
   ///Returns true if this declaration is accessible through the du-chain, and thus cannot be edited without a du-chain write lock
   virtual bool inDUChain() const;
-  
+
   bool isDefinition() const;
   void setDeclarationIsDefinition(bool dd);
 
@@ -112,7 +112,7 @@ public:
    * If this is a definition, and the definition is resolved, it returns the internal context of the definition.
    * */
   virtual DUContext * internalContext() const;
-  
+
   /**
    * Returns the parent-context of this declaration.
    * */
@@ -156,7 +156,7 @@ public:
    * */
   QString comment() const;
   void setComment(const QString& str);
-  
+
   /**
    * Provides a mangled version of this definition's identifier, for use in a symbol table.
    */
@@ -184,14 +184,14 @@ public:
    * The declaration will not be registered anywhere, so you must care about its deletion.
    *
    * This declaration's text-range will be referenced from the clone, so the clone must not live longer than the original.
-   * 
+   *
    * Sub-classes should implement this and should copy as much information into the clone as possible without breaking the du-chain.
    * Sub-classes should also implement a public copy-constructor that can be used for cloning by sub-classes.
    *
    * ---> You do not have to implement this for your language if you are not going to use it(the du-chain itself does not and should not depend on it).
    * */
   virtual Declaration* clone() const;
-  
+
 private:
   class DeclarationPrivate* const d;
 };

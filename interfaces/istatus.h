@@ -20,8 +20,8 @@
 #ifndef ISTATUS_H
 #define ISTATUS_H
 
-#include <interfacesexport.h>
-#include <iextension.h>
+#include "interfacesexport.h"
+#include "iextension.h"
 
 namespace KDevelop {
 
@@ -37,7 +37,7 @@ public:
      * Return a name for the status object
      */
     virtual QString statusName() const = 0;
-    
+
 Q_SIGNALS:
     /**
      * Request the current message for this plugin to be cleared.

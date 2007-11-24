@@ -22,10 +22,10 @@
 #ifndef SUBLIME_IDEALLAYOUT_H
 #define SUBLIME_IDEALLAYOUT_H
 
-#include <QLayout>
-#include <QPointer>
-#include <QMap>
-#include <QHash>
+#include <QtGui/QLayout>
+#include <QtCore/QPointer>
+#include <QtCore/QMap>
+#include <QtCore/QHash>
 
 class QDockWidget;
 
@@ -161,7 +161,7 @@ private:
 
         int count() const;
         QLayoutItem* itemAt(int index, int& at) const;
-        
+
         const QList<QWidgetItem*> items() const;
         QWidgetItem* first() const;
         void addWidget(QWidget* widget);

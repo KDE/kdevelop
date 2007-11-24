@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef ENVIRONMENTGROUPLIST_H
 #define ENVIRONMENTGROUPLIST_H
 
-#include <utilexport.h>
+#include "utilexport.h"
 #include <ksharedconfig.h>
 
 class KConfig;
@@ -34,13 +34,13 @@ namespace KDevelop
 class EnvironmentWidget;
 
 /**
- * This class manages a list of environment groups, each group containing a number 
+ * This class manages a list of environment groups, each group containing a number
  * of environment variables and their values.
  *
  * The class is constructed from a KConfig object for easy usage in the plugins.
  *
  * The methods to change the environments is protected to disallow access to those methods
- * from plugins, only the environment widget is allowed to change them. 
+ * from plugins, only the environment widget is allowed to change them.
  *
  * Example Usage
  * \code
@@ -79,7 +79,7 @@ public:
     EnvironmentGroupList( KSharedConfigPtr config );
     EnvironmentGroupList( KConfig* config );
     ~EnvironmentGroupList();
-    
+
     /**
      * returns the variables that are set for a given group.
      * This function provides read-only access to the environment
@@ -87,7 +87,7 @@ public:
      * @return a map containing the environment variables for this group, or an empty map if the group doesn't exist in this list
      */
     const QMap<QString, QString> variables( const QString& group ) const;
-    
+
     /**
      * returns the default group
      * The default group should be used by plugins unless the user chooses a different group
@@ -100,7 +100,7 @@ public:
      * @return the list of groups
      */
     QStringList groups() const;
-    
+
 protected:
     EnvironmentGroupList();
     /**
@@ -113,19 +113,19 @@ protected:
      * @return a map containing the environment variables for this group, or an empty map if the group doesn't exist in this list
      */
     QMap<QString, QString>& variables( const QString& group );
-    
+
     /**
      * Changes the default group.
      * @param group a new groupname, if a group of this name doesn't exist the default group is not changed
      */
     void setDefaultGroup( const QString& group );
-    
+
     /**
      * Stores the environment groups in this list to the given KConfig object
      * @param config a KConfig object to which the environment settings should be stored
      */
     void saveSettings( KConfig* config ) const;
-    
+
     void loadSettings( KConfig* config );
     void removeGroup( const QString& group );
 private:
@@ -135,4 +135,4 @@ private:
 
 }
 
-#endif 
+#endif

@@ -21,9 +21,9 @@
 #ifndef FUNCTIONDECLARATION_H
 #define FUNCTIONDECLARATION_H
 
-#include <declaration.h>
-#include <abstractfunctiondeclaration.h>
-#include <languageexport.h>
+#include "declaration.h"
+#include "abstractfunctiondeclaration.h"
+#include "../languageexport.h"
 
 namespace KDevelop
 {
@@ -38,7 +38,7 @@ public:
   virtual ~FunctionDeclaration();
 
   virtual void setAbstractType(AbstractType::Ptr type);
-  
+
   virtual Declaration* clone() const;
 
   virtual QString toString() const;

@@ -23,7 +23,7 @@
 #define IBROWSABLEVERSIONCONTROL_H
 
 #include <iextension.h>
-#include <vcsrevision.h>
+#include "../vcsrevision.h"
 
 class QString;
 
