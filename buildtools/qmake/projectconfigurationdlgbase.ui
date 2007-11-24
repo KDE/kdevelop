@@ -2270,12 +2270,6 @@
         <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
-        <sender>uidir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
         <sender>editConfigExtra</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -2635,6 +2629,12 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>activateApply(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>uidir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>TabBuild</tabstop>
@@ -2741,6 +2741,7 @@
     <include location="global" impldecl="in implementation">klineedit.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>
     <include location="global" impldecl="in implementation">kpushbutton.h</include>
+    <include location="local" impldecl="in implementation">projectconfigurationdlgbase.ui.h</include>
 </includes>
 <slots>
     <slot>updateProjectConfiguration()</slot>
@@ -2777,14 +2778,14 @@
     <slot>downCustomValueClicked()</slot>
     <slot>newCustomVariableActive()</slot>
     <slot>addCustomValueClicked()</slot>
-    <slot>groupRequirementsChanged(int)</slot>
-    <slot>groupLibrariesChanged(int)</slot>
-    <slot>groupTemplateChanged(int)</slot>
-    <slot>targetInstallChanged(bool)</slot>
+    <slot>groupRequirementsChanged( int )</slot>
+    <slot>groupLibrariesChanged( int )</slot>
+    <slot>groupTemplateChanged( int )</slot>
+    <slot>targetInstallChanged( bool )</slot>
     <slot>apply()</slot>
-    <slot>activateApply(int)</slot>
-    <slot>activateApply(const QString&amp;)</slot>
-    <slot>activateApply(QListViewItem*)</slot>
+    <slot>activateApply( int )</slot>
+    <slot>activateApply( const QString &amp; )</slot>
+    <slot>activateApply( QListViewItem * )</slot>
     <slot>customVarChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

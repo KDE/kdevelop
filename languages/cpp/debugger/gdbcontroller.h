@@ -132,7 +132,6 @@ public:
                const QString& run_directory, 
                const QString &application, 
                const QString& run_arguments);
-    void start2();
 
     int qtVersion() const;
 
