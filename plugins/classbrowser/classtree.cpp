@@ -42,7 +42,7 @@
 #include <idocument.h>
 
 #include "classmodel.h"
-#include "classbrowserpart.h"
+#include "classbrowserplugin.h"
 #include "duchainbase.h"
 #include "duchain.h"
 #include "duchainlock.h"
@@ -51,10 +51,10 @@
 
 using namespace KDevelop;
 
-ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPart* part)
+ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   : QWidget(parent)
-  , m_part(part)
-  , m_tree(new ClassTree(this, part))
+  , m_plugin(plugin)
+  , m_tree(new ClassTree(this, plugin))
   , m_currentMode(ModeProject)
 {
   setObjectName("Class Browser Tree");
@@ -123,9 +123,9 @@ ClassWidget::~ClassWidget()
 {
 }
 
-ClassTree::ClassTree(QWidget* parent, ClassBrowserPart* part)
+ClassTree::ClassTree(QWidget* parent, ClassBrowserPlugin* plugin)
   : QTreeView(parent)
-  , m_part(part)
+  , m_plugin(plugin)
 {
   setModel(model());
   header()->hide();
@@ -139,12 +139,12 @@ ClassTree::~ClassTree()
 
 ClassModel* ClassWidget::model()
 {
-  return m_part->model();
+  return m_plugin->model();
 }
 
 ClassModel* ClassTree::model()
 {
-  return m_part->model();
+  return m_plugin->model();
 }
 
 void ClassWidget::setMode(QAction* action)
@@ -155,7 +155,7 @@ void ClassWidget::setMode(QAction* action)
     switch (m_currentMode) {
       case ModeCurrentDocument:
         model()->setFilterDocument(0L);
-        disconnect(m_part->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
+        disconnect(m_plugin->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
         break;
 
       case ModeProject:
@@ -170,8 +170,8 @@ void ClassWidget::setMode(QAction* action)
 
     switch (m_currentMode) {
       case ModeCurrentDocument:
-        model()->setFilterDocument(m_part->core()->documentController()->activeDocument());
-        connect(m_part->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
+        model()->setFilterDocument(m_plugin->core()->documentController()->activeDocument());
+        connect(m_plugin->core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), model(), SLOT(setFilterDocument(KDevelop::IDocument*)));
         break;
 
       case ModeProject:
@@ -225,10 +225,10 @@ void ClassTree::itemActivated(const QModelIndex& index)
 
     readLock.unlock();
 
-    IDocument* doc = m_part->core()->documentController()->documentForUrl(url);
+    IDocument* doc = m_plugin->core()->documentController()->documentForUrl(url);
 
     if (!doc)
-      doc = m_part->core()->documentController()->openDocument(url, range.start());
+      doc = m_plugin->core()->documentController()->openDocument(url, range.start());
 
     doc->textDocument()->activeView()->setSelection(range);
   }
@@ -254,7 +254,7 @@ void ClassTree::openDeclaration()
 
       readLock.unlock();
 
-      m_part->core()->documentController()->openDocument(url, range.start());
+      m_plugin->core()->documentController()->openDocument(url, range.start());
 
     } else {
       kDebug() << "No declaration for base object" << base;
@@ -281,7 +281,7 @@ void ClassTree::openDefinition()
 
       readLock.unlock();
 
-      m_part->core()->documentController()->openDocument(url, range.start());
+      m_plugin->core()->documentController()->openDocument(url, range.start());
     }
   }
 }

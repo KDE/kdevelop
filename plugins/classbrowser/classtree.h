@@ -27,7 +27,7 @@
 #include "duchainbase.h"
 #include "duchainobserver.h"
 
-class ClassBrowserPart;
+class ClassBrowserPlugin;
 
 namespace KDevelop {
  class TopDUContext;
@@ -39,7 +39,7 @@ class ClassWidget : public QWidget
   Q_OBJECT
 
 public:
-  ClassWidget(QWidget* parent, ClassBrowserPart* part);
+  ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin);
   virtual ~ClassWidget();
 
   class ClassModel* model();
@@ -54,7 +54,7 @@ private Q_SLOTS:
   void setMode(QAction* action);
 
 private:
-  ClassBrowserPart* m_part;
+  ClassBrowserPlugin* m_plugin;
 
   class ClassTree* m_tree;
   Modes m_currentMode;
@@ -65,7 +65,7 @@ class ClassTree : public QTreeView
   Q_OBJECT
 
 public:
-  ClassTree(QWidget* parent, ClassBrowserPart* part);
+  ClassTree(QWidget* parent, ClassBrowserPlugin* plugin);
   virtual ~ClassTree();
 
   ClassModel* model();
@@ -79,7 +79,7 @@ private Q_SLOTS:
   void openDefinition();
 
 private:
-  ClassBrowserPart* m_part;
+  ClassBrowserPlugin* m_plugin;
 };
 
 #endif

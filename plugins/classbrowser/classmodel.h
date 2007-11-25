@@ -33,7 +33,7 @@
 #include <identifier.h>
 #include <duchainpointer.h>
 
-class ClassBrowserPart;
+class ClassBrowserPlugin;
 
 namespace KDevelop {
  class TopDUContext;
@@ -47,7 +47,7 @@ class ClassModel : public QAbstractItemModel
   Q_OBJECT
 
 public:
-  ClassModel(ClassBrowserPart* parent);
+  ClassModel(ClassBrowserPlugin* parent);
   virtual ~ClassModel();
 
   class Node : public KDevelop::DUChainBasePointer
@@ -89,7 +89,7 @@ private Q_SLOTS:
   void branchRemoved(KDevelop::DUContextPointer context, KDevelop::DUContextPointer parent);
 
 private:
-  ClassBrowserPart* part() const;
+  ClassBrowserPlugin* plugin() const;
 
   void resetModel();
 

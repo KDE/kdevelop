@@ -35,7 +35,7 @@
 #include "backgroundparser/backgroundparser.h"
 #include "backgroundparser/parsejob.h"
 
-#include "classbrowserpart.h"
+#include "classbrowserplugin.h"
 #include "topducontext.h"
 #include "declaration.h"
 #include "definition.h"
@@ -49,7 +49,7 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-ClassModel::ClassModel(ClassBrowserPart* parent)
+ClassModel::ClassModel(ClassBrowserPlugin* parent)
   : QAbstractItemModel(parent)
   , m_topList(0L)
   , m_filterDocument(0L)
@@ -61,8 +61,8 @@ ClassModel::ClassModel(ClassBrowserPart* parent)
   Q_ASSERT(success);
 }
 
-ClassBrowserPart* ClassModel::part() const {
-  return qobject_cast<ClassBrowserPart*>(QObject::parent());
+ClassBrowserPlugin* ClassModel::plugin() const {
+  return qobject_cast<ClassBrowserPlugin*>(QObject::parent());
 }
 
 ClassModel::~ClassModel()
@@ -113,10 +113,10 @@ bool ClassModel::filterObject(DUChainBase* object) const
     if (m_inProject.contains(object->url()))
       return m_inProject[object->url()];
 
-    bool ret = !part()->core()->projectController()->findProjectForUrl(object->url());
+    bool ret = !plugin()->core()->projectController()->findProjectForUrl(object->url());
 
     if (ret)
-      foreach (IProject* project,  part()->core()->projectController()->projects()) {
+      foreach (IProject* project,  plugin()->core()->projectController()->projects()) {
         if (project->folder().isParentOf(object->url())) {
           ret = false;
           break;
@@ -392,7 +392,7 @@ void ClassModel::branchAdded(DUContextPointer context)
 void ClassModel::contextAdded(Node* parent, DUContext* context)
 {
   ENSURE_CHAIN_READ_LOCKED
-  
+
   if (parent && !m_lists.contains(parent))
     // The parent node is not yet discovered, it will be figured out later if needed
     return;
@@ -444,7 +444,7 @@ void ClassModel::branchRemoved(DUContextPointer context, DUContextPointer parent
 void ClassModel::contextRemoved(Node* parent, DUContext* context)
 {
   ENSURE_CHAIN_READ_LOCKED
-  
+
   if (parent && !m_lists.contains(parent))
     // The parent node is not yet discovered, it will be figured out later if needed
     return;
@@ -462,7 +462,7 @@ void ClassModel::contextRemoved(Node* parent, DUContext* context)
       kWarning() << "Unknown context removal requested - why is it unknown?";
       return;
     }
-    
+
     int index = list->indexOf(cn);
     if (index == -1)
       return;
@@ -486,7 +486,7 @@ ClassModel::Node* ClassModel::pointer(DUChainBase* object) const
 ClassModel::Node* ClassModel::createPointer(DUContext* context, Node* parent) const
 {
   ENSURE_CHAIN_READ_LOCKED
-      
+
   if (context->type() == DUContext::Namespace) {
     Q_ASSERT(!m_namespaces.contains(context->scopeIdentifier()));
 
@@ -502,7 +502,7 @@ ClassModel::Node* ClassModel::createPointer(DUContext* context, Node* parent) co
 ClassModel::Node* ClassModel::createPointer(DUChainBase* object, Node* parent) const
 {
   ENSURE_CHAIN_READ_LOCKED
-      
+
   Node* ret;
 
   if (!m_knownObjects.contains(object)) {
@@ -602,7 +602,7 @@ QVariant ClassModel::data(Node* node, int role)
 Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer) const
 {
   ENSURE_CHAIN_READ_LOCKED
-      
+
   if (!pointer)
     return 0L;
 
@@ -626,7 +626,7 @@ Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer)
 Definition* ClassModel::definitionForObject(const DUChainBasePointer& pointer) const
 {
   ENSURE_CHAIN_READ_LOCKED
-      
+
   if (!pointer)
     return 0L;
 

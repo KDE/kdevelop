@@ -1,5 +1,5 @@
 /*
- * This file is part of KDevelop
+  * This file is part of KDevelop
  *
  * Copyright 2006 Adam Treat <treat@kde.org>
  * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "classbrowserpart.h"
+#include "classbrowserplugin.h"
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -33,17 +33,17 @@
 #include "classmodel.h"
 #include "classtree.h"
 
-K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPart>(); )
+K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPlugin>(); )
 K_EXPORT_PLUGIN(KDevClassBrowserFactory("kdevclassbrowser"))
 
 class ClassBrowserFactory: public KDevelop::IToolViewFactory
 {
 public:
-  ClassBrowserFactory(ClassBrowserPart *part): m_part(part) {}
+  ClassBrowserFactory(ClassBrowserPlugin *plugin): m_plugin(plugin) {}
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    return new ClassWidget(parent, m_part);
+    return new ClassWidget(parent, m_plugin);
   }
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -52,10 +52,10 @@ public:
   }
 
 private:
-  ClassBrowserPart *m_part;
+  ClassBrowserPlugin *m_plugin;
 };
 
-ClassBrowserPart::ClassBrowserPart(QObject *parent, const QVariantList&)
+ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevClassBrowserFactory::componentData(), parent)
     , m_factory(new ClassBrowserFactory(this))
     , m_model(new ClassModel(this))
@@ -66,20 +66,20 @@ ClassBrowserPart::ClassBrowserPart(QObject *parent, const QVariantList&)
   //connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_model, SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
-ClassBrowserPart::~ClassBrowserPart()
+ClassBrowserPlugin::~ClassBrowserPlugin()
 {
 }
 
-void ClassBrowserPart::unload()
+void ClassBrowserPlugin::unload()
 {
   core()->uiController()->removeToolView(m_factory);
 }
 
-ClassModel* ClassBrowserPart::model() const
+ClassModel* ClassBrowserPlugin::model() const
 {
   return m_model;
 }
 
-#include "classbrowserpart.moc"
+#include "classbrowserplugin.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

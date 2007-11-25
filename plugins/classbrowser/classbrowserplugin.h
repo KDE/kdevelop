@@ -26,13 +26,13 @@
 #include <iplugin.h>
 #include <QtCore/QVariant>
 
-class ClassBrowserPart : public KDevelop::IPlugin
+class ClassBrowserPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 
   public:
-    ClassBrowserPart(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ClassBrowserPart();
+    ClassBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~ClassBrowserPlugin();
 
     // KDevelop::Plugin methods
     virtual void unload();
