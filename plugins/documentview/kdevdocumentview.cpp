@@ -18,7 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "kdevdocumentview.h"
-#include "kdevdocumentview_part.h"
+#include "kdevdocumentviewplugin.h"
 #include "kdevdocumentmodel.h"
 
 #include <QAction>
@@ -41,9 +41,9 @@ Boston, MA 02110-1301, USA.
 #include <iplugincontroller.h>
 #include <context.h>
 
-KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent )
+KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *parent )
     : QTreeView( parent ),
-        m_part( part )
+        m_plugin( plugin )
 {
     m_documentModel = new KDevDocumentModel();
 
@@ -73,9 +73,9 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent 
 KDevDocumentView::~KDevDocumentView()
 {}
 
-KDevDocumentViewPart *KDevDocumentView::part() const
+KDevDocumentViewPlugin *KDevDocumentView::plugin() const
 {
-    return m_part;
+    return m_plugin;
 }
 
 void KDevDocumentView::mousePressEvent( QMouseEvent * event )
@@ -86,7 +86,7 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     if ( event->button() == Qt::LeftButton && index.parent().isValid() &&
             event->modifiers() == Qt::NoModifier )
     {
-        m_part->core()->documentController() ->openDocument(
+        m_plugin->core()->documentController() ->openDocument(
             static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) ) ->fileItem() ->url() );
 
     }
@@ -115,7 +115,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 
     KMenu menu( this );
     KDevelop::FileContext context( list ); //FIXME change filecontext to documentcontext
-    m_part->core()->pluginController()->buildContextMenu( &context, &menu );
+    m_plugin->core()->pluginController()->buildContextMenu( &context, &menu );
     menu.exec( event->globalPos() );
 
     QTreeView::contextMenuEvent( event );

@@ -23,7 +23,7 @@
 #include <QTreeView>
 
 class KUrl;
-class KDevDocumentViewPart;
+class KDevDocumentViewPlugin;
 class KDevDocumentModel;
 class KDevDocumentViewDelegate;
 class KDevDocumentSelection;
@@ -40,10 +40,10 @@ class KDevDocumentView: public QTreeView
 {
     Q_OBJECT
 public:
-    explicit KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent );
+    explicit KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *parent );
     virtual ~KDevDocumentView();
 
-    KDevDocumentViewPart *part() const;
+    KDevDocumentViewPlugin *plugin() const;
 
 signals:
     void activateURL( const KUrl &url );
@@ -61,7 +61,7 @@ protected:
     virtual void contextMenuEvent( QContextMenuEvent * event );
 
 private:
-    KDevDocumentViewPart *m_part;
+    KDevDocumentViewPlugin *m_plugin;
     KDevDocumentModel *m_documentModel;
     KDevDocumentSelection* m_selectionModel;
     KDevDocumentViewDelegate* m_delegate;

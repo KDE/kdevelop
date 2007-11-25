@@ -26,9 +26,9 @@
 #include <iplugin.h>
 #include <idocumentcontroller.h>
 
-class KDevDocumentViewPartFactory;
+class KDevDocumentViewPluginFactory;
 
-class KDevDocumentViewPart: public KDevelop::IPlugin
+class KDevDocumentViewPlugin: public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
@@ -40,15 +40,15 @@ public:
     };
 
 public:
-    KDevDocumentViewPart( QObject *parent, const QVariantList& args );
-    virtual ~KDevDocumentViewPart();
+    KDevDocumentViewPlugin( QObject *parent, const QVariantList& args );
+    virtual ~KDevDocumentViewPlugin();
 
     // KDevelop::Plugin methods
     //virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
     virtual bool isCentralPlugin() const;
 private:
-    KDevDocumentViewPartFactory* factory;
+    KDevDocumentViewPluginFactory* factory;
 };
 
 #endif

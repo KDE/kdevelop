@@ -19,7 +19,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kdevdocumentview_part.h"
+#include "kdevdocumentviewplugin.h"
 #include "kdevdocumentviewdelegate.h"
 #include "kdevdocumentview.h"
 #include "kdevdocumentmodel.h"
@@ -36,18 +36,18 @@
 #include <icore.h>
 #include <iuicontroller.h>
 
-K_PLUGIN_FACTORY(KDevDocumentViewFactory, registerPlugin<KDevDocumentViewPart>(); )
+K_PLUGIN_FACTORY(KDevDocumentViewFactory, registerPlugin<KDevDocumentViewPlugin>(); )
 K_EXPORT_PLUGIN(KDevDocumentViewFactory("kdevdocumentview"))
 
-class KDevDocumentViewPartFactory: public KDevelop::IToolViewFactory
+class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 {
     public:
-        KDevDocumentViewPartFactory( KDevDocumentViewPart *part ): m_part( part )
+        KDevDocumentViewPluginFactory( KDevDocumentViewPlugin *plugin ): m_plugin( plugin )
         {}
         virtual QWidget* create( QWidget *parent = 0 )
         {
-            KDevDocumentView* view = new KDevDocumentView( m_part, parent );
-            KDevelop::IDocumentController* docController = m_part->core()->documentController();
+            KDevDocumentView* view = new KDevDocumentView( m_plugin, parent );
+            KDevelop::IDocumentController* docController = m_plugin->core()->documentController();
             QObject::connect( docController, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
                     view, SLOT( activated( KDevelop::IDocument* ) ) );
             QObject::connect( docController, SIGNAL( documentSaved( KDevelop::IDocument* ) ),
@@ -69,36 +69,36 @@ class KDevDocumentViewPartFactory: public KDevelop::IToolViewFactory
             return Qt::RightDockWidgetArea;
         }
     private:
-        KDevDocumentViewPart* m_part;
+        KDevDocumentViewPlugin* m_plugin;
 };
 
 
-KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const QVariantList& args )
+KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantList& args )
         : KDevelop::IPlugin( KDevDocumentViewFactory::componentData(), parent )
 {
 
-    factory = new KDevDocumentViewPartFactory( this );
+    factory = new KDevDocumentViewPluginFactory( this );
 
     core()->uiController()->addToolView( i18n("Documents"), factory );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
 
-KDevDocumentViewPart::~KDevDocumentViewPart()
+KDevDocumentViewPlugin::~KDevDocumentViewPlugin()
 {
 }
 
-Qt::DockWidgetArea KDevDocumentViewPart::dockWidgetAreaHint() const
+Qt::DockWidgetArea KDevDocumentViewPlugin::dockWidgetAreaHint() const
 {
     return Qt::LeftDockWidgetArea;
 }
 
-bool KDevDocumentViewPart::isCentralPlugin() const
+bool KDevDocumentViewPlugin::isCentralPlugin() const
 {
     return true;
 }
 
 
 
-#include "kdevdocumentview_part.moc"
+#include "kdevdocumentviewplugin.moc"
 

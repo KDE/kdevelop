@@ -13,7 +13,7 @@ include_directories(
 set(kdevdocumentview_PART_SRCS
     kdevdocumentview.cpp
     kdevdocumentviewdelegate.cpp
-    kdevdocumentview_part.cpp
+    kdevdocumentviewplugin.cpp
     kdevdocumentmodel.cpp
     kdevdocumentselection.cpp
 )
