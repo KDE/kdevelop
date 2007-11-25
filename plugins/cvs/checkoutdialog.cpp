@@ -13,12 +13,12 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include "cvspart.h"
+#include "cvsplugin.h"
 #include "cvsjob.h"
 #include "cvsproxy.h"
 
-CheckoutDialog::CheckoutDialog(CvsPart* part, QWidget *parent)
-    : KDialog(parent), Ui::CheckoutDialogBase(), m_part(part)
+CheckoutDialog::CheckoutDialog(CvsPlugin* plugin, QWidget *parent)
+    : KDialog(parent), Ui::CheckoutDialogBase(), m_plugin(plugin)
 {
     Ui::CheckoutDialogBase::setupUi(this);
 
@@ -31,7 +31,7 @@ CheckoutDialog::~CheckoutDialog()
 
 void CheckoutDialog::accept()
 {
-    CvsJob *job = m_part->proxy()->checkout(
+    CvsJob *job = m_plugin->proxy()->checkout(
                     localWorkingDir->url(),
                     serverPath->text(),
                     module->currentText(),

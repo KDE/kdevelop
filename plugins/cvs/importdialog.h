@@ -17,7 +17,7 @@
 
 #include "ui_importdialog.h"
 
-class CvsPart;
+class CvsPlugin;
 
 /**
  * Asks the user for all options needed to import an existing directory into
@@ -28,7 +28,7 @@ class ImportDialog : public KDialog, private Ui::ImportDialogBase
 {
     Q_OBJECT
 public:
-    ImportDialog(CvsPart *part, const KUrl& url, QWidget* parent=0);
+    ImportDialog(CvsPlugin *plugin, const KUrl& url, QWidget* parent=0);
     virtual ~ImportDialog();
 
 public slots:
@@ -37,7 +37,7 @@ public slots:
 
 private:
     KUrl m_url;
-    CvsPart* m_part;
+    CvsPlugin* m_plugin;
 };
 
 #endif

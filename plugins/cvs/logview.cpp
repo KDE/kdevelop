@@ -17,13 +17,13 @@
 #include <KDebug>
 #include <KMessageBox>
 
-#include "cvspart.h"
+#include "cvsplugin.h"
 #include "cvsjob.h"
 #include "cvsproxy.h"
 
 
-LogView::LogView(CvsPart* part, CvsJob* job, QWidget *parent)
-    : QWidget(parent), Ui::LogViewBase(), m_part(part)
+LogView::LogView(CvsPlugin* plugin, CvsJob* job, QWidget *parent)
+    : QWidget(parent), Ui::LogViewBase(), m_plugin(plugin)
 {
     Ui::LogViewBase::setupUi(this);
 

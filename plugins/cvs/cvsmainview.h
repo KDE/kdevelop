@@ -17,7 +17,7 @@
 
 #include "ui_cvsmainview.h"
 
-class CvsPart;
+class CvsPlugin;
 class CvsGenericOutputView;
 
 /**
@@ -36,20 +36,20 @@ class CvsGenericOutputView;
 class CvsMainView : public QWidget, private Ui::CvsMainViewBase {
     Q_OBJECT
 public:
-    CvsMainView(CvsPart *part, QWidget* parent);
+    CvsMainView(CvsPlugin *plugin, QWidget* parent);
     virtual ~CvsMainView();
 
 public slots:
     /**
      * Inserts @p tag into the KTabWidget and calls it @p label .
-     * This slot gets connected to CvsPart::addNewTabToMainView().
+     * This slot gets connected to CvsPlugin::addNewTabToMainView().
      */
     void slotAddTab(QWidget* tab, const QString& label);
 
     /**
      * When this slot gets called, the output of the job will be written to
      * the default outputview of the KTabWidget.
-     * This slot gets connected to CvsPart::jobFinished().
+     * This slot gets connected to CvsPlugin::jobFinished().
      */
     void slotJobFinished(KJob* job);
 
@@ -59,7 +59,7 @@ public slots:
     void slotTabClose();
 
 private:
-    CvsPart* m_part;
+    CvsPlugin* m_plugin;
     CvsGenericOutputView* m_mainview;
     QToolButton* m_closeButton;
 };

@@ -12,8 +12,8 @@
 
 #include "cvsjob.h"
 
-CvsGenericOutputView::CvsGenericOutputView(CvsPart *part, CvsJob* job, QWidget* parent)
-    : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_part(part)
+CvsGenericOutputView::CvsGenericOutputView(CvsPlugin *plugin, CvsJob* job, QWidget* parent)
+    : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_plugin(plugin)
 {
     Ui::CvsGenericOutputViewBase::setupUi(this);
 

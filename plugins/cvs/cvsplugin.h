@@ -28,7 +28,7 @@ class CvsProxy;
  *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CvsPart: public KDevelop::IPlugin , public KDevelop::IBasicVersionControl
+class CvsPlugin: public KDevelop::IPlugin , public KDevelop::IBasicVersionControl
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IBasicVersionControl )
@@ -36,8 +36,8 @@ class CvsPart: public KDevelop::IPlugin , public KDevelop::IBasicVersionControl
 friend class CvsProxy;
 
 public:
-    CvsPart( QObject *parent, const QVariantList & args = QVariantList() );
-    virtual ~CvsPart();
+    CvsPlugin( QObject *parent, const QVariantList & args = QVariantList() );
+    virtual ~CvsPlugin();
 
     // From KDevelop::IPlugin
     QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
@@ -138,14 +138,14 @@ signals:
 
     /**
      * Gets emmited when a job like log, editors... was created.
-     * CvsPart will connect the newly created view to the result() signal
+     * CvsPlugin will connect the newly created view to the result() signal
      * of a job. So the new view will show the output of that job as
      * soon as it has finished.
      */
     void addNewTabToMainView(QWidget* tab, QString label);
 
 private:
-    class CvsPartPrivate* d;
+    class CvsPluginPrivate* d;
 
     void setupActions();
 };

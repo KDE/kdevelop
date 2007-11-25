@@ -13,12 +13,12 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include "cvspart.h"
+#include "cvsplugin.h"
 #include "cvsproxy.h"
 #include "cvsjob.h"
 
-ImportDialog::ImportDialog(CvsPart* part, const KUrl& url, QWidget *parent)
-    : KDialog(parent), Ui::ImportDialogBase(), m_url(url), m_part(part)
+ImportDialog::ImportDialog(CvsPlugin* plugin, const KUrl& url, QWidget *parent)
+    : KDialog(parent), Ui::ImportDialogBase(), m_url(url), m_plugin(plugin)
 {
     Ui::ImportDialogBase::setupUi(this);
 
@@ -31,7 +31,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    CvsJob *job = m_part->proxy()->import(m_url,
+    CvsJob *job = m_plugin->proxy()->import(m_url,
                             repository->text(),
                             module->text(),
                             vendorTag->text(),

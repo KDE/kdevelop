@@ -16,7 +16,7 @@
 
 #include "ui_cvsgenericoutputview.h"
 
-class CvsPart;
+class CvsPlugin;
 class CvsJob;
 
 /**
@@ -31,7 +31,7 @@ class CvsJob;
 class CvsGenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
     Q_OBJECT
 public:
-    explicit CvsGenericOutputView(CvsPart *part, CvsJob* job=0, QWidget* parent=0);
+    explicit CvsGenericOutputView(CvsPlugin *plugin, CvsJob* job=0, QWidget* parent=0);
     virtual ~CvsGenericOutputView();
 
 public slots:
@@ -39,7 +39,7 @@ public slots:
     void slotJobFinished(KJob* job);
 
 private:
-    CvsPart* m_part;
+    CvsPlugin* m_plugin;
 };
 
 #endif

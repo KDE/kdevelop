@@ -18,7 +18,7 @@
 
 #include "ui_checkoutdialog.h"
 
-class CvsPart;
+class CvsPlugin;
 
 /**
  * Allows the user to define from where to checkout
@@ -28,7 +28,7 @@ class CheckoutDialog : public KDialog, private Ui::CheckoutDialogBase
 {
     Q_OBJECT
 public:
-    explicit CheckoutDialog(CvsPart* part, QWidget *parent=0);
+    explicit CheckoutDialog(CvsPlugin* plugin, QWidget *parent=0);
     virtual ~CheckoutDialog();
 
 public slots:
@@ -36,7 +36,7 @@ public slots:
     void jobFinished(KJob* job);
 
 private:
-    CvsPart* m_part;
+    CvsPlugin* m_plugin;
 };
 
 #endif

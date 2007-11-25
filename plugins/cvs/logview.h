@@ -16,7 +16,7 @@
 
 #include "ui_logview.h"
 
-class CvsPart;
+class CvsPlugin;
 class CvsJob;
 
 
@@ -43,7 +43,7 @@ class LogView : public QWidget, private Ui::LogViewBase
 {
 Q_OBJECT
 public:
-    explicit LogView(CvsPart* part, CvsJob* job=0, QWidget *parent = 0);
+    explicit LogView(CvsPlugin* plugin, CvsJob* job=0, QWidget *parent = 0);
     virtual ~LogView();
 
     /**
@@ -65,7 +65,7 @@ private slots:
     void slotJobFinished(KJob* job);
 
 private:
-    CvsPart* m_part;
+    CvsPlugin* m_plugin;
     QString m_output;
 };
 

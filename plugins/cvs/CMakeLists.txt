@@ -12,42 +12,42 @@ include_directories( ${KDE4_INCLUDES}
 ########### next target ###############
 
 set(kdevcvs_PART_SRCS
-	cvspart.cpp
-	cvsmainview.cpp
-	cvsgenericoutputview.cpp
-	cvsjob.cpp
-	cvsproxy.cpp
-	diffoptionsdialog.cpp
-	editorsview.cpp
-	logview.cpp
-	commitdialog.cpp
-	updateoptionsdialog.cpp
-	importdialog.cpp
-	checkoutdialog.cpp
-#	cvsfileinfoprovider.cpp
+    cvsplugin.cpp
+    cvsmainview.cpp
+    cvsgenericoutputview.cpp
+    cvsjob.cpp
+    cvsproxy.cpp
+    diffoptionsdialog.cpp
+    editorsview.cpp
+    logview.cpp
+    commitdialog.cpp
+    updateoptionsdialog.cpp
+    importdialog.cpp
+    checkoutdialog.cpp
+#   cvsfileinfoprovider.cpp
 )
 
 set(kdevcvs_PART_UI
-	cvsmainview.ui
-	cvsgenericoutputview.ui
-	diffoptionsdialog.ui
-	editorsview.ui
-	logview.ui
-	commitdialog.ui
-	updateoptionsdialog.ui
-	importdialog.ui
-	checkoutdialog.ui
+    cvsmainview.ui
+    cvsgenericoutputview.ui
+    diffoptionsdialog.ui
+    editorsview.ui
+    logview.ui
+    commitdialog.ui
+    updateoptionsdialog.ui
+    importdialog.ui
+    checkoutdialog.ui
 )
 
 kde4_add_ui_files(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
 kde4_add_plugin(kdevcvs ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
-	${KDE4_KDECORE_LIBS}
-	kdevplatformutil
-	kdevplatforminterfaces
-	kdevplatformvcs
-	kdevplatformproject
+    ${KDE4_KDECORE_LIBS}
+    kdevplatformutil
+    kdevplatforminterfaces
+    kdevplatformvcs
+    kdevplatformproject
 )
 
 install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR} )

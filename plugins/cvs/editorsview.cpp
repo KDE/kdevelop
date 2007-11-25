@@ -16,13 +16,13 @@
 #include <KDebug>
 #include <KMessageBox>
 
-#include "cvspart.h"
+#include "cvsplugin.h"
 #include "cvsjob.h"
 #include "cvsproxy.h"
 
 
-EditorsView::EditorsView(CvsPart* part, CvsJob* job, QWidget *parent)
-    : QWidget(parent), Ui::EditorsViewBase(), m_part(part)
+EditorsView::EditorsView(CvsPlugin* plugin, CvsJob* job, QWidget *parent)
+    : QWidget(parent), Ui::EditorsViewBase(), m_plugin(plugin)
 {
     Ui::EditorsViewBase::setupUi(this);
 

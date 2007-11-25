@@ -13,28 +13,28 @@
 #include <KLocale>
 #include <KDebug>
 
-#include "cvspart.h"
+#include "cvsplugin.h"
 #include "cvsjob.h"
 #include "cvsgenericoutputview.h"
 
-CvsMainView::CvsMainView( CvsPart *part, QWidget* parent )
+CvsMainView::CvsMainView( CvsPlugin *plugin, QWidget* parent )
  : QWidget( parent ),
    Ui::CvsMainViewBase(),
-   m_part(part)
+   m_plugin(plugin)
 {
     Ui::CvsMainViewBase::setupUi(this);
     setWindowTitle(i18n("CVS"));
 
-    // CvsPart will notify when a job finished
-    connect(m_part, SIGNAL(jobFinished(KJob*)),
+    // CvsPlugin will notify when a job finished
+    connect(m_plugin, SIGNAL(jobFinished(KJob*)),
             this, SLOT(slotJobFinished(KJob*)));
 
     // allow appending of new views
-    connect(m_part, SIGNAL(addNewTabToMainView(QWidget*, QString)),
+    connect(m_plugin, SIGNAL(addNewTabToMainView(QWidget*, QString)),
             this, SLOT(slotAddTab(QWidget*, QString)) );
 
     // create a default output view
-    m_mainview = new CvsGenericOutputView(m_part);
+    m_mainview = new CvsGenericOutputView(m_plugin);
     tabwidget->addTab( m_mainview, i18n("CVS") );
 
     // add a close button as corner widget
