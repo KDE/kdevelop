@@ -18,12 +18,12 @@
 class KDevKonsoleViewFactory;
 class KPluginFactory;
 
-class KDevKonsoleViewPart : public KDevelop::IPlugin
+class KDevKonsoleViewPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
-    KDevKonsoleViewPart( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~KDevKonsoleViewPart();
+    KDevKonsoleViewPlugin( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~KDevKonsoleViewPlugin();
     KPluginFactory* konsoleFactory() const;
 private:
     class KDevKonsoleViewFactory *m_factory;

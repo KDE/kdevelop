@@ -1,6 +1,6 @@
-/** \class KonsoleViewPart
+/** \class KonsoleViewPlugin
 Put a brief description here, the brief description ends at the first dot.
-Put a more detailed description of your part in these lines. It can span
+Put a more detailed description of your plugin in these lines. It can span
 over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
@@ -21,20 +21,20 @@ and images.
 ..
 \bug Describe a the nth bug that you know of, but probably hasn't been reported yet.
 
-\requirement Describe a the 1st requirement of your part.
-\requirement Describe a the 2nd requirement of your part.
+\requirement Describe a the 1st requirement of your plugin.
+\requirement Describe a the 2nd requirement of your plugin.
 ...
-\requirement Describe a the nth requirement of your part.
+\requirement Describe a the nth requirement of your plugin.
 
-\todo Describe a the 1st TODO of your part.
-\todo Describe a the 2nd TODO of your part.
+\todo Describe a the 1st TODO of your plugin.
+\todo Describe a the 2nd TODO of your plugin.
 ...
-\todo Describe a the nth TODO of your part.
+\todo Describe a the nth TODO of your plugin.
 
-\faq <b>First frequenly asked question about your part ?</b> Answer.
-\faq <b>Second frequenly asked question about your part ?</b> Answer.
+\faq <b>First frequenly asked question about your plugin ?</b> Answer.
+\faq <b>Second frequenly asked question about your plugin ?</b> Answer.
 ...
-\faq <b>Last frequenly asked question about your part ?</b> Answer.
+\faq <b>Last frequenly asked question about your plugin ?</b> Answer.
 
 \note First note text.
 \note Second note text.

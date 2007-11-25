@@ -9,7 +9,7 @@
 *                                                                         *
 ***************************************************************************/
 
-#include "kdevkonsoleview_part.h"
+#include "kdevkonsoleviewplugin.h"
 
 #include <kgenericfactory.h>
 
@@ -25,45 +25,45 @@ QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
     {
         KPluginFactory *factory = KPluginLoader(*service.data()).factory();
         if( factory )
-            return new KDevKonsoleViewPart( factory, op, args );
+            return new KDevKonsoleViewPlugin( factory, op, args );
     }
     return 0;
 }
 
-K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPart>( QString(), &createKonsoleView ); )
+K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPlugin>( QString(), &createKonsoleView ); )
 K_EXPORT_PLUGIN(KonsoleViewFactory("kdevkonsoleview"))
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
-    KDevKonsoleViewFactory(KDevKonsoleViewPart *part):
-        m_part(part) {}
+    KDevKonsoleViewFactory(KDevKonsoleViewPlugin *plugin):
+        mplugin(plugin) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
-        return new KDevKonsoleView(m_part, parent);
+        return new KDevKonsoleView(mplugin, parent);
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
     {
         return Qt::BottomDockWidgetArea;
     }
 private:
-    KDevKonsoleViewPart *m_part;
+    KDevKonsoleViewPlugin *mplugin;
 };
 
-KDevKonsoleViewPart::KDevKonsoleViewPart( KPluginFactory* konsolefactory, QObject *parent, const QVariantList & )
+KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsolefactory, QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( KonsoleViewFactory::componentData(), parent ), m_konsoleFactory( konsolefactory )
 {
     m_factory = new KDevKonsoleViewFactory(this);
     core()->uiController()->addToolView("Konsole", m_factory);
 }
 
-KPluginFactory* KDevKonsoleViewPart::konsoleFactory() const
+KPluginFactory* KDevKonsoleViewPlugin::konsoleFactory() const
 {
     return m_konsoleFactory;
 }
 
-KDevKonsoleViewPart::~KDevKonsoleViewPart()
+KDevKonsoleViewPlugin::~KDevKonsoleViewPlugin()
 {
 }
 
-#include "kdevkonsoleview_part.moc"
+#include "kdevkonsoleviewplugin.moc"
 

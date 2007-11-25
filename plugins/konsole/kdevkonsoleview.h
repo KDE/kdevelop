@@ -17,14 +17,14 @@
 class KUrl;
 
 
-class KDevKonsoleViewPart;
+class KDevKonsoleViewPlugin;
 
 
 class KDevKonsoleView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KDevKonsoleView( KDevKonsoleViewPart* part, QWidget *parent = 0 );
+    explicit KDevKonsoleView( KDevKonsoleViewPlugin* plugin, QWidget *parent = 0 );
     virtual ~KDevKonsoleView();
 
 public slots:

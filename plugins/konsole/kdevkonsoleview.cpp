@@ -29,12 +29,12 @@
 #include <iprojectcontroller.h>
 // #include <kdevdocumentcontroller.h>
 
-#include "kdevkonsoleview_part.h"
+#include "kdevkonsoleviewplugin.h"
 
 class KDevKonsoleViewPrivate
 {
 public:
-    KDevKonsoleViewPart* m_part;
+    KDevKonsoleViewPlugin* mplugin;
     KDevKonsoleView* m_view;
     KParts::ReadOnlyPart *konsolepart;
     QVBoxLayout *m_vbox;
@@ -69,11 +69,11 @@ public:
 
 };
 
-KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPart *part, QWidget* parent )
+KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent )
         : QWidget( parent ), d(new KDevKonsoleViewPrivate)
 
 {
-    d->m_part = part;
+    d->mplugin = plugin;
     d->m_view = this;
     d->konsolepart = 0;
     setObjectName( i18n( "Konsole" ) );
@@ -87,7 +87,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPart *part, QWidget* parent )
     d->m_vbox->setMargin( 0 );
     d->m_vbox->setSpacing( 0 );
 
-    d->init( d->m_part->konsoleFactory() );
+    d->init( d->mplugin->konsoleFactory() );
 
     //TODO Make this configurable in the future,
     // but by default the konsole shouldn't

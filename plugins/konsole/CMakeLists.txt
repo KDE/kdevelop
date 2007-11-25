@@ -8,7 +8,7 @@ include_directories(
 ########### next target ###############
 
 set(kdevkonsoleview_PART_SRCS
-    kdevkonsoleview_part.cpp
+    kdevkonsoleviewplugin.cpp
     kdevkonsoleview.cpp
 )
 
