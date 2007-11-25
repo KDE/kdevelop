@@ -19,7 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "quickopen_part.h"
+#include "quickopenplugin.h"
 
 #include <typeinfo>
 #include <QtGui/QTreeView>
@@ -48,7 +48,7 @@
 #include "quickopenmodel.h"
 #include "project_file_quickopen.h"
 
-K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPart>(); )
+K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
 
 QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes ) : QObject( d ), m_dialog(d), m_model(model) {
@@ -292,7 +292,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
   return false;
 }
 
-QuickOpenPart::QuickOpenPart(QObject *parent,
+QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
                                  const QVariantList&)
     : KDevelop::IPlugin(KDevQuickOpenFactory::componentData(), parent)
 {
@@ -333,17 +333,17 @@ QuickOpenPart::QuickOpenPart(QObject *parent,
     }
 }
 
-QuickOpenPart::~QuickOpenPart()
+QuickOpenPlugin::~QuickOpenPlugin()
 {
   delete m_model;
   delete m_projectFileData;
 }
 
-void QuickOpenPart::unload()
+void QuickOpenPlugin::unload()
 {
 }
 
-void QuickOpenPart::showQuickOpen( ModelTypes modes )
+void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 {
   kDebug() <<  "showing quickopen";
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
@@ -364,38 +364,38 @@ void QuickOpenPart::showQuickOpen( ModelTypes modes )
 }
 
 
-void QuickOpenPart::quickOpen()
+void QuickOpenPlugin::quickOpen()
 {
   showQuickOpen( All );
 }
 
-void QuickOpenPart::quickOpenFile()
+void QuickOpenPlugin::quickOpenFile()
 {
   showQuickOpen( Files );
 }
 
-void QuickOpenPart::quickOpenFunction()
+void QuickOpenPlugin::quickOpenFunction()
 {
   showQuickOpen( Functions );
 }
 
-void QuickOpenPart::quickOpenClass()
+void QuickOpenPlugin::quickOpenClass()
 {
   showQuickOpen( Classes );
 }
 
-void QuickOpenPart::registerProvider( const QStringList& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
+void QuickOpenPlugin::registerProvider( const QStringList& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_model->registerProvider( scope, type, provider );
 }
 
-bool QuickOpenPart::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
+bool QuickOpenPlugin::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_model->removeProvider( provider );
   return true;
 }
 
 
-#include "quickopen_part.moc"
+#include "quickopenplugin.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

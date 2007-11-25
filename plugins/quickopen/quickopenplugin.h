@@ -31,14 +31,14 @@
 
 class QuickOpenModel;
 
-class QuickOpenPart : public KDevelop::IPlugin, public KDevelop::IQuickOpen
+class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IQuickOpen )
 
 public:
-    QuickOpenPart( QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~QuickOpenPart();
+    QuickOpenPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~QuickOpenPlugin();
 
     // KDevelop::Plugin methods
     virtual void unload();
