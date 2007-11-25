@@ -21,10 +21,10 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 
-#include <qheader.h>
-#include <qlistbox.h>
+#include <q3header.h>
+#include <q3listbox.h>
 #include <qregexp.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qpainter.h>
 
 
@@ -40,8 +40,8 @@ namespace GDBDebugger
 
 FramestackWidget::FramestackWidget(GDBController* controller,
                                    QWidget *parent, 
-                                   const char *name, WFlags f)
-        : QListView(parent, name, f),
+                                   const char *name, Qt::WFlags f)
+        : Q3ListView(parent, name, f),
           viewedThread_(0),
           controller_(controller)
 {
@@ -59,8 +59,8 @@ FramestackWidget::FramestackWidget(GDBController* controller,
     connect(controller, SIGNAL(event(GDBController::event_t)),
             this,       SLOT(slotEvent(GDBController::event_t)));
 
-    connect( this, SIGNAL(clicked(QListViewItem*)),
-             this, SLOT(slotSelectionChanged(QListViewItem*)) );
+    connect( this, SIGNAL(clicked(Q3ListViewItem*)),
+             this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
 }
 
 
@@ -71,11 +71,11 @@ FramestackWidget::~FramestackWidget()
 
 /***************************************************************************/
 
-QListViewItem *FramestackWidget::lastChild() const
+Q3ListViewItem *FramestackWidget::lastChild() const
 {
-    QListViewItem* child = firstChild();
+    Q3ListViewItem* child = firstChild();
     if (child)
-        while (QListViewItem* nextChild = child->nextSibling())
+        while (Q3ListViewItem* nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -87,12 +87,12 @@ void FramestackWidget::clear()
 {
     viewedThread_     = 0;
 
-    QListView::clear();
+    Q3ListView::clear();
 }
 
 /***************************************************************************/
 
-void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
+void FramestackWidget::slotSelectionChanged(Q3ListViewItem *thisItem)
 {
     ThreadStackItem *thread = dynamic_cast<ThreadStackItem*> (thisItem);
     if (thread)
@@ -307,7 +307,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
     Q_ASSERT(dynamic_cast<const GDBMI::ListValue*>(&frames));
 
     // Remove "..." item, if there's one.
-    QListViewItem* last;    
+    Q3ListViewItem* last;    
     if (viewedThread_)
     {
         last = viewedThread_->firstChild();
@@ -355,7 +355,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
     }
     if (has_more_frames)
     {
-        QListViewItem* item;
+        Q3ListViewItem* item;
         if (viewedThread_)
             item = new FrameStackItem(viewedThread_, lastLevel+1, "...");
         else
@@ -382,7 +382,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
 
 ThreadStackItem *FramestackWidget::findThread(int threadNo)
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
     while (sibling)
     {
         ThreadStackItem *thread = dynamic_cast<ThreadStackItem*> (sibling);
@@ -400,7 +400,7 @@ ThreadStackItem *FramestackWidget::findThread(int threadNo)
 
 FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
 {
-    QListViewItem* frameItem = 0;
+    Q3ListViewItem* frameItem = 0;
 
     if (threadNo != -1)
     {
@@ -457,7 +457,7 @@ void FramestackWidget::formatFrame(const GDBMI::Value& frame,
 void FramestackWidget::drawContentsOffset( QPainter * p, int ox, int oy,
                                            int cx, int cy, int cw, int ch )
 {
-    QListView::drawContentsOffset(p, ox, oy, cx, cy, cw, ch);
+    Q3ListView::drawContentsOffset(p, ox, oy, cx, cy, cw, ch);
 
     int s1_x = header()->sectionPos(1);
     int s1_w = header()->sectionSize(1);
@@ -474,7 +474,7 @@ void FramestackWidget::drawContentsOffset( QPainter * p, int ox, int oy,
 FrameStackItem::FrameStackItem(FramestackWidget *parent, 
                                unsigned frameNo,
                                const QString &name)
-        : QListViewItem(parent, parent->lastChild()),
+        : Q3ListViewItem(parent, parent->lastChild()),
         frameNo_(frameNo),
         threadNo_(-1)
 {
@@ -486,7 +486,7 @@ FrameStackItem::FrameStackItem(FramestackWidget *parent,
 FrameStackItem::FrameStackItem(ThreadStackItem *parent, 
                                unsigned frameNo,
                                const QString &name)
-        : QListViewItem(parent, parent->lastChild()),
+        : Q3ListViewItem(parent, parent->lastChild()),
         frameNo_(frameNo),
         threadNo_(parent->threadNo())
 {
@@ -500,11 +500,11 @@ FrameStackItem::~FrameStackItem()
 
 // **************************************************************************
 
-QListViewItem *FrameStackItem::lastChild() const
+Q3ListViewItem *FrameStackItem::lastChild() const
 {
-    QListViewItem* child = firstChild();
+    Q3ListViewItem* child = firstChild();
     if (child)
-        while (QListViewItem* nextChild = child->nextSibling())
+        while (Q3ListViewItem* nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -525,7 +525,7 @@ void FrameStackItem::setOpen(bool open)
         }
     }
 #endif
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 }
 
 // **************************************************************************
@@ -533,7 +533,7 @@ void FrameStackItem::setOpen(bool open)
 // **************************************************************************
 
 ThreadStackItem::ThreadStackItem(FramestackWidget *parent, unsigned threadNo)
-: QListViewItem(parent),
+: Q3ListViewItem(parent),
   threadNo_(threadNo)
 {
     setText(0, i18n("Thread %1").arg(threadNo_));
@@ -547,11 +547,11 @@ ThreadStackItem::~ThreadStackItem()
 
 // **************************************************************************
 
-QListViewItem *ThreadStackItem::lastChild() const
+Q3ListViewItem *ThreadStackItem::lastChild() const
 {
-    QListViewItem* child = firstChild();
+    Q3ListViewItem* child = firstChild();
     if (child)
-        while (QListViewItem* nextChild = child->nextSibling())
+        while (Q3ListViewItem* nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -587,7 +587,7 @@ void ThreadStackItem::setOpen(bool open)
         setText(2, savedSource_);
     }
 
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 }
 
 void FrameStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
@@ -599,7 +599,7 @@ void FrameStackItem::paintCell(QPainter * p, const QColorGroup & cg,
         cg2.setColor(QColorGroup::Base, 
                      KGlobalSettings::alternateBackgroundColor());
     }
-    QListViewItem::paintCell(p, cg2, column, width, align);
+    Q3ListViewItem::paintCell(p, cg2, column, width, align);
 }
 
 void ThreadStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
@@ -611,7 +611,7 @@ void ThreadStackItem::paintCell(QPainter * p, const QColorGroup & cg,
         cg2.setColor(QColorGroup::Base, 
                      KGlobalSettings::alternateBackgroundColor());
     }
-    QListViewItem::paintCell(p, cg2, column, width, align);
+    Q3ListViewItem::paintCell(p, cg2, column, width, align);
 }
 
 

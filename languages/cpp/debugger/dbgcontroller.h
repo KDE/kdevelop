@@ -19,13 +19,15 @@
 #include "mi/gdbmi.h"
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3StrList>
 #include <domutil.h>
 
 
 
 class KProcess;
 class QString;
-class QStrList;
+class Q3StrList;
 
 namespace GDBDebugger
 {

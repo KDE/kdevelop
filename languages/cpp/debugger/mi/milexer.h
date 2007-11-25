@@ -20,9 +20,11 @@
 #ifndef MILEXER_H
 #define MILEXER_H
 
-#include <qmemarray.h>
+#include <q3memarray.h>
 #include <qmap.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class MILexer;
 class TokenStream;
@@ -38,7 +40,7 @@ struct Token
 
 struct FileSymbol
 {
-    QCString contents;
+    Q3CString contents;
     TokenStream *tokenStream;
 
     inline FileSymbol()
@@ -55,10 +57,10 @@ struct TokenStream
     inline int currentToken() const
     { return m_currentToken->kind; }
 
-    inline QCString currentTokenText() const
+    inline Q3CString currentTokenText() const
     { return tokenText(-1); }
 
-    QCString tokenText(int index = 0) const;
+    Q3CString tokenText(int index = 0) const;
 
     inline int lineOffset(int line) const
     { return m_lines.at(line); }
@@ -84,12 +86,12 @@ struct TokenStream
     { m_currentToken++; m_cursor++; }
 
 //private:
-    QCString m_contents;
+    Q3CString m_contents;
 
-    QMemArray<int> m_lines;
+    Q3MemArray<int> m_lines;
     int m_line;
 
-    QMemArray<Token> m_tokens;
+    Q3MemArray<Token> m_tokens;
     int m_tokensCount;
 
     Token *m_firstToken;
@@ -123,15 +125,15 @@ private:
     static bool s_initialized;
     static scan_fun_ptr s_scan_table[128 + 1];
 
-    QCString m_contents;
+    Q3CString m_contents;
     int m_ptr;
     // Cached 'm_contents.length()'
     int m_length;
 
-    QMemArray<int> m_lines;
+    Q3MemArray<int> m_lines;
     int m_line;
 
-    QMemArray<Token> m_tokens;
+    Q3MemArray<Token> m_tokens;
     int m_tokensCount;
 
     int m_cursor;

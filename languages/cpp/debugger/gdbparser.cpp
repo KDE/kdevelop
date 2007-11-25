@@ -18,6 +18,8 @@
 #include <kdebug.h>
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -67,7 +69,7 @@ QString GDBParser::getName(const char **buf)
     const char *start = skipNextTokenStart(*buf);
     if (*start) {
         *buf = skipTokenValue(start);
-        return QCString(start, *buf - start + 1);
+        return Q3CString(start, *buf - start + 1);
     } else
         *buf = start;
 
@@ -81,13 +83,13 @@ QString GDBParser::getValue(const char **buf)
     const char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
 
-    QString value(QCString(start, *buf - start + 1).data());
+    QString value(Q3CString(start, *buf - start + 1).data());
     return value;
 }
 
 QString GDBParser::undecorateValue(DataType type, const QString& s)
 {
-    QCString l8 = s.local8Bit();
+    Q3CString l8 = s.local8Bit();
     const char* start = l8;
     const char* end = start + s.length();
 
@@ -106,7 +108,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
         else
         {
             // Looks like composite, strip the braces and return.
-            return QCString(start+1, end - start -1);
+            return Q3CString(start+1, end - start -1);
         }
     }
     else if (*start == '(')
@@ -131,7 +133,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
         start = skipDelim(start, '(', ')');
     }
 
-    QString value(QCString(start, end - start + 1).data());
+    QString value(Q3CString(start, end - start + 1).data());
 
     value = value.stripWhiteSpace();
 

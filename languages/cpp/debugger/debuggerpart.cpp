@@ -15,10 +15,12 @@
 #include "label_with_double_click.h"
 
 #include <qdir.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
-#include <qpopupmenu.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
+#include <q3popupmenu.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -104,7 +106,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbBreakpointWidget = new GDBBreakpointWidget( controller,
                                                    0, "gdbBreakpointWidget" );
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (gdbBreakpointWidget, i18n("<b>Breakpoint list</b><p>"
                                 "Displays a list of breakpoints with "
                                 "their current status. Clicking on a "
@@ -124,7 +126,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     framestackWidget = new FramestackWidget( controller, 0, "framestackWidget" );
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (framestackWidget, i18n("<b>Frame stack</b><p>"
                                 "Often referred to as the \"call stack\", "
                                 "this is a list showing what function is "
@@ -140,7 +142,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     disassembleWidget = new DisassembleWidget( controller, 0, "disassembleWidget" );
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (disassembleWidget, i18n("<b>Machine code display</b><p>"
                                  "A machine code view into your running "
                                  "executable with the current instruction "
@@ -157,7 +159,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbOutputWidget->setEnabled(false);
     gdbOutputWidget->setIcon( SmallIcon("inline_image") );
     gdbOutputWidget->setCaption(i18n("GDB Output"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (gdbOutputWidget, i18n("<b>GDB output</b><p>"
                                  "Shows all gdb commands being executed. "
                                  "You can also issue any other gdb command while debugging."));
@@ -330,8 +332,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( debugger(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              gdbBreakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStop(KDevPlugin*)) );
@@ -374,20 +376,20 @@ void DebuggerPart::setupDcop()
         if ((*it).find("drkonqi-") == 0)
             slotDCOPApplicationRegistered(*it);
 
-    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const QCString&)), SLOT(slotDCOPApplicationRegistered(const QCString&)));
+    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const Q3CString&)), SLOT(slotDCOPApplicationRegistered(const Q3CString&)));
     kapp->dcopClient()->setNotifications(true);
 }
 
-void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
+void DebuggerPart::slotDCOPApplicationRegistered(const Q3CString& appId)
 {
     if (appId.find("drkonqi-") == 0) {
         QByteArray answer;
-        QCString replyType;
+        Q3CString replyType;
 
         kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true, 5000);
 
-        QDataStream d(answer, IO_ReadOnly);
-        QCString appName;
+        QDataStream d(answer, QIODevice::ReadOnly);
+        Q3CString appName;
         d >> appName;
 
         if (appName.length() && project() && project()->mainProgram().endsWith(appName)) {
@@ -400,11 +402,11 @@ void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
 ASYNC DebuggerPart::slotDebugExternalProcess()
 {
     QByteArray answer;
-    QCString replyType;
+    Q3CString replyType;
 
     kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true, 5000);
 
-    QDataStream d(answer, IO_ReadOnly);
+    QDataStream d(answer, QIODevice::ReadOnly);
     int pid;
     d >> pid;
 
@@ -465,7 +467,7 @@ void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
         stateChanged( QString("stopped") );
 }
 
-void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
+void DebuggerPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (!context->hasType( Context::EditorContext ))
         return;
@@ -555,7 +557,7 @@ void DebuggerPart::contextEvaluate()
 
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(finished()), controller, SLOT(configure()) );

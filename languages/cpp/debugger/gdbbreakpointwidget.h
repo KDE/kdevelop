@@ -16,11 +16,14 @@
 #ifndef _GDBBreakpointWidget_H_
 #define _GDBBreakpointWidget_H_
 
-#include <qhbox.h>
-#include <qpopupmenu.h>
-#include <qtable.h>
-#include <qguardedptr.h>
-#include <qvaluevector.h>
+#include <q3hbox.h>
+#include <q3popupmenu.h>
+#include <q3table.h>
+#include <qpointer.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QFocusEvent>
 
 #include "mi/gdbmi.h"
 #include "gdbcontroller.h"
@@ -41,7 +44,7 @@ class BreakpointTableRow;
 class GDBTable;
 class GDBController;
 
-class GDBBreakpointWidget : public QHBox
+class GDBBreakpointWidget : public Q3HBox
 {
     Q_OBJECT
 
@@ -89,7 +92,7 @@ private slots:
     void slotContextMenuSelect( int item );
     void slotEditRow(int row, int col, const QPoint & mousePos);
     void slotNewValue(int row, int col);
-    void editTracing(QTableItem* item);
+    void editTracing(Q3TableItem* item);
     void slotBreakpointModified(Breakpoint*);
 
     void slotEvent(GDBController::event_t);
@@ -116,13 +119,13 @@ private:
     void sendToGdb(Breakpoint &);
 
     void handleBreakpointList(const GDBMI::ResultRecord&);
-    void handleTracingPrintf(const QValueVector<QString>& s);
+    void handleTracingPrintf(const Q3ValueVector<QString>& s);
 
 private:
     GDBController*  controller_;
 
     GDBTable*       m_table;
-    QPopupMenu*     m_ctxMenu;
+    Q3PopupMenu*     m_ctxMenu;
 };
 
 class BreakpointTableRow;
@@ -135,12 +138,12 @@ class BreakpointTableRow;
     When editing is done, the receiver of 'edit' should change the
     value in the table, and then call the 'updateValue' method.    
  */
-class ComplexEditCell : public QObject, public QTableItem
+class ComplexEditCell : public QObject, public Q3TableItem
 {
     Q_OBJECT
 public:
 
-    ComplexEditCell(QTable* table);
+    ComplexEditCell(Q3Table* table);
 
     /** Called by Qt when the current cell should become editable.
         In our case, when the item becomes current. Creates a widget
@@ -158,10 +161,10 @@ private slots:
     void slotEdit();
 
 signals:
-    void edit(QTableItem*);
+    void edit(Q3TableItem*);
 
 private:
-    mutable QGuardedPtr<QLabel> label_;
+    mutable QPointer<QLabel> label_;
 };
 
 

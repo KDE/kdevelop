@@ -80,7 +80,7 @@ int StringLiteralValue::toInt(int base) const
 
 TupleValue::~TupleValue()
 {
-    for (QValueListIterator<Result*> it=results.begin(); it!=results.end(); ++it)
+    for (Q3ValueListIterator<Result*> it=results.begin(); it!=results.end(); ++it)
         delete *it;
 }
 
@@ -99,7 +99,7 @@ const Value& TupleValue::operator[](const QString& variable) const
 
 ListValue::~ListValue()
 {
-    for (QValueListIterator<Result*> it=results.begin(); it!=results.end(); ++it)
+    for (Q3ValueListIterator<Result*> it=results.begin(); it!=results.end(); ++it)
         delete *it;
 }
 

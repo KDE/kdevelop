@@ -38,8 +38,10 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qdir.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qeventloop.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <iostream>
 #include <ctype.h>
@@ -232,7 +234,7 @@ void GDBController::configure()
         // Disabled for MI port.
         if (old_outputRadix != config_outputRadix_)
         {
-            queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",
+            queueCmd(new GDBCommand(Q3CString().sprintf("set output-radix %d",
                                 config_outputRadix_)));
 
             // FIXME: should do this in variable widget anyway.
@@ -456,7 +458,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
     bool shared_library_load = false;
     if (currentCmd_)
     {
-        const QValueVector<QString>& lines = currentCmd_->allStreamOutput();
+        const Q3ValueVector<QString>& lines = currentCmd_->allStreamOutput();
         for(unsigned int i = 0; i < lines.count(); ++i)
         {
             if (lines[i].startsWith("Stopped due to shared library event"))
@@ -900,16 +902,16 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
         queueCmd(new GDBCommand("set print asm-demangle off"));
 
     // make sure output radix is always set to users view.
-    queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",  config_outputRadix_)));
+    queueCmd(new GDBCommand(Q3CString().sprintf("set output-radix %d",  config_outputRadix_)));
 
     // Change the "Working directory" to the correct one
-    QCString tmp( "cd " + QFile::encodeName( run_directory ));
+    Q3CString tmp( "cd " + QFile::encodeName( run_directory ));
     queueCmd(new GDBCommand(tmp));
 
     // Set the run arguments
     if (!run_arguments.isEmpty())
         queueCmd(
-            new GDBCommand(QCString("set args ") + run_arguments.local8Bit()));
+            new GDBCommand(Q3CString("set args ") + run_arguments.local8Bit()));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -1035,7 +1037,7 @@ void GDBController::slotCoreFile(const QString &coreFile)
     setStateOff(s_programExited|s_appNotStarted);
     setStateOn(s_core);
 
-    queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1()));
+    queueCmd(new GDBCommand(Q3CString("core ") + coreFile.latin1()));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -1059,7 +1061,7 @@ void GDBController::slotAttachTo(int pid)
     // The MI interface does not implements -target-attach yet,
     // and we don't recognize whatever gibberish 'attach' pours out, so...
     queueCmd(new GDBCommand(
-        QCString().sprintf("attach %d", pid)));
+        Q3CString().sprintf("attach %d", pid)));
 
     raiseEvent(connected_to_program);
 
@@ -1099,12 +1101,12 @@ void GDBController::slotRun()
             return;
         }
 
-        queueCmd(new GDBCommand(QCString("tty ")+tty.latin1()));
+        queueCmd(new GDBCommand(Q3CString("tty ")+tty.latin1()));
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
-            QCString tty(tty_->getSlave().latin1());
-            QCString options = QCString(">") + tty + QCString("  2>&1 <") + tty;
+            Q3CString tty(tty_->getSlave().latin1());
+            Q3CString options = Q3CString(">") + tty + Q3CString("  2>&1 <") + tty;
 
             KProcess *proc = new KProcess;
 
@@ -1201,10 +1203,10 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
 
     if (fileName.isEmpty())
         queueCmd(new GDBCommand(
-                     QCString().sprintf("-exec-until %d", lineNum)));
+                     Q3CString().sprintf("-exec-until %d", lineNum)));
     else
         queueCmd(new GDBCommand(
-                QCString().
+                Q3CString().
                 sprintf("-exec-until %s:%d", fileName.latin1(), lineNum)));
 }
 
@@ -1216,8 +1218,8 @@ void GDBController::slotJumpTo(const QString &fileName, int lineNum)
         return;
 
     if (!fileName.isEmpty()) {
-        queueCmd(new GDBCommand(QCString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum)));
-        queueCmd(new GDBCommand(QCString().sprintf("jump %s:%d", fileName.latin1(), lineNum)));
+        queueCmd(new GDBCommand(Q3CString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum)));
+        queueCmd(new GDBCommand(Q3CString().sprintf("jump %s:%d", fileName.latin1(), lineNum)));
     }
 }
 
@@ -1403,11 +1405,11 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
     static bool parsing = false;
 
-    QCString msg(buf, buflen+1);
+    Q3CString msg(buf, buflen+1);
 
     // Copy the data out of the KProcess buffer before it gets overwritten
     // Append to the back of the holding zone.
-    holdingZone_ +=  QCString(buf, buflen+1);
+    holdingZone_ +=  Q3CString(buf, buflen+1);
 
     // Already parsing? then get out quick.
     // VP, 2006-01-30. I'm not sure how this could happen, since
@@ -1429,7 +1431,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     {
         got_any_command = true;
 
-        QCString reply(holdingZone_.left(i));
+        Q3CString reply(holdingZone_.left(i));
         holdingZone_ = holdingZone_.mid(i+1);
 
         kdDebug(9012) << "REPLY: " << reply << "\n";

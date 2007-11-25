@@ -57,7 +57,7 @@ void GDBCommand::newOutput(const QString& line)
     lines.push_back(line);
 }
 
-const QValueVector<QString>& GDBCommand::allStreamOutput() const
+const Q3ValueVector<QString>& GDBCommand::allStreamOutput() const
 {
     return lines;
 }

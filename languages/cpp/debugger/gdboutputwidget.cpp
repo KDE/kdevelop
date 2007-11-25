@@ -26,12 +26,17 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QFocusEvent>
+#include <Q3PopupMenu>
+#include <Q3VBoxLayout>
 
 
 namespace GDBDebugger
@@ -49,9 +54,9 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
 {
 
     m_gdbView = new OutputText(this);
-    m_gdbView->setTextFormat(QTextEdit::LogText);
+    m_gdbView->setTextFormat(Q3TextEdit::LogText);
 
-    QBoxLayout *userGDBCmdEntry = new QHBoxLayout();
+    Q3BoxLayout *userGDBCmdEntry = new Q3HBoxLayout();
     m_userGDBCmdEditor = new KHistoryCombo (this, "gdb-user-cmd-editor");
 
     QLabel *label = new QLabel(i18n("&GDB cmd:"), this);
@@ -72,7 +77,7 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
     userGDBCmdEntry->addWidget(m_Interrupt);
     QToolTip::add ( m_Interrupt, i18n ( "Pause execution of the app to enter gdb commands" ) );
 
-    QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout(this, 2);
     topLayout->addWidget(m_gdbView, 10);
     topLayout->addLayout(userGDBCmdEntry);
 
@@ -319,7 +324,7 @@ void GDBOutputWidget::restorePartialProjectSession(const QDomElement* el)
 
 
 //void OutputText::contextMenuEvent(QContextMenuEvent* e)
-QPopupMenu* OutputText::createPopupMenu(const QPoint&)
+Q3PopupMenu* OutputText::createPopupMenu(const QPoint&)
 {
     KPopupMenu* popup = new KPopupMenu;
 

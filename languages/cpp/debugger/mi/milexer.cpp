@@ -22,6 +22,8 @@
 #include "tokens.h"
 #include <cctype>
 #include <iostream>
+//Added by qt3to4:
+#include <Q3CString>
 
 bool MILexer::s_initialized = false;
 scan_fun_ptr MILexer::s_scan_table[];
@@ -281,10 +283,10 @@ void TokenStream::positionAt(int position, int *line, int *column) const
     Q_ASSERT( *column >= 0 );
 }
 
-QCString TokenStream::tokenText(int index) const
+Q3CString TokenStream::tokenText(int index) const
 {
     Token *t = index < 0 ? m_currentToken : m_firstToken + index;
     const char* data = m_contents;
-    return QCString(data + t->position, t->length+1);
+    return Q3CString(data + t->position, t->length+1);
 }
 

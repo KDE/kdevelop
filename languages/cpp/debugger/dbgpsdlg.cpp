@@ -26,15 +26,18 @@
 #include <klistviewsearchline.h>
 #include <kmessagebox.h>
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qlayout.h>
 
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QFocusEvent>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -65,7 +68,7 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     pids_->addColumn("COMMAND");
 
 
-    QBoxLayout *topLayout = new QVBoxLayout(this, 5);
+    Q3BoxLayout *topLayout = new Q3VBoxLayout(this, 5);
 
     searchLineWidget_ = new KListViewSearchLineWidget(pids_, this);
     topLayout->addWidget(searchLineWidget_);
@@ -177,7 +180,7 @@ void Dbg_PS_Dialog::slotProcessExited()
                 break;
             }
             
-            new QListViewItem(pids_, 
+            new Q3ListViewItem(pids_, 
                               ps_output_line.cap(1),
                               ps_output_line.cap(2),
                               ps_output_line.cap(3),

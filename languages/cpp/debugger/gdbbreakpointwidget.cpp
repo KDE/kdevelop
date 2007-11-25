@@ -31,16 +31,19 @@
 
 #include <qvbuttongroup.h>
 #include <qfileinfo.h>
-#include <qheader.h>
-#include <qtable.h>
+#include <q3header.h>
+#include <q3table.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qvbox.h>
+#include <q3whatsthis.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <QFocusEvent>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -76,11 +79,11 @@ static int m_activeFlag = 0;
 /***************************************************************************/
 /***************************************************************************/
 
-class BreakpointTableRow : public QTableItem
+class BreakpointTableRow : public Q3TableItem
 {
 public:
 
-    BreakpointTableRow(QTable* table, EditType editType, Breakpoint* bp);
+    BreakpointTableRow(Q3Table* table, EditType editType, Breakpoint* bp);
     ~BreakpointTableRow();
 
     bool match (Breakpoint* bp) const;
@@ -100,9 +103,9 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-BreakpointTableRow::BreakpointTableRow(QTable* parent, EditType editType,
+BreakpointTableRow::BreakpointTableRow(Q3Table* parent, EditType editType,
                                        Breakpoint* bp) :
-        QTableItem(parent, editType, ""),
+        Q3TableItem(parent, editType, ""),
         m_breakpoint(bp)
 {
     appendEmptyRow();
@@ -140,13 +143,13 @@ void BreakpointTableRow::appendEmptyRow()
 
     table()->setItem(row, Control, this);
 
-    QCheckTableItem* cti = new QCheckTableItem( table(), "");
+    Q3CheckTableItem* cti = new Q3CheckTableItem( table(), "");
     table()->setItem(row, Enable, cti);
 
     ComplexEditCell* act = new ComplexEditCell(table());
     table()->setItem(row, Tracing, act);
-    QObject::connect(act, SIGNAL(edit(QTableItem*)),
-                     table()->parent(), SLOT(editTracing(QTableItem*)));
+    QObject::connect(act, SIGNAL(edit(Q3TableItem*)),
+                     table()->parent(), SLOT(editTracing(Q3TableItem*)));
 }
 
 /***************************************************************************/
@@ -155,9 +158,9 @@ void BreakpointTableRow::setRow()
 {
     if ( m_breakpoint )
     {
-        QTableItem *item =  table()->item ( row(), Enable );
+        Q3TableItem *item =  table()->item ( row(), Enable );
         Q_ASSERT(item->rtti() == 2);
-        ((QCheckTableItem*)item)->setChecked(m_breakpoint->isEnabled());
+        ((Q3CheckTableItem*)item)->setChecked(m_breakpoint->isEnabled());
 
         QString status=m_breakpoint->statusDisplay(m_activeFlag);
 
@@ -170,7 +173,7 @@ void BreakpointTableRow::setRow()
         table()->setText(row(), Location, m_breakpoint->location());
 
 
-        QTableItem* ce = table()->item( row(), Tracing );
+        Q3TableItem* ce = table()->item( row(), Tracing );
         ce->setText(breakpoint()->tracingEnabled() ? "Enabled" : "Disabled");
         // In case there's editor open in this cell, update it too.
         static_cast<ComplexEditCell*>(ce)->updateValue();
@@ -197,14 +200,14 @@ void BreakpointTableRow::setRow()
 
 GDBBreakpointWidget::GDBBreakpointWidget(GDBController* controller,
                                          QWidget *parent, const char *name) :
-QHBox(parent, name),
+Q3HBox(parent, name),
 controller_(controller)
 {
     m_table = new GDBTable(0, numCols, this, name);
-    m_table->setSelectionMode(QTable::SingleRow);
+    m_table->setSelectionMode(Q3Table::SingleRow);
     m_table->setShowGrid (false);
     m_table->setLeftMargin(0);
-    m_table->setFocusStyle(QTable::FollowStyle);
+    m_table->setFocusStyle(Q3Table::FollowStyle);
 
     m_table->hideColumn(Control);
     m_table->setColumnReadOnly(Type, true);
@@ -212,7 +215,7 @@ controller_(controller)
     m_table->setColumnReadOnly(Hits, true);
     m_table->setColumnWidth( Enable, 20);
 
-    QHeader *header = m_table->horizontalHeader();
+    Q3Header *header = m_table->horizontalHeader();
 
     header->setLabel( Enable,       "" );
     header->setLabel( Type,         i18n("Type") );
@@ -223,7 +226,7 @@ controller_(controller)
     header->setLabel( Hits,         i18n("Hits") );
     header->setLabel( Tracing,      i18n("Tracing") );
 
-    QPopupMenu* newBreakpoint = new QPopupMenu(this);
+    Q3PopupMenu* newBreakpoint = new Q3PopupMenu(this);
     newBreakpoint->insertItem(i18n("Code breakpoint", "Code"),
                               BP_TYPE_FilePos);
     newBreakpoint->insertItem(i18n("Data breakpoint", "Data write"),
@@ -232,7 +235,7 @@ controller_(controller)
                               BP_TYPE_ReadWatchpoint);
 
 
-    m_ctxMenu = new QPopupMenu( this );
+    m_ctxMenu = new Q3PopupMenu( this );
     m_ctxMenu->insertItem( i18n("New breakpoint", "New"),
                                 newBreakpoint);
     m_ctxMenu->insertItem( i18n( "Show text" ),    BW_ITEM_Show );
@@ -451,7 +454,7 @@ bool GDBBreakpointWidget::hasWatchpointForAddress(
 BreakpointTableRow* GDBBreakpointWidget::addBreakpoint(Breakpoint *bp)
 {
     BreakpointTableRow* btr =
-        new BreakpointTableRow( m_table, QTableItem::WhenCurrent, bp );
+        new BreakpointTableRow( m_table, Q3TableItem::WhenCurrent, bp );
 
     connect(bp, SIGNAL(modified(Breakpoint*)),
             this, SLOT(slotBreakpointModified(Breakpoint*)));
@@ -580,7 +583,7 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
                     bp->setPending(false);
 
                     new BreakpointTableRow(m_table,
-                                           QTableItem::WhenCurrent,
+                                           Q3TableItem::WhenCurrent,
                                            bp);
 
                     emit publishBPState(*bp);
@@ -607,7 +610,7 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
     }
 }
 
-void GDBBreakpointWidget::handleTracingPrintf(const QValueVector<QString>& s)
+void GDBBreakpointWidget::handleTracingPrintf(const Q3ValueVector<QString>& s)
 {
     // The first line of output is the command itself, which we don't need.
     for(unsigned i = 1; i < s.size(); ++i)
@@ -839,8 +842,8 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
         {
         case Enable:
         {
-            QCheckTableItem *item =
-                (QCheckTableItem*)m_table->item ( row, Enable );
+            Q3CheckTableItem *item =
+                (Q3CheckTableItem*)m_table->item ( row, Enable );
             bp->setEnabled(item->isChecked());
         }
         break;
@@ -922,7 +925,7 @@ void GDBBreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNu
 
     if (btr)
     {
-        QTableSelection ts;
+        Q3TableSelection ts;
         ts.init(btr->row(), 0);
         ts.expandTo(btr->row(), numCols);
         m_table->addSelection(ts);
@@ -1019,7 +1022,7 @@ void GDBBreakpointWidget::slotEditBreakpoint()
 }
 
 
-void GDBBreakpointWidget::editTracing(QTableItem* item)
+void GDBBreakpointWidget::editTracing(Q3TableItem* item)
 {
     BreakpointTableRow* btr = (BreakpointTableRow *)
         m_table->item(item->row(), Control);
@@ -1203,15 +1206,15 @@ void GDBBreakpointWidget::focusInEvent( QFocusEvent */* e*/ )
 }
 
 ComplexEditCell::
-ComplexEditCell(QTable* table)
-: QTableItem(table, QTableItem::WhenCurrent)
+ComplexEditCell(Q3Table* table)
+: Q3TableItem(table, Q3TableItem::WhenCurrent)
 {
 }
 
 
 QWidget* ComplexEditCell::createEditor() const
 {
-    QHBox* box = new QHBox( table()->viewport() );
+    Q3HBox* box = new Q3HBox( table()->viewport() );
     box->setPaletteBackgroundColor(
                table()->palette().active().highlight());
 

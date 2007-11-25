@@ -17,8 +17,10 @@
 #define _DBGPSDLG_H_
 
 #include <kdialog.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
-class QListBox;
+class Q3ListBox;
 class KProcess;
 class KListView;
 class KListViewSearchLineWidget;

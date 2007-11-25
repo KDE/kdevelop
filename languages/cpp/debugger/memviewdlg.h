@@ -20,10 +20,12 @@
 
 #include <kdialog.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
 
 class KLineEdit;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 class QToolBox;
 
 namespace GDBDebugger
@@ -58,7 +60,7 @@ namespace GDBDebugger
     private: // Data
         GDBController* controller_;
         QToolBox* toolBox_;
-        QValueVector<MemoryView*> memoryViews_;
+        Q3ValueVector<MemoryView*> memoryViews_;
     };
 
     class MemoryView : public QWidget

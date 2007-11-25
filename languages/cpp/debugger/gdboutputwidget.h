@@ -19,13 +19,16 @@
 #define _GDBOUTPUTWIDGET_H_
 
 #include <qwidget.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qtimer.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <QFocusEvent>
 
 class KHistoryCombo;
 
-class QTextEdit;
+class Q3TextEdit;
 class QToolButton;
 class QDomElement;
 
@@ -80,7 +83,7 @@ private:
 
     KHistoryCombo*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
-    QTextEdit*      m_gdbView;
+    Q3TextEdit*      m_gdbView;
 
     void setShowInternalCommands(bool);
     friend class OutputText;
@@ -113,16 +116,16 @@ private:
 
 /** Add popup menu specific to gdb output window to QTextEdit.
 */
-class OutputText : public QTextEdit
+class OutputText : public Q3TextEdit
 {
     Q_OBJECT
 public:
     OutputText(GDBOutputWidget* parent) 
-    : QTextEdit(parent), 
+    : Q3TextEdit(parent), 
       parent_(parent)
     {}
 
-    QPopupMenu* createPopupMenu(const QPoint& pos);
+    Q3PopupMenu* createPopupMenu(const QPoint& pos);
 
 private slots:
     void copyAll();

@@ -18,7 +18,10 @@
 
 #include "mi/gdbmi.h"
 
-#include <qtextedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <QHideEvent>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -30,7 +33,7 @@ namespace GDBDebugger
 class Breakpoint;
 class GDBController;
 
-class DisassembleWidget : public QTextEdit
+class DisassembleWidget : public Q3TextEdit
 {
     Q_OBJECT
 

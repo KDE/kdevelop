@@ -16,7 +16,7 @@
 #ifndef _FRAMESTACKWIDGET_H_
 #define _FRAMESTACKWIDGET_H_
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qstringlist.h>
 
 #include "gdbcontroller.h"
@@ -30,7 +30,7 @@ namespace GDBDebugger
 class FramestackWidget;
 
 
-class ThreadStackItem : public QListViewItem
+class ThreadStackItem : public Q3ListViewItem
 {
 public:
     ThreadStackItem(FramestackWidget *parent, 
@@ -38,7 +38,7 @@ public:
     virtual ~ThreadStackItem();
 
     void setOpen(bool open);
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
     void paintCell(QPainter * p, const QColorGroup & cg, 
                    int column, int width, int align );
@@ -56,7 +56,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class FrameStackItem : public QListViewItem
+class FrameStackItem : public Q3ListViewItem
 {
 public:
     FrameStackItem(FramestackWidget *parent, 
@@ -68,7 +68,7 @@ public:
     virtual ~FrameStackItem();
 
     void setOpen(bool open);
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
     void paintCell(QPainter * p, const QColorGroup & cg, 
                    int column, int width, int align );
@@ -89,17 +89,17 @@ private:
 /**
  * @author John Birch
  */
-class FramestackWidget : public QListView
+class FramestackWidget : public Q3ListView
 {
     Q_OBJECT
 
 public:
     FramestackWidget( GDBController* controller,
                       QWidget *parent=0,                       
-                      const char *name=0, WFlags f=0 );
+                      const char *name=0, Qt::WFlags f=0 );
     virtual ~FramestackWidget();
 
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
    
     ThreadStackItem *findThread(int threadNo);
     FrameStackItem *findFrame(int frameNo, int threadNo);
@@ -149,11 +149,11 @@ private:
 
 public slots:
     void slotEvent(GDBController::event_t e);
-    void slotSelectionChanged(QListViewItem *thisItem);
+    void slotSelectionChanged(Q3ListViewItem *thisItem);
 
 #if QT_VERSION < 300
 private:
-  QListViewItem* findItemWhichBeginsWith(const QString& text) const;
+  Q3ListViewItem* findItemWhichBeginsWith(const QString& text) const;
 #endif
 
 private:

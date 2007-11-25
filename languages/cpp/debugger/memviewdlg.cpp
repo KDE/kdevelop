@@ -28,13 +28,18 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 #include <qpushbutton.h>
 #include <qvariant.h>
-#include <qpopupmenu.h>
-#include <qhbox.h>
+#include <q3popupmenu.h>
+#include <q3hbox.h>
 #include <qtoolbox.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QContextMenuEvent>
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 #include <kmessagebox.h>
 
@@ -82,10 +87,10 @@ namespace GDBDebugger
         MemoryRangeSelector(QWidget* parent) 
         : QWidget(parent)
         {
-            QVBoxLayout* l = new QVBoxLayout(this);
+            Q3VBoxLayout* l = new Q3VBoxLayout(this);
 
             // Grid layout: labels + address field
-            QGridLayout* gl = new QGridLayout(l);
+            Q3GridLayout* gl = new Q3GridLayout(l);
 
             gl->setColSpacing(0, 2);
             gl->setColSpacing(1, 4);
@@ -105,7 +110,7 @@ namespace GDBDebugger
 
             l->addSpacing(2);
                         
-            QHBoxLayout* hb = new QHBoxLayout(l);
+            Q3HBoxLayout* hb = new Q3HBoxLayout(l);
             hb->addStretch();
             
             okButton = new QPushButton(i18n("OK"), this);
@@ -147,7 +152,7 @@ namespace GDBDebugger
 
     void MemoryView::initWidget()
     {
-        QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
+        Q3VBoxLayout *l = new Q3VBoxLayout(this, 0, 0);
 
         khexedit2_widget = KHE::createBytesEditWidget(this);               
 
@@ -218,7 +223,7 @@ namespace GDBDebugger
 
         } else {
 
-            QTextEdit* edit = new QTextEdit(this);
+            Q3TextEdit* edit = new Q3TextEdit(this);
             l->addWidget(edit);
 
             edit->setText(
@@ -339,7 +344,7 @@ namespace GDBDebugger
         if (!isOk())
             return;
         
-        QPopupMenu menu;
+        Q3PopupMenu menu;
 
         bool app_running = !(debuggerState_ & s_appNotStarted);
 
@@ -410,7 +415,7 @@ namespace GDBDebugger
     {
         setIcon(SmallIcon("math_brace"));
         
-        QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
+        Q3VBoxLayout *l = new Q3VBoxLayout(this, 0, 0);
         
         toolBox_ = new QToolBox(this);
         l->addWidget(toolBox_);
@@ -463,7 +468,7 @@ namespace GDBDebugger
 
     void ViewerWidget::slotChildDestroyed(QObject* child)
     {
-        QValueVector<MemoryView*>::iterator i, e;
+        Q3ValueVector<MemoryView*>::iterator i, e;
         for(i = memoryViews_.begin(), e = memoryViews_.end(); i != e; ++i)
         {
             if (*i == child)

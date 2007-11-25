@@ -23,10 +23,13 @@
 #include <kcombobox.h>
 #include <qwidget.h>
 #include <qtooltip.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qdatetime.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QKeyEvent>
 
 #include <vector>
 
@@ -92,9 +95,9 @@ public:
                  const char *name=0 );
     virtual ~VariableTree();
 
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
-    QListViewItem *findRoot(QListViewItem *item) const;
+    Q3ListViewItem *findRoot(Q3ListViewItem *item) const;
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
     WatchRoot *findWatch();
 
@@ -112,18 +115,18 @@ public slots:
     void slotEvaluateExpression(const QString& expression);
 
     void slotEvent(GDBController::event_t);
-    void slotItemRenamed(QListViewItem* item, int col, const QString& text);
+    void slotItemRenamed(Q3ListViewItem* item, int col, const QString& text);
 
 private slots:
-    void slotContextMenu(KListView *, QListViewItem *item);
+    void slotContextMenu(KListView *, Q3ListViewItem *item);
     void slotVarobjNameChanged(const QString& from, const QString& to);
 
 private: // Callbacks for gdb commands;
     void argumentsReady(const GDBMI::ResultRecord&);
     void localsReady(const GDBMI::ResultRecord&);
-    void frameIdReady(const QValueVector<QString>&);
+    void frameIdReady(const Q3ValueVector<QString>&);
     void handleVarUpdate(const GDBMI::ResultRecord&);
-    void handleEvaluateExpression(const QValueVector<QString>&);
+    void handleEvaluateExpression(const Q3ValueVector<QString>&);
     void variablesFetchDone();
     void fetchSpecialValuesDone();
     
@@ -148,7 +151,7 @@ private: // helper functions
     /** Copies the value (second column) of the specified item to
         the clipboard.
     */
-    void copyToClipboard(QListViewItem*);
+    void copyToClipboard(Q3ListViewItem*);
 
 private: // QWidget overrides
     void keyPressEvent(QKeyEvent* e);
@@ -210,7 +213,7 @@ public:
 
     virtual ~TrimmableItem();
 
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
 protected:
 
@@ -347,14 +350,14 @@ private:
     void valueDone(const GDBMI::ResultRecord& r);
     void childrenDone(const GDBMI::ResultRecord& r);    
     void childrenOfFakesDone(const GDBMI::ResultRecord& r);    
-    void handleCurrentAddress(const QValueVector<QString>& lines);
-    void handleType(const QValueVector<QString>& lines);
+    void handleCurrentAddress(const Q3ValueVector<QString>& lines);
+    void handleType(const Q3ValueVector<QString>& lines);
 
     void createChildren(const GDBMI::ResultRecord& r, bool children_of_fake);
 
     /** Called to handle the output of the cli print command.
      */
-    void handleCliPrint(const QValueVector<QString>& lines);
+    void handleCliPrint(const Q3ValueVector<QString>& lines);
 
     // Assuming 'expression_' is already set, returns the
     // displayName to use when showing this to the user.

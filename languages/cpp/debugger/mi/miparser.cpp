@@ -22,6 +22,8 @@
 #include "miparser.h"
 #include "tokens.h"
 #include <memory>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace GDBMI;
 
@@ -291,7 +293,7 @@ bool MIParser::parseCSV(GDBMI::TupleValue& value,
                         
 QString MIParser::parseStringLiteral()
 {
-    QCString message = lex->currentTokenText();
+    Q3CString message = lex->currentTokenText();
 
     unsigned int length = message.length();
     QString message2;

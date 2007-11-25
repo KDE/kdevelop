@@ -22,10 +22,10 @@
 #include "mi/gdbmi.h"
 #include "mi/miparser.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qdatetime.h>
@@ -278,7 +278,7 @@ private:
     int               viewedThread_;
 
     // The output from gdb that was not parsed yet
-    QCString          gdbOutput_;
+    Q3CString          gdbOutput_;
     // The output from gdb that arrived where we was
     // parsing the previous output. To avoid messing
     // things up, it's not directly added to
@@ -286,9 +286,9 @@ private:
     // VP: It's not clear why the previous code was doing
     // this, and holdingZone_ won't be processed until
     // next output arrives, so probably should be just removed.
-    QCString          holdingZone_;
+    Q3CString          holdingZone_;
 
-    QPtrList<GDBCommand> cmdList_;
+    Q3PtrList<GDBCommand> cmdList_;
     GDBCommand*       currentCmd_;
 
     STTY*             tty_;
@@ -312,9 +312,9 @@ private:
     bool    config_dbgTerminal_;
     QString config_gdbPath_;
     QString config_dbgShell_;
-    QCString config_configGdbScript_;
-    QCString config_runShellScript_;
-    QCString config_runGdbScript_;
+    Q3CString config_configGdbScript_;
+    Q3CString config_runShellScript_;
+    Q3CString config_runGdbScript_;
     int config_outputRadix_;
 
     MIParser mi_parser_;
@@ -330,7 +330,7 @@ private:
     // so the only way it can work is via the "print" command. As gdb
     // outputs things, we'll grep for lines that look like output from
     // print, and store such lines in this variable, so later use.
-    QCString print_command_result;
+    Q3CString print_command_result;
 
     bool state_reload_needed;
 

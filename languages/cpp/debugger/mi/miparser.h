@@ -24,7 +24,7 @@
 #include "gdbmi.h"
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 /**
 @author Roberto Raggi
