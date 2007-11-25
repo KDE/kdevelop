@@ -14,7 +14,7 @@ include_directories(
 ########### next target ###############
 
 set(kdevproblemreporter_PART_SRCS
-    problemreporterpart.cpp
+    problemreporterplugin.cpp
     problemwidget.cpp
     problemmodel.cpp
 #modeltest.cpp

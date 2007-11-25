@@ -26,13 +26,13 @@
 #include <iplugin.h>
 #include <QtCore/QVariant>
 
-class ProblemReporterPart : public KDevelop::IPlugin
+class ProblemReporterPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 
   public:
-    ProblemReporterPart(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ProblemReporterPart();
+    ProblemReporterPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~ProblemReporterPlugin();
 
     // KDevelop::Plugin methods
     virtual void unload();

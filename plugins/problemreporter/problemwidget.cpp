@@ -44,23 +44,23 @@
 #include "duchain.h"
 #include "duchainobserver.h"
 
-#include "problemreporterpart.h"
+#include "problemreporterplugin.h"
 #include "problemmodel.h"
 
 //#include "modeltest.h"
 
 using namespace KDevelop;
 
-ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPart* part)
+ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     : QTreeView(parent)
-    , m_part(part)
+    , m_plugin(plugin)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problem Reporter"));
     setWindowIcon(KIcon("info"));
     setRootIsDecorated(true);
     setWhatsThis( i18n( "Problem Reporter" ) );
-    setModel(new ProblemModel(m_part));
+    setModel(new ProblemModel(m_plugin));
 
     //new ModelTest(model());
 
@@ -86,9 +86,9 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     KDevelop::Problem* problem = model()->problemForIndex(index);
 
     if (!index.internalPointer())
-        m_part->core()->documentController()->openDocument(problem->finalLocation().document(), problem->finalLocation().start());
+        m_plugin->core()->documentController()->openDocument(problem->finalLocation().document(), problem->finalLocation().start());
     else
-        m_part->core()->documentController()->openDocument(problem->locationStack().at(index.row()).document(), problem->locationStack().at(index.row()));
+        m_plugin->core()->documentController()->openDocument(problem->locationStack().at(index.row()).document(), problem->locationStack().at(index.row()));
 }
 
 ProblemModel * ProblemWidget::model() const

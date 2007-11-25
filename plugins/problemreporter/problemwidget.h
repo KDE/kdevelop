@@ -29,14 +29,14 @@
 
 #include <iproblem.h>
 
-class ProblemReporterPart;
+class ProblemReporterPlugin;
 
 class ProblemWidget : public QTreeView
 {
   Q_OBJECT
 
 public:
-  ProblemWidget(QWidget* parent, ProblemReporterPart* part);
+  ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin);
   virtual ~ProblemWidget();
 
   class ProblemModel* model() const;
@@ -50,7 +50,7 @@ private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
 
 private:
-  ProblemReporterPart* m_part;
+  ProblemReporterPlugin* m_plugin;
 };
 
 #endif

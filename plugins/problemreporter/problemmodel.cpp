@@ -23,11 +23,11 @@
 
 #include <klocale.h>
 
-#include "problemreporterpart.h"
+#include "problemreporterplugin.h"
 
 using namespace KDevelop;
 
-ProblemModel::ProblemModel(ProblemReporterPart * parent)
+ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
   : QAbstractItemModel(parent)
 {
 }
@@ -157,9 +157,9 @@ int ProblemModel::columnCount(const QModelIndex & parent) const
     return LastColumn;
 }
 
-ProblemReporterPart * ProblemModel::part() const
+ProblemReporterPlugin * ProblemModel::plugin() const
 {
-    return static_cast<ProblemReporterPart*>(const_cast<QObject*>(sender()));
+    return static_cast<ProblemReporterPlugin*>(const_cast<QObject*>(sender()));
 }
 
 KDevelop::Problem * ProblemModel::problemForIndex(const QModelIndex & index) const

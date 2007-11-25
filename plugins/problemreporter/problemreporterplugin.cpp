@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "problemreporterpart.h"
+#include "problemreporterplugin.h"
 
 #include <QTreeWidget>
 
@@ -34,7 +34,7 @@
 
 #include "problemwidget.h"
 
-K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPart>(); )
+K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPlugin>(); )
 K_EXPORT_PLUGIN(KDevProblemReporterFactory("kdevproblemreporter"))
 
 using namespace KDevelop;
@@ -42,11 +42,11 @@ using namespace KDevelop;
 class ProblemReporterFactory: public KDevelop::IToolViewFactory
 {
 public:
-  ProblemReporterFactory(ProblemReporterPart *part): m_part(part) {}
+  ProblemReporterFactory(ProblemReporterPlugin *plugin): m_plugin(plugin) {}
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    return new ProblemWidget(parent, m_part);
+    return new ProblemWidget(parent, m_plugin);
   }
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -55,10 +55,10 @@ public:
   }
 
 private:
-  ProblemReporterPart *m_part;
+  ProblemReporterPlugin *m_plugin;
 };
 
-ProblemReporterPart::ProblemReporterPart(QObject *parent, const QVariantList&)
+ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent)
     , m_factory(new ProblemReporterFactory(this))
 {
@@ -66,15 +66,15 @@ ProblemReporterPart::ProblemReporterPart(QObject *parent, const QVariantList&)
   setXMLFile( "kdevproblemreporter.rc" );
 }
 
-ProblemReporterPart::~ProblemReporterPart()
+ProblemReporterPlugin::~ProblemReporterPlugin()
 {
 }
 
-void ProblemReporterPart::unload()
+void ProblemReporterPlugin::unload()
 {
   core()->uiController()->removeToolView(m_factory);
 }
 
-#include "problemreporterpart.moc"
+#include "problemreporterplugin.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

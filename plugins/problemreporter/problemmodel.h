@@ -26,14 +26,14 @@
 
 #include <iproblem.h>
 
-class ProblemReporterPart;
+class ProblemReporterPlugin;
 
 class ProblemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    ProblemModel(ProblemReporterPart* parent);
+    ProblemModel(ProblemReporterPlugin* parent);
     virtual ~ProblemModel();
 
     enum Columns {
@@ -57,7 +57,7 @@ public:
     KDevelop::Problem* problemForIndex(const QModelIndex& index) const;
     
 private:
-    ProblemReporterPart* part() const;
+    ProblemReporterPlugin* plugin() const;
 
     QList<KDevelop::Problem*> m_problems;
 };
