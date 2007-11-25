@@ -1,0 +1,51 @@
+
+#add_subdirectory(tests)
+
+########### next target ###############
+
+set(kdevcppdebugger_PART_SRCS
+    debuggerpart.cpp
+    dbgcontroller.cpp
+    gdbcontroller.cpp
+    gdbcommand.cpp
+    gdbparser.cpp
+    stty.cpp
+    breakpoint.cpp
+    variablewidget.cpp
+    gdbbreakpointwidget.cpp
+    framestackwidget.cpp
+    disassemblewidget.cpp
+    memviewdlg.cpp
+    dbgpsdlg.cpp
+    dbgtoolbar.cpp
+    debuggerconfigwidget.cpp
+    gdboutputwidget.cpp
+    gdbtable.cpp
+    debuggertracingdialog.cpp
+    label_with_double_click.cpp
+    mi/gdbmi.cpp
+    mi/milexer.cpp
+    mi/miparser.cpp
+)
+
+set(kdevcppdebugger_PART_UI
+    debuggerconfigwidgetbase.ui
+    debuggertracingdialogbase.ui
+)
+
+kde4_add_ui_files(kdevcppdebugger_PART_SRCS ${kdevcppdebugger_PART_UI})
+kde4_add_plugin(kdevcppdebugger ${kdevcppdebugger_PART_SRCS})
+target_link_libraries(kdevcppdebugger
+    ${KDEVPLATFORM_INTERFACES_LIBRARY}
+    ${KDEVPLATFORM_PROJECT_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+    ${KDE4_KDEUI_LIBS}
+)
+
+install(TARGETS kdevcppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})
+
+
+########### install files ###############
+
+install(FILES kdevcppdebugger.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kdevcppdebuggerui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppdebugger )
