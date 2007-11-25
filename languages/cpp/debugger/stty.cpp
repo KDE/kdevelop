@@ -319,13 +319,13 @@ bool STTY::findExternalTTY(const QString &termApp)
          * back the terminal name and then only sits and waits.
          */
 
-        const char* prog      = appName.latin1();
+        const char* prog      = appName.toLatin1();
         QString script = QString("tty>") + QString(fifo) +
             QString(";"                  // fifo name
                     "trap \"\" INT QUIT TSTP;"	  // ignore various signals
                     "exec<&-;exec>&-;"		        // close stdin and stdout
                     "while :;do sleep 3600;done");
-        const char* scriptStr = script.latin1();
+        const char* scriptStr = script.toLatin1();
         const char* end       = 0;
 
         if ( termApp == "konsole" )

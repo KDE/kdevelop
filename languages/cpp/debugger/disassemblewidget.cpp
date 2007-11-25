@@ -64,7 +64,7 @@ bool DisassembleWidget::displayCurrent()
     int line;
     for (line=0; line < paragraphs(); line++)
     {
-        unsigned long address = strtoul(text(line).latin1(), 0, 0);
+        unsigned long address = strtoul(text(line).toLatin1(), 0, 0);
         if (address == address_)
         {
             // put cursor at start of line and highlight the line
@@ -102,7 +102,7 @@ void DisassembleWidget::slotShowStepInSource(   const QString &, int,
     kDebug(9012) << "DisasssembleWidget::slotShowStepInSource()";
 
     currentAddress_ = currentAddress;
-    address_ = strtoul(currentAddress.latin1(), 0, 0);
+    address_ = strtoul(currentAddress.toLatin1(), 0, 0);
     if (!active_)
         return;
 
@@ -147,9 +147,9 @@ void DisassembleWidget::memoryRead(const GDBMI::ResultRecord& r)
     rawdata += QString(addr + "  " + fct+"+"+offs + "    " + inst + "\n");
 
     if (i == 0) {
-      lower_ = strtoul(addr.latin1(), 0, 0);
+      lower_ = strtoul(addr.toLatin1(), 0, 0);
     } else  if (i == content.size()-1) {
-      upper_ = strtoul(addr.latin1(), 0, 0);
+      upper_ = strtoul(addr.toLatin1(), 0, 0);
     }
   }
 

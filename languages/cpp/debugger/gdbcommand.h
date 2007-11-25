@@ -253,7 +253,7 @@ CliCommand::CliCommand(
     Handler* handler_this,
     void (Handler::* handler_method)(const Q3ValueVector<QString>&),
     bool handlesError)
-: GDBCommand(command.latin1()),
+: GDBCommand(command.toLatin1()),
   cli_handler_this(handler_this), 
   cli_handler_method(static_cast<cli_handler_t>(handler_method))
 {

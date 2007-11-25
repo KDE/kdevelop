@@ -178,9 +178,9 @@ GDBController::~GDBController()
 void GDBController::configure()
 {
     // A a configure.gdb script will prevent these from uncontrolled growth...
-    config_configGdbScript_       = DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript").latin1();
-    config_runShellScript_        = DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript").latin1();
-    config_runGdbScript_          = DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript").latin1();
+    config_configGdbScript_       = DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript").toLatin1();
+    config_runShellScript_        = DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript").toLatin1();
+    config_runGdbScript_          = DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript").toLatin1();
 
 //  add macros for reading QStrings? or in configGdbScript?
     config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);
@@ -408,9 +408,9 @@ void GDBController::executeCmd()
     prettyCmd = "(gdb) " + prettyCmd;
 
     if (currentCmd_->isUserCommand())
-        emit gdbUserCommandStdout( prettyCmd.latin1() );
+        emit gdbUserCommandStdout( prettyCmd.toLatin1() );
     else
-        emit gdbInternalCommandStdout( prettyCmd.latin1() );
+        emit gdbInternalCommandStdout( prettyCmd.toLatin1() );
 
     emit dbgStatus ("", state_);
 }
@@ -830,7 +830,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
         emit gdbUserCommandStdout(
             QString( "/bin/sh -c " + shell + " " + gdb
                      + " " + application
-                     + " --interpreter=mi2 -quiet\n" ).latin1());
+                     + " --interpreter=mi2 -quiet\n" ).toLatin1());
     }
     else
     {
@@ -838,7 +838,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
                      << "-interpreter=mi2" << "-quiet";
         emit gdbUserCommandStdout(
             QString( gdb + " " + application +
-                     " --interpreter=mi2 -quiet\n" ).latin1());
+                     " --interpreter=mi2 -quiet\n" ).toLatin1());
     }
 
     if (!dbgProcess_->start( K3Process::NotifyOnExit,
@@ -927,7 +927,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
         environstr += (*it).first;
         environstr += "=";
         environstr += (*it).second;
-        queueCmd(new GDBCommand(environstr.latin1()));
+        queueCmd(new GDBCommand(environstr.toLatin1()));
     }
 
     // Needed so that breakpoint widget has a chance to insert breakpoints.
@@ -1038,7 +1038,7 @@ void GDBController::slotCoreFile(const QString &coreFile)
     setStateOff(s_programExited|s_appNotStarted);
     setStateOn(s_core);
 
-    queueCmd(new GDBCommand(QByteArray("core ") + coreFile.latin1()));
+    queueCmd(new GDBCommand(QByteArray("core ") + coreFile.toLatin1()));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -1102,18 +1102,18 @@ void GDBController::slotRun()
             return;
         }
 
-        queueCmd(new GDBCommand(QByteArray("tty ")+tty.latin1()));
+        queueCmd(new GDBCommand(QByteArray("tty ")+tty.toLatin1()));
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
-            QByteArray tty(tty_->getSlave().latin1());
+            QByteArray tty(tty_->getSlave().toLatin1());
             QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
             K3Process *proc = new K3Process;
 
             *proc << "sh" << "-c";
             *proc << config_runShellScript_ +
-                " " + application_.latin1() + options;
+                " " + application_.toLatin1() + options;
             proc->start(K3Process::DontCare);
         }
 
@@ -1208,7 +1208,7 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
     else
         queueCmd(new GDBCommand(
                 QByteArray().
-                sprintf("-exec-until %s:%d", fileName.latin1(), lineNum)));
+                sprintf("-exec-until %s:%d", fileName.toLatin1(), lineNum)));
 }
 
 // **************************************************************************
@@ -1219,8 +1219,8 @@ void GDBController::slotJumpTo(const QString &fileName, int lineNum)
         return;
 
     if (!fileName.isEmpty()) {
-        queueCmd(new GDBCommand(QString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum)));
-        queueCmd(new GDBCommand(QString().sprintf("jump %s:%d", fileName.latin1(), lineNum)));
+        queueCmd(new GDBCommand(QString().sprintf("tbreak %s:%d", fileName.toLatin1(), lineNum)));
+        queueCmd(new GDBCommand(QString().sprintf("jump %s:%d", fileName.toLatin1(), lineNum)));
     }
 }
 
@@ -1712,7 +1712,7 @@ void GDBController::slotDbgProcessExited(K3Process* process)
 
 void GDBController::slotUserGDBCmd(const QString& cmd)
 {
-    queueCmd(new UserCommand(cmd.latin1()));
+    queueCmd(new UserCommand(cmd.toLatin1()));
 
     // User command can theoreticall modify absolutely everything,
     // so need to force a reload.

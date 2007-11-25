@@ -10,7 +10,7 @@ set(kdevcppdebugger_PART_SRCS
     gdbcommand.cpp
     gdbparser.cpp
     stty.cpp
-    breakpoint.cpp
+    breakpoint.h
     variablewidget.cpp
     gdbbreakpointwidget.cpp
     framestackwidget.cpp

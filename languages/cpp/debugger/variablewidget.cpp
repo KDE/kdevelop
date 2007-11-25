@@ -971,7 +971,7 @@ void VariableTree::keyPressEvent(QKeyEvent* e)
             || text == "t")
         {
             item->setFormat(
-                item->formatFromGdbModifier(text[0].latin1()));
+                item->formatFromGdbModifier(text[0].toLatin1()));
         }
 
         if (e->key() == Qt::Key_Delete)
@@ -1107,7 +1107,7 @@ VarItem::VarItem(TrimmableItem *parent,
     static QRegExp explicit_format("^\\s*/(.)\\s*(.*)");
     if (explicit_format.search(expression_) == 0)
     {
-        format_ = formatFromGdbModifier(explicit_format.cap(1)[0].latin1());
+        format_ = formatFromGdbModifier(explicit_format.cap(1)[0].toLatin1());
         expression_ = explicit_format.cap(2);
     }
 

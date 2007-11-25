@@ -346,7 +346,7 @@ void GDBBreakpointWidget::slotBreakpointHit(int id)
     {
         controller_->addCommand(
             new CliCommand(("printf "
-                            + b->traceRealFormatString()).latin1(),
+                            + b->traceRealFormatString()).toLatin1(),
                            this,
                            &GDBBreakpointWidget::handleTracingPrintf));
 
@@ -871,7 +871,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
                 // and then appears again, and won't have internal issues
                 // as well.
                 if (!controller_->stateIsOn(s_dbgNotStarted))
-                    controller_->addCommand(bp->dbgRemoveCommand().latin1());
+                    controller_->addCommand(bp->dbgRemoveCommand().toLatin1());
 
                 // Now add new breakpoint in gdb. It will correspond to
                 // the same 'Breakpoint' and 'BreakpointRow' objects in
