@@ -23,7 +23,7 @@ class KDevTeamworkViewFactory;
 class KUrl;
 class QModelIndex;
 class KDevTeamwork;
-class KDevTeamworkPartFactory;
+class KDevTeamworkPluginFactory;
 
 namespace KDevelop {
   class ICore;
@@ -31,7 +31,7 @@ namespace KDevelop {
   class IProject;
 }
 
-class KDevTeamworkPart: public KDevelop::IPlugin
+class KDevTeamworkPlugin: public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
@@ -43,8 +43,8 @@ public:
     };
 
 public:
-    KDevTeamworkPart( QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~KDevTeamworkPart();
+    KDevTeamworkPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~KDevTeamworkPlugin();
 
     //KDevPlugin methods
     virtual QWidget* pluginView() const;
@@ -77,7 +77,7 @@ private:
     void startTeamwork( KDevelop::IProject* );
 
     KDevelop::IProject* m_currentProject;
-    static KDevTeamworkPart* m_self;
+    static KDevTeamworkPlugin* m_self;
     QPointer<KDevTeamwork> m_teamwork;
     QPointer<QWidget> m_window;
     KDevTeamworkViewFactory* m_factory;

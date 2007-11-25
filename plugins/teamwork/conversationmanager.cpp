@@ -41,7 +41,7 @@
 
 #include "messagemanager.h"
 #include "kdevteamwork_user.h"
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include "kdevteamwork_messages.h"
 #include "kdevteamwork.h"
 #include "kdevteamwork_helpers.h"
@@ -155,7 +155,7 @@ ConversationManager* ConversationManager::m_instance;
 ConversationManager::ConversationManager( MessageManager* mng ) {
   m_manager = mng;
   m_instance = this;
-  IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
+  IDocumentController* docControl = KDevTeamworkPlugin::staticDocumentController();
   if ( docControl ) {
     connect( docControl, SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( docControl, SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
@@ -341,7 +341,7 @@ void InDocumentConversation::selectMessage( InDocumentMessagePointer msg ) {
     out( Logger::Debug ) << "opening:" << url.toLocalFile();
 
 
-    IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
+    IDocumentController* docControl = KDevTeamworkPlugin::staticDocumentController();
 
     IDocument* doc = docControl->documentForUrl( url );
     if(!doc) doc = docControl->openDocument( url );
@@ -480,7 +480,7 @@ void InDocumentConversation::sendMessage() {
     if ( text.isEmpty() )
       throw "no text";
 
-    IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
+    IDocumentController* docControl = KDevTeamworkPlugin::staticDocumentController();
 
     IDocument* d = docControl->activeDocument();
     if ( !d )
@@ -999,7 +999,7 @@ InDocumentConversation::InDocumentConversation( InDocumentMessage* msg ) : SafeL
       if ( line == -1 )
         throw "in-document-message has no line-information";
 
-      IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
+      IDocumentController* docControl = KDevTeamworkPlugin::staticDocumentController();
       if ( !docControl )
         throw "no document-controller";
 
@@ -1140,7 +1140,7 @@ void InDocumentConversation::setActive( bool active ) {
     return ;
 
   m_active = active;
-  IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
+  IDocumentController* docControl = KDevTeamworkPlugin::staticDocumentController();
 
   if ( active ) {
     if( m_widget ) m_widget->show();

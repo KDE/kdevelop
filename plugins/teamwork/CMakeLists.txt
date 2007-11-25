@@ -13,7 +13,7 @@ add_subdirectory(lib)
 
 set(kdevteamwork_PART_SRCS
     kdevteamwork.cpp
-    kdevteamwork_part.cpp
+    kdevteamworkplugin.cpp
     kdevteamwork_client.cpp
     kdevteamwork_messages.cpp
     kdevteamwork_user.cpp

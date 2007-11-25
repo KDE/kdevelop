@@ -13,7 +13,7 @@
 
 #include "kdevutils.h"
 #include "teamworkfoldermanager.h"
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include <idocumentcontroller.h>
 #include <idocument.h>
 #include <ktexteditor/document.h>
@@ -23,7 +23,7 @@
 using namespace KDevelop;
 
 QString currentDocumentPath() {
-  IDocumentController * docControl = KDevTeamworkPart::staticDocumentController();
+  IDocumentController * docControl = KDevTeamworkPlugin::staticDocumentController();
 
   IDocument* d = docControl->activeDocument();
   if ( !d )

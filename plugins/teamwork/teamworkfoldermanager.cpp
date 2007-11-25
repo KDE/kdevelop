@@ -13,7 +13,7 @@
 
 #include "teamworkfoldermanager.h"
 #include <icore.h>
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include <kio/netaccess.h>
 #include <krandom.h>
 #include <QStringList>

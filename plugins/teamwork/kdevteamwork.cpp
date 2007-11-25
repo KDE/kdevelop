@@ -36,7 +36,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "network/messagetypeset.h"
 #include "network/multisession.h"
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include "kdevteamwork_messageshower.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_client.h"
@@ -197,11 +197,11 @@ MessageManager* KDevTeamwork::messageManager() {
 }
 
 
-KDevTeamwork::KDevTeamwork( const KUrl& workspaceDirectory, KDevTeamworkPart *part, QWidget *parent ) :
+KDevTeamwork::KDevTeamwork( const KUrl& workspaceDirectory, KDevTeamworkPlugin *plugin, QWidget *parent ) :
 m_folderManager( workspaceDirectory ),
 m_logger( new KDevTeamworkLogger( this ) ),
 m_destroyed( false ),
-m_part( part ),
+m_plugin( plugin ),
 m_active( false ),
 m_serverActive( false ),
 m_patchesManager( this ),
@@ -361,8 +361,8 @@ KDevTeamwork::~KDevTeamwork() {
   m_destroyed = true;
 }
 
-KDevTeamworkPart *KDevTeamwork::part() const {
-  return m_part;
+KDevTeamworkPlugin *KDevTeamwork::plugin() const {
+  return m_plugin;
 }
 
 KDevTeamworkUserPointer KDevTeamwork::currentTabUser() {
@@ -1778,7 +1778,7 @@ void KDevTeamwork::sendMessageButton() {
           InDocumentReference endRef( false, m_widgets->reference->text() );
           KUrl docUrl = TeamworkFolderManager::workspaceAbsolute( ref.document() );
 
-          IDocument* doc = KDevTeamworkPart::staticCore()->documentController()->documentForUrl( docUrl );
+          IDocument* doc = KDevTeamworkPlugin::staticCore()->documentController()->documentForUrl( docUrl );
 
           if ( doc && doc->textDocument() ) {
             docText = doc->textDocument() ->text();

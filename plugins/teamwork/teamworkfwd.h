@@ -21,7 +21,7 @@ class CollaborationManager;
 class MessageSendManager;
 class PatchesManager;
 class KUrl;
-class KDevTeamworkPart;
+class KDevTeamworkPlugin;
 class KDevTeamwork;
 class QStandardItemModel;
 class QTimer;

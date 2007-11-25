@@ -13,7 +13,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "documentwrapper.h"
 #include "kdevteamwork_messages.h"
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include <QStandardItemModel>
 #include <QModelIndex>
 #include <QMenu>
@@ -176,11 +176,11 @@ void DocumentWrapper::toggleEnabled() {
 void DocumentWrapper::saveAsBufferFile() {
   KUrl u = TeamworkFolderManager::workspaceAbsolute( m_fileName );
 
-  IDocument* doc = KDevTeamworkPart::staticDocumentController() ->openDocument( u, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+  IDocument* doc = KDevTeamworkPlugin::staticDocumentController() ->openDocument( u, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
 
   if ( doc && doc->textDocument() ) {
     if ( doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified ) {
-      int answer = KMessageBox::warningYesNo( KDevTeamworkPart::staticCore()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" , m_fileName ) );
+      int answer = KMessageBox::warningYesNo( KDevTeamworkPlugin::staticCore()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" , m_fileName ) );
       if ( answer != KMessageBox::Yes )
         return ;
     }
@@ -475,7 +475,7 @@ void DocumentWrapper::openDocument( bool toForeground ) {
   try {
     if ( m_document ) {
       if( toForeground )
-        KDevTeamworkPart::staticDocumentController() ->activateDocument( m_document );
+        KDevTeamworkPlugin::staticDocumentController() ->activateDocument( m_document );
       return ;
     }
 
@@ -498,7 +498,7 @@ void DocumentWrapper::openDocument( bool toForeground ) {
 
     out( Logger::Debug ) << "temporary file for" << fileName() << "is" << m_tempFile;
 
-    m_document = KDevTeamworkPart::staticDocumentController() ->openDocument( m_tempFile, KTextEditor::Cursor(), toForeground == true ? KDevelop::IDocumentController::ActivateOnOpen : KDevelop::IDocumentController::DontActivate );
+    m_document = KDevTeamworkPlugin::staticDocumentController() ->openDocument( m_tempFile, KTextEditor::Cursor(), toForeground == true ? KDevelop::IDocumentController::ActivateOnOpen : KDevelop::IDocumentController::DontActivate );
 
     if ( m_document ) {
       KTextEditor::Document * doc = m_document->textDocument();
@@ -703,7 +703,7 @@ void DocumentWrapper::readFile( bool fromBuffer ) throw ( QString ) {
   QString txt;
 
   if ( fromBuffer ) {
-    IDocument * doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( u );
+    IDocument * doc = KDevTeamworkPlugin::staticDocumentController() ->documentForUrl( u );
     if ( doc && doc->textDocument() ) {
       txt = doc->textDocument() ->text();
     }

@@ -21,15 +21,15 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <idocumentcontroller.h>
 #include <indocumentreference.h>
 
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include "teamworkfoldermanager.h"
 
 MessageSendManager::MessageSendManager( Ui::Teamwork& widgets ) : m_widgets( widgets ), m_lastDocument(0) {
-  connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
-  connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
-  connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
-  if( KDevTeamworkPart::staticDocumentController()->activeDocument() )
-    documentActivated( KDevTeamworkPart::staticDocumentController()->activeDocument() );
+  connect( KDevTeamworkPlugin::staticDocumentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+  connect( KDevTeamworkPlugin::staticDocumentController(), SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+  connect( KDevTeamworkPlugin::staticDocumentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
+  if( KDevTeamworkPlugin::staticDocumentController()->activeDocument() )
+    documentActivated( KDevTeamworkPlugin::staticDocumentController()->activeDocument() );
 }
 
 void MessageSendManager::documentActivated( KDevelop::IDocument* document ) {

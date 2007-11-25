@@ -34,7 +34,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "network/messagetypeset.h"
 #include "network/messagesendhelper.h"
 
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include "kdevteamwork_user.h"
 #include "ui_kdevteamwork_interface.h"
 #include "collaborationmanager.h"
@@ -456,7 +456,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 //         if ( patchInfo->type == "text/x-diff" ) {
 //           QString str = msg->data();
 //
-//           KDevDiffFrontend *df = KDevTeamworkPart::staticCore()->pluginController()->pluginForExtension<KDevDiffFrontend>( "KDevelop/DiffFrontend" );
+//           KDevDiffFrontend *df = KDevTeamworkPlugin::staticCore()->pluginController()->pluginForExtension<KDevDiffFrontend>( "KDevelop/DiffFrontend" );
 //           if ( df ) {
 //             df->showDiff( str );
 //             return 1;
@@ -465,7 +465,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 //           }
 //         }
 
-        if( !KDevTeamworkPart::staticDocumentController()->openDocument( filePath, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen ) ) {
+        if( !KDevTeamworkPlugin::staticDocumentController()->openDocument( filePath, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen ) ) {
           log( QString( "could not open %1 with the document-controller" ).arg( filePath.prettyUrl() ), Warning );
 
           auto_ptr<KOpenWithDialog> d( new KOpenWithDialog( ~patchInfo->type, "" ) );
@@ -489,7 +489,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
           d.reset(0);
 
 /*          ///Open with KRun instead
-          if( KRun::runUrl( KUrl(filePath), ~patchInfo->type, KDevTeamworkPart::staticCore()->uiController()->activeMainWindow() ) == 0 ) {
+          if( KRun::runUrl( KUrl(filePath), ~patchInfo->type, KDevTeamworkPlugin::staticCore()->uiController()->activeMainWindow() ) == 0 ) {
             log( QString( "Failed to open %1 with an application" ).arg( filePath ), Warning );
           }*/
         }
@@ -530,7 +530,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
         d = 0;
 #else
 
-        KService::Ptr service = KMimeTypeTrader::self() ->preferredService( ~patchInfo->type , "KParts/ReadOnlyPart" );
+        KService::Ptr service = KMimeTypeTrader::self() ->preferredService( ~patchInfo->type , "KPlugins/ReadOnlyPlugin" );
         if ( !service )
           throw QString( "could not get a service that can handle " + ~patchInfo->type );
 

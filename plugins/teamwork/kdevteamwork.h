@@ -48,10 +48,10 @@ class KDevTeamwork : public QObject {
     Q_OBJECT
   public:
     typedef SafeSharedPtr<KDevTeamworkClient> TeamworkClientPointer;
-    KDevTeamwork( const KUrl& workspaceDirectory, KDevTeamworkPart *part, QWidget *parent );
+    KDevTeamwork( const KUrl& workspaceDirectory, KDevTeamworkPlugin *plugin, QWidget *parent );
     virtual ~KDevTeamwork();
 
-    KDevTeamworkPart *part() const;
+    KDevTeamworkPlugin *plugin() const;
 
     static KDevTeamwork* self() ;
 
@@ -252,7 +252,7 @@ class KDevTeamwork : public QObject {
     SafeSharedPtr<KDevTeamworkLogger> m_logger;
 
     bool m_destroyed;
-    KDevTeamworkPart *m_part;
+    KDevTeamworkPlugin *m_plugin;
     QWidget* m_widget;
     AutoConstructPointer<Ui::Teamwork> m_widgets;
     bool m_active, m_serverActive;

@@ -35,7 +35,7 @@ Q_DECLARE_METATYPE( Teamwork::UserPointer )
 #include "filecollaborationmanager.h"
 #include "dynamictext/vectortimestamp.h"
 #include "kdevteamwork_user.h"
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include "documentwrapper.h"
 #include "patchesmanager.h"
 #include "kdevteamwork_helpers.h"
@@ -167,7 +167,7 @@ const FileCollaborationSession::FileSet& FileCollaborationSession::files() const
 
 
 void FileCollaborationSession::fillContextMenu( int /*i*/, QMenu* menu ) {
-  IDocument * d = KDevTeamworkPart::staticDocumentController() ->activeDocument();
+  IDocument * d = KDevTeamworkPlugin::staticDocumentController() ->activeDocument();
   if ( d && d->textDocument() ) {
     KUrl u = TeamworkFolderManager::workspaceRelative( d->url() );
 
@@ -444,7 +444,7 @@ void FileCollaborationSession::saveAsPatch() {
 }
 void FileCollaborationSession::addFile() {
   try {
-    IDocument * document = KDevTeamworkPart::staticDocumentController() ->activeDocument();
+    IDocument * document = KDevTeamworkPlugin::staticDocumentController() ->activeDocument();
     Q_ASSERT( document != 0 );
     Q_ASSERT( document->textDocument() != 0 );
 

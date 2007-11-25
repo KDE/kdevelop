@@ -41,7 +41,7 @@
 #include "parser.h"
 #include <assert.h>
 
-//#include "kompare_part.h"
+//#include "kompareplugin.h"
 
 using namespace Diff2;
 

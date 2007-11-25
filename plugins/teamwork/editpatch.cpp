@@ -31,7 +31,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "kdevteamwork.h"
 #include <idocument.h>
 //#include "kdevdiffinterface.h"
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include "collaborationmanager.h"
 #include <QStandardItemModel>
 #include <icore.h>
@@ -892,10 +892,10 @@ void EditPatch::seekHunk( bool forwards, bool isSource, const QString& fileName 
 
       //out( Logger::Debug ) << "highlighting" << file.toLocalFile();
 
-      IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
+      IDocument* doc = KDevTeamworkPlugin::staticDocumentController() ->documentForUrl( file );
 
       if ( doc ) {
-        KDevTeamworkPart::staticDocumentController()->activateDocument( doc );
+        KDevTeamworkPlugin::staticDocumentController()->activateDocument( doc );
         if ( doc->textDocument() ) {
           KTextEditor::View * v = doc->textDocument() ->activeView();
           int bestLine = -1;
@@ -964,10 +964,10 @@ void EditPatch::highlightFile() {
 
       out( Logger::Debug ) << "highlighting" << file.toLocalFile();
 
-      IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
+      IDocument* doc = KDevTeamworkPlugin::staticDocumentController() ->documentForUrl( file );
 
       if ( !doc ) {
-        doc = KDevTeamworkPart::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+        doc = KDevTeamworkPlugin::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
         seekHunk( true, m_isSource, file.toLocalFile() );
       }
       removeHighlighting( file.toLocalFile() );
@@ -1004,7 +1004,7 @@ void EditPatch::fileDoubleClicked( const QModelIndex& i ) {
 
     out( Logger::Debug ) << "opening" << file.toLocalFile();
 
-    KDevTeamworkPart::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+    KDevTeamworkPlugin::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
 
     seekHunk( true, m_isSource, file.toLocalFile() );
   } catch ( const QString & str ) {
@@ -1053,9 +1053,9 @@ DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocume
     throw QString( "no smart-interface" );
 
   QMutexLocker lock(smart->smartMutex());
-  
+
   KTextEditor::SmartRange* topRange = smart->newSmartRange(doc->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
-  
+
   for ( Diff2::DifferenceList::const_iterator it = model->differences() ->begin(); it != model->differences() ->end(); ++it ) {
     Diff2::Difference* diff = *it;
     int line, lineCount;

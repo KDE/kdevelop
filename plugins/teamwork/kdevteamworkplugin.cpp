@@ -19,7 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kdevteamwork_part.h"
+#include "kdevteamworkplugin.h"
 #include "kdevteamwork.h"
 
 #include <QMenu>
@@ -42,23 +42,23 @@
 
 // #include <kplugininfo.h>
 
-KDevTeamworkPart* KDevTeamworkPart::m_self = 0;
+KDevTeamworkPlugin* KDevTeamworkPlugin::m_self = 0;
 
-K_PLUGIN_FACTORY(KDevTeamworkFactory, registerPlugin<KDevTeamworkPart>(); )
+K_PLUGIN_FACTORY(KDevTeamworkFactory, registerPlugin<KDevTeamworkPlugin>(); )
 K_EXPORT_PLUGIN(KDevTeamworkFactory("kdevteamwork"))
 
 
 class KDevTeamworkViewFactory : public KDevelop::IToolViewFactory
 {
 public:
-    KDevTeamworkViewFactory(KDevTeamworkPart *part): m_part(part) {}
+    KDevTeamworkViewFactory(KDevTeamworkPlugin *plugin): m_plugin(plugin) {}
 
     virtual QWidget* create(QWidget *parent = 0)
     {
         QWidget* view = new QWidget(parent);
         view->setObjectName("Teamwork");
         view->setWindowTitle(i18n("Teamwork"));
-        m_part->setView( view );
+        m_plugin->setView( view );
         return view;
     }
 
@@ -68,15 +68,15 @@ public:
     }
 
 private:
-    KDevTeamworkPart *m_part;
+    KDevTeamworkPlugin *m_plugin;
 };
 
-void KDevTeamworkPart::unload()
+void KDevTeamworkPlugin::unload()
 {
     core()->uiController()->removeToolView(m_factory);
 }
 
-KDevTeamworkPart::KDevTeamworkPart( QObject *parent,
+KDevTeamworkPlugin::KDevTeamworkPlugin( QObject *parent,
                                     const QVariantList& )
     : KDevelop::IPlugin( KDevTeamworkFactory::componentData(), parent ), m_currentProject( 0 ), m_window(0), m_factory( new KDevTeamworkViewFactory(this) )
 {
@@ -89,12 +89,12 @@ KDevTeamworkPart::KDevTeamworkPart( QObject *parent,
     connect( core()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), this, SLOT( projectClosed( KDevelop::IProject* ) ) );
 }
 
-KDevelop::ICore * KDevTeamworkPart::staticCore( )
+KDevelop::ICore * KDevTeamworkPlugin::staticCore( )
 {
   return m_self->core();
 }
 
-void KDevTeamworkPart::setView( QWidget* view ) {
+void KDevTeamworkPlugin::setView( QWidget* view ) {
     KDevelop::IProject* oldProject = m_currentProject;
     destroyTeamwork();
     m_window = view;
@@ -103,7 +103,7 @@ void KDevTeamworkPart::setView( QWidget* view ) {
         startTeamwork( oldProject );
 }
 
-void KDevTeamworkPart::destroyTeamwork() {
+void KDevTeamworkPlugin::destroyTeamwork() {
     delete m_teamwork;
     m_teamwork = 0;
     m_currentProject = 0;
@@ -111,7 +111,7 @@ void KDevTeamworkPart::destroyTeamwork() {
         m_window->hide();
 }
 
-void KDevTeamworkPart::startTeamwork( KDevelop::IProject* project ) {
+void KDevTeamworkPlugin::startTeamwork( KDevelop::IProject* project ) {
     destroyTeamwork();
     m_currentProject = project;
     if( !m_window ) return;
@@ -119,47 +119,47 @@ void KDevTeamworkPart::startTeamwork( KDevelop::IProject* project ) {
     m_window->show();
 }
 
-KDevelop::IDocumentController* KDevTeamworkPart::staticDocumentController() {
+KDevelop::IDocumentController* KDevTeamworkPlugin::staticDocumentController() {
   return staticCore()->documentController();
 }
 
-KDevTeamworkPart::~KDevTeamworkPart()
+KDevTeamworkPlugin::~KDevTeamworkPlugin()
 {
     destroyTeamwork();
 }
 
-QWidget* KDevTeamworkPart::pluginView() const
+QWidget* KDevTeamworkPlugin::pluginView() const
 {
 	return m_window;
 }
 
-Qt::DockWidgetArea KDevTeamworkPart::dockWidgetAreaHint() const
+Qt::DockWidgetArea KDevTeamworkPlugin::dockWidgetAreaHint() const
 {
 	return Qt::RightDockWidgetArea;
 }
 
 
-void KDevTeamworkPart::import( RefreshPolicy /*policy*/ )
+void KDevTeamworkPlugin::import( RefreshPolicy /*policy*/ )
 {}
 
-void KDevTeamworkPart::restorePartialProjectSession(const QDomElement* el) {
+void KDevTeamworkPlugin::restorePartialProjectSession(const QDomElement* el) {
     m_teamwork->restorePartialProjectSession( el );
 }
 
-void KDevTeamworkPart::savePartialProjectSession(QDomElement* el) {
+void KDevTeamworkPlugin::savePartialProjectSession(QDomElement* el) {
     m_teamwork->savePartialProjectSession( el );
 }
 
-void KDevTeamworkPart::projectOpened( KDevelop::IProject* project ) {
+void KDevTeamworkPlugin::projectOpened( KDevelop::IProject* project ) {
     if( !m_currentProject )
         startTeamwork( project );
 }
 
-void KDevTeamworkPart::projectClosed( KDevelop::IProject* project ) {
+void KDevTeamworkPlugin::projectClosed( KDevelop::IProject* project ) {
     if( project == m_currentProject )
         destroyTeamwork();
 }
 
 
-#include "kdevteamwork_part.moc"
+#include "kdevteamworkplugin.moc"
 
