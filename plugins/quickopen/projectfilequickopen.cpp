@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "project_file_quickopen.h"
+#include "projectfilequickopen.h"
 #include <QIcon>
 #include <QTextBrowser>
 #include <klocale.h>

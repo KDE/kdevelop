@@ -17,7 +17,7 @@ include_directories(
 set(kdevquickopen_PART_SRCS
     quickopenplugin.cpp
     quickopenmodel.cpp
-    project_file_quickopen.cpp
+    projectfilequickopen.cpp
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp

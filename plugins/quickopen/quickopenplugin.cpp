@@ -46,7 +46,7 @@
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
 #include "quickopenmodel.h"
-#include "project_file_quickopen.h"
+#include "projectfilequickopen.h"
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
