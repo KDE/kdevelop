@@ -12,9 +12,9 @@
 
 #include <kgenericfactory.h>
 
-#include "appwizardpart.h"
+#include "appwizardplugin.h"
 
-class AppWizardFactory : public KGenericFactory<AppWizardPart> {
+class AppWizardFactory : public KGenericFactory<AppWizardPlugin> {
 public:
     AppWizardFactory(const char *instanceName);
 

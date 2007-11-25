@@ -18,7 +18,7 @@
 #include <kdialog.h>
 #include <QFile>
 
-class AppWizardPart;
+class AppWizardPlugin;
 
 struct InfrastructureCmd{
     bool isOn;
@@ -32,7 +32,7 @@ class ImportProject : public QDialog, public Ui::ImportProject
     Q_OBJECT
 
 public:
-    ImportProject( AppWizardPart *part, QWidget *parent=0 );
+    ImportProject( AppWizardPlugin *plugin, QWidget *parent=0 );
     ~ImportProject();
 
 protected:
@@ -53,7 +53,7 @@ private slots:
     QString manager() const;
     QString primaryLanguage() const;
 
-    AppWizardPart *m_part;
+    AppWizardPlugin *m_plugin;
 };
 
 #endif // IMPORTPROJECT_H

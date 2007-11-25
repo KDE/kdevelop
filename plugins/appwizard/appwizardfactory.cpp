@@ -15,13 +15,13 @@
 K_EXPORT_COMPONENT_FACTORY(kdevappwizard, AppWizardFactory("kdevappwizard"))
 
 AppWizardFactory::AppWizardFactory(const char *instanceName)
-    : KGenericFactory<AppWizardPart>(instanceName)
+    : KGenericFactory<AppWizardPlugin>(instanceName)
 {
 }
 
 KComponentData *AppWizardFactory::createComponentData()
 {
-    KComponentData *componentData = KGenericFactory<AppWizardPart>::createComponentData();
+    KComponentData *componentData = KGenericFactory<AppWizardPlugin>::createComponentData();
     KStandardDirs *dirs = componentData->dirs();
     dirs->addResourceType("apptemplates", "data", "kdevappwizard/templates/");
     dirs->addResourceType("apptemplate_descriptions","data", "kdevappwizard/template_descriptions/");

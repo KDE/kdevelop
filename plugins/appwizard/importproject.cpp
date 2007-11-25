@@ -34,12 +34,12 @@
 #include "iprojectcontroller.h"
 
 #include "appwizardfactory.h"
-#include "appwizardpart.h"
+#include "appwizardplugin.h"
 
 
-ImportProject::ImportProject(AppWizardPart *part, QWidget *parent)
+ImportProject::ImportProject(AppWizardPlugin *plugin, QWidget *parent)
     : QDialog(parent)
-    , m_part(part)
+    , m_plugin(plugin)
 {
     setupUi(this);
 
@@ -100,7 +100,7 @@ void ImportProject::accept()
 
     kDebug(9010) << "OPENING PROJECT: " << projectUrl;
 
-    m_part->core()->projectController()->openProject(projectUrl);
+    m_plugin->core()->projectController()->openProject(projectUrl);
 }
 
 void ImportProject::importProject(QFile& file)
@@ -185,7 +185,7 @@ void ImportProject::dirChanged()
 /*
 void ImportProject::scanAvailableVCS()
 {
-//    vcsCombo->insertStringList( m_part->registeredVersionControls() );
+//    vcsCombo->insertStringList( m_plugin->registeredVersionControls() );
     int i = 0;
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl");
     KTrader::OfferList::const_iterator it = offers.begin();
@@ -209,7 +209,7 @@ void ImportProject::slotFinishedCheckout( QString destinationDir )
 void ImportProject::slotFetchModulesFromRepository()
 {
 
-    KDevVersionControl *vcs = m_part->versionControlByName( vcsCombo->currentText() );
+    KDevVersionControl *vcs = m_plugin->versionControlByName( vcsCombo->currentText() );
     if (!vcs)
         return;
 

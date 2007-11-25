@@ -10,7 +10,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include "appwizardpart.h"
+#include "appwizardplugin.h"
 
 #include <QDir>
 #include <QFile>
@@ -41,7 +41,7 @@
 #include "importproject.h"
 
 K_PLUGIN_FACTORY(AppWizardFactory,
-    registerPlugin<AppWizardPart>();
+    registerPlugin<AppWizardPlugin>();
     KComponentData compData = componentData();
     KStandardDirs *dirs = compData.dirs();
     dirs->addResourceType("apptemplates", "data", "kdevappwizard/templates/");
@@ -52,7 +52,7 @@ K_PLUGIN_FACTORY(AppWizardFactory,
 )
 K_EXPORT_PLUGIN(AppWizardFactory("kdevappwizard"))
 
-AppWizardPart::AppWizardPart(QObject *parent, const QVariantList &)
+AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
 {
     setXMLFile("kdevappwizard.rc");
@@ -76,11 +76,11 @@ AppWizardPart::AppWizardPart(QObject *parent, const QVariantList &)
     m_templatesModel = new ProjectTemplatesModel(this);
 }
 
-AppWizardPart::~AppWizardPart()
+AppWizardPlugin::~AppWizardPlugin()
 {
 }
 
-void AppWizardPart::slotNewProject()
+void AppWizardPlugin::slotNewProject()
 {
     m_templatesModel->refresh();
     AppWizardDialog dlg;
@@ -96,13 +96,13 @@ void AppWizardPart::slotNewProject()
     }
 }
 
-void AppWizardPart::slotImportProject()
+void AppWizardPlugin::slotImportProject()
 {
     ImportProject import(this, QApplication::activeWindow());
     import.exec();
 }
 
-QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
+QString AppWizardPlugin::createProject(ProjectSelectionPage *selectionPage)
 {
     QFileInfo templateInfo(selectionPage->selectedTemplate());
     if (!templateInfo.exists())
@@ -144,7 +144,7 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
     return QDir::cleanPath(dest + '/' + selectionPage->appName().toLower() + ".kdev4");
 }
 
-void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
+void AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
 {
     KIO::NetAccess::mkdir(dest, 0);
     kDebug(9010) << "unpacking dir:" << dir->name() << "to" << dest;
@@ -178,7 +178,7 @@ void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &d
     tdir.unlink();
 }
 
-bool AppWizardPart::copyFile(const QString &source, const QString &dest)
+bool AppWizardPlugin::copyFile(const QString &source, const QString &dest)
 {
     kDebug(9010) << "copy:" << source << "to" << dest;
     QFile inputFile(source);
@@ -209,5 +209,5 @@ bool AppWizardPart::copyFile(const QString &source, const QString &dest)
     }
 }
 
-#include "appwizardpart.moc"
+#include "appwizardplugin.moc"
 

@@ -13,12 +13,12 @@
 #include <QMap>
 #include <QStandardItemModel>
 
-class AppWizardPart;
+class AppWizardPlugin;
 class ProjectTemplateItem;
 
 class ProjectTemplatesModel: public QStandardItemModel {
 public:
-    ProjectTemplatesModel(AppWizardPart *parent);
+    ProjectTemplatesModel(AppWizardPlugin *parent);
 
     void refresh();
 
@@ -26,7 +26,7 @@ private:
     void extractTemplateDescriptions();
     ProjectTemplateItem *createItem(const QString &name, const QString &category);
 
-    AppWizardPart *m_part;
+    AppWizardPlugin *m_plugin;
 
     QMap<QString, QStandardItem*> m_templateItems;
 };

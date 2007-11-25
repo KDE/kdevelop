@@ -23,11 +23,11 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include "appwizardpart.h"
+#include "appwizardplugin.h"
 #include "projecttemplateitem.h"
 
-ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPart *parent)
-    :QStandardItemModel(parent), m_part(parent)
+ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
+    :QStandardItemModel(parent), m_plugin(parent)
 {
 }
 
@@ -38,7 +38,7 @@ void ProjectTemplatesModel::refresh()
     m_templateItems[""] = invisibleRootItem();
     extractTemplateDescriptions();
 
-    KStandardDirs *dirs = m_part->componentData().dirs();
+    KStandardDirs *dirs = m_plugin->componentData().dirs();
     QStringList templateDescriptions = dirs->findAllResources("apptemplate_descriptions");
     foreach (QString templateDescription, templateDescriptions)
     {
@@ -80,7 +80,7 @@ ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, cons
 
 void ProjectTemplatesModel::extractTemplateDescriptions()
 {
-    KStandardDirs *dirs = m_part->componentData().dirs();
+    KStandardDirs *dirs = m_plugin->componentData().dirs();
     QStringList templateArchives = dirs->findAllResources("apptemplates");
 
     QString localDescriptionsDir = dirs->saveLocation("apptemplate_descriptions");

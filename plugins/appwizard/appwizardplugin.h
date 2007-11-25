@@ -21,11 +21,11 @@ class ProjectTemplatesModel;
 class ProjectSelectionPage;
 class KArchiveDirectory;
 
-class AppWizardPart: public KDevelop::IPlugin {
+class AppWizardPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    AppWizardPart(QObject *parent, const QVariantList & = QVariantList() );
-    ~AppWizardPart();
+    AppWizardPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    ~AppWizardPlugin();
 
 private slots:
     void slotNewProject();
