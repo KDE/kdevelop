@@ -409,12 +409,12 @@ namespace GDBDebugger
 
 
     ViewerWidget::ViewerWidget(GDBController* controller,
-                               QWidget* parent, 
-                               const char* name) 
-    : QWidget(parent, name),
+                               QWidget* parent)
+    : QWidget(parent),
       controller_(controller)
     {
-        setIcon(SmallIcon("math_brace"));
+        setWindowIcon(KIcon("math_brace"));
+        setWindowTitle(i18n("Special debugger views"));
         
         Q3VBoxLayout *l = new Q3VBoxLayout(this, 0, 0);
         

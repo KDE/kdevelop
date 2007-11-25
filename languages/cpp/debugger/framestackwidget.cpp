@@ -45,6 +45,15 @@ FramestackWidget::FramestackWidget(GDBController* controller,
           viewedThread_(0),
           controller_(controller)
 {
+    setToolTip(i18n("<b>Frame stack</b><p>"
+                    "Often referred to as the \"call stack\", "
+                    "this is a list showing what function is "
+                    "currently active and who called each "
+                    "function to get to this point in your "
+                    "program. By clicking on an item you "
+                    "can see the values in any of the "
+                    "previous calling functions."));
+    setWindowIcon(KIcon("table"));
     setRootIsDecorated(true);
     setSorting(-1);
     setSelectionMode(Single);

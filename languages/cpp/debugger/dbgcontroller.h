@@ -70,7 +70,7 @@ class DbgController : public QObject
 
 public:
 
-    DbgController();
+    DbgController(QObject* parent);
     virtual ~DbgController();
 
     virtual bool stateIsOn( int state )                                     = 0;

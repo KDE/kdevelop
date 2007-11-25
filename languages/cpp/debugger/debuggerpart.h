@@ -135,7 +135,7 @@ private:
     QPointer<GDBOutputWidget> gdbOutputWidget;
     QPointer<ViewerWidget> viewerWidget;
     GDBController *controller;
-    QPointer<QLabel> statusBarIndicator;
+    //QPointer<QLabel> statusBarIndicator;
     QPointer<DbgToolBar> floatingToolBar;
     ProcessLineMaker* procLineMaker;
     ProcessLineMaker* gdbLineMaker;
@@ -143,7 +143,7 @@ private:
     QString m_contextIdent;
     QByteArray m_drkonqi;
     
-    KDevDebugger *m_debugger;
+    //KDevDebugger *m_debugger;
     int previousDebuggerState_;
     // Set to true after each debugger restart
     // Currently used to auto-show variables view
@@ -159,6 +159,13 @@ private:
 
     // Set by 'startDebugger' and cleared by 'slotStopDebugger'.
     bool running_;
+
+    class BreakpointListFactory* m_breakpointFactory;
+    class VariableBreakpointListFactory* m_variableFactory;
+    class FramestackViewFactory* m_framestackFactory;
+    class DisassembleViewFactory* m_disassembleFactory;
+    class GDBOutputViewFactory* m_outputFactory;
+    class SpecialViewFactory* m_specialFactory;
 
 Q_SIGNALS:
     void buildProject();

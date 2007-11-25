@@ -41,7 +41,7 @@ class GDBOutputWidget : public QWidget
     Q_OBJECT
 
 public:
-    GDBOutputWidget( QWidget *parent=0 );
+    GDBOutputWidget( GDBController* controller, QWidget *parent=0 );
     ~GDBOutputWidget();
 
     void savePartialProjectSession(QDomElement* el);
@@ -82,6 +82,7 @@ private:
     */
     void trimList(QStringList& l, unsigned max_size);
 
+    GDBController* m_controller;
     KHistoryComboBox*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
     Q3TextEdit*      m_gdbView;

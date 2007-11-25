@@ -47,6 +47,10 @@
 #include <ctype.h>
 #include <kvbox.h>
 
+#include <icore.h>
+#include <idocumentcontroller.h>
+#include <idocument.h>
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
@@ -201,6 +205,15 @@ GDBBreakpointWidget::GDBBreakpointWidget(GDBController* controller, QWidget *par
 QWidget(parent),
 controller_(controller)
 {
+    setWindowTitle(i18n("Debugger Breakpoints"));
+    setWhatsThis(i18n("<b>Breakpoint list</b><p>"
+                      "Displays a list of breakpoints with "
+                      "their current status. Clicking on a "
+                      "breakpoint item allows you to change "
+                      "the breakpoint and will take you "
+                      "to the source in the editor window."));
+    setWindowIcon( KIcon("process-stop") );
+
     QHBoxLayout* layout = new QHBoxLayout(this);
 
     m_table = new GDBTable(0, numCols, this);
@@ -257,6 +270,9 @@ controller_(controller)
     m_ctxMenu->insertItem( i18n( "Delete all"), BW_ITEM_DeleteAll );
 
     m_table->show();
+
+    connect( ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
+             this, SLOT(slotRefreshBP(KDevelop::IDocument*)) );
 
     connect( newBreakpoint,       SIGNAL(activated(int)),
              this,          SLOT(slotAddBlankBreakpoint(int)) );
@@ -319,7 +335,7 @@ void GDBBreakpointWidget::reset()
 
 // When a file is loaded then we need to tell the editor (display window)
 // which lines contain a breakpoint.
-void GDBBreakpointWidget::slotRefreshBP(const KUrl &filename)
+void GDBBreakpointWidget::slotRefreshBP(KDevelop::IDocument* document)
 {
     for ( int row = 0; row < m_table->numRows(); row++ )
     {
@@ -328,7 +344,7 @@ void GDBBreakpointWidget::slotRefreshBP(const KUrl &filename)
         {
             FilePosBreakpoint* bp = dynamic_cast<FilePosBreakpoint*>(btr->breakpoint());
             if (bp && bp->hasFileAndLine()
-                && (bp->fileName() == filename.path()))
+                && (bp->fileName() == document->url().path()))
                 emit refreshBPState(*bp);
         }
     }

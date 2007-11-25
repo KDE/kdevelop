@@ -46,14 +46,20 @@ namespace GDBDebugger
 
 /***************************************************************************/
 
-GDBOutputWidget::GDBOutputWidget( QWidget *parent) :
+GDBOutputWidget::GDBOutputWidget(GDBController* controller, QWidget *parent) :
     QWidget(parent),
+    m_controller(controller),
     m_userGDBCmdEditor(0),
     m_Interrupt(0),
     m_gdbView(0),
     showInternalCommands_(false),
     maxLines_(5000)
 {
+    setWindowIcon(KIcon("inline_image"));
+    setWindowTitle(i18n("GDB Output"));
+    setToolTip(i18n("<b>GDB output</b><p>"
+                    "Shows all gdb commands being executed. "
+                    "You can also issue any other gdb command while debugging."));
 
     m_gdbView = new OutputText(this);
     m_gdbView->setTextFormat(Qt::LogText);

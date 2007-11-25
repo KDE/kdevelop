@@ -58,7 +58,6 @@ class VariableWidget : public QWidget
 
 public:
     VariableWidget( GDBController* controller,
-                    GDBBreakpointWidget* breakpointWidget,
                     QWidget *parent=0 );
 
     VariableTree *varTree() const

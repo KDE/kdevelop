@@ -55,7 +55,7 @@ class GDBController : public DbgController
     Q_OBJECT
 
 public:
-    GDBController(QDomDocument &projectDom);
+    GDBController(QObject* parent);
     ~GDBController();
     
     enum event_t { program_state_changed = 1, program_exited, debugger_exited,

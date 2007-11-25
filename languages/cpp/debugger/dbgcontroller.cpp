@@ -22,8 +22,9 @@
 namespace GDBDebugger
 {
 
-DbgController::DbgController()
-    : dbgProcess_(0)
+DbgController::DbgController(QObject* parent)
+    : QObject(parent)
+    , dbgProcess_(0)
 {
 }
 

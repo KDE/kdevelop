@@ -39,7 +39,7 @@ namespace GDBDebugger
         Q_OBJECT
     public:
         ViewerWidget(GDBController* controller,
-                     QWidget* parent, const char* name);
+                     QWidget* parent);
 
     public Q_SLOTS:
         /** Adds a new memory view to *this, initially showing

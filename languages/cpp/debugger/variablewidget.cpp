@@ -83,14 +83,13 @@ namespace GDBDebugger
 {
 
 VariableWidget::VariableWidget(GDBController*  controller,
-                               GDBBreakpointWidget* breakpointWidget,
                                QWidget *parent)
 : QWidget(parent)
 {
-    setIcon(SmallIcon("math_brace"));
-    setCaption(i18n("Variable Tree"));
+    setWindowIcon(KIcon("math_brace"));
+    setWindowTitle(i18n("Debugger Variables"));
 
-    varTree_ = new VariableTree(this, controller, breakpointWidget);
+    varTree_ = new VariableTree(this, controller);
 
     watchVarEditor_ = new KHistoryComboBox( this );
 

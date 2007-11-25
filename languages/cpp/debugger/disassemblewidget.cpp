@@ -46,6 +46,15 @@ DisassembleWidget::DisassembleWidget(GDBController* controller, QWidget *parent)
         upper_(0),
         address_(0)
 {
+    setToolTip(i18n("<b>Machine code display</b><p>"
+                    "A machine code view into your running "
+                    "executable with the current instruction "
+                    "highlighted. You can step instruction by "
+                    "instruction using the debuggers toolbar "
+                    "buttons of \"step over\" instruction and "
+                    "\"step into\" instruction."));
+    setWindowIcon( KIcon("gear") );
+    setWindowTitle(i18n("Disassemble View"));
     setFont(KGlobalSettings::fixedFont());
     setReadOnly(true);
 }

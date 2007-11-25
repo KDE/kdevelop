@@ -131,8 +131,8 @@ namespace GDBDebugger
 int debug_controllerExists = false;
 
 
-GDBController::GDBController(QDomDocument &projectDom)
-        : DbgController(),
+GDBController::GDBController(QObject* parent)
+        : DbgController(parent),
         currentFrame_(0),
         viewedThread_(-1),
         holdingZone_(),

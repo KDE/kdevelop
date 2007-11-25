@@ -71,7 +71,7 @@ public Q_SLOTS:
 
     void slotBreakpointSet(Breakpoint*);
 
-    void slotRefreshBP(const KUrl &filename);
+    void slotRefreshBP(KDevelop::IDocument* document);
 
     void slotBreakpointHit(int id);
 
@@ -105,7 +105,7 @@ Q_SIGNALS:
     void refreshBPState(const Breakpoint& brkpt);
     void gotoSourcePosition(const QString &fileName, int lineNum);
     // Emitted when output from yet another passed tracepoint is available.
-    void tracingOutput(const char*);
+    void tracingOutput(const QByteArray&);
 
 private:
     BreakpointTableRow* find(Breakpoint *bp);
