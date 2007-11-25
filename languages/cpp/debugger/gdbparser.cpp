@@ -136,7 +136,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
 
     QString value(QByteArray(start, end - start + 1).data());
 
-    value = value.stripWhiteSpace();
+    value = value.trimmed();
 
     if (value[0] == '@')
     {
@@ -155,7 +155,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
     if (value.indexOf("Cannot access memory") == 0)
         value = "(inaccessible)";
   
-    return value.stripWhiteSpace();
+    return value.trimmed();
 }
 
 QString GDBParser::undecorateValue(const QString& s)

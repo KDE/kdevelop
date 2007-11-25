@@ -133,7 +133,7 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
     {
         case GDBController::program_state_changed: 
 
-            kdDebug(9012) << "Clearning framestack\n";
+            kDebug(9012) << "Clearning framestack\n";
             clear();
 
             controller_->addCommand(

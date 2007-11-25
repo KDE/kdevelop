@@ -34,7 +34,7 @@
 #include <set>
 #include <kvbox.h>
 
-class KProcess;
+class K3Process;
 
 namespace GDBDebugger
 {
@@ -249,10 +249,10 @@ public Q_SLOTS:
 
 
 protected Q_SLOTS:
-    void slotDbgStdout(KProcess *proc, char *buf, int buflen);
-    void slotDbgStderr(KProcess *proc, char *buf, int buflen);
-    void slotDbgWroteStdin(KProcess *proc);
-    void slotDbgProcessExited(KProcess *proc);
+    void slotDbgStdout(K3Process *proc, char *buf, int buflen);
+    void slotDbgStderr(K3Process *proc, char *buf, int buflen);
+    void slotDbgWroteStdin(K3Process *proc);
+    void slotDbgProcessExited(K3Process *proc);
 
 Q_SIGNALS:
 

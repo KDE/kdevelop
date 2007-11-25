@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kurl.h>
 #include <kmessagebox.h>
 
@@ -316,7 +316,7 @@ void GDBBreakpointWidget::reset()
 
 // When a file is loaded then we need to tell the editor (display window)
 // which lines contain a breakpoint.
-void GDBBreakpointWidget::slotRefreshBP(const KURL &filename)
+void GDBBreakpointWidget::slotRefreshBP(const KUrl &filename)
 {
     for ( int row = 0; row < m_table->numRows(); row++ )
     {
@@ -626,7 +626,7 @@ void GDBBreakpointWidget::slotBreakpointSet(Breakpoint* bp)
     BreakpointTableRow* btr = findKey(bp->key());
     if (!btr)
     {
-        kdDebug(9012) << "Early return\n";
+        kDebug(9012) << "Early return\n";
         return;
     }
 
@@ -692,7 +692,7 @@ void GDBBreakpointWidget::slotRowDoubleClicked(int row, int col, int btn, const 
 {
     if ( btn == Qt::LeftButton )
     {
-//    kdDebug(9012) << "in slotRowSelected row=" << row << endl;
+//    kDebug(9012) << "in slotRowSelected row=" << row;
         BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
         if (btr)
         {
@@ -819,7 +819,7 @@ void GDBBreakpointWidget::slotContextMenuSelect( int item )
 
 void GDBBreakpointWidget::slotEditRow(int row, int col, const QPoint &)
 {
-//    kdDebug(9012) << "in slotEditRow row=" << row << endl;
+//    kDebug(9012) << "in slotEditRow row=" << row;
     BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
     if (btr)
     {

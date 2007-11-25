@@ -19,7 +19,7 @@
 #include "gdbbreakpointwidget.h"
 
 #include <kdebug.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klineedit.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -91,7 +91,7 @@ VariableWidget::VariableWidget(GDBController*  controller,
 
     varTree_ = new VariableTree(this, controller, breakpointWidget);
 
-    watchVarEditor_ = new KHistoryCombo( this,
+    watchVarEditor_ = new KHistoryComboBox( this,
                                          "var-to-watch editor");
 
     Q3HBoxLayout* buttons = new Q3HBoxLayout();
@@ -207,7 +207,7 @@ VariableTree::VariableTree(VariableWidget *parent,
                            GDBController*  controller,
                            GDBBreakpointWidget* breakpointWidget,
                            const char *name)
-    : KListView(parent, name),
+    : K3ListView(parent, name),
       QToolTip( viewport() ),
       controller_(controller),
       breakpointWidget_(breakpointWidget),
@@ -229,8 +229,8 @@ VariableTree::VariableTree(VariableWidget *parent,
     addColumn(i18n("Value"));
 //     setResizeMode(AllColumns);
 
-    connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-             SLOT(slotContextMenu(KListView*, Q3ListViewItem*)) );
+    connect( this, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+             SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*)) );
     connect( this, SIGNAL(itemRenamed( Q3ListViewItem*, int, const QString&)),
              this, SLOT(slotItemRenamed( Q3ListViewItem*, int, const QString&)));
 }
@@ -243,7 +243,7 @@ VariableTree::~VariableTree()
 
 // **************************************************************************
 
-void VariableTree::slotContextMenu(KListView *, Q3ListViewItem *item)
+void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -252,8 +252,8 @@ void VariableTree::slotContextMenu(KListView *, Q3ListViewItem *item)
 
     if (item->parent())
     {
-        KPopupMenu popup(this);
-        KPopupMenu format(this);
+        KMenu popup(this);
+        KMenu format(this);
 
         int idRemember = -2;
         int idRemove = -2;
@@ -399,7 +399,7 @@ void VariableTree::slotContextMenu(KListView *, Q3ListViewItem *item)
     }
     else if (item == recentExpressions_)
     {
-        KPopupMenu popup(this);
+        KMenu popup(this);
         popup.insertTitle(i18n("Recent Expressions"));
         int idRemove = popup.insertItem(
             SmallIcon("editdelete"), i18n("Remove All"));
@@ -710,13 +710,13 @@ void VariableTree::localsReady(const GDBMI::ResultRecord& r)
 
 void VariableTree::frameIdReady(const Q3ValueVector<QString>& lines)
 {
-    //kdDebug(9012) << "localAddresses: " << lines[1] << "\n";
+    //kDebug(9012) << "localAddresses: " << lines[1] << "\n";
 
     QString frame_info;
     for(unsigned i = 1; i < lines.size(); ++i)
         frame_info += lines[i];
 
-    kdDebug(9012) << "frame info: " << frame_info << "\n";
+    kDebug(9012) << "frame info: " << frame_info << "\n";
     frame_info.replace('\n', "");
 
     static QRegExp frame_base_rx("frame at 0x([0-9a-fA-F]*)");
@@ -747,10 +747,10 @@ void VariableTree::frameIdReady(const Q3ValueVector<QString>& lines)
             frame_base_rx.cap(1).toULongLong(0, 16);
         unsigned long long new_code_address =
             frame_code_rx.cap(1).toULongLong(0, 16);
-        kdDebug(9012) << "Frame base = " << QString::number(new_frame_base, 16)
+        kDebug(9012) << "Frame base = " << QString::number(new_frame_base, 16)
                       << " code = " << QString::number(new_code_address, 16)
                       << "\n";
-        kdDebug(9012) << "Previous frame " <<
+        kDebug(9012) << "Previous frame " <<
             QString::number(frame->currentFrameBase, 16)
                       << " code = " << QString::number(
                           frame->currentFrameCodeAddress, 16)
@@ -942,7 +942,7 @@ void VariableTree::fetchSpecialValuesDone()
     setUpdatesEnabled(true);
     triggerUpdate();
 
-    kdDebug(9012) << "Time to fetch variables: " << fetch_time.elapsed() <<
+    kDebug(9012) << "Time to fetch variables: " << fetch_time.elapsed() <<
         "ms\n";
 }
 
@@ -984,7 +984,7 @@ void VariableTree::keyPressEvent(QKeyEvent* e)
             }
         }
 
-        if (e->key() == Qt::Key_C && e->state() == Qt::ControlButton)
+        if (e->key() == Qt::Key_C && e->state() == Qt::ControlModifier)
         {
             copyToClipboard(item);
         }
@@ -1025,14 +1025,14 @@ void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
 // **************************************************************************
 
 TrimmableItem::TrimmableItem(VariableTree *parent)
-    : KListViewItem (parent, parent->lastChild())
+    : K3ListViewItem (parent, parent->lastChild())
 {
 }
 
 // **************************************************************************
 
 TrimmableItem::TrimmableItem(TrimmableItem *parent)
-    : KListViewItem (parent, parent->lastChild())
+    : K3ListViewItem (parent, parent->lastChild())
 {
 }
 
@@ -1384,7 +1384,7 @@ void VarItem::createChildren(const GDBMI::ResultRecord& r,
                 child; child = child->nextSibling())
             {
                 VarItem* v = static_cast<VarItem*>(child);
-                kdDebug(9012) << "Child exp : " << v->expression_ <<
+                kDebug(9012) << "Child exp : " << v->expression_ <<
                     " new exp " << exp << "\n";
 
                 if (v->expression_ == exp)
@@ -1398,7 +1398,7 @@ void VarItem::createChildren(const GDBMI::ResultRecord& r,
             }
             else
             {
-                kdDebug(9012) << "Creating new varobj "
+                kDebug(9012) << "Creating new varobj "
                               << exp << " " << baseObject << "\n";
                 // Propagate format from parent.
                 VarItem* v = 0;
@@ -1430,7 +1430,7 @@ void VarItem::handleCurrentAddress(const Q3ValueVector<QString>& lines)
         if (i == 0)
         {
             lastObtainedAddress_ = r.cap(1);
-            kdDebug(9012) << "new address " << lastObtainedAddress_ << "\n";
+            kDebug(9012) << "new address " << lastObtainedAddress_ << "\n";
         }
     }
 }
@@ -1441,7 +1441,7 @@ void VarItem::handleType(const Q3ValueVector<QString>& lines)
 
     if (lastObtainedAddress_ != currentAddress_)
     {
-        kdDebug(9012) << "Address changed from " << currentAddress_
+        kDebug(9012) << "Address changed from " << currentAddress_
                       << " to " << lastObtainedAddress_ << "\n";
         recreate = true;
     }
@@ -1454,8 +1454,8 @@ void VarItem::handleType(const Q3ValueVector<QString>& lines)
             int i = r.search(lines[1]);
             if (i == 0)
             {
-                kdDebug(9012) << "found type: " << r.cap(1) << "\n";
-                kdDebug(9012) << "original Type: " << originalValueType_ << "\n";
+                kDebug(9012) << "found type: " << r.cap(1) << "\n";
+                kDebug(9012) << "original Type: " << originalValueType_ << "\n";
 
                 if (r.cap(1) != originalValueType_)
                 {
@@ -1705,7 +1705,7 @@ void VarItem::setOpen(bool open)
 
 bool VarItem::handleSpecialTypes()
 {
-    kdDebug(9012) << "handleSpecialTypes: " << originalValueType_ << "\n";
+    kDebug(9012) << "handleSpecialTypes: " << originalValueType_ << "\n";
     if (originalValueType_.isEmpty())
         return false;
 

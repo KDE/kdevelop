@@ -37,7 +37,7 @@
 #include <dcopclient.h>
 #include <QTimer>
 
-#include <kdockwidget.h>
+#include <k3dockwidget.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -114,7 +114,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                 "breakpoint item allows you to change "
                                 "the breakpoint and will take you "
                                 "to the source in the editor window."));
-    gdbBreakpointWidget->setIcon( SmallIcon("stop") );
+    gdbBreakpointWidget->setIcon( SmallIcon("process-stop") );
     mainWindow()->embedOutputView(gdbBreakpointWidget, i18n("Breakpoints"), i18n("Debugger breakpoints"));
 
     variableWidget = new VariableWidget( controller,
@@ -188,8 +188,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     // Now setup the actions
     KAction *action;
 
-//    action = new KAction(i18n("&Start"), "1rightarrow", CTRL+SHIFT+Key_F9,
-    action = new KAction(i18n("&Start"), "dbgrun", Key_F9,
+//    action = new KAction(i18n("&Start"), "arrow-right", Qt::CTRL+Qt::SHIFT+Qt::Key_F9,
+    action = new KAction(i18n("&Start"), "dbgrun", Qt::Key_F9,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
     action->setToolTip( i18n("Start in debugger") );
@@ -210,13 +210,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setEnabled(false);
 
 
-    action = new KAction(i18n("Sto&p"), "stop", 0,
+    action = new KAction(i18n("Sto&p"), "process-stop", 0,
                          this, SLOT(slotStop()),
                          actionCollection(), "debug_stop");
     action->setToolTip( i18n("Stop debugger") );
     action->setWhatsThis(i18n("<b>Stop debugger</b><p>Kills the executable and exits the debugger."));
 
-    action = new KAction(i18n("Interrupt"), "player_pause", 0,
+    action = new KAction(i18n("Interrupt"), "media-playback-pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
     action->setToolTip( i18n("Interrupt application") );
@@ -236,7 +236,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position."));
 
 
-    action = new KAction(i18n("Step &Over"), "dbgnext", Key_F10,
+    action = new KAction(i18n("Step &Over"), "dbgnext", Qt::Key_F10,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
     action->setToolTip( i18n("Step over the next line") );
@@ -254,7 +254,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction."));
 
 
-    action = new KAction(i18n("Step &Into"), "dbgstep", Key_F11,
+    action = new KAction(i18n("Step &Into"), "dbgstep", Qt::Key_F11,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
     action->setToolTip( i18n("Step into the next statement") );
@@ -271,7 +271,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction."));
 
 
-    action = new KAction(i18n("Step O&ut"), "dbgstepout", Key_F12,
+    action = new KAction(i18n("Step O&ut"), "dbgstepout", Qt::Key_F12,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
     action->setToolTip( i18n("Steps out of the current function") );
@@ -324,8 +324,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
-    connect( partController(), SIGNAL(loadedFile(const KURL &)),
-             gdbBreakpointWidget, SLOT(slotRefreshBP(const KURL &)) );
+    connect( partController(), SIGNAL(loadedFile(const KUrl &)),
+             gdbBreakpointWidget, SLOT(slotRefreshBP(const KUrl &)) );
     connect( debugger(), SIGNAL(toggledBreakpoint(const QString &, int)),
              gdbBreakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
     connect( debugger(), SIGNAL(editedBreakpoint(const QString &, int)),
@@ -359,7 +359,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              procLineMaker,         SLOT(slotReceivedStdout(const char*)));
 
 
-    connect(partController(), SIGNAL(savedFile(const KURL &)),
+    connect(partController(), SIGNAL(savedFile(const KUrl &)),
             this, SLOT(slotFileSaved()));
 
     if (project())
@@ -558,7 +558,7 @@ void DebuggerPart::contextEvaluate()
 
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
-    KVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+    KVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIconLoader::SizeMedium) );
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(finished()), controller, SLOT(configure()) );
@@ -644,7 +644,7 @@ bool DebuggerPart::startDebugger()
     QString shell = DomUtil::readEntry(*projectDom(), "/kdevdebugger/general/dbgshell");
     if( !shell.isEmpty() )
     {
-        shell = shell.simplifyWhiteSpace();
+        shell = shell.simplified();
         QString shell_without_args = QStringList::split(QChar(' '), shell ).first();
 
         QFileInfo info( shell_without_args );
@@ -737,7 +737,7 @@ void DebuggerPart::slotStopDebugger()
 
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Start") );
-//    ac->action("debug_run")->setIcon( "1rightarrow" );
+//    ac->action("debug_run")->setIcon( "arrow-right" );
     ac->action("debug_run")->setToolTip( i18n("Runs the program in the debugger") );
     ac->action("debug_run")->setWhatsThis( i18n("Start in debugger\n\n"
                                            "Starts the debugger with the project's main "
@@ -948,7 +948,7 @@ void DebuggerPart::slotExamineCore()
 {
     mainWindow()->statusBar()->message(i18n("Choose a core file to examine..."), 1000);
 
-    QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
+    QString dirName = project()? project()->projectDirectory() : QDir::homePath();
     QString coreFile = KFileDialog::getOpenFileName(dirName);
     if (coreFile.isNull())
         return;
@@ -1167,8 +1167,8 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     }
 
     // And now? :-)
-    kdDebug(9012) << "Debugger state: " << stateIndicator << ": " << endl;
-    kdDebug(9012) << "   " << msg << endl;
+    kDebug(9012) << "Debugger state: " << stateIndicator << ": ";
+    kDebug(9012) << "   " << msg;
 
     statusBarIndicator->setText(stateIndicator);
     statusBarIndicator->setToolTip( stateIndicatorFull);
@@ -1195,7 +1195,7 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
     if ( ! fileName.isEmpty() )
     {
         // Debugger counts lines from 1
-        debugger()->gotoExecutionPoint(KURL( fileName ), lineNum-1);
+        debugger()->gotoExecutionPoint(KUrl( fileName ), lineNum-1);
     }
     else
     {
@@ -1207,7 +1207,7 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 void DebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
     if ( ! fileName.isEmpty() )
-        partController()->editDocument(KURL( fileName ), lineNum);
+        partController()->editDocument(KUrl( fileName ), lineNum);
 }
 
 
@@ -1242,8 +1242,8 @@ void DebuggerPart::savePartialProjectSession(QDomElement* el)
 bool DebuggerPart::haveModifiedFiles()
 {
     bool have_modified = false;
-    KURL::List const& filelist = partController()->openURLs();
-    KURL::List::ConstIterator it = filelist.begin();
+    KUrl::List const& filelist = partController()->openURLs();
+    KUrl::List::ConstIterator it = filelist.begin();
     while ( it != filelist.end() )
     {
         if (partController()->documentState(*it) != Clean)

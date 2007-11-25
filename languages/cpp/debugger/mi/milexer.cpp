@@ -278,7 +278,7 @@ void TokenStream::positionAt(int position, int *line, int *column) const
             len = half;
     }
 
-    *line = QMAX(first - 1, 0);
+    *line = qMax(first - 1, 0);
     *column = position - m_lines.at(*line);
 
     Q_ASSERT( *column >= 0 );

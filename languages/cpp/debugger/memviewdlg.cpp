@@ -17,7 +17,7 @@
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
 
-#include <kbuttonbox.h>
+#include <k3buttonbox.h>
 #include <klineedit.h>
 #include <kglobalsettings.h>
 #include <klocale.h>

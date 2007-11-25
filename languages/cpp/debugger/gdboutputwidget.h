@@ -27,7 +27,7 @@
 #include <QFocusEvent>
 #include <kvbox.h>
 
-class KHistoryCombo;
+class KHistoryComboBox;
 
 class Q3TextEdit;
 class QToolButton;
@@ -82,7 +82,7 @@ private:
     */
     void trimList(QStringList& l, unsigned max_size);
 
-    KHistoryCombo*  m_userGDBCmdEditor;
+    KHistoryComboBox*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
     Q3TextEdit*      m_gdbView;
 

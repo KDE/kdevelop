@@ -19,10 +19,10 @@
 #ifndef _DBGTOOLBAR_H_
 #define _DBGTOOLBAR_H_
 
-class KWinModule;
+class KWindowSystem;
 
 #include <ksystemtray.h>
-#include <kwin.h>         // needed for WId :(
+#include <kwindowsystem.h>         // needed for WId :(
 
 #include <q3frame.h>
 #include <kvbox.h>
@@ -74,7 +74,7 @@ private:
 
     DebuggerPart*   part_;
     WId             activeWindow_;
-    KWinModule*     winModule_;
+    KWindowSystem*     winModule_;
     DbgButton*      bKDevFocus_;
     DbgButton*      bPrevFocus_;
     bool            appIsActive_;

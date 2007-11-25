@@ -15,15 +15,15 @@
 
 #include "dbgpsdlg.h"
 
-#include <kbuttonbox.h>
+#include <k3buttonbox.h>
 #include <kdialog.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kstdguiitem.h>
 #include <kdeversion.h>
-#include <klistview.h>
-#include <klistviewsearchline.h>
+#include <k3listview.h>
+#include <k3listviewsearchline.h>
 #include <kmessagebox.h>
 
 #include <q3frame.h>
@@ -57,7 +57,7 @@ namespace GDBDebugger
 Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       psProc_(0),
-      pids_(new KListView(this)),
+      pids_(new K3ListView(this)),
       pidLines_(QString())
 {
     setCaption(i18n("Attach to Process"));
@@ -77,10 +77,10 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     topLayout->addWidget(pids_);
     pids_->setFont(KGlobalSettings::fixedFont());
 
-    KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal);
+    K3ButtonBox *buttonbox = new K3ButtonBox(this, Qt::Horizontal);
     buttonbox->addStretch();
-    QPushButton *ok       = buttonbox->addButton(KStdGuiItem::ok());
-    QPushButton *cancel   = buttonbox->addButton(KStdGuiItem::cancel());
+    QPushButton *ok       = buttonbox->addButton(KStandardGuiItem::ok());
+    QPushButton *cancel   = buttonbox->addButton(KStandardGuiItem::cancel());
     buttonbox->layout();
     topLayout->addWidget(buttonbox);
 
@@ -112,7 +112,7 @@ int Dbg_PS_Dialog::pidSelected()
 /***************************************************************************/
 void Dbg_PS_Dialog::slotInit()
 {
-    psProc_ = new KShellProcess("/bin/sh");
+    psProc_ = new K3ShellProcess("/bin/sh");
 #ifdef USE_SOLARIS
     *psProc_ << "ps";
     *psProc_ << "-opid";
@@ -137,15 +137,15 @@ void Dbg_PS_Dialog::slotInit()
     }
 #endif
 
-    connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
-    connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );
+    connect( psProc_, SIGNAL(processExited(K3Process *)),                SLOT(slotProcessExited()) );
+    connect( psProc_, SIGNAL(receivedStdout(K3Process *, char *, int)),  SLOT(slotReceivedOutput(K3Process *, char *, int)) );
 
-    psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
+    psProc_->start(K3Process::NotifyOnExit, K3Process::Stdout);
 }
 
 /***************************************************************************/
 
-void Dbg_PS_Dialog::slotReceivedOutput(KProcess */*proc*/, char *buffer, int buflen)
+void Dbg_PS_Dialog::slotReceivedOutput(K3Process */*proc*/, char *buffer, int buflen)
 {
     pidLines_ += QString::fromLocal8Bit(buffer, buflen);
 }
@@ -191,7 +191,7 @@ void Dbg_PS_Dialog::slotProcessExited()
 
         start = pos+1;    
     }
-    // Need to set focus here too, as KListView will
+    // Need to set focus here too, as K3ListView will
     // 'steal' it otherwise.
     searchLineWidget_->searchLine()->setFocus();
 }

@@ -26,7 +26,7 @@
 
 
 
-class KProcess;
+class K3Process;
 class QString;
 class Q3StrList;
 
@@ -104,10 +104,10 @@ public Q_SLOTS:
     virtual void slotVarItemConstructed(VarItem */*item*/) {}
 
 protected Q_SLOTS:
-    virtual void slotDbgStdout(KProcess *proc, char *buf, int buflen)       = 0;
-    virtual void slotDbgStderr(KProcess*, char*, int) {} ;
-    virtual void slotDbgWroteStdin(KProcess *proc)                          = 0;
-    virtual void slotDbgProcessExited(KProcess *proc)                       = 0;
+    virtual void slotDbgStdout(K3Process *proc, char *buf, int buflen)       = 0;
+    virtual void slotDbgStderr(K3Process*, char*, int) {} ;
+    virtual void slotDbgWroteStdin(K3Process *proc)                          = 0;
+    virtual void slotDbgProcessExited(K3Process *proc)                       = 0;
 
 Q_SIGNALS:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
@@ -123,7 +123,7 @@ Q_SIGNALS:
     void dbgStatus            (const QString &status, int statusFlag);
 
 protected:
-    KProcess *dbgProcess_;
+    K3Process *dbgProcess_;
 };
 
 }

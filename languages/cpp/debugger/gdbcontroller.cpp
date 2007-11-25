@@ -30,8 +30,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
-#include <kwin.h>
+#include <k3process.h>
+#include <kwindowsystem.h>
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -319,7 +319,7 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
         cmdList_.insert(i, cmd);
     }
 
-    kdDebug(9012) << "QUEUE: " << cmd->initialString()
+    kDebug(9012) << "QUEUE: " << cmd->initialString()
                   << (stateReloadInProgress_ ? " (state reloading)\n" : "\n");
 
     setStateOn(s_dbgBusy);
@@ -367,12 +367,12 @@ void GDBController::executeCmd()
         // it.
         if (SentinelCommand* sc = dynamic_cast<SentinelCommand*>(currentCmd_))
         {
-            kdDebug(9012) << "SEND: sentinel command, not sending\n";
+            kDebug(9012) << "SEND: sentinel command, not sending\n";
             sc->invokeHandler();
         }
         else
         {
-            kdDebug(9012) << "SEND: command " << currentCmd_->initialString()
+            kDebug(9012) << "SEND: command " << currentCmd_->initialString()
                           << " changed its mind, not sending\n";
         }
 
@@ -397,7 +397,7 @@ void GDBController::executeCmd()
         return;
     }
 
-    kdDebug(9012) << "SEND: " << commandText;
+    kDebug(9012) << "SEND: " << commandText;
 
     dbgProcess_->writeStdin(commandText.local8Bit(),
                             commandText.length());
@@ -698,7 +698,7 @@ void GDBController::parseCliLine(const QString& line)
         strncmp(buf, "No executable file specified.", 29)==0)
     {
         programNoApp(QString(buf), true);
-        kdDebug(9012) << "Bad file <"  << buf << ">" << endl;
+        kDebug(9012) << "Bad file <"  << buf << ">";
         return;
     }
 #endif
@@ -794,24 +794,24 @@ void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
 
 bool GDBController::start(const QString& shell, const DomUtil::PairList& run_envvars, const QString& run_directory, const QString &application, const QString& run_arguments)
 {
-    kdDebug(9012) << "Starting debugger controller\n";
+    kDebug(9012) << "Starting debugger controller\n";
     badCore_ = QString();
 
     Q_ASSERT (!dbgProcess_ && !tty_);
 
-    dbgProcess_ = new KProcess;
+    dbgProcess_ = new K3Process;
 
-    connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
-             this,        SLOT(slotDbgStdout(KProcess *, char *, int)) );
+    connect( dbgProcess_, SIGNAL(receivedStdout(K3Process *, char *, int)),
+             this,        SLOT(slotDbgStdout(K3Process *, char *, int)) );
 
-    connect( dbgProcess_, SIGNAL(receivedStderr(KProcess *, char *, int)),
-             this,        SLOT(slotDbgStderr(KProcess *, char *, int)) );
+    connect( dbgProcess_, SIGNAL(receivedStderr(K3Process *, char *, int)),
+             this,        SLOT(slotDbgStderr(K3Process *, char *, int)) );
 
-    connect( dbgProcess_, SIGNAL(wroteStdin(KProcess *)),
-             this,        SLOT(slotDbgWroteStdin(KProcess *)) );
+    connect( dbgProcess_, SIGNAL(wroteStdin(K3Process *)),
+             this,        SLOT(slotDbgWroteStdin(K3Process *)) );
 
-    connect( dbgProcess_, SIGNAL(processExited(KProcess*)),
-             this,        SLOT(slotDbgProcessExited(KProcess*)) );
+    connect( dbgProcess_, SIGNAL(processExited(K3Process*)),
+             this,        SLOT(slotDbgProcessExited(K3Process*)) );
 
     application_ = application;
 
@@ -841,8 +841,8 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
                      " --interpreter=mi2 -quiet\n" ).latin1());
     }
 
-    if (!dbgProcess_->start( KProcess::NotifyOnExit,
-                             KProcess::Communication(KProcess::All)))
+    if (!dbgProcess_->start( K3Process::NotifyOnExit,
+                             K3Process::Communication(K3Process::All)))
     {
         KMessageBox::information(
             0,
@@ -948,12 +948,12 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
 
 void GDBController::slotStopDebugger()
 {
-    kdDebug(9012) << "GDBController::slotStopDebugger() called" << endl;
+    kDebug(9012) << "GDBController::slotStopDebugger() called";
     if (stateIsOn(s_shuttingDown) || !dbgProcess_)
         return;
 
     setStateOn(s_shuttingDown);
-    kdDebug(9012) << "GDBController::slotStopDebugger() executing" << endl;
+    kDebug(9012) << "GDBController::slotStopDebugger() executing";
 
     QTime start;
     QTime now;
@@ -962,7 +962,7 @@ void GDBController::slotStopDebugger()
     // command line so we can stop it.
     if (stateIsOn(s_dbgBusy))
     {
-        kdDebug(9012) << "gdb busy on shutdown - stopping gdb (SIGINT)" << endl;
+        kDebug(9012) << "gdb busy on shutdown - stopping gdb (SIGINT)";
         dbgProcess_->kill(SIGINT);
         start = QTime::currentTime();
         while (-1)
@@ -980,7 +980,7 @@ void GDBController::slotStopDebugger()
     {
         const char *detach="detach\n";
         if (!dbgProcess_->writeStdin(detach, strlen(detach)))
-            kdDebug(9012) << "failed to write 'detach' to gdb" << endl;
+            kDebug(9012) << "failed to write 'detach' to gdb";
         emit gdbUserCommandStdout("(gdb) detach\n");
         start = QTime::currentTime();
         while (-1)
@@ -995,7 +995,7 @@ void GDBController::slotStopDebugger()
     // Now try to stop gdb running.
     const char *quit="quit\n";
     if (!dbgProcess_->writeStdin(quit, strlen(quit)))
-        kdDebug(9012) << "failed to write 'quit' to gdb" << endl;
+        kDebug(9012) << "failed to write 'quit' to gdb";
 
     emit gdbUserCommandStdout("(gdb) quit");
     start = QTime::currentTime();
@@ -1010,7 +1010,7 @@ void GDBController::slotStopDebugger()
     // We cannot wait forever.
     if (!stateIsOn(s_programExited))
     {
-        kdDebug(9012) << "gdb not shutdown - killing" << endl;
+        kDebug(9012) << "gdb not shutdown - killing";
         dbgProcess_->kill(SIGKILL);
     }
 
@@ -1081,7 +1081,7 @@ void GDBController::slotRun()
     if (stateIsOn(s_appNotStarted)) {
 
         delete tty_;
-        tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *kapp->config() ));
+        tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *KGlobal::config() ));
         if (!config_dbgTerminal_)
         {
             connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
@@ -1109,12 +1109,12 @@ void GDBController::slotRun()
             QByteArray tty(tty_->getSlave().latin1());
             QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
-            KProcess *proc = new KProcess;
+            K3Process *proc = new K3Process;
 
             *proc << "sh" << "-c";
             *proc << config_runShellScript_ +
                 " " + application_.latin1() + options;
-            proc->start(KProcess::DontCare);
+            proc->start(K3Process::DontCare);
         }
 
         if (!config_runGdbScript_.isEmpty()) {// gdb script at run is requested
@@ -1363,7 +1363,7 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
 
 void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
 {
-    kdDebug(9012) << "MI stop reason " << result.reason << "\n";
+    kDebug(9012) << "MI stop reason " << result.reason << "\n";
     if (result.reason == "stopped")
     {
         actOnProgramPauseMI(result);
@@ -1402,13 +1402,13 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
 }
 
 // Data from gdb gets processed here.
-void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
+void GDBController::slotDbgStdout(K3Process *, char *buf, int buflen)
 {
     static bool parsing = false;
 
     QByteArray msg(buf, buflen+1);
 
-    // Copy the data out of the KProcess buffer before it gets overwritten
+    // Copy the data out of the K3Process buffer before it gets overwritten
     // Append to the back of the holding zone.
     holdingZone_ +=  QByteArray(buf, buflen+1);
 
@@ -1419,7 +1419,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     // it's likely we won't return to slotDbgStdout again.
     if (parsing)
     {
-        kdDebug(9012) << "Already parsing" << endl;
+        kDebug(9012) << "Already parsing";
         return;
     }
 
@@ -1435,7 +1435,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         QByteArray reply(holdingZone_.left(i));
         holdingZone_ = holdingZone_.mid(i+1);
 
-        kdDebug(9012) << "REPLY: " << reply << "\n";
+        kDebug(9012) << "REPLY: " << reply << "\n";
 
         FileSymbol file;
         file.contents = reply;
@@ -1445,7 +1445,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         if (r.get() == 0)
         {
             // FIXME: Issue an error!
-            kdDebug(9012) << "Invalid MI message: " << reply << "\n";
+            kDebug(9012) << "Invalid MI message: " << reply << "\n";
             ready_for_next_command = true;
             continue;
         }
@@ -1460,7 +1460,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
                 if (result.reason != "running")
                 {
-                    kdDebug(9012) << "Command execution time "
+                    kDebug(9012) << "Command execution time "
                                   << commandExecutionTime.elapsed() << " ms.\n";
                 }
 
@@ -1545,7 +1545,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                 static QRegExp print_output("^\\$(\\d+) = ");
                 if (print_output.search(s.message) != -1)
                 {
-                    kdDebug(9012) << "Found 'print' output: " << s.message << "\n";
+                    kDebug(9012) << "Found 'print' output: " << s.message << "\n";
                     print_command_result = s.message.ascii();
                 }
 
@@ -1586,7 +1586,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     }
 
     if (got_any_command)
-        kdDebug(9012) << "COMMANDS: " << cmdList_.count() << " in queue, "
+        kDebug(9012) << "COMMANDS: " << cmdList_.count() << " in queue, "
                       << int(bool(currentCmd_)) << " executing\n";
 
     commandDone();
@@ -1598,7 +1598,7 @@ void GDBController::commandDone()
 
     if (no_more_commands && state_reload_needed)
     {
-        kdDebug(9012) << "Finishing program stop\n";
+        kDebug(9012) << "Finishing program stop\n";
         // Set to false right now, so that if 'actOnProgramPauseMI_part2'
         // sends some commands, we won't call it again when handling replies
         // from that commands.
@@ -1608,7 +1608,7 @@ void GDBController::commandDone()
 
     if (no_more_commands)
     {
-        kdDebug(9012) << "No more commands\n";
+        kDebug(9012) << "No more commands\n";
         setStateOff(s_dbgBusy);
         emit dbgStatus("", state_);
         raiseEvent(debugger_ready);
@@ -1631,7 +1631,7 @@ void GDBController::removeStateReloadingCommands()
         GDBCommand* cmd = cmdList_.seek(i);
         if (stateReloadingCommands_.count(cmd));
         {
-            kdDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
+            kDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
             delete cmdList_.take(i);
         }
     }
@@ -1654,7 +1654,7 @@ void GDBController::raiseEvent(event_t e)
     if (e == program_state_changed)
     {
         stateReloadInProgress_ = true;
-        kdDebug(9012) << "State reload in progress\n";
+        kDebug(9012) << "State reload in progress\n";
     }
 
     emit event(e);
@@ -1666,16 +1666,16 @@ void GDBController::raiseEvent(event_t e)
 }
 
 
-void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
+void GDBController::slotDbgStderr(K3Process *proc, char *buf, int buflen)
 {
     // At the moment, just drop a message out and redirect
-    kdDebug(9012) << "STDERR: " << QLatin1String(buf, buflen+1) << endl;
+    kDebug(9012) << "STDERR: " << QLatin1String(buf, buflen+1);
     slotDbgStdout(proc, buf, buflen);
 }
 
 // **************************************************************************
 
-void GDBController::slotDbgWroteStdin(KProcess *)
+void GDBController::slotDbgWroteStdin(K3Process *)
 {
     commandExecutionTime.start();
 
@@ -1687,7 +1687,7 @@ void GDBController::slotDbgWroteStdin(KProcess *)
 
 // **************************************************************************
 
-void GDBController::slotDbgProcessExited(KProcess* process)
+void GDBController::slotDbgProcessExited(K3Process* process)
 {
     Q_ASSERT(process == dbgProcess_);
     bool abnormal = !process->normalExit();
@@ -1810,7 +1810,7 @@ void GDBController::debugStateChange(int oldState, int newState)
 
             }
         }
-        kdDebug(9012) << out << "\n";
+        kDebug(9012) << out << "\n";
     }
 }
 
@@ -1823,7 +1823,7 @@ void GDBController::demandAttention() const
 {
     if ( QWidget * w = kapp->mainWidget() )
     {
-        KWin::demandAttention( w->winId(), true );
+        KWindowSystem::demandAttention( w->winId(), true );
     }
 }
 

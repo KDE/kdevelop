@@ -32,7 +32,7 @@
 class QDomElement;
 class QToolButton;
 class QLabel;
-class KURL;
+class KUrl;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -72,7 +72,7 @@ public Q_SLOTS:
 
     void slotBreakpointSet(Breakpoint*);
 
-    void slotRefreshBP(const KURL &filename);
+    void slotRefreshBP(const KUrl &filename);
 
     void slotBreakpointHit(int id);
 

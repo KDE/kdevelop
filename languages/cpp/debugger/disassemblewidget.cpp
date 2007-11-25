@@ -81,7 +81,7 @@ bool DisassembleWidget::displayCurrent()
 
 void DisassembleWidget::slotActivate(bool activate)
 {
-    kdDebug(9012) << "Disassemble widget active: " << activate << endl;
+    kDebug(9012) << "Disassemble widget active: " << activate;
 
     if (active_ != activate)
     {
@@ -99,7 +99,7 @@ void DisassembleWidget::slotActivate(bool activate)
 void DisassembleWidget::slotShowStepInSource(   const QString &, int,
                                                 const QString &currentAddress)
 {
-    kdDebug(9012) << "DisasssembleWidget::slotShowStepInSource()" << endl;
+    kDebug(9012) << "DisasssembleWidget::slotShowStepInSource()";
 
     currentAddress_ = currentAddress;
     address_ = strtoul(currentAddress.latin1(), 0, 0);
@@ -114,7 +114,7 @@ void DisassembleWidget::slotShowStepInSource(   const QString &, int,
 
 void DisassembleWidget::getNextDisplay()
 {
-    kdDebug(9012) << "DisasssembleWidget::getNextDisplay()" << endl;
+    kDebug(9012) << "DisasssembleWidget::getNextDisplay()";
 
     if (address_)
     {

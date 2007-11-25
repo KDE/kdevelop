@@ -20,10 +20,10 @@
 #include <kdockwindow.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
-#include <kwin.h>
-#include <kwinmodule.h>
+#include <kwindowsystem.h>
+#include <kwindowsystem.h>
 
 #include <QApplication>
 #include <QCursor>
@@ -113,8 +113,8 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
     if (moving_)
         return;
 
-    if (e->button() == RightButton) {
-        KPopupMenu *menu = new KPopupMenu(this);
+    if (e->button() == Qt::RightButton) {
+        KMenu *menu = new KMenu(this);
 	menu->insertTitle(i18n("Debug Toolbar"));
         menu->insertItem(i18n("Dock to Panel"),
                          parent(), SLOT(slotDock()));
@@ -125,7 +125,7 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
         moving_ = true;
         offset_ = parentWidget()->pos() - e->globalPos();
         setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
-        QApplication::setOverrideCursor(QCursor(Qt::sizeAllCursor));
+        QApplication::setOverrideCursor(QCursor(Qt::SizeAllCursor));
         setPalette(QPalette(colorGroup().background()));
         repaint();
     }
@@ -198,7 +198,7 @@ void DbgButton::drawButtonLabel(QPainter *painter)
 
     if (hasText) {
         painter->setPen(colorGroup().text());
-        painter->drawText(height()+2, 0, width()-(height()+2), height(), AlignLeft|AlignVCenter, text());
+        painter->drawText(height()+2, 0, width()-(height()+2), height(), Qt::AlignLeft|Qt::AlignVCenter, text());
     }
 }
 
@@ -232,15 +232,15 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
         return;
 
     switch (e->button()) {
-    case LeftButton:
+    case Qt::LeftButton:
         {
             // Not really a click, but it'll hold for the time being !!!
             emit clicked();
             break;
         }
-    case RightButton:
+    case Qt::RightButton:
         {
-            KPopupMenu* menu = new KPopupMenu(this);
+            KMenu* menu = new KMenu(this);
 	    menu->insertTitle(i18n("Debug Toolbar"));
             menu->insertItem(i18n("Activate"),                        toolBar_, SLOT(slotUndock()));
             menu->insertItem(i18n("Activate (KDevelop gets focus)"),  toolBar_, SLOT(slotActivateAndUndock()));
@@ -269,7 +269,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
       docker_(0),
       dockWindow_(new KSystemTray(parent))
 {
-    winModule_  = new KWinModule(this);
+    winModule_  = new KWindowSystem(this);
     docker_ = new DbgDocker(parent, this, BarIcon("dbgnext"));
     connect(docker_, SIGNAL(clicked()), part_, SLOT(slotStepOver()));
 
@@ -280,9 +280,9 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     // This widget is closed when the debugger finishes i.e. they press "Stop"
 
     // Do we need NoFocus???
-    KWin::setState(winId(), NET::StaysOnTop | NET::Modal | NET::SkipTaskbar);
-//    KWin::setType(winId(), NET::Override);    // So it has no decoration
-    KWin::setType(winId(), NET::Dock);
+    KWindowSystem::setState(winId(), NET::StaysOnTop | NET::Modal | NET::SkipTaskbar);
+//    KWindowSystem::setType(winId(), NET::Override);    // So it has no decoration
+    KWindowSystem::setType(winId(), NET::Dock);
 
     setFocusPolicy(NoFocus);
     setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
@@ -298,7 +298,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     DbgMoveHandle*  moveHandle= new DbgMoveHandle(this);
 
     QPushButton*  bRun        = new DbgButton(BarIcon("dbgrun"),        i18n("Run"),        this);
-    QPushButton*  bInterrupt  = new DbgButton(BarIcon("player_pause"),  i18n("Interrupt"),  this);
+    QPushButton*  bInterrupt  = new DbgButton(BarIcon("media-playback-pause"),  i18n("Interrupt"),  this);
     QPushButton*  bNext       = new DbgButton(BarIcon("dbgnext"),       QString::null,      this);
     QPushButton*  bNexti      = new DbgButton(BarIcon("dbgnextinst"),   QString::null,      this);
     QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),       QString::null,      this);
@@ -364,9 +364,9 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     nextLayout->addWidget(bNext);
     nextLayout->addWidget(bNexti);
 
-//     int w = QMAX(bRun->sizeHint().width(), bFinish->sizeHint().width());
-//     w = QMAX(w, bInterrupt->sizeHint().width());
-//     w = QMAX(w, bView->sizeHint().width());
+//     int w = qMax(bRun->sizeHint().width(), bFinish->sizeHint().width());
+//     w = qMax(w, bInterrupt->sizeHint().width());
+//     w = qMax(w, bView->sizeHint().width());
 
     // they should have the same height, so don't be too fussy
 //     int h = bFinish->sizeHint().height();
@@ -406,14 +406,14 @@ void DbgToolBar::slotKdevFocus()
     if (winModule_->activeWindow() != topLevelWidget()->winId())
         activeWindow_ = winModule_->activeWindow();
 
-    KWin::activateWindow(topLevelWidget()->winId());
+    KWindowSystem::activateWindow(topLevelWidget()->winId());
 }
 
 // **************************************************************************
 
 void DbgToolBar::slotPrevFocus()
 {
-    KWin::activateWindow(activeWindow_);
+    KWindowSystem::activateWindow(activeWindow_);
 }
 
 // **************************************************************************
@@ -463,7 +463,7 @@ void DbgToolBar::slotIconifyAndDock()
     if (docked_)
         return;
 
-    //  KWin::iconifyWindow(ckDevelop_->winId(), true);
+    //  KWindowSystem::iconifyWindow(ckDevelop_->winId(), true);
     slotDock();
 }
 
@@ -486,7 +486,7 @@ void DbgToolBar::slotActivateAndUndock()
     if (!docked_)
         return;
 
-    KWin::activateWindow(topLevelWidget()->winId());
+    KWindowSystem::activateWindow(topLevelWidget()->winId());
     slotUndock();
 }
 

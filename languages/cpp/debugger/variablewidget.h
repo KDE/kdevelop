@@ -19,7 +19,7 @@
 #include "gdbcontroller.h"
 #include "mi/gdbmi.h"
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kcombobox.h>
 #include <qwidget.h>
 #include <QToolTip>
@@ -35,7 +35,7 @@
 #include <kvbox.h>
 
 class KLineEdit;
-class KPopupMenu;
+class KMenu;
 
 namespace GDBDebugger
 {
@@ -79,14 +79,14 @@ private:
 //    KLineEdit *watchVarEntry_;
     friend class VariableTree;
 
-    KHistoryCombo *watchVarEditor_;
+    KHistoryComboBox *watchVarEditor_;
 };
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
-class VariableTree : public KListView, public QToolTip
+class VariableTree : public K3ListView, public QToolTip
 {
     Q_OBJECT
 public:
@@ -119,7 +119,7 @@ public Q_SLOTS:
     void slotItemRenamed(Q3ListViewItem* item, int col, const QString& text);
 
 private Q_SLOTS:
-    void slotContextMenu(KListView *, Q3ListViewItem *item);
+    void slotContextMenu(K3ListView *, Q3ListViewItem *item);
     void slotVarobjNameChanged(const QString& from, const QString& to);
 
 private: // Callbacks for gdb commands;
@@ -176,7 +176,7 @@ private:
 
     QMap<QString, VarItem*> varobj2varitem;
 
-    KPopupMenu* activePopup_;
+    KMenu* activePopup_;
     static const int idToggleWatch = 10;
 
     friend class VarFrameRoot;
@@ -206,7 +206,7 @@ private:
     'trim' method is called, removing all variables which were not recieved
     from gdbr.    
  */
-class TrimmableItem : public KListViewItem
+class TrimmableItem : public K3ListViewItem
 {
 public:
     TrimmableItem(VariableTree *parent);

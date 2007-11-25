@@ -22,8 +22,8 @@
 #include <kvbox.h>
 
 class Q3ListBox;
-class KProcess;
-class KListView;
+class K3Process;
+class K3ListView;
 class KListViewSearchLineWidget;
 
 namespace GDBDebugger
@@ -43,15 +43,15 @@ public:
 
 private Q_SLOTS:
     void slotInit();
-    void slotReceivedOutput(KProcess *proc, char *buffer, int buflen);
+    void slotReceivedOutput(K3Process *proc, char *buffer, int buflen);
     void slotProcessExited();
 
 protected:
     void focusIn(QFocusEvent*);
 
 private:
-    KProcess* psProc_;
-    KListView* pids_;
+    K3Process* psProc_;
+    K3ListView* pids_;
     KListViewSearchLineWidget* searchLineWidget_;
     QString   pidLines_;
     QString   pidCmd_;

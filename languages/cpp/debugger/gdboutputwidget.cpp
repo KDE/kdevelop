@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <QLabel>
 #include <QLayout>
@@ -58,7 +58,7 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
     m_gdbView->setTextFormat(Q3TextEdit::LogText);
 
     Q3BoxLayout *userGDBCmdEntry = new Q3HBoxLayout();
-    m_userGDBCmdEditor = new KHistoryCombo (this, "gdb-user-cmd-editor");
+    m_userGDBCmdEditor = new KHistoryComboBox (this, "gdb-user-cmd-editor");
 
     QLabel *label = new QLabel(i18n("&GDB cmd:"), this);
     label->setBuddy(m_userGDBCmdEditor);
@@ -74,7 +74,7 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
                                          0,
                                          m_Interrupt->sizePolicy().hasHeightForWidth())
                                          );
-    m_Interrupt->setPixmap ( SmallIcon ( "player_pause" ) );
+    m_Interrupt->setPixmap ( SmallIcon ( "media-playback-pause" ) );
     userGDBCmdEntry->addWidget(m_Interrupt);
     m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
 
@@ -327,7 +327,7 @@ void GDBOutputWidget::restorePartialProjectSession(const QDomElement* el)
 //void OutputText::contextMenuEvent(QContextMenuEvent* e)
 Q3PopupMenu* OutputText::createPopupMenu(const QPoint&)
 {
-    KPopupMenu* popup = new KPopupMenu;
+    KMenu* popup = new KMenu;
 
     int id = popup->insertItem(i18n("Show Internal Commands"),
                                this,
