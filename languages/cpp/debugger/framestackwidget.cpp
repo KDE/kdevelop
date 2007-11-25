@@ -41,7 +41,7 @@ namespace GDBDebugger
 
 FramestackWidget::FramestackWidget(GDBController* controller,
                                    QWidget *parent, Qt::WFlags f)
-        : Q3ListView(parent, f),
+        : Q3ListView(parent, "", f),
           viewedThread_(0),
           controller_(controller)
 {
@@ -574,30 +574,6 @@ void ThreadStackItem::setOpen(bool open)
     }
 
     Q3ListViewItem::setOpen(open);
-}
-
-void FrameStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
-                               int column, int width, int align )
-{
-    QColorGroup cg2(cg);
-    if (column % 2)
-    {
-        cg2.setColor(QColorGroup::Base, 
-                     KGlobalSettings::alternateBackgroundColor());
-    }
-    Q3ListViewItem::paintCell(p, cg2, column, width, align);
-}
-
-void ThreadStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
-                               int column, int width, int align )
-{
-    QColorGroup cg2(cg);
-    if (column % 2)
-    {
-        cg2.setColor(QColorGroup::Base, 
-                     KGlobalSettings::alternateBackgroundColor());
-    }
-    Q3ListViewItem::paintCell(p, cg2, column, width, align);
 }
 
 

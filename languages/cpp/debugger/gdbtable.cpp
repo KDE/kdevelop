@@ -14,12 +14,12 @@
 namespace GDBDebugger {
 
 GDBTable::GDBTable(QWidget *parent)
- : Q3Table(parent, name)
+ : Q3Table(parent)
 {
 }
 
 GDBTable::GDBTable(int nr, int nc, QWidget * parent)
- : Q3Table(nr, nc, parent, name)
+ : Q3Table(nr, nc, parent)
 {
 }
 

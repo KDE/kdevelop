@@ -41,9 +41,6 @@ public:
     void setOpen(bool open);
     Q3ListViewItem *lastChild() const;
 
-    void paintCell(QPainter * p, const QColorGroup & cg, 
-                   int column, int width, int align );
-
     int threadNo()
     { return threadNo_; }
 
@@ -70,9 +67,6 @@ public:
 
     void setOpen(bool open);
     Q3ListViewItem *lastChild() const;
-
-    void paintCell(QPainter * p, const QColorGroup & cg, 
-                   int column, int width, int align );
 
     int frameNo()
     { return frameNo_; }

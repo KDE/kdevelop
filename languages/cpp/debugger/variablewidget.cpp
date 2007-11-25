@@ -253,47 +253,56 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
         KMenu popup(this);
         KMenu format(this);
 
-        int idRemember = -2;
-        int idRemove = -2;
-        int idReevaluate = -2;
-        int idWatch = -2;
+        QAction* remember = 0;
+        QAction* remove = 0;
+        QAction* reevaluate = 0;
+        QAction* watch = 0;
 
-        int idNatural = -2;
-        int idHex = -2;
-        int idDecimal = -2;
-        int idCharacter = -2;
-        int idBinary = -2;
+        QAction* natural = 0;
+        QAction* hex = 0;
+        QAction* decimal = 0;
+        QAction* character = 0;
+        QAction* binary = 0;
 
-#define MAYBE_DISABLE(id) if (!var->isAlive()) popup.setItemEnabled(id, false)
+#define MAYBE_DISABLE(id) if (!var->isAlive()) id->setEnabled(false)
 
         VarItem* var;
         if ((var = dynamic_cast<VarItem*>(item)))
         {
             popup.addTitle(var->gdbExpression());
 
+            format.setTitle(i18n("Format"));
 
-            format.setCheckable(true);
-            idNatural = format.insertItem(i18n("Natural"),
-                                          (int)VarItem::natural);
-            format.setAccel(Qt::Key_N, idNatural);
-            idHex = format.insertItem(i18n("Hexadecimal"),
-                                      (int)VarItem::hexadecimal);
-            format.setAccel(Qt::Key_X, idHex);
-            idDecimal = format.insertItem(i18n("Decimal"),
-                                          (int)VarItem::decimal);
-            format.setAccel(Qt::Key_D, idDecimal);
-            idCharacter = format.insertItem(i18n("Character"),
-                                          (int)VarItem::character);
-            format.setAccel(Qt::Key_C, idCharacter);
-            idBinary = format.insertItem(i18n("Binary"),
-                                         (int)VarItem::binary);
-            format.setAccel(Qt::Key_T, idBinary);
+            QActionGroup* ag = new QActionGroup(&format);
 
+            natural = format.addAction(i18n("Natural"));
+            natural->setData(VarItem::natural);
+            natural->setShortcut(Qt::Key_N);
 
-            format.setItemChecked((int)(var->format()), true);
+            hex = format.addAction(i18n("Hexadecimal"));
+            hex->setData(VarItem::hexadecimal);
+            hex->setShortcut(Qt::Key_X);
 
-            int id = popup.insertItem(i18n("Format"), &format);
-            MAYBE_DISABLE(id);
+            decimal = format.addAction(i18n("Decimal"));
+            decimal->setData(VarItem::decimal);
+            decimal->setShortcut(Qt::Key_D);
+
+            character = format.addAction(i18n("Character"));
+            character->setData(VarItem::character);
+            character->setShortcut(Qt::Key_C);
+
+            binary = format.addAction(i18n("Binary"));
+            binary->setData(VarItem::binary);
+            binary->setShortcut(Qt::Key_T);
+
+            foreach (QAction* action, ag->actions()) {
+              action->setCheckable(true);
+              if (action->data().toInt() == var->format())
+                action->setChecked(true);
+            }
+
+            QAction* formatActions = popup.addMenu(&format);
+            MAYBE_DISABLE(formatActions);
         }
 
 
@@ -301,38 +310,36 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
 
         if (root != recentExpressions_)
         {
-            idRemember = popup.insertItem(
-                SmallIcon("pencil"), i18n("Remember Value"));
-            MAYBE_DISABLE(idRemember);
+            remember = popup.addAction(KIcon("pencil"), i18n("Remember Value"));
+            MAYBE_DISABLE(remember);
         }
 
         if (dynamic_cast<WatchRoot*>(root)) {
-            idRemove = popup.insertItem(
-                SmallIcon("editdelete"), i18n("Remove Watch Variable") );
-            popup.setAccel(Qt::Key_Delete, idRemove);
+            remove = popup.addAction(KIcon("editdelete"), i18n("Remove Watch Variable"));
+            remove->setShortcut(Qt::Key_Delete);
+
         } else if (root != recentExpressions_) {
-            idWatch = popup.insertItem(
-                i18n("Watch Variable"));
-            MAYBE_DISABLE(idWatch);
+            watch = popup.addAction(i18n("Watch Variable"));
+            MAYBE_DISABLE(watch);
         }
+
         if (root == recentExpressions_) {
-            idReevaluate = popup.insertItem(
-                SmallIcon("reload"), i18n("Reevaluate Expression") );
-            MAYBE_DISABLE(idReevaluate);
-            idRemove = popup.insertItem(
-                SmallIcon("editdelete"), i18n("Remove Expression") );
-            popup.setAccel(Qt::Key_Delete, idRemove);
+            reevaluate = popup.addAction(KIcon("reload"), i18n("Reevaluate Expression"));
+            MAYBE_DISABLE(reevaluate);
+            remove = popup.addAction(KIcon("editdelete"), i18n("Remove Expression"));
+            remove->setShortcut(Qt::Key_Delete);
         }
 
         if (var)
         {
-            popup.insertItem( i18n("Data write breakpoint"), idToggleWatch );
-            popup.setItemEnabled(idToggleWatch, false);
+            toggleWatch = popup.addAction( i18n("Data write breakpoint") );
+            toggleWatch->setCheckable(true);
+            toggleWatch->setEnabled(false);
         }
 
-        int     idCopyToClipboard = popup.insertItem(
-            SmallIcon("editcopy"), i18n("Copy Value") );
-        popup.setAccel(Qt::CTRL + Qt::Key_C, idCopyToClipboard);
+        QAction* copyToClipboard = popup.addAction(
+            KIcon("editcopy"), i18n("Copy Value") );
+        copyToClipboard->setShortcut(Qt::CTRL + Qt::Key_C);
 
         activePopup_ = &popup;
         /* This code can be executed when debugger is stopped,
@@ -348,19 +355,19 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
                     true /*handles error*/));
 
 
-        int res = popup.exec(QCursor::pos());
+        QAction* res = popup.exec(QCursor::pos());
 
         activePopup_ = 0;
 
 
-        if (res == idNatural || res == idHex || res == idDecimal
-            || res == idCharacter || res == idBinary)
+        if (res == natural || res == hex || res == decimal
+            || res == character || res == binary)
         {
             // Change format.
             VarItem* var_item = static_cast<VarItem*>(item);
-            var_item->setFormat(static_cast<VarItem::format_t>(res));
+            var_item->setFormat(static_cast<VarItem::format_t>(res->data().toInt()));
         }
-        else if (res == idRemember)
+        else if (res == remember)
         {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
             {
@@ -368,7 +375,7 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
                     slotEvaluateExpression(item->gdbExpression());
             }
         }
-        else if (res == idWatch)
+        else if (res == watch)
         {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
             {
@@ -376,18 +383,20 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
                     slotAddWatchVariable(item->gdbExpression());
             }
         }
-        else if (res == idRemove)
-            delete item;
-        else if (res == idCopyToClipboard)
+        else if (res == remove)
         {
-            copyToClipboard(item);
+            delete item;
         }
-        else if (res == idToggleWatch)
+        else if (res == copyToClipboard)
+        {
+            VariableTree::copyToClipboard(item);
+        }
+        else if (res == toggleWatch)
         {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
                 emit toggleWatchpoint(item->gdbExpression());
         }
-        else if (res == idReevaluate)
+        else if (res == reevaluate)
         {
             if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
             {
@@ -400,7 +409,7 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
         KMenu popup(this);
         popup.addTitle(i18n("Recent Expressions"));
         QAction* remove = popup.addAction(KIcon("editdelete"), i18n("Remove All"));
-        KAction* reevaluate = popup.addAction(KIcon("reload"), i18n("Reevaluate All"));
+        QAction* reevaluate = popup.addAction(KIcon("reload"), i18n("Reevaluate All"));
 
         if (controller()->stateIsOn(s_dbgNotStarted))
             reevaluate->setEnabled(false);
@@ -422,6 +431,7 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
         }
     }
 }
+
 
 void VariableTree::slotEvent(GDBController::event_t event)
 {
@@ -1008,12 +1018,12 @@ void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
 
     if (activePopup_)
     {
-        activePopup_->setItemEnabled(idToggleWatch, true);
+        toggleWatch->setEnabled(true);
 
         unsigned long long address = r["value"].literal().toULongLong(0, 16);
         if (breakpointWidget_->hasWatchpointForAddress(address))
         {
-            activePopup_->setItemChecked(idToggleWatch, true);
+            toggleWatch->setChecked(true);
         }
     }
 }

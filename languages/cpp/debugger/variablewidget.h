@@ -175,7 +175,7 @@ private:
     QMap<QString, VarItem*> varobj2varitem;
 
     KMenu* activePopup_;
-    static const int idToggleWatch = 10;
+    QPointer<QAction> toggleWatch;
 
     friend class VarFrameRoot;
     friend class VarItem;

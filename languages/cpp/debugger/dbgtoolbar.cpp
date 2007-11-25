@@ -17,7 +17,6 @@
 #include "debuggerpart.h"
 #include "dbgcontroller.h"
 
-#include <kdockwindow.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -115,7 +114,7 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::RightButton) {
         KMenu *menu = new KMenu(this);
-	menu->insertTitle(i18n("Debug Toolbar"));
+        menu->addTitle(i18n("Debug Toolbar"));
         menu->insertItem(i18n("Dock to Panel"),
                          parent(), SLOT(slotDock()));
         menu->insertItem(i18n("Dock to Panel && Iconify KDevelop"),
@@ -217,18 +216,18 @@ QSize DbgButton::sizeHint() const
 // **************************************************************************
 
 DbgDocker::DbgDocker(QWidget* parent, DbgToolBar* toolBar, const QPixmap& pixmap) :
-    KSystemTray(parent, "DbgDocker"),
+    KSystemTrayIcon(parent),
     toolBar_(toolBar)
 {
-    setPixmap(pixmap);
-    this->setToolTip( i18n("KDevelop debugger: Click to execute one line of code (\"step\")") );
+    setIcon(pixmap);
+    setToolTip( i18n("KDevelop debugger: Click to execute one line of code (\"step\")") );
 }
 
 // **************************************************************************
 
 void DbgDocker::mousePressEvent(QMouseEvent *e)
 {
-    if (!rect().contains( e->pos()))
+    if (!geometry().contains( e->pos()))
         return;
 
     switch (e->button()) {
@@ -240,8 +239,8 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
         }
     case Qt::RightButton:
         {
-            KMenu* menu = new KMenu(this);
-	    menu->insertTitle(i18n("Debug Toolbar"));
+            KMenu* menu = new KMenu(QApplication::activeWindow());
+            menu->addTitle(i18n("Debug Toolbar"));
             menu->insertItem(i18n("Activate"),                        toolBar_, SLOT(slotUndock()));
             menu->insertItem(i18n("Activate (KDevelop gets focus)"),  toolBar_, SLOT(slotActivateAndUndock()));
             menu->popup(e->globalPos());
@@ -257,8 +256,8 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
 // **************************************************************************
 
 DbgToolBar::DbgToolBar(DebuggerPart* part,
-                       QWidget* parent, const char* name)
-    : Q3Frame(0, name),
+                       QWidget* parent)
+    : QWidget(parent),
       part_(part),
       activeWindow_(0),
       winModule_(0),
@@ -267,9 +266,9 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
       appIsActive_(false),
       docked_(false),
       docker_(0),
-      dockWindow_(new KSystemTray(parent))
+      dockWindow_(new KSystemTrayIcon(parent))
 {
-    winModule_  = new KWindowSystem(this);
+    winModule_  = new KWindowSystem();
     docker_ = new DbgDocker(parent, this, BarIcon("dbgnext"));
     connect(docker_, SIGNAL(clicked()), part_, SLOT(slotStepOver()));
 

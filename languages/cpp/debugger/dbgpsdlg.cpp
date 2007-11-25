@@ -25,6 +25,7 @@
 #include <k3listview.h>
 #include <k3listviewsearchline.h>
 #include <kmessagebox.h>
+#include <klistwidgetsearchline.h>
 
 #include <q3frame.h>
 #include <QLabel>
@@ -55,7 +56,7 @@ namespace GDBDebugger
 // about why it's doing it.
 
 Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent)
-    : KDialog(parent, name, true),      // modal
+    : KDialog(parent),      // modal
       psProc_(0),
       pids_(new K3ListView(this)),
       pidLines_(QString())
@@ -71,8 +72,8 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent)
 
     Q3BoxLayout *topLayout = new Q3VBoxLayout(this, 5);
 
-    searchLineWidget_ = new KListViewSearchLineWidget(pids_, this);
-    topLayout->addWidget(searchLineWidget_);
+    //searchLineWidget_ = new KListWidgetSearchLine(pids_, this);
+    //topLayout->addWidget(searchLineWidget_);
 
     topLayout->addWidget(pids_);
     pids_->setFont(KGlobalSettings::fixedFont());
@@ -163,7 +164,7 @@ void Dbg_PS_Dialog::slotProcessExited()
     int pos;
 
     static QRegExp ps_output_line("^\\s*(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(.+)");
-    while ( (pos = pidLines_.contains('\n', start)) ) {        
+    while ( (pos = pidLines_.indexOf('\n', start)) ) {
 
         QString item = pidLines_.mid(start, pos-start);
         if (!item.isEmpty() && !item.contains(pidCmd_) )
@@ -193,12 +194,12 @@ void Dbg_PS_Dialog::slotProcessExited()
     }
     // Need to set focus here too, as K3ListView will
     // 'steal' it otherwise.
-    searchLineWidget_->searchLine()->setFocus();
+    //searchLineWidget_->searchLine()->setFocus();
 }
 
 void Dbg_PS_Dialog::focusIn(QFocusEvent*)
 {
-    searchLineWidget_->searchLine()->setFocus();
+    //searchLineWidget_->searchLine()->setFocus();
 }
 
 }

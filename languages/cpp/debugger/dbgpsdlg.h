@@ -24,7 +24,7 @@
 class Q3ListBox;
 class K3Process;
 class K3ListView;
-class KListViewSearchLineWidget;
+class KListWidgetSearchLine;
 
 namespace GDBDebugger
 {
@@ -52,7 +52,7 @@ protected:
 private:
     K3Process* psProc_;
     K3ListView* pids_;
-    KListViewSearchLineWidget* searchLineWidget_;
+    KListWidgetSearchLine* searchLineWidget_;
     QString   pidLines_;
     QString   pidCmd_;
 };

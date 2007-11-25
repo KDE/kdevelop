@@ -21,21 +21,21 @@
 namespace GDBDebugger
 {
 
-class DebuggerPart;
+class CppDebuggerPlugin;
 
-class DebuggerConfigWidget : public Ui::DebuggerConfigWidget
+class DebuggerConfigWidget : public QWidget, public Ui::DebuggerConfigWidget
 {
     Q_OBJECT
 
 public:
-    DebuggerConfigWidget( DebuggerPart* part, QWidget *parent=0 );
+    DebuggerConfigWidget( CppDebuggerPlugin* plugin, QWidget *parent=0 );
     ~DebuggerConfigWidget();
 
 public Q_SLOTS:
     void accept();
 
 private:
-    QDomDocument &dom;
+    CppDebuggerPlugin* m_plugin;
 };
 
 }

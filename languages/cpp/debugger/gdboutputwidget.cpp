@@ -38,6 +38,7 @@
 #include <Q3PopupMenu>
 #include <Q3VBoxLayout>
 #include <kvbox.h>
+#include <khistorycombobox.h>
 
 
 namespace GDBDebugger
@@ -46,7 +47,7 @@ namespace GDBDebugger
 /***************************************************************************/
 
 GDBOutputWidget::GDBOutputWidget( QWidget *parent) :
-    QWidget(parent, name),
+    QWidget(parent),
     m_userGDBCmdEditor(0),
     m_Interrupt(0),
     m_gdbView(0),
@@ -55,7 +56,7 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent) :
 {
 
     m_gdbView = new OutputText(this);
-    m_gdbView->setTextFormat(Q3TextEdit::LogText);
+    m_gdbView->setTextFormat(Qt::LogText);
 
     Q3BoxLayout *userGDBCmdEntry = new Q3HBoxLayout();
     m_userGDBCmdEditor = new KHistoryComboBox (this, "gdb-user-cmd-editor");

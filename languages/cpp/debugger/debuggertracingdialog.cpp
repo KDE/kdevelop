@@ -2,7 +2,6 @@
 #include "debuggertracingdialog.h"
 #include "breakpoint.h"
 
-#include <qbutton.h>
 #include <QLabel>
 #include <QCheckBox>
 #include <klineedit.h>

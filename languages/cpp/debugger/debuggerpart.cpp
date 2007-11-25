@@ -23,6 +23,7 @@
 #include <QTimer>
 
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
@@ -65,9 +66,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     justRestarted_(false), needRebuild_(true),
     running_(false)
 {
-    setObjId("DebuggerInterface");
-    setComponentData(DebuggerFactory::componentData());
-
     setXMLFile("kdevcppdebugger.rc");
 
     m_debugger = new Debugger( partController() );
@@ -1114,7 +1112,7 @@ void CppDebuggerPlugin::slotStatus(const QString &msg, int state)
     if (state & s_appNotStarted)
     {
         KActionCollection *ac = actionCollection();
-        ac->action("debug_run")->setText( i18n("To start something","Start") );
+        ac->action("debug_run")->setText( i18nc("To start something","Start") );
         ac->action("debug_run")->setToolTip( i18n("Restart the program in the debugger") );
         ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
                                            "Restarts the program in the debugger") );
@@ -1150,10 +1148,10 @@ void CppDebuggerPlugin::slotStatus(const QString &msg, int state)
     kDebug(9012) << "Debugger state: " << stateIndicator << ": ";
     kDebug(9012) << "   " << msg;
 
-    statusBarIndicator->setText(stateIndicator);
+    /*statusBarIndicator->setText(stateIndicator);
     statusBarIndicator->setToolTip( stateIndicatorFull);
     if (!msg.isEmpty())
-        mainWindow()->statusBar()->message(msg, 3000);
+        mainWindow()->statusBar()->message(msg, 3000);*/
 
 
     previousDebuggerState_ = state;

@@ -93,7 +93,7 @@ static int chownpty(int fd, int grant)
         if (fd != PTY_FILENO && dup2(fd, PTY_FILENO) < 0)
             ::exit(1);
 
-        QString path = locate("exe", BASE_CHOWN);
+        QString path = KStandardDirs::locate("exe", BASE_CHOWN);
         execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", (void *)0, NULL);
         ::exit(1); // should not be reached
     }

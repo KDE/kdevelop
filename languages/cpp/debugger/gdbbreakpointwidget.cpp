@@ -231,16 +231,16 @@ controller_(controller)
     layout->addWidget(header);
 
     Q3PopupMenu* newBreakpoint = new Q3PopupMenu(this);
-    newBreakpoint->insertItem(i18n("Code breakpoint", "Code"),
+    newBreakpoint->insertItem(i18nc("Code breakpoint", "Code"),
                               BP_TYPE_FilePos);
-    newBreakpoint->insertItem(i18n("Data breakpoint", "Data write"),
+    newBreakpoint->insertItem(i18nc("Data breakpoint", "Data write"),
                               BP_TYPE_Watchpoint);
-    newBreakpoint->insertItem(i18n("Data read breakpoint", "Data read"),
+    newBreakpoint->insertItem(i18nc("Data read breakpoint", "Data read"),
                               BP_TYPE_ReadWatchpoint);
 
 
     m_ctxMenu = new Q3PopupMenu( this );
-    m_ctxMenu->insertItem( i18n("New breakpoint", "New"),
+    m_ctxMenu->insertItem( i18nc("New breakpoint", "New"),
                                 newBreakpoint);
     m_ctxMenu->insertItem( i18n( "Show text" ),    BW_ITEM_Show );
     int edit_id =
@@ -1032,7 +1032,7 @@ void GDBBreakpointWidget::editTracing(Q3TableItem* item)
         m_table->item(item->row(), Control);
 
     DebuggerTracingDialog* d = new DebuggerTracingDialog(
-        btr->breakpoint(), m_table, "");
+        btr->breakpoint(), m_table);
 
     int r = d->exec();
 

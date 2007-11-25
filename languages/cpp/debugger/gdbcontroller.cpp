@@ -1575,7 +1575,7 @@ void GDBController::slotDbgStdout(QProcess *, char *buf, int buflen)
                      "<p>The debugger component encountered internal error while "
                      "processing reply from gdb. Please submit a bug report."),
                 i18n("The exception is: %1\n"
-                     "The MI response is: %2", e.what(), reply),
+                     "The MI response is: %2", e.what(), QString::fromLatin1(reply)),
                 i18n("Internal debugger error"));
 
             destroyCurrentCommand();

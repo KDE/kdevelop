@@ -21,10 +21,10 @@
 
 class KWindowSystem;
 
+#include <QWidget>
+
 #include <kwindowsystem.h>         // needed for WId :(
 #include <KSystemTrayIcon>
-             
-#include <q3frame.h>
 #include <kvbox.h>
 
 namespace GDBDebugger
@@ -51,12 +51,12 @@ private:
 };
 
 
-class DbgToolBar : public Q3Frame
+class DbgToolBar : public QWidget
 {
     Q_OBJECT
 
 public:
-    DbgToolBar(DebuggerPart *part, QWidget* parent, const char* name=0);
+    DbgToolBar(DebuggerPart *part, QWidget* parent);
     virtual ~DbgToolBar();
 
 private Q_SLOTS:

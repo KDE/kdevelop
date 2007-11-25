@@ -14,9 +14,7 @@
 #include "debuggerconfigwidget.h"
 
 #include "debuggerpart.h"
-#include "kdevproject.h"
 
-#include "domutil.h"
 #include <kurlrequester.h>
 #include <klineedit.h>
 
@@ -28,8 +26,9 @@
 namespace GDBDebugger
 {
 
-DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent)
-    : DebuggerConfigWidgetBase(parent), dom(*part->projectDom())
+DebuggerConfigWidget::DebuggerConfigWidget(CppDebuggerPlugin* plugin, QWidget *parent)
+    : QWidget(parent)
+    , m_plugin(plugin)
 {
     setupUp(this);
   
