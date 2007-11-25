@@ -16,6 +16,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     ilanguage.cpp
     idocumentcontroller.cpp
     istatus.cpp
+    irun.cpp
 )
 
 
@@ -39,6 +40,7 @@ install(FILES
     iextension.h
     interfacesexport.h
     istatus.h
+    irun.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces
 )
 

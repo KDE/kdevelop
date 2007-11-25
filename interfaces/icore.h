@@ -56,7 +56,10 @@ class IDocumentController;
  * will take ownership of the object and upon application shutdown will take
  * responsibility for deleting the objects stored by ICore.
  */
-class KDEVPLATFORMINTERFACES_EXPORT ICore: public QObject {
+class KDEVPLATFORMINTERFACES_EXPORT ICore: public QObject
+{
+    Q_OBJECT
+
 public:
     virtual ~ICore();
 

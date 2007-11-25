@@ -111,6 +111,7 @@ public:
     */
     virtual DocumentState state() const = 0;
 
+    virtual KTextEditor::Cursor cursorPosition() const = 0;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor) = 0;
 
     /**

@@ -42,3 +42,5 @@ ICore *ICore::self()
 }
 
 }
+
+#include "icore.moc"
