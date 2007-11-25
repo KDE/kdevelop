@@ -11,7 +11,7 @@
  ***************************************************************************/
 
 #include "grepoutputmodel.h"
-#include "grepviewpart.h"
+#include "grepviewplugin.h"
 #include <QModelIndex>
 #include <kcolorscheme.h>
 #include <ktexteditor/cursor.h>
@@ -41,9 +41,9 @@ GrepOutputItem::~GrepOutputItem()
 
 ///////////////////////////////////////////////////////////////
 
-GrepOutputModel::GrepOutputModel( GrepViewPart *part )
-    : QStandardItemModel( part )
-    , m_part(part), _lastfilename(QString())
+GrepOutputModel::GrepOutputModel( GrepViewPlugin *plugin )
+    : QStandardItemModel( plugin )
+    , m_plugin(plugin), _lastfilename(QString())
 {}
 GrepOutputModel::~GrepOutputModel()
 {}
@@ -56,7 +56,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
         return;
 
     KTextEditor::Cursor range( grepitem->m_lineNumber.toInt() - 1, 0 );
-    m_part->core()->documentController()->openDocument( KUrl(grepitem->m_fileName), range );
+    m_plugin->core()->documentController()->openDocument( KUrl(grepitem->m_fileName), range );
 }
 
 QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex& currentIndex )

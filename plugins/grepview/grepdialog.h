@@ -19,7 +19,7 @@
 class KConfig;
 class KUrlRequester;
 class QPushButton;
-class GrepViewPart;
+class GrepViewPlugin;
 class KLineEdit;
 
 class GrepDialog : public KDialog, private Ui::GrepWidget
@@ -27,7 +27,7 @@ class GrepDialog : public KDialog, private Ui::GrepWidget
     Q_OBJECT
 
 public:
-    explicit GrepDialog( GrepViewPart * part, QWidget *parent=0 );
+    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0 );
     ~GrepDialog();
 
     void setPattern(const QString &pattern);
@@ -57,7 +57,7 @@ private Q_SLOTS:
     void slotHidden();
 
 private:
-    GrepViewPart * m_part;
+    GrepViewPlugin * m_plugin;
 };
 
 

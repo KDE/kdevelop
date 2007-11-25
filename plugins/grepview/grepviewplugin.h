@@ -25,13 +25,13 @@ namespace KDevelop
     class IProject;
 }
 
-class GrepViewPart : public KDevelop::IPlugin
+class GrepViewPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 
 public:
-    GrepViewPart( QObject *parent, const QVariantList & = QVariantList() );
-    ~GrepViewPart();
+    GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    ~GrepViewPlugin();
 
 private Q_SLOTS:
     void slotGrep();

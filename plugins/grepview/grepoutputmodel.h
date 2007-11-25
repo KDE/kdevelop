@@ -16,7 +16,7 @@
 #include <QStandardItemModel>
 #include <ioutputviewmodel.h>
 class QModelIndex;
-class GrepViewPart;
+class GrepViewPlugin;
 
 using namespace KDevelop;
 
@@ -41,7 +41,7 @@ public:
         Text,
         File
     };
-    explicit GrepOutputModel( GrepViewPart *part );
+    explicit GrepOutputModel( GrepViewPlugin *plugin );
     ~GrepOutputModel();
 
     void activate( const QModelIndex &idx );
@@ -55,7 +55,7 @@ public Q_SLOTS:
     void slotFailed();
 
 private:
-    GrepViewPart *m_part;
+    GrepViewPlugin *m_plugin;
 //     int m_matchCount;
     QString _lastfilename;
 };

@@ -11,7 +11,7 @@
 ***************************************************************************/
 
 #include "grepdialog.h"
-#include "grepviewpart.h"
+#include "grepviewplugin.h"
 #include <icore.h>
 #include <idocument.h>
 #include <idocumentcontroller.h>
@@ -67,8 +67,8 @@ QStringList __filepatterns = QStringList()
     << "CMakeLists.txt,*.cmake"
     << "*";
 
-GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent )
-    : KDialog(parent), Ui::GrepWidget(), m_part( part )
+GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
+    : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
 
     setButtons( KDialog::Ok | KDialog::Cancel );
@@ -164,7 +164,7 @@ void GrepDialog::slotHidden()
 
 void GrepDialog::syncButtonClicked( )
 {
-    KDevelop::IDocument *doc = m_part->core()->documentController()->activeDocument();
+    KDevelop::IDocument *doc = m_plugin->core()->documentController()->activeDocument();
     kDebug(9001) << doc;
     if ( doc )
     {

@@ -1,4 +1,4 @@
-/** \class GrepViewPart
+/** \class GrepViewPlugin
 Integrates "find|grep" in KDevelop - allows fast searching of multiple files using patterns or regular expressions.
 
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>

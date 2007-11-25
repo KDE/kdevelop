@@ -10,7 +10,7 @@ include_directories(
 ########### next target ###############
 
 set(kdevgrepview_PART_SRCS
-    grepviewpart.cpp
+    grepviewplugin.cpp
     grepdialog.cpp
     grepoutputmodel.cpp
     grepoutputdelegate.cpp

@@ -10,7 +10,7 @@
 *                                                                         *
 ***************************************************************************/
 
-#include "grepviewpart.h"
+#include "grepviewplugin.h"
 #include "grepdialog.h"
 #include "grepoutputmodel.h"
 #include "grepoutputdelegate.h"
@@ -47,10 +47,10 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPart>(); )
+K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory("kdevgrepview"))
 
-GrepViewPart::GrepViewPart( QObject *parent, const QVariantList & )
+GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent )
     , m_projectForActiveFile(0), m_view(0)
 {
@@ -84,17 +84,17 @@ GrepViewPart::GrepViewPart( QObject *parent, const QVariantList & )
 
 }
 
-void GrepViewPart::updateOkButton(const QString& text)
+void GrepViewPlugin::updateOkButton(const QString& text)
 {
     m_grepdlg->enableButtonOk( !text.isEmpty() );
 }
 
-GrepViewPart::~GrepViewPart()
+GrepViewPlugin::~GrepViewPlugin()
 {
     delete m_grepdlg;
 }
 
-void GrepViewPart::slotGrep()
+void GrepViewPlugin::slotGrep()
 {
     QString contextString = currentSelectedWord();
     if( contextString.isEmpty() )
@@ -103,7 +103,7 @@ void GrepViewPart::slotGrep()
 
 }
 
-void GrepViewPart::showDialogWithPattern(const QString& p)
+void GrepViewPlugin::showDialogWithPattern(const QString& p)
 {
     // Before anything, this removes line feeds from the
     // beginning and the end.
@@ -144,7 +144,7 @@ void GrepViewPart::showDialogWithPattern(const QString& p)
     m_grepdlg->show();
 }
 
-void GrepViewPart::searchActivated()
+void GrepViewPlugin::searchActivated()
 {
 //     m_grepdlg->hide();
 
@@ -367,7 +367,7 @@ void GrepViewPart::searchActivated()
     }
 }
 
-QString GrepViewPart::escape(const QString &str)
+QString GrepViewPlugin::escape(const QString &str)
 {
     QString escaped("[]{}()\\^$?.+-*|");
     QString res;
@@ -384,7 +384,7 @@ QString GrepViewPart::escape(const QString &str)
 
 
 // from kdeveditorutil.cpp in kdev3.4, plus porting
-QString GrepViewPart::currentWord()
+QString GrepViewPlugin::currentWord()
 {
     KDevelop::IDocument *doc =
              core()->documentController()->activeDocument();
@@ -413,7 +413,7 @@ QString GrepViewPart::currentWord()
     return ( ( startPos == endPos ) ? QString() : linestr.mid( startPos+1, endPos-startPos-1 ) );
 }
 
-QString GrepViewPart::currentSelectedWord()
+QString GrepViewPlugin::currentSelectedWord()
 {
     KDevelop::IDocument *doc =
              core()->documentController()->activeDocument();
@@ -429,4 +429,4 @@ QString GrepViewPart::currentSelectedWord()
     return view->selectionText();
 }
 
-#include "grepviewpart.moc"
+#include "grepviewplugin.moc"
