@@ -31,6 +31,7 @@ set(kdevplatformshell_LIB_SRCS
     languagecontroller.cpp
     language.cpp
     statusbar.cpp
+    runcontroller.cpp
 )
 
 

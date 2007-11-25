@@ -39,6 +39,7 @@
 #include "editorintegrator.h"
 #include "documentcontroller.h"
 #include "backgroundparser.h"
+#include "runcontroller.h"
 
 namespace KDevelop {
 
@@ -56,6 +57,7 @@ struct CorePrivate {
         projectController = new ProjectController(m_core);
         languageController = new LanguageController(m_core);
         documentController = new DocumentController(m_core);
+        runController = new RunController(m_core);
 
         uiController->initialize();
         languageController->initialize();
@@ -80,6 +82,7 @@ struct CorePrivate {
         delete uiController;
         delete partController;
         delete documentController;
+        delete runController;
     }
 
     QPointer<PluginController> pluginController;
@@ -88,6 +91,7 @@ struct CorePrivate {
     QPointer<LanguageController> languageController;
     QPointer<PartController> partController;
     QPointer<DocumentController> documentController;
+    QPointer<RunController> runController;
 
     Core *m_core;
 };
@@ -191,5 +195,14 @@ DocumentController *Core::documentControllerInternal()
     return d->documentController;
 }
 
+IRunController *Core::runController()
+{
+    return d->runController;
 }
 
+RunController *Core::runControllerInternal()
+{
+    return d->runController;
+}
+
+}

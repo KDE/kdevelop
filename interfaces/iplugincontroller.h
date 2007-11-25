@@ -158,6 +158,7 @@ public:
 Q_SIGNALS:
     void loadingPlugin( const QString& );
     void pluginLoaded( KDevelop::IPlugin* );
+    void pluginUnloaded( KDevelop::IPlugin* );
 
     /**
      * Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).
@@ -165,6 +166,9 @@ Q_SIGNALS:
      */
     void profileChanged();
 
+private:
+    friend class IPlugin;
+    void pluginUnloading(IPlugin* plugin);
 };
 
 }

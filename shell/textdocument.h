@@ -43,6 +43,7 @@ public:
     virtual void reload();
     virtual DocumentState state() const;
 
+    virtual KTextEditor::Cursor cursorPosition() const;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
     virtual KTextEditor::Document* textDocument() const;

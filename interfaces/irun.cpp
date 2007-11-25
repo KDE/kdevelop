@@ -30,6 +30,28 @@ static int s_runSerial = 0;
 class IRun::IRunPrivate : public QSharedData
 {
     public:
+        IRunPrivate()
+            : QSharedData()
+        {
+            newSerial();
+        }
+
+        IRunPrivate(const IRunPrivate& copy)
+            : QSharedData(copy)
+        {
+            executable = copy.executable;
+            instrumentor = copy.instrumentor;
+            environmentKey = copy.environmentKey;
+            newSerial();
+        }
+
+        void newSerial()
+        {
+            serial = s_runSerial++;
+            if (s_runSerial == INT_MAX)
+                s_runSerial = 0;
+        }
+
         int serial;
         QString executable, instrumentor, environmentKey;
         QStringList arguments;
@@ -37,9 +59,6 @@ class IRun::IRunPrivate : public QSharedData
 
 IRun::IRun()
 {
-    d->serial = s_runSerial++;
-    if (s_runSerial == INT_MAX)
-        s_runSerial = 0;
 }
 
 void IRun::setExecutable(const QString & executable)
@@ -97,7 +116,23 @@ int KDevelop::IRun::serial() const
     return d->serial;
 }
 
-KDevelop::IRunProvider::~ IRunProvider()
+IRun::IRun(const IRun & rhs)
+    : d(rhs.d)
+{
+}
+
+IRun & KDevelop::IRun::operator =(const IRun & rhs)
+{
+    d.operator=(rhs.d);
+    return *this;
+}
+
+IRun::~ IRun()
+{
+}
+
+IRunController::IRunController(QObject * parent)
+    : QObject(parent)
 {
 }
 

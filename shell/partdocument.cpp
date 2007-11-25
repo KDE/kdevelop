@@ -129,6 +129,11 @@ void PartDocument::activate(Sublime::View *activeView)
     notifyActivated();
 }
 
+KTextEditor::Cursor KDevelop::PartDocument::cursorPosition() const
+{
+    return KTextEditor::Cursor::invalid();
+}
+
 void PartDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
     //do nothing here
@@ -143,4 +148,3 @@ KUrl PartDocument::url() const
 }
 
 #include "partdocument.moc"
-

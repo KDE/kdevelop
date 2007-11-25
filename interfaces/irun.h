@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 #include <KUrl>
 
 #include "interfacesexport.h"
-#include "iextension.h"
 
 namespace KDevelop
 {
@@ -35,6 +34,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IRun
 {
 public:
     IRun();
+    IRun(const IRun& rhs);
+    IRun& operator=(const IRun& rhs);
+    ~IRun();
 
     int serial() const;
 
@@ -49,6 +51,9 @@ public:
     void setArguments(const QStringList& arguments);
     void clearArguments();
 
+    /**
+     * The requested instrumentor, usually one of 'default', 'gdb', 'memcheck' etc.
+     */
     QString instrumentor() const;
     void setInstrumentor(const QString& instrumentor);
 
@@ -64,34 +69,23 @@ class KDEVPLATFORMINTERFACES_EXPORT IRunController : public QObject
 public:
     IRunController(QObject *parent);
 
-    virtual void run(const IRun& run) = 0;
+    /**
+     * Request for the provided \a run object to be executed.
+     */
+    virtual bool run(const IRun& run) = 0;
     virtual void abort(const IRun& run) = 0;
     virtual void abortAll() = 0;
 
     enum State {
+        Idle,
         Running,
-        Paused,
-        Finished
+        Paused
     };
 
 Q_SIGNALS:
     void runStateChanged(State state);
 };
 
-class KDEVPLATFORMINTERFACES_EXPORT IRunProvider
-{
-public:
-    virtual ~IRunProvider();
-
-    virtual QStringList instrumentorsProvided() const = 0;
-
-    virtual void run(const IRun& run) = 0;
-    virtual void abort(const IRun& run) = 0;
-};
-
 }
-
-KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, IRunProvider, "org.kdevelop.IRunProvider")
-Q_DECLARE_INTERFACE(KDevelop::IRunProvider, "org.kdevelop.IRunProvider")
 
 #endif

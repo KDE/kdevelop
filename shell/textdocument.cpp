@@ -240,6 +240,16 @@ IDocument::DocumentState TextDocument::state() const
     return d->state;
 }
 
+KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
+{
+    KTextEditor::View *view = d->document->activeView();
+
+    if (view)
+        return view->cursorPosition();
+
+    return KTextEditor::Cursor();
+}
+
 void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
     if (cursor.line() < 0)
@@ -280,4 +290,3 @@ void TextDocument::close()
 }
 
 #include "textdocument.moc"
-

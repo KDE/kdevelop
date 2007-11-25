@@ -31,6 +31,7 @@ class ProjectController;
 class LanguageController;
 class PartController;
 class DocumentController;
+class RunController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
@@ -57,6 +58,9 @@ public:
     /** @copydoc ICore::documentController() */
     virtual IDocumentController *documentController();
 
+    /** @copydoc ICore::runController() */
+    virtual IRunController *runController();
+
     /// The following methods may only be used within the shell.
 
     /** @return ui controller */
@@ -76,6 +80,9 @@ public:
 
     /** @return document controller */
     DocumentController *documentControllerInternal();
+
+    /** @return run controller */
+    RunController *runControllerInternal();
 
     void deinitialize();
 

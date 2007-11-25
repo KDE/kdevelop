@@ -110,7 +110,7 @@ bool IPlugin::isCentralPlugin() const
 
 void IPlugin::unload()
 {
-    //do nothing
+    ICore::self()->pluginController()->pluginUnloading(this);
 }
 
 KIconLoader *IPlugin::iconLoader() const

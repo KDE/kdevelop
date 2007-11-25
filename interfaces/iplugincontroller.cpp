@@ -70,7 +70,11 @@ QStringList IPluginController::argumentsFromService( const KService::Ptr &servic
     return args;
 }
 
+void KDevelop::IPluginController::pluginUnloading(IPlugin * plugin)
+{
+    emit pluginUnloaded(plugin);
+}
+
 }
 
 #include "iplugincontroller.moc"
-

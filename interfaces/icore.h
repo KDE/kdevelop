@@ -38,6 +38,7 @@ class IPluginController;
 class IProjectController;
 class ILanguageController;
 class IDocumentController;
+class IRunController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -83,6 +84,9 @@ public:
 
     /** @return document controller */
     virtual IDocumentController *documentController() = 0;
+
+    /** @return run controller */
+    virtual IRunController *runController() = 0;
 
 protected:
     ICore(QObject *parent = 0);
