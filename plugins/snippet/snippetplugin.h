@@ -18,13 +18,13 @@
  * This is the main class of KDevelop's snippet plugin.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class SnippetPart : public KDevelop::IPlugin
+class SnippetPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 
 public:
-    SnippetPart(QObject *parent, const QVariantList &args = QVariantList() );
-    virtual ~SnippetPart();
+    SnippetPlugin(QObject *parent, const QVariantList &args = QVariantList() );
+    virtual ~SnippetPlugin();
 
     /**
      * Inserts the given @p snippet into the currently active view.

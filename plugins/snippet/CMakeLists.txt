@@ -9,7 +9,7 @@ include_directories(
 ########### next target ###############
 
 set(kdevsnippet_PART_SRCS
-    snippetpart.cpp
+    snippetplugin.cpp
     snippetview.cpp
     snippetvariablesubst.cpp
     snippetvariablemodel.cpp

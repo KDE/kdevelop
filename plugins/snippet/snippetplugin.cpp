@@ -8,7 +8,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "snippetpart.h"
+#include "snippetplugin.h"
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -21,17 +21,17 @@
 
 #include "snippetview.h"
 
-K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPart>(); )
+K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
 K_EXPORT_PLUGIN(SnippetFactory("kdevsnippet"))
 
 class SnippetViewFactory: public KDevelop::IToolViewFactory{
 public:
-    SnippetViewFactory(SnippetPart *part): m_part(part) {}
+    SnippetViewFactory(SnippetPlugin *plugin): m_plugin(plugin) {}
 
     virtual QWidget* create(QWidget *parent = 0)
     {
         Q_UNUSED(parent)
-        return new SnippetView( m_part, parent);
+        return new SnippetView( m_plugin, parent);
     }
 
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -40,28 +40,28 @@ public:
     }
 
 private:
-    SnippetPart *m_part;
+    SnippetPlugin *m_plugin;
 };
 
 
-SnippetPart::SnippetPart(QObject *parent, const QVariantList &)
+SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
   : KDevelop::IPlugin(SnippetFactory::componentData(), parent)
 {
     m_factory = new SnippetViewFactory(this);
     core()->uiController()->addToolView(i18n("Snippets"), m_factory);
 }
 
-SnippetPart::~SnippetPart()
+SnippetPlugin::~SnippetPlugin()
 {
     kDebug(9500) ;
 }
 
-void SnippetPart::unload()
+void SnippetPlugin::unload()
 {
     core()->uiController()->removeToolView(m_factory);
 }
 
-void SnippetPart::insertText(const QString& snippet)
+void SnippetPlugin::insertText(const QString& snippet)
 {
     kDebug(9500) << "Insert Snippet:" << snippet ;
 
@@ -71,5 +71,5 @@ void SnippetPart::insertText(const QString& snippet)
 	}
 }
 
-#include "snippetpart.moc"
+#include "snippetplugin.moc"
 

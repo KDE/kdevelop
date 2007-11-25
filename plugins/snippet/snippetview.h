@@ -15,10 +15,10 @@
 
 class SnippetFilterProxyModel;
 class QStandardItem;
-class SnippetPart;
+class SnippetPlugin;
 
 /**
- * This class gets embedded into the right tool view by the SnippetPart.
+ * This class gets embedded into the right tool view by the SnippetPlugin.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
 class SnippetView : public QWidget, public Ui::SnippetViewBase
@@ -26,7 +26,7 @@ class SnippetView : public QWidget, public Ui::SnippetViewBase
     Q_OBJECT
 
 public:
-    explicit SnippetView(SnippetPart* part, QWidget* parent = 0);
+    explicit SnippetView(SnippetPlugin* plugin, QWidget* parent = 0);
     virtual ~SnippetView();
 
 public slots:
@@ -101,7 +101,7 @@ private slots:
 private:
     QStandardItem* currentItem();
 
-    SnippetPart* part_;
+    SnippetPlugin* plugin_;
     SnippetFilterProxyModel* proxy_;
 };
 

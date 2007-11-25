@@ -20,7 +20,7 @@
 
 #include "ui_addrepository.h"
 #include "snippet.h"
-#include "snippetpart.h"
+#include "snippetplugin.h"
 #include "snippetrepository.h"
 #include "snippetstore.h"
 #include "editsnippet.h"
@@ -28,8 +28,8 @@
 #include "moverepository.h"
 
 
-SnippetView::SnippetView(SnippetPart* part, QWidget* parent)
- : QWidget(parent), Ui::SnippetViewBase(), part_(part)
+SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
+ : QWidget(parent), Ui::SnippetViewBase(), plugin_(plugin)
 {
     Ui::SnippetViewBase::setupUi(this);
 
@@ -102,7 +102,7 @@ void SnippetView::slotSnippetClicked (const QModelIndex & index)
     QString text = snippet->interpretSnippet();
 
     if (!text.isEmpty())
-        part_->insertText( text );
+        plugin_->insertText( text );
 }
 
 void SnippetView::contextMenu (const QPoint& pos)
