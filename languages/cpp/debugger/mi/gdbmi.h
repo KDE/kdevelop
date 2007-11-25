@@ -22,11 +22,12 @@
 #ifndef GDBMI_H
 #define GDBMI_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 #include <qmap.h>
 
 #include <stdexcept>
+#include <kvbox.h>
 
 /**
 @author Roberto Raggi

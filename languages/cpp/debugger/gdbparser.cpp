@@ -17,12 +17,13 @@
 #include "variablewidget.h"
 #include <kdebug.h>
 
-#include <qregexp.h>
+#include <QRegExp>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <ctype.h>
 #include <stdlib.h>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {
@@ -69,7 +70,7 @@ QString GDBParser::getName(const char **buf)
     const char *start = skipNextTokenStart(*buf);
     if (*start) {
         *buf = skipTokenValue(start);
-        return Q3CString(start, *buf - start + 1);
+        return QByteArray(start, *buf - start + 1);
     } else
         *buf = start;
 
@@ -83,13 +84,13 @@ QString GDBParser::getValue(const char **buf)
     const char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
 
-    QString value(Q3CString(start, *buf - start + 1).data());
+    QString value(QByteArray(start, *buf - start + 1).data());
     return value;
 }
 
 QString GDBParser::undecorateValue(DataType type, const QString& s)
 {
-    Q3CString l8 = s.local8Bit();
+    QByteArray l8 = s.local8Bit();
     const char* start = l8;
     const char* end = start + s.length();
 
@@ -108,7 +109,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
         else
         {
             // Looks like composite, strip the braces and return.
-            return Q3CString(start+1, end - start -1);
+            return QByteArray(start+1, end - start -1);
         }
     }
     else if (*start == '(')
@@ -133,14 +134,14 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
         start = skipDelim(start, '(', ')');
     }
 
-    QString value(Q3CString(start, end - start + 1).data());
+    QString value(QByteArray(start, end - start + 1).data());
 
     value = value.stripWhiteSpace();
 
     if (value[0] == '@')
     {
         // It's a reference, we need to show just the value.
-        if (int i = value.find(":"))
+        if (int i = value.indexOf(":"))
         {
             value = value.mid(i+2);
         }
@@ -151,7 +152,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
         }
     }
 
-    if (value.find("Cannot access memory") == 0)
+    if (value.indexOf("Cannot access memory") == 0)
         value = "(inaccessible)";
   
     return value.stripWhiteSpace();

@@ -14,11 +14,12 @@
 #ifndef _DEBUGGERPART_H_
 #define _DEBUGGERPART_H_
 
-#include <qpointer.h>
+#include <QPointer>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <QLabel>
 #include <Q3PopupMenu>
+#include <kvbox.h>
 #include "kdevplugin.h"
 #include "kdevcore.h"
 
@@ -62,7 +63,7 @@ k_dcop:
     virtual ASYNC slotDebugExternalProcess();
     virtual ASYNC slotDebugCommandLine(const QString& command);
 
-private slots:
+private Q_SLOTS:
     void setupDcop();
     void guiClientAdded(KXMLGUIClient*);
     void contextMenu(Q3PopupMenu *popup, const Context *context);
@@ -102,7 +103,7 @@ private slots:
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
 
-    void slotDCOPApplicationRegistered(const Q3CString &appId);
+    void slotDCOPApplicationRegistered(const QByteArray &appId);
     void slotCloseDrKonqi();
 
     // Hide or show the view that's the sender of this signal.
@@ -140,7 +141,7 @@ private:
     ProcessLineMaker* gdbLineMaker;
 
     QString m_contextIdent;
-    Q3CString m_drkonqi;
+    QByteArray m_drkonqi;
     
     KDevDebugger *m_debugger;
     int previousDebuggerState_;
@@ -159,7 +160,7 @@ private:
     // Set by 'startDebugger' and cleared by 'slotStopDebugger'.
     bool running_;
 
-signals:
+Q_SIGNALS:
     void buildProject();
 };
 

@@ -24,6 +24,7 @@
 #include <memory>
 //Added by qt3to4:
 #include <Q3CString>
+#include <kvbox.h>
 
 using namespace GDBMI;
 

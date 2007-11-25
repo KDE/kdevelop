@@ -27,7 +27,7 @@ namespace GDBDebugger
         DebuggerTracingDialog(Breakpoint* bp,
                               QWidget* parent, const char* name = 0);
 
-    private slots:
+    private Q_SLOTS:
         void enableOrDisable(int);
         void enableOrDisableCustomFormat(int);
 

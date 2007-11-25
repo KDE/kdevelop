@@ -23,6 +23,7 @@
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <QContextMenuEvent>
+#include <kvbox.h>
 
 class KLineEdit;
 class Q3MultiLineEdit;
@@ -40,7 +41,7 @@ namespace GDBDebugger
         ViewerWidget(GDBController* controller,
                      QWidget* parent, const char* name);
 
-    public slots:
+    public Q_SLOTS:
         /** Adds a new memory view to *this, initially showing
             no data. */
         void slotAddMemoryView();
@@ -49,11 +50,11 @@ namespace GDBDebugger
             debugger is not running. */
         void slotDebuggerState(const QString&, int state);
 
-    signals:
+    Q_SIGNALS:
         void setViewShown(bool shown);
 
 
-    private slots:
+    private Q_SLOTS:
         void slotChildCaptionChanged(const QString& caption);
         void slotChildDestroyed(QObject* child);
      
@@ -72,7 +73,7 @@ namespace GDBDebugger
 
         void debuggerStateChanged(int state);
 
-    signals:
+    Q_SIGNALS:
         void captionChanged(const QString& caption);
 
     private: // Callbacks
@@ -80,7 +81,7 @@ namespace GDBDebugger
 
         void memoryRead(const GDBMI::ResultRecord& r);
 
-    private slots:
+    private Q_SLOTS:
         void memoryEdited(int start, int end);
 
     private:        
@@ -90,7 +91,7 @@ namespace GDBDebugger
 
         
 
-    private slots:
+    private Q_SLOTS:
         /** Invoked when user has changed memory range.
             Gets memory for the new range. */
         void slotChangeMemoryRange();

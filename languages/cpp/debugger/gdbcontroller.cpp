@@ -33,21 +33,22 @@
 #include <kprocess.h>
 #include <kwin.h>
 
-#include <qdatetime.h>
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qdir.h>
+#include <QDateTime>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QString>
+#include <QDir>
 #include <q3valuevector.h>
-#include <qeventloop.h>
+#include <QEventLoop>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <iostream>
 #include <ctype.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <typeinfo>
+#include <kvbox.h>
 using namespace std;
 
 // **************************************************************************
@@ -234,7 +235,7 @@ void GDBController::configure()
         // Disabled for MI port.
         if (old_outputRadix != config_outputRadix_)
         {
-            queueCmd(new GDBCommand(Q3CString().sprintf("set output-radix %d",
+            queueCmd(new GDBCommand(QString().sprintf("set output-radix %d",
                                 config_outputRadix_)));
 
             // FIXME: should do this in variable widget anyway.
@@ -312,7 +313,7 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
     {
         unsigned i;
         for (i = 0; i < cmdList_.count(); ++i)
-            if (cmdList_.at(i)->isRun())
+            if (cmdList_.seek(i)->isRun())
                 break;
 
         cmdList_.insert(i, cmd);
@@ -441,7 +442,7 @@ void GDBController::pauseApp()
     while (i)
     {
         i--;
-        DbgCommand *cmd = cmdList_.at(i);
+        DbgCommand *cmd = cmdList_.seek(i);
         if (cmd->isAnInfoCmd())
             delete cmdList_.take(i);
     }
@@ -902,16 +903,16 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
         queueCmd(new GDBCommand("set print asm-demangle off"));
 
     // make sure output radix is always set to users view.
-    queueCmd(new GDBCommand(Q3CString().sprintf("set output-radix %d",  config_outputRadix_)));
+    queueCmd(new GDBCommand(QString().sprintf("set output-radix %d",  config_outputRadix_)));
 
     // Change the "Working directory" to the correct one
-    Q3CString tmp( "cd " + QFile::encodeName( run_directory ));
+    QByteArray tmp( "cd " + QFile::encodeName( run_directory ));
     queueCmd(new GDBCommand(tmp));
 
     // Set the run arguments
     if (!run_arguments.isEmpty())
         queueCmd(
-            new GDBCommand(Q3CString("set args ") + run_arguments.local8Bit()));
+            new GDBCommand(QByteArray("set args ") + run_arguments.local8Bit()));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -1037,7 +1038,7 @@ void GDBController::slotCoreFile(const QString &coreFile)
     setStateOff(s_programExited|s_appNotStarted);
     setStateOn(s_core);
 
-    queueCmd(new GDBCommand(Q3CString("core ") + coreFile.latin1()));
+    queueCmd(new GDBCommand(QByteArray("core ") + coreFile.latin1()));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -1061,7 +1062,7 @@ void GDBController::slotAttachTo(int pid)
     // The MI interface does not implements -target-attach yet,
     // and we don't recognize whatever gibberish 'attach' pours out, so...
     queueCmd(new GDBCommand(
-        Q3CString().sprintf("attach %d", pid)));
+        QString().sprintf("attach %d", pid)));
 
     raiseEvent(connected_to_program);
 
@@ -1101,12 +1102,12 @@ void GDBController::slotRun()
             return;
         }
 
-        queueCmd(new GDBCommand(Q3CString("tty ")+tty.latin1()));
+        queueCmd(new GDBCommand(QByteArray("tty ")+tty.latin1()));
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
-            Q3CString tty(tty_->getSlave().latin1());
-            Q3CString options = Q3CString(">") + tty + Q3CString("  2>&1 <") + tty;
+            QByteArray tty(tty_->getSlave().latin1());
+            QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
             KProcess *proc = new KProcess;
 
@@ -1203,10 +1204,10 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
 
     if (fileName.isEmpty())
         queueCmd(new GDBCommand(
-                     Q3CString().sprintf("-exec-until %d", lineNum)));
+                     QString().sprintf("-exec-until %d", lineNum)));
     else
         queueCmd(new GDBCommand(
-                Q3CString().
+                QByteArray().
                 sprintf("-exec-until %s:%d", fileName.latin1(), lineNum)));
 }
 
@@ -1218,8 +1219,8 @@ void GDBController::slotJumpTo(const QString &fileName, int lineNum)
         return;
 
     if (!fileName.isEmpty()) {
-        queueCmd(new GDBCommand(Q3CString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum)));
-        queueCmd(new GDBCommand(Q3CString().sprintf("jump %s:%d", fileName.latin1(), lineNum)));
+        queueCmd(new GDBCommand(QString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum)));
+        queueCmd(new GDBCommand(QString().sprintf("jump %s:%d", fileName.latin1(), lineNum)));
     }
 }
 
@@ -1405,11 +1406,11 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
     static bool parsing = false;
 
-    Q3CString msg(buf, buflen+1);
+    QByteArray msg(buf, buflen+1);
 
     // Copy the data out of the KProcess buffer before it gets overwritten
     // Append to the back of the holding zone.
-    holdingZone_ +=  Q3CString(buf, buflen+1);
+    holdingZone_ +=  QByteArray(buf, buflen+1);
 
     // Already parsing? then get out quick.
     // VP, 2006-01-30. I'm not sure how this could happen, since
@@ -1427,11 +1428,11 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     int i;
     bool got_any_command = false;
     // For each gdb reply. In MI mode, each reply is one string.
-    while((i = holdingZone_.find('\n')) != -1)
+    while((i = holdingZone_.contains('\n')) )
     {
         got_any_command = true;
 
-        Q3CString reply(holdingZone_.left(i));
+        QByteArray reply(holdingZone_.left(i));
         holdingZone_ = holdingZone_.mid(i+1);
 
         kdDebug(9012) << "REPLY: " << reply << "\n";
@@ -1627,7 +1628,7 @@ void GDBController::removeStateReloadingCommands()
     while (i)
     {
         i--;
-        GDBCommand* cmd = cmdList_.at(i);
+        GDBCommand* cmd = cmdList_.seek(i);
         if (stateReloadingCommands_.count(cmd));
         {
             kdDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
@@ -1668,7 +1669,7 @@ void GDBController::raiseEvent(event_t e)
 void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
     // At the moment, just drop a message out and redirect
-    kdDebug(9012) << "STDERR: " << QString::fromLatin1(buf, buflen+1) << endl;
+    kdDebug(9012) << "STDERR: " << QLatin1String(buf, buflen+1) << endl;
     slotDbgStdout(proc, buf, buflen);
 }
 

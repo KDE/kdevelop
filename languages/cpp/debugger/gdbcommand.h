@@ -16,12 +16,13 @@
 #ifndef _GDBCOMMAND_H_
 #define _GDBCOMMAND_H_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <q3valuevector.h>
 
 #include "mi/gdbmi.h"
-#include <qpointer.h>
+#include <QPointer>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {

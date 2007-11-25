@@ -16,14 +16,15 @@
 #ifndef _GDBBreakpointWidget_H_
 #define _GDBBreakpointWidget_H_
 
-#include <q3hbox.h>
+
 #include <q3popupmenu.h>
 #include <q3table.h>
-#include <qpointer.h>
+#include <QPointer>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <QLabel>
 #include <QFocusEvent>
+#include <kvbox.h>
 
 #include "mi/gdbmi.h"
 #include "gdbcontroller.h"
@@ -44,7 +45,7 @@ class BreakpointTableRow;
 class GDBTable;
 class GDBController;
 
-class GDBBreakpointWidget : public Q3HBox
+class GDBBreakpointWidget : public KHBox
 {
     Q_OBJECT
 
@@ -61,7 +62,7 @@ public:
     bool hasWatchpointForAddress(unsigned long long address) const;
 
 
-public slots:
+public Q_SLOTS:
     // Connected to from the editor widget:
     void slotToggleBreakpoint(const QString &filename, int lineNum);
     void slotToggleBreakpointEnabled(const QString &fileName, int lineNum);
@@ -81,7 +82,7 @@ protected:
 
 
     friend class BreakpointActionCell; // for access to slotNewValue
-private slots:
+private Q_SLOTS:
     void slotRemoveBreakpoint();
     void slotRemoveAllBreakpoints();
     void slotEditBreakpoint(const QString &fileName, int lineNum);
@@ -100,7 +101,7 @@ private slots:
                            const QString& oldValue,
                            const QString& newValue);
 
-signals:
+Q_SIGNALS:
     void publishBPState(const Breakpoint& brkpt);
     void refreshBPState(const Breakpoint& brkpt);
     void gotoSourcePosition(const QString &fileName, int lineNum);
@@ -155,12 +156,12 @@ public:
 
     void updateValue();
 
-private slots:
+private Q_SLOTS:
 
     /** Called when the "..." button is clicked. */
     void slotEdit();
 
-signals:
+Q_SIGNALS:
     void edit(Q3TableItem*);
 
 private:

@@ -25,19 +25,20 @@
 #include <kwin.h>
 #include <kwinmodule.h>
 
-#include <qapplication.h>
-#include <qcursor.h>
+#include <QApplication>
+#include <QCursor>
 #include <q3frame.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <QLayout>
+#include <QPainter>
+#include <QPushButton>
+#include <QToolTip>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <Q3VBoxLayout>
+#include <kvbox.h>
 
 // **************************************************************************
 // **************************************************************************
@@ -220,7 +221,7 @@ DbgDocker::DbgDocker(QWidget* parent, DbgToolBar* toolBar, const QPixmap& pixmap
     toolBar_(toolBar)
 {
     setPixmap(pixmap);
-    QToolTip::add( this, i18n("KDevelop debugger: Click to execute one line of code (\"step\")") );
+    this->setToolTip( i18n("KDevelop debugger: Click to execute one line of code (\"step\")") );
 }
 
 // **************************************************************************
@@ -320,29 +321,29 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
   connect(bKDevFocus_, SIGNAL(clicked()), this,   SLOT(slotKdevFocus()));
   connect(bPrevFocus_, SIGNAL(clicked()), this,   SLOT(slotPrevFocus()));
 
-    QToolTip::add( bRun,        i18n("Continue with application execution, may start the application") );
-    QToolTip::add( bInterrupt,  i18n("Interrupt the application execution") );
-    QToolTip::add( bNext,       i18n("Execute one line of code, but run through functions") );
-    QToolTip::add( bNexti,      i18n("Execute one assembler instruction, but run through functions") );
-    QToolTip::add( bStep,       i18n("Execute one line of code, stepping into functions if appropriate") );
-    QToolTip::add( bStepi,      i18n("Execute one assembler instruction, stepping into functions if appropriate") );
-    QToolTip::add( bFinish,     i18n("Execute to end of current stack frame") );
-    QToolTip::add( bRunTo,      i18n("Continues execution until the cursor position is reached.") );
-    QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewers") );
-    QToolTip::add( bKDevFocus_, i18n("Set focus on KDevelop") );
-    QToolTip::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus") );
+    bRun->setToolTip(        i18n("Continue with application execution, may start the application") );
+    bInterrupt->setToolTip(  i18n("Interrupt the application execution") );
+    bNext->setToolTip(       i18n("Execute one line of code, but run through functions") );
+    bNexti->setToolTip(      i18n("Execute one assembler instruction, but run through functions") );
+    bStep->setToolTip(       i18n("Execute one line of code, stepping into functions if appropriate") );
+    bStepi->setToolTip(      i18n("Execute one assembler instruction, stepping into functions if appropriate") );
+    bFinish->setToolTip(     i18n("Execute to end of current stack frame") );
+    bRunTo->setToolTip(      i18n("Continues execution until the cursor position is reached.") );
+    bView->setToolTip(       i18n("Memory, dissemble, registers, library viewers") );
+    bKDevFocus_->setToolTip( i18n("Set focus on KDevelop") );
+    bPrevFocus_->setToolTip( i18n("Set focus on window that had focus when KDevelop got focus") );
 
-    Q3WhatsThis::add( bRun,        i18n("Continue with application execution. May start the application.") );
-    Q3WhatsThis::add( bInterrupt,  i18n("Interrupt the application execution.") );
-    Q3WhatsThis::add( bNext,       i18n("Execute one line of code, but run through functions.") );
-    Q3WhatsThis::add( bNexti,      i18n("Execute one assembler instruction, but run through functions.") );
-    Q3WhatsThis::add( bStep,       i18n("Execute one line of code, stepping into functions if appropriate.") );
-    Q3WhatsThis::add( bStepi,      i18n("Execute one assembler instruction, stepping into functions if appropriate.") );
-    Q3WhatsThis::add( bFinish,     i18n("Execute to end of current stack frame.") );
-    Q3WhatsThis::add( bRunTo,      i18n("Continues execution until the cursor position is reached.") );
-    Q3WhatsThis::add( bView,       i18n("Memory, dissemble, registers, library viewers.") );
-    Q3WhatsThis::add( bKDevFocus_, i18n("Set focus on KDevelop.") );
-    Q3WhatsThis::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus.") );
+    bRun->setWhatsThis(        i18n("Continue with application execution. May start the application.") );
+    bInterrupt->setWhatsThis(  i18n("Interrupt the application execution.") );
+    bNext->setWhatsThis(       i18n("Execute one line of code, but run through functions.") );
+    bNexti->setWhatsThis(      i18n("Execute one assembler instruction, but run through functions.") );
+    bStep->setWhatsThis(       i18n("Execute one line of code, stepping into functions if appropriate.") );
+    bStepi->setWhatsThis(      i18n("Execute one assembler instruction, stepping into functions if appropriate.") );
+    bFinish->setWhatsThis(     i18n("Execute to end of current stack frame.") );
+    bRunTo->setWhatsThis(      i18n("Continues execution until the cursor position is reached.") );
+    bView->setWhatsThis(       i18n("Memory, dissemble, registers, library viewers.") );
+    bKDevFocus_->setWhatsThis( i18n("Set focus on KDevelop.") );
+    bPrevFocus_->setWhatsThis( i18n("Set focus on window that had focus when KDevelop got focus.") );
 
     topLayout->addWidget(moveHandle);
     topLayout->addWidget(bRun);

@@ -18,9 +18,10 @@
 
 #include <klocale.h>
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QObject>
+#include <QString>
+#include <QStringList>
+#include <kvbox.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -150,7 +151,7 @@ public:
     virtual void setLocation(const QString& )       = 0;
     virtual bool isValid() const                    = 0;
 
-signals:
+Q_SIGNALS:
     /** Emitted whenever this breakpoint is modified from gdb side,
         say when it's first created, or when gdb reports that any
         property has changes.

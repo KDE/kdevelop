@@ -27,8 +27,9 @@
 
 class QSocketNotifier;
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {
@@ -44,10 +45,10 @@ public:
     QString getSlave()    { return ttySlave; };
     void readRemaining();
 
-private slots:
+private Q_SLOTS:
     void OutReceived(int);
 
-signals:
+Q_SIGNALS:
     void OutOutput(const char *);
     void ErrOutput(const char*);
 

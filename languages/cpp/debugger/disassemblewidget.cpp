@@ -30,6 +30,7 @@
 #include <QHideEvent>
 
 #include <stdlib.h>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {

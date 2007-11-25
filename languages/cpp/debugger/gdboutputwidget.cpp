@@ -24,19 +24,20 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3textedit.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QToolButton>
+#include <QToolTip>
+#include <QApplication>
+#include <QClipboard>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <QFocusEvent>
 #include <Q3PopupMenu>
 #include <Q3VBoxLayout>
+#include <kvbox.h>
 
 
 namespace GDBDebugger
@@ -75,7 +76,7 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
                                          );
     m_Interrupt->setPixmap ( SmallIcon ( "player_pause" ) );
     userGDBCmdEntry->addWidget(m_Interrupt);
-    QToolTip::add ( m_Interrupt, i18n ( "Pause execution of the app to enter gdb commands" ) );
+    m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
 
     Q3VBoxLayout *topLayout = new Q3VBoxLayout(this, 2);
     topLayout->addWidget(m_gdbView, 10);

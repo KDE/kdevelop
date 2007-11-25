@@ -24,14 +24,15 @@
 
 #include <q3cstring.h>
 #include <qdom.h>
-#include <qobject.h>
+#include <QObject>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 #include <qmap.h>
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include <memory>
 #include <set>
+#include <kvbox.h>
 
 class KProcess;
 
@@ -217,7 +218,7 @@ private:
 public:
     bool stateIsOn(int state);
 
-public slots:
+public Q_SLOTS:
     void configure();
 
 
@@ -247,13 +248,13 @@ public slots:
     void explainDebuggerStatus();
 
 
-protected slots:
+protected Q_SLOTS:
     void slotDbgStdout(KProcess *proc, char *buf, int buflen);
     void slotDbgStderr(KProcess *proc, char *buf, int buflen);
     void slotDbgWroteStdin(KProcess *proc);
     void slotDbgProcessExited(KProcess *proc);
 
-signals:
+Q_SIGNALS:
 
     /** This signal is emitted whenever the given event in a program
         happens. See DESIGN.txt for expected handled of each event.
@@ -278,7 +279,7 @@ private:
     int               viewedThread_;
 
     // The output from gdb that was not parsed yet
-    Q3CString          gdbOutput_;
+    QByteArray          gdbOutput_;
     // The output from gdb that arrived where we was
     // parsing the previous output. To avoid messing
     // things up, it's not directly added to
@@ -286,7 +287,7 @@ private:
     // VP: It's not clear why the previous code was doing
     // this, and holdingZone_ won't be processed until
     // next output arrives, so probably should be just removed.
-    Q3CString          holdingZone_;
+    QByteArray          holdingZone_;
 
     Q3PtrList<GDBCommand> cmdList_;
     GDBCommand*       currentCmd_;
@@ -312,9 +313,9 @@ private:
     bool    config_dbgTerminal_;
     QString config_gdbPath_;
     QString config_dbgShell_;
-    Q3CString config_configGdbScript_;
-    Q3CString config_runShellScript_;
-    Q3CString config_runGdbScript_;
+    QByteArray config_configGdbScript_;
+    QByteArray config_runShellScript_;
+    QByteArray config_runGdbScript_;
     int config_outputRadix_;
 
     MIParser mi_parser_;
@@ -330,7 +331,7 @@ private:
     // so the only way it can work is via the "print" command. As gdb
     // outputs things, we'll grep for lines that look like output from
     // print, and store such lines in this variable, so later use.
-    Q3CString print_command_result;
+    QByteArray print_command_result;
 
     bool state_reload_needed;
 

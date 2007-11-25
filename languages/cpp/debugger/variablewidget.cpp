@@ -25,14 +25,14 @@
 #include <kiconloader.h>
 
 #include <q3header.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3hbox.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
-#include <qcursor.h>
-#include <q3whatsthis.h>
+#include <QLabel>
+#include <QLayout>
+
+#include <QPainter>
+#include <QPushButton>
+#include <QRegExp>
+#include <QCursor>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <QKeyEvent>
@@ -41,7 +41,7 @@
 #include <klocale.h>
 
 #include <qpoint.h>
-#include <qclipboard.h>
+#include <QClipboard>
 #include <kapplication.h>
 #include <kmessagebox.h>
 
@@ -49,9 +49,10 @@
 #include <set>
 #include <typeinfo>
 #include <cctype>
+#include <kvbox.h>
 
 /** The variables widget is passive, and is invoked by the rest of the
-    code via two main slots:
+    code via two main Q_SLOTS:
     - slotDbgStatus
     - slotCurrentFrame
 
@@ -121,7 +122,7 @@ VariableWidget::VariableWidget(GDBController*  controller,
 
     // Setup help items.
 
-    Q3WhatsThis::add(this, i18n(
+    this->setWhatsThis( i18n(
         "<b>Variable tree</b><p>"
         "The variable tree allows you to see the values of local "
         "variables and arbitrary expressions."
@@ -135,14 +136,14 @@ VariableWidget::VariableWidget(GDBController*  controller,
         "<p>To change the value of a variable or an expression, "
         "click on the value."));
 
-    Q3WhatsThis::add(watchVarEditor_,
+    watchVarEditor_->setWhatsThis(
                     i18n("<b>Expression entry</b>"
                          "<p>Type in expression to evaluate."));
 
-    Q3WhatsThis::add(evalButton,
+    evalButton->setWhatsThis(
                     i18n("Evaluate the expression."));
 
-    Q3WhatsThis::add(addButton,
+    addButton->setWhatsThis(
                     i18n("Evaluate the expression and "
                          "auto-update the value when stepping."));
 }
@@ -1624,7 +1625,7 @@ void VarItem::updateSpecialRepresentation(const QString& xs)
     QString s(xs);
     if (s[0] == '$')
     {
-        int i = s.find('=');
+        int i = s.indexOf('=');
         if (i != -1)
             s = s.mid(i+2);
     }

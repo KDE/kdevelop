@@ -17,12 +17,13 @@
 #define _FRAMESTACKWIDGET_H_
 
 #include <q3listview.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include "gdbcontroller.h"
 #include "mi/miparser.h"
 
 #include <vector>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {
@@ -147,7 +148,7 @@ private:
     void parseGDBBacktraceList(const GDBMI::ResultRecord&);
     void handleStackDepth(const GDBMI::ResultRecord& r);
 
-public slots:
+public Q_SLOTS:
     void slotEvent(GDBController::event_t e);
     void slotSelectionChanged(Q3ListViewItem *thisItem);
 

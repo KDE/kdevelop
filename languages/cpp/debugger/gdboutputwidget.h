@@ -20,11 +20,12 @@
 
 #include <qwidget.h>
 #include <q3textedit.h>
-#include <qtimer.h>
-#include <qstringlist.h>
+#include <QTimer>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3PopupMenu>
 #include <QFocusEvent>
+#include <kvbox.h>
 
 class KHistoryCombo;
 
@@ -48,7 +49,7 @@ public:
 
     void clear();
 
-public slots:
+public Q_SLOTS:
     void slotInternalCommandStdout(const char* line);
     void slotUserCommandStdout(const char* line);
     void slotReceivedStderr(const char* line);
@@ -61,7 +62,7 @@ public slots:
 protected:
     virtual void focusInEvent(QFocusEvent *e);
 
-signals:
+Q_SIGNALS:
     void userGDBCmd(const QString &cmd);
     void breakInto();
 
@@ -127,7 +128,7 @@ public:
 
     Q3PopupMenu* createPopupMenu(const QPoint& pos);
 
-private slots:
+private Q_SLOTS:
     void copyAll();
     void toggleShowInternalCommands();
 

@@ -14,13 +14,13 @@
 #include "debuggerpart.h"
 #include "label_with_double_click.h"
 
-#include <qdir.h>
-#include <q3vbox.h>
-#include <q3whatsthis.h>
+#include <QDir>
+
+
 #include <q3popupmenu.h>
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -35,8 +35,8 @@
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <dcopclient.h>
-#include <qtimer.h>
-#include <kstringhandler.h>
+#include <QTimer>
+
 #include <kdockwidget.h>
 
 #include "kdevcore.h"
@@ -65,6 +65,7 @@
 
 #include <kdevplugininfo.h>
 #include <debugger.h>
+#include <kvbox.h>
 
 
 
@@ -85,7 +86,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     running_(false)
 {
     setObjId("DebuggerInterface");
-    setInstance(DebuggerFactory::instance());
+    setComponentData(DebuggerFactory::componentData());
 
     setXMLFile("kdevdebugger.rc");
 
@@ -373,23 +374,23 @@ void DebuggerPart::setupDcop()
 {
     QCStringList objects = kapp->dcopClient()->registeredApplications();
     for (QCStringList::Iterator it = objects.begin(); it != objects.end(); ++it)
-        if ((*it).find("drkonqi-") == 0)
+        if ((*it).indexOf("drkonqi-") == 0)
             slotDCOPApplicationRegistered(*it);
 
-    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const Q3CString&)), SLOT(slotDCOPApplicationRegistered(const Q3CString&)));
+    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const QByteArray&)), SLOT(slotDCOPApplicationRegistered(const QByteArray&)));
     kapp->dcopClient()->setNotifications(true);
 }
 
-void DebuggerPart::slotDCOPApplicationRegistered(const Q3CString& appId)
+void DebuggerPart::slotDCOPApplicationRegistered(const QByteArray& appId)
 {
-    if (appId.find("drkonqi-") == 0) {
+    if (appId.indexOf("drkonqi-") == 0) {
         QByteArray answer;
-        Q3CString replyType;
+        QByteArray replyType;
 
         kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true, 5000);
 
         QDataStream d(answer, QIODevice::ReadOnly);
-        Q3CString appName;
+        QByteArray appName;
         d >> appName;
 
         if (appName.length() && project() && project()->mainProgram().endsWith(appName)) {
@@ -402,7 +403,7 @@ void DebuggerPart::slotDCOPApplicationRegistered(const Q3CString& appId)
 ASYNC DebuggerPart::slotDebugExternalProcess()
 {
     QByteArray answer;
-    Q3CString replyType;
+    QByteArray replyType;
 
     kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true, 5000);
 
@@ -557,7 +558,7 @@ void DebuggerPart::contextEvaluate()
 
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
-    Q3VBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+    KVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(finished()), controller, SLOT(configure()) );
@@ -1170,7 +1171,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     kdDebug(9012) << "   " << msg << endl;
 
     statusBarIndicator->setText(stateIndicator);
-    QToolTip::add(statusBarIndicator, stateIndicatorFull);
+    statusBarIndicator->setToolTip( stateIndicatorFull);
     if (!msg.isEmpty())
         mainWindow()->statusBar()->message(msg, 3000);
 

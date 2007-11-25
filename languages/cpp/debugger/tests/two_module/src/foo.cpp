@@ -1,6 +1,7 @@
 
 #include <stdio.h>
-#include <qstring.h>
+#include <QString>
+#include <kvbox.h>
 
 void foo(int a)
 {

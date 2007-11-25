@@ -25,6 +25,7 @@ class KWinModule;
 #include <kwin.h>         // needed for WId :(
 
 #include <q3frame.h>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {
@@ -42,7 +43,7 @@ public:
     virtual ~DbgDocker()  {};
     virtual void mousePressEvent(QMouseEvent *e);
 
-signals:
+Q_SIGNALS:
     void clicked();
 
 private:
@@ -58,7 +59,7 @@ public:
     DbgToolBar(DebuggerPart *part, QWidget* parent, const char* name=0);
     virtual ~DbgToolBar();
 
-private slots:
+private Q_SLOTS:
     void slotDbgStatus(const QString&, int);
     void slotDock();
     void slotUndock();

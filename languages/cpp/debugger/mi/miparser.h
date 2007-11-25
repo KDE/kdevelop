@@ -23,8 +23,9 @@
 #include "milexer.h"
 #include "gdbmi.h"
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
+#include <kvbox.h>
 
 /**
 @author Roberto Raggi

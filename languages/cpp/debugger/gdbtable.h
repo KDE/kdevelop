@@ -13,6 +13,7 @@
 #include <q3table.h>
 //Added by qt3to4:
 #include <QKeyEvent>
+#include <kvbox.h>
 
 namespace GDBDebugger {
 
@@ -26,7 +27,7 @@ public:
 
     virtual void keyPressEvent ( QKeyEvent * e );
 
-signals:
+Q_SIGNALS:
     void keyPressed(int key);
 
     void returnPressed();

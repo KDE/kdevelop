@@ -18,10 +18,11 @@
 
 #include "mi/gdbmi.h"
 
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3StrList>
 #include <domutil.h>
+#include <kvbox.h>
 
 
 
@@ -78,7 +79,7 @@ public:
 
     virtual bool stateIsOn( int state )                                     = 0;
 
-public slots:
+public Q_SLOTS:
     virtual void configure()                                                = 0;
 
     virtual void slotCoreFile(const QString &coreFile)                      = 0;
@@ -102,13 +103,13 @@ public slots:
     // jw - for optional additional commands and initialization
     virtual void slotVarItemConstructed(VarItem */*item*/) {}
 
-protected slots:
+protected Q_SLOTS:
     virtual void slotDbgStdout(KProcess *proc, char *buf, int buflen)       = 0;
     virtual void slotDbgStderr(KProcess*, char*, int) {} ;
     virtual void slotDbgWroteStdin(KProcess *proc)                          = 0;
     virtual void slotDbgProcessExited(KProcess *proc)                       = 0;
 
-signals:
+Q_SIGNALS:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
     void rawGDBMemoryDump     (char *buf);
     void rawGDBRegisters      (char *buf);

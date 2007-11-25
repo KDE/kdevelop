@@ -22,16 +22,17 @@
 #include <klistview.h>
 #include <kcombobox.h>
 #include <qwidget.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <q3valuevector.h>
-#include <qdatetime.h>
-#include <qpointer.h>
+#include <QDateTime>
+#include <QPointer>
 #include <qmap.h>
 //Added by qt3to4:
 #include <QFocusEvent>
 #include <QKeyEvent>
 
 #include <vector>
+#include <kvbox.h>
 
 class KLineEdit;
 class KPopupMenu;
@@ -67,7 +68,7 @@ public:
 protected: // QWidget overrides
     void focusInEvent(QFocusEvent *e);
 
-public slots:
+public Q_SLOTS:
     void slotAddWatchVariable();
     void slotAddWatchVariable(const QString &ident);
     void slotEvaluateExpression();
@@ -107,17 +108,17 @@ public:
 
     GDBController* controller() const { return controller_; }
 
-signals:
+Q_SIGNALS:
     void toggleWatchpoint(const QString &varName);
 
-public slots:
+public Q_SLOTS:
     void slotAddWatchVariable(const QString& watchVar);
     void slotEvaluateExpression(const QString& expression);
 
     void slotEvent(GDBController::event_t);
     void slotItemRenamed(Q3ListViewItem* item, int col, const QString& text);
 
-private slots:
+private Q_SLOTS:
     void slotContextMenu(KListView *, Q3ListViewItem *item);
     void slotVarobjNameChanged(const QString& from, const QString& to);
 
@@ -309,7 +310,7 @@ public:
 
     bool isAlive() const;
 
-signals:
+Q_SIGNALS:
     /** Emitted whenever the name of varobj associated with *this changes:
         - when we've created initial varobj
         - when we've changed varobj name as part of 'recreate' method

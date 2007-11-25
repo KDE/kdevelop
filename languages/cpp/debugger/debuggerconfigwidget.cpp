@@ -20,9 +20,10 @@
 #include <kurlrequester.h>
 #include <klineedit.h>
 
-#include <qcheckbox.h>
-#include <qfileinfo.h>
-#include <qradiobutton.h>
+#include <QCheckBox>
+#include <QFileInfo>
+#include <QRadioButton>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {

@@ -23,12 +23,13 @@
 
 #include <q3header.h>
 #include <q3listbox.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <q3strlist.h>
-#include <qpainter.h>
+#include <QPainter>
 
 
 #include <ctype.h>
+#include <kvbox.h>
 
 
 /***************************************************************************/

@@ -1,6 +1,7 @@
 
-#include <qstring.h>
+#include <QString>
 #include <vector>
+#include <kvbox.h>
 
 struct B { int i; int j; static int k; };
 struct C { int a[3]; };

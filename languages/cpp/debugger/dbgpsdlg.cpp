@@ -27,20 +27,21 @@
 #include <kmessagebox.h>
 
 #include <q3frame.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 
-#include <qtoolbutton.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
+#include <QToolButton>
+#include <QPushButton>
+#include <QRegExp>
 #include <q3header.h>
-#include <qtimer.h>
+#include <QTimer>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QFocusEvent>
 
 #include <unistd.h>
 #include <sys/types.h>
+#include <kvbox.h>
 
 namespace GDBDebugger
 {
@@ -158,14 +159,14 @@ void Dbg_PS_Dialog::slotProcessExited()
 
     pidLines_ += '\n';
 
-    int start = pidLines_.find('\n', 0);  // Skip the first line (header line)
+    int start = pidLines_.indexOf('\n', 0);  // Skip the first line (header line)
     int pos;
 
     static QRegExp ps_output_line("^\\s*(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(.+)");
-    while ( (pos = pidLines_.find('\n', start)) != -1) {        
+    while ( (pos = pidLines_.contains('\n', start)) ) {        
 
         QString item = pidLines_.mid(start, pos-start);
-        if (!item.isEmpty() && item.find(pidCmd_) == -1)
+        if (!item.isEmpty() && !item.contains(pidCmd_) )
         {
             if(ps_output_line.search(item) == -1)
             {

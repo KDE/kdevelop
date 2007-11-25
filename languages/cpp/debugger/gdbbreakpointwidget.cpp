@@ -30,23 +30,24 @@
 #include <kmessagebox.h>
 
 #include <qvbuttongroup.h>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <q3header.h>
 #include <q3table.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <q3vbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
+#include <QToolButton>
+#include <QToolTip>
+
+
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QCheckBox>
 //Added by qt3to4:
 #include <Q3PopupMenu>
 #include <QFocusEvent>
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <kvbox.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -200,7 +201,7 @@ void BreakpointTableRow::setRow()
 
 GDBBreakpointWidget::GDBBreakpointWidget(GDBController* controller,
                                          QWidget *parent, const char *name) :
-Q3HBox(parent, name),
+KHBox(parent, name),
 controller_(controller)
 {
     m_table = new GDBTable(0, numCols, this, name);
@@ -1214,11 +1215,12 @@ ComplexEditCell(Q3Table* table)
 
 QWidget* ComplexEditCell::createEditor() const
 {
-    Q3HBox* box = new Q3HBox( table()->viewport() );
+    KHBox* box = new KHBox( table()->viewport() );
     box->setPaletteBackgroundColor(
                table()->palette().active().highlight());
 
-    label_ = new QLabel(text(), box, "label");
+    label_ = new QLabel(text(),box);
+    label_->setObjectName("label");
     label_->setBackgroundMode(Qt::PaletteHighlight);
     // Sorry for hardcode, but '2' is already hardcoded in
     // Qt source, in QTableItem::paint. Since I don't want the

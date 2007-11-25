@@ -60,13 +60,14 @@
 #endif
 
 #include <q3intdict.h>
-#include <qsocketnotifier.h>
-#include <qstring.h>
-#include <qfile.h>
+#include <QSocketNotifier>
+#include <QString>
+#include <QFile>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+#include <kvbox.h>
 
 #include "stty.h"
 
@@ -105,7 +106,7 @@ static int chownpty(int fd, int grant)
 
         //    { // signal from other child, behave like catchChild.
         //      // guess this gives quite some control chaos...
-        //      Shell* sh = shells.find(rc);
+        //      Shell* sh = shells.indexOf(rc);
         //      if (sh) { shells.remove(rc); sh->doneShell(w); }
         //      goto retry;
         //    }

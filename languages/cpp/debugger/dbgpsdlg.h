@@ -19,6 +19,7 @@
 #include <kdialog.h>
 //Added by qt3to4:
 #include <QFocusEvent>
+#include <kvbox.h>
 
 class Q3ListBox;
 class KProcess;
@@ -40,7 +41,7 @@ public:
 
     int pidSelected();
 
-private slots:
+private Q_SLOTS:
     void slotInit();
     void slotReceivedOutput(KProcess *proc, char *buffer, int buflen);
     void slotProcessExited();

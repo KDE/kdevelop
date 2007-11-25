@@ -26,13 +26,13 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3multilineedit.h>
-#include <qpushbutton.h>
-#include <qvariant.h>
+#include <QPushButton>
+#include <QVariant>
 #include <q3popupmenu.h>
-#include <q3hbox.h>
+
 #include <qtoolbox.h>
 #include <q3textedit.h>
 //Added by qt3to4:
@@ -46,6 +46,7 @@
 #include <khexedit/byteseditinterface.h>
 
 #include <ctype.h>
+#include <kvbox.h>
 
 // **************************************************************************
 //

@@ -31,7 +31,7 @@ public:
     DebuggerConfigWidget( DebuggerPart* part, QWidget *parent=0, const char *name=0 );
     ~DebuggerConfigWidget();
 
-public slots:
+public Q_SLOTS:
     void accept();
 
 private:

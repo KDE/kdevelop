@@ -20,14 +20,15 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qfileinfo.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include <QFileInfo>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QRegExp>
+#include <QString>
 
 #include <stdio.h>
 #include <typeinfo>
+#include <kvbox.h>
 
 /***************************************************************************/
 /***************************************************************************/

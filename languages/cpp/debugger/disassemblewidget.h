@@ -22,6 +22,7 @@
 //Added by qt3to4:
 #include <QShowEvent>
 #include <QHideEvent>
+#include <kvbox.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -41,7 +42,7 @@ public:
     DisassembleWidget( GDBController* controller, QWidget *parent=0, const char *name=0 );
     virtual ~DisassembleWidget();
 
-public slots:
+public Q_SLOTS:
     void slotActivate(bool activate);
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
 

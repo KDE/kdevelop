@@ -22,9 +22,10 @@
 
 #include <q3memarray.h>
 #include <qmap.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3CString>
+#include <kvbox.h>
 
 class MILexer;
 class TokenStream;
