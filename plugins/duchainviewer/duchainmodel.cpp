@@ -32,7 +32,7 @@
 #include "backgroundparser/backgroundparser.h"
 #include "backgroundparser/parsejob.h"
 
-#include "duchainview_part.h"
+#include "duchainviewplugin.h"
 #include "dumpdotgraph.h"
 #include "topducontext.h"
 #include "declaration.h"
@@ -55,19 +55,19 @@ ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
 {
 }
 
-DUChainModel::DUChainModel(DUChainViewPart* parent)
+DUChainModel::DUChainModel(DUChainViewPlugin* parent)
   : QAbstractItemModel(parent)
   , m_chain(0)
 {
   //new ModelTest(this);
-  connect( part()->core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
+  connect( plugin()->core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
   bool success = connect(DUChain::self()->notifier(), SIGNAL(branchAdded(KDevelop::DUContextPointer)), SLOT(branchAdded(KDevelop::DUContextPointer)), Qt::QueuedConnection);
   Q_ASSERT(success);
 }
 
-DUChainViewPart* DUChainModel::part() const {
-  return qobject_cast<DUChainViewPart*>(QObject::parent());
+DUChainViewPlugin* DUChainModel::plugin() const {
+  return qobject_cast<DUChainViewPlugin*>(QObject::parent());
 }
 
 DUChainModel::~DUChainModel()

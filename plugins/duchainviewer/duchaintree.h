@@ -27,7 +27,7 @@
 #include "duchainbase.h"
 #include "duchainobserver.h"
 
-class DUChainViewPart;
+class DUChainViewPlugin;
 
 namespace KDevelop {
  class TopDUContext;
@@ -39,7 +39,7 @@ class DUChainTree : public QTreeView
   Q_OBJECT
 
 public:
-  DUChainTree(QWidget* parent, DUChainViewPart* part);
+  DUChainTree(QWidget* parent, DUChainViewPlugin* plugin);
   virtual ~DUChainTree();
 
   class DUChainModel* model();
@@ -48,7 +48,7 @@ private Q_SLOTS:
   void contextActivated(const QModelIndex& index);
 
 private:
-  DUChainViewPart* m_part;
+  DUChainViewPlugin* mplugin;
 };
 
 #endif

@@ -15,7 +15,7 @@ include_directories(
 
 set(kdevduchainview_PART_SRCS
     duchainmodel.cpp
-    duchainview_part.cpp
+    duchainviewplugin.cpp
     duchaintree.cpp
 )
 

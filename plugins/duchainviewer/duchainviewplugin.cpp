@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "duchainview_part.h"
+#include "duchainviewplugin.h"
 #include "duchainmodel.h"
 #include "duchaintree.h"
 
@@ -32,18 +32,18 @@
 #include <iuicontroller.h>
 #include <idocumentcontroller.h>
 
-K_PLUGIN_FACTORY(KDevDUChainViewFactory, registerPlugin<DUChainViewPart>(); )
+K_PLUGIN_FACTORY(KDevDUChainViewFactory, registerPlugin<DUChainViewPlugin>(); )
 K_EXPORT_PLUGIN(KDevDUChainViewFactory("kdevduchainview"))
 
 class DUChainViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    DUChainViewFactory(DUChainViewPart *part): m_part(part) {}
+    DUChainViewFactory(DUChainViewPlugin *plugin): mplugin(plugin) {}
 
     virtual QWidget* create(QWidget *parent = 0)
     {
-        QTreeView* view = new DUChainTree(parent, m_part);
-        QObject::connect(view, SIGNAL(doubleClicked(const QModelIndex &)), m_part->model(), SLOT(doubleClicked(const QModelIndex &)));
+        QTreeView* view = new DUChainTree(parent, mplugin);
+        QObject::connect(view, SIGNAL(doubleClicked(const QModelIndex &)), mplugin->model(), SLOT(doubleClicked(const QModelIndex &)));
         return view;
     }
 
@@ -53,10 +53,10 @@ public:
     }
 
 private:
-    DUChainViewPart *m_part;
+    DUChainViewPlugin *mplugin;
 };
 
-DUChainViewPart::DUChainViewPart(QObject *parent,
+DUChainViewPlugin::DUChainViewPlugin(QObject *parent,
                                  const QVariantList&)
     : KDevelop::IPlugin(KDevDUChainViewFactory::componentData(), parent)
     , m_model(new DUChainModel(this))
@@ -68,20 +68,20 @@ DUChainViewPart::DUChainViewPart(QObject *parent,
     connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_model, SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
-DUChainViewPart::~DUChainViewPart()
+DUChainViewPlugin::~DUChainViewPlugin()
 {
 }
 
-void DUChainViewPart::unload()
+void DUChainViewPlugin::unload()
 {
     core()->uiController()->removeToolView(m_factory);
 }
 
-DUChainModel* DUChainViewPart::model() const
+DUChainModel* DUChainViewPlugin::model() const
 {
     return m_model;
 }
 
-#include "duchainview_part.moc"
+#include "duchainviewplugin.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

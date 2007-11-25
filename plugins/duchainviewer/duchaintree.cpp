@@ -33,18 +33,18 @@
 #include <idocument.h>
 
 #include "duchainmodel.h"
-#include "duchainview_part.h"
+#include "duchainviewplugin.h"
 #include "duchainbase.h"
 
 using namespace KDevelop;
 
-DUChainTree::DUChainTree(QWidget* parent, DUChainViewPart* part)
+DUChainTree::DUChainTree(QWidget* parent, DUChainViewPlugin* plugin)
   : QTreeView(parent)
-  , m_part(part)
+  , mplugin(plugin)
 {
   setObjectName("DUChain Viewer Tree");
   setWindowTitle(i18n("Definition-Use Chain"));
-  setModel(m_part->model());
+  setModel(mplugin->model());
   header()->hide();
 
   connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(contextActivated(const QModelIndex&)));
@@ -56,14 +56,14 @@ DUChainTree::~DUChainTree()
 
 DUChainModel* DUChainTree::model()
 {
-  return m_part->model();
+  return mplugin->model();
 }
 
 void DUChainTree::contextActivated(const QModelIndex& index)
 {
   DUChainBasePointer* base = model()->objectForIndex(index);
   if (base && base->data()) {
-    IDocument* doc = m_part->core()->documentController()->activeDocument();
+    IDocument* doc = mplugin->core()->documentController()->activeDocument();
     doc->textDocument()->activeView()->setSelection((*base)->textRange());
   }
 }

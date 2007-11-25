@@ -28,13 +28,13 @@
 
 class DUChainModel;
 
-class DUChainViewPart : public KDevelop::IPlugin
+class DUChainViewPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 
 public:
-    DUChainViewPart(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~DUChainViewPart();
+    DUChainViewPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~DUChainViewPlugin();
 
     // KDevelop::Plugin methods
     virtual void unload();

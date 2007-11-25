@@ -31,7 +31,7 @@
 #include "duchainbase.h"
 #include "duchainobserver.h"
 
-class DUChainViewPart;
+class DUChainViewPlugin;
 
 namespace KDevelop {
  class TopDUContext;
@@ -55,7 +55,7 @@ class DUChainModel : public QAbstractItemModel
   Q_OBJECT
 
 public:
-  DUChainModel(DUChainViewPart* parent);
+  DUChainModel(DUChainViewPlugin* parent);
   virtual ~DUChainModel();
 
   void setTopContext(KDevelop::TopDUContextPointer context);
@@ -81,7 +81,7 @@ private slots:
   void branchAdded(KDevelop::DUContextPointer context);
 
 private:
-  DUChainViewPart* part() const;
+  DUChainViewPlugin* plugin() const;
 
   int findInsertIndex(QList<KDevelop::DUChainBasePointer*>& list, KDevelop::DUChainBase* object) const;
 
