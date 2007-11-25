@@ -165,7 +165,7 @@ class DbgButton : public QPushButton
 {
 public:
     DbgButton(const QPixmap &pixmap, const QString &text,
-              DbgToolBar *parent, const char *name=0);
+              DbgToolBar *parent);
     virtual ~DbgButton() {};
     void drawButtonLabel(QPainter *painter);
     QSize sizeHint() const;
@@ -177,8 +177,8 @@ private:
 // **************************************************************************
 
 DbgButton::DbgButton(const QPixmap& pixmap, const QString& text,
-                     DbgToolBar* parent, const char* name)
-    : QPushButton(parent, name),
+                     DbgToolBar* parent)
+    : QPushButton(parent),
       pixmap_(pixmap)
 {
     setText(text);

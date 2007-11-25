@@ -20,7 +20,6 @@
 #include "gdbcontroller.h"
 
 #include "breakpoint.h"
-#include "domutil.h"
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -29,7 +28,6 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 
-#include <qvbuttongroup.h>
 #include <QFileInfo>
 #include <q3header.h>
 #include <q3table.h>
@@ -199,12 +197,13 @@ void BreakpointTableRow::setRow()
 /***************************************************************************/
 /***************************************************************************/
 
-GDBBreakpointWidget::GDBBreakpointWidget(GDBController* controller,
-                                         QWidget *parent, const char *name) :
-KHBox(parent, name),
+GDBBreakpointWidget::GDBBreakpointWidget(GDBController* controller, QWidget *parent) :
+QWidget(parent),
 controller_(controller)
 {
-    m_table = new GDBTable(0, numCols, this, name);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+
+    m_table = new GDBTable(0, numCols, this);
     m_table->setSelectionMode(Q3Table::SingleRow);
     m_table->setShowGrid (false);
     m_table->setLeftMargin(0);
@@ -216,6 +215,8 @@ controller_(controller)
     m_table->setColumnReadOnly(Hits, true);
     m_table->setColumnWidth( Enable, 20);
 
+    layout->addWidget(m_table);
+
     Q3Header *header = m_table->horizontalHeader();
 
     header->setLabel( Enable,       "" );
@@ -226,6 +227,8 @@ controller_(controller)
     header->setLabel( IgnoreCount,  i18n("Ignore Count") );
     header->setLabel( Hits,         i18n("Hits") );
     header->setLabel( Tracing,      i18n("Tracing") );
+
+    layout->addWidget(header);
 
     Q3PopupMenu* newBreakpoint = new Q3PopupMenu(this);
     newBreakpoint->insertItem(i18n("Code breakpoint", "Code"),

@@ -20,8 +20,6 @@
 #include "breakpoint.h"
 #include "gdbcommand.h"
 #include "stty.h"
-#include "domutil.h"
-#include "settings.h"
 #include "mi/miparser.h"
 
 #include <kapplication.h>
@@ -40,8 +38,8 @@
 #include <QDir>
 #include <q3valuevector.h>
 #include <QEventLoop>
-//Added by qt3to4:
 #include <QByteArray>
+#include <QProcess>
 
 #include <iostream>
 #include <ctype.h>
@@ -177,6 +175,7 @@ GDBController::~GDBController()
 
 void GDBController::configure()
 {
+  /*
     // A a configure.gdb script will prevent these from uncontrolled growth...
     config_configGdbScript_       = DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript").toLatin1();
     config_runShellScript_        = DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript").toLatin1();
@@ -249,7 +248,7 @@ void GDBController::configure()
 
         if (restart)
             queueCmd(new GDBCommand("-exec-continue"));
-    }
+    }*/
 }
 
 // **************************************************************************
@@ -313,7 +312,7 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
     {
         unsigned i;
         for (i = 0; i < cmdList_.count(); ++i)
-            if (cmdList_.seek(i)->isRun())
+            if (cmdList_.at(i)->isRun())
                 break;
 
         cmdList_.insert(i, cmd);
@@ -399,7 +398,7 @@ void GDBController::executeCmd()
 
     kDebug(9012) << "SEND: " << commandText;
 
-    dbgProcess_->writeStdin(commandText.local8Bit(),
+    dbgProcess_->write(commandText.toLatin1(),
                             commandText.length());
     setStateOn(s_waitForWrite);
 
@@ -449,7 +448,8 @@ void GDBController::pauseApp()
     */
 
     if (dbgProcess_)
-        dbgProcess_->kill(SIGINT);
+        // PORTING TODO how to send SIGINT instead of SIGKILL
+        dbgProcess_->kill();
 }
 
 void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
@@ -654,7 +654,7 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     emit dbgStatus (msg, state_);
     /* Also show message in gdb window, so that users who
        prefer to look at gdb window know what's up.  */
-    emit gdbUserCommandStdout(msg.ascii());
+    emit gdbUserCommandStdout(msg.toAscii());
 }
 
 void GDBController::parseCliLine(const QString& line)
@@ -792,26 +792,26 @@ void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
 
 // **************************************************************************
 
-bool GDBController::start(const QString& shell, const DomUtil::PairList& run_envvars, const QString& run_directory, const QString &application, const QString& run_arguments)
+bool GDBController::start(const QString& shell, const QList< QPair<QString, QString> >& run_envvars, const QString& run_directory, const QString &application, const QString& run_arguments)
 {
     kDebug(9012) << "Starting debugger controller\n";
     badCore_ = QString();
 
     Q_ASSERT (!dbgProcess_ && !tty_);
 
-    dbgProcess_ = new K3Process;
+    dbgProcess_ = new QProcess;
 
-    connect( dbgProcess_, SIGNAL(receivedStdout(K3Process *, char *, int)),
-             this,        SLOT(slotDbgStdout(K3Process *, char *, int)) );
+    connect( dbgProcess_, SIGNAL(receivedStdout(QProcess *, char *, int)),
+             this,        SLOT(slotDbgStdout(QProcess *, char *, int)) );
 
-    connect( dbgProcess_, SIGNAL(receivedStderr(K3Process *, char *, int)),
-             this,        SLOT(slotDbgStderr(K3Process *, char *, int)) );
+    connect( dbgProcess_, SIGNAL(receivedStderr(QProcess *, char *, int)),
+             this,        SLOT(slotDbgStderr(QProcess *, char *, int)) );
 
-    connect( dbgProcess_, SIGNAL(wroteStdin(K3Process *)),
-             this,        SLOT(slotDbgWroteStdin(K3Process *)) );
+    connect( dbgProcess_, SIGNAL(wroteStdin(QProcess *)),
+             this,        SLOT(slotDbgWroteStdin(QProcess *)) );
 
-    connect( dbgProcess_, SIGNAL(processExited(K3Process*)),
-             this,        SLOT(slotDbgProcessExited(K3Process*)) );
+    connect( dbgProcess_, SIGNAL(processExited(QProcess*)),
+             this,        SLOT(slotDbgProcessExited(QProcess*)) );
 
     application_ = application;
 
@@ -825,8 +825,9 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
 
     if (!shell.isEmpty())
     {
-        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " + gdb +
-                      + " " + application + " --interpreter=mi2 -quiet";
+        QStringList arguments;
+        arguments << "-c" << shell + " " + gdb + " " + application + " --interpreter=mi2 -quiet";
+        dbgProcess_->start("/bin/sh", arguments);
         emit gdbUserCommandStdout(
             QString( "/bin/sh -c " + shell + " " + gdb
                      + " " + application
@@ -834,26 +835,28 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     }
     else
     {
-        *dbgProcess_ << gdb << application
-                     << "-interpreter=mi2" << "-quiet";
+        QStringList arguments;
+        arguments << application << "-interpreter=mi2" << "-quiet";
+        dbgProcess_->start(gdb, arguments);
         emit gdbUserCommandStdout(
             QString( gdb + " " + application +
                      " --interpreter=mi2 -quiet\n" ).toLatin1());
     }
 
-    if (!dbgProcess_->start( K3Process::NotifyOnExit,
-                             K3Process::Communication(K3Process::All)))
+    /* PORTING TODO
+    if (!dbgProcess_->start( QProcess::NotifyOnExit,
+                             QProcess::Communication(QProcess::All)))
     {
         KMessageBox::information(
             0,
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly."
-                ).arg(dbgProcess_->args()[0]),
+                , dbgProcess_->args()[0]),
             i18n("Could not start debugger"), "gdb_error");
 
         return false;
-    }
+    } */
 
     setStateOff(s_dbgNotStarted);
     emit dbgStatus ("", state_);
@@ -920,13 +923,13 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
     QString environstr;
-    DomUtil::PairList::ConstIterator it;
-    for (it = run_envvars.begin(); it != run_envvars.end(); ++it)
+    typedef QPair<QString, QString> QStringPair;
+    foreach (const QStringPair& envvar, run_envvars)
     {
         environstr = "set environment ";
-        environstr += (*it).first;
+        environstr += envvar.first;
         environstr += "=";
-        environstr += (*it).second;
+        environstr += envvar.second;
         queueCmd(new GDBCommand(environstr.toLatin1()));
     }
 
@@ -963,11 +966,12 @@ void GDBController::slotStopDebugger()
     if (stateIsOn(s_dbgBusy))
     {
         kDebug(9012) << "gdb busy on shutdown - stopping gdb (SIGINT)";
-        dbgProcess_->kill(SIGINT);
+        // PORTING TODO how to send SIGINT
+        dbgProcess_->kill();
         start = QTime::currentTime();
         while (-1)
         {
-            kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
+            //kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
             now = QTime::currentTime();
             if (!stateIsOn(s_dbgBusy) || start.msecsTo( now ) > 2000)
                 break;
@@ -979,13 +983,13 @@ void GDBController::slotStopDebugger()
     if (stateIsOn(s_attached))
     {
         const char *detach="detach\n";
-        if (!dbgProcess_->writeStdin(detach, strlen(detach)))
+        if (!dbgProcess_->write(detach, strlen(detach)))
             kDebug(9012) << "failed to write 'detach' to gdb";
         emit gdbUserCommandStdout("(gdb) detach\n");
         start = QTime::currentTime();
         while (-1)
         {
-             kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
+             //kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
              now = QTime::currentTime();
              if (!stateIsOn(s_attached) || start.msecsTo( now ) > 2000)
                  break;
@@ -994,14 +998,14 @@ void GDBController::slotStopDebugger()
 
     // Now try to stop gdb running.
     const char *quit="quit\n";
-    if (!dbgProcess_->writeStdin(quit, strlen(quit)))
+    if (!dbgProcess_->write(quit, strlen(quit)))
         kDebug(9012) << "failed to write 'quit' to gdb";
 
     emit gdbUserCommandStdout("(gdb) quit");
     start = QTime::currentTime();
     while (-1)
     {
-         kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
+         //kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
          now = QTime::currentTime();
          if (stateIsOn(s_programExited) || start.msecsTo( now ) > 2000)
              break;
@@ -1011,7 +1015,7 @@ void GDBController::slotStopDebugger()
     if (!stateIsOn(s_programExited))
     {
         kDebug(9012) << "gdb not shutdown - killing";
-        dbgProcess_->kill(SIGKILL);
+        dbgProcess_->kill();
     }
 
     destroyCmds();
@@ -1081,7 +1085,7 @@ void GDBController::slotRun()
     if (stateIsOn(s_appNotStarted)) {
 
         delete tty_;
-        tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *KGlobal::config() ));
+        tty_ = new STTY(config_dbgTerminal_);//, Settings::terminalEmulatorName( *KGlobal::config() ));
         if (!config_dbgTerminal_)
         {
             connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
@@ -1109,12 +1113,13 @@ void GDBController::slotRun()
             QByteArray tty(tty_->getSlave().toLatin1());
             QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
-            K3Process *proc = new K3Process;
-
-            *proc << "sh" << "-c";
-            *proc << config_runShellScript_ +
+            QProcess *proc = new QProcess;
+            QStringList arguments;
+            arguments << "-c" << config_runShellScript_ +
                 " " + application_.toLatin1() + options;
-            proc->start(K3Process::DontCare);
+            
+            proc->start("sh", arguments);
+            //PORTING TODO QProcess::DontCare);
         }
 
         if (!config_runGdbScript_.isEmpty()) {// gdb script at run is requested
@@ -1207,8 +1212,7 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
                      QString().sprintf("-exec-until %d", lineNum)));
     else
         queueCmd(new GDBCommand(
-                QByteArray().
-                sprintf("-exec-until %s:%d", fileName.toLatin1(), lineNum)));
+                QString("-exec-until %s:%d").arg(fileName).arg(lineNum).toLatin1()));
 }
 
 // **************************************************************************
@@ -1219,8 +1223,8 @@ void GDBController::slotJumpTo(const QString &fileName, int lineNum)
         return;
 
     if (!fileName.isEmpty()) {
-        queueCmd(new GDBCommand(QString().sprintf("tbreak %s:%d", fileName.toLatin1(), lineNum)));
-        queueCmd(new GDBCommand(QString().sprintf("jump %s:%d", fileName.toLatin1(), lineNum)));
+        queueCmd(new GDBCommand(QString().sprintf("tbreak %s:%d", fileName, lineNum)));
+        queueCmd(new GDBCommand(QString().sprintf("jump %s:%d", fileName, lineNum)));
     }
 }
 
@@ -1305,11 +1309,11 @@ void GDBController::selectFrame(int frameNo, int threadNo)
     {
         if (viewedThread_ != threadNo)
             queueCmd(new GDBCommand(
-                         QString("-thread-select %1").arg(threadNo).ascii()));
+                         QString("-thread-select %1").arg(threadNo).toAscii()));
     }
 
     queueCmd(new GDBCommand(
-                 QString("-stack-select-frame %1").arg(frameNo).ascii()));
+                 QString("-stack-select-frame %1").arg(frameNo).toAscii()));
 
     // Will emit the 'thread_or_frame_changed' event.
     queueCmd(new GDBCommand("-stack-info-frame",
@@ -1402,13 +1406,13 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
 }
 
 // Data from gdb gets processed here.
-void GDBController::slotDbgStdout(K3Process *, char *buf, int buflen)
+void GDBController::slotDbgStdout(QProcess *, char *buf, int buflen)
 {
     static bool parsing = false;
 
     QByteArray msg(buf, buflen+1);
 
-    // Copy the data out of the K3Process buffer before it gets overwritten
+    // Copy the data out of the QProcess buffer before it gets overwritten
     // Append to the back of the holding zone.
     holdingZone_ +=  QByteArray(buf, buflen+1);
 
@@ -1428,7 +1432,7 @@ void GDBController::slotDbgStdout(K3Process *, char *buf, int buflen)
     int i;
     bool got_any_command = false;
     // For each gdb reply. In MI mode, each reply is one string.
-    while((i = holdingZone_.contains('\n')) )
+    while((i = holdingZone_.indexOf('\n')) )
     {
         got_any_command = true;
 
@@ -1533,9 +1537,9 @@ void GDBController::slotDbgStdout(K3Process *, char *buf, int buflen)
                    output from user's .gdbinit that user cares about.  */
                 if (!saw_gdb_prompt_ 
                     || !currentCmd_ || currentCmd_->isUserCommand())
-                    emit gdbUserCommandStdout(s.message.ascii());
+                    emit gdbUserCommandStdout(s.message.toAscii());
                 else
-                    emit gdbInternalCommandStdout(s.message.ascii());
+                    emit gdbInternalCommandStdout(s.message.toAscii());
 
                 if (currentCmd_)
                     currentCmd_->newOutput(s.message);
@@ -1567,11 +1571,11 @@ void GDBController::slotDbgStdout(K3Process *, char *buf, int buflen)
         {
             KMessageBox::detailedSorry(
                 0,
-                i18n("<b>Internal debugger error</b>",
+                i18nc("<b>Internal debugger error</b>",
                      "<p>The debugger component encountered internal error while "
                      "processing reply from gdb. Please submit a bug report."),
                 i18n("The exception is: %1\n"
-                     "The MI response is: %2").arg(e.what()).arg(reply),
+                     "The MI response is: %2", e.what(), reply),
                 i18n("Internal debugger error"));
 
             destroyCurrentCommand();
@@ -1628,7 +1632,7 @@ void GDBController::removeStateReloadingCommands()
     while (i)
     {
         i--;
-        GDBCommand* cmd = cmdList_.seek(i);
+        GDBCommand* cmd = cmdList_.at(i);
         if (stateReloadingCommands_.count(cmd));
         {
             kDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
@@ -1666,16 +1670,16 @@ void GDBController::raiseEvent(event_t e)
 }
 
 
-void GDBController::slotDbgStderr(K3Process *proc, char *buf, int buflen)
+void GDBController::slotDbgStderr(QProcess *proc, char *buf, int buflen)
 {
     // At the moment, just drop a message out and redirect
-    kDebug(9012) << "STDERR: " << QLatin1String(buf, buflen+1);
+    kDebug(9012) << "STDERR: " << QString::fromAscii(buf, buflen+1);
     slotDbgStdout(proc, buf, buflen);
 }
 
 // **************************************************************************
 
-void GDBController::slotDbgWroteStdin(K3Process *)
+void GDBController::slotDbgWroteStdin(QProcess *)
 {
     commandExecutionTime.start();
 
@@ -1687,10 +1691,10 @@ void GDBController::slotDbgWroteStdin(K3Process *)
 
 // **************************************************************************
 
-void GDBController::slotDbgProcessExited(K3Process* process)
+void GDBController::slotDbgProcessExited(QProcess* process)
 {
     Q_ASSERT(process == dbgProcess_);
-    bool abnormal = !process->normalExit();
+    bool abnormal = process->exitCode() != 0;
     delete dbgProcess_;
     dbgProcess_ = 0;
     delete tty_;
@@ -1816,12 +1820,12 @@ void GDBController::debugStateChange(int oldState, int newState)
 
 int GDBController::qtVersion( ) const
 {
-  return DomUtil::readIntEntry( dom, "/kdevcppsupport/qt/version", 3 );
+  return 4;//DomUtil::readIntEntry( dom, "/kdevcppsupport/qt/version", 3 );
 }
 
 void GDBController::demandAttention() const
 {
-    if ( QWidget * w = kapp->mainWidget() )
+    if ( QWidget * w = qApp->activeWindow() )
     {
         KWindowSystem::demandAttention( w->winId(), true );
     }

@@ -21,8 +21,8 @@ class GDBTable : public Q3Table
 {
 Q_OBJECT
 public:
-    GDBTable(QWidget *parent = 0, const char *name = 0);
-    GDBTable( int numRows, int numCols, QWidget * parent = 0, const char * name = 0 );
+    GDBTable(QWidget *parent = 0);
+    GDBTable( int numRows, int numCols, QWidget * parent = 0 );
     ~GDBTable();
 
     virtual void keyPressEvent ( QKeyEvent * e );

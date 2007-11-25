@@ -34,7 +34,7 @@
 #include <set>
 #include <kvbox.h>
 
-class K3Process;
+class QProcess;
 
 namespace GDBDebugger
 {
@@ -129,7 +129,7 @@ public:
     int currentFrame() const;
 
     bool start(const QString& shell, 
-               const DomUtil::PairList& run_envvars, 
+               const QList< QPair<QString, QString> >& run_envvars,
                const QString& run_directory, 
                const QString &application, 
                const QString& run_arguments);
@@ -249,10 +249,10 @@ public Q_SLOTS:
 
 
 protected Q_SLOTS:
-    void slotDbgStdout(K3Process *proc, char *buf, int buflen);
-    void slotDbgStderr(K3Process *proc, char *buf, int buflen);
-    void slotDbgWroteStdin(K3Process *proc);
-    void slotDbgProcessExited(K3Process *proc);
+    void slotDbgStdout(QProcess *proc, char *buf, int buflen);
+    void slotDbgStderr(QProcess *proc, char *buf, int buflen);
+    void slotDbgWroteStdin(QProcess *proc);
+    void slotDbgProcessExited(QProcess *proc);
 
 Q_SIGNALS:
 

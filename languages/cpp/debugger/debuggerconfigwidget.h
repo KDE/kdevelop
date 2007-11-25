@@ -14,7 +14,7 @@
 #ifndef _DEBUGGERCONFIGWIDGET_H_
 #define _DEBUGGERCONFIGWIDGET_H_
 
-#include "debuggerconfigwidgetbase.h"
+#include "ui_debuggerconfigwidget.h"
 
 #include <qdom.h>
 
@@ -23,12 +23,12 @@ namespace GDBDebugger
 
 class DebuggerPart;
 
-class DebuggerConfigWidget : public DebuggerConfigWidgetBase
+class DebuggerConfigWidget : public Ui::DebuggerConfigWidget
 {
     Q_OBJECT
 
 public:
-    DebuggerConfigWidget( DebuggerPart* part, QWidget *parent=0, const char *name=0 );
+    DebuggerConfigWidget( DebuggerPart* part, QWidget *parent=0 );
     ~DebuggerConfigWidget();
 
 public Q_SLOTS:

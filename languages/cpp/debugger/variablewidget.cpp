@@ -37,13 +37,14 @@
 #include <Q3HBoxLayout>
 #include <QKeyEvent>
 #include <QFocusEvent>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <klocale.h>
 
 #include <qpoint.h>
 #include <QClipboard>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <khistorycombobox.h>
 
 #include <cctype>
 #include <set>
@@ -83,16 +84,15 @@ namespace GDBDebugger
 
 VariableWidget::VariableWidget(GDBController*  controller,
                                GDBBreakpointWidget* breakpointWidget,
-                               QWidget *parent, const char *name)
-: QWidget(parent, name)
+                               QWidget *parent)
+: QWidget(parent)
 {
     setIcon(SmallIcon("math_brace"));
     setCaption(i18n("Variable Tree"));
 
     varTree_ = new VariableTree(this, controller, breakpointWidget);
 
-    watchVarEditor_ = new KHistoryComboBox( this,
-                                         "var-to-watch editor");
+    watchVarEditor_ = new KHistoryComboBox( this );
 
     Q3HBoxLayout* buttons = new Q3HBoxLayout();
 
@@ -104,7 +104,7 @@ VariableWidget::VariableWidget(GDBController*  controller,
     QPushButton *addButton = new QPushButton(i18n("&Watch"), this );
     buttons->addWidget(addButton);
 
-    Q3VBoxLayout *topLayout = new Q3VBoxLayout(this, 2);
+    QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
     topLayout->addWidget(varTree_, 10);
     topLayout->addWidget(watchVarEditor_);
     topLayout->addItem(buttons);
@@ -205,10 +205,8 @@ void VariableWidget::focusInEvent(QFocusEvent */*e*/)
 
 VariableTree::VariableTree(VariableWidget *parent,
                            GDBController*  controller,
-                           GDBBreakpointWidget* breakpointWidget,
-                           const char *name)
-    : K3ListView(parent, name),
-      QToolTip( viewport() ),
+                           GDBBreakpointWidget* breakpointWidget)
+    : K3ListView(parent),
       controller_(controller),
       breakpointWidget_(breakpointWidget),
       activeFlag_(0),
@@ -271,7 +269,7 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
         VarItem* var;
         if ((var = dynamic_cast<VarItem*>(item)))
         {
-            popup.insertTitle(var->gdbExpression());
+            popup.addTitle(var->gdbExpression());
 
 
             format.setCheckable(true);
@@ -400,21 +398,21 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
     else if (item == recentExpressions_)
     {
         KMenu popup(this);
-        popup.insertTitle(i18n("Recent Expressions"));
-        int idRemove = popup.insertItem(
-            SmallIcon("editdelete"), i18n("Remove All"));
-        int idReevaluate = popup.insertItem(
-            SmallIcon("reload"), i18n("Reevaluate All"));
-        if (controller()->stateIsOn(s_dbgNotStarted))
-            popup.setItemEnabled(idReevaluate, false);
-        int res = popup.exec(QCursor::pos());
+        popup.addTitle(i18n("Recent Expressions"));
+        QAction* remove = popup.addAction(KIcon("editdelete"), i18n("Remove All"));
+        KAction* reevaluate = popup.addAction(KIcon("reload"), i18n("Reevaluate All"));
 
-        if (res == idRemove)
+        if (controller()->stateIsOn(s_dbgNotStarted))
+            reevaluate->setEnabled(false);
+
+        QAction* res = popup.exec(QCursor::pos());
+
+        if (res == remove)
         {
             delete recentExpressions_;
             recentExpressions_ = 0;
         }
-        else if (res == idReevaluate)
+        else if (res == reevaluate)
         {
             for(Q3ListViewItem* child = recentExpressions_->firstChild();
                 child; child = child->nextSibling())
@@ -513,7 +511,7 @@ void VariableTree::updateCurrentFrame()
         new GDBCommand(QString("-stack-list-arguments 0 %1 %2")
                        .arg(controller_->currentFrame())
                        .arg(controller_->currentFrame())
-                       .ascii(),
+                       .toAscii(),
                        this,
                        &VariableTree::argumentsReady));
 
@@ -623,7 +621,7 @@ class ValueSpecialRepresentationCommand : public QObject, public CliCommand
 {
 public:
     ValueSpecialRepresentationCommand(VarItem* item, const QString& command)
-    : CliCommand(command.ascii(),
+    : CliCommand(command.toAscii(),
                  this,
                  &ValueSpecialRepresentationCommand::handleReply,
                  true),

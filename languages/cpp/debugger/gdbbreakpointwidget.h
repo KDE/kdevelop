@@ -21,7 +21,6 @@
 #include <q3table.h>
 #include <QPointer>
 #include <q3valuevector.h>
-//Added by qt3to4:
 #include <QLabel>
 #include <QFocusEvent>
 #include <kvbox.h>
@@ -45,13 +44,13 @@ class BreakpointTableRow;
 class GDBTable;
 class GDBController;
 
-class GDBBreakpointWidget : public KHBox
+class GDBBreakpointWidget : public QWidget
 {
     Q_OBJECT
 
 public:
     GDBBreakpointWidget( GDBController* controller,
-                         QWidget* parent=0, const char* name=0 );
+                         QWidget* parent=0 );
     virtual ~GDBBreakpointWidget();
 
     void reset();

@@ -45,7 +45,7 @@ namespace GDBDebugger
 
 /***************************************************************************/
 
-GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
+GDBOutputWidget::GDBOutputWidget( QWidget *parent) :
     QWidget(parent, name),
     m_userGDBCmdEditor(0),
     m_Interrupt(0),

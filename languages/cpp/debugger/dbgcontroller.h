@@ -19,16 +19,12 @@
 #include "mi/gdbmi.h"
 
 #include <QObject>
-//Added by qt3to4:
-#include <Q3StrList>
-#include <domutil.h>
 #include <kvbox.h>
 
 
 
-class K3Process;
+class QProcess;
 class QString;
-class Q3StrList;
 
 namespace GDBDebugger
 {
@@ -104,10 +100,10 @@ public Q_SLOTS:
     virtual void slotVarItemConstructed(VarItem */*item*/) {}
 
 protected Q_SLOTS:
-    virtual void slotDbgStdout(K3Process *proc, char *buf, int buflen)       = 0;
-    virtual void slotDbgStderr(K3Process*, char*, int) {} ;
-    virtual void slotDbgWroteStdin(K3Process *proc)                          = 0;
-    virtual void slotDbgProcessExited(K3Process *proc)                       = 0;
+    virtual void slotDbgStdout(QProcess *proc, char *buf, int buflen)       = 0;
+    virtual void slotDbgStderr(QProcess*, char*, int) {} ;
+    virtual void slotDbgWroteStdin(QProcess *proc)                          = 0;
+    virtual void slotDbgProcessExited(QProcess *proc)                       = 0;
 
 Q_SIGNALS:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
@@ -123,7 +119,7 @@ Q_SIGNALS:
     void dbgStatus            (const QString &status, int statusFlag);
 
 protected:
-    K3Process *dbgProcess_;
+    QProcess *dbgProcess_;
 };
 
 }

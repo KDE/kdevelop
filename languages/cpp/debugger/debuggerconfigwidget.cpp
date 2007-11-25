@@ -28,9 +28,11 @@
 namespace GDBDebugger
 {
 
-DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, const char *name)
-    : DebuggerConfigWidgetBase(parent, name), dom(*part->projectDom())
+DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent)
+    : DebuggerConfigWidgetBase(parent), dom(*part->projectDom())
 {
+    setupUp(this);
+  
     gdbPath_edit->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
     gdbPath_edit->setURL(      DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));

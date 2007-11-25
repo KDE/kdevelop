@@ -22,7 +22,6 @@
 #include <k3listview.h>
 #include <kcombobox.h>
 #include <qwidget.h>
-#include <QToolTip>
 #include <q3valuevector.h>
 #include <QDateTime>
 #include <QPointer>
@@ -32,10 +31,10 @@
 #include <QKeyEvent>
 
 #include <vector>
-#include <kvbox.h>
 
 class KLineEdit;
 class KMenu;
+class KHistoryComboBox;
 
 namespace GDBDebugger
 {
@@ -60,7 +59,7 @@ class VariableWidget : public QWidget
 public:
     VariableWidget( GDBController* controller,
                     GDBBreakpointWidget* breakpointWidget,
-                    QWidget *parent=0, const char *name=0 );
+                    QWidget *parent=0 );
 
     VariableTree *varTree() const
     { return varTree_; }
@@ -86,14 +85,13 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class VariableTree : public K3ListView, public QToolTip
+class VariableTree : public K3ListView
 {
     Q_OBJECT
 public:
     VariableTree(VariableWidget *parent, 
                  GDBController*  controller,
-                 GDBBreakpointWidget* breakpointWidget,
-                 const char *name=0 );
+                 GDBBreakpointWidget* breakpointWidget);
     virtual ~VariableTree();
 
     Q3ListViewItem *lastChild() const;

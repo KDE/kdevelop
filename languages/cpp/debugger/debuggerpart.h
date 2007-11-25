@@ -19,12 +19,11 @@
 #include <QByteArray>
 #include <QLabel>
 #include <Q3PopupMenu>
+#include <QtCore/QVariant>
 #include <kvbox.h>
-#include "kdevplugin.h"
-#include "kdevcore.h"
 
 #include "gdbcontroller.h"
-#include "debuggerdcopinterface.h"
+#include <iplugin.h>
 
 namespace KParts { class Part; }
 
@@ -48,20 +47,21 @@ class DbgToolBar;
 class VariableWidget;
 class GDBOutputWidget;
 class ViewerWidget;
+class Context;
 
-class DebuggerPart : public KDevPlugin, virtual public DebuggerDCOPInterface
+class CppDebuggerPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 
 public:
-    DebuggerPart( QObject *parent, const char *name, const QStringList & );
-    ~DebuggerPart();
+    CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    ~CppDebuggerPlugin();
     virtual void restorePartialProjectSession(const QDomElement* el);
     virtual void savePartialProjectSession(QDomElement* el);
 
-k_dcop:
-    virtual ASYNC slotDebugExternalProcess();
-    virtual ASYNC slotDebugCommandLine(const QString& command);
+//k_dcop:
+//    virtual ASYNC slotDebugExternalProcess();
+//    virtual ASYNC slotDebugCommandLine(const QString& command);
 
 private Q_SLOTS:
     void setupDcop();
@@ -86,7 +86,7 @@ private Q_SLOTS:
     void slotExamineCore();
     void slotAttachProcess();
     void slotStopDebugger();
-    void slotStop(KDevPlugin* which = 0);
+    //void slotStop(KDevPlugin* which = 0);
     void slotPause();
     void slotRunToCursor();
     void slotJumpToCursor();
@@ -103,7 +103,7 @@ private Q_SLOTS:
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
 
-    void slotDCOPApplicationRegistered(const QByteArray &appId);
+    //void slotDCOPApplicationRegistered(const QByteArray &appId);
     void slotCloseDrKonqi();
 
     // Hide or show the view that's the sender of this signal.

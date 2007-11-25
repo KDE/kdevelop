@@ -3,6 +3,10 @@
 
 ########### next target ###############
 
+# FIXME remove
+add_definitions(-DQT3_SUPPORT)
+#-DQT3_SUPPORT_WARNINGS)
+
 set(kdevcppdebugger_PART_SRCS
     debuggerpart.cpp
     dbgcontroller.cpp
@@ -10,7 +14,7 @@ set(kdevcppdebugger_PART_SRCS
     gdbcommand.cpp
     gdbparser.cpp
     stty.cpp
-    breakpoint.h
+    breakpoint.cpp
     variablewidget.cpp
     gdbbreakpointwidget.cpp
     framestackwidget.cpp
@@ -29,8 +33,8 @@ set(kdevcppdebugger_PART_SRCS
 )
 
 set(kdevcppdebugger_PART_UI
-    debuggerconfigwidgetbase.ui
-    debuggertracingdialogbase.ui
+    debuggerconfigwidget.ui
+    debuggertracingdialog.ui
 )
 
 kde4_add_ui_files(kdevcppdebugger_PART_SRCS ${kdevcppdebugger_PART_UI})

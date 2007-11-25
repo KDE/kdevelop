@@ -13,19 +13,18 @@
 #ifndef DEBUGGER_TRACING_DIALOG_VP_2005_08_22
 #define DEBUGGER_TRACING_DIALOG_VP_2005_08_22
 
-#include "debuggertracingdialogbase.h"
-
+#include "ui_debuggertracingdialog.h"
+#include <QDialog>
 
 namespace GDBDebugger
 {
     class Breakpoint;
 
-    class DebuggerTracingDialog : public DebuggerTracingDialogBase
+    class DebuggerTracingDialog : public QDialog, public Ui::DebuggerTracingDialog
     {
         Q_OBJECT
     public:
-        DebuggerTracingDialog(Breakpoint* bp,
-                              QWidget* parent, const char* name = 0);
+        DebuggerTracingDialog(Breakpoint* bp, QWidget* parent);
 
     private Q_SLOTS:
         void enableOrDisable(int);

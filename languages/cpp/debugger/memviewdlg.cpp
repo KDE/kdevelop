@@ -270,7 +270,7 @@ namespace GDBDebugger
             GDBCommand(
                 QString("-data-read-memory %1 x 1 1 %2")
                 .arg(rangeSelector_->startAddressLineEdit->text())
-                .arg(size).ascii(),
+                .arg(size).latin1(),
                 this,
                 &MemoryView::memoryRead));
     }
@@ -380,7 +380,7 @@ namespace GDBDebugger
                 new 
                 GDBCommand(
                     QString("-data-read-memory %1 x 1 1 %2")
-                    .arg(start_).arg(amount_).ascii(),
+                    .arg(start_).arg(amount_).latin1(),
                     this,
                     &MemoryView::memoryRead));
         }

@@ -96,8 +96,7 @@ class FramestackWidget : public Q3ListView
 
 public:
     FramestackWidget( GDBController* controller,
-                      QWidget *parent=0,                       
-                      const char *name=0, Qt::WFlags f=0 );
+                      QWidget *parent=0, Qt::WFlags f=0 );
     virtual ~FramestackWidget();
 
     Q3ListViewItem *lastChild() const;
@@ -107,12 +106,6 @@ public:
 
     int viewedThread()
     { return viewedThread_ ? viewedThread_->threadNo() : -1; }
-
-protected:
-
-    void drawContentsOffset( QPainter * p, int ox, int oy,
-                             int cx, int cy, int cw, int ch );
-
 
 
 private:

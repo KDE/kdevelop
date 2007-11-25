@@ -41,7 +41,7 @@ class GDBOutputWidget : public QWidget
     Q_OBJECT
 
 public:
-    GDBOutputWidget( QWidget *parent=0, const char *name=0 );
+    GDBOutputWidget( QWidget *parent=0 );
     ~GDBOutputWidget();
 
     void savePartialProjectSession(QDomElement* el);

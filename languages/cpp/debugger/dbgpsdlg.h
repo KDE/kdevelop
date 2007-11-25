@@ -36,7 +36,7 @@ class Dbg_PS_Dialog : public KDialog
     Q_OBJECT
 
 public:
-    Dbg_PS_Dialog( QWidget *parent=0, const char *name=0 );
+    Dbg_PS_Dialog( QWidget *parent=0 );
     ~Dbg_PS_Dialog();
 
     int pidSelected();

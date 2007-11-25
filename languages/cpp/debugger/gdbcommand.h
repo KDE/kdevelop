@@ -215,7 +215,7 @@ public:
         const QString& expression,
         Handler* handler_this,
         void (Handler::* handler_method)(const QString&))
-    : GDBCommand(("-data-evaluate-expression " + expression).ascii(), this,
+    : GDBCommand(("-data-evaluate-expression " + expression).toAscii(), this,
                  &ExpressionValueCommand::handleResponse),
       handler_this(handler_this),
       handler_method(static_cast<handler_method_t>(handler_method))

@@ -19,38 +19,27 @@
 
 #include <q3popupmenu.h>
 #include <QToolTip>
-//Added by qt3to4:
 #include <QByteArray>
+#include <QTimer>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
-#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <kparts/part.h>
-#include <ktexteditor/viewcursorinterface.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
-#include <dcopclient.h>
-#include <QTimer>
+#include <kpluginfactory.h>
 
 #include <k3dockwidget.h>
 
-#include "kdevcore.h"
-#include "kdevproject.h"
-#include "kdevmainwindow.h"
-#include "kdevappfrontend.h"
-#include "kdevpartcontroller.h"
-#include "kdevdebugger.h"
-#include "domutil.h"
 #include "variablewidget.h"
 #include "gdbbreakpointwidget.h"
 #include "framestackwidget.h"
 #include "disassemblewidget.h"
-#include "processwidget.h"
 #include "gdbcontroller.h"
 #include "breakpoint.h"
 #include "dbgpsdlg.h"
@@ -59,28 +48,19 @@
 #include "gdbparser.h"
 #include "gdboutputwidget.h"
 #include "debuggerconfigwidget.h"
-#include "processlinemaker.h"
 
 #include <iostream>
 
-#include <kdevplugininfo.h>
-#include <debugger.h>
 #include <kvbox.h>
-
-
-
-
 
 namespace GDBDebugger
 {
 
-static const KDevPluginInfo data("kdevdebugger");
+K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
+K_EXPORT_PLUGIN(CppDebuggerPlugin("kdevcppdebbugger"))
 
-typedef KDevGenericFactory<DebuggerPart> DebuggerFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
-
-DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
-    KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
+CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
+    KDevelop::IPlugin( CppDebuggerFactory::componentData(), parent ),
     controller(0), previousDebuggerState_(s_dbgNotStarted),
     justRestarted_(false), needRebuild_(true),
     running_(false)
@@ -88,7 +68,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     setObjId("DebuggerInterface");
     setComponentData(DebuggerFactory::componentData());
 
-    setXMLFile("kdevdebugger.rc");
+    setXMLFile("kdevcppdebugger.rc");
 
     m_debugger = new Debugger( partController() );
 
@@ -370,18 +350,18 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     QTimer::singleShot(0, this, SLOT(setupDcop()));
 }
 
-void DebuggerPart::setupDcop()
+void CppDebuggerPlugin::setupDcop()
 {
-    QCStringList objects = kapp->dcopClient()->registeredApplications();
+    /*QCStringList objects = kapp->dcopClient()->registeredApplications();
     for (QCStringList::Iterator it = objects.begin(); it != objects.end(); ++it)
         if ((*it).indexOf("drkonqi-") == 0)
             slotDCOPApplicationRegistered(*it);
 
     connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const QByteArray&)), SLOT(slotDCOPApplicationRegistered(const QByteArray&)));
-    kapp->dcopClient()->setNotifications(true);
+    kapp->dcopClient()->setNotifications(true);*/
 }
 
-void DebuggerPart::slotDCOPApplicationRegistered(const QByteArray& appId)
+/*void CppDebuggerPlugin::slotDCOPApplicationRegistered(const QByteArray& appId)
 {
     if (appId.indexOf("drkonqi-") == 0) {
         QByteArray answer;
@@ -400,7 +380,7 @@ void DebuggerPart::slotDCOPApplicationRegistered(const QByteArray& appId)
     }
 }
 
-ASYNC DebuggerPart::slotDebugExternalProcess()
+ASYNC CppDebuggerPlugin::slotDebugExternalProcess()
 {
     QByteArray answer;
     QByteArray replyType;
@@ -420,18 +400,18 @@ ASYNC DebuggerPart::slotDebugExternalProcess()
     mainWindow()->main()->raise();
 }
 
-ASYNC DebuggerPart::slotDebugCommandLine(const QString& /*command*/)
+ASYNC CppDebuggerPlugin::slotDebugCommandLine(const QString& /command/)
 {
     KMessageBox::information(0, "Asked to debug command line");
-}
+}*/
 
-void DebuggerPart::slotCloseDrKonqi()
+void CppDebuggerPlugin::slotCloseDrKonqi()
 {
     kapp->dcopClient()->send(m_drkonqi, "MainApplication-Interface", "quit()", QByteArray());
     m_drkonqi = "";
 }
 
-DebuggerPart::~DebuggerPart()
+CppDebuggerPlugin::~CppDebuggerPlugin()
 {
     kapp->dcopClient()->setNotifications(false);
 
@@ -460,7 +440,7 @@ DebuggerPart::~DebuggerPart()
 }
 
 
-void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
+void CppDebuggerPlugin::guiClientAdded( KXMLGUIClient* client )
 {
     // Can't change state until after XMLGUI has been loaded...
     // Anyone know of a better way of doing this?
@@ -468,7 +448,7 @@ void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
         stateChanged( QString("stopped") );
 }
 
-void DebuggerPart::contextMenu(Q3PopupMenu *popup, const Context *context)
+void CppDebuggerPlugin::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (!context->hasType( Context::EditorContext ))
         return;
@@ -529,7 +509,7 @@ void DebuggerPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 }
 
 
-void DebuggerPart::toggleBreakpoint()
+void CppDebuggerPlugin::toggleBreakpoint()
 {
     KParts::ReadWritePart *rwpart
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
@@ -546,17 +526,17 @@ void DebuggerPart::toggleBreakpoint()
 }
 
 
-void DebuggerPart::contextWatch()
+void CppDebuggerPlugin::contextWatch()
 {
     variableWidget->slotAddWatchVariable(m_contextIdent);
 }
 
-void DebuggerPart::contextEvaluate()
+void CppDebuggerPlugin::contextEvaluate()
 {
     variableWidget->slotEvaluateExpression(m_contextIdent);
 }
 
-void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
+void CppDebuggerPlugin::projectConfigWidget(KDialogBase *dlg)
 {
     KVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIconLoader::SizeMedium) );
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
@@ -565,7 +545,7 @@ void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 }
 
 
-void DebuggerPart::setupController()
+void CppDebuggerPlugin::setupController()
 {
     VariableTree *variableTree = variableWidget->varTree();
 
@@ -625,7 +605,7 @@ void DebuggerPart::setupController()
 }
 
 
-bool DebuggerPart::startDebugger()
+bool CppDebuggerPlugin::startDebugger()
 {
     QString build_dir;              // Currently selected build directory
     DomUtil::PairList run_envvars;  // List with the environment variables
@@ -710,7 +690,7 @@ bool DebuggerPart::startDebugger()
     }
 }
 
-void DebuggerPart::slotStopDebugger()
+void CppDebuggerPlugin::slotStopDebugger()
 {
     running_ = false;
     controller->slotStopDebugger();
@@ -751,7 +731,7 @@ void DebuggerPart::slotStopDebugger()
     core()->running(this, false);
 }
 
-void DebuggerPart::slotShowView(bool show)
+void CppDebuggerPlugin::slotShowView(bool show)
 {
     const QWidget* s = static_cast<const QWidget*>(sender());
     QWidget* ncs = const_cast<QWidget*>(s);
@@ -760,7 +740,7 @@ void DebuggerPart::slotShowView(bool show)
         mainWindow()->raiseView(ncs);
 }
 
-void DebuggerPart::slotDebuggerAbnormalExit()
+void CppDebuggerPlugin::slotDebuggerAbnormalExit()
 {
     mainWindow()->raiseView(gdbOutputWidget);
 
@@ -776,22 +756,22 @@ void DebuggerPart::slotDebuggerAbnormalExit()
     // problem.
 }
 
-void DebuggerPart::slotFileSaved()
+void CppDebuggerPlugin::slotFileSaved()
 {
     needRebuild_ = true;
 }
 
-void DebuggerPart::slotProjectCompiled()
+void CppDebuggerPlugin::slotProjectCompiled()
 {
     needRebuild_ = false;
 }
 
-void DebuggerPart::projectClosed()
+void CppDebuggerPlugin::projectClosed()
 {
     slotStopDebugger();
 }
 
-void DebuggerPart::slotRun()
+void CppDebuggerPlugin::slotRun()
 {
     if( controller->stateIsOn( s_dbgNotStarted ) ||
         controller->stateIsOn( s_appNotStarted ) )
@@ -888,7 +868,7 @@ void DebuggerPart::slotRun()
     controller->slotRun();
 }
 
-void DebuggerPart::slotRun_part2()
+void CppDebuggerPlugin::slotRun_part2()
 {
     needRebuild_ = false;
 
@@ -928,7 +908,7 @@ void DebuggerPart::slotRun_part2()
 }
 
 
-void DebuggerPart::slotRestart()
+void CppDebuggerPlugin::slotRestart()
 {
     // We implement restart as kill + slotRun, as opposed as plain "run"
     // command because kill + slotRun allows any special logic in slotRun
@@ -944,7 +924,7 @@ void DebuggerPart::slotRestart()
     slotRun();
 }
 
-void DebuggerPart::slotExamineCore()
+void CppDebuggerPlugin::slotExamineCore()
 {
     mainWindow()->statusBar()->message(i18n("Choose a core file to examine..."), 1000);
 
@@ -960,7 +940,7 @@ void DebuggerPart::slotExamineCore()
 }
 
 
-void DebuggerPart::slotAttachProcess()
+void CppDebuggerPlugin::slotAttachProcess()
 {
     mainWindow()->statusBar()->message(i18n("Choose a process to attach to..."), 1000);
 
@@ -972,7 +952,7 @@ void DebuggerPart::slotAttachProcess()
     attachProcess(pid);
 }
 
-bool DebuggerPart::attachProcess(int pid)
+bool CppDebuggerPlugin::attachProcess(int pid)
 {
     mainWindow()->statusBar()->message(i18n("Attaching to process %1").arg(pid), 1000);
 
@@ -982,7 +962,7 @@ bool DebuggerPart::attachProcess(int pid)
 }
 
 
-void DebuggerPart::slotStop(KDevPlugin* which)
+void CppDebuggerPlugin::slotStop(KDevPlugin* which)
 {
     if( which != 0 && which != this )
         return;
@@ -992,13 +972,13 @@ void DebuggerPart::slotStop(KDevPlugin* which)
 }
 
 
-void DebuggerPart::slotPause()
+void CppDebuggerPlugin::slotPause()
 {
     controller->slotBreakInto();
 }
 
 
-void DebuggerPart::slotRunToCursor()
+void CppDebuggerPlugin::slotRunToCursor()
 {
     KParts::ReadWritePart *rwpart
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
@@ -1014,7 +994,7 @@ void DebuggerPart::slotRunToCursor()
     controller->slotRunUntil(rwpart->url().path(), ++line);
 }
 
-void DebuggerPart::slotJumpToCursor()
+void CppDebuggerPlugin::slotJumpToCursor()
 {
     KParts::ReadWritePart *rwpart
             = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
@@ -1030,42 +1010,42 @@ void DebuggerPart::slotJumpToCursor()
     controller->slotJumpTo(rwpart->url().path(), ++line);
 }
 
-void DebuggerPart::slotStepOver()
+void CppDebuggerPlugin::slotStepOver()
 {
     controller->slotStepOver();
 }
 
 
-void DebuggerPart::slotStepOverInstruction()
+void CppDebuggerPlugin::slotStepOverInstruction()
 {
     controller->slotStepOverIns();
 }
 
 
-void DebuggerPart::slotStepIntoInstruction()
+void CppDebuggerPlugin::slotStepIntoInstruction()
 {
     controller->slotStepIntoIns();
 }
 
 
-void DebuggerPart::slotStepInto()
+void CppDebuggerPlugin::slotStepInto()
 {
     controller->slotStepInto();
 }
 
 
-void DebuggerPart::slotStepOut()
+void CppDebuggerPlugin::slotStepOut()
 {
     controller->slotStepOutOff();
 }
 
 
-void DebuggerPart::slotMemoryView()
+void CppDebuggerPlugin::slotMemoryView()
 {
     viewerWidget->slotAddMemoryView();
 }
 
-void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
+void CppDebuggerPlugin::slotRefreshBPState( const Breakpoint& BP)
 {
     if (BP.hasFileAndLine())
     {
@@ -1090,7 +1070,7 @@ void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
     }
 }
 
-void DebuggerPart::slotStatus(const QString &msg, int state)
+void CppDebuggerPlugin::slotStatus(const QString &msg, int state)
 {
     QString stateIndicator, stateIndicatorFull;
 
@@ -1179,7 +1159,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     previousDebuggerState_ = state;
 }
 
-void DebuggerPart::slotEvent(GDBController::event_t e)
+void CppDebuggerPlugin::slotEvent(GDBController::event_t e)
 {
     if (e == GDBController::program_running ||
         e == GDBController::program_exited ||
@@ -1190,7 +1170,7 @@ void DebuggerPart::slotEvent(GDBController::event_t e)
 }
 
 
-void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
+void CppDebuggerPlugin::slotShowStep(const QString &fileName, int lineNum)
 {
     if ( ! fileName.isEmpty() )
     {
@@ -1204,14 +1184,14 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 }
 
 
-void DebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
+void CppDebuggerPlugin::slotGotoSource(const QString &fileName, int lineNum)
 {
     if ( ! fileName.isEmpty() )
         partController()->editDocument(KUrl( fileName ), lineNum);
 }
 
 
-void DebuggerPart::slotActivePartChanged( KParts::Part* part )
+void CppDebuggerPlugin::slotActivePartChanged( KParts::Part* part )
 {
     KAction* action = actionCollection()->action("debug_toggle_breakpoint");
     if(!action)
@@ -1227,19 +1207,19 @@ void DebuggerPart::slotActivePartChanged( KParts::Part* part )
     action->setEnabled( iface != 0 );
 }
 
-void DebuggerPart::restorePartialProjectSession(const QDomElement* el)
+void CppDebuggerPlugin::restorePartialProjectSession(const QDomElement* el)
 {
     gdbBreakpointWidget->restorePartialProjectSession(el);
     gdbOutputWidget->restorePartialProjectSession(el);
 }
 
-void DebuggerPart::savePartialProjectSession(QDomElement* el)
+void CppDebuggerPlugin::savePartialProjectSession(QDomElement* el)
 {
     gdbBreakpointWidget->savePartialProjectSession(el);
     gdbOutputWidget->savePartialProjectSession(el);
 }
 
-bool DebuggerPart::haveModifiedFiles()
+bool CppDebuggerPlugin::haveModifiedFiles()
 {
     bool have_modified = false;
     KUrl::List const& filelist = partController()->openURLs();
@@ -1257,12 +1237,12 @@ bool DebuggerPart::haveModifiedFiles()
 
 }
 
-KDevAppFrontend * GDBDebugger::DebuggerPart::appFrontend( )
+KDevAppFrontend * GDBDebugger::CppDebuggerPlugin::appFrontend( )
 {
     return extension<KDevAppFrontend>("KDevelop/AppFrontend");
 }
 
-KDevDebugger * GDBDebugger::DebuggerPart::debugger()
+KDevDebugger * GDBDebugger::CppDebuggerPlugin::debugger()
 {
     return m_debugger;
 }

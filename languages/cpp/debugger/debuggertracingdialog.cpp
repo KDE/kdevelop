@@ -15,9 +15,11 @@ namespace GDBDebugger
 
     DebuggerTracingDialog
     ::DebuggerTracingDialog(Breakpoint* bp,
-                            QWidget* parent, const char* name)
-    : DebuggerTracingDialogBase(parent, name), bp_(bp)
+                            QWidget* parent)
+    : QDialog(parent), bp_(bp)
     {
+        setupUi(this);
+
         expressions->setButtons(KEditListBox::Add | KEditListBox::Remove);
 
         connect(enable, SIGNAL(stateChanged(int)),

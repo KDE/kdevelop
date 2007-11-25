@@ -95,7 +95,7 @@ bool UserCommand::isUserCommand() const
 
 ModifyBreakpointCommand::ModifyBreakpointCommand(
     const QString& command, const Breakpoint* bp)
-: GDBCommand(command.local8Bit()),
+: GDBCommand(command.toLatin1()),
   bp_(bp)
 {}
 
@@ -106,7 +106,7 @@ ModifyBreakpointCommand::cmdToSend()
     {
         QString s(initialString());
         s = s.arg(bp_->dbgId()) + "\n";
-        return s.local8Bit();
+        return s.toLatin1();
     }
     else
     {

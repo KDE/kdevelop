@@ -54,7 +54,7 @@ namespace GDBDebugger
 // For use with the internal debugger, but this dialog doesn't know anything
 // about why it's doing it.
 
-Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
+Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent)
     : KDialog(parent, name, true),      // modal
       psProc_(0),
       pids_(new K3ListView(this)),

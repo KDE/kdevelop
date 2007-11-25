@@ -40,9 +40,8 @@ namespace GDBDebugger
 {
 
 FramestackWidget::FramestackWidget(GDBController* controller,
-                                   QWidget *parent, 
-                                   const char *name, Qt::WFlags f)
-        : Q3ListView(parent, name, f),
+                                   QWidget *parent, Qt::WFlags f)
+        : Q3ListView(parent, f),
           viewedThread_(0),
           controller_(controller)
 {
@@ -111,7 +110,7 @@ void FramestackWidget::slotSelectionChanged(Q3ListViewItem *thisItem)
                 if (frame->threadNo() != -1)
                     controller_->addCommand(
                         new GDBCommand(QString("-thread-select %1")
-                                       .arg(frame->threadNo()).ascii()));
+                                       .arg(frame->threadNo()).toAscii()));
 
                viewedThread_ = findThread(frame->threadNo());
                getBacktrace(frame->frameNo(), frame->frameNo() + frameChunk_);
@@ -215,7 +214,7 @@ void FramestackWidget::getBacktraceForThread(int threadNo)
         // Switch to the target thread.
         controller_->addCommand(
             new GDBCommand(QString("-thread-select %1")
-                           .arg(threadNo).ascii()));
+                           .arg(threadNo).toAscii()));
 
         viewedThread_ = findThread(threadNo);
     }
@@ -227,7 +226,7 @@ void FramestackWidget::getBacktraceForThread(int threadNo)
         // Switch back to the original thread.
         controller_->addCommand(
             new GDBCommand(QString("-thread-select %1")
-                           .arg(currentThread).ascii()));
+                           .arg(currentThread).toAscii()));
     }
 }
 
@@ -452,20 +451,6 @@ void FramestackWidget::formatFrame(const GDBMI::Value& frame,
     {
         source_column = frame["from"].literal();
     }
-}
-
-
-void FramestackWidget::drawContentsOffset( QPainter * p, int ox, int oy,
-                                           int cx, int cy, int cw, int ch )
-{
-    Q3ListView::drawContentsOffset(p, ox, oy, cx, cy, cw, ch);
-
-    int s1_x = header()->sectionPos(1);
-    int s1_w = header()->sectionSize(1);
-
-    QRect section1(s1_x, contentsHeight(), s1_w, viewport()->height());
-
-    p->fillRect(section1, KGlobalSettings::alternateBackgroundColor());
 }
 
 // **************************************************************************

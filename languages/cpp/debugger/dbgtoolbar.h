@@ -21,9 +21,9 @@
 
 class KWindowSystem;
 
-#include <ksystemtray.h>
 #include <kwindowsystem.h>         // needed for WId :(
-
+#include <KSystemTrayIcon>
+             
 #include <q3frame.h>
 #include <kvbox.h>
 
@@ -34,7 +34,7 @@ class DbgButton;
 class DbgToolBar;
 class DebuggerPart;
 
-class DbgDocker : public KSystemTray
+class DbgDocker : public KSystemTrayIcon
 {
     Q_OBJECT
 
@@ -80,7 +80,7 @@ private:
     bool            appIsActive_;
     bool            docked_;
     DbgDocker*      docker_;
-    KSystemTray*    dockWindow_;
+    KSystemTrayIcon*    dockWindow_;
 };
 
 }

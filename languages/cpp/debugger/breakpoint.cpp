@@ -37,7 +37,7 @@
 namespace GDBDebugger
 {
 
-static int BPQt::Key_ = 0;
+static int BPKey_ = 0;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -58,7 +58,7 @@ Breakpoint::Breakpoint(bool temporary, bool enabled)
 
       dbgId_(-1),
       hits_(0),
-      key_(BPQt::Key_++),
+      key_(BPKey_++),
       active_(-1),
       ignoreCount_(0),
       condition_("")
@@ -417,7 +417,7 @@ bool FilePosBreakpoint::match_data(const Breakpoint *xb) const
 
 QString FilePosBreakpoint::displayType() const
 {
-    return i18n("Code breakpoint", "Code"); 
+    return i18nc("Code breakpoint", "Code"); 
 }
 
 bool FilePosBreakpoint::isValid() const

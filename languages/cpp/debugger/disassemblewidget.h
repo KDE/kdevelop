@@ -39,7 +39,7 @@ class DisassembleWidget : public Q3TextEdit
     Q_OBJECT
 
 public:
-    DisassembleWidget( GDBController* controller, QWidget *parent=0, const char *name=0 );
+    DisassembleWidget( GDBController* controller, QWidget *parent=0 );
     virtual ~DisassembleWidget();
 
 public Q_SLOTS:
