@@ -41,7 +41,7 @@
 #include "idocumentcontroller.h"
 
 #include "filesortfilterproxymodel.h"
-#include "kdevfilemanagerpart.h"
+#include "kdevfilemanagerplugin.h"
 #include "drilldownview.h"
 #include "kdevdirmodel.h"
 
@@ -55,7 +55,7 @@ public:
     DrillDownView *m_view;
     QWidget *m_toolBar;
     KUrlComboBox *m_urlBox;
-    KDevFileManagerPart *m_part;
+    KDevFileManagerPlugin *m_plugin;
 
     FileManagerPrivate(FileManager *manager): m_manager(manager) {}
 
@@ -80,7 +80,7 @@ public:
         if (fileItem.isNull())
             return;
 
-        m_part->core()->documentController()->openDocument(fileItem.url());
+        m_plugin->core()->documentController()->openDocument(fileItem.url());
     }
 
     void init()
@@ -165,7 +165,7 @@ public:
 
     void syncCurrentDocumentDirectory()
     {
-        KDevelop::IDocument *doc = m_part->core()->documentController()->activeDocument();
+        KDevelop::IDocument *doc = m_plugin->core()->documentController()->activeDocument();
         if ( doc )
         {
             goToUrl(doc->url().upUrl());
@@ -194,10 +194,10 @@ private:
 };
 
 
-FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
+FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     :QWidget(parent), d(new FileManagerPrivate(this))
 {
-    d->m_part = part;
+    d->m_plugin = plugin;
     setObjectName("FileManager");
 //     setWindowIcon(SmallIcon("kdevelop"));
     setWindowTitle(i18n("File Manager"));

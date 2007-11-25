@@ -7,7 +7,7 @@ include_directories(
 ########### next target ###############
 
 set(kdevfilemanager_PART_SRCS
-    kdevfilemanagerpart.cpp
+    kdevfilemanagerplugin.cpp
     filemanager.cpp
     drilldownview.cpp
     kdevdirmodel.cpp

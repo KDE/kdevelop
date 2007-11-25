@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "kdevfilemanagerpart.h"
+#include "kdevfilemanagerplugin.h"
 
 #include <QTimer>
 
@@ -31,27 +31,27 @@
 
 #include "filemanager.h"
 
-K_PLUGIN_FACTORY(KDevFileManagerFactory, registerPlugin<KDevFileManagerPart>(); )
+K_PLUGIN_FACTORY(KDevFileManagerFactory, registerPlugin<KDevFileManagerPlugin>(); )
 K_EXPORT_PLUGIN(KDevFileManagerFactory("kdevfilemanager"))
 
 
 class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{
 public:
-    KDevFileManagerViewFactory(KDevFileManagerPart *part): m_part(part) {}
+    KDevFileManagerViewFactory(KDevFileManagerPlugin *plugin): m_plugin(plugin) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
         Q_UNUSED(parent)
-        return new FileManager(m_part, parent);
+        return new FileManager(m_plugin, parent);
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
     {
         return Qt::LeftDockWidgetArea;
     }
 private:
-    KDevFileManagerPart *m_part;
+    KDevFileManagerPlugin *m_plugin;
 };
 
-KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QVariantList &/*args*/)
+KDevFileManagerPlugin::KDevFileManagerPlugin(QObject *parent, const QVariantList &/*args*/)
     :KDevelop::IPlugin(KDevFileManagerFactory::componentData(), parent)
 {
     setXMLFile("kdevfilemanager.rc");
@@ -59,20 +59,20 @@ KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QVariantList &/*
     init();
 }
 
-void KDevFileManagerPart::init()
+void KDevFileManagerPlugin::init()
 {
     m_factory = new KDevFileManagerViewFactory(this);
     core()->uiController()->addToolView("File Manager", m_factory);
 }
 
-KDevFileManagerPart::~KDevFileManagerPart()
+KDevFileManagerPlugin::~KDevFileManagerPlugin()
 {
 }
 
-void KDevFileManagerPart::unload()
+void KDevFileManagerPlugin::unload()
 {
     core()->uiController()->removeToolView(m_factory);
 }
 
-#include "kdevfilemanagerpart.moc"
+#include "kdevfilemanagerplugin.moc"
 

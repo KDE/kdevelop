@@ -24,11 +24,11 @@
 
 class FileManager;
 
-class KDevFileManagerPart: public KDevelop::IPlugin {
+class KDevFileManagerPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    KDevFileManagerPart(QObject *parent, const QVariantList &args = QVariantList() );
-    ~KDevFileManagerPart();
+    KDevFileManagerPlugin(QObject *parent, const QVariantList &args = QVariantList() );
+    ~KDevFileManagerPlugin();
 
     virtual void unload();
 

@@ -25,12 +25,12 @@
 
 class QModelIndex;
 class KFileItem;
-class KDevFileManagerPart;
+class KDevFileManagerPlugin;
 
 class FileManager: public QWidget {
     Q_OBJECT
 public:
-    FileManager(KDevFileManagerPart *part, QWidget* parent);
+    FileManager(KDevFileManagerPlugin *plugin, QWidget* parent);
 
 private:
     void setupActions();
