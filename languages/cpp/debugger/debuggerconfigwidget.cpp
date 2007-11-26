@@ -13,7 +13,7 @@
 
 #include "debuggerconfigwidget.h"
 
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 
 #include <kurlrequester.h>
 #include <klineedit.h>

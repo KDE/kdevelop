@@ -17,7 +17,7 @@
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "gdbglobal.h"
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 
 #include <k3buttonbox.h>
 #include <klineedit.h>

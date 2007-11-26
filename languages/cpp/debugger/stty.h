@@ -49,8 +49,8 @@ private Q_SLOTS:
     void OutReceived(int);
 
 Q_SIGNALS:
-    void OutOutput(const char *);
-    void ErrOutput(const char*);
+    void OutOutput(const QByteArray&);
+    void ErrOutput(const QByteArray&);
 
 private:
     int findTTY();

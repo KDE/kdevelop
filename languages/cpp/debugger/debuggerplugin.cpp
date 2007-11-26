@@ -11,7 +11,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 
 #include <QDir>
 
@@ -35,6 +35,8 @@
 #include <kpluginfactory.h>
 #include <KToolBar>
 #include <KDialog>
+
+#include <sublime/view.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
@@ -84,6 +86,11 @@ public:
     return Qt::BottomDockWidgetArea;
   }
 
+  virtual void viewCreated(Sublime::View* view)
+  {
+      QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
+  }
+
 private:
   CppDebuggerPlugin* m_plugin;
   GDBController* m_controller;
@@ -102,6 +109,11 @@ public:
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
   {
     return Qt::LeftDockWidgetArea;
+  }
+
+  virtual void viewCreated(Sublime::View* view)
+  {
+      QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
   }
 
 private:
@@ -294,7 +306,7 @@ void CppDebuggerPlugin::setupActions()
     action = new KAction(KIcon("process-stop"), i18n("Sto&p"), this);
     action->setToolTip( i18n("Stop debugger") );
     action->setWhatsThis(i18n("<b>Stop debugger</b><p>Kills the executable and exits the debugger."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStop()));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStopDebugger()));
     ac->addAction("debug_stop", action);
 
     action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
@@ -579,10 +591,10 @@ void CppDebuggerPlugin::setupController()
             this,       SLOT(slotEvent(GDBController::event_t)));
 
     // controller -> procLineMaker
-    connect( controller,            SIGNAL(ttyStdout(const char*)),
-             procLineMaker,         SLOT(slotReceivedStdout(const char*)));
-    connect( controller,            SIGNAL(ttyStderr(const char*)),
-             procLineMaker,         SLOT(slotReceivedStderr(const char*)));
+    connect( controller,            SIGNAL(ttyStdout(const QByteArray&)),
+             procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
+    connect( controller,            SIGNAL(ttyStderr(const QByteArray&)),
+             procLineMaker,         SLOT(slotReceivedStderr(const QByteArray&)));
 
 //     connect(statusBarIndicator, SIGNAL(doubleClicked()),
 //             controller, SLOT(explainDebuggerStatus()));
@@ -1077,4 +1089,4 @@ BreakpointController * CppDebuggerPlugin::breakpoints() const
 
 }
 
-#include "debuggerpart.moc"
+#include "debuggerplugin.moc"

@@ -102,6 +102,8 @@ public:
     int viewedThread()
     { return viewedThread_ ? viewedThread_->threadNo() : -1; }
 
+Q_SIGNALS:
+    void requestRaise();
 
 private:
     /** Given gdb's 'frame' information, compute decent

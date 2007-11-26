@@ -256,8 +256,8 @@ Q_SIGNALS:
     void rawGDBMemoryDump     (char *buf);
     void rawGDBRegisters      (char *buf);
     void rawGDBLibraries      (char *buf);
-    void ttyStdout            (const char *output);
-    void ttyStderr            (const char *output);
+    void ttyStdout            (const QByteArray& output);
+    void ttyStderr            (const QByteArray& output);
     void gdbInternalCommandStdout (const char *output);
     void gdbUserCommandStdout (const char *output);
     void gdbStderr            (const char *output);

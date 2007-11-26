@@ -41,7 +41,7 @@
 #include <KIcon>
 
 #include "gdbglobal.h"
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 
 namespace GDBDebugger
 {

@@ -255,7 +255,8 @@ void STTY::OutReceived(int f)
     // stream of data, so the loop is unlikely to cause problems.
     while ((n = ::read(f, buf, sizeof(buf)-1)) > 0) {
         *(buf+n) = 0;         // a standard string
-        emit OutOutput(buf);
+        QByteArray ba(buf);
+        emit OutOutput(ba);
     }
     // Note: for some reason, n can be 0 here.
     // I can understand that non-blocking read returns 0,

@@ -64,6 +64,9 @@ public:
     VariableTree *varTree() const
     { return varTree_; }
 
+Q_SIGNALS:
+    void requestRaise();
+
 protected: // QWidget overrides
     void focusInEvent(QFocusEvent *e);
 

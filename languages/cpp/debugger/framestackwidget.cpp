@@ -16,7 +16,7 @@
 #include "framestackwidget.h"
 #include "gdbparser.h"
 #include "gdbcommand.h"
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 
 #include <klocale.h>
 #include <kdebug.h>

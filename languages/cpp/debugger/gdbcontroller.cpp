@@ -1085,8 +1085,8 @@ void GDBController::slotRun()
         tty_ = new STTY(config_dbgTerminal_);//, Settings::terminalEmulatorName( *KGlobal::config() ));
         if (!config_dbgTerminal_)
         {
-            connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
-            connect( tty_, SIGNAL(ErrOutput(const char*)), SIGNAL(ttyStderr(const char*)) );
+            connect( tty_, SIGNAL(OutOutput(const QByteArray&)), SIGNAL(ttyStdout(const QByteArray&)) );
+            connect( tty_, SIGNAL(ErrOutput(const QByteArray&)), SIGNAL(ttyStderr(const QByteArray&)) );
         }
 
         QString tty(tty_->getSlave());

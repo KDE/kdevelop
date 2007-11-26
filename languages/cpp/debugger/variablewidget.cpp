@@ -18,7 +18,7 @@
 #include "gdbcommand.h"
 #include "gdbbreakpointwidget.h"
 #include "gdbglobal.h"
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -127,7 +127,7 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
     
     // Setup help items.
 
-    this->setWhatsThis( i18n(
+    setWhatsThis( i18n(
         "<b>Variable tree</b><p>"
         "The variable tree allows you to see the values of local "
         "variables and arbitrary expressions."

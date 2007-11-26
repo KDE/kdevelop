@@ -19,7 +19,7 @@
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
 #include "gdbglobal.h"
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 #include "breakpointcontroller.h"
 
 #include "breakpoint.h"

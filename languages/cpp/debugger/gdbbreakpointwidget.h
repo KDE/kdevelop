@@ -61,6 +61,8 @@ public:
 
     bool hasWatchpointForAddress(unsigned long long address) const;
 
+Q_SIGNALS:
+    void requestRaise();
 
 public Q_SLOTS:
     void reset();

@@ -1,6 +1,7 @@
 
 include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}/util
+    ${KDEVPLATFORM_INCLUDE_DIR}/
 )
 
 #add_subdirectory(tests)
@@ -14,7 +15,7 @@ add_definitions(-DQT3_SUPPORT)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(kdevcppdebugger_PART_SRCS
-    debuggerpart.cpp
+    debuggerplugin.cpp
     gdbcontroller.cpp
     gdbcommand.cpp
     gdbparser.cpp

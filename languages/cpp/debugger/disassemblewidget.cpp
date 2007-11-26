@@ -16,7 +16,7 @@
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
-#include "debuggerpart.h"
+#include "debuggerplugin.h"
 
 #include <kdebug.h>
 #include <kdeversion.h>
