@@ -115,9 +115,9 @@ void MainWindow::saveSettings()
 
 void MainWindow::initialize()
 {
-    setStatusBar(new KDevelop::StatusBar(this));
     createGUI(0);
     Core::self()->partManager()->addManagedTopLevelWidget(this);
+    kDebug(9501) << "Adding plugin-added connection";
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
              d, SLOT(addPlugin(KDevelop::IPlugin*)));
     connect( Core::self()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -131,6 +131,7 @@ void MainWindow::initialize()
              d, SLOT( projectOpened() ) );
     connect( Core::projectController(), SIGNAL( projectClosed() ),
              d, SLOT( projectClosed() ) );*/
+    setStatusBar(new KDevelop::StatusBar(this));
 }
 
 void MainWindow::cleanup()

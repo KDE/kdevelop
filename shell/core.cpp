@@ -51,7 +51,9 @@ struct CorePrivate {
     }
     void initialize()
     {
+	kDebug(9501) << "Creating ui controller";
         uiController = new UiController(m_core);
+	kDebug(9501) << "Creating plugin controller";
         pluginController = new PluginController(m_core);
         partController = new PartController(m_core, uiController->defaultMainWindow());
         projectController = new ProjectController(m_core);
@@ -59,10 +61,12 @@ struct CorePrivate {
         documentController = new DocumentController(m_core);
         runController = new RunController(m_core);
 
+	kDebug(9501) << "initializing ui controller";
         uiController->initialize();
         languageController->initialize();
         projectController->initialize();
 
+	kDebug(9501) << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );
 
         Sublime::Area *defaultArea = uiController->defaultArea();
