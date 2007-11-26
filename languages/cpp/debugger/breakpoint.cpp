@@ -16,6 +16,7 @@
 #include "breakpoint.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
+#include "gdbglobal.h"
 
 #include <klocale.h>
 #include <kdebug.h>

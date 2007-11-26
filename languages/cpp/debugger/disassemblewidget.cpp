@@ -41,7 +41,7 @@ namespace GDBDebugger
 /***************************************************************************/
 /***************************************************************************/
 
-DisassembleWidget::DisassembleWidget(GDBController* controller, QWidget *parent)
+DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent)
         : Q3TextEdit(parent), controller_(controller),
         active_(false),
         lower_(0),

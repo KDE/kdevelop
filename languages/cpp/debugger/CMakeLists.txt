@@ -1,4 +1,8 @@
 
+include_directories(
+    ${KDEVPLATFORM_INCLUDE_DIR}/util
+)
+
 #add_subdirectory(tests)
 
 ########### next target ###############
@@ -11,7 +15,6 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(kdevcppdebugger_PART_SRCS
     debuggerpart.cpp
-    dbgcontroller.cpp
     gdbcontroller.cpp
     gdbcommand.cpp
     gdbparser.cpp
@@ -28,6 +31,7 @@ set(kdevcppdebugger_PART_SRCS
     gdbtable.cpp
     debuggertracingdialog.cpp
     processlinemaker.cpp
+    breakpointcontroller.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
@@ -45,6 +49,10 @@ target_link_libraries(kdevcppdebugger
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDE4_KDEUI_LIBS}
+    ${KDEVPLATFORM_EDITOR_LIBRARY}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDEVPLATFORM_UTIL_LIBRARY}
 )
 
 install(TARGETS kdevcppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -45,13 +45,14 @@ class Breakpoint;
 class BreakpointTableRow;
 class GDBTable;
 class GDBController;
+class CppDebuggerPlugin;
 
 class GDBBreakpointWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    GDBBreakpointWidget( GDBController* controller,
+    GDBBreakpointWidget( CppDebuggerPlugin* plugin, GDBController* controller,
                          QWidget* parent=0 );
     virtual ~GDBBreakpointWidget();
 

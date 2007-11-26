@@ -29,6 +29,7 @@ namespace GDBDebugger
 {
 
 class FramestackWidget;
+class CppDebuggerPlugin;
 
 
 class ThreadStackItem : public Q3ListViewItem
@@ -89,8 +90,8 @@ class FramestackWidget : public Q3ListView
     Q_OBJECT
 
 public:
-    FramestackWidget( GDBController* controller,
-                      QWidget *parent=0, Qt::WFlags f=0 );
+    FramestackWidget( CppDebuggerPlugin* plugin, GDBController* controller,
+                      QWidget *parent=0 );
     virtual ~FramestackWidget();
 
     Q3ListViewItem *lastChild() const;

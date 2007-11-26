@@ -38,13 +38,14 @@ namespace GDBDebugger
 {
 
 class GDBController;
+class CppDebuggerPlugin;
   
 class GDBOutputWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    GDBOutputWidget( GDBController* controller, QWidget *parent=0 );
+    GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent=0 );
     ~GDBOutputWidget();
 
     void savePartialProjectSession(QDomElement* el);

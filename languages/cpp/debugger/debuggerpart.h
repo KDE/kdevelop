@@ -20,21 +20,23 @@
 #include <QLabel>
 #include <Q3PopupMenu>
 #include <QtCore/QVariant>
+
 #include <kvbox.h>
+#include <KConfigGroup>
 
 #include "gdbcontroller.h"
-#include <iplugin.h>
 
-namespace KParts { class Part; }
+#include <iplugin.h>
+#include <irunprovider.h>
+#include <istatus.h>
 
 class QLabel;
 class Q3PopupMenu;
 class KDialog;
 class ProcessWidget;
 class ProcessLineMaker;
-class KDevAppFrontend;
-class KDevDebugger;
 class KToolBar;
+class BreakpointController;
 
 namespace KDevelop { class Context; }
 
@@ -50,15 +52,43 @@ class VariableWidget;
 class GDBOutputWidget;
 class ViewerWidget;
 
-class CppDebuggerPlugin : public KDevelop::IPlugin
+class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider, public KDevelop::IStatus
 {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::IRunProvider)
+    Q_INTERFACES(KDevelop::IStatus)
 
 public:
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
     virtual void restorePartialProjectSession(const QDomElement* el);
     virtual void savePartialProjectSession(QDomElement* el);
+
+    void startDebugger();
+    
+    // BEGIN IRunProvider
+    virtual QStringList instrumentorsProvided() const;
+    virtual bool execute(const KDevelop::IRun& run, int serial);
+    virtual void abort(int serial);
+
+Q_SIGNALS:
+    void finished(int serial);
+    void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
+
+public:
+    // BEGIN IStatus
+    virtual QString statusName() const;
+
+Q_SIGNALS:
+    void clearMessage();
+    void showMessage(const QString & message, int timeout = 0);
+    void hideProgress();
+    void showProgress(int minimum, int maximum, int value);
+
+    void raiseOutputViews();
+    void raiseFramestackViews();
+    void raiseVariableViews();
+    void clearViews();
 
 //k_dcop:
 //    virtual ASYNC slotDebugExternalProcess();
@@ -74,7 +104,6 @@ private Q_SLOTS:
 //    void projectOpened();
     void projectClosed();
     //void projectConfigWidget(KDialog *dlg);
-    void slotActivePartChanged(KParts::Part*);
 
     void slotRun();
     // Called to finish run operation in the case when we're
@@ -87,7 +116,6 @@ private Q_SLOTS:
     void slotExamineCore();
     void slotAttachProcess();
     void slotStopDebugger();
-    //void slotStop(KDevPlugin* which = 0);
     void slotPause();
     void slotRunToCursor();
     void slotJumpToCursor();
@@ -107,9 +135,6 @@ private Q_SLOTS:
     //void slotDCOPApplicationRegistered(const QByteArray &appId);
     void slotCloseDrKonqi();
 
-    // Hide or show the view that's the sender of this signal.
-    void slotShowView(bool enabled);
-
     void slotDebuggerAbnormalExit();
 
     // Called when some file in the project was saved.
@@ -121,11 +146,11 @@ private Q_SLOTS:
     void slotEvent(GDBController::event_t);
 
 private:
-    KDevAppFrontend *appFrontend();
-    KDevDebugger *debugger();
+    BreakpointController* breakpoints() const;
+  
+    KConfigGroup config() const;
     
-    bool attachProcess(int pid);
-    bool startDebugger();
+    void attachProcess(int pid);
     void setupController();
     bool haveModifiedFiles();
 
@@ -167,6 +192,9 @@ private:
     class DisassembleViewFactory* m_disassembleFactory;
     class GDBOutputViewFactory* m_outputFactory;
     class SpecialViewFactory* m_specialFactory;
+
+    KConfigGroup m_config;
+    BreakpointController* m_breakpointController;
 
 Q_SIGNALS:
     void buildProject();

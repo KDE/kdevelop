@@ -33,13 +33,14 @@ namespace GDBDebugger
 
 class Breakpoint;
 class GDBController;
+class CppDebuggerPlugin;
 
 class DisassembleWidget : public Q3TextEdit
 {
     Q_OBJECT
 
 public:
-    DisassembleWidget( GDBController* controller, QWidget *parent=0 );
+    DisassembleWidget( CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent=0 );
     virtual ~DisassembleWidget();
 
 public Q_SLOTS:

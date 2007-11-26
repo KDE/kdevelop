@@ -46,6 +46,7 @@ class VarItem;
 class VariableTree;
 class DbgController;
 class GDBBreakpointWidget;
+class CppDebuggerPlugin;
 
 enum { VarNameCol = 0, ValueCol = 1, VarTypeCol = 2};
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,
@@ -57,7 +58,7 @@ class VariableWidget : public QWidget
     Q_OBJECT
 
 public:
-    VariableWidget( GDBController* controller,
+    VariableWidget( CppDebuggerPlugin* plugin, GDBController* controller,
                     QWidget *parent=0 );
 
     VariableTree *varTree() const

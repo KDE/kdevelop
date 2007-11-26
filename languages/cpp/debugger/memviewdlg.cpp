@@ -16,6 +16,7 @@
 #include "memviewdlg.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
+#include "gdbglobal.h"
 
 #include <k3buttonbox.h>
 #include <klineedit.h>

@@ -17,6 +17,8 @@
 #include "gdbparser.h"
 #include "gdbcommand.h"
 #include "gdbbreakpointwidget.h"
+#include "gdbglobal.h"
+#include "debuggerpart.h"
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -82,7 +84,7 @@
 namespace GDBDebugger
 {
 
-VariableWidget::VariableWidget(GDBController*  controller,
+VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  controller,
                                QWidget *parent)
 : QWidget(parent)
 {
@@ -118,6 +120,7 @@ VariableWidget::VariableWidget(GDBController*  controller,
     connect(controller, SIGNAL(event(GDBController::event_t)),
             varTree_,       SLOT(slotEvent(GDBController::event_t)));
 
+    connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
 
     // Setup help items.
 

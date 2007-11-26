@@ -16,6 +16,7 @@
 #include "framestackwidget.h"
 #include "gdbparser.h"
 #include "gdbcommand.h"
+#include "debuggerpart.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -39,9 +40,9 @@
 namespace GDBDebugger
 {
 
-FramestackWidget::FramestackWidget(GDBController* controller,
-                                   QWidget *parent, Qt::WFlags f)
-        : Q3ListView(parent, "", f),
+FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* controller,
+                                   QWidget *parent)
+        : Q3ListView(parent),
           viewedThread_(0),
           controller_(controller)
 {
@@ -70,6 +71,8 @@ FramestackWidget::FramestackWidget(GDBController* controller,
 
     connect( this, SIGNAL(clicked(Q3ListViewItem*)),
              this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
+
+    connect(plugin, SIGNAL(raiseFramestackViews()), this, SIGNAL(requestRaise()));
 }
 
 

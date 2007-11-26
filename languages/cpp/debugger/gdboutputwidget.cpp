@@ -16,7 +16,6 @@
 // **************************************************************************
 
 #include "gdboutputwidget.h"
-#include "dbgcontroller.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -41,13 +40,14 @@
 #include <khistorycombobox.h>
 #include <KIcon>
 
+#include "gdbglobal.h"
 
 namespace GDBDebugger
 {
 
 /***************************************************************************/
 
-GDBOutputWidget::GDBOutputWidget(GDBController* controller, QWidget *parent) :
+GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent) :
     QWidget(parent),
     m_controller(controller),
     m_userGDBCmdEditor(0),

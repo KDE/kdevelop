@@ -18,12 +18,14 @@
 #ifndef _GDBCONTROLLER_H_
 #define _GDBCONTROLLER_H_
 
-#include "dbgcontroller.h"
+#include <irun.h>
+
 #include "mi/gdbmi.h"
 #include "mi/miparser.h"
 
 #include <q3cstring.h>
 #include <QObject>
+#include <QProcess>
 #include <q3ptrlist.h>
 #include <QString>
 #include <qmap.h>
@@ -49,7 +51,7 @@ class STTY;
  * @author jbb
  */
 
-class GDBController : public DbgController
+class GDBController : public QObject
 {
     Q_OBJECT
 
@@ -127,11 +129,7 @@ public:
 
     int currentFrame() const;
 
-    bool start(const QString& shell, 
-               const QList< QPair<QString, QString> >& run_envvars,
-               const QString& run_directory, 
-               const QString &application, 
-               const QString& run_arguments);
+    bool start(const QString& shell, const KDevelop::IRun& run, int serial);
 
     int qtVersion() const;
 
@@ -248,12 +246,23 @@ public Q_SLOTS:
 
 
 protected Q_SLOTS:
-    void slotDbgStdout(QProcess *proc, char *buf, int buflen);
-    void slotDbgStderr(QProcess *proc, char *buf, int buflen);
+    void readyReadStandardOutput();
+    void readyReadStandardError();
     void slotDbgWroteStdin(QProcess *proc);
-    void slotDbgProcessExited(QProcess *proc);
+    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 Q_SIGNALS:
+    void gotoSourcePosition   (const QString &fileName, int lineNum);
+    void rawGDBMemoryDump     (char *buf);
+    void rawGDBRegisters      (char *buf);
+    void rawGDBLibraries      (char *buf);
+    void ttyStdout            (const char *output);
+    void ttyStderr            (const char *output);
+    void gdbInternalCommandStdout (const char *output);
+    void gdbUserCommandStdout (const char *output);
+    void gdbStderr            (const char *output);
+    void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
+    void dbgStatus            (const QString &status, int statusFlag);
 
     /** This signal is emitted whenever the given event in a program
         happens. See DESIGN.txt for expected handled of each event.
@@ -274,6 +283,8 @@ Q_SIGNALS:
                        const QString& oldValue, const QString& newValue);
 
 private:
+    void readFromProcess(QProcess* process);
+
     int               currentFrame_;
     int               viewedThread_;
 
@@ -342,6 +353,8 @@ private:
     std::set<GDBCommand*> stateReloadingCommands_;
 
     bool saw_gdb_prompt_;
+
+    QProcess* m_process;
 };
 
 }

@@ -18,6 +18,8 @@
 #include "debuggertracingdialog.h"
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
+#include "gdbglobal.h"
+#include "debuggerpart.h"
 
 #include "breakpoint.h"
 
@@ -201,7 +203,7 @@ void BreakpointTableRow::setRow()
 /***************************************************************************/
 /***************************************************************************/
 
-GDBBreakpointWidget::GDBBreakpointWidget(GDBController* controller, QWidget *parent) :
+GDBBreakpointWidget::GDBBreakpointWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent) :
 QWidget(parent),
 controller_(controller)
 {
@@ -307,6 +309,13 @@ controller_(controller)
             SIGNAL(watchpointHit(int, const QString&, const QString&)),
             this,
             SLOT(slotWatchpointHit(int, const QString&, const QString&)));
+
+    connect( this, SIGNAL(refreshBPState(const Breakpoint&)),
+             plugin,   SLOT(slotRefreshBPState(const Breakpoint&)));
+    connect( this, SIGNAL(publishBPState(const Breakpoint&)),
+             plugin,   SLOT(slotRefreshBPState(const Breakpoint&)));
+    connect( this, SIGNAL(gotoSourcePosition(const QString&, int)),
+             plugin,   SLOT(slotGotoSource(const QString&, int)) );
 }
 
 /***************************************************************************/

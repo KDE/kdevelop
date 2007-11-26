@@ -21,6 +21,9 @@
 #include "gdbcommand.h"
 #include "stty.h"
 #include "mi/miparser.h"
+#include "gdbglobal.h"
+
+#include "environmentgrouplist.h"
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -39,7 +42,6 @@
 #include <q3valuevector.h>
 #include <QEventLoop>
 #include <QByteArray>
-#include <QProcess>
 
 #include <iostream>
 #include <ctype.h>
@@ -132,13 +134,12 @@ int debug_controllerExists = false;
 
 
 GDBController::GDBController(QObject* parent)
-        : DbgController(parent),
+        : QObject(parent),
         currentFrame_(0),
         viewedThread_(-1),
         holdingZone_(),
         currentCmd_(0),
         tty_(0),
-        badCore_(QString()),
         state_(s_dbgNotStarted|s_appNotStarted),
         programHasExited_(false),
         config_breakOnLoadingLibrary_(true),
@@ -206,7 +207,7 @@ void GDBController::configure()
             old_asmDemangle             != config_asmDemangle_            ||
             old_breakOnLoadingLibrary_  != config_breakOnLoadingLibrary_  ||
             old_outputRadix             != config_outputRadix_)           &&
-            dbgProcess_)
+            m_process)
     {
         bool restart = false;
         if (stateIsOn(s_dbgBusy))
@@ -336,7 +337,7 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
 // state will get updated.
 void GDBController::executeCmd()
 {
-    if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_shuttingDown) || !dbgProcess_)
+    if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_shuttingDown) || !m_process)
     {
         return;
     }
@@ -397,7 +398,7 @@ void GDBController::executeCmd()
 
     kDebug(9012) << "SEND: " << commandText;
 
-    dbgProcess_->write(commandText.toLatin1(),
+    m_process->write(commandText.toLatin1(),
                             commandText.length());
     setStateOn(s_waitForWrite);
 
@@ -446,9 +447,9 @@ void GDBController::pauseApp()
     }
     */
 
-    if (dbgProcess_)
+    if (m_process)
         // PORTING TODO how to send SIGINT instead of SIGKILL
-        dbgProcess_->kill();
+        m_process->kill();
 }
 
 void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
@@ -791,28 +792,24 @@ void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
 
 // **************************************************************************
 
-bool GDBController::start(const QString& shell, const QList< QPair<QString, QString> >& run_envvars, const QString& run_directory, const QString &application, const QString& run_arguments)
+bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int serial)
 {
     kDebug(9012) << "Starting debugger controller\n";
-    badCore_ = QString();
 
-    Q_ASSERT (!dbgProcess_ && !tty_);
+    Q_ASSERT (!m_process && !tty_);
 
-    dbgProcess_ = new QProcess;
+    m_process = new QProcess;
 
-    connect( dbgProcess_, SIGNAL(receivedStdout(QProcess *, char *, int)),
-             this,        SLOT(slotDbgStdout(QProcess *, char *, int)) );
+    connect(m_process, SIGNAL(readyReadStandardOutput()), SLOT(readyReadStandardOutput()));
+    connect(m_process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
 
-    connect( dbgProcess_, SIGNAL(receivedStderr(QProcess *, char *, int)),
-             this,        SLOT(slotDbgStderr(QProcess *, char *, int)) );
+    m_process->setProperty("serial", serial);
 
-    connect( dbgProcess_, SIGNAL(wroteStdin(QProcess *)),
+    connect( m_process, SIGNAL(wroteStdin(QProcess *)),
              this,        SLOT(slotDbgWroteStdin(QProcess *)) );
 
-    connect( dbgProcess_, SIGNAL(processExited(QProcess*)),
-             this,        SLOT(slotDbgProcessExited(QProcess*)) );
-
-    application_ = application;
+    application_ = run.executable().path();
 
     QString gdb = "gdb";
     // Prepend path to gdb, if needed. Using QDir,
@@ -825,25 +822,25 @@ bool GDBController::start(const QString& shell, const QList< QPair<QString, QStr
     if (!shell.isEmpty())
     {
         QStringList arguments;
-        arguments << "-c" << shell + " " + gdb + " " + application + " --interpreter=mi2 -quiet";
-        dbgProcess_->start("/bin/sh", arguments);
+        arguments << "-c" << shell + " " + gdb + " " + run.executable().path() + " --interpreter=mi2 -quiet";
+        m_process->start("/bin/sh", arguments);
         emit gdbUserCommandStdout(
             QString( "/bin/sh -c " + shell + " " + gdb
-                     + " " + application
+                     + " " + run.executable().path()
                      + " --interpreter=mi2 -quiet\n" ).toLatin1());
     }
     else
     {
         QStringList arguments;
-        arguments << application << "-interpreter=mi2" << "-quiet";
-        dbgProcess_->start(gdb, arguments);
+        arguments << run.executable().path() << "-interpreter=mi2" << "-quiet";
+        m_process->start(gdb, arguments);
         emit gdbUserCommandStdout(
-            QString( gdb + " " + application +
+            QString( gdb + " " + run.executable().path() +
                      " --interpreter=mi2 -quiet\n" ).toLatin1());
     }
 
-    /* PORTING TODO
-    if (!dbgProcess_->start( QProcess::NotifyOnExit,
+    /* PORTING move to non-blocking location (would have to call waitForStarted otherwise)
+    if (!m_process->start( QProcess::NotifyOnExit,
                              QProcess::Communication(QProcess::All)))
     {
         KMessageBox::information(
@@ -851,7 +848,7 @@ bool GDBController::start(const QString& shell, const QList< QPair<QString, QStr
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly."
-                , dbgProcess_->args()[0]),
+                , m_process->args()[0]),
             i18n("Could not start debugger"), "gdb_error");
 
         return false;
@@ -908,13 +905,13 @@ bool GDBController::start(const QString& shell, const QList< QPair<QString, QStr
     queueCmd(new GDBCommand(QString().sprintf("set output-radix %d",  config_outputRadix_)));
 
     // Change the "Working directory" to the correct one
-    QByteArray tmp( "cd " + QFile::encodeName( run_directory ));
+    QByteArray tmp( "cd " + QFile::encodeName( run.workingDirectory().path() ));
     queueCmd(new GDBCommand(tmp));
 
     // Set the run arguments
-    if (!run_arguments.isEmpty())
+    if (!run.arguments().isEmpty())
         queueCmd(
-            new GDBCommand(QByteArray("set args ") + run_arguments.local8Bit()));
+            new GDBCommand(QByteArray("set args ") + run.arguments().join(" ").local8Bit()));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -923,12 +920,13 @@ bool GDBController::start(const QString& shell, const QList< QPair<QString, QStr
     // embedded spaces
     QString environstr;
     typedef QPair<QString, QString> QStringPair;
-    foreach (const QStringPair& envvar, run_envvars)
+
+    KDevelop::EnvironmentGroupList l(KGlobal::config());
+
+    foreach (const QString& envvar, l.createEnvironment(run.environmentKey(), m_process->systemEnvironment()))
     {
         environstr = "set environment ";
-        environstr += envvar.first;
-        environstr += "=";
-        environstr += envvar.second;
+        environstr += envvar;
         queueCmd(new GDBCommand(environstr.toLatin1()));
     }
 
@@ -951,7 +949,7 @@ bool GDBController::start(const QString& shell, const QList< QPair<QString, QStr
 void GDBController::slotStopDebugger()
 {
     kDebug(9012) << "GDBController::slotStopDebugger() called";
-    if (stateIsOn(s_shuttingDown) || !dbgProcess_)
+    if (stateIsOn(s_shuttingDown) || !m_process)
         return;
 
     setStateOn(s_shuttingDown);
@@ -966,7 +964,7 @@ void GDBController::slotStopDebugger()
     {
         kDebug(9012) << "gdb busy on shutdown - stopping gdb (SIGINT)";
         // PORTING TODO how to send SIGINT
-        dbgProcess_->kill();
+        m_process->kill();
         start = QTime::currentTime();
         while (-1)
         {
@@ -982,7 +980,7 @@ void GDBController::slotStopDebugger()
     if (stateIsOn(s_attached))
     {
         const char *detach="detach\n";
-        if (!dbgProcess_->write(detach, strlen(detach)))
+        if (!m_process->write(detach, strlen(detach)))
             kDebug(9012) << "failed to write 'detach' to gdb";
         emit gdbUserCommandStdout("(gdb) detach\n");
         start = QTime::currentTime();
@@ -997,7 +995,7 @@ void GDBController::slotStopDebugger()
 
     // Now try to stop gdb running.
     const char *quit="quit\n";
-    if (!dbgProcess_->write(quit, strlen(quit)))
+    if (!m_process->write(quit, strlen(quit)))
         kDebug(9012) << "failed to write 'quit' to gdb";
 
     emit gdbUserCommandStdout("(gdb) quit");
@@ -1014,11 +1012,11 @@ void GDBController::slotStopDebugger()
     if (!stateIsOn(s_programExited))
     {
         kDebug(9012) << "gdb not shutdown - killing";
-        dbgProcess_->kill();
+        m_process->kill();
     }
 
     destroyCmds();
-    delete dbgProcess_;    dbgProcess_ = 0;
+    delete m_process;    m_process = 0;
     delete tty_;           tty_ = 0;
 
     // The gdb output buffer might contain start marker of some
@@ -1405,26 +1403,31 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
 }
 
 // Data from gdb gets processed here.
-void GDBController::slotDbgStdout(QProcess *, char *buf, int buflen)
+void GDBController::readyReadStandardOutput()
 {
-    static bool parsing = false;
+    QProcess* process = qobject_cast<QProcess*>(sender());
+    Q_ASSERT(process);
 
-    QByteArray msg(buf, buflen+1);
+    process->setReadChannel(QProcess::StandardOutput);
+    readFromProcess(process);
+}
 
+void GDBController::readyReadStandardError()
+{
+    QProcess* process = qobject_cast<QProcess*>(sender());
+    Q_ASSERT(process);
+
+    // At the moment, just drop a message out and redirect
+    process->setReadChannel(QProcess::StandardError);
+    kDebug(9012) << "STDERR: " << process->readAll();
+    readFromProcess(process);
+}
+
+void GDBController::readFromProcess(QProcess* process)
+{
     // Copy the data out of the QProcess buffer before it gets overwritten
     // Append to the back of the holding zone.
-    holdingZone_ +=  QByteArray(buf, buflen+1);
-
-    // Already parsing? then get out quick.
-    // VP, 2006-01-30. I'm not sure how this could happen, since
-    // parsing of gdb reply should not ever execute Qt message loop. Except,
-    // maybe, when we pop up a message box. But even in that case,
-    // it's likely we won't return to slotDbgStdout again.
-    if (parsing)
-    {
-        kDebug(9012) << "Already parsing";
-        return;
-    }
+    holdingZone_ +=  process->readAll();
 
     bool ready_for_next_command = false;
 
@@ -1669,13 +1672,6 @@ void GDBController::raiseEvent(event_t e)
 }
 
 
-void GDBController::slotDbgStderr(QProcess *proc, char *buf, int buflen)
-{
-    // At the moment, just drop a message out and redirect
-    kDebug(9012) << "STDERR: " << QString::fromAscii(buf, buflen+1);
-    slotDbgStdout(proc, buf, buflen);
-}
-
 // **************************************************************************
 
 void GDBController::slotDbgWroteStdin(QProcess *)
@@ -1690,12 +1686,15 @@ void GDBController::slotDbgWroteStdin(QProcess *)
 
 // **************************************************************************
 
-void GDBController::slotDbgProcessExited(QProcess* process)
+void GDBDebugger::GDBController::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    Q_ASSERT(process == dbgProcess_);
-    bool abnormal = process->exitCode() != 0;
-    delete dbgProcess_;
-    dbgProcess_ = 0;
+    QProcess* process = qobject_cast<QProcess*>(sender());
+
+    Q_ASSERT(process == m_process);
+
+    bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
+    delete m_process;
+    m_process = 0;
     delete tty_;
     tty_ = 0;
 
