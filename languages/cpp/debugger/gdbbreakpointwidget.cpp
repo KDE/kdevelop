@@ -316,6 +316,11 @@ controller_(controller)
              plugin,   SLOT(slotRefreshBPState(const Breakpoint&)));
     connect( this, SIGNAL(gotoSourcePosition(const QString&, int)),
              plugin,   SLOT(slotGotoSource(const QString&, int)) );
+
+    connect( controller,   SIGNAL(breakpointHit(int)),
+             this,         SLOT(slotBreakpointHit(int)));
+
+    connect(plugin, SIGNAL(reset()), this, SLOT(reset()));
 }
 
 /***************************************************************************/

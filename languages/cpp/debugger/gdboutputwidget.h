@@ -51,9 +51,9 @@ public:
     void savePartialProjectSession(QDomElement* el);
     void restorePartialProjectSession(const QDomElement* el);
 
+public Q_SLOTS:
     void clear();
 
-public Q_SLOTS:
     void slotInternalCommandStdout(const char* line);
     void slotUserCommandStdout(const char* line);
     void slotReceivedStderr(const char* line);

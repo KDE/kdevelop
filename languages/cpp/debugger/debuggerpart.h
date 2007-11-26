@@ -61,8 +61,6 @@ class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvide
 public:
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
-    virtual void restorePartialProjectSession(const QDomElement* el);
-    virtual void savePartialProjectSession(QDomElement* el);
 
     void startDebugger();
     
@@ -89,6 +87,13 @@ Q_SIGNALS:
     void raiseFramestackViews();
     void raiseVariableViews();
     void clearViews();
+
+    void addWatchVariable(const QString& variable);
+    void evaluateExpression(const QString& variable);
+
+    void reset();
+
+    void addMemoryView();
 
 //k_dcop:
 //    virtual ASYNC slotDebugExternalProcess();
@@ -154,12 +159,6 @@ private:
     void setupController();
     bool haveModifiedFiles();
 
-    QPointer<VariableWidget> variableWidget;
-    QPointer<GDBBreakpointWidget> gdbBreakpointWidget;
-    QPointer<FramestackWidget> framestackWidget;
-    QPointer<DisassembleWidget> disassembleWidget;
-    QPointer<GDBOutputWidget> gdbOutputWidget;
-    QPointer<ViewerWidget> viewerWidget;
     GDBController *controller;
     //QPointer<QLabel> statusBarIndicator;
     QPointer<KToolBar> floatingToolBar;

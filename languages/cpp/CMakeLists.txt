@@ -19,6 +19,7 @@ add_subdirectory(parser)
 add_subdirectory(cppduchain)
 add_subdirectory(app_templates)
 add_subdirectory(tests)
+add_subdirectory(debugger)
 
 ########### next target ###############
 

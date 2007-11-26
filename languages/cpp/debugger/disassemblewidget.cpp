@@ -16,6 +16,7 @@
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
+#include "debuggerpart.h"
 
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -59,6 +60,12 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, GDBController* c
     setWindowTitle(i18n("Disassemble View"));
     setFont(KGlobalSettings::fixedFont());
     setReadOnly(true);
+
+    connect( controller,  SIGNAL(showStepInSource(const QString&, int, const QString&)),
+             this,        SLOT(slotShowStepInSource(const QString&, int, const QString&)));
+
+    connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
+    connect(plugin, SIGNAL(reset()), this, SLOT(slotDeactivate()));
 }
 
 /***************************************************************************/
@@ -179,6 +186,11 @@ void DisassembleWidget::showEvent(QShowEvent*)
 void DisassembleWidget::hideEvent(QHideEvent*)
 {
     slotActivate(false);
+}
+
+void DisassembleWidget::slotDeactivate()
+{
+  slotActivate(false);
 }
 
 /***************************************************************************/

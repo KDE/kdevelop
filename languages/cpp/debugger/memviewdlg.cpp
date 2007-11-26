@@ -17,6 +17,7 @@
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "gdbglobal.h"
+#include "debuggerpart.h"
 
 #include <k3buttonbox.h>
 #include <klineedit.h>
@@ -133,9 +134,9 @@ namespace GDBDebugger
 
 
     
-    MemoryView::MemoryView(GDBController* controller,
-                           QWidget* parent, const char* name)
-    : QWidget(parent, name), 
+    MemoryView::MemoryView(CppDebuggerPlugin* plugin, GDBController* controller,
+                           QWidget* parent)
+    : QWidget(parent),
       controller_(controller),
       // New memory view can be created only when debugger is active,
       // so don't set s_appNotStarted here.
@@ -150,6 +151,11 @@ namespace GDBDebugger
 
         if (isOk())
             slotEnableOrDisable();
+
+        connect( controller, SIGNAL(dbgStatus(const QString&, int)),
+                 this,       SLOT(slotDebuggerState(const QString&, int)));
+        connect(this,        SIGNAL(setViewShown(bool)),
+                plugin,      SLOT(slotShowView(bool)));
     }
 
     void MemoryView::initWidget()
@@ -409,9 +415,10 @@ namespace GDBDebugger
     }
 
 
-    ViewerWidget::ViewerWidget(GDBController* controller,
+    ViewerWidget::ViewerWidget(CppDebuggerPlugin* plugin, GDBController* controller,
                                QWidget* parent)
     : QWidget(parent),
+      m_plugin(plugin),
       controller_(controller)
     {
         setWindowIcon(KIcon("math_brace"));
@@ -421,6 +428,8 @@ namespace GDBDebugger
         
         toolBox_ = new QToolBox(this);
         l->addWidget(toolBox_);
+
+        connect(plugin, SIGNAL(addMemoryView()), this, SLOT(slotAddMemoryView()));
     }
 
     void ViewerWidget::slotAddMemoryView()
@@ -438,7 +447,7 @@ namespace GDBDebugger
 
         setViewShown(true);
 
-        MemoryView* widget = new MemoryView(controller_, this);
+        MemoryView* widget = new MemoryView(m_plugin, controller_, this);
         toolBox_->addItem(widget, widget->caption());
         toolBox_->setCurrentItem(widget);
         memoryViews_.push_back(widget);

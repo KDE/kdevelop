@@ -56,8 +56,6 @@ public:
                          QWidget* parent=0 );
     virtual ~GDBBreakpointWidget();
 
-    void reset();
-
     void savePartialProjectSession(QDomElement* el);
     void restorePartialProjectSession(const QDomElement* el);
 
@@ -65,6 +63,8 @@ public:
 
 
 public Q_SLOTS:
+    void reset();
+
     // Connected to from the editor widget:
     void slotToggleBreakpoint(const QString &filename, int lineNum);
     void slotToggleBreakpointEnabled(const QString &fileName, int lineNum);

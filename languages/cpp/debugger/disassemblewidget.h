@@ -45,6 +45,7 @@ public:
 
 public Q_SLOTS:
     void slotActivate(bool activate);
+    void slotDeactivate();
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
 
 private:

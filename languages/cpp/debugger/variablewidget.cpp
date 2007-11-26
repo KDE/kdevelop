@@ -122,6 +122,9 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
 
     connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
 
+    connect(plugin, SIGNAL(addWatchVariable(const QString&)), this, SLOT(slotAddWatchVariable(const QString&)));
+    connect(plugin, SIGNAL(evaluateExpression(const QString&)), this, SLOT(slotEvaluateExpression(const QString&)));
+    
     // Setup help items.
 
     this->setWhatsThis( i18n(
@@ -634,7 +637,7 @@ private:
     void handleReply(const Q3ValueVector<QString>& lines)
     {
         QString s;
-        for(unsigned i = 1; i < lines.count(); ++i)
+        for(int i = 1; i < lines.count(); ++i)
             s += lines[i];
         item_->updateSpecialRepresentation(s.local8Bit());
     }
@@ -1300,7 +1303,7 @@ void VarItem::valueDone(const GDBMI::ResultRecord& r)
             if (i == 0)
             {
                 QString split;
-                for(unsigned i = 0; i < s.length(); ++i)
+                for(int i = 0; i < s.length(); ++i)
                 {
                     // For string 11111, we should split it as
                     // 1 1111, not as 1111 1.
@@ -1906,7 +1909,7 @@ void VarItem::unhookFromGdb()
 
 QString VarItem::tipText() const
 {
-    const unsigned int maxTooltipSize = 70;
+    const int maxTooltipSize = 70;
     QString tip = text( ValueCol );
 
     if (tip.length() > maxTooltipSize)

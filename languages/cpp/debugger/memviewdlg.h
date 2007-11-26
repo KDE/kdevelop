@@ -33,12 +33,13 @@ namespace GDBDebugger
 {
     class MemoryView;
     class GDBController;
+    class CppDebuggerPlugin;
 
     class ViewerWidget : public QWidget
     {
         Q_OBJECT
     public:
-        ViewerWidget(GDBController* controller,
+        ViewerWidget(CppDebuggerPlugin* plugin, GDBController* controller,
                      QWidget* parent);
 
     public Q_SLOTS:
@@ -62,14 +63,15 @@ namespace GDBDebugger
         GDBController* controller_;
         QToolBox* toolBox_;
         Q3ValueVector<MemoryView*> memoryViews_;
+        CppDebuggerPlugin* m_plugin;
     };
 
     class MemoryView : public QWidget
     {
         Q_OBJECT
     public:
-        MemoryView(GDBController* controller, 
-                   QWidget* parent, const char* name = 0);
+        MemoryView(CppDebuggerPlugin* plugin, GDBController* controller,
+                   QWidget* parent);
 
         void debuggerStateChanged(int state);
 

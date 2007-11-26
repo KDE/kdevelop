@@ -176,10 +176,7 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    ViewerWidget* vw = new ViewerWidget(m_controller, parent);
-    QObject::connect(vw, SIGNAL(setViewShown(bool)),
-            m_plugin, SLOT(slotShowView(bool)));
-    return vw;
+    return new ViewerWidget(m_plugin, m_controller, parent);
   }
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -202,9 +199,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
 
-    setXMLFile("kdevcppdebugger.rc");
-
-    //m_debugger = new Debugger( partController() );
+    setXMLFile("kdevcppdebuggerui.rc");
 
     // Setup widgets and dbgcontroller
 
@@ -400,8 +395,9 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     // we don't have any better alternative, and using yet another window
     // is undesirable. Besides, this makes tracepoint look even more similar
     // to printf debugging.
-    connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
-             procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
+// PORTING TODO broken - need intermediate signal?
+//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
+//              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
 
 
     connect(core()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
@@ -479,13 +475,6 @@ CppDebuggerPlugin::~CppDebuggerPlugin()
 {
     //kapp->dcopClient()->setNotifications(false);
 
-    delete m_breakpointFactory;
-    delete m_variableFactory;
-    delete m_framestackFactory;
-    delete m_disassembleFactory;
-    delete m_outputFactory;
-    delete  m_specialFactory;
-
     delete controller;
     delete floatingToolBar;
     delete procLineMaker;
@@ -562,12 +551,12 @@ void CppDebuggerPlugin::toggleBreakpoint()
 
 void CppDebuggerPlugin::contextWatch()
 {
-    variableWidget->slotAddWatchVariable(m_contextIdent);
+    emit addWatchVariable(m_contextIdent);
 }
 
 void CppDebuggerPlugin::contextEvaluate()
 {
-    variableWidget->slotEvaluateExpression(m_contextIdent);
+    emit evaluateExpression(m_contextIdent);
 }
 
 /*void CppDebuggerPlugin::projectConfigWidget(KDialogBase *dlg)
@@ -581,24 +570,9 @@ void CppDebuggerPlugin::contextEvaluate()
 
 void CppDebuggerPlugin::setupController()
 {
-    VariableTree *variableTree = variableWidget->varTree();
-
     // variableTree -> gdbBreakpointWidget
-    connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
-             gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(const QString &)));
-
-    // gdbOutputWidget -> controller
-    connect( gdbOutputWidget,       SIGNAL(userGDBCmd(const QString &)),
-             controller,            SLOT(slotUserGDBCmd(const QString&)));
-    connect( gdbOutputWidget,       SIGNAL(breakInto()),
-             controller,            SLOT(slotBreakInto()));
-
-    connect( controller,            SIGNAL(breakpointHit(int)),
-             gdbBreakpointWidget,   SLOT(slotBreakpointHit(int)));
-
-    // controller -> disassembleWidget
-    connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
-             disassembleWidget,     SLOT(slotShowStepInSource(const QString&, int, const QString&)));
+//     connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
+//              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(const QString &)));
 
     // controller -> this
     connect( controller,            SIGNAL(dbgStatus(const QString&, int)),
@@ -616,22 +590,6 @@ void CppDebuggerPlugin::setupController()
              procLineMaker,         SLOT(slotReceivedStdout(const char*)));
     connect( controller,            SIGNAL(ttyStderr(const char*)),
              procLineMaker,         SLOT(slotReceivedStderr(const char*)));
-
-    // controller -> gdbOutputWidget
-    connect( controller,            SIGNAL(gdbInternalCommandStdout(const char*)),
-             gdbOutputWidget,       SLOT(slotInternalCommandStdout(const char*)) );
-    connect( controller,            SIGNAL(gdbUserCommandStdout(const char*)),
-             gdbOutputWidget,       SLOT(slotUserCommandStdout(const char*)) );
-
-    connect( controller,            SIGNAL(gdbStderr(const char*)),
-             gdbOutputWidget,       SLOT(slotReceivedStderr(const char*)) );
-    connect( controller,            SIGNAL(dbgStatus(const QString&, int)),
-             gdbOutputWidget,       SLOT(slotDbgStatus(const QString&, int)));
-
-    // controller -> viewerWidget
-    connect( controller, SIGNAL(dbgStatus(const QString&, int)),
-             viewerWidget, SLOT(slotDebuggerState(const QString&, int)));
-
 
 //     connect(statusBarIndicator, SIGNAL(doubleClicked()),
 //             controller, SLOT(explainDebuggerStatus()));
@@ -714,10 +672,7 @@ void CppDebuggerPlugin::slotStopDebugger()
     delete floatingToolBar;
     floatingToolBar = 0;
 
-    gdbBreakpointWidget->reset();
-    disassembleWidget->clear();
-    gdbOutputWidget->clear();
-    disassembleWidget->slotActivate(false);
+    emit reset();
 
 //     variableWidget->setEnabled(false);
 //     framestackWidget->setEnabled(false);
@@ -945,7 +900,7 @@ void CppDebuggerPlugin::slotStepOut()
 
 void CppDebuggerPlugin::slotMemoryView()
 {
-    viewerWidget->slotAddMemoryView();
+    emit addMemoryView();
 }
 
 void CppDebuggerPlugin::slotRefreshBPState( const Breakpoint& BP)
@@ -1093,17 +1048,7 @@ void CppDebuggerPlugin::slotGotoSource(const QString &fileName, int lineNum)
 
 // Used to disable breakpoint actions when non-text document selected
 
-void CppDebuggerPlugin::restorePartialProjectSession(const QDomElement* el)
-{
-    gdbBreakpointWidget->restorePartialProjectSession(el);
-    gdbOutputWidget->restorePartialProjectSession(el);
-}
-
-void CppDebuggerPlugin::savePartialProjectSession(QDomElement* el)
-{
-    gdbBreakpointWidget->savePartialProjectSession(el);
-    gdbOutputWidget->savePartialProjectSession(el);
-}
+// save/restore partial project session
 
 QStringList CppDebuggerPlugin::instrumentorsProvided() const
 {

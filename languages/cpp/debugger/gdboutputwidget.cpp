@@ -41,6 +41,7 @@
 #include <KIcon>
 
 #include "gdbglobal.h"
+#include "debuggerpart.h"
 
 namespace GDBDebugger
 {
@@ -97,6 +98,23 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
 
     connect( &updateTimer_, SIGNAL(timeout()),
              this,  SLOT(flushPending()));
+
+    connect( this,       SIGNAL(userGDBCmd(const QString &)),
+             controller, SLOT(slotUserGDBCmd(const QString&)));
+    connect( this,       SIGNAL(breakInto()),
+             controller, SLOT(slotBreakInto()));
+
+    connect( controller, SIGNAL(gdbInternalCommandStdout(const char*)),
+             this,       SLOT(slotInternalCommandStdout(const char*)) );
+    connect( controller, SIGNAL(gdbUserCommandStdout(const char*)),
+             this,       SLOT(slotUserCommandStdout(const char*)) );
+
+    connect( controller, SIGNAL(gdbStderr(const char*)),
+             this,       SLOT(slotReceivedStderr(const char*)) );
+    connect( controller, SIGNAL(dbgStatus(const QString&, int)),
+             this,       SLOT(slotDbgStatus(const QString&, int)));
+
+    connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
 }
 
 /***************************************************************************/
