@@ -105,4 +105,3 @@ void ProcessLineMaker::clearBuffers( )
 }
 
 #include "processlinemaker.moc"
-             

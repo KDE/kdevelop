@@ -23,7 +23,6 @@
 #include "mi/miparser.h"
 
 #include <q3cstring.h>
-#include <qdom.h>
 #include <QObject>
 #include <q3ptrlist.h>
 #include <QString>
@@ -305,7 +304,6 @@ private:
     bool              programHasExited_;
 
     // Configuration values
-    QDomDocument &dom;
     bool    config_breakOnLoadingLibrary_;
     bool    config_forceBPSet_;
     bool    config_displayStaticMembers_;

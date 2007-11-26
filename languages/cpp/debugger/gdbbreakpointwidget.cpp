@@ -271,7 +271,7 @@ controller_(controller)
 
     m_table->show();
 
-    connect( ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
+    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
              this, SLOT(slotRefreshBP(KDevelop::IDocument*)) );
 
     connect( newBreakpoint,       SIGNAL(activated(int)),
@@ -1071,7 +1071,7 @@ void GDBBreakpointWidget::editTracing(Q3TableItem* item)
 
 void GDBBreakpointWidget::savePartialProjectSession(QDomElement* el)
 {
-    QDomDocument domDoc = el->ownerDocument();
+    /*QDomDocument domDoc = el->ownerDocument();
     if (domDoc.isNull())
         return;
 
@@ -1115,7 +1115,7 @@ void GDBBreakpointWidget::savePartialProjectSession(QDomElement* el)
     }
 
     if (!breakpointListEl.isNull())
-        el->appendChild(breakpointListEl);
+        el->appendChild(breakpointListEl);*/
 }
 
 /***************************************************************************/
@@ -1129,7 +1129,7 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
         KDE (Boost.Serialization is too much dependency, and rolling my own is
         boring).
     */
-    QDomElement breakpointListEl = el->namedItem("breakpointList").toElement();
+    /*QDomElement breakpointListEl = el->namedItem("breakpointList").toElement();
     if (!breakpointListEl.isNull())
     {
         QDomElement breakpointEl;
@@ -1204,7 +1204,7 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
                 addBreakpoint(bp);
             }
         }
-    }
+    }*/
 }
 
 /***************************************************************************/

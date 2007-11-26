@@ -25,6 +25,7 @@
 //Added by qt3to4:
 #include <Q3PopupMenu>
 #include <QFocusEvent>
+#include <QStringList>
 #include <kvbox.h>
 
 class KHistoryComboBox;
@@ -36,6 +37,8 @@ class QDomElement;
 namespace GDBDebugger
 {
 
+class GDBController;
+  
 class GDBOutputWidget : public QWidget
 {
     Q_OBJECT

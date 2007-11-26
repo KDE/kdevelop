@@ -31,6 +31,8 @@
 
 #include <stdlib.h>
 #include <kvbox.h>
+#include <klocale.h>
+#include <KIcon>
 
 namespace GDBDebugger
 {

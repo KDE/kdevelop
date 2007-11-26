@@ -12,7 +12,6 @@
  ***************************************************************************/
 
 #include "debuggerpart.h"
-#include "label_with_double_click.h"
 
 #include <QDir>
 
@@ -34,10 +33,13 @@
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kpluginfactory.h>
+#include <KToolBar>
+#include <KDialog>
 
 #include <icore.h>
 #include <iuicontroller.h>
-//#include <idocumentcontroller.h>
+#include <idocumentcontroller.h>
+#include <context.h>
 
 #include "variablewidget.h"
 #include "gdbbreakpointwidget.h"
@@ -46,15 +48,16 @@
 #include "gdbcontroller.h"
 #include "breakpoint.h"
 #include "dbgpsdlg.h"
-#include "dbgtoolbar.h"
 #include "memviewdlg.h"
 #include "gdbparser.h"
 #include "gdboutputwidget.h"
 #include "debuggerconfigwidget.h"
+#include "processlinemaker.h"
 
 #include <iostream>
 
 #include <kvbox.h>
+
 
 namespace GDBDebugger
 {
@@ -380,8 +383,8 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 //     connect( debugger(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
 //              gdbBreakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 
-//     connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-//              this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
+//     connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const KDevelop::Context *)),
+//              this, SLOT(contextMenu(Q3PopupMenu *, const KDevelop::Context *)) );
 // 
 //     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
 //              this, SLOT(slotStop(KDevPlugin*)) );
@@ -393,10 +396,10 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     procLineMaker = new ProcessLineMaker();
 
-    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-             appFrontend(), SLOT(insertStdoutLine(const QString&)) );
-    connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-             appFrontend(), SLOT(insertStderrLine(const QString&)) );
+//     connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
+//              appFrontend(), SLOT(insertStdoutLine(const QString&)) );
+//     connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
+//              appFrontend(), SLOT(insertStderrLine(const QString&)) );
 
     // The output from tracepoints goes to "application" window, because
     // we don't have any better alternative, and using yet another window
@@ -473,33 +476,23 @@ ASYNC CppDebuggerPlugin::slotDebugCommandLine(const QString& /command/)
 
 void CppDebuggerPlugin::slotCloseDrKonqi()
 {
-    kapp->dcopClient()->send(m_drkonqi, "MainApplication-Interface", "quit()", QByteArray());
-    m_drkonqi = "";
+    /*kapp->dcopClient()->send(m_drkonqi, "MainApplication-Interface", "quit()", QByteArray());
+    m_drkonqi = "";*/
 }
 
 CppDebuggerPlugin::~CppDebuggerPlugin()
 {
-    kapp->dcopClient()->setNotifications(false);
+    //kapp->dcopClient()->setNotifications(false);
 
-    if (variableWidget)
-        mainWindow()->removeView(variableWidget);
-    if (gdbBreakpointWidget)
-        mainWindow()->removeView(gdbBreakpointWidget);
-    if (framestackWidget)
-        mainWindow()->removeView(framestackWidget);
-    if (disassembleWidget)
-        mainWindow()->removeView(disassembleWidget);
-    if(gdbOutputWidget)
-        mainWindow()->removeView(gdbOutputWidget);
+    delete m_breakpointFactory;
+    delete m_variableFactory;
+    delete m_framestackFactory;
+    delete m_disassembleFactory;
+    delete m_outputFactory;
+    delete  m_specialFactory;
 
-    delete variableWidget;
-    delete gdbBreakpointWidget;
-    delete framestackWidget;
-    delete disassembleWidget;
-    delete gdbOutputWidget;
     delete controller;
     delete floatingToolBar;
-    delete statusBarIndicator;
     delete procLineMaker;
 
     GDBParser::destroy();
@@ -514,12 +507,12 @@ void CppDebuggerPlugin::guiClientAdded( KXMLGUIClient* client )
         stateChanged( QString("stopped") );
 }
 
-void CppDebuggerPlugin::contextMenu(Q3PopupMenu *popup, const Context *context)
+void CppDebuggerPlugin::contextMenu(Q3PopupMenu *popup, const KDevelop::Context *context)
 {
-    if (!context->hasType( Context::EditorContext ))
+    if (!context->hasType( KDevelop::Context::EditorContext ))
         return;
 
-    const EditorContext *econtext = static_cast<const EditorContext*>(context);
+    const KDevelop::EditorContext *econtext = static_cast<const KDevelop::EditorContext*>(context);
     m_contextIdent = econtext->currentWord();
 
     bool running = !(previousDebuggerState_ & s_dbgNotStarted);
@@ -532,63 +525,43 @@ void CppDebuggerPlugin::contextMenu(Q3PopupMenu *popup, const Context *context)
     if (!running)
         popup->insertSeparator();
 
-    int index = running ? 0 : -1;
     if (running)
     {
-        // Too bad we can't add QAction to popup menu in Qt3.
-        KAction* act = actionCollection()->action("debug_runtocursor");
-        Q_ASSERT(act);
-        if (act)
-        {
-            int id = popup->insertItem( act->iconSet(), i18n("Run to &Cursor"),
-                                        this, SLOT(slotRunToCursor()),
-                                        0, -1, index);
-
-            popup->setWhatsThis(id, act->whatsThis());
-            index += running;
-        }
+        QAction* act = actionCollection()->action("debug_runtocursor");
+        popup->addAction(act);
     }
+
     if (econtext->url().isLocalFile())
     {
-        int id = popup->insertItem( i18n("Toggle Breakpoint"),
-                                    this, SLOT(toggleBreakpoint()),
-                                    0, -1, index);
-        index += running;
+        popup->addAction( i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()));
         popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Toggles breakpoint at the current line."));
     }
     if (!m_contextIdent.isEmpty())
     {
-        QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
-        int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed),
-                                    this, SLOT(contextEvaluate()),
-                                    0, -1, index);
-        index += running;
-        popup->setWhatsThis(id, i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor."));
-        int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed),
-                                     this, SLOT(contextWatch()),
-                                    0, -1, index);
-        index += running;
-        popup->setWhatsThis(id2, i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list."));
+        // PORTING TODO
+        //QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
+        QAction* action = popup->addAction( i18n("Evaluate: %1").arg(m_contextIdent),
+                                    this, SLOT(contextEvaluate()));
+        action->setWhatsThis(i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor."));
+        action = popup->addAction( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()));
+        action->setWhatsThis(i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list."));
     }
-    if (running)
-        popup->insertSeparator(index);
+
+    popup->addSeparator();
 }
 
 
 void CppDebuggerPlugin::toggleBreakpoint()
 {
-    KParts::ReadWritePart *rwpart
-        = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    KTextEditor::ViewCursorInterface *cursorIface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(partController()->activeWidget());
+    if (KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->activeDocument()) {
+      KTextEditor::Cursor cursor = document->cursorPosition();
 
-    if (!rwpart || !cursorIface)
+      if (!cursor.isValid())
         return;
 
-    uint line, col;
-    cursorIface->cursorPositionReal(&line, &col);
-
-    gdbBreakpointWidget->slotToggleBreakpoint(rwpart->url().path(), line);
+      // PORTING TODO
+      //emit toggleBreakpoint(document->url().path(), cursor.line());
+    }
 }
 
 
@@ -602,13 +575,13 @@ void CppDebuggerPlugin::contextEvaluate()
     variableWidget->slotEvaluateExpression(m_contextIdent);
 }
 
-void CppDebuggerPlugin::projectConfigWidget(KDialogBase *dlg)
+/*void CppDebuggerPlugin::projectConfigWidget(KDialogBase *dlg)
 {
     KVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIconLoader::SizeMedium) );
-    DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
+    DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(finished()), controller, SLOT(configure()) );
-}
+}*/
 
 
 void CppDebuggerPlugin::setupController()
@@ -665,8 +638,8 @@ void CppDebuggerPlugin::setupController()
              viewerWidget, SLOT(slotDebuggerState(const QString&, int)));
 
 
-    connect(statusBarIndicator, SIGNAL(doubleClicked()),
-            controller, SLOT(explainDebuggerStatus()));
+//     connect(statusBarIndicator, SIGNAL(doubleClicked()),
+//             controller, SLOT(explainDebuggerStatus()));
 
 }
 
@@ -674,14 +647,12 @@ void CppDebuggerPlugin::setupController()
 bool CppDebuggerPlugin::startDebugger()
 {
     QString build_dir;              // Currently selected build directory
-    DomUtil::PairList run_envvars;  // List with the environment variables
     QString run_directory;          // Directory from where the program should be run
     QString program;                // Absolute path to application
     QString run_arguments;          // Command line arguments to be passed to the application
 
     if (project()) {
         build_dir     = project()->buildDirectory();
-        run_envvars   = project()->runEnvironmentVars();
         run_directory = project()->runDirectory();
         program       = project()->mainProgram();
         run_arguments = project()->debugArguments();
@@ -742,7 +713,7 @@ bool CppDebuggerPlugin::startDebugger()
         if (DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar", false))
         {
 #ifndef QT_MAC
-            floatingToolBar = new DbgToolBar(this, mainWindow()->main());
+            floatingToolBar = new KToolBar(this, mainWindow()->main());
             floatingToolBar->show();
 #endif
         }

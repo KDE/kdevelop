@@ -23,12 +23,11 @@ set(kdevcppdebugger_PART_SRCS
     disassemblewidget.cpp
     memviewdlg.cpp
     dbgpsdlg.cpp
-    dbgtoolbar.cpp
     debuggerconfigwidget.cpp
     gdboutputwidget.cpp
     gdbtable.cpp
     debuggertracingdialog.cpp
-    label_with_double_click.cpp
+    processlinemaker.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp

@@ -39,6 +39,7 @@
 #include <Q3VBoxLayout>
 #include <kvbox.h>
 #include <khistorycombobox.h>
+#include <KIcon>
 
 
 namespace GDBDebugger
@@ -65,7 +66,7 @@ GDBOutputWidget::GDBOutputWidget(GDBController* controller, QWidget *parent) :
     m_gdbView->setTextFormat(Qt::LogText);
 
     Q3BoxLayout *userGDBCmdEntry = new Q3HBoxLayout();
-    m_userGDBCmdEditor = new KHistoryComboBox (this, "gdb-user-cmd-editor");
+    m_userGDBCmdEditor = new KHistoryComboBox (this);
 
     QLabel *label = new QLabel(i18n("&GDB cmd:"), this);
     label->setBuddy(m_userGDBCmdEditor);
@@ -334,7 +335,7 @@ void GDBOutputWidget::restorePartialProjectSession(const QDomElement* el)
 //void OutputText::contextMenuEvent(QContextMenuEvent* e)
 Q3PopupMenu* OutputText::createPopupMenu(const QPoint&)
 {
-    KMenu* popup = new KMenu;
+    Q3PopupMenu* popup = new Q3PopupMenu;
 
     int id = popup->insertItem(i18n("Show Internal Commands"),
                                this,

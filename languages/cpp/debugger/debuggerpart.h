@@ -29,11 +29,14 @@ namespace KParts { class Part; }
 
 class QLabel;
 class Q3PopupMenu;
-class KDialogBase;
+class KDialog;
 class ProcessWidget;
 class ProcessLineMaker;
 class KDevAppFrontend;
 class KDevDebugger;
+class KToolBar;
+
+namespace KDevelop { class Context; }
 
 namespace GDBDebugger
 {
@@ -43,11 +46,9 @@ class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
 class GDBController;
-class DbgToolBar;
 class VariableWidget;
 class GDBOutputWidget;
 class ViewerWidget;
-class Context;
 
 class CppDebuggerPlugin : public KDevelop::IPlugin
 {
@@ -66,13 +67,13 @@ public:
 private Q_SLOTS:
     void setupDcop();
     void guiClientAdded(KXMLGUIClient*);
-    void contextMenu(Q3PopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const KDevelop::Context *context);
     void toggleBreakpoint();
     void contextEvaluate();
     void contextWatch();
 //    void projectOpened();
     void projectClosed();
-    void projectConfigWidget(KDialogBase *dlg);
+    //void projectConfigWidget(KDialog *dlg);
     void slotActivePartChanged(KParts::Part*);
 
     void slotRun();
@@ -136,7 +137,7 @@ private:
     QPointer<ViewerWidget> viewerWidget;
     GDBController *controller;
     //QPointer<QLabel> statusBarIndicator;
-    QPointer<DbgToolBar> floatingToolBar;
+    QPointer<KToolBar> floatingToolBar;
     ProcessLineMaker* procLineMaker;
     ProcessLineMaker* gdbLineMaker;
 

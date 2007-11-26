@@ -89,8 +89,7 @@ class VariableTree : public K3ListView
     Q_OBJECT
 public:
     VariableTree(VariableWidget *parent, 
-                 GDBController*  controller,
-                 GDBBreakpointWidget* breakpointWidget);
+                 GDBController*  controller);
     virtual ~VariableTree();
 
     Q3ListViewItem *lastChild() const;
@@ -99,9 +98,6 @@ public:
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
     WatchRoot *findWatch();
 
-
-	// (from QToolTip) Display a tooltip when the cursor is over an item
-	virtual void maybeTip(const QPoint &);
 
     GDBController* controller() const { return controller_; }
 

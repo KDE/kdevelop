@@ -141,7 +141,6 @@ GDBController::GDBController(QObject* parent)
         badCore_(QString()),
         state_(s_dbgNotStarted|s_appNotStarted),
         programHasExited_(false),
-        dom(projectDom),
         config_breakOnLoadingLibrary_(true),
         config_forceBPSet_(true),
         config_displayStaticMembers_(false),

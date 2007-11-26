@@ -203,11 +203,9 @@ void VariableWidget::focusInEvent(QFocusEvent */*e*/)
 // **************************************************************************
 
 VariableTree::VariableTree(VariableWidget *parent,
-                           GDBController*  controller,
-                           GDBBreakpointWidget* breakpointWidget)
+                           GDBController*  controller)
     : K3ListView(parent),
       controller_(controller),
-      breakpointWidget_(breakpointWidget),
       activeFlag_(0),
       recentExpressions_(0),
       currentFrameItem(0),
@@ -614,17 +612,6 @@ Q3ListViewItem *VariableTree::lastChild() const
 }
 
 // **************************************************************************
-
-void VariableTree::maybeTip(const QPoint &p)
-{
-    VarItem * item = dynamic_cast<VarItem*>( itemAt( p ) );
-    if ( item )
-    {
-        QRect r = itemRect( item );
-        if ( r.isValid() )
-            tip( r, item->tipText() );
-    }
-}
 
 class ValueSpecialRepresentationCommand : public QObject, public CliCommand
 {

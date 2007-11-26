@@ -37,7 +37,7 @@ namespace GDBDebugger
 
     void DebuggerTracingDialog::enableOrDisable(int state)
     {
-        bool enable = (state == QButton::On);
+        bool enable = (state == QCheckBox::On);
 
         expressionsLabel->setEnabled(enable);
         expressions->setEnabled(enable);
@@ -47,7 +47,7 @@ namespace GDBDebugger
 
     void DebuggerTracingDialog::enableOrDisableCustomFormat(int state)
     {
-        customFormat->setEnabled(state == QButton::On);
+        customFormat->setEnabled(state == QCheckBox::On);
     }
 
     void DebuggerTracingDialog::accept()
@@ -99,7 +99,7 @@ namespace GDBDebugger
             bp_->setTracedExpressions(expressions->items());
             bp_->setTraceFormatStringEnabled(enableCustomFormat->isOn());
             bp_->setTraceFormatString(customFormat->text());
-            DebuggerTracingDialogBase::accept();
+            QDialog::accept();
         }
     }
 
