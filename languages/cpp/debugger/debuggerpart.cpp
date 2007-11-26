@@ -67,7 +67,7 @@ namespace GDBDebugger
 {
 
 K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
-K_EXPORT_PLUGIN(CppDebuggerFactory("kdevcppdebbugger"))
+K_EXPORT_PLUGIN(CppDebuggerFactory("kdevcppdebugger"))
 
 class BreakpointListFactory : public KDevelop::IToolViewFactory
 {
@@ -221,7 +221,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     core()->uiController()->addToolView(i18n("GDB"), m_outputFactory);
 
     m_specialFactory = new SpecialViewFactory(this, controller);
-    core()->uiController()->addToolView(i18n("Debug views"), m_outputFactory);
+    core()->uiController()->addToolView(i18n("Debug views"), m_specialFactory);
 
     // Now setup the actions
     KAction *action;
