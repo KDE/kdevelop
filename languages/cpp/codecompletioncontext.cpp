@@ -31,6 +31,7 @@
 #include "cppduchain/environmentmanager.h"
 #include "cpptypes.h"
 #include "safetycounter.h"
+#include "templatedeclaration.h"
 #include "cpplanguagesupport.h"
 #include "parser/rpp/pp-engine.h"
 #include "parser/rpp/preprocessor.h"
@@ -341,7 +342,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType));
         if( idType ) {
           if( idType->declaration() && idType->declaration()->internalContext() ) {
-            QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(QualifiedIdentifier("operator*"));
+            QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(QualifiedIdentifier("operator->"));
             if( !operatorDeclarations.isEmpty() ) {
               ///@todo care about const
               m_expressionResult.allDeclarations = operatorDeclarations;
@@ -487,6 +488,17 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
       DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
       if( ctx )
         ret << ctx;
+      else {
+        kDebug() << "Could not get internal context from" << m_expressionResult.type->toString();
+        kDebug() << "Declaration" << idType->declaration()->toString() << idType->declaration()->isForwardDeclaration();
+        if( Cpp::TemplateDeclaration* tempDeclaration = dynamic_cast<Cpp::TemplateDeclaration*>(idType->declaration()) ) {
+          if( tempDeclaration->instantiatedFrom() ) {
+            kDebug() << "instantiated from" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->toString() << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->isForwardDeclaration();
+            kDebug() << "internal context" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->internalContext();
+          }
+        }
+        
+      }
     }
   }
   
