@@ -63,7 +63,9 @@ public:
     ~CppDebuggerPlugin();
 
     void startDebugger();
-    
+
+    BreakpointController* breakpoints() const;
+
     // BEGIN IRunProvider
     virtual QStringList instrumentorsProvided() const;
     virtual bool execute(const KDevelop::IRun& run, int serial);
@@ -150,14 +152,12 @@ private Q_SLOTS:
 
     void slotEvent(GDBController::event_t);
 
-private:
-    BreakpointController* breakpoints() const;
-  
+private:  
     KConfigGroup config() const;
     
     void attachProcess(int pid);
     void setupController();
-    bool haveModifiedFiles();
+    void setupActions();
 
     GDBController *controller;
     //QPointer<QLabel> statusBarIndicator;

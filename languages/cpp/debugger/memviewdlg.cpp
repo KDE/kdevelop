@@ -461,7 +461,7 @@ namespace GDBDebugger
 
     void ViewerWidget::slotDebuggerState(const QString&, int state)
     {
-        for(unsigned i = 0; i < memoryViews_.size(); ++i)
+        for(int i = 0; i < memoryViews_.size(); ++i)
         {
             memoryViews_[i]->debuggerStateChanged(state);
         }

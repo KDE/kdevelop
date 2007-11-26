@@ -223,11 +223,53 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     m_specialFactory = new SpecialViewFactory(this, controller);
     core()->uiController()->addToolView(i18n("Debug views"), m_specialFactory);
 
-    // Now setup the actions
-    KAction *action;
+    setupActions();
+
+//    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+//             this, SLOT(projectConfigWidget(KDialogBase*)) );
+
+//     connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const KDevelop::Context *)),
+//              this, SLOT(contextMenu(Q3PopupMenu *, const KDevelop::Context *)) );
+// 
+//     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+//              this, SLOT(slotStop(KDevPlugin*)) );
+//     connect( core(), SIGNAL(projectClosed()),
+//              this, SLOT(projectClosed()) );
+// 
+//     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
+//              this, SLOT(slotActivePartChanged(KParts::Part*)) );
+
+    procLineMaker = new ProcessLineMaker();
+
+//     connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
+//              appFrontend(), SLOT(insertStdoutLine(const QString&)) );
+//     connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
+//              appFrontend(), SLOT(insertStderrLine(const QString&)) );
+
+    // The output from tracepoints goes to "application" window, because
+    // we don't have any better alternative, and using yet another window
+    // is undesirable. Besides, this makes tracepoint look even more similar
+    // to printf debugging.
+// PORTING TODO broken - need intermediate signal?
+//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
+//              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
+
+
+    connect(core()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
+            this, SLOT(slotFileSaved()));
+
+//     if (project())
+//         connect(project(), SIGNAL(projectCompiled()),
+//                 this, SLOT(slotProjectCompiled()));
+
+    setupController();
+}
+
+void CppDebuggerPlugin::setupActions()
+{
     KActionCollection* ac = actionCollection();
 
-    action = new KAction(KIcon("dbgrun"), i18n("&Start"), this);
+    KAction* action = new KAction(KIcon("dbgrun"), i18n("&Start"), this);
     action->setShortcut(Qt::Key_F9);
     action->setToolTip( i18n("Start in debugger") );
     action->setWhatsThis( i18n("<b>Start in debugger</b><p>"
@@ -359,55 +401,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     action->setWhatsThis(i18n("<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in editor."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleBreakpoint()));
     ac->addAction("debug_toggle_breakpoint", action);
-
-//    connect( mainWindow()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
-//             this, SLOT(guiClientAdded(KXMLGUIClient*)) );
-
-//    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-//             this, SLOT(projectConfigWidget(KDialogBase*)) );
-
-//     connect( breakpoints(), SIGNAL(toggledBreakpoint(const QString &, int)),
-//              gdbBreakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
-//     connect( breakpoints(), SIGNAL(editedBreakpoint(const QString &, int)),
-//              gdbBreakpointWidget, SLOT(slotEditBreakpoint(const QString &, int)) );
-//     connect( breakpoints(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
-//              gdbBreakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
-
-//     connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const KDevelop::Context *)),
-//              this, SLOT(contextMenu(Q3PopupMenu *, const KDevelop::Context *)) );
-// 
-//     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
-//              this, SLOT(slotStop(KDevPlugin*)) );
-//     connect( core(), SIGNAL(projectClosed()),
-//              this, SLOT(projectClosed()) );
-// 
-//     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
-//              this, SLOT(slotActivePartChanged(KParts::Part*)) );
-
-    procLineMaker = new ProcessLineMaker();
-
-//     connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-//              appFrontend(), SLOT(insertStdoutLine(const QString&)) );
-//     connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-//              appFrontend(), SLOT(insertStderrLine(const QString&)) );
-
-    // The output from tracepoints goes to "application" window, because
-    // we don't have any better alternative, and using yet another window
-    // is undesirable. Besides, this makes tracepoint look even more similar
-    // to printf debugging.
-// PORTING TODO broken - need intermediate signal?
-//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
-//              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
-
-
-    connect(core()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
-            this, SLOT(slotFileSaved()));
-
-//     if (project())
-//         connect(project(), SIGNAL(projectCompiled()),
-//                 this, SLOT(slotProjectCompiled()));
-
-    setupController();
 }
 
 void CppDebuggerPlugin::setupDcop()

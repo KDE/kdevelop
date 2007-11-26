@@ -60,10 +60,10 @@ namespace GDBDebugger
         void slotChildDestroyed(QObject* child);
      
     private: // Data
+        CppDebuggerPlugin* m_plugin;
         GDBController* controller_;
         QToolBox* toolBox_;
         Q3ValueVector<MemoryView*> memoryViews_;
-        CppDebuggerPlugin* m_plugin;
     };
 
     class MemoryView : public QWidget

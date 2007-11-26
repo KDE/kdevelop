@@ -20,6 +20,7 @@
 #include "gdbcontroller.h"
 #include "gdbglobal.h"
 #include "debuggerpart.h"
+#include "breakpointcontroller.h"
 
 #include "breakpoint.h"
 
@@ -321,6 +322,13 @@ controller_(controller)
              this,         SLOT(slotBreakpointHit(int)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(reset()));
+
+    connect( plugin->breakpoints(), SIGNAL(toggledBreakpoint(const QString &, int)),
+             this, SLOT(slotToggleBreakpoint(const QString &, int)) );
+    connect( plugin->breakpoints(), SIGNAL(editedBreakpoint(const QString &, int)),
+             this, SLOT(slotEditBreakpoint(const QString &, int)) );
+    connect( plugin->breakpoints(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
+             this, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 }
 
 /***************************************************************************/
