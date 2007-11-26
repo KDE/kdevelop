@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Run Options">
+    <entry name="executable" key="Executable" type="Path"/>
+    <entry name="environment" key="Environment" type="String"/>
+    <entry name="arguments" key="Arguments" type="String"/>
+    <entry name="workingDirectory" key="Working Directory" type="Path"/>
+    <entry name="autocompile" key="Compile Before Execution" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="autoinstall" key="Install Before Execution" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="autosu" key="Super User Install" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="startinterminal" key="Start In Terminal" type="Bool">
+        <default>false</default>
+    </entry>
+  </group>
+</kcfg>

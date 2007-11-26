@@ -1,0 +1,6 @@
+File=runconfig.kcfg
+ClassName=RunSettings
+Singleton=true
+UseEnumTypes=true
+SetUserTexts=true
+ItemAccessors=true

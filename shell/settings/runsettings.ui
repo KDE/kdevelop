@@ -1,12 +1,12 @@
 <ui version="4.0" >
- <class>RunOptionsWidget</class>
- <widget class="QWidget" name="RunOptionsWidget" >
+ <class>RunSettings</class>
+ <widget class="QWidget" name="RunSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>616</width>
-    <height>465</height>
+    <width>606</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -49,11 +49,7 @@
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="KURLRequester" native="1" name="kcfg_executable" >
-        <property name="toolTip" >
-         <string>Full path to the executable</string>
-        </property>
-       </widget>
+       <widget class="KUrlRequester" name="kcfg_executable" />
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="mainprogram_label_2" >
@@ -64,7 +60,7 @@
          <bool>false</bool>
         </property>
         <property name="buddy" >
-         <cstring>kcfg_executable</cstring>
+         <cstring>kcfg_arguments</cstring>
         </property>
        </widget>
       </item>
@@ -75,7 +71,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0" >
+      <item row="3" column="0" >
        <widget class="QLabel" name="mainprogram_label_3_2" >
         <property name="text" >
          <string>Working &amp;Directory:</string>
@@ -84,18 +80,14 @@
          <bool>false</bool>
         </property>
         <property name="buddy" >
-         <cstring>kcfg_executable</cstring>
+         <cstring>kcfg_workingDirectory</cstring>
         </property>
        </widget>
       </item>
-      <item row="4" column="1" >
-       <widget class="KURLRequester" native="1" name="kcfg_workingDirectory" >
-        <property name="toolTip" >
-         <string>Sets the current working directory for the launched process</string>
-        </property>
-       </widget>
+      <item row="3" column="1" >
+       <widget class="KUrlRequester" name="kcfg_workingDirectory" />
       </item>
-      <item row="5" column="0" >
+      <item row="4" column="0" >
        <widget class="QLabel" name="label" >
         <property name="text" >
          <string>&amp;Environment</string>
@@ -105,8 +97,8 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1" >
-       <widget class="EnvironmentSelectionWidget" name="kcfg_environment" />
+      <item row="4" column="1" >
+       <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environment" />
       </item>
      </layout>
     </widget>
@@ -167,8 +159,8 @@
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>598</width>
+       <height>61</height>
       </size>
      </property>
     </spacer>
@@ -185,12 +177,12 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>KURLRequester</class>
-   <extends>QWidget</extends>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
    <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>
-   <class>EnvironmentSelectionWidget</class>
+   <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>KComboBox</extends>
    <header>environmentselectionwidget.h</header>
   </customwidget>
