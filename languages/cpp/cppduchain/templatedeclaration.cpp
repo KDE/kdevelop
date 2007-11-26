@@ -313,8 +313,12 @@ bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
 }
 
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
-CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
+CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& _templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
 {
+  QList<ExpressionEvaluationResult> templateArguments = _templateArguments;
+  if( templateArguments.count() == 1 && !templateArguments[0].isValid() )
+    templateArguments.clear(); //If there is only exactly one template-argument, and that one is invalid, interpret the whole thing as no arguments at all
+  
   if( instantiatedDeclaration ) {
     ///Move the instantiated declaration anonymously into the parent-context
     instantiatedDeclaration->setContext(parentContext, true);
@@ -348,7 +352,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
 
     if( instantiatedDeclaration )
       instantiatedDeclaration->setInternalContext(contextCopy);
-
+      
     ///Now the created context is already partially functional and can be used for searching(not the instantiated template-params yet though)
     
     if( context->type() == KDevelop::DUContext::Template ) { //templateArguments may be empty, that means that only copying should happen.
@@ -458,8 +462,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
 ///@todo Use explicitly declared specializations
 Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const DUContext::ImportTrace& inclusionTrace )
 {
-  //foreach(const ExpressionEvaluationResult& res, templateArguments)
-  
   if( ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(this) ) {
     TemplateDeclaration* resolvedTemplate = dynamic_cast<TemplateDeclaration*>(forward->resolved());
     if( resolvedTemplate )
