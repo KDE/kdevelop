@@ -278,9 +278,7 @@ DUContext * Declaration::internalContext() const
   ENSURE_CAN_READ
   if( isForwardDeclaration() ) {
     Declaration* declaration = static_cast<const KDevelop::ForwardDeclaration*>(this)->resolved();
-    if( !declaration )
-      return 0;
-    else
+    if( declaration )
       return declaration->internalContext();
   }
 
