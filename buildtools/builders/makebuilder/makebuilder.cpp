@@ -294,6 +294,7 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
             {
                 id = m_ids[item];
                 m_models[id]->clear();
+                view->raiseView(id);
             }else
             {
                 QString target;
