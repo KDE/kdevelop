@@ -489,12 +489,13 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
       if( ctx )
         ret << ctx;
       else {
-        kDebug() << "Could not get internal context from" << m_expressionResult.type->toString();
-        kDebug() << "Declaration" << idType->declaration()->toString() << idType->declaration()->isForwardDeclaration();
+        //Print some debug-output
+        kDebug(9007) << "Could not get internal context from" << m_expressionResult.type->toString();
+        kDebug(9007) << "Declaration" << idType->declaration()->toString() << idType->declaration()->isForwardDeclaration();
         if( Cpp::TemplateDeclaration* tempDeclaration = dynamic_cast<Cpp::TemplateDeclaration*>(idType->declaration()) ) {
           if( tempDeclaration->instantiatedFrom() ) {
-            kDebug() << "instantiated from" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->toString() << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->isForwardDeclaration();
-            kDebug() << "internal context" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->internalContext();
+            kDebug(9007) << "instantiated from" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->toString() << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->isForwardDeclaration();
+            kDebug(9007) << "internal context" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->internalContext();
           }
         }
         
