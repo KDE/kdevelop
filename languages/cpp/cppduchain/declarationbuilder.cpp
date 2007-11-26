@@ -67,6 +67,19 @@ void copyCppClass( const CppClassType* from, CppClassType* to )
   to->close();
 }
 
+///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
+DUContext* getTemplateContext(Declaration* decl) {
+  DUContext* internal = decl->internalContext();
+  if( !internal )
+    return 0;
+  foreach( DUContextPointer ctx, internal->importedParentContexts() ) {
+    if( ctx )
+      if( ctx->type() == DUContext::Template )
+        return ctx.data();
+  }
+  return 0;
+}
+
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
   : DeclarationBuilderBase(session), m_inTypedef(false)
 {
@@ -643,6 +656,36 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
       if( decl->abstractType()) {
         ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
         if( forward ) {
+          {
+            ///Transfer template default-parameters from the forward-declaration to the real declaration if possible
+            KDevelop::DUContext* forwardTemplateContext = forward->internalContext();
+            if( forwardTemplateContext && forwardTemplateContext->type() == DUContext::Template ) {
+              KDevelop::DUContext* currentTemplateContext = getTemplateContext(currentDeclaration());
+              if( (bool)forwardTemplateContext != (bool)currentTemplateContext ) {
+                kDebug(9007) << "Template-contexts of forward- and real declaration do not match: " << currentTemplateContext << getTemplateContext(currentDeclaration()) << currentDeclaration()->internalContext() << forwardTemplateContext << currentDeclaration()->internalContext()->importedParentContexts().count();
+              } else if( forwardTemplateContext && currentTemplateContext ) {
+                if( forwardTemplateContext->localDeclarations().count() != currentTemplateContext->localDeclarations().count() ) {
+                  kDebug(9007) << "Template-context declaration counts of forward- and real declaration do not match";
+                } else {
+                  const QList<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
+                  const QList<Declaration*>& realList = currentTemplateContext->localDeclarations();
+                  
+                  QList<Declaration*>::const_iterator forwardIt = forwardList.begin();
+                  QList<Declaration*>::const_iterator realIt = realList.begin();
+                    
+                  for( ; forwardIt != forwardList.end(); ++forwardIt, ++realIt ) {
+                    TemplateParameterDeclaration* forwardParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*forwardIt);
+                    TemplateParameterDeclaration* realParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*realIt);
+                    if( forwardParamDecl && realParamDecl ) {
+                      if( !forwardParamDecl->defaultParameter().isEmpty() )
+                        realParamDecl->setDefaultParameter(forwardParamDecl->defaultParameter());
+                    }
+                  }
+                }
+              }
+            }
+          }
+
           forward->setResolved(currentDeclaration());
 
           CppClassType::Ptr realClass(dynamic_cast<CppClassType*>(lastType().data()));
