@@ -34,6 +34,7 @@ using namespace KDevelop;
 class RunController::RunControllerPrivate
 {
 public:
+    int serial;
     QMap<int, IRun> running;
     QMap<QString, IRunProvider*> providers;
     IRunController::State state;
@@ -43,6 +44,7 @@ RunController::RunController(QObject *parent)
     : IRunController(parent)
     , d(new RunControllerPrivate)
 {
+    d->serial = 0;
     d->state = Idle;
     connect(Core::self()->pluginController(), SIGNAL(pluginLoaded(IPlugin*)), SLOT(pluginLoaded(IPlugin*)));
     connect(Core::self()->pluginController(), SIGNAL(pluginUnloaded(IPlugin*)), SLOT(pluginUnloaded(IPlugin*)));
@@ -56,7 +58,7 @@ void RunController::pluginLoaded(IPlugin* plugin)
         foreach (const QString& instrumentor, provider->instrumentorsProvided())
             d->providers.insert(instrumentor, provider);
 
-        connect(plugin, SIGNAL(finished(const IRun&)), this, SLOT(slotFinished(const IRun&)));
+        connect(plugin, SIGNAL(finished(int)), this, SLOT(slotFinished(int)));
     }
 }
 
@@ -68,46 +70,46 @@ void RunController::pluginUnloaded(KDevelop::IPlugin * plugin)
             it.remove();
 }
 
-bool RunController::run(const IRun & run)
+int RunController::run(const IRun & run)
 {
     if (d->providers.contains(run.instrumentor())) {
-        if (d->providers[run.instrumentor()]->run(run)) {
-            d->running.insert(run.serial(), run);
-            d->state = Running;
-            emit runStateChanged(d->state);
-            return true;
+        int newSerial = d->serial++;
+        if (d->providers[run.instrumentor()]->run(run, newSerial)) {
+            d->running.insert(newSerial, run);
+            setState(Running);
+            return newSerial;
         }
     }
 
-    // TODO provide feedback
-    return false;
+    return -1;
 }
 
-void RunController::abort(const IRun & run)
+void RunController::abort(int serial)
 {
-    if (d->running.contains(run.serial())) {
-        d->providers[run.instrumentor()]->abort(run);
-        d->running.remove(run.serial());
+    if (d->running.contains(serial)) {
+        const IRun& run = d->running[serial];
+        d->providers[run.instrumentor()]->abort(serial);
+        d->running.remove(serial);
+
+        if (d->running.isEmpty())
+            setState(Idle);
     }
 }
 
 void RunController::abortAll()
 {
-    foreach (const IRun& run, d->running)
-        abort(run);
+    foreach (int serial, d->running.keys())
+        abort(serial);
 }
 
-void RunController::slotFinished(const IRun & run)
+void RunController::slotFinished(int serial)
 {
-    if (d->running.contains(run.serial())) {
-        d->running.remove(run.serial());
+    if (d->running.contains(serial)) {
+        d->running.remove(serial);
 
-        if (d->running.isEmpty()) {
-            d->state = Idle;
-            emit runStateChanged(d->state);
-        }
+        if (d->running.isEmpty())
+            setState(Idle);
     }
-    // TODO provide feedback
 }
 
 RunController::~ RunController()
@@ -126,6 +128,14 @@ void RunController::setupActions()
     action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently active target or the main program specified in project settings, <b>Run Options</b> tab."));
     ac->addAction("run_execute", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
+}
+
+void KDevelop::RunController::setState(State state)
+{
+    if (d->state != state) {
+        d->state = state;
+        emit runStateChanged(d->state);
+    }
 }
 
 #include "runcontroller.moc"

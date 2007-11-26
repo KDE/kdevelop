@@ -35,17 +35,18 @@ public:
     RunController(QObject *parent);
     ~RunController();
 
-    virtual bool run(const IRun& run);
-    virtual void abort(const IRun& run);
+    virtual int run(const IRun& run);
+    virtual void abort(int serial);
     virtual void abortAll();
 
 private Q_SLOTS:
     void pluginLoaded(KDevelop::IPlugin*);
     void pluginUnloaded(KDevelop::IPlugin*);
-    void slotFinished(const IRun& run);
+    void slotFinished(int serial);
 
 private:
     void setupActions();
+    void setState(State state);
     
     class RunControllerPrivate;
     RunControllerPrivate* const d;

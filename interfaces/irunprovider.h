@@ -27,18 +27,31 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+/**
+ * An abstract interface for plugins which are able to execute programs.
+ */
 class KDEVPLATFORMINTERFACES_EXPORT IRunProvider
 {
 public:
     virtual ~IRunProvider();
 
+    /**
+     * Return a list of instrumentors that your plugin supports.
+     */
     virtual QStringList instrumentorsProvided() const = 0;
 
-    virtual bool run(const IRun& run) = 0;
-    virtual void abort(const IRun& run) = 0;
+    /**
+     * Request the execution of \a run.
+     */
+    virtual bool run(const IRun& run, int serial) = 0;
+
+    /**
+     * Request the aborting of a run with the given \a serial number.
+     */
+    virtual void abort(int serial) = 0;
 
 Q_SIGNALS:
-    void finished(const IRun& run);
+    void finished(int serial);
 };
 
 }

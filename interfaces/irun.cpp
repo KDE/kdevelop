@@ -25,34 +25,9 @@ Boston, MA 02110-1301, USA.
 
 using namespace KDevelop;
 
-static int s_runSerial = 0;
-
 class IRun::IRunPrivate : public QSharedData
 {
     public:
-        IRunPrivate()
-            : QSharedData()
-        {
-            newSerial();
-        }
-
-        IRunPrivate(const IRunPrivate& copy)
-            : QSharedData(copy)
-        {
-            executable = copy.executable;
-            instrumentor = copy.instrumentor;
-            environmentKey = copy.environmentKey;
-            newSerial();
-        }
-
-        void newSerial()
-        {
-            serial = s_runSerial++;
-            if (s_runSerial == INT_MAX)
-                s_runSerial = 0;
-        }
-
-        int serial;
         QString executable, instrumentor, environmentKey;
         QStringList arguments;
 };
@@ -109,11 +84,6 @@ void IRun::setEnvironmentKey(const QString& environmentKey)
 QString IRun::environmentKey() const
 {
     return d->environmentKey;
-}
-
-int KDevelop::IRun::serial() const
-{
-    return d->serial;
 }
 
 IRun::IRun(const IRun & rhs)
