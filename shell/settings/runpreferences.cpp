@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
+#include <KConfigDialogManager>
 
 #include "core.h"
 #include "ilanguagecontroller.h"
@@ -50,6 +51,8 @@ RunPreferences::RunPreferences( QWidget *parent, const QVariantList &args )
 
     KDevelop::EnvironmentGroupList env( RunSettings::self()->config() );
     preferencesDialog->kcfg_environment->addItems( env.groups() );
+
+    preferencesDialog->kcfg_workingDirectory->setMode(KFile::Directory);
 
     l->addWidget( w );
 
