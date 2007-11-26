@@ -81,6 +81,12 @@ public:
     ~EnvironmentGroupList();
 
     /**
+     * Creates a merged environment between the defaults specified by
+     * \a defaultEnvironment and those saved in \a group
+     */
+    QStringList createEnvironment(const QString& group, const QStringList& defaults) const;
+    
+    /**
      * returns the variables that are set for a given group.
      * This function provides read-only access to the environment
      * @param group  the name of the group for which the environment should be returned

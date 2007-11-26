@@ -35,6 +35,12 @@ class KDEVPLATFORMINTERFACES_EXPORT IRunProvider
 public:
     virtual ~IRunProvider();
 
+    enum OutputTypes {
+        StandardOutput,
+        StandardError,
+        RunProvider
+    };
+    
     /**
      * Return a list of instrumentors that your plugin supports.
      */
@@ -43,7 +49,7 @@ public:
     /**
      * Request the execution of \a run.
      */
-    virtual bool run(const IRun& run, int serial) = 0;
+    virtual bool execute(const IRun& run, int serial) = 0;
 
     /**
      * Request the aborting of a run with the given \a serial number.
@@ -51,7 +57,15 @@ public:
     virtual void abort(int serial) = 0;
 
 Q_SIGNALS:
+    /**
+     * Notify that process with the given \a serial number has finished.
+     */
     void finished(int serial);
+
+    /**
+     * Notify that the process with given \a serial has produced the given \a output in the given \a channel.
+     */
+    void output(int serial, const QString& line, IRunProvider::OutputTypes type);
 };
 
 }

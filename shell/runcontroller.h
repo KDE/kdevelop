@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #define RUNCONTROLLER_H
 
 #include "irun.h"
+#include "irunprovider.h"
 
 namespace KDevelop
 {
@@ -35,19 +36,21 @@ public:
     RunController(QObject *parent);
     ~RunController();
 
-    virtual int run(const IRun& run);
+    virtual int execute(const IRun& run);
     virtual void abort(int serial);
     virtual void abortAll();
 
 private Q_SLOTS:
-    void pluginLoaded(KDevelop::IPlugin*);
-    void pluginUnloaded(KDevelop::IPlugin*);
     void slotFinished(int serial);
     void slotExecute();
+    void slotOutput(int serial, const QString& line, IRunProvider::OutputTypes type);
+    void outputViewRemoved(int id);
 
 private:
     void setupActions();
     void setState(State state);
+    void createModel(int serial, const IRun& run);
+    IRunProvider* findProvider(const QString& instrumentor);
     
     class RunControllerPrivate;
     RunControllerPrivate* const d;

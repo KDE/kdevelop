@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin allows running of programs with no instrumentor, ie. natively by the current host.
+Name=KDevExecute
+GenericName=Execute
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevexecute
+X-KDevelop-Version=4
+X-KDE-PluginInfo-Name=kdevexecute
+X-KDE-PluginInfo-Author=Hamish Rodda
+X-KDE-PluginInfo-License=LGPL
+X-KDevelop-Interfaces=org.kdevelop.IRunProvider

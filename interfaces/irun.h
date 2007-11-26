@@ -122,7 +122,7 @@ public:
      *
      * \return the serial number for the run job, or -1 if \a run could not be executed.
      */
-    virtual int run(const IRun& run) = 0;
+    virtual int execute(const IRun& run) = 0;
 
     /**
      * Request the run with the given \a serial number to be aborted.

@@ -19,19 +19,21 @@ Boston, MA 02110-1301, USA.
 
 #include "runcontroller.h"
 
-#include "irunprovider.h"
-
 #include "core.h"
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "mainwindow.h"
+#include "ioutputview.h"
 
 #include <QApplication>
+#include <QStandardItemModel>
+#include <QItemDelegate>
 
 #include <KAction>
 #include <KActionCollection>
 #include <KMessageBox>
 #include <KLocale>
+#include <KDebug>
 
 using namespace KDevelop;
 
@@ -39,8 +41,8 @@ class RunController::RunControllerPrivate
 {
 public:
     int serial;
-    QMap<int, IRun> running;
-    QMap<QString, IRunProvider*> providers;
+    QMap<int, IRunProvider*> running;
+    QMap<int, QPair<int, QStandardItemModel*> > outputModels;
     IRunController::State state;
 };
 
@@ -50,36 +52,19 @@ RunController::RunController(QObject *parent)
 {
     d->serial = 0;
     d->state = Idle;
-    connect(Core::self()->pluginController(), SIGNAL(pluginLoaded(IPlugin*)), SLOT(pluginLoaded(IPlugin*)));
-    connect(Core::self()->pluginController(), SIGNAL(pluginUnloaded(IPlugin*)), SLOT(pluginUnloaded(IPlugin*)));
 
     setupActions();
 }
 
-void RunController::pluginLoaded(IPlugin* plugin)
+int RunController::execute(const IRun & run)
 {
-    if (IRunProvider* provider = qobject_cast<IRunProvider*>(plugin)) {
-        foreach (const QString& instrumentor, provider->instrumentorsProvided())
-            d->providers.insert(instrumentor, provider);
-
-        connect(plugin, SIGNAL(finished(int)), this, SLOT(slotFinished(int)));
-    }
-}
-
-void RunController::pluginUnloaded(KDevelop::IPlugin * plugin)
-{
-    QMutableMapIterator<QString, IRunProvider*> it = d->providers;
-    while (it.hasNext())
-        if (it.next().value() == qobject_cast<IRunProvider*>(plugin))
-            it.remove();
-}
-
-int RunController::run(const IRun & run)
-{
-    if (d->providers.contains(run.instrumentor())) {
+    if (IRunProvider* provider = findProvider(run.instrumentor())) {
         int newSerial = d->serial++;
-        if (d->providers[run.instrumentor()]->run(run, newSerial)) {
-            d->running.insert(newSerial, run);
+        if (provider->execute(run, newSerial)) {
+            d->running.insert(newSerial, provider);
+
+            createModel(newSerial, run);
+
             setState(Running);
             return newSerial;
         }
@@ -93,8 +78,7 @@ int RunController::run(const IRun & run)
 void RunController::abort(int serial)
 {
     if (d->running.contains(serial)) {
-        const IRun& run = d->running[serial];
-        d->providers[run.instrumentor()]->abort(serial);
+        d->running[serial]->abort(serial);
         d->running.remove(serial);
 
         if (d->running.isEmpty())
@@ -166,7 +150,80 @@ void RunController::slotExecute()
     if (group.readEntry("Start In Terminal", false))
         ;// TODO: start in terminal rather than output view
 
-    RunController::run(run);
+    execute(run);
+}
+
+void KDevelop::RunController::slotOutput(int serial, const QString& line, IRunProvider::OutputTypes type)
+{
+    if (!d->outputModels.contains(serial)) {
+        kWarning() << "No output model available for input";
+        return;
+    }
+
+    QStandardItemModel* model = d->outputModels[serial].second;
+
+    QStandardItem* item = new QStandardItem(line);
+
+    switch (type) {
+        case IRunProvider::StandardError:
+            item->setForeground(Qt::red);
+            break;
+        case IRunProvider::RunProvider:
+            item->setForeground(Qt::blue);
+            break;
+        default:
+            break;
+    }
+
+    model->appendRow(item);
+}
+
+void KDevelop::RunController::createModel(int serial, const IRun& run)
+{
+    IPlugin* i = Core::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    if( i )
+    {
+        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        if( view )
+        {
+            int id = view->registerView(i18n("Run: %1", run.executable().path()), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+
+            QStandardItemModel* model = new QStandardItemModel(this);
+            d->outputModels.insert(serial, qMakePair(id, model));
+            connect(i, SIGNAL(viewRemoved(int)), this, SLOT(outputViewRemoved(int)));
+
+            view->setModel(id, model);
+            view->setDelegate(id, new QItemDelegate(this));
+        }
+    }
+}
+
+void KDevelop::RunController::outputViewRemoved(int id)
+{
+    QMutableMapIterator<int, QPair<int, QStandardItemModel*> > it = d->outputModels;
+    while (it.hasNext()) {
+        if (it.next().value().first == id) {
+            delete it.value().second;
+            it.remove();
+            return;
+        }
+    }
+}
+
+IRunProvider * KDevelop::RunController::findProvider(const QString & instrumentor)
+{
+    foreach (IPlugin* i, Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IRunProvider", QStringList())) {
+        if (KDevelop::IRunProvider* provider = i->extension<KDevelop::IRunProvider>()) {
+            if (provider->instrumentorsProvided().contains(instrumentor)) {
+                i->disconnect(this);
+                connect(i, SIGNAL(finished(int)), this, SLOT(slotFinished(int)));
+                connect(i, SIGNAL(output(int, const QString&, IRunProvider::OutputTypes)), this, SLOT(slotOutput(int, const QString&, IRunProvider::OutputTypes)));
+                return provider;
+            }
+        }
+    }
+
+    return 0;
 }
 
 #include "runcontroller.moc"

@@ -145,5 +145,34 @@ EnvironmentGroupList::EnvironmentGroupList()
 {
 }
 
+QStringList EnvironmentGroupList::createEnvironment(const QString & group, const QStringList & defaults) const
+{
+    QMap<QString, QString> retMap;
+    foreach( QString line, defaults )
+    {
+        QString varName = line.section( '=', 0, 0 );
+        QString varValue = line.section( '=', 1 );
+        retMap.insert( varName, varValue );
+    }
+
+    if( !group.isEmpty() ) {
+      QMap<QString, QString> userMap = variables(group);
+
+      for( QMap<QString, QString>::const_iterator it = userMap.begin();
+          it != userMap.end(); ++it )
+      {
+          retMap.insert( it.key(), it.value() );
+      }
+    }
+
+    QStringList env;
+    for( QMap<QString, QString>::const_iterator it = retMap.begin();
+        it != retMap.end(); ++it )
+    {
+        env << it.key() + '=' + it.value();
+    }
+
+    return env;
 }
 
+}

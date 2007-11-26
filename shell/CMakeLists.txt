@@ -10,6 +10,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/language
     ${CMAKE_SOURCE_DIR}/language/backgroundparser
     ${CMAKE_SOURCE_DIR}/language/interfaces
+    ${CMAKE_SOURCE_DIR}/outputview
 )
 
 set(kdevplatformshell_LIB_SRCS
