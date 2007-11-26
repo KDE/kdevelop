@@ -23,6 +23,7 @@
 #include "lexer.h"
 #include "symbol.h"
 #include "parsesession.h"
+#include "tokens.h"
 
 #include <QtCore/qdebug.h>
 
@@ -33,12 +34,21 @@ NameCompiler::NameCompiler(ParseSession* session)
 {
 }
 
-QString NameCompiler::decode(AST* ast) const
+QString NameCompiler::decode(AST* ast, bool without_spaces) const
 {
   QString ret;
-  for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-    const Token &tk = m_session->token_stream->token(a);
-    ret += tk.symbol() + " ";
+  if( without_spaces ) {
+    //Decode operator-names without spaces for now, since we rely on it in other places.
+    ///@todo change this, here and in all the places that rely on it. Operators should then by written like "operator [ ]"(space between each token)
+    for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
+      const Token &tk = m_session->token_stream->token(a);
+      ret += tk.symbol();
+    }
+  } else {
+    for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
+      const Token &tk = m_session->token_stream->token(a);
+      ret += tk.symbol() + " ";
+    }
   }
   return ret;
 }
@@ -68,7 +78,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
       tmp_name += QLatin1String("operator");
 
       if (op_id->op && op_id->op->op)
-        tmp_name +=  decode(op_id->op);
+        tmp_name +=  decode(op_id->op, true);
       else
         tmp_name += QLatin1String("{...cast...}");
 
