@@ -43,6 +43,7 @@ private Q_SLOTS:
     void pluginLoaded(KDevelop::IPlugin*);
     void pluginUnloaded(KDevelop::IPlugin*);
     void slotFinished(int serial);
+    void slotExecute();
 
 private:
     void setupActions();

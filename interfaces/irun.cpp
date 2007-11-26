@@ -28,7 +28,8 @@ using namespace KDevelop;
 class IRun::IRunPrivate : public QSharedData
 {
     public:
-        QString executable, instrumentor, environmentKey;
+        KUrl executable, workingDirectory;
+        QString instrumentor, environmentKey;
         QStringList arguments;
 };
 
@@ -104,6 +105,16 @@ IRun::~ IRun()
 IRunController::IRunController(QObject * parent)
     : QObject(parent)
 {
+}
+
+KUrl KDevelop::IRun::workingDirectory() const
+{
+    return d->workingDirectory;
+}
+
+void KDevelop::IRun::setWorkingDirectory(const QString & workingDirectory)
+{
+    d->workingDirectory = workingDirectory;
 }
 
 #include "irun.moc"

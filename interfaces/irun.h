@@ -52,6 +52,16 @@ public:
     void setExecutable(const QString& executable);
 
     /**
+     * The working directory for this session.
+     */
+    KUrl workingDirectory() const;
+
+    /**
+     * Set the \a workingDirectory for this run session.
+     */
+    void setWorkingDirectory(const QString& workingDirectory);
+
+    /**
      * The key which references the environment under which to run the executable.
      */
     QString environmentKey() const;

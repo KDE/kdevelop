@@ -138,4 +138,29 @@ void KDevelop::RunController::setState(State state)
     }
 }
 
+void RunController::slotExecute()
+{
+    KConfigGroup group(KGlobal::config(), "Run Options" );
+
+    IRun run;
+    run.setExecutable(group.readEntry( "Executable", "" ));
+    run.setWorkingDirectory(group.readEntry( "Working Directory", "" ));
+    run.setArguments(QStringList() << group.readEntry( "Arguments", QString() ));
+    run.setArguments(QStringList() << group.readEntry( "Arguments", QString() ));
+
+    if (group.readEntry("Compile Before Execution", false))
+        if (group.readEntry("Install Before Execution", false))
+            if (group.readEntry("Super User Install", false))
+                ;// TODO: sudo make install
+            else
+                ;// TODO: make install
+        else
+            ;// TODO: make
+
+    if (group.readEntry("Start In Terminal", false))
+        ;// TODO: start in terminal rather than output view
+
+    RunController::run(run);
+}
+
 #include "runcontroller.moc"
