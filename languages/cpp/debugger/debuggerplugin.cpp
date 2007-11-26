@@ -212,6 +212,8 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
 
+    kDebug() << "Debugger component:" << componentData().componentName() << componentData().catalogName();
+
     setXMLFile("kdevcppdebuggerui.rc");
 
     // Setup widgets and dbgcontroller
@@ -497,7 +499,7 @@ void CppDebuggerPlugin::guiClientAdded( KXMLGUIClient* client )
         stateChanged( QString("stopped") );
 }
 
-void CppDebuggerPlugin::contextMenu(Q3PopupMenu *popup, const KDevelop::Context *context)
+void CppDebuggerPlugin::contextMenu(QMenu *popup, const KDevelop::Context *context)
 {
     if (!context->hasType( KDevelop::Context::EditorContext ))
         return;

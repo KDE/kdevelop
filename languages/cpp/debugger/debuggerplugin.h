@@ -18,7 +18,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 #include <QLabel>
-#include <Q3PopupMenu>
+// #include <Q3PopupMenu>
 #include <QtCore/QVariant>
 
 #include <kvbox.h>
@@ -31,7 +31,7 @@
 #include <istatus.h>
 
 class QLabel;
-class Q3PopupMenu;
+class QMenu;
 class KDialog;
 class ProcessWidget;
 
@@ -107,7 +107,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void setupDcop();
     void guiClientAdded(KXMLGUIClient*);
-    void contextMenu(Q3PopupMenu *popup, const KDevelop::Context *context);
+    void contextMenu(QMenu *popup, const KDevelop::Context *context);
     void toggleBreakpoint();
     void contextEvaluate();
     void contextWatch();
