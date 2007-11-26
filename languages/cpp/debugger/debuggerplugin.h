@@ -34,11 +34,14 @@ class QLabel;
 class Q3PopupMenu;
 class KDialog;
 class ProcessWidget;
-class ProcessLineMaker;
+
 class KToolBar;
 class BreakpointController;
 
-namespace KDevelop { class Context; }
+namespace KDevelop {
+class Context;
+class ProcessLineMaker;
+}
 
 namespace GDBDebugger
 {
@@ -152,9 +155,9 @@ private Q_SLOTS:
 
     void slotEvent(GDBController::event_t);
 
-private:  
+private:
     KConfigGroup config() const;
-    
+
     void attachProcess(int pid);
     void setupController();
     void setupActions();
@@ -162,12 +165,12 @@ private:
     GDBController *controller;
     //QPointer<QLabel> statusBarIndicator;
     QPointer<KToolBar> floatingToolBar;
-    ProcessLineMaker* procLineMaker;
-    ProcessLineMaker* gdbLineMaker;
+    KDevelop::ProcessLineMaker* procLineMaker;
+    KDevelop::ProcessLineMaker* gdbLineMaker;
 
     QString m_contextIdent;
     QByteArray m_drkonqi;
-    
+
     //KDevDebugger *m_debugger;
     int previousDebuggerState_;
     // Set to true after each debugger restart
@@ -179,7 +182,7 @@ private:
     // before running the debugger. Set to 'true' in constructor
     // because we have no idea if project is 'dirty' or not
     // when it's opened, and then set to 'true' each time a file is
-    // modified.    
+    // modified.
     bool needRebuild_;
 
     // Set by 'startDebugger' and cleared by 'slotStopDebugger'.

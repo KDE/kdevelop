@@ -44,6 +44,7 @@
 #include <iprojectcontroller.h>
 #include <iproject.h>
 #include <context.h>
+#include <util/processlinemaker.h>
 
 #include "variablewidget.h"
 #include "gdbbreakpointwidget.h"
@@ -56,7 +57,7 @@
 #include "gdbparser.h"
 #include "gdboutputwidget.h"
 #include "debuggerconfigwidget.h"
-#include "processlinemaker.h"
+
 #include "gdbglobal.h"
 #include "breakpointcontroller.h"
 
@@ -242,16 +243,16 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
 //     connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const KDevelop::Context *)),
 //              this, SLOT(contextMenu(Q3PopupMenu *, const KDevelop::Context *)) );
-// 
+//
 //     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
 //              this, SLOT(slotStop(KDevPlugin*)) );
 //     connect( core(), SIGNAL(projectClosed()),
 //              this, SLOT(projectClosed()) );
-// 
+//
 //     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
 //              this, SLOT(slotActivePartChanged(KParts::Part*)) );
 
-    procLineMaker = new ProcessLineMaker();
+    procLineMaker = new KDevelop::ProcessLineMaker();
 
 //     connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
 //              appFrontend(), SLOT(insertStdoutLine(const QString&)) );
@@ -683,8 +684,8 @@ void CppDebuggerPlugin::slotStopDebugger()
 //     framestackWidget->setEnabled(false);
 //     disassembleWidget->setEnabled(false);
 //     gdbOutputWidget->setEnabled(false);
-// 
-// 
+//
+//
 //     mainWindow()->setViewAvailable(variableWidget, false);
 //     mainWindow()->setViewAvailable(framestackWidget, false);
 //     mainWindow()->setViewAvailable(disassembleWidget, false);

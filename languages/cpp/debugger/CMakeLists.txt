@@ -30,7 +30,6 @@ set(kdevcppdebugger_PART_SRCS
     gdboutputwidget.cpp
     gdbtable.cpp
     debuggertracingdialog.cpp
-    processlinemaker.cpp
     breakpointcontroller.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
@@ -50,6 +49,7 @@ target_link_libraries(kdevcppdebugger
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_EDITOR_LIBRARY}
+    ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARY}
