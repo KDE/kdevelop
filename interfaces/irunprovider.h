@@ -65,7 +65,7 @@ Q_SIGNALS:
     /**
      * Notify that the process with given \a serial has produced the given \a output in the given \a channel.
      */
-    void output(int serial, const QString& line, IRunProvider::OutputTypes type);
+    void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
 };
 
 }

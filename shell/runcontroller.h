@@ -39,11 +39,12 @@ public:
     virtual int execute(const IRun& run);
     virtual void abort(int serial);
     virtual void abortAll();
+    virtual IRun defaultRun() const;
 
 private Q_SLOTS:
     void slotFinished(int serial);
     void slotExecute();
-    void slotOutput(int serial, const QString& line, IRunProvider::OutputTypes type);
+    void slotOutput(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
     void outputViewRemoved(int id);
 
 private:

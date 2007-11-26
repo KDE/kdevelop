@@ -56,7 +56,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
   Q_SIGNALS:
     // implementations from IRunProvider
     void finished(int serial);
-    void output(int serial, const QString& line, IRunProvider::OutputTypes type);
+    void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
 
   private Q_SLOTS:
     void readyReadStandardOutput();

@@ -134,6 +134,11 @@ public:
      */
     virtual void abortAll() = 0;
 
+    /**
+     * Provide the default run object.
+     */
+    virtual IRun defaultRun() const = 0;
+
     /// An enumeration of the possible states for the run controller.
     enum State {
         /// No processes are currently running.

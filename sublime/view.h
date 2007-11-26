@@ -47,10 +47,11 @@ public:
     /**@return true if this view has an initialized widget.*/
     bool hasWidget() const;
 
-    void requestRaise();
-
 Q_SIGNALS:
     void raise(Sublime::View*);
+
+public Q_SLOTS:
+    void requestRaise();
 
 protected:
     View(Document *doc);

@@ -130,6 +130,11 @@ void KDevelop::RunController::setState(State state)
 
 void RunController::slotExecute()
 {
+    execute(defaultRun());
+}
+
+IRun KDevelop::RunController::defaultRun() const
+{
     KConfigGroup group(KGlobal::config(), "Run Options" );
 
     IRun run;
@@ -150,10 +155,10 @@ void RunController::slotExecute()
     if (group.readEntry("Start In Terminal", false))
         ;// TODO: start in terminal rather than output view
 
-    execute(run);
+    return run;
 }
 
-void KDevelop::RunController::slotOutput(int serial, const QString& line, IRunProvider::OutputTypes type)
+void KDevelop::RunController::slotOutput(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type)
 {
     if (!d->outputModels.contains(serial)) {
         kWarning() << "No output model available for input";
@@ -217,7 +222,7 @@ IRunProvider * KDevelop::RunController::findProvider(const QString & instrumento
             if (provider->instrumentorsProvided().contains(instrumentor)) {
                 i->disconnect(this);
                 connect(i, SIGNAL(finished(int)), this, SLOT(slotFinished(int)));
-                connect(i, SIGNAL(output(int, const QString&, IRunProvider::OutputTypes)), this, SLOT(slotOutput(int, const QString&, IRunProvider::OutputTypes)));
+                connect(i, SIGNAL(output(int, const QString&, KDevelop::IRunProvider::OutputTypes)), this, SLOT(slotOutput(int, const QString&, KDevelop::IRunProvider::OutputTypes)));
                 return provider;
             }
         }
