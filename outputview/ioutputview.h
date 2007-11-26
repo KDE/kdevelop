@@ -57,6 +57,11 @@ public:
     virtual int registerView( const QString& title, Behaviours ) = 0;
 
     /**
+     * Raise a given view
+     */
+    virtual void raiseView( int id ) = 0;
+
+    /**
      * Sets the model of the registered view identified by id to model
      *
      * This function does _not_ take ownership of the model, the user is

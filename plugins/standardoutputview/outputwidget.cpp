@@ -50,6 +50,8 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
                 m_outputView, SIGNAL( viewRemoved( int ) ) );
     connect( m_outputView, SIGNAL( removeView( int ) ),
                 this, SLOT( removeView( int ) ) );
+    connect( m_outputView, SIGNAL( requestRaiseView( int ) ),
+                this, SLOT( raiseView( int ) ) );
     connect( this, SIGNAL( viewRemoved( int ) ),
                 m_outputView, SLOT( removeViewData( int ) ) );
 //  connect( this, SIGNAL( activated(const QModelIndex&) ),
@@ -231,5 +233,9 @@ void OutputWidget::rangeChanged(int min, int max)
         slider->setValue(max);
 }
 
-#include "outputwidget.moc"
+void OutputWidget::raiseView(int id)
+{
+    setCurrentIndex(id);
+}
 
+#include "outputwidget.moc"

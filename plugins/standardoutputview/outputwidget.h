@@ -42,6 +42,7 @@ class OutputWidget : public KTabWidget
         void changeModel( int id );
         void changeDelegate( int id );
         void removeView( int id );
+        void raiseView( int id );
         void closeActiveView();
         void selectNextItem();
         void selectPrevItem();

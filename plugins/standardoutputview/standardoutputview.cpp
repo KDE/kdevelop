@@ -124,6 +124,14 @@ int StandardOutputView::registerView( const QString& title,
     return newid;
 }
 
+void StandardOutputView::raiseView(int id)
+{
+    foreach (Sublime::View* view, d->m_views)
+        view->requestRaise();
+
+    emit requestRaiseView(id);
+}
+
 KDevelop::IOutputView::Behaviours StandardOutputView::behaviour( int id ) const
 {
 

@@ -46,6 +46,7 @@ public:
     virtual ~StandardOutputView();
     int registerView( const QString& title,
                           KDevelop::IOutputView::Behaviours behaviour );
+    void raiseView( int id );
     void setModel( int id, QAbstractItemModel* );
 
     void setDelegate( int id, QAbstractItemDelegate* );
@@ -68,6 +69,7 @@ Q_SIGNALS:
      * Signal to inform the view to remove one output view
      */
     void removeView( int id );
+    void requestRaiseView( int id );
 
 private:
     class StandardOutputViewPrivate* const d;
