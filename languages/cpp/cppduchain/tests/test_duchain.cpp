@@ -1595,7 +1595,7 @@ void TestDUChain::testForwardDeclaration3()
 
 void TestDUChain::testTemplateForwardDeclaration()
 {
-  QByteArray method("class B{}; template<class T>class Test; Test<B> t; template<class T>class Test {}; ");
+  QByteArray method("class B{}; template<class T = B>class Test; Test<B> t; template<class T = B>class Test {}; ");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -1603,6 +1603,8 @@ void TestDUChain::testTemplateForwardDeclaration()
 
   QCOMPARE(top->localDeclarations().count(), 4);
 
+  QVERIFY(top->localDeclarations()[1]->internalContext());
+  
   QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[1]));
   
   CppClassType* type1 = top->localDeclarations()[1]->type<CppClassType>().data();
@@ -1618,9 +1620,59 @@ void TestDUChain::testTemplateForwardDeclaration()
   TemplateDeclaration* temp3Decl = dynamic_cast<TemplateDeclaration*>(type3->declaration());
   QVERIFY(temp3Decl);
   QCOMPARE(temp2Decl->instantiatedFrom(), temp3Decl);
+
+  Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test<>"));
+  QVERIFY(decl);
+  kDebug() << decl->toString();
   
   release(top);
 }
+
+void TestDUChain::testTemplateForwardDeclaration2()
+{
+  QByteArray method("class B{}; template<class T = B, class Q = B, class R = B>class Test; Test<B> t; template<class T, class Q, class R>class Test { T a; Q b; R c;}; ");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 4);
+
+  QVERIFY(top->localDeclarations()[1]->internalContext());
+  kDebug() << top->localDeclarations()[1]->internalContext();
+  
+  QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[1]));
+  
+  CppClassType* type1 = top->localDeclarations()[1]->type<CppClassType>().data();
+  CppClassType* type2 = top->localDeclarations()[2]->type<CppClassType>().data();
+  CppClassType* type3 = top->localDeclarations()[3]->type<CppClassType>().data();
+
+  QVERIFY(type1);
+  QVERIFY(type2);
+  QVERIFY(type3);
+
+  TemplateDeclaration* temp2Decl = dynamic_cast<TemplateDeclaration*>(type2->declaration());
+  QVERIFY(temp2Decl);
+  TemplateDeclaration* temp3Decl = dynamic_cast<TemplateDeclaration*>(type3->declaration());
+  QVERIFY(temp3Decl);
+  QCOMPARE(temp2Decl->instantiatedFrom(), temp3Decl);
+
+  Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test<>"));
+  QVERIFY(decl);
+  QVERIFY(decl->internalContext());
+  Declaration* aDecl = findDeclaration(decl->internalContext(), QualifiedIdentifier("a"));
+  QVERIFY(aDecl);
+  Declaration* bDecl = findDeclaration(decl->internalContext(), QualifiedIdentifier("b"));
+  QVERIFY(bDecl);
+  Declaration* cDecl = findDeclaration(decl->internalContext(), QualifiedIdentifier("c"));
+  QVERIFY(cDecl);
+  QCOMPARE(bDecl->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
+  QCOMPARE(cDecl->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
+  QCOMPARE(aDecl->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
+  
+  release(top);
+}
+
 void TestDUChain::testFileParse()
 {
   //QSKIP("Unwanted", SkipSingle);
