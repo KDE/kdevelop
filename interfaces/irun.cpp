@@ -34,6 +34,7 @@ class IRun::IRunPrivate : public QSharedData
 };
 
 IRun::IRun()
+    : d(new IRunPrivate)
 {
 }
 

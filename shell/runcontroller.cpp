@@ -26,8 +26,12 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "mainwindow.h"
 
+#include <QApplication>
+
 #include <KAction>
 #include <KActionCollection>
+#include <KMessageBox>
+#include <KLocale>
 
 using namespace KDevelop;
 
@@ -81,6 +85,8 @@ int RunController::run(const IRun & run)
         }
     }
 
+    KMessageBox::error(qApp->activeWindow(), i18n("Execution failed: no plugin found for requested instrumentor \"%1\"", run.instrumentor()), i18n("Execution Error"));
+    
     return -1;
 }
 
@@ -146,7 +152,7 @@ void RunController::slotExecute()
     run.setExecutable(group.readEntry( "Executable", "" ));
     run.setWorkingDirectory(group.readEntry( "Working Directory", "" ));
     run.setArguments(QStringList() << group.readEntry( "Arguments", QString() ));
-    run.setArguments(QStringList() << group.readEntry( "Arguments", QString() ));
+    run.setInstrumentor("default");
 
     if (group.readEntry("Compile Before Execution", false))
         if (group.readEntry("Install Before Execution", false))
