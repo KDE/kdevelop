@@ -756,8 +756,8 @@ void TestExpressionParser::testOperators() {
   QVERIFY(!cDec->internalContext());
   QVERIFY(plusDec->internalContext());
 
-  Q_ASSERT(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()")));
-  Q_ASSERT(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()"))->type<CppFunctionType>());
+  QVERIFY(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()")));
+  QVERIFY(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()"))->type<CppFunctionType>());
   
   CppClassType::Ptr cont2 = cont2Dec->type<CppClassType>();
   CppClassType::Ptr cont3 = cont3Dec->type<CppClassType>();
