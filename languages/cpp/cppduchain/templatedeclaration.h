@@ -148,7 +148,7 @@ namespace Cpp {
    * @param parentContext he parent-context everything should be created in(instantiatedDeclaration will be moved into that context anonymously)
    * @param inclusionTrace a trace as used in findDeclarationsInternal(..)
    * @param context A du-context that will be copied and used as internal context for declaration. If this is zero, no context will be copied.
-   * @param templateArguments The template-arguments that will be used to instantiate the input-context. If this is empty, the intersting context will be only copied without specialization.
+   * @param templateArguments The template-arguments that will be used to instantiate the input-context. If this is empty, the intersting context will be only copied without specialization. If it contains exactly one argument, and that argument is invalid, the context is instantiated without arguments(default-arguments are used)
    * @param instantiatedDeclaration The copied declaration this should belong to. If this is set, the created context will be made the given declaration's internal-context, and its parent-context will be set to the given context's parent-context. Also delayed types in the declaration will be resolved(The declaration will be changed)
    * @param instantiatedFrom The declaration instantiatedDeclaration should be/is instantiated from. This is needed to eventually change the declaration of in IdentifiedType
    *
