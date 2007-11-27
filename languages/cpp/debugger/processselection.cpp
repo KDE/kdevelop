@@ -37,7 +37,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include "ui_dbgpsdlg.h"
+#include "ui_processselection.h"
 
 namespace GDBDebugger
 {
