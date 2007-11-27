@@ -25,9 +25,9 @@
 
 #include <q3cstring.h>
 #include <QObject>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QString>
-#include <qmap.h>
+#include <QMap>
 #include <QDateTime>
 
 #include <memory>
@@ -298,7 +298,7 @@ private:
     // next output arrives, so probably should be just removed.
     QByteArray          holdingZone_;
 
-    Q3PtrList<GDBCommand> cmdList_;
+    QList<GDBCommand*> cmdList_;
     GDBCommand*       currentCmd_;
 
     STTY*             tty_;

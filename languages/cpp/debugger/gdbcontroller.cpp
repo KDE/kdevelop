@@ -155,7 +155,6 @@ GDBController::GDBController(QObject* parent)
         stateReloadInProgress_(false)
 {
     configure();
-    cmdList_.setAutoDelete(true);
 
     Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
@@ -349,7 +348,7 @@ void GDBController::executeCmd()
         if (cmdList_.isEmpty())
             return;
 
-        currentCmd_ = cmdList_.take(0);
+        currentCmd_ = cmdList_.takeAt(0);
     }
     else
     {
@@ -426,7 +425,7 @@ void GDBController::destroyCmds()
     }
 
     while (!cmdList_.isEmpty())
-        delete cmdList_.take(0);
+        delete cmdList_.takeAt(0);
 }
 
 // Pausing an app removes any pending run commands so that the app doesn't
@@ -445,7 +444,7 @@ void GDBController::pauseApp()
         i--;
         DbgCommand *cmd = cmdList_.seek(i);
         if (cmd->isAnInfoCmd())
-            delete cmdList_.take(i);
+            delete cmdList_.takeAt(i);
     }
     */
 
@@ -1619,7 +1618,7 @@ void GDBController::removeStateReloadingCommands()
         if (stateReloadingCommands_.count(cmd));
         {
             kDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
-            delete cmdList_.take(i);
+            delete cmdList_.takeAt(i);
         }
     }
 
