@@ -27,6 +27,9 @@ namespace KDevelop
 }
 
 class GrepOutputModel;
+class GrepOutputDelegate;
+class KProcess;
+class QSignalMapper;
 
 class GrepViewPlugin : public KDevelop::IPlugin
 {
@@ -40,9 +43,9 @@ private Q_SLOTS:
     void slotGrep();
     void showDialogWithPattern(const QString& pattern);
     void searchActivated();
-    void updateOkButton(const QString& text);
-    void slotFailed();
-    void slotCompleted();
+    void procFailed(int);
+    void procFinished(int);
+    void cleanupForView(int);
 
 private:
     static QString escape(const QString &str);
@@ -55,8 +58,12 @@ private:
     KDevelop::IProject *m_projectForActiveFile;
 
     KDevelop::IOutputView *m_view;
-    GrepOutputModel* m_model;
-    KDevelop::ProcessLineMaker* m_lineMaker;
+    QMap<int, GrepOutputModel*> models;
+    QMap<int, GrepOutputDelegate*> delegates;
+    QMap<int, KDevelop::ProcessLineMaker*> lineMakers;
+    QMap<int, QList<KProcess*> > processes;
+    QSignalMapper* finishedmapper;
+    QSignalMapper* failedmapper;
 };
 
 #endif
