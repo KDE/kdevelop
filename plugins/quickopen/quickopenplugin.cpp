@@ -188,6 +188,20 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
     switch( keyEvent->key() ) {
       case Qt::Key_Down:
       case Qt::Key_Up:
+      {
+        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+          QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
+          if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
+              dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
+            if( keyEvent->key() == Qt::Key_Down )
+              interface->down();
+            else
+              interface->up();
+            return true;
+          }
+          return false;
+        }
+      }
       case Qt::Key_PageUp:
       case Qt::Key_PageDown:
       case Qt::Key_End:
@@ -206,12 +220,6 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->previous();
             return true;
-          } else {
-            if( w ) {
-              QMetaObject::invokeMethod( w, "previous" );
-              kDebug() << "dynamic-cast fail" << typeid(*w).name();
-              return true;
-            }
           }
         } else {
           QModelIndex row = o.list->selectionModel()->currentIndex();
@@ -233,15 +241,8 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
           QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
-          kDebug() << "dynamic-cast success";
             interface->next();
             return true;
-          }else{
-            if( w ) {
-              QMetaObject::invokeMethod( w, "next" );
-              kDebug() << "dynamic-cast fail" << typeid(*w).name();
-              return true;
-            }
           }
         } else {
           QModelIndex row = o.list->selectionModel()->currentIndex();
@@ -265,13 +266,6 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
             interface->accept();
             return true;
-          } else {
-            ///@todo this is a bug in gcc or whatever, somehow it cannot dynamic_cast to the object. For now, workaround it using invokeMethod
-            if( w ) {
-              QMetaObject::invokeMethod( w, "accept" );
-              kDebug() << "dynamic-cast fail" << typeid(*w).name();
-              return true;
-            }
           }
         } else {
           QString filterText = o.searchLine->text();
@@ -298,12 +292,10 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
     setXMLFile( "kdevquickopen.rc" );
-    ///@todo Make the whole thing work using the own action-collection, it simply doesn't
     m_model = new QuickOpenModel( 0 );
 
     KActionCollection* actions = actionCollection();
 
-    ///@todo All the locally created actions do not work,, also not if they are put into actionCollection()
     QAction* quickOpen = actions->addAction("quick_open");
     quickOpen->setText( i18n("&Quick Open") );
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
@@ -324,9 +316,8 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
-    m_projectFileData = new ProjectFileDataProvider(core());
-
     {
+      m_projectFileData = new ProjectFileDataProvider();
       QStringList scopes;
       scopes << i18n("Project");
       m_model->registerProvider( scopes, i18n("Files"), m_projectFileData );
@@ -345,7 +336,6 @@ void QuickOpenPlugin::unload()
 
 void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 {
-  kDebug() <<  "showing quickopen";
   QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
 
   d->setAttribute( Qt::WA_DeleteOnClose, true );

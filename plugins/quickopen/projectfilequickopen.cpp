@@ -48,7 +48,7 @@ QString ProjectFileData::htmlDescription() const {
 }
 
 bool ProjectFileData::execute( QString& filterText ) {
-  m_file.m_core->documentController()->openDocument( totalUrl() );
+  ICore::self()->documentController()->openDocument( totalUrl() );
   return true;
 }
 
@@ -86,7 +86,7 @@ QIcon ProjectFileData::icon() const {
   return QIcon();
 }
 
-ProjectFileDataProvider::ProjectFileDataProvider(ICore* core) : m_core(core) {
+ProjectFileDataProvider::ProjectFileDataProvider() {
   reset();
 }
 
@@ -98,7 +98,7 @@ void ProjectFileDataProvider::reset() {
   Base::clearFilter();
   QList<ProjectFile> projectFiles;
   
-  foreach( IProject* project, m_core->projectController()->projects() ) {
+  foreach( IProject* project, ICore::self()->projectController()->projects() ) {
     QList<ProjectFileItem*> files = project->files();
     foreach( ProjectFileItem* file, files ) {
       ProjectFile f;
@@ -106,7 +106,6 @@ void ProjectFileDataProvider::reset() {
       f.m_projectUrl.adjustPath(KUrl::AddTrailingSlash);
       f.m_relativePath = KUrl::relativeUrl( f.m_projectUrl, file->url() );
       f.m_project = project->name();
-      f.m_core = m_core;
       projectFiles << f;
     }
   }

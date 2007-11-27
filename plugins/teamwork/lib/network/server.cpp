@@ -20,7 +20,6 @@
 #include <map>
 #include <list>
 #include "interfaces.h"
-#include <typeinfo>
 #include <sstream>
 #include "messagetypeset.h"
 #include "messageimpl.h"

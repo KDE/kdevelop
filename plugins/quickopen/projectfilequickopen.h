@@ -28,12 +28,11 @@ namespace KDevelop {
 }
 
 struct ProjectFile {
-  ProjectFile() : m_core(0) {
+  ProjectFile() {
   }
   QString m_relativePath;
   KUrl m_projectUrl;
   QString m_project;
-  KDevelop::ICore* m_core; ///@todo remove this, add a static instance somewhere
 };
 
 class ProjectFileData : public KDevelop::QuickOpenDataBase {
@@ -64,7 +63,7 @@ typedef KDevelop::Filter<ProjectFile> Base;
 
 class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base {
   public:
-    ProjectFileDataProvider(KDevelop::ICore* core);
+    ProjectFileDataProvider();
     virtual void setFilterText( const QString& text );
     virtual void reset();
     virtual uint itemCount() const;
@@ -74,8 +73,6 @@ class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
   
     //Reimplemented from Base<..>
     virtual QString itemText( const ProjectFile& data ) const;
-
-    KDevelop::ICore* m_core;
 };
 
 
