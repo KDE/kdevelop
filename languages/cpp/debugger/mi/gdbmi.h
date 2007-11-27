@@ -23,7 +23,6 @@
 #define GDBMI_H
 
 #include <QString>
-#include <q3valuelist.h>
 #include <qmap.h>
 
 #include <stdexcept>
@@ -168,7 +167,7 @@ namespace GDBMI
         const Value& operator[](const QString& variable) const;
 
 
-        Q3ValueList<Result*> results;
+        QList<Result*> results;
         QMap<QString, GDBMI::Result*> results_by_name;
     };
 
@@ -183,7 +182,7 @@ namespace GDBMI
 
         const Value& operator[](unsigned index) const;
 
-        Q3ValueList<Result*> results;
+        QList<Result*> results;
 
     };
 

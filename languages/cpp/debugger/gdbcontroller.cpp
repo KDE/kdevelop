@@ -151,7 +151,8 @@ GDBController::GDBController(QObject* parent)
         config_gdbPath_(),
         config_outputRadix_(10),
         state_reload_needed(false),
-        stateReloadInProgress_(false)
+        stateReloadInProgress_(false),
+        m_process(0)
 {
     configure();
 
@@ -1404,7 +1405,6 @@ void GDBController::readyReadStandardError()
 
 void GDBController::readFromProcess(QProcess* process)
 {
-    // Copy the data out of the QProcess buffer before it gets overwritten
     // Append to the back of the holding zone.
     holdingZone_ +=  process->readAll();
 

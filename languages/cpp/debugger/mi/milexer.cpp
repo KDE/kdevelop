@@ -284,10 +284,10 @@ void TokenStream::positionAt(int position, int *line, int *column) const
     Q_ASSERT( *column >= 0 );
 }
 
-Q3CString TokenStream::tokenText(int index) const
+QByteArray TokenStream::tokenText(int index) const
 {
     Token *t = index < 0 ? m_currentToken : m_firstToken + index;
     const char* data = m_contents;
-    return Q3CString(data + t->position, t->length+1);
+    return QByteArray(data + t->position, t->length+1);
 }
 
