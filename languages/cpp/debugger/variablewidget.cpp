@@ -124,7 +124,7 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
 
     connect(plugin, SIGNAL(addWatchVariable(const QString&)), this, SLOT(slotAddWatchVariable(const QString&)));
     connect(plugin, SIGNAL(evaluateExpression(const QString&)), this, SLOT(slotEvaluateExpression(const QString&)));
-    
+
     // Setup help items.
 
     setWhatsThis( i18n(
@@ -634,7 +634,7 @@ private:
 
     VarItem* item_;
 
-    void handleReply(const Q3ValueVector<QString>& lines)
+    void handleReply(const QStringList& lines)
     {
         QString s;
         for(int i = 1; i < lines.count(); ++i)
@@ -708,7 +708,7 @@ void VariableTree::localsReady(const GDBMI::ResultRecord& r)
                                            &VariableTree::frameIdReady));
 }
 
-void VariableTree::frameIdReady(const Q3ValueVector<QString>& lines)
+void VariableTree::frameIdReady(const QStringList& lines)
 {
     //kDebug(9012) << "localAddresses: " << lines[1] << "\n";
 
@@ -878,7 +878,7 @@ void VariableTree::handleVarUpdate(const GDBMI::ResultRecord& r)
     }
 }
 
-void VarItem::handleCliPrint(const Q3ValueVector<QString>& lines)
+void VarItem::handleCliPrint(const QStringList& lines)
 {
     static QRegExp r("(\\$[0-9]+)");
     if (lines.size() >= 2)
@@ -1420,7 +1420,7 @@ void VarItem::childrenOfFakesDone(const GDBMI::ResultRecord& r)
     createChildren(r, true);
 }
 
-void VarItem::handleCurrentAddress(const Q3ValueVector<QString>& lines)
+void VarItem::handleCurrentAddress(const QStringList& lines)
 {
     lastObtainedAddress_ = "";
     if (lines.count() > 1)
@@ -1435,7 +1435,7 @@ void VarItem::handleCurrentAddress(const Q3ValueVector<QString>& lines)
     }
 }
 
-void VarItem::handleType(const Q3ValueVector<QString>& lines)
+void VarItem::handleType(const QStringList& lines)
 {
     bool recreate = false;
 

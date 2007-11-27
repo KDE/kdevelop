@@ -58,12 +58,12 @@ namespace GDBDebugger
     private Q_SLOTS:
         void slotChildCaptionChanged(const QString& caption);
         void slotChildDestroyed(QObject* child);
-     
+
     private: // Data
         CppDebuggerPlugin* m_plugin;
         GDBController* controller_;
         QToolBox* toolBox_;
-        Q3ValueVector<MemoryView*> memoryViews_;
+        QList<MemoryView*> memoryViews_;
     };
 
     class MemoryView : public QWidget
@@ -86,12 +86,12 @@ namespace GDBDebugger
     private Q_SLOTS:
         void memoryEdited(int start, int end);
 
-    private:        
+    private:
         // Returns true is we successfully created the hexeditor, and so
         // can work.
         bool isOk() const;
 
-        
+
 
     private Q_SLOTS:
         /** Invoked when user has changed memory range.
@@ -115,7 +115,7 @@ namespace GDBDebugger
         uint start_, amount_;
         QString startAsString_, amountAsString_;
         char* data_;
-        
+
         int debuggerState_;
     };
 }

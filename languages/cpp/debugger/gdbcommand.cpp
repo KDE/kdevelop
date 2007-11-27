@@ -57,7 +57,7 @@ void GDBCommand::newOutput(const QString& line)
     lines.push_back(line);
 }
 
-const Q3ValueVector<QString>& GDBCommand::allStreamOutput() const
+const QStringList& GDBCommand::allStreamOutput() const
 {
     return lines;
 }
@@ -131,7 +131,7 @@ bool CliCommand::invokeHandler(const GDBMI::ResultRecord& r)
     else {
         return false;
     }
-    
+
 }
 
 

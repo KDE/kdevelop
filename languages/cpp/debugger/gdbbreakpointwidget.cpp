@@ -652,7 +652,7 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
     }
 }
 
-void GDBBreakpointWidget::handleTracingPrintf(const Q3ValueVector<QString>& s)
+void GDBBreakpointWidget::handleTracingPrintf(const QStringList& s)
 {
     // The first line of output is the command itself, which we don't need.
     for(unsigned i = 1; i < s.size(); ++i)

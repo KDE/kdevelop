@@ -80,7 +80,7 @@ public Q_SLOTS:
 
     void slotBreakpointHit(int id);
 
-    
+
 protected:
     virtual void focusInEvent(QFocusEvent *e);
 
@@ -124,7 +124,7 @@ private:
     void sendToGdb(Breakpoint &);
 
     void handleBreakpointList(const GDBMI::ResultRecord&);
-    void handleTracingPrintf(const Q3ValueVector<QString>& s);
+    void handleTracingPrintf(const QStringList& s);
 
 private:
     GDBController*  controller_;
@@ -138,10 +138,10 @@ class BreakpointTableRow;
 /** Custom table cell class for cells that require complex editing.
     When current, the cell shows a "..." on the right. When clicked,
     the 'edit' signal is emitted that can be be used to pop-up
-    a dialog box. 
+    a dialog box.
 
     When editing is done, the receiver of 'edit' should change the
-    value in the table, and then call the 'updateValue' method.    
+    value in the table, and then call the 'updateValue' method.
  */
 class ComplexEditCell : public QObject, public Q3TableItem
 {
@@ -153,10 +153,10 @@ public:
     /** Called by Qt when the current cell should become editable.
         In our case, when the item becomes current. Creates a widget
         that will be shown in the cell and should be able to edit cell
-        content. In our case -- text plus "..." button that invokes 
-        action dialog.        
+        content. In our case -- text plus "..." button that invokes
+        action dialog.
     */
-    QWidget* createEditor() const;    
+    QWidget* createEditor() const;
 
     void updateValue();
 

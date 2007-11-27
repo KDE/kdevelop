@@ -38,8 +38,8 @@
 #include <QFileInfo>
 #include <QRegExp>
 #include <QString>
+#include <QStringList>
 #include <QDir>
-#include <q3valuevector.h>
 #include <QEventLoop>
 #include <QByteArray>
 
@@ -50,7 +50,6 @@
 #include <sys/types.h>
 #include <assert.h>
 #include <typeinfo>
-#include <kvbox.h>
 using namespace std;
 
 // **************************************************************************
@@ -460,7 +459,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
     bool shared_library_load = false;
     if (currentCmd_)
     {
-        const Q3ValueVector<QString>& lines = currentCmd_->allStreamOutput();
+        const QStringList& lines = currentCmd_->allStreamOutput();
         for(unsigned int i = 0; i < lines.count(); ++i)
         {
             if (lines[i].startsWith("Stopped due to shared library event"))

@@ -74,7 +74,7 @@
 namespace GDBDebugger
 {
     /** Container for controls that select memory range.
-        
+
         The memory range selection is embedded into memory view widget,
         it's not a standalone dialog. However, we want to have easy way
         to hide/show all controls, so we group them in this class.
@@ -87,7 +87,7 @@ namespace GDBDebugger
         QPushButton* okButton;
         QPushButton* cancelButton;
 
-        MemoryRangeSelector(QWidget* parent) 
+        MemoryRangeSelector(QWidget* parent)
         : QWidget(parent)
         {
             Q3VBoxLayout* l = new Q3VBoxLayout(this);
@@ -98,29 +98,29 @@ namespace GDBDebugger
             gl->setColSpacing(0, 2);
             gl->setColSpacing(1, 4);
             gl->setRowSpacing(1, 2);
-            
+
             QLabel* l1 = new QLabel(i18n("Start"), this);
             gl->addWidget(l1, 0, 1);
-            
+
             startAddressLineEdit = new KLineEdit(this);
             gl->addWidget(startAddressLineEdit, 0, 3);
-            
+
             QLabel* l2 = new QLabel(i18n("Amount"), this);
             gl->addWidget(l2, 2, 1);
-            
+
             amountLineEdit = new KLineEdit(this);
             gl->addWidget(amountLineEdit, 2, 3);
 
             l->addSpacing(2);
-                        
+
             Q3HBoxLayout* hb = new Q3HBoxLayout(l);
             hb->addStretch();
-            
+
             okButton = new QPushButton(i18n("OK"), this);
             hb->addWidget(okButton);
-            
+
             cancelButton = new QPushButton(i18n("Cancel"), this);
-            hb->addWidget(cancelButton);            
+            hb->addWidget(cancelButton);
 
             l->addSpacing(2);
 
@@ -133,7 +133,7 @@ namespace GDBDebugger
     };
 
 
-    
+
     MemoryView::MemoryView(CppDebuggerPlugin* plugin, GDBController* controller,
                            QWidget* parent)
     : QWidget(parent),
@@ -162,7 +162,7 @@ namespace GDBDebugger
     {
         Q3VBoxLayout *l = new Q3VBoxLayout(this, 0, 0);
 
-        khexedit2_widget = KHE::createBytesEditWidget(this);               
+        khexedit2_widget = KHE::createBytesEditWidget(this);
 
         bool ok_ = false;
 
@@ -170,19 +170,19 @@ namespace GDBDebugger
         {
             QWidget* real_widget = (QWidget*)
                 khexedit2_widget->child("BytesEdit");
-            
+
             if (real_widget)
             {
                 ok_ = true;
 
                 connect(real_widget, SIGNAL(bufferChanged(int, int)),
                         this, SLOT(memoryEdited(int, int)));
-                
+
                 khexedit2_real_widget = real_widget;
 
                 QVariant resize_style(2); // full size usage.
                 real_widget->setProperty("ResizeStyle", resize_style);
-                                
+
                 //QVariant group(8);
                 //real_widget->setProperty("StartOffset", start);
                 //real_widget->setProperty("NoOfBytesPerLine", group);
@@ -197,31 +197,31 @@ namespace GDBDebugger
 
                 //QVariant gap(32);
                 //real_widget->setProperty("BinaryGapWidth", gap);
-                
-            }   
+
+            }
             else
             {
                 delete khexedit2_widget;
-            }            
-        }            
+            }
+        }
 
         if (ok_) {
 
             rangeSelector_ = new MemoryRangeSelector(this);
             l->addWidget(rangeSelector_);
-            
+
             connect(rangeSelector_->okButton, SIGNAL(clicked()),
                     this,                     SLOT(slotChangeMemoryRange()));
-            
-            
-            connect(rangeSelector_->cancelButton,  SIGNAL(clicked()), 
+
+
+            connect(rangeSelector_->cancelButton,  SIGNAL(clicked()),
                     this,                         SLOT(slotHideRangeDialog()));
-            
+
             connect(rangeSelector_->startAddressLineEdit,
                     SIGNAL(textChanged(const QString&)),
                     this,
                     SLOT(slotEnableOrDisable()));
-            
+
             connect(rangeSelector_->amountLineEdit,
                     SIGNAL(textChanged(const QString&)),
                     this,
@@ -273,7 +273,7 @@ namespace GDBDebugger
     void MemoryView::sizeComputed(const QString& size)
     {
         controller_->addCommand(
-            new 
+            new
             GDBCommand(
                 QString("-data-read-memory %1 x 1 1 %2")
                 .arg(rangeSelector_->startAddressLineEdit->text())
@@ -306,7 +306,7 @@ namespace GDBDebugger
             this->data_[i] = content[i].literal().toInt(0, 16);
         }
 
-                    
+
         bytesEditor->setData( this->data_, amount_ );
         bytesEditor->setReadOnly(false);
         // Overwrite data, not insert new
@@ -314,13 +314,13 @@ namespace GDBDebugger
         // Not sure this is needed, but prevent
         // inserting new data.
         bytesEditor->setOverwriteOnly( true );
-                   
+
         QVariant start_v(start_);
         khexedit2_real_widget->setProperty("FirstLineOffset", start_v);
 
         //QVariant bsw(0);
         //khexedit2_real_widget->setProperty("ByteSpacingWidth", bsw);
-        
+
         // HACK: use hardcoded constant taht should match
         // khexedit2
         // 3 -- binary
@@ -330,12 +330,12 @@ namespace GDBDebugger
         //khexedit2_real_widget->setProperty("Coding", coding);
 
 
-        slotHideRangeDialog();                   
+        slotHideRangeDialog();
     }
 
-    
+
     void MemoryView::memoryEdited(int start, int end)
-    {        
+    {
         for(int i = start; i <= end; ++i)
         {
             controller_->addCommand(
@@ -346,12 +346,12 @@ namespace GDBDebugger
                         .arg(QString::number(data_[i]))));
         }
     }
-    
-    void MemoryView::contextMenuEvent ( QContextMenuEvent * e ) 
+
+    void MemoryView::contextMenuEvent ( QContextMenuEvent * e )
     {
         if (!isOk())
             return;
-        
+
         Q3PopupMenu menu;
 
         bool app_running = !(debuggerState_ & s_appNotStarted);
@@ -359,14 +359,14 @@ namespace GDBDebugger
         int idRange = menu.insertItem(i18n("Change memory range"));
         // If address selector is show, 'set memory range' can't
         // do anything more.
-        menu.setItemEnabled(idRange, 
+        menu.setItemEnabled(idRange,
                             app_running && !rangeSelector_->isShown());
         int idReload = menu.insertItem(i18n("Reload"));
         // If amount is zero, it means there's not data yet, so
         // reloading does not make sense.
-        menu.setItemEnabled(idReload, app_running && amount_ != 0);        
+        menu.setItemEnabled(idReload, app_running && amount_ != 0);
         int idClose = menu.insertItem(i18n("Close this view"));
-        
+
         int result = menu.exec(e->globalPos());
 
         if (result == idRange)
@@ -376,15 +376,15 @@ namespace GDBDebugger
 
             rangeSelector_->show();
             rangeSelector_->startAddressLineEdit->setFocus();
-        }        
+        }
         if (result == idReload)
         {
-            // We use numeric start_ and amount_ stored in this, 
+            // We use numeric start_ and amount_ stored in this,
             // not textual startAsString_ and amountAsString_,
             // because program position might have changes and expressions
             // are no longer valid.
             controller_->addCommand(
-                new 
+                new
                 GDBCommand(
                     QString("-data-read-memory %1 x 1 1 %2")
                     .arg(start_).arg(amount_).latin1(),
@@ -395,8 +395,8 @@ namespace GDBDebugger
         if (result == idClose)
             delete this;
 
-        
-    }        
+
+    }
 
     bool MemoryView::isOk() const
     {
@@ -406,8 +406,8 @@ namespace GDBDebugger
     void MemoryView::slotEnableOrDisable()
     {
         bool app_started = !(debuggerState_ & s_appNotStarted);
-       
-        bool enabled_ = app_started &&           
+
+        bool enabled_ = app_started &&
             !rangeSelector_->startAddressLineEdit->text().isEmpty() &&
             !rangeSelector_->amountLineEdit->text().isEmpty();
 
@@ -423,9 +423,9 @@ namespace GDBDebugger
     {
         setWindowIcon(KIcon("math_brace"));
         setWindowTitle(i18n("Special debugger views"));
-        
+
         Q3VBoxLayout *l = new Q3VBoxLayout(this, 0, 0);
-        
+
         toolBox_ = new QToolBox(this);
         l->addWidget(toolBox_);
 
@@ -479,7 +479,7 @@ namespace GDBDebugger
 
     void ViewerWidget::slotChildDestroyed(QObject* child)
     {
-        Q3ValueVector<MemoryView*>::iterator i, e;
+        QList<MemoryView*>::iterator i, e;
         for(i = memoryViews_.begin(), e = memoryViews_.end(); i != e; ++i)
         {
             if (*i == child)

@@ -92,7 +92,7 @@ class VariableTree : public K3ListView
 {
     Q_OBJECT
 public:
-    VariableTree(VariableWidget *parent, 
+    VariableTree(VariableWidget *parent,
                  GDBController*  controller);
     virtual ~VariableTree();
 
@@ -122,18 +122,18 @@ private Q_SLOTS:
 private: // Callbacks for gdb commands;
     void argumentsReady(const GDBMI::ResultRecord&);
     void localsReady(const GDBMI::ResultRecord&);
-    void frameIdReady(const Q3ValueVector<QString>&);
+    void frameIdReady(const QStringList&);
     void handleVarUpdate(const GDBMI::ResultRecord&);
-    void handleEvaluateExpression(const Q3ValueVector<QString>&);
+    void handleEvaluateExpression(const QStringList&);
     void variablesFetchDone();
     void fetchSpecialValuesDone();
-    
-    /** This is called when address of expression for which 
+
+    /** This is called when address of expression for which
         popup is created is known.
 
         If there's no address (for rvalue), does nothing
         (leaving "Data breakpoint" item disabled).
-        Otherwise, enabled that item, and check is we 
+        Otherwise, enabled that item, and check is we
         have data breakpoint for that address already.
     */
     void handleAddressComputed(const GDBMI::ResultRecord& r);
@@ -141,7 +141,7 @@ private: // Callbacks for gdb commands;
 private: // helper functions
     /** Get (if exists) and create (otherwise) frame root for
         the specified frameNo/threadNo combination.
-    */    
+    */
     VarFrameRoot* demand_frame_root(int frameNo, int threadNo);
 
     void updateCurrentFrame();
@@ -201,7 +201,7 @@ private:
     So, we first update the values, highlighting the modified variables, and
     keeping track which variables were recieved from gdb. After that, the
     'trim' method is called, removing all variables which were not recieved
-    from gdbr.    
+    from gdbr.
  */
 class TrimmableItem : public K3ListViewItem
 {
@@ -228,22 +228,22 @@ class VarItem : public QObject,
 {
     Q_OBJECT
 public:
-    enum format_t { natural, hexadecimal, decimal, character, binary };   
+    enum format_t { natural, hexadecimal, decimal, character, binary };
 
     /** Creates top-level variable item from the specified expression.
         Optionally, alternative display name can be provided.
     */
-    VarItem( TrimmableItem *parent, 
-             const QString& expression, 
+    VarItem( TrimmableItem *parent,
+             const QString& expression,
              bool frozen = false);
 
     VarItem( TrimmableItem *parent, const GDBMI::Value& varobj,
              format_t format, bool baseClassMember);
 
     virtual ~VarItem();
-    
+
     /// Returns the gdb expression for *this.
-    QString gdbExpression() const;     
+    QString gdbExpression() const;
 
     /** Returns true is this VarItem should be unconditionally
         updated on each step, not matter what's the result of
@@ -297,7 +297,7 @@ public:
     void setFormat(format_t f);
     format_t formatFromGdbModifier(char c) const;
 
-    /** Clears highliting for this variable and 
+    /** Clears highliting for this variable and
         all its children. */
     void clearHighlight();
 
@@ -327,7 +327,7 @@ private:
 
     /** Precondition: 'name' is a name of existing
         gdb variable object.
-        Effects: 
+        Effects:
            - sets varobjName_ to 'name'
            - sets format, if it's not default one
            - gets initial value
@@ -346,16 +346,16 @@ private:
                     int column, int width, int align );
     void varobjCreated(const GDBMI::ResultRecord& r);
     void valueDone(const GDBMI::ResultRecord& r);
-    void childrenDone(const GDBMI::ResultRecord& r);    
-    void childrenOfFakesDone(const GDBMI::ResultRecord& r);    
-    void handleCurrentAddress(const Q3ValueVector<QString>& lines);
-    void handleType(const Q3ValueVector<QString>& lines);
+    void childrenDone(const GDBMI::ResultRecord& r);
+    void childrenOfFakesDone(const GDBMI::ResultRecord& r);
+    void handleCurrentAddress(const QStringList& lines);
+    void handleType(const QStringList& lines);
 
     void createChildren(const GDBMI::ResultRecord& r, bool children_of_fake);
 
     /** Called to handle the output of the cli print command.
      */
-    void handleCliPrint(const Q3ValueVector<QString>& lines);
+    void handleCliPrint(const QStringList& lines);
 
     // Assuming 'expression_' is already set, returns the
     // displayName to use when showing this to the user.
@@ -371,7 +371,7 @@ private:
 
 private:
     // The gdb expression for this varItem relatively to
-    // parent VarItem. 
+    // parent VarItem.
     QString expression_;
 
     bool      highlight_;
@@ -379,7 +379,7 @@ private:
 
     QString varobjName_;
 
-    // the non-cast type of the variable    
+    // the non-cast type of the variable
     QString originalValueType_;
     bool oldSpecialRepresentationSet_;
     QString oldSpecialRepresentation_;
@@ -390,7 +390,7 @@ private:
 
     int numChildren_;
     bool childrenFetched_;
-    
+
     QString currentAddress_;
     QString lastObtainedAddress_;
 

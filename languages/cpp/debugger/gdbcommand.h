@@ -18,11 +18,10 @@
 
 #include <QObject>
 #include <QString>
-#include <q3valuevector.h>
+#include <QStringList>
 
 #include "mi/gdbmi.h"
 #include <QPointer>
-#include <kvbox.h>
 
 namespace GDBDebugger
 {
@@ -43,11 +42,11 @@ public:
 
     template<class Handler>
     GDBCommand(const QString& command,
-               Handler* handler_this, 
+               Handler* handler_this,
                void (Handler::* handler_method)(const GDBMI::ResultRecord&),
                bool handlesError = false);
 
-    /* The command that should be sent to gdb.  
+    /* The command that should be sent to gdb.
        This method is virtual so the command can compute this
        dynamically, possibly using results of the previous
        commands.
@@ -76,16 +75,16 @@ public:
 
     virtual ~GDBCommand();
 
-    // Called by gdbcontroller for each new output string 
+    // Called by gdbcontroller for each new output string
     // gdb emits for this command. In MI mode, this includes
     // all "stream" messages, but does not include MI responses.
     void newOutput(const QString&);
 
-    const Q3ValueVector<QString>& allStreamOutput() const;
+    const QStringList& allStreamOutput() const;
 
     // True if this command run then target for
     // unspecified period of time -- that is either 'run' or
-    // 'continue'. 
+    // 'continue'.
     bool isRun() const;
 
     void setRun(bool run);
@@ -95,7 +94,7 @@ private:
     QPointer<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
-    Q3ValueVector<QString> lines;
+    QStringList lines;
     bool run;
 
 protected: // FIXME: should be private, after I kill the first ctor
@@ -132,7 +131,7 @@ public: // DbgCommand overrides
     virtual QString cmdToSend();
 
 private:
-    const Breakpoint* bp_;    
+    const Breakpoint* bp_;
 };
 
 /** This is a class for raw CLI commands. Instead of invoking
@@ -144,8 +143,8 @@ class CliCommand : public GDBCommand
 public:
     template<class Handler>
     CliCommand(const QString& command,
-               Handler* handler_this, 
-               void (Handler::* handler_method)(const Q3ValueVector<QString>&),
+               Handler* handler_this,
+               void (Handler::* handler_method)(const QStringList&),
                bool handlesError = false);
 
 
@@ -155,7 +154,7 @@ public: // GDBCommand overrides
 
 private:
 		QPointer<QObject> cli_handler_this;
-    typedef void (QObject::* cli_handler_t)(const Q3ValueVector<QString>&);
+    typedef void (QObject::* cli_handler_t)(const QStringList&);
     cli_handler_t cli_handler_method;
 };
 
@@ -181,7 +180,7 @@ public:
         (handler_this->*handler_method)();
     }
 
-    QString cmdToSend()             
+    QString cmdToSend()
     {
         return "";
     }
@@ -240,7 +239,7 @@ GDBCommand::GDBCommand(
     void (Handler::* handler_method)(const GDBMI::ResultRecord&),
     bool handlesError)
 : command_(command),
-  handler_this(handler_this), 
+  handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   run(false),
   handlesError_(handlesError)
@@ -251,10 +250,10 @@ template<class Handler>
 CliCommand::CliCommand(
     const QString& command,
     Handler* handler_this,
-    void (Handler::* handler_method)(const Q3ValueVector<QString>&),
+    void (Handler::* handler_method)(const QStringList&),
     bool handlesError)
 : GDBCommand(command.toLatin1()),
-  cli_handler_this(handler_this), 
+  cli_handler_this(handler_this),
   cli_handler_method(static_cast<cli_handler_t>(handler_method))
 {
     handlesError_ = handlesError;
