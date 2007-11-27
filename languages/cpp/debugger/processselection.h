@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _DBGPSDLG_H_
-#define _DBGPSDLG_H_
+#ifndef PROCESSSELECTION_H
+#define PROCESSSELECTION_H
 
 #include <kdialog.h>
 

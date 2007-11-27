@@ -13,7 +13,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "dbgpsdlg.h"
+#include "processselection.h"
 
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -152,4 +152,4 @@ void ProcessSelectionDialog::focusIn(QFocusEvent*)
 }
 
 /***************************************************************************/
-#include "dbgpsdlg.moc"
+#include "processselection.moc"

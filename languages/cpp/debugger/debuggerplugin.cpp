@@ -52,7 +52,7 @@
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
 #include "breakpoint.h"
-#include "dbgpsdlg.h"
+#include "processselection.h"
 #include "memviewdlg.h"
 #include "gdbparser.h"
 #include "gdboutputwidget.h"

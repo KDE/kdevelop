@@ -25,7 +25,7 @@ set(kdevcppdebugger_PART_SRCS
     framestackwidget.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
-    dbgpsdlg.cpp
+    processselection.cpp
     debuggerconfigwidget.cpp
     gdboutputwidget.cpp
     gdbtable.cpp
@@ -39,7 +39,7 @@ set(kdevcppdebugger_PART_SRCS
 set(kdevcppdebugger_PART_UI
     debuggerconfigwidget.ui
     debuggertracingdialog.ui
-    dbgpsdlg.ui
+    processselection.ui
 )
 
 kde4_add_ui_files(kdevcppdebugger_PART_SRCS ${kdevcppdebugger_PART_UI})
