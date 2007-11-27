@@ -35,9 +35,8 @@ namespace KDevelop
 class EnvironmentPreferencesPrivate
 {
 public:
-    ProjectConfigSkeleton *m_skel;
     EnvironmentWidget *preferencesDialog;
-    KConfig* m_config;
+    KConfigSkeleton* skel;
 };
 
 K_PLUGIN_FACTORY(PreferencesFactory, registerPlugin<EnvironmentPreferences>(); )
@@ -54,41 +53,34 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantL
     connect( d->preferencesDialog, SIGNAL( changed() ),
              this, SLOT( settingsChanged() ) );
 
-    // init kconfigskeleton
-    d->m_skel = new ProjectConfigSkeleton( args.first().toString() );
-    d->m_skel->setProjectTempFile( args.at(1).toString() );
-    d->m_skel->setProjectFileUrl( args.at(2).toString() );
-    d->m_skel->setDeveloperFileUrl( args.at(3).toString() );
 
-    addConfig( d->m_skel, d->preferencesDialog );
+    d->skel = new KConfigSkeleton("kdeveloprc");
+    addConfig( d->skel, d->preferencesDialog );
 
-    d->m_config = d->m_skel->config();
 
     load();
 }
 
 EnvironmentPreferences::~EnvironmentPreferences( )
 {
-    delete d->m_skel;
     delete d;
 }
 
 void EnvironmentPreferences::save()
 {
-    d->preferencesDialog->saveSettings( d->m_config );
+    d->preferencesDialog->saveSettings( d->skel->config() );
     KCModule::save();
 }
 
 void EnvironmentPreferences::load()
 {
-    kDebug(9503) << "Loading env settings";
-    d->preferencesDialog->loadSettings( d->m_config );
+    d->preferencesDialog->loadSettings( d->skel->config() );
     KCModule::load();
 }
 
 void EnvironmentPreferences::defaults()
 {
-    d->preferencesDialog->defaults( d->m_config );
+    d->preferencesDialog->defaults( d->skel->config() );
     KCModule::defaults();
 }
 
