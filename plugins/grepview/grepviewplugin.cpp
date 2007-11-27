@@ -327,28 +327,28 @@ void GrepViewPlugin::searchActivated()
     if( validProcs.count() > 3 )
         validProcs[2]->setStandardOutputProcess( validProcs[3] );
 
-    GrepOutputModel *model = new GrepOutputModel(this);
+    m_model = new GrepOutputModel(this);
     GrepOutputDelegate* delegate = new GrepOutputDelegate(this);
-    ProcessLineMaker *lineMaker = new ProcessLineMaker( xargsProc );
+    m_lineMaker = new KDevelop::ProcessLineMaker( xargsProc );
 
     // needed because processlinemaker is not a child of KProcess.
-    connect( xargsProc, SIGNAL(destroyed(QObject*)), lineMaker, SLOT(deleteLater()) );
+    connect( xargsProc, SIGNAL(destroyed(QObject*)), m_lineMaker, SLOT(deleteLater()) );
 
     // Delete the tempfile when xargs process is destroyed
     if( tempFile )
         connect( xargsProc, SIGNAL(destroyed(QObject*)), tempFile, SLOT(deleteLater()) );
 
-    connect( lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
-             model, SLOT(appendOutputs(const QStringList&)) );
-    connect( lineMaker, SIGNAL(receivedStderrLines( const QStringList& )),
-             model, SLOT(appendErrors(const QStringList&)) );
+    connect( m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
+             m_model, SLOT(appendOutputs(const QStringList&)) );
+    connect( m_lineMaker, SIGNAL(receivedStderrLines( const QStringList& )),
+             m_model, SLOT(appendErrors(const QStringList&)) );
     connect( xargsProc, SIGNAL(finished(int, QProcess::ExitStatus)),
-             model, SLOT(slotCompleted()) );
+             this, SLOT(slotCompleted()) );
     connect( xargsProc, SIGNAL(error( QProcess::ProcessError )),
-             model, SLOT(slotFailed()) );
+             this, SLOT(slotFailed()) );
 
     int id = m_view->registerView( m_grepdlg->patternString(), KDevelop::IOutputView::AllowUserClose );
-    m_view->setModel( id, model );
+    m_view->setModel( id, m_model );
     m_view->setDelegate( id, delegate );
 
     // At first line, print out actual command invocation as if it was run via shell.
@@ -358,7 +358,7 @@ void GrepViewPlugin::searchActivated()
         printCmd += _proc->program().join(" ") + " | ";
     }
     printCmd.chop(3); // chop last '|'
-    model->appendRow( new QStandardItem(printCmd) );
+    m_model->appendRow( new QStandardItem(printCmd) );
 
     // start process. GrepviewProcess is self-deleted.
     foreach( KProcess *_proc, validProcs )
@@ -427,6 +427,18 @@ QString GrepViewPlugin::currentSelectedWord()
     KTextEditor::View *view = ktedoc->activeView();
     if( !view ) return QString();
     return view->selectionText();
+}
+
+void GrepViewPlugin::slotCompleted()
+{
+    m_lineMaker->flush();
+    m_model->slotCompleted();
+}
+
+void GrepViewPlugin::slotFailed()
+{
+    m_lineMaker->flush();
+    m_model->slotCompleted();
 }
 
 #include "grepviewplugin.moc"

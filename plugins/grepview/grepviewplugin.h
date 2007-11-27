@@ -23,7 +23,10 @@ namespace KDevelop
 {
     class IOutputView;
     class IProject;
+    class ProcessLineMaker;
 }
+
+class GrepOutputModel;
 
 class GrepViewPlugin : public KDevelop::IPlugin
 {
@@ -38,6 +41,8 @@ private Q_SLOTS:
     void showDialogWithPattern(const QString& pattern);
     void searchActivated();
     void updateOkButton(const QString& text);
+    void slotFailed();
+    void slotCompleted();
 
 private:
     static QString escape(const QString &str);
@@ -50,6 +55,8 @@ private:
     KDevelop::IProject *m_projectForActiveFile;
 
     KDevelop::IOutputView *m_view;
+    GrepOutputModel* m_model;
+    KDevelop::ProcessLineMaker* m_lineMaker;
 };
 
 #endif
