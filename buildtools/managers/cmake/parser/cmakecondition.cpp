@@ -1,11 +1,6 @@
 /* KDevelop CMake Support
  *
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright 2007 Aleix Pol <aleixpol@gmail.com>z
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -105,13 +100,13 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 
 bool CMakeCondition::isTrue(const QString& varName) const
 {
-    kDebug(9032) << "+++++++ isTrue: " << varName;
+	kDebug(9042) << "+++++++ isTrue: " << varName;
     
     if(m_vars->contains(varName))
     {
         const QStringList valu=m_vars->value(varName);
 
-//         kDebug(9032) << "Checking" << varName << "is true";
+//         kDebug(9042) << "Checking" << varName << "is true";
         QString val = valu.join(";").toUpper();
         return !val.isEmpty() && val!="0" && val!="N" && val!="NO" && val!="OFF" && val!="FALSE" && val!="NOTFOUND" && !val.endsWith("_NOTFOUND");
     }
@@ -123,7 +118,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
 {
     bool done=false;
     it--;
-    kDebug(9032) << "it" << *it;
+    kDebug(9042) << "it" << *it;
     while(!done && it!=itStop)
     {
         conditionToken c = typeName(*it);
@@ -131,7 +126,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
         if(!done)
             it--;
     }
-    kDebug(9032) << "it2" << *it << *itStop;
+    kDebug(9042) << "it2" << *it << *itStop;
     return it;
 }
 
@@ -170,9 +165,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case EXISTS:
             {
                 QString v=*(it2+1);
-                kDebug(9032) << "EXISTS" << v << *it2;
+                kDebug(9042) << "EXISTS" << v << *it2;
                 if(v.isEmpty())
-                    kDebug(9032) << "error: no";
+                    kDebug(9042) << "error: no";
                 else
                 {
                     last=false;
@@ -254,7 +249,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             default:
-                kDebug(9032) << "unrecog:" << *it2;
+                kDebug(9042) << "unrecog:" << *it2;
                 break;
         }
     }
@@ -264,6 +259,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 bool CMakeCondition::condition(const QStringList &expression) const
 {
     bool ret = evaluateCondition(expression.constBegin(), expression.constEnd());
-    kDebug(9032) << "condition" << expression << "=>" << ret;
+    kDebug(9042) << "condition" << expression << "=>" << ret;
     return ret;
 }

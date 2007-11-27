@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +43,8 @@ QHash< QString, QString > CMakeTargetItem::environment() const
 
 KUrl::List CMakeFolderItem::includeDirectories() const
 {
-    KUrl::List urls(m_includeList); //FIXME: Returning a temporary variable
-    
+    KUrl::List urls(m_includeList);
+
     CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(parent());
     while(folder)
     {
@@ -58,7 +59,7 @@ QList< QPair < QString , QString > > CMakeFolderItem::defines() const
 {
     CMakeFolderItem *par = dynamic_cast<CMakeFolderItem*>(parent());
     if(par)
-        return m_defines+par->defines(); //FIXME: Returning a temporary variable
+        return m_defines+par->defines();
     else
         return m_defines;
 }

@@ -53,7 +53,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()),
             this, SLOT(createBuildDir()));
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
-    m_prefsUi->showAdvanced->setChecked(false);
+    
     showInternal(m_prefsUi->showInternal->checkState());
     m_srcFolder=KUrl(args[0].toString());
     m_srcFolder=m_srcFolder.upUrl();
@@ -65,6 +65,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
             break;
         }
     }
+    m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
     load();
 }
@@ -130,6 +131,8 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         m_prefsUi->cacheList->setEnabled(true);
         connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
                 this, SLOT( cacheEdited( QStandardItem * ) ));
+        
+        showInternal(m_prefsUi->showInternal->checkState());
     }
     else
     {
