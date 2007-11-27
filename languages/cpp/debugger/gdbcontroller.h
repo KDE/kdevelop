@@ -245,7 +245,6 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void readyReadStandardOutput();
     void readyReadStandardError();
-    void slotDbgWroteStdin(QProcess *proc);
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void processErrored(QProcess::ProcessError);
 

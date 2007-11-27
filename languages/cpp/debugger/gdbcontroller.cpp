@@ -341,7 +341,7 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
 // state will get updated.
 void GDBController::executeCmd()
 {
-    if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_shuttingDown) || !m_process)
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown) || !m_process)
     {
         return;
     }
@@ -404,7 +404,6 @@ void GDBController::executeCmd()
 
     m_process->write(commandText.toLatin1(),
                             commandText.length());
-    setStateOn(s_waitForWrite);
 
     QString prettyCmd = currentCmd_->cmdToSend();
     prettyCmd.replace( QRegExp("set prompt \032.\n"), "" );
@@ -811,10 +810,6 @@ bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int s
             SLOT(processErrored(QProcess::ProcessError)));
 
     m_process->setProperty("serial", serial);
-
-    //This signal doesn't exist anymore
-//     connect( m_process, SIGNAL(wroteStdin(QProcess *)),
-//              this,        SLOT(slotDbgWroteStdin(QProcess *)) );
 
     application_ = run.executable().path();
 
@@ -1418,8 +1413,10 @@ void GDBController::readFromProcess(QProcess* process)
     forever
     {
         i = holdingZone_.indexOf('\n');
-        if (i == -1)
+        if (i == -1) {
+          ready_for_next_command = true;
           break;
+        }
 
         got_any_command = true;
 
@@ -1659,18 +1656,6 @@ void GDBController::raiseEvent(event_t e)
 
 // **************************************************************************
 
-void GDBController::slotDbgWroteStdin(QProcess *)
-{
-    commandExecutionTime.start();
-
-    setStateOff(s_waitForWrite);
-
-    // FIXME: need to remove s_waitForWrite flag completely.
-    executeCmd();
-}
-
-// **************************************************************************
-
 void GDBDebugger::GDBController::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
 
@@ -1802,7 +1787,6 @@ void GDBController::debugStateChange(int oldState, int newState)
     if (i == name) { out += #name; found = true; }
                 STATE_CHECK(s_dbgNotStarted);
                 STATE_CHECK(s_appNotStarted);
-                STATE_CHECK(s_waitForWrite);
                 STATE_CHECK(s_programExited);
                 STATE_CHECK(s_viewBT);
                 STATE_CHECK(s_viewBP);

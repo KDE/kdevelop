@@ -25,7 +25,6 @@ enum DBGStateFlags
 {
   s_dbgNotStarted     = 1,
   s_appNotStarted     = 2,
-  s_waitForWrite      = 8,
   s_programExited     = 16,
   s_viewBT            = 128,
   s_viewBP            = 256,

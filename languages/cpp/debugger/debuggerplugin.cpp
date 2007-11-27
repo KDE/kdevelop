@@ -134,7 +134,7 @@ public:
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
   {
-    return Qt::LeftDockWidgetArea;
+    return Qt::BottomDockWidgetArea;
   }
 
 private:

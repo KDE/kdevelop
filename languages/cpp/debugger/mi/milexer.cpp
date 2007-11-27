@@ -286,6 +286,6 @@ QByteArray TokenStream::tokenText(int index) const
 {
     Token *t = index < 0 ? m_currentToken : m_firstToken + index;
     const char* data = m_contents;
-    return QByteArray(data + t->position, t->length+1);
+    return QByteArray(data + t->position, t->length);
 }
 
