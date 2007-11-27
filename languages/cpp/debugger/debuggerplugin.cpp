@@ -212,8 +212,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
 
-    kDebug() << "Debugger component:" << componentData().componentName() << componentData().catalogName();
-
     setXMLFile("kdevcppdebuggerui.rc");
 
     // Setup widgets and dbgcontroller
