@@ -452,8 +452,7 @@ void GDBController::pauseApp()
     */
 
     if (m_process)
-        // PORTING TODO how to send SIGINT instead of SIGKILL
-        m_process->kill();
+        kill(m_process->pid(), SIGINT);
 }
 
 void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
