@@ -30,7 +30,7 @@ ProcessLineMaker::ProcessLineMaker( const KProcess* proc )
 {
     connect(proc, SIGNAL(receivedStdout(KProcess*,char*,int)),
             this, SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-    
+
     connect(proc, SIGNAL(receivedStderr(KProcess*,char*,int)),
             this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
 
@@ -97,4 +97,11 @@ void ProcessLineMaker::clearBuffers( )
     stdoutbuf.truncate(0);
     stdouttimer.stop();
     stderrtimer.stop();
+}
+
+void ProcessLineMaker::flush()
+{
+    emit receivedStderrLine(QString::fromLocal8Bit(stderrbuf));
+    emit receivedStdoutLine(QString::fromLocal8Bit(stdoutbuf));
+    clearBuffers();
 }

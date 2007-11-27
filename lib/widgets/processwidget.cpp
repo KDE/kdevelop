@@ -154,7 +154,7 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
 void ProcessWidget::killJob( int signo )
 {
     procLineMaker->blockSignals( true );
-    
+
 	childproc->kill( signo );
 }
 
@@ -167,6 +167,7 @@ bool ProcessWidget::isRunning()
 
 void ProcessWidget::slotProcessExited(KProcess *)
 {
+    procLineMaker->flush();
     childFinished(childproc->normalExit(), childproc->exitStatus());
     maybeScrollToBottom();
     emit processExited(childproc);
@@ -233,7 +234,7 @@ QSize ProcessWidget::minimumSizeHint() const
 */
 void ProcessWidget::maybeScrollToBottom()
 {
-    if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() ) 
+    if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() )
     {
         setBottomItem( count() -1 );
     }

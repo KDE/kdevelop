@@ -528,6 +528,7 @@ void MakeWidget::insertStderrLine( const QString& line )
 
 void MakeWidget::slotProcessExited(KProcess *)
 {
+	procLineMaker->flush();
 	if (childproc->normalExit())
 	{
 		if (childproc->exitStatus())

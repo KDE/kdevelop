@@ -40,8 +40,9 @@ Q_OBJECT
 public:
 	ProcessLineMaker();
 	ProcessLineMaker( const KProcess* );
-	
+
 	void clearBuffers();
+	void flush();
 
 public slots:
 	void slotReceivedStdout(const char*);
@@ -52,11 +53,11 @@ protected slots:
 	void slotReceivedStderr(KProcess *, char *buffer, int buflen);
 	void slotTimeoutStdout();
 	void slotTimeoutStderr();
-        
+
 signals:
 	void receivedStdoutLine( const QString& line );
 	void receivedStderrLine( const QString& line );
-        
+
 private:
 	QCString stdoutbuf;
 	QCString stderrbuf;
@@ -65,3 +66,5 @@ private:
 };
 
 #endif
+
+//kate: replace-tabs off; indent-spaces off;
