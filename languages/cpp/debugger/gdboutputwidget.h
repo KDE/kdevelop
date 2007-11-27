@@ -54,8 +54,8 @@ public:
 public Q_SLOTS:
     void clear();
 
-    void slotInternalCommandStdout(const char* line);
-    void slotUserCommandStdout(const char* line);
+    void slotInternalCommandStdout(const QString& line);
+    void slotUserCommandStdout(const QString& line);
     void slotReceivedStderr(const char* line);
     void slotDbgStatus     (const QString &status, int statusFlag);
 

@@ -76,14 +76,8 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     userGDBCmdEntry->addWidget(m_userGDBCmdEditor);
     userGDBCmdEntry->setStretchFactor(m_userGDBCmdEditor, 1);
 
-    m_Interrupt = new QToolButton( this, "add breakpoint" );
-    m_Interrupt->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0,
-                                         ( QSizePolicy::SizeType)0,
-                                         0,
-                                         0,
-                                         m_Interrupt->sizePolicy().hasHeightForWidth())
-                                         );
-    m_Interrupt->setPixmap ( SmallIcon ( "media-playback-pause" ) );
+    m_Interrupt = new QToolButton( this );
+    m_Interrupt->setIcon ( KIcon ( "media-playback-pause" ) );
     userGDBCmdEntry->addWidget(m_Interrupt);
     m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
 
@@ -136,12 +130,12 @@ void GDBOutputWidget::clear()
 
 /***************************************************************************/
 
-void GDBOutputWidget::slotInternalCommandStdout(const char* line)
+void GDBOutputWidget::slotInternalCommandStdout(const QString& line)
 {
     newStdoutLine(line, true);
 }
 
-void GDBOutputWidget::slotUserCommandStdout(const char* line)
+void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 {
     newStdoutLine(line, false);
 }
@@ -348,28 +342,25 @@ void GDBOutputWidget::restorePartialProjectSession(const QDomElement* el)
 }
 
 
-//void OutputText::contextMenuEvent(QContextMenuEvent* e)
 Q3PopupMenu* OutputText::createPopupMenu(const QPoint&)
 {
-    Q3PopupMenu* popup = new Q3PopupMenu;
+    Q3PopupMenu* popup = new Q3PopupMenu(this);
 
-    int id = popup->insertItem(i18n("Show Internal Commands"),
+    QAction* action = popup->addAction(i18n("Show Internal Commands"),
                                this,
                                SLOT(toggleShowInternalCommands()));
 
-    popup->setItemChecked(id, parent_->showInternalCommands_);
-    popup->setWhatsThis(
-        id,
-        i18n(
+    action->setCheckable(true);
+    action->setChecked(parent_->showInternalCommands_);
+    action->setWhatsThis(i18n(
             "Controls if commands issued internally by KDevelop "
             "will be shown or not.<br>"
             "This option will affect only future commands, it won't "
             "add or remove already issued commands from the view."));
 
-    popup->insertItem(i18n("Copy All"),
+    popup->addAction(i18n("Copy All"),
                       this,
                       SLOT(copyAll()));
-
 
     return popup;
 }
@@ -381,7 +372,7 @@ void OutputText::copyAll()
     QStringList& raw = parent_->showInternalCommands_ ?
         parent_->allCommandsRaw_ : parent_->userCommandsRaw_;
     QString text;
-    for (unsigned i = 0; i < raw.size(); ++i)
+    for (int i = 0; i < raw.size(); ++i)
         text += raw[i];
 
     // Make sure the text is pastable both with Ctrl-C and with
