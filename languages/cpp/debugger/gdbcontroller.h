@@ -30,7 +30,7 @@
 #include <QSet>
 #include <QDateTime>
 
-#include <memory>
+// #include <memory>
 #include <kprocess.h>
 
 
