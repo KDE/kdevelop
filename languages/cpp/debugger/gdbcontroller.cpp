@@ -1413,8 +1413,12 @@ void GDBController::readFromProcess(QProcess* process)
     int i;
     bool got_any_command = false;
     // For each gdb reply. In MI mode, each reply is one string.
-    while((i = holdingZone_.indexOf('\n')) )
+    forever
     {
+        i = holdingZone_.indexOf('\n');
+        if (i == -1)
+          break;
+
         got_any_command = true;
 
         QByteArray reply(holdingZone_.left(i));
