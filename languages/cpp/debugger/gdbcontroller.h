@@ -317,11 +317,11 @@ private:
     bool    config_displayStaticMembers_;
     bool    config_asmDemangle_;
     bool    config_dbgTerminal_;
-    QString config_gdbPath_;
-    QString config_dbgShell_;
-    QByteArray config_configGdbScript_;
-    QByteArray config_runShellScript_;
-    QByteArray config_runGdbScript_;
+    KUrl config_gdbPath_;
+    KUrl config_dbgShell_;
+    KUrl config_configGdbScript_;
+    KUrl config_runShellScript_;
+    KUrl config_runGdbScript_;
     int config_outputRadix_;
 
     MIParser mi_parser_;

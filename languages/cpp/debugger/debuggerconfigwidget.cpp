@@ -3,6 +3,8 @@
  *   jbb@kdevelop.org                                                      *
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2007 by Hamish Rodda                                    *
+ *   rodda@kde.org                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -16,27 +18,31 @@
 #include "debuggerplugin.h"
 
 #include <kurlrequester.h>
-#include <klineedit.h>
 
-#include <QCheckBox>
-#include <QFileInfo>
-#include <QRadioButton>
-#include <kvbox.h>
+#include <kgenericfactory.h>
+#include <KConfigDialogManager>
+
+#include "debuggerconfig.h"
 
 namespace GDBDebugger
 {
 
-DebuggerConfigWidget::DebuggerConfigWidget(CppDebuggerPlugin* plugin, QWidget *parent)
-    : QWidget(parent)
-    , m_plugin(plugin)
+K_PLUGIN_FACTORY(DebuggerConfigFactory, registerPlugin<DebuggerConfigWidget>();)
+K_EXPORT_PLUGIN(DebuggerConfigFactory("kcm_kdev_cppdebugger"))
+
+DebuggerConfigWidget::DebuggerConfigWidget(QWidget *parent, const QVariantList &args)
+    : KCModule( DebuggerConfigFactory::componentData(), parent, args )
 {
     setupUi(this);
-  
-    gdbPath_edit->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
-    //gdbPath_edit->setUrl(      DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
+    kcfg_gdbPath->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
-    //QString shell =             DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
+    addConfig( DebuggerConfig::self(), this );
+
+    load();
+
+//     KConfigGroup config(KGlobal::config(), "GDB Debugger");
+//     QString shell = config.readEntry("dbgshell","no_value");
 //     if( shell == QString("no_value") )
 //     {
 //         QFileInfo info( part->project()->buildDirectory() + "/libtool" );
@@ -53,87 +59,12 @@ DebuggerConfigWidget::DebuggerConfigWidget(CppDebuggerPlugin* plugin, QWidget *p
 //             }
 //         }
 //     }
-//     debuggingShell_edit->setUrl( shell );
-
-    // Use setFile instead?
-//     configGdbScript_edit->setUrl( DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript"));
-//     runShellScript_edit ->setUrl( DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript"));
-//     runGdbScript_edit   ->setUrl( DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript"));
-// 
-//     displayStaticMembers_box->setChecked(  DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers", false));
-//     asmDemangle_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames", true));
-//     breakOnLoadingLibrary_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", true));
-//     dbgTerminal_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false));
-//     enableFloatingToolBar_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", false));
-//     int outputRadix = DomUtil::readIntEntry(dom, "/kdevdebugger/display/outputradix", 10);
-
-//     switch (outputRadix)
-//     {
-//     case 8:
-//       outputRadixOctal->setChecked(true);
-//       break;
-//     case 16:
-//       outputRadixHexadecimal->setChecked(true);
-//       break;
-//     case 10:
-//     default:
-//       outputRadixDecimal->setChecked(true);
-//       break;
-//     }
-
-
-//     if( DomUtil::readBoolEntry( dom, "/kdevdebugger/general/raiseGDBOnStart", false ) )
-//     {
-//         radioGDB->setChecked(true);
-//     }else
-//     {
-//         radioFramestack->setChecked(true);
-//     }
-
-    // ??? DomUtil::readEntry(dom, "/kdevdebugger/general/allowforcedbpset");
-
-    resize(sizeHint());
+//     kcfg_debuggingShell->setUrl( shell );
 }
 
 
 DebuggerConfigWidget::~DebuggerConfigWidget()
 {}
-
-
-void DebuggerConfigWidget::accept()
-{
-//     DomUtil::writeEntry(dom, "/kdevdebugger/general/gdbpath", gdbPath_edit->url());
-//     DomUtil::writeEntry(dom, "/kdevdebugger/general/dbgshell", debuggingShell_edit->url());
-// 
-//     DomUtil::writeEntry(dom, "/kdevdebugger/general/configGdbScript", configGdbScript_edit->url());
-//     DomUtil::writeEntry(dom, "/kdevdebugger/general/runShellScript", runShellScript_edit ->url());
-//     DomUtil::writeEntry(dom, "/kdevdebugger/general/runGdbScript", runGdbScript_edit   ->url());
-// 
-//     DomUtil::writeBoolEntry(dom, "/kdevdebugger/display/staticmembers", displayStaticMembers_box->isChecked());
-//     DomUtil::writeBoolEntry(dom, "/kdevdebugger/display/demanglenames", asmDemangle_box->isChecked());
-//     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", breakOnLoadingLibrary_box->isChecked());
-//     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/separatetty", dbgTerminal_box->isChecked());
-//     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", enableFloatingToolBar_box->isChecked());
-// 
-//     int outputRadix;
-//     if (outputRadixOctal->isChecked())
-//       outputRadix = 8;
-//     else if (outputRadixHexadecimal->isChecked())
-//       outputRadix = 16;
-//     else
-//       outputRadix = 10;
-// 
-//     DomUtil::writeIntEntry(dom, "/kdevdebugger/display/outputradix", outputRadix);
-// 
-//     if( radioGDB->isChecked() )
-//     {
-//         DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/raiseGDBOnStart", true);
-//     }else
-//     {
-//         DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/raiseGDBOnStart", false);
-//     }
-
-}
 
 }
 

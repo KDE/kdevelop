@@ -8,6 +8,26 @@ include_directories(
 
 ########### next target ###############
 
+set(kcm_kdev_cppdebugger_PART_SRCS
+    debuggerconfigwidget.cpp
+)
+
+set(kcm_kdev_cppdebugger_PART_UI
+    debuggerconfigwidget.ui
+)
+
+kde4_add_ui_files(kcm_kdev_cppdebugger_PART_SRCS ${kcm_kdev_cppdebugger_PART_UI})
+kde4_add_kcfg_files( kcm_kdev_cppdebugger_PART_SRCS debuggerconfig.kcfgc )
+kde4_add_plugin(kcm_kdev_cppdebugger ${kcm_kdev_cppdebugger_PART_SRCS})
+target_link_libraries(kcm_kdev_cppdebugger
+    ${KDE4_KUTILS_LIBS}
+)
+
+install(TARGETS kcm_kdev_cppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES kcm_kdev_cppdebugger.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
+########### next target ###############
+
 # FIXME remove
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -26,7 +46,6 @@ set(kdevcppdebugger_PART_SRCS
     disassemblewidget.cpp
     memviewdlg.cpp
     processselection.cpp
-    debuggerconfigwidget.cpp
     gdboutputwidget.cpp
     gdbtable.cpp
     debuggertracingdialog.cpp
@@ -37,7 +56,6 @@ set(kdevcppdebugger_PART_SRCS
 )
 
 set(kdevcppdebugger_PART_UI
-    debuggerconfigwidget.ui
     debuggertracingdialog.ui
     processselection.ui
 )

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kdeveloprc"/>
+  <group name="GDB Options">
+    <entry name="gdbPath" key="GDB Path" type="Url"/>
+    <entry name="debuggingShell" key="Debugger Shell" type="Url"/>
+    <entry name="configGdbScript" key="Remote GDB Configure Script" type="Url"/>
+    <entry name="runShellScript" key="Remote GDB Shell Script" type="Url"/>
+    <entry name="runGdbScript" key="Remote GDB Run Script" type="Url"/>
+    <entry name="displayStaticMembers" key="Display Static Members" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="asmDemangle" key="Display Demangle Names" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="breakOnLoadingLibrary" key="Try Setting Breakpoints On Loading Libraries" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="dbgTerminal" key="Separate Terminal For Application IO" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="enableFloatingToolBar" key="Floating Toolbar" type="Bool">
+        <default>false</default>
+    </entry>
+    <!--entry type="Enum" name="outputRadix" key="Output Radix">
+      <choices>
+        <choice name="Octal"/>
+        <choice name="Hexadecimal"/>
+        <choice name="Decimal"/>
+      </choices>
+      <default>Decimal</default>
+    </entry-->
+
+    <entry name="startWithGdb" key="Start With GDB Output" type="Bool">
+        <default>false</default>
+    </entry>
+  </group>
+</kcfg>

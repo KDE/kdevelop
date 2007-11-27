@@ -18,8 +18,8 @@
   <property name="whatsThis" >
    <string/>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
+  <layout class="QVBoxLayout" >
+   <item>
     <widget class="QLabel" name="textLabel1" >
      <property name="text" >
       <string>Debug arguments can be set on the Run Options page
@@ -30,7 +30,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
+   <item>
     <widget class="QLabel" name="gdbPath_label" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
@@ -45,12 +45,12 @@
       <bool>false</bool>
      </property>
      <property name="buddy" >
-      <cstring>gdbPath_edit</cstring>
+      <cstring>kcfg_gdbPath</cstring>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="KUrlRequester" name="gdbPath_edit" >
+   <item>
+    <widget class="KUrlRequester" name="kcfg_gdbPath" >
      <property name="toolTip" >
       <string>Gdb executable</string>
      </property>
@@ -59,7 +59,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
+   <item>
     <widget class="QLabel" name="debuggingShell_label" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
@@ -80,12 +80,12 @@
       <bool>false</bool>
      </property>
      <property name="buddy" >
-      <cstring>debuggingShell_edit</cstring>
+      <cstring>kcfg_debuggingShell</cstring>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" >
-    <widget class="KUrlRequester" name="debuggingShell_edit" >
+   <item>
+    <widget class="KUrlRequester" name="kcfg_debuggingShell" >
      <property name="toolTip" >
       <string>Run gdb in a special shell (mainly for automake projects)</string>
      </property>
@@ -94,16 +94,16 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0" >
-    <layout class="QGridLayout" >
-     <item rowspan="2" row="0" column="0" >
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
       <widget class="QGroupBox" name="groupBox_2" >
        <property name="title" >
         <string>Options</string>
        </property>
        <layout class="QVBoxLayout" >
         <item>
-         <widget class="QCheckBox" name="displayStaticMembers_box" >
+         <widget class="QCheckBox" name="kcfg_displayStaticMembers" >
           <property name="whatsThis" >
            <string>Displaying static members makes GDB slower in
 producing data within KDE and Qt.
@@ -121,7 +121,7 @@ check this option.</string>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="asmDemangle_box" >
+         <widget class="QCheckBox" name="kcfg_asmDemangle" >
           <property name="whatsThis" >
            <string>When displaying the disassembled code you
 can select to see the methods' mangled names.
@@ -133,7 +133,7 @@ However, non-mangled names are easier to read.</string>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="breakOnLoadingLibrary_box" >
+         <widget class="QCheckBox" name="kcfg_breakOnLoadingLibrary" >
           <property name="whatsThis" >
            <string>If GDB has not seen a library that will be loaded via
 "dlopen" then it will refuse to set a breakpoint in that code.
@@ -144,12 +144,12 @@ for more details relating to this behavior.
 If you are not "dlopen"ing libs then leave this unchecked.</string>
           </property>
           <property name="text" >
-           <string>Try settings &amp;breakpoints on library loading</string>
+           <string>Try setting &amp;breakpoints on library loading</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="enableFloatingToolBar_box" >
+         <widget class="QCheckBox" name="kcfg_enableFloatingToolBar" >
           <property name="whatsThis" >
            <string>Use the floating toolbar. This toolbar always stays
 on top of all windows so that if the app covers KDevelop
@@ -167,7 +167,7 @@ This toolbar is in addition to the toolbar in KDevelop.</string>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="dbgTerminal_box" >
+         <widget class="QCheckBox" name="kcfg_dbgTerminal" >
           <property name="whatsThis" >
            <string>This allows you to enter terminal input when your
 application contains terminal input code (e.g. cin, fgets, etc.).
@@ -198,62 +198,45 @@ Otherwise leave it unchecked.</string>
        </layout>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QGroupBox" name="groupBox_3" >
-       <property name="title" >
-        <string>Global Output Radix</string>
-       </property>
-       <layout class="QVBoxLayout" >
-        <item>
-         <widget class="QRadioButton" name="outputRadixOctal" >
-          <property name="text" >
-           <string>Oct&amp;al</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="outputRadixHexadecimal" >
-          <property name="text" >
-           <string>He&amp;xadecimal</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="outputRadixDecimal" >
-          <property name="text" >
-           <string>Decimal</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="1" column="1" >
+     <item>
       <widget class="QGroupBox" name="groupBox_4" >
        <property name="title" >
         <string>Start Debugger With</string>
        </property>
        <layout class="QVBoxLayout" >
         <item>
-         <widget class="QRadioButton" name="radioFramestack" >
+         <widget class="QRadioButton" name="startWithFramestack" >
           <property name="text" >
            <string>Framestack</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioGDB" >
+         <widget class="QRadioButton" name="kcfg_startWithGdb" >
           <property name="text" >
            <string>GDB Output</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="6" column="0" >
+   <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="whatsThis" >
       <string>This script is intended for the actual commands needed to connect to a remotely running executable.
@@ -274,12 +257,12 @@ Otherwise leave it unchecked.</string>
          <bool>false</bool>
         </property>
         <property name="buddy" >
-         <cstring>configGdbScript_edit</cstring>
+         <cstring>kcfg_configGdbScript</cstring>
         </property>
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="KUrlRequester" name="configGdbScript_edit" >
+       <widget class="KUrlRequester" name="kcfg_configGdbScript" >
         <property name="toolTip" >
          <string>Gdb configure script</string>
         </property>
@@ -300,12 +283,12 @@ Otherwise leave it unchecked.</string>
          <bool>false</bool>
         </property>
         <property name="buddy" >
-         <cstring>runShellScript_edit</cstring>
+         <cstring>kcfg_runShellScript</cstring>
         </property>
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="KUrlRequester" name="runShellScript_edit" >
+       <widget class="KUrlRequester" name="kcfg_runShellScript" >
         <property name="toolTip" >
          <string>Script to start remote application</string>
         </property>
@@ -329,12 +312,12 @@ or if your executable contains the gdb stub
          <bool>false</bool>
         </property>
         <property name="buddy" >
-         <cstring>runGdbScript_edit</cstring>
+         <cstring>kcfg_runGdbScript</cstring>
         </property>
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="KUrlRequester" name="runGdbScript_edit" >
+       <widget class="KUrlRequester" name="kcfg_runGdbScript" >
         <property name="toolTip" >
          <string>Script to connect with remote application</string>
         </property>
@@ -350,7 +333,7 @@ This script is intended for the actual commands needed to connect to a remotely 
      </layout>
     </widget>
    </item>
-   <item row="7" column="0" >
+   <item>
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -379,19 +362,16 @@ This script is intended for the actual commands needed to connect to a remotely 
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>debuggingShell_edit</tabstop>
-  <tabstop>gdbPath_edit</tabstop>
-  <tabstop>displayStaticMembers_box</tabstop>
-  <tabstop>asmDemangle_box</tabstop>
-  <tabstop>breakOnLoadingLibrary_box</tabstop>
-  <tabstop>enableFloatingToolBar_box</tabstop>
-  <tabstop>dbgTerminal_box</tabstop>
-  <tabstop>outputRadixOctal</tabstop>
-  <tabstop>outputRadixDecimal</tabstop>
-  <tabstop>outputRadixHexadecimal</tabstop>
-  <tabstop>configGdbScript_edit</tabstop>
-  <tabstop>runShellScript_edit</tabstop>
-  <tabstop>runGdbScript_edit</tabstop>
+  <tabstop>kcfg_debuggingShell</tabstop>
+  <tabstop>kcfg_gdbPath</tabstop>
+  <tabstop>kcfg_displayStaticMembers</tabstop>
+  <tabstop>kcfg_asmDemangle</tabstop>
+  <tabstop>kcfg_breakOnLoadingLibrary</tabstop>
+  <tabstop>kcfg_enableFloatingToolBar</tabstop>
+  <tabstop>kcfg_dbgTerminal</tabstop>
+  <tabstop>kcfg_configGdbScript</tabstop>
+  <tabstop>kcfg_runShellScript</tabstop>
+  <tabstop>kcfg_runGdbScript</tabstop>
  </tabstops>
  <includes>
   <include location="local" >kurlrequester.h</include>

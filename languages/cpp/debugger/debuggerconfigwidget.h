@@ -3,6 +3,8 @@
  *   jbb@kdevelop.org                                                      *
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2007 by Hamish Rodda                                    *
+ *   rodda@kde.org                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -16,26 +18,18 @@
 
 #include "ui_debuggerconfigwidget.h"
 
-#include <qdom.h>
+#include <kcmodule.h>
 
 namespace GDBDebugger
 {
 
-class CppDebuggerPlugin;
-
-class DebuggerConfigWidget : public QWidget, public Ui::DebuggerConfigWidget
+class DebuggerConfigWidget : public KCModule, public Ui::DebuggerConfigWidget
 {
     Q_OBJECT
 
 public:
-    DebuggerConfigWidget( CppDebuggerPlugin* plugin, QWidget *parent=0 );
+    DebuggerConfigWidget( QWidget *parent, const QVariantList &args );
     ~DebuggerConfigWidget();
-
-public Q_SLOTS:
-    void accept();
-
-private:
-    CppDebuggerPlugin* m_plugin;
 };
 
 }

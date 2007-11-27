@@ -33,6 +33,7 @@
 #include <kmessagebox.h>
 #include <kwindowsystem.h>
 #include <kshell.h>
+#include <KConfigGroup>
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -176,30 +177,32 @@ GDBController::~GDBController()
 
 void GDBController::configure()
 {
-  /*
-    // A a configure.gdb script will prevent these from uncontrolled growth...
-    config_configGdbScript_       = DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript").toLatin1();
-    config_runShellScript_        = DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript").toLatin1();
-    config_runGdbScript_          = DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript").toLatin1();
+    KConfigGroup config(KGlobal::config(), "GDB Debugger");
 
-//  add macros for reading QStrings? or in configGdbScript?
-    config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);
-    config_dbgTerminal_           = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false);
-    config_gdbPath_               = DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath");
+    // A a configure.gdb script will prevent these from uncontrolled growth...
+    config_configGdbScript_       = config.readEntry("Remote GDB Configure Script", "");
+    config_runShellScript_        = config.readEntry("Remote GDB Shell Script", "");
+    config_runGdbScript_          = config.readEntry("Remote GDB Run Script", "");
+
+    // PORTING TODO: where is this in the ui?
+    config_forceBPSet_            = config.readEntry("Allow Forced Breakpoint Set", true);
+
+    config_dbgTerminal_           = config.readEntry("Separate Terminal For Application IO", false);
+    config_gdbPath_               = config.readEntry("GDB Path");
 
     bool old_displayStatic        = config_displayStaticMembers_;
-    config_displayStaticMembers_  = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers",false);
+    config_displayStaticMembers_  = config.readEntry("Display Static Members",false);
 
     bool old_asmDemangle  = config_asmDemangle_;
-    config_asmDemangle_   = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames",true);
+    config_asmDemangle_   = config.readEntry("Display Demangle Names",true);
 
     bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
-    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs",true);
+    config_breakOnLoadingLibrary_ = config.readEntry("Try Setting Breakpoints On Loading Libraries",true);
 
     // FIXME: should move this into debugger part or variable widget.
     int old_outputRadix  = config_outputRadix_;
 #if 0
-    config_outputRadix_   = DomUtil::readIntEntry(dom, "/kdevdebugger/display/outputradix", 10);
+    config_outputRadix_   = DomUtil::readIntEntry("Output Radix", 10);
     varTree_->setRadix(config_outputRadix_);
 #endif
 
@@ -244,12 +247,12 @@ void GDBController::configure()
 
         }
 
-        if (!config_configGdbScript_.isEmpty())
-          queueCmd(new GDBCommand("source " + config_configGdbScript_));
+        if (config_configGdbScript_.isValid())
+          queueCmd(new GDBCommand("source " + config_configGdbScript_.path()));
 
         if (restart)
             queueCmd(new GDBCommand("-exec-continue"));
-    }*/
+    }
 }
 
 // **************************************************************************
@@ -819,9 +822,9 @@ bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int s
     QString gdb = "gdb";
     // Prepend path to gdb, if needed. Using QDir,
     // path can either end with slash, or not.
-    if (!config_gdbPath_.isEmpty())
+    if (config_gdbPath_.isValid())
     {
-        gdb = config_gdbPath_;
+        gdb = config_gdbPath_.path();
     }
     QStringList arguments;
     arguments << run.executable().path() << "--interpreter=mi2" << "-quiet";
@@ -1099,7 +1102,7 @@ void GDBController::slotRun()
 
             QProcess *proc = new QProcess;
             QStringList arguments;
-            arguments << "-c" << config_runShellScript_ +
+            arguments << "-c" << config_runShellScript_.path() +
                 " " + application_.toLatin1() + options;
 
             proc->start("sh", arguments);
@@ -1114,7 +1117,7 @@ void GDBController::slotRun()
             // Future: the shell script should be able to pass info (like pid)
             // to the gdb script...
 
-            queueCmd(new GDBCommand("source " + config_runGdbScript_));
+            queueCmd(new GDBCommand("source " + config_runGdbScript_.path()));
 
             // Note: script could contain "run" or "continue"
         }
@@ -1825,7 +1828,7 @@ void GDBController::debugStateChange(int oldState, int newState)
 
 int GDBController::qtVersion( ) const
 {
-  return 4;//DomUtil::readIntEntry( dom, "/kdevcppsupport/qt/version", 3 );
+  return 4;//DomUtil::readIntEntry( "/kdevcppsupport/qt/version", 3 );
 }
 
 void GDBController::demandAttention() const
