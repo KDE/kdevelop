@@ -581,7 +581,7 @@ class NavigationContext : public KShared {
       if( m_linkCount == m_selectedLink ) ///@todo Change background-color here instead of foreground-color
         str = "<font color=\"#880088\">" + str + "</font>";
       
-      m_currentText += "<a href=\"" + targetId + "\">" + str + "</a>";
+      m_currentText += "<a href=\"" + targetId + "\"" + (m_linkCount == m_selectedLink ? QString(" name = \"selectedItem\"") : QString()) + ">" + str + "</a>";
 
       if( m_selectedLink == m_linkCount )
         m_selectedLinkAction = action;
@@ -794,6 +794,7 @@ void NavigationWidget::update() {
   int scrollPos = verticalScrollBar()->value();
   setHtml( m_context->html() );
   verticalScrollBar()->setValue(scrollPos);
+  scrollToAnchor("selectedItem");
 }
 
 void NavigationWidget::anchorClicked(const QUrl& url) {
@@ -819,6 +820,14 @@ void NavigationWidget::accept() {
   DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
   setContext( m_context->accept() );
+}
+
+void NavigationWidget::up() {
+  verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepSub );
+}
+
+void NavigationWidget::down() {
+  verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepAdd );
 }
 
 QString NavigationWidget::shortDescription(KDevelop::Declaration* declaration) {

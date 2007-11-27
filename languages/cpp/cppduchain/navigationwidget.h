@@ -71,6 +71,9 @@ namespace Cpp {
       virtual void previous();
       ///Keyboard-action "accept"
       virtual void accept();
+      virtual void up();
+      virtual void down();
+      
     private slots:
       void anchorClicked(const QUrl&);
     private:
