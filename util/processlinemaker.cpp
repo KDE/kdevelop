@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright 2002 John Firebaugh <jfirebaugh@kde.org>
    Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+   Copyright 2007 Oswald Buddenhagen <ossi@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 
 #include <QtCore/QProcess>
 #include <QtCore/QStringList>
+#include <QtCore/QTimer>
 
 namespace KDevelop
 {
@@ -29,100 +31,81 @@ namespace KDevelop
 class ProcessLineMakerPrivate
 {
 public:
-    ProcessLineMakerPrivate( ProcessLineMaker* maker )
-        : p(maker)
-    {}
-    QByteArray m_stdout_rest;
-    QByteArray m_stderr_rest;
-    QString stdoutbuf;
-    QString stderrbuf;
+    QByteArray stdoutbuf;
+    QByteArray stderrbuf;
+    QTimer stdouttimer;
+    QTimer stderrtimer;
     ProcessLineMaker* p;
     QProcess* m_proc;
 
-    void slotProcessFinished()
+    ProcessLineMakerPrivate( ProcessLineMaker* maker )
+        : p(maker)
     {
-        QString out = QString::fromLocal8Bit(m_stdout_rest+m_proc->readAll());
-        m_stdout_rest.clear();
-        processStdOut( out );
+        stdouttimer.setSingleShot(true);
+        stderrtimer.setSingleShot(true);
+    }
 
-        m_proc->setReadChannel( QProcess::StandardError );
-        out = QString::fromLocal8Bit(m_stderr_rest+m_proc->readAll());
-        m_stderr_rest.clear();
-        m_proc->setReadChannel( QProcess::StandardOutput );
-        processStdErr( out );
+    void flushData()
+    {
+        if (!stdoutbuf.isEmpty())
+            emit p->receivedStdoutLines(QStringList(QString::fromLocal8Bit(stdoutbuf)));
+        if (!stderrbuf.isEmpty())
+            emit p->receivedStderrLines(QStringList(QString::fromLocal8Bit(stderrbuf)));
+        p->clearBuffers();
     }
 
     void slotReadyReadStdout()
     {
-        QString out;
-        while( m_proc->canReadLine() )
-        {
-            out += QString::fromLocal8Bit( m_stdout_rest + m_proc->readLine() );
-            m_stdout_rest.clear();
-        }
-        m_stdout_rest = m_proc->readAll();
-        processStdOut( out );
+        stdoutbuf += m_proc->readAllStandardOutput();
+        processStdOut();
     }
 
-    void processStdOut( const QString& s )
+    void processStdOut()
     {
-        // First Flush the opposite buffer
-        if (!stderrbuf.isEmpty())
-        {
-            emit p->receivedStderrLines( QStringList(stderrbuf) );
-
-            stderrbuf = "";
-        }
-
-
-        stdoutbuf += s;
-        int pos;
+        stdouttimer.stop();
         QStringList lineList;
-        while ( (pos = stdoutbuf.indexOf('\n')) != -1)
-        {
-            QString line = stdoutbuf.left(pos);
-            lineList << line;
+        int pos;
+        while ( (pos = stdoutbuf.indexOf('\n')) != -1) {
+            lineList << QString::fromLocal8Bit(stdoutbuf, pos);
             stdoutbuf.remove(0, pos+1);
         }
         emit p->receivedStdoutLines(lineList);
+        if (!stdoutbuf.isEmpty())
+            stdouttimer.start(100);
+    }
+
+    void slotTimeoutStdout()
+    {
+        emit p->receivedStdoutLines(QStringList(QString::fromLocal8Bit(stdoutbuf)));
+        stdoutbuf.truncate(0);
     }
 
     void slotReadyReadStderr()
     {
-        QString out;
-        m_proc->setReadChannel( QProcess::StandardError );
-        while( m_proc->canReadLine() )
-        {
-            out += QString::fromLocal8Bit( m_stderr_rest + m_proc->readLine() );
-            m_stderr_rest.clear();
-        }
-        m_stderr_rest = m_proc->readAll();
-        m_proc->setReadChannel( QProcess::StandardOutput );
-        processStdErr( out );
+        stderrbuf += m_proc->readAllStandardError();
+        processStdErr();
     }
 
-    void processStdErr( const QString& s )
+    void processStdErr()
     {
-        // First Flush the opposite buffer
-        if (!stdoutbuf.isEmpty())
-        {
-            emit p->receivedStdoutLines( QStringList(stdoutbuf) );
-
-            stdoutbuf = "";
-        }
-
-
-        stderrbuf += s;
-        int pos;
+        stderrtimer.stop();
         QStringList lineList;
-        while ( (pos = stderrbuf.indexOf('\n')) != -1)
-        {
-            QString line = stderrbuf.left(pos);
-            lineList << line;
+        int pos;
+        while ( (pos = stderrbuf.indexOf('\n')) != -1) {
+            lineList << QString::fromLocal8Bit(stderrbuf, pos);
             stderrbuf.remove(0, pos+1);
         }
         emit p->receivedStderrLines(lineList);
+        if (!stderrbuf.isEmpty())
+            stderrtimer.start(100);
     }
+
+    void slotTimeoutStderr()
+    {
+        emit p->receivedStderrLines(QStringList(QString::fromLocal8Bit(stderrbuf)));
+        stderrbuf.truncate(0);
+    }
+
 };
 
 ProcessLineMaker::ProcessLineMaker()
@@ -137,47 +120,37 @@ ProcessLineMaker::ProcessLineMaker( QProcess* proc )
     d->m_proc->setTextModeEnabled( true );
     connect(proc, SIGNAL(readyReadStandardOutput()),
             this, SLOT(slotReadyReadStdout()) );
-
     connect(proc, SIGNAL(readyReadStandardError()),
             this, SLOT(slotReadyReadStderr()) );
-    connect(proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(slotProcessFinished()));
-}
-
-void ProcessLineMaker::slotReceivedStdout( const QString& s )
-{
-    d->processStdOut( s );
-}
-
-void ProcessLineMaker::slotReceivedStdout( const char* buffer )
-{
-    d->processStdOut( QString::fromLocal8Bit( buffer ) );
+    connect(&d->stdouttimer, SIGNAL(timeout()),
+            this, SLOT(slotTimeoutStdout()) );
+    connect(&d->stderrtimer, SIGNAL(timeout()),
+            this, SLOT(slotTimeoutStderr()) );
 }
 
 void ProcessLineMaker::slotReceivedStdout( const QByteArray& buffer )
 {
-    d->processStdOut( QString::fromLocal8Bit( buffer ) );
-}
-
-void ProcessLineMaker::slotReceivedStderr( const QString& s )
-{
-    d->processStdErr( s );
-}
-
-void ProcessLineMaker::slotReceivedStderr( const char* buffer )
-{
-    d->processStdErr( QString::fromLocal8Bit( buffer ) );
+    d->stdoutbuf += buffer;
+    d->processStdOut();
 }
 
 void ProcessLineMaker::slotReceivedStderr( const QByteArray& buffer )
 {
-    d->processStdErr( QString::fromLocal8Bit( buffer ) );
+    d->stderrbuf += buffer;
+    d->processStdErr();
 }
 
 void ProcessLineMaker::clearBuffers( )
 {
-    d->stderrbuf = "";
-    d->stdoutbuf = "";
+    d->stderrbuf.truncate(0);
+    d->stdoutbuf.truncate(0);
+    d->stdouttimer.stop();
+    d->stderrtimer.stop();
+}
+
+void ProcessLineMaker::flush()
+{
+    d->flushData();
 }
 
 }
