@@ -15,34 +15,29 @@
 
 #include "dbgpsdlg.h"
 
-#include <k3buttonbox.h>
-#include <kdialog.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <k3process.h>
-#include <kstdguiitem.h>
-#include <kdeversion.h>
-#include <k3listview.h>
-#include <k3listviewsearchline.h>
 #include <kmessagebox.h>
 #include <klistwidgetsearchline.h>
 
-#include <q3frame.h>
+
 #include <QLabel>
 #include <QLayout>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
-#include <QToolButton>
-#include <QPushButton>
 #include <QRegExp>
-#include <q3header.h>
-#include <QTimer>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 #include <QFocusEvent>
+
+#include <kprocess.h>
+#include <kshell.h>
+
+#include <util/commandexecutor.h>
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <kvbox.h>
+
+#include "ui_dbgpsdlg.h"
 
 namespace GDBDebugger
 {
@@ -55,151 +50,103 @@ namespace GDBDebugger
 // For use with the internal debugger, but this dialog doesn't know anything
 // about why it's doing it.
 
-Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent)
+ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : KDialog(parent),      // modal
-      psProc_(0),
-      pids_(new K3ListView(this)),
-      pidLines_(QString())
+      psProc(0)
 {
+    m_ui = new Ui::ProcessSelection();
+    m_ui->setupUi(mainWidget());
+    m_ui->search->searchLine()->setTreeWidget( m_ui->pids );
+    // Maybe allow to search for other things than command?
+    m_ui->search->searchLine()->setSearchColumns( QList<int>() << 4 );
     setCaption(i18n("Attach to Process"));
+    setButtons( KDialog::Ok | KDialog::Cancel );
 
-    pids_->addColumn("PID");
-    pids_->addColumn("TTY");
-    pids_->addColumn("STAT");
-    pids_->addColumn("TIME");
-    pids_->addColumn("COMMAND");
-
-
-    Q3BoxLayout *topLayout = new Q3VBoxLayout(this, 5);
-
-    //searchLineWidget_ = new KListWidgetSearchLine(pids_, this);
-    //topLayout->addWidget(searchLineWidget_);
-
-    topLayout->addWidget(pids_);
-    pids_->setFont(KGlobalSettings::fixedFont());
-
-    K3ButtonBox *buttonbox = new K3ButtonBox(this, Qt::Horizontal);
-    buttonbox->addStretch();
-    QPushButton *ok       = buttonbox->addButton(KStandardGuiItem::ok());
-    QPushButton *cancel   = buttonbox->addButton(KStandardGuiItem::cancel());
-    buttonbox->layout();
-    topLayout->addWidget(buttonbox);
-
-    connect(ok,     SIGNAL(clicked()),  SLOT(accept()));
-    connect(cancel, SIGNAL(clicked()),  SLOT(reject()));  
-
-    // Default display to 40 chars wide, default height is okay
-    resize( ((KGlobalSettings::fixedFont()).pointSize())*40, height());
-    topLayout->activate();
-
-    QTimer::singleShot(0, this, SLOT(slotInit()));
-
-}
-
-/***************************************************************************/
-
-Dbg_PS_Dialog::~Dbg_PS_Dialog()
-{
-    delete psProc_;
-}
-
-/***************************************************************************/
-
-int Dbg_PS_Dialog::pidSelected()
-{
-	return pids_->currentItem()->text(0).toInt();
-}
-
-/***************************************************************************/
-void Dbg_PS_Dialog::slotInit()
-{
-    psProc_ = new K3ShellProcess("/bin/sh");
+    QStringList cmd;
+    psProc = new KDevelop::CommandExecutor("ps");
 #ifdef USE_SOLARIS
-    *psProc_ << "ps";
-    *psProc_ << "-opid";
-    *psProc_ << "-otty";
-    *psProc_ << "-os";
-    *psProc_ << "-otime";
-    *psProc_ << "-oargs";
-    pidCmd_ = "ps -opid -otty -os -otime -oargs";
+    cmt << "-opid";
+    cmd << "-otty";
+    cmd << "-os";
+    cmd << "-otime";
+    cmd << "-oargs";
+    pidCmd = "ps -opid -otty -os -otime -oargs";
 
     if (getuid() == 0) {
-        *psProc_ << "-e";
-        pidCmd_ += " -e";
+        cmd << "-e";
+        pidCmd += " -e";
     }
 #else
-    *psProc_ << "ps";
-    *psProc_ << "x";
-    pidCmd_ = "ps x";
+    cmd << "x";
+    pidCmd = "ps x";
 
     if (getuid() == 0) {
-        *psProc_ << "a";
-        pidCmd_ += " a";
+        cmd << "a";
+        pidCmd += " a";
     }
 #endif
 
-    connect( psProc_, SIGNAL(processExited(K3Process *)),                SLOT(slotProcessExited()) );
-    connect( psProc_, SIGNAL(receivedStdout(K3Process *, char *, int)),  SLOT(slotReceivedOutput(K3Process *, char *, int)) );
+    psProc->setArguments(cmd);
+    connect( psProc, SIGNAL(completed()),
+             SLOT(slotProcessExited()) );
+    connect( psProc, SIGNAL(failed()),
+             SLOT(slotProcessExited()) );
+    connect( psProc, SIGNAL(receivedStandardOutput(const QStringList&)),
+             SLOT(slotReceivedOutput(const QStringList&)) );
 
-    psProc_->start(K3Process::NotifyOnExit, K3Process::Stdout);
+    psProc->start();
+
 }
 
 /***************************************************************************/
 
-void Dbg_PS_Dialog::slotReceivedOutput(K3Process */*proc*/, char *buffer, int buflen)
+ProcessSelectionDialog::~ProcessSelectionDialog()
 {
-    pidLines_ += QString::fromLocal8Bit(buffer, buflen);
+    delete psProc;
 }
 
 /***************************************************************************/
 
-void Dbg_PS_Dialog::slotProcessExited()
+int ProcessSelectionDialog::pidSelected()
 {
-    delete psProc_;
-    psProc_ = 0;
+	return m_ui->pids->currentItem()->text(0).toInt();
+}
 
-    pidLines_ += '\n';
 
-    int start = pidLines_.indexOf('\n', 0);  // Skip the first line (header line)
-    int pos;
+/***************************************************************************/
 
+void ProcessSelectionDialog::slotReceivedOutput(const QStringList& lines)
+{
     static QRegExp ps_output_line("^\\s*(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(.+)");
-    while ( (pos = pidLines_.indexOf('\n', start)) ) {
+    QStringList tmp = lines.filter(ps_output_line);
+    foreach( QString line, lines )
+    {
+        ps_output_line.exactMatch( line );
+        new QTreeWidgetItem(m_ui->pids,
+                            QStringList()
+                                << ps_output_line.cap(1)
+                                << ps_output_line.cap(2)
+                                << ps_output_line.cap(3)
+                                << ps_output_line.cap(4)
+                                << ps_output_line.cap(5));
 
-        QString item = pidLines_.mid(start, pos-start);
-        if (!item.isEmpty() && !item.contains(pidCmd_) )
-        {
-            if(ps_output_line.search(item) == -1)
-            {
-                KMessageBox::information(
-                    this, 
-                    // FIXME: probably should XML-escape 'item' before passing it
-                    // to 'arg'.
-                    i18n("<b>Could not parse output from the <tt>ps</tt> command!</b>"
-                         "<p>The following line could not be parsed:"
-                         "<b><tt>%1</tt>").arg(item),
-                    i18n("Internal error"), "gdb_error" );
-                break;
-            }
-            
-            new Q3ListViewItem(pids_, 
-                              ps_output_line.cap(1),
-                              ps_output_line.cap(2),
-                              ps_output_line.cap(3),
-                              ps_output_line.cap(4),
-                              ps_output_line.cap(5));
-        }
-
-        start = pos+1;    
     }
     // Need to set focus here too, as K3ListView will
     // 'steal' it otherwise.
-    //searchLineWidget_->searchLine()->setFocus();
+    m_ui->search->searchLine()->setFocus();
 }
 
-void Dbg_PS_Dialog::focusIn(QFocusEvent*)
+/***************************************************************************/
+
+void ProcessSelectionDialog::slotProcessExited()
 {
-    //searchLineWidget_->searchLine()->setFocus();
+    delete psProc;
+    psProc = 0;
+}
+
+void ProcessSelectionDialog::focusIn(QFocusEvent*)
+{
+    m_ui->search->searchLine()->setFocus();
 }
 
 }

@@ -17,44 +17,45 @@
 #define _DBGPSDLG_H_
 
 #include <kdialog.h>
-//Added by qt3to4:
-#include <QFocusEvent>
-#include <kvbox.h>
 
-class Q3ListBox;
-class K3Process;
-class K3ListView;
-class KListWidgetSearchLine;
+namespace Ui
+{
+class ProcessSelection;
+}
+
+namespace KDevelop
+{
+class CommandExecutor;
+}
+
+class QFocusEvent;
 
 namespace GDBDebugger
 {
 
 /***************************************************************************/
 
-class Dbg_PS_Dialog : public KDialog
+class ProcessSelectionDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    Dbg_PS_Dialog( QWidget *parent=0 );
-    ~Dbg_PS_Dialog();
+    ProcessSelectionDialog( QWidget *parent=0 );
+    ~ProcessSelectionDialog();
 
     int pidSelected();
 
 private Q_SLOTS:
-    void slotInit();
-    void slotReceivedOutput(K3Process *proc, char *buffer, int buflen);
+    void slotReceivedOutput(const QStringList&);
     void slotProcessExited();
 
 protected:
     void focusIn(QFocusEvent*);
 
 private:
-    K3Process* psProc_;
-    K3ListView* pids_;
-    KListWidgetSearchLine* searchLineWidget_;
-    QString   pidLines_;
-    QString   pidCmd_;
+    KDevelop::CommandExecutor* psProc;
+    QString   pidCmd;
+    Ui::ProcessSelection* m_ui;
 };
 
 }

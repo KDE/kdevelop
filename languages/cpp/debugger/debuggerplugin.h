@@ -15,12 +15,10 @@
 #define _DEBUGGERPART_H_
 
 #include <QPointer>
-//Added by qt3to4:
 #include <QByteArray>
 #include <QLabel>
 #include <QtCore/QVariant>
 
-#include <kvbox.h>
 #include <KConfigGroup>
 
 #include "gdbcontroller.h"

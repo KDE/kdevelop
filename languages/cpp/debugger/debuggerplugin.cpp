@@ -835,7 +835,7 @@ void CppDebuggerPlugin::slotAttachProcess()
 {
     emit showMessage(i18n("Choose a process to attach to..."), 1000);
 
-    Dbg_PS_Dialog dlg;
+    ProcessSelectionDialog dlg;
     if (!dlg.exec() || !dlg.pidSelected())
         return;
 

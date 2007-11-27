@@ -39,6 +39,7 @@ set(kdevcppdebugger_PART_SRCS
 set(kdevcppdebugger_PART_UI
     debuggerconfigwidget.ui
     debuggertracingdialog.ui
+    dbgpsdlg.ui
 )
 
 kde4_add_ui_files(kdevcppdebugger_PART_SRCS ${kdevcppdebugger_PART_UI})

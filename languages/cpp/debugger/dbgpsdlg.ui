@@ -1,0 +1,59 @@
+<ui version="4.0" >
+ <class>ProcessSelection</class>
+ <widget class="QWidget" name="ProcessSelection" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>587</width>
+    <height>379</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="KTreeWidgetSearchLineWidget" name="search" />
+   </item>
+   <item>
+    <widget class="QTreeWidget" name="pids" >
+     <column>
+      <property name="text" >
+       <string>Pid</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>TTY</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Stat</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Command</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KTreeWidgetSearchLineWidget</class>
+   <extends>QWidget</extends>
+   <header>ktreewidgetsearchline.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
