@@ -154,12 +154,22 @@ void ProcessLineMaker::slotReceivedStdout( const char* buffer )
     d->processStdOut( QString::fromLocal8Bit( buffer ) );
 }
 
+void ProcessLineMaker::slotReceivedStdout( const QByteArray& buffer )
+{
+    d->processStdOut( QString::fromLocal8Bit( buffer ) );
+}
+
 void ProcessLineMaker::slotReceivedStderr( const QString& s )
 {
     d->processStdErr( s );
 }
 
 void ProcessLineMaker::slotReceivedStderr( const char* buffer )
+{
+    d->processStdErr( QString::fromLocal8Bit( buffer ) );
+}
+
+void ProcessLineMaker::slotReceivedStderr( const QByteArray& buffer )
 {
     d->processStdErr( QString::fromLocal8Bit( buffer ) );
 }

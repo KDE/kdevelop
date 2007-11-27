@@ -51,6 +51,8 @@ public:
     void clearBuffers();
 
 public Q_SLOTS:
+    void slotReceivedStdout( const QByteArray& );
+    void slotReceivedStderr( const QByteArray& );
     void slotReceivedStdout( const QString& );
     void slotReceivedStderr( const QString& );
     void slotReceivedStdout( const char* );
