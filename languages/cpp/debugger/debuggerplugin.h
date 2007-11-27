@@ -18,7 +18,6 @@
 //Added by qt3to4:
 #include <QByteArray>
 #include <QLabel>
-// #include <Q3PopupMenu>
 #include <QtCore/QVariant>
 
 #include <kvbox.h>

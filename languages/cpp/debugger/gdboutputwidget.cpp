@@ -104,13 +104,11 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     connect( this,       SIGNAL(breakInto()),
              controller, SLOT(slotBreakInto()));
 
-    connect( controller, SIGNAL(gdbInternalCommandStdout(const char*)),
-             this,       SLOT(slotInternalCommandStdout(const char*)) );
-    connect( controller, SIGNAL(gdbUserCommandStdout(const char*)),
-             this,       SLOT(slotUserCommandStdout(const char*)) );
+    connect( controller, SIGNAL(gdbInternalCommandStdout(const QString&)),
+             this,       SLOT(slotInternalCommandStdout(const QString&)) );
+    connect( controller, SIGNAL(gdbUserCommandStdout(const QString&)),
+             this,       SLOT(slotUserCommandStdout(const QString&)) );
 
-    connect( controller, SIGNAL(gdbStderr(const char*)),
-             this,       SLOT(slotReceivedStderr(const char*)) );
     connect( controller, SIGNAL(dbgStatus(const QString&, int)),
              this,       SLOT(slotDbgStatus(const QString&, int)));
 
@@ -139,7 +137,7 @@ void GDBOutputWidget::clear()
 /***************************************************************************/
 
 void GDBOutputWidget::slotInternalCommandStdout(const char* line)
-{    
+{
     newStdoutLine(line, true);
 }
 
@@ -177,7 +175,7 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     allCommands_.append(s);
     allCommandsRaw_.append(line);
     trimList(allCommands_, maxLines_);
-    trimList(allCommandsRaw_, maxLines_);    
+    trimList(allCommandsRaw_, maxLines_);
 
     if (!internal)
     {
@@ -188,7 +186,7 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     }
 
     if (!internal || showInternalCommands_)
-        showLine(s);                 
+        showLine(s);
 }
 
 
@@ -220,11 +218,11 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
     if (show != showInternalCommands_)
     {
         showInternalCommands_ = show;
-        
+
         // Set of strings to show changes, text edit still has old
         // set. Refresh.
         m_gdbView->clear();
-        QStringList& newList = 
+        QStringList& newList =
             showInternalCommands_ ? allCommands_ : userCommands_;
 
         QStringList::iterator i = newList.begin(), e = newList.end();
@@ -242,12 +240,12 @@ void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
     QString colored = colorify(html_escape(line), "red");
     // Errors are shown inside user commands too.
-    allCommands_.append(colored);    
+    allCommands_.append(colored);
     trimList(allCommands_, maxLines_);
     userCommands_.append(colored);
     trimList(userCommands_, maxLines_);
 
-    allCommandsRaw_.append(line);    
+    allCommandsRaw_.append(line);
     trimList(allCommandsRaw_, maxLines_);
     userCommandsRaw_.append(line);
     trimList(userCommandsRaw_, maxLines_);
@@ -340,7 +338,7 @@ void GDBOutputWidget::savePartialProjectSession(QDomElement* el)
 
 void GDBOutputWidget::restorePartialProjectSession(const QDomElement* el)
 {
-    QDomElement showInternal = 
+    QDomElement showInternal =
         el->namedItem("showInternalCommands").toElement();
 
     if (!showInternal.isNull())
@@ -361,7 +359,7 @@ Q3PopupMenu* OutputText::createPopupMenu(const QPoint&)
 
     popup->setItemChecked(id, parent_->showInternalCommands_);
     popup->setWhatsThis(
-        id, 
+        id,
         i18n(
             "Controls if commands issued internally by KDevelop "
             "will be shown or not.<br>"

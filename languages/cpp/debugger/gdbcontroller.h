@@ -25,7 +25,6 @@
 
 #include <q3cstring.h>
 #include <QObject>
-#include <QProcess>
 #include <q3ptrlist.h>
 #include <QString>
 #include <qmap.h>
@@ -33,9 +32,9 @@
 
 #include <memory>
 #include <set>
+#include <kprocess.h>
 #include <kvbox.h>
 
-class QProcess;
 
 namespace GDBDebugger
 {
@@ -58,7 +57,7 @@ class GDBController : public QObject
 public:
     GDBController(QObject* parent);
     ~GDBController();
-    
+
     enum event_t { program_state_changed = 1, program_exited, debugger_exited,
                    thread_or_frame_changed, debugger_busy, debugger_ready,
                    shared_library_loaded,
@@ -75,7 +74,7 @@ public:
         by gdb. The command will be actually sent to gdb only when
         replies from all previous commands are received and full processed.
 
-        The literal command sent to gdb is obtained by calling 
+        The literal command sent to gdb is obtained by calling
         cmd->cmdToSend. The call is made immediately before sending the
         command, so it's possible to use results of prior commands when
         computing the exact command to send.
@@ -200,7 +199,7 @@ private:
 
     /** Raises the specified event. Should be used instead of
         emitting 'event' directly, since this method can perform
-        additional book-keeping for events. 
+        additional book-keeping for events.
     */
     void raiseEvent(event_t e);
 
@@ -208,7 +207,7 @@ private:
 
     /** Default handler for errors.
         Tries to guess is the error message is telling that target is
-        gone, if so, informs the user.  
+        gone, if so, informs the user.
         Otherwise, shows a dialog box and reloads view state.  */
     void defaultErrorHandler(const GDBMI::ResultRecord& result);
 
@@ -250,6 +249,7 @@ protected Q_SLOTS:
     void readyReadStandardError();
     void slotDbgWroteStdin(QProcess *proc);
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void processErrored(QProcess::ProcessError);
 
 Q_SIGNALS:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
@@ -258,9 +258,8 @@ Q_SIGNALS:
     void rawGDBLibraries      (char *buf);
     void ttyStdout            (const QByteArray& output);
     void ttyStderr            (const QByteArray& output);
-    void gdbInternalCommandStdout (const char *output);
-    void gdbUserCommandStdout (const char *output);
-    void gdbStderr            (const char *output);
+    void gdbInternalCommandStdout (const QString& output);
+    void gdbUserCommandStdout (const QString& output);
     void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
     void dbgStatus            (const QString &status, int statusFlag);
 
@@ -354,7 +353,7 @@ private:
 
     bool saw_gdb_prompt_;
 
-    QProcess* m_process;
+    KProcess* m_process;
 };
 
 }
