@@ -474,7 +474,7 @@ namespace GDBDebugger
         QString cap = caption;
         // Prevent intepreting '&' as accelerator specifier.
         cap.replace("&", "&&");
-        toolBox_->setItemLabel(toolBox_->indexOf(ncs), cap);
+        toolBox_->setItemText(toolBox_->indexOf(ncs), cap);
     }
 
     void ViewerWidget::slotChildDestroyed(QObject* child)
