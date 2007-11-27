@@ -423,7 +423,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
 
 void ProjectSession::loadDocument( )
 {
-	if ( !_docDataList.isEmpty() )
+	while ( !_docDataList.isEmpty() )
 	{
 		DocumentData & dd = _docDataList.first();
 		if ( dd.type == "Source" )
