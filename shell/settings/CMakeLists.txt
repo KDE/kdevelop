@@ -102,3 +102,23 @@ target_link_libraries( kcm_kdev_runsettings ${KDE4_KUTILS_LIBS} kdevplatformshel
 
 install( TARGETS kcm_kdev_runsettings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_runsettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+
+
+########### Environment widget
+
+set( envsettings_cfg_SRCS
+  environmentwidget.cpp
+  environmentpreferences.cpp
+)
+
+set( envsettings_cfg_UI
+  environmentwidget.ui
+)
+
+kde4_add_ui_files( envsettings_cfg_SRCS ${envsettings_cfg_UI} )
+kde4_add_plugin( kcm_kdev_envsettings ${envsettings_cfg_SRCS} )
+target_link_libraries( kcm_kdev_envsettings ${KDE4_KUTILS_LIBS} kdevplatformshell kdevplatformutil)
+
+install( TARGETS kcm_kdev_envsettings DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( FILES kcm_kdev_envsettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+

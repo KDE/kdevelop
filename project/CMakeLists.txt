@@ -1,5 +1,4 @@
 
-add_subdirectory(settings)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/interfaces

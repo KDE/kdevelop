@@ -75,7 +75,7 @@ void ProjectConfigSkeleton::setDefaults()
         if( cfg.hasGroup( item->group() ) )
         {
             KConfigGroup grp = cfg.group( item->group() );
-	    if( grp.hasKey( item->key() ) )
+            if( grp.hasKey( item->key() ) )
                 item->setProperty( grp.readEntry( item->key(), item->property() ) );
         }
     }
