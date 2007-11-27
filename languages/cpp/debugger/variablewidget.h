@@ -440,8 +440,8 @@ private:
     // Frame base and code address of the current inner-most
     // frame. Needed so that if we can know when 'frame N' no longer
     // is the same as 'frame N' when this 'VarFrameRoot' was created.
-    unsigned long long currentFrameBase;
-    unsigned long long currentFrameCodeAddress;
+    quint64 currentFrameBase;
+    quint64 currentFrameCodeAddress;
 
     friend class VariableTree;
 

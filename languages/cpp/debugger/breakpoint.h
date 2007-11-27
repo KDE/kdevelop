@@ -285,7 +285,7 @@ public:
     QString displayType() const                 { return i18n("Watchpoint"); }
     void setVarName(const QString& varName)     { varName_ = varName; }
     QString varName() const                     { return varName_; }
-    unsigned long long address() const          { return address_; }
+    quint64 address() const          { return address_; }
     QString location(bool) const                { return varName_; }
     void setLocation(const QString& location)   { varName_ = location; }
     bool isValid() const                        { return !varName_.isEmpty(); }
@@ -295,7 +295,7 @@ private:
     void handleAddressComputed(const GDBMI::ResultRecord&);
 
     QString varName_;
-    unsigned long long address_;
+    quint64 address_;
 };
 
 class ReadWatchpoint : public Watchpoint

@@ -743,9 +743,9 @@ void VariableTree::frameIdReady(const QStringList& lines)
 
     if (i != -1 && i2 != -1)
     {
-        unsigned long long new_frame_base =
+        quint64 new_frame_base =
             frame_base_rx.cap(1).toULongLong(0, 16);
-        unsigned long long new_code_address =
+        quint64 new_code_address =
             frame_code_rx.cap(1).toULongLong(0, 16);
         kDebug(9012) << "Frame base = " << QString::number(new_frame_base, 16)
                       << " code = " << QString::number(new_code_address, 16)
@@ -1012,7 +1012,7 @@ void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
     {
         toggleWatch->setEnabled(true);
 
-        unsigned long long address = r["value"].literal().toULongLong(0, 16);
+        quint64 address = r["value"].literal().toULongLong(0, 16);
         if (breakpointWidget_->hasWatchpointForAddress(address))
         {
             toggleWatch->setChecked(true);
@@ -1941,8 +1941,8 @@ VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
       needLocals_(false),
       frameNo_(frameNo),
       threadNo_(threadNo),
-      currentFrameBase((unsigned long long)-1),
-      currentFrameCodeAddress((unsigned long long)-1)
+      currentFrameBase((quint64)-1),
+      currentFrameCodeAddress((quint64)-1)
 {
     setExpandable(true);
 }

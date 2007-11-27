@@ -59,7 +59,7 @@ public:
     void savePartialProjectSession(QDomElement* el);
     void restorePartialProjectSession(const QDomElement* el);
 
-    bool hasWatchpointForAddress(unsigned long long address) const;
+    bool hasWatchpointForAddress(quint64 address) const;
 
 Q_SIGNALS:
     void requestRaise();

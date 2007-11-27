@@ -564,7 +564,7 @@ void Watchpoint::applicationExited(GDBController* c)
         setDbgId(-1);
         setEnabled(false);
         setActionAdd(true);
-        address_ = static_cast<unsigned long long>(-1);
+        address_ = static_cast<quint64>(-1);
         emit modified(this);
     }
 }

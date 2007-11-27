@@ -477,7 +477,7 @@ BreakpointTableRow* GDBBreakpointWidget::findKey(int BPKey)
 }
 
 bool GDBBreakpointWidget::hasWatchpointForAddress(
-    unsigned long long address) const
+    quint64 address) const
 {
     for(int i = 0; i < m_table->numRows(); ++i)
     {
