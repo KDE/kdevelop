@@ -1345,7 +1345,7 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
     //
     // Also, don't reload state on errors appeared during state
     // reloading!
-    if (stateReloadingCommands_.count(currentCmd_) == 0)
+    if (!stateReloadingCommands_.contains(currentCmd_))
         raiseEvent(program_state_changed);
 }
 
@@ -1366,7 +1366,7 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
             // Assume that if this command is part of state reloading,
             // then any further commands issued in command handler
             // are part of state reloading as well.
-            if (stateReloadingCommands_.count(currentCmd_))
+            if (stateReloadingCommands_.contains(currentCmd_))
             {
                 stateReloadInProgress_ = true;
             }
@@ -1603,7 +1603,7 @@ void GDBController::commandDone()
 
 void GDBController::destroyCurrentCommand()
 {
-    stateReloadingCommands_.erase(currentCmd_);
+    stateReloadingCommands_.remove(currentCmd_);
     delete currentCmd_;
     currentCmd_ = 0;
 }
@@ -1615,14 +1615,14 @@ void GDBController::removeStateReloadingCommands()
     {
         i--;
         GDBCommand* cmd = cmdList_.at(i);
-        if (stateReloadingCommands_.count(cmd));
+        if (stateReloadingCommands_.contains(cmd));
         {
             kDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
             delete cmdList_.takeAt(i);
         }
     }
 
-    if (stateReloadingCommands_.count(currentCmd_))
+    if (stateReloadingCommands_.contains(currentCmd_))
     {
         // This effectively prevents handler for this command
         // to be ever invoked.

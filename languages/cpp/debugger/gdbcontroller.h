@@ -23,17 +23,15 @@
 #include "mi/gdbmi.h"
 #include "mi/miparser.h"
 
-#include <q3cstring.h>
 #include <QObject>
 #include <QList>
 #include <QString>
 #include <QMap>
+#include <QSet>
 #include <QDateTime>
 
 #include <memory>
-#include <set>
 #include <kprocess.h>
-#include <kvbox.h>
 
 
 namespace GDBDebugger
@@ -349,7 +347,7 @@ private:
 
     /** Commands issues as result of the 'program_state_changed'
         event. */
-    std::set<GDBCommand*> stateReloadingCommands_;
+    QSet<GDBCommand*> stateReloadingCommands_;
 
     bool saw_gdb_prompt_;
 
