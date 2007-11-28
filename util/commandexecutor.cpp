@@ -46,13 +46,13 @@ public:
     void procError( QProcess::ProcessError error )
     {
         Q_UNUSED(error)
-        m_lineMaker->flush();
+        m_lineMaker->flushBuffers();
         emit m_exec->failed();
     }
     void procFinished( int code, QProcess::ExitStatus status )
     {
         Q_UNUSED(code)
-        m_lineMaker->flush();
+        m_lineMaker->flushBuffers();
         if( status == QProcess::NormalExit )
             emit m_exec->completed();
         else

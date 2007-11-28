@@ -52,7 +52,7 @@ public:
      * clears out the internal buffers, this drops any data without
      * emitting the related signal
      */
-    void clearBuffers();
+    void discardBuffers();
     /**
      * Flush the data from the buffers and then clear them. 
      * This should be called once when the process has 
@@ -64,7 +64,7 @@ public:
      * that itself too and possibly delete the process, making 
      * it impossible to fetch the last output.
      */
-    void flush();
+    void flushBuffers();
 
 public Q_SLOTS:
     /**

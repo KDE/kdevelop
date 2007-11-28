@@ -45,15 +45,6 @@ public:
         stderrtimer.setSingleShot(true);
     }
 
-    void flushData()
-    {
-        if (!stdoutbuf.isEmpty())
-            emit p->receivedStdoutLines(QStringList(QString::fromLocal8Bit(stdoutbuf)));
-        if (!stderrbuf.isEmpty())
-            emit p->receivedStderrLines(QStringList(QString::fromLocal8Bit(stderrbuf)));
-        p->clearBuffers();
-    }
-
     void slotReadyReadStdout()
     {
         stdoutbuf += m_proc->readAllStandardOutput();
@@ -140,7 +131,7 @@ void ProcessLineMaker::slotReceivedStderr( const QByteArray& buffer )
     d->processStdErr();
 }
 
-void ProcessLineMaker::clearBuffers( )
+void ProcessLineMaker::discardBuffers( )
 {
     d->stderrbuf.truncate(0);
     d->stdoutbuf.truncate(0);
@@ -148,9 +139,13 @@ void ProcessLineMaker::clearBuffers( )
     d->stderrtimer.stop();
 }
 
-void ProcessLineMaker::flush()
+void ProcessLineMaker::flushBuffers()
 {
-    d->flushData();
+    if (!d->stdoutbuf.isEmpty())
+        emit receivedStdoutLines(QStringList(QString::fromLocal8Bit(d->stdoutbuf)));
+    if (!d->stderrbuf.isEmpty())
+        emit receivedStderrLines(QStringList(QString::fromLocal8Bit(d->stderrbuf)));
+    discardBuffers();
 }
 
 }
