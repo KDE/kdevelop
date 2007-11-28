@@ -381,13 +381,7 @@ void CvsPlugin::ctxDiff()
     DiffOptionsDialog dlg(0, url);
 
     if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::VcsRevision revA;
-        revA.setRevisionValue(dlg.revA(), KDevelop::VcsRevision::FileNumber);
-
-        KDevelop::VcsRevision revB;
-        revB.setRevisionValue(dlg.revB(), KDevelop::VcsRevision::FileNumber);
-
-        KDevelop::VcsJob* j = diff(url, QString(""), revA, revB, KDevelop::VcsDiff::DiffUnified);
+        KDevelop::VcsJob* j = diff(url, QString(""), dlg.revA(), dlg.revB(), KDevelop::VcsDiff::DiffUnified);
         CvsJob* job = dynamic_cast<CvsJob*>(j);
         if (job) {
             job->start();

@@ -96,13 +96,14 @@ QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
             break;
 
         case KDevelop::VcsRevision::FileNumber:
+            kDebug(9500) << "VcsRevision::FileNumber: " << rev.revisionValue() << endl;
             if (rev.revisionValue().isValid())
-                str = "-r"+rev.revisionValue().toInt();
+                str = "-r"+rev.revisionValue().toString();
             break;
 
         case KDevelop::VcsRevision::Date:
             if (rev.revisionValue().isValid())
-                str = "-D"+rev.revisionValue().toDateTime().toString( Qt::ISODate );
+                str = "-D"+rev.revisionValue().toString();
             break;
 
         case KDevelop::VcsRevision::GlobalNumber: // !! NOT SUPPORTED BY CVS !!
@@ -149,7 +150,9 @@ CvsJob* CvsProxy::diff(const KUrl& url,
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "diff";
-        *job << diffOptions;
+
+        if (!diffOptions.isEmpty())
+            *job << diffOptions;
 
         QString rA = convertVcsRevisionToString(revA);
         if (!rA.isEmpty())

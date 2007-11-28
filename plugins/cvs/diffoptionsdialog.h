@@ -14,6 +14,7 @@
 #include <QDialog>
 #include <KUrl>
 
+#include "vcsrevision.h"
 #include "ui_diffoptionsdialog.h"
 
 /**
@@ -32,12 +33,12 @@ public:
      * @return The first diffing revision, branchname or tag
      * @note Can also be QString() if the user requested a diff agains BASE
      */
-    QString revA() const;
+    KDevelop::VcsRevision revA() const;
     /**
      * @return The second diffing revision, branchname or tag
      * @note Can also be QString() if the user requested a diff agains a single revision
      */
-    QString revB() const;
+    KDevelop::VcsRevision revB() const;
 
 private:
     enum DiffType { diffLocalBASE, diffLocalHEAD, diffLocalOther, diffArbitrary };

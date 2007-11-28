@@ -35,24 +35,28 @@ DiffOptionsDialog::DiffType DiffOptionsDialog::requestedDiff() const
         return diffLocalHEAD;
 }
 
-QString DiffOptionsDialog::revA() const
+KDevelop::VcsRevision DiffOptionsDialog::revA() const
 {
+    KDevelop::VcsRevision rev;
+
     if (requestedDiff() == diffArbitrary)
-        return revaEdit->text();
+        rev.setRevisionValue( revaEdit->text(), KDevelop::VcsRevision::FileNumber );
     else  if (requestedDiff() == diffLocalOther)
-        return revOtherEdit->text();
+        rev.setRevisionValue( revOtherEdit->text(), KDevelop::VcsRevision::FileNumber );
     else  if (requestedDiff() == diffLocalHEAD)
-        return "HEAD";
-    else
-        return QString();
+        rev.setRevisionValue( "HEAD", KDevelop::VcsRevision::FileNumber );
+
+    return rev;
 }
 
-QString DiffOptionsDialog::revB() const
+KDevelop::VcsRevision DiffOptionsDialog::revB() const
 {
-    if (requestedDiff())
-        return this->revbEdit->text();
-    else
-        return QString();
+    KDevelop::VcsRevision rev;
+
+    if (requestedDiff() == diffArbitrary)
+        rev.setRevisionValue( this->revbEdit->text(), KDevelop::VcsRevision::FileNumber );
+
+    return rev;
 }
 
 #include "diffoptionsdialog.moc"
