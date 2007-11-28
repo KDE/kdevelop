@@ -101,7 +101,9 @@ void ProcessLineMaker::clearBuffers( )
 
 void ProcessLineMaker::flush()
 {
-    emit receivedStderrLine(QString::fromLocal8Bit(stderrbuf));
-    emit receivedStdoutLine(QString::fromLocal8Bit(stdoutbuf));
+    if( !stderrbuf.isEmpty() )
+        emit receivedStderrLine(QString::fromLocal8Bit(stderrbuf));
+    if( !stdoutbuf.isEmpty() )
+        emit receivedStdoutLine(QString::fromLocal8Bit(stdoutbuf));
     clearBuffers();
 }
