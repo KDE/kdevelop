@@ -38,13 +38,23 @@ class ValueCallback;
 class GDBCommand
 {
 public:
-    GDBCommand(const QString& command);
+    GDBCommand(GDBMI::CommandType type, const QString& arguments = QString());
+    GDBCommand(GDBMI::CommandType type, int index);
 
     template<class Handler>
-    GDBCommand(const QString& command,
+    GDBCommand(GDBMI::CommandType type, const QString& arguments,
                Handler* handler_this,
                void (Handler::* handler_method)(const GDBMI::ResultRecord&),
                bool handlesError = false);
+
+    template<class Handler>
+    GDBCommand(GDBMI::CommandType type, int index,
+               Handler* handler_this,
+               void (Handler::* handler_method)(const GDBMI::ResultRecord&),
+               bool handlesError = false);
+
+    GDBMI::CommandType type() const;
+    QString gdbCommand() const;
 
     /* The command that should be sent to gdb.
        This method is virtual so the command can compute this
@@ -90,6 +100,7 @@ public:
     void setRun(bool run);
 
 private:
+    GDBMI::CommandType type_;
     QString command_;
     QPointer<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
@@ -106,7 +117,7 @@ protected: // FIXME: should be private, after I kill the first ctor
 class UserCommand : public GDBCommand
 {
 public:
-    UserCommand(const QString& s);
+    UserCommand(GDBMI::CommandType type, const QString& s);
 
     bool isUserCommand() const;
 };
@@ -125,7 +136,7 @@ public:
     /** The 'comamnd' should include a single format specifier "%1" that
         will be replaced with the id of breakpoint.
     */
-    ModifyBreakpointCommand(const QString& command, const Breakpoint* bp);
+    ModifyBreakpointCommand(GDBMI::CommandType type, const QString& command, const Breakpoint* bp);
 
 public: // DbgCommand overrides
     virtual QString cmdToSend();
@@ -142,7 +153,7 @@ class CliCommand : public GDBCommand
 {
 public:
     template<class Handler>
-    CliCommand(const QString& command,
+    CliCommand(GDBMI::CommandType type, const QString& command,
                Handler* handler_this,
                void (Handler::* handler_method)(const QStringList&),
                bool handlesError = false);
@@ -170,7 +181,7 @@ public:
     template<class Handler>
     SentinelCommand(Handler* handler_this,
                     void (Handler::* handler_method)())
-    : GDBCommand(""),
+    : GDBCommand(GDBMI::NonMI, ""),
       handler_this(handler_this),
       handler_method(static_cast<handler_method_t>(handler_method))
     {}
@@ -195,8 +206,8 @@ private:
 class ResultlessCommand : public QObject, public GDBCommand
 {
 public:
-    ResultlessCommand(const QString& command, bool handlesError = false)
-    : GDBCommand(command, this, &ResultlessCommand::handle, handlesError)
+    ResultlessCommand(GDBMI::CommandType type, const QString& command, bool handlesError = false)
+    : GDBCommand(type, command, this, &ResultlessCommand::handle, handlesError)
     {}
 
 private:
@@ -214,7 +225,7 @@ public:
         const QString& expression,
         Handler* handler_this,
         void (Handler::* handler_method)(const QString&))
-    : GDBCommand(("-data-evaluate-expression " + expression).toAscii(), this,
+    : GDBCommand(GDBMI::DataEvaluateExpression, expression, this,
                  &ExpressionValueCommand::handleResponse),
       handler_this(handler_this),
       handler_method(static_cast<handler_method_t>(handler_method))
@@ -231,14 +242,31 @@ private:
 };
 
 
-
 template<class Handler>
 GDBCommand::GDBCommand(
+    GDBMI::CommandType type,
     const QString& command,
     Handler* handler_this,
     void (Handler::* handler_method)(const GDBMI::ResultRecord&),
     bool handlesError)
-: command_(command),
+: type_(type),
+  command_(command),
+  handler_this(handler_this),
+  handler_method(static_cast<handler_t>(handler_method)),
+  run(false),
+  handlesError_(handlesError)
+{
+}
+
+template<class Handler>
+GDBCommand::GDBCommand(
+    GDBMI::CommandType type,
+    int index,
+    Handler* handler_this,
+    void (Handler::* handler_method)(const GDBMI::ResultRecord&),
+    bool handlesError)
+: type_(type),
+  command_(QString::number(index)),
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   run(false),
@@ -248,11 +276,12 @@ GDBCommand::GDBCommand(
 
 template<class Handler>
 CliCommand::CliCommand(
+    GDBMI::CommandType type,
     const QString& command,
     Handler* handler_this,
     void (Handler::* handler_method)(const QStringList&),
     bool handlesError)
-: GDBCommand(command.toLatin1()),
+: GDBCommand(type, command),
   cli_handler_this(handler_this),
   cli_handler_method(static_cast<cli_handler_t>(handler_method))
 {

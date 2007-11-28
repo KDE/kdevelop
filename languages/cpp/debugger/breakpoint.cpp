@@ -35,6 +35,8 @@
 /***************************************************************************/
 /***************************************************************************/
 
+using namespace GDBMI;
+
 namespace GDBDebugger
 {
 
@@ -132,7 +134,7 @@ void Breakpoint::sendToGdb(GDBController* controller)
 
     if (restart) {
         kDebug(9012) << "RESTARING APP\n";
-        GDBCommand *cmd = new GDBCommand("-exec-continue");
+        GDBCommand *cmd = new GDBCommand(ExecContinue);
         cmd->setRun(true);
         controller->addCommand(cmd);
     }
@@ -141,7 +143,8 @@ void Breakpoint::sendToGdb(GDBController* controller)
 void Breakpoint::clearBreakpoint(GDBController* /*c*/)
 {
     controller()->addCommandBeforeRun(
-        new GDBCommand(dbgRemoveCommand(), 
+        new GDBCommand(BreakDelete,
+                       dbgRemoveCommand(),
                        this,
                        &Breakpoint::handleDeleted)); 
 }
@@ -166,7 +169,7 @@ void Breakpoint::setBreakpoint(GDBController* controller)
     // When this command is finished, slotParseGDBBreakpointSet
     // will be called by the controller.
     controller->addCommandBeforeRun(
-        new GDBCommand(dbgSetCommand(),                        
+        new GDBCommand(BreakInsert, dbgSetCommand(),
                        this,
                        &Breakpoint::handleSet, true));
 }
@@ -176,18 +179,18 @@ void Breakpoint::modifyBreakpoint(GDBController* controller)
 {
     controller->
         addCommandBeforeRun(
-            new ModifyBreakpointCommand(QString("-break-condition %1 ") +
+            new ModifyBreakpointCommand(BreakCondition, QString("%1 ") +
                                         conditional(), this));
     controller->
         addCommandBeforeRun(
-            new ModifyBreakpointCommand(QString("-break-after %1 ") +
+            new ModifyBreakpointCommand(BreakAfter, QString("%1 ") +
                                         QString::number(ignoreCount()), this));
 
     controller->
         addCommandBeforeRun(
-            new ModifyBreakpointCommand(isEnabled() ? 
-                                        QString("-break-enable %1") 
-                                        : QString("-break-disable %1"), this));
+            new ModifyBreakpointCommand(isEnabled() ? BreakEnable : BreakDisable,
+                                        QString("%1"),
+                                        this));
 }
 
 void Breakpoint::removedInGdb()
@@ -215,7 +218,7 @@ bool Breakpoint::match(const Breakpoint* breakpoint) const
 QString Breakpoint::dbgRemoveCommand() const
 {
     if (dbgId_>0)
-        return QString("-break-delete %1").arg(dbgId_); // gdb command - not translatable
+        return QString("%1").arg(dbgId_); // gdb command - not translatable
 
     return QString();
 }
@@ -398,7 +401,7 @@ FilePosBreakpoint::~FilePosBreakpoint()
 QString FilePosBreakpoint::dbgSetCommand() const
 {
     QString cmdStr;
-    cmdStr = QString("-break-insert %1").arg(location_);
+    cmdStr = QString("%1").arg(location_);
 
     if (isTemporary())
         cmdStr = cmdStr + " -t";
@@ -536,7 +539,8 @@ void Watchpoint::setBreakpoint(GDBController* controller)
 
         controller->addCommandBeforeRun(
             new GDBCommand(
-                QString("-data-evaluate-expression &%1").arg(varName_),
+                DataEvaluateExpression,
+                QString("&%1").arg(varName_),
                 this,
                 &Watchpoint::handleAddressComputed));
     }
@@ -547,7 +551,8 @@ void Watchpoint::handleAddressComputed(const GDBMI::ResultRecord& r)
     address_ = r["value"].literal().toULongLong(0, 16);
     controller()->addCommandBeforeRun(
         new GDBCommand(
-            QString("-break-watch *%1").arg(r["value"].literal()),
+            BreakWatch,
+            QString("*%1").arg(r["value"].literal()),
             static_cast<Breakpoint*>(this),
             &Watchpoint::handleSet));
 }
@@ -560,7 +565,7 @@ void Watchpoint::applicationExited(GDBController* c)
         // completely.
 
         controller()->addCommand(
-            new GDBCommand(dbgRemoveCommand()));
+            new GDBCommand(BreakDelete, dbgRemoveCommand()));
         setDbgId(-1);
         setEnabled(false);
         setActionAdd(true);

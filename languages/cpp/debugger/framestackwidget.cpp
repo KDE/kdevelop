@@ -37,6 +37,8 @@
 /***************************************************************************/
 /***************************************************************************/
 
+using namespace GDBMI;
+
 namespace GDBDebugger
 {
 
@@ -120,9 +122,7 @@ void FramestackWidget::slotSelectionChanged(Q3ListViewItem *thisItem)
             {
                // Switch to the target thread.
                 if (frame->threadNo() != -1)
-                    controller_->addCommand(
-                        new GDBCommand(QString("-thread-select %1")
-                                       .arg(frame->threadNo()).toAscii()));
+                    controller_->addCommand(new GDBCommand(ThreadSelect, frame->threadNo()));
 
                viewedThread_ = findThread(frame->threadNo());
                getBacktrace(frame->frameNo(), frame->frameNo() + frameChunk_);
@@ -148,7 +148,7 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
             clear();
 
             controller_->addCommand(
-                new GDBCommand("-thread-list-ids",
+                new GDBCommand(ThreadListIds, "",
                                this, &FramestackWidget::handleThreadList));
 
             break;
@@ -198,7 +198,7 @@ void FramestackWidget::getBacktrace(int min_frame, int max_frame)
     maxFrame_ = max_frame;
 
     controller_->addCommand(
-        new GDBCommand(QString("-stack-info-depth %1").arg(max_frame+1),
+        new GDBCommand(StackInfoDepth, QString("%1").arg(max_frame+1),
                        this, 
                        &FramestackWidget::handleStackDepth));        
 }
@@ -213,7 +213,7 @@ void FramestackWidget::handleStackDepth(const GDBMI::ResultRecord& r)
         maxFrame_ = existing_frames;
     //add the following command to the front, so noone switches threads in between
     controller_->addCommandToFront(
-        new GDBCommand(QString("-stack-list-frames %1 %2")
+        new GDBCommand(StackListFrames, QString("%1 %2")
                        .arg(minFrame_).arg(maxFrame_),
                        this, &FramestackWidget::parseGDBBacktraceList));    
 }
@@ -224,9 +224,7 @@ void FramestackWidget::getBacktraceForThread(int threadNo)
     if (viewedThread_)
     {
         // Switch to the target thread.
-        controller_->addCommand(
-            new GDBCommand(QString("-thread-select %1")
-                           .arg(threadNo).toAscii()));
+        controller_->addCommand(new GDBCommand(ThreadSelect, threadNo));
 
         viewedThread_ = findThread(threadNo);
     }
@@ -236,9 +234,7 @@ void FramestackWidget::getBacktraceForThread(int threadNo)
     if (viewedThread_)
     {
         // Switch back to the original thread.
-        controller_->addCommand(
-            new GDBCommand(QString("-thread-select %1")
-                           .arg(currentThread).toAscii()));
+        controller_->addCommand(new GDBCommand(ThreadSelect, currentThread));
     }
 }
 
@@ -264,13 +260,11 @@ void FramestackWidget::handleThreadList(const GDBMI::ResultRecord& r)
             QString id = ids.results[i]->value->literal();
 
             controller_->addCommand(
-                new GDBCommand(QString("-thread-select %1").arg(id).ascii(), 
+                new GDBCommand(ThreadSelect, id,
                                this, &FramestackWidget::handleThread));
         }
 
-        controller_->addCommand(
-            new GDBCommand(QString("-thread-select %1")
-                           .arg(controller_->currentThread()).ascii()));
+        controller_->addCommand(new GDBCommand(ThreadSelect, controller_->currentThread()));
     }
 
     // Get backtrace for the current thread. We need to do this

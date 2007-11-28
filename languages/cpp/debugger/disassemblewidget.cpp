@@ -35,6 +35,8 @@
 #include <klocale.h>
 #include <KIcon>
 
+using namespace GDBMI;
+
 namespace GDBDebugger
 {
 
@@ -138,9 +140,9 @@ void DisassembleWidget::getNextDisplay()
     {
         Q_ASSERT(!currentAddress_.isNull());
 
-        QString cmd = QString("-data-disassemble -s $pc -e \"$pc + 128\" -- 0");
+        QString cmd = QString("-s $pc -e \"$pc + 128\" -- 0");
         controller_->addCommandToFront( 
-                        new GDBCommand( cmd, this, &DisassembleWidget::memoryRead ) );
+                        new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::memoryRead ) );
     }
 }
 

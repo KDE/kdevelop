@@ -58,6 +58,8 @@
 /***************************************************************************/
 /***************************************************************************/
 
+using namespace GDBMI;
+
 namespace GDBDebugger
 {
 
@@ -385,13 +387,13 @@ void GDBBreakpointWidget::slotBreakpointHit(int id)
     if (b->tracingEnabled())
     {
         controller_->addCommand(
-            new CliCommand(("printf "
+            new CliCommand(NonMI, ("printf "
                             + b->traceRealFormatString()).toLatin1(),
                            this,
                            &GDBBreakpointWidget::handleTracingPrintf));
 
         controller_->addCommand(new
-                            GDBCommand("-exec-continue"));
+                            GDBCommand(ExecContinue));
 
     }
     else
@@ -911,7 +913,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
                 // and then appears again, and won't have internal issues
                 // as well.
                 if (!controller_->stateIsOn(s_dbgNotStarted))
-                    controller_->addCommand(bp->dbgRemoveCommand().toLatin1());
+                    controller_->addCommand(BreakDelete, bp->dbgRemoveCommand().toLatin1());
 
                 // Now add new breakpoint in gdb. It will correspond to
                 // the same 'Breakpoint' and 'BreakpointRow' objects in
@@ -1011,7 +1013,8 @@ void GDBBreakpointWidget::slotEvent(GDBController::event_t e)
     case GDBController::program_state_changed:
         {
             controller_->addCommand(
-                new GDBCommand("-break-list",
+                new GDBCommand(BreakList,
+                               "",
                                this,
                                &GDBBreakpointWidget::handleBreakpointList));
             break;

@@ -33,7 +33,6 @@
 #include <memory>
 #include <kprocess.h>
 
-
 namespace GDBDebugger
 {
 
@@ -81,7 +80,7 @@ public:
 
     /** Same as above, but internally constructs new GDBCommand
        instance from the string. */
-    void addCommand(const QString& cmd);
+    void addCommand(GDBMI::CommandType type, const QString& cmd);
 
     /** Adds command to the front of the commands queue. It will be executed
         next.

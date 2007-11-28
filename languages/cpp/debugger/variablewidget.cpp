@@ -81,6 +81,8 @@
 // **************************************************************************
 // **************************************************************************
 
+using namespace GDBMI;
+
 namespace GDBDebugger
 {
 
@@ -350,8 +352,8 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
            just to delete it. */
         if (var && var->isAlive() && !controller()->stateIsOn(s_dbgNotStarted))
             controller_->addCommand(
-                new GDBCommand(
-                    QString("-data-evaluate-expression &%1")
+                new GDBCommand(DataEvaluateExpression,
+                    QString("&%1")
                     .arg(var->gdbExpression()),
                     this,
                     &VariableTree::handleAddressComputed,
@@ -521,16 +523,15 @@ void VariableTree::updateCurrentFrame()
     // We'll fetch values separately:
 
     controller_->addCommand(
-        new GDBCommand(QString("-stack-list-arguments 0 %1 %2")
+        new GDBCommand(StackListArguments, QString("0 %1 %2")
                        .arg(controller_->currentFrame())
-                       .arg(controller_->currentFrame())
-                       .toAscii(),
+                       .arg(controller_->currentFrame()),
                        this,
                        &VariableTree::argumentsReady));
 
 
     controller_->addCommand(
-        new GDBCommand("-stack-list-locals 0",
+        new GDBCommand(StackListLocals, 0,
                        this,
                        &VariableTree::localsReady));
 
@@ -622,8 +623,8 @@ Q3ListViewItem *VariableTree::lastChild() const
 class ValueSpecialRepresentationCommand : public QObject, public CliCommand
 {
 public:
-    ValueSpecialRepresentationCommand(VarItem* item, const QString& command)
-    : CliCommand(command.toAscii(),
+    ValueSpecialRepresentationCommand(GDBMI::CommandType type, VarItem* item, const QString& command)
+    : CliCommand(type, command,
                  this,
                  &ValueSpecialRepresentationCommand::handleReply,
                  true),
@@ -703,7 +704,7 @@ void VariableTree::localsReady(const GDBMI::ResultRecord& r)
         }
     }
 
-    controller_->addCommand(new CliCommand("info frame",
+    controller_->addCommand(new CliCommand(NonMI, "info frame",
                                            this,
                                            &VariableTree::frameIdReady));
 }
@@ -840,8 +841,8 @@ void VariableTree::frameIdReady(const QStringList& lines)
 
     // Note: can't use --all-values in this command, because gdb will
     // die if there's any uninitialized variable. Ouch!
-    controller_->addCommand(new GDBCommand(
-                                "-var-update *",
+    controller_->addCommand(new GDBCommand(VarUpdate,
+                                "*",
                                 this,
                                 &VariableTree::handleVarUpdate));
 
@@ -887,7 +888,7 @@ void VarItem::handleCliPrint(const QStringList& lines)
         if (i == 0)
         {
             controller_->addCommand(
-                new GDBCommand(QString("-var-create %1 * \"%2\"")
+                new GDBCommand(VarCreate, QString("%1 * \"%2\"")
                                .arg(varobjName_)
                                .arg(r.cap(1)),
                                this,
@@ -1174,7 +1175,7 @@ void VarItem::createVarobj()
         // issue print command that returns $NN convenience
         // variable and we create variable object from that.
         controller_->addCommand(
-            new CliCommand(
+            new CliCommand(NonMI,
                 QString("print %1").arg(expression_),
                 this,
                 &VarItem::handleCliPrint));
@@ -1182,7 +1183,7 @@ void VarItem::createVarobj()
     else
     {
         controller_->addCommand(
-            new CliCommand(
+            new CliCommand(NonMI,
                 QString("print /x &%1").arg(expression_),
                 this,
                 &VarItem::handleCurrentAddress,
@@ -1191,7 +1192,7 @@ void VarItem::createVarobj()
         controller_->addCommand(
             // Need to quote expression, otherwise gdb won't like
             // spaces inside it.
-            new GDBCommand(QString("-var-create %1 * \"%2\"")
+            new GDBCommand(VarCreate, QString("%1 * \"%2\"")
                            .arg(varobjName_)
                            .arg(expression_),
                            this,
@@ -1244,7 +1245,7 @@ void VarItem::setVarobjName(const QString& name)
     if (format_ != natural)
     {
         controller_->addCommand(
-            new GDBCommand(QString("-var-set-format \"%1\" %2")
+            new GDBCommand(VarSetFormat, QString("\"%1\" %2")
                            .arg(varobjName_).arg(varobjFormatName())));
     }
 
@@ -1367,8 +1368,8 @@ void VarItem::createChildren(const GDBMI::ResultRecord& r,
         if (exp == "public" || exp == "protected" || exp == "private")
         {
             QString name = children[i]["name"].literal();
-            controller_->addCommand(new GDBCommand(
-                                        "-var-list-children \"" +
+            controller_->addCommand(new GDBCommand(VarListChildren,
+                                        "\"" +
                                         name + "\"",
                                         this,
                                         &VarItem::childrenOfFakesDone));
@@ -1599,8 +1600,8 @@ void VarItem::updateValue()
     updateUnconditionally_ = false;
 
     controller_->addCommand(
-        new GDBCommand(
-            "-var-evaluate-expression \"" + varobjName_ + "\"",
+        new GDBCommand(VarEvaluateExpression,
+            "\"" + varobjName_ + "\"",
             this,
             &VarItem::valueDone,
             true /* handle error */));
@@ -1609,7 +1610,7 @@ void VarItem::updateValue()
 void VarItem::setValue(const QString& new_value)
 {
     controller_->addCommand(
-        new GDBCommand(QString("-var-assign \"%1\" %2").arg(varobjName_)
+        new GDBCommand(VarAssign, QString("\"%1\" %2").arg(varobjName_)
                        .arg(new_value)));
 
     // And immediately reload it from gdb,
@@ -1666,14 +1667,14 @@ void VarItem::updateSpecialRepresentation(const QString& xs)
 void VarItem::recreateLocallyMaybe()
 {
     controller_->addCommand(
-        new CliCommand(
+        new CliCommand(NonMI,
             QString("print /x &%1").arg(expression_),
             this,
             &VarItem::handleCurrentAddress,
             true));
 
     controller_->addCommand(
-        new CliCommand(
+        new CliCommand(NonMI,
             QString("whatis %1").arg(expression_),
             this,
             &VarItem::handleType));
@@ -1696,8 +1697,8 @@ void VarItem::setOpen(bool open)
 
     if (open && !childrenFetched_)
     {
-        controller_->addCommand(new GDBCommand(
-                                    "-var-list-children \"" + varobjName_ + "\"",
+        controller_->addCommand(new GDBCommand(VarListChildren,
+                                    "\"" + varobjName_ + "\"",
                                     this,
                                     &VarItem::childrenDone));
     }
@@ -1716,31 +1717,31 @@ bool VarItem::handleSpecialTypes()
         VariableTree* varTree = static_cast<VariableTree*>(listView());
 
         varTree->controller()->addCommand(
-            new ResultlessCommand(QString("print $kdev_d=%1.d")
+            new ResultlessCommand(NonMI, QString("print $kdev_d=%1.d")
                                   .arg(gdbExpression()),
                                   true /* ignore error */));
 
         if (varTree->controller()->qtVersion() >= 4)
             varTree->controller()->addCommand(
-                new ResultlessCommand(QString("print $kdev_s=$kdev_d.size"),
+                new ResultlessCommand(NonMI, QString("print $kdev_s=$kdev_d.size"),
                                       true));
         else
             varTree->controller()->addCommand(
-                new ResultlessCommand(QString("print $kdev_s=$kdev_d.len"),
+                new ResultlessCommand(NonMI, QString("print $kdev_s=$kdev_d.len"),
                                       true));
 
         varTree->controller()->addCommand(
-            new ResultlessCommand(
+            new ResultlessCommand(NonMI,
                 QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0"),
                 true));
 
         if (varTree->controller()->qtVersion() >= 4)
             varTree->controller()->addCommand(
-                new ValueSpecialRepresentationCommand(
+                new ValueSpecialRepresentationCommand(NonMI,
                     this, "print ($kdev_s>0) ? (*((char*)&$kdev_d.data[0])@$kdev_s) : \"\""));
         else
             varTree->controller()->addCommand(
-                new ValueSpecialRepresentationCommand(
+                new ValueSpecialRepresentationCommand(NonMI,
                     this, "print ($kdev_s>0) ? (*((char*)&$kdev_d.unicode[0])@$kdev_s) : \"\""));
 
         return true;
@@ -1779,7 +1780,7 @@ void VarItem::setFormat(format_t f)
     else
     {
          controller_->addCommand(
-            new GDBCommand(QString("-var-set-format \"%1\" %2")
+            new GDBCommand(VarSetFormat, QString("\"%1\" %2")
                            .arg(varobjName_).arg(varobjFormatName())));
 
         updateValue();
@@ -1898,8 +1899,8 @@ void VarItem::unhookFromGdb()
     if (!controller_->stateIsOn(s_dbgNotStarted) && !varobjName_.isEmpty())
     {
         controller_->addCommand(
-            new GDBCommand(
-                QString("-var-delete \"%1\"").arg(varobjName_)));
+            new GDBCommand(VarDelete,
+                QString("\"%1\"").arg(varobjName_)));
     }
 
     varobjName_ = "";

@@ -275,7 +275,8 @@ namespace GDBDebugger
         controller_->addCommand(
             new
             GDBCommand(
-                QString("-data-read-memory %1 x 1 1 %2")
+                GDBMI::DataReadMemory,
+                QString("%1 x 1 1 %2")
                 .arg(rangeSelector_->startAddressLineEdit->text())
                 .arg(size).latin1(),
                 this,
@@ -339,8 +340,8 @@ namespace GDBDebugger
         for(int i = start; i <= end; ++i)
         {
             controller_->addCommand(
-                new GDBCommand(
-                    QString("set *(char*)(%1 + %2) = %3")
+                new GDBCommand(GDBMI::GdbSet,
+                    QString("*(char*)(%1 + %2) = %3")
                         .arg(start_)
                         .arg(i)
                         .arg(QString::number(data_[i]))));
@@ -386,7 +387,8 @@ namespace GDBDebugger
             controller_->addCommand(
                 new
                 GDBCommand(
-                    QString("-data-read-memory %1 x 1 1 %2")
+                    GDBMI::DataReadMemory,
+                    QString("%1 x 1 1 %2")
                     .arg(start_).arg(amount_).latin1(),
                     this,
                     &MemoryView::memoryRead));
