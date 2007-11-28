@@ -33,6 +33,8 @@ class KDialog;
 class ProcessWidget;
 
 class KToolBar;
+class KAction;
+
 class BreakpointController;
 
 namespace KDevelop {
@@ -195,6 +197,20 @@ private:
     KConfigGroup m_config;
     BreakpointController* m_breakpointController;
 
+    KAction* m_startDebugger;
+    KAction* m_restartDebugger;
+    KAction* m_stopDebugger;
+    KAction* m_interruptDebugger;
+    KAction* m_runToCursor;
+    KAction* m_setToCursor;
+    KAction* m_stepOver;
+    KAction* m_stepIntoInstruction;
+    KAction* m_stepInto;
+    KAction* m_stepOverInstruction;
+    KAction* m_stepOut;
+    KAction* m_toggleBreakpoint;
+
+    
 Q_SIGNALS:
     void buildProject();
 };

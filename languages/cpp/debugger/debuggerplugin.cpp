@@ -282,7 +282,7 @@ void CppDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    KAction* action = new KAction(KIcon("dbgrun"), i18n("&Start"), this);
+    KAction* action = m_startDebugger = new KAction(KIcon("dbgrun"), i18n("&Start"), this);
     action->setShortcut(Qt::Key_F9);
     action->setToolTip( i18n("Start in debugger") );
     action->setWhatsThis( i18n("<b>Start in debugger</b><p>"
@@ -294,7 +294,7 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_run", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotRun()));
 
-    action = new KAction(KIcon("dbgrestart"), i18n("&Restart"), this);
+    m_restartDebugger = action = new KAction(KIcon("dbgrestart"), i18n("&Restart"), this);
     action->setToolTip( i18n("Restart program") );
     action->setWhatsThis( i18n("<b>Restarts application</b><p>"
                                "Restarts applications from the beginning."
@@ -304,33 +304,33 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_restart", action);
 
 
-    action = new KAction(KIcon("process-stop"), i18n("Sto&p"), this);
+    m_stopDebugger = action = new KAction(KIcon("process-stop"), i18n("Sto&p"), this);
     action->setToolTip( i18n("Stop debugger") );
     action->setWhatsThis(i18n("<b>Stop debugger</b><p>Kills the executable and exits the debugger."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStopDebugger()));
     ac->addAction("debug_stop", action);
 
-    action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
+    m_interruptDebugger = action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
     action->setToolTip( i18n("Interrupt application") );
     action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current GDB command."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotPause()));
     ac->addAction("debug_pause", action);
 
-    action = new KAction(KIcon("dbgrunto"), i18n("Run to &Cursor"), this);
+    m_runToCursor = action = new KAction(KIcon("dbgrunto"), i18n("Run to &Cursor"), this);
     action->setToolTip( i18n("Run to cursor") );
     action->setWhatsThis(i18n("<b>Run to cursor</b><p>Continues execution until the cursor position is reached."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotRunToCursor()));
     ac->addAction("debug_runtocursor", action);
 
 
-    action = new KAction(KIcon("dbgjumpto"), i18n("Set E&xecution Position to Cursor"), this);
+    m_setToCursor = action = new KAction(KIcon("dbgjumpto"), i18n("Set E&xecution Position to Cursor"), this);
     action->setToolTip( i18n("Jump to cursor") );
     action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotJumpToCursor()));
     ac->addAction("debug_jumptocursor", action);
 
 
-    action = new KAction(KIcon("dbgnext"), i18n("Step &Over"), this);
+    m_stepOver = action = new KAction(KIcon("dbgnext"), i18n("Step &Over"), this);
     action->setShortcut(Qt::Key_F10);
     action->setToolTip( i18n("Step over the next line") );
     action->setWhatsThis( i18n("<b>Step over</b><p>"
@@ -342,14 +342,14 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_stepover", action);
 
 
-    action = new KAction(KIcon("dbgnextinst"), i18n("Step over Ins&truction"), this);
+    m_stepOverInstruction = action = new KAction(KIcon("dbgnextinst"), i18n("Step over Ins&truction"), this);
     action->setToolTip( i18n("Step over instruction") );
     action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStepOverInstruction()));
     ac->addAction("debug_stepoverinst", action);
 
 
-    action = new KAction(KIcon("dbgstep"), i18n("Step &Into"), this);
+    m_stepInto = action = new KAction(KIcon("dbgstep"), i18n("Step &Into"), this);
     action->setShortcut(Qt::Key_F11);
     action->setToolTip( i18n("Step into the next statement") );
     action->setWhatsThis( i18n("<b>Step into</b><p>"
@@ -360,14 +360,14 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_stepinto", action);
 
 
-    action = new KAction(KIcon("dbgstepinst"), i18n("Step into I&nstruction"), this);
+    m_stepIntoInstruction = action = new KAction(KIcon("dbgstepinst"), i18n("Step into I&nstruction"), this);
     action->setToolTip( i18n("Step into instruction") );
     action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStepIntoInstruction()));
     ac->addAction("debug_stepintoinst", action);
 
 
-    action = new KAction(KIcon("dbgstepout"), i18n("Step O&ut"), this);
+    m_stepOut = action = new KAction(KIcon("dbgstepout"), i18n("Step O&ut"), this);
     action->setShortcut(Qt::Key_F12);
     action->setToolTip( i18n("Steps out of the current function") );
     action->setWhatsThis( i18n("<b>Step out</b><p>"
@@ -409,7 +409,7 @@ void CppDebuggerPlugin::setupActions()
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));
     ac->addAction("debug_attach", action);
 
-    action = new KAction(i18n("Toggle Breakpoint"), this);
+    m_toggleBreakpoint = action = new KAction(i18n("Toggle Breakpoint"), this);
     action->setToolTip(i18n("Toggle breakpoint"));
     action->setWhatsThis(i18n("<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in editor."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleBreakpoint()));
@@ -517,14 +517,12 @@ void CppDebuggerPlugin::contextMenu(QMenu *popup, const KDevelop::Context *conte
 
     if (running)
     {
-        QAction* act = actionCollection()->action("debug_runtocursor");
-        popup->addAction(act);
+        popup->addAction(m_runToCursor);
     }
 
     if (econtext->url().isLocalFile())
     {
-        QAction* action = popup->addAction(i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()));
-        action->setWhatsThis(i18n("<b>Toggle breakpoint</b><p>Toggles breakpoint at the current line."));
+        popup->addAction(m_toggleBreakpoint);
     }
     if (!m_contextIdent.isEmpty())
     {

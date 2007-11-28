@@ -44,12 +44,12 @@ public:
     BPItem() : m_fileName(""), m_lineNum(0)
     {}
 
-    BPItem( const QString& fileName, const uint lineNum)
+    BPItem( const QString& fileName, const int lineNum)
             : m_fileName(fileName),
             m_lineNum(lineNum)
     {}
 
-    uint lineNum() const        {  return m_lineNum; }
+    int lineNum() const        {  return m_lineNum; }
     QString fileName() const    {  return m_fileName; }
 
     bool operator==( const BPItem& rhs ) const
@@ -60,7 +60,7 @@ public:
 
 private:
     QString m_fileName;
-    uint m_lineNum;
+    int m_lineNum;
 };
 
 
@@ -137,7 +137,7 @@ private slots:
     * In here we figure out if we need to reset the breakpoints due to
     * these source changes.
     */
-    void marksChanged();
+    void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
 
 private:
     static const QPixmap* inactiveBreakpointPixmap();

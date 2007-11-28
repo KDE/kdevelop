@@ -136,7 +136,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
              this, SLOT( documentChanged( KDevelop::IDocument* ) ) );
     connect( core()->documentController(),
              SIGNAL( documentActivated( KDevelop::IDocument* ) ),
-             this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+             this, SLOT(  ) );
     connect( core()->projectController(),
              SIGNAL( projectOpened( KDevelop::IProject* ) ),
              this, SLOT( projectOpened( KDevelop::IProject* ) ) );
@@ -470,6 +470,11 @@ KDevelop::ILanguage *CppLanguageSupport::language()
 
 Cpp::EnvironmentManager* CppLanguageSupport::environmentManager() const {
     return m_environmentManager;
+}
+
+void CppLanguageSupport::documentActivated(KDevelop::IDocument * document)
+{
+  Q_UNUSED(document)
 }
 
 #include "cpplanguagesupport.moc"

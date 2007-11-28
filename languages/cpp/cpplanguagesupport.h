@@ -80,6 +80,7 @@ private slots:
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
     void documentChanged( KDevelop::IDocument* document );
+    void documentActivated( KDevelop::IDocument* document );
 
 private:
     static CppLanguageSupport* m_self;

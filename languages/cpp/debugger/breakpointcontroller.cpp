@@ -38,15 +38,15 @@ void BreakpointController::setBreakpoint(const QString &fileName, int lineNum, i
 
     // Temporarily disconnect so we don't get confused by receiving extra
     // marksChanged signals
-    disconnect( document->textDocument(), SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
+    disconnect( document->textDocument(), SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)), this, SLOT(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)) );
     iface->removeMark( lineNum, Breakpoint | ActiveBreakpoint | ReachedBreakpoint | DisabledBreakpoint );
 
     BPItem bpItem(fileName, lineNum);
-    QList<BPItem>::Iterator it = BPList.find(bpItem);
-    if (it != BPList.end())
+    int index = BPList.indexOf(bpItem);
+    if (index != -1)
     {
 //        kdDebug(9012) << "Removing BP=" << fileName << ":" << lineNum << endl;
-        BPList.remove(it);
+        BPList.removeAt(index);
     }
 
     // An id of -1 means this breakpoint should be hidden from the user.
@@ -63,7 +63,7 @@ void BreakpointController::setBreakpoint(const QString &fileName, int lineNum, i
         BPList.append(BPItem(fileName, lineNum));
     }
 
-    connect( document->textDocument(), SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
+    connect( document->textDocument(), SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)), this, SLOT(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)) );
 }
 
 
@@ -102,77 +102,74 @@ void BreakpointController::gotoExecutionPoint(const KUrl &url, int lineNum)
     iface->addMark( lineNum, ExecutionPoint );
 }
 
-void BreakpointController::marksChanged()
+void BreakpointController::markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action)
 {
-    if(KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(sender()))
+    MarkInterface* iface = dynamic_cast<KTextEditor::MarkInterface*>( document );
+
+    if (iface)
     {
-        MarkInterface* iface = dynamic_cast<KTextEditor::MarkInterface*>( doc );
+        KTextEditor::Mark *m;
+        QList<BPItem> oldBPList = BPList;
+        QHashIterator<int, KTextEditor::Mark*> newMarks = iface->marks();
 
-        if (iface)
+        // Compare the oldBPlist to the new list from the editor.
+        //
+        // If we don't have some of the old breakpoints in the new list
+        // then they have been moved by the user adding or removing source
+        // code. Remove these old breakpoints
+        //
+        // If we _can_ find these old breakpoints in the newlist then
+        // nothing has happened to them. We can just ignore these and to
+        // do that we must remove them from the new list.
+
+        bool bpchanged = false;
+
+        for (int i = 0; i < oldBPList.count(); i++)
         {
-            KTextEditor::Mark *m;
-            QList<BPItem> oldBPList = BPList;
-            QHashIterator<int, KTextEditor::Mark*> newMarks = iface->marks();
+            if (oldBPList[i].fileName() != document->url().path())
+                continue;
 
-            // Compare the oldBPlist to the new list from the editor.
-            //
-            // If we don't have some of the old breakpoints in the new list
-            // then they have been moved by the user adding or removing source
-            // code. Remove these old breakpoints
-            //
-            // If we _can_ find these old breakpoints in the newlist then
-            // nothing has happened to them. We can just ignore these and to
-            // do that we must remove them from the new list.
+            bool found=false;
 
-            bool bpchanged = false;
-
-            for (int i = 0; i < oldBPList.count(); i++)
-            {
-                if (oldBPList[i].fileName() != doc->url().path())
-                    continue;
-
-                bool found=false;
-
-                newMarks.toFront();
-                while (newMarks.hasNext())
-                {
-                    m = newMarks.next().value();
-                    if ((m->type & Breakpoint) &&
-                            m->line == oldBPList[i].lineNum() &&
-                            doc->url().path() == oldBPList[i].fileName())
-                    {
-                        found=true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    emit toggledBreakpoint( doc->url().path(), oldBPList[i].lineNum() );
-                    bpchanged = true;
-                }
-            }
-
-            // Any breakpoints left in the new list are the _new_ position of
-            // the moved breakpoints. So add these as new breakpoints via
-            // toggling them.
             newMarks.toFront();
             while (newMarks.hasNext())
             {
                 m = newMarks.next().value();
-                if (m->type & Breakpoint)
+                if ((m->type & Breakpoint) &&
+                        m->line == oldBPList[i].lineNum() &&
+                        document->url().path() == oldBPList[i].fileName())
                 {
-                    emit toggledBreakpoint( doc->url().path(), m->line );
-                    bpchanged = true;
+                    found=true;
+                    break;
                 }
             }
 
-            if ( bpchanged && KDevelop::ICore::self()->documentController()->activeDocument() && KDevelop::ICore::self()->documentController()->activeDocument()->textDocument() == doc )
+            if (!found)
             {
-                //bring focus back to the editor
-                // TODO probably want a different command here
-                KDevelop::ICore::self()->documentController()->activateDocument(KDevelop::ICore::self()->documentController()->activeDocument());
+                emit toggledBreakpoint( document->url().path(), oldBPList[i].lineNum() );
+                bpchanged = true;
             }
+        }
+
+        // Any breakpoints left in the new list are the _new_ position of
+        // the moved breakpoints. So add these as new breakpoints via
+        // toggling them.
+        newMarks.toFront();
+        while (newMarks.hasNext())
+        {
+            m = newMarks.next().value();
+            if (m->type & Breakpoint)
+            {
+                emit toggledBreakpoint( document->url().path(), m->line );
+                bpchanged = true;
+            }
+        }
+
+        if ( bpchanged && KDevelop::ICore::self()->documentController()->activeDocument() && KDevelop::ICore::self()->documentController()->activeDocument()->textDocument() == document )
+        {
+            //bring focus back to the editor
+            // TODO probably want a different command here
+            KDevelop::ICore::self()->documentController()->activateDocument(KDevelop::ICore::self()->documentController()->activeDocument());
         }
     }
 }
@@ -192,7 +189,7 @@ void BreakpointController::documentLoaded(KDevelop::IDocument* document)
     iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPoint, *executionPointPixmap());
     iface->setEditableMarks( Bookmark | Breakpoint );
 
-    connect( document->textDocument(), SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
+    connect( document->textDocument(), SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)), this, SLOT(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)) );
 }
 
 const QPixmap* BreakpointController::inactiveBreakpointPixmap()

@@ -18,10 +18,12 @@
 #ifndef _GDBGLOBAL_H_
 #define _GDBGLOBAL_H_
 
+#include <QFlags>
+
 namespace GDBDebugger
 {
 
-enum DBGStateFlags
+enum DBGStateFlag
 {
   s_dbgNotStarted     = 1,
   s_appNotStarted     = 2,
@@ -40,6 +42,10 @@ enum DBGStateFlags
   s_lastDbgState      = (s_appRunning << 1)
 
 };
+
+Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag);
+Q_DECLARE_OPERATORS_FOR_FLAGS(DBGStateFlags)
+
 
 }
 
