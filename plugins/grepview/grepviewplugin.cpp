@@ -434,7 +434,7 @@ void GrepViewPlugin::procFinished( int id )
 {
     if( models.contains( id ) )
     {
-        lineMakers[id]->flush();
+        lineMakers[id]->flushBuffers();
         models[id]->slotCompleted();
     }
 }
@@ -443,7 +443,7 @@ void GrepViewPlugin::procFailed( int id )
 {
     if( models.contains( id ) )
     {
-        lineMakers[id]->flush();
+        lineMakers[id]->flushBuffers();
         models[id]->slotCompleted();
         foreach(KProcess* proc, processes[id])
         {
