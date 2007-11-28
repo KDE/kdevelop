@@ -851,7 +851,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
             p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
-        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+        if( resultLine+widgetLines < 1 || resultLine+widgetLines > view->document()->lines() ||
+            view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
           resultLine = -1; //Make sure the lower end of the widget is visible too
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline - 2 - widgetLines, widgetLines) ) {
@@ -860,7 +861,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
             p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
         
-        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+        if( resultLine+widgetLines < 1 || resultLine+widgetLines > view->document()->lines() ||
+            view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
           resultLine = -1; //Make sure the lower end of the widget is visible too
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline + 5, widgetLines) ) {
@@ -869,7 +871,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
             p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
-        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+        if( resultLine+widgetLines < 1 || resultLine+widgetLines > view->document()->lines() ||
+            view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
           resultLine = -1; //Make sure the lower end of the widget is visible too
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline + 2, widgetLines) ) {
@@ -886,7 +889,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
             p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
-        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+        if( resultLine+widgetLines < 1 || resultLine+widgetLines > view->document()->lines() ||
+            view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
           resultLine = -1; //Make sure the lower end of the widget is visible too
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline + 2, widgetLines) ) {
@@ -895,7 +899,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
             p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
-        if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
+        if( resultLine+widgetLines < 1 || resultLine+widgetLines > view->document()->lines() ||
+          view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
           resultLine = -1; //Make sure the lower end of the widget is visible too
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline + 2, widgetLines) ) {
