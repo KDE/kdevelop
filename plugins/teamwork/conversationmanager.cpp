@@ -276,12 +276,11 @@ void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
       disconnect( d, SIGNAL(destroyed( QObject* )), this, SLOT(rangeDeleted()) );
       connect( d, SIGNAL(destroyed( QObject* )), this, SLOT(rangeDeleted()) );
 
-      if( m_currentRange )
-        delete m_currentRange;
-
       QMutexLocker lock(smart->smartMutex());
+      
       if(m_currentRange)
         delete m_currentRange;
+      
       m_currentRange = smart->newSmartRange(d->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
       KTextEditor::SmartRange* highlightRange = smart->newSmartRange( c, endC, m_currentRange );
       KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
@@ -842,12 +841,14 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
         int resultLine = -1;
         if( !isCovered(cline, cline, sline+1, widgetLines) ) {
           resultLine = sline+1;
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline - 5 - widgetLines, widgetLines) ) {
           resultLine = cline - 5 - widgetLines; //Above cursor
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
         if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
@@ -855,7 +856,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline - 2 - widgetLines, widgetLines) ) {
           resultLine = sline - 5 - widgetLines; //Above target-position
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
         
         if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
@@ -863,7 +865,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline + 5, widgetLines) ) {
           resultLine = cline + 5; //Below cursor
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
         if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
@@ -871,14 +874,16 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline + 2, widgetLines) ) {
           resultLine = sline + 5; //Below target-position
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
       
 
         ///Try exactly the same positions as above, using less distance
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline - 2 - widgetLines, widgetLines) ) {
           resultLine = cline - 2 - widgetLines; //Above cursor
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
         if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
@@ -886,7 +891,8 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, cline + 2, widgetLines) ) {
           resultLine = cline + 2; //Below cursor
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
         if( view->cursorToCoordinate( KTextEditor::Cursor( resultLine+widgetLines, 0 ) ) == QPoint( -1, -1 ) )
@@ -894,25 +900,27 @@ void InDocumentConversation::placeWidget( KTextEditor::View* view, const KTextEd
         
         if( (p == QPoint( -1, -1 ) || resultLine == -1) && !isCovered(cline, sline, sline + 2, widgetLines) ) {
           resultLine = sline + 2; //Below target-position
-          p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
+          if(resultLine >= 1 && resultLine < view->document()->lines())
+            p = view->cursorToCoordinate( KTextEditor::Cursor( resultLine, 0 ) );
         }
 
       }
-    }
-
-    if( p == QPoint( -1, -1 ) ) {
-      if( !forceShow ) {
-          err() << "could not determine a good position to show the widget";
-        p.setX( 50 );
-      } else {
-        p.setX( 50 );
-        p.setY( 50 );
+      
+      if( p == QPoint( -1, -1 ) ) {
+        if( !forceShow ) {
+            err() << "could not determine a good position to show the widget";
+          p.setX( 50 );
+        } else {
+          p.setX( 50 );
+          p.setY( 50 );
+        }
       }
+
+      //manager()->log( QString("smartcursor coordinates: %1 %2").arg( p.x() ).arg( p.y() ), Debug );
+      m_widget->move( p );
+      m_widget->show();
     }
 
-    //manager()->log( QString("smartcursor coordinates: %1 %2").arg( p.x() ).arg( p.y() ), Debug );
-    m_widget->move( p );
-    m_widget->show();
   } catch ( const char * str ) {
     err() << "placeWidget:" << str;
   }
@@ -1165,6 +1173,7 @@ void InDocumentConversation::setActive( bool active ) {
 
     if(m_currentRange)
       delete m_currentRange;
+    m_currentRange = 0;
   }
 }
 
