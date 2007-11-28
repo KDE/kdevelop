@@ -217,7 +217,7 @@ controller_(controller)
                       "to the source in the editor window."));
     setWindowIcon( KIcon("process-stop") );
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
 
     m_table = new GDBTable(0, numCols, this);
     m_table->setSelectionMode(Q3Table::SingleRow);
@@ -243,8 +243,6 @@ controller_(controller)
     header->setLabel( IgnoreCount,  i18n("Ignore Count") );
     header->setLabel( Hits,         i18n("Hits") );
     header->setLabel( Tracing,      i18n("Tracing") );
-
-    layout->addWidget(header);
 
     Q3PopupMenu* newBreakpoint = new Q3PopupMenu(this);
     newBreakpoint->insertItem(i18nc("Code breakpoint", "Code"),
@@ -329,6 +327,7 @@ controller_(controller)
              this, SLOT(slotEditBreakpoint(const QString &, int)) );
     connect( plugin->breakpoints(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              this, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
+    connect(plugin, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), this, SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
 }
 
 /***************************************************************************/
@@ -1302,7 +1301,11 @@ void ComplexEditCell::slotEdit()
     emit edit(this);
 }
 
+void GDBBreakpointWidget::slotToggleBreakpoint(const KUrl & url, const KTextEditor::Cursor & cursor)
+{
+  slotToggleBreakpoint(url.path(), cursor.line());
 }
 
+}
 
 #include "gdbbreakpointwidget.moc"

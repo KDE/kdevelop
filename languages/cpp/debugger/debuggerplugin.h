@@ -27,6 +27,8 @@
 #include <irunprovider.h>
 #include <istatus.h>
 
+#include <KTextEditor/Cursor>
+
 class QLabel;
 class QMenu;
 class KDialog;
@@ -98,6 +100,8 @@ Q_SIGNALS:
     void reset();
 
     void addMemoryView();
+
+    void toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor);
 
 //k_dcop:
 //    virtual ASYNC slotDebugExternalProcess();

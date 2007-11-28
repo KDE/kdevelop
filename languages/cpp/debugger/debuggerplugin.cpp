@@ -547,8 +547,7 @@ void CppDebuggerPlugin::toggleBreakpoint()
       if (!cursor.isValid())
         return;
 
-      // PORTING TODO
-      //emit toggleBreakpoint(document->url().path(), cursor.line());
+      emit toggleBreakpoint(document->url(), cursor);
     }
 }
 

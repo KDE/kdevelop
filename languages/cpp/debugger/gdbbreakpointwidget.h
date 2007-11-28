@@ -25,13 +25,14 @@
 #include <QFocusEvent>
 #include <kvbox.h>
 
+#include <KTextEditor/Cursor>
+
 #include "mi/gdbmi.h"
 #include "gdbcontroller.h"
 
 class QDomElement;
 class QToolButton;
 class QLabel;
-class KUrl;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -68,6 +69,7 @@ public Q_SLOTS:
     void reset();
 
     // Connected to from the editor widget:
+    void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
     void slotToggleBreakpoint(const QString &filename, int lineNum);
     void slotToggleBreakpointEnabled(const QString &fileName, int lineNum);
 
