@@ -223,12 +223,13 @@ public Q_SLOTS:
 
     void slotRun();
     void slotKill();
+    void slotRestart();
     void slotRunUntil(const QString &filename, int lineNum);
     void slotJumpTo(const QString &filename, int lineNum);
     void slotStepInto();
     void slotStepOver();
-    void slotStepIntoIns();
-    void slotStepOverIns();
+    void slotStepIntoInstruction();
+    void slotStepOverInstruction();
     void slotStepOutOff();
 
     void slotBreakInto();

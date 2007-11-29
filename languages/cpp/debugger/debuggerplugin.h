@@ -119,25 +119,11 @@ private Q_SLOTS:
     //void projectConfigWidget(KDialog *dlg);
 
     void slotRun();
-    // Called to finish run operation in the case when we're
-    // starting the debugger. Called either directly from
-    // slotRun, if no rebuilding of project is needed, or
-    // indirectly from project()->projectCompiled() after project
-    // is rebuilt.
-    void slotRun_part2();
-    void slotRestart();
     void slotExamineCore();
     void slotAttachProcess();
     void slotStopDebugger();
-    void slotPause();
     void slotRunToCursor();
     void slotJumpToCursor();
-    void slotStepOver();
-    void slotStepOverInstruction();
-    void slotStepIntoInstruction();
-    void slotStepInto();
-    void slotStepOut();
-    void slotMemoryView();
 
     void slotRefreshBPState(const Breakpoint&);
 

@@ -300,7 +300,7 @@ void CppDebuggerPlugin::setupActions()
                                "Restarts applications from the beginning."
                               ) );
     action->setEnabled(false);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotRestart()));
+    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotRestart()), Qt::QueuedConnection);
     ac->addAction("debug_restart", action);
 
 
@@ -313,7 +313,7 @@ void CppDebuggerPlugin::setupActions()
     m_interruptDebugger = action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
     action->setToolTip( i18n("Interrupt application") );
     action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current GDB command."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotPause()));
+    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotBreakInto()), Qt::QueuedConnection);
     ac->addAction("debug_pause", action);
 
     m_runToCursor = action = new KAction(KIcon("dbgrunto"), i18n("Run to &Cursor"), this);
@@ -329,7 +329,6 @@ void CppDebuggerPlugin::setupActions()
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotJumpToCursor()));
     ac->addAction("debug_jumptocursor", action);
 
-
     m_stepOver = action = new KAction(KIcon("dbgnext"), i18n("Step &Over"), this);
     action->setShortcut(Qt::Key_F10);
     action->setToolTip( i18n("Step over the next line") );
@@ -338,14 +337,14 @@ void CppDebuggerPlugin::setupActions()
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStepOver()));
+    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepOver()), Qt::QueuedConnection);
     ac->addAction("debug_stepover", action);
 
 
     m_stepOverInstruction = action = new KAction(KIcon("dbgnextinst"), i18n("Step over Ins&truction"), this);
     action->setToolTip( i18n("Step over instruction") );
     action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStepOverInstruction()));
+    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepOverInstruction()), Qt::QueuedConnection);
     ac->addAction("debug_stepoverinst", action);
 
 
@@ -356,14 +355,14 @@ void CppDebuggerPlugin::setupActions()
                                "Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
                                "the function has been entered.") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStepInto()));
+    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepInto()), Qt::QueuedConnection);
     ac->addAction("debug_stepinto", action);
 
 
     m_stepIntoInstruction = action = new KAction(KIcon("dbgstepinst"), i18n("Step into I&nstruction"), this);
     action->setToolTip( i18n("Step into instruction") );
     action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStepIntoInstruction()));
+    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepIntoInstruction()), Qt::QueuedConnection);
     ac->addAction("debug_stepintoinst", action);
 
 
@@ -376,7 +375,7 @@ void CppDebuggerPlugin::setupActions()
                                "the line after the original call to that function. If "
                                "program execution is in the outermost frame (i.e. in "
                                "main()) then this operation has no effect.") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStepOut()));
+    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepOut()), Qt::QueuedConnection);
     ac->addAction("debug_stepout", action);
 
 
@@ -387,7 +386,7 @@ void CppDebuggerPlugin::setupActions()
         "<b>Disassemble</b><br>"
         "<b>Registers</b><br>"
         "<b>Libraries</b>"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotMemoryView()));
+    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(addMemoryView()));
     ac->addAction("debug_memview", action);
 
 
@@ -632,12 +631,9 @@ bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, int serial)
 
         stateChanged( QString("active") );
 
-        KActionCollection *ac = actionCollection();
-        ac->action("debug_run")->setText( i18n("&Continue") );
-
-        ac->action("debug_run")->setToolTip(
-            i18n("Continues the application execution") );
-        ac->action("debug_run")->setWhatsThis(
+        m_startDebugger->setText( i18n("&Continue") );
+        m_startDebugger->setToolTip( i18n("Continues the application execution") );
+        m_startDebugger->setWhatsThis(
             i18n("Continue application execution\n\n"
                  "Continues the execution of your application in the "
                  "debugger. This only takes effect when the application "
@@ -689,10 +685,10 @@ void CppDebuggerPlugin::slotStopDebugger()
 //     mainWindow()->setViewAvailable(gdbOutputWidget, false);
 
     KActionCollection *ac = actionCollection();
-    ac->action("debug_run")->setText( i18n("&Start") );
+    m_startDebugger->setText( i18n("&Start") );
 //    ac->action("debug_run")->setIcon( "arrow-right" );
-    ac->action("debug_run")->setToolTip( i18n("Runs the program in the debugger") );
-    ac->action("debug_run")->setWhatsThis( i18n("Start in debugger\n\n"
+    m_startDebugger->setToolTip( i18n("Runs the program in the debugger") );
+    m_startDebugger->setWhatsThis( i18n("Start in debugger\n\n"
                                            "Starts the debugger with the project's main "
                                            "executable. You may set some breakpoints "
                                            "before this, or you can interrupt the program "
@@ -750,65 +746,43 @@ void CppDebuggerPlugin::slotRun()
             slotStopDebugger();
         }
 
-        slotRun_part2();
+        if (controller->stateIsOn( s_dbgNotStarted ))
+        {
+            emit showMessage(i18n("Debugging program"), 1000);
+            if ( config().readEntry("Raise GDB On Start", false ) )
+            {
+                emit raiseOutputViews();
+            }
+            else
+            {
+                emit raiseFramestackViews();
+            }
+
+            emit clearViews();
+
+            startDebugger();
+        }
+        else if (controller->stateIsOn( s_appNotStarted ) )
+        {
+            KActionCollection *ac = actionCollection();
+            ac->action("debug_run")->setText( i18n("&Continue") );
+            ac->action("debug_run")->setToolTip( i18n("Continues the application execution") );
+            ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
+                "Continues the execution of your application in the "
+                "debugger. This only takes effect when the application "
+                "has been halted by the debugger (i.e. a breakpoint has "
+                "been activated or the interrupt was pressed).") );
+
+            emit showMessage(i18n("Running program"), 1000);
+
+            emit clearViews();
+        }
+
+        controller->slotRun();
         return;
     }
 
     controller->slotRun();
-}
-
-void CppDebuggerPlugin::slotRun_part2()
-{
-    if (controller->stateIsOn( s_dbgNotStarted ))
-    {
-        emit showMessage(i18n("Debugging program"), 1000);
-        if ( config().readEntry("Raise GDB On Start", false ) )
-        {
-            emit raiseOutputViews();
-        }
-        else
-        {
-            emit raiseFramestackViews();
-        }
-
-        emit clearViews();
-
-        startDebugger();
-    }
-    else if (controller->stateIsOn( s_appNotStarted ) )
-    {
-        KActionCollection *ac = actionCollection();
-        ac->action("debug_run")->setText( i18n("&Continue") );
-        ac->action("debug_run")->setToolTip( i18n("Continues the application execution") );
-        ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
-            "Continues the execution of your application in the "
-            "debugger. This only takes effect when the application "
-            "has been halted by the debugger (i.e. a breakpoint has "
-            "been activated or the interrupt was pressed).") );
-
-        emit showMessage(i18n("Running program"), 1000);
-
-        emit clearViews();
-    }
-
-    controller->slotRun();
-}
-
-
-void CppDebuggerPlugin::slotRestart()
-{
-    // We implement restart as kill + slotRun, as opposed as plain "run"
-    // command because kill + slotRun allows any special logic in slotRun
-    // to apply for restart.
-    //
-    // That includes:
-    // - checking for out-of-date project
-    // - special setup for remote debugging.
-    //
-    // Had we used plain 'run' command, restart for remote debugging simply
-    // would not work.
-    controller->slotKill();
-    slotRun();
 }
 
 void CppDebuggerPlugin::slotExamineCore()
@@ -847,12 +821,6 @@ void CppDebuggerPlugin::attachProcess(int pid)
 }
 
 
-void CppDebuggerPlugin::slotPause()
-{
-    controller->slotBreakInto();
-}
-
-
 void CppDebuggerPlugin::slotRunToCursor()
 {
     if (KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument()) {
@@ -869,41 +837,6 @@ void CppDebuggerPlugin::slotJumpToCursor()
         if (cursor.isValid())
             controller->slotJumpTo(doc->url().path(), cursor.line() + 1);
     }
-}
-
-void CppDebuggerPlugin::slotStepOver()
-{
-    controller->slotStepOver();
-}
-
-
-void CppDebuggerPlugin::slotStepOverInstruction()
-{
-    controller->slotStepOverIns();
-}
-
-
-void CppDebuggerPlugin::slotStepIntoInstruction()
-{
-    controller->slotStepIntoIns();
-}
-
-
-void CppDebuggerPlugin::slotStepInto()
-{
-    controller->slotStepInto();
-}
-
-
-void CppDebuggerPlugin::slotStepOut()
-{
-    controller->slotStepOutOff();
-}
-
-
-void CppDebuggerPlugin::slotMemoryView()
-{
-    emit addMemoryView();
 }
 
 void CppDebuggerPlugin::slotRefreshBPState( const Breakpoint& BP)

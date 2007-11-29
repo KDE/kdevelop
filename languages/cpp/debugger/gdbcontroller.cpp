@@ -1215,7 +1215,7 @@ void GDBController::slotStepInto()
 
 // **************************************************************************
 
-void GDBController::slotStepIntoIns()
+void GDBController::slotStepIntoInstruction()
 {
     if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
         return;
@@ -1239,7 +1239,7 @@ void GDBController::slotStepOver()
 
 // **************************************************************************
 
-void GDBController::slotStepOverIns()
+void GDBController::slotStepOverInstruction()
 {
     if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
         return;
@@ -1811,6 +1811,22 @@ void GDBController::demandAttention() const
     {
         KWindowSystem::demandAttention( w->winId(), true );
     }
+}
+
+void GDBController::slotRestart()
+{
+    // We implement restart as kill + slotRun, as opposed as plain "run"
+    // command because kill + slotRun allows any special logic in slotRun
+    // to apply for restart.
+    //
+    // That includes:
+    // - checking for out-of-date project
+    // - special setup for remote debugging.
+    //
+    // Had we used plain 'run' command, restart for remote debugging simply
+    // would not work.
+    slotKill();
+    slotRun();
 }
 
 }
