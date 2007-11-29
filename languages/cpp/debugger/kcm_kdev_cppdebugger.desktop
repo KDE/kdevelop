@@ -12,4 +12,14 @@ X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Debugger Settings
+Name[es]=Preferencias del depurador
+Name[ga]=Socruithe an Dífhabhtóra
+Name[pt]=Configuração do Depurador
+Name[pt_BR]=Configuração do Depurador
+Name[sv]=Avlusningsinställningar
 Comment=Configure GDB settings
+Comment[es]=Configurar las preferencias de GDB
+Comment[ga]=Cumraigh socruithe GDB
+Comment[pt]=Configurar as opções do GDB
+Comment[pt_BR]=Configurar as opções do GDB
+Comment[sv]=Anpassa inställningar för GDB
