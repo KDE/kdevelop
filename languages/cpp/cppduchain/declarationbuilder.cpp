@@ -614,6 +614,24 @@ void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 
   DeclarationBuilderBase::visitEnumSpecifier(node);
 
+  if(node->name && currentDeclaration()) {
+    //Resolve forward-declarations of the enum
+    DUChainWriteLocker lock(DUChain::lock());
+
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+
+    //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
+    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
+
+    foreach( Declaration* decl, declarations ) {
+      ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
+      if( forward ) {
+        forward->setResolved(currentDeclaration());
+        forward->setAbstractType(currentDeclaration()->abstractType());
+      }
+    }
+  }
+            
   closeDeclaration();
 }
 
@@ -629,6 +647,9 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
+  bool m_wasInTypedef = m_inTypedef;
+  m_inTypedef = false;
+  
   openDefinition(node->name, node);
 
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
@@ -723,8 +744,8 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
                 kDebug(9007) << "Bad types involved in formward-declaration";
               }
             }
-          }
-        }//templateForward && currentTemplate
+          }//templateForward && currentTemplate
+        }
       }
     }//foreach
 
@@ -735,6 +756,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   closeDeclaration();
 
   m_accessPolicyStack.pop();
+  m_inTypedef = m_wasInTypedef;
 }
 
 QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position)
@@ -865,6 +887,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
       case Token_class:
       case Token_struct:
       case Token_union:
+      case Token_enum:
       
         if(forwardDeclarationGlobal) {
           //Open the global context, so it is currentContext() and we can insert the forward-declaration there
@@ -886,8 +909,6 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
           closeContext();
 
         openedDeclaration = true;
-        break;
-      case Token_enum:
         break;
     }
   }
