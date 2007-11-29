@@ -55,7 +55,7 @@
 #include "envvartools.h"
 #include "urlutil.h"
 
-#include "addfilesdialog.h"
+#include "selectnewfilesdialog.h"
 
 #include <kdevplugininfo.h>
 
@@ -1555,7 +1555,7 @@ void CustomProjectPart::addNewFilesToProject( const QStringList& filelist )
     if( addfiles.isEmpty() )
         return;
 
-    AddFilesDialog *dlg = new AddFilesDialog( addfiles, mainWindow()->main() );
+    SelectNewFilesDialog *dlg = new SelectNewFilesDialog( addfiles, mainWindow()->main() );
     if( dlg->exec() == KDialog::Accepted )
     {
         m_first_recursive = false;

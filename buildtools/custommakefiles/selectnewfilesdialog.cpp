@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 
-#include "addfilesdialog.h"
+#include "selectnewfilesdialog.h"
 
 #include <qlistview.h>
 #include <klistview.h>
@@ -18,12 +18,12 @@
 #include <qstringlist.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include "addfilesdialogbase.h"
+#include "selectnewfilesdialogbase.h"
 
-AddFilesDialog::AddFilesDialog( QStringList paths, QWidget* parent, const char* name )
+SelectNewFilesDialog::SelectNewFilesDialog( QStringList paths, QWidget* parent, const char* name )
         : KDialogBase( parent, name, true, i18n("Add newly created files to project"), KDialogBase::Ok|KDialogBase::Cancel )
 {
-    m_widget = new AddFilesDialogBase(this);
+    m_widget = new SelectNewFilesDialogBase(this);
     m_widget->fileView->header()->hide();
     m_widget->fileView->addColumn(i18n("Path") );
     for( QStringList::const_iterator it = paths.begin(); it != paths.end(); ++it)
@@ -34,17 +34,17 @@ AddFilesDialog::AddFilesDialog( QStringList paths, QWidget* parent, const char* 
     resize( 300,400 );
 }
 
-AddFilesDialog::~AddFilesDialog()
+SelectNewFilesDialog::~SelectNewFilesDialog()
 {}
 
-void AddFilesDialog::slotCancel()
+void SelectNewFilesDialog::slotCancel()
 {
     excludePaths.clear();
     includePaths.clear();
     KDialogBase::slotCancel();
 }
 
-void AddFilesDialog::checkItem( QCheckListItem* item, const QString& curpath )
+void SelectNewFilesDialog::checkItem( QCheckListItem* item, const QString& curpath )
 {
     if( !item )
         return;
@@ -64,7 +64,7 @@ void AddFilesDialog::checkItem( QCheckListItem* item, const QString& curpath )
     }
 }
 
-void AddFilesDialog::slotOk()
+void SelectNewFilesDialog::slotOk()
 {
     QCheckListItem* item = static_cast<QCheckListItem*> (m_widget->fileView->firstChild());
     checkItem( item, "" );
@@ -73,7 +73,7 @@ void AddFilesDialog::slotOk()
     KDialogBase::slotOk();
 }
 
-void AddFilesDialog::addPath( QCheckListItem* item, const QString& path )
+void SelectNewFilesDialog::addPath( QCheckListItem* item, const QString& path )
 {
     if( path.isEmpty() )
         return;
@@ -87,7 +87,7 @@ void AddFilesDialog::addPath( QCheckListItem* item, const QString& path )
     addPath(i, parts.join("/") );
 }
 
-QCheckListItem* AddFilesDialog::createItem( QCheckListItem* parent, const QString& name, int count )
+QCheckListItem* SelectNewFilesDialog::createItem( QCheckListItem* parent, const QString& name, int count )
 {
     QCheckListItem::Type t = QCheckListItem::CheckBox;
     if( count > 0 )
@@ -116,16 +116,16 @@ QCheckListItem* AddFilesDialog::createItem( QCheckListItem* parent, const QStrin
     }
 }
 
-QStringList AddFilesDialog::excludedPaths() const
+QStringList SelectNewFilesDialog::excludedPaths() const
 {
     return excludePaths;
 }
 
-QStringList AddFilesDialog::includedPaths() const
+QStringList SelectNewFilesDialog::includedPaths() const
 {
     return includePaths;
 }
 
-#include "addfilesdialog.moc"
+#include "selectnewfilesdialog.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

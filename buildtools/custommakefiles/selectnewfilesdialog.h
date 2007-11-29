@@ -9,22 +9,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ADDFILESDIALOG_H
-#define ADDFILESDIALOG_H
+#ifndef SELECTNEWFILESDIALOG_H
+#define SELECTNEWFILESDIALOG_H
 
 #include "kdialogbase.h"
 
 class QCheckListItem;
 class QStringList;
-class AddFilesDialogBase;
+class SelectNewFilesDialogBase;
 
-class AddFilesDialog : public KDialogBase
+class SelectNewFilesDialog : public KDialogBase
 {
 Q_OBJECT
 
 public:
-    AddFilesDialog( QStringList paths, QWidget* parent = 0, const char* name = 0 );
-    ~AddFilesDialog();
+    SelectNewFilesDialog( QStringList paths, QWidget* parent = 0, const char* name = 0 );
+    ~SelectNewFilesDialog();
 
     QStringList excludedPaths() const;
     QStringList includedPaths() const;
@@ -43,7 +43,7 @@ private:
     void addPath( QCheckListItem* , const QString& );
     void checkItem( QCheckListItem* item, const QString& curpath );
     QCheckListItem* createItem( QCheckListItem*, const QString&, int );
-    AddFilesDialogBase* m_widget;
+    SelectNewFilesDialogBase* m_widget;
     QStringList excludePaths;
     QStringList includePaths;
 };
