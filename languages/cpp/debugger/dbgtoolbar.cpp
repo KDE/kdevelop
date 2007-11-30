@@ -203,7 +203,14 @@ QSize DbgButton::sizeHint() const
     if (text().isEmpty())
         return pixmap_.size();
     else
-        return QPushButton::sizeHint();
+    {
+        QSize ps = pixmap_.size();
+        QSize bs = QPushButton::sizeHint();
+        QSize result;
+        result.setWidth( ps.width() + bs.width()+10 );
+        result.setHeight( ps.height() > bs.height() ? ps.height() : bs.height() );
+        return result;
+    }
 }
 
 // **************************************************************************
