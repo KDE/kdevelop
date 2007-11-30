@@ -13,13 +13,17 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Debugger Settings
 Name[es]=Preferencias del depurador
+Name[fr]=Configuration du débogueur
 Name[ga]=Socruithe an Dífhabhtóra
+Name[pl]=Ustawienia debuggera
 Name[pt]=Configuração do Depurador
 Name[pt_BR]=Configuração do Depurador
 Name[sv]=Avlusningsinställningar
 Comment=Configure GDB settings
 Comment[es]=Configurar las preferencias de GDB
+Comment[fr]=Paramétrer la configuration de GDB
 Comment[ga]=Cumraigh socruithe GDB
+Comment[pl]=Konfiguruj ustawienia GDB
 Comment[pt]=Configurar as opções do GDB
 Comment[pt_BR]=Configurar as opções do GDB
 Comment[sv]=Anpassa inställningar för GDB
