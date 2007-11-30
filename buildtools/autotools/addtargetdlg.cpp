@@ -164,7 +164,7 @@ void AddTargetDialog::accept()
 
 #endif
 
-	if( primary.endsWith("LIBRARIES") && !name.startsWith("lib") )
+	if( primary.endsWith("LIBRARIES") && !name.startsWith("lib") && !module_box->isChecked() )
 	    name.prepend( QString::fromLatin1("lib") );
 
 	if( primary == "LTLIBRARIES" && !name.endsWith(".la") )
