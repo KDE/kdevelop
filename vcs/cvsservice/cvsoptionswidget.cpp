@@ -58,13 +58,13 @@ void CvsOptionsWidget::storeConfig()
 {
     CvsOptions *options = CvsOptions::instance();
 
-    options->setCvsRshEnvVar( this->cvsRshEnvVar() );
-    options->setLocation( this->serverLocation() );
+    options->setCvsRshEnvVar( this->cvsRshEnvVar().stripWhiteSpace() );
+    options->setLocation( this->serverLocation().stripWhiteSpace() );
     options->setPruneEmptyDirsWhenUpdate( this->pruneEmptyDirWhenUpdating() );
     options->setCreateDirsWhenUpdate( this->createNewDirWhenUpdating() );
     options->setRecursiveWhenUpdate( this->recursiveWhenUpdating() );
     options->setRecursiveWhenCommitRemove( this->recursiveWhenCommittingRemoving() );
-    options->setDiffOptions( this->diffOptions() );
+    options->setDiffOptions( this->diffOptions().stripWhiteSpace() );
     options->setContextLines( this->contextLines() );
 }
 
