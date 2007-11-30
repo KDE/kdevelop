@@ -73,6 +73,8 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
 
     if( initialItems.isEmpty() || initialItems.contains( type ) )
       check->setCheckState( Qt::Checked );
+    else
+      check->setCheckState( Qt::Unchecked );
   
     connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
   }
@@ -89,6 +91,8 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
     
     if( initialScopes.isEmpty() || initialScopes.contains( scope ) )
       check->setCheckState( Qt::Checked );
+    else
+      check->setCheckState( Qt::Unchecked );
   
     connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
   }
@@ -353,14 +357,14 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   d->setAttribute( Qt::WA_DeleteOnClose, true );
 
   QStringList initialItems;
-  if( modes & All ) {
-  } else if( modes & Files ) {
+  if( modes & Files )
     initialItems << i18n("Files");
-  } else if( modes & Functions ) {
+
+  if( modes & Functions )
     initialItems << i18n("Functions");
-  } else if( modes & Classes ) {
+
+  if( modes & Classes )
     initialItems << i18n("Classes");
-  }
   
   new QuickOpenWidgetHandler( d, m_model, initialItems, QStringList() );
 }

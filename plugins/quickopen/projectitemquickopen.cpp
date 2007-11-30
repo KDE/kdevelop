@@ -57,8 +57,15 @@ QString DUChainItemData::htmlDescription() const {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   if(!m_item.m_item)
     return i18n("Not available any more");
+
+  QString text;
+  KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+  if( function )
+    text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+  else
+    text = m_item.m_item->toString();
   
-  return "<small><small>" + i18n("Project") + " " + m_item.m_project + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
+  return "<small><small>" + text + ", " + i18n("Project") + " " + m_item.m_project + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
 }
 
 bool DUChainItemData::execute( QString& filterText ) {
@@ -104,7 +111,10 @@ void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* d
       || ((itemTypes & DUChainItemDataProvider::Functions) && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
     DUChainItem f;
     f.m_project = project;
-    f.m_text = decl->toString();
+        //KSharedPtr<FunctionType> function = decl->type<FunctionType>();
+        //if( function )
+      //f.m_text = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn )).arg(decl->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments )
+    f.m_text = decl->qualifiedIdentifier().toString();
     f.m_item = DeclarationPointer(decl);
     items << f;
   }
