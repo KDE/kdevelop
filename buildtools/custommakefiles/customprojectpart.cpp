@@ -1006,14 +1006,14 @@ void CustomProjectPart::slotExecute()
     partController()->saveAllFiles();
 
     bool _auto = false;
-    if ( DomUtil::readBoolEntry( *projectDom(), "/kdevcustomproject/run/autocompile", true ) && isDirty() )
+    if ( DomUtil::readBoolEntry( *projectDom(), "/kdevcustomproject/run/autocompile", true ) && ( isDirty() || !QFileInfo( mainProgram() ).exists() ) )
     {
         m_executeAfterBuild = true;
         slotBuild();
         _auto = true;
     }
 
-    if ( DomUtil::readBoolEntry( *projectDom(), "/kdevcustomproject/run/autoinstall", false ) && isDirty() )
+    if ( DomUtil::readBoolEntry( *projectDom(), "/kdevcustomproject/run/autoinstall", false ) && ( isDirty() || !QFileInfo( mainProgram() ).exists() ) )
     {
         m_executeAfterBuild = true;
         // Use kdesu??
