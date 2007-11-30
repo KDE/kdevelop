@@ -708,7 +708,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
 /** Adds the make command for the libraries that the target depends on
   * to the make frontend queue (this is a recursive function) */
-void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
+bool AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem, QStringList& alreadyScheduledDeps)
 {
 
     QString addstr = (titem->primary == "PROGRAMS")? titem->ldadd : titem->libadd;
@@ -722,52 +722,75 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
         QString dependency = *l2it;
         if (dependency.startsWith("$(top_builddir)/"))
         {
-            // These are the internal libraries
-            dependency.remove("$(top_builddir)/");
+                alreadyScheduledDeps << *l2it;
+                // These are the internal libraries
+                dependency.remove("$(top_builddir)/");
 
-            tdir = buildDirectory();
-            if (!tdir.endsWith("/") && !tdir.isEmpty())
-                tdir += "/";
-            int pos = dependency.findRev('/');
-            if (pos == -1)
+            if( !alreadyScheduledDeps.contains(*l2it) )
             {
-                tname = dependency;
-            }
-            else
-            {
-                tdir += dependency.left(pos+1);
-                tname = dependency.mid(pos+1);
-            }
-            kdDebug(9020) << "Scheduling : <" << tdir << ">  target <" << tname << ">" << endl;
-
-            // Recursively queue the dependencies for building
-            SubprojectItem *spi = m_widget->subprojectItemForPath( dependency.left(pos) );
-            if (spi)
-            {
-                QPtrList< TargetItem > tl = spi->targets;
-                // Cycle through the list of targets to find the one we're looking for
-                TargetItem *ti = tl.first();
-                do
+                tdir = buildDirectory();
+                if (!tdir.endsWith("/") && !tdir.isEmpty())
+                    tdir += "/";
+                int pos = dependency.findRev('/');
+                if (pos == -1)
                 {
-                    if (ti->name == tname)
-                    {
-                        // found it: queue it and stop looking
-                        queueInternalLibDependenciesBuild(ti);
-                        break;
-                    }
-                    ti = tl.next();
+                    tname = dependency;
                 }
-                while (ti);
-            }
+                else
+                {
+                    tdir += dependency.left(pos+1);
+                    tname = dependency.mid(pos+1);
+                }
+                kdDebug(9020) << "Scheduling : <" << tdir << ">  target <" << tname << ">" << endl;
+                // Recursively queue the dependencies for building
+                SubprojectItem *spi = m_widget->subprojectItemForPath( dependency.left(pos) );
+                if (spi)
+                {
+                    QPtrList< TargetItem > tl = spi->targets;
+                    // Cycle through the list of targets to find the one we're looking for
+                    TargetItem *ti = tl.first();
+                    do
+                    {
+                        if (ti->name == tname)
+                        {
+                            // found it: queue it and stop looking
+                            if( !queueInternalLibDependenciesBuild(ti, alreadyScheduledDeps) )
+                                return false;
+                            break;
+                        }
+                        ti = tl.next();
+                    }
+                    while (ti);
+                }
 
-            kdDebug(9020) << "queueInternalLibDependenciesBuild:" << tdir << ": "<< tname << endl;
-            tcmd = constructMakeCommandLine(tdir, tname);
-            if (!tcmd.isNull())
+                kdDebug(9020) << "queueInternalLibDependenciesBuild:" << tdir << ": "<< tname << endl;
+                tcmd = constructMakeCommandLine(tdir, tname);
+                if (!tcmd.isNull())
+                {
+                    makeFrontend()->queueCommand( tdir, tcmd);
+                }
+            }else
             {
-                makeFrontend()->queueCommand( tdir, tcmd);
+                //Message box about circular deps.
+                tdir = buildDirectory();
+                if (!tdir.endsWith("/") && !tdir.isEmpty())
+                    tdir += "/";
+                int pos = dependency.findRev('/');
+                if (pos == -1)
+                {
+                    tname = dependency;
+                }
+                else
+                {
+                    tdir += dependency.left(pos+1);
+                    tname = dependency.mid(pos+1);
+                }
+                KMessageBox::error( 0, i18n("Found a circular dependecy in the project, between this target and %1.\nCan't build this project until this is resolved").arg(tname), i18n("Circular Dependecy found") );
+                return false;
             }
         }
     }
+    return true;
 }
 
 
@@ -813,7 +836,9 @@ void AutoProjectPart::buildTarget(QString relpath, TargetItem* titem)
 
     // Add the make command for the libraries that the target depends on to the make frontend queue
     // if this recursive behavour is un-wanted comment the next line
-    queueInternalLibDependenciesBuild(titem);
+    QStringList deps;
+    if( !queueInternalLibDependenciesBuild(titem, deps) )
+        return;
 
     // Calculate the "make" command line for the target
     //QString relpath = dir.path().mid( projectDirectory().length() );

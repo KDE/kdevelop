@@ -144,7 +144,7 @@ private:
 
 	// For make commands queuing
 	QString constructMakeCommandLine( const QString &dir, const QString &target ) const;
-	void queueInternalLibDependenciesBuild( TargetItem* titem );
+	bool queueInternalLibDependenciesBuild( TargetItem* titem, QStringList& list );
 };
 
 typedef KDevGenericFactory<AutoProjectPart> AutoProjectFactory;
