@@ -101,7 +101,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     IQuickOpen* quickOpen = core()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
 
     if( quickOpen )
-        quickOpen->registerProvider( IncludeFileDataProvider::scopes(), i18n("Files"), m_quickOpenDataProvider );
+        quickOpen->registerProvider( IncludeFileDataProvider::scopes(), QStringList(i18n("Files")), m_quickOpenDataProvider );
     else
         kWarning() << "Quickopen not found";
     

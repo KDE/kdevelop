@@ -346,7 +346,7 @@ QStringList IncludeFileDataProvider::scopes() {
   return ret;
 }
 
-void IncludeFileDataProvider::enableScopes( const QStringList& scopes ) {
+void IncludeFileDataProvider::enableData( const QStringList& items, const QStringList& scopes ) {
   m_allowImports = scopes.contains( i18n("Imports") );
 /*  m_allowPossibleImports = scopes.contains( i18n("Possible Imports") );*/
   m_allowImporters = scopes.contains( i18n("Importers") );

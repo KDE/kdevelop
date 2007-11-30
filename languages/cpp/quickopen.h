@@ -64,7 +64,7 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual void reset();
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
-    virtual void enableScopes( const QStringList& scopes );
+    virtual void enableData( const QStringList& items, const QStringList& scopes );
 
     ///Returns all scopes supported by this data-provider
     static QStringList scopes();
