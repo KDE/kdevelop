@@ -147,12 +147,17 @@ void UIChooserWidget::accept()
 
 void UIChooserWidget::maybeEnableCloseOnHover( bool )
 {
-	if (!ShowTabIcons->isChecked())
+	if ( !NeverShowTabs->isChecked() && !ShowTabIcons->isChecked())
 	{
 		HoverCloseGroup->setEnabled(false);
-	} else if ( !NeverShowTabs->isChecked() )
+	} else if ( NeverShowTabs->isChecked() )
+	{
+		HoverCloseGroup->setEnabled( false );
+		TabbedBrowsingGroup->setEnabled( false );
+	} else
 	{
 		HoverCloseGroup->setEnabled( true );
+		TabbedBrowsingGroup->setEnabled( true );
 	}
 }
 
