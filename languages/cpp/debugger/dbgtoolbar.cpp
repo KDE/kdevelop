@@ -281,7 +281,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     // This widget is closed when the debugger finishes i.e. they press "Stop"
 
     // Do we need NoFocus???
-    KWin::setState(winId(), NET::StaysOnTop | NET::Modal | NET::SkipTaskbar);
+    KWin::setState(winId(), NET::StaysOnTop | NET::SkipTaskbar);
 //    KWin::setType(winId(), NET::Override);    // So it has no decoration
     KWin::setType(winId(), NET::Dock);
 
