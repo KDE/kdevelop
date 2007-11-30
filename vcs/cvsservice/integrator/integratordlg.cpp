@@ -47,7 +47,7 @@ IntegratorDlg::IntegratorDlg(CVSServiceIntegrator *integrator, QWidget *parent, 
     if (cvspass.open(IO_ReadOnly))
     {
         QTextStream stream(&cvspass);
-        while (!stream.atEnd()) 
+        while (!stream.atEnd())
         {
             QString line = stream.readLine();
             QStringList recs = QStringList::split(" ", line, false);
@@ -64,13 +64,13 @@ void IntegratorDlg::init_clicked()
     (new QVBoxLayout(dlg.plainPage(), 0, 0))->setAutoAdd(true);
     InitDlg *initDlg = new InitDlg(dlg.plainPage());
     initDlg->show();
-    
+
     initDlg->location->setFocus();
     initDlg->location->setMode(KFile::Directory);
     QRegExp localrep(":local:(.*)");
     if (localrep.search(repository->currentText()) != -1)
         initDlg->location->setURL(localrep.cap(1));
-    
+
     if (dlg.exec() == QDialog::Accepted)
     {
         QString url = initDlg->location->url();
@@ -114,7 +114,7 @@ void IntegratorDlg::accept()
 {
     if (m_projectLocation.isEmpty())
         return;
-    
+
     if (!createModule->isChecked())
         return;
 
@@ -128,26 +128,26 @@ void IntegratorDlg::accept()
     if (!proc->normalExit())
         KMessageBox::error(this, i18n("cvs import did not exit normally. Please check if cvs is installed and works correctly."), i18n("Init CVS Repository"));
     else if (proc->exitStatus() != 0)
-        KMessageBox::error(this, i18n("cvs import exited with status %1. Please check if the cvs location is correct.").arg(proc->exitStatus()), i18n("Init CVS Repository"));    
+        KMessageBox::error(this, i18n("cvs import exited with status %1. Please check if the cvs location is correct.").arg(proc->exitStatus()), i18n("Init CVS Repository"));
     else
     {
         kdDebug() << "Project is in: " << m_projectLocation << endl;
-        
+
         KURL url = KURL::fromPathOrURL(m_projectLocation);
         QString up = url.upURL().path();
         kdDebug() << "Up is: " << up << endl;
-        
+
         //delete sources in project dir
         KProcess *rmproc = new KProcess();
         *rmproc << "rm";
         *rmproc << "-f" << "-r" << m_projectLocation;
         rmproc->start(KProcess::Block);
-        
+
         //checkout sources from cvs
         KProcess *coproc = new KProcess();
         coproc->setWorkingDirectory(up);
         *coproc << "cvs";
-        *coproc << "-d" << repository->currentText() << "checkout" << module->text();
+        *coproc << "-d" << repository->currentText() << "checkout" << "-d" << m_projectName << module->text();
         coproc->start(KProcess::Block);
     }
 
@@ -182,7 +182,9 @@ QWidget *IntegratorDlg::self()
 
 void IntegratorDlg::init(const QString &projectName, const QString &projectLocation)
 {
-    module->setText(projectName);
+    if( m_projectName != projectName )
+        module->setText(projectName);
+    m_projectName = projectName;
     m_projectLocation = projectLocation;
 }
 
