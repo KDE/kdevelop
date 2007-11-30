@@ -32,7 +32,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
   public:
     QuickOpenModel( QWidget* parent );
     
-    void registerProvider( const QStringList& scopes, const QString& type, KDevelop::QuickOpenDataProviderBase* provider );
+    void registerProvider( const QStringList& scopes, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider );
 
     /**
      * Remove provider.
@@ -101,12 +101,13 @@ class QuickOpenModel : public ExpandingWidgetModel {
       }
       bool enabled;
       QSet<QString> scopes;
-      QString type;
+      QSet<QString> types;
       KDevelop::QuickOpenDataProviderBase* provider;
     };
     
-    typedef QMultiMap< QString, ProviderEntry > ProviderMap;
-    ProviderMap m_providers;
+  //typedef QMultiMap< QString, ProviderEntry > ProviderMap;
+    typedef QList<ProviderEntry> ProviderList;
+    QList<ProviderEntry> m_providers;
 };
 
 #endif

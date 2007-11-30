@@ -18,6 +18,7 @@ set(kdevquickopen_PART_SRCS
     quickopenplugin.cpp
     quickopenmodel.cpp
     projectfilequickopen.cpp
+    projectitemquickopen.cpp
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp

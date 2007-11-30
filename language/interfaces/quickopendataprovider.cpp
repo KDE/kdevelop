@@ -49,9 +49,8 @@ namespace KDevelop {
   QuickOpenDataProviderBase::~QuickOpenDataProviderBase() {
   }
 
-  void QuickOpenDataProviderBase::enableScopes( const QStringList& ) {
+  void QuickOpenDataProviderBase::enableData( const QStringList& , const QStringList& ) {
   }
-
 }
 
 #include "quickopendataprovider.moc"

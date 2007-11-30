@@ -56,7 +56,7 @@ public:
      * */
     void showQuickOpen( ModelTypes modes = All );
 
-    virtual void registerProvider( const QStringList& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider );
+    virtual void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider );
 
     virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
     
@@ -70,6 +70,7 @@ public slots:
 
     QuickOpenModel* m_model;
     class ProjectFileDataProvider* m_projectFileData;
+    class DUChainItemDataProvider* m_projectItemData;
 };
 
 class QuickOpenWidgetHandler : public QObject {

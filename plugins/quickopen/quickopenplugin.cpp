@@ -47,6 +47,7 @@
 #include "ui_quickopen.h"
 #include "quickopenmodel.h"
 #include "projectfilequickopen.h"
+#include "projectitemquickopen.h"
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
@@ -320,9 +321,17 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 
     {
       m_projectFileData = new ProjectFileDataProvider();
-      QStringList scopes;
+      QStringList scopes, items;
       scopes << i18n("Project");
-      m_model->registerProvider( scopes, i18n("Files"), m_projectFileData );
+      items << i18n("Files");
+      m_model->registerProvider( scopes, items, m_projectFileData );
+    }
+    {
+      m_projectItemData = new DUChainItemDataProvider();
+      QStringList scopes, items;
+      scopes << i18n("Project");
+      items << DUChainItemDataProvider::supportedItemTypes();
+      m_model->registerProvider( scopes, items, m_projectItemData );
     }
 }
 
@@ -330,6 +339,7 @@ QuickOpenPlugin::~QuickOpenPlugin()
 {
   delete m_model;
   delete m_projectFileData;
+  delete m_projectItemData;
 }
 
 void QuickOpenPlugin::unload()
@@ -376,7 +386,7 @@ void QuickOpenPlugin::quickOpenClass()
   showQuickOpen( Classes );
 }
 
-void QuickOpenPlugin::registerProvider( const QStringList& scope, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
+void QuickOpenPlugin::registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider )
 {
   m_model->registerProvider( scope, type, provider );
 }

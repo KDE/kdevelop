@@ -43,22 +43,21 @@ QStringList QuickOpenModel::allScopes() const
 
 QStringList QuickOpenModel::allTypes() const
 {
-  QStringList types;
+  QSet<QString> types;
   foreach( const ProviderEntry& provider, m_providers )
-    if( !types.contains( provider.type ) )
-      types << provider.type;
+    types += provider.types;
 
-  return types;
+  return types.toList();
 }
 
-void QuickOpenModel::registerProvider( const QStringList& scopes, const QString& type, KDevelop::QuickOpenDataProviderBase* provider )
+void QuickOpenModel::registerProvider( const QStringList& scopes, const QStringList& types, KDevelop::QuickOpenDataProviderBase* provider )
 {
   ProviderEntry e;
   e.scopes = QSet<QString>::fromList(scopes);
-  e.type = type;
+  e.types = QSet<QString>::fromList(types);
   e.provider = provider;
 
-  m_providers.insert( type, e );
+  m_providers << e; //.insert( types, e );
 
   connect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
 
@@ -68,7 +67,7 @@ void QuickOpenModel::registerProvider( const QStringList& scopes, const QString&
 bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
 {
   restart();
-  for( ProviderMap::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
+  for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
     if( (*it).provider == provider ) {
       m_providers.erase( it );
       disconnect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
@@ -78,18 +77,19 @@ bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provid
   return false;
 }
 
-void QuickOpenModel::enableProviders( const QStringList& items, const QStringList& _scopes )
+void QuickOpenModel::enableProviders( const QStringList& _items, const QStringList& _scopes )
 {
+  QSet<QString> items = QSet<QString>::fromList( _items );
   QSet<QString> scopes = QSet<QString>::fromList( _scopes );
   kDebug() << "params " << items << " " << scopes;
-  for( ProviderMap::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
-    kDebug() << "comparing" << (*it).scopes << (*it).type;
-    if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) && ( items.contains( (*it).type ) || items.isEmpty() ) ) {
-      kDebug() << "enabling " << (*it).type << " " << (*it).scopes;
+  for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
+    kDebug() << "comparing" << (*it).scopes << (*it).types;
+    if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) && ( !( items & (*it).types ).isEmpty() || items.isEmpty() ) ) {
+      kDebug() << "enabling " << (*it).types << " " << (*it).scopes;
       (*it).enabled = true;
-      (*it).provider->enableScopes( _scopes );
+      (*it).provider->enableData( _items, _scopes );
     } else {
-      kDebug() << "disabling " << (*it).type << " " << (*it).scopes;
+      kDebug() << "disabling " << (*it).types << " " << (*it).scopes;
       (*it).enabled = false;
     }
   }

@@ -42,10 +42,10 @@ public:
      * There may be multiple providers with the same type/scope, they will be used simultaneously in that case.
      * type and scope will be shown in the GUI, so they should be translated.
      * @param scope Different scopes supported by this data-provider, Examples: "Project", "Imports", etc.
-     * @param type Type of the provided data, Examples: "Files", "Functiosn", "Classes", etc.
+     * @param type Types of the provided data, Examples: "Files", "Functiosn", "Classes", etc.
      * @param provider The provider. It does not need to be explicitly removed before its destruction.
      * */
-    virtual void registerProvider( const QStringList& scopes, const QString& type, QuickOpenDataProviderBase* provider ) = 0;
+    virtual void registerProvider( const QStringList& scopes, const QStringList& type, QuickOpenDataProviderBase* provider ) = 0;
 
     /**
      * Remove provider.
