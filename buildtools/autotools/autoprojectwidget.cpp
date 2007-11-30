@@ -416,7 +416,27 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 			//m_activeTarget->insertItem( fitem );
 
 			/// @todo Merge with code in addfiledlg.cpp
-			addToTarget(fileName, m_activeSubproject, m_activeTarget);
+			// Check wether a selected subproject+target exists and matches this file
+			// If so use that as target.
+			if( m_detailView->listView()->selectedItem() && m_subprojectView->listView()->selectedItem() )
+			{
+				TargetItem *titem = dynamic_cast <TargetItem*> ( m_detailView->listView()->selectedItem() );
+				SubprojectItem * subitem = dynamic_cast <SubprojectItem*> ( m_subprojectView->listView()->selectedItem() );
+				QString relativeDir = URLUtil::directory(*it);
+				SubprojectItem* spitem = subprojectItemForPath(relativeDir);
+
+				if( titem && subitem && subitem == spitem )
+				{
+					addToTarget(fileName, subitem, titem);
+				}else
+				{
+					addToTarget(fileName, m_activeSubproject, m_activeTarget);
+				}
+			}else
+			{
+				addToTarget(fileName, m_activeSubproject, m_activeTarget);
+			}
+
 //			QString canontargetname = AutoProjectTool::canonicalize( m_activeTarget->name );
 //			QString varname = canontargetname + "_SOURCES";
 //			m_activeSubproject->variables[ varname ] += ( " " + fileName );
@@ -431,11 +451,35 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 	}
 	else
 	{
+		QStringList doManually, doneAutomatically;
+		// First check wether the detail view has a selected target and the subproject
+		// view selected subproject matches the path of the new file. Then
+		// we can assume the user used the right-click option on the target
+		for( QStringList::iterator it = fileList.begin(); it != fileList.end(); ++it)
+		{
+			bool autoAdded = false;
+			if( m_detailView->listView()->selectedItem() && m_subprojectView->listView()->selectedItem() )
+			{
+				TargetItem *titem = dynamic_cast <TargetItem*> ( m_detailView->listView()->selectedItem() );
+				SubprojectItem * subitem = dynamic_cast <SubprojectItem*> ( m_subprojectView->listView()->selectedItem() );
+				QString relativeDir = URLUtil::directory(*it);
+				SubprojectItem* spitem = subprojectItemForPath(relativeDir);
+				if( titem && subitem && subitem == spitem )
+				{
+					addToTarget(URLUtil::filename(*it), subitem, titem);
+					autoAdded = true;
+					doneAutomatically << *it;
+				}
+			}
+			if(!autoAdded) doManually << *it;
+		}
+
 		// See if we can figure out the target for each file without asking the user
 		// I think it's a valid assumption that if a directory contains only one target
 		// the file can be added to that target (Julian Rockey linux at jrockey.com)
-		QStringList doManually, doneAutomatically;
-		for(QStringList::iterator it = fileList.begin();it!=fileList.end();++it)
+		QStringList temp = doManually;
+		doManually.clear();
+		for(QStringList::iterator it = temp.begin();it!=temp.end();++it)
 		{
 			bool autoAdded = false;
 			QString relativeDir = URLUtil::directory(*it);
