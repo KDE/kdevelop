@@ -443,6 +443,17 @@ void MakeWidget::specialCheck( const QString& file, QString& fName ) const
             kdDebug(9004) << "MakeWidget::specialCheck thinks that url is: " << url.url()
                 << " origin: " << file << endl;
             fName = url.url();
+            return;
+        }
+    }
+    // Ok the "worst case", lets see if we can find a file in the project that has the same name
+    // obviously this will pick always the wrong file when you've got the same filename multiple times.
+    QStringList files = m_part->project()->allFiles();
+    for( QStringList::iterator it = files.begin() ; it != files.end(); ++it)
+    {
+        if( (*it).contains( file ) )
+        {
+            fName = URLUtil::canonicalPath( m_part->project()->projectDirectory() + "/" + *it );
         }
     }
 }
