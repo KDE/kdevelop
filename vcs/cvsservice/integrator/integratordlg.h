@@ -32,16 +32,17 @@ public:
 
     virtual QWidget *self();
     virtual void init(const QString &projectName, const QString &projectLocation);
-    
+
 public slots:
     virtual void login_clicked();
     virtual void init_clicked();
     virtual void accept();
     virtual void createModule_clicked();
-    
+
 private:
     CVSServiceIntegrator *m_integrator;
     QString m_projectLocation;
+    QString m_projectName;
 };
 
 #endif
