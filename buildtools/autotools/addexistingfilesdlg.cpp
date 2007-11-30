@@ -37,6 +37,8 @@
 #include <kiconview.h>
 #include <ksqueezedtextlabel.h>
 
+#include "urlutil.h"
+
 #include "autolistviewitems.h"
 
 #include "autoprojectwidget.h"
@@ -287,7 +289,7 @@ void AddExistingFilesDialog::slotOk()
 
 				proc << "ln";
 				proc << "-s";
-				proc << ( *it )->url().path();
+				proc << URLUtil::relativePathToFile( m_spitem->path, ( *it )->url().path() );
 				proc << m_spitem->path;
 				proc.start(KProcess::DontCare);
 
