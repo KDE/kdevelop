@@ -383,6 +383,8 @@ Warnings1Tab::Warnings1Tab( GccOptionsPlugin::Type type, QWidget *parent, const 
 	                  "-Wuninitialized", i18n( "<qt>Warn when a variable is used without being initialized first</qt>" ) );
 	new FlagListItem( wallBox,
 	                  "-Wunknown-pragmas", i18n( "<qt>Warn when an unknown #pragma statement is encountered</qt>" ) );
+	new FlagListItem( wallBox,
+	                  "-Wdiv-by-zero", i18n( "<qt>Warn when a division by zero occurs.</qt>" ) );
 	if ( type == GccOptionsPlugin::GPP )
 	{
 		new FlagListItem( wallBox,
@@ -475,7 +477,8 @@ Warnings2Tab::Warnings2Tab( GccOptionsPlugin::Type type, QWidget *parent, const 
 	                  "-Wlong-long", i18n( "<qt>Warn if the <i>long long</i> type is used</qt>" ) );
 	new FlagListItem( wrestBox,
 	                  "-Wdisabled-optimization", i18n( "<qt>Warn if a requested optimization pass is disabled</qt>" ) );
-
+	new FlagListItem( wrestBox,
+	                  "-Wno-div-by-zero", i18n( "<qt>Don't warn if there is a division by zero</qt>" ) );
 
 	if ( type == GccOptionsPlugin::GCC )
 	{
