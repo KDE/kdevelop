@@ -103,7 +103,7 @@ m_newFileNames(newFileNames), m_cppSupport( cppSupport )
 	m_formFile = formFile;
 	readUiFile();
 	m_creatingNewSubclass = true;
-	
+
 	KConfig *config = CppSupportFactory::instance()->config();
 	if (config)
 	{
@@ -125,7 +125,7 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
 	m_formFile = formFile;
 	m_creatingNewSubclass = false;
 	m_filename = filename;
-	
+
 	KConfig *config = CppSupportFactory::instance()->config();
 	if (config)
 	{
@@ -134,9 +134,9 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
 		if (reformatDefault_box->isChecked())
 			reformat_box->setChecked(true);
 	}
-	
+
 	QStringList pathsplit(QStringList::split('/',filename));
-	
+
 	QString baseClass = readBaseClassName();
 	if (!cppSupport->codeModel()->hasFile(filename+QString(".h")))
 		return;
@@ -150,7 +150,7 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
 			kdDebug() << "base class matched " << endl;
 			m_edClassName->setText((*classIt)->name());
 			m_edFileName->setText(pathsplit[pathsplit.count()-1]);
-			
+
 			FunctionList functionList = (*classIt)->functionList();
 			for (FunctionList::const_iterator methodIt = functionList.begin();
 			     methodIt != functionList.end(); ++methodIt)
@@ -179,20 +179,20 @@ void SubclassingDlg::readUiFile()
 	m_formName = QStringList::split('.',splitPath[splitPath.count()-1])[0]; // "somedlg.ui" = "somedlg"
 	splitPath.pop_back();
 	m_formPath = "/" + splitPath.join("/"); // join path to ui-file
-	
+
 	m_btnOk->setEnabled(false);
 	QDomDocument doc;
-	
+
 	DomUtil::openDOMFile(doc,m_formFile);
 	m_baseClassName = DomUtil::elementByPathExt(doc,WIDGET_CLASS_NAME).text();
-	
+
 	m_baseCaption = DomUtil::elementByPathExt(doc,WIDGET_CAPTION_NAME).text();
 	setCaption(i18n("Create Subclass of ")+m_baseClassName);
-	
+
   // Special widget specific slots
 	SlotItem *newSlot;
 	m_qtBaseClassName = DomUtil::elementByPathExt(doc,"widget").attribute("class","QDialog");
-	
+
 	if ( (m_qtBaseClassName=="QMainWindow") || (m_qtBaseClassName=="QWidget") )
 		m_canBeModal = false;
 	else
@@ -205,7 +205,7 @@ void SubclassingDlg::readUiFile()
 			newSlot->setAllreadyInSubclass();
 		m_slotView->insertItem(newSlot);
 		m_slots << newSlot;
-		
+
 		newSlot = new SLOT_REJECT;
 		newSlot->setOn(false);
 		if (alreadyInSubclass("reject()"))
@@ -213,7 +213,7 @@ void SubclassingDlg::readUiFile()
 		m_slotView->insertItem(newSlot);
 		m_slots << newSlot;
 	}
-	
+
 	if (m_qtBaseClassName == "QWizard")
 	{
 		newSlot = new SLOT_NEXT;
@@ -233,10 +233,10 @@ void SubclassingDlg::readUiFile()
 		m_slotView->insertItem(newSlot);
 		m_slots << newSlot;
 	}
-	
+
 	QDomElement slotsElem = DomUtil::elementByPathExt(doc,WIDGET_SLOTS);
 	QDomNodeList slotnodes = slotsElem.childNodes();
-	
+
 	for (unsigned int i=0; i<slotnodes.count();i++)
 	{
 		QDomElement slotelem = slotnodes.item(i).toElement();
@@ -249,7 +249,7 @@ void SubclassingDlg::readUiFile()
 			newSlot->setAllreadyInSubclass();
 		m_slots << newSlot;
 	}
-	
+
 	QDomElement funcsElem = DomUtil::elementByPathExt(doc,WIDGET_FUNCTIONS);
 	QDomNodeList funcnodes = funcsElem.childNodes();
 	SlotItem *newFunc;
@@ -311,6 +311,7 @@ bool SubclassingDlg::replaceKeywords(QString &buffer,bool canBeModal)
 	replace(buffer,"$QTBASECLASS$", m_qtBaseClassName );
 	replace(buffer,"$BASECLASS$",m_baseClassName);
 	replace(buffer,"$NEWFILENAMELC$",m_edFileName->text().lower());
+    replace(buffer,"$SPECIALIZATION$","Specialization from "+m_baseClassName);
 	if (canBeModal)
 	{
 		replace(buffer,"$CAN_BE_MODAL_H$",", bool modal = FALSE");
@@ -323,14 +324,14 @@ bool SubclassingDlg::replaceKeywords(QString &buffer,bool canBeModal)
 		replace(buffer,"$CAN_BE_MODAL_CPP1$","");
 		replace(buffer,"$CAN_BE_MODAL_CPP2$","");
 	}
-	
+
 	return true;
 }
 
 bool SubclassingDlg::saveBuffer(QString &buffer, const QString& filename)
 {
 	// save buffer
-	
+
 	QFile dataFile(filename);
 	if (!dataFile.open(IO_WriteOnly | IO_Truncate))
 		return false;
@@ -348,23 +349,23 @@ void SubclassingDlg::accept()
 		config->setGroup("Subclassing");
 		config->writeEntry("Reformat Source", reformatDefault_box->isChecked());
 	}
-	
+
 	unsigned int i;
-	
+
   // h - file
-	
+
 	QString public_slot =
 		"/*$PUBLIC_SLOTS$*/\n  ";
-	
+
 	QString protected_slot =
 		"/*$PROTECTED_SLOTS$*/\n  ";
-	
+
 	QString public_func =
 		"/*$PUBLIC_FUNCTIONS$*/\n  ";
-	
+
 	QString protected_func =
 		"/*$PROTECTED_FUNCTIONS$*/\n  ";
-	
+
 	QString buffer;
 	int qtVersion = DomUtil::readIntEntry( *m_cppSupport->project()->projectDom(), "/kdevcppsupport/qt/version", 3 );
 	if (m_creatingNewSubclass)
@@ -373,7 +374,7 @@ void SubclassingDlg::accept()
 			loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.h"));
 		else
 			loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_qt4_template.h"));
-			
+
 		buffer = FileTemplate::read(m_cppSupport, "h") + buffer;
 		QFileInfo fi(m_filename + ".h");
 		QString module = fi.baseName();
@@ -383,7 +384,7 @@ void SubclassingDlg::accept()
 	}
 	else
 		loadBuffer(buffer,m_filename+".h");
-	
+
 	replaceKeywords(buffer,m_canBeModal);
 	for (i=0; i<m_slots.count(); i++)
 	{
@@ -433,35 +434,35 @@ void SubclassingDlg::accept()
 			}
 		}
 	}
-	
+
 	if (reformat_box->isChecked())
 	{
 		KDevSourceFormatter *fmt = m_cppSupport->extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
 		if (fmt)
 			buffer = fmt->formatSource(buffer);
 	}
-	
+
 	if (m_creatingNewSubclass)
 		saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".h");
 	else
 		saveBuffer(buffer,m_filename+".h");
-	
+
   // cpp - file
-	
+
 	QString implementation =
 		"/*$SPECIALIZATION$*/\n"
 		"$RETURNTYPE$ $NEWCLASS$::$METHOD$\n"
 		"{\n"
 		"}\n";
-	
+
 	QString implementation_callbase =
 		"/*$SPECIALIZATION$*/\n"
 		"$RETURNTYPE$ $NEWCLASS$::$METHOD$\n"
 		"{\n"
 		"  $QTBASECLASS$::$METHOD$;\n"
 		"}\n";
-	
-	
+
+
 	if (m_creatingNewSubclass)
 	{
 		if ( qtVersion == 3 )
@@ -480,7 +481,7 @@ void SubclassingDlg::accept()
 	}
 	else
 		loadBuffer(buffer,m_filename+".cpp");
-	
+
 	replaceKeywords(buffer,m_canBeModal);
 	for (i=0; i<m_slots.count(); i++)
 	{
@@ -495,19 +496,19 @@ void SubclassingDlg::accept()
 		replace(impl,"$QTBASECLASS$", m_qtBaseClassName);
 		replace(buffer,"/*$SPECIALIZATION$*/",impl);
 	}
-	
+
 	if (reformat_box->isChecked())
 	{
 		KDevSourceFormatter *fmt = m_cppSupport->extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
 		if (fmt)
 			buffer = fmt->formatSource(buffer);
 	}
-	
+
 	if (m_creatingNewSubclass)
 		saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
 	else
 		saveBuffer(buffer,m_filename+".cpp");
-	
+
 	if (m_creatingNewSubclass)
 	{
 		m_newFileNames.append(m_formPath + "/" + m_edFileName->text()+".cpp");
