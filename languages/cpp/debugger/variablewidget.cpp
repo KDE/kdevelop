@@ -1506,6 +1506,9 @@ QString VarItem::gdbExpression() const
     //  - ***intentifier, for derefenreced pointer.
     const VarItem* parent = dynamic_cast<const VarItem*>(TrimmableItem::parent());
 
+    if( !parent )
+        return "";
+
     bool ok = false;
     expression_.toInt(&ok);
     if (ok)
@@ -1708,7 +1711,8 @@ bool VarItem::handleSpecialTypes()
     if (qstring.exactMatch(originalValueType_)) {
 
         VariableTree* varTree = static_cast<VariableTree*>(listView());
-
+        if( !varTree->controller() )
+            return false;
         varTree->controller()->addCommand(
             new ResultlessCommand(QString("print $kdev_d=%1.d")
                                   .arg(gdbExpression()),
