@@ -32,11 +32,6 @@ CvsProxy::~CvsProxy()
 {
 }
 
-void CvsProxy::slotResult(KJob* job)
-{
-//     job->deleteLater();
-}
-
 bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
 {
     QString path = dirPath.toLocalFile() + QDir::separator() + "CVS";
@@ -59,12 +54,6 @@ bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum Requested
 
     // setup the working directory for the new job
     job->setDirectory(repository);
-
-    // each job that was created by this proxy will
-    // automatically be delete after it has finished.
-    // Therefor the slotResult() calls deleteLater() on the job
-    connect(job, SIGNAL( result(KJob*) ),
-            this, SLOT( slotResult(KJob*) ));
 
     return true;
 }
@@ -96,7 +85,6 @@ QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
             break;
 
         case KDevelop::VcsRevision::FileNumber:
-            kDebug(9500) << "VcsRevision::FileNumber: " << rev.revisionValue() << endl;
             if (rev.revisionValue().isValid())
                 str = "-r"+rev.revisionValue().toString();
             break;

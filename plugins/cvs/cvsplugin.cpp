@@ -99,18 +99,6 @@ void CvsPlugin::setupActions()
 {
     KAction *action;
 
-    action = actionCollection()->addAction("cvs_edit");
-    action->setText(i18n("Edit..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotEdit()));
-
-    action = actionCollection()->addAction("cvs_unedit");
-    action->setText(i18n("Unedit..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotUnEdit()));
-
-    action = actionCollection()->addAction("cvs_editors");
-    action->setText(i18n("Show Editors..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotEditors()));
-
     action = actionCollection()->addAction("cvs_import");
     action->setText(i18n("Import Directory..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotImport()));
@@ -136,41 +124,6 @@ const KUrl CvsPlugin::urlFocusedDocument() const
     return KUrl();
 }
 
-
-void CvsPlugin::slotEdit()
-{
-    KUrl url = urlFocusedDocument();
-
-    KDevelop::VcsJob* j = edit(url);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
-    }
-}
-
-void CvsPlugin::slotUnEdit()
-{
-    KUrl url = urlFocusedDocument();
-
-    KDevelop::VcsJob* j = unedit(url);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
-    }
-}
-
-void CvsPlugin::slotEditors()
-{
-    KUrl url = urlFocusedDocument();
-    KUrl::List urls;
-    urls << url;
-
-    ///@todo implement me
-}
 
 void CvsPlugin::slotImport()
 {
@@ -262,6 +215,18 @@ QPair<QString,QList<QAction*> > CvsPlugin::requestContextMenuActions(KDevelop::C
 
     action = new KAction(i18n("Remove"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+    actions << action;
+
+    action = new KAction(i18n("Edit"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
+    actions << action;
+
+    action = new KAction(i18n("Unedit"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()) );
+    actions << action;
+
+    action = new KAction(i18n("Show Editors"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxEditors()) );
     actions << action;
 
     action = new KAction(i18n("Update.."), this);
@@ -391,6 +356,47 @@ void CvsPlugin::ctxDiff()
     }
 }
 
+void CvsPlugin::ctxEdit()
+{
+    KUrl url = d->m_ctxUrlList.first();
+
+    KDevelop::VcsJob* j = edit(url);
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SIGNAL( jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
+void CvsPlugin::ctxUnEdit()
+{
+    KUrl url = d->m_ctxUrlList.first();
+
+    KDevelop::VcsJob* j = unedit(url);
+    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SIGNAL( jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
+void CvsPlugin::ctxEditors()
+{
+    ///@todo find a common base directory for the files
+    QFileInfo info( d->m_ctxUrlList[0].toLocalFile() );
+
+    CvsJob* job = d->m_proxy->editors( info.absolutePath(),
+                                       d->m_ctxUrlList);
+    if (job) {
+        job->start();
+        EditorsView* view = new EditorsView(this, job);
+        emit addNewTabToMainView( view, i18n("Editors") );
+    }
+}
+
+
 
 
 // Begin:  KDevelop::IBasicVersionControl
@@ -518,10 +524,10 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
     if( msg.isEmpty() )
     {
         CommitDialog dlg;
-    if( dlg.exec() == QDialog::Accepted )
-    {
+        if( dlg.exec() == QDialog::Accepted )
+        {
             msg = dlg.message();
-    }
+        }
     }
     ///@todo find a common base directory for the files
     QFileInfo info( localLocations[0].toLocalFile() );
@@ -530,11 +536,6 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
                                       localLocations,
                                       msg);
     return job;
-}
-
-KDevelop::VcsJob * CvsPlugin::showDiff(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode  )
-{
-    return NULL;
 }
 
 KDevelop::VcsJob * CvsPlugin::diff(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode )
@@ -557,20 +558,10 @@ KDevelop::VcsJob * CvsPlugin::log(const KUrl & localLocation, const KDevelop::Vc
     return log(localLocation, rev, 0);
 }
 
-KDevelop::VcsJob * CvsPlugin::showLog(const KUrl & localLocation, const KDevelop::VcsRevision & rev)
-{
-    return NULL;
-}
-
 KDevelop::VcsJob * CvsPlugin::annotate(const KUrl & localLocation, const KDevelop::VcsRevision & rev)
 {
     CvsJob* job = d->m_proxy->annotate( localLocation, rev );
     return job;
-}
-
-KDevelop::VcsJob * CvsPlugin::showAnnotate(const KUrl & localLocation, const KDevelop::VcsRevision & rev)
-{
-    return NULL;
 }
 
 KDevelop::VcsJob * CvsPlugin::merge(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, const KUrl & localLocation)

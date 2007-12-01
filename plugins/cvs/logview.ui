@@ -13,8 +13,27 @@
    <string>Log</string>
   </property>
   <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
    <item>
-    <widget class="KTextBrowser" name="textbrowser" />
+    <widget class="KTextBrowser" name="textbrowser" >
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -72,23 +72,13 @@ public:
                 const KDevelop::VcsRevision& dstRevision,
                 KDevelop::VcsDiff::Type,
                 KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive );
-    virtual KDevelop::VcsJob* showDiff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
-                const KDevelop::VcsLocation& localOrRepoLocationDst,
-                const KDevelop::VcsRevision& srcRevision,
-                const KDevelop::VcsRevision& dstRevision,
-                KDevelop::VcsDiff::Type,
-                KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive  );
     virtual KDevelop::VcsJob* log( const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev,
                 unsigned long limit );
     virtual KDevelop::VcsJob* log( const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev,
                 const KDevelop::VcsRevision& limit );
-    virtual KDevelop::VcsJob* showLog( const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev );
     virtual KDevelop::VcsJob* annotate( const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev );
-    virtual KDevelop::VcsJob* showAnnotate( const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev );
     virtual KDevelop::VcsJob* merge( const KDevelop::VcsLocation& localOrRepoLocationSrc,
                 const KDevelop::VcsLocation& localOrRepoLocationDst,
@@ -117,11 +107,11 @@ public slots:
     void ctxAnnotate();
     void ctxRevert();
     void ctxDiff();
+    void ctxEdit();
+    void ctxUnEdit();
+    void ctxEditors();
 
     // slots for menu
-    void slotEdit();
-    void slotUnEdit();
-    void slotEditors();
     void slotImport();
     void slotCheckout();
     void slotStatus();

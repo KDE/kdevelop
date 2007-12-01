@@ -20,16 +20,8 @@ The CVS plugin is separated into three part.
    CvsJobs. The proxy offers a list of methods for the different
    supported CVS actions. Each of these methods will return a CvsJob
    object. So the caller does not have to worry about the whole 
-   job and ommandline creation. Calling the appropriate method will
+   job and commandline creation. Calling the appropriate method will
    do all the work and return a CvsJob object ready for starting.
-
-   But a CvsJob can also be created directly. In such cases, it must
-   be deleted manually in order to not leak memory. All jobs created
-   by the CvsProxy will automatically be deleted. CvsProxy does this 
-   by calling deleteLater() for the job as soon as it's result() signal
-   got emitted. So any other slots that also connected to the result() 
-   signal can still work with the CvsJob object. But as soon as all 
-   connected slots where called, the CvsJob object gets freed by QT.
 
 3) The CvsMainView (cvsmainview.h) and custom view (like editorsview.h)
    The CvsMainView displays output from finished jobs. It holds a 

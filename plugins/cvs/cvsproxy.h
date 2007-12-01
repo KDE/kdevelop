@@ -88,9 +88,6 @@ public:
     CvsJob* status(const QString & repo, const KUrl::List & files,
                 bool recursive=false, bool taginfo=false);
 
-private slots:
-    void slotResult(KJob* job);
-
 private:
     bool addFileList(CvsJob* job, const QString& repository, const KUrl::List& urls);
     QString convertVcsRevisionToString(const KDevelop::VcsRevision& rev);
