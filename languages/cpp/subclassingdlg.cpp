@@ -311,7 +311,6 @@ bool SubclassingDlg::replaceKeywords(QString &buffer,bool canBeModal)
 	replace(buffer,"$QTBASECLASS$", m_qtBaseClassName );
 	replace(buffer,"$BASECLASS$",m_baseClassName);
 	replace(buffer,"$NEWFILENAMELC$",m_edFileName->text().lower());
-    replace(buffer,"$SPECIALIZATION$","Specialization from "+m_baseClassName);
 	if (canBeModal)
 	{
 		replace(buffer,"$CAN_BE_MODAL_H$",", bool modal = FALSE");
