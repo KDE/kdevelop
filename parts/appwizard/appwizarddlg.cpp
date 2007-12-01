@@ -94,7 +94,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0),
 	m_profileSupport(new ProfileSupport(part))
 {
-	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
+	kdDebug( 9010 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
 	m_customOptions = 0L;
 	loadLicenses();
@@ -404,7 +404,7 @@ void AppWizardDialog::textChanged()
 {
 //    licenseChanged();
 
-	updateNextButtons();
+    updateNextButtons();
 }
 
 void AppWizardDialog::licenseChanged()
@@ -454,9 +454,18 @@ void AppWizardDialog::accept()
 {
     QFileInfo fi(finalLoc_label->text());
     // check /again/ whether the dir already exists; maybe users create it in the meantime
-    if (fi.exists()) {
+    if (fi.exists() ) {
         KMessageBox::sorry(this, i18n("The directory you have chosen as the location for "
                                       "the project already exists."));
+        showPage(generalPage);
+        appname_edit->setFocus();
+        projectLocationChanged();
+        return;
+    }
+
+    if( !QFileInfo(dest_edit->url()).isWritable()  ){
+        KMessageBox::sorry(this, i18n("The directory you have chosen as the location for "
+                                      "the project is not writeable."));
         showPage(generalPage);
         appname_edit->setFocus();
         projectLocationChanged();
@@ -466,7 +475,7 @@ void AppWizardDialog::accept()
 	QString source = kdevRoot( m_pCurrentAppInfo->templateName );
 
 	// Unpack template archive to temp dir, and get the name
-
+	kdDebug(9010) << "Unpacking archive to temp dir" << endl;
 	KTempDir archDir;
 	archDir.setAutoDelete(true);
 	KTar templateArchive( source + "/" + m_pCurrentAppInfo->sourceArchive, "application/x-gzip" );
@@ -483,6 +492,7 @@ void AppWizardDialog::accept()
 	}
 	templateArchive.close();
 
+	kdDebug(9010) << "build macro map" << endl;
 	// Build KMacroExpander map
 	//m_customOptions->dataForm()->fillPropertyMap(&m_pCurrentAppInfo->subMap);
 	PropertyLib::PropertyList::Iterator idx = m_pCurrentAppInfo->propValues->begin();
@@ -519,6 +529,8 @@ void AppWizardDialog::accept()
 	QStringList cleanUpSubstMap;
 	cleanUpSubstMap << "src" << "I18N" << "kdevelop";
 
+
+	kdDebug(9010) << "add template files" << endl;
 	// Add template files to the fileList
 	installDir templateDir;
 	templateDir.dir = "%{dest}/templates";
@@ -588,6 +600,7 @@ void AppWizardDialog::accept()
 	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
 	{
 		(*fileIt).source = KMacroExpander::expandMacros((*fileIt).source , m_pCurrentAppInfo->subMap);
+		kdDebug(9010) << "Updating file dest: " << (*fileIt).dest << " with " << KMacroExpander::expandMacros((*fileIt).dest , m_pCurrentAppInfo->subMap) << endl;
 		(*fileIt).dest = KMacroExpander::expandMacros((*fileIt).dest , m_pCurrentAppInfo->subMap);
 	}
 
@@ -626,7 +639,7 @@ void AppWizardDialog::accept()
 	dirIt = m_pCurrentAppInfo->dirList.begin();
 	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
 	{
-		kdDebug( 9000 ) << "Process dir " << (*dirIt).dir  << endl;
+		kdDebug( 9010 ) << "Process dir " << (*dirIt).dir  << endl;
 		if( m_pCurrentAppInfo->subMap[(*dirIt).option] != "false" )
 		{
 			if( ! KIO::NetAccess::mkdir( (*dirIt).dir, this ) )
@@ -728,6 +741,7 @@ void AppWizardDialog::accept()
 
 bool AppWizardDialog::copyFile( const installFile& file )
 {
+	kdDebug(9010) << "Copying file" << file.dest << endl;
 	return
 		copyFile( file.source, file.dest, file.isXML, file.process );
 }
@@ -939,7 +953,7 @@ void AppWizardDialog::projectLocationChanged()
   } else {
     m_pathIsValid=true;
   }
-	updateNextButtons();
+  updateNextButtons();
 }
 
 
@@ -1279,7 +1293,7 @@ void AppWizardDialog::loadLicenses()
 		KDevLicense* lic = new KDevLicense( licName, licPath );
 		m_licenses.insert( licName, lic );
 	}
-	// kdDebug(9000) << "======================== Done loadLicenses" << endl;
+	// kdDebug(9010) << "======================== Done loadLicenses" << endl;
 }
 
 void AppWizardDialog::showTemplates(bool all)

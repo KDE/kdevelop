@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>AppWizardDialogBase</class>
 <widget class="QWizard">
     <property name="name">
@@ -580,12 +580,6 @@
         <sender>dest_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>AppWizardDialogBase</receiver>
-        <slot>textChanged()</slot>
-    </connection>
-    <connection>
-        <sender>dest_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDialogBase</receiver>
         <slot>projectLocationChanged()</slot>
     </connection>
     <connection>
@@ -617,6 +611,12 @@
         <signal>toggled(bool)</signal>
         <receiver>AppWizardDialogBase</receiver>
         <slot>showTemplates(bool)</slot>
+    </connection>
+    <connection>
+        <sender>dest_edit</sender>
+        <signal>returnPressed(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>projectLocationChanged()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -651,7 +651,9 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>kiconview.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>
