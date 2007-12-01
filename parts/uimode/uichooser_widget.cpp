@@ -67,13 +67,8 @@ void UIChooserWidget::load()
 	}
 
 	bool CloseOnHover = config->readBoolEntry( "CloseOnHover", false );
-	bool CloseOnHoverDelay = config->readBoolEntry( "CloseOnHoverDelay", false );
 
-	if ( CloseOnHover && CloseOnHoverDelay )
-	{
-		DoDelayedCloseOnHover->setChecked( true );
-	}
-	else if ( CloseOnHover && !CloseOnHoverDelay )
+	if ( CloseOnHover )
 	{
 		DoCloseOnHover->setChecked( true );
 	}
@@ -106,17 +101,10 @@ void UIChooserWidget::save()
 	if ( DoNotCloseOnHover->isChecked() )
 	{
 		config->writeEntry( "CloseOnHover", false );
-		config->writeEntry( "CloseOnHoverDelay", false );
 	}
 	else if ( DoCloseOnHover->isChecked() )
 	{
 		config->writeEntry( "CloseOnHover", true );
-		config->writeEntry( "CloseOnHoverDelay", false );
-	}
-	else if ( DoDelayedCloseOnHover->isChecked() )
-	{
-		config->writeEntry( "CloseOnHover", true );
-		config->writeEntry( "CloseOnHoverDelay", true );
 	}
 
 	// using magic numbers for now.. where are these values defined??

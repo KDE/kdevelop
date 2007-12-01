@@ -12,6 +12,9 @@
             <height>529</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>UIChooser</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -96,14 +99,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Yes</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>DoDelayedCloseOnHover</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Yes, &amp;delayed</string>
                             </property>
                         </widget>
                     </vbox>
