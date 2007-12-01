@@ -22,6 +22,7 @@
 #include "cppsupportpart.h"
 #include "backgroundparser.h"
 #include "cppsupport_utils.h"
+#include "domutil.h"
 
 #include <kdevpartcontroller.h>
 #include <kdevcreatefile.h>
@@ -47,16 +48,16 @@ AddMethodDialog::AddMethodDialog( CppSupportPart* cppSupport, ClassDom klass,
 : AddMethodDialogBase( parent, name, modal, fl ), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
 {
 	QString fileName = m_klass->fileName();
-	
+
 	access->insertStringList( QStringList() << "Public" << "Protected" << "Private" << "Signals" <<
 	                          "Public Slots" << "Protected Slots" << "Private Slots" );
-	
+
 	storage->insertStringList( QStringList() << "Normal" << "Static" << "Virtual" << "Pure Virtual" << "Friend" );
-	
+
 	// setup sourceFile combo
 	QMap<QString, bool> m;
 #if 0 /// \FIXME ROBE
-	
+
 	FunctionList l = m_klass->functionList();
 	{
 		for ( FunctionList::Iterator it = l.begin(); it != l.end(); ++it )
@@ -66,7 +67,7 @@ AddMethodDialog::AddMethodDialog( CppSupportPart* cppSupport, ClassDom klass,
 		}
 	}
 #endif
-	
+
 	{
 		QStringList headers = QStringList::split( ",", "h,H,hh,hxx,hpp,inl,tlh,diff,ui.h" );
 		QStringList fileList;
@@ -78,14 +79,15 @@ AddMethodDialog::AddMethodDialog( CppSupportPart* cppSupport, ClassDom klass,
 				sourceFile->insertItem( it.key() );
 			++it;
 		}
-		
+
 		if ( sourceFile->count() == 0 )
 		{
 			QFileInfo info( fileName );
-			sourceFile->insertItem( info.dirPath( true ) + "/" + info.baseName() + ".cpp" );
+			QString impl = DomUtil::readEntry( *cppSupport->projectDom(), "/cppsupportpart/filetemplates/implementationsuffix", "cpp" );
+			sourceFile->insertItem( info.dirPath( true ) + "/" + info.baseName() + impl );
 		}
 	}
-	
+
 	returnType->setAutoCompletion( true );
 	returnType->insertStringList( QStringList()
 	                              << "void"
@@ -99,9 +101,9 @@ AddMethodDialog::AddMethodDialog( CppSupportPart* cppSupport, ClassDom klass,
 	                              << "unsigned"
 	                              << "float"
 	                              << "double" );
-	
+
 	returnType->insertStringList( typeNameList( m_cppSupport->codeModel() ) );
-	
+
 	updateGUI();
 	addMethod();
 }
@@ -118,25 +120,25 @@ QString AddMethodDialog::accessID( FunctionDom fun ) const
 {
 	if ( fun->isSignal() )
 		return QString::fromLatin1( "Signals" );
-	
+
 	switch ( fun->access() )
 	{
 	case CodeModelItem::Public:
 		if ( fun->isSlot() )
 			return QString::fromLatin1( "Public Slots" );
 		return QString::fromLatin1( "Public" );
-		
+
 	case CodeModelItem::Protected:
 		if ( fun->isSlot() )
 			return QString::fromLatin1( "Protected Slots" );
 		return QString::fromLatin1( "Protected" );
-		
+
 	case CodeModelItem::Private:
 		if ( fun->isSlot() )
 			return QString::fromLatin1( "Private Slots" );
 		return QString::fromLatin1( "Private" );
 	}
-	
+
 	return QString::null;
 }
 
@@ -150,14 +152,14 @@ void AddMethodDialog::accept()
 		QDialog::accept();
 		return ;
 	}
-	
+
 	int line, column;
 	m_klass->getEndPosition( &line, &column );
-	
+
 	// compute the insertion point map
 	QMap<QString, QPair<int, int> > points;
 	QStringList accessList;
-	
+
 	const FunctionList functionList = m_klass->functionList();
 	for ( FunctionList::ConstIterator it = functionList.begin(); it != functionList.end(); ++it )
 	{
@@ -165,37 +167,37 @@ void AddMethodDialog::accept()
 		( *it ) ->getEndPosition( &funEndLine, &funEndColumn );
 		QString access = accessID( *it );
 		QPair<int, int> funEndPoint = qMakePair( funEndLine, funEndColumn );
-		
+
 		if ( !points.contains( access ) || points[ access ] < funEndPoint )
 		{
 			accessList.remove( access );
 			accessList.push_back( access ); // move 'access' at the end of the list
-			
+
 			points[ access ] = funEndPoint;
 		}
 	}
-	
+
 	int insertedLine = 0;
-	
+
 	accessList += newAccessList( accessList );
-	
+
 	for ( QStringList::iterator it = accessList.begin(); it != accessList.end(); ++it )
 	{
 		QListViewItem* item = methods->firstChild();
 		while ( item )
 		{
 			QListViewItem * currentItem = item;
-			
+
 			item = item->nextSibling();
-			
+
 			if ( currentItem->text( 1 ) != *it )
 				continue;
-			
+
 			QString access = ( *it ).lower();
-			
+
 			bool isInline = currentItem->text( 0 ) == "True";
 			QString str = isInline ? functionDefinition( currentItem ) : functionDeclaration( currentItem );
-			
+
 			QPair<int, int> pt;
 			if ( points.contains( *it ) )
 			{
@@ -207,42 +209,42 @@ void AddMethodDialog::accept()
 				points[ *it ] = qMakePair( line - 1, 0 );
 				pt = points[ *it ]; // end of class declaration
 			}
-			
+
 			editIface->insertText( pt.first + insertedLine + 1, 0 /*pt.second*/, str );
 			insertedLine += str.contains( QChar( '\n' ) );
 		}
 	}
-	
+
 	m_cppSupport->backgroundParser() ->addFile( m_klass->fileName() );
-	
+
 	QString str;
 	QListViewItem* item = methods->firstChild();
 	while ( item )
 	{
 		QListViewItem * currentItem = item;
-		
+
 		item = item->nextSibling();
-		
+
 		QString str = functionDefinition( currentItem );
 		if ( str.isEmpty() )
 			continue;
-		
+
 		QString implementationFile = currentItem->text( 5 );
 		if ( currentItem->text( 0 ) == "True" )
 			implementationFile = m_klass->fileName();
-		
+
 		QFileInfo fileInfo( implementationFile );
 		if ( !QFile::exists( fileInfo.absFilePath() ) )
 		{
 			if ( KDevCreateFile * createFileSupp = m_cppSupport->extension<KDevCreateFile>( "KDevelop/CreateFile" ) )
 				createFileSupp->createNewFile( fileInfo.extension(), fileInfo.dirPath( true ), fileInfo.baseName() );
 		}
-		
+
 		m_cppSupport->partController() ->editDocument( KURL( implementationFile ) );
 		editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController() ->activePart() );
 		if ( !editIface )
 			continue;
-		
+
 		bool isInline = currentItem->text( 0 ) == "True";
 		if ( !isInline )
 		{
@@ -251,25 +253,25 @@ void AddMethodDialog::accept()
 			m_cppSupport->backgroundParser() ->addFile( implementationFile );
 		}
 	}
-	
+
 	QDialog::accept();
 }
 
 void AddMethodDialog::updateGUI()
 {
 	bool enable = methods->selectedItem() != 0;
-	
+
 	returnType->setEnabled( enable );
 	declarator->setEnabled( enable );
 	access->setEnabled( enable );
 	storage->setEnabled( enable );
 	isInline->setEnabled( enable );
-	
+
 	sourceFile->setEnabled( enable );
 	browseButton->setEnabled( enable );
-	
+
 	deleteMethodButton->setEnabled( enable );
-	
+
 	if ( enable )
 	{
 		QListViewItem * item = methods->selectedItem();
@@ -279,7 +281,7 @@ void AddMethodDialog::updateGUI()
 		item->setText( 3, returnType->currentText() );
 		item->setText( 4, declarator->text() );
 		item->setText( 5, sourceFile->currentText() );
-		
+
 		if ( isInline->isChecked() || storage->currentText() == "Friend" || storage->currentText() == "Pure Virtual" )
 		{
 			sourceFile->setEnabled( false );
@@ -295,7 +297,7 @@ void AddMethodDialog::addMethod()
 	                                          sourceFile->currentText() );
 	methods->setCurrentItem( item );
 	methods->setSelected( item, true );
-	
+
 	returnType->setFocus();
 }
 
@@ -315,7 +317,7 @@ void AddMethodDialog::currentChanged( QListViewItem* item )
 		QString _returnType = item->text( 3 );
 		QString _declarator = item->text( 4 );
 		QString _sourceFile = item->text( 5 );
-		
+
 		isInline->setChecked( _isInline == "True" ? true : false );
 		access->setCurrentText( _access );
 		storage->setCurrentText( _storage );
@@ -323,7 +325,7 @@ void AddMethodDialog::currentChanged( QListViewItem* item )
 		declarator->setText( _declarator );
 		sourceFile->setCurrentText( _sourceFile );
 	}
-	
+
 	updateGUI();
 }
 
@@ -338,9 +340,9 @@ QString AddMethodDialog::functionDeclaration( QListViewItem * item ) const
 {
 	QString str;
 	QTextStream stream( &str, IO_WriteOnly );
-	
+
 	QString access = item->text( 1 ).lower();
-	
+
 	stream << "    "; /// @todo use AStyle
 	if ( item->text( 2 ) == "Virtual" || item->text( 2 ) == "Pure Virtual" )
 		stream << "virtual ";
@@ -352,7 +354,7 @@ QString AddMethodDialog::functionDeclaration( QListViewItem * item ) const
 	if ( item->text( 2 ) == "Pure Virtual" )
 		stream << " = 0";
 	stream << ";\n";
-	
+
 	return str;
 }
 
@@ -363,56 +365,56 @@ QString AddMethodDialog::functionDefinition( QListViewItem* item ) const
 	{
 		return QString::null;
 	}
-	
+
 	QString className = m_klass->name();
 	QString fullName = m_klass->scope().join( "::" );
 	if ( !fullName.isEmpty() )
 		fullName += "::";
 	fullName += className;
-	
+
 	QString str;
 	QTextStream stream( &str, IO_WriteOnly );
-	
+
 	bool isInline = item->text( 0 ) == "True";
-	
+
 	QString ind;
 	if ( isInline )
 		ind.fill( QChar( ' ' ), 4 );
-	
+
 	stream << "\n"
 		<< ind << "/*!\n"
 		<< ind << "    \\fn " << fullName << "::" << item->text( 4 ) << "\n"
 		<< ind << " */\n";
-	
+
 	stream
 		<< ind << item->text( 3 ) << " " << ( isInline ? QString::fromLatin1( "" ) : fullName + "::" )
 		<< item->text( 4 ) << "\n"
 		<< ind << "{\n"
 		<< ind << "    /// @todo implement me\n"
 		<< ind << "}\n";
-	
+
 	return str;
 }
 
 QStringList AddMethodDialog::newAccessList( const QStringList& accessList ) const
 {
 	QStringList newAccessList;
-	
+
 	QListViewItem* item = methods->firstChild();
 	while ( item )
 	{
 		QListViewItem * currentItem = item;
-		
+
 		item = item->nextSibling();
-		
+
 		QString access = currentItem->text( 1 );
 		if ( !( accessList.contains( access ) || newAccessList.contains( access ) ) )
 			newAccessList.push_back( access );
 	}
-	
+
 	return newAccessList;
 }
 
-#include "addmethoddialog.moc" 
+#include "addmethoddialog.moc"
 //kate: indent-mode csands; tab-width 4; space-indent off;
 
