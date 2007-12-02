@@ -26,7 +26,7 @@ public:
     SvnImportMetadataWidget( QWidget *parent );
     virtual ~SvnImportMetadataWidget();
 
-    virtual void setImportDir( const QString& );
+    virtual void setImportDirectory( const QString& );
     virtual KDevelop::VcsMapping mapping() const;
 
 private:

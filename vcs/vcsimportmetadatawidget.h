@@ -35,8 +35,9 @@ Q_OBJECT
 public:
     VcsImportMetadataWidget( QWidget* parent );
     virtual ~VcsImportMetadataWidget();
-    virtual void setImportDir( const QString& ) = 0;
     virtual VcsMapping mapping() const = 0;
+public Q_SLOTS:
+    virtual void setImportDirectory( const QString& ) = 0;
 };
 
 }

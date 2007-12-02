@@ -25,7 +25,7 @@ SvnImportMetadataWidget::~SvnImportMetadataWidget()
     delete m_ui;
 }
 
-void SvnImportMetadataWidget::setImportDir( const QString& importdir )
+void SvnImportMetadataWidget::setImportDirectory( const QString& importdir )
 {
     m_ui->srcLabel->setText( importdir );
 }
