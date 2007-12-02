@@ -37,13 +37,13 @@ class ProcessListBoxItem : public QListBoxText
 {
 public:
     enum Type { Diagnostic, Normal, Error };
-    
+
     ProcessListBoxItem(const QString &s, Type type);
 
     virtual bool isCustomItem();
- 
+
 protected:
-    QColor blend(const QColor &c1, const QColor &c2, double k = 0.5) const;
+    QColor blend(const QColor &c1, const QColor &c2, double k = 0.25) const;
 
 private:
     virtual void paint(QPainter *p);
@@ -67,7 +67,7 @@ public:
      * Returns whether a process is running in this view.
      */
     bool isRunning();
-    
+
 public slots:
     /**
      * Starts the child process.
@@ -101,13 +101,13 @@ protected:
     virtual void childFinished(bool normal, int status);
 
 signals:
-    void processExited(KProcess *); 
+    void processExited(KProcess *);
     void rowSelected(int row);
 
 protected:
     virtual QSize minimumSizeHint() const;
     void maybeScrollToBottom();
-    
+
 protected slots:
     void slotProcessExited(KProcess*);
 
