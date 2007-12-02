@@ -85,7 +85,7 @@ class JobHelper : public QObject
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     : ThreadWeaver::Job( parent ), m_ctxt( new svn::Context() ),
-      m_guiSemaphore( 1 ), m_mutex( new QMutex() ),
+      m_guiSemaphore( 0 ), m_mutex( new QMutex() ),
       helper(0), m_success( true ), sendFirstDelta( false )
 {
     m_ctxt->setListener(this);
