@@ -168,12 +168,15 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                     if( job->status() != JobSucceeded )
                     {
                         //Error handling, display checkout-error message to user
+                        return "";
                     }
-                }
+                }else
+                    return "";
             }else
             {
                 //Error handling and copying the project from tmpdir to the chosen
                 //destination
+                return "";
             }
         }
     }else
