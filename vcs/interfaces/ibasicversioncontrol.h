@@ -266,12 +266,9 @@ public:
      */
 
     /**
-     * take the local directory and add it into the repository at the given
-     * target
+     * take a mapping of local to repository locations and import that into the repository
      */
-    virtual VcsJob* import( const KUrl& localLocation,
-                            const QString& repositoryLocation,
-                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
+    virtual VcsJob* import( const VcsMapping& localLocation, const QString& commitMessage ) = 0;
 
     /**
      * Checks out files or dirs from a repository into a local directory

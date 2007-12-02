@@ -29,7 +29,11 @@ class VcsLocationPrivate
 {
 public:
     KUrl m_localUrl;
-    QString m_repoLocation;
+    QString m_repoServer;
+    QString m_repoPath;
+    QString m_repoModule;
+    QString m_repoBranch;
+    QString m_repoTag;
     VcsLocation::LocationType m_type;
 };
 
@@ -49,7 +53,7 @@ VcsLocation::VcsLocation( const KUrl& u )
 VcsLocation::VcsLocation( const QString& s )
     : d(new VcsLocationPrivate)
 {
-    setRepositoryLocation( s );
+    setRepositoryServer( s );
 }
 
 VcsLocation::~VcsLocation()
@@ -62,7 +66,11 @@ VcsLocation::VcsLocation( const VcsLocation& rhs )
 {
     d->m_type = rhs.d->m_type;
     d->m_localUrl = rhs.d->m_localUrl;
-    d->m_repoLocation = rhs.d->m_repoLocation;
+    d->m_repoServer = rhs.d->m_repoServer;
+    d->m_repoPath = rhs.d->m_repoPath;
+    d->m_repoModule = rhs.d->m_repoModule;
+    d->m_repoBranch = rhs.d->m_repoBranch;
+    d->m_repoTag = rhs.d->m_repoTag;
 }
 
 VcsLocation& VcsLocation::operator=( const VcsLocation& rhs )
@@ -71,7 +79,11 @@ VcsLocation& VcsLocation::operator=( const VcsLocation& rhs )
         return *this;
     d->m_type = rhs.d->m_type;
     d->m_localUrl = rhs.d->m_localUrl;
-    d->m_repoLocation = rhs.d->m_repoLocation;
+    d->m_repoServer = rhs.d->m_repoServer;
+    d->m_repoPath = rhs.d->m_repoPath;
+    d->m_repoModule = rhs.d->m_repoModule;
+    d->m_repoBranch = rhs.d->m_repoBranch;
+    d->m_repoTag = rhs.d->m_repoTag;
     return *this;
 }
 
@@ -79,9 +91,9 @@ KUrl VcsLocation::localUrl() const
 {
     return d->m_localUrl;
 }
-QString VcsLocation::repositoryLocation() const
+QString VcsLocation::repositoryServer() const
 {
-    return d->m_repoLocation;
+    return d->m_repoServer;
 }
 
 VcsLocation::LocationType VcsLocation::type() const
@@ -91,21 +103,26 @@ VcsLocation::LocationType VcsLocation::type() const
 
 bool VcsLocation::isValid() const
 {
-    return( ( d->m_localUrl.isValid() 
-              && d->m_type == VcsLocation::LocalLocation ) 
-            || ( !d->m_repoLocation.isEmpty()
-               && d->m_type == VcsLocation::RepositoryLocation ) );
+    return( ( d->m_localUrl.isValid()
+              && d->m_type == VcsLocation::LocalLocation )
+            || ( !d->m_repoServer.isEmpty()
+                && !d->m_repoModule.isEmpty()
+                && d->m_type == VcsLocation::RepositoryLocation ) );
 }
 
 void VcsLocation::setLocalUrl( const KUrl& url )
 {
-    d->m_repoLocation = QString();
+    d->m_repoServer = QString();
+    d->m_repoModule = QString();
+    d->m_repoBranch = QString();
+    d->m_repoTag = QString();
+    d->m_repoPath = QString();
     d->m_type = VcsLocation::LocalLocation;
     d->m_localUrl = url;
 }
-void VcsLocation::setRepositoryLocation( const QString& location )
+void VcsLocation::setRepositoryServer( const QString& location )
 {
-    d->m_repoLocation = location;
+    d->m_repoServer = location;
     d->m_type = VcsLocation::RepositoryLocation;
     d->m_localUrl = KUrl();
 }
@@ -113,9 +130,63 @@ void VcsLocation::setRepositoryLocation( const QString& location )
 bool VcsLocation::operator==( const KDevelop::VcsLocation& rhs )
 {
     return( type() == rhs.type()
-            && repositoryLocation() == rhs.repositoryLocation()
-            && localUrl() == rhs.localUrl() );
+            && repositoryServer() == rhs.repositoryServer()
+            && localUrl() == rhs.localUrl()
+            && repositoryPath() == rhs.repositoryPath()
+            && repositoryModule() == rhs.repositoryModule()
+            && repositoryBranch() == rhs.repositoryBranch()
+            && repositoryTag() == rhs.repositoryTag() );
+}
+
+
+QString VcsLocation::repositoryModule( ) const
+{
+    return d->m_repoModule;
+}
+
+QString VcsLocation::repositoryTag( ) const
+{
+    return d->m_repoTag;
+}
+
+QString VcsLocation::repositoryBranch( ) const
+{
+    return d->m_repoBranch;
+}
+
+QString VcsLocation::repositoryPath( ) const
+{
+    return d->m_repoPath;
+}
+
+void VcsLocation::setRepositoryModule( const QString & module )
+{
+    d->m_repoModule = module;
+    d->m_type = VcsLocation::RepositoryLocation;
+    d->m_localUrl = KUrl();
+}
+
+void VcsLocation::setRepositoryBranch( const QString & branch )
+{
+    d->m_repoBranch = branch;
+    d->m_type = VcsLocation::RepositoryLocation;
+    d->m_localUrl = KUrl();
+}
+
+void VcsLocation::setRepositoryTag( const QString & tag )
+{
+    d->m_repoTag = tag;
+    d->m_type = VcsLocation::RepositoryLocation;
+    d->m_localUrl = KUrl();
+}
+
+void VcsLocation::setRepositoryPath( const QString & path )
+{
+    d->m_repoPath = path;
+    d->m_type = VcsLocation::RepositoryLocation;
+    d->m_localUrl = KUrl();
 }
 
 }
+
 

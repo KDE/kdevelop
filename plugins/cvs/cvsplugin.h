@@ -90,9 +90,7 @@ public:
                 const KUrl& localLocation );
     virtual KDevelop::VcsJob* resolve( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* import( const KUrl& localLocation,
-                const QString& repositoryLocation,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
+    virtual KDevelop::VcsJob* import( const KDevelop::VcsMapping& localLocation, const QString& commitMessage );
     virtual KDevelop::VcsJob* checkout( const KDevelop::VcsMapping& mapping );
     // End:  KDevelop::IBasicVersionControl
 

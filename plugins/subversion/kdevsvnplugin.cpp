@@ -300,9 +300,7 @@ KDevelop::VcsJob* KDevSvnPlugin::resolve( const KUrl::List& /*localLocations*/,
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::import( const KUrl& /*localLocation*/,
-                const QString& /*repositoryLocation*/,
-                KDevelop::IBasicVersionControl::RecursionMode /*recursion*/ )
+KDevelop::VcsJob* KDevSvnPlugin::import( const KDevelop::VcsMapping& localLocation, const QString& commitMessage )
 {
     return 0;
 }

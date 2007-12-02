@@ -28,6 +28,7 @@ namespace KDevelop
 {
 
 class VcsMapping;
+class VcsLocation;
 
 class KDEVPLATFORMVCS_EXPORT VcsImportMetadataWidget : public QWidget
 {
@@ -36,8 +37,10 @@ public:
     VcsImportMetadataWidget( QWidget* parent );
     virtual ~VcsImportMetadataWidget();
     virtual VcsMapping mapping() const = 0;
+    virtual QString message() const = 0;
 public Q_SLOTS:
-    virtual void setImportDirectory( const QString& ) = 0;
+    virtual void setSourceLocation( const VcsLocation& ) = 0;
+    virtual void setSourceLocationEditable( bool ) = 0;
 };
 
 }

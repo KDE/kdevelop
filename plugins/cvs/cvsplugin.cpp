@@ -575,7 +575,7 @@ KDevelop::VcsJob * CvsPlugin::resolve(const KUrl::List & localLocations, KDevelo
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPlugin::import(const KUrl & localLocation, const QString & repositoryLocation, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, const QString& commitMessage)
 {
     return NULL;
 }

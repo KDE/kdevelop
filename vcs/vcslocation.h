@@ -23,15 +23,18 @@
 #define KDEVVCSLOCATION_H
 
 #include "vcsexport.h"
-#include <QtCore/QString>
+#include <QtCore/QList>
 #include <kurl.h>
 
-class KUrl;
-class QString;
 
 namespace KDevelop
 {
-
+/**
+ * Denotes a local or repository location for a Vcs system
+ *
+ * For the RepositoryLocation type most of the informations
+ * are vcs specific
+ */
 class KDEVPLATFORMVCS_EXPORT VcsLocation
 {
 public:
@@ -48,12 +51,68 @@ public:
     VcsLocation( const VcsLocation& );
     VcsLocation& operator=( const VcsLocation& );
 
+    /**
+     * @returns Local url if this location is a LocalLocation
+     */
     KUrl localUrl() const;
-    QString repositoryLocation() const;
+
+    /**
+     * Returns a string for the repository, usually this identifies the server
+     * @returns a vcs-implementation-specific string identifying the server
+     */
+    QString repositoryServer() const;
+    /**
+     * Returns the module or module path inside the server
+     * @returns a vcs-implementation-specific string identifying the module
+     */
+    QString repositoryModule() const;
+    /**
+     * identifies the tag which this location belongs to
+     * @returns a vcs-implementation-specific string identifying the tag
+     */
+    QString repositoryTag() const;
+    /**
+     * identifies the branch to which this location belongs to
+     * @returns a vcs-implementation-specific string identifying the branch
+     */
+    QString repositoryBranch() const;
+    /**
+     * This can define a path relative to the module, this is used
+     * when identifying a subdirectory or file inside a repository location
+     * @returns a path relative to module
+     */
+    QString repositoryPath() const;
+    /**
+     * @returns the type of this location
+     */
     VcsLocation::LocationType type() const;
 
-    void setLocalUrl( const KUrl& );
-    void setRepositoryLocation( const QString& );
+    /**
+     * Set the local url for this location, automatically sets the type to LocalLocation
+     * @param url the local url
+     */
+    void setLocalUrl( const KUrl& url );
+
+    /**
+     * Set the server string for this location, automatically sets the type to RepositoryLocation
+     */
+    void setRepositoryServer( const QString& );
+    /**
+     * Set the module for this location, automatically sets the type to RepositoryLocation
+     */
+    void setRepositoryModule( const QString& );
+    /**
+     * Set the branch string for this location, automatically sets the type to RepositoryLocation
+     */
+    void setRepositoryBranch( const QString& );
+    /**
+     * Set the tag string for this location, automatically sets the type to RepositoryLocation
+     */
+    void setRepositoryTag( const QString& );
+    /**
+     * Set the path for this location, automatically sets the type to RepositoryLocation
+     */
+    void setRepositoryPath( const QString& );
 
     bool operator==( const KDevelop::VcsLocation& );
 
@@ -72,14 +131,14 @@ inline uint qHash( const KDevelop::VcsLocation& loc )
         return qHash(loc.localUrl());
     }else
     {
-        return qHash(loc.repositoryLocation());
+        return qHash(loc.repositoryServer());
     }
 }
 
 inline bool operator==( const KDevelop::VcsLocation& lhs, const KDevelop::VcsLocation& rhs )
 {
     return( lhs.type() == rhs.type()
-            && lhs.repositoryLocation() == rhs.repositoryLocation()
+            && lhs.repositoryServer() == rhs.repositoryServer()
             && lhs.localUrl() == rhs.localUrl() );
 }
 

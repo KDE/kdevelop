@@ -68,7 +68,7 @@ void SvnInternalCatJob::run()
             }
         }else
         {
-            srcba = source().repositoryLocation().toUtf8();
+            srcba = source().repositoryServer().toUtf8();
         }
         svn::Revision srcRev = createSvnCppRevisionFromVcsRevision( srcRevision() );
         content = QString::fromUtf8( cli.cat( svn::Path( srcba.data() ), srcRev ).c_str() );
@@ -76,7 +76,7 @@ void SvnInternalCatJob::run()
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while doing a diff: "
-                << m_source.localUrl() << m_source.repositoryLocation() << m_srcRevision.revisionValue()
+                << m_source.localUrl() << m_source.repositoryServer() << m_srcRevision.revisionValue()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;

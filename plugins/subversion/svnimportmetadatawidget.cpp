@@ -12,12 +12,13 @@
 #include "svnimportmetadatawidget.h"
 #include "ui_importmetadatawidget.h"
 #include <vcsmapping.h>
+#include <vcslocation.h>
 
 SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
     : VcsImportMetadataWidget( parent ), m_ui(new Ui::SvnImportMetadataWidget)
 {
     m_ui->setupUi( this );
-    m_ui->srcLabel->setText( "" );
+    m_ui->srcEdit->setUrl( KUrl() );
 }
 
 SvnImportMetadataWidget::~SvnImportMetadataWidget()
@@ -25,17 +26,30 @@ SvnImportMetadataWidget::~SvnImportMetadataWidget()
     delete m_ui;
 }
 
-void SvnImportMetadataWidget::setImportDirectory( const QString& importdir )
+void SvnImportMetadataWidget::setSourceLocation( const KDevelop::VcsLocation& importdir )
 {
-    m_ui->srcLabel->setText( importdir );
+    m_ui->srcEdit->setUrl( importdir.localUrl() );
 }
 
 KDevelop::VcsMapping SvnImportMetadataWidget::mapping() const
 {
-    QString importdir = m_ui->srcLabel->text();
+    KDevelop::VcsLocation loc;
+    loc.setLocalUrl( m_ui->srcEdit->url() );
+    KDevelop::VcsLocation destloc;
+    destloc.setRepositoryServer(m_ui->dest->url().url());
     KDevelop::VcsMapping map;
-    map.addMapping( importdir, m_ui->dest->url().url(), m_ui->recursive->isChecked() ? KDevelop::VcsMapping::Recursive : KDevelop::VcsMapping::NonRecursive );
+    map.addMapping( loc, destloc , m_ui->recursive->isChecked() ? KDevelop::VcsMapping::Recursive : KDevelop::VcsMapping::NonRecursive );
     return map;
+}
+
+void SvnImportMetadataWidget::setSourceLocationEditable( bool enable )
+{
+    m_ui->srcEdit->setEnabled( enable );
+}
+
+QString SvnImportMetadataWidget::message() const
+{
+    return m_ui->message->toPlainText();
 }
 
 #include "svnimportmetadatawidget.moc"

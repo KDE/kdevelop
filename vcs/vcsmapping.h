@@ -34,11 +34,11 @@ class QStringList;
 namespace KDevelop
 {
 
+class VcsLocation;
+
 /**
- * Small container class that has a mapping of
- * repository-location -> local location including a recursion flag
- *
- * Just a convenient API around QMap\<KUrl, QPair\<KUrl, MappingFlag\>\>
+ * This class stores mappings of vcs locations. Usually one location is a local
+ * location, the other is a repository location.
  */
 class KDEVPLATFORMVCS_EXPORT VcsMapping
 {
@@ -53,13 +53,13 @@ public:
     virtual ~VcsMapping();
     VcsMapping(const VcsMapping&);
 
-    void addMapping( const QString& sourceLocation,
-                     const QString& destinationLocation,
+    void addMapping( const VcsLocation& sourceLocation,
+                     const VcsLocation& destinationLocation,
                      MappingFlag recursion );
-    void removeMapping( const QString& sourceLocation);
-    QStringList sourceLocations() const;
-    QString destinationLocation( const QString& sourceLocation ) const;
-    MappingFlag mappingFlag( const QString& sourceLocation ) const;
+    void removeMapping( const VcsLocation& sourceLocation);
+    QList<VcsLocation> sourceLocations() const;
+    VcsLocation destinationLocation( const VcsLocation& sourceLocation ) const;
+    MappingFlag mappingFlag( const VcsLocation& sourceLocation ) const;
 
     VcsMapping& operator=( const VcsMapping& rhs);
 private:

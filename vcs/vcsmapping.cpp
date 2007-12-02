@@ -22,8 +22,10 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QPair>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include "vcslocation.h"
+
+#include <QtCore/QHash>
+
 
 namespace KDevelop
 {
@@ -31,7 +33,7 @@ namespace KDevelop
 class VcsMappingPrivate
 {
     public:
-        QMap<QString,QPair<QString, VcsMapping::MappingFlag> > mapping;
+        QHash<VcsLocation,QPair<VcsLocation, VcsMapping::MappingFlag> > mapping;
 };
 
 VcsMapping::VcsMapping()
@@ -50,33 +52,33 @@ VcsMapping::VcsMapping( const VcsMapping& rhs )
     d->mapping = rhs.d->mapping;
 }
 
-void VcsMapping::addMapping( const QString& sourceLocation,
-                    const QString& destinationLocation,
+void VcsMapping::addMapping( const VcsLocation& sourceLocation,
+                    const VcsLocation& destinationLocation,
                     VcsMapping::MappingFlag recursion )
 {
-    QPair<QString,VcsMapping::MappingFlag> val = qMakePair(destinationLocation,recursion);
+    QPair<VcsLocation,VcsMapping::MappingFlag> val = qMakePair(destinationLocation,recursion);
     d->mapping[sourceLocation] = val;
 }
 
-void VcsMapping::removeMapping( const QString& sourceLocation)
+void VcsMapping::removeMapping( const VcsLocation& sourceLocation)
 {
     if( d->mapping.contains(sourceLocation) )
         d->mapping.remove(sourceLocation);
 }
 
-QStringList VcsMapping::sourceLocations() const
+QList<VcsLocation> VcsMapping::sourceLocations() const
 {
     return d->mapping.keys();
 }
 
-QString VcsMapping::destinationLocation( const QString& sourceLocation ) const
+VcsLocation VcsMapping::destinationLocation( const VcsLocation& sourceLocation ) const
 {
     if( d->mapping.contains( sourceLocation ) )
         return d->mapping[sourceLocation].first;
     return QString();
 }
 
-VcsMapping::MappingFlag VcsMapping::mappingFlag( const QString& sourceLocation ) const
+VcsMapping::MappingFlag VcsMapping::mappingFlag( const VcsLocation& sourceLocation ) const
 {
     if( d->mapping.contains( sourceLocation ) )
         return d->mapping[sourceLocation].second;

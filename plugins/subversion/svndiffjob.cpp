@@ -78,7 +78,7 @@ void SvnInternalDiffJob::run()
                 }
             }else
             {
-                srcba = source().repositoryLocation().toUtf8();
+                srcba = source().repositoryServer().toUtf8();
             }
             QByteArray dstba;
             if( destination().type() == KDevelop::VcsLocation::LocalLocation )
@@ -93,7 +93,7 @@ void SvnInternalDiffJob::run()
                 }
             }else
             {
-                dstba = destination().repositoryLocation().toUtf8();
+                dstba = destination().repositoryServer().toUtf8();
             }
             svn::Revision srcRev = createSvnCppRevisionFromVcsRevision( srcRevision() );
             svn::Revision dstRev = createSvnCppRevisionFromVcsRevision( dstRevision() );
@@ -120,7 +120,7 @@ void SvnInternalDiffJob::run()
                 }
             }else
             {
-                srcba = source().repositoryLocation().toUtf8();
+                srcba = source().repositoryServer().toUtf8();
             }
             svn::Revision pegRev = createSvnCppRevisionFromVcsRevision( pegRevision() );
             svn::Revision srcRev = createSvnCppRevisionFromVcsRevision( srcRevision() );
@@ -141,8 +141,8 @@ void SvnInternalDiffJob::run()
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while doing a diff: "
-                << m_source.localUrl() << m_source.repositoryLocation() << m_srcRevision.prettyValue()
-                << m_destination.localUrl() << m_destination.repositoryLocation() << m_dstRevision.prettyValue()
+                << m_source.localUrl() << m_source.repositoryServer() << m_srcRevision.prettyValue()
+                << m_destination.localUrl() << m_destination.repositoryServer() << m_dstRevision.prettyValue()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
@@ -357,14 +357,14 @@ void SvnDiffJob::setDiff( const QString& diff )
                 l.setLocalUrl( KUrl( s ) );
             }else
             {
-                QString repoLocation = KUrl( l.repositoryLocation() ).path();
+                QString repoLocation = KUrl( l.repositoryServer() ).path();
                 QFileInfo fi( repoLocation );
                 if( s == fi.fileName() )
                 {
-                    l.setRepositoryLocation( l.repositoryLocation() );
+                    l.setRepositoryServer( l.repositoryServer() );
                 }else
                 {
-                    l.setRepositoryLocation( l.repositoryLocation() + "/" + s );
+                    l.setRepositoryServer( l.repositoryServer() + "/" + s );
                 }
             }
 

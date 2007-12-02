@@ -55,7 +55,7 @@ void SvnDiffWidget::diffReady( KDevelop::VcsJob* job )
     kDebug(9510) << "diff:" << diff.leftTexts().count();
     foreach( KDevelop::VcsLocation l, diff.leftTexts().keys() )
     {
-        kDebug(9510) << "diff:" << l.localUrl() << l.repositoryLocation();
+        kDebug(9510) << "diff:" << l.localUrl() << l.repositoryServer();
     }
     kDebug(9510) << "diff:" << diff.diff();
     kDebug(9510) << "diff:" << diff.type();

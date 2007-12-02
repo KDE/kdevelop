@@ -19,6 +19,11 @@ namespace Ui
     class SvnImportMetadataWidget;
 }
 
+namespace KDevelop
+{
+class VcsLocation;
+}
+
 class SvnImportMetadataWidget : public KDevelop::VcsImportMetadataWidget
 {
     Q_OBJECT
@@ -26,8 +31,10 @@ public:
     SvnImportMetadataWidget( QWidget *parent );
     virtual ~SvnImportMetadataWidget();
 
-    virtual void setImportDirectory( const QString& );
+    virtual void setSourceLocation( const KDevelop::VcsLocation& );
+    virtual void setSourceLocationEditable( bool );
     virtual KDevelop::VcsMapping mapping() const;
+    virtual QString message() const;
 
 private:
     Ui::SvnImportMetadataWidget *m_ui;
