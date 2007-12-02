@@ -58,6 +58,7 @@
 #include "svnlogwidget.h"
 #include "svnannotationwidget.h"
 #include "svndiffwidget.h"
+#include "svnimportmetadatawidget.h"
 
 K_PLUGIN_FACTORY(KDevSvnFactory, registerPlugin<KDevSvnPlugin>(); )
 K_EXPORT_PLUGIN(KDevSvnFactory("kdevsubversion"))
@@ -743,7 +744,7 @@ QString KDevSvnPlugin::name() const
 
 KDevelop::VcsImportMetadataWidget* KDevSvnPlugin::importMetadataWidget( QWidget* parent )
 {
-    return 0;
+    return new SvnImportMetadataWidget( parent );
 }
 
 #include "kdevsvnplugin.moc"

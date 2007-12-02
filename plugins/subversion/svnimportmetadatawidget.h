@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,26 +9,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVNIMPORTWIDGETS_H
-#define SVNIMPORTWIDGETS_H
+#ifndef SVNIMPORTMETADATAWIDGET_H
+#define SVNIMPORTMETADATAWIDGET_H
 
-#include <kdialog.h>
+#include <vcsimportmetadatawidget.h>
 
-class SvnImportDialog : public KDialog
+namespace Ui
+{
+    class SvnImportMetadataWidget;
+}
+
+class SvnImportMetadataWidget : public KDevelop::VcsImportMetadataWidget
 {
     Q_OBJECT
 public:
-    SvnImportDialog( QWidget *parent = NULL );
-    virtual ~SvnImportDialog();
+    SvnImportMetadataWidget( QWidget *parent );
+    virtual ~SvnImportMetadataWidget();
 
-    KUrl srcLocal();
-    KUrl destRepository();
-    bool nonRecurse();
-    bool noIgnore();
+    virtual void setImportDir( const QString& );
+    virtual KDevelop::VcsMapping mapping() const;
 
 private:
-    class Private;
-    Private *d;
+    Ui::SvnImportMetadataWidget *m_ui;
 };
 
 #endif

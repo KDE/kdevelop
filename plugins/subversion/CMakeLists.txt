@@ -50,6 +50,7 @@ set(kdevsubversion_PART_SRCS
     vcsannotationmodel.cpp
     svnannotationwidget.cpp
     svndiffwidget.cpp
+    svnimportmetadatawidget.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -58,6 +59,7 @@ set(kdevsubversion_PART_UI
     ui/logwidget.ui
     ui/annotationwidget.ui
     ui/diffwidget.ui
+    ui/importmetadatawidget.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
