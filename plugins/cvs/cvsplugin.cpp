@@ -589,7 +589,7 @@ QString CvsPlugin::name() const
 {
     return i18n("CVS");
 }
-QWidget* CvsPlugin::importMetadataWidget( QWidget* parent )
+KDevelop::VcsImportMetadataWidget* CvsPlugin::importMetadataWidget( QWidget* parent )
 {
     return 0;
 }

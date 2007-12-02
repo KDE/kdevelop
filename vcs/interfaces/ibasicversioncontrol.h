@@ -35,7 +35,7 @@ namespace KDevelop
 class VcsJob;
 class VcsMapping;
 class VcsLocation;
-
+class VcsImportMetadataWidget;
 /**
  * This is the basic interface that all Version Control or Source Code Management
  * plugins need to implement. None of the methods in this interface are optional.
@@ -75,7 +75,7 @@ public:
      * @param parent the parent widget for the newly created widget
      * @returns a widget to fetch metadata needed to import a project
      */
-    virtual QWidget* importMetadataWidget( QWidget* parent ) = 0;
+    virtual VcsImportMetadataWidget* importMetadataWidget( QWidget* parent ) = 0;
 
     /**
      * These methods rely on a valid vcs-directory with vcs-metadata in it.
