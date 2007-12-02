@@ -36,6 +36,7 @@
 #include <ioutputview.h>
 #include <projectmodel.h>
 #include <context.h>
+#include <vcs/vcsmapping.h>
 
 #include <svncpp/apr.hpp>
 
@@ -405,30 +406,33 @@ QPair<QString,QList<QAction*> > KDevSvnPlugin::requestContextMenuActions( KDevel
     connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
     actions << action;
 
-    action = new QAction("Diff to Head", this);
+    action = new QAction(i18n("Diff to Head"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
     actions << action;
 
-    action = new QAction("Diff to Base", this);
+    action = new QAction(i18n("Diff to Base"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
     actions << action;
 
-    action = new QAction("Copy...", this);
+    action = new QAction(i18n("Copy..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxCopy()) );
     actions << action;
 
-    action = new QAction("Move...", this);
+    action = new QAction(i18n("Move..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxMove()) );
     actions << action;
 
-    action = new QAction("History...", this);
+    action = new QAction(i18n("History..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxHistory()) );
     actions << action;
 
-    action = new QAction("Annotation...", this);
+    action = new QAction(i18n("Annotation..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
     actions << action;
 
+    action = new QAction(i18n("Import"), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxImport()) );
+    actions << action;
 
 //         action = new QAction(i18n("Blame/Annotate..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
@@ -747,6 +751,26 @@ QString KDevSvnPlugin::name() const
 KDevelop::VcsImportMetadataWidget* KDevSvnPlugin::createImportMetadataWidget( QWidget* parent )
 {
     return new SvnImportMetadataWidget( parent );
+}
+
+void KDevSvnPlugin::ctxImport( )
+{
+    if( m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( 0, i18n("Please select only one item for this operation") );
+        return;
+    }
+    KDialog dlg;
+    dlg.setCaption(i18n("Import into Subversion repository"));
+    SvnImportMetadataWidget* widget = new SvnImportMetadataWidget(&dlg);
+    widget->setSourceLocation( KDevelop::VcsLocation( m_ctxUrlList.first() ) );
+    widget->setSourceLocationEditable( false );
+    dlg.setMainWidget( widget );
+    if( dlg.exec() == QDialog::Accepted )
+    {
+        KDevelop::VcsJob* job = import( widget->mapping(), widget->message() );
+        job->exec();
+        delete job;
+    }
 }
 
 #include "kdevsvnplugin.moc"

@@ -135,6 +135,7 @@ public Q_SLOTS:
     void ctxCopy();
     void ctxMove();
     void ctxCat();
+    void ctxImport();
 private slots:
     void doCommit( SvnCommitDialog* );
     void cancelCommit( SvnCommitDialog* );
