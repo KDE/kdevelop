@@ -28,6 +28,11 @@ VcsImportMetadataWidget::VcsImportMetadataWidget( QWidget * parent )
 {
 }
 
+VcsImportMetadataWidget::~VcsImportMetadataWidget()
+{
+}
+
 }
 
 #include "vcsimportmetadatawidget.moc"
+

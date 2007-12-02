@@ -22,17 +22,19 @@
 #define VCSIMPORTMETADATAWIDGET_H
 
 #include <QtGui/QWidget>
+#include "vcsexport.h"
 
 namespace KDevelop
 {
 
 class VcsMapping;
 
-class VcsImportMetadataWidget : public QWidget
+class KDEVPLATFORMVCS_EXPORT VcsImportMetadataWidget : public QWidget
 {
 Q_OBJECT
 public:
     VcsImportMetadataWidget( QWidget* parent );
+    virtual ~VcsImportMetadataWidget();
     virtual void setImportDir( const QString& ) = 0;
     virtual VcsMapping mapping() const = 0;
 };
