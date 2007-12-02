@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,21 +18,27 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "svnoutputdelegate.h"
-#include "svnoutputmodel.h"
+#ifndef SVNIMPORTJOB_P_H
+#define SVNIMPORTJOB_P_H
 
-SvnOutputDelegate::SvnOutputDelegate( QObject* parent )
-    : QItemDelegate(parent), conflictBrush( KColorScheme::View, KColorScheme::NegativeText )
-{
-}
+#include "svninternaljobbase.h"
+#include <vcs/vcsmapping.h>
 
-void SvnOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+class SvnImportInternalJob : public SvnInternalJobBase
 {
-    QStyleOptionViewItem opt = option;
-    QVariant status = index.data(Qt::UserRole+1);
-    if( status.isValid() && status.toInt() == SvnOutputModel::Conflict )
-    {
-        opt.palette.setBrush( QPalette::Text, conflictBrush.brush( opt.palette ) );
-    }
-    QItemDelegate::paint(painter, opt, index);
-}
+    Q_OBJECT
+public:
+    SvnImportInternalJob( SvnJobBase* parent = 0 );
+    void setMapping( const KDevelop::VcsMapping& );
+    void setMessage( const QString& );
+
+    QString message() const;
+    KDevelop::VcsMapping mapping() const;
+protected:
+    void run();
+private:
+    KDevelop::VcsMapping m_mapping;
+    QString m_message;
+};
+
+#endif

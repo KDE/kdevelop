@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,21 +18,36 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "svnoutputdelegate.h"
-#include "svnoutputmodel.h"
+#ifndef svnimportjob_H
+#define svnimportjob_H
 
-SvnOutputDelegate::SvnOutputDelegate( QObject* parent )
-    : QItemDelegate(parent), conflictBrush( KColorScheme::View, KColorScheme::NegativeText )
+#include "svnjobbase.h"
+#include <QString>
+#include <QVariant>
+
+namespace KDevelop
 {
+class VcsMapping;
 }
 
-void SvnOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+class SvnImportInternalJob;
+
+class SvnImportJob : public SvnJobBase
 {
-    QStyleOptionViewItem opt = option;
-    QVariant status = index.data(Qt::UserRole+1);
-    if( status.isValid() && status.toInt() == SvnOutputModel::Conflict )
-    {
-        opt.palette.setBrush( QPalette::Text, conflictBrush.brush( opt.palette ) );
-    }
-    QItemDelegate::paint(painter, opt, index);
-}
+    Q_OBJECT
+public:
+    SvnImportJob( KDevSvnPlugin* parent );
+    QVariant fetchResults();
+    void start();
+    SvnInternalJobBase* internalJob() const;
+
+    void setMapping( const KDevelop::VcsMapping& locations );
+    void setMessage( const QString& );
+private:
+    SvnImportInternalJob* m_job;
+
+};
+
+
+#endif
+

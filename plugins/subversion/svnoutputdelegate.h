@@ -28,7 +28,7 @@ class SvnOutputDelegate : public QItemDelegate
 {
 public:
     SvnOutputDelegate(QObject*);
-    void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& );
+    void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
 private:
     KStatefulBrush conflictBrush;
 };

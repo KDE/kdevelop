@@ -35,6 +35,7 @@ set(kdevsubversion_JOB_SRCS
     svnmovejob.cpp
     svnlogjob.cpp
     svnblamejob.cpp
+    svnimportjob.cpp
 )
 
 set(kdevsubversion_PART_SRCS

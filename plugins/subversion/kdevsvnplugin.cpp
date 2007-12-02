@@ -51,6 +51,7 @@
 #include "svnmovejob.h"
 #include "svnlogjob.h"
 #include "svnblamejob.h"
+#include "svnimportjob.h"
 
 #include "svnoutputdelegate.h"
 #include "svnoutputmodel.h"
@@ -300,9 +301,12 @@ KDevelop::VcsJob* KDevSvnPlugin::resolve( const KUrl::List& /*localLocations*/,
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::import( const KDevelop::VcsMapping& localLocation, const QString& commitMessage )
+KDevelop::VcsJob* KDevSvnPlugin::import( const KDevelop::VcsMapping& mapping, const QString& msg )
 {
-    return 0;
+    SvnImportJob* job = new SvnImportJob( this );
+    job->setMapping( mapping );
+    job->setMessage( msg );
+    return job;
 }
 
 KDevelop::VcsJob* KDevSvnPlugin::checkout( const KDevelop::VcsMapping& mapping )
