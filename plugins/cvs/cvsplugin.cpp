@@ -584,6 +584,16 @@ KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsMapping & mapping)
     return NULL;
 }
 
+
+QString CvsPlugin::name() const
+{
+    return i18n("CVS");
+}
+QWidget* CvsPlugin::importMetadataWidget( QWidget* parent )
+{
+    return 0;
+}
+
 // End:  KDevelop::IBasicVersionControl
 
 #include "cvsplugin.moc"

@@ -33,6 +33,9 @@ public:
     KDevSvnPlugin( QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevSvnPlugin();
 
+    virtual QString name() const;
+    virtual QWidget* importMetadataWidget( QWidget* parent );
+
     // IBasicVersionControl interfaces.
     bool isVersionControlled( const KUrl& localLocation );
 

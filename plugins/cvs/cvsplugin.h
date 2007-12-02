@@ -39,6 +39,9 @@ public:
     CvsPlugin( QObject *parent, const QVariantList & args = QVariantList() );
     virtual ~CvsPlugin();
 
+    virtual QString name() const;
+    virtual QWidget* importMetadataWidget( QWidget* parent );
+
     // From KDevelop::IPlugin
     QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
 

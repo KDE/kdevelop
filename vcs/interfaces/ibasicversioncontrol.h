@@ -58,6 +58,26 @@ public:
     virtual ~IBasicVersionControl(){}
 
     /**
+     * return a user-visible string for the version control plugin
+     * Can be used for example when importing a project into a
+     * version control system to choose the apropriate system
+     *
+     * @returns a translated user-visible name for this version control plugin
+     */
+    virtual QString name() const = 0;
+    /**
+     * provides a widget that fetches the needed input data from the user
+     * to import a project into a version control system.
+     *
+     * If this returns 0 the plugin will not be available as an option for import
+     * when creating a new project
+     *
+     * @param parent the parent widget for the newly created widget
+     * @returns a widget to fetch metadata needed to import a project
+     */
+    virtual QWidget* importMetadataWidget( QWidget* parent ) = 0;
+
+    /**
      * These methods rely on a valid vcs-directory with vcs-metadata in it.
      *
      * revisions can contain a date in format parseable by QDate, a number,

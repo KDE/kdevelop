@@ -735,5 +735,16 @@ SvnOutputModel* KDevSvnPlugin::outputModel() const
     return m_outputmodel;
 }
 
+
+QString KDevSvnPlugin::name() const
+{
+    return i18n("Subversion");
+}
+
+QWidget* KDevSvnPlugin::importMetadataWidget( QWidget* parent )
+{
+    return 0;
+}
+
 #include "kdevsvnplugin.moc"
 
