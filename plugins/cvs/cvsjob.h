@@ -38,6 +38,8 @@ public:
     void setServer(const QString& server);
     void setDirectory(const QString& directory);
 
+    QString getDirectory();
+
     CvsJob& operator<<(const QString& arg);
     CvsJob& operator<<(const char* arg);
     CvsJob& operator<<(const QStringList& args);

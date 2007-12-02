@@ -88,6 +88,12 @@ void CvsJob::setDirectory(const QString& directory)
 }
 
 
+QString CvsJob::getDirectory()
+{
+    return d->directory;
+}
+
+
 bool CvsJob::isRunning() const
 {
     return d->isRunning;

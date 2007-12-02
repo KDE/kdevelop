@@ -20,6 +20,7 @@ set(kdevcvs_PART_SRCS
     diffoptionsdialog.cpp
     editorsview.cpp
     logview.cpp
+    annotateview.cpp
     commitdialog.cpp
     updateoptionsdialog.cpp
     importdialog.cpp
@@ -33,6 +34,7 @@ set(kdevcvs_PART_UI
     diffoptionsdialog.ui
     editorsview.ui
     logview.ui
+    annotateview.ui
     commitdialog.ui
     updateoptionsdialog.ui
     importdialog.ui

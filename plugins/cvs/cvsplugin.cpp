@@ -36,6 +36,7 @@
 #include "diffoptionsdialog.h"
 #include "editorsview.h"
 #include "logview.h"
+#include "annotateview.h"
 #include "commitdialog.h"
 #include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
@@ -322,7 +323,7 @@ void CvsPlugin::ctxAnnotate()
     KDevelop::VcsJob* j = annotate(d->m_ctxUrlList.first(), rev);
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
+        AnnotateView* view = new AnnotateView(this, job);
         emit addNewTabToMainView( view, i18n("Annotate") );
         job->start();
     }
