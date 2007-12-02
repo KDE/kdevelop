@@ -34,7 +34,11 @@
 
 #include <icore.h>
 #include <iprojectcontroller.h>
+#include <iplugincontroller.h>
 #include <vcs/vcsmapping.h>
+#include <vcs/vcslocation.h>
+#include <vcs/vcsjob.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
@@ -120,6 +124,9 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     if (templateArchive.isEmpty())
         return "";
 
+
+    KUrl dest = info.location;
+
     //prepare variable substitution hash
     m_variables.clear();
     m_variables["APPNAME"] = info.name;
@@ -140,7 +147,6 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     {
         if( info.vcsPluginName.isEmpty() )
         {
-            KUrl dest = info.location;
             if( !QFileInfo( dest.toLocalFile() ).exists() )
             {
                 QDir::root().mkdir( dest.toLocalFile() );
@@ -148,7 +154,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             unpackArchive(arch->directory(), dest.toLocalFile());
         }else
         {
-            KTempFile tmpdir;
+            KTempDir tmpdir;
             unpackArchive(arch->directory(), tmpdir.name());
             KDevelop::VcsMapping import;
             KDevelop::VcsLocation srcloc = info.importInformation.sourceLocations().first();
@@ -159,13 +165,13 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
             if( plugin && iface )
             {
-                VcsJob* job = iface->import( import, info.importCommitMessage );
+                KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
                 job->exec();
-                if( job->status() == JobSucceeded )
+                if( job->status() == KDevelop::VcsJob::JobSucceeded )
                 {
-                    VcsJob* job = iface->checkout( info.checkoutInformation );
+                    KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
                     job->exec();
-                    if( job->status() != JobSucceeded )
+                    if( job->status() != KDevelop::VcsJob::JobSucceeded )
                     {
                         //Error handling, display checkout-error message to user
                         return "";
