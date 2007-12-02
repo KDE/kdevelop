@@ -75,7 +75,7 @@ public:
      * @param parent the parent widget for the newly created widget
      * @returns a widget to fetch metadata needed to import a project
      */
-    virtual VcsImportMetadataWidget* importMetadataWidget( QWidget* parent ) = 0;
+    virtual VcsImportMetadataWidget* createImportMetadataWidget( QWidget* parent ) = 0;
 
     /**
      * These methods rely on a valid vcs-directory with vcs-metadata in it.

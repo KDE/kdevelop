@@ -34,7 +34,7 @@ public:
     virtual ~KDevSvnPlugin();
 
     virtual QString name() const;
-    virtual KDevelop::VcsImportMetadataWidget* importMetadataWidget( QWidget* parent );
+    virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget( QWidget* parent );
 
     // IBasicVersionControl interfaces.
     bool isVersionControlled( const KUrl& localLocation );

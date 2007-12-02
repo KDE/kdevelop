@@ -740,7 +740,7 @@ QString KDevSvnPlugin::name() const
     return i18n("Subversion");
 }
 
-KDevelop::VcsImportMetadataWidget* KDevSvnPlugin::importMetadataWidget( QWidget* parent )
+KDevelop::VcsImportMetadataWidget* KDevSvnPlugin::createImportMetadataWidget( QWidget* parent )
 {
     return new SvnImportMetadataWidget( parent );
 }
