@@ -40,7 +40,7 @@ public:
     virtual ~CvsPlugin();
 
     virtual QString name() const;
-    virtual KDevelop::VcsImportMetadataWidget* importMetadataWidget( QWidget* parent );
+    virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget( QWidget* parent );
 
     // From KDevelop::IPlugin
     QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );

@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,37 +9,40 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTDIALOG_H
-#define IMPORTDIALOG_H
+#ifndef IMPORTMETADATAWIDGET_H
+#define IMPORTMETADATAWIDGET_H
 
-#include <KDialog>
-#include <KUrl>
-#include <KJob>
+#include <vcs/vcsimportmetadatawidget.h>
 
-class ImportMetadataWidget;
+#include "ui_importmetadatawidget.h"
 
 class CvsPlugin;
+
+namespace KDevelop
+{
+class VcsMapping;
+class VcsLocation;
+}
 
 /**
  * Asks the user for all options needed to import an existing directory into
  * a CVS repository
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class ImportDialog : public KDialog
+class ImportMetadataWidget : public KDevelop::VcsImportMetadataWidget, private Ui::ImportMetadataWidget
 {
     Q_OBJECT
 public:
-    ImportDialog(CvsPlugin *plugin, const KUrl& url, QWidget* parent=0);
-    virtual ~ImportDialog();
+    ImportMetadataWidget(QWidget* parent=0);
+    virtual ~ImportMetadataWidget();
 
-public slots:
-    virtual void accept();
-    void jobFinished(KJob* job);
+    virtual KDevelop::VcsMapping mapping() const;
+    virtual QString message() const;
+    virtual void setSourceLocation( const KDevelop::VcsLocation& );
+    virtual void setSourceLocationEditable( bool );
 
 private:
-    KUrl m_url;
-    CvsPlugin* m_plugin;
-    ImportMetadataWidget* m_widget;
+    Ui::ImportMetadataWidget* m_ui;
 };
 
 #endif

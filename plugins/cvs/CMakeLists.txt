@@ -23,6 +23,7 @@ set(kdevcvs_PART_SRCS
     annotateview.cpp
     commitdialog.cpp
     updateoptionsdialog.cpp
+    importmetadatawidget.cpp
     importdialog.cpp
     checkoutdialog.cpp
 #   cvsfileinfoprovider.cpp
@@ -37,7 +38,7 @@ set(kdevcvs_PART_UI
     annotateview.ui
     commitdialog.ui
     updateoptionsdialog.ui
-    importdialog.ui
+    importmetadatawidget.ui
     checkoutdialog.ui
 )
 

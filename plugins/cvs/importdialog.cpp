@@ -17,12 +17,18 @@
 #include "cvsproxy.h"
 #include "cvsjob.h"
 
-ImportDialog::ImportDialog(CvsPlugin* plugin, const KUrl& url, QWidget *parent)
-    : KDialog(parent), Ui::ImportDialogBase(), m_url(url), m_plugin(plugin)
-{
-    Ui::ImportDialogBase::setupUi(this);
+#include <vcs/vcsmapping.h>
+#include <vcs/vcslocation.h>
 
-    labelUrl->setText( url.path() );
+#include "importmetadatawidget.h"
+
+ImportDialog::ImportDialog(CvsPlugin* plugin, const KUrl& url, QWidget *parent)
+    : KDialog(parent), m_url(url), m_plugin(plugin)
+{
+    m_widget = new ImportMetadataWidget(this);
+    m_widget->setSourceLocation( KDevelop::VcsLocation(m_url) );
+    m_widget->setSourceLocationEditable( false );
+    setMainWidget(m_widget);
 }
 
 ImportDialog::~ImportDialog()
@@ -31,12 +37,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    CvsJob *job = m_plugin->proxy()->import(m_url,
-                            repository->text(),
-                            module->text(),
-                            vendorTag->text(),
-                            releaseTag->text(),
-                            comment->text());
+    CvsJob *job = dynamic_cast<CvsJob*>( m_plugin->import(m_widget->mapping(), m_widget->message() ) );
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SLOT( jobFinished(KJob*) ));

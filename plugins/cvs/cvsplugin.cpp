@@ -30,6 +30,7 @@
 #include <icore.h>
 #include <context.h>
 
+
 #include "cvsmainview.h"
 #include "cvsproxy.h"
 #include "cvsjob.h"
@@ -40,9 +41,8 @@
 #include "commitdialog.h"
 #include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
-#include "importdialog.h"
 #include "checkoutdialog.h"
-
+#include "importmetadatawidget.h"
 
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>(); )
 K_EXPORT_PLUGIN(KDevCvsFactory("kdevcvs"))
@@ -590,9 +590,9 @@ QString CvsPlugin::name() const
 {
     return i18n("CVS");
 }
-KDevelop::VcsImportMetadataWidget* CvsPlugin::importMetadataWidget( QWidget* parent )
+KDevelop::VcsImportMetadataWidget* CvsPlugin::createImportMetadataWidget( QWidget* parent )
 {
-    return 0;
+    return new ImportMetadataWidget(parent);
 }
 
 // End:  KDevelop::IBasicVersionControl
