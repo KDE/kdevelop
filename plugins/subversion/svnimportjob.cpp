@@ -48,7 +48,7 @@ void SvnImportInternalJob::run()
         KDevelop::VcsLocation src = map.sourceLocations().first();
         KDevelop::VcsLocation dest = map.destinationLocation( src );
         bool recurse = ( map.mappingFlag( src ) == KDevelop::VcsMapping::Recursive );
-        QByteArray srcba = src.localUrl().path().toUtf8();
+        QByteArray srcba = src.localUrl().toLocalFile().toUtf8();
         QByteArray destba = dest.repositoryServer().toUtf8();
         QByteArray msg = message().toUtf8();
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), recurse );
@@ -105,7 +105,7 @@ void SvnImportJob::start()
         setErrorText( i18n( "Not enough information to import" ) );
     }else
     {
-        kDebug(9510) << "importing:" << m_job->mapping().sourceLocations().count();
+        kDebug(9510) << "importing:" << m_job->mapping().sourceLocations().first().localUrl();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }
