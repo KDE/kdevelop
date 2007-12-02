@@ -122,11 +122,15 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
     //prepare variable substitution hash
     m_variables.clear();
-    m_variables["APPNAME"] = info.appTemplate;
-    m_variables["APPNAMEUC"] = info.appTemplate.toUpper();
-    m_variables["APPNAMELC"] = info.appTemplate.toLower();
+    m_variables["APPNAME"] = info.name;
+    m_variables["APPNAMEUC"] = info.name.toUpper();
+    m_variables["APPNAMELC"] = info.name.toLower();
 
     KUrl dest = info.location;
+    if( !QFileInfo( dest.toLocalFile() ).exists() )
+    {
+        QDir::root().mkdir( dest.toLocalFile() );
+    }
     KArchive* arch = 0;
     if( templateArchive.endsWith(".zip") )
     {
@@ -141,7 +145,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     else
         kDebug(9010) << "failed to open template archive";
 
-    return QDir::cleanPath(dest.toLocalFile() + '/' + info.appTemplate.toLower() + ".kdev4");
+    return QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
 }
 
 void AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
