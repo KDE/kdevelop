@@ -178,6 +178,9 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
 
     connect( filter, SIGNAL( activated(const QString&) ),
              SLOT( slotFilterChange(const QString&) ) );
+
+    connect( filter, SIGNAL( textChanged(const QString&) ),
+             SLOT( slotFilterChange(const QString&) ) );
     connect( filter, SIGNAL( returnPressed(const QString&) ),
              filter, SLOT( addToHistory(const QString&) ) );
 
