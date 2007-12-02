@@ -68,11 +68,11 @@ ProjectVcsPage::~ ProjectVcsPage( )
     delete m_ui;
 }
 
-void ProjectVcsPage::setImportDirectory( const QString& s )
+void ProjectVcsPage::setSourceLocation( const KUrl& s )
 {
     foreach( int idx, importWidgets.keys() )
     {
-        importWidgets[idx]->setImportDirectory( s );
+        importWidgets[idx]->setSourceLocation( KDevelop::VcsLocation( s ) );
     }
 }
 
@@ -81,6 +81,15 @@ QString ProjectVcsPage::pluginName() const
     int idx = m_ui->vcsTypes->currentIndex();
     if( idx > 0)
         return vcsPlugins[idx].first;
+    return "";
+}
+
+
+QString ProjectVcsPage::commitMessage() const
+{
+    int idx = m_ui->vcsTypes->currentIndex();
+    if( idx )
+        return importWidgets[idx]->message();
     return "";
 }
 

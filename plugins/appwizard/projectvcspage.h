@@ -36,6 +36,8 @@ class VcsMapping;
 class VcsImportMetadataWidget;
 }
 
+class KUrl;
+
 class ProjectVcsPage : public QWidget
 {
     Q_OBJECT
@@ -43,11 +45,12 @@ public:
     ProjectVcsPage( KDevelop::IPluginController*, QWidget* parent = 0 );
     ~ProjectVcsPage();
 public slots:
-    void setImportDirectory( const QString& );
+    void setSourceLocation( const KUrl& );
 public:
     QString pluginName() const;
     QString name() const;
     KDevelop::VcsMapping mapping() const;
+    QString commitMessage() const;
 private:
     QMap<int, KDevelop::VcsImportMetadataWidget*> importWidgets;
     QMap<int, QPair<QString,QString> > vcsPlugins;
