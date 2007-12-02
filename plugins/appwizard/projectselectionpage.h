@@ -17,8 +17,10 @@ class ProjectSelectionPage;
 }
 
 class ProjectTemplatesModel;
+class KUrl;
 
 class ProjectSelectionPage: public QWidget {
+Q_OBJECT
 public:
     explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent = 0);
     ~ProjectSelectionPage();
@@ -26,7 +28,10 @@ public:
     QString selectedTemplate();
     QString appName();
     QString location();
-
+signals:
+    void locationChanged( const QString& );
+private slots:
+    void locationChanged( const KUrl& );
 private:
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;

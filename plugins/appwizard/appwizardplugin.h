@@ -19,6 +19,7 @@
 
 class ProjectTemplatesModel;
 class ProjectSelectionPage;
+class ProjectVcsPage;
 class KArchiveDirectory;
 
 class AppWizardPlugin: public KDevelop::IPlugin {
@@ -32,7 +33,7 @@ private slots:
     void slotImportProject();
 
 private:
-    QString createProject(ProjectSelectionPage *selectionPage);
+    QString createProject(ProjectSelectionPage *selectionPage, ProjectVcsPage*);
     void unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFile(const QString &source, const QString &dest);
 

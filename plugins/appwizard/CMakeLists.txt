@@ -10,11 +10,13 @@ set(kdevappwizard_PART_SRCS
     projecttemplatesmodel.cpp
     projecttemplateitem.cpp
     importproject.cpp
+    projectvcspage.cpp
 )
 
 set(kdevappwizard_PART_UI
     projectselectionpage.ui
     importproject.ui
+    projectvcspage.ui
 )
 
 kde4_add_ui_files(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
@@ -24,7 +26,7 @@ target_link_libraries(kdevappwizard
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDEVPLATFORM_INTERFACES_LIBRARY})
+    ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_VCS_LIBRARY})
 
 install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
 

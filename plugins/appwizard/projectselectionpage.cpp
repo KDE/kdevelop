@@ -23,6 +23,10 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 
     ui->locationUrl->setPath(QDir::homePath());
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    connect( ui->locationUrl, SIGNAL(textChanged(const QString&)),
+             this, SIGNAL(locationChanged(const QString&) ));
+    connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
+             this, SLOT(locationChanged(const KUrl&) ));
 }
 
 ProjectSelectionPage::~ProjectSelectionPage()
@@ -51,3 +55,9 @@ QString ProjectSelectionPage::appName()
     return ui->appNameEdit->text();
 }
 
+void ProjectSelectionPage::locationChanged( const KUrl& url )
+{
+    emit locationChanged( url.url() );
+}
+
+#include "projectselectionpage.moc"

@@ -34,9 +34,11 @@
 
 #include <icore.h>
 #include <iprojectcontroller.h>
+#include <vcs/vcsmapping.h>
 
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
+#include "projectvcspage.h"
 #include "projecttemplatesmodel.h"
 #include "importproject.h"
 
@@ -86,11 +88,15 @@ void AppWizardPlugin::slotNewProject()
     AppWizardDialog dlg;
 
     ProjectSelectionPage *selectionPage = new ProjectSelectionPage(m_templatesModel, &dlg);
+    ProjectVcsPage* vcsPage = new ProjectVcsPage( core()->pluginController(), &dlg );
+    connect( selectionPage, SIGNAL(locationChanged(const QString&) ),
+             vcsPage, SLOT(setImportDirectory(const QString&)) );
     dlg.addPage(selectionPage, i18nc("Page for general configuration options", "General"));
+    dlg.addPage(vcsPage, i18nc("Page for version control options", "Version Control") );
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        QString project = createProject(selectionPage);
+        QString project = createProject(selectionPage, vcsPage);
         if (!project.isEmpty())
             core()->projectController()->openProject(KUrl::fromPath(project));
     }
@@ -102,14 +108,14 @@ void AppWizardPlugin::slotImportProject()
     import.exec();
 }
 
-QString AppWizardPlugin::createProject(ProjectSelectionPage *selectionPage)
+QString AppWizardPlugin::createProject(ProjectSelectionPage *selectionPage, ProjectVcsPage* vcsPage)
 {
     QFileInfo templateInfo(selectionPage->selectedTemplate());
     if (!templateInfo.exists())
         return "";
 
     QString templateName = templateInfo.baseName();
-    kDebug(9010) << "creating project for template:" << templateName;
+    kDebug(9010) << "creating project for template:" << templateName << " with VCS:" << vcsPage->name() << vcsPage->pluginName();
 
     QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".zip");
     if( templateArchive.isEmpty() )
