@@ -114,6 +114,18 @@ public:
      */
     void setRepositoryPath( const QString& );
 
+    /**
+     * Allows to add vcs-specific data to this location
+     * automatically sets the type to RepositoryLocation
+     * @param data the vcs-specific data
+     */
+    void setUserData( const QVariant& );
+
+    /**
+     * retrieve vcs-specific data
+     */
+    QVariant userData() const;
+
     bool operator==( const KDevelop::VcsLocation& );
 
     bool isValid() const;

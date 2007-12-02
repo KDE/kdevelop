@@ -35,6 +35,7 @@ public:
     QString m_repoBranch;
     QString m_repoTag;
     VcsLocation::LocationType m_type;
+    QVariant m_userData;
 };
 
 VcsLocation::VcsLocation()
@@ -71,6 +72,7 @@ VcsLocation::VcsLocation( const VcsLocation& rhs )
     d->m_repoModule = rhs.d->m_repoModule;
     d->m_repoBranch = rhs.d->m_repoBranch;
     d->m_repoTag = rhs.d->m_repoTag;
+    d->m_userData = rhs.d->m_userData;
 }
 
 VcsLocation& VcsLocation::operator=( const VcsLocation& rhs )
@@ -84,6 +86,7 @@ VcsLocation& VcsLocation::operator=( const VcsLocation& rhs )
     d->m_repoModule = rhs.d->m_repoModule;
     d->m_repoBranch = rhs.d->m_repoBranch;
     d->m_repoTag = rhs.d->m_repoTag;
+    d->m_userData = rhs.d->m_userData;
     return *this;
 }
 
@@ -135,7 +138,8 @@ bool VcsLocation::operator==( const KDevelop::VcsLocation& rhs )
             && repositoryPath() == rhs.repositoryPath()
             && repositoryModule() == rhs.repositoryModule()
             && repositoryBranch() == rhs.repositoryBranch()
-            && repositoryTag() == rhs.repositoryTag() );
+            && repositoryTag() == rhs.repositoryTag()
+            && userData() == rhs.userData() );
 }
 
 
@@ -187,6 +191,18 @@ void VcsLocation::setRepositoryPath( const QString & path )
     d->m_localUrl = KUrl();
 }
 
+
+QVariant VcsLocation::userData( ) const
+{
+    return d->m_userData;
 }
 
+void VcsLocation::setUserData( const QVariant& data )
+{
+    d->m_type = VcsLocation::RepositoryLocation;
+    d->m_localUrl = KUrl();
+    d->m_userData = data;
+}
+
+}
 
