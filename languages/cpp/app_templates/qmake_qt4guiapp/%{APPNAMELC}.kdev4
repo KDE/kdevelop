@@ -1,4 +1,4 @@
 [Project]
 Manager=KDevQMakeManager
-PrimaryLanguage=C++
-ManagementView=KDevProjectManagerView
+Name=%{APPNAME}
+VersionControl=%{VERSIONCONTROLPLUGIN}
