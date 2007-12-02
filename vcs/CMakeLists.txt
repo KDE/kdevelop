@@ -11,11 +11,12 @@ set(kdevplatformvcs_LIB_SRCS
     vcsevent.cpp
     vcsmapping.cpp
     vcsstatusinfo.cpp
+    vcsimportmetadatawidget.cpp
 )
 
 
 kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
-target_link_libraries(kdevplatformvcs ${KDE4_KDECORE_LIBS}  )
+target_link_libraries(kdevplatformvcs ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY}  )
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS kdevplatformvcs DESTINATION ${LIB_INSTALL_DIR} )
 
@@ -29,6 +30,7 @@ install(FILES
     vcsstatusinfo.h
     vcsmapping.h
     vcslocation.h
+    vcsimportmetadatawidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs
 )
 
