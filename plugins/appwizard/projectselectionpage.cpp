@@ -21,12 +21,12 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     ui->setupUi(this);
     ui->templateView->setModel(templatesModel);
 
-    ui->locationUrl->setPath(QDir::homePath());
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     connect( ui->locationUrl, SIGNAL(textChanged(const QString&)),
-             this, SIGNAL(locationChanged(const QString&) ));
+             this, SLOT(locationChanged() ));
     connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
-             this, SLOT(locationChanged(const KUrl&) ));
+             this, SLOT(locationChanged() ));
+    ui->locationUrl->setPath(QDir::homePath());
 }
 
 ProjectSelectionPage::~ProjectSelectionPage()
@@ -43,11 +43,9 @@ QString ProjectSelectionPage::selectedTemplate()
         return "";
 }
 
-QString ProjectSelectionPage::location()
+KUrl ProjectSelectionPage::location()
 {
-    KUrl url = ui->locationUrl->url();
-    url.addPath(ui->appNameEdit->text());
-    return url.toLocalFile();
+    return ui->locationUrl->url();
 }
 
 QString ProjectSelectionPage::appName()
@@ -55,9 +53,22 @@ QString ProjectSelectionPage::appName()
     return ui->appNameEdit->text();
 }
 
-void ProjectSelectionPage::locationChanged( const KUrl& url )
+void ProjectSelectionPage::locationChanged()
 {
-    emit locationChanged( url.url() );
+    KUrl url = ui->locationUrl->url();
+    if( url.isLocalFile() )
+    {
+        QFileInfo fi( url.toLocalFile( KUrl::RemoveTrailingSlash ) );
+        if( fi.exists() && fi.isDir() && QDir( fi.absoluteFilePath()).entryList().isEmpty() )
+        {
+            ui->locationValidLabel->setText( i18n("Invalid Location") );
+            emit invalid();
+            return;
+        }
+    }
+    ui->locationValidLabel->setText( i18n("Valid Location") );
+    emit valid();
+    emit locationChanged( url );
 }
 
 #include "projectselectionpage.moc"

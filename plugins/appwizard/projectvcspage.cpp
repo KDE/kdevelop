@@ -101,10 +101,3 @@ KDevelop::VcsMapping ProjectVcsPage::mapping() const
     return KDevelop::VcsMapping();
 }
 
-QString ProjectVcsPage::name( ) const
-{
-    int idx = m_ui->vcsTypes->currentIndex();
-    if( idx > 0)
-        return vcsPlugins[idx].second;
-    return "";
-}

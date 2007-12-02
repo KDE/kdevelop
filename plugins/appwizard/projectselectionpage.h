@@ -27,11 +27,13 @@ public:
 
     QString selectedTemplate();
     QString appName();
-    QString location();
+    KUrl location();
 signals:
-    void locationChanged( const QString& );
-private slots:
     void locationChanged( const KUrl& );
+    void valid();
+    void invalid();
+private slots:
+    void locationChanged();
 private:
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;

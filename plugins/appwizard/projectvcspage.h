@@ -48,7 +48,6 @@ public slots:
     void setSourceLocation( const KUrl& );
 public:
     QString pluginName() const;
-    QString name() const;
     KDevelop::VcsMapping mapping() const;
     QString commitMessage() const;
 private:

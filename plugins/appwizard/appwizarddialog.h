@@ -11,11 +11,52 @@
 #define _APPWIZARDDIALOG_H_
 
 #include <kassistantdialog.h>
+#include <QMap>
+#include <kurl.h>
+
+#include <vcs/vcsmapping.h>
+
+class KPageWidgetItem;
+class QSignalMapper;
+class ProjectSelectionPage;
+class ProjectVcsPage;
+class ProjectTemplatesModel;
+
+namespace KDevelop
+{
+class IPluginController;
+}
+
+class ApplicationInfo
+{
+public:
+    QString name;
+    KUrl location;
+    QString vcsPluginName;
+    KDevelop::VcsMapping importInformation;
+    KDevelop::VcsMapping checkoutInformation;
+    QString importCommitMessage;
+    QString appTemplate;
+};
 
 class AppWizardDialog: public KAssistantDialog {
+Q_OBJECT
 public:
-    explicit AppWizardDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
+    AppWizardDialog( KDevelop::IPluginController*, ProjectTemplatesModel*,
+                     QWidget *parent = 0, Qt::WFlags flags = 0);
 
+    ApplicationInfo appInfo() const;
+
+private slots:
+    void pageInValid( QWidget* w );
+    void pageValid( QWidget* w );
+private:
+
+    QMap<QWidget*, KPageWidgetItem*> m_pageItems;
+    QSignalMapper* m_invalidMapper;
+    QSignalMapper* m_validMapper;
+    ProjectSelectionPage* m_selectionPage;
+    ProjectVcsPage* m_vcsPage;
 };
 
 #endif

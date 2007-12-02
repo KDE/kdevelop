@@ -85,18 +85,12 @@ AppWizardPlugin::~AppWizardPlugin()
 void AppWizardPlugin::slotNewProject()
 {
     m_templatesModel->refresh();
-    AppWizardDialog dlg;
+    AppWizardDialog dlg(core()->pluginController(), m_templatesModel);
 
-    ProjectSelectionPage *selectionPage = new ProjectSelectionPage(m_templatesModel, &dlg);
-    ProjectVcsPage* vcsPage = new ProjectVcsPage( core()->pluginController(), &dlg );
-    connect( selectionPage, SIGNAL(locationChanged(const QString&) ),
-             vcsPage, SLOT(setImportDirectory(const QString&)) );
-    dlg.addPage(selectionPage, i18nc("Page for general configuration options", "General"));
-    dlg.addPage(vcsPage, i18nc("Page for version control options", "Version Control") );
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        QString project = createProject(selectionPage, vcsPage);
+        QString project = createProject( dlg.appInfo() );
         if (!project.isEmpty())
             core()->projectController()->openProject(KUrl::fromPath(project));
     }
@@ -108,14 +102,14 @@ void AppWizardPlugin::slotImportProject()
     import.exec();
 }
 
-QString AppWizardPlugin::createProject(ProjectSelectionPage *selectionPage, ProjectVcsPage* vcsPage)
+QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 {
-    QFileInfo templateInfo(selectionPage->selectedTemplate());
+    QFileInfo templateInfo(info.appTemplate);
     if (!templateInfo.exists())
         return "";
 
     QString templateName = templateInfo.baseName();
-    kDebug(9010) << "creating project for template:" << templateName << " with VCS:" << vcsPage->name() << vcsPage->pluginName();
+    kDebug(9010) << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
     QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".zip");
     if( templateArchive.isEmpty() )
@@ -128,26 +122,26 @@ QString AppWizardPlugin::createProject(ProjectSelectionPage *selectionPage, Proj
 
     //prepare variable substitution hash
     m_variables.clear();
-    m_variables["APPNAME"] = selectionPage->appName();
-    m_variables["APPNAMEUC"] = selectionPage->appName().toUpper();
-    m_variables["APPNAMELC"] = selectionPage->appName().toLower();
+    m_variables["APPNAME"] = info.appTemplate;
+    m_variables["APPNAMEUC"] = info.appTemplate.toUpper();
+    m_variables["APPNAMELC"] = info.appTemplate.toLower();
 
-    QString dest = selectionPage->location();
-	KArchive* arch = 0;
-	if( templateArchive.endsWith(".zip") )
-	{
-		arch = new KZip(templateArchive);
-	}
-	else
-	{
-	    arch = new KTar(templateArchive, "application/x-bzip");
-	}
-	if (arch->open(QIODevice::ReadOnly))
-		unpackArchive(arch->directory(), dest);
-	else
-		kDebug(9010) << "failed to open template archive";
+    KUrl dest = info.location;
+    KArchive* arch = 0;
+    if( templateArchive.endsWith(".zip") )
+    {
+        arch = new KZip(templateArchive);
+    }
+    else
+    {
+        arch = new KTar(templateArchive, "application/x-bzip");
+    }
+    if (arch->open(QIODevice::ReadOnly))
+        unpackArchive(arch->directory(), dest.toLocalFile());
+    else
+        kDebug(9010) << "failed to open template archive";
 
-    return QDir::cleanPath(dest + '/' + selectionPage->appName().toLower() + ".kdev4");
+    return QDir::cleanPath(dest.toLocalFile() + '/' + info.appTemplate.toLower() + ".kdev4");
 }
 
 void AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
@@ -214,6 +208,7 @@ bool AppWizardPlugin::copyFile(const QString &source, const QString &dest)
         return false;
     }
 }
+
 
 #include "appwizardplugin.moc"
 

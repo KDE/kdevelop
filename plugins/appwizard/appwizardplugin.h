@@ -18,14 +18,13 @@
 #include <QVariant>
 
 class ProjectTemplatesModel;
-class ProjectSelectionPage;
-class ProjectVcsPage;
 class KArchiveDirectory;
+class ApplicationInfo;
 
 class AppWizardPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    AppWizardPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    AppWizardPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~AppWizardPlugin();
 
 private slots:
@@ -33,7 +32,7 @@ private slots:
     void slotImportProject();
 
 private:
-    QString createProject(ProjectSelectionPage *selectionPage, ProjectVcsPage*);
+    QString createProject(const ApplicationInfo& );
     void unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFile(const QString &source, const QString &dest);
 
