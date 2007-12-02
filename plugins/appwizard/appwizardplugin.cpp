@@ -125,12 +125,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     m_variables["APPNAME"] = info.name;
     m_variables["APPNAMEUC"] = info.name.toUpper();
     m_variables["APPNAMELC"] = info.name.toLower();
+    m_variables["VERSIONCONTROLPLUGIN"] = info.vcsPluginName;
 
-    KUrl dest = info.location;
-    if( !QFileInfo( dest.toLocalFile() ).exists() )
-    {
-        QDir::root().mkdir( dest.toLocalFile() );
-    }
     KArchive* arch = 0;
     if( templateArchive.endsWith(".zip") )
     {
@@ -141,8 +137,46 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         arch = new KTar(templateArchive, "application/x-bzip");
     }
     if (arch->open(QIODevice::ReadOnly))
-        unpackArchive(arch->directory(), dest.toLocalFile());
-    else
+    {
+        if( info.vcsPluginName.isEmpty() )
+        {
+            KUrl dest = info.location;
+            if( !QFileInfo( dest.toLocalFile() ).exists() )
+            {
+                QDir::root().mkdir( dest.toLocalFile() );
+            }
+            unpackArchive(arch->directory(), dest.toLocalFile());
+        }else
+        {
+            KTempFile tmpdir;
+            unpackArchive(arch->directory(), tmpdir.name());
+            KDevelop::VcsMapping import;
+            KDevelop::VcsLocation srcloc = info.importInformation.sourceLocations().first();
+            import.addMapping( tmpdir.name(),
+                               info.importInformation.destinationLocation( srcloc ),
+                               info.importInformation.mappingFlag( srcloc ) );
+            IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
+            KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+            if( plugin && iface )
+            {
+                VcsJob* job = iface->import( import, info.importCommitMessage );
+                job->exec();
+                if( job->status() == JobSucceeded )
+                {
+                    VcsJob* job = iface->checkout( info.checkoutInformation );
+                    job->exec();
+                    if( job->status() != JobSucceeded )
+                    {
+                        //Error handling, display checkout-error message to user
+                    }
+                }
+            }else
+            {
+                //Error handling and copying the project from tmpdir to the chosen
+                //destination
+            }
+        }
+    }else
         kDebug(9010) << "failed to open template archive";
 
     return QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
@@ -150,7 +184,6 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
 void AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
 {
-    KIO::NetAccess::mkdir(dest, 0);
     kDebug(9010) << "unpacking dir:" << dir->name() << "to" << dest;
     QStringList entries = dir->entries();
     kDebug(9010) << "entries:" << entries.join(",");

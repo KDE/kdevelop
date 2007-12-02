@@ -59,6 +59,9 @@ ApplicationInfo AppWizardDialog::appInfo() const
     {
         a.importInformation = m_vcsPage->mapping();
         a.vcsPluginName = m_vcsPage->pluginName();
+        a.checkoutInformation = KDevelop::VcsMapping();
+        VcsLocation srcloc = a.importInformation.sourceLocations.first();
+        a.checkoutInformation( a.importInformation.destinationLocation( srcloc ), srcloc, a.importInformation.mappingFlag( srcloc ) );
         a.importCommitMessage = m_vcsPage->commitMessage();
     }else
     {
