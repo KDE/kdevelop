@@ -174,8 +174,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                     return "";
             }else
             {
-                //Error handling and copying the project from tmpdir to the chosen
-                //destination
+                //This should never happen, the vcs dialog presented a list of vcs
+                //systems and now the chosen system doesn't exist anymore??
                 return "";
             }
         }
