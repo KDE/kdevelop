@@ -1,3 +1,6 @@
+2007-12-03  Richard Dale  <rdale@foton.es>
+* Added a QtRuby4 project based on the C++ Qt4 one
+
 2007-10-16  Richard Dale  <rdale@foton.es>
 * Added Rails 2.0 file type suffixes; .html.erb, .js.rjs and .xml.builder
 

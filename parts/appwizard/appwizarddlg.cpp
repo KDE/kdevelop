@@ -947,7 +947,7 @@ void AppWizardDialog::projectLocationChanged()
     if (!fi.exists() || appname_edit->displayText().isEmpty()) {
       finalLoc_label->setText(finalLoc_label->text() + i18n("invalid location", " (invalid)"));
     } else {
-      finalLoc_label->setText(finalLoc_label->text() + i18n(" (dir/file already exist)"));
+      finalLoc_label->setText(finalLoc_label->text() + i18n(" (dir/file already exists)"));
     }
     m_pathIsValid=false;
   } else {
