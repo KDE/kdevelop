@@ -594,7 +594,7 @@ KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, 
     CvsJob* job = d->m_proxy->import( srcLocation.localUrl(), 
 				destLocation.repositoryServer(), 
 				destLocation.repositoryModule(), 
-				destLocation.repositoryBranch(), 
+				destLocation.userData().toString(), 
 				destLocation.repositoryTag(), 
 				commitMessage);
     return job;

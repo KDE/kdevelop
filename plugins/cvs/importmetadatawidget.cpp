@@ -39,7 +39,7 @@ KDevelop::VcsMapping ImportMetadataWidget::mapping( ) const
     destloc.setRepositoryServer(m_ui->repository->text() );
     destloc.setRepositoryModule(m_ui->module->text());
     destloc.setRepositoryTag(m_ui->vendorTag->text());
-    destloc.setRepositoryBranch(m_ui->releaseTag->text());
+    destloc.setUserData(m_ui->releaseTag->text());
     KDevelop::VcsMapping map;
     map.addMapping( loc, destloc , KDevelop::VcsMapping::Recursive );
     return map;
