@@ -183,19 +183,23 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                     if( job->status() != KDevelop::VcsJob::JobSucceeded )
                     {
                         KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                        tmpdir.unlink();
                         return "";
                     }
                 }else
                 {
                     KMessageBox::error(0, i18n("Couldn't import project"));
+                    tmpdir.unlink();
                     return "";
                 }
             }else
             {
                 //This should never happen, the vcs dialog presented a list of vcs
                 //systems and now the chosen system doesn't exist anymore??
+                tmpdir.unlink();
                 return "";
             }
+            tmpdir.unlink();
         }
     }else
         kDebug(9010) << "failed to open template archive";
