@@ -1506,9 +1506,6 @@ QString VarItem::gdbExpression() const
     //  - ***intentifier, for derefenreced pointer.
     const VarItem* parent = dynamic_cast<const VarItem*>(TrimmableItem::parent());
 
-    if( !parent )
-        return "";
-
     bool ok = false;
     expression_.toInt(&ok);
     if (ok)
