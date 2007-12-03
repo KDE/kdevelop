@@ -44,6 +44,9 @@ class ProjectVcsPage : public QWidget
 public:
     ProjectVcsPage( KDevelop::IPluginController*, QWidget* parent = 0 );
     ~ProjectVcsPage();
+signals:
+    void valid();
+    void invalid();
 public slots:
     void setSourceLocation( const KUrl& );
 public:
