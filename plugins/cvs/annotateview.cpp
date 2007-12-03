@@ -80,13 +80,13 @@ void AnnotateView::parseOutput(const QString& jobOutput, const QString& workingD
     QStringList lines = jobOutput.split("\n");
 
     QString filename;
-    for (int i=0; i<lines.count(); ++i) {
+    for (int i=0, linenumber=1; i<lines.count(); ++i) {
         QString s = lines[i];
 
         if (re.exactMatch(s)) {
             KDevelop::VcsAnnotationLine item;
 
-            item.setLineNumber( i+1 );
+            item.setLineNumber( linenumber );
             item.setText( re.cap(4) );
             item.setAuthor( re.cap(2)  );
 
@@ -97,7 +97,8 @@ void AnnotateView::parseOutput(const QString& jobOutput, const QString& workingD
             ///@todo find correct time format code
             //item.setDate( QDateTime::fromString( re.cap(3)/*, Qt::ISODate*/ ) );
 
-            annotateInfo.insertLine( i+1, item );
+            annotateInfo.insertLine( linenumber, item );
+            linenumber++;
         } else if (reFile.exactMatch(s)) {
             KUrl url(workingDirectory + QDir::separator() + reFile.cap(1));
             annotateInfo.setLocation( url );
