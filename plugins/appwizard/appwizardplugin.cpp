@@ -121,6 +121,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
     }
 
+    kDebug(9010) << "Using archive:" << templateArchive;
+
     if (templateArchive.isEmpty())
         return "";
 
@@ -155,14 +157,21 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         }else
         {
             KTempDir tmpdir;
-            unpackArchive(arch->directory(), tmpdir.name());
+            if( !unpackArchive(arch->directory(), tmpdir.name()) )
+            {
+                KMessageBox::error(0, i18n("Couldn't create new project"));
+                return "";
+            }
             KDevelop::VcsMapping import;
             KDevelop::VcsLocation srcloc = info.importInformation.sourceLocations().first();
-            import.addMapping( tmpdir.name(),
+            import.addMapping( KDevelop::VcsLocation( KUrl( tmpdir.name() ) ),
                                info.importInformation.destinationLocation( srcloc ),
                                info.importInformation.mappingFlag( srcloc ) );
             IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
             KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+            kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
+            kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
+            kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
             if( plugin && iface )
             {
                 KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
@@ -173,11 +182,14 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                     job->exec();
                     if( job->status() != KDevelop::VcsJob::JobSucceeded )
                     {
-                        //Error handling, display checkout-error message to user
+                        KMessageBox::error(0, i18n("Couldn't checkout imported project"));
                         return "";
                     }
                 }else
+                {
+                    KMessageBox::error(0, i18n("Couldn't import project"));
                     return "";
+                }
             }else
             {
                 //This should never happen, the vcs dialog presented a list of vcs
@@ -188,16 +200,19 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }else
         kDebug(9010) << "failed to open template archive";
 
+    kDebug(9010) << "Returning" << QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
     return QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
 }
 
-void AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
+bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
 {
     kDebug(9010) << "unpacking dir:" << dir->name() << "to" << dest;
     QStringList entries = dir->entries();
     kDebug(9010) << "entries:" << entries.join(",");
 
     KTempDir tdir;
+
+    bool ret = true;
 
     foreach (QString entry, entries)
     {
@@ -206,7 +221,12 @@ void AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
         if (dir->entry(entry)->isDirectory())
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
-            unpackArchive(file, dest + '/' + file->name());
+            QString newdest = dest+"/"+file->name();
+            if( !QFileInfo( newdest ).exists() )
+            {
+                QDir::root().mkdir( newdest  );
+            }
+            ret |= unpackArchive(file, newdest);
         }
         else if (dir->entry(entry)->isFile())
         {
@@ -217,11 +237,12 @@ void AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
                 KMessageBox::sorry(0, i18n("The file %1 cannot be created.", dest));
-                return;
+                return false;
             }
         }
     }
     tdir.unlink();
+    return ret;
 }
 
 bool AppWizardPlugin::copyFile(const QString &source, const QString &dest)

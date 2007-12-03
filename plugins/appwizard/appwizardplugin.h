@@ -33,7 +33,7 @@ private slots:
 
 private:
     QString createProject(const ApplicationInfo& );
-    void unpackArchive(const KArchiveDirectory *dir, const QString &dest);
+    bool unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFile(const QString &source, const QString &dest);
 
     ProjectTemplatesModel *m_templatesModel;
