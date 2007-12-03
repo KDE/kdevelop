@@ -51,6 +51,7 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
                                                     m_ui->vcsImportOptions );
             if( widget )
             {
+                widget->setSourceLocationEditable( false );
                 m_ui->vcsTypes->insertItem( idx, iface->name() );
                 importWidgets.insert( idx, widget );
                 vcsPlugins.insert( idx, qMakePair( controller->pluginInfo( plugin ).pluginName(), iface->name() ) );
