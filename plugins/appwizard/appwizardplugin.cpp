@@ -134,6 +134,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     m_variables["APPNAME"] = info.name;
     m_variables["APPNAMEUC"] = info.name.toUpper();
     m_variables["APPNAMELC"] = info.name.toLower();
+    m_variables["PROJECTDIRNAME"] = dest.fileName();
     m_variables["VERSIONCONTROLPLUGIN"] = info.vcsPluginName;
 
     KArchive* arch = 0;
@@ -205,7 +206,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         kDebug(9010) << "failed to open template archive";
 
     kDebug(9010) << "Returning" << QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
-    return QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
+    return QDir::cleanPath(dest.toLocalFile() + '/' + dest.fileName() + ".kdev4");
 }
 
 bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
