@@ -1,11 +1,6 @@
-READ THIS IN ORDER TO COMPILE THE Qt4 TEMPLATE
-----------------------------------------------
+READ THIS IN ORDER TO Run THE QtRuby4 APPLICATION
+-------------------------------------------------
 
-Before compiling, check the Qt Options, go to 
-Project->Project Options->C++ Support and open the Qt Options tab.
+Click the 'Build Project' button to generate the qrc_application.rb
+file from the application.qrc resource with the rbrcc tool.
 
-Check that the Qt installation directory is correct for the Qt version you've chosen.
-
-------------------
-Andreas Pakulat
-July 2006
