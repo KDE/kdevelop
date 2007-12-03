@@ -109,7 +109,6 @@ bool VcsLocation::isValid() const
     return( ( d->m_localUrl.isValid()
               && d->m_type == VcsLocation::LocalLocation )
             || ( !d->m_repoServer.isEmpty()
-                && !d->m_repoModule.isEmpty()
                 && d->m_type == VcsLocation::RepositoryLocation ) );
 }
 
