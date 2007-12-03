@@ -21,6 +21,9 @@ ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
     : KDevelop::VcsImportMetadataWidget(parent), m_ui( new Ui::ImportMetadataWidget )
 {
     m_ui->setupUi(this);
+
+    m_ui->sourceLoc->setEnabled( false );
+    m_ui->sourceLoc->setMode( KFile::Directory );
 }
 
 ImportMetadataWidget::~ImportMetadataWidget()
@@ -35,7 +38,8 @@ KDevelop::VcsMapping ImportMetadataWidget::mapping( ) const
     KDevelop::VcsLocation destloc;
     destloc.setRepositoryServer(m_ui->repository->text() );
     destloc.setRepositoryModule(m_ui->module->text());
-    destloc.setRepositoryTag(m_ui->releaseTag->text());
+    destloc.setRepositoryTag(m_ui->vendorTag->text());
+    destloc.setRepositoryBranch(m_ui->releaseTag->text());
     KDevelop::VcsMapping map;
     map.addMapping( loc, destloc , KDevelop::VcsMapping::Recursive );
     return map;

@@ -29,6 +29,7 @@
 #include <iuicontroller.h>
 #include <icore.h>
 #include <context.h>
+#include <vcsmapping.h>
 
 
 #include "cvsmainview.h"
@@ -42,6 +43,7 @@
 #include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
 #include "checkoutdialog.h"
+#include "importdialog.h"
 #include "importmetadatawidget.h"
 
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>(); )
@@ -130,16 +132,8 @@ void CvsPlugin::slotImport()
 {
     KUrl url = urlFocusedDocument();
 
-    /// @todo just for testing; remove me...
-    // In order to be able the test the ImportDialog and the
-    // import job I need to get to a directory somehow.
-    // So this is a bit of a hack right now. I take the directory
-    // from the currently opened file are directory to import.
-    // This whole slot will be removed later when createNewProject()
-    // gets called via the IVersionControl interface.
-    QFileInfo info(url.toLocalFile());
-
-    ///@todo implement me
+    ImportDialog dlg(this, url);
+    dlg.exec();
 }
 
 void CvsPlugin::slotCheckout()
@@ -577,7 +571,28 @@ KDevelop::VcsJob * CvsPlugin::resolve(const KUrl::List & localLocations, KDevelo
 
 KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, const QString& commitMessage)
 {
-    return NULL;
+    QList<KDevelop::VcsLocation> list = localLocation.sourceLocations();
+    if (list.size() < 1) {
+        return NULL;
+    }
+    
+    KDevelop::VcsLocation srcLocation = list[0];
+    KDevelop::VcsLocation destLocation = localLocation.destinationLocation(list[0]);
+
+    if (srcLocation.type() != KDevelop::VcsLocation::LocalLocation) {
+        return NULL;
+    }
+    if (destLocation.type() != KDevelop::VcsLocation::RepositoryLocation) {
+        return NULL;
+    }
+
+    CvsJob* job = d->m_proxy->import( srcLocation.localUrl(), 
+				destLocation.repositoryServer(), 
+				destLocation.repositoryModule(), 
+				destLocation.repositoryBranch(), 
+				destLocation.repositoryTag(), 
+				commitMessage);
+    return job;
 }
 
 KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsMapping & mapping)

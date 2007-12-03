@@ -27,7 +27,7 @@ ImportDialog::ImportDialog(CvsPlugin* plugin, const KUrl& url, QWidget *parent)
 {
     m_widget = new ImportMetadataWidget(this);
     m_widget->setSourceLocation( KDevelop::VcsLocation(m_url) );
-    m_widget->setSourceLocationEditable( false );
+    m_widget->setSourceLocationEditable( true );
     setMainWidget(m_widget);
 }
 
@@ -55,7 +55,7 @@ void ImportDialog::jobFinished(KJob * job)
     // The job finished, now let's check the output is everything was OK
     CvsJob* cvsjob = dynamic_cast<CvsJob*>(job);
 
-    static QRegExp re_file("^N\\s(.*)");
+    static QRegExp re_file("^[IN]\\s(.*)");
     bool error = false;
     QStringList lines = cvsjob->output().split("\n");
     foreach(QString line, lines) {
@@ -70,7 +70,7 @@ void ImportDialog::jobFinished(KJob * job)
             continue;
         } else {
             // any other line must mean that an error occurred
-            kDebug(9500) << line;
+            kDebug(9500) <<"ERR: "<< line;
             error = true;
         }
     }
