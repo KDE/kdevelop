@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SVNIMPORTJOB_H
-#define SVNIMPORTJOB_H
+#ifndef SVNCHECKOUTJOB_H
+#define SVNCHECKOUTJOB_H
 
 #include "svnjobbase.h"
 #include <QString>
@@ -30,23 +30,23 @@ namespace KDevelop
 class VcsMapping;
 }
 
-class SvnImportInternalJob;
+class SvnInternalCheckoutJob;
 
-class SvnImportJob : public SvnJobBase
+class SvnCheckoutJob : public SvnJobBase
 {
     Q_OBJECT
 public:
-    SvnImportJob( KDevSvnPlugin* parent );
+    SvnCheckoutJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
     SvnInternalJobBase* internalJob() const;
 
     void setMapping( const KDevelop::VcsMapping& locations );
-    void setMessage( const QString& );
 private:
-    SvnImportInternalJob* m_job;
+    SvnInternalCheckoutJob* m_job;
 
 };
+
 
 
 #endif

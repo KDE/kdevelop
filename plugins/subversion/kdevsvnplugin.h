@@ -126,7 +126,6 @@ public Q_SLOTS:
     void ctxAdd();
     void ctxRemove();
     void ctxRevert();
-    void ctxCheckout();
     void ctxDiff();
     void ctxDiffHead();
     void ctxDiffBase();
@@ -136,6 +135,7 @@ public Q_SLOTS:
     void ctxMove();
     void ctxCat();
     void ctxImport();
+    void ctxCheckout();
 private slots:
     void doCommit( SvnCommitDialog* );
     void cancelCommit( SvnCommitDialog* );

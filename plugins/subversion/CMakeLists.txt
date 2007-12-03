@@ -36,6 +36,7 @@ set(kdevsubversion_JOB_SRCS
     svnlogjob.cpp
     svnblamejob.cpp
     svnimportjob.cpp
+    svncheckoutjob.cpp
 )
 
 set(kdevsubversion_PART_SRCS
@@ -52,6 +53,7 @@ set(kdevsubversion_PART_SRCS
     svnannotationwidget.cpp
     svndiffwidget.cpp
     svnimportmetadatawidget.cpp
+    svncheckoutmetadatawidget.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -61,6 +63,7 @@ set(kdevsubversion_PART_UI
     ui/annotationwidget.ui
     ui/diffwidget.ui
     ui/importmetadatawidget.ui
+    ui/checkoutmetadatawidget.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

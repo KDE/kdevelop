@@ -8,30 +8,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_CHECKOUTWIDGETS_H
-#define SVN_CHECKOUTWIDGETS_H
+#ifndef SVN_CHECKOUTMETADATAWIDGET_H
+#define SVN_CHECKOUTMETADATAWIDGET_H
 
-#include <kdialog.h>
-#include "ui_checkoutoptiondlg.h"
+#include <QWidget>
+
+namespace Ui
+{
+class SvnCheckoutMetadataWidget;
+}
+
+namespace KDevelop
+{
+class VcsMapping;
+}
 
 class KUrl;
-class SvnRevision;
 
-class SvnCheckoutDialog : public KDialog
+class SvnCheckoutMetadataWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SvnCheckoutDialog( const KUrl &destDir, QWidget *parent );
-    virtual ~SvnCheckoutDialog();
-
-    KUrl reposUrl();
-    KUrl destPath();
-    SvnRevision revision();
-//     SvnRevision pegRevision();
-    bool recurse();
-    bool ignoreExternals();
+    SvnCheckoutMetadataWidget( QWidget *parent );
+    virtual ~SvnCheckoutMetadataWidget();
+    void setDestinationLocation( const KUrl& );
+    KDevelop::VcsMapping mapping() const;
 private:
-    Ui::SvnCheckoutDialog ui;
+    Ui::SvnCheckoutMetadataWidget* m_ui;
 };
 
 #endif

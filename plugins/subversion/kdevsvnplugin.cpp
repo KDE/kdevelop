@@ -53,6 +53,7 @@
 #include "svnlogjob.h"
 #include "svnblamejob.h"
 #include "svnimportjob.h"
+#include "svncheckoutjob.h"
 
 #include "svnoutputdelegate.h"
 #include "svnoutputmodel.h"
@@ -61,6 +62,7 @@
 #include "svnannotationwidget.h"
 #include "svndiffwidget.h"
 #include "svnimportmetadatawidget.h"
+#include "svncheckoutmetadatawidget.h"
 
 K_PLUGIN_FACTORY(KDevSvnFactory, registerPlugin<KDevSvnPlugin>(); )
 K_EXPORT_PLUGIN(KDevSvnFactory("kdevsubversion"))
@@ -312,9 +314,9 @@ KDevelop::VcsJob* KDevSvnPlugin::import( const KDevelop::VcsMapping& mapping, co
 
 KDevelop::VcsJob* KDevSvnPlugin::checkout( const KDevelop::VcsMapping& mapping )
 {
-    // TODO understand vcsmapping, implement checkoutjob
-    Q_UNUSED( mapping )
-    return 0;
+    SvnCheckoutJob* job = new SvnCheckoutJob( this );
+    job->setMapping( mapping );
+    return job;
 }
 
 
@@ -430,8 +432,12 @@ QPair<QString,QList<QAction*> > KDevSvnPlugin::requestContextMenuActions( KDevel
     connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
     actions << action;
 
-    action = new QAction(i18n("Import"), this);
+    action = new QAction(i18n("Import..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxImport()) );
+    actions << action;
+
+    action = new QAction(i18n("Checkout..."), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
     actions << action;
 
 //         action = new QAction(i18n("Blame/Annotate..."), this);
@@ -591,14 +597,6 @@ void KDevSvnPlugin::ctxRevert()
     KDevelop::VcsJob* job = revert( m_ctxUrlList );
     job->exec();
     delete job;
-}
-
-void KDevSvnPlugin::ctxCheckout()
-{
-    if( m_ctxUrlList.count() > 1 ){
-        KMessageBox::error( 0, i18n("Please select only one item for this operation") );
-        return;
-    }
 }
 
 void KDevSvnPlugin::ctxDiff()
@@ -768,6 +766,27 @@ void KDevSvnPlugin::ctxImport( )
     if( dlg.exec() == QDialog::Accepted )
     {
         KDevelop::VcsJob* job = import( widget->mapping(), widget->message() );
+        job->exec();
+        delete job;
+    }
+}
+
+void KDevSvnPlugin::ctxCheckout( )
+{
+    if( m_ctxUrlList.count() > 1 ){
+        KMessageBox::error( 0, i18n("Please select only one item for this operation") );
+        return;
+    }
+    KDialog dlg;
+    dlg.setCaption(i18n("Checkout from Subversion repository"));
+    SvnCheckoutMetadataWidget* widget = new SvnCheckoutMetadataWidget(&dlg);
+    KUrl tmp = m_ctxUrlList.first();
+    tmp.cd("..");
+    widget->setDestinationLocation( tmp );
+    dlg.setMainWidget( widget );
+    if( dlg.exec() == QDialog::Accepted )
+    {
+        KDevelop::VcsJob* job = checkout( widget->mapping() );
         job->exec();
         delete job;
     }
