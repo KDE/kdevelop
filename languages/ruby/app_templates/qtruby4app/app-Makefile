@@ -7,7 +7,7 @@ gen_qrcs: $(qrcs)
 	@for name in $^; do rbrcc $$name > `echo $$name | awk -F '\\\.qrc$$' '{ printf("qrc_%s", $$1) }' 2> /dev/null`.rb; echo "Running rbrcc on $$name"; done
 
 gen_uis: $(uis)
-	@for name in $^; do rbuic $$name > `echo $$name | awk -F '\\\.ui$$' '{ print $$1 }' 2> /dev/null`.rb; echo "Running rbuic on $$name"; done
+	@for name in $^; do rbuic4 $$name > `echo $$name | awk -F '\\\.ui$$' '{ print $$1 }' 2> /dev/null`.rb; echo "Running rbuic4 on $$name"; done
 
 clean: clean_qrcs clean_uis
 
