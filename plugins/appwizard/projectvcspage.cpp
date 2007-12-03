@@ -47,7 +47,7 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
         KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
         if( iface  )
         {
-            KDevelop::VcsImportMetadataWidget* widget = iface->importMetadataWidget(
+            KDevelop::VcsImportMetadataWidget* widget = iface->createImportMetadataWidget(
                                                     m_ui->vcsImportOptions );
             if( widget )
             {
