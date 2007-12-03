@@ -586,6 +586,11 @@ KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, 
         return NULL;
     }
 
+    kDebug(9500) << "CVS Import requested "
+                 << "src:"<<srcLocation.localUrl().path()
+                 << "srv:"<<destLocation.repositoryServer()
+                 << "module:"<<destLocation.repositoryModule() << endl;
+
     CvsJob* job = d->m_proxy->import( srcLocation.localUrl(), 
 				destLocation.repositoryServer(), 
 				destLocation.repositoryModule(), 
@@ -597,7 +602,34 @@ KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, 
 
 KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsMapping & mapping)
 {
-    return NULL;
+    QList<KDevelop::VcsLocation> list = mapping.sourceLocations();
+    if (list.size() < 1) {
+        return NULL;
+    }
+    
+    KDevelop::VcsLocation srcLocation = list[0];
+    KDevelop::VcsLocation destLocation = mapping.destinationLocation(list[0]);
+
+    if (srcLocation.type() != KDevelop::VcsLocation::RepositoryLocation) {
+        return NULL;
+    }
+    if (destLocation.type() != KDevelop::VcsLocation::LocalLocation) {
+        return NULL;
+    }
+
+    kDebug(9500) << "CVS Checkout requested "
+                 << "dest:"<<destLocation.localUrl().path()
+                 << "srv:"<<srcLocation.repositoryServer()
+                 << "module:"<<srcLocation.repositoryModule()
+                 << "branch:"<<srcLocation.repositoryBranch() << endl;
+
+    CvsJob* job = d->m_proxy->checkout(destLocation.localUrl(),
+                                       srcLocation.repositoryServer(),
+                                       srcLocation.repositoryModule(),
+                                       "",
+                                       srcLocation.repositoryBranch(),
+                                       true, true);
+    return job;
 }
 
 
