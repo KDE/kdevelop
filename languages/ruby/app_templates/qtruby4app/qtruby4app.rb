@@ -21,7 +21,7 @@ class %{APPNAME} < Qt::MainWindow
         readSettings()
       
         connect(@textEdit.document, SIGNAL(:contentsChanged),
-              self, SLOT(:documentWasModified))
+                self, SLOT(:documentWasModified))
       
         setCurrentFile("")
     end
@@ -45,14 +45,14 @@ class %{APPNAME} < Qt::MainWindow
     def open()
         if maybeSave
             fileName = Qt::FileDialog.getOpenFileName(self)
-            if !fileName.empty?
+            if !fileName.nil?
                 loadFile(fileName)
             end
         end
     end
 
     def save()
-        if @curFile.empty?
+        if @curFile.nil?
             return saveAs()
         else
             return saveFile(@curFile);
@@ -61,7 +61,7 @@ class %{APPNAME} < Qt::MainWindow
 
     def saveAs()
         fileName = Qt::FileDialog.getSaveFileName(self)
-        if fileName.empty?
+        if fileName.nil?
             return false
         end
 
@@ -81,53 +81,53 @@ class %{APPNAME} < Qt::MainWindow
 
     def createActions()
         @newAct = Qt::Action.new(Qt::Icon.new(":/filenew.xpm"), tr("&New"), self)
-        @newAct.setShortcut(tr("Ctrl+N"))
-        @newAct.setStatusTip(tr("Create a new file"))
+        @newAct.shortcut = tr("Ctrl+N")
+        @newAct.statusTip = tr("Create a new file")
         connect(@newAct, SIGNAL(:triggered), self, SLOT(:newFile))
 
         @openAct = Qt::Action.new(Qt::Icon.new(":/fileopen.xpm"), tr("&Open..."), self)
-        @openAct.setShortcut(tr("Ctrl+O"))
-        @openAct.setStatusTip(tr("Open an existing file"))
+        @openAct.shortcut = tr("Ctrl+O")
+        @openAct.statusTip = tr("Open an existing file")
         connect(@openAct, SIGNAL(:triggered), self, SLOT(:open))
 
         @saveAct = Qt::Action.new(Qt::Icon.new(":/filesave.xpm"), tr("&Save"), self)
-        @saveAct.setShortcut(tr("Ctrl+S"))
-        @saveAct.setStatusTip(tr("Save the document to disk"))
+        @saveAct.shortcut = tr("Ctrl+S")
+        @saveAct.statusTip = tr("Save the document to disk")
         connect(@saveAct, SIGNAL(:triggered), self, SLOT(:save))
 
         @saveAsAct = Qt::Action.new(tr("Save &As..."), self)
-        @saveAsAct.setStatusTip(tr("Save the document under a new name"))
+        @saveAsAct.statusTip = tr("Save the document under a new name")
         connect(@saveAsAct, SIGNAL(:triggered), self, SLOT(:saveAs))
 
         @exitAct = Qt::Action.new(tr("E&xit"), self)
-        @exitAct.setShortcut(tr("Ctrl+Q"))
-        @exitAct.setStatusTip(tr("Exit the application"))
+        @exitAct.shortcut = tr("Ctrl+Q")
+        @exitAct.statusTip = tr("Exit the application")
         connect(@exitAct, SIGNAL(:triggered), self, SLOT(:close))
 
         @cutAct = Qt::Action.new(Qt::Icon.new(":/editcut.xpm"), tr("Cu&t"), self)
-        @cutAct.setShortcut(tr("Ctrl+X"))
-        @cutAct.setStatusTip(tr("Cut the current selection's contents to the " \
-                                "clipboard"))
+        @cutAct.shortcut = tr("Ctrl+X")
+        @cutAct.statusTip = tr("Cut the current selection's contents to the " \
+                                "clipboard")
         connect(@cutAct, SIGNAL(:triggered), @textEdit, SLOT(:cut))
 
         @copyAct = Qt::Action.new(Qt::Icon.new(":/editcopy.xpm"), tr("&Copy"), self)
-        @copyAct.setShortcut(tr("Ctrl+C"))
-        @copyAct.setStatusTip(tr("Copy the current selection's contents to the " \
-                              "clipboard"))
+        @copyAct.shortcut = tr("Ctrl+C")
+        @copyAct.statusTip = tr("Copy the current selection's contents to the " \
+                              "clipboard")
         connect(@copyAct, SIGNAL(:triggered), @textEdit, SLOT(:copy))
 
         @pasteAct = Qt::Action.new(Qt::Icon.new(":/editpaste.xpm"), tr("&Paste"), self)
-        @pasteAct.setShortcut(tr("Ctrl+V"))
-        @pasteAct.setStatusTip(tr("Paste the clipboard's contents into the current " \
-                                "selection"))
+        @pasteAct.shortcut = tr("Ctrl+V")
+        @pasteAct.statusTip = tr("Paste the clipboard's contents into the current " \
+                                "selection")
         connect(@pasteAct, SIGNAL(:triggered), @textEdit, SLOT(:paste))
 
         @aboutAct = Qt::Action.new(tr("&About"), self)
-        @aboutAct.setStatusTip(tr("Show the application's About box"))
+        @aboutAct.statusTip = tr("Show the application's About box")
         connect(@aboutAct, SIGNAL(:triggered), self, SLOT(:about))
 
         @aboutQtAct = Qt::Action.new(tr("About &Qt"), self)
-        @aboutQtAct.setStatusTip(tr("Show the Qt library's About box"))
+        @aboutQtAct.statusTip = tr("Show the Qt library's About box")
         connect(@aboutQtAct, SIGNAL(:triggered), $qApp, SLOT(:aboutQt))
 
         @cutAct.setEnabled(false)
@@ -214,50 +214,50 @@ class %{APPNAME} < Qt::MainWindow
             return
         end
 
-      inf = Qt::TextStream.new(file)
-      Qt::Application.setOverrideCursor(Qt::Cursor.new(Qt::WaitCursor))
-      @textEdit.setPlainText(inf.readAll())
-      Qt::Application.restoreOverrideCursor()
+        inf = Qt::TextStream.new(file)
+        Qt::Application.overrideCursor = Qt::Cursor.new(Qt::WaitCursor)
+        @textEdit.setPlainText(inf.readAll)
+        Qt::Application.restoreOverrideCursor()
 
-      setCurrentFile(fileName)
-      statusBar.showMessage(tr("File loaded"), 2000)
+        setCurrentFile(fileName)
+        statusBar.showMessage(tr("File loaded"), 2000)
     end
 
     def saveFile(fileName)
-      file = Qt::File.new(fileName)
-      if !file.open(Qt::File::WriteOnly | Qt::File::Text)
+        file = Qt::File.new(fileName)
+        if !file.open(Qt::File::WriteOnly | Qt::File::Text)
             Qt::MessageBox.warning(self, tr("Application"),
                                     tr("Cannot write file %s\n%s." % [fileName, file.errorString]) )
             return false
-      end
+        end
 
-      outf = Qt::TextStream.new(file)
-      Qt::Application.setOverrideCursor(Qt::Cursor.new(Qt::WaitCursor))
-      outf << @textEdit.toPlainText()
-      Qt::Application.restoreOverrideCursor()
-      outf.flush
+        outf = Qt::TextStream.new(file)
+        Qt::Application.overrideCursor = Qt::Cursor.new(Qt::WaitCursor)
+        outf << @textEdit.toPlainText()
+        Qt::Application.restoreOverrideCursor()
+        outf.flush
 
-      setCurrentFile(fileName)
-      statusBar().showMessage(tr("File saved"), 2000)
-      return true
+        setCurrentFile(fileName)
+        statusBar().showMessage(tr("File saved"), 2000)
+        return true
     end
 
     def setCurrentFile(fileName)
-      @curFile = fileName;
-      @textEdit.document().setModified(false)
-      setWindowModified(false)
+        @curFile = fileName;
+        @textEdit.document().modified = false
+        setWindowModified(false)
 
-      shownName = ""
-      if @curFile.empty?
-          shownName = "untitled.txt"
-      else
-          shownName = strippedName(@curFile)
-      end
+        shownName = ""
+        if @curFile.nil?
+            shownName = "untitled.txt"
+        else
+            shownName = strippedName(@curFile)
+        end
 
-      setWindowTitle(tr("%s[*] - %s" % [shownName, tr("Application")]))
+        setWindowTitle(tr("%s[*] - %s" % [shownName, tr("Application")]))
     end
 
     def strippedName(fullFileName)
-      return Qt::FileInfo.new(fullFileName).fileName()
+        return Qt::FileInfo.new(fullFileName).fileName()
     end
 end
