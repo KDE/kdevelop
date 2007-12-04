@@ -13,6 +13,7 @@
 #include <QTextBrowser>
 #include <QRegExp>
 #include <QDir>
+#include <KDebug>
 
 #include "cvsplugin.h"
 #include "cvsjob.h"
@@ -55,7 +56,7 @@ void AnnotateView::slotJobFinished(KJob* job)
     QString html;
 
     html += annotateInfo.location().path()+"\n\n";
-    for(int i=1; i < annotateInfo.lineCount(); i++) {
+    for(int i=1; i <= annotateInfo.lineCount(); i++) {
         KDevelop::VcsAnnotationLine line = annotateInfo.line(i);
 
         html += QString::number(line.lineNumber())+":";
@@ -102,6 +103,8 @@ void AnnotateView::parseOutput(const QString& jobOutput, const QString& workingD
         } else if (reFile.exactMatch(s)) {
             KUrl url(workingDirectory + QDir::separator() + reFile.cap(1));
             annotateInfo.setLocation( url );
+        } else {
+            kDebug(9500) << "Unmatched:"<<s<<endl;
         }
     }
 }
