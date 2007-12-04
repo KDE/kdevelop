@@ -722,12 +722,12 @@ bool AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem, QStri
         QString dependency = *l2it;
         if (dependency.startsWith("$(top_builddir)/"))
         {
-                alreadyScheduledDeps << *l2it;
-                // These are the internal libraries
-                dependency.remove("$(top_builddir)/");
+            // These are the internal libraries
+            dependency.remove("$(top_builddir)/");
 
             if( !alreadyScheduledDeps.contains(*l2it) )
             {
+                alreadyScheduledDeps << *l2it;
                 tdir = buildDirectory();
                 if (!tdir.endsWith("/") && !tdir.isEmpty())
                     tdir += "/";
