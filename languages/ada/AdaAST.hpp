@@ -71,5 +71,7 @@ private:
 };
 
 #define Set(n, t) (n)->set(t, #t)
+// for Java compatibility:
+#define boolean   bool
 
 #endif

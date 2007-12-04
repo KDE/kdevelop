@@ -3,7 +3,7 @@
 
 #include <antlr/config.hpp>
 #include "AdaTreeParserSuperTokenTypes.hpp"
-/* $ANTLR 2.7.7 (20061129): "ada.tree.g" -> "AdaTreeParserSuper.hpp"$ */
+/* $ANTLR 2.7.7 (20070609): "ada.tree.g" -> "AdaTreeParserSuper.hpp"$ */
 #include <antlr/TreeParser.hpp>
 
 class CUSTOM_API AdaTreeParserSuper : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaTreeParserSuperTokenTypes
@@ -46,9 +46,11 @@ public:
 	public: void pkg_spec_part(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void renames(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void generic_decl(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void id_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void def_designator(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void end_id_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void subprog_decl(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void formal_part_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void def_designator(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void function_tail(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void value_s(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void value(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
@@ -69,6 +71,7 @@ public:
 	public: void extension_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void spec_decl_part(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void basic_declarative_items_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void private_declarative_items_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void basic_decl_item(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void task_type_or_single_decl(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void prot_type_or_single_decl(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
@@ -90,8 +93,9 @@ public:
 	public: void local_enum_name(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void enumeration_aggregate(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void protected_definition(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-	public: void prot_op_decl_s(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void prot_private_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void prot_member_decl_s(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void prot_op_decl_s(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void prot_op_decl(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void comp_decl(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void component_subtype_def(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
@@ -144,6 +148,7 @@ public:
 	public: void subprog_decl_or_body(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void statements(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void except_handler_part_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
+	public: void handled_stmts_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void statement(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void def_label_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void null_stmt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
@@ -214,10 +219,10 @@ protected:
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS
-	static const int NUM_TOKENS = 305;
+	static const int NUM_TOKENS = 291;
 #else
 	enum {
-		NUM_TOKENS = 305
+		NUM_TOKENS = 291
 	};
 #endif
 	

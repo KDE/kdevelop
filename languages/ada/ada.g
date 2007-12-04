@@ -1,7 +1,8 @@
 /*
- * Ada95 Recognizer for ANTLR
+ * Ada95 Grammar for ANTLR, target language C++
  *
- * Oliver M. Kellogg  <okellogg@users.sourceforge.net>
+ * Copyright (C) 2003 Oliver M. Kellogg  <okellogg@users.sourceforge.net>
+ * Modifications (C) 2005 Daniel Zuberbuehler <dzubi@users.sourceforge.net>
  *
  * Adapted from lexer9x.l/grammar9x.y,
  *
@@ -35,17 +36,16 @@ options {
   language="Cpp";
 }
 
-
 //-----------------------------------------------------------------------------
 // Define a Parser, calling it AdaParser
 //-----------------------------------------------------------------------------
 class AdaParser extends Parser;
 options {
-  k = 2;                           // token lookahead
-  exportVocab=Ada;                 // Call its vocabulary "Ada"
+  k = 2;                              // token lookahead
+  exportVocab=Ada;                    // Call its vocabulary "Ada"
   // codeGenMakeSwitchThreshold = 2;  // Some optimizations
   // codeGenBitsetTestThreshold = 3;
-  defaultErrorHandler = true;     // Generate parser error handlers
+  defaultErrorHandler = false;        // Generate parser error handlers
   buildAST = true;
   ASTLabelType = "RefAdaAST";
 }
@@ -82,11 +82,11 @@ pragma_args_opt : ( LPAREN! pragma_arg ( COMMA! pragma_arg )* RPAREN! )?
 pragma_arg : ( IDENTIFIER RIGHT_SHAFT^ )? expression
 	;
 
-context_items_opt : ( pragma )* ( with_clause ( use_clause | pragma )* )*
+context_items_opt : ( pragma | with_clause | use_clause )*
 	{ #context_items_opt =
 		#(#[CONTEXT_CLAUSE, "CONTEXT_CLAUSE"], #context_items_opt); }
 		// RM Annex P neglects pragmas; we include them.
-		// The node should really be named CONTEXT_ITEMS_OPT, but we
+		// The node should really be named CONTEXT_ITEMS_OPT but we
 		// stick with the RM wording.
 	;
 
@@ -139,13 +139,13 @@ private_opt : ( PRIVATE )?
 
 lib_pkg_spec_or_body
 	: pkg:PACKAGE^
-		( BODY! def_id[true] IS! pkg_body_part end_id_opt! SEMI!
+		( BODY! def_id[true] IS! pkg_body_part SEMI!
 			{ Set(#pkg, PACKAGE_BODY); }
 		| def_id[true] spec_decl_part[#pkg]
 		)
 	;
 
-subprog_decl [bool lib_level]
+subprog_decl [boolean lib_level]
 	{ RefAdaAST t; }
 	: p:PROCEDURE^ def_id[lib_level]
 		( generic_subp_inst
@@ -167,7 +167,7 @@ subprog_decl [bool lib_level]
 		)
 	;
 
-def_id [bool lib_level]
+def_id [boolean lib_level]
 	: { lib_level }? cn:compound_name { push_def_id(#cn); }
 	| { !lib_level }? n:IDENTIFIER { push_def_id(#n); }
 	;
@@ -199,7 +199,8 @@ ranged_expr : expression
 		)?
 	;
 
-range_constraint : RANGE! range
+range_constraint : r:RANGE^ range
+        { Set(#r, RANGE_CONSTRAINT); }
 	;
 
 range : ( (range_dots) => range_dots
@@ -326,7 +327,7 @@ separate_or_abstract! [RefAdaAST t]
 		}
 	;
 
-def_designator [bool lib_level]
+def_designator [boolean lib_level]
 	{ RefAdaAST d; }
 	: { lib_level }? n:compound_name { push_def_id(#n); }
 	| { !lib_level }? d=designator { push_def_id(d); }
@@ -355,7 +356,7 @@ func_param : def_ids_colon in_access_opt subtype_mark init_opt
 		   "PARAMETER_SPECIFICATION"], #func_param); }
 	;
 
-in_access_opt : ( IN! | ACCESS )?
+in_access_opt : ( IN | ACCESS )?
 	{ #in_access_opt = #(#[MODIFIERS, "MODIFIERS"], #in_access_opt); }
 	;
 
@@ -369,8 +370,15 @@ spec_decl_part [RefAdaAST pkg]
 	;
 
 pkg_spec_part : basic_declarative_items_opt
-		( PRIVATE! basic_declarative_items_opt )?
-		end_id_opt!
+		private_declarative_items_opt
+		end_id_opt
+	;
+
+private_declarative_items_opt : ( PRIVATE! ( basic_decl_item | pragma )* )?
+	{ #private_declarative_items_opt =
+		#(#[PRIVATE_DECLARATIVE_ITEMS_OPT,
+		   "PRIVATE_DECLARATIVE_ITEMS_OPT"],
+		  #private_declarative_items_opt); }
 	;
 
 basic_declarative_items_opt : ( basic_decl_item | pragma )*
@@ -403,7 +411,7 @@ task_type_or_single_decl [RefAdaAST tsk]
 	;
 
 task_definition_opt
-	: IS! task_items_opt private_task_items_opt end_id_opt! SEMI!
+	: IS! task_items_opt private_task_items_opt end_id_opt SEMI!
 	| SEMI! { pop_def_id(); }
 	;
 
@@ -533,8 +541,14 @@ prot_type_or_single_decl [RefAdaAST pro]
 		{ Set(pro, SINGLE_PROTECTED_DECLARATION); }
 	;
 
+prot_private_opt : ( PRIVATE! ( prot_op_decl | comp_decl )* )?
+	{ #prot_private_opt =
+		#(#[PROT_PRIVATE_OPT,
+		   "PROT_PRIVATE_OPT"], #prot_private_opt); }
+	;
+
 protected_definition
-	: IS! prot_op_decl_s ( PRIVATE! prot_member_decl_s )? end_id_opt!
+	: IS! prot_op_decl_s prot_private_opt end_id_opt
 	;
 
 prot_op_decl_s : ( prot_op_decl )*
@@ -752,7 +766,7 @@ constant_all_opt : ( CONSTANT | ALL )?
 		#(#[MODIFIERS, "MODIFIERS"], #constant_all_opt); }
 	;
 
-derived_or_private_or_record [RefAdaAST t, bool has_discrim]
+derived_or_private_or_record [RefAdaAST t, boolean has_discrim]
 	: ( ( ABSTRACT )? NEW subtype_ind WITH ) =>
 		abstract_opt NEW! subtype_ind WITH!
 			( PRIVATE!  { Set(t, PRIVATE_EXTENSION_DECLARATION); }
@@ -771,12 +785,12 @@ abstract_opt : ( ABSTRACT )?
 	{ #abstract_opt = #(#[MODIFIERS, "MODIFIERS"], #abstract_opt); }
 	;
 
-record_definition [bool has_discrim]
+record_definition [boolean has_discrim]
 	: RECORD! component_list[has_discrim] END! RECORD!
 	| NuLL! RECORD!  // Thus the component_list is optional in the tree.
 	;
 
-component_list [bool has_discrim]
+component_list [boolean has_discrim]
 	: NuLL! SEMI!  // Thus the component_list is optional in the tree.
 	| component_items ( variant_part { has_discrim }? )?
 	| empty_component_items variant_part { has_discrim }?
@@ -845,7 +859,7 @@ aliased_constant_opt : ( ALIASED )? ( CONSTANT )?
 	  #(#[MODIFIERS, "MODIFIERS"], #aliased_constant_opt); }
 	;
 
-generic_decl [bool lib_level]
+generic_decl [boolean lib_level]
 	: g:GENERIC^ generic_formal_part_opt
 	( PACKAGE! def_id[lib_level]
 		( renames { Set(#g, GENERIC_PACKAGE_RENAMING); }
@@ -927,7 +941,7 @@ formal_package_actual_part_opt
 	: ( LPAREN! ( BOX | defining_identifier_list ) RPAREN! )?
 	;
 
-subprog_decl_or_rename_or_inst_or_body [bool lib_level]
+subprog_decl_or_rename_or_inst_or_body [boolean lib_level]
 	{ RefAdaAST t; }
 	: p:PROCEDURE^ def_id[lib_level]
 		( generic_subp_inst
@@ -957,7 +971,7 @@ subprog_decl_or_rename_or_inst_or_body [bool lib_level]
 		)
 	;
 
-body_part : declarative_part block_body end_id_opt!
+body_part : declarative_part block_body end_id_opt
 	;
 
 declarative_part : ( pragma | declarative_item )*
@@ -970,7 +984,7 @@ declarative_part : ( pragma | declarative_item )*
 declarative_item :
 	( pkg:PACKAGE^ ( body_is
 			( separate { Set(#pkg, PACKAGE_BODY_STUB); }
-			| pkg_body_part end_id_opt!
+			| pkg_body_part
 				{ Set(#pkg, PACKAGE_BODY); }
 			)
 			SEMI!
@@ -986,7 +1000,7 @@ declarative_item :
 	| pro:PROTECTED^
 		( body_is
 			( separate { Set(#pro, PROTECTED_BODY_STUB); }
-	       		| prot_op_bodies_opt end_id_opt!
+	       		| prot_op_bodies_opt end_id_opt
 				{ Set(#pro, PROTECTED_BODY); }
 			)
 		| prot_type_or_single_decl[#pro]
@@ -1009,7 +1023,7 @@ body_is : BODY! def_id[false] IS!
 separate : SEPARATE! { pop_def_id(); }
 	;
 
-pkg_body_part : declarative_part block_body_opt
+pkg_body_part : declarative_part block_body_opt end_id_opt
 	;
 
 block_body_opt : ( BEGIN! handled_stmt_s )?
@@ -1050,6 +1064,12 @@ handled_stmt_s : statements except_handler_part_opt
 		   "HANDLED_SEQUENCE_OF_STATEMENTS"], #handled_stmt_s); }
 	;
 
+handled_stmts_opt : ( statements except_handler_part_opt )?
+	{ #handled_stmts_opt =
+		#(#[HANDLED_STMTS_OPT,
+		   "HANDLED_STMTS_OPT"], #handled_stmts_opt); }
+	;
+
 statements : ( pragma | statement )+
 	{ #statements = #(#[SEQUENCE_OF_STATEMENTS,
 			    "SEQUENCE_OF_STATEMENTS"], #statements); }
@@ -1071,8 +1091,8 @@ statement : def_label_opt
 	| loop_stmt SEMI!
 	| block END! SEMI!
 	| statement_identifier
-		( loop_stmt id_opt! SEMI!   // FIXME: The statement_identifier
-		| block end_id_opt! SEMI!   // is not promoted into the tree.
+		( loop_stmt id_opt SEMI!
+		| block end_id_opt SEMI!
 		)
 	| call_or_assignment
 	// | code_stmt  // TBD: resolve ambiguity
@@ -1122,8 +1142,8 @@ case_statement_alternative : s:WHEN^ choice_s RIGHT_SHAFT! statements
 	;
 
 loop_stmt : iteration_scheme_opt
-		LOOP! statements END! LOOP!  // basic_loop
-	{ #loop_stmt = #(#[LOOP_STATEMENT, "LOOP_STATEMENT"], #loop_stmt); }
+		l:LOOP^ statements END! LOOP!  // basic_loop
+	{ Set(#l, LOOP_STATEMENT); }
         ;
 
 iteration_scheme_opt : ( WHILE^ condition
@@ -1138,7 +1158,7 @@ reverse_opt : ( REVERSE )?
 	{ #reverse_opt = #(#[MODIFIERS, "MODIFIERS"], #reverse_opt); }
 	;
 
-id_opt { RefAdaAST endid; } :
+id_opt_aux { RefAdaAST endid; } :
 	endid=definable_operator_symbol { end_id_matches_def_id (endid) }?
 	| n:compound_name { end_id_matches_def_id (#n) }?
 	  /* Ordinarily we would need to be stricter here, i.e.
@@ -1148,7 +1168,12 @@ id_opt { RefAdaAST endid; } :
 	| { pop_def_id(); }
 	;
 
-end_id_opt : END! id_opt
+id_opt : id_opt_aux
+	{ #id_opt = #(#[ID_OPT, "ID_OPT"], #id_opt); }
+	;
+
+end_id_opt : e:END^ id_opt_aux
+	{ Set(#e, END_ID_OPT); }
 	;
 
 /* Note: This rule should really be `statement_identifier_opt'.
@@ -1164,7 +1189,7 @@ statement_identifier! : n:IDENTIFIER COLON!
 /*
 statement_identifier_opt : ( n:IDENTIFIER COLON!  { push_def_id(#n); } )?
 	{ #statement_identifier_opt =
-	  	#(#[STATEMENT_IDENTIFIER_OPT,
+		#(#[STATEMENT_IDENTIFIER_OPT,
 		   "STATEMENT_IDENTIFIER_OPT"], #statement_identifier_opt); }
 	;
  */
@@ -1235,7 +1260,7 @@ entry_call_stmt : name SEMI!  // Semantic analysis required, for example
 	;
 
 accept_stmt : a:ACCEPT^ def_id[false] entry_index_opt formal_part_opt
-		( DO! handled_stmt_s end_id_opt! SEMI!
+		( DO! handled_stmts_opt end_id_opt SEMI!
 		| SEMI! { pop_def_id(); }
 		)
 	{ Set (#a, ACCEPT_STATEMENT); }
@@ -1302,8 +1327,8 @@ entry_call_alternative : entry_call_stmt stmts_opt
 selective_accept : guard_opt select_alternative or_select_opt else_opt
 	;
 
-guard_opt : ( WHEN! condition RIGHT_SHAFT! ( pragma )* )?
-	{ #guard_opt = #(#[GUARD_OPT, "GUARD_OPT"], #guard_opt); }
+guard_opt : ( w:WHEN^ condition RIGHT_SHAFT! ( pragma )* )?
+	{ Set(#w, GUARD_OPT); }
 	;
 
 select_alternative  // Not modeled since it's just a pass-through.
@@ -1479,12 +1504,12 @@ subunit : sep:SEPARATE^ LPAREN! compound_name RPAREN!
 
 subprogram_body
 	: p:PROCEDURE^ def_id[false] formal_part_opt IS! body_part SEMI!
-		{ Set(#p, PROCEDURE_BODY); }
-	| f:FUNCTION^ function_tail IS! body_part SEMI!
-		{ Set(#f, FUNCTION_BODY); }
+		{ pop_def_id(); Set(#p, PROCEDURE_BODY); }
+	| f:FUNCTION^ def_designator[false] function_tail IS! body_part SEMI!
+		{ pop_def_id(); Set(#f, FUNCTION_BODY); }
 	;
 
-package_body : p:PACKAGE^ body_is pkg_body_part end_id_opt! SEMI!
+package_body : p:PACKAGE^ body_is pkg_body_part SEMI!
 	{ Set(#p, PACKAGE_BODY); }
 	;
 
@@ -1492,7 +1517,7 @@ task_body : t:TASK^ body_is body_part SEMI!
 	{ Set(#t, TASK_BODY); }
 	;
  
-protected_body : p:PROTECTED^ body_is prot_op_bodies_opt end_id_opt! SEMI!
+protected_body : p:PROTECTED^ body_is prot_op_bodies_opt end_id_opt SEMI!
 	{ Set(#p, PROTECTED_BODY); }
 	;
 
@@ -1515,7 +1540,7 @@ options {
   k = 4;                  // number of characters of lookahead
   caseSensitive = false;
   caseSensitiveLiterals = false;
-  defaultErrorHandler = true;
+  ///defaultErrorHandler = true;
 }
 
 tokens {
@@ -1593,8 +1618,8 @@ tokens {
   // part 2: RM tokens (synthetic)
   ABORTABLE_PART;
   ABORT_STATEMENT;
-  ABSTRACT_SUBPROGRAM_DECLARATION;  /* =>
-			     ABSTRACT_{FUNCTION|PROCEDURE}_DECLARATION  */
+  /*ABSTRACT_SUBPROGRAM_DECLARATION; =>
+    ABSTRACT_{FUNCTION|PROCEDURE}_DECLARATION  */
   ACCEPT_ALTERNATIVE;
   ACCEPT_STATEMENT;
   /* ACCESS_TO_FUNCTION_DEFINITION => ACCESS_TO_FUNCTION_DECLARATION */
@@ -1612,12 +1637,12 @@ tokens {
   CASE_STATEMENT_ALTERNATIVE;
   CODE_STATEMENT;
   COMPONENT_DECLARATION;
-  COMPONENT_LIST;    // not currently used as an explicit node
-  CONDITION;
+  // COMPONENT_LIST;    // not currently used as an explicit node
+  // CONDITION; // not currently used
   CONDITIONAL_ENTRY_CALL;
   CONTEXT_CLAUSE;
   /* DECIMAL_FIXED_POINT_DEFINITION => DECIMAL_FIXED_POINT_DECLARATION */
-  DECLARATIVE_ITEM;  // not currently used
+  // DECLARATIVE_ITEM;  // not currently used
   DECLARATIVE_PART;
   DEFINING_IDENTIFIER_LIST;
   DELAY_ALTERNATIVE;
@@ -1626,7 +1651,7 @@ tokens {
   /* DERIVED_TYPE_DEFINITION;  =>
      DERIVED_RECORD_EXTENSION, ORDINARY_DERIVED_TYPE_DECLARATION */
   DIGITS_CONSTRAINT;
-  DISCRETE_RANGE;   // Not used; instead, directly use its RHS alternatives.
+  // DISCRETE_RANGE;   // Not used; instead, directly use its RHS alternatives.
   DISCRIMINANT_ASSOCIATION;
   DISCRIMINANT_CONSTRAINT;
   DISCRIMINANT_SPECIFICATION;
@@ -1660,22 +1685,23 @@ tokens {
      FORMAL_SIGNED_INTEGER_TYPE_DECLARATION */
   /* FORMAL_SUBPROGRAM_DECLARATION;  =>
      FORMAL_{FUNCTION|PROCEDURE}_DECLARATION  */
-  FORMAL_TYPE_DECLARATION; /* not used, replaced by the corresponding
+  /* FORMAL_TYPE_DECLARATION; not used, replaced by the corresponding
 			      finer grained declarations  */
-  /* FORMAL_TYPE_DEFINITION; not used at all; we use declarations
-			     not definitions */
-  FULL_TYPE_DECLARATION;   /* not used, replaced by the corresponding
+  /* FORMAL_TYPE_DEFINITION;  not used at all; we use declarations
+			      not definitions */
+  /* FULL_TYPE_DECLARATION;   not used, replaced by the corresponding
 			      finer grained declarations  */
   GENERIC_FORMAL_PART;
-  GENERIC_INSTANTIATION;  /* =>
+  /* GENERIC_INSTANTIATION;  =>
      GENERIC_{FUNCTION|PACKAGE|PROCEDURE}_INSTANTIATION  */
   GENERIC_PACKAGE_DECLARATION;
-  GENERIC_RENAMING_DECLARATION;  /* =>
+  /* GENERIC_RENAMING_DECLARATION;  =>
      GENERIC_{FUNCTION|PACKAGE|PROCEDURE}_RENAMING  */
-  GENERIC_SUBPROGRAM_DECLARATION; /* =>
+  /* GENERIC_SUBPROGRAM_DECLARATION;  =>
      GENERIC_{FUNCTION|PROCEDURE}_DECLARATION  */
   GOTO_STATEMENT;
   HANDLED_SEQUENCE_OF_STATEMENTS;
+  HANDLED_STMTS_OPT;
   IF_STATEMENT;
   INCOMPLETE_TYPE_DECLARATION;
   INDEXED_COMPONENT;
@@ -1695,11 +1721,11 @@ tokens {
   PACKAGE_RENAMING_DECLARATION;
   PACKAGE_SPECIFICATION;
   PARAMETER_SPECIFICATION;
-  PREFIX;
-  PRIMARY;
+  // PREFIX;	// not used
+  // PRIMARY;	// not used
   PRIVATE_EXTENSION_DECLARATION;
   PRIVATE_TYPE_DECLARATION;
-  PROCEDURE_CALL_STATEMENT;  // NYI, using CALL_STATEMENT for now.
+  // PROCEDURE_CALL_STATEMENT;  // NYI, using CALL_STATEMENT for now.
   PROTECTED_BODY;
   PROTECTED_BODY_STUB;
   PROTECTED_TYPE_DECLARATION;
@@ -1710,10 +1736,10 @@ tokens {
   REQUEUE_STATEMENT;
   RETURN_STATEMENT;
   SELECTIVE_ACCEPT;
-  SELECT_ALTERNATIVE;  /* Not used - instead, we use the finer grained rules
+  /* SELECT_ALTERNATIVE;  Not used - instead, we use the finer grained rules
                           ACCEPT_ALTERNATIVE | DELAY_ALTERNATIVE
                           | TERMINATE_ALTERNATIVE  */
-  SELECT_STATEMENT;    /* Not used - instead, we use the finer grained rules
+  /* SELECT_STATEMENT;    Not used - instead, we use the finer grained rules
                         SELECTIVE_ACCEPT | TIMED_ENTRY_CALL
                         | CONDITIONAL_ENTRY_CALL | ASYNCHRONOUS_SELECT  */
   SEQUENCE_OF_STATEMENTS;
@@ -1721,11 +1747,11 @@ tokens {
   SINGLE_PROTECTED_DECLARATION;
   SINGLE_TASK_DECLARATION;
   STATEMENT;
-  SUBPROGRAM_BODY;  /* => {FUNCTION|PROCEDURE}_BODY  */
-  SUBPROGRAM_BODY_STUB;  /* => {FUNCTION|PROCEDURE}_BODY_STUB  */
-  SUBPROGRAM_DECLARATION;  /* => {FUNCTION|PROCEDURE}_DECLARATION  */
-  SUBPROGRAM_RENAMING_DECLARATION;  /* =>
-			     {FUNCTION|PROCEDURE}_RENAMING_DECLARATION  */
+  /* SUBPROGRAM_BODY;  => {FUNCTION|PROCEDURE}_BODY  */
+  /* SUBPROGRAM_BODY_STUB;  => {FUNCTION|PROCEDURE}_BODY_STUB  */
+  /* SUBPROGRAM_DECLARATION;  => {FUNCTION|PROCEDURE}_DECLARATION  */
+  /* SUBPROGRAM_RENAMING_DECLARATION; =>
+     {FUNCTION|PROCEDURE}_RENAMING_DECLARATION  */
   SUBTYPE_DECLARATION;
   SUBTYPE_INDICATION;
   SUBTYPE_MARK;
@@ -1736,7 +1762,7 @@ tokens {
   TERMINATE_ALTERNATIVE;
   TIMED_ENTRY_CALL;
   TRIGGERING_ALTERNATIVE;
-  TYPE_DECLARATION;   /* not used, replaced by the corresponding
+  /* TYPE_DECLARATION;   not used, replaced by the corresponding
 			 finer grained declarations  */
   USE_CLAUSE;
   USE_TYPE_CLAUSE;
@@ -1753,7 +1779,7 @@ tokens {
   ACCESS_TO_FUNCTION_DECLARATION;
   ACCESS_TO_OBJECT_DECLARATION;
   ACCESS_TO_PROCEDURE_DECLARATION;
-  ACCESS_TYPE_DECLARATION;  /* not used, replaced by
+  /* ACCESS_TYPE_DECLARATION;  not used, replaced by
                              ACCESS_TO_{FUNCTION|OBJECT|PROCEDURE}_DECLARATION
 			     */
   ARRAY_OBJECT_DECLARATION;
@@ -1769,12 +1795,13 @@ tokens {
   DECIMAL_FIXED_POINT_DECLARATION;
   DECLARE_OPT;
   DERIVED_RECORD_EXTENSION;
-  DERIVED_TYPE_DECLARATION;
+  // DERIVED_TYPE_DECLARATION; // not used
   DISCRETE_SUBTYPE_DEF_OPT;
   DISCRIMINANT_SPECIFICATIONS;
   DISCRIM_PART_OPT;
   ELSE_OPT;
   ELSIFS_OPT;
+  END_ID_OPT;
   ENTRY_INDEX_OPT;
   ENUMERATION_TYPE_DECLARATION;
   EXCEPT_HANDLER_PART_OPT;
@@ -1808,6 +1835,7 @@ tokens {
   GENERIC_PROCEDURE_RENAMING;
   GUARD_OPT;
   IDENTIFIER_COLON_OPT;
+  ID_OPT;
   INIT_OPT;
   ITERATION_SCHEME_OPT;
   LABEL_OPT;
@@ -1825,6 +1853,7 @@ tokens {
   PARENTHESIZED_PRIMARY;
   // PARENTHESIZED_VALUES;
   // PARENTHESIZED_VALUES_OPT;
+  PRIVATE_DECLARATIVE_ITEMS_OPT;
   PRIVATE_TASK_ITEMS_OPT;
   PROCEDURE_BODY;
   PROCEDURE_BODY_STUB;
@@ -1833,7 +1862,9 @@ tokens {
   PROT_MEMBER_DECLARATIONS;
   PROT_OP_BODIES_OPT;
   PROT_OP_DECLARATIONS;
+  PROT_PRIVATE_OPT;
   RANGED_EXPRS;  // ugh, what an ugly name
+  RANGE_CONSTRAINT;
   RECORD_TYPE_DECLARATION;
   SELECTOR_NAMES_OPT;
   SIGNED_INTEGER_TYPE_DECLARATION;
@@ -1847,40 +1878,39 @@ tokens {
 
 {
   ANTLR_LEXER_PREAMBLE
+  private:
+    bool lastTokenWasTicCompatible;
 }
 
 //----------------------------------------------------------------------------
 // OPERATORS
 //----------------------------------------------------------------------------
-COMMENT_INTRO      :       "--"    ;
-DOT_DOT            :       ".."    ;
-LT_LT              :       "<<"    ;
-BOX                :       "<>"    ;
-GT_GT              :       ">>"    ;
-ASSIGN             :       ":="    ;
-RIGHT_SHAFT        :       "=>"    ;
-NE                 :       "/="    ;
-LE                 :       "<="    ;
-GE                 :       ">="    ;
-EXPON              :       "**"    ;
-PIPE               :       '|'     ;
-CONCAT             :       '&'     ;
-DOT                :       '.'     ;
-EQ                 :       '='     ;
-LT_                :       '<'     ;
-GT                 :       '>'     ;
-PLUS               :       '+'     ;
-MINUS              :       '-'     ;
-STAR               :       '*'     ;
-DIV                :       '/'     ;
-LPAREN             :       '('     ;
-RPAREN             :       ')'     ;
-COLON              :       ':'     ;
-COMMA              :       ','     ;
-SEMI               :       ';'     ;
-
-TIC    : { LA(3)!='\'' }?  '\''    ;
-	 // condition needed to disambiguate from CHARACTER_LITERAL
+COMMENT_INTRO      :       "--"    {lastTokenWasTicCompatible=false;};
+DOT_DOT            :       ".."    {lastTokenWasTicCompatible=false;};
+LT_LT              :       "<<"    {lastTokenWasTicCompatible=false;};
+OX                :       "<>"    {lastTokenWasTicCompatible=false;};
+GT_GT              :       ">>"    {lastTokenWasTicCompatible=false;};
+ASSIGN             :       ":="    {lastTokenWasTicCompatible=false;};
+RIGHT_SHAFT        :       "=>"    {lastTokenWasTicCompatible=false;};
+NE                 :       "/="    {lastTokenWasTicCompatible=false;};
+LE                 :       "<="    {lastTokenWasTicCompatible=false;};
+GE                 :       ">="    {lastTokenWasTicCompatible=false;};
+EXPON              :       "**"    {lastTokenWasTicCompatible=false;};
+PIPE               :       '|'     {lastTokenWasTicCompatible=false;};
+CONCAT             :       '&'     {lastTokenWasTicCompatible=false;};
+DOT                :       '.'     {lastTokenWasTicCompatible=false;};
+EQ                 :       '='     {lastTokenWasTicCompatible=false;};
+LT_                :       '<'     {lastTokenWasTicCompatible=false;};
+GT                 :       '>'     {lastTokenWasTicCompatible=false;};
+PLUS               :       '+'     {lastTokenWasTicCompatible=false;};
+MINUS              :       '-'     {lastTokenWasTicCompatible=false;};
+STAR               :       '*'     {lastTokenWasTicCompatible=false;};
+DIV                :       '/'     {lastTokenWasTicCompatible=false;};
+LPAREN             :       '('     {lastTokenWasTicCompatible=false;};
+RPAREN             :       ')'     {lastTokenWasTicCompatible=true;};
+COLON              :       ':'     {lastTokenWasTicCompatible=false;};
+COMMA              :       ','     {lastTokenWasTicCompatible=false;};
+SEMI               :       ';'     {lastTokenWasTicCompatible=false;};
 
 
 // Literals.
@@ -1893,13 +1923,15 @@ IDENTIFIER
             : ( 'a'..'z' ) ( ('_')? ( 'a'..'z'|'0'..'9' ) )*
 	;
 
-CHARACTER_LITERAL    : { LA(3)=='\'' }?
-	// condition needed to disambiguate from TIC
-	"'" . "'"
-	;
+TIC_OR_CHARACTER_LITERAL   :
+	"'"! { $setType(TIC); } (
+	    { ! lastTokenWasTicCompatible }? . "'"! 
+	    { $setType(CHARACTER_LITERAL); } 
+	)?
+	{lastTokenWasTicCompatible=false;};
 
-CHAR_STRING : '"' ("\"\"" | ~('"'))* '"'
-	;
+CHAR_STRING : '"'! ("\"\"" | ~('"'))* '"'!
+	{lastTokenWasTicCompatible=true;};
 
 NUMERIC_LIT : ( DIGIT )+
 		( '#' BASED_INTEGER ( '.' BASED_INTEGER )? '#'
@@ -1910,21 +1942,21 @@ NUMERIC_LIT : ( DIGIT )+
 			| EXPONENT
 			)
 		)?
-	;
+	{lastTokenWasTicCompatible=false;};
 
 // a couple protected methods to assist in matching the various numbers
 
 protected
-DIGIT   :  ( '0'..'9' ) ;
+DIGIT   :  ( '0'..'9' ) {lastTokenWasTicCompatible=false;};
 
 protected
-EXPONENT           :  ('e') ('+'|'-')? ( DIGIT )+ ;
+EXPONENT           :  ('e') ('+'|'-')? ( DIGIT )+ {lastTokenWasTicCompatible=false;};
 
 protected
-EXTENDED_DIGIT     :  ( DIGIT | 'a'..'f' ) ;
+EXTENDED_DIGIT     :  ( DIGIT | 'a'..'f' ) {lastTokenWasTicCompatible=false;};
 
 protected
-BASED_INTEGER      :  ( EXTENDED_DIGIT ) ( ('_')? EXTENDED_DIGIT )* ;
+BASED_INTEGER      :  ( EXTENDED_DIGIT ) ( ('_')? EXTENDED_DIGIT )* {lastTokenWasTicCompatible=false;};
 
 
 // Whitespace -- ignored
@@ -1942,7 +1974,9 @@ WS_	:	(	' '
 	;
 
 // Single-line comments
-COMMENT :	( COMMENT_INTRO (~('\n'|'\r'))* ('\n'|'\r'('\n')?) )
-		{ $setType(antlr::Token::SKIP); newline(); }
-	;
+COMMENT :	COMMENT_INTRO (~('\n'|'\r'))* ('\n'|'\r'('\n')?)
+		{ $setType(antlr::Token::SKIP); 
+		  newline();
+		  lastTokenWasTicCompatible=false; }
+        ;
 

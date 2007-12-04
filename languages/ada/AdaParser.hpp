@@ -1,7 +1,7 @@
 #ifndef INC_AdaParser_hpp_
 #define INC_AdaParser_hpp_
 
-#line 28 "ada.g"
+#line 29 "ada.g"
 
 #include <antlr/SemanticException.hpp>  // antlr wants this
 #include "AdaAST.hpp"
@@ -9,7 +9,7 @@
 
 #line 11 "AdaParser.hpp"
 #include <antlr/config.hpp>
-/* $ANTLR 2.7.7 (20061129): "ada.g" -> "AdaParser.hpp"$ */
+/* $ANTLR 2.7.7 (20070609): "ada.g" -> "AdaParser.hpp"$ */
 #include <antlr/TokenStream.hpp>
 #include <antlr/TokenBuffer.hpp>
 #include "AdaTokenTypes.hpp"
@@ -70,21 +70,20 @@ public:
 	public: void private_opt();
 	public: void lib_pkg_spec_or_body();
 	public: void subprog_decl_or_rename_or_inst_or_body(
-		bool lib_level
+		boolean lib_level
 	);
 	public: void generic_decl(
-		bool lib_level
+		boolean lib_level
 	);
 	public: void def_id(
-		bool lib_level
+		boolean lib_level
 	);
 	public: void pkg_body_part();
-	public: void end_id_opt();
 	public: void spec_decl_part(
 		RefAdaAST pkg
 	);
 	public: void subprog_decl(
-		bool lib_level
+		boolean lib_level
 	);
 	public: void generic_subp_inst();
 	public: void formal_part_opt();
@@ -93,7 +92,7 @@ public:
 		RefAdaAST t
 	);
 	public: void def_designator(
-		bool lib_level
+		boolean lib_level
 	);
 	public: void function_tail();
 	public: void generic_inst();
@@ -127,6 +126,8 @@ public:
 	public: void in_access_opt();
 	public: void pkg_spec_part();
 	public: void basic_declarative_items_opt();
+	public: void private_declarative_items_opt();
+	public: void end_id_opt();
 	public: void basic_decl_item();
 	public: void basic_declarative_items();
 	public: void task_type_or_single_decl(
@@ -159,16 +160,17 @@ public:
 	public: void align_opt();
 	public: void comp_loc_s();
 	public: void protected_definition();
-	public: void prot_op_decl_s();
-	public: void prot_member_decl_s();
+	public: void prot_private_opt();
 	public: void prot_op_decl();
 	public: void comp_decl();
+	public: void prot_op_decl_s();
+	public: void prot_member_decl_s();
 	public: void component_subtype_def();
 	public: void type_def(
 		RefAdaAST t
 	);
 	public: void derived_or_private_or_record(
-		RefAdaAST t, bool has_discrim
+		RefAdaAST t, boolean has_discrim
 	);
 	public: void local_enum_name();
 	public: void enumeration_aggregate();
@@ -199,11 +201,11 @@ public:
 	public: void constant_all_opt();
 	public: void abstract_opt();
 	public: void record_definition(
-		bool has_discrim
+		boolean has_discrim
 	);
 	public: void abstract_tagged_limited_opt();
 	public: void component_list(
-		bool has_discrim
+		boolean has_discrim
 	);
 	public: void component_items();
 	public: void variant_part();
@@ -235,6 +237,7 @@ public:
 	public: void subprog_decl_or_body();
 	public: void statements();
 	public: void except_handler_part_opt();
+	public: void handled_stmts_opt();
 	public: void statement();
 	public: void def_label_opt();
 	public: void null_stmt();
@@ -262,6 +265,7 @@ public:
 	public: void case_statement_alternative();
 	public: void iteration_scheme_opt();
 	public: void reverse_opt();
+	public: void id_opt_aux();
 	public: void declare_opt();
 	public: void label_name();
 	public: void entry_body_formal_part();
@@ -311,10 +315,10 @@ protected:
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS
-	static const int NUM_TOKENS = 304;
+	static const int NUM_TOKENS = 290;
 #else
 	enum {
-		NUM_TOKENS = 304
+		NUM_TOKENS = 290
 	};
 #endif
 	
@@ -380,180 +384,6 @@ private:
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_29;
 	static const unsigned long _tokenSet_30_data_[];
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_30;
-	static const unsigned long _tokenSet_31_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_31;
-	static const unsigned long _tokenSet_32_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_32;
-	static const unsigned long _tokenSet_33_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_33;
-	static const unsigned long _tokenSet_34_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_34;
-	static const unsigned long _tokenSet_35_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_35;
-	static const unsigned long _tokenSet_36_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_36;
-	static const unsigned long _tokenSet_37_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_37;
-	static const unsigned long _tokenSet_38_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_38;
-	static const unsigned long _tokenSet_39_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_39;
-	static const unsigned long _tokenSet_40_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_40;
-	static const unsigned long _tokenSet_41_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_41;
-	static const unsigned long _tokenSet_42_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_42;
-	static const unsigned long _tokenSet_43_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_43;
-	static const unsigned long _tokenSet_44_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_44;
-	static const unsigned long _tokenSet_45_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_45;
-	static const unsigned long _tokenSet_46_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_46;
-	static const unsigned long _tokenSet_47_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_47;
-	static const unsigned long _tokenSet_48_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_48;
-	static const unsigned long _tokenSet_49_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_49;
-	static const unsigned long _tokenSet_50_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_50;
-	static const unsigned long _tokenSet_51_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_51;
-	static const unsigned long _tokenSet_52_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_52;
-	static const unsigned long _tokenSet_53_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_53;
-	static const unsigned long _tokenSet_54_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_54;
-	static const unsigned long _tokenSet_55_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_55;
-	static const unsigned long _tokenSet_56_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_56;
-	static const unsigned long _tokenSet_57_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_57;
-	static const unsigned long _tokenSet_58_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_58;
-	static const unsigned long _tokenSet_59_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_59;
-	static const unsigned long _tokenSet_60_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_60;
-	static const unsigned long _tokenSet_61_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_61;
-	static const unsigned long _tokenSet_62_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_62;
-	static const unsigned long _tokenSet_63_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_63;
-	static const unsigned long _tokenSet_64_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_64;
-	static const unsigned long _tokenSet_65_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_65;
-	static const unsigned long _tokenSet_66_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_66;
-	static const unsigned long _tokenSet_67_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_67;
-	static const unsigned long _tokenSet_68_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_68;
-	static const unsigned long _tokenSet_69_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_69;
-	static const unsigned long _tokenSet_70_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_70;
-	static const unsigned long _tokenSet_71_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_71;
-	static const unsigned long _tokenSet_72_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_72;
-	static const unsigned long _tokenSet_73_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_73;
-	static const unsigned long _tokenSet_74_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_74;
-	static const unsigned long _tokenSet_75_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_75;
-	static const unsigned long _tokenSet_76_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_76;
-	static const unsigned long _tokenSet_77_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_77;
-	static const unsigned long _tokenSet_78_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_78;
-	static const unsigned long _tokenSet_79_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_79;
-	static const unsigned long _tokenSet_80_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_80;
-	static const unsigned long _tokenSet_81_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_81;
-	static const unsigned long _tokenSet_82_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_82;
-	static const unsigned long _tokenSet_83_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_83;
-	static const unsigned long _tokenSet_84_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_84;
-	static const unsigned long _tokenSet_85_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_85;
-	static const unsigned long _tokenSet_86_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_86;
-	static const unsigned long _tokenSet_87_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_87;
-	static const unsigned long _tokenSet_88_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_88;
-	static const unsigned long _tokenSet_89_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_89;
-	static const unsigned long _tokenSet_90_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_90;
-	static const unsigned long _tokenSet_91_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_91;
-	static const unsigned long _tokenSet_92_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_92;
-	static const unsigned long _tokenSet_93_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_93;
-	static const unsigned long _tokenSet_94_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_94;
-	static const unsigned long _tokenSet_95_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_95;
-	static const unsigned long _tokenSet_96_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_96;
-	static const unsigned long _tokenSet_97_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_97;
-	static const unsigned long _tokenSet_98_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_98;
-	static const unsigned long _tokenSet_99_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_99;
-	static const unsigned long _tokenSet_100_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_100;
-	static const unsigned long _tokenSet_101_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_101;
-	static const unsigned long _tokenSet_102_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_102;
-	static const unsigned long _tokenSet_103_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_103;
-	static const unsigned long _tokenSet_104_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_104;
-	static const unsigned long _tokenSet_105_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_105;
-	static const unsigned long _tokenSet_106_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_106;
-	static const unsigned long _tokenSet_107_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_107;
-	static const unsigned long _tokenSet_108_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_108;
-	static const unsigned long _tokenSet_109_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_109;
-	static const unsigned long _tokenSet_110_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_110;
-	static const unsigned long _tokenSet_111_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_111;
-	static const unsigned long _tokenSet_112_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_112;
-	static const unsigned long _tokenSet_113_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_113;
-	static const unsigned long _tokenSet_114_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_114;
-	static const unsigned long _tokenSet_115_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_115;
-	static const unsigned long _tokenSet_116_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_116;
-	static const unsigned long _tokenSet_117_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_117;
 };
 
 #endif /*INC_AdaParser_hpp_*/

@@ -348,10 +348,15 @@ spec_decl_part
 	| #(PACKAGE_RENAMING_DECLARATION def_id renames)
 	;
 
-pkg_spec_part
-	: basic_declarative_items_opt
-	  (	{ m_currentAccess = CodeModelItem::Protected; }
-		basic_declarative_items_opt
+pkg_spec_part :
+	basic_declarative_items_opt
+	private_declarative_items_opt
+	end_id_opt
+	;
+
+private_declarative_items_opt
+	: (	{ m_currentAccess = CodeModelItem::Protected; }
+		( basic_decl_item | pragma )+
 	 	{ m_currentAccess = CodeModelItem::Public; }
 	  )?
 	;

@@ -14,7 +14,7 @@
 #line 15 "AdaStoreWalker.hpp"
 #include <antlr/config.hpp>
 #include "AdaStoreWalkerTokenTypes.hpp"
-/* $ANTLR 2.7.7 (20061129): "expandedada.store.g" -> "AdaStoreWalker.hpp"$ */
+/* $ANTLR 2.7.7 (20070609): "expandedada.store.g" -> "AdaStoreWalker.hpp"$ */
 #include <antlr/TreeParser.hpp>
 
 #line 10 "expandedada.store.g"
@@ -157,6 +157,9 @@ public:
 	public: void definable_operator_symbol(RefAdaAST _t);
 	public: void spec_decl_part(RefAdaAST _t);
 	public: void basic_declarative_items_opt(RefAdaAST _t);
+	public: void private_declarative_items_opt(RefAdaAST _t);
+	public: void end_id_opt(RefAdaAST _t);
+	public: void basic_decl_item(RefAdaAST _t);
 	public: void generic_formal_part_opt(RefAdaAST _t);
 	public: void procedure_body(RefAdaAST _t);
 	public: void function_body(RefAdaAST _t);
@@ -167,6 +170,7 @@ public:
 	public: void expression(RefAdaAST _t);
 	public: void attribute_id(RefAdaAST _t);
 	public: void modifiers(RefAdaAST _t);
+	public: void id_opt(RefAdaAST _t);
 	public: void value_s(RefAdaAST _t);
 	public: void value(RefAdaAST _t);
 	public: void ranged_expr_s(RefAdaAST _t);
@@ -183,7 +187,6 @@ public:
 	public: void name(RefAdaAST _t);
 	public: void parenthesized_primary(RefAdaAST _t);
 	public: void extension_opt(RefAdaAST _t);
-	public: void basic_decl_item(RefAdaAST _t);
 	public: void task_type_or_single_decl(RefAdaAST _t);
 	public: void prot_type_or_single_decl(RefAdaAST _t);
 	public: void decl_common(RefAdaAST _t);
@@ -204,8 +207,9 @@ public:
 	public: void local_enum_name(RefAdaAST _t);
 	public: void enumeration_aggregate(RefAdaAST _t);
 	public: void protected_definition(RefAdaAST _t);
-	public: void prot_op_decl_s(RefAdaAST _t);
+	public: void prot_private_opt(RefAdaAST _t);
 	public: void prot_member_decl_s(RefAdaAST _t);
+	public: void prot_op_decl_s(RefAdaAST _t);
 	public: void prot_op_decl(RefAdaAST _t);
 	public: void comp_decl(RefAdaAST _t);
 	public: void component_subtype_def(RefAdaAST _t);
@@ -254,6 +258,7 @@ public:
 	public: void entry_body(RefAdaAST _t);
 	public: void statements(RefAdaAST _t);
 	public: void except_handler_part_opt(RefAdaAST _t);
+	public: void handled_stmts_opt(RefAdaAST _t);
 	public: void statement(RefAdaAST _t);
 	public: void def_label_opt(RefAdaAST _t);
 	public: void null_stmt(RefAdaAST _t);
@@ -323,10 +328,10 @@ protected:
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS
-	static const int NUM_TOKENS = 305;
+	static const int NUM_TOKENS = 291;
 #else
 	enum {
-		NUM_TOKENS = 305
+		NUM_TOKENS = 291
 	};
 #endif
 	

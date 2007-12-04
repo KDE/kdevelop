@@ -98,6 +98,12 @@ modifiers : #(MODIFIERS
 	     )
 	;
 
+id_opt : #(ID_OPT ( def_designator )? )
+	;
+
+end_id_opt : #(END ( def_designator )? )
+	;
+
 subprog_decl
 	: #(GENERIC_PROCEDURE_INSTANTIATION def_id generic_inst)
 	| #(PROCEDURE_RENAMING_DECLARATION  def_id formal_part_opt renames)
@@ -133,7 +139,7 @@ ranged_expr
 	| expression
 	;
 
-range_constraint : range
+range_constraint : #(RANGE_CONSTRAINT range)
 	;
 
 range : ( range_dots
@@ -206,11 +212,16 @@ spec_decl_part
 
 pkg_spec_part
 	: basic_declarative_items_opt
-	  ( basic_declarative_items_opt )?   // optional private part
+	  private_declarative_items_opt
+	  end_id_opt
 	;
 
 basic_declarative_items_opt
 	: #(BASIC_DECLARATIVE_ITEMS_OPT ( basic_decl_item )* )
+	;
+
+private_declarative_items_opt
+	: #(PRIVATE_DECLARATIVE_ITEMS_OPT ( basic_decl_item )* )
 	;
 
 basic_decl_item
@@ -227,7 +238,7 @@ task_type_or_single_decl
 	;
 
 task_definition_opt
-	: ( task_items_opt private_task_items_opt )?
+	: task_items_opt private_task_items_opt
 	;
 
 discrim_part_opt
@@ -297,8 +308,11 @@ prot_type_or_single_decl
 	| #(SINGLE_PROTECTED_DECLARATION def_id protected_definition)
 	;
 
+prot_private_opt : #(PROT_PRIVATE_OPT ( prot_member_decl_s )? )
+        ;
+
 protected_definition
-	: prot_op_decl_s ( prot_member_decl_s )?
+	: prot_op_decl_s prot_private_opt end_id_opt
 	;
 
 prot_op_decl_s
@@ -561,7 +575,7 @@ function_body
 	: #(FUNCTION_BODY def_designator function_tail body_part)
 	;
 
-body_part : declarative_part block_body
+body_part : declarative_part block_body end_id_opt
 	;
 
 declarative_part
@@ -574,16 +588,16 @@ declarative_item
 	| #(PACKAGE_BODY def_id pkg_body_part)
 	| spec_decl_part
 	| #(TASK_BODY_STUB def_id)
-	| #(TASK_BODY def_id body_part)
+	| #(TASK_BODY def_id body_part end_id_opt)
 	| task_type_or_single_decl
 	| #(PROTECTED_BODY_STUB def_id)
-	| #(PROTECTED_BODY def_id prot_op_bodies_opt)
+	| #(PROTECTED_BODY def_id prot_op_bodies_opt end_id_opt)
 	| prot_type_or_single_decl
 	| subprog_decl_or_rename_or_inst_or_body
 	| decl_common
 	;
 
-pkg_body_part : declarative_part block_body_opt
+pkg_body_part : declarative_part block_body_opt end_id_opt
 	;
 
 block_body_opt
@@ -610,6 +624,10 @@ handled_stmt_s
 	: #(HANDLED_SEQUENCE_OF_STATEMENTS statements except_handler_part_opt)
 	;
 
+handled_stmts_opt
+	: #(HANDLED_STMTS_OPT ( statements except_handler_part_opt )? )
+	;
+
 statements
 	: #(SEQUENCE_OF_STATEMENTS ( pragma | statement )+ )
 	;
@@ -627,8 +645,8 @@ statement : #(STATEMENT def_label_opt
 		| select_stmt
 		| if_stmt
 		| case_stmt
-		| loop_stmt
-		| block
+		| loop_stmt id_opt
+		| block end_id_opt
 		| call_or_assignment
 		// | code_stmt  // not yet implemented in parser
 		)
@@ -724,7 +742,7 @@ entry_call_stmt
 
 accept_stmt
 	: #(ACCEPT_STATEMENT def_id entry_index_opt formal_part_opt
-		( handled_stmt_s )? )
+		handled_stmts_opt end_id_opt )
 	;
 
 entry_index_opt
