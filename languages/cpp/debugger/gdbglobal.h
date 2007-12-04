@@ -25,6 +25,7 @@ namespace GDBDebugger
 
 enum DBGStateFlag
 {
+  s_none              = 0,
   s_dbgNotStarted     = 1,
   s_appNotStarted     = 2,
   s_programExited     = 16,

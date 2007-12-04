@@ -83,7 +83,7 @@ namespace GDBDebugger
                 ok = false;
 
                 KMessageBox::error(
-                    this, 
+                    this,
                     "<b>Not enough format specifiers</b>"
                     "<p>The number of format specifiers in the custom format "
                     "string is less then the number of expressions. Either remove "

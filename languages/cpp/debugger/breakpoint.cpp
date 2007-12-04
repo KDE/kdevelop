@@ -99,7 +99,7 @@ void Breakpoint::sendToGdb(GDBController* controller)
         && !controller->stateIsOn(s_explicitBreakInto))
     {
         kDebug(9012) << "PAUSING APP\n";
-        controller->pauseApp();
+        controller->slotPauseApp();
         restart = true;
     }
     

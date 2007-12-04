@@ -31,7 +31,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kwindowsystem.h>
 #include <kshell.h>
 #include <KConfigGroup>
 
@@ -43,6 +42,7 @@
 #include <QDir>
 #include <QEventLoop>
 #include <QByteArray>
+#include <QTimer>
 
 #include <iostream>
 #include <ctype.h>
@@ -172,6 +172,12 @@ GDBController::GDBController(QObject* parent)
 GDBController::~GDBController()
 {
     debug_controllerExists = false;
+
+    if (!stateIsOn(s_dbgNotStarted) && m_process) {
+        stopDebugger();
+        // This currently isn't working, so comment out until it can be resolved - at the moment it just causes a delay on stopping kdevelop
+        //m_process->waitForFinished();
+    }
 }
 
 // **************************************************************************
@@ -217,7 +223,7 @@ void GDBController::configure()
         bool restart = false;
         if (stateIsOn(s_dbgBusy))
         {
-            pauseApp();
+            slotPauseApp();
             restart = true;
         }
 
@@ -299,10 +305,10 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
     if (stateIsOn(s_dbgNotStarted))
     {
         KMessageBox::information(
-            0,
+            qApp->activeWindow(),
             i18n("<b>Gdb command sent when debugger is not running</b><br>"
-            "The command was:<br> %1").arg(cmd->initialString()),
-            i18n("Internal error"), "gdb_error");
+            "The command was:<br> %1", cmd->initialString()),
+            i18n("Internal error"));
         return;
     }
 
@@ -315,7 +321,7 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
         cmdList_.append (cmd);
     else if (queue_where == queue_before_run)
     {
-        unsigned i;
+        int i;
         for (i = 0; i < cmdList_.count(); ++i)
             if (cmdList_.at(i)->isRun())
                 break;
@@ -327,7 +333,6 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
                   << (stateReloadInProgress_ ? " (state reloading)\n" : "\n");
 
     setStateOn(s_dbgBusy);
-    emit dbgStatus("", state_);
     raiseEvent(debugger_busy);
 
     executeCmd();
@@ -395,9 +400,9 @@ void GDBController::executeCmd()
     }
     if (bad_command)
     {
-        KMessageBox::information(0, i18n("<b>Invalid debugger command</b><br>")
-                           + message,
-                           i18n("Invalid debugger command"), "gdb_error");
+        KMessageBox::information(qApp->activeWindow(),
+                                 i18n("<b>Invalid debugger command</b><br>%1", message),
+                                 i18n("Invalid debugger command"));
         return;
     }
 
@@ -405,6 +410,8 @@ void GDBController::executeCmd()
 
     m_process->write(commandText.toLatin1(),
                             commandText.length());
+
+    commandExecutionTime.start();
 
     QString prettyCmd = currentCmd_->cmdToSend();
     prettyCmd.replace( QRegExp("set prompt \032.\n"), "" );
@@ -414,8 +421,6 @@ void GDBController::executeCmd()
         emit gdbUserCommandStdout( prettyCmd );
     else
         emit gdbInternalCommandStdout( prettyCmd );
-
-    emit dbgStatus ("", state_);
 }
 
 // **************************************************************************
@@ -434,7 +439,7 @@ void GDBController::destroyCmds()
 // Pausing an app removes any pending run commands so that the app doesn't
 // start again. If we want to be silent then we remove any pending info
 // commands as well.
-void GDBController::pauseApp()
+void GDBController::slotPauseApp()
 {
     setStateOn(s_explicitBreakInto);
 
@@ -463,7 +468,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
     if (currentCmd_)
     {
         const QStringList& lines = currentCmd_->allStreamOutput();
-        for(unsigned int i = 0; i < lines.count(); ++i)
+        for(int i = 0; i < lines.count(); ++i)
         {
             if (lines[i].startsWith("Stopped due to shared library event"))
             {
@@ -486,7 +491,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
         // caller. Show message box in the caller, not here.
         // FIXME: remove this 'bla-bla-bla'.
         KMessageBox::detailedSorry(
-            0,
+            qApp->activeWindow(),
             i18n("<b>Invalid gdb reply</b>"
                  "<p>The 'stopped' packet does not include the 'reason' field'."),
             i18n("The gdb reply is: bla-bla-bla"),
@@ -546,7 +551,6 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
             // or whatever).
 
             setStateOff(s_explicitBreakInto);
-            emit dbgStatus("Application interrupted", state_);
             // Will show the source line in the code
             // handling non-special stop kinds, below.
         }
@@ -558,9 +562,8 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
             // program has a signal that's caused the prog to stop.
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
             // that'll end the program.
-            KMessageBox::information(0,
-                                     i18n("Program received signal %1 (%2)")
-                                     .arg(name).arg(user_name),
+            KMessageBox::information(qApp->activeWindow(),
+                                     i18n("Program received signal %1 (%2)", name, user_name),
                                      i18n("Received signal"));
         }
     }
@@ -598,8 +601,6 @@ void GDBController::reloadProgramState()
     {
         maybeAnnounceWatchpointHit();
     }
-
-    emit dbgStatus ("", state_);
 
     // We're always at frame zero when the program stops
     // and we must reset the active flag
@@ -653,9 +654,9 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     raiseEvent(program_exited);
 
     if (msgBox)
-        KMessageBox::information(0, i18n("gdb message:\n")+msg,"Warning", "gdb_error");
+        KMessageBox::information(qApp->activeWindow(), i18n("gdb message:\n%1", msg), i18n("Warning"));
 
-    emit dbgStatus (msg, state_);
+    emit showMessage(msg, 3000);
     /* Also show message in gdb window, so that users who
        prefer to look at gdb window know what's up.  */
     emit gdbUserCommandStdout(msg);
@@ -718,7 +719,7 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
         // to the caller, who knows the gdb output.
 #if 0
         KMessageBox::information(
-            0,
+            qApp->activeWindow(),
             i18n("Invalid gdb reply\n"
                  "Command was: %1\n"
                  "Response is: %2\n"
@@ -762,7 +763,7 @@ void GDBController::maybeAnnounceWatchpointHit()
         }
         else if (last_stop_reason == "read-watchpoint-trigger")
         {
-            emit dbgStatus ("Read watchpoint triggered", state_);
+            emit showMessage("Read watchpoint triggered", 3000);
         }
     }
 }
@@ -788,32 +789,18 @@ void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
                      frame["addr"].literal());
 }
 
-// **************************************************************************
-//                                SLOTS
-//                                *****
-// For most of these slots data can only be sent to gdb when it
-// isn't busy and it is running.
-
-// **************************************************************************
-
-bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int serial)
+bool GDBController::startDebugger()
 {
     kDebug(9012) << "Starting debugger controller\n";
 
-    Q_ASSERT (!m_process && !tty_);
-
-    m_process = new KProcess();
+    Q_ASSERT (!m_process);
+    m_process = new KProcess(this);
     m_process->setOutputChannelMode( KProcess::SeparateChannels );
 
     connect(m_process, SIGNAL(readyReadStandardOutput()), SLOT(readyReadStandardOutput()));
     connect(m_process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
-    connect(m_process, SIGNAL(error(QProcess::ProcessError)),
-            SLOT(processErrored(QProcess::ProcessError)));
-
-    m_process->setProperty("serial", serial);
-
-    application_ = run.executable().path();
+    connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processErrored(QProcess::ProcessError)));
 
     QString gdb = "gdb";
     // Prepend path to gdb, if needed. Using QDir,
@@ -823,9 +810,30 @@ bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int s
         gdb = config_gdbPath_.path();
     }
     QStringList arguments;
-    arguments << run.executable().path() << "--interpreter=mi2" << "-quiet";
-    if (!shell.isEmpty())
+    arguments << "--interpreter=mi2" << "-quiet";
+
+    KConfigGroup config(KGlobal::config(), "GDB Options");
+    QString shell = config.readEntry("Debugger Shell");
+    if( !shell.isEmpty() )
     {
+        shell = shell.simplified();
+        QString shell_without_args = shell.split(QChar(' ')).first();
+
+        QFileInfo info( shell_without_args );
+        /*if( info.isRelative() )
+        {
+            shell_without_args = build_dir + "/" + shell_without_args;
+            info.setFile( shell_without_args );
+        }*/
+        if( !info.exists() )
+        {
+            KMessageBox::information(
+                qApp->activeWindow(),
+                i18n("Could not locate the debugging shell '%1'.", shell_without_args ),
+                i18n("Debugging Shell Not Found") );
+            return false;
+        }
+
         arguments.insert(0, gdb );
         arguments.insert(0, shell);
         m_process->setShellCommand( KShell::joinArgs( arguments ) );
@@ -834,14 +842,14 @@ bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int s
     {
         m_process->setProgram( gdb, arguments );
     }
+
     m_process->start();
+
     emit gdbUserCommandStdout(
                               shell + " " + gdb
-                              + " " + run.executable().path()
                               + " --interpreter=mi2 -quiet\n" );
 
     setStateOff(s_dbgNotStarted);
-    emit dbgStatus ("", state_);
 
     saw_gdb_prompt_ = false;
 
@@ -885,8 +893,44 @@ bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int s
     // make sure output radix is always set to users view.
     queueCmd(new GDBCommand(GDBMI::GdbSet, QString().sprintf("output-radix %d",  config_outputRadix_)));
 
+    Q_ASSERT (!tty_);
+    tty_ = new STTY(config_dbgTerminal_);//, Settings::terminalEmulatorName( *KGlobal::config() ));
+    if (!config_dbgTerminal_)
+    {
+        connect( tty_, SIGNAL(OutOutput(const QByteArray&)), SIGNAL(ttyStdout(const QByteArray&)) );
+        connect( tty_, SIGNAL(ErrOutput(const QByteArray&)), SIGNAL(ttyStderr(const QByteArray&)) );
+    }
+
+    QString tty(tty_->getSlave());
+    if (tty.isEmpty())
+    {
+        KMessageBox::information(qApp->activeWindow(), i18n("GDB cannot use the tty* or pty* devices.\n"
+                                    "Check the settings on /dev/tty* and /dev/pty*\n"
+                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
+                                    "and/or add the user to the tty group using "
+                                    "\"usermod -G tty username\"."), i18n("Warning"));
+
+        delete tty_;
+        tty_ = 0;
+        return false;
+    }
+
+    queueCmd(new GDBCommand(InferiorTtySet, tty));
+
+    return true;
+}
+
+bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
+{
+    if (!startDebugger())
+        return false;
+
+    m_process->setProperty("serial", serial);
+
     // Change the "Working directory" to the correct one
-    queueCmd(new GDBCommand(EnvironmentCd, QString::fromLatin1(QFile::encodeName( run.workingDirectory().path() ))));
+    QString dir = QString::fromLatin1(QFile::encodeName( run.workingDirectory().path() ));
+    if (!dir.isEmpty())
+        queueCmd(new GDBCommand(EnvironmentCd, dir));
 
     // Set the run arguments
     if (!run.arguments().isEmpty())
@@ -912,6 +956,10 @@ bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int s
     raiseEvent(debugger_ready);
     raiseEvent(connected_to_program);
 
+    application_ = run.executable().path();
+    queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, application_));
+    queueCmd(new GDBCommand(ExecRun));
+
     // Now gdb has been started and the application has been loaded,
     // BUT the app hasn't been started yet! A run command is about to be issued
     // by whoever is controlling us. Or we might be asked to load a core, or
@@ -921,8 +969,14 @@ bool GDBController::start(const QString& shell, const KDevelop::IRun& run, int s
 }
 
 // **************************************************************************
+//                                SLOTS
+//                                *****
+// For most of these slots data can only be sent to gdb when it
+// isn't busy and it is running.
 
-void GDBController::slotStopDebugger()
+// **************************************************************************
+
+void GDBController::stopDebugger()
 {
     kDebug(9012) << "GDBController::slotStopDebugger() called";
     if (stateIsOn(s_shuttingDown) || !m_process)
@@ -931,91 +985,58 @@ void GDBController::slotStopDebugger()
     setStateOn(s_shuttingDown);
     kDebug(9012) << "GDBController::slotStopDebugger() executing";
 
-    QTime start;
-    QTime now;
-
     // Get gdb's attention if it's busy. We need gdb to be at the
     // command line so we can stop it.
     if (stateIsOn(s_dbgBusy))
     {
         kDebug(9012) << "gdb busy on shutdown - stopping gdb (SIGINT)";
         //TODO:win32 Porting needed
-        kill( m_process->pid(), SIGSTOP );
-        start = QTime::currentTime();
-        while (-1)
-        {
-            //kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
-            now = QTime::currentTime();
-            if (!stateIsOn(s_dbgBusy) || start.msecsTo( now ) > 2000)
-                break;
-        }
+        kill( m_process->pid(), SIGINT );
     }
 
     // If the app is attached then we release it here. This doesn't stop
     // the app running.
     if (stateIsOn(s_attached))
     {
-        const char *detach="detach\n";
-        if (!m_process->write(detach, strlen(detach)))
-            kDebug(9012) << "failed to write 'detach' to gdb";
+        queueCmd(new GDBCommand(TargetDetach));
         emit gdbUserCommandStdout("(gdb) detach\n");
-        start = QTime::currentTime();
-        while (-1)
-        {
-             //kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
-             now = QTime::currentTime();
-             if (!stateIsOn(s_attached) || start.msecsTo( now ) > 2000)
-                 break;
-        }
     }
 
     // Now try to stop gdb running.
-    const char *quit="quit\n";
-    if (!m_process->write(quit, strlen(quit)))
-        kDebug(9012) << "failed to write 'quit' to gdb";
-
+    queueCmd(new GDBCommand(GdbExit));
     emit gdbUserCommandStdout("(gdb) quit");
-    start = QTime::currentTime();
-    while (-1)
-    {
-         //kapp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput, 20 );
-         now = QTime::currentTime();
-         if (stateIsOn(s_programExited) || start.msecsTo( now ) > 2000)
-             break;
-    }
 
-    // We cannot wait forever.
-    if (!stateIsOn(s_programExited))
+    // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
+    QTimer::singleShot(5000, this, SLOT(slotKillGdb()));
+}
+
+void GDBController::slotKillGdb()
+{
+    if (!stateIsOn(s_programExited) && stateIsOn(s_shuttingDown))
     {
         kDebug(9012) << "gdb not shutdown - killing";
         m_process->kill();
+
+        holdingZone_.clear();
+
+        setState(s_dbgNotStarted | s_appNotStarted);
+
+        raiseEvent(debugger_exited);
     }
-
-    destroyCmds();
-    delete m_process;    m_process = 0;
-    delete tty_;           tty_ = 0;
-
-    // The gdb output buffer might contain start marker of some
-    // previously issued command that crashed gdb (so there's no end marker)
-    // If we don't clear this, then after restart, we'll be trying to search
-    // for the end marker of the command issued in previous gdb session,
-    // and never succeed.
-    gdbOutput_ = "";
-
-    setState(s_dbgNotStarted | s_appNotStarted);
-    emit dbgStatus (i18n("Debugger stopped"), state_);
-
-    raiseEvent(debugger_exited);
 }
 
 // **************************************************************************
 
-void GDBController::slotCoreFile(const QString &coreFile)
+void GDBController::examineCoreFile(const KUrl& coreFile)
 {
     setStateOff(s_programExited|s_appNotStarted);
     setStateOn(s_core);
 
-    queueCmd(new GDBCommand(NonMI, "core " + coreFile));
+    if (stateIsOn(s_dbgNotStarted))
+      startDebugger();
+
+    // TODO support non-local URLs
+    queueCmd(new GDBCommand(NonMI, "core " + coreFile.path()));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -1023,10 +1044,13 @@ void GDBController::slotCoreFile(const QString &coreFile)
 
 // **************************************************************************
 
-void GDBController::slotAttachTo(int pid)
+void GDBController::attachToProcess(int pid)
 {
     setStateOff(s_appNotStarted|s_programExited);
     setStateOn(s_attached);
+
+    if (stateIsOn(s_dbgNotStarted))
+      startDebugger();
 
     // Currently, we always start debugger with a name of binary,
     // we might be connecting to a different binary completely,
@@ -1052,34 +1076,30 @@ void GDBController::slotAttachTo(int pid)
 
 void GDBController::slotRun()
 {
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown)) {
+        kDebug() << "Tried to run when debugger not started, or shutting down";
         return;
+    }
+
+    if( stateIsOn( s_appNotStarted ) )
+    {
+        if (stateIsOn(s_dbgNotStarted))
+        {
+            // User has already run the debugger, but it's not running.
+            // Most likely, the debugger has crashed, and the debuggerpart
+            // was left in 'running' state so that the user can examine
+            // gdb output or something. But now, need to fully shut down
+            // previous debug session.
+            stopDebugger();
+        }
+
+        if (stateIsOn( s_appNotStarted ) )
+        {
+            emit showMessage(i18n("Running program"), 1000);
+        }
+    }
 
     if (stateIsOn(s_appNotStarted)) {
-
-        delete tty_;
-        tty_ = new STTY(config_dbgTerminal_);//, Settings::terminalEmulatorName( *KGlobal::config() ));
-        if (!config_dbgTerminal_)
-        {
-            connect( tty_, SIGNAL(OutOutput(const QByteArray&)), SIGNAL(ttyStdout(const QByteArray&)) );
-            connect( tty_, SIGNAL(ErrOutput(const QByteArray&)), SIGNAL(ttyStderr(const QByteArray&)) );
-        }
-
-        QString tty(tty_->getSlave());
-        if (tty.isEmpty())
-        {
-            KMessageBox::information(0, i18n("GDB cannot use the tty* or pty* devices.\n"
-                                       "Check the settings on /dev/tty* and /dev/pty*\n"
-                                       "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
-                                       "and/or add the user to the tty group using "
-                                       "\"usermod -G tty username\"."), "Warning",  "gdb_error");
-
-            delete tty_;
-            tty_ = 0;
-            return;
-        }
-
-        queueCmd(new GDBCommand(InferiorTtySet, tty));
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
@@ -1114,32 +1134,32 @@ void GDBController::slotRun()
             if (!app.exists())
             {
                 KMessageBox::error(
-                    0,
+                    qApp->activeWindow(),
                     i18n("<b>Application does not exist</b>"
                          "<p>The application you're trying to debug,<br>"
                          "    %1\n"
                          "<br>does not exist. Check that you've specified "
-                         "the right application in the debugger configuration."
-                        ).arg(app.fileName()),
+                         "the right application in the debugger configuration.",
+                         app.fileName()),
                     i18n("Application does not exist"));
 
                 // FIXME: after this, KDevelop will still show that debugger
                 // is running, because DebuggerPart::slotStopDebugger won't be
                 // called, and core()->running(this, false) won't be called too.
-                slotStopDebugger();
+                stopDebugger();
                 return;
             }
             if (!app.isExecutable())
             {
                 KMessageBox::error(
-                    0,
+                    qApp->activeWindow(),
                     i18n("<b>Could not run application '%1'.</b>"
                          "<p>The application does not have the executable bit set. "
                          "Try rebuilding the project, or change permissions "
-                         "manually."
-                        ).arg(app.fileName()),
+                         "manually.",
+                         app.fileName()),
                     i18n("Could not run application"));
-                slotStopDebugger();
+                stopDebugger();
             }
             else
             {
@@ -1163,7 +1183,7 @@ void GDBController::slotKill()
 
     if (stateIsOn(s_dbgBusy))
     {
-        pauseApp();
+        slotPauseApp();
     }
 
     queueCmd(new GDBCommand(ExecAbort));
@@ -1173,31 +1193,30 @@ void GDBController::slotKill()
 
 // **************************************************************************
 
-void GDBController::slotRunUntil(const QString &fileName, int lineNum)
+void GDBController::runUntil(const KUrl& url, int line)
 {
     if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
     removeStateReloadingCommands();
 
-    if (fileName.isEmpty())
-        queueCmd(new GDBCommand(ExecUntil,
-                     QString::number(lineNum)));
+    if (!url.isValid())
+        queueCmd(new GDBCommand(ExecUntil, line));
     else
         queueCmd(new GDBCommand(ExecUntil,
-                QString("%s:%d").arg(fileName).arg(lineNum)));
+                QString("%s:%d").arg(url.path()).arg(line)));
 }
 
 // **************************************************************************
 
-void GDBController::slotJumpTo(const QString &fileName, int lineNum)
+void GDBController::jumpTo(const KUrl& url, int line)
 {
     if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    if (!fileName.isEmpty()) {
-        queueCmd(new GDBCommand(NonMI, QString().sprintf("tbreak %s:%d", fileName, lineNum)));
-        queueCmd(new GDBCommand(NonMI, QString().sprintf("jump %s:%d", fileName, lineNum)));
+    if (url.isValid()) {
+        queueCmd(new GDBCommand(NonMI, QString("tbreak %1:%2").arg(url.path()).arg(line)));
+        queueCmd(new GDBCommand(NonMI, QString("jump %1:%2").arg(url.path()).arg(line)));
     }
 }
 
@@ -1251,7 +1270,7 @@ void GDBController::slotStepOverInstruction()
 
 // **************************************************************************
 
-void GDBController::slotStepOutOff()
+void GDBController::slotStepOut()
 {
     if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
         return;
@@ -1259,14 +1278,6 @@ void GDBController::slotStepOutOff()
     removeStateReloadingCommands();
 
     queueCmd(new GDBCommand(ExecFinish));
-}
-
-// **************************************************************************
-
-// Only interrupt a running program.
-void GDBController::slotBreakInto()
-{
-    pauseApp();
 }
 
 // **************************************************************************
@@ -1309,17 +1320,16 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
     if (msg.contains("No such process"))
     {
         setState(s_appNotStarted|s_programExited);
-        emit dbgStatus (i18n("Process exited"), state_);
         raiseEvent(program_exited);
         return;
     }
 
     KMessageBox::information(
-        0,
+        qApp->activeWindow(),
         i18n("<b>Debugger error</b>"
              "<p>Debugger reported the following error:"
-             "<p><tt>") + result["msg"].literal(),
-        i18n("Debugger error"), "gdb_error");
+             "<p><tt>%1", result["msg"].literal()),
+        i18n("Debugger error"));
 
     // Error most likely means that some change made in GUI
     // was not communicated to the gdb, so GUI is now not
@@ -1522,10 +1532,9 @@ void GDBController::readFromProcess(QProcess* process)
                 parseCliLine(s.message);
 
                 static QRegExp print_output("^\\$(\\d+) = ");
-                if (print_output.search(s.message) != -1)
+                if (print_output.indexIn(s.message) != -1)
                 {
                     kDebug(9012) << "Found 'print' output: " << s.message << "\n";
-                    print_command_result = s.message.ascii();
                 }
 
                 /* This is output from the program.  Route it to
@@ -1545,7 +1554,7 @@ void GDBController::readFromProcess(QProcess* process)
         catch(const std::exception& e)
         {
             KMessageBox::detailedSorry(
-                0,
+                qApp->activeWindow(),
                 i18nc("<b>Internal debugger error</b>",
                      "<p>The debugger component encountered internal error while "
                      "processing reply from gdb. Please submit a bug report."),
@@ -1589,7 +1598,6 @@ void GDBController::commandDone()
     {
         kDebug(9012) << "No more commands\n";
         setStateOff(s_dbgBusy);
-        emit dbgStatus("", state_);
         raiseEvent(debugger_ready);
     }
 }
@@ -1649,7 +1657,6 @@ void GDBController::raiseEvent(event_t e)
 
 void GDBDebugger::GDBController::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
     delete m_process;
     m_process = 0;
@@ -1663,22 +1670,24 @@ void GDBDebugger::GDBController::processFinished(int exitCode, QProcess::ExitSta
 
     destroyCmds();
     setState(s_dbgNotStarted|s_appNotStarted|s_programExited);
-    emit dbgStatus (i18n("Process exited"), state_);
+    emit showMessage(i18n("Process exited"), 3000);
 
     emit gdbUserCommandStdout("(gdb) Process exited\n");
+
+    holdingZone_.clear();
 }
 
 void GDBController::processErrored(QProcess::ProcessError error)
 {
-    if( error = QProcess::FailedToStart )
+    if( error == QProcess::FailedToStart )
     {
         KMessageBox::information(
-            0,
+            qApp->activeWindow(),
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly."
                 , m_process->program()[0]),
-            i18n("Could not start debugger"), "gdb_error");
+            i18n("Could not start debugger"));
         delete m_process;
         m_process = 0;
         delete tty_;
@@ -1689,9 +1698,11 @@ void GDBController::processErrored(QProcess::ProcessError error)
 
         destroyCmds();
         setState(s_dbgNotStarted|s_appNotStarted|s_programExited);
-        emit dbgStatus (i18n("Process didn't start"), state_);
+        emit showMessage(i18n("Process didn't start"), 3000);
 
         emit gdbUserCommandStdout("(gdb) didn't start\n");
+
+        holdingZone_.clear();
     }
 }
 
@@ -1713,52 +1724,58 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
 
 void GDBController::explainDebuggerStatus()
 {
-    QString information("%1 commands in queue\n"
+    QString information = i18n("%1 commands in queue\n"
                         "%2 commands being processed by gdb\n"
-                        "Debugger state: %3\n");
-    information =
-        information.arg(cmdList_.count()).arg(currentCmd_ ? 1 : 0)
-        .arg(state_);
+                        "Debugger state: %3\n", cmdList_.count(), (currentCmd_ ? 1 : 0), state_);
 
     if (currentCmd_)
     {
-        QString extra("Current command class: '%1'\n"
+        QString extra = i18n("Current command class: '%1'\n"
                       "Current command text: '%2'\n"
-                      "Current command origianl text: '%3'\n");
+                      "Current command original text: '%3'\n", typeid(*currentCmd_).name(), currentCmd_->cmdToSend(), currentCmd_->initialString());
 
-        extra = extra.arg(
-            typeid(*currentCmd_).name()).arg(currentCmd_->cmdToSend()).
-            arg(currentCmd_->initialString());
         information += extra;
     }
 
-    KMessageBox::information(0, information, "Debugger status");
+    KMessageBox::information(qApp->activeWindow(), information, i18n("Debugger status"));
 }
 
-bool GDBController::stateIsOn(int state)
+bool GDBController::stateIsOn(DBGStateFlags state)
 {
     return state_ & state;
 }
 
-void GDBController::setStateOn(int stateOn)
+void GDBController::setStateOn(DBGStateFlags stateOn)
 {
+    DBGStateFlags oldState = state_;
+
     debugStateChange(state_, state_ | stateOn);
     state_ |= stateOn;
+
+    emit stateChanged(oldState, state_);
 }
 
-void GDBController::setStateOff(int stateOff)
+void GDBController::setStateOff(DBGStateFlags stateOff)
 {
+    DBGStateFlags oldState = state_;
+  
     debugStateChange(state_, state_ & ~stateOff);
     state_ &= ~stateOff;
+
+    emit stateChanged(oldState, state_);
 }
 
-void GDBController::setState(int newState)
+void GDBController::setState(DBGStateFlags newState)
 {
+    DBGStateFlags oldState = state_;
+  
     debugStateChange(state_, newState);
     state_ = newState;
+
+    emit stateChanged(oldState, state_);
 }
 
-void GDBController::debugStateChange(int oldState, int newState)
+void GDBController::debugStateChange(DBGStateFlags oldState, DBGStateFlags newState)
 {
     int delta = oldState ^ newState;
     if (delta)
@@ -1802,15 +1819,8 @@ void GDBController::debugStateChange(int oldState, int newState)
 
 int GDBController::qtVersion( ) const
 {
-  return 4;//DomUtil::readIntEntry( "/kdevcppsupport/qt/version", 3 );
-}
-
-void GDBController::demandAttention() const
-{
-    if ( QWidget * w = qApp->activeWindow() )
-    {
-        KWindowSystem::demandAttention( w->winId(), true );
-    }
+    // PORTING TODO change mechanism for displaying pretty variables, or reinstate this...
+    return 4;//DomUtil::readIntEntry( "/kdevcppsupport/qt/version", 3 );
 }
 
 void GDBController::slotRestart()
@@ -1834,5 +1844,17 @@ void GDBController::slotRestart()
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
+
+int GDBDebugger::GDBController::serial() const
+{
+    QVariant var;
+    if (m_process)
+        var = m_process->property("serial");
+
+    if (var.canConvert(QVariant::Int))
+        return var.toInt();
+
+    return -1;
+}
 
 #include "gdbcontroller.moc"

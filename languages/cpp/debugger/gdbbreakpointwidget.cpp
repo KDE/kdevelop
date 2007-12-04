@@ -398,7 +398,7 @@ void GDBBreakpointWidget::slotBreakpointHit(int id)
     }
     else
     {
-        controller_->demandAttention();
+        plugin_->demandAttention();
     }
 }
 
@@ -417,16 +417,12 @@ void GDBBreakpointWidget::slotWatchpointHit(int id,
 
 
     KMessageBox::information(
-        0,
+        this,
         i18n("<b>Data write breakpoint</b><br>"
              "Expression: %1<br>"
              "Address: 0x%2<br>"
              "Old value: %3<br>"
-             "New value: %4")
-        .arg(b->varName())
-        .arg(b->address(), 0, 16)
-        .arg(oldValue)
-        .arg(newValue));
+             "New value: %4", b->varName(), QString::number(b->address(), 16), oldValue, newValue));
 }
 
 /***************************************************************************/

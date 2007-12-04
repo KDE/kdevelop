@@ -18,10 +18,7 @@
 #ifndef _GDBCONTROLLER_H_
 #define _GDBCONTROLLER_H_
 
-#include <irun.h>
-
-#include "mi/gdbmi.h"
-#include "mi/miparser.h"
+#include <memory>
 
 #include <QObject>
 #include <QList>
@@ -30,8 +27,14 @@
 #include <QSet>
 #include <QDateTime>
 
-#include <memory>
 #include <kprocess.h>
+
+#include <irun.h>
+
+#include "mi/gdbmi.h"
+#include "mi/miparser.h"
+
+#include "gdbglobal.h"
 
 namespace GDBDebugger
 {
@@ -66,6 +69,40 @@ public:
                    connected_to_program
     };
 
+    /**
+     * Start the debugger, and execute the program specified by \a run, and remember the provided \a serial number.
+     */
+    bool startProgram(const KDevelop::IRun& run, int serial);
+
+    /**
+     * Run currently executing program to the given \a url and \a line.
+     */
+    void runUntil(const KUrl& url, int line);
+
+    /**
+     * Move the execution point of the currently executing program to the given \a url and \a line.
+     */
+    void jumpTo(const KUrl& url, int line);
+
+    /**
+     * Start the debugger and examine the core file given by \a coreFile.
+     */
+    void examineCoreFile(const KUrl& coreFile);
+
+    /**
+     * Attach to currently running process with the given \a pid.
+     */
+    void attachToProcess(int pid);
+
+    /**
+     * Stop the currently running application.
+     */
+    void stopDebugger();
+
+    /**
+     * Return the serial number for the currently run program, if one was given, else return -1.
+     */
+    int serial() const;
 
     /** Adds a command to the end of queue of commands to be executed
         by gdb. The command will be actually sent to gdb only when
@@ -125,24 +162,12 @@ public:
 
     int currentFrame() const;
 
-    bool start(const QString& shell, const KDevelop::IRun& run, int serial);
-
     int qtVersion() const;
 
-    /**
-     * Call this when something very interesting happens that the user
-     * might be unaware of. It will make KDevelop's taskbar entry flash
-     * if the application doesn't already have focus.
-     * Typical use case: The debugger has stopped on a breakpoint.
-     */
-    void demandAttention() const;
+    bool stateIsOn(DBGStateFlags state);
 
-    void pauseApp();
-
-protected:
-    enum queue_where { queue_at_end, queue_at_front, queue_before_run };
-
-    void queueCmd(GDBCommand *cmd, enum queue_where queue_where = queue_at_end);
+public Q_SLOTS:
+    void slotPauseApp();
 
 private:
     void parseLocals          (char type, char *buf);
@@ -182,11 +207,11 @@ private:
 
     void programNoApp(const QString &msg, bool msgBox);
 
-    void setStateOn(int stateOn);
-    void setStateOff(int stateOff);
-    void setState(int newState);
+    void setStateOn(DBGStateFlags stateOn);
+    void setStateOff(DBGStateFlags stateOff);
+    void setState(DBGStateFlags newState);
 
-    void debugStateChange(int oldState, int newState);
+    void debugStateChange(DBGStateFlags oldState, DBGStateFlags newState);
     void commandDone();
     void destroyCurrentCommand();
 
@@ -208,31 +233,24 @@ private:
         Otherwise, shows a dialog box and reloads view state.  */
     void defaultErrorHandler(const GDBMI::ResultRecord& result);
 
-public:
-    bool stateIsOn(int state);
+    bool startDebugger();
 
-public Q_SLOTS:
+    enum queue_where { queue_at_end, queue_at_front, queue_before_run };
+
+private Q_SLOTS:
+    // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
+    void queueCmd(GDBCommand *cmd, queue_where queue_where = queue_at_end);
+
     void configure();
-
-
-    //void slotStart(const QString& shell, const QString &application);
-    void slotCoreFile(const QString &coreFile);
-    void slotAttachTo(int pid);
-
-    void slotStopDebugger();
 
     void slotRun();
     void slotKill();
     void slotRestart();
-    void slotRunUntil(const QString &filename, int lineNum);
-    void slotJumpTo(const QString &filename, int lineNum);
     void slotStepInto();
     void slotStepOver();
     void slotStepIntoInstruction();
     void slotStepOverInstruction();
-    void slotStepOutOff();
-
-    void slotBreakInto();
+    void slotStepOut();
 
     void slotUserGDBCmd(const QString&);
 
@@ -241,12 +259,12 @@ public Q_SLOTS:
     // is in, which commands were sent and so on.
     void explainDebuggerStatus();
 
-
-protected Q_SLOTS:
     void readyReadStandardOutput();
     void readyReadStandardError();
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void processErrored(QProcess::ProcessError);
+
+    void slotKillGdb();
 
 Q_SIGNALS:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
@@ -258,7 +276,6 @@ Q_SIGNALS:
     void gdbInternalCommandStdout (const QString& output);
     void gdbUserCommandStdout (const QString& output);
     void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
-    void dbgStatus            (const QString &status, int statusFlag);
 
     /** This signal is emitted whenever the given event in a program
         happens. See DESIGN.txt for expected handled of each event.
@@ -278,18 +295,17 @@ Q_SIGNALS:
     void watchpointHit(int id,
                        const QString& oldValue, const QString& newValue);
 
+    void showMessage(const QString& message, int timeout);
+    void stateChanged(DBGStateFlags oldState, DBGStateFlags newState);
+
 private:
     void readFromProcess(QProcess* process);
 
     int               currentFrame_;
     int               viewedThread_;
 
-    // The output from gdb that was not parsed yet
-    QByteArray          gdbOutput_;
     // The output from gdb that arrived where we was
-    // parsing the previous output. To avoid messing
-    // things up, it's not directly added to
-    // gdbOutput_ but stored for future use.
+    // parsing the previous output.
     // VP: It's not clear why the previous code was doing
     // this, and holdingZone_ won't be processed until
     // next output arrives, so probably should be just removed.
@@ -307,7 +323,7 @@ private:
     QMap<int, const Breakpoint*> tracedBreakpoints_;
 
     // Some state variables
-    int               state_;
+    DBGStateFlags     state_;
     bool              programHasExited_;
 
     // Configuration values
@@ -331,12 +347,6 @@ private:
     // like announcing write watchpoints, and so need to have
     // access to the stop packet. So store it here.
     std::auto_ptr<GDBMI::ResultRecord> last_stop_result;
-
-    // Gdb 6.4 (and 6.3) does not support "character" format with MI,
-    // so the only way it can work is via the "print" command. As gdb
-    // outputs things, we'll grep for lines that look like output from
-    // print, and store such lines in this variable, so later use.
-    QByteArray print_command_result;
 
     bool state_reload_needed;
 

@@ -152,8 +152,8 @@ namespace GDBDebugger
         if (isOk())
             slotEnableOrDisable();
 
-        connect( controller, SIGNAL(dbgStatus(const QString&, int)),
-                 this,       SLOT(slotDebuggerState(const QString&, int)));
+        connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
+                 this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
         connect(this,        SIGNAL(setViewShown(bool)),
                 plugin,      SLOT(slotShowView(bool)));
     }
@@ -247,7 +247,7 @@ namespace GDBDebugger
 
     }
 
-    void MemoryView::debuggerStateChanged(int state)
+    void MemoryView::debuggerStateChanged(DBGStateFlags state)
     {
         if (isOk())
         {
@@ -461,11 +461,11 @@ namespace GDBDebugger
                 this, SLOT(slotChildDestroyed(QObject*)));
     }
 
-    void ViewerWidget::slotDebuggerState(const QString&, int state)
+    void ViewerWidget::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState)
     {
         for(int i = 0; i < memoryViews_.size(); ++i)
         {
-            memoryViews_[i]->debuggerStateChanged(state);
+            memoryViews_[i]->debuggerStateChanged(newState);
         }
     }
 

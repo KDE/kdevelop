@@ -766,11 +766,11 @@ void VariableTree::frameIdReady(const QStringList& lines)
     else
     {
         KMessageBox::information(
-            0,
+            this,
             "<b>Can't get frame id</b>"
             "Could not found frame id from output of 'info frame'. "
             "Further debugging can be unreliable. ",
-            i18n("Internal error"),  "gdb_error");
+            i18n("Internal error"));
     }
 
     if (frameIdChanged)
@@ -903,9 +903,9 @@ void VarItem::handleCliPrint(const QStringList& lines)
             // FIXME: merge all output lines together.
             // FIXME: add 'debuggerError' to debuggerpart.
             KMessageBox::information(
-                0,
-                i18n("<b>Debugger error</b><br>") + lines[1],
-                i18n("Debugger error"), "gdb_error");
+                qApp->activeWindow(),
+                i18n("<b>Debugger error</b><br>%1", lines[1]),
+                i18n("Debugger error"));
         }
     }
 }

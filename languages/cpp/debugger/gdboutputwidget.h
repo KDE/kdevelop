@@ -28,6 +28,8 @@
 #include <QStringList>
 #include <kvbox.h>
 
+#include "gdbglobal.h"
+
 class KHistoryComboBox;
 
 class Q3TextEdit;
@@ -57,7 +59,7 @@ public Q_SLOTS:
     void slotInternalCommandStdout(const QString& line);
     void slotUserCommandStdout(const QString& line);
     void slotReceivedStderr(const char* line);
-    void slotDbgStatus     (const QString &status, int statusFlag);
+    void slotStateChanged(DBGStateFlags oldStatus, DBGStateFlags newStatus);
 
     void slotGDBCmd();
 

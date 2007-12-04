@@ -85,7 +85,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     topLayout->addWidget(m_gdbView, 10);
     topLayout->addLayout(userGDBCmdEntry);
 
-    slotDbgStatus( "", s_dbgNotStarted);
+    slotStateChanged(s_none, s_dbgNotStarted);
 
     connect( m_userGDBCmdEditor, SIGNAL(returnPressed()), SLOT(slotGDBCmd()) );
     connect( m_Interrupt,        SIGNAL(clicked()),       SIGNAL(breakInto()));
@@ -96,15 +96,15 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     connect( this,       SIGNAL(userGDBCmd(const QString &)),
              controller, SLOT(slotUserGDBCmd(const QString&)));
     connect( this,       SIGNAL(breakInto()),
-             controller, SLOT(slotBreakInto()));
+             controller, SLOT(slotPauseApp()));
 
     connect( controller, SIGNAL(gdbInternalCommandStdout(const QString&)),
              this,       SLOT(slotInternalCommandStdout(const QString&)) );
     connect( controller, SIGNAL(gdbUserCommandStdout(const QString&)),
              this,       SLOT(slotUserCommandStdout(const QString&)) );
 
-    connect( controller, SIGNAL(dbgStatus(const QString&, int)),
-             this,       SLOT(slotDbgStatus(const QString&, int)));
+    connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
+             this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
 }
@@ -283,9 +283,10 @@ void GDBOutputWidget::flushPending()
 
 /***************************************************************************/
 
-void GDBOutputWidget::slotDbgStatus(const QString &, int statusFlag)
+void GDBOutputWidget::slotStateChanged(DBGStateFlags oldStatus, DBGStateFlags newStatus)
 {
-    if (statusFlag & s_dbgNotStarted)
+    Q_UNUSED(oldStatus)
+    if (newStatus & s_dbgNotStarted)
     {
         m_Interrupt->setEnabled(false);
         m_userGDBCmdEditor->setEnabled(false);
@@ -296,7 +297,7 @@ void GDBOutputWidget::slotDbgStatus(const QString &, int statusFlag)
         m_Interrupt->setEnabled(true);
     }
 
-    if (statusFlag & s_dbgBusy)
+    if (newStatus & s_dbgBusy)
     {
         m_userGDBCmdEditor->setEnabled(false);
     }

@@ -25,6 +25,8 @@
 #include <QContextMenuEvent>
 #include <kvbox.h>
 
+#include "gdbglobal.h"
+
 class KLineEdit;
 class Q3MultiLineEdit;
 class QToolBox;
@@ -49,7 +51,7 @@ namespace GDBDebugger
         /** Informs *this about change in debugger state. Should always
             be connected to, so that *this can disable itself when
             debugger is not running. */
-        void slotDebuggerState(const QString&, int state);
+        void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
     Q_SIGNALS:
         void setViewShown(bool shown);
@@ -73,7 +75,7 @@ namespace GDBDebugger
         MemoryView(CppDebuggerPlugin* plugin, GDBController* controller,
                    QWidget* parent);
 
-        void debuggerStateChanged(int state);
+        void debuggerStateChanged(DBGStateFlags state);
 
     Q_SIGNALS:
         void captionChanged(const QString& caption);

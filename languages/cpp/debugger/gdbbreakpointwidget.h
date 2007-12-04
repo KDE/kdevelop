@@ -129,6 +129,7 @@ private:
     void handleTracingPrintf(const QStringList& s);
 
 private:
+    CppDebuggerPlugin* plugin_;
     GDBController*  controller_;
 
     GDBTable*       m_table;

@@ -20,14 +20,13 @@
 #include <QtCore/QVariant>
 
 #include <KConfigGroup>
-
-#include "gdbcontroller.h"
+#include <KTextEditor/Cursor>
 
 #include <iplugin.h>
 #include <irunprovider.h>
 #include <istatus.h>
 
-#include <KTextEditor/Cursor>
+#include "gdbcontroller.h"
 
 class QLabel;
 class QMenu;
@@ -66,9 +65,15 @@ public:
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
 
-    void startDebugger();
-
     BreakpointController* breakpoints() const;
+
+    /**
+     * Call this when something very interesting happens that the user
+     * might be unaware of. It will make KDevelop's taskbar entry flash
+     * if the application doesn't already have focus.
+     * Typical use case: The debugger has stopped on a breakpoint.
+     */
+    void demandAttention() const;
 
     // BEGIN IRunProvider
     virtual QStringList instrumentorsProvided() const;
@@ -116,9 +121,8 @@ private Q_SLOTS:
     void contextWatch();
 //    void projectOpened();
     void projectClosed();
-    //void projectConfigWidget(KDialog *dlg);
 
-    void slotRun();
+    void slotStartDebugger();
     void slotExamineCore();
     void slotAttachProcess();
     void slotStopDebugger();
@@ -127,7 +131,6 @@ private Q_SLOTS:
 
     void slotRefreshBPState(const Breakpoint&);
 
-    void slotStatus(const QString &msg, int state);
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
 
@@ -143,6 +146,19 @@ private Q_SLOTS:
     void slotProjectCompiled();
 
     void slotEvent(GDBController::event_t);
+
+    void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
+
+    void applicationStandardOutputLines(const QStringList& lines);
+    void applicationStandardErrorLines(const QStringList& lines);
+
+Q_SIGNALS:
+    void startDebugger(const KDevelop::IRun & run, int serial);
+    void stopDebugger();
+    void attachTo(int pid);
+    void coreFile(const QString& core);
+    void runUntil(const KUrl& url, int line);
+    void jumpTo(const KUrl& url, int line);
 
 private:
     KConfigGroup config() const;
@@ -161,7 +177,7 @@ private:
     QByteArray m_drkonqi;
 
     //KDevDebugger *m_debugger;
-    int previousDebuggerState_;
+    DBGStateFlags debuggerState_;
     // Set to true after each debugger restart
     // Currently used to auto-show variables view
     // on the first pause.
