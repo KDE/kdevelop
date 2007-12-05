@@ -364,7 +364,7 @@ class CppDUContext : public BaseContext {
           QList<Declaration*>::iterator it = ret.begin();
           while( it != ret.end() ) {
             if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<const CppTemplateParameterType*>((*it)->abstractType().data()) )
-               || ( (dynamic_cast<ClassFunctionDeclaration*>(*it) && static_cast<ClassFunctionDeclaration*>(*it)->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
+                || ( (!(flags & BaseContext::OnlyFunctions)) &&  (dynamic_cast<ClassFunctionDeclaration*>(*it) && static_cast<ClassFunctionDeclaration*>(*it)->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
               it = ret.erase(it);
               //kDebug(9007) << "filtered out 1 declaration";
             } else {
