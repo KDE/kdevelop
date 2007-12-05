@@ -160,15 +160,9 @@ void DUChainItemDataProvider::reset() {
   foreach( KUrl u, enabledFiles ) {
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-    QString s = u.prettyUrl();
-    if( s.contains("stl_list.h") )
-      kDebug() << "got " << s;
-    
     TopDUContext* ctx = getTopContext( u );
     if( ctx )
       fillItems( QString(), items, ctx, m_itemTypes );
-    else if( s.contains("stl_list.h") )
-      kDebug() << "did not find context for" << s;
   }
 
   setItems(items);
