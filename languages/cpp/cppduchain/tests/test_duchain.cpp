@@ -951,26 +951,35 @@ void TestDUChain::testDeclareUsingNamespace()
 }
 
 void TestDUChain::testFunctionDefinition() {
-  QByteArray text("class B{}; class A { char at(B* b); }; \n char A::at(B* b) {B* b; at(b); } ");
+  QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() {}; A::~A() {}; ");
 
-  DUContext* top = parse(text, DumpNone);
+  DUContext* top = parse(text, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->childContexts().count(), 4);
-  QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
-  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts().count(), 8);
+  QCOMPARE(top->childContexts()[1]->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 3);
 
   Declaration* atInA = top->childContexts()[1]->localDeclarations()[0];
   
   QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(atInA));
 
+  foreach( Definition* def, top->localDefinitions() )
+    kDebug() << "definition: " << def->declaration()->toString();
   QCOMPARE(top->localDeclarations().count(), 2);
-  QCOMPARE(top->localDefinitions().count(), 1);
+  QCOMPARE(top->localDefinitions().count(), 3);
 
+  
   QCOMPARE(top->localDefinitions()[0]->declaration(), top->childContexts()[1]->localDeclarations()[0]);
   QCOMPARE(top->localDefinitions()[0], top->childContexts()[1]->localDeclarations()[0]->definition());
 
+  QCOMPARE(top->localDefinitions()[1]->declaration(), top->childContexts()[1]->localDeclarations()[1]);
+  QCOMPARE(top->localDefinitions()[1], top->childContexts()[1]->localDeclarations()[1]->definition());
+
+  QCOMPARE(top->localDefinitions()[2]->declaration(), top->childContexts()[1]->localDeclarations()[2]);
+  QCOMPARE(top->localDefinitions()[2], top->childContexts()[1]->localDeclarations()[2]->definition());
+  
   QCOMPARE(top->childContexts()[3]->owner()->asDefinition(), top->localDefinitions()[0]);
   
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
