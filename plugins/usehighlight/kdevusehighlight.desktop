@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin highlights all known visible occurences of the language item under the cursor.
+Name=KDevUseHighlight
+GenericName=UseHighlight
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevusehighlight
+X-KDevelop-Version=4
+X-KDevelop-Category=Global
+X-KDevelop-Properties=DUChainNavigation
+X-KDE-PluginInfo-Name=kdevusehighlight
+X-KDE-PluginInfo-Author=David Nolden
+X-KDE-PluginInfo-License=LGPL

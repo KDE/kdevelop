@@ -2,6 +2,7 @@
 include_directories(
     ${CMAKE_TOP_BUILD_DIR}
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/language/duchain
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/util
 )

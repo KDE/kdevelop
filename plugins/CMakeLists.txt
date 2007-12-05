@@ -1,3 +1,4 @@
+
 macro_optional_add_subdirectory(duchainviewer)
 macro_optional_add_subdirectory(konsole)
 add_subdirectory(filemanager)
@@ -5,6 +6,7 @@ add_subdirectory(projectmanagerview)
 add_subdirectory(genericprojectmanager)
 add_subdirectory(standardoutputview)
 add_subdirectory(quickopen)
+add_subdirectory(usehighlight)
 macro_optional_add_subdirectory(snippet)
 macro_optional_add_subdirectory(cvs)
 add_subdirectory(classbrowser)
