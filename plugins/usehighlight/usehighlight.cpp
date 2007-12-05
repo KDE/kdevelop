@@ -110,14 +110,15 @@ void UseHighlightPlugin::changeHighlight( KTextEditor::SmartRange* range, bool h
 }
 
 void UseHighlightPlugin::changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight ) {
-  if( !view || !decl )
+  if( !view || !decl ) {
+    kDebug() << "invalid view/declaration";
     return;
+  }
   
   KTextEditor::SmartRange* range = decl->smartRange();
-  if( !range )
-    return;
+  if( range )
+    changeHighlight( range, highlight, true );
   
-  changeHighlight( range, highlight, true );
 
   foreach( Use* use, decl->uses() ) {
     KTextEditor::SmartRange* range = use->smartRange();
@@ -129,7 +130,6 @@ void UseHighlightPlugin::changeHighlight( KTextEditor::View* view, KDevelop::Dec
 
 void UseHighlightPlugin::updateViews()
 {
-  kDebug() << "updating views";
   foreach( KTextEditor::View* view, m_updateViews ) {
     KTextEditor::Cursor c = view->cursorPosition();
     ///Find either a Declaration, or a use, that is in the Range.
@@ -159,6 +159,7 @@ void UseHighlightPlugin::updateViews()
         //Try finding a use under the cursor
         foreach( Use* use, ctx->uses() ) {
           if( use->textRange().contains(c) ) {
+            kDebug() << "found use" << use->textRange();
             foundDeclaration = use->declaration();
             break;
           }
@@ -169,15 +170,17 @@ void UseHighlightPlugin::updateViews()
     } else {
       kDebug() << "Found no valid context";
     }
-
+    
     if( m_highlightedDeclarations.contains(view) ) {
       ///Step 1: unhighlight the old uses
       changeHighlight( view, m_highlightedDeclarations[view].data(), false );
     }
     if( foundDeclaration ) {
+      kDebug() << "found declaration";
       m_highlightedDeclarations[view] = foundDeclaration;
       changeHighlight( view, foundDeclaration, true );
     }else{
+      kDebug() << "not found declaration";
       m_highlightedDeclarations.remove(view);
     }
   }
