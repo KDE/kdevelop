@@ -113,7 +113,7 @@ public:
     template<class Extension> Extension* extensionForPlugin( const QString &extension, const QString &pluginname = "") {
         IPlugin *plugin = pluginForExtension(extension, pluginname);
         if (plugin)
-            return plugin->extension<Extension>();
+            return plugin->IPlugin::extension<Extension>();
         else
             return 0L;
     }
