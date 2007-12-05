@@ -913,8 +913,29 @@ bool GDBController::startDebugger()
 
 bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
 {
-    if (!startDebugger())
+    if (stateIsOn(s_dbgNotStarted))
+    {
+        // User has already run the debugger, but it's not running.
+        // Most likely, the debugger has crashed, and the debuggerpart
+        // was left in 'running' state so that the user can examine
+        // gdb output or something. But now, need to fully shut down
+        // previous debug session.
+        stopDebugger();
+    }
+
+    if (stateIsOn( s_appNotStarted ) )
+    {
+        emit showMessage(i18n("Running program"), 1000);
+    }
+
+    if (stateIsOn(s_dbgNotStarted))
+        if (!startDebugger())
+            return false;
+
+    if (stateIsOn(s_shuttingDown)) {
+        kDebug() << "Tried to run when debugger shutting down";
         return false;
+    }
 
     m_process->setProperty("serial", serial);
 
@@ -947,14 +968,76 @@ bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
     raiseEvent(debugger_ready);
     raiseEvent(connected_to_program);
 
-    application_ = run.executable().path();
-    queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, application_));
-    queueCmd(new GDBCommand(ExecRun));
+    if (!config_runShellScript_.isEmpty()) {
+        // Special for remote debug...
+        QByteArray tty(tty_->getSlave().toLatin1());
+        QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
-    // Now gdb has been started and the application has been loaded,
-    // BUT the app hasn't been started yet! A run command is about to be issued
-    // by whoever is controlling us. Or we might be asked to load a core, or
-    // attach to a running process.
+        QProcess *proc = new QProcess;
+        QStringList arguments;
+        arguments << "-c" << config_runShellScript_.path() +
+            " " + run.executable().path().toLatin1() + options;
+
+        proc->start("sh", arguments);
+        //PORTING TODO QProcess::DontCare);
+    }
+
+    if (!config_runGdbScript_.isEmpty()) {// gdb script at run is requested
+
+        // Race notice: wait for the remote gdbserver/executable
+        // - but that might be an issue for this script to handle...
+
+        // Future: the shell script should be able to pass info (like pid)
+        // to the gdb script...
+
+        queueCmd(new GDBCommand(NonMI, "source " + config_runGdbScript_.path()));
+
+        // Note: script could contain "run" or "continue"
+    }
+    else
+    {
+        QFileInfo app(run.executable().path());
+
+        if (!app.exists())
+        {
+            KMessageBox::error(
+                qApp->activeWindow(),
+                i18n("<b>Application does not exist</b>"
+                      "<p>The application you're trying to debug,<br>"
+                      "    %1\n"
+                      "<br>does not exist. Check that you've specified "
+                      "the right application in the debugger configuration.",
+                      app.fileName()),
+                i18n("Application does not exist"));
+
+            // FIXME: after this, KDevelop will still show that debugger
+            // is running, because DebuggerPart::slotStopDebugger won't be
+            // called, and core()->running(this, false) won't be called too.
+            stopDebugger();
+            return false;
+        }
+
+        if (!app.isExecutable())
+        {
+            KMessageBox::error(
+                qApp->activeWindow(),
+                i18n("<b>Could not run application '%1'.</b>"
+                      "<p>The application does not have the executable bit set. "
+                      "Try rebuilding the project, or change permissions "
+                      "manually.",
+                      app.fileName()),
+                i18n("Could not run application"));
+            stopDebugger();
+            return false;
+        }
+        else
+        {
+            queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, run.executable().path()));
+            queueCmd(new GDBCommand(ExecRun));
+        }
+    }
+
+    setStateOff(s_appNotStarted|s_programExited);
 
     return true;
 }
@@ -1067,103 +1150,13 @@ void GDBController::attachToProcess(int pid)
 
 void GDBController::slotRun()
 {
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown)) {
-        kDebug() << "Tried to run when debugger not started, or shutting down";
+    if (stateIsOn(s_appNotStarted|s_dbgNotStarted|s_shuttingDown))
         return;
-    }
 
-    if( stateIsOn( s_appNotStarted ) )
-    {
-        if (stateIsOn(s_dbgNotStarted))
-        {
-            // User has already run the debugger, but it's not running.
-            // Most likely, the debugger has crashed, and the debuggerpart
-            // was left in 'running' state so that the user can examine
-            // gdb output or something. But now, need to fully shut down
-            // previous debug session.
-            stopDebugger();
-        }
-
-        if (stateIsOn( s_appNotStarted ) )
-        {
-            emit showMessage(i18n("Running program"), 1000);
-        }
-    }
-
-    if (stateIsOn(s_appNotStarted)) {
-
-        if (!config_runShellScript_.isEmpty()) {
-            // Special for remote debug...
-            QByteArray tty(tty_->getSlave().toLatin1());
-            QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
-
-            QProcess *proc = new QProcess;
-            QStringList arguments;
-            arguments << "-c" << config_runShellScript_.path() +
-                " " + application_.toLatin1() + options;
-
-            proc->start("sh", arguments);
-            //PORTING TODO QProcess::DontCare);
-        }
-
-        if (!config_runGdbScript_.isEmpty()) {// gdb script at run is requested
-
-            // Race notice: wait for the remote gdbserver/executable
-            // - but that might be an issue for this script to handle...
-
-            // Future: the shell script should be able to pass info (like pid)
-            // to the gdb script...
-
-            queueCmd(new GDBCommand(NonMI, "source " + config_runGdbScript_.path()));
-
-            // Note: script could contain "run" or "continue"
-        }
-        else {
-
-            QFileInfo app(application_);
-
-            if (!app.exists())
-            {
-                KMessageBox::error(
-                    qApp->activeWindow(),
-                    i18n("<b>Application does not exist</b>"
-                         "<p>The application you're trying to debug,<br>"
-                         "    %1\n"
-                         "<br>does not exist. Check that you've specified "
-                         "the right application in the debugger configuration.",
-                         app.fileName()),
-                    i18n("Application does not exist"));
-
-                // FIXME: after this, KDevelop will still show that debugger
-                // is running, because DebuggerPart::slotStopDebugger won't be
-                // called, and core()->running(this, false) won't be called too.
-                stopDebugger();
-                return;
-            }
-            if (!app.isExecutable())
-            {
-                KMessageBox::error(
-                    qApp->activeWindow(),
-                    i18n("<b>Could not run application '%1'.</b>"
-                         "<p>The application does not have the executable bit set. "
-                         "Try rebuilding the project, or change permissions "
-                         "manually.",
-                         app.fileName()),
-                    i18n("Could not run application"));
-                stopDebugger();
-            }
-            else
-            {
-                queueCmd(new GDBCommand(ExecRun));
-            }
-        }
-    }
-    else {
-        queueCmd(new GDBCommand(ExecContinue));
-    }
-    setStateOff(s_appNotStarted|s_programExited);
+    queueCmd(new GDBCommand(ExecContinue));
 }
 
+// **************************************************************************
 
 void GDBController::slotKill()
 {
@@ -1191,7 +1184,7 @@ void GDBController::runUntil(const KUrl& url, int line)
         queueCmd(new GDBCommand(ExecUntil, line));
     else
         queueCmd(new GDBCommand(ExecUntil,
-                QString("%s:%d").arg(url.path()).arg(line)));
+                QString("%1:%2").arg(url.path()).arg(line)));
 }
 
 // **************************************************************************

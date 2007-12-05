@@ -311,7 +311,6 @@ private:
 
     STTY*             tty_;
     QString           badCore_;
-    QString           application_;
 
     // Gdb command that should be issued when we stop on breakpoint
     // with the given gdb breakpoint id.

@@ -800,6 +800,8 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
                                                   "before this, or you can interrupt the program "
                                                   "while it is running, in order to get information "
                                                   "about variables, frame stack, and so on.") );
+            m_startDebugger->disconnect(controller);
+            connect(m_startDebugger, SIGNAL(triggered(bool)), this, SLOT(slotStartDebugger()));
 
             stateChanged( "stopped" );
             message = i18n("Debugger stopped");
@@ -824,6 +826,9 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
                 "debugger. This only takes effect when the application "
                 "has been halted by the debugger (i.e. a breakpoint has "
                 "been activated or the interrupt was pressed).") );
+            m_startDebugger->disconnect(this);
+            connect(m_startDebugger, SIGNAL(triggered(bool)), controller, SLOT(slotRun()));
+            m_startDebugger->setEnabled(true);
 
             if ( config().readEntry("Raise GDB On Start", false ) )
             {
