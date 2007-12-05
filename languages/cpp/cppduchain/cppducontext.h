@@ -491,7 +491,9 @@ class CppDUContext : public BaseContext {
         //This requests all declarations, so they all will be instantiated and instances of them added into this context.
         //DUContext::mergeDeclarationsInternal will then get them.
         
-        foreach( Declaration* baseDecls, m_instantiatedFrom->localDeclarations() )
+        QList<Declaration*> decls = m_instantiatedFrom->localDeclarations();
+
+        foreach( Declaration* baseDecls, decls )
           this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), true, temp, trace, DUContext::NoFiltering );
       }
 

@@ -741,45 +741,45 @@ struct ConstantBinaryExpressionEvaluator {
     
     switch( tokenKind ) {
       case '+':
-        endValue = left->value<Type>() + right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() + right->CppConstantIntegralType::value<Type>();
       break;
       case '-':
-        endValue = left->value<Type>() - right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() - right->CppConstantIntegralType::value<Type>();
       break;
       case '*':
-        endValue = left->value<Type>() * right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() * right->CppConstantIntegralType::value<Type>();
       break;
       case '/':
-        endValue = left->value<Type>() / right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() / right->CppConstantIntegralType::value<Type>();
       break;
       case '=':
-        endValue = right->value<Type>();
+        endValue = right->CppConstantIntegralType::value<Type>();
       break;
       case '<':
-        endValue = left->value<Type>() < right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() < right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
       case '>':
-        endValue = left->value<Type>() > right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() > right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
       case Token_assign:
-        endValue = right->value<Type>();
+        endValue = right->CppConstantIntegralType::value<Type>();
       break;
       case Token_eq:
-        endValue = left->value<Type>() == right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() == right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
       case Token_not_eq:
-        endValue = left->value<Type>() != right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() != right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
       case Token_leq:
-        endValue = left->value<Type>() <= right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() <= right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
       case Token_geq:
-        endValue = left->value<Type>() >= right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() >= right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
     }
@@ -789,27 +789,27 @@ struct ConstantBinaryExpressionEvaluator {
   void evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left, CppConstantIntegralType* right ) {
     switch( tokenKind ) {
       case '%':
-        endValue = left->value<Type>() % right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() % right->CppConstantIntegralType::value<Type>();
       break;
       case '^':
-        endValue = left->value<Type>() ^ right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() ^ right->CppConstantIntegralType::value<Type>();
       break;
       case '&':
-        endValue = left->value<Type>() & right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() & right->CppConstantIntegralType::value<Type>();
       break;
       case '|':
-        endValue = left->value<Type>() | right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() | right->CppConstantIntegralType::value<Type>();
       break;
       case Token_shift:
         ///@todo shift-direction?
-        endValue = left->value<Type>() << right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() << right->CppConstantIntegralType::value<Type>();
       break;
       case Token_and:
-        endValue = left->value<Type>() && right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() && right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
       case Token_or:
-        endValue = left->value<Type>() || right->value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() || right->CppConstantIntegralType::value<Type>();
         type = CppIntegralType::TypeBool;
       break;
     }
@@ -817,7 +817,7 @@ struct ConstantBinaryExpressionEvaluator {
   
   AbstractType::Ptr createType() {
     AbstractType::Ptr ret = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(type, modifier)) );
-    static_cast<CppConstantIntegralType*>(ret.data())->setValue<Type>( endValue );
+    static_cast<CppConstantIntegralType*>(ret.data())->CppConstantIntegralType::setValue<Type>( endValue );
     return ret;
   }
 };
@@ -849,15 +849,15 @@ struct ConstantUnaryExpressionEvaluator {
     evaluateSpecialTokens( tokenKind, left );
     switch( tokenKind ) {
       case '+':
-        endValue = +left->value<Type>();
+        endValue = +left->CppConstantIntegralType::value<Type>();
       break;
       case '-':
-        endValue = -left->value<Type>();
+        endValue = -left->CppConstantIntegralType::value<Type>();
       break;
       case Token_incr:
-        endValue = left->value<Type>()+1;
+        endValue = left->CppConstantIntegralType::value<Type>()+1;
       case Token_decr:
-        endValue = left->value<Type>()-1;
+        endValue = left->CppConstantIntegralType::value<Type>()-1;
     }
   }
 
@@ -865,17 +865,17 @@ struct ConstantUnaryExpressionEvaluator {
   void evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left ) {
     switch( tokenKind ) {
       case '~':
-        endValue = ~left->value<Type>();
+        endValue = ~left->CppConstantIntegralType::value<Type>();
       break;
       case '!':
-        endValue = !left->value<Type>();
+        endValue = !left->CppConstantIntegralType::value<Type>();
       break;
     }
   }
 
   AbstractType::Ptr createType() {
     AbstractType::Ptr ret = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(type, modifier)) );
-    static_cast<CppConstantIntegralType*>(ret.data())->setValue<Type>( endValue );
+    static_cast<CppConstantIntegralType*>(ret.data())->CppConstantIntegralType::setValue<Type>( endValue );
     return ret;
   }
 };
