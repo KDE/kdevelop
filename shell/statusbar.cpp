@@ -88,7 +88,7 @@ void StatusBar::updateMessage()
     int timeout = 0;
 
     foreach (const Message& m, m_messages) {
-        if (ret.isEmpty())
+        if (!ret.isEmpty())
             ret += "; ";
 
         ret += m.text;
