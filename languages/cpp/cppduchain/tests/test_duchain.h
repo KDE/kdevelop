@@ -74,6 +74,7 @@ private slots:
   void testIntegralTemplates();
   void testTypedef();
   void testTemplateDependentClass();
+  void testTypedefUses();
   void testTemplates();
   void testTemplates2();
   void testTemplatesRebind();

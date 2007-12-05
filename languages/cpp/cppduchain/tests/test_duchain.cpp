@@ -393,6 +393,25 @@ void TestDUChain::testArrayType()
   release(top);
 }
 
+void TestDUChain::testTypedefUses()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5
+  //                 012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("class A{}; typedef A B; A c; B d;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(top->uses().count(), 3);
+  QCOMPARE(top->localDeclarations()[0]->uses().count(), 2); //Typedef and "A c;"
+  QCOMPARE(top->localDeclarations()[1]->uses().count(), 1); //"B d;"
+  
+}
+
 void TestDUChain::testDeclareFor()
 {
   TEST_FILE_PARSE_ONLY
@@ -542,7 +561,7 @@ void TestDUChain::testDeclareStruct()
   
   Declaration* defStructA = top->localDeclarations().first();
   QCOMPARE(defStructA->identifier(), Identifier("A"));
-  QCOMPARE(defStructA->uses().count(), 0);
+  QCOMPARE(defStructA->uses().count(), 1);
   QVERIFY(defStructA->type<CppClassType>());
   QCOMPARE(defStructA->type<CppClassType>()->elements().count(), 3);
   QCOMPARE(defStructA->type<CppClassType>()->elements().first(), typeShort);
@@ -708,7 +727,7 @@ void TestDUChain::testDeclareClass()
 
   Declaration* defClassA = top->localDeclarations().first();
   QCOMPARE(defClassA->identifier(), Identifier("A"));
-  QCOMPARE(defClassA->uses().count(), 0);
+  QCOMPARE(defClassA->uses().count(), 1);
   QVERIFY(defClassA->type<CppClassType>());
   QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 3);
   CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements()[2]);
@@ -953,7 +972,7 @@ void TestDUChain::testDeclareUsingNamespace()
 void TestDUChain::testFunctionDefinition() {
   QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() {}; A::~A() {}; ");
 
-  DUContext* top = parse(text, DumpAll);
+  DUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1447,7 +1466,7 @@ void TestDUChain::testTemplatesRebind() {
 void TestDUChain::testTemplatesRebind2() {
   QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Test { }; template<class T> class Class { typedef T::Value Value; T::Value value; typedef Test<Value> ValueClass; Test<const Value> ValueClass2;}; };");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1641,7 +1660,7 @@ void TestDUChain::testTemplateForwardDeclaration2()
 {
   QByteArray method("class B{}; template<class T = B, class Q = B, class R = B>class Test; Test<B> t; template<class T, class Q, class R>class Test { T a; Q b; R c;}; ");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
