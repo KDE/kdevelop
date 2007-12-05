@@ -200,7 +200,7 @@ int main( int argc, char *argv[] )
             
             Core::self()->documentController()->openDocument( KUrl( file ), line != -1 ? KTextEditor::Cursor(line, 0) : KTextEditor::Cursor() );
         }
-        if( args->count() == 1 )
+        if( splash && args->count() == 1 )
             splash->showMessage(args->url(0).prettyUrl());
     }
 
