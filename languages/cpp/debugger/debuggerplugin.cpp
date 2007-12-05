@@ -575,6 +575,8 @@ void CppDebuggerPlugin::setupController()
 
     connect(controller, SIGNAL(event(GDBController::event_t)),
             this,       SLOT(slotEvent(GDBController::event_t)));
+    connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
+             this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
 
     connect(controller, SIGNAL(showMessage(const QString&, int)), this, SIGNAL(showMessage(const QString&, int)));
 
@@ -873,14 +875,14 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
         }
     }
 
-    if (changedState & s_dbgBusy) {
-        if (newState & s_dbgBusy) {
-            //message = i18n("Debugger is busy");
+    if (changedState & s_appRunning) {
+        if (newState & s_appRunning) {
+            message = "Application is running";
             stateChanged( QString("active") );
         }
         else
         {
-            //message = "Application is paused";
+            message = "Application is paused";
             stateChanged( QString("paused") );
 
             // On the first stop, show the variables view.
