@@ -17,7 +17,7 @@ set(kdevusehighlight_PART_SRCS
 )
 
 kde4_add_plugin(kdevusehighlight ${kdevusehighlight_PART_SRCS})
-target_link_libraries(kdevusehighlight kdevplatforminterfaces kdevplatformutil ${KDEVPLATFORM_LANGUAGE_LIBRARY})
+target_link_libraries(kdevusehighlight kdevplatforminterfaces kdevplatformutil kdevplatformlanguage)
 
 install(TARGETS kdevusehighlight DESTINATION ${PLUGIN_INSTALL_DIR})
 
