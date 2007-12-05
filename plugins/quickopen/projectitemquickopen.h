@@ -24,8 +24,9 @@
 #include <quickopenfilter.h>
 #include <duchainpointer.h>
 
+
 namespace KDevelop {
-  class ICore;
+  class IQuickOpen;
 }
 
 struct DUChainItem {
@@ -67,7 +68,7 @@ class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     AllItemTypes = Classes + Functions
   };
     
-    DUChainItemDataProvider();
+    DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen );
     virtual void setFilterText( const QString& text );
     virtual void reset();
     virtual uint itemCount() const;
@@ -82,6 +83,7 @@ class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual QString itemText( const DUChainItem& data ) const;
 
     ItemTypes m_itemTypes;
+    KDevelop::IQuickOpen* m_quickopen;
 };
 
 

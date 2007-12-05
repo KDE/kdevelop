@@ -79,6 +79,8 @@ class QuickOpenModel : public ExpandingWidgetModel {
     void setTreeView( QTreeView* view );
     
     virtual QTreeView* treeView() const;
+
+    virtual QSet<KUrl> fileSet() const;
   public slots:
     void textChanged( const QString& str );
   private slots:

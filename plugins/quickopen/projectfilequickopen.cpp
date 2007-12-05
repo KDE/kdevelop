@@ -47,7 +47,7 @@ QString ProjectFileData::htmlDescription() const {
   return "<small><small>" + i18n("Project") + " " + m_file.m_project + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
 }
 
-bool ProjectFileData::execute( QString& filterText ) {
+bool ProjectFileData::execute( QString& /*filterText*/ ) {
   ICore::self()->documentController()->openDocument( totalUrl() );
   return true;
 }
@@ -115,6 +115,16 @@ void ProjectFileDataProvider::reset() {
 
 uint ProjectFileDataProvider::itemCount() const {
   return Base::filteredItems().count();
+}
+
+QSet<KUrl> ProjectFileDataProvider::files() const {
+  QSet<KUrl> ret;
+  foreach( const ProjectFile& file, items() ) {
+    KUrl totalUrl = file.m_projectUrl;
+    totalUrl.addPath( file.m_relativePath );
+    ret.insert(totalUrl);
+  }
+  return ret;
 }
 
 QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start, uint end ) const {

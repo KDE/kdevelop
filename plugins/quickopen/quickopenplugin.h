@@ -59,7 +59,9 @@ public:
     virtual void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider );
 
     virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
-    
+
+    virtual QSet<KUrl> fileSet() const;
+
 public slots:
     void quickOpen();
     void quickOpenFile();

@@ -25,8 +25,11 @@
 #include <QIcon>
 
 namespace KDevelop {
+  QuickOpenFileSetInterface::~QuickOpenFileSetInterface() {
+  }
+
   QuickOpenEmbeddedWidgetInterface::~QuickOpenEmbeddedWidgetInterface() {
-    }
+  }
 
   QuickOpenDataBase::~QuickOpenDataBase() {
   }

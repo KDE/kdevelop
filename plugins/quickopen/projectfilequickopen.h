@@ -61,13 +61,14 @@ class ProjectFileData : public KDevelop::QuickOpenDataBase {
 
 typedef KDevelop::Filter<ProjectFile> Base;
 
-class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base {
+class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base, public KDevelop::QuickOpenFileSetInterface {
   public:
     ProjectFileDataProvider();
     virtual void setFilterText( const QString& text );
     virtual void reset();
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
+    virtual QSet<KUrl> files() const;
 
   private:
   

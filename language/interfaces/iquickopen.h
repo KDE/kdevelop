@@ -19,6 +19,8 @@
 #ifndef IQUICKOPEN_H
 #define IQUICKOPEN_H
 
+#include <KUrl>
+#include <QSet>
 #include <iextension.h>
 #include "../languageexport.h"
 
@@ -53,6 +55,12 @@ public:
      * @return Whether a provider was removed. If false, the provider was not attached.
      * */
     virtual bool removeProvider( QuickOpenDataProviderBase* provider ) = 0;
+
+    /**
+     * Queries a set of files merged from all active data-providers that implement QuickOpenFileSetInterface.
+     * This should not be queried by data-providers that implement QuickOpenFileSetInterface during their initialization(set() and enableData())
+    * */
+    virtual QSet<KUrl> fileSet() const = 0;
 };
 
 }

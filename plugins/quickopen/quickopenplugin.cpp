@@ -331,7 +331,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
       m_model->registerProvider( scopes, items, m_projectFileData );
     }
     {
-      m_projectItemData = new DUChainItemDataProvider();
+      m_projectItemData = new DUChainItemDataProvider(this);
       QStringList scopes, items;
       scopes << i18n("Project");
       items << DUChainItemDataProvider::supportedItemTypes();
@@ -388,6 +388,10 @@ void QuickOpenPlugin::quickOpenFunction()
 void QuickOpenPlugin::quickOpenClass()
 {
   showQuickOpen( Classes );
+}
+
+QSet<KUrl> QuickOpenPlugin::fileSet() const {
+  return m_model->fileSet();
 }
 
 void QuickOpenPlugin::registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider )

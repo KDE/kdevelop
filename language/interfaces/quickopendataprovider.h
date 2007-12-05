@@ -23,6 +23,8 @@
 
 #include <QList>
 #include <QObject>
+#include <QSet>
+#include <KUrl>
 
 #include <ksharedptr.h>
 #include "../languageexport.h"
@@ -33,6 +35,23 @@ class QIcon;
 
 namespace KDevelop {
 
+/**
+ * Hint: When implementing a data-provider, do not forget to export it! Else it won't work.
+ * */
+
+/**
+ * If your plugin manages a list of files, you can use this to return that list.
+ * The file-list can be queried by other data-providers(for example functions/methods) so they
+ * can manipulate their content based on those file-lists. The file-list should not be filtered at all,
+ * it should only depend on the enabled models/items
+ *
+ * Example: A list of files in the include-path, a list of files in the project, etc.
+ * */
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenFileSetInterface {
+  public:
+    virtual QSet<KUrl> files() const = 0;
+    virtual ~QuickOpenFileSetInterface();
+};
 /**
  * You can use this as additional base-class for your embedded widgets to get additional interaction
  * */

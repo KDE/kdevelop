@@ -22,6 +22,7 @@
 
 #include <ktexteditor/codecompletionmodel.h>
 #include <kdebug.h>
+#include <typeinfo>
 
 using namespace KDevelop;
 
@@ -82,7 +83,26 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
   QSet<QString> items = QSet<QString>::fromList( _items );
   QSet<QString> scopes = QSet<QString>::fromList( _scopes );
   kDebug() << "params " << items << " " << scopes;
+
+  //We use 2 iterations here: In the first iteration, all providers that implement QuickOpenFileSetInterface are initialized, then the other ones.
+  //The reason is that the second group can refer to the first one.
   for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
+    if( !dynamic_cast<QuickOpenFileSetInterface*>((*it).provider) )
+      continue;
+    kDebug() << "comparing" << (*it).scopes << (*it).types;
+    if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) && ( !( items & (*it).types ).isEmpty() || items.isEmpty() ) ) {
+      kDebug() << "enabling " << (*it).types << " " << (*it).scopes;
+      (*it).enabled = true;
+      (*it).provider->enableData( _items, _scopes );
+    } else {
+      kDebug() << "disabling " << (*it).types << " " << (*it).scopes;
+      (*it).enabled = false;
+    }
+  }
+
+  for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
+    if( dynamic_cast<QuickOpenFileSetInterface*>((*it).provider) )
+      continue;
     kDebug() << "comparing" << (*it).scopes << (*it).types;
     if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) && ( !( items & (*it).types ).isEmpty() || items.isEmpty() ) ) {
       kDebug() << "enabling " << (*it).types << " " << (*it).scopes;
@@ -110,9 +130,29 @@ void QuickOpenModel::textChanged( const QString& str )
 
 void QuickOpenModel::restart()
 {
-  foreach( const ProviderEntry& provider, m_providers )
+  bool anyEnabled = false;
+
+  foreach( const ProviderEntry& e, m_providers )
+    anyEnabled |= e.enabled;
+
+  if( !anyEnabled )
+    return;
+  
+  foreach( const ProviderEntry& provider, m_providers ) {
+    if( !dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) )
+      continue;
+
+    ///Always reset providers that implement QuickOpenFileSetInterface, because they may be needed by other providers.
+    //if( provider.enabled && provider.provider )
+    provider.provider->reset();
+  }
+  foreach( const ProviderEntry& provider, m_providers ) {
+    if( dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) )
+      continue;
+
     if( provider.enabled && provider.provider )
       provider.provider->reset();
+  }
 
   m_cachedData.clear();
   clearExpanding();
@@ -246,6 +286,19 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
 
   return QuickOpenDataPointer();
 }
+
+QSet<KUrl> QuickOpenModel::fileSet() const {
+  QSet<KUrl> merged;
+  foreach( const ProviderEntry& provider, m_providers ) {
+    if( QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) ) {
+      QSet<KUrl> ifiles = iface->files();
+      kDebug() << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
+      merged += ifiles;
+    }
+  }
+  return merged;
+}
+
 
 QTreeView* QuickOpenModel::treeView() const {
   return m_treeView;

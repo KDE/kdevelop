@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <iprojectcontroller.h>
 #include <idocumentcontroller.h>
+#include <iquickopen.h>
 #include <iproject.h>
 #include <icore.h>
 #include <duchain/topducontext.h>
@@ -68,7 +69,7 @@ QString DUChainItemData::htmlDescription() const {
   return "<small><small>" + text + ", " + i18n("Project") + " " + m_item.m_project + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
 }
 
-bool DUChainItemData::execute( QString& filterText ) {
+bool DUChainItemData::execute( QString& /*filterText*/ ) {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   if(!m_item.m_item)
     return false;
@@ -98,7 +99,7 @@ QIcon DUChainItemData::icon() const {
   return QIcon();
 }
 
-DUChainItemDataProvider::DUChainItemDataProvider() {
+DUChainItemDataProvider::DUChainItemDataProvider( IQuickOpen* quickopen ) : m_quickopen(quickopen) {
   reset();
 }
 
@@ -153,17 +154,21 @@ void fillItems( const QString& project, QList<DUChainItem>& items, DUContext* co
 void DUChainItemDataProvider::reset() {
   Base::clearFilter();
   QList<DUChainItem> items;
-  
-  foreach( IProject* project, ICore::self()->projectController()->projects() ) {
-    QList<ProjectFileItem*> files = project->files();
-    foreach( ProjectFileItem* file, files )
-    {
-      KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-      TopDUContext* ctx = getTopContext( file->url() );
-      if( ctx )
-        fillItems( project->name(), items, ctx, m_itemTypes );
-    }
+  QSet<KUrl> enabledFiles = m_quickopen->fileSet();
+  
+  foreach( KUrl u, enabledFiles ) {
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+    QString s = u.prettyUrl();
+    if( s.contains("stl_list.h") )
+      kDebug() << "got " << s;
+    
+    TopDUContext* ctx = getTopContext( u );
+    if( ctx )
+      fillItems( QString(), items, ctx, m_itemTypes );
+    else if( s.contains("stl_list.h") )
+      kDebug() << "did not find context for" << s;
   }
 
   setItems(items);
