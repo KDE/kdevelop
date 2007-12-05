@@ -96,15 +96,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
 
-    m_quickOpenDataProvider = new IncludeFileDataProvider();
-
-    IQuickOpen* quickOpen = core()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
-
-    if( quickOpen )
-        quickOpen->registerProvider( IncludeFileDataProvider::scopes(), QStringList(i18n("Files")), m_quickOpenDataProvider );
-    else
-        kWarning() << "Quickopen not found";
-    
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
     m_standardMacros = new Cpp::MacroSet;
@@ -147,6 +138,15 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     // Initialise singletons, to prevent needing a mutex in their self() methods
     TypeRepository::self();
     SymbolTable::self();
+
+    m_quickOpenDataProvider = new IncludeFileDataProvider();
+
+    IQuickOpen* quickOpen = core()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
+
+    if( quickOpen )
+        quickOpen->registerProvider( IncludeFileDataProvider::scopes(), QStringList(i18n("Files")), m_quickOpenDataProvider );
+    else
+        kWarning() << "Quickopen not found";
 }
 
 CppLanguageSupport::~CppLanguageSupport()

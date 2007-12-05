@@ -203,6 +203,37 @@ QString IncludeFileData::htmlDescription() const
 IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
 }
 
+void allIncludedRecursion( QMap<KUrl, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
+
+  if( !ctx )
+    return;
+
+  foreach( DUContextPointer ctx2, ctx->importedParentContexts() ) {
+    TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.data()) );
+    allIncludedRecursion( ret, d, prefixPath );
+  }
+
+  IncludeItem i;
+  KUrl u = ctx->url();
+
+  if( !prefixPath.isEmpty() && !u.prettyUrl().contains(prefixPath) )
+    return;
+  
+  i.name = u.fileName();
+  u.setFileName(QString());
+  i.basePath = u;
+  ret[ctx->url()] = i;
+}
+
+QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixPath = QString() ) {
+
+  DUChainReadLocker lock( DUChain::lock() );
+
+  QMap<KUrl, IncludeItem> ret;
+  allIncludedRecursion( ret, ctx, prefixPath );
+  return ret.values();
+}
+
 void IncludeFileDataProvider::setFilterText( const QString& text )
 {
   QString filterText;
@@ -224,7 +255,15 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
     {
       kDebug(9007) << "extracted prefix " << prefixPath;
 
-      setItems( CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, prefixPath ) );
+      QList<IncludeItem> allIncludeItems;
+
+      if( m_allowPossibleImports )
+        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, prefixPath );
+
+      if( m_allowImports )
+        allIncludeItems += getAllIncludedItems( m_duContext, prefixPath );
+      
+        setItems( allIncludeItems );
 
       m_lastSearchedPrefix = prefixPath;
     }
@@ -235,9 +274,12 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
 
       QList<IncludeItem> allIncludeItems;
 
-      if( m_allowImports )
-        allIncludeItems = CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString() );
+      if( m_allowPossibleImports )
+        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString() );
 
+      if( m_allowImports )
+        allIncludeItems += getAllIncludedItems( m_duContext );
+      
       foreach( KUrl u, m_importers ) {
         IncludeItem i;
         i.isDirectory = false;
@@ -338,17 +380,27 @@ QString IncludeFileDataProvider::itemText( const Cpp::IncludeItem& data ) const
   return data.name;
 }
 
+QSet<KUrl> IncludeFileDataProvider::files() const {
+  QSet<KUrl> set;
+  foreach(const Cpp::IncludeItem& item, items()) {
+    KUrl path = item.basePath;
+    path.addPath( item.name );
+    set << path;
+  }
+  return set;
+}
+
 QStringList IncludeFileDataProvider::scopes() {
   QStringList ret;
-  ret << i18n("Imports");
-/*  ret << i18n("Possible Imports");*/
-  ret << i18n("Importers");
+  ret << i18n("Includes");
+  ret << i18n("Include Path");
+  ret << i18n("Includers");
   return ret;
 }
 
 void IncludeFileDataProvider::enableData( const QStringList& items, const QStringList& scopes ) {
-  m_allowImports = scopes.contains( i18n("Imports") );
-/*  m_allowPossibleImports = scopes.contains( i18n("Possible Imports") );*/
-  m_allowImporters = scopes.contains( i18n("Importers") );
+  m_allowImports = scopes.contains( i18n("Includes") );
+  m_allowPossibleImports = scopes.contains( i18n("Include Path") );
+  m_allowImporters = scopes.contains( i18n("Includers") );
 }
 

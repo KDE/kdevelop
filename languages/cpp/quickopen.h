@@ -57,7 +57,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
  * also searches sub-directories if the typed text wants it.
  * */
 
-class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::Filter<Cpp::IncludeItem> {
+class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::Filter<Cpp::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
   public:
     IncludeFileDataProvider();
     virtual void setFilterText( const QString& text );
@@ -68,6 +68,8 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
 
     ///Returns all scopes supported by this data-provider
     static QStringList scopes();
+    
+    virtual QSet<KUrl> files() const;
   private slots:
     void documentDestroyed( QObject* obl );
   private:
