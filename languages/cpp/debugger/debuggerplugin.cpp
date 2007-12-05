@@ -35,6 +35,8 @@
 #include <KToolBar>
 #include <KDialog>
 #include <kwindowsystem.h>
+#include <KXmlGuiWindow>
+#include <KXMLGUIFactory>
 
 #include <sublime/view.h>
 
@@ -276,6 +278,10 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 //                 this, SLOT(slotProjectCompiled()));
 
     setupController();
+
+    foreach (KMainWindow* mw, KMainWindow::memberList())
+        if (KXmlGuiWindow* xw = qobject_cast<KXmlGuiWindow*>(mw))
+            connect(xw->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)), this, SLOT(guiClientAdded(KXMLGUIClient*)));
 }
 
 void CppDebuggerPlugin::setupActions()
@@ -491,9 +497,9 @@ CppDebuggerPlugin::~CppDebuggerPlugin()
 void CppDebuggerPlugin::guiClientAdded( KXMLGUIClient* client )
 {
     // Can't change state until after XMLGUI has been loaded...
-    // Anyone know of a better way of doing this?
+
     if( client == this )
-        stateChanged( QString("stopped") );
+        stateChanged("stopped");
 }
 
 void CppDebuggerPlugin::contextMenu(QMenu *popup, const KDevelop::Context *context)
@@ -794,6 +800,33 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
     DBGStateFlags changedState = oldState ^ newState;
     if (changedState & s_dbgNotStarted) {
         if (newState & s_dbgNotStarted) {
+            message = i18n("Debugger stopped");
+            floatingToolBar->hide();
+
+        } else {
+            if (config().readEntry("Floating Toolbar", false))
+            {
+            #ifndef QT_MAC
+                if (!floatingToolBar)
+                    floatingToolBar = new KToolBar(qApp->activeWindow());
+                floatingToolBar->show();
+            #endif
+            }
+        }
+
+        //core()->running(this, false);
+        // TODO enable/disable tool views as applicable
+    }
+
+    // As soon as debugger clears 's_appNotStarted' flag, we
+    // set 'justRestarted' variable.
+    // The other approach would be to set justRestarted in slotRun, slotCore
+    // and slotAttach.
+    // Note that setting this var in startDebugger is not OK, because the
+    // initial state of debugger is exactly the same as state after pause,
+    // so we'll always show varaibles view.
+    if (changedState & s_appNotStarted) {
+        if (newState & s_appNotStarted) {
             m_startDebugger->setText( i18n("&Start") );
             m_startDebugger->setToolTip( i18n("Runs the program in the debugger") );
             m_startDebugger->setWhatsThis( i18n("Start in debugger\n\n"
@@ -805,22 +838,11 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
             m_startDebugger->disconnect(controller);
             connect(m_startDebugger, SIGNAL(triggered(bool)), this, SLOT(slotStartDebugger()));
 
-            stateChanged( "stopped" );
-            message = i18n("Debugger stopped");
-            floatingToolBar->hide();
+            stateChanged("stopped");
+
+            justRestarted_ = false;
 
         } else {
-            stateChanged( "active" );
-
-            if (config().readEntry("Floating Toolbar", false))
-            {
-            #ifndef QT_MAC
-                if (!floatingToolBar)
-                    floatingToolBar = new KToolBar(qApp->activeWindow());
-                floatingToolBar->show();
-            #endif
-            }
-
             m_startDebugger->setText( i18n("&Continue") );
             m_startDebugger->setToolTip( i18n("Continues the application execution") );
             m_startDebugger->setWhatsThis( i18n("Continue application execution\n\n"
@@ -842,26 +864,10 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
             }
 
             emit clearViews();
+
+            stateChanged("active");
+            justRestarted_ = true;
         }
-
-        //core()->running(this, false);
-        // TODO enable/disable tool views as applicable
-    }
-
-    // As soon as debugger clears 's_appNotStarted' flag, we
-    // set 'justRestarted' variable.
-    // The other approach would be to set justRestarted in slotRun, slotCore
-    // and slotAttach.
-    // Note that setting this var in startDebugger is not OK, because the
-    // initial state of debugger is exactly the same as state after pause,
-    // so we'll always show varaibles view.
-    if (changedState & s_appNotStarted) {
-      if (newState & s_appNotStarted) {
-          justRestarted_ = false;
-
-      } else {
-          justRestarted_ = true;
-      }
     }
 
     if (changedState & s_explicitBreakInto)
@@ -871,31 +877,33 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
     if (changedState & s_programExited) {
         if (newState & s_programExited) {
             message = i18n("Process exited");
-            stateChanged( QString("stopped") );
+            stateChanged("stopped");
         }
     }
 
     if (changedState & s_appRunning) {
         if (newState & s_appRunning) {
             message = "Application is running";
-            stateChanged( QString("active") );
+            stateChanged("active");
         }
         else
         {
-            message = "Application is paused";
-            stateChanged( QString("paused") );
+            if (!(newState & s_appNotStarted)) {
+                message = "Application is paused";
+                stateChanged("paused");
 
-            // On the first stop, show the variables view.
-            // We do it on first stop, and not at debugger start, because
-            // a program might just successfully run till completion. If we show
-            // the var views on start and hide on stop, this will look like flicker.
-            // On the other hand, if application is paused, it's very
-            // likely that the user wants to see variables.
-            if (justRestarted_)
-            {
-                justRestarted_ = false;
-                //mainWindow()->setViewAvailable(variableWidget, true);
-                emit raiseVariableViews();
+                // On the first stop, show the variables view.
+                // We do it on first stop, and not at debugger start, because
+                // a program might just successfully run till completion. If we show
+                // the var views on start and hide on stop, this will look like flicker.
+                // On the other hand, if application is paused, it's very
+                // likely that the user wants to see variables.
+                if (justRestarted_)
+                {
+                    justRestarted_ = false;
+                    //mainWindow()->setViewAvailable(variableWidget, true);
+                    emit raiseVariableViews();
+                }
             }
         }
     }
