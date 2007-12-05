@@ -164,7 +164,15 @@ void UseBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationSt
   if( exp->expressionChosen )
     visitExpression(exp->expression);
   else
-    UseBuilderBase::visitExpressionOrDeclarationStatement(exp);
+    visit(exp->declaration);
+}
+
+void UseBuilder::visitCondition(ConditionAST *node)
+{
+  ///@todo Until we find out how to correctly handle this type-specifier(It is created wrongly in test_duchain.cpp testDeclareFor) ignore it.
+  //visit(node->type_specifier);
+  visit(node->declarator);
+  visit(node->expression);
 }
 
 void UseBuilder::visitExpressionStatement(ExpressionStatementAST * exp) {
@@ -246,6 +254,17 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
 };
 
 void UseBuilder::visitExpression(AST* node) {
+  UseExpressionVisitor visitor( m_editor->parseSession(), this );
+  if( !node->ducontext )
+    node->ducontext = currentContext();
+  
+  visitor.parse( node );
+}
+
+void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
+{
+  UseBuilderBase::visitSimpleTypeSpecifier(node);
+  
   UseExpressionVisitor visitor( m_editor->parseSession(), this );
   if( !node->ducontext )
     node->ducontext = currentContext();

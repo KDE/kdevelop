@@ -68,7 +68,9 @@ protected:
   virtual void visitSubscriptExpression(SubscriptExpressionAST *) ;
   //virtual void visitThrowExpression(ThrowExpressionAST *) ;
   virtual void visitUnaryExpression(UnaryExpressionAST *) ;
-  
+
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node);
+  virtual void visitCondition(ConditionAST *node);
 private:
 
   void visitExpression(AST* node);
