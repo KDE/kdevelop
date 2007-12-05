@@ -226,13 +226,12 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       if (!def) {
         QualifiedIdentifier id = identifierForName(node->id);
         if (id.count() > 1) {
-          KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
+          KTextEditor::Cursor pos = currentDeclaration()->textRange().start();//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
           //kDebug(9007) << "Searching for declaration of" << id;
-
           // TODO: potentially excessive locking
           DUChainWriteLocker lock(DUChain::lock());
-          QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
+          QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
           foreach (Declaration* dec, declarations) {
             if (dec->isForwardDeclaration())
               continue;
