@@ -217,7 +217,8 @@ void TestCppCodeCompletion::testCompletionContext() {
   
   {
     ///The context is a function, and there is no prefix-expression, so it should be normal completion.
-    Cpp::CodeCompletionContext c(DUContextPointer(context), "{" );
+    DUContextPointer contPtr(context);
+    Cpp::CodeCompletionContext c(contPtr, "{" );
     QVERIFY( c.isValid() );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );
