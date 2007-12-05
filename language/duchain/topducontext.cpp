@@ -25,6 +25,7 @@
 #include "parsingenvironment.h"
 #include "duchainpointer.h"
 #include "namespacealiasdeclaration.h"
+#include "abstractfunctiondeclaration.h"
 
 using namespace KTextEditor;
 
@@ -167,12 +168,12 @@ bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& id
 
   foreach( const QualifiedIdentifier& identifier, targetIdentifiers ) {
     QList<Declaration*> declarations = SymbolTable::self()->findDeclarations(identifier);
-    ret += checkDeclarations(declarations, position, dataType);
+    ret += checkDeclarations(declarations, position, dataType, flags);
   }
   return true;
 }
 
-QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const
+QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -180,6 +181,10 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
 
   foreach (Declaration* dec, declarations) {
     TopDUContext* top = dec->topContext();
+    
+    if((flags & OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(dec))
+      continue;
+    
     if (top != this) {
       if (dataType && dec->abstractType() != dataType)
         // The declaration doesn't match the type filter we are applying
@@ -194,7 +199,7 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
         // The declaration doesn't match the type filter we are applying
         continue;
 
-      if (dec->textRange().start() > position)
+      if (dec->textRange().start() >= position)
         if(!dec->context() || dec->context()->type() != Class)
             continue; // The declaration is behind the position we're searching from, therefore not accessible
     }
@@ -229,7 +234,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
           ///@todo this is bad for a very big repository(the chains should be walked for the top-context instead)
           //Find all namespace-imports at given scope
           QList<Declaration*> imports = SymbolTable::self()->findDeclarations( identifier.mid(0, pos) + globalImportIdentifier );
-          imports = checkDeclarations(imports, position, AbstractType::Ptr());
+          imports = checkDeclarations(imports, position, AbstractType::Ptr(), NoSearchFlags);
 
           if( !imports.isEmpty() )
           {
@@ -255,7 +260,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
         if( identifier.count() > (canBeNamespace ? pos  : pos+1) ) { //If it cannot be a namespace, the last part of the scope will be ignored
           ready = false; //Find aliases
           QList<Declaration*> aliases = SymbolTable::self()->findDeclarations( identifier.mid(0, pos+1) );
-          aliases = checkDeclarations(aliases, position, AbstractType::Ptr());
+          aliases = checkDeclarations(aliases, position, AbstractType::Ptr(), NoSearchFlags);
           if(!aliases.isEmpty()) {
 
             //The first part of the identifier has been found as a namespace-alias.

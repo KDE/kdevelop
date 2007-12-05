@@ -114,7 +114,7 @@ protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;
   
   /// Return those \a declarations that are visible in this document from \a position and are of the specified \a dataType
-  QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const;
+  QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const;
 
   virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 

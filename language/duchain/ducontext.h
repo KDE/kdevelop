@@ -97,7 +97,8 @@ public:
     DontSearchInParent = 4, //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
     NoUndefinedTemplateParams = 8, //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
     LanguageSpecificFlag1 = 16, //This is a flag that can be used to control language-specific parts of the search in overridden functions(has no direct function in the du-chain)
-    NoFiltering = 32           //Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default)
+    NoFiltering = 32,           //Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default)
+    OnlyFunctions = 64 //When this is given, only function-declarations are returned. In case of C++, this also means that constructors can be retrieved, while normally they are filtered out.
   };
 
   ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
@@ -248,6 +249,7 @@ public:
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position, with the given type \a dataType.
+   * In fact, only items are returned that are declared BEFORE that position.
    *
    * \param identifier the identifier of the definition to search for
    * \param location the text position to search for

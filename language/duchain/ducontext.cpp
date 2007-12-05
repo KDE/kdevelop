@@ -33,6 +33,7 @@
 #include "symboltable.h"
 #include "contextowner.h"
 #include "namespacealiasdeclaration.h"
+#include "abstractfunctiondeclaration.h"
 
 ///It is fine to use one global static mutex here
 
@@ -320,11 +321,11 @@ QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier&
   return ret;
 }
 
-void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags /*flags*/ ) const
+void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
 {
   if( identifier.explicitlyGlobal() && parentContext() )
     return;
-  
+
   ///@todo use flags
   QLinkedList<Declaration*> tryToResolve;
   QLinkedList<Declaration*> ensureResolution;
@@ -347,7 +348,10 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
       }
       if( dynamic_cast<NamespaceAliasDeclaration*>(declaration) )
         continue; //Do not include NamespaceAliasDeclarations here, they are handled by DUContext directly.
-        
+
+      if((flags & OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(declaration))
+        continue;
+      
       QualifiedIdentifier::MatchTypes m = identifier.match(declaration->identifier());
       switch (m) {
         case QualifiedIdentifier::NoMatch:
@@ -379,12 +383,8 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
   foreach (Declaration* declaration, resolved)
     if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || type() == Template || position >= declaration->textRange().start() || !position.isValid())
+      if (type() == Class || type() == Template || position > declaration->textRange().start() || !position.isValid())
         ret.append(declaration);
-
-  if (!ret.isEmpty())
-    // Match(es)
-    return;
 
   if (tryToResolve.isEmpty() && ensureResolution.isEmpty())
     return;
