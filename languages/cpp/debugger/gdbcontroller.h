@@ -44,6 +44,7 @@ class DbgCommand;
 class GDBCommand;
 class VarItem;
 class STTY;
+class CommandQueue;
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -215,10 +216,6 @@ private:
     void commandDone();
     void destroyCurrentCommand();
 
-    /** Removes all 'stateReloading' commands from the queue.
-     */
-    void removeStateReloadingCommands();
-
     /** Raises the specified event. Should be used instead of
         emitting 'event' directly, since this method can perform
         additional book-keeping for events.
@@ -235,11 +232,9 @@ private:
 
     bool startDebugger();
 
-    enum queue_where { queue_at_end, queue_at_front, queue_before_run };
-
 private Q_SLOTS:
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
-    void queueCmd(GDBCommand *cmd, queue_where queue_where = queue_at_end);
+    void queueCmd(GDBCommand *cmd, QueuePosition queue_where = QueueAtEnd);
 
     void configure();
 
@@ -311,7 +306,7 @@ private:
     // next output arrives, so probably should be just removed.
     QByteArray          holdingZone_;
 
-    QList<GDBCommand*> cmdList_;
+    CommandQueue*   commandQueue_;
     GDBCommand*       currentCmd_;
 
     STTY*             tty_;

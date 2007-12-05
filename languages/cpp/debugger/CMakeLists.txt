@@ -36,6 +36,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 set(kdevcppdebugger_PART_SRCS
     debuggerplugin.cpp
     gdbcontroller.cpp
+    gdbcommandqueue.cpp
     gdbcommand.cpp
     gdbparser.cpp
     stty.cpp

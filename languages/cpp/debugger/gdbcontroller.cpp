@@ -17,22 +17,13 @@
 
 #include "gdbcontroller.h"
 
-#include "breakpoint.h"
-#include "gdbcommand.h"
-#include "stty.h"
-#include "mi/miparser.h"
-#include "gdbglobal.h"
-
-#include "environmentgrouplist.h"
-
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kshell.h>
-#include <KConfigGroup>
+#include <iostream>
+#include <ctype.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <assert.h>
+#include <typeinfo>
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -44,13 +35,23 @@
 #include <QByteArray>
 #include <QTimer>
 
-#include <iostream>
-#include <ctype.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <assert.h>
-#include <typeinfo>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kshell.h>
+#include <KConfigGroup>
+
+#include <environmentgrouplist.h>
+
+#include "breakpoint.h"
+#include "gdbcommand.h"
+#include "stty.h"
+#include "mi/miparser.h"
+#include "gdbcommandqueue.h"
+
 using namespace std;
 using namespace GDBMI;
 
@@ -141,6 +142,7 @@ GDBController::GDBController(QObject* parent)
         currentFrame_(0),
         viewedThread_(-1),
         holdingZone_(),
+        commandQueue_(new CommandQueue),
         currentCmd_(0),
         tty_(0),
         state_(s_dbgNotStarted|s_appNotStarted),
@@ -178,6 +180,8 @@ GDBController::~GDBController()
         // This currently isn't working, so comment out until it can be resolved - at the moment it just causes a delay on stopping kdevelop
         //m_process->waitForFinished();
     }
+
+    delete commandQueue_;
 }
 
 // **************************************************************************
@@ -276,12 +280,12 @@ void GDBController::addCommand(GDBMI::CommandType type, const QString& str)
 
 void GDBController::addCommandToFront(GDBCommand* cmd)
 {
-    queueCmd(cmd, queue_at_front);
+    queueCmd(cmd, QueueAtFront);
 }
 
 void GDBController::addCommandBeforeRun(GDBCommand* cmd)
 {
-    queueCmd(cmd, queue_before_run);
+    queueCmd(cmd, QueueWhileInterrupted);
 }
 
 int  GDBController::currentThread() const
@@ -300,7 +304,7 @@ int GDBController::currentFrame() const
 // information requests become redundent and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
-void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
+void GDBController::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
 {
     if (stateIsOn(s_dbgNotStarted))
     {
@@ -315,20 +319,8 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
     if (stateReloadInProgress_)
         stateReloadingCommands_.insert(cmd);
 
-    if (queue_where == queue_at_front)
-        cmdList_.insert(0, cmd);
-    else if (queue_where == queue_at_end)
-        cmdList_.append (cmd);
-    else if (queue_where == queue_before_run)
-    {
-        int i;
-        for (i = 0; i < cmdList_.count(); ++i)
-            if (cmdList_.at(i)->isRun())
-                break;
-
-        cmdList_.insert(i, cmd);
-    }
-
+    commandQueue_->enqueue(cmd, queue_where);
+    
     kDebug(9012) << "QUEUE: " << cmd->initialString()
                   << (stateReloadInProgress_ ? " (state reloading)\n" : "\n");
 
@@ -354,10 +346,10 @@ void GDBController::executeCmd()
 
     if (!currentCmd_)
     {
-        if (cmdList_.isEmpty())
-            return;
+        currentCmd_ = commandQueue_->nextCommand();
 
-        currentCmd_ = cmdList_.takeAt(0);
+        if (!currentCmd_)
+            return;
     }
     else
     {
@@ -432,8 +424,7 @@ void GDBController::destroyCmds()
         destroyCurrentCommand();
     }
 
-    while (!cmdList_.isEmpty())
-        delete cmdList_.takeAt(0);
+    commandQueue_->clear();
 }
 
 // Pausing an app removes any pending run commands so that the app doesn't
@@ -1168,8 +1159,6 @@ void GDBController::slotRun()
         }
     }
     else {
-        removeStateReloadingCommands();
-
         queueCmd(new GDBCommand(ExecContinue));
     }
     setStateOff(s_appNotStarted|s_programExited);
@@ -1195,10 +1184,8 @@ void GDBController::slotKill()
 
 void GDBController::runUntil(const KUrl& url, int line)
 {
-    if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
-
-    removeStateReloadingCommands();
 
     if (!url.isValid())
         queueCmd(new GDBCommand(ExecUntil, line));
@@ -1211,7 +1198,7 @@ void GDBController::runUntil(const KUrl& url, int line)
 
 void GDBController::jumpTo(const KUrl& url, int line)
 {
-    if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
     if (url.isValid()) {
@@ -1224,10 +1211,8 @@ void GDBController::jumpTo(const KUrl& url, int line)
 
 void GDBController::slotStepInto()
 {
-    if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
+    if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
-
-    removeStateReloadingCommands();
 
     queueCmd(new GDBCommand(ExecStep));
 }
@@ -1236,10 +1221,8 @@ void GDBController::slotStepInto()
 
 void GDBController::slotStepIntoInstruction()
 {
-    if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
+    if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
-
-    removeStateReloadingCommands();
 
     queueCmd(new GDBCommand(ExecStepInstruction));
 }
@@ -1248,10 +1231,8 @@ void GDBController::slotStepIntoInstruction()
 
 void GDBController::slotStepOver()
 {
-    if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
+    if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
-
-    removeStateReloadingCommands();
 
     queueCmd(new GDBCommand(ExecNext));
 }
@@ -1260,10 +1241,8 @@ void GDBController::slotStepOver()
 
 void GDBController::slotStepOverInstruction()
 {
-    if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
+    if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
-
-    removeStateReloadingCommands();
 
     queueCmd(new GDBCommand(ExecNextInstruction));
 }
@@ -1272,10 +1251,8 @@ void GDBController::slotStepOverInstruction()
 
 void GDBController::slotStepOut()
 {
-    if (stateIsOn(s_dbgBusy|s_appNotStarted|s_shuttingDown))
+    if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
-
-    removeStateReloadingCommands();
 
     queueCmd(new GDBCommand(ExecFinish));
 }
@@ -1286,7 +1263,7 @@ void GDBController::selectFrame(int frameNo, int threadNo)
 {
     // FIXME: this either should be removed completely, or
     // trigger an error message.
-    if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
     if (threadNo != -1)
@@ -1574,7 +1551,7 @@ void GDBController::readFromProcess(QProcess* process)
     }
 
     if (got_any_command)
-        kDebug(9012) << "COMMANDS: " << cmdList_.count() << " in queue, "
+        kDebug(9012) << "COMMANDS: " << commandQueue_->count() << " in queue, "
                       << int(bool(currentCmd_)) << " executing\n";
 
     commandDone();
@@ -1582,7 +1559,7 @@ void GDBController::readFromProcess(QProcess* process)
 
 void GDBController::commandDone()
 {
-    bool no_more_commands = (cmdList_.isEmpty() && !currentCmd_);
+    bool no_more_commands = (commandQueue_->isEmpty() && !currentCmd_);
 
     if (no_more_commands && state_reload_needed)
     {
@@ -1607,28 +1584,6 @@ void GDBController::destroyCurrentCommand()
     stateReloadingCommands_.remove(currentCmd_);
     delete currentCmd_;
     currentCmd_ = 0;
-}
-
-void GDBController::removeStateReloadingCommands()
-{
-    int i = cmdList_.count();
-    while (i)
-    {
-        i--;
-        GDBCommand* cmd = cmdList_.at(i);
-        if (stateReloadingCommands_.contains(cmd));
-        {
-            kDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
-            delete cmdList_.takeAt(i);
-        }
-    }
-
-    if (stateReloadingCommands_.contains(currentCmd_))
-    {
-        // This effectively prevents handler for this command
-        // to be ever invoked.
-        destroyCurrentCommand();
-    }
 }
 
 void GDBController::raiseEvent(event_t e)
@@ -1726,7 +1681,7 @@ void GDBController::explainDebuggerStatus()
 {
     QString information = i18n("%1 commands in queue\n"
                         "%2 commands being processed by gdb\n"
-                        "Debugger state: %3\n", cmdList_.count(), (currentCmd_ ? 1 : 0), state_);
+                        "Debugger state: %3\n", commandQueue_->count(), (currentCmd_ ? 1 : 0), state_);
 
     if (currentCmd_)
     {

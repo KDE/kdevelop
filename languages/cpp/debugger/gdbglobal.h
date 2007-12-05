@@ -47,6 +47,11 @@ enum DBGStateFlag
 Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag)
 Q_DECLARE_OPERATORS_FOR_FLAGS(DBGStateFlags)
 
+enum QueuePosition {
+    QueueAtEnd,
+    QueueAtFront,
+    QueueWhileInterrupted
+};
 
 }
 
