@@ -148,7 +148,8 @@ void UseHighlightPlugin::updateViews()
     if( chosen )
     {
       DUContext* ctx = chosen->findContextAt(c);
-      if( ctx ) {
+      //It may happen, for example in the case of function-declarations, that the use is one context higher.
+      while( ctx && !foundDeclaration ) {
         //Try finding a declaration under the cursor
         foreach( Declaration* decl, ctx->localDeclarations() ) {
           if( decl->textRange().contains(c) ) {
@@ -164,9 +165,11 @@ void UseHighlightPlugin::updateViews()
             break;
           }
         }
-      } else {
-        kDebug() << "Found specific context for cursor " << c;
+        ctx = ctx->parentContext();
       }
+      
+      if( !ctx )
+        kDebug() << "Found specific context for cursor " << c;
     } else {
       kDebug() << "Found no valid context";
     }
