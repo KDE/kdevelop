@@ -60,8 +60,8 @@ namespace GDBDebugger
         if (enableCustomFormat->isOn())
         {
             QString s = customFormat->text();
-            unsigned percent_count = 0;
-            for (unsigned i = 0; i < s.length(); ++i)
+            int percent_count = 0;
+            for (int i = 0; i < s.length(); ++i)
                 if (s[i] == '%')
                 {
                     if (i+1 < s.length())

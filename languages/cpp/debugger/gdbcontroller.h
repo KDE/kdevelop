@@ -167,6 +167,8 @@ public:
 
     bool stateIsOn(DBGStateFlags state);
 
+    using QObject::event;
+
 public Q_SLOTS:
     void slotPauseApp();
 

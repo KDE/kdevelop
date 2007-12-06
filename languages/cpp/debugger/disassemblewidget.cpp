@@ -84,7 +84,7 @@ bool DisassembleWidget::displayCurrent()
     int line;
     for (line=0; line < paragraphs(); line++)
     {
-        unsigned long address = strtoul(text(line).toLatin1(), 0, 0);
+        long address = strtoul(text(line).toLatin1(), 0, 0);
         if (address == address_)
         {
             // put cursor at start of line and highlight the line
@@ -155,7 +155,7 @@ void DisassembleWidget::memoryRead(const GDBMI::ResultRecord& r)
 
   clear();
 
-  for(unsigned i = 0; i < content.size(); ++i)
+  for(int i = 0; i < content.size(); ++i)
   {
     const GDBMI::Value& line = content[i];
 

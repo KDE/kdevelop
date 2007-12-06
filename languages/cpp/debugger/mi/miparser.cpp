@@ -294,13 +294,13 @@ QString MIParser::parseStringLiteral()
 {
     QByteArray message = lex->currentTokenText();
 
-    unsigned int length = message.length();
+    int length = message.length();
     QString message2;
     message2.setLength(length);
     // The [1,length-1] range removes quotes without extra
     // call to 'mid'
-    unsigned target_index = 0;
-    for(unsigned i = 1, e = length-1; i != e; ++i)
+    int target_index = 0;
+    for(int i = 1, e = length-1; i != e; ++i)
     {
         int translated = -1;
         if (message[i] == '\\')

@@ -53,13 +53,13 @@ bool Value::empty() const
     throw type_error();
 }
 
-unsigned Value::size() const
+int Value::size() const
 {
     throw type_error();
 }
 
 
-const Value& Value::operator[](unsigned) const
+const Value& Value::operator[](int) const
 {
     throw type_error();
 }
@@ -106,12 +106,12 @@ bool ListValue::empty() const
     return results.isEmpty();
 }
 
-unsigned ListValue::size() const
+int ListValue::size() const
 {
     return results.size();
 }
 
-const Value& ListValue::operator[](unsigned index) const
+const Value& ListValue::operator[](int index) const
 {
     if (index < results.size())
     {

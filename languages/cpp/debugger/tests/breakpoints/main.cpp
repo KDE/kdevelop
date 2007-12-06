@@ -25,7 +25,7 @@ int test_main(int* i)
     modify(i);
     read(i);
     
-    for(unsigned j = 0; j < 10; ++j)
+    for(int j = 0; j < 10; ++j)
 	foo(j);
         
     return 0;    

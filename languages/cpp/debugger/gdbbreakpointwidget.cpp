@@ -581,7 +581,7 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
 
     const GDBMI::Value& blist = r["BreakpointTable"]["body"];
 
-    for(unsigned i = 0, e = blist.size(); i != e; ++i)
+    for(int i = 0, e = blist.size(); i != e; ++i)
     {
         const GDBMI::Value& b = blist[i];
 
@@ -652,7 +652,7 @@ void GDBBreakpointWidget::handleBreakpointList(const GDBMI::ResultRecord& r)
 void GDBBreakpointWidget::handleTracingPrintf(const QStringList& s)
 {
     // The first line of output is the command itself, which we don't need.
-    for(unsigned i = 1; i < s.size(); ++i)
+    for(int i = 1; i < s.size(); ++i)
         emit tracingOutput(s[i].local8Bit());
 }
 

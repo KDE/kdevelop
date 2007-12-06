@@ -129,12 +129,12 @@ int MILexer::nextToken(int &pos, int &len)
 {
     int start = 0;
     int kind = 0;
-    unsigned char ch = 0;
+    char ch = 0;
 
     while (m_ptr < m_length) {
         start = m_ptr;
 
-        ch = (unsigned char)m_contents[m_ptr];
+        ch = m_contents[m_ptr];
         (this->*s_scan_table[ch < 128 ? ch : 128])(&kind);
 
         switch (kind) {

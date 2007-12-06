@@ -439,7 +439,7 @@ QString FilePosBreakpoint::fileName() const
     return fileName_;
 }
 
-unsigned FilePosBreakpoint::lineNum() const
+int FilePosBreakpoint::lineNum() const
 {
     return line_;
 }

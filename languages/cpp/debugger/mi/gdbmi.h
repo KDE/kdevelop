@@ -274,12 +274,12 @@ namespace GDBMI
         /** If this value is a list, returns it's size.
             Otherwise, throws 'type_error'.
         */
-        virtual unsigned size() const;
+        virtual int size() const;
 
         /** If this value is a list, returns the element at
             'index'. Otherwise, throws 'type_error'.
         */
-        virtual const Value& operator[](unsigned index) const;
+        virtual const Value& operator[](int index) const;
     };
 
     /** @internal
@@ -314,8 +314,9 @@ namespace GDBMI
         ~TupleValue();
 
         bool hasField(const QString&) const;
-        const Value& operator[](const QString& variable) const;
 
+        using Value::operator[];
+        const Value& operator[](const QString& variable) const;
 
         QList<Result*> results;
         QMap<QString, GDBMI::Result*> results_by_name;
@@ -328,9 +329,10 @@ namespace GDBMI
 
         bool empty() const;
 
-        unsigned size() const;
+        int size() const;
 
-        const Value& operator[](unsigned index) const;
+        using Value::operator[];
+        const Value& operator[](int index) const;
 
         QList<Result*> results;
 

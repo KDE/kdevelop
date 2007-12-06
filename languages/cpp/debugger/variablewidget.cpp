@@ -681,7 +681,7 @@ void VariableTree::argumentsReady(const GDBMI::ResultRecord& r)
     fetch_time.start();
 
     locals_and_arguments.clear();
-    for(unsigned i = 0; i < args.size(); ++i)
+    for(int i = 0; i < args.size(); ++i)
     {
         locals_and_arguments.push_back(args[i].literal());
     }
@@ -691,7 +691,7 @@ void VariableTree::localsReady(const GDBMI::ResultRecord& r)
 {
     const GDBMI::Value& locals = r["locals"];
 
-    for(unsigned i = 0; i < locals.size(); ++i)
+    for(int i = 0; i < locals.size(); ++i)
     {
         QString val = locals[i].literal();
 
@@ -714,7 +714,7 @@ void VariableTree::frameIdReady(const QStringList& lines)
     //kDebug(9012) << "localAddresses: " << lines[1] << "\n";
 
     QString frame_info;
-    for(unsigned i = 1; i < lines.size(); ++i)
+    for(int i = 1; i < lines.size(); ++i)
         frame_info += lines[i];
 
     kDebug(9012) << "frame info: " << frame_info << "\n";
@@ -790,7 +790,7 @@ void VariableTree::frameIdReady(const QStringList& lines)
 
     std::set<Q3ListViewItem*> alive;
 
-    for(unsigned i = 0; i < locals_and_arguments.size(); ++i)
+    for(int i = 0; i < locals_and_arguments.size(); ++i)
     {
         QString name = locals_and_arguments[i];
 
@@ -857,7 +857,7 @@ void VariableTree::handleVarUpdate(const GDBMI::ResultRecord& r)
 
     std::set<QString> names_to_update;
 
-    for(unsigned i = 0; i < changed.size(); ++i)
+    for(int i = 0; i < changed.size(); ++i)
     {
         const GDBMI::Value& c = changed[i];
 
@@ -1360,7 +1360,7 @@ void VarItem::createChildren(const GDBMI::ResultRecord& r,
         }
     }
 
-    for (unsigned i = 0; i < children.size(); ++i)
+    for (int i = 0; i < children.size(); ++i)
     {
         QString exp = children[i]["exp"].literal();
         // For artificial accessibility nodes,

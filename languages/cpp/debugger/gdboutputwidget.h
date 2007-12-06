@@ -86,7 +86,7 @@ private:
     /** Makes 'l' no longer then 'max_size' by
         removing excessive elements from the top.
     */
-    void trimList(QStringList& l, unsigned max_size);
+    void trimList(QStringList& l, int max_size);
 
     GDBController* m_controller;
     KHistoryComboBox*  m_userGDBCmdEditor;

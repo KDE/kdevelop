@@ -220,7 +220,7 @@ void FramestackWidget::handleStackDepth(const GDBMI::ResultRecord& r)
 
 void FramestackWidget::getBacktraceForThread(int threadNo)
 {
-    unsigned currentThread = controller_->currentThread();
+    int currentThread = controller_->currentThread();
     if (viewedThread_)
     {
         // Switch to the target thread.
@@ -255,7 +255,7 @@ void FramestackWidget::handleThreadList(const GDBMI::ResultRecord& r)
         // get state for a wrong thread.
                         
         // Really threaded program.
-        for(unsigned i = 0, e = ids.results.size(); i != e; ++i)
+        for(int i = 0, e = ids.results.size(); i != e; ++i)
         {
             QString id = ids.results[i]->value->literal();
 
@@ -329,7 +329,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
         delete last;
 
     int lastLevel;
-    for(unsigned i = 0, e = frames.size(); i != e; ++i)
+    for(int i = 0, e = frames.size(); i != e; ++i)
     {
         const GDBMI::Value& frame = frames[i];
       
@@ -464,7 +464,7 @@ void FramestackWidget::formatFrame(const GDBMI::Value& frame,
 // **************************************************************************
 
 FrameStackItem::FrameStackItem(FramestackWidget *parent, 
-                               unsigned frameNo,
+                               int frameNo,
                                const QString &name)
         : Q3ListViewItem(parent, parent->lastChild()),
         frameNo_(frameNo),
@@ -476,7 +476,7 @@ FrameStackItem::FrameStackItem(FramestackWidget *parent,
 // **************************************************************************
 
 FrameStackItem::FrameStackItem(ThreadStackItem *parent, 
-                               unsigned frameNo,
+                               int frameNo,
                                const QString &name)
         : Q3ListViewItem(parent, parent->lastChild()),
         frameNo_(frameNo),
@@ -524,7 +524,7 @@ void FrameStackItem::setOpen(bool open)
 // **************************************************************************
 // **************************************************************************
 
-ThreadStackItem::ThreadStackItem(FramestackWidget *parent, unsigned threadNo)
+ThreadStackItem::ThreadStackItem(FramestackWidget *parent, int threadNo)
 : Q3ListViewItem(parent),
   threadNo_(threadNo)
 {

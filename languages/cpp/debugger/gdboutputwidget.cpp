@@ -197,9 +197,9 @@ void GDBOutputWidget::showLine(const QString& line)
     }
 }
 
-void GDBOutputWidget::trimList(QStringList& l, unsigned max_size)
+void GDBOutputWidget::trimList(QStringList& l, int max_size)
 {
-    unsigned int length = l.count();
+    int length = l.count();
     if (length > max_size)
     {
         for(int to_delete = length - max_size; to_delete; --to_delete)

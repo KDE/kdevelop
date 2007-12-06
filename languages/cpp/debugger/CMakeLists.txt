@@ -42,6 +42,8 @@ set(kdevcppdebugger_PART_SRCS
     stty.cpp
     breakpoint.cpp
     variablewidget.cpp
+    variableitem.cpp
+    variablecollection.cpp
     gdbbreakpointwidget.cpp
     framestackwidget.cpp
     disassemblewidget.cpp

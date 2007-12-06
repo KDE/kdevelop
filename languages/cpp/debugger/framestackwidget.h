@@ -36,7 +36,7 @@ class ThreadStackItem : public Q3ListViewItem
 {
 public:
     ThreadStackItem(FramestackWidget *parent, 
-                    unsigned threadNo);
+                    int threadNo);
     virtual ~ThreadStackItem();
 
     void setOpen(bool open);
@@ -59,10 +59,10 @@ class FrameStackItem : public Q3ListViewItem
 {
 public:
     FrameStackItem(FramestackWidget *parent, 
-                   unsigned frameNo,
+                   int frameNo,
                    const QString &name);
     FrameStackItem(ThreadStackItem *parent, 
-                   unsigned frameNo,
+                   int frameNo,
                    const QString &name);
     virtual ~FrameStackItem();
 

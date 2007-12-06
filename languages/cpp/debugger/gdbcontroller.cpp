@@ -360,7 +360,7 @@ void GDBController::executeCmd()
     bool bad_command = false;
     QString message;
 
-    unsigned length = commandText.length();
+    int length = commandText.length();
     // No i18n for message since it's mainly for debugging.
     if (length == 0)
     {
@@ -1729,7 +1729,7 @@ void GDBController::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSt
     if (delta)
     {
         QString out = "STATE: ";
-        for(unsigned i = 1; i < s_lastDbgState; i <<= 1)
+        for(int i = 1; i < s_lastDbgState; i <<= 1)
         {
             if (delta & i)
             {

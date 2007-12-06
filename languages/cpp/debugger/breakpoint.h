@@ -218,7 +218,7 @@ public:
 
     bool hasFileAndLine() const;
     QString fileName() const;
-    unsigned lineNum() const;
+    int lineNum() const;
 
 protected:
     void handleSet(const GDBMI::ResultRecord&);

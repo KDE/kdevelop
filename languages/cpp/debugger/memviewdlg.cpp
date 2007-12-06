@@ -302,7 +302,7 @@ namespace GDBDebugger
 
         delete[] this->data_;
         this->data_ = new char[amount_];
-        for(unsigned i = 0; i < content.size(); ++i)
+        for(int i = 0; i < content.size(); ++i)
         {
             this->data_[i] = content[i].literal().toInt(0, 16);
         }
