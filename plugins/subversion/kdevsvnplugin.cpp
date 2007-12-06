@@ -494,7 +494,7 @@ void KDevSvnPlugin::ctxBlame()
         return;
     }
 
-    if( m_ctxUrlList.first().isLocalFile() )
+    if( !m_ctxUrlList.first().isLocalFile() )
     {
         KMessageBox::error( 0, i18n("Annotate is only supported on local files") );
         return;
