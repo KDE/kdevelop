@@ -43,7 +43,8 @@ public:
     enum Columns {
       ColumnName = 0,
       ColumnValue = 1,
-      ColumnType = 2
+      ColumnType = 2,
+      ColumnLast = ColumnType
     };
 
     enum DataTypes { typeUnknown, typeValue, typePointer, typeReference,
@@ -65,6 +66,7 @@ public:
     virtual ~VariableItem();
 
     Qt::ItemFlags flags(int column) const;
+    QVariant data(int column, int role = Qt::DisplayRole ) const;
 
     /// Returns the gdb expression for *this.
     QString gdbExpression() const;
@@ -98,7 +100,6 @@ public:
     void recreate();
 
     void getChildren();
-    void setText (int column, const QString& text);
 
     /** Mark the variable as alive, or not alive.
         Variables that are not alive a shown as "gray",
@@ -114,9 +115,6 @@ public:
     */
     void unhookFromGdb();
 
-    // Returns the text to be displayed as tooltip (the value)
-    QString tipText() const;
-
     format_t format() const;
     void setFormat(format_t f);
     format_t formatFromGdbModifier(char c) const;
@@ -130,6 +128,11 @@ public:
     void setValue(const QString& new_value);
 
     bool isAlive() const;
+
+    VariableItem* parent() const;
+    const QList<VariableItem*>& children() const;
+
+    void setVariableName(const QString& name);
 
 Q_SIGNALS:
     /** Emitted whenever the name of varobj associated with *this changes:
@@ -189,8 +192,6 @@ private:
 
     QString varobjFormatName() const;
 
-    const VariableItem* parent() const;
-
 private:
     VariableCollection* m_collection;
   
@@ -230,7 +231,7 @@ private:
     bool alive_;
 
     QList<VariableItem*> m_children;
-    QList<QString> m_text;
+    QString m_value, m_type;
 };
 
 }

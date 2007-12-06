@@ -186,6 +186,7 @@ public:
       handler_method(static_cast<handler_method_t>(handler_method))
     {}
 
+    using GDBCommand::invokeHandler;
     void invokeHandler()
     {
         (handler_this->*handler_method)();

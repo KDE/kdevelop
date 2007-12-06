@@ -84,7 +84,7 @@ bool DisassembleWidget::displayCurrent()
     int line;
     for (line=0; line < paragraphs(); line++)
     {
-        long address = strtoul(text(line).toLatin1(), 0, 0);
+        unsigned long address = strtoul(text(line).toLatin1(), 0, 0);
         if (address == address_)
         {
             // put cursor at start of line and highlight the line

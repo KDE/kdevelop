@@ -108,8 +108,6 @@ VariableItem::VariableItem(VariableItem* parent,
         expression_ = explicit_format.cap(2);
     }
 
-    setText(ColumnName, expression_);
-
     createVarobj();
 }
 
@@ -135,8 +133,6 @@ VariableItem::VariableItem(VariableItem* parent, const GDBMI::Value& varobj,
     varobjName_ = varobj["name"].literal();
 
     varobjNameChange("", varobjName_);
-
-    setText(ColumnName, displayName());
 
     // Set type and children.
     originalValueType_ = varobj["type"].literal();
@@ -298,7 +294,7 @@ void VariableItem::valueDone(const GDBMI::ResultRecord& r)
             }
         }
 
-        setText(ColumnValue, s);
+        m_value = s;
     }
     else
     {
@@ -308,7 +304,7 @@ void VariableItem::valueDone(const GDBMI::ResultRecord& r)
         {
             s = "(inaccessible)";
         }
-        setText(ColumnValue, s);
+        m_value = s;
     }
 }
 
@@ -448,7 +444,7 @@ QString VariableItem::displayName() const
     if (expression_[0] != '*')
         return expression_;
 
-    if (const VariableItem* p = parent())
+    if (VariableItem* p = parent())
     {
         return "*" + p->displayName();
     }
@@ -456,6 +452,11 @@ QString VariableItem::displayName() const
     {
         return expression_;
     }
+}
+
+void GDBDebugger::VariableItem::setVariableName(const QString & name)
+{
+    expression_ = name;
 }
 
 void VariableItem::setAliveRecursively(bool enable)
@@ -523,23 +524,6 @@ QString VariableItem::gdbExpression() const
 
 // **************************************************************************
 
-
-// FIXME: we have two method to set VariableItem: this one
-// and updateValue below. That's bad, must have just one.
-void VariableItem::setText(int column, const QString &data)
-{
-    QString strData=data;
-
-    if (column == ColumnValue) {
-        QString oldValue(m_text[column]);
-        if (!oldValue.isEmpty()) // Don't highlight new items
-        {
-            highlight_ = (oldValue != QString(data));
-        }
-    }
-
-    m_text[column] = strData;
-}
 
 void VariableItem::clearHighlight()
 {
@@ -618,9 +602,8 @@ void VariableItem::updateSpecialRepresentation(const QString& xs)
     // FIXME: for now, assume that all special representations are
     // just strings.
 
-    s = GDBParser::getGDBParser()->undecorateValue(s);
+    m_value = GDBParser::getGDBParser()->undecorateValue(s);
 
-    setText(ColumnValue, s);
     // On the first stop, when VariableItem was just created,
     // don't show it in red.
     if (oldSpecialRepresentationSet_)
@@ -829,22 +812,6 @@ void VariableItem::unhookFromGdb()
     varobjName_ = "";
 }
 
-// **************************************************************************
-
-QString VariableItem::tipText() const
-{
-    const int maxTooltipSize = 70;
-    QString tip = m_text[ColumnValue];
-
-    if (tip.length() > maxTooltipSize)
-        tip = tip.mid(0, maxTooltipSize - 1 ) + " [...]";
-
-    if (!tip.isEmpty())
-        tip += "\n" + originalValueType_;
-
-    return tip;
-}
-
 bool VariableItem::updateUnconditionally() const
 {
     return updateUnconditionally_;
@@ -862,15 +829,52 @@ Qt::ItemFlags GDBDebugger::VariableItem::flags(int column) const
     if (alive_)
         flags |= Qt::ItemIsEnabled;
 
-    if (column == ColumnValue)    // Allow to change variable name by editing.
+    if (column == ColumnName && expression_[0] != '*')    // Allow to change variable name by editing.
         flags |= Qt::ItemIsEditable;
 
     return flags;
 }
 
-const VariableItem * GDBDebugger::VariableItem::parent() const
+VariableItem * GDBDebugger::VariableItem::parent() const
 {
-    return qobject_cast<const VariableItem*>(parent());
+    return qobject_cast<VariableItem*>(const_cast<QObject*>(QObject::parent()));
+}
+
+QVariant GDBDebugger::VariableItem::data(int column, int role) const
+{
+    switch (role) {
+        case Qt::DisplayRole:
+            switch (column) {
+                case ColumnName:
+                    return displayName();
+
+                case ColumnValue:
+                    return m_value;
+
+                case ColumnType:
+                    return m_type;
+            }
+
+        case Qt::ToolTipRole: {
+            const int maxTooltipSize = 70;
+            QString tip = displayName();
+
+            if (tip.length() > maxTooltipSize)
+                tip = tip.mid(0, maxTooltipSize - 1 ) + " [...]";
+
+            if (!tip.isEmpty())
+                tip += "\n" + originalValueType_;
+
+            return tip;
+        }
+    }
+
+    return QVariant();
+}
+
+const QList< VariableItem * > & GDBDebugger::VariableItem::children() const
+{
+    return m_children;
 }
 
 #include "variableitem.moc"

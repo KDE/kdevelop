@@ -60,9 +60,9 @@ private:
 
     GDBController* controller_;
     bool    active_;
-    long    lower_;
-    long    upper_;
-    long    address_;
+    unsigned long    lower_;
+    unsigned long    upper_;
+    unsigned long    address_;
     QString currentAddress_;
 };
 
