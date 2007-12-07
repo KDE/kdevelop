@@ -46,10 +46,7 @@ set(kdevsubversion_PART_SRCS
     svnoutputmodel.cpp
     svnoutputdelegate.cpp
     svnclient.cpp
-    vcseventmodel.cpp
-    vcsitemeventmodel.cpp
     svnlogwidget.cpp
-    vcsannotationmodel.cpp
     svnannotationwidget.cpp
     svndiffwidget.cpp
     svnimportmetadatawidget.cpp

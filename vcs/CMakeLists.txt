@@ -12,6 +12,9 @@ set(kdevplatformvcs_LIB_SRCS
     vcsmapping.cpp
     vcsstatusinfo.cpp
     vcsimportmetadatawidget.cpp
+    models/vcsannotationmodel.cpp
+    models/vcseventmodel.cpp
+    models/vcsitemeventmodel.cpp
 )
 
 
@@ -34,6 +37,12 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs
 )
 
+install(FILES
+    models/vcsannotationmodel.h
+    models/vcseventmodel.h
+    models/vcsitemeventmodel.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models
+)
 
 install(FILES
     interfaces/ibasicversioncontrol.h

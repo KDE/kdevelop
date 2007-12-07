@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <vcsrevision.h>
+#include "vcsrevision.h"
 
 VcsAnnotationModel::VcsAnnotationModel( const KUrl& url )
 {

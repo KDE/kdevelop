@@ -22,12 +22,13 @@
 #define VCSANNOTATIONMODEL_H
 
 #include <QAbstractTableModel>
-#include <vcsrevision.h>
+#include "../vcsannotation.h"
+#include "../vcsrevision.h"
 #include <QHash>
 #include <QBrush>
-#include <vcsannotation.h>
+#include "../vcsexport.h"
 
-class VcsAnnotationModel : public QAbstractTableModel
+class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:

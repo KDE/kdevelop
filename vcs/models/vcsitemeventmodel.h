@@ -18,28 +18,31 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VCSEVENTMODEL_H
-#define VCSEVENTMODEL_H
+#ifndef VCSITEMEVENTMODEL_H
+#define VCSITEMEVENTMODEL_H
+
 
 #include <QAbstractTableModel>
 #include <QList>
 
-#include <vcsevent.h>
+#include "../vcsevent.h"
+#include "../vcsexport.h"
 
-class VcsEventModel : public QAbstractTableModel
+class KDEVPLATFORMVCS_EXPORT VcsItemEventModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
-    VcsEventModel( QObject* parent );
-    int rowCount( const QModelIndex& = QModelIndex() ) const;
+    VcsItemEventModel( QObject* parent );
+    int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const;
     QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const;
-    void addEvents( const QList<KDevelop::VcsEvent>& );
-    KDevelop::VcsEvent eventForIndex( const QModelIndex& ) const;
+    void addItemEvents( const QList<KDevelop::VcsItemEvent>& );
+    KDevelop::VcsItemEvent itemEventForIndex( const QModelIndex& ) const;
     void clear();
 private:
-    QList<KDevelop::VcsEvent> m_events;
+    QList<KDevelop::VcsItemEvent> m_itemEvents;
 };
+
 
 #endif

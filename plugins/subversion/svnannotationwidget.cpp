@@ -26,7 +26,7 @@
 
 #include <vcsjob.h>
 
-#include "vcsannotationmodel.h"
+#include "vcs/models/vcsannotationmodel.h"
 
 SvnAnnotationWidget::SvnAnnotationWidget( const KUrl& url, KDevelop::VcsJob* job, QWidget* parent )
     : QWidget( parent ), m_job( job )

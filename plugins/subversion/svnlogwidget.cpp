@@ -33,8 +33,8 @@
 #include <vcsrevision.h>
 #include <vcslocation.h>
 
-#include "vcsitemeventmodel.h"
-#include "vcseventmodel.h"
+#include "vcs/models/vcsitemeventmodel.h"
+#include "vcs/models/vcseventmodel.h"
 #include "svndiffwidget.h"
 
 SvnLogWidget::SvnLogWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget *parent )
