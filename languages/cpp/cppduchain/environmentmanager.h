@@ -127,7 +127,7 @@ class MacroSet;
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
-    EnvironmentFile( const KUrl& url, EnvironmentManager* manager );
+    EnvironmentFile( const KDevelop::HashedString& url, EnvironmentManager* manager );
 
     void addStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 
@@ -152,16 +152,14 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     void merge( const EnvironmentFile& file );
 
     bool operator <  ( const EnvironmentFile& rhs ) const {
-      return m_hashedUrl < rhs.m_hashedUrl;
+      return m_url < rhs.m_url;
     }
 
     size_t hash() const;
 
     virtual KDevelop::IdentifiedFile identity() const;
 
-    KUrl url() const;
-
-    KDevelop::HashedString hashedUrl() const;
+    KDevelop::HashedString url() const;
 
     void setModificationRevision( const KDevelop::ModificationRevision& rev ) ;
     
@@ -199,9 +197,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
 
     friend class EnvironmentManager;
     uint m_identityOffset;
-    KUrl m_url;
     KUrl::List m_includePaths;
-    KDevelop::HashedString m_hashedUrl;
+    KDevelop::HashedString m_url;
     KDevelop::ModificationRevision m_modificationTime;
     Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
     Cpp::StringSetRepository::LazySet m_includeFiles; //Set of all files with absolute paths
@@ -265,7 +262,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     /**
      * Search for the availability of a file parsed in a given environment
      * */
-    virtual KDevelop::ParsingEnvironmentFile* find( const KUrl& url, const KDevelop::ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
+    virtual KDevelop::ParsingEnvironmentFile* find( const KDevelop::HashedString& url, const KDevelop::ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
 
   private:
     virtual int type() const;
@@ -277,8 +274,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
 
     ///Returns zero if no fitting file is available for the given Environment
     EnvironmentFilePointer lexedFile( const KDevelop::HashedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
-    EnvironmentFilePointer lexedFile( const KUrl& url, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
-
     void addEnvironmentFile( const EnvironmentFilePointer& file );
     void removeEnvironmentFile( const EnvironmentFilePointer& file );
 

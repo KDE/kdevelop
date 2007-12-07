@@ -151,9 +151,7 @@ void ContextBuilder::smartenContext(TopDUContext* topLevelContext) {
 
 KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
-  KUrl u(file->url());
-  
-  m_editor->setCurrentUrl(u);
+  m_editor->setCurrentUrl(file->url());
 
   TopDUContext* topLevelContext = 0;
   {
@@ -193,7 +191,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
       cppContext->addImportedParentContext(content.data());
     } else {
       ///This happens if a content-context is deleted from the du-chain during the time that the du-chain is not locked by this thread
-      kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << u;
+      kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << file->url().str();
     }
   }
 
@@ -208,8 +206,6 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     kDebug(9007) << "updating a context " << file->identity() << " from a proxy-context to a content-context";
     updateContext->setFlags((TopDUContext::Flags)( updateContext->flags() & (~TopDUContext::ProxyContextFlag))); //It is possible to upgrade a proxy-context to a content-context
   }
-  
-  KUrl u(file->url());
   
   m_editor->setCurrentUrl(file->url());
 
@@ -302,7 +298,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
-    kWarning(9007) << file->url() << "Previous parameter declaration context didn't get used??" ;
+    kWarning(9007) << file->url().str() << "Previous parameter declaration context didn't get used??" ;
     DumpChain dump;
     dump.dump(topLevelContext);
     m_importedParentContexts.clear();
@@ -311,7 +307,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   return topLevelContext;
 }
 
-KDevelop::DUContext* ContextBuilder::buildSubContexts(const KUrl& url, AST *node, KDevelop::DUContext* parent) {
+KDevelop::DUContext* ContextBuilder::buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
   m_compilingContexts = true;
   m_recompiling = false;
 

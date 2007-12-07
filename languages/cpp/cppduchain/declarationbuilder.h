@@ -57,7 +57,7 @@ public:
    *
    * \param parent Context that will be used as parent for this context
    */
-  KDevelop::DUContext* buildSubDeclarations(const KUrl& url, AST *node, KDevelop::DUContext* parent = 0);
+  KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
   inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
   

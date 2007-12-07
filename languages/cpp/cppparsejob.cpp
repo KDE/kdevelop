@@ -114,7 +114,7 @@ const KUrl::List& CPPParseJob::includePaths() const {
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
             m_includePathsComputed = true;
-            m_includePaths = cpp()->findIncludePaths(document());
+            m_includePaths = cpp()->findIncludePaths(KUrl(document().str()));
         }
         return m_includePaths;
     } else {
@@ -249,7 +249,7 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
 void CPPInternalParseJob::run()
 {
     kDebug( 9007 ) << "===-- PARSING --===> "
-    << parentJob()->document().fileName()
+    << parentJob()->document().str()
     << endl;
     Q_ASSERT(parentJob()->environmentFile());
 
@@ -451,7 +451,7 @@ void CPPInternalParseJob::run()
     //DumpTree dumpTree;
     //dumpTree.dump( m_AST );
 
-    kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().fileName();
+    kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().str();
 }
 
 

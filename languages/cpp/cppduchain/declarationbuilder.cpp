@@ -100,7 +100,7 @@ TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePo
   return top;
 }
 
-DUContext* DeclarationBuilder::buildSubDeclarations(const KUrl& url, AST *node, KDevelop::DUContext* parent) {
+DUContext* DeclarationBuilder::buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
   DUContext* top = buildSubContexts(url, node, parent);
 
   Q_ASSERT(m_accessPolicyStack.isEmpty());

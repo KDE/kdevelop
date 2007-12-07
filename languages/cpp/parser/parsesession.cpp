@@ -73,9 +73,9 @@ void ParseSession::setContentsAndGenerateLocationTable(const QByteArray & conten
   m_locationTable = new rpp::LocationTable(m_contents);
 }
 
-void ParseSession::setUrl(const KUrl& url)
+void ParseSession::setUrl(const KDevelop::HashedString& url)
 {
-  m_url = url.prettyUrl();
+  m_url = url;
 }
 
 const KDevelop::HashedString& ParseSession::url() const

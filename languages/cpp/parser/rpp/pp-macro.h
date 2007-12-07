@@ -37,7 +37,7 @@ public:
 
   KDevelop::HashedString name;
   QString definition; //body
-  QString file; //fileName
+  KDevelop::HashedString file; //fileName
   int sourceLine; //line
   QStringList formals; // argumentList
 

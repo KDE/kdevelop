@@ -35,7 +35,7 @@ Utils::SetRepository<HashedString, HashedStringHash> EnvironmentManager::m_strin
 
 //For debugging
 QString id(const EnvironmentFile* file) {
-  return file->url().prettyUrl() + QString(" %1").arg((size_t)file);
+  return file->url().str() + QString(" %1").arg((size_t)file);
 }
 
 //Only for debugging
@@ -72,13 +72,13 @@ bool EnvironmentManager::isSimplifiedMatching() const {
 void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file ) {
   ifDebug( kDebug( 9007 ) << "EnvironmentManager: adding an instance of" << file->url()  );
 
-  std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->hashedUrl() );
+  std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->url() );
 
   if ( files.first == files.second ) {
-    m_files.insert( std::make_pair( file->hashedUrl(), file ) );
+    m_files.insert( std::make_pair( file->url(), file ) );
   } else {
       //Make sure newer files appear first
-      m_files.insert( files.first, std::make_pair( file->hashedUrl(), file ) );
+      m_files.insert( files.first, std::make_pair( file->url(), file ) );
   }
 
   int cnt = 0;
@@ -96,7 +96,7 @@ void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file 
 void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& file ) {
   ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: removing an instance of" << file->url()  );
 
-  std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->hashedUrl() );
+  std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->url() );
 
   int cnt = 0;
   while ( files.first != files.second ) {
@@ -108,10 +108,6 @@ void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& fi
     }
   }
   ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: new count of cached instances for the file:" << cnt  );
-}
-
-EnvironmentFilePointer EnvironmentManager::lexedFile( const KUrl& url, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* acceptor )  {
-  return lexedFile( HashedString( url.prettyUrl( KUrl::RemoveTrailingSlash )), environment, acceptor );
 }
 
 EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* acceptor ) {
@@ -251,7 +247,7 @@ void EnvironmentManager::clear() {
 }
 
 void EnvironmentManager::erase( const CacheNode* node ) {
-  std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( ((const EnvironmentFile*)(node))->hashedUrl() );
+  std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( ((const EnvironmentFile*)(node))->url() );
   while ( files.first != files.second ) {
     if( (*files.first).second.data() == ((const EnvironmentFile*)(node)) ) {
       m_files.erase( files.first );
@@ -262,14 +258,13 @@ void EnvironmentManager::erase( const CacheNode* node ) {
   ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url()  );
 }
 
-EnvironmentFile::EnvironmentFile( const KUrl& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex) {
-  QFileInfo fileInfo( fileName.path() ); ///@todo care about remote documents
+EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex) {
+  QFileInfo fileInfo( KUrl(fileName.str()).path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
   ifDebug( kDebug(9007) << "EnvironmentFile::EnvironmentFile: created for" << fileName << "modification-time:" << m_modificationTime  );
 
-  m_hashedUrl = fileName.prettyUrl(KUrl::RemoveTrailingSlash);
-  addIncludeFile( m_hashedUrl, m_modificationTime );
-  m_allModificationTimes[ m_hashedUrl ] = m_modificationTime;
+  addIncludeFile( m_url, m_modificationTime );
+  m_allModificationTimes[ m_url ] = m_modificationTime;
 }
 
 void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro ) {
@@ -322,12 +317,8 @@ const QMap<HashedString, KDevelop::ModificationRevision>& EnvironmentFile::allMo
   return m_allModificationTimes;
 }
 
-KUrl EnvironmentFile::url() const {
+HashedString EnvironmentFile::url() const {
   return m_url;
-}
-
-HashedString EnvironmentFile::hashedUrl() const {
-  return m_hashedUrl;
 }
 
 void EnvironmentFile::addIncludeFile( const HashedString& file, const ModificationRevision& modificationTime ) {
@@ -444,7 +435,7 @@ void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
 /**
  * Search for the availability of a file parsed in a given environment
  * */
-KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const KUrl& url, const ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter ) {
+KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const HashedString& url, const ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter ) {
   const rpp::Environment* env = dynamic_cast<const rpp::Environment*>(environment);
   if( !env ) {
     kDebug(9007) << "EnvironmentManager::find() called with a wrong environment of type" << environment->type();

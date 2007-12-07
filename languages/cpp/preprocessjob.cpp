@@ -82,7 +82,7 @@ void PreprocessJob::run()
 {
     //kDebug(9007) << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
 
-    kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document();
+    kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document().str();
 
     if (checkAbort())
         return;
@@ -91,7 +91,7 @@ void PreprocessJob::run()
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
 
         if( CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching() ) {
-            KUrl u = parentJob()->document();
+            HashedString u = parentJob()->document();
             m_contentEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
 //            m_contentEnvironmentFile->setFlags(IdentifiedFile::Content);
         }
@@ -104,15 +104,17 @@ void PreprocessJob::run()
 
     QString contents;
 
-    QFileInfo fileInfo( parentJob()->document().toLocalFile() );
+    QString localFile(KUrl(parentJob()->document().str()).toLocalFile());
+  
+    QFileInfo fileInfo( localFile );
     
     if ( readFromDisk )
     {
-        QFile file( parentJob()->document().toLocalFile() );
+        QFile file( localFile );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
-            parentJob()->setErrorMessage(i18n( "Could not open file '%1'", parentJob()->document().toLocalFile() ));
-            kWarning( 9007 ) << "Could not open file" << parentJob()->document() << "(path" << parentJob()->document().toLocalFile() << ")" ;
+            parentJob()->setErrorMessage(i18n( "Could not open file '%1'", localFile ));
+            kWarning( 9007 ) << "Could not open file" << parentJob()->document().str() << "(path" << localFile << ")" ;
             return ;
         }
 
@@ -153,7 +155,7 @@ void PreprocessJob::run()
     }
 
     kDebug( 9007 ) << "===-- PREPROCESSING --===> "
-    << parentJob()->document().fileName()
+    << parentJob()->document().str()
     << "<== readFromDisk:" << readFromDisk
     << "size:" << contents.length()
     << endl;
@@ -192,7 +194,7 @@ void PreprocessJob::run()
     preprocessor.setEnvironment( m_currentEnvironment );
     preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);
 
-    QString result = preprocessor.processFile(parentJob()->document().prettyUrl(), rpp::pp::Data, contents);
+    QString result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
 
     foreach (KDevelop::Problem p, preprocessor.problems()) {
       p.setLocationStack(parentJob()->includeStack());
@@ -207,7 +209,7 @@ void PreprocessJob::run()
     m_currentEnvironment->finish();
 
     if(!m_headerSectionEnded) {
-        kDebug(9007) << parentJob()->document().prettyUrl() << ": header-section was note ended";
+        kDebug(9007) << parentJob()->document().str() << ": header-section was note ended";
         headerSectionEnded();
     }
     
@@ -227,7 +229,7 @@ void PreprocessJob::run()
             kDebug(9007) << (*it)->name.str() << "                  from: " << (*it)->file << ":" << (*it)->sourceLine;
         }*/
     }
-    kDebug(9007) << "PreprocessJob: finished" << parentJob()->document();
+    kDebug(9007) << "PreprocessJob: finished" << parentJob()->document().str();
 
     m_currentEnvironment = 0;
 }
@@ -241,10 +243,10 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
 bool PreprocessJob::headerSectionEnded() {
     bool ret = false;
     m_headerSectionEnded = true;
-    kDebug(9007) << parentJob()->document() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section";
+    kDebug(9007) << parentJob()->document().str() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section";
     
     if( m_contentEnvironmentFile ) {
-        KUrl u = parentJob()->document();
+        HashedString u = parentJob()->document();
 
         ///Find a matching content-context
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock()); //Write-lock because of setFlags below
@@ -285,9 +287,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     if (checkAbort())
         return 0;
 
-    kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": searching for include" << fileName;
+    kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": searching for include" << fileName;
 
-    KUrl localPath(parentJob()->document());
+    KUrl localPath(parentJob()->document().str());
     localPath.setFileName(QString());
     QStack<DocumentCursor> includeStack = parentJob()->includeStack();
 
@@ -298,7 +300,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude(parentJob()->includePaths(), localPath, fileName, type, from );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
-        kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile;
+        kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile;
 
         KDevelop::TopDUContext* includedContext;
 
@@ -308,7 +310,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         }
 
         if( includedContext ) {
-            kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": took included file from the du-chain" << fileName;
+            kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": took included file from the du-chain" << fileName;
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             parentJob()->addIncludedFile(includedContext, sourceLine);
@@ -321,7 +323,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
                 kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support";
             }
         } else {
-            kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": no fitting entry in du-chain, parsing";
+            kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry in du-chain, parsing";
             
             /// Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the
             /// included file right here. Parallel parsing cannot be used here, because we need the
@@ -346,9 +348,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             Q_ASSERT(slaveJob.duChain());
             parentJob()->addIncludedFile(slaveJob.duChain(), sourceLine);
         }
-        kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
+        kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
     } else {
-        kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": include not found:" << fileName;
+        kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
     }
 
         /*} else {
