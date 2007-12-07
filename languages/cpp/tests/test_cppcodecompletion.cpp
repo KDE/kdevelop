@@ -660,9 +660,9 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
   }
 
   static int testNumber = 0;
-  KUrl url(QString("file:///internal/%1").arg(testNumber++));
+  HashedString url(QString("file:///internal/%1").arg(testNumber++));
   if( !_identity.isEmpty() )
-        url = _identity;
+      url = _identity.prettyUrl();
 
   DeclarationBuilder definitionBuilder(session);
 

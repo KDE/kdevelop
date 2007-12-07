@@ -146,7 +146,7 @@ void TestDUChain::initTestCase()
   topContext = new TopDUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(0,0,25,0)));
   DUChainWriteLocker lock(DUChain::lock());
   
-  DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
+  DUChain::self()->addDocumentChain(IdentifiedFile(file1.prettyUrl()), topContext);
 
   typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
   typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
@@ -1253,6 +1253,22 @@ void TestDUChain::testFunctionTemplates() {
   release(top);
 }
 
+void TestDUChain::testTemplateFunctions() {
+  QByteArray method("class A {}; template<class T> T a(T& q) {};");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 2);
+  Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
+  QVERIFY(d);
+  CppFunctionType* cppFunction = dynamic_cast<CppFunctionType*>(d->abstractType().data());
+  QVERIFY(cppFunction);
+  QCOMPARE(cppFunction->arguments().count(), 1);
+  QCOMPARE(cppFunction->returnType(), top->localDeclarations()[0]->abstractType());
+  QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
+}
+
 void TestDUChain::testTemplateDependentClass() {
   QByteArray method("class A {}; template<class T> class B { class Q{ typedef T Type; }; }; B<A>::Q::Type t;");
 
@@ -2008,7 +2024,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   }
 
   static int testNumber = 0;
-  KUrl url(QString("file:///internal/%1").arg(testNumber++));
+  HashedString url(QString("file:///internal/%1").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session);
   Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );

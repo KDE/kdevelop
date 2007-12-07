@@ -845,7 +845,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   }
 
   static int testNumber = 0;
-  KUrl url(QString("file:///internal/%1").arg(testNumber++));
+  HashedString url(QString("file:///internal/%1").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session);
 
