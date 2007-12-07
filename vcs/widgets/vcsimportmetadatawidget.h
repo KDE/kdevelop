@@ -22,7 +22,7 @@
 #define VCSIMPORTMETADATAWIDGET_H
 
 #include <QtGui/QWidget>
-#include "vcsexport.h"
+#include "../vcsexport.h"
 
 namespace KDevelop
 {
