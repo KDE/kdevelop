@@ -246,7 +246,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
             Declaration* oldDec = currentDeclaration();
             abortDeclaration();
-            Definition* def = new Definition(oldDec->takeRange(), currentContext());
+            Definition* def = new Definition(m_editor->currentUrl(), oldDec->takeRange(), currentContext());
             setEncountered(def);
             delete oldDec;
             dec->setDefinition(def);
@@ -311,22 +311,22 @@ template<class DeclarationType>
 DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range )
 {
     if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
-      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(range, currentContext());
+      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(m_editor->currentUrl(), range, currentContext());
       ret->setTemplateParameterContext(ctx);
       return ret;
     } else
-      return new DeclarationType(range, currentContext());
+      return new DeclarationType(m_editor->currentUrl(), range, currentContext());
 }
 
 template<class DeclarationType>
 DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range, int scope )
 {
     if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
-      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(range, (KDevelop::Declaration::Scope)scope, currentContext());
+      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(m_editor->currentUrl(), range, (KDevelop::Declaration::Scope)scope, currentContext());
       ret->setTemplateParameterContext(ctx);
       return ret;
     } else
-      return new DeclarationType(range, (KDevelop::Declaration::Scope)scope, currentContext());
+      return new DeclarationType(m_editor->currentUrl(), range, (KDevelop::Declaration::Scope)scope, currentContext());
 }
 
 Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition, bool isNamespaceAlias, const Identifier& customName)
@@ -443,7 +443,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     Q_ASSERT(m_editor->currentRange() == prior);
 
     if( isNamespaceAlias ) {
-      declaration = new NamespaceAliasDeclaration(range, scope, currentContext());
+      declaration = new NamespaceAliasDeclaration(m_editor->currentUrl(), range, scope, currentContext());
       declaration->setIdentifier(customName);
     } else if (isForward) {
       declaration = specialDeclaration<ForwardDeclaration>(range, scope);
@@ -458,7 +458,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         declaration = specialDeclaration<ClassMemberDeclaration>(range );
     } else if( currentContext()->type() == DUContext::Template ) {
       //This is a template-parameter.
-      declaration = new TemplateParameterDeclaration( range, currentContext() );
+      declaration = new TemplateParameterDeclaration( m_editor->currentUrl(), range, currentContext() );
     } else {
       declaration = specialDeclaration<Declaration>(range, scope );
     }

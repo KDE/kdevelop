@@ -27,8 +27,8 @@ public:
   QualifiedIdentifier m_defaultParameter;
 };
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(KTextEditor::Range * range, DUContext* context)
-  : Declaration(range, LocalScope, context)
+TemplateParameterDeclaration::TemplateParameterDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
+  : Declaration(url, range, LocalScope, context)
   , d(new TemplateParameterDeclarationPrivate)
 {
 }

@@ -26,11 +26,12 @@ QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
 template<>
 QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix ) const {
   if( decl == 0 ) {
+    KUrl u( url().str() );
     IncludeItem i;
     i.pathNumber = -1;
-    i.name = url().fileName();
+    i.name = u.fileName();
     i.isDirectory = false;
-    i.basePath = url().upUrl();
+    i.basePath = u.upUrl();
     
     return new NavigationWidget( i, htmlPrefix, htmlSuffix );
   } else {

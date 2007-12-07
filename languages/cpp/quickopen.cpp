@@ -47,7 +47,7 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
   QList<KUrl> ret;
   
   if( context == import ) {
-    ret << import->url();
+    ret << KUrl(import->url().str());
     return ret;
   }
   
@@ -67,12 +67,12 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
   }
 
   if( !ret.isEmpty() )
-    ret.push_front( context->url() );
+    ret.push_front( KUrl(context->url().str()) );
   
   return ret;
 }
 
-void collectImporters( QSet<KUrl>& importers, DUContext* ctx )
+void collectImporters( QSet<HashedString>& importers, DUContext* ctx )
 {
   if( importers.contains( ctx->url() ) )
     return;
@@ -214,7 +214,8 @@ void allIncludedRecursion( QMap<KUrl, IncludeItem>& ret, TopDUContextPointer ctx
   }
 
   IncludeItem i;
-  KUrl u = ctx->url();
+  KUrl baseUrl = KUrl(ctx->url().str());
+  KUrl u = baseUrl;
 
   if( !prefixPath.isEmpty() && !u.prettyUrl().contains(prefixPath) )
     return;
@@ -222,7 +223,7 @@ void allIncludedRecursion( QMap<KUrl, IncludeItem>& ret, TopDUContextPointer ctx
   i.name = u.fileName();
   u.setFileName(QString());
   i.basePath = u;
-  ret[ctx->url()] = i;
+  ret[baseUrl] = i;
 }
 
 QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixPath = QString() ) {
@@ -317,12 +318,12 @@ void IncludeFileDataProvider::reset()
       m_duContext = TopDUContextPointer( getCompletionContext( doc->url() ) );
 
       if( m_allowImporters && m_duContext ) {
-        QSet<KUrl> importers;
+        QSet<HashedString> importers;
 
         collectImporters( importers, m_duContext.data() );
 
-        foreach( const KUrl& u,  importers )
-          m_importers << u;
+        foreach( const HashedString& u,  importers )
+          m_importers << KUrl(u.str());
       }
     }
   }

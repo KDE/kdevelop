@@ -134,7 +134,7 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
     m_editor->exitCurrentRange();
     Q_ASSERT(m_editor->currentRange() == prior);
 
-    Use* newUse = new Use(use, currentContext());
+    Use* newUse = new Use(m_editor->currentUrl(), use, currentContext());
 
     setEncountered(newUse);
 

@@ -475,12 +475,12 @@ class NavigationContext : public KShared {
 
       if( !shorten ) {
         m_currentText += labelHighlight(i18n( "Decl.: " ));
-        makeLink( QString("%1 :%2").arg( m_declaration->url().fileName() ).arg( m_declaration->textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
+        makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
         m_currentText += " ";
         //m_currentText += "<br />";
         if( m_declaration->definition() ) {
           m_currentText += labelHighlight(i18n( "Def.: " ));
-          makeLink( QString("%1 :%2").arg( m_declaration->definition()->url().fileName() ).arg( m_declaration->definition()->textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
         }
       }
       //m_currentText += "<br />";
@@ -636,7 +636,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
         KUrl doc = action.document;
         KTextEditor::Cursor cursor = action.cursor;
         if(doc.isEmpty()) {
-          doc = action.decl->url();
+          doc = KUrl(action.decl->url().str());
           cursor = action.decl->textRange().start();
         }
         
@@ -647,7 +647,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
       case NavigationAction::JumpToDefinition:
       //This is used to execute the slot delayed in the event-loop, so crashes are avoided
       if( action.decl->definition() ) {
-        QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, action.decl->definition()->url()), Q_ARG(KTextEditor::Cursor, action.decl->definition()->textRange().start()) );
+        QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, KUrl(action.decl->definition()->url().str())), Q_ARG(KTextEditor::Cursor, action.decl->definition()->textRange().start()) );
       }
       break;
   }

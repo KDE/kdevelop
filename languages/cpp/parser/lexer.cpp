@@ -22,6 +22,7 @@
 #include "parsesession.h"
 #include "rpp/pp-scanner.h"
 
+#include <hashedstring.h>
 #include <cctype>
 
 #include <kdebug.h>

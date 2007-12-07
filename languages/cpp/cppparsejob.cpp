@@ -311,7 +311,7 @@ void CPPInternalParseJob::run()
         QList<DUContext*> temporaryChains;
 
         ///Here we count together all files that were included while this parse-run. If we are updating, and have parsed the document completely, we can remove all contexts urls that do not match this.
-        QSet<KUrl> encounteredIncludeUrls;
+        QSet<KDevelop::HashedString> encounteredIncludeUrls;
 
         {
             DUChainReadLocker lock(DUChain::lock());
@@ -367,7 +367,7 @@ void CPPInternalParseJob::run()
                     foreach(DUContextPointer ctx, imports) {
                         if(ctx.data() && !encounteredIncludeUrls.contains(ctx->url())) {
                             topContext->removeImportedParentContext(ctx.data());
-                            kDebug(9007) << "removing not encountered import " << ctx->url();
+                            kDebug(9007) << "removing not encountered import " << ctx->url().str();
                         }
                     }
                 }

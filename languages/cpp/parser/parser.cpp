@@ -25,6 +25,7 @@
 #include "control.h"
 #include "parsesession.h"
 
+#include <hashedstring.h>
 #include <cstdlib>
 #include <iostream>
 

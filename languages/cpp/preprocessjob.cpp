@@ -337,7 +337,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
             slaveJob.setIncludedFromPath(included.second);
 
-            includeStack.append(DocumentCursor(includedFile, KTextEditor::Cursor(sourceLine, 0)));
+            includeStack.append(DocumentCursor(includedFile.prettyUrl(), KTextEditor::Cursor(sourceLine, 0)));
             slaveJob.setIncludeStack(includeStack);
 
             slaveJob.parseForeground();

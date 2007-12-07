@@ -37,7 +37,7 @@ class KDEVCPPDUCHAIN_EXPORT TemplateParameterDeclaration : public KDevelop::Decl
 {
 public:
   TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs);
-  TemplateParameterDeclaration(KTextEditor::Range* range, KDevelop::DUContext* context);
+  TemplateParameterDeclaration(const KDevelop::HashedString& url, KTextEditor::Range* range, KDevelop::DUContext* context);
   ~TemplateParameterDeclaration();
 
   /**

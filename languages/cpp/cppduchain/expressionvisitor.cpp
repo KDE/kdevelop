@@ -469,7 +469,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       LOCKDUCHAIN;
 
       KTextEditor::Cursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
-      if( !m_currentContext->url().equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
+      if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
         position = position.invalid();
 
       ///We use the more complex findDeclarationsInternal here so we can give m_inclusionTrace

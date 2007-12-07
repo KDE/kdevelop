@@ -75,10 +75,10 @@ void ParseSession::setContentsAndGenerateLocationTable(const QByteArray & conten
 
 void ParseSession::setUrl(const KUrl& url)
 {
-  m_url = url;
+  m_url = url.prettyUrl();
 }
 
-const KUrl & ParseSession::url() const
+const KDevelop::HashedString& ParseSession::url() const
 {
   return m_url;
 }

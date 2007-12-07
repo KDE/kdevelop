@@ -176,8 +176,8 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
     } else {
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: compiling";
 
-      Range* range = new DocumentRange(u, KTextEditor::Cursor(), KTextEditor::Cursor());
-      topLevelContext = new CppDUContext<TopDUContext>(range, const_cast<Cpp::EnvironmentFile*>(file.data()));
+      Range* range = new DocumentRange(m_editor->currentUrl(), KTextEditor::Cursor(), KTextEditor::Cursor());
+      topLevelContext = new CppDUContext<TopDUContext>(m_editor->currentUrl(), range, const_cast<Cpp::EnvironmentFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
@@ -257,7 +257,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       Q_ASSERT(m_compilingContexts);
 
       Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
-      topLevelContext = new CppDUContext<TopDUContext>(range, const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(m_editor->currentUrl(), range, const_cast<Cpp::EnvironmentFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
 
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
@@ -437,7 +437,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       else if (classContexts.count() > 1) {
         kWarning(9007) << "Muliple class contexts for" << functionName.toString() << "- shouldn't happen!" ;
         foreach (DUContext* classContext, classContexts) {
-          kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->textRange() << "in" << classContext->url();
+          kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->textRange() << "in" << classContext->url().str();
         }
       }
     }
@@ -565,7 +565,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
       readLock.unlock();
       DUChainWriteLocker writeLock(DUChain::lock());
 
-      ret = new CppDUContext<DUContext>(m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
+      ret = new CppDUContext<DUContext>(m_editor->currentUrl(), m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
       ret->setType(type);
 
       if (!identifier.isEmpty()) {

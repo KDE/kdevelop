@@ -86,13 +86,13 @@ template<class BaseContext>
 class CppDUContext : public BaseContext {
   public:
     ///Parameters will be reached to the base-class
-    template<class Param1, class Param2>
-    CppDUContext( Param1* p1, Param2* p2, bool isInstantiationContext ) : BaseContext(p1, p2, isInstantiationContext), m_instantiatedFrom(0) {
+    template<class Param1, class Param2, class Param3>
+    CppDUContext( const Param3& document, Param1* p1, Param2* p2, bool isInstantiationContext ) : BaseContext(document, p1, p2, isInstantiationContext), m_instantiatedFrom(0) {
     }
 
     ///Both parameters will be reached to the base-class. This fits TopDUContext.
-    template<class Param1, class Param2>
-    CppDUContext( Param1* p1, Param2* p2) : BaseContext(p1, p2), m_instantiatedFrom(0) {
+    template<class Param1, class Param2, class Param3>
+    CppDUContext( const Param3& document, Param1* p1, Param2* p2) : BaseContext(document, p1, p2), m_instantiatedFrom(0) {
     }
 
     ~CppDUContext() {

@@ -455,7 +455,7 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   if(!m_duContext)
     return;
 #ifndef TEST_COMPLETION
-  m_includeItems = CppLanguageSupport::self()->allFilesInIncludePath(m_duContext->url(), local, prefixPath);
+  m_includeItems = CppLanguageSupport::self()->allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
 #endif
   m_valid = true;
   m_memberAccessOperation = IncludeListAccess;

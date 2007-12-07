@@ -345,7 +345,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
   if( context ) {
     ///Specialize involved contexts
     Q_ASSERT(context->parentContext()); //Top-context is not allowed
-    contextCopy = new StandardCppDUContext(context->textRangePtr(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be instantiated
+    contextCopy = new StandardCppDUContext(context->url(), context->textRangePtr(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be instantiated
     contextCopy->setRangeOwning(KDevelop::DocumentRangeObject::DontOwn); //The range belongs to the original context, so flag it not to be owned by the context
     contextCopy->setType(context->type());
     contextCopy->setLocalScopeIdentifier(context->localScopeIdentifier());

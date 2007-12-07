@@ -30,6 +30,8 @@
 #include <ksharedptr.h>
 #include <kurl.h>
 
+#include <hashedstring.h>
+
 namespace Cpp {
   class EnvironmentFile;
 }
@@ -60,7 +62,7 @@ public:
   void setContentsAndGenerateLocationTable(const QByteArray& contents, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
 
   void setUrl(const KUrl& url);
-  const KUrl& url() const;
+  const KDevelop::HashedString& url() const;
   
   const char *contents() const;
   std::size_t size() const;
@@ -68,7 +70,7 @@ public:
   TokenStream* token_stream;
   rpp::MacroBlock* macros;
   KTextEditor::Cursor m_contentOffset;
-  KUrl m_url; //Should contain the url from which the content was extracted, can also be empty.
+  KDevelop::HashedString m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:
   QByteArray m_contents;

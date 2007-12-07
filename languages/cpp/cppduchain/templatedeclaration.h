@@ -122,10 +122,10 @@ namespace Cpp {
     SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(rhs), TemplateDeclaration(rhs) {
     }
     ///Arguments are passed to the base
-    SpecialTemplateDeclaration( KTextEditor::Range* range, KDevelop::Declaration::Scope scope, KDevelop::DUContext* context ) : BaseDeclaration(range, scope, context) {
+    SpecialTemplateDeclaration( const HashedString& url, KTextEditor::Range* range, KDevelop::Declaration::Scope scope, KDevelop::DUContext* context ) : BaseDeclaration(url, range, scope, context) {
     }
     ///Arguments are passed to the base
-    SpecialTemplateDeclaration( KTextEditor::Range* range, KDevelop::DUContext* context ) : BaseDeclaration(range, context) {
+    SpecialTemplateDeclaration( const HashedString& url, KTextEditor::Range* range, KDevelop::DUContext* context ) : BaseDeclaration(url, range, context) {
     }
 
     virtual bool inDUChain() const {

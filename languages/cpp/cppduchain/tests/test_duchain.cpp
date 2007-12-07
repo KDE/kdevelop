@@ -143,7 +143,7 @@ void TestDUChain::initTestCase()
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-  topContext = new TopDUContext(new KDevelop::DocumentRange(file1, Range(0,0,25,0)));
+  topContext = new TopDUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(0,0,25,0)));
   DUChainWriteLocker lock(DUChain::lock());
   
   DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
@@ -249,19 +249,19 @@ void TestDUChain::testContextRelationships()
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  DUContext* firstChild = new DUContext(new KDevelop::DocumentRange(file1, Range(4,4, 10,3)), topContext);
+  DUContext* firstChild = new DUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(4,4, 10,3)), topContext);
 
   QCOMPARE(firstChild->parentContext(), topContext);
   QCOMPARE(firstChild->childContexts().count(), 0);
   QCOMPARE(topContext->childContexts().count(), 1);
   QCOMPARE(topContext->childContexts().last(), firstChild);
 
-  DUContext* secondChild = new DUContext(new KDevelop::DocumentRange(file1, Range(14,4, 19,3)), topContext);
+  DUContext* secondChild = new DUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(14,4, 19,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 2);
   QCOMPARE(topContext->childContexts()[1], secondChild);
 
-  DUContext* thirdChild = new DUContext(new KDevelop::DocumentRange(file1, Range(10,4, 14,3)), topContext);
+  DUContext* thirdChild = new DUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(10,4, 14,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 3);
   QCOMPARE(topContext->childContexts()[1], thirdChild);
