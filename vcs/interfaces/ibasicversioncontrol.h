@@ -22,7 +22,7 @@
 #ifndef IBASICVERSIONCONTROL_H
 #define IBASICVERSIONCONTROL_H
 
-#include <iextension.h>
+#include <interfaces/iextension.h>
 #include <kurl.h>
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
