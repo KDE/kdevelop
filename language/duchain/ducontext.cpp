@@ -107,11 +107,12 @@ void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
 
 //     m_localDeclarations.append(newDeclaration);
 
+  KTextEditor::Cursor start = newDeclaration->textRange().start();
   bool inserted = false;
-  for (int i = 0; i < m_localDeclarations.count(); ++i) {
+  for (int i = m_localDeclarations.count()-1; i >= 0; --i) {
     Declaration* child = m_localDeclarations.at(i);
-    if (newDeclaration->textRange().start() < child->textRange().start()) {
-      m_localDeclarations.insert(i, newDeclaration);
+    if (start > child->textRange().start()) {
+      m_localDeclarations.insert(i+1, newDeclaration);
       inserted = true;
       break;
     }
