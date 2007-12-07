@@ -143,7 +143,7 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPlugin::requestContextMenuAct
         return IPlugin::requestContextMenuActions( context );
 
     bool closeProjectsAdded = false;
-    bool buildTargetsAdded = false;
+    bool buildItemsAdded = false;
     foreach( ProjectBaseItem* item, items )
     {
         d->ctxProjectItemList << item;
@@ -155,25 +155,21 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPlugin::requestContextMenuAct
             actions << close;
             closeProjectsAdded = true;
         }
-        else if ( KDevelop::ProjectFolderItem *folder = item->folder() )
+        if ( !buildItemsAdded && ( item->folder() || item->target() || item->folder() ) )
         {
-        }
-        else if ( KDevelop::ProjectFileItem *file = item->file() )
-        {
-        }
-        else if ( !buildTargetsAdded && item->target() )
-        {
-            KDevelop::ProjectTargetItem* target = item->target();
-            KAction* action = new KAction( i18n( "Build target(s)" ), this );
-            connect( action, SIGNAL( triggered() ), this, SLOT(buildProjectsFromContextMenu()) );
+            KAction* action = new KAction( i18n( "Build items(s)" ), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
             actions << action;
-            action = new KAction( i18n( "Install target(s)" ), this );
-            connect( action, SIGNAL( triggered() ), this, SLOT(installProjectsFromContextMenu()) );
+            action = new KAction( i18n( "Install item(s)" ), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
             actions << action;
-            action = new KAction( i18n( "Clean target(s)" ), this );
-            connect( action, SIGNAL( triggered() ), this, SLOT(cleanProjectsFromContextMenu()) );
+            action = new KAction( i18n( "Clean item(s)" ), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
             actions << action;
-            buildTargetsAdded = true;
+            action = new KAction( i18n( "Add item(s) to buildset" ), this );
+            connect( action, SIGNAL(triggered() ), this, SLOT(addItemsFromContextMenuToBuildset() ) );
+            actions << action;
+            buildItemsAdded = true;
         }
     }
     return qMakePair(QString("Project Management"), actions);
@@ -263,7 +259,7 @@ void ProjectManagerViewPlugin::closeProjects()
 }
 
 
-void ProjectManagerViewPlugin::installProjectsFromContextMenu()
+void ProjectManagerViewPlugin::installItemsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
@@ -272,7 +268,7 @@ void ProjectManagerViewPlugin::installProjectsFromContextMenu()
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPlugin::cleanProjectsFromContextMenu()
+void ProjectManagerViewPlugin::cleanItemsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
@@ -281,7 +277,7 @@ void ProjectManagerViewPlugin::cleanProjectsFromContextMenu()
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPlugin::buildProjectsFromContextMenu()
+void ProjectManagerViewPlugin::buildItemsFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
@@ -351,6 +347,14 @@ void ProjectManagerViewPlugin::buildProjectItems()
 ProjectBuildSetModel* ProjectManagerViewPlugin::buildSet()
 {
     return d->buildSet;
+}
+
+void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        buildSet()->addProjectItem( item );
+    }
 }
 
 

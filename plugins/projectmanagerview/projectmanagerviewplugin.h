@@ -58,15 +58,16 @@ public:
 
 protected Q_SLOTS:
     void closeProjects();
-    void buildProjectsFromContextMenu();
-    void installProjectsFromContextMenu();
-    void cleanProjectsFromContextMenu();
+    void buildItemsFromContextMenu();
+    void installItemsFromContextMenu();
+    void cleanItemsFromContextMenu();
     void buildProjectItems();
     void installProjectItems();
     void cleanProjectItems();
     void configureProjectItems();
     void pruneProjectItems();
     void buildAllProjects();
+    void addItemsFromContextMenuToBuildset();
 
 private:
     void executeBuild( KDevelop::ProjectBaseItem* );
