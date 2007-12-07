@@ -126,6 +126,7 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
 QString pp_skip_identifier::operator()(Stream& input)
 {
   QString identifier;
+  identifier.reserve(10);
 
   while (!input.atEnd()) {
     if (!input.current().isLetterOrNumber() && input != '_')
@@ -135,6 +136,7 @@ QString pp_skip_identifier::operator()(Stream& input)
     ++input;
   }
 
+  identifier.squeeze();
   return identifier;
 }
 
