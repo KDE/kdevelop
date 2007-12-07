@@ -288,10 +288,10 @@ QSize IdealMainLayout::minimumSize() const
         int minWidth = 0;
         int softMinWidth = 0;
 
-        sizeHint(Left, minWidth, softMinWidth, minHeight, softMinHeight);
-        sizeHint(Right, minWidth, softMinWidth, minHeight, softMinHeight);
-        sizeHint(Top, minWidth, softMinWidth, minHeight, softMinHeight);
-        sizeHint(Bottom, minWidth, softMinWidth, minHeight, softMinHeight);
+        minimumSize(Left, minWidth, softMinWidth, minHeight, softMinHeight);
+        minimumSize(Right, minWidth, softMinWidth, minHeight, softMinHeight);
+        minimumSize(Top, minWidth, softMinWidth, minHeight, softMinHeight);
+        minimumSize(Bottom, minWidth, softMinWidth, minHeight, softMinHeight);
 
         if (QLayoutItem* item = m_items[Central]->first()) {
             const QSize itemSizeHint = item->minimumSize();
