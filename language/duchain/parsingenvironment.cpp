@@ -26,7 +26,7 @@ class IdentifiedFilePrivate
 public:
   IdentifiedFilePrivate() : m_identity(0) {
   }
-  KUrl m_url;
+  HashedString m_url;
   uint m_identity;
 };
 
@@ -35,7 +35,7 @@ IdentifiedFile::IdentifiedFile()
 {
 }
 
-IdentifiedFile::IdentifiedFile( const KUrl& url , uint identity )
+IdentifiedFile::IdentifiedFile( const HashedString& url , uint identity )
   : d(new IdentifiedFilePrivate)
 {
   d->m_url = url;
@@ -46,12 +46,12 @@ IdentifiedFile::~IdentifiedFile() {
  delete d;
 }
 
-KUrl IdentifiedFile::url() const {
+HashedString IdentifiedFile::url() const {
   return d->m_url;
 }
 
 QString IdentifiedFile::toString() const {
-  return QString("%1 %2").arg(url().prettyUrl()).arg(identity());
+  return QString("%1 %2").arg(url().str()).arg(identity());
 }
 
 uint IdentifiedFile::identity() const {
@@ -74,7 +74,7 @@ IdentifiedFile& IdentifiedFile::operator=( const IdentifiedFile& rhs ) {
 }
 
 bool IdentifiedFile::isEmpty() const {
-  return d->m_url.isEmpty();
+  return d->m_url.str().isEmpty();
 }
 
 IdentifiedFile::operator bool() const {
@@ -112,7 +112,7 @@ void ParsingEnvironmentManager::addFile( ParsingEnvironmentFile* /*file*/ ) {
 void ParsingEnvironmentManager::removeFile( ParsingEnvironmentFile* /*file*/ ) {
 }
 
-ParsingEnvironmentFile* ParsingEnvironmentManager::find( const KUrl& /*url*/, const ParsingEnvironment* /*environment*/, ParsingEnvironmentFileAcceptor* ) {
+ParsingEnvironmentFile* ParsingEnvironmentManager::find( const HashedString& /*url*/, const ParsingEnvironment* /*environment*/, ParsingEnvironmentFileAcceptor* ) {
   return 0;
 }
 

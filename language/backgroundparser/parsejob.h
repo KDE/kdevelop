@@ -25,12 +25,11 @@
 #include <JobSequence.h>
 #include <kurl.h>
 #include "../languageexport.h"
-
+#include <hashedstring.h>
 
 
 namespace KDevelop
 {
-
 class BackgroundParser;
 class TopDUContext;
 
@@ -62,7 +61,7 @@ public:
     /// or -1 if there was a problem.
     int revisionToken() const;
 
-    KUrl document() const;
+    KDevelop::HashedString document() const;
 
     void setErrorMessage(const QString& message);
     QString errorMessage() const;
@@ -94,7 +93,7 @@ public:
     bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
 
 protected:
-    KUrl m_document;
+    KDevelop::HashedString m_document;
     QString m_errorMessage;
     BackgroundParser* m_backgroundParser;
 

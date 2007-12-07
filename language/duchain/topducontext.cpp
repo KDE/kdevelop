@@ -133,7 +133,7 @@ IdentifiedFile TopDUContext::identity() const {
   if( d->m_file )
     return d->m_file->identity();
   else
-    return IdentifiedFile(KUrl( url().str() ));
+    return IdentifiedFile(url());
 }
 
 KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {

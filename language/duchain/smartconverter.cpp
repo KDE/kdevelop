@@ -92,7 +92,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
 {
   DUChainWriteLocker lock(DUChain::lock());
 
-  d->m_editor->setCurrentUrl( KUrl(context->url().str()) );
+  d->m_editor->setCurrentUrl( context->url() );
 
   if (d->m_editor->smart() && !context->smartRange()) {
     context->setTextRange(context->url(), d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
@@ -106,7 +106,7 @@ void SmartConverter::unconvertDUChain(DUContext* context) const
   DUChainWriteLocker lock(DUChain::lock());
 
   Q_ASSERT(!d->m_hl);
-  d->m_editor->setCurrentUrl( KUrl(context->url().str()) );
+  d->m_editor->setCurrentUrl( context->url() );
 
   if (d->m_editor->smart() && !context->smartRange()) {
     context->setTextRange(context->url(), d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));

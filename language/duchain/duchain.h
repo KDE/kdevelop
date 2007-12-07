@@ -59,14 +59,22 @@ public:
 
   /**
    * Return any chain for the given document
+   * If available, the version accepting HashedString should be used instead of this, for performance reasons.
    * */
   TopDUContext* chainForDocument(const KUrl& document) const;
+  TopDUContext* chainForDocument(const HashedString& document) const;
 
   /**
    * Return all chains for the given document
    * */
   QList<TopDUContext*> chainsForDocument(const KUrl& document) const;
 
+  /**
+   * Return all chains for the given document
+   * Should be preferred over the KUrl version.
+   * */
+  QList<TopDUContext*> chainsForDocument(const HashedString& document) const;
+  
   /**
    * Find the chain based on file-url and identity-number. If the number is zero, any chain for the given url is returned.
    * */
@@ -79,6 +87,15 @@ public:
    * */
   TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
 
+  /**
+   * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
+   * @param flags If this is TopDUContext::AnyFlag, context-flags will be ignored while searching.
+   *              Else a context will be searched that exactly matches the given flags.
+   *
+   * Prefer this over the KUrl version.
+   * */
+  TopDUContext* chainForDocument(const HashedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
+  
   /// Only used for debugging at the moment
   QList<KUrl> documents() const;
 

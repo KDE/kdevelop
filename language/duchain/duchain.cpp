@@ -222,6 +222,10 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
 }
 
 TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
+  return chainForDocument(IdentifiedFile(document.prettyUrl()));
+}
+
+TopDUContext* DUChain::chainForDocument(const HashedString& document) const {
   return chainForDocument( IdentifiedFile(document) );
 }
 
@@ -234,7 +238,7 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) cons
       for( ; it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); ++it )
         ++count;
       if( count > 1 )
-        kDebug(9505) << "found " << count << " chains for " << document.url();
+        kDebug(9505) << "found " << count << " chains for " << document.url().str();
 
     }
     // Match any parsed version of this document
@@ -253,11 +257,16 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) cons
 
 QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
 {
+  return chainsForDocument(HashedString(document.prettyUrl()));
+}
+
+QList<TopDUContext*> DUChain::chainsForDocument(const HashedString& document) const
+{
   QList<TopDUContext*> chains;
 
   // Match all parsed versions of this document
   for (QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(IdentifiedFile(document)); it != sdDUChainPrivate->m_chains.constEnd(); ++it) {
-    if (it.key().url() == document.url())
+    if (it.key().url() == document)
       chains << it.value();
     else
       break;
@@ -267,6 +276,9 @@ QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
 }
 
 TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
+  return chainForDocument( HashedString(document.prettyUrl()), environment, flags );
+}
+TopDUContext* DUChain::chainForDocument( const HashedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
 
   //Use this struct to search for context that match the specified flags
   struct FlagFileAcceptor : public ParsingEnvironmentFileAcceptor {
@@ -351,7 +363,7 @@ QList<KUrl> DUChain::documents() const
 {
   QList<KUrl> ret;
   foreach (const IdentifiedFile& file, sdDUChainPrivate->m_chains.keys()) {
-    ret << file.url();
+    ret << KUrl(file.url().str());
   }
   return ret;
 }

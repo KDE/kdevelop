@@ -104,10 +104,8 @@ public:
   static void removeDocument(KTextEditor::Document* document);
 
   /**
-   * Returns the text document for \a url, if one exists.
+   * Returns the text document for \a url, if one exists. The url should have been formatted using KUrl::prettyUrl() at some point.
    */
-  static KTextEditor::Document* documentForUrl(const KUrl& url);
-  
   static KTextEditor::Document* documentForUrl(const HashedString& url);
 
   /**
@@ -116,7 +114,6 @@ public:
   static bool documentLoaded(KTextEditor::Document* document);
 
    HashedString currentUrl() const;
-   void setCurrentUrl(const KUrl& currentUrl);
    void setCurrentUrl(const HashedString& currentUrl);
 
   /**
@@ -241,7 +238,7 @@ public:
    * Returns the modification-revision that contains the file-modification time,
    * and if the document is loaded, the revision-number of it's content.
    * */
-  static ModificationRevision modificationRevision(const KUrl& url);
+  static ModificationRevision modificationRevision(const HashedString& url);
 
   /**
    * Use this to connect to notifications provided by EditorIntegratorStatic.

@@ -79,7 +79,7 @@ DUChainModel::~DUChainModel()
 
 void DUChainModel::parseJobFinished(KDevelop::ParseJob* job)
 {
-  if( job->document() == m_document && job->duChain() ) {
+  if( KUrl(job->document().str()) == m_document && job->duChain() ) {
     setTopContext(TopDUContextPointer(job->duChain()->weakPointer()));
   }
 

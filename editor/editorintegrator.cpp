@@ -74,20 +74,6 @@ void EditorIntegrator::addDocument( KTextEditor::Document * document )
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
 }
 
-
-
-Document * EditorIntegrator::documentForUrl(const KUrl& url)
-{
-  QMutexLocker lock(data()->mutex);
-
-  HashedString s(url.prettyUrl());
-  
-  if (data()->documents.contains(s))
-    return data()->documents[s];
-
-  return 0;
-}
-
 Document * EditorIntegrator::documentForUrl(const HashedString& url)
 {
   QMutexLocker lock(data()->mutex);
@@ -294,13 +280,6 @@ HashedString EditorIntegrator::currentUrl() const
   return d->m_currentUrl;
 }
 
-void EditorIntegrator::setCurrentUrl(const KUrl& url)
-{
-  d->m_currentUrl = url.prettyUrl();
-  d->m_currentDocument = documentForUrl(url);
-  d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
-}
-
 void EditorIntegrator::setCurrentUrl(const HashedString& url)
 {
   d->m_currentUrl = url;
@@ -358,11 +337,11 @@ void EditorIntegrator::exitCurrentRange()
   d->m_currentRangeStack.pop();
 }
 
-ModificationRevision EditorIntegrator::modificationRevision(const KUrl& url) {
+ModificationRevision EditorIntegrator::modificationRevision(const HashedString& url) {
   ///@todo add a cache, use the old code from Cpp::EnvironmentManager
   ///@todo support non-local files
 
-  QFileInfo fileInfo( url.toLocalFile() );
+  QFileInfo fileInfo( KUrl(url.str()).toLocalFile() );
   
   ModificationRevision ret(fileInfo.lastModified());
 

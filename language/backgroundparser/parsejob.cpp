@@ -58,7 +58,7 @@ struct ParseJobPrivate
 ParseJob::ParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
-        m_document( url ),
+        m_document( url.prettyUrl() ),
         m_backgroundParser( 0 ),
         m_abortMutex(new QMutex),
         m_abortRequested( false ),
@@ -82,7 +82,7 @@ ParseJob::~ParseJob()
     delete d;
 }
 
-KUrl ParseJob::document() const
+HashedString ParseJob::document() const
 {
     return m_document;
 }
