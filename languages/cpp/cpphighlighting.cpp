@@ -34,8 +34,12 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
+uint colors[] = {0x421919/* gray red */, 0x422f19 /* gray orange */,0x2a4219 /* gray green/orange */, 0x194219 /* gray pure green*/, 0x194239 /* gray green/blue */, 0x192942 /* gray blue */, 0x191c42 /* gray deep blue */, 0x321942 /* gray violet blue */, 0x42193b /* gray violet */, 0};
+
+const uint numColors = 9;
+
 CppHighlighting::CppHighlighting( QObject * parent )
-  : QObject(parent)
+  : QObject(parent), m_localColorization(true)
 {
 }
 
@@ -43,7 +47,7 @@ CppHighlighting::~CppHighlighting( )
 {
 }
 
-KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Contexts context ) const
+KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Contexts context, uint color ) const
 {
   KTextEditor::Attribute::Ptr a;
   switch (context) {
@@ -60,20 +64,23 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
       break;
   }
 
-  if (!a) {
+  if (!a || color ) {
     a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute());
     a->setBackgroundFillWhitespace(true);
     switch (context) {
       case DefinitionContext:
-        m_definitionAttributes.insert(type, a);
+        if( !color )
+          m_definitionAttributes.insert(type, a);
         break;
 
       case DeclarationContext:
-        m_declarationAttributes.insert(type, a);
+        if( !color )
+          m_declarationAttributes.insert(type, a);
         break;
 
       case ReferenceContext:
-        m_referenceAttributes.insert(type, a);
+        if( !color )
+          m_referenceAttributes.insert(type, a);
         break;
     }
 
@@ -176,6 +183,10 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         a->setDynamicAttribute(Attribute::ActivateMouseIn, d);
         break;
     }
+    if( color ) {
+      a->setForeground(QColor((color*5)/2));//0xffffff-(color)));
+                       //a->setBackground(QColor((color*7)));
+    }
   }
 
   return a;
@@ -197,30 +208,112 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
     outputRange(child);
 }
 
+ColorMap emptyColorMap() {
+  ColorMap ret(numColors+1, 0);
+ return ret;
+}
+
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
   kDebug( 9007 ) << "highighting du chain";
   DUChainReadLocker lock(DUChain::lock());
   Q_ASSERT(context->topContext() == context);
-  highlightDUChain(static_cast<DUContext*>(context));
+  highlightDUChainSimple(static_cast<DUContext*>(context));
+
+  m_functionColorsForDeclarations.clear();
+  m_functionDeclarationsForColors.clear();
 }
 
-void CppHighlighting::highlightDUChain(DUContext* context) const
+void CppHighlighting::highlightDUChainSimple(DUContext* context) const
 {
   if (!context->smartRange())
     return;
 
-  foreach (Declaration* dec, context->localDeclarations())
-    highlightDeclaration(dec);
+  bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
+  
+  if( isInFunction && m_localColorization ) {
+    highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
+    return;
+  }
+  
+
+  foreach (Declaration* dec, context->localDeclarations()) {
+    highlightDeclaration(dec, 0);
+  }
 
   foreach (Definition* def, context->localDefinitions())
     highlightDefinition(def);
 
-  foreach (Use* use, context->uses())
-    highlightUse(use);
+  foreach (Use* use, context->uses()) {
+    highlightUse(use, 0);
+  }
+
+  foreach (DUContext* child, context->childContexts()) {
+    highlightDUChainSimple(child );
+  }
+}
+
+void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors) const
+{
+  if (!context->smartRange())
+    return;
+
+  //Merge the colors from the function arguments
+  foreach( DUContextPointer imported, context->importedParentContexts() ) {
+    //For now it's enough simply copying them, because we only pass on colors within function bodies.
+    colorsForDeclarations = m_functionColorsForDeclarations[imported];
+    declarationsForColors = m_functionDeclarationsForColors[imported];
+  }
+
+  QList<Declaration*> takeFreeColors;
+  
+  foreach (Declaration* dec, context->localDeclarations()) {
+    //Initially pick a color using the hash, so the chances are good that the same identifier gets the same color always.
+    uint colorNum = dec->identifier().hash() % numColors;
+
+    if( declarationsForColors[colorNum] ) {
+      takeFreeColors << dec; //Use one of the colors that stays free
+      continue;
+    }
+
+    colorsForDeclarations[dec] = colorNum;
+    declarationsForColors[colorNum] = dec;
+    
+    highlightDeclaration(dec, colors[colorNum]);
+  }
+
+  foreach( Declaration* dec, takeFreeColors ) {
+    uint colorNum = dec->identifier().hash() % numColors;
+    uint oldColorNum = colorNum;
+    while( declarationsForColors[colorNum] ) {
+      colorNum = (colorNum+1) % numColors;
+      if( colorNum == oldColorNum ) {
+        //Could not allocate a unique color, what now? Just pick the black color.
+        colorNum = numColors;
+        break;
+      }
+    }
+    colorsForDeclarations[dec] = colorNum;
+    declarationsForColors[colorNum] = dec;
+    
+    highlightDeclaration(dec, colors[colorNum]);
+  }
+
+  foreach (Definition* def, context->localDefinitions())
+    highlightDefinition(def);
+
+  foreach (Use* use, context->uses()) {
+    uint colorNum = numColors;
+    if( colorsForDeclarations.contains(use->declaration()) )
+      colorNum = colorsForDeclarations[use->declaration()];
+    highlightUse(use, colors[colorNum]);
+  }
 
   foreach (DUContext* child, context->childContexts())
-    highlightDUChain(child);
+    highlightDUChain(child,  colorsForDeclarations, declarationsForColors );
+
+  m_functionColorsForDeclarations[DUContextPointer(context)] = colorsForDeclarations;
+  m_functionDeclarationsForColors[DUContextPointer(context)] = declarationsForColors;
 }
 
 KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
@@ -273,13 +366,30 @@ void CppHighlighting::highlightDefinition(Definition * definition) const
 {
   if (Declaration* declaration = definition->declaration())
     if (SmartRange* range = definition->smartRange())
-      range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext));
+      range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext, 0));
+}
+
+void CppHighlighting::highlightDeclaration(Declaration * declaration, uint color) const
+{
+  if (SmartRange* range = declaration->smartRange())
+    range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext, color));
 }
 
 void CppHighlighting::highlightDeclaration(Declaration * declaration) const
 {
   if (SmartRange* range = declaration->smartRange())
-    range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext));
+    range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext, 0));
+}
+
+void CppHighlighting::highlightUse(Use * use, uint color) const
+{
+  if (SmartRange* range = use->smartRange()) {
+    Types type = ErrorVariableType;
+    if (use->declaration())
+      type = typeForDeclaration(use->declaration());
+
+    range->setAttribute(attributeForType(type, ReferenceContext, color));
+  }
 }
 
 void CppHighlighting::highlightUse(Use * use) const
@@ -289,6 +399,6 @@ void CppHighlighting::highlightUse(Use * use) const
     if (use->declaration())
       type = typeForDeclaration(use->declaration());
 
-    range->setAttribute(attributeForType(type, ReferenceContext));
+    range->setAttribute(attributeForType(type, ReferenceContext, 0));
   }
 }

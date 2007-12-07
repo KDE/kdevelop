@@ -25,6 +25,8 @@
 #include <QObject>
 #include <QHash>
 #include <QModelIndex>
+#include <vector>
+#include <duchain/duchainpointer.h>
 
 #include <ktexteditor/attribute.h>
 
@@ -37,6 +39,8 @@ namespace KDevelop
 class DUContext;
 class Declaration;
 }
+
+typedef std::vector<KDevelop::Declaration*> ColorMap;
 
 class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
 {
@@ -81,14 +85,18 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     void highlightDUChain(KDevelop::TopDUContext* context) const;
 
     virtual void highlightDefinition(KDevelop::Definition* definition) const;
+    virtual void highlightDeclaration(KDevelop::Declaration* declaration, uint color) const;
+    virtual void highlightUse(KDevelop::Use* use, uint color) const;
     virtual void highlightDeclaration(KDevelop::Declaration* declaration) const;
     virtual void highlightUse(KDevelop::Use* use) const;
 
-    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context) const;
+    //color should be zero when undecided
+    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, uint color ) const;
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
   private:
-    void highlightDUChain(KDevelop::DUContext* context) const;
+    void highlightDUChainSimple(KDevelop::DUContext* context) const;
+    void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap) const;
     void outputRange( KTextEditor::SmartRange * range ) const;
 
     Types typeForDeclaration(KDevelop::Declaration* dec) const;
@@ -98,6 +106,13 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_referenceAttributes;
 
     mutable QList<KTextEditor::Attribute::Ptr> m_depthAttributes;
+
+    //Here the colors of function context are stored until they are merged into the function body
+    mutable QMap<KDevelop::DUContextPointer, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
+    mutable QMap<KDevelop::DUContextPointer, ColorMap> m_functionDeclarationsForColors;
+
+  //Should be used to enable/disable the colorization of local variables and their uses
+  bool m_localColorization;
 };
 
 #endif
