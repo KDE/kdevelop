@@ -16,12 +16,12 @@ if(NOT Boost_FOUND)
     message(STATUS "Couldn't find Boost, will not try to find the libraries")
     set(Boost_LIBS_FOUND FALSE)
 else(NOT Boost_FOUND)
-    find_library(Boost_SERIALIZATION NAMES boost_serialization boost_serialization-mt
+    find_library(Boost_SERIALIZATION NAMES boost_serialization-mt boost_serialization
         PATHS
         ${Boost_LIBRARY_DIRS}
     )
     
-    find_library(Boost_THREAD NAMES boost_thread boost_thread-mt
+    find_library(Boost_THREAD NAMES boost_thread-mt boost_thread
         PATHS
         ${Boost_LIBRARY_DIRS}
     )
