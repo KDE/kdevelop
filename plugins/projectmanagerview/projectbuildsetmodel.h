@@ -27,7 +27,10 @@
 namespace KDevelop
 {
 class ProjectBaseItem;
+class ICore;
 }
+
+class KConfigGroup;
 
 class ProjectBuildSetModel : public QAbstractTableModel
 {
@@ -43,6 +46,8 @@ public:
     void removeProjectItem( KDevelop::ProjectBaseItem* );
     KDevelop::ProjectBaseItem* itemForIndex( const QModelIndex& );
     QList<KDevelop::ProjectBaseItem*> items();
+    void saveSettings( KConfigGroup& ) const;
+    void readSettings( KConfigGroup &, KDevelop::ICore* );
 private:
     QList<KDevelop::ProjectBaseItem*> m_items;
 };

@@ -43,6 +43,9 @@
      <property name="selectionMode" >
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
+     <property name="rootIsDecorated" >
+      <bool>false</bool>
+     </property>
      <property name="itemsExpandable" >
       <bool>false</bool>
      </property>

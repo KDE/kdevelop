@@ -25,11 +25,16 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kconfiggroup.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include "projectmodel.h"
 #include "iproject.h"
 
-QString getFolder( KDevelop::ProjectBaseItem* item )
+QString getRelativeFolder( KDevelop::ProjectBaseItem* item )
 {
     if( !item )
         return "";
@@ -41,8 +46,48 @@ QString getFolder( KDevelop::ProjectBaseItem* item )
         return item->project()->relativeUrl( item->folder()->url() ).path();
     }else
     {
-        return getFolder( dynamic_cast<KDevelop::ProjectBaseItem*>( item->parent() ) );
+        return getRelativeFolder( dynamic_cast<KDevelop::ProjectBaseItem*>( item->parent() ) );
     }
+}
+
+KDevelop::ProjectBaseItem* findItem( const QString& item, const QString& path, KDevelop::ProjectBaseItem* top )
+{
+    if( top && top->text() == item && getRelativeFolder( top ) == path )
+    {
+        return top;
+    }else if( top->hasChildren() )
+    {
+        for( int i = 0; i < top->rowCount(); i++ )
+        {
+            QStandardItem* sitem = top->child( i );
+            KDevelop::ProjectBaseItem* prjitem = dynamic_cast<KDevelop::ProjectBaseItem*>(sitem);
+            if( prjitem )
+            {
+                if( prjitem->file() 
+                    && prjitem->text() == item 
+                    && path == getRelativeFolder( prjitem->file() ) )
+                {
+                    return prjitem;
+                }else if( prjitem->folder() 
+                          && prjitem->text() == item
+                          && path == getRelativeFolder( prjitem->folder() ) )
+                {
+                    return prjitem;
+                }else if( prjitem->target() 
+                          && prjitem->text() == item
+                          && path == getRelativeFolder( prjitem->target() ) )
+                {
+                    return prjitem;
+                }else
+                {
+                    KDevelop::ProjectBaseItem* tmp = findItem( item, path, prjitem );
+                    if( tmp )
+                        return tmp;
+                }
+            }
+        }
+    }
+    return 0;
 }
 
 ProjectBuildSetModel::ProjectBuildSetModel( QObject* parent )
@@ -67,7 +112,7 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
             return m_items.at( idx.row() )->project()->name();
             break;
         case 2:
-            return getFolder( m_items.at( idx.row() ) );
+            return getRelativeFolder( m_items.at( idx.row() ) );
             break;
     }
     return QVariant();
@@ -136,4 +181,42 @@ QList<KDevelop::ProjectBaseItem*> ProjectBuildSetModel::items()
     return m_items ;
 }
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
+void ProjectBuildSetModel::saveSettings( KConfigGroup & base ) const
+{
+    for( int i = 0; i < rowCount(); i++ )
+    {
+        KConfigGroup grp = base.group(QString("Builditem%1").arg(i));
+        grp.writeEntry("Projectname", data(index(i, 1)).toString());
+        grp.writeEntry("Itemname", data(index(i, 0)).toString());
+        grp.writeEntry("Itempath", data(index(i, 2)).toString());
+    }
+    base.writeEntry("Number of Builditems", rowCount());
+}
+
+void ProjectBuildSetModel::readSettings( KConfigGroup & base, KDevelop::ICore* core )
+{
+    beginRemoveRows( QModelIndex(), 0, rowCount() );
+    m_items.clear();
+    endRemoveRows();
+    
+    int count = base.readEntry("Number of Builditems", 0);
+    for( int i = 0; i < count; i++ )
+    {
+        KConfigGroup grp = base.group(QString("Builditem%1").arg(i));
+        QString name = grp.readEntry("Projectname");
+        QString item = grp.readEntry("Itemname");
+        QString path = grp.readEntry("Itempath");
+        KDevelop::IProject* project = core->projectController()->findProjectByName( name );
+        if( project )
+        {
+            KDevelop::ProjectBaseItem* top = findItem( item, path, project->projectItem() );
+            
+            if( top )
+            {
+                beginInsertRows( QModelIndex(), rowCount(), rowCount() );
+                m_items << top;
+                endInsertRows();
+            }
+        }
+    }
+}

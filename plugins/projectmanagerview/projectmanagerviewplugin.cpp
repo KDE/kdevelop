@@ -356,6 +356,13 @@ void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
         buildSet()->addProjectItem( item );
     }
 }
+    
+void ProjectManagerViewPlugin::storeBuildset()
+{
+    KConfigGroup setgrp = KGlobal::config()->group("Buildset");
+    buildSet()->saveSettings( setgrp );
+    setgrp.sync();
+}
 
 
 #include "projectmanagerviewplugin.moc"

@@ -58,8 +58,11 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
     connect( m_ui->removeItemButton, SIGNAL( clicked() ),
              this, SLOT( removeItems() ) );
 
+    
     m_ui->itemView->setModel( m_view->plugin()->buildSet() );
 
+    KConfigGroup setgrp = KGlobal::config()->group("Buildset");
+    m_view->plugin()->buildSet()->readSettings( setgrp, m_view->plugin()->core() );
 }
 
 ProjectBuildSetWidget::~ProjectBuildSetWidget()
@@ -73,6 +76,7 @@ void ProjectBuildSetWidget::addItems()
     {
         m_view->plugin()->buildSet()->addProjectItem( item );
     }
+    m_view->plugin()->storeBuildset();
 }
 
 void ProjectBuildSetWidget::removeItems()
@@ -85,6 +89,6 @@ void ProjectBuildSetWidget::removeItems()
             m_view->plugin()->buildSet()->removeProjectItem( item );
         }
     }
+    m_view->plugin()->storeBuildset();
 }
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
