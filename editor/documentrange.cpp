@@ -17,6 +17,7 @@
 */
 
 #include "documentrange.h"
+#include "hashedstring.h"
 
 using namespace KTextEditor;
 
@@ -25,27 +26,27 @@ namespace KDevelop
 
 class DocumentRangePrivate{
 public:
-    DocumentRangePrivate( const KUrl& document ) : m_document(document)
+    DocumentRangePrivate( const HashedString& document ) : m_document(document)
         , m_parentRange(0)
     {}
-    KUrl m_document;
+    HashedString m_document;
     KTextEditor::Range* m_parentRange;
     QList<DocumentRange*> m_childRanges;
 };
 
 DocumentRange::DocumentRange()
-    : d( new DocumentRangePrivate( KUrl() ) )
+    : d( new DocumentRangePrivate( HashedString() ) )
 {
 }
 
-DocumentRange::DocumentRange(const KUrl& document, const KTextEditor::Cursor& start,
+DocumentRange::DocumentRange(const HashedString& document, const KTextEditor::Cursor& start,
         const KTextEditor::Cursor& end, KTextEditor::Range* parent)
     : Range(start, end), d( new DocumentRangePrivate( document ) )
 {
     setParentRange(parent);
 }
 
-DocumentRange::DocumentRange(const KUrl& document, const KTextEditor::Range& range, KTextEditor::Range* parent)
+DocumentRange::DocumentRange(const HashedString& document, const KTextEditor::Range& range, KTextEditor::Range* parent)
     : Range(range), d( new DocumentRangePrivate( document ) )
 {
     setParentRange(parent);
@@ -66,12 +67,12 @@ DocumentRange::~DocumentRange()
     delete d;
 }
 
-const KUrl& DocumentRange::document() const
+const HashedString& DocumentRange::document() const
 {
     return d->m_document;
 }
 
-void DocumentRange::setDocument(const KUrl& document)
+void DocumentRange::setDocument(const HashedString& document)
 {
     d->m_document = document;
 }

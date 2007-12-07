@@ -22,6 +22,7 @@
 #include <ktexteditor/document.h>
 
 #include "documentrangeobject.h"
+#include <hashedstring.h>
 
 using namespace KTextEditor;
 
@@ -31,20 +32,20 @@ namespace KDevelop
 class DocumentCursorPrivate
 {
 public:
-    DocumentCursorPrivate( const KUrl& document = KUrl() ) : m_document(document)
+    DocumentCursorPrivate( const HashedString& document = HashedString() ) : m_document(document)
     {}
-    KUrl m_document;
+    HashedString m_document;
 };
 
-DocumentCursor::DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor)
+DocumentCursor::DocumentCursor(const HashedString& document, const KTextEditor::Cursor& cursor)
     : Cursor(cursor)
     ,d( new DocumentCursorPrivate( document ) )
 {
 }
 
-DocumentCursor::DocumentCursor(KTextEditor::Range* range, Position position )
+DocumentCursor::DocumentCursor(const HashedString& document, KTextEditor::Range* range, Position position )
     : Cursor(position == Start ? range->start() : range->end())
-    ,d( new DocumentCursorPrivate( DocumentRangeObject::url(range) ) )
+    ,d( new DocumentCursorPrivate( document ) )
 {
 }
 
@@ -52,8 +53,8 @@ DocumentCursor::DocumentCursor(KTextEditor::Cursor* cursor)
     : Cursor(*cursor)
     ,d( new DocumentCursorPrivate )
 {
-    if (cursor->isSmartCursor())
-        d->m_document = cursor->toSmartCursor()->document()->url();
+  if (cursor->isSmartCursor()) ///@todo Possible high memory-usage here, because the string is re-allocated for each conversion
+        d->m_document = HashedString( cursor->toSmartCursor()->document()->url().prettyUrl() );
     else
         d->m_document = static_cast<DocumentCursor*>(cursor)->document();
 }
@@ -65,7 +66,7 @@ DocumentCursor::DocumentCursor(const DocumentCursor& copy)
 }
 
 DocumentCursor::DocumentCursor()
-    : d( new DocumentCursorPrivate( KUrl() ) )
+    : d( new DocumentCursorPrivate( HashedString() ) )
 {
 }
 
@@ -74,12 +75,12 @@ DocumentCursor::~DocumentCursor()
     delete d;
 }
 
-const KUrl& DocumentCursor::document() const
+const HashedString& DocumentCursor::document() const
 {
     return d->m_document;
 }
 
-void DocumentCursor::setDocument(const KUrl& document)
+void DocumentCursor::setDocument(const HashedString& document)
 {
     d->m_document = document;
 }

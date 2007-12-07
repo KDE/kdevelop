@@ -73,7 +73,7 @@ public:
 
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
-  Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
+  Declaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   virtual ~Declaration();

@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberD
 {
 public:
   ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs);
-  ClassFunctionDeclaration(KTextEditor::Range* range, DUContext* context);
+  ClassFunctionDeclaration(const HashedString& url, KTextEditor::Range* range, DUContext* context);
   ~ClassFunctionDeclaration();
 
   enum QtFunctionType

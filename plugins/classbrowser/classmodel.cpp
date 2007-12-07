@@ -105,26 +105,28 @@ void ClassModel::setFilterByProject(bool filterByProject)
 bool ClassModel::filterObject(DUChainBase* object) const
 {
   ENSURE_CHAIN_READ_LOCKED
+  
+  KUrl url(object->url().str());
 
   if (m_filterDocument)
-    return m_filterDocument && object->url() != m_filterDocument->url();
+    return m_filterDocument && !(url == m_filterDocument->url());
 
   if (m_filterProject) {
-    if (m_inProject.contains(object->url()))
-      return m_inProject[object->url()];
+    if (m_inProject.contains(url))
+      return m_inProject[url];
 
-    bool ret = !plugin()->core()->projectController()->findProjectForUrl(object->url());
+    bool ret = !plugin()->core()->projectController()->findProjectForUrl(url);
 
     if (ret)
       foreach (IProject* project,  plugin()->core()->projectController()->projects()) {
-        if (project->folder().isParentOf(object->url())) {
+        if (project->folder().isParentOf(url)) {
           ret = false;
           break;
         }
       }
 
     //kDebug() << "Is file" << object->url().prettyUrl() << "in a project?" << !ret;
-    m_inProject.insert(object->url(), ret);
+    m_inProject.insert(url, ret);
     return ret;
   }
 

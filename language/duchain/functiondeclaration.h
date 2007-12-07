@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public Declaration, publ
 {
 public:
   FunctionDeclaration(const FunctionDeclaration& rhs);
-  FunctionDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);
+  FunctionDeclaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~FunctionDeclaration();
 
   virtual void setAbstractType(AbstractType::Ptr type);

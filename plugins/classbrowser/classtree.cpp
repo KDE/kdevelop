@@ -220,7 +220,7 @@ void ClassTree::itemActivated(const QModelIndex& index)
 
   DUChainBasePointer* base = model()->objectForIndex(index);
   if (base && base->data()) {
-    KUrl url = (*base)->url();
+    KUrl url = KUrl((*base)->url().str());
     KTextEditor::Range range = (*base)->textRange();
 
     readLock.unlock();
@@ -249,7 +249,7 @@ void ClassTree::openDeclaration()
     Declaration* dec = model()->declarationForObject(base);
 
     if (dec) {
-      KUrl url = dec->url();
+      KUrl url( dec->url().str() );
       KTextEditor::Range range = dec->textRange();
 
       readLock.unlock();
@@ -276,7 +276,7 @@ void ClassTree::openDefinition()
     Definition* def = model()->definitionForObject(base);
 
     if (def) {
-      KUrl url = def->url();
+      KUrl url(def->url().str());
       KTextEditor::Range range = def->textRange();
 
       readLock.unlock();

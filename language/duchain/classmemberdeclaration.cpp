@@ -48,8 +48,8 @@ Declaration* ClassMemberDeclaration::clone() const {
   return new ClassMemberDeclaration(*this);
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(KTextEditor::Range * range, DUContext* context)
-  : Declaration(range, ClassScope, context)
+ClassMemberDeclaration::ClassMemberDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
+  : Declaration(url, range, ClassScope, context)
   , d(new ClassMemberDeclarationPrivate)
 {
   d->m_accessPolicy = Declaration::Public;

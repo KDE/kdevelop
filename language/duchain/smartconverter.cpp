@@ -22,6 +22,7 @@
 #include <ktexteditor/smartrange.h>
 
 #include <editorintegrator.h>
+#include <hashedstring.h>
 #include "icodehighlighting.h"
 
 #include "ducontext.h"
@@ -43,24 +44,24 @@ public:
   void convertDUChainInternal(DUContext* context, bool first = false) const
   {
     if (!first)
-      context->setTextRange(m_editor->createRange(context->textRange()));
+      context->setTextRange(context->url(), m_editor->createRange(context->textRange()));
 
     foreach (Declaration* dec, context->localDeclarations()) {
-      dec->setTextRange(m_editor->createRange(dec->textRange()));
+      dec->setTextRange(dec->url(), m_editor->createRange(dec->textRange()));
       if( m_hl )
         m_hl->highlightDeclaration(dec);
       m_editor->exitCurrentRange();
     }
 
     foreach (Definition* def, context->localDefinitions()) {
-      def->setTextRange(m_editor->createRange(def->textRange()));
+      def->setTextRange(def->url(), m_editor->createRange(def->textRange()));
       if( m_hl )
         m_hl->highlightDefinition(def);
       m_editor->exitCurrentRange();
     }
 
     foreach (Use* use, context->uses()) {
-      use->setTextRange(m_editor->createRange(use->textRange()));
+      use->setTextRange(use->url(), m_editor->createRange(use->textRange()));
       if( m_hl )
         m_hl->highlightUse(use);
       m_editor->exitCurrentRange();
@@ -91,10 +92,10 @@ void SmartConverter::convertDUChain(DUContext* context) const
 {
   DUChainWriteLocker lock(DUChain::lock());
 
-  d->m_editor->setCurrentUrl(context->url());
+  d->m_editor->setCurrentUrl( KUrl(context->url().str()) );
 
   if (d->m_editor->smart() && !context->smartRange()) {
-    context->setTextRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
+    context->setTextRange(context->url(), d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
 
     d->convertDUChainInternal(context, true);
   }
@@ -105,10 +106,10 @@ void SmartConverter::unconvertDUChain(DUContext* context) const
   DUChainWriteLocker lock(DUChain::lock());
 
   Q_ASSERT(!d->m_hl);
-  d->m_editor->setCurrentUrl(context->url());
+  d->m_editor->setCurrentUrl( KUrl(context->url().str()) );
 
   if (d->m_editor->smart() && !context->smartRange()) {
-    context->setTextRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
+    context->setTextRange(context->url(), d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
 
     d->convertDUChainInternal(context, true);
   }

@@ -9,6 +9,7 @@ set(kdevplatformeditor_LIB_SRCS
     documentcursorobject.cpp
     editorintegrator.cpp
     editorintegratorstatic.cpp
+    hashedstring.cpp
 )
 
 
@@ -26,5 +27,6 @@ install(FILES
     documentcursorobject.h
     editorintegrator.h
     editorexport.h
+    hashedstring.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/editor
  )

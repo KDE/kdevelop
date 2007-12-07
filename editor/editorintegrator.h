@@ -37,6 +37,7 @@ namespace KDevelop
 {
   class DocumentRange;
   class EditorIntegratorStatic;
+  class HashedString;
 
 /**
  * Pairs together a date and a revision-number, for simpler moving around and comparison. Plus some convenience-functions.
@@ -106,14 +107,17 @@ public:
    * Returns the text document for \a url, if one exists.
    */
   static KTextEditor::Document* documentForUrl(const KUrl& url);
+  
+  static KTextEditor::Document* documentForUrl(const HashedString& url);
 
   /**
    * Determine if a document has been loaded yet
    */
   static bool documentLoaded(KTextEditor::Document* document);
 
-   KUrl currentUrl() const;
+   HashedString currentUrl() const;
    void setCurrentUrl(const KUrl& currentUrl);
+   void setCurrentUrl(const HashedString& currentUrl);
 
   /**
    * Return the current text editor document, based on the current URL.

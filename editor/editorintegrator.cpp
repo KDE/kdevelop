@@ -33,6 +33,7 @@
 
 #include "documentrange.h"
 #include "documentrangeobject.h"
+#include "hashedstring.h"
 
 using namespace KTextEditor;
 
@@ -42,7 +43,7 @@ namespace KDevelop
 class EditorIntegratorPrivate
 {
 public:
-  KUrl m_currentUrl;
+  HashedString m_currentUrl;
   KTextEditor::Document* m_currentDocument;
   KTextEditor::SmartInterface* m_smart;
 
@@ -76,6 +77,18 @@ void EditorIntegrator::addDocument( KTextEditor::Document * document )
 
 
 Document * EditorIntegrator::documentForUrl(const KUrl& url)
+{
+  QMutexLocker lock(data()->mutex);
+
+  HashedString s(url.prettyUrl());
+  
+  if (data()->documents.contains(s))
+    return data()->documents[s];
+
+  return 0;
+}
+
+Document * EditorIntegrator::documentForUrl(const HashedString& url)
 {
   QMutexLocker lock(data()->mutex);
 
@@ -276,12 +289,19 @@ Range* EditorIntegrator::currentRange( ) const
     return 0;
 }
 
-KUrl EditorIntegrator::currentUrl() const
+HashedString EditorIntegrator::currentUrl() const
 {
   return d->m_currentUrl;
 }
 
 void EditorIntegrator::setCurrentUrl(const KUrl& url)
+{
+  d->m_currentUrl = url.prettyUrl();
+  d->m_currentDocument = documentForUrl(url);
+  d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
+}
+
+void EditorIntegrator::setCurrentUrl(const HashedString& url)
 {
   d->m_currentUrl = url;
   d->m_currentDocument = documentForUrl(url);
@@ -292,7 +312,7 @@ void EditorIntegrator::releaseTopRange(KTextEditor::Range * range)
 {
   QMutexLocker lock(data()->mutex);
 
-  KUrl url = DocumentRangeObject::url(range);
+  HashedString url = DocumentRangeObject::url(range);
 
   if (range->isSmartRange())
     range->toSmartRange()->removeWatcher(data());

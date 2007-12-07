@@ -86,9 +86,9 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     KDevelop::Problem* problem = model()->problemForIndex(index);
 
     if (!index.internalPointer())
-        m_plugin->core()->documentController()->openDocument(problem->finalLocation().document(), problem->finalLocation().start());
+        m_plugin->core()->documentController()->openDocument(KUrl(problem->finalLocation().document().str()), problem->finalLocation().start());
     else
-        m_plugin->core()->documentController()->openDocument(problem->locationStack().at(index.row()).document(), problem->locationStack().at(index.row()));
+        m_plugin->core()->documentController()->openDocument(KUrl(problem->locationStack().at(index.row()).document().str()), problem->locationStack().at(index.row()));
 }
 
 ProblemModel * ProblemWidget::model() const

@@ -29,6 +29,7 @@ namespace KTextEditor { class SmartCursor; }
 
 namespace KDevelop
 {
+class HashedString;
 
 /**
  * Extends KTextEditor::Range with information about the URL to which the range
@@ -39,7 +40,7 @@ namespace KDevelop
 class KDEVPLATFORMEDITOR_EXPORT DocumentCursor : public KTextEditor::Cursor
 {
 public:
-    explicit DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
+    explicit DocumentCursor(const HashedString& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
     ~DocumentCursor();
 
     enum Position {
@@ -49,7 +50,7 @@ public:
 
     /// Constructor for information extraction only, does not take ownership of the cursor.
     /// \a range must be either a DocumentRange or a KTextEditor::SmartRange.
-    DocumentCursor(KTextEditor::Range* range, Position position);
+    DocumentCursor(const HashedString& document, KTextEditor::Range* range, Position position);
 
     /// Constructor for information extraction only, does not take ownership of the cursor.
     /// \a cursor must be either a DocumentCursor or a KTextEditor::SmartCursor.
@@ -59,10 +60,10 @@ public:
     DocumentCursor();
 
     /// Returns the associated document.
-    const KUrl& document() const;
+    const HashedString& document() const;
 
-    /// Sets the associated document.
-    void setDocument(const KUrl& document);
+    /// Sets the associated document. Should be formatted from an url using prettyUrl()
+    void setDocument(const HashedString& document);
 
     DocumentCursor& operator=(const DocumentCursor& rhs);
 

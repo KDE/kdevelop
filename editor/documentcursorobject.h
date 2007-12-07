@@ -26,6 +26,7 @@
 
 namespace KDevelop
 {
+class HashedString;
 
 /**
  * Base class for any object which has an associated range of text.
@@ -46,8 +47,8 @@ public:
     KTextEditor::Cursor* textCursorPtr() const;
     KTextEditor::SmartCursor* smartCursor() const;
 
-    KUrl url() const;
-    static KUrl url(const KTextEditor::Cursor* range);
+    HashedString url() const;
+    static HashedString url(const KTextEditor::Cursor* range);
 
     virtual void deleted(KTextEditor::SmartCursor* cursor);
 

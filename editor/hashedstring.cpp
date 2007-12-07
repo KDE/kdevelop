@@ -46,6 +46,10 @@ bool HashedString::operator == ( const HashedString& rhs ) const {
   return m_str == rhs.m_str;
 }
 
+bool HashedString::operator != ( const HashedString& rhs ) const {
+  return ! operator==(rhs);
+}
+
 ///Does not compare alphabetically, uses the hash-key for ordering.
 bool HashedString::operator < ( const HashedString& rhs ) const {
   if ( m_hash < rhs.m_hash )

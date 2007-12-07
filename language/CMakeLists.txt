@@ -32,7 +32,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/abstractfunctiondeclaration.cpp
     duchain/functiondeclaration.cpp
     duchain/stringhelpers.cpp
-    duchain/hashedstring.cpp
     duchain/namespacealiasdeclaration.cpp
     duchain/dumpdotgraph.cpp
     duchain/contextowner.cpp
@@ -95,7 +94,6 @@ install(FILES
     duchain/abstractfunctiondeclaration.h
     duchain/functiondeclaration.h
     duchain/stringhelpers.h
-    duchain/hashedstring.h
     duchain/namespacealiasdeclaration.h
     duchain/dumpdotgraph.h
     duchain/contextowner.h

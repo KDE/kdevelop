@@ -27,6 +27,7 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
+#include "hashedstring.h"
 #include "documentcursor.h"
 
 namespace KTextEditor
@@ -66,8 +67,8 @@ public Q_SLOTS:
 public:
   QMutex* mutex;
 
-  QHash<KUrl, KTextEditor::Document*> documents;
-  QHash<KUrl, QVector<KTextEditor::Range*> > topRanges;
+  QHash<HashedString, KTextEditor::Document*> documents;
+  QHash<HashedString, QVector<KTextEditor::Range*> > topRanges;
 
   /* FIXME port to this?
 

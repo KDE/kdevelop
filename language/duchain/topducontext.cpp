@@ -26,6 +26,7 @@
 #include "duchainpointer.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
+#include <hashedstring.h>
 
 using namespace KTextEditor;
 
@@ -119,8 +120,8 @@ DUContext::ImportTrace TopDUContext::importTrace(const TopDUContext* target) con
   }
 
 
-TopDUContext::TopDUContext(KTextEditor::Range* range, ParsingEnvironmentFile* file)
-  : DUContext(range)
+TopDUContext::TopDUContext(const HashedString& url, KTextEditor::Range* range, ParsingEnvironmentFile* file)
+  : DUContext(url, range)
   , d(new TopDUContextPrivate(this))
 {
   d->m_hasUses = false;
@@ -132,7 +133,7 @@ IdentifiedFile TopDUContext::identity() const {
   if( d->m_file )
     return d->m_file->identity();
   else
-    return IdentifiedFile(url());
+    return IdentifiedFile(KUrl( url().str() ));
 }
 
 KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {

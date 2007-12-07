@@ -27,6 +27,7 @@
 
 namespace KDevelop
 {
+class HashedString;
 
 /**
  * Extends KTextEditor::Range with information about the URL to which the range
@@ -38,16 +39,16 @@ class KDEVPLATFORMEDITOR_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
     DocumentRange();
-    DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
-    explicit DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
+    DocumentRange(const HashedString& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
+    explicit DocumentRange(const HashedString& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
     DocumentRange(const DocumentRange& copy);
     virtual ~DocumentRange();
 
     /// Returns the associated document.
-    const KUrl& document() const;
+    const HashedString& document() const;
 
     /// Sets the associated document.
-    void setDocument(const KUrl& document);
+    void setDocument(const HashedString& document);
 
     KTextEditor::Range* parentRange() const;
     void setParentRange(KTextEditor::Range* parent);

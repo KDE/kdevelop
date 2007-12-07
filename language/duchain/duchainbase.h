@@ -23,7 +23,7 @@
 
 #include <documentrangeobject.h>
 #include "../languageexport.h"
-#include <ksharedptr.h>
+#include <hashedstring.h>
 
 namespace KDevelop
 {
@@ -39,7 +39,7 @@ class DUChainPointerData;
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
 {
 public:
-  DUChainBase(KTextEditor::Range* range);
+  DUChainBase(const HashedString& url, KTextEditor::Range* range);
   virtual ~DUChainBase();
 
   virtual TopDUContext* topContext() const;

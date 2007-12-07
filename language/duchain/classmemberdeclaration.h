@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
 {
 public:
   ClassMemberDeclaration(const ClassMemberDeclaration& rhs);
-  ClassMemberDeclaration(KTextEditor::Range* range, DUContext* context);
+  ClassMemberDeclaration(const HashedString& url, KTextEditor::Range* range, DUContext* context);
   ~ClassMemberDeclaration();
 
   AccessPolicy accessPolicy() const;

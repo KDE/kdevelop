@@ -32,6 +32,8 @@
 #include "backgroundparser/backgroundparser.h"
 #include "backgroundparser/parsejob.h"
 
+#include <hashedstring.h>
+
 #include "duchainviewplugin.h"
 #include "dumpdotgraph.h"
 #include "topducontext.h"
@@ -49,7 +51,7 @@ using namespace KTextEditor;
 using namespace KDevelop;
 
 ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
-  : DUChainBase(_object->textRangePtr())
+: DUChainBase(HashedString(), _object->textRangePtr())
   , parent(_parent)
   , object(_object)
 {
@@ -101,7 +103,7 @@ void DUChainModel::setTopContext(TopDUContextPointer context)
   DUChainReadLocker readLock(DUChain::lock());
 
   if( context )
-    m_document = context->url();
+    m_document = KUrl(context->url().str());
   else
     m_document = KUrl();
 

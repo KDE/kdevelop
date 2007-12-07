@@ -43,7 +43,7 @@ EditorIntegratorStatic::EditorIntegratorStatic()
 
 EditorIntegratorStatic::~EditorIntegratorStatic()
 {
-  QHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
+  QHashIterator<HashedString, QVector<KTextEditor::Range*> > it = topRanges;
   while (it.hasNext()) {
     it.next();
     foreach (KTextEditor::Range* range, it.value())
@@ -65,7 +65,7 @@ void EditorIntegratorStatic::documentLoaded()
   {
     QMutexLocker lock(mutex);
 
-    documents.insert(doc->url(), doc);
+    documents.insert(HashedString(doc->url().prettyUrl()), doc);
   }
 }
 
@@ -73,17 +73,17 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
 {
   QMutexLocker lock(mutex);
 
-  QMutableHashIterator<KUrl, Document*>  it = documents;
+  QMutableHashIterator<HashedString, Document*>  it = documents;
   while (it.hasNext()) {
     it.next();
     if (it.value() == document) {
       if (topRanges.contains(it.key())) {
         kDebug(9506) << "Document URL change - found corresponding document";
-        topRanges.insert(document->url(), topRanges.take(it.key()));
+        topRanges.insert(document->url().prettyUrl(), topRanges.take(it.key()));
       }
 
       it.remove();
-      documents.insert(document->url(), document);
+      documents.insert(document->url().prettyUrl(), document);
       // TODO trigger reparsing??
       return;
     }
@@ -95,13 +95,13 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
   QMutexLocker lock(mutex);
 
-  documents.remove(document->url());
+  documents.remove(document->url().prettyUrl());
 
-  foreach (KTextEditor::Range* range, topRanges[document->url()])
+  foreach (KTextEditor::Range* range, topRanges[document->url().prettyUrl()])
     if (range && range->isSmartRange())
       range->toSmartRange()->removeWatcher(this);
 
-  topRanges.remove(document->url());
+  topRanges.remove(document->url().prettyUrl());
 
   lock.unlock();
   
@@ -112,7 +112,7 @@ void EditorIntegratorStatic::rangeDeleted(KTextEditor::SmartRange * range)
 {
   QMutexLocker lock(mutex);
 
-  QMutableHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
+  QMutableHashIterator<HashedString, QVector<KTextEditor::Range*> > it = topRanges;
   while (it.hasNext()) {
     it.next();
     //kDebug(9506) << "Searching for" << range << ", potentials" << it.value().toList();

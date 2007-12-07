@@ -34,6 +34,7 @@
 #include "contextowner.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
+#include <hashedstring.h>
 
 ///It is fine to use one global static mutex here
 
@@ -196,8 +197,8 @@ int DUContext::depth() const
   { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
 }
 
-DUContext::DUContext(KTextEditor::Range* range, DUContext* parent, bool anonymous)
-  : DUChainBase(range)
+DUContext::DUContext(const HashedString& url, KTextEditor::Range* range, DUContext* parent, bool anonymous)
+  : DUChainBase(url, range)
   , d(new DUContextPrivate(this))
 {
   d->m_contextType = Other;
@@ -546,7 +547,7 @@ void DUContext::addImportedParentContext( DUContext * context, const KTextEditor
   ENSURE_CAN_WRITE
 
   if( context->imports(this) ) {
-    kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url() << ") into " << this << " (" << url() << ")";
+    kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url().str() << ") into " << this << " (" << url().str() << ")";
     return;
   }
 

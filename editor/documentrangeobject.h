@@ -29,8 +29,10 @@
 #include "documentcursor.h"
 #include "documentrange.h"
 
+
 namespace KDevelop
 {
+class HashedString;
 
 /**
  * Base class for any object which has an associated range of text.
@@ -40,17 +42,18 @@ namespace KDevelop
 class KDEVPLATFORMEDITOR_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
-    DocumentRangeObject(KTextEditor::Range* range);
+    DocumentRangeObject(const HashedString& document, KTextEditor::Range* range);
     virtual ~DocumentRangeObject();
 
     enum RangeOwning{ Own, DontOwn };
     Q_DECLARE_FLAGS( RangeOwnings, RangeOwning )
 
     /**
+     * @param document Should be a string containing the document name, formatted from an url using prettyUrl(). This must be given explicitly, so it can be implicitly shared.
      * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
      * deleted when the object is deleted.
      */
-    void setTextRange(KTextEditor::Range* range, RangeOwning ownsRange = Own);
+    void setTextRange(const HashedString& document, KTextEditor::Range* range, RangeOwning ownsRange = Own);
 
     void setRangeOwning(RangeOwning ownsRange);
 
@@ -62,10 +65,13 @@ public:
     ///If this document's range is a SmartRange, returns it. Else 0.
     KTextEditor::SmartRange* smartRange() const;
 
+    static HashedString url(const KTextEditor::Range* cursor);
+
     RangeOwning ownsRange() const;
 
-    KUrl url() const;
-    static KUrl url(const KTextEditor::Range* range);
+    ///Returns the url, for efficiency as a HashedString. This allows fast comparison. It is was from a real url using prettyUrl() at some point.
+    HashedString url() const;
+  //    static KUrl url(const KTextEditor::Range* range);
 
     bool contains(const DocumentCursor& cursor) const;
 

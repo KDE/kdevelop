@@ -23,6 +23,8 @@
 
 #include <klocale.h>
 
+#include <hashedstring.h>
+
 #include "problemreporterplugin.h"
 
 using namespace KDevelop;
@@ -80,7 +82,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return p->description();
                     case File:
-                        return p->finalLocation().document().prettyUrl();
+                        return p->finalLocation().document().str();
                     case Line:
                         return QString::number(p->finalLocation().start().line() + 1);
                     case Column:
@@ -102,7 +104,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return i18n("In file included from:");
                     case File:
-                        return p->locationStack().at(index.row()).document().prettyUrl();
+                        return p->locationStack().at(index.row()).document().str();
                     case Line:
                         return QString::number(p->locationStack().at(index.row()).line() + 1);
                     case Column:

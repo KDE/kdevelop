@@ -31,8 +31,8 @@ struct NamespaceAliasDeclarationPrivate
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs) : Declaration(rhs), d(new NamespaceAliasDeclarationPrivate(*rhs.d)) {
 }
 
-NamespaceAliasDeclaration::NamespaceAliasDeclaration(KTextEditor::Range * range, Scope scope, DUContext* context)
-  : Declaration(range, scope, context), d(new NamespaceAliasDeclarationPrivate)
+NamespaceAliasDeclaration::NamespaceAliasDeclaration(const HashedString& url, KTextEditor::Range * range, Scope scope, DUContext* context)
+  : Declaration(url, range, scope, context), d(new NamespaceAliasDeclarationPrivate)
 {
 }
 

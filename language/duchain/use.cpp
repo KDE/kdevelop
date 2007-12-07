@@ -49,8 +49,8 @@ void UsePrivate::setDeclaration(Declaration* declaration)
 }
 
 
-Use::Use(KTextEditor::Range* range, DUContext* context)
-  : DUChainBase(range)
+Use::Use(const HashedString& url, KTextEditor::Range* range, DUContext* context)
+  : DUChainBase(url, range)
   , d(new UsePrivate(this))
 {
   d->m_context = 0;

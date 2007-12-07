@@ -26,8 +26,8 @@ namespace KDevelop
 {
 
 
-DUChainBase::DUChainBase(KTextEditor::Range* range)
-  : KDevelop::DocumentRangeObject(range), m_ptr( 0L )
+DUChainBase::DUChainBase(const HashedString& url, KTextEditor::Range* range)
+  : KDevelop::DocumentRangeObject(url, range), m_ptr( 0L )
 {
 }
 

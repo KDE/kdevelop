@@ -20,6 +20,7 @@
 
 #include <ktexteditor/smartcursor.h>
 #include <ktexteditor/document.h>
+#include "hashedstring.h"
 
 using namespace KTextEditor;
 
@@ -31,7 +32,7 @@ class DocumentCursorObjectPrivate
 public:
     DocumentCursorObjectPrivate() : m_cursor(0) {}
     KTextEditor::Cursor* m_cursor;
-    KUrl m_url;
+    HashedString m_url;
 };
 
 DocumentCursorObject::DocumentCursorObject(KTextEditor::Cursor* cursor)
@@ -89,15 +90,15 @@ const DocumentCursor& DocumentCursorObject::textDocCursor() const
     return *static_cast<DocumentCursor*>(d->m_cursor);
 }
 
-KUrl DocumentCursorObject::url() const
+HashedString DocumentCursorObject::url() const
 {
     return url(d->m_cursor);
 }
 
-KUrl DocumentCursorObject::url( const KTextEditor::Cursor * cursor )
+HashedString DocumentCursorObject::url( const KTextEditor::Cursor * cursor )
 {
-    if (cursor->isSmartCursor())
-        return static_cast<const SmartCursor*>(cursor)->document()->url();
+    if (cursor->isSmartCursor()) ///@todo this conversion is bad
+        return static_cast<const SmartCursor*>(cursor)->document()->url().prettyUrl();
     else
         return static_cast<const DocumentCursor*>(cursor)->document();
 }

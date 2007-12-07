@@ -42,8 +42,8 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   ClassMemberDeclaration::setAbstractType(type);
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, DUContext* context)
-  : ClassMemberDeclaration(range, context), AbstractFunctionDeclaration()
+ClassFunctionDeclaration::ClassFunctionDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
+  : ClassMemberDeclaration(url, range, context), AbstractFunctionDeclaration()
   , d(new ClassFunctionDeclarationPrivate)
 {
   d->m_functionType = Normal;

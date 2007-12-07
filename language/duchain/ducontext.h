@@ -73,7 +73,7 @@ public:
    * and providing all permutations would be overkill.
    * @param anonymous Whether the context should be added as an anonymous context to the parent. That way the context can never be found through any of the parent's member-functions.
    */
-  explicit DUContext(KTextEditor::Range* range, DUContext* parent = 0, bool anonymous = false);
+  explicit DUContext(const HashedString& url, KTextEditor::Range* range, DUContext* parent = 0, bool anonymous = false);
 
   /**
    * Destructor. Will delete all child contexts which are defined within

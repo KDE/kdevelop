@@ -74,7 +74,7 @@ bool DUChainItemData::execute( QString& /*filterText*/ ) {
   if(!m_item.m_item)
     return false;
   
-  ICore::self()->documentController()->openDocument( m_item.m_item->url(), m_item.m_item->textRange().start() );
+  ICore::self()->documentController()->openDocument( KUrl(m_item.m_item->url().str()), m_item.m_item->textRange().start() );
   return true;
 }
 

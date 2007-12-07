@@ -21,6 +21,8 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
+#include <hashedstring.h>
+
 #include "topducontext.h"
 #include "use.h"
 #include "definition.h"
@@ -80,8 +82,8 @@ bool Declaration::inDUChain() const {
   return top && top->inDuChain();
 }
 
-Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* context )
-  : DUChainBase(range)
+Declaration::Declaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context )
+  : DUChainBase(url, range)
   , ContextOwner(this)
   , d(new DeclarationPrivate)
 {
@@ -94,8 +96,8 @@ Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* cont
     setContext(context);
 }
 
-Declaration::Declaration(const Declaration& rhs) : DUChainBase(0), ContextOwner(this), d(new DeclarationPrivate) {
-  setTextRange(rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+Declaration::Declaration(const Declaration& rhs) : DUChainBase(HashedString(), 0), ContextOwner(this), d(new DeclarationPrivate) {
+  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
   d->m_identifier = rhs.d->m_identifier;
   d->m_type = rhs.d->m_type;
   d->m_scope = rhs.d->m_scope;

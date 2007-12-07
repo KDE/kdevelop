@@ -37,7 +37,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Definition : public DUChainBase, public Contex
 {
 friend class Declaration;
 public:
-  Definition(KTextEditor::Range* range, DUContext* context);
+  Definition(const HashedString& url, KTextEditor::Range* range, DUContext* context);
   virtual ~Definition();
 
   virtual TopDUContext* topContext() const;

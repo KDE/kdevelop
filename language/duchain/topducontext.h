@@ -43,7 +43,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
-  explicit TopDUContext(KTextEditor::Range* range, ParsingEnvironmentFile* file = 0);
+  explicit TopDUContext(const HashedString& url, KTextEditor::Range* range, ParsingEnvironmentFile* file = 0);
   virtual ~TopDUContext();
 
   TopDUContext* topContext() const;

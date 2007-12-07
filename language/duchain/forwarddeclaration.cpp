@@ -44,8 +44,8 @@ ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declarat
   d->m_resolvedDeclaration = 0;
 }
 
-ForwardDeclaration::ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context )
-  : Declaration(range, scope, context)
+ForwardDeclaration::ForwardDeclaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context )
+  : Declaration(url, range, scope, context)
   , d(new ForwardDeclarationPrivate)
 {
   d->m_resolvedDeclaration = 0;
