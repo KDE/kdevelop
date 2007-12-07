@@ -2,6 +2,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+set(kdevplatformvcs_UIS
+    widgets/vcsannotationwidget.ui
+)
+
 set(kdevplatformvcs_LIB_SRCS
     vcsjob.cpp
     vcsrevision.cpp
@@ -12,12 +16,13 @@ set(kdevplatformvcs_LIB_SRCS
     vcsmapping.cpp
     vcsstatusinfo.cpp
     widgets/vcsimportmetadatawidget.cpp
+    widgets/vcsannotationwidget.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp
 )
 
-
+kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
 kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
 target_link_libraries(kdevplatformvcs ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY}  )
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
@@ -38,6 +43,7 @@ install(FILES
 
 install(FILES
     widgets/vcsimportmetadatawidget.h
+    widgets/vcsannotationwidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets
 )
 

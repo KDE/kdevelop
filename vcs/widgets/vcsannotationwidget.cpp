@@ -19,51 +19,70 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "svnannotationwidget.h"
+#include "vcsannotationwidget.h"
 
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
 
-#include <vcsjob.h>
+#include "vcs/vcsjob.h"
 
 #include "vcs/models/vcsannotationmodel.h"
+#include "ui_vcsannotationwidget.h"
 
-SvnAnnotationWidget::SvnAnnotationWidget( const KUrl& url, KDevelop::VcsJob* job, QWidget* parent )
-    : QWidget( parent ), m_job( job )
+namespace KDevelop
 {
-    setupUi( this );
-    m_model = new VcsAnnotationModel( url );
-    annotations->setModel( m_model );
-    QHeaderView* header = annotations->horizontalHeader();
+class VcsAnnotationWidgetPrivate
+{
+public:
+    VcsAnnotationModel* m_model;
+    KDevelop::VcsJob* m_job;
+    Ui::VcsAnnotationWidget* m_ui;
+    void addAnnotation(KDevelop::VcsJob* job)
+    {
+        if( job == m_job )
+        {
+            QList<QVariant> result = job->fetchResults().toList();
+            QList<KDevelop::VcsAnnotationLine> lines;
+            foreach( QVariant v, result )
+            {
+                if( v.canConvert<KDevelop::VcsAnnotationLine>() )
+                {
+                    lines << v.value<KDevelop::VcsAnnotationLine>();
+                }
+            }
+            m_model->addLines( lines );
+        }
+
+    }
+};
+
+VcsAnnotationWidget::VcsAnnotationWidget( const KUrl& url, KDevelop::VcsJob* job, QWidget* parent )
+    : QWidget( parent ), d( new VcsAnnotationWidgetPrivate)
+{
+    d->m_job = job;
+    d->m_ui = new Ui::VcsAnnotationWidget();
+    d->m_ui->setupUi( this );
+    d->m_model = new VcsAnnotationModel( url );
+    d->m_ui->annotations->setModel( d->m_model );
+    QHeaderView* header = d->m_ui->annotations->horizontalHeader();
     header->setResizeMode(0, QHeaderView::ResizeToContents );
     header->setResizeMode(1, QHeaderView::ResizeToContents );
 //     header->setResizeMode(2, QHeaderView::ResizeToContents );
 //     header->setResizeMode(3, QHeaderView::ResizeToContents );
     header->setResizeMode(2, QHeaderView::Stretch );
 //     annotations->setIndentation(-7);
-    connect( job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ),
+    connect( d->m_job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ),
              this, SLOT( addAnnotations( KDevelop::VcsJob* ) ) );
-    m_job->start();
+    d->m_job->start();
 }
 
-SvnAnnotationWidget::~SvnAnnotationWidget()
+VcsAnnotationWidget::~VcsAnnotationWidget()
 {
-    delete m_model;
+    delete d->m_model;
+    delete d->m_ui;
+    delete d;
 }
 
-void SvnAnnotationWidget::addAnnotations( KDevelop::VcsJob* job )
-{
-    if( job == m_job )
-    {
-        QList<QVariant> result = job->fetchResults().toList();
-        QList<KDevelop::VcsAnnotationLine> lines;
-        foreach( QVariant v, result )
-        {
-            if( v.canConvert<KDevelop::VcsAnnotationLine>() )
-            {
-                lines << v.value<KDevelop::VcsAnnotationLine>();
-            }
-        }
-        m_model->addLines( lines );
-    }
 }
+
+#include "vcsannotationwidget.moc"

@@ -47,7 +47,6 @@ set(kdevsubversion_PART_SRCS
     svnoutputdelegate.cpp
     svnclient.cpp
     svnlogwidget.cpp
-    svnannotationwidget.cpp
     svndiffwidget.cpp
     svnimportmetadatawidget.cpp
     svncheckoutmetadatawidget.cpp
@@ -57,7 +56,6 @@ set(kdevsubversion_PART_UI
     ui/ssltrustdialog.ui
     ui/commitdialog.ui
     ui/logwidget.ui
-    ui/annotationwidget.ui
     ui/diffwidget.ui
     ui/importmetadatawidget.ui
     ui/checkoutmetadatawidget.ui

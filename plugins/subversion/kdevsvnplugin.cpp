@@ -37,6 +37,7 @@
 #include <projectmodel.h>
 #include <context.h>
 #include <vcs/vcsmapping.h>
+#include "vcs/widgets/vcsannotationwidget.h"
 
 #include <svncpp/apr.hpp>
 
@@ -59,7 +60,6 @@
 #include "svnoutputmodel.h"
 #include "svncommitdialog.h"
 #include "svnlogwidget.h"
-#include "svnannotationwidget.h"
 #include "svndiffwidget.h"
 #include "svnimportmetadatawidget.h"
 #include "svncheckoutmetadatawidget.h"
@@ -521,7 +521,7 @@ void KDevSvnPlugin::ctxBlame()
             KDialog* dlg = new KDialog();
             dlg->setButtons( KDialog::Close );
             dlg->setCaption( i18n("Annotation (%1)", m_ctxUrlList.first().prettyUrl() ) );
-            SvnAnnotationWidget* w = new SvnAnnotationWidget( m_ctxUrlList.first(), job, dlg );
+            KDevelop::VcsAnnotationWidget* w = new KDevelop::VcsAnnotationWidget( m_ctxUrlList.first(), job, dlg );
             dlg->setMainWidget( w );
             connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
             dlg->show();

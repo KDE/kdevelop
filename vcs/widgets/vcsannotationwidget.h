@@ -19,33 +19,30 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SVNANNOTATIONWIDGET_H
-#define SVNANNOTATIONWIDGET_H
+#ifndef VCSANNOTATIONWIDGET_H
+#define VCSANNOTATIONWIDGET_H
 
-#include <QWidget>
-#include "ui_annotationwidget.h"
+#include <QtGui/QWidget>
 
-#include <vcsannotation.h>
+#include "../vcsexport.h"
 
-class QSortFilterProxyModel;
-class VcsAnnotationModel;
+class KUrl;
 
 namespace KDevelop
 {
 class VcsJob;
-}
 
-class SvnAnnotationWidget : public QWidget, private Ui::AnnotationWidget
+class KDEVPLATFORMVCS_EXPORT VcsAnnotationWidget : public QWidget
 {
 Q_OBJECT
 public:
-    SvnAnnotationWidget( const KUrl&, KDevelop::VcsJob*, QWidget* parent = 0 );
-    virtual ~SvnAnnotationWidget();
-private slots:
-    void addAnnotations( KDevelop::VcsJob* );
+    VcsAnnotationWidget( const KUrl&, VcsJob*, QWidget* parent = 0 );
+    virtual ~VcsAnnotationWidget();
 private:
-    VcsAnnotationModel* m_model;
-    KDevelop::VcsJob* m_job;
+    Q_PRIVATE_SLOT(d, void addAnnotation(VcsJob*) )
+    class VcsAnnotationWidgetPrivate* d;
 };
+
+}
 
 #endif

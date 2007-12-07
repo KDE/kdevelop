@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>AnnotationWidget</class>
- <widget class="QWidget" name="AnnotationWidget" >
+ <class>VcsAnnotationWidget</class>
+ <widget class="QWidget" name="VcsAnnotationWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>
