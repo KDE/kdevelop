@@ -60,6 +60,7 @@ private slots:
   void testTemplates();
   void cleanupTestCase();
   void testOperators();
+  void testTemplateFunctions();
   void testThis();
   void testArray();
   void testDynamicArray();

@@ -816,6 +816,29 @@ void TestExpressionParser::testOperators() {
   lock.lock();
   release(ctx);
 }
+
+void TestExpressionParser::testTemplateFunctions() {
+  QByteArray method("class A {}; template<class T> T a(T& q) {};");
+
+  DUContext* top = parse(method, DumpNone);
+  
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 2);
+  Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
+  QVERIFY(d);
+  CppFunctionType* cppFunction = dynamic_cast<CppFunctionType*>(d->abstractType().data());
+  QVERIFY(cppFunction);
+  QCOMPARE(cppFunction->arguments().count(), 1);
+  QCOMPARE(cppFunction->returnType(), top->localDeclarations()[0]->abstractType());
+  QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
+  
+  Cpp::ExpressionParser parser(false, true);
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
