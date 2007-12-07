@@ -32,6 +32,7 @@
 #include <duchain/duchain.h>
 #include <duchain/ducontext.h>
 #include <duchain/declaration.h>
+#include <duchain/definition.h>
 #include <duchain/use.h>
 #include <icore.h>
 #include <idocumentcontroller.h>
@@ -126,6 +127,10 @@ void UseHighlightPlugin::changeHighlight( KTextEditor::View* view, KDevelop::Dec
       continue;
     changeHighlight( range, highlight, false );
   }
+  if( decl->definition() && decl->definition()->smartRange() ) {
+    if( range )
+      changeHighlight( decl->definition()->smartRange(), highlight, false );
+  }
 }
 
 void UseHighlightPlugin::updateViews()
@@ -154,6 +159,12 @@ void UseHighlightPlugin::updateViews()
         foreach( Declaration* decl, ctx->localDeclarations() ) {
           if( decl->textRange().contains(c) ) {
             foundDeclaration = decl;
+            break;
+          }
+        }
+        foreach( Definition* def, ctx->localDefinitions() ) {
+          if( def->textRange().contains(c) ) {
+            foundDeclaration = def->declaration();
             break;
           }
         }
