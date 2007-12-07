@@ -39,6 +39,7 @@
 #include <vcs/vcsmapping.h>
 #include "vcs/widgets/vcsannotationwidget.h"
 #include "vcs/widgets/vcseventwidget.h"
+#include "vcs/widgets/vcsdiffwidget.h"
 
 #include <svncpp/apr.hpp>
 
@@ -60,7 +61,6 @@
 #include "svnoutputdelegate.h"
 #include "svnoutputmodel.h"
 #include "svncommitdialog.h"
-#include "svndiffwidget.h"
 #include "svnimportmetadatawidget.h"
 #include "svncheckoutmetadatawidget.h"
 
@@ -619,7 +619,12 @@ void KDevSvnPlugin::ctxDiffHead()
     dstRev.setRevisionValue( KDevelop::VcsRevision::Working, KDevelop::VcsRevision::Special );
     KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
 
-    SvnDiffDialog* dlg = new SvnDiffDialog( job );
+    KDialog* dlg = new KDialog();
+    dlg->setButtons( KDialog::Close );
+    dlg->setCaption( i18n( "Differences" ) );
+    KDevelop::VcsDiffWidget* w = new KDevelop::VcsDiffWidget( job, dlg );
+    w->setRevisions( srcRev, dstRev );
+    dlg->setMainWidget( w );
     connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
     dlg->show();
 }
@@ -634,7 +639,13 @@ void KDevSvnPlugin::ctxDiffBase()
     dstRev.setRevisionValue( KDevelop::VcsRevision::Working, KDevelop::VcsRevision::Special );
     KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
 
-    SvnDiffDialog* dlg = new SvnDiffDialog( job );
+    
+    KDialog* dlg = new KDialog();
+    dlg->setButtons( KDialog::Close );
+    dlg->setCaption( i18n( "Differences" ) );
+    KDevelop::VcsDiffWidget* w = new KDevelop::VcsDiffWidget( job, dlg );
+    w->setRevisions( srcRev, dstRev );
+    dlg->setMainWidget( w );
     connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
     dlg->show();
 }

@@ -5,6 +5,7 @@ include_directories(
 set(kdevplatformvcs_UIS
     widgets/vcsannotationwidget.ui
     widgets/vcseventwidget.ui
+    widgets/vcsdiffwidget.ui
 )
 
 set(kdevplatformvcs_LIB_SRCS
@@ -19,6 +20,7 @@ set(kdevplatformvcs_LIB_SRCS
     widgets/vcsimportmetadatawidget.cpp
     widgets/vcsannotationwidget.cpp
     widgets/vcseventwidget.cpp
+    widgets/vcsdiffwidget.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp
@@ -47,6 +49,7 @@ install(FILES
     widgets/vcsimportmetadatawidget.h
     widgets/vcsannotationwidget.h
     widgets/vcseventwidget.h
+    widgets/vcsdiffwidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets
 )
 

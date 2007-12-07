@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>DiffWidget</class>
- <widget class="QWidget" name="DiffWidget" >
+ <class>VcsDiffWidget</class>
+ <widget class="QWidget" name="VcsDiffWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>

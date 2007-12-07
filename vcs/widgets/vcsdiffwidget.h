@@ -18,38 +18,29 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SVNDIFFWIDGET_H
-#define SVNDIFFWIDGET_H
+#ifndef VCSDIFFWIDGET_H
+#define VCSDIFFWIDGET_H
 
-#include <QWidget>
-#include <ui_diffwidget.h>
+#include <QtGui/QWidget>
+#include "../vcsexport.h"
 
 namespace KDevelop
 {
 class VcsJob;
 class VcsRevision;
+
+class KDEVPLATFORMVCS_EXPORT VcsDiffWidget : public QWidget
+{
+Q_OBJECT
+public:
+    VcsDiffWidget( KDevelop::VcsJob*, QWidget* parent = 0 );
+    void setRevisions( const KDevelop::VcsRevision&, const KDevelop::VcsRevision& );
+    
+private:
+    Q_PRIVATE_SLOT(d, void diffReady( KDevelop::VcsJob* ) )
+    class VcsDiffWidgetPrivate* const d;
+};
+
 }
-
-class SvnDiffWidget : public QWidget, private Ui::DiffWidget
-{
-Q_OBJECT
-public:
-    SvnDiffWidget( KDevelop::VcsJob*, QWidget* parent = 0 );
-    void setRevisions( const KDevelop::VcsRevision&, const KDevelop::VcsRevision& );
-private slots:
-    void diffReady( KDevelop::VcsJob* );
-private:
-    KDevelop::VcsJob* m_job;
-};
-
-class SvnDiffDialog : public KDialog
-{
-Q_OBJECT
-public:
-    SvnDiffDialog( KDevelop::VcsJob*, QWidget* parent = 0 );
-    void setRevisions( const KDevelop::VcsRevision&, const KDevelop::VcsRevision& );
-private:
-    SvnDiffWidget* m_widget;
-};
 
 #endif
