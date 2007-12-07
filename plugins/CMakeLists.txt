@@ -21,6 +21,8 @@ if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
         macro_optional_add_subdirectory(teamwork)
     endif(COMMONCPP2_FOUND AND Boost_FOUND  AND Boost_LIBS_FOUND)
 endif(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+macro_log_feature( COMMONCPP2_FOUND "Common C++2" "Support for Teamwork plugin integration" "http://ftp.gnu.org/pub/gnu/commoncpp/" FALSE "1.5.9" "The commoncpp2 libraries are needed for the Teamwork plugin" )
+macro_log_feature( Boost_LIBS_FOUND "Boost" "Support for Teamwork plugin integration" "http://www.boost.org/" FALSE "1.34.0" "The boost C++ libraries are needed for the Teamwork plugin" )
 
 find_package(SvnCpp)
 find_package(SubversionLibrary)
