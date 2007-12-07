@@ -22,16 +22,20 @@
 #define VCSEVENTMODEL_H
 
 #include <QAbstractTableModel>
-#include <QList>
 
-#include "../vcsevent.h"
 #include "../vcsexport.h"
+
+namespace KDevelop
+{
+
+class VcsEvent;
 
 class KDEVPLATFORMVCS_EXPORT VcsEventModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
     VcsEventModel( QObject* parent );
+    ~VcsEventModel();
     int rowCount( const QModelIndex& = QModelIndex() ) const;
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const;
@@ -40,7 +44,9 @@ public:
     KDevelop::VcsEvent eventForIndex( const QModelIndex& ) const;
     void clear();
 private:
-    QList<KDevelop::VcsEvent> m_events;
+    class VcsEventModelPrivate* const d;
 };
+
+}
 
 #endif

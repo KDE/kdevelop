@@ -20,27 +20,45 @@
 
 #include "vcsannotationmodel.h"
 
+#include "../vcsrevision.h"
+#include "../vcsannotation.h"
+
 #include <QDateTime>
 #include <QtGlobal>
+#include <QBrush>
 
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "vcsrevision.h"
+
+#include <QHash>
+
+
+namespace KDevelop
+{
+
+class VcsAnnotationModelPrivate
+{
+public:
+    KDevelop::VcsAnnotation m_annotation;
+    QHash<KDevelop::VcsRevision,QBrush> m_brushes;
+};
 
 VcsAnnotationModel::VcsAnnotationModel( const KUrl& url )
+    : d( new VcsAnnotationModelPrivate )
 {
-    m_annotation.setLocation( url );
+    d->m_annotation.setLocation( url );
     qsrand( QDateTime().toTime_t() );
 }
 VcsAnnotationModel::~VcsAnnotationModel()
 {
+    delete d;
 }
 
 int VcsAnnotationModel::rowCount( const QModelIndex& ) const
 {
-    return m_annotation.lineCount();
+    return d->m_annotation.lineCount();
 }
 
 int VcsAnnotationModel::columnCount( const QModelIndex& ) const
@@ -57,10 +75,10 @@ QVariant VcsAnnotationModel::data( const QModelIndex& idx, int role ) const
     if( idx.row() < 0 || idx.row() >= rowCount() || idx.column() < 0 || idx.column() >= columnCount() )
         return QVariant();
 
-    KDevelop::VcsAnnotationLine line = m_annotation.line( idx.row() );
+    KDevelop::VcsAnnotationLine line = d->m_annotation.line( idx.row() );
     if( role == Qt::BackgroundRole )
     {
-        return QVariant( m_brushes[line.revision()] );
+        return QVariant( d->m_brushes[line.revision()] );
     }else
     {
         switch( idx.column() )
@@ -124,21 +142,23 @@ void VcsAnnotationModel::addLines( const QList<KDevelop::VcsAnnotationLine>& lis
         beginInsertRows( QModelIndex(), rowCount(), list.count() );
     foreach( KDevelop::VcsAnnotationLine l, list )
     {
-        if( !m_brushes.contains( l.revision() ) )
+        if( !d->m_brushes.contains( l.revision() ) )
         {
             int r = ( float(qrand()) / RAND_MAX ) * 255;
             int g = ( float(qrand()) / RAND_MAX ) * 255;
             int b = ( float(qrand()) / RAND_MAX ) * 255;
-            m_brushes.insert( l.revision(), QBrush( QColor( r, g, b, 80 ) ) );
+            d->m_brushes.insert( l.revision(), QBrush( QColor( r, g, b, 80 ) ) );
         }
-        m_annotation.insertLine( l.lineNumber(), l );
+        d->m_annotation.insertLine( l.lineNumber(), l );
     }
     endInsertRows();
 }
 
 KDevelop::VcsAnnotation VcsAnnotationModel::annotation() const
 {
-    return m_annotation;
+    return d->m_annotation;
+}
+
 }
 
 #include "vcsannotationmodel.moc"

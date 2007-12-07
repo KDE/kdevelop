@@ -22,12 +22,18 @@
 #define VCSANNOTATIONMODEL_H
 
 #include <QAbstractTableModel>
-#include "../vcsannotation.h"
-#include "../vcsrevision.h"
-#include <QHash>
-#include <QBrush>
 #include "../vcsexport.h"
 
+class QModelIndex;
+template<typename T> class QList;
+class KUrl;
+
+namespace KDevelop
+{
+
+class VcsAnnotation;
+class VcsAnnotationLine;
+    
 class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public QAbstractTableModel
 {
 Q_OBJECT
@@ -45,8 +51,9 @@ public:
 
 
 private:
-    KDevelop::VcsAnnotation m_annotation;
-    QHash<KDevelop::VcsRevision,QBrush> m_brushes;
+    class VcsAnnotationModelPrivate* const d;
 };
+
+}
 
 #endif

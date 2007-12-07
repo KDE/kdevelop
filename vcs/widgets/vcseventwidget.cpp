@@ -33,6 +33,7 @@
 #include <interfaces/iplugin.h>
 #include "../interfaces/ibasicversioncontrol.h"
 #include "../vcsrevision.h"
+#include "../vcsevent.h"
 #include "../vcslocation.h"
 
 #include "../models/vcsitemeventmodel.h"

@@ -23,19 +23,35 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <QDateTime>
+#include <QList>
 
 #include <klocale.h>
 
-#include <vcsrevision.h>
+#include "../vcsevent.h"
+#include "../vcsrevision.h"
+
+namespace KDevelop
+{
+
+class VcsEventModelPrivate
+{
+public:
+    QList<KDevelop::VcsEvent> m_events;
+};
 
 VcsEventModel::VcsEventModel( QObject* parent )
-    : QAbstractTableModel( parent )
+    : QAbstractTableModel( parent ), d(new VcsEventModelPrivate)
 {
+}
+
+VcsEventModel::~VcsEventModel()
+{
+    delete d;
 }
 
 int VcsEventModel::rowCount( const QModelIndex& ) const
 {
-    return m_events.count();
+    return d->m_events.count();
 }
 
 int VcsEventModel::columnCount( const QModelIndex& ) const
@@ -51,7 +67,7 @@ QVariant VcsEventModel::data( const QModelIndex& idx, int role ) const
     if( idx.row() < 0 || idx.row() >= rowCount() || idx.column() < 0 || idx.column() >= columnCount() )
         return QVariant();
 
-    KDevelop::VcsEvent ev = m_events.at( idx.row() );
+    KDevelop::VcsEvent ev = d->m_events.at( idx.row() );
     switch( idx.column() )
     {
         case 0:
@@ -104,7 +120,7 @@ void VcsEventModel::addEvents( const QList<KDevelop::VcsEvent>& list )
         beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
     else
         beginInsertRows( QModelIndex(), rowCount(), list.count() );
-    m_events += list;
+    d->m_events += list;
     endInsertRows();
 }
 
@@ -114,7 +130,7 @@ KDevelop::VcsEvent VcsEventModel::eventForIndex( const QModelIndex& idx ) const
     {
         return KDevelop::VcsEvent();
     }
-    return m_events.at( idx.row() );
+    return d->m_events.at( idx.row() );
 }
 
 void VcsEventModel::clear()
@@ -123,8 +139,10 @@ void VcsEventModel::clear()
         beginRemoveRows( QModelIndex(), 0, 0 );
     else
         beginRemoveRows( QModelIndex(), 0, rowCount()-1 );
-    m_events.clear();
+    d->m_events.clear();
     endRemoveRows();
+}
+
 }
 
 #include "vcseventmodel.moc"

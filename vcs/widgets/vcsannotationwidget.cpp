@@ -24,9 +24,10 @@
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
 
-#include "vcs/vcsjob.h"
+#include "../vcsjob.h"
 
-#include "vcs/models/vcsannotationmodel.h"
+#include "../models/vcsannotationmodel.h"
+#include "../vcsannotation.h"
 #include "ui_vcsannotationwidget.h"
 
 namespace KDevelop
