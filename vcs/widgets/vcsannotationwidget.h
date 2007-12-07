@@ -40,7 +40,7 @@ public:
     virtual ~VcsAnnotationWidget();
 private:
     Q_PRIVATE_SLOT(d, void addAnnotation(VcsJob*) )
-    class VcsAnnotationWidgetPrivate* d;
+    class VcsAnnotationWidgetPrivate* const d;
 };
 
 }
