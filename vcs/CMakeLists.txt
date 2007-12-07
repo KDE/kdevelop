@@ -11,7 +11,7 @@ set(kdevplatformvcs_LIB_SRCS
     vcsevent.cpp
     vcsmapping.cpp
     vcsstatusinfo.cpp
-    vcsimportmetadatawidget.cpp
+    widgets/vcsimportmetadatawidget.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp
@@ -33,9 +33,14 @@ install(FILES
     vcsstatusinfo.h
     vcsmapping.h
     vcslocation.h
-    vcsimportmetadatawidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs
 )
+
+install(FILES
+    widgets/vcsimportmetadatawidget.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets
+)
+
 
 install(FILES
     models/vcsannotationmodel.h

@@ -12,7 +12,7 @@
 #ifndef IMPORTMETADATAWIDGET_H
 #define IMPORTMETADATAWIDGET_H
 
-#include <vcs/vcsimportmetadatawidget.h>
+#include <vcs/widgets/vcsimportmetadatawidget.h>
 
 #include "ui_importmetadatawidget.h"
 

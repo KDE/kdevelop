@@ -12,7 +12,7 @@
 #ifndef SVNIMPORTMETADATAWIDGET_H
 #define SVNIMPORTMETADATAWIDGET_H
 
-#include <vcsimportmetadatawidget.h>
+#include <vcs/widgets/vcsimportmetadatawidget.h>
 
 namespace Ui
 {
