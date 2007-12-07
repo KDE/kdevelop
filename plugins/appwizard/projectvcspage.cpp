@@ -30,7 +30,7 @@
 #include <iplugin.h>
 
 #include <vcs/vcsmapping.h>
-#include <vcs/vcsimportmetadatawidget.h>
+#include <vcs/widgets/vcsimportmetadatawidget.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
 ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget * parent )
