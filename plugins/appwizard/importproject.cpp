@@ -82,7 +82,8 @@ void ImportProject::accept()
     if (projectUrl.isLocalFile()) {
         QFile projectFile(projectUrl.toLocalFile());
         if (!projectFile.open(QIODevice::WriteOnly)) {
-            KMessageBox::error(this, i18n("Project file already exists."), i18n("Project import error"));
+            KMessageBox::error(this, i18n("Cannot create project file.<p><b>Suggestion</b>: check permissions on the selected directory"), 
+		i18n("Project import error"));
             return;
         }
         importProject(projectFile);
