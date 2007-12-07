@@ -184,7 +184,7 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         break;
     }
     if( color ) {
-      a->setForeground(QColor((color*5)/2));//0xffffff-(color)));
+      a->setForeground(QColor((color*4)/2));//0xffffff-(color)));
                        //a->setBackground(QColor((color*7)));
     }
   }
