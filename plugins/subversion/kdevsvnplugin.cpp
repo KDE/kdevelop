@@ -38,6 +38,7 @@
 #include <context.h>
 #include <vcs/vcsmapping.h>
 #include "vcs/widgets/vcsannotationwidget.h"
+#include "vcs/widgets/vcseventwidget.h"
 
 #include <svncpp/apr.hpp>
 
@@ -59,7 +60,6 @@
 #include "svnoutputdelegate.h"
 #include "svnoutputmodel.h"
 #include "svncommitdialog.h"
-#include "svnlogwidget.h"
 #include "svndiffwidget.h"
 #include "svnimportmetadatawidget.h"
 #include "svncheckoutmetadatawidget.h"
@@ -482,7 +482,7 @@ void KDevSvnPlugin::ctxHistory()
     KDialog* dlg = new KDialog();
     dlg->setButtons( KDialog::Close );
     dlg->setCaption( i18n( "Subversion Log (%1)", m_ctxUrlList.first().path() ) );
-    SvnLogWidget* logWidget = new SvnLogWidget( m_ctxUrlList.first(), job, dlg );
+    KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget( m_ctxUrlList.first(), job, dlg );
     dlg->setMainWidget( logWidget );
     connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
     dlg->show();

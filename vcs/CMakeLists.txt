@@ -4,6 +4,7 @@ include_directories(
 
 set(kdevplatformvcs_UIS
     widgets/vcsannotationwidget.ui
+    widgets/vcseventwidget.ui
 )
 
 set(kdevplatformvcs_LIB_SRCS
@@ -17,6 +18,7 @@ set(kdevplatformvcs_LIB_SRCS
     vcsstatusinfo.cpp
     widgets/vcsimportmetadatawidget.cpp
     widgets/vcsannotationwidget.cpp
+    widgets/vcseventwidget.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp
@@ -24,7 +26,7 @@ set(kdevplatformvcs_LIB_SRCS
 
 kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
 kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
-target_link_libraries(kdevplatformvcs ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY}  )
+target_link_libraries(kdevplatformvcs ${KDE4_KDEUI_LIBS} kdevplatforminterfaces )
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS kdevplatformvcs DESTINATION ${LIB_INSTALL_DIR} )
 
@@ -44,6 +46,7 @@ install(FILES
 install(FILES
     widgets/vcsimportmetadatawidget.h
     widgets/vcsannotationwidget.h
+    widgets/vcseventwidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets
 )
 

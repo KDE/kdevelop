@@ -1,0 +1,211 @@
+/***************************************************************************
+ *   This file is part of KDevelop                                         *
+ *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+ ***************************************************************************/
+
+#include "vcseventwidget.h"
+
+#include <QHeaderView>
+#include <QAction>
+
+#include <kdebug.h>
+#include <kmenu.h>
+
+#include "ui_vcseventwidget.h"
+
+#include "../vcsjob.h"
+#include <interfaces/iplugin.h>
+#include "../interfaces/ibasicversioncontrol.h"
+#include "../vcsrevision.h"
+#include "../vcslocation.h"
+
+#include "../models/vcsitemeventmodel.h"
+#include "../models/vcseventmodel.h"
+
+
+namespace KDevelop
+{
+
+class VcsEventWidgetPrivate
+{
+public:
+    VcsEventWidgetPrivate( VcsEventWidget* w )
+        : q( w )
+    {}
+    
+    Ui::VcsEventWidget* m_ui;
+    VcsItemEventModel* m_detailModel;
+    VcsEventModel *m_logModel;
+    KDevelop::VcsJob* m_job;
+    KUrl m_url;
+    QModelIndex m_contextIndex;
+    VcsEventWidget* q;
+    void eventViewCustomContextMenuRequested( const QPoint &point );
+    void eventViewClicked( const QModelIndex &index );
+    void jobReceivedResults( KDevelop::VcsJob* job );
+    void diffToPrevious();
+    void diffRevisions();
+};
+
+void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &point )
+{
+    m_contextIndex = m_ui->eventView->indexAt( point );
+    if( !m_contextIndex.isValid() ){
+        kDebug(9509) << "contextMenu is not in TreeView";
+        return;
+    }
+
+    KMenu menu( m_ui->eventView );
+
+    QAction* action = menu.addAction(i18n("Diff to previous revision"));
+    QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffToPrevious()) );
+
+    action = menu.addAction(i18n("Diff between revisions"));
+    QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffRevisions()) );
+
+    menu.exec( m_ui->eventView->viewport()->mapToGlobal(point) );
+}
+
+void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
+{
+    KDevelop::VcsEvent ev = m_logModel->eventForIndex( index );
+    if( ev.revision().revisionType() != KDevelop::VcsRevision::Invalid )
+    {
+        m_ui->message->setPlainText( ev.message() );
+        m_detailModel->clear();
+        m_detailModel->addItemEvents( ev.items() );
+    }else
+    {
+        m_ui->message->clear();
+        m_detailModel->clear();
+    }
+}
+
+void VcsEventWidgetPrivate::jobReceivedResults( KDevelop::VcsJob* job )
+{
+    if( job == m_job )
+    {
+        QList<QVariant> l = job->fetchResults().toList();
+        QList<KDevelop::VcsEvent> newevents;
+        foreach( QVariant v, l )
+        {
+            if( qVariantCanConvert<KDevelop::VcsEvent>( v ) )
+            {
+                newevents << qVariantValue<KDevelop::VcsEvent>( v );
+            }
+        }
+        m_logModel->addEvents( newevents );
+    }
+}
+
+
+void VcsEventWidgetPrivate::diffToPrevious()
+{
+    KDevelop::IPlugin* plugin = m_job->vcsPlugin();
+    if( plugin )
+    {
+        KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+        if( iface )
+        {
+            KDevelop::VcsEvent ev = m_logModel->eventForIndex( m_contextIndex );
+            KDevelop::VcsRevision prev;
+            prev.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Previous ),
+                                   KDevelop::VcsRevision::Special );
+            KDevelop::VcsLocation loc( m_url );
+
+            KDevelop::VcsJob* job = iface->diff( loc, loc, prev, ev.revision() );
+
+
+//             SvnDiffDialog* dlg = new SvnDiffDialog( job );
+//             connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
+//             dlg->show();
+        }
+    }
+}
+
+void VcsEventWidgetPrivate::diffRevisions()
+{
+    KDevelop::IPlugin* plugin = m_job->vcsPlugin();
+    if( plugin )
+    {
+        KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+        if( iface )
+        {
+            QModelIndexList l = m_ui->eventView->selectionModel()->selectedRows();
+            KDevelop::VcsEvent ev1 = m_logModel->eventForIndex( l.first() );
+            KDevelop::VcsEvent ev2 = m_logModel->eventForIndex( l.last() );
+            KDevelop::VcsLocation loc( m_url );
+            KDevelop::VcsJob* job = iface->diff( loc, loc, ev1.revision(), ev2.revision() );
+
+//             SvnDiffDialog* dlg = new SvnDiffDialog( job );
+//             connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
+//             dlg->show();
+        }
+    }
+}
+
+VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget *parent )
+    : QWidget(parent), d(new VcsEventWidgetPrivate(this) )
+{
+
+    d->m_job = job;
+    d->m_url = url;
+    d->m_ui = new Ui::VcsEventWidget();
+    d->m_ui->setupUi(this);
+
+    d->m_logModel= new VcsEventModel(this);
+    d->m_ui->eventView->setModel( d->m_logModel );
+    d->m_ui->eventView->sortByColumn(0, Qt::DescendingOrder);
+    d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
+    QHeaderView* header = d->m_ui->eventView->horizontalHeader();
+    header->setResizeMode( 0, QHeaderView::ResizeToContents );
+    header->setResizeMode( 1, QHeaderView::ResizeToContents );
+    header->setResizeMode( 2, QHeaderView::ResizeToContents );
+    header->setResizeMode( 3, QHeaderView::Stretch );
+
+    d->m_detailModel = new VcsItemEventModel(this);
+    d->m_ui->itemEventView->setModel( d->m_detailModel );
+    header = d->m_ui->itemEventView->horizontalHeader();
+    header->setResizeMode( 0, QHeaderView::ResizeToContents );
+    header->setResizeMode( 1, QHeaderView::Stretch );
+    header->setResizeMode( 2, QHeaderView::ResizeToContents );
+    header->setResizeMode( 3, QHeaderView::Stretch );
+    header->setResizeMode( 4, QHeaderView::ResizeToContents );
+
+    connect( d->m_ui->eventView, SIGNAL( clicked( const QModelIndex& ) ),
+             this, SLOT( eventViewClicked( const QModelIndex& ) ) );
+    connect( d->m_ui->eventView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
+             this, SLOT( eventViewCustomContextMenuRequested( const QPoint& ) ) );
+    
+    connect( d->m_job, SIGNAL(resultsReady( KDevelop::VcsJob*) ),
+             this, SLOT( jobReceivedResults( KDevelop::VcsJob* ) ) );
+    d->m_job->start();
+}
+VcsEventWidget::~VcsEventWidget()
+{
+    delete d->m_logModel;
+    delete d->m_detailModel;
+    delete d->m_ui;
+    delete d;
+}
+
+}
+
+
+#include "vcseventwidget.moc"

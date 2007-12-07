@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>SvnLogWidget</class>
- <widget class="QWidget" name="SvnLogWidget" >
+ <class>VcsEventWidget</class>
+ <widget class="QWidget" name="VcsEventWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -19,42 +19,36 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SVNLOGWIDGET_H
-#define SVNLOGWIDGET_H
+#ifndef VCSEVENTWIDGET_H
+#define VCSEVENTWIDGET_H
 
-#include <QWidget>
-#include <ui_logwidget.h>
+#include <QtGui/QWidget>
+#include "../vcsexport.h"
+
+class QPoint;
+class QModelIndex;
+class KUrl;
 
 namespace KDevelop
 {
 class VcsJob;
-}
 
-class QPoint;
-class QModelIndex;
-class VcsItemEventModel;
-class VcsEventModel;
 
-class SvnLogWidget : public QWidget, public Ui::SvnLogWidget
+class KDEVPLATFORMVCS_EXPORT VcsEventWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SvnLogWidget( const KUrl&, KDevelop::VcsJob*, QWidget *parent = 0 );
-    virtual ~SvnLogWidget();
+    VcsEventWidget( const KUrl&, KDevelop::VcsJob*, QWidget *parent = 0 );
+    virtual ~VcsEventWidget();
 
-protected slots:
-    void diffToPrevious();
-    void diffRevisions();
-    void jobReceivedResults( KDevelop::VcsJob* );
-    void on_eventView_customContextMenuRequested( const QPoint &point );
-    void on_eventView_clicked( const QModelIndex &index );
 private:
-    VcsItemEventModel* m_detailModel;
-    VcsEventModel *m_logModel;
-    KDevelop::VcsJob* m_job;
-    KUrl m_url;
-    QModelIndex m_contextIndex;
+    Q_PRIVATE_SLOT(d, void diffToPrevious())
+    Q_PRIVATE_SLOT(d, void diffRevisions())
+    Q_PRIVATE_SLOT(d, void jobReceivedResults( KDevelop::VcsJob* ))
+    Q_PRIVATE_SLOT(d, void eventViewCustomContextMenuRequested( const QPoint &point ))
+    Q_PRIVATE_SLOT(d, void eventViewClicked( const QModelIndex &index ))
+    class VcsEventWidgetPrivate* const d;
 };
-
+}
 
 #endif
