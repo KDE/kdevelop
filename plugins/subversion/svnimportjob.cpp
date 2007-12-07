@@ -99,7 +99,7 @@ QVariant SvnImportJob::fetchResults()
 
 void SvnImportJob::start()
 {
-    if( m_job->mapping().sourceLocations().isEmpty() )
+    if( m_job->mapping().sourceLocations().isEmpty() || !m_job->mapping().sourceLocations().first().localUrl().isValid() )
     {
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information to import" ) );
