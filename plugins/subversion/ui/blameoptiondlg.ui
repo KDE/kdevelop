@@ -9,9 +9,6 @@
     <height>392</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string/>
-  </property>
   <layout class="QGridLayout" >
    <item row="0" column="0" >
     <widget class="QGroupBox" name="groupBox" >
