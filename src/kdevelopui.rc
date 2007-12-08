@@ -42,6 +42,7 @@
   <Menu name="view">
     <text>&amp;View</text>
     <Action name="add_toolview"/>
+    <Action name="remove_view"/>
     <Action name="user_interface"/>
     <DefineGroup name="history_operations"/>
     <Action name="history_back"/>
