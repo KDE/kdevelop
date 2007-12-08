@@ -19,7 +19,7 @@
 #include<set>
 #include <ext/hash_map>
 #include <ext/hash_set>
-#include <duchain/hashedstring.h>
+#include <editor/hashedstring.h>
 #include <string>
 #include "cppduchainexport.h"
 
