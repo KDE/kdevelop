@@ -30,6 +30,8 @@
 #include <QByteArray>
 #include <QRegExp>
 #include <QFileInfo>
+#include <QScriptEngine>
+#include <QScriptValue>
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root) : m_root(root)
 {}
@@ -157,10 +159,10 @@ int CMakeProjectVisitor::notImplemented(const QString &name) const
     return 1;
 }
 
-int CMakeProjectVisitor::visit(const CMakeAst *)
+int CMakeProjectVisitor::visit(const CMakeAst *ast)
 {
 //     kDebug(9042) << "Pipiripipi" << ast->children().count();
-    kDebug(9042) << "error! function not implemented";
+    kDebug(9042) << "error! function not implemented" << ast->content()[0].name;
 #if 0
     if(ast->children().isEmpty())
         kDebug(9032) << "warning: visiting an element without children.";
@@ -455,6 +457,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
             error=true;
         } else {
             path += p1;
+            break;
         }
     }
 
@@ -807,31 +810,14 @@ int CMakeProjectVisitor::visit(const MessageAst *msg)
 
 int CMakeProjectVisitor::visit(const MathAst *math)
 {
-    QStringList exps=resolveVariable(math->expression(), m_vars);
-    if(exps.isEmpty()) {
-        kDebug(9032) << "couldn't resolve" << math->expression();
-        return 1;
+    QScriptEngine eng;
+    QScriptValue result = eng.evaluate(math->expression());
+
+    if (result.isError()) {
+        kDebug(9032) << "error: found an error while calculating" << math->expression();
     }
-    KProcess p;
-    p.setOutputChannelMode(KProcess::MergedChannels);
-    p.setProgram("bc", QStringList("-q"));
-    p.start();
-    
-    QString exp=exps[0];
-    p.write(qPrintable(exp));
-    p.closeWriteChannel();
-    if(!p.waitForFinished())
-        kDebug(9032) << "error: failed to calculate with bc";
-
-    if(p.exitCode()!=0)
-        kDebug(9032) << "error: executing math bc. returns" << p.exitCode();
-
-    QByteArray b = p.readAllStandardOutput().trimmed();
-    QString t;
-    t.prepend(b);
-    m_vars->insert(math->outputVariable(), QStringList(t));
-
-    kDebug(9042) << "math." << exp << "=" << m_vars->value(math->outputVariable()) << "=" << b;
+    kDebug(9042) << "math. " << math->expression() << "=" << result.toString();
+    m_vars->insert(math->outputVariable(), QStringList(result.toString()));
     return 1;
 }
 

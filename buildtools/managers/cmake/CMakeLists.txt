@@ -45,12 +45,12 @@ remove_definitions( -DQT_NO_STL )
 kde4_add_kcfg_files( cmakecommon_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBRARY}
-                       ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} )
-
+                       ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${QT_QTSCRIPT_LIBRARY})
+#QtScript is used for the MathAst
 
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS}
-                       ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon ${KDEVPLATFORM_PROJECT_LIBRARY})
+                       ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon ${KDEVPLATFORM_PROJECT_LIBRARY} )
 
 
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
