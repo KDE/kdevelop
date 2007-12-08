@@ -180,9 +180,14 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 if( job->status() == KDevelop::VcsJob::JobSucceeded )
                 {
                     KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
-                    job->exec();
-                    if( job->status() != KDevelop::VcsJob::JobSucceeded )
-                    {
+                    if (job) {
+                        job->exec();
+                        if( job->status() != KDevelop::VcsJob::JobSucceeded )
+                        {
+                            KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                            return "";
+                        }
+                    } else {
                         KMessageBox::error(0, i18n("Couldn't checkout imported project"));
                         tmpdir.unlink();
                         return "";
