@@ -93,6 +93,8 @@ public Q_SLOTS:
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
             DocumentActivation activate = IDocumentController::ActivateOnOpen );
 
+    virtual Q_SCRIPTABLE void openDocumentFromText( const QString& data );
+    
     virtual void closeDocument( const KUrl &url );
     void fileClose();
     void slotSaveAllDocuments();

@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <krecentfilesaction.h>
+#include <ktexteditor/document.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -202,6 +203,16 @@ void DocumentController::slotOpenDocument(const KUrl &url)
 {
     openDocument(url);
 }
+
+void DocumentController::openDocumentFromText( const QString& data )
+{
+    TextDocument *doc = new TextDocument(KUrl(), Core::self());
+    Sublime::View *view = doc->createView();
+    Core::self()->uiControllerInternal()->activeArea()->addView(view);
+    Core::self()->uiControllerInternal()->activeSublimeWindow()->activateView(view);
+    doc->textDocument()->setText( data );
+}
+
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Cursor& cursor,
