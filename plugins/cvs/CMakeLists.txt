@@ -6,6 +6,7 @@ include_directories( ${KDE4_INCLUDES}
     ${CMAKE_SOURCE_DIR}/project
     ${CMAKE_SOURCE_DIR}/vcs
     ${CMAKE_SOURCE_DIR}/vcs/interfaces
+    ${CMAKE_SOURCE_DIR}/vcs/models
 )
 
 

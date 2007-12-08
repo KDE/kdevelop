@@ -13,7 +13,10 @@
 #include <QTextBrowser>
 #include <QRegExp>
 #include <QDir>
+#include <QHeaderView>
 #include <KDebug>
+
+#include <vcsannotationmodel.h>
 
 #include "cvsplugin.h"
 #include "cvsjob.h"
@@ -23,6 +26,16 @@ AnnotateView::AnnotateView(CvsPlugin* plugin, CvsJob* job, QWidget *parent)
     : QWidget(parent), Ui::AnnotateViewBase(), m_plugin(plugin)
 {
     Ui::AnnotateViewBase::setupUi(this);
+
+    m_model = new KDevelop::VcsAnnotationModel( KUrl() );
+    annotations->setModel( m_model );
+
+    annotations->verticalHeader()->setVisible(false);
+
+    QHeaderView* header = annotations->horizontalHeader();
+    header->setResizeMode(0, QHeaderView::ResizeToContents);
+    header->setResizeMode(1, QHeaderView::ResizeToContents);
+    header->setResizeMode(2, QHeaderView::Stretch);
 
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
@@ -38,7 +51,6 @@ void AnnotateView::slotJobFinished(KJob* job)
 {
     if ( job->error() )
     {
-        textbrowser->append( i18n("Listing annotations failed") );
         return;
     }
 
@@ -48,24 +60,19 @@ void AnnotateView::slotJobFinished(KJob* job)
     }
 
 
+    // Convert job's output into KDevelop::VcsAnnotation
     KDevelop::VcsAnnotation annotateInfo;
-
     parseOutput(cvsjob->output(), cvsjob->getDirectory(), annotateInfo);
 
-    /// @todo better us a QModel and a QTableView here
-    QString html;
-
-    html += annotateInfo.location().path()+"\n\n";
-    for(int i=1; i <= annotateInfo.lineCount(); i++) {
+    QList<KDevelop::VcsAnnotationLine> lines;
+    for(int i=0; i < annotateInfo.lineCount(); i++) {
         KDevelop::VcsAnnotationLine line = annotateInfo.line(i);
 
-        html += QString::number(line.lineNumber())+":";
-        html += line.revision().revisionValue().toString()+":";
-        html += line.author()+":";
-        html += line.text()+"\n";
+        lines << line;
     }
 
-    textbrowser->setPlainText( html );
+    // Fill model with data
+    m_model->addLines( lines );
 }
 
 void AnnotateView::parseOutput(const QString& jobOutput, const QString& workingDirectory, KDevelop::VcsAnnotation& annotateInfo)

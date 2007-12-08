@@ -12,9 +12,9 @@
   <property name="windowTitle" >
    <string>Annotate</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QHBoxLayout" >
    <property name="spacing" >
-    <number>0</number>
+    <number>-1</number>
    </property>
    <property name="leftMargin" >
     <number>0</number>
@@ -29,9 +29,18 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="KTextBrowser" name="textbrowser" >
+    <widget class="QTableView" name="annotations" >
      <property name="frameShape" >
       <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="showGrid" >
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -39,13 +48,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>KTextBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>ktextbrowser.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -20,6 +20,10 @@
 
 class CvsPlugin;
 class CvsJob;
+namespace KDevelop
+{
+class VcsAnnotationModel;
+}
 
 /**
  * Shows the output from @code cvs annotate @endcode in a nice way.
@@ -56,7 +60,7 @@ private slots:
 
 private:
     CvsPlugin* m_plugin;
-    QString m_output;
+    KDevelop::VcsAnnotationModel* m_model;
 };
 
 #endif
