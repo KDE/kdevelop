@@ -432,7 +432,7 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
 
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(area))) {
         KAction* action = bar->addWidget(view->document()->title(), dock);
-        actions[dock] = views[view] = action;
+        m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
         m_docks->addAction(action);
         bar->show();
     }
@@ -472,7 +472,7 @@ void IdealMainWidget::hideAllDocks()
 
 void IdealMainWidget::raiseView(View * view)
 {
-    QAction* action = views[view];
+    QAction* action = m_view_to_action[view];
     Q_ASSERT(action);
 
     action->setChecked(true);
@@ -480,9 +480,9 @@ void IdealMainWidget::raiseView(View * view)
 
 void IdealMainWidget::removeView(View* view)
 {
-    Q_ASSERT(views.contains(view));
+    Q_ASSERT(m_view_to_action.contains(view));
 
-    QAction* action = views[view];
+    QAction* action = m_view_to_action[view];
 
     QDockWidget* dock = qobject_cast<QDockWidget*>(view->widget()->parentWidget());
     Q_ASSERT(dock);
@@ -490,8 +490,8 @@ void IdealMainWidget::removeView(View* view)
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(docks[dock])))
         bar->removeAction(action);
 
-    views.remove(view);
-    actions.remove(dock);
+    m_view_to_action.remove(view);
+    m_dockwidget_to_action.remove(dock);
 }
 
 void IdealMainWidget::setCentralWidget(QWidget * widget)
@@ -683,8 +683,8 @@ void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
 {
     if (show) {
         if (QDockWidget* widget = m_mainLayout->lastDockWidget(role))
-            if (actions.contains(widget))
-                return actions[widget]->setChecked(show);
+            if (m_dockwidget_to_action.contains(widget))
+                return m_dockwidget_to_action[widget]->setChecked(show);
 
         if (barForRole(role)->actions().count())
             barForRole(role)->actions().first()->setChecked(show);
@@ -764,8 +764,8 @@ IdealMainLayout::Role IdealMainWidget::roleForBar(IdealButtonBarWidget* bar) con
 
 QAction * IdealMainWidget::actionForView(View * view) const
 {
-    if (views.contains(view))
-        return views[view];
+    if (m_view_to_action.contains(view))
+        return m_view_to_action[view];
 
     return 0;
 }
@@ -864,7 +864,7 @@ void IdealMainWidget::selectNextDock()
 
     IdealButtonBarWidget* bar = barForRole(role);
 
-    int index = bar->actions().indexOf(actions[dock]);
+    int index = bar->actions().indexOf(m_dockwidget_to_action[dock]);
 
     if (index == -1 || index == bar->actions().count() - 1)
         index = 0;
@@ -884,7 +884,7 @@ void IdealMainWidget::selectPreviousDock()
 
     IdealButtonBarWidget* bar = barForRole(role);
 
-    int index = bar->actions().indexOf(actions[dock]);
+    int index = bar->actions().indexOf(m_dockwidget_to_action[dock]);
 
     if (index < 1)
         index = bar->actions().count() - 1;

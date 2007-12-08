@@ -222,8 +222,12 @@ private:
     class IdealMainLayout* m_mainLayout;
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
-    QMap<View*, QAction*> views;
-    QMap<QDockWidget*, QAction*> actions;
+    /** Map from View to an action that shows/hides
+        the QDockWidget containing that view.  */
+    QMap<View*, QAction*> m_view_to_action;
+    /** Map from QDockWidget  to an action that shows/hides
+        that QDockWidget.  */
+    QMap<QDockWidget*, QAction*> m_dockwidget_to_action;
 };
 
 class IdealSplitterHandle : public QWidget
