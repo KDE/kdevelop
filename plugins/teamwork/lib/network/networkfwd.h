@@ -14,6 +14,8 @@
 #ifndef NETWORKFWD_H
 #define NETWORKFWD_H
 
+#include "networkexport.h"
+
 //#define USE_POLYMORPHIC_ARCHIVE
 #define USE_TEXT_ARCHIVE
 
@@ -98,7 +100,7 @@ namespace Teamwork {
   typedef boost::archive::xml_oarchive OutArchive;
   #endif
 
-  MessageTypeSet& globalMessageTypeSet();
+  NETWORK_EXPORT MessageTypeSet& globalMessageTypeSet();
 }
 
 typedef unsigned int u32;

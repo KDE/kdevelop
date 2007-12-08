@@ -29,6 +29,7 @@
 #include "user.h"
 #include "messagesendhelper.h"
 #include "serverconfig.h"
+#include "networkexport.h"
 
 namespace Teamwork {
 class Server;
@@ -47,7 +48,7 @@ class MultiSession;
 typedef SafeSharedPtr<MultiSession> MultiSessionPointer;
 typedef WeakSafeSharedPtr<MultiSession> WeakMultiSessionPointer;
 
-class Server : public BasicServer, public MessageSendHelper {
+class NETWORK_EXPORT Server : public BasicServer, public MessageSendHelper {
     typedef std::map< SessionPointer, UserPointer > SessionMap;
     typedef std::set< MultiSessionPointer > SessionSet;
 
@@ -147,7 +148,7 @@ class Server : public BasicServer, public MessageSendHelper {
 };
 
 ///Encapsulates information about a server to connect to
-class ServerInformation {
+class NETWORK_EXPORT ServerInformation {
     std::string addr_;
     int port_;
   public:

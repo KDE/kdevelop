@@ -20,13 +20,14 @@
 #include "safesharedptr.h"
 #include "teamworkserver.h"
 #include "user.h"
+#include "networkexport.h"
 
 namespace Teamwork {
 
 class ClientSessionHandler;
 class UserListMessage;
 
-struct ClientSessionDesc {
+struct NETWORK_EXPORT ClientSessionDesc {
   UserPointer loginUser; ///user as which we are logged in
   SessionPointer session;
   ClientSessionDesc( const UserPointer& asUser = UserPointer(), const SessionPointer& _session = SessionPointer() ) {
@@ -37,7 +38,7 @@ struct ClientSessionDesc {
 /*  typedef Binder< AllTeamworkServerMessages >::Append< UserListMessage >::Result
   AllTeamworkClientMessages;*/
 
-struct SessionPointerCompare {
+struct NETWORK_EXPORT SessionPointerCompare {
 public:
   bool operator () ( const SessionPointer& s1, const SessionPointer& s2 ) const {
     return s1.unsafe() < s2.unsafe();
@@ -45,7 +46,7 @@ public:
 };
 
 /// A teamwork-client generally is the same as a teamwork-server, except it not only supports incoming connections, but also outgoing ones and connections forwarded through a server, and may be associated with a user-identity.
-class Client : public Server {
+class NETWORK_EXPORT Client : public Server {
     typedef map< ServerInformation, ClientSessionDesc > ClientSessionMap;
     ClientSessionMap clientSessions_;
     friend class ClientSessionHandler;

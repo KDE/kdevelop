@@ -15,11 +15,12 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "teamworkmessages.h"
 #include "user.h"
+#include "networkexport.h"
 #include <list>
 
 namespace Teamwork {
 
-struct UserListMessage : public TeamworkMessage {
+struct NETWORK_EXPORT UserListMessage : public TeamworkMessage {
   DECLARE_MESSAGE( UserListMessage, TeamworkMessage, 2 );
   std::list<User> users;
 

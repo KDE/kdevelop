@@ -20,10 +20,12 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <iostream>
 #include <sstream>
 
+#include "networkexport.h"
+
 namespace Teamwork {
 
 ///WARNING: The functions in this class will be called from many different threads, but only from one thread at a time(due to mutex-locking)
-struct Logger : public SafeShared {
+struct NETWORK_EXPORT Logger : public SafeShared {
   enum Level {
     Debug = 1,
     Info = 2,
@@ -41,7 +43,7 @@ struct Logger : public SafeShared {
 };
 
 ///this class represents one line of logger-output. On its destruction the line is given to the logger. When it is copied, the copy-source is invalidated.
-class LoggerPrinter {
+class NETWORK_EXPORT LoggerPrinter {
   public:
     explicit LoggerPrinter( const LoggerPointer& logger, Logger::Level level = Logger::Info );
 

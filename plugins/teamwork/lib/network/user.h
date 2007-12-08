@@ -21,10 +21,11 @@
 #include "networkfwd.h"
 #include "safesharedptr.h"
 #include "weaksafesharedptr.h"
+#include "networkexport.h"
 
 namespace Teamwork {
 ///when a user is flagged as online that means that there is a session to that user. It does not mean that that session is really functional.
-class OnlineInformation {
+class NETWORK_EXPORT OnlineInformation {
     friend class User;
     SafeSharedPtr<SessionInterface> session_;
     //SessionPointer session_;
@@ -44,7 +45,7 @@ class OnlineInformation {
 };
 
 ///This represents the identity of a user, it can be used to store it persistently.
-class UserIdentity {
+class NETWORK_EXPORT UserIdentity {
     std::string name_;
     friend class User;
 
@@ -80,7 +81,7 @@ class UserIdentity {
 };
 
 
-class User : public WeakSafeShared {
+class NETWORK_EXPORT User : public WeakSafeShared {
     std::string name_;
     std::string password_;
     std::string description_;

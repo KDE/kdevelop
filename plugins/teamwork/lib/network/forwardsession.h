@@ -17,11 +17,12 @@
 #include "handler.h"
 #include "sessioninterface.h"
 #include "basicsession.h"
+#include "networkexport.h"
 
 namespace Teamwork {
   class ForwardMessage;
   ///A virtual session that uses another session to forward messages through it to a specified user
-  class ForwardSession : public SessionInterface, public SessionReplyManager {
+  class NETWORK_EXPORT ForwardSession : public SessionInterface, public SessionReplyManager {
       friend class MultiSession;
       MultiSessionPointer session_;
       UserPointer targetUser_;
@@ -72,7 +73,7 @@ namespace Teamwork {
   };
 
   ///This is a class that implements the session-interface, and just stores the messages that should be sent in a list. It can be used for debugging.
-  class FakeSession : public SessionInterface {
+  class NETWORK_EXPORT FakeSession : public SessionInterface {
       LoggerPointer logger_;
       MessageTypeSet& messageTypes_;
       HandlerPointer handler_;

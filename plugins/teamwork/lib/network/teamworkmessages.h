@@ -18,6 +18,7 @@
 #include "user.h"
 #include "messageimpl.h"
 #include "binder.h"
+#include "networkexport.h"
 
 namespace Teamwork {
 
@@ -30,14 +31,14 @@ vector<char> messageToData( MessageInterface* msg ) {
 
 /** Abstract message for all messages that have to do with the teamwork-stuff */
 
-class TeamworkMessage : public RawMessage {
+class NETWORK_EXPORT TeamworkMessage : public RawMessage {
     DECLARE_MESSAGE( TeamworkMessage, RawMessage, 1 );
   public:
     TeamworkMessage( const MessageConstructionInfo& messageTypes );
     TeamworkMessage( InArchive& arch, const MessageInfo& info );
 };
 
-class IdentificationMessage : public TeamworkMessage {
+class NETWORK_EXPORT IdentificationMessage : public TeamworkMessage {
     DECLARE_MESSAGE( IdentificationMessage, TeamworkMessage, 1 );
     User user_;
 
@@ -61,7 +62,7 @@ typedef TextMessage MaintenanceMessage;
 typedef Chain< MaintenanceMessage, TextMessage, 15> MaintenanceMessageChain;
 
 
-class ForwardMessage : public RawMessage {
+class NETWORK_EXPORT ForwardMessage : public RawMessage {
     DECLARE_MESSAGE( ForwardMessage, RawMessage, 2 );
     User source_;
     User target_;

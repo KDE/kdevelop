@@ -17,9 +17,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <string>
 #include "networkfwd.h"
 #include "safesharedptr.h"
+#include "networkexport.h"
 
 namespace Teamwork {
-  class SessionInterface : public /*Weak*/SafeShared {
+  class NETWORK_EXPORT SessionInterface : public /*Weak*/SafeShared {
   public:
     virtual void startSession();
 

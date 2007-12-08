@@ -18,21 +18,21 @@
 #include <vector>
 #include <string>
 #include <cstdlib>
-
+#include "networkexport.h"
 
 namespace Teamwork {
 
   class BasicTCPSession;
 
-  MessagePointer buildMessageFromArchive( InArchive& arch, MessageTypeSet& messages, SessionPointer sess  );
+  NETWORK_EXPORT MessagePointer buildMessageFromArchive( InArchive& arch, MessageTypeSet& messages, SessionPointer sess  );
   
   ///May throw several exceptions
-  void serializeMessageToArchive( OutArchive& arch, MessageInterface& message );
+  NETWORK_EXPORT void serializeMessageToArchive( OutArchive& arch, MessageInterface& message );
 
   ///May throw several exceptions
-  void serializeMessageToBuffer( std::vector<char>& buf, MessageInterface& message );
-  MessagePointer buildMessageFromBuffer( const std::vector<char>& buf, MessageTypeSet& messages, SessionPointer sess  );
-  MessagePointer buildMessageFromBuffer( const std::vector<char>& buf, MessageTypeSet& messages);
+  NETWORK_EXPORT void serializeMessageToBuffer( std::vector<char>& buf, MessageInterface& message );
+  NETWORK_EXPORT MessagePointer buildMessageFromBuffer( const std::vector<char>& buf, MessageTypeSet& messages, SessionPointer sess  );
+  NETWORK_EXPORT MessagePointer buildMessageFromBuffer( const std::vector<char>& buf, MessageTypeSet& messages);
 }
 
 template <class VecType, class Vec2Type>

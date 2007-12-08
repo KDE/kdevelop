@@ -46,13 +46,14 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #define DYNAMICMESSAGEDISPATCHER_H
 
 #include <vector>
+#include "networkexport.h"
 #include "dynamicmessagedispatcher_internal.h"
 #include "messagetypeset.h" //needed so the message-type-description can be extracted while registering
 
 namespace Teamwork {
 
   ///The message-dispatcher:
-class DynamicMessageDispatcher {
+class NETWORK_EXPORT DynamicMessageDispatcher {
   public:
     DynamicMessageDispatcher( MessageTypeSet& messageTypes = globalMessageTypeSet() );
     ~DynamicMessageDispatcher();

@@ -22,7 +22,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #define USE_BUFFER_SERIALIZATION
 
-struct MessageSerialization {
+struct NETWORK_EXPORT MessageSerialization {
   template <class Type, class Archive, class Target>
   static void load( Target& t, Archive& arch, int /*version*/ ) {
     bool b = false;

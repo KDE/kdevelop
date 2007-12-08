@@ -17,6 +17,7 @@
 #include "networkfwd.h"
 #include "messageinterface.h"
 #include "binder.h"
+#include "networkexport.h"
 ///Since objects must have external linkage to be usable as template-arguments, these must be defined here.
 
 namespace Teamwork {
@@ -53,7 +54,7 @@ class CustomMessage : public RawMessage {
  /**MessageConstructionInfo is a class used while constructing messages, that makes sure that the name of the most derived message will be passed on to RawMessage.
   *Use it by simply passing the this-pointer of each constructed message while passing it to the parent-message. */
 
- class MessageConstructionInfo {
+ class NETWORK_EXPORT MessageConstructionInfo {
  public:
    //This is the constructor you are supposed to use when creating a message(use the automatic conversion from MessageTypeSet&)
    MessageConstructionInfo( const MessageTypeSet& rhs );
@@ -80,7 +81,7 @@ class CustomMessage : public RawMessage {
     const MessageTypeSet& typeSet_;
  };
 
-  class RawMessage : public MessageInterface
+  class NETWORK_EXPORT RawMessage : public MessageInterface
   {
     DECLARE_MESSAGE( RawMessage, MessageInterface, 1 );
 
@@ -114,7 +115,7 @@ class CustomMessage : public RawMessage {
   };
 
 
-  class TextMessage : public RawMessage {
+  class NETWORK_EXPORT TextMessage : public RawMessage {
     DECLARE_MESSAGE( TextMessage, RawMessage, 3 );
     public:
       explicit TextMessage( const MessageConstructionInfo& messageTypes, const std::string& text = "" );
@@ -124,7 +125,7 @@ class CustomMessage : public RawMessage {
       std::string text() const;
   };
 
-  struct SystemMessage : public TextMessage
+  struct NETWORK_EXPORT SystemMessage : public TextMessage
   {
     DECLARE_MESSAGE( SystemMessage, TextMessage, 2 );
     public:

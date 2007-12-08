@@ -17,6 +17,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "networkfwd.h"
 #include "safesharedptr.h"
+#include "networkexport.h"
 #include <vector>
 
 #ifndef MESSAGEINTERFACE_H
@@ -28,7 +29,7 @@ namespace Teamwork {
 typedef uint64_t UniqueMessageId;
 
 ///MessageType represents the Message-Type
-class MessageType {
+class NETWORK_EXPORT MessageType {
   public:
     typedef std::vector<unsigned char> IdList;
   private:
@@ -67,7 +68,7 @@ class MessageType {
 };
 
 ///this class holds information about the instance of a message(it's id and an optional pointer to the session/user it was created in/for)
-class MessageInfo {
+class NETWORK_EXPORT MessageInfo {
     MessageType id_;
     SessionPointer session_;
     UserPointer user_;
@@ -144,7 +145,7 @@ To create and use an own message there's three things to do:
 3. Register the message to the used MessageTypeSet, to register it to globalMessageTypeSet() simply use the REGISTER_MESSAGE(Message)-macro(within an implementation-file).
 Now the message can be sent and received. */
 
-class MessageInterface : public SafeShared /*, public virtual Serializable*/ {
+class NETWORK_EXPORT MessageInterface : public SafeShared /*, public virtual Serializable*/ {
   public:
 
     virtual void serialize( OutArchive& target ) = 0;

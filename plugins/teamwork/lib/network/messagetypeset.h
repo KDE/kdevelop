@@ -21,6 +21,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "messagetypesetinternal.h"
 
 #include "messageinterface.h"
+#include "networkexport.h"
 
 #define MAXMESSAGESIZE 50000000
 #define DISABLEWARNINGS
@@ -37,7 +38,7 @@ namespace Teamwork {
 using namespace Tree;
 
 /**This allows multiple differing dispatch-targets(like the server + the thread). */
-class MessageTypeSet {
+class NETWORK_EXPORT MessageTypeSet {
     //protected:
     ///this should be optimized, and all the no more necessary template dispatch-code above removed
     typedef std::map<MessageType, MessageFactoryInterface* > TypeMap;
@@ -168,7 +169,7 @@ is based on, by calling "TargetType::receiveMessage( MessageType* )".
  * @param TargetType must be the type the messages should be delivered to
  * @param Messages must be the list of messages(without any inheritance-info)*/
 template <class TargetType, class Messages>
-class MessageDispatcher {
+class NETWORK_EXPORT MessageDispatcher {
     TargetType& targ_;
 
     struct EntryTemplate {
@@ -232,7 +233,7 @@ class MessageDispatcher {
 MessageTypeSet& globalMessageTypeSet();
 
 template <class MessageType>
-class RegisterMessageTypeInternal {
+class NETWORK_EXPORT RegisterMessageTypeInternal {
   public:
     RegisterMessageTypeInternal() {
       globalMessageTypeSet().registerMessageTypes<MessageType>();

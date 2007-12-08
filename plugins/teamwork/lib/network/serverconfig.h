@@ -17,9 +17,10 @@
 #include "user.h"
 #include <string>
 #include <set>
+#include "networkexport.h"
 
 namespace Teamwork {
-struct ServerConfiguration {
+struct NETWORK_EXPORT ServerConfiguration {
   std::string serverName;
   std::string serverPassword; ///A password that is used for users that don't have an own password set
   
@@ -36,8 +37,8 @@ struct ServerConfiguration {
   void serialize( Archive& arch, const unsigned int /*version*/ );
 };
 
-bool loadServerConfiguration( ServerConfiguration& conf );
-bool saveServerConfiguration( ServerConfiguration& conf );
+NETWORK_EXPORT bool loadServerConfiguration( ServerConfiguration& conf );
+NETWORK_EXPORT bool saveServerConfiguration( ServerConfiguration& conf );
 }
 
 #endif

@@ -19,6 +19,7 @@
 #include "weaksafesharedptr.h"
 #include "safelist.h"
 #include "logger.h"
+#include "networkexport.h"
 
 #include <cc++/socket.h>
 
@@ -26,7 +27,7 @@ namespace Teamwork {
 template <class Target>
 struct HandlerProxy;
 
-class BasicTCPSocket : public ost::TCPSocket {
+class NETWORK_EXPORT BasicTCPSocket : public ost::TCPSocket {
   protected:
     bool onAccept( const ost::InetHostAddress &ia, ost::tpport_t port );
 
@@ -39,7 +40,7 @@ This class never deletes itself, it can be deleted from outside once isRunning()
 For each client that connects, it creates a session derived from BasicSession, which can also be
 created by a derived class.
  */
-class BasicServer : protected ost::Thread, public WeakSafeShared {
+class NETWORK_EXPORT BasicServer : protected ost::Thread, public WeakSafeShared {
   public:
     BasicServer( const char* str, int port, MessageTypeSet& messageTypes, LoggerPointer logger, bool openServer = true );
 

@@ -140,7 +140,7 @@ class MessageSendHelper {
 };
 
 ///This can be used to simply send messages using the global message-type-set, @todo remove this
-MessageSendHelper& globalMessageSendHelper();
+NETWORK_EXPORT MessageSendHelper& globalMessageSendHelper();
 }
 #endif
 

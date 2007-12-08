@@ -14,6 +14,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #define WEAKPOINTER_H
 
 #include "safesharedptr.h"
+#include "networkexport.h"
 
 class WeakSafeShared;
 class WeakShared;
@@ -25,7 +26,7 @@ class WeakSafeSharedPtr;
 #endif
 
 
-class WeakReference : public SafeShared {
+class NETWORK_EXPORT WeakReference : public SafeShared {
     WeakSafeShared* pointer_;
     friend class WeakSafeShared;
 
@@ -39,7 +40,7 @@ class WeakReference : public SafeShared {
     }
 };
 
-class WeakSafeShared : protected SafeShared {
+class NETWORK_EXPORT WeakSafeShared : protected SafeShared {
     SafeSharedPtr<WeakReference> ref_;
 
     virtual void prepareDeletion() {
@@ -81,7 +82,7 @@ class WeakSafeShared : protected SafeShared {
  */
 
 template <class Item, class Serialization>
-class WeakSafeSharedPtr {
+class NETWORK_EXPORT WeakSafeSharedPtr {
     SafeSharedPtr<WeakReference> ref_;
   public:
     WeakSafeSharedPtr() {}
@@ -188,7 +189,7 @@ class WeakSafeSharedPtr {
     }
 };
 
-class NormalWeakReference : public Shared {
+class NETWORK_EXPORT NormalWeakReference : public Shared {
     WeakShared* pointer_;
     friend class WeakShared;
 
@@ -208,7 +209,7 @@ class NormalWeakReference : public Shared {
 /**  To use WeakSharedPtr on an object, that object must be based this type.
  */
 
-class WeakShared : private Shared {
+class NETWORK_EXPORT WeakShared : private Shared {
     SharedPtr<NormalWeakReference> ref_;
 
     virtual void prepareDeletion() {
@@ -234,7 +235,7 @@ class WeakShared : private Shared {
 };
 
 template <class Item, class Serialization = NormalSerialization>
-class WeakSharedPtr {
+class NETWORK_EXPORT WeakSharedPtr {
     SharedPtr<NormalWeakReference> ref_;
   public:
     WeakSharedPtr() {}
