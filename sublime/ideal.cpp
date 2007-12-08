@@ -21,12 +21,14 @@
 
 #include "ideal.h"
 
+#include <Qt>
 #include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KAcceleratorManager>
+#include <KMenu>
 
 #include "area.h"
 #include "view.h"
@@ -123,7 +125,7 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock
         IdealDockWidgetTitle* title = 
             new IdealDockWidgetTitle(
                 orientation() == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, 
-                dock, area, view);
+                dock, area, view, _area);
         dock->setTitleBarWidget(title);
         connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
         connect(title, SIGNAL(maximize(bool)), SLOT(maximize(bool)));
@@ -247,11 +249,13 @@ void IdealButtonBarWidget::actionToggled(bool state)
 
 IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, 
                                            QDockWidget * parent, 
-                                           Area *area, View *view)
+                                           Area *area, View *view,
+                                           Qt::DockWidgetArea docking_area)
     : QWidget(parent)
     , m_orientation(orientation)
     , m_area(area)
     , m_view(view)
+    , m_docking_area(docking_area)
 {
     QBoxLayout* layout = 0;
     switch (m_orientation) {
@@ -355,6 +359,57 @@ void IdealDockWidgetTitle::slotRemove()
     m_area->removeToolView(m_view);
 }
 
+void IdealDockWidgetTitle::contextMenuEvent(QContextMenuEvent *event)
+{
+    KMenu menu;
+
+    menu.addTitle(i18n("Position"));
+
+    QActionGroup *g = new QActionGroup(this);
+
+    QAction *left = new QAction(i18n("Left"), g);
+    QAction *bottom = new QAction(i18n("Bottom"), g);
+    QAction *right = new QAction(i18n("Right"), g);
+    QAction *top = new QAction(i18n("Top"), g);
+
+    QAction* actions[] = {left, bottom, right, top};
+    for (int i = 0; i < 4; ++i)
+    {
+        menu.addAction(actions[i]);
+        actions[i]->setCheckable(true);
+    }
+    if (m_docking_area == Qt::TopDockWidgetArea)
+        top->setChecked(true);
+    else if (m_docking_area == Qt::BottomDockWidgetArea)
+        bottom->setChecked(true);
+    else if (m_docking_area == Qt::LeftDockWidgetArea)
+        left->setChecked(true);
+    else 
+        right->setChecked(true);
+
+    QAction* triggered = menu.exec(event->globalPos());
+
+    if (triggered)
+    {
+        Sublime::Position pos;
+        if (triggered == left)
+            pos = Sublime::Left;
+        else if (triggered == bottom)
+            pos = Sublime::Bottom;
+        else if (triggered == right)
+            pos = Sublime::Right;
+        else
+            pos = Sublime::Top;
+
+        Area *area = m_area;
+        View *view = m_view;
+        /* This call will delete *this, so we no longer
+           can access member variables. */
+        m_area->moveToolView(m_view, pos);
+        area->raiseToolView(view);
+    }
+}
+
 IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     : QWidget(parent)
 {
@@ -454,7 +509,15 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
 
     KAcceleratorManager::setNoAccel(dock);
 
-    dock->setWidget(view->widget(dock));
+    QWidget *w = view->widget(dock);
+    if (w->parent() == 0)
+    {
+        /* Could happen when we're moving the widget from
+           one QDockWidget to another.  See moveView below.
+           In this case, we need to reparent the widget. */
+        w->setParent(dock);
+    }
+    dock->setWidget(w);
     dock->setWindowTitle(view->widget()->windowTitle());
     dock->setAutoFillBackground(true);
     dock->setFocusProxy(dock->widget());
@@ -509,7 +572,7 @@ void IdealMainWidget::raiseView(View * view)
     action->setChecked(true);
 }
 
-void IdealMainWidget::removeView(View* view)
+void IdealMainWidget::removeView(View* view, bool nondestructive)
 {
     Q_ASSERT(m_view_to_action.contains(view));
 
@@ -530,7 +593,16 @@ void IdealMainWidget::removeView(View* view)
     m_view_to_action.remove(view);
     m_dockwidget_to_action.remove(dock);
 
+    if (nondestructive)
+        view->widget()->setParent(0);
+
     delete dock;
+}
+
+void IdealMainWidget::moveView(View *view, Qt::DockWidgetArea area)
+{
+    removeView(view);
+    addView(area, view);
 }
 
 void IdealMainWidget::setCentralWidget(QWidget * widget)

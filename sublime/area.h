@@ -92,8 +92,13 @@ public:
     the proper position for the toolview when necessary. If it has no configuration
     for this view, it will use @p defaultPosition.*/
     void addToolView(View *toolView, Position defaultPosition);
+
     /**Removes the toolview from the area.*/
     View* removeToolView(View *toolView);
+
+    /**Moves the toolview to a different position.  */
+    void moveToolView(View *toolView, Position newPosition);
+
     /**Raise tool view.*/
     void raiseToolView(View *toolView);
     /**@return the list of toolviews in the area. No particular sort order is guaranteed.*/
@@ -165,6 +170,8 @@ Q_SIGNALS:
     void requestToolViewRaise(Sublime::View*);
     /**Emitted when a toolview is going to be removed from the area.*/
     void aboutToRemoveToolView(Sublime::View*, Sublime::Position);
+    /**Emitted when a toolview is moved to a different position.*/
+    void toolViewMoved(Sublime::View*, Sublime::Position);
 
 private:
     template <typename Operator>

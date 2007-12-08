@@ -188,6 +188,15 @@ View* Area::removeToolView(View *view)
     return view;
 }
 
+void Area::moveToolView(View *toolView, Position newPosition)
+{
+    if (!d->toolViews.contains(toolView))
+        return;
+
+    d->toolViewPositions[toolView] = newPosition;
+    emit toolViewMoved(toolView, newPosition);
+}
+
 QList<View*> &Area::toolViews() const
 {
     return d->toolViews;

@@ -135,6 +135,8 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
         mainWindow, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
     connect(areaToShow, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
+    connect(areaToShow, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
+        mainWindow, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
 }
 
 QList<Area*> &Controller::areas() const

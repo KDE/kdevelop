@@ -117,7 +117,8 @@ class IdealDockWidgetTitle : public QWidget
 
 public:
     IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, 
-                         Area* area, View *view);
+                         Area* area, View *view, 
+                         Qt::DockWidgetArea docking_area);
     virtual ~IdealDockWidgetTitle();
 
     bool isAnchored() const;
@@ -125,6 +126,9 @@ public:
 
     bool isMaximized() const;
     void setMaximized(bool maximized);
+
+protected: // QWidget overrides
+    virtual void contextMenuEvent(QContextMenuEvent *);
 
 Q_SIGNALS:
     void anchor(bool anchor);
@@ -142,6 +146,7 @@ private:
     QToolButton* m_maximize;
     Area *m_area;
     View *m_view;
+    Qt::DockWidgetArea m_docking_area;
 };
 
 class IdealCentralWidget : public QWidget
@@ -172,7 +177,11 @@ public:
     QAction* actionForView(View* view) const;
     void addView(Qt::DockWidgetArea area, View* View);
     void raiseView(View* view);
-    void removeView(View* view);
+    /** Remove view.  If nondestructive true, view->widget()
+        is not deleted, as is left with NULL parent.
+        Otherwise, it's deleted.  */
+    void removeView(View* view, bool nondestructive = false);
+    void moveView(View *view, Qt::DockWidgetArea area);
 
     // Internal api
 
