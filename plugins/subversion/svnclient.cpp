@@ -35,7 +35,7 @@ extern "C" {
 #include <svncpp/targets.hpp>
 #include <svncpp/pool.hpp>
 
-#include <ktempdir.h>
+#include <kstandarddirs.h>
 
 #include <vcsrevision.h>
 #include <vcsannotation.h>
@@ -94,14 +94,6 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
     // null options
     apr_array_header_t *options = svn_cstring_split( "", "\t\r\n", false, pool );
 
-    KTempDir tempDir;
-
-    if( tempDir.status() != 0 )
-    {
-        svn::ClientException ce("Couldn't create temporary directory");
-        throw ce;
-    }
-
     svn_error_t* error;
 
     const char* outfileName = 0;
@@ -109,8 +101,8 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
     const char* errfileName = 0;
     apr_file_t* errfile = 0;
 
-    QByteArray ba = tempDir.name().toUtf8();
-
+    QByteArray ba = (KStandardDirs::locateLocal("tmp","")+"kdevelop_svn_diff" ).toUtf8();
+    
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", FALSE, pool );
 
     if( error != 0 )
@@ -126,6 +118,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
         ::cleanup( outfile, outfileName, errfile, errfileName, pool );
         throw svn::ClientException( error );
     }
+        
     error = svn_client_diff3( options,
                             src.c_str(), srcRev.revision(),
                             dst.c_str(), dstRev.revision(),
@@ -178,13 +171,6 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
     // null options
     apr_array_header_t *options = svn_cstring_split( "", "\t\r\n", false, pool );
 
-    KTempDir tempDir;
-
-    if( tempDir.status() != 0 )
-    {
-        svn::ClientException ce("Couldn't create temporary directory");
-        throw ce;
-    }
 
     svn_error_t* error;
 
@@ -193,7 +179,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
     const char* errfileName = 0;
     apr_file_t* errfile = 0;
 
-    QByteArray ba = tempDir.name().toUtf8();
+    QByteArray ba = KStandardDirs::locateLocal("tmp","").toUtf8();
 
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", FALSE, pool );
 
