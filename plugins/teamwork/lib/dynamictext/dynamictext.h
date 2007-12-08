@@ -25,6 +25,7 @@ typedef std::string String;
 #include "vectortimestamp.h"
 #include "offsetutils.h"
 
+#include "dynamictextexport.h"
 #include "dynamictexthelpers.h"
 #include "flexibletext.h"
 using namespace Tree;
@@ -59,7 +60,7 @@ struct hash<OffsetRequest> {
  *
  * currently, every function may throw DynamicTextError on problems
  * */
-class DynamicText : public SafeShared {
+class DYNAMICTEXT_EXPORT DynamicText : public SafeShared {
 
   public:
     typedef std::string String;

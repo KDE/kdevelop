@@ -19,10 +19,11 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/level.hpp>
 #include <iosfwd>
+#include "dynamictextexport.h"
 
 typedef int Timestamp;
 
-class VectorTimestamp {
+class DYNAMICTEXT_EXPORT VectorTimestamp {
     std::vector<Timestamp> m_state;
     uint m_primaryIndex;
   public:
@@ -116,7 +117,7 @@ class VectorTimestamp {
     std::string print() const;
 };
 
-std::ostream& operator << ( std::ostream& str, const VectorTimestamp& timestamp );
+DYNAMICTEXT_EXPORT std::ostream& operator << ( std::ostream& str, const VectorTimestamp& timestamp );
 
 BOOST_CLASS_IMPLEMENTATION(VectorTimestamp, object_serializable)
 

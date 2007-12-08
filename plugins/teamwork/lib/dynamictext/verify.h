@@ -15,6 +15,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include <string>
 #include <sstream>
+#include "dynamictextexport.h"
 
 struct DynamicTextErrorDummy {
   std::string what() const {
@@ -22,7 +23,7 @@ struct DynamicTextErrorDummy {
 	}
 };
 
-struct DynamicTextError {
+struct DYNAMICTEXT_EXPORT DynamicTextError {
   std::string function;
   int line;
   std::string file;

@@ -23,6 +23,7 @@
 #include "network/sharedptr.h"
 #include "network/weaksafesharedptr.h"
 #include "vectortimestamp.h"
+#include "dynamictextexport.h"
 
 ///Check whether these are useful for something or should be completely removed
 //#define USELINKS
@@ -33,7 +34,7 @@ class Advancer;
 typedef SharedPtr<Replacement, BoostSerializationNormal> ReplacementPointer;
 typedef WeakSharedPtr<Replacement, BoostSerializationNormal> WeakReplacementPointer;
 
-struct SimpleReplacement {
+struct DYNAMICTEXT_EXPORT SimpleReplacement {
 	uint m_position;
 	std::string m_oldText;
 	std::string m_newText;
@@ -50,9 +51,9 @@ struct SimpleReplacement {
 	}
 };
 
-std::ostream& operator << ( std::ostream& o, const SimpleReplacement& rhs );
+DYNAMICTEXT_EXPORT std::ostream& operator << ( std::ostream& o, const SimpleReplacement& rhs );
 
-class Replacement : public WeakShared {
+class DYNAMICTEXT_EXPORT Replacement : public WeakShared {
 	public:
 
 		Replacement( const VectorTimestamp& state, const SimpleReplacement& repl ) : m_state( state ), m_replacement( repl ), m_enabled(true) {}
@@ -117,7 +118,7 @@ class Replacement : public WeakShared {
 		bool m_enabled;
 };
 
-struct ReplacementChain {
+struct DYNAMICTEXT_EXPORT ReplacementChain {
 	ReplacementPointer first, last;
 	template<class Archive>
 	void serialize( Archive& arch, const uint ) {
@@ -125,7 +126,7 @@ struct ReplacementChain {
 	}
 };
 
-struct ReplacementId {
+struct DYNAMICTEXT_EXPORT ReplacementId {
 	uint primaryIndex;
 	Timestamp stamp;
 	ReplacementId( uint i = 0, Timestamp st = 0 ) : primaryIndex( i ), stamp( st ) {}

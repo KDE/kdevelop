@@ -21,6 +21,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "network/weaksafesharedptr.h"
 
 #include "verify.h"
+#include "dynamictextexport.h"
 
 namespace SumTree {
 class Node;
@@ -36,7 +37,7 @@ struct IndexAndSum {
 };
 
 ///Everything may throw DynamicTextError. Every pointer to Nodes, except those from parent-node to slave-node, must be weak-pointers.(because the ref-count is important for ownership-stuff)
-class Node : public Shared {
+class DYNAMICTEXT_EXPORT Node : public Shared {
   typedef std::list<NodePointer> ListType;
   public:
     Node( bool isLeaf, Node* parent );
@@ -123,7 +124,7 @@ class Node : public Shared {
 };
 
 ///This object can be copied around and changed at will, no other instances of it will be affected, while still staying efficient(Because of implicit node-sharing)
-class Map : public WeakShared {
+class DYNAMICTEXT_EXPORT Map : public WeakShared {
   public:
     typedef std::vector< int > SumVector; ///Pairs of (index, sum-value). Muss dicht sein.
     ///preferredOrder says how many slave-nodes one node should ideally have. Higher values -> faster manipulation, lower values -> faster lookup

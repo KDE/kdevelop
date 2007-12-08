@@ -19,6 +19,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <boost/serialization/map.hpp>
 #include <string>
 #include <iosfwd>
+#include "dynamictextexport.h"
 
 typedef int OffsetPosition;
 
@@ -38,7 +39,7 @@ struct OffsetMapError {
 
 ///@todo there's a lot of room for optimizations in this.. but first make sure everything works correctly. Everything may throw DynamicTextError
 
-class OffsetMap {
+class DYNAMICTEXT_EXPORT OffsetMap {
   public:
     void clear();
 
