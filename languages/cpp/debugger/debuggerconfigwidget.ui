@@ -115,9 +115,6 @@ check this option.</string>
           <property name="text" >
            <string>Display static &amp;members</string>
           </property>
-          <property name="shortcut" >
-           <string>Alt+M</string>
-          </property>
          </widget>
         </item>
         <item>
@@ -161,9 +158,6 @@ This toolbar is in addition to the toolbar in KDevelop.</string>
           <property name="text" >
            <string>E&amp;nable floating toolbar</string>
           </property>
-          <property name="shortcut" >
-           <string>Alt+N</string>
-          </property>
          </widget>
         </item>
         <item>
@@ -176,9 +170,6 @@ Otherwise leave it unchecked.</string>
           </property>
           <property name="text" >
            <string>Enable separate terminal for application &amp;IO</string>
-          </property>
-          <property name="shortcut" >
-           <string>Alt+I</string>
           </property>
          </widget>
         </item>
