@@ -54,6 +54,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const IncludeAst * );
         virtual int visit( const MacroCallAst * call);
         virtual int visit( const FindPackageAst * );
+        virtual int visit( const MarkAsAdvancedAst * );
         virtual int visit( const FindProgramAst * );
         virtual int visit( const FindPathAst * );
         virtual int visit( const FindLibraryAst * );

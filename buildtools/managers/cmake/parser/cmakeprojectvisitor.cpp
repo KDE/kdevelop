@@ -163,7 +163,7 @@ int CMakeProjectVisitor::notImplemented(const QString &name) const
 int CMakeProjectVisitor::visit(const CMakeAst *ast)
 {
 //     kDebug(9042) << "Pipiripipi" << ast->children().count();
-    kDebug(9042) << "error! function not implemented" << ast->content()[0].name;
+    kDebug(9042) << "error! function not implemented" << ast->content()[ast->line()].name;
 #if 0
     if(ast->children().isEmpty())
         kDebug(9032) << "warning: visiting an element without children.";
@@ -287,7 +287,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             break;
         }
     }
-    kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
+//     kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
     return path;
 }
 
@@ -519,7 +519,6 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
         ++lines;
     }
     ++lines; //We do not want to return to endmacro
-    
     m_macros->insert(macro->macroName(), m);
     return lines;
 }
@@ -593,11 +592,12 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
 
 int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
 {
-    kDebug(9042) << "Visiting If" << ifast->condition();
-
     int lines=ifast->line();
     CMakeCondition cond(m_vars);
-    if(cond.condition(ifast->condition()))
+    bool result=cond.condition(ifast->condition());
+    
+    kDebug(9042) << "Visiting If" << ifast->condition() << "?" << result;
+    if(result)
     {
 //         kDebug(9042) << "if executed, @" << lines; //<< "now:" << ifast->content()[lines+1].writeBack();
         lines+=walk(ifast->content(), lines+1)-lines;
@@ -1131,7 +1131,6 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     return 1;
 }
 
-
 int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
 {
     kDebug(9042) << "Adding defs: " << addDef->definitions();
@@ -1149,6 +1148,12 @@ int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
         m_defs.append(d);
         kDebug(9042) << "added definition" << d << " from " << def;
     }
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const MarkAsAdvancedAst *maa)
+{
+    kDebug(9042) << "Mark As Advanced" << maa->advancedVars();
     return 1;
 }
 

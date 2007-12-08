@@ -59,6 +59,7 @@ class ForeachAst;
 class StringAst;
 class SubdirsAst;
 class GetCMakePropertyAst;
+class MarkAsAdvancedAst;
 class CMakeAst;
 
 class CMakeAstVisitor {
@@ -84,6 +85,7 @@ class CMakeAstVisitor {
 	virtual int visit( const ExecuteProcessAst * ) = 0;
         virtual int visit( const IncludeDirectoriesAst * ) = 0;
         virtual int visit( const MacroCallAst * ) = 0;
+        virtual int visit( const MarkAsAdvancedAst * ) = 0;
         virtual int visit( const FindPackageAst * ) = 0;
         virtual int visit( const FindProgramAst * ) = 0;
         virtual int visit( const FindPathAst * ) = 0;

@@ -126,20 +126,26 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
         if(!done)
             it--;
     }
-//     kDebug(9042) << "it2" << *it << *itStop;
     return it;
 }
 
 bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd) const
 {
     bool last = false, done=false;
-    while(!done && itBegin!=itEnd)
+    while(!done)
     {
-        QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
+        QStringList::const_iterator it2;
+        if(itBegin==itEnd) {
+            it2 = itBegin;
+            done = true;
+        } else
+            it2 = prevOperator(itEnd, itBegin);
+        
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
-//         kDebug(9032) << "operator" << *it2 << c << "..." << variable;
+//         kDebug(9042) << " or " << last;
+//         kDebug(9032) << "operator" << *it2 << c;
         QString cmd;
         
         if(c==variable && it2==itBegin)
@@ -165,7 +171,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case EXISTS:
             {
                 QString v=*(it2+1);
-                kDebug(9042) << "EXISTS" << v << *it2;
+//                 kDebug(9042) << "EXISTS" << v << *it2;
                 if(v.isEmpty())
                     kDebug(9042) << "error: no";
                 else
@@ -248,9 +254,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 last= (strA==strB);
                 itEnd=it2-1;
             }   break;
-            default:
-                kDebug(9042) << "unrecog:" << *it2;
-                break;
+            /*default:
+                kDebug(9042) << "no operator:" << *it2;
+                break;*/
         }
     }
     return last;
@@ -259,6 +265,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 bool CMakeCondition::condition(const QStringList &expression) const
 {
     bool ret = evaluateCondition(expression.constBegin(), expression.constEnd());
-    kDebug(9042) << "condition" << expression << "=>" << ret;
+//     kDebug(9042) << "condition" << expression << "=>" << ret;
     return ret;
 }

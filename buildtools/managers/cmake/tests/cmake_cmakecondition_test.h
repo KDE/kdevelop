@@ -36,8 +36,8 @@ private slots:
     void testGoodParse();
     void testGoodParse_data();
 
-    void testBadParse();
-    void testBadParse_data();
+//     void testBadParse();
+//     void testBadParse_data();
     
 private:
     VariableMap* m_vars;

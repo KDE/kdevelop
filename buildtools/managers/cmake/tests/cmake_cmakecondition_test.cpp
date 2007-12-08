@@ -35,13 +35,13 @@ CMakeConditionTest::~CMakeConditionTest()
 {
     delete m_vars;
 }
-        
-        
+
 void CMakeConditionTest::testGoodParse()
 {
     QFETCH( QStringList, expression );
+    QFETCH( bool, result );
     CMakeCondition cond(m_vars);
-    QVERIFY( cond.condition(expression) );
+    QVERIFY( cond.condition(expression)==result );
 }
 
 void CMakeConditionTest::testGoodParse_data()
@@ -49,26 +49,21 @@ void CMakeConditionTest::testGoodParse_data()
     QStringList condition;
     
     QTest::addColumn<QStringList>( "expression" );
-    QTest::newRow( "variable check" ) << QStringList("TRUE");
-    QTest::newRow( "and" ) << QString("TRUE;AND;TRUE").split(";");
-    QTest::newRow( "not+and" ) << QString("NOT;FALSE;AND;TRUE").split(";");
-    QTest::newRow( "not+and+command" ) << QString("NOT;FALSE;AND;COMMAND;/usr/bin/ls").split(";");
-    QTest::newRow( "not+and+exists" ) << QString("NOT;FALSE;AND;EXISTS;/etc/group").split(";");
-}
-
-void CMakeConditionTest::testBadParse()
-{
-    QFETCH( QStringList, expression );
-    QVERIFY( true );
-}
-
-void CMakeConditionTest::testBadParse_data()
-{//TODO
-    QStringList condition;
-    
-    QTest::addColumn<QStringList>( "expression" );
-    QTest::newRow( "variable check" ) << QStringList("FALSE");
-    QTest::newRow( "ban wrong name" ) << QString("NOT;NOT").split(";");
+    QTest::addColumn<bool>( "result" );
+    QTest::newRow( "variable check" ) << QStringList("TRUE") << true;
+    QTest::newRow( "false variable check" ) << QStringList("FALSE") << false;
+    QTest::newRow( "not" ) << QString("NOT;FALSE").split(";") << true;
+    QTest::newRow( "not1" ) << QString("NOT;TRUE").split(";") << false;
+    QTest::newRow( "and" ) << QString("TRUE;AND;TRUE").split(";") << true;
+    QTest::newRow( "false+and" ) << QString("FALSE;AND;TRUE").split(";") << false;
+    QTest::newRow( "and+false" ) << QString("TRUE;AND;FALSE").split(";") << false;
+    QTest::newRow( "not+and" ) << QString("NOT;FALSE;AND;TRUE").split(";") << true;
+    QTest::newRow( "not+and+command" ) << QString("NOT;FALSE;AND;COMMAND;/usr/bin/ls").split(";") << true;
+    QTest::newRow( "not+and+exists" ) << QString("NOT;FALSE;AND;EXISTS;/etc/group").split(";") << true;
+    QTest::newRow( "or" ) << QString("TRUE;OR;TRUE").split(";") << true;
+    QTest::newRow( "false+or" ) << QString("FALSE;OR;TRUE").split(";") << true;
+    QTest::newRow( "false+or+false" ) << QString("FALSE;OR;FALSE").split(";") << false;
+    QTest::newRow( "not+or" ) << QString("NOT;TRUE;OR;TRUE").split(";") << true;
 }
 
 #include "cmake_cmakecondition_test.moc"

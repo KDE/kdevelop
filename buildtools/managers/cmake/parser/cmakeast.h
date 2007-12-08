@@ -67,7 +67,7 @@ public:
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
     
     int line() const { return m_line; }
-    const CMakeFileContent content() const { return m_content; }
+    const CMakeFileContent & content() const { return m_content; }
     void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
     
     private:
