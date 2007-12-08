@@ -33,7 +33,8 @@
 #include <QScriptEngine>
 #include <QScriptValue>
 
-CMakeProjectVisitor::CMakeProjectVisitor(const QString& root) : m_root(root)
+CMakeProjectVisitor::CMakeProjectVisitor(const QString& root)
+    : m_root(root), m_defaultLibraryDirs("/usr/lib/")
 {}
 
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
@@ -449,6 +450,10 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     QStringList locationOptions = flib->path();
     QStringList path, files=flib->filenames();
 
+    if(!flib->noDefaultPath()) {
+        locationOptions += m_defaultLibraryDirs;
+    }
+    
     kDebug(9042) << "Find Library:" << flib->filenames();
     foreach(QString p, files) {
         QString p1=findFile(p, locationOptions, Library);
@@ -725,7 +730,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         }
         p->setWorkingDirectory(exec->workingDirectory());
         p->setOutputChannelMode(KProcess::MergedChannels);
-        QString execName=args.takeFirst();;
+        QString execName=args.takeFirst();
         p->setProgram(execName, args);
         p->start();
         procs.append(p);
@@ -864,18 +869,10 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 
 int CMakeProjectVisitor::visit(const OptionAst *opt)
 {
-    //TODO: Save options somewhere
-    QStringList vars = resolveVariable(opt->variableName(), m_vars);
     kDebug(9042) << "option" << opt->variableName() << "-" << opt->description();
     
-    if(vars.isEmpty())
-        return 1;
-    QString varname = vars[0];
     if(!m_vars->contains(opt->variableName())) {
-        if(opt->defaultValue())
-            m_vars->insert(varname, QStringList("ON"));
-        else
-            m_vars->insert(varname, QStringList("OFF"));
+        m_vars->insert(opt->variableName(), QStringList(opt->defaultValue()));
     }
     return 1;
 }
@@ -908,7 +905,6 @@ int CMakeProjectVisitor::visit(const ListAst *list)
                 theList.insert(p, elem);
                 p++;
             }
-            
             m_vars->insert(list->list(), theList);
         }   break;
         case ListAst::REMOVE_ITEM:

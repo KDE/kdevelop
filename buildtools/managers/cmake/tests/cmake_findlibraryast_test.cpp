@@ -34,18 +34,34 @@ void FindLibraryAstTest::testGoodParse()
 
 void FindLibraryAstTest::testGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "find_library";
+    l.addArguments(QString("DEST_VAR name").split(' '));
+    QTest::newRow("findlib with name") << l;
+    
+    l.arguments.clear();
+    l.addArguments(QString("DEST_VAR name /path/to/lib").split(' '));
+    QTest::newRow("findlib with name and path") << l;
 }
 
 void FindLibraryAstTest::testBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    FindLibraryAst* ast = new FindLibraryAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
 
 void FindLibraryAstTest::testBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "lol";
+    l.addArguments(QString("DEST_VAR name").split(' '));
+    QTest::newRow("findlib with name") << l;
 }
 
 #include "cmake_findlibraryast_test.moc"

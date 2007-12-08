@@ -100,7 +100,7 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 
 bool CMakeCondition::isTrue(const QString& varName) const
 {
-	kDebug(9042) << "+++++++ isTrue: " << varName;
+//     kDebug(9042) << "+++++++ isTrue: " << varName;
     
     if(m_vars->contains(varName))
     {
@@ -118,7 +118,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
 {
     bool done=false;
     it--;
-    kDebug(9042) << "it" << *it;
+//     kDebug(9042) << "it" << *it;
     while(!done && it!=itStop)
     {
         conditionToken c = typeName(*it);
@@ -126,7 +126,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
         if(!done)
             it--;
     }
-    kDebug(9042) << "it2" << *it << *itStop;
+//     kDebug(9042) << "it2" << *it << *itStop;
     return it;
 }
 

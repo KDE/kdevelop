@@ -1197,20 +1197,19 @@ void FindLibraryAst::writeBack( QString& ) const
 
 bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="find_library" || func.arguments.count()<3)
+    if(func.name.toLower()!="find_library" || func.arguments.count()<2)
         return false;
     
-    //FIXME: FIND_PATH(KDE4_DATA_DIR cmake/modules/FindKDE4Internal.cmake ${_data_DIR})
     bool definedNames=false;
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
-    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
     if(it->value=="NAMES") {
         ++it;
         definedNames = true;
     } else {
         m_filenames=QStringList(it->value);
-        it++;
+        ++it;
         s=PATHS;
         definedNames = false;
     }
@@ -1229,23 +1228,23 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_documentation = it->value;
         } else if(it->value=="PATHS")
             s=PATHS;
-            else if(it->value=="PATH_SUFFIXES")
-                s=PATH_SUFFIXES;
-            else switch(s) {
-                case NAMES:
-                    m_filenames << it->value;
-                    if(!definedNames)
-                        s=PATHS;
-                    break;
-                case PATHS:
-                    m_path << it->value;
-                    break;
-                case PATH_SUFFIXES:
-                    m_pathSuffixes << it->value;
-                    break;
-            }
+        else if(it->value=="PATH_SUFFIXES")
+            s=PATH_SUFFIXES;
+        else switch(s) {
+            case NAMES:
+                m_filenames << it->value;
+                if(!definedNames)
+                    s=PATHS;
+                break;
+            case PATHS:
+                m_path << it->value;
+                break;
+            case PATH_SUFFIXES:
+                m_pathSuffixes << it->value;
+                break;
+        }
     }
-    return !m_filenames.isEmpty() && !m_path.isEmpty();
+    return !m_filenames.isEmpty();
 }
 
 FindPackageAst::FindPackageAst()
@@ -2142,11 +2141,9 @@ bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_type=STATUS;
         else if(type=="FATAL_ERROR")
             m_type=FATAL_ERROR;
-        else
-            m_message.append(func.arguments.last().value);
     }
-    else
-        m_message.append(func.arguments.last().value);
+    
+    m_message.append(func.arguments.last().value); //Maybe should do a foreach
     return true;
 }
 
@@ -2168,10 +2165,9 @@ bool OptionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     m_variableName = func.arguments[0].value;
     m_description = func.arguments[1].value;
+    m_defaultValue = "OFF";
     if(func.arguments.count() ==3)
-        m_defaultValue = func.arguments[2].value=="TRUE";
-    else
-        m_defaultValue=false;
+        m_defaultValue = func.arguments[2].value;
     return true;
 }
 

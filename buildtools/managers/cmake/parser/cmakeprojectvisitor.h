@@ -104,6 +104,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         
+        QStringList m_defaultLibraryDirs;
         QStringList m_modulePath;
         QString m_projectName;
         QStringList m_subdirectories;

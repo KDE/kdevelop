@@ -553,7 +553,7 @@ CMAKE_END_AST_CLASS( MessageAst )
 CMAKE_BEGIN_AST_CLASS( OptionAst )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, description, Description )
-CMAKE_ADD_AST_MEMBER( bool, bool, defaultValue, defaultValue )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, defaultValue, defaultValue )
 CMAKE_END_AST_CLASS( OptionAst )
 
 
