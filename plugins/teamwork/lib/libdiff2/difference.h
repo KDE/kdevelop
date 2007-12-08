@@ -23,6 +23,8 @@
 
 #include <kdebug.h>
 
+#include "diffexport.h"
+
 class QString;
 
 namespace Diff2
@@ -150,7 +152,7 @@ typedef Q3ValueVector<DifferenceString*> DifferenceStringList;
 typedef Q3ValueVector<DifferenceString*>::iterator DifferenceStringListIterator;
 typedef Q3ValueVector<DifferenceString*>::const_iterator DifferenceStringListConstIterator;
 
-class Difference
+class DIFF2_EXPORT Difference
 {
 public:
 	enum Type { Change, Insert, Delete, Unchanged };
