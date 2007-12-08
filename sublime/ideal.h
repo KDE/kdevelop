@@ -203,6 +203,7 @@ public Q_SLOTS:
     void maximizeCurrentDock(bool maximized);
     void selectNextDock();
     void selectPreviousDock();
+    void removeView();
 
 private:
     IdealButtonBarWidget *leftBarWidget;

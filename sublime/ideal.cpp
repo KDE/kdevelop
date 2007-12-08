@@ -28,6 +28,7 @@
 #include <KActionMenu>
 #include <KAcceleratorManager>
 
+#include "area.h"
 #include "view.h"
 #include "document.h"
 #include "mainwindow.h"
@@ -137,6 +138,7 @@ void IdealButtonBarWidget::removeAction(QAction * action)
 {
     _widgets.remove(action);
     delete _buttons.take(action);
+    delete action;
 }
 
 Qt::Orientation IdealButtonBarWidget::orientation() const
@@ -415,6 +417,10 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);
 
+    action = new KAction(i18n("Remove view"), this);
+    connect(action, SIGNAL(triggered(bool)), SLOT(removeView()));
+    ac->addAction("remove_view", action);
+
     action = m_docks = new KActionMenu(i18n("Docks"), this);
     ac->addAction("docks_submenu", action);
 }
@@ -487,11 +493,19 @@ void IdealMainWidget::removeView(View* view)
     QDockWidget* dock = qobject_cast<QDockWidget*>(view->widget()->parentWidget());
     Q_ASSERT(dock);
 
+    /* Hide the view, first.  This is a workaround -- if we
+       try to remove QDockWidget without this, then eventually
+       a call to IdealMainLayout::takeAt will be made, which 
+       method asserts immediately.  */
+    action->setChecked(false);
+
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(docks[dock])))
         bar->removeAction(action);
 
     m_view_to_action.remove(view);
     m_dockwidget_to_action.remove(dock);
+
+    delete dock;
 }
 
 void IdealMainWidget::setCentralWidget(QWidget * widget)
@@ -895,6 +909,12 @@ void IdealMainWidget::selectPreviousDock()
         QAction* action = bar->actions().at(index);
         action->setChecked(true);
     }
+}
+
+void IdealMainWidget::removeView()
+{
+    MainWindow *main = dynamic_cast<MainWindow*>(parent());
+    main->area()->removeToolView(main->activeToolView());
 }
 
 void Sublime::IdealMainWidget::setShowDockStatus(IdealMainLayout::Role role, bool checked)
