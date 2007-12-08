@@ -36,7 +36,12 @@
 #include <ioutputview.h>
 #include <projectmodel.h>
 #include <context.h>
+#include <vcs/vcsrevision.h>
+#include <vcs/vcsevent.h>
+#include <vcs/vcsrevision.h>
 #include <vcs/vcsmapping.h>
+#include <vcs/vcsstatusinfo.h>
+#include <vcs/vcsannotation.h>
 #include "vcs/widgets/vcsannotationwidget.h"
 #include "vcs/widgets/vcseventwidget.h"
 #include "vcs/widgets/vcsdiffwidget.h"
@@ -96,6 +101,7 @@ KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     qRegisterMetaType<SvnInfoHolder>();
     qRegisterMetaType<KDevelop::VcsEvent>();
     qRegisterMetaType<KDevelop::VcsRevision>();
+    qRegisterMetaType<KDevelop::VcsRevision::RevisionSpecialType>();
     qRegisterMetaType<KDevelop::VcsAnnotation>();
     qRegisterMetaType<KDevelop::VcsAnnotationLine>();
     m_outputmodel = new SvnOutputModel( this, this );
@@ -476,7 +482,7 @@ void KDevSvnPlugin::ctxHistory()
         return;
     }
     KDevelop::VcsRevision start;
-    start.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Head ),
+    start.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( KDevelop::VcsRevision::Head ),
                             KDevelop::VcsRevision::Special );
     KDevelop::VcsJob *job = log( m_ctxUrlList.first(), start, 0 );
     KDialog* dlg = new KDialog();
@@ -507,7 +513,7 @@ void KDevSvnPlugin::ctxBlame()
     if( doc && doc->textDocument() )
     {
         KDevelop::VcsRevision head;
-        head.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Head ),
+        head.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( KDevelop::VcsRevision::Head ),
                             KDevelop::VcsRevision::Special );
         KDevelop::VcsJob* job = annotate( m_ctxUrlList.first(), head );
         KTextEditor::MarkInterface* markiface = 0;
@@ -572,7 +578,7 @@ void KDevSvnPlugin::cancelCommit( SvnCommitDialog* dlg )
 void KDevSvnPlugin::ctxUpdate()
 {
     KDevelop::VcsRevision rev;
-    rev.setRevisionValue( QVariant( KDevelop::VcsRevision::Head ), KDevelop::VcsRevision::Special );
+    rev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( KDevelop::VcsRevision::Head ), KDevelop::VcsRevision::Special );
     KDevelop::VcsJob* job = update( m_ctxUrlList, rev );
     job->exec();
     delete job;
@@ -615,18 +621,21 @@ void KDevSvnPlugin::ctxDiffHead()
         return;
     }
     KDevelop::VcsRevision srcRev,dstRev;
-    srcRev.setRevisionValue( KDevelop::VcsRevision::Head, KDevelop::VcsRevision::Special );
-    dstRev.setRevisionValue( KDevelop::VcsRevision::Working, KDevelop::VcsRevision::Special );
+    srcRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Head), KDevelop::VcsRevision::Special );
+    dstRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Working), KDevelop::VcsRevision::Special );
     KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
 
-    KDialog* dlg = new KDialog();
-    dlg->setButtons( KDialog::Close );
-    dlg->setCaption( i18n( "Differences" ) );
-    KDevelop::VcsDiffWidget* w = new KDevelop::VcsDiffWidget( job, dlg );
-    w->setRevisions( srcRev, dstRev );
-    dlg->setMainWidget( w );
-    connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
-    dlg->show();
+    job->exec();
+    if( job->status() == KDevelop::VcsJob::JobSucceeded )
+    {
+        KDevelop::VcsDiff d = job->fetchResults().value<KDevelop::VcsDiff>();
+        QString diff = d.diff();
+        core()->documentController()->openDocumentFromText( diff );
+    }else
+    {
+        kDebug(9510) << "Ooops couldn't diff";
+    }
+    delete job;
 }
 void KDevSvnPlugin::ctxDiffBase()
 {
@@ -635,19 +644,21 @@ void KDevSvnPlugin::ctxDiffBase()
         return;
     }
     KDevelop::VcsRevision srcRev,dstRev;
-    srcRev.setRevisionValue( KDevelop::VcsRevision::Base, KDevelop::VcsRevision::Special );
-    dstRev.setRevisionValue( KDevelop::VcsRevision::Working, KDevelop::VcsRevision::Special );
+    srcRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Base), KDevelop::VcsRevision::Special );
+    dstRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Working), KDevelop::VcsRevision::Special );
     KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
 
-    
-    KDialog* dlg = new KDialog();
-    dlg->setButtons( KDialog::Close );
-    dlg->setCaption( i18n( "Differences" ) );
-    KDevelop::VcsDiffWidget* w = new KDevelop::VcsDiffWidget( job, dlg );
-    w->setRevisions( srcRev, dstRev );
-    dlg->setMainWidget( w );
-    connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
-    dlg->show();
+    job->exec();
+    if( job->status() == KDevelop::VcsJob::JobSucceeded )
+    {
+        KDevelop::VcsDiff d = job->fetchResults().value<KDevelop::VcsDiff>();
+        QString diff = d.diff();
+        core()->documentController()->openDocumentFromText( diff );
+    }else
+    {
+        kDebug(9510) << "Ooops couldn't diff";
+    }
+    delete job;
 }
 void KDevSvnPlugin::ctxInfo()
 {
