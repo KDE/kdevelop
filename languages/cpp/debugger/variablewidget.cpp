@@ -315,7 +315,7 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
 
         if (root != recentExpressions_)
         {
-            remember = popup.addAction(KIcon("pencil"), i18n("Remember Value"));
+            remember = popup.addAction(KIcon("draw-freehand"), i18n("Remember Value"));
             MAYBE_DISABLE(remember);
         }
 
