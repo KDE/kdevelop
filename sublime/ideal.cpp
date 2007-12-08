@@ -274,6 +274,11 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
     m_anchor->setFocusPolicy(Qt::NoFocus);
     m_anchor->setIcon(KIcon("object-unlocked"));
     m_anchor->setCheckable(true);
+    m_anchor->setToolTip("Lock the tool");
+    m_anchor->setWhatsThis(i18n("<b>Lock the tool</b><p>When a tool is unlocked, it "
+			   "will be automatically hidden when you click outside it. "
+			   "A locked tool will remain visible until you explicitly "
+			   "hide it, or switch to a different tool."));
     connect(m_anchor, SIGNAL(toggled(bool)), SLOT(slotAnchor(bool)));
     layout->addWidget(m_anchor);
 
@@ -281,12 +286,17 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
     m_maximize->setFocusPolicy(Qt::NoFocus);
     m_maximize->setIcon(KIcon("view-fullscreen"));
     m_maximize->setCheckable(true);
+    m_maximize->setToolTip("Maximize the tool");
     connect(m_maximize, SIGNAL(toggled(bool)), SLOT(slotMaximize(bool)));
     layout->addWidget(m_maximize);
 
     QToolButton* close = new QToolButton(this);
     close->setFocusPolicy(Qt::NoFocus);
     close->setIcon(KIcon("dialog-close"));
+    close->setToolTip("Remove the tool");
+    close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
+		        "You can add the tool again by using the "
+			"<tt>View->Add Tool View</tt> command."));
     connect(close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
     layout->addWidget(close);
 }
