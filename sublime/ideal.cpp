@@ -108,7 +108,8 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
     (void) new IdealButtonBarLayout(orientation(), this);
 }
 
-KAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock)
+KAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock,
+                                         Area *area, View *view)
 {
     KAction *action = new KAction(this);
     action->setCheckable(true);
@@ -119,7 +120,10 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock
         dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
 
     if (!dock->titleBarWidget()) {
-        IdealDockWidgetTitle* title = new IdealDockWidgetTitle(orientation() == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, dock, action);
+        IdealDockWidgetTitle* title = 
+            new IdealDockWidgetTitle(
+                orientation() == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, 
+                dock, area, view);
         dock->setTitleBarWidget(title);
         connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
         connect(title, SIGNAL(maximize(bool)), SLOT(maximize(bool)));
@@ -241,9 +245,13 @@ void IdealButtonBarWidget::actionToggled(bool state)
     button->blockSignals(false);
 }
 
-IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget * parent, QAction* showAction)
+IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, 
+                                           QDockWidget * parent, 
+                                           Area *area, View *view)
     : QWidget(parent)
     , m_orientation(orientation)
+    , m_area(area)
+    , m_view(view)
 {
     QBoxLayout* layout = 0;
     switch (m_orientation) {
@@ -279,7 +287,7 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, QDockWid
     QToolButton* close = new QToolButton(this);
     close->setFocusPolicy(Qt::NoFocus);
     close->setIcon(KIcon("dialog-close"));
-    connect(close, SIGNAL(clicked(bool)), showAction, SLOT(toggle()));
+    connect(close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
     layout->addWidget(close);
 }
 
@@ -330,6 +338,11 @@ void IdealDockWidgetTitle::slotMaximize(bool maximized)
         m_maximize->setIcon(KIcon("view-fullscreen"));
 
     emit maximize(maximized);
+}
+
+void IdealDockWidgetTitle::slotRemove()
+{
+    m_area->removeToolView(m_view);
 }
 
 IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
@@ -437,7 +450,9 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     dock->setFocusProxy(dock->widget());
 
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(area))) {
-        KAction* action = bar->addWidget(view->document()->title(), dock);
+        KAction* action = bar->addWidget(
+            view->document()->title(), dock,
+            static_cast<MainWindow*>(parent())->area(), view);
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
         m_docks->addAction(action);
         bar->show();

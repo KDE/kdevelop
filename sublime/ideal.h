@@ -32,6 +32,8 @@ class KActionCollection;
 
 namespace Sublime {
 
+class Area;
+class View;
 class MainWindow;
 
 class IdealToolButton: public QToolButton
@@ -79,7 +81,8 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(Qt::DockWidgetArea area, class IdealMainWidget *parent = 0);
 
-    KAction *addWidget(const QString& title, QDockWidget *widget);
+    KAction *addWidget(const QString& title, QDockWidget *widget, 
+                       Area* area, View *view);
     void showWidget(QDockWidget* widget);
     void removeAction(QAction* action);
 
@@ -113,7 +116,8 @@ class IdealDockWidgetTitle : public QWidget
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, QAction* showAction);
+    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, 
+                         Area* area, View *view);
     virtual ~IdealDockWidgetTitle();
 
     bool isAnchored() const;
@@ -130,11 +134,14 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotAnchor(bool anchored);
     void slotMaximize(bool maximized);
+    void slotRemove();
 
 private:
     Qt::Orientation m_orientation;
     QToolButton* m_anchor;
     QToolButton* m_maximize;
+    Area *m_area;
+    View *m_view;
 };
 
 class IdealCentralWidget : public QWidget
