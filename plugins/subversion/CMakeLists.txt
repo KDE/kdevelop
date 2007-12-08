@@ -1,8 +1,7 @@
 
 project(KDevSubversionPlugin)
 
-#@TODO: Hack to make the exceptions from rapidsvn usable
-add_definitions( -fexceptions )
+add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
                      ${KDE4_INCLUDES}
