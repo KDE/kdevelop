@@ -303,8 +303,8 @@ controller_(controller)
 
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
-    connect(controller, SIGNAL(event(GDBController::event_t)),
-            this,       SLOT(slotEvent(GDBController::event_t)));
+    connect(controller, SIGNAL(event(event_t)),
+            this,       SLOT(slotEvent(event_t)));
 
     connect(controller,
             SIGNAL(watchpointHit(int, const QString&, const QString&)),
@@ -664,7 +664,7 @@ void GDBBreakpointWidget::slotBreakpointSet(Breakpoint* bp)
     BreakpointTableRow* btr = findKey(bp->key());
     if (!btr)
     {
-        kDebug(9012) << "Early return\n";
+        kDebug(9012) << "Early return";
         return;
     }
 
@@ -1002,11 +1002,11 @@ void GDBBreakpointWidget::slotBreakpointModified(Breakpoint* b)
     }
 }
 
-void GDBBreakpointWidget::slotEvent(GDBController::event_t e)
+void GDBBreakpointWidget::slotEvent(event_t e)
 {
     switch(e)
     {
-    case GDBController::program_state_changed:
+    case program_state_changed:
         {
             controller_->addCommand(
                 new GDBCommand(BreakList,
@@ -1016,8 +1016,8 @@ void GDBBreakpointWidget::slotEvent(GDBController::event_t e)
             break;
         }
 
-    case GDBController::shared_library_loaded:
-    case GDBController::connected_to_program:
+    case shared_library_loaded:
+    case connected_to_program:
         {
             for ( int row = 0; row < m_table->numRows(); row++ )
             {
@@ -1037,7 +1037,7 @@ void GDBBreakpointWidget::slotEvent(GDBController::event_t e)
             }
             break;
         }
-    case GDBController::program_exited:
+    case program_exited:
         {
             for(int row = 0; row < m_table->numRows(); ++row)
             {

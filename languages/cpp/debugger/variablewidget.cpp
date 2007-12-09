@@ -14,45 +14,39 @@
 // **************************************************************************
 
 #include "variablewidget.h"
-#include "gdbparser.h"
-#include "gdbcommand.h"
-#include "gdbbreakpointwidget.h"
-#include "gdbglobal.h"
-#include "debuggerplugin.h"
 
+#include <QLabel>
+#include <QLayout>
+#include <QPainter>
+#include <QPushButton>
+#include <QRegExp>
+#include <QCursor>
+#include <QHBoxLayout>
+#include <QKeyEvent>
+#include <QFocusEvent>
+#include <QVBoxLayout>
+#include <QPoint>
+#include <QClipboard>
+
+#include <kapplication.h>
+#include <kmessagebox.h>
+#include <khistorycombobox.h>
 #include <kdebug.h>
 #include <kmenu.h>
 #include <klineedit.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
-
-#include <q3header.h>
-#include <QLabel>
-#include <QLayout>
-
-#include <QPainter>
-#include <QPushButton>
-#include <QRegExp>
-#include <QCursor>
-
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <QKeyEvent>
-#include <QFocusEvent>
-#include <QVBoxLayout>
 #include <klocale.h>
 
-#include <qpoint.h>
-#include <QClipboard>
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <khistorycombobox.h>
-
-#include <cctype>
-#include <set>
-#include <typeinfo>
-#include <cctype>
-#include <kvbox.h>
+#include "gdbparser.h"
+#include "gdbcommand.h"
+#include "gdbbreakpointwidget.h"
+#include "gdbglobal.h"
+#include "debuggerplugin.h"
+#include "variableitem.h"
+#include "frameitem.h"
+#include "variablecollection.h"
+#include "watchitem.h"
 
 /** The variables widget is passive, and is invoked by the rest of the
     code via two main Q_SLOTS:
@@ -94,10 +88,11 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
     setWindowTitle(i18n("Debugger Variables"));
 
     varTree_ = new VariableTree(this, controller);
+    setFocusProxy(varTree_);
 
     watchVarEditor_ = new KHistoryComboBox( this );
 
-    Q3HBoxLayout* buttons = new Q3HBoxLayout();
+    QHBoxLayout* buttons = new QHBoxLayout();
 
     buttons->addStretch();
 
@@ -107,7 +102,7 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
     QPushButton *addButton = new QPushButton(i18n("&Watch"), this );
     buttons->addWidget(addButton);
 
-    QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
+    QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->addWidget(varTree_, 10);
     topLayout->addWidget(watchVarEditor_);
     topLayout->addItem(buttons);
@@ -119,13 +114,10 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
     connect( watchVarEditor_, SIGNAL(returnPressed()),
              SLOT(slotEvaluateExpression()) );
 
-    connect(controller, SIGNAL(event(GDBController::event_t)),
-            varTree_,       SLOT(slotEvent(GDBController::event_t)));
-
     connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
 
-    connect(plugin, SIGNAL(addWatchVariable(const QString&)), this, SLOT(slotAddWatchVariable(const QString&)));
-    connect(plugin, SIGNAL(evaluateExpression(const QString&)), this, SLOT(slotEvaluateExpression(const QString&)));
+    connect(this, SIGNAL(addWatchVariable(const QString&)), plugin, SIGNAL(addWatchVariable(const QString&)));
+    connect(this, SIGNAL(evaluateExpression(const QString&)), plugin, SIGNAL(evaluateExpression(const QString&)));
 
     // Setup help items.
 
@@ -157,7 +149,6 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
 
 void VariableWidget::slotAddWatchVariable()
 {
-//    QString watchVar(watchVarEntry_->text());
     QString watchVar(watchVarEditor_->currentText());
     if (!watchVar.isEmpty())
     {
@@ -172,8 +163,8 @@ void VariableWidget::slotAddWatchVariable(const QString &ident)
     if (!ident.isEmpty())
     {
         watchVarEditor_->addToHistory(ident);
-        varTree_->slotAddWatchVariable(ident);
-        watchVarEditor_->clearEdit();
+        emit addWatchVariable(ident);
+        watchVarEditor_->clear();
     }
 }
 
@@ -191,20 +182,10 @@ void VariableWidget::slotEvaluateExpression(const QString &ident)
     if (!ident.isEmpty())
     {
         watchVarEditor_->addToHistory(ident);
-        varTree_->slotEvaluateExpression(ident);
-        watchVarEditor_->clearEdit();
+        emit evaluateExpression(ident);
+        watchVarEditor_->clear();
     }
 }
-
-// **************************************************************************
-
-void VariableWidget::focusInEvent(QFocusEvent */*e*/)
-{
-    varTree_->setFocus();
-}
-
-
-
 
 // **************************************************************************
 // **************************************************************************
@@ -212,30 +193,15 @@ void VariableWidget::focusInEvent(QFocusEvent */*e*/)
 
 VariableTree::VariableTree(VariableWidget *parent,
                            GDBController*  controller)
-    : K3ListView(parent),
+    : QTreeView(parent),
       controller_(controller),
-      activeFlag_(0),
-      recentExpressions_(0),
-      currentFrameItem(0),
-      activePopup_(0)
+      activePopup_(0),
+      toggleWatch_(0)
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
-    setSorting(-1);
-    Q3ListView::setSelectionMode(Q3ListView::Single);
 
-    // Note: it might be reasonable to set width of value
-    // column to 10 characters ('0x12345678'), and rely on
-    // tooltips for showing larger values. Currently, both
-    // columns will get roughly equal width.
-    addColumn(i18n("Variable"));
-    addColumn(i18n("Value"));
-//     setResizeMode(AllColumns);
-
-    connect( this, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
-             SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*)) );
-    connect( this, SIGNAL(itemRenamed( Q3ListViewItem*, int, const QString&)),
-             this, SLOT(slotItemRenamed( Q3ListViewItem*, int, const QString&)));
+    setModel(controller->variables());
 }
 
 // **************************************************************************
@@ -246,16 +212,42 @@ VariableTree::~VariableTree()
 
 // **************************************************************************
 
-void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
+void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 {
-    if (!item)
+    QModelIndex index = indexAt(event->pos());
+    if (!index.isValid())
         return;
 
-    setSelected(item, true);    // Need to select this item.
+    AbstractVariableItem* item = collection()->itemForIndex(index);
 
-    if (item->parent())
+    if (RecentItem* recent = qobject_cast<RecentItem*>(item))
     {
         KMenu popup(this);
+        popup.addTitle(i18n("Recent Expressions"));
+        QAction* remove = popup.addAction(KIcon("editdelete"), i18n("Remove All"));
+        QAction* reevaluate = popup.addAction(KIcon("reload"), i18n("Re-evaluate All"));
+
+        if (controller()->stateIsOn(s_dbgNotStarted))
+            reevaluate->setEnabled(false);
+
+        QAction* res = popup.exec(QCursor::pos());
+
+        if (res == remove)
+        {
+            collection()->deleteItem(recent);
+        }
+        else if (res == reevaluate)
+        {
+            foreach (AbstractVariableItem* item, recent->children())
+            {
+                if (VariableItem* variable = qobject_cast<VariableItem*>(item))
+                    variable->recreate();
+            }
+        }
+    }
+    else
+    {
+        activePopup_ = new KMenu(this);
         KMenu format(this);
 
         QAction* remember = 0;
@@ -269,35 +261,34 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
         QAction* character = 0;
         QAction* binary = 0;
 
-#define MAYBE_DISABLE(id) if (!var->isAlive()) id->setEnabled(false)
+#define MAYBE_DISABLE(action) if (!var->isAlive()) action->setEnabled(false)
 
-        VarItem* var;
-        if ((var = dynamic_cast<VarItem*>(item)))
-        {
-            popup.addTitle(var->gdbExpression());
+        VariableItem* var = qobject_cast<VariableItem*>(item);
+        if (var) {
+            activePopup_->addTitle(var->gdbExpression());
 
             format.setTitle(i18n("Format"));
 
             QActionGroup* ag = new QActionGroup(&format);
 
             natural = format.addAction(i18n("Natural"));
-            natural->setData(VarItem::natural);
+            natural->setData(VariableItem::natural);
             natural->setShortcut(Qt::Key_N);
 
             hex = format.addAction(i18n("Hexadecimal"));
-            hex->setData(VarItem::hexadecimal);
+            hex->setData(VariableItem::hexadecimal);
             hex->setShortcut(Qt::Key_X);
 
             decimal = format.addAction(i18n("Decimal"));
-            decimal->setData(VarItem::decimal);
+            decimal->setData(VariableItem::decimal);
             decimal->setShortcut(Qt::Key_D);
 
             character = format.addAction(i18n("Character"));
-            character->setData(VarItem::character);
+            character->setData(VariableItem::character);
             character->setShortcut(Qt::Key_C);
 
             binary = format.addAction(i18n("Binary"));
-            binary->setData(VarItem::binary);
+            binary->setData(VariableItem::binary);
             binary->setShortcut(Qt::Key_T);
 
             foreach (QAction* action, ag->actions()) {
@@ -306,47 +297,48 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
                 action->setChecked(true);
             }
 
-            QAction* formatActions = popup.addMenu(&format);
+            QAction* formatActions = activePopup_->addMenu(&format);
             MAYBE_DISABLE(formatActions);
         }
 
 
-        Q3ListViewItem* root = findRoot(item);
+        AbstractVariableItem* root = item->abstractRoot();
 
-        if (root != recentExpressions_)
+        RecentItem* recentRoot = qobject_cast<RecentItem*>(root);
+
+        if (!recentRoot)
         {
-            remember = popup.addAction(KIcon("draw-freehand"), i18n("Remember Value"));
+            remember = activePopup_->addAction(KIcon("draw-freehand"), i18n("Remember Value"));
             MAYBE_DISABLE(remember);
         }
 
-        if (dynamic_cast<WatchRoot*>(root)) {
-            remove = popup.addAction(KIcon("editdelete"), i18n("Remove Watch Variable"));
+        if (qobject_cast<WatchItem*>(root)) {
+            remove = activePopup_->addAction(KIcon("editdelete"), i18n("Remove Watch Variable"));
             remove->setShortcut(Qt::Key_Delete);
 
-        } else if (root != recentExpressions_) {
-            watch = popup.addAction(i18n("Watch Variable"));
+        } else if (!recentRoot) {
+            watch = activePopup_->addAction(i18n("Watch Variable"));
             MAYBE_DISABLE(watch);
         }
 
-        if (root == recentExpressions_) {
-            reevaluate = popup.addAction(KIcon("reload"), i18n("Reevaluate Expression"));
+        if (recentRoot) {
+            reevaluate = activePopup_->addAction(KIcon("reload"), i18n("Reevaluate Expression"));
             MAYBE_DISABLE(reevaluate);
-            remove = popup.addAction(KIcon("editdelete"), i18n("Remove Expression"));
+            remove = activePopup_->addAction(KIcon("editdelete"), i18n("Remove Expression"));
             remove->setShortcut(Qt::Key_Delete);
         }
 
         if (var)
         {
-            toggleWatch = popup.addAction( i18n("Data write breakpoint") );
-            toggleWatch->setCheckable(true);
-            toggleWatch->setEnabled(false);
+            toggleWatch_ = activePopup_->addAction( i18n("Data write breakpoint") );
+            toggleWatch_->setCheckable(true);
+            toggleWatch_->setEnabled(false);
         }
 
-        QAction* copyToClipboard = popup.addAction(
+        QAction* copyToClipboard = activePopup_->addAction(
             KIcon("editcopy"), i18n("Copy Value") );
         copyToClipboard->setShortcut(Qt::CTRL + Qt::Key_C);
 
-        activePopup_ = &popup;
         /* This code can be executed when debugger is stopped,
            and we invoke popup menu on a var under "recent expressions"
            just to delete it. */
@@ -360,32 +352,31 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
                     true /*handles error*/));
 
 
-        QAction* res = popup.exec(QCursor::pos());
-
+        QAction* res = activePopup_->exec(QCursor::pos());
+        delete activePopup_;
         activePopup_ = 0;
-
 
         if (res == natural || res == hex || res == decimal
             || res == character || res == binary)
         {
             // Change format.
-            VarItem* var_item = static_cast<VarItem*>(item);
-            var_item->setFormat(static_cast<VarItem::format_t>(res->data().toInt()));
+            VariableItem* var_item = static_cast<VariableItem*>(item);
+            var_item->setFormat(static_cast<VariableItem::FormatTypes>(res->data().toInt()));
         }
         else if (res == remember)
         {
-            if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
+            if (var)
             {
                 ((VariableWidget*)parent())->
-                    slotEvaluateExpression(item->gdbExpression());
+                    slotEvaluateExpression(var->gdbExpression());
             }
         }
         else if (res == watch)
         {
-            if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
+            if (var)
             {
                 ((VariableWidget*)parent())->
-                    slotAddWatchVariable(item->gdbExpression());
+                    slotAddWatchVariable(var->gdbExpression());
             }
         }
         else if (res == remove)
@@ -396,234 +387,35 @@ void VariableTree::slotContextMenu(K3ListView *, Q3ListViewItem *item)
         {
             VariableTree::copyToClipboard(item);
         }
-        else if (res == toggleWatch)
+        else if (res == toggleWatch_)
         {
-            if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
-                emit toggleWatchpoint(item->gdbExpression());
+            if (var)
+                emit toggleWatchpoint(var->gdbExpression());
         }
         else if (res == reevaluate)
         {
-            if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
+            if (var)
             {
-                item->recreate();
+                var->recreate();
             }
         }
-    }
-    else if (item == recentExpressions_)
-    {
-        KMenu popup(this);
-        popup.addTitle(i18n("Recent Expressions"));
-        QAction* remove = popup.addAction(KIcon("editdelete"), i18n("Remove All"));
-        QAction* reevaluate = popup.addAction(KIcon("reload"), i18n("Reevaluate All"));
 
-        if (controller()->stateIsOn(s_dbgNotStarted))
-            reevaluate->setEnabled(false);
-
-        QAction* res = popup.exec(QCursor::pos());
-
-        if (res == remove)
-        {
-            delete recentExpressions_;
-            recentExpressions_ = 0;
-        }
-        else if (res == reevaluate)
-        {
-            for(Q3ListViewItem* child = recentExpressions_->firstChild();
-                child; child = child->nextSibling())
-            {
-                static_cast<VarItem*>(child)->recreate();
-            }
-        }
+        event->accept();
     }
 }
 
-
-void VariableTree::slotEvent(GDBController::event_t event)
-{
-    switch(event)
-    {
-        case GDBController::program_exited:
-        case GDBController::debugger_exited:
-        {
-            // Remove all locals.
-            Q3ListViewItem *child = firstChild();
-
-            while (child) {
-                Q3ListViewItem *nextChild = child->nextSibling();
-
-                // don't remove the watch root, or 'recent expressions' root.
-                if (!(dynamic_cast<WatchRoot*> (child))
-                    && child != recentExpressions_)
-                {
-                    delete child;
-                }
-                child = nextChild;
-            }
-            currentFrameItem = 0;
-
-            if (recentExpressions_)
-            {
-                for(Q3ListViewItem* child = recentExpressions_->firstChild();
-                    child; child = child->nextSibling())
-                {
-                    static_cast<VarItem*>(child)->unhookFromGdb();
-                }
-            }
-
-            if (WatchRoot* w = findWatch())
-            {
-                for(Q3ListViewItem* child = w->firstChild();
-                    child; child = child->nextSibling())
-                {
-                    static_cast<VarItem*>(child)->unhookFromGdb();
-                }
-            }
-
-            break;
-        }
-
-        case GDBController::program_state_changed:
-
-            // Fall-through intended.
-
-        case GDBController::thread_or_frame_changed:
-            {
-                VarFrameRoot *frame = demand_frame_root(
-                    controller_->currentFrame(), controller_->currentThread());
-
-                if (frame->isOpen())
-                {
-                    updateCurrentFrame();
-                }
-                else
-                {
-                    frame->setDirty();
-                }
-            }
-            break;
-
-        default:
-            break;
-    }
-}
 
 void VariableTree::updateCurrentFrame()
 {
-    // In GDB 6.4, the -stack-list-locals command is broken.
-    // If there's any local reference variable which is not
-    // initialized yet, for example because it's in the middle
-    // of function, gdb will still print it and try to dereference
-    // it. If the address in not accessible, the MI command will
-    // exit with an error, and we won't be able to see *any*
-    // locals. A patch is submitted:
-    //    http://sourceware.org/ml/gdb-patches/2006-04/msg00069.html
-    // but we need to work with 6.4, not with some future version. So,
-    // we just -stack-list-locals to get just names of the locals,
-    // but not their values.
-    // We'll fetch values separately:
-
-    controller_->addCommand(
-        new GDBCommand(StackListArguments, QString("0 %1 %2")
-                       .arg(controller_->currentFrame())
-                       .arg(controller_->currentFrame()),
-                       this,
-                       &VariableTree::argumentsReady));
-
-
-    controller_->addCommand(
-        new GDBCommand(StackListLocals, 0,
-                       this,
-                       &VariableTree::localsReady));
-
 }
 
-
-// **************************************************************************
-
-void VariableTree::slotAddWatchVariable(const QString &watchVar)
-{
-    VarItem *varItem = 0;
-    varItem = new VarItem(findWatch(), watchVar);
-}
-
-void VariableTree::slotEvaluateExpression(const QString &expression)
-{
-    if (recentExpressions_ == 0)
-    {
-        recentExpressions_ = new TrimmableItem(this);
-        recentExpressions_->setText(0, "Recent");
-        recentExpressions_->setOpen(true);
-    }
-
-    VarItem *varItem = new VarItem(recentExpressions_,
-                                   expression,
-                                   true /* freeze */);
-    varItem->setRenameEnabled(0, 1);
-}
-
-// **************************************************************************
-
-Q3ListViewItem *VariableTree::findRoot(Q3ListViewItem *item) const
-{
-    while (item->parent())
-        item = item->parent();
-
-    return item;
-}
-
-// **************************************************************************
-
-VarFrameRoot *VariableTree::findFrame(int frameNo, int threadNo) const
-{
-    Q3ListViewItem *sibling = firstChild();
-
-    // frames only exist on th top level so we only need to
-    // check the siblings
-    while (sibling) {
-        VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (sibling);
-        if (frame && frame->matchDetails(frameNo, threadNo))
-            return frame;
-
-        sibling = sibling->nextSibling();
-    }
-
-    return 0;
-}
-
-// **************************************************************************
-
-WatchRoot *VariableTree::findWatch()
-{
-    Q3ListViewItem *sibling = firstChild();
-
-    while (sibling) {
-        if (WatchRoot *watch = dynamic_cast<WatchRoot*> (sibling))
-            return watch;
-
-        sibling = sibling->nextSibling();
-    }
-
-    return new WatchRoot(this);
-}
-
-// **************************************************************************
-
-Q3ListViewItem *VariableTree::lastChild() const
-{
-    Q3ListViewItem *child = firstChild();
-    if (child)
-        while (Q3ListViewItem *nextChild = child->nextSibling())
-            child = nextChild;
-
-    return child;
-}
 
 // **************************************************************************
 
 class ValueSpecialRepresentationCommand : public QObject, public CliCommand
 {
 public:
-    ValueSpecialRepresentationCommand(GDBMI::CommandType type, VarItem* item, const QString& command)
+    ValueSpecialRepresentationCommand(GDBMI::CommandType type, VariableItem* item, const QString& command)
     : CliCommand(type, command,
                  this,
                  &ValueSpecialRepresentationCommand::handleReply,
@@ -633,338 +425,20 @@ public:
 
 private:
 
-    VarItem* item_;
+    VariableItem* item_;
 
     void handleReply(const QStringList& lines)
     {
         QString s;
         for(int i = 1; i < lines.count(); ++i)
             s += lines[i];
-        item_->updateSpecialRepresentation(s.local8Bit());
+        item_->updateSpecialRepresentation(s.toLocal8Bit());
     }
 };
 
-void VariableTree::slotVarobjNameChanged(
-    const QString& from, const QString& to)
-{
-    if (!from.isEmpty())
-        varobj2varitem.erase(from);
-
-    if (!to.isEmpty())
-        varobj2varitem[to] =
-            const_cast<VarItem*>(
-                static_cast<const VarItem*>(sender()));
-}
-
-
-
-VarFrameRoot* VariableTree::demand_frame_root(int frameNo, int threadNo)
-{
-    VarFrameRoot *frame = findFrame(frameNo, threadNo);
-    if (!frame)
-    {
-        frame = new VarFrameRoot(this, frameNo, threadNo);
-        frame->setFrameName(i18n("Locals"));
-        // Make sure "Locals" item is always the top item, before
-        // "watch" and "recent experessions" items.
-        this->takeItem(frame);
-        this->insertItem(frame);
-        frame->setOpen(true);
-    }
-    return frame;
-}
-
-void VariableTree::argumentsReady(const GDBMI::ResultRecord& r)
-{
-    const GDBMI::Value& args = r["stack-args"][0]["args"];
-
-    fetch_time.start();
-
-    locals_and_arguments.clear();
-    for(int i = 0; i < args.size(); ++i)
-    {
-        locals_and_arguments.push_back(args[i].literal());
-    }
-}
-
-void VariableTree::localsReady(const GDBMI::ResultRecord& r)
-{
-    const GDBMI::Value& locals = r["locals"];
-
-    for(int i = 0; i < locals.size(); ++i)
-    {
-        QString val = locals[i].literal();
-
-        // Check ada internal variables like <R45b>, <L23R> ...
-        bool is_ada_variable = (val[0] == '<' && val[val.length() - 1] == '>');
-
-        if (!is_ada_variable)
-        {
-            locals_and_arguments.push_back(val);
-        }
-    }
-
-    controller_->addCommand(new CliCommand(NonMI, "info frame",
-                                           this,
-                                           &VariableTree::frameIdReady));
-}
-
-void VariableTree::frameIdReady(const QStringList& lines)
-{
-    //kDebug(9012) << "localAddresses: " << lines[1] << "\n";
-
-    QString frame_info;
-    for(int i = 1; i < lines.size(); ++i)
-        frame_info += lines[i];
-
-    kDebug(9012) << "frame info: " << frame_info << "\n";
-    frame_info.replace('\n', "");
-
-    static QRegExp frame_base_rx("frame at 0x([0-9a-fA-F]*)");
-    static QRegExp frame_code_rx("saved [a-zA-Z0-9]* 0x([0-9a-fA-F]*)");
-
-    int i = frame_base_rx.search(frame_info);
-    int i2 = frame_code_rx.search(frame_info);
-
-    bool frameIdChanged = false;
-
-    VarFrameRoot *frame = demand_frame_root(
-        controller_->currentFrame(), controller_->currentThread());
-
-    if (frame != currentFrameItem)
-    {
-        if (currentFrameItem)
-        {
-            currentFrameItem->setVisible(false);
-        }
-    }
-    currentFrameItem = frame;
-    currentFrameItem->setVisible(true);
-
-
-    if (i != -1 && i2 != -1)
-    {
-        quint64 new_frame_base =
-            frame_base_rx.cap(1).toULongLong(0, 16);
-        quint64 new_code_address =
-            frame_code_rx.cap(1).toULongLong(0, 16);
-        kDebug(9012) << "Frame base = " << QString::number(new_frame_base, 16)
-                      << " code = " << QString::number(new_code_address, 16)
-                      << "\n";
-        kDebug(9012) << "Previous frame " <<
-            QString::number(frame->currentFrameBase, 16)
-                      << " code = " << QString::number(
-                          frame->currentFrameCodeAddress, 16)
-                      << "\n";
-
-        frameIdChanged = (new_frame_base != frame->currentFrameBase ||
-                          new_code_address != frame->currentFrameCodeAddress);
-
-        frame->currentFrameBase = new_frame_base;
-        frame->currentFrameCodeAddress = new_code_address;
-    }
-    else
-    {
-        KMessageBox::information(
-            this,
-            "<b>Can't get frame id</b>"
-            "Could not found frame id from output of 'info frame'. "
-            "Further debugging can be unreliable. ",
-            i18n("Internal error"));
-    }
-
-    if (frameIdChanged)
-    {
-        // Remove all variables.
-        // FIXME: probably, need to do this in all frames.
-        Q3ListViewItem* child = frame->firstChild();
-        Q3ListViewItem* next;
-        for(; child; child = next)
-        {
-            next = child->nextSibling();
-            delete child;
-        }
-    }
-
-    setUpdatesEnabled(false);
-
-    std::set<Q3ListViewItem*> alive;
-
-    for(int i = 0; i < locals_and_arguments.size(); ++i)
-    {
-        QString name = locals_and_arguments[i];
-
-        // See if we've got VarItem for this one already.
-        VarItem* var = 0;
-        for(Q3ListViewItem *child = frame->firstChild();
-            child;
-            child = child->nextSibling())
-        {
-            if (child->text(VarNameCol) == name)
-            {
-                var = dynamic_cast<VarItem*>(child);
-                break;
-            }
-        }
-        if (!var)
-        {
-            var = new VarItem(frame, name);
-        }
-        alive.insert(var);
-
-        var->clearHighlight();
-    }
-
-    // Remove VarItems that don't correspond to any local
-    // variables any longer. Perform type/address updates
-    // for others.
-    for(Q3ListViewItem* child = frame->firstChild(); child;)
-    {
-        Q3ListViewItem* current = child;
-        child = current->nextSibling();
-        if (!alive.count(current))
-            delete current;
-        else
-            static_cast<VarItem*>(current)->recreateLocallyMaybe();
-    }
-
-    for(Q3ListViewItem* child = findWatch()->firstChild();
-        child; child = child->nextSibling())
-    {
-        VarItem* var = static_cast<VarItem*>(child);
-        var->clearHighlight();
-        // For watched expressions, we don't have an easy way
-        // to check if their meaning is still the same, so
-        // unconditionally recreate them.
-        var->recreate();
-    }
-
-    // Note: can't use --all-values in this command, because gdb will
-    // die if there's any uninitialized variable. Ouch!
-    controller_->addCommand(new GDBCommand(VarUpdate,
-                                "*",
-                                this,
-                                &VariableTree::handleVarUpdate));
-
-    controller_->addCommand(new SentinelCommand(
-                                this,
-                                &VariableTree::variablesFetchDone));
-}
-
-void VariableTree::handleVarUpdate(const GDBMI::ResultRecord& r)
-{
-    const GDBMI::Value& changed = r["changelist"];
-
-    std::set<QString> names_to_update;
-
-    for(int i = 0; i < changed.size(); ++i)
-    {
-        const GDBMI::Value& c = changed[i];
-
-        QString name = c["name"].literal();
-        if (c.hasField("in_scope") && c["in_scope"].literal() == "false")
-            continue;
-
-        names_to_update.insert(name);
-    }
-
-    QMap<QString, VarItem*>::iterator i, e;
-    for (i = varobj2varitem.begin(), e = varobj2varitem.end(); i != e; ++i)
-    {
-        if (names_to_update.count(i.key())
-            || i.data()->updateUnconditionally())
-        {
-            i.data()->updateValue();
-        }
-    }
-}
-
-void VarItem::handleCliPrint(const QStringList& lines)
-{
-    static QRegExp r("(\\$[0-9]+)");
-    if (lines.size() >= 2)
-    {
-        int i = r.search(lines[1]);
-        if (i == 0)
-        {
-            controller_->addCommand(
-                new GDBCommand(VarCreate, QString("%1 * \"%2\"")
-                               .arg(varobjName_)
-                               .arg(r.cap(1)),
-                               this,
-                               &VarItem::varobjCreated,
-                               // On initial create, errors get reported
-                               // by generic code. After then, errors
-                               // are swallowed by varobjCreated.
-                               initialCreation_ ? false : true));
-        }
-        else
-        {
-            // FIXME: merge all output lines together.
-            // FIXME: add 'debuggerError' to debuggerpart.
-            KMessageBox::information(
-                qApp->activeWindow(),
-                i18n("<b>Debugger error</b><br>%1", lines[1]),
-                i18n("Debugger error"));
-        }
-    }
-}
-
-
-void VariableTree::variablesFetchDone()
-{
-    // During parsing of fetched variable values, we might have issued
-    // extra command to handle 'special values', like QString.
-    // We don't want to enable updates just yet, because this will cause
-    // flicker, so add a sentinel command just to enable updates.
-    //
-    // We need this intermediate hook because commands for special
-    // representation are issues when responses to orginary fetch
-    // values commands are received, so we can add sentinel command after
-    // special representation fetch only when commands for ordinary
-    // fetch are all executed.
-    controller_->addCommand(new SentinelCommand(
-                                this,
-                                &VariableTree::fetchSpecialValuesDone));
-
-}
-
-void VariableTree::fetchSpecialValuesDone()
-{
-    // FIXME: can currentFrame_ or currentThread_ change between
-    // start of var fetch and call of 'variablesFetchDone'?
-    VarFrameRoot *frame = demand_frame_root(
-        controller_->currentFrame(), controller_->currentThread());
-
-//    frame->trim();
-
-    frame->needLocals_ = false;
-
-    setUpdatesEnabled(true);
-    triggerUpdate();
-
-    kDebug(9012) << "Time to fetch variables: " << fetch_time.elapsed() <<
-        "ms\n";
-}
-
-void
-VariableTree::slotItemRenamed(Q3ListViewItem* item, int col, const QString& text)
-{
-    if (col == ValueCol)
-    {
-        VarItem* v = dynamic_cast<VarItem*>(item);
-        Q_ASSERT(v);
-        if (v)
-        {
-            v->setValue(text);
-        }
-    }
-}
-
-
 void VariableTree::keyPressEvent(QKeyEvent* e)
 {
-    if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
+    if (VariableItem* item = qobject_cast<VariableItem*>(collection()->itemForIndex(currentIndex())))
     {
         QString text = e->text();
 
@@ -977,15 +451,18 @@ void VariableTree::keyPressEvent(QKeyEvent* e)
 
         if (e->key() == Qt::Key_Delete)
         {
-            Q3ListViewItem* root = findRoot(item);
+            AbstractVariableItem* root = item->abstractRoot();
 
-            if (dynamic_cast<WatchRoot*>(root) || root == recentExpressions_)
+            if (qobject_cast<WatchItem*>(root) || qobject_cast<RecentItem*>(root))
             {
-                delete item;
+                AbstractVariableItem* parent = item->abstractParent();
+                Q_ASSERT(parent);
+                if (parent)
+                    parent->deleteChild(item);
             }
         }
 
-        if (e->key() == Qt::Key_C && e->state() == Qt::ControlModifier)
+        if (e->key() == Qt::Key_C && e->modifiers() == Qt::ControlModifier)
         {
             copyToClipboard(item);
         }
@@ -993,10 +470,10 @@ void VariableTree::keyPressEvent(QKeyEvent* e)
 }
 
 
-void VariableTree::copyToClipboard(Q3ListViewItem* item)
+void VariableTree::copyToClipboard(AbstractVariableItem* item)
 {
     QClipboard *qb = KApplication::clipboard();
-    QString text = item->text( 1 );
+    QString text = item->data( 1, Qt::DisplayRole ).toString();
 
     qb->setText( text, QClipboard::Clipboard );
 }
@@ -1011,990 +488,24 @@ void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
 
     if (activePopup_)
     {
-        toggleWatch->setEnabled(true);
+        toggleWatch_->setEnabled(true);
 
-        quint64 address = r["value"].literal().toULongLong(0, 16);
-        if (breakpointWidget_->hasWatchpointForAddress(address))
+        //quint64 address = r["value"].literal().toULongLong(0, 16);
+        /*if (breakpointWidget_->hasWatchpointForAddress(address))
         {
-            toggleWatch->setChecked(true);
-        }
+            toggleWatch_->setChecked(true);
+        }*/
     }
 }
 
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
-
-TrimmableItem::TrimmableItem(VariableTree *parent)
-    : K3ListViewItem (parent, parent->lastChild())
+VariableCollection * VariableTree::collection() const
 {
+    return controller_->variables();
 }
 
-// **************************************************************************
-
-TrimmableItem::TrimmableItem(TrimmableItem *parent)
-    : K3ListViewItem (parent, parent->lastChild())
+GDBController * VariableTree::controller() const
 {
-}
-
-// **************************************************************************
-
-TrimmableItem::~TrimmableItem()
-{
-}
-
-// **************************************************************************
-
-void TrimmableItem::paintCell(QPainter *p, const QColorGroup &cg,
-                              int column, int width, int align)
-{
-    if ( !p )
-        return;
-    // make toplevel item (watch and frame items) names bold
-    if (column == 0 && !parent())
-    {
-        QFont f = p->font();
-        f.setBold(true);
-        p->setFont(f);
-    }
-    Q3ListViewItem::paintCell( p, cg, column, width, align );
-}
-
-Q3ListViewItem *TrimmableItem::lastChild() const
-{
-    Q3ListViewItem *child = firstChild();
-    if (child)
-        while (Q3ListViewItem *nextChild = child->nextSibling())
-            child = nextChild;
-
-    return child;
-}
-
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
-
-int VarItem::varobjIndex = 0;
-
-VarItem::VarItem(TrimmableItem *parent,
-                 const QString& expression,
-                 bool frozen)
-    : TrimmableItem (parent),
-      expression_(expression),
-      highlight_(false),
-      oldSpecialRepresentationSet_(false),
-      format_(natural),
-      numChildren_(0),
-      childrenFetched_(false),
-      updateUnconditionally_(false),
-      frozen_(frozen),
-      initialCreation_(true),
-      baseClassMember_(false),
-      alive_(true)
-{
-    connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
-            varTree(),
-            SLOT(slotVarobjNameChanged(const QString&, const QString&)));
-
-
-    // User might have entered format together with expression: like
-    //   /x i1+i2
-    // If we do nothing, it will be impossible to watch the variable in
-    // different format, as we'll just add extra format specifier.
-    // So:
-    //   - detect initial value of format_
-    //   - remove the format specifier from the string.
-
-    static QRegExp explicit_format("^\\s*/(.)\\s*(.*)");
-    if (explicit_format.search(expression_) == 0)
-    {
-        format_ = formatFromGdbModifier(explicit_format.cap(1)[0].toLatin1());
-        expression_ = explicit_format.cap(2);
-    }
-
-    setText(VarNameCol, expression_);
-    // Allow to change variable name by editing.
-    setRenameEnabled(ValueCol, true);
-
-    // Need to store this locally, since varTree() is 0 in
-    // destructor.
-    controller_ = varTree()->controller();
-
-    createVarobj();
-}
-
-VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
-                 format_t format, bool baseClassMember)
-: TrimmableItem (parent),
-  highlight_(false),
-  oldSpecialRepresentationSet_(false),
-  format_(format),
-  numChildren_(0),
-  childrenFetched_(false),
-  updateUnconditionally_(false),
-  frozen_(false),
-  initialCreation_(false),
-  baseClassMember_(baseClassMember),
-  alive_(true)
-{
-    connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
-            varTree(),
-            SLOT(slotVarobjNameChanged(const QString&, const QString&)));
-
-    expression_ = varobj["exp"].literal();
-    varobjName_ = varobj["name"].literal();
-
-    varobjNameChange("", varobjName_);
-
-    setText(VarNameCol, displayName());
-
-    // Allow to change variable name by editing.
-    setRenameEnabled(ValueCol, true);
-
-    controller_ = varTree()->controller();
-
-    // Set type and children.
-    originalValueType_ = varobj["type"].literal();
-    numChildren_ = varobj["numchild"].literal().toInt();
-    setExpandable(numChildren_ != 0);
-
-
-    // Get the initial value.
-    updateValue();
-}
-
-void VarItem::createVarobj()
-{
-    QString old = varobjName_;
-    varobjName_ = QString("KDEV%1").arg(varobjIndex++);
-    emit varobjNameChange(old, varobjName_);
-
-    if (frozen_)
-    {
-        // MI has no way to freeze a variable object. So, we
-        // issue print command that returns $NN convenience
-        // variable and we create variable object from that.
-        controller_->addCommand(
-            new CliCommand(NonMI,
-                QString("print %1").arg(expression_),
-                this,
-                &VarItem::handleCliPrint));
-    }
-    else
-    {
-        controller_->addCommand(
-            new CliCommand(NonMI,
-                QString("print /x &%1").arg(expression_),
-                this,
-                &VarItem::handleCurrentAddress,
-                true));
-
-        controller_->addCommand(
-            // Need to quote expression, otherwise gdb won't like
-            // spaces inside it.
-            new GDBCommand(VarCreate, QString("%1 * \"%2\"")
-                           .arg(varobjName_)
-                           .arg(expression_),
-                           this,
-                           &VarItem::varobjCreated,
-                           initialCreation_ ? false : true));
-    }
-}
-
-void VarItem::varobjCreated(const GDBMI::ResultRecord& r)
-{
-    // If we've tried to recreate varobj (for example for watched expression)
-    // after step, and it's no longer valid, it's fine.
-    if (r.reason == "error")
-    {
-        varobjName_ = "";
-        return;
-    }
-    setAliveRecursively(true);
-
-    QString oldType = originalValueType_;
-    originalValueType_ = r["type"].literal();
-    if (!oldType.isEmpty() && oldType != originalValueType_)
-    {
-        // Type changed, the children might be no longer valid,
-        // so delete them.
-        for(Q3ListViewItem* child = firstChild(); child; )
-        {
-            Q3ListViewItem* cur = child;
-            child = child->nextSibling();
-            delete cur;
-        }
-    }
-
-    if (r.hasField("exp"))
-        expression_ = r["exp"].literal();
-    numChildren_ = r["numchild"].literal().toInt();
-    setExpandable(numChildren_ != 0);
-    currentAddress_ = lastObtainedAddress_;
-
-    setVarobjName(varobjName_);
-}
-
-void VarItem::setVarobjName(const QString& name)
-{
-    if (varobjName_ != name)
-        emit varobjNameChange(varobjName_, name);
-
-    varobjName_ = name;
-
-    if (format_ != natural)
-    {
-        controller_->addCommand(
-            new GDBCommand(VarSetFormat, QString("\"%1\" %2")
-                           .arg(varobjName_).arg(varobjFormatName())));
-    }
-
-    // Get the initial value.
-    updateValue();
-
-    if (isOpen())
-    {
-        // This regets children list.
-        setOpen(true);
-    }
-}
-
-void VarItem::valueDone(const GDBMI::ResultRecord& r)
-{
-    if (r.reason == "done")
-    {
-        QString s = GDBParser::getGDBParser()->undecorateValue(
-            r["value"].literal());
-
-        if (format_ == character)
-        {
-            QString encoded = s;
-            bool ok;
-            int value = s.toInt(&ok);
-            if (ok)
-            {
-                char c = (char)value;
-                encoded += " '";
-                if (std::isprint(c))
-                    encoded += c;
-                else {
-                    // Try common escape characters.
-                    static char *backslashed[] = {"a", "b", "f", "n",
-                                                  "r", "t", "v", "0"};
-                    static char represented[] = "\a\b\f\n\r\t\v";
-
-                    const char* ix = strchr (represented, c);
-                    if (ix) {
-                        encoded += "\\";
-                        encoded += backslashed[ix - represented];
-                    }
-                    else
-                        encoded += "\\" + s;
-                }
-                encoded += "'";
-                s = encoded;
-            }
-        }
-
-        if (format_ == binary)
-        {
-            // For binary format, split the value at 4-bit boundaries
-            static QRegExp r("^[01]+$");
-            int i = r.search(s);
-            if (i == 0)
-            {
-                QString split;
-                for(int i = 0; i < s.length(); ++i)
-                {
-                    // For string 11111, we should split it as
-                    // 1 1111, not as 1111 1.
-
-                    // 0 is past the end character
-                    int distance = i - s.length();
-
-                    if (distance % 4 == 0 && !split.isEmpty())
-                        split.append(' ');
-                    split.append(s[i]);
-                }
-                s = split;
-            }
-        }
-
-        setText(ValueCol, s);
-    }
-    else
-    {
-        QString s = r["msg"].literal();
-        // Error response.
-        if (s.startsWith("Cannot access memory"))
-        {
-            s = "(inaccessible)";
-            setExpandable(false);
-        }
-        else
-        {
-            setExpandable(numChildren_ != 0);
-        }
-        setText(ValueCol, s);
-    }
-}
-
-void VarItem::createChildren(const GDBMI::ResultRecord& r,
-                             bool children_of_fake)
-{
-    const GDBMI::Value& children = r["children"];
-
-    /* In order to figure out which variable objects correspond
-       to base class subobject, we first must detect if *this
-       is a structure type. We use present of 'public'/'private'/'protected'
-       fake child as an indicator. */
-    bool structureType = false;
-    if (!children_of_fake && children.size() > 0)
-    {
-        QString exp = children[0]["exp"].literal();
-        bool ok = false;
-        exp.toInt(&ok);
-        if (!ok || exp[0] != '*')
-        {
-            structureType = true;
-        }
-    }
-
-    for (int i = 0; i < children.size(); ++i)
-    {
-        QString exp = children[i]["exp"].literal();
-        // For artificial accessibility nodes,
-        // fetch their children.
-        if (exp == "public" || exp == "protected" || exp == "private")
-        {
-            QString name = children[i]["name"].literal();
-            controller_->addCommand(new GDBCommand(VarListChildren,
-                                        "\"" +
-                                        name + "\"",
-                                        this,
-                                        &VarItem::childrenOfFakesDone));
-        }
-        else
-        {
-            /* All children of structures that are not artifical
-               are base subobjects. */
-            bool baseObject = structureType;
-
-            VarItem* existing = 0;
-            for(Q3ListViewItem* child = firstChild();
-                child; child = child->nextSibling())
-            {
-                VarItem* v = static_cast<VarItem*>(child);
-                kDebug(9012) << "Child exp : " << v->expression_ <<
-                    " new exp " << exp << "\n";
-
-                if (v->expression_ == exp)
-                {
-                    existing = v;
-                }
-            }
-            if (existing)
-            {
-                existing->setVarobjName(children[i]["name"].literal());
-            }
-            else
-            {
-                kDebug(9012) << "Creating new varobj "
-                              << exp << " " << baseObject << "\n";
-                // Propagate format from parent.
-                VarItem* v = 0;
-                v = new VarItem(this, children[i], format_, baseObject);
-            }
-        }
-    }
-}
-
-
-void VarItem::childrenDone(const GDBMI::ResultRecord& r)
-{
-    createChildren(r, false);
-    childrenFetched_ = true;
-}
-
-void VarItem::childrenOfFakesDone(const GDBMI::ResultRecord& r)
-{
-    createChildren(r, true);
-}
-
-void VarItem::handleCurrentAddress(const QStringList& lines)
-{
-    lastObtainedAddress_ = "";
-    if (lines.count() > 1)
-    {
-        static QRegExp r("\\$\\d+ = ([^\n]*)");
-        int i = r.search(lines[1]);
-        if (i == 0)
-        {
-            lastObtainedAddress_ = r.cap(1);
-            kDebug(9012) << "new address " << lastObtainedAddress_ << "\n";
-        }
-    }
-}
-
-void VarItem::handleType(const QStringList& lines)
-{
-    bool recreate = false;
-
-    if (lastObtainedAddress_ != currentAddress_)
-    {
-        kDebug(9012) << "Address changed from " << currentAddress_
-                      << " to " << lastObtainedAddress_ << "\n";
-        recreate = true;
-    }
-    else
-    {
-        // FIXME: add error diagnostic.
-        if (lines.count() > 1)
-        {
-            static QRegExp r("type = ([^\n]*)");
-            int i = r.search(lines[1]);
-            if (i == 0)
-            {
-                kDebug(9012) << "found type: " << r.cap(1) << "\n";
-                kDebug(9012) << "original Type: " << originalValueType_ << "\n";
-
-                if (r.cap(1) != originalValueType_)
-                {
-                    recreate = true;
-                }
-            }
-        }
-    }
-    if (recreate)
-    {
-        this->recreate();
-    }
-}
-
-QString VarItem::displayName() const
-{
-    if (expression_[0] != '*')
-        return expression_;
-
-    if (const VarItem* parent =
-        dynamic_cast<const VarItem*>(TrimmableItem::parent()))
-    {
-        return "*" + parent->displayName();
-    }
-    else
-    {
-        return expression_;
-    }
-}
-
-void VarItem::setAliveRecursively(bool enable)
-{
-    setEnabled(enable);
-    alive_ = true;
-
-    for(Q3ListViewItem* child = firstChild();
-        child; child = child->nextSibling())
-    {
-        static_cast<VarItem*>(child)->setAliveRecursively(enable);
-    }
-}
-
-
-VarItem::~VarItem()
-{
-    unhookFromGdb();
-}
-
-QString VarItem::gdbExpression() const
-{
-    // The expression for this item can be either:
-    //  - number, for array element
-    //  - identifier, for member,
-    //  - ***intentifier, for derefenreced pointer.
-    const VarItem* parent = dynamic_cast<const VarItem*>(TrimmableItem::parent());
-
-    bool ok = false;
-    expression_.toInt(&ok);
-    if (ok)
-    {
-        // Array, parent always exists.
-        return parent->gdbExpression() + "[" + expression_ + "]";
-    }
-    else if (expression_[0] == '*')
-    {
-        if (parent)
-        {
-            // For MI, expression_ can be "*0" (meaing
-            // references 0-th element of some array).
-            // So, we really need to get to the parent to computed the right
-            // gdb expression.
-            return "*" + parent->gdbExpression();
-        }
-        else
-        {
-            // Parent can be null for watched expressions. In that case,
-            // expression_ should be a valid C++ expression.
-            return expression_;
-        }
-    }
-    else
-    {
-        if (parent)
-            /* This is varitem corresponds to a base suboject,
-               the expression should cast parent to the base's
-               type. */
-            if (baseClassMember_)
-                return "((" + expression_ + ")" + parent->gdbExpression() + ")";
-            else
-                return parent->gdbExpression() + "." + expression_;
-        else
-            return expression_;
-    }
-}
-
-// **************************************************************************
-
-
-// FIXME: we have two method to set VarItem: this one
-// and updateValue below. That's bad, must have just one.
-void VarItem::setText(int column, const QString &data)
-{
-    QString strData=data;
-
-    if (column == ValueCol) {
-        QString oldValue(text(column));
-        if (!oldValue.isEmpty()) // Don't highlight new items
-        {
-            highlight_ = (oldValue != QString(data));
-        }
-    }
-
-    Q3ListViewItem::setText(column, strData);
-}
-
-void VarItem::clearHighlight()
-{
-    highlight_ = false;
-
-    for(Q3ListViewItem* child = firstChild();
-        child; child = child->nextSibling())
-    {
-        static_cast<VarItem*>(child)->clearHighlight();
-    }
-}
-
-// **************************************************************************
-
-void VarItem::updateValue()
-{
-    if (handleSpecialTypes())
-    {
-        // 1. Gdb never includes structures in output from -var-update
-        // 2. Even if it did, the internal state of object can be
-        //    arbitrary complex and gdb can't detect if pretty-printed
-        //    value remains the same.
-        // So, we need to reload value on each step.
-        updateUnconditionally_ = true;
-        return;
-    }
-    updateUnconditionally_ = false;
-
-    controller_->addCommand(
-        new GDBCommand(VarEvaluateExpression,
-            "\"" + varobjName_ + "\"",
-            this,
-            &VarItem::valueDone,
-            true /* handle error */));
-}
-
-void VarItem::setValue(const QString& new_value)
-{
-    controller_->addCommand(
-        new GDBCommand(VarAssign, QString("\"%1\" %2").arg(varobjName_)
-                       .arg(new_value)));
-
-    // And immediately reload it from gdb,
-    // so that it's display format is the one gdb uses,
-    // not the one user has typed. Otherwise, on the next
-    // step, the visible value might change and be highlighted
-    // as changed, which is bogus.
-    updateValue();
-}
-
-void VarItem::updateSpecialRepresentation(const QString& xs)
-{
-    QString s(xs);
-    if (s[0] == '$')
-    {
-        int i = s.indexOf('=');
-        if (i != -1)
-            s = s.mid(i+2);
-    }
-
-    // A hack to nicely display QStrings. The content of QString is unicode
-    // for for ASCII only strings we get ascii character mixed with \000.
-    // Remove those \000 now.
-
-    // This is not very nice, becuse we're doing this unconditionally
-    // and this method can be called twice: first with data that gdb sends
-    // for a variable, and second after we request the string data. In theory
-    // the data sent by gdb might contain \000 that should not be translated.
-    //
-    // What's even worse, ideally we should convert the string data from
-    // gdb into a QString again, handling all other escapes and composing
-    // one QChar from two characters from gdb. But to do that, we *should*
-    // now if the data if generic gdb value, and result of request for string
-    // data. Fixing is is for later.
-    s.replace( QRegExp("\\\\000|\\\\0"), "" );
-
-    // FIXME: for now, assume that all special representations are
-    // just strings.
-
-    s = GDBParser::getGDBParser()->undecorateValue(s);
-
-    setText(ValueCol, s);
-    // On the first stop, when VarItem was just created,
-    // don't show it in red.
-    if (oldSpecialRepresentationSet_)
-        highlight_ = (oldSpecialRepresentation_ != s);
-    else
-        highlight_ = false;
-
-    oldSpecialRepresentationSet_ = true;
-    oldSpecialRepresentation_ = s;
-}
-
-void VarItem::recreateLocallyMaybe()
-{
-    controller_->addCommand(
-        new CliCommand(NonMI,
-            QString("print /x &%1").arg(expression_),
-            this,
-            &VarItem::handleCurrentAddress,
-            true));
-
-    controller_->addCommand(
-        new CliCommand(NonMI,
-            QString("whatis %1").arg(expression_),
-            this,
-            &VarItem::handleType));
-}
-
-void VarItem::recreate()
-{
-    unhookFromGdb();
-
-    initialCreation_ = false;
-    createVarobj();
-}
-
-
-// **************************************************************************
-
-void VarItem::setOpen(bool open)
-{
-    Q3ListViewItem::setOpen(open);
-
-    if (open && !childrenFetched_)
-    {
-        controller_->addCommand(new GDBCommand(VarListChildren,
-                                    "\"" + varobjName_ + "\"",
-                                    this,
-                                    &VarItem::childrenDone));
-    }
-}
-
-bool VarItem::handleSpecialTypes()
-{
-    kDebug(9012) << "handleSpecialTypes: " << originalValueType_ << "\n";
-    if (originalValueType_.isEmpty())
-        return false;
-
-    static QRegExp qstring("^(const)?[ ]*QString[ ]*&?$");
-
-    if (qstring.exactMatch(originalValueType_)) {
-
-        VariableTree* varTree = static_cast<VariableTree*>(listView());
-
-        varTree->controller()->addCommand(
-            new ResultlessCommand(NonMI, QString("print $kdev_d=%1.d")
-                                  .arg(gdbExpression()),
-                                  true /* ignore error */));
-
-        if (varTree->controller()->qtVersion() >= 4)
-            varTree->controller()->addCommand(
-                new ResultlessCommand(NonMI, QString("print $kdev_s=$kdev_d.size"),
-                                      true));
-        else
-            varTree->controller()->addCommand(
-                new ResultlessCommand(NonMI, QString("print $kdev_s=$kdev_d.len"),
-                                      true));
-
-        varTree->controller()->addCommand(
-            new ResultlessCommand(NonMI,
-                QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0"),
-                true));
-
-        if (varTree->controller()->qtVersion() >= 4)
-            varTree->controller()->addCommand(
-                new ValueSpecialRepresentationCommand(NonMI,
-                    this, "print ($kdev_s>0) ? (*((char*)&$kdev_d.data[0])@$kdev_s) : \"\""));
-        else
-            varTree->controller()->addCommand(
-                new ValueSpecialRepresentationCommand(NonMI,
-                    this, "print ($kdev_s>0) ? (*((char*)&$kdev_d.unicode[0])@$kdev_s) : \"\""));
-
-        return true;
-    }
-
-    return false;
-}
-
-// **************************************************************************
-
-VarItem::format_t VarItem::format() const
-{
-    return format_;
-}
-
-void VarItem::setFormat(format_t f)
-{
-    if (f == format_)
-        return;
-
-    format_ = f;
-
-    if (numChildren_)
-    {
-        // If variable has children, change format for children.
-        // - for structures, that's clearly right
-        // - for arrays, that's clearly right
-        // - for pointers, this can be confusing, but nobody ever wants to
-        //   see the pointer in decimal!
-        for(Q3ListViewItem* child = firstChild();
-            child; child = child->nextSibling())
-        {
-            static_cast<VarItem*>(child)->setFormat(f);
-        }
-    }
-    else
-    {
-         controller_->addCommand(
-            new GDBCommand(VarSetFormat, QString("\"%1\" %2")
-                           .arg(varobjName_).arg(varobjFormatName())));
-
-        updateValue();
-    }
-}
-
-VarItem::format_t VarItem::formatFromGdbModifier(char c) const
-{
-    format_t nf;
-    switch(c)
-    {
-    case 'n': // Not quite gdb modifier, but used in our UI.
-        nf = natural; break;
-    case 'x':
-        nf = hexadecimal; break;
-    case 'd':
-        nf = decimal; break;
-    case 'c':
-        nf = character; break;
-    case 't':
-        nf = binary; break;
-    default:
-        nf = natural; break;
-    }
-    return nf;
-}
-
-QString VarItem::varobjFormatName() const
-{
-    switch(format_)
-    {
-    case natural:
-        return "natural";
-        break;
-
-    case hexadecimal:
-        return "hexadecimal";
-        break;
-
-    case decimal:
-        return "decimal";
-        break;
-
-        // Note: gdb does not support 'character' natively,
-        // so we'll generate appropriate representation
-        // ourselfs.
-    case character:
-        return "decimal";
-        break;
-
-    case binary:
-        return "binary";
-        break;
-    }
-    return "<undefined>";
-}
-
-
-// **************************************************************************
-
-// Overridden to highlight the changed items
-void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
-                        int column, int width, int align)
-{
-    if ( !p )
-        return;
-
-    // Draw values in fixed font. For example, when there are several
-    // pointer variables, it's nicer if they are aligned -- it allows
-    // to easy see the diferrence between the pointers.
-    if (column == ValueCol)
-    {
-        p->setFont(KGlobalSettings::fixedFont());
-    }
-
-    if (!alive_)
-    {
-        /* Draw this as disabled. */
-        Q3ListViewItem::paintCell(p, varTree()->QWidget::palette().disabled(),
-                                 column, width, align);
-    }
-    else
-    {
-        if (column == ValueCol && highlight_)
-        {
-            QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
-                               cg.dark(), cg.mid(), Qt::red, cg.base());
-            Q3ListViewItem::paintCell( p, hl_cg, column, width, align );
-        } else
-            Q3ListViewItem::paintCell( p, cg, column, width, align );
-    }
-}
-
-
-VariableTree* VarItem::varTree() const
-{
-    return static_cast<VariableTree*>(listView());
-}
-
-void VarItem::unhookFromGdb()
-{
-    // Unhook children first, so that child varitems are deleted
-    // before parent. Strictly speaking, we can avoid calling
-    // -var-delete on child varitems, but that's a bit cheesy,
-    for(Q3ListViewItem* child = firstChild();
-        child; child = child->nextSibling())
-    {
-        static_cast<VarItem*>(child)->unhookFromGdb();
-    }
-
-    alive_ = false;
-    childrenFetched_ = false;
-
-    emit varobjNameChange(varobjName_, "");
-
-    if (!controller_->stateIsOn(s_dbgNotStarted) && !varobjName_.isEmpty())
-    {
-        controller_->addCommand(
-            new GDBCommand(VarDelete,
-                QString("\"%1\"").arg(varobjName_)));
-    }
-
-    varobjName_ = "";
-}
-
-// **************************************************************************
-
-QString VarItem::tipText() const
-{
-    const int maxTooltipSize = 70;
-    QString tip = text( ValueCol );
-
-    if (tip.length() > maxTooltipSize)
-        tip = tip.mid(0, maxTooltipSize - 1 ) + " [...]";
-
-    if (!tip.isEmpty())
-        tip += "\n" + originalValueType_;
-
-    return tip;
-}
-
-bool VarItem::updateUnconditionally() const
-{
-    return updateUnconditionally_;
-}
-
-bool VarItem::isAlive() const
-{
-    return alive_;
-}
-
-
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
-
-VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
-    : TrimmableItem (parent),
-      needLocals_(false),
-      frameNo_(frameNo),
-      threadNo_(threadNo),
-      currentFrameBase((quint64)-1),
-      currentFrameCodeAddress((quint64)-1)
-{
-    setExpandable(true);
-}
-
-// **************************************************************************
-
-VarFrameRoot::~VarFrameRoot()
-{
-}
-
-void VarFrameRoot::setOpen(bool open)
-{
-    bool frameOpened = ( isOpen()==false && open==true );
-    Q3ListViewItem::setOpen(open);
-
-    if (frameOpened && needLocals_)
-    {
-        needLocals_ = false;
-        VariableTree* parent = static_cast<VariableTree*>(listView());
-        parent->updateCurrentFrame();
-    }
-}
-
-// **************************************************************************
-
-bool VarFrameRoot::matchDetails(int frameNo, int threadNo)
-{
-    return frameNo == frameNo_ && threadNo == threadNo_;
-}
-
-void VarFrameRoot::setDirty()
-{
-    needLocals_ = true;
-}
-
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
-
-WatchRoot::WatchRoot(VariableTree *parent)
-    : TrimmableItem(parent)
-{
-    setText(0, i18n("Watch"));
-    setOpen(true);
-}
-
-// **************************************************************************
-
-WatchRoot::~WatchRoot()
-{
+    return controller_;
 }
 
 // **************************************************************************
@@ -2002,7 +513,6 @@ WatchRoot::~WatchRoot()
 // **************************************************************************
 
 }
-
 
 #include "variablewidget.moc"
 

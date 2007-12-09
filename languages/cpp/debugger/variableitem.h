@@ -25,48 +25,44 @@
 
 #include "mi/gdbmi.h"
 
+#include "abstractvariableitem.h"
+
 namespace GDBDebugger
 {
 
 class GDBController;
 class VariableCollection;
 
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-class VariableItem : public QObject
+class VariableItem : public AbstractVariableItem
 {
     Q_OBJECT
 
 public:
-    enum Columns {
-      ColumnName = 0,
-      ColumnValue = 1,
-      ColumnType = 2,
-      ColumnLast = ColumnType
-    };
-
-    enum DataTypes { typeUnknown, typeValue, typePointer, typeReference,
-                typeStruct, typeArray, typeQString, typeWhitespace,
-                typeName };
-
-    enum format_t { natural, hexadecimal, decimal, character, binary };
+    enum FormatTypes { natural, hexadecimal, decimal, character, binary };
 
     /** Creates top-level variable item from the specified expression.
         Optionally, alternative display name can be provided.
     */
-    VariableItem( VariableItem* parent,
-             const QString& expression,
-             bool frozen = false);
+    VariableItem(AbstractVariableItem* parent);
 
-    VariableItem( VariableItem* parent, const GDBMI::Value& varobj,
-             format_t format, bool baseClassMember);
+    void setExpression(const QString& expression);
+    void setFrozen(bool frozen = true);
 
-    virtual ~VariableItem();
+    void setVariableObject(const GDBMI::Value& varobj, FormatTypes format, bool baseClassMember);
 
-    Qt::ItemFlags flags(int column) const;
-    QVariant data(int column, int role = Qt::DisplayRole ) const;
+    virtual void registerWithGdb();
+
+    /** Recursively clears the varobjName_ field, making
+       *this completely disconnected from gdb.
+       Automatically makes *this and children disables,
+       since there's no possible interaction with unhooked
+       object.
+    */
+    virtual void deregisterWithGdb();
+
+    virtual Qt::ItemFlags flags(int column) const;
+    virtual QVariant data(int column, int role = Qt::DisplayRole ) const;
+    virtual bool hasChildren() const;
 
     /// Returns the gdb expression for *this.
     QString gdbExpression() const;
@@ -99,7 +95,10 @@ public:
     */
     void recreate();
 
-    void getChildren();
+    /**
+     * Search for and create children if not already performed.
+     */
+    void refresh();
 
     /** Mark the variable as alive, or not alive.
         Variables that are not alive a shown as "gray",
@@ -107,17 +106,9 @@ public:
         removing. */
     void setAliveRecursively(bool enable);
 
-    /** Recursively clears the varobjName_ field, making
-       *this completely disconnected from gdb.
-       Automatically makes *this and children disables,
-       since there's no possible interaction with unhooked
-       object.
-    */
-    void unhookFromGdb();
-
-    format_t format() const;
-    void setFormat(format_t f);
-    format_t formatFromGdbModifier(char c) const;
+    FormatTypes format() const;
+    void setFormat(FormatTypes f);
+    FormatTypes formatFromGdbModifier(char c) const;
 
     /** Clears highliting for this variable and
         all its children. */
@@ -129,10 +120,10 @@ public:
 
     bool isAlive() const;
 
-    VariableItem* parent() const;
-    const QList<VariableItem*>& children() const;
+    VariableItem* parentItem() const;
 
     void setVariableName(const QString& name);
+    const QString& variableName() const;
 
 Q_SIGNALS:
     /** Emitted whenever the name of varobj associated with *this changes:
@@ -193,8 +184,6 @@ private:
     QString varobjFormatName() const;
 
 private:
-    VariableCollection* m_collection;
-  
     // The gdb expression for this varItem relatively to
     // parent VarItem.
     QString expression_;
@@ -208,12 +197,11 @@ private:
     bool oldSpecialRepresentationSet_;
     QString oldSpecialRepresentation_;
 
-    format_t format_;
+    FormatTypes format_;
 
     static int varobjIndex;
 
     int numChildren_;
-    bool childrenFetched_;
 
     QString currentAddress_;
     QString lastObtainedAddress_;
@@ -230,7 +218,6 @@ private:
 
     bool alive_;
 
-    QList<VariableItem*> m_children;
     QString m_value, m_type;
 };
 

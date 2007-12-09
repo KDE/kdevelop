@@ -42,7 +42,10 @@ set(kdevcppdebugger_PART_SRCS
     stty.cpp
     breakpoint.cpp
     variablewidget.cpp
+    abstractvariableitem.cpp
     variableitem.cpp
+    frameitem.cpp
+    watchitem.cpp
     variablecollection.cpp
     gdbbreakpointwidget.cpp
     framestackwidget.cpp
@@ -56,6 +59,7 @@ set(kdevcppdebugger_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
+    #modeltest.cpp
 )
 
 set(kdevcppdebugger_PART_UI

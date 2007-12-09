@@ -53,6 +53,21 @@ enum QueuePosition {
     QueueWhileInterrupted
 };
 
+enum event_t { program_state_changed = 1, program_exited, debugger_exited,
+                thread_or_frame_changed, debugger_busy, debugger_ready,
+                shared_library_loaded,
+                // Raised when debugger believe that program start running.
+                // Can be used to hide current line indicator.
+                // Don't count on this being raise in all cases where
+                // program is running.
+                program_running,
+                connected_to_program
+};
+
+enum DataType { typeUnknown, typeValue, typePointer, typeReference,
+            typeStruct, typeArray, typeQString, typeWhitespace,
+            typeName };
+
 }
 
 #endif

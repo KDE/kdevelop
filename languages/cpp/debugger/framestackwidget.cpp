@@ -68,8 +68,8 @@ FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* con
 
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
-    connect(controller, SIGNAL(event(GDBController::event_t)),
-            this,       SLOT(slotEvent(GDBController::event_t)));
+    connect(controller, SIGNAL(event(event_t)),
+            this,       SLOT(slotEvent(event_t)));
 
     connect( this, SIGNAL(clicked(Q3ListViewItem*)),
              this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
@@ -138,13 +138,13 @@ void FramestackWidget::slotSelectionChanged(Q3ListViewItem *thisItem)
 
 /***************************************************************************/
 
-void FramestackWidget::slotEvent(GDBController::event_t e)
+void FramestackWidget::slotEvent(event_t e)
 {
     switch(e)
     {
-        case GDBController::program_state_changed: 
+        case program_state_changed:
 
-            kDebug(9012) << "Clearning framestack\n";
+            kDebug(9012) << "Clearning framestack";
             clear();
 
             controller_->addCommand(
@@ -154,7 +154,7 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
             break;
             
 
-         case GDBController::thread_or_frame_changed: 
+         case thread_or_frame_changed:
 
              if (viewedThread_)
              {
@@ -177,17 +177,17 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
 
             break;
 
-        case GDBController::program_exited: 
-        case GDBController::debugger_exited: 
+        case program_exited:
+        case debugger_exited: 
         {
             clear();
             break;
         }        
-        case GDBController::debugger_busy:
-        case GDBController::debugger_ready:
-        case GDBController::shared_library_loaded:
-        case GDBController::program_running:
-        case GDBController::connected_to_program:
+        case debugger_busy:
+        case debugger_ready:
+        case shared_library_loaded:
+        case program_running:
+        case connected_to_program:
             break;
     }
 }

@@ -51,6 +51,7 @@
 #include "stty.h"
 #include "mi/miparser.h"
 #include "gdbcommandqueue.h"
+#include "variablecollection.h"
 
 using namespace std;
 using namespace GDBMI;
@@ -156,12 +157,15 @@ GDBController::GDBController(QObject* parent)
         config_outputRadix_(10),
         state_reload_needed(false),
         stateReloadInProgress_(false),
-        m_process(0)
+        m_process(0),
+        m_variableCollection(new VariableCollection(this))
 {
     configure();
 
     Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
+
+    connect(this, SIGNAL(event(event_t)), m_variableCollection, SLOT(slotEvent(event_t)));
 }
 
 // **************************************************************************
@@ -322,7 +326,7 @@ void GDBController::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     commandQueue_->enqueue(cmd, queue_where);
     
     kDebug(9012) << "QUEUE: " << cmd->initialString()
-                  << (stateReloadInProgress_ ? " (state reloading)\n" : "\n");
+                  << (stateReloadInProgress_ ? "(state reloading)" : "");
 
     setStateOn(s_dbgBusy);
     raiseEvent(debugger_busy);
@@ -368,13 +372,13 @@ void GDBController::executeCmd()
         // it.
         if (SentinelCommand* sc = dynamic_cast<SentinelCommand*>(currentCmd_))
         {
-            kDebug(9012) << "SEND: sentinel command, not sending\n";
+            kDebug(9012) << "SEND: sentinel command, not sending";
             sc->invokeHandler();
         }
         else
         {
             kDebug(9012) << "SEND: command " << currentCmd_->initialString()
-                          << " changed its mind, not sending\n";
+                          << "changed its mind, not sending";
         }
 
         destroyCurrentCommand();
@@ -398,7 +402,7 @@ void GDBController::executeCmd()
         return;
     }
 
-    kDebug(9012) << "SEND: " << commandText;
+    kDebug(9012) << "SEND:" << commandText;
 
     m_process->write(commandText.toLatin1(),
                             commandText.length());
@@ -782,7 +786,7 @@ void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
 
 bool GDBController::startDebugger()
 {
-    kDebug(9012) << "Starting debugger controller\n";
+    kDebug(9012) << "Starting debugger controller";
 
     Q_ASSERT (!m_process);
     m_process = new KProcess(this);
@@ -884,30 +888,6 @@ bool GDBController::startDebugger()
     // make sure output radix is always set to users view.
     queueCmd(new GDBCommand(GDBMI::GdbSet, QString().sprintf("output-radix %d",  config_outputRadix_)));
 
-    Q_ASSERT (!tty_);
-    tty_ = new STTY(config_dbgTerminal_);//, Settings::terminalEmulatorName( *KGlobal::config() ));
-    if (!config_dbgTerminal_)
-    {
-        connect( tty_, SIGNAL(OutOutput(const QByteArray&)), SIGNAL(ttyStdout(const QByteArray&)) );
-        connect( tty_, SIGNAL(ErrOutput(const QByteArray&)), SIGNAL(ttyStderr(const QByteArray&)) );
-    }
-
-    QString tty(tty_->getSlave());
-    if (tty.isEmpty())
-    {
-        KMessageBox::information(qApp->activeWindow(), i18n("GDB cannot use the tty* or pty* devices.\n"
-                                    "Check the settings on /dev/tty* and /dev/pty*\n"
-                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
-                                    "and/or add the user to the tty group using "
-                                    "\"usermod -G tty username\"."), i18n("Warning"));
-
-        delete tty_;
-        tty_ = 0;
-        return false;
-    }
-
-    queueCmd(new GDBCommand(InferiorTtySet, tty));
-
     return true;
 }
 
@@ -938,6 +918,33 @@ bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
     }
 
     m_process->setProperty("serial", serial);
+
+    // Need to set up a new TTY for each run...
+    if (tty_)
+        delete tty_;
+
+    tty_ = new STTY(config_dbgTerminal_);//, Settings::terminalEmulatorName( *KGlobal::config() ));
+    if (!config_dbgTerminal_)
+    {
+        connect( tty_, SIGNAL(OutOutput(const QByteArray&)), SIGNAL(ttyStdout(const QByteArray&)) );
+        connect( tty_, SIGNAL(ErrOutput(const QByteArray&)), SIGNAL(ttyStderr(const QByteArray&)) );
+    }
+
+    QString tty(tty_->getSlave());
+    if (tty.isEmpty())
+    {
+        KMessageBox::information(qApp->activeWindow(), i18n("GDB cannot use the tty* or pty* devices.\n"
+                                    "Check the settings on /dev/tty* and /dev/pty*\n"
+                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
+                                    "and/or add the user to the tty group using "
+                                    "\"usermod -G tty username\"."), i18n("Warning"));
+
+        delete tty_;
+        tty_ = 0;
+        return false;
+    }
+
+    queueCmd(new GDBCommand(InferiorTtySet, tty));
 
     // Change the "Working directory" to the correct one
     QString dir = QString::fromLatin1(QFile::encodeName( run.workingDirectory().path() ));
@@ -1319,7 +1326,7 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
 
 void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
 {
-    kDebug(9012) << "MI stop reason " << result.reason << "\n";
+    kDebug(9012) << "MI stop reason " << result.reason;
     if (result.reason == "stopped")
     {
         actOnProgramPauseMI(result);
@@ -1394,7 +1401,7 @@ void GDBController::readFromProcess(QProcess* process)
         QByteArray reply(holdingZone_.left(i));
         holdingZone_ = holdingZone_.mid(i+1);
 
-        kDebug(9012) << "REPLY: " << reply << "\n";
+        kDebug(9012) << "REPLY:" << reply;
 
         FileSymbol file;
         file.contents = reply;
@@ -1404,12 +1411,13 @@ void GDBController::readFromProcess(QProcess* process)
         if (r.get() == 0)
         {
             // FIXME: Issue an error!
-            kDebug(9012) << "Invalid MI message: " << reply << "\n";
+            kDebug(9012) << "Invalid MI message:" << reply;
             ready_for_next_command = true;
             continue;
         }
 
-        try {
+        //try
+        {
 
             switch(r->kind)
             {
@@ -1420,7 +1428,7 @@ void GDBController::readFromProcess(QProcess* process)
                 if (result.reason != "running")
                 {
                     kDebug(9012) << "Command execution time "
-                                  << commandExecutionTime.elapsed() << " ms.\n";
+                                  << commandExecutionTime.elapsed() << " ms.";
                 }
 
                 /* The currentCmd_ may be NULL here, because when detaching
@@ -1504,7 +1512,7 @@ void GDBController::readFromProcess(QProcess* process)
                 static QRegExp print_output("^\\$(\\d+) = ");
                 if (print_output.indexIn(s.message) != -1)
                 {
-                    kDebug(9012) << "Found 'print' output: " << s.message << "\n";
+                    kDebug(9012) << "Found 'print' output:" << s.message;
                 }
 
                 /* This is output from the program.  Route it to
@@ -1521,7 +1529,7 @@ void GDBController::readFromProcess(QProcess* process)
                 break;
             }
         }
-        catch(const std::exception& e)
+        /*catch(const std::exception& e)
         {
             KMessageBox::detailedSorry(
                 qApp->activeWindow(),
@@ -1534,7 +1542,7 @@ void GDBController::readFromProcess(QProcess* process)
 
             destroyCurrentCommand();
             ready_for_next_command = true;
-        }
+        }*/
     }
 
     // check the queue for any commands to send
@@ -1603,7 +1611,7 @@ void GDBController::raiseEvent(event_t e)
 
 // **************************************************************************
 
-void GDBDebugger::GDBController::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void GDBController::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
     delete m_process;
@@ -1761,7 +1769,7 @@ void GDBController::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSt
 
             }
         }
-        kDebug(9012) << out << "\n";
+        kDebug(9012) << out;
     }
 }
 
@@ -1787,13 +1795,7 @@ void GDBController::slotRestart()
     slotRun();
 }
 
-}
-
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
-
-int GDBDebugger::GDBController::serial() const
+int GDBController::serial() const
 {
     QVariant var;
     if (m_process)
@@ -1804,5 +1806,16 @@ int GDBDebugger::GDBController::serial() const
 
     return -1;
 }
+
+VariableCollection * GDBController::variables() const
+{
+    return m_variableCollection;
+}
+
+}
+
+// **************************************************************************
+// **************************************************************************
+// **************************************************************************
 
 #include "gdbcontroller.moc"

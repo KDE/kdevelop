@@ -16,7 +16,7 @@
 #ifndef _GDBPARSER_H_
 #define _GDBPARSER_H_
 
-#include "variablewidget.h"
+#include "gdbglobal.h"
 
 namespace GDBDebugger
 {
@@ -35,8 +35,6 @@ public:
     static void destroy();
 
 private:
-    void parseArray(TrimmableItem *parent, const char *buf);
-
     const char *skipTokenEnd(const char *buf) const;
     const char *skipTokenValue(const char *buf) const;
     const char *skipNextTokenStart(const char *buf) const;

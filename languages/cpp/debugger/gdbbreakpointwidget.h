@@ -102,7 +102,7 @@ private Q_SLOTS:
     void editTracing(Q3TableItem* item);
     void slotBreakpointModified(Breakpoint*);
 
-    void slotEvent(GDBController::event_t);
+    void slotEvent(event_t);
     void slotWatchpointHit(int id,
                            const QString& oldValue,
                            const QString& newValue);

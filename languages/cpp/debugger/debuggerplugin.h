@@ -145,7 +145,7 @@ private Q_SLOTS:
 
     void slotProjectCompiled();
 
-    void slotEvent(GDBController::event_t);
+    void slotEvent(event_t);
 
     void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 

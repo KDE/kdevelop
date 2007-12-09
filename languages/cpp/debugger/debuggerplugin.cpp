@@ -59,9 +59,9 @@
 #include "gdbparser.h"
 #include "gdboutputwidget.h"
 #include "debuggerconfigwidget.h"
-
 #include "gdbglobal.h"
 #include "breakpointcontroller.h"
+#include "variablecollection.h"
 
 #include <iostream>
 
@@ -518,7 +518,7 @@ void CppDebuggerPlugin::contextMenu(QMenu *popup, const KDevelop::Context *conte
     // menu items should be about debugging, not some copy/paste/cut
     // things.
     if (!running)
-        popup->insertSeparator();
+        popup->addSeparator();
 
     if (running)
     {
@@ -579,8 +579,8 @@ void CppDebuggerPlugin::setupController()
     connect( controller,            SIGNAL(debuggerAbnormalExit()),
          this,                  SLOT(slotDebuggerAbnormalExit()));
 
-    connect(controller, SIGNAL(event(GDBController::event_t)),
-            this,       SLOT(slotEvent(GDBController::event_t)));
+    connect(controller, SIGNAL(event(event_t)),
+            this,       SLOT(slotEvent(event_t)));
     connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
              this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
 
@@ -595,6 +595,8 @@ void CppDebuggerPlugin::setupController()
 //     connect(statusBarIndicator, SIGNAL(doubleClicked()),
 //             controller, SLOT(explainDebuggerStatus()));
 
+    connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
+    connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
 }
 
 bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, int serial)
@@ -720,11 +722,11 @@ void CppDebuggerPlugin::slotRefreshBPState( const Breakpoint& BP)
     }
 }
 
-void CppDebuggerPlugin::slotEvent(GDBController::event_t e)
+void CppDebuggerPlugin::slotEvent(event_t e)
 {
-    if (e == GDBController::program_running ||
-        e == GDBController::program_exited ||
-        e == GDBController::debugger_exited)
+    if (e == program_running ||
+        e == program_exited ||
+        e == debugger_exited)
     {
         breakpoints()->clearExecutionPoint();
     }
@@ -767,7 +769,8 @@ KConfigGroup CppDebuggerPlugin::config() const
 
 void CppDebuggerPlugin::abort(int serial)
 {
-    kWarning() << "Implement";
+    Q_UNUSED(serial);
+    controller->stopDebugger();
 }
 
 QString CppDebuggerPlugin::statusName() const
@@ -801,15 +804,17 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
     if (changedState & s_dbgNotStarted) {
         if (newState & s_dbgNotStarted) {
             message = i18n("Debugger stopped");
-            floatingToolBar->hide();
+            if (floatingToolBar)
+                floatingToolBar->hide();
 
         } else {
             if (config().readEntry("Floating Toolbar", false))
             {
             #ifndef QT_MAC
-                if (!floatingToolBar)
+                if (!floatingToolBar) {
                     floatingToolBar = new KToolBar(qApp->activeWindow());
-                floatingToolBar->show();
+                    floatingToolBar->show();
+                }
             #endif
             }
         }

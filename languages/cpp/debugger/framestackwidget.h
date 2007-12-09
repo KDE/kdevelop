@@ -139,13 +139,8 @@ private:
     void handleStackDepth(const GDBMI::ResultRecord& r);
 
 public Q_SLOTS:
-    void slotEvent(GDBController::event_t e);
+    void slotEvent(event_t e);
     void slotSelectionChanged(Q3ListViewItem *thisItem);
-
-#if QT_VERSION < 300
-private:
-  Q3ListViewItem* findItemWhichBeginsWith(const QString& text) const;
-#endif
 
 private:
 

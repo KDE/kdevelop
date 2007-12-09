@@ -90,7 +90,7 @@ QString GDBParser::getValue(const char **buf)
 
 QString GDBParser::undecorateValue(DataType type, const QString& s)
 {
-    QByteArray l8 = s.local8Bit();
+    QByteArray l8 = s.toLocal8Bit();
     const char* start = l8;
     const char* end = start + s.length();
 
@@ -160,8 +160,8 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
 
 QString GDBParser::undecorateValue(const QString& s)
 {
-    DataType dataType = determineType(s.local8Bit());
-    QString r = undecorateValue(dataType, s.local8Bit());
+    DataType dataType = determineType(s.toLocal8Bit());
+    QString r = undecorateValue(dataType, s.toLocal8Bit());
     return r;
 }
 

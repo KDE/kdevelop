@@ -98,7 +98,7 @@ void Breakpoint::sendToGdb(GDBController* controller)
     if (controller->stateIsOn(s_appRunning)
         && !controller->stateIsOn(s_explicitBreakInto))
     {
-        kDebug(9012) << "PAUSING APP\n";
+        kDebug(9012) << "PAUSING APP";
         controller->slotPauseApp();
         restart = true;
     }
@@ -133,7 +133,7 @@ void Breakpoint::sendToGdb(GDBController* controller)
     }
 
     if (restart) {
-        kDebug(9012) << "RESTARING APP\n";
+        kDebug(9012) << "RESTARING APP";
         GDBCommand *cmd = new GDBCommand(ExecContinue);
         cmd->setRun(true);
         controller->addCommand(cmd);
@@ -368,11 +368,11 @@ void Breakpoint::handleSet(const GDBMI::ResultRecord& r)
 
 void Breakpoint::handleDeleted(const GDBMI::ResultRecord& /*r*/)
 {
-    kDebug(9012) << "inside handleDeleted\n";
+    kDebug(9012) << "inside handleDeleted";
     setActionDie();
     if (FilePosBreakpoint* fp = dynamic_cast<FilePosBreakpoint*>(this))
     {
-        kDebug(9012) << "handleDeleted, line is " << fp->lineNum() << "\n";
+        kDebug(9012) << "handleDeleted, line is" << fp->lineNum();
     }
     emit modified(this);
 }

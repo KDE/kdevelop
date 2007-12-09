@@ -45,6 +45,7 @@ class GDBCommand;
 class VarItem;
 class STTY;
 class CommandQueue;
+class VariableCollection;
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -58,17 +59,6 @@ class GDBController : public QObject
 public:
     GDBController(QObject* parent);
     ~GDBController();
-
-    enum event_t { program_state_changed = 1, program_exited, debugger_exited,
-                   thread_or_frame_changed, debugger_busy, debugger_ready,
-                   shared_library_loaded,
-                   // Raised when debugger believe that program start running.
-                   // Can be used to hide current line indicator.
-                   // Don't count on this being raise in all cases where
-                   // program is running.
-                   program_running,
-                   connected_to_program
-    };
 
     /**
      * Start the debugger, and execute the program specified by \a run, and remember the provided \a serial number.
@@ -166,6 +156,11 @@ public:
     int qtVersion() const;
 
     bool stateIsOn(DBGStateFlags state);
+
+    /**
+     * Return the shared variable collection cache
+     */
+    VariableCollection* variables() const;
 
     using QObject::event;
 
@@ -280,7 +275,7 @@ Q_SIGNALS:
         NOTE: this signal should never be emitted directly. Instead,
         use raiseEvent.
     */
-    void event(GDBController::event_t e);
+    void event(event_t e);
 
     void debuggerAbnormalExit();
 
@@ -357,6 +352,8 @@ private:
     bool saw_gdb_prompt_;
 
     KProcess* m_process;
+
+    VariableCollection* m_variableCollection;
 };
 
 }
