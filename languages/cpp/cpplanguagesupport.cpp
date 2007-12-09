@@ -305,6 +305,12 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                         hadMissingPath = true;
                         allPaths << r;
                         kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.prettyUrl();
+                        KDevelop::Problem p;
+                        p.setSource(KDevelop::Problem::Preprocessor);
+                        p.setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
+                        p.setExplanation(result.longErrorMessage);
+                        p.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                        KDevelop::DUChain::problemEncountered( p );
                     }
                 }
                 
