@@ -73,6 +73,8 @@ struct CorePrivate {
         uiController->showArea(defaultArea, uiController->defaultMainWindow());
 
         uiController->defaultMainWindow()->show();
+
+        documentController->restoreDocumentList();
     }
     void deinitialize()
     {
@@ -135,6 +137,8 @@ Core::~Core()
 
 void Core::cleanup()
 {
+    /* Must be called before projectController->cleanup(). */
+    d->documentController->cleanup();
     d->projectController->cleanup();
     d->pluginController->cleanup();
 }
