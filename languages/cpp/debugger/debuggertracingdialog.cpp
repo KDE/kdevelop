@@ -7,7 +7,6 @@
 #include <klineedit.h>
 #include <keditlistbox.h>
 #include <kmessagebox.h>
-#include <kvbox.h>
 
 namespace GDBDebugger
 {

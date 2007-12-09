@@ -11,9 +11,7 @@
 #define GDBDEBUGGERGDBTABLE_H
 
 #include <q3table.h>
-//Added by qt3to4:
 #include <QKeyEvent>
-#include <kvbox.h>
 
 namespace GDBDebugger {
 

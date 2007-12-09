@@ -48,11 +48,11 @@ VariableCollection::~ VariableCollection()
 
 void VariableCollection::addItem(AbstractVariableItem * item)
 {
+    item->registerWithGdb();
+
     beginInsertRows(QModelIndex(), m_items.count(), m_items.count());
     m_items.append(item);
     endInsertRows();
-
-    item->registerWithGdb();
 }
 
 void VariableCollection::deleteItem(AbstractVariableItem * item)
@@ -62,14 +62,14 @@ void VariableCollection::deleteItem(AbstractVariableItem * item)
     if (index == -1)
         return;
 
-    if (item->isRegisteredWithGdb())
-        item->deregisterWithGdb();
-
     item->deleteAllChildren();
 
     beginRemoveRows(QModelIndex(), index, index);
     delete m_items.takeAt(index);
     endRemoveRows();
+
+    if (item->isRegisteredWithGdb())
+        item->deregisterWithGdb();
 }
 
 GDBController * VariableCollection::controller() const

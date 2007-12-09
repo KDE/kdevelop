@@ -25,7 +25,6 @@
 
 #include <QString>
 #include <q3valuelist.h>
-#include <kvbox.h>
 
 /**
 @author Roberto Raggi

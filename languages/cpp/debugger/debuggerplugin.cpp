@@ -65,8 +65,6 @@
 
 #include <iostream>
 
-#include <kvbox.h>
-
 
 namespace GDBDebugger
 {

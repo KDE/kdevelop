@@ -26,12 +26,10 @@
 #include <q3dict.h>
 #include <q3header.h>
 #include <q3textedit.h>
-//Added by qt3to4:
 #include <QShowEvent>
 #include <QHideEvent>
 
 #include <stdlib.h>
-#include <kvbox.h>
 #include <klocale.h>
 #include <KIcon>
 

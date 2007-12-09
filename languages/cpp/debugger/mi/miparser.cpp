@@ -22,7 +22,6 @@
 #include "miparser.h"
 #include "tokens.h"
 #include <memory>
-#include <kvbox.h>
 
 using namespace GDBMI;
 

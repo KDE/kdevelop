@@ -20,9 +20,9 @@
 #ifndef MILEXER_H
 #define MILEXER_H
 
-#include <qmap.h>
+#include <QMap>
 #include <QString>
-#include <kvbox.h>
+#include <QVector>
 
 class MILexer;
 class TokenStream;

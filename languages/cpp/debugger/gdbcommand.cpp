@@ -23,12 +23,12 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), command_(command), run(false), handler_this(0)
+: type_(type), command_(command), handler_this(0), run(false)
 {
 }
 
 GDBDebugger::GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), command_(QString::number(index)), run(false), handler_this(0)
+: type_(type), command_(QString::number(index)), handler_this(0), run(false)
 {
 }
 

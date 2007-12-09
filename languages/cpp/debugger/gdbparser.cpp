@@ -18,12 +18,10 @@
 #include <kdebug.h>
 
 #include <QRegExp>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <ctype.h>
 #include <stdlib.h>
-#include <kvbox.h>
 
 namespace GDBDebugger
 {

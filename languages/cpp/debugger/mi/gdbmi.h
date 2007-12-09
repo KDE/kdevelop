@@ -26,7 +26,6 @@
 #include <qmap.h>
 
 #include <stdexcept>
-#include <kvbox.h>
 
 /**
 @author Roberto Raggi

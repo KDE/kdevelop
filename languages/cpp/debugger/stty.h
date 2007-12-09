@@ -29,7 +29,6 @@ class QSocketNotifier;
 
 #include <QObject>
 #include <QString>
-#include <kvbox.h>
 
 namespace GDBDebugger
 {

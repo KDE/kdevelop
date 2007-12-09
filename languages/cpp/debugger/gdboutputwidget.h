@@ -22,11 +22,9 @@
 #include <q3textedit.h>
 #include <QTimer>
 #include <QStringList>
-//Added by qt3to4:
 #include <Q3PopupMenu>
 #include <QFocusEvent>
 #include <QStringList>
-#include <kvbox.h>
 
 #include "gdbglobal.h"
 
@@ -34,14 +32,13 @@ class KHistoryComboBox;
 
 class Q3TextEdit;
 class QToolButton;
-class QDomElement;
 
 namespace GDBDebugger
 {
 
 class GDBController;
 class CppDebuggerPlugin;
-  
+
 class GDBOutputWidget : public QWidget
 {
     Q_OBJECT
@@ -50,8 +47,8 @@ public:
     GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent=0 );
     ~GDBOutputWidget();
 
-    void savePartialProjectSession(QDomElement* el);
-    void restorePartialProjectSession(const QDomElement* el);
+    void savePartialProjectSession();
+    void restorePartialProjectSession();
 
 public Q_SLOTS:
     void clear();

@@ -19,10 +19,8 @@
 #include "mi/gdbmi.h"
 
 #include <q3textedit.h>
-//Added by qt3to4:
 #include <QShowEvent>
 #include <QHideEvent>
-#include <kvbox.h>
 
 /***************************************************************************/
 /***************************************************************************/

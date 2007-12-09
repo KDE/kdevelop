@@ -42,9 +42,6 @@ public:
     VariableWidget( CppDebuggerPlugin* plugin, GDBController* controller,
                     QWidget *parent=0 );
 
-    VariableTree *varTree() const
-    { return varTree_; }
-
 Q_SIGNALS:
     void requestRaise();
     void addWatchVariable(const QString& indent);

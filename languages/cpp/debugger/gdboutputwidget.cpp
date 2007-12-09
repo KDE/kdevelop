@@ -30,13 +30,8 @@
 #include <QToolTip>
 #include <QApplication>
 #include <QClipboard>
-#include <qdom.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
 #include <QFocusEvent>
 #include <Q3PopupMenu>
-#include <Q3VBoxLayout>
-#include <kvbox.h>
 #include <khistorycombobox.h>
 #include <KIcon>
 
@@ -66,30 +61,34 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     m_gdbView = new OutputText(this);
     m_gdbView->setTextFormat(Qt::LogText);
 
-    Q3BoxLayout *userGDBCmdEntry = new Q3HBoxLayout();
     m_userGDBCmdEditor = new KHistoryComboBox (this);
 
     QLabel *label = new QLabel(i18n("&GDB cmd:"), this);
     label->setBuddy(m_userGDBCmdEditor);
-    userGDBCmdEntry->addWidget(label);
-
-    userGDBCmdEntry->addWidget(m_userGDBCmdEditor);
-    userGDBCmdEntry->setStretchFactor(m_userGDBCmdEditor, 1);
 
     m_Interrupt = new QToolButton( this );
     m_Interrupt->setIcon ( KIcon ( "media-playback-pause" ) );
-    userGDBCmdEntry->addWidget(m_Interrupt);
     m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
 
-    Q3VBoxLayout *topLayout = new Q3VBoxLayout(this, 2);
-    topLayout->addWidget(m_gdbView, 10);
+    QVBoxLayout *topLayout = new QVBoxLayout(this);
+    topLayout->addWidget(m_gdbView);
+    topLayout->setStretchFactor(m_gdbView, 1);
+
+    QBoxLayout *userGDBCmdEntry = new QHBoxLayout();
+    userGDBCmdEntry->addWidget(label);
+    userGDBCmdEntry->addWidget(m_userGDBCmdEditor);
+    userGDBCmdEntry->setStretchFactor(m_userGDBCmdEditor, 1);
+    userGDBCmdEntry->addWidget(m_Interrupt);
     topLayout->addLayout(userGDBCmdEntry);
+
+    setLayout(topLayout);
 
     slotStateChanged(s_none, s_dbgNotStarted);
 
     connect( m_userGDBCmdEditor, SIGNAL(returnPressed()), SLOT(slotGDBCmd()) );
     connect( m_Interrupt,        SIGNAL(clicked()),       SIGNAL(breakInto()));
 
+    updateTimer_.setSingleShot(true);
     connect( &updateTimer_, SIGNAL(timeout()),
              this,  SLOT(flushPending()));
 
@@ -193,7 +192,7 @@ void GDBOutputWidget::showLine(const QString& line)
     // To improve performance, we update the view after some delay.
     if (!updateTimer_.isActive())
     {
-        updateTimer_.start(100, true /* single shot */);
+        updateTimer_.start(100);
     }
 }
 
@@ -257,7 +256,7 @@ void GDBOutputWidget::slotGDBCmd()
     if (!GDBCmd.isEmpty())
     {
         m_userGDBCmdEditor->addToHistory(GDBCmd);
-        m_userGDBCmdEditor->clearEdit();
+        m_userGDBCmdEditor->clearEditText();
         emit userGDBCmd(GDBCmd);
     }
 }
@@ -323,25 +322,18 @@ QString GDBOutputWidget::html_escape(const QString& s)
     return r;
 }
 
-void GDBOutputWidget::savePartialProjectSession(QDomElement* el)
+void GDBOutputWidget::savePartialProjectSession()
 {
-    QDomDocument doc = el->ownerDocument();
+    KConfigGroup config(KGlobal::config(), "GDB Debugger");
 
-    QDomElement showInternal = doc.createElement("showInternalCommands");
-    showInternal.setAttribute("value", QString::number(showInternalCommands_));
-
-    el->appendChild(showInternal);
+    config.writeEntry("showInternalCommands", showInternalCommands_);
 }
 
-void GDBOutputWidget::restorePartialProjectSession(const QDomElement* el)
+void GDBOutputWidget::restorePartialProjectSession()
 {
-    QDomElement showInternal =
-        el->namedItem("showInternalCommands").toElement();
+    KConfigGroup config(KGlobal::config(), "GDB Debugger");
 
-    if (!showInternal.isNull())
-    {
-        showInternalCommands_ = showInternal.attribute("value", "0").toInt();
-    }
+    showInternalCommands_ = config.readEntry("showInternalCommands", false);
 }
 
 

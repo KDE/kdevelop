@@ -20,10 +20,8 @@
 #include <q3popupmenu.h>
 #include <q3table.h>
 #include <QPointer>
-#include <q3valuevector.h>
 #include <QLabel>
 #include <QFocusEvent>
-#include <kvbox.h>
 
 #include <KTextEditor/Cursor>
 

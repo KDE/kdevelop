@@ -67,7 +67,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
-#include <kvbox.h>
 
 #include "stty.h"
 
@@ -332,7 +331,7 @@ bool STTY::findExternalTTY(const QString &termApp)
         if ( termApp == "konsole" )
         {
             ::execlp( prog,       prog,
-                  "-caption", i18n("kdevelop: Debug application console").local8Bit().data(),
+                  "-caption", i18n("kdevelop: Debug application console").toLocal8Bit().data(),
                   "-e",       "sh",
                   "-c",       scriptStr,
                   end);

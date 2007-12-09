@@ -23,7 +23,6 @@
 #include "mi/miparser.h"
 
 #include <vector>
-#include <kvbox.h>
 
 namespace GDBDebugger
 {

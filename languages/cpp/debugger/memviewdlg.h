@@ -20,10 +20,7 @@
 
 #include <kdialog.h>
 
-#include <q3valuevector.h>
-//Added by qt3to4:
 #include <QContextMenuEvent>
-#include <kvbox.h>
 
 #include "gdbglobal.h"
 

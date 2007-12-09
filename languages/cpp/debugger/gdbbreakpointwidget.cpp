@@ -30,6 +30,7 @@
 #include <kmenu.h>
 #include <kurl.h>
 #include <kmessagebox.h>
+#include <khbox.h>
 
 #include <QFileInfo>
 #include <q3header.h>
@@ -42,13 +43,11 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QCheckBox>
-//Added by qt3to4:
 #include <Q3PopupMenu>
 #include <QFocusEvent>
 
 #include <stdlib.h>
 #include <ctype.h>
-#include <kvbox.h>
 
 #include <icore.h>
 #include <idocumentcontroller.h>

@@ -38,17 +38,16 @@
 #include <qtoolbox.h>
 #include <q3textedit.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QContextMenuEvent>
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 #include <kmessagebox.h>
 
 #include <khexedit/byteseditinterface.h>
 
 #include <ctype.h>
-#include <kvbox.h>
 
 // **************************************************************************
 //
@@ -90,14 +89,10 @@ namespace GDBDebugger
         MemoryRangeSelector(QWidget* parent)
         : QWidget(parent)
         {
-            Q3VBoxLayout* l = new Q3VBoxLayout(this);
+            QVBoxLayout* l = new QVBoxLayout(this);
 
             // Grid layout: labels + address field
-            Q3GridLayout* gl = new Q3GridLayout(l);
-
-            gl->setColSpacing(0, 2);
-            gl->setColSpacing(1, 4);
-            gl->setRowSpacing(1, 2);
+            QGridLayout* gl = new QGridLayout(l);
 
             QLabel* l1 = new QLabel(i18n("Start"), this);
             gl->addWidget(l1, 0, 1);
@@ -113,7 +108,7 @@ namespace GDBDebugger
 
             l->addSpacing(2);
 
-            Q3HBoxLayout* hb = new Q3HBoxLayout(l);
+            QHBoxLayout* hb = new QHBoxLayout(l);
             hb->addStretch();
 
             okButton = new QPushButton(i18n("OK"), this);
@@ -123,6 +118,7 @@ namespace GDBDebugger
             hb->addWidget(cancelButton);
 
             l->addSpacing(2);
+            setLayout(l);
 
             connect(startAddressLineEdit, SIGNAL(returnPressed()),
                     okButton, SLOT(animateClick()));
@@ -144,8 +140,8 @@ namespace GDBDebugger
       amount_(0), data_(0),
       debuggerState_(0)
     {
-        setCaption(i18n("Memory view"));
-        emit captionChanged(caption());
+        setWindowTitle(i18n("Memory view"));
+        emit captionChanged(windowTitle());
 
         initWidget();
 
@@ -160,7 +156,7 @@ namespace GDBDebugger
 
     void MemoryView::initWidget()
     {
-        Q3VBoxLayout *l = new Q3VBoxLayout(this, 0, 0);
+        QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
 
         khexedit2_widget = KHE::createBytesEditWidget(this);
 
@@ -426,7 +422,7 @@ namespace GDBDebugger
         setWindowIcon(KIcon("math_brace"));
         setWindowTitle(i18n("Special debugger views"));
 
-        Q3VBoxLayout *l = new Q3VBoxLayout(this, 0, 0);
+        QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
 
         toolBox_ = new QToolBox(this);
         l->addWidget(toolBox_);

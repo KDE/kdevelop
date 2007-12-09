@@ -116,8 +116,8 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
 
     connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
 
-    connect(this, SIGNAL(addWatchVariable(const QString&)), plugin, SIGNAL(addWatchVariable(const QString&)));
-    connect(this, SIGNAL(evaluateExpression(const QString&)), plugin, SIGNAL(evaluateExpression(const QString&)));
+    connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
+    connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
 
     // Setup help items.
 
@@ -164,7 +164,7 @@ void VariableWidget::slotAddWatchVariable(const QString &ident)
     {
         watchVarEditor_->addToHistory(ident);
         emit addWatchVariable(ident);
-        watchVarEditor_->clear();
+        watchVarEditor_->clearEditText();
     }
 }
 
@@ -183,7 +183,7 @@ void VariableWidget::slotEvaluateExpression(const QString &ident)
     {
         watchVarEditor_->addToHistory(ident);
         emit evaluateExpression(ident);
-        watchVarEditor_->clear();
+        watchVarEditor_->clearEditText();
     }
 }
 
