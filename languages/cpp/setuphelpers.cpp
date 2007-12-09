@@ -112,6 +112,8 @@ bool setupStandardMacros(Cpp::MacroSet& macros)
       macros.addMacro( m );
     }
 
+    macros.addMacro( rpp::pp_macro("__extension__") );
+    
     //Get standard macros from gcc
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
