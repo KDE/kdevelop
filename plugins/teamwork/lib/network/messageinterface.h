@@ -176,7 +176,7 @@ class NETWORK_EXPORT MessageInterface : public SafeShared /*, public virtual Ser
     ///This should return "true" when the message wants a reply. gotReply will then be called once a reply has been received. The default-implementation returns false.
     virtual bool needReply() const;
 
-    struct ReplyResult {
+    struct NETWORK_EXPORT ReplyResult {
       bool messageHandled; ///This should indicate that the message was used locally and should not be handled on by higher instances
       bool awaitingMore; ///whether the message is awaiting more replies.(if this is true, the message will not be deleted and needReply will be called again as soon as another reply arrives)
       ReplyResult( bool messageHandled_ = false, bool awaitingMore_ = false );
