@@ -57,7 +57,10 @@ public:
         QStringList lineList;
         int pos;
         while ( (pos = stdoutbuf.indexOf('\n')) != -1) {
-            lineList << QString::fromLocal8Bit(stdoutbuf, pos);
+            if (pos > 0 && stdoutbuf.at(pos - 1) == '\r')
+                lineList << QString::fromLocal8Bit(stdoutbuf, pos - 1);
+            else
+                lineList << QString::fromLocal8Bit(stdoutbuf, pos);
             stdoutbuf.remove(0, pos+1);
         }
         emit p->receivedStdoutLines(lineList);
