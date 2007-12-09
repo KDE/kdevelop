@@ -73,6 +73,8 @@ public:
 
     virtual void saveAllDocuments(IDocument::DocumentSaveMode mode = IDocument::Default) = 0;
 
+    virtual void openDocumentFromText( const QString& data ) = 0;
+    
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
