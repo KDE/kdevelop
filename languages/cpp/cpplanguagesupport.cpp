@@ -40,6 +40,7 @@
 #include <ktexteditor/document.h>
 
 #include <icore.h>
+#include <iproblem.h>
 #include <iproject.h>
 #include <idocument.h>
 #include <idocumentcontroller.h>
@@ -270,6 +271,8 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         }
     }
 
+    KDevelop::Problem problem;
+    
     if( allPaths.isEmpty() || DEBUG_INCLUDE_PATHS ) {
         //Fallback-search using include-path resolver
 
@@ -315,8 +318,11 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             }
         }else{
             kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
+            problem.setSource(KDevelop::Problem::Preprocessor);
+            problem.setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
+            problem.setExplanation(result.longErrorMessage);
+            problem.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
         }
-
     }
 
     if( allPaths.isEmpty() ) {
@@ -330,6 +336,10 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             kDebug(9007) << "Took include-path for" << source << "from a random parsed duchain-version of it";
         }
     }
+
+    if( allPaths.isEmpty() && problem.source() != KDevelop::Problem::Unknown )
+      KDevelop::DUChain::problemEncountered( problem );
+      
 
     //Insert the standard-paths at the end
     foreach( QString path, *m_standardIncludePaths)
