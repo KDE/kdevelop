@@ -206,8 +206,9 @@ void UseHighlightPlugin::documentLoaded( KDevelop::IDocument* document )
   connect( document->textDocument(), SIGNAL(destroyed( QObject* )), this, SLOT( documentDestroyed( QObject* ) ) );
   connect( document->textDocument(), SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
 
-  foreach( KTextEditor::View* view, document->textDocument()->views() )
-    viewCreated( document->textDocument(), view );
+  if (document->textDocument())
+    foreach( KTextEditor::View* view, document->textDocument()->views() )
+      viewCreated( document->textDocument(), view );
 }
 
 void UseHighlightPlugin::documentClosed( KDevelop::IDocument* document )
