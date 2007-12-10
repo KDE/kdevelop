@@ -60,5 +60,5 @@ Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type, int s
 
 void Preprocessor::headerSectionEnded(rpp::Stream& stream)
 {
-  
+  Q_UNUSED(stream)
 }
