@@ -34,7 +34,7 @@
 #include <QScriptValue>
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root)
-    : m_root(root), m_defaultLibraryDirs("/usr/lib/")
+    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include")
 {}
 
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
@@ -278,7 +278,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
                 case Location:
                     path=mpath;
                     break;
-                case Executable:    //Must check if it is an executable.
+                case Executable:    //TODO: Must check if it is an executable.
                 case Library:
                 case File:
                     path=p.toLocalFile();
@@ -287,7 +287,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             break;
         }
     }
-//     kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
+    kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
     return path;
 }
 
@@ -416,6 +416,10 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     bool error=false;
     QStringList locationOptions = fpath->path();
     QStringList path, files=fpath->filenames();
+    
+    if(!fpath->noDefaultPath()) {
+        locationOptions += m_defaultPaths;
+    }
 
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(QString p, files) {
@@ -451,10 +455,9 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     QStringList path, files=flib->filenames();
 
     if(!flib->noDefaultPath()) {
-        locationOptions += m_defaultLibraryDirs;
+        locationOptions += m_defaultPaths;
     }
     
-    kDebug(9042) << "Find Library:" << flib->filenames();
     foreach(QString p, files) {
         QString p1=findFile(p, locationOptions, Library);
         if(p1.isEmpty()) {
@@ -471,6 +474,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     } else
         kDebug(9032) << "error. Library" << flib->filenames() << "not found";
 //     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
+    kDebug(9042) << "Find Library:" << flib->filenames() << m_vars->value(flib->variableName());
     return 1;
 }
 
@@ -703,7 +707,8 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 
     if(!exec->returnValue().isEmpty())
     {
-        m_vars->insert(exec->returnValue(), QStringList(QString(p.exitCode())));
+        kDebug(9042) << "execution returned: " << exec->returnValue() << " = " << p.exitCode();
+        m_vars->insert(exec->returnValue(), QStringList(QString::number(p.exitCode())));
     }
 
     if(!exec->outputVariable().isEmpty())
@@ -1007,13 +1012,18 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                         {
                             rx.indexIn(in);
                             QStringList info = rx.capturedTexts();
-                            foreach(QString s, info)
-                            {
-                                res.append(in.replace(s, sast->replace()));
+                            if(info.count()==1 && info[0].isEmpty()) {
+                                res.append(in);
+                            } else {
+                                foreach(QString s, info)
+                                {
+                                    res.append(in.replace(s, sast->replace()));
+                                }
                             }
                         }
                     }
-                    kDebug(9042) << "ret: " << res << " << string(regex replace " << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
+                    kDebug(9042) << "ret: " << res << " << string(regex replace "
+                            << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
                 }
                     break;
                 default:

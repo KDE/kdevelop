@@ -105,7 +105,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         
-        QStringList m_defaultLibraryDirs;
         QStringList m_modulePath;
         QString m_projectName;
         QStringList m_subdirectories;
@@ -113,6 +112,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QMap<QString, QStringList> m_filesPerTarget;
         QMap<QString, QStringList> m_generatedFiles;
         QString m_root;
+        QStringList m_defaultPaths;
         VariableMap *m_vars;
         MacroMap *m_macros;
         DefineList m_defs;

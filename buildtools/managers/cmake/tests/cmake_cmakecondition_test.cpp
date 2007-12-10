@@ -29,6 +29,9 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars=new VariableMap();
     m_vars->insert("TRUE", QStringList("TRUE"));
     m_vars->insert("FALSE", QStringList("FALSE"));
+    
+    m_vars->insert("ZERO", QStringList("0"));
+    m_vars->insert("ONE", QStringList("1"));
 }
 
 CMakeConditionTest::~CMakeConditionTest()
@@ -64,6 +67,21 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "false+or" ) << QString("FALSE;OR;TRUE").split(";") << true;
     QTest::newRow( "false+or+false" ) << QString("FALSE;OR;FALSE").split(";") << false;
     QTest::newRow( "not+or" ) << QString("NOT;TRUE;OR;TRUE").split(";") << true;
+    
+    QTest::newRow( "variable check" ) << QStringList("ONE") << true;
+    QTest::newRow( "false variable check" ) << QStringList("ZERO") << false;
+    QTest::newRow( "not" ) << QString("NOT;ZERO").split(";") << true;
+    QTest::newRow( "not1" ) << QString("NOT;ONE").split(";") << false;
+    QTest::newRow( "and" ) << QString("ONE;AND;ONE").split(";") << true;
+    QTest::newRow( "false+and" ) << QString("ZERO;AND;ONE").split(";") << false;
+    QTest::newRow( "and+false" ) << QString("ONE;AND;ZERO").split(";") << false;
+    QTest::newRow( "not+and" ) << QString("NOT;ZERO;AND;ONE").split(";") << true;
+    QTest::newRow( "not+and+command" ) << QString("NOT;ZERO;AND;COMMAND;/usr/bin/ls").split(";") << true;
+    QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;/etc/group").split(";") << true;
+    QTest::newRow( "or" ) << QString("ONE;OR;ONE").split(";") << true;
+    QTest::newRow( "false+or" ) << QString("ZERO;OR;ONE").split(";") << true;
+    QTest::newRow( "false+or+false" ) << QString("ZERO;OR;ZERO").split(";") << false;
+    QTest::newRow( "not+or" ) << QString("NOT;ZERO;OR;ZERO").split(";") << true;
 }
 
 #include "cmake_cmakecondition_test.moc"
