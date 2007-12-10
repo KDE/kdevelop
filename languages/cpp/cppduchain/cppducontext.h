@@ -122,6 +122,7 @@ extern QMutex cppDuContextInstantiationsMutex;
               m_states.top().templateParameters << res;
             }
           }
+          return false;
         }
         /**
          * The identifier must not have template identifiers, those need to be added using openQualifiedIdentifier(..) and closeQualifiedIdentifier(..)
