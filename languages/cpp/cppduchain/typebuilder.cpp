@@ -287,7 +287,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       res = parser.evaluateType( node->expression, m_editor->parseSession(), DUContext::ImportTrace() );
 
       //Delay the type-resolution of template-parameters
-      if( !res.allDeclarations.isEmpty() && (dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front()) || isTemplateDependent(res.allDeclarations.front())) )
+      if( !res.allDeclarations.isEmpty() && (dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front().data()) || isTemplateDependent(res.allDeclarations.front().data())) )
         delay = true;
 
       if ( !delay && res.isValid() && res.instance ) {

@@ -420,7 +420,7 @@ void TestDUChain::testDeclareFor()
   //                 012345678901234567890123456789012345678901234567890123456789
   QByteArray method("int main() { for (int i = 0; i < 10; i++) { if (i == 4) return; int i5[5]; i5[i] = 1; } }");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1277,6 +1277,7 @@ void TestDUChain::testTemplateDependentClass() {
   DUChainWriteLocker lock(DUChain::lock());
   Declaration* d = findDeclaration(top, QualifiedIdentifier("t"));
   QVERIFY(d);
+  kDebug() << d->toString();
   QCOMPARE(d->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
 }
 

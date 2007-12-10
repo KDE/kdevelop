@@ -52,7 +52,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     AbstractType::Ptr type; ///Type the expression evaluated to, may be zero when the expression failed to evaluate
     ExpressionVisitor::Instance instance; ///If the expression evaluates to an instance, this contains a pointer to the instance's declaration(@see CppExpressionVisitor::expressionType())
 
-    QList<Declaration*> allDeclarations; ///If type is a function-type, this may contain the declarations of all found overloaded functions
+    QList<DeclarationPointer> allDeclarations; ///This contains the declarations found for the item evaluated.
 
     ///@return whether the result is an lvalue
     bool isLValue() const {

@@ -454,6 +454,7 @@ void TestExpressionParser::testSimpleExpression() {
   lock.lock();
   QVERIFY(result.isValid());
   QCOMPARE(result.type->toString(), QString("int"));
+  kDebug() << result.toString();
   QVERIFY(result.instance);
   lock.unlock();
   

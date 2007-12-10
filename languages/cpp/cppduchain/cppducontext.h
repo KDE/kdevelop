@@ -45,8 +45,8 @@ While construction:
 
 */
 
-//#define ifDebug(x)
-#define ifDebug(x) x
+#define ifDebug(x)
+//#define ifDebug(x) x
 
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
@@ -81,7 +81,7 @@ extern QMutex cppDuContextInstantiationsMutex;
     ///This class breaks up the logic of searching a declaration in C++, so QualifiedIdentifiers as well as AST-based lookup mechanisms can be used for searching
     class FindDeclaration {
       public:
-        FindDeclaration( const DUContext* ctx, const DUContext::ImportTrace& trace, DUContext::SearchFlags flags, const KTextEditor::Cursor& position, AbstractType::Ptr dataType ) : m_context(ctx), m_trace(trace), m_flags(flags), m_position(position), m_dataType(dataType) {
+        FindDeclaration( const DUContext* ctx, const DUContext::ImportTrace& trace, DUContext::SearchFlags flags, const KTextEditor::Cursor& position, AbstractType::Ptr dataType = AbstractType::Ptr() ) : m_context(ctx), m_trace(trace), m_flags(flags), m_position(position), m_dataType(dataType) {
         }
         void openQualifiedIdentifier( bool isExplicitlyGlobal ) {
           QualifiedIdentifier i;
@@ -103,6 +103,7 @@ extern QMutex cppDuContextInstantiationsMutex;
 
         /**
          * After this was called, lastDeclarations(..) can be used to retrieve declarations of the qualified identifier.
+         * The DUChain needs to be locked when this is called.
          * */
         void closeQualifiedIdentifier() {
           State s = m_states.top();
@@ -136,6 +137,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         /**
          * When closeIdentifier() is called, the last opened identifier is searched, and can be retrieved using lastDeclarations().
          * Returns false when the search should be stopped.
+         * The DUChain needs to be locked when this is called.
          * */
         bool closeIdentifier() {
           State& s = m_states.top();
@@ -147,8 +149,10 @@ extern QMutex cppDuContextInstantiationsMutex;
           if( !s.result.isEmpty() && lookup.count() == 1 ) { //When we are searching within a scope-context, no namespaces are involved any more, so we look up exactly one item at a time.
 
             //Eventually extract a scope context
-            foreach( Declaration* decl, s.result ) {
-              scopeContext = TypeUtils::getInternalContext(decl);
+            foreach( DeclarationPointer decl, s.result ) {
+              if( !decl )
+                continue;
+              scopeContext = TypeUtils::getInternalContext(decl.data());
 
               if( !scopeContext || scopeContext->type() == DUContext::Template )
                 if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data()) ) //Try to get the context from the type, maybe it is a typedef.
@@ -215,15 +219,15 @@ extern QMutex cppDuContextInstantiationsMutex;
               m_trace += previousTopContext->importTrace(tempDecls.last()->topContext());
             }
             
-            if( s.templateParameters.isEmpty() ) {
-              s.result = tempDecls;
-            } else {
-              s.result.clear();
-              //instantiate template declarations
-              foreach(Declaration* decl, tempDecls) {
+            s.result.clear();
+            //instantiate template declarations
+            foreach(Declaration* decl, tempDecls) {
+              if( s.templateParameters.isEmpty() ) {
+                s.result << DeclarationPointer(decl);
+              }else{
                 Declaration* dec = instantiateDeclaration(decl, s.templateParameters);
                 if( dec )
-                  s.result << dec;
+                  s.result << DeclarationPointer(dec);
               }
             }
 
@@ -234,8 +238,8 @@ extern QMutex cppDuContextInstantiationsMutex;
             
             ///Namespace-aliases are treated elsewhere, and should not screw our search, so simply remove them
             bool hadNamespaceAlias = false;
-            for(QList<Declaration*>::iterator it = s.result.begin(); it != s.result.end(); ++it) {
-              if( dynamic_cast<NamespaceAliasDeclaration*>(*it) )
+            for(QList<DeclarationPointer>::iterator it = s.result.begin(); it != s.result.end(); ++it) {
+              if( dynamic_cast<NamespaceAliasDeclaration*>(it->data()) )
                 hadNamespaceAlias = true;
             }
 
@@ -251,19 +255,17 @@ extern QMutex cppDuContextInstantiationsMutex;
                 return false; //If one of the parts has a template-identifier, it cannot be a namespace
               }
           }
+
+          m_lastDeclarations = s.result;
+          
           return true;
-        }
-        /**
-         * Can be used to append template-parameters that were computed outside, without using openQualifiedIdentifier and closeQualifiedIdentifier
-         * */
-        void addTemplateParameter( const ExpressionEvaluationResult& result ) {
         }
 
         /**
-         * Returns the Declarations found for the last opened identifier.
+         * Returns the Declarations found for the last closed qualified identifier.
          * 
          * */
-        QList<Declaration*> lastDeclarations() const {
+        QList<DeclarationPointer> lastDeclarations() const {
           return m_lastDeclarations;
         }
 
@@ -298,14 +300,14 @@ extern QMutex cppDuContextInstantiationsMutex;
           QList<ExpressionEvaluationResult> templateParameters;
 
           ///One of the following is filled
-          QList<Declaration*> result;
+          QList<DeclarationPointer> result;
           ExpressionEvaluationResult expressionResult;
         };
         QStack<State> m_states;
         const DUContext* m_context;
         DUContext::ImportTrace m_trace;
         DUContext::SearchFlags m_flags;
-        QList<Declaration*> m_lastDeclarations;
+        QList<DeclarationPointer> m_lastDeclarations;
         KTextEditor::Cursor m_position;
         AbstractType::Ptr m_dataType;
     };
@@ -420,7 +422,10 @@ class CppDUContext : public BaseContext {
           return false;
       }
       find.closeQualifiedIdentifier();
-      ret += find.lastDeclarations();
+      
+      foreach( const DeclarationPointer& decl, find.lastDeclarations() )
+        ret << decl.data();
+      
       return true;
     }
 

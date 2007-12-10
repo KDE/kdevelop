@@ -52,6 +52,22 @@
 using namespace Cpp;
 using namespace KDevelop;
 
+///@todo move these together with those from expressionvisitor into an own file, or make them unnecessary
+QList<DeclarationPointer> convert( const QList<Declaration*>& list ) {
+  QList<DeclarationPointer> ret;
+  foreach( Declaration* decl, list )
+    ret << DeclarationPointer(decl);
+  return ret;
+}
+
+QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
+  QList<Declaration*> ret;
+  foreach( DeclarationPointer decl, list )
+    if( decl )
+      ret << decl.data();
+  return ret;
+}
+
 template<class Value>
 class PushValue {
   public:
@@ -345,7 +361,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
             QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(QualifiedIdentifier("operator->"));
             if( !operatorDeclarations.isEmpty() ) {
               ///@todo care about const
-              m_expressionResult.allDeclarations = operatorDeclarations;
+              m_expressionResult.allDeclarations = convert(operatorDeclarations);
               CppFunctionType* function = dynamic_cast<CppFunctionType*>( operatorDeclarations.front()->abstractType().data() );
 
               if( function ) {
@@ -409,7 +425,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   } else {
     ///Simply take all the declarations that were found by the expression-parser
     
-    helper.setFunctions(m_expressionResult.allDeclarations);
+    helper.setFunctions(convert(m_expressionResult.allDeclarations));
   }
 
   OverloadResolver::ParameterList knownParameters;

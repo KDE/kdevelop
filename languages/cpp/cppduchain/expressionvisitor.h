@@ -52,18 +52,20 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
     ~ExpressionVisitor();
 
     struct Instance {
-      Instance() : isInstance(false), declaration(0) {
+      Instance() : isInstance(false) {
       }
-      Instance( bool is ) : isInstance(is), declaration(0) {
+      Instance( bool is ) : isInstance(is) {
       }
-      Instance( Declaration* decl ) : isInstance(true), declaration(decl) {
+      Instance( DeclarationPointer decl ) : isInstance(true), declaration(decl) {
+      }
+      Instance( Declaration* decl ) : isInstance(true), declaration(DeclarationPointer(decl)) {
       }
       inline operator bool() const {
         return isInstance;
       }
 
       bool isInstance;
-      Declaration* declaration; //May contain the declaration of the instance, but only when isInstance is true. May also contain type-declaration, which signalizes that this is an instance of that type.
+      DeclarationPointer declaration; //May contain the declaration of the instance, but only when isInstance is true. May also contain type-declaration, which signalizes that this is an instance of that type.
     };
 
     /**
@@ -79,7 +81,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
     ParseSession* session();
 
     ///Returns the last queried list of declarations
-    QList<Declaration*> lastDeclarations() const;
+    QList<DeclarationPointer> lastDeclarations() const;
   protected:
     /**
      * Will be called for each relevant sub-node with the resolved type of that expression. This is not guaranteed to be called.
@@ -121,19 +123,20 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
 
   private:
 
-    bool m_strict;
+    bool m_strict, m_memberAccess;
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
 
     KDevelop::DUContext::ImportTrace m_inclusionTrace;
     
     //Whenever a list of declarations is queried, it is stored here. Especially in visitName(...) and findMember(...)
-    QList<Declaration*> m_lastDeclarations;
+    QList<DeclarationPointer> m_lastDeclarations;
 
     //Here the parameters of function-calls are collected
     //When a parameter could not be evaluated, this will hold a parameter with null-value type
     QList<OverloadResolver::Parameter> m_parameters;
 
+public:
     /**
      * Calls usingDeclaration(..) for any delayed uses, and registers a new use in m_currentUse.
      * The whole sense of this thing is to allow updating an earlier created use in a later AST, like necessary because of overload-resolution.
@@ -147,6 +150,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
       m_currentUse.end_token = end_token;
       m_currentUse.declaration = decl;
     }
+private:
 
     void flushUse() {
       if( m_currentUse.isValid )
@@ -215,6 +219,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
 
   /**
    *  !!DU-Chain must be locked!
+   *  Note that this may return zero even when base is valid, it needs to be an instance of IdentifiedType to be able to retrieve a declaration.
    **/
   Declaration* getDeclaration( AST* node, const AbstractType::Ptr& base );
 
