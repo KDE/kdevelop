@@ -31,7 +31,7 @@ class OperatorAST;
 
 namespace Cpp {
   class ExpressionVisitor;
-};
+}
 
 class KDEVCPPDUCHAIN_EXPORT NameASTVisitor: protected DefaultVisitor
 {
