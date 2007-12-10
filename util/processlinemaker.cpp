@@ -86,10 +86,10 @@ public:
         QStringList lineList;
         int pos;
         while ( (pos = stderrbuf.indexOf('\n')) != -1) {
-            if (pos > 0 && stdoutbuf.at(pos - 1) == '\r')
-                lineList << QString::fromLocal8Bit(stdoutbuf, pos - 1);
+            if (pos > 0 && stderrbuf.at(pos - 1) == '\r')
+                lineList << QString::fromLocal8Bit(stderrbuf, pos - 1);
             else
-                lineList << QString::fromLocal8Bit(stdoutbuf, pos);
+                lineList << QString::fromLocal8Bit(stderrbuf, pos);
             stderrbuf.remove(0, pos+1);
         }
         emit p->receivedStderrLines(lineList);
