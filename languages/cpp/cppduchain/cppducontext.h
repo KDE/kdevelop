@@ -102,7 +102,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         
 
         /**
-         * Returns false if the search should be stopped due to failure.
+         * After this was called, lastDeclarations(..) can be used to retrieve declarations of the qualified identifier.
          * */
         void closeQualifiedIdentifier() {
           State s = m_states.top();
