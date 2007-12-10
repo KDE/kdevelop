@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
  *
  * Some parts of this code are based on CMake
  * Copyright 2002 Kitware, Inc. Insight Consortium <kitware@kitware.com>
@@ -2519,11 +2520,11 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     else if(stringType=="REPLACE")
     {
         m_type=REPLACE;
-        m_regex = func.arguments[2].value;
-        m_replace=func.arguments[3].value;
-        m_outputVariable = func.arguments[4].value;
+        m_regex = func.arguments[1].value;
+        m_replace=func.arguments[2].value;
+        m_outputVariable = func.arguments[3].value;
         
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+5;
+        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4;
         QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
         for(; it!=itEnd; ++it)
         {

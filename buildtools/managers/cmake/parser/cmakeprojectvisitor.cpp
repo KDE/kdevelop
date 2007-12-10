@@ -1039,8 +1039,9 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             foreach(QString in, sast->input())
             {
                 QString aux=in.replace(sast->regex(), sast->replace());
-                out += aux;
+                out += aux.split(";"); //FIXME: HUGE ugly hack
             }
+            kDebug(9042) << "string REPLACE" << sast->input() << "=>" << out;
             m_vars->insert(sast->outputVariable(), out);
         }   break;
         case StringAst::COMPARE:

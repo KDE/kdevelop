@@ -131,31 +131,25 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
 
 bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd) const
 {
+    if(itBegin==itEnd)
+    {
+        return isTrue(*itBegin);
+    }
+    
     bool last = false, done=false;
-    while(!done)
+    while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2;
-        if(itBegin==itEnd) {
-            it2 = itBegin;
-            done = true;
-        } else
-            it2 = prevOperator(itEnd, itBegin);
+        it2 = prevOperator(itEnd, itBegin);
         
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
 //         kDebug(9042) << " or " << last;
-//         kDebug(9032) << "operator" << *it2 << c;
+//         kDebug(9042) << "operator" << *it2 << done;
         QString cmd;
         
-        if(c==variable && it2==itBegin)
-        { //we will only find variables in the first case
-            last = isTrue(*it2);
-        }
-        else
-        {
-            last = isTrue(*(it2+1));
-        }
+        last = isTrue(*(it2+1));
         switch(c)
         {
             case NOT:
@@ -200,7 +194,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 return evaluateCondition(itBegin, it2-1) || last;
             case MATCHES: { //Using QRegExp, don't know if it is the ideal situation
                 QRegExp rx(*(it2+1));
-                last=rx.exactMatch(*(it2-1));
+                rx.indexIn(*(it2-1));
+                last=rx.matchedLength()>0;
                 itEnd=it2-1;
             }   break;
             case LESS: {
@@ -264,7 +259,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 
 bool CMakeCondition::condition(const QStringList &expression) const
 {
-    bool ret = evaluateCondition(expression.constBegin(), expression.constEnd());
+    bool ret = evaluateCondition(expression.constBegin(), expression.constEnd()-1);
 //     kDebug(9042) << "condition" << expression << "=>" << ret;
     return ret;
 }

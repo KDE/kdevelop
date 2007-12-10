@@ -53,20 +53,6 @@ void CMakeConditionTest::testGoodParse_data()
     
     QTest::addColumn<QStringList>( "expression" );
     QTest::addColumn<bool>( "result" );
-    QTest::newRow( "variable check" ) << QStringList("TRUE") << true;
-    QTest::newRow( "false variable check" ) << QStringList("FALSE") << false;
-    QTest::newRow( "not" ) << QString("NOT;FALSE").split(";") << true;
-    QTest::newRow( "not1" ) << QString("NOT;TRUE").split(";") << false;
-    QTest::newRow( "and" ) << QString("TRUE;AND;TRUE").split(";") << true;
-    QTest::newRow( "false+and" ) << QString("FALSE;AND;TRUE").split(";") << false;
-    QTest::newRow( "and+false" ) << QString("TRUE;AND;FALSE").split(";") << false;
-    QTest::newRow( "not+and" ) << QString("NOT;FALSE;AND;TRUE").split(";") << true;
-    QTest::newRow( "not+and+command" ) << QString("NOT;FALSE;AND;COMMAND;/usr/bin/ls").split(";") << true;
-    QTest::newRow( "not+and+exists" ) << QString("NOT;FALSE;AND;EXISTS;/etc/group").split(";") << true;
-    QTest::newRow( "or" ) << QString("TRUE;OR;TRUE").split(";") << true;
-    QTest::newRow( "false+or" ) << QString("FALSE;OR;TRUE").split(";") << true;
-    QTest::newRow( "false+or+false" ) << QString("FALSE;OR;FALSE").split(";") << false;
-    QTest::newRow( "not+or" ) << QString("NOT;TRUE;OR;TRUE").split(";") << true;
     
     QTest::newRow( "variable check" ) << QStringList("ONE") << true;
     QTest::newRow( "false variable check" ) << QStringList("ZERO") << false;
@@ -82,6 +68,8 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "false+or" ) << QString("ZERO;OR;ONE").split(";") << true;
     QTest::newRow( "false+or+false" ) << QString("ZERO;OR;ZERO").split(";") << false;
     QTest::newRow( "not+or" ) << QString("NOT;ZERO;OR;ZERO").split(";") << true;
+    QTest::newRow( "matches" ) << QString("-lapr-1;MATCHES;^-l").split(";") << true;
+    QTest::newRow( "less" ) << QString("5;LESS;9").split(";") << true;
 }
 
 #include "cmake_cmakecondition_test.moc"
