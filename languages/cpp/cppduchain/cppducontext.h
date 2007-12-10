@@ -104,7 +104,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         /**
          * Returns false if the search should be stopped due to failure.
          * */
-        bool closeQualifiedIdentifier() {
+        void closeQualifiedIdentifier() {
           State s = m_states.top();
           m_lastDeclarations = s.result;
           m_states.pop();
@@ -122,7 +122,6 @@ extern QMutex cppDuContextInstantiationsMutex;
               m_states.top().templateParameters << res;
             }
           }
-          return false;
         }
         /**
          * The identifier must not have template identifiers, those need to be added using openQualifiedIdentifier(..) and closeQualifiedIdentifier(..)
@@ -142,7 +141,6 @@ extern QMutex cppDuContextInstantiationsMutex;
           State& s = m_states.top();
           QualifiedIdentifier lookup = s.identifier;
           ///Search a Declaration of the identifier
-
 
           DUContext* scopeContext = 0;
 
