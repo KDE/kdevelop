@@ -1094,6 +1094,7 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindFileAst::FindFileAst()
+    : m_noDefaultPath(false)
 {
 }
 
@@ -1185,6 +1186,7 @@ bool MacroCallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindLibraryAst::FindLibraryAst()
+    : m_noDefaultPath(false)
 {
 }
 
