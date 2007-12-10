@@ -77,7 +77,7 @@ void ImportProject::accept()
         return;
     }
 
-    projectUrl.setFileName(projectName->text() + ".kdev4");
+    projectUrl.addPath(projectName->text() + ".kdev4");
 
     if (projectUrl.isLocalFile()) {
         QFile projectFile(projectUrl.toLocalFile());
@@ -152,7 +152,7 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
 
 void ImportProject::dirChanged()
 {
-    kDebug(9010) << "ImportProject::dirChanged";
+    kDebug(9010) << "ImportProject::dirChanged" << directory->url();
     KUrl projectUrl = directory->url();
 
     if (!projectUrl.isValid() || !KIO::NetAccess::exists(projectUrl, KIO::NetAccess::SourceSide, QApplication::activeWindow()))
