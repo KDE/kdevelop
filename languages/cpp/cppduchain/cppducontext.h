@@ -45,8 +45,8 @@ While construction:
 
 */
 
-#define ifDebug(x)
-//#define ifDebug(x) x
+//#define ifDebug(x)
+#define ifDebug(x) x
 
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
@@ -77,6 +77,239 @@ using namespace KDevelop;
 
 namespace Cpp {
 extern QMutex cppDuContextInstantiationsMutex;
+
+    ///This class breaks up the logic of searching a declaration in C++, so QualifiedIdentifiers as well as AST-based lookup mechanisms can be used for searching
+    class FindDeclaration {
+      public:
+        FindDeclaration( const DUContext* ctx, const DUContext::ImportTrace& trace, DUContext::SearchFlags flags, const KTextEditor::Cursor& position, AbstractType::Ptr dataType ) : m_context(ctx), m_trace(trace), m_flags(flags), m_position(position), m_dataType(dataType) {
+        }
+        void openQualifiedIdentifier( bool isExplicitlyGlobal ) {
+          QualifiedIdentifier i;
+          i.setExplicitlyGlobal( isExplicitlyGlobal );
+          State s;
+          s.identifier = i;
+          m_states << s;
+        }
+
+        ///Can be used to just append a result that was computed outside. closeQualifiedIdentifier(...) must still be called.
+        void openQualifiedIdentifier( const ExpressionEvaluationResult& result ) {
+          State s;
+          s.expressionResult = result;
+          s.result = result.allDeclarations;
+          
+          m_states << s;
+        }
+        
+
+        /**
+         * Returns false if the search should be stopped due to failure.
+         * */
+        bool closeQualifiedIdentifier() {
+          State s = m_states.top();
+          m_lastDeclarations = s.result;
+          m_states.pop();
+          if( !m_states.isEmpty() ) {
+            //Append template-parameter to parent
+            if( s.expressionResult.isValid() ) {
+              m_states.top().templateParameters << s.expressionResult;
+            } else {
+              ExpressionEvaluationResult res;
+              if( !s.result.isEmpty() ) {
+                res.allDeclarations = s.result;
+                res.type = s.result[0]->abstractType();
+                res.instance = s.result[0]->kind() != Declaration::Type;
+              }
+              m_states.top().templateParameters << res;
+            }
+          }
+        }
+        /**
+         * The identifier must not have template identifiers, those need to be added using openQualifiedIdentifier(..) and closeQualifiedIdentifier(..)
+         * */
+        void openIdentifier( const Identifier& identifier ) {
+#ifdef DEBUG
+         for( int a = 0; a < identifier.count(); ++a )
+           Q_ASSERT(identifier.at(a).templateIdentifiers().count() == 0);
+#endif
+         m_states.top().identifier.push(identifier);
+        }
+        /**
+         * When closeIdentifier() is called, the last opened identifier is searched, and can be retrieved using lastDeclarations().
+         * Returns false when the search should be stopped.
+         * */
+        bool closeIdentifier() {
+          State& s = m_states.top();
+          QualifiedIdentifier lookup = s.identifier;
+          ///Search a Declaration of the identifier
+
+
+          DUContext* scopeContext = 0;
+
+          if( !s.result.isEmpty() && lookup.count() == 1 ) { //When we are searching within a scope-context, no namespaces are involved any more, so we look up exactly one item at a time.
+
+            //Eventually extract a scope context
+            foreach( Declaration* decl, s.result ) {
+              scopeContext = TypeUtils::getInternalContext(decl);
+
+              if( !scopeContext || scopeContext->type() == DUContext::Template )
+                if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data()) ) //Try to get the context from the type, maybe it is a typedef.
+                  if( idType->declaration() )
+                    scopeContext = TypeUtils::getInternalContext(idType->declaration());
+
+    #ifdef DEBUG
+                kDebug(9007) << decl->toString() << ": scope-context" << scopeContext;
+                if(scopeContext)
+                  kDebug(9007) << "scope-context-type" << scopeContext->type();
+    #endif
+
+              if( scopeContext && scopeContext->type() == DUContext::Class )
+                break;
+            }
+            
+            if( !scopeContext ) {
+              s.result.clear();
+              return false;
+            }
+          }
+          
+          /// Look up Declarations
+//           DUContext::SearchFlags flags = (num != (identifier.count()-1)) ? BaseContext::OnlyContainerTypes : BaseContext::NoSearchFlags;
+//           flags |= m_flags;
+
+          QList<Declaration*> tempDecls;
+          if( !scopeContext ) {
+            m_context->findDeclarationsInternal( toList(lookup), m_position, m_dataType, tempDecls, m_trace, m_flags | DUContext::LanguageSpecificFlag1 );
+            if( tempDecls.isEmpty() ) {
+              ///If we have a m_trace, walk the m_trace up so we're able to find the item in earlier imported contexts.
+              //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
+              QList<QualifiedIdentifier> allIdentifiers;
+              QualifiedIdentifier prepend = m_context->scopeIdentifier(true);
+              while( !prepend.isEmpty() ) {
+                allIdentifiers << prepend + lookup;
+                prepend.pop();
+              }
+              allIdentifiers << lookup;
+
+              for( int a = m_trace.count()-1; a >= 0; --a ) {
+                const DUContext::ImportTraceItem& traceItem(m_trace[a]);
+                QList<Declaration*> decls;
+                ///@todo Give a correctly modified m_trace(without the used items)
+                traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->textRange().end(), AbstractType::Ptr(), decls, m_trace.mid(0,a), KDevelop::DUContext::NoUndefinedTemplateParams );
+                if( !decls.isEmpty() ) {
+                  tempDecls = decls;
+                  break;
+                }
+              }
+            }
+          } else {
+            scopeContext->findDeclarationsInternal( toList(lookup), scopeContext->url() == m_context->url() ? m_position : scopeContext->textRange().end(), m_dataType, tempDecls, m_trace, m_flags | DUContext::DontSearchInParent | DUContext::LanguageSpecificFlag1 );
+          }
+
+          if( !tempDecls.isEmpty() ) {
+            //We need to build the inclusion-m_trace here, so template-parameters can be resolved nicely
+            TopDUContext* previousTopContext = scopeContext ? scopeContext->topContext() : m_context->topContext();
+            
+            if( previousTopContext != tempDecls.last()->topContext() ) {
+              /*The top-context has changed, so we need to append the inclusion-path
+                from previousTopContext to tempDecls.last()->topContext() to newTrace */
+              ///@todo which item from tempDecls to choose here?
+              m_trace += previousTopContext->importTrace(tempDecls.last()->topContext());
+            }
+            
+            if( s.templateParameters.isEmpty() ) {
+              s.result = tempDecls;
+            } else {
+              s.result.clear();
+              //instantiate template declarations
+              foreach(Declaration* decl, tempDecls) {
+                Declaration* dec = instantiateDeclaration(decl, s.templateParameters);
+                if( dec )
+                  s.result << dec;
+              }
+            }
+
+            s.templateParameters.clear();
+
+
+            ///@todo When there is a namespace-alias and a class, what to prefer?
+            
+            ///Namespace-aliases are treated elsewhere, and should not screw our search, so simply remove them
+            bool hadNamespaceAlias = false;
+            for(QList<Declaration*>::iterator it = s.result.begin(); it != s.result.end(); ++it) {
+              if( dynamic_cast<NamespaceAliasDeclaration*>(*it) )
+                hadNamespaceAlias = true;
+            }
+
+            if(!hadNamespaceAlias)
+              s.identifier.clear();
+          } else {
+            s.result.clear();
+            s.templateParameters.clear();
+            //Nothing was found 
+              //This is ok in the case that currentLookup stands for a namespace, because namespaces do not have a declaration.
+              if( s.templateParameters.count() != 0 ) {
+                kDebug(9007) << "CppDUContext::findDeclarationsInternal: Template in scope could not be located: " << lookup.toString();
+                return false; //If one of the parts has a template-identifier, it cannot be a namespace
+              }
+          }
+          return true;
+        }
+        /**
+         * Can be used to append template-parameters that were computed outside, without using openQualifiedIdentifier and closeQualifiedIdentifier
+         * */
+        void addTemplateParameter( const ExpressionEvaluationResult& result ) {
+        }
+
+        /**
+         * Returns the Declarations found for the last opened identifier.
+         * 
+         * */
+        QList<Declaration*> lastDeclarations() const {
+          return m_lastDeclarations;
+        }
+
+        const DUContext::ImportTrace& trace() const {
+          return m_trace;
+        }
+      private:
+        QList<QualifiedIdentifier> toList( const QualifiedIdentifier& id ) const {
+          QList<QualifiedIdentifier> ret;
+          ret << id;
+          return ret;
+        }
+
+        Declaration* instantiateDeclaration( Declaration* decl, const QList<Cpp::ExpressionEvaluationResult>& templateArguments ) const
+        {
+          if( templateArguments.isEmpty() )
+            return decl;
+          
+          TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
+          if( !templateDecl ) {
+            ifDebug( kDebug(9007) << "Tried to instantiate a non-template declaration" << decl->toString(); )
+            return 0;
+          }
+
+          return templateDecl->instantiate( templateArguments, m_trace );
+        }
+        
+        struct State {
+          State() {
+          }
+          QualifiedIdentifier identifier; //identifier including eventual namespace prefix
+          QList<ExpressionEvaluationResult> templateParameters;
+
+          ///One of the following is filled
+          QList<Declaration*> result;
+          ExpressionEvaluationResult expressionResult;
+        };
+        QStack<State> m_states;
+        const DUContext* m_context;
+        DUContext::ImportTrace m_trace;
+        DUContext::SearchFlags m_flags;
+        QList<Declaration*> m_lastDeclarations;
+        KTextEditor::Cursor m_position;
+        AbstractType::Ptr m_dataType;
+    };
 
 /**
  * This is a du-context template that wraps the c++-specific logic around existing DUContext-derived classes.
@@ -140,202 +373,55 @@ class CppDUContext : public BaseContext {
       }
       return true;
     }
-    
+
     ///Overridden to take care of templates and other c++ specific things
-    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& _trace, typename BaseContext::SearchFlags basicFlags ) const
+    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 
-      typename BaseContext::ImportTrace trace(_trace);
-      
-      ///@todo maybe move parts of this logic directly into the du-chain
+      FindDeclaration find( this, trace, basicFlags, position, dataType );
 
-      ///Iso c++ 3.4.3.1 and 3.4.3.2 say that identifiers should be looked up part by part
-      ///Since we cannot directly locate namespaces becase A) they have no declaration and b) they may be declared in multiple positions,
-      ///we put qualified identifiers in the form of Namespace::...::Identifier together in currentLookup.
-      QualifiedIdentifier currentLookup;
-      KDevelop::DUContext* scopeContext = 0; //The scope(class) we are searching in
+      find.openQualifiedIdentifier( identifier.explicitlyGlobal() );
 
-      //num is the part of the scope that's being looked up
-      int num = 0;
-
-      currentLookup.setExplicitlyGlobal(identifier.explicitlyGlobal());
-      
-      //Only do the piece-by-piece lookup when templates are involved.
-      //Push all earlier non-template parts on the lookup-identifier, and continue behind them.
-      /** The lookup needs to be piecewise always, because we may need to instantiate an earlier part of the scope
-       * @todo Maybe only do this when searching from within a template
-       * */
-//       for( int a = 0; a < identifier.count()-1; a++ ) {
-//         if( identifier.at(a).templateIdentifiers().isEmpty() ) {
-//           num = a+1;
-//           currentLookup.push(identifier.at(a));
-//         }else{
-//           break;
-//         }
-//       }
-
-      for( ; num < identifier.count(); num++ )
+      for( int num = 0; num < identifier.count(); num++ )
       {
-        Identifier currentIdentifier = identifier.at(num);
-        
-        ///Step 1: Resolve the template-arguments
-        //Since there may be non-type template-parameters, represent them as ExpressionEvaluationResult's
-        QList<Cpp::ExpressionEvaluationResult> templateArgumentTypes;
-
-        for( int a = 0; a < currentIdentifier.templateIdentifiers().size(); a++ ) {
-          QList<KDevelop::Declaration*> decls;
-
-          //Use the already available mechanism for resolving delayed types
-          DelayedType::Ptr delayed( new DelayedType() );
-          delayed->setQualifiedIdentifier( currentIdentifier.templateIdentifiers().at(a) );
-          
-          Cpp::ExpressionEvaluationResult res;
-          res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags );
-          
-          if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && (dynamic_cast<CppTemplateParameterType*>(res.type.data()) || dynamic_cast<DelayedType*>(res.type.data())) ) {
-            return false;
-          }
-
-          templateArgumentTypes << res;
-          
-          if( !res.isValid() )
-            kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString();
+        {
+          Identifier current = identifier.at(num);
+          current.clearTemplateIdentifiers();
+          find.openIdentifier(current);
         }
         
-        currentIdentifier.clearTemplateIdentifiers();
-        
-        currentLookup.push(currentIdentifier);
+        {
+          Identifier currentIdentifier = identifier.at(num);
 
-        ///Step 2: Find the type
-        typename BaseContext::SearchFlags flags = (num != (identifier.count()-1)) ? BaseContext::OnlyContainerTypes : BaseContext::NoSearchFlags;
-        flags |= basicFlags;
-        
-        QList<Declaration*> tempDecls;
-        if( !scopeContext ) {
-          BaseContext::findDeclarationsInternal( toList(currentLookup), position, dataType, tempDecls, trace, flags | BaseContext::LanguageSpecificFlag1 );
-          if( tempDecls.isEmpty() ) {
-            ///If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
-            //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
-            QList<QualifiedIdentifier> allIdentifiers;
-            QualifiedIdentifier prepend = this->scopeIdentifier(true);
-            while( !prepend.isEmpty() ) {
-              allIdentifiers << prepend + currentLookup;
-              prepend.pop();
-            }
-            allIdentifiers << currentLookup;
+          ///Step 1: Resolve the template-arguments
+          //Since there may be non-type template-parameters, represent them as ExpressionEvaluationResult's
+
+          for( int a = 0; a < currentIdentifier.templateIdentifiers().size(); a++ ) {
+            //Use the already available mechanism for resolving delayed types
+            DelayedType::Ptr delayed( new DelayedType() );
+            delayed->setQualifiedIdentifier( currentIdentifier.templateIdentifiers().at(a) );
             
-            for( int a = trace.count()-1; a >= 0; --a ) {
-              const DUContext::ImportTraceItem& traceItem(trace[a]);
-              QList<Declaration*> decls;
-              ///@todo Give a correctly modified trace(without the used items)
-              traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->textRange().end(), AbstractType::Ptr(), decls, trace.mid(0,a), KDevelop::DUContext::NoUndefinedTemplateParams );
-              if( !decls.isEmpty() ) {
-                tempDecls = decls;
-                break;
-              }
+            Cpp::ExpressionEvaluationResult res;
+            res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags );
+            
+            if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && (dynamic_cast<CppTemplateParameterType*>(res.type.data()) || dynamic_cast<DelayedType*>(res.type.data())) ) {
+              return false;
             }
-          }
-        } else {
-          scopeContext->findDeclarationsInternal( toList(currentLookup), scopeContext->url() == this->url() ? position : scopeContext->textRange().end(), dataType, tempDecls, trace, flags | BaseContext::DontSearchInParent | BaseContext::LanguageSpecificFlag1 );
-        }
 
-        if( !tempDecls.isEmpty() && num < identifier.count()-1 ) { //Filter out intermediate namespace alias declarations, those are applied from within the du-chain.
-          for( QList<Declaration*>::iterator it = tempDecls.begin(); it != tempDecls.end();  ) {
-            if( dynamic_cast<NamespaceAliasDeclaration*>(*it) && num < identifier.count()-1 ) {
-              it = tempDecls.erase(it);
-            } else {
-                ++it;
-            }
-          }
-        }
-        
-        if( !tempDecls.isEmpty() ) {
-          //We need to build the inclusion-trace here, so template-parameters can be resolved nicely
-          TopDUContext* previousTopContext = scopeContext ? scopeContext->topContext() : this->topContext();
+            if( !res.isValid() )
+              kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString();
           
-          if( previousTopContext != tempDecls.last()->topContext() ) {
-            /*The top-context has changed, so we need to append the inclusion-path
-              from previousTopContext to tempDecls.last()->topContext() to newTrace */
-            ///@todo which item from tempDecls to choose here?
-            trace += previousTopContext->importTrace(tempDecls.last()->topContext());
-          }
-          
-          //We have found a part of the scope
-          if( num == identifier.count()-1 ) {
-            //Last part of the scope found -> target found
-            if( templateArgumentTypes.isEmpty() ) {
-              ret += tempDecls;
-            } else {
-              foreach( Declaration* decl, tempDecls ) {
-                ifDebug( kDebug(9007) << "Instantiating" << currentLookup.toString() );
-                Declaration* dec = instantiateDeclaration(decl, templateArgumentTypes, trace);
-                if( dec )
-                  ret << dec;
-                ifDebug( else kDebug(9007) << "Could not instantiate template-declaration"; )
-              }
-            }
-          }else{
-            //Only a part of the scope found, keep on searching
-
-            //Handle normal found declarations
-            if( tempDecls.size() == 1 ) {
-            } else {
-              kDebug(9007) << "CppDUContext::findDeclarationsInternal: found " << tempDecls.size() << " ambiguous declarations for scope " << currentLookup.toString();
-            }
-            currentLookup.clear();
-            //Extract a context, maybe it would be enough only testing the first found declaration
-            foreach( Declaration* decl, tempDecls ) {
-              Declaration* instanceDecl = decl;
-
-              if( !templateArgumentTypes.isEmpty() ) {
-                ifDebug( kDebug(9007) << "Instantiating" << decl->toString() );
-                instanceDecl = instantiateDeclaration(decl, templateArgumentTypes, trace);
-              }
-
-              if( !instanceDecl ) {
-                kDebug(9007) << "Could not instantiate context-declaration";
-                continue;
-              }
-
-              scopeContext = TypeUtils::getInternalContext(instanceDecl);
-
-              if(!scopeContext || scopeContext->type() == DUContext::Template )
-                if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instanceDecl->abstractType().data()) ) //Try to get the context from the type, maybe it is a typedef.
-                  if( idType->declaration() )
-                    scopeContext = TypeUtils::getInternalContext(idType->declaration());
-
-#ifdef DEBUG
-              kDebug(9007) << instanceDecl->toString() << ": scope-context" << scopeContext;
-              if(scopeContext)
-                kDebug(9007) << "scope-context-type" << scopeContext->type();
-#endif
-              
-              if( scopeContext && scopeContext->type() == DUContext::Class )
-                break;
-            }
-            if( !scopeContext || scopeContext->type() != DUContext::Class ) {
-              kDebug(9007) << "CppDUContext::findDeclarationsInternal: could not get a class-context from " << tempDecls.size() << " declarations for scope " << currentLookup.toString();
-              return true;
-
-            }
-          }
-        } else {
-          //Nothing was found for currentLookup.
-          if( num != identifier.count() - 1 ) {
-            //This is ok in the case that currentLookup stands for a namespace, because namespaces do not have a declaration.
-            for( int a = 0; a < currentLookup.count(); a++ ) {
-              if( templateArgumentTypes.count() != 0 ) {
-                kDebug(9007) << "CppDUContext::findDeclarationsInternal: while searching " << identifier.toString() << " Template in scope could not be located: " << currentLookup.toString();
-                return true; //If one of the parts has a template-identifier, it cannot be a namespace
-              }
-            }
-          } else {
-            //Final part of the scope not found
-            return true;
+            find.openQualifiedIdentifier( res );
+            find.closeQualifiedIdentifier();
           }
         }
+
+        if( !find.closeIdentifier() )
+          return false;
       }
+      find.closeQualifiedIdentifier();
+      ret += find.lastDeclarations();
       return true;
     }
 
@@ -460,25 +546,6 @@ class CppDUContext : public BaseContext {
     virtual QWidget* createNavigationWidget(Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix) const;
     
   private:
-    QList<QualifiedIdentifier> toList( const QualifiedIdentifier& id ) const {
-      QList<QualifiedIdentifier> ret;
-      ret << id;
-      return ret;
-    }
-
-    Declaration* instantiateDeclaration( Declaration* decl, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, const DUContext::ImportTrace& inclusionTrace ) const
-    {
-      if( templateArguments.isEmpty() )
-        return decl;
-      
-      TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
-      if( !templateDecl ) {
-        ifDebug( kDebug(9007) << "Tried to instantiate a non-template declaration" << decl->toString(); )
-        return 0;
-      }
-
-      return templateDecl->instantiate( templateArguments, inclusionTrace );
-    }
 
     virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, const typename BaseContext::ImportTrace& trace,  bool searchInParents, int currentDepth) const
     {
