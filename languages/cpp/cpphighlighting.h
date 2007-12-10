@@ -40,7 +40,7 @@ class DUContext;
 class Declaration;
 }
 
-typedef std::vector<KDevelop::Declaration*> ColorMap;
+typedef QVector<KDevelop::Declaration*> ColorMap;
 
 class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
 {
@@ -116,4 +116,3 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
 };
 
 #endif
-
