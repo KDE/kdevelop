@@ -101,11 +101,6 @@ QModelIndex VariableCollection::index(int row, int column, const QModelIndex & p
         if (row >= m_items.count())
             return QModelIndex();
 
-        /*AbstractVariableItem* item = m_items.at(row);
-        // Originally had this in canFetchMore/fetchMore, but that is greedy, so...
-        if (item->isDirty())
-            item->refresh();*/
-
         return createIndex(row, column, m_items.at(row));
     }
 

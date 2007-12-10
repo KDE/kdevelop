@@ -56,6 +56,9 @@ set(kdevcppdebugger_PART_SRCS
     gdbtable.cpp
     debuggertracingdialog.cpp
     breakpointcontroller.cpp
+    threaditem.cpp
+    framestackitem.cpp
+    stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
