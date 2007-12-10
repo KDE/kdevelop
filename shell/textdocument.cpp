@@ -127,6 +127,11 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     {
         d->document = Core::self()->partManagerInternal()->createTextPart(url(),
             Core::self()->documentController()->encoding(), !url().isEmpty());
+        /* It appears, that by default a part will be deleted the the
+           first view containing it is deleted.  Since we do want
+           to have several views, disable that behaviour.  */
+        d->document->setAutoDeletePart(false);
+
         Core::self()->partManager()->addPart(d->document);
 
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
@@ -279,7 +284,7 @@ void TextDocument::close()
         }
     }
 
-    //d->document->deleteLater();
+    d->document->deleteLater();
 
     Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
 
