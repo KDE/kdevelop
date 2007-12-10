@@ -107,7 +107,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 
 void MainWindowPrivate::setupActions()
 {
-    KStandardAction::quit( m_mainWindow, SLOT( close() ), actionCollection() );
+    KStandardAction::quit( this, SLOT( quitAll() ), actionCollection() );
 
     KAction *action;
 

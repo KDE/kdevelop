@@ -91,6 +91,8 @@ public Q_SLOTS:
 
     void toggleStatusbar();
 
+    void quitAll();
+
 private:
     KActionCollection *actionCollection();
 

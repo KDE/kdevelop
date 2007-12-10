@@ -21,6 +21,9 @@ Boston, MA 02110-1301, USA.
 */
 
 #include <kconfiggroup.h>
+#include <KApplication>
+
+#include "core.h"
 
 namespace KDevelop {
 
@@ -235,6 +238,13 @@ void MainWindowPrivate::fileNew()
 void MainWindowPrivate::viewAddNewToolView()
 {
     Core::self()->uiControllerInternal()->addNewToolView(m_mainWindow);
+}
+
+void MainWindowPrivate::quitAll()
+{
+    Core::self()->deinitialize();
+    KApplication::kApplication()->exit();
+
 }
 
 }
