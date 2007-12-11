@@ -188,8 +188,10 @@ Range* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor::Rang
         importList << other; //Delay the setParent because else the list we iterate over gets corrupted
     }
 
-    for( QList<SmartRange*>::const_iterator it = importList.begin(); it != importList.end(); ++it )
+    for( QList<SmartRange*>::const_iterator it = importList.begin(); it != importList.end(); ++it ) {
+      Q_ASSERT((*it)->parentRange()); //We must never import a top-range, top-ranges must stay top-ranges
       (*it)->setParentRange(ret);
+    }
 
     ///Normal case:
     ret->setParentRange( currentRange );
