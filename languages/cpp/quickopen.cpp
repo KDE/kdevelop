@@ -41,6 +41,17 @@
 using namespace KDevelop;
 using namespace Cpp;
 
+KUrl url( const IncludeItem& item ) {
+  KUrl u;
+  if( !item.basePath.isEmpty() ) {
+    u = KUrl( item.basePath );
+    u.addPath( item.name );
+  }else{
+    u = KUrl( item.name );
+  }
+  return u;
+}
+
 ///Finds the shortest path through the imports to a given included file
 QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import ) {
 
@@ -99,8 +110,8 @@ bool IncludeFileData::execute( QString& filterText ) {
     filterText = u.path( KUrl::AddTrailingSlash );
     return false;
   } else {
-    KUrl u( m_item.basePath );
-    u.addPath( m_item.name );
+    KUrl u = url(m_item);
+    
     CppLanguageSupport::self()->core()->documentController()->openDocument( u );
 
     return true;
@@ -135,8 +146,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   if( m_includedFrom && m_item.pathNumber != -1 )
   {
     //Find the trace from m_includedFrom to the this file
-    KUrl u = m_item.basePath;
-    u.addPath( m_item.name );
+    KUrl u = url(m_item);
 
     QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
@@ -153,8 +163,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   }else if( m_item.pathNumber == -1 && m_includedFrom )
   {
     //Find the trace from this file to m_includedFrom
-    KUrl u = m_item.basePath;
-    u.addPath( m_item.name );
+    KUrl u = url(m_item);
 
     QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
@@ -188,8 +197,8 @@ QWidget* IncludeFileData::expandingWidget() const {
 
 QString IncludeFileData::htmlDescription() const
 {
-  KUrl path = m_item.basePath;
-  path.addPath( m_item.name );
+  KUrl path = url(m_item);
+  
   QString ret;
   
   if( m_item.isDirectory )
@@ -203,34 +212,34 @@ QString IncludeFileData::htmlDescription() const
 IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
 }
 
-void allIncludedRecursion( QMap<KUrl, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
+void allIncludedRecursion( QMap<HashedString, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
 
   if( !ctx )
     return;
 
+  if( ret.contains(ctx->url()) )
+    return;
+  
   foreach( DUContextPointer ctx2, ctx->importedParentContexts() ) {
     TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.data()) );
     allIncludedRecursion( ret, d, prefixPath );
   }
 
   IncludeItem i;
-  KUrl baseUrl = KUrl(ctx->url().str());
-  KUrl u = baseUrl;
 
-  if( !prefixPath.isEmpty() && !u.prettyUrl().contains(prefixPath) )
+  i.name = ctx->url().str();
+
+  if( !prefixPath.isEmpty() && !i.name.contains(prefixPath) )
     return;
   
-  i.name = u.fileName();
-  u.setFileName(QString());
-  i.basePath = u;
-  ret[baseUrl] = i;
+  ret[ctx->url()] = i;
 }
 
 QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixPath = QString() ) {
 
   DUChainReadLocker lock( DUChain::lock() );
 
-  QMap<KUrl, IncludeItem> ret;
+  QMap<HashedString, IncludeItem> ret;
   allIncludedRecursion( ret, ctx, prefixPath );
   return ret.values();
 }
@@ -281,12 +290,10 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext );
       
-      foreach( KUrl u, m_importers ) {
+      foreach( HashedString u, m_importers ) {
         IncludeItem i;
         i.isDirectory = false;
-        i.name = u.fileName();
-        u.setFileName(QString());
-        i.basePath = u;
+        i.name = u.str();
         i.pathNumber = -1; //We mark this as an importer by putting pathNumber to -1
         allIncludeItems << i;
       }
@@ -322,8 +329,7 @@ void IncludeFileDataProvider::reset()
 
         collectImporters( importers, m_duContext.data() );
 
-        foreach( const HashedString& u,  importers )
-          m_importers << KUrl(u.str());
+        m_importers = importers.values();
       }
     }
   }
@@ -354,8 +360,7 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
 
     if( m_duContext )
     {
-      KUrl u = items[a].basePath;
-      u.addPath( items[a].name );
+      KUrl u = url( items[a] );
 
       QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
@@ -381,12 +386,16 @@ QString IncludeFileDataProvider::itemText( const Cpp::IncludeItem& data ) const
   return data.name;
 }
 
-QSet<KUrl> IncludeFileDataProvider::files() const {
-  QSet<KUrl> set;
+QSet<HashedString> IncludeFileDataProvider::files() const {
+  QSet<HashedString> set;
   foreach(const Cpp::IncludeItem& item, items()) {
-    KUrl path = item.basePath;
-    path.addPath( item.name );
-    set << path;
+    if( !item.basePath.isEmpty() ) {
+      KUrl path = item.basePath;
+      path.addPath( item.name );
+      set << path.prettyUrl();
+    }else{
+      set << item.name;
+    }
   }
   return set;
 }
