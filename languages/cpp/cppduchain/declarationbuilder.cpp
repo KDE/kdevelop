@@ -232,35 +232,63 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
           // TODO: potentially excessive locking
           DUChainWriteLocker lock(DUChain::lock());
           QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
-          foreach (Declaration* dec, declarations) {
-            if (dec->isForwardDeclaration())
-              continue;
-            //Compare signatures of function-declarations:
-            if(dec->abstractType() == lastType()
-               || (dec->abstractType() && lastType() && dec->abstractType()->equals(lastType().data())))
-            {
-              //The declaration-type matches this definition, good.
-            }else{
-              continue;
-            }
 
-            Declaration* oldDec = currentDeclaration();
-            abortDeclaration();
-            Definition* def = new Definition(m_editor->currentUrl(), oldDec->takeRange(), currentContext());
-            setEncountered(def);
-            delete oldDec;
-            dec->setDefinition(def);
-            
-            if( m_lastContext && !m_lastContext->owner() )
-              def->setInternalContext(m_lastContext);
-            m_lastContext = 0;
+          CppFunctionType::Ptr currentFunction = CppFunctionType::Ptr(dynamic_cast<CppFunctionType*>(lastType().data()));
+          int functionArgumentCount = 0;
+          if(currentFunction)
+            functionArgumentCount = currentFunction->arguments().count();
+          
+          for( int cycle = 0; cycle < 3; cycle++ ) {
+            bool found = false;
+            ///We do 2 cycles: In the first cycle, we want an exact match. In the second, we accept approximate matches.
+            foreach (Declaration* dec, declarations) {
+              if (dec->isForwardDeclaration())
+                continue;
+              //Compare signatures of function-declarations:
+              if(dec->abstractType() == lastType()
+                 || (dec->abstractType() && lastType() && dec->abstractType()->equals(lastType().data())))
+              {
+                //The declaration-type matches this definition, good.
+              }else{
+                if(cycle == 0) {
+                  //First cycle, only accept exact matches
+                  continue;
+                }else if(cycle == 1){
+                  //Second cycle, match by argument-count
+                  CppFunctionType::Ptr matchFunction = dec->type<CppFunctionType>();
+                  if(currentFunction && matchFunction && currentFunction->arguments().count() == functionArgumentCount ) {
+                    //We have a match
+                  }else{
+                    continue;
+                  }
+                }else if(cycle == 2){
+                  //Accept any match, so just continue
+                }
+                if(dec->definition() && wasEncountered(dec->definition()))
+                  continue; //Do not steal declarations
+              }
 
-            // Resolve forward declarations
-            foreach (Declaration* forward, declarations) {
-              if (forward->isForwardDeclaration())
-                forward->toForwardDeclaration()->setResolved(dec);
+              Declaration* oldDec = currentDeclaration();
+              abortDeclaration();
+              Definition* def = new Definition(m_editor->currentUrl(), oldDec->takeRange(), currentContext());
+              setEncountered(def);
+              delete oldDec;
+              dec->setDefinition(def);
+              
+              if( m_lastContext && !m_lastContext->owner() )
+                def->setInternalContext(m_lastContext);
+              m_lastContext = 0;
+
+              // Resolve forward declarations
+              foreach (Declaration* forward, declarations) {
+                if (forward->isForwardDeclaration())
+                  forward->toForwardDeclaration()->setResolved(dec);
+              }
+              found = true;
+              break;
             }
-            return;
+            if(found)
+              return;
           }
           //We do not want unresolved definitions to hide declarations.
           //As declarations are named by Identifiers, not by QualifiedIdentifiers,
