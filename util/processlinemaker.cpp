@@ -125,6 +125,11 @@ ProcessLineMaker::ProcessLineMaker( QProcess* proc )
             this, SLOT(slotTimeoutStderr()) );
 }
 
+ProcessLineMaker::~ProcessLineMaker()
+{
+     delete d;
+}
+
 void ProcessLineMaker::slotReceivedStdout( const QByteArray& buffer )
 {
     d->stdoutbuf += buffer;

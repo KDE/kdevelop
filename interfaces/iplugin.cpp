@@ -96,6 +96,7 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
 
 IPlugin::~IPlugin()
 {
+    delete d;
 }
 
 Qt::DockWidgetArea IPlugin::dockWidgetAreaHint() const

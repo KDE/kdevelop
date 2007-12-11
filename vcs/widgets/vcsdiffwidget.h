@@ -34,6 +34,7 @@ class KDEVPLATFORMVCS_EXPORT VcsDiffWidget : public QWidget
 Q_OBJECT
 public:
     VcsDiffWidget( KDevelop::VcsJob*, QWidget* parent = 0 );
+    ~VcsDiffWidget();
     void setRevisions( const KDevelop::VcsRevision&, const KDevelop::VcsRevision& );
     
 private:

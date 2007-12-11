@@ -48,6 +48,9 @@ class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
 public:
     ProcessLineMaker();
     ProcessLineMaker( QProcess* );
+    
+    ~ProcessLineMaker();
+
     /**
      * clears out the internal buffers, this drops any data without
      * emitting the related signal

@@ -64,6 +64,7 @@ EditorIntegrator::EditorIntegrator()
 
 EditorIntegrator::~ EditorIntegrator()
 {
+  delete d;
 }
 
 void EditorIntegrator::addDocument( KTextEditor::Document * document )

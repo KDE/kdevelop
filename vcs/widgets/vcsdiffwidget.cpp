@@ -71,6 +71,12 @@ VcsDiffWidget::VcsDiffWidget( KDevelop::VcsJob* job, QWidget* parent )
     d->m_job->start();
 }
 
+VcsDiffWidget::~VcsDiffWidget()
+{
+    delete d->m_ui;
+    delete d;
+}
+
 void VcsDiffWidget::setRevisions( const KDevelop::VcsRevision& first,
                                   const KDevelop::VcsRevision& second )
 {

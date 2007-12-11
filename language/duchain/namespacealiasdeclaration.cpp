@@ -46,6 +46,7 @@ void NamespaceAliasDeclaration::setImportIdentifier(const QualifiedIdentifier& i
 
 NamespaceAliasDeclaration::~NamespaceAliasDeclaration()
 {
+  delete d;
 }
 
 Declaration* NamespaceAliasDeclaration::clone() const {

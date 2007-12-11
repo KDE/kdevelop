@@ -39,6 +39,7 @@ FunctionDeclaration::FunctionDeclaration(const HashedString& url, KTextEditor::R
 
 FunctionDeclaration::~FunctionDeclaration()
 {
+  delete d;
 }
 
 Declaration* FunctionDeclaration::clone() const {

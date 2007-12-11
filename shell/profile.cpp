@@ -87,6 +87,7 @@ Profile::~Profile()
 {
     for (QList<Profile*>::iterator it = d->m_children.begin(); it != d->m_children.end(); ++it)
         delete *it;
+    delete d;
 }
 
 void Profile::addChildProfile(Profile *profile)

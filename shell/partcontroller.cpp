@@ -115,7 +115,9 @@ PartController::PartController(Core *core, QWidget *toplevel)
 }
 
 PartController::~PartController()
-{}
+{ 
+    delete d;
+}
 
 //MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY
 bool PartController::isTextType( KMimeType::Ptr mimeType )
