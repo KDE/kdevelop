@@ -1000,6 +1000,12 @@ void TestDUChain::testFunctionDefinition() {
   QCOMPARE(top->localDefinitions()[2], top->childContexts()[1]->localDeclarations()[2]->definition());
   
   QCOMPARE(top->childContexts()[3]->owner()->asDefinition(), top->localDefinitions()[0]);
+  QCOMPARE(top->childContexts()[3]->importedParentContexts().count(), 1);
+  QCOMPARE(top->childContexts()[3]->importedParentContexts()[0].data(), top->childContexts()[2]);
+  
+  QCOMPARE(top->childContexts()[2]->importedParentContexts().count(), 1);
+  QCOMPARE(top->childContexts()[2]->importedParentContexts()[0].data(), top->childContexts()[1]);
+  
   
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
 
