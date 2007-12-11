@@ -62,7 +62,7 @@ set(kdevcppdebugger_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
-    #modeltest.cpp
+#modeltest.cpp
 )
 
 set(kdevcppdebugger_PART_UI

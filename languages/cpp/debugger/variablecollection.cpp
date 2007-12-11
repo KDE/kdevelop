@@ -390,21 +390,17 @@ void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
 
 bool VariableCollection::canFetchMore(const QModelIndex & parent) const
 {
-    if (AbstractVariableItem* item = itemForIndex(parent)) {
-        kDebug() << "Being asked if depth" << item->depth() << "can fetch more";
+    if (AbstractVariableItem* item = itemForIndex(parent))
         if (item->isDirty() && item->hasChildren())
             return true;
-    }
 
     return false;
 }
 
 void VariableCollection::fetchMore(const QModelIndex & parent)
 {
-    if (AbstractVariableItem* item = itemForIndex(parent)) {
-        kDebug() << "Being asked to fetch more for depth" << item->depth();
+    if (AbstractVariableItem* item = itemForIndex(parent))
         item->refresh();
-    }
 }
 
 bool VariableCollection::hasChildren(const QModelIndex & parent) const

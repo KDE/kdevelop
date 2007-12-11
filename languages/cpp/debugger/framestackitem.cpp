@@ -55,20 +55,14 @@ void FrameStackItem::parseFrame(const GDBMI::Value& frame)
 {
     m_dirty = false;
     m_refreshRequested = false;
-    // For now, just produce string simular to gdb
-    // console output. In future we might have a table,
-    // or something better.
-    QString frameDesc;
-
-    QString func_column;
-    QString source_column;
 
     m_level = frame["level"].literal().toInt();
 
     if (frame.hasField("func"))
         m_function = frame["func"].literal();
-    else
-        m_function = frame["address"].literal();
+
+    if (frame.hasField("address"))
+        m_address = frame["address"].literal().toULongLong();
 
     if (frame.hasField("file"))
     {
@@ -94,8 +88,8 @@ QString GDBDebugger::FrameStackItem::function() const
 
 QString GDBDebugger::FrameStackItem::sourceString() const
 {
-    if (m_sourceLine)
-        return m_source + ":" + m_sourceLine;
+    if (m_sourceLine != -1)
+        return QString("%1:%2").arg(m_source).arg(m_sourceLine);
 
     return m_source;
 }

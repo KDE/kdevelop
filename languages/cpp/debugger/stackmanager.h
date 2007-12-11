@@ -66,6 +66,9 @@ public:
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
 
+    QObject* objectForIndex(const QModelIndex& index) const;
+    ThreadItem* threadForIndex(const QModelIndex& index) const;
+
 protected:
     void prepareInsertFrames(ThreadItem* thread, int startIndex, int endIndex);
     void completeInsertFrames();

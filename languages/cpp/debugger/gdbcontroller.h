@@ -46,6 +46,7 @@ class VarItem;
 class STTY;
 class CommandQueue;
 class VariableCollection;
+class StackManager;
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -161,6 +162,11 @@ public:
      * Return the shared variable collection cache
      */
     VariableCollection* variables() const;
+
+    /**
+     * Return the shared frame stack model
+     */
+    StackManager* stackManager() const;
 
     using QObject::event;
 
@@ -354,6 +360,7 @@ private:
     KProcess* m_process;
 
     VariableCollection* m_variableCollection;
+    StackManager* m_stackManager;
 };
 
 }

@@ -52,6 +52,7 @@
 #include "mi/miparser.h"
 #include "gdbcommandqueue.h"
 #include "variablecollection.h"
+#include "stackmanager.h"
 
 using namespace std;
 using namespace GDBMI;
@@ -158,7 +159,8 @@ GDBController::GDBController(QObject* parent)
         state_reload_needed(false),
         stateReloadInProgress_(false),
         m_process(0),
-        m_variableCollection(new VariableCollection(this))
+        m_variableCollection(new VariableCollection(this)),
+        m_stackManager(new StackManager(this))
 {
     configure();
 
@@ -1810,6 +1812,11 @@ int GDBController::serial() const
 VariableCollection * GDBController::variables() const
 {
     return m_variableCollection;
+}
+
+StackManager * GDBDebugger::GDBController::stackManager() const
+{
+    return m_stackManager;
 }
 
 }

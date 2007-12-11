@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _FRAMESTACKWIDGET_H_
-#define _FRAMESTACKWIDGET_H_
+#ifndef THREADITEM_H
+#define THREADITEM_H
 
 #include "mi/miparser.h"
 
@@ -52,6 +52,8 @@ public:
      * Returns true if more frames than currently loaded are available.
      */
     bool moreFramesAvailable() const;
+
+    void setDirty();
 
     /**
      * Check to see if more frames are available from GDB, and create them if so.
@@ -84,4 +86,4 @@ private:
 
 }
 
-#endif
+#endif // THREADITEM_H

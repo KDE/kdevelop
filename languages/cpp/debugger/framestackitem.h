@@ -65,6 +65,7 @@ private:
 
     // Details
     int m_level;
+    qulonglong m_address;
     QString m_function;
     QString m_source;
     int m_sourceLine;

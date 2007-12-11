@@ -88,10 +88,23 @@ bool ThreadItem::moreFramesAvailable() const
 
 void ThreadItem::fetchMoreFrames()
 {
-    stackManager()->controller()->addCommand(
-        new GDBCommand(StackInfoDepth, m_lastConfirmedFrame + g_lookaheadCount,
-                       this, 
-                       &ThreadItem::handleStackDepth));
+    GDBCommand* stackInfoDepth = new GDBCommand(StackInfoDepth,
+                                                m_lastConfirmedFrame + g_lookaheadCount,
+                                                this,
+                                                &ThreadItem::handleStackDepth);
+
+    int currentThread = stackManager()->controller()->currentThread();
+    if (currentThread != thread()) {
+        stackManager()->controller()->addCommand(new GDBCommand(ThreadSelect, thread()));
+
+        stackManager()->controller()->addCommand(stackInfoDepth);
+
+        // Switch back to the original thread.
+        stackManager()->controller()->addCommand(new GDBCommand(ThreadSelect, currentThread));
+
+    } else {
+        stackManager()->controller()->addCommand(stackInfoDepth);
+    }
 }
 
 StackManager* ThreadItem::stackManager() const
@@ -110,7 +123,7 @@ void ThreadItem::handleStackDepth(const GDBMI::ResultRecord& r)
     if (m_frames.count() <= m_lastConfirmedFrame) {
         stackManager()->prepareInsertFrames(this, m_frames.count(), m_lastConfirmedFrame);
 
-        for (int i = m_frames.count(); i <= m_lastConfirmedFrame; ++i)
+        for (int i = m_frames.count(); i < m_lastConfirmedFrame; ++i)
             createFrame(i);
 
         stackManager()->completeInsertFrames();
@@ -129,7 +142,7 @@ void ThreadItem::refreshFrames(int from, int to)
     dirty:
 
     // For now just update the whole block, even if some are not dirty
-    for (int i = from; i <= to; ++i)
+    for (int i = from; i <= to && i < m_frames.count(); ++i)
         m_frames[i]->setRefreshRequested();
 
     GDBCommand* listFrameCommand = new GDBCommand(StackListFrames, QString("%1 %2").arg(from).arg(to),
@@ -166,7 +179,7 @@ void ThreadItem::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
 
     for (int i = 0, e = frames.size(); i != e; ++i)
     {
-        FrameStackItem* frame = createFrame(i);
+        FrameStackItem* frame = createFrame(frames[i]["level"].literal().toInt());
         frame->parseFrame(frames[i]);
     }
 }
@@ -177,6 +190,7 @@ void ThreadItem::parseThread(const GDBMI::ResultRecord& r)
 
     // We're given the first frame too, parse it
 
+    // First frame doesn't have a model index (shares the thread index), don't have to notify creation
     FrameStackItem* frame = createFrame(0);
     frame->parseFrame(r["frame"]);
 }
@@ -194,6 +208,11 @@ FrameStackItem* ThreadItem::createFrame(int frame)
     FrameStackItem* item = new FrameStackItem(this, frame);
     m_frames.append(item);
     return item;
+}
+
+void GDBDebugger::ThreadItem::setDirty()
+{
+    m_moreFramesAvailable = true;
 }
 
 #include "threaditem.moc"
