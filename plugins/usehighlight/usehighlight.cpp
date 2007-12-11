@@ -221,7 +221,8 @@ void UseHighlightPlugin::documentDestroyed( QObject* obj )
 
 void UseHighlightPlugin::viewDestroyed( QObject* obj )
 {
-  m_highlightedDeclarations.remove( (KTextEditor::View*)obj );
+  m_highlightedDeclarations.remove(static_cast<KTextEditor::View*>(obj));
+  m_updateViews.remove(static_cast<KTextEditor::View*>(obj));
 }
 
 void UseHighlightPlugin::cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition )
