@@ -341,7 +341,15 @@ ModificationRevision EditorIntegrator::modificationRevision(const HashedString& 
   ///@todo add a cache, use the old code from Cpp::EnvironmentManager
   ///@todo support non-local files
 
-  QFileInfo fileInfo( KUrl(url.str()).toLocalFile() );
+  
+  QString localFile = url.str();
+  if( localFile.startsWith("file://") )
+    localFile = localFile.mid(7); //This is much faster then first constructing KUrl
+  else
+    localFile = KUrl(url.str()).toLocalFile();
+
+  QFileInfo fileInfo( localFile );
+  
   
   ModificationRevision ret(fileInfo.lastModified());
 

@@ -30,6 +30,7 @@ namespace KDevelop
 {
 
 class QuickOpenDataProviderBase;
+class HashedString;
 
 /**
  * Interface to quickopen
@@ -60,7 +61,7 @@ public:
      * Queries a set of files merged from all active data-providers that implement QuickOpenFileSetInterface.
      * This should not be queried by data-providers that implement QuickOpenFileSetInterface during their initialization(set() and enableData())
     * */
-    virtual QSet<KUrl> fileSet() const = 0;
+    virtual QSet<KDevelop::HashedString> fileSet() const = 0;
 };
 
 }

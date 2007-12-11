@@ -21,6 +21,7 @@
 #include <QTreeView>
 
 #include <ktexteditor/codecompletionmodel.h>
+#include <hashedstring.h>
 #include <kdebug.h>
 #include <typeinfo>
 
@@ -162,7 +163,7 @@ void QuickOpenModel::restart()
 
 void QuickOpenModel::destroyed( QObject* obj )
 {
-  removeProvider( dynamic_cast<KDevelop::QuickOpenDataProviderBase*>(obj) );
+  removeProvider( static_cast<KDevelop::QuickOpenDataProviderBase*>(obj) );
 }
 
 QModelIndex QuickOpenModel::index( int row, int column, const QModelIndex& /*parent*/) const
@@ -287,12 +288,12 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
   return QuickOpenDataPointer();
 }
 
-QSet<KUrl> QuickOpenModel::fileSet() const {
-  QSet<KUrl> merged;
+QSet<HashedString> QuickOpenModel::fileSet() const {
+  QSet<HashedString> merged;
   foreach( const ProviderEntry& provider, m_providers ) {
     if( QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) ) {
-      QSet<KUrl> ifiles = iface->files();
-      kDebug() << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
+      QSet<HashedString> ifiles = iface->files();
+      //kDebug() << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
       merged += ifiles;
     }
   }

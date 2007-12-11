@@ -80,7 +80,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     
     virtual QTreeView* treeView() const;
 
-    virtual QSet<KUrl> fileSet() const;
+    virtual QSet<KDevelop::HashedString> fileSet() const;
   public slots:
     void textChanged( const QString& str );
   private slots:

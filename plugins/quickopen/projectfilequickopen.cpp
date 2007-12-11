@@ -35,12 +35,13 @@ ProjectFileData::ProjectFileData( const ProjectFile& file ) : m_file(file) {
 }
 
 QString ProjectFileData::text() const {
-  return m_file.m_relativePath;
+  KUrl u = m_file.m_projectUrl;
+  u.adjustPath(KUrl::AddTrailingSlash);
+  return KUrl::relativeUrl( u, m_file.m_url );
 }
+
 KUrl ProjectFileData::totalUrl() const {
-  KUrl totalUrl = m_file.m_projectUrl;
-  totalUrl.addPath( m_file.m_relativePath );
-  return totalUrl;
+  return m_file.m_url;
 }
 
 QString ProjectFileData::htmlDescription() const {
@@ -103,8 +104,7 @@ void ProjectFileDataProvider::reset() {
     foreach( ProjectFileItem* file, files ) {
       ProjectFile f;
       f.m_projectUrl = project->folder();
-      f.m_projectUrl.adjustPath(KUrl::AddTrailingSlash);
-      f.m_relativePath = KUrl::relativeUrl( f.m_projectUrl, file->url() );
+      f.m_url = file->url();
       f.m_project = project->name();
       projectFiles << f;
     }
@@ -117,12 +117,10 @@ uint ProjectFileDataProvider::itemCount() const {
   return Base::filteredItems().count();
 }
 
-QSet<KUrl> ProjectFileDataProvider::files() const {
-  QSet<KUrl> ret;
+QSet<HashedString> ProjectFileDataProvider::files() const {
+  QSet<HashedString> ret;
   foreach( const ProjectFile& file, items() ) {
-    KUrl totalUrl = file.m_projectUrl;
-    totalUrl.addPath( file.m_relativePath );
-    ret.insert(totalUrl);
+    ret.insert(file.m_url.prettyUrl());
   }
   return ret;
 }
@@ -144,6 +142,6 @@ QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start,
 }
 
 QString ProjectFileDataProvider::itemText( const ProjectFile& data ) const {
-  return data.m_relativePath;
+  return data.m_url.prettyUrl();
 }
 

@@ -37,7 +37,7 @@ using namespace KDevelop;
 typedef KDevelop::Filter<DUChainItem> Base;
 
 //May return zero
-TopDUContext* getTopContext(const KUrl& url) {
+TopDUContext* getTopContext(const HashedString& url) {
   KDevelop::TopDUContext* chosen = 0;
   QList<KDevelop::TopDUContext*> contexts = KDevelop::DUChain::self()->chainsForDocument(url);
   foreach( KDevelop::TopDUContext* ctx, contexts )
@@ -155,9 +155,9 @@ void DUChainItemDataProvider::reset() {
   Base::clearFilter();
   QList<DUChainItem> items;
 
-  QSet<KUrl> enabledFiles = m_quickopen->fileSet();
+  QSet<HashedString> enabledFiles = m_quickopen->fileSet();
   
-  foreach( KUrl u, enabledFiles ) {
+  foreach( HashedString u, enabledFiles ) {
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
     TopDUContext* ctx = getTopContext( u );

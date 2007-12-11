@@ -35,6 +35,8 @@ class QIcon;
 
 namespace KDevelop {
 
+class HashedString; //Currently located in the editor component
+
 /**
  * Hint: When implementing a data-provider, do not forget to export it! Else it won't work.
  * */
@@ -49,7 +51,7 @@ namespace KDevelop {
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenFileSetInterface {
   public:
-    virtual QSet<KUrl> files() const = 0;
+    virtual QSet<HashedString> files() const = 0;
     virtual ~QuickOpenFileSetInterface();
 };
 /**

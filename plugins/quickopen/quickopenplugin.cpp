@@ -42,6 +42,7 @@
 
 #include <icore.h>
 #include <iuicontroller.h>
+#include <hashedstring.h>
 
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
@@ -390,7 +391,7 @@ void QuickOpenPlugin::quickOpenClass()
   showQuickOpen( Classes );
 }
 
-QSet<KUrl> QuickOpenPlugin::fileSet() const {
+QSet<KDevelop::HashedString> QuickOpenPlugin::fileSet() const {
   return m_model->fileSet();
 }
 

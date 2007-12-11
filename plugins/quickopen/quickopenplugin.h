@@ -60,7 +60,7 @@ public:
 
     virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
 
-    virtual QSet<KUrl> fileSet() const;
+    virtual QSet<KDevelop::HashedString> fileSet() const;
 
 public slots:
     void quickOpen();

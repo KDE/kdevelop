@@ -30,7 +30,7 @@ namespace KDevelop {
 struct ProjectFile {
   ProjectFile() {
   }
-  QString m_relativePath;
+  KUrl m_url;
   KUrl m_projectUrl;
   QString m_project;
 };
@@ -68,7 +68,7 @@ class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual void reset();
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
-    virtual QSet<KUrl> files() const;
+    virtual QSet<KDevelop::HashedString> files() const;
 
   private:
   
