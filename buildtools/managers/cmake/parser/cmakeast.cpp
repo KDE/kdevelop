@@ -1291,6 +1291,11 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindPathAst::FindPathAst()
+    : m_noDefaultPath(false)
+    , m_noCmakeEnvironmentPath(false)
+    , m_noCmakePath(false)
+    , m_noSystemEnvironmentPath(false)
+    , m_noCmakeSystemPath(false)
 {
 }
 
