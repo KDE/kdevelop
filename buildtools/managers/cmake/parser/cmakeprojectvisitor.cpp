@@ -366,8 +366,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         //FIXME: Put here the error.
         kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
     }
-    m_vars->insert(pack->name()+"_FOUND", QStringList());
-    kDebug(9042) << "Exit. Found:" << pack->name();
+    kDebug(9042) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
     return 1;
 }
 
@@ -550,7 +549,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             {
                 if(mit!=code.knownArgs.constEnd())
                 {
-                    kDebug(9032) << "param:" << *mit << "=" << *cit;
+                    kDebug(9042) << "param:" << *mit << "=" << *cit;
                     m_vars->insertMulti(*mit, QStringList(*cit));
                     m_vars->insertMulti(QString("ARGV%1").arg(i), QStringList(*cit));
                     mit++;
@@ -566,6 +565,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             m_vars->insertMulti("ARGN", argn);
             m_vars->insertMulti("ARGV", call->arguments());
             m_vars->insertMulti("ARGC", QStringList(QString::number(call->arguments().count())));
+            kDebug(9042) << "argn=" << m_vars->value("ARGN");
     
             //Executing
             int len = walk(code.code, 1);
@@ -952,13 +952,31 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
     else
     {
         //Looping in a list of values
-        if(fea->arguments().isEmpty())
-            kDebug(9032) << "Error! not enough arguments";
-        foreach(QString s, fea->arguments())
+        QStringList args=fea->arguments();
+        if(args.count()==1 && args.first().isEmpty()) { //if the args are empty
+            int lines=fea->line()+1, depth=1;
+            CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
+            CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
+            for(; depth>0 && it!=itEnd; ++it, lines++)
+            {
+                if(it->name.toLower()=="foreach")
+                {
+                    depth++;
+                }
+                else if(it->name.toLower()=="endforeach") {
+                    depth--;
+                }
+            }
+            end=lines-1;
+        }
+        else
         {
-            m_vars->insertMulti(fea->loopVar(), QStringList(s));
-            end=walk(fea->content(), fea->line()+1);
-            m_vars->take(fea->loopVar());
+            foreach(QString s, args)
+            {
+                m_vars->insertMulti(fea->loopVar(), QStringList(s));
+                end=walk(fea->content(), fea->line()+1);
+                m_vars->take(fea->loopVar());
+            }
         }
     }
     kDebug(9042) << "EndForeach" << fea->loopVar();
@@ -1030,7 +1048,6 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();
                     break;
             }
-            kDebug(9042) << "String " << res;
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }
             break;
@@ -1089,6 +1106,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
         }
             break;
     }
+    kDebug(9042) << "String " << m_vars->value(sast->outputVariable());
     return 1;
 }
 

@@ -106,7 +106,7 @@ bool CMakeCondition::isTrue(const QString& varName) const
     {
         const QStringList valu=m_vars->value(varName);
 
-//         kDebug(9042) << "Checking" << varName << "is true ? >>>" << valu << "<<";
+//         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
         QString val = valu.join(";").toUpper();
         return !val.isEmpty() && val!="0" && val!="N" && val!="NO" && val!="OFF" && val!="FALSE" && val!="NOTFOUND" && !val.endsWith("_NOTFOUND");
     }
