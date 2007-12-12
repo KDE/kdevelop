@@ -128,8 +128,7 @@ void UseHighlightPlugin::changeHighlight( KTextEditor::View* view, KDevelop::Dec
     changeHighlight( range, highlight, false );
   }
   if( decl->definition() && decl->definition()->smartRange() ) {
-    if( range )
-      changeHighlight( decl->definition()->smartRange(), highlight, false );
+    changeHighlight( decl->definition()->smartRange(), highlight, false );
   }
 }
 
@@ -178,9 +177,6 @@ void UseHighlightPlugin::updateViews()
         }
         ctx = ctx->parentContext();
       }
-      
-      if( !ctx )
-        kDebug() << "Found specific context for cursor " << c;
     } else {
       kDebug() << "Found no valid context";
     }
