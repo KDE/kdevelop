@@ -1626,7 +1626,7 @@ void GDBController::removeStateReloadingCommands()
     {
         i--;
         GDBCommand* cmd = cmdList_.at(i);
-        if (stateReloadingCommands_.count(cmd));
+        if (stateReloadingCommands_.count(cmd))
         {
             kdDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
             delete cmdList_.take(i);
