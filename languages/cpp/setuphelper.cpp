@@ -23,7 +23,6 @@ namespace SetupHelper {
   
 QString getGccIncludePath(bool *ok)
 {
-  Driver* d;
   *ok = true;
   QString processStdout; 
   BlockingKProcess proc;
@@ -51,7 +50,7 @@ QString getVerboseGccIncludePath(bool *ok)
   QString path = tempFile.name();
   QFileInfo pathInfo( path );
 
-  char* fileText = "//This source-file is empty";
+  char fileText[] = "//This source-file is empty";
   fwrite(fileText, strlen(fileText), 1, tempFile.fstream() );
   tempFile.close();
   

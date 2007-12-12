@@ -1272,8 +1272,8 @@ void VarItem::valueDone(const GDBMI::ResultRecord& r)
                     encoded += c;
                 else {
                     // Try common escape characters.
-                    static char *backslashed[] = {"a", "b", "f", "n",
-                                                  "r", "t", "v", "0"};
+                    static char backslashed[] = {'a', 'b', 'f', 'n',
+                                                  'r', 't', 'v', '0'};
                     static char represented[] = "\a\b\f\n\r\t\v";
 
                     const char* ix = strchr (represented, c);
