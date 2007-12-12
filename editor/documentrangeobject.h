@@ -82,8 +82,8 @@ public:
     KTextEditor::Range* takeRange();
 
 protected:
-    // This is the object's internal mutex, lock it whenever dealing with non-threadsafe data.
-    mutable QMutex m_mutex;
+    // Mutex protects all DocumentRangeObject internals from threading-conditioned corruption
+    static QMutex m_mutex;
 
 private:
     Q_DISABLE_COPY(DocumentRangeObject)

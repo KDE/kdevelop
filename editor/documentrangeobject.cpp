@@ -199,3 +199,4 @@ HashedString DocumentRangeObject::url( const KTextEditor::Range * range )
 
 }
 
+QMutex KDevelop::DocumentRangeObject::m_mutex;
