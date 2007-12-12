@@ -86,6 +86,7 @@ void CppPreprocessEnvironment::merge( const Cpp::MacroSet& macros ) {
 }
 
 void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
+    macro->name = Cpp::EnvironmentManager::unifyString(macro->name);
     //Note defined macros
     if( m_environmentFile )
         m_environmentFile->addDefinedMacro(*macro);

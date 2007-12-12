@@ -57,11 +57,15 @@
 
 using namespace KDevelop;
 
+QString cppStringUnifier (const QString& str) {
+  return Cpp::EnvironmentManager::unifyString(str).str();
+}
+
 CPPParseJob::CPPParseJob( const KUrl &url,
                     CppLanguageSupport *parent, PreprocessJob* parentPreprocessor )
         : KDevelop::ParseJob( url, parent ),
         m_parentPreprocessor( parentPreprocessor ),
-        m_session( new ParseSession ),
+        m_session( new ParseSession(&cppStringUnifier) ),
         m_AST( 0 ),
         m_readFromDisk( false ),
         m_includePathsComputed( false ),

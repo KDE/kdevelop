@@ -85,6 +85,12 @@ using namespace KDevelop;
 
 CppLanguageSupport* CppLanguageSupport::m_self = 0;
 
+QList<KUrl> convertToUrls(const QList<HashedString>& stringList) {
+  QList<KUrl> ret;
+  foreach(const HashedString& str, stringList)
+    ret << KUrl(str.str());
+  return ret;
+}
 
 K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
 K_EXPORT_PLUGIN(KDevCppSupportFactory("kdevcppsupport"))
@@ -338,7 +344,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         if( ctx && ctx->parsingEnvironmentFile() ) {
             Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data());
             Q_ASSERT(envFile);
-            allPaths = envFile->includePaths();
+            allPaths = convertToUrls(envFile->includePaths());
             kDebug(9007) << "Took include-path for" << source << "from a random parsed duchain-version of it";
         }
     }

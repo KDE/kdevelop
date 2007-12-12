@@ -85,7 +85,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
       m_typeSpecifier = op_id->type_specifier;
     }
 
-  m_currentIdentifier = Identifier(tmp_name);
+  m_currentIdentifier = Identifier(m_session->unify(tmp_name));
 
   if (node->template_arguments)
     {

@@ -183,8 +183,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     const QMap<KDevelop::HashedString, KDevelop::ModificationRevision>& allModificationTimes() const;
 
     ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
-    const KUrl::List& includePaths() const;
-    void setIncludePaths( const KUrl::List& paths );
+    const QList<KDevelop::HashedString>& includePaths() const;
+    void setIncludePaths( const QList<KDevelop::HashedString>& paths );
 
     /**
      * The identity-value usually only depends on the content of the environment-information. This can be used to separate environments that have the same content.
@@ -197,7 +197,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
 
     friend class EnvironmentManager;
     uint m_identityOffset;
-    KUrl::List m_includePaths;
+    QList<KDevelop::HashedString> m_includePaths;
     KDevelop::HashedString m_url;
     KDevelop::ModificationRevision m_modificationTime;
     Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
@@ -235,7 +235,11 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     static QMutex m_stringRepositoryMutex;
     static StringSetRepository m_stringRepository;
 
-    const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {
+    /**
+     * Use this to save memory. Whenever retrieving a string from a parsed file, first unify it.
+     * */
+    static const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {
+      QMutexLocker lock(&m_stringRepositoryMutex);
       __gnu_cxx::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
       if( it != m_totalStringSet.end() ) {
         return *it;
@@ -280,7 +284,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     //typedef __gnu_cxx::hash_multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
     typedef std::multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
     EnvironmentFileMap m_files;
-    __gnu_cxx::hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
+    static __gnu_cxx::hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
     struct FileModificationCache {
       QDateTime m_readTime;
       QDateTime m_modificationTime;

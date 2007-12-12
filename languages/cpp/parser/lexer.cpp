@@ -27,6 +27,10 @@
 
 #include <kdebug.h>
 
+QString Token::symbol() const {
+  return session->unify(QString::fromUtf8(&(session->contents()[position]), size));
+}
+
 /**
  * Returns the character BEHIND the found comment
  * */
@@ -134,7 +138,7 @@ void Lexer::tokenize(ParseSession* _session)
       session->token_stream->resize(session->token_stream->size() * 2);
 
     Token *current_token = &(*session->token_stream)[index];
-    current_token->text = session->contents();
+    current_token->session = session;
     current_token->position = cursor - session->contents();
     (this->*s_scan_table[((uchar)*cursor)])();
     current_token->size = cursor - session->contents() - current_token->position;
@@ -573,7 +577,7 @@ void Lexer::scan_divide()
         (*session->token_stream)[index++].kind = Token_comment;
         (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
         (*session->token_stream)[index-1].position = commentBegin - session->contents();
-        (*session->token_stream)[index-1].text = session->contents();
+        (*session->token_stream)[index-1].session = session;
       }
     }
   else

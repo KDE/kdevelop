@@ -1096,7 +1096,7 @@ void TestDUChain::testTypedef() {
   Declaration* defClassA = top->localDeclarations().first();
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QVERIFY(defClassA->type<CppClassType>());
-  QCOMPARE(defClassA->comment(), QString("This is class A"));
+  QCOMPARE(QString::fromUtf8(defClassA->comment()), QString("This is class A"));
 
   DUContext* classA = top->childContexts().first();
   QVERIFY(classA->parentContext());
@@ -1107,7 +1107,7 @@ void TestDUChain::testTypedef() {
   QCOMPARE(defB->abstractType(), defClassA->abstractType());
   QVERIFY(defB->isTypeAlias());
   QCOMPARE(defB->kind(), Declaration::Type);
-  QCOMPARE(defB->comment(), QString("This is a typedef"));
+  QCOMPARE(QString::fromUtf8(defB->comment()), QString("This is a typedef"));
   
   QVERIFY( !dynamic_cast<CppTypeAliasType*>(defB->abstractType().data()) ); //Just verify that CppTypeAliasType is not used, because it isn't(maybe remove that class?)
   

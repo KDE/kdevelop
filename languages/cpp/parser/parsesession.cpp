@@ -26,10 +26,11 @@
 
 #include <cctype>
 
-ParseSession::ParseSession()
+ParseSession::ParseSession(QString (*stringUnifier) (const QString&))
   : mempool(new pool)
   , token_stream(0)
   , m_locationTable(0)
+  , m_unifier(stringUnifier)
 {
 }
 
@@ -47,6 +48,14 @@ KTextEditor::Cursor ParseSession::positionAt(std::size_t offset) const
   // FIXME shouldn't just add the column offset...??
 
   return m_locationTable->positionForOffset(offset) + m_contentOffset;
+}
+
+QString ParseSession::unify(const QString& str) const
+{
+  if(m_unifier)
+    return m_unifier(str);
+  else
+    return str;
 }
 
 std::size_t ParseSession::size() const

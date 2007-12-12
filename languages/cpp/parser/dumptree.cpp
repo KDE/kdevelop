@@ -19,6 +19,7 @@
 
 #include "dumptree.h"
 #include "lexer.h"
+#include "parsesession.h"
 
 #include <QtCore/QString>
 
@@ -119,7 +120,7 @@ void DumpTree::visit(AST *node)
   if( m_tokenStream ) {
     for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
       const Token& tok( m_tokenStream->token((int) a) );
-      nodeText += QByteArray( tok.text+tok.position, tok.size );
+      nodeText += QByteArray( tok.session->contents()+tok.position, tok.size );
     }
   }
   if (node)

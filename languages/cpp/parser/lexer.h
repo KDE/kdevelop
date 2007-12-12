@@ -43,10 +43,10 @@ public:
   std::size_t position;
   ///size of the token text in the c++ source buffer.
   std::size_t size;
-  ///pointer to the text in the c++ source buffer (not valid when buffer is destroyed).
-  char const *text;
+  ///pointer to the parse session.
+  const ParseSession* session;
 
-  QString symbol() const { return QString::fromUtf8(&text[position], size); }
+  QString symbol() const;
 
   ///@todo adymo: find out what @p right_brace is
   union

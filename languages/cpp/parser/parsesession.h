@@ -38,6 +38,7 @@ namespace Cpp {
 
 class pool;
 class TokenStream;
+class Token;
 
 namespace rpp { class MacroBlock; class LocationTable; }
 
@@ -46,7 +47,8 @@ namespace rpp { class MacroBlock; class LocationTable; }
 class KDEVCPPPARSER_EXPORT ParseSession
 {
 public:
-  ParseSession();
+  ///@todo Make stringUnifier unnecessary by moving the string-repository into the parser
+  ParseSession(QString (*stringUnifier) (const QString&) = 0);
   ~ParseSession();
 
   /**
@@ -63,6 +65,9 @@ public:
 
   void setUrl(const KDevelop::HashedString& url);
   const KDevelop::HashedString& url() const;
+
+  /// This saves memory by sharing the strings using a global string repository
+  QString unify(const QString& str) const;
   
   const char *contents() const;
   std::size_t size() const;
@@ -75,6 +80,7 @@ public:
 private:
   QByteArray m_contents;
   rpp::LocationTable* m_locationTable;
+  QString (*m_unifier) (const QString&);
 };
 
 #endif

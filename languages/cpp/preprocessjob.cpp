@@ -53,6 +53,13 @@
 #include "environmentmanager.h"
 #include "cpppreprocessenvironment.h"
 
+QList<HashedString> convertFromUrls(const QList<KUrl>& urlList) {
+  QList<HashedString> ret;
+  foreach(const KUrl& url, urlList)
+    ret << Cpp::EnvironmentManager::unifyString(url.prettyUrl());
+  return ret;
+}
+
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_currentEnvironment(0)
@@ -83,7 +90,7 @@ void PreprocessJob::run()
     if (checkAbort())
         return;
 
-    m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
+    m_environmentFile->setIncludePaths( convertFromUrls(parentJob()->masterJob()->includePaths()) );
     if(CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching())
         //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
         m_environmentFile->setIdentityOffset(1);
@@ -195,6 +202,7 @@ void PreprocessJob::run()
     preprocessor.setEnvironment( m_currentEnvironment );
     preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);
 
+    ///@todo preprocessor should work in utf8 too, for performance-reasons
     QString result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
 
     foreach (KDevelop::Problem p, preprocessor.problems()) {

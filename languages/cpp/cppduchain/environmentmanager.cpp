@@ -304,11 +304,11 @@ const MacroSet& EnvironmentFile::usedMacros() const {
   return m_usedMacros;
 }
 
-const KUrl::List& EnvironmentFile::includePaths() const {
+const QList<HashedString>& EnvironmentFile::includePaths() const {
   return m_includePaths;
 }
 
-void EnvironmentFile::setIncludePaths( const KUrl::List& paths ) {
+void EnvironmentFile::setIncludePaths( const QList<HashedString>& paths ) {
   m_includePaths = paths;
 }
 
@@ -444,4 +444,5 @@ KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const HashedString& 
   return lexedFile( url, env, accepter ).data();
 }
 
+__gnu_cxx::hash_set<KDevelop::HashedString> EnvironmentManager::m_totalStringSet;
 
