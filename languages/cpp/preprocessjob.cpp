@@ -60,10 +60,6 @@ PreprocessJob::PreprocessJob(CPPParseJob * parent)
     , m_success(true)
     , m_headerSectionEnded(false)
 {
-    m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
-    if(CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching())
-        //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
-        m_environmentFile->setIdentityOffset(1);
 }
 
 KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
@@ -87,6 +83,11 @@ void PreprocessJob::run()
     if (checkAbort())
         return;
 
+    m_environmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
+    if(CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching())
+        //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
+        m_environmentFile->setIdentityOffset(1);
+    
     {
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
 
