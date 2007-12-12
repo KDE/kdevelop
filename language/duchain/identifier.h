@@ -202,8 +202,10 @@ public:
     return s;
   }
 
+  typedef uint HashType;
+  
   ///The hash does not respect explicitlyGlobal, only the real scope.
-  uint hash() const;
+  HashType hash() const;
 
   /**
     * Non-debug stream operator; does nothing.
