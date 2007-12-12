@@ -142,7 +142,9 @@ CPPParseJob::CPPParseJob( KDevelop::Document *document,
 */
 
 CPPParseJob::~CPPParseJob()
-{}
+{
+  delete m_session;
+}
 
 TranslationUnitAST *CPPParseJob::AST() const
 {
