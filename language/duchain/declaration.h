@@ -28,6 +28,8 @@
 #include "duchainbase.h"
 #include "contextowner.h"
 
+class QByteArray;
+
 namespace KDevelop
 {
 
@@ -153,8 +155,13 @@ public:
 
   /**
    * Returns the comment associated to this declaration in the source-code, or an invalid string if there is none.
+   * Stored in utf-8 encoding
    * */
-  QString comment() const;
+  QByteArray comment() const;
+  /**
+   * Sets the comment for this declaration. Should be utf-8 encoded.
+   * */
+  void setComment(const QByteArray& str);
   void setComment(const QString& str);
 
   /**

@@ -18,6 +18,8 @@
 
 #include "declaration.h"
 
+#include <QByteArray>
+
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
@@ -51,7 +53,7 @@ public:
   AbstractType::Ptr m_type;
   Identifier m_identifier;
   
-  QString m_comment;
+  QByteArray m_comment;
 
   QList<ForwardDeclaration*> m_forwardDeclarations;
 
@@ -142,12 +144,16 @@ Declaration::~Declaration()
   delete d;
 }
 
-QString Declaration::comment() const {
+QByteArray Declaration::comment() const {
   return d->m_comment;
 }
 
-void Declaration::setComment(const QString& str) {
+void Declaration::setComment(const QByteArray& str) {
   d->m_comment = str;
+}
+
+void Declaration::setComment(const QString& str) {
+  d->m_comment = str.toUtf8();
 }
 
 void Declaration::removeUse( Use* use )
