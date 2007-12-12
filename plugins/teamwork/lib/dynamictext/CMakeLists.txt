@@ -30,7 +30,7 @@ ADD_DEFINITIONS(-Wall ${KDE4_ENABLE_EXCEPTIONS})
 ######## next target ########
 
 ADD_LIBRARY( dynamictext SHARED ${dynamictext_SRCS} )
-TARGET_LINK_LIBRARIES( dynamictext ${COMMONCPP2_LIBRARIES} ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES( dynamictext ${COMMONCPP2_LIBRARIES} ${Boost_LIBRARIES} pthread)
 install(TARGETS dynamictext DESTINATION ${LIB_INSTALL_DIR})
 
 ADD_EXECUTABLE( testexec main.cpp)
