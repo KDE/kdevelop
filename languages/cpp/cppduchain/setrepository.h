@@ -131,6 +131,9 @@ private:
   Private* d;
 };
 
+/**
+ * Use this to iterate over the indices contained in a set
+ * */
 class Set::Iterator {
 public:
   Iterator(const Iterator& rhs);
