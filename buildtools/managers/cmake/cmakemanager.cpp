@@ -242,19 +242,23 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
     foreach ( QString t, v.targets())
     {
-        if(!v.targetDependencies(t).isEmpty()) //Just to remove verbosity
+        QStringList dependencies=v.targetDependencies(t);
+        if(!dependencies.isEmpty()) //Just to remove verbosity
         {
             CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
 
-            foreach( QString sFile, v.targetDependencies(t) )
+            foreach( QString sFile, dependencies )
             {
                 if(sFile.isEmpty())
                     continue;
-                KUrl sourceFile = folder->url();
-                sourceFile.adjustPath( KUrl::AddTrailingSlash );
-                sourceFile.addPath( sFile );
+                KUrl sourceFile(sFile);
+                if(sourceFile.isRelative()) {
+                    sourceFile = folder->url();
+                    sourceFile.adjustPath( KUrl::AddTrailingSlash );
+                    sourceFile.addPath( sFile );
+                }
                 new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-                kDebug(9042) << "..........Adding:" << sFile;
+                kDebug(9042) << "..........Adding:" << sourceFile;
             }
             m_targets.append(targetItem);
         }
