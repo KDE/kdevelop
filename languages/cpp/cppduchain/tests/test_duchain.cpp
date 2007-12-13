@@ -1556,13 +1556,14 @@ void TestDUChain::testForwardDeclaration()
 
 void TestDUChain::testCaseUse()
 {
-  QByteArray method("enum Bla { Val }; int a; void test() { switch(a) { case Val: a += 1; break; } ");
+  QByteArray method("enum Bla { Val }; char* c; int a; void test() { switch(a) { case Val: a += 1; break; } delete c; }   ");
 
   DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(top->localDeclarations().count(), 5);
   QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
+  QCOMPARE(top->localDeclarations()[2]->uses().count(), 1);
 }
 
 void TestDUChain::testForwardDeclaration2()

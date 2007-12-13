@@ -1899,13 +1899,20 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     ///Simple type-specifiers like "int" are parsed as SimpleDeclarationAST, so treat them here.
     visit( node->declaration );
   }
+  void ExpressionVisitor::visitThrowExpression(ThrowExpressionAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    visit( node->expression );
+  }
+  void ExpressionVisitor::visitDeleteExpression(DeleteExpressionAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    visit( node->expression );
+  }
   
   ///Nodes that are invalid inside an expression:
   void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitDeleteExpression(DeleteExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitOperator(OperatorAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitAccessSpecifier(AccessSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitAsmDefinition(AsmDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -1939,7 +1946,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitTemplateArgument(TemplateArgumentAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTemplateDeclaration(TemplateDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTemplateParameter(TemplateParameterAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitThrowExpression(ThrowExpressionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTryBlockStatement(TryBlockStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTypeParameter(TypeParameterAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitTypedef(TypedefAST* node)  { problem(node, "node-type cannot be parsed"); }
