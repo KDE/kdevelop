@@ -397,7 +397,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
       else
       {
         //Import all other imported contexts
-        contextCopy->addImportedParentContext( importedContext.data(), KTextEditor::Cursor(), true );
+        contextCopy->addImportedParentContext( importedContext.data(), KTextEditor::Cursor::invalid(), true );
       }
     }
 
@@ -417,7 +417,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
             {
               if( baseClass->declaration() && baseClass->declaration()->internalContext() )
               {
-                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), KTextEditor::Cursor(), true );
+                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), KTextEditor::Cursor::invalid(), true );
               }
             } else {
               kDebug(9007) << "Resolved bad base-class";
