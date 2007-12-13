@@ -41,7 +41,7 @@ class FrameItem : public AbstractVariableItem
     Q_OBJECT
 
 public:
-    FrameItem(VariableCollection *parent, int frameNo, int threadNo);
+    FrameItem(VariableCollection *parent);
     virtual ~FrameItem();
 
     void refresh();
@@ -56,7 +56,7 @@ private:
     // Callbacks for gdb commands
     void argumentsReady(const GDBMI::ResultRecord&);
     void localsReady(const GDBMI::ResultRecord&);
-    void frameIdReady(const QStringList&);
+    void frameIdReady(const GDBMI::ResultRecord&);
     void handleVarUpdate(const GDBMI::ResultRecord&);
     void handleEvaluateExpression(const QStringList&);
     void variablesFetchDone();
@@ -66,15 +66,14 @@ private:
 
     QTime fetch_time;
 
-    int     frameNo_;
-    int     threadNo_;
     int     m_serial;
 
-    // Frame base and code address of the current inner-most
+    // Frame address of the current inner-most
     // frame. Needed so that if we can know when 'frame N' no longer
     // is the same as 'frame N' when this 'VarFrameRoot' was created.
-    quint64 currentFrameBase;
     quint64 currentFrameCodeAddress;
+
+    QString m_function;
 
     friend class VariableTree;
 };

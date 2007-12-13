@@ -78,16 +78,10 @@ void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, con
         return;
     }
 
-    // Set current thread
-    ThreadItem* thread = controller_->stackManager()->threadForIndex(selected.first().topLeft());
-    if (thread)
-        if (controller_->currentThread() != thread->thread())
-            controller_->addCommand(new GDBCommand(ThreadSelect, thread->thread()));
-
     // Set current frame
     QObject* selectedObject = controller_->stackManager()->objectForIndex(selected.first().topLeft());
 
-    thread = qobject_cast<ThreadItem*>(selectedObject);
+    ThreadItem* thread = qobject_cast<ThreadItem*>(selectedObject);
     if (thread)
     {
         controller_->selectFrame(0, thread->thread());

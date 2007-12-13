@@ -77,9 +77,6 @@ enum Column {
 
 #define numCols 9
 
-enum BW_ITEMS { BW_ITEM_Show, BW_ITEM_Edit, BW_ITEM_Disable, BW_ITEM_Delete,
-                BW_ITEM_DisableAll, BW_ITEM_EnableAll, BW_ITEM_DeleteAll};
-
 static int m_activeFlag = 0;
 
 /***************************************************************************/
@@ -245,44 +242,33 @@ controller_(controller)
     header->setLabel( Hits,         i18n("Hits") );
     header->setLabel( Tracing,      i18n("Tracing") );
 
-    Q3PopupMenu* newBreakpoint = new Q3PopupMenu(this);
-    newBreakpoint->insertItem(i18nc("Code breakpoint", "Code"),
-                              BP_TYPE_FilePos);
-    newBreakpoint->insertItem(i18nc("Data breakpoint", "Data write"),
-                              BP_TYPE_Watchpoint);
-    newBreakpoint->insertItem(i18nc("Data read breakpoint", "Data read"),
-                              BP_TYPE_ReadWatchpoint);
+    m_ctxMenu = new QMenu( this );
 
+    QMenu* newBreakpoint = m_ctxMenu->addMenu( i18nc("New breakpoint", "New") );
+    newBreakpoint->addAction( i18nc("Code breakpoint", "Code"), this, SLOT(slotAddBlankBreakpoint()) );
+    newBreakpoint->addAction( i18nc("Data breakpoint", "Data write"), this, SLOT(slotAddBlankWatchpoint()) );
+    newBreakpoint->addAction( i18nc("Data read breakpoint", "Data read"), this, SLOT(slotAddBlankReadWatchpoint()) );
 
-    m_ctxMenu = new Q3PopupMenu( this );
-    m_ctxMenu->insertItem( i18nc("New breakpoint", "New"),
-                                newBreakpoint);
-    m_ctxMenu->insertItem( i18n( "Show text" ),    BW_ITEM_Show );
-    int edit_id =
-        m_ctxMenu->insertItem( i18n( "Edit" ),    BW_ITEM_Edit );
-    m_ctxMenu->setAccel(Qt::Key_Enter, edit_id);
-    m_ctxMenu->insertItem( i18n( "Disable" ), BW_ITEM_Disable );
-    int del_id =
-        m_ctxMenu->insertItem( SmallIcon("breakpoint_delete"),
-                               i18n( "Delete" ),  BW_ITEM_Delete );
-    m_ctxMenu->setAccel(Qt::Key_Delete, del_id);
-    m_ctxMenu->insertSeparator();
-    m_ctxMenu->insertItem( i18n( "Disable all"), BW_ITEM_DisableAll );
-    m_ctxMenu->insertItem( i18n( "Enable all"), BW_ITEM_EnableAll );
-    m_ctxMenu->insertItem( i18n( "Delete all"), BW_ITEM_DeleteAll );
+    m_breakpointShow = m_ctxMenu->addAction( i18n( "Show text" ) );
+    m_breakpointEdit = m_ctxMenu->addAction( i18n( "Edit" ) );
+    m_breakpointEdit->setShortcut(Qt::Key_Enter);
+    m_breakpointDisable = m_ctxMenu->addAction( i18n( "Disable" ) );
+    m_breakpointDelete = m_ctxMenu->addAction( KIcon("breakpoint_delete"), i18n( "Delete" ), this, SLOT(slotRemoveBreakpoint()) );
+    m_breakpointDelete->setShortcut(Qt::Key_Delete);
+    m_ctxMenu->addSeparator();
+    m_breakpointDisableAll = m_ctxMenu->addAction( i18n( "Disable all") );
+    m_breakpointEnableAll = m_ctxMenu->addAction( i18n( "Enable all") );
+    m_breakpointDeleteAll = m_ctxMenu->addAction( i18n( "Delete all"), this, SLOT(slotRemoveAllBreakpoints()));
 
     m_table->show();
 
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
              this, SLOT(slotRefreshBP(KDevelop::IDocument*)) );
 
-    connect( newBreakpoint,       SIGNAL(activated(int)),
-             this,          SLOT(slotAddBlankBreakpoint(int)) );
-
     connect( m_table,       SIGNAL(contextMenuRequested(int, int, const QPoint &)),
              this,          SLOT(slotContextMenuShow(int, int, const QPoint & )) );
-    connect( m_ctxMenu,     SIGNAL(activated(int)),
-             this,          SLOT(slotContextMenuSelect(int)) );
+    connect( m_ctxMenu,     SIGNAL(triggered(QAction*)),
+             this,          SLOT(slotContextMenuSelect(QAction*)) );
 
     connect( m_table,       SIGNAL(doubleClicked(int, int, int, const QPoint &)),
              this,          SLOT(slotRowDoubleClicked(int, int, int, const QPoint &)));
@@ -386,8 +372,7 @@ void GDBBreakpointWidget::slotBreakpointHit(int id)
     if (b->tracingEnabled())
     {
         controller_->addCommand(
-            new CliCommand(NonMI, ("printf "
-                            + b->traceRealFormatString()).toLatin1(),
+            new CliCommand(DataEvaluateExpression, b->traceRealFormatString(),
                            this,
                            &GDBBreakpointWidget::handleTracingPrintf));
 
@@ -652,7 +637,7 @@ void GDBBreakpointWidget::handleTracingPrintf(const QStringList& s)
 {
     // The first line of output is the command itself, which we don't need.
     for(int i = 1; i < s.size(); ++i)
-        emit tracingOutput(s[i].local8Bit());
+        emit tracingOutput(s[i].toLocal8Bit());
 }
 
 /***************************************************************************/
@@ -672,27 +657,29 @@ void GDBBreakpointWidget::slotBreakpointSet(Breakpoint* bp)
 
 /***************************************************************************/
 
-void GDBBreakpointWidget::slotAddBlankBreakpoint(int idx)
+void GDBBreakpointWidget::slotAddBlankBreakpoint()
 {
-    BreakpointTableRow* btr = 0;
-    switch (idx)
-    {
-      case BP_TYPE_FilePos:
-          btr = addBreakpoint(new FilePosBreakpoint());
-          break;
+    editBreakpoint(addBreakpoint(new FilePosBreakpoint()));
+}
 
-      case BP_TYPE_Watchpoint:
-          btr = addBreakpoint(new Watchpoint(""));
-          break;
+/***************************************************************************/
 
-      case BP_TYPE_ReadWatchpoint:
-          btr = addBreakpoint(new ReadWatchpoint(""));
-          break;
+void GDBBreakpointWidget::slotAddBlankWatchpoint()
+{
+    editBreakpoint(addBreakpoint(new Watchpoint("")));
+}
 
-      default:
-          break;
-    }
+/***************************************************************************/
 
+void GDBBreakpointWidget::slotAddBlankReadWatchpoint()
+{
+    editBreakpoint(addBreakpoint(new ReadWatchpoint("")));
+}
+
+/***************************************************************************/
+
+void GDBBreakpointWidget::editBreakpoint(BreakpointTableRow* btr)
+{
     if (btr)
     {
         m_table->selectRow(btr->row());
@@ -756,45 +743,39 @@ void GDBBreakpointWidget::slotContextMenuShow( int row, int /*col*/, const QPoin
 
     if (btr != NULL)
     {
-        m_ctxMenu->setItemEnabled(
-            BW_ITEM_Show,
-            btr->breakpoint()->hasFileAndLine());
+        m_breakpointShow->setEnabled(btr->breakpoint()->hasFileAndLine());
 
         if (btr->breakpoint( )->isEnabled( ))
         {
-            m_ctxMenu->changeItem( BW_ITEM_Disable, i18n("Disable") );
+            m_breakpointDisable->setText( i18n("Disable") );
         }
         else
         {
-            m_ctxMenu->changeItem( BW_ITEM_Disable, i18n("Enable") );
+            m_breakpointDisable->setText( i18n("Enable") );
         }
-
-        m_ctxMenu->setItemEnabled(BW_ITEM_Disable, true);
-        m_ctxMenu->setItemEnabled(BW_ITEM_Delete, true);
-        m_ctxMenu->setItemEnabled(BW_ITEM_Edit, true);
     }
     else
     {
-        m_ctxMenu->setItemEnabled(BW_ITEM_Show, false);
-        m_ctxMenu->setItemEnabled(BW_ITEM_Disable, false);
-        m_ctxMenu->setItemEnabled(BW_ITEM_Delete, false);
-        m_ctxMenu->setItemEnabled(BW_ITEM_Edit, false);
+        m_breakpointShow->setEnabled(false);
     }
 
+    m_breakpointDisable->setEnabled(btr);
+    m_breakpointDelete->setEnabled(btr);
+    m_breakpointEdit->setEnabled(btr);
+
     bool has_bps = (m_table->numRows() != 0);
-    m_ctxMenu->setItemEnabled(BW_ITEM_DisableAll, has_bps);
-    m_ctxMenu->setItemEnabled(BW_ITEM_EnableAll, has_bps);
-    m_ctxMenu->setItemEnabled(BW_ITEM_Delete, has_bps);
+    m_breakpointDisableAll->setEnabled(has_bps);
+    m_breakpointEnableAll->setEnabled(has_bps);
+    m_breakpointDelete->setEnabled(has_bps);
 
     m_ctxMenu->popup( mousePos );
 }
 
-void GDBBreakpointWidget::slotContextMenuSelect( int item )
+void GDBBreakpointWidget::slotContextMenuSelect( QAction* action )
 {
     int                  row, col;
     BreakpointTableRow  *btr;
     Breakpoint          *bp;
-    FilePosBreakpoint   *fbp;
 
     row= m_table->currentRow( );
     if (row == -1)
@@ -805,50 +786,34 @@ void GDBBreakpointWidget::slotContextMenuSelect( int item )
     bp = btr->breakpoint( );
     if (bp == NULL)
         return;
-    fbp = dynamic_cast<FilePosBreakpoint*>(bp);
 
-    switch( item )
-    {
-        case BW_ITEM_Show:
-            if (fbp)
-                emit gotoSourcePosition(fbp->fileName(), fbp->lineNum()-1);
-            break;
-        case BW_ITEM_Edit:
-            col = m_table->currentColumn( );
-            if (col == Location || col ==  Condition || col == IgnoreCount)
-                m_table->editCell(row, col, false);
-            break;
-        case BW_ITEM_Disable:
+    if ( action == m_breakpointShow ) {
+        if (FilePosBreakpoint* fbp = dynamic_cast<FilePosBreakpoint*>(bp))
+            emit gotoSourcePosition(fbp->fileName(), fbp->lineNum()-1);
 
-            bp->setEnabled( !bp->isEnabled( ) );
-            btr->setRow( );
-            sendToGdb( *bp );
-            break;
-        case BW_ITEM_Delete:
-            slotRemoveBreakpoint( );
-            break;
-        case BW_ITEM_DeleteAll:
-            slotRemoveAllBreakpoints();
-            break;
-        case BW_ITEM_DisableAll:
-        case BW_ITEM_EnableAll:
-            for ( int row = 0; row < m_table->numRows(); row++ )
+    } else if ( action == m_breakpointEdit ) {
+        col = m_table->currentColumn( );
+        if (col == Location || col ==  Condition || col == IgnoreCount)
+            m_table->editCell(row, col, false);
+
+    } else if ( action == m_breakpointDisable ) {
+        bp->setEnabled( !bp->isEnabled( ) );
+        btr->setRow( );
+        sendToGdb( *bp );
+
+    } else if ( action == m_breakpointDisableAll || action == m_breakpointEnableAll ) {
+        for ( int row = 0; row < m_table->numRows(); row++ )
+        {
+            BreakpointTableRow* btr = (BreakpointTableRow *)
+                m_table->item(row, Control);
+
+            if (btr)
             {
-                BreakpointTableRow* btr = (BreakpointTableRow *)
-                    m_table->item(row, Control);
-
-                if (btr)
-                {
-                    btr->breakpoint()->setEnabled(item == BW_ITEM_EnableAll);
-                    btr->setRow();
-                    sendToGdb(*btr->breakpoint());
-                }
+                btr->breakpoint()->setEnabled(action == m_breakpointEnableAll);
+                btr->setRow();
+                sendToGdb(*btr->breakpoint());
             }
-            break;
-        default:
-            // oops, check it out! this case is not in sync with the
-            // m_ctxMenu.  Check the enum in the header file.
-            return;
+        }
     }
 }
 

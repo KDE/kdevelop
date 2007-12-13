@@ -56,6 +56,34 @@ public:
     GDBMI::CommandType type() const;
     QString gdbCommand() const;
 
+    /**
+     * Returns the thread that needs to be currently selected when this command is executed,
+     * or -1 if there is no requirement.
+     */
+    int thread() const;
+
+    /**
+     * Set the thread required to be currently selected when the command is executed.
+     */
+    void setThread(int thread);
+
+    /**
+     * Returns the frame that needs to be currently selected when this command is executed,
+     * or -1 if there is no requirement.
+     */
+    int frame() const;
+
+    /**
+     * Set the frame required to be currently selected when the command is executed.
+     */
+    void setFrame(int frame);
+
+    /**
+     * Sets the handler for results.
+     */
+    template<class Handler>
+    void setHandler(Handler* handler_this, void (Handler::* handler_method)(const GDBMI::ResultRecord&), bool handlesError = false);
+    
     /* The command that should be sent to gdb.
        This method is virtual so the command can compute this
        dynamically, possibly using results of the previous
@@ -99,6 +127,8 @@ public:
 
     void setRun(bool run);
 
+    QString command() const;
+
 private:
     GDBMI::CommandType type_;
     QString command_;
@@ -112,6 +142,9 @@ protected: // FIXME: should be private, after I kill the first ctor
     // that is obsolete and no longer necessary.
     bool handlesError_;
 
+private:
+    int m_thread;
+    int m_frame;
 };
 
 class UserCommand : public GDBCommand
@@ -255,7 +288,9 @@ GDBCommand::GDBCommand(
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   run(false),
-  handlesError_(handlesError)
+  handlesError_(handlesError),
+  m_thread(-1),
+  m_frame(-1)
 {
 }
 
@@ -271,7 +306,9 @@ GDBCommand::GDBCommand(
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   run(false),
-  handlesError_(handlesError)
+  handlesError_(handlesError),
+  m_thread(-1),
+  m_frame(-1)
 {
 }
 
@@ -289,8 +326,13 @@ CliCommand::CliCommand(
     handlesError_ = handlesError;
 }
 
-
-
+template<class Handler>
+void GDBCommand::setHandler(Handler* handler_this, void (Handler::* handler_method)(const GDBMI::ResultRecord&), bool handlesError)
+{
+    GDBCommand::handler_this = handler_this;
+    GDBCommand::handler_method = static_cast<handler_t>(handler_method);
+    handlesError_ = handlesError;
+}
 
 }
 

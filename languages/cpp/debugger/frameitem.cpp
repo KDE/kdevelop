@@ -36,17 +36,14 @@
 using namespace GDBDebugger;
 using namespace GDBMI;
 
-FrameItem::FrameItem(VariableCollection* parent, int frameNo, int threadNo)
+FrameItem::FrameItem(VariableCollection* parent)
     : AbstractVariableItem(parent),
-      frameNo_(frameNo),
-      threadNo_(threadNo),
       m_serial(-1),
-      currentFrameBase((quint64)-1),
       currentFrameCodeAddress((quint64)-1)
 {
 }
 
-GDBDebugger::FrameItem::~ FrameItem()
+FrameItem::~ FrameItem()
 {
 }
 
@@ -68,20 +65,20 @@ void FrameItem::refresh()
         // but not their values.
         // We'll fetch values separately:
 
-        // rodda: actually, we want te fetch values separately, it might be quicker if there
+        // rodda: actually, we want to fetch values separately, it might be quicker if there
         // are excessive amounts of variables.
 
         ++m_serial;
 
-        controller()->addCommand(
+        addCommandUnaltered(
             new GDBCommand(StackListArguments, QString("0 %1 %2")
-                        .arg(threadNo_)
-                        .arg(frameNo_),
+                        .arg(frame())
+                        .arg(frame()),
                         this,
                         &FrameItem::argumentsReady));
 
 
-        controller()->addCommand(
+        addCommandUnaltered(
             new GDBCommand(StackListLocals, 0,
                         this,
                         &FrameItem::localsReady));
@@ -92,7 +89,7 @@ void FrameItem::refresh()
 
 bool FrameItem::matchDetails(int frameNo, int threadNo)
 {
-    return frameNo == frameNo_ && threadNo == threadNo_;
+    return frameNo == frame() && threadNo == thread();
 }
 
 void FrameItem::argumentsReady(const GDBMI::ResultRecord& r)
@@ -127,49 +124,36 @@ void FrameItem::localsReady(const GDBMI::ResultRecord& r)
         }
     }
 
-    controller()->addCommand(new CliCommand(NonMI, "info frame",
-                                           this,
-                                           &FrameItem::frameIdReady));
+    GDBCommand* command = new GDBCommand(StackInfoFrame);
+    command->setHandler(this, &FrameItem::frameIdReady);
+    addCommand(command);
 }
 
-void FrameItem::frameIdReady(const QStringList& lines)
+void FrameItem::frameIdReady(const GDBMI::ResultRecord& result)
 {
     //kDebug(9012) << "localAddresses: " << lines[1];
-
-    QString frame_info;
-    for(int i = 1; i < lines.size(); ++i)
-        frame_info += lines[i];
-
-    kDebug(9012) << "frame info: " << frame_info;
-    frame_info.replace('\n', "");
-
-    static QRegExp frame_base_rx("frame at 0x([0-9a-fA-F]*)");
-    static QRegExp frame_code_rx("saved [a-zA-Z0-9]* 0x([0-9a-fA-F]*)");
-
-    int i = frame_base_rx.indexIn(frame_info);
-    int i2 = frame_code_rx.indexIn(frame_info);
 
     bool frameIdChanged = false;
 
    // TODO collapse non-this frames
 
-    if (i != -1 && i2 != -1)
+    if (result.hasField("frame") || result["frame"].hasField("addr"))
     {
-        quint64 new_frame_base =
-            frame_base_rx.cap(1).toULongLong(0, 16);
-        quint64 new_code_address =
-            frame_code_rx.cap(1).toULongLong(0, 16);
-        kDebug(9012) << "Frame base = " << QString::number(new_frame_base, 16)
-                      << " code = " << QString::number(new_code_address, 16);
-        kDebug(9012) << "Previous frame " <<
-            QString::number(currentFrameBase, 16)
-                      << " code = " << QString::number(
-                          currentFrameCodeAddress, 16);
+        const GDBMI::Value& frame = result["frame"];
+        quint64 new_code_address = frame["addr"].literal().remove("0x").toULongLong(0, 16);
 
-        frameIdChanged = (new_frame_base != currentFrameBase ||
-                          new_code_address != currentFrameCodeAddress);
+        m_function.clear();
+        if (frame.hasField("func"))
+            m_function = frame["func"].literal();
 
-        currentFrameBase = new_frame_base;
+        if (frame.hasField("level"))
+            setFrame(frame["level"].toInt());
+
+        kDebug(9012) << "Frame address = " << QString::number(new_code_address, 16);
+        kDebug(9012) << "Previous address = " << QString::number(currentFrameCodeAddress, 16);
+
+        frameIdChanged = (new_code_address != currentFrameCodeAddress);
+
         currentFrameCodeAddress = new_code_address;
     }
     else
@@ -214,12 +198,12 @@ void FrameItem::frameIdReady(const QStringList& lines)
 
     // Note: can't use --all-values in this command, because gdb will
     // die if there's any uninitialized variable. Ouch!
-    controller()->addCommand(new GDBCommand(VarUpdate,
+    addCommand(new GDBCommand(VarUpdate,
                                 "*",
                                 this,
                                 &FrameItem::handleVarUpdate));
 
-    controller()->addCommand(new SentinelCommand(
+    addCommand(new SentinelCommand(
                                 this,
                                 &FrameItem::variablesFetchDone));
 }
@@ -280,7 +264,7 @@ void FrameItem::variablesFetchDone()
     // values commands are received, so we can add sentinel command after
     // special representation fetch only when commands for ordinary
     // fetch are all executed.
-    controller()->addCommand(new SentinelCommand(
+    addCommand(new SentinelCommand(
                                 this,
                                 &FrameItem::fetchSpecialValuesDone));
 }
@@ -291,7 +275,9 @@ QVariant FrameItem::data(int column, int role) const
         case Qt::DisplayRole:
             switch (column) {
                 case ColumnName:
-                    return i18n("Locals");
+                    return i18n("Frame");
+                case ColumnValue:
+                    return m_function;
             }
     }
 

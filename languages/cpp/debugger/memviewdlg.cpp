@@ -164,8 +164,7 @@ namespace GDBDebugger
 
         if (khexedit2_widget)
         {
-            QWidget* real_widget = (QWidget*)
-                khexedit2_widget->child("BytesEdit");
+            QWidget* real_widget = khexedit2_widget->findChild<QWidget*>("BytesEdit");
 
             if (real_widget)
             {
@@ -274,7 +273,7 @@ namespace GDBDebugger
                 GDBMI::DataReadMemory,
                 QString("%1 x 1 1 %2")
                 .arg(rangeSelector_->startAddressLineEdit->text())
-                .arg(size).latin1(),
+                .arg(size),
                 this,
                 &MemoryView::memoryRead));
     }

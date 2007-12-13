@@ -34,6 +34,7 @@ class GDBController;
 class AbstractVariableItem;
 class FrameItem;
 class WatchItem;
+class VariableItem;
 
 class VariableCollection : public QAbstractItemModel
 {
@@ -72,6 +73,8 @@ public:
     AbstractVariableItem* itemForVariableObject(const QString& variableObject) const;
     void addVariableObject(const QString& variableObject, AbstractVariableItem* item);
     void removeVariableObject(const QString& variableObject);
+
+    VariableItem* createCustomItem(const QString& type, AbstractVariableItem* parent);
 
 Q_SIGNALS:
     void toggleWatchpoint(const QString &varName);

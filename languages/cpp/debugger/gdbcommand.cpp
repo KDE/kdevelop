@@ -23,12 +23,12 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), command_(command), handler_this(0), run(false)
+: type_(type), command_(command), handler_this(0), run(false), m_thread(-1), m_frame(-1)
 {
 }
 
-GDBDebugger::GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), command_(QString::number(index)), handler_this(0), run(false)
+GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
+: type_(type), command_(QString::number(index)), handler_this(0), run(false), m_thread(-1), m_frame(-1)
 {
 }
 
@@ -563,6 +563,31 @@ QString GDBCommand::gdbCommand() const
 GDBMI::CommandType GDBCommand::type() const
 {
     return type_;
+}
+
+int GDBCommand::thread() const
+{
+    return m_thread;
+}
+
+void GDBCommand::setThread(int thread)
+{
+    m_thread = thread;
+}
+
+int GDBCommand::frame() const
+{
+    return m_frame;
+}
+
+void GDBCommand::setFrame(int frame)
+{
+    m_frame = frame;
+}
+
+QString GDBCommand::command() const
+{
+    return command_;
 }
 
 }

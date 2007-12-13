@@ -23,6 +23,8 @@
 #include "abstractvariableitem.h"
 
 #include "variablecollection.h"
+#include "gdbcommand.h"
+#include "gdbcontroller.h"
 
 using namespace GDBDebugger;
 
@@ -31,7 +33,13 @@ AbstractVariableItem::AbstractVariableItem(AbstractVariableItem * parent)
     , m_registered(false)
     , m_dirty(true)
     , m_lastSeen(-1)
+    , m_thread(-1)
+    , m_frame(-1)
 {
+    if (parent) {
+        setThread(parent->thread());
+        setFrame(parent->frame());
+    }
 }
 
 AbstractVariableItem::AbstractVariableItem(VariableCollection * parent)
@@ -39,6 +47,8 @@ AbstractVariableItem::AbstractVariableItem(VariableCollection * parent)
     , m_registered(false)
     , m_dirty(true)
     , m_lastSeen(-1)
+    , m_thread(-1)
+    , m_frame(-1)
 {
 }
 
@@ -185,6 +195,49 @@ int AbstractVariableItem::depth() const
         return item->depth() + 1;
 
     return 0;
+}
+
+int AbstractVariableItem::thread() const
+{
+    return m_thread;
+}
+
+int AbstractVariableItem::frame() const
+{
+    return m_frame;
+}
+
+void AbstractVariableItem::setThread(int thread)
+{
+    m_thread = thread;
+
+    foreach (AbstractVariableItem* child, children())
+        child->setThread(thread);
+}
+
+void AbstractVariableItem::setFrame(int frame)
+{
+    m_frame = frame;
+
+    foreach (AbstractVariableItem* child, children())
+        child->setFrame(frame);
+}
+
+void AbstractVariableItem::addCommand(GDBCommand * command)
+{
+    command->setThread(thread());
+    command->setFrame(frame());
+    controller()->addCommand(command);
+}
+
+void AbstractVariableItem::addCommandUnaltered(GDBCommand * command)
+{
+    controller()->addCommand(command);
+}
+
+void AbstractVariableItem::dataChanged(int column) const
+{
+    collection()->dataChanged(const_cast<AbstractVariableItem*>(this), column);
 }
 
 #include "abstractvariableitem.moc"

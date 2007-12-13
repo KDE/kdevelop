@@ -43,8 +43,6 @@ public:
 
     StackManager* stackManager() const;
     int thread() const;
-    /// Returns true if this thread is the currently selected thread in GDB
-    bool isCurrentThread() const;
 
     const QList<FrameStackItem*>& frames() const;
 

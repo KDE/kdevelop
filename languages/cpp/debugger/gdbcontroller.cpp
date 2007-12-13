@@ -75,7 +75,7 @@ using namespace GDBMI;
 //              if the app is busy but we don't think so, then we lose control
 //              of the app. The only way to get out of these situations is to
 //              delete (stop) the controller.
-// currentFrame_
+// viewedFrame_
 //            - Holds the frame number where and locals/variable information will
 //              go to
 //
@@ -141,8 +141,10 @@ int debug_controllerExists = false;
 
 GDBController::GDBController(QObject* parent)
         : QObject(parent),
+        viewedFrame_(0),
         currentFrame_(0),
         viewedThread_(-1),
+        currentThread_(-1),
         holdingZone_(),
         commandQueue_(new CommandQueue),
         currentCmd_(0),
@@ -301,7 +303,7 @@ int  GDBController::currentThread() const
 
 int GDBController::currentFrame() const
 {
-    return currentFrame_;
+    return viewedFrame_;
 }
 
 // Fairly obvious that we'll add whatever command you give me to a queue
@@ -360,6 +362,23 @@ void GDBController::executeCmd()
     else
     {
         return;
+    }
+
+    if (currentCmd_->thread() != -1 && currentCmd_->thread() != currentThread_) {
+        // put current command back for now
+        commandQueue_->enqueue(currentCmd_, QueueAtFront);
+
+        // Switching threads will auto-select frame 0, maybe we want a different frame
+        if (currentCmd_->frame() > 0)
+            commandQueue_->enqueue(new GDBCommand(StackSelectFrame, currentCmd_->frame()), QueueAtFront);
+
+        currentCmd_ = new GDBCommand(ThreadSelect, currentCmd_->thread());
+
+    } else if (currentCmd_->frame() != -1 && currentCmd_->frame() != currentFrame_) {
+        // put current command back for now
+        commandQueue_->enqueue(currentCmd_, QueueAtFront);
+
+        currentCmd_ = new GDBCommand(StackSelectFrame, currentCmd_->frame());
     }
 
     QString commandText = currentCmd_->cmdToSend();
@@ -602,10 +621,10 @@ void GDBController::reloadProgramState()
     // We're always at frame zero when the program stops
     // and we must reset the active flag
     if (r.hasField("thread-id"))
-        viewedThread_ = r["thread-id"].literal().toInt();
+        currentThread_ = viewedThread_ = r["thread-id"].literal().toInt();
     else
-        viewedThread_ = -1;
-    currentFrame_ = 0;
+        currentThread_ = viewedThread_ = -1;
+    currentFrame_ = viewedFrame_ = 0;
 
     raiseEvent(program_state_changed);
     state_reload_needed = false;
@@ -626,8 +645,8 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
 
     // We're always at frame zero when the program stops
     // and we must reset the active flag
-    viewedThread_ = -1;
-    currentFrame_ = 0;
+    currentThread_ = viewedThread_ = -1;
+    currentFrame_ = viewedFrame_ = 0;
 
     // The application has existed, but it's possible that
     // some of application output is still in the pipe. We use
@@ -1143,10 +1162,7 @@ void GDBController::attachToProcess(int pid)
     // real binary name.
     queueCmd(new GDBCommand(FileExecAndSymbols));
 
-    // The MI interface does not implements -target-attach yet,
-    // and we don't recognize whatever gibberish 'attach' pours out, so...
-    queueCmd(new GDBCommand(NonMI,
-        QString().sprintf("attach %d", pid)));
+    queueCmd(new GDBCommand(TargetAttach, pid));
 
     raiseEvent(connected_to_program);
 
@@ -1268,26 +1284,15 @@ void GDBController::selectFrame(int frameNo, int threadNo)
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
-    if (threadNo != -1)
-    {
-        if (viewedThread_ != threadNo)
-            queueCmd(new GDBCommand(ThreadSelect,
-                         QString::number(threadNo)));
-    }
-
-    queueCmd(new GDBCommand(StackSelectFrame, frameNo));
+    viewedThread_ = threadNo;
+    viewedFrame_ = frameNo;
 
     // Will emit the 'thread_or_frame_changed' event.
-    queueCmd(new GDBCommand(StackInfoFrame, "",
-                            this, &GDBController::handleMiFrameSwitch));
-
-
-    // FIXME: the above commands might not be the first in queue, and
-    // previous commands might using values of 'viewedThread_' or
-    // 'currentFrame_'. Ideally, should change the values only after
-    // response from gdb.
-    viewedThread_ = threadNo;
-    currentFrame_ = frameNo;
+    GDBCommand* stackInfoFrame = new GDBCommand(StackInfoFrame);
+    stackInfoFrame->setThread(threadNo);
+    stackInfoFrame->setFrame(frameNo);
+    stackInfoFrame->setHandler(this, &GDBController::handleMiFrameSwitch);
+    queueCmd(stackInfoFrame);
 }
 
 // **************************************************************************
@@ -1347,6 +1352,20 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
             {
                 stateReloadInProgress_ = true;
             }
+
+            switch (currentCmd_->type()) {
+                case GDBMI::ThreadSelect:
+                    if (result.hasField("new-thread-id"))
+                        currentThread_ = result["new-thread-id"].toInt();
+                    currentFrame_ = 0;
+                    break;
+                case GDBMI::StackSelectFrame:
+                    currentFrame_ = currentCmd_->command().toInt();
+                    break;
+                default:
+                    break;
+            }
+
             currentCmd_->invokeHandler(result);
             stateReloadInProgress_ = false;
         }
@@ -1418,7 +1437,7 @@ void GDBController::readFromProcess(QProcess* process)
             continue;
         }
 
-        //try
+        try
         {
 
             switch(r->kind)
@@ -1531,7 +1550,7 @@ void GDBController::readFromProcess(QProcess* process)
                 break;
             }
         }
-        /*catch(const std::exception& e)
+        catch(const std::exception& e)
         {
             KMessageBox::detailedSorry(
                 qApp->activeWindow(),
@@ -1544,7 +1563,7 @@ void GDBController::readFromProcess(QProcess* process)
 
             destroyCurrentCommand();
             ready_for_next_command = true;
-        }*/
+        }
     }
 
     // check the queue for any commands to send

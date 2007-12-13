@@ -30,6 +30,7 @@ namespace GDBDebugger
 
 class VariableCollection;
 class GDBController;
+class GDBCommand;
 
 class AbstractVariableItem : public QObject
 {
@@ -53,8 +54,15 @@ public:
     AbstractVariableItem* abstractRoot() const;
     int depth() const;
 
+    int thread() const;
+    void setThread(int thread);
+    int frame() const;
+    void setFrame(int frame);
+
     virtual Qt::ItemFlags flags(int column) const;
     virtual QVariant data(int column, int role = Qt::DisplayRole ) const = 0;
+    /// Use this method to notify the collection that data has changed in the given \a column.
+    void dataChanged(int column) const;
     virtual bool hasChildren() const;
 
     const QList<AbstractVariableItem*>& children() const;
@@ -82,12 +90,24 @@ public:
      */
     int lastSeen() const;
 
+protected:
+    /**
+     * Queue a command with the controller, adding thread and frame information to the command.
+     */
+    void addCommand(GDBCommand* command);
+
+    /**
+     * Queue a command with the controller, without adding thread and frame information to the command.
+     */
+    void addCommandUnaltered(GDBCommand* command);
+
 private:
     QList<AbstractVariableItem*> m_children;
 
     bool m_registered : 1;
     bool m_dirty : 1;
     int m_lastSeen;
+    int m_thread, m_frame;
 };
 
 }

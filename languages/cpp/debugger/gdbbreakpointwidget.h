@@ -91,10 +91,12 @@ private Q_SLOTS:
     void slotRemoveAllBreakpoints();
     void slotEditBreakpoint(const QString &fileName, int lineNum);
     void slotEditBreakpoint();
-    void slotAddBlankBreakpoint(int idx);
+    void slotAddBlankBreakpoint();
+    void slotAddBlankWatchpoint();
+    void slotAddBlankReadWatchpoint();
     void slotRowDoubleClicked(int row, int col, int button, const QPoint & mousePos);
     void slotContextMenuShow( int row, int col, const QPoint &mousePos );
-    void slotContextMenuSelect( int item );
+    void slotContextMenuSelect( QAction* action );
     void slotEditRow(int row, int col, const QPoint & mousePos);
     void slotNewValue(int row, int col);
     void editTracing(Q3TableItem* item);
@@ -126,12 +128,22 @@ private:
     void handleBreakpointList(const GDBMI::ResultRecord&);
     void handleTracingPrintf(const QStringList& s);
 
+    void editBreakpoint(BreakpointTableRow* btr);
+
 private:
     CppDebuggerPlugin* plugin_;
     GDBController*  controller_;
 
     GDBTable*       m_table;
-    Q3PopupMenu*     m_ctxMenu;
+
+    QMenu*   m_ctxMenu;
+    QAction* m_breakpointShow;
+    QAction* m_breakpointEdit;
+    QAction* m_breakpointDisable;
+    QAction* m_breakpointDelete;
+    QAction* m_breakpointDisableAll;
+    QAction* m_breakpointEnableAll;
+    QAction* m_breakpointDeleteAll;
 };
 
 class BreakpointTableRow;

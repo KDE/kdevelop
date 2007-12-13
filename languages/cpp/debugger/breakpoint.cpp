@@ -465,7 +465,7 @@ void FilePosBreakpoint::setLocation(const QString& location)
    
     QRegExp regExp1("(.*):(\\d+)$");
     regExp1.setMinimal(true);
-    if ( regExp1.search(location, 0) >= 0 )
+    if ( regExp1.indexIn(location, 0) >= 0 )
     {
         subtype_ = filepos;
 

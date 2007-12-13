@@ -89,6 +89,7 @@ private:
 
 private:
     QList<ThreadItem*> m_threads;
+    mutable bool m_ignoreOneFetch;
 };
 
 }

@@ -342,14 +342,15 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         /* This code can be executed when debugger is stopped,
            and we invoke popup menu on a var under "recent expressions"
            just to delete it. */
-        if (var && var->isAlive() && !controller()->stateIsOn(s_dbgNotStarted))
-            controller_->addCommand(
-                new GDBCommand(DataEvaluateExpression,
-                    QString("&%1")
-                    .arg(var->gdbExpression()),
-                    this,
-                    &VariableTree::handleAddressComputed,
-                    true /*handles error*/));
+        if (var && var->isAlive() && !controller()->stateIsOn(s_dbgNotStarted)) {
+            GDBCommand* cmd =  new GDBCommand(DataEvaluateExpression,
+                                                QString("&%1")
+                                                .arg(var->gdbExpression()));
+            cmd->setHandler(this, &VariableTree::handleAddressComputed, true /*handles error*/);
+            cmd->setThread(var->thread());
+            cmd->setFrame(var->frame());
+            controller_->addCommand(cmd);
+        }
 
 
         QAction* res = activePopup_->exec(QCursor::pos());
@@ -409,32 +410,7 @@ void VariableTree::updateCurrentFrame()
 {
 }
 
-
 // **************************************************************************
-
-class ValueSpecialRepresentationCommand : public QObject, public CliCommand
-{
-public:
-    ValueSpecialRepresentationCommand(GDBMI::CommandType type, VariableItem* item, const QString& command)
-    : CliCommand(type, command,
-                 this,
-                 &ValueSpecialRepresentationCommand::handleReply,
-                 true),
-      item_(item)
-    {}
-
-private:
-
-    VariableItem* item_;
-
-    void handleReply(const QStringList& lines)
-    {
-        QString s;
-        for(int i = 1; i < lines.count(); ++i)
-            s += lines[i];
-        item_->updateSpecialRepresentation(s.toLocal8Bit());
-    }
-};
 
 void VariableTree::keyPressEvent(QKeyEvent* e)
 {

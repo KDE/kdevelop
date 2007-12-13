@@ -62,6 +62,7 @@ set(kdevcppdebugger_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
+    qt4/qstringvariableitem.cpp
 #modeltest.cpp
 )
 

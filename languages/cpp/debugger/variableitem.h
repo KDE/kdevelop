@@ -48,7 +48,7 @@ public:
     void setExpression(const QString& expression);
     void setFrozen(bool frozen = true);
 
-    void setVariableObject(const GDBMI::Value& varobj, FormatTypes format, bool baseClassMember);
+    virtual void setVariableObject(const GDBMI::Value& varobj, FormatTypes format, bool baseClassMember);
 
     virtual void registerWithGdb();
 
@@ -73,10 +73,12 @@ public:
     */
     bool updateUnconditionally() const;
 
+    /**
+     * Retrieve the value for this object from GDB
+     */
     void updateValue();
-    void updateSpecialRepresentation(const QString& s);
 
-    /** Creates a fresh gdbs "variable object", if needed.
+    /** Creates a fresh gdb "variable object", if needed.
         Preconditions:
           - frame id did not change
           - this is a root variable
@@ -113,6 +115,8 @@ public:
     /** Clears highliting for this variable and
         all its children. */
     void clearHighlight();
+    void setHighlight(bool highlight = true);
+    bool highlight();
 
     /** Sets new top-level textual value of this variable.
     */
@@ -194,8 +198,6 @@ private:
 
     // the non-cast type of the variable
     QString originalValueType_;
-    bool oldSpecialRepresentationSet_;
-    QString oldSpecialRepresentation_;
 
     FormatTypes format_;
 

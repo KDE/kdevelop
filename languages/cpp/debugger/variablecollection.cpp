@@ -29,6 +29,8 @@
 #include "frameitem.h"
 #include "watchitem.h"
 
+#include "qt4/qstringvariableitem.h"
+
 //#include "modeltest.h"
 
 using namespace GDBDebugger;
@@ -271,6 +273,7 @@ void VariableCollection::slotEvent(event_t event)
 
 void VariableCollection::slotAddWatchVariable(const QString &watchVar)
 {
+    // FIXME need thread +/- frame info??
     VariableItem *varItem = new VariableItem(findWatch());
     varItem->setExpression(watchVar);
     findWatch()->addChild(varItem);
@@ -284,6 +287,7 @@ void VariableCollection::slotEvaluateExpression(const QString &expression)
         addItem(recentExpressions_);
     }
 
+    // FIXME need thread +/- frame info??
     VariableItem *varItem = new VariableItem(recentExpressions_);
     varItem->setExpression(expression);
     varItem->setFrozen();
@@ -360,7 +364,9 @@ FrameItem* VariableCollection::demand_frame_root(int frameNo, int threadNo)
     FrameItem* frame = findFrame(frameNo, threadNo);
     if (!frame)
     {
-        frame = new FrameItem(this, frameNo, threadNo);
+        frame = new FrameItem(this);
+        frame->setThread(threadNo);
+        frame->setFrame(frameNo);
         addItem(frame);
     }
     return frame;
@@ -417,6 +423,15 @@ bool VariableCollection::hasChildren(const QModelIndex & parent) const
     // Shouldn't hit this
     Q_ASSERT(false);
     return false;
+}
+
+VariableItem* VariableCollection::createCustomItem(const QString & type, AbstractVariableItem * parent)
+{
+    static QRegExp qstring("^(const)?[ ]*QString[ ]*&?$");
+    if (qstring.exactMatch(type))
+        return new QStringVariableItem(parent);
+
+    return 0;
 }
 
 #include "variablecollection.moc"

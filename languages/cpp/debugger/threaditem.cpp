@@ -65,46 +65,12 @@ bool ThreadItem::moreFramesAvailable() const
     return m_moreFramesAvailable;
 }
 
-/*void ThreadItem::requestFrames(int from, int to)
-{
-    // Already requested + filled
-    if (m_frames.count() > to)
-        return;
-
-    if (m_lastConfirmedFrame >= to) {
-        // proceed directly to retrieving the frames
-        listFrames(from, to);
-        return;
-    }
-
-    m_startFrameRequested = from;
-    m_endFrameRequested = to;
-
-    stackManager()->controller()->addCommand(
-        new GDBCommand(StackInfoDepth, to + g_lookaheadCount,
-                       this, 
-                       &ThreadItem::handleStackDepth));
-}*/
-
 void ThreadItem::fetchMoreFrames()
 {
-    GDBCommand* stackInfoDepth = new GDBCommand(StackInfoDepth,
-                                                m_lastConfirmedFrame + g_lookaheadCount,
-                                                this,
-                                                &ThreadItem::handleStackDepth);
-
-    int currentThread = stackManager()->controller()->currentThread();
-    if (currentThread != thread()) {
-        stackManager()->controller()->addCommand(new GDBCommand(ThreadSelect, thread()));
-
-        stackManager()->controller()->addCommand(stackInfoDepth);
-
-        // Switch back to the original thread.
-        stackManager()->controller()->addCommand(new GDBCommand(ThreadSelect, currentThread));
-
-    } else {
-        stackManager()->controller()->addCommand(stackInfoDepth);
-    }
+    GDBCommand* stackInfoDepth = new GDBCommand(StackInfoDepth, m_lastConfirmedFrame + g_lookaheadCount);
+    stackInfoDepth->setHandler(this, &ThreadItem::handleStackDepth);
+    stackInfoDepth->setThread(thread());
+    stackManager()->controller()->addCommand(stackInfoDepth);
 }
 
 StackManager* ThreadItem::stackManager() const
@@ -123,7 +89,7 @@ void ThreadItem::handleStackDepth(const GDBMI::ResultRecord& r)
     if (m_frames.count() <= m_lastConfirmedFrame) {
         stackManager()->prepareInsertFrames(this, m_frames.count(), m_lastConfirmedFrame);
 
-        for (int i = m_frames.count(); i < m_lastConfirmedFrame; ++i)
+        for (int i = m_frames.count(); i <= m_lastConfirmedFrame; ++i)
             createFrame(i);
 
         stackManager()->completeInsertFrames();
@@ -145,24 +111,10 @@ void ThreadItem::refreshFrames(int from, int to)
     for (int i = from; i <= to && i < m_frames.count(); ++i)
         m_frames[i]->setRefreshRequested();
 
-    GDBCommand* listFrameCommand = new GDBCommand(StackListFrames, QString("%1 %2").arg(from).arg(to),
-                                                this, &ThreadItem::parseGDBBacktraceList);
-
-    if (isCurrentThread()) {
-        //add the following command to the front, so noone switches threads in between
-        stackManager()->controller()->addCommandToFront(listFrameCommand);
-
-    } else {
-        // Switch to the target thread.
-        int currentThread = stackManager()->controller()->currentThread();
-
-        stackManager()->controller()->addCommand(new GDBCommand(ThreadSelect, thread()));
-
-        stackManager()->controller()->addCommand(listFrameCommand);
-
-        // Switch back to the original thread.
-        stackManager()->controller()->addCommand(new GDBCommand(ThreadSelect, currentThread));
-    }
+    GDBCommand* listFrameCommand = new GDBCommand(StackListFrames, QString("%1 %2").arg(from).arg(to));
+    listFrameCommand->setHandler(this, &ThreadItem::parseGDBBacktraceList);
+    listFrameCommand->setThread(thread());
+    stackManager()->controller()->addCommand(listFrameCommand);
 }
 
 void ThreadItem::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
@@ -193,11 +145,6 @@ void ThreadItem::parseThread(const GDBMI::ResultRecord& r)
     // First frame doesn't have a model index (shares the thread index), don't have to notify creation
     FrameStackItem* frame = createFrame(0);
     frame->parseFrame(r["frame"]);
-}
-
-bool ThreadItem::isCurrentThread() const
-{
-    return thread() == stackManager()->controller()->currentThread();
 }
 
 FrameStackItem* ThreadItem::createFrame(int frame)

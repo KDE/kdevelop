@@ -39,6 +39,7 @@ using namespace GDBDebugger;
 
 StackManager::StackManager(GDBController* controller)
     : QAbstractItemModel(controller)
+    , m_ignoreOneFetch(false)
 {
     //new ModelTest(this);
     
@@ -119,9 +120,6 @@ void StackManager::handleThreadList(const GDBMI::ResultRecord& r)
                 new GDBCommand(ThreadSelect, threadId,
                                thread, &ThreadItem::parseThread));
         }
-
-        if (ids.results.size() > 1)
-            controller()->addCommand(new GDBCommand(ThreadSelect, controller()->currentThread()));
     }
 }
 
@@ -172,11 +170,7 @@ int StackManager::rowCount(const QModelIndex & parent) const
         if (parent.row() < 0 || parent.row() >= m_threads.count() || parent.column() != 0)
             return 0;
 
-        int rows = m_threads.at(parent.row())->frames().count();// - 1;
-        if (rows == -1)
-            return 0;
-
-        return rows;
+        return m_threads.at(parent.row())->frames().count();
     }
 
     return 0;
@@ -204,7 +198,7 @@ QModelIndex StackManager::index(int row, int column, const QModelIndex & parent)
         return QModelIndex();
 
     ThreadItem* thread = m_threads.at(parent.row());
-    if (row < thread->frames().count());// - 1)
+    if (row < thread->frames().count());
         return createIndex(row, column, thread);
 
     return QModelIndex();
@@ -218,10 +212,10 @@ QModelIndex StackManager::indexForThread(ThreadItem * thread, int column) const
 
 QModelIndex StackManager::indexForFrame(FrameStackItem * frame, int column) const
 {
-    if (frame->frame() == 0)
-        return indexForThread(frame->thread(), column);
+    /*if (frame->frame() == 0)
+        return indexForThread(frame->thread(), column);*/
 
-    return createIndex(frame->frame()/* - 1*/, column, frame->thread());
+    return createIndex(frame->frame(), column, frame->thread());
 }
 
 QModelIndex StackManager::parent(const QModelIndex & index) const
@@ -248,12 +242,18 @@ QVariant StackManager::data(const QModelIndex & index, int role) const
 
     if (index.internalPointer()) {
         ThreadItem* thread = static_cast<ThreadItem*>(index.internalPointer());
-        Q_ASSERT(thread->frames().count() > index.row()/* + 1*/);
-        FrameStackItem* frame = thread->frames().at(index.row()/* + 1*/);
+        Q_ASSERT(thread->frames().count() > index.row());
+        FrameStackItem* frame = thread->frames().at(index.row());
 
         // Refresh if dirty, it will tell us when to emit dataChanged
         if (frame->isDirty())
             frame->refresh();
+
+        /*if (index.row() == thread->frames().count() - 1) {
+            //kDebug() << index.row() << role;
+            //if (thread->moreFramesAvailable() && index.row() < 40)
+                thread->fetchMoreFrames();
+        }*/
 
         switch (role) {
             case Qt::DisplayRole:
@@ -311,11 +311,17 @@ QVariant StackManager::headerData(int section, Qt::Orientation orientation, int 
 
 bool StackManager::canFetchMore(const QModelIndex & parent) const
 {
+    kDebug() << parent;
     if (!parent.isValid())
         return false;
 
     if (parent.internalPointer())
         return false;
+
+    if (m_ignoreOneFetch) {
+        m_ignoreOneFetch = false;
+        return false;
+    }
 
     Q_ASSERT(parent.row() < m_threads.count());
     ThreadItem* thread = m_threads.at(parent.row());
@@ -334,13 +340,14 @@ void StackManager::fetchMore(const QModelIndex & parent)
     thread->fetchMoreFrames();
 }
 
-void StackManager::prepareInsertFrames(ThreadItem* thread, int index, int count)
+void StackManager::prepareInsertFrames(ThreadItem* thread, int index, int endIndex)
 {
-    beginInsertRows(indexForThread(thread), index/* - 1*/, index + count - 1/* - 2*/);
+    beginInsertRows(indexForThread(thread), index, endIndex);
 }
 
 void StackManager::completeInsertFrames()
 {
+    m_ignoreOneFetch = true;
     endInsertRows();
 }
 
@@ -356,8 +363,8 @@ QObject * StackManager::objectForIndex(const QModelIndex & index) const
 
     if (index.internalPointer()) {
         ThreadItem* thread = static_cast<ThreadItem*>(index.internalPointer());
-        Q_ASSERT(index.row()/* + 1*/ < thread->frames().count());
-        return thread->frames().at(index.row()/* + 1*/);
+        Q_ASSERT(index.row() < thread->frames().count());
+        return thread->frames().at(index.row());
     }
 
     Q_ASSERT(m_threads.count() > index.row());

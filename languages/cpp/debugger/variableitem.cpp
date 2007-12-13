@@ -43,7 +43,6 @@ int VariableItem::varobjIndex = 0;
 VariableItem::VariableItem(AbstractVariableItem* parent)
     : AbstractVariableItem(parent),
       highlight_(false),
-      oldSpecialRepresentationSet_(false),
       format_(natural),
       numChildren_(0),
       updateUnconditionally_(false),
@@ -65,7 +64,7 @@ void VariableItem::setFrozen(bool frozen)
         frozen_ = frozen;
 
         if (isRegisteredWithGdb())
-            controller()->addCommand(new GDBCommand(VarSetFrozen, QString("%1 %2").arg(frozen_ ? "1" : "0").arg(expression_)));
+            addCommand(new GDBCommand(VarSetFrozen, QString("%1 %2").arg(frozen_ ? "1" : "0").arg(expression_)));
     }
 }
 
@@ -77,7 +76,7 @@ void VariableItem::setVariableObject(const GDBMI::Value & varobj, FormatTypes fo
     baseClassMember_ = baseClassMember;
 
     // Set type and children.
-    originalValueType_ = varobj["type"].literal();
+    m_type = originalValueType_ = varobj["type"].literal();
     numChildren_ = varobj["numchild"].literal().toInt();
 
     updateValue();
@@ -124,24 +123,17 @@ void VariableItem::createVarobj()
         // issue print command that returns $NN convenience
         // variable and we create variable object from that.
         // TODO check version this was introduced into
-        /*controller()->addCommand(
+        /*addCommand(
             new CliCommand(NonMI,
                 QString("print %1").arg(expression_),
                 this,
                 &VariableItem::handleCliPrint));*/
 
-        controller()->addCommand(new GDBCommand(VarSetFrozen, QString("1 %1").arg(expression_)));
+        addCommand(new GDBCommand(VarSetFrozen, QString("1 %1").arg(expression_)));
     }
     else
     {
-        controller()->addCommand(
-            new CliCommand(NonMI,
-                QString("print /x &%1").arg(expression_),
-                this,
-                &VariableItem::handleCurrentAddress,
-                true));
-
-        controller()->addCommand(
+        addCommand(
             // Need to quote expression, otherwise gdb won't like
             // spaces inside it.
             new GDBCommand(VarCreate, QString("%1 * \"%2\"")
@@ -190,7 +182,7 @@ void VariableItem::setVarobjName(const QString& name)
 
     if (format_ != natural)
     {
-        controller()->addCommand(
+        addCommand(
             new GDBCommand(VarSetFormat, QString("\"%1\" %2")
                            .arg(varobjName_).arg(varobjFormatName())));
     }
@@ -280,7 +272,7 @@ void VariableItem::valueDone(const GDBMI::ResultRecord& r)
 
     if (m_value != s) {
         m_value = s;
-        collection()->dataChanged(this, ColumnValue);
+        dataChanged(ColumnValue);
     }
 }
 
@@ -316,7 +308,7 @@ void VariableItem::createChildren(const GDBMI::ResultRecord& r,
         if (exp == "public" || exp == "protected" || exp == "private")
         {
             QString name = children[i]["name"].literal();
-            controller()->addCommand(new GDBCommand(VarListChildren,
+            addCommand(new GDBCommand(VarListChildren,
                                         "\"" +
                                         name + "\"",
                                         this,
@@ -349,8 +341,13 @@ void VariableItem::createChildren(const GDBMI::ResultRecord& r,
             {
                 kDebug(9012) << "Creating new varobj" << exp << baseObject;
                 // Propagate format from parent.
+
                 VariableItem* v = 0;
-                v = new VariableItem(this);
+                if (children[i].hasField("type"))
+                    v = collection()->createCustomItem(children[i]["type"].literal(), this);
+                if (!v)
+                    v = new VariableItem(this);
+
                 v->setVariableObject(children[i], format_, baseObject);
                 addChild(v);
             }
@@ -527,7 +524,7 @@ void VariableItem::updateValue()
     }*/
     updateUnconditionally_ = false;
 
-    controller()->addCommand(
+    addCommand(
         new GDBCommand(VarEvaluateExpression,
             "\"" + varobjName_ + "\"",
             this,
@@ -537,7 +534,7 @@ void VariableItem::updateValue()
 
 void VariableItem::setValue(const QString& new_value)
 {
-    controller()->addCommand(
+    addCommand(
         new GDBCommand(VarAssign, QString("\"%1\" %2").arg(varobjName_)
                        .arg(new_value)));
 
@@ -549,58 +546,16 @@ void VariableItem::setValue(const QString& new_value)
     updateValue();
 }
 
-void VariableItem::updateSpecialRepresentation(const QString& xs)
-{
-    QString s(xs);
-    if (s[0] == '$')
-    {
-        int i = s.indexOf('=');
-        if (i != -1)
-            s = s.mid(i+2);
-    }
-
-    // A hack to nicely display QStrings. The content of QString is unicode
-    // for for ASCII only strings we get ascii character mixed with \000.
-    // Remove those \000 now.
-
-    // This is not very nice, becuse we're doing this unconditionally
-    // and this method can be called twice: first with data that gdb sends
-    // for a variable, and second after we request the string data. In theory
-    // the data sent by gdb might contain \000 that should not be translated.
-    //
-    // What's even worse, ideally we should convert the string data from
-    // gdb into a QString again, handling all other escapes and composing
-    // one QChar from two characters from gdb. But to do that, we *should*
-    // now if the data if generic gdb value, and result of request for string
-    // data. Fixing is is for later.
-    s.replace( QRegExp("\\\\000|\\\\0"), "" );
-
-    // FIXME: for now, assume that all special representations are
-    // just strings.
-
-    m_value = GDBParser::getGDBParser()->undecorateValue(s);
-
-    // On the first stop, when VariableItem was just created,
-    // don't show it in red.
-    if (oldSpecialRepresentationSet_)
-        highlight_ = (oldSpecialRepresentation_ != s);
-    else
-        highlight_ = false;
-
-    oldSpecialRepresentationSet_ = true;
-    oldSpecialRepresentation_ = s;
-}
-
 void VariableItem::recreateLocallyMaybe()
 {
-    controller()->addCommand(
-        new CliCommand(NonMI,
-            QString("print /x &%1").arg(expression_),
+    addCommand(
+        new CliCommand(DataEvaluateExpression,
+            QString("&%1").arg(expression_),
             this,
             &VariableItem::handleCurrentAddress,
             true));
 
-    controller()->addCommand(
+    addCommand(
         new CliCommand(NonMI,
             QString("whatis %1").arg(expression_),
             this,
@@ -625,58 +580,12 @@ void VariableItem::refresh()
     {
         setDirty(false);
 
-        controller()->addCommand(new GDBCommand(VarListChildren,
+        addCommand(new GDBCommand(VarListChildren,
                                     "\"" + varobjName_ + "\"",
                                     this,
                                     &VariableItem::childrenDone));
     }
 }
-
-/*bool VariableItem::handleSpecialTypes()
-{
-    kDebug(9012) << "handleSpecialTypes:" << originalValueType_;
-    if (originalValueType_.isEmpty())
-        return false;
-
-    static QRegExp qstring("^(const)?[ ]*QString[ ]*&?$");
-
-    if (qstring.exactMatch(originalValueType_)) {
-
-        VariableTree* varTree = static_cast<VariableTree*>(listView());
-
-        varTree->controller()->addCommand(
-            new ResultlessCommand(NonMI, QString("print $kdev_d=%1.d")
-                                  .arg(gdbExpression()),
-                                  true / ignore error /));
-
-        if (varTree->controller()->qtVersion() >= 4)
-            varTree->controller()->addCommand(
-                new ResultlessCommand(NonMI, QString("print $kdev_s=$kdev_d.size"),
-                                      true));
-        else
-            varTree->controller()->addCommand(
-                new ResultlessCommand(NonMI, QString("print $kdev_s=$kdev_d.len"),
-                                      true));
-
-        varTree->controller()->addCommand(
-            new ResultlessCommand(NonMI,
-                QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0"),
-                true));
-
-        if (varTree->controller()->qtVersion() >= 4)
-            varTree->controller()->addCommand(
-                new ValueSpecialRepresentationCommand(NonMI,
-                    this, "print ($kdev_s>0) ? (*((char*)&$kdev_d.data[0])@$kdev_s) : \"\""));
-        else
-            varTree->controller()->addCommand(
-                new ValueSpecialRepresentationCommand(NonMI,
-                    this, "print ($kdev_s>0) ? (*((char*)&$kdev_d.unicode[0])@$kdev_s) : \"\""));
-
-        return true;
-    }
-
-    return false;
-}*/
 
 // **************************************************************************
 
@@ -707,11 +616,11 @@ void VariableItem::setFormat(FormatTypes f)
     }
     else
     {
-         controller()->addCommand(
+         addCommand(
             new GDBCommand(VarSetFormat, QString("\"%1\" %2")
                            .arg(varobjName_).arg(varobjFormatName())));
 
-        updateValue();
+        refresh();
     }
 }
 
@@ -780,7 +689,7 @@ void VariableItem::deregisterWithGdb()
 
     if (!controller()->stateIsOn(s_dbgNotStarted) && !varobjName_.isEmpty())
     {
-        controller()->addCommand(
+        addCommand(
             new GDBCommand(VarDelete,
                 QString("\"%1\"").arg(varobjName_)));
     }
@@ -851,7 +760,7 @@ void VariableItem::handleCliPrint(const QStringList& lines)
         int i = r.indexIn(lines[1]);
         if (i == 0)
         {
-            controller()->addCommand(
+            addCommand(
                 new GDBCommand(VarCreate, QString("%1 * \"%2\"")
                                .arg(varobjName_)
                                .arg(r.cap(1)),
@@ -887,6 +796,16 @@ const QString & GDBDebugger::VariableItem::variableName() const
 bool GDBDebugger::VariableItem::hasChildren() const
 {
     return numChildren_ || AbstractVariableItem::hasChildren();
+}
+
+void GDBDebugger::VariableItem::setHighlight(bool highlight)
+{
+    highlight_ = highlight;
+}
+
+bool GDBDebugger::VariableItem::highlight()
+{
+    return highlight_;
 }
 
 #include "variableitem.moc"

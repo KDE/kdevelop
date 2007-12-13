@@ -145,7 +145,6 @@ public:
     */
     void selectFrame(int frameNo, int threadNo);
 
-
     /** Returns the numerical identfier of the current thread,
         or -1 if the program is not threaded (i.e. there's just
         one thread.
@@ -299,8 +298,14 @@ Q_SIGNALS:
 private:
     void readFromProcess(QProcess* process);
 
+    // This is the frame designated as "current" by currentFrame() and selectFrame()
+    int               viewedFrame_;
+    // This is the frame which is actually current in gdb
     int               currentFrame_;
+    // This is the thread designated as "current" by currentThread() and selectFrame()
     int               viewedThread_;
+    // This is the thread which is actually current in gdb
+    int               currentThread_;
 
     // The output from gdb that arrived where we was
     // parsing the previous output.
