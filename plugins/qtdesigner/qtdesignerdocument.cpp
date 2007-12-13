@@ -123,7 +123,6 @@ void QtDesignerDocument::close()
         m_areas.removeAll(area);
         m_forms.removeAll(form);
         delete area;
-        delete form;
     }
 }
 
