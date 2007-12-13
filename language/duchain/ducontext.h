@@ -207,7 +207,7 @@ public:
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
-  virtual void addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position = KTextEditor::Cursor(), bool anonymous = false);
+  virtual void addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), bool anonymous = false);
 
   /**
    * Removes a child context.

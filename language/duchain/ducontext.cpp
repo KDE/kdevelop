@@ -408,7 +408,7 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
   foreach (Declaration* declaration, resolved)
     if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || position >= declaration->textRange().start())
+      if (type() == Class || position >= declaration->textRange().start() || !position.isValid())
         ret.append(declaration);
 
   if (!ret.isEmpty())
@@ -432,7 +432,7 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
   foreach (Declaration* declaration, resolved)
     if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || position >= declaration->textRange().start())
+      if (type() == Class || position >= declaration->textRange().start() || !position.isValid())
         ret.append(declaration);
 
   //if (!ret.isEmpty())
@@ -491,16 +491,18 @@ bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
           break;
 
         ImportTrace newTrace(trace);
-        
-        QMap<DUContextPointer, KTextEditor::Cursor>::const_iterator it2 = d->m_importedParentContextPositions.find(*it);
-        if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
-          if( position < *it2 )
-            continue; ///Respect the import-positions
-          
-            ImportTraceItem item;
-            item.ctx = this;
-            item.position = *it2;
-            newTrace << item;
+
+        if( position.isValid() ) {
+          QMap<DUContextPointer, KTextEditor::Cursor>::const_iterator it2 = d->m_importedParentContextPositions.find(*it);
+          if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
+            if( position < *it2 )
+              continue; ///Respect the import-positions
+            
+              ImportTraceItem item;
+              item.ctx = this;
+              item.position = *it2;
+              newTrace << item;
+          }
         }
         if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->textRange().end(), dataType, ret, newTrace, flags | InImportedParentContext) )
           return false;
@@ -695,8 +697,9 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
     if( !context )
       break;
 
-      ImportTrace newTrace(trace);
+    ImportTrace newTrace(trace);
 
+    if( position.isValid() ) {
       QMap<DUContextPointer, KTextEditor::Cursor>::const_iterator it2 = d->m_importedParentContextPositions.find(DUContextPointer(context));
       if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
         if( position < *it2 )
@@ -707,6 +710,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
           item.position = *it2;
           newTrace << item;
       }
+    }
     
     context->mergeDeclarationsInternal(definitions, KTextEditor::Cursor::invalid(), hadContexts, newTrace, false, currentDepth+1);
   }
