@@ -29,17 +29,16 @@ class FunctionDeclarationPrivate
 {
 };
 
-FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(rhs), d(new FunctionDeclarationPrivate) {
+FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(rhs) {
 }
 
 FunctionDeclaration::FunctionDeclaration(const HashedString& url, KTextEditor::Range * range, Scope scope, DUContext* context)
-  : Declaration(url, range, scope, context), d(new FunctionDeclarationPrivate)
+  : Declaration(url, range, scope, context)
 {
 }
 
 FunctionDeclaration::~FunctionDeclaration()
 {
-  delete d;
 }
 
 Declaration* FunctionDeclaration::clone() const {

@@ -42,8 +42,6 @@ public:
   virtual Declaration* clone() const;
 
   virtual QString toString() const;
-private:
-  class FunctionDeclarationPrivate* const d;
 };
 }
 
