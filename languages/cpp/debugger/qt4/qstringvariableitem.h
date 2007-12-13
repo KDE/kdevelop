@@ -41,10 +41,12 @@ public:
     virtual void registerWithGdb();
     virtual void deregisterWithGdb();*/
 
-    virtual void refresh();
+    virtual void updateValue();
 
 private:
-    void handleResult(const QStringList& lines);
+    void handleSize(const GDBMI::ResultRecord& r);
+    void handleResult(const GDBMI::ResultRecord& r);
+    void setResult(const QString& result);
 
     QString m_result;
     bool m_resultSet;

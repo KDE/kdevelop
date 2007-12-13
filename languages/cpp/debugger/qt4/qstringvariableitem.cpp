@@ -36,38 +36,37 @@ QStringVariableItem::QStringVariableItem(AbstractVariableItem * parent)
 {
 }
 
-void QStringVariableItem::refresh()
+void QStringVariableItem::updateValue()
 {
-    /*addCommand(
-        new ResultlessCommand(QString("print $kdev_d=%1.d")
-                                .arg(gdbExpression()),
-                                true / ignore error /));
-
     addCommand(
-        new ResultlessCommand(QString("print $kdev_s=$kdev_d.size"),
-                                true));
-
-    addCommand(
-        new ResultlessCommand(
-            QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0"),
-            true));
-
-    addCommand(
-        new CliCommand(DataEvaluateExpression,
-                        "($kdev_s>0) ? (*((char*)&$kdev_d.data[0])@$kdev_s) : \"\"",
-                        this,
-                        &QStringVariableItem::handleResult,
-                        true));*/
+        new GDBCommand(DataEvaluateExpression, QString("%1.d.size").arg(gdbExpression()),
+                        this, &QStringVariableItem::handleSize));
 }
 
-void QStringVariableItem::handleResult(const QStringList& lines)
+void QStringVariableItem::handleSize(const GDBMI::ResultRecord& r)
+{
+    if (r.hasField("value")) {
+        int size = r["value"].toInt() * 2;
+        size = qMin(200, size);
+        if (!size)
+            setResult(QString());
+        else
+            addCommand(new GDBCommand(DataEvaluateExpression,
+                QString("*((char*)&%1.d.data[0])@%2").arg(gdbExpression()).arg(size),
+                this,
+                &QStringVariableItem::handleResult,
+                true));
+    }
+}
+
+void QStringVariableItem::handleResult(const GDBMI::ResultRecord& r)
 {
     QString s;
 
-    foreach (QString line, lines)
-        s += line;
+    if (r.hasField("value"))
+        s = r["value"].literal();
 
-    if (s[0] == '$')
+    if (!s.isEmpty() && s[0] == '$')
     {
         int i = s.indexOf('=');
         if (i != -1)
@@ -94,7 +93,12 @@ void QStringVariableItem::handleResult(const QStringList& lines)
     // just strings.
 
     QString result = GDBParser::getGDBParser()->undecorateValue(s);
+    setResult(result);
+}
 
+
+void QStringVariableItem::setResult(const QString& result)
+{
     // On the first stop, when VariableItem was just created,
     // don't show it in red.
     if (m_resultSet)

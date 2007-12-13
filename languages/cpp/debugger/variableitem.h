@@ -76,7 +76,7 @@ public:
     /**
      * Retrieve the value for this object from GDB
      */
-    void updateValue();
+    virtual void updateValue();
 
     /** Creates a fresh gdb "variable object", if needed.
         Preconditions:
