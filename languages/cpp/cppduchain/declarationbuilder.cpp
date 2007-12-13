@@ -202,10 +202,14 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 {
   if (node->parameter_declaration_clause) {
+    //Check if all parameter declarations are valid. If not, this is a misunderstood variable declaration.
+    if(!checkParameterDeclarationClause(node->parameter_declaration_clause))
+      node->parameter_declaration_clause = 0;
+  }
+  if (node->parameter_declaration_clause) {
     openDeclaration(node->id, node, true);
 
     applyFunctionSpecifiers();
-
   } else {
     openDefinition(node->id, node);
   }
@@ -1105,6 +1109,46 @@ void DeclarationBuilder::applyFunctionSpecifiers()
 
     function->setFunctionSpecifiers(m_functionSpecifiers.top());
   }
+}
+
+bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause)
+{
+    if(!clause || !clause->parameter_declarations)
+      return true;
+    AbstractType::Ptr oldLastType = lastType();
+    
+    const ListNode<ParameterDeclarationAST*> *start = clause->parameter_declarations->toFront();
+    
+    const ListNode<ParameterDeclarationAST*> *it = start;
+
+    bool ret = false;
+    
+    do {
+      ParameterDeclarationAST* ast = it->element;
+      if(ast) {
+        if(ast->expression || ast->declarator) {
+          ret = true; //If one parameter has a default argument or a parameter name, it is surely a parameter
+          break;
+        }
+        
+        visit(ast->type_specifier);
+        if( lastType() ) {
+          //Break on the first valid thing found
+          if( lastTypeWasInstance() ) {
+            ret = false;
+            break;
+          }else{
+            ret = true;
+            break;
+          }
+        }
+      }
+      it = it->next;
+    } while (it != start);
+
+    setLastType(oldLastType);
+
+    return ret;
 }
 
 void DeclarationBuilder::openContext(DUContext * newContext)

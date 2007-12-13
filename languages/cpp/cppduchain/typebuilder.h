@@ -95,6 +95,8 @@ protected:
 
   ///Returns whether a type was opened
   bool openTypeFromName(NameAST* name);
+
+  bool lastTypeWasInstance() const;
   
   private:
   template <class T>
@@ -127,6 +129,8 @@ protected:
   QList<KDevelop::AbstractType::Ptr> m_topTypes;
 
   int m_currentEnumeratorValue;
+
+  bool m_lastTypeWasInstance;
 };
 
 ///Helper-function that extracts the text from start_token until end_token

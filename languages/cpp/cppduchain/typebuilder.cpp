@@ -53,12 +53,12 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
 }
 
 TypeBuilder::TypeBuilder(ParseSession* session)
-  : TypeBuilderBase(session), m_declarationHasInitDeclarators(false)
+  : TypeBuilderBase(session), m_declarationHasInitDeclarators(false), m_lastTypeWasInstance(false)
 {
 }
 
 TypeBuilder::TypeBuilder(CppEditorIntegrator * editor)
-  : TypeBuilderBase(editor), m_declarationHasInitDeclarators(false)
+  : TypeBuilderBase(editor), m_declarationHasInitDeclarators(false), m_lastTypeWasInstance(false)
 {
 }
 ///DUChain must be locked
@@ -334,8 +334,14 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
   ++m_currentEnumeratorValue;
 }
 
+bool TypeBuilder::lastTypeWasInstance() const
+{
+  return m_lastTypeWasInstance;
+}
+
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
+  m_lastTypeWasInstance = false;
   AbstractType::Ptr type;
 
   int kind = m_editor->parseSession()->token_stream->kind(node->type);
@@ -397,6 +403,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
   bool openedType = false;
+  m_lastTypeWasInstance = false;
 
   if (node->integrals) {
     CppIntegralType::IntegralTypes type = CppIntegralType::TypeNone;
@@ -481,6 +488,10 @@ bool TypeBuilder::openTypeFromName(NameAST* name) {
 
     
     if (!dec.isEmpty() && dec.front()->abstractType() && (!templateDeclarationDepth() || !isTemplateDependent(dec.front()))) {
+
+      if(dec.front()->kind() == KDevelop::Declaration::Instance)
+        m_lastTypeWasInstance = true;
+      
       ///@todo only functions may have multiple declarations here
       ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
       //kDebug(9007) << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();

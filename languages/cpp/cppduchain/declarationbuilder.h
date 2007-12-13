@@ -82,6 +82,8 @@ public:
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
 
 private:
+  //Returns true if the given parameter declaration clause is really a parameter declaration clause, depending on the given parameters.
+  bool checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause);
   //Du-chain must be locked
   QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position);
   
