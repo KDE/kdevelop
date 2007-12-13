@@ -3026,6 +3026,8 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
 
     case Token_case:
       {
+        std::size_t start = session->token_stream->cursor();
+        
         advance();
         ExpressionAST *expr = 0;
         if (!parseConstantExpression(expr))
@@ -3036,20 +3038,24 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
           {
             advance();
 
-            ExpressionAST *expr2 = 0;
-            if (!parseConstantExpression(expr2))
+            if (!parseConstantExpression(expr))
               {
                 reportError(("expression expected"));
               }
           }
         ADVANCE(':', ":");
 
-        StatementAST *stmt = 0;
-        if (parseStatement(stmt))
-          {
-            node = stmt;
-            return true;
-          }
+        LabeledStatementAST* ast = CreateNode<LabeledStatementAST>(session->mempool);
+
+        ast->expression = expr;
+        
+        parseStatement(ast->statement);
+
+        if(ast->expression || ast->statement) {
+          UPDATE_POS(ast, start, _M_last_valid_token+1);
+          node = ast;
+          return true;
+        }
       }
       break;
 

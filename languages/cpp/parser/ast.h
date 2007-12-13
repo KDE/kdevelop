@@ -500,6 +500,10 @@ struct InitializerClauseAST: public AST
 struct LabeledStatementAST: public StatementAST
 {
   DECLARE_AST_NODE(LabeledStatement)
+
+  //The constant label expression
+  ExpressionAST *expression;
+  StatementAST* statement;
 };
 
 struct LinkageBodyAST: public AST

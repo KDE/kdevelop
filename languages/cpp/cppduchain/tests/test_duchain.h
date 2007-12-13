@@ -93,7 +93,8 @@ private slots:
   void testTemplateForwardDeclaration2();
   void testHashedStringRepository();
   void testEnum();
-   
+  void testCaseUse();
+
   void testCStruct();
   void testCStruct2();
 

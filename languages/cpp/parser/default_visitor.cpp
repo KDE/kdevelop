@@ -204,9 +204,10 @@ void DefaultVisitor::visitInitializerClause(InitializerClauseAST *node)
   visit(node->expression);
 }
 
-void DefaultVisitor::visitLabeledStatement(LabeledStatementAST *)
+void DefaultVisitor::visitLabeledStatement(LabeledStatementAST *node)
 {
-  // nothing to do
+  visit(node->expression);
+  visit(node->statement);
 }
 
 void DefaultVisitor::visitLinkageBody(LinkageBodyAST *node)

@@ -1554,6 +1554,17 @@ void TestDUChain::testForwardDeclaration()
   release(top);
 }
 
+void TestDUChain::testCaseUse()
+{
+  QByteArray method("enum Bla { Val }; int a; void test() { switch(a) { case Val: a += 1; break; } ");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
+}
+
 void TestDUChain::testForwardDeclaration2()
 {
   QByteArray method("class Test; Test t; class Test {int i; class SubTest; }; class Test; Test::SubTest t2; class Test::SubTest{ int i;};");
