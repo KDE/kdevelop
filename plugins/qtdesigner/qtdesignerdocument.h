@@ -53,6 +53,7 @@ public:
     virtual DocumentState state() const;
     virtual void setCursorPosition(const KTextEditor::Cursor&);
     virtual void activate(Sublime::View*);
+    virtual KTextEditor::Cursor cursorPosition() const;
     void setDesignerPlugin(QtDesignerPlugin*);
 
 private slots:

@@ -83,7 +83,7 @@ KTextEditor::Document* QtDesignerDocument::textDocument() const
 bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
 {
     Q_UNUSED(mode);
-    kDebug(9039) << "Going to Save";
+    kDebug(9038) << "Going to Save";
     if( m_state == KDevelop::IDocument::Clean )
         return false;
     if( m_forms.isEmpty() )
@@ -91,7 +91,7 @@ bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
     QFile f(m_url.toLocalFile());
     if( !f.open( QIODevice::WriteOnly ) )
     {
-        kDebug(9039) << "Couldn't open file:" << f.error();
+        kDebug(9038) << "Couldn't open file:" << f.error();
         return false;
     }
     QTextStream s(&f);
@@ -155,7 +155,7 @@ void QtDesignerDocument::activate(Sublime::View* view)
     if(a)
     {
         int num = m_areas.indexOf(a);
-        kDebug(9039) << "Area found at" << num;
+        kDebug(9038) << "Area found at" << num;
         if( num >= 0 )
         {
             m_designerPlugin->designer()->formWindowManager()->setActiveFormWindow( m_forms.at(num) );
@@ -171,7 +171,7 @@ void QtDesignerDocument::setDesignerPlugin(QtDesignerPlugin* plugin)
 
 QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
 {
-    kDebug(9039) << "Creating new area for form:" << m_url;
+    kDebug(9038) << "Creating new area for form:" << m_url;
     QMdiArea* area = new QMdiArea(parent);
 //     area->setScrollBarsEnabled( true ); //FIXME commented just to make it compile with the new qt-copy
 //     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
@@ -180,7 +180,7 @@ QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
     QDesignerFormWindowManagerInterface* manager = m_designerPlugin->designer()->formWindowManager();
 
     QDesignerFormWindowInterface* form = manager->createFormWindow();
-    kDebug(9039) << "now we have" << manager->formWindowCount() << "formwindows";
+    kDebug(9038) << "now we have" << manager->formWindowCount() << "formwindows";
     form->setFileName(m_url.toLocalFile());
     form->setContents(&uiFile);
     manager->setActiveFormWindow(form);
@@ -204,7 +204,7 @@ QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
 
 void QtDesignerDocument::formChanged()
 {
-    kDebug(9039) << "Form changed";
+    kDebug(9038) << "Form changed";
     QDesignerFormWindowInterface* activeForm = m_designerPlugin->designer()->formWindowManager()->activeFormWindow();
     foreach(QDesignerFormWindowInterface* form, m_forms)
     {
@@ -217,6 +217,11 @@ void QtDesignerDocument::formChanged()
     }
     m_state = KDevelop::IDocument::Modified;
     notifyStateChanged();
+}
+
+KTextEditor::Cursor QtDesignerDocument::cursorPosition( ) const
+{
+    return KTextEditor::Cursor();
 }
 
 #include "qtdesignerdocument.moc"

@@ -62,9 +62,9 @@ public:
 
     KDevelop::IDocument* create( const KUrl& url, KDevelop::ICore* core)
     {
-        kDebug(9000) << "creating doc for designer?";
+        kDebug(9038) << "creating doc for designer?";
         KMimeType::Ptr mimetype = KMimeType::findByUrl(url);
-        kDebug(9000) << "mimetype for" << url << "is" << mimetype->name();
+        kDebug(9038) << "mimetype for" << url << "is" << mimetype->name();
         if( mimetype->name() == "application/x-designer" )
         {
             QtDesignerDocument* d = new QtDesignerDocument(url, core);
@@ -103,7 +103,7 @@ public:
             return m_plugin->designer()->actionEditor();
         else if( m_type == ObjectInspector )
             return m_plugin->designer()->objectInspector();
-        kDebug(9039) << "Type not found:" << m_type;
+        kDebug(9038) << "Type not found:" << m_type;
         return 0;
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -116,7 +116,7 @@ public:
             return Qt::RightDockWidgetArea;
         else if( m_type == ObjectInspector )
             return Qt::RightDockWidgetArea;
-        kDebug(9039) << "Type not found:" << m_type;
+        kDebug(9038) << "Type not found:" << m_type;
         return Qt::TopDockWidgetArea;
     }
 
@@ -144,7 +144,7 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     QDesignerFormEditorInterface* formeditor = QDesignerComponents::createFormEditor(this);
     QDesignerComponents::initializePlugins( formeditor );
 
-    kDebug(9039) << "integration:" << formeditor->integration();
+    kDebug(9038) << "integration:" << formeditor->integration();
 
     //TODO apaku: if multiple mainwindows exist, this needs to be changed on mainwindow-change
     formeditor->setTopLevel(core()->uiController()->activeMainWindow());
@@ -168,7 +168,7 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     m_designer->core()->objectInspector()->setObjectName( i18n("Object Inspector") );
 
     QList<QObject*> plugins = QPluginLoader::staticInstances();
-    kDebug(9039) << "pluginlist from designer:" << plugins;
+    kDebug(9038) << "pluginlist from designer:" << plugins;
     foreach (QObject *plugin, plugins)
     {
         QDesignerFormEditorPluginInterface *fep;
@@ -186,7 +186,7 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
                 if( fep->action()->text() == "Edit Tab Order" )
                     actionCollection()->addAction("tabordereditor", fep->action());
 
-                kDebug(9039) << "Added action:" << fep->action()->objectName() << "|" << fep->action()->text();
+                kDebug(9038) << "Added action:" << fep->action()->objectName() << "|" << fep->action()->text();
         }
     }
 
@@ -263,7 +263,7 @@ void QtDesignerPlugin::setupActions()
 
 void QtDesignerPlugin::saveActiveDocument()
 {
-    kDebug(9039) << "going to save:" << m_activeDoc;
+    kDebug(9038) << "going to save:" << m_activeDoc;
     if( m_activeDoc )
     {
         m_activeDoc->save( KDevelop::IDocument::Default );
@@ -274,7 +274,7 @@ void QtDesignerPlugin::activateDocument( KDevelop::IDocument* doc )
 {
     if( doc->mimeType()->is( "application/x-designer" ) )
     {
-        kDebug(9039) << "Doc activated:" << doc;
+        kDebug(9038) << "Doc activated:" << doc;
         m_activeDoc = doc;
     }
 }
