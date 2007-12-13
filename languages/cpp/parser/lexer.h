@@ -20,7 +20,7 @@
 #define LEXER_H
 
 #include "symbol.h"
-
+#include <cppparserexport.h>
 #include <QtCore/QString>
 #include <cstdlib>
 
@@ -34,7 +34,7 @@ class ParseSession;
 typedef void (Lexer::*scan_fun_ptr)();
 
 /**Token.*/
-class Token
+class KDEVCPPPARSER_EXPORT Token
 {
 public:
   ///kind of the token @see TOKEN_KIND enum reference.
