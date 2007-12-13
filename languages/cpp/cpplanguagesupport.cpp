@@ -134,7 +134,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
              this, SLOT( documentChanged( KDevelop::IDocument* ) ) );
     connect( core()->documentController(),
              SIGNAL( documentActivated( KDevelop::IDocument* ) ),
-             this, SLOT(  ) );
+             this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( core()->projectController(),
              SIGNAL( projectOpened( KDevelop::IProject* ) ),
              this, SLOT( projectOpened( KDevelop::IProject* ) ) );
