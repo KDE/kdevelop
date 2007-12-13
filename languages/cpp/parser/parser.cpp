@@ -1883,6 +1883,13 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationAST *&node)
         }
     }
 
+  if( session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != ')' )
+  {
+    //Not a valid parameter declaration
+    rewind(start);
+    return false;
+  }
+  
   ParameterDeclarationAST *ast = CreateNode<ParameterDeclarationAST>(session->mempool);
   ast->type_specifier = spec;
   ast->declarator = decl;
