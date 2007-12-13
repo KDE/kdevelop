@@ -1614,14 +1614,16 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     {
       LOCKDUCHAIN;
-      if( !m_lastDeclarations.isEmpty() && (constructedType = m_lastDeclarations.first()->type<CppClassType>()) && m_lastDeclarations.first()->kind() == Declaration::Type ) {
+      if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->type<CppClassType>()) ) {
         
         if( constructedType && constructedType->declaration() && constructedType->declaration()->internalContext() )
+        {
           m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->textRange().end(), AbstractType::Ptr(), true, DUContext::OnlyFunctions ));
+        }
       }
     }
     
-    if( m_lastDeclarations.isEmpty() ) {
+    if( m_lastDeclarations.isEmpty() && !constructedType ) {
       problem( node, "function-call: no matching declarations found" );
       return;
     }
@@ -1662,6 +1664,16 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
     LOCKDUCHAIN;
 
+    if(declarations.isEmpty() && constructedType) {
+      //Default-constructor is used
+      m_lastType = AbstractType::Ptr(constructedType.data());
+      m_lastInstance = Instance(constructedType->declaration());
+      DeclarationPointer decl(constructedType->declaration());
+      lock.unlock();
+      newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
+      return;
+    }
+    
     //Resolve functions
     DeclarationPointer chosenFunction;
     KDevelop::DUContextPointer ptr(m_currentContext);
