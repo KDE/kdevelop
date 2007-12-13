@@ -241,6 +241,12 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 {
     KUrl::List allPaths;
 
+  if( source.isEmpty() ) {
+    foreach( QString path, *m_standardIncludePaths)
+        allPaths << KUrl(path);
+    return allPaths;
+  }
+
     KUrl buildDirectory;
     KUrl projectDirectory;
 
@@ -313,8 +319,8 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                         kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.prettyUrl();
                         KDevelop::Problem p;
                         p.setSource(KDevelop::Problem::Preprocessor);
-                        p.setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
-                        p.setExplanation(result.longErrorMessage);
+                        p.setDescription(i18n("Build-manager did not return an include-path" ));
+                        p.setExplanation(i18n("The build-manager did not return the include-path %1, which was resolved by the include-path resolver", r.prettyUrl()));
                         p.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
                         KDevelop::DUChain::problemEncountered( p );
                     }
