@@ -1602,11 +1602,30 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   
   void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
+
+    /**
+     * If a class-name was found, get its constructors.
+     *
+     * @todo Think uses should be built for typedef class constructors.
+     *       Normally, it should be a use of the typedef class, so refactoring can work
+     *       correctly. However we also want to know which constructor was called in other places.
+     * */
+    CppClassType::Ptr constructedType;
+
+    {
+      LOCKDUCHAIN;
+      if( !m_lastDeclarations.isEmpty() && (constructedType = m_lastDeclarations.first()->type<CppClassType>()) && m_lastDeclarations.first()->kind() == Declaration::Type ) {
+        
+        if( constructedType && constructedType->declaration() && constructedType->declaration()->internalContext() )
+          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->textRange().end(), AbstractType::Ptr(), true, DUContext::OnlyFunctions ));
+      }
+    }
+    
     if( m_lastDeclarations.isEmpty() ) {
       problem( node, "function-call: no matching declarations found" );
       return;
     }
-
+    
     /**
      * Step 1: Evaluate the function-argument types. Those are represented a little strangely:
      * node->arguments contains them, using recursive binary expressions
@@ -1642,16 +1661,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       }
     }
     LOCKDUCHAIN;
-
-    if( !declarations.isEmpty() && declarations.first()->type<CppClassType>() && declarations.first()->kind() == Declaration::Type ) {
-      //If a type was found, simply assume that it is constructed. We do not need more checks for it.
-      ///@todo resolve the constructor, so the code-flow is modeled better
-      m_lastType = declarations.first()->abstractType();
-      m_lastInstance = Instance(declarations.first());
-      m_parameters = oldParams;
-      //kDebug(9007) << "resetting old parameters of size " << oldParams.size();
-      return;
-    }
 
     //Resolve functions
     DeclarationPointer chosenFunction;
@@ -1692,13 +1701,19 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     //kDebug(9007) << "Resetting old parameters of size " << oldParams.size();
     
     clearLast();
-    
-    CppFunctionType* functionType = dynamic_cast<CppFunctionType*>( chosenFunction->abstractType().data() );
-    if( !chosenFunction || !functionType ) {
-      problem( node, QString( "could not find a matching function for function-call" ) );
+
+    if( constructedType ) {
+      //Constructor was called
+      m_lastType = AbstractType::Ptr(constructedType.data());
+      m_lastInstance = Instance(constructedType->declaration());
     } else {
-      m_lastType = functionType->returnType();
-      m_lastInstance = Instance(chosenFunction);
+      CppFunctionType* functionType = dynamic_cast<CppFunctionType*>( chosenFunction->abstractType().data() );
+      if( !chosenFunction || !functionType ) {
+        problem( node, QString( "could not find a matching function for function-call" ) );
+      } else {
+        m_lastType = functionType->returnType();
+        m_lastInstance = Instance(chosenFunction);
+      }
     }
 
     //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.
