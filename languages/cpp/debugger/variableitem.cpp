@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <KGlobalSettings>
 
 #include "gdbparser.h"
 #include "gdbcommand.h"
@@ -734,6 +735,14 @@ QVariant VariableItem::data(int column, int role) const
                 case ColumnType:
                     return m_type;
             }
+            break;
+
+        case Qt::FontRole:
+            switch (column) {
+                case ColumnValue:
+                    return KGlobalSettings::fixedFont();
+            }
+            break;
 
         case Qt::ToolTipRole: {
             const int maxTooltipSize = 70;
@@ -795,7 +804,7 @@ const QString & GDBDebugger::VariableItem::variableName() const
 
 bool GDBDebugger::VariableItem::hasChildren() const
 {
-    return numChildren_ || AbstractVariableItem::hasChildren();
+    return numChildren_ || !children().isEmpty();
 }
 
 void GDBDebugger::VariableItem::setHighlight(bool highlight)

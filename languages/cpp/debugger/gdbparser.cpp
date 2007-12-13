@@ -107,7 +107,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
         else
         {
             // Looks like composite, strip the braces and return.
-            return QByteArray(start+1, end - start -1);
+            return QByteArray(start+1, end - start - 2);
         }
     }
     else if (*start == '(')
