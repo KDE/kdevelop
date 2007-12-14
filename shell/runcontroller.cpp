@@ -50,6 +50,8 @@ RunController::RunController(QObject *parent)
     : IRunController(parent)
     , d(new RunControllerPrivate)
 {
+    // TODO: need to implement compile only if needed before execute
+
     d->serial = 0;
     d->state = Idle;
 
