@@ -258,7 +258,7 @@ void VariableCollection::slotEvent(event_t event)
 
         case thread_or_frame_changed:
             {
-                FrameItem *frame = demand_frame_root(controller()->currentFrame(), controller()->currentThread());
+                FrameItem *frame = currentFrame();
 
                 frame->setDirty();
             }
@@ -358,40 +358,18 @@ void VariableCollection::removeVariableObject(const QString & variableObject)
     m_variableObjectMap.remove(variableObject);
 }
 
-FrameItem* VariableCollection::demand_frame_root(int frameNo, int threadNo)
+FrameItem* VariableCollection::currentFrame()
 {
-    FrameItem* frame = findFrame(frameNo, threadNo);
+    FrameItem* frame = findFrame(controller()->currentFrame(), controller()->currentThread());
     if (!frame)
     {
         frame = new FrameItem(this);
-        frame->setThread(threadNo);
-        frame->setFrame(frameNo);
+        frame->setThread(controller()->currentThread());
+        frame->setFrame(controller()->currentFrame());
         addItem(frame);
     }
     return frame;
 }
-
-/*
-void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
-{
-    if (r.reason == "error")
-    {
-        // Not lvalue, leave item disabled.
-        return;
-    }
-
-    if (activePopup_)
-    {
-        toggleWatch->setEnabled(true);
-
-        quint64 address = r["value"].literal().toULongLong(0, 16);
-        if (breakpointWidget_->hasWatchpointForAddress(address))
-        {
-            toggleWatch->setChecked(true);
-        }
-    }
-}
-*/
 
 bool VariableCollection::canFetchMore(const QModelIndex & parent) const
 {

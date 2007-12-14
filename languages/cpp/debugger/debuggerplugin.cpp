@@ -72,19 +72,20 @@ namespace GDBDebugger
 K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
 K_EXPORT_PLUGIN(CppDebuggerFactory("kdevcppdebugger"))
 
-class BreakpointListFactory : public KDevelop::IToolViewFactory
+template<class T>
+class DebuggerToolFactory : public KDevelop::IToolViewFactory
 {
 public:
-  BreakpointListFactory(CppDebuggerPlugin* plugin, GDBController* controller): m_plugin(plugin), m_controller(controller) {}
+  DebuggerToolFactory(CppDebuggerPlugin* plugin, GDBController* controller, Qt::DockWidgetArea defaultArea): m_plugin(plugin), m_controller(controller), m_defaultArea(defaultArea) {}
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    return new GDBBreakpointWidget(m_plugin, m_controller, parent);
+    return new T(m_plugin, m_controller, parent);
   }
 
   virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
   {
-    return Qt::BottomDockWidgetArea;
+    return m_defaultArea;
   }
 
   virtual void viewCreated(Sublime::View* view)
@@ -95,117 +96,13 @@ public:
 private:
   CppDebuggerPlugin* m_plugin;
   GDBController* m_controller;
-};
-
-class VariableBreakpointListFactory : public KDevelop::IToolViewFactory
-{
-public:
-  VariableBreakpointListFactory(CppDebuggerPlugin* plugin, GDBController* controller): m_plugin(plugin), m_controller(controller) {}
-
-  virtual QWidget* create(QWidget *parent = 0)
-  {
-    return new VariableWidget(m_plugin, m_controller, parent);
-  }
-
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
-  {
-    return Qt::LeftDockWidgetArea;
-  }
-
-  virtual void viewCreated(Sublime::View* view)
-  {
-      QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
-  }
-
-private:
-  CppDebuggerPlugin* m_plugin;
-  GDBController* m_controller;
-};
-
-class FramestackViewFactory : public KDevelop::IToolViewFactory
-{
-public:
-  FramestackViewFactory(CppDebuggerPlugin* plugin, GDBController* controller): m_plugin(plugin), m_controller(controller) {}
-
-  virtual QWidget* create(QWidget *parent = 0)
-  {
-    return new FramestackWidget(m_plugin, m_controller, parent);
-  }
-
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
-  {
-    return Qt::BottomDockWidgetArea;
-  }
-
-private:
-  CppDebuggerPlugin* m_plugin;
-  GDBController* m_controller;
-};
-
-class DisassembleViewFactory : public KDevelop::IToolViewFactory
-{
-public:
-  DisassembleViewFactory(CppDebuggerPlugin* plugin, GDBController* controller): m_plugin(plugin), m_controller(controller) {}
-
-  virtual QWidget* create(QWidget *parent = 0)
-  {
-    return new DisassembleWidget(m_plugin, m_controller, parent);
-  }
-
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
-  {
-    return Qt::BottomDockWidgetArea;
-  }
-
-private:
-  CppDebuggerPlugin* m_plugin;
-  GDBController* m_controller;
-};
-
-class GDBOutputViewFactory : public KDevelop::IToolViewFactory
-{
-public:
-  GDBOutputViewFactory(CppDebuggerPlugin* plugin, GDBController* controller): m_plugin(plugin), m_controller(controller) {}
-
-  virtual QWidget* create(QWidget *parent = 0)
-  {
-    return new GDBOutputWidget(m_plugin, m_controller, parent);
-  }
-
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
-  {
-    return Qt::BottomDockWidgetArea;
-  }
-
-private:
-  CppDebuggerPlugin* m_plugin;
-  GDBController* m_controller;
-};
-
-class SpecialViewFactory : public KDevelop::IToolViewFactory
-{
-public:
-  SpecialViewFactory(CppDebuggerPlugin* plugin, GDBController* controller): m_plugin(plugin), m_controller(controller) {}
-
-  virtual QWidget* create(QWidget *parent = 0)
-  {
-    return new ViewerWidget(m_plugin, m_controller, parent);
-  }
-
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
-  {
-    return Qt::BottomDockWidgetArea;
-  }
-
-private:
-  CppDebuggerPlugin* m_plugin;
-  GDBController* m_controller;
+  Qt::DockWidgetArea m_defaultArea;
 };
 
 CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDevelop::IPlugin( CppDebuggerFactory::componentData(), parent ),
     controller(0), debuggerState_(s_dbgNotStarted|s_appNotStarted),
-    justRestarted_(false), needRebuild_(true),
+    justRestarted_(false),
     running_(false), m_config(KGlobal::config(), "GDB Debugger"),
     m_breakpointController(new BreakpointController(this))
 {
@@ -218,28 +115,19 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     controller = new GDBController(this);
 
-    m_breakpointFactory = new BreakpointListFactory(this, controller);
-    core()->uiController()->addToolView(i18n("Breakpoints"), m_breakpointFactory);
+    core()->uiController()->addToolView(i18n("Breakpoints"), new DebuggerToolFactory<GDBBreakpointWidget>(this, controller, Qt::BottomDockWidgetArea));
 
-    m_variableFactory = new VariableBreakpointListFactory(this, controller);
-    core()->uiController()->addToolView(i18n("Variables"), m_variableFactory);
+    core()->uiController()->addToolView(i18n("Variables"), new DebuggerToolFactory<VariableWidget>(this, controller, Qt::LeftDockWidgetArea));
 
-    m_framestackFactory = new FramestackViewFactory(this, controller);
-    core()->uiController()->addToolView(i18n("Frame Stack"), m_framestackFactory);
+    core()->uiController()->addToolView(i18n("Frame Stack"), new DebuggerToolFactory<FramestackWidget>(this, controller, Qt::BottomDockWidgetArea));
 
-    m_disassembleFactory = new DisassembleViewFactory(this, controller);
-    core()->uiController()->addToolView(i18n("Disassemble"), m_disassembleFactory);
+    core()->uiController()->addToolView(i18n("Disassemble"), new DebuggerToolFactory<DisassembleWidget>(this, controller, Qt::BottomDockWidgetArea));
 
-    m_outputFactory = new GDBOutputViewFactory(this, controller);
-    core()->uiController()->addToolView(i18n("GDB"), m_outputFactory);
+    core()->uiController()->addToolView(i18n("GDB"), new DebuggerToolFactory<GDBOutputWidget>(this, controller, Qt::BottomDockWidgetArea));
 
-    m_specialFactory = new SpecialViewFactory(this, controller);
-    core()->uiController()->addToolView(i18n("Debug views"), m_specialFactory);
+    core()->uiController()->addToolView(i18n("Debug views"), new DebuggerToolFactory<ViewerWidget>(this, controller, Qt::BottomDockWidgetArea));
 
     setupActions();
-
-//    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-//             this, SLOT(projectConfigWidget(KDialogBase*)) );
 
 //     connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const KDevelop::Context *)),
 //              this, SLOT(contextMenu(Q3PopupMenu *, const KDevelop::Context *)) );
@@ -266,14 +154,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 // PORTING TODO broken - need intermediate signal?
 //     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
 //              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
-
-
-    connect(core()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
-            this, SLOT(slotFileSaved()));
-
-//     if (project())
-//         connect(project(), SIGNAL(projectCompiled()),
-//                 this, SLOT(slotProjectCompiled()));
 
     setupController();
 
@@ -626,16 +506,6 @@ void CppDebuggerPlugin::slotDebuggerAbnormalExit()
     // Note: we don't stop the debugger here, becuse that will hide gdb
     // window and prevent the user from finding the exact reason of the
     // problem.
-}
-
-void CppDebuggerPlugin::slotFileSaved()
-{
-    needRebuild_ = true;
-}
-
-void CppDebuggerPlugin::slotProjectCompiled()
-{
-    needRebuild_ = false;
 }
 
 void CppDebuggerPlugin::projectClosed()

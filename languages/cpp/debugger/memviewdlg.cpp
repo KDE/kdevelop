@@ -288,9 +288,9 @@ namespace GDBDebugger
         amountAsString_ = rangeSelector_->amountLineEdit->text();
         start_ = startAsString_.toUInt(0, 0);
 
-        setCaption(QString("%1 (%2 bytes)")
+        setWindowTitle(QString("%1 (%2 bytes)")
                    .arg(startAsString_).arg(amount_));
-        emit captionChanged(caption());
+        emit captionChanged(windowTitle());
 
         KHE::BytesEditInterface* bytesEditor
             = KHE::bytesEditInterface(khexedit2_widget);
@@ -384,7 +384,7 @@ namespace GDBDebugger
                 GDBCommand(
                     GDBMI::DataReadMemory,
                     QString("%1 x 1 1 %2")
-                    .arg(start_).arg(amount_).latin1(),
+                    .arg(start_).arg(amount_),
                     this,
                     &MemoryView::memoryRead));
         }
@@ -445,7 +445,7 @@ namespace GDBDebugger
         setViewShown(true);
 
         MemoryView* widget = new MemoryView(m_plugin, controller_, this);
-        toolBox_->addItem(widget, widget->caption());
+        toolBox_->addItem(widget, widget->windowTitle());
         toolBox_->setCurrentItem(widget);
         memoryViews_.push_back(widget);
 

@@ -75,9 +75,6 @@ using namespace GDBMI;
 //              if the app is busy but we don't think so, then we lose control
 //              of the app. The only way to get out of these situations is to
 //              delete (stop) the controller.
-// viewedFrame_
-//            - Holds the frame number where and locals/variable information will
-//              go to
 //
 // Certain commands need to be "wrapped", so that the output gdb produces is
 // of the form "\032data_id gdb output \032data_id"
@@ -141,9 +138,7 @@ int debug_controllerExists = false;
 
 GDBController::GDBController(QObject* parent)
         : QObject(parent),
-        viewedFrame_(0),
         currentFrame_(0),
-        viewedThread_(-1),
         currentThread_(-1),
         holdingZone_(),
         commandQueue_(new CommandQueue),
@@ -298,12 +293,12 @@ void GDBController::addCommandBeforeRun(GDBCommand* cmd)
 
 int  GDBController::currentThread() const
 {
-    return viewedThread_;
+    return currentThread_;
 }
 
 int GDBController::currentFrame() const
 {
-    return viewedFrame_;
+    return currentFrame_;
 }
 
 // Fairly obvious that we'll add whatever command you give me to a queue
@@ -651,8 +646,8 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
 
     // We're always at frame zero when the program stops
     // and we must reset the active flag
-    currentThread_ = viewedThread_ = -1;
-    currentFrame_ = viewedFrame_ = 0;
+    currentThread_ = -1;
+    currentFrame_ = 0;
 
     // The application has existed, but it's possible that
     // some of application output is still in the pipe. We use
@@ -1262,9 +1257,6 @@ void GDBController::selectFrame(int frameNo, int threadNo)
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
-    viewedThread_ = threadNo;
-    viewedFrame_ = frameNo;
-
     // Will emit the 'thread_or_frame_changed' event.
     GDBCommand* stackInfoFrame = new GDBCommand(StackInfoFrame);
     stackInfoFrame->setThread(threadNo);
@@ -1764,12 +1756,6 @@ void GDBController::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSt
         }
         kDebug(9012) << out;
     }
-}
-
-int GDBController::qtVersion( ) const
-{
-    // PORTING TODO change mechanism for displaying pretty variables, or reinstate this...
-    return 4;//DomUtil::readIntEntry( "/kdevcppsupport/qt/version", 3 );
 }
 
 void GDBController::slotRestart()

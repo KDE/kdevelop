@@ -115,7 +115,7 @@ private:
     /** Get (if exists) and create (otherwise) frame root for
         the specified frameNo/threadNo combination.
     */
-    FrameItem* demand_frame_root(int frameNo, int threadNo);
+    FrameItem* currentFrame();
     void updateCurrentFrame();
 
     AbstractVariableItem* parentForIndex(const QModelIndex& index) const;

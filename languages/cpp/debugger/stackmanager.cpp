@@ -212,9 +212,6 @@ QModelIndex StackManager::indexForThread(ThreadItem * thread, int column) const
 
 QModelIndex StackManager::indexForFrame(FrameStackItem * frame, int column) const
 {
-    /*if (frame->frame() == 0)
-        return indexForThread(frame->thread(), column);*/
-
     return createIndex(frame->frame(), column, frame->thread());
 }
 

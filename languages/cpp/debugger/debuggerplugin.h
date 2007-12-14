@@ -139,12 +139,6 @@ private Q_SLOTS:
 
     void slotDebuggerAbnormalExit();
 
-    // Called when some file in the project was saved.
-    // Sets 'needRebuild_' to true.
-    void slotFileSaved();
-
-    void slotProjectCompiled();
-
     void slotEvent(event_t);
 
     void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
@@ -183,22 +177,8 @@ private:
     // on the first pause.
     bool justRestarted_;
 
-    // Flag that specifies in project rebuild is necessary
-    // before running the debugger. Set to 'true' in constructor
-    // because we have no idea if project is 'dirty' or not
-    // when it's opened, and then set to 'true' each time a file is
-    // modified.
-    bool needRebuild_;
-
     // Set by 'startDebugger' and cleared by 'slotStopDebugger'.
     bool running_;
-
-    class BreakpointListFactory* m_breakpointFactory;
-    class VariableBreakpointListFactory* m_variableFactory;
-    class FramestackViewFactory* m_framestackFactory;
-    class DisassembleViewFactory* m_disassembleFactory;
-    class GDBOutputViewFactory* m_outputFactory;
-    class SpecialViewFactory* m_specialFactory;
 
     KConfigGroup m_config;
     BreakpointController* m_breakpointController;

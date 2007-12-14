@@ -153,8 +153,6 @@ public:
 
     int currentFrame() const;
 
-    int qtVersion() const;
-
     bool stateIsOn(DBGStateFlags state);
 
     /**
@@ -298,13 +296,7 @@ Q_SIGNALS:
 private:
     void readFromProcess(QProcess* process);
 
-    // This is the frame designated as "current" by currentFrame() and selectFrame()
-    int               viewedFrame_;
-    // This is the frame which is actually current in gdb
     int               currentFrame_;
-    // This is the thread designated as "current" by currentThread() and selectFrame()
-    int               viewedThread_;
-    // This is the thread which is actually current in gdb
     int               currentThread_;
 
     // The output from gdb that arrived where we was
