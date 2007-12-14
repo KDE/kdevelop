@@ -37,7 +37,7 @@ ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions)
 
 ###### First Target ##########
 ADD_LIBRARY( network SHARED ${libfiles} )
-TARGET_LINK_LIBRARIES( network ${COMMONCPP2_LIBRARIES} ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES( network ${COMMONCPP2_LIBRARIES} ${Boost_LIBRARIES} pthread)
 
 INSTALL(TARGETS network DESTINATION ${LIB_INSTALL_DIR})
 
