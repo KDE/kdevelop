@@ -46,7 +46,6 @@ VariableItem::VariableItem(AbstractVariableItem* parent)
       highlight_(false),
       format_(natural),
       numChildren_(0),
-      updateUnconditionally_(false),
       frozen_(false),
       initialCreation_(true),
       baseClassMember_(false),
@@ -71,8 +70,11 @@ void VariableItem::setFrozen(bool frozen)
 
 void VariableItem::setVariableObject(const GDBMI::Value & varobj, FormatTypes format, bool baseClassMember)
 {
-    expression_ = varobj["exp"].literal();
     varobjName_ = varobj["name"].literal();
+
+    if (varobj.hasField("exp"))
+        expression_ = varobj["exp"].literal();
+
     format_ = format;
     baseClassMember_ = baseClassMember;
 
@@ -109,27 +111,22 @@ void VariableItem::registerWithGdb()
     }
 }
 
+QString VariableItem::nextVariableObjectName()
+{
+    return QString("KDEV%1").arg(varobjIndex++);
+}
+
 void VariableItem::createVarobj()
 {
     if (!varobjName_.isEmpty())
         collection()->removeVariableObject(varobjName_);
 
-    varobjName_ = QString("KDEV%1").arg(varobjIndex++);
+    varobjName_ = nextVariableObjectName();
 
     collection()->addVariableObject(varobjName_, this);
 
     if (frozen_)
     {
-        // MI had no way to freeze a variable object. So, we
-        // issue print command that returns $NN convenience
-        // variable and we create variable object from that.
-        // TODO check version this was introduced into
-        /*addCommand(
-            new CliCommand(NonMI,
-                QString("print %1").arg(expression_),
-                this,
-                &VariableItem::handleCliPrint));*/
-
         addCommand(new GDBCommand(VarSetFrozen, QString("1 %1").arg(expression_)));
     }
     else
@@ -166,6 +163,7 @@ void VariableItem::varobjCreated(const GDBMI::ResultRecord& r)
 
     if (r.hasField("exp"))
         expression_ = r["exp"].literal();
+
     numChildren_ = r["numchild"].literal().toInt();
     currentAddress_ = lastObtainedAddress_;
 
@@ -190,12 +188,6 @@ void VariableItem::setVarobjName(const QString& name)
 
     // Get the initial value.
     updateValue();
-
-//     if (isOpen())
-//     {
-//         // This regets children list.
-//         setOpen(true);
-//     }
 }
 
 void VariableItem::valueDone(const GDBMI::ResultRecord& r)
@@ -344,10 +336,11 @@ void VariableItem::createChildren(const GDBMI::ResultRecord& r,
                 // Propagate format from parent.
 
                 VariableItem* v = 0;
+                QString type;
                 if (children[i].hasField("type"))
-                    v = collection()->createCustomItem(children[i]["type"].literal(), this);
-                if (!v)
-                    v = new VariableItem(this);
+                    type = children[i]["type"].literal();
+
+                v = collection()->createVariableItem(type, this);
 
                 v->setVariableObject(children[i], format_, baseObject);
                 addChild(v);
@@ -365,56 +358,6 @@ void VariableItem::childrenDone(const GDBMI::ResultRecord& r)
 void VariableItem::childrenOfFakesDone(const GDBMI::ResultRecord& r)
 {
     createChildren(r, true);
-}
-
-void VariableItem::handleCurrentAddress(const QStringList& lines)
-{
-    lastObtainedAddress_ = "";
-    if (lines.count() > 1)
-    {
-        static QRegExp r("\\$\\d+ = ([^\n]*)");
-        int i = r.indexIn(lines[1]);
-        if (i == 0)
-        {
-            lastObtainedAddress_ = r.cap(1);
-            kDebug(9012) << "new address" << lastObtainedAddress_;
-        }
-    }
-}
-
-void VariableItem::handleType(const QStringList& lines)
-{
-    bool recreate = false;
-
-    if (lastObtainedAddress_ != currentAddress_)
-    {
-        kDebug(9012) << "Address changed from" << currentAddress_
-                      << "to" << lastObtainedAddress_;
-        recreate = true;
-    }
-    else
-    {
-        // FIXME: add error diagnostic.
-        if (lines.count() > 1)
-        {
-            static QRegExp r("type = ([^\n]*)");
-            int i = r.indexIn(lines[1]);
-            if (i == 0)
-            {
-                kDebug(9012) << "found type:" << r.cap(1);
-                kDebug(9012) << "original Type:" << originalValueType_;
-
-                if (r.cap(1) != originalValueType_)
-                {
-                    recreate = true;
-                }
-            }
-        }
-    }
-    if (recreate)
-    {
-        this->recreate();
-    }
 }
 
 QString VariableItem::displayName() const
@@ -513,24 +456,14 @@ void VariableItem::clearHighlight()
 
 void VariableItem::updateValue()
 {
-/*    if (handleSpecialTypes())
-    {
-        // 1. Gdb never includes structures in output from -var-update
-        // 2. Even if it did, the internal state of object can be
-        //    arbitrary complex and gdb can't detect if pretty-printed
-        //    value remains the same.
-        // So, we need to reload value on each step.
-        updateUnconditionally_ = true;
-        return;
-    }*/
-    updateUnconditionally_ = false;
-
     addCommand(
         new GDBCommand(VarEvaluateExpression,
             "\"" + varobjName_ + "\"",
             this,
             &VariableItem::valueDone,
             true /* handle error */));
+
+    setValueDirty(false);
 }
 
 void VariableItem::setValue(const QString& new_value)
@@ -547,39 +480,13 @@ void VariableItem::setValue(const QString& new_value)
     updateValue();
 }
 
-void VariableItem::recreateLocallyMaybe()
-{
-    addCommand(
-        new CliCommand(DataEvaluateExpression,
-            QString("&%1").arg(expression_),
-            this,
-            &VariableItem::handleCurrentAddress,
-            true));
-
-    addCommand(
-        new CliCommand(NonMI,
-            QString("whatis %1").arg(expression_),
-            this,
-            &VariableItem::handleType));
-}
-
-void VariableItem::recreate()
-{
-    deregisterWithGdb();
-
-    initialCreation_ = false;
-
-    registerWithGdb();
-}
-
-
 // **************************************************************************
 
-void VariableItem::refresh()
+void VariableItem::refreshChildren()
 {
-    if (isDirty())
+    if (isChildrenDirty())
     {
-        setDirty(false);
+        setChildrenDirty(false);
 
         addCommand(new GDBCommand(VarListChildren,
                                     "\"" + varobjName_ + "\"",
@@ -698,11 +605,6 @@ void VariableItem::deregisterWithGdb()
     varobjName_ = "";
 }
 
-bool VariableItem::updateUnconditionally() const
-{
-    return updateUnconditionally_;
-}
-
 bool VariableItem::isAlive() const
 {
     return alive_;
@@ -723,6 +625,9 @@ Qt::ItemFlags VariableItem::flags(int column) const
 
 QVariant VariableItem::data(int column, int role) const
 {
+    if (isValueDirty())
+        const_cast<VariableItem*>(this)->updateValue();
+
     switch (role) {
         case Qt::DisplayRole:
             switch (column) {
@@ -761,37 +666,6 @@ QVariant VariableItem::data(int column, int role) const
     return QVariant();
 }
 
-void VariableItem::handleCliPrint(const QStringList& lines)
-{
-    static QRegExp r("(\\$[0-9]+)");
-    if (lines.size() >= 2)
-    {
-        int i = r.indexIn(lines[1]);
-        if (i == 0)
-        {
-            addCommand(
-                new GDBCommand(VarCreate, QString("%1 * \"%2\"")
-                               .arg(varobjName_)
-                               .arg(r.cap(1)),
-                               this,
-                               &VariableItem::varobjCreated,
-                               // On initial create, errors get reported
-                               // by generic code. After then, errors
-                               // are swallowed by varobjCreated.
-                               initialCreation_ ? false : true));
-        }
-        else
-        {
-            // FIXME: merge all output lines together.
-            // FIXME: add 'debuggerError' to debuggerpart.
-            KMessageBox::information(
-                qApp->activeWindow(),
-                i18n("<b>Debugger error</b><br>%1", lines[1]),
-                i18n("Debugger error"));
-        }
-    }
-}
-
 VariableItem * GDBDebugger::VariableItem::parentItem() const
 {
     return qobject_cast<VariableItem*>(const_cast<QObject*>(QObject::parent()));
@@ -799,7 +673,7 @@ VariableItem * GDBDebugger::VariableItem::parentItem() const
 
 const QString & GDBDebugger::VariableItem::variableName() const
 {
-    return expression_;
+    return varobjName_;
 }
 
 bool GDBDebugger::VariableItem::hasChildren() const

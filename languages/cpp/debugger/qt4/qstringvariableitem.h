@@ -44,6 +44,7 @@ public:
     virtual void updateValue();
 
 private:
+    void handleAttributes(const GDBMI::ResultRecord& r);
     void handleSize(const GDBMI::ResultRecord& r);
     void handleResult(const GDBMI::ResultRecord& r);
     void setResult(const QString& result);

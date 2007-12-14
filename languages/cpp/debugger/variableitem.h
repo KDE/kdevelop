@@ -78,29 +78,10 @@ public:
      */
     virtual void updateValue();
 
-    /** Creates a fresh gdb "variable object", if needed.
-        Preconditions:
-          - frame id did not change
-          - this is a root variable
-
-        If the current type of expression, or it's address, it different
-        from it was previously, creates new "variable object" and
-        fetches new value.
-
-        Otherwise, does nothing.
-    */
-    void recreateLocallyMaybe();
-
-    /** Tries to create new gdb variable object for this expression.
-        If successfull, updates all values. Otherwise, makes
-        itself disabled.
-    */
-    void recreate();
-
     /**
      * Search for and create children if not already performed.
      */
-    void refresh();
+    virtual void refreshChildren();
 
     /** Mark the variable as alive, or not alive.
         Variables that are not alive a shown as "gray",
@@ -129,14 +110,14 @@ public:
     void setVariableName(const QString& name);
     const QString& variableName() const;
 
-Q_SIGNALS:
-    /** Emitted whenever the name of varobj associated with *this changes:
-        - when we've created initial varobj
-        - when we've changed varobj name as part of 'recreate' method
-        - when *this is destroyed and no longer uses any varobj.
+    static QString nextVariableObjectName();
 
-        Either 'from' or 'to' can be empty string.
-    */
+Q_SIGNALS:
+    /**
+     * Emitted whenever the name of varobj associated with *this changes:
+     *
+     * Either 'from' or 'to' can be empty string.
+     */
     void varobjNameChange(const QString& from, const QString& to);
 
 private:
@@ -157,25 +138,12 @@ private:
     */
     void setVarobjName(const QString& name);
 
-
-    /** Handle types that require special dispay, such as
-        QString. Return true if this is such a type.
-        The 'originalValueType_' is already initialized
-        by the time this method is called.
-    */
-    //bool handleSpecialTypes();
     void varobjCreated(const GDBMI::ResultRecord& r);
     void valueDone(const GDBMI::ResultRecord& r);
     void childrenDone(const GDBMI::ResultRecord& r);
     void childrenOfFakesDone(const GDBMI::ResultRecord& r);
-    void handleCurrentAddress(const QStringList& lines);
-    void handleType(const QStringList& lines);
 
     void createChildren(const GDBMI::ResultRecord& r, bool children_of_fake);
-
-    /** Called to handle the output of the cli print command.
-     */
-    void handleCliPrint(const QStringList& lines);
 
     // Assuming 'expression_' is already set, returns the
     // displayName to use when showing this to the user.
@@ -208,7 +176,6 @@ private:
     QString currentAddress_;
     QString lastObtainedAddress_;
 
-    bool updateUnconditionally_;
     bool frozen_;
 
     /* Set to true whan calling createVarobj for the

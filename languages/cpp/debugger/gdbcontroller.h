@@ -342,13 +342,6 @@ private:
     int config_outputRadix_;
 
     MIParser mi_parser_;
-    // As of gdb 6.3, the *stopped packet does not contain
-    // full file name. So we need to send another command to
-    // fetch that, to highlight current line.
-    // After highting current line we need to do something more,
-    // like announcing write watchpoints, and so need to have
-    // access to the stop packet. So store it here.
-    std::auto_ptr<GDBMI::ResultRecord> last_stop_result;
 
     bool state_reload_needed;
 

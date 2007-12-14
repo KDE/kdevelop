@@ -23,8 +23,7 @@
 #ifndef _FRAMEITEM_H_
 #define _FRAMEITEM_H_
 
-#include <QTime>
-#include <QVector>
+#include <QHash>
 
 #include "mi/gdbmi.h"
 
@@ -44,7 +43,7 @@ public:
     FrameItem(VariableCollection *parent);
     virtual ~FrameItem();
 
-    void refresh();
+    void refreshChildren();
 
     void setFrameName(const QString &frameName);
 
@@ -59,12 +58,9 @@ private:
     void frameIdReady(const GDBMI::ResultRecord&);
     void handleVarUpdate(const GDBMI::ResultRecord&);
     void handleEvaluateExpression(const QStringList&);
-    void variablesFetchDone();
-    void fetchSpecialValuesDone();
+    void handleVariableObjectCreated(const GDBMI::ResultRecord& r);
 
     void checkVariable(const QString& variable);
-
-    QTime fetch_time;
 
     int     m_serial;
 
@@ -75,7 +71,7 @@ private:
 
     QString m_function;
 
-    friend class VariableTree;
+    QHash<QString, QString> m_temporaryExpressions;
 };
 
 }

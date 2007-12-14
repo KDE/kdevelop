@@ -123,7 +123,6 @@ QModelIndex VariableCollection::indexForItem(AbstractVariableItem * item, int co
 
     if (AbstractVariableItem* parent = item->abstractParent()) {
         int row = parent->children().indexOf(item);
-        Q_ASSERT(row != -1);
         if (row == -1)
             return QModelIndex();
 
@@ -131,7 +130,6 @@ QModelIndex VariableCollection::indexForItem(AbstractVariableItem * item, int co
     }
 
     int row = m_items.indexOf(item);
-    Q_ASSERT(row != -1);
     if (row == -1)
         return QModelIndex();
 
@@ -338,7 +336,8 @@ void VariableCollection::completeRemoveItems()
 void VariableCollection::dataChanged(AbstractVariableItem * item, int column)
 {
     QModelIndex index = indexForItem(item, column);
-    emit QAbstractItemModel::dataChanged(index, index);
+    if (index.isValid())
+        emit QAbstractItemModel::dataChanged(index, index);
 }
 
 AbstractVariableItem * VariableCollection::itemForVariableObject(const QString & variableObject) const
@@ -397,7 +396,7 @@ void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
 bool VariableCollection::canFetchMore(const QModelIndex & parent) const
 {
     if (AbstractVariableItem* item = itemForIndex(parent))
-        if (item->isDirty() && item->hasChildren())
+        if (item->isChildrenDirty() && item->hasChildren())
             return true;
 
     return false;
@@ -406,7 +405,7 @@ bool VariableCollection::canFetchMore(const QModelIndex & parent) const
 void VariableCollection::fetchMore(const QModelIndex & parent)
 {
     if (AbstractVariableItem* item = itemForIndex(parent))
-        item->refresh();
+        item->refreshChildren();
 }
 
 bool VariableCollection::hasChildren(const QModelIndex & parent) const
@@ -425,13 +424,13 @@ bool VariableCollection::hasChildren(const QModelIndex & parent) const
     return false;
 }
 
-VariableItem* VariableCollection::createCustomItem(const QString & type, AbstractVariableItem * parent)
+VariableItem* VariableCollection::createVariableItem(const QString & type, AbstractVariableItem * parent)
 {
     static QRegExp qstring("^(const)?[ ]*QString[ ]*&?$");
     if (qstring.exactMatch(type))
         return new QStringVariableItem(parent);
 
-    return 0;
+    return new VariableItem(parent);
 }
 
 #include "variablecollection.moc"

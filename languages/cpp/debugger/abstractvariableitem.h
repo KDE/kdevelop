@@ -76,8 +76,16 @@ public:
     bool isRegisteredWithGdb() const;
 
     bool isDirty() const;
-    virtual void setDirty(bool dirty = true);
-    virtual void refresh();
+    void setDirty(bool dirty = true);
+    void refresh();
+
+    bool isChildrenDirty() const;
+    virtual void setChildrenDirty(bool dirty = true);
+    virtual void refreshChildren();
+
+    bool isValueDirty() const;
+    virtual void setValueDirty(bool dirty = true);
+    virtual void updateValue();
 
     /**
      * Set a serial number for the last time this item was present 
@@ -105,7 +113,8 @@ private:
     QList<AbstractVariableItem*> m_children;
 
     bool m_registered : 1;
-    bool m_dirty : 1;
+    bool m_childrenDirty : 1;
+    bool m_valueDirty : 1;
     int m_lastSeen;
     int m_thread, m_frame;
 };

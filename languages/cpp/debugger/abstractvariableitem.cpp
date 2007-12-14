@@ -31,7 +31,8 @@ using namespace GDBDebugger;
 AbstractVariableItem::AbstractVariableItem(AbstractVariableItem * parent)
     : QObject(parent)
     , m_registered(false)
-    , m_dirty(true)
+    , m_childrenDirty(true)
+    , m_valueDirty(true)
     , m_lastSeen(-1)
     , m_thread(-1)
     , m_frame(-1)
@@ -45,7 +46,8 @@ AbstractVariableItem::AbstractVariableItem(AbstractVariableItem * parent)
 AbstractVariableItem::AbstractVariableItem(VariableCollection * parent)
     : QObject(parent)
     , m_registered(false)
-    , m_dirty(true)
+    , m_childrenDirty(true)
+    , m_valueDirty(true)
     , m_lastSeen(-1)
     , m_thread(-1)
     , m_frame(-1)
@@ -132,9 +134,11 @@ GDBController * AbstractVariableItem::controller() const
     return collection()->controller();
 }
 
-void AbstractVariableItem::setDirty(bool dirty)
+void AbstractVariableItem::setChildrenDirty(bool dirty)
 {
-    m_dirty = dirty;
+    if (m_childrenDirty != dirty) {
+        m_childrenDirty = dirty;
+    }
 }
 
 bool AbstractVariableItem::isRegisteredWithGdb() const
@@ -160,13 +164,14 @@ int AbstractVariableItem::lastSeen() const
     return m_lastSeen;
 }
 
-bool AbstractVariableItem::isDirty() const
+bool AbstractVariableItem::isChildrenDirty() const
 {
-    return m_dirty;
+    return m_childrenDirty;
 }
 
-void AbstractVariableItem::refresh()
+void AbstractVariableItem::refreshChildren()
 {
+    setChildrenDirty(false);
 }
 
 void AbstractVariableItem::deleteAllChildren()
@@ -238,6 +243,44 @@ void AbstractVariableItem::addCommandUnaltered(GDBCommand * command)
 void AbstractVariableItem::dataChanged(int column) const
 {
     collection()->dataChanged(const_cast<AbstractVariableItem*>(this), column);
+}
+
+bool AbstractVariableItem::isValueDirty() const
+{
+    return m_valueDirty;
+}
+
+void AbstractVariableItem::setValueDirty(bool dirty)
+{
+    if (m_valueDirty != dirty) {
+        m_valueDirty = dirty;
+
+        if (dirty) {
+            dataChanged(ColumnValue);
+        }
+    }
+}
+
+bool AbstractVariableItem::isDirty() const
+{
+    return isChildrenDirty() || isValueDirty();
+}
+
+void AbstractVariableItem::setDirty(bool dirty)
+{
+    setChildrenDirty(dirty);
+    setValueDirty(dirty);
+}
+
+void AbstractVariableItem::refresh()
+{
+    updateValue();
+    refreshChildren();
+}
+
+void AbstractVariableItem::updateValue()
+{
+    setValueDirty(false);
 }
 
 #include "abstractvariableitem.moc"

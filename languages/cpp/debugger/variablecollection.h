@@ -74,7 +74,7 @@ public:
     void addVariableObject(const QString& variableObject, AbstractVariableItem* item);
     void removeVariableObject(const QString& variableObject);
 
-    VariableItem* createCustomItem(const QString& type, AbstractVariableItem* parent);
+    VariableItem* createVariableItem(const QString& type, AbstractVariableItem* parent);
 
 Q_SIGNALS:
     void toggleWatchpoint(const QString &varName);

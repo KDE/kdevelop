@@ -584,48 +584,54 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
         }
     }
 
+    if (!reason.contains("exited"))
+    {
+        // Update information
+        if (r.hasField("thread-id"))
+            currentThread_ = r["thread-id"].toInt();
+
+        if (r.hasField("frame")) {
+            const GDBMI::Value& frame = r["frame"];
+            if (frame.hasField("fullname") && frame.hasField("line") && frame.hasField("addr")) {
+                showStepInSource(frame["fullname"].literal(),
+                     frame["line"].literal().toInt(),
+                     frame["addr"].literal());
+
+                raiseEvent(program_state_changed);
+                state_reload_needed = false;
+            }
+        }
+    }
+
     if (reason == "breakpoint-hit")
     {
         int id = r["bkptno"].literal().toInt();
         emit breakpointHit(id);
     }
 
-
+    if (reason.contains("watchpoint-trigger"))
+    {
+        if (reason == "watchpoint-trigger")
+        {
+            emit watchpointHit(r["wpt"]["number"]
+                               .literal().toInt(),
+                               r["value"]["old"].literal(),
+                               r["value"]["new"].literal());
+        }
+        else if (reason == "read-watchpoint-trigger")
+        {
+            emit showMessage("Read watchpoint triggered", 3000);
+        }
+        else if (reason == "access-watchpoint-trigger")
+        {
+            emit showMessage("Access watchpoint triggered", 3000);
+        }
+    }
 }
 
 
 void GDBController::reloadProgramState()
 {
-    const GDBMI::ResultRecord& r = *last_stop_result;
-
-    // In gdb 6.3, the *stopped reply does not include full
-    // name of the source file. Need to send extra command.
-    // Don't send it unless there was 'line' field in last *stopped response.
-    // The command has a bug that makes it always returns some file/line,
-    // even if we're not in one.
-    //
-    // FIXME: For gdb 6.4, should not send extra commands.
-    // That's for later, so that I verify that this three-command
-    // approach works fine.
-    if (r.hasField("frame") && r["frame"].hasField("line"))
-        queueCmd(new GDBCommand(
-                     GDBMI::FileListExecSourceFile,
-                     "",
-                     this,
-                     &GDBController::handleMiFileListExecSourceFile));
-    else
-    {
-        maybeAnnounceWatchpointHit();
-    }
-
-    // We're always at frame zero when the program stops
-    // and we must reset the active flag
-    if (r.hasField("thread-id"))
-        currentThread_ = viewedThread_ = r["thread-id"].literal().toInt();
-    else
-        currentThread_ = viewedThread_ = -1;
-    currentFrame_ = viewedFrame_ = 0;
-
     raiseEvent(program_state_changed);
     state_reload_needed = false;
 }
@@ -753,35 +759,7 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
 
     showStepInSource(fullname,
                      r["line"].literal().toInt(),
-                     (*last_stop_result)["frame"]["addr"].literal());
-
-    /* Watchpoint hit is announced only after we've highlighted
-       the current line. */
-    maybeAnnounceWatchpointHit();
-
-    last_stop_result.reset();
-}
-
-void GDBController::maybeAnnounceWatchpointHit()
-{
-    /* For some cases, for example catchpoints,
-       gdb does not report any reason at all. */
-    if ((*last_stop_result).hasField("reason"))
-    {
-        QString last_stop_reason = (*last_stop_result)["reason"].literal();
-
-        if (last_stop_reason == "watchpoint-trigger")
-        {
-            emit watchpointHit((*last_stop_result)["wpt"]["number"]
-                               .literal().toInt(),
-                               (*last_stop_result)["value"]["old"].literal(),
-                               (*last_stop_result)["value"]["new"].literal());
-        }
-        else if (last_stop_reason == "read-watchpoint-trigger")
-        {
-            emit showMessage("Read watchpoint triggered", 3000);
-        }
-    }
+                     r["addr"].literal());
 }
 
 void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
@@ -1437,7 +1415,7 @@ void GDBController::readFromProcess(QProcess* process)
             continue;
         }
 
-        try
+        //try
         {
 
             switch(r->kind)
@@ -1465,12 +1443,6 @@ void GDBController::readFromProcess(QProcess* process)
 
                 if (result.reason == "stopped")
                 {
-                    // Transfers ownership.
-                    // Needed so that in
-                    //   handleMiFileListExecSourceFile(GDBMI::ResultRecord& r);
-                    // we can use the last stop reason.
-                    last_stop_result.reset(static_cast<GDBMI::ResultRecord*>(r.get()));
-                    r.release();
                     state_reload_needed = true;
                 }
                 else if (result.reason == "running")
@@ -1550,7 +1522,7 @@ void GDBController::readFromProcess(QProcess* process)
                 break;
             }
         }
-        catch(const std::exception& e)
+        /*catch(const std::exception& e)
         {
             KMessageBox::detailedSorry(
                 qApp->activeWindow(),
@@ -1563,7 +1535,7 @@ void GDBController::readFromProcess(QProcess* process)
 
             destroyCurrentCommand();
             ready_for_next_command = true;
-        }
+        }*/
     }
 
     // check the queue for any commands to send

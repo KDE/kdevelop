@@ -241,7 +241,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
             foreach (AbstractVariableItem* item, recent->children())
             {
                 if (VariableItem* variable = qobject_cast<VariableItem*>(item))
-                    variable->recreate();
+                    variable->updateValue();
             }
         }
     }
@@ -397,7 +397,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         {
             if (var)
             {
-                var->recreate();
+                var->updateValue();
             }
         }
 

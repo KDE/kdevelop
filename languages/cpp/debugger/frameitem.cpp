@@ -47,11 +47,11 @@ FrameItem::~ FrameItem()
 {
 }
 
-void FrameItem::refresh()
+void FrameItem::refreshChildren()
 {
-    if (isDirty())
+    if (isChildrenDirty())
     {
-        setDirty(false);
+        setChildrenDirty(false);
         // In GDB 6.4, the -stack-list-locals command is broken.
         // If there's any local reference variable which is not
         // initialized yet, for example because it's in the middle
@@ -98,8 +98,6 @@ void FrameItem::argumentsReady(const GDBMI::ResultRecord& r)
         return;
 
     const GDBMI::Value& args = r["stack-args"][0]["args"];
-
-    fetch_time.start();
 
     for(int i = 0; i < args.size(); ++i)
     {
@@ -181,8 +179,8 @@ void FrameItem::frameIdReady(const GDBMI::ResultRecord& result)
     {
         if (child->lastSeen() != m_serial)
             deleteChild(child);
-        else
-            static_cast<VariableItem*>(child)->recreateLocallyMaybe();
+        //else
+            //static_cast<VariableItem*>(child)->recreateLocallyMaybe();
     }
 
     foreach (AbstractVariableItem* child, children())
@@ -192,7 +190,9 @@ void FrameItem::frameIdReady(const GDBMI::ResultRecord& result)
             // For watched expressions, we don't have an easy way
             // to check if their meaning is still the same, so
             // unconditionally recreate them.
-            var->recreate();
+
+            // TODO reimplement
+            //var->recreate();
         }
     }
 
@@ -202,10 +202,6 @@ void FrameItem::frameIdReady(const GDBMI::ResultRecord& result)
                                 "*",
                                 this,
                                 &FrameItem::handleVarUpdate));
-
-    addCommand(new SentinelCommand(
-                                this,
-                                &FrameItem::variablesFetchDone));
 }
 
 void FrameItem::checkVariable(const QString & variable)
@@ -216,7 +212,7 @@ void FrameItem::checkVariable(const QString & variable)
     foreach (AbstractVariableItem* child, children())
     {
         if (VariableItem* vi = qobject_cast<VariableItem*>(child)) {
-            if (vi->variableName() == variable) {
+            if (vi->gdbExpression() == variable) {
                 var = vi;
                 break;
             }
@@ -225,13 +221,35 @@ void FrameItem::checkVariable(const QString & variable)
 
     if (!var)
     {
-        var = new VariableItem(this);
-        var->setExpression(variable);
-        addChild(var);
+        QString variableObjectName = VariableItem::nextVariableObjectName();
+        m_temporaryExpressions.insert(variableObjectName, variable);
+        addCommand(
+            // Need to quote expression, otherwise gdb won't like
+            // spaces inside it.
+            new GDBCommand(VarCreate, QString("%1 * \"%2\"")
+                           .arg(variableObjectName)
+                           .arg(variable),
+                           this,
+                           &FrameItem::handleVariableObjectCreated,
+                           true));
+        return;
     }
 
     var->clearHighlight();
     var->setLastSeen(m_serial);
+}
+
+void FrameItem::handleVariableObjectCreated(const GDBMI::ResultRecord& r)
+{
+    QString type;
+    if (r.hasField("type"))
+        type = r["type"].literal();
+
+    VariableItem* var = collection()->createVariableItem(type, this);
+    var->setExpression(m_temporaryExpressions.take(r["name"].literal()));
+    var->setVariableObject(r, VariableItem::natural, false);
+    var->setLastSeen(m_serial);
+    addChild(var);
 }
 
 void FrameItem::handleVarUpdate(const GDBMI::ResultRecord& r)
@@ -247,30 +265,29 @@ void FrameItem::handleVarUpdate(const GDBMI::ResultRecord& r)
             continue;
 
         AbstractVariableItem* item = collection()->itemForVariableObject(name);
+
+        if (c.hasField("type_changed"))
+            if (c["type_changed"].literal() == "true") {
+                AbstractVariableItem* parent = item->abstractParent();
+                Q_ASSERT(parent && parent == this);
+                deleteChild(item);
+
+                checkVariable(name);
+                continue;
+            }
+
+
         if (item)
+            // Children and value dirty
             item->setDirty();
     }
 }
 
-void FrameItem::variablesFetchDone()
-{
-    // During parsing of fetched variable values, we might have issued
-    // extra command to handle 'special values', like QString.
-    // We don't want to enable updates just yet, because this will cause
-    // flicker, so add a sentinel command just to enable updates.
-    //
-    // We need this intermediate hook because commands for special
-    // representation are issues when responses to orginary fetch
-    // values commands are received, so we can add sentinel command after
-    // special representation fetch only when commands for ordinary
-    // fetch are all executed.
-    addCommand(new SentinelCommand(
-                                this,
-                                &FrameItem::fetchSpecialValuesDone));
-}
-
 QVariant FrameItem::data(int column, int role) const
 {
+    if (isChildrenDirty())
+        const_cast<FrameItem*>(this)->refreshChildren();
+
     switch (role) {
         case Qt::DisplayRole:
             switch (column) {
@@ -282,14 +299,6 @@ QVariant FrameItem::data(int column, int role) const
     }
 
     return QVariant();
-}
-
-void FrameItem::fetchSpecialValuesDone()
-{
-    // FIXME: can currentFrame_ or currentThread_ change between
-    // start of var fetch and call of 'variablesFetchDone'?
-    kDebug(9012) << "Time to fetch variables: " << fetch_time.elapsed() <<
-        "ms";
 }
 
 #include "frameitem.moc"

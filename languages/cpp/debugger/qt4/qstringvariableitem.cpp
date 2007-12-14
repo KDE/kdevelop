@@ -38,6 +38,22 @@ QStringVariableItem::QStringVariableItem(AbstractVariableItem * parent)
 
 void QStringVariableItem::updateValue()
 {
+    if (isValueDirty()) {
+        // Check that this variable is in scope
+        addCommand(new GDBCommand(VarShowAttributes, variableName(), this, &QStringVariableItem::handleAttributes));
+
+        setValueDirty(false);
+    }
+}
+
+void QStringVariableItem::handleAttributes(const GDBMI::ResultRecord& r)
+{
+    // TODO support comma separated attr list when more than 2 flags
+    if (!r.hasField("attr") || r["attr"].literal() != "editable") {
+        setResult("<out of scope>");
+        return;
+    }
+
     addCommand(
         new GDBCommand(DataEvaluateExpression, QString("%1.d.size").arg(gdbExpression()),
                         this, &QStringVariableItem::handleSize));
