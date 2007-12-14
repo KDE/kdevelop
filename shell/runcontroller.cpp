@@ -51,6 +51,7 @@ RunController::RunController(QObject *parent)
     , d(new RunControllerPrivate)
 {
     // TODO: need to implement compile only if needed before execute
+    // TODO: need to implement abort all running programs when project closed
 
     d->serial = 0;
     d->state = Idle;
