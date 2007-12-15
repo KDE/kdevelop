@@ -1,4 +1,3 @@
-
 /* KDevelop CMake Support
  *
  * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
@@ -18,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
 #include "cmakeprojectvisitor.h"
 #include "cmakeast.h"
 #include "cmakecondition.h"
@@ -483,8 +483,8 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         return 1;
 
     bool error=false;
-    QStringList locationOptions = resolveVariables(ffile->path(), m_vars);
-    QStringList path, files=resolveVariables(ffile->filenames(), m_vars);
+    QStringList locationOptions = ffile->path();
+    QStringList path, files=ffile->filenames();
 
     kDebug(9042) << "Find File:" << ffile->filenames();
     foreach(QString p, files) {
@@ -769,7 +769,6 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
 
 int CMakeProjectVisitor::visit(const FileAst *file)
 {
-    QStringList val;
     switch(file->type()) //TODO
     {
 //         case FileAst::WRITE:
@@ -796,12 +795,9 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 //         case FileAst::MAKE_DIRECTORY:
 //         case FileAst::RELATIVE_PATH:
         case FileAst::TO_CMAKE_PATH:
-            val=resolveVariable(file->path(), m_vars);
-            if(!val.isEmpty()) {
-                val=val[0].split(':');
-                m_vars->insert(file->variable(), val);
-            }
-            kDebug(9042) << "file TO_CMAKE_PATH variable:" << file->variable() << "=" << m_vars->value(file->variable()) << "file:" << file->path() << val;
+            m_vars->insert(file->variable(), file->path().split(':'));
+            kDebug(9042) << "file TO_CMAKE_PATH variable:" << file->variable() << "="
+                    << m_vars->value(file->variable()) << "file:" << file->path();
             break;
 //         case FileAst::TO_NATIVE_PATH:
 //             break;
@@ -833,15 +829,10 @@ int CMakeProjectVisitor::visit(const MathAst *math)
 
 int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
-    QStringList paths=resolveVariable(filecomp->fileName(), m_vars);
+    QString val, path=filecomp->fileName();
     kDebug(9042) << "filename component" << filecomp->variableName() << "= "
-        << m_root << "?" << filecomp->fileName() << "=" << paths << endl;
-    if(paths.isEmpty()) {
-        kDebug(9032) << "error: " << filecomp->fileName();
-        return 1;
-    }
+            << m_root << "?" << filecomp->fileName() << "=" << filecomp->fileName() << endl;
     
-    QString val, path=paths[0];
     switch(filecomp->type()) {
         case GetFilenameComponentAst::PATH:
             val=path.mid(0, path.lastIndexOf('/'));
@@ -920,10 +911,18 @@ int CMakeProjectVisitor::visit(const ListAst *list)
 
             m_vars->insert(list->list(), theList);
             break;
-        case ListAst::REMOVE_AT:
-            foreach(int i, list->index())
-                theList.removeAt(i);
-            m_vars->insert(list->list(), theList);
+            case ListAst::REMOVE_AT: {
+                QList<int> indices=list->index();
+                qSort(indices);
+                QList<int>::const_iterator it=indices.constEnd();
+                qDebug() << "list remove: " << theList << indices;
+                while(it!=indices.constBegin())
+                {
+                    --it;
+                    theList.removeAt(*it);
+                }
+                m_vars->insert(list->list(), theList);
+            }
             break;
         case ListAst::SORT:
             qSort(theList);

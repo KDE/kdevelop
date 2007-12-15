@@ -1965,14 +1965,18 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
         } break;
         case REMOVE_AT: {
-            if(func.arguments.count()<4)
+            if(func.arguments.count()<3)
                 return false;
             int i=0;
-            m_index.append(func.arguments[1].value.toInt());
             foreach(CMakeFunctionArgument arg, func.arguments)
             {
-                if(i>2)
-                    m_elements.append(arg.value);
+                if(i>1)
+                {
+                    bool correct;
+                    m_index.append(arg.value.toInt(&correct));
+                    kDebug(9042) << "???" << arg.value;
+                    Q_ASSERT(correct);
+                }
                 i++;
             }
         } break;

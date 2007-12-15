@@ -20,6 +20,16 @@
 
 #include "variablemap.h"
 
+QStringList VariableMap::value(const QString & varName) const
+{
+    const QStringList & value=QHash<QString, QStringList>::value(varName);
+    QStringList res;
+    foreach(QString v, value) {
+        res << v.split(';');
+    }
+    return res;
+}
+
 #if 0
 bool VariableMap::contains(const QString & varName) const
 {
@@ -34,11 +44,6 @@ QHash<QString, QStringList>::iterator VariableMap::insert(const QString & varNam
 QHash<QString, QStringList>::iterator VariableMap::insertMulti(const QString & varName, const QStringList & value)
 {
     return QHash<QString, QStringList>::insertMulti(varName.toLower(), value);
-}
-
-QStringList VariableMap::value(const QString & varName) const
-{
-    return QHash<QString, QStringList>::value(varName.toLower());
 }
 
 QStringList VariableMap::take(const QString & varName)

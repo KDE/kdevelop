@@ -121,6 +121,7 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
 //     kDebug(9042) << "it" << *it;
     while(!done && it!=itStop)
     {
+//         qDebug() << "oper " << *it;
         conditionToken c = typeName(*it);
         done = c>variable;
         if(!done)
@@ -137,6 +138,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
     }
     
     bool last = false, done=false;
+    last = isTrue(*(prevOperator(itEnd, itBegin)+1));
     while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2;
@@ -145,11 +147,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
 
-//         kDebug(9042) << " or " << last;
-//         kDebug(9042) << "operator" << *it2 << done;
+//         qDebug() << "operator" << *it2 << done;
         QString cmd;
         
-        last = isTrue(*(it2+1));
         switch(c)
         {
             case NOT:
@@ -177,7 +177,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                         last=true;
                     }
                 }
-                itEnd=it2-1;
+                itEnd=it2;
             }   break;
             case IS_DIRECTORY: {
                 QFileInfo f(*(it2+1));

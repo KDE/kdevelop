@@ -57,7 +57,7 @@ Q_DECLARE_METATYPE( CMakeFunctionDesc )
 
 struct CMakeFunctionArgument
 {
-    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {unescapeValue();}
+    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {}
     CMakeFunctionArgument(const CMakeFunctionArgument& r):
             value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line), column(r.column) {unescapeValue();}
     CMakeFunctionArgument(const QString& v, bool q = false,
@@ -78,11 +78,11 @@ struct CMakeFunctionArgument
         return !(*this == r);
     }
     
-    void unescapeValue() {value=value.replace("\\\\", "\\");}
+    void unescapeValue() {value=value.replace("\\\\", "\\");} //FIXME: Should scape all characters
 
     QString value;
     bool quoted;
-    QString filePath;
+    QString filePath; //FIXME: i don't understand why do i want it here
     quint32 line;
     quint32 column;
 };

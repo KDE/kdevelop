@@ -67,9 +67,12 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "or" ) << QString("ONE;OR;ONE").split(";") << true;
     QTest::newRow( "false+or" ) << QString("ZERO;OR;ONE").split(";") << true;
     QTest::newRow( "false+or+false" ) << QString("ZERO;OR;ZERO").split(";") << false;
+    QTest::newRow( "strequal" ) << QString("HOLA;STREQUAL;HOLA").split(";") << true;
+    QTest::newRow( "not+streq" ) << QString("NOT;HOLA;STREQUAL;HOLA").split(";") << false;
     QTest::newRow( "not+or" ) << QString("NOT;ZERO;OR;ZERO").split(";") << true;
     QTest::newRow( "matches" ) << QString("-lapr-1;MATCHES;^-l").split(";") << true;
     QTest::newRow( "less" ) << QString("5;LESS;9").split(";") << true;
+    QTest::newRow( "not+less" ) << QString("NOT;5;LESS;9").split(";") << false;
 }
 
 #include "cmake_cmakecondition_test.moc"

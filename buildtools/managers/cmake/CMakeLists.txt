@@ -20,6 +20,7 @@ set( cmakecommon_SRCS
   parser/cmakeast.cpp
   parser/cmakecondition.cpp
   parser/cmakeprojectvisitor.cpp 
+  parser/variablemap.cpp
  )
 
 set( cmakemanager_SRCS
