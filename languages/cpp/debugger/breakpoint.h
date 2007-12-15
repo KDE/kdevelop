@@ -92,6 +92,8 @@ public:
 
     virtual void remove();
 
+    void notifyModified();
+
     void setActive(int active, int id);
     bool isActive(int active) const                 { return (active_ == active) ||
                                                         (s_pending_ && !s_actionClear_); }

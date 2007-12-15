@@ -648,4 +648,9 @@ void GDBDebugger::Breakpoint::setTraceFormatString(const QString & s)
     emit modified(this);
 }
 
+void GDBDebugger::Breakpoint::notifyModified()
+{
+    emit modified(this);
+}
+
 #include "breakpoint.moc"

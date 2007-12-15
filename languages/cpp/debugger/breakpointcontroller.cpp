@@ -610,7 +610,8 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord& r)
             else
                 bp->setConditional(QString::null);
 
-            //emit publishBPState(*bp);
+            // TODO: make the above functions do this instead
+            bp->notifyModified();
         }
         else
         {
@@ -631,8 +632,6 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord& r)
                     bp->setPending(false);
 
                     addBreakpoint(bp);
-
-                    //emit publishBPState(*bp);
                 }
             }
 
