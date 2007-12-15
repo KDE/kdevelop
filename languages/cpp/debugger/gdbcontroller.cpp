@@ -1,11 +1,10 @@
 // *************************************************************************
 //                          gdbcontroller.cpp  -  description
-//                             -------------------
 //    begin                : Sun Aug 8 1999
 //    copyright            : (C) 1999 by John Birch
 //    email                : jbb@kdevelop.org
-// **************************************************************************
 //
+// Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
 // **************************************************************************
 // *                                                                        *
 // *   This program is free software; you can redistribute it and/or modify *

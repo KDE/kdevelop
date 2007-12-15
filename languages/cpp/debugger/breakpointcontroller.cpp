@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
+   Copyright (C) 2006 Vladimir Prus <ghost@cs.msu.su>
    Copyright (C) 2007 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or

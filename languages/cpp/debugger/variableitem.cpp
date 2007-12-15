@@ -2,6 +2,7 @@
  * GDB Debugger Support
  *
  * Copyright 1999 John Birch <jbb@kdevelop.org>
+ * Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
