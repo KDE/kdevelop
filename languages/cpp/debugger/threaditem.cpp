@@ -82,7 +82,7 @@ void ThreadItem::handleStackDepth(const GDBMI::ResultRecord& r)
 {
     int lastActuallyRequestedFrame = m_lastConfirmedFrame + g_lookaheadCount;
 
-    m_lastConfirmedFrame = r["depth"].literal().toInt();
+    m_lastConfirmedFrame = r["depth"].literal().toInt()-1;
 
     m_moreFramesAvailable = m_lastConfirmedFrame >= lastActuallyRequestedFrame;
 
