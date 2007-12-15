@@ -96,4 +96,12 @@ void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, con
     }
 }
 
+void FramestackWidget::showEvent(QShowEvent * event)
+{
+    Q_UNUSED(event)
+
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
+}
+
 #include "framestackwidget.moc"

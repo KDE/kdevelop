@@ -186,8 +186,10 @@ void DisassembleWidget::memoryRead(const GDBMI::ResultRecord& r)
 void DisassembleWidget::showEvent(QShowEvent*)
 {
     slotActivate(true);
-}
 
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
+}
 
 void DisassembleWidget::hideEvent(QHideEvent*)
 {

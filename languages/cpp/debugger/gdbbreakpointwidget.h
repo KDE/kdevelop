@@ -79,6 +79,7 @@ public Q_SLOTS:
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void showEvent(QShowEvent* event);
 
 private Q_SLOTS:
     void slotRemoveBreakpoint();

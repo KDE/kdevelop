@@ -53,6 +53,9 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
+protected:
+    virtual void showEvent(QShowEvent* event);
+
 private:
     GDBController* controller_;
 };

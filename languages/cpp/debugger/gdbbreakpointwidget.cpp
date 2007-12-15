@@ -414,4 +414,12 @@ void GDBBreakpointWidget::slotMaybeEditTracing(const QModelIndex & index)
     dialog->show();
 }
 
+void GDBBreakpointWidget::showEvent(QShowEvent * event)
+{
+    Q_UNUSED(event)
+
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
+}
+
 #include "gdbbreakpointwidget.moc"

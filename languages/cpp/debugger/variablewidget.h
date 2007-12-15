@@ -80,6 +80,7 @@ Q_SIGNALS:
 protected:
     virtual void contextMenuEvent(QContextMenuEvent* event);
     virtual void keyPressEvent(QKeyEvent* e);
+    virtual void showEvent(QShowEvent* event);
 
 private: // helper functions
     void handleAddressComputed(const GDBMI::ResultRecord& r);

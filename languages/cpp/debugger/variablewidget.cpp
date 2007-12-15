@@ -484,6 +484,14 @@ GDBController * VariableTree::controller() const
     return controller_;
 }
 
+void VariableTree::showEvent(QShowEvent * event)
+{
+    Q_UNUSED(event)
+
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
+}
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
