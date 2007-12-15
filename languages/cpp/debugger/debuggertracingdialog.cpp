@@ -22,7 +22,7 @@ namespace GDBDebugger
 
         connect(enable, SIGNAL(stateChanged(int)),
                 this, SLOT(enableOrDisable(int)));        
-        
+
         connect(enableCustomFormat, SIGNAL(stateChanged(int)),
                 this, SLOT(enableOrDisableCustomFormat(int)));
 
@@ -30,8 +30,11 @@ namespace GDBDebugger
         expressions->setItems(bp_->tracedExpressions());
         enableCustomFormat->setChecked(bp_->traceFormatStringEnabled());
         customFormat->setText(bp_->traceFormatString());
-        
+
         enableOrDisable(enable->isChecked());
+
+        // Go away if the breakpoint does
+        connect(bp_, SIGNAL(destroyed(QObject*)), this, SLOT(reject()));
     }
 
     void DebuggerTracingDialog::enableOrDisable(int state)
@@ -51,7 +54,7 @@ namespace GDBDebugger
 
     void DebuggerTracingDialog::accept()
     {
-        // Check that if we use format string, 
+        // Check that if we use format string,
         // the number of expression is not larget than the number of
         // format specifiers
         bool ok = true;
@@ -89,11 +92,10 @@ namespace GDBDebugger
                     "some expressions or edit the format string.",
                     "Not enough format specifiers");
             }
-                
         }
-       
+
         if (ok)
-        {        
+        {
             bp_->setTracingEnabled(enable->isChecked());
             bp_->setTracedExpressions(expressions->items());
             bp_->setTraceFormatStringEnabled(enableCustomFormat->isChecked());

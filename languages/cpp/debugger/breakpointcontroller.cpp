@@ -383,7 +383,10 @@ Qt::ItemFlags BreakpointController::flags(const QModelIndex & index) const
 
     flags |= Qt::ItemIsEnabled;
 
-    if (index.column() != Type && index.column() != Status && index.column() != Hits)
+    if (index.column() == Enable ||
+        index.column() == Location ||
+        index.column() == Condition ||
+        index.column() == IgnoreCount)
         flags |= Qt::ItemIsEditable;
 
     return flags;

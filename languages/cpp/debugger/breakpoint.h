@@ -155,7 +155,7 @@ public:
     void setTraceFormatStringEnabled(bool en)       { s_traceFormatStringEnabled_ = en; }
 
     const QString& traceFormatString() const        { return traceFormatString_; }
-    void setTraceFormatString(const QString& s)     { traceFormatString_ = s; }
+    void setTraceFormatString(const QString& s);
 
     QString traceRealFormatString() const;  
 

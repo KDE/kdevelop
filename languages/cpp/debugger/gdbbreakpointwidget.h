@@ -94,6 +94,8 @@ private Q_SLOTS:
                            const QString& oldValue,
                            const QString& newValue);
 
+    void slotMaybeEditTracing(const QModelIndex& index);
+
 Q_SIGNALS:
     void gotoSourcePosition(const QString &fileName, int lineNum);
     // Emitted when output from yet another passed tracepoint is available.

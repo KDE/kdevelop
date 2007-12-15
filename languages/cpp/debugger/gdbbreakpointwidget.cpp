@@ -135,6 +135,8 @@ GDBBreakpointWidget::GDBBreakpointWidget(CppDebuggerPlugin* plugin, GDBControlle
     connect( controller->breakpoints(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              this, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
     connect(plugin, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), this, SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
+
+    connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotMaybeEditTracing(QModelIndex)));
 }
 
 /***************************************************************************/
@@ -397,6 +399,19 @@ void GDBBreakpointWidget::slotToggleBreakpoint(const KUrl & url, const KTextEdit
 BreakpointController* GDBBreakpointWidget::breakpoints() const
 {
     return controller_->breakpoints();
+}
+
+void GDBBreakpointWidget::slotMaybeEditTracing(const QModelIndex & index)
+{
+    if (!index.isValid() || index.column() != BreakpointController::Tracing)
+        return;
+
+    Breakpoint* bp = breakpoints()->breakpointForIndex(index);
+    if (!bp)
+        return;
+
+    DebuggerTracingDialog* dialog = new DebuggerTracingDialog(bp, this);
+    dialog->show();
 }
 
 #include "gdbbreakpointwidget.moc"
