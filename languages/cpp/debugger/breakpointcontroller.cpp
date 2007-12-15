@@ -89,7 +89,9 @@ void BreakpointController::gotoExecutionPoint(const KUrl &url, int lineNum)
     if( !iface )
         return;
 
+    document->textDocument()->blockSignals(true);
     iface->addMark( lineNum, ExecutionPointMark );
+    document->textDocument()->blockSignals(false);
 }
 
 void BreakpointController::markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action)
