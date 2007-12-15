@@ -25,12 +25,12 @@
 
 #include <QPointer>
 #include <QLabel>
+#include <QTableView>
 
 #include <KTextEditor/Cursor>
 
 #include "mi/gdbmi.h"
 #include "gdbcontroller.h"
-#include "gdbtable.h"
 
 class QToolButton;
 class QLabel;
@@ -49,7 +49,7 @@ class GDBTable;
 class GDBController;
 class CppDebuggerPlugin;
 
-class GDBBreakpointWidget : public GDBTable
+class GDBBreakpointWidget : public QTableView
 {
     Q_OBJECT
 

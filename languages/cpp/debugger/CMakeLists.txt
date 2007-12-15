@@ -53,7 +53,6 @@ set(kdevcppdebugger_PART_SRCS
     memviewdlg.cpp
     processselection.cpp
     gdboutputwidget.cpp
-    gdbtable.cpp
     debuggertracingdialog.cpp
     breakpointcontroller.cpp
     threaditem.cpp

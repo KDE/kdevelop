@@ -21,7 +21,6 @@
  */
 
 #include "gdbbreakpointwidget.h"
-#include "gdbtable.h"
 #include "debuggertracingdialog.h"
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
@@ -46,6 +45,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QContextMenuEvent>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -62,7 +62,7 @@ using namespace GDBMI;
 using namespace GDBDebugger;
 
 GDBBreakpointWidget::GDBBreakpointWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent)
-    : GDBTable(parent)
+    : QTableView(parent)
     , controller_(controller)
 {
     setWindowTitle(i18n("Debugger Breakpoints"));
@@ -82,37 +82,38 @@ GDBBreakpointWidget::GDBBreakpointWidget(CppDebuggerPlugin* plugin, GDBControlle
     // TODO: delegate with
     //DebuggerTracingDialog* d = new DebuggerTracingDialog(
 
-
     m_ctxMenu = new QMenu( this );
 
     QMenu* newBreakpoint = m_ctxMenu->addMenu( i18nc("New breakpoint", "New") );
-    newBreakpoint->addAction( i18nc("Code breakpoint", "Code"), this, SLOT(slotAddBlankBreakpoint()) );
+
+    QAction* action = newBreakpoint->addAction( i18nc("Code breakpoint", "Code"), this, SLOT(slotAddBlankBreakpoint()) );
+    // Use this action also to provide a local shortcut
+    action->setShortcut(Qt::Key_A + Qt::ShiftModifier + Qt::AltModifier);
+    addAction(action);
+
     newBreakpoint->addAction( i18nc("Data breakpoint", "Data write"), this, SLOT(slotAddBlankWatchpoint()) );
     newBreakpoint->addAction( i18nc("Data read breakpoint", "Data read"), this, SLOT(slotAddBlankReadWatchpoint()) );
 
     m_breakpointShow = m_ctxMenu->addAction( i18n( "Show text" ) );
+
     m_breakpointEdit = m_ctxMenu->addAction( i18n( "Edit" ) );
     m_breakpointEdit->setShortcut(Qt::Key_Enter);
+
     m_breakpointDisable = m_ctxMenu->addAction( i18n( "Disable" ) );
+
     m_breakpointDelete = m_ctxMenu->addAction( KIcon("breakpoint_delete"), i18n( "Delete" ), this, SLOT(slotRemoveBreakpoint()) );
+    // Use this action also to provide a local shortcut
     m_breakpointDelete->setShortcut(Qt::Key_Delete);
+    addAction(m_breakpointDelete);
+
     m_ctxMenu->addSeparator();
+
     m_breakpointDisableAll = m_ctxMenu->addAction( i18n( "Disable all") );
     m_breakpointEnableAll = m_ctxMenu->addAction( i18n( "Enable all") );
     m_breakpointDeleteAll = m_ctxMenu->addAction( i18n( "Delete all"), this, SLOT(slotRemoveAllBreakpoints()));
 
     connect( m_ctxMenu,     SIGNAL(triggered(QAction*)),
              this,          SLOT(slotContextMenuSelect(QAction*)) );
-
-    connect( this,       SIGNAL(returnPressed()),
-             this,          SLOT(slotEditBreakpoint()));
-//    connect( m_table,       SIGNAL(f2Pressed()),
-//             this,          SLOT(slotEditBreakpoint()));
-    connect( this,       SIGNAL(deletePressed()),
-             this,          SLOT(slotRemoveBreakpoint()));
-// This slot doesn't exist anymore
-//     connect( m_table,       SIGNAL(insertPressed()),
-//              this,          SLOT(slotAddBlankBreakpoint()));
 
     connect(controller,
             SIGNAL(watchpointHit(int, const QString&, const QString&)),
@@ -135,7 +136,6 @@ GDBBreakpointWidget::GDBBreakpointWidget(CppDebuggerPlugin* plugin, GDBControlle
              this, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
     connect(plugin, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), this, SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
 }
-
 
 /***************************************************************************/
 
@@ -345,7 +345,7 @@ void GDBBreakpointWidget::contextMenuEvent(QContextMenuEvent* event)
     m_breakpointDelete->setEnabled(has_bps);
 
     m_ctxMenuBreakpoint = bp;
-    m_ctxMenu->popup( event->pos() );
+    m_ctxMenu->popup( event->globalPos() );
 }
 
 void GDBBreakpointWidget::slotContextMenuSelect( QAction* action )

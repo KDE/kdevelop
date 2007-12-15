@@ -353,7 +353,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         }
 
 
-        QAction* res = activePopup_->exec(QCursor::pos());
+        QAction* res = activePopup_->exec(event->globalPos());
         delete activePopup_;
         activePopup_ = 0;
 
