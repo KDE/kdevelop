@@ -1,17 +1,24 @@
-/***************************************************************************
-    begin                : Tues Jan 3 2000
-    copyright            : (C) 2000 by John Birch
-    email                : jbb@kdevelop.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ * GDB Debugger Support
+ *
+ * Copyright 2000 John Birch <jbb@kdevelop.org>
+ * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
@@ -23,9 +30,6 @@
 #include <ktextedit.h>
 #include <kglobalsettings.h>
 
-#include <q3dict.h>
-#include <q3header.h>
-#include <q3textedit.h>
 #include <QShowEvent>
 #include <QHideEvent>
 
@@ -43,7 +47,7 @@ namespace GDBDebugger
 /***************************************************************************/
 
 DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent)
-        : Q3TextEdit(parent), controller_(controller),
+        : QTreeWidget(parent), controller_(controller),
         active_(false),
         lower_(0),
         upper_(0),
@@ -59,7 +63,10 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, GDBController* c
     setWindowIcon( KIcon("gear") );
     setWindowTitle(i18n("Disassemble View"));
     setFont(KGlobalSettings::fixedFont());
-    setReadOnly(true);
+    setSelectionMode(SingleSelection);
+    setColumnCount(ColumnCount);
+
+    setHeaderLabels(QStringList() << i18n("Address") << i18n("Function") << i18n("Offset") << i18n("Instruction"));
 
     connect( controller,  SIGNAL(showStepInSource(const QString&, int, const QString&)),
              this,        SLOT(slotShowStepInSource(const QString&, int, const QString&)));
@@ -80,14 +87,15 @@ bool DisassembleWidget::displayCurrent()
     Q_ASSERT(address_ >= lower_ || address_ <= upper_);
 
     int line;
-    for (line=0; line < paragraphs(); line++)
+    for (line=0; line < topLevelItemCount(); line++)
     {
-        unsigned long address = strtoul(text(line).toLatin1(), 0, 0);
+        QTreeWidgetItem* item = topLevelItem(line);
+        unsigned long address = strtoul(item->text(Address).toLatin1(), 0, 0);
         if (address == address_)
         {
             // put cursor at start of line and highlight the line
-            setCursorPosition(line, 0);
-            setSelection(line,0,line+1,0,0);
+            setCurrentItem(item);
+            selectionModel()->select(indexFromItem(item), QItemSelectionModel::Select);
             return true;
         }
     }
@@ -162,7 +170,7 @@ void DisassembleWidget::memoryRead(const GDBMI::ResultRecord& r)
     QString offs = line["offset"].literal();
     QString inst = line["inst"].literal();
 
-    rawdata += QString(addr + "  " + fct+"+"+offs + "    " + inst + "\n");
+    addTopLevelItem(new QTreeWidgetItem(this, QStringList() << addr << fct << offs << inst));
 
     if (i == 0) {
       lower_ = strtoul(addr.toLatin1(), 0, 0);
@@ -170,8 +178,6 @@ void DisassembleWidget::memoryRead(const GDBMI::ResultRecord& r)
       upper_ = strtoul(addr.toLatin1(), 0, 0);
     }
   }
-
-  append(rawdata);
 
   displayCurrent();
 }
@@ -190,7 +196,7 @@ void DisassembleWidget::hideEvent(QHideEvent*)
 
 void DisassembleWidget::slotDeactivate()
 {
-  slotActivate(false);
+    slotActivate(false);
 }
 
 /***************************************************************************/
