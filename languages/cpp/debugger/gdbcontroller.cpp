@@ -406,29 +406,6 @@ void GDBController::slotPauseApp()
 
 void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
 {
-    // Is this stop on shared library load? Gdb smartly does not
-    // print any 'reason' field in this case.
-    bool shared_library_load = false;
-    if (currentCmd_)
-    {
-        const QStringList& lines = currentCmd_->allStreamOutput();
-        for(int i = 0; i < lines.count(); ++i)
-        {
-            if (lines[i].startsWith("Stopped due to shared library event"))
-            {
-                shared_library_load = true;
-                break;
-            }
-        }
-    }
-
-    if (shared_library_load)
-    {
-        raiseEvent(shared_library_loaded);
-        queueCmd(new GDBCommand(GDBMI::ExecContinue));
-        return;
-    }
-
     if (!r.hasField("reason"))
     {
         // FIXME: throw an exception, and add the gdb reply in the
@@ -788,18 +765,6 @@ bool GDBController::startDebugger()
     queueCmd(new GDBCommand(GDBMI::GdbSet, "width 0"));
     queueCmd(new GDBCommand(GDBMI::GdbSet, "height 0"));
 
-    // Get gdb to notify us of shared library events. This allows us to
-    // set breakpoints in shared libraries that are not loaded yet. On each
-    // stop, we'll try to set breakpoints again.
-    //
-    // Gdb 6.3 and later implement so called 'pending breakpoints' that
-    // solve this issue cleanly, but:
-    // - This is broken for MI -break-insert command (the breakpoint is
-    //   not inserted at all, and no error is produced)
-    // - MI does not contains notification that pending breakpoint is resolved.
-    queueCmd(new GDBCommand(GDBMI::GdbSet, "stop-on-solib-events 1"));
-
-
     queueCmd(new GDBCommand(SignalHandle, "SIG32 pass nostop noprint"));
     queueCmd(new GDBCommand(SignalHandle, "SIG41 pass nostop noprint"));
     queueCmd(new GDBCommand(SignalHandle, "SIG42 pass nostop noprint"));
@@ -900,7 +865,6 @@ bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
     // FIXME: a bit hacky, as we're really not ready for new commands.
     setStateOn(s_dbgBusy);
     raiseEvent(debugger_ready);
-    raiseEvent(connected_to_program);
 
     if (!config_runShellScript_.isEmpty()) {
         // Special for remote debug...
@@ -967,6 +931,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
         else
         {
             queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, run.executable().path()));
+            raiseEvent(connected_to_program);
             queueCmd(new GDBCommand(ExecRun));
         }
     }

@@ -174,7 +174,7 @@ QString GDBCommand::gdbCommand() const
             command = "break-info";//"info break"
             break;
         case BreakInsert:
-            command = "break-insert";
+            command = "break-insert -f";
             break;
         case BreakList:
             command = "break-list";//"info break"

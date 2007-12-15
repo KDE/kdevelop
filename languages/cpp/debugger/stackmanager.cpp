@@ -85,7 +85,6 @@ void StackManager::slotEvent(event_t e)
 
         case debugger_busy:
         case debugger_ready:
-        case shared_library_loaded:
         case program_running:
         case connected_to_program:
             break;

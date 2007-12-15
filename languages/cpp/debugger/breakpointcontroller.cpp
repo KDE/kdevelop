@@ -552,7 +552,6 @@ void BreakpointController::slotEvent(event_t e)
             break;
         }
 
-    case shared_library_loaded:
     case connected_to_program:
         {
             foreach (Breakpoint* bp, breakpoints())
