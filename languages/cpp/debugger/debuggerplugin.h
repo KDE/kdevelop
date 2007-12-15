@@ -36,8 +36,6 @@ class ProcessWidget;
 class KToolBar;
 class KAction;
 
-class BreakpointController;
-
 namespace KDevelop {
 class Context;
 class ProcessLineMaker;
@@ -64,8 +62,6 @@ class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvide
 public:
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
-
-    BreakpointController* breakpoints() const;
 
     /**
      * Call this when something very interesting happens that the user
@@ -129,17 +125,12 @@ private Q_SLOTS:
     void slotRunToCursor();
     void slotJumpToCursor();
 
-    void slotRefreshBPState(const Breakpoint&);
-
-    void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
 
     //void slotDCOPApplicationRegistered(const QByteArray &appId);
     void slotCloseDrKonqi();
 
     void slotDebuggerAbnormalExit();
-
-    void slotEvent(event_t);
 
     void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
@@ -162,7 +153,6 @@ private:
     void setupActions();
 
     GDBController *controller;
-    //QPointer<QLabel> statusBarIndicator;
     QPointer<KToolBar> floatingToolBar;
     KDevelop::ProcessLineMaker* procLineMaker;
     KDevelop::ProcessLineMaker* gdbLineMaker;
@@ -170,7 +160,6 @@ private:
     QString m_contextIdent;
     QByteArray m_drkonqi;
 
-    //KDevDebugger *m_debugger;
     DBGStateFlags debuggerState_;
     // Set to true after each debugger restart
     // Currently used to auto-show variables view
@@ -181,7 +170,6 @@ private:
     bool running_;
 
     KConfigGroup m_config;
-    BreakpointController* m_breakpointController;
 
     KAction* m_startDebugger;
     KAction* m_restartDebugger;
@@ -195,10 +183,6 @@ private:
     KAction* m_stepOverInstruction;
     KAction* m_stepOut;
     KAction* m_toggleBreakpoint;
-
-    
-Q_SIGNALS:
-    void buildProject();
 };
 
 }

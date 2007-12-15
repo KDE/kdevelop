@@ -47,6 +47,7 @@ class STTY;
 class CommandQueue;
 class VariableCollection;
 class StackManager;
+class BreakpointController;
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -165,6 +166,11 @@ public:
      */
     StackManager* stackManager() const;
 
+    /**
+     * Returns the breakpoint controller for this gdb session
+     */
+    BreakpointController* breakpoints() const;
+
     using QObject::event;
 
 public Q_SLOTS:
@@ -261,6 +267,8 @@ private Q_SLOTS:
 
     void slotKillGdb();
 
+    void slotShowStep(const QString &fileName, int lineNum);
+
 Q_SIGNALS:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
     void rawGDBMemoryDump     (char *buf);
@@ -351,6 +359,7 @@ private:
 
     VariableCollection* m_variableCollection;
     StackManager* m_stackManager;
+    BreakpointController* m_breakpointController;
 };
 
 }

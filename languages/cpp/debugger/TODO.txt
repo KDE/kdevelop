@@ -196,23 +196,4 @@ BUGS/ISSUES found:
    - When stopping inside undebuggable code (say, on watchpoint hit), 
      -file-list-exec-source-file reports the last valid source file.
 
-   - It's not possible to find if intefiour is running or not.
-
-  
-   
-
-
-Advantages of MI
-
-
-- The information is easier to extract.
-
-     - For watchpoint, getting the old and new value of
-       watched expression for display is trivial. For CLI,
-       this is tricky and not done in current code.
-
-
-
-
-
-
+   - It's not possible to find if inferiour is running or not.

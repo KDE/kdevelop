@@ -1,22 +1,30 @@
-/***************************************************************************
-    begin                : Tue May 13 2003
-    copyright            : (C) 2003 by John Birch
-    email                : jbb@kdevelop.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ * GDB Debugger Support
+ *
+ * Copyright 2003 John Birch <jbb@kdevelop.org>
+ * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "breakpoint.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "gdbglobal.h"
+#include "breakpointcontroller.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -36,8 +44,7 @@
 
 using namespace GDBMI;
 
-namespace GDBDebugger
-{
+using namespace GDBDebugger;
 
 static int BPKey_ = 0;
 
@@ -45,8 +52,9 @@ static int BPKey_ = 0;
 /***************************************************************************/
 /***************************************************************************/
 
-Breakpoint::Breakpoint(bool temporary, bool enabled)
-    : s_pending_(true),
+Breakpoint::Breakpoint(BreakpointController* controller, bool temporary, bool enabled)
+    : QObject(controller),
+      s_pending_(true),
       s_actionAdd_(true),
       s_actionClear_(false),
       s_actionModify_(false),
@@ -73,14 +81,11 @@ Breakpoint::~Breakpoint()
 {
 }
 
-void Breakpoint::sendToGdb(GDBController* controller)
+void Breakpoint::sendToGdb()
 {
-    // Need to issue 'modifyBreakpoint' when setting breakpoint is done
-    controller_ = controller;
-
     // FIXME: should either make sure this widget is disabled
     // when needed, or implement simular logic.
-    if (controller->stateIsOn(s_dbgNotStarted))
+    if (controller()->stateIsOn(s_dbgNotStarted))
     {
         // Can't modify breakpoint now, will try again later.
         setPending(true);
@@ -94,11 +99,11 @@ void Breakpoint::sendToGdb(GDBController* controller)
     // produces the "^running" marker.
     // FIXME: this probably won't work if there are other
     // run commands in the thread already.
-    if (controller->stateIsOn(s_appRunning)
-        && !controller->stateIsOn(s_explicitBreakInto))
+    if (controller()->stateIsOn(s_appRunning)
+        && !controller()->stateIsOn(s_explicitBreakInto))
     {
         kDebug(9012) << "PAUSING APP";
-        controller->slotPauseApp();
+        controller()->slotPauseApp();
         restart = true;
     }
     
@@ -113,20 +118,20 @@ void Breakpoint::sendToGdb(GDBController* controller)
         // output from the first one.
         if (isValid() && !isDbgProcessing())
         {
-            setBreakpoint(controller);
+            setBreakpoint();
         }
     }
     else
     {
         if (isActionClear())
         {
-            clearBreakpoint(controller);
+            clearBreakpoint();
         }
         else
         {
             if (isActionModify())
             {
-                modifyBreakpoint(controller); 
+                modifyBreakpoint();
             }
         }
     }
@@ -135,11 +140,11 @@ void Breakpoint::sendToGdb(GDBController* controller)
         kDebug(9012) << "RESTARING APP";
         GDBCommand *cmd = new GDBCommand(ExecContinue);
         cmd->setRun(true);
-        controller->addCommand(cmd);
+        controller()->addCommand(cmd);
     }
 }
 
-void Breakpoint::clearBreakpoint(GDBController* /*c*/)
+void Breakpoint::clearBreakpoint()
 {
     controller()->addCommandBeforeRun(
         new GDBCommand(BreakDelete,
@@ -148,12 +153,12 @@ void Breakpoint::clearBreakpoint(GDBController* /*c*/)
                        &Breakpoint::handleDeleted)); 
 }
 
-void Breakpoint::applicationExited(GDBController*) 
+void Breakpoint::applicationExited() 
 {
 }
 
 
-void Breakpoint::setBreakpoint(GDBController* controller)
+void Breakpoint::setBreakpoint()
 {
     setDbgProcessing(true);
 
@@ -167,25 +172,25 @@ void Breakpoint::setBreakpoint(GDBController* controller)
     //
     // When this command is finished, slotParseGDBBreakpointSet
     // will be called by the controller.
-    controller->addCommandBeforeRun(
+    controller()->addCommandBeforeRun(
         new GDBCommand(BreakInsert, dbgSetCommand(),
                        this,
                        &Breakpoint::handleSet, true));
 }
 
 
-void Breakpoint::modifyBreakpoint(GDBController* controller)
+void Breakpoint::modifyBreakpoint()
 {
-    controller->
+    controller()->
         addCommandBeforeRun(
             new ModifyBreakpointCommand(BreakCondition, QString("%1 ") +
                                         conditional(), this));
-    controller->
+    controller()->
         addCommandBeforeRun(
             new ModifyBreakpointCommand(BreakAfter, QString("%1 ") +
                                         QString::number(ignoreCount()), this));
 
-    controller->
+    controller()->
         addCommandBeforeRun(
             new ModifyBreakpointCommand(isEnabled() ? BreakEnable : BreakDisable,
                                         QString("%1"),
@@ -360,7 +365,7 @@ void Breakpoint::handleSet(const GDBMI::ResultRecord& r)
 
     // Immediately call modifyBreakpoint to set all breakpoint
     // properties, such as condition.
-    modifyBreakpoint(controller_);
+    modifyBreakpoint();
 
     emit modified(this);
 }
@@ -376,18 +381,31 @@ void Breakpoint::handleDeleted(const GDBMI::ResultRecord& /*r*/)
     emit modified(this);
 }
 
+void Breakpoint::remove()
+{
+    // Only remove if gdb has already heard of it
+    if (dbgId() != -1 || isDbgProcessing()) {
+        setActionClear(true);
+        sendToGdb();
+    }
+
+    setActionDie();
+    sendToGdb();
+}
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
-FilePosBreakpoint::FilePosBreakpoint()
-: subtype_(filepos),
+FilePosBreakpoint::FilePosBreakpoint(BreakpointController* controller)
+: Breakpoint(controller),
+  subtype_(filepos),
   line_(-1)
 {}
 
-FilePosBreakpoint::FilePosBreakpoint(const QString &fileName, int lineNum,
+FilePosBreakpoint::FilePosBreakpoint(BreakpointController* controller, const QString &fileName, int lineNum,
                                      bool temporary, bool enabled)
-    : Breakpoint(temporary, enabled)
+    : Breakpoint(controller, temporary, enabled)
 {
     // Sets 'subtype'
     setLocation(QString("%1:%2").arg(fileName).arg(lineNum));
@@ -400,7 +418,7 @@ FilePosBreakpoint::~FilePosBreakpoint()
 QString FilePosBreakpoint::dbgSetCommand() const
 {
     QString cmdStr;
-    cmdStr = QString("%1").arg(location_);
+    cmdStr = location_;
 
     if (isTemporary())
         cmdStr = cmdStr + " -t";
@@ -443,8 +461,6 @@ int FilePosBreakpoint::lineNum() const
     return line_;
 }
 
-
-
 QString FilePosBreakpoint::location(bool compact) const
 {
     if (subtype_ == filepos && hasFileAndLine() && compact)
@@ -456,8 +472,6 @@ QString FilePosBreakpoint::location(bool compact) const
         return location_;
     }
 }
-
-/***************************************************************************/
 
 void FilePosBreakpoint::setLocation(const QString& location)
 {
@@ -507,7 +521,7 @@ void FilePosBreakpoint::handleSet(const GDBMI::ResultRecord& r)
         if (v.hasField("fullname") && v.hasField("line"))
         {
             fileName_ = v["fullname"].literal();
-            line_ = v["line"].literal().toInt();        
+            line_ = v["line"].literal().toInt();
         }
     }
 
@@ -518,8 +532,8 @@ void FilePosBreakpoint::handleSet(const GDBMI::ResultRecord& r)
 /***************************************************************************/
 /***************************************************************************/
 
-Watchpoint::Watchpoint(const QString& varName, bool temporary, bool enabled)
-    : Breakpoint(temporary, enabled),
+Watchpoint::Watchpoint(BreakpointController* controller, const QString& varName, bool temporary, bool enabled)
+    : Breakpoint(controller, temporary, enabled),
       varName_(varName)    
 {    
 }
@@ -530,13 +544,13 @@ Watchpoint::~Watchpoint()
 {
 }
 
-void Watchpoint::setBreakpoint(GDBController* controller)
+void Watchpoint::setBreakpoint()
 {    
     if (isEnabled())
     {
         setDbgProcessing(true);
 
-        controller->addCommandBeforeRun(
+        controller()->addCommandBeforeRun(
             new GDBCommand(
                 DataEvaluateExpression,
                 QString("&%1").arg(varName_),
@@ -556,9 +570,9 @@ void Watchpoint::handleAddressComputed(const GDBMI::ResultRecord& r)
             &Watchpoint::handleSet));
 }
 
-void Watchpoint::applicationExited(GDBController* c)
+void Watchpoint::applicationExited()
 {
-    if (!c->stateIsOn(s_dbgNotStarted))
+    if (!controller()->stateIsOn(s_dbgNotStarted))
     {
         // Note: not using 'clearBreakpoint' as it will delete breakpoint
         // completely.
@@ -595,8 +609,8 @@ bool Watchpoint::match_data(const Breakpoint* xb) const
     return (varName_ == b->varName_);
 }
 
-ReadWatchpoint::ReadWatchpoint(const QString& varName, bool temporary, bool enabled)
-    : Watchpoint(varName, temporary, enabled)
+ReadWatchpoint::ReadWatchpoint(BreakpointController* controller, const QString& varName, bool temporary, bool enabled)
+    : Watchpoint(controller, varName, temporary, enabled)
 {
 }
 
@@ -612,112 +626,20 @@ bool ReadWatchpoint::match_data(const Breakpoint* xb) const
     return (varName() == b->varName());
 }
 
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
+BreakpointController * GDBDebugger::Breakpoint::breakpointController() const
+{
+    return static_cast<BreakpointController*>(const_cast<QObject*>(parent()));
+}
 
-//ExitBreakpoint::ExitBreakpoint(bool temporary, bool enabled) :
-//  Breakpoint(temporary, enabled)
-//{
-//}
-//
-///***************************************************************************/
-//
-//ExitBreakpoint::~ExitBreakpoint()
-//{
-//}
-//
-///***************************************************************************/
-//
-//QString ExitBreakpoint::dbgSetCommand() const
-//{
-//  return "";
-//}
-//
-///***************************************************************************/
-//
-//bool ExitBreakpoint::match(const Breakpoint* brkpt) const
-//{
-//  // simple case
-//  if (this == brkpt)
-//    return true;
-//
-//  // Type case
-//  const ExitBreakpoint* check = dynamic_cast<const ExitBreakpoint*>(brkpt);
-//  if (!check)
-//    return false;
-//
-//  // member case
-//  return true;
-//}
-//
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-//
-// These are implemented in gdb but can cause a lot of breakpoints
-// to be set. This needs more thought before being implemented
+GDBController * GDBDebugger::Breakpoint::controller() const
+{
+    return breakpointController()->controller();
+}
 
-//RegExpBreakpoint::RegExpBreakpoint(bool temporary, bool enabled) :
-//  Breakpoint(temporary, enabled)
-//{
-//}
-//
-///***************************************************************************/
-//
-//RegExpBreakpoint::~RegExpBreakpoint()
-//{
-//}
-//
-///***************************************************************************/
-//
-//QString RegExpBreakpoint::dbgSetCommand() const
-//{
-//  return "";
-//}
-//
-///***************************************************************************/
-//
-////QString RegExpBreakpoint::dbgRemoveCommand() const
-////{
-////  return "";
-////}
-//
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
-// Most catch options arn't implemented in gdb so ignore this for now.
-
-//CatchBreakpoint::CatchBreakpoint(bool temporary, bool enabled) :
-//  Breakpoint(temporary, enabled)
-//{
-//}
-//
-///***************************************************************************/
-//
-//CatchBreakpoint::~CatchBreakpoint()
-//{
-//}
-//
-///***************************************************************************/
-//
-//QString CatchBreakpoint::dbgSetCommand() const
-//{
-//  return "";
-//}
-//
-///***************************************************************************/
-//
-////QString CatchBreakpoint::dbgRemoveCommand() const
-////{
-////  return "";
-////}
-//
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
+void Breakpoint::setEnabled(bool enabled)
+{
+    s_enabled_ = enabled;
+    emit enabledChanged(this);
 }
 
 #include "breakpoint.moc"

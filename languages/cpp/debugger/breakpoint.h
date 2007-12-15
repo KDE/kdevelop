@@ -1,17 +1,24 @@
-/***************************************************************************
-    begin                : Tue May 13 2003
-    copyright            : (C) 2003 by John Birch
-    email                : jbb@kdevelop.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+ * GDB Debugger Support
+ *
+ * Copyright 2003 John Birch <jbb@kdevelop.org>
+ * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #ifndef _BREAKPOINT_H_
 #define _BREAKPOINT_H_
@@ -35,6 +42,7 @@ namespace GDBDebugger
 {
 
     class GDBController;
+    class BreakpointController;
 
 enum BP_TYPES
 {
@@ -48,15 +56,18 @@ class Breakpoint : public QObject
 {
     Q_OBJECT
 public:
-    Breakpoint(bool temporary=false, bool enabled=true);
+    Breakpoint(BreakpointController* controller, bool temporary=false, bool enabled=true);
     virtual ~Breakpoint();
 
-    void sendToGdb(GDBController* c);
+    BreakpointController* breakpointController() const;
+    GDBController* controller() const;
+
+    void sendToGdb();
 
     // Called whenever this breakpoint is removed on gdb side.
     virtual void removedInGdb();
 
-    virtual void applicationExited(GDBController*);
+    virtual void applicationExited();
 
 
 
@@ -79,11 +90,13 @@ public:
 
     virtual void reset();
 
+    virtual void remove();
+
     void setActive(int active, int id);
     bool isActive(int active) const                 { return (active_ == active) ||
                                                         (s_pending_ && !s_actionClear_); }
 
-    void setEnabled(bool enabled)                   { s_enabled_ = enabled; }
+    void setEnabled(bool enabled);
     bool isEnabled() const                          { return s_enabled_; }
 
     void setTemporary(bool temporary)               { s_temporary_ = temporary; }
@@ -156,16 +169,16 @@ Q_SIGNALS:
         property has changes.
     */
     void modified(Breakpoint*);
+    void enabledChanged(Breakpoint*);
 
 private:
     void handleDeleted(const GDBMI::ResultRecord&);
-    virtual void setBreakpoint(GDBController* controller);
-    void modifyBreakpoint(GDBController* controller);
+    virtual void setBreakpoint();
+    void modifyBreakpoint();
 
 protected:
-    GDBController* controller() const { return controller_; }
     virtual void handleSet(const GDBMI::ResultRecord&);
-    void clearBreakpoint(GDBController* c);
+    void clearBreakpoint();
 
 private:
     bool s_pending_             :1;
@@ -191,8 +204,6 @@ private:
     QString condition_;
     QStringList tracedExpressions_;
     QString traceFormatString_;
-
-    GDBController* controller_;
 };
 
 /***************************************************************************/
@@ -200,10 +211,12 @@ private:
 /***************************************************************************/
 class FilePosBreakpoint : public Breakpoint
 {
-public:
-    FilePosBreakpoint();
+    Q_OBJECT
 
-    FilePosBreakpoint(const QString &fileName, int lineNum,
+public:
+    FilePosBreakpoint(BreakpointController* controller);
+
+    FilePosBreakpoint(BreakpointController* controller, const QString &fileName, int lineNum,
                       bool temporary=false, bool enabled=true);
     virtual ~FilePosBreakpoint();
     virtual QString dbgSetCommand() const;
@@ -232,50 +245,17 @@ private:
     QString fileName_;
     int line_;
 };
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-//class RegExpBreakpoint : public Breakpoint
-//{
-//public:
-//  RegExpBreakpoint(bool temporary=false, bool enabled=true);
-//  virtual ~RegExpBreakpoint();
-//  virtual QString dbgSetCommand() const;
-//};
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-//class CatchBreakpoint : public Breakpoint
-//{
-//public:
-//  CatchBreakpoint(bool temporary=false, bool enabled=true);
-//  virtual ~CatchBreakpoint();
-//  virtual QString dbgSetCommand() const;
-//  virtual CatchBreakpoint& operator=(const CatchBreakpoint& rhs);
-//};
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-//class ExitBreakpoint : public Breakpoint
-//{
-//public:
-//  ExitBreakpoint(bool temporary=false, bool enabled=true);
-//  virtual ~ExitBreakpoint();
-//  virtual QString dbgSetCommand() const;
-//  bool match(const Breakpoint* brkpt) const;
-//  virtual void configureDisplay();
-//};
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
+
 class Watchpoint : public Breakpoint
 {
+    Q_OBJECT
+
 public:
-    Watchpoint(const QString &varName, bool temporary=false, bool enabled=true);
+    Watchpoint(BreakpointController* controller, const QString &varName, bool temporary=false, bool enabled=true);
     virtual ~Watchpoint();
     virtual QString dbgSetCommand() const;
 
-    void applicationExited(GDBController*);
+    void applicationExited();
     void removedInGdb();
  
     bool match_data(const Breakpoint *brkpt) const;
@@ -290,7 +270,7 @@ public:
     bool isValid() const                        { return !varName_.isEmpty(); }
 
 private:
-    void setBreakpoint(GDBController* controller);
+    void setBreakpoint();
     void handleAddressComputed(const GDBMI::ResultRecord&);
 
     QString varName_;
@@ -299,8 +279,10 @@ private:
 
 class ReadWatchpoint : public Watchpoint
 {
+    Q_OBJECT
+
 public:
-    ReadWatchpoint(const QString &varName, bool temporary=false, bool enabled=true);
+    ReadWatchpoint(BreakpointController* controller, const QString &varName, bool temporary=false, bool enabled=true);
     virtual QString dbgSetCommand() const;
     bool match_data(const Breakpoint *brkpt) const;
 

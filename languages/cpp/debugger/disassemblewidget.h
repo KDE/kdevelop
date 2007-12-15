@@ -41,6 +41,9 @@ public:
     DisassembleWidget( CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent=0 );
     virtual ~DisassembleWidget();
 
+Q_SIGNALS:
+    void requestRaise();
+
 public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();

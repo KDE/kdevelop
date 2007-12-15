@@ -51,6 +51,7 @@ namespace GDBDebugger
         void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
     Q_SIGNALS:
+        void requestRaise();
         void setViewShown(bool shown);
 
 

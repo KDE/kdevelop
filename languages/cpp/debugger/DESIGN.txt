@@ -6,7 +6,7 @@ one.
 == Components and lifecycle ==
 
 Debugger part consists of low-lever "controller" that handles talking
-with gdb and guess what state gdb is in, a number of view widgets, showing
+with gdb and remembering what state gdb is in, a number of view widgets, showing
 the state of the program, and a number of places where user can click to
 affect the program.
 

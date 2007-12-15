@@ -126,7 +126,7 @@ void AbstractVariableItem::deleteChild(AbstractVariableItem * item)
 Qt::ItemFlags AbstractVariableItem::flags(int column) const
 {
     Q_UNUSED(column);
-    return Qt::ItemIsSelectable;
+    return static_cast<Qt::ItemFlags>(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
 GDBController * AbstractVariableItem::controller() const

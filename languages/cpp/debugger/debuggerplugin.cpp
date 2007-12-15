@@ -60,7 +60,6 @@
 #include "gdboutputwidget.h"
 #include "debuggerconfigwidget.h"
 #include "gdbglobal.h"
-#include "breakpointcontroller.h"
 #include "variablecollection.h"
 
 #include <iostream>
@@ -103,8 +102,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDevelop::IPlugin( CppDebuggerFactory::componentData(), parent ),
     controller(0), debuggerState_(s_dbgNotStarted|s_appNotStarted),
     justRestarted_(false),
-    running_(false), m_config(KGlobal::config(), "GDB Debugger"),
-    m_breakpointController(new BreakpointController(this))
+    running_(false), m_config(KGlobal::config(), "GDB Debugger")
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
@@ -134,11 +132,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 //
 //     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
 //              this, SLOT(slotStop(KDevPlugin*)) );
-//     connect( core(), SIGNAL(projectClosed()),
-//              this, SLOT(projectClosed()) );
-//
-//     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
-//              this, SLOT(slotActivePartChanged(KParts::Part*)) );
 
     procLineMaker = new KDevelop::ProcessLineMaker();
 
@@ -452,13 +445,9 @@ void CppDebuggerPlugin::setupController()
 //              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(const QString &)));
 
     // controller -> this
-    connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
-             this,                  SLOT(slotShowStep(const QString&, int)));
     connect( controller,            SIGNAL(debuggerAbnormalExit()),
          this,                  SLOT(slotDebuggerAbnormalExit()));
 
-    connect(controller, SIGNAL(event(event_t)),
-            this,       SLOT(slotEvent(event_t)));
     connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
              this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
 
@@ -487,7 +476,6 @@ bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, int serial)
 void CppDebuggerPlugin::slotStopDebugger()
 {
     controller->stopDebugger();
-    breakpoints()->clearExecutionPoint();
 
     emit reset();
 }
@@ -565,56 +553,6 @@ void CppDebuggerPlugin::slotJumpToCursor()
     }
 }
 
-void CppDebuggerPlugin::slotRefreshBPState( const Breakpoint& BP)
-{
-    if (BP.hasFileAndLine())
-    {
-        const FilePosBreakpoint& bp = dynamic_cast<const FilePosBreakpoint&>(BP);
-        if (bp.isActionDie())
-        {
-            breakpoints()->setBreakpoint(bp.fileName(), bp.lineNum()-1, -1, true, false);
-        }
-        else if (bp.isActionClear())
-        {
-            // Do nothing. This is always a result of breakpoint deletion,
-            // either via click on gutter, or via breakpoints window.
-            // We should not add marker for a breakpoint that's being deleted,
-            // because if user removes marker, and we re-add it here until
-            // we see 'actionDie' this can confuse the code.
-            // And no need to clear the marker, since we'll soon see 'actionDie'
-            // and clear it for good.
-        }
-        else
-            breakpoints()->setBreakpoint(bp.fileName(), bp.lineNum()-1,
-                                  1/*bp->id()*/, bp.isEnabled(), bp.isPending() );
-    }
-}
-
-void CppDebuggerPlugin::slotEvent(event_t e)
-{
-    if (e == program_running ||
-        e == program_exited ||
-        e == debugger_exited)
-    {
-        breakpoints()->clearExecutionPoint();
-    }
-}
-
-
-void CppDebuggerPlugin::slotShowStep(const QString &fileName, int lineNum)
-{
-    if ( ! fileName.isEmpty() )
-    {
-        // Debugger counts lines from 1
-        breakpoints()->gotoExecutionPoint(KUrl( fileName ), lineNum-1);
-    }
-    else
-    {
-        breakpoints()->clearExecutionPoint();
-    }
-}
-
-
 void CppDebuggerPlugin::slotGotoSource(const QString &fileName, int lineNum)
 {
     if ( ! fileName.isEmpty() )
@@ -657,11 +595,6 @@ void CppDebuggerPlugin::slotStartDebugger()
         run.setInstrumentor("gdb");
         KDevelop::ICore::self()->runController()->execute(run);
     }
-}
-
-BreakpointController * CppDebuggerPlugin::breakpoints() const
-{
-    return m_breakpointController;
 }
 
 void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState)

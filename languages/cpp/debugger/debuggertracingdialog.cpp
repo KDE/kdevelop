@@ -31,7 +31,7 @@ namespace GDBDebugger
         enableCustomFormat->setChecked(bp_->traceFormatStringEnabled());
         customFormat->setText(bp_->traceFormatString());
         
-        enableOrDisable(enable->state());
+        enableOrDisable(enable->isChecked());
     }
 
     void DebuggerTracingDialog::enableOrDisable(int state)
@@ -41,7 +41,7 @@ namespace GDBDebugger
         expressionsLabel->setEnabled(enable);
         expressions->setEnabled(enable);
         enableCustomFormat->setEnabled(enable);
-        customFormat->setEnabled(enable && enableCustomFormat->isOn());
+        customFormat->setEnabled(enable && enableCustomFormat->isChecked());
     }
 
     void DebuggerTracingDialog::enableOrDisableCustomFormat(int state)
@@ -56,7 +56,7 @@ namespace GDBDebugger
         // format specifiers
         bool ok = true;
 
-        if (enableCustomFormat->isOn())
+        if (enableCustomFormat->isChecked())
         {
             QString s = customFormat->text();
             int percent_count = 0;
@@ -94,9 +94,9 @@ namespace GDBDebugger
        
         if (ok)
         {        
-            bp_->setTracingEnabled(enable->isOn());
+            bp_->setTracingEnabled(enable->isChecked());
             bp_->setTracedExpressions(expressions->items());
-            bp_->setTraceFormatStringEnabled(enableCustomFormat->isOn());
+            bp_->setTraceFormatStringEnabled(enableCustomFormat->isChecked());
             bp_->setTraceFormatString(customFormat->text());
             QDialog::accept();
         }

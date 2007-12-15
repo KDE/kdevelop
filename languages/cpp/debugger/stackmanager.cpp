@@ -308,7 +308,6 @@ QVariant StackManager::headerData(int section, Qt::Orientation orientation, int 
 
 bool StackManager::canFetchMore(const QModelIndex & parent) const
 {
-    kDebug() << parent;
     if (!parent.isValid())
         return false;
 

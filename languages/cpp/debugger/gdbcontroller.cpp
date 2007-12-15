@@ -53,6 +53,7 @@
 #include "gdbcommandqueue.h"
 #include "variablecollection.h"
 #include "stackmanager.h"
+#include "breakpointcontroller.h"
 
 using namespace std;
 using namespace GDBMI;
@@ -157,7 +158,8 @@ GDBController::GDBController(QObject* parent)
         stateReloadInProgress_(false),
         m_process(0),
         m_variableCollection(new VariableCollection(this)),
-        m_stackManager(new StackManager(this))
+        m_stackManager(new StackManager(this)),
+        m_breakpointController(new BreakpointController(this))
 {
     configure();
 
@@ -165,6 +167,9 @@ GDBController::GDBController(QObject* parent)
     debug_controllerExists = true;
 
     connect(this, SIGNAL(event(event_t)), m_variableCollection, SLOT(slotEvent(event_t)));
+
+    connect( this, SIGNAL(showStepInSource(const QString&, int, const QString&)),
+             this, SLOT(slotShowStep(const QString&, int)));
 }
 
 // **************************************************************************
@@ -1083,6 +1088,8 @@ void GDBController::stopDebugger()
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
     QTimer::singleShot(5000, this, SLOT(slotKillGdb()));
+
+    breakpoints()->clearExecutionPoint();
 }
 
 void GDBController::slotKillGdb()
@@ -1791,9 +1798,27 @@ VariableCollection * GDBController::variables() const
     return m_variableCollection;
 }
 
-StackManager * GDBDebugger::GDBController::stackManager() const
+StackManager * GDBController::stackManager() const
 {
     return m_stackManager;
+}
+
+BreakpointController* GDBController::breakpoints() const
+{
+    return m_breakpointController;
+}
+
+void GDBController::slotShowStep(const QString &fileName, int lineNum)
+{
+    if ( ! fileName.isEmpty() )
+    {
+        // Debugger counts lines from 1
+        breakpoints()->gotoExecutionPoint(KUrl( fileName ), lineNum-1);
+    }
+    else
+    {
+        breakpoints()->clearExecutionPoint();
+    }
 }
 
 }
