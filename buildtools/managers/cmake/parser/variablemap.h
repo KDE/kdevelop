@@ -37,6 +37,8 @@ class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
 // 
 //         int size() const { return QHash<QString, QStringList>::size(); }
 //         QStringList keys() const { return QHash<QString, QStringList>::keys(); }
+        static QString regexVar() { return "\\$\\{[A-z0-9-]+\\}"; }
+        static QString regexEnvVar() { return "\\$ENV\\{[A-z0-9-]+\\}"; }
 };
 
 #endif

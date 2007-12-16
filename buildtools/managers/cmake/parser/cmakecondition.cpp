@@ -154,7 +154,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
         {
             case NOT:
                 last = !last;
-                itEnd=it2-1;
+                itEnd=it2;
                 break;
             case COMMAND:
                 cmd = CMakeProjectVisitor::findFile(*(it2+1),
@@ -182,11 +182,11 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case IS_DIRECTORY: {
                 QFileInfo f(*(it2+1));
                 last = f.isDir();
-                itEnd=it2-1;
+                itEnd=it2;
             }   break;
             case DEFINED:
                 last=m_vars->contains(*(it2+1));
-                itEnd=it2-1;
+                itEnd=it2;
                 break;
             case AND:
                 return evaluateCondition(itBegin, it2-1) && last;

@@ -683,7 +683,12 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QRegExp rx("([0-9]*).([0-9]*).([0-9]*)");
     rx.indexIn(func.arguments[1].value);
     foreach(QString s, rx.capturedTexts())
-        m_version.append(s.toInt());
+    {
+        bool correct;
+        m_version.append(s.toInt(&correct));
+        if(!correct)
+            return false;
+    }
 
     if(func.arguments.count()==3)
     {
@@ -1277,9 +1282,12 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     foreach( CMakeFunctionArgument arg, func.arguments ) {
         if(arg.value[0].isNumber()) {
+            bool correctmin, correctmaj;
             QStringList version = func.arguments[1].value.split('.');
-            m_minorVersion = version[0].toInt();
-            m_majorVersion = version[1].toInt();
+            m_minorVersion = version[0].toInt(&correctmin);
+            m_majorVersion = version[1].toInt(&correctmaj);
+            if(!correctmin || !correctmaj)
+                return false;
         } else if(arg.value=="QUIET")
             m_isQuiet=true;
         else if(arg.value=="NO_MODULE")
@@ -1459,14 +1467,17 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     m_loopVar=func.arguments.first().value;
     if(func.arguments[1].value=="RANGE") {
+        bool correctStart, correctStop, correctRange;
         m_range=true;
         if(func.arguments.count()<4)
             return false;
         m_ranges.step = 1;
-        m_ranges.start = func.arguments[2].value.toInt();
-        m_ranges.stop = func.arguments[3].value.toInt();
+        m_ranges.start = func.arguments[2].value.toInt(&correctStart);
+        m_ranges.stop = func.arguments[3].value.toInt(&correctStop);
         if(func.arguments.count()==5)
-            m_ranges.step = func.arguments[4].value.toInt();
+            m_ranges.step = func.arguments[4].value.toInt(&correctRange);
+        if(!correctStart || !correctStop || !correctRange)
+            return false;
     } else {
         m_range=false;
         QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
@@ -1920,8 +1931,12 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         case GET: {
             if(func.arguments.count()<3)
                 return false;
+            
+            bool correct;
             m_output = func.arguments.last().value;
-            m_index.append(func.arguments[1].value.toInt());
+            m_index.append(func.arguments[2].value.toInt(&correct));
+            if(!correct)
+                return false;
             int i=0;
             foreach(CMakeFunctionArgument arg, func.arguments)
             {
@@ -1942,10 +1957,13 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
         } break;
         case INSERT: {
+            bool correct;
             if(func.arguments.count()<4)
                 return false;
             int i=0;
-            m_index.append(func.arguments[1].value.toInt());
+            m_index.append(func.arguments[1].value.toInt(&correct));
+            if(!correct)
+                return false;
             foreach(CMakeFunctionArgument arg, func.arguments)
             {
                 if(i>2)
@@ -2602,11 +2620,14 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         if(func.arguments.count()<5)
             return false;
+        bool correctBegin, correctLength;
         m_type=SUBSTRING;
         m_input.append(func.arguments[1].value);
-        m_begin = func.arguments[2].value.toInt();
-        m_length = func.arguments[3].value.toInt();
+        m_begin = func.arguments[2].value.toInt(&correctBegin);
+        m_length = func.arguments[3].value.toInt(&correctLength);
         m_outputVariable = func.arguments[4].value;
+        if(!correctBegin || !correctLength)
+            return false;
     }
     return true;
 }

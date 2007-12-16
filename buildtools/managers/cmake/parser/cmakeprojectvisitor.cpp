@@ -58,23 +58,16 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
 
 CMakeProjectVisitor::VariableType CMakeProjectVisitor::hasVariable(const QString &name)
 {
-    int CMakeIdx=name.indexOf("${"), envIdx=name.indexOf("$ENV{");
-    if(name.indexOf('}')>=0)
-    {
-        if(CMakeIdx>=0 && envIdx>=0)
-        {
-            if(CMakeIdx<envIdx)
-                return CMake;
-            else
-                return ENV;
-        }
-        else if(CMakeIdx<0)
-            return ENV;
-        else
-            return CMake;
-    }
-    else
+    int CMakeIdx=name.indexOf ( "${" ), envIdx=name.indexOf ( "$ENV{" );
+    
+    if ( CMakeIdx<0 && envIdx<0 )
         return NoVar;
+    else if ( envIdx>=0 )
+        return ENV;
+    else if ( CMakeIdx>=0 )
+        return CMake;
+    
+    return NoVar;
 }
 
 QString CMakeProjectVisitor::variableName(const QString &name, VariableType &type)
@@ -86,10 +79,10 @@ QString CMakeProjectVisitor::variableName(const QString &name, VariableType &typ
         case NoVar:
             return QString();
         case CMake:
-            exp="\\$\\{[A-z0-9-]+\\}";
+            exp=VariableMap::regexVar();
             break;
         case ENV:
-            exp="\\$ENV\\{[A-z0-9-]+\\}";
+            exp=VariableMap::regexEnvVar();
             break;
     }
     QRegExp rx(exp);
@@ -771,8 +764,12 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 {
     switch(file->type()) //TODO
     {
-//         case FileAst::WRITE:
-//         case FileAst::APPEND:
+        case FileAst::WRITE:
+            kDebug(9042) << "(ni) File write: " << file->path() << file->message();
+            break;
+        case FileAst::APPEND:
+            kDebug(9042) << "(ni) File append: " << file->path() << file->message();
+            break;
         case FileAst::READ:
         {
             KUrl filename=file->path();
@@ -875,7 +872,6 @@ int CMakeProjectVisitor::visit(const OptionAst *opt)
 
 int CMakeProjectVisitor::visit(const ListAst *list)
 {
-    kDebug(9042) << "List!!" << list->output();
     QString output = list->output();
     QStringList theList = m_vars->value(list->list());
     switch(list->type())
@@ -936,6 +932,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             }
             break;
     }
+    kDebug(9042) << "List!!" << list->output() << '='<< m_vars->value(list->output()) << " -> " << m_vars->value(list->list());
     return 1;
 }
 
@@ -984,7 +981,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
 
 int CMakeProjectVisitor::visit(const StringAst *sast)
 {
-    kDebug(9042) << "String to" << sast->input() << sast->input().isEmpty();
+    kDebug(9042) << "String to" /*<< sast->input()*/ << sast->input().isEmpty();
     switch(sast->type())
     {
         case StringAst::REGEX:

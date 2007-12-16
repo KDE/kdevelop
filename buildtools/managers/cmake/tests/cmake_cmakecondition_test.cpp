@@ -73,6 +73,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "matches" ) << QString("-lapr-1;MATCHES;^-l").split(";") << true;
     QTest::newRow( "less" ) << QString("5;LESS;9").split(";") << true;
     QTest::newRow( "not+less" ) << QString("NOT;5;LESS;9").split(";") << false;
+    QTest::newRow( "not+or+not" ) << QString("NOT;TRUE;OR;NOT;TRUE").split(";") << false;
 }
 
 #include "cmake_cmakecondition_test.moc"
