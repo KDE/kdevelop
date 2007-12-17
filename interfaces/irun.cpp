@@ -30,7 +30,7 @@ class IRun::IRunPrivate : public QSharedData
     public:
         KUrl executable, workingDirectory;
         QString instrumentor, environmentKey;
-        QStringList arguments;
+        QStringList arguments, instrumentorArguments;
 };
 
 IRun::IRun()
@@ -93,7 +93,7 @@ IRun::IRun(const IRun & rhs)
 {
 }
 
-IRun & KDevelop::IRun::operator =(const IRun & rhs)
+IRun & IRun::operator =(const IRun & rhs)
 {
     d.operator=(rhs.d);
     return *this;
@@ -108,14 +108,34 @@ IRunController::IRunController(QObject * parent)
 {
 }
 
-KUrl KDevelop::IRun::workingDirectory() const
+KUrl IRun::workingDirectory() const
 {
     return d->workingDirectory;
 }
 
-void KDevelop::IRun::setWorkingDirectory(const QString & workingDirectory)
+void IRun::setWorkingDirectory(const QString & workingDirectory)
 {
     d->workingDirectory = workingDirectory;
+}
+
+QStringList IRun::instrumentorArguments() const
+{
+    return d->instrumentorArguments;
+}
+
+void IRun::addInstrumentorArgument(const QString & argument)
+{
+    d->instrumentorArguments.append(argument);
+}
+
+void IRun::setInstrumentorArguments(const QStringList & arguments)
+{
+    d->instrumentorArguments = arguments;
+}
+
+void IRun::clearInstrumentorArguments()
+{
+    d->instrumentorArguments.clear();
 }
 
 #include "irun.moc"

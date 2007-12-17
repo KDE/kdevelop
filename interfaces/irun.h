@@ -101,6 +101,26 @@ public:
      */
     void setInstrumentor(const QString& instrumentor);
 
+    /**
+     * The argument list to pass to the executable.
+     */
+    QStringList instrumentorArguments() const;
+
+    /**
+     * Add an argument to pass to the executable.
+     */
+    void addInstrumentorArgument(const QString& argument);
+
+    /**
+     * Set the arguments which should be passed to the executable.
+     */
+    void setInstrumentorArguments(const QStringList& arguments);
+
+    /**
+     * Clear all arguments.
+     */
+    void clearInstrumentorArguments();
+
 private:
     class IRunPrivate;
     QSharedDataPointer<IRunPrivate> d;
