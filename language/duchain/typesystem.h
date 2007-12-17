@@ -39,6 +39,15 @@ class FunctionType;
 class StructureType;
 class ArrayType;
 
+class AbstractTypePrivate;
+class IntegralTypePrivate;
+class PointerTypePrivate;
+class ReferenceTypePrivate;
+class FunctionTypePrivate;
+class StructureTypePrivate;
+class ArrayTypePrivate;
+class DelayedTypePrivate;
+
 class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
 {
 public:
@@ -122,6 +131,7 @@ public:
 
   AbstractType();
   AbstractType(const AbstractType& rhs);
+  AbstractType(AbstractTypePrivate& dd);
   virtual ~AbstractType ();
 
   void accept(TypeVisitor *v) const;
@@ -162,12 +172,13 @@ public:
 
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
+  AbstractTypePrivate* const d_ptr;
 
 //  template <class T>
 //  void deregister(T* that) { TypeSystem::self()->deregisterType(that); }
 
 private:
-  class AbstractTypePrivate* const d;
+  Q_DECLARE_PRIVATE(AbstractType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
@@ -201,7 +212,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  class IntegralTypePrivate* const d;
+  Q_DECLARE_PRIVATE(IntegralType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
@@ -233,7 +244,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  class PointerTypePrivate* const d;
+  Q_DECLARE_PRIVATE(PointerType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType: public AbstractType
@@ -267,7 +278,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  class ReferenceTypePrivate* const d;
+  Q_DECLARE_PRIVATE(ReferenceType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionType : public AbstractType
@@ -316,7 +327,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  class FunctionTypePrivate* const d;
+  Q_DECLARE_PRIVATE(FunctionType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public AbstractType
@@ -353,7 +364,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  class StructureTypePrivate* const d;
+  Q_DECLARE_PRIVATE(StructureType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
@@ -393,7 +404,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  class ArrayTypePrivate* const d;
+  Q_DECLARE_PRIVATE(ArrayType)
 };
 
 /**
@@ -431,7 +442,7 @@ public:
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;
   private:
-    class DelayedTypePrivate* const d;
+    Q_DECLARE_PRIVATE(DelayedType)
 };
 
 template <class T>

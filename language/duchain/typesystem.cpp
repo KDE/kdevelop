@@ -23,6 +23,115 @@
 namespace KDevelop
 {
 
+class AbstractTypePrivate
+{
+public:
+  AbstractTypePrivate() : m_registered( false )
+  {
+  }
+  AbstractTypePrivate( const AbstractTypePrivate& rhs )
+    : m_registered( rhs.m_registered )
+  {
+  }
+  bool m_registered;
+};
+
+class IntegralTypePrivate : public AbstractTypePrivate
+{
+public:
+  IntegralTypePrivate()
+  {
+  }
+  IntegralTypePrivate( const IntegralTypePrivate& rhs )
+    : AbstractTypePrivate(rhs), m_name( rhs.m_name )
+  {
+  }
+  QString m_name;
+};
+
+class PointerTypePrivate : public AbstractTypePrivate
+{
+public:
+  PointerTypePrivate() : m_baseType(0)
+  {
+  }
+  PointerTypePrivate( const PointerTypePrivate& rhs )
+    : AbstractTypePrivate(rhs), m_baseType( rhs.m_baseType )
+  {
+  }
+  AbstractType::Ptr m_baseType;
+};
+
+class ReferenceTypePrivate : public AbstractTypePrivate
+{
+public:
+  ReferenceTypePrivate() : m_baseType(0)
+  {
+  }
+  ReferenceTypePrivate( const ReferenceTypePrivate& rhs )
+    : AbstractTypePrivate( rhs ), m_baseType( rhs.m_baseType )
+  {
+  }
+  AbstractType::Ptr m_baseType;
+};
+
+class FunctionTypePrivate : public AbstractTypePrivate
+{
+public:
+  FunctionTypePrivate()
+  {}
+  FunctionTypePrivate( const FunctionTypePrivate& rhs )
+    : AbstractTypePrivate( rhs ), m_returnType( rhs.m_returnType),
+      m_arguments( rhs.m_arguments)
+  {
+  }
+  AbstractType::Ptr m_returnType;
+  QList<AbstractType::Ptr> m_arguments;
+};
+
+class StructureTypePrivate : public AbstractTypePrivate
+{
+public:
+  StructureTypePrivate()
+  {
+  }
+  StructureTypePrivate( const StructureTypePrivate& rhs )
+    : AbstractTypePrivate( rhs ), m_elements( rhs.m_elements )
+  {
+  }
+  QList<AbstractType::Ptr> m_elements;
+};
+
+class ArrayTypePrivate : public AbstractTypePrivate
+{
+public:
+  ArrayTypePrivate()
+  {
+  }
+  ArrayTypePrivate( const ArrayTypePrivate& rhs )
+    : AbstractTypePrivate( rhs ), m_dimension( rhs.m_dimension ),
+      m_elementType( rhs.m_elementType )
+  {
+  }
+  int m_dimension;
+  AbstractType::Ptr m_elementType;
+};
+
+class DelayedTypePrivate : public AbstractTypePrivate
+{
+public:
+  DelayedTypePrivate() : m_kind(DelayedType::Delayed) {
+  }
+  DelayedTypePrivate( const DelayedTypePrivate& rhs )
+    : AbstractTypePrivate( rhs ), m_identifier( rhs.m_identifier ), 
+      m_kind( rhs.m_kind )
+  {
+  }
+  QualifiedIdentifier m_identifier;
+  DelayedType::Kind m_kind;
+};
+
+
 bool SimpleTypeVisitor::preVisit (const AbstractType *) {
   return true;
 }
@@ -79,79 +188,30 @@ TypeVisitor::~TypeVisitor()
 {
 }
 
-class AbstractTypePrivate
-{
-public:
-  bool m_registered;
-};
-
-class IntegralTypePrivate
-{
-public:
-  QString m_name;
-};
-
-class PointerTypePrivate
-{
-public:
-  AbstractType::Ptr m_baseType;
-};
-
-class ReferenceTypePrivate
-{
-public:
-  AbstractType::Ptr m_baseType;
-};
-
-class FunctionTypePrivate
-{
-public:
-  AbstractType::Ptr m_returnType;
-  QList<AbstractType::Ptr> m_arguments;
-};
-
-class StructureTypePrivate
-{
-public:
-  QList<AbstractType::Ptr> m_elements;
-};
-
-class ArrayTypePrivate
-{
-public:
-  int m_dimension;
-  AbstractType::Ptr m_elementType;
-};
-
-class DelayedTypePrivate
-{
-public:
-  DelayedTypePrivate() : m_kind(DelayedType::Delayed) {
-  }
-  
-  QualifiedIdentifier m_identifier;
-  DelayedType::Kind m_kind;
-};
-
-AbstractType::AbstractType(const AbstractType& rhs) : KShared(), d(new AbstractTypePrivate(*rhs.d)) {
+AbstractType::AbstractType(const AbstractType& rhs) : KShared(), d_ptr(new AbstractTypePrivate(*rhs.d_ptr)) {
 }
 
-IntegralType::IntegralType(const IntegralType& rhs) : AbstractType(rhs), d(new IntegralTypePrivate(*rhs.d)) {
+AbstractType::AbstractType( AbstractTypePrivate& dd )
+  : d_ptr(&dd)
+{
 }
 
-PointerType::PointerType(const PointerType& rhs) : AbstractType(rhs), d(new PointerTypePrivate(*rhs.d)) {
+IntegralType::IntegralType(const IntegralType& rhs) : AbstractType(*new IntegralTypePrivate(*rhs.d_func())) {
 }
 
-ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(rhs), d(new ReferenceTypePrivate(*rhs.d)) {
+PointerType::PointerType(const PointerType& rhs) : AbstractType(*new PointerTypePrivate(*rhs.d_func())) {
 }
 
-FunctionType::FunctionType(const FunctionType& rhs) : AbstractType(rhs), d(new FunctionTypePrivate(*rhs.d)) {
+ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(*new ReferenceTypePrivate(*rhs.d_func())) {
 }
 
-StructureType::StructureType(const StructureType& rhs) : AbstractType(rhs), d(new StructureTypePrivate(*rhs.d)) {
+FunctionType::FunctionType(const FunctionType& rhs) : AbstractType(*new FunctionTypePrivate(*rhs.d_func())) {
 }
 
-ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(rhs), d(new ArrayTypePrivate(*rhs.d)) {
+StructureType::StructureType(const StructureType& rhs) : AbstractType(*new StructureTypePrivate(*rhs.d_func())) {
+}
+
+ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(*new ArrayTypePrivate(*rhs.d_func())) {
 }
 
 AbstractType* IntegralType::clone() const {
@@ -188,7 +248,7 @@ bool IntegralType::equals(const AbstractType* _rhs) const
     return false;
   const IntegralType* rhs = static_cast<const IntegralType*>(_rhs);
   
-  return rhs->d->m_name == d->m_name;
+  return rhs->d_func()->m_name == d_func()->m_name;
 }
 
 bool PointerType::equals(const AbstractType* _rhs) const
@@ -197,13 +257,14 @@ bool PointerType::equals(const AbstractType* _rhs) const
     return false;
   const PointerType* rhs = static_cast<const PointerType*>(_rhs);
 
-  if( (bool)rhs->d->m_baseType != (bool)d->m_baseType )
+  Q_D(const PointerType);
+  if( (bool)rhs->d_func()->m_baseType != (bool)d->m_baseType )
     return false;
   
   if( !d->m_baseType )
     return true;
   
-  return rhs->d->m_baseType->equals(d->m_baseType.data());
+  return rhs->d_func()->m_baseType->equals(d->m_baseType.data());
 }
 
 bool ReferenceType::equals(const AbstractType* _rhs) const
@@ -212,13 +273,14 @@ bool ReferenceType::equals(const AbstractType* _rhs) const
     return false;
   const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
 
-  if( (bool)rhs->d->m_baseType != (bool)d->m_baseType )
+  Q_D(const ReferenceType);
+  if( (bool)rhs->d_func()->m_baseType != (bool)d->m_baseType )
     return false;
   
   if( !d->m_baseType )
     return true;
   
-  return rhs->d->m_baseType->equals(d->m_baseType.data());
+  return rhs->d_func()->m_baseType->equals(d->m_baseType.data());
 }
 
 bool FunctionType::equals(const AbstractType* _rhs) const
@@ -227,18 +289,19 @@ bool FunctionType::equals(const AbstractType* _rhs) const
     return false;
   const FunctionType* rhs = static_cast<const FunctionType*>(_rhs);
 
-  if( d->m_arguments.count() != rhs->d->m_arguments.count() )
+  Q_D(const FunctionType);
+  if( d->m_arguments.count() != rhs->d_func()->m_arguments.count() )
     return false;
   
-  if( (bool)rhs->d->m_returnType != (bool)d->m_returnType )
+  if( (bool)rhs->d_func()->m_returnType != (bool)d->m_returnType )
     return false;
   
   if( d->m_returnType )
-    if( !rhs->d->m_returnType->equals(d->m_returnType.data()) )
+    if( !rhs->d_func()->m_returnType->equals(d->m_returnType.data()) )
       return false;
   
   QList<AbstractType::Ptr>::const_iterator it1 = d->m_arguments.begin();
-  QList<AbstractType::Ptr>::const_iterator it2 = rhs->d->m_arguments.begin();
+  QList<AbstractType::Ptr>::const_iterator it2 = rhs->d_func()->m_arguments.begin();
   
   for( ;it1 != d->m_arguments.end(); ++it1, ++it2 ) {
     if( (bool)*it1 != (bool)*it2 )
@@ -259,12 +322,12 @@ bool StructureType::equals(const AbstractType* _rhs) const
   if( !dynamic_cast<const StructureType*>(_rhs))
     return false;
   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
-
-  if( d->m_elements.count() != rhs->d->m_elements.count() )
+  Q_D(const StructureType);
+  if( d->m_elements.count() != rhs->d_func()->m_elements.count() )
     return false;
   
   QList<AbstractType::Ptr>::const_iterator it1 = d->m_elements.begin();
-  QList<AbstractType::Ptr>::const_iterator it2 = rhs->d->m_elements.begin();
+  QList<AbstractType::Ptr>::const_iterator it2 = rhs->d_func()->m_elements.begin();
   
   for( ;it1 != d->m_elements.end(); ++it1, ++it2 ) {
     if( (bool)*it1 != (bool)*it2 )
@@ -285,17 +348,17 @@ bool ArrayType::equals(const AbstractType* _rhs) const
   if( !dynamic_cast<const ArrayType*>(_rhs))
     return false;
   const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
-
-  if( d->m_dimension != rhs->d->m_dimension )
+  Q_D(const ArrayType);
+  if( d->m_dimension != rhs->d_func()->m_dimension )
     return false;
   
-  if( (bool)rhs->d->m_elementType != (bool)d->m_elementType )
+  if( (bool)rhs->d_func()->m_elementType != (bool)d->m_elementType )
     return false;
   
   if( !d->m_elementType )
     return true;
   
-  return rhs->d->m_elementType->equals(d->m_elementType.data());
+  return rhs->d_func()->m_elementType->equals(d->m_elementType.data());
 }
 
 bool DelayedType::equals(const AbstractType* _rhs) const
@@ -305,19 +368,18 @@ bool DelayedType::equals(const AbstractType* _rhs) const
 
   const DelayedType* rhs = static_cast<const DelayedType*>(_rhs);
 
-  return d->m_identifier == rhs->d->m_identifier;
+  return d_func()->m_identifier == rhs->d_func()->m_identifier;
 }
 
 AbstractType::AbstractType()
-  : d(new AbstractTypePrivate)
+  : d_ptr(new AbstractTypePrivate)
 {
-  d->m_registered = false;
 }
 
 AbstractType::~AbstractType()
 {
 //  Q_ASSERT(!m_registered);
-  delete d;
+  delete d_ptr;
 }
 
 uint AbstractType::hash() const
@@ -352,44 +414,43 @@ AbstractType::WhichType AbstractType::whichType() const
 }
 
 IntegralType::IntegralType(const QString & name)
-  : d(new IntegralTypePrivate)
+  : AbstractType(*new IntegralTypePrivate)
 {
-  d->m_name = name;
+  d_func()->m_name = name;
 }
 
 IntegralType::IntegralType()
-  : d(new IntegralTypePrivate)
+  : AbstractType(*new IntegralTypePrivate)
 {
 }
 
 IntegralType::~IntegralType()
 {
-  delete d;
 }
 
 const QString& IntegralType::name() const
 {
-  return d->m_name;
+  return d_func()->m_name;
 }
 
 void IntegralType::setName(const QString& name)
 {
-  d->m_name = name;
+  d_func()->m_name = name;
 }
 
 bool IntegralType::operator == (const IntegralType &other) const
 {
-  return d->m_name == other.d->m_name;
+  return d_func()->m_name == other.d_func()->m_name;
 }
 
 bool IntegralType::operator != (const IntegralType &other) const
 {
-  return d->m_name != other.d->m_name;
+  return d_func()->m_name != other.d_func()->m_name;
 }
 
 QString IntegralType::toString() const
 {
-  return d->m_name;
+  return d_func()->m_name;
 }
 
 void IntegralType::accept0(TypeVisitor *v) const
@@ -403,46 +464,44 @@ AbstractType::WhichType IntegralType::whichType() const
 }
 
 PointerType::PointerType()
-  : d(new PointerTypePrivate)
+  : AbstractType(*new PointerTypePrivate)
 {
-  d->m_baseType = 0;
 }
 
 void PointerType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
-    acceptType (d->m_baseType, v);
+    acceptType (d_func()->m_baseType, v);
 
   v->endVisit (this);
 }
 
 void PointerType::exchangeTypes( TypeExchanger* exchanger ) {
-  d->m_baseType = exchanger->exchange( d->m_baseType.data() );
+  d_func()->m_baseType = exchanger->exchange( d_func()->m_baseType.data() );
 }
 
 PointerType::~PointerType()
 {
-  delete d;
 }
 
 AbstractType::Ptr PointerType::baseType () const
 {
-  return d->m_baseType;
+  return d_func()->m_baseType;
 }
 
 void PointerType::setBaseType(AbstractType::Ptr type)
 {
-  d->m_baseType = type;
+  d_func()->m_baseType = type;
 }
 
 bool PointerType::operator == (const PointerType &other) const
 {
-  return d->m_baseType == other.d->m_baseType;
+  return d_func()->m_baseType == other.d_func()->m_baseType;
 }
 
 bool PointerType::operator != (const PointerType &other) const
 {
-  return d->m_baseType != other.d->m_baseType;
+  return d_func()->m_baseType != other.d_func()->m_baseType;
 }
 
 QString PointerType::toString() const
@@ -456,47 +515,45 @@ AbstractType::WhichType PointerType::whichType() const
 }
 
 ReferenceType::ReferenceType()
-  : d(new ReferenceTypePrivate)
+  : AbstractType(*new ReferenceTypePrivate)
 {
-  d->m_baseType = 0;
 }
 
 ReferenceType::~ReferenceType()
 {
-  delete d;
 }
 
 AbstractType::Ptr ReferenceType::baseType () const
 {
-  return d->m_baseType;
+  return d_func()->m_baseType;
 }
 
 void ReferenceType::setBaseType(AbstractType::Ptr type)
 {
-  d->m_baseType = type;
+  d_func()->m_baseType = type;
 }
 
 bool ReferenceType::operator == (const ReferenceType &other) const
 {
-  return d->m_baseType == other.d->m_baseType;
+  return d_func()->m_baseType == other.d_func()->m_baseType;
 }
 
 bool ReferenceType::operator != (const ReferenceType &other) const
 {
-  return d->m_baseType != other.d->m_baseType;
+  return d_func()->m_baseType != other.d_func()->m_baseType;
 }
 
 void ReferenceType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
-    acceptType (d->m_baseType, v);
+    acceptType (d_func()->m_baseType, v);
 
   v->endVisit (this);
 }
 
 void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 {
-  d->m_baseType = exchanger->exchange( d->m_baseType.data() );
+  d_func()->m_baseType = exchanger->exchange( d_func()->m_baseType.data() );
 }
 
 QString ReferenceType::toString() const
@@ -510,49 +567,50 @@ AbstractType::WhichType ReferenceType::whichType() const
 }
 
 FunctionType::FunctionType()
-  : d(new FunctionTypePrivate)
+  : AbstractType(*new FunctionTypePrivate)
 {
 }
 
 FunctionType::~FunctionType()
 {
-  delete d;
 }
 
 
 void FunctionType::addArgument(AbstractType::Ptr argument)
 {
-  d->m_arguments.append(argument);
+  d_func()->m_arguments.append(argument);
 }
 
 void FunctionType::removeArgument(AbstractType::Ptr argument)
 {
-  d->m_arguments.removeAll(argument);
+  d_func()->m_arguments.removeAll(argument);
 }
 
 void FunctionType::setReturnType(AbstractType::Ptr returnType)
 {
-  d->m_returnType = returnType;
+  d_func()->m_returnType = returnType;
 }
 
 AbstractType::Ptr FunctionType::returnType () const
 {
-  return d->m_returnType;
+  return d_func()->m_returnType;
 }
 
 const QList<AbstractType::Ptr>& FunctionType::arguments () const
 {
-  return d->m_arguments;
+  return d_func()->m_arguments;
 }
 
 bool FunctionType::operator == (const FunctionType &other) const
 {
-  return d->m_returnType == other.d->m_returnType && d->m_arguments == other.d->m_arguments;
+  Q_D(const FunctionType);
+  return d->m_returnType == other.d_func()->m_returnType && d->m_arguments == other.d_func()->m_arguments;
 }
 
 bool FunctionType::operator != (const FunctionType &other) const
 {
-  return d->m_returnType != other.d->m_returnType || d->m_arguments != other.d->m_arguments;
+  Q_D(const FunctionType);
+  return d->m_returnType != other.d_func()->m_returnType || d->m_arguments != other.d_func()->m_arguments;
 }
 
 void AbstractType::exchangeTypes( TypeExchanger* /*exchanger */) {
@@ -560,6 +618,7 @@ void AbstractType::exchangeTypes( TypeExchanger* /*exchanger */) {
 
 void FunctionType::accept0 (TypeVisitor *v) const
 {
+  Q_D(const FunctionType);
   if (v->visit (this))
   {
     acceptType (d->m_returnType, v);
@@ -573,6 +632,7 @@ void FunctionType::accept0 (TypeVisitor *v) const
 
 void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 {
+  Q_D(FunctionType);
   for (int i = 0; i < d->m_arguments.count (); ++i)
     d->m_arguments[i] = exchanger->exchange( d->m_arguments[i].data() );
   d->m_returnType = exchanger->exchange(d->m_returnType.data());
@@ -580,6 +640,7 @@ void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 
 QString FunctionType::partToString( SignaturePart sigPart ) const {
   QString args;
+  Q_D(const FunctionType);
   if( sigPart == SignatureArguments || sigPart == SignatureWhole )
   {
     args += '(';
@@ -615,46 +676,46 @@ AbstractType::WhichType FunctionType::whichType() const
 }
 
 StructureType::StructureType()
-  : d(new StructureTypePrivate)
+  : AbstractType(*new StructureTypePrivate)
 {
 }
 
 StructureType::~StructureType()
 {
-  delete d;
 }
 
 const QList<AbstractType::Ptr>& StructureType::elements () const
 {
-  return d->m_elements;
+  return d_func()->m_elements;
 }
 
 bool StructureType::operator == (const StructureType &other) const
 {
-  return d->m_elements == other.d->m_elements;
+  return d_func()->m_elements == other.d_func()->m_elements;
 }
 
 bool StructureType::operator != (const StructureType &other) const
 {
-  return d->m_elements != other.d->m_elements;
+  return d_func()->m_elements != other.d_func()->m_elements;
 }
 
 void StructureType::addElement(AbstractType::Ptr element)
 {
-  d->m_elements.append(element);
+  d_func()->m_elements.append(element);
 }
 
 void StructureType::removeElement(AbstractType::Ptr element)
 {
-  d->m_elements.removeAll(element);
+  d_func()->m_elements.removeAll(element);
 }
 
 void StructureType::clear() {
-  d->m_elements.clear();
+  d_func()->m_elements.clear();
 }
 
 void StructureType::accept0 (TypeVisitor *v) const
 {
+  Q_D(const StructureType);
   if (v->visit (this))
     {
       for (int i = 0; i < d->m_elements.count (); ++i)
@@ -666,6 +727,7 @@ void StructureType::accept0 (TypeVisitor *v) const
 
 void StructureType::exchangeTypes( TypeExchanger* exchanger )
 {
+  Q_D(StructureType);
   if( exchanger->exchangeMembers() )
     for (int i = 0; i < d->m_elements.count (); ++i)
       d->m_elements[i] = exchanger->exchange( d->m_elements[i].data() );
@@ -682,55 +744,56 @@ AbstractType::WhichType StructureType::whichType() const
 }
 
 ArrayType::ArrayType()
-  : d(new ArrayTypePrivate)
+  : AbstractType(*new ArrayTypePrivate)
 {
 }
 
 ArrayType::~ArrayType()
 {
-  delete d;
 }
 
 int ArrayType::dimension () const
 {
-  return d->m_dimension;
+  return d_func()->m_dimension;
 }
 
 void ArrayType::setDimension(int dimension)
 {
-  d->m_dimension = dimension;
+  d_func()->m_dimension = dimension;
 }
 
 AbstractType::Ptr ArrayType::elementType () const
 {
-  return d->m_elementType;
+  return d_func()->m_elementType;
 }
 
 void ArrayType::setElementType(AbstractType::Ptr type)
 {
-  d->m_elementType = type;
+  d_func()->m_elementType = type;
 }
 
 bool ArrayType::operator == (const ArrayType &other) const
 {
-  return d->m_elementType == other.d->m_elementType && d->m_dimension == other.d->m_dimension;
+  Q_D(const ArrayType);
+  return d->m_elementType == other.d_func()->m_elementType && d->m_dimension == other.d_func()->m_dimension;
 }
 
 bool ArrayType::operator != (const ArrayType &other) const
 {
-  return d->m_elementType != other.d->m_elementType || d->m_dimension != other.d->m_dimension;
+  Q_D(const ArrayType);
+  return d->m_elementType != other.d_func()->m_elementType || d->m_dimension != other.d_func()->m_dimension;
 }
 
 QString ArrayType::toString() const
 {
-  return QString("%1[%2]").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(d->m_dimension);
+  return QString("%1[%2]").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(d_func()->m_dimension);
 }
 
 void ArrayType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
     {
-      acceptType (d->m_elementType, v);
+      acceptType (d_func()->m_elementType, v);
     }
 
   v->endVisit (this);
@@ -738,6 +801,7 @@ void ArrayType::accept0 (TypeVisitor *v) const
 
 void ArrayType::exchangeTypes( TypeExchanger* exchanger )
 {
+  Q_D(ArrayType);
   d->m_elementType = exchanger->exchange( d->m_elementType.data() );
 }
 
@@ -753,35 +817,34 @@ AbstractType::WhichType DelayedType::whichType() const
 
 QString DelayedType::toString() const
 {
-  return (d->m_kind == Delayed ? "<delayed> " : "<unresolved> ") + qualifiedIdentifier().toString();
+  return (d_func()->m_kind == Delayed ? "<delayed> " : "<unresolved> ") + qualifiedIdentifier().toString();
 }
 
 DelayedType::Kind DelayedType::kind() const {
-  return d->m_kind;
+  return d_func()->m_kind;
 }
 
 void DelayedType::setKind(Kind kind) {
-  d->m_kind = kind;
+  d_func()->m_kind = kind;
 }
 
 DelayedType::DelayedType()
-  : d(new DelayedTypePrivate)
+  : AbstractType(*new DelayedTypePrivate)
 {
 }
 
 DelayedType::~DelayedType()
 {
-  delete d;
 }
 
 void DelayedType::setQualifiedIdentifier(const QualifiedIdentifier& identifier)
 {
-  d->m_identifier = identifier;
+  d_func()->m_identifier = identifier;
 }
 
 QualifiedIdentifier DelayedType::qualifiedIdentifier() const
 {
-  return d->m_identifier;
+  return d_func()->m_identifier;
 }
 
 void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
