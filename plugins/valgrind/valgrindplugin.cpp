@@ -18,7 +18,7 @@
 
  */
 
-#include "valgrind_part.h"
+#include "valgrindplugin.h"
 
 #include <unistd.h>
 
@@ -41,18 +41,17 @@
 #include <kdebug.h>
 #include <kicon.h>
 
-#include "kdevcore.h"
-#include "kdevmainwindow.h"
+#include <icore.h>
 
 #include "valgrind_dialog.h"
 #include "valgrindmodel.h"
 #include "valgrindcontrol.h"
 
-K_PLUGIN_FACTORY(ValgrindFactory, registerPlugin<ValgrindPart>(); )
+K_PLUGIN_FACTORY(ValgrindFactory, registerPlugin<ValgrindPlugin>(); )
 K_EXPORT_PLUGIN(ValgrindFactory("kdevvalgrind"))
 
 
-ValgrindPart::ValgrindPart( QObject *parent, const QVariantList& )
+ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
   : KDevPlugin( ValgrindFactory::componentData(), parent)
   , m_model(new ValgrindModel())
   , m_control(new ValgrindControl(this))
@@ -61,7 +60,6 @@ ValgrindPart::ValgrindPart( QObject *parent, const QVariantList& )
 
   m_treeView = new QTreeView();
   m_treeView->setWindowIcon(KIcon("fork"));
-  m_treeView->setObjectName("valgrind");
   m_treeView->setWindowTitle(i18n("Valgrind Output"));
   m_treeView->setModel(m_model);
 
@@ -88,27 +86,27 @@ ValgrindPart::ValgrindPart( QObject *parent, const QVariantList& )
 }
 
 
-ValgrindPart::~ValgrindPart()
+ValgrindPlugin::~ValgrindPlugin()
 {
   delete m_treeView;
 }
 
-QWidget *ValgrindPart::pluginView() const
+QWidget *ValgrindPlugin::pluginView() const
 {
     return m_treeView;
 }
 
-Qt::DockWidgetArea ValgrindPart::dockWidgetAreaHint() const
+Qt::DockWidgetArea ValgrindPlugin::dockWidgetAreaHint() const
 {
     return Qt::BottomDockWidgetArea;
 }
 
-void ValgrindPart::projectOpened()
+void ValgrindPlugin::projectOpened()
 {
   m_lastExec.truncate( 0 );
 }
 
-void ValgrindPart::loadOutput()
+void ValgrindPlugin::loadOutput()
 {
   QString fName = KFileDialog::getOpenFileName(QString(), "*", 0, i18n("Open Valgrind Output"));
   if ( fName.isEmpty() )
@@ -130,7 +128,7 @@ void ValgrindPart::loadOutput()
   f.close();
 }
 
-void ValgrindPart::slotExecValgrind()
+void ValgrindPlugin::slotExecValgrind()
 {
   ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Memcheck);
   /*if ( KDevApi::self()->project() && m_lastExec.isEmpty() ) {
@@ -148,7 +146,7 @@ void ValgrindPart::slotExecValgrind()
   }
 }
 
-void ValgrindPart::slotExecCalltree()
+void ValgrindPlugin::slotExecCalltree()
 {
     /* FIXME add a mainProgram function or equivalent so this can be ported
   ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Calltree);
@@ -173,12 +171,12 @@ void ValgrindPart::slotExecCalltree()
     */
 }
 
-void ValgrindPart::slotKillValgrind()
+void ValgrindPlugin::slotKillValgrind()
 {
   m_control->stop();
 }
 
-void ValgrindPart::slotStopButtonClicked( KDevPlugin* which )
+void ValgrindPlugin::slotStopButtonClicked( KDevPlugin* which )
 {
   if ( which != 0 && which != this )
     return;
@@ -186,12 +184,12 @@ void ValgrindPart::slotStopButtonClicked( KDevPlugin* which )
   slotKillValgrind();
 }
 
-void ValgrindPart::clear()
+void ValgrindPlugin::clear()
 {
   m_model->clear();
 }
 
-void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
+void ValgrindPlugin::restorePartialProjectSession( const QDomElement* el )
 {
   QDomElement execElem = el->namedItem( "executable" ).toElement();
   m_lastExec = execElem.attribute( "path", "" );
@@ -209,7 +207,7 @@ void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
   m_lastKcExec = kcElem.attribute( "path", "" );
 }
 
-void ValgrindPart::savePartialProjectSession( QDomElement* el )
+void ValgrindPlugin::savePartialProjectSession( QDomElement* el )
 {
   QDomDocument domDoc = el->ownerDocument();
   if ( domDoc.isNull() )
