@@ -28,10 +28,12 @@ IProjectBuilder::~IProjectBuilder()
 
 bool IProjectBuilder::configure(IProject*)
 {
+    return false;
 }
 
 bool IProjectBuilder::prune(IProject*)
 {
+    return false;
 }
 
 }
