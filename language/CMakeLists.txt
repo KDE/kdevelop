@@ -39,6 +39,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainutils.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
+    interfaces/iquickopen.cpp
 )
 
 

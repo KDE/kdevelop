@@ -38,7 +38,7 @@ class HashedString;
 class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpen
 {
 public:
-    virtual ~IQuickOpen() {}
+    virtual ~IQuickOpen();
 
     /**
      * Registers a new provider under a specified name.
