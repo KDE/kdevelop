@@ -1,20 +1,25 @@
-// *************************************************************************
-//                          gdboutputwidget.cpp  -  description
-//                             -------------------
-//    begin                : 10th April 2003
-//    copyright            : (C) 2003 by John Birch
-//    email                : jbb@kdevelop.org
-// **************************************************************************
-// * Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
-// *
-// **************************************************************************
-// *                                                                        *
-// *   This program is free software; you can redistribute it and/or modify *
-// *   it under the terms of the GNU General Public License as published by *
-// *   the Free Software Foundation; either version 2 of the License, or    *
-// *   (at your option) any later version.                                  *
-// *                                                                        *
-// **************************************************************************
+/*
+ * GDB Debugger Support
+ *
+ * Copyright 2003 John Birch <jbb@kdevelop.org>
+ * Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
+ * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "gdboutputwidget.h"
 
@@ -26,15 +31,15 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <q3textedit.h>
 #include <QToolButton>
 #include <QToolTip>
 #include <QApplication>
 #include <QClipboard>
 #include <QFocusEvent>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <khistorycombobox.h>
 #include <KIcon>
+#include <QScrollBar>
 
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
@@ -59,8 +64,8 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
                     "Shows all gdb commands being executed. "
                     "You can also issue any other gdb command while debugging."));
 
-    m_gdbView = new OutputText(this);
-    m_gdbView->setTextFormat(Qt::LogText);
+    m_gdbView = new OutputTextEdit(this);
+    m_gdbView->setReadOnly(true);
 
     m_userGDBCmdEditor = new KHistoryComboBox (this);
 
@@ -153,7 +158,7 @@ namespace {
         {
             text.remove(text.length()-1, 1);
         }
-        text = "<font color=\"" + color +  "\">" + text + "</font>\n";
+        text = "<font color=\"" + color +  "\">" + text + "</font><br>";
         return text;
     }
 }
@@ -167,6 +172,8 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     {
         s = colorify(s, "blue");
     }
+    else
+        s.replace("\n", "<br>");
 
     allCommands_.append(s);
     allCommandsRaw_.append(line);
@@ -272,10 +279,10 @@ void GDBOutputWidget::flushPending()
         pendingOutput_.remove(pendingOutput_.length()-1, 1);
     Q_ASSERT(!pendingOutput_.endsWith("\n"));
 
-    m_gdbView->append(pendingOutput_);
+    m_gdbView->insertHtml(pendingOutput_);
     pendingOutput_ = "";
 
-    m_gdbView->scrollToBottom();
+    m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
     m_gdbView->setUpdatesEnabled(true);
     m_gdbView->update();
     m_userGDBCmdEditor->setFocus();
@@ -311,7 +318,7 @@ void GDBOutputWidget::slotStateChanged(DBGStateFlags oldStatus, DBGStateFlags ne
 
 void GDBOutputWidget::focusInEvent(QFocusEvent */*e*/)
 {
-    m_gdbView->scrollToBottom();
+    m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
     m_userGDBCmdEditor->setFocus();
 }
 
@@ -338,16 +345,16 @@ void GDBOutputWidget::restorePartialProjectSession()
 }
 
 
-Q3PopupMenu* OutputText::createPopupMenu(const QPoint&)
+void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
 {
-    Q3PopupMenu* popup = new Q3PopupMenu(this);
+    QMenu* popup = new QMenu(this);
 
     QAction* action = popup->addAction(i18n("Show Internal Commands"),
                                this,
                                SLOT(toggleShowInternalCommands()));
 
     action->setCheckable(true);
-    action->setChecked(parent_->showInternalCommands_);
+    action->setChecked(showInternalCommands_);
     action->setWhatsThis(i18n(
             "Controls if commands issued internally by KDevelop "
             "will be shown or not.<br>"
@@ -358,15 +365,15 @@ Q3PopupMenu* OutputText::createPopupMenu(const QPoint&)
                       this,
                       SLOT(copyAll()));
 
-    return popup;
+    popup->exec(e->globalPos());
 }
 
-void OutputText::copyAll()
+void GDBOutputWidget::copyAll()
 {
     /* See comments for allCommandRaw_ for explanations of
        this complex logic, as opposed to calling text(). */
-    QStringList& raw = parent_->showInternalCommands_ ?
-        parent_->allCommandsRaw_ : parent_->userCommandsRaw_;
+    QStringList& raw = showInternalCommands_ ?
+        allCommandsRaw_ : userCommandsRaw_;
     QString text;
     for (int i = 0; i < raw.size(); ++i)
         text += raw[i];
@@ -377,11 +384,40 @@ void OutputText::copyAll()
     QApplication::clipboard()->setText(text, QClipboard::Selection);
 }
 
-void OutputText::toggleShowInternalCommands()
+void GDBOutputWidget::toggleShowInternalCommands()
 {
-    parent_->setShowInternalCommands(!parent_->showInternalCommands_);
+    setShowInternalCommands(!showInternalCommands_);
 }
 
+
+OutputTextEdit::OutputTextEdit(GDBOutputWidget * parent)
+    : QTextEdit(parent)
+{
+}
+
+void OutputTextEdit::contextMenuEvent(QContextMenuEvent * event)
+{
+    QMenu* popup = createStandardContextMenu();
+
+    QAction* action = popup->addAction(i18n("Show Internal Commands"),
+                               parent(),
+                               SLOT(toggleShowInternalCommands()));
+
+    action->setCheckable(true);
+    action->setChecked(static_cast<GDBOutputWidget*>(parent())->showInternalCommands());
+    action->setWhatsThis(i18n(
+            "Controls if commands issued internally by KDevelop "
+            "will be shown or not.<br>"
+            "This option will affect only future commands, it won't "
+            "add or remove already issued commands from the view."));
+
+    popup->exec(event->globalPos());
+}
+
+bool GDBOutputWidget::showInternalCommands() const
+{
+    return showInternalCommands_;
+}
 
 /***************************************************************************/
 /***************************************************************************/

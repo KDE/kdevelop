@@ -25,7 +25,6 @@
 #include "gdbglobal.h"
 
 class KLineEdit;
-class Q3MultiLineEdit;
 class QToolBox;
 
 namespace GDBDebugger

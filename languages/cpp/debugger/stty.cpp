@@ -59,7 +59,6 @@
 #include <bsdtty.h>
 #endif
 
-#include <q3intdict.h>
 #include <QSocketNotifier>
 #include <QString>
 #include <QFile>

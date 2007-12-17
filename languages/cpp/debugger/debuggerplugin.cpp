@@ -25,11 +25,10 @@
 #include "debuggerplugin.h"
 
 #include <QDir>
-
-#include <q3popupmenu.h>
 #include <QToolTip>
 #include <QByteArray>
 #include <QTimer>
+#include <QMenu>
 
 #include <kaction.h>
 #include <kactioncollection.h>

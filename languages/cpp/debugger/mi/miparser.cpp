@@ -295,7 +295,7 @@ QString MIParser::parseStringLiteral()
 
     int length = message.length();
     QString message2;
-    message2.setLength(length);
+    message2.reserve(length);
     // The [1,length-1] range removes quotes without extra
     // call to 'mid'
     int target_index = 0;
@@ -337,7 +337,6 @@ QString MIParser::parseStringLiteral()
             message2[target_index++] = message[i];
         }        
     }
-    message2.setLength(target_index);
 
     lex->nextToken();
     return message2;

@@ -1,36 +1,39 @@
-// *************************************************************************
-//                          gdboutputwidget.cpp  -  description
-//                             -------------------
-//    begin                : 10th April 2003
-//    copyright            : (C) 2003 by John Birch
-//    email                : jbb@kdevelop.org
-// **************************************************************************
-//
-// **************************************************************************
-// *                                                                        *
-// *   This program is free software; you can redistribute it and/or modify *
-// *   it under the terms of the GNU General Public License as published by *
-// *   the Free Software Foundation; either version 2 of the License, or    *
-// *   (at your option) any later version.                                  *
-// *                                                                        *
-// **************************************************************************
+/*
+ * GDB Debugger Support
+ *
+ * Copyright 2003 John Birch <jbb@kdevelop.org>
+ * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #ifndef _GDBOUTPUTWIDGET_H_
 #define _GDBOUTPUTWIDGET_H_
 
-#include <qwidget.h>
-#include <q3textedit.h>
 #include <QTimer>
 #include <QStringList>
-#include <Q3PopupMenu>
 #include <QFocusEvent>
 #include <QStringList>
+#include <QTextEdit>
 
 #include "gdbglobal.h"
 
 class KHistoryComboBox;
 
-class Q3TextEdit;
+class QTextEdit;
 class QToolButton;
 
 namespace GDBDebugger
@@ -50,6 +53,8 @@ public:
     void savePartialProjectSession();
     void restorePartialProjectSession();
 
+    bool showInternalCommands() const;
+
 public Q_SLOTS:
     void clear();
 
@@ -62,8 +67,12 @@ public Q_SLOTS:
 
     void flushPending();
 
+    void copyAll();
+    void toggleShowInternalCommands();
+
 protected:
     virtual void focusInEvent(QFocusEvent *e);
+    virtual void contextMenuEvent(QContextMenuEvent* e);
 
 Q_SIGNALS:
     void requestRaise();
@@ -89,7 +98,7 @@ private:
     GDBController* m_controller;
     KHistoryComboBox*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
-    Q3TextEdit*      m_gdbView;
+    QTextEdit*      m_gdbView;
 
     void setShowInternalCommands(bool);
     friend class OutputText;
@@ -120,25 +129,15 @@ private:
     int maxLines_;
 };
 
-/** Add popup menu specific to gdb output window to QTextEdit.
-*/
-class OutputText : public Q3TextEdit
+class OutputTextEdit : public QTextEdit
 {
     Q_OBJECT
+
 public:
-    OutputText(GDBOutputWidget* parent) 
-    : Q3TextEdit(parent), 
-      parent_(parent)
-    {}
+    OutputTextEdit(GDBOutputWidget* parent);
 
-    Q3PopupMenu* createPopupMenu(const QPoint& pos);
-
-private Q_SLOTS:
-    void copyAll();
-    void toggleShowInternalCommands();
-
-private:
-    GDBOutputWidget* parent_;
+protected:
+    virtual void contextMenuEvent(QContextMenuEvent* event);
 };
 
 }

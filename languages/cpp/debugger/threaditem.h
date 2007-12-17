@@ -23,6 +23,8 @@
 #ifndef THREADITEM_H
 #define THREADITEM_H
 
+#include <QObject>
+
 #include "mi/miparser.h"
 
 namespace GDBDebugger

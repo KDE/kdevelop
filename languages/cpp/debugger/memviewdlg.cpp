@@ -19,7 +19,6 @@
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
 
-#include <k3buttonbox.h>
 #include <klineedit.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -30,14 +29,12 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <q3multilineedit.h>
 #include <QPushButton>
 #include <QVariant>
-#include <q3popupmenu.h>
+#include <QMenu>
 
 #include <qtoolbox.h>
-#include <q3textedit.h>
-//Added by qt3to4:
+#include <QTextEdit>
 #include <QHBoxLayout>
 #include <QContextMenuEvent>
 #include <QGridLayout>
@@ -92,7 +89,8 @@ namespace GDBDebugger
             QVBoxLayout* l = new QVBoxLayout(this);
 
             // Grid layout: labels + address field
-            QGridLayout* gl = new QGridLayout(l);
+            QGridLayout* gl = new QGridLayout(this);
+            l->addLayout(gl);
 
             QLabel* l1 = new QLabel(i18n("Start"), this);
             gl->addWidget(l1, 0, 1);
@@ -108,7 +106,8 @@ namespace GDBDebugger
 
             l->addSpacing(2);
 
-            QHBoxLayout* hb = new QHBoxLayout(l);
+            QHBoxLayout* hb = new QHBoxLayout(this);
+            l->addLayout(hb);
             hb->addStretch();
 
             okButton = new QPushButton(i18n("OK"), this);
@@ -156,7 +155,7 @@ namespace GDBDebugger
 
     void MemoryView::initWidget()
     {
-        QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
+        QVBoxLayout *l = new QVBoxLayout(this);
 
         khexedit2_widget = KHE::createBytesEditWidget(this);
 
@@ -226,7 +225,7 @@ namespace GDBDebugger
 
         } else {
 
-            Q3TextEdit* edit = new Q3TextEdit(this);
+            QTextEdit* edit = new QTextEdit(this);
             l->addWidget(edit);
 
             edit->setText(
@@ -348,24 +347,25 @@ namespace GDBDebugger
         if (!isOk())
             return;
 
-        Q3PopupMenu menu;
+        QMenu menu;
 
         bool app_running = !(debuggerState_ & s_appNotStarted);
 
-        int idRange = menu.insertItem(i18n("Change memory range"));
+        QAction* range = menu.addAction(i18n("Change memory range"));
         // If address selector is show, 'set memory range' can't
         // do anything more.
-        menu.setItemEnabled(idRange,
-                            app_running && !rangeSelector_->isShown());
-        int idReload = menu.insertItem(i18n("Reload"));
+        range->setEnabled(app_running && !rangeSelector_->isVisible());
+
+        QAction* reload = menu.addAction(i18n("Reload"));
         // If amount is zero, it means there's not data yet, so
         // reloading does not make sense.
-        menu.setItemEnabled(idReload, app_running && amount_ != 0);
-        int idClose = menu.insertItem(i18n("Close this view"));
+        reload->setEnabled(app_running && amount_ != 0);
 
-        int result = menu.exec(e->globalPos());
+        QAction* close = menu.addAction(i18n("Close this view"));
 
-        if (result == idRange)
+        QAction* result = menu.exec(e->globalPos());
+
+        if (result == range)
         {
             rangeSelector_->startAddressLineEdit->setText(startAsString_);
             rangeSelector_->amountLineEdit->setText(amountAsString_);
@@ -373,7 +373,7 @@ namespace GDBDebugger
             rangeSelector_->show();
             rangeSelector_->startAddressLineEdit->setFocus();
         }
-        if (result == idReload)
+        if (result == reload)
         {
             // We use numeric start_ and amount_ stored in this,
             // not textual startAsString_ and amountAsString_,
@@ -389,7 +389,7 @@ namespace GDBDebugger
                     &MemoryView::memoryRead));
         }
 
-        if (result == idClose)
+        if (result == close)
             delete this;
 
 
@@ -421,7 +421,7 @@ namespace GDBDebugger
         setWindowIcon(KIcon("math_brace"));
         setWindowTitle(i18n("Special debugger views"));
 
-        QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
+        QVBoxLayout *l = new QVBoxLayout(this);
 
         toolBox_ = new QToolBox(this);
         l->addWidget(toolBox_);
@@ -446,7 +446,7 @@ namespace GDBDebugger
 
         MemoryView* widget = new MemoryView(m_plugin, controller_, this);
         toolBox_->addItem(widget, widget->windowTitle());
-        toolBox_->setCurrentItem(widget);
+        toolBox_->setCurrentIndex(toolBox_->indexOf(widget));
         memoryViews_.push_back(widget);
 
         connect(widget, SIGNAL(captionChanged(const QString&)),
