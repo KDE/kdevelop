@@ -15,7 +15,7 @@
 #include <hashedstring.h>
 #include <iproblem.h>
 
-CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::m_stringRepository, &Cpp::EnvironmentManager::m_stringRepositoryMutex), m_environmentFile(environmentFile) {
+CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::m_stringRepository, &Cpp::EnvironmentManager::m_repositoryMutex), m_environmentFile(environmentFile) {
     //If this is included from another preprocessed file, take the current macro-set from there.
     ///NOTE: m_environmentFile may be zero, this must be treated
 }
@@ -39,16 +39,19 @@ rpp::pp_macro* CppPreprocessEnvironment::retrieveMacro(const KDevelop::HashedStr
     if( !m_environmentFile )
         return rpp::Environment::retrieveMacro(name);
 
-    {
-        QMutexLocker l(&Cpp::EnvironmentManager::m_stringRepositoryMutex);
+  //kDebug() << "retrieving macro" << name.str();
+
+    rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
+
+    if( !ret || !m_environmentFile->definedMacroNames().contains(name) ) {
+        QMutexLocker l(&Cpp::EnvironmentManager::m_repositoryMutex);
         Utils::BasicSetRepository::Index idx;
         Cpp::EnvironmentManager::m_stringRepository.getItem(name, &idx);
         m_strings.insert(idx);
     }
-    rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
-
-    if( ret ) //note all used macros
-        m_environmentFile->addUsedMacro(*ret);
+    
+    if( ret )
+        m_environmentFile->usingMacro(*ret);
 
     return ret;
 }
@@ -76,22 +79,29 @@ void CppPreprocessEnvironment::swapMacros( Environment* parentEnvironment ) {
 /**
   * Merges the given set of macros into the environment. Does not modify m_environmentFile
   * */
-void CppPreprocessEnvironment::merge( const Cpp::MacroSet& macros ) {
-    Cpp::MacroSet::Macros::const_iterator endIt = macros.macros().end();
-    for( Cpp::MacroSet::Macros::const_iterator it = macros.macros().begin(); it != endIt; ++it ) {
-        ///@todo ownership!
+void CppPreprocessEnvironment::merge( const Cpp::MacroRepository::LazySet& macros ) {
+    for( Cpp::MacroRepository::Iterator it(&Cpp::EnvironmentManager::m_macroRepository, macros.set().iterator()); it; ++it ) {
         rpp::Environment::setMacro(new rpp::pp_macro(*it)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
-        m_macroNameSet.insert((*it).name);
+
+        if( !(*it).isUndef() )
+          m_macroNameSet.insert((*it).name);
+        else
+          m_macroNameSet.remove((*it).name);
     }
 }
 
 void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
+  //kDebug() << "setting macro" << macro->name.str() << "with body" << macro->definition << "is undef:" << macro->isUndef();
     macro->name = Cpp::EnvironmentManager::unifyString(macro->name);
     //Note defined macros
     if( m_environmentFile )
-        m_environmentFile->addDefinedMacro(*macro);
+      m_environmentFile->addDefinedMacro(*macro, retrieveStoredMacro(macro->name));
 
-    m_macroNameSet.insert(macro->name);
+    if( !macro->isUndef() )
+      m_macroNameSet.insert(macro->name);
+    else
+      m_macroNameSet.remove(macro->name);
+    
     rpp::Environment::setMacro(macro);
 }
 

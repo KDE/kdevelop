@@ -25,6 +25,7 @@
 #include <iplugin.h>
 #include <ilanguagesupport.h>
 #include "includeitem.h"
+#include "environmentmanager.h"
 
 class CppHighlighting;
 class CppCodeCompletion;
@@ -70,7 +71,7 @@ public:
 
     static CppLanguageSupport* self();
 
-    const Cpp::MacroSet& standardMacros() const;
+    const Cpp::MacroRepository::LazySet& standardMacros() const;
 
     Cpp::EnvironmentManager* environmentManager() const;
 
@@ -88,7 +89,7 @@ private:
     CppHighlighting *m_highlights;
     CppCodeCompletion *m_cc;
     Cpp::EnvironmentManager* m_environmentManager;
-    Cpp::MacroSet *m_standardMacros;
+    Cpp::MacroRepository::LazySet *m_standardMacros;
     QStringList *m_standardIncludePaths;
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;

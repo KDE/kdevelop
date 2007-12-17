@@ -687,7 +687,7 @@ public:
     if(duchain) {
       const Cpp::EnvironmentFile* f = dynamic_cast<const Cpp::EnvironmentFile*>(duchain->parsingEnvironmentFile().data());
       Q_ASSERT(f); //Should always be for c++
-      m_currentText += QString("%1: %2 %3: %4 %5: %6").arg(labelHighlight(i18nc("Headers included into this header", "Included"))).arg(duchain->importedParentContexts().count()).arg(i18nc("Count of files this header was included into", "Included by")).arg(duchain->importedChildContexts().count()).arg(i18nc("Count of macros defined in this header", "Defined macros")).arg(f->definedMacros().size());
+      m_currentText += QString("%1: %2 %3: %4 %5: %6").arg(labelHighlight(i18nc("Headers included into this header", "Included"))).arg(duchain->importedParentContexts().count()).arg(i18nc("Count of files this header was included into", "Included by")).arg(duchain->importedChildContexts().count()).arg(i18nc("Count of macros defined in this header", "Defined macros")).arg(f->definedMacros().set().count());
       m_currentText += "<br />";
       if(!shorten) {
         m_currentText += labelHighlight(i18n("Declarations:")) + "<br />";

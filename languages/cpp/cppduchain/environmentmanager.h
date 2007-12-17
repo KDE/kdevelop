@@ -121,6 +121,9 @@ namespace Cpp {
 typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash>::Iterator StringSetIterator;
 typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash> StringSetRepository;
 
+typedef Utils::SetRepository<rpp::pp_macro, rpp::pp_macro::CompleteHash>::Iterator MacroRepositoryIterator;
+typedef Utils::SetRepository<rpp::pp_macro, rpp::pp_macro::CompleteHash> MacroRepository;
+
 class EnvironmentManager;
 class MacroSet;
 
@@ -131,10 +134,11 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
 
     void addStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 
-    void addDefinedMacro( const rpp::pp_macro& macro  );
+    ///If there previously was a macro defined of the same name, it must be given through previousOfSameName, else it can be zero.
+    void addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName );
 
     ///the given macro will only make it into usedMacros() if it was not defined in this file
-    void addUsedMacro( const rpp::pp_macro& macro );
+    void usingMacro( const rpp::pp_macro& macro );
 
     void addIncludeFile( const KDevelop::HashedString& file, const KDevelop::ModificationRevision& modificationTime );
 
@@ -142,6 +146,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
 //       return m_strings[string];
 //     }
 
+    ///Returns the set of all strings that can affect this file from outside.
     Utils::Set strings() const;
     
     void addProblem( const KDevelop::Problem& p );
@@ -174,11 +179,15 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     //const HashedStringSet& includeFiles() const;
 
     ///Set of all defined macros, including those of all deeper included files
-    const MacroSet& definedMacros() const;
+    const MacroRepository::LazySet& definedMacros() const;
 
     ///Set of all macros used from outside, including those used in deeper included files
-    const MacroSet& usedMacros() const;
+    const MacroRepository::LazySet& usedMacros() const;
 
+    const StringSetRepository::LazySet& usedMacroNames() const;
+    
+    const StringSetRepository::LazySet& definedMacroNames() const;
+  
     ///Should contain a modification-time for each included-file
     const QMap<KDevelop::HashedString, KDevelop::ModificationRevision>& allModificationTimes() const;
 
@@ -202,8 +211,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     KDevelop::ModificationRevision m_modificationTime;
     Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
     Cpp::StringSetRepository::LazySet m_includeFiles; //Set of all files with absolute paths
-    MacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
-    MacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
+    Cpp::MacroRepository::LazySet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
+    Cpp::StringSetRepository::LazySet m_usedMacroNames; //Set the names of all used macros
+    Cpp::MacroRepository::LazySet m_definedMacros; //Set of all macros that were defined while lexing this file
     Cpp::StringSetRepository::LazySet m_definedMacroNames;
     QList<KDevelop::Problem> m_problems;
     QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
@@ -232,14 +242,15 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     virtual ~EnvironmentManager();
 
     ///No lock needs to be acquired for reading, only for writing.
-    static QMutex m_stringRepositoryMutex;
+    static QMutex m_repositoryMutex;
     static StringSetRepository m_stringRepository;
+    static MacroRepository m_macroRepository;
 
     /**
      * Use this to save memory. Whenever retrieving a string from a parsed file, first unify it.
      * */
     static const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {
-      QMutexLocker lock(&m_stringRepositoryMutex);
+      QMutexLocker lock(&m_repositoryMutex);
       __gnu_cxx::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
       if( it != m_totalStringSet.end() ) {
         return *it;

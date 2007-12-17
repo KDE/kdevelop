@@ -30,8 +30,9 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-QMutex EnvironmentManager::m_stringRepositoryMutex;
-Utils::SetRepository<HashedString, HashedStringHash> EnvironmentManager::m_stringRepository;
+QMutex EnvironmentManager::m_repositoryMutex(QMutex::Recursive);
+StringSetRepository EnvironmentManager::m_stringRepository;
+MacroRepository EnvironmentManager::m_macroRepository;
 
 //For debugging
 QString id(const EnvironmentFile* file) {
@@ -39,8 +40,7 @@ QString id(const EnvironmentFile* file) {
 }
 
 //Only for debugging
-QString print(const Cpp::StringSetRepository::LazySet& set) {
-  Utils::Set s = set.set();
+QString print(const Utils::Set& s) {
   QString ret;
   bool first = true;
   Cpp::StringSetRepository::Iterator it(&EnvironmentManager::m_stringRepository, s.iterator());
@@ -53,6 +53,10 @@ QString print(const Cpp::StringSetRepository::LazySet& set) {
     ++it;
   }
   return ret;
+}
+
+QString print(const Cpp::StringSetRepository::LazySet& set) {
+  return print( set.set() );
 }
 
 EnvironmentManager::EnvironmentManager() : m_simplifiedMatching(false) {
@@ -70,7 +74,7 @@ bool EnvironmentManager::isSimplifiedMatching() const {
 }
 
 void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file ) {
-  ifDebug( kDebug( 9007 ) << "EnvironmentManager: adding an instance of" << file->url()  );
+  ifDebug( kDebug( 9007 ) << "adding an instance of" << file->url().str()  );
 
   std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->url() );
 
@@ -94,7 +98,7 @@ void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file 
 }
 
 void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& file ) {
-  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: removing an instance of" << file->url()  );
+  ifDebug( kDebug( 9007 ) << "removing an instance of" << file->url().str()  );
 
   std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( file->url() );
 
@@ -107,14 +111,12 @@ void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& fi
       files.first++;
     }
   }
-  ifDebug( kDebug( 9007 ) << "EnvironmentManager::removeEnvironmentFile: new count of cached instances for the file:" << cnt  );
+  ifDebug( kDebug( 9007 ) << "new count of cached instances for the file:" << cnt  );
 }
 
 EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* acceptor ) {
   initFileModificationCache();
   std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( fileName );
-
-  
 
 #ifdef LEXERCACHE_DEBUG
     if( files.first != files.second ) {
@@ -122,9 +124,9 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
       std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files2 = files;
       for( ; files2.first != files2.second; ++files2.first )
         ++count;
-        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file " << fileName.str() << " has " << count << " entries";
+        kDebug( 9007 ) << "cache for file " << fileName.str() << " has " << count << " entries";
     } else {
-        kDebug( 9007 ) << "EnvironmentManager::lexedFile: cache for file " << fileName.str() << " is empty";
+        kDebug( 9007 ) << "cache for file " << fileName.str() << " is empty";
     }
 #endif
 
@@ -133,69 +135,52 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
 
   Utils::Set environmentMacroNames = cppEnvironment->macroNameSet().set();
 
-  while ( files.first != files.second ) {
+  for ( ;files.first != files.second; ++files.first ) {
     const EnvironmentFile& file( *( *( files.first ) ).second );
 
     if(acceptor && !acceptor->accept(*( *files.first ).second)) {
-      ++files.first;
       continue;
     }
-    
-    bool success = true;
+
     //Make sure that none of the macros stored in the driver affect the file in a different way than the one before
+    bool success = true;
    
-    Utils::Set conflicts = environmentMacroNames & file.strings();
+    Utils::Set conflicts = (environmentMacroNames & file.strings()) - file.m_usedMacroNames.set();
 
-    StringSetIterator conflictIt(&EnvironmentManager::m_stringRepository, conflicts.iterator());
+    for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, conflicts.iterator() ); it; ++it ) {
+      rpp::pp_macro* m = environment->retrieveStoredMacro( (*it).name );
+      if(m && !m->isUndef()) {
+#ifdef LEXERCACHE_DEBUG
+        kDebug() << "The environment contains a macro that can affect the cached file:" << m->name.str();
+#endif
+        success = false;
+        break;
+      }
+    }
     
-    rpp::Environment::EnvironmentMap::const_iterator end = environment->environment().end();
-    for( ; conflictIt; ++conflictIt) {
-      rpp::Environment::EnvironmentMap::const_iterator rit = environment->environment().find(*conflictIt);
-      if(rit == environment->environment().end()) {
-        kDebug(9007) << "Found environment-macro name, but not the fitting macro: " << (*conflictIt).str();
-        continue;
-      }
-      rpp::Environment::EnvironmentMap::const_iterator it = rit;
-      ++rit;
-      while ( rit != end && it.key() == rit.key() ) {; //Always only use the last macro of the same name for comparison, it is on top of the macro-stack
-        it = rit;
-        ++rit;
-      }
-      if (( *it )->isUndef() ) continue; //Undef-macros practically don't exist
+    if( !success )
+      continue;
+    //Make sure that all external macros used by the file now exist too
 
-      if ( file.m_usedMacros.hasMacro( it.key() ) ) {
-        rpp::pp_macro m( file.m_usedMacros.macro(it.key()) );
-        if ( !( m == **it ) ) {
-          ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file " << fileName.str() << " depends on the string \"" << it.key().str() << "\" and used a macro for it with the body \"" << m.definition << "\"(from" << m.file << "), but the driver contains the same macro with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), cache is not used"  );
-
-          //rpp::pp_macro with the same name was used, but it is different
+    for ( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, file.m_usedMacros.set().iterator() ); it; ++it ) {
+      rpp::pp_macro* m = environment->retrieveStoredMacro( ( *it ).name );
+      if ( !m || !(*m == *it) ) {
+        if( !m && !(*it).isUndef() ) {
+          //It is okay, we did not find a macro, but the used macro is an undef macro
+          //Q_ASSERT(0); //Undef-macros should not be marked as used
+        } else {
+          ifDebug( kDebug( 9007 ) << "The cached file " << fileName.str() << " used a macro called \"" << (*it).name.str() << "\"(from" << (*it).file.str() << "), but the driver does not contain that macro or the macro differs, the cached file is not used"  );
           success = false;
           break;
         }
-
-      } else {
-        //There is a macro that affects the file, but was not used while the previous parse
-        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file " << fileName.str() << " depends on the string \"" << ( it ).key().str() << "\" and the driver contains a macro of that name with body \"" << ( *it )->definition << "\"(from" << ( *it )->file << "), the cached file is not used"  );
-        success = false;
-        break;
       }
     }
-    //Make sure that all external macros used by the file now exist too
-  MacroSet::Macros::const_iterator end2 = file.usedMacros().macros().end();
-    for ( MacroSet::Macros::const_iterator it = file.usedMacros().macros().begin(); it != end2; ++it ) {
-      if ( !environment->retrieveStoredMacro( ( *it ).name ) ) {
-        ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: The cached file " << fileName.str() << " used a macro called \"" << it->name.str() << "\"(from" << it->file << "), but the driver does not contain that macro, the cached file is not used"  );
-        success = false;
-        break;
-      }
-    }
+    if( !success )
+      continue;
 
-    if ( success ) {
-      ifDebug( kDebug( 9007 ) << "EnvironmentManager::lexedFile: Using cached file " << fileName.str() );
-      (*files.first).second->access();
-      return ( *files.first ).second;
-    }
-    ++files.first;
+    ifDebug( kDebug( 9007 ) << "Using cached file " << fileName.str() );
+    //(*files.first).second->access();
+    return ( *files.first ).second;
   }
   return EnvironmentFilePointer();
 }
@@ -224,14 +209,14 @@ bool EnvironmentManager::hasSourceChanged( const EnvironmentFile& file ) const {
   ModificationRevision revision = EditorIntegrator::modificationRevision( file.url() );
 
   if ( revision != file.modificationRevision() ) {
-    ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged:" << file.url() << "has changed, stored stamp:" << file.modificationRevision() << "new time:" << revision  );
+    ifDebug( kDebug( 9007 ) << file.url().str() << "has changed, stored stamp:" << file.modificationRevision() << "new time:" << revision  );
     return true;
   }
 
   for( QMap<HashedString, ModificationRevision>::const_iterator it = file.allModificationTimes().begin(); it != file.allModificationTimes().end(); ++it ) {
     ModificationRevision revision = EditorIntegrator::modificationRevision( file.url() );
     if( revision != *it ) {
-      ifDebug( kDebug( 9007 ) << "EnvironmentManager::hasSourceChanged: dependency" << it.key().str() << "has changed"  );
+      ifDebug( kDebug( 9007 ) << "dependency" << it.key().str() << "has changed"  );
       return true;
     }
   }
@@ -255,33 +240,39 @@ void EnvironmentManager::erase( const CacheNode* node ) {
     }
       files.first++;
   }
-  ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url()  );
+  ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url().str()  );
 }
 
-EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_stringRepositoryMutex) {
+EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex) {
   QFileInfo fileInfo( KUrl(fileName.str()).path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
-  ifDebug( kDebug(9007) << "EnvironmentFile::EnvironmentFile: created for" << fileName << "modification-time:" << m_modificationTime  );
+  ifDebug( kDebug(9007) << "created for" << fileName.str() << "modification-time:" << m_modificationTime  );
 
   addIncludeFile( m_url, m_modificationTime );
   m_allModificationTimes[ m_url ] = m_modificationTime;
 }
 
-void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro ) {
+void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName ) {
 #ifdef LEXERCACHE_DEBUG
   kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
 #endif
-  m_definedMacros.addMacro( macro );
+  Q_ASSERT( previousOfSameName || !m_definedMacroNames.contains(macro.name) );
+  if( previousOfSameName )
+    m_definedMacros.remove( *previousOfSameName );
+  
+  m_definedMacros.insert( macro );
   
   m_definedMacroNames.insert( macro.name );
 }
 
-void EnvironmentFile::addUsedMacro( const rpp::pp_macro& macro ) {
-  if ( !m_definedMacros.hasMacro( macro.name ) ) {
+void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
+  if ( !m_definedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
 #ifdef LEXERCACHE_DEBUG
-    kDebug( 9007 ) << id(this) << "used macro" << macro.name.str() << "from" << macro.file;
+    kDebug( 9007 ) << id(this) << "used macro" << macro.name.str() << "from" << macro.file.str();
 #endif
-    m_usedMacros.addMacro( macro );
+    m_usedMacros.insert( macro );
+  
+    m_usedMacroNames.insert( macro.name );
   }
 }
 
@@ -295,12 +286,22 @@ Utils::Set EnvironmentFile::strings() const {
 
 
 ///Set of all defined macros, including those of all deeper included files
-const MacroSet& EnvironmentFile::definedMacros() const {
+const MacroRepository::LazySet& EnvironmentFile::definedMacros() const {
   return m_definedMacros;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
-const MacroSet& EnvironmentFile::usedMacros() const {
+const StringSetRepository::LazySet& EnvironmentFile::usedMacroNames() const {
+  return m_usedMacroNames;
+}
+
+///Set of all macros used from outside, including those used in deeper included files
+const StringSetRepository::LazySet& EnvironmentFile::definedMacroNames() const {
+  return m_definedMacroNames;
+}
+
+///Set of all macros used from outside, including those used in deeper included files
+const MacroRepository::LazySet& EnvironmentFile::usedMacros() const {
   return m_usedMacros;
 }
 
@@ -343,32 +344,42 @@ QList<Problem>  EnvironmentFile::problems() const {
 }
 
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
-  QMutexLocker l(&EnvironmentManager::m_stringRepositoryMutex);
+  QMutexLocker l(&EnvironmentManager::m_repositoryMutex);
   m_strings += EnvironmentManager::m_stringRepository.createSet(strings);
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
+  QMutexLocker l(&EnvironmentManager::m_repositoryMutex);
 #ifdef LEXERCACHE_DEBUG
-  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames);
+  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "strings in other:" << print(file.m_strings);
 #endif
-  Utils::Set tempStrings = file.m_strings;
-  tempStrings -= m_definedMacroNames.set();
-  m_strings += tempStrings;
-  m_includeFiles += file.m_includeFiles.set();
+  m_strings += file.m_strings - m_definedMacroNames.set();
+  
   //Only add macros to the usedMacros-list that were not defined locally
-  for ( MacroSet::Macros::const_iterator it = file.m_usedMacros.macros().begin(); it != file.m_usedMacros.macros().end(); ++it ) {
-    if ( !m_definedMacros.hasMacro(( *it ).name ) ) {///If the macro was not defined locally, add it to the macros-list.
-#ifdef LEXERCACHE_DEBUG
-      kDebug( 9007 ) <<  id(this) <<  "inserting used macro" << ( *it ).name.str();
-#endif
-      m_usedMacros.addMacro( *it );
-    }
-  }
+  m_usedMacroNames += file.m_usedMacroNames.set() - m_definedMacroNames.set();
 
-  m_definedMacros.merge( file.m_definedMacros );
+  ///Merge those used macros that were not defined within this environment
+  //This is slightly inefficient, would be nicer to have a fast mechanism for this
+  for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, file.m_usedMacros.set().iterator() ); it; ++it )
+    if( !m_definedMacroNames.contains((*it).name) )
+      m_usedMacros.insert( *it );
+
+  ///Add defined macros from the merged file.
+
+  //Since merged macros overrule already stored ones, first remove the ones of the same name.
+  for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, m_definedMacros.set().iterator() ); it; ++it )
+    if( file.m_definedMacroNames.contains( (*it).name ) )
+      m_definedMacros.remove(*it);
+
+  //Now merge in the new defined macros
+  
+  m_definedMacros += file.m_definedMacros.set();
   m_definedMacroNames += file.m_definedMacroNames.set();
 
+  ///Merge include-files, problems and other stuff
+  m_includeFiles += file.m_includeFiles.set();
+  
   for( QMap<HashedString, KDevelop::ModificationRevision>::const_iterator it = file.m_allModificationTimes.begin(); it != file.m_allModificationTimes.end(); ++it )
     m_allModificationTimes[it.key()] = *it;
 
@@ -380,9 +391,9 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 }
 
 size_t EnvironmentFile::hash() const {
-  ///@todo remove the (size_t)(this), it is just temporary to make them unique, bit will not work with serialization to disk.
+  ///@todo remove the (size_t)(this), it is just temporary to make them unique, but will not work with serialization to disk.
   ///Instead, create a hash over the contained strings, and make sure the other hashes work reliably.
-  return m_usedMacros.valueHash() + m_usedMacros.idHash() + m_definedMacros.idHash() + m_definedMacros.valueHash() + (size_t)(this)/*+ m_strings.hash()*/; ///@todo is the string-hash needed here?
+  return (size_t)(this); //m_usedMacros.valueHash() + m_usedMacros.idHash() + m_definedMacros.idHash() + m_definedMacros.valueHash() + (size_t)(this)/*+ m_strings.hash()*/; ///@todo is the string-hash needed here?
 }
 
 void EnvironmentFile::setIdentityOffset(uint offset) {
@@ -415,20 +426,20 @@ void EnvironmentManager::saveMemory() {
 void EnvironmentManager::addFile( ParsingEnvironmentFile* file ) {
   EnvironmentFile* cfile = dynamic_cast<EnvironmentFile*>(file);
   if( !cfile ) {
-    kDebug(9007) << "EnvironmentManager::addFile() called with a non-cpp EnvironmentFile of type" << file->type();
+    kDebug(9007) << "called with a non-cpp EnvironmentFile of type" << file->type();
     return;
   }
-  ifDebug( kDebug(9007) << "EnvironmentManager::addFile" << cfile->url()  );
+  ifDebug( kDebug(9007) << cfile->url().str()  );
   addEnvironmentFile(EnvironmentFilePointer(cfile));
 }
 ///Remove a file from the manager
 void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
   EnvironmentFile* cfile = dynamic_cast<EnvironmentFile*>(file);
   if( !cfile ) {
-    kDebug(9007) << "EnvironmentManager::removeFile() called with a non-cpp EnvironmentFile of type" << file->type();
+    kDebug(9007) << "called with a non-cpp EnvironmentFile of type" << file->type();
     return;
   }
-  ifDebug( kDebug(9007) << "EnvironmentManager::removeFile" << cfile->url()  );
+  ifDebug( kDebug(9007) << cfile->url().str()  );
   removeEnvironmentFile(EnvironmentFilePointer(cfile));
 }
 
@@ -438,10 +449,12 @@ void EnvironmentManager::removeFile( ParsingEnvironmentFile* file ) {
 KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const HashedString& url, const ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter ) {
   const rpp::Environment* env = dynamic_cast<const rpp::Environment*>(environment);
   if( !env ) {
-    kDebug(9007) << "EnvironmentManager::find() called with a wrong environment of type" << environment->type();
+    kDebug(9007) << "called with a wrong environment of type" << environment->type();
     return 0;
   }
-  return lexedFile( url, env, accepter ).data();
+  EnvironmentFilePointer p = lexedFile( url, env, accepter );
+  Q_ASSERT(!p || p->ref.value > 1);
+  return p.data();
 }
 
 __gnu_cxx::hash_set<KDevelop::HashedString> EnvironmentManager::m_totalStringSet;

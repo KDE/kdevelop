@@ -72,6 +72,7 @@ private slots:
   void testForwardDeclaration();
   void testAcrossHeaderReferences();
   void testAcrossHeaderTemplateReferences();
+  void testEnvironmentMatching();
 
 public:
   enum DumpArea {
@@ -86,10 +87,10 @@ public:
 private:
   friend class TestPreprocessor;
 
-  //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed
-  QString preprocess( const QString& text, IncludeFileList& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, rpp::LocationTable** returnLocationTable = 0L );
+  //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed. The url is only neede for the EnvironmentFile.
+  QString preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* = 0, rpp::LocationTable** returnLocationTable = 0L );
   
-  KDevelop::DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
+  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
 
   void release(KDevelop::DUContext* top);
 

@@ -56,7 +56,6 @@ struct SetNode : public KShared
   //Rule: start <= end
   Index start, end; //This set-node contains all indices starting at start until end, not including end.
 
-  
   //Rule: left->start == start, right->end == end
   //Rule: (left != 0 && right != 0) || (left == 0 && right == 0)
   Ptr left, right;
@@ -101,7 +100,16 @@ struct SetNode : public KShared
   inline bool hasSlaves() const {
     return (bool)left;
   }
-  
+
+  Index count() const {
+    if(contiguous)
+      return end - start;
+    else if(left && right)
+      return left->size() + right->size();
+    else
+      return 0;
+  }
+
   /**
    * Must only be called on nodes without children.
    * Returns a node representing the range start -> end
@@ -299,6 +307,13 @@ Set::Set() : d(KSharedPtr<Private>(new Private)) {
 }
 
 Set::~Set() {
+}
+
+unsigned int Set::count() const {
+  if(d->m_tree)
+    return d->m_tree->count();
+  else
+    return 0;
 }
 
 Set::Set(const Set& rhs) {

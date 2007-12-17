@@ -97,22 +97,22 @@ bool setupStandardIncludePaths(QStringList& includePaths)
     }
 }
 
-bool setupStandardMacros(Cpp::MacroSet& macros)
+bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
 {
     //Add some macros to be compatible with the gnu c++ compiler
     {
       //Used in several headers like sys/time.h
       rpp::pp_macro m("__restrict");
-      macros.addMacro( m );
+      macros.insert( m );
     }
     {
       //Used in several headers like sys/time.h
       rpp::pp_macro m("__const");
       m.definition = "const";
-      macros.addMacro( m );
+      macros.insert( m );
     }
 
-    macros.addMacro( rpp::pp_macro("__extension__") );
+    macros.insert( rpp::pp_macro("__extension__") );
     
     //Get standard macros from gcc
     KProcess proc;
@@ -140,7 +140,7 @@ bool setupStandardMacros(Cpp::MacroSet& macros)
                     } else {
                         macro.name = line;
                     }
-                    macros.addMacro(macro);
+                    macros.insert(macro);
                 }
             }
         }

@@ -47,12 +47,13 @@ public:
   /**
     * Merges the given set of macros into the environment. Does not modify m_environmentFile
     * */
-  void merge( const Cpp::MacroSet& macros );
+  void merge( const Cpp::MacroRepository::LazySet& macros );
 
   virtual void setMacro(rpp::pp_macro* macro);
 
   virtual int type() const;
 
+  ///Does not include the names of undef macros
   const Cpp::StringSetRepository::LazySet& macroNameSet() const;
 
 private:

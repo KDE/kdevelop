@@ -35,6 +35,8 @@ public:
   pp_macro();
   pp_macro(const KDevelop::HashedString& name);
 
+  typedef size_t HashType;
+  
   KDevelop::HashedString name;
   QString definition; //body
   KDevelop::HashedString file; //fileName
@@ -75,6 +77,13 @@ public:
     }
   };
 
+  //Hash over id and value
+  struct CompleteHash {
+    HashType operator () ( const pp_macro& lhs ) const {
+        return lhs.valueHash() + lhs.idHash();
+    }
+  };
+  
   private:
     void computeHash() const;
     mutable bool m_idHashValid;

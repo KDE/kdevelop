@@ -21,6 +21,8 @@
 #ifndef CPPTOOLSSETUPHELPERS_H
 #define CPPTOOLSSETUPHELPERS_H
 
+#include "environmentmanager.h"
+
 class QStringList;
 namespace Cpp {
     class MacroSet;
@@ -38,7 +40,7 @@ namespace CppTools {
     * This function attempts to run a gcc command to retrieve the standard
     * c++ macro definitions.
     */
-    bool setupStandardMacros(Cpp::MacroSet& macros);
+    bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros);
 
 }
 

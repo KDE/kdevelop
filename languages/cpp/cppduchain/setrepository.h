@@ -61,6 +61,9 @@ public:
 
   //Returns this set converted to a standard set that contains all indices contained by this set.
   std::set<unsigned int> stdSet() const;
+
+  ///Returns the count of items in the set
+  unsigned int count() const;
   
   ///Set union
   Set operator +(const Set& rhs) const;
@@ -214,7 +217,7 @@ public:
       ++m_it;
       return *this;
     }
-    
+
     const T& operator*() const {
       Q_ASSERT(m_rep);
       return m_rep->elements()[*m_it];
@@ -249,7 +252,15 @@ public:
     }
 
     void insert(const T& t) {
+      if(!m_temporaryRemoveIndices.empty())
+        apply();
       m_temporaryIndices.push_back(t);
+    }
+    
+    void remove(const T& t) {
+      if(!m_temporaryIndices.empty())
+        apply();
+      m_temporaryRemoveIndices.push_back(t);
     }
 
     ///Returns the set this LazySet represents. When this is called, the set is constructed in the repository.
@@ -258,11 +269,54 @@ public:
       return m_set;
     }
 
+    ///@warning this is expensive, because the set is constructed
+    bool contains(const T& item) const {
+      QMutexLocker l(m_lockBeforeAccess);
+      BasicSetRepository::Index i;
+      m_rep->getItem(item, &i);
+
+      if( m_temporaryRemoveIndices.empty() && m_temporaryIndices.size() < 10 ) {
+        //Simplification without creating the set
+        for( typename std::list<T>::const_iterator it = m_temporaryIndices.begin(); it != m_temporaryIndices.end(); ++it )
+          if( *it == item )
+            return true;
+        return (bool)(m_set & m_rep->createSet(i)).iterator();
+      }
+      
+      return (bool)(set() & m_rep->createSet(i)).iterator();
+      
+    }
+
     LazySet& operator +=(const Set& set) {
+      if(!m_temporaryRemoveIndices.empty())
+        apply();
+      QMutexLocker l(m_lockBeforeAccess);
       m_set += set;
       return *this;
     }
+    
+    LazySet& operator -=(const Set& set) {
+      if(!m_temporaryIndices.empty())
+        apply();
+      QMutexLocker l(m_lockBeforeAccess);
+      m_set -= set;
+      return *this;
+    }
 
+    LazySet operator +(const Set& set) const {
+      apply();
+      QMutexLocker l(m_lockBeforeAccess);
+      Set ret = m_set + set;
+      return LazySet(m_rep, m_lockBeforeAccess, ret);
+    }
+    
+    LazySet operator -(const Set& set) const {
+      apply();
+      QMutexLocker l(m_lockBeforeAccess);
+      Set ret = m_set - set;
+      return LazySet(m_rep, m_lockBeforeAccess, ret);
+    }
+    
     ///Returns an iterator that can conveniently be used to iterate over the items contained in this set
 //     Iterator iterator() const {
 //       return Iterator(m_rep, set().iterator());
@@ -283,11 +337,25 @@ public:
         m_temporaryIndices.clear();
         m_set += tempSet;
       }
+      if(!m_temporaryRemoveIndices.empty()) {
+        QMutexLocker l(m_lockBeforeAccess);
+        std::set<Utils::BasicSetRepository::Index> indices;
+        typename std::list<T>::const_iterator end = m_temporaryRemoveIndices.end();
+        for ( typename std::list<T>::const_iterator rit = m_temporaryRemoveIndices.begin(); rit != end; ++rit ) {
+          Utils::BasicSetRepository::Index idx;
+          m_rep->getItem(*rit, &idx);
+          indices.insert(idx);
+        }
+        Set tempSet = m_rep->createSet(indices);
+        m_temporaryRemoveIndices.clear();
+        m_set -= tempSet;
+      }
     }
     SetRepository<T, Hash>* m_rep;
     mutable Set m_set;
     QMutex* m_lockBeforeAccess;
     mutable std::list<T> m_temporaryIndices;
+    mutable std::list<T> m_temporaryRemoveIndices;
   };
 private:
   // Tracks what elements have been assigned to what indices

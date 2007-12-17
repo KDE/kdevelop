@@ -45,6 +45,7 @@
 #include "expressionparser.h"
 #include "classfunctiondeclaration.h"
 #include "codecompletioncontext.h"
+#include "cpppreprocessenvironment.h"
 
 using namespace KTextEditor;
 
@@ -432,27 +433,29 @@ void TestCppCodeCompletion::testHeaderSections() {
       
   IncludeFileList includes;
 
-  QCOMPARE(preprocess("#include \"someHeader.h\"\nHello", includes, 0, true), QString("\n"));
+  HashedString turl("ths.h");
+  
+  QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\nHello", includes, 0, true), QString("\n"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
   
-  QCOMPARE(preprocess("#include \"someHeader.h\"\nHello", includes, 0, false), QString("\nHello"));
+  QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\nHello", includes, 0, false), QString("\nHello"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
 
-  QCOMPARE(preprocess("#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, false), QString("\n\nHello"));
+  QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, false), QString("\n\nHello"));
   QCOMPARE(includes.count(), 2);
   includes.clear();
 
-  QCOMPARE(preprocess("#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, true), QString("\n\n"));
+  QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, true), QString("\n\n"));
   QCOMPARE(includes.count(), 2);
   includes.clear();
   
-  QCOMPARE(preprocess("#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, true), QString("\n\n\n"));
+  QCOMPARE(preprocess(turl, "#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, true), QString("\n\n\n"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
   
-  QCOMPARE(preprocess("#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, false), QString("\n\n\nHello\n"));
+  QCOMPARE(preprocess(turl, "#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, false), QString("\n\n\nHello\n"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
 }
@@ -561,6 +564,123 @@ void TestCppCodeCompletion::addInclude( const QString& identity, const QString& 
   fakeIncludes[identity] = text;
 }
 
+//Only for debugging
+QString print(const Cpp::StringSetRepository::LazySet& set) {
+  Utils::Set s = set.set();
+  QString ret;
+  bool first = true;
+  Cpp::StringSetRepository::Iterator it(&Cpp::EnvironmentManager::m_stringRepository, s.iterator());
+  while(it) {
+    if(!first)
+      ret += ", ";
+    first = false;
+    
+    ret += (*it).str();
+    ++it;
+  }
+  return ret;
+}
+
+//Only for debugging
+QStringList toStringList( const Utils::Set& set ) {
+  QStringList ret;
+  Cpp::StringSetRepository::Iterator it(&Cpp::EnvironmentManager::m_stringRepository, set.iterator());
+  while(it) {
+    ret << (*it).str();
+    ++it;
+  }
+  return ret;
+}
+
+
+void TestCppCodeCompletion::testEnvironmentMatching() {
+    Cpp::EnvironmentManager* environmentManager = new Cpp::EnvironmentManager;
+    {
+        DUChainWriteLocker l(DUChain::lock());
+        DUChain::self()->addParsingEnvironmentManager(environmentManager);
+    }
+    
+    {
+      addInclude("stringset_test1.h", "String1 s1;\n#undef String2\n String2 s2;");
+      addInclude("stringset_test2.h", "String1 s1;\n#undef String2\n String2 s2;");
+      
+      {
+        TopDUContext* top = parse(QByteArray("#include \"stringset_test1.h\"\n"), DumpNone);
+        DUChainWriteLocker lock(DUChain::lock());
+        QVERIFY(top->parsingEnvironmentFile());
+        Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
+        QVERIFY(envFile);
+        QCOMPARE(toStringList(envFile->strings()), QString("String1\ns1\ns2").split("\n")); //The #undef protects String2, so it cannot be affected from outside
+      }
+      {
+        TopDUContext* top = parse(QByteArray("#define String1\n#include \"stringset_test1.h\"\nString2 String1;"), DumpNone); //Both String1 and String2 are shadowed. String1 by the macro, and String2 by the #undef in stringset_test1.h
+        DUChainWriteLocker lock(DUChain::lock());
+        QVERIFY(top->parsingEnvironmentFile());
+        Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
+        QVERIFY(envFile);
+        //String1 is shadowed by the macro-definition, so it is not a string that can be affected from outside.
+        QCOMPARE(toStringList(envFile->strings()), QString("s1\ns2").split("\n"));
+        QCOMPARE(toStringList(envFile->usedMacroNames().set()), QStringList()); //No macros from outside were used
+
+        QCOMPARE(envFile->definedMacros().set().count(), 2u);
+        
+        QCOMPARE(top->importedParentContexts().count(), 1);
+        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].data());
+        QVERIFY(top2);
+        Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
+        QVERIFY(envFile2);
+        
+        QCOMPARE(envFile2->definedMacros().set().count(), 1u);
+        
+        QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList("String1")); //stringset_test1.h used the Macro String1 from outside
+        QCOMPARE(toStringList(envFile2->strings()), QString("String1\ns1\ns2").split("\n"));
+      }
+      {
+        TopDUContext* top = parse(QByteArray("#define String1\n#undef String1\n#include \"stringset_test1.h\""), DumpNone);
+        DUChainWriteLocker lock(DUChain::lock());
+        QVERIFY(top->parsingEnvironmentFile());
+        Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
+        QVERIFY(envFile);
+        QCOMPARE(envFile->definedMacros().set().count(), 2u);
+        //String1 is shadowed by the macro-definition, so it is not a string that can be affected from outside.
+        QCOMPARE(toStringList(envFile->strings()), QString("s1\ns2").split("\n"));
+        QCOMPARE(toStringList(envFile->usedMacroNames().set()), QStringList()); //No macros from outside were used
+
+        QCOMPARE(top->importedParentContexts().count(), 1);
+        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].data());
+        QVERIFY(top2);
+        Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
+        QVERIFY(envFile2);
+        QCOMPARE(envFile2->definedMacros().set().count(), 1u);
+        
+        QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList()); //stringset_test1.h used the Macro String1 from outside. However it is an undef-macro, so it does not appear in usedMacroNames() and usedMacros()
+        QCOMPARE(envFile2->usedMacros().set().count(), (unsigned int)0);
+        QCOMPARE(toStringList(envFile2->strings()), QString("String1\ns1\ns2").split("\n"));
+      }
+    }
+
+/*    addInclude( "envmatch_header1.h", "#include \"envmatch_header2.h\"\n class SomeName; #define SomeName SomeAlternativeName" );
+    addInclude( "envmatch_header2.h", "#ifndef SOMEDEF\n #define SOMEDEF\n#endif\n" );
+    QByteArray method1("#include \"envmatch_header1.h\"");
+    QByteArray method2("#include \"envmatch_header1.h\"");
+    QByteArray method3("#include \"envmatch_header1.h\"\n#include \"envmatch_header1.h\"");
+
+    DUContext* top1 = parse(method1, DumpNone);
+    DUContext* top2 = parse(method1, DumpNone);
+    DUContext* top3 = parse(method1, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top1->importedParentContexts().count(), 1);
+    QCOMPARE(top2->importedParentContexts().count(), 1);
+//     QCOMPARE(top3->importedParentContexts().count(), 2);
+
+    QCOMPARE(top1->importedParentContexts()[0], top2->importedParentContexts()[1]);*/
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    DUChain::self()->removeParsingEnvironmentManager(environmentManager);
+}
+
 struct TestPreprocessor : public rpp::Preprocessor {
 
   TestCppCodeCompletion* cc;
@@ -576,7 +696,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.find(fileName);
     if( it != cc->fakeIncludes.end() || !pp ) {
       kDebug(9007) << "parsing included file \"" << fileName << "\"";
-      included << LineContextPair( dynamic_cast<TopDUContext*>(cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp)), sourceLine );
+      included << LineContextPair( dynamic_cast<TopDUContext*>(cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp, KUrl(it.key()))), sourceLine );
     } else {
       kDebug(9007) << "could not find include-file \"" << fileName << "\"";
     }
@@ -593,11 +713,26 @@ struct TestPreprocessor : public rpp::Preprocessor {
   }
 };
 
-QString TestCppCodeCompletion::preprocess( const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, rpp::LocationTable** returnLocationTable ) {
+QString TestCppCodeCompletion::preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable ) {
   TestPreprocessor ppc( this, included, stopAfterHeaders );
 
+    
     rpp::pp preprocessor(&ppc);
     ppc.setPp( &preprocessor );
+
+    KSharedPtr<Cpp::EnvironmentFile> environmentFile;
+    if( paramEnvironmentFile && *paramEnvironmentFile )
+      environmentFile = *paramEnvironmentFile;
+    else
+      environmentFile = Cpp::EnvironmentFilePointer( new Cpp::EnvironmentFile( url, 0 ) );
+    
+    if( paramEnvironmentFile )
+      *paramEnvironmentFile = environmentFile;
+    
+    CppPreprocessEnvironment* currentEnvironment = new CppPreprocessEnvironment( &preprocessor, environmentFile );
+    preprocessor.setEnvironment( currentEnvironment );
+    currentEnvironment->setEnvironmentFile( environmentFile );
+    
     rpp::MacroBlock* macros = new rpp::MacroBlock(0);
 
     preprocessor.environment()->enterBlock(macros);
@@ -610,28 +745,37 @@ QString TestCppCodeCompletion::preprocess( const QString& text, IncludeFileList&
     if (returnLocationTable)
       *returnLocationTable = preprocessor.environment()->takeLocationTable();
     
-        //Merge include-file-set, defined macros, used macros, and string-set
-//         parentPreprocessor->m_lexedFile->merge(*m_lexedFile);
-  
-    if( parent )
-            preprocessor.environment()->swapMacros(parent->environment());
+    currentEnvironment->finish();
+
+    if( parent ) {
+      preprocessor.environment()->swapMacros(parent->environment());
+      static_cast<CppPreprocessEnvironment*>(parent->environment())->environmentFile()->merge(*environmentFile);
+    }
+
     return result;
 }
 
-DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity)
+TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
    ;
+  
+  static int testNumber = 0;
+  HashedString url(QString("file:///internal/%1").arg(testNumber++));
+  if( !_identity.isEmpty() )
+      url = _identity.prettyUrl();
 
    IncludeFileList included;
    QList<DUContext*> temporaryIncluded;
 
   rpp::LocationTable* locationTable;
+  
+  Cpp::EnvironmentFilePointer file;
    
-  QByteArray source = preprocess( QString::fromUtf8(unit), included, parent, false, &locationTable ).toUtf8();
+  QByteArray source = preprocess( url, QString::fromUtf8(unit), included, parent, false, &file, &locationTable ).toUtf8();
 
   session->setContents( source, locationTable );
 
@@ -659,15 +803,8 @@ DUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, 
     dumper.dump(ast, session);
   }
 
-  static int testNumber = 0;
-  HashedString url(QString("file:///internal/%1").arg(testNumber++));
-  if( !_identity.isEmpty() )
-      url = _identity.prettyUrl();
-
   DeclarationBuilder definitionBuilder(session);
 
-  //EnvironmentFile is not built correctly by TestPreprocessor
-  Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );
   TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, &included);
 
   UseBuilder useBuilder(session);

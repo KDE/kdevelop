@@ -97,7 +97,8 @@ K_EXPORT_PLUGIN(KDevCppSupportFactory("kdevcppsupport"))
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
-      KDevelop::ILanguageSupport()
+      KDevelop::ILanguageSupport(),
+      m_standardMacros(0)
 {
     m_self = this;
 
@@ -105,7 +106,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
-    m_standardMacros = new Cpp::MacroSet;
+    m_standardMacros = new Cpp::MacroRepository::LazySet( &Cpp::EnvironmentManager::m_macroRepository, &Cpp::EnvironmentManager::m_repositoryMutex );
     m_standardIncludePaths = new QStringList;
     m_environmentManager = new Cpp::EnvironmentManager;
     m_environmentManager->setSimplifiedMatching(true); ///@todo Make simplified matching optional. Before that, make it work.
@@ -177,7 +178,7 @@ CppLanguageSupport::~CppLanguageSupport()
     delete m_includeResolver;
 }
 
-const Cpp::MacroSet& CppLanguageSupport::standardMacros() const {
+const Cpp::MacroRepository::LazySet& CppLanguageSupport::standardMacros() const {
     return *m_standardMacros;
 }
 

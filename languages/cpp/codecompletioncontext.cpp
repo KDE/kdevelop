@@ -38,6 +38,7 @@
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-macro.h"
 #include <iproblem.h>
+#include "environmentmanager.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -102,7 +103,7 @@ QString preprocess( const QString& text, const Cpp::EnvironmentFilePointer& file
     LOCKDUCHAIN;
 /*    kDebug(9007) << "defined macros: " << file->definedMacros().size();*/
     //Copy in all macros from the file
-    for( MacroSet::Macros::const_iterator it = file->definedMacros().macros().begin(); it != file->definedMacros().macros().end(); ++it ) {
+    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->definedMacros().set().iterator() ); it; ++it ) {
       if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
         pp.environment()->setMacro( new rpp::pp_macro( *it ) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/
@@ -111,7 +112,7 @@ QString preprocess( const QString& text, const Cpp::EnvironmentFilePointer& file
       }
     }
 /*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
-    for( MacroSet::Macros::const_iterator it = file->usedMacros().macros().begin(); it != file->usedMacros().macros().end(); ++it ) {
+    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->usedMacros().set().iterator() ); it; ++it ) {
       if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
         pp.environment()->setMacro( new rpp::pp_macro( *it ) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/
