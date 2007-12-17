@@ -28,46 +28,53 @@
 #include "definition.h"
 #include "symboltable.h"
 #include "use_p.h"
+#include "declaration_p.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-class ForwardDeclarationPrivate
+class ForwardDeclarationPrivate : public DeclarationPrivate
 {
 public:
+  ForwardDeclarationPrivate() {}
+  ForwardDeclarationPrivate( const ForwardDeclarationPrivate& rhs ) 
+      : DeclarationPrivate( rhs )
+  {
+    m_resolvedDeclaration = 0;
+  }
   Declaration* m_resolvedDeclaration;
 };
 
-ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(rhs), d(new ForwardDeclarationPrivate) {
-  d->m_resolvedDeclaration = 0;
+ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationPrivate(*rhs.d_func()), HashedString(), 0, rhs.scope()) {
+  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
 }
 
 ForwardDeclaration::ForwardDeclaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context )
-  : Declaration(url, range, scope, context)
-  , d(new ForwardDeclarationPrivate)
+  : Declaration(*new ForwardDeclarationPrivate, url, range, scope)
 {
-  d->m_resolvedDeclaration = 0;
+  d_func()->m_resolvedDeclaration = 0;
+  if( context )
+    setContext( context );
 }
 
 ForwardDeclaration::~ForwardDeclaration()
 {
   setResolved(0);
-  delete d;
 }
 
 Declaration * ForwardDeclaration::resolved() const
 {
   ENSURE_CAN_READ
 
-  return d->m_resolvedDeclaration;
+  return d_func()->m_resolvedDeclaration;
 }
 
 void ForwardDeclaration::setResolved(Declaration * declaration)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(ForwardDeclaration);
   if (d->m_resolvedDeclaration)
     d->m_resolvedDeclaration->removeForwardDeclaration(this);
 
@@ -81,7 +88,7 @@ void ForwardDeclaration::setResolved(Declaration * declaration)
 
     // Offload uses...
     foreach (Use* use, uses())
-      use->d->setDeclaration(d->m_resolvedDeclaration);
+      use->d_func()->setDeclaration(d->m_resolvedDeclaration);
   }
 }
 

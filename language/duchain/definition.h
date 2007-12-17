@@ -29,7 +29,7 @@ namespace KDevelop
 
 class Declaration;
 class DUContext;
-
+class DefinitionPrivate;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
  */
@@ -51,7 +51,7 @@ public:
   Declaration* declaration() const;
 
 private:
-  class DefinitionPrivate* const d;
+  Q_DECLARE_PRIVATE(Definition)
 };
 }
 #endif // DEFINITION_H

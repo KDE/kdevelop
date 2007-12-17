@@ -29,7 +29,7 @@ namespace KDevelop
 {
 
 DefinitionPrivate::DefinitionPrivate( Definition* d )
-  : m_definition(d)
+  : m_context(0), m_definition(d)
 {
 }
 
@@ -48,13 +48,12 @@ void DefinitionPrivate::setDeclaration(Declaration* declaration)
 }
 
 Definition::Definition(const HashedString& url, KTextEditor::Range* range, DUContext* context)
-  : DUChainBase(url, range)
+  : DUChainBase(*new DefinitionPrivate(this), url, range)
   , ContextOwner(this)
-  , d(new DefinitionPrivate(this))
 {
-  d->m_context = 0;
-  d->m_declaration = 0;
-  setContext(context);
+  d_func()->m_declaration = 0;
+  if( context )
+    setContext(context);
 }
 
 Definition::~Definition()
@@ -65,20 +64,19 @@ Definition::~Definition()
     dec->setDefinition(0);
 
   //DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
-  delete d;
 }
 
 DUContext* Definition::context() const
 {
   ENSURE_CHAIN_READ_LOCKED
-
-  return d->m_context;
+  
+  return d_func()->m_context;
 }
 
 void Definition::setContext(DUContext* context)
 {
   ENSURE_CHAIN_WRITE_LOCKED
-
+  Q_D(Definition);
   if (d->m_context) {
     d->m_context->takeDefinition(this);
     //DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
@@ -96,7 +94,7 @@ Declaration* Definition::declaration() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return d->m_declaration;
+  return d_func()->m_declaration;
 }
 
 // kate: indent-width 2;

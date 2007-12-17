@@ -16,38 +16,51 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FORWARDDECLARATION_H
-#define FORWARDDECLARATION_H
+#ifndef DECLARATION_P_H
+#define DECLARATION_P_H
+
+#include "duchainbase_p.h"
+#include "contextowner_p.h"
 
 #include "declaration.h"
-#include "../languageexport.h"
+#include "ducontext.h"
+#include "ducontext_p.h"
+#include "topducontext.h"
+#include "duchainlock.h"
+#include "duchain.h"
 
 namespace KDevelop
 {
-class ForwardDeclarationPrivate;
-/**
- * Represents a forward declaration
- */
-class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclaration : public Declaration
+
+class DeclarationPrivate : public DUChainBasePrivate
 {
 public:
-  ForwardDeclaration(const ForwardDeclaration& rhs);
-  ForwardDeclaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context);
-  virtual ~ForwardDeclaration();
+  DeclarationPrivate();
+  
+  DeclarationPrivate( const DeclarationPrivate& rhs );
+  
+  DUContext* m_context;
+  Declaration::Scope m_scope;
+  AbstractType::Ptr m_type;
+  Identifier m_identifier;
+  
+  QByteArray m_comment;
 
-  virtual bool isForwardDeclaration() const;
+  QList<ForwardDeclaration*> m_forwardDeclarations;
 
-  Declaration* resolved() const;
-  void setResolved(Declaration* declaration);
+  Definition* m_definition;
 
-  virtual Declaration* clone() const;
+  QList<Use*> m_uses;
 
-private:
-  Q_DECLARE_PRIVATE(ForwardDeclaration)
+  Declaration::Kind m_kind;
+
+  bool m_isDefinition  : 1;
+  bool m_inSymbolTable : 1;
+  bool m_isTypeAlias   : 1;
+  bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
+  
 };
 
 }
 
-#endif // DECLARATION_H
-
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+#endif

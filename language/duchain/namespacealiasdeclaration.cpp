@@ -19,34 +19,46 @@
 #include "namespacealiasdeclaration.h"
 
 #include "ducontext.h"
+#include "declaration_p.h"
 
 namespace KDevelop
 {
 
-struct NamespaceAliasDeclarationPrivate
+class NamespaceAliasDeclarationPrivate : public DeclarationPrivate
 {
+public:
+  NamespaceAliasDeclarationPrivate() {}
+  NamespaceAliasDeclarationPrivate( const NamespaceAliasDeclarationPrivate& rhs )
+      : DeclarationPrivate( rhs )
+  {
+  }
   QualifiedIdentifier m_importIdentifier; //The identifier that was imported
 };
 
-NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs) : Declaration(rhs), d(new NamespaceAliasDeclarationPrivate(*rhs.d)) {
+NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs) 
+  : Declaration(*new NamespaceAliasDeclarationPrivate(*rhs.d_func()), 
+                 HashedString(), 0, rhs.scope()) {
+  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+  
 }
 
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const HashedString& url, KTextEditor::Range * range, Scope scope, DUContext* context)
-  : Declaration(url, range, scope, context), d(new NamespaceAliasDeclarationPrivate)
+  : Declaration(*new NamespaceAliasDeclarationPrivate, url, range, scope)
 {
+  if( context )
+    setContext( context );
 }
 
 QualifiedIdentifier NamespaceAliasDeclaration::importIdentifier() const {
-  return d->m_importIdentifier;
+  return d_func()->m_importIdentifier;
 }
 
 void NamespaceAliasDeclaration::setImportIdentifier(const QualifiedIdentifier& id) {
-  d->m_importIdentifier = id;
+  d_func()->m_importIdentifier = id;
 }
 
 NamespaceAliasDeclaration::~NamespaceAliasDeclaration()
 {
-  delete d;
 }
 
 Declaration* NamespaceAliasDeclaration::clone() const {
@@ -59,6 +71,7 @@ void NamespaceAliasDeclaration::setAbstractType(AbstractType::Ptr type) {
 }
 
 QString NamespaceAliasDeclaration::toString() const {
+  Q_D(const NamespaceAliasDeclaration);
   if( identifier() != globalImportIdentifier )
     return QString("Import %1 as %2").arg(d->m_importIdentifier.toString()).arg(identifier().toString());
   else

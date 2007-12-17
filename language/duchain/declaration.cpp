@@ -17,6 +17,7 @@
 */
 
 #include "declaration.h"
+#include "declaration_p.h"
 
 #include <QByteArray>
 
@@ -42,42 +43,41 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-class DeclarationPrivate
+DeclarationPrivate::DeclarationPrivate() 
+  : m_isDefinition(false), m_inSymbolTable(false),  
+    m_isTypeAlias(false), m_anonymousInContext(false) 
 {
-public:
-  DeclarationPrivate() : m_isDefinition(false), m_inSymbolTable(false),  m_isTypeAlias(false), m_anonymousInContext(false) {
-  }
+  m_context = 0;
+  m_definition = 0;
+  m_kind = Declaration::Instance;
+}
   
-  DUContext* m_context;
-  Declaration::Scope m_scope;
-  AbstractType::Ptr m_type;
-  Identifier m_identifier;
   
-  QByteArray m_comment;
-
-  QList<ForwardDeclaration*> m_forwardDeclarations;
-
-  Definition* m_definition;
-
-  QList<Use*> m_uses;
-
-  Declaration::Kind m_kind;
-
-  bool m_isDefinition  : 1;
-  bool m_inSymbolTable : 1;
-  bool m_isTypeAlias   : 1;
-  bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
-};
-
+DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs )
+{
+  m_identifier = rhs.m_identifier;
+  m_type = rhs.m_type;
+  m_scope = rhs.m_scope;
+  m_kind = rhs.m_kind;
+  m_isDefinition = rhs.m_isDefinition;
+  m_isTypeAlias = rhs.m_isTypeAlias;
+  m_inSymbolTable = false;
+  m_context = 0;
+  m_definition = 0;
+}
+  
 Declaration::Kind Declaration::kind() const {
+  Q_D(const Declaration);
   return d->m_kind;
 }
 
 void Declaration::setKind(Kind kind) {
+  Q_D(Declaration);
   d->m_kind = kind;
 }
 
 bool Declaration::inDUChain() const {
+  Q_D(const Declaration);
   if( d->m_anonymousInContext )
     return false;
   TopDUContext* top = topContext();
@@ -85,34 +85,34 @@ bool Declaration::inDUChain() const {
 }
 
 Declaration::Declaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context )
-  : DUChainBase(url, range)
+  : DUChainBase(*new DeclarationPrivate, url, range)
   , ContextOwner(this)
-  , d(new DeclarationPrivate)
 {
-  d->m_context = 0;
-  d->m_scope = scope;
-  d->m_definition = 0;
-  d->m_kind = Instance;
-
+  d_func()->m_scope = scope;
   if(context)
     setContext(context);
 }
 
-Declaration::Declaration(const Declaration& rhs) : DUChainBase(HashedString(), 0), ContextOwner(this), d(new DeclarationPrivate) {
+Declaration::Declaration(const Declaration& rhs) 
+  : DUChainBase(*new DeclarationPrivate( *rhs.d_func() ), HashedString(), 0), 
+    ContextOwner(this) {
   setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
-  d->m_identifier = rhs.d->m_identifier;
-  d->m_type = rhs.d->m_type;
-  d->m_scope = rhs.d->m_scope;
-  d->m_kind = rhs.d->m_kind;
-  d->m_isDefinition = rhs.d->m_isDefinition;
-  d->m_isTypeAlias = rhs.d->m_isTypeAlias;
-  d->m_inSymbolTable = false;
+}
+
+Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, KTextEditor::Range* range, Scope scope )
+  : DUChainBase(dd, url, range), ContextOwner(this)
+{
+  
+  Q_D(Declaration);
   d->m_context = 0;
+  d->m_scope = scope;
   d->m_definition = 0;
+  d->m_kind = Declaration::Instance;
 }
 
 Declaration::~Declaration()
 {
+  Q_D(Declaration);
   // Inserted by the builder after construction has finished.
   if (d->m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
@@ -123,14 +123,14 @@ Declaration::~Declaration()
 
   QList<Use*> _uses = uses();
   foreach (Use* use, _uses)
-    use->d->setDeclaration(0);
+    use->d_func()->setDeclaration(0);
 
   if (Definition* def = definition())
-    def->d->setDeclaration(0);
+    def->d_func()->setDeclaration(0);
 
   // context is only null in the test cases
   if (context())
-    context()->d->removeDeclaration(this);
+    context()->d_func()->removeDeclaration(this);
 
   setContext(0);
 
@@ -141,26 +141,28 @@ Declaration::~Declaration()
   setAbstractType(AbstractType::Ptr());
 
   //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
-  delete d;
 }
 
 QByteArray Declaration::comment() const {
+  Q_D(const Declaration);
   return d->m_comment;
 }
 
 void Declaration::setComment(const QByteArray& str) {
+  Q_D(Declaration);
   d->m_comment = str;
 }
 
 void Declaration::setComment(const QString& str) {
+  Q_D(Declaration);
   d->m_comment = str.toUtf8();
 }
 
 void Declaration::removeUse( Use* use )
 {
   ENSURE_CAN_WRITE
-
-  use->d->setDeclaration(0L);
+  Q_D(Declaration);
+  use->d_func()->setDeclaration(0L);
   d->m_uses.removeAll(use);
 
   //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Uses, use);
@@ -169,8 +171,8 @@ void Declaration::removeUse( Use* use )
 void Declaration::addUse( Use* use )
 {
   ENSURE_CAN_WRITE
-
-  use->d->setDeclaration(this);
+  Q_D(Declaration);
+  use->d_func()->setDeclaration(this);
   d->m_uses.append(use);
 
   //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Uses, use);
@@ -179,21 +181,21 @@ void Declaration::addUse( Use* use )
 const QList< Use* > & Declaration::uses( ) const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_uses;
 }
 
 const Identifier& Declaration::identifier( ) const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_identifier;
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(Declaration);
   if( d->m_context )
     d->m_context->changingIdentifier( this, d->m_identifier, identifier );
 
@@ -205,14 +207,14 @@ void Declaration::setIdentifier(const Identifier& identifier)
 AbstractType::Ptr Declaration::abstractType( ) const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_type;
 }
 
 void Declaration::setAbstractType(AbstractType::Ptr type)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(Declaration);
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
 
@@ -225,7 +227,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 Declaration::Scope Declaration::scope( ) const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_scope;
 }
 
@@ -252,20 +254,20 @@ QString Declaration::mangledIdentifier() const
 DUContext * Declaration::context() const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_context;
 }
 
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(Declaration);
   if (d->m_context && context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
 
   if (d->m_context) {
     if( !d->m_anonymousInContext ) {
-      d->m_context->d->removeDeclaration(this);// if( )
+      d->m_context->d_func()->removeDeclaration(this);// if( )
         //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
     }
   }
@@ -275,7 +277,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   if (d->m_context) {
     if(!d->m_anonymousInContext) {
-      d->m_context->d->addDeclaration(this);
+      d->m_context->d_func()->addDeclaration(this);
       //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
     }
   }
@@ -313,14 +315,14 @@ QString Declaration::toString() const
 bool Declaration::isDefinition() const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_isDefinition;
 }
 
 void Declaration::setDeclarationIsDefinition(bool dd)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(Declaration);
   d->m_isDefinition = dd;
   if (d->m_isDefinition && definition()) {
     setDefinition(0);
@@ -329,26 +331,28 @@ void Declaration::setDeclarationIsDefinition(bool dd)
 
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
 bool Declaration::isTypeAlias() const {
+  Q_D(const Declaration);
   return d->m_isTypeAlias;
 }
 
 void Declaration::setIsTypeAlias(bool isTypeAlias) {
+  Q_D(Declaration);
   d->m_isTypeAlias = isTypeAlias;
 }
 
 Definition* Declaration::definition() const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_definition;
 }
 
 void Declaration::setDefinition(Definition* definition)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(Declaration);
   if (d->m_definition) {
-    d->m_definition->d->setDeclaration(0);
+    d->m_definition->d_func()->setDeclaration(0);
 
     //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, d->m_definition);
   }
@@ -356,7 +360,7 @@ void Declaration::setDefinition(Definition* definition)
   d->m_definition = definition;
 
   if (d->m_definition) {
-    d->m_definition->d->setDeclaration(this);
+    d->m_definition->d_func()->setDeclaration(this);
     d->m_isDefinition = false;
 
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, d->m_definition);
@@ -365,32 +369,34 @@ void Declaration::setDefinition(Definition* definition)
 
 bool Declaration::inSymbolTable() const
 {
+  Q_D(const Declaration);
   return d->m_inSymbolTable;
 }
 
 void Declaration::setInSymbolTable(bool inSymbolTable)
 {
+  Q_D(Declaration);
   d->m_inSymbolTable = inSymbolTable;
 }
 
 const QList< ForwardDeclaration * > & Declaration::forwardDeclarations() const
 {
   ENSURE_CAN_READ
-
+  Q_D(const Declaration);
   return d->m_forwardDeclarations;
 }
 
 void Declaration::addForwardDeclaration( ForwardDeclaration* declaration)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(Declaration);
   d->m_forwardDeclarations.append( declaration );
 }
 
 void Declaration::removeForwardDeclaration( ForwardDeclaration* declaration)
 {
   ENSURE_CAN_WRITE
-
+  Q_D(Declaration);
   d->m_forwardDeclarations.removeAll( declaration );
 }
 
@@ -411,10 +417,11 @@ const ForwardDeclaration* Declaration::toForwardDeclaration() const
 
 TopDUContext * Declaration::topContext() const
 {
+  Q_D(const Declaration);
   if (d->m_context)
-    return d->m_context->topContext();
+      return d->m_context->topContext();
 
-  return 0;
+    return 0;
 }
 
 Declaration* Declaration::clone() const  {
@@ -424,3 +431,5 @@ Declaration* Declaration::clone() const  {
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+
+

@@ -22,19 +22,29 @@
 
 #include "ducontext.h"
 #include "typesystem.h"
+#include "classmemberdeclaration_p.h"
 
 namespace KDevelop
 {
 Identifier conversionIdentifier("operator{...cast...}");
 
-class ClassFunctionDeclarationPrivate
+class ClassFunctionDeclarationPrivate : public ClassMemberDeclarationPrivate
 {
 public:
+  ClassFunctionDeclarationPrivate() {}
+  ClassFunctionDeclarationPrivate( const ClassFunctionDeclarationPrivate& rhs )
+      : ClassMemberDeclarationPrivate( rhs )
+  {
+    m_functionType = rhs.m_functionType;
+  }
   ClassFunctionDeclaration::QtFunctionType m_functionType;
 };
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs) : ClassMemberDeclaration(rhs), AbstractFunctionDeclaration(rhs), d(new ClassFunctionDeclarationPrivate) {
-  d->m_functionType = rhs.d->m_functionType;
+ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs) 
+    : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate( *rhs.d_func() ), 
+                             HashedString(), 0, rhs.scope())
+      , AbstractFunctionDeclaration(rhs) {
+  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
 }
 
 void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
@@ -43,10 +53,11 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
 }
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
-  : ClassMemberDeclaration(url, range, context), AbstractFunctionDeclaration()
-  , d(new ClassFunctionDeclarationPrivate)
+  : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate, url, range, ClassScope), AbstractFunctionDeclaration()
 {
-  d->m_functionType = Normal;
+  d_func()->m_functionType = Normal;
+  if( context )
+    setContext( context );
 }
 
 Declaration* ClassFunctionDeclaration::clone() const {
@@ -55,7 +66,6 @@ Declaration* ClassFunctionDeclaration::clone() const {
 
 ClassFunctionDeclaration::~ClassFunctionDeclaration()
 {
-  delete d;
 }
 
 QString ClassFunctionDeclaration::toString() const {
@@ -95,12 +105,12 @@ QString ClassFunctionDeclaration::toString() const {
 
 ClassFunctionDeclaration::QtFunctionType ClassFunctionDeclaration::functionType() const
 {
-  return d->m_functionType;
+  return d_func()->m_functionType;
 }
 
 void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 {
-  d->m_functionType = functionType;
+  d_func()->m_functionType = functionType;
 }
 
 bool ClassFunctionDeclaration::isConversionFunction() const {

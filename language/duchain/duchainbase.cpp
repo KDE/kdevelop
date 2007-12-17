@@ -17,6 +17,7 @@
 */
 
 #include "duchainbase.h"
+#include "duchainbase_p.h"
 
 #include <QMutexLocker>
 
@@ -25,9 +26,13 @@
 namespace KDevelop
 {
 
-
 DUChainBase::DUChainBase(const HashedString& url, KTextEditor::Range* range)
-  : KDevelop::DocumentRangeObject(url, range), m_ptr( 0L )
+  : KDevelop::DocumentRangeObject(url, range), d_ptr(new DUChainBasePrivate), m_ptr( 0L )
+{
+}
+
+DUChainBase::DUChainBase( DUChainBasePrivate & dd, const HashedString & url, KTextEditor::Range * range )
+  : KDevelop::DocumentRangeObject( url, range ), d_ptr( &dd ), m_ptr( 0 )
 {
 }
 
@@ -35,6 +40,7 @@ DUChainBase::~DUChainBase()
 {
   if (m_ptr)
     m_ptr->m_base = 0;
+  delete d_ptr;
 }
 
 TopDUContext* DUChainBase::topContext() const
@@ -57,3 +63,4 @@ const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+

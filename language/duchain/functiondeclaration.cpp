@@ -19,22 +19,33 @@
 */
 
 #include "functiondeclaration.h"
-
+#include "declaration_p.h"
 #include "ducontext.h"
 
 namespace KDevelop
 {
 
-class FunctionDeclarationPrivate
+class FunctionDeclarationPrivate : public DeclarationPrivate
 {
+  public:
+    FunctionDeclarationPrivate()
+    {
+    }
+    FunctionDeclarationPrivate( const FunctionDeclarationPrivate& rhs )
+      :DeclarationPrivate( rhs )
+    {
+    }
 };
 
-FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(rhs), AbstractFunctionDeclaration(rhs) {
+FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(*new FunctionDeclarationPrivate( *rhs.d_func() ), HashedString(), 0, rhs.scope()), AbstractFunctionDeclaration(rhs) {
+  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
 }
 
 FunctionDeclaration::FunctionDeclaration(const HashedString& url, KTextEditor::Range * range, Scope scope, DUContext* context)
-  : Declaration(url, range, scope, context)
+  : Declaration(*new FunctionDeclarationPrivate, url, range, scope)
 {
+  if( context )
+    setContext( context );
 }
 
 FunctionDeclaration::~FunctionDeclaration()

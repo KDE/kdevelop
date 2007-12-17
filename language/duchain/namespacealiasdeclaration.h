@@ -24,6 +24,7 @@
 
 namespace KDevelop
 {
+class NamespaceAliasDeclarationPrivate;
 /**
  * A class which represents a "using namespace" statement, or a "namespace A = B" statement.
  *
@@ -50,7 +51,7 @@ public:
 
   virtual QString toString() const;
 private:
-  class NamespaceAliasDeclarationPrivate* const d;
+  Q_DECLARE_PRIVATE(NamespaceAliasDeclaration)
 };
 }
 

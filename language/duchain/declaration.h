@@ -38,7 +38,7 @@ class DUContext;
 class Use;
 class ForwardDeclaration;
 class Definition;
-
+class DeclarationPrivate;
 /**
  * Represents a single declaration in a definition-use chain.
  *
@@ -198,9 +198,10 @@ public:
    * ---> You do not have to implement this for your language if you are not going to use it(the du-chain itself does not and should not depend on it).
    * */
   virtual Declaration* clone() const;
-
+protected:
+    Declaration( DeclarationPrivate & dd, const HashedString& url, KTextEditor::Range* range, Scope scope );
 private:
-  class DeclarationPrivate* const d;
+  Q_DECLARE_PRIVATE(Declaration)
 };
 
 }

@@ -28,7 +28,7 @@ namespace KDevelop
 
 class DUContext;
 class Declaration;
-
+class UsePrivate;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
@@ -56,7 +56,7 @@ public:
   bool isOrphan() const;
 
 private:
-  class UsePrivate* const d;
+  Q_DECLARE_PRIVATE(Use)
 };
 
 }

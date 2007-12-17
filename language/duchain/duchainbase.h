@@ -19,8 +19,6 @@
 #ifndef DUCHAINBASE_H
 #define DUCHAINBASE_H
 
-//krazy:excludeall=dpointer
-
 #include <documentrangeobject.h>
 #include "../languageexport.h"
 #include <hashedstring.h>
@@ -50,7 +48,12 @@ public:
    * */
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
+protected:
+  class DUChainBasePrivate* const d_ptr;
+  DUChainBase( DUChainBasePrivate& dd, const HashedString& url, KTextEditor::Range* range );
+  
 private:
+  Q_DECLARE_PRIVATE(DUChainBase)
   mutable KSharedPtr<DUChainPointerData> m_ptr;
 };
 }

@@ -17,19 +17,17 @@
 */
 
 #include "contextowner.h"
+#include "contextowner_p.h"
 #include "declaration.h"
 #include "definition.h"
 #include "ducontext.h"
 
+
 namespace  KDevelop {
 
-struct ContextOwnerPrivate
-{
-  ContextOwnerPrivate() : m_internalContext(0) {
+ContextOwnerPrivate::ContextOwnerPrivate() : m_internalContext(0) {
   }
-  DUContext* m_internalContext;
-};
-
+  
 ContextOwner::ContextOwner(DUChainBase* self) : d(new ContextOwnerPrivate) {
 }
 

@@ -42,7 +42,7 @@ class DUChain;
 class Use;
 class TopDUContext;
 class DUContext;
-
+class DUContextPrivate;
 
 template<class T>
 class DUChainPointer;
@@ -65,6 +65,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
 {
   friend class Use;
   friend class Declaration;
+  friend class DeclarationPrivate;
   friend class Definition;
 
 public:
@@ -467,9 +468,10 @@ public:
    * */
   void applyAliases(const QList<QualifiedIdentifier>& identifier, QList<QualifiedIdentifier>& targetIdentifiers, const KTextEditor::Cursor& position, bool canBeNamespace) const;
 
+  DUContext(DUContextPrivate& dd, const HashedString& url, KTextEditor::Range* range, DUContext* parent = 0, bool anonymous = false);
+  
 private:
-  class DUContextPrivate* const d;
-  friend class DUContextPrivate;
+  Q_DECLARE_PRIVATE(DUContext)
 };
 
 /**

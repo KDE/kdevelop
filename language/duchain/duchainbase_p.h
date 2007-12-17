@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2006 Hamish Rodda <rodda@kde.org>                       *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,30 +18,16 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef DEFINITION_P_H
-#define DEFINITION_P_H
-
-#include "duchainbase_p.h"
+#ifndef DUCHAINBASE_P_H
+#define DUCHAINBASE_P_H
 
 namespace KDevelop
 {
-class Definition;
 
-class DefinitionPrivate : public DUChainBasePrivate
+class DUChainBasePrivate
 {
-public:
-  DefinitionPrivate( Definition* d);
-  DUContext* m_context;
-  Declaration* m_declaration;
-  /**
-   * Set the declaration for this use.
-   */
-  void setDeclaration(Declaration* declaration);
-  Definition* m_definition;
 };
 
 }
 
 #endif
-
-//kate: space-indent on; indent-width 2; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

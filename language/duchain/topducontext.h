@@ -32,7 +32,7 @@ namespace KDevelop
   class DUChain;
   class IdentifiedFile; //Defined in parsingenvironment.h
   class ParsingEnvironmentFile;
-
+  class TopDUContextPrivate;
 /**
  * The top context in a definition-use chain for one source file.
  *
@@ -111,7 +111,7 @@ public:
   
   virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const;
 protected:
-  void setParsingEnvironmentFile(ParsingEnvironmentFile*) const;
+  void setParsingEnvironmentFile(ParsingEnvironmentFile*);
   
   /// Return those \a declarations that are visible in this document from \a position and are of the specified \a dataType
   QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const;
@@ -129,8 +129,7 @@ protected:
   void applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const KTextEditor::Cursor& position, bool canBeNamespace, int startPos = 0, int maxPos = -1 ) const;
   
 private:
-  class TopDUContextPrivate* const d;
-  friend class TopDUContextPrivate;
+  Q_DECLARE_PRIVATE(TopDUContext)
   friend class DUChain; //To allow access to setParsingEnvironmentFile
 };
 

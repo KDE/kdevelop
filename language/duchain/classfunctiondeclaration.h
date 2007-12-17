@@ -27,6 +27,7 @@
 
 namespace KDevelop
 {
+class ClassFunctionDeclarationPrivate;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
@@ -69,7 +70,7 @@ public:
 
   virtual Declaration* clone() const;
 private:
-  class ClassFunctionDeclarationPrivate* const d;
+  Q_DECLARE_PRIVATE(ClassFunctionDeclaration)
 };
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassFunctionDeclaration::FunctionSpecifiers)

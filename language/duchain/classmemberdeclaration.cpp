@@ -19,29 +19,28 @@
 */
 
 #include "classmemberdeclaration.h"
+#include "classmemberdeclaration_p.h"
 
 namespace KDevelop
 {
-class ClassMemberDeclarationPrivate
-{
-public:
-  Declaration::AccessPolicy m_accessPolicy;
-  bool m_isStatic: 1;
-  bool m_isAuto: 1;
-  bool m_isFriend: 1;
-  bool m_isRegister: 1;
-  bool m_isExtern: 1;
-  bool m_isMutable: 1;
-};
 
-ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(rhs), d(new ClassMemberDeclarationPrivate) {
-  d->m_accessPolicy = rhs.d->m_accessPolicy; 
-  d->m_isStatic = rhs.d->m_isStatic;
-  d->m_isAuto = rhs.d->m_isAuto;
-  d->m_isFriend = rhs.d->m_isFriend;
-  d->m_isRegister = rhs.d->m_isRegister;
-  d->m_isExtern = rhs.d->m_isExtern;
-  d->m_isMutable = rhs.d->m_isMutable;
+ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate()
+{
+}
+ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate( const ClassMemberDeclarationPrivate& rhs ) 
+    : DeclarationPrivate( rhs )
+{
+  m_accessPolicy = rhs.m_accessPolicy;
+  m_isStatic = rhs.m_isStatic;
+  m_isAuto = rhs.m_isAuto;
+  m_isFriend = rhs.m_isFriend;
+  m_isRegister = rhs.m_isRegister;
+  m_isExtern = rhs.m_isExtern;
+  m_isMutable = rhs.m_isMutable;
+}
+  
+ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationPrivate(*rhs.d_func()), HashedString(), 0, rhs.scope()) {
+  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
 }
 
 Declaration* ClassMemberDeclaration::clone() const {
@@ -49,9 +48,24 @@ Declaration* ClassMemberDeclaration::clone() const {
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
-  : Declaration(url, range, ClassScope, context)
-  , d(new ClassMemberDeclarationPrivate)
+  : Declaration(*new ClassMemberDeclarationPrivate,url, range, ClassScope )
 {
+  Q_D(ClassMemberDeclaration);
+  d->m_accessPolicy = Declaration::Public;
+  d->m_isStatic = false;
+  d->m_isAuto = false;
+  d->m_isFriend = false;
+  d->m_isRegister = false;
+  d->m_isExtern = false;
+  d->m_isMutable = false;
+  if( context )
+    setContext( context );
+}
+
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, KTextEditor::Range * range, Scope s)
+  : Declaration(dd, url, range, s)
+{
+  Q_D(ClassMemberDeclaration);
   d->m_accessPolicy = Declaration::Public;
   d->m_isStatic = false;
   d->m_isAuto = false;
@@ -63,81 +77,81 @@ ClassMemberDeclaration::ClassMemberDeclaration(const HashedString& url, KTextEdi
 
 ClassMemberDeclaration::~ClassMemberDeclaration()
 {
-  delete d;
 }
 
 bool ClassMemberDeclaration::isStatic() const
 {
-  return d->m_isStatic;
+  return d_func()->m_isStatic;
 }
 
 void ClassMemberDeclaration::setStatic(bool isStatic)
 {
-  d->m_isStatic = isStatic;
+  d_func()->m_isStatic = isStatic;
 }
 
 bool ClassMemberDeclaration::isAuto() const
 {
-  return d->m_isAuto;
+  return d_func()->m_isAuto;
 }
 
 void ClassMemberDeclaration::setAuto(bool isAuto)
 {
-  d->m_isAuto = isAuto;
+  d_func()->m_isAuto = isAuto;
 }
 
 bool ClassMemberDeclaration::isFriend() const
 {
-  return d->m_isFriend;
+  return d_func()->m_isFriend;
 }
 
 void ClassMemberDeclaration::setFriend(bool isFriend)
 {
-  d->m_isFriend = isFriend;
+  d_func()->m_isFriend = isFriend;
 }
 
 bool ClassMemberDeclaration::isRegister() const
 {
-  return d->m_isRegister;
+  return d_func()->m_isRegister;
 }
 
 void ClassMemberDeclaration::setRegister(bool isRegister)
 {
-  d->m_isRegister = isRegister;
+  d_func()->m_isRegister = isRegister;
 }
 
 bool ClassMemberDeclaration::isExtern() const
 {
-  return d->m_isExtern;
+  return d_func()->m_isExtern;
 }
 
 void ClassMemberDeclaration::setExtern(bool isExtern)
 {
-  d->m_isExtern = isExtern;
+  d_func()->m_isExtern = isExtern;
 }
 
 bool ClassMemberDeclaration::isMutable() const
 {
-  return d->m_isMutable;
+  return d_func()->m_isMutable;
 }
 
 void ClassMemberDeclaration::setMutable(bool isMutable)
 {
-  d->m_isMutable = isMutable;
+  d_func()->m_isMutable = isMutable;
 }
 
 Declaration::AccessPolicy ClassMemberDeclaration::accessPolicy() const
 {
-  return d->m_accessPolicy;
+  return d_func()->m_accessPolicy;
 }
 
 void ClassMemberDeclaration::setAccessPolicy(Declaration::AccessPolicy accessPolicy)
 {
-  d->m_accessPolicy = accessPolicy;
+  d_func()->m_accessPolicy = accessPolicy;
 }
 
 void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
 {
+  Q_D(ClassMemberDeclaration);
   d->m_isStatic = specifiers & StaticSpecifier;
   d->m_isAuto = specifiers & AutoSpecifier;
   d->m_isFriend = specifiers & FriendSpecifier;

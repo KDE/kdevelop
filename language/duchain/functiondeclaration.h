@@ -27,6 +27,7 @@
 
 namespace KDevelop
 {
+class FunctionDeclarationPrivate;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
@@ -42,6 +43,8 @@ public:
   virtual Declaration* clone() const;
 
   virtual QString toString() const;
+private:
+  Q_DECLARE_PRIVATE(FunctionDeclaration)
 };
 }
 

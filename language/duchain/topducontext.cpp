@@ -28,17 +28,19 @@
 #include "abstractfunctiondeclaration.h"
 #include <hashedstring.h>
 
+#include "ducontext_p.h"
+
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
 
-class TopDUContextPrivate
+class TopDUContextPrivate : public DUContextPrivate
 {
 public:
   TopDUContextPrivate( TopDUContext* ctxt)
-    : m_inDuChain(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
+    : DUContextPrivate(ctxt), m_inDuChain(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
   {
   }
   
@@ -74,7 +76,7 @@ public:
         return true;
       }
 
-      if (top->d->imports(target, depth + 1)) {
+      if (top->d_func()->imports(target, depth + 1)) {
         if(alwaysCache || depth == 0) {
           m_importsCache[target] = top;
         }
@@ -100,7 +102,7 @@ public:
 DUContext::ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
   {
     DUContext::ImportTrace ret;
-
+    Q_D(const TopDUContext);
     if(!d->imports(target, 0))
       return ret;
 
@@ -121,15 +123,16 @@ DUContext::ImportTrace TopDUContext::importTrace(const TopDUContext* target) con
 
 
 TopDUContext::TopDUContext(const HashedString& url, KTextEditor::Range* range, ParsingEnvironmentFile* file)
-  : DUContext(url, range)
-  , d(new TopDUContextPrivate(this))
+  : DUContext(*new TopDUContextPrivate(this), url, range)
 {
+  Q_D(TopDUContext);
   d->m_hasUses = false;
   d->m_deleting = false;
   d->m_file = ParsingEnvironmentFilePointer(file);
 }
 
 IdentifiedFile TopDUContext::identity() const {
+  Q_D(const TopDUContext);
   if( d->m_file )
     return d->m_file->identity();
   else
@@ -137,27 +140,26 @@ IdentifiedFile TopDUContext::identity() const {
 }
 
 KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {
-  return d->m_file;
+  return d_func()->m_file;
 }
 
 TopDUContext::~TopDUContext( )
 {
-  d->m_deleting = true;
-  delete d;
+  d_func()->m_deleting = true;
 }
 
 void TopDUContext::setHasUses(bool hasUses)
 {
-  d->m_hasUses = hasUses;
+  d_func()->m_hasUses = hasUses;
 }
 
 bool TopDUContext::hasUses() const
 {
-  return d->m_hasUses;
+  return d_func()->m_hasUses;
 }
 
-void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) const {
-  d->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
+void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
+  d_func()->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 }
 
 bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const
@@ -350,7 +352,7 @@ TopDUContext * TopDUContext::topContext() const
 
 bool TopDUContext::deleting() const
 {
-  return d->m_deleting;
+  return d_func()->m_deleting;
 }
 
 bool TopDUContext::imports(const DUContext * origin, const KTextEditor::Cursor& position) const
@@ -361,7 +363,7 @@ bool TopDUContext::imports(const DUContext * origin, const KTextEditor::Cursor& 
   // TODO use position
 
   if( dynamic_cast<const TopDUContext*>(origin) ) {
-    return d->imports(static_cast<const TopDUContext*>(origin), 0);
+    return d_func()->imports(static_cast<const TopDUContext*>(origin), 0);
   } else {
     kWarning() << "non top-context importet into top-context";
     return DUContext::imports(origin, position);
@@ -369,31 +371,31 @@ bool TopDUContext::imports(const DUContext * origin, const KTextEditor::Cursor& 
  }
 
 void TopDUContext::addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position, bool anonymous) {
-  d->m_importsCache.remove(static_cast<TopDUContext*>(context));
+  d_func()->m_importsCache.remove(static_cast<TopDUContext*>(context));
   DUContext::addImportedParentContext(context, position, anonymous);
 }
 
 void TopDUContext::removeImportedParentContext(DUContext* context) {
-  d->m_importsCache.remove(static_cast<TopDUContext*>(context));
+  d_func()->m_importsCache.remove(static_cast<TopDUContext*>(context));
   DUContext::removeImportedParentContext(context);
 }
  
 /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
 bool TopDUContext::inDuChain() const {
-  return d->m_inDuChain;
+  return d_func()->m_inDuChain;
 }
 
 /// This flag is only used by DUChain, never change it from outside.
 void TopDUContext::setInDuChain(bool b) {
-  d->m_inDuChain = b;
+  d_func()->m_inDuChain = b;
 }
 
 TopDUContext::Flags TopDUContext::flags() const {
-  return d->m_flags;
+  return d_func()->m_flags;
 }
 
 void TopDUContext::setFlags(Flags f) {
-  d->m_flags = f;
+  d_func()->m_flags = f;
 }
 
 }

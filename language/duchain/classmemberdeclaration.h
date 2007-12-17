@@ -26,7 +26,7 @@
 
 namespace KDevelop
 {
-
+class ClassMemberDeclarationPrivate;
 /**
  * Represents a single class member definition in a definition-use chain.
  */
@@ -72,8 +72,11 @@ public:
 
   virtual Declaration* clone() const;
 
+protected:
+  ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, KTextEditor::Range* range, Scope s);
+  
 private:
-  class ClassMemberDeclarationPrivate* const d;
+  Q_DECLARE_PRIVATE(ClassMemberDeclaration)
 };
 }
 

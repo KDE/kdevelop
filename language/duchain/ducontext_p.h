@@ -25,11 +25,13 @@
 #include <QMultiHash>
 #include <QMap>
 
+#include "duchainbase_p.h"
+
 #include "duchainpointer.h"
 
 namespace KDevelop{
 class DUContext;
-class DUContextPrivate
+class DUContextPrivate : public DUChainBasePrivate
 {
 public:
   DUContextPrivate( DUContext* );

@@ -21,10 +21,12 @@
 #ifndef USE_P_H
 #define USE_P_H
 
+#include "duchainbase_p.h"
+
 namespace KDevelop
 {
 class Use;
-class UsePrivate
+class UsePrivate : public DUChainBasePrivate
 {
 public:
   UsePrivate( Use* );

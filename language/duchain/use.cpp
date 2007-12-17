@@ -50,9 +50,9 @@ void UsePrivate::setDeclaration(Declaration* declaration)
 
 
 Use::Use(const HashedString& url, KTextEditor::Range* range, DUContext* context)
-  : DUChainBase(url, range)
-  , d(new UsePrivate(this))
+  : DUChainBase(*new UsePrivate(this), url, range)
 {
+  Q_D(Use);
   d->m_context = 0;
   d->m_declaration = 0;
   if (context)
@@ -62,27 +62,27 @@ Use::Use(const HashedString& url, KTextEditor::Range* range, DUContext* context)
 Use::~Use()
 {
   setContext(0);
-
+  Q_D(Use);
   if (d->m_declaration)
     d->m_declaration->removeUse(this);
 
   //DUChain::useChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
-  delete d;
 }
 
 Declaration* Use::declaration() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return d->m_declaration;
+  return d_func()->m_declaration;
 }
 
 void Use::setContext(DUContext * context)
 {
+  Q_D(Use);
   if (d->m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    d->m_context->d->removeUse(this);
+    d->m_context->d_func()->removeUse(this);
 
     //DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
   }
@@ -92,7 +92,7 @@ void Use::setContext(DUContext * context)
   if (d->m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    d->m_context->d->addUse(this);
+    d->m_context->d_func()->addUse(this);
 
     //DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
   }
@@ -102,7 +102,7 @@ DUContext * Use::context() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return d->m_context;
+  return d_func()->m_context;
 }
 
 bool Use::isOrphan() const
