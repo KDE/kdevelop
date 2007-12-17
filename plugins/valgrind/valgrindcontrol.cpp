@@ -32,60 +32,94 @@
 #include <kmessagebox.h>
 
 #include "valgrindmodel.h"
+#include "valgrindplugin.h"
 
-ValgrindControl::ValgrindControl( QObject * parent )
-  : QObject(parent)
-  , m_inputSource(0)
-  , m_xmlReader(new QXmlSimpleReader)
-  , m_server(0)
-  , m_connection(0)
+ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
+    : QObject(parent)
+    , m_process(new KProcess(this))
+    , m_inputSource(0)
+    , m_xmlReader(new QXmlSimpleReader)
+    , m_server(0)
+    , m_connection(0)
+    , m_model(new ValgrindModel(this))
 {
-  m_process = new K3ShellProcess();
-  connect( m_process, SIGNAL(receivedStdout( K3Process*, char*, int )), SLOT(receivedStdout( K3Process*, char*, int )) );
-  connect( m_process, SIGNAL(receivedStderr( K3Process*, char*, int )), SLOT(receivedStderr( K3Process*, char*, int )) );
-  connect( m_process, SIGNAL(processExited( K3Process* )), SLOT(processExited( K3Process* )) );
+    m_process->setOutputChannelMode( KProcess::SeparateChannels );
+
+    connect(m_process, SIGNAL(readyReadStandardOutput()), SLOT(readyReadStandardOutput()));
+    connect(m_process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
+    connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processErrored(QProcess::ProcessError)));
 }
 
-void ValgrindControl::run( ValgrindModel * model, const QString & executable, const QString & parameters, const QString & valgrindExecutable, const QString & valgrindParameters )
+bool ValgrindControl::run(const KDevelop::IRun& run)
 {
-  if ( m_process->isRunning() ) {
-    KMessageBox::sorry( 0, i18n( "There is already an instance of valgrind running." ) );
-    return;
-    /// @todo - ask for forced kill
-  }
+    Q_ASSERT(m_process->state() != QProcess::Running);
 
-  int port = 38462;
-  if (!m_server) {
-    m_server = new QTcpServer(this);
-    connect(m_server, SIGNAL(newConnection()), SLOT(readFromValgrind()));
+    int port = 38462;
+    if (!m_server) {
+        m_server = new QTcpServer(this);
+        connect(m_server, SIGNAL(newConnection()), SLOT(readFromValgrind()));
 
-    // Try an arbitrary port range for now
-    while (!m_server->listen(QHostAddress::LocalHost, port) && port < 38482)
-      ++port;
+        // Try an arbitrary port range for now
+        while (!m_server->listen(QHostAddress::LocalHost, port) && port < 38482)
+            ++port;
 
-    if (!m_server->isListening())
-      kWarning() << "Could not open TCP socket for communication with Valgrind." ;
-    else
-      kDebug() << "Opened TCP socket" << port << "for communication with Valgrind.";
-  }
+        if (!m_server->isListening())
+            kWarning() << "Could not open TCP socket for communication with Valgrind." ;
+        else
+            kDebug() << "Opened TCP socket" << port << "for communication with Valgrind.";
+    }
 
-  m_process->clearArguments();
-  *m_process << valgrindExecutable << valgrindParameters  << "--xml=yes" << QString("--log-socket=localhost:%1").arg(port) << executable << parameters;
-  m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput );
-  //mainWindow()->raiseView( m_treeView );
-  //KDevCore::core()->running( this, true );
+    QStringList arguments;
+    arguments << QString("--tool=%1").arg(run.instrumentor());
+    arguments << run.instrumentorArguments();
+    arguments << "--xml=yes";
+    arguments << QString("--log-socket=localhost:%1").arg(port);
+    arguments << run.executable().path();
+    arguments << run.arguments();
 
-  m_xmlReader->setContentHandler(model);
+    m_process->setProgram(plugin()->valgrindExecutable().path(), arguments);
+
+    m_process->start();
+
+    m_xmlReader->setContentHandler(m_model);
+
+    return true;
 }
 
 void ValgrindControl::stop()
 {
-  m_process->kill();
+    m_process->kill();
 }
 
-void ValgrindControl::processExited( K3Process* p )
+void ValgrindControl::readFromValgrind( )
 {
-  if ( p == m_process ) {
+}
+
+void ValgrindControl::newValgrindConnection( )
+{
+    QTcpSocket* sock = m_server->nextPendingConnection();
+    kDebug() << sock;
+    if (sock && !m_connection) {
+        m_connection = sock;
+        delete m_inputSource;
+        m_inputSource = new QXmlInputSource(sock);
+        m_xmlReader->parse(m_inputSource, true);
+        connect(sock, SIGNAL(readyRead()), SLOT(slotReadFromValgrind()));
+    }
+}
+
+ValgrindPlugin * ValgrindControl::plugin() const
+{
+    return static_cast<ValgrindPlugin*>(const_cast<QObject*>(parent()));
+}
+
+void ValgrindControl::processErrored(QProcess::ProcessError )
+{
+}
+
+void ValgrindControl::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
     //core()->running( this, false );
 
     m_server->close();
@@ -100,31 +134,13 @@ void ValgrindControl::processExited( K3Process* p )
         kcProc << QString("cachegrind.out.%1").arg(p->pid());
         kcProc.startDetached();
     }*/
-  }
 }
 
-void ValgrindControl::readFromValgrind( )
+void ValgrindControl::readyReadStandardError()
 {
 }
 
-void ValgrindControl::newValgrindConnection( )
-{
-  QTcpSocket* sock = m_server->nextPendingConnection();
-  kDebug() << sock;
-  if (sock && !m_connection) {
-    m_connection = sock;
-    delete m_inputSource;
-    m_inputSource = new QXmlInputSource(sock);
-    m_xmlReader->parse(m_inputSource, true);
-    connect(sock, SIGNAL(readyRead()), SLOT(slotReadFromValgrind()));
-  }
-}
-
-void ValgrindControl::receivedStdout( K3Process*, char*, int )
-{
-}
-
-void ValgrindControl::receivedStderr( K3Process*, char*, int )
+void ValgrindControl::readyReadStandardOutput()
 {
 }
 

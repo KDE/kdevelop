@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
  *  Copyright 2002 Harald Fernengel <harry@kdevelop.org>
+ *  Copyright 2007 Hamish Rodda <rodda@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -35,203 +36,210 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
-#include <k3process.h>
+#include <kprocess.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kactioncollection.h>
 
 #include <icore.h>
+#include <iuicontroller.h>
 
 #include "valgrind_dialog.h"
 #include "valgrindmodel.h"
 #include "valgrindcontrol.h"
+#include "valgrindwidget.h"
+
+using namespace KDevelop;
 
 K_PLUGIN_FACTORY(ValgrindFactory, registerPlugin<ValgrindPlugin>(); )
 K_EXPORT_PLUGIN(ValgrindFactory("kdevvalgrind"))
 
+class ValgrindWidgetFactory : public KDevelop::IToolViewFactory
+{
+public:
+    ValgrindWidgetFactory(ValgrindPlugin* plugin)
+        : m_plugin( plugin )
+    {
+    }
+
+    virtual QWidget* create( QWidget *parent = 0 )
+    {
+        return new ValgrindWidget(m_plugin, parent);
+    }
+
+    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    {
+        return Qt::BottomDockWidgetArea;
+    }
+
+private:
+    ValgrindPlugin* m_plugin;
+};
 
 ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
-  : KDevPlugin( ValgrindFactory::componentData(), parent)
-  , m_model(new ValgrindModel())
-  , m_control(new ValgrindControl(this))
+    : IPlugin( ValgrindFactory::componentData(), parent)
+    , m_model(new ValgrindCombinedModel(this))
 {
-  setXMLFile( "kdevpart_valgrind.rc" );
+    setXMLFile( "kdevvalgrind.rc" );
 
-  m_treeView = new QTreeView();
-  m_treeView->setWindowIcon(KIcon("fork"));
-  m_treeView->setWindowTitle(i18n("Valgrind Output"));
-  m_treeView->setModel(m_model);
+    core()->uiController()->addToolView(i18n("Valgrind"), new ValgrindWidgetFactory(this));
 
-  m_treeView->setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/>"
-    "use of uninitialized memory<br/>"
-    "reading/writing memory after it has been free'd<br/>"
-    "reading/writing off the end of malloc'd blocks<br/>"
-    "reading/writing inappropriate areas on the stack<br/>"
-    "memory leaks -- where pointers to malloc'd blocks are lost forever<br/>"
-    "passing of uninitialised and/or unaddressable memory to system calls<br/>"
-    "mismatched use of malloc/new/new [] vs free/delete/delete []<br/>"
-    "some abuses of the POSIX pthread API.</p>" ) );
-
-  KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), actionCollection(), "tools_valgrind" );
-  action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
-  action->setToolTip(i18n("Valgrind memory leak check"));
-  action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs.</p>"));
-  connect(action, SIGNAL(triggered(bool)), SLOT(slotExecValgrind()));
-
-  action = new KAction( i18n("P&rofile with KCachegrind"), actionCollection(), "tools_calltree" );
-  action->setToolTip(i18n("Profile with KCachegrind"));
-  action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind.</p>"));
-  connect(action, SIGNAL(triggered(bool)), SLOT(slotExecCalltree()));
+    KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), this);
+    actionCollection()->addAction("tools_valgrind", action);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
+    action->setToolTip(i18n("Valgrind memory leak check and other tools"));
+    action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs, and other valgrind tools.</p>"));
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotExecValgrind()));
 }
-
 
 ValgrindPlugin::~ValgrindPlugin()
 {
-  delete m_treeView;
-}
-
-QWidget *ValgrindPlugin::pluginView() const
-{
-    return m_treeView;
-}
-
-Qt::DockWidgetArea ValgrindPlugin::dockWidgetAreaHint() const
-{
-    return Qt::BottomDockWidgetArea;
-}
-
-void ValgrindPlugin::projectOpened()
-{
-  m_lastExec.truncate( 0 );
 }
 
 void ValgrindPlugin::loadOutput()
 {
-  QString fName = KFileDialog::getOpenFileName(QString(), "*", 0, i18n("Open Valgrind Output"));
-  if ( fName.isEmpty() )
-    return;
+#if 0
+    QString fName = KFileDialog::getOpenFileName(QString(), "*", 0, i18n("Open Valgrind Output"));
+    if ( fName.isEmpty() )
+        return;
 
-  QFile f( fName );
-  if ( !f.open( QIODevice::ReadOnly ) ) {
-    KMessageBox::sorry( 0, i18n("Could not open valgrind output: %1", fName) );
-    return;
-  }
+    QFile f( fName );
+    if ( !f.open( QIODevice::ReadOnly ) ) {
+        KMessageBox::sorry( 0, i18n("Could not open valgrind output: %1", fName) );
+        return;
+    }
 
-  clear();
+    clear();
 
-  /*FIXME
-  QTextStream stream( &f );
-  while ( !stream.atEnd() ) {
-    receivedString( stream.readLine() + "\n" );
-  }*/
-  f.close();
+    /*FIXME
+    QTextStream stream( &f );
+    while ( !stream.atEnd() ) {
+        receivedString( stream.readLine() + "\n" );
+    }*/
+    f.close();
+#endif
 }
 
 void ValgrindPlugin::slotExecValgrind()
 {
-  ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Memcheck);
-  /*if ( KDevApi::self()->project() && m_lastExec.isEmpty() ) {
-    dlg->setExecutable( KDevApi::self()->project()->mainProgram() );
-  } else {*/
-    dlg->setExecutable( m_lastExec );
-  //}
-  dlg->setParameters( m_lastParams );
-  dlg->setValExecutable( m_lastValExec );
-  dlg->setValParams( m_lastValParams );
-  m_lastValExec = dlg->valExecutable();
-  m_lastValParams = dlg->valParams();
-  if ( dlg->exec() == QDialog::Accepted ) {
-    m_control->run( m_model, dlg->executableName(), dlg->parameters(), dlg->valExecutable(), dlg->valParams() );
-  }
+    ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Memcheck);
+    /*if ( KDevApi::self()->project() && m_lastExec.isEmpty() ) {
+        dlg->setExecutable( KDevApi::self()->project()->mainProgram() );
+    } else {*/
+        dlg->setExecutable( m_lastExec );
+    //}
+    dlg->setParameters( m_lastParams );
+    dlg->setValExecutable( m_lastValExec );
+    dlg->setValParams( m_lastValParams );
+    m_lastValExec = dlg->valExecutable();
+    m_lastValParams = dlg->valParams();
+    if ( dlg->exec() == QDialog::Accepted ) {
+        KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
+        run.setInstrumentor("memcheck");
+        KDevelop::ICore::self()->runController()->execute(run);
+    }
 }
 
 void ValgrindPlugin::slotExecCalltree()
 {
     /* FIXME add a mainProgram function or equivalent so this can be ported
-  ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Calltree);
-  if ( KDevApi::self()->project() && m_lastExec.isEmpty() ) {
-    dlg->setExecutable( project()->mainProgram() );
-  } else {
-    dlg->setExecutable( m_lastExec );
-  }
-  dlg->setParameters( m_lastParams );
-  dlg->setCtExecutable( m_lastCtExec );
-  dlg->setKcExecutable( m_lastKcExec );
-  dlg->setCtParams( m_lastCtParams );
-  kcInfo.runKc = true;
-  kcInfo.kcPath = dlg->kcExecutable();
+    ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Calltree);
+    if ( KDevApi::self()->project() && m_lastExec.isEmpty() ) {
+        dlg->setExecutable( project()->mainProgram() );
+    } else {
+        dlg->setExecutable( m_lastExec );
+    }
+    dlg->setParameters( m_lastParams );
+    dlg->setCtExecutable( m_lastCtExec );
+    dlg->setKcExecutable( m_lastKcExec );
+    dlg->setCtParams( m_lastCtParams );
+    kcInfo.runKc = true;
+    kcInfo.kcPath = dlg->kcExecutable();
 //  kcInfo.kcWorkDir = KUrl(dlg->executableName()).directory();
-  if ( dlg->exec() == QDialog::Accepted ) {
-    runValgrind( dlg->executableName(), dlg->parameters(), dlg->ctExecutable(), dlg->ctParams() );
-  }
-  m_lastKcExec = dlg->kcExecutable();
-  m_lastCtExec = dlg->ctExecutable();
-  m_lastCtParams = dlg->ctParams();
+    if ( dlg->exec() == QDialog::Accepted ) {
+        runValgrind( dlg->executableName(), dlg->parameters(), dlg->ctExecutable(), dlg->ctParams() );
+    }
+    m_lastKcExec = dlg->kcExecutable();
+    m_lastCtExec = dlg->ctExecutable();
+    m_lastCtParams = dlg->ctParams();
     */
 }
 
-void ValgrindPlugin::slotKillValgrind()
+QStringList ValgrindPlugin::instrumentorsProvided() const
 {
-  m_control->stop();
+    QStringList() << "memcheck" << "callgrind" << "cachegrind" << "helgrind" << "massif" << "drd" << "omega" << "lackey";
 }
 
-void ValgrindPlugin::slotStopButtonClicked( KDevPlugin* which )
+bool ValgrindPlugin::execute(const KDevelop::IRun & run, int serial)
 {
-  if ( which != 0 && which != this )
-    return;
-
-  slotKillValgrind();
+    ValgrindControl* control = new ValgrindControl(this);
+    m_controls.insert(serial, control);
+    return control->run(run);
 }
 
-void ValgrindPlugin::clear()
+void ValgrindPlugin::abort(int serial)
 {
-  m_model->clear();
+    ValgrindControl* control = m_controls[serial];
+    control->stop();
 }
 
+const KUrl & ValgrindPlugin::valgrindExecutable() const
+{
+    return m_valgrindExecutable;
+}
+
+ValgrindCombinedModel* ValgrindPlugin::model() const
+{
+    return m_model;
+}
+
+#if 0
 void ValgrindPlugin::restorePartialProjectSession( const QDomElement* el )
 {
-  QDomElement execElem = el->namedItem( "executable" ).toElement();
-  m_lastExec = execElem.attribute( "path", "" );
-  m_lastParams = execElem.attribute( "params", "" );
+    QDomElement execElem = el->namedItem( "executable" ).toElement();
+    m_lastExec = execElem.attribute( "path", "" );
+    m_lastParams = execElem.attribute( "params", "" );
 
-  QDomElement valElem = el->namedItem( "valgrind" ).toElement();
-  m_lastValExec = valElem.attribute( "path", "" );
-  m_lastValParams = valElem.attribute( "params", "" );
+    QDomElement valElem = el->namedItem( "valgrind" ).toElement();
+    m_lastValExec = valElem.attribute( "path", "" );
+    m_lastValParams = valElem.attribute( "params", "" );
 
-  QDomElement ctElem = el->namedItem( "calltree" ).toElement();
-  m_lastCtExec = ctElem.attribute( "path", "" );
-  m_lastCtParams = ctElem.attribute( "params", "" );
+    QDomElement ctElem = el->namedItem( "calltree" ).toElement();
+    m_lastCtExec = ctElem.attribute( "path", "" );
+    m_lastCtParams = ctElem.attribute( "params", "" );
 
-  QDomElement kcElem = el->namedItem( "kcachegrind" ).toElement();
-  m_lastKcExec = kcElem.attribute( "path", "" );
+    QDomElement kcElem = el->namedItem( "kcachegrind" ).toElement();
+    m_lastKcExec = kcElem.attribute( "path", "" );
 }
 
 void ValgrindPlugin::savePartialProjectSession( QDomElement* el )
 {
-  QDomDocument domDoc = el->ownerDocument();
-  if ( domDoc.isNull() )
-    return;
+    QDomDocument domDoc = el->ownerDocument();
+    if ( domDoc.isNull() )
+        return;
 
-  QDomElement execElem = domDoc.createElement( "executable" );
-  execElem.setAttribute( "path", m_lastExec );
-  execElem.setAttribute( "params", m_lastParams );
+    QDomElement execElem = domDoc.createElement( "executable" );
+    execElem.setAttribute( "path", m_lastExec );
+    execElem.setAttribute( "params", m_lastParams );
 
-  QDomElement valElem = domDoc.createElement( "valgrind" );
-  valElem.setAttribute( "path", m_lastValExec );
-  valElem.setAttribute( "params", m_lastValParams );
+    QDomElement valElem = domDoc.createElement( "valgrind" );
+    valElem.setAttribute( "path", m_lastValExec );
+    valElem.setAttribute( "params", m_lastValParams );
 
-  QDomElement ctElem = domDoc.createElement( "calltree" );
-  ctElem.setAttribute( "path", m_lastCtExec );
-  ctElem.setAttribute( "params", m_lastCtParams );
+    QDomElement ctElem = domDoc.createElement( "calltree" );
+    ctElem.setAttribute( "path", m_lastCtExec );
+    ctElem.setAttribute( "params", m_lastCtParams );
 
-  QDomElement kcElem = domDoc.createElement( "kcachegrind" );
-  kcElem.setAttribute( "path", m_lastKcExec );
+    QDomElement kcElem = domDoc.createElement( "kcachegrind" );
+    kcElem.setAttribute( "path", m_lastKcExec );
 
-  el->appendChild( execElem );
-  el->appendChild( valElem );
-  el->appendChild( ctElem );
-  el->appendChild( kcElem );
+    el->appendChild( execElem );
+    el->appendChild( valElem );
+    el->appendChild( ctElem );
+    el->appendChild( kcElem );
 }
+#endif
 
-#include "valgrind_part.moc"
+#include "valgrindplugin.moc"

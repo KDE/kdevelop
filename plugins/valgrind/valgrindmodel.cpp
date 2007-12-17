@@ -386,4 +386,14 @@ KUrl ValgrindFrame::url() const
   return KUrl(KUrl::fromPath(dir), file);
 }
 
+ValgrindCombinedModel::ValgrindCombinedModel(QObject * parent)
+    : QSortFilterProxyModel(parent)
+{
+}
+
+ValgrindModel::ValgrindModel(QObject * parent)
+    : QAbstractItemModel(parent)
+{
+}
+
 #include "valgrindmodel.moc"

@@ -23,9 +23,9 @@
 #include <QHash>
 #include <QStack>
 #include <QXmlDefaultHandler>
-#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
 
-#include <kurl.h>
+#include <KUrl>
 
 class ValgrindError;
 class ValgrindFrame;
@@ -34,8 +34,16 @@ class ValgrindStack;
 class ValgrindItem
 {
 public:
-  virtual ~ValgrindItem() {}
-  virtual ValgrindItem* parent() const = 0;
+    virtual ~ValgrindItem() {}
+    virtual ValgrindItem* parent() const = 0;
+};
+
+class ValgrindCombinedModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+    ValgrindCombinedModel(QObject* parent);
 };
 
 /**
@@ -49,138 +57,139 @@ class ValgrindModel : public QAbstractItemModel, public QXmlDefaultHandler, publ
   Q_OBJECT
 
 public:
-  virtual ~ValgrindModel();
+    ValgrindModel(QObject* parent);
+    virtual ~ValgrindModel();
 
-  enum Columns {
-    Index = 0,
-    Function,
-    Source,
-    Object
-  };
-  static const int numColumns = 4;
+    enum Columns {
+        Index = 0,
+        Function,
+        Source,
+        Object
+    };
+    static const int numColumns = 4;
 
-  // Item
-  virtual ValgrindItem* parent() const { return 0L; }
+    // Item
+    virtual ValgrindItem* parent() const { return 0L; }
 
-  // Model
-  QModelIndex indexForItem(ValgrindItem* item, int column = 0) const;
-  ValgrindItem* itemForIndex(const QModelIndex& index) const;
+    // Model
+    QModelIndex indexForItem(ValgrindItem* item, int column = 0) const;
+    ValgrindItem* itemForIndex(const QModelIndex& index) const;
 
-  virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
-  virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-  virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-  virtual QModelIndex parent ( const QModelIndex & index ) const;
-  virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
+    virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
+    virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+    virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    virtual QModelIndex parent ( const QModelIndex & index ) const;
+    virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
-  // XML parsing
-  virtual bool characters( const QString & ch );
-  virtual bool endElement( const QString & namespaceURI, const QString & localName, const QString & qName );
-  virtual bool startDocument();
-  virtual bool startElement( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
+    // XML parsing
+    virtual bool characters( const QString & ch );
+    virtual bool endElement( const QString & namespaceURI, const QString & localName, const QString & qName );
+    virtual bool startDocument();
+    virtual bool startElement( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
 
-  // Manipulation
-  void clear();
+    // Manipulation
+    void clear();
 
 private:
-  enum State {
-    Unknown,
-    Root,
-    Session,
-    Status,
-    Preamble,
-    Error,
-    Stack,
-    Frame
-  } m_state;
+    enum State {
+        Unknown,
+        Root,
+        Session,
+        Status,
+        Preamble,
+        Error,
+        Stack,
+        Frame
+    } m_state;
 
-  QStack<State> m_stateStack;
+    QStack<State> m_stateStack;
 
-  QString m_buffer;
-  int m_depth;
-  int m_protocolVersion;
-  int pid;
-  int ppid;
-  QString tool, userComment;
-  QStringList preamble;
-  QHash<QString, QString> valgrindArgs, programArgs;
+    QString m_buffer;
+    int m_depth;
+    int m_protocolVersion;
+    int pid;
+    int ppid;
+    QString tool, userComment;
+    QStringList preamble;
+    QHash<QString, QString> valgrindArgs, programArgs;
 
-  enum {
-    NotRunning,
-    Running,
-    Paused
-  } state;
+    enum {
+        NotRunning,
+        Running,
+        Paused
+    } state;
 
-  QList<ValgrindError*> errors;
+    QList<ValgrindError*> errors;
 
-  ValgrindError* m_currentError;
-  ValgrindStack* m_currentStack;
-  ValgrindFrame* m_currentFrame;
+    ValgrindError* m_currentError;
+    ValgrindStack* m_currentStack;
+    ValgrindFrame* m_currentFrame;
 };
 
 class ValgrindError : public ValgrindItem
 {
 public:
-  ValgrindError(ValgrindModel* parent);
-  virtual ~ValgrindError();
+    ValgrindError(ValgrindModel* parent);
+    virtual ~ValgrindError();
 
-  virtual ValgrindModel* parent() const { return m_parent; }
+    virtual ValgrindModel* parent() const { return m_parent; }
 
-  void setKind(const QString& s);
+    void setKind(const QString& s);
 
-  int uniqueId;
-  int threadId;
+    int uniqueId;
+    int threadId;
 
-  enum {
-    Unknown,
-    InvalidFree,
-    MismatchedFree,
-    InvalidRead,
-    InvalidWrite,
-    InvalidJump,
-    Overlap,
-    InvalidMemPool,
-    UninitCondition,
-    UninitValue,
-    SyscallParam,
-    ClientCheck,
-    Leak_DefinitelyLost,
-    Leak_IndirectlyLost,
-    Leak_PossiblyLost,
-    Leak_StillReachable
-  } kind;
+    enum {
+        Unknown,
+        InvalidFree,
+        MismatchedFree,
+        InvalidRead,
+        InvalidWrite,
+        InvalidJump,
+        Overlap,
+        InvalidMemPool,
+        UninitCondition,
+        UninitValue,
+        SyscallParam,
+        ClientCheck,
+        Leak_DefinitelyLost,
+        Leak_IndirectlyLost,
+        Leak_PossiblyLost,
+        Leak_StillReachable
+    } kind;
 
-  QString what, auxWhat;
-  int leakedBytes, leakedBlocks;
+    QString what, auxWhat;
+    int leakedBytes, leakedBlocks;
 
-  ValgrindStack* stack;
-  ValgrindStack* auxStack;
-  ValgrindModel* m_parent;
+    ValgrindStack* stack;
+    ValgrindStack* auxStack;
+    ValgrindModel* m_parent;
 };
 
 class ValgrindStack : public ValgrindItem
 {
 public:
-  ValgrindStack(ValgrindError* parent);
-  virtual ~ValgrindStack();
+    ValgrindStack(ValgrindError* parent);
+    virtual ~ValgrindStack();
 
-  virtual ValgrindError* parent() const { return m_parent; }
+    virtual ValgrindError* parent() const { return m_parent; }
 
-  QList<ValgrindFrame*> frames;
-  ValgrindError* m_parent;
+    QList<ValgrindFrame*> frames;
+    ValgrindError* m_parent;
 };
 
 class ValgrindFrame : public ValgrindItem
 {
 public:
-  ValgrindFrame(ValgrindStack* parent);
+    ValgrindFrame(ValgrindStack* parent);
 
-  virtual ValgrindStack* parent() const { return m_parent; }
+    virtual ValgrindStack* parent() const { return m_parent; }
 
-  KUrl url() const;
+    KUrl url() const;
 
-  int instructionPointer, line;
-  QString obj, fn, dir, file;
-  ValgrindStack* m_parent;
+    int instructionPointer, line;
+    QString obj, fn, dir, file;
+    ValgrindStack* m_parent;
 };
 
 #endif

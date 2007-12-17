@@ -22,40 +22,50 @@
 #define KDEV_VALGRIND_CONTROL_H
 
 #include <QObject>
+#include <QProcess>
 
-class K3Process;
+#include <irun.h>
+
+class KProcess;
 class QXmlInputSource;
 class QXmlSimpleReader;
 class ValgrindModel;
 class QTcpServer;
 class QTcpSocket;
+class ValgrindPlugin;
 
 class ValgrindControl : public QObject
 {
   Q_OBJECT
 
 public:
-  ValgrindControl(QObject* parent);
+    ValgrindControl(ValgrindPlugin* parent);
 
-  void run(ValgrindModel* model, const QString& executable, const QString& parameters, const QString& valgrindExecutable, const QString& valgrindParameters);
-  void stop();
+    ValgrindPlugin* plugin() const;
+
+    bool run(const KDevelop::IRun& run);
+    void stop();
 
 private slots:
-  void newValgrindConnection();
-  void readFromValgrind();
-  void processExited(K3Process* p);
-  void receivedStdout( K3Process*, char*, int );
-  void receivedStderr( K3Process*, char*, int );
+    void newValgrindConnection();
+    void readFromValgrind();
+
+    void readyReadStandardOutput();
+    void readyReadStandardError();
+    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void processErrored(QProcess::ProcessError);
 
 private:
-  K3Process* m_process;
-  int m_currentPid;
+    KProcess* m_process;
+    int m_currentPid;
 
-  QXmlInputSource* m_inputSource;
-  QXmlSimpleReader* m_xmlReader;
+    QXmlInputSource* m_inputSource;
+    QXmlSimpleReader* m_xmlReader;
 
-  QTcpServer* m_server;
-  QTcpSocket* m_connection;
+    QTcpServer* m_server;
+    QTcpSocket* m_connection;
+
+    ValgrindModel* m_model;
 };
 
 #endif

@@ -11,6 +11,7 @@ set(kdevvalgrind_PART_SRCS
     valgrindplugin.cpp
     valgrindmodel.cpp
     valgrindcontrol.cpp
+    valgrindwidget.cpp
 )
 
 set(kdevvalgrind_PART_UI
@@ -20,7 +21,15 @@ set(kdevvalgrind_PART_UI
 kde4_add_ui_files(kdevvalgrind_PART_SRCS ${kdevvalgrind_PART_UI})
 
 kde4_add_plugin(kdevvalgrind ${kdevvalgrind_PART_SRCS})
-target_link_libraries(kdevvalgrind ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS} kdevplatform)
+target_link_libraries(kdevvalgrind
+    ${KDEVPLATFORM_INTERFACES_LIBRARY}
+    ${KDEVPLATFORM_PROJECT_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+    ${KDE4_KDEUI_LIBS}
+    ${KDEVPLATFORM_EDITOR_LIBRARY}
+    ${KDEVPLATFORM_UTIL_LIBRARY}
+    ${KDE4_KTEXTEDITOR_LIBS}
+    ${QT_QTNETWORK_LIBRARY})
 
 install(TARGETS kdevvalgrind DESTINATION ${PLUGIN_INSTALL_DIR} )
 
