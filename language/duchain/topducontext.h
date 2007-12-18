@@ -129,6 +129,8 @@ protected:
   void applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const KTextEditor::Cursor& position, bool canBeNamespace, int startPos = 0, int maxPos = -1 ) const;
   
 private:
+  //Same as imports, without the slow access-check, for internal usage
+  bool importsPrivate(const DUContext * origin, const KTextEditor::Cursor& position) const;
   Q_DECLARE_PRIVATE(TopDUContext)
   friend class DUChain; //To allow access to setParsingEnvironmentFile
 };

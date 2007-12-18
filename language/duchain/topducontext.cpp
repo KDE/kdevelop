@@ -194,7 +194,7 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
         continue;
 
       // Make sure that this declaration is accessible
-      if (!imports(top, position))
+      if (!importsPrivate(top, position))
         continue;
 
     } else {
@@ -329,7 +329,7 @@ void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*
         continue;
 
       // Make sure that this declaration is accessible
-      if (!imports(top, position))
+      if (!importsPrivate(top, position))
         continue;
 
     } else {
@@ -359,6 +359,11 @@ bool TopDUContext::imports(const DUContext * origin, const KTextEditor::Cursor& 
 {
   ENSURE_CAN_READ
 
+  return importsPrivate(origin, position);
+ }
+
+bool TopDUContext::importsPrivate(const DUContext * origin, const KTextEditor::Cursor& position) const
+{
   Q_UNUSED(position);
   // TODO use position
 
