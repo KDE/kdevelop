@@ -356,6 +356,10 @@ void KDevFileSelector::slotFilterChange( const QString & nf )
     }
     else
     {
+        if ( !f.startsWith( "*" ) )
+            f.prepend( '*' );
+        if ( !f.endsWith( "*" ) )
+            f.append( '*' );
         dir->setNameFilter( f );
         lastFilter = f;
         QToolTip::add
