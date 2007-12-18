@@ -21,10 +21,12 @@
 #ifndef DUCHAINBASE_P_H
 #define DUCHAINBASE_P_H
 
+#include "documentrangeobject_p.h"
+
 namespace KDevelop
 {
 
-class DUChainBasePrivate
+class DUChainBasePrivate : public DocumentRangeObjectPrivate
 {
 };
 

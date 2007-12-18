@@ -27,12 +27,12 @@ namespace KDevelop
 {
 
 DUChainBase::DUChainBase(const HashedString& url, KTextEditor::Range* range)
-  : KDevelop::DocumentRangeObject(url, range), d_ptr(new DUChainBasePrivate), m_ptr( 0L )
+  : KDevelop::DocumentRangeObject(*new DUChainBasePrivate, url, range), m_ptr( 0L )
 {
 }
 
 DUChainBase::DUChainBase( DUChainBasePrivate & dd, const HashedString & url, KTextEditor::Range * range )
-  : KDevelop::DocumentRangeObject( url, range ), d_ptr( &dd ), m_ptr( 0 )
+  : KDevelop::DocumentRangeObject( dd, url, range ), m_ptr( 0 )
 {
 }
 
@@ -40,7 +40,6 @@ DUChainBase::~DUChainBase()
 {
   if (m_ptr)
     m_ptr->m_base = 0;
-  delete d_ptr;
 }
 
 TopDUContext* DUChainBase::topContext() const

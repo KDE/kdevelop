@@ -29,11 +29,10 @@
 #include "documentcursor.h"
 #include "documentrange.h"
 
-
 namespace KDevelop
 {
 class HashedString;
-
+class DocumentRangeObjectPrivate;
 /**
  * Base class for any object which has an associated range of text.
  *
@@ -42,6 +41,7 @@ class HashedString;
 class KDEVPLATFORMEDITOR_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
+    DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, KTextEditor::Range* range);
     DocumentRangeObject(const HashedString& document, KTextEditor::Range* range);
     virtual ~DocumentRangeObject();
 
@@ -85,10 +85,10 @@ protected:
     // Mutex protects all DocumentRangeObject internals from threading-conditioned corruption
     static QMutex m_mutex;
 
+    DocumentRangeObjectPrivate* const d_ptr;
 private:
     Q_DISABLE_COPY(DocumentRangeObject)
-
-    class DocumentRangeObjectPrivate* const d;
+    Q_DECLARE_PRIVATE(DocumentRangeObject)
 };
 
 

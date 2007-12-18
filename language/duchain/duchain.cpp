@@ -150,7 +150,7 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
     {
       ModificationRevision thisRev = (*it)->parsingEnvironmentFile()->modificationRevision();
       
-      if( (*it)->parsingEnvironmentFile() && !(thisRev == rev)  )
+      if( (*it)->parsingEnvironmentFile() && !(thisRev == rev) )
       {
         //Don't remove obsolete chains here, because the caller may not be prepared to it, and also the chains may yet be updated.
 /*        kDebug(9505) << "duchain: removing obsolete document " << (*it)->parsingEnvironmentFile()->identity().toString() << " from du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();

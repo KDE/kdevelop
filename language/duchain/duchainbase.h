@@ -49,8 +49,7 @@ public:
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
 protected:
-  class DUChainBasePrivate* const d_ptr;
-  DUChainBase( DUChainBasePrivate& dd, const HashedString& url, KTextEditor::Range* range );
+  DUChainBase( class DUChainBasePrivate& dd, const HashedString& url, KTextEditor::Range* range );
   
 private:
   Q_DECLARE_PRIVATE(DUChainBase)
