@@ -137,7 +137,7 @@ private:
 /**
  * Use this to iterate over the indices contained in a set
  * */
-class Set::Iterator {
+class KDEVCPPDUCHAIN_EXPORT Set::Iterator {
 public:
   Iterator(const Iterator& rhs);
   Iterator& operator=(const Iterator& rhs);
