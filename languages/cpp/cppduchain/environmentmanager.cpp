@@ -147,8 +147,8 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
    
     Utils::Set conflicts = (environmentMacroNames & file.strings()) - file.m_usedMacroNames.set();
 
-    for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, conflicts.iterator() ); it; ++it ) {
-      rpp::pp_macro* m = environment->retrieveStoredMacro( (*it).name );
+    for( StringSetRepository::Iterator it( &EnvironmentManager::m_stringRepository, conflicts.iterator() ); it; ++it ) {
+      rpp::pp_macro* m = environment->retrieveStoredMacro( *it );
       if(m && !m->isUndef()) {
 #ifdef LEXERCACHE_DEBUG
         kDebug() << "The environment contains a macro that can affect the cached file:" << m->name.str();

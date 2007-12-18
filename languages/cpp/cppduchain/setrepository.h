@@ -220,6 +220,7 @@ public:
 
     const T& operator*() const {
       Q_ASSERT(m_rep);
+      Q_ASSERT(*m_it >= 0 && *m_it < m_rep->elements().size());
       return m_rep->elements()[*m_it];
     }
   private:

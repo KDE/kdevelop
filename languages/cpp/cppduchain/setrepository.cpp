@@ -389,6 +389,7 @@ struct Set::Iterator::IteratorPrivate : public KShared {
         break; //We need no finer granularity, because the range is contiguous
       node = node->left.data();
     } while(node);
+    Q_ASSERT(currentIndex >= nodeStack.front()->start);
   }
 };
 
@@ -441,6 +442,9 @@ Set::Iterator& Set::Iterator::operator++() {
       d->startAtNode(d->nodeStack.back()->right.data());
     }
   }
+
+  Q_ASSERT(d->nodeStack.empty() || d->currentIndex < d->nodeStack.front()->start);
+  
   return *this;
 }
 
