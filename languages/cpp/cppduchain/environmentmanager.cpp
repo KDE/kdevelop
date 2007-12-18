@@ -256,13 +256,20 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
 #ifdef LEXERCACHE_DEBUG
   kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
 #endif
-  Q_ASSERT( previousOfSameName || !m_definedMacroNames.contains(macro.name) );
   if( previousOfSameName )
     m_definedMacros.remove( *previousOfSameName );
-  
+  else if( m_definedMacroNames.contains(macro.name) ) {
+    //Search if there is already a macro of the same name in the set, and remove it
+    //This is slow, but should not happen too often
+    ///@todo maybe give a warning, and find out how this can happen
+    for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, m_definedMacros.set().iterator() ); it; ++it )
+      if( macro.name == (*it).name )
+        m_definedMacros.remove(*it);
+  }else{
+    m_definedMacroNames.insert( macro.name );
+  }
+    
   m_definedMacros.insert( macro );
-  
-  m_definedMacroNames.insert( macro.name );
 }
 
 void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
