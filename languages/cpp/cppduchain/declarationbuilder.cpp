@@ -385,7 +385,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   }
 
   Range newRange = m_editor->findRange(name ? static_cast<AST*>(name) : rangeNode);
-  Q_ASSERT(newRange.start() != newRange.end());
+  if(newRange.start() != newRange.end())
+    kWarning(9007) << "Range collapsed";
 
   QualifiedIdentifier id;
 
