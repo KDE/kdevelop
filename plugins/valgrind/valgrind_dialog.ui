@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>ValgrindDialog</class>
  <widget class="QWidget" name="ValgrindDialog" >
   <property name="geometry" >
@@ -13,25 +10,43 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
+   </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
    </property>
    <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Valgrind</string>
      </property>
-     <property name="flat" >
-      <bool>true</bool>
-     </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>6</number>
       </property>
       <item row="0" column="0" >
@@ -74,25 +89,43 @@
      </property>
      <widget class="QWidget" name="callgrindWidget" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
        </property>
        <item>
         <widget class="QGroupBox" name="groupBox_2" >
          <property name="title" >
           <string>Callgrind</string>
          </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>9</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>6</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>6</number>
           </property>
           <item row="0" column="0" colspan="2" >
@@ -140,14 +173,23 @@
          <property name="title" >
           <string>KCacheGrind</string>
          </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>9</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>6</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>6</number>
           </property>
           <item row="0" column="1" >
@@ -187,11 +229,20 @@
      </widget>
      <widget class="QWidget" name="memcheckWidget" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
        </property>
        <item>
         <widget class="QGroupBox" name="groupBox_4" >
@@ -202,11 +253,20 @@
           <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>9</number>
+          </property>
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
           </property>
           <item>
            <widget class="QCheckBox" name="memleakBox" >
@@ -220,11 +280,20 @@
           </item>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <spacer>
@@ -260,10 +329,22 @@
           </item>
           <item>
            <layout class="QGridLayout" >
-            <property name="margin" >
+            <property name="leftMargin" >
              <number>0</number>
             </property>
-            <property name="spacing" >
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
+            </property>
+            <property name="horizontalSpacing" >
+             <number>6</number>
+            </property>
+            <property name="verticalSpacing" >
              <number>6</number>
             </property>
             <item row="1" column="0" >
@@ -328,15 +409,11 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <tabstops>

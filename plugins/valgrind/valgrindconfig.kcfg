@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Valgrind Options">
+    <entry name="valgrindExecutable" key="Valgrind Executable" type="Url"/>
+    <entry name="valgrindArguments" key="Valgrind Arguments" type="String"/>
+    <entry name="numCallers" key="Framestack Depth" type="Int"/>
+    <entry name="maxStackFrame" key="Maximum Stack Frame Size" type="Int"/>
+    <entry name="limitErrors" key="Limit Errors" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="leakSummary" key="Leak Summary Type" type="Enum">
+    </entry>
+    <entry name="leakResolution" key="Leak Resolution Matching" type="Enum">
+        <default>false</default>
+    </entry>
+    <entry name="showReachable" key="Show Reachable Blocks" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="freeBlockList" key="Free Block List Size" type="Int"/>
+  </group>
+</kcfg>
