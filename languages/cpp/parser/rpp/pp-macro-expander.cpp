@@ -44,8 +44,6 @@ pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<QString>& __actuals)
 
 QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
 {
-  Q_ASSERT(!name.isEmpty());
-
   if (!m_frame)
     return QString();
 
@@ -53,6 +51,14 @@ QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
 
   const QStringList& formals = m_frame->expandingMacro->formals;
 
+  if(name.isEmpty()) {
+    KDevelop::Problem problem;
+    problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+    problem.setDescription(i18n("Macro error"));
+    m_engine->problemEncountered(problem);
+    return QString();
+  }
+  
   for (int index = 0; index < formals.size(); ++index) {
     if (name == formals[index]) {
       if (index < m_frame->actuals.size())
