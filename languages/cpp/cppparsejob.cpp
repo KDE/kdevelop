@@ -76,6 +76,11 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         addJob(m_parseJob = new CPPInternalParseJob(this));
         // Higher priority means it will be preferred over other waiting preprocess jobs
         m_parseJob->setPriority(1);
+
+        // Calculate this while still in the main thread
+        // Avoids many issues with race conditions
+        includePaths();
+
     } else {
         m_preprocessJob = 0;
         m_parseJob = 0;
