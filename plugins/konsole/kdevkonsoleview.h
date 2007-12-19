@@ -31,7 +31,9 @@ public slots:
     void setDirectory( const KUrl &dirUrl );
 
 private :
-    struct KDevKonsoleViewPrivate* const d;
+    class KDevKonsoleViewPrivate* const d;
+
+    Q_PRIVATE_SLOT( d, void _k_slotTerminalClosed() )
 };
 
 #endif
