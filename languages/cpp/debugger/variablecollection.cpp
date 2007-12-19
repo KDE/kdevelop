@@ -30,6 +30,7 @@
 #include "watchitem.h"
 
 #include "qt4/qstringvariableitem.h"
+#include "qt4/qlistvariableitem.h"
 
 //#include "modeltest.h"
 
@@ -407,6 +408,10 @@ VariableItem* VariableCollection::createVariableItem(const QString & type, Abstr
     static QRegExp qstring("^(const)?[ ]*QString[ ]*&?$");
     if (qstring.exactMatch(type))
         return new QStringVariableItem(parent);
+
+    static QRegExp qlist("^(const)?[ ]*QList.*");
+    if (qlist.exactMatch(type))
+        return new QListVariableItem(parent);
 
     return new VariableItem(parent);
 }

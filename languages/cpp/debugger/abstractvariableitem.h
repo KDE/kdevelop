@@ -67,6 +67,7 @@ public:
 
     const QList<AbstractVariableItem*>& children() const;
     void addChild(AbstractVariableItem* item);
+    void addChild(const QString& expression, const QString& type);
     void removeChild(AbstractVariableItem* item);
     void deleteChild(AbstractVariableItem* item);
     void deleteAllChildren();

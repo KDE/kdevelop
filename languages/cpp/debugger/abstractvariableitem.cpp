@@ -25,6 +25,7 @@
 #include "variablecollection.h"
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
+#include "variableitem.h"
 
 using namespace GDBDebugger;
 
@@ -281,6 +282,13 @@ void AbstractVariableItem::refresh()
 void AbstractVariableItem::updateValue()
 {
     setValueDirty(false);
+}
+
+void AbstractVariableItem::addChild(const QString & expression, const QString& type)
+{
+    VariableItem* var = collection()->createVariableItem(type, this);
+    var->setExpression(expression);
+    addChild(var);
 }
 
 #include "abstractvariableitem.moc"

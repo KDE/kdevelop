@@ -59,6 +59,7 @@ set(kdevcppdebugger_PART_SRCS
     mi/milexer.cpp
     mi/miparser.cpp
     qt4/qstringvariableitem.cpp
+    qt4/qlistvariableitem.cpp
 #modeltest.cpp
 )
 
@@ -76,9 +77,7 @@ target_link_libraries(kdevcppdebugger
     ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_EDITOR_LIBRARY}
     ${KDEVPLATFORM_UTIL_LIBRARY}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDEVPLATFORM_UTIL_LIBRARY}
 )
 
 install(TARGETS kdevcppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})

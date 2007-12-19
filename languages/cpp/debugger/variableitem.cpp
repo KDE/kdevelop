@@ -667,29 +667,34 @@ QVariant VariableItem::data(int column, int role) const
     return QVariant();
 }
 
-VariableItem * GDBDebugger::VariableItem::parentItem() const
+VariableItem * VariableItem::parentItem() const
 {
     return qobject_cast<VariableItem*>(const_cast<QObject*>(QObject::parent()));
 }
 
-const QString & GDBDebugger::VariableItem::variableName() const
+const QString & VariableItem::variableName() const
 {
     return varobjName_;
 }
 
-bool GDBDebugger::VariableItem::hasChildren() const
+bool VariableItem::hasChildren() const
 {
     return numChildren_ || !children().isEmpty();
 }
 
-void GDBDebugger::VariableItem::setHighlight(bool highlight)
+void VariableItem::setHighlight(bool highlight)
 {
     highlight_ = highlight;
 }
 
-bool GDBDebugger::VariableItem::highlight()
+bool VariableItem::highlight()
 {
     return highlight_;
+}
+
+const QString & VariableItem::type() const
+{
+    return m_type;
 }
 
 #include "variableitem.moc"

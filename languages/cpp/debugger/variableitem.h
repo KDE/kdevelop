@@ -103,6 +103,8 @@ public:
     */
     void setValue(const QString& new_value);
 
+    const QString& type() const;
+
     bool isAlive() const;
 
     VariableItem* parentItem() const;
