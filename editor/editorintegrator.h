@@ -137,6 +137,8 @@ public:
    * \param type The use for which the created range will be used
    * \returns the range either found or created, if the document was valid and supports
    *          smart ranges.
+   *
+   * Opens a range that needs to be closed using exitCurrentRange()
    */
   KTextEditor::Range* topRange(TopRangeType type);
 

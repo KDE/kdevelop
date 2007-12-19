@@ -119,12 +119,15 @@ Range* EditorIntegrator::topRange( TopRangeType /*type*/)
 {
   QMutexLocker lock(data()->mutex);
 
+  Q_ASSERT(d->m_currentRangeStack.isEmpty());
+  
   if (!data()->topRanges.contains(currentUrl()))
     data()->topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
   
   Range* newRange = 0;
   if (currentDocument()) {
     newRange = createRange(currentDocument()->documentRange(), KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
+    Q_ASSERT(!dynamic_cast<KTextEditor::SmartRange*>(newRange) || static_cast<KTextEditor::SmartRange*>(newRange)->parentRange() == 0 || static_cast<KTextEditor::SmartRange*>(newRange)->childRanges().count() == 0);
     if (SmartInterface* iface = smart()) {
       QMutexLocker lock(iface->smartMutex());
       Q_ASSERT(newRange->isSmartRange());

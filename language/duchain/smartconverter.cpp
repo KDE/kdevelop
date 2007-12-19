@@ -98,8 +98,10 @@ void SmartConverter::convertDUChain(DUContext* context) const
   if (d->m_editor->smart() && !context->smartRange()) {
     context->setTextRange(context->url(), d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
     Q_ASSERT(context->textRange() == d->m_editor->currentDocument()->documentRange());
+    Q_ASSERT(context->smartRange() && !context->smartRange()->parentRange() && context->smartRange()->childRanges().isEmpty());
 
     d->convertDUChainInternal(context, true);
+    d->m_editor->exitCurrentRange(); //topRange(..) opens a range
   }
 }
 
