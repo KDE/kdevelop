@@ -64,6 +64,7 @@ DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs )
   m_inSymbolTable = false;
   m_context = 0;
   m_definition = 0;
+  m_anonymousInContext = rhs.m_anonymousInContext;
 }
   
 Declaration::Kind Declaration::kind() const {
