@@ -97,7 +97,9 @@ void SmartConverter::convertDUChain(DUContext* context) const
 
   if (d->m_editor->smart() && !context->smartRange()) {
     context->setSmartRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
-    Q_ASSERT(context->range().textRange() == d->m_editor->currentDocument()->documentRange());
+    if (context->range().textRange() != d->m_editor->currentDocument()->documentRange())
+      kWarning() << "Context range to be converted" << context->range().textRange() << "does not match the document range" << d->m_editor->currentDocument()->documentRange();
+    //Q_ASSERT(context->range().textRange() == d->m_editor->currentDocument()->documentRange());
     Q_ASSERT(context->smartRange() && !context->smartRange()->parentRange() && context->smartRange()->childRanges().isEmpty());
 
     d->convertDUChainInternal(context, true);
