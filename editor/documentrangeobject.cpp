@@ -153,6 +153,7 @@ SimpleRange DocumentRangeObject::range( ) const
 {
     Q_D(const DocumentRangeObject);
     QMutexLocker lock(&m_mutex);
+    d->syncFromSmart();
     return d->m_range;
 }
 
@@ -208,7 +209,7 @@ bool DocumentRangeObject::contains(const SimpleCursor& cursor) const
 void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 {
     Q_D(DocumentRangeObject);
-  ///@todo syncFromRange if it still exists at this moment
+    d->syncFromSmart();
     QMutexLocker lock(&m_mutex);
     Q_ASSERT(range == d->m_smartRange);
     //Q_ASSERT(false);
