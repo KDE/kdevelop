@@ -45,24 +45,24 @@ public:
   void convertDUChainInternal(DUContext* context, bool first = false) const
   {
     if (!first)
-      context->setTextRange(context->url(), m_editor->createRange(context->textRange()));
+      context->setSmartRange(m_editor->createRange(context->range().textRange())->toSmartRange());
 
     foreach (Declaration* dec, context->localDeclarations()) {
-      dec->setTextRange(dec->url(), m_editor->createRange(dec->textRange()));
+      dec->setSmartRange(m_editor->createRange(dec->range().textRange())->toSmartRange());
       if( m_hl )
         m_hl->highlightDeclaration(dec);
       m_editor->exitCurrentRange();
     }
 
     foreach (Definition* def, context->localDefinitions()) {
-      def->setTextRange(def->url(), m_editor->createRange(def->textRange()));
+      def->setSmartRange(m_editor->createRange(def->range().textRange())->toSmartRange());
       if( m_hl )
         m_hl->highlightDefinition(def);
       m_editor->exitCurrentRange();
     }
 
     foreach (Use* use, context->uses()) {
-      use->setTextRange(use->url(), m_editor->createRange(use->textRange()));
+      use->setSmartRange(m_editor->createRange(use->range().textRange())->toSmartRange());
       if( m_hl )
         m_hl->highlightUse(use);
       m_editor->exitCurrentRange();
@@ -96,8 +96,8 @@ void SmartConverter::convertDUChain(DUContext* context) const
   d->m_editor->setCurrentUrl( context->url() );
 
   if (d->m_editor->smart() && !context->smartRange()) {
-    context->setTextRange(context->url(), d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
-    Q_ASSERT(context->textRange() == d->m_editor->currentDocument()->documentRange());
+    context->setSmartRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
+    Q_ASSERT(context->range().textRange() == d->m_editor->currentDocument()->documentRange());
     Q_ASSERT(context->smartRange() && !context->smartRange()->parentRange() && context->smartRange()->childRanges().isEmpty());
 
     d->convertDUChainInternal(context, true);
@@ -113,7 +113,7 @@ void SmartConverter::unconvertDUChain(DUContext* context) const
   d->m_editor->setCurrentUrl( context->url() );
 
   if (d->m_editor->smart() && !context->smartRange()) {
-    context->setTextRange(context->url(), d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
+    context->setSmartRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
 
     d->convertDUChainInternal(context, true);
   }

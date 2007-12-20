@@ -75,7 +75,7 @@ public:
 
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
-  Declaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context);
+  Declaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   virtual ~Declaration();
@@ -199,7 +199,8 @@ public:
    * */
   virtual Declaration* clone() const;
 protected:
-    Declaration( DeclarationPrivate & dd, const HashedString& url, KTextEditor::Range* range, Scope scope );
+    Declaration( DeclarationPrivate & dd );
+    Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range, Scope scope );
 private:
   Q_DECLARE_PRIVATE(Declaration)
 };

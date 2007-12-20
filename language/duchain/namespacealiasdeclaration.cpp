@@ -36,13 +36,12 @@ public:
 };
 
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs) 
-  : Declaration(*new NamespaceAliasDeclarationPrivate(*rhs.d_func()), 
-                 HashedString(), 0, rhs.scope()) {
-  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+  : Declaration(*new NamespaceAliasDeclarationPrivate(*rhs.d_func())) {
+  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
   
 }
 
-NamespaceAliasDeclaration::NamespaceAliasDeclaration(const HashedString& url, KTextEditor::Range * range, Scope scope, DUContext* context)
+NamespaceAliasDeclaration::NamespaceAliasDeclaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context)
   : Declaration(*new NamespaceAliasDeclarationPrivate, url, range, scope)
 {
   if( context )

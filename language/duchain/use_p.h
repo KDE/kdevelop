@@ -26,7 +26,7 @@
 namespace KDevelop
 {
 class Use;
-class UsePrivate : public DUChainBasePrivate
+class KDEVPLATFORMLANGUAGE_EXPORT UsePrivate : public DUChainBasePrivate
 {
 public:
   UsePrivate( Use* );

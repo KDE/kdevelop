@@ -74,7 +74,7 @@ public:
    * and providing all permutations would be overkill.
    * @param anonymous Whether the context should be added as an anonymous context to the parent. That way the context can never be found through any of the parent's member-functions.
    */
-  explicit DUContext(const HashedString& url, KTextEditor::Range* range, DUContext* parent = 0, bool anonymous = false);
+  explicit DUContext(const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
 
   /**
    * Destructor. Will delete all child contexts which are defined within
@@ -106,7 +106,7 @@ public:
   struct ImportTraceItem {
     //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
     const DUContext* ctx;
-    KTextEditor::Cursor position;
+    SimpleCursor position;
   };
 
   typedef QList<ImportTraceItem> ImportTrace;
@@ -141,12 +141,12 @@ public:
   /**
    * Find the context which most specifically covers \a position.
    */
-  DUContext* findContextAt(const KTextEditor::Cursor& position) const;
+  DUContext* findContextAt(const SimpleCursor& position) const;
 
   /**
    * Find the context which most specifically covers \a range.
    */
-  DUContext* findContextIncluding(const KTextEditor::Range& range) const;
+  DUContext* findContextIncluding(const SimpleRange& range) const;
 
   /**
    * Calculate the fully qualified scope identifier
@@ -190,12 +190,12 @@ public:
    * addImportedParentContext(..) was called with a valid cursor, this will return that position.
    * Else an invalid cursor is returned.
    * */
-  KTextEditor::Cursor importPosition(const DUContext* target) const;
+  SimpleCursor importPosition(const DUContext* target) const;
 
   /**
    * Returns true if this context imports @param origin at any depth, else false.
    * */
-  virtual bool imports(const DUContext* origin, const KTextEditor::Cursor& position = KTextEditor::Cursor()) const;
+  virtual bool imports(const DUContext* origin, const SimpleCursor& position = SimpleCursor::invalid()) const;
 
   /**
    * Adds an imported context.
@@ -208,7 +208,7 @@ public:
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
-  virtual void addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), bool anonymous = false);
+  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor::invalid(), bool anonymous = false);
 
   /**
    * Removes a child context.
@@ -261,7 +261,7 @@ public:
    *
    * \warning this may return declarations which are not in this tree, you may need to lock them too...
    */
-  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -277,7 +277,7 @@ public:
    *
    * \overload
    */
-  QList<Declaration*> findDeclarations(const Identifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findDeclarations(const Identifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
@@ -285,7 +285,7 @@ public:
    *
    * Does not search imported parent-contexts(like base-classes).
    */
-  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -334,7 +334,7 @@ public:
    *
    * \returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(const KTextEditor::Cursor& position, DUContext* parent = 0) const;
+  DUContext* findContext(const SimpleCursor& position, DUContext* parent = 0) const;
 
   /**
    * Searches for the context with the given \a type and \a identifier.
@@ -347,7 +347,7 @@ public:
    *
    * \warning this may return contexts which are not in this tree, you may need to lock them too...
    */
-  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid(), SearchFlags flags = NoSearchFlags) const;
+  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Iterates the tree to see if the provided \a context is a subcontext of this context.
@@ -368,7 +368,7 @@ public:
    *
    * \returns the requested declarations, if any were active at that location. Declarations propagated into this context(@see setPropagateDeclarations) are included.
    */
-  QList< QPair<Declaration*, int> > allDeclarations(const KTextEditor::Cursor& position, const TopDUContext* topContext, bool searchInParents=true) const;
+  QList< QPair<Declaration*, int> > allDeclarations(const SimpleCursor& position, const TopDUContext* topContext, bool searchInParents=true) const;
 
   /**
    * Return all declarations in this context that have the given \a identifier, without any filtering.
@@ -378,7 +378,7 @@ public:
   /**
    * Find the use which encompasses \a position, if one exists.
    */
-  Use* findUseAt(const KTextEditor::Cursor& position) const;
+  Use* findUseAt(const SimpleCursor& position) const;
 
   /**
    * Return a list of all uses which occur in this context.
@@ -440,7 +440,7 @@ public:
    * @warning position Must be valid!
    * @return whether the search was successful. If it is false, it had to be stopped for special reasons(like some flags)
    * */
-  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
 
   protected:
 
@@ -453,22 +453,22 @@ public:
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
    * @param hadUrls is used to count together all contexts that already were visited, so they are not visited again.
    */
-  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, const ImportTrace& trace, bool searchInParents = true, int currentDepth = 0) const;
+  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const ImportTrace& trace, bool searchInParents = true, int currentDepth = 0) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
 
   /// Context search implementation
-  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   /**Applies namespace-imports and namespace-aliases and returns possible absolute identifiers that need to be searched.
    * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.
    * */
-  void applyAliases(const QList<QualifiedIdentifier>& identifier, QList<QualifiedIdentifier>& targetIdentifiers, const KTextEditor::Cursor& position, bool canBeNamespace) const;
+  void applyAliases(const QList<QualifiedIdentifier>& identifier, QList<QualifiedIdentifier>& targetIdentifiers, const SimpleCursor& position, bool canBeNamespace) const;
 
-  DUContext(DUContextPrivate& dd, const HashedString& url, KTextEditor::Range* range, DUContext* parent = 0, bool anonymous = false);
+  DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
   
 private:
   Q_DECLARE_PRIVATE(DUContext)

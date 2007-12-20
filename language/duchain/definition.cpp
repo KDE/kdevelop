@@ -47,7 +47,7 @@ void DefinitionPrivate::setDeclaration(Declaration* declaration)
     //DUChain::definitionChanged(m_definition, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, m_declaration);
 }
 
-Definition::Definition(const HashedString& url, KTextEditor::Range* range, DUContext* context)
+Definition::Definition(const HashedString& url, const SimpleRange& range, DUContext* context)
   : DUChainBase(*new DefinitionPrivate(this), url, range)
   , ContextOwner(this)
 {

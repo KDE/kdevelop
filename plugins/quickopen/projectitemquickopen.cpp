@@ -74,7 +74,7 @@ bool DUChainItemData::execute( QString& /*filterText*/ ) {
   if(!m_item.m_item)
     return false;
   
-  ICore::self()->documentController()->openDocument( KUrl(m_item.m_item->url().str()), m_item.m_item->textRange().start() );
+  ICore::self()->documentController()->openDocument( KUrl(m_item.m_item->url().str()), m_item.m_item->range().textRange().start() );
   return true;
 }
 
@@ -134,7 +134,7 @@ void fillItems( const QString& project, QList<DUChainItem>& items, DUContext* co
   while( contextIterator != contextEnd || declarationIterator != declarationEnd ) {
     if( contextIterator != contextEnd && declarationIterator != declarationEnd ) {
       //Sort by position
-      if( (*contextIterator)->textRange().start() < (*declarationIterator)->textRange().start() ) {
+      if( (*contextIterator)->range().textRange().start() < (*declarationIterator)->range().textRange().start() ) {
         fillItems( project, items, *contextIterator, itemTypes );
         ++contextIterator;
       } else {

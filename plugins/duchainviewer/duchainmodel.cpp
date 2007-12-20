@@ -51,10 +51,11 @@ using namespace KTextEditor;
 using namespace KDevelop;
 
 ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
-: DUChainBase(HashedString(), _object->textRangePtr())
+: DUChainBase(HashedString(), _object->range())
   , parent(_parent)
   , object(_object)
 {
+  setSmartRange(_object->smartRange(), DUChainBase::DontOwn);
 }
 
 DUChainModel::DUChainModel(DUChainViewPlugin* parent)
@@ -506,7 +507,7 @@ int DUChainModel::findInsertIndex(QList<DUChainBasePointer*>& list, DUChainBase*
 {
   for (int i = 0; i < list.count(); ++i)
     if (DUChainBase* at = list.at(i)->data())
-      if (at->textRange().start() > object->textRange().start())
+      if (at->range().textRange().start() > object->range().textRange().start())
         return i;
 
   return list.count();

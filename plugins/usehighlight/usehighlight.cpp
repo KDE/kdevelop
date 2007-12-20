@@ -135,7 +135,7 @@ void UseHighlightPlugin::changeHighlight( KTextEditor::View* view, KDevelop::Dec
 void UseHighlightPlugin::updateViews()
 {
   foreach( KTextEditor::View* view, m_updateViews ) {
-    KTextEditor::Cursor c = view->cursorPosition();
+    SimpleCursor c = SimpleCursor(view->cursorPosition());
     ///Find either a Declaration, or a use, that is in the Range.
 
     ///Pick a non-proxy context
@@ -156,21 +156,21 @@ void UseHighlightPlugin::updateViews()
       while( ctx && !foundDeclaration ) {
         //Try finding a declaration under the cursor
         foreach( Declaration* decl, ctx->localDeclarations() ) {
-          if( decl->textRange().contains(c) ) {
+          if( decl->range().contains(c) ) {
             foundDeclaration = decl;
             break;
           }
         }
         foreach( Definition* def, ctx->localDefinitions() ) {
-          if( def->textRange().contains(c) ) {
+          if( def->range().contains(c) ) {
             foundDeclaration = def->declaration();
             break;
           }
         }
         //Try finding a use under the cursor
         foreach( Use* use, ctx->uses() ) {
-          if( use->textRange().contains(c) ) {
-            kDebug() << "found use" << use->textRange();
+          if( use->range().contains(c) ) {
+            kDebug() << "found use" << use->range().textRange();
             foundDeclaration = use->declaration();
             break;
           }

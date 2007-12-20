@@ -26,7 +26,7 @@
 namespace KDevelop
 {
 
-class ClassMemberDeclarationPrivate : public DeclarationPrivate
+class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclarationPrivate : public DeclarationPrivate
 {
 public:
   ClassMemberDeclarationPrivate();

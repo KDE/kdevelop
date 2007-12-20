@@ -26,6 +26,14 @@ namespace KDevelop
 
 ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate()
 {
+  m_accessPolicy = Declaration::Public;
+  m_isStatic = false;
+  m_isAuto = false;
+  m_isFriend = false;
+  m_isRegister = false;
+  m_isExtern = false;
+  m_isMutable = false;
+  
 }
 ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate( const ClassMemberDeclarationPrivate& rhs ) 
     : DeclarationPrivate( rhs )
@@ -39,40 +47,29 @@ ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate( const ClassMemberD
   m_isMutable = rhs.m_isMutable;
 }
   
-ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationPrivate(*rhs.d_func()), HashedString(), 0, rhs.scope()) {
-  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationPrivate(*rhs.d_func())) {
+  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 Declaration* ClassMemberDeclaration::clone() const {
   return new ClassMemberDeclaration(*this);
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
+ClassMemberDeclaration::ClassMemberDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
   : Declaration(*new ClassMemberDeclarationPrivate,url, range, ClassScope )
 {
-  Q_D(ClassMemberDeclaration);
-  d->m_accessPolicy = Declaration::Public;
-  d->m_isStatic = false;
-  d->m_isAuto = false;
-  d->m_isFriend = false;
-  d->m_isRegister = false;
-  d->m_isExtern = false;
-  d->m_isMutable = false;
   if( context )
     setContext( context );
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, KTextEditor::Range * range, Scope s)
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, const SimpleRange& range, Scope s)
   : Declaration(dd, url, range, s)
 {
-  Q_D(ClassMemberDeclaration);
-  d->m_accessPolicy = Declaration::Public;
-  d->m_isStatic = false;
-  d->m_isAuto = false;
-  d->m_isFriend = false;
-  d->m_isRegister = false;
-  d->m_isExtern = false;
-  d->m_isMutable = false;
+}
+
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd)
+  : Declaration(dd)
+{
 }
 
 ClassMemberDeclaration::~ClassMemberDeclaration()

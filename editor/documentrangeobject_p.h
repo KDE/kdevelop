@@ -20,22 +20,29 @@
 #define DOCUMENTRANGEOBJECT_P
 
 #include "documentrangeobject.h"
-#include <ktexteditor/range.h>
+#include <ktexteditor/smartrange.h>
+#include "simplerange.h"
+#include "editorexport.h"
 
 
 namespace KDevelop
 {
 
-class DocumentRangeObjectPrivate
+class KDEVPLATFORMEDITOR_EXPORT DocumentRangeObjectPrivate
 {
     public:
-    DocumentRangeObjectPrivate() : m_range(0)
+    DocumentRangeObjectPrivate() : m_smartRange(0)
         , m_ownsRange(DocumentRangeObject::Own)
     {}
+    DocumentRangeObjectPrivate(const DocumentRangeObjectPrivate& rhs);
 
-    KTextEditor::Range* m_range;
+    mutable KTextEditor::SmartRange* m_smartRange; //Mutable for synchronization
     DocumentRangeObject::RangeOwning m_ownsRange;
-    HashedString m_document;
+    mutable SimpleRange m_range; //Mutable for synchronization
+    HashedString m_document; ///@todo get rid of this, the information can be gotten from elsewhere
+
+    void syncFromSmart() const;
+    void syncToSmart() const;
 };
 }
 

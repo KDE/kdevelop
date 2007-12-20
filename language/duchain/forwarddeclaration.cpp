@@ -38,7 +38,9 @@ namespace KDevelop
 class ForwardDeclarationPrivate : public DeclarationPrivate
 {
 public:
-  ForwardDeclarationPrivate() {}
+  ForwardDeclarationPrivate() {
+    m_resolvedDeclaration = 0;
+  }
   ForwardDeclarationPrivate( const ForwardDeclarationPrivate& rhs ) 
       : DeclarationPrivate( rhs )
   {
@@ -47,14 +49,13 @@ public:
   Declaration* m_resolvedDeclaration;
 };
 
-ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationPrivate(*rhs.d_func()), HashedString(), 0, rhs.scope()) {
-  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationPrivate(*rhs.d_func())) {
+  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-ForwardDeclaration::ForwardDeclaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context )
+ForwardDeclaration::ForwardDeclaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context )
   : Declaration(*new ForwardDeclarationPrivate, url, range, scope)
 {
-  d_func()->m_resolvedDeclaration = 0;
   if( context )
     setContext( context );
 }

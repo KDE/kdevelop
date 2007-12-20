@@ -43,7 +43,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
-  explicit TopDUContext(const HashedString& url, KTextEditor::Range* range, ParsingEnvironmentFile* file = 0);
+  explicit TopDUContext(const HashedString& url, const SimpleRange& range, ParsingEnvironmentFile* file = 0);
   virtual ~TopDUContext();
 
   TopDUContext* topContext() const;
@@ -75,7 +75,7 @@ public:
    *
    * \note you must be holding a read but not a write chain lock when you access this function.
    */
-  virtual bool imports(const DUContext* origin, const KTextEditor::Cursor& position) const;
+  virtual bool imports(const DUContext* origin, const SimpleCursor& position) const;
 
   /**
    * Returns the trace of imports from this context top the given target.
@@ -106,31 +106,31 @@ public:
   Flags flags() const;
   void setFlags(Flags f);
 
-  virtual void addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position = KTextEditor::Cursor(), bool anonymous=false);
+  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor(), bool anonymous=false);
   virtual void removeImportedParentContext(DUContext* context);
   
-  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const;
+  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
   
   /// Return those \a declarations that are visible in this document from \a position and are of the specified \a dataType
-  QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const;
+  QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const SimpleCursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const;
 
-  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   /// Place \a contexts of type \a contextType that are visible in this document from \a position in a \a{ret}urn list
-  void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const;
+  void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret) const;
 
   /**
    * Does the same as DUContext::updateAliases, except that it uses the symbol-store, and processes the whole identifier.
    * @param canBeNamespace whether the searched identifier may be a namespace.
    * If this is true, namespace-aliasing is applied to the last elements of the identifiers.
    * */
-  void applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const KTextEditor::Cursor& position, bool canBeNamespace, int startPos = 0, int maxPos = -1 ) const;
+  void applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const SimpleCursor& position, bool canBeNamespace, int startPos = 0, int maxPos = -1 ) const;
   
 private:
   //Same as imports, without the slow access-check, for internal usage
-  bool importsPrivate(const DUContext * origin, const KTextEditor::Cursor& position) const;
+  bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
   Q_DECLARE_PRIVATE(TopDUContext)
   friend class DUChain; //To allow access to setParsingEnvironmentFile
 };

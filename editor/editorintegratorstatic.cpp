@@ -43,14 +43,6 @@ EditorIntegratorStatic::EditorIntegratorStatic()
 
 EditorIntegratorStatic::~EditorIntegratorStatic()
 {
-  QHashIterator<HashedString, QVector<KTextEditor::Range*> > it = topRanges;
-  while (it.hasNext()) {
-    it.next();
-    foreach (KTextEditor::Range* range, it.value())
-      if (range && range->isSmartRange())
-        range->toSmartRange()->removeWatcher(this);
-  }
-
   delete mutex;
 }
 
@@ -77,11 +69,6 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
   while (it.hasNext()) {
     it.next();
     if (it.value() == document) {
-      if (topRanges.contains(it.key())) {
-        kDebug(9506) << "Document URL change - found corresponding document";
-        topRanges.insert(document->url().prettyUrl(), topRanges.take(it.key()));
-      }
-
       it.remove();
       documents.insert(document->url().prettyUrl(), document);
       // TODO trigger reparsing??
@@ -97,34 +84,9 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 
   documents.remove(document->url().prettyUrl());
 
-  foreach (KTextEditor::Range* range, topRanges[document->url().prettyUrl()])
-    if (range && range->isSmartRange())
-      range->toSmartRange()->removeWatcher(this);
-
-  topRanges.remove(document->url().prettyUrl());
-
   lock.unlock();
   
   emit documentAboutToBeDeleted(document);
-}
-
-void EditorIntegratorStatic::rangeDeleted(KTextEditor::SmartRange * range)
-{
-  QMutexLocker lock(mutex);
-
-  QMutableHashIterator<HashedString, QVector<KTextEditor::Range*> > it = topRanges;
-  while (it.hasNext()) {
-    it.next();
-    //kDebug(9506) << "Searching for" << range << ", potentials" << it.value().toList();
-    int index = it.value().indexOf(range);
-    if (index != -1) {
-      it.value()[index] = 0;
-      return;
-    }
-  }
-
-  // Should have found the top level range by now
-  kWarning() << "Could not find record of top level range" << range << "!" ;
 }
 
 }

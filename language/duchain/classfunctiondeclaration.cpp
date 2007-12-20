@@ -31,7 +31,9 @@ Identifier conversionIdentifier("operator{...cast...}");
 class ClassFunctionDeclarationPrivate : public ClassMemberDeclarationPrivate
 {
 public:
-  ClassFunctionDeclarationPrivate() {}
+  ClassFunctionDeclarationPrivate() {
+    m_functionType = ClassFunctionDeclaration::Normal;
+  }
   ClassFunctionDeclarationPrivate( const ClassFunctionDeclarationPrivate& rhs )
       : ClassMemberDeclarationPrivate( rhs )
   {
@@ -41,10 +43,9 @@ public:
 };
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs) 
-    : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate( *rhs.d_func() ), 
-                             HashedString(), 0, rhs.scope())
+    : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate( *rhs.d_func() ))
       , AbstractFunctionDeclaration(rhs) {
-  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
@@ -52,10 +53,9 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   ClassMemberDeclaration::setAbstractType(type);
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
+ClassFunctionDeclaration::ClassFunctionDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
   : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate, url, range, ClassScope), AbstractFunctionDeclaration()
 {
-  d_func()->m_functionType = Normal;
   if( context )
     setContext( context );
 }

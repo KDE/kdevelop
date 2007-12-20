@@ -28,6 +28,8 @@
 
 #include "documentcursor.h"
 #include "documentrange.h"
+#include "simplecursor.h"
+#include "simplerange.h"
 
 namespace KDevelop
 {
@@ -41,8 +43,11 @@ class DocumentRangeObjectPrivate;
 class KDEVPLATFORMEDITOR_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
-    DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, KTextEditor::Range* range);
-    DocumentRangeObject(const HashedString& document, KTextEditor::Range* range);
+    /**
+     * @param range May be invalid, then it is not changed(So it can come from a copy constructor)
+     * @param document May be emty, then it will not be changed(can come from a copy constructor)
+     * */
+    DocumentRangeObject(const HashedString& document, const SimpleRange& range);
     virtual ~DocumentRangeObject();
 
     enum RangeOwning{ Own, DontOwn };
@@ -53,40 +58,43 @@ public:
      * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
      * deleted when the object is deleted.
      */
-    void setTextRange(const HashedString& document, KTextEditor::Range* range, RangeOwning ownsRange = Own);
+    void setSmartRange(KTextEditor::SmartRange* range, RangeOwning ownsRange = Own);
 
     void setRangeOwning(RangeOwning ownsRange);
 
-    void setRange(const KTextEditor::Range& range);
+    void setRange(const SimpleRange& range);
     ///Returns the text-range. Needs to be a reference for performance-reasons.
-    const KTextEditor::Range& textRange() const;
-    const DocumentRange textDocRange() const;
-    KTextEditor::Range* textRangePtr() const;
+    SimpleRange range() const;
     ///If this document's range is a SmartRange, returns it. Else 0.
     KTextEditor::SmartRange* smartRange() const;
 
-    static HashedString url(const KTextEditor::Range* cursor);
+    //static HashedString url(const KTextEditor::Range* cursor);
 
     RangeOwning ownsRange() const;
 
+    void setUrl(const HashedString& document);
     ///Returns the url, for efficiency as a HashedString. This allows fast comparison. It is was from a real url using prettyUrl() at some point.
     HashedString url() const;
-  //    static KUrl url(const KTextEditor::Range* range);
 
-    bool contains(const DocumentCursor& cursor) const;
-
-    virtual void rangeDeleted(KTextEditor::SmartRange* range);
+    bool contains(const SimpleCursor& cursor) const;
+    //bool contains(const KTextEditor::Cursor& cursor) const;
 
     /// Take the range from this object. USE WITH CARE!! You must be willing to
     /// immediately delete this range object if you take its range.
-    KTextEditor::Range* takeRange();
+    KTextEditor::SmartRange* takeRange();
 
 protected:
     // Mutex protects all DocumentRangeObject internals from threading-conditioned corruption
     static QMutex m_mutex;
 
+    DocumentRangeObject(DocumentRangeObjectPrivate& dd);
+    DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range);
+    
     DocumentRangeObjectPrivate* const d_ptr;
 private:
+
+    virtual void rangeDeleted(KTextEditor::SmartRange* range);
+    
     Q_DISABLE_COPY(DocumentRangeObject)
     Q_DECLARE_PRIVATE(DocumentRangeObject)
 };

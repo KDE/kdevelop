@@ -29,5 +29,7 @@ install(FILES
     editorintegrator.h
     editorexport.h
     hashedstring.h
+    simplecursor.h
+    simplerange.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/editor
  )

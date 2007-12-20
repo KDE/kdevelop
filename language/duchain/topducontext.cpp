@@ -122,7 +122,7 @@ DUContext::ImportTrace TopDUContext::importTrace(const TopDUContext* target) con
   }
 
 
-TopDUContext::TopDUContext(const HashedString& url, KTextEditor::Range* range, ParsingEnvironmentFile* file)
+TopDUContext::TopDUContext(const HashedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
   : DUContext(*new TopDUContextPrivate(this), url, range)
 {
   Q_D(TopDUContext);
@@ -162,7 +162,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
   d_func()->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 }
 
-bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const
+bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -176,7 +176,7 @@ bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& id
   return true;
 }
 
-QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const
+QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const SimpleCursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -202,7 +202,7 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
         // The declaration doesn't match the type filter we are applying
         continue;
 
-      if (dec->textRange().start() >= position)
+      if (dec->range().start >= position)
         if(!dec->context() || dec->context()->type() != Class)
             continue; // The declaration is behind the position we're searching from, therefore not accessible
     }
@@ -216,7 +216,7 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
 }
 
 
-void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const KTextEditor::Cursor& position, bool canBeNamespace, int startPos, int endPos ) const
+void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const SimpleCursor& position, bool canBeNamespace, int startPos, int endPos ) const
 {
   QList<QualifiedIdentifier> currentIdentifiers = identifiers;
   int pos = startPos;
@@ -252,7 +252,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
               temp << identifierInImport;
               
               if( alias->importIdentifier().count() )
-                applyAliases(temp, newCurrentIdentifiers, alias->textRange().start(), canBeNamespace, alias->importIdentifier().count(), pos+1);
+                applyAliases(temp, newCurrentIdentifiers, alias->range().start, canBeNamespace, alias->importIdentifier().count(), pos+1);
               else
                 kDebug(9505) << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << " is \"" << alias->importIdentifier() << "\"";
             }
@@ -273,7 +273,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
               if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
                 continue;
               
-              if( aliasDecl->textRange().end() > position )
+              if( aliasDecl->range().end > position )
                 continue;
 
               addUnmodified = false; //The un-modified identifier can be ignored, because it will be replaced with the resolved alias
@@ -285,7 +285,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
               temp << alias->importIdentifier() + identifier.mid(pos+1);
 
               if( alias->importIdentifier().count() )
-                applyAliases(temp, newCurrentIdentifiers, alias->textRange().start(), canBeNamespace, alias->importIdentifier().count(), pos+1);
+                applyAliases(temp, newCurrentIdentifiers, alias->range().start, canBeNamespace, alias->importIdentifier().count(), pos+1);
               else
                 kDebug(9505) << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << "\" is \"" << alias->importIdentifier() << "\"";
             }
@@ -305,7 +305,7 @@ void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, 
   target += currentIdentifiers;
 }
 
-void TopDUContext::findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& baseIdentifiers, const KTextEditor::Cursor& position, QList<DUContext*>& ret, SearchFlags flags) const {
+void TopDUContext::findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const {
 
   Q_UNUSED(flags);
   QList<QualifiedIdentifier> targetIdentifiers;
@@ -317,7 +317,7 @@ void TopDUContext::findContextsInternal(ContextType contextType, const QList<Qua
   }
 }
 
-void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const
+void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret) const
 {
   ENSURE_CAN_READ
 
@@ -336,7 +336,7 @@ void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*
       if (context->type() != contextType)
         continue;
 
-      if (context->textRange().start() > position)
+      if (context->range().start > position)
         if(!context->parentContext() || context->parentContext()->type() != Class)
             continue;
     }
@@ -355,14 +355,14 @@ bool TopDUContext::deleting() const
   return d_func()->m_deleting;
 }
 
-bool TopDUContext::imports(const DUContext * origin, const KTextEditor::Cursor& position) const
+bool TopDUContext::imports(const DUContext * origin, const SimpleCursor& position) const
 {
   ENSURE_CAN_READ
 
   return importsPrivate(origin, position);
  }
 
-bool TopDUContext::importsPrivate(const DUContext * origin, const KTextEditor::Cursor& position) const
+bool TopDUContext::importsPrivate(const DUContext * origin, const SimpleCursor& position) const
 {
   Q_UNUSED(position);
   // TODO use position
@@ -375,7 +375,7 @@ bool TopDUContext::importsPrivate(const DUContext * origin, const KTextEditor::C
   }
  }
 
-void TopDUContext::addImportedParentContext(DUContext* context, const KTextEditor::Cursor& position, bool anonymous) {
+void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool anonymous) {
   d_func()->m_importsCache.remove(static_cast<TopDUContext*>(context));
   DUContext::addImportedParentContext(context, position, anonymous);
 }

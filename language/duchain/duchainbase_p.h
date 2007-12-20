@@ -22,12 +22,18 @@
 #define DUCHAINBASE_P_H
 
 #include "documentrangeobject_p.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {
 
-class DUChainBasePrivate : public DocumentRangeObjectPrivate
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainBasePrivate : public DocumentRangeObjectPrivate
 {
+  public:
+  DUChainBasePrivate() {
+  }
+  DUChainBasePrivate(const DUChainBasePrivate& rhs) : DocumentRangeObjectPrivate(rhs) {
+  }
 };
 
 }

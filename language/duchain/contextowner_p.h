@@ -24,7 +24,7 @@ namespace KDevelop
 
 class DUContext;
 
-struct ContextOwnerPrivate
+struct KDEVPLATFORMLANGUAGE_EXPORT ContextOwnerPrivate
 {
   ContextOwnerPrivate();
   DUContext* m_internalContext;

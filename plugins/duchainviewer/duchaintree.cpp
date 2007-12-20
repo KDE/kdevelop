@@ -64,7 +64,7 @@ void DUChainTree::contextActivated(const QModelIndex& index)
   DUChainBasePointer* base = model()->objectForIndex(index);
   if (base && base->data()) {
     IDocument* doc = mplugin->core()->documentController()->activeDocument();
-    doc->textDocument()->activeView()->setSelection((*base)->textRange());
+    doc->textDocument()->activeView()->setSelection((*base)->range().textRange());
   }
 }
 

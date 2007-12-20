@@ -53,7 +53,7 @@ bool IdentifiedType::equals(const IdentifiedType* rhs) const
   if( !d->m_declaration )
     return false;
 
-  return d->m_declaration.data()->textRange() == rhs->d->m_declaration->textRange()
+  return d->m_declaration.data()->range() == rhs->d->m_declaration->range()
          && d->m_declaration.data()->url() == rhs->d->m_declaration->url();
 }
 

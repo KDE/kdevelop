@@ -33,6 +33,8 @@ namespace KDevelop
 UsePrivate::UsePrivate( Use* u)
   : m_use(u)
 {
+  m_context = 0;
+  m_declaration = 0;
 }
 
 void UsePrivate::setDeclaration(Declaration* declaration)
@@ -49,12 +51,9 @@ void UsePrivate::setDeclaration(Declaration* declaration)
 }
 
 
-Use::Use(const HashedString& url, KTextEditor::Range* range, DUContext* context)
+Use::Use(const HashedString& url, const SimpleRange& range, DUContext* context)
   : DUChainBase(*new UsePrivate(this), url, range)
 {
-  Q_D(Use);
-  d->m_context = 0;
-  d->m_declaration = 0;
   if (context)
     setContext(context);
 }

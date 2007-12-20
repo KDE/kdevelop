@@ -38,7 +38,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Use : public DUChainBase
   friend class ForwardDeclaration;
 
 public:
-  Use(const HashedString& url, KTextEditor::Range* range, DUContext* context);
+  Use(const HashedString& url, const SimpleRange& range, DUContext* context);
   virtual ~Use();
 
   virtual TopDUContext* topContext() const;

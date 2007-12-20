@@ -37,7 +37,7 @@ class DUChainPointerData;
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
 {
 public:
-  DUChainBase(const HashedString& url, KTextEditor::Range* range);
+  DUChainBase(const HashedString& url, const SimpleRange& range);
   virtual ~DUChainBase();
 
   virtual TopDUContext* topContext() const;
@@ -49,7 +49,8 @@ public:
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
 protected:
-  DUChainBase( class DUChainBasePrivate& dd, const HashedString& url, KTextEditor::Range* range );
+  DUChainBase( class DUChainBasePrivate& dd );
+  DUChainBase( class DUChainBasePrivate& dd, const HashedString& url, const SimpleRange& range );
   
 private:
   Q_DECLARE_PRIVATE(DUChainBase)

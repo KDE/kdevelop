@@ -53,7 +53,7 @@ DeclarationPrivate::DeclarationPrivate()
 }
   
   
-DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs )
+DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChainBasePrivate(rhs)
 {
   m_identifier = rhs.m_identifier;
   m_type = rhs.m_type;
@@ -85,7 +85,7 @@ bool Declaration::inDUChain() const {
   return top && top->inDuChain();
 }
 
-Declaration::Declaration(const HashedString& url, KTextEditor::Range* range, Scope scope, DUContext* context )
+Declaration::Declaration( const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context )
   : DUChainBase(*new DeclarationPrivate, url, range)
   , ContextOwner(this)
 {
@@ -95,20 +95,20 @@ Declaration::Declaration(const HashedString& url, KTextEditor::Range* range, Sco
 }
 
 Declaration::Declaration(const Declaration& rhs) 
-  : DUChainBase(*new DeclarationPrivate( *rhs.d_func() ), HashedString(), 0), 
+  : DUChainBase(*new DeclarationPrivate( *rhs.d_func() )),
     ContextOwner(this) {
-  setTextRange(rhs.url(), rhs.textRangePtr(), DocumentRangeObject::DontOwn);
+  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, KTextEditor::Range* range, Scope scope )
+Declaration::Declaration( DeclarationPrivate & dd ) : DUChainBase(dd), ContextOwner(this)
+{
+}
+
+Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range, Scope scope )
   : DUChainBase(dd, url, range), ContextOwner(this)
 {
-  
   Q_D(Declaration);
-  d->m_context = 0;
   d->m_scope = scope;
-  d->m_definition = 0;
-  d->m_kind = Declaration::Instance;
 }
 
 Declaration::~Declaration()

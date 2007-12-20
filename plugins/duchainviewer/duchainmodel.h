@@ -95,7 +95,7 @@ private:
         it.next();
 
     if (it.hasPrevious())
-      return it.peekPrevious()->textRange().start();
+      return it.peekPrevious()->range().textRange().start();
 
     return KTextEditor::Cursor::invalid();
   }

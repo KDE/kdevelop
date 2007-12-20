@@ -74,7 +74,7 @@ void DumpDotGraphPrivate::addDeclaration(QTextStream& stream, Declaration* dec) 
       "[shape=distortion,label=\"" <<
       dec->toString() << " [" <<
       dec->qualifiedIdentifier().toString() << "]" << " " <<
-      rangeToString(dec->textRange()) << "\"];\n";
+      rangeToString(dec->range().textRange()) << "\"];\n";
   stream << shortLabel(dec->context()) << " -> " << shortLabel(dec) << "[color=green];\n";
   if( dec->internalContext() )
     stream << shortLabel(dec) << " -> " << shortLabel(dec->internalContext()) << "[label=\"internal\", color=blue];\n";
@@ -86,7 +86,7 @@ void DumpDotGraphPrivate::addDefinition(QTextStream& stream, Definition* def) {
 
   m_hadObjects[def] = true;
   
-  stream << shortLabel(def) <<  "[shape=regular,color=yellow,label=\"" << (def->declaration() ? def->declaration()->toString() : QString("no declaration")) << " "<< rangeToString(def->textRange()) <<  "\"];\n";
+  stream << shortLabel(def) <<  "[shape=regular,color=yellow,label=\"" << (def->declaration() ? def->declaration()->toString() : QString("no declaration")) << " "<< rangeToString(def->range().textRange()) <<  "\"];\n";
   stream << shortLabel(def->context()) << " -> " << shortLabel(def) << ";\n";
   if( def->declaration() ) {
     stream << shortLabel(def) << " -> " << shortLabel(def->declaration()) << "[label=\"defines\",color=green];\n";
@@ -145,7 +145,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       label = "Proxy-context " + label;
   }else{
     label = /*"context " + */context->localScopeIdentifier().toString();
-    label += ' ' + rangeToString(context->textRange());
+    label += ' ' + rangeToString(context->range().textRange());
   }
 
   //label = QString("%1 ").arg((size_t)context) + label;

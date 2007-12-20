@@ -28,6 +28,7 @@
 #include "duchainbase_p.h"
 
 #include "duchainpointer.h"
+#include "simplecursor.h"
 
 namespace KDevelop{
 class DUContext;
@@ -41,7 +42,7 @@ public:
   ContextOwner* m_owner;
   QList<DUContextPointer> m_importedParentContexts;
   ///Contains the import-positions of those imported contexts that have a valid one
-  QMap<DUContextPointer, KTextEditor::Cursor> m_importedParentContextPositions;
+  QMap<DUContextPointer, SimpleCursor> m_importedParentContextPositions;
   QList<DUContext*> m_childContexts;
   QList<DUContext*> m_importedChildContexts;
 

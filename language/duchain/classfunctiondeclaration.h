@@ -34,8 +34,7 @@ class ClassFunctionDeclarationPrivate;
 class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberDeclaration, public AbstractFunctionDeclaration
 {
 public:
-  ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs);
-  ClassFunctionDeclaration(const HashedString& url, KTextEditor::Range* range, DUContext* context);
+  ClassFunctionDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
   ~ClassFunctionDeclaration();
 
   enum QtFunctionType
@@ -69,6 +68,8 @@ public:
   virtual void setAbstractType(AbstractType::Ptr type);
 
   virtual Declaration* clone() const;
+protected:
+  ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs);
 private:
   Q_DECLARE_PRIVATE(ClassFunctionDeclaration)
 };

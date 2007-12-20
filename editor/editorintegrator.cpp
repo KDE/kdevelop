@@ -31,7 +31,6 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "documentrange.h"
 #include "documentrangeobject.h"
 #include "hashedstring.h"
 
@@ -47,10 +46,10 @@ public:
   KTextEditor::Document* m_currentDocument;
   KTextEditor::SmartInterface* m_smart;
 
-  QStack<KTextEditor::Range*> m_currentRangeStack;
+  QStack<KTextEditor::SmartRange*> m_currentRangeStack;
   KTextEditor::Range m_newRangeMarker;
   template<class RangeType>
-  Range* createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior );
+  SmartRange* createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior );
 };
 
 K_GLOBAL_STATIC( EditorIntegratorStatic, s_data)
@@ -95,19 +94,14 @@ SmartInterface* EditorIntegrator::smart() const
   return d->m_smart;
 }
 
-Cursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
+SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
 {
-  Cursor* ret = 0;
-
   if (SmartInterface* iface = smart()) {
     QMutexLocker lock(iface->smartMutex());
-    ret = iface->newSmartCursor(position);
+    return iface->newSmartCursor(position);
+  }else{
+      return 0;
   }
-
-  if (!ret)
-    ret = new DocumentCursor(d->m_currentUrl, position);
-
-  return ret;
 }
 
 Document* EditorIntegrator::currentDocument() const
@@ -115,16 +109,16 @@ Document* EditorIntegrator::currentDocument() const
   return d->m_currentDocument;
 }
 
-Range* EditorIntegrator::topRange( TopRangeType /*type*/)
+SmartRange* EditorIntegrator::topRange( TopRangeType /*type*/)
 {
   QMutexLocker lock(data()->mutex);
 
+  if(!smart())
+      return 0;
+  
   Q_ASSERT(d->m_currentRangeStack.isEmpty());
   
-  if (!data()->topRanges.contains(currentUrl()))
-    data()->topRanges.insert(currentUrl(), QVector<Range*>(TopRangeCount));
-  
-  Range* newRange = 0;
+  SmartRange* newRange = 0;
   if (currentDocument()) {
     newRange = createRange(currentDocument()->documentRange(), KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
     Q_ASSERT(!dynamic_cast<KTextEditor::SmartRange*>(newRange) || static_cast<KTextEditor::SmartRange*>(newRange)->parentRange() == 0 || static_cast<KTextEditor::SmartRange*>(newRange)->childRanges().count() == 0);
@@ -143,7 +137,7 @@ Range* EditorIntegrator::topRange( TopRangeType /*type*/)
 }
 
 template<>
-Range* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
+SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
   SmartInterface* iface = m_smart;
   
@@ -205,55 +199,29 @@ Range* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor::Rang
   return ret;
 }
 
-
-template<>
-Range* EditorIntegratorPrivate::createRange<DocumentRange>( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors /*insertBehavior*/ )
+SmartRange* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
-  DocumentRange* currentRange = 0;
-
-  if( !m_currentRangeStack.isEmpty() ) {
-    currentRange = dynamic_cast<DocumentRange*>(m_currentRangeStack.top());
-    Q_ASSERT(currentRange);
-  }
-
-  DocumentRange* ret = new DocumentRange(m_currentUrl, range);
-
-  if (currentRange)
-    ret->setParentRange( currentRange );
-
-  m_currentRangeStack << ret;
-  return ret;
-}
-
-Range* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
-{
+  if(!smart())
+      return 0;
   SmartInterface* iface = smart();
   
   QMutexLocker lock(iface ? iface->smartMutex() : 0);
 
-  if( iface && ( d->m_currentRangeStack.isEmpty() || d->m_currentRangeStack.top()->isSmartRange() ) )
-    return d->createRange<SmartRange>(range, insertBehavior);
-  else {
-    if( !d->m_currentRangeStack.isEmpty() && d->m_currentRangeStack.top()->isSmartRange() ) {
-      //This should never happen
-      kDebug() << "EditorIntegrator: WARNING: Creating a document-range as slave of a smart-range";
-    }
-    return d->createRange<DocumentRange>(range, insertBehavior);
-  }
+  return d->createRange<SmartRange>(range, insertBehavior);
 }
 
 
-Range* EditorIntegrator::createRange( const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
+SmartRange* EditorIntegrator::createRange( const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
 {
   return createRange(Range(start, end));
 }
 
-Range* EditorIntegrator::createRange()
+SmartRange* EditorIntegrator::createRange()
 {
   return createRange(d->m_newRangeMarker);
 }
 
-void EditorIntegrator::setNewRange(const KTextEditor::Range& range)
+void EditorIntegrator::setNewRange(const KTextEditor::SmartRange& range)
 {
   d->m_newRangeMarker = range;
 }
@@ -268,12 +236,14 @@ void EditorIntegrator::setNewStart( const KTextEditor::Cursor & position )
   d->m_newRangeMarker.start() = position;
 }
 
- void EditorIntegrator::setCurrentRange( KTextEditor::Range* range )
- {
+ void EditorIntegrator::setCurrentRange( KTextEditor::SmartRange* range )
+{
+   if(!range)
+     return;
    d->m_currentRangeStack << range;
  }
 
-Range* EditorIntegrator::currentRange( ) const
+SmartRange* EditorIntegrator::currentRange( ) const
 {
   if( !d->m_currentRangeStack.isEmpty() )
     return d->m_currentRangeStack.top();
@@ -293,28 +263,18 @@ void EditorIntegrator::setCurrentUrl(const HashedString& url)
   d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
 }
 
-void EditorIntegrator::releaseTopRange(KTextEditor::Range * range)
+void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)
 {
   QMutexLocker lock(data()->mutex);
-
-  HashedString url = DocumentRangeObject::url(range);
 
   if (range->isSmartRange())
     range->toSmartRange()->removeWatcher(data());
 
-  if (data()->topRanges.contains(url)) {
-    QVector<Range*>& ranges = data()->topRanges[url];
-    int index = ranges.indexOf(range);
-    if (index != -1) {
-      ranges[index] = 0;
-      return;
-    }
-  }
-
+  delete range;
   //kWarning() << "Could not find top range to delete." ;
 }
 
-void EditorIntegrator::releaseRange(KTextEditor::Range* range)
+void EditorIntegrator::releaseRange(KTextEditor::SmartRange* range)
 {
   if (range) {
     if (range->isSmartRange()) {

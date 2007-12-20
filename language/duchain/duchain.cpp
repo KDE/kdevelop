@@ -317,7 +317,8 @@ void DUChain::clear()
 {
   DUChainWriteLocker writeLock(lock());
   foreach (TopDUContext* context, sdDUChainPrivate->m_chains) {
-    KDevelop::EditorIntegrator::releaseTopRange(context->textRangePtr());
+    if( context->smartRange() )
+      KDevelop::EditorIntegrator::releaseTopRange(context->smartRange());
     delete context;
   }
 

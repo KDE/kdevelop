@@ -78,6 +78,11 @@ install(FILES
     duchain/ducontext.h
     duchain/topducontext.h
     duchain/declaration.h
+    duchain/declaration_p.h
+    duchain/duchainbase_p.h
+    duchain/ducontext_p.h
+    duchain/contextowner_p.h
+    duchain/classmemberdeclaration_p.h
     duchain/definition.h
     duchain/classmemberdeclaration.h
     duchain/classfunctiondeclaration.h

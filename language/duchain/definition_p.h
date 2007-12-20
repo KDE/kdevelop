@@ -27,7 +27,7 @@ namespace KDevelop
 {
 class Definition;
 
-class DefinitionPrivate : public DUChainBasePrivate
+class KDEVPLATFORMLANGUAGE_EXPORT DefinitionPrivate : public DUChainBasePrivate
 {
 public:
   DefinitionPrivate( Definition* d);

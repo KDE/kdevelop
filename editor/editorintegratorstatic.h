@@ -49,8 +49,6 @@ public:
   EditorIntegratorStatic();
   virtual ~EditorIntegratorStatic();
 
-  virtual void rangeDeleted(KTextEditor::SmartRange* range);
-
 Q_SIGNALS:
   void documentAboutToBeDeleted(KTextEditor::Document* document);
 
@@ -68,7 +66,6 @@ public:
   QMutex* mutex;
 
   QHash<HashedString, KTextEditor::Document*> documents;
-  QHash<HashedString, QVector<KTextEditor::Range*> > topRanges;
 
   /* FIXME port to this?
 
