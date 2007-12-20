@@ -407,7 +407,7 @@ void CPPInternalParseJob::run()
 
                 ///Add all our imports to the re-used context
                 foreach( const LineContextPair& import, chains )
-                    topContext->addImportedParentContext(import.context, KTextEditor::Cursor(import.sourceLine, 0));
+                    topContext->addImportedParentContext(import.context, SimpleCursor(import.sourceLine, 0));
                 if( !topContext ) {
                     kDebug( 9007 ) << "Context was deleted while parsing";
                     return;

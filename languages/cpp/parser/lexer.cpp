@@ -1813,9 +1813,9 @@ KDevelop::Problem Lexer::createProblem() const
 
   KDevelop::Problem p; // ### fill me
 
-  KTextEditor::Cursor position = session->positionAt(index - 1);
+  KDevelop::SimpleCursor position = session->positionAt(index - 1);
 
-  p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position, 1)));
+  p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.textCursor(), 1)));
 
   return p;
 }

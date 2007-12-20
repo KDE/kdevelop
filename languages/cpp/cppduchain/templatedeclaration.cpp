@@ -158,7 +158,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         identifiers << delayedType->qualifiedIdentifier();
         QList<Declaration*> decls;
         
-        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->textRange().end(), AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) ) {
+        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) ) {
           kDebug(9007) << "stopping exchange because template involved";
           return const_cast<AbstractType*>(type);
         }
@@ -345,8 +345,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
   if( context ) {
     ///Specialize involved contexts
     Q_ASSERT(context->parentContext()); //Top-context is not allowed
-    contextCopy = new StandardCppDUContext(context->url(), context->textRangePtr(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be instantiated
-    contextCopy->setRangeOwning(KDevelop::DocumentRangeObject::DontOwn); //The range belongs to the original context, so flag it not to be owned by the context
+    contextCopy = new StandardCppDUContext(context->url(), context->range(), parentContext, true); //We do not need to care about TopDUContext here, because a top-context can not be instantiated
+    contextCopy->setSmartRange(context->smartRange(), KDevelop::DocumentRangeObject::DontOwn); //The range belongs to the original context, so flag it not to be owned by the context
     contextCopy->setType(context->type());
     contextCopy->setLocalScopeIdentifier(context->localScopeIdentifier());
 
@@ -392,12 +392,12 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
       if( importedContext->type() == KDevelop::DUContext::Template || importedContext->type() == KDevelop::DUContext::Function )
       {
         DUContext* ctx = instantiateDeclarationContext( parentContext, inclusionTrace, importedContext.data(), templateArguments, 0, 0);
-        contextCopy->addImportedParentContext( ctx, KTextEditor::Cursor(), true );
+        contextCopy->addImportedParentContext( ctx, SimpleCursor(), true );
       }
       else
       {
         //Import all other imported contexts
-        contextCopy->addImportedParentContext( importedContext.data(), KTextEditor::Cursor::invalid(), true );
+        contextCopy->addImportedParentContext( importedContext.data(), SimpleCursor::invalid(), true );
       }
     }
 
@@ -417,7 +417,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
             {
               if( baseClass->declaration() && baseClass->declaration()->internalContext() )
               {
-                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), KTextEditor::Cursor::invalid(), true );
+                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), SimpleCursor::invalid(), true );
               }
             } else {
               kDebug(9007) << "Resolved bad base-class";

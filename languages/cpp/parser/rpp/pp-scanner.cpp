@@ -261,12 +261,12 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
       continue;
 
     } else if (input.current().isLetter() || input == '_') {
-      KTextEditor::Cursor inputPosition = input.inputPosition();
+      KDevelop::SimpleCursor inputPosition = input.inputPosition();
       output.appendString(inputPosition, skip_identifier(input));
       continue;
 
     } else if (input.current().isNumber()) {
-      KTextEditor::Cursor inputPosition = input.inputPosition();
+      KDevelop::SimpleCursor inputPosition = input.inputPosition();
       output.appendString(inputPosition, skip_number(input));
       continue;
 

@@ -143,7 +143,7 @@ void TestDUChain::initTestCase()
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-  topContext = new TopDUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(0,0,25,0)));
+  topContext = new TopDUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(0,0),SimpleCursor(25,0)));
   DUChainWriteLocker lock(DUChain::lock());
   
   DUChain::self()->addDocumentChain(IdentifiedFile(file1.prettyUrl()), topContext);
@@ -161,11 +161,11 @@ void TestDUChain::cleanupTestCase()
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  KDevelop::EditorIntegrator::releaseTopRange(topContext->textRangePtr());
+  //KDevelop::EditorIntegrator::releaseTopRange(topContext->textRangePtr());
   delete topContext;
 }
 
-Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& id, const Cursor& position)
+Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& id, const SimpleCursor& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -173,7 +173,7 @@ Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& 
   return 0;
 }
 
-Declaration* TestDUChain::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const Cursor& position)
+Declaration* TestDUChain::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const SimpleCursor& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -249,19 +249,19 @@ void TestDUChain::testContextRelationships()
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  DUContext* firstChild = new DUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(4,4, 10,3)), topContext);
+  DUContext* firstChild = new DUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(4,4), SimpleCursor(10,3)), topContext);
 
   QCOMPARE(firstChild->parentContext(), topContext);
   QCOMPARE(firstChild->childContexts().count(), 0);
   QCOMPARE(topContext->childContexts().count(), 1);
   QCOMPARE(topContext->childContexts().last(), firstChild);
 
-  DUContext* secondChild = new DUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(14,4, 19,3)), topContext);
+  DUContext* secondChild = new DUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(14,4), SimpleCursor(19,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 2);
   QCOMPARE(topContext->childContexts()[1], secondChild);
 
-  DUContext* thirdChild = new DUContext(file1.prettyUrl(), new KDevelop::DocumentRange(file1.prettyUrl(), Range(10,4, 14,3)), topContext);
+  DUContext* thirdChild = new DUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(10,4), SimpleCursor(14,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 3);
   QCOMPARE(topContext->childContexts()[1], thirdChild);
@@ -947,7 +947,7 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(bar->identifier(), Identifier("bar"));
   QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
   QCOMPARE(bar->uses().count(), 1);
-  QCOMPARE(findDeclaration(top, bar->identifier(), top->textRange().start()), noDef);
+  QCOMPARE(findDeclaration(top, bar->identifier(), top->range().start), noDef);
   QCOMPARE(findDeclaration(top, bar->identifier()), bar);
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
 
@@ -2019,7 +2019,7 @@ void TestDUChain::testHashedStringRepository() {
 
 void TestDUChain::release(DUContext* top)
 {
-  KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
+  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
   if(dynamic_cast<TopDUContext*>(top))
     DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
   //delete top;

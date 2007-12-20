@@ -72,7 +72,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   KTextEditor::Range range;
   QString text;
   {
-    range = KTextEditor::Range(context->textRange().start(), position);
+    range = KTextEditor::Range(context->range().start.textCursor(), position);
     text = doc->text(range);
   }
 
@@ -111,7 +111,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
           if (m_abort)
             return;
 
-          foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->textRange().end(), context->topContext(), false ) ) )
+          foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, context->topContext(), false ) ) )
             items << CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data();
         }
       } else {
@@ -134,7 +134,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     } else {
       //Show all visible declarations
 
-      foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( context->allDeclarations(context->type() == DUContext::Class ? context->textRange().end() : position, context->topContext()) ) ) {
+      foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( context->allDeclarations(context->type() == DUContext::Class ? context->range().end : SimpleCursor(position), context->topContext()) ) ) {
         if (m_abort)
           return;
         items << CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data();

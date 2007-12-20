@@ -29,6 +29,10 @@
 class ParseSession;
 class OperatorAST;
 
+namespace KDevelop {
+  class SimpleCursor;
+}
+
 namespace Cpp {
   class ExpressionVisitor;
 }
@@ -36,7 +40,7 @@ namespace Cpp {
 class KDEVCPPDUCHAIN_EXPORT NameASTVisitor: protected DefaultVisitor
 {
 public:
-  NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& trace, const KTextEditor::Cursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags);
+  NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& trace, const KDevelop::SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags);
 
   void run(NameAST *node);
   void run(UnqualifiedNameAST *node);

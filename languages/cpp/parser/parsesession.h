@@ -24,7 +24,7 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
-#include <ktexteditor/cursor.h>
+#include <editor/simplecursor.h>
 
 #include <cppparserexport.h>
 #include <ksharedptr.h>
@@ -56,12 +56,12 @@ public:
    *
    * \note the return line starts from 0, not 1.
    */
-  KTextEditor::Cursor positionAt(std::size_t offset) const;
+  KDevelop::SimpleCursor positionAt(std::size_t offset) const;
 
-  void setContents(const QByteArray& contents, rpp::LocationTable* locationTable, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
+  void setContents(const QByteArray& contents, rpp::LocationTable* locationTable, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0));
 
   /// Unweildy name, but we want to be clear here, if there is already a location table, this would be the wrong setup function to call
-  void setContentsAndGenerateLocationTable(const QByteArray& contents, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
+  void setContentsAndGenerateLocationTable(const QByteArray& contents, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0));
 
   void setUrl(const KDevelop::HashedString& url);
   const KDevelop::HashedString& url() const;
@@ -74,7 +74,7 @@ public:
   pool* mempool;
   TokenStream* token_stream;
   rpp::MacroBlock* macros;
-  KTextEditor::Cursor m_contentOffset;
+  KDevelop::SimpleCursor m_contentOffset;
   KDevelop::HashedString m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:

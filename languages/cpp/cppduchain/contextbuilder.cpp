@@ -163,8 +163,6 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: recompiling";
 
-      Q_ASSERT(topLevelContext->textRangePtr());
-      
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
 
@@ -174,8 +172,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
     } else {
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: compiling";
 
-      Range* range = new DocumentRange(m_editor->currentUrl(), KTextEditor::Cursor(), KTextEditor::Cursor());
-      topLevelContext = new CppDUContext<TopDUContext>(m_editor->currentUrl(), range, const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(m_editor->currentUrl(), SimpleRange(), const_cast<Cpp::EnvironmentFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
@@ -232,16 +229,12 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
       m_recompiling = true;
 
-      Q_ASSERT(topLevelContext->textRangePtr());
-
       if (m_compilingContexts) {
         // To here...
-        Q_ASSERT(topLevelContext->textRangePtr());
-
-        if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
-          (*topLevelContext->textRangePtr()) = m_editor->currentDocument()->documentRange();
+        if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->range().textRange() != m_editor->currentDocument()->documentRange()) {
+          topLevelContext->setRange(SimpleRange(m_editor->currentDocument()->documentRange()));
           //This happens the whole file is deleted, and then a space inserted.
-          kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
+          kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->range().textRange() << " should be: " << m_editor->currentDocument()->documentRange();
         }
       }
 
@@ -252,8 +245,9 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
       Q_ASSERT(m_compilingContexts);
 
-      Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
-      topLevelContext = new CppDUContext<TopDUContext>(m_editor->currentUrl(), range, const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(m_editor->currentUrl(), m_editor->currentDocument() ? SimpleRange(m_editor->currentDocument()->documentRange()) : SimpleRange(SimpleCursor(0,0), SimpleCursor(INT_MAX, INT_MAX)), const_cast<Cpp::EnvironmentFile*>(file.data()));
+      
+      topLevelContext->setSmartRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
       topLevelContext->setType(DUContext::Global);
 
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
@@ -271,15 +265,15 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       }
 
       foreach (LineContextPair included, *includes)
-        topLevelContext->addImportedParentContext(included.context, KTextEditor::Cursor(included.sourceLine, 0));
+        topLevelContext->addImportedParentContext(included.context, SimpleCursor(included.sourceLine, 0));
     }
   }
 
   supportBuild(node);
 
-  if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->textRange() != m_editor->currentDocument()->documentRange()) {
-    kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->textRange() << " should be: " << m_editor->currentDocument()->documentRange();
-    (*topLevelContext->textRangePtr()) = m_editor->currentDocument()->documentRange();
+  if (m_editor->currentDocument() && m_editor->smart() && topLevelContext->range().textRange() != m_editor->currentDocument()->documentRange()) {
+    kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->range().textRange() << " should be: " << m_editor->currentDocument()->documentRange();
+    topLevelContext->setRange( SimpleRange(m_editor->currentDocument()->documentRange()) );
   }
 
   {
@@ -320,7 +314,7 @@ KDevelop::DUContext* ContextBuilder::buildSubContexts(const HashedString& url, A
 
     openContext(node->ducontext);
 
-    m_editor->setCurrentRange(m_editor->topRange(EditorIntegrator::DefinitionUseChain ));
+    m_editor->setCurrentRange(m_editor->topRange(EditorIntegrator::DefinitionUseChain));
 
     visit (node);
 
@@ -357,7 +351,7 @@ void ContextBuilder::supportBuild(AST *node, DUContext* context)
 
   m_editor->setCurrentUrl(currentContext()->url());
 
-  m_editor->setCurrentRange(currentContext()->textRangePtr());
+  m_editor->setCurrentRange(currentContext()->smartRange());
 
   visit (node);
 
@@ -433,7 +427,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       else if (classContexts.count() > 1) {
         kWarning(9007) << "Muliple class contexts for" << functionName.toString() << "- shouldn't happen!" ;
         foreach (DUContext* classContext, classContexts) {
-          kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->textRange() << "in" << classContext->url().str();
+          kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->range().textRange() << "in" << classContext->url().str();
         }
       }
     }
@@ -474,7 +468,7 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
 
   } else {
     openContext(rangeNode->ducontext);
-    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    m_editor->setCurrentRange(currentContext()->smartRange());
     return currentContext();
   }
 }
@@ -482,15 +476,15 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
 DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextType type)
 {
   if (m_compilingContexts) {
-    KTextEditor::Range range = m_editor->findRange(rangeNode);
-    range.end() = range.start();
+    KDevelop::SimpleRange range = m_editor->findRange(rangeNode);
+    range.end = range.start;
     DUContext* ret = openContextInternal(range, type, QualifiedIdentifier());
     rangeNode->ducontext = ret;
     return ret;
 
   } else {
     openContext(rangeNode->ducontext);
-    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    m_editor->setCurrentRange(currentContext()->smartRange());
     return currentContext();
   }
 }
@@ -504,7 +498,7 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
 
   } else {
     openContext(rangeNode->ducontext);
-    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    m_editor->setCurrentRange(currentContext()->smartRange());
     return currentContext();
   }
 }
@@ -517,12 +511,12 @@ DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::
     return ret;
   } else {
     openContext(fromRange->ducontext);
-    m_editor->setCurrentRange(currentContext()->textRangePtr());
+    m_editor->setCurrentRange(currentContext()->smartRange());
     return currentContext();
   }
 }
 
-DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
+DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
   DUContext* ret = 0L;
 
@@ -534,24 +528,25 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
 
       QMutexLocker lock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
-      Range translated = range;
+      SimpleRange translated = range;
       if (m_editor->smart())
-        translated = m_editor->smart()->translateFromRevision(translated);
+        translated = SimpleRange( m_editor->smart()->translateFromRevision(translated.textRange()) );
 
+      
       for (; nextContextIndex() < childContexts.count(); ++nextContextIndex()) {
         DUContext* child = childContexts.at(nextContextIndex());
 
-        if (child->textRange().start() > translated.end() && child->smartRange())
+        if (child->range().start > translated.end && child->smartRange())
           break;
 
-        if (child->type() == type && child->localScopeIdentifier() == identifier && child->textRange() == translated) {
+        if (child->type() == type && child->localScopeIdentifier() == identifier && child->range() == translated) {
           // Match
           ret = child;
           readLock.unlock();
           DUChainWriteLocker writeLock(DUChain::lock());
 
           ret->clearImportedParentContexts();
-          m_editor->setCurrentRange(ret->textRangePtr());
+          m_editor->setCurrentRange(ret->smartRange());
           break;
         }
       }
@@ -561,7 +556,8 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
       readLock.unlock();
       DUChainWriteLocker writeLock(DUChain::lock());
 
-      ret = new CppDUContext<DUContext>(m_editor->currentUrl(), m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
+      ret = new CppDUContext<DUContext>(m_editor->currentUrl(), SimpleRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
+      ret->setSmartRange(m_editor->createRange(range.textRange()), DocumentRangeObject::Own);
       ret->setType(type);
 
       if (!identifier.isEmpty()) {
@@ -572,7 +568,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
       }
 
       if( recompiling() )
-        kDebug(9007) << "created new context while recompiling for " << identifier.toString() << "(" << ret->textRange() << ")";
+        kDebug(9007) << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";
     }
   }
 
@@ -613,7 +609,8 @@ void ContextBuilder::closeContext()
   m_nextContextStack.pop();
 
   // Go back to the previous range
-  m_editor->exitCurrentRange();
+  if(m_editor->smart())
+    m_editor->exitCurrentRange();
 }
 
 void ContextBuilder::visitCompoundStatement(CompoundStatementAST * node)
@@ -671,7 +668,7 @@ class VerifyExpressionVisitor : public Cpp::ExpressionVisitor {
 class IdentifierVerifier : public DefaultVisitor
 {
 public:
-  IdentifierVerifier(ContextBuilder* _builder, const Cursor& _cursor)
+  IdentifierVerifier(ContextBuilder* _builder, const SimpleCursor& _cursor)
     : builder(_builder)
     , result(true)
     , cursor(_cursor)
@@ -680,7 +677,7 @@ public:
 
   ContextBuilder* builder;
   bool result;
-  Cursor cursor;
+  SimpleCursor cursor;
 
   void visitPostfixExpression(PostfixExpressionAST* node)
   {
@@ -735,7 +732,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
         
         node->expression->ducontext = currentContext();
         iv.parse(node->expression);*/
-        IdentifierVerifier iv(this, m_editor->findPosition(node->start_token));
+        IdentifierVerifier iv(this, SimpleCursor(m_editor->findPosition(node->start_token)));
         iv.visit(node->expression);
         //kDebug(9007) << m_editor->findPosition(node->start_token) << "IdentifierVerifier returned" << iv.result;
         node->expressionChosen = iv.result;
@@ -861,4 +858,8 @@ QualifiedIdentifier ContextBuilder::identifierForName(NameAST* id, TypeSpecifier
   if( typeSpecifier )
     *typeSpecifier = m_nameCompiler->lastTypeSpecifier();
   return m_nameCompiler->identifier();
+}
+
+bool ContextBuilder::smart() const {
+  return m_editor->smart();
 }

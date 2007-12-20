@@ -41,7 +41,7 @@ ParseSession::~ParseSession()
   delete m_locationTable;
 }
 
-KTextEditor::Cursor ParseSession::positionAt(std::size_t offset) const
+KDevelop::SimpleCursor ParseSession::positionAt(std::size_t offset) const
 {
   Q_ASSERT(m_locationTable);
 
@@ -68,14 +68,14 @@ const char * ParseSession::contents() const
   return m_contents.constData();
 }
 
-void ParseSession::setContents(const QByteArray & contents, rpp::LocationTable* locationTable, const KTextEditor::Cursor& offset)
+void ParseSession::setContents(const QByteArray & contents, rpp::LocationTable* locationTable, const KDevelop::SimpleCursor& offset)
 {
   m_contents = contents;
   m_contentOffset = offset;
   m_locationTable = locationTable;
 }
 
-void ParseSession::setContentsAndGenerateLocationTable(const QByteArray & contents, const KTextEditor::Cursor& offset)
+void ParseSession::setContentsAndGenerateLocationTable(const QByteArray & contents, const KDevelop::SimpleCursor& offset)
 {
   m_contents = contents;
   m_contentOffset = offset;

@@ -53,7 +53,7 @@ QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
 
   if(name.isEmpty()) {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+    problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(i18n("Macro error"));
     m_engine->problemEncountered(problem);
     return QString();
@@ -65,7 +65,7 @@ QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
         return m_frame->actuals[index];
       else {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
         problem.setDescription(i18n("Call to macro %1 missing argument number %2", name, index));
         problem.setExplanation(i18n("Formals: %1", formals.join(", ")));
         m_engine->problemEncountered(problem);
@@ -120,8 +120,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         QString identifier = skip_identifier(input);
 
-        KTextEditor::Cursor inputPosition = input.inputPosition();
-        KTextEditor::Cursor originalInputPosition = input.originalInputPosition();
+        KDevelop::SimpleCursor inputPosition = input.inputPosition();
+        KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
         QString formal = resolve_formal(identifier, input);
 
         if (!formal.isEmpty()) {
@@ -184,7 +184,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       {
         check_header_section
         
-        KTextEditor::Cursor inputPosition = input.inputPosition();
+        KDevelop::SimpleCursor inputPosition = input.inputPosition();
         QString name = skip_identifier (input);
 
         // search for the paste token
@@ -204,7 +204,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         Q_ASSERT(name.length() >= 0 && name.length() < 512);
 
-        KTextEditor::Cursor inputPosition2 = input.inputPosition();
+        KDevelop::SimpleCursor inputPosition2 = input.inputPosition();
         QString actual = resolve_formal(name, input);
         if (!actual.isEmpty()) {
           output.appendString(inputPosition2, actual);
@@ -219,7 +219,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           m_engine->setHideNextMacro(name == "defined");
 
           if (name == "__LINE__")
-            output.appendString(inputPosition, QString::number(input.inputPosition().line()));
+            output.appendString(inputPosition, QString::number(input.inputPosition().line));
           else if (name == "__FILE__")
             output.appendString(inputPosition, QString("\"%1\"").arg(m_engine->currentFile()));
           else if (name == "__DATE__")
@@ -275,7 +275,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         //In case expansion fails, we can skip back to this position
         int openingPosition = input.offset();
-        KTextEditor::Cursor openingPositionCursor = input.inputPosition();
+        KDevelop::SimpleCursor openingPositionCursor = input.inputPosition();
         
         // function like macro
         if (input.atEnd() || input != '(')
@@ -318,7 +318,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input; // skip ','
 
           {
-            KTextEditor::Cursor inputPosition = input.inputPosition();
+            KDevelop::SimpleCursor inputPosition = input.inputPosition();
             {
               Stream as(&actual);
               skip_argument_variadics(actuals, macro, input, as);

@@ -25,7 +25,7 @@
 
 #include <kurl.h>
 
-#include <ktexteditor/cursor.h>
+#include <editor/simplecursor.h>
 #include <contextbuilder.h>
 
 #include "parser.h"
@@ -58,8 +58,8 @@ class TestCppCodeCompletion : public QObject
 public:
   TestCppCodeCompletion();
 
-  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
-  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
 
 private slots:
   void initTestCase();

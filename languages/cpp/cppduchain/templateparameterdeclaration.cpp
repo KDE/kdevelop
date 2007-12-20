@@ -18,36 +18,37 @@
 
 #include "templateparameterdeclaration.h"
 #include <duchain/identifier.h>
+#include <duchain/declaration_p.h>
+
 
 using namespace KDevelop;
 
-class TemplateParameterDeclarationPrivate
+class TemplateParameterDeclarationPrivate : public DeclarationPrivate
 {
 public:
   QualifiedIdentifier m_defaultParameter;
 };
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(const HashedString& url, KTextEditor::Range * range, DUContext* context)
-  : Declaration(url, range, LocalScope, context)
-  , d(new TemplateParameterDeclarationPrivate)
+TemplateParameterDeclaration::TemplateParameterDeclaration(const HashedString& url, const KDevelop::SimpleRange& range, DUContext* context)
+  : Declaration(*new TemplateParameterDeclarationPrivate, url, range, LocalScope)
 {
+  if(context)
+    setContext(context);
 }
 
 TemplateParameterDeclaration::~TemplateParameterDeclaration()
 {
-  delete d;
 }
 
 QualifiedIdentifier TemplateParameterDeclaration::defaultParameter() const {
-  return d->m_defaultParameter;
+  return d_func()->m_defaultParameter;
 }
 
 void TemplateParameterDeclaration::setDefaultParameter(const QualifiedIdentifier& str) {
-  d->m_defaultParameter = str;
+  d_func()->m_defaultParameter = str;
 }
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(rhs), d(new TemplateParameterDeclarationPrivate) {
-  d->m_defaultParameter = rhs.d->m_defaultParameter;
+TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(*new TemplateParameterDeclarationPrivate(*rhs.d_func())) {
   setIsTypeAlias(true);
 }
 

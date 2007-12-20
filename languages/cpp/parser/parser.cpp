@@ -109,7 +109,7 @@ Comment Parser::comment() {
 
 void Parser::preparseLineComments( int tokenNumber ) {
   const Token& token( (*session->token_stream)[tokenNumber] );
-  KTextEditor::Cursor tokenPosition = KTextEditor::Cursor::invalid();
+  KDevelop::SimpleCursor tokenPosition = KDevelop::SimpleCursor::invalid();
 
   for( int a = 0; a < 40; a++ ) {
       if( !session->token_stream->lookAhead(a) ) break;
@@ -120,11 +120,11 @@ void Parser::preparseLineComments( int tokenNumber ) {
         if( !tokenPosition.isValid() ) //Get the token line. Only on-demand, because it's not cheap.
           tokenPosition = session->positionAt(token.position);
 
-        KTextEditor::Cursor commentPosition = session->positionAt( commentToken.position );
+        KDevelop::SimpleCursor commentPosition = session->positionAt( commentToken.position );
 
-        if( commentPosition.line() < tokenPosition.line() ) {
+        if( commentPosition.line < tokenPosition.line ) {
             continue;
-        } else if( commentPosition.line() == tokenPosition.line() ) {
+        } else if( commentPosition.line == tokenPosition.line ) {
             processComment( a );
         } else {
             //Too far
@@ -136,7 +136,7 @@ void Parser::preparseLineComments( int tokenNumber ) {
 
 int Parser::lineFromTokenNumber( size_t tokenNumber ) const {
   const Token& token( (*session->token_stream)[tokenNumber] );
-  return session->positionAt( token.position ).line();
+  return session->positionAt( token.position ).line;
 }
 
 
@@ -144,8 +144,8 @@ void Parser::processComment( int offset, int line ) {
   const Token& commentToken( (*session->token_stream)[session->token_stream->cursor() + offset] );
   Q_ASSERT(commentToken.kind == Token_comment);
   if( line == -1 ) {
-    KTextEditor::Cursor position = session->positionAt( commentToken.position );
-    line = position.line();
+    KDevelop::SimpleCursor position = session->positionAt( commentToken.position );
+    line = position.line;
   }
 
   m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
@@ -282,10 +282,10 @@ void Parser::reportError(const QString& msg)
       QString fileName;
 
       std::size_t tok = session->token_stream->cursor();
-      KTextEditor::Cursor position = session->positionAt(session->token_stream->position(tok));
+      KDevelop::SimpleCursor position = session->positionAt(session->token_stream->position(tok));
 
       KDevelop::Problem p;
-      p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position, 0)));
+      p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.textCursor(), 0)));
       p.setDescription(msg);
 
       control->reportProblem(p);

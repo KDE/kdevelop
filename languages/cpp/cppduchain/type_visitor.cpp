@@ -36,7 +36,7 @@
 
 TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& trace) : m_session(session), m_visitor(visitor), m_context(context), m_trace(trace)
 {
-  m_position = m_context->textRange().end();
+  m_position = m_context->range().end;
 }
 
 void TypeASTVisitor::run(TypeSpecifierAST *node)
@@ -84,7 +84,7 @@ QList<KDevelop::DeclarationPointer> TypeASTVisitor::declarations() const
 
 void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
-  Cpp::FindDeclaration find( m_context, m_trace, DUContext::NoSearchFlags, m_context->textRange().end() );
+  Cpp::FindDeclaration find( m_context, m_trace, DUContext::NoSearchFlags, m_context->range().end );
   find.openQualifiedIdentifier(false);
   
   if (const ListNode<std::size_t> *it = node->integrals)

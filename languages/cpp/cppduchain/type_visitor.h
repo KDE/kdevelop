@@ -69,7 +69,7 @@ private:
   ParseSession* m_session;
   Cpp::ExpressionVisitor* m_visitor;
   const KDevelop::DUContext* m_context;
-  KTextEditor::Cursor m_position;
+  KDevelop::SimpleCursor m_position;
   QList<KDevelop::DeclarationPointer> m_declarations;
   KDevelop::DUContext::ImportTrace m_trace;
   KDevelop::QualifiedIdentifier _M_type;

@@ -98,7 +98,7 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
   return ret;
 }
 
-QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position)
+QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const QualifiedIdentifier& identifier, const KDevelop::SimpleCursor& position)
 {
   if( context->type() == DUContext::Namespace || context->type() == DUContext::Global ) {
     ///May have been forward-declared anywhere

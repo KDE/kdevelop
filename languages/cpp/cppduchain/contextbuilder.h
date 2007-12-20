@@ -177,7 +177,7 @@ protected:
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
   
-  KDevelop::DUContext* openContextInternal(const KTextEditor::Range& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
+  KDevelop::DUContext* openContextInternal(const KDevelop::SimpleRange& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
 
   bool createContextIfNeeded(AST* node, const QList<KDevelop::DUContext*>& importedParentContexts);
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
@@ -196,6 +196,7 @@ protected:
   bool m_ownsEditorIntegrator: 1;
   bool m_compilingContexts: 1;
   bool m_recompiling : 1;
+  bool smart() const;
 
   int m_templateDeclarationDepth;
 

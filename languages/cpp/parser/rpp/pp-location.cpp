@@ -26,24 +26,24 @@ using namespace rpp;
 
 LocationTable::LocationTable()
 {
-  anchor(0, KTextEditor::Cursor(0,0));
+  anchor(0, KDevelop::SimpleCursor(0,0));
 }
 
 LocationTable::LocationTable(const QByteArray& contents)
 {
-  anchor(0, KTextEditor::Cursor(0,0));
+  anchor(0, KDevelop::SimpleCursor(0,0));
 
   const QChar newline = '\n';
   int line = 0;
 
   for (std::size_t i = 0; i < contents.size(); ++i)
     if (contents.at(i) == newline)
-      anchor(i + 1, KTextEditor::Cursor(++line, 0));
+      anchor(i + 1, KDevelop::SimpleCursor(++line, 0));
 }
 
-void LocationTable::anchor(std::size_t offset, KTextEditor::Cursor cursor)
+void LocationTable::anchor(std::size_t offset, KDevelop::SimpleCursor cursor)
 {
-  if (cursor.column()) {
+  if (cursor.column) {
     // Check to see if it's different to what we already know
     if (positionForOffset(offset) == cursor)
       return;
@@ -52,10 +52,10 @@ void LocationTable::anchor(std::size_t offset, KTextEditor::Cursor cursor)
   m_currentOffset = m_offsetTable.insert(offset, cursor);
 }
 
-KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
+KDevelop::SimpleCursor LocationTable::positionForOffset(std::size_t offset) const
 {
   // Look nearby for a match first
-  QMap<std::size_t, KTextEditor::Cursor>::ConstIterator constEnd = m_offsetTable.constEnd();
+  QMap<std::size_t, KDevelop::SimpleCursor>::ConstIterator constEnd = m_offsetTable.constEnd();
 
   if (m_currentOffset != constEnd) {
     std::size_t current = m_currentOffset.key();
@@ -107,15 +107,15 @@ KTextEditor::Cursor LocationTable::positionForOffset(std::size_t offset) const
 
   done:
   Q_ASSERT(m_currentOffset != constEnd);
-  return m_currentOffset.value() + KTextEditor::Cursor(0, offset - m_currentOffset.key());
+  return m_currentOffset.value() + KDevelop::SimpleCursor(0, offset - m_currentOffset.key());
 }
 
 void LocationTable::dump() const
 {
-  QMapIterator<std::size_t, KTextEditor::Cursor> it = m_offsetTable;
+  QMapIterator<std::size_t, KDevelop::SimpleCursor> it = m_offsetTable;
   kDebug(9007) << "Location Table:";
   while (it.hasNext()) {
     it.next();
-    kDebug(9007) << it.key() << " => " << it.value();
+    kDebug(9007) << it.key() << " => " << it.value().textCursor();
   }
 }

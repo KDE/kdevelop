@@ -433,7 +433,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext ? node->ducontext : m_currentContext ); //Definitely push one up here, so we can change the context without side-effects
     
-    KTextEditor::Cursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
+    SimpleCursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
     if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
       position = position.invalid();
 
@@ -466,7 +466,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     clearLast();
     
-    NameASTVisitor nameV( m_session, this, m_currentContext, m_inclusionTrace, position.isValid() ? position : m_currentContext->textRange().end(), m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
+    NameASTVisitor nameV( m_session, this, m_currentContext, m_inclusionTrace, position.isValid() ? position : m_currentContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
     nameV.run(node);
 
     if( nameV.identifier().isEmpty() ) {
@@ -1618,7 +1618,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         
         if( constructedType && constructedType->declaration() && constructedType->declaration()->internalContext() )
         {
-          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->textRange().end(), AbstractType::Ptr(), true, DUContext::OnlyFunctions ));
+          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->range().end, AbstractType::Ptr(), true, DUContext::OnlyFunctions ));
         }
       }
     }

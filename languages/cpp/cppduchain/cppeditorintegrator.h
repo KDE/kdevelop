@@ -20,6 +20,7 @@
 #define CPPEDITORINTEGRATOR_H
 
 #include <editorintegrator.h>
+#include <editor/simplerange.h>
 #include "cppduchainexport.h"
 #include "lexer.h"
 
@@ -49,7 +50,7 @@ public:
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KTextEditor::Cursor findPosition(const Token& token, Edge edge = BackEdge) const;
+  KDevelop::SimpleCursor findPosition(const Token& token, Edge edge = BackEdge) const;
 
   /**
    * Finds the location and \a file where the given \a token was parsed from.
@@ -60,7 +61,7 @@ public:
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KTextEditor::Cursor findPosition(std::size_t token, Edge edge = BackEdge) const;
+  KDevelop::SimpleCursor findPosition(std::size_t token, Edge edge = BackEdge) const;
 
   using KDevelop::EditorIntegrator::createRange;
 
@@ -70,7 +71,7 @@ public:
    *
    * \overload
    */
-  KTextEditor::Range findRange(AST* node, RangeEdge = OuterEdge);
+  KDevelop::SimpleRange findRange(AST* node, RangeEdge = OuterEdge);
 
   /**
    * Create a range encompassing the given AST \a nodes.
@@ -78,7 +79,7 @@ public:
    *
    * \overload
    */
-  KTextEditor::Range findRange(AST* from, AST* to);
+  KDevelop::SimpleRange findRange(AST* from, AST* to);
 
   /**
    * Create a range encompassing the given AST \a token.
@@ -86,7 +87,7 @@ public:
    *
    * \overload
    */
-  KTextEditor::Range findRange(const Token& token);
+  KDevelop::SimpleRange findRange(const Token& token);
 
   /**
    * Create a range encompassing the given AST \a token.
@@ -94,7 +95,7 @@ public:
    *
    * \overload
    */
-  KTextEditor::Range findRange(std::size_t token);
+  KDevelop::SimpleRange findRange(std::size_t token);
 
   /**
    * Create a range encompassing the given AST \a tokens.
@@ -102,7 +103,7 @@ public:
    *
    * \overload
    */
-  KTextEditor::Range findRange(std::size_t start_token, std::size_t end_token);
+  KDevelop::SimpleRange findRange(std::size_t start_token, std::size_t end_token);
   
   /**
    * Retrieve the string represented by a token.
@@ -111,7 +112,7 @@ public:
 
 private:
   static QHash<KUrl, KTextEditor::Document*> s_documents;
-  static QHash<KUrl, QVector<KTextEditor::Range*> > s_topRanges;
+  static QHash<KUrl, QVector<KDevelop::SimpleRange*> > s_topRanges;
 
   ParseSession* m_session;
 };

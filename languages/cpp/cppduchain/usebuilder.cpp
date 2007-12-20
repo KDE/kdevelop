@@ -72,10 +72,10 @@ void UseBuilder::newUse(NameAST* name)
 {
   QualifiedIdentifier id = identifierForName(name);
 
-  Range newRange = m_editor->findRange(name);
+  SimpleRange newRange = m_editor->findRange(name);
   
   DUChainWriteLocker lock(DUChain::lock());
-  QList<Declaration*> declarations = currentContext()->findDeclarations(id, newRange.start());
+  QList<Declaration*> declarations = currentContext()->findDeclarations(id, newRange.start);
   foreach (Declaration* declaration, declarations)
     if (!declaration->isForwardDeclaration()) {
       declarations.clear();
@@ -92,7 +92,7 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
 {
   DUChainWriteLocker lock(DUChain::lock());
   
-  Range newRange = m_editor->findRange(start_token, end_token);
+  SimpleRange newRange = m_editor->findRange(start_token, end_token);
   
   Use* ret = 0;
 
@@ -101,17 +101,17 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
 
     QMutexLocker smartLock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
-    Range translated = newRange;
+    SimpleRange translated = newRange;
     if (m_editor->smart())
-      translated = m_editor->smart()->translateFromRevision(translated);
+      translated = SimpleRange( m_editor->smart()->translateFromRevision(translated.textRange()) );
 
     for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
       Use* use = uses.at(nextUseIndex());
 
-      if (use->textRange().start() > translated.end() && use->smartRange() )
+      if (use->range().start > translated.end && use->smartRange() )
         break;
 
-      if (use->textRange() == translated &&
+      if (use->range() == translated &&
           ((!use->declaration() && !declaration) ||
            (declaration && use->declaration() == declaration)))
       {
@@ -129,12 +129,13 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
   }
 
   if (!ret) {
-    Range* prior = m_editor->currentRange();
-    Range* use = m_editor->createRange(newRange);
+    SmartRange* prior = m_editor->currentRange();
+    SmartRange* use = m_editor->createRange(newRange.textRange());
     m_editor->exitCurrentRange();
     Q_ASSERT(m_editor->currentRange() == prior);
 
-    Use* newUse = new Use(m_editor->currentUrl(), use, currentContext());
+    Use* newUse = new Use(m_editor->currentUrl(), newRange, currentContext());
+    newUse->setSmartRange(use);
 
     setEncountered(newUse);
 

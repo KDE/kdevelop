@@ -25,7 +25,7 @@
 
 #include <QtCore/QIODevice>
 
-#include <KTextEditor/Cursor>
+#include <editor/simplecursor.h>
 
 namespace rpp {
 
@@ -42,7 +42,7 @@ class KDEVCPPRPP_EXPORT Stream
 
   public:
     Stream();
-    explicit Stream( QString * string, const KTextEditor::Cursor& offset = KTextEditor::Cursor() );
+    explicit Stream( QString * string, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0) );
     explicit Stream( QString * string, LocationTable* table );
     virtual ~Stream();
 
@@ -89,17 +89,17 @@ class KDEVCPPRPP_EXPORT Stream
 
     Stream& operator--();
 
-    KTextEditor::Cursor inputPosition() const;
-    void setInputPosition(const KTextEditor::Cursor& position);
+    KDevelop::SimpleCursor inputPosition() const;
+    void setInputPosition(const KDevelop::SimpleCursor& position);
 
-    KTextEditor::Cursor originalInputPosition() const;
-    void setOriginalInputPosition(const KTextEditor::Cursor& position);
+    KDevelop::SimpleCursor originalInputPosition() const;
+    void setOriginalInputPosition(const KDevelop::SimpleCursor& position);
 
-    void mark(const KTextEditor::Cursor& position);
+    void mark(const KDevelop::SimpleCursor& position);
 
     Stream & operator<< ( const QChar& c );
     Stream & operator<< ( const Stream& input );
-    Stream& appendString( const KTextEditor::Cursor& position, const QString & string );
+    Stream& appendString( const KDevelop::SimpleCursor& position, const QString & string );
 
   private:
     Q_DISABLE_COPY(Stream)
@@ -112,7 +112,7 @@ class KDEVCPPRPP_EXPORT Stream
     int m_inputLine;
     int m_inputLineStartedAt;
     LocationTable* m_locationTable;
-    KTextEditor::Cursor m_originalInputPosition;
+    KDevelop::SimpleCursor m_originalInputPosition;
     //QString output;
 };
 

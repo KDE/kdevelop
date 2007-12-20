@@ -230,7 +230,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       if (!def) {
         QualifiedIdentifier id = identifierForName(node->id);
         if (id.count() > 1) {
-          KTextEditor::Cursor pos = currentDeclaration()->textRange().start();//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
+          SimpleCursor pos = currentDeclaration()->range().start;//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
           //kDebug(9007) << "Searching for declaration of" << id;
           // TODO: potentially excessive locking
@@ -274,7 +274,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
               Declaration* oldDec = currentDeclaration();
               abortDeclaration();
-              Definition* def = new Definition(m_editor->currentUrl(), oldDec->takeRange(), currentContext());
+              Definition* def = new Definition(m_editor->currentUrl(), oldDec->range(), currentContext());
+              def->setSmartRange(oldDec->takeRange());
               setEncountered(def);
               delete oldDec;
               dec->setDefinition(def);
@@ -340,25 +341,33 @@ KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
 }
 
 template<class DeclarationType>
-DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range )
+DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::SmartRange* smartRange, const KDevelop::SimpleRange& range )
 {
     if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
       Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(m_editor->currentUrl(), range, currentContext());
+      ret->setSmartRange(smartRange);
       ret->setTemplateParameterContext(ctx);
       return ret;
-    } else
-      return new DeclarationType(m_editor->currentUrl(), range, currentContext());
+    } else{
+      DeclarationType* ret = new DeclarationType(m_editor->currentUrl(), range, currentContext());
+      ret->setSmartRange(smartRange);
+      return ret;
+    }
 }
 
 template<class DeclarationType>
-DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::Range* range, int scope )
+DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::SmartRange* smartRange, const SimpleRange& range, int scope )
 {
     if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
       Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(m_editor->currentUrl(), range, (KDevelop::Declaration::Scope)scope, currentContext());
+      ret->setSmartRange(smartRange);
       ret->setTemplateParameterContext(ctx);
       return ret;
-    } else
-      return new DeclarationType(m_editor->currentUrl(), range, (KDevelop::Declaration::Scope)scope, currentContext());
+    } else{
+      DeclarationType* ret = new DeclarationType(m_editor->currentUrl(), range, (KDevelop::Declaration::Scope)scope, currentContext());
+      ret->setSmartRange(smartRange);
+      return ret;
+    }
 }
 
 Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition, bool isNamespaceAlias, const Identifier& customName)
@@ -384,8 +393,10 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       break;
   }
 
-  Range newRange = m_editor->findRange(name ? static_cast<AST*>(name) : rangeNode);
-  if(newRange.start() == newRange.end())
+  
+  SimpleRange newRange = m_editor->findRange(name ? static_cast<AST*>(name) : rangeNode);
+  
+  if(newRange.start >= newRange.end)
     kWarning(9007) << "Range collapsed";
 
   QualifiedIdentifier id;
@@ -412,9 +423,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     QMutexLocker lock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
 
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
-    Range translated = newRange;
+    SimpleRange translated = newRange;
     if (m_editor->smart())
-      translated = m_editor->smart()->translateFromRevision(translated);
+      translated = SimpleRange(m_editor->smart()->translateFromRevision(translated.textRange()));
 
     foreach( Declaration* dec, currentContext()->allLocalDeclarations(lastId) ) {
 
@@ -422,7 +433,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         continue;
 
       //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
-      if (dec->textRange() == translated &&
+      if (dec->range() == translated &&
           dec->scope() == scope &&
           ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && lastId == dec->identifier())) &&
            dec->isDefinition() == isDefinition &&
@@ -467,8 +478,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   if (!declaration) {
 /*    if( recompiling() )
       kDebug(9007) << "creating new declaration while recompiling: " << lastId << "(" << newRange << ")";*/
-    Range* prior = m_editor->currentRange();
-    Range* range = m_editor->createRange(newRange);
+    SmartRange* prior = m_editor->currentRange();
+    SmartRange* range = m_editor->createRange(newRange.textRange());
     
     m_editor->exitCurrentRange();
   //Q_ASSERT(range->start() != range->end());
@@ -476,24 +487,26 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     Q_ASSERT(m_editor->currentRange() == prior);
 
     if( isNamespaceAlias ) {
-      declaration = new NamespaceAliasDeclaration(m_editor->currentUrl(), range, scope, currentContext());
+      declaration = new NamespaceAliasDeclaration(m_editor->currentUrl(), newRange, scope, currentContext());
+      declaration->setSmartRange(range);
       declaration->setIdentifier(customName);
     } else if (isForward) {
-      declaration = specialDeclaration<ForwardDeclaration>(range, scope);
+      declaration = specialDeclaration<ForwardDeclaration>(range, newRange, scope);
 
     } else if (isFunction) {
       if (scope == Declaration::ClassScope) {
-        declaration = specialDeclaration<ClassFunctionDeclaration>( range );
+        declaration = specialDeclaration<ClassFunctionDeclaration>( range, newRange );
       } else {
-        declaration = specialDeclaration<FunctionDeclaration>(range, scope );
+        declaration = specialDeclaration<FunctionDeclaration>(range, newRange, scope );
       }
     } else if (scope == Declaration::ClassScope) {
-        declaration = specialDeclaration<ClassMemberDeclaration>(range );
+        declaration = specialDeclaration<ClassMemberDeclaration>( range, newRange );
     } else if( currentContext()->type() == DUContext::Template ) {
       //This is a template-parameter.
-      declaration = new TemplateParameterDeclaration( m_editor->currentUrl(), range, currentContext() );
+      declaration = new TemplateParameterDeclaration( m_editor->currentUrl(), newRange, currentContext() );
+      declaration->setSmartRange(range);
     } else {
-      declaration = specialDeclaration<Declaration>(range, scope );
+      declaration = specialDeclaration<Declaration>( range, newRange, scope );
     }
 
     if (!isNamespaceAlias) {
@@ -589,7 +602,7 @@ void DeclarationBuilder::eventuallyAssignInternalContext()
       if( !m_lastContext->owner() || (!wasEncountered(m_lastContext->owner()->asDeclaration()) && !wasEncountered(m_lastContext->owner()->asDefinition()) ) ) { //if the context is already internalContext of another declaration, leave it alone
         currentDeclaration()->setInternalContext(m_lastContext);
         
-        if( currentDeclaration()->textRange().start() == currentDeclaration()->textRange().end() )
+        if( currentDeclaration()->range().start >= currentDeclaration()->range().end )
           kDebug(9007) << "Warning: Range was invalidated";
         
         m_lastContext = 0;
@@ -650,7 +663,7 @@ void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
     //Resolve forward-declarations of the enum
     DUChainWriteLocker lock(DUChain::lock());
 
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
     //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
     QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
@@ -698,7 +711,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     //Resolve forward-declarations
     DUChainWriteLocker lock(DUChain::lock());
 
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
     //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
     QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
@@ -791,7 +804,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   m_inTypedef = m_wasInTypedef;
 }
 
-QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position)
+QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const SimpleCursor& position)
 {
   QList<DUContext*> contexts = currentContext()->findContexts(DUContext::Namespace, identifier, position);
   if( contexts.isEmpty() ) {
@@ -828,7 +841,7 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
     {
       DUChainWriteLocker lock(DUChain::lock());
       Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(currentDeclaration()));
-      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForName(node->name), currentDeclaration()->textRange().start()) );
+      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForName(node->name), currentDeclaration()->range().start) );
     }
     closeDeclaration();
   }
@@ -851,7 +864,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
     {
       DUChainWriteLocker lock(DUChain::lock());
       Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(currentDeclaration()));
-      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForName(node->alias_name), currentDeclaration()->textRange().start()) );
+      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForName(node->alias_name), currentDeclaration()->range().start) );
     }
     closeDeclaration();
   }
@@ -890,7 +903,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
        * - @todo While searching for the existing declarations, non-fitting overloaded names should be ignored.
        * */
       QList<Declaration*> declarations;
-      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
       
       {
         DUChainReadLocker lock(DUChain::lock());

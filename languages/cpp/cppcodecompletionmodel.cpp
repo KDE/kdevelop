@@ -156,7 +156,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
     DUContextPointer thisContext;
     {
-      thisContext = top->findContextAt(range.start());
+      thisContext = top->findContextAt(SimpleCursor(range.start()));
 
        kDebug(9007) << "context is set to" << thisContext.data();
         if( thisContext ) {

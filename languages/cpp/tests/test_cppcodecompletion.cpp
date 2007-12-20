@@ -139,7 +139,7 @@ void TestCppCodeCompletion::cleanupTestCase()
 {
 }
 
-Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Identifier& id, const Cursor& position)
+Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Identifier& id, const SimpleCursor& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -147,7 +147,7 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Id
   return 0;
 }
 
-Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const Cursor& position)
+Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const SimpleCursor& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -470,7 +470,7 @@ void TestCppCodeCompletion::testForwardDeclaration()
   DUChainWriteLocker lock(DUChain::lock());
 
 
-  Declaration* decl = findDeclaration(top, Identifier("Test"), top->textRange().end());
+  Declaration* decl = findDeclaration(top, Identifier("Test"), top->range().end);
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
@@ -490,7 +490,7 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
   DUChainWriteLocker lock(DUChain::lock());
 
 
-  Declaration* decl = findDeclaration(top, Identifier("t"), top->textRange().end());
+  Declaration* decl = findDeclaration(top, Identifier("t"), top->range().end);
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
@@ -511,28 +511,28 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 
   {
     kDebug() << "top is" << top;
-    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Dummy"), top->textRange().end());
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Dummy"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Dummy"));
   }
   {
-    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::B2"), top->textRange().end());
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::B2"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
-    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::bm"), top->textRange().end());
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::bm"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
-    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->textRange().end());
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     CppClassType* classType = dynamic_cast<CppClassType*>(decl->abstractType().data());
@@ -554,7 +554,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 
 void TestCppCodeCompletion::release(DUContext* top)
 {
-  KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
+  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
   if(dynamic_cast<TopDUContext*>(top))
     DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
   //delete top;

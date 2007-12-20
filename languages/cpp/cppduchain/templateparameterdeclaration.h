@@ -30,6 +30,8 @@ namespace KDevelop {
   class DUContext;
 }
 
+class TemplateParameterDeclarationPrivate;
+
 /**
  * Represents a single template-parameter definition
  */
@@ -37,7 +39,7 @@ class KDEVCPPDUCHAIN_EXPORT TemplateParameterDeclaration : public KDevelop::Decl
 {
 public:
   TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs);
-  TemplateParameterDeclaration(const KDevelop::HashedString& url, KTextEditor::Range* range, KDevelop::DUContext* context);
+  TemplateParameterDeclaration(const KDevelop::HashedString& url, const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
   ~TemplateParameterDeclaration();
 
   /**
@@ -50,7 +52,7 @@ public:
   virtual Declaration* clone() const;
   
 private:
-  class TemplateParameterDeclarationPrivate* const d;
+  Q_DECLARE_PRIVATE(TemplateParameterDeclaration)
 };
 
 #endif // FUNCTIONDECLARATION_H

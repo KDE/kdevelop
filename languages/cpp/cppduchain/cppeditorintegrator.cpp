@@ -29,42 +29,43 @@
 #include "parsesession.h"
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 CppEditorIntegrator::CppEditorIntegrator( ParseSession* session )
   : m_session(session)
 {
 }
 
-Cursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
+SimpleCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 {
   const Token& t = m_session->token_stream->token(token);
   return findPosition(t, edge);
 }
 
-Cursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
+SimpleCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
   return m_session->positionAt((edge == BackEdge) ? token.position + token.size : token.position);
 }
 
-Range CppEditorIntegrator::findRange( AST * node, RangeEdge edge )
+SimpleRange CppEditorIntegrator::findRange( AST * node, RangeEdge edge )
 {
   Q_UNUSED(edge);
-  return Range(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge));
+  return SimpleRange(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge));
 }
 
-Range CppEditorIntegrator::findRange( size_t start_token, size_t end_token )
+SimpleRange CppEditorIntegrator::findRange( size_t start_token, size_t end_token )
 {
-  return Range(findPosition(start_token, FrontEdge), findPosition(end_token - 1, BackEdge));
+  return SimpleRange(findPosition(start_token, FrontEdge), findPosition(end_token - 1, BackEdge));
 }
 
-Range CppEditorIntegrator::findRange(AST* from, AST* to)
+SimpleRange CppEditorIntegrator::findRange(AST* from, AST* to)
 {
-  return Range(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge));
+  return SimpleRange(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge));
 }
 
-Range CppEditorIntegrator::findRange( const Token & token )
+SimpleRange CppEditorIntegrator::findRange( const Token & token )
 {
-  return Range(findPosition(token, FrontEdge), findPosition(token, BackEdge));
+  return SimpleRange(findPosition(token, FrontEdge), findPosition(token, BackEdge));
 }
 
 QString CppEditorIntegrator::tokenToString(std::size_t token) const

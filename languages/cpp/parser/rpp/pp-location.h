@@ -23,7 +23,7 @@
 
 #include <QMap>
 
-#include <KTextEditor/Cursor>
+#include <editor/simplecursor.h>
 
 #include <cppparserexport.h>
 
@@ -37,15 +37,15 @@ class KDEVCPPRPP_EXPORT LocationTable
     /// Generates the location table from the byte array's contents
     LocationTable(const QByteArray& contents);
 
-    void anchor(std::size_t offset, KTextEditor::Cursor cursor);
+    void anchor(std::size_t offset, KDevelop::SimpleCursor cursor);
 
-    KTextEditor::Cursor positionForOffset(std::size_t offset) const;
+    KDevelop::SimpleCursor positionForOffset(std::size_t offset) const;
 
     void dump() const;
     
   private:
-    QMap<std::size_t, KTextEditor::Cursor> m_offsetTable;
-    mutable QMap<std::size_t, KTextEditor::Cursor>::ConstIterator m_currentOffset;
+    QMap<std::size_t, KDevelop::SimpleCursor> m_offsetTable;
+    mutable QMap<std::size_t, KDevelop::SimpleCursor>::ConstIterator m_currentOffset;
 };
 
 }

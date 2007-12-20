@@ -37,6 +37,7 @@ namespace KDevelop
 {
 class Declaration;
 class TopDUContext;
+class SimpleCursor;
 }
 
 class TestDUChain : public QObject
@@ -46,8 +47,8 @@ class TestDUChain : public QObject
 public:
   TestDUChain();
 
-  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
-  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
   
 
   //Move to slots again once it should be tested

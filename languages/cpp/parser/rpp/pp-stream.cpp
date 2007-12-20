@@ -36,18 +36,18 @@ Stream::Stream()
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
   , m_locationTable(0L)
-  , m_originalInputPosition(KTextEditor::Cursor::invalid())
+  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
 {
 }
 
-Stream::Stream( QString * string, const KTextEditor::Cursor& offset )
+Stream::Stream( QString * string, const KDevelop::SimpleCursor& offset )
   : m_string(string)
   , m_isNull(false)
   , m_pos(0)
-  , m_inputLine(offset.line())
-  , m_inputLineStartedAt(-offset.column())
+  , m_inputLine(offset.line)
+  , m_inputLineStartedAt(-offset.column)
   , m_locationTable(0L)
-  , m_originalInputPosition(KTextEditor::Cursor::invalid())
+  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
 {
   c = m_string->constData();
   end = m_string->constData() + m_string->length();
@@ -60,7 +60,7 @@ Stream::Stream( QString * string, LocationTable* table )
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
   , m_locationTable(table)
-  , m_originalInputPosition(KTextEditor::Cursor::invalid())
+  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
 {
   c = m_string->constData();
   end = m_string->constData() + m_string->length();
@@ -150,7 +150,7 @@ Stream& Stream::operator<< ( const Stream& input )
     if (c == newline) {
       ++m_inputLine;
       m_inputLineStartedAt = m_pos;
-      mark(KTextEditor::Cursor(input.inputPosition().line() + 1, 0));
+      mark(KDevelop::SimpleCursor(input.inputPosition().line + 1, 0));
     }
 
     m_string->append(c);
@@ -158,7 +158,7 @@ Stream& Stream::operator<< ( const Stream& input )
   return *this;
 }
 
-Stream& Stream::appendString( const KTextEditor::Cursor& position, const QString & string )
+Stream& Stream::appendString( const KDevelop::SimpleCursor& position, const QString & string )
 {
   if (!isNull()) {
     mark(position);
@@ -167,7 +167,7 @@ Stream& Stream::appendString( const KTextEditor::Cursor& position, const QString
     for (int i = 0; i < string.length(); ++i) {
       if (string.at(i) == newline) {
         m_pos += i + 1;
-        mark(KTextEditor::Cursor(position.line() + ++extraLines, 0));
+        mark(KDevelop::SimpleCursor(position.line + ++extraLines, 0));
         m_pos -= i + 1;
       }
     }
@@ -186,18 +186,18 @@ bool Stream::isNull() const
   return m_isNull;
 }
 
-KTextEditor::Cursor Stream::inputPosition() const
+KDevelop::SimpleCursor Stream::inputPosition() const
 {
-  return KTextEditor::Cursor(m_inputLine, m_pos - m_inputLineStartedAt);
+  return KDevelop::SimpleCursor(m_inputLine, m_pos - m_inputLineStartedAt);
 }
 
-void Stream::setInputPosition(const KTextEditor::Cursor& position)
+void Stream::setInputPosition(const KDevelop::SimpleCursor& position)
 {
-  m_inputLine = position.line();
-  m_inputLineStartedAt = m_pos - position.column();
+  m_inputLine = position.line;
+  m_inputLineStartedAt = m_pos - position.column;
 }
 
-void Stream::mark(const KTextEditor::Cursor& position)
+void Stream::mark(const KDevelop::SimpleCursor& position)
 {
   if (m_locationTable)
     m_locationTable->anchor(m_pos, position);
@@ -214,7 +214,7 @@ QString rpp::Stream::stringFrom(int offset) const
   return m_string->mid(offset, m_pos);
 }
 
-KTextEditor::Cursor rpp::Stream::originalInputPosition() const
+KDevelop::SimpleCursor rpp::Stream::originalInputPosition() const
 {
   if (m_originalInputPosition.isValid())
     return m_originalInputPosition;
@@ -222,7 +222,7 @@ KTextEditor::Cursor rpp::Stream::originalInputPosition() const
   return inputPosition();
 }
 
-void rpp::Stream::setOriginalInputPosition(const KTextEditor::Cursor & position)
+void rpp::Stream::setOriginalInputPosition(const KDevelop::SimpleCursor & position)
 {
   m_originalInputPosition = position;
 }

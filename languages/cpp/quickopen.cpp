@@ -62,7 +62,7 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
     return ret;
   }
   
-  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->textRange().end() ) )
+  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->range().end ) )
     return ret;
   
   QList<DUContextPointer> imports = context->importedParentContexts();
@@ -152,7 +152,7 @@ QWidget* IncludeFileData::expandingWidget() const {
 
     foreach( TopDUContext* t, allChains )
     {
-      if( m_includedFrom.data()->imports( t, m_includedFrom->textRange().end() ) )
+      if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
       {
         QList<KUrl> inclusion = getInclusionPath( m_includedFrom.data(), t );
 
@@ -169,7 +169,7 @@ QWidget* IncludeFileData::expandingWidget() const {
 
     foreach( TopDUContext* t, allChains )
     {
-      if( t->imports( m_includedFrom.data(), m_includedFrom->textRange().end() ) )
+      if( t->imports( m_includedFrom.data(), m_includedFrom->range().end ) )
       {
         QList<KUrl> inclusion = getInclusionPath( t, m_includedFrom.data() );
 
@@ -366,7 +366,7 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
 
       foreach( TopDUContext* t, allChains )
       {
-        if( m_duContext.data()->imports( t, m_duContext->textRange().end() ) )
+        if( m_duContext.data()->imports( t, m_duContext->range().end ) )
         {
           isIncluded = true;
           break;

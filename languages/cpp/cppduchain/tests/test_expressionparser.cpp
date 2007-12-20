@@ -147,7 +147,7 @@ void TestExpressionParser::cleanupTestCase()
 {
 }
 
-Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Identifier& id, const Cursor& position)
+Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Identifier& id, const SimpleCursor& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -155,7 +155,7 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Ide
   return 0;
 }
 
-Declaration* TestExpressionParser::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const Cursor& position)
+Declaration* TestExpressionParser::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const SimpleCursor& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -845,7 +845,7 @@ void TestExpressionParser::testTemplateFunctions() {
 
 void TestExpressionParser::release(DUContext* top)
 {
-  KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
+  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
   if(dynamic_cast<TopDUContext*>(top))
     DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
   //delete top;

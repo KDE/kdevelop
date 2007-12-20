@@ -183,7 +183,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     bool openedType = false;
 
     if(!delay) {
-      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      SimpleCursor  pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
       
       QList<Declaration*> declarations = searchContext()->findDeclarations(baseClassIdentifier, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
       /**
@@ -363,7 +363,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
       
       ///If possible, find another fitting declaration/forward-declaration and re-use it's type
     
-      KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
       QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
       if( !declarations.isEmpty() && declarations.first()->abstractType()) {
@@ -482,7 +482,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name) {
   bool delay = false;
 
   if(!delay) {
-    KTextEditor::Cursor pos = m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
 

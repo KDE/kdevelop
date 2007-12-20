@@ -81,7 +81,7 @@ extern QMutex cppDuContextInstantiationsMutex;
     ///This class breaks up the logic of searching a declaration in C++, so QualifiedIdentifiers as well as AST-based lookup mechanisms can be used for searching
     class FindDeclaration {
       public:
-        FindDeclaration( const DUContext* ctx, const DUContext::ImportTrace& trace, DUContext::SearchFlags flags, const KTextEditor::Cursor& position, AbstractType::Ptr dataType = AbstractType::Ptr() ) : m_context(ctx), m_trace(trace), m_flags(flags), m_position(position), m_dataType(dataType) {
+        FindDeclaration( const DUContext* ctx, const DUContext::ImportTrace& trace, DUContext::SearchFlags flags, const SimpleCursor& position, AbstractType::Ptr dataType = AbstractType::Ptr() ) : m_context(ctx), m_trace(trace), m_flags(flags), m_position(position), m_dataType(dataType) {
         }
         void openQualifiedIdentifier( bool isExplicitlyGlobal ) {
           QualifiedIdentifier i;
@@ -197,7 +197,7 @@ extern QMutex cppDuContextInstantiationsMutex;
                 const DUContext::ImportTraceItem& traceItem(m_trace[a]);
                 QList<Declaration*> decls;
                 ///@todo Give a correctly modified m_trace(without the used items)
-                traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->textRange().end(), AbstractType::Ptr(), decls, m_trace.mid(0,a), KDevelop::DUContext::NoUndefinedTemplateParams );
+                traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->range().end, AbstractType::Ptr(), decls, m_trace.mid(0,a), KDevelop::DUContext::NoUndefinedTemplateParams );
                 if( !decls.isEmpty() ) {
                   tempDecls = decls;
                   break;
@@ -205,7 +205,7 @@ extern QMutex cppDuContextInstantiationsMutex;
               }
             }
           } else {
-            scopeContext->findDeclarationsInternal( toList(lookup), scopeContext->url() == m_context->url() ? m_position : scopeContext->textRange().end(), m_dataType, tempDecls, m_trace, m_flags | DUContext::DontSearchInParent | DUContext::LanguageSpecificFlag1 );
+            scopeContext->findDeclarationsInternal( toList(lookup), scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, m_trace, m_flags | DUContext::DontSearchInParent | DUContext::LanguageSpecificFlag1 );
           }
 
           if( !tempDecls.isEmpty() ) {
@@ -308,7 +308,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         DUContext::ImportTrace m_trace;
         DUContext::SearchFlags m_flags;
         QList<DeclarationPointer> m_lastDeclarations;
-        KTextEditor::Cursor m_position;
+        SimpleCursor m_position;
         AbstractType::Ptr m_dataType;
     };
 
@@ -321,12 +321,12 @@ class CppDUContext : public BaseContext {
   public:
     ///Parameters will be reached to the base-class
     template<class Param1, class Param2, class Param3>
-    CppDUContext( const Param3& document, Param1* p1, Param2* p2, bool isInstantiationContext ) : BaseContext(document, p1, p2, isInstantiationContext), m_instantiatedFrom(0) {
+    CppDUContext( const Param3& document, const Param1& p1, const Param2& p2, bool isInstantiationContext ) : BaseContext(document, p1, p2, isInstantiationContext), m_instantiatedFrom(0) {
     }
 
     ///Both parameters will be reached to the base-class. This fits TopDUContext.
     template<class Param1, class Param2, class Param3>
-    CppDUContext( const Param3& document, Param1* p1, Param2* p2) : BaseContext(document, p1, p2), m_instantiatedFrom(0) {
+    CppDUContext( const Param3& document, const Param1& p1, const Param2& p2) : BaseContext(document, p1, p2), m_instantiatedFrom(0) {
     }
 
     ~CppDUContext() {
@@ -340,7 +340,7 @@ class CppDUContext : public BaseContext {
         delete instatiation;
     }
     
-    virtual bool findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
+    virtual bool findDeclarationsInternal(const QList<KDevelop::QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<KDevelop::Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
     {
       if( basicFlags & BaseContext::LanguageSpecificFlag1 ) {
         //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
@@ -376,7 +376,7 @@ class CppDUContext : public BaseContext {
     }
 
     ///Overridden to take care of templates and other c++ specific things
-    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
+    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags basicFlags ) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 
@@ -429,7 +429,7 @@ class CppDUContext : public BaseContext {
       return true;
     }
 
-    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags flags ) const
+    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const typename BaseContext::ImportTrace& trace, typename BaseContext::SearchFlags flags ) const
     {
       ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "with parent" << this->parentContext() << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
       ifDebug( if( BaseContext::owner() && BaseContext::owner()->asDeclaration() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->asDeclaration()->toString(); )
@@ -551,7 +551,7 @@ class CppDUContext : public BaseContext {
     
   private:
 
-    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const KTextEditor::Cursor& position, QHash<const DUContext*, bool>& hadContexts, const typename BaseContext::ImportTrace& trace,  bool searchInParents, int currentDepth) const
+    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const typename BaseContext::ImportTrace& trace,  bool searchInParents, int currentDepth) const
     {
       if( m_instantiatedFrom )
       {
@@ -565,7 +565,7 @@ class CppDUContext : public BaseContext {
         QList<Declaration*> decls = m_instantiatedFrom->localDeclarations();
 
         foreach( Declaration* baseDecls, decls )
-          this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), KTextEditor::Cursor::invalid(), AbstractType::Ptr(), true, temp, trace, DUContext::NoFiltering );
+          this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), SimpleCursor::invalid(), AbstractType::Ptr(), true, temp, trace, DUContext::NoFiltering );
       }
 
       return BaseContext::mergeDeclarationsInternal(definitions, position, hadContexts, trace, searchInParents, currentDepth);

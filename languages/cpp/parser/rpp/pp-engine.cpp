@@ -249,7 +249,7 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
       return handle_elif(input);
 
     case PP_ELSE:
-      return handle_else(input.inputPosition().line());
+      return handle_else(input.inputPosition().line);
 
     case PP_ENDIF:
       return handle_endif(input, output);
@@ -273,8 +273,8 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
   if (input.current().isLetter() || input == '_') {
     pp_macro_expander expand_include(this);
 
-    KTextEditor::Cursor inputPosition = input.inputPosition();
-    KTextEditor::Cursor originalInputPosition = input.originalInputPosition();
+    KDevelop::SimpleCursor inputPosition = input.inputPosition();
+    KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
     QString includeString;
     {
       Stream cs(&includeString);
@@ -303,7 +303,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     ++input;
   }
 
-  Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputPosition().line(), skip_current_path);
+  Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputPosition().line, skip_current_path);
   Q_ASSERT(!include);
 
   /*if (include && !include->atEnd()) {
@@ -314,7 +314,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     operator()(*include, output);
 
     // restore the file name and sync the buffer
-    output.mark(m_files.pop(), input.inputPosition().line());
+    output.mark(m_files.pop(), input.inputPosition().line);
   }*/
 
   delete include;
@@ -356,8 +356,8 @@ void pp::operator () (Stream& input, Stream& output)
 
       skip_blanks(input, devnull());
 
-      KTextEditor::Cursor inputPosition = input.inputPosition();
-      KTextEditor::Cursor originalInputPosition = input.originalInputPosition();
+      KDevelop::SimpleCursor inputPosition = input.inputPosition();
+      KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
       
       QString skipped;
       {
@@ -384,7 +384,7 @@ void pp::operator () (Stream& input, Stream& output)
 
   if (iflevel != previousIfLevel) {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(i18n("Unterminated #if statement"));
     problemEncountered(problem);
   }
@@ -552,7 +552,7 @@ Value pp::eval_primary(Stream& input)
       if (token != TOKEN_IDENTIFIER)
       {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 1)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
         QChar tk(token);
         problem.setDescription(i18n("Expected \"identifier\", found: %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
         problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text, input.stringFrom(start)));
@@ -570,7 +570,7 @@ Value pp::eval_primary(Stream& input)
       if (expect_paren) {
         if (token != ')') {
           KDevelop::Problem problem;
-          problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+          problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
           QChar tk(token);
           problem.setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
           problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text, input.stringFrom(start)));
@@ -602,7 +602,7 @@ Value pp::eval_primary(Stream& input)
 
       if (token != ')') {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 1)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
         QChar tk(token);
         problem.setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
         problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text, input.stringFrom(start)));
@@ -639,7 +639,7 @@ Value pp::eval_multiplicative(Stream& input)
     } else if (token == '/') {
       if (value.is_zero()) {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
         problem.setDescription(i18n("Division by zero"));
         problem.setDescription(i18n("Input text: %1", input.stringFrom(start)));
         problemEncountered(problem);
@@ -652,7 +652,7 @@ Value pp::eval_multiplicative(Stream& input)
     } else {
       if (value.is_zero()) {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
         problem.setDescription(i18n("Division by zero"));
         problem.setDescription(i18n("Input text: %1", input.stringFrom(start)));
         problemEncountered(problem);
@@ -890,7 +890,7 @@ Value pp::eval_constant_expression(Stream& input)
     else
     {
       KDevelop::Problem problem;
-      problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 1)));
+      problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
       problem.setDescription(i18n("expected ``:'' = %1", int(token)));
       problemEncountered(problem);
       result = left_value;
@@ -915,15 +915,15 @@ void pp::handle_if (Stream& input)
     pp_macro_expander expand_condition(this);
     skip_blanks(input, devnull());
 
-    KTextEditor::Cursor inputPosition = input.inputPosition();
-    KTextEditor::Cursor originalInputPosition = input.originalInputPosition();
+    KDevelop::SimpleCursor inputPosition = input.inputPosition();
+    KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
     QString condition;
     {
       Stream cs(&condition);
       expand_condition(input, cs);
     }
 
-    environment()->enterBlock(input.inputPosition().line(), condition);
+    environment()->enterBlock(input.inputPosition().line, condition);
 
     Stream cs(&condition, inputPosition);
     cs.setOriginalInputPosition(originalInputPosition);
@@ -942,7 +942,7 @@ void pp::handle_if (Stream& input)
       expand_condition(input, cs);
     }
 
-    environment()->enterBlock(input.inputPosition().line(), condition);
+    environment()->enterBlock(input.inputPosition().line, condition);
 
     _M_true_test[iflevel] = true;
     _M_skipping[iflevel] = true;
@@ -979,7 +979,7 @@ void pp::handle_elif(Stream& input)
   if (iflevel == 0 && !skipping())
   {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(i18n("#else without #if"));
     problemEncountered(problem);
   }
@@ -988,8 +988,8 @@ void pp::handle_elif(Stream& input)
     pp_macro_expander expand_condition(this);
     skip_blanks(input, devnull());
 
-    KTextEditor::Cursor inputPosition = input.inputPosition();
-    KTextEditor::Cursor originalInputPosition = input.originalInputPosition();
+    KDevelop::SimpleCursor inputPosition = input.inputPosition();
+    KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
     QString condition;
     {
       Stream cs(&condition);
@@ -997,7 +997,7 @@ void pp::handle_elif(Stream& input)
       expand_condition(input, cs);
     }
 
-    environment()->elseBlock(input.inputPosition().line(), condition);
+    environment()->elseBlock(input.inputPosition().line, condition);
 
     if (!_M_true_test[iflevel] && !_M_skipping[iflevel - 1])
     {
@@ -1019,8 +1019,8 @@ void pp::handle_endif(Stream& input, Stream& output)
   if (iflevel == 0 && !skipping())
   {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition(), 0)));
-    problem.setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->positionForOffset(output.offset()).line()));
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem.setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->positionForOffset(output.offset()).line));
     problemEncountered(problem);
   }
   else
@@ -1039,7 +1039,7 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 {
   QString macro_name = skip_identifier(input);
 
-  environment()->enterBlock(input.inputPosition().line(), QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name));
+  environment()->enterBlock(input.inputPosition().line, QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name));
 
   if (test_if_level())
   {

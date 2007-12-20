@@ -85,7 +85,7 @@ private:
   //Returns true if the given parameter declaration clause is really a parameter declaration clause, depending on the given parameters.
   bool checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause);
   //Du-chain must be locked
-  QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position);
+  QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KDevelop::SimpleCursor& position);
   
   KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**
@@ -114,10 +114,10 @@ private:
 
   ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
   template<class DeclarationType>
-  DeclarationType* specialDeclaration( KTextEditor::Range* range );
+  DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const KDevelop::SimpleRange& range );
   ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
   template<class DeclarationType>
-  DeclarationType* specialDeclaration( KTextEditor::Range* range, int scope );
+  DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const KDevelop::SimpleRange& range, int scope );
   
   void parseComments(const ListNode<size_t> *comments);
   
