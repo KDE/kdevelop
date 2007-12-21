@@ -2,6 +2,7 @@
 Type=Service
 Name=DocDoxygenPlugin
 Name[da]=DocDoxygen-plugin
+Name[ms]=PluginDocDoxygen
 Name[sk]=Doc Doxygen modul
 Name[sv]=Doxygen-dokumentationsinsticksmodul
 Name[ta]=DocDoxygen  சொருகு
