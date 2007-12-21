@@ -164,7 +164,7 @@ void Breakpoint::setBreakpoint(GDBController* controller)
     // When this command is finished, slotParseGDBBreakpointSet
     // will be called by the controller.
     controller->addCommandBeforeRun(
-        new GDBCommand(dbgSetCommand(),                        
+        new GDBCommand(dbgSetCommand(controller),                        
                        this,
                        &Breakpoint::handleSet, true));
 }
@@ -393,15 +393,17 @@ FilePosBreakpoint::~FilePosBreakpoint()
 {
 }
 
-QString FilePosBreakpoint::dbgSetCommand() const
+QString FilePosBreakpoint::dbgSetCommand(GDBController *c) const
 {
-    QString cmdStr;
-    cmdStr = QString("-break-insert %1").arg(location_);
-
+    QString cmdStr = "-break-insert";
+    
     if (isTemporary())
         cmdStr = cmdStr + " -t";
 
-    return cmdStr;
+    if (c->miPendingBreakpoints())
+        cmdStr = cmdStr + " -f";
+
+    return cmdStr + " " + location_;
 }
 
 bool FilePosBreakpoint::match_data(const Breakpoint *xb) const
@@ -575,7 +577,7 @@ void Watchpoint::removedInGdb()
 
 /***************************************************************************/
 
-QString Watchpoint::dbgSetCommand() const
+QString Watchpoint::dbgSetCommand(GDBController *) const
 {
     return QString("-break-watch ")+varName_;    // gdb command - not translatable
 }
@@ -594,7 +596,7 @@ ReadWatchpoint::ReadWatchpoint(const QString& varName, bool temporary, bool enab
 {
 }
 
-QString ReadWatchpoint::dbgSetCommand() const
+QString ReadWatchpoint::dbgSetCommand(GDBController *) const
 {
    return QString("-break-watch -r ")+varName();
 }

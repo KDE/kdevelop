@@ -60,7 +60,7 @@ public:
 
 
 
-    virtual QString dbgSetCommand() const = 0;
+    virtual QString dbgSetCommand(GDBController *) const = 0;
     virtual QString dbgRemoveCommand() const;
     /** Returns true if 'breakpoint' is identical to *this.
         Checks for trival cases like pointer equality and
@@ -206,7 +206,7 @@ public:
     FilePosBreakpoint(const QString &fileName, int lineNum,
                       bool temporary=false, bool enabled=true);
     virtual ~FilePosBreakpoint();
-    virtual QString dbgSetCommand() const;
+    virtual QString dbgSetCommand(GDBController *) const;
     virtual bool match_data(const Breakpoint *brkpt) const;
 
     BP_TYPES type () const                      { return BP_TYPE_FilePos; }
@@ -273,7 +273,7 @@ class Watchpoint : public Breakpoint
 public:
     Watchpoint(const QString &varName, bool temporary=false, bool enabled=true);
     virtual ~Watchpoint();
-    virtual QString dbgSetCommand() const;
+    virtual QString dbgSetCommand(GDBController *) const;
 
     void applicationExited(GDBController*);
     void removedInGdb();
@@ -301,7 +301,7 @@ class ReadWatchpoint : public Watchpoint
 {
 public:
     ReadWatchpoint(const QString &varName, bool temporary=false, bool enabled=true);
-    virtual QString dbgSetCommand() const;
+    virtual QString dbgSetCommand(GDBController *) const;
     bool match_data(const Breakpoint *brkpt) const;
 
     BP_TYPES type () const                      { return BP_TYPE_ReadWatchpoint; }

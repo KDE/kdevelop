@@ -875,18 +875,6 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     queueCmd(new GDBCommand("set width 0"));
     queueCmd(new GDBCommand("set height 0"));
 
-    // Get gdb to notify us of shared library events. This allows us to
-    // set breakpoints in shared libraries that are not loaded yet. On each
-    // stop, we'll try to set breakpoints again.
-    //
-    // Gdb 6.3 and later implement so called 'pending breakpoints' that
-    // solve this issue cleanly, but:
-    // - This is broken for MI -break-insert command (the breakpoint is
-    //   not inserted at all, and no error is produced)
-    // - MI does not contains notification that pending breakpoint is resolved.
-    queueCmd(new GDBCommand("set stop-on-solib-events 1"));
-
-
     queueCmd(new GDBCommand("handle SIG32 pass nostop noprint"));
     queueCmd(new GDBCommand("handle SIG41 pass nostop noprint"));
     queueCmd(new GDBCommand("handle SIG42 pass nostop noprint"));
@@ -927,11 +915,12 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
         queueCmd(new GDBCommand(environstr.latin1()));
     }
 
-    // Needed so that breakpoint widget has a chance to insert breakpoints.
-    // FIXME: a bit hacky, as we're really not ready for new commands.
-    setStateOn(s_dbgBusy);
-    raiseEvent(debugger_ready);
-    raiseEvent(connected_to_program);
+    queueCmd(new GDBCommand(
+                 "-list-features", this,
+                 &GDBController::handleListFeatures, true /* handles error */));
+
+ 
+    queueCmd(new SentinelCommand(this, &GDBController::startDone));
 
     // Now gdb has been started and the application has been loaded,
     // BUT the app hasn't been started yet! A run command is about to be issued
@@ -941,6 +930,37 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     return true;
 }
 
+void GDBController::startDone()
+{
+   // Needed so that breakpoint widget has a chance to insert breakpoints.
+    // FIXME: a bit hacky, as we're really not ready for new commands.
+    setStateOn(s_dbgBusy);
+    raiseEvent(debugger_ready);
+    raiseEvent(connected_to_program);
+}
+
+void GDBController::handleListFeatures(const GDBMI::ResultRecord& r)
+{
+    mi_pending_breakpoints_ = false;
+    if (r.reason == "done")
+    {
+        const GDBMI::Value& features = r["features"];
+        for (unsigned i = 0; i < features.size(); ++i)
+            if (features[i].literal() == "pending-breakpoints")
+            {
+                mi_pending_breakpoints_ = true;
+            }
+    }
+
+    if (!mi_pending_breakpoints_)
+    {
+        // This version of GDB does not support pending breakpoints in MI,
+        // so use a workaround.
+        // The below command makes GDB notify us about shared library
+        // events, and on each stop we'll try to set breakpoint again.
+        addCommandToFront(new GDBCommand("set stop-on-solib-events 1"));
+    }
+}
 // **************************************************************************
 
 void GDBController::slotStopDebugger()
@@ -1162,7 +1182,9 @@ void GDBController::slotRun()
             }
             else
             {
-                queueCmd(new GDBCommand("-exec-run"));
+                GDBCommand *cmd = new GDBCommand("-exec-run");
+                cmd->setRun(true);
+                queueCmd(cmd);
             }
         }
     }
@@ -1822,6 +1844,11 @@ void GDBController::demandAttention() const
     {
         KWin::demandAttention( w->winId(), true );
     }
+}
+
+bool GDBController::miPendingBreakpoints() const
+{
+    return mi_pending_breakpoints_;
 }
 
 }

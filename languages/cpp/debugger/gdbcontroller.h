@@ -145,6 +145,8 @@ public:
 
     void pauseApp();
 
+    bool miPendingBreakpoints() const;
+
 protected:
     enum queue_where { queue_at_end, queue_at_front, queue_before_run };
 
@@ -207,6 +209,9 @@ private:
     void raiseEvent(event_t e);
 
     void maybeAnnounceWatchpointHit();
+
+    void handleListFeatures(const GDBMI::ResultRecord& result);
+    void startDone();
 
     /** Default handler for errors.
         Tries to guess is the error message is telling that target is
@@ -343,6 +348,9 @@ private:
     std::set<GDBCommand*> stateReloadingCommands_;
 
     bool saw_gdb_prompt_;
+
+    /** Does the used GDB supports pending breakpoints in MI? */
+    bool mi_pending_breakpoints_;
 };
 
 }
