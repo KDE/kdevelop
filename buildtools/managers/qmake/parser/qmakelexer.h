@@ -21,7 +21,6 @@
 #ifndef QMAKELEXER_H
 #define QMAKELEXER_H
 
-#include <cstddef>
 #include <QtCore/QStack>
 #include <QtCore/QString>
 #include "parserexport.h"
@@ -32,23 +31,23 @@ class kdev_pg_location_table;
 namespace QMake
 {
 
-class parser;
+class Parser;
 
 class KDEVQMAKEPARSER_EXPORT Lexer {
 public:
-    Lexer(parser* _parser, const QString& contents);
+    Lexer(Parser* _parser, const QString& contents);
 
     int nextTokenKind();
-    std::size_t tokenBegin() const;
-    std::size_t tokenEnd() const;
+    qint64 tokenBegin() const;
+    qint64 tokenEnd() const;
 
 private:
     QString m_content;
-    parser* m_parser;
+    Parser* m_parser;
     int m_curpos;
     int m_contentSize;
-    std::size_t m_tokenBegin;
-    std::size_t m_tokenEnd;
+    qint64 m_tokenBegin;
+    qint64 m_tokenEnd;
 
     int state() const;
     void pushState(int state);

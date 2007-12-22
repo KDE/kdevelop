@@ -24,13 +24,13 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QFile>
 #include <kdebug.h>
-#include "qmake_parser.h"
-#include "qmake_ast.h"
+#include "qmakeparser.h"
+#include "qmakeast.h"
 
 #include "qmakedebugvisitor.h"
 #include "buildastvisitor.h"
 
-#include "qmakeast.h"
+#include "ast.h"
 
 namespace QMake
 {
@@ -64,28 +64,28 @@ void Driver::setDebug( bool debug )
 }
 bool Driver::parse( ProjectAST** qmast )
 {
-    parser::token_stream_type token_stream;
-    parser::memory_pool_type memory_pool;
+    KDevPG::TokenStream tokenStream;
+    KDevPG::MemoryPool memory_pool;
 
-    parser qmakeparser;
-    qmakeparser.set_token_stream(&token_stream);
-    qmakeparser.set_memory_pool(&memory_pool);
+    Parser qmakeparser;
+    qmakeparser.setTokenStream(&tokenStream);
+    qmakeparser.setMemoryPool(&memory_pool);
     qmakeparser.setDebug( m_debug );
 
     qmakeparser.tokenize(m_content);
-    project_ast* ast = 0;
-    bool matched = qmakeparser.parse_project(&ast);
+    ProjectAst* ast = 0;
+    bool matched = qmakeparser.parseProject(&ast);
     if( matched )
     {
         kDebug(9024) << "Sucessfully parsed";
         if( m_debug )
         {
             DebugVisitor d(&qmakeparser);
-            d.visit_project(ast);
+            d.visitProject(ast);
         }
         *qmast = new ProjectAST();
         BuildASTVisitor d( &qmakeparser, *qmast );
-        d.visit_project(ast);
+        d.visitProject(ast);
         kDebug(9024) << "Found" << (*qmast)->statements().count() << "Statements";
     }else
     {

@@ -20,7 +20,7 @@
 
 #include "lexertest.h"
 #include "qmakelexer.h"
-#include "qmake_parser.h"
+#include "qmakeparser.h"
 
 QTEST_MAIN( LexerTest )
 
@@ -82,9 +82,9 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7;
     expectedends << 2 << 5 << 9;
     QTest::newRow( "row1" )
@@ -92,12 +92,12 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_CONT;
-    expectedtokens << QMake::parser::Token_NEWLINE;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_CONT;
+    expectedtokens << QMake::Parser::Token_NEWLINE;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7 << 10 << 11 << 12;
     expectedends << 2 << 5 << 9 << 10 << 11 << 14;
     QTest::newRow( "row2" )
@@ -105,14 +105,14 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_CONT;
-    expectedtokens << QMake::parser::Token_NEWLINE;
-    expectedtokens << QMake::parser::Token_CONT;
-    expectedtokens << QMake::parser::Token_NEWLINE;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_CONT;
+    expectedtokens << QMake::Parser::Token_NEWLINE;
+    expectedtokens << QMake::Parser::Token_CONT;
+    expectedtokens << QMake::Parser::Token_NEWLINE;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7 << 14 << 15 << 21 << 22 << 23;
     expectedends << 2 << 5 << 9 << 14 << 15 << 21 << 22 << 25;
     QTest::newRow( "row3" )
@@ -120,12 +120,12 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_CONT;
-    expectedtokens << QMake::parser::Token_NEWLINE;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_CONT;
+    expectedtokens << QMake::Parser::Token_NEWLINE;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7 << 14 << 20 << 26;
     expectedends << 2 << 5 << 9 << 14 << 20 << 28;
     QTest::newRow( "row4" )
@@ -133,9 +133,9 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 4 << 8 << 11;
     expectedends << 6 << 9 << 13;
     QTest::newRow( "row5" )
@@ -143,9 +143,9 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7;
     expectedends << 2 << 5 << 9;
     QTest::newRow( "row6" )
@@ -153,11 +153,11 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_CONT;
-    expectedtokens << QMake::parser::Token_NEWLINE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_CONT;
+    expectedtokens << QMake::Parser::Token_NEWLINE;
     expectedbegins << 0 << 4 << 7 << 10 << 11;
     expectedends << 2 << 5 << 9 << 10 << 11;
     QTest::newRow( "row7" )
@@ -165,12 +165,12 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_CONT;
-    expectedtokens << QMake::parser::Token_NEWLINE;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_CONT;
+    expectedtokens << QMake::Parser::Token_NEWLINE;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7 << 10 << 11 << 17;
     expectedends << 2 << 5 << 9 << 10 << 11 << 19;
     QTest::newRow( "row8" )
@@ -178,12 +178,12 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_CONT;
-    expectedtokens << QMake::parser::Token_NEWLINE;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_CONT;
+    expectedtokens << QMake::Parser::Token_NEWLINE;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7 << 10 << 15 << 16;
     expectedends << 2 << 5 << 9 << 10 << 15 << 18;
     QTest::newRow( "row9" )
@@ -191,10 +191,10 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7 << 11;
     expectedends << 2 << 5 << 9 << 26;
     QTest::newRow( "row10" )
@@ -202,10 +202,10 @@ void LexerTest::varAssignment_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7 << 11;
     expectedends << 2 << 5 << 9 << 18;
     QTest::newRow( "row11" )
@@ -257,9 +257,9 @@ void LexerTest::functions_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_LPAREN;
-    expectedtokens << QMake::parser::Token_RPAREN;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_LPAREN;
+    expectedtokens << QMake::Parser::Token_RPAREN;
     expectedbegins << 0 << 3 << 4;
     expectedends << 2 << 3 << 4;
     QTest::newRow( "row1" )
@@ -267,10 +267,10 @@ void LexerTest::functions_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_LPAREN;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_RPAREN;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_LPAREN;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_RPAREN;
     expectedbegins << 0 << 3 << 4 << 8;
     expectedends << 2 << 3 << 7 << 8 ;
     QTest::newRow( "row2" )
@@ -278,12 +278,12 @@ void LexerTest::functions_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_LPAREN;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_COMMA;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_RPAREN;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_LPAREN;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_COMMA;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_RPAREN;
     expectedbegins << 0 << 3 << 4 << 8 << 9 << 13;
     expectedends << 2 << 3 << 7 << 8 << 12 << 13;
     QTest::newRow( "row3" )
@@ -291,10 +291,10 @@ void LexerTest::functions_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_LPAREN;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_RPAREN;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_LPAREN;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_RPAREN;
     expectedbegins << 0 << 3 << 4 << 20;
     expectedends << 2 << 3 << 19 << 20;
     QTest::newRow( "row4" )
@@ -302,10 +302,10 @@ void LexerTest::functions_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_LPAREN;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_RPAREN;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_LPAREN;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_RPAREN;
     expectedbegins << 0 << 3 << 4 << 22;
     expectedends << 2 << 3 << 21 << 22;
     QTest::newRow( "row5" )
@@ -313,11 +313,11 @@ void LexerTest::functions_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_LPAREN;
-    expectedtokens << QMake::parser::Token_VALUE;
-    expectedtokens << QMake::parser::Token_RPAREN;
-    expectedtokens << QMake::parser::Token_LBRACE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_LPAREN;
+    expectedtokens << QMake::Parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_RPAREN;
+    expectedtokens << QMake::Parser::Token_LBRACE;
     expectedbegins << 0 << 3 << 4 << 8 << 10;
     expectedends << 2 << 3 << 7 << 8 << 10;
     QTest::newRow( "row5" )
@@ -368,9 +368,9 @@ void LexerTest::operators_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_EQUAL;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_EQUAL;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 6;
     expectedends << 2 << 4 << 8;
     QTest::newRow( "row1" )
@@ -378,9 +378,9 @@ void LexerTest::operators_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_PLUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_PLUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7;
     expectedends << 2 << 5 << 9;
     QTest::newRow( "row2" )
@@ -388,9 +388,9 @@ void LexerTest::operators_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_MINUSEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_MINUSEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7;
     expectedends << 2 << 5 << 9;
     QTest::newRow( "row3" )
@@ -398,9 +398,9 @@ void LexerTest::operators_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_TILDEEQ;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_TILDEEQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7;
     expectedends << 2 << 5 << 9;
     QTest::newRow( "row4" )
@@ -408,9 +408,9 @@ void LexerTest::operators_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_STAREQ;
-    expectedtokens << QMake::parser::Token_VALUE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_STAREQ;
+    expectedtokens << QMake::Parser::Token_VALUE;
     expectedbegins << 0 << 4 << 7;
     expectedends << 2 << 5 << 9;
     QTest::newRow( "row5" )
@@ -461,8 +461,8 @@ void LexerTest::scope_data()
     expectedtokens.clear();
     expectedbegins.clear();
     expectedends.clear();
-    expectedtokens << QMake::parser::Token_IDENTIFIER;
-    expectedtokens << QMake::parser::Token_LBRACE;
+    expectedtokens << QMake::Parser::Token_IDENTIFIER;
+    expectedtokens << QMake::Parser::Token_LBRACE;
     expectedbegins << 0 << 3;
     expectedends << 2 << 3;
     QTest::newRow( "row1" )

@@ -24,7 +24,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QRegExp>
 #include <QtCore/QDebug>
-#include "qmake_parser.h"
+#include "qmakeparser.h"
 #include <kdev-pg-location-table.h>
 #include <kdev-pg-token-stream.h>
 
@@ -82,7 +82,7 @@ bool isCont( QChar* c )
 }
 
 
-Lexer::Lexer( parser* _parser, const QString& content ):
+Lexer::Lexer( Parser* _parser, const QString& content ):
         m_content( content ), m_parser( _parser ),
         m_curpos( 0 ), m_contentSize( m_content.size() ),
         m_tokenBegin( 0 ), m_tokenEnd( 0 )
@@ -108,7 +108,7 @@ void Lexer::popState()
 
 int Lexer::nextTokenKind()
 {
-    int token = parser::Token_INVALID;
+    int token = Parser::Token_INVALID;
     if ( m_curpos >= m_contentSize )
     {
         return 0;
@@ -126,12 +126,12 @@ int Lexer::nextTokenKind()
                 {
                     popState();
                     createNewline( m_curpos );
-                    token = parser::Token_NEWLINE;
+                    token = Parser::Token_NEWLINE;
                 }else if( it->unicode() == '\\' && isCont(it) )
 
                 {
                     pushState(ContState);
-                    token = parser::Token_CONT;
+                    token = Parser::Token_CONT;
                 }else if( it->unicode() == '"')
                 {
                     it++;
@@ -147,7 +147,7 @@ int Lexer::nextTokenKind()
                     {
                         m_curpos--;
                     }
-                    token = parser::Token_VALUE;
+                    token = Parser::Token_VALUE;
                     if( it->unicode() == '#' )
                     {
                         m_tokenEnd = m_curpos - 1;
@@ -181,7 +181,7 @@ int Lexer::nextTokenKind()
                     {
                         m_curpos--;
                     }
-                    token = parser::Token_VALUE;
+                    token = Parser::Token_VALUE;
                 }else
                 {
                     while( !it->isSpace() && !isCont(it) && it->unicode() != '#' && m_curpos < m_contentSize )
@@ -190,7 +190,7 @@ int Lexer::nextTokenKind()
                         m_curpos++;
                     }
                     m_curpos--;
-                    token = parser::Token_VALUE;
+                    token = Parser::Token_VALUE;
                 }
             }
             break;
@@ -199,18 +199,18 @@ int Lexer::nextTokenKind()
             if( it->unicode() == '\n' )
             {
                 createNewline( m_curpos );
-                token = parser::Token_NEWLINE;
+                token = Parser::Token_NEWLINE;
             }else if( it->unicode() == '\\' && isCont(it) )
             {
                 pushState( ContState );
-                token = parser::Token_CONT;
+                token = Parser::Token_CONT;
             }else if( it->unicode() == ',' )
             {
-                token = parser::Token_COMMA;
+                token = Parser::Token_COMMA;
             }else if( it->unicode() == ')' )
             {
                 popState();
-                token = parser::Token_RPAREN;
+                token = Parser::Token_RPAREN;
             }else
             {
                 unsigned int parentCount = 0;
@@ -227,7 +227,7 @@ int Lexer::nextTokenKind()
                     ++m_curpos;
                 }
                 m_curpos--;
-                token = parser::Token_VALUE;
+                token = Parser::Token_VALUE;
             }
             break;
         case ContState:
@@ -238,7 +238,7 @@ int Lexer::nextTokenKind()
                 if ( it->unicode() == '\n' )
                 {
                     createNewline( m_curpos );
-                    token = parser::Token_NEWLINE;
+                    token = Parser::Token_NEWLINE;
                     m_tokenEnd = m_curpos;
                     popState();
                     QChar* temp = it;
@@ -272,7 +272,7 @@ int Lexer::nextTokenKind()
             {
                 if ( isBeginIdentifierCharacter( it ) )
                 {
-                    token = parser::Token_IDENTIFIER;
+                    token = Parser::Token_IDENTIFIER;
                     while ( !it->isSpace() && isIdentifierCharacter( it )  && m_curpos < m_contentSize )
                     {
                         it++;
@@ -280,7 +280,7 @@ int Lexer::nextTokenKind()
                     }
                     if( !isEndIdentifierCharacter( ( it-1 ) ) )
                     {
-                        token = parser::Token_INVALID;
+                        token = Parser::Token_INVALID;
                     }
                     m_curpos--;
                 }
@@ -291,30 +291,30 @@ int Lexer::nextTokenKind()
                     switch ( it->unicode() )
                     {
                         case '|':
-                            token = parser::Token_OR;
+                            token = Parser::Token_OR;
                             break;
                         case '!':
-                            token = parser::Token_EXCLAM;
+                            token = Parser::Token_EXCLAM;
                             break;
                         case '(':
                             pushState( FunctionArgState );
-                            token = parser::Token_LPAREN;
+                            token = Parser::Token_LPAREN;
                             break;
                         case '{':
-                            token = parser::Token_LBRACE;
+                            token = Parser::Token_LBRACE;
                             break;
                         case '}':
-                            token = parser::Token_RBRACE;
+                            token = Parser::Token_RBRACE;
                             break;
                         case ':':
-                            token = parser::Token_COLON;
+                            token = Parser::Token_COLON;
                             break;
                         case '~':
                             if ( c2 && c2->unicode() == '=' )
                             {
                                 pushState( VariableValueState );
                                 m_curpos++;
-                                token = parser::Token_TILDEEQ;
+                                token = Parser::Token_TILDEEQ;
                             }
                             break;
                         case '*':
@@ -322,7 +322,7 @@ int Lexer::nextTokenKind()
                             {
                                 pushState( VariableValueState );
                                 m_curpos++;
-                                token = parser::Token_STAREQ;
+                                token = Parser::Token_STAREQ;
                             }
                             break;
                         case '-':
@@ -330,7 +330,7 @@ int Lexer::nextTokenKind()
                             {
                                 pushState( VariableValueState );
                                 m_curpos++;
-                                token = parser::Token_MINUSEQ;
+                                token = Parser::Token_MINUSEQ;
                             }
                             break;
                         case '+':
@@ -338,16 +338,16 @@ int Lexer::nextTokenKind()
                             {
                                 pushState( VariableValueState );
                                 m_curpos++;
-                                token = parser::Token_PLUSEQ;
+                                token = Parser::Token_PLUSEQ;
                             }
                             break;
                         case '=':
                             pushState( VariableValueState );
-                            token = parser::Token_EQUAL;
+                            token = Parser::Token_EQUAL;
                             break;
                         case '\n':
                             createNewline( m_curpos );
-                            token = parser::Token_NEWLINE;
+                            token = Parser::Token_NEWLINE;
                             break;
                         default:
                             break;
@@ -356,7 +356,7 @@ int Lexer::nextTokenKind()
             }
             break;
         default:
-            token = parser::Token_INVALID;
+            token = Parser::Token_INVALID;
             break;
     }
     if ( m_curpos >= m_contentSize )
@@ -368,12 +368,12 @@ int Lexer::nextTokenKind()
     return token;
 }
 
-std::size_t Lexer::tokenBegin() const
+qint64 Lexer::tokenBegin() const
 {
     return m_tokenBegin;
 }
 
-std::size_t Lexer::tokenEnd() const
+qint64 Lexer::tokenEnd() const
 {
     return m_tokenEnd;
 }
@@ -397,7 +397,7 @@ QChar* Lexer::ignoreWhitespaceAndComment( QChar* it )
 void Lexer::createNewline( int pos )
 {
     if( m_parser )
-        m_parser->token_stream->location_table()->newline( pos );
+        m_parser->tokenStream->locationTable()->newline( pos );
 }
 
 }

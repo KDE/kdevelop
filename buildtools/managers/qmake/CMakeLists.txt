@@ -1,7 +1,7 @@
 project(QMakeManager)
 
 
-find_package(KDevelop-PG QUIET)
+find_package(KDevelop-PG-Qt QUIET)
 include_directories(${QMakeManager_SOURCE_DIR} ${QMakeManager_BINARY_DIR} ${KDE4_INCLUDES}
     ${CMAKE_SOURCE_DIR}/buildtools/builders/qmakebuilder/
 )

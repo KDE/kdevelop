@@ -21,7 +21,7 @@
 #include "assignmenttest.h"
 
 #include "qmakedriver.h"
-#include "qmakeast.h"
+#include "ast.h"
 
 #include "testhelpers.h"
 

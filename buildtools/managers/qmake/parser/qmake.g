@@ -26,7 +26,6 @@
 [:
 
 #include <QtCore/QString>
-#include <limits>
 
 namespace QMake
 {
@@ -53,9 +52,9 @@ namespace QMake
         Warning,
         Info
     };
-    void reportProblem( parser::ProblemType type, const QString& message );
+    void reportProblem( Parser::ProblemType type, const QString& message );
 
-    QString tokenText(std::size_t begin, std::size_t end) const;
+    QString tokenText(qint64 begin, qint64 end) const;
 
     void setDebug( bool debug );
 
@@ -85,10 +84,10 @@ namespace QMake
 
 -- The actual grammar starts here.
 
-   ( #stmts=stmt )*
+   ( #statements=statement )*
 -> project ;;
 
-   ( id=IDENTIFIER ( var=variable_assignment | scope=scope )
+   ( id=IDENTIFIER ( var=variableAssignment | scope=scope )
             [:
                 (*yynode)->isNewline = false;
                 (*yynode)->isExclam = false;
@@ -103,39 +102,39 @@ namespace QMake
                 (*yynode)->isNewline = true;
                 (*yynode)->isExclam = false;
             :]
--> stmt [ member variable isNewline: bool;
+-> statement [ member variable isNewline: bool;
           member variable isExclam: bool; ] ;;
 
-   func_args=function_args ( scope_body=scope_body | or_op=or_op scope_body=scope_body | 0 )
-   | ( or_op=or_op | 0 ) scope_body=scope_body
+   functionArguments=functionArguments ( scopeBody=scopeBody | orOperator=orOperator scopeBody=scopeBody | 0 )
+   | ( orOperator=orOperator | 0 ) scopeBody=scopeBody
 -> scope ;;
 
    ( OR #item=item )+
--> or_op ;;
+-> orOperator ;;
 
-   id=IDENTIFIER ( func_args=function_args | 0 )
+   id=IDENTIFIER ( functionArguments=functionArguments | 0 )
 -> item ;;
 
-   op=op ( values=value_list ( NEWLINE | 0 ) | NEWLINE | 0 )
--> variable_assignment ;;
+   op=op ( values=valueList ( NEWLINE | 0 ) | NEWLINE | 0 )
+-> variableAssignment ;;
 
    optoken=PLUSEQ | optoken=MINUSEQ | optoken=STAREQ | optoken=EQUAL | optoken=TILDEEQ
 -> op ;;
 
    ( #list=value | CONT NEWLINE )+
--> value_list ;;
+-> valueList ;;
 
    value=VALUE
 -> value ;;
 
-   LPAREN args=arg_list RPAREN
--> function_args ;;
+   LPAREN args=argumentList RPAREN
+-> functionArguments ;;
 
    ( ( #args=value | CONT NEWLINE ) ( ( COMMA | CONT NEWLINE ) #args=value )* | 0 )
--> arg_list ;;
+-> argumentList ;;
 
-    LBRACE ( NEWLINE | 0 ) ( #stmts=stmt )* RBRACE | COLON #stmts=stmt
--> scope_body ;;
+    LBRACE ( NEWLINE | 0 ) ( #statements=statement )* RBRACE | COLON #statements=statement
+-> scopeBody ;;
 
 -----------------------------------------------------------------
 -- Code segments copied to the implementation (.cpp) file.
@@ -147,30 +146,29 @@ namespace QMake
 #include "qmakelexer.h"
 #include <kdebug.h>
 #include <QtCore/QString>
-#include <cstddef>
 
 namespace QMake
 {
 
-void parser::tokenize( const QString& contents )
+void Parser::tokenize( const QString& contents )
 {
     m_contents = contents;
     QMake::Lexer lexer( this, contents );
-    int kind = parser::Token_EOF;
+    int kind = Parser::Token_EOF;
 
     do
     {
         kind = lexer.nextTokenKind();
 
         if ( !kind ) // when the lexer returns 0, the end of file is reached
-            kind = parser::Token_EOF;
+            kind = Parser::Token_EOF;
 
-        parser::token_type &t = this->token_stream->next();
+        Parser::Token &t = this->tokenStream->next();
         t.kind = kind;
-        if( t.kind == parser::Token_EOF )
+        if( t.kind == Parser::Token_EOF )
         {
-            t.begin = std::numeric_limits<std::size_t>::max();
-            t.end = std::numeric_limits<std::size_t>::max();
+            t.begin = -1;
+            t.end = -1;
         }else
         {
             t.begin = lexer.tokenBegin();
@@ -183,17 +181,17 @@ void parser::tokenize( const QString& contents )
         }
 
     }
-    while ( kind != parser::Token_EOF );
+    while ( kind != Parser::Token_EOF );
 
     this->yylex(); // produce the look ahead token
 }
 
-QString parser::tokenText( std::size_t begin, std::size_t end ) const
+QString Parser::tokenText( qint64 begin, qint64 end ) const
 {
     return m_contents.mid((int)begin, (int)end-begin+1);
 }
 
-void parser::reportProblem( parser::ProblemType type, const QString& message )
+void Parser::reportProblem( Parser::ProblemType type, const QString& message )
 {
     if (type == Error)
         kDebug(9024) << "** ERROR:" << message;
@@ -205,25 +203,25 @@ void parser::reportProblem( parser::ProblemType type, const QString& message )
 
 
 // custom error recovery
-void parser::yy_expected_token(int /*expected*/, std::size_t /*where*/, char const *name)
+void Parser::expectedToken(int /*expected*/, qint64 /*where*/, const QString& name)
 {
     reportProblem(
-        parser::Error,
+        Parser::Error,
         QString("Expected token \"%1\"").arg(name));
 }
 
-void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
+void Parser::expectedSymbol(int /*expected_symbol*/, const QString& name)
 {
-    std::size_t line;
-    std::size_t col;
-    size_t index = token_stream->index()-1;
-    token_type &token = token_stream->token(index);
+    qint64 line;
+    qint64 col;
+    size_t index = tokenStream->index()-1;
+    Token &token = tokenStream->token(index);
     kDebug(9024) << "token starts at:" << token.begin;
     kDebug(9024) << "index is:" << index;
-    token_stream->start_position(index, &line, &col);
+    tokenStream->startPosition(index, &line, &col);
     QString tokenValue = tokenText(token.begin, token.end);
     reportProblem(
-        parser::Error,
+        Parser::Error,
         QString("Expected symbol \"%1\" (current token: \"%2\" [%3] at line: %4 col: %5)")
             .arg(name)
             .arg(token.kind != 0 ? tokenValue : "EOF")
@@ -232,7 +230,7 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
             .arg(col));
 }
 
-void parser::setDebug( bool debug )
+void Parser::setDebug( bool debug )
 {
     m_debug = debug;
 }

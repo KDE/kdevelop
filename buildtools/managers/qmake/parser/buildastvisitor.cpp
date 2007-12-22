@@ -21,8 +21,8 @@
 #include "buildastvisitor.h"
 
 #include "qmakeast.h"
-#include "qmake_parser.h"
-#include "qmake_ast.h"
+#include "qmakeparser.h"
+#include "ast.h"
 
 #include <QtCore/QPair>
 
@@ -31,7 +31,7 @@
 namespace QMake
 {
 
-BuildASTVisitor::BuildASTVisitor(parser* parser, ProjectAST* project)
+BuildASTVisitor::BuildASTVisitor(Parser* parser, ProjectAST* project)
     : m_parser(parser)
 {
     aststack.push(project);
@@ -43,65 +43,65 @@ BuildASTVisitor::~BuildASTVisitor()
     m_parser = 0;
 }
 
-void BuildASTVisitor::visit_arg_list( arg_list_ast *node )
+void BuildASTVisitor::visitArgumentList( ArgumentListAst *node )
 {
     //Nothing to be done here as we just need to iterate through the items
-    default_visitor::visit_arg_list(node);
+    DefaultVisitor::visitArgumentList(node);
 }
 
-void BuildASTVisitor::visit_function_args( function_args_ast *node )
+void BuildASTVisitor::visitFunctionArguments( FunctionArgumentsAst *node )
 {
     //Nothing to be done here as we just need to iterate through the items
-    default_visitor::visit_function_args(node);
+    DefaultVisitor::visitFunctionArguments(node);
 }
 
-void BuildASTVisitor::visit_or_op( or_op_ast *node )
+void BuildASTVisitor::visitOrOperator( OrOperatorAst *node )
 {
     //Nothing to be done here as we just need to iterate through the items
-    default_visitor::visit_or_op(node);
+    DefaultVisitor::visitOrOperator(node);
 }
 
-void BuildASTVisitor::visit_item( item_ast *node )
+void BuildASTVisitor::visitItem( ItemAst *node )
 {
-    if( node->func_args )
+    if( node->functionArguments )
     {
         FunctionCallAST* call = new FunctionCallAST( aststack.top() );
         ValueAST* val = new ValueAST();
         val->setValue( getTokenString( node->id ) );
-        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn(node->id);
+        QPair<qint64,qint64> line_col = getTokenLineAndColumn(node->id);
         val->setLine( line_col.first );
         val->setColumn( line_col.second );
         call->setFunctionName( val );
         OrAST* orast = stackTop<OrAST>();
         orast->addScope( call );
         aststack.push( call );
-        default_visitor::visit_item( node );
+        DefaultVisitor::visitItem( node );
         aststack.pop();
     }else
     {
         SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
         ValueAST* val = new ValueAST();
         val->setValue( getTokenString( node->id ) );
-        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn(node->id);
+        QPair<qint64,qint64> line_col = getTokenLineAndColumn(node->id);
         val->setLine( line_col.first );
         val->setColumn( line_col.second );
         simple->setScopeName( val );
         OrAST* orast = stackTop<OrAST>();
         orast->addScope( simple );
-        default_visitor::visit_item( node );
+        DefaultVisitor::visitItem( node );
     }
 }
 
-void BuildASTVisitor::visit_scope( scope_ast *node )
+void BuildASTVisitor::visitScope( ScopeAst *node )
 {
-    if( node->or_op )
+    if( node->orOperator )
     {
         OrAST* orast = new OrAST( aststack.top() );
-        if( node->func_args )
+        if( node->functionArguments )
         {
             FunctionCallAST* ast = new FunctionCallAST( orast );
             aststack.push( ast );
-            visit_node( node->func_args );
+            visitNode( node->functionArguments );
             aststack.pop();
             orast->addScope( ast );
         }else
@@ -110,62 +110,62 @@ void BuildASTVisitor::visit_scope( scope_ast *node )
             orast->addScope( simple );
         }
         aststack.push(orast);
-        visit_node( node->or_op );
+        visitNode( node->orOperator );
     }else
     {
-        if( node->func_args )
+        if( node->functionArguments )
         {
             FunctionCallAST* call = new FunctionCallAST( aststack.top() );
             aststack.push( call );
-            visit_node( node->func_args );
+            visitNode( node->functionArguments );
         }else
         {
             SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
             aststack.push( simple );
         }
     }
-    if( node->scope_body )
+    if( node->scopeBody )
     {
         ScopeBodyAST* scopebody = new ScopeBodyAST(aststack.top());
         ScopeAST* scope = stackTop<ScopeAST>();
         scope->setScopeBody( scopebody );
         aststack.push( scopebody );
-        visit_node( node->scope_body );
+        visitNode( node->scopeBody );
         aststack.pop();
     }
 }
 
-void BuildASTVisitor::visit_op( op_ast *node )
+void BuildASTVisitor::visitOp( OpAst *node )
 {
     AssignmentAST* assign = stackTop<AssignmentAST>();
     ValueAST* val = new ValueAST();
     val->setValue( getTokenString( node->optoken ) );
-    QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn( node->optoken );
+    QPair<qint64,qint64> line_col = getTokenLineAndColumn( node->optoken );
     val->setLine( line_col.first );
     val->setColumn( line_col.second );
     assign->setOp( val );
-    default_visitor::visit_op(node);
+    DefaultVisitor::visitOp(node);
 }
 
-void BuildASTVisitor::visit_project( project_ast *node )
+void BuildASTVisitor::visitProject( ProjectAst *node )
 {
-    default_visitor::visit_project(node);
+    DefaultVisitor::visitProject(node);
 }
 
-void BuildASTVisitor::visit_scope_body( scope_body_ast *node )
+void BuildASTVisitor::visitScopeBody( ScopeBodyAst *node )
 {
-    default_visitor::visit_scope_body(node);
+    DefaultVisitor::visitScopeBody(node);
 }
 
-void BuildASTVisitor::visit_stmt( stmt_ast *node )
+void BuildASTVisitor::visitStatement( StatementAst *node )
 {
-    default_visitor::visit_stmt(node);
+    DefaultVisitor::visitStatement(node);
     if( !node->isNewline )
     {
         StatementAST* stmt = stackPop<StatementAST>();
         ValueAST* val = new ValueAST();
         val->setValue( getTokenString( node->id ) );
-        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn( node->id );
+        QPair<qint64,qint64> line_col = getTokenLineAndColumn( node->id );
         val->setLine( line_col.first );
         val->setColumn( line_col.second );
         if( node->isExclam )
@@ -178,7 +178,7 @@ void BuildASTVisitor::visit_stmt( stmt_ast *node )
     }
 }
 
-void BuildASTVisitor::visit_value( value_ast *node )
+void BuildASTVisitor::visitValue( ValueAst *node )
 {
     AssignmentAST* assign = dynamic_cast<AssignmentAST*>( aststack.top() );
     if( assign )
@@ -191,24 +191,24 @@ void BuildASTVisitor::visit_value( value_ast *node )
         FunctionCallAST* call = stackTop<FunctionCallAST>();
         ValueAST* value = new ValueAST( call );
         value->setValue( getTokenString(node->value) );
-        QPair<std::size_t,std::size_t> line_col = getTokenLineAndColumn(node->value);
+        QPair<qint64,qint64> line_col = getTokenLineAndColumn(node->value);
         value->setLine( line_col.first );
         value->setColumn( line_col.second );
         call->addArgument( value );
     }
-    default_visitor::visit_value(node);
+    DefaultVisitor::visitValue(node);
 }
 
-void BuildASTVisitor::visit_value_list( value_list_ast *node )
+void BuildASTVisitor::visitValueList( ValueListAst *node )
 {
-    default_visitor::visit_value_list(node);
+    DefaultVisitor::visitValueList(node);
 }
 
-void BuildASTVisitor::visit_variable_assignment( variable_assignment_ast *node )
+void BuildASTVisitor::visitVariableAssignment( VariableAssignmentAst *node )
 {
     AssignmentAST* assign = new AssignmentAST(aststack.top());
     aststack.push(assign);
-    default_visitor::visit_variable_assignment(node);
+    DefaultVisitor::visitVariableAssignment(node);
 }
 
 template <typename T> T* BuildASTVisitor::stackTop()
@@ -248,18 +248,18 @@ template <typename T> T* BuildASTVisitor::stackPop()
     return ast;
 }
 
-QString BuildASTVisitor::getTokenString(std::size_t idx)
+QString BuildASTVisitor::getTokenString(qint64 idx)
 {
-    QMake::parser::token_type token = m_parser->token_stream->token(idx);
+    QMake::Parser::Token token = m_parser->tokenStream->token(idx);
     return m_parser->tokenText(token.begin,token.end).replace("\n","\\n");
 }
 
-QPair<std::size_t,std::size_t> BuildASTVisitor::getTokenLineAndColumn( std::size_t idx )
+QPair<qint64,qint64> BuildASTVisitor::getTokenLineAndColumn( qint64 idx )
 {
-    QPair<std::size_t,std::size_t> info;
-    std::size_t line,col;
-    QMake::parser::token_type token = m_parser->token_stream->token(idx);
-    m_parser->token_stream->start_position(idx,&line,&col);
+    QPair<qint64,qint64> info;
+    qint64 line,col;
+    QMake::Parser::Token token = m_parser->tokenStream->token(idx);
+    m_parser->tokenStream->startPosition(idx,&line,&col);
     info.first = line;
     info.second = col;
     return info;

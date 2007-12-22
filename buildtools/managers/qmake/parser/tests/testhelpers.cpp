@@ -22,7 +22,7 @@
 
 #include <QtCore/QList>
 #include <QtTest/QtTest>
-#include "qmakeast.h"
+#include "ast.h"
 
 void matchScopeBodies( QList<QMake::StatementAST*> realbody,
                              QList<QMake::StatementAST*> testbody )

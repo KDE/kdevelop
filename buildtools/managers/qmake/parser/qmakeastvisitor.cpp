@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "qmakeastvisitor.h"
-#include "qmakeast.h"
+#include "ast.h"
 
 namespace QMake
 {
