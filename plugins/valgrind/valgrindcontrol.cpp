@@ -25,7 +25,6 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
-#include <k3process.h>
 #include <kprocess.h>
 #include <klocale.h>
 #include <kdebug.h>
