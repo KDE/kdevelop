@@ -311,7 +311,7 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
   if( d_func()->m_isTypeAlias ) {
     ///If this is a type-alias, return the internal context of the actual type.
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(abstractType().data());
-    if( idType && idType->declaration() )
+    if( idType && idType->declaration() && idType->declaration() != this )
       return idType->declaration()->logicalInternalContext( topContext );
   }
   
