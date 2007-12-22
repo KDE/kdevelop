@@ -36,7 +36,7 @@ namespace Cpp {
   class KDEVCPPDUCHAIN_EXPORT ViableFunction {
     public:
 
-    explicit ViableFunction( Declaration* decl = 0, bool noUserDefinedConversion = false );
+    explicit ViableFunction( TopDUContext* topContext = 0, Declaration* decl = 0, bool noUserDefinedConversion = false );
 
     /**
      * Is it a valid function?
@@ -79,6 +79,7 @@ namespace Cpp {
     private:
     QList<ParameterConversion> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
+    KDevelop::TopDUContextPointer m_topContext;
     KSharedPtr<CppFunctionType> m_type;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };

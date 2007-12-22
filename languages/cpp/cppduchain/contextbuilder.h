@@ -151,6 +151,13 @@ protected:
   // Write lock is already held here...
   virtual void closeContext();
 
+  ///Open/close prefix contexts around the class specifier that make the qualified identifier
+  ///of the class Declaration match, because Declarations have only unqualified names.
+  ///@param id should be the whole identifier. A prefix-context will only be created if it
+  ///has more than 1 element.
+  void openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id);
+  void closePrefixContext(const QualifiedIdentifier& id);
+  
   // Split up visitors created for subclasses to use
   /// Visits the type specifier and init declarator for a function.
   virtual void visitFunctionDeclaration (FunctionDefinitionAST *);

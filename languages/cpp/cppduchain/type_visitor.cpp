@@ -34,7 +34,7 @@
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
 
-TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& trace) : m_session(session), m_visitor(visitor), m_context(context), m_trace(trace)
+TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace) : m_session(session), m_visitor(visitor), m_context(context), m_trace(trace)
 {
   m_position = m_context->range().end;
 }

@@ -52,6 +52,19 @@ KUrl url( const IncludeItem& item ) {
   return u;
 }
 
+TopDUContextPointer getCurrentTopDUContext() {
+  IDocument* doc = CppLanguageSupport::self()->core()->documentController()->activeDocument();
+
+  if( doc )
+  {
+    {
+      DUChainReadLocker lock( DUChain::lock() );
+      return TopDUContextPointer( getCompletionContext( doc->url() ) );
+    }
+  }
+  return TopDUContextPointer();
+}
+
 ///Finds the shortest path through the imports to a given included file
 QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import ) {
 
@@ -192,7 +205,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   foreach( const KUrl& u, inclusionPath )
     htmlPrefix += i18n("Included through") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.prettyUrl()) + "<br/>";
   
-  return new NavigationWidget( m_item, htmlPrefix, htmlSuffix );
+  return new NavigationWidget( m_item, getCurrentTopDUContext(), htmlPrefix, htmlSuffix );
 }
 
 QString IncludeFileData::htmlDescription() const

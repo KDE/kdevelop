@@ -205,13 +205,20 @@ const Token& ExpressionVisitor::tokenFromIndex( int index ) {
 
 typedef PushValue<AbstractType::Ptr> PushAbstractType;
 
+TopDUContext* ExpressionVisitor::topContext() const {
+  if( !m_inclusionTrace.isEmpty() ) {
+    return m_inclusionTrace.front().ctx->topContext();
+  }else{
+    return m_currentContext->topContext();
+  }
+}
 
 bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance& instance ) {
   return instance && (instance.declaration || isReferenceType(type));
 }
 
   
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::DUContext::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_memberAccess(false), m_inclusionTrace(inclusionTrace), m_session(session), m_currentContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_memberAccess(false), m_inclusionTrace(inclusionTrace), m_session(session), m_currentContext(0) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -259,7 +266,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     LOCKDUCHAIN;
 
-    base = realType(base,&isConst);
+    base = realType(base, topContext(), &isConst);
     
     clearLast();
     
@@ -278,7 +285,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     MUST_HAVE(declaration);
     MUST_HAVE(declaration->context());
 
-    DUContext* internalContext = getInternalContext(declaration);
+    DUContext* internalContext = declaration->logicalInternalContext(topContext());
 
     MUST_HAVE( internalContext );
     
@@ -336,7 +343,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         LOCKDUCHAIN;
         //When the type is a reference, dereference it so we get to the pointer-type
 
-        PointerType* pnt = dynamic_cast<PointerType*>( realType(m_lastType) );
+        PointerType* pnt = dynamic_cast<PointerType*>( realType(m_lastType, topContext()) );
         if( pnt ) {
 /*          kDebug(9007) << "got type:" << pnt->toString();
           kDebug(9007) << "base-type:" << pnt->baseType()->toString();*/
@@ -386,7 +393,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
 
   AbstractType::Ptr ExpressionVisitor::realLastType(bool* constant) const {
-    return AbstractType::Ptr(realType( m_lastType, constant ));
+    return AbstractType::Ptr(realType( m_lastType, topContext(), constant ));
   }
   
   bool ExpressionVisitor::getPointerTarget( AST* node, bool* constant )  {
@@ -441,7 +448,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       LOCKDUCHAIN;
       bool isConst = false; //@todo get this from upside
       
-      m_lastType = realType(m_lastType, &isConst);
+      m_lastType = realType(m_lastType, topContext(), &isConst);
 
       isConst |= isConstant(m_lastType.data());
       
@@ -459,7 +466,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       MUST_HAVE(declaration);
       MUST_HAVE(declaration->context());
 
-      m_currentContext = getInternalContext(declaration);
+      m_currentContext = declaration->logicalInternalContext(topContext());
 
       MUST_HAVE( m_currentContext );
     }
@@ -1614,11 +1621,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     {
       LOCKDUCHAIN;
-      if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->type<CppClassType>()) ) {
+      if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->logicalDeclaration(topContext())->type<CppClassType>()) ) {
         
         if( constructedType && constructedType->declaration() && constructedType->declaration()->internalContext() )
         {
-          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->range().end, AbstractType::Ptr(), true, DUContext::OnlyFunctions ));
+          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->range().end, topContext(), AbstractType::Ptr(), true, DUContext::OnlyFunctions ));
         }
       }
     }

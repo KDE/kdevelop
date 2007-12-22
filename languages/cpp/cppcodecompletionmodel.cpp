@@ -146,6 +146,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   }
 
   TopDUContext* top = getCompletionContext( url );
+  m_currentTopContext = TopDUContextPointer(top);
 
   if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;
@@ -342,7 +343,7 @@ QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int ro
     case IsExpandable:
       return QVariant(true);
     case ExpandingWidget: {
-      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(item);
+      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(item, m_currentTopContext);
       m_navigationWidgets[&completionItem] = nav;
 
        QVariant v;
@@ -462,7 +463,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         Cpp::CodeCompletionContext::Function f( m_currentMatchContext.completionContext->functions()[m_currentMatchContext.listOffset] );
 
         if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<CppFunctionType>() && f.function.declaration()->type<CppFunctionType>()->arguments().count() > f.matchedArguments ) {
-          Cpp::TypeConversion conv;
+          Cpp::TypeConversion conv(m_currentTopContext.data());
 
           ///@todo fill the lvalue-ness correctly
           int quality = ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<CppFunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
@@ -485,7 +486,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     case IsExpandable:
       return QVariant(true);
     case ExpandingWidget: {
-      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(DeclarationPointer(dec));
+      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(DeclarationPointer(dec), m_currentTopContext);
       m_navigationWidgets[&item] = nav;
 
        QVariant v;

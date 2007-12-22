@@ -19,6 +19,7 @@
 #include "viablefunctions.h"
 #include "cppduchain/typeutils.h"
 #include "duchain/ducontext.h"
+#include "duchain/topducontext.h"
 #include "duchain/declaration.h"
 #include "duchain/classfunctiondeclaration.h"
 #include "cppduchain/cpptypes.h"
@@ -34,7 +35,7 @@ inline bool ViableFunction::ParameterConversion::operator<(const ParameterConver
     return baseConversionLevels > rhs.baseConversionLevels; //Conversion-rank is same, so use the base-conversion levels for ranking
 }
 
-ViableFunction::ViableFunction( Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
+ViableFunction::ViableFunction( TopDUContext* topContext, Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_topContext(topContext), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
   if( decl )
     m_type = KSharedPtr<CppFunctionType>(dynamic_cast<CppFunctionType*>( decl->abstractType().data()));
 }
@@ -48,7 +49,7 @@ bool ViableFunction::isValid() const {
 }
 
 void ViableFunction::matchParameters( const OverloadResolver::ParameterList& params, bool partial ) {
-  if( !isValid() )
+  if( !isValid() || !m_topContext )
     return;
   AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());
   Q_ASSERT(functionDecl);
@@ -62,7 +63,7 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   QList<AbstractType::Ptr>::const_iterator argumentIt = m_type->arguments().begin();
 
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
-    TypeConversion conv;
+    TypeConversion conv(m_topContext.data());
     ParameterConversion c;
     c.rank = conv.implicitConversion(AbstractType::Ptr((*it).type), (*argumentIt), (*it).lValue, m_noUserDefinedConversion );
     c.baseConversionLevels = conv.baseConversionLevels();

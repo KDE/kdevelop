@@ -114,6 +114,21 @@ ContextBuilder::~ContextBuilder ()
   delete m_nameCompiler;
 }
 
+void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id) {
+  if(id.count() < 2)
+    return;
+  QualifiedIdentifier prefixId(id);
+  prefixId.pop();
+  ///@todo What would be the best context-type for this?
+  openContext(ast, DUContext::Namespace, prefixId);
+}
+
+void ContextBuilder::closePrefixContext(const QualifiedIdentifier& id) {
+  if(id.count() < 2)
+    return;
+  closeContext();
+}
+
 void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
   AST* first, *last;
@@ -386,8 +401,8 @@ void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
   
   Q_ASSERT(currentContext()->type() == DUContext::Class);
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.baseClass.data());
-  if( idType && idType->declaration() && idType->declaration()->internalContext() ) {
-    currentContext()->addImportedParentContext( idType->declaration()->internalContext() );
+  if( idType && idType->declaration() && idType->declaration()->logicalInternalContext(0) ) {
+    currentContext()->addImportedParentContext( idType->declaration()->logicalInternalContext(0) );
   } else if( !dynamic_cast<DelayedType*>(base.baseClass.data()) ) {
     kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? QString() : base.baseClass->toString());
   }
@@ -395,7 +410,16 @@ void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
 
 void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
-  openContext(node, DUContext::Class, node->name);
+  //We only use the local identifier here, because we build a prefix-context around
+  ///@todo think about this.
+  QualifiedIdentifier id;
+  if(node->name) {
+    NameCompiler nc(m_editor->parseSession());
+    nc.run(node->name);
+    id = nc.identifier();
+  }
+  
+  openContext(node, DUContext::Class, id.isEmpty() ? QualifiedIdentifier() : QualifiedIdentifier(id.last()) );
   addImportedContexts(); //eventually add template-context
 
   DefaultVisitor::visitClassSpecifier (node);
@@ -656,7 +680,7 @@ void ContextBuilder::visitUsing(UsingAST* node)
  * */
 class VerifyExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
-    VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session, DUContext::ImportTrace()), result(true) {
+    VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session, ImportTrace()), result(true) {
     }
     virtual void problem(AST* /*node*/, const QString& /*str*/) {
       result = false;

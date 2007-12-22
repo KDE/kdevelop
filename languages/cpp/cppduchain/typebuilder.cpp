@@ -23,6 +23,7 @@
 #include <identifier.h>
 #include <duchain.h>
 #include <forwarddeclaration.h>
+#include <forwarddeclarationtype.h>
 #include <templateparameterdeclaration.h>
 #include <duchainlock.h>
 #include "cppeditorintegrator.h"
@@ -284,7 +285,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     if(!delay) {
       DUChainReadLocker lock(DUChain::lock());
       node->expression->ducontext = currentContext();
-      res = parser.evaluateType( node->expression, m_editor->parseSession(), DUContext::ImportTrace() );
+      res = parser.evaluateType( node->expression, m_editor->parseSession(), ImportTrace() );
 
       //Delay the type-resolution of template-parameters
       if( !res.allDeclarations.isEmpty() && (dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front().data()) || isTemplateDependent(res.allDeclarations.front().data())) )
@@ -358,7 +359,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
   }
   
   if (node->name) {
-    {
+/*    {
       DUChainReadLocker lock(DUChain::lock());
       
       ///If possible, find another fitting declaration/forward-declaration and re-use it's type
@@ -371,25 +372,26 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
         closeType();
         return;
       }
-    }
+    }*/
     
-    switch (kind) {
-      case Token_class:
-      case Token_struct:
-      case Token_union:
-        type = AbstractType::Ptr(openClass(kind));
-        break;
-      case Token_enum:
-        type = AbstractType::Ptr(new CppEnumerationType());
-        break;
-      case Token_typename:
-        // TODO what goes here...?
-        //type = def->abstractType();
-        break;
-    }
+//     switch (kind) {
+//       case Token_class:
+//       case Token_struct:
+//       case Token_union:
+//         type = AbstractType::Ptr(openClass(kind));
+//         break;
+//       case Token_enum:
+//         type = AbstractType::Ptr(new CppEnumerationType());
+//         break;
+//       case Token_typename:
+//         // TODO what goes here...?
+//         //type = def->abstractType();
+//         break;
+//     }
 
-    if (type)
-      openType(type, node);
+    type = AbstractType::Ptr(new ForwardDeclarationType());
+    
+    openType(type, node);
   }
 
   // TODO.. figure out what to do with this now... parseConstVolatile(node->cv);
@@ -659,7 +661,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     DUChainReadLocker lock(DUChain::lock());
     if(expression) {
       expression->ducontext = currentContext();
-      res = parser.evaluateType( expression, m_editor->parseSession(), DUContext::ImportTrace() );
+      res = parser.evaluateType( expression, m_editor->parseSession(), ImportTrace() );
     }
   
     CppArrayType::Ptr array(new CppArrayType());

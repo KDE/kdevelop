@@ -182,17 +182,17 @@ void TestExpressionParser::testTemplatesSimple() {
   QCOMPARE(defClassC->identifier(), Identifier("C"));
   QVERIFY(defClassC->type<CppClassType>());
   
-  DUContext* classA = TypeUtils::getInternalContext(defClassA);
+  DUContext* classA = defClassA->logicalInternalContext(0);
   QVERIFY(classA->parentContext());
   QCOMPARE(classA->importedParentContexts().count(), 1); //The template-parameter context is imported
   QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
-  DUContext* classB = TypeUtils::getInternalContext(defClassB);
+  DUContext* classB = defClassB->logicalInternalContext(0);
   QVERIFY(classB->parentContext());
   QCOMPARE(classB->importedParentContexts().count(), 0);
   QCOMPARE(classB->localScopeIdentifier(), QualifiedIdentifier("B"));
   
-  DUContext* classC = TypeUtils::getInternalContext(defClassC);
+  DUContext* classC = defClassC->logicalInternalContext(0);
   QVERIFY(classC->parentContext());
   QCOMPARE(classC->importedParentContexts().count(), 0);
   QCOMPARE(classC->localScopeIdentifier(), QualifiedIdentifier("C"));

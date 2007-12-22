@@ -48,13 +48,13 @@ namespace Cpp {
        * The texts may contain links to files, using a simple special Syntax:
        * KDEV_FILE_LINK{File}. Every occurence of KDEV_FILE_LINK will be replaced.
        * */
-      NavigationWidget(KDevelop::DeclarationPointer declaration, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
+      NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
       /**
        * @param htmlPrefix and @param htmlSuffix can be used to add own text before/behind the
        * normal text in the navigation-widget.
        * The texts may contain links to files, see above.
        * */
-      NavigationWidget(const IncludeItem& includeItem, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
+      NavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
       ~NavigationWidget();
 
       /**
@@ -84,6 +84,8 @@ namespace Cpp {
       void setContext(NavigationContextPointer context);
 
       NavigationContextPointer m_context, m_startContext;
+
+      KDevelop::TopDUContextPointer m_topContext;
       
       QPointer<QTextBrowser> m_browser;
       KDevelop::DeclarationPointer m_declaration;

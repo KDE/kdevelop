@@ -73,14 +73,12 @@ namespace Cpp {
       TemplateDeclaration* instantiatedFrom() const;
 
       ///Marks this template-declaration as a instantiation of the given one. This also means that this declaration will be deleted when the here given is deleted.
-      void setInstantiatedFrom(TemplateDeclaration* from, const QList<ExpressionEvaluationResult>& templateArguments);
+      void setInstantiatedFrom(TemplateDeclaration* from);
       
       /**
        * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
-       *
-       * If this is a forward-declaration, the returned declaration can return another declaration than this one on instantiatedFrom(..).
        * */
-      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const DUContext::ImportTrace& inclusionTrace );
+      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const ImportTrace& inclusionTrace );
 
       ///Returns true if this class is either is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
       bool isInstantiatedFrom(const TemplateDeclaration* other) const;
@@ -91,6 +89,9 @@ namespace Cpp {
       TemplateDeclaration* specializedFrom() const;
 
       const QList<ExpressionEvaluationResult>& instantiatedWith() const;
+
+      ///Must not be called once setInstantiatedFrom was called
+      void setInstantiatedWith(const QList<ExpressionEvaluationResult>& templateParams);
 
       ///Returns all current instantiations of this declaration
       InstantiationsHash instantiations() const;
@@ -135,6 +136,12 @@ namespace Cpp {
     virtual KDevelop::Declaration* clone() const {
       return new SpecialTemplateDeclaration(*this);
     }
+
+    //Is specialized for ForwardDeclaration in templatedeclaration.cpp to actively instantiate template forward declarations
+    virtual Declaration* resolve(const TopDUContext* /*topContext*/) const {
+      Q_ASSERT(0);
+      return 0;
+    }
   };
 
   bool KDEVCPPDUCHAIN_EXPORT isTemplateDeclaration(const KDevelop::Declaration*);
@@ -148,18 +155,18 @@ namespace Cpp {
    * @param parentContext he parent-context everything should be created in(instantiatedDeclaration will be moved into that context anonymously)
    * @param inclusionTrace a trace as used in findDeclarationsInternal(..)
    * @param context A du-context that will be copied and used as internal context for declaration. If this is zero, no context will be copied.
-   * @param templateArguments The template-arguments that will be used to instantiate the input-context. If this is empty, the intersting context will be only copied without specialization. If it contains exactly one argument, and that argument is invalid, the context is instantiated without arguments(default-arguments are used)
+   * @param templateArguments The template-arguments that will be used to instantiate the input-context. If this is empty, the intersting context will be only copied without specialization. If it contains exactly one argument, and that argument is invalid, the context is instantiated without arguments(default-arguments are used). Default-arguments will be used if needed.
    * @param instantiatedDeclaration The copied declaration this should belong to. If this is set, the created context will be made the given declaration's internal-context, and its parent-context will be set to the given context's parent-context. Also delayed types in the declaration will be resolved(The declaration will be changed)
    * @param instantiatedFrom The declaration instantiatedDeclaration should be/is instantiated from. This is needed to eventually change the declaration of in IdentifiedType
    *
    * The DU-Context must be read-locked but not write-locked when this is called.
    * */
-  CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom  );
+  CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const ImportTrace& inclusionTrace, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom  );
 
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
-  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::DUContext::ImportTrace& inclusionTrace, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
+  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::ImportTrace& inclusionTrace, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
 }
 
 #endif

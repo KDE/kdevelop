@@ -284,11 +284,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
                 def->setInternalContext(m_lastContext);
               m_lastContext = 0;
 
-              // Resolve forward declarations
-              foreach (Declaration* forward, declarations) {
-                if (forward->isForwardDeclaration())
-                  forward->toForwardDeclaration()->setResolved(dec);
-              }
               found = true;
               break;
             }
@@ -659,24 +654,6 @@ void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 
   DeclarationBuilderBase::visitEnumSpecifier(node);
 
-  if(node->name && currentDeclaration()) {
-    //Resolve forward-declarations of the enum
-    DUChainWriteLocker lock(DUChain::lock());
-
-    SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-
-    //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
-
-    foreach( Declaration* decl, declarations ) {
-      ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
-      if( forward ) {
-        forward->setResolved(currentDeclaration());
-        forward->setAbstractType(currentDeclaration()->abstractType());
-      }
-    }
-  }
-            
   closeDeclaration();
 }
 
@@ -694,6 +671,18 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   bool m_wasInTypedef = m_inTypedef;
   m_inTypedef = false;
+
+  /**Open helper contexts around the class, so the qualified identifier matches.
+   * Example: "class MyClass::RealClass{}"
+   * Will create one helper-context named "MyClass" around RealClass
+   * */
+
+  QualifiedIdentifier id;
+  if( node->name ) {
+    id = identifierForName(node->name);
+    ///@todo Make decision: Would it be better to allow giving declarations qualified identifiers? Then we wouldn't need to do this.
+    openPrefixContext(node, id);
+  }
   
   openDefinition(node->name, node);
 
@@ -708,13 +697,12 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   eventuallyAssignInternalContext();
   
   if( node->name ) {
-    //Resolve forward-declarations
+    ///Copy template default-parameters from the forward-declaration to the real declaration if possible
     DUChainWriteLocker lock(DUChain::lock());
 
     SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
-    //If possible, find a forward-declaration and re-use its type. That way the forward-declaration is resolved.
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
+    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id, pos);
 
     AbstractType::Ptr newLastType;
     
@@ -723,16 +711,16 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
         ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
         if( forward ) {
           {
-            ///Transfer template default-parameters from the forward-declaration to the real declaration if possible
             KDevelop::DUContext* forwardTemplateContext = forward->internalContext();
             if( forwardTemplateContext && forwardTemplateContext->type() == DUContext::Template ) {
+              
               KDevelop::DUContext* currentTemplateContext = getTemplateContext(currentDeclaration());
               if( (bool)forwardTemplateContext != (bool)currentTemplateContext ) {
                 kDebug(9007) << "Template-contexts of forward- and real declaration do not match: " << currentTemplateContext << getTemplateContext(currentDeclaration()) << currentDeclaration()->internalContext() << forwardTemplateContext << currentDeclaration()->internalContext()->importedParentContexts().count();
               } else if( forwardTemplateContext && currentTemplateContext ) {
                 if( forwardTemplateContext->localDeclarations().count() != currentTemplateContext->localDeclarations().count() ) {
-                  kDebug(9007) << "Template-context declaration counts of forward- and real declaration do not match";
                 } else {
+                  
                   const QList<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
                   const QList<Declaration*>& realList = currentTemplateContext->localDeclarations();
                   
@@ -752,44 +740,31 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
             }
           }
 
-          forward->setResolved(currentDeclaration());
-
-          CppClassType::Ptr realClass(dynamic_cast<CppClassType*>(lastType().data()));
-          CppClassType::Ptr forwardClass = forward->type<CppClassType>();
-          if( realClass && forwardClass )
-          {
-            ///Copy the class into the forward-declarations class, and re-use that class for this declaration.
-            copyCppClass(realClass.data(), forwardClass.data());
-            newLastType = forward->abstractType();
-          } else {
-            kDebug(9007) << "Problem while forward-declaration resolution";
-          }
-
           //Update instantiations in case of template forward-declarations
-          SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (decl);
-          SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (currentDeclaration());
-
-          if( templateForward && currentTemplate )
-          {
-            //Change the types of all the forward-template instantiations
-            TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
-
-            for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
-            {
-              Declaration* realInstance = currentTemplate->instantiate(it.key().args, DUContext::ImportTrace());
-              Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
-              //Now change the type of forwardInstance so it matches the type of realInstance
-              CppClassType::Ptr realClass = realInstance->type<CppClassType>();
-              CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
-
-              if( realClass && forwardClass ) {
-                //Copy the class from real into the forward-declaration's instance
-                copyCppClass(realClass.data(), forwardClass.data());
-              } else {
-                kDebug(9007) << "Bad types involved in formward-declaration";
-              }
-            }
-          }//templateForward && currentTemplate
+//           SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (decl);
+//           SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (currentDeclaration());
+// 
+//           if( templateForward && currentTemplate )
+//           {
+//             //Change the types of all the forward-template instantiations
+//             TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
+// 
+//             for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
+//             {
+//               Declaration* realInstance = currentTemplate->instantiate(it.key().args, ImportTrace());
+//               Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
+//               //Now change the type of forwardInstance so it matches the type of realInstance
+//               CppClassType::Ptr realClass = realInstance->type<CppClassType>();
+//               CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
+// 
+//               if( realClass && forwardClass ) {
+//                 //Copy the class from real into the forward-declaration's instance
+//                 copyCppClass(realClass.data(), forwardClass.data());
+//               } else {
+//                 kDebug(9007) << "Bad types involved in formward-declaration";
+//               }
+//             }
+//           }//templateForward && currentTemplate
         }
       }
     }//foreach
@@ -799,6 +774,9 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   }//node-name
   
   closeDeclaration();
+
+  if(node->name)
+    closePrefixContext(id);
 
   m_accessPolicyStack.pop();
   m_inTypedef = m_wasInTypedef;
@@ -887,7 +865,6 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
   bool openedDeclaration = false;
 
   if (node->name) {
-    //Do not store new template-declarations if there is already known ones for the same type
     QualifiedIdentifier id = identifierForName(node->name);
 
     bool forwardDeclarationGlobal = false;
@@ -902,9 +879,11 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
        * - If it is not found, create a forward-declaration in the global scope.
        * - @todo While searching for the existing declarations, non-fitting overloaded names should be ignored.
        * */
+
+      ///@todo think how this interacts with re-using duchains. In some cases a forward-declaration should still be created.
       QList<Declaration*> declarations;
       SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-      
+
       {
         DUChainReadLocker lock(DUChain::lock());
 
@@ -961,13 +940,12 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
   DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
 
   if (openedDeclaration) {
-    DUChainWriteLocker lock(DUChain::lock());
+/*    DUChainWriteLocker lock(DUChain::lock());
     //Resolve forward-declarations that are declared after the real type was already declared
     Q_ASSERT(dynamic_cast<ForwardDeclaration*>(currentDeclaration()));
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
     if(idType && idType->declaration())
-      static_cast<ForwardDeclaration*>(currentDeclaration())->setResolved(idType->declaration());
-    
+      static_cast<ForwardDeclaration*>(currentDeclaration())->setResolved(idType->declaration());*/
     closeDeclaration();
   }
 }

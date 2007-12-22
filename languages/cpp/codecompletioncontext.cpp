@@ -354,9 +354,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       LOCKDUCHAIN;
       //Dereference a pointer
       AbstractType::Ptr containerType = m_expressionResult.type;
-      CppPointerType* pnt = dynamic_cast<CppPointerType*>(TypeUtils::realType(containerType));
+      CppPointerType* pnt = dynamic_cast<CppPointerType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
       if( !pnt ) {
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType));
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
         if( idType ) {
           if( idType->declaration() && idType->declaration()->internalContext() ) {
             QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(QualifiedIdentifier("operator->"));
@@ -500,9 +500,9 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   }
 
   if(m_expressionResult.isValid() ) {
-    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( TypeUtils::targetType(m_expressionResult.type.data()) );
+    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( TypeUtils::targetType(m_expressionResult.type.data(), m_duContext->topContext()) );
     if( idType && idType->declaration() ) {
-      DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
+      DUContext* ctx = idType->declaration()->logicalInternalContext(m_duContext->topContext());
       if( ctx )
         ret << ctx;
       else {

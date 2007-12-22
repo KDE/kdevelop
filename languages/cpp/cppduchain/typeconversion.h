@@ -19,8 +19,16 @@
 #ifndef TYPECONVERSION_H
 #define TYPECONVERSION_H
 
+#include <QList>
+
 #include "cppduchainexport.h"
 #include "typesystem.h"
+
+namespace KDevelop {
+  class TopDUContext;
+  class ImportTraceItem;
+  typedef QList<ImportTraceItem> ImportTrace;
+}
 
 namespace Cpp {
 using namespace KDevelop;
@@ -64,6 +72,8 @@ using namespace KDevelop;
  * */
 class KDEVCPPDUCHAIN_EXPORT TypeConversion {
   public:
+    ///topContext is needed to resolve forward-declarations
+    TypeConversion(const KDevelop::TopDUContext* topContext);
     virtual ~TypeConversion();
     /**
      * An implicit conversion sequence is a sequence of conversions used to convert an argument in a function call to the type of the corresponding parameter of the function being called. (iso c++ draft 13.3.3.1)
@@ -117,6 +127,7 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
 
     //Used to store the count of steps by which a class needed to be converted to it's base-class
     int m_baseConversionLevels;
+    const TopDUContext* m_topContext;
 };
 
 }

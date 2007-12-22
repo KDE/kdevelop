@@ -22,6 +22,7 @@
 #include <typesystem.h>
 #include <QHash>
 #include "cppduchainexport.h"
+#include <duchain/declaration.h>
 
 class CppIntegralType;
 class CppClassType;
@@ -37,15 +38,16 @@ namespace TypeUtils {
   using namespace KDevelop;
   /**
    * Returns the dereferenced type(example: ReferenceType(PointerType(int)) -> PointerType(int))
+   * Returns the resolved type of unresolved forward-declarations.
    *
    *  !!DU-Chain must be locked!
   * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
-  KDEVCPPDUCHAIN_EXPORT AbstractType* realType(AbstractType* type, bool* constant = 0);
+  KDEVCPPDUCHAIN_EXPORT AbstractType* realType(AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
 
-  KDEVCPPDUCHAIN_EXPORT inline AbstractType* realType(AbstractType::Ptr type, bool* constant = 0) {
-    return realType(type.data(), constant );
+  KDEVCPPDUCHAIN_EXPORT inline AbstractType* realType(AbstractType::Ptr type, const TopDUContext* topContext, bool* constant = 0) {
+    return realType(type.data(), topContext, constant );
   }
 
   /**
@@ -55,11 +57,11 @@ namespace TypeUtils {
   * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
-  KDEVCPPDUCHAIN_EXPORT AbstractType* targetType(AbstractType* type, bool* constant = 0);
-  KDEVCPPDUCHAIN_EXPORT const AbstractType* targetType(const AbstractType* type, bool* constant = 0);
+  KDEVCPPDUCHAIN_EXPORT AbstractType* targetType(AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
+  KDEVCPPDUCHAIN_EXPORT const AbstractType* targetType(const AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
 
-  KDEVCPPDUCHAIN_EXPORT inline AbstractType* targetType(AbstractType::Ptr type, bool* constant = 0) {
-    return targetType(type.data(), constant);
+  KDEVCPPDUCHAIN_EXPORT inline AbstractType* targetType(AbstractType::Ptr type, const TopDUContext* topContext, bool* constant = 0) {
+    return targetType(type.data(), topContext, constant);
   }
 
   /**k
@@ -130,26 +132,24 @@ namespace TypeUtils {
   KDEVCPPDUCHAIN_EXPORT extern const int unsignedIntConversionRank;
 
   /**
-   * Returns all conversion-functions from klass and all accessible bases
+   * Returns all found functions from klass and all accessible bases
    * @param klass The class in which to search
    * @param functions A hash that will map functions to their types
    * @param functionName Name of the functions
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
 
   /**
    * Same as above, except that it adds the functions to a list.
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(CppClassType* klass, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
   /**
    * Returns all constructors
    * */
-  KDEVCPPDUCHAIN_EXPORT void getConstructors(CppClassType* klass, QList<Declaration*>& functions);
+  KDEVCPPDUCHAIN_EXPORT void getConstructors(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions);
   /**
    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
-   * It's possibly a bug in the du-chain that this function is necessary, decl->context() should return the internal context.
    **/
-  KDEVCPPDUCHAIN_EXPORT DUContext* getInternalContext( Declaration* decl );
 }
 
 #endif

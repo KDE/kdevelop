@@ -79,14 +79,14 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
     Declaration* decl = *it;
     bool isConstant = false;
 
-    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl->abstractType(), &isConstant) ) )
+    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl->abstractType(), m_context->topContext(), &isConstant) ) )
     {
       if( decl->kind() == Declaration::Instance ) {
         //Instances of classes should be substituted with their operator() members
-        TypeUtils::getMemberFunctions( klass, newDeclarations, "operator()", isConstant );
+        TypeUtils::getMemberFunctions( klass, m_context->topContext(), newDeclarations, "operator()", isConstant );
       } else {
         //Classes should be substituted with their constructors
-        TypeUtils::getConstructors( klass, newDeclarations );
+        TypeUtils::getConstructors( klass, m_context->topContext(), newDeclarations );
       }
     }
   }
@@ -97,18 +97,18 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
     QPair<OverloadResolver::ParameterList, Declaration*> decl = *it;
     bool isConstant = false;
 
-    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl.second->abstractType(), &isConstant) ) )
+    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl.second->abstractType(), m_context->topContext(), &isConstant) ) )
     {
       if( decl.second->kind() == Declaration::Instance ) {
         //Instances of classes should be substituted with their operator() members
         QList<Declaration*> functions;
-        TypeUtils::getMemberFunctions( klass, functions, "operator()", isConstant );
+        TypeUtils::getMemberFunctions( klass, m_context->topContext(), functions, "operator()", isConstant );
         foreach(Declaration* f, functions)
           newDeclarations << QPair<OverloadResolver::ParameterList, Declaration*>(decl.first, f );
       } else {
         //Classes should be substituted with their constructors
         QList<Declaration*> functions;
-        TypeUtils::getConstructors( klass, functions );
+        TypeUtils::getConstructors( klass, m_context->topContext(), functions );
         foreach(Declaration* f, functions)
           newDeclarations << QPair<OverloadResolver::ParameterList, Declaration*>( decl.first, f );
       }
@@ -130,11 +130,11 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   expandDeclarations( declarations, newDeclarations );
   
   ///Second step: Find best viable function
-  ViableFunction bestViableFunction;
+  ViableFunction bestViableFunction( m_context->topContext() );
   
   for( QList<Declaration*>::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
-    ViableFunction viable( *it , noUserDefinedConversion );
+    ViableFunction viable( m_context->topContext(), *it , noUserDefinedConversion );
     viable.matchParameters( params );
     
     if( viable.isBetter(bestViableFunction) ) {
@@ -166,7 +166,7 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
 
   for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
-    ViableFunction viable( (*it).second );
+    ViableFunction viable( m_context->topContext(), (*it).second );
     ParameterList mergedParams = (*it).first;
     mergedParams.parameters += params.parameters;
     viable.matchParameters( mergedParams, partial );

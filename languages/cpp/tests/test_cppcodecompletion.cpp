@@ -265,7 +265,7 @@ void TestCppCodeCompletion::testTypeConversion() {
     CppFunctionType::Ptr test = findDeclaration( testContext, QualifiedIdentifier("test") )->type<CppFunctionType>();
     QVERIFY(test);
   
-    Cpp::TypeConversion conv;
+    Cpp::TypeConversion conv(context->topContext());
     QVERIFY(!conv.implicitConversion(test->returnType(), Heinz, false));
     QVERIFY(!conv.implicitConversion(Heinz, test->returnType(), false));
     QVERIFY(!conv.implicitConversion(test->returnType(), n, false));
@@ -274,7 +274,7 @@ void TestCppCodeCompletion::testTypeConversion() {
   //lock.unlock();
   {
     ///Test whether a recursive function-call context is created correctly
-    Cpp::TypeConversion conv;
+    Cpp::TypeConversion conv(context->topContext());
     QVERIFY( !conv.implicitConversion(Honk, Heinz) );
     QVERIFY( conv.implicitConversion(Honk, typeInt) ); //Honk has operator int()
     QVERIFY( conv.implicitConversion(Honk, Erna) ); //Erna has constructor that takes Honk
@@ -351,7 +351,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.instance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Erna&"));
+  QCOMPARE(result.type->toString(), QString("forward-declaration Erna&"));
 
   
   ///Test overload-resolution 

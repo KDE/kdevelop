@@ -100,6 +100,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
 
     QMutex* m_mutex;
     CodeCompletionWorker* m_worker;
+    KDevelop::TopDUContextPointer m_currentTopContext;
 };
 
 /**

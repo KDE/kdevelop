@@ -20,13 +20,21 @@
 #include "cppduchain/cpptypes.h"
 #include "duchain/ducontext.h"
 #include "duchain/forwarddeclaration.h"
+#include "duchain/forwarddeclarationtype.h"
 #include "duchain/classfunctiondeclaration.h"
 
 namespace TypeUtils {
   using namespace KDevelop;
 
-  AbstractType* realType(AbstractType* base, bool* constant) {
+  AbstractType* realType(AbstractType* base, const TopDUContext* topContext, bool* constant) {
 
+    ForwardDeclarationType* forward = dynamic_cast<ForwardDeclarationType*>( base );
+    if( forward ) {
+      AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+      if( resolved.data() != (AbstractType*)forward )
+        return realType( resolved.data(), topContext, constant );
+    }
+    
     CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base );
 
     while( ref ) {
@@ -34,16 +42,30 @@ namespace TypeUtils {
         (*constant) |= ref->isConstant();
       base = ref->baseType().data();
       ref = dynamic_cast<CppReferenceType*>( base );
+
+      forward = dynamic_cast<ForwardDeclarationType*>( base );
+      if( forward ) {
+        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+        if( resolved.data() != (AbstractType*)forward )
+          return realType( resolved.data(), topContext, constant );
+      }
     }
 
     return base;
   }
 
-  AbstractType* targetType(AbstractType* base, bool* constant) {
+  AbstractType* targetType(AbstractType* base, const TopDUContext* topContext, bool* constant) {
 
     CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base );
     CppPointerType* pnt = dynamic_cast<CppPointerType*>( base );
-
+    ForwardDeclarationType* forward = dynamic_cast<ForwardDeclarationType*>( base );
+    
+    if( forward ) {
+      AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+      if( resolved.data() != (AbstractType*)forward )
+        return targetType( resolved.data(), topContext, constant );
+    }
+    
     while( ref || pnt ) {
       if( ref ) {
         if( constant )
@@ -56,15 +78,29 @@ namespace TypeUtils {
       }
       ref = dynamic_cast<CppReferenceType*>( base );
       pnt = dynamic_cast<CppPointerType*>( base );
+      forward = dynamic_cast<ForwardDeclarationType*>( base );
+    
+      if( forward ) {
+        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+        if( resolved.data() != (AbstractType*)forward )
+          return targetType( resolved.data(), topContext, constant );
+      }
     }
 
     return base;
   }
 
-  const AbstractType* targetType(const AbstractType* base, bool* constant) {
+  const AbstractType* targetType(const AbstractType* base, const TopDUContext* topContext, bool* constant) {
 
     const CppReferenceType* ref = dynamic_cast<const CppReferenceType*>( base );
     const CppPointerType* pnt = dynamic_cast<const CppPointerType*>( base );
+    const ForwardDeclarationType* forward = dynamic_cast<const ForwardDeclarationType*>( base );
+    
+    if( forward ) {
+      AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+      if( resolved.data() != (AbstractType*)forward )
+        return targetType( resolved.data(), topContext, constant );
+    }
 
     while( ref || pnt ) {
       if( ref ) {
@@ -78,13 +114,20 @@ namespace TypeUtils {
       }
       ref = dynamic_cast<const CppReferenceType*>( base );
       pnt = dynamic_cast<const CppPointerType*>( base );
+      forward = dynamic_cast<const ForwardDeclarationType*>( base );
+    
+      if( forward ) {
+        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+        if( resolved.data() != (AbstractType*)forward )
+          return targetType( resolved.data(), topContext, constant );
+      }
     }
 
     return base;
   }
   
   bool isPointerType(AbstractType* type) {
-    return dynamic_cast<PointerType*>( realType(type) );
+    return dynamic_cast<PointerType*>( realType(type, 0) );
   }
 
   bool isReferenceType(AbstractType* type) {
@@ -180,19 +223,13 @@ namespace TypeUtils {
     return false;
   }
 
-  DUContext* getInternalContext( Declaration* declaration ) {
-    if( declaration )
-      return declaration->internalContext();
-    else
-      return 0;
-  }
+  void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
+    DUContext* context = klass->declaration() ? klass->declaration()->internalContext() : 0;
 
-  void getMemberFunctions(CppClassType* klass, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
-    DUContext* context = getInternalContext( klass->declaration() );
-
+    int functionCount = functions.size();
 
     if( context ) {
-      QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(functionName));
+      QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(functionName), SimpleCursor::invalid(), topContext);
       for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
         CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
@@ -204,31 +241,34 @@ namespace TypeUtils {
       }
     }
 
-    ///@todo One overloaded function of a specific name overloads all inherited with the same name. Think about it in the context where getMemberFunctions is used.
+    ///One overloaded function of a specific name overloads all inherited with the same name. Think about it in the context where getMemberFunctions is used.
+    if( functionCount != functions.size() )
+      return;
 
     //equivalent to using the imported parent-contexts
     for( QList<CppClassType::BaseClassInstance>::const_iterator it =  klass->baseClasses().begin(); it != klass->baseClasses().end(); ++it ) {
       if( (*it).access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
         if( dynamic_cast<const CppClassType*>((*it).baseClass.data()) )
-          getMemberFunctions( static_cast<CppClassType*>( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data() ), functions, functionName,   mustBeConstant);
+          getMemberFunctions( static_cast<CppClassType*>( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data() ), topContext, functions, functionName,   mustBeConstant);
     }
   }
 
-  void getMemberFunctions(CppClassType* klass, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant)  {
+  void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     QHash<CppFunctionType*, ClassFunctionDeclaration*> tempFunctions;
-    getMemberFunctions( klass, tempFunctions, functionName, mustBeConstant );
+    getMemberFunctions( klass, topContext, tempFunctions, functionName, mustBeConstant );
     for( QHash<CppFunctionType*, ClassFunctionDeclaration*>::const_iterator it = tempFunctions.begin(); it != tempFunctions.end(); ++it )
       functions << (*it);
   }
 
-  void getConstructors(CppClassType* klass, QList<Declaration*>& functions) {
-    DUContext* context = getInternalContext( klass->declaration() );
-    if( !context ) {
+  void getConstructors(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions) {
+    DUContext* context = klass->declaration() ? klass->declaration()->internalContext() : 0;
+    if( !context || !context->owner() || !context->owner()->asDeclaration() ) {
       kDebug(9007) << "Tried to get constructors of a class without context";
       return;
     }
 
-    QList<Declaration*> declarations = context->localDeclarations();
+    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(context->owner()->asDeclaration()->identifier()), SimpleCursor::invalid(), topContext);
+    
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
       if( functionDeclaration && functionDeclaration->isConstructor() )

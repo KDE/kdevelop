@@ -147,7 +147,7 @@ struct NavigationAction {
   
 class NavigationContext : public KShared {
   public:
-    NavigationContext( DeclarationPointer decl, NavigationContext* previousContext = 0 ) : m_declaration(decl), m_selectedLink(0), m_linkCount(-1), m_previousContext(previousContext) {
+    NavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, NavigationContext* previousContext = 0 ) : m_declaration(decl), m_selectedLink(0), m_linkCount(-1), m_previousContext(previousContext), m_topContext(topContext) {
     }
     virtual ~NavigationContext() {
     }
@@ -218,6 +218,7 @@ class NavigationContext : public KShared {
         else
           i18n("Class");
       }
+      
       if( decl->kind() == Declaration::Instance )
         kind = i18n("Variable");
 
@@ -230,6 +231,9 @@ class NavigationContext : public KShared {
 
       if(function)
         kind = i18n("Function");
+      
+      if( decl->isForwardDeclaration() )
+        kind = i18n("Forward Declaration");
       
       return kind;
     }
@@ -407,9 +411,10 @@ class NavigationContext : public KShared {
               else {
                 if(m_declaration->isForwardDeclaration()) {
                   ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
-                  if(forwardDec->resolved()) {
+                  Declaration* resolved = forwardDec->resolve(m_topContext.data());
+                  if(resolved) {
                     m_currentText += "(" + i18n("resolved forward-declaration") + ": ";
-                    makeLink(forwardDec->resolved()->identifier().toString(), KDevelop::DeclarationPointer(forwardDec->resolved()), NavigationAction::NavigateDeclaration );
+                    makeLink(resolved->identifier().toString(), KDevelop::DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
                     m_currentText += ") ";
                   }else{
                     m_currentText += i18n("(bad forward-declaration)") + " ";
@@ -526,7 +531,7 @@ class NavigationContext : public KShared {
         m_currentText += Qt::escape("<notype>");
         return;
       }
-        const AbstractType* target = TypeUtils::targetType( type );
+        const AbstractType* target = TypeUtils::targetType( type, m_topContext.data() );
         const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target );
 
         if( idType ) {
@@ -606,6 +611,7 @@ class NavigationContext : public KShared {
     QMap<int, NavigationAction> m_intLinks;
     NavigationContext* m_previousContext;
     QString m_prefix, m_suffix;
+    KDevelop::TopDUContextPointer m_topContext;
 };
 
 NavigationContextPointer NavigationContext::execute(NavigationAction& action)
@@ -629,7 +635,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
       if( m_previousContext && m_previousContext->m_declaration == action.decl )
         return NavigationContextPointer( m_previousContext );
       
-      return registerChild( new NavigationContext(action.decl, this) );
+      return registerChild( new NavigationContext(action.decl, m_topContext, this) );
     } break;
   case NavigationAction::JumpToSource:
       {
@@ -657,7 +663,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
 
 class IncludeNavigationContext : public NavigationContext {
 public:
-  IncludeNavigationContext(const IncludeItem& item) : NavigationContext(DeclarationPointer(0)), m_item(item) {
+  IncludeNavigationContext(const IncludeItem& item, KDevelop::TopDUContextPointer topContext) : NavigationContext(DeclarationPointer(0), topContext), m_item(item) {
   }
   virtual QString html(bool shorten) {
     m_currentText  = "<html><body><p><small><small>";
@@ -752,21 +758,21 @@ private:
   IncludeItem m_item;
 };
 
-NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, const QString& htmlPrefix, const QString& htmlSuffix) : m_declaration(declaration)
+NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_declaration(declaration), m_topContext(topContext)
 {
   initBrowser(400);
 
   //The first context is registered so it is kept alive by the shared-pointer mechanism
-  m_startContext = NavigationContextPointer(new NavigationContext(declaration));
+  m_startContext = NavigationContextPointer(new NavigationContext(declaration, m_topContext));
   m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
   setContext( m_startContext );
 }
 
-NavigationWidget::NavigationWidget(const IncludeItem& includeItem, const QString& htmlPrefix, const QString& htmlSuffix) {
+NavigationWidget::NavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(topContext) {
   initBrowser(200);
   
 //The first context is registered so it is kept alive by the shared-pointer mechanism
-  m_startContext = NavigationContextPointer(new IncludeNavigationContext(includeItem));
+  m_startContext = NavigationContextPointer(new IncludeNavigationContext(includeItem, m_topContext));
   m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
   setContext( m_startContext );
 }
@@ -831,12 +837,12 @@ void NavigationWidget::down() {
 }
 
 QString NavigationWidget::shortDescription(KDevelop::Declaration* declaration) {
-  NavigationContextPointer ctx(new NavigationContext(DeclarationPointer(declaration)));
+  NavigationContextPointer ctx(new NavigationContext(DeclarationPointer(declaration), TopDUContextPointer())); ///@todo give correct top-context
   return ctx->html(true);
 }
 
 QString NavigationWidget::shortDescription(const IncludeItem& includeItem) {
-  NavigationContextPointer ctx(new IncludeNavigationContext(includeItem));
+  NavigationContextPointer ctx(new IncludeNavigationContext(includeItem, TopDUContextPointer())); ///@todo give correct top-context
   return ctx->html(true);
 }
 

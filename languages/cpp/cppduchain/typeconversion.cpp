@@ -28,6 +28,10 @@ using namespace Cpp;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+TypeConversion::TypeConversion(const KDevelop::TopDUContext* topContext) : m_topContext(topContext) {
+}
+
+
 TypeConversion::~TypeConversion() {
 }
 
@@ -79,11 +83,11 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
     if( toReference->isConstant() || toReference->isConstant() == isConstant(from.data()) && fromLValue ) {
       ///Since from is an lvalue, and the constant-specification matches, we can maybe directly create a reference
       //Either identity-conversion:
-      if( identityConversion( AbstractType::Ptr(realType(from)), AbstractType::Ptr(realType(toReference)) ) )
+      if( identityConversion( AbstractType::Ptr(realType(from, m_topContext)), AbstractType::Ptr(realType(toReference, m_topContext)) ) )
         return ExactMatch + 2*ConversionRankOffset;
       //Or realType(toReference) is a public base-class of realType(fromReference)
-      CppClassType* fromClass = dynamic_cast<CppClassType*>( realType(from) );
-      CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to) );
+      CppClassType* fromClass = dynamic_cast<CppClassType*>( realType(from, m_topContext) );
+      CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to, m_topContext) );
       
       if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) )
         return ExactMatch + 2*ConversionRankOffset;
@@ -98,7 +102,7 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
     
     if( toReference->isConstant() ) {
       //For constant references, the compiler can create a temporary object holding the converted value. So just forget whether the types are references.
-      return implicitConversion( AbstractType::Ptr( realType(from) ), AbstractType::Ptr( realType(to) ), fromLValue );
+      return implicitConversion( AbstractType::Ptr( realType(from, m_topContext) ), AbstractType::Ptr( realType(to, m_topContext) ), fromLValue );
     }
   }
   
@@ -196,14 +200,14 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     if( isReferenceType(from) ) {
       ///Transform lvalue to rvalue. Iso c++ draft 4.1 modeled roughly
       ///@todo what about c/v?
-      ConversionRank ret = standardConversion( AbstractType::Ptr( realType(from) ), to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
+      ConversionRank ret = standardConversion( AbstractType::Ptr( realType(from, m_topContext) ), to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
       maximizeRank( bestRank, ret );
       if( ret > bestRank )
         bestRank = ret;
     }
 
     bool constRef = false;
-    if( ArrayType* array = dynamic_cast<ArrayType*>( realType(from, &constRef) ) ) { //realType(from) is used here so reference-to-array can be transformed to a pointer. This does not exactly follow the standard I think, check that.
+    if( ArrayType* array = dynamic_cast<ArrayType*>( realType(from, m_topContext, &constRef) ) ) { //realType(from) is used here so reference-to-array can be transformed to a pointer. This does not exactly follow the standard I think, check that.
       ///Transform array to pointer. Iso c++ draft 4.2 modeled roughly.
       CppPointerType::Ptr p( new CppPointerType( constRef ? Declaration::Const : Declaration::CVNone ) );
       p->setBaseType(array->elementType());
@@ -213,7 +217,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     }
 
     constRef = false;
-    if( FunctionType* function = dynamic_cast<FunctionType*>( realType(from.data(), &constRef) ) ) {
+    if( FunctionType* function = dynamic_cast<FunctionType*>( realType(from.data(), m_topContext, &constRef) ) ) {
       ///Transform lvalue-function. Iso c++ draft 4.3
       //This code is nearly the same as the above array-to-pointer conversion. Maybe it should be merged.
 
@@ -394,7 +398,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
   ConversionRank bestRank = NoMatch;
 
   bool fromConst = false;
-  AbstractType::Ptr realFrom( realType(from, &fromConst) );
+  AbstractType::Ptr realFrom( realType(from, m_topContext, &fromConst) );
   CppClassType* fromClass = dynamic_cast<CppClassType*>( realFrom.data() );
   {
     ///Try user-defined conversion using a conversion-function, iso c++ 12.3
@@ -403,7 +407,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
     {
       ///Search for a conversion-function that has a compatible output
       QHash<CppFunctionType*, ClassFunctionDeclaration*> conversionFunctions;
-      getMemberFunctions(fromClass, conversionFunctions, "operator{...cast...}", fromConst);
+      getMemberFunctions(fromClass, m_topContext, conversionFunctions, "operator{...cast...}", fromConst);
       
       for( QHash<CppFunctionType*, ClassFunctionDeclaration*>::const_iterator it = conversionFunctions.begin(); it != conversionFunctions.end(); ++it )
       {
@@ -413,7 +417,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
         if( rank != NoMatch && (!secondConversionIsIdentity || rank == ExactMatch) )
         {
           //We have found a matching conversion-function
-          if( realType(convertedType) == to.data() )
+          if( realType(convertedType, m_topContext) == to.data() )
             maximizeRank( bestRank, ExactMatch );
           else
             maximizeRank( bestRank, Conversion );
@@ -424,8 +428,8 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
 
   {
     ///Try conversion using constructor
-    CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to) ); //@todo think whether the realType(..) is ok
-    if( toClass )
+    CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to, m_topContext) ); //@todo think whether the realType(..) is ok
+    if( toClass && toClass->declaration() )
     {
       if( fromClass ) {
         if( isPublicBaseClass(fromClass, toClass, &m_baseConversionLevels ) ) {
@@ -435,7 +439,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
         }
       }
       
-      KDevelop::DUContextPointer ptr(getInternalContext( toClass->declaration() ));
+      KDevelop::DUContextPointer ptr(toClass->declaration()->logicalInternalContext(m_topContext));
       OverloadResolver resolver( ptr );
       Declaration* function = resolver.resolveConstructor( OverloadResolver::Parameter( from.data(), fromLValue ), true, true );
       

@@ -67,12 +67,12 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
 
   if( m_isOperator ) {
     ///Search for member operators
-    AbstractType::Ptr real( TypeUtils::realType(m_baseType.type) );
+    AbstractType::Ptr real( TypeUtils::realType(m_baseType.type, m_context->topContext()) );
     if( dynamic_cast<CppClassType*>( real.data() ) )
     {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
-      if( idType ) {
-        DUContext* ctx = TypeUtils::getInternalContext( idType->declaration() );
+      if( idType && idType->declaration() ) {
+        DUContext* ctx = idType->declaration()->logicalInternalContext(m_context->topContext());
         if( ctx ) {
           QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, m_operatorIdentifier );
           foreach( Declaration* decl, decls )

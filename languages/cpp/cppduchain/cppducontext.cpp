@@ -24,7 +24,7 @@ namespace Cpp {
 QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
 
 template<>
-QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix ) const {
+QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix ) const {
   if( decl == 0 ) {
     KUrl u( url().str() );
     IncludeItem i;
@@ -33,21 +33,21 @@ QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, 
     i.isDirectory = false;
     i.basePath = u.upUrl();
     
-    return new NavigationWidget( i, htmlPrefix, htmlSuffix );
+    return new NavigationWidget( i, TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
   } else {
-    return new NavigationWidget( DeclarationPointer(decl), htmlPrefix, htmlSuffix );
+    return new NavigationWidget( DeclarationPointer(decl), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
   }
 }
 
 template<>
-QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix) const {
+QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
   if( decl == 0 ) {
     if( owner() && owner()->asDeclaration() )
-      return new NavigationWidget( DeclarationPointer(owner()->asDeclaration()), htmlPrefix, htmlSuffix );
+      return new NavigationWidget( DeclarationPointer(owner()->asDeclaration()), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
     else
       return 0;
   } else {
-    return new NavigationWidget( DeclarationPointer(decl), htmlPrefix, htmlSuffix );
+    return new NavigationWidget( DeclarationPointer(decl), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
   }
 }
 
