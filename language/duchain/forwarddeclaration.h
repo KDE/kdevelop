@@ -37,11 +37,23 @@ public:
 
   virtual bool isForwardDeclaration() const;
 
-  Declaration* resolved() const;
-  void setResolved(Declaration* declaration);
+  /**
+   * Resolved the forward-declaration using the given import-trace.
+   * The topcontext is needed for correct functionality, and may only be
+   * zero when the declaration is resolved starting from the top-context
+   * the forward-declaration is contained in.
+   *
+   * If this forward-declaration has a type assigned that is not derived from ForwardDeclarationType,
+   * and that is derived from IdentifiedType, the declaration of that type is returned here.
+   * */
+  virtual Declaration* resolve(const TopDUContext* topContext) const;
 
   virtual Declaration* clone() const;
 
+  DUContext * logicalInternalContext(const TopDUContext* topContext) const;
+
+  virtual QString toString() const;
+  
 private:
   Q_DECLARE_PRIVATE(ForwardDeclaration)
 };

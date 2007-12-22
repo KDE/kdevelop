@@ -92,7 +92,7 @@ QWidget* DUChainItemData::expandingWidget() const {
   if( !decl || !decl->context() )
     return 0;
 
-  return decl->context()->createNavigationWidget( decl, "<small><small>" + i18n("Project") + " " + m_item.m_project + "<br>" + "</small></small>");
+  return decl->context()->createNavigationWidget( decl, decl->topContext(), "<small><small>" + i18n("Project") + " " + m_item.m_project + "<br>" + "</small></small>");
 }
 
 QIcon DUChainItemData::icon() const {

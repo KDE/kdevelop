@@ -99,19 +99,16 @@ public:
   mutable QHash<const TopDUContext*, const TopDUContext*> m_importsCache;
 };
 
-DUContext::ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
+ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
   {
-    DUContext::ImportTrace ret;
+    ImportTrace ret;
     Q_D(const TopDUContext);
     if(!d->imports(target, 0))
       return ret;
 
     const TopDUContext* nextContext = d->m_importsCache[target];
     if(nextContext) {
-      DUContext::ImportTraceItem item;
-      item.position = DUContext::importPosition(nextContext);
-      item.ctx = this;
-      ret << item;
+      ret << ImportTraceItem(this, DUContext::importPosition(nextContext));
 
       if(target != nextContext)
         ret += nextContext->importTrace(target);

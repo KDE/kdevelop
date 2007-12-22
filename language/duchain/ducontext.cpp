@@ -332,12 +332,12 @@ bool DUContext::isPropagateDeclarations() const
   return d_func()->m_propagateDeclarations;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, SearchFlags flags ) const
+QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const SimpleCursor & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, SearchFlags flags ) const
 {
   ENSURE_CAN_READ
 
   QList<Declaration*> ret;
-  findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, allowUnqualifiedMatch, ret, ImportTrace(), flags);
+  findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, allowUnqualifiedMatch, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
   return ret;
 }
 
@@ -518,10 +518,7 @@ bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
             if( position < *it2 )
               continue; ///Respect the import-positions
             
-              ImportTraceItem item;
-              item.ctx = this;
-              item.position = *it2;
-              newTrace << item;
+              newTrace << ImportTraceItem(this, *it2);
           }
         }
         if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, newTrace, flags | InImportedParentContext) )
@@ -726,10 +723,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
         if( position < *it2 )
           continue; ///Respect the import-positions
 
-          ImportTraceItem item;
-          item.ctx = this;
-          item.position = *it2;
-          newTrace << item;
+        newTrace << ImportTraceItem(this, *it2);
       }
     }
     
@@ -1135,7 +1129,7 @@ TopDUContext* DUContext::topContext() const
   return 0;
 }
 
-QWidget* DUContext::createNavigationWidget(Declaration* decl, const QString& htmlPrefix, const QString& htmlSuffix) const
+QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const
 {
   return 0;
 }

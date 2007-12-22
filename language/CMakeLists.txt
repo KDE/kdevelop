@@ -37,6 +37,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/contextowner.cpp
     duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
+    duchain/forwarddeclarationtype.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
@@ -73,6 +74,7 @@ install(FILES
 )
 
 install(FILES
+    duchain/forwarddeclarationtype.h
     duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/ducontext.h

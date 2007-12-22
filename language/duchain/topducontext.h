@@ -81,7 +81,7 @@ public:
    * Returns the trace of imports from this context top the given target.
    * The positions in the returned trace may be invalid.
    * */
-  DUContext::ImportTrace importTrace(const TopDUContext* target) const;
+  ImportTrace importTrace(const TopDUContext* target) const;
 
   enum Flags {
     NoFlags = 0,

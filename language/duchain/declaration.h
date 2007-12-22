@@ -39,6 +39,10 @@ class Use;
 class ForwardDeclaration;
 class Definition;
 class DeclarationPrivate;
+
+struct ImportTraceItem;
+typedef QList<ImportTraceItem> ImportTrace;
+
 /**
  * Represents a single declaration in a definition-use chain.
  *
@@ -82,10 +86,6 @@ public:
 
   virtual TopDUContext* topContext() const;
 
-  const QList<ForwardDeclaration*>& forwardDeclarations() const;
-  void addForwardDeclaration(ForwardDeclaration* );
-  void removeForwardDeclaration(ForwardDeclaration* );
-
   virtual bool isForwardDeclaration() const;
   ForwardDeclaration* toForwardDeclaration();
   const ForwardDeclaration* toForwardDeclaration() const;
@@ -110,11 +110,29 @@ public:
   void setDefinition(Definition* definition);
 
   /**
-   * If this is a forward-declaration, it returns the internal context of the resolved declaration.
-   * If this is a definition, and the definition is resolved, it returns the internal context of the definition.
+   * This returns the context that is opened by this declaration, or zero.
    * */
   virtual DUContext * internalContext() const;
 
+  /**
+   * If this declaration has a definition, and the definition is resolved, it returns the internal context of the definition.
+   * If this declaration is a forward-declaration, the forward-declaration is resolved, and the internal context of the resolved declaration.
+   * If this is a type-alias, returns the internal context of the actual type.
+   * is returned.
+   * Else, returns the same as internalContext().
+   * @param topContext Needed to resolve forward-declarations.
+   * */
+  virtual DUContext * logicalInternalContext(const TopDUContext* topContext) const;
+
+  /**
+   * Convenience function:
+   * If this is a forward-declaration that can be resolved, returns the resolved forward-declaration.
+   * Else returns this.
+   * @param topContext Needed to resolve forward-declarations.
+   * */
+  const Declaration* logicalDeclaration(const TopDUContext* topContext) const;
+  Declaration* logicalDeclaration(const TopDUContext* topContext);
+  
   /**
    * Returns the parent-context of this declaration.
    * */

@@ -46,8 +46,6 @@ public:
   
   QByteArray m_comment;
 
-  QList<ForwardDeclaration*> m_forwardDeclarations;
-
   Definition* m_definition;
 
   QList<Use*> m_uses;

@@ -72,7 +72,7 @@ QWidget* ProjectFileData::expandingWidget() const {
 
   
   if( chosen )
-    return chosen->createNavigationWidget(0, "<small><small>" + i18n("Project") + " " + m_file.m_project + "<br>" + "</small></small>");
+    return chosen->createNavigationWidget(0, 0, "<small><small>" + i18n("Project") + " " + m_file.m_project + "<br>" + "</small></small>");
   else {
     QTextBrowser* ret = new QTextBrowser();
     ret->resize(400, 100);

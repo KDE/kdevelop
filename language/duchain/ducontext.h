@@ -44,6 +44,18 @@ class TopDUContext;
 class DUContext;
 class DUContextPrivate;
 
+///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
+struct ImportTraceItem {
+  ImportTraceItem(const DUContext* _ctx, SimpleCursor _pos = SimpleCursor::invalid()) : ctx(_ctx), position(_pos) {
+  }
+
+  //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
+  const DUContext* ctx;
+  SimpleCursor position;
+};
+
+typedef QList<ImportTraceItem> ImportTrace;
+
 template<class T>
 class DUChainPointer;
 typedef DUChainPointer<DUContext> DUContextPointer;
@@ -97,20 +109,10 @@ public:
     OnlyContainerTypes = 2, //Not implemented yet
     DontSearchInParent = 4, //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
     NoUndefinedTemplateParams = 8, //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
-    LanguageSpecificFlag1 = 16, //This is a flag that can be used to control language-specific parts of the search in overridden functions(has no direct function in the du-chain)
+    DirectQualifiedLookup = 16, //When this flag is used, the searched qualified identifier should NOT be split up into it's components and looked up one by one. Currently only plays a role in C++ specific parts.
     NoFiltering = 32,           //Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default)
     OnlyFunctions = 64 //When this is given, only function-declarations are returned. In case of C++, this also means that constructors can be retrieved, while normally they are filtered out.
   };
-
-  ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
-  struct ImportTraceItem {
-    //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
-    const DUContext* ctx;
-    SimpleCursor position;
-  };
-
-  typedef QList<ImportTraceItem> ImportTrace;
-
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
 
@@ -285,7 +287,7 @@ public:
    *
    * Does not search imported parent-contexts(like base-classes).
    */
-  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* topContext = 0, const AbstractType::Ptr& dataType = AbstractType::Ptr(), bool allowUnqualifiedMatch = false, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -419,12 +421,13 @@ public:
    * The returned widget will be owned by the caller.
    *
    * @param decl A member-declaration of this context the navigation-widget should be created for
+   * @param topContext Top-context from where the navigation-widget is triggered. In C++, this is needed to resolve forward-declarations.
    * @param htmlPrefix Html-formatted text that should be prepended before any information shown by this widget
    * @param htmlSuffux Html-formatted text that should be appended to any information shown by this widget
    *
    * Can return zero, which the default-implementation currently always does.
    * */
-  virtual QWidget* createNavigationWidget(Declaration* decl = 0, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString()) const;
+  virtual QWidget* createNavigationWidget(Declaration* decl = 0, TopDUContext* topContext = 0, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString()) const;
 
   ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
   /// Declaration search implementation

@@ -36,8 +36,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ContextOwner {
     ContextOwner(DUChainBase* self);
     virtual ~ContextOwner();
   /**
-   * If this item opens an own context, this returns that context.
-   * If this is a resolved forward-declaration, this returns the resolved declaration's internal context.
+   * If this item is assigned to a context, this returns that context.
    * */
   virtual DUContext* internalContext() const;
   void setInternalContext(DUContext* context);

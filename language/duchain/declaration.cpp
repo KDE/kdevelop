@@ -118,10 +118,6 @@ Declaration::~Declaration()
   if (d->m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
 
-  foreach (ForwardDeclaration* forward, d->m_forwardDeclarations)
-    forward->setResolved(0);
-  Q_ASSERT(d->m_forwardDeclarations.isEmpty());
-
   QList<Use*> _uses = uses();
   foreach (Use* use, _uses)
     use->d_func()->setDeclaration(0);
@@ -284,18 +280,48 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   }
 }
 
-DUContext * Declaration::internalContext() const
-{
+const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
   ENSURE_CAN_READ
-  if( isForwardDeclaration() ) {
-    Declaration* declaration = static_cast<const KDevelop::ForwardDeclaration*>(this)->resolved();
-    if( declaration )
-      return declaration->internalContext();
+  if(isForwardDeclaration()) {
+    const ForwardDeclaration* dec = toForwardDeclaration();
+    Declaration* ret = dec->resolve(topContext);
+    if(ret)
+      return ret;
   }
+  return this;
+}
 
+Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) {
+  ENSURE_CAN_READ
+  if(isForwardDeclaration()) {
+    ForwardDeclaration* dec = toForwardDeclaration();
+    Declaration* ret = dec->resolve(topContext);
+    if(ret)
+      return ret;
+  }
+  return this;
+}
+
+DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) const {
+  ENSURE_CAN_READ
+  
   if( definition() )
     return definition()->internalContext();
 
+  if( d_func()->m_isTypeAlias ) {
+    ///If this is a type-alias, return the internal context of the actual type.
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(abstractType().data());
+    if( idType && idType->declaration() )
+      return idType->declaration()->logicalInternalContext( topContext );
+  }
+  
+  return ContextOwner::internalContext();
+}
+
+DUContext * Declaration::internalContext() const
+{
+  ENSURE_CAN_READ
+  
   return ContextOwner::internalContext();
 }
 
@@ -380,32 +406,6 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
   d->m_inSymbolTable = inSymbolTable;
 }
 
-const QList< ForwardDeclaration * > & Declaration::forwardDeclarations() const
-{
-  ENSURE_CAN_READ
-  Q_D(const Declaration);
-  return d->m_forwardDeclarations;
-}
-
-void Declaration::addForwardDeclaration( ForwardDeclaration* declaration)
-{
-  ENSURE_CAN_WRITE
-  Q_D(Declaration);
-  d->m_forwardDeclarations.append( declaration );
-}
-
-void Declaration::removeForwardDeclaration( ForwardDeclaration* declaration)
-{
-  ENSURE_CAN_WRITE
-  Q_D(Declaration);
-  d->m_forwardDeclarations.removeAll( declaration );
-}
-
-bool Declaration::isForwardDeclaration() const
-{
-  return false;
-}
-
 ForwardDeclaration* Declaration::toForwardDeclaration()
 {
   return static_cast<ForwardDeclaration*>(this);
@@ -428,6 +428,12 @@ TopDUContext * Declaration::topContext() const
 Declaration* Declaration::clone() const  {
   return new Declaration(*this);
 }
+
+bool Declaration::isForwardDeclaration() const
+{
+  return false;
+}
+
 
 }
 
