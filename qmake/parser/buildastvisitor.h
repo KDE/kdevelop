@@ -21,7 +21,7 @@
 #ifndef BUILDASTVISITOR_H
 #define BUILDASTVISITOR_H
 
-#include "qmake_default_visitor.h"
+#include "qmakedefaultvisitor.h"
 #include <QtCore/QStack>
 
 class QString;
@@ -30,37 +30,37 @@ template <typename T1, typename T2> class QPair;
 namespace QMake
 {
 
-class parser;
+class Parser;
 class ProjectAST;
 class AST;
 
-class BuildASTVisitor : public default_visitor
+class BuildASTVisitor : public DefaultVisitor
 {
 public:
-    BuildASTVisitor(parser* parser, ProjectAST* project);
+    BuildASTVisitor(Parser* parser, ProjectAST* project);
     virtual ~BuildASTVisitor();
-    virtual void visit_arg_list( arg_list_ast *node );
-    virtual void visit_function_args( function_args_ast *node );
-    virtual void visit_or_op( or_op_ast *node );
-    virtual void visit_item( item_ast *node );
-    virtual void visit_scope( scope_ast *node );
-    virtual void visit_op( op_ast *node );
-    virtual void visit_project( project_ast *node );
-    virtual void visit_scope_body( scope_body_ast *node );
-    virtual void visit_stmt( stmt_ast *node );
-    virtual void visit_value( value_ast *node );
-    virtual void visit_value_list( value_list_ast *node );
-    virtual void visit_variable_assignment( variable_assignment_ast *node );
+    virtual void visitArgumentList( ArgumentListAst *node );
+    virtual void visitFunctionArguments( FunctionArgumentsAst *node );
+    virtual void visitOrOperator( OrOperatorAst *node );
+    virtual void visitItem( ItemAst *node );
+    virtual void visitScope( ScopeAst *node );
+    virtual void visitOp( OpAst *node );
+    virtual void visitProject( ProjectAst *node );
+    virtual void visitScopeBody( ScopeBodyAst *node );
+    virtual void visitStatement( StatementAst *node );
+    virtual void visitValue( ValueAst *node );
+    virtual void visitValueList( ValueListAst *node );
+    virtual void visitVariableAssignment( VariableAssignmentAst *node );
 
 private:
-    QString getTokenString(std::size_t idx);
-    QPair<std::size_t,std::size_t> getTokenLineAndColumn( std::size_t idx );
+    QString getTokenString(qint64 idx);
+    QPair<qint64,qint64> getTokenLineAndColumn( qint64 idx );
 
     template <typename T> T* stackTop();
     template <typename T> T* stackPop();
 
     QStack<AST*> aststack;
-    parser* m_parser;
+    Parser* m_parser;
 };
 
 }

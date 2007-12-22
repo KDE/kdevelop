@@ -21,34 +21,35 @@
 #ifndef QMAKEDEBUGVISITOR_H
 #define QMAKEDEBUGVISITOR_H
 
-#include "qmake_default_visitor.h"
+#include "qmakedefaultvisitor.h"
+#include "qmakeparser.h"
 
 namespace QMake
 {
 
 class parser;
 
-class DebugVisitor:  public default_visitor
+class DebugVisitor:  public DefaultVisitor
 {
 
 public:
-    DebugVisitor(QMake::parser* parser);
-    virtual void visit_arg_list( arg_list_ast *node );
-    virtual void visit_function_args( function_args_ast *node );
-    virtual void visit_or_op( or_op_ast *node );
-    virtual void visit_item( item_ast *node );
-    virtual void visit_scope( scope_ast *node );
-    virtual void visit_op( op_ast *node );
-    virtual void visit_project( project_ast *node );
-    virtual void visit_scope_body( scope_body_ast *node );
-    virtual void visit_stmt( stmt_ast *node );
-    virtual void visit_value( value_ast *node );
-    virtual void visit_value_list( value_list_ast *node );
-    virtual void visit_variable_assignment( variable_assignment_ast *node );
-    QString getTokenInfo(std::size_t idx);
+    DebugVisitor(QMake::Parser* parser);
+    virtual void visitArgumentList( ArgumentListAst *node );
+    virtual void visitFunctionArguments( FunctionArgumentsAst *node );
+    virtual void visitOrOperator( OrOperatorAst *node );
+    virtual void visitItem( ItemAst *node );
+    virtual void visitScope( ScopeAst *node );
+    virtual void visitOp( OpAst *node );
+    virtual void visitProject( ProjectAst *node );
+    virtual void visitScopeBody( ScopeBodyAst *node );
+    virtual void visitStatement( StatementAst *node );
+    virtual void visitValue( ValueAst *node );
+    virtual void visitValueList( ValueListAst *node );
+    virtual void visitVariableAssignment( VariableAssignmentAst *node );
+    QString getTokenInfo(qint64 idx);
     QString getIndent();
 private:
-    QMake::parser* m_parser;
+    QMake::Parser* m_parser;
     int indent;
 };
 

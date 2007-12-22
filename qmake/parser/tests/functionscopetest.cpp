@@ -19,7 +19,7 @@
  */
 
 #include "functionscopetest.h"
-#include "qmakeast.h"
+#include "ast.h"
 #include "qmakedriver.h"
 #include "testhelpers.h"
 
@@ -128,7 +128,7 @@ DATAFUNCIMPL( FunctionScopeTest, nestedFunccalls,
               "eval(val, $$contains(QT_PROJECT, $$foobar(some)))\n" )
 
 
-BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtScope, 1 )
+BEGINTESTFUNCIMPL( FunctionScopeTest, oneStatementScope, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "contains" )
 
@@ -150,11 +150,11 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtScope, 1 )
     TESTSCOPEBODY( scope, teststmts, 1 )
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL( FunctionScopeTest, oneStmtScope,
+DATAFUNCIMPL( FunctionScopeTest, oneStatementScope,
               "contains(SOMETHINGELSE, foobar) : VARIABLE = val1 val2\n" )
 
 
-BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtSubScope, 1 )
+BEGINTESTFUNCIMPL( FunctionScopeTest, oneStatementSubScope, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "contains" )
 
@@ -187,7 +187,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtSubScope, 1 )
     TESTSCOPEBODY( scope, teststmts, 1 )
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL( FunctionScopeTest, oneStmtSubScope,
+DATAFUNCIMPL( FunctionScopeTest, oneStatementSubScope,
               "contains(SOMETHINGELSE, foobar) : contains( foobar ) : VARIABLE = val1 val2\n" )
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScope, 1 )
@@ -297,7 +297,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( FunctionScopeTest, notFunc,
               "!contains(SOMETHINGELSE, foobar) : VARIABLE = val1 val2\n" )
 
-BEGINTESTFUNCIMPL( FunctionScopeTest, orOp, 1 )
+BEGINTESTFUNCIMPL( FunctionScopeTest, orOperator, 1 )
     QMake::OrAST* orop = dynamic_cast<QMake::OrAST*>( ast->statements().first() );
     QStringList funcs;
     funcs << "!contains" << "contains";
@@ -321,7 +321,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, orOp, 1 )
     TESTSCOPEBODY( orop, teststmts, 1 )
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL( FunctionScopeTest, orOp,
+DATAFUNCIMPL( FunctionScopeTest, orOperator,
               "!contains(SOMETHINGELSE, foobar) | contains(OTHER,foo) : VARIABLE = val1 val2\n" )
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, spaceBeforeBrace, 1 )
@@ -340,7 +340,7 @@ DATAFUNCIMPL( FunctionScopeTest, missingParenthesis,
               "eval(SOMETHINGELSE\n" )
 
 
-BEGINTESTFUNCIMPL( FunctionScopeTest, missingStmt, 1 )
+BEGINTESTFUNCIMPL( FunctionScopeTest, missingStatement, 1 )
     QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>( ast->statements().first() );
     TESTFUNCNAME( fn, "eval" )
     QStringList testlist;
@@ -348,7 +348,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, missingStmt, 1 )
 
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL( FunctionScopeTest, missingStmt,
+DATAFUNCIMPL( FunctionScopeTest, missingStatement,
               "eval(SOMETHINGELSE):\n" )
 
 BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingBrace, "No closing brace for function scope" )

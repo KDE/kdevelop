@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "qmakeast.h"
+#include "ast.h"
 
 namespace QMake
 {

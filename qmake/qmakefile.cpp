@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-#include "qmakeast.h"
+#include "parser/ast.h"
 #include "qmakedriver.h"
 #include "qmakeincludefile.h"
 #include "variablereferenceparser.h"

@@ -18,9 +18,6 @@
  * 02110-1301, USA.
  */
 
-#include <cstdlib>
-#include <iostream>
-#include <stdio.h>
 #include "qmakedriver.h"
 
 #include <QtGlobal>

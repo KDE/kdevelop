@@ -27,7 +27,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 
-#include "qmakeast.h"
+#include "parser/ast.h"
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
 

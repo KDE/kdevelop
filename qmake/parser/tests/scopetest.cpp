@@ -19,7 +19,7 @@
  */
 
 #include "scopetest.h"
-#include "qmakeast.h"
+#include "ast.h"
 #include "qmakedriver.h"
 #include "testhelpers.h"
 
