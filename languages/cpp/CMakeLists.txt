@@ -20,8 +20,9 @@ add_subdirectory(parser)
 add_subdirectory(cppduchain)
 add_subdirectory(app_templates)
 add_subdirectory(tests)
-add_subdirectory(debugger)
-
+if(NOT WIN32)
+    add_subdirectory(debugger)
+endif(NOT WIN32)
 ########### next target ###############
 
 set(kdevcpplanguagesupport_PART_SRCS
