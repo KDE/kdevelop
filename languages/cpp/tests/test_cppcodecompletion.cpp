@@ -351,7 +351,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.instance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("forward-declaration Erna&"));
+  QCOMPARE(result.type->toString(), QString("Erna&"));
 
   
   ///Test overload-resolution 
