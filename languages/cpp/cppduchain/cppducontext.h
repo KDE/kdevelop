@@ -357,9 +357,11 @@ class CppDUContext : public BaseContext {
       bool haveForwardDeclaration = false;
       bool haveNonForwardDeclaration = false;
       
-      foreach(KDevelop::Declaration* dec, ret)
+      QList<KDevelop::Declaration*>::iterator it = ret.begin();
+      QList<KDevelop::Declaration*>::iterator end = ret.end();
+      for( ; it != end; ++it)
       {
-        if(dec->isForwardDeclaration())
+        if((*it)->isForwardDeclaration())
           haveForwardDeclaration = true;
         else
           haveNonForwardDeclaration = true;
