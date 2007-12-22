@@ -21,6 +21,7 @@ add_subdirectory(cppduchain)
 add_subdirectory(app_templates)
 add_subdirectory(tests)
 if(NOT WIN32)
+    #TODO: port debugger to win32
     add_subdirectory(debugger)
 endif(NOT WIN32)
 ########### next target ###############
