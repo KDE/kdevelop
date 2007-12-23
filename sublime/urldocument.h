@@ -35,6 +35,10 @@ public:
     UrlDocument(Controller *controller, const KUrl &url);
     ~UrlDocument();
 
+    virtual QString documentType() const;
+
+    virtual QString documentSpecifier() const;
+
 protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     KUrl url() const;

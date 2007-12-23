@@ -229,6 +229,12 @@ void Area::setTitle(const QString &title)
     d->title = title;
 }
 
+void Area::saveSettings(KConfigGroup& group)
+{
+    KConfigGroup subgroup(&group, "Area");
+    d->rootIndex->saveSettings(subgroup);
+}
+
 }
 
 #include "area.moc"

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -25,6 +25,8 @@
 
 #include "areaindex.h"
 #include "sublimedefs.h"
+
+#include <KConfigGroup>
 
 namespace Sublime {
 
@@ -158,6 +160,9 @@ public:
     */
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
+
+    ///Saves area layout + information to the given configuration \a {group}.
+    virtual void saveSettings(KConfigGroup& group);
 
 Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/

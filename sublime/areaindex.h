@@ -22,6 +22,8 @@
 #include <QtCore/Qt>
 #include <QtCore/QList>
 
+#include <KConfigGroup>
+
 #include "sublimeexport.h"
 
 namespace Sublime {
@@ -141,6 +143,8 @@ public:
     /**@return the list of views at this index.*/
     QList<View*> &views() const;
 
+    ///Saves area layout + information to the given configuration \a {group}.
+    void saveSettings(KConfigGroup& group);
 
 protected:
     /**Constructor for Root index.*/

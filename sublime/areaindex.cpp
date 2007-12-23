@@ -215,7 +215,28 @@ bool Sublime::AreaIndex::isSplitted() const
     return d->isSplitted();
 }
 
+void AreaIndex::saveSettings(KConfigGroup & group)
+{
+    group.writeEntry("View Count", d->views.count());
 
+    int index = 0;
+    foreach (View* view, d->views) {
+        group.writeEntry(QString("View Type %1").arg(index++), view->document()->documentType());
+        group.writeEntry(QString("View %1").arg(index++), view->document()->documentSpecifier());
+    }
+
+    group.writeEntry("Orientation", d->orientation == Qt::Horizontal ? "Horizontal" : "Vertical");
+
+    if (d->first) {
+        KConfigGroup subgroup(&group, "0");
+        d->first->saveSettings(subgroup);
+    }
+
+    if (d->second) {
+        KConfigGroup subgroup(&group, "1");
+        d->second->saveSettings(subgroup);
+    }
+}
 
 // class RootAreaIndex
 
@@ -225,4 +246,3 @@ RootAreaIndex::RootAreaIndex()
 }
 
 }
-

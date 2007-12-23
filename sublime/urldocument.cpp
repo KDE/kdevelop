@@ -56,5 +56,14 @@ QWidget *UrlDocument::createViewWidget(QWidget *parent)
     return new KTextEdit(parent);
 }
 
+QString UrlDocument::documentType() const
+{
+    return "Url";
 }
 
+QString UrlDocument::documentSpecifier() const
+{
+    return d->url.url();
+}
+
+}

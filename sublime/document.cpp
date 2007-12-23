@@ -98,4 +98,3 @@ View *Document::newView(Document *doc)
 }
 
 #include "document.moc"
-

@@ -57,6 +57,12 @@ public:
     /**@return the document title.*/
     QString title() const;
 
+    /**@return the type of document which can be written to config.*/
+    virtual QString documentType() const = 0;
+
+    /**@return the specifics of this document which can be written to config.*/
+    virtual QString documentSpecifier() const = 0;
+
 Q_SIGNALS:
     /**Emitted when the view is added or deleted. Use Document::views to find out
     which views and how many of them are still there.*/

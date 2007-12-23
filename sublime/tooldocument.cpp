@@ -60,5 +60,15 @@ QWidget *ToolDocument::createViewWidget(QWidget *parent)
     return factory()->create(this, parent);
 }
 
+QString ToolDocument::documentType() const
+{
+    return "Tool";
+}
+
+QString ToolDocument::documentSpecifier() const
+{
+    return "<unimplemented>";
+}
+
 }
 
