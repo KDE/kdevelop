@@ -231,8 +231,7 @@ void Area::setTitle(const QString &title)
 
 void Area::saveSettings(KConfigGroup& group)
 {
-    KConfigGroup subgroup(&group, "Area");
-    d->rootIndex->saveSettings(subgroup);
+    d->rootIndex->saveSettings(group);
 }
 
 }

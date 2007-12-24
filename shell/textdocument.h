@@ -21,6 +21,12 @@
 
 #include "partdocument.h"
 
+#include "sublime/view.h"
+
+namespace KTextEditor {
+    class View;
+}
+
 namespace KDevelop {
 
 /**
@@ -48,6 +54,9 @@ public:
 
     virtual KTextEditor::Document* textDocument() const;
 
+protected:
+    virtual Sublime::View *newView(Sublime::Document *doc);
+
 private:
     Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
     Q_PRIVATE_SLOT(d, void textChanged(KTextEditor::Document*))
@@ -55,6 +64,20 @@ private:
 
     struct TextDocumentPrivate * const d;
     friend class TextDocumentPrivate;
+};
+
+class TextView : public Sublime::View
+{
+public:
+    TextView(TextDocument* doc);
+
+    virtual QWidget *widget(QWidget *parent = 0);
+
+    virtual QString viewState() const;
+    virtual void setState(const QString& state);
+
+private:
+    KTextEditor::View* m_view;
 };
 
 }

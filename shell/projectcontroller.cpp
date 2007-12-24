@@ -41,6 +41,8 @@ Boston, MA 02110-1301, USA.
 #include <kactionmenu.h>
 #include <ksettings/dialog.h>
 
+#include "sublime/area.h"
+
 #include "core.h"
 #include "iplugin.h"
 #include "iprojectfilemanager.h"
@@ -355,6 +357,12 @@ bool ProjectController::closeProject( IProject* proj )
     emit projectClosing( proj );
 
     //The project file is being closed.
+    int areaIndex = 0;
+    foreach (Sublime::Area* area, d->m_core->uiControllerInternal()->areas()) {
+        KConfigGroup group(proj->projectConfiguration(), QString("Area %1").arg(areaIndex));
+        area->saveSettings(group);
+    }
+
     //Now we can save settings for all of the Core objects including this one!!
 //     Core::self()->saveSettings();
 
@@ -395,7 +403,7 @@ bool ProjectController::closeProject( IProject* proj )
     // start project manager that is used by this project. If that manager is being used
     // by other project also, don't unload that manager.
     // TODO remove all the plugins unique to this project.
-    QList<IPlugin*> pluginsForProj = d->m_projectPlugins.value( proj );;
+    QList<IPlugin*> pluginsForProj = d->m_projectPlugins.value( proj );
     d->m_projectPlugins.remove( proj );
 
     QList<IPlugin*> otherProjectPlugins;

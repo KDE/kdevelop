@@ -292,6 +292,40 @@ void TextDocument::close()
     deleteLater();
 }
 
+Sublime::View* TextDocument::newView(Sublime::Document* doc)
+{
+    emit viewNumberChanged(this);
+    return new TextView(this);
+}
+
+}
+
+KDevelop::TextView::TextView(TextDocument * doc)
+    : View(doc)
+    , m_view(0)
+{
+}
+
+QWidget * KDevelop::TextView::widget(QWidget * parent)
+{
+    if (!m_view) {
+        m_view = static_cast<KTextEditor::View*>(static_cast<TextDocument*>(document())->createViewWidget(parent));
+    }
+
+    return m_view;
+}
+
+QString KDevelop::TextView::viewState() const
+{
+    KTextEditor::Cursor cursor = m_view->cursorPosition();
+    return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
+}
+
+void KDevelop::TextView::setState(const QString & state)
+{
+    static QRegExp re("Cursor=([\\d]+),([\\d]+)");
+    if (re.exactMatch(state))
+        m_view->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
 }
 
 #include "textdocument.moc"

@@ -58,6 +58,16 @@ void Sublime::View::requestRaise()
     emit raise(this);
 }
 
+QString Sublime::View::viewState() const
+{
+    return QString();
+}
+
+void Sublime::View::setState(const QString & state)
+{
+    Q_UNUSED(state);
+}
+
 }
 
 #include "view.moc"

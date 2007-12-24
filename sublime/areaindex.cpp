@@ -217,12 +217,19 @@ bool Sublime::AreaIndex::isSplitted() const
 
 void AreaIndex::saveSettings(KConfigGroup & group)
 {
+    group.deleteGroup();
+
     group.writeEntry("View Count", d->views.count());
 
     int index = 0;
     foreach (View* view, d->views) {
-        group.writeEntry(QString("View Type %1").arg(index++), view->document()->documentType());
-        group.writeEntry(QString("View %1").arg(index++), view->document()->documentSpecifier());
+        group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
+        group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
+        QString state = view->viewState();
+        if (!state.isEmpty())
+            group.writeEntry(QString("View %1 State").arg(index), state);
+
+        ++index;
     }
 
     group.writeEntry("Orientation", d->orientation == Qt::Horizontal ? "Horizontal" : "Vertical");

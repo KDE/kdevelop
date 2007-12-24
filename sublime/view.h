@@ -47,6 +47,11 @@ public:
     /**@return true if this view has an initialized widget.*/
     bool hasWidget() const;
 
+    /// Retrieve view state for saving into configuration.
+    virtual QString viewState() const;
+    /// Restore view state from configuration
+    virtual void setState(const QString& state);
+
 Q_SIGNALS:
     void raise(Sublime::View*);
 
