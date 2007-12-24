@@ -321,10 +321,13 @@ void DUContext::setPropagateDeclarations(bool propagate)
   
   d->m_propagateDeclarations = propagate;
 
-  if( !oldPropagate && propagate && d->m_parentContext )
-    foreach(const DeclarationPointer& decl, d->m_localDeclarationsHash)
-      if(decl)
-        d->m_parentContext->d_func()->addDeclarationToHash(decl->identifier(), decl.data());
+  if( !oldPropagate && propagate && d->m_parentContext ) {
+    DUContextPrivate::DeclarationsHash::const_iterator it = d->m_localDeclarationsHash.begin();
+    DUContextPrivate::DeclarationsHash::const_iterator end = d->m_localDeclarationsHash.end();
+    for( ; it != end ; it++ )
+      if(it.value())
+        d->m_parentContext->d_func()->addDeclarationToHash(it.value()->identifier(), it.value().data());
+  }
 }
 
 bool DUContext::isPropagateDeclarations() const
