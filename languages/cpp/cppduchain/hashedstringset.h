@@ -17,8 +17,13 @@
 #include<QString>
 #include<ksharedptr.h>
 #include<set>
+#ifdef Q_WS_WIN
+#include <hash_map>
+#include <hash_set>
+#else
 #include <ext/hash_map>
 #include <ext/hash_set>
+#endif
 #include <editor/hashedstring.h>
 #include <string>
 #include "cppduchainexport.h"
@@ -97,8 +102,13 @@ class KDEVCPPDUCHAIN_EXPORT HashedStringSetGroup {
     void findGroups( HashedStringSet strings, ItemSet& target ) const;
 
   private:
-    typedef __gnu_cxx::hash_map<KDevelop::HashedString, ItemSet> GroupMap;
-    typedef __gnu_cxx::hash_map<unsigned int, unsigned int> SizeMap;
+    #ifdef Q_WS_WIN
+        typedef hash_map<KDevelop::HashedString, ItemSet> GroupMap;
+        typedef hash_map<unsigned int, unsigned int> SizeMap;
+    #else
+        typedef __gnu_cxx::hash_map<KDevelop::HashedString, ItemSet> GroupMap;
+        typedef __gnu_cxx::hash_map<unsigned int, unsigned int> SizeMap;
+    #endif
     GroupMap m_map;
     SizeMap m_sizeMap;
     ItemSet m_disabled;
