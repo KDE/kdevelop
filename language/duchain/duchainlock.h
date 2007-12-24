@@ -21,6 +21,9 @@
 
 #include "../languageexport.h"
 
+#ifdef NDEBUG
+#include <QtCore/QReadWriteLock>
+
 namespace KDevelop
 {
 
@@ -28,9 +31,6 @@ namespace KDevelop
  * In a DEBUG build, keeps track of additional locking information.
  * In a non-DEBUG build, is actually a QReadWriteLock.
  */
-#ifdef NDEBUG
-
-#include <QtCore/QReadWriteLock>
 
 #define ENSURE_CHAIN_READ_LOCKED
 #define ENSURE_CHAIN_WRITE_LOCKED
@@ -57,7 +57,12 @@ public:
   ~DUChainWriteLocker() {}
 };
 
+}
+
 #else
+
+namespace KDevelop
+{
 
 /**
  * Macros for ensuring the DUChain is locked properly.
@@ -159,6 +164,8 @@ private:
   class DUChainWriteLockerPrivate* const d;
 };
 
+}
+
 #endif // NDEBUG
 
 /**
@@ -169,7 +176,6 @@ private:
 #define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
 #define ENSURE_CAN_READ {if( inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
 
-}
 
 #endif // DUCHAINLOCK_H
 
