@@ -35,6 +35,7 @@ namespace KDevelop
 #define ENSURE_CHAIN_READ_LOCKED
 #define ENSURE_CHAIN_WRITE_LOCKED
 
+
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock : public QReadWriteLock //krazy:exclude=dpointer
 {
 public:
@@ -67,15 +68,6 @@ public:
  */
 #define ENSURE_CHAIN_READ_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasReadLock() || DUChain::lock()->currentThreadHasWriteLock());
 #define ENSURE_CHAIN_WRITE_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasWriteLock());
-
-/**
- * Like the above, except that this should be used in items that can be detached from the du-chain, like DOContext's and Declarations.
- * Those items must implement an inDUChain() function that returns whether the item is in the du-chain.
- * Examples for such detachable items are DUContext's and Declarations, they can be written as long as they are not in the DUChain.
- * */
-#define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
-#define ENSURE_CAN_READ {if( inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
-
 
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock
 {
@@ -168,6 +160,15 @@ private:
 };
 
 #endif // NDEBUG
+
+/**
+ * Like the ENSURE_CHAIN_WRITE_LOCKED and .._READ_LOCKED, except that this should be used in items that can be detached from the du-chain, like DOContext's and Declarations.
+ * Those items must implement an inDUChain() function that returns whether the item is in the du-chain.
+ * Examples for such detachable items are DUContext's and Declarations, they can be written as long as they are not in the DUChain.
+ * */
+#define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
+#define ENSURE_CAN_READ {if( inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
+
 }
 
 #endif // DUCHAINLOCK_H

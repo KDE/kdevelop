@@ -87,6 +87,7 @@ public:
 
   bool isEmpty() const;
 
+#ifndef KDE_NO_DEBUG_OUTPUT
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -99,7 +100,7 @@ public:
     * Non-debug stream operator; does nothing.
     */
   inline friend kndbgstream& operator<< (kndbgstream& s, const Identifier&) { return s; }
-
+#endif
 private:
   void prepareWrite();
   KSharedPtr<IdentifierPrivate> d;
