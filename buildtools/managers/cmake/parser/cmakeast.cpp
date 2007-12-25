@@ -1109,7 +1109,7 @@ void FindFileAst::writeBack( QString& ) const
 
 bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="find_path" || func.arguments.count()<3)
+    if(func.name.toLower()!="find_file" || func.arguments.count()<3)
         return false;
     
     //FIXME: FIND_PATH(KDE4_DATA_DIR cmake/modules/FindKDE4Internal.cmake ${_data_DIR})
