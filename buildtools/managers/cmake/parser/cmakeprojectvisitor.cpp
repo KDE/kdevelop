@@ -309,9 +309,16 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
     {
         if(!inc->optional())
         {
-            //FIXME: Put here the error.
             kDebug(9032) << "error!! Could not find" << inc->includeFile() << "=" << possib << "into" << modulePath;
         }
+    }
+    
+    if(!inc->resultVariable().isEmpty())
+    {
+        QString result="NOTFOUND";
+        if(!path.isEmpty())
+            result=path;
+        m_vars->insert(inc->resultVariable(), QStringList(result));
     }
     kDebug(9042) << "include of" << inc->includeFile() << "done.";
     return 1;
@@ -816,8 +823,6 @@ int CMakeProjectVisitor::visit(const MathAst *math)
 int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
     QString val, path=filecomp->fileName();
-    kDebug(9042) << "filename component" << filecomp->variableName() << "= "
-            << m_root << "?" << filecomp->fileName() << "=" << filecomp->fileName() << endl;
     
     switch(filecomp->type()) {
         case GetFilenameComponentAst::PATH:
@@ -845,7 +850,8 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             break;
     }
     m_vars->insert(filecomp->variableName(), QStringList(val));
-    kDebug(9042) << "filecomp:" << val;
+    kDebug(9042) << "filename component" << filecomp->variableName() << "= "
+            << filecomp->fileName() << "=" << val << endl;
     return 1;
 }
 
@@ -1147,13 +1153,14 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
 
 int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
 {
-    kDebug(9042) << "Adding defs: " << addDef->definitions();
-    QString regex="-D([A-Za-z0-9]+)=?([A-Za-z0-9]+)";
+//     kDebug(9042) << "Adding defs: " << addDef->definitions();
+    QString regex="-D([A-Za-z0-9_]+)=?([A-Za-z0-9_]*)";
     QRegExp rx(regex);
     foreach(QString def, addDef->definitions())
     {
+        if(def.isEmpty()) continue;
         if(rx.indexIn(def)<0)
-            kDebug(9042) << "error: definition not matched" << regex;
+            kDebug(9042) << "error: definition not matched" << def;
         QStringList captured=rx.capturedTexts();
         Definition d;
         d.first=captured[1];

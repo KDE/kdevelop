@@ -102,7 +102,6 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_varsDef.insert("UNIX", QStringList("TRUE"));
     #ifdef Q_WS_X11
         m_varsDef.insert("LINUX", QStringList("TRUE"));
-        cmakeInitScripts << "Platform/Linux.cmake";
     #endif
     #ifdef Q_WS_MAC //NOTE: maybe should use __APPLE__
         m_varsDef.insert("APPLE", QStringList("TRUE"));

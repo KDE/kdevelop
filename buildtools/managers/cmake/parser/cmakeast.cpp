@@ -73,6 +73,7 @@ CMAKE_REGISTER_AST( SubdirsAst, subdirs )
 CMAKE_REGISTER_AST( GetCMakePropertyAst, get_cmake_property )
 CMAKE_REGISTER_AST( ForeachAst, foreach )
 CMAKE_REGISTER_AST( ExecuteProcessAst, execute_process )
+CMAKE_REGISTER_AST( EnableTestingAst, enable_testing )
 CMAKE_REGISTER_AST( IncludeRegularExpressionAst, include_regular_expression )
 CMAKE_REGISTER_AST( LinkDirectoriesAst, link_directories )
 CMAKE_REGISTER_AST( TryRunAst, try_run )
@@ -677,12 +678,15 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "cmake_minimum_required" )
         return false;
-    if ( func.arguments.size() < 2 || func.arguments.first().value.toUpper()!="VERSION")
+    if ( (func.arguments.size() < 2 && func.arguments.count()>3) || func.arguments.first().value.toUpper()!="VERSION")
         return false;
 
     QRegExp rx("([0-9]*).([0-9]*).([0-9]*)");
     rx.indexIn(func.arguments[1].value);
-    foreach(QString s, rx.capturedTexts())
+
+    QStringList caps=rx.capturedTexts();
+    caps.erase(caps.begin());
+    foreach(QString s, caps)
     {
         bool correct;
         m_version.append(s.toInt(&correct));
@@ -697,8 +701,6 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else
             return false;
     }
-    else if(func.arguments.count()>3)
-        return false;
     return true;
 }
 
@@ -805,13 +807,7 @@ void EnableTestingAst::writeBack( QString& ) const
 
 bool EnableTestingAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "enable_testing" )
-        return false;
-
-    if ( !func.arguments.isEmpty() )
-        return false;
-
-    return true;
+    return func.name.toLower() == "enable_testing" && func.arguments.isEmpty();
 }
 
 ExecProgramAst::ExecProgramAst()
@@ -1317,7 +1313,7 @@ void FindPathAst::writeBack( QString& ) const
 
 bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="find_path" || func.arguments.count()<3)
+    if(func.name.toLower()!="find_path" || func.arguments.count()<2)
         return false;
     
     //FIXME: FIND_PATH(KDE4_DATA_DIR cmake/modules/FindKDE4Internal.cmake ${_data_DIR})
@@ -1365,7 +1361,7 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
         }
     }
-    return !m_filenames.isEmpty() && !m_path.isEmpty();
+    return !m_filenames.isEmpty();
 }
 
 FindProgramAst::FindProgramAst()
@@ -1656,8 +1652,8 @@ bool IfAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 IncludeAst::IncludeAst()
+    : m_optional(false)
 {
-    m_optional = false;
 }
 
 IncludeAst::~IncludeAst()
@@ -1672,12 +1668,27 @@ bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "include" )
         return false;
-    if ( func.arguments.size() < 1 || func.arguments.size() > 2 )
+    if ( func.arguments.size() < 1 || func.arguments.size() > 4 )
         return false;
 
     m_includeFile = func.arguments[0].value;
-    if ( func.arguments.size() == 2 && func.arguments[1].value == "OPTIONAL" )
-        m_optional = true;
+    
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
+    it=func.arguments.begin() + 1;
+    itEnd = func.arguments.end();
+
+    bool nextIsResult=false;
+    for ( ; it != itEnd; ++it ) {
+        if(nextIsResult)
+        {
+            m_resultVariable=it->value;
+            nextIsResult=false;
+        }
+        else if ( it->value == "OPTIONAL" )
+            m_optional = true;
+        else if( it->value == "RESULT_VARIABLE" )
+            nextIsResult=true;
+    }
 
     return true;
 }
