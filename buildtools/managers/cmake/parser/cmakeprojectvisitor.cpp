@@ -70,9 +70,8 @@ CMakeProjectVisitor::VariableType CMakeProjectVisitor::hasVariable(const QString
     return NoVar;
 }
 
-QString CMakeProjectVisitor::variableName(const QString &name, VariableType &type)
+QString CMakeProjectVisitor::variableName(const QString &name, const VariableType type)
 {
-    type = hasVariable(name);
     QString exp;
 
     switch(type) {
@@ -98,10 +97,9 @@ QString CMakeProjectVisitor::variableName(const QString &name, VariableType &typ
 
 QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const VariableMap *values)
 {
-//     kDebug(9042) << "lol!" << exp << "@t" << *values;
-    if(hasVariable(exp))
+    VariableType type=hasVariable(exp);
+    if(type)
     {
-        VariableType type;
         QStringList ret;
         QString var = variableName(exp, type);
         if(type==ENV)
@@ -114,12 +112,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
         }
         else
         {
-            if(!values->contains(var))
-            {
-                kDebug(9042) << "warning: Variable" << var << "not defined";
-                ret = QStringList();
-            }
-            else
+            if(values->contains(var))
             {
                 foreach(QString s, values->value(var))
                 {
@@ -128,23 +121,17 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
 //                     kDebug(9042) << "Resolving" << var << "=" << s;
                 }
             }
+            else
+            {
+                kDebug(9042) << "warning: Variable" << var << "not defined";
+                QString res=exp;
+                ret += resolveVariable(res.replace(QString("${%1}").arg(var), QString()), values);
+            }
         }
+//         kDebug(9042) << "lol!" << exp << "=" << ret;
         return ret;
     }
     return QStringList(exp);
-}
-
-QStringList CMakeProjectVisitor::resolveVariables(const QStringList & vars, const VariableMap *values)
-{
-//     kDebug(9042) << "resolving:" << vars << "into" << *values;
-    QStringList rvars;
-    for(QStringList::const_iterator i=vars.begin(); i!=vars.end(); ++i)
-    {
-        rvars += resolveVariable(*i, values);
-    }
-
-
-    return rvars;
 }
 
 int CMakeProjectVisitor::notImplemented(const QString &name) const
@@ -247,8 +234,10 @@ int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 
 QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &folders, FileType t)
 {
+    if(file.isEmpty())
+        return file;
     QString path, filename;
-    switch(t) { //only working on linux/unix
+    switch(t) {
         case Library:
             filename=QString("lib%1.so").arg(file);
             break;
@@ -1226,7 +1215,6 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         kDebug(9032) << i++ << ":" << it2->writeBack();
     }*/
     
-    bool correct=true;
     CMakeFileContent::const_iterator it=fc.constBegin()+line, itEnd=fc.constEnd();
     for(; it!=itEnd; )
     {
@@ -1247,12 +1235,12 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         CMakeFunctionDesc func = resolveVariables(*it, m_vars); //FIXME not correct in while case
 //         kDebug(9042) << "resolved:" << func.writeBack();
         QString funcName=func.name;
-        bool err = element->parseFunctionInfo(func);
-        if(!err)
+        bool correct = element->parseFunctionInfo(func);
+        if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl <<
                     " at" << func.filePath << ":" << func.line << endl;
-            correct=false;
+            //FIXME: Should avoid to run
         }
         
         RecursivityType r = recursivity(funcName);
@@ -1266,7 +1254,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             kDebug(9042) << "Warning: Using the function: " << funcName << " which is deprecated by cmake.";
         element->setContent(fc, line);
 
-        m_vars->insert("CMAKE_CURRENT_LIST_LINE ", QStringList(QString::number(it->line)));
+        m_vars->insert("CMAKE_CURRENT_LIST_LINE", QStringList(QString::number(it->line)));
         int lines=element->accept(this);
         line+=lines;
         it+=lines;

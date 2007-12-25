@@ -95,14 +95,18 @@ public:
 
 private:
     static QStringList guessCMakeModulesDirectories(const QString& cmakeBin);
+    static QString guessCMakeShare(const QString& cmakeBin);
     static QString guessCMakeRoot(const QString& cmakeBin);
-
+    
+    void includeScript(const QString& File, KDevelop::IProject * project);
+    
     VariableMap m_varsDef;
     QStringList m_modulePathDef;
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
 
+    QStringList cmakeInitScripts;
     ICMakeBuilder* m_builder;
     QList<KDevelop::ProjectTargetItem*> m_targets;
 };

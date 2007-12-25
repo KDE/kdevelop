@@ -30,6 +30,7 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars->insert("TRUE", QStringList("TRUE"));
     m_vars->insert("FALSE", QStringList("FALSE"));
     
+    m_vars->insert("EMPTY", QStringList());
     m_vars->insert("ZERO", QStringList("0"));
     m_vars->insert("ONE", QStringList("1"));
 }
@@ -74,6 +75,8 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "less" ) << QString("5;LESS;9").split(";") << true;
     QTest::newRow( "not+less" ) << QString("NOT;5;LESS;9").split(";") << false;
     QTest::newRow( "not+or+not" ) << QString("NOT;TRUE;OR;NOT;TRUE").split(";") << false;
+    QTest::newRow( "empty" ) << QString("EMPTY").split(";") << false;
+    QTest::newRow( "not+empty" ) << QString("NOT;EMPTY").split(";") << true;
 }
 
 #include "cmake_cmakecondition_test.moc"

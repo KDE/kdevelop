@@ -25,7 +25,7 @@
 #include <QVector>
 #include <QDomDocument>
 #include <QDir>
-#include <QtDesigner/QExtensionFactory>
+// #include <QtDesigner/QExtensionFactory>
 
 #include <KUrl>
 #include <KProcess>
@@ -82,27 +82,27 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     {
         m_builder = i->extension<ICMakeBuilder>();
     }
-
     QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
     m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd);
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
     m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
+    
+    cmakeInitScripts << "CMakeUnixFindMake.cmake";
+    cmakeInitScripts << "CMakeDetermineSystem.cmake";
+    cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
+    cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
+    cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
+
     m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
     m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd)));
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC) //If it has uname :)
-    QString sysName=executeProcess("uname", QStringList("-s"));
-    QString sysVersion=executeProcess("uname", QStringList("-r"));
-    QString sysProcessor=executeProcess("uname", QStringList("-p"));
-
+#if defined(Q_WS_X11) || defined(Q_WS_MAC)
+    m_varsDef.insert("CMAKE_HOST_UNIX", QStringList("TRUE"));
     m_varsDef.insert("UNIX", QStringList("TRUE"));
-    m_varsDef.insert("CMAKE_SYSTEM_NAME", QStringList(sysName));
-    m_varsDef.insert("CMAKE_SYSTEM_VERSION", QStringList(sysVersion));
-    m_varsDef.insert("CMAKE_SYSTEM", QStringList(sysName+'-'+sysVersion));
-    m_varsDef.insert("CMAKE_SYSTEM_PROCESSOR", QStringList(sysProcessor));
     #ifdef Q_WS_X11
         m_varsDef.insert("LINUX", QStringList("TRUE"));
+        cmakeInitScripts << "Platform/Linux.cmake";
     #endif
     #ifdef Q_WS_MAC //NOTE: maybe should use __APPLE__
         m_varsDef.insert("APPLE", QStringList("TRUE"));
@@ -147,24 +147,54 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     }
     else
     {
-        VariableMap vm=m_varsDef;
-        QStringList mpath=m_modulePathDef;
+        m_macrosPerProject[project].clear();
+        m_modulePathPerProject[project]=m_modulePathDef;
+        m_varsPerProject[project]=m_varsDef;
 
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), "CMake");
         if(group.hasKey("CMakeDir"))
-            mpath=group.readEntry("CMakeDir", QStringList());
+            m_modulePathPerProject[project]=group.readEntry("CMakeDir", QStringList());
         else
-            group.writeEntry("CMakeDir", mpath);
+            group.writeEntry("CMakeDir", m_modulePathDef);
 
-        vm.insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
-        m_macrosPerProject[project]=MacroMap();
-        m_modulePathPerProject[project]=mpath;
-        m_varsPerProject[project]=vm;
+        m_varsPerProject[project].insert("CMAKE_SOURCE_DIR", QStringList(cmakeInfoFile.upUrl().toLocalFile()));
+        
+        foreach(const QString& script, cmakeInitScripts) {
+            includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project]), project);
+        }
+        
         m_rootItem = new CMakeFolderItem(project, folderUrl, 0 );
         m_rootItem->setProjectRoot(true);
     }
     return m_rootItem;
+}
+
+
+void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject * project)
+{
+    kDebug(9042) << "Running cmake script: " << file;
+    VariableMap *vm=&m_varsPerProject[project];
+    MacroMap *mm=&m_macrosPerProject[project];
+    CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
+    if(f.isEmpty())
+    {
+        kDebug(9032) << "There is no such file: " << file;
+        return;
+    }
+
+    vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]));
+    vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
+
+    CMakeProjectVisitor v(file);
+    v.setVariableMap(vm);
+    v.setMacroMap(mm);
+    v.setModulePath(m_modulePathPerProject[project]);
+    v.walk(f, 0);
+
+    vm->remove("CMAKE_CURRENT_LIST_FILE");
+    vm->remove("CMAKE_CURRENT_SOURCE_DIR");
+    vm->remove("CMAKE_CURRENT_BINARY_DIR");
 }
 
 QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
@@ -179,10 +209,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     KUrl cmakeListsPath(folder->url());
     cmakeListsPath.addPath("CMakeLists.txt");
 
-    CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
-
     VariableMap *vm=&m_varsPerProject[item->project()];
     MacroMap *mm=&m_macrosPerProject[item->project()];
+    CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
     if(f.isEmpty())
     {
         kDebug(9032) << "There is no" << cmakeListsPath;
@@ -322,7 +351,7 @@ KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectFolder
     return m_builder;
 }
 
-QString CMakeProjectManager::guessCMakeRoot(const QString& cmakeBin)
+QString CMakeProjectManager::guessCMakeShare(const QString& cmakeBin)
 {
     KUrl bin(cmakeBin);
     bin=bin.upUrl();
@@ -330,30 +359,35 @@ QString CMakeProjectManager::guessCMakeRoot(const QString& cmakeBin)
     return bin.toLocalFile();
 }
 
-QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin)
+QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin)
 {
     QString ret;
-    KUrl bin(guessCMakeRoot(cmakeBin));
+    KUrl bin(guessCMakeShare(cmakeBin));
 
     QString version=executeProcess(cmakeBin, QStringList("--version"));
     QRegExp rx("[a-z* ]*([0-9.]*)-[0-9]*");
     rx.indexIn(version);
     QString versionNumber = rx.capturedTexts()[1];
 
-    bin.cd(QString("share/cmake-%1/Modules").arg(versionNumber));
+    bin.cd(QString("share/cmake-%1/").arg(versionNumber));
 
     ret=bin.toLocalFile();
     QDir d(ret);
     if(!d.exists(ret)) {
         KUrl std(bin);
         std = std.upUrl(); std = std.upUrl();
-        std.cd("cmake/Modules");
+        std.cd("cmake/");
         ret=std.toLocalFile();
         bin = std;
     }
 
     kDebug(9042) << "guessing: " << bin.toLocalFile();
-    return QStringList(ret);
+    return ret;
+}
+
+QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin)
+{
+    return QStringList(guessCMakeRoot(cmakeBin)+"/Modules");
 }
 
 #include "cmakemanager.moc"

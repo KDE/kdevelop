@@ -92,8 +92,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         enum VariableType { NoVar, CMake, ENV };
         static VariableType hasVariable(const QString &name);
-        static QString variableName(const QString &name, VariableType& isEnv);
-        static QStringList resolveVariables(const QStringList & vars, const VariableMap *values);
+        static QString variableName(const QString &name, const VariableType isEnv);
         static QStringList resolveVariable(const QString &exp, const VariableMap *values);
         static CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp, const VariableMap *values);
         static QStringList envVarDirectories(const QString &varName);

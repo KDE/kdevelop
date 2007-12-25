@@ -1384,7 +1384,7 @@ void FindProgramAst::writeBack( QString& ) const
 
 bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="find_program" || func.arguments.count()<3)
+    if(func.name.toLower()!="find_program" || func.arguments.count()<2)
         return false;
     
     m_variableName = func.arguments[0].value;
