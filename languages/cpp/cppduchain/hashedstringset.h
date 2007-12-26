@@ -17,7 +17,7 @@
 #include<QString>
 #include<ksharedptr.h>
 #include<set>
-#ifdef Q_WS_WIN
+#ifdef Q_CC_MSVC
 #include <hash_map>
 #include <hash_set>
 #else
@@ -79,6 +79,12 @@ class KDEVCPPDUCHAIN_EXPORT HashedStringSet {
 
 HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& rhs );
 
+#ifdef Q_CC_MSVC
+namespace stdext {
+template<>
+KDevelop::HashType hash_value<KDevelop::HashedString> ( const KDevelop::HashedString& str );
+}
+#else
 namespace __gnu_cxx {
 template<>
 struct KDEVCPPDUCHAIN_EXPORT hash<KDevelop::HashedString> {
@@ -87,6 +93,7 @@ struct KDEVCPPDUCHAIN_EXPORT hash<KDevelop::HashedString> {
   }
 };
 }
+#endif
 
 ///Used to find all registered HashedStringSet's that contain all strings given to findGroups(..)
 class KDEVCPPDUCHAIN_EXPORT HashedStringSetGroup {
@@ -102,9 +109,9 @@ class KDEVCPPDUCHAIN_EXPORT HashedStringSetGroup {
     void findGroups( HashedStringSet strings, ItemSet& target ) const;
 
   private:
-    #ifdef Q_WS_WIN
-        typedef hash_map<KDevelop::HashedString, ItemSet> GroupMap;
-        typedef hash_map<unsigned int, unsigned int> SizeMap;
+    #ifdef Q_CC_MSVC
+        typedef stdext::hash_map<KDevelop::HashedString, ItemSet> GroupMap;
+        typedef stdext::hash_map<unsigned int, unsigned int> SizeMap;
     #else
         typedef __gnu_cxx::hash_map<KDevelop::HashedString, ItemSet> GroupMap;
         typedef __gnu_cxx::hash_map<unsigned int, unsigned int> SizeMap;

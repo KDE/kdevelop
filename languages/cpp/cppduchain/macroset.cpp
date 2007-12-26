@@ -44,7 +44,7 @@ void MacroSet::write( QDataStream& stream ) const {
 }
 
 void MacroSet::addMacro( const rpp::pp_macro& macro ) {
-  std::pair<Macros::const_iterator, bool> r = m_usedMacros.insert( macro );
+  std::pair<Macros::iterator, bool> r = m_usedMacros.insert( macro );
   if( !r.second ) {
     //Make sure the macro added later will be used
     m_usedMacros.erase( r.first );

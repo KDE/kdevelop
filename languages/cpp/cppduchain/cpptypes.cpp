@@ -501,12 +501,12 @@ uint CppFunctionType::hash() const
 
 uint CppClassType::hash() const
 {
-  uint hash_value = cvHash(StructureType::hash());
+  uint hash_val = cvHash(StructureType::hash());
 
   foreach (const BaseClassInstance& base, m_baseClasses)
-    hash_value = (hash_value << 5) - hash_value + base.baseClass->hash() + (base.access + base.virtualInheritance) * 281;
+    hash_val = (hash_val << 5) - hash_val + base.baseClass->hash() + (base.access + base.virtualInheritance) * 281;
 
-  return hash_value;
+  return hash_val;
 }
 
 uint CppTypeAliasType::hash() const

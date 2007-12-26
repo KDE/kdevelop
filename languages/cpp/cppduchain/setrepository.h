@@ -16,7 +16,7 @@
 
 #include <QMutex>
 #include <ksharedptr.h>
-#ifdef Q_WS_WIN
+#ifdef Q_CC_MSVC    
 #include <hash_map>
 #else
 #include <ext/hash_map>
@@ -163,10 +163,10 @@ private:
  * */
 template<class T, class Hash>
   class KDEVCPPDUCHAIN_EXPORT SetRepository : public BasicSetRepository {
-  #ifdef Q_WS_WIN
-  typedef hash_map<T, Index, Hash> ElementHash; ///@todo use a pool allocator, @see rxx_allocator
+  #ifdef Q_CC_MSVC
+    typedef stdext::hash_map<T, Index, Hash> ElementHash; ///@todo use a pool allocator, @see rxx_allocator
   #else
-  typedef __gnu_cxx::hash_map<T, Index, Hash> ElementHash; ///@todo use a pool allocator, @see rxx_allocator
+    typedef __gnu_cxx::hash_map<T, Index, Hash> ElementHash; ///@todo use a pool allocator, @see rxx_allocator
   #endif
 public:
   SetRepository() {

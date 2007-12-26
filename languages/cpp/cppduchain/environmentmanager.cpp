@@ -464,5 +464,9 @@ KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const HashedString& 
   return p.data();
 }
 
+#ifdef Q_CC_MSVC
+stdext::hash_set<KDevelop::HashedString> EnvironmentManager::m_totalStringSet;
+#else
 __gnu_cxx::hash_set<KDevelop::HashedString> EnvironmentManager::m_totalStringSet;
+#endif
 

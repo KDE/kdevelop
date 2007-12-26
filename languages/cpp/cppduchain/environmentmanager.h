@@ -15,7 +15,8 @@
 #define ENVIRONMENTMANAGER_H
 
 #include <map>
-#ifdef Q_WS_WIN
+#include <QtCore/qglobal.h>
+#ifdef Q_CC_MSVC
     #include <hash_map>
     #include <hash_set>
 #else
@@ -45,6 +46,16 @@ struct HashedStringHash {
   uint operator() (const KDevelop::HashedString& str) const {
     return str.hash();
   }
+  
+  #ifdef Q_CC_MSVC
+  bool operator() (const KDevelop::HashedString& lhs, const KDevelop::HashedString& rhs) const {
+    return lhs < rhs;
+  }
+    enum
+		{	// parameters for hash table
+		bucket_size = 4,	// 0 < bucket_size
+		min_buckets = 8};	// min_buckets = 2 ^^ N, 0 < N
+  #endif
 };
 
 /**
@@ -256,8 +267,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
      * */
     static const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {
       QMutexLocker lock(&m_repositoryMutex);
-      #ifdef Q_WS_WIN
-        hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
+      #ifdef Q_CC_MSVC
+        stdext::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
       #else
         __gnu_cxx::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
       #endif
@@ -304,8 +315,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     //typedef __gnu_cxx::hash_multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
     typedef std::multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
     EnvironmentFileMap m_files;
-    #ifdef Q_WS_WIN
-        static hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
+    #ifdef Q_CC_MSVC
+        static stdext::hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
     #else
         static __gnu_cxx::hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
     #endif
@@ -313,8 +324,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
       QDateTime m_readTime;
       QDateTime m_modificationTime;
     };
-    #ifdef Q_WS_WIN
-        typedef hash_map<KDevelop::HashedString, FileModificationCache> FileModificationMap;
+    #ifdef Q_CC_MSVC
+        typedef stdext::hash_map<KDevelop::HashedString, FileModificationCache> FileModificationMap;
     #else    
         typedef __gnu_cxx::hash_map<KDevelop::HashedString, FileModificationCache> FileModificationMap;
     #endif

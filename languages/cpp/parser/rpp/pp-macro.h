@@ -75,6 +75,18 @@ public:
       int df = lhs.name.str().compare( rhs.name.str() );
       return df < 0;
     }
+    #ifdef Q_CC_MSVC
+    
+    std::size_t operator () ( const pp_macro& macro ) const
+    {
+        return macro.idHash();
+    }
+    
+    enum
+		{	// parameters for hash table
+		bucket_size = 4,	// 0 < bucket_size
+		min_buckets = 8};	// min_buckets = 2 ^^ N, 0 < N
+    #endif
   };
 
   //Hash over id and value
@@ -82,6 +94,24 @@ public:
     HashType operator () ( const pp_macro& lhs ) const {
         return lhs.valueHash() + lhs.idHash();
     }
+    
+    #ifdef Q_CC_MSVC
+    
+    bool operator () ( const pp_macro& lhs, const pp_macro& rhs ) const {
+        size_t lhash = lhs.valueHash()+lhs.idHash();
+        size_t rhash = rhs.valueHash()+rhs.idHash();
+        if( lhash < rhash ) return true;
+        else if( lhash > rhash ) return false;
+
+      int df = lhs.name.str().compare( rhs.name.str() );
+      return df < 0;
+    }
+    
+    enum
+		{	// parameters for hash table
+		bucket_size = 4,	// 0 < bucket_size
+		min_buckets = 8};	// min_buckets = 2 ^^ N, 0 < N
+    #endif
   };
   
   private:

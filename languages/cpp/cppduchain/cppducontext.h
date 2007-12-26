@@ -54,9 +54,7 @@ While construction:
 /** @todo Remove this. It is currently needed because CppDUContext<KDevelop::DUContext> cannot call protected members of KDevelop::DUContext,
  *  which is wrong because KDevelop::DUContext is a base-class of CppDUContext<KDevelop::DUContext>. Find out why this happens and then remove this.
  * */
-#define protected public
 #include <duchain/ducontext.h>
-#undef protected
 
 #include <QSet>
 #include <QMutex>

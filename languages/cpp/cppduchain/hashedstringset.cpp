@@ -23,6 +23,15 @@
 #include <iostream>
 #include "kdebug.h"
 
+#ifdef Q_CC_MSVC
+namespace stdext {
+template<>
+KDevelop::HashType hash_value<KDevelop::HashedString> ( const KDevelop::HashedString& str ) {
+    return str.hash();
+  }
+}
+#endif
+
 //It needs to be measured whether this flag should be turned on or off. It seems just to move the complexity from one position to the other, without any variant being really better.
 #define USE_HASHMAP
 
@@ -265,7 +274,11 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
     return;
   }
   //This might yet be optimized by sorting the sets according to their size, and starting the intersectioning with the smallest ones.
-  __gnu_cxx::hash_map<unsigned int, unsigned int> hitCounts;
+  #ifdef Q_CC_MSVC
+    stdext::hash_map<unsigned int, unsigned int> hitCounts;
+  #else
+    __gnu_cxx::hash_map<unsigned int, unsigned int> hitCounts;
+  #endif
 
   for( HashedStringSetData::StringSet::const_iterator it = strings.m_data->m_files.begin(); it != strings.m_data->m_files.end(); ++it ) {
     GroupMap::const_iterator itr = m_map.find( *it );
@@ -275,7 +288,11 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
       }
 
       for( ItemSet::const_iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2 ) {
-        __gnu_cxx::hash_map<unsigned int, unsigned int>::iterator v = hitCounts.find( *it2 );
+        #ifdef Q_CC_MSVC
+            stdext::hash_map<unsigned int, unsigned int>::iterator v = hitCounts.find( *it2 );
+        #else
+            __gnu_cxx::hash_map<unsigned int, unsigned int>::iterator v = hitCounts.find( *it2 );
+        #endif
         if( v != hitCounts.end() ) {
           ++(*v).second;
         } else {
@@ -286,7 +303,11 @@ void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target 
 
   //Now count together all groups that are completely within the given string-set(their hitCount equals their size)
   ItemSet found;
-  for( __gnu_cxx::hash_map<unsigned int, unsigned int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
+  #ifdef Q_CC_MSVC
+    for( stdext::hash_map<unsigned int, unsigned int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
+  #else
+    for( __gnu_cxx::hash_map<unsigned int, unsigned int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
+  #endif
     if( (*it).second == (*m_sizeMap.find( (*it).first )).second )
       found.insert( (*it).first );
   }
