@@ -34,7 +34,6 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
 #include <kaction.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
@@ -42,6 +41,8 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
@@ -169,7 +170,7 @@ void ValgrindPlugin::slotExecCalltree()
 
 QStringList ValgrindPlugin::instrumentorsProvided() const
 {
-    QStringList() << "memcheck" << "callgrind" << "cachegrind" << "helgrind" << "massif" << "drd" << "omega" << "lackey";
+    return QStringList() << "memcheck" << "callgrind" << "cachegrind" << "helgrind" << "massif" << "drd" << "omega" << "lackey";
 }
 
 bool ValgrindPlugin::execute(const KDevelop::IRun & run, int serial)
