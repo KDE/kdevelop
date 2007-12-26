@@ -194,8 +194,6 @@ private:
     */
     void processMICommandResponse(const GDBMI::ResultRecord& r);
 
-    void handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r);
-
     /** Handles reply from -stack-info-frame command issues
         after switching the stack frame.
     */

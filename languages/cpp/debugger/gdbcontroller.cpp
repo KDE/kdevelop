@@ -635,37 +635,6 @@ void GDBController::parseCliLine(const QString& line)
 #endif
 }
 
-void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
-{
-    if (r.reason != "done")
-    {
-        return;
-
-        // FIXME: throw an exception here. Move reporting
-        // to the caller, who knows the gdb output.
-#if 0
-        KMessageBox::information(
-            qApp->activeWindow(),
-            i18n("Invalid gdb reply\n"
-                 "Command was: %1\n"
-                 "Response is: %2\n"
-                 "Invalid response kind: \"%3\"")
-            .arg(currentCmd_->rawDbgCommand())
-            .arg(buf)
-            .arg(r.reason),
-            i18n("Invalid gdb reply"), "gdb_error");
-#endif
-    }
-
-    QString fullname = "";
-    if (r.hasField("fullname"))
-        fullname = r["fullname"].literal();
-
-    showStepInSource(fullname,
-                     r["line"].literal().toInt(),
-                     r["addr"].literal());
-}
-
 void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
 {
     raiseEvent(thread_or_frame_changed);
