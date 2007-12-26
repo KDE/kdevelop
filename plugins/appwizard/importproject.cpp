@@ -33,7 +33,6 @@
 #include "icore.h"
 #include "iprojectcontroller.h"
 
-#include "appwizardfactory.h"
 #include "appwizardplugin.h"
 
 
