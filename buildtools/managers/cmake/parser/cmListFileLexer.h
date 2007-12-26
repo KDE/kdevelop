@@ -17,6 +17,8 @@
 #ifndef cmListFileLexer_h
 #define cmListFileLexer_h
 
+#include "../cmakeexport.h"
+
 typedef enum cmListFileLexer_Type_e
 {
   cmListFileLexer_Token_None,
@@ -47,15 +49,15 @@ extern "C"
 {
 #endif
 
-cmListFileLexer* cmListFileLexer_New();
-int cmListFileLexer_SetFileName(cmListFileLexer*, const char*);
-int cmListFileLexer_SetString(cmListFileLexer*, const char*);
-cmListFileLexer_Token* cmListFileLexer_Scan(cmListFileLexer*);
-long cmListFileLexer_GetCurrentLine(cmListFileLexer*);
-long cmListFileLexer_GetCurrentColumn(cmListFileLexer*);
-const char* cmListFileLexer_GetTypeAsString(cmListFileLexer*,
+KDEVCMAKECOMMON_EXPORT cmListFileLexer* cmListFileLexer_New();
+KDEVCMAKECOMMON_EXPORT int cmListFileLexer_SetFileName(cmListFileLexer*, const char*);
+KDEVCMAKECOMMON_EXPORT int cmListFileLexer_SetString(cmListFileLexer*, const char*);
+KDEVCMAKECOMMON_EXPORT cmListFileLexer_Token* cmListFileLexer_Scan(cmListFileLexer*);
+KDEVCMAKECOMMON_EXPORT long cmListFileLexer_GetCurrentLine(cmListFileLexer*);
+KDEVCMAKECOMMON_EXPORT long cmListFileLexer_GetCurrentColumn(cmListFileLexer*);
+KDEVCMAKECOMMON_EXPORT const char* cmListFileLexer_GetTypeAsString(cmListFileLexer*,
                                             cmListFileLexer_Type);
-void cmListFileLexer_Delete(cmListFileLexer*);
+KDEVCMAKECOMMON_EXPORT void cmListFileLexer_Delete(cmListFileLexer*);
 
 #ifdef __cplusplus
 } /* extern "C" */
