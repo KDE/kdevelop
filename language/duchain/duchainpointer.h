@@ -21,6 +21,13 @@
 
 #include <QMetaType>
 
+#include "ducontext.h"
+#include "topducontext.h"
+#include "declaration.h"
+#include "use.h"
+#include "abstractfunctiondeclaration.h"
+#include "definition.h"
+
 #include <ksharedptr.h>
 #include "../languageexport.h"
 
