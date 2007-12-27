@@ -1112,7 +1112,6 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.name.toLower()!="find_file" || func.arguments.count()<3)
         return false;
     
-    //FIXME: FIND_PATH(KDE4_DATA_DIR cmake/modules/FindKDE4Internal.cmake ${_data_DIR})
     bool definedNames=false;
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
