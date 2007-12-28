@@ -310,40 +310,6 @@ void CppConstantIntegralType::setValue<double>(double value) {
   memcpy(&m_value, &value, sizeof(double));
 }
 
-template<>
-qint64 CppConstantIntegralType::value<qint64>() const {
-/*  if((typeModifiers() & ModifierUnsigned))
-    kWarning() << "value<signed> called on unsigned type";*/
-  return m_value;
-}
-
-template<>
-quint64 CppConstantIntegralType::value<quint64>() const {
-/*  if(!(typeModifiers() & ModifierUnsigned))
-    kWarning() << "value<unsigned> called on not unsigned type";*/
-  return (quint64)m_value;
-}
-
-template<>
-float CppConstantIntegralType::value<float>() const {
-  if(integralType() != TypeFloat)
-    kWarning() << "value<float> called on non-float type";
-
-  float value;
-  memcpy(&value, &m_value, sizeof(float));
-  return value;
-}
-
-template<>
-double CppConstantIntegralType::value<double>() const {
-  if(integralType() != TypeDouble)
-    kWarning() << "value<double> called on non-double type";
-
-  double value;
-  memcpy(&value, &m_value, sizeof(double));
-  return value;
-}
-
 QString CppConstantIntegralType::toString() const {
   switch(integralType()) {
     case TypeNone:

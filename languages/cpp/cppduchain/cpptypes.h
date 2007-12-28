@@ -38,6 +38,14 @@ class DUContext;
 class Declaration;
 }
 
+template<typename T>
+T constant_value(const qint64* realval)
+{
+  T value;
+  memcpy(&value, realval, sizeof(T));
+  return value;
+}
+
 class TemplateParameterDeclaration;
 
 class KDEVCPPDUCHAIN_EXPORT CppCVType
@@ -152,7 +160,9 @@ public:
    * 
    * */
   template<class Type>
-  Type value() const;
+  Type value() const {
+    return constant_value<Type>(&m_value);
+  }
 
   virtual QString toString() const;
 
@@ -446,6 +456,7 @@ _Target model_dynamic_cast(_Source item)
 
   return _Target();
 }*/
+
 
 #endif // CPPTYPES_H
 
