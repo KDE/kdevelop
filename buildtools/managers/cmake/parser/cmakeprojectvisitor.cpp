@@ -796,7 +796,11 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 //         case FileAst::MAKE_DIRECTORY:
 //         case FileAst::RELATIVE_PATH:
         case FileAst::TO_CMAKE_PATH:
+#ifdef Q_WS_WIN
+            m_vars->insert(file->variable(), file->path().split(';'));
+#else
             m_vars->insert(file->variable(), file->path().split(':'));
+#endif
             kDebug(9042) << "file TO_CMAKE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "file:" << file->path();
             break;
