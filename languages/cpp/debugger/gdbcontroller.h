@@ -332,7 +332,6 @@ private:
     bool    config_displayStaticMembers_;
     bool    config_asmDemangle_;
     bool    config_dbgTerminal_;
-    KUrl config_gdbPath_;
     KUrl config_dbgShell_;
     KUrl config_configGdbScript_;
     KUrl config_runShellScript_;

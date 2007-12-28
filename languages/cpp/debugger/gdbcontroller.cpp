@@ -79,7 +79,6 @@ GDBController::GDBController(QObject* parent)
         config_displayStaticMembers_(false),
         config_asmDemangle_(true),
         config_dbgTerminal_(false),
-        config_gdbPath_(),
         config_outputRadix_(10),
         state_reload_needed(false),
         stateReloadInProgress_(false),
@@ -134,7 +133,6 @@ void GDBController::configure()
     config_forceBPSet_            = config.readEntry("Allow Forced Breakpoint Set", true);
 
     config_dbgTerminal_           = config.readEntry("Separate Terminal For Application IO", false);
-    config_gdbPath_               = config.readEntry("GDB Path");
 
     bool old_displayStatic        = config_displayStaticMembers_;
     config_displayStaticMembers_  = config.readEntry("Display Static Members",false);
@@ -669,17 +667,12 @@ bool GDBController::startDebugger()
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processErrored(QProcess::ProcessError)));
 
-    QString gdb = "gdb";
-    // Prepend path to gdb, if needed. Using QDir,
-    // path can either end with slash, or not.
-    if (config_gdbPath_.isValid())
-    {
-        gdb = config_gdbPath_.path();
-    }
+    KConfigGroup config(KGlobal::config(), "GDB Debugger");    
+    QString gdb = config.readEntry("GDB Path", "gdb");
+
     QStringList arguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
-    KConfigGroup config(KGlobal::config(), "GDB Debugger");
     QString shell = config.readEntry("Debugger Shell");
     if( !shell.isEmpty() )
     {
