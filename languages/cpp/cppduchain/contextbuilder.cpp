@@ -38,6 +38,8 @@
 #include "dumpchain.h"
 #include "environmentmanager.h"
 
+#include <climits>
+
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
