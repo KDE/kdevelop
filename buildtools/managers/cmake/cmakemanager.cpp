@@ -171,7 +171,10 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
                     l << path;
                 }   
             }
-            group.writeEntry("CMakeDir", l);
+            if( !l.isEmpty() )
+                group.writeEntry("CMakeDir", l);
+            else
+                group.writeEntry("CMakeDir", m_modulePathDef);
         }
         else
             group.writeEntry("CMakeDir", m_modulePathDef);
