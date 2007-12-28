@@ -117,7 +117,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
 #ifdef Q_WS_WIN
     m_varsDef.insert("WIN32", QStringList("TRUE"));
 #endif
-    kDebug(9042) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH");
+    kDebug(9042) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH") << m_modulePathDef;
 }
 
 CMakeProjectManager::~CMakeProjectManager()
@@ -143,6 +143,8 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     cmakeInfoFile = cmakeInfoFile.upUrl();
     QString folderUrl(cmakeInfoFile.toLocalFile());
     cmakeInfoFile.addPath("CMakeLists.txt");
+    
+    kDebug(9042) << "found module path is" << m_modulePathDef;
 
     kDebug(9042) << "file is" << cmakeInfoFile.path();
     if ( !cmakeInfoFile.isLocalFile() )
@@ -159,7 +161,18 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), "CMake");
         if(group.hasKey("CMakeDir"))
-            m_modulePathPerProject[project]=group.readEntry("CMakeDir", QStringList());
+        {
+            QStringList l;
+            foreach(QString path, group.readEntry("CMakeDir", QStringList()) )
+            {
+                if( QFileInfo(path).exists() )
+                {
+                    m_modulePathPerProject[project] << path;
+                    l << path;
+                }   
+            }
+            group.writeEntry("CMakeDir", l);
+        }
         else
             group.writeEntry("CMakeDir", m_modulePathDef);
 
