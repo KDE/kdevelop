@@ -1481,6 +1481,7 @@ void QComboView::setCurrentActiveItem( QListViewItem * item )
     d->completeAt = 0;
     if ( d->ed ) {
         d->ed->setText( item->text(0) );
+	d->ed->setCursorPosition(0);
 //        qWarning("setCurrentActiveItem( %s )", item->text(0).latin1());
         d->updateLinedGeometry();
     }
