@@ -679,7 +679,7 @@ bool GDBController::startDebugger()
     QStringList arguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
-    KConfigGroup config(KGlobal::config(), "GDB Options");
+    KConfigGroup config(KGlobal::config(), "GDB Debugger");
     QString shell = config.readEntry("Debugger Shell");
     if( !shell.isEmpty() )
     {

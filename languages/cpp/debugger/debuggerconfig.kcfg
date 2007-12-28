@@ -2,7 +2,7 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
   <kcfgfile name="kdeveloprc"/>
-  <group name="GDB Options">
+  <group name="GDB Debugger">
     <entry name="gdbPath" key="GDB Path" type="Url"/>
     <entry name="debuggingShell" key="Debugger Shell" type="Url"/>
     <entry name="configGdbScript" key="Remote GDB Configure Script" type="Url"/>
