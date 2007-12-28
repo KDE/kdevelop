@@ -157,8 +157,13 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2;
                 break;
             case COMMAND:
+#ifdef Q_WS_WIN
+                cmd = CMakeProjectVisitor::findFile(*(it2+1),
+                        CMakeProjectVisitor::envVarDirectories("Path"), CMakeProjectVisitor::Executable);
+#else
                 cmd = CMakeProjectVisitor::findFile(*(it2+1),
                         CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
+#endif
                 last = !cmd.isEmpty();
                 itEnd=it2-1;
                 break;

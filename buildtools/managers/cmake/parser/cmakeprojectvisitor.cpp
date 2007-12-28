@@ -378,9 +378,13 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
         return 1;
 
     QStringList modulePath = fprog->path();
+#ifdef Q_WS_WIN
+    if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
+        modulePath += envVarDirectories("Path");
+#else
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("PATH");
-
+#endif
     kDebug(9042) << "Find:" << fprog->variableName() << "program"/* into" << modulePath<<":"<< fprog->path()*/;
     QStringList paths;
     foreach(QString file, fprog->filenames())
