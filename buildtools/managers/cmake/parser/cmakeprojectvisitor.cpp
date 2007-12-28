@@ -40,11 +40,15 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root)
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
 {
     QStringList env = QProcess::systemEnvironment().filter(QRegExp('^'+varName+"=*"));
-//     kDebug(9042) << ".......resolving env:" << varName << "=" << env;
-    char separator;
+//     kDebug(9042) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
+    QChar separator;
     if(!env.isEmpty())
     {
-        separator = env[0].contains(':') ? ':' : ';';   //FIXME: this is not the way to do
+#ifdef Q_OS_WIN
+        separator = ';';
+#else
+        separator = ':';
+#endif
         env=env[0].split('=')[1].split(separator);
     }
     else
@@ -52,7 +56,7 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
         kDebug(9032) << "error:" << varName << " not found";
         return QStringList();
     }
-//     kDebug(9042) << "resolving env:" << varName << "=" << env;
+    kDebug(9042) << "resolving env:" << varName << "=" << env;
     return env;
 }
 

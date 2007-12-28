@@ -82,7 +82,13 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     {
         m_builder = i->extension<ICMakeBuilder>();
     }
-    QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
+    
+    QString cmakeCmd;
+#ifdef Q_WS_WIN
+    cmakeCmd = CMakeProjectVisitor::findFile("cmake.exe", CMakeProjectVisitor::envVarDirectories("Path"), CMakeProjectVisitor::Executable);
+#else
+    cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
+#endif
     m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd);
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
