@@ -99,6 +99,10 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
     cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
     cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
+    cmakeInitScripts << "CMakeMinGWFindMake.cmake";
+    cmakeInitScripts << "CMakeMSYSFindMake.cmake";
+    cmakeInitScripts << "CMakeNMakeFindMake.cmake";
+    cmakeInitScripts << "CMakeVS8FindMake.cmake";
 
     m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
     m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd)));
