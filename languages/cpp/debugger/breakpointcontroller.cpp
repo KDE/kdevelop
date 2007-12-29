@@ -95,8 +95,19 @@ void BreakpointController::gotoExecutionPoint(const KUrl &url, int lineNum)
     document->textDocument()->blockSignals(false);
 }
 
-void BreakpointController::markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action)
+void BreakpointController::markChanged(
+    KTextEditor::Document *document, 
+    KTextEditor::Mark mark, 
+    KTextEditor::MarkInterface::MarkChangeAction action)
 {
+    int type = mark.type;
+    /* Is this a breakpoint mark, to begin with? */
+    if (type != (MarkInterface::MarkTypes)BreakpointMark
+        && type != (MarkInterface::MarkTypes)ActiveBreakpointMark
+        && type != (MarkInterface::MarkTypes)ReachedBreakpointMark
+        && type != (MarkInterface::MarkTypes)DisabledBreakpointMark)
+        return;
+
     switch (action) {
         case KTextEditor::MarkInterface::MarkAdded: {
             FilePosBreakpoint* fileBreakpoint = new FilePosBreakpoint(this, document->url().path(), mark.line);
