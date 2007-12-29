@@ -465,14 +465,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     ///Change the identifier to reflect the set template-arguments
     if( !templateArguments.isEmpty() ) {
       KDevelop::Identifier id = instantiatedDeclaration->identifier();
-      foreach(Cpp::ExpressionEvaluationResult expr, templateArguments) {
-        KDevelop::IdentifiedType* idType = dynamic_cast<KDevelop::IdentifiedType*>(expr.type.data());
-
-        if( idType )
-          id.appendTemplateIdentifier(idType->identifier());
-        else
-          id.appendTemplateIdentifier(QualifiedIdentifier(expr.toShortString()));
-      }
+      foreach(Cpp::ExpressionEvaluationResult expr, templateArguments)
+        id.appendTemplateIdentifier(expr.identifier());
 
       instantiatedDeclaration->setIdentifier(id);
     }

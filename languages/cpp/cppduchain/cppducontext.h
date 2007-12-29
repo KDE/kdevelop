@@ -97,7 +97,6 @@ extern QMutex cppDuContextInstantiationsMutex;
           
           m_states << s;
         }
-        
 
         /**
          * After this was called, lastDeclarations(..) can be used to retrieve declarations of the qualified identifier.
@@ -182,10 +181,10 @@ extern QMutex cppDuContextInstantiationsMutex;
           if( !scopeContext ) {
             m_context->findDeclarationsInternal( toList(lookup), m_position, m_dataType, tempDecls, m_trace, m_flags | DUContext::DirectQualifiedLookup );
             if( tempDecls.isEmpty() ) {
-              ///If we have a m_trace, walk the m_trace up so we're able to find the item in earlier imported contexts.
+              ///If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
               //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
               QList<QualifiedIdentifier> allIdentifiers;
-              QualifiedIdentifier prepend = m_context->scopeIdentifier(true);
+              QualifiedIdentifier prepend = m_context->scopeIdentifier(false);
               while( !prepend.isEmpty() ) {
                 allIdentifiers << prepend + lookup;
                 prepend.pop();
@@ -195,8 +194,8 @@ extern QMutex cppDuContextInstantiationsMutex;
               for( int a = m_trace.count()-1; a >= 0; --a ) {
                 const ImportTraceItem& traceItem(m_trace[a]);
                 QList<Declaration*> decls;
-                ///@todo Give a correctly modified m_trace(without the used items)
-                traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->range().end, AbstractType::Ptr(), decls, m_trace.mid(0,a), KDevelop::DUContext::NoUndefinedTemplateParams );
+                ///@todo Give a correctly modified trace(without the used items)
+                traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->range().end, AbstractType::Ptr(), decls, m_trace.mid(0,a), (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup) );
                 if( !decls.isEmpty() ) {
                   tempDecls = decls;
                   break;
@@ -414,7 +413,7 @@ class CppDUContext : public BaseContext {
             //If the identifier is empty, it is probably just a mark that a template should be instantiated, but without explicit paremeters.
             if( !i.isEmpty() ) {
               DelayedType::Ptr delayed( new DelayedType() );
-              delayed->setQualifiedIdentifier( currentIdentifier.templateIdentifiers().at(a) );
+              delayed->setQualifiedIdentifier( i );
               
               res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags );
               
@@ -535,7 +534,7 @@ class CppDUContext : public BaseContext {
       
       id.clearTemplateIdentifiers();
       for( QList<ExpressionEvaluationResult>::const_iterator it = templateArguments.begin(); it != templateArguments.end(); it++ )
-        id.appendTemplateIdentifier( QualifiedIdentifier(it->toShortString()) );
+        id.appendTemplateIdentifier( it->identifier() );
 
       totalId.push(id);
       
