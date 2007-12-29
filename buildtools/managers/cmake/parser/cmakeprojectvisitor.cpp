@@ -405,7 +405,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     QStringList paths;
     foreach(QString file, fprog->filenames())
     {
-        QString path=findFile(file, modulePath);
+        QString path=findFile(file, modulePath, Executable);
         if(!path.isEmpty()) {
             paths+=path;
             break;
@@ -715,7 +715,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 
     if(!p.waitForFinished())
     {
-        kDebug(9032) << "error: failed to execute:" << execName;
+        kDebug(9032) << "error: failed to execute:" << execName << "error:" << p.error() << p.exitCode();
     }
 
     if(!exec->returnValue().isEmpty())
