@@ -84,7 +84,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     }
     
     QString cmakeCmd;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     cmakeCmd = CMakeProjectVisitor::findFile("cmake.exe", CMakeProjectVisitor::envVarDirectories("Path"), CMakeProjectVisitor::Executable);
 #else
     cmakeCmd = CMakeProjectVisitor::findFile("cmake", CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
@@ -93,16 +93,19 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
     m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
-    
-    cmakeInitScripts << "CMakeUnixFindMake.cmake";
-    cmakeInitScripts << "CMakeDetermineSystem.cmake";
-    cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
-    cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
-    cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
+#ifdef Q_OS_WIN
     cmakeInitScripts << "CMakeMinGWFindMake.cmake";
     cmakeInitScripts << "CMakeMSYSFindMake.cmake";
     cmakeInitScripts << "CMakeNMakeFindMake.cmake";
     cmakeInitScripts << "CMakeVS8FindMake.cmake";
+#else
+    cmakeInitScripts << "CMakeUnixFindMake.cmake";
+#endif
+    cmakeInitScripts << "CMakeDetermineSystem.cmake";
+    cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
+    cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
+    cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
+    
 
     m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
     m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd)));
@@ -118,7 +121,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     #endif
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     m_varsDef.insert("WIN32", QStringList("TRUE"));
 #endif
     kDebug(9042) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH") << m_modulePathDef;

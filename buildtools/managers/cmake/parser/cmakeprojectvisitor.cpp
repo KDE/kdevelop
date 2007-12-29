@@ -27,6 +27,7 @@
 #include <KDebug>
 #include <QHash>
 #include <QFile>
+#include <QtCore/qglobal.h>
 #include <QByteArray>
 #include <QRegExp>
 #include <QFileInfo>
@@ -243,10 +244,25 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
     QString path, filename;
     switch(t) {
         case Library:
+#ifdef Q_OS_WIN
+            filename=QString("%1.dll").arg(file);
+#else
             filename=QString("lib%1.so").arg(file);
+#endif
             break;
         case Location:
+            filename=file;
+            break;
         case Executable:
+#ifdef Q_OS_WIN
+            kDebug(9042) << "Setting file extension to .exe";
+            filename=file+".exe";
+            break;
+#else
+            kDebug(9042) << "NOT Setting file extension";
+            filename=file;
+            break;
+#endif
         case File:
             filename=file;
             break;
@@ -257,7 +273,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 
         QString possib=p.toLocalFile();
 
-//         kDebug(9042) << "Trying:" << possib /*<< "." << p << "." << mpath*/;
+//         kDebug(9042) << "Trying:" << possib << "." << p << "." << mpath;
         if(QFile::exists(possib))
         {
             switch(t) {
@@ -273,7 +289,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             break;
         }
     }
-    kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
+    kDebug(9042) << "find file" << filename << "into:" << folders << "found at:" << path;
     return path;
 }
 
@@ -378,14 +394,14 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
         return 1;
 
     QStringList modulePath = fprog->path();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("Path");
 #else
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("PATH");
 #endif
-    kDebug(9042) << "Find:" << fprog->variableName() << "program"/* into" << modulePath<<":"<< fprog->path()*/;
+    kDebug(9042) << "Find:" << fprog->variableName() /*<< "program into" << modulePath<<":"<< fprog->path()*/;
     QStringList paths;
     foreach(QString file, fprog->filenames())
     {
@@ -796,7 +812,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 //         case FileAst::MAKE_DIRECTORY:
 //         case FileAst::RELATIVE_PATH:
         case FileAst::TO_CMAKE_PATH:
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             m_vars->insert(file->variable(), file->path().split(';'));
 #else
             m_vars->insert(file->variable(), file->path().split(':'));
