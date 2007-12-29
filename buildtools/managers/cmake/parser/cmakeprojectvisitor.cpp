@@ -688,7 +688,8 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
 int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 {
     QString execName = exec->executableName();
-    QStringList argsTemp = exec->arguments(), args;
+    QStringList argsTemp = exec->arguments();
+    QStringList args;
 
     foreach(QString arg, argsTemp)
     {
@@ -705,7 +706,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
             args.append(arg);
         }
     }
-    kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+    kDebug(9042) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
 
     KProcess p;
     p.setWorkingDirectory(exec->workingDirectory());
