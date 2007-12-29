@@ -129,6 +129,10 @@ public:
 
     QString command() const;
 
+    void setStateReloading(bool f);
+
+    bool stateReloading() const;
+
 private:
     GDBMI::CommandType type_;
     QString command_;
@@ -137,6 +141,7 @@ private:
     handler_t handler_method;
     QStringList lines;
     bool run;
+    bool stateReloading_;
 
 protected: // FIXME: should be private, after I kill the first ctor
     // that is obsolete and no longer necessary.

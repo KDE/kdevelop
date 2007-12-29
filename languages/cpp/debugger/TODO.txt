@@ -1,5 +1,12 @@
 
-KDEV4 Debugger:
+Near term:
+
+      - Implemment handling of debugger exit in GDB class
+      - Implement threading support
+          - Make breakpoint modification be a threaded operation, for a start
+
+
+KDEV4 Debugger overall:
 
       - Launch framework
 

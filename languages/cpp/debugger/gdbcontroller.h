@@ -48,6 +48,7 @@ class CommandQueue;
 class VariableCollection;
 class StackManager;
 class BreakpointController;
+class GDB;
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -63,7 +64,8 @@ public:
     ~GDBController();
 
     /**
-     * Start the debugger, and execute the program specified by \a run, and remember the provided \a serial number.
+     * Start the debugger, and execute the program specified by \a run, 
+     * and remember the provided \a serial number.
      */
     bool startProgram(const KDevelop::IRun& run, int serial);
 
@@ -178,14 +180,6 @@ public Q_SLOTS:
 
 private:
     void parseLocals          (char type, char *buf);
-    /** Parses the CLI output line, and catches interesting messages
-        like "Program exited". This is intended to allow using console
-        commands in the gdb window despite the fact that GDB does not
-        produce right MI notification for CLI commands. I.e. if you
-        run "continue" there will be no MI message if the application has
-        exited.
-    */
-    void parseCliLine            (const QString&);
 
     /** Handles a result response from a MI command -- that is
         all MI responses except for Stream and Prompt responses.
@@ -199,10 +193,13 @@ private:
     */
     void handleMiFrameSwitch(const GDBMI::ResultRecord& r);
 
-    void executeCmd ();
+    /** Try to execute next command in the queue.  If GDB is not
+        busy with previous command, and there's a command in the
+        queue, sends it and returns true.
+        Otherwise, returns false.  */
+    bool executeCmd ();
     void destroyCmds();
     void removeInfoRequests();
-    void actOnProgramPauseMI(const GDBMI::ResultRecord& mi_record);
     /** Called when there are no pending commands and 'state_reload_needed'
         is true.
         Issues commands to completely reload all program state shown
@@ -218,7 +215,6 @@ private:
 
     void debugStateChange(DBGStateFlags oldState, DBGStateFlags newState);
     void commandDone();
-    void destroyCurrentCommand();
 
     /** Raises the specified event. Should be used instead of
         emitting 'event' directly, since this method can perform
@@ -228,15 +224,33 @@ private:
 
     void maybeAnnounceWatchpointHit();
 
+    bool startDebugger();
+
+private Q_SLOTS:
+
+    void gdbReady();
+
+    void programStopped(const GDBMI::ResultRecord& mi_record);
+
+    /** Parses the CLI output line, and catches interesting messages
+        like "Program exited". This is intended to allow using console
+        commands in the gdb window despite the fact that GDB does not
+        produce right MI notification for CLI commands. I.e. if you
+        run "continue" there will be no MI message if the application has
+        exited.
+    */
+    void parseStreamRecord(const GDBMI::StreamRecord& s);
+
     /** Default handler for errors.
         Tries to guess is the error message is telling that target is
         gone, if so, informs the user.
         Otherwise, shows a dialog box and reloads view state.  */
     void defaultErrorHandler(const GDBMI::ResultRecord& result);
 
-    bool startDebugger();
+    void resultRecord(const GDBMI::ResultRecord& result);
 
-private Q_SLOTS:
+    void programRunning();
+
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
     void queueCmd(GDBCommand *cmd, QueuePosition queue_where = QueueAtEnd);
 
@@ -258,14 +272,10 @@ private Q_SLOTS:
     // is in, which commands were sent and so on.
     void explainDebuggerStatus();
 
-    void readyReadStandardOutput();
-    void readyReadStandardError();
-    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void processErrored(QProcess::ProcessError);
-
     void slotKillGdb();
 
     void slotShowStep(const QString &fileName, int lineNum);
+
 
 Q_SIGNALS:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
@@ -300,20 +310,10 @@ Q_SIGNALS:
     void stateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
 private:
-    void readFromProcess(QProcess* process);
-
     int               currentFrame_;
     int               currentThread_;
 
-    // The output from gdb that arrived where we was
-    // parsing the previous output.
-    // VP: It's not clear why the previous code was doing
-    // this, and holdingZone_ won't be processed until
-    // next output arrives, so probably should be just removed.
-    QByteArray          holdingZone_;
-
     CommandQueue*   commandQueue_;
-    GDBCommand*       currentCmd_;
 
     STTY*             tty_;
     QString           badCore_;
@@ -338,21 +338,13 @@ private:
     KUrl config_runGdbScript_;
     int config_outputRadix_;
 
-    MIParser mi_parser_;
-
     bool state_reload_needed;
 
     QTime commandExecutionTime;
 
     bool stateReloadInProgress_;
 
-    /** Commands issues as result of the 'program_state_changed'
-        event. */
-    QSet<GDBCommand*> stateReloadingCommands_;
-
-    bool saw_gdb_prompt_;
-
-    KProcess* m_process;
+    GDB* gdb_;
 
     VariableCollection* m_variableCollection;
     StackManager* m_stackManager;

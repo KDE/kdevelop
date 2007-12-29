@@ -31,6 +31,7 @@ install(FILES kcm_kdev_cppdebugger.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(kdevcppdebugger_PART_SRCS
+    gdb.cpp    
     debuggerplugin.cpp
     gdbcontroller.cpp
     gdbcommandqueue.cpp

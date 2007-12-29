@@ -23,12 +23,14 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), command_(command), handler_this(0), run(false), m_thread(-1), m_frame(-1)
+: type_(type), command_(command), handler_this(0), 
+  run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), command_(QString::number(index)), handler_this(0), run(false), m_thread(-1), m_frame(-1)
+: type_(type), command_(QString::number(index)), handler_this(0), 
+  run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
@@ -589,5 +591,16 @@ QString GDBCommand::command() const
 {
     return command_;
 }
+
+void GDBCommand::setStateReloading(bool f)
+{
+    stateReloading_ = f;
+}
+
+bool GDBCommand::stateReloading() const
+{
+    return stateReloading_;
+}
+
 
 }
