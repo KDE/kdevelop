@@ -64,25 +64,14 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
       return (bool)type;
     }
 
-    ///@return A short version, that only contains the name or value, without instance-information etc.
-    QString toShortString() const
-    {
-      //Inline for now, so it can be used from the duchainbuilder module
-      if( DUChain::lock()->currentThreadHasReadLock() )
-        return type ? type->toString() : QString("<no type>");
-
-      DUChainReadLocker lock(DUChain::lock());
-      return type ? type->toString() : QString("<no type>");
-    }
+    ///Duchain must be read-locked
+    QualifiedIdentifier identifier() const;
+    
+    ///@return A short version, that only contains the name or value, without instance-information etc. Should be language-processable.
+    QString toShortString() const;
     
     ///it does not matter whether du-chain is locked or not
-    QString toString() const {
-      if( DUChain::lock()->currentThreadHasReadLock() )
-        return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
-
-      DUChainReadLocker lock(DUChain::lock());
-      return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("<no type>"));
-    }
+    QString toString() const;
 
     typedef KSharedPtr<ExpressionEvaluationResult> Ptr;
 };

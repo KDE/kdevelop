@@ -42,6 +42,43 @@ using namespace KDevelop;
 ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
 }
 
+QualifiedIdentifier ExpressionEvaluationResult::identifier() const {
+  static QualifiedIdentifier noIdentifier("(no type)");
+  
+  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.data());
+  if( idType )
+    return idType->identifier();
+  
+  const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type.data());
+  if( delayedType )
+    return delayedType->qualifiedIdentifier();
+  
+  if( type )
+    return QualifiedIdentifier( type->toString() );
+  else
+    return noIdentifier;
+  
+}
+
+QString ExpressionEvaluationResult::toString() const {
+  if( DUChain::lock()->currentThreadHasReadLock() )
+    return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("(no type)"));
+
+  DUChainReadLocker lock(DUChain::lock());
+  return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("(no type)"));
+}
+
+QString ExpressionEvaluationResult::toShortString() const
+{
+  //Inline for now, so it can be used from the duchainbuilder module
+  if( DUChain::lock()->currentThreadHasReadLock() )
+    return type ? type->toString() : QString("(no type)");
+
+  DUChainReadLocker lock(DUChain::lock());
+  return type ? type->toString() : QString("(no type)");
+}
+
+
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const KDevelop::ImportTrace& trace, bool forceExpression ) {
 
   if( m_debug )
