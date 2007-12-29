@@ -33,6 +33,8 @@
 #include <QApplication>
 #include <QFileInfo>
 
+#include <memory>
+
 #include <sys/types.h>
 #include <signal.h>
 
