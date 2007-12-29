@@ -774,9 +774,9 @@ QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
 
   QualifiedIdentifier ret;
   if (parentContext())
-    ret = parentContext()->scopeIdentifier();
+    ret = parentContext()->scopeIdentifier(includeClasses);
 
-  if (includeClasses || type() == Namespace)
+  if (includeClasses || type() != Class)
     ret += localScopeIdentifier();
 
 
