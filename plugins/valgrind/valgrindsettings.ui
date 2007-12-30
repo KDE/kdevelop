@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>ValgrindConfigWidget</class>
- <widget class="QWidget" name="ValgrindConfigWidget" >
+ <class>ValgrindSettings</class>
+ <widget class="QWidget" name="ValgrindSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -8,6 +8,9 @@
     <width>669</width>
     <height>475</height>
    </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
   </property>
   <layout class="QVBoxLayout" >
    <item>
@@ -221,6 +224,42 @@
       <attribute name="title" >
        <string>Ca&amp;llgrind</string>
       </attribute>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QCheckBox" name="kcfg_separateThreads" >
+         <property name="text" >
+          <string>Separate Thread Reporting</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="kcfg_simulateCache" >
+         <property name="text" >
+          <string>Full Cache Simulation</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="kcfg_simulateHWPref" >
+         <property name="text" >
+          <string>Simulate Hardware Prefetcher</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab_4" >
       <attribute name="title" >
@@ -231,6 +270,50 @@
       <attribute name="title" >
        <string>&amp;Hellgrind</string>
       </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>Extra Synchronization Events</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="KComboBox" name="kcfg_happensBefore" >
+         <property name="currentIndex" >
+          <number>2</number>
+         </property>
+         <item>
+          <property name="text" >
+           <string>None (Locks Only)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Threads</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>All</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

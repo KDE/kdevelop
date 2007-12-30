@@ -4,20 +4,37 @@
   <kcfgfile name="kdeveloprc"/>
   <group name="Valgrind Options">
     <entry name="valgrindExecutable" key="Valgrind Executable" type="Url"/>
-    <entry name="valgrindArguments" key="Valgrind Arguments" type="String"/>
-    <entry name="numCallers" key="Framestack Depth" type="Int"/>
-    <entry name="maxStackFrame" key="Maximum Stack Frame Size" type="Int"/>
+    <entry name="valgrindParameters" key="Valgrind Arguments" type="String"/>
+    <entry name="numCallers" key="Framestack Depth" type="Int">
+        <default>12</default>
+    </entry>
+    <entry name="maxStackFrame" key="Maximum Stack Frame Size" type="Int">
+        <default>2000000</default>
+    </entry>
     <entry name="limitErrors" key="Limit Errors" type="Bool">
         <default>false</default>
     </entry>
-    <entry name="leakSummary" key="Leak Summary Type" type="Enum">
+    <entry name="leakSummary" key="Leak Summary Type" type="Int">
+        <default>1</default>
     </entry>
-    <entry name="leakResolution" key="Leak Resolution Matching" type="Enum">
-        <default>false</default>
+    <entry name="leakResolution" key="Leak Resolution Matching" type="Int">
     </entry>
     <entry name="showReachable" key="Show Reachable Blocks" type="Bool">
         <default>false</default>
     </entry>
-    <entry name="freeBlockList" key="Free Block List Size" type="Int"/>
+    <entry name="freeBlockList" key="Free Block List Size" type="Int">
+        <default>5000000</default>
+    </entry>
+    <entry name="separateThreads" key="Separate Thread Reporting" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="simulateCache" key="Full Cache Simulation" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="simulateHWPref" key="Simulate Hardware Prefetcher" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="happensBefore" key="Extra Synchronization Events" type="Int">
+    </entry>
   </group>
 </kcfg>

@@ -31,6 +31,7 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QDomElement>
+#include <QApplication>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -41,13 +42,13 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
+#include <kcmultidialog.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
 
-#include "valgrind_dialog.h"
 #include "valgrindmodel.h"
 #include "valgrindcontrol.h"
 #include "valgrindwidget.h"
@@ -89,7 +90,7 @@ ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
 
     KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), this);
     actionCollection()->addAction("tools_valgrind", action);
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_V);
     action->setToolTip(i18n("Valgrind memory leak check and other tools"));
     action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs, and other valgrind tools.</p>"));
     connect(action, SIGNAL(triggered(bool)), SLOT(slotExecValgrind()));
@@ -125,22 +126,9 @@ void ValgrindPlugin::loadOutput()
 
 void ValgrindPlugin::slotExecValgrind()
 {
-    ValgrindDialog* dlg = new ValgrindDialog(ValgrindDialog::Memcheck);
-    /*if ( KDevApi::self()->project() && m_lastExec.isEmpty() ) {
-        dlg->setExecutable( KDevApi::self()->project()->mainProgram() );
-    } else {*/
-        dlg->setExecutable( m_lastExec );
-    //}
-    dlg->setParameters( m_lastParams );
-    dlg->setValExecutable( m_lastValExec );
-    dlg->setValParams( m_lastValParams );
-    m_lastValExec = dlg->valExecutable();
-    m_lastValParams = dlg->valParams();
-    if ( dlg->exec() == QDialog::Accepted ) {
-        KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
-        run.setInstrumentor("memcheck");
-        KDevelop::ICore::self()->runController()->execute(run);
-    }
+    KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
+    run.setInstrumentor("memcheck");
+    KDevelop::ICore::self()->runController()->execute(run);
 }
 
 void ValgrindPlugin::slotExecCalltree()

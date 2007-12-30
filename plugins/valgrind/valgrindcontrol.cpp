@@ -54,7 +54,7 @@ bool ValgrindControl::run(const KDevelop::IRun& run)
 {
     Q_ASSERT(m_process->state() != QProcess::Running);
 
-    int port = 38462;
+    /*int port = 38462;
     if (!m_server) {
         m_server = new QTcpServer(this);
         connect(m_server, SIGNAL(newConnection()), SLOT(readFromValgrind()));
@@ -67,13 +67,13 @@ bool ValgrindControl::run(const KDevelop::IRun& run)
             kWarning() << "Could not open TCP socket for communication with Valgrind." ;
         else
             kDebug() << "Opened TCP socket" << port << "for communication with Valgrind.";
-    }
+    }*/
 
     QStringList arguments;
     arguments << QString("--tool=%1").arg(run.instrumentor());
     arguments << run.instrumentorArguments();
     arguments << "--xml=yes";
-    arguments << QString("--log-socket=localhost:%1").arg(port);
+    //arguments << QString("--log-socket=localhost:%1").arg(port);
     arguments << run.executable().path();
     arguments << run.arguments();
 
@@ -82,6 +82,10 @@ bool ValgrindControl::run(const KDevelop::IRun& run)
     m_process->start();
 
     m_xmlReader->setContentHandler(m_model);
+
+    delete m_inputSource;
+    m_inputSource = new QXmlInputSource(m_process);
+    m_xmlReader->parse(m_inputSource, true);
 
     return true;
 }

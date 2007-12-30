@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_valgrindsettings
+X-KDE-FactoryName=kcm_kdev_valgrindsettings
+X-KDE-ParentApp=kdevplatform
+X-KDE-ParentComponents=kdevplatform
+X-KDE-CfgDlgHierarchy=USERINTERFACE
+
+Name=Valgrind Settings
+Name[x-test]=xxValgrind Settingsxx
+Comment=Configure Valgrind settings
+Comment[x-test]=xxConfigure Valgrind settingsxx
+

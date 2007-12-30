@@ -1,0 +1,6 @@
+File=valgrindconfig.kcfg
+ClassName=ValgrindSettings
+Singleton=true
+UseEnumTypes=true
+SetUserTexts=true
+ItemAccessors=true
