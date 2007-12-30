@@ -240,7 +240,7 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
 
 KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 {
-    KUrl::List allPaths;
+  KUrl::List allPaths;
 
   if( source.isEmpty() ) {
     foreach( QString path, *m_standardIncludePaths)
@@ -268,6 +268,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         
         projectDirectory = project->folder();
         buildDirectory = buildManager->buildDirectory(project->projectItem());
+        kDebug(9007) << "Got build-directory from project manager:" << buildDirectory;
 
         if(projectDirectory == buildDirectory)
             projectDirectory = buildDirectory = KUrl();
@@ -284,6 +285,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         }
     }
 
+    if(!gotPathsFromManager)
+      kDebug(9007) << "Did not find a build-manager for" << source;
+    
     KDevelop::Problem problem;
     
     if( allPaths.isEmpty() || DEBUG_INCLUDE_PATHS ) {
