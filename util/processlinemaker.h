@@ -35,7 +35,7 @@ class QProcess;
 class QStringList;
 
 /**
-Convenience class to catch output of K3Process.
+Convenience class to catch output of QProcess.
 */
 
 namespace KDevelop
@@ -46,8 +46,8 @@ class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
     Q_OBJECT
 
 public:
-    ProcessLineMaker();
-    ProcessLineMaker( QProcess* );
+    ProcessLineMaker( QObject* parent = 0 );
+    ProcessLineMaker( QProcess* process, QObject* parent = 0 );
     
     ~ProcessLineMaker();
 

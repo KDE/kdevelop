@@ -105,13 +105,15 @@ public:
 
 };
 
-ProcessLineMaker::ProcessLineMaker()
-    : d( new ProcessLineMakerPrivate( this ) )
+ProcessLineMaker::ProcessLineMaker(QObject* parent)
+    : QObject(parent)
+    , d( new ProcessLineMakerPrivate( this ) )
 {
 }
 
-ProcessLineMaker::ProcessLineMaker( QProcess* proc )
-    : d( new ProcessLineMakerPrivate( this ) )
+ProcessLineMaker::ProcessLineMaker( QProcess* proc, QObject* parent )
+    : QObject(parent)
+    , d( new ProcessLineMakerPrivate( this ) )
 {
     d->m_proc = proc;
     d->m_proc->setTextModeEnabled( true );
