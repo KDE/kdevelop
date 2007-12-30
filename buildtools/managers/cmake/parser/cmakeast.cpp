@@ -830,6 +830,8 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     bool args=false;
 
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin(), itEnd=func.arguments.end();
+    // don't re-read the first element
+    it++;
     for(; it!=itEnd; ++it) {
         if(it->value.toUpper()=="OUTPUT_VARIABLE") {
             ++it;

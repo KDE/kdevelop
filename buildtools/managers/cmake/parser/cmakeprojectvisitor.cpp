@@ -709,7 +709,8 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
     kDebug(9042) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
 
     KProcess p;
-    p.setWorkingDirectory(exec->workingDirectory());
+    if(!exec->workingDirectory().isEmpty()) 
+        p.setWorkingDirectory(exec->workingDirectory());
     p.setOutputChannelMode(KProcess::MergedChannels);
     p.setProgram(execName, args);
     p.start();
