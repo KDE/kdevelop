@@ -46,6 +46,10 @@
 #include "cmakeexport.h"
 #include "icmakebuilder.h"
 
+#ifdef CMAKEDEBUGVISITOR
+#include "cmakedebugvisitor.h"
+#endif
+
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeProjectManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory("kdevcmakemanager"))
 
@@ -256,6 +260,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
     kDebug(9042) << "currentBinDir" << vm->value("CMAKE_CURRENT_BINARY_DIR");
 
+#ifdef CMAKEDEBUGVISITOR
+    CMakeAstDebugVisitor dv;
+    dv.walk(cmakeListsPath, f, 0);
+#endif
+    
     CMakeProjectVisitor v(folder->url().toLocalFile());
     v.setVariableMap(vm);
     v.setMacroMap(mm);

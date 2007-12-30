@@ -11,6 +11,10 @@ include_directories(
 )
 add_subdirectory(tests)
 
+# enable this if you want to have the cmake debug visitor run on each CMakeLists.txt
+# the debug visitor prints out the Ast for the CMakeLists.txt file.
+#add_definitions( -DCMAKEDEBUGVISITOR )
+
 set( cmakecommon_SRCS
   cmakemodelitems.cpp
   #cmakexmlparser.cpp
@@ -21,6 +25,7 @@ set( cmakecommon_SRCS
   parser/cmakecondition.cpp
   parser/cmakeprojectvisitor.cpp 
   parser/variablemap.cpp
+  parser/cmakedebugvisitor.cpp
  )
 
 set( cmakemanager_SRCS
