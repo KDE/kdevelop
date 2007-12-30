@@ -184,6 +184,7 @@ public:
   /**
    * Returns the list of imported parent contexts for this context.
    * @warning The list may contain objects that are not valid any more(data() returns zero, but that can only happen when using anonymous imports, @see addImportedParentContext)
+   * @warning The import structure may contain loops if this is a TopDUContext, so be careful when traversing the tree.
    */
   const QList<DUContextPointer>& importedParentContexts() const;
 

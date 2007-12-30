@@ -35,28 +35,42 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+QMutex importSearchMutex;
 
 class TopDUContextPrivate : public DUContextPrivate
 {
 public:
   TopDUContextPrivate( TopDUContext* ctxt)
-    : DUContextPrivate(ctxt), m_inDuChain(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
+    : DUContextPrivate(ctxt), m_inDuChain(false), m_searchingImport(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
   {
   }
-  
-  bool imports(const TopDUContext* target, int depth) const
+
+  ///importSearchMutex must be locked before using this
+  bool imports(const TopDUContext* target, int depth = 0) const
   {
+    if(depth == 0)
+      importSearchMutex.lock();
+    
+    m_searchingImport = true;
+
     const bool alwaysCache = true;
     
     if(alwaysCache || depth == 0) {
       QHash<const TopDUContext*, const TopDUContext*>::const_iterator it = m_importsCache.find(target);
       if(it != m_importsCache.end()) {
+      m_searchingImport = false;
+      if(depth == 0)
+        importSearchMutex.unlock();
+        
         return *it;
       }
     }
     
     if (depth == 100) {
       kWarning() << "Imported context list too deep! Infinite recursion?" ;
+      m_searchingImport = false;
+      if(depth == 0)
+        importSearchMutex.unlock();
       return false;
     }
 
@@ -73,24 +87,37 @@ public:
         if(alwaysCache || depth == 0) {
           m_importsCache[target] = top;
         }
+        m_searchingImport = false;
+        if(depth == 0)
+          importSearchMutex.unlock();
         return true;
       }
+
+      if(top->d_func()->m_searchingImport) //Prevent endless recursion
+        continue;
 
       if (top->d_func()->imports(target, depth + 1)) {
         if(alwaysCache || depth == 0) {
           m_importsCache[target] = top;
         }
+        m_searchingImport = false;
+        if(depth == 0)
+          importSearchMutex.unlock();
         return true;
       }
     }
 
     m_importsCache[target] = 0;
+    m_searchingImport = false;
+    if(depth == 0)
+      importSearchMutex.unlock();
     return false;
   }
 
   bool m_hasUses  : 1;
   bool m_deleting : 1;
   bool m_inDuChain : 1;
+  mutable bool m_searchingImport : 1; //Used to prevent endless recursion, protected by importSearchMutex
   TopDUContext::Flags m_flags;
   TopDUContext* m_ctxt;
   ParsingEnvironmentFilePointer m_file;
@@ -103,7 +130,7 @@ ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
   {
     ImportTrace ret;
     Q_D(const TopDUContext);
-    if(!d->imports(target, 0))
+    if(!d->imports(target))
       return ret;
 
     const TopDUContext* nextContext = d->m_importsCache[target];
@@ -365,7 +392,7 @@ bool TopDUContext::importsPrivate(const DUContext * origin, const SimpleCursor& 
   // TODO use position
 
   if( dynamic_cast<const TopDUContext*>(origin) ) {
-    return d_func()->imports(static_cast<const TopDUContext*>(origin), 0);
+    return d_func()->imports(static_cast<const TopDUContext*>(origin));
   } else {
     kWarning() << "non top-context importet into top-context";
     return DUContext::imports(origin, position);

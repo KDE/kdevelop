@@ -569,10 +569,11 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
 {
   ENSURE_CAN_WRITE
   Q_D(DUContext);
-  if( context->imports(this) ) {
-    kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url().str() << ") into " << this << " (" << url().str() << ")";
-    return;
-  }
+  //We allow loops in the import-structure. It is needed in the case of C++ for simplified environment matching.
+//   if( context->imports(this) ) {
+//     kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url().str() << ") into " << this << " (" << url().str() << ")";
+//     return;
+//   }
 
   if( position.isValid() )
     d->m_importedParentContextPositions[DUContextPointer(context)] = position;
