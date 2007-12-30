@@ -143,7 +143,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 //     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
 //              this, SLOT(slotStop(KDevPlugin*)) );
 
-    procLineMaker = new KDevelop::ProcessLineMaker();
+    procLineMaker = new KDevelop::ProcessLineMaker(this);
 
     connect( procLineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
              this, SLOT(applicationStandardOutputLines(const QStringList&)));
@@ -369,7 +369,6 @@ CppDebuggerPlugin::~CppDebuggerPlugin()
 
     delete controller;
     delete floatingToolBar;
-    delete procLineMaker;
 
     GDBParser::destroy();
 }
