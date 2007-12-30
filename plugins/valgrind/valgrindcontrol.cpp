@@ -44,7 +44,7 @@ ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     , m_server(0)
     , m_connection(0)
     , m_model(new ValgrindModel(this))
-    , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
+    , m_applicationOutput(new KDevelop::ProcessLineMaker(this->m_process))
 {
     m_xmlReader->setContentHandler(m_model);
     m_xmlReader->setErrorHandler(m_model);
