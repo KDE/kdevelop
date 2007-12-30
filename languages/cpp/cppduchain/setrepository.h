@@ -27,14 +27,30 @@
 #include "cppduchainexport.h"
 
 /**
- * These set-repositories are optimized by the fact that they can only grow.
+ * This file provides a set system that can be used to very efficiently manage sub-sets of
+ * a given global set of objects. Each object is mapped to a natural number(index), and that index
+ * is used for all further computations.
  *
- * The general idea is that new items can only be appended, and the ranges of the items are used to
- * represent sets of these items by binary trees, that at least share their end-nodes.
+ * These efficiency comes from:
+ * 1. The global set can not shrink, only grow.
+ * 2. The sets are represented by binary trees, where every single tree node can be shared across multiple sets.
+ *    For that reason, intersecting sets will share large parts of their internal data structures, which leads to
+ *    extremely low memory-usage compared to using for example std::set.
  *
- * These trees can then be used for optimized intersection- and union-computation.
- * 
- * This will have the biggest advantage when items that were added contiguously are commonly used within the same sets, and work fastest if the intersections between different sets are contiguously long.
+ * The more common intersections between the sets exist, the more efficient the system is.
+ * This will have the biggest advantage when items that were added contiguously are commonly
+ * used within the same sets, and work fastest if the intersections between different sets are contiguously long.
+ *
+ * That makes it perfect for representing sets that are inherited across tree-like structures, like for example in C++:
+ * - Macros defined in files(Macros are inherited from included files)
+ * - Strings contained in files(Strings are inherited from included files)
+ * - Set of all included files
+ *
+ * Measurements(see in kdevelop languages/cpp/cppduchain/tests/duchaintest) show that even in worst case(with totally random sets)
+ * these set-repositories are 2 times faster than std::set, and 4 times faster than QSet.
+ *
+ * The main disadvantages are that a global repository needs to be managed, and needs to be secured from simultaneous write-access
+ * during multi-threading.
  * */
 
 class QString;
@@ -68,6 +84,9 @@ public:
 
   ///Returns the count of items in the set
   unsigned int count() const;
+
+  ///@warning: The following operations can change the global repository, and thus need to be serialized
+  ///          using mutexes in case of multi-threading.
   
   ///Set union
   Set operator +(const Set& rhs) const;
@@ -112,7 +131,6 @@ public:
    * The created indices will be the range from return-value to return-value + count
    * */
   Index appendIndices(int count);
-
 
   /**
    * Takes a sorted list of index-ranges, and creates a set from them.
@@ -371,7 +389,6 @@ private:
   ElementHash m_elementHash;
   std::vector<T> m_elements;
 };
-
 }
 
 #endif
