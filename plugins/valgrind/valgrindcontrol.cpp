@@ -24,12 +24,12 @@
 #include <QXmlSimpleReader>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QProcess>
 #include <QApplication>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <KProcess>
 
 #include <processlinemaker.h>
 
@@ -38,13 +38,13 @@
 
 ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     : QObject(parent)
-    , m_process(new QProcess(this))
+    , m_process(new KProcess(this))
     , m_inputSource(0)
     , m_xmlReader(new QXmlSimpleReader)
     , m_server(0)
     , m_connection(0)
     , m_model(new ValgrindModel(this))
-    , m_applicationOutput(new KDevelop::ProcessLineMaker(this->m_process))
+    , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
 {
     m_xmlReader->setContentHandler(m_model);
     m_xmlReader->setErrorHandler(m_model);
@@ -90,7 +90,8 @@ bool ValgrindControl::run(const KDevelop::IRun& run, int serial)
     m_inputSource = 0;
     
     m_process->setReadChannel(QProcess::StandardError);
-    m_process->start(plugin()->valgrindExecutable().path(), arguments);
+    m_process->setProgram(plugin()->valgrindExecutable().path(), arguments);
+    m_process->start();
 
     return true;
 }

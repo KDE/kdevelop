@@ -26,7 +26,7 @@
 
 #include <irun.h>
 
-class QProcess;
+class KProcess;
 class QXmlInputSource;
 class QXmlSimpleReader;
 class ValgrindModel;
@@ -62,7 +62,7 @@ private slots:
     void applicationOutput(const QStringList& lines);
 
 private:
-    QProcess* m_process;
+    KProcess* m_process;
     int m_currentPid;
     int m_serial;
 
