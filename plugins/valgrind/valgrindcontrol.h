@@ -26,13 +26,15 @@
 
 #include <irun.h>
 
-class KProcess;
+class QProcess;
 class QXmlInputSource;
 class QXmlSimpleReader;
 class ValgrindModel;
 class QTcpServer;
 class QTcpSocket;
 class ValgrindPlugin;
+
+namespace KDevelop { class ProcessLineMaker; }
 
 class ValgrindControl : public QObject
 {
@@ -41,9 +43,11 @@ class ValgrindControl : public QObject
 public:
     ValgrindControl(ValgrindPlugin* parent);
 
+    ValgrindModel* model() const;
+
     ValgrindPlugin* plugin() const;
 
-    bool run(const KDevelop::IRun& run);
+    bool run(const KDevelop::IRun& run, int serial);
     void stop();
 
 private slots:
@@ -55,9 +59,12 @@ private slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void processErrored(QProcess::ProcessError);
 
+    void applicationOutput(const QStringList& lines);
+
 private:
-    KProcess* m_process;
+    QProcess* m_process;
     int m_currentPid;
+    int m_serial;
 
     QXmlInputSource* m_inputSource;
     QXmlSimpleReader* m_xmlReader;
@@ -66,6 +73,8 @@ private:
     QTcpSocket* m_connection;
 
     ValgrindModel* m_model;
+
+    KDevelop::ProcessLineMaker* m_applicationOutput;
 };
 
 #endif

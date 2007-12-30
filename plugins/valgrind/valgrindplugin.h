@@ -40,11 +40,13 @@ class ValgrindPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider//
     Q_INTERFACES(KDevelop::IRunProvider)
     //Q_INTERFACES(KDevelop::IStatus)
 
+    friend class ValgrindControl;
+
 public:
     ValgrindPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~ValgrindPlugin();
 
-    const KUrl& valgrindExecutable() const;
+    KUrl valgrindExecutable() const;
 
     ValgrindCombinedModel* model() const;
     
@@ -68,8 +70,6 @@ private slots:
 private:
     QString m_lastExec, m_lastParams, m_lastValExec, m_lastValParams,
         m_lastCtExec, m_lastCtParams, m_lastKcExec;
-
-    KUrl m_valgrindExecutable;
 
     QHash<int, ValgrindControl*> m_controls;
 

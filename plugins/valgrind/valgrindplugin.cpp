@@ -165,7 +165,9 @@ bool ValgrindPlugin::execute(const KDevelop::IRun & run, int serial)
 {
     ValgrindControl* control = new ValgrindControl(this);
     m_controls.insert(serial, control);
-    return control->run(run);
+    bool ret = control->run(run, serial);
+    m_model->setSourceModel(control->model());
+    return ret;
 }
 
 void ValgrindPlugin::abort(int serial)
@@ -174,9 +176,10 @@ void ValgrindPlugin::abort(int serial)
     control->stop();
 }
 
-const KUrl & ValgrindPlugin::valgrindExecutable() const
+KUrl ValgrindPlugin::valgrindExecutable() const
 {
-    return m_valgrindExecutable;
+    KConfigGroup group(KGlobal::config(), "Valgrind Options");
+    return group.readEntry("Valgrind Executable", "valgrind");
 }
 
 ValgrindCombinedModel* ValgrindPlugin::model() const

@@ -87,6 +87,10 @@ public:
     virtual bool startDocument();
     virtual bool startElement( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
 
+    virtual bool error ( const QXmlParseException & exception );
+    virtual bool fatalError ( const QXmlParseException & exception );
+    virtual bool warning ( const QXmlParseException & exception );
+
     // Manipulation
     void clear();
 

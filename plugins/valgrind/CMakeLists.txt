@@ -29,6 +29,7 @@ set(kdevvalgrind_PART_SRCS
     valgrindmodel.cpp
     valgrindcontrol.cpp
     valgrindwidget.cpp
+#    modeltest.cpp
 )
 
 kde4_add_ui_files(kdevvalgrind_PART_SRCS ${kdevvalgrind_PART_UI})

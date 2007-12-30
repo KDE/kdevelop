@@ -19,7 +19,13 @@
 
 #include "valgrindmodel.h"
 
+#include <QApplication>
+
 #include <kdebug.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+
+//#include "modeltest.h"
 
 ValgrindError::~ ValgrindError( )
 {
@@ -394,6 +400,26 @@ ValgrindCombinedModel::ValgrindCombinedModel(QObject * parent)
 ValgrindModel::ValgrindModel(QObject * parent)
     : QAbstractItemModel(parent)
 {
+    //new ModelTest(this);
+}
+
+bool ValgrindModel::error(const QXmlParseException & exception)
+{
+    KMessageBox::error(qApp->activeWindow(), i18n("Valgrind XML Parsing error at line %1, column %2: %3", exception.lineNumber(), exception.columnNumber(), exception.message()), i18n("Valgrind Error"));
+    return true;
+}
+
+bool ValgrindModel::fatalError(const QXmlParseException & exception)
+{
+    KMessageBox::error(qApp->activeWindow(), i18n("Valgrind XML Parsing error at line %1, column %2: %3", exception.lineNumber(), exception.columnNumber(), exception.message()), i18n("Valgrind Error"));
+    return false;
+}
+
+bool ValgrindModel::warning(const QXmlParseException & exception)
+{
+    KMessageBox::information(qApp->activeWindow(), i18n("Valgrind XML Parsing warning at line %1, column %2: %3", exception.lineNumber(), exception.columnNumber(), exception.message()), i18n("Valgrind Warning"));
+    return true;
 }
 
 #include "valgrindmodel.moc"
+
