@@ -964,7 +964,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
 int CMakeProjectVisitor::visit(const ForeachAst *fea)
 {
     kDebug(9042) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->range();
-    int end;
+    int end = 0;
     if(fea->range())
     {
         kDebug(9032) << "Ranges not implemented" << endl << "look:" << fea->content()[fea->line()].writeBack();
