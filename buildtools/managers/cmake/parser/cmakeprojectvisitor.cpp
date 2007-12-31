@@ -93,10 +93,12 @@ QString CMakeProjectVisitor::variableName(const QString &name, const VariableTyp
     int idx = rx.indexIn(name);
     if(idx<0) {
         kDebug(9042) << "error!!! I can't know that it is a variable:" << name << ". Report this bug, please.";
+		return "";
     }
     int begin=name.indexOf('{', idx)+1;
     int end=name.indexOf('}', begin);
 
+	kDebug(9042) << "resolving variable to name:" << name.mid(begin, end-begin);
     return name.mid(begin, end-begin);
 }
 
