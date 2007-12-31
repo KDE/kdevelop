@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>
+#include <QSet>
 #include <QApplication>
 #include <QExtensionFactory>
 #include <QtDesigner/QExtensionFactory>
@@ -241,13 +242,18 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
 KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 {
   KUrl::List allPaths;
+  QSet<KUrl> hasPath;
 
   if( source.isEmpty() ) {
-    foreach( QString path, *m_standardIncludePaths)
-        allPaths << KUrl(path);
+    foreach( QString path, *m_standardIncludePaths) {
+        KUrl u(path);
+        if(!hasPath.contains(u))
+          allPaths << KUrl(path);
+    }
     return allPaths;
   }
 
+    KUrl effectiveBuildDirectory;
     KUrl buildDirectory;
     KUrl projectDirectory;
 
@@ -267,11 +273,11 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 
         
         projectDirectory = project->folder();
-        buildDirectory = buildManager->buildDirectory(project->projectItem());
-        kDebug(9007) << "Got build-directory from project manager:" << buildDirectory;
+        effectiveBuildDirectory = buildDirectory = buildManager->buildDirectory(project->projectItem());
+        kDebug(9007) << "Got build-directory from project manager:" << effectiveBuildDirectory;
 
-        if(projectDirectory == buildDirectory)
-            projectDirectory = buildDirectory = KUrl();
+        if(projectDirectory == effectiveBuildDirectory)
+            projectDirectory = effectiveBuildDirectory = KUrl();
         
         KUrl::List dirs = buildManager->includeDirectories(file);
 
@@ -281,7 +287,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
 
         foreach( KUrl dir, dirs ) {
             dir.adjustPath(KUrl::AddTrailingSlash);
-            allPaths << dir;
+            if(!hasPath.contains(dir))
+              allPaths << dir;
+            hasPath.insert(dir);
         }
     }
 
@@ -293,9 +301,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
     if( allPaths.isEmpty() || DEBUG_INCLUDE_PATHS ) {
         //Fallback-search using include-path resolver
 
-        if(!buildDirectory.isEmpty()) {
+        if(!effectiveBuildDirectory.isEmpty()) {
             ///@todo remote directories?
-            m_includeResolver->setOutOfSourceBuildSystem(projectDirectory.path(), buildDirectory.path());
+            m_includeResolver->setOutOfSourceBuildSystem(projectDirectory.path(), effectiveBuildDirectory.path());
         } else {
             m_includeResolver->resetOutOfSourceBuild();
         }
@@ -306,7 +314,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                 foreach( QString res, result.paths ) {
                     KUrl r(res);
                     r.adjustPath(KUrl::AddTrailingSlash);
-                    allPaths << r;
+                    if(!hasPath.contains(r))
+                      allPaths << r;
+                    hasPath.insert(r);
                 }
             } else {
                 //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
@@ -318,14 +328,17 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                     KUrl r2(res);
                     r2.adjustPath(KUrl::RemoveTrailingSlash);
                     
-                    if( !allPaths.contains(r) && !allPaths.contains(r2) ) {
+                    if( !hasPath.contains(r) && !hasPath.contains(r2) ) {
                         hadMissingPath = true;
-                        allPaths << r;
+                        if(!hasPath.contains(r))
+                          allPaths << r;
+                        hasPath.insert(r);
+                        
                         kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.prettyUrl();
                         KDevelop::Problem p;
                         p.setSource(KDevelop::Problem::Preprocessor);
                         p.setDescription(i18n("Build-manager did not return an include-path" ));
-                        p.setExplanation(i18n("The build-manager did not return the include-path %1, which was resolved by the include-path resolver", r.prettyUrl()));
+                        p.setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.prettyUrl()));
                         p.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
                         KDevelop::DUChain::problemEncountered( p );
                     }
@@ -333,9 +346,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                 
                 if( hadMissingPath ) {
                     QString paths;
-                    foreach( const KUrl& u, allPaths ) {
+                    foreach( const KUrl& u, allPaths )
                         paths += u.prettyUrl() + "\n";
-                    }
+                    
                     kDebug(9007) << "Total list of include-paths:\n" << paths << "\nEnd of list";
                 }
             }
@@ -343,7 +356,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
             kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
             problem.setSource(KDevelop::Problem::Preprocessor);
             problem.setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
-            problem.setExplanation(result.longErrorMessage);
+            problem.setExplanation(i18n("Used build directory: \"%1\"\nInclude-path resolver: %2", effectiveBuildDirectory.prettyUrl(), result.longErrorMessage));
             problem.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
         }
     }
@@ -365,20 +378,13 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
       
 
     //Insert the standard-paths at the end
-    foreach( QString path, *m_standardIncludePaths)
+    foreach( QString path, *m_standardIncludePaths) {
+      KUrl u(path);
+      if(!hasPath.contains(u))
         allPaths << KUrl(path);
-
-
-    //Clean the list for better search-performance(remove multiple paths)
-    QMap<KUrl, bool> hadUrls;
-    for( KUrl::List::iterator it = allPaths.begin(); it != allPaths.end(); ) {
-        if( hadUrls.contains(*it) )
-            it = allPaths.erase(it);
-        else {
-            hadUrls[*it] = true;
-            ++it;
-        }
+      hasPath.insert(u);
     }
+
 
     return allPaths;
 }
