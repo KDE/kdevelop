@@ -967,8 +967,13 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
     int end = 0;
     if(fea->range())
     {
-        kDebug(9032) << "Ranges not implemented" << endl << "look:" << fea->content()[fea->line()].writeBack();
         //Looping in a range
+        for( int i = fea->ranges().start; i < fea->ranges().stop; i += fea->ranges().step )
+        {
+            m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
+            end=walk(fea->content(), fea->line()+1);
+            m_vars->take(fea->loopVar());
+        }
     }
     else
     {
