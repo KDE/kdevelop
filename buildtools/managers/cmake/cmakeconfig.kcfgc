@@ -2,5 +2,4 @@ File=cmakeconfig.kcfg
 ClassName=CMakeSettings
 Singleton=true
 Inherits=KDevelop::ProjectConfigSkeleton
-IncludeFiles=projectconfigskeleton.h,cmakeexport.h
-Visibility=KDEVCMAKECOMMON_EXPORT
+IncludeFiles=projectconfigskeleton.h

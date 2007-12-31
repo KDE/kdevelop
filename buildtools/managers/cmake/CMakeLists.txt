@@ -48,7 +48,7 @@ remove_definitions( -DQT_NO_STL )
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
-kde4_add_kcfg_files( cmakecommon_SRCS cmakeconfig.kcfgc )
+kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBRARY}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${QT_QTSCRIPT_LIBRARY})
