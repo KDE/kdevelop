@@ -1466,11 +1466,18 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.arguments[1].value=="RANGE") {
         bool correctStart, correctStop, correctRange;
         m_range=true;
-        if(func.arguments.count()<4)
+        if(func.arguments.count()<3)
             return false;
         m_ranges.step = 1;
-        m_ranges.start = func.arguments[2].value.toInt(&correctStart);
-        m_ranges.stop = func.arguments[3].value.toInt(&correctStop);
+        m_ranges.start = 0;
+        if( func.arguments.count() == 3 )
+        {
+            m_ranges.stop = func.arguments[2].value.toInt(&correctStop);
+        }else
+        {
+            m_ranges.start = func.arguments[2].value.toInt(&correctStart);
+            m_ranges.stop = func.arguments[3].value.toInt(&correctStop);
+        }
         if(func.arguments.count()==5)
             m_ranges.step = func.arguments[4].value.toInt(&correctRange);
         if(!correctStart || !correctStop || !correctRange)
