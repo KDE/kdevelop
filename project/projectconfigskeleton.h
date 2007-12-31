@@ -46,7 +46,6 @@ public:
     void setProjectTempFile( const QString& );
     void setProjectFileUrl( const QString& );
     void setDeveloperFileUrl( const QString& );
-protected:
     void setDefaults();
     bool useDefaults( bool b );
     void writeConfig();
