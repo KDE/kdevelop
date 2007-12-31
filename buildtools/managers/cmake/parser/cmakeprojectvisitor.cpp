@@ -61,54 +61,40 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
     return env;
 }
 
-CMakeProjectVisitor::VariableType CMakeProjectVisitor::hasVariable(const QString &name)
+QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type)
 {
-    int CMakeIdx=name.indexOf ( "${" ), envIdx=name.indexOf ( "$ENV{" );
-    
-    if ( CMakeIdx<0 && envIdx<0 )
-        return NoVar;
-    else if ( envIdx>=0 )
-        return ENV;
-    else if ( CMakeIdx>=0 )
-        return CMake;
-    
-    return NoVar;
-}
-
-QString CMakeProjectVisitor::variableName(const QString &name, const VariableType type)
-{
-    QString exp;
-
-    switch(type) {
-        case NoVar:
-            return QString();
-        case CMake:
-            exp=VariableMap::regexVar();
-            break;
-        case ENV:
-            exp=VariableMap::regexEnvVar();
-            break;
+    QString name;
+    type=NoVar;
+    const int count=exp.count();
+    bool done=false;
+    int prev=-1;
+    for(int i=0; i<count && !done; i++)
+    {
+        if(exp[i]=='{')
+            prev=i;
+        if(exp[i]=='}' && i>0 && prev>0) {
+            if(exp[prev-1]=='$') {
+                name = exp.mid(prev+1, i-prev-1);
+                type=CMake;
+                done=true;
+            } else if(exp.mid(prev-4,4)=="$ENV") {
+                name = exp.mid(prev+1, i-prev-1);
+                type=ENV;
+                done=true;
+            }
+        }
     }
-    QRegExp rx(exp);
-    int idx = rx.indexIn(name);
-    if(idx<0) {
-        kDebug(9042) << "error!!! I can't know that it is a variable:" << name << ". Report this bug, please.";
-		return "";
-    }
-    int begin=name.indexOf('{', idx)+1;
-    int end=name.indexOf('}', begin);
-
-	kDebug(9042) << "resolving variable to name:" << name.mid(begin, end-begin);
-    return name.mid(begin, end-begin);
+    return name;
 }
 
 QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const VariableMap *values)
 {
-    VariableType type=hasVariable(exp);
+    VariableType type;
+    QString var = variableName(exp, type);
+    
     if(type)
     {
         QStringList ret;
-        QString var = variableName(exp, type);
         if(type==ENV)
         {
             foreach(QString s, envVarDirectories(var))
@@ -1223,7 +1209,9 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     
     foreach(CMakeFunctionArgument arg, exp.arguments)
     {
-        if(hasVariable(arg.value))
+        VariableType t;
+        variableName(arg.value, t);
+        if(t)
         {
             ret.addArguments(resolveVariable(arg.value, vars));
         }
