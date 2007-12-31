@@ -262,7 +262,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
 #ifdef CMAKEDEBUGVISITOR
     CMakeAstDebugVisitor dv;
-    dv.walk(cmakeListsPath, f, 0);
+    dv.walk(cmakeListsPath.toLocalFile(), f, 0);
 #endif
     
     CMakeProjectVisitor v(folder->url().toLocalFile());
