@@ -12,5 +12,9 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=USERINTERFACE
 
 Name=Valgrind Settings
+Name[el]=Ρυθμίσεις του Valgrind
+Name[pt_BR]=Configurações do Valgrind
 Comment=Configure Valgrind settings
+Comment[el]=Ρύθμιση επιλογών του Valgrind
+Comment[pt_BR]=Configurar as Opções do Valgrind
 
