@@ -55,16 +55,10 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
     
     showInternal(m_prefsUi->showInternal->checkState());
+    //TODO: This will break when the kdevelop project file is not inside the source dir
     m_srcFolder=KUrl(args[0].toString());
     m_srcFolder=m_srcFolder.upUrl();
 
-    foreach(QVariant v, args) { //FIXME: This sucks
-        QString arg=v.toString();
-        if(arg.contains("/.kdev4/")) {
-            m_cfg = KSharedConfig::openConfig(arg);
-            break;
-        }
-    }
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
     load();
@@ -76,15 +70,11 @@ CMakePreferences::~CMakePreferences()
 void CMakePreferences::load()
 {
     ProjectKCModule<CMakeSettings>::load();
-//     kDebug(9032) << "********loading";
+    CMakeSettings::self()->readConfig();
+    kDebug(9032) << "********loading";
 
-    KConfigGroup group(m_cfg.data(), "CMake");
-    QStringList bDirs=group.readPathEntry("BuildDirs", QStringList());
-    m_prefsUi->buildDirs->addItems(bDirs);
-
-    QString current=group.readEntry("CurrentBuildDir");
-    m_prefsUi->buildDirs->setCurrentIndex(0); //FIXME should use current
-    kDebug(9032) << "builddirs" << bDirs;
+    m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
+    m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
 
 //     QString cmDir=group.readEntry("CMakeDirectory");
 //     m_prefsUi->kcfg_cmakeDir->setUrl(KUrl(cmDir));
@@ -93,8 +83,7 @@ void CMakePreferences::load()
 
 void CMakePreferences::save()
 {
-    ProjectKCModule<CMakeSettings>::save();
-//     kDebug(9032) << "*******saving";
+    kDebug(9032) << "*******saving";
     QStringList bDirs;
     int count=m_prefsUi->buildDirs->model()->rowCount();
     for(int i=0; i<count; i++)
@@ -102,14 +91,22 @@ void CMakePreferences::save()
         bDirs += m_prefsUi->buildDirs->itemText(i);
     }
 
-    KConfigGroup group(m_cfg.data(), "CMake");
-    group.writeEntry("BuildDirs", bDirs);
-    group.writeEntry("Current CMake Binary", m_currentModel->value("CMAKE_COMMAND") );
-    group.writeEntry("CurrentBuildDir", m_prefsUi->buildDirs->currentText());
-    group.writeEntry("CurrentInstallDir", m_currentModel->value("CMAKE_INSTALL_PREFIX"));
-    group.writeEntry("CurrentBuildType", m_currentModel->value("CMAKE_BUILD_TYPE"));
+    KConfigSkeletonItem* item = CMakeSettings::self()->findItem("buildDirs");
+    item->setProperty( QVariant( bDirs ) );
+    
+    item = CMakeSettings::self()->findItem("currentBuildDir");
+    item->setProperty( qVariantFromValue<KUrl>( KUrl( m_prefsUi->buildDirs->currentText() ) ) );
+    
+    item = CMakeSettings::self()->findItem("cmakeBin");
+    item->setProperty( qVariantFromValue<KUrl>( KUrl( m_currentModel->value("CMAKE_COMMAND") ) ) );
+    
+    item = CMakeSettings::self()->findItem("currentInstallDir");
+    item->setProperty( qVariantFromValue<KUrl>( KUrl( m_currentModel->value("CMAKE_INSTALL_PREFIX") ) ) );
     m_currentModel->writeDown();
-    m_cfg->sync();
+    
+    kDebug(9032) << "doing real save from ProjectKCModule";
+    ProjectKCModule<CMakeSettings>::save();
+    CMakeSettings::self()->writeConfig();
 }
 
 void CMakePreferences::defaults()

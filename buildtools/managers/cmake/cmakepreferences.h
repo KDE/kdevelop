@@ -54,7 +54,6 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
         void showAdvanced(bool v);
     private:
         KUrl m_srcFolder;
-        KSharedConfig::Ptr m_cfg;
         void updateCache( const KUrl & );
         Ui::CMakeBuildSettings* m_prefsUi;
         CMakeCacheModel* m_currentModel;
