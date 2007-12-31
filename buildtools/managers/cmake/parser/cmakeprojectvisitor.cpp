@@ -964,10 +964,9 @@ int CMakeProjectVisitor::visit(const ListAst *list)
 int CMakeProjectVisitor::visit(const ForeachAst *fea)
 {
     kDebug(9042) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->range();
-    int end = 0;
+    int end = 1;
     if(fea->range())
     {
-        //Looping in a range
         for( int i = fea->ranges().start; i < fea->ranges().stop; i += fea->ranges().step )
         {
             m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
