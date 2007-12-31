@@ -60,6 +60,15 @@ QList<HashedString> convertFromUrls(const QList<KUrl>& urlList) {
   return ret;
 }
 
+QString urlsToString(const QList<KUrl>& urlList) {
+  QString paths;
+  foreach( const KUrl& u, urlList )
+      paths += u.prettyUrl() + "\n";
+
+  return paths;
+}
+
+
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_currentEnvironment(0)
@@ -348,7 +357,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
             slaveJob.setIncludedFromPath(included.second);
 
-            includeStack.append(DocumentCursor(includedFile.prettyUrl(), KTextEditor::Cursor(sourceLine, 0)));
+            includeStack.append(DocumentCursor(parentJob()->document(), KTextEditor::Cursor(sourceLine, 0)));
             slaveJob.setIncludeStack(includeStack);
 
             slaveJob.parseForeground();
@@ -360,6 +369,14 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
     } else {
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
+        KDevelop::Problem p;
+        p.setSource(KDevelop::Problem::Preprocessor);
+        p.setDescription(i18n("Included file was not found: %1", fileName ));
+        p.setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePaths())));
+        p.setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
+        p.setLocationStack(parentJob()->includeStack());
+        KDevelop::DUChain::problemEncountered( p );
+        
     }
 
         /*} else {
