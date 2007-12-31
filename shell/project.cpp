@@ -344,6 +344,17 @@ ProjectFileItem *Project::fileForUrl(const KUrl& url) const
         }
     }
 
+    foreach( ProjectTargetItem* target, d->topItem->targetList() )
+    {
+        foreach( ProjectFileItem* file, target->fileList() )
+        {
+            if( file->url() == url )
+            {
+                return file;
+            }
+        }
+    }
+    
     foreach( ProjectFolderItem* top, d->topItem->folderList() )
     {
         while ( top )
