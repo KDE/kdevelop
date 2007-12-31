@@ -926,7 +926,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
                 QList<int> indices=list->index();
                 qSort(indices);
                 QList<int>::const_iterator it=indices.constEnd();
-                qDebug() << "list remove: " << theList << indices;
+                kDebug(9042) << "list remove: " << theList << indices;
                 while(it!=indices.constBegin())
                 {
                     --it;
