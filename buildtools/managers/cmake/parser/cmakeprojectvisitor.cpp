@@ -242,6 +242,8 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
     if(file.isEmpty())
         return file;
     QString path, filename;
+	if( QFileInfo(file).isAbsolute() )
+		return file;
     switch(t) {
         case Library:
 #ifdef Q_OS_WIN
