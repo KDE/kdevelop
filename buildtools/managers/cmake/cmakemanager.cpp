@@ -378,7 +378,7 @@ KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *it
     if(!folder)
         return KUrl::List();
 
-    KUrl::List l = resolveSystemDirs(item->project(), folder->includeDirectories());
+    KUrl::List l = resolveSystemDirs(folder->project(), folder->includeDirectories());
     kDebug(9032) << "Include directories!" << l;
     return l;
 }
