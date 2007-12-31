@@ -1464,7 +1464,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     m_loopVar=func.arguments.first().value;
     if(func.arguments[1].value=="RANGE") {
-        bool correctStart, correctStop, correctRange;
+        bool correctStart = true, correctStop = true, correctRange = true;
         m_range=true;
         if(func.arguments.count()<3)
             return false;
