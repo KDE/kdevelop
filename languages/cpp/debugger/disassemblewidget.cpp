@@ -61,7 +61,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, GDBController* c
                     "instruction using the debuggers toolbar "
                     "buttons of \"step over\" instruction and "
                     "\"step into\" instruction."));
-    setWindowIcon( KIcon("gear") );
+    setWindowIcon( KIcon("system-run") );
     setWindowTitle(i18n("Disassemble View"));
     setFont(KGlobalSettings::fixedFont());
     setSelectionMode(SingleSelection);
