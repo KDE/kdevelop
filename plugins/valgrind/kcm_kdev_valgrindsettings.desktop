@@ -13,8 +13,14 @@ X-KDE-CfgDlgHierarchy=USERINTERFACE
 
 Name=Valgrind Settings
 Name[el]=Ρυθμίσεις του Valgrind
+Name[ga]=Socruithe Valgrind
+Name[pl]=Ustawienia Valgrinda
 Name[pt_BR]=Configurações do Valgrind
+Name[sv]=Valgrind-inställningar
 Comment=Configure Valgrind settings
 Comment[el]=Ρύθμιση επιλογών του Valgrind
+Comment[ga]=Cumraigh socruithe Valgrind
+Comment[pl]=Ustawienia programu Valgrind
 Comment[pt_BR]=Configurar as Opções do Valgrind
+Comment[sv]=Anpassa inställningar för Valgrind
 
