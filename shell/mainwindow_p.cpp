@@ -212,7 +212,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of current area.</p>" ) );
 
     action = actionCollection()->addAction( "split_horizontal" );
-    action->setIcon(KIcon( "view-top-bottom" ));
+    action->setIcon(KIcon( "view-split-top-bottom" ));
     action->setText( i18n( "Split View &Top/Bottom" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_T );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitHorizontal() ) );
@@ -220,7 +220,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18n( "<b>Split Horizontal</b><p>Splitts the current view horizontally.</p>" ) );
 
     action = actionCollection()->addAction( "split_vertical" );
-    action->setIcon(KIcon( "view-left-right" ));
+    action->setIcon(KIcon( "view-split-left-right" ));
     action->setText( i18n( "Split View &Left/Right" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
