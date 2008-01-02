@@ -277,8 +277,13 @@ void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from)
   //Change the identifier so it contains the template-parameters
   
   QMutexLocker l(&instantiationsMutex);
-  if( m_instantiatedFrom )
-    m_instantiatedFrom->m_instantiations.remove(m_instantiatedWith);
+  if( m_instantiatedFrom ) {
+    InstantiationsHash::iterator it = m_instantiatedFrom->m_instantiations.find(m_instantiatedWith);
+    if( it != m_instantiatedFrom->m_instantiations.end() && *it == this )
+      m_instantiatedFrom->m_instantiations.erase(it);
+
+    m_instantiatedFrom = 0;
+  }
   m_instantiatedFrom = from;
   from->m_instantiations.insert(m_instantiatedWith, this);
 }
@@ -456,8 +461,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
   if( instantiatedDeclaration ) {
     TemplateDeclaration* instantiatedTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
 
-    if( instantiatedFrom )
-      applyDefaultParameters( templateArguments, instantiatedDeclaration );
+    applyDefaultParameters( templateArguments, instantiatedDeclaration );
     
     if(instantiatedTemplate) //Since this is also called for normal members, this does not have to be the case.
       instantiatedTemplate->setInstantiatedWith(templateArguments);
