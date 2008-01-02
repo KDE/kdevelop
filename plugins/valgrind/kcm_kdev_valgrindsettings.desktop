@@ -17,10 +17,12 @@ Name[ga]=Socruithe Valgrind
 Name[pl]=Ustawienia Valgrinda
 Name[pt_BR]=Configurações do Valgrind
 Name[sv]=Valgrind-inställningar
+Name[zh_TW]=Valgrind 設定
 Comment=Configure Valgrind settings
 Comment[el]=Ρύθμιση επιλογών του Valgrind
 Comment[ga]=Cumraigh socruithe Valgrind
 Comment[pl]=Ustawienia programu Valgrind
 Comment[pt_BR]=Configurar as Opções do Valgrind
 Comment[sv]=Anpassa inställningar för Valgrind
+Comment[zh_TW]=設定 Valgrind 相關選項
 
