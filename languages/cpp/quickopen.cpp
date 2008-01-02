@@ -65,8 +65,8 @@ TopDUContextPointer getCurrentTopDUContext() {
   return TopDUContextPointer();
 }
 
-///Finds the shortest path through the imports to a given included file
-QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import ) {
+///Finds the shortest path through the imports to a given included file @param used Is needed to prevent endless recursion
+QList<KUrl> getInclusionPath( QSet<const DUContext*>& used, const DUContext* context, const DUContext* import ) {
 
   QList<KUrl> ret;
   
@@ -75,8 +75,14 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
     return ret;
   }
   
-  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->range().end ) )
+  if( used.contains(context) )
     return ret;
+  used.insert(context);
+  
+  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->range().end ) ) {
+    used.remove(context);
+    return ret;
+  }
   
   QList<DUContextPointer> imports = context->importedParentContexts();
   
@@ -84,7 +90,7 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
     if( !i )
       continue;
     
-    QList<KUrl> ret2 = getInclusionPath( i.data(), import );
+    QList<KUrl> ret2 = getInclusionPath( used, i.data(), import );
 
     if( !ret2.isEmpty() && ( ret.isEmpty() || ret.count() > ret2.count() ) )
       ret = ret2;
@@ -93,6 +99,7 @@ QList<KUrl> getInclusionPath( const DUContext* context, const DUContext* import 
   if( !ret.isEmpty() )
     ret.push_front( KUrl(context->url().str()) );
   
+  used.remove(context);
   return ret;
 }
 
@@ -167,7 +174,8 @@ QWidget* IncludeFileData::expandingWidget() const {
     {
       if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
       {
-        QList<KUrl> inclusion = getInclusionPath( m_includedFrom.data(), t );
+        QSet<const DUContext*> used;
+        QList<KUrl> inclusion = getInclusionPath( used, m_includedFrom.data(), t );
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
           inclusionPath = inclusion;
@@ -184,7 +192,8 @@ QWidget* IncludeFileData::expandingWidget() const {
     {
       if( t->imports( m_includedFrom.data(), m_includedFrom->range().end ) )
       {
-        QList<KUrl> inclusion = getInclusionPath( t, m_includedFrom.data() );
+        QSet<const DUContext*> used;
+        QList<KUrl> inclusion = getInclusionPath( used, t, m_includedFrom.data() );
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
           inclusionPath = inclusion;
@@ -225,7 +234,7 @@ QString IncludeFileData::htmlDescription() const
 IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
 }
 
-void allIncludedRecursion( QMap<HashedString, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
+void allIncludedRecursion( QSet<const DUContext*> used, QMap<HashedString, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
 
   if( !ctx )
     return;
@@ -233,9 +242,14 @@ void allIncludedRecursion( QMap<HashedString, IncludeItem>& ret, TopDUContextPoi
   if( ret.contains(ctx->url()) )
     return;
   
+  if( used.contains(ctx.data() ) )
+    return;
+
+  used.insert(ctx.data());
+  
   foreach( DUContextPointer ctx2, ctx->importedParentContexts() ) {
     TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.data()) );
-    allIncludedRecursion( ret, d, prefixPath );
+    allIncludedRecursion( used, ret, d, prefixPath );
   }
 
   IncludeItem i;
@@ -253,7 +267,8 @@ QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixP
   DUChainReadLocker lock( DUChain::lock() );
 
   QMap<HashedString, IncludeItem> ret;
-  allIncludedRecursion( ret, ctx, prefixPath );
+  QSet<const DUContext*> used;
+  allIncludedRecursion( used, ret, ctx, prefixPath );
   return ret.values();
 }
 
@@ -421,7 +436,7 @@ QStringList IncludeFileDataProvider::scopes() {
   return ret;
 }
 
-void IncludeFileDataProvider::enableData( const QStringList& items, const QStringList& scopes ) {
+void IncludeFileDataProvider::enableData( const QStringList& /*items*/, const QStringList& scopes ) {
   m_allowImports = scopes.contains( i18n("Includes") );
   m_allowPossibleImports = scopes.contains( i18n("Include Path") );
   m_allowImporters = scopes.contains( i18n("Includers") );
