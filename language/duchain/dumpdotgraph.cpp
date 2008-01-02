@@ -99,6 +99,11 @@ void DumpDotGraphPrivate::addDefinition(QTextStream& stream, Definition* def) {
 
 
 QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool isMaster, bool shortened) {
+  if( m_hadObjects.contains(context) )
+    return QString();
+
+  m_hadObjects[context] = true;
+  
   QTextStream stream;
   QString ret;
   stream.setString(&ret, QIODevice::WriteOnly);
