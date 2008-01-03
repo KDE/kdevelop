@@ -234,99 +234,132 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
-    if ( !folder )
-        return folderList;
-
-    kDebug(9032) << "parse:" << folder->url();
-    KUrl cmakeListsPath(folder->url());
-    cmakeListsPath.addPath("CMakeLists.txt");
-
-    VariableMap *vm=&m_varsPerProject[item->project()];
-    MacroMap *mm=&m_macrosPerProject[item->project()];
-    CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
-    if(f.isEmpty())
-    {
-        kDebug(9032) << "There is no" << cmakeListsPath;
-        return folderList;
-    }
-
-    new KDevelop::ProjectFileItem( item->project(), cmakeListsPath, folder );
-    kDebug(9032) << "Adding cmake: " << cmakeListsPath << " to the model";
-
-    QString currentBinDir=KUrl::relativeUrl(folder->project()->projectFileUrl().upUrl(), folder->url());
-    vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
-    vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
-    vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile()));
-
-    kDebug(9032) << "currentBinDir" << vm->value("CMAKE_CURRENT_BINARY_DIR");
-
-#ifdef CMAKEDEBUGVISITOR
-    CMakeAstDebugVisitor dv;
-    dv.walk(cmakeListsPath.toLocalFile(), f, 0);
-#endif
+    QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::Hidden | QDir::System );
     
-    CMakeProjectVisitor v(folder->url().toLocalFile());
-    v.setVariableMap(vm);
-    v.setMacroMap(mm);
-    v.setModulePath(m_modulePathPerProject[item->project()]);
-    v.walk(f, 0);
-    vm->remove("CMAKE_CURRENT_LIST_FILE");
-    vm->remove("CMAKE_CURRENT_SOURCE_DIR");
-    vm->remove("CMAKE_CURRENT_BINARY_DIR");
-
-    if(folder->text()=="/" && !v.projectName().isEmpty())
+    entries.removeAll(".");
+    entries.removeAll("..");
+    
+    if ( folder )
     {
-        folder->setText(v.projectName());
-    }
 
-    foreach ( QString subf, v.subdirectories() )
-    {
-        KUrl path(folder->url());
-        path.addPath(subf);
-
-        CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
-        a->setUrl(path);
-        folderList.append( a );
-    }
-
-    KUrl::List directories;
-    foreach(QString s, v.includeDirectories())
-    {
-        KUrl path;
-        if(s.startsWith('/'))
+        kDebug(9032) << "parse:" << folder->url();
+        KUrl cmakeListsPath(folder->url());
+        cmakeListsPath.addPath("CMakeLists.txt");
+    
+        VariableMap *vm=&m_varsPerProject[item->project()];
+        MacroMap *mm=&m_macrosPerProject[item->project()];
+        CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
+        if(f.isEmpty())
         {
-            path=s;
+            kDebug(9032) << "There is no" << cmakeListsPath;
+            return folderList;
         }
-        else
+    
+        kDebug(9032) << "Adding cmake: " << cmakeListsPath << " to the model";
+    
+        QString currentBinDir=KUrl::relativeUrl(folder->project()->projectFileUrl().upUrl(), folder->url());
+        vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
+        vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
+        vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile()));
+    
+        kDebug(9032) << "currentBinDir" << vm->value("CMAKE_CURRENT_BINARY_DIR");
+    
+    #ifdef CMAKEDEBUGVISITOR
+        CMakeAstDebugVisitor dv;
+        dv.walk(cmakeListsPath.toLocalFile(), f, 0);
+    #endif
+        
+        CMakeProjectVisitor v(folder->url().toLocalFile());
+        v.setVariableMap(vm);
+        v.setMacroMap(mm);
+        v.setModulePath(m_modulePathPerProject[item->project()]);
+        v.walk(f, 0);
+        vm->remove("CMAKE_CURRENT_LIST_FILE");
+        vm->remove("CMAKE_CURRENT_SOURCE_DIR");
+        vm->remove("CMAKE_CURRENT_BINARY_DIR");
+    
+        if(folder->text()=="/" && !v.projectName().isEmpty())
         {
-            path=folder->url();
-            path.addPath(s);
+            folder->setText(v.projectName());
         }
-        directories.append(path);
-    }
-    folder->setIncludeDirectories(directories);
-
-    foreach ( QString t, v.targets())
-    {
-        QStringList dependencies=v.targetDependencies(t);
-        if(!dependencies.isEmpty()) //Just to remove verbosity
+    
+        foreach ( QString subf, v.subdirectories() )
         {
-            CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
-
-            foreach( QString sFile, dependencies )
+            if( entries.contains( subf ) )
             {
-                if(sFile.isEmpty())
-                    continue;
-                KUrl sourceFile(sFile);
-                if(sourceFile.isRelative()) {
-                    sourceFile = folder->url();
-                    sourceFile.adjustPath( KUrl::AddTrailingSlash );
-                    sourceFile.addPath( sFile );
-                }
-                new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-                kDebug(9032) << "..........Adding:" << sourceFile;
+                entries.removeAll( subf );
             }
-            m_targets.append(targetItem);
+
+            
+            KUrl path(folder->url());
+            path.addPath(subf);
+    
+            CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
+            a->setUrl(path);
+            folderList.append( a );
+        }
+    
+        KUrl::List directories;
+        foreach(QString s, v.includeDirectories())
+        {
+            KUrl path;
+            if(s.startsWith('/'))
+            {
+                path=s;
+            }
+            else
+            {
+                path=folder->url();
+                path.addPath(s);
+            }
+            directories.append(path);
+        }
+        folder->setIncludeDirectories(directories);
+    
+        foreach ( QString t, v.targets())
+        {
+            QStringList dependencies=v.targetDependencies(t);
+            if(!dependencies.isEmpty()) //Just to remove verbosity
+            {
+                CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
+    
+                foreach( QString sFile, dependencies )
+                {
+                    if(sFile.isEmpty())
+                        continue;
+                    
+                    KUrl sourceFile(sFile);
+                    if(sourceFile.isRelative()) {
+                        sourceFile = folder->url();
+                        sourceFile.adjustPath( KUrl::AddTrailingSlash );
+                        sourceFile.addPath( sFile );
+                    }
+                    
+                    if( entries.contains( sourceFile.fileName() ) )
+                    {
+                        entries.removeAll( sourceFile.fileName() );
+                    }
+                    
+                    new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+                    kDebug(9032) << "..........Adding:" << sourceFile;
+                }
+                m_targets.append(targetItem);
+            }
+        }
+    }
+    foreach( QString entry, entries )
+    {
+        KUrl folderurl = item->url();
+        folderurl.addPath( entry );
+        
+        if( item->project()->inProject( folderurl ) )
+            continue;
+        if( QFileInfo( folderurl.toLocalFile() ).isDir() )
+        {
+            new KDevelop::ProjectFolderItem( item->project(), folderurl, item );
+        }else
+        {
+            new KDevelop::ProjectFileItem( item->project(), folderurl, item );
         }
     }
     return folderList;
