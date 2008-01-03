@@ -34,8 +34,7 @@ public:
     ValgrindTree();
 
 private Q_SLOTS:
-    void expanded(const QModelIndex& index);
-    void activated(const QModelIndex& index);
+    void openDocument(const QModelIndex& index);
 };
 
 #endif // VALGRINDTREE_H

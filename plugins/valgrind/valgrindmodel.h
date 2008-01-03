@@ -59,7 +59,7 @@ public:
         Source,
         Object
     };
-    static const int numColumns = 3;
+    static const int numColumns = 1;
 
     // Item
     virtual ValgrindItem* parent() const { return 0L; }

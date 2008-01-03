@@ -31,23 +31,15 @@
 
 ValgrindTree::ValgrindTree()
 {
+    connect(this, SIGNAL(activated(QModelIndex)), SLOT(openDocument(QModelIndex)));
 }
 
-void ValgrindTree::expanded(const QModelIndex & index)
-{
-    if (index.isValid() && !index.parent().isValid()) {
-        QModelIndex child = index.child(0,0);
-        if (child.isValid())
-            expand(child);
-    }
-}
-
-void ValgrindTree::activated(const QModelIndex & index)
+void ValgrindTree::openDocument(const QModelIndex & index)
 {
     if (ValgrindFrame* frame = dynamic_cast<ValgrindFrame*>(static_cast<ValgrindModel*>(model())->itemForIndex(index))) {
         KUrl doc = frame->url();
         if (doc.isValid() && KIO::NetAccess::exists(doc, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
-            KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(frame->line, 0));
+            KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, frame->line - 1), 0));
         }
     }
 }
