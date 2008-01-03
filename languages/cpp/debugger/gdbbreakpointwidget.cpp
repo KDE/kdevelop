@@ -352,7 +352,7 @@ void GDBBreakpointWidget::contextMenuEvent(QContextMenuEvent* event)
 
 void GDBBreakpointWidget::slotContextMenuSelect( QAction* action )
 {
-    int                  row, col;
+    int                  col;
     Breakpoint          *bp = m_ctxMenuBreakpoint;
 
     if ( action == m_breakpointShow ) {
@@ -362,7 +362,7 @@ void GDBBreakpointWidget::slotContextMenuSelect( QAction* action )
     } else if ( action == m_breakpointEdit ) {
         col = currentIndex().column();
         if (col == BreakpointController::Location || col ==  BreakpointController::Condition || col == BreakpointController::IgnoreCount)
-            openPersistentEditor(model()->index(row, col, QModelIndex()));
+            openPersistentEditor(model()->index(currentIndex().row(), col, QModelIndex()));
 
     } else if ( action == m_breakpointDisable ) {
         bp->setEnabled( !bp->isEnabled( ) );
