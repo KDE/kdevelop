@@ -52,7 +52,7 @@ FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* con
                     "program. By clicking on an item you "
                     "can see the values in any of the "
                     "previous calling functions."));
-    setWindowIcon(KIcon("table"));
+    setWindowIcon(KIcon("view-list-text"));
     setRootIsDecorated(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setModel(controller->stackManager());
