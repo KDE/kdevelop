@@ -26,7 +26,7 @@
 class QMakeProjectFile;
 
 
-class QMakeFolderItem : public KDevelop::ProjectFolderItem
+class QMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
 public:
     QMakeFolderItem( KDevelop::IProject*, QMakeProjectFile*, const KUrl&, QStandardItem* parent = 0 );
