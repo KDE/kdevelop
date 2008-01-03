@@ -29,7 +29,7 @@
 
 QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, QMakeProjectFile* scope,
                                 const KUrl& url, QStandardItem* parent )
-: KDevelop::ProjectFolderItem( project, url, parent ), m_projectFile( scope )
+: KDevelop::ProjectBuildFolderItem( project, url, parent ), m_projectFile( scope )
 {
 }
 

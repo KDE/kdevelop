@@ -92,33 +92,60 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     kDebug(9024) << "Parsing item:";
 
     QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
-    if( !folderitem )
-        return folderList;
-
-    kDebug(9024) << "Item is a qmakefolder:";
-
-    foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
+    QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::Hidden | QDir::System );
+    
+    entries.removeAll(".");
+    entries.removeAll("..");
+    
+    if( folderitem )
     {
-        kDebug(9024) << "adding subproject:" << subproject->absoluteDir();
-        folderList.append( new QMakeFolderItem( item->project(),
-                           subproject,
-                           KUrl( subproject->absoluteDir() ),
-                           item ) );
-    }
-    foreach( QString s, folderitem->projectFile()->targets() )
-    {
-        kDebug(9024) << "adding target:" << s;
-        QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
-        foreach( KUrl u, folderitem->projectFile()->filesForTarget(s) )
+        kDebug(9024) << "Item is a qmakefolder:";
+    
+        foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
         {
-            kDebug(9024) << "adding file:" << u;
-            new KDevelop::ProjectFileItem( item->project(), u, target );
+            kDebug(9024) << "adding subproject:" << subproject->absoluteDir();
+            if( entries.contains( KUrl(subproject->absoluteFile()).fileName() ) )
+            {
+                entries.removeAll( KUrl(subproject->absoluteFile()).fileName() );
+            }
+            folderList.append( new QMakeFolderItem( item->project(),
+                               subproject,
+                               KUrl( subproject->absoluteDir() ),
+                               item ) );
+        }
+        foreach( QString s, folderitem->projectFile()->targets() )
+        {
+            kDebug(9024) << "adding target:" << s;
+            QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
+            foreach( KUrl u, folderitem->projectFile()->filesForTarget(s) )
+            {
+                if( entries.contains( u.fileName() ) )
+                {
+                    entries.removeAll( u.fileName() );
+                }
+                kDebug(9024) << "adding file:" << u;
+                new KDevelop::ProjectFileItem( item->project(), u, target );
+            }
         }
     }
-    kDebug(9024) << "adding project file:" << folderitem->projectFile()->absoluteFile();
-    new KDevelop::ProjectFileItem( item->project(),
-                                   KUrl( folderitem->projectFile()->absoluteFile() ),
-                                   item );
+    
+    foreach( QString entry, entries )
+    {
+        KUrl folderurl = folderitem->url();
+        folderurl.addPath( entry );
+        if( QFileInfo( folderurl.toLocalFile() ).isDir() )
+        {
+            new KDevelop::ProjectFolderItem( folderitem->project(), folderurl, folderitem );
+        }else
+        {
+            new KDevelop::ProjectFileItem( folderitem->project(), folderurl, folderitem );
+        }
+    }
+    
+//     kDebug(9024) << "adding project file:" << folderitem->projectFile()->absoluteFile();
+//     new KDevelop::ProjectFileItem( item->project(),
+//                                    KUrl( folderitem->projectFile()->absoluteFile() ),
+//                                    item );
     kDebug(9024) << "Added" << folderList.count() << "Elements";
 
 
