@@ -32,7 +32,7 @@
 class QTreeView;
 class ValgrindModel;
 class ValgrindControl;
-class ValgrindCombinedModel;
+class ValgrindModel;
 
 class ValgrindPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider//, public KDevelop::IStatus
 {
@@ -48,7 +48,7 @@ public:
 
     KUrl valgrindExecutable() const;
 
-    ValgrindCombinedModel* model() const;
+    QList<ValgrindModel*> models() const;
     
     // BEGIN IRunProvider
     virtual QStringList instrumentorsProvided() const;
@@ -58,6 +58,8 @@ public:
 signals:
     void finished(int serial);
     void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
+
+    void newModel(ValgrindModel* model);
 
 //   void savePartialProjectSession( QDomElement* el );
 //   void restorePartialProjectSession( const QDomElement* el );
@@ -72,8 +74,6 @@ private:
         m_lastCtExec, m_lastCtParams, m_lastKcExec;
 
     QHash<int, ValgrindControl*> m_controls;
-
-    ValgrindCombinedModel* m_model;
 };
 
 #endif // VALGRINDPLUGIN_H

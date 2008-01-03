@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-   Copyright 2006 Hamish Rodda <rodda@kde.org>
+   Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -22,8 +22,9 @@
 
 #include <QHash>
 #include <QStack>
-#include <QXmlDefaultHandler>
+#include <QXmlStreamReader>
 #include <QSortFilterProxyModel>
+#include <QStringList>
 
 #include <KUrl>
 
@@ -38,21 +39,13 @@ public:
     virtual ValgrindItem* parent() const = 0;
 };
 
-class ValgrindCombinedModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
-
-public:
-    ValgrindCombinedModel(QObject* parent);
-};
-
 /**
  * A class which parses valgrind's XML output and presents it as an
  * item model.
  *
  * \author Hamish Rodda \<rodda@kde.org\>
  */
-class ValgrindModel : public QAbstractItemModel, public QXmlDefaultHandler, public ValgrindItem
+class ValgrindModel : public QAbstractItemModel, public QXmlStreamReader, public ValgrindItem
 {
   Q_OBJECT
 
@@ -61,12 +54,12 @@ public:
     virtual ~ValgrindModel();
 
     enum Columns {
-        Index = 0,
+        //Index = 0,
         Function,
         Source,
         Object
     };
-    static const int numColumns = 4;
+    static const int numColumns = 3;
 
     // Item
     virtual ValgrindItem* parent() const { return 0L; }
@@ -76,20 +69,16 @@ public:
     ValgrindItem* itemForIndex(const QModelIndex& index) const;
 
     virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
+    virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
     virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex parent ( const QModelIndex & index ) const;
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
     // XML parsing
-    virtual bool characters( const QString & ch );
-    virtual bool endElement( const QString & namespaceURI, const QString & localName, const QString & qName );
-    virtual bool startDocument();
-    virtual bool startElement( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
-
-    virtual bool error ( const QXmlParseException & exception );
-    virtual bool fatalError ( const QXmlParseException & exception );
-    virtual bool warning ( const QXmlParseException & exception );
+    void parse();
+    bool endElement();
+    bool startElement();
 
     // Manipulation
     void clear();
@@ -140,6 +129,8 @@ public:
 
     void setKind(const QString& s);
 
+    QString whatForStack(const ValgrindStack* stack) const;
+
     int uniqueId;
     int threadId;
 
@@ -177,6 +168,8 @@ public:
     virtual ~ValgrindStack();
 
     virtual ValgrindError* parent() const { return m_parent; }
+
+    QString what() const;
 
     QList<ValgrindFrame*> frames;
     ValgrindError* m_parent;

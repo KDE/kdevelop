@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-   Copyright 2006 Hamish Rodda <rodda@kde.org>
+   Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -103,40 +103,42 @@ ValgrindModel::~ ValgrindModel( )
   qDeleteAll(errors);
 }
 
-bool ValgrindModel::startElement( const QString &, const QString & localName, const QString &, const QXmlAttributes &)
+bool ValgrindModel::startElement()
 {
-  kDebug() << localName;
-
   m_buffer.clear();
 
   State newState = Unknown;
 
   switch (m_state) {
     case Root:
-      if (localName == "valgrindoutput")
+      if (name() == "valgrindoutput")
         newState = Session;
       break;
 
     case Session:
-      if (localName == "status")
+      if (name() == "status")
         newState = Status;
-      else if (localName == "preamble")
+      else if (name() == "preamble")
         newState = Preamble;
-      else if (localName == "error") {
+      else if (name() == "error") {
         newState = Error;
         m_currentError = new ValgrindError(this);
+
+        beginInsertRows(QModelIndex(), errors.count(), errors.count());
+        errors.append(m_currentError);
+        endInsertRows();
       }
       break;
 
     case Error:
-      if (localName == "stack") {
+      if (name() == "stack") {
         newState = Stack;
         m_currentStack = new ValgrindStack(m_currentError);
       }
       break;
 
     case Stack:
-      if (localName == "frame") {
+      if (name() == "frame") {
         newState = Frame;
         m_currentFrame = new ValgrindFrame(m_currentStack);
       }
@@ -146,97 +148,92 @@ bool ValgrindModel::startElement( const QString &, const QString & localName, co
       break;
   }
 
-  m_stateStack.push(newState);
+  //kDebug() << name() << newState;
+
+  m_stateStack.push(m_state);
   m_state = newState;
   ++m_depth;
   return true;
 }
 
-bool ValgrindModel::startDocument( )
-{
-  clear();
-  return true;
-  return true;
-}
-
-bool ValgrindModel::endElement( const QString & namespaceURI, const QString & localName, const QString & qName )
+bool ValgrindModel::endElement()
 {
   m_state = m_stateStack.pop();
 
+  //kDebug() << name() << m_state;
+
   switch (m_state) {
     case Root:
-      if (localName == "m_protocolVersion")
+      if (name() == "m_protocolVersion")
         m_protocolVersion = m_buffer.toInt();
-      else if (localName == "pid")
+      else if (name() == "pid")
         pid = m_buffer.toInt();
-      else if (localName == "ppid")
+      else if (name() == "ppid")
         ppid = m_buffer.toInt();
-      else if (localName == "tool")
+      else if (name() == "tool")
         tool = m_buffer;
-      else if (localName == "usercomment")
+      else if (name() == "usercomment")
         userComment = m_buffer;
-      else if (localName == "error") {
-        beginInsertRows(QModelIndex(), errors.count(), errors.count());
-        errors.append(m_currentError);
-        endInsertRows();
+      else if (name() == "error")
         m_currentError = 0L;
-      }
       break;
 
     case Preamble:
-      if (localName == "line")
+      if (name() == "line")
         preamble.append(m_buffer);
       break;
 
     case Error:
-      if (localName == "unique")
+      if (name() == "unique")
         m_currentError->uniqueId = m_buffer.toInt(0L, 16);
-      else if (localName == "tid")
+      else if (name() == "tid")
         m_currentError->threadId = m_buffer.toInt();
-      else if (localName == "kind")
+      else if (name() == "kind")
         m_currentError->setKind(m_buffer);
-      else if (localName == "what")
+      else if (name() == "what")
         m_currentError->what = m_buffer;
-      else if (localName == "leakedbytes")
+      else if (name() == "leakedbytes")
         m_currentError->leakedBytes = m_buffer.toInt();
-      else if (localName == "leakedblocks")
+      else if (name() == "leakedblocks")
         m_currentError->leakedBlocks = m_buffer.toInt();
-      else if (localName == "auxwhat")
+      else if (name() == "auxwhat")
         m_currentError->auxWhat = m_buffer;
-      else if (localName == "stack") {
-        beginInsertRows(indexForItem(m_currentError), 0, 0);
-        m_currentError->stack = m_currentStack;
-        endInsertRows();
-        m_currentStack = 0L;
-      } else if (localName == "auxstack") {
-        beginInsertRows(indexForItem(m_currentError), m_currentError->stack ? 1 : 0, m_currentError->stack ? 1 : 0);
-        m_currentError->auxStack = m_currentStack;
-        endInsertRows();
+      else if (name() == "stack") {
+        if (!m_currentError->stack) {
+            beginInsertRows(indexForItem(m_currentError), 0, 0);
+            m_currentError->stack = m_currentStack;
+            endInsertRows();
+        } else if (!m_currentError->auxStack) {
+            beginInsertRows(indexForItem(m_currentError), 1, 1);
+            m_currentError->auxStack = m_currentStack;
+            endInsertRows();
+        } else {
+            delete m_currentStack;
+            kWarning() << "Unexpected stack received";
+        }
         m_currentStack = 0L;
       }
       break;
 
     case Stack:
-      if (localName == "frame") {
-        beginInsertRows(indexForItem(m_currentStack), m_currentStack->frames.count(), m_currentStack->frames.count());
+      if (name() == "frame") {
         m_currentStack->frames.append(m_currentFrame);
-        endInsertRows();
         m_currentFrame = 0L;
       }
       break;
 
     case Frame:
-      if (localName == "ip")
+      if (name() == "ip")
         m_currentFrame->instructionPointer = m_buffer.toInt(0L, 16);
-      else if (localName == "obj")
+      else if (name() == "obj")
         m_currentFrame->obj = m_buffer;
-      else if (localName == "fn")
+      else if (name() == "fn")
         m_currentFrame->fn = m_buffer;
-      else if (localName == "dir")
+      else if (name() == "dir")
         m_currentFrame->dir = m_buffer;
-      else if (localName == "file")
+      else if (name() == "file")
         m_currentFrame->file = m_buffer;
-      else if (localName == "line")
+      else if (name() == "line")
         m_currentFrame->line = m_buffer.toInt();
       break;
 
@@ -248,14 +245,9 @@ bool ValgrindModel::endElement( const QString & namespaceURI, const QString & lo
   return true;
 }
 
-bool ValgrindModel::characters( const QString & ch )
-{
-  m_buffer += ch;
-  return true;
-}
-
 int ValgrindModel::columnCount ( const QModelIndex & parent ) const
 {
+  Q_UNUSED(parent)
   return numColumns;
 }
 
@@ -266,17 +258,22 @@ QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
   switch (role) {
     case Qt::DisplayRole:
       switch (index.column()) {
-        case Index:
+        /*case Index:
           if (ValgrindError* e = dynamic_cast<ValgrindError*>(item))
             return e->uniqueId;
           else if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
             return f->line;
-          break;
+          break;*/
         case Function:
           if (ValgrindError* e = dynamic_cast<ValgrindError*>(item))
             return e->what;
+          else if (ValgrindStack* s = dynamic_cast<ValgrindStack*>(item))
+            return s->what();
           else if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
-            return f->fn;
+            if (!f->fn.isEmpty())
+              return f->fn;
+            else
+              return QString("0x%1").arg(QString::number(f->instructionPointer, 16));
           break;
         case Source:
           if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
@@ -293,14 +290,43 @@ QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
   return QVariant();
 }
 
+QVariant ValgrindModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  Q_UNUSED(orientation)
+
+  switch (role) {
+    case Qt::DisplayRole:
+      switch (section) {
+        //case Index:
+          //return i18n("Item");
+        case Function:
+          return i18n("Function");
+        case Source:
+          return i18n("Source");
+        case Object:
+          return i18n("Object");
+      }
+      break;
+  }
+
+  return QVariant();
+}
+
 QModelIndex ValgrindModel::index ( int row, int column, const QModelIndex & p ) const
 {
   if (row < 0 || column < 0 || column >= numColumns)
     return QModelIndex();
 
+  if (p.isValid() && p.column() != 0)
+    return QModelIndex();
+
   ValgrindItem* parent = itemForIndex(p);
 
-  if (ValgrindError* e = dynamic_cast<ValgrindError*>(parent)) {
+  if (!parent) {
+    if (row < errors.count())
+        return createIndex(row, column, errors.at(row));
+
+  } else if (ValgrindError* e = dynamic_cast<ValgrindError*>(parent)) {
     if (row < 2)
       return createIndex(row, column, row ? e->auxStack : e->stack);
 
@@ -323,12 +349,15 @@ QModelIndex ValgrindModel::parent ( const QModelIndex & index ) const
 
 int ValgrindModel::rowCount ( const QModelIndex & p ) const
 {
-  ValgrindItem* parent = itemForIndex(p);
-
-  if (!parent)
+  if (!p.isValid())
     return errors.count();
 
-  else if (ValgrindError* e = dynamic_cast<ValgrindError*>(parent))
+  if (p.column() != 0)
+    return 0;
+
+  ValgrindItem* parent = itemForIndex(p);
+
+  if (ValgrindError* e = dynamic_cast<ValgrindError*>(parent))
     if (e->stack && e->auxStack)
       return 2;
     else if (e->stack)
@@ -359,6 +388,8 @@ void ValgrindModel::clear( )
   programArgs.clear();
 
   qDeleteAll(errors);
+  errors.clear();
+
   reset();
 }
 
@@ -389,36 +420,70 @@ ValgrindItem* ValgrindModel::itemForIndex(const QModelIndex& index) const
 
 KUrl ValgrindFrame::url() const
 {
-  return KUrl(KUrl::fromPath(dir), file);
-}
-
-ValgrindCombinedModel::ValgrindCombinedModel(QObject * parent)
-    : QSortFilterProxyModel(parent)
-{
+  KUrl url(KUrl::fromPath(dir), file);
+  url.cleanPath();
+  return url;
 }
 
 ValgrindModel::ValgrindModel(QObject * parent)
     : QAbstractItemModel(parent)
 {
-    //new ModelTest(this);
+  //new ModelTest(this);
 }
 
-bool ValgrindModel::error(const QXmlParseException & exception)
+QString ValgrindError::whatForStack(const ValgrindStack * s) const
 {
-    KMessageBox::error(qApp->activeWindow(), i18n("Valgrind XML Parsing error at line %1, column %2: %3", exception.lineNumber(), exception.columnNumber(), exception.message()), i18n("Valgrind Error"));
-    return true;
+  if (s == stack)
+    return what;
+  if (s == auxStack)
+    return auxWhat;
+
+  return "<INTERNAL ERROR>";
 }
 
-bool ValgrindModel::fatalError(const QXmlParseException & exception)
+QString ValgrindStack::what() const
 {
-    KMessageBox::error(qApp->activeWindow(), i18n("Valgrind XML Parsing error at line %1, column %2: %3", exception.lineNumber(), exception.columnNumber(), exception.message()), i18n("Valgrind Error"));
-    return false;
+  return parent()->whatForStack(this);
 }
 
-bool ValgrindModel::warning(const QXmlParseException & exception)
+void ValgrindModel::parse()
 {
-    KMessageBox::information(qApp->activeWindow(), i18n("Valgrind XML Parsing warning at line %1, column %2: %3", exception.lineNumber(), exception.columnNumber(), exception.message()), i18n("Valgrind Warning"));
-    return true;
+    while (!atEnd()) {
+        switch (readNext()) {
+            case StartDocument:
+                clear();
+                break;
+
+            case StartElement:
+                startElement();
+                break;
+
+            case EndElement:
+                endElement();
+                break;
+
+            case Characters:
+                m_buffer += text().toString();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if (hasError()) {
+        switch (error()) {
+            case CustomError:
+            case UnexpectedElementError:
+            case NotWellFormedError:
+                KMessageBox::error(qApp->activeWindow(), i18n("Valgrind XML Parsing: error at line %1, column %2: %3", lineNumber(), columnNumber(), errorString()), i18n("Valgrind Error"));
+                break;
+
+            case NoError:
+            case PrematureEndOfDocumentError:
+                break;
+        }
+    }
 }
 
 #include "valgrindmodel.moc"

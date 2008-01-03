@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
- *  Copyright 2007 Hamish Rodda <rodda@kde.org>
+ *  Copyright 2007-2008 Hamish Rodda <rodda@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -25,14 +25,14 @@
 
 #include "valgrindplugin.h"
 #include "valgrindmodel.h"
+#include "valgrindtree.h"
 
 ValgrindWidget::ValgrindWidget(ValgrindPlugin* plugin, QWidget * parent)
-    : QTreeView(parent)
+    : QTabWidget(parent)
     , m_plugin(plugin)
 {
     setWindowIcon(KIcon("fork"));
     setWindowTitle(i18n("Valgrind Output"));
-    setModel(plugin->model());
 
     setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/>"
         "use of uninitialized memory<br/>"
@@ -43,11 +43,29 @@ ValgrindWidget::ValgrindWidget(ValgrindPlugin* plugin, QWidget * parent)
         "passing of uninitialised and/or unaddressable memory to system calls<br/>"
         "mismatched use of malloc/new/new [] vs free/delete/delete []<br/>"
         "some abuses of the POSIX pthread API.</p>" ) );
+
+    connect(plugin, SIGNAL(newModel(ValgrindModel*)), this, SLOT(newModel(ValgrindModel*)));
 }
 
 ValgrindPlugin * ValgrindWidget::plugin() const
 {
     return m_plugin;
+}
+
+void ValgrindWidget::newModel(ValgrindModel * model)
+{
+    ValgrindTree* tree = new ValgrindTree();
+    tree->setModel(model);
+    connect(model, SIGNAL(destroyed(QObject*)), this, SLOT(modelDestroyed(QObject*)));
+    addTab(tree, QString());
+    setCurrentWidget(tree);
+}
+
+void ValgrindWidget::modelDestroyed(QObject * model)
+{
+    for (int i = 0; i < count(); ++i)
+        if (static_cast<ValgrindTree*>(widget(i))->model() == model)
+            return removeTab(i);
 }
 
 #include "valgrindwidget.moc"

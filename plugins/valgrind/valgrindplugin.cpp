@@ -82,7 +82,6 @@ private:
 
 ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
     : IPlugin( ValgrindFactory::componentData(), parent)
-    , m_model(new ValgrindCombinedModel(this))
 {
     setXMLFile( "kdevvalgrind.rc" );
 
@@ -166,7 +165,7 @@ bool ValgrindPlugin::execute(const KDevelop::IRun & run, int serial)
     ValgrindControl* control = new ValgrindControl(this);
     m_controls.insert(serial, control);
     bool ret = control->run(run, serial);
-    m_model->setSourceModel(control->model());
+    emit newModel(control->model());
     return ret;
 }
 
@@ -182,9 +181,12 @@ KUrl ValgrindPlugin::valgrindExecutable() const
     return group.readEntry("Valgrind Executable", "valgrind");
 }
 
-ValgrindCombinedModel* ValgrindPlugin::model() const
+QList<ValgrindModel*> ValgrindPlugin::models() const
 {
-    return m_model;
+    QList<ValgrindModel*> ret;
+    foreach (ValgrindControl* control, m_controls)
+        ret.append(control->model());
+    return ret;
 }
 
 #if 0

@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
- *  Copyright 2007-2008 Hamish Rodda <rodda@kde.org>
+ *  Copyright 2008 Hamish Rodda <rodda@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,29 +18,24 @@
 
  */
 
-#ifndef VALGRINDWIDGET_H
-#define VALGRINDWIDGET_H
+#ifndef VALGRINDTREE_H
+#define VALGRINDTREE_H
 
-#include <QTabWidget>
+#include <QTreeView>
 
 class ValgrindPlugin;
 class ValgrindModel;
 
-class ValgrindWidget : public QTabWidget
+class ValgrindTree : public QTreeView
 {
     Q_OBJECT
 
 public:
-    ValgrindWidget(ValgrindPlugin* plugin, QWidget* parent);
-
-    ValgrindPlugin* plugin() const;
+    ValgrindTree();
 
 private Q_SLOTS:
-    void newModel(ValgrindModel* model);
-    void modelDestroyed(QObject* model);
-
-private:
-    ValgrindPlugin* m_plugin;
+    void expanded(const QModelIndex& index);
+    void activated(const QModelIndex& index);
 };
 
-#endif // VALGRINDWIDGET_H
+#endif // VALGRINDTREE_H

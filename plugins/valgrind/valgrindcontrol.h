@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-   Copyright 2006 Hamish Rodda <rodda@kde.org>
+   Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
    Copyright 2002 Harald Fernengel <harry@kdevelop.org>
 
    This program is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@ class ValgrindModel;
 class QTcpServer;
 class QTcpSocket;
 class ValgrindPlugin;
+class QBuffer;
 
 namespace KDevelop { class ProcessLineMaker; }
 
@@ -51,7 +52,7 @@ public:
     void stop();
 
 private slots:
-    void newValgrindConnection();
+    //void newValgrindConnection();
     void readFromValgrind();
 
     void readyReadStandardOutput();
@@ -65,9 +66,6 @@ private:
     KProcess* m_process;
     int m_currentPid;
     int m_serial;
-
-    QXmlInputSource* m_inputSource;
-    QXmlSimpleReader* m_xmlReader;
 
     QTcpServer* m_server;
     QTcpSocket* m_connection;

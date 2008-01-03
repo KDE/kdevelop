@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-   Copyright 2006 Hamish Rodda <rodda@kde.org>
+   Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
    Copyright 2002 Harald Fernengel <harry@kdevelop.org>
 
    This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QApplication>
+#include <QBuffer>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -39,15 +40,13 @@
 ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     : QObject(parent)
     , m_process(new KProcess(this))
-    , m_inputSource(0)
-    , m_xmlReader(new QXmlSimpleReader)
     , m_server(0)
     , m_connection(0)
     , m_model(new ValgrindModel(this))
     , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
 {
-    m_xmlReader->setContentHandler(m_model);
-    m_xmlReader->setErrorHandler(m_model);
+    m_process->setOutputChannelMode(KProcess::SeparateChannels);
+    m_model->setDevice(m_process);
 
     connect(m_applicationOutput, SIGNAL(receivedStdoutLines(QStringList)), SLOT(applicationOutput(QStringList)));
 
@@ -86,9 +85,6 @@ bool ValgrindControl::run(const KDevelop::IRun& run, int serial)
     arguments << run.executable().path();
     arguments << run.arguments();
 
-    delete m_inputSource;
-    m_inputSource = 0;
-    
     m_process->setReadChannel(QProcess::StandardError);
     m_process->setProgram(plugin()->valgrindExecutable().path(), arguments);
     m_process->start();
@@ -105,7 +101,7 @@ void ValgrindControl::readFromValgrind( )
 {
 }
 
-void ValgrindControl::newValgrindConnection( )
+/*void ValgrindControl::newValgrindConnection( )
 {
     QTcpSocket* sock = m_server->nextPendingConnection();
     kDebug() << sock;
@@ -116,7 +112,7 @@ void ValgrindControl::newValgrindConnection( )
         m_xmlReader->parse(m_inputSource, true);
         connect(sock, SIGNAL(readyRead()), SLOT(slotReadFromValgrind()));
     }
-}
+}*/
 
 ValgrindPlugin * ValgrindControl::plugin() const
 {
@@ -127,22 +123,22 @@ void ValgrindControl::processErrored(QProcess::ProcessError e)
 {
     switch (e) {
         case QProcess::FailedToStart:
-            KMessageBox::error(qApp->activeWindow(), i18n("Failed to start valgrind from %1", plugin()->valgrindExecutable().path()), i18n("Failed to start Valgrind"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Failed to start valgrind from \"%1.\"", plugin()->valgrindExecutable().path()), i18n("Failed to start Valgrind"));
             break;
         case QProcess::Crashed:
             KMessageBox::error(qApp->activeWindow(), i18n("Valgrind crashed."), i18n("Valgrind Error"));
             break;
         case QProcess::Timedout:
-            KMessageBox::error(qApp->activeWindow(), i18n("Valgrind Error: process timed out."), i18n("Valgrind Error"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Valgrind process timed out."), i18n("Valgrind Error"));
             break;
         case QProcess::WriteError:
-            KMessageBox::error(qApp->activeWindow(), i18n("Valgrind Error: write to process failed."), i18n("Valgrind Error"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Write to Valgrind process failed."), i18n("Valgrind Error"));
             break;
         case QProcess::ReadError:
-            KMessageBox::error(qApp->activeWindow(), i18n("Valgrind Error: read from process failed."), i18n("Valgrind Error"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Read from Valgrind process failed."), i18n("Valgrind Error"));
             break;
         case QProcess::UnknownError:
-            KMessageBox::error(qApp->activeWindow(), i18n("Valgrind Error: unknown process error."), i18n("Valgrind Error"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Unknown Valgrind process error."), i18n("Valgrind Error"));
             break;
     }
 }
@@ -169,13 +165,7 @@ void ValgrindControl::processFinished(int exitCode, QProcess::ExitStatus exitSta
 
 void ValgrindControl::readyReadStandardError()
 {
-    if (!m_inputSource) {
-        m_inputSource = new QXmlInputSource(m_process);
-        m_xmlReader->parse(m_inputSource, true);
-
-    } else {
-        m_xmlReader->parseContinue();
-    }
+    m_model->parse();
 }
 
 void ValgrindControl::readyReadStandardOutput()
