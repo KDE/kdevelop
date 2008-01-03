@@ -21,30 +21,30 @@ IconCache* IconCache::m_instance = 0;
 IconCache::IconCache() {
   ///Here, the appropriate icon-names can be chosen by mapping
 	m_instance = this;
-	maps_[ "unknown" ] = "help";
-	maps_[ "text_message_in" ] = "mail_get";
-	maps_[ "text_message_out" ] = "mail_send";
+	maps_[ "unknown" ] = "unknown";
+	maps_[ "text_message_in" ] = "mail-receive";
+	maps_[ "text_message_out" ] = "mail-send";
 
 	maps_[ "document_message_in" ] = "folder_inbox";
 	maps_[ "document_message_out" ] = "folder_outbox";
 
-	maps_[ "generalrequest_in" ] = "bookmark";
-	maps_[ "generalrequest_out" ] = "wizard";
+	maps_[ "generalrequest_in" ] = "bookmarks";
+    maps_[ "generalrequest_out" ] = "tools-wizard";
 	maps_[ "generalrequest_in_denied" ] = "fileclose";
-	maps_[ "generalrequest_in_accepted" ] = "ok";
+	maps_[ "generalrequest_in_accepted" ] = "dialog-ok";
 	maps_[ "generalrequest_out_denied" ] = "fileclose";
-	maps_[ "generalrequest_out_accepted" ] = "ok";
+    maps_[ "generalrequest_out_accepted" ] = "dialog-ok";
 	maps_[ "generalrequest_out_failed" ] = "remove";
 	maps_[ "generalrequest_in_failed" ] = "remove";
 
-	maps_[ "collaborationrequest_in" ] = "bookmark";
-	maps_[ "collaborationrequest_out" ] = "wizard";
-	maps_[ "collaborationrequest_accepted" ] = "ok";
+    maps_[ "collaborationrequest_in" ] = "bookmarks";
+    maps_[ "collaborationrequest_out" ] = "tools-wizard";
+    maps_[ "collaborationrequest_accepted" ] = "dialog-ok";
 	maps_[ "collaborationrequest_denied" ] = "fileclose";
 	maps_[ "collaborationrequest_in_denied" ] = "fileclose";
-	maps_[ "collaborationrequest_in_accepted" ] = "ok";
+    maps_[ "collaborationrequest_in_accepted" ] = "dialog-ok";
 	maps_[ "collaborationrequest_out_denied" ] = "fileclose";
-	maps_[ "collaborationrequest_out_accepted" ] = "ok";
+    maps_[ "collaborationrequest_out_accepted" ] = "dialog-ok";
 	maps_[ "collaborationrequest_out_failed" ] = "remove";
 	maps_[ "collaborationrequest_in_failed" ] = "remove";
 
@@ -55,20 +55,20 @@ IconCache::IconCache() {
 	maps_[ "collaboration_session_finished" ] = "remove";
 	maps_[ "collaboration_session_connectionlost" ] = "fileclose";
 
-	maps_[ "filecollaborationrequest_in" ] = "bookmark";
-	maps_[ "filecollaborationrequest_out" ] = "wizard";
-	maps_[ "filecollaborationrequest_accepted" ] = "ok";
+    maps_[ "filecollaborationrequest_in" ] = "bookmarks";
+	maps_[ "filecollaborationrequest_out" ] = "tools-wizard";
+    maps_[ "filecollaborationrequest_accepted" ] = "dialog-ok";
 	maps_[ "filecollaborationrequest_denied" ] = "fileclose";
 	maps_[ "filecollaborationrequest_in_denied" ] = "fileclose";
-	maps_[ "filecollaborationrequest_in_accepted" ] = "ok";
+    maps_[ "filecollaborationrequest_in_accepted" ] = "dialog-ok";
 	maps_[ "filecollaborationrequest_out_denied" ] = "fileclose";
-	maps_[ "filecollaborationrequest_out_accepted" ] = "ok";
+    maps_[ "filecollaborationrequest_out_accepted" ] = "dialog-ok";
 	maps_[ "filecollaborationrequest_out_failed" ] = "remove";
 	maps_[ "filecollaborationrequest_in_failed" ] = "remove";
 	maps_[ "filecollaborationrequest_in_failed" ] = "remove";
 	maps_[ "fileusercollaboration_inactive" ] = "presence_unknown";
 
-	maps_[ "patch" ] = "txt2";
+	maps_[ "patch" ] = "text-x-generic";
 	maps_[ "failed" ] = "fileclose";
 
 	maps_[ "error" ] = "stop";
