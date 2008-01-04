@@ -163,8 +163,19 @@ const KUrl& Project::folder() const
     return d->folder;
 }
 
-bool Project::open( const KUrl& projectFileUrl )
+bool Project::open( const KUrl& projectFileUrl_ )
 {
+    //Canonicalize the project url, because we do the same in many other cases with files,
+    //so we must canonicalize the project url too.
+    KUrl projectFileUrl = projectFileUrl_;
+    
+    if ( projectFileUrl.isLocalFile() )
+    {
+        QString path = QFileInfo( projectFileUrl.toLocalFile() ).canonicalFilePath();
+        if ( !path.isEmpty() )
+            projectFileUrl.setPath( path );
+    }
+    
     KIO::StatJob* statJob = KIO::stat( projectFileUrl, KIO::HideProgressInfo );
     if ( !statJob->exec() ) //be sync for right now
     {
