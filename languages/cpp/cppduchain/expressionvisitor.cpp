@@ -1241,8 +1241,15 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return;
     }
     
-    LOCKDUCHAIN;
+    AbstractType::Ptr lastType = m_lastType;
+    Instance instance = m_lastInstance;
 
+    DefaultVisitor::visitNewDeclarator(node);
+    
+    m_lastType = lastType;
+    m_lastInstance = instance;
+
+    LOCKDUCHAIN;
     visit(node->ptr_op);
   }
   
@@ -1337,11 +1344,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       visit(node->new_type_id->type_specifier);
       visit(node->new_type_id->new_declarator);
     }
-    if( !m_lastType ) {
-      problem(node, "Could not resolve type");
-      return;
-    }
-
+    if( m_lastType )
     {
       LOCKDUCHAIN;
       ///@todo cv-qualifiers
@@ -1352,11 +1355,20 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       
       
       m_lastInstance = Instance(true);
+      
+      if( m_lastType )
+        expressionType( node, m_lastType, m_lastInstance );
+    }else{
+      problem(node, "Could not resolve type");
     }
 
+    AbstractType::Ptr lastType = m_lastType;
+    Instance instance = m_lastInstance;
+
+    visit(node->new_initializer);
     
-    if( m_lastType )
-      expressionType( node, m_lastType, m_lastInstance );
+    m_lastType = lastType;
+    m_lastInstance = instance;
   }
   
   /**
@@ -1914,6 +1926,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     visit( node->expression );
   }
+
+  void ExpressionVisitor::visitNewInitializer(NewInitializerAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    visit(node->expression);
+  }
   
   ///Nodes that are invalid inside an expression:
   void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -1945,7 +1962,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitMemInitializer(MemInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNamespace(NamespaceAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitNewInitializer(NewInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitParameterDeclaration(ParameterDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitReturnStatement(ReturnStatementAST* node)  { problem(node, "node-type cannot be parsed"); }

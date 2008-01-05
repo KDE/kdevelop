@@ -23,6 +23,7 @@
 #include <duchain/declaration.h>
 #include <ducontext.h>
 #include "visitor.h"
+#include "default_visitor.h"
 #include "cppduchainexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */
 
@@ -43,7 +44,7 @@ using namespace KDevelop;
  *
  *  The code is somewhat redundant with UseBuilder. Maybe UseBuilder should be based on this class. However a TypeBuilder must have been run already on the code, so the declarations of uses are located.
 **/
-class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public Visitor {
+class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
   public:
     /**
      * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.

@@ -201,6 +201,10 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
 void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 {
+  //need to make backup because we may temporarily change it
+  ParameterDeclarationClauseAST* parameter_declaration_clause_backup = node->parameter_declaration_clause;
+  
+  ///@todo this should be solved more elegantly within parser and AST
   if (node->parameter_declaration_clause) {
     //Check if all parameter declarations are valid. If not, this is a misunderstood variable declaration.
     if(!checkParameterDeclarationClause(node->parameter_declaration_clause))
@@ -287,8 +291,10 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
               found = true;
               break;
             }
-            if(found)
+            if(found) {
+              node->parameter_declaration_clause = parameter_declaration_clause_backup;
               return;
+            }
           }
           //We do not want unresolved definitions to hide declarations.
           //As declarations are named by Identifiers, not by QualifiedIdentifiers,
@@ -297,6 +303,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
           abortDeclaration();
           delete oldDec;
           kDebug(9007) << "No declaration found for definition " << id << ", discarding definition";
+
+          node->parameter_declaration_clause = parameter_declaration_clause_backup;
           return;
         }
       }
@@ -304,6 +312,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   }
 
   closeDeclaration();
+
+  node->parameter_declaration_clause = parameter_declaration_clause_backup;
 }
 
 ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, AST * range)

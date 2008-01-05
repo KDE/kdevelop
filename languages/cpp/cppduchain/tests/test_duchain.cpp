@@ -682,15 +682,16 @@ void TestDUChain::testVariableDeclaration()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("int c; A instance(c); A instance(2); A instance(q);");
+    QByteArray method("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); }");
 
   DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 1); // "A instance(c)" evaluates to a function declaration, so we have one function context.
-  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(top->childContexts().count(), 3); // "A instance(c)" evaluates to a function declaration, so we have one function context.
+  QCOMPARE(top->localDeclarations().count(), 5);
+  QCOMPARE(top->localDeclarations()[0]->uses().count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
 //   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[1]->abstractType().data());
