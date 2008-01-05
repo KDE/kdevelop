@@ -460,7 +460,14 @@ KDevelop::ParsingEnvironmentFile* EnvironmentManager::find( const HashedString& 
     return 0;
   }
   EnvironmentFilePointer p = lexedFile( url, env, accepter );
+#if QT_VERSION >= 0x040400
+  /* QAtomicInt doesn't have a value member in Qt 4.4
+     Use the int operator to get the value.
+  */
+  Q_ASSERT(!p || (int)p->ref > 1);
+#else
   Q_ASSERT(!p || p->ref.value > 1);
+#endif
   return p.data();
 }
 
