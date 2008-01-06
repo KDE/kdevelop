@@ -375,6 +375,7 @@ bool Parser::skipUntilStatement()
         case Token_while:
         case Token_do:
         case Token_for:
+        case Token_foreach:
         case Token_break:
         case Token_continue:
         case Token_return:
@@ -1756,13 +1757,15 @@ bool Parser::parseTypeId(TypeIdAST *&node)
   return true;
 }
 
-bool Parser::parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node)
+bool Parser::parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node, bool onlyOneDeclarator)
 {
   InitDeclaratorAST *decl = 0;
   if (!parseInitDeclarator(decl))
     return false;
 
   node = snoc(node, decl, session->mempool);
+  if(onlyOneDeclarator)
+    return true;
 
   while (session->token_stream->lookAhead() == ',')
     {
@@ -2624,6 +2627,7 @@ bool Parser::parseStatement(StatementAST *&node)
       return parseDoStatement(node);
 
     case Token_for:
+    case Token_foreach:
       return parseForStatement(node);
 
     case Token_if:
@@ -2854,19 +2858,30 @@ bool Parser::parseForStatement(StatementAST *&node)
 {
   std::size_t start = session->token_stream->cursor();
 
-  ADVANCE(Token_for, "for");
-  ADVANCE('(', "(");
+  int tok = session->token_stream->lookAhead();
 
   StatementAST *init = 0;
-  if (!parseForInitStatement(init))
-    {
-      reportError(("for initialization expected"));
-      return false;
-    }
+  
+  if(tok == Token_foreach) {
+    ADVANCE(Token_foreach, "foreach");
+  }else{
+    ADVANCE(Token_for, "for");
+  }
+  
+  ADVANCE('(', "(");
 
+  if (!parseForInitStatement(init, tok == Token_foreach))
+  {
+    reportError(("for initialization expected"));
+    return false;
+  }
+  
   ConditionAST *cond = 0;
-  parseCondition(cond);
-  ADVANCE(';', ";");
+  
+  if(tok != Token_foreach) {
+    parseCondition(cond);
+    ADVANCE(';', ";");
+  }
 
   ExpressionAST *expr = 0;
   parseCommaExpression(expr);
@@ -2888,11 +2903,14 @@ bool Parser::parseForStatement(StatementAST *&node)
   return true;
 }
 
-bool Parser::parseForInitStatement(StatementAST *&node)
+bool Parser::parseForInitStatement(StatementAST *&node, bool isForeach)
 {
-  if (parseDeclarationStatement(node))
+  if (parseDeclarationStatement(node, isForeach))
     return true;
 
+  if(isForeach)
+    return false;
+  
   return parseExpressionStatement(node);
 }
 
@@ -3071,7 +3089,7 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
   return false;
 }
 
-bool Parser::parseBlockDeclaration(DeclarationAST *&node)
+bool Parser::parseBlockDeclaration(DeclarationAST *&node, bool onlyOneDeclarator)
 {
   switch(session->token_stream->lookAhead())
     {
@@ -3109,9 +3127,10 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   spec->cv = cv;
 
   const ListNode<InitDeclaratorAST*> *declarators = 0;
-  parseInitDeclaratorList(declarators);
+  
+  parseInitDeclaratorList(declarators, onlyOneDeclarator);
 
-  if (session->token_stream->lookAhead() != ';')
+  if (session->token_stream->lookAhead() != ';' && (!onlyOneDeclarator || session->token_stream->lookAhead() != ',') )
     {
       rewind(start);
       return false;
@@ -3158,12 +3177,12 @@ bool Parser::parseNamespaceAliasDefinition(DeclarationAST *&node)
   return true;
 }
 
-bool Parser::parseDeclarationStatement(StatementAST *&node)
+bool Parser::parseDeclarationStatement(StatementAST *&node, bool onlyOneDeclarator)
 {
   std::size_t start = session->token_stream->cursor();
 
   DeclarationAST *decl = 0;
-  if (!parseBlockDeclaration(decl))
+  if (!parseBlockDeclaration(decl, onlyOneDeclarator))
     return false;
 
   DeclarationStatementAST *ast = CreateNode<DeclarationStatementAST>(session->mempool);

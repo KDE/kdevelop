@@ -448,6 +448,7 @@ struct FunctionDefinitionAST: public DeclarationAST
   CtorInitializerAST *constructor_initializers;
 };
 
+//ForStatementAST is also used for foreach statements, but for them only init_statement is non-zero.
 struct ForStatementAST: public StatementAST
 {
   DECLARE_AST_NODE(ForStatement)

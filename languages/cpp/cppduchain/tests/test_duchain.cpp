@@ -482,6 +482,34 @@ void TestDUChain::testDeclareFor()
   release(top);
 }
 
+void TestDUChain::testDeclareForeach()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5
+  //                 012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("struct IntList{}; int main() { foreach (int i, IntList) { i += 3; } }");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QVERIFY(top->localScopeIdentifier().isEmpty());
+
+  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+  
+  DUContext* mainContext = top->childContexts()[2];
+  QCOMPARE(mainContext->childContexts().count(), 2);
+  QCOMPARE(mainContext->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(mainContext->childContexts()[1]->localDeclarations().count(), 0);
+  QCOMPARE(mainContext->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+
+  release(top);
+}
+
 void TestDUChain::testEnum()
 {
   TEST_FILE_PARSE_ONLY

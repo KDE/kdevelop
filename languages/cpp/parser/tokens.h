@@ -70,6 +70,7 @@ enum TOKEN_KIND
     Token_false,
     Token_float,
     Token_for,
+    Token_foreach,
     Token_friend,
     Token_geq,
     Token_goto,

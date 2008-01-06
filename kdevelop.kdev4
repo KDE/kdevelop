@@ -1,3 +1,6 @@
+[CMake]
+CMakeDir=/home/nolden/kdedev/4.0/qt-copy/share/cmake/Modules
+
 [Project]
-Name=KDevelop
 Manager=KDevCMakeManager
+Name=KDevelop

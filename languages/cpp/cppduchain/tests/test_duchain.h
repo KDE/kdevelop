@@ -63,6 +63,7 @@ private slots:
   void testIntegralTypes();
   void testArrayType();
   void testDeclareFor();
+  void testDeclareForeach();
   void testVariableDeclaration();
   void testDeclareStruct();
   void testDeclareClass();

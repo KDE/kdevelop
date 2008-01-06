@@ -1387,15 +1387,27 @@ void Lexer::scanKeyword7()
     {
     case 'd':
       if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 'f' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 'u' &&
-	  *(cursor + 5) == 'l' &&
-	  *(cursor + 6) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_default;
-	  return;
-	}
+    *(cursor + 2) == 'f' &&
+    *(cursor + 3) == 'a' &&
+    *(cursor + 4) == 'u' &&
+    *(cursor + 5) == 'l' &&
+    *(cursor + 6) == 't')
+  {
+    (*session->token_stream)[index++].kind = Token_default;
+    return;
+  }
+      break;
+    case 'f':
+      if (*(cursor + 1) == 'o' &&
+    *(cursor + 2) == 'r' &&
+    *(cursor + 3) == 'e' &&
+    *(cursor + 4) == 'a' &&
+    *(cursor + 5) == 'c' &&
+    *(cursor + 6) == 'h')
+  {
+    (*session->token_stream)[index++].kind = Token_foreach;
+    return;
+  }
       break;
 
     case 'm':
