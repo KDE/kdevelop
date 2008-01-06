@@ -28,6 +28,8 @@
  */
 #if 0
 
+//krazy:excludeall=dpointer
+
 #include <QtCore/QReadWriteLock>
 
 namespace KDevelop
@@ -147,7 +149,8 @@ public:
   void unlock();
 
 private:
-  class DUChainReadLockerPrivate* const d;
+  DUChainLock* m_lock;
+  bool m_locked;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker

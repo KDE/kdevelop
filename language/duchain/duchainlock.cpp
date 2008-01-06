@@ -29,6 +29,9 @@
 // Uncomment the following to turn on verbose locking information
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
 
+// Uncomment this to enable checking for long lock times. It adds significant performance cost though.
+//#define DEBUG_LOG_TIMING
+
 #include <kdebug.h>
 
 namespace KDevelop
@@ -59,12 +62,14 @@ public:
       ownReaderRecursion = *it;
     return ownReaderRecursion;
   }
-  
+
+#ifdef DEBUG_LOG_TIMING
   void auditTime() const {
     int ms = m_lockTime.elapsed();
     if (ms > 100)
       kWarning(9512) << "Long lock time:" << ms << "miliseconds.";
   }
+#endif
 
   QMutex m_mutex;
   Qt::HANDLE m_writer;
@@ -75,17 +80,10 @@ public:
   ///Map readers to the count of recursive read-locks they hold(0 if they do not hold a lock)
   typedef QHash<Qt::HANDLE,int> ReaderMap;
   ReaderMap m_readers;
-  
-  QTime m_lockTime;
-};
 
-class DUChainReadLockerPrivate
-{
-public:
-  DUChainReadLockerPrivate() : m_locked(false) {
-  }
-  DUChainLock* m_lock;
-  bool m_locked;
+#ifdef DEBUG_LOG_TIMING
+  QTime m_lockTime;
+#endif
 };
 
 class DUChainWriteLockerPrivate
@@ -140,7 +138,9 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 
   if(locked) {
     ++d->m_totalReaderRecursion;
+#ifdef DEBUG_LOCK_TIMING
     d->m_lockTime.start();
+#endif
   }
 
   lock.unlock();
@@ -173,7 +173,9 @@ void DUChainLock::releaseReadLock()
 /*  if( *it == 0 )
     d->m_readers.erase(it); //Maybe it would even be wise simply leaving it there*/
 
+#ifdef DEBUG_LOCK_TIMING
   d->auditTime();
+#endif
 }
 
 bool DUChainLock::currentThreadHasReadLock()
@@ -214,7 +216,9 @@ bool DUChainLock::lockForWrite()
     d->m_writer = QThread::currentThreadId();
     ++d->m_writerRecursion;
     locked = true;
+#ifdef DEBUG_LOCK_TIMING
     d->m_lockTime.start();
+#endif
   }
 
   return locked;
@@ -235,7 +239,9 @@ void DUChainLock::releaseWriteLock()
   if( !d->m_writerRecursion )
     d->m_writer = 0;
 
+#ifdef DEBUG_LOCK_TIMING
   d->auditTime();
+#endif
 }
 
 bool DUChainLock::currentThreadHasWriteLock()
@@ -245,40 +251,38 @@ bool DUChainLock::currentThreadHasWriteLock()
 }
 
 
-DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock)
-  : d(new DUChainReadLockerPrivate)
+DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock) : m_locked(false)
 {
-  d->m_lock = duChainLock;
+  m_lock = duChainLock;
   lock();
 }
 
 DUChainReadLocker::~DUChainReadLocker()
 {
   unlock();
-  delete d;
 }
 
 bool DUChainReadLocker::lock()
 {
-  if( d->m_locked )
+  if( m_locked )
     return true;
   
   bool l = false;
-  if (d->m_lock) {
-    l = d->m_lock->lockForRead();
+  if (m_lock) {
+    l = m_lock->lockForRead();
     Q_ASSERT(l);
   };
 
-  d->m_locked = l;
+  m_locked = l;
   
   return l;
 }
 
 void DUChainReadLocker::unlock()
 {
-  if (d->m_locked && d->m_lock) {
-    d->m_lock->releaseReadLock();
-    d->m_locked = false;
+  if (m_locked && m_lock) {
+    m_lock->releaseReadLock();
+    m_locked = false;
   }
 }
 
