@@ -193,7 +193,7 @@ void Declaration::setIdentifier(const Identifier& identifier)
 {
   ENSURE_CAN_WRITE
   Q_D(Declaration);
-  if( d->m_context )
+  if( d->m_context && !d->m_anonymousInContext )
     d->m_context->changingIdentifier( this, d->m_identifier, identifier );
 
   d->m_identifier = identifier;
