@@ -497,12 +497,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       switch (index.column()) {
         case Prefix:
         {
-          QString indentation;
           int depth = item.inheritanceDepth;
           if( depth >= 1000 )
             depth-=1000;
-          for( int a = 0; a < depth; a++ )
-            indentation += " ";
+          QString indentation(depth, ' ');
 
           if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(dec) ) {
             if( alias->identifier().isEmpty() ) {
