@@ -264,7 +264,11 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   int start_expr = Utils::expressionAt( m_text, m_text.length() );
 
   m_expression = m_text.mid(start_expr).trimmed();
+
   if(m_expression.endsWith(')'))
+    m_expression = QString();
+
+  if(m_expression == "else")
     m_expression = QString();
   
   QString expressionPrefix = Utils::stripFinalWhitespace( m_text.left(start_expr) );
