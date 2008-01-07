@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=QtRuby4 Application
+Name[da]=QtRuby4-program
 Name[el]=Εφαρμογή QtRuby4
 Name[es]=Aplicación en QtRuby4
 Name[et]=QtRuby4 rakendus
@@ -14,6 +15,7 @@ Icon=qtruby4app.png
 Category=Ruby/Qt
 Category[fr]=Ruby/Qt
 Comment=Generate a QtRuby4 based application (crossplatform compatible) - Needs QtRuby4
+Comment[da]=Genererer et QtRuby4-baseret program (krydsplatformskompatibelt) - kræver QtRuby4
 Comment[el]=Δημιουργία μιας εφαρμογής βασισμένης στην QtRuby4 (πολλαπλών πλατφόρμων) - Απαιτείται η QtRuby4
 Comment[es]=Genera una aplicación basada en QtRuby4 (con compatibilidad multiplataforma) - Necesita QtRuby4
 Comment[et]=Rakenduse loomine QtRuby4 põhjal (multiplatvormne) - vajalik on QtRuby4
@@ -95,6 +97,7 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
 [MSG]
 Type=message
 Comment=A QtRuby4 based application was created in %{dest}
+Comment[da]=Et QtRuby4-baseret program blev oprettet i %{dest}
 Comment[el]=Μία εφαρμογή βασισμένη στην QtRuby4 δημιουργήθηκε στο %{dest}
 Comment[es]=Una aplicación basada en QtRuby4 ha sido creada en %{dest}
 Comment[et]=Rakendus QtRuby4 põhjal loodi asukohta %{dest}

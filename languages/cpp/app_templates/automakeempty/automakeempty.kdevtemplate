@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Empty Autotools Template
+Name[da]=Tom Autotools-skabelon
 Name[de]=Leere Autotools-Vorlage
 Name[el]=Κενό πρότυπο των Autotools
 Name[es]=Plantilla Autotools vacía
@@ -19,6 +20,7 @@ Name[zh_TW]=空的 Autotools 樣板
 Icon=automakeempty.png
 Category=C++/Automake project
 Comment=Generate an empty Automake based application
+Comment[da]=Opretter et tomt Automake-baseret program
 Comment[de]=Erstellt eine leere auf Automake basierende Anwendung
 Comment[el]=Δημιουργία μίας κενής εφαρμογής βασισμένης στο Automake
 Comment[es]=Genera una aplicación vacía basada en Automake
@@ -69,6 +71,7 @@ Dest=%{dest}/configure.in
 [MSG]
 Type=message
 Comment=An Automake based application was created in %{dest}
+Comment[da]=Et Automake-baseret program blev oprettet i %{dest}
 Comment[de]=Eine auf Automake basierende Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μία εφαρμογή βασισμένη στο Automake δημιουργήθηκε στο %{dest}
 Comment[es]=Una aplicación basada en Automake ha sido creada en %{dest}

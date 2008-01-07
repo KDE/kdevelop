@@ -9,6 +9,7 @@ Icon=kapp4
 Type=Application
 DocPath=kapp4/kapp4.html
 GenericName=A KDE4 Application
+GenericName[da]=Et KDE4-program
 GenericName[de]=Eine KDE 4-Anwendung
 GenericName[el]=Μία εφαρμογή του KDE4
 GenericName[es]=Una aplicación para KDE4

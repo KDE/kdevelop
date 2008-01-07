@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Empty Custom Makefile Template
+Name[da]=Tom brugertilpasset Makefile-skabelon
 Name[de]=Leere Vorlage für benutzerdefiniertes Makefile
 Name[el]=Κενό προσαρμοσμένο πρότυπο Makefile
 Name[es]=Plantilla vacía para Makefile personalizado
@@ -19,6 +20,7 @@ Name[zh_TW]=空的自訂 Makefile 樣板
 Icon=makefileempty.png
 Category=C++
 Comment=Generate an empty Custom Makefile based application
+Comment[da]=Opretter et tomt brugertilpasset Makefile-baseret program
 Comment[de]=Erstellt eine auf einem benutzerdefinierten Makefile basierende Anwendung
 Comment[el]=Δημιουργία μίας κενής εφαρμογής βασισμένης σε προσαρμοσμένο Makefile
 Comment[es]=Genera una aplicación vacía basada en un Makefile personalizado
@@ -55,6 +57,7 @@ Dest=%{dest}/Makefile
 [MSG]
 Type=message
 Comment=A Custom Makefile based application was created in %{dest}
+Comment[da]=Et brugertilpasset Makefile-baseret program blev oprettet i %{dest}
 Comment[de]=Eine auf einem benutzerdefinierten Makefile basierende Anwendung wurde in %{dest} erstellt.
 Comment[el]=Δημιουργήθηκε μία εφαρμογή βασισμένη σε προσαρμοσμένο Makefile στο %{dest}
 Comment[es]=Una aplicación basada en un Makefile personalizado ha sido creada en %{dest}

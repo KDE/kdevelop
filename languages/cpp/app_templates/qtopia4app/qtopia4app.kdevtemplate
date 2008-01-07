@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Qtopia 4 Application
+Name[da]=Qtopia4-program
 Name[de]=Qtopia 4-Anwendung
 Name[el]=Εφαρμογή Qtopia 4
 Name[es]=Aplicación para Qtopia 4
@@ -19,6 +20,7 @@ Name[zh_TW]=Qtopia 4 應用程式
 Icon=qmakeapp4.png
 Category=C++/Embedded
 Comment=Generate a Qmake/Qt based application for Qtopia 4.x
+Comment[da]=Genererer et QMake-/Qt-baseret program til Qtopia 4.x
 Comment[de]=Erstellt eine auf QMake/Qt basierende Anwendung für Qtopia 4.x
 Comment[el]=Δημιουργία μιας εφαρμογής βασισμένης στο Qmake/Qt για το Qtopia 4.x
 Comment[es]=Genera una aplicación basada en Qmake/Qt para Qtopia 4.x

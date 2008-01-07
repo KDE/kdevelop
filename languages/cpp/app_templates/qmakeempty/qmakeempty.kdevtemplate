@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Empty QMake Template
+Name[da]=Tom QMake-skabelon
 Name[de]=Leere QMake-Vorlage
 Name[el]=Κενό πρότυπο του QMake
 Name[es]=Plantilla QMake vacía
@@ -19,6 +20,7 @@ Name[zh_TW]=空的 QMake 樣本
 Icon=qmakeempty.png
 Category=C++/QMake project
 Comment=Generate an empty QMake based application (crossplatform compatible) - Needs Qt
+Comment[da]=Genererer et tomt QMake-baseret program (krydsplatformskompatibelt) - kræver Qt
 Comment[de]=Erstellt eine leere auf QMake basierende Anwendung (plattformunabhängig). - Benötigt Qt
 Comment[el]=Δημιουργία μιας κενής εφαρμογής βασισμένης στο QMake (crossplatform) - Βασίζεται στην Qt
 Comment[es]=Genera una aplicación vacía basada en QMake (con compatibilidad multiplataforma) - Necesita Qt
@@ -50,6 +52,7 @@ Dest=%{dest}/%{APPNAMELC}.pro
 [MSG]
 Type=message
 Comment=A Qmake based application was created in %{dest}
+Comment[da]=Et Qmake-baseret program blev oprettet i %{dest}
 Comment[de]=Eine auf Qmake basierende Anwendung wurde in %{dest} erstellt.
 Comment[el]=Δημιουργήθηκε μια εφαρμογή βασισμένη σε Qmake στο %{dest}
 Comment[es]=Una aplicación basada en QMake ha sido creada en %{dest}
@@ -71,6 +74,7 @@ Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake.
+Comment[da]=Absolut søgesti til QMake.
 Comment[de]=Absoluter Pfad für QMake.
 Comment[el]=Απόλυτη διαδρομή του QMake.
 Comment[es]=Ruta completa para QMake.
@@ -93,6 +97,7 @@ Type=value
 ValueType=QString
 Value=DESIGNER
 Comment=Absolute Path for Designer.
+Comment[da]=Absolut søgesti til Designer
 Comment[de]=Absoluter Pfad für Designer.
 Comment[el]=Απόλυτη διαδρομή του Designer.
 Comment[es]=Ruta completa para Designer.
