@@ -122,5 +122,6 @@ hpux11*)
     ;;
 esac
 
+AC_CHECK_FILE([$qt_incdir/qassistantclient.h], [],[AC_MSG_ERROR([The qassistantclient.h header from Qt3 is needed to build kdevelop, on some systems this header is in a separate package called qt3-apps-dev])])
 
 KDE_INIT_DOXYGEN([KDevelop], [Version $VERSION])
