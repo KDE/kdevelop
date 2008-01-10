@@ -20,6 +20,7 @@ Name[pl]=Ustawienia Valgrinda
 Name[pt]=Configuração do Valgrind
 Name[pt_BR]=Configurações do Valgrind
 Name[sv]=Valgrind-inställningar
+Name[zh_CN]=Valgrind 设置
 Name[zh_TW]=Valgrind 設定
 Comment=Configure Valgrind settings
 Comment[el]=Ρύθμιση επιλογών του Valgrind
@@ -30,5 +31,6 @@ Comment[pl]=Ustawienia programu Valgrind
 Comment[pt]=Configurar as opções do Valgrind
 Comment[pt_BR]=Configurar as Opções do Valgrind
 Comment[sv]=Anpassa inställningar för Valgrind
+Comment[zh_CN]=配置 Valgrind 设置
 Comment[zh_TW]=設定 Valgrind 相關選項
 
