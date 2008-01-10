@@ -122,8 +122,8 @@ void subversionPart::setupActions() {
 	actionUpdate->setToolTip( i18n("Update") );
 	actionUpdate->setWhatsThis( i18n("<b>Update</b><p>Updates file(s) from repository.") );
 
-	actionDiffLocal = new KAction( i18n("&Diff to Disk"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_local" );
-	actionDiffLocal->setToolTip( i18n("Diff to Disk") );
+	actionDiffLocal = new KAction( i18n("&Diff to BASE"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_local" );
+	actionDiffLocal->setToolTip( i18n("Diff to BASE") );
 	actionDiffLocal->setWhatsThis( i18n("<b>Diff to disk</b><p>Diff current file to the BASE checked out copy.") );
 
 	actionDiffHead = new KAction( i18n("&Diff to HEAD"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_head" );
