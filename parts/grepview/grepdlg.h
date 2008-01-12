@@ -77,7 +77,9 @@ private slots:
 
 private:
     KLineEdit *template_edit;
-    KComboBox *pattern_combo, *files_combo, *exclude_combo;
+    KHistoryCombo *pattern_combo;
+    KComboBox *files_combo;
+    KComboBox *exclude_combo;
     KComboBox * dir_combo;
     KURLRequester * url_requester;
 

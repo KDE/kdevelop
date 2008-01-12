@@ -95,10 +95,10 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
     layout->addWidget(pattern_label, 0, 0, AlignRight | AlignVCenter);
 
-    pattern_combo = new KComboBox(true, this);
+    pattern_combo = new KHistoryCombo(true, this);
     pattern_label->setBuddy(pattern_combo);
     pattern_combo->setFocus();
-    pattern_combo->insertStringList(config->readListEntry("LastSearchItems"));
+    pattern_combo->setHistoryItems(config->readListEntry("LastSearchItems"), true);
     pattern_combo->setInsertionPolicy(QComboBox::NoInsertion);
     layout->addWidget(pattern_combo, 0, 1);
 
@@ -320,10 +320,10 @@ void GrepDialog::slotSearchClicked()
     }
     // add the last patterns and paths to the combo
     if (!qComboContains(pattern_combo->currentText(), pattern_combo)) {
-	pattern_combo->insertItem(pattern_combo->currentText(), 0);
+	pattern_combo->addToHistory(pattern_combo->currentText());
     }
     if (pattern_combo->count() > 15) {
-	pattern_combo->removeItem(15);
+	pattern_combo->removeFromHistory(pattern_combo->text(15));
     }
     if (!qComboContains(exclude_combo->currentText(), exclude_combo)) {
 	exclude_combo->insertItem(exclude_combo->currentText(), 0);
