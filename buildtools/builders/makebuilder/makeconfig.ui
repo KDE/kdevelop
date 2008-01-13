@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>688</width>
-    <height>390</height>
+    <width>499</width>
+    <height>440</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -93,7 +93,14 @@ execute them:</string>
     </widget>
    </item>
    <item row="4" column="1" >
-    <widget class="KUrlRequester" name="kcfg_makeBinary" />
+    <widget class="KUrlRequester" name="kcfg_makeBinary" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item row="5" column="0" >
     <widget class="QLabel" name="label_6" >
@@ -106,7 +113,11 @@ execute them:</string>
     </widget>
    </item>
    <item row="5" column="1" >
-    <widget class="KLineEdit" name="kcfg_defaultTarget" />
+    <widget class="KLineEdit" name="kcfg_defaultTarget" >
+     <property name="showClearButton" stdset="0" >
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="6" column="0" >
     <widget class="QLabel" name="label_5" >
@@ -119,7 +130,11 @@ execute them:</string>
     </widget>
    </item>
    <item row="6" column="1" >
-    <widget class="KLineEdit" name="kcfg_additionalOptions" />
+    <widget class="KLineEdit" name="kcfg_additionalOptions" >
+     <property name="showClearButton" stdset="0" >
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="7" column="0" >
     <widget class="QLabel" name="label_2" >
@@ -151,8 +166,8 @@ execute them:</string>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>670</width>
-       <height>191</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
