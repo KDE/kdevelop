@@ -2,7 +2,7 @@
  * KDevelop C++ Code Completion Support
  *
  * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
- * Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+ * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -78,17 +78,17 @@ TopDUContext* getCompletionContext( const KUrl& url )
     {
       if(top->importedParentContexts().count() != 1)
         kDebug(9007) << "WARNING: Proxy-context has more than one content-contexts, this should never happen";
-      
+
       top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
-      
+
       if(!top)
         kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
-      
+
     } else {
       kDebug(9007) << "ERROR: Proxy-context has no content-context";
     }
   }
-  
+
   return top;
 }
 
@@ -97,7 +97,7 @@ AbstractType::Ptr effectiveType( Declaration* decl )
 {
   if( !decl || !decl->abstractType() )
     return AbstractType::Ptr();
-  
+
   if( decl->type<FunctionType>() )
     return decl->type<FunctionType>()->returnType();
 
@@ -109,11 +109,13 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   , m_mutex(new QMutex)
   , m_worker(new CodeCompletionWorker(this))
 {
-  qRegisterMetaType<QList<CompletionItem> >("QList<CppCodeCompletionModel::CompletionItem>");
+  qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 
   connect(this, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
-  connect(m_worker, SIGNAL(foundDeclarations(QList<CppCodeCompletionModel::CompletionItem>, void*)), this, SLOT(foundDeclarations(QList<CppCodeCompletionModel::CompletionItem>, void*)), Qt::QueuedConnection);
+
+  //We connect directly, so we can do the pre-grouping within the background thread
+  connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), this, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), Qt::QueuedConnection);
 
   m_worker->start();
 }
@@ -132,7 +134,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   Q_UNUSED(invocationType)
 
   m_navigationWidgets.clear();
-  m_declarations.clear();
+  m_completionItems.clear();
 
   reset();
 
@@ -166,7 +168,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
           dump.dump(thisContext.data());*/
         } else {
           kDebug( 9007 ) << "================== NO CONTEXT FOUND =======================";
-          m_declarations.clear();
+          m_completionItems.clear();
           m_navigationWidgets.clear();
           reset();
           return;
@@ -183,20 +185,22 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   }
 }
 
-void CppCodeCompletionModel::foundDeclarations(QList<CompletionItem> items, void* completionContext)
+void CppCodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, void* completionContext)
 {
-  if (completionContext == m_completionContext.data()) {
-    if( !m_declarations.isEmpty() ) {
-      beginInsertRows(QModelIndex(), m_declarations.count(), m_declarations.count() + items.count() - 1);
-      m_declarations += items;
+  m_completionItems = items;
+  m_completionContext = KSharedPtr<Cpp::CodeCompletionContext>((Cpp::CodeCompletionContext*)completionContext);
+  reset();
+  
+/*  if (completionContext == m_completionContext.data()) {
+    if( !m_completionItems.isEmpty() ) {
+      beginInsertRows(QModelIndex(), m_completionItems.count(), m_completionItems.count() + items.count() - 1);
+      m_completionItems += items;
       endInsertRows();
-    } else {
-      m_declarations = items;
-      reset();
-    }
-  }
+    } else {*/
+/*    }
+  }*/
+  
 }
-
 
 void CppCodeCompletionModel::setCompletionContext(KSharedPtr<Cpp::CodeCompletionContext> completionContext)
 {
@@ -219,7 +223,7 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
 
   if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext->functions().count() > item.listOffset )
     f = item.completionContext->functions()[item.listOffset];
-  
+
   int textFormatStart = 0;
   QTextFormat normalFormat(QTextFormat::CharFormat);
   QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
@@ -235,14 +239,14 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
     QStringList::const_iterator defaultParamIt = defaultParams.begin();
 
     int firstDefaultParam = functionType->arguments().count() - defaultParams.count();
-    
+
     ret = "(";
     bool first = true;
     int num = 0;
 
     const QList<Cpp::ViableFunction::ParameterConversion>& conversions = f.function.parameterConversions();
     QList<Cpp::ViableFunction::ParameterConversion>::const_iterator parameterConversion = conversions.begin();
-    
+
     foreach (const AbstractType::Ptr& argument, functionType->arguments()) {
       if (first)
         first = false;
@@ -256,7 +260,7 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       {
         doHighlight = true;
         doFormat = highlightFormat;
-        
+
       } else if( num < f.matchedArguments )
       {
         doHighlight = true;
@@ -268,13 +272,13 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
           quint64 goodMatchColor = 0xff77ff77; //Full green
 
           uint totalColor = (badMatchColor*(Cpp::MaximumConversionResult-(*parameterConversion).rank) + goodMatchColor*(*parameterConversion).rank)/Cpp::MaximumConversionResult;
-          
+
           doFormat.setBackground( QBrush(totalColor) );
 
           ++parameterConversion;
         }
       }
-      
+
       if( doHighlight )
       {
         if( highlighting && ret.length() != textFormatStart )
@@ -286,7 +290,7 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
           textFormatStart = ret.length();
         }
       }
-      
+
       if (argument)
         ret += argument->toString();
       else
@@ -294,7 +298,7 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
 
       if( paramNameIt != paramNames.end() && !(*paramNameIt).isEmpty() )
         ret += " " + *paramNameIt;
-      
+
       if( doHighlight  )
       {
         if( highlighting && ret.length() != textFormatStart )
@@ -305,12 +309,12 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
           textFormatStart = ret.length();
         }
       }
-      
+
       if( num >= firstDefaultParam ) {
         ret += " = " + *defaultParamIt;
         ++defaultParamIt;
       }
-      
+
       ++num;
       if( paramNameIt != paramNames.end() )
         ++paramNameIt;
@@ -325,18 +329,18 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       *highlighting << normalFormat;
       textFormatStart = ret.length();
     }
-    
+
     return;
   }
 }
 
-QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int role) const {
-  quint32 dataIndex = index.internalId();
-
-  if( dataIndex >= (quint32)m_declarations.size() )
+QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int role) const
+{
+  CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
+  if( !element || !element->asItem() )
     return QVariant();
 
-  const CompletionItem& completionItem(m_declarations[dataIndex]);
+  const CompletionItem& completionItem(element->asItem()->item);
   const Cpp::IncludeItem& item( completionItem.includeItem );
 
   switch (role) {
@@ -384,7 +388,7 @@ QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int ro
 /*          QString indentation;
           for( int a = 0; a < item.pathNumber; a++ )
             indentation += ' ';*/
-        
+
           return /*indentation + */item.name;
         }
       }
@@ -397,29 +401,53 @@ QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int ro
       return QVariant( Cpp::NavigationWidget::shortDescription(item) );
     }
   }
-  
+
   return QVariant();
 }
 
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
-  quint32 dataIndex = index.internalId();
-
-  if( dataIndex >= (quint32)m_declarations.size() )
+  CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
+  if( !element || !element->asItem() )
     return QVariant();
 
   DUChainReadLocker lock(DUChain::lock());
 
-  Declaration* dec = const_cast<Declaration*>( m_declarations[dataIndex].declaration.data() );
-  if (!dec) {
-    if(completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess)
-      return getIncludeData(index, role);
-  
-    kDebug(9007) <<  "code-completion model item" << dataIndex << ": Du-chain item is deleted";
+  const CompletionTreeElement& treeElement(*element);
+
+  if( role == CodeCompletionModel::GroupRole ) {
+    if( treeElement.asNode() ) {
+      return QVariant(treeElement.asNode()->role);
+    }else {
+      kDebug(9007) << "Requested group-role from leaf tree element";
+      return QVariant();
+    }
+  }else{
+    if( treeElement.asNode() ) {
+      if( role == treeElement.asNode()->role ) {
+        return treeElement.asNode()->roleValue;
+      } else {
+        kDebug(9007) << "Requested wrong role from non-leaf tree element";
+        return QVariant();
+      }
+    }
+  }
+
+  if(!treeElement.asItem()) {
+    kWarning(9007) << "Error in completion model";
     return QVariant();
   }
 
-  const CompletionItem& item(m_declarations[dataIndex]);
+  const CompletionItem& item(treeElement.asItem()->item);
+
+  Declaration* dec = const_cast<Declaration*>( item.declaration.data() );
+  if (!dec) {
+    if(completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess)
+      return getIncludeData(index, role);
+
+    kDebug(9007) <<  "code-completion model: Du-chain item is deleted";
+    return QVariant();
+  }
 
   bool isArgumentHint = false;
   if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
@@ -509,10 +537,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
               return indentation + "namespace";/* " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();*/
             }
           }
-          
+
           if( dec->isTypeAlias() )
             indentation += "typedef ";
-          
+
           if( dec->kind() == Declaration::Type && !dec->type<CppFunctionType>() && !dec->isTypeAlias() ) {
             if (CppClassType::Ptr classType =  dec->type<CppClassType>())
               switch (classType->classType()) {
@@ -531,7 +559,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           if (dec->abstractType()) {
             if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
               ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
-              
+
               if (functionType->returnType())
                 return indentation + functionType->returnType()->toString();
               else if(funDecl && funDecl->isConstructor() )
@@ -663,20 +691,54 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
 QModelIndex CppCodeCompletionModel::index(int row, int column, const QModelIndex& parent) const
 {
-  if (row < 0 || row >= m_declarations.count() || column < 0 || column >= ColumnCount || parent.isValid())
-    return QModelIndex();
+  if( parent.isValid() ) {
+    CompletionTreeElement* element = (CompletionTreeElement*)parent.internalPointer();
 
-  QModelIndex ret = createIndex(row, column, row);
+    CompletionTreeNode* node = element->asNode();
 
-  return ret;
+    if( !node ) {
+      kDebug(9007) << "Requested sub-index of leaf node";
+      return QModelIndex();
+    }
+
+    if (row < 0 || row >= node->children.count() || column < 0 || column >= ColumnCount)
+      return QModelIndex();
+
+    return createIndex(row, column, node->children[row].data());
+  } else {
+    if (row < 0 || row >= m_completionItems.count() || column < 0 || column >= ColumnCount)
+      return QModelIndex();
+
+    return createIndex(row, column, const_cast<CompletionTreeElement*>(m_completionItems[row].data()));
+  }
+}
+
+QModelIndex CppCodeCompletionModel::parent ( const QModelIndex & index ) const
+{
+  if( index.isValid() ) {
+    CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
+
+    if( element->parent() )
+      return createIndex( element->rowInParent(), element->columnInParent(), element->parent() );
+  }
+
+  return QModelIndex();
 }
 
 int CppCodeCompletionModel::rowCount ( const QModelIndex & parent ) const
 {
-  if (parent.isValid())
-    return 0;
+  if( parent.isValid() ) {
+    CompletionTreeElement* element = (CompletionTreeElement*)parent.internalPointer();
 
-  return m_declarations.count();
+    CompletionTreeNode* node = element->asNode();
+
+    if( !node )
+      return 0;
+
+    return node->children.count();
+  }else{
+    return m_completionItems.count();
+  }
 }
 
 #include "cppcodecompletionmodel.moc"

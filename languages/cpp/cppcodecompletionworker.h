@@ -27,6 +27,55 @@
 
 #include "cppcodecompletionmodel.h"
 
+namespace Cpp {
+  class CodeCompletionContext;
+}
+
+class CompletionTreeNode;
+class CompletionTreeItem;
+
+class CompletionTreeElement : public KShared {
+public:
+  CompletionTreeElement(CompletionTreeElement* _parent);
+  
+  virtual ~CompletionTreeElement();
+
+  CompletionTreeElement* parent() const;
+
+  int rowInParent() const;
+  
+  int columnInParent() const;
+
+  ///Each element is either a node, or an item.
+  
+  CompletionTreeNode* asNode();
+  
+  CompletionTreeItem* asItem();
+  
+  const CompletionTreeNode* asNode() const;
+  
+  const CompletionTreeItem* asItem() const;
+  
+private:
+  CompletionTreeElement* m_parent;
+  int m_rowInParent;
+};
+
+struct CompletionTreeNode : public CompletionTreeElement {
+  CompletionTreeNode(CompletionTreeElement* _parent);
+  ~CompletionTreeNode();
+  
+  KTextEditor::CodeCompletionModel::ExtraItemDataRoles role;
+  QVariant roleValue;
+  QList<KSharedPtr<CompletionTreeElement> > children;
+};
+
+struct CompletionTreeItem : public CompletionTreeElement {
+  CompletionTreeItem(CompletionTreeElement* _parent);
+  
+  CppCodeCompletionModel::CompletionItem item;
+};
+
 class CodeCompletionWorker : public QThread
 {
   Q_OBJECT
@@ -40,7 +89,7 @@ class CodeCompletionWorker : public QThread
     void abortCurrentCompletion();
 
   Q_SIGNALS:
-    void foundDeclarations(QList<CppCodeCompletionModel::CompletionItem>, void* completionContext);
+    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void* completionContext);
 
   protected:
     virtual void run();
@@ -49,6 +98,9 @@ class CodeCompletionWorker : public QThread
     void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
 
   private:
+
+    void computeGroups(QList<CppCodeCompletionModel::CompletionItem> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
+  
     KTextEditor::Cursor m_position;
     bool m_abort;
     QMutex* m_mutex;

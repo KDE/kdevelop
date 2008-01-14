@@ -44,6 +44,65 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+
+///Intermediate nodes
+class CompletionTreeNode;
+///Leaf items
+class CompletionTreeItem;
+
+CompletionTreeElement::CompletionTreeElement(CompletionTreeElement* _parent) : m_parent(_parent), m_rowInParent(0) {
+  if( _parent ) {
+    CompletionTreeNode* node = _parent->asNode();
+    if( node )
+      m_rowInParent = node->children.count();
+  }
+}
+
+CompletionTreeElement::~CompletionTreeElement() {
+}
+
+CompletionTreeElement* CompletionTreeElement::parent() const {
+  return m_parent;
+}
+
+int CompletionTreeElement::columnInParent() const {
+  return 0;
+}
+
+CompletionTreeNode::CompletionTreeNode(CompletionTreeElement* _parent) : CompletionTreeElement(_parent) {
+}
+CompletionTreeNode::~CompletionTreeNode() {
+}
+  
+CompletionTreeItem::CompletionTreeItem(CompletionTreeElement* _parent) : CompletionTreeElement(_parent) {
+}
+  
+CompletionTreeNode* CompletionTreeElement::asNode() {
+  return dynamic_cast<CompletionTreeNode*>(this);
+}
+
+CompletionTreeItem* CompletionTreeElement::asItem() {
+  return dynamic_cast<CompletionTreeItem*>(this);
+}
+
+const CompletionTreeNode* CompletionTreeElement::asNode() const {
+  return dynamic_cast<const CompletionTreeNode*>(this);
+}
+
+const CompletionTreeItem* CompletionTreeElement::asItem() const {
+  return dynamic_cast<const CompletionTreeItem*>(this);
+}
+
+int CompletionTreeElement::rowInParent() const {
+  return m_rowInParent;
+/*  if( !m_parent )
+    return 0;
+  Q_ASSERT(m_parent->asNode());
+  
+  return m_parent->asNode()->children.indexOf( KSharedPtr<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
+}
+
+
 CodeCompletionWorker::CodeCompletionWorker(CppCodeCompletionModel* parent)
   : QThread(parent)
   , m_mutex(new QMutex)
@@ -162,10 +221,110 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
         }
       }
     } while( parentContext );
-    emit foundDeclarations( items, completionContext.data() );
+    computeGroups( items, completionContext );
   } else {
     kDebug(9007) << "CppCodeCompletionModel::setContext: Invalid code-completion context";
   }
+}
+
+///Always the last item of a grouping chain: Only inserts the items
+struct LastGrouper {
+  LastGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CppCodeCompletionModel::CompletionItem> items)
+  {
+    foreach( const CppCodeCompletionModel::CompletionItem& value, items )
+    {
+      KSharedPtr<CompletionTreeItem> item( new CompletionTreeItem(parent) );
+      item->item = value;
+      
+      tree << KSharedPtr<CompletionTreeElement>( item.data() );
+    }
+  }
+};
+
+///Helper class that helps us grouping the completion-list. A chain of groupers can be built, by using NextGrouper.
+template<class KeyExtractor, class NextGrouper = LastGrouper>
+struct ItemGrouper {
+  typedef typename KeyExtractor::KeyType KeyType;
+  
+  ItemGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CppCodeCompletionModel::CompletionItem> items)
+  {
+    typedef QMap<KeyType, QList<CppCodeCompletionModel::CompletionItem> > GroupMap;
+    GroupMap groups;
+    
+    foreach(const CppCodeCompletionModel::CompletionItem& item, items) {
+      KeyType key = KeyExtractor::extract(item);
+      typename GroupMap::iterator it = groups.find(key);
+      if(it == groups.end())
+        it = groups.insert(key, QList<CppCodeCompletionModel::CompletionItem>());
+
+      (*it).append(item);
+    }
+
+    for( typename GroupMap::const_iterator it = groups.begin(); it != groups.end(); ++it ) {
+      KSharedPtr<CompletionTreeNode> node(new CompletionTreeNode(parent));
+      node->role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)KeyExtractor::Role;
+      node->roleValue = QVariant(it.key());
+
+      tree << KSharedPtr<CompletionTreeElement>( node.data() );
+      
+      NextGrouper nextGrouper(node->children, node.data(), *it);
+    }
+  }
+};
+
+///Extracts the argument-hint depth from completion-items, to be used in ItemGrouper for grouping by argument-hint depth.
+struct ArgumentHintDepthExtractor {
+  typedef int KeyType;
+  enum { Role = CodeCompletionModel::ArgumentHintDepth };
+  
+  static KeyType extract( const CppCodeCompletionModel::CompletionItem& item ) {
+    if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+      return item.completionContext->depth();
+    else
+      return 0;
+  }
+};
+
+struct InheritanceDepthExtractor {
+  typedef int KeyType;
+  
+  enum { Role = CodeCompletionModel::InheritanceDepth };
+  
+  static KeyType extract( const CppCodeCompletionModel::CompletionItem& item ) {
+    return item.inheritanceDepth;
+  }
+};
+
+struct SimplifiedAttributesExtractor {
+  typedef int KeyType;
+  
+  enum { Role = CodeCompletionModel::CompletionRole };
+
+  static int groupingProperties;
+  
+  static KeyType extract( const CppCodeCompletionModel::CompletionItem& item ) {
+    if( item.declaration.data() )
+      return DUChainUtils::completionProperties(item.declaration.data()) & groupingProperties;
+    else
+      return 0;
+  }
+};
+
+///@todo make configurable. These are the attributes that can be respected for grouping.
+int SimplifiedAttributesExtractor::groupingProperties = CodeCompletionModel::Public | CodeCompletionModel::Protected | CodeCompletionModel::Private | CodeCompletionModel::Static | CodeCompletionModel::TypeAlias | CodeCompletionModel::Variable | CodeCompletionModel::Class | CodeCompletionModel::GlobalScope | CodeCompletionModel::LocalScope | CodeCompletionModel::GlobalScope | CodeCompletionModel::NamespaceScope;
+
+void CodeCompletionWorker::computeGroups(QList<CppCodeCompletionModel::CompletionItem> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext)
+{
+  QList<KSharedPtr<CompletionTreeElement> > tree;
+  
+  /**
+   * 1. Group by argument-hint depth
+   * 2. Group by inheritance depth
+   * 3. Group by simplified attributes
+   * */
+  ItemGrouper<ArgumentHintDepthExtractor, ItemGrouper<InheritanceDepthExtractor, ItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, 0, items);
+
+  emit foundDeclarations( tree, completionContext.data() );
 }
 
 CppCodeCompletionModel* CodeCompletionWorker::model() const

@@ -48,6 +48,8 @@ namespace Cpp {
 
 class CodeCompletionWorker;
 
+class CompletionTreeElement;
+
 class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
 {
   Q_OBJECT
@@ -64,7 +66,8 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     QVariant getIncludeData(const QModelIndex& index, int role) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
-
+    virtual QModelIndex parent ( const QModelIndex & index ) const;
+  
     void setCompletionContext(KSharedPtr<Cpp::CodeCompletionContext> completionContext);
     KSharedPtr<Cpp::CodeCompletionContext> completionContext() const;
     
@@ -85,7 +88,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
 
   private Q_SLOTS:
-    void foundDeclarations(QList<CppCodeCompletionModel::CompletionItem> item, void* completionContext);
+    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > item, void* completionContext);
     
   private:
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
@@ -96,7 +99,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     mutable CompletionItem m_currentMatchContext;
     
     mutable QMap<const CompletionItem*, QPointer<Cpp::NavigationWidget> > m_navigationWidgets;
-    QList< CompletionItem > m_declarations;
+    QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
     QMutex* m_mutex;
     CodeCompletionWorker* m_worker;
