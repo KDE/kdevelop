@@ -445,7 +445,7 @@ QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin)
     QDir d(ret);
     if(!d.exists(ret)) {
         KUrl std(bin);
-        std = std.upUrl(); std = std.upUrl();
+        std = std.upUrl();
         std.cd("cmake/");
         ret=std.toLocalFile();
         bin = std;
