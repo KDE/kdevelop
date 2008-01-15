@@ -22,7 +22,6 @@ set(kdevquickopen_PART_SRCS
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp
-    expandingtree/kateexpandingtree.cpp
 )
 
 set (
