@@ -192,7 +192,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ///First: find out what kind of completion we are dealing with
 
-  if( m_text.endsWith( ';' ) || m_text.endsWith('}') || m_text.endsWith('{') ) {
+  if( m_text.endsWith( ';' ) || m_text.endsWith('}') || m_text.endsWith('{') || m_text.endsWith(')') ) {
     ///We're at the beginning of a new statement. General completion is valid.
     return;
   }
@@ -264,9 +264,6 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   int start_expr = Utils::expressionAt( m_text, m_text.length() );
 
   m_expression = m_text.mid(start_expr).trimmed();
-
-  if(m_expression.endsWith(')'))
-    m_expression = QString();
 
   if(m_expression == "else")
     m_expression = QString();
