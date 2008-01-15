@@ -58,7 +58,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
   o.setupUi( d );
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
-  o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+  o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
 
   o.list->setItemDelegate( new ExpandingDelegate( m_model, o.list ) );
 
