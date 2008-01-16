@@ -167,11 +167,19 @@ extern QMutex cppDuContextInstantiationsMutex;
                 break;
             }
             
+            if( scopeContext && scopeContext->owner()->asDeclaration() && scopeContext->owner()->asDeclaration()->isForwardDeclaration() ) {
+              kDebug(9007) << "Tried to search in forward-declaration of " << scopeContext->owner()->asDeclaration()->identifier().toString();
+              m_lastScopeContext = DUContextPointer(scopeContext);
+              scopeContext = 0;
+            }
+            
             if( !scopeContext ) {
               s.result.clear();
               return false;
             }
           }
+
+          m_lastScopeContext = DUContextPointer(scopeContext);
           
           /// Look up Declarations
 //           DUContext::SearchFlags flags = (num != (identifier.count()-1)) ? BaseContext::OnlyContainerTypes : BaseContext::NoSearchFlags;
@@ -202,8 +210,8 @@ extern QMutex cppDuContextInstantiationsMutex;
                 }
               }
             }
-          } else {
-            scopeContext->findDeclarationsInternal( toList(lookup), scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, m_trace, m_flags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup );
+          } else { //Create a new trace, so template-parameters can be resolved globally
+            scopeContext->findDeclarationsInternal( toList(lookup), scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext()->importTrace(scopeContext->topContext()), m_flags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup );
           }
 
           if( !tempDecls.isEmpty() ) {
@@ -257,6 +265,15 @@ extern QMutex cppDuContextInstantiationsMutex;
           m_lastDeclarations = s.result;
           
           return true;
+        }
+
+        ///For debugging. Describes the last search context.
+        QString describeLastContext() const {
+          if( m_lastScopeContext ) {
+            return "Context " + m_lastScopeContext->scopeIdentifier(true).toString() + QString(" from %1:%2").arg(m_lastScopeContext->url().str()).arg(m_lastScopeContext->range().start.line);
+          } else {
+            return QString("Global search with %1 trace-items, and top-context %2").arg(m_trace.count()).arg(topContext()->url().str());
+          }
         }
 
         /**
@@ -316,6 +333,8 @@ extern QMutex cppDuContextInstantiationsMutex;
         QList<DeclarationPointer> m_lastDeclarations;
         SimpleCursor m_position;
         AbstractType::Ptr m_dataType;
+
+        DUContextPointer m_lastScopeContext; //For debugging, last context in which we searched
     };
 
 /**
