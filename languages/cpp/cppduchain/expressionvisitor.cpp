@@ -1959,6 +1959,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     visit(node->expression);
   }
+
+  void ExpressionVisitor::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)  {
+    //Happens as template-parameter
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    visit(node->name);
+    ///@todo respect const etc.
+  }
+
   
   ///Nodes that are invalid inside an expression:
   void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -1974,7 +1982,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
   void ExpressionVisitor::visitCtorInitializer(CtorInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitDoStatement(DoStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitEnumSpecifier(EnumSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitEnumerator(EnumeratorAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitExceptionSpecification(ExceptionSpecificationAST* node)  { problem(node, "node-type cannot be parsed"); }
