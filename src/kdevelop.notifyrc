@@ -1,9 +1,9 @@
-[!Global!]
+[Global]
 IconName=kdevelop
 Comment=KDevelop
 Comment[x-test]=xxKDevelopxx
 
-[ProcessSuccess]
+[Event/ProcessSuccess]
 Name=Process successful
 Name[da]=Processen lykkedes
 Name[el]=Επιτυχής διεργασία
@@ -61,9 +61,9 @@ Comment[tr]=İşlem başarıyla bitti.
 Comment[x-test]=xxProcess finished successfullyxx
 Comment[zh_CN]=处理成功完成
 Comment[zh_TW]=行程成功完成
-default_presentation=0
+Action=None
 
-[ProcessError]
+[Event/ProcessError]
 Name=Process error
 Name[da]=Procesfejl
 Name[el]=Σφάλμα διεργασίας
@@ -122,4 +122,4 @@ Comment[tr]=İşlem hatalarla bitti
 Comment[x-test]=xxProcess finished with errorsxx
 Comment[zh_CN]=处理完成，但有错误
 Comment[zh_TW]=行程發生錯誤
-default_presentation=0
+Action=None
