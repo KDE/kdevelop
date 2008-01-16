@@ -213,7 +213,7 @@ void TestDUChain::testIdentifiers()
 
   QCOMPARE(aj2.match(ajt2), QualifiedIdentifier::NoMatch);
   QCOMPARE(ajt2.match(aj2), QualifiedIdentifier::NoMatch);
-  QualifiedIdentifier t("Area<A,B>::jump<F>::tes<C>");
+  QualifiedIdentifier t(" Area<A,B>::jump <F> ::tes<C>");
   QCOMPARE(t.count(), 3);
   QCOMPARE(t.at(0).templateIdentifiers().count(), 2);
   QCOMPARE(t.at(1).templateIdentifiers().count(), 1);
