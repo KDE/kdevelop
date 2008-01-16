@@ -455,6 +455,11 @@ void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Ra
         closingParen = ")";
 
       KTextEditor::Cursor jumpPos = word.end() + KTextEditor::Cursor( 0, openingParen.length() );
+
+      //If no arguments, move the cursor behind the closing paren
+      if( !haveArguments )
+        jumpPos += KTextEditor::Cursor( 0, closingParen.length() );
+      
       document->insertText( word.end(), openingParen + closingParen );
       if( document->activeView() )
         document->activeView()->setCursorPosition( jumpPos );
