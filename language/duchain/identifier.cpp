@@ -78,6 +78,8 @@ public:
 
     while( currentStart < (uint)str.length() ) {
       m_identifiers << Identifier( str, currentStart, &currentStart );
+      while( currentStart < (uint)str.length() && (str[currentStart] == ' ' ) )
+        ++currentStart;
       currentStart += 2; //Skip "::"
     }
   }
@@ -123,7 +125,7 @@ Identifier::Identifier(const QString& id, uint start, uint* takenRange)
 {
   ///Extract template-parameters
   ParamIterator paramIt("<>:", id, start);
-  d->m_identifier = paramIt.prefix();
+  d->m_identifier = paramIt.prefix().trimmed();
   while( paramIt ) {
     appendTemplateIdentifier( QualifiedIdentifier(*paramIt) );
     ++paramIt;
