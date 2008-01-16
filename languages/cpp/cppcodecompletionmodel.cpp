@@ -105,7 +105,7 @@ AbstractType::Ptr effectiveType( Declaration* decl )
 }
 
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
-  : CodeCompletionModel(parent)
+  : CodeCompletionModel2(parent)
   , m_mutex(new QMutex)
   , m_worker(new CodeCompletionWorker(this))
 {
@@ -403,6 +403,63 @@ QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int ro
   }
 
   return QVariant();
+}
+
+void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
+{
+  DUChainReadLocker lock(DUChain::lock());
+  
+  CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
+  if( !element || !element->asItem() )
+    return;
+
+  bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
+  bool spaceBetweenParens = true;
+  bool spaceBetweenEmptyParens = false;
+  
+  const CompletionItem& item(element->asItem()->item);
+
+  if( index.data( CodeCompletionModel::ArgumentHintDepth ).toInt() )
+    return; //Do not replace any text when it is an argument-hint
+
+  QString newText = data(index.sibling(index.row(), Name)).toString();
+  int properties = data(index, CompletionRole).toInt();
+  
+  document->replaceText(word, newText);
+
+  if( properties & CodeCompletionModel::Function ) {
+    bool haveArguments = false;
+    if( item.declaration && item.declaration->type<CppFunctionType>() && item.declaration->type<CppFunctionType>()->arguments().count() )
+      haveArguments = true;
+    //Need to have a paren behind
+    QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
+    if( suffix.trimmed().startsWith("(") ) {
+      //Move the cursor behind the opening paren
+      if( document->activeView() )
+        document->activeView()->setCursorPosition( word.end() + KTextEditor::Cursor( 0, suffix.indexOf('(')+1 ) );
+    }else{
+      //We need to insert an opening paren
+      QString openingParen;
+      if( spaceBeforeParen )
+        openingParen = " (";
+      else
+        openingParen = "(";
+
+      if( spaceBetweenParens && (haveArguments || spaceBetweenEmptyParens) )
+        openingParen += " ";
+
+      QString closingParen;
+      if( spaceBetweenParens && (haveArguments) ) {
+        closingParen = " )";
+      } else
+        closingParen = ")";
+
+      KTextEditor::Cursor jumpPos = word.end() + KTextEditor::Cursor( 0, openingParen.length() );
+      document->insertText( word.end(), openingParen + closingParen );
+      if( document->activeView() )
+        document->activeView()->setCursorPosition( jumpPos );
+    }
+  }
 }
 
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const

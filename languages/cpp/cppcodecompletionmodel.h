@@ -50,7 +50,7 @@ class CodeCompletionWorker;
 
 class CompletionTreeElement;
 
-class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
+class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel2
 {
   Q_OBJECT
 
@@ -91,6 +91,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > item, void* completionContext);
     
   private:
+    virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const;
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
 
