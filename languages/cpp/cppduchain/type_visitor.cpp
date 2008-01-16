@@ -34,7 +34,7 @@
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
 
-TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace) : m_session(session), m_visitor(visitor), m_context(context), m_trace(trace)
+TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, bool debug) : m_session(session), m_visitor(visitor), m_context(context), m_trace(trace), m_debug(debug)
 {
   m_position = m_context->range().end;
 }
@@ -106,6 +106,9 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
           
           if( !find.lastDeclarations().isEmpty() )
             m_visitor->newUse( node, token, token+1, find.lastDeclarations()[0] );
+          else if( m_debug )
+            kDebug( 9007 ) << "failed to find " << id << " as part of " << decode( m_session, node) << ", searched in " << find.describeLastContext();
+            
 
           it = it->next;
         }
@@ -128,7 +131,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
 void TypeASTVisitor::visitName(NameAST *node)
 {
-  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_trace, m_position);
+  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_trace, m_position, KDevelop::DUContext::NoSearchFlags, m_debug);
   name_cc.run(node);
   _M_type = name_cc.identifier();
   m_declarations = name_cc.declarations();

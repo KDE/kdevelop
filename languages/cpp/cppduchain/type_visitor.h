@@ -42,7 +42,7 @@ class ExpressionVisitor;
 class KDEVCPPDUCHAIN_EXPORT TypeASTVisitor: protected DefaultVisitor
 {
 public:
-  TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace);
+  TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, bool debug = false);
 
   KDevelop::QualifiedIdentifier identifier() const;
   inline QStringList qualifiedName() const { return _M_type.toStringList(); }
@@ -74,6 +74,7 @@ private:
   KDevelop::ImportTrace m_trace;
   KDevelop::QualifiedIdentifier _M_type;
   QList<int> _M_cv;
+  bool m_debug;
 };
 
 #endif // TYPE_VISITOR_H

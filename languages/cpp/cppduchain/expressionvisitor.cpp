@@ -38,6 +38,9 @@
 #include "cppduchain.h"
 #include "overloadresolutionhelper.h"
 
+//If this is enabled and a type is not found, it is searched again with verbose debug output.
+#define DEBUG_RESOLUTION_PROBLEMS
+
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
 /** A typical expression:
@@ -209,7 +212,7 @@ TopDUContext* ExpressionVisitor::topContext() const {
   if( !m_inclusionTrace.isEmpty() ) {
     return m_inclusionTrace.front().ctx->topContext();
   }else{
-    return m_currentContext->topContext();
+    return m_topContext;
   }
 }
 
@@ -217,8 +220,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
   return instance && (instance.declaration || isReferenceType(type));
 }
 
-  
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_memberAccess(false), m_inclusionTrace(inclusionTrace), m_session(session), m_currentContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_memberAccess(false), m_inclusionTrace(inclusionTrace), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -237,7 +239,9 @@ void ExpressionVisitor::parse( AST* ast ) {
   m_lastType = 0;
   m_lastInstance = Instance();
   Q_ASSERT(ast->ducontext);
+  m_topContext = ast->ducontext->topContext();
   visit(ast);
+  m_topContext = 0;
   flushUse();
 }
 
@@ -472,8 +476,14 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     }
 
     clearLast();
+
+    ImportTrace trace;
+    {
+      LOCKDUCHAIN;
+      trace = topContext()->importTrace(m_currentContext->topContext());
+    }
     
-    NameASTVisitor nameV( m_session, this, m_currentContext, m_inclusionTrace, position.isValid() ? position : m_currentContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
+    NameASTVisitor nameV( m_session, this, m_currentContext, trace, position.isValid() ? position : m_currentContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
     nameV.run(node);
 
     if( nameV.identifier().isEmpty() ) {
@@ -1108,7 +1118,13 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     ///@todo cv-qualifiers
     clearLast();
     
-    TypeASTVisitor comp(m_session, this, m_currentContext, m_inclusionTrace);
+    ImportTrace trace;
+    {
+      LOCKDUCHAIN;
+      trace = topContext()->importTrace(m_currentContext->topContext());
+    }
+    
+    TypeASTVisitor comp(m_session, this, m_currentContext, trace);
     comp.run(ast);
     
     LOCKDUCHAIN;
@@ -1129,7 +1145,19 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if( dynamic_cast<CppTemplateParameterType*>(m_lastType.data()) )
         createDelayedType(ast, false);
     } else {
-      problem(ast, "Could not resolve type");
+      //Run the ast-visitor in debug mode
+      problem(ast, "Could not resolve type, running ast-visitor in debug mode");
+#ifdef DEBUG_RESOLUTION_PROBLEMS
+      ImportTrace trace;
+      {
+        LOCKDUCHAIN;
+        trace = topContext()->importTrace(m_currentContext->topContext());
+      }
+      ++m_ignore_uses;
+      TypeASTVisitor comp2(m_session, this, m_currentContext, trace, true);
+      comp2.run(ast);
+      --m_ignore_uses;
+#endif
     }
   }
 

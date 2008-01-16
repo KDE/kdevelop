@@ -138,6 +138,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
     //Here the parameters of function-calls are collected
     //When a parameter could not be evaluated, this will hold a parameter with null-value type
     QList<OverloadResolver::Parameter> m_parameters;
+    int m_ignore_uses;
 
 public:
     /**
@@ -146,12 +147,14 @@ public:
      * Must be called when the du-chain is not locked.
      * */
     void newUse( AST* node, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl ) {
-      flushUse();
-      m_currentUse.isValid = true;
-      m_currentUse.node = node;
-      m_currentUse.start_token = start_token;
-      m_currentUse.end_token = end_token;
-      m_currentUse.declaration = decl;
+      if( !m_ignore_uses ) {
+        flushUse();
+        m_currentUse.isValid = true;
+        m_currentUse.node = node;
+        m_currentUse.start_token = start_token;
+        m_currentUse.end_token = end_token;
+        m_currentUse.declaration = decl;
+      }
     }
 private:
 
@@ -172,6 +175,7 @@ private:
   
     ParseSession* m_session;
     KDevelop::DUContext* m_currentContext;
+    KDevelop::TopDUContext* m_topContext;
 
   inline void clearLast() {
     m_lastInstance = Instance();

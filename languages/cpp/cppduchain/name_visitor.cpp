@@ -36,24 +36,24 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags )
-: m_session(session), m_visitor(visitor), m_context(context), m_trace(trace), m_find(m_context, m_trace, localSearchFlags, SimpleCursor(position) )
+NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
+: m_session(session), m_visitor(visitor), m_context(context), m_trace(trace), m_find(m_context, m_trace, localSearchFlags, SimpleCursor(position) ), m_debug(debug)
 {
 }
 
-QString NameASTVisitor::decode(AST* ast, bool without_spaces) const
+QString decode(ParseSession* session, AST* ast, bool without_spaces)
 {
   QString ret;
   if( without_spaces ) {
     //Decode operator-names without spaces for now, since we rely on it in other places.
     ///@todo change this, here and in all the places that rely on it. Operators should then by written like "operator [ ]"(space between each token)
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = m_session->token_stream->token(a);
+      const Token &tk = session->token_stream->token(a);
       ret += tk.symbol();
     }
   } else {
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = m_session->token_stream->token(a);
+      const Token &tk = session->token_stream->token(a);
       ret += tk.symbol() + " ";
     }
   }
@@ -85,7 +85,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
       tmp_name += QLatin1String("operator");
 
       if (op_id->op && op_id->op->op)
-        tmp_name +=  decode(op_id->op, true);
+        tmp_name +=  decode(m_session, op_id->op, true);
       else
         tmp_name += QLatin1String("{...cast...}");
 
@@ -107,6 +107,10 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   if( node->id && !m_find.lastDeclarations().isEmpty() )
     m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
+  else if( m_debug )
+    kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
+
+    
   
   _M_name.push(m_currentIdentifier);
 }
@@ -129,10 +133,12 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
       res.instance = m_visitor->lastInstance();
       m_find.openQualifiedIdentifier(res);
       opened = true;
+    }else if( m_debug ) {
+      kDebug(9007) << "Failed to resolve template-argument " << decode(m_session, node->expression);
     }
   } else if( node->type_id )
   {
-    TypeASTVisitor v( m_session, m_visitor, m_context, m_trace );
+    TypeASTVisitor v( m_session, m_visitor, m_context, m_trace, m_debug );
     v.run( node->type_id->type_specifier );
 
     ExpressionEvaluationResult res;
@@ -147,14 +153,14 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
   }else{
     LOCKDUCHAIN;
     m_find.openQualifiedIdentifier(false);
-    m_find.openIdentifier(Identifier(decode(node)));
+    m_find.openIdentifier(Identifier(decode(m_session, node)));
     m_find.closeIdentifier();
     opened = true;
   }
   LOCKDUCHAIN;
   if(opened)
     m_find.closeQualifiedIdentifier();
-  m_currentIdentifier.appendTemplateIdentifier(QualifiedIdentifier(decode(node)));
+  m_currentIdentifier.appendTemplateIdentifier(QualifiedIdentifier(decode(m_session, node)));
 }
 
 const QualifiedIdentifier& NameASTVisitor::identifier() const
