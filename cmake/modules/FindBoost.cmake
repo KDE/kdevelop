@@ -8,7 +8,12 @@
 # boost include dir and library names and will also be used to do a version
 # check. Its expected that this variable always has the form 
 # <number>.<number>.<number>. The default version to be checked for if this
-# variable is not set will be 1.34.1
+# variable is not set will be 1.34.1. 
+#
+# The components list needs to be the actual names of boost libraries, that is
+# the part of the actual library files that differ on different libraries. So
+# its "date_time" for "libboost_date_time...". Anything else will result in 
+# errors
 #
 # Variables used by this module, they can change the default behaviour:
 #  Boost_USE_NONMULTITHREAD      Can be set to TRUE to use the non-multithreaded
@@ -40,7 +45,8 @@
 #
 #  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
 #  Copyright (c) 2007 Wengo
-#  Copyright (c) 2007 Andreas Pakulat <apaku@gmx.de>
+#  Copyright (c) 2007 Mike Jackson
+#  Copyright (c) 2008 Andreas Pakulat <apaku@gmx.de>
 #
 #  Redistribution AND use is allowed according to the terms of the New
 #  BSD license.
