@@ -2,7 +2,7 @@
 # Usage of this module as follows:
 #
 #     SET( Boost_REQUIRED_VERSION "1.34.1" )
-#     FIND_PACKAGE( Boost COMPONENTS date_time filesystem iostreams )
+#     FIND_PACKAGE( Boost COMPONENTS date_time filesystem iostreams ... )
 #
 # The Boost_REQUIRED_VERSION variable will be used to determine part of the
 # boost include dir and library names and will also be used to do a version
@@ -26,74 +26,17 @@
 #  Boost_VERSION              The version number of the boost libraries that have been found, 
 #                             same as in version.hpp from Boost
 #  Boost_LIB_VERSION          The version number in filename form as its appended to the library filenames
+# For each component you list the following variables are set. 
+# ATTENTION: The component names need to be in lower case, just as the boost
+# library names however the cmake variables use upper case for the component
+# part. So you'd get Boost_SERIALIZATION_FOUND for example.
 #
-# These are only set when the named libraries are found and where listed in the COMPONENTS list:
-#
-#  Boost_DATE_TIME_FOUND           True IF Boost Date Time was found.
-#  Boost_FILESYSTEM_FOUND          True IF Boost Filesystem was found.
-#  Boost_IOSTREAMS_FOUND           True IF Boost Iostream was found.
-#  Boost_PRG_EXEC_MONITOR_FOUND    True IF Boost Program Exec Monitor was found.
-#  Boost_PROGRAM_OPTIONS_FOUND     True IF Boost Program Options was found.
-#  Boost_PYTHON_FOUND              True IF Boost Python was found.
-#  Boost_REGEX_FOUND               True IF Boost Regex was found.
-#  Boost_SERIALIZATION_FOUND       True IF Boost Serialization was found.
-#  Boost_SIGNALS_FOUND             True IF Boost Signals was found.
-#  Boost_TEST_EXEC_MONITOR_FOUND   True IF Boost Test Exec Monitor was found.
-#  Boost_THREAD-MT_FOUND           True IF Boost Thread was found.
-#  Boost_UNIT_TEST_FRAMEWORK_FOUND True IF Boost Unit Test Framework was found.
-#  Boost_WSERIALIZATION_FOUND      True IF Boost WSerialization was found.
-#
-#  Boost_DATE_TIME_LIBRARY                    The Boost date_time libraries
-#  Boost_DATE_TIME_LIBRARY_DEBUG              The Boost date_time debug library
-#  Boost_DATE_TIME_LIBRARY_RELEASE            The Boost date_time release library
-#
-#  Boost_FILESYSTEM_LIBRARY                   The Boost filesystem libraries
-#  Boost_FILESYSTEM_LIBRARY_DEBUG             The Boost filesystem debug library
-#  Boost_FILESYSTEM_LIBRARY_RELEASE           The Boost filesystem release library
-#
-#  Boost_IOSTREAMS_LIBRARY                    The Boost iostreams libraries
-#  Boost_IOSTREAMS_LIBRARY_DEBUG              The Boost iostreams debug library
-#  Boost_IOSTREAMS_LIBRARY_RELEASE            The Boost iostreams release library
-#
-#  Boost_PRO_EXEC_MONITOR_LIBRARY             The Boost prg_exec_monitor libraries
-#  Boost_PRO_EXEC_MONITOR_LIBRARY_DEBUG       The Boost prg_exec_monitor debug library
-#  Boost_PRO_EXEC_MONITOR_LIBRARY_RELEASE     The Boost prg_exec_monitor release library
-#
-#  Boost_PROGRAM_OPTIONS_LIBRARY              The Boost program_options libraries
-#  Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG        The Boost program_options debug library
-#  Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE      The Boost program_options release library
-#
-#  Boost_PYTHON_LIBRARY                       The Boost python libraries
-#  Boost_PYTHON_LIBRARY_DEBUG                 The Boost python debug library
-#  Boost_PYTHON_LIBRARY_RELEASE               The Boost python release library
-#
-#  Boost_REGEX_LIBRARY                        The Boost regex libraries
-#  Boost_REGEX_LIBRARY_DEBUG                  The Boost regex debug library
-#  Boost_REGEX_LIBRARY_RELEASE                The Boost regex release library
-#
-#  Boost_SERIALIZATION_LIBRARY                The Boost serialization libraries
-#  Boost_SERIALIZATION_LIBRARY_DEBUG          The Boost serialization debug library
-#  Boost_SERIALIZATION_LIBRARY_RELEASE        The Boost serialization release library
-#
-#  Boost_SIGNALS_LIBRARY                      The Boost signals libraries
-#  Boost_SIGNALS_LIBRARY_DEBUG                The Boost signals debug library
-#  Boost_SIGNALS_LIBRARY_RELEASE              The Boost signals release library
-#
-#  Boost_TEST_EXEC_MONITOR_LIBRARY            The Boost test_exec_monitor libraries
-#  Boost_TEST_EXEC_MONITOR_LIBRARY_DEBUG      The Boost test_exec_monitor debug library
-#  Boost_TEST_EXEC_MONITOR_LIBRARY_RELEASE    The Boost test_exec_monitor release library
-#
-#  Boost_THREAD_LIBRARY                       The Boost thread libraries
-#  Boost_THREAD_LIBRARY_DEBUG                 The Boost thread debug library
-#  Boost_THREAD_LIBRARY_RELEASE               The Boost thread release library
-#
-#  Boost_UNIT_TEST_FRAMEWORK_LIBRARY          The Boost unit_test_framework libraries
-#  Boost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG    The Boost unit_test_framework debug library
-#  Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE  The Boost unit_test_framework release library
-#
-#  Boost_WSERIALIZATION_LIBRARY               The Boost wserialization libraries
-#  Boost_WSERIALIZATION_LIBRARY_DEBUG         The Boost wserialization debug library
-#  Boost_WSERIALIZATION_LIBRARY_RELEASE       The Boost wserialization release library
+#  Boost_${COMPONENT}_FOUND             True IF the Boost library "component" was found.
+#  Boost_${COMPONENT}_LIBRARY           The absolute path of the Boost library "component".
+#  Boost_${COMPONENT}_LIBRARY_DEBUG     The absolute path of the debug version of the 
+#                                       Boost library "component".
+#  Boost_${COMPONENT}_LIBRARY_RELEASE   The absolute path of the release version of the
+#                                       Boost library "component"
 #
 #  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
 #  Copyright (c) 2007 Wengo
