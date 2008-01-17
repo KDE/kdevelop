@@ -670,8 +670,7 @@ public:
     m_linkCount = 0;
     addExternalText(m_prefix);
 
-    KUrl u(m_item.basePath);
-    u.addPath(m_item.name);
+    KUrl u(m_item.url());
     NavigationAction action(u, KTextEditor::Cursor(0,0));
     makeLink(u.prettyUrl(), u.prettyUrl(), action);
     QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
@@ -686,6 +685,8 @@ public:
       if(ctx->localDeclarations().count() != 0 && (duchain == 0 || ctx->localDeclarations().count() > duchain->localDeclarations().count())) {
         duchain = ctx;
       }
+      if(!duchain)
+        duchain = ctx; //Any is better than none
     }
     
     m_currentText += "<br />";

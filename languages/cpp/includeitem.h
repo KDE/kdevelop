@@ -24,6 +24,19 @@ namespace Cpp {
 struct IncludeItem {
   IncludeItem() : isDirectory(false), pathNumber(0) {
   }
+
+  ///Constructs the url from basePath and name.
+  KUrl url() const {
+    KUrl u;
+    if( !basePath.isEmpty() ) {
+      u = KUrl( basePath );
+      u.addPath( name );
+    }else{
+      u = KUrl( name );
+    }
+    return u;
+  }
+
   ///If this is true, this item represents a sub-directory. Else it represents a file.
   bool isDirectory;
   ///The name of this include-item, starting behind basePath.

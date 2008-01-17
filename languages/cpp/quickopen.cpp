@@ -41,17 +41,6 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-KUrl url( const IncludeItem& item ) {
-  KUrl u;
-  if( !item.basePath.isEmpty() ) {
-    u = KUrl( item.basePath );
-    u.addPath( item.name );
-  }else{
-    u = KUrl( item.name );
-  }
-  return u;
-}
-
 TopDUContextPointer getCurrentTopDUContext() {
   IDocument* doc = CppLanguageSupport::self()->core()->documentController()->activeDocument();
 
@@ -130,7 +119,7 @@ bool IncludeFileData::execute( QString& filterText ) {
     filterText = u.path( KUrl::AddTrailingSlash );
     return false;
   } else {
-    KUrl u = url(m_item);
+    KUrl u = m_item.url();
     
     CppLanguageSupport::self()->core()->documentController()->openDocument( u );
 
@@ -166,7 +155,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   if( m_includedFrom && m_item.pathNumber != -1 )
   {
     //Find the trace from m_includedFrom to the this file
-    KUrl u = url(m_item);
+    KUrl u = m_item.url();
 
     QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
@@ -184,7 +173,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   }else if( m_item.pathNumber == -1 && m_includedFrom )
   {
     //Find the trace from this file to m_includedFrom
-    KUrl u = url(m_item);
+    KUrl u = m_item.url();
 
     QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
@@ -219,7 +208,7 @@ QWidget* IncludeFileData::expandingWidget() const {
 
 QString IncludeFileData::htmlDescription() const
 {
-  KUrl path = url(m_item);
+  KUrl path = m_item.url();
   
   QString ret;
   
@@ -388,7 +377,7 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
 
     if( m_duContext )
     {
-      KUrl u = url( items[a] );
+      KUrl u = items[a].url();
 
       QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
