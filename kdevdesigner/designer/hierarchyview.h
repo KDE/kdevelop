@@ -145,6 +145,11 @@ protected:
     QPopupMenu *normalMenu, *tabWidgetMenu;
     bool deselect;
 
+    QPixmap DesignerFormPix;
+    QPixmap DesignerLayoutPix;
+    QPixmap DesignerFolderPix;
+    QPixmap DesignerEditSlotsPix;
+
 };
 
 class FormDefinitionView : public HierarchyList

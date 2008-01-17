@@ -90,23 +90,6 @@
 
 #include <limits.h>
 
-const QPixmap DesignerResetPix = SmallIcon( "designer_resetproperty.png" , KDevDesignerPartFactory::instance());
-const QPixmap DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance());
-
-const QPixmap ArrowPix = SmallIcon( "designer_arrow.png" , KDevDesignerPartFactory::instance());
-const QPixmap UpArrowPix = SmallIcon( "designer_uparrow.png" , KDevDesignerPartFactory::instance());
-const QPixmap CrossPix = SmallIcon( "designer_cross.png" , KDevDesignerPartFactory::instance());
-const QPixmap WaitPix = SmallIcon( "designer_wait.png" , KDevDesignerPartFactory::instance());
-const QPixmap IBeamPix = SmallIcon( "designer_ibeam.png" , KDevDesignerPartFactory::instance());
-const QPixmap SizeVPix = SmallIcon( "designer_sizev.png" , KDevDesignerPartFactory::instance());
-const QPixmap SizeHPix = SmallIcon( "designer_sizeh.png" , KDevDesignerPartFactory::instance());
-const QPixmap SizeFPix = SmallIcon( "designer_sizef.png" , KDevDesignerPartFactory::instance());
-const QPixmap SizeBPix = SmallIcon( "designer_sizeb.png" , KDevDesignerPartFactory::instance());
-const QPixmap SizeAllPix = SmallIcon( "designer_sizeall.png" , KDevDesignerPartFactory::instance());
-const QPixmap VSplitPix = SmallIcon( "designer_vsplit.png" , KDevDesignerPartFactory::instance());
-const QPixmap HSplitPix = SmallIcon( "designer_hsplit.png" , KDevDesignerPartFactory::instance());
-const QPixmap HandPix = SmallIcon( "designer_hand.png" , KDevDesignerPartFactory::instance());
-const QPixmap NoPix = SmallIcon( "designer_no.png" , KDevDesignerPartFactory::instance());
 
 static QFontDatabase *fontDataBase = 0;
 QString assistantPath();
@@ -422,6 +405,8 @@ void PropertyItem::createResetButton()
 	resetButton->parentWidget()->lower();
 	return;
     }
+    const QPixmap DesignerResetPix = SmallIcon( "designer_resetproperty.png" , KDevDesignerPartFactory::instance());
+
     QHBox *hbox = new QHBox( listview->viewport() );
     hbox->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     hbox->setLineWidth( 1 );
@@ -2377,6 +2362,21 @@ QComboBox *PropertyCursorItem::combo()
     comb->hide();
     QBitmap cur;
 
+    const QPixmap ArrowPix = SmallIcon( "designer_arrow.png" , KDevDesignerPartFactory::instance());
+    const QPixmap UpArrowPix = SmallIcon( "designer_uparrow.png" , KDevDesignerPartFactory::instance());
+    const QPixmap CrossPix = SmallIcon( "designer_cross.png" , KDevDesignerPartFactory::instance());
+    const QPixmap WaitPix = SmallIcon( "designer_wait.png" , KDevDesignerPartFactory::instance());
+    const QPixmap IBeamPix = SmallIcon( "designer_ibeam.png" , KDevDesignerPartFactory::instance());
+    const QPixmap SizeVPix = SmallIcon( "designer_sizev.png" , KDevDesignerPartFactory::instance());
+    const QPixmap SizeHPix = SmallIcon( "designer_sizeh.png" , KDevDesignerPartFactory::instance());
+    const QPixmap SizeFPix = SmallIcon( "designer_sizef.png" , KDevDesignerPartFactory::instance());
+    const QPixmap SizeBPix = SmallIcon( "designer_sizeb.png" , KDevDesignerPartFactory::instance());
+    const QPixmap SizeAllPix = SmallIcon( "designer_sizeall.png" , KDevDesignerPartFactory::instance());
+    const QPixmap VSplitPix = SmallIcon( "designer_vsplit.png" , KDevDesignerPartFactory::instance());
+    const QPixmap HSplitPix = SmallIcon( "designer_hsplit.png" , KDevDesignerPartFactory::instance());
+    const QPixmap HandPix = SmallIcon( "designer_hand.png" , KDevDesignerPartFactory::instance());
+    const QPixmap NoPix = SmallIcon( "designer_no.png" , KDevDesignerPartFactory::instance());
+
     comb->insertItem( ArrowPix, i18n("Arrow"), QObject::ArrowCursor);
     comb->insertItem( UpArrowPix, i18n("Up-Arrow"), QObject::UpArrowCursor );
     comb->insertItem( CrossPix, i18n("Cross"), QObject::CrossCursor );
@@ -3958,6 +3958,7 @@ void EventList::setup()
     if ( !formWindow )
 	return;
     LanguageInterface *iface = MetaDataBase::languageInterface( formWindow->project()->language() );
+    const QPixmap DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance());
     QStrList sigs;
     if ( iface )
     {
@@ -4003,6 +4004,7 @@ void EventList::contentsMouseDoubleClickEvent( QMouseEvent *e )
 	s = QString( editor->widget()->name() ) + "_" + i->text( 0 );
     }
 
+    const QPixmap DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance());
     insertEntry( i, DesignerEditSlotsPix , s );
 }
 

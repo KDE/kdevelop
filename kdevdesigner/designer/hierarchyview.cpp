@@ -66,11 +66,6 @@
 
 QListViewItem *newItem = 0;
 
-const QPixmap DesignerFormPix = SmallIcon( "designer_form.png" , KDevDesignerPartFactory::instance());
-const QPixmap DesignerLayoutPix = SmallIcon( "designer_layout.png" , KDevDesignerPartFactory::instance());
-const QPixmap DesignerFolderPix = SmallIcon( "designer_folder.png" , KDevDesignerPartFactory::instance());
-const QPixmap DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance());
-
 static QPluginManager<ClassBrowserInterface> *classBrowserInterfaceManager = 0;
 
 HierarchyItem::HierarchyItem( Type type, QListViewItem *parent, QListViewItem *after,
@@ -180,6 +175,11 @@ void HierarchyItem::cancelRename( int col )
 HierarchyList::HierarchyList( QWidget *parent, FormWindow *fw, bool doConnects )
     : QListView( parent ), formWindow( fw )
 {
+    DesignerFormPix = SmallIcon( "designer_form.png" , KDevDesignerPartFactory::instance());
+    DesignerLayoutPix = SmallIcon( "designer_layout.png" , KDevDesignerPartFactory::instance());
+    DesignerFolderPix = SmallIcon( "designer_folder.png" , KDevDesignerPartFactory::instance());
+    DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance());
+
     init_colors();
 
     setDefaultRenameAction( Accept );
