@@ -1,14 +1,16 @@
 # - Try to find Boost include dirs and libraries
 # Usage of this module as follows:
 #
-#     SET( Boost_REQUIRED_VERSION "1.34.1" )
 #     FIND_PACKAGE( Boost COMPONENTS date_time filesystem iostreams ... )
 #
-# The Boost_REQUIRED_VERSION variable will be used to determine part of the
-# boost include dir and library names and will also be used to do a version
-# check. Its expected that this variable always has the form 
-# <number>.<number>.<number>. The default version to be checked for if this
-# variable is not set will be 1.34.1. 
+# The Boost_ADDITIONAL_VERSIONS variable can be used to specify a list of
+# boost version numbers that should be taken into account when searching
+# for the libraries. Unfortunately boost puts the version number into the
+# actual filename for the libraries, so this might be needed in the future
+# when new boost versions are released.
+#
+# Currently this module searches for the following version numbers:
+# 1.33, 1.33.0, 1.33.1, 1.34, 1.34.0, 1.34.1
 #
 # The components list needs to be the actual names of boost libraries, that is
 # the part of the actual library files that differ on different libraries. So
@@ -18,6 +20,23 @@
 # Variables used by this module, they can change the default behaviour:
 #  Boost_USE_NONMULTITHREAD      Can be set to TRUE to use the non-multithreaded
 #                                boost libraries.
+#  Boost_ADDITIONAL_VERSIONS     A list of version numbers to use for searching
+#                                the boost include directory. The default list
+#                                of version numbers is: 
+#                                1.33, 1.33.0, 1.33.1, 1.34, 1.34.0, 1.34.1
+#                                If you want to look for an older or newer
+#                                version set this variable to a list of
+#                                strings, where each string contains a number, i.e. 
+#                                SET(Boost_ADDITIONAL_VERSIONS "0.99.0" "1.35.0")
+#  Boost_ROOT                    Preferred installation prefix for searching for Boost,
+#                                set this if the module has problems finding the proper Boost installation
+#  Boost_INCLUDEDIR              Set this to the include directory of Boost, if the
+#                                module has problems finding the proper Boost installation
+#  Boost_LIBRARYDIR              Set this to the lib directory of Boost, if the
+#                                module has problems finding the proper Boost installation
+#
+#  The last three variables are available also as environment variables
+#
 #
 # Variables defined by this module:
 #
@@ -54,9 +73,8 @@
 #
 
 # MESSAGE(STATUS "Finding Boost libraries.... ")
-IF (NOT DEFINED Boost_REQUIRED_VERSION)
-    SET ( Boost_REQUIRED_VERSION "1.34.1")
-ENDIF (NOT DEFINED Boost_REQUIRED_VERSION)
+
+SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.33" "1.33.0" "1.33.1" "1.34" "1.34.0" "1.34.1" )
 
 ############################################
 #
@@ -142,19 +160,7 @@ IF (_boost_IN_CACHE)
 ELSE (_boost_IN_CACHE)
   # Need to search for boost
 
-
-
-  # Add in a path suffix, based on the required version, ideally we could
-  # read this from version.hpp, but for that to work we'd need to know the include
-  # dir already
-  SET(_boost_PATH_SUFFIX
-    boost-${Boost_REQUIRED_VERSION}
-  )
-  STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
-
   SET(Boost_INCLUDE_SEARCH_DIRS
-    $ENV{BoostINCLUDEDIR}
-    $ENV{Boost_ROOT}/include
     C:/boost/include
     "C:/Program Files/boost/boost_${Boost_REQUIRED_VERSION}"
     # D: is very often the cdrom drive, IF you don't have a
@@ -164,34 +170,70 @@ ELSE (_boost_IN_CACHE)
   )
   
   SET(_boost_LIBRARIES_SEARCH_DIRS
-    $ENV{BoostLIBDIR}
-    $ENV{Boost_ROOT}/lib
     C:/boost/lib
     "C:/Program Files/boost/boost_${Boost_REQUIRED_VERSION}/lib"
     /opt/local/lib
   )
 
-  FIND_PATH(Boost_INCLUDE_DIR
-    NAMES
-      boost/config.hpp
-    PATHS
-      ${_boost_INCLUDE_SEARCH_DIRS}
-    PATH_SUFFIXES
-      ${_boost_PATH_SUFFIX}
-  )
+  IF( $ENV{Boost_ROOT} )
+    SET(Boost_INCLUDE_SEARCH_DIRS $ENV{Boost_ROOT}/include ${Boost_INCLUDE_SEARCH_DIRS})
+    SET(Boost_LIBRARY_SEARCH_DIRS $ENV{Boost_ROOT}/lib ${Boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( $ENV{Boost_ROOT} )
 
-  # Extract Boost_VERSION and Boost_LIB_VERSION from version.hpp
-  # Read the whole file:
-  #
-  SET(BOOST_VERSION 0)
-  SET(BOOST_LIB_VERSION "")
-  FILE(READ "${Boost_INCLUDE_DIR}/boost/version.hpp" _boost_VERSION_HPP_CONTENTS)
+  IF( $ENV{Boost_INCLUDEDIR} )
+    SET(Boost_INCLUDE_SEARCH_DIRS $ENV{Boost_INCLUDEDIR} ${Boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( $ENV{Boost_INCLUDEDIR} )
 
-  STRING(REGEX REPLACE ".*#define BOOST_VERSION ([0-9]+).*" "\\1" Boost_VERSION ${_boost_VERSION_HPP_CONTENTS})
-  STRING(REGEX REPLACE ".*#define BOOST_LIB_VERSION \"([0-9_]+)\".*" "\\1" Boost_LIB_VERSION ${_boost_VERSION_HPP_CONTENTS})
+  IF( $ENV{Boost_LIBRARYDIR} )
+    SET(Boost_LIBRARY_SEARCH_DIRS $ENV{Boost_LIBRARYDIR} ${Boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( $ENV{Boost_LIBRARYDIR} )
 
-  SET(Boost_LIB_VERSION ${Boost_LIB_VERSION} CACHE STRING "The library version string for boost libraries")
-  SET(Boost_VERSION ${Boost_VERSION} CACHE STRING "The version number for boost libraries")
+  IF( Boost_ROOT )
+    SET(Boost_INCLUDE_SEARCH_DIRS ${Boost_ROOT}/include ${Boost_INCLUDE_SEARCH_DIRS})
+    SET(Boost_LIBRARY_SEARCH_DIRS ${Boost_ROOT}/lib ${Boost_LIBRARY_SEARCH_DIRS})
+  ENDIF( Boost_ROOT )
+
+  IF( Boost_INCLUDEDIR )
+    SET(Boost_INCLUDE_SEARCH_DIRS ${Boost_INCLUDEDIR}/include ${Boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( Boost_INCLUDEDIR )
+
+  IF( Boost_LIBRARYDIR )
+    SET(Boost_LIBRARY_SEARCH_DIRS ${Boost_LIBRARYDIR}/include ${Boost_LIBRARY_SEARCH_DIRS})
+  ENDIF( Boost_LIBRARYDIR )
+
+  FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
+    IF( NOT Boost_INCLUDE_DIR )
+
+      # Add in a path suffix, based on the required version, ideally we could
+      # read this from version.hpp, but for that to work we'd need to know the include
+      # dir already
+      SET(_boost_PATH_SUFFIX
+        boost-${_boost_VER}
+      )
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+    
+
+      FIND_PATH(Boost_INCLUDE_DIR
+          NAMES         boost/config.hpp
+          PATHS         ${_boost_INCLUDE_SEARCH_DIRS}
+          PATH_SUFFIXES ${_boost_PATH_SUFFIX}
+      )
+    
+      # Extract Boost_VERSION and Boost_LIB_VERSION from version.hpp
+      # Read the whole file:
+      #
+      SET(BOOST_VERSION 0)
+      SET(BOOST_LIB_VERSION "")
+      FILE(READ "${Boost_INCLUDE_DIR}/boost/version.hpp" _boost_VERSION_HPP_CONTENTS)
+    
+      STRING(REGEX REPLACE ".*#define BOOST_VERSION ([0-9]+).*" "\\1" Boost_VERSION ${_boost_VERSION_HPP_CONTENTS})
+      STRING(REGEX REPLACE ".*#define BOOST_LIB_VERSION \"([0-9_]+)\".*" "\\1" Boost_LIB_VERSION ${_boost_VERSION_HPP_CONTENTS})
+    
+      SET(Boost_LIB_VERSION ${Boost_LIB_VERSION} CACHE STRING "The library version string for boost libraries")
+      SET(Boost_VERSION ${Boost_VERSION} CACHE STRING "The version number for boost libraries")
+    
+    ENDIF( NOT Boost_INCLUDE_DIR )
+  ENDFOREACH(_boost_VER)
 
   #Setting some more suffixes for the library
   SET (Boost_LIB_PREFIX "")
@@ -248,15 +290,36 @@ ELSE (_boost_IN_CACHE)
   # ------------------------------------------------------------------------
   FOREACH(COMPONENT ${Boost_FIND_COMPONENTS})
     STRING(TOUPPER ${COMPONENT} UPPERCOMPONENT)
+    SET( Boost_{UPPERCOMPONENT}_LIBRARY FALSE)
+    SET( Boost_{UPPERCOMPONENT}_LIBRARY_RELEASE FALSE)
+    SET( Boost_{UPPERCOMPONENT}_LIBRARY_DEBUG FALSE)
     FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE 
         NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
-	PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
+	    PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
     )
+
+	IF( NOT Boost${UPPERCOMPONENT}_LIBRARY_RELEASE )
+      #Hmm, maybe the library has none of the special suffixes, so try without
+      FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE 
+          NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}
+          PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
+      )
+	ENDIF( NOT Boost${UPPERCOMPONENT}_LIBRARY_RELEASE )
+
 
     FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG
         NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${Boost_ABI_TAG}-${Boost_LIB_VERSION}
-	PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
+        PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
     )
+
+	IF( NOT Boost${UPPERCOMPONENT}_LIBRARY_DEBUG )
+      #Hmm, maybe the library has none of the special suffixes, so try without
+      FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG 
+          NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${Boost_ABI_TAG}
+          PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
+      )
+	ENDIF( NOT Boost${UPPERCOMPONENT}_LIBRARY_DEBUG )
+
     _Boost_ADJUST_LIB_VARS(${UPPERCOMPONENT})
   ENDFOREACH(COMPONENT)
   # ------------------------------------------------------------------------
@@ -309,5 +372,5 @@ ELSE (_boost_IN_CACHE)
       Boost_LIBRARIES 
       Boost_LIBRARY_DIRS 
   )
-
 ENDIF(_boost_IN_CACHE)
+
