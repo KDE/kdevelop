@@ -166,14 +166,12 @@ ELSE (_boost_IN_CACHE)
     # D: is very often the cdrom drive, IF you don't have a
     # cdrom inserted it will popup a very annoying dialog
     #D:/boost/include
-    /opt/local/include
     /sw/local/include
   )
   
   SET(_boost_LIBRARIES_SEARCH_DIRS
     C:/boost/lib
     "C:/Program Files/boost/boost_${Boost_REQUIRED_VERSION}/lib"
-    /opt/local/lib
     /sw/local/lib
   )
 
