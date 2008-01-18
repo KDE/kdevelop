@@ -27,6 +27,8 @@ QMakeOptionsWidget::QMakeOptionsWidget( QDomDocument &dom, const QString &config
     checkReplacePaths->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/replacePaths", false ) );
     checkDisableDefaultOpts->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/disableDefaultOpts", true ) );
     checkFilenamesOnly->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/enableFilenamesOnly", false ) );
+    checkShowParseErrors->setChecked( DomUtil::readBoolEntry( dom, 
+            configGroup+"/qmake/showParseErrors", true ) );
 }
 
 
@@ -40,6 +42,7 @@ void QMakeOptionsWidget::accept()
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/replacePaths", checkReplacePaths->isChecked() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/disableDefaultOpts", checkDisableDefaultOpts->isChecked() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/enableFilenamesOnly", checkFilenamesOnly->isChecked() );
+    DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/showParseErrors", checkShowParseErrors->isChecked() );
 }
 
 #include "qmakeoptionswidget.moc"

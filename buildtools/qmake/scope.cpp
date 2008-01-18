@@ -155,8 +155,12 @@ bool Scope::loadFromFile( const QString& filename )
     if ( !QFileInfo(filename).exists() || QMake::Driver::parseFile( filename, &m_root, 0 ) != 0 )
     {
         kdDebug( 9024 ) << "Couldn't parse project: " << filename << endl;
-        KMessageBox::error( 0, i18n( "Couldn't parse project file: %1" ).arg( filename ),
-                i18n( "Couldn't parse project file" ) );
+        if( DomUtil::readBoolEntry( *m_part->projectDom(), 
+            "/kdevtrollproject/qmake/showParseErrors", true ) )
+        {
+            KMessageBox::error( 0, i18n( "Couldn't parse project file: %1" ).arg( filename ),
+                    i18n( "Couldn't parse project file" ) );
+        }
         m_root = 0;
         return false;
     }

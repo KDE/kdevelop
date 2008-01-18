@@ -114,6 +114,12 @@
             <property name="text">
                 <string>Repla&amp;ce File Paths with matching Variables</string>
             </property>
+            <property name="accel">
+                <string>Alt+C</string>
+            </property>
+            <property name="checked">
+                <bool>false</bool>
+            </property>
             <property name="toolTip" stdset="0">
                 <string>This replaces the relative paths of added files with existing custom variables if the value assigned to it is the same as the path.</string>
             </property>
@@ -131,9 +137,20 @@
                 <cstring>checkDisableDefaultOpts</cstring>
             </property>
             <property name="text">
-                <string>Use the QMake Default Options
+                <string>Do not use the QMake Default Options
 This disables the reading of any .qmake.cache files or mkspecs.
 If you change this setting the project needs to be closed and re-opened.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>checkShowParseErrors</cstring>
+            </property>
+            <property name="text">
+                <string>Show parse error in message box</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
             </property>
         </widget>
         <spacer>
@@ -149,7 +166,7 @@ If you change this setting the project needs to be closed and re-opened.</string
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>30</height>
+                    <height>50</height>
                 </size>
             </property>
         </spacer>
