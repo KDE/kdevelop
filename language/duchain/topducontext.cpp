@@ -44,6 +44,25 @@ public:
     : DUContextPrivate(ctxt), m_inDuChain(false), m_searchingImport(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
   {
   }
+  /// Clears the import-cache for @param context in this and all context that import this
+  /// This is potentially expensive, but needs to be done. We need to find better ways of managing the whole imports structure,
+  /// maybe using SetRepository.
+  void clearImportsCache(TopDUContext* context) {
+    if( m_searchingImport )
+      return;
+
+    m_searchingImport = true;
+
+    if( m_importsCache.contains(context) ) {
+      m_importsCache.remove(context);
+      foreach(DUContext* ctx, m_importedChildContexts) {
+        if( TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx) )
+          topCtx->d_func()->clearImportsCache(context);
+      }
+    }
+    
+    m_searchingImport = false;
+  }
 
   ///importSearchMutex must be locked before using this
   bool imports(const TopDUContext* target, int depth = 0) const
@@ -400,12 +419,12 @@ bool TopDUContext::importsPrivate(const DUContext * origin, const SimpleCursor& 
  }
 
 void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool anonymous) {
-  d_func()->m_importsCache.remove(static_cast<TopDUContext*>(context));
+  d_func()->clearImportsCache(static_cast<TopDUContext*>(context));
   DUContext::addImportedParentContext(context, position, anonymous);
 }
 
 void TopDUContext::removeImportedParentContext(DUContext* context) {
-  d_func()->m_importsCache.remove(static_cast<TopDUContext*>(context));
+  d_func()->clearImportsCache(static_cast<TopDUContext*>(context));
   DUContext::removeImportedParentContext(context);
 }
  
