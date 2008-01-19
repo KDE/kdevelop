@@ -14,7 +14,6 @@ add_subdirectory(problemreporter)
 add_subdirectory(execute)
 
 macro_optional_find_package(Commoncpp)
-set(Boost_REQUIRED_VER4ION "1.34.1")
 macro_optional_find_package(Boost COMPONENTS thread serialization )
 if(COMMONCPP2_FOUND AND Boost_FOUND)
     macro_optional_add_subdirectory(teamwork)
