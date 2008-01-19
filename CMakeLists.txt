@@ -18,6 +18,9 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${K
 # create config.h
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
+set(KDEVPLATFORM_LIB_VERSION 1.0.0)
+set(KDEVPLATFORM_LIB_SOVERSION 1)
+
 add_subdirectory(cmake)
 add_subdirectory(sublime)
 add_subdirectory(interfaces)

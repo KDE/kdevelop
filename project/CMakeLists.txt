@@ -17,7 +17,7 @@ set(kdevplatformproject_LIB_SRCS
 
 kde4_add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
 target_link_libraries(kdevplatformproject ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces )
-set_target_properties(kdevplatformproject PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
+set_target_properties(kdevplatformproject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS kdevplatformproject DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
