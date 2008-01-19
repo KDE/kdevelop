@@ -62,10 +62,10 @@
 #  Boost_${COMPONENT}_LIBRARY_RELEASE   The absolute path of the release version of the
 #                                       Boost library "component"
 #
-#  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
-#  Copyright (c) 2007 Wengo
-#  Copyright (c) 2007 Mike Jackson
-#  Copyright (c) 2008 Andreas Pakulat <apaku@gmx.de>
+#  Copyright (c) 2006-2008 Andreas Schneider <mail@cynapses.org>
+#  Copyright (c) 2007      Wengo
+#  Copyright (c) 2007      Mike Jackson
+#  Copyright (c) 2008      Andreas Pakulat <apaku@gmx.de>
 #
 #  Redistribution AND use is allowed according to the terms of the New
 #  BSD license.
@@ -267,7 +267,7 @@ ELSE (_boost_IN_CACHE)
             OUTPUT_VARIABLE _boost_COMPILER_VERSION
         )
         STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.[0-9] .*" "\\1\\2" 
-		_boost_COMPILER_VERSION ${_boost_COMPILER_VERSION})
+               _boost_COMPILER_VERSION ${_boost_COMPILER_VERSION})
         SET (_boost_COMPILER "-gcc${_boost_COMPILER_VERSION}")
       ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
     ENDIF (APPLE)
@@ -294,31 +294,18 @@ ELSE (_boost_IN_CACHE)
     SET( Boost_{UPPERCOMPONENT}_LIBRARY_RELEASE FALSE)
     SET( Boost_{UPPERCOMPONENT}_LIBRARY_DEBUG FALSE)
     FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE 
-        NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
-	    PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
-    )
-
-	IF( NOT Boost${UPPERCOMPONENT}_LIBRARY_RELEASE )
-      #Hmm, maybe the library has none of the special suffixes, so try without
-      FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE 
-          NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}
-          PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
-      )
-	ENDIF( NOT Boost${UPPERCOMPONENT}_LIBRARY_RELEASE )
-
-
-    FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG
-        NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${Boost_ABI_TAG}-${Boost_LIB_VERSION}
+        NAMES 
+              ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+              ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}
         PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
     )
 
-	IF( NOT Boost${UPPERCOMPONENT}_LIBRARY_DEBUG )
-      #Hmm, maybe the library has none of the special suffixes, so try without
-      FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG 
-          NAMES ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${Boost_ABI_TAG}
-          PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
-      )
-	ENDIF( NOT Boost${UPPERCOMPONENT}_LIBRARY_DEBUG )
+    FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG
+        NAMES 
+              ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${Boost_ABI_TAG}-${Boost_LIB_VERSION}
+              ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${Boost_ABI_TAG}
+        PATHS ${_boost_LIBRARIES_SEARCH_DIRS}
+    )
 
     _Boost_ADJUST_LIB_VARS(${UPPERCOMPONENT})
   ENDFOREACH(COMPONENT)
@@ -350,10 +337,11 @@ ELSE (_boost_IN_CACHE)
       IF (NOT Boost_FIND_QUIETLY)
         MESSAGE(STATUS "Found The Following Boost Libraries:")
         FOREACH ( COMPONENT  ${Boost_FIND_COMPONENTS} )
-          STRING( TOUPPER ${COMPONENT} ${UPPERCOMPONENT} )
-	  IF ( Boost_${UPPERCOMPONENT}_FOUND )
-            MESSAGE (STATUS "  ${TMP_LIB}")
-	  ENDIF ( Boost_${UPPERCOMPONENT}_FOUND )
+          STRING( TOUPPER ${COMPONENT} UPPERCOMPONENT )
+          IF ( Boost_${UPPERCOMPONENT}_FOUND )
+            MESSAGE (STATUS "  ${COMPONENT}")
+	    SET(Boost_LIBRARIES ${Boost_LIBRARIES} ${Boost_${UPPERCOMPONENT}_LIBRARY})
+          ENDIF ( Boost_${UPPERCOMPONENT}_FOUND )
         ENDFOREACH(COMPONENT)
       ENDIF(NOT Boost_FIND_QUIETLY)
   ELSE (Boost_FOUND)
