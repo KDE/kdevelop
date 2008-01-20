@@ -57,6 +57,13 @@
 
 using namespace KDevelop;
 
+QList<HashedString> convertFromUrls(const QList<KUrl>& urlList) {
+  QList<HashedString> ret;
+  foreach(const KUrl& url, urlList)
+    ret << Cpp::EnvironmentManager::unifyString(url.prettyUrl());
+  return ret;
+}
+
 QString cppStringUnifier (const QString& str) {
   return Cpp::EnvironmentManager::unifyString(str).str();
 }
@@ -119,11 +126,17 @@ PreprocessJob* CPPParseJob::parentPreprocessor() const {
     return m_parentPreprocessor;
 }
 
-const KUrl::List& CPPParseJob::includePaths() const {
+const KUrl::List& CPPParseJob::includePathUrls() const {
+  includePaths();
+  return masterJob()->m_includePathUrls;
+}
+
+const QList<HashedString>& CPPParseJob::includePaths() const {
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
             m_includePathsComputed = true;
-            m_includePaths = cpp()->findIncludePaths(KUrl(document().str()));
+            m_includePathUrls = cpp()->findIncludePaths(KUrl(document().str()));
+            m_includePaths = convertFromUrls(m_includePathUrls);
         }
         return m_includePaths;
     } else {
