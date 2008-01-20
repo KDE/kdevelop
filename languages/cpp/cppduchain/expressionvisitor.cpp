@@ -293,7 +293,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     MUST_HAVE( internalContext );
     
-    m_lastDeclarations = convert(findLocalDeclarations( internalContext, member ));
+  m_lastDeclarations = convert(findLocalDeclarations( internalContext, member, topContext() ));
 
     
     if( m_lastDeclarations.isEmpty() ) {
@@ -1455,7 +1455,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     clearLast();
     visit(node->expression);
-    kDebug(9007) << "expression kind" << node->kind;
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }

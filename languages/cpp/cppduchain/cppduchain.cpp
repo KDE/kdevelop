@@ -29,9 +29,9 @@ using namespace KDevelop;
 
 namespace Cpp {
 
-KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier ) {
+KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier, const TopDUContext* topContext ) {
   QList<Declaration*> ret;
-  ret += context->findLocalDeclarations( identifier );
+  ret += context->findLocalDeclarations( identifier, SimpleCursor::invalid(), topContext );
   if( !ret.isEmpty() )
     return ret;
 
@@ -41,25 +41,7 @@ KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDev
   QList<DUContextPointer> bases = context->importedParentContexts();
   for( QList<DUContextPointer>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
     if( *it )
-      ret += findLocalDeclarations( (*it).data(), identifier );
-  }
-  return ret;
-}
-
-KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context ) {
-  QList<Declaration*> ret;
-  ret += context->localDeclarations();
-  if( !ret.isEmpty() )
-    return ret;
-
-  if( context->type() != DUContext::Class )
-    return ret;
-
-  ///@todo exclude overloaded functions
-  QList<DUContextPointer> bases = context->importedParentContexts();
-  for( QList<DUContextPointer>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
-    if( *it )
-      ret += localDeclarations( (*it).data() );
+      ret += findLocalDeclarations( (*it).data(), identifier, topContext );
   }
   return ret;
 }

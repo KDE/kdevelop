@@ -34,6 +34,7 @@ namespace KTextEditor {
 namespace KDevelop {
   class Declaration;
   class DUContext;
+  class TopDUContext;
   class QualifiedIdentifier;
   class SimpleCursor;
 }
@@ -41,10 +42,10 @@ namespace KDevelop {
 namespace Cpp {
 /**
  * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++.
+ * @param topContext should be the top-context from where the search starts. This is needed to resolve template-parameters.
  * Du-chain must be locked before.
  * */
-KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier );
-KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> localDeclarations( KDevelop::DUContext* context );
+KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier, const KDevelop::TopDUContext* topContext );
 
 /**
  * Searches for declarations on the same level, either locally within the context, or namespace. \param identifier that will be declared in a given \param context

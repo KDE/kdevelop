@@ -74,7 +74,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
       if( idType && idType->declaration() ) {
         DUContext* ctx = idType->declaration()->logicalInternalContext(m_context->topContext());
         if( ctx ) {
-          QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, m_operatorIdentifier );
+          QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, m_operatorIdentifier, m_context->topContext() );
           foreach( Declaration* decl, decls )
             m_declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl );
         } else {

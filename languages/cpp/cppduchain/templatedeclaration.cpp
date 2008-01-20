@@ -158,14 +158,11 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         identifiers << delayedType->qualifiedIdentifier();
         QList<Declaration*> decls;
         
-        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) ) {
-          kDebug(9007) << "stopping exchange because template involved";
+        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) )
           return const_cast<AbstractType*>(type);
-        }
         
-        if( !decls.isEmpty() ) {
+        if( !decls.isEmpty() )
           return decls.front()->abstractType().data();
-        }
       }
       ///Resolution as type has failed, or is not appropriate.
       ///Resolve delayed expression, for example static numeric expressions
@@ -400,7 +397,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           if( !templateDecl->defaultParameter().isEmpty() ) {
             DelayedType::Ptr delayed( new DelayedType() );
             delayed->setQualifiedIdentifier( templateDecl->defaultParameter() );
-            declCopy->setAbstractType( resolveDelayedTypes( AbstractType::Ptr(delayed.data()), contextCopy, inclusionTrace ) );
+            declCopy->setAbstractType( resolveDelayedTypes( AbstractType::Ptr(delayed.data()), contextCopy, inclusionTrace + parentContext->topContext()->importTrace(contextCopy->topContext()) ) );
           }else{
             //Parameter missing
           }
