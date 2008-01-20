@@ -121,7 +121,7 @@ MACRO (_Boost_ADJUST_LIB_VARS basename)
       SET(Boost_${basename}_LIBRARY         ${Boost_${basename}_LIBRARY_DEBUG})
       SET(Boost_${basename}_LIBRARIES       ${Boost_${basename}_LIBRARY_DEBUG})
     ENDIF (Boost_${basename}_LIBRARY_DEBUG AND NOT Boost_${basename}_LIBRARY_RELEASE)
-
+    
     IF (Boost_${basename}_LIBRARY)
       SET(Boost_${basename}_LIBRARY ${Boost_${basename}_LIBRARY} CACHE FILEPATH "The Boost ${basename} library")
       GET_FILENAME_COMPONENT(Boost_LIBRARY_DIRS "${Boost_${basename}_LIBRARY}" PATH)
@@ -164,7 +164,7 @@ IF (_boost_IN_CACHE)
 ELSE (_boost_IN_CACHE)
   # Need to search for boost
 
-  SET(Boost_INCLUDE_SEARCH_DIRS
+  SET(_boost_INCLUDE_SEARCH_DIRS
     C:/boost/include
     "C:/Program Files/boost/boost_${Boost_REQUIRED_VERSION}"
     # D: is very often the cdrom drive, IF you don't have a
@@ -179,30 +179,30 @@ ELSE (_boost_IN_CACHE)
     /sw/local/lib
   )
 
-  IF( $ENV{Boost_ROOT} )
-    SET(Boost_INCLUDE_SEARCH_DIRS $ENV{Boost_ROOT}/include ${Boost_INCLUDE_SEARCH_DIRS})
-    SET(Boost_LIBRARY_SEARCH_DIRS $ENV{Boost_ROOT}/lib ${Boost_INCLUDE_SEARCH_DIRS})
-  ENDIF( $ENV{Boost_ROOT} )
+  IF( NOT $ENV{Boost_ROOT} STREQUAL "" )
+    SET(_boost_INCLUDE_SEARCH_DIRS $ENV{Boost_ROOT}/include ${_boost_INCLUDE_SEARCH_DIRS})
+    SET(_boost_LIBRARIES_SEARCH_DIRS $ENV{Boost_ROOT}/lib ${_boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( NOT $ENV{Boost_ROOT} STREQUAL "" )
 
-  IF( $ENV{Boost_INCLUDEDIR} )
-    SET(Boost_INCLUDE_SEARCH_DIRS $ENV{Boost_INCLUDEDIR} ${Boost_INCLUDE_SEARCH_DIRS})
-  ENDIF( $ENV{Boost_INCLUDEDIR} )
+  IF( NOT $ENV{Boost_INCLUDEDIR} STREQUAL "" )
+    SET(_boost_INCLUDE_SEARCH_DIRS $ENV{Boost_INCLUDEDIR} ${_boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( NOT $ENV{Boost_INCLUDEDIR} STREQUAL "" )
 
-  IF( $ENV{Boost_LIBRARYDIR} )
-    SET(Boost_LIBRARY_SEARCH_DIRS $ENV{Boost_LIBRARYDIR} ${Boost_INCLUDE_SEARCH_DIRS})
-  ENDIF( $ENV{Boost_LIBRARYDIR} )
+  IF( NOT $ENV{Boost_LIBRARYDIR} STREQUAL "" )
+    SET(_boost_LIBRARIES_SEARCH_DIRS $ENV{Boost_LIBRARYDIR} ${_boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( NOT $ENV{Boost_LIBRARYDIR} STREQUAL "" )
 
   IF( Boost_ROOT )
-    SET(Boost_INCLUDE_SEARCH_DIRS ${Boost_ROOT}/include ${Boost_INCLUDE_SEARCH_DIRS})
-    SET(Boost_LIBRARY_SEARCH_DIRS ${Boost_ROOT}/lib ${Boost_LIBRARY_SEARCH_DIRS})
+    SET(_boost_INCLUDE_SEARCH_DIRS ${Boost_ROOT}/include ${_boost_INCLUDE_SEARCH_DIRS})
+    SET(_boost_LIBRARIES_SEARCH_DIRS ${Boost_ROOT}/lib ${_boost_LIBRARIES_SEARCH_DIRS})
   ENDIF( Boost_ROOT )
 
   IF( Boost_INCLUDEDIR )
-    SET(Boost_INCLUDE_SEARCH_DIRS ${Boost_INCLUDEDIR}/include ${Boost_INCLUDE_SEARCH_DIRS})
+    SET(_boost_INCLUDE_SEARCH_DIRS ${Boost_INCLUDEDIR}/include ${_boost_INCLUDE_SEARCH_DIRS})
   ENDIF( Boost_INCLUDEDIR )
 
   IF( Boost_LIBRARYDIR )
-    SET(Boost_LIBRARY_SEARCH_DIRS ${Boost_LIBRARYDIR}/include ${Boost_LIBRARY_SEARCH_DIRS})
+    SET(_boost_LIBRARIES_SEARCH_DIRS ${Boost_LIBRARYDIR}/include ${_boost_LIBRARIES_SEARCH_DIRS})
   ENDIF( Boost_LIBRARYDIR )
 
   FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
@@ -290,11 +290,12 @@ ELSE (_boost_IN_CACHE)
     SET (_boost_MULTITHREADED "")
   ENDIF( Boost_USE_NONMULTITHREADED )
 
-
+  SET( _boost_STATIC_TAG "")
   IF (WIN32)
-    SET (Boost_ABI_TAG "g")
+    SET (_boost_ABI_TAG "g")
+    SET( _boost_STATIC_TAG "-s")
   ENDIF(WIN32)
-  SET (Boost_ABI_TAG "-${Boost_ABI_TAG}d")
+  SET (_boost_ABI_TAG "${_boost_ABI_TAG}d")
 
   # ------------------------------------------------------------------------
   #  Begin finding boost libraries
@@ -306,18 +307,43 @@ ELSE (_boost_IN_CACHE)
     SET( Boost_{UPPERCOMPONENT}_LIBRARY_DEBUG FALSE)
     FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE
         NAMES  ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${_boost_STATIC_TAG}-${Boost_LIB_VERSION}
                ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${_boost_STATIC_TAG}
                ${Boost_LIB_PREFIX}boost_${COMPONENT}
         PATHS  ${_boost_LIBRARIES_SEARCH_DIRS}
+	NO_DEFAULT_PATH
     )
+
+    IF( NOT ${Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE} )
+      FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE
+          NAMES  ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+                 ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${_boost_STATIC_TAG}-${Boost_LIB_VERSION}
+                 ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}
+                 ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${_boost_STATIC_TAG}
+                 ${Boost_LIB_PREFIX}boost_${COMPONENT}
+      )
+    ENDIF( NOT ${Boost_${UPPERCOMPONENT}_LIBRARY_RELEASE} )
 
     FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG
-        NAMES  ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${Boost_ABI_TAG}-${Boost_LIB_VERSION}
-               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${Boost_ABI_TAG}
-               ${Boost_LIB_PREFIX}boost_${COMPONENT}${Boost_ABI_TAG}
+        NAMES  ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${_boost_ABI_TAG}-${Boost_LIB_VERSION}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${_boost_STATIC_TAG}${_boost_ABI_TAG}-${Boost_LIB_VERSION}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}-${_boost_ABI_TAG}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${_boost_STATIC_TAG}${_boost_ABI_TAG}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}-${_boost_ABI_TAG}
         PATHS  ${_boost_LIBRARIES_SEARCH_DIRS}
+	NO_DEFAULT_PATH
     )
 
+    IF( NOT ${Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG} )
+      FIND_LIBRARY(Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG
+          NAMES  ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${_boost_ABI_TAG}-${Boost_LIB_VERSION}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${_boost_STATIC_TAG}${_boost_ABI_TAG}-${Boost_LIB_VERSION}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}-${_boost_ABI_TAG}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}${_boost_STATIC_TAG}${_boost_ABI_TAG}
+               ${Boost_LIB_PREFIX}boost_${COMPONENT}-${_boost_ABI_TAG}
+      )
+    ENDIF( NOT ${Boost_${UPPERCOMPONENT}_LIBRARY_DEBUG} )
     _Boost_ADJUST_LIB_VARS(${UPPERCOMPONENT})
   ENDFOREACH(COMPONENT)
   # ------------------------------------------------------------------------
