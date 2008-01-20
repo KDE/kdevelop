@@ -206,7 +206,11 @@ public:
   const QList<KDevelop::Problem>& problems() const;
   void problemEncountered(const KDevelop::Problem& problem);
 
+  //Returns a hash-value computed from all until currently open branching-conditions and their decisions(like #ifdef's)
+  uint branchingHash() const;
+  
 private:
+  
   int skipping() const;
   bool test_if_level();
 

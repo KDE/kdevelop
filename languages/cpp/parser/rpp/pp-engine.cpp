@@ -1034,6 +1034,18 @@ void pp::handle_endif(Stream& input, Stream& output)
   }
 }
 
+uint pp::branchingHash() const
+{
+  uint hash = 0;
+  for( int a = 0; a <= iflevel; a++ ) {
+    hash *= 19;
+    if( _M_skipping[a] )
+      hash += 3;
+    if( _M_true_test[a] )
+      hash += 7;
+  }
+  return hash;
+}
 
 void pp::handle_ifdef (bool check_undefined, Stream& input)
 {
