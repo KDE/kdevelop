@@ -15,7 +15,7 @@
 #include <hashedstring.h>
 #include <iproblem.h>
 
-CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::m_stringRepository, &Cpp::EnvironmentManager::m_repositoryMutex), m_environmentFile(environmentFile) {
+CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::m_stringRepository, &Cpp::EnvironmentManager::m_repositoryMutex), m_environmentFile(environmentFile) {
     //If this is included from another preprocessed file, take the current macro-set from there.
     ///NOTE: m_environmentFile may be zero, this must be treated
 }
@@ -113,3 +113,10 @@ const Cpp::StringSetRepository::LazySet& CppPreprocessEnvironment::macroNameSet(
     return m_macroNameSet;
 }
 
+void CppPreprocessEnvironment::setIdentityOffsetRestriction(uint value) {
+  m_identityOffsetRestriction = value;
+}
+
+uint CppPreprocessEnvironment::identityOffsetRestriction() const {
+  return m_identityOffsetRestriction;
+}

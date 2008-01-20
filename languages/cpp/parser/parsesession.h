@@ -73,6 +73,7 @@ public:
   std::size_t size() const;
   pool* mempool;
   TokenStream* token_stream;
+
   rpp::MacroBlock* macros;
   KDevelop::SimpleCursor m_contentOffset;
   KDevelop::HashedString m_url; //Should contain the url from which the content was extracted, can also be empty.

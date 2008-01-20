@@ -19,6 +19,7 @@
 #include "parsesession.h"
 
 #include "rpp/pp-location.h"
+#include "rpp/pp-environment.h"
 
 #include "lexer.h"
 #include "memorypool.h"
@@ -29,6 +30,7 @@
 ParseSession::ParseSession(QString (*stringUnifier) (const QString&))
   : mempool(new pool)
   , token_stream(0)
+  , macros(0)
   , m_locationTable(0)
   , m_unifier(stringUnifier)
 {
@@ -39,6 +41,7 @@ ParseSession::~ParseSession()
   delete mempool;
   delete token_stream;
   delete m_locationTable;
+  delete macros;
 }
 
 KDevelop::SimpleCursor ParseSession::positionAt(std::size_t offset) const

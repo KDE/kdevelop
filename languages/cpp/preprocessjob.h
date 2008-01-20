@@ -37,6 +37,10 @@ namespace KDevelop {
     class ParsingEnvironment;
 }
 
+namespace rpp {
+    class pp;
+}
+
 class CppPreprocessEnvironment;
 
 class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
@@ -66,8 +70,7 @@ public:
      * */
     static KDevelop::ParsingEnvironment* createStandardEnvironment();
 private:
-    //Returns whether the input-stream should be stopped
-    bool headerSectionEnded();
+    void headerSectionEndedInternal(rpp::Stream* stream);
     bool checkAbort();
 
     CppPreprocessEnvironment* m_currentEnvironment;
@@ -76,6 +79,7 @@ private:
     KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
     bool m_success;
     bool m_headerSectionEnded;
+    rpp::pp* m_pp;
 };
 
 #endif

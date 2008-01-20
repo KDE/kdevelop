@@ -56,7 +56,17 @@ public:
   ///Does not include the names of undef macros
   const Cpp::StringSetRepository::LazySet& macroNameSet() const;
 
+  ///Restricts the header branching hash of searched contexts to the given number
+  ///(Is only stored here, it is used in the environment-manager)
+  ///Set to zero to disable again
+  void setIdentityOffsetRestriction(uint value);
+
+  ///Returns the header branching hash restriction that has been set through the function above.
+  ///If zero, should be ignored.
+  uint identityOffsetRestriction() const;
+  
 private:
+    uint m_identityOffsetRestriction;
     bool m_finished;
     Cpp::StringSetRepository::LazySet m_macroNameSet;
     mutable std::set<Utils::BasicSetRepository::Index> m_strings;

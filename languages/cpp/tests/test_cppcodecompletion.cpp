@@ -600,6 +600,27 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         DUChain::self()->addParsingEnvironmentManager(environmentManager);
     }
     
+    addInclude("h1.h", "#ifndef H1_H  \n#define H1_H  \n  class H1 {};\n #else \n class H1_Already_Defined {}; \n#endif");
+    addInclude("h1_user.h", "#ifndef H1_USER \n#define H1_USER \n#include \"h1.h\" \nclass H1User {}; \n#endif\n");
+
+    {
+      TopDUContext* test1 = parse(QByteArray("#include \"h1.h\" \n#include \"h1_user.h\"\n\nclass Honk {};"), DumpNone);
+        //We test here, whether the environment-manager re-combines h1_user.h so it actually contains a definition of class H1.
+        //In the version parsed in test1, H1_H was already defined, so the h1.h parsed into h1_user.h was parsed to contain H1_Already_Defined.
+        TopDUContext* test2 = parse(QByteArray("#include \"h1_user.h\"\n"), DumpNone);
+        DUChainWriteLocker lock(DUChain::lock());
+        QVERIFY(test1->parsingEnvironmentFile());
+        QVERIFY(test2->parsingEnvironmentFile());
+        Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+        Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(test2->parsingEnvironmentFile().data());
+        QVERIFY(envFile1);
+        QVERIFY(envFile2);
+
+        QVERIFY(findDeclaration( test1, Identifier("H1") ));
+        
+      QCOMPARE( envFile1->contentStartLine(), 3 );
+    }
+
     {
       addInclude("stringset_test1.h", "String1 s1;\n#undef String2\n String2 s2;");
       addInclude("stringset_test2.h", "String1 s1;\n#undef String2\n String2 s2;");
@@ -687,6 +708,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
   IncludeFileList& included;
   rpp::pp* pp;
   bool stopAfterHeaders;
+  Cpp::EnvironmentFilePointer environmentFile;
 
   TestPreprocessor( TestCppCodeCompletion* _cc, IncludeFileList& _included, bool _stopAfterHeaders ) : cc(_cc), included(_included), pp(0), stopAfterHeaders(_stopAfterHeaders) {
   }
@@ -708,6 +730,8 @@ struct TestPreprocessor : public rpp::Preprocessor {
   }
 
   virtual void headerSectionEnded(rpp::Stream& stream) {
+    if( environmentFile )
+      environmentFile->setContentStartLine( stream.originalInputPosition().line );
     if(stopAfterHeaders)
       stream.toEnd();
   }
@@ -725,7 +749,9 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
       environmentFile = *paramEnvironmentFile;
     else
       environmentFile = Cpp::EnvironmentFilePointer( new Cpp::EnvironmentFile( url, 0 ) );
-    
+
+  ppc.environmentFile = environmentFile;
+  
     if( paramEnvironmentFile )
       *paramEnvironmentFile = environmentFile;
     

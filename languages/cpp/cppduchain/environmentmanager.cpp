@@ -36,7 +36,7 @@ MacroRepository EnvironmentManager::m_macroRepository;
 
 //For debugging
 QString id(const EnvironmentFile* file) {
-  return file->url().str() + QString(" %1").arg((size_t)file);
+  return file->url().str() + QString(" %1").arg((size_t)file) ;
 }
 
 //Only for debugging
@@ -141,6 +141,11 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
     if(acceptor && !acceptor->accept(*( *files.first ).second)) {
       continue;
     }
+    
+    if( cppEnvironment->identityOffsetRestriction() && cppEnvironment->identityOffsetRestriction() != file.identityOffset() ) {
+      kDebug( 9007 ) << "file" << fileName.str() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << file.identityOffset();
+      continue;
+    }
 
     //Make sure that none of the macros stored in the driver affect the file in a different way than the one before
     bool success = true;
@@ -151,7 +156,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
       rpp::pp_macro* m = environment->retrieveStoredMacro( *it );
       if(m && !m->isUndef()) {
 #ifdef LEXERCACHE_DEBUG
-        kDebug() << "The environment contains a macro that can affect the cached file:" << m->name.str();
+        kDebug(9007) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m->name.str();
 #endif
         success = false;
         break;
@@ -162,10 +167,16 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
       continue;
     //Make sure that all external macros used by the file now exist too
 
+    ///@todo find out why this assertion sometimes triggers
+    //ifDebug( Q_ASSERT(file.m_usedMacros.set().count() == file.m_usedMacroNames.set().count()) );
+
+    ifDebug( kDebug(9007) << "Count of used macros that need to be verified:" << file.m_usedMacros.set().count() );
+    
     for ( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, file.m_usedMacros.set().iterator() ); it; ++it ) {
       rpp::pp_macro* m = environment->retrieveStoredMacro( ( *it ).name );
       if ( !m || !(*m == *it) ) {
-        if( !m && !(*it).isUndef() ) {
+        if( !m && (*it).isUndef() ) {
+          ifDebug( kDebug( 9007 ) << "Undef-macro" << (*it).name.str() << "is ok" << m );
           //It is okay, we did not find a macro, but the used macro is an undef macro
           //Q_ASSERT(0); //Undef-macros should not be marked as used
         } else {
@@ -173,6 +184,8 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
           success = false;
           break;
         }
+      }else{
+        ifDebug( kDebug( 9007 ) << (*it).name.str() << "match" );
       }
     }
     if( !success )
@@ -243,13 +256,21 @@ void EnvironmentManager::erase( const CacheNode* node ) {
   ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url().str()  );
 }
 
-EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex) {
+EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_contentStartLine(0) {
   QFileInfo fileInfo( KUrl(fileName.str()).path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
   ifDebug( kDebug(9007) << "created for" << fileName.str() << "modification-time:" << m_modificationTime  );
 
   addIncludeFile( m_url, m_modificationTime );
   m_allModificationTimes[ m_url ] = m_modificationTime;
+}
+
+void EnvironmentFile::setContentStartLine(int line) {
+  m_contentStartLine = line;
+}
+
+int EnvironmentFile::contentStartLine() const {
+  return m_contentStartLine;
 }
 
 void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName ) {
@@ -359,7 +380,7 @@ void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Inde
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
   QMutexLocker l(&EnvironmentManager::m_repositoryMutex);
 #ifdef LEXERCACHE_DEBUG
-  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "strings in other:" << print(file.m_strings);
+  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "strings in other:" << print(file.m_strings);
 #endif
   m_strings += file.m_strings - m_definedMacroNames.set();
   
@@ -393,6 +414,8 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 
 #ifdef LEXERCACHE_DEBUG
   kDebug( 9007 ) << id(this) << ": defined in this after merge:" << print(m_definedMacroNames);
+  kDebug( 9007 ) << id(this) << ": strings in this after merge:" << print(m_strings);
+  kDebug( 9007 ) << id(this) << ": macros used in this after merge:" << print(m_usedMacroNames);
 #endif
   m_problems += file.m_problems;
 }
@@ -401,6 +424,10 @@ size_t EnvironmentFile::hash() const {
   ///@todo remove the (size_t)(this), it is just temporary to make them unique, but will not work with serialization to disk.
   ///Instead, create a hash over the contained strings, and make sure the other hashes work reliably.
   return (size_t)(this); //m_usedMacros.valueHash() + m_usedMacros.idHash() + m_definedMacros.idHash() + m_definedMacros.valueHash() + (size_t)(this)/*+ m_strings.hash()*/; ///@todo is the string-hash needed here?
+}
+
+uint EnvironmentFile::identityOffset() const {
+  return m_identityOffset;
 }
 
 void EnvironmentFile::setIdentityOffset(uint offset) {

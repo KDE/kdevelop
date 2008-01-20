@@ -216,7 +216,12 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
      * For example a content-environment from a proxy-environment.
      * */
     void setIdentityOffset(uint offset);
-    
+    uint identityOffset() const;
+
+    ///Set the first line of actual content, behind includes etc.
+    void setContentStartLine(int line);
+    int contentStartLine() const;
+
   private:
     virtual int type() const;
 
@@ -233,6 +238,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     Cpp::StringSetRepository::LazySet m_definedMacroNames;
     QList<KDevelop::Problem> m_problems;
     QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
+    mutable int m_contentStartLine; //Line-number where the actual content starts. Needs to be kept current when edited
     /*
     Needed data:
     1. Set of all strings that appear in this file(For memory-reasons they should be taken from a global string-repository, because many will be the same)
