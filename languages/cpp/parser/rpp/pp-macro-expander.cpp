@@ -308,7 +308,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           {
             Stream as(&actualText);
             skip_argument_variadics(actuals, macro, input, as);
-            kDebug() << "actualText:" << actualText;
           }
 
           if (input.offset() != before)
