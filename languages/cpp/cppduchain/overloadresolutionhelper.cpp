@@ -39,7 +39,7 @@ OverloadResolutionFunction::OverloadResolutionFunction() : matchedArguments(0) {
 OverloadResolutionFunction::OverloadResolutionFunction( int _matchedArguments, const ViableFunction& _viable ) : matchedArguments(_matchedArguments), function(_viable) {
 }
 
-OverloadResolutionHelper::OverloadResolutionHelper(const DUContextPointer& context) : m_context(context), m_isOperator(false)
+OverloadResolutionHelper::OverloadResolutionHelper(const DUContextPointer& context, const KDevelop::TopDUContextPointer& topContext) : m_context(context), m_topContext(topContext), m_isOperator(false)
 {
 }
 
@@ -99,7 +99,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
   foreach( const DeclarationWithArgument& decl, m_declarations )
     m_argumentCountMap[decl.second] = decl.first.parameters.size();
 
-  OverloadResolver resolv( m_context );
+  OverloadResolver resolv( m_context, m_topContext );
 
 //   log( "functions given to overload-resolution:" );
 //   foreach( const DeclarationWithArgument& declaration, m_declarations )

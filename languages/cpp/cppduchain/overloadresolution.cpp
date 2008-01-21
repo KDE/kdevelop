@@ -28,16 +28,16 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-OverloadResolver::OverloadResolver( DUContextPointer context ) : m_context(context), m_worstConversionRank(NoMatch) {
+OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext  ) : m_context(context), m_topContext(topContext), m_worstConversionRank(NoMatch) {
   
 }
 
 Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, bool implicit, bool noUserDefinedConversion ) {
-    if( !m_context )
+    if( !m_context || !m_topContext )
       return 0;
     
     QList<Declaration*> goodDeclarations;
-    QList<Declaration*> declarations = m_context->localDeclarations();
+    QList<Declaration*> declarations = m_context->findLocalDeclarations(m_context->localScopeIdentifier(), KDevelop::SimpleCursor(), m_topContext.data());
     
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       if( (*it)->abstractType() )
@@ -62,10 +62,10 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
 
 Declaration* OverloadResolver::resolve( const ParameterList& params, const QualifiedIdentifier& functionName, bool noUserDefinedConversion )
 {
-  if( !m_context )
+  if( !m_context || !m_topContext )
     return 0;
   
-  QList<Declaration*> declarations = m_context->findDeclarations(functionName);
+  QList<Declaration*> declarations = m_context->findDeclarations(functionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data());
   
   return resolveList(params, declarations, noUserDefinedConversion );
 }
@@ -79,14 +79,14 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
     Declaration* decl = *it;
     bool isConstant = false;
 
-    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl->abstractType(), m_context->topContext(), &isConstant) ) )
+    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl->abstractType(), m_topContext.data(), &isConstant) ) )
     {
       if( decl->kind() == Declaration::Instance ) {
         //Instances of classes should be substituted with their operator() members
-        TypeUtils::getMemberFunctions( klass, m_context->topContext(), newDeclarations, "operator()", isConstant );
+        TypeUtils::getMemberFunctions( klass, m_topContext.data(), newDeclarations, "operator()", isConstant );
       } else {
         //Classes should be substituted with their constructors
-        TypeUtils::getConstructors( klass, m_context->topContext(), newDeclarations );
+        TypeUtils::getConstructors( klass, m_topContext.data(), newDeclarations );
       }
     }
   }
@@ -97,18 +97,18 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
     QPair<OverloadResolver::ParameterList, Declaration*> decl = *it;
     bool isConstant = false;
 
-    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl.second->abstractType(), m_context->topContext(), &isConstant) ) )
+    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl.second->abstractType(), m_topContext.data(), &isConstant) ) )
     {
       if( decl.second->kind() == Declaration::Instance ) {
         //Instances of classes should be substituted with their operator() members
         QList<Declaration*> functions;
-        TypeUtils::getMemberFunctions( klass, m_context->topContext(), functions, "operator()", isConstant );
+        TypeUtils::getMemberFunctions( klass, m_topContext.data(), functions, "operator()", isConstant );
         foreach(Declaration* f, functions)
           newDeclarations << QPair<OverloadResolver::ParameterList, Declaration*>(decl.first, f );
       } else {
         //Classes should be substituted with their constructors
         QList<Declaration*> functions;
-        TypeUtils::getConstructors( klass, m_context->topContext(), functions );
+        TypeUtils::getConstructors( klass, m_topContext.data(), functions );
         foreach(Declaration* f, functions)
           newDeclarations << QPair<OverloadResolver::ParameterList, Declaration*>( decl.first, f );
       }
@@ -118,7 +118,7 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
 
 Declaration* OverloadResolver::resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion )
 {
-  if( !m_context )
+  if( !m_context || !m_topContext )
     return 0;
   
   ///Iso c++ draft 13.3.3
@@ -130,11 +130,11 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   expandDeclarations( declarations, newDeclarations );
   
   ///Second step: Find best viable function
-  ViableFunction bestViableFunction( m_context->topContext() );
+  ViableFunction bestViableFunction( m_topContext.data() );
   
   for( QList<Declaration*>::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
-    ViableFunction viable( m_context->topContext(), *it , noUserDefinedConversion );
+    ViableFunction viable( m_topContext.data(), *it , noUserDefinedConversion );
     viable.matchParameters( params );
     
     if( viable.isBetter(bestViableFunction) ) {
@@ -151,7 +151,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
 
 QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial  )
 {
-  if( !m_context )
+  if( !m_context || !m_topContext )
     return QList<ViableFunction>();
   
   ///Iso c++ draft 13.3.3
@@ -166,7 +166,7 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
 
   for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
-    ViableFunction viable( m_context->topContext(), (*it).second );
+    ViableFunction viable( m_topContext.data(), (*it).second );
     ParameterList mergedParams = (*it).first;
     mergedParams.parameters += params.parameters;
     viable.matchParameters( mergedParams, partial );

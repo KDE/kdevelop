@@ -1065,7 +1065,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           {
             LOCKDUCHAIN;
             KDevelop::DUContextPointer ptr(m_currentContext);
-            OverloadResolutionHelper helper(ptr);
+            OverloadResolutionHelper helper(ptr, TopDUContextPointer(topContext()) );
             helper.setOperator( OverloadResolver::Parameter(leftType.data(), isLValue( leftType, leftInstance ) ), op );
             helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType.data(), isLValue( rightType, rightInstance ) ) ) );
             QList<OverloadResolutionFunction> functions = helper.resolve(false);
@@ -1594,7 +1594,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         {
           LOCKDUCHAIN;
           KDevelop::DUContextPointer ptr(m_currentContext);
-          OverloadResolutionHelper helper(ptr);
+          OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
           helper.setOperator( OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) ), op );
 
           //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) ) );
@@ -1723,7 +1723,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     //Resolve functions
     DeclarationPointer chosenFunction;
     KDevelop::DUContextPointer ptr(m_currentContext);
-    OverloadResolver resolver( ptr );
+    OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()) );
 
     if( !fail ) {
       chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
@@ -1822,7 +1822,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     LOCKDUCHAIN;
 
     KDevelop::DUContextPointer ptr(m_currentContext);
-    OverloadResolutionHelper helper(ptr);
+    OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
     helper.setOperator( OverloadResolver::Parameter(masterType.data(), isLValue( masterType, masterInstance ) ), "[]" );
 
     helper.setKnownParameters( OverloadResolver::Parameter( m_lastType.data(), isLValue( m_lastType, m_lastInstance ) ) );
@@ -1897,7 +1897,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       {
         LOCKDUCHAIN;
         KDevelop::DUContextPointer ptr(m_currentContext);
-        OverloadResolutionHelper helper(ptr);
+        OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
         helper.setOperator( OverloadResolver::Parameter(m_lastType.data(), isLValue( m_lastType, m_lastInstance ) ), op );
 
         //Overloaded postfix operators have one additional int parameter

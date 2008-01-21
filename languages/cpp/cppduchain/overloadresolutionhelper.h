@@ -58,7 +58,7 @@ namespace Cpp
     public:
     typedef QPair<OverloadResolver::ParameterList, KDevelop::Declaration*> DeclarationWithArgument;
 
-    OverloadResolutionHelper(const KDevelop::DUContextPointer& context);
+    OverloadResolutionHelper(const KDevelop::DUContextPointer& context, const KDevelop::TopDUContextPointer& topContext);
 
     /**
      * @param base Sets the base-type, which is used while searching overloaded operators as:
@@ -88,6 +88,7 @@ namespace Cpp
     private:
       void log(const QString& str) const;
       KDevelop::DUContextPointer m_context;
+      KDevelop::TopDUContextPointer m_topContext;
       OverloadResolver::Parameter m_baseType;
       bool m_isOperator;
       QList< DeclarationWithArgument > m_declarations; //Declarations are paired with the optional first argument for the declared functions

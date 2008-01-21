@@ -415,7 +415,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
 
   LOCKDUCHAIN;
   
-  OverloadResolutionHelper helper(m_duContext);
+  OverloadResolutionHelper helper( m_duContext, TopDUContextPointer(m_duContext->topContext()) );
   
   if( m_contextType == BinaryOperatorFunctionCall ) {
 

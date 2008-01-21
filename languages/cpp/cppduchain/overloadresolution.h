@@ -83,8 +83,9 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
 
     /**
      * @param container The container in which to search for the functions. If it is a class, base-classes will be respected too.
+     * @param topContext The top-context of the file where where code-completion/parsing is started from. Needed to resolve forward-declarations.
      * */
-    OverloadResolver( DUContextPointer context );
+    OverloadResolver( DUContextPointer context, TopDUContextPointer topContext );
 
     /**
      * Resolve one function with the given name that matches the given parameters.
@@ -146,6 +147,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     void expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& from, QList<QPair<OverloadResolver::ParameterList, Declaration*> >& to );
 
     DUContextPointer m_context;
+    TopDUContextPointer m_topContext;
     uint m_worstConversionRank;
 };
 
