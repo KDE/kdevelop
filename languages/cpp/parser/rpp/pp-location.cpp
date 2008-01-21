@@ -19,7 +19,7 @@
 */
 
 #include <pp-location.h>
-
+#include <QStringList>
 #include <kdebug.h>
 
 using namespace rpp;
@@ -36,7 +36,7 @@ LocationTable::LocationTable(const QByteArray& contents)
   const QChar newline = '\n';
   int line = 0;
 
-  for (std::size_t i = 0; i < contents.size(); ++i)
+  for (std::size_t i = 0; i < (std::size_t)contents.size(); ++i)
     if (contents.at(i) == newline)
       anchor(i + 1, KDevelop::SimpleCursor(++line, 0));
 }
@@ -117,5 +117,36 @@ void LocationTable::dump() const
   while (it.hasNext()) {
     it.next();
     kDebug(9007) << it.key() << " => " << it.value().textCursor();
+  }
+}
+
+void LocationTable::splitByAnchors(const QString& text, const KDevelop::SimpleCursor& textStartPosition, QStringList& strings, QList<KDevelop::SimpleCursor>& anchors) const {
+
+  KDevelop::SimpleCursor currentCursor = textStartPosition;
+  size_t currentOffset = 0;
+  
+  QMapIterator<std::size_t, KDevelop::SimpleCursor> it = m_offsetTable;
+
+  while (currentOffset < (size_t)text.length())
+  {
+    KDevelop::SimpleCursor nextCursor;
+    size_t nextOffset;
+    
+    if(it.hasNext()) {
+      it.next();
+      nextOffset = it.key();
+      nextCursor = it.value();
+    }else{
+      nextOffset = text.length();
+      nextCursor = KDevelop::SimpleCursor::invalid();
+    }
+
+    if( nextOffset-currentOffset > 0 ) {
+      strings.append(text.mid(currentOffset, nextOffset-currentOffset));
+      anchors.append(currentCursor);
+    }
+    
+    currentOffset = nextOffset;
+    currentCursor = nextCursor;
   }
 }

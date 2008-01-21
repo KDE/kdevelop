@@ -44,7 +44,10 @@ SimpleCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) c
 
 SimpleCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
-  return m_session->positionAt((edge == BackEdge) ? token.position + token.size : token.position);
+  if(edge == BackEdge)
+    return m_session->positionAt(token.position) + SimpleCursor(0, token.size);
+  else
+    return m_session->positionAt(token.position);
 }
 
 SimpleRange CppEditorIntegrator::findRange( AST * node, RangeEdge edge )

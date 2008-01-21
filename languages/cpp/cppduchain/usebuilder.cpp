@@ -93,6 +93,23 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
   DUChainWriteLocker lock(DUChain::lock());
   
   SimpleRange newRange = m_editor->findRange(start_token, end_token);
+
+  /**
+   * We need to find a context that this use fits into, which must not necessarily be the current one.
+   * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
+   * sub-context that comes from the macro. That sub-context will have a very small range, and will most
+   * probably not be the range of the actual "SomeClass" text, so the "SomeClass" use has to be moved
+   * into the context that surrounds the SOME_MACRO invocation.
+   * */
+  DUContext* newContext = currentContext();
+  int contextUpSteps = 0;
+  while (!newContext->range().contains(newRange) && newContext->parentContext()) {
+    newContext = newContext->parentContext();
+    ++contextUpSteps;
+  }
+
+  if (contextUpSteps)
+    openContext(newContext);
   
   Use* ret = 0;
 
@@ -129,10 +146,20 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
   }
 
   if (!ret) {
+
     SmartRange* prior = m_editor->currentRange();
+
+    //We must close all ranges in the range-hierarchy that belong to context that we have moved this use out of
+    QList<SmartRange*> backupRanges;
+    for(int a = 0; a < contextUpSteps; a++) {
+      SmartRange* s = m_editor->currentRange();
+      if(s)
+        backupRanges.push_front(s);
+      m_editor->exitCurrentRange();
+    }
+
     SmartRange* use = m_editor->createRange(newRange.textRange());
     m_editor->exitCurrentRange();
-    Q_ASSERT(m_editor->currentRange() == prior);
 
     Use* newUse = new Use(m_editor->currentUrl(), newRange, currentContext());
     newUse->setSmartRange(use);
@@ -144,7 +171,16 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
     else
       currentContext()->addOrphanUse(newUse);
       //kWarning(9007) << "Could not find definition for identifier" << id << "at" << *use ;
+
+    //Put back parent-ranges of higher contexts that we have moved by side
+    for (QList<SmartRange*>::const_iterator it = backupRanges.begin(); it != backupRanges.end(); ++it)
+      m_editor->setCurrentRange( *it );
+
+    Q_ASSERT(m_editor->currentRange() == prior);
   }
+
+  if (contextUpSteps)
+    closeContext();
 }
 
 void UseBuilder::openContext(DUContext * newContext)

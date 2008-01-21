@@ -32,20 +32,21 @@
 #include "pp-internal.h"
 #include "pp-engine.h"
 #include "pp-environment.h"
+#include "pp-location.h"
 #include "preprocessor.h"
 
 using namespace rpp;
 
-pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<QString>& __actuals)
+pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals)
   : expandingMacro(__expandingMacro)
   , actuals(__actuals)
 {
 }
 
-QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
+pp_actual pp_macro_expander::resolve_formal(const QString& name, Stream& input)
 {
   if (!m_frame)
-    return QString();
+    return pp_actual();
 
   Q_ASSERT(m_frame->expandingMacro != 0);
 
@@ -56,7 +57,7 @@ QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
     problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(i18n("Macro error"));
     m_engine->problemEncountered(problem);
-    return QString();
+    return pp_actual();
   }
   
   for (int index = 0; index < formals.size(); ++index) {
@@ -73,7 +74,7 @@ QString pp_macro_expander::resolve_formal(const QString& name, Stream& input)
     }
   }
 
-  return QString();
+  return pp_actual();
 }
 
 pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderSection)
@@ -122,7 +123,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         KDevelop::SimpleCursor inputPosition = input.inputPosition();
         KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
-        QString formal = resolve_formal(identifier, input);
+        QString formal = resolve_formal(identifier, input).mergeText();
 
         if (!formal.isEmpty()) {
           Stream is(&formal, inputPosition);
@@ -202,12 +203,21 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           input.seek(blankStart);
         }
 
-        Q_ASSERT(name.length() >= 0 && name.length() < 512);
+        //Q_ASSERT(name.length() >= 0 && name.length() < 512);
 
         KDevelop::SimpleCursor inputPosition2 = input.inputPosition();
-        QString actual = resolve_formal(name, input);
-        if (!actual.isEmpty()) {
-          output.appendString(inputPosition2, actual);
+        pp_actual actual = resolve_formal(name, input);
+        if (actual.isValid()) {
+          Q_ASSERT(actual.text.size() == actual.inputPosition.size());
+          
+          QStringList::const_iterator textIt = actual.text.begin();
+          QList<KDevelop::SimpleCursor>::const_iterator cursorIt = actual.inputPosition.begin();
+
+          for( ; textIt != actual.text.end(); ++textIt, ++cursorIt )
+          {
+            output.appendString(*cursorIt, *textIt);
+          }
+          output.mark(input.inputPosition());
           continue;
         }
 
@@ -284,7 +294,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           continue;
         }
 
-        QList<QString> actuals;
+        QList<pp_actual> actuals;
         ++input; // skip '('
 
         pp_macro_expander expand_actual(m_engine, m_frame);
@@ -293,19 +303,27 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         {
           actual.clear();
 
+          QString actualText;
+          KDevelop::SimpleCursor actualStart = input.inputPosition();
           {
-            Stream as(&actual);
+            Stream as(&actualText);
             skip_argument_variadics(actuals, macro, input, as);
+            kDebug() << "actualText:" << actualText;
           }
 
           if (input.offset() != before)
           {
-            QString newActual;
+            pp_actual newActual;
             {
-              Stream as(&actual, input.inputPosition());
-              as.setOriginalInputPosition(input.originalInputPosition());
-              Stream nas(&newActual);
+              QString newActualText;
+              Stream as(&actualText, actualStart);
+              as.setOriginalInputPosition(input.originalInputPosition());///@todo What does originalInputPosition mean?
+
+              rpp::LocationTable table;
+              Stream nas(&newActualText, actualStart, &table);
               expand_actual(as, nas);
+              
+              table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
             }
             actuals.append(newActual);
           }
@@ -318,18 +336,25 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input; // skip ','
 
           {
-            KDevelop::SimpleCursor inputPosition = input.inputPosition();
+            QString actualText;
+            KDevelop::SimpleCursor actualStart = input.inputPosition();
             {
-              Stream as(&actual);
+              Stream as(&actualText);
               skip_argument_variadics(actuals, macro, input, as);
             }
 
-            QString newActual;
+            pp_actual newActual;
             {
-              Stream as(&actual, inputPosition);
+              QString newActualText;
+              Stream as(&actualText, actualStart);
               as.setOriginalInputPosition(input.originalInputPosition());
-              Stream nas(&newActual);
+
+              QString actualText;
+              rpp::LocationTable table;
+              Stream nas(&newActualText, actualStart, &table);
               expand_actual(as, nas);
+              
+              table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
             }
             actuals.append(newActual);
           }
@@ -370,7 +395,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
   }
 }
 
-void pp_macro_expander::skip_argument_variadics (const QList<QString>& __actuals, pp_macro *__macro, Stream& input, Stream& output)
+void pp_macro_expander::skip_argument_variadics (const QList<pp_actual>& __actuals, pp_macro *__macro, Stream& input, Stream& output)
 {
   int first;
 

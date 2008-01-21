@@ -40,13 +40,13 @@ Stream::Stream()
 {
 }
 
-Stream::Stream( QString * string, const KDevelop::SimpleCursor& offset )
+Stream::Stream( QString * string, const KDevelop::SimpleCursor& offset, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
   , m_pos(0)
   , m_inputLine(offset.line)
   , m_inputLineStartedAt(-offset.column)
-  , m_locationTable(0L)
+  , m_locationTable(table)
   , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
 {
   c = m_string->constData();

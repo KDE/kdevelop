@@ -42,7 +42,7 @@ class KDEVCPPRPP_EXPORT Stream
 
   public:
     Stream();
-    explicit Stream( QString * string, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0) );
+    explicit Stream( QString * string, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0), LocationTable* table = 0 );
     explicit Stream( QString * string, LocationTable* table );
     virtual ~Stream();
 

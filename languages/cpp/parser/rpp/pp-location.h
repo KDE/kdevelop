@@ -42,7 +42,14 @@ class KDEVCPPRPP_EXPORT LocationTable
     KDevelop::SimpleCursor positionForOffset(std::size_t offset) const;
 
     void dump() const;
-    
+
+    /**
+     * Splits the given @param text using this location-table into sub-strings each assigned to a cursor where it starts.
+     * @param textStartPosition must be given as the start-position, because the location-table might not contain an anchor
+     * for the first character.
+    * */
+    void splitByAnchors(const QString& text, const KDevelop::SimpleCursor& textStartPosition, QStringList& strings, QList<KDevelop::SimpleCursor>& anchors) const;
+  
   private:
     QMap<std::size_t, KDevelop::SimpleCursor> m_offsetTable;
     mutable QMap<std::size_t, KDevelop::SimpleCursor>::ConstIterator m_currentOffset;

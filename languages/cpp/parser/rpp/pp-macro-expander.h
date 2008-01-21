@@ -29,18 +29,38 @@
 #include "pp-macro.h"
 #include "pp-stream.h"
 #include "pp-scanner.h"
+#include <simplecursor.h>
 
 namespace rpp {
 
 class pp;
 
+//The value of a preprocessor function-like macro parameter
+class pp_actual {
+public:
+  QStringList text;
+  QList<KDevelop::SimpleCursor> inputPosition; //Each inputPosition marks the beginning of one item in the text list
+
+  bool isValid() const {
+    return !text.isEmpty();
+  }
+  void clear() {
+    text.clear();
+    inputPosition.clear();
+  }
+
+  QString mergeText() const {
+    return text.join(QString());
+  }
+};
+
 class pp_frame
 {
 public:
-  pp_frame (pp_macro* __expandingMacro, const QList<QString>& __actuals);
+  pp_frame (pp_macro* __expandingMacro, const QList<pp_actual>& __actuals);
 
   pp_macro* expandingMacro;
-  QList<QString> actuals;
+  QList<pp_actual> actuals;
 };
 
 class pp_macro_expander
@@ -48,13 +68,13 @@ class pp_macro_expander
 public:
   explicit pp_macro_expander(pp* engine, pp_frame* frame = 0, bool inHeaderSection = false);
 
-  QString resolve_formal(const QString& name, Stream& input);
+  pp_actual resolve_formal(const QString& name, Stream& input);
 
   /// Expands text with the known macros. Continues until it finds a new text line
   /// beginning with #, at which point control is returned.
   void operator()(Stream& input, Stream& output);
 
-  void skip_argument_variadics (const QList<QString>& __actuals, pp_macro *__macro,
+  void skip_argument_variadics (const QList<pp_actual>& __actuals, pp_macro *__macro,
                                 Stream& input, Stream& output);
 
 private:
