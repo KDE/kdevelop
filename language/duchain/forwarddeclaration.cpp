@@ -104,7 +104,8 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
     if( !decl->isForwardDeclaration() )
       return decl;
   }
-  
+
+  kDebug(9505) << "Failed to resolve forward-declaration " << globalIdentifier << " from top-context " << topContext->url().str();
   return 0;
 }
 
