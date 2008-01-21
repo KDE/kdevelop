@@ -18,8 +18,8 @@
 # errors
 #
 # Variables used by this module, they can change the default behaviour:
-#  Boost_USE_NONMULTITHREAD      Can be set to TRUE to use the non-multithreaded
-#                                boost libraries.
+#  Boost_USE_MULTITHREAD         Can be set to OFF to use the non-multithreaded
+#                                boost libraries. Defaults to ON.
 #  Boost_ADDITIONAL_VERSIONS     A list of version numbers to use for searching
 #                                the boost include directory. The default list
 #                                of version numbers is:
@@ -28,6 +28,10 @@
 #                                version set this variable to a list of
 #                                strings, where each string contains a number, i.e.
 #                                SET(Boost_ADDITIONAL_VERSIONS "0.99.0" "1.35.0")
+#  Boost_MINIMUM_VERSION         Can be used to require a specific minimum version of boost.
+#                                Should be set as a plain string in the form "major.minor[.subminor]".
+#                                If this variable is set and find_package is called with the REQUIRED
+#                                Option FindBoost.cmake will fail if it doesn't find a suitable version.
 #  Boost_ROOT                    Preferred installation prefix for searching for Boost,
 #                                set this if the module has problems finding the proper Boost installation
 #  Boost_INCLUDEDIR              Set this to the include directory of Boost, if the
@@ -77,6 +81,8 @@
 #
 
 # MESSAGE(STATUS "Finding Boost libraries.... ")
+
+OPTION(Boost_USE_MULTITHREAD "Use the multithreaded versions of the boost libraries" ON)
 
 SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.33" "1.33.0" "1.33.1" "1.34" "1.34.0" "1.34.1" )
 
@@ -166,7 +172,7 @@ ELSE (_boost_IN_CACHE)
 
   SET(_boost_INCLUDE_SEARCH_DIRS
     C:/boost/include
-    "C:/Program Files/boost/boost_${Boost_REQUIRED_VERSION}"
+    "C:/Program Files/boost/boost_${Boost_MINIMUM_VERSION}"
     # D: is very often the cdrom drive, IF you don't have a
     # cdrom inserted it will popup a very annoying dialog
     #D:/boost/include
@@ -175,7 +181,7 @@ ELSE (_boost_IN_CACHE)
 
   SET(_boost_LIBRARIES_SEARCH_DIRS
     C:/boost/lib
-    "C:/Program Files/boost/boost_${Boost_REQUIRED_VERSION}/lib"
+    "C:/Program Files/boost/boost_${Boost_MINIMUM_VERSION}/lib"
     /sw/local/lib
   )
 
@@ -205,6 +211,23 @@ ELSE (_boost_IN_CACHE)
     SET(_boost_LIBRARIES_SEARCH_DIRS ${Boost_LIBRARYDIR}/include ${_boost_LIBRARIES_SEARCH_DIRS})
   ENDIF( Boost_LIBRARYDIR )
 
+  IF( Boost_MINIMUM_VERSION )
+    IF(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+\\.[0-9]")
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" _boost_REQ_MAJ_VER ${Boost_MINIMUM_VERSION})
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" _boost_REQ_MIN_VER ${Boost_MINIMUM_VERSION})
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" _boost_REQ_SMIN_VER ${Boost_MINIMUM_VERSION})
+    ELSEIF(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+")
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1" _boost_REQ_MAJ_VER ${Boost_MINIMUM_VERSION})
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\2" _boost_REQ_MIN_VER ${Boost_MINIMUM_VERSION})
+      SET(_boost_REQ_SMIN_VER 0)
+    ELSE(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+\\.[0-9]")
+      MESSAGE(FATAL_ERROR "Wrong format for Boost_MINIMUM_VERSION variable, the format needs to be major.minor[.subminor]")
+    ENDIF(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+\\.[0-9]")
+
+    MATH(EXPR _boost_REQ_VERSION "${_boost_REQ_MAJ_VER} * 100000 + ${_boost_REQ_MIN_VER} * 100 + ${_boost_REQ_SMIN_VER}")
+
+  ENDIF( Boost_MINIMUM_VERSION )
+
   FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
     IF( NOT Boost_INCLUDE_DIR )
 
@@ -222,30 +245,36 @@ ELSE (_boost_IN_CACHE)
           PATHS         ${_boost_INCLUDE_SEARCH_DIRS}
           PATH_SUFFIXES ${_boost_PATH_SUFFIX}
       )
-
-      # Extract Boost_VERSION and Boost_LIB_VERSION from version.hpp
-      # Read the whole file:
-      #
-      SET(BOOST_VERSION 0)
-      SET(BOOST_LIB_VERSION "")
-      FILE(READ "${Boost_INCLUDE_DIR}/boost/version.hpp" _boost_VERSION_HPP_CONTENTS)
-
-      STRING(REGEX REPLACE ".*#define BOOST_VERSION ([0-9]+).*" "\\1" Boost_VERSION "${_boost_VERSION_HPP_CONTENTS}")
-      STRING(REGEX REPLACE ".*#define BOOST_LIB_VERSION \"([0-9_]+)\".*" "\\1" Boost_LIB_VERSION "${_boost_VERSION_HPP_CONTENTS}")
-
-      SET(Boost_LIB_VERSION ${Boost_LIB_VERSION} CACHE STRING "The library version string for boost libraries")
-      SET(Boost_VERSION ${Boost_VERSION} CACHE STRING "The version number for boost libraries")
-      
-      IF(NOT "${Boost_VERSION}" STREQUAL "0")
-        MATH(EXPR Boost_MAJOR_VERSION "${Boost_VERSION} / 100000")
-        MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
-        MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
-      ENDIF(NOT "${Boost_VERSION}" STREQUAL "0")
-
+ 
+      IF(Boost_INCLUDE_DIR)
+        # Extract Boost_VERSION and Boost_LIB_VERSION from version.hpp
+        # Read the whole file:
+        #
+        SET(BOOST_VERSION 0)
+        SET(BOOST_LIB_VERSION "")
+        FILE(READ "${Boost_INCLUDE_DIR}/boost/version.hpp" _boost_VERSION_HPP_CONTENTS)
+  
+        STRING(REGEX REPLACE ".*#define BOOST_VERSION ([0-9]+).*" "\\1" Boost_VERSION "${_boost_VERSION_HPP_CONTENTS}")
+        STRING(REGEX REPLACE ".*#define BOOST_LIB_VERSION \"([0-9_]+)\".*" "\\1" Boost_LIB_VERSION "${_boost_VERSION_HPP_CONTENTS}")
+  
+        SET(Boost_LIB_VERSION ${Boost_LIB_VERSION} CACHE STRING "The library version string for boost libraries")
+        SET(Boost_VERSION ${Boost_VERSION} CACHE STRING "The version number for boost libraries")
+        
+        IF(NOT "${Boost_VERSION}" STREQUAL "0")
+          MATH(EXPR Boost_MAJOR_VERSION "${Boost_VERSION} / 100000")
+          MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
+          MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
+  	  IF(_boost_REQ_VERSION)
+            IF( Boost_VERSION LESS ${_boost_REQ_VERSION})
+              SET(Boost_INCLUDE_DIR FALSE)
+            ENDIF( Boost_VERSION LESS ${_boost_REQ_VERSION})
+  	  ENDIF(_boost_REQ_VERSION)
+  
+        ENDIF(NOT "${Boost_VERSION}" STREQUAL "0")
+      ENDIF(Boost_INCLUDE_DIR)
 
     ENDIF( NOT Boost_INCLUDE_DIR )
   ENDFOREACH(_boost_VER)
-
   #Setting some more suffixes for the library
   SET (Boost_LIB_PREFIX "")
   IF ( WIN32 )
@@ -286,9 +315,9 @@ ELSE (_boost_IN_CACHE)
 
   SET (_boost_MULTITHREADED "-mt")
 
-  IF( Boost_USE_NONMULTITHREADED )
+  IF( NOT Boost_USE_MULTITHREADED )
     SET (_boost_MULTITHREADED "")
-  ENDIF( Boost_USE_NONMULTITHREADED )
+  ENDIF( NOT Boost_USE_MULTITHREADED )
 
   SET( _boost_STATIC_TAG "")
   IF (WIN32)
@@ -384,7 +413,7 @@ ELSE (_boost_IN_CACHE)
       ENDIF(NOT Boost_FIND_QUIETLY)
   ELSE (Boost_FOUND)
       IF (Boost_FIND_REQUIRED)
-        MESSAGE(FATAL_ERROR "Please install the Boost libraries AND development packages")
+	MESSAGE(FATAL_ERROR "Couldn't find the Boost libraries and/or include irectory. Please install the Boost libraries AND development packages")
       ENDIF(Boost_FIND_REQUIRED)
   ENDIF(Boost_FOUND)
 
