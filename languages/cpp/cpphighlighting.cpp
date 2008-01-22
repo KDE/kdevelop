@@ -172,8 +172,8 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         break;
 
       case DeclarationContext:
-        //a->setFontBold();
-        a->setFontUnderline(true);
+        a->setFontBold();
+        //a->setFontUnderline(true);
         break;
 
       case ReferenceContext:
