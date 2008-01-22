@@ -21,6 +21,7 @@
 #include <QMutexLocker>
 
 #include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
 #include <hashedstring.h>
@@ -46,6 +47,10 @@ void DocumentRangeObjectPrivate::syncFromSmart() const {
 void DocumentRangeObjectPrivate::syncToSmart() const {
     if(!m_smartRange)
         return;
+    
+    KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
+    Q_ASSERT(iface);
+    QMutexLocker l(iface->smartMutex());
     
     m_smartRange->start().setLine(m_range.start.line);
     m_smartRange->start().setColumn(m_range.start.column);
@@ -143,10 +148,7 @@ void DocumentRangeObject::setSmartRange(KTextEditor::SmartRange * range, RangeOw
     d->m_ownsRange = ownsRange;
 
     if(d->m_smartRange)
-    {
         d->m_smartRange->addWatcher(this);
-        d->m_document = d->m_smartRange->document()->url().prettyUrl();
-    }
 }
 
 SimpleRange DocumentRangeObject::range( ) const

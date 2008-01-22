@@ -54,9 +54,8 @@ public:
     Q_DECLARE_FLAGS( RangeOwnings, RangeOwning )
 
     /**
-     * @param document Should be a string containing the document name, formatted from an url using prettyUrl(). This must be given explicitly, so it can be implicitly shared.
-     * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
-     * deleted when the object is deleted.
+     * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be deleted when the object is deleted.
+     * Does not change the url associated to this object, because that cannot be retrieved from the smart-range in a thread-safe way.
      */
     void setSmartRange(KTextEditor::SmartRange* range, RangeOwning ownsRange = Own);
 
