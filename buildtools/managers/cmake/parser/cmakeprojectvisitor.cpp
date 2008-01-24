@@ -508,6 +508,28 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     return 1;
 }
 
+
+int CMakeProjectVisitor::visit(const TryCompileAst *tca)
+{
+    kDebug(9042) << "try_compile" << tca->resultName() << tca->binDir() << tca->source()
+            << "cmakeflags" << tca->cmakeFlags() << "outputvar" << tca->outputName();
+    if(m_projectName.isEmpty())
+    {
+        kDebug(9042) << "file compile" << tca->compileDefinitions() << tca->copyFile();
+    }
+    else
+    {
+        kDebug(9042) << "project compile" << tca->projectName() << tca->targetName();
+    }
+    return 1;
+}
+
+
+int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *)
+{
+    return 1;
+}
+
 int CMakeProjectVisitor::visit(const MacroAst *macro)
 {
     kDebug(9042) << "Adding macro:" << macro->macroName();
@@ -1324,4 +1346,6 @@ QStringList CMakeProjectVisitor::targetDependencies(const QString & target) cons
     }
     return ret;
 }
+
+
 

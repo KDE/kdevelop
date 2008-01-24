@@ -664,6 +664,15 @@ CMAKE_END_AST_CLASS( TargetLinkLibrariesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( TryCompileAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, resultName, ResultName)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, binDir, BinDir)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, source, source)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, projectName, ProjectName)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, targetName, TargetName)
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, cmakeFlags, CMakeFlags)
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, compileDefinitions, compileDefinitions)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputName, OutputName)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, copyFile, CopyFile)
 CMAKE_END_AST_CLASS( TryCompileAst )
 
 

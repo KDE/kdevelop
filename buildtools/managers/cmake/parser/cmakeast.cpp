@@ -32,12 +32,6 @@
 #include "astfactory.h"
 #include "cmakelistsparser.h"
 
-void CMakeAst::writeBack(QString& ) const
-{
-}
-
-CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
-CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
 CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
@@ -49,38 +43,47 @@ CMAKE_REGISTER_AST( BuildCommandAst, build_command )
 CMAKE_REGISTER_AST( BuildNameAst, build_name )
 CMAKE_REGISTER_AST( CMakeMinimumRequiredAst, cmake_minimum_required )
 CMAKE_REGISTER_AST( ConfigureFileAst, configure_file )
-CMAKE_REGISTER_AST( IncludeAst, include )
-CMAKE_REGISTER_AST( IfAst, if )
-CMAKE_REGISTER_AST( IncludeDirectoriesAst, include_directories )
-CMAKE_REGISTER_AST( SetAst, set )
-CMAKE_REGISTER_AST( ProjectAst, project )
-CMAKE_REGISTER_AST( MacroAst, macro )
+CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
+CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
+CMAKE_REGISTER_AST( EnableTestingAst, enable_testing )
 CMAKE_REGISTER_AST( ExecProgramAst, exec_program )
-CMAKE_REGISTER_AST( MarkAsAdvancedAst, mark_as_advanced )
-CMAKE_REGISTER_AST( FindPackageAst, find_package )
-CMAKE_REGISTER_AST( FindProgramAst, find_program )
-CMAKE_REGISTER_AST( FindPathAst, find_path )
+CMAKE_REGISTER_AST( ExecuteProcessAst, execute_process )
+CMAKE_REGISTER_AST( FileAst, file )
 CMAKE_REGISTER_AST( FindFileAst, find_file )
 CMAKE_REGISTER_AST( FindLibraryAst, find_library )
-CMAKE_REGISTER_AST( FileAst, file )
-CMAKE_REGISTER_AST( MessageAst, message )
-CMAKE_REGISTER_AST( MathAst, math )
-CMAKE_REGISTER_AST( GetFilenameComponentAst, get_filename_component )
-CMAKE_REGISTER_AST( ListAst, list )
-CMAKE_REGISTER_AST( OptionAst, option )
-CMAKE_REGISTER_AST( StringAst, string )
-CMAKE_REGISTER_AST( SubdirsAst, subdirs )
-CMAKE_REGISTER_AST( GetCMakePropertyAst, get_cmake_property )
+CMAKE_REGISTER_AST( FindPackageAst, find_package )
+CMAKE_REGISTER_AST( FindPathAst, find_path )
+CMAKE_REGISTER_AST( FindProgramAst, find_program )
 CMAKE_REGISTER_AST( ForeachAst, foreach )
-CMAKE_REGISTER_AST( ExecuteProcessAst, execute_process )
-CMAKE_REGISTER_AST( EnableTestingAst, enable_testing )
+CMAKE_REGISTER_AST( GetCMakePropertyAst, get_cmake_property )
+CMAKE_REGISTER_AST( GetFilenameComponentAst, get_filename_component )
+CMAKE_REGISTER_AST( IfAst, if )
+CMAKE_REGISTER_AST( IncludeAst, include )
+CMAKE_REGISTER_AST( IncludeDirectoriesAst, include_directories )
 CMAKE_REGISTER_AST( IncludeRegularExpressionAst, include_regular_expression )
 CMAKE_REGISTER_AST( LinkDirectoriesAst, link_directories )
+CMAKE_REGISTER_AST( ListAst, list )
+CMAKE_REGISTER_AST( MacroAst, macro )
+CMAKE_REGISTER_AST( MarkAsAdvancedAst, mark_as_advanced )
+CMAKE_REGISTER_AST( MathAst, math )
+CMAKE_REGISTER_AST( MessageAst, message )
+CMAKE_REGISTER_AST( OptionAst, option )
+CMAKE_REGISTER_AST( ProjectAst, project )
+CMAKE_REGISTER_AST( SetAst, set )
+CMAKE_REGISTER_AST( StringAst, string )
+CMAKE_REGISTER_AST( SubdirsAst, subdirs )
+CMAKE_REGISTER_AST( TargetLinkLibrariesAst, target_link_libraries)
+CMAKE_REGISTER_AST( TryCompileAst, try_compile )
 CMAKE_REGISTER_AST( TryRunAst, try_run )
 CMAKE_REGISTER_AST( UseMangledMesaAst, use_mangled_mesa )
 CMAKE_REGISTER_AST( UtilitySourceAst, utility_source )
 CMAKE_REGISTER_AST( VariableRequiresAst, variable_requires )
 CMAKE_REGISTER_AST( WhileAst, while)
+
+
+void CMakeAst::writeBack(QString& ) const
+{
+}
 
 enum Stage {NAMES, PATHS, PATH_SUFFIXES};
 
@@ -2773,7 +2776,53 @@ void TryCompileAst::writeBack( QString& ) const
 
 bool TryCompileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "try_compile" || func.arguments.size() < 3)
+        return false;
+    m_resultName=func.arguments[0].value;
+    m_binDir=func.arguments[1].value;
+    m_source=func.arguments[2].value;
+    
+    enum Param { None, CMakeFlags, CompileDefinitions, OutputVariable, CopyFile };
+    
+    Param current=None;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
+    it = func.arguments.begin() + 3;
+    itEnd = func.arguments.end();
+
+    //FIXME:Maybe could look for errors
+    for ( ; it != itEnd; ++it )
+    {
+        if(it->value=="CMAKE_FLAGS") current=CMakeFlags;
+        else if(it->value=="COMPILE_DEFINITIONS") current=CompileDefinitions;
+        else if(it->value=="OUTPUT_VARIABLE") current=OutputVariable;
+        else if(it->value=="COPY_FILE") current=OutputVariable;
+        else switch(current)
+        {
+            case None:
+                if(m_projectName.isEmpty())
+                    m_projectName=it->value;
+                else
+                    m_targetName=it->value;
+                current=None;
+                break;
+            case CMakeFlags:
+                m_cmakeFlags.append(it->value);
+                break;
+            case CompileDefinitions:
+                m_compileDefinitions.append(it->value);
+                break;
+            case OutputVariable:
+                m_outputName=it->value;
+                current=None;
+                break;
+            case CopyFile:
+                m_copyFile=it->value;
+                current=None;
+                break;
+        }
+    }
+    
+    return true;
 }
 
 TryRunAst::TryRunAst()

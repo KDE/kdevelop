@@ -61,7 +61,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const FindFileAst * );
         virtual int visit( const IfAst * );
         virtual int visit( const ExecProgramAst * );
-	virtual int visit( const ExecuteProcessAst * );
+        virtual int visit( const ExecuteProcessAst * );
         virtual int visit( const FileAst * );
         virtual int visit( const MessageAst * );
         virtual int visit( const MathAst * );
@@ -74,6 +74,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const ProjectAst * );
         virtual int visit( const StringAst * );
         virtual int visit( const SubdirsAst * );
+        virtual int visit( const TryCompileAst * );
+        virtual int visit( const TargetLinkLibrariesAst * );
         virtual int visit( const GetCMakePropertyAst * );
         virtual int visit( const CMakeAst * );
         
