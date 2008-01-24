@@ -225,7 +225,6 @@ ELSE (_boost_IN_CACHE)
     ENDIF(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+\\.[0-9]")
 
     MATH(EXPR _boost_REQ_VERSION "${_boost_REQ_MAJ_VER} * 100000 + ${_boost_REQ_MIN_VER} * 100 + ${_boost_REQ_SMIN_VER}")
-
   ENDIF( Boost_MINIMUM_VERSION )
 
   FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
@@ -265,9 +264,9 @@ ELSE (_boost_IN_CACHE)
           MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
           MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
   	  IF(_boost_REQ_VERSION)
-            IF( Boost_VERSION LESS ${_boost_REQ_VERSION})
+            IF( Boost_VERSION LESS "${_boost_REQ_VERSION}")
               SET(Boost_INCLUDE_DIR FALSE)
-            ENDIF( Boost_VERSION LESS ${_boost_REQ_VERSION})
+            ENDIF( Boost_VERSION LESS "${_boost_REQ_VERSION}")
   	  ENDIF(_boost_REQ_VERSION)
   
         ENDIF(NOT "${Boost_VERSION}" STREQUAL "0")
