@@ -36,6 +36,9 @@
 #include <duchain/use.h>
 #include <icore.h>
 #include <idocumentcontroller.h>
+#include <ilanguage.h>
+#include <interfaces/ilanguagesupport.h>
+#include <ilanguagecontroller.h>
 
 using namespace KDevelop;
 
@@ -143,11 +146,13 @@ void UseHighlightPlugin::updateViews()
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
     
     Declaration* foundDeclaration = 0;
+
+
+    QList<KDevelop::ILanguage*> languages = core()->languageController()->languagesForUrl(view->document()->url());
     
-    QList<KDevelop::TopDUContext*> contexts = KDevelop::DUChain::self()->chainsForDocument(view->document()->url());
-    foreach( KDevelop::TopDUContext* ctx, contexts )
-      if( !(ctx->flags() & KDevelop::TopDUContext::ProxyContextFlag) )
-        chosen = ctx;
+    foreach( KDevelop::ILanguage* language, languages)
+      if(!chosen)
+        chosen = language->languageSupport()->standardContext(view->document()->url());
 
     if( chosen )
     {
