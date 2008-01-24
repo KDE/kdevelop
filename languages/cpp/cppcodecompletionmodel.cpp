@@ -56,41 +56,11 @@
 #include "preprocessjob.h"
 #include <duchainutils.h>
 #include "cppcodecompletionworker.h"
+#include "cpplanguagesupport.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
-
-TopDUContext* getCompletionContext( const KUrl& url )
-{
-  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
-  KDevelop::TopDUContext* top = KDevelop::DUChain::self()->chainForDocument(url, env);
-  delete env;
-
-  if( !top ) {
-    kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
-    top = DUChain::self()->chainForDocument(url);
-  }
-
-  if(top && top->flags() & TopDUContext::ProxyContextFlag)
-  {
-    if(!top->importedParentContexts().isEmpty())
-    {
-      if(top->importedParentContexts().count() != 1)
-        kDebug(9007) << "WARNING: Proxy-context has more than one content-contexts, this should never happen";
-
-      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
-
-      if(!top)
-        kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
-
-    } else {
-      kDebug(9007) << "ERROR: Proxy-context has no content-context";
-    }
-  }
-
-  return top;
-}
 
 //Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
 AbstractType::Ptr effectiveType( Declaration* decl )
@@ -147,7 +117,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     return;
   }
 
-  TopDUContext* top = getCompletionContext( url );
+  TopDUContext* top = CppLanguageSupport::self()->standardContext( url );
   m_currentTopContext = TopDUContextPointer(top);
 
   if (top) {

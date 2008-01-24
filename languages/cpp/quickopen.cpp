@@ -46,10 +46,7 @@ TopDUContextPointer getCurrentTopDUContext() {
 
   if( doc )
   {
-    {
-      DUChainReadLocker lock( DUChain::lock() );
-      return TopDUContextPointer( getCompletionContext( doc->url() ) );
-    }
+    return TopDUContextPointer( CppLanguageSupport::self()->standardContext( doc->url() ) );
   }
   return TopDUContextPointer();
 }
@@ -339,7 +336,7 @@ void IncludeFileDataProvider::reset()
 
     {
       DUChainReadLocker lock( DUChain::lock() );
-      m_duContext = TopDUContextPointer( getCompletionContext( doc->url() ) );
+      m_duContext = TopDUContextPointer( CppLanguageSupport::self()->standardContext( doc->url() )  );
 
       if( m_allowImporters && m_duContext ) {
         QSet<HashedString> importers;

@@ -74,7 +74,21 @@ public:
     const Cpp::MacroRepository::LazySet& standardMacros() const;
 
     Cpp::EnvironmentManager* environmentManager() const;
-
+/**
+ * There may be multiple differnt parsed versions of a document available in the du-chain.
+ * This function helps choosing the right one, by creating a standard parsing-environment,
+ * and searching for a TopDUContext that fits in. If this fails, a random version is chosen.
+ *
+ * If simplified environment-matching is enabled, and a proxy-context is found, it returns
+ * that proxy-contexts target-context, so the returned context may be used for completion etc.
+ * without additional checking.
+ *
+ * @todo Move this somewhere more general
+ *
+ * @warning The du-chain must be locked before calling this.
+* */
+  virtual KDevelop::TopDUContext *standardContext(const KUrl& url);
+  
 private slots:
     void documentLoaded(KDevelop::IDocument*);
     void documentClosed(KDevelop::IDocument*);

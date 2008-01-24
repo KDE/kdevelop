@@ -202,6 +202,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible";
     }
 
+
     ///Find all recursive function-calls that should be shown as call-tips
     Cpp::CodeCompletionContext::Ptr parentContext = completionContext;
     do {

@@ -59,6 +59,7 @@
 #include <smartconverter.h>
 #include <symboltable.h>
 
+#include "preprocessjob.h"
 #include "rpp/preprocessor.h"
 #include "ast.h"
 #include "parsesession.h"
@@ -515,6 +516,39 @@ void CppLanguageSupport::documentActivated(KDevelop::IDocument * document)
 {
   Q_UNUSED(document)
 }
+
+TopDUContext* CppLanguageSupport::standardContext(const KUrl& url)
+{
+  DUChainReadLocker lock(DUChain::lock());
+  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
+  KDevelop::TopDUContext* top = KDevelop::DUChain::self()->chainForDocument(url, env);
+  delete env;
+
+  if( !top ) {
+    kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
+    top = DUChain::self()->chainForDocument(url);
+  }
+
+  if(top && top->flags() & TopDUContext::ProxyContextFlag)
+  {
+    if(!top->importedParentContexts().isEmpty())
+    {
+      if(top->importedParentContexts().count() != 1)
+        kDebug(9007) << "WARNING: Proxy-context has more than one content-contexts, this should never happen";
+
+      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
+
+      if(!top)
+        kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
+
+    } else {
+      kDebug(9007) << "ERROR: Proxy-context has no content-context";
+    }
+  }
+
+  return top;
+}
+
 
 #include "cpplanguagesupport.moc"
 
