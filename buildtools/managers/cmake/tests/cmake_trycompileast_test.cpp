@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,18 +35,38 @@ void TryCompileAstTest::testGoodParse()
 
 void TryCompileAstTest::testGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc l;
+    l.name = "try_compile";
+    l.addArguments(QStringList() << "RESULT" << "mySrcDir" << "myBinDir" << "myProjectName");
+    QTest::newRow("cmake way") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "RESULT" << "mySrcDir" << "myBinDir");
+    QTest::newRow("compile way") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "RESULT" << "mySrcDir" << "myBinDir" << "COMPILE_DEFINITIONS" << "-D LOL");
+    QTest::newRow("more complex compile") << l;
 }
 
 void TryCompileAstTest::testBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    TryCompileAst* ast = new TryCompileAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
 
 void TryCompileAstTest::testBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc l;
+    l.name = "try_compile";
+    QTest::newRow("no parameters") << l;
+
 }
 
 #include "cmake_trycompileast_test.moc"

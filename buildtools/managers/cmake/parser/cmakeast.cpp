@@ -972,6 +972,7 @@ bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 ExportLibraryDepsAst::ExportLibraryDepsAst()
+    : m_append(false)
 {
 }
 
@@ -985,7 +986,19 @@ void ExportLibraryDepsAst::writeBack( QString& ) const
 
 bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower() != "export_library_dependencies" || func.arguments.isEmpty())
+        return false;
+    m_file=func.arguments[0].value;
+    if(func.arguments.count()>=2)
+    {
+        if(func.arguments[1].value=="APPEND")
+        {
+            m_append=true;
+        }
+        if(func.arguments.count()>(2+m_append))
+            return false;
+    }
+    return true;
 }
 
 FileAst::FileAst()
@@ -1596,7 +1609,12 @@ void GetSourceFilePropAst::writeBack( QString& ) const
 
 bool GetSourceFilePropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="get_source_file_property" || func.arguments.count()!=3)
+        return false;
+    m_variableName=func.arguments[0].value;
+    m_filename=func.arguments[1].value;
+    m_property=func.arguments[2].value;
+    return true;
 }
 
 GetTargetPropAst::GetTargetPropAst()
@@ -1613,7 +1631,12 @@ void GetTargetPropAst::writeBack( QString& ) const
 
 bool GetTargetPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="get_target_property" || func.arguments.count()!=3)
+        return false;
+    m_variableName=func.arguments[0].value;
+    m_target=func.arguments[1].value;
+    m_property=func.arguments[2].value;
+    return true;
 }
 
 GetTestPropAst::GetTestPropAst()
@@ -1630,7 +1653,12 @@ void GetTestPropAst::writeBack( QString& ) const
 
 bool GetTestPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="get_target_property" || func.arguments.count()!=3)
+        return false;
+    m_test=func.arguments[0].value;
+    m_variableName=func.arguments[1].value;
+    m_property=func.arguments[2].value;
+    return true;
 }
 
 IfAst::IfAst()
@@ -1881,7 +1909,7 @@ bool LinkDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.name.toLower() != "include_regular_expression" || func.arguments.isEmpty() )
         return false;
     
-    foreach(CMakeFunctionArgument arg, func.arguments)
+    foreach(const CMakeFunctionArgument &arg, func.arguments)
         m_directories.append(arg.value);
     return true;
 }
@@ -1900,7 +1928,27 @@ void LinkLibrariesAst::writeBack( QString& ) const
 
 bool LinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "link_libraries" || func.arguments.isEmpty() )
+        return false;
+    
+    QString lastLib;
+    foreach(const CMakeFunctionArgument &arg, func.arguments)
+    {
+        BuildType current=None;
+        if(arg.value=="debug")
+            current=Debug;
+        else if(arg.value=="optimized")
+            current=Optimized;
+        else
+        {
+            if(!lastLib.isEmpty())
+                m_libraries.append(LibraryType(lastLib, None));
+            lastLib=arg.value;
+        }
+        if(current!=None)
+            m_libraries.append(LibraryType(lastLib, current));
+    }
+    return true;
 }
 
 ListAst::ListAst()
@@ -2043,6 +2091,47 @@ void LoadCacheAst::writeBack( QString& ) const
 
 bool LoadCacheAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    if ( func.name.toLower() != "load_cache" || func.arguments.count()<4)
+        return false;
+    m_cachePath=func.arguments[0].value;
+    if(func.arguments[1].value=="READ_WITH_PREFIX")
+    {
+        QString prefix;
+        QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
+        for ( it = func.arguments.constBegin() + 2; it != itEnd; ++it )
+        {
+            if(prefix.isEmpty())
+            {
+                prefix=it->value;
+            }
+            else
+            {
+                m_prefixes=PrefixEntry(prefix, it->value);
+                prefix.clear();
+            }
+        }
+        return prefix.isEmpty();
+    }
+    else
+    {
+        bool exclude=false;
+        QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
+        for ( it = func.arguments.constBegin() + 2; it != itEnd; ++it )
+        {
+            if(it->value=="EXCLUDE")
+                exclude=true;
+            else if(it->value=="INCLUDE_INTERNALS")
+                exclude=false;
+            else
+            {
+                if(exclude)
+                    m_exclude.append(it->value);
+                else
+                    m_includeInternals.append(it->value);
+            }
+        }
+        return true;
+    }
     return false;
 }
 
@@ -2060,7 +2149,14 @@ void LoadCommandAst::writeBack( QString& ) const
 
 bool LoadCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "load_cache" || func.arguments.count()<4)
+        return false;
+    m_cmdName=func.arguments[0].value;
+    
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
+    for ( it = func.arguments.constBegin() + 1; it != itEnd; ++it )
+        m_location.append( it->value );
+    return !m_location.isEmpty();
 }
 
 MacroAst::MacroAst()
@@ -2237,7 +2333,11 @@ void OutputRequiredFilesAst::writeBack( QString& ) const
 
 bool OutputRequiredFilesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="output_required_files" || func.arguments.count()!=2)
+        return false;
+    m_srcFile=func.arguments[0].value;
+    m_outputFile=func.arguments[1].value;
+    return true;
 }
 
 ProjectAst::ProjectAst()
@@ -2263,9 +2363,7 @@ bool ProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_projectName = func.arguments[0].value;
 
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
-    it = func.arguments.begin();
-    ++it;
-    for ( ; it != itEnd; ++it )
+    for ( it = func.arguments.begin()+1; it != itEnd; ++it )
     {
         CMakeFunctionArgument arg = ( *it );
         if ( arg.value == "CXX" )
@@ -2329,7 +2427,17 @@ void RemoveAst::writeBack( QString& ) const
 
 bool RemoveAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "remove" || func.arguments.isEmpty())
+        return false;
+
+    m_variableName = func.arguments[0].value;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    for ( it = func.arguments.begin()+1; it != itEnd; ++it )
+    {
+        m_values.append(it->value);
+    }
+    return !m_values.isEmpty();
 }
 
 RemoveDefinitionsAst::RemoveDefinitionsAst()
@@ -2346,7 +2454,15 @@ void RemoveDefinitionsAst::writeBack( QString& ) const
 
 bool RemoveDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "remove_definitions")
+        return false;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    for ( it = func.arguments.begin(); it != itEnd; ++it )
+    {
+        m_definitions.append(it->value);
+    }
+    return !m_definitions.isEmpty();
 }
 
 SeparateArgumentsAst::SeparateArgumentsAst()
@@ -2363,7 +2479,11 @@ void SeparateArgumentsAst::writeBack( QString& ) const
 
 bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "separate_arguments" || func.arguments.count()==1)
+        return false;
+
+    m_variableName=func.arguments.first().value;
+    return true;
 }
 
 SetAst::SetAst()
@@ -2434,7 +2554,36 @@ void SetDirectoryPropsAst::writeBack( QString& ) const
 
 bool SetDirectoryPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="set_directory_properties" || func.arguments.count()<3)
+        return false;
+    bool props=false;
+    
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin();
+    QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+    QString prop;
+    for(; it!=itEnd; ++it)
+    {
+        if(it->value=="PROPERTIES")
+        {
+            props=true;
+            continue;
+        }
+        if(!props)
+        {
+            return false;
+        }
+        else
+        {
+            if(prop.isEmpty())
+                prop=it->value;
+            else
+            {
+                m_properties.append(PropPair(prop, it->value));
+                prop.clear();
+            }
+        }
+    }
+    return prop.isEmpty();
 }
 
 SetSourceFilesPropsAst::SetSourceFilesPropsAst()
@@ -2451,7 +2600,36 @@ void SetSourceFilesPropsAst::writeBack( QString& ) const
 
 bool SetSourceFilesPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="set_source_files_properties" || func.arguments.count()<4)
+        return false;
+    bool props=false;
+    
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin();
+    QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+    QString prop;
+    for(; it!=itEnd; ++it)
+    {
+        if(it->value=="PROPERTIES")
+        {
+            props=true;
+            continue;
+        }
+        if(!props)
+        {
+            m_files.append(it->value);
+        }
+        else
+        {
+            if(prop.isEmpty())
+                prop=it->value;
+            else
+            {
+                m_properties.append(PropPair(prop, it->value));
+                prop.clear();
+            }
+        }
+    }
+    return prop.isEmpty();
 }
 
 SetTargetPropsAst::SetTargetPropsAst()
@@ -2468,7 +2646,36 @@ void SetTargetPropsAst::writeBack( QString& ) const
 
 bool SetTargetPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="set_target_properties" || func.arguments.count()<4)
+        return false;
+    bool props=false;
+    
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin();
+    QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+    QString prop;
+    for(; it!=itEnd; ++it)
+    {
+        if(it->value=="PROPERTIES")
+        {
+            props=true;
+            continue;
+        }
+        if(!props)
+        {
+            m_targets.append(it->value);
+        }
+        else
+        {
+            if(prop.isEmpty())
+                prop=it->value;
+            else
+            {
+                m_properties.append(PropPair(prop, it->value));
+                prop.clear();
+            }
+        }
+    }
+    return prop.isEmpty();
 }
 
 SetTestsPropsAst::SetTestsPropsAst()
@@ -2485,7 +2692,36 @@ void SetTestsPropsAst::writeBack( QString& ) const
 
 bool SetTestsPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="set_tests_properties" || func.arguments.count()<4)
+        return false;
+    bool props=false;
+    
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin();
+    QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+    QString prop;
+    for(; it!=itEnd; ++it)
+    {
+        if(it->value=="PROPERTIES")
+        {
+            props=true;
+            continue;
+        }
+        if(!props)
+        {
+            m_tests.append(it->value);
+        }
+        else
+        {
+            if(prop.isEmpty())
+                prop=it->value;
+            else
+            {
+                m_properties.append(PropPair(prop, it->value));
+                prop.clear();
+            }
+        }
+    }
+    return prop.isEmpty();
 }
 
 SiteNameAst::SiteNameAst()
@@ -2522,7 +2758,32 @@ void SourceGroupAst::writeBack( QString& ) const
 
 bool SourceGroupAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="source_group" || func.arguments.count()>1)
+        return false;
+    
+    m_name=func.arguments[0].value;
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1;
+    QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+    enum Param { None, Regex, Files };
+    Param current=None;
+    for(; it!=itEnd; ++it)
+    {
+        if(it->value=="REGULAR_EXPRESSION")
+            current=Regex;
+        else if(it->value=="FILES")
+            current=Files;
+        else switch(current)
+        {
+            case Regex:
+                m_regex=it->value;
+            case Files:
+                m_files.append(it->value);
+                break;
+            case None:
+                return false;
+        }
+    }
+    return !m_regex.isEmpty() || !m_files.isEmpty();
 }
 
 StringAst::StringAst()
@@ -2668,7 +2929,9 @@ void SubdirDependsAst::writeBack( QString& ) const
 
 bool SubdirDependsAst::parseFunctionInfo( const CMakeFunctionDesc& func)
 {
-    //NOTE: Should not do anything :)
+    if ( func.name.toLower() != "subdir_depends" || func.arguments.isEmpty())
+        return false;
+
     return true;
 }
 
@@ -3050,7 +3313,8 @@ bool WhileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="while" || func.arguments.isEmpty())
         return false;
-    foreach(CMakeFunctionArgument arg, func.arguments) {
+    foreach(CMakeFunctionArgument arg, func.arguments)
+    {
         m_condition.append(arg.value);
     }
     return true;
@@ -3070,7 +3334,20 @@ void WriteFileAst::writeBack( QString& ) const
 
 bool WriteFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()!="write_file" || func.arguments.count()<2)
+        return false;
+    m_filename=func.arguments[0].value;
+    m_message=func.arguments[1].value;
+    if(func.arguments.count()>=3)
+    {
+        if(func.arguments[2].value=="APPEND")
+        {
+            m_append=true;
+        }
+        if(func.arguments.count()>(3+m_append))
+            return false;
+    }
+    return true;
 }
 
 CustomInvokationAst::CustomInvokationAst()

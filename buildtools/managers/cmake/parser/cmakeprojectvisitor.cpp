@@ -527,6 +527,7 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 
 int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *)
 {
+    kDebug(9042) << "target_link_libraries";
     return 1;
 }
 
