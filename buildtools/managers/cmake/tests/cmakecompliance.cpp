@@ -27,7 +27,7 @@
 #include <KProcess>
 #include <QFile>
 
-QTEST_MAIN( CMakeCompliance );
+QTEST_MAIN( CMakeCompliance )
 
 //Copied from CMakeManager
 QString executeProcess(const QString& execName, const QStringList& args=QStringList())
