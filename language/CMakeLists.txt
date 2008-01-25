@@ -38,6 +38,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
     duchain/forwarddeclarationtype.cpp
+    interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
