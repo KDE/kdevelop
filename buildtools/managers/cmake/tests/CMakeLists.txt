@@ -40,6 +40,16 @@ target_link_libraries( cmake-parsertest
     kdev4cmakecommon
 )
 
+
+set( cmakecompliance_SRCS cmakecompliance.cpp )
+
+kde4_add_unit_test(cmakecompliance  ${cmakecompliance_SRCS} )
+target_link_libraries( cmakecompliance
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdev4cmakecommon
+)
+
 set( astfactorytest_SRCS astfactorytest.cpp )
 
 kde4_add_unit_test(cmake-astfactorytest  ${astfactorytest_SRCS} )
