@@ -521,6 +521,7 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
     {
         kDebug(9042) << "project compile" << tca->projectName() << tca->targetName();
     }
+    m_vars->insert(tca->resultName(), QStringList("TRUE"));
     return 1;
 }
 
