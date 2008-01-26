@@ -123,6 +123,7 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     {
         m_currentModel=new CMakeCacheModel(this, file);
         m_prefsUi->cacheList->setModel(m_currentModel);
+        m_prefsUi->cacheList->hideColumn(1);
         m_prefsUi->cacheList->hideColumn(3);
         m_prefsUi->cacheList->hideColumn(4);
         m_prefsUi->cacheList->setEnabled(true);
@@ -144,33 +145,24 @@ void CMakePreferences::listSelectionChanged(const QModelIndex & index)
 {
     kDebug(9032) << "item " << index << " selected";
     QModelIndex idx = index.sibling(index.row(), 3);
-    m_prefsUi->commentText->setText(m_currentModel->itemFromIndex(idx)->text());
+    QModelIndex idxType = index.sibling(index.row(), 1);
+    QString comment=QString("%1. %2")
+            .arg(m_currentModel->itemFromIndex(idxType)->text())
+            .arg(m_currentModel->itemFromIndex(idx)->text());
+    m_prefsUi->commentText->setText(comment);
 }
 
 void CMakePreferences::showInternal(int state)
 {
     if(!m_currentModel)
         return;
-    if(state==Qt::Unchecked)
+    bool showAdv=(state==Qt::Unchecked);
+    for(int i=0; i<m_currentModel->rowCount(); i++)
     {
-        for(int i=0; i<m_currentModel->rowCount(); i++)
-        {
-            QStandardItem *p=m_currentModel->item(i, 4);
-            bool isAdv=p;
-            if(!isAdv)
-            {
-                p=m_currentModel->item(i, 1);
-                isAdv = p->text()=="INTERNAL" || p->text()=="STATIC";
-            }
-            m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), isAdv);
-        }
-    }
-    else
-    {
-        for(int i=0; i<m_currentModel->rowCount(); i++)
-        {
-            m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), false);
-        }
+        bool shown=m_currentModel->isInternal(i);
+        if(showAdv && !shown)
+            shown=m_currentModel->isAdvanced(i);
+        m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), shown);
     }
 }
 

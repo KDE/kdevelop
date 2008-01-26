@@ -24,6 +24,7 @@
 #include <cmakeexport.h>
 #include <QStandardItemModel>
 #include <QHash>
+#include <QSet>
 
 #include <KUrl>
 
@@ -42,6 +43,8 @@ class CMakeCacheModel : public QStandardItemModel
         int internal() const { return m_internalBegin; }
         
         QString value(const QString& name) const;
+        bool isAdvanced(int i) const;
+        bool isInternal(int i) const;
     private slots:
         void edited() { m_changed=true; }
     private:
@@ -51,6 +54,7 @@ class CMakeCacheModel : public QStandardItemModel
         bool m_changed;
         int m_internalBegin;
         QHash<QString, int> m_variablePos;
+        QSet<QString> m_internal;
 };
 
 #endif

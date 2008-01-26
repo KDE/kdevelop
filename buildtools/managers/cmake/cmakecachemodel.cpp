@@ -49,9 +49,15 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                 lineItems.append(new QStandardItem(info[4])); //3. value
                 lineItems.append(new QStandardItem(currentComment.join("\n"))); //4. comment
                 
+                if(info[3]=="INTERNAL")
+                {
+                    m_internal.insert(info[1]);
+                }
+                
                 if(info[2]=="ADVANCED")
                 {
-                    if(m_variablePos.contains(info[1])) {
+                    if(m_variablePos.contains(info[1]))
+                    {
                         int pos=m_variablePos[info[1]];
                         QStandardItem *p = item(pos, 4);
                         if(!p)
@@ -79,13 +85,12 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                 currentIdx++;
                 currentComment.clear();
             }
-            else if(line.startsWith('#'))
+            else if(line.startsWith('#') && line.contains("INTERNAL"))
             {
-                if(line.contains("INTERNAL"))
-                    m_internalBegin=currentIdx;
+                m_internalBegin=currentIdx;
 //                 kDebug(9032) << "Comment: " << line << " -.- " << currentIdx;
             }
-            else
+            else if(!line.startsWith('#'))
             {
                 kDebug(9032) << "unrecognized cache line: " << line;
             }
@@ -170,6 +175,28 @@ QString CMakeCacheModel::value(const QString & varName) const
         }
     }
     return QString();
+}
+
+bool CMakeCacheModel::isAdvanced(int i) const
+{
+    QStandardItem *p=item(i, 4);
+    bool isAdv= (p!=0) || i>m_internalBegin;
+    if(!isAdv)
+    {
+        p=item(i, 1);
+        isAdv = p->text()=="INTERNAL" || p->text()=="STATIC";
+    }
+    if(!isAdv)
+    {
+        m_internal.contains(item(i,0)->text());
+    }
+    return isAdv;
+}
+
+bool CMakeCacheModel::isInternal(int i) const
+{
+    bool isInt= i>m_internalBegin;
+    return isInt;
 }
 
 #include "cmakecachemodel.moc"
