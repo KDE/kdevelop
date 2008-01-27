@@ -20,7 +20,7 @@ class QMakeOptionsWidget : public QMakeOptionsWidgetBase
 {
     Q_OBJECT
 public:
-    QMakeOptionsWidget( QDomDocument &dom, const QString &configGroup,
+    QMakeOptionsWidget( const QString& projectdir, QDomDocument &dom, const QString &configGroup,
                         QWidget *parent = 0, const char *name = 0 );
     ~QMakeOptionsWidget();
 
@@ -29,6 +29,7 @@ public slots:
 private:
     QDomDocument &m_dom;
     QString m_configGroup;
+    QString m_projectDir;
 };
 
 #endif

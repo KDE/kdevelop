@@ -271,7 +271,7 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
 
     vbox = dlg->addVBoxPage(i18n("QMake Manager"), i18n("QMake Manager"), BarIcon( "make", KIcon::SizeMedium ));
-    QMakeOptionsWidget *qm = new QMakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
+    QMakeOptionsWidget *qm = new QMakeOptionsWidget( projectDirectory(), *projectDom(), "/kdevtrollproject", vbox);
 
 
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );

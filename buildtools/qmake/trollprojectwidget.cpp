@@ -323,21 +323,32 @@ void TrollProjectWidget::openProject( const QString &dirName )
     QDomDocument & dom = *( m_part->projectDom() );
     m_subclasslist = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
                      "subclass", "sourcefile", "uifile" );
-    QFileInfo fi( dirName );
-    QDir dir( dirName );
-    //    QString proname = item->path + "/" + fi.baseName() + ".pro";
+    
+    QString projectfile = DomUtil::readEntry( dom, "/kdevtrollproject/qmake/projectfile", "" );
+    
+    QString proname;
+    
+    if( projectfile.isEmpty() )
+    {
+        QFileInfo fi( dirName );
+        QDir dir( dirName );
+        //    QString proname = item->path + "/" + fi.baseName() + ".pro";
+    
+        QStringList l = dir.entryList( "*.pro" );
+    
+        QString profile;
+        if( l.count() && l.findIndex( m_part->projectName() + ".pro") != -1  )
+            profile = m_part->projectName()+".pro";
+        else if( l.isEmpty() || ( l.count() && l.findIndex( fi.baseName() + ".pro") != -1  ) )
+            profile = fi.baseName()+".pro";
+        else
+          profile = l[0];
 
-    QStringList l = dir.entryList( "*.pro" );
-
-    QString profile;
-    if( l.count() && l.findIndex( m_part->projectName() + ".pro") != -1  )
-        profile = m_part->projectName()+".pro";
-    else if( l.isEmpty() || ( l.count() && l.findIndex( fi.baseName() + ".pro") != -1  ) )
-        profile = fi.baseName()+".pro";
-    else
-      profile = l[0];
-
-    QString proname = dirName + QString( QChar( QDir::separator() ) ) + profile;
+        proname = dirName + QString( QChar( QDir::separator() ) ) + profile;
+    } else
+    {
+        proname = projectfile;
+    }
 
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 

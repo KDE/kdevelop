@@ -14,14 +14,15 @@
 #include <qcheckbox.h>
 #include <kcombobox.h>
 #include <qbuttongroup.h>
+#include <kurlrequester.h>
 
 #include <domutil.h>
 #include <kdebug.h>
 
-QMakeOptionsWidget::QMakeOptionsWidget( QDomDocument &dom, const QString &configGroup,
+QMakeOptionsWidget::QMakeOptionsWidget( const QString& projectdir, QDomDocument &dom, const QString &configGroup,
                                       QWidget *parent, const char *name )
         : QMakeOptionsWidgetBase( parent, name ),
-        m_dom( dom ), m_configGroup( configGroup )
+        m_dom( dom ), m_configGroup( configGroup ), m_projectDir( projectdir )
 {
     groupBehaviour->setButton( DomUtil::readIntEntry( dom, configGroup+"/qmake/savebehaviour", 2) );
     checkReplacePaths->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/replacePaths", false ) );
@@ -29,6 +30,13 @@ QMakeOptionsWidget::QMakeOptionsWidget( QDomDocument &dom, const QString &config
     checkFilenamesOnly->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/enableFilenamesOnly", false ) );
     checkShowParseErrors->setChecked( DomUtil::readBoolEntry( dom, 
             configGroup+"/qmake/showParseErrors", true ) );
+    qmakeProjectFile->setURL( DomUtil::readEntry( dom, configGroup+"/qmake/projectfile", "" ) );
+    qmakeProjectFile->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
+    qmakeProjectFile->setFilter( "*.pro *.pri" );
+    if( qmakeProjectFile->url().isEmpty() )
+    {
+        qmakeProjectFile->setURL( projectdir );
+    }
 }
 
 
@@ -43,6 +51,9 @@ void QMakeOptionsWidget::accept()
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/disableDefaultOpts", checkDisableDefaultOpts->isChecked() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/enableFilenamesOnly", checkFilenamesOnly->isChecked() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/showParseErrors", checkShowParseErrors->isChecked() );
+    QString projfile = qmakeProjectFile->url();
+    if( projfile != m_projectDir && QFileInfo( projfile ).isFile() && ( projfile.endsWith( ".pro" ) || projfile.endsWith( ".pri" ) ) )
+        DomUtil::writeEntry( m_dom, m_configGroup + "/qmake/projectfile", projfile );
 }
 
 #include "qmakeoptionswidget.moc"

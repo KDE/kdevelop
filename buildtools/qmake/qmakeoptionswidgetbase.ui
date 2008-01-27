@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>738</width>
-            <height>475</height>
+            <height>523</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,8 +24,40 @@
                 <cstring>textLabel1_2</cstring>
             </property>
             <property name="text">
-                <string>Also look into C++/Qt to define the QMake, Qt and Designer paths</string>
+                <string>Also look into C++/Qt to define the QMake, Qt and Designer paths.
+
+For changes on this page to take effect the project needs to be reloaded.</string>
             </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>QMake Project File:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>qmakeProjectFile</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>qmakeProjectFile</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                            <string>This is the top level qmake project file, from which the project manager will be populated.
+Leave this empty to automatically search for a .pro file in the project directory.</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
@@ -114,9 +146,6 @@
             <property name="text">
                 <string>Repla&amp;ce File Paths with matching Variables</string>
             </property>
-            <property name="accel">
-                <string>Alt+C</string>
-            </property>
             <property name="checked">
                 <bool>false</bool>
             </property>
@@ -138,8 +167,7 @@
             </property>
             <property name="text">
                 <string>Do not use the QMake Default Options
-This disables the reading of any .qmake.cache files or mkspecs.
-If you change this setting the project needs to be closed and re-opened.</string>
+This disables the reading of any .qmake.cache files or mkspecs.</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -172,5 +200,11 @@ If you change this setting the project needs to be closed and re-opened.</string
         </spacer>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>
