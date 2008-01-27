@@ -42,6 +42,11 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->setupUi( w );
     l->addWidget( w );
 
+    m_prefsUi->addBuildDir->setIcon(KIcon( "list-add" ));
+    m_prefsUi->removeBuildDir->setIcon(KIcon( "list-remove" ));
+    
+    m_prefsUi->addBuildDir->setText(QString());
+    m_prefsUi->removeBuildDir->setText(QString());
     addConfig( CMakeSettings::self(), w );
 
     connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(const QString& )),
@@ -52,6 +57,8 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
             this, SLOT(showInternal ( int )));
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()),
             this, SLOT(createBuildDir()));
+    connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()),
+            this, SLOT(removeBuildDir()));
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
     
     showInternal(m_prefsUi->showInternal->checkState());
@@ -186,11 +193,20 @@ void CMakePreferences::createBuildDir()
     //TODO: Save it for next runs
 }
 
+void CMakePreferences::removeBuildDir()
+{
+    int curr=m_prefsUi->buildDirs->currentIndex();
+    if(curr>=0)
+        m_prefsUi->buildDirs->removeItem(curr);
+    emit changed(true);
+}
+
 void CMakePreferences::showAdvanced(bool v)
 {
     kDebug(9042) << "toggle pressed: " << v;
     m_prefsUi->advancedBox->setHidden(!v);
 }
+
 
 #include "cmakepreferences.moc"
 
