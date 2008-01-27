@@ -26,40 +26,42 @@
 #include <KProcess>
 
 namespace Ui {
-	class CMakeBuildDirCreator;
+    class CMakeBuildDirCreator;
 }
 
 class CMakeBuildDirCreator : public QDialog
 {
-	Q_OBJECT
-	public:
-		explicit CMakeBuildDirCreator(const QString& srcDir, QWidget* parent = 0, Qt::WindowFlags f=0);
-		~CMakeBuildDirCreator() {}
-		
-		KUrl cmakeBinary() const;
-		KUrl installPrefix() const;
-		KUrl buildFolder() const;
-		QString buildType() const;
-		
-		void setCMakeBinary(const KUrl&);
-		void setInstallPrefix(const KUrl&);
-		void setBuildFolder(const KUrl&);
-		void setBuildType(const QString&);
-		
-	private slots:
-		void runBegin();
-		void runEnd();
-		
-		void addError();
-		void addOutput();
-		
-		void cmakeCommandDone(int exitCode, QProcess::ExitStatus exitStatus);
-		void updated();
-	private:
-		static QString executeProcess(const QString& execName, const QStringList& args=QStringList());
-		Ui::CMakeBuildDirCreator* m_creatorUi;
-		KProcess m_proc;
-		QString m_srcFolder;
+    Q_OBJECT
+    public:
+        explicit CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent = 0, Qt::WindowFlags f=0);
+        ~CMakeBuildDirCreator() {}
+
+        KUrl cmakeBinary() const;
+        KUrl installPrefix() const;
+        KUrl buildFolder() const;
+        QString buildType() const;
+
+        void setCMakeBinary(const KUrl&);
+        void setInstallPrefix(const KUrl&);
+        void setBuildFolder(const KUrl&);
+        void setBuildType(const QString&);
+
+    private slots:
+        void runBegin();
+        void runEnd();
+
+        void addError();
+        void addOutput();
+
+        void cmakeCommandDone(int exitCode, QProcess::ExitStatus exitStatus);
+        void updated();
+    private:
+        bool isBuildDirProject(const KUrl& buildDir);
+
+        static QString executeProcess(const QString& execName, const QStringList& args=QStringList());
+        Ui::CMakeBuildDirCreator* m_creatorUi;
+        KProcess m_proc;
+        KUrl m_srcFolder;
 };
 
 

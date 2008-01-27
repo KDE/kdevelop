@@ -100,11 +100,11 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
 
 bool CMakeCacheModel::writeBack(const KUrl & path) const
 {
-    kDebug(9032) << "writing CMakeCache.txt at " << path;
+    kDebug(9042) << "writing CMakeCache.txt at " << path;
     QFile file(path.toLocalFile());
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        kDebug(9032) << "Could not open the file for writing";
+        kDebug(9032) << "Could not open " << path << " the file for writing";
         return false;
     }
 

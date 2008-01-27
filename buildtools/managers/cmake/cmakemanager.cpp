@@ -155,13 +155,13 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     QString folderUrl(cmakeInfoFile.toLocalFile());
     cmakeInfoFile.addPath("CMakeLists.txt");
     
-    kDebug(9032) << "found module path is" << m_modulePathDef;
+    kDebug(9042) << "found module path is" << m_modulePathDef;
 
-    kDebug(9032) << "file is" << cmakeInfoFile.path();
+    kDebug(9042) << "file is" << cmakeInfoFile.path();
     if ( !cmakeInfoFile.isLocalFile() )
     {
         //FIXME turn this into a real warning
-        kWarning(9032) << "not a local file. CMake support doesn't handle remote projects" ;
+        kWarning(9032) << "error. not a local file. CMake support doesn't handle remote projects" ;
     }
     else
     {
@@ -180,7 +180,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
                 {
                     m_modulePathPerProject[project] << path;
                     l << path;
-                }   
+                }
             }
             if( !l.isEmpty() )
                 group.writeEntry("CMakeDir", l);

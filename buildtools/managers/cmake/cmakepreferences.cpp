@@ -57,7 +57,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     showInternal(m_prefsUi->showInternal->checkState());
     //TODO: This will break when the kdevelop project file is not inside the source dir
     m_srcFolder=KUrl(args[0].toString());
-    m_srcFolder=m_srcFolder.upUrl();
+    m_srcFolder=m_srcFolder.upUrl().upUrl();
 
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
@@ -71,7 +71,7 @@ void CMakePreferences::load()
 {
     ProjectKCModule<CMakeSettings>::load();
     CMakeSettings::self()->readConfig();
-    kDebug(9032) << "********loading";
+    kDebug(9042) << "********loading";
 
     m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
     m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
@@ -83,7 +83,7 @@ void CMakePreferences::load()
 
 void CMakePreferences::save()
 {
-    kDebug(9032) << "*******saving";
+    kDebug(9042) << "*******saving";
     QStringList bDirs;
     int count=m_prefsUi->buildDirs->model()->rowCount();
     for(int i=0; i<count; i++)
@@ -104,7 +104,7 @@ void CMakePreferences::save()
     item->setProperty( qVariantFromValue<KUrl>( KUrl( m_currentModel->value("CMAKE_INSTALL_PREFIX") ) ) );
     m_currentModel->writeDown();
     
-    kDebug(9032) << "doing real save from ProjectKCModule";
+    kDebug(9042) << "doing real save from ProjectKCModule";
     ProjectKCModule<CMakeSettings>::save();
     CMakeSettings::self()->writeConfig();
 }
@@ -126,6 +126,7 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         m_prefsUi->cacheList->hideColumn(1);
         m_prefsUi->cacheList->hideColumn(3);
         m_prefsUi->cacheList->hideColumn(4);
+        m_prefsUi->cacheList->resizeColumnToContents(0);
         m_prefsUi->cacheList->setEnabled(true);
         connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
                 this, SLOT( cacheEdited( QStandardItem * ) ));
@@ -169,17 +170,17 @@ void CMakePreferences::showInternal(int state)
 void CMakePreferences::buildDirChanged(const QString &str)
 {
     updateCache(str);
-    kDebug(9032) << "Emitting changed signal for cmake kcm";
+    kDebug(9042) << "Emitting changed signal for cmake kcm";
     emit changed(true);
 }
 
 void CMakePreferences::createBuildDir()
 {
-    CMakeBuildDirCreator bdCreator(m_srcFolder.toLocalFile(), this);
+    CMakeBuildDirCreator bdCreator(m_srcFolder, this);
     //TODO: if there is information, use it to initialize the dialog
     if(bdCreator.exec()) {
         m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile());
-        kDebug(9032) << "Emitting changed signal for cmake kcm";
+        kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
     }
     //TODO: Save it for next runs
@@ -187,7 +188,7 @@ void CMakePreferences::createBuildDir()
 
 void CMakePreferences::showAdvanced(bool v)
 {
-    kDebug(9032) << "toggle pressed: " << v;
+    kDebug(9042) << "toggle pressed: " << v;
     m_prefsUi->advancedBox->setHidden(!v);
 }
 

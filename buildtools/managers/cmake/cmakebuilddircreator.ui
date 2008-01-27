@@ -145,6 +145,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item row="8" column="0" colspan="2" >
