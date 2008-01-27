@@ -352,7 +352,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
 
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 
-    m_rootScope = new Scope( proname, m_part );
+    m_rootScope = new Scope( qmakeEnvironment(), proname, m_part );
     if( m_rootScope->scopeType() != Scope::InvalidScope )
     {
 
@@ -2498,6 +2498,30 @@ QMakeScopeItem* TrollProjectWidget::currentSubproject()
 bool TrollProjectWidget::showFilenamesOnly() const
 {
     return m_showFilenamesOnly;
+}
+
+QMap<QString,QString> TrollProjectWidget::qmakeEnvironment() const
+{
+    QMap<QString,QString> map;
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*m_part->projectDom(), "/kdevtrollproject/make/envvars", "envvar", "name", "value");
+
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    bool hasQtDir = false;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        if( (*it).first == "QTDIR" )
+            hasQtDir = true;
+
+        map[(*it).first] = (*it).second;
+    }
+
+    if( !hasQtDir && !m_part->isQt4Project() && !DomUtil::readEntry(*m_part->projectDom(), "/kdevcppsupport/qt/root", "").isEmpty() )
+    {
+         map["QTDIR="] = DomUtil::readEntry(*m_part->projectDom(), "/kdevcppsupport/qt/root", "");
+         map["PATH"] = map["PATH"].prepend( DomUtil::readEntry(*m_part->projectDom(), "/kdevcppsupport/qt/root", "") +"/bin" );
+    }
+    return map;
 }
 
 #include "trollprojectwidget.moc"

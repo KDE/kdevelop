@@ -167,6 +167,7 @@ private:
     QMakeScopeItem *findSubprojectForScope( QMakeScopeItem *scope );
 
     void reloadProjectFromFile( QMakeScopeItem* item );
+    QMap<QString,QString> qmakeEnvironment() const;
 
     QVBox *overviewContainer;
     KListView *overview;

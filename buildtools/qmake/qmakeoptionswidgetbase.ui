@@ -24,9 +24,9 @@
                 <cstring>textLabel1_2</cstring>
             </property>
             <property name="text">
-                <string>Also look into C++/Qt to define the QMake, Qt and Designer paths.
-
-For changes on this page to take effect the project needs to be reloaded.</string>
+                <string>- Also look into C++/Qt to define the QMake, Qt and Designer paths.
+- Environment variables that should be resolved during parsing can be set on the Make Options page.
+- For changes on this page to take effect the project needs to be reloaded.</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -53,7 +53,7 @@ For changes on this page to take effect the project needs to be reloaded.</strin
                         <cstring>qmakeProjectFile</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                            <string>This is the top level qmake project file, from which the project manager will be populated.
+                        <string>This is the top level qmake project file, from which the project manager will be populated.
 Leave this empty to automatically search for a .pro file in the project directory.</string>
                     </property>
                 </widget>

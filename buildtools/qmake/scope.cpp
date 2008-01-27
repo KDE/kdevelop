@@ -35,8 +35,8 @@ const QStringList Scope::KnownVariables = QStringList() << "QT" << "CONFIG" << "
 
 const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "release" << "debug_and_release" << "warn_on" << "warn_off" << "staticlib" << "dll" << "plugin" << "designer" << "create_pkgconf" << "create_libtool" << "qt" << "console" << "windows" << "x11" << "thread" << "exceptions" << "stl" << "rtti" << "opengl" << "thread" << "ordered" << "precompile_header" << "qtestlib" << "uitools" << "dbus" << "assistant" << "build_all";
 
-Scope::Scope( const QString &filename, TrollProjectPart* part )
-    : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0)
+Scope::Scope( const QMap<QString, QString>& env, const QString &filename, TrollProjectPart* part )
+    : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0), m_environment( env )
 {
     if ( !loadFromFile( filename ) )
     {
@@ -80,19 +80,19 @@ Scope::~Scope()
 }
 
 // Simple/Function Scopes
-Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope,
+Scope::Scope( const QMap<QString, QString>& env, unsigned int num, Scope* parent, QMake::ProjectAST* scope,
               QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
     : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ),
-        m_part(part), m_defaultopts(defaultopts)
+        m_part(part), m_defaultopts(defaultopts), m_environment( env )
 {
     init();
 }
 
 //Subdirs
-Scope::Scope( unsigned int num, Scope* parent, const QString& filename,
+Scope::Scope( const QMap<QString, QString>& env, unsigned int num, Scope* parent, const QString& filename,
               TrollProjectPart* part, bool isEnabled )
     : m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ),
-    m_part(part), m_defaultopts(0)
+    m_part(part), m_defaultopts(0), m_environment( env )
 {
     if ( !loadFromFile( filename ) )
     {
@@ -114,10 +114,10 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename,
 }
 
 //Include Scope
-Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path,
+Scope::Scope( const QMap<QString, QString>& env, unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path,
               const QString& incfile, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
     : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ),
-    m_part(part), m_defaultopts(defaultopts)
+    m_part(part), m_defaultopts(defaultopts), m_environment( env )
 {
     QString absfilename;
     QString tmp = incfile.stripWhiteSpace();
@@ -493,7 +493,7 @@ Scope* Scope::createFunctionScope( const QString& funcName, const QString& args 
     ast->addChildAST( new QMake::NewLineAST() );
     m_root->addChildAST( ast );
     m_root->addChildAST( new QMake::NewLineAST() );
-    Scope* funcScope = new Scope( getNextScopeNum(), this, ast, m_defaultopts, m_part );
+    Scope* funcScope = new Scope( m_environment, getNextScopeNum(), this, ast, m_defaultopts, m_part );
     if( funcScope->scopeType() != Scope::InvalidScope )
     {
         m_scopes.insert( getNextScopeNum(), funcScope );
@@ -518,7 +518,7 @@ Scope* Scope::createSimpleScope( const QString& scopename )
     if ( m_part->isQt4Project() )
         addToPlusOp( "CONFIG", QStringList( scopename ) );
     */
-    Scope* simpleScope = new Scope( getNextScopeNum(), this, ast, m_defaultopts, m_part );
+    Scope* simpleScope = new Scope( m_environment, getNextScopeNum(), this, ast, m_defaultopts, m_part );
 
     if( simpleScope->scopeType() != Scope::InvalidScope )
     {
@@ -550,7 +550,7 @@ Scope* Scope::createIncludeScope( const QString& includeFile, bool negate )
     QMake::IncludeAST* ast = new QMake::IncludeAST();
     ast->setDepth( m_root->depth() );
     ast->projectName = includeFile;
-    Scope* incScope = new Scope( funcScope->getNextScopeNum(), funcScope, ast, projectDir(), resolveVariables( ast->projectName ), m_defaultopts, m_part );
+    Scope* incScope = new Scope( m_environment, funcScope->getNextScopeNum(), funcScope, ast, projectDir(), resolveVariables( ast->projectName ), m_defaultopts, m_part );
     if ( incScope->scopeType() != InvalidScope )
     {
         funcScope->m_root->addChildAST( ast );
@@ -601,7 +601,7 @@ Scope* Scope::createSubProject( const QString& projname )
 
         kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part );
+        Scope* s = new Scope( m_environment, getNextScopeNum(), this, filename, m_part );
         s->loadDefaultOpts();
         if ( s->scopeType() != InvalidScope )
         {
@@ -927,7 +927,7 @@ void Scope::init()
         if ( ( *it ) ->nodeType() == QMake::AST::ProjectAST )
         {
             QMake::ProjectAST * p = static_cast<QMake::ProjectAST*>( *it );
-            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, p, m_defaultopts, m_part ) );
+            m_scopes.insert( getNextScopeNum(), new Scope( m_environment, getNextScopeNum(), this, p, m_defaultopts, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
         {
@@ -937,7 +937,7 @@ void Scope::init()
             {
                 filename = resolveVariables(i->projectName, *it);
             }
-            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), filename, m_defaultopts, m_part ) );
+            m_scopes.insert( getNextScopeNum(), new Scope( m_environment, getNextScopeNum(), this, i, projectDir(), filename, m_defaultopts, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
@@ -961,7 +961,10 @@ void Scope::init()
                         projectfile = str;
                     }else
                     {
-                        subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + str,
+                        QString dir = str;
+                        if( QFileInfo( dir ).isRelative() )
+                            dir = projectDir() + QString( QChar( QDir::separator() ) ) + dir;
+                        subproject = QDir(  dir,
                                            "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
                         if( !subproject.exists() )
                         {
@@ -982,7 +985,7 @@ void Scope::init()
 
                     }
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
-                    m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this,
+                    m_scopes.insert( getNextScopeNum(), new Scope( m_environment, getNextScopeNum(), this,
                                                 subproject.absFilePath( projectfile ),
                                          m_part, ( m->op != "-=" )) );
                 }
@@ -1238,7 +1241,7 @@ Scope* Scope::disableSubproject( const QString& dir)
 
         kdDebug( 9024 ) << "Disabling subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, false );
+        Scope* s = new Scope( m_environment, getNextScopeNum(), this, filename, m_part, false );
         addToMinusOp( "SUBDIRS", QStringList( dir ) );
         m_scopes.insert( getNextScopeNum(), s );
         return s;
@@ -1320,8 +1323,11 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
             pos = re.search( (*it), pos );
             if( pos > -1 )
             {
-                if( !envvars.contains( re.cap(1) ) && ::getenv( re.cap(1).local8Bit() ) != 0 )
-                    envvars[re.cap(1)] = QString::fromLocal8Bit(::getenv( re.cap(1).local8Bit() ) );
+                if( !envvars.contains( re.cap(1) ) )
+                    if( m_environment.contains( re.cap(1) ) != -1 )
+                        envvars[re.cap(1)] = m_environment[ re.cap(1) ];
+                    else if ( ::getenv( re.cap(1).local8Bit() ) != 0 )
+                        envvars[re.cap(1)] = QString::fromLocal8Bit( ::getenv( re.cap(1).local8Bit() ) );
                 pos += re.matchedLength();
             }
         }

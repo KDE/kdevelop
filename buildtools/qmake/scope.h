@@ -41,7 +41,7 @@ public:
     static const QStringList KnownVariables;
     static const QStringList KnownConfigValues;
 
-    Scope( const QString &filename, TrollProjectPart* part );
+    Scope( const QMap<QString, QString>& env, const QString &filename, TrollProjectPart* part );
     ~Scope();
 
     void saveToFile() const;
@@ -201,17 +201,17 @@ private:
     /*
      * just initializes the lists from the scope
      */
-    Scope( unsigned int num, Scope* parent, QMake::ProjectAST* root, QMakeDefaultOpts*, TrollProjectPart* part );
+    Scope( const QMap<QString, QString>& env, unsigned int num, Scope* parent, QMake::ProjectAST* root, QMakeDefaultOpts*, TrollProjectPart* part );
     /*
      * reads the given filename and parses it. If it doesn't exist creates an empty
      * ProjectAST with the given filename
      */
-    Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled = true );
+    Scope( const QMap<QString, QString>& env, unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled = true );
     /*
      * Creates a scope for an include statement, parses the file and initializes the Scope
      * Create an empty ProjectAST if the file cannot be found or parsed.
      */
-    Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, QMakeDefaultOpts*, TrollProjectPart* part );
+    Scope( const QMap<QString, QString>& env, unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, QMakeDefaultOpts*, TrollProjectPart* part );
 
 
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
@@ -263,6 +263,7 @@ private:
     QMakeDefaultOpts* m_defaultopts;
     QMap<QString, QStringList> m_varCache;
     QValueList<Scope*>* m_unfinishedScopes;
+    QMap<QString,QString> m_environment;
 
 #ifdef DEBUG
     class PrintAST : QMake::ASTVisitor
