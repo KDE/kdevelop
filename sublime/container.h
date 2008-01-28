@@ -23,7 +23,6 @@
 
 #include "sublimeexport.h"
 
-
 namespace Sublime {
 
 class View;
@@ -59,8 +58,12 @@ public:
     /**@return the current widget in the container.*/
     QWidget *currentWidget() const;
 
+Q_SIGNALS:
+  void activateView(Sublime::View* view);
+
+private slots:
+  void widgetActivated(int idx);
 private:
-    Q_PRIVATE_SLOT(d, void widgetActivated(int))
 
     struct ContainerPrivate * const d;
 

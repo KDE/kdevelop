@@ -66,8 +66,9 @@ public:
     /**@return active toolview inside this mainwindow.*/
     View *activeToolView();
 
+public slots:
     /**Shows the @p view and makes it active.*/
-    void activateView(View *view);
+    void activateView(Sublime::View *view);
 
 Q_SIGNALS:
     /**Emitted before the area is cleared from this mainwindow.*/
@@ -106,7 +107,7 @@ private:
     /**Unsets the area clearing main window.*/
     void clearArea();
     /**Sets the active view and focuses it.*/
-    void setActiveView(View *view);
+    void setActiveView(Sublime::View *view);
     /**Sets the active toolview and focuses it.*/
     void setActiveToolView(View *view);
 

@@ -32,12 +32,6 @@ namespace Sublime {
 
 struct ContainerPrivate {
 
-    void widgetActivated(int idx)
-    {
-        stack->setCurrentIndex(idx);
-        stack->widget(idx)->setFocus();
-    }
-
     Switcher *switcher;
     QStackedLayout *stack;
     QMap<QWidget*, View*> viewForWidget;
@@ -65,6 +59,14 @@ Container::Container(QWidget *parent)
 Container::~Container()
 {
     delete d;
+}
+
+void Container::widgetActivated(int idx)
+{
+    d->stack->setCurrentIndex(idx);
+    d->stack->widget(idx)->setFocus();
+    if(d->viewForWidget.contains(d->stack->widget(idx)))
+      emit activateView(d->viewForWidget[d->stack->widget(idx)]);
 }
 
 void Container::addWidget(View *view)
