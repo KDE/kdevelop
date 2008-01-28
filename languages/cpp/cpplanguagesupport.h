@@ -58,7 +58,7 @@ public:
     /// @param localPath the path from which this findInclude is issued
     /// @param skipPath this path will be skipped while searching, as needed for gcc extension #include_next
     /// @return first: The found file, second: The include-path the file was found in(can be used to skip that path on #include_next)
-    QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const;
+    QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath, bool quiet=false) const;
 
     /**
      * Returns a list of all files within the include-path of the given file

@@ -377,6 +377,8 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
             Q_ASSERT(envFile);
             allPaths = convertToUrls(envFile->includePaths());
             kDebug(9007) << "Took include-path for" << source << "from a random parsed duchain-version of it";
+            foreach(KUrl url, allPaths)
+              hasPath.insert(url);
         }
     }
 
@@ -445,7 +447,7 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
     return ret;
 }
 
-QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath) const {
+QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath, bool quiet) const {
     QPair<KUrl, KUrl> ret;
 #ifdef DEBUG
     kDebug(9007) << "searching for include-file" << includeName;
@@ -491,7 +493,7 @@ restart:
         goto restart;
     }
 
-    if( ret.first.isEmpty() ) {
+    if( ret.first.isEmpty() && !quiet ) {
         kDebug(9007) << "FAILED to find include-file" << includeName << "in paths:";
         foreach( KUrl path, includePaths )
             kDebug(9007) << path;
