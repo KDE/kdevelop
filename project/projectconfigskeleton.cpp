@@ -51,7 +51,6 @@ void ProjectConfigSkeleton::setProjectTempFile( const QString& cfg )
 {
     d->m_projectTempFile = cfg;
     config()->addConfigSources( QStringList() << cfg );
-    config()->reparseConfiguration();
     readConfig();
 }
 

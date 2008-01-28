@@ -234,8 +234,6 @@ bool Project::open( const KUrl& projectFileUrl_ )
     kdDebug(9501) << "Creating KConfig object for project files" << d->developerTempFile << d->projectTempFile;
     d->m_cfg = KSharedConfig::openConfig( d->developerTempFile );
     d->m_cfg->addConfigSources( QStringList() << d->projectTempFile );
-    //This is currently needed as the above doesn't re-read the files it adds
-    d->m_cfg->reparseConfiguration();
 
     KConfigGroup projectGroup( d->m_cfg, "Project" );
 
