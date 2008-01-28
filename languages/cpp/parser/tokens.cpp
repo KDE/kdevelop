@@ -64,6 +64,7 @@ static char const * const _S_token_names[] = {
   "false",
   "float",
   "for",
+  "foreach",
   "friend",
   "geq",
   "goto",
