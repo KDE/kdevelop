@@ -363,14 +363,6 @@ KDevelop::ModificationRevision EnvironmentFile::modificationRevision() const {
   return m_modificationTime;
 }
 
-void EnvironmentFile::addProblem( const Problem& p ) {
-  m_problems << p;
-}
-
-QList<Problem>  EnvironmentFile::problems() const {
-  return m_problems;
-}
-
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
   QMutexLocker l(&EnvironmentManager::m_repositoryMutex);
   m_strings += EnvironmentManager::m_stringRepository.createSet(strings);
@@ -417,7 +409,6 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   kDebug( 9007 ) << id(this) << ": strings in this after merge:" << print(m_strings);
   kDebug( 9007 ) << id(this) << ": macros used in this after merge:" << print(m_usedMacroNames);
 #endif
-  m_problems += file.m_problems;
 }
 
 size_t EnvironmentFile::hash() const {

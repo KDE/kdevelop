@@ -165,10 +165,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     ///Returns the set of all strings that can affect this file from outside.
     Utils::Set strings() const;
     
-    void addProblem( const KDevelop::Problem& p );
-
-    QList<KDevelop::Problem>  problems() const;
-
     //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
     void merge( const EnvironmentFile& file );
 
@@ -236,7 +232,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     Cpp::StringSetRepository::LazySet m_usedMacroNames; //Set the names of all used macros
     Cpp::MacroRepository::LazySet m_definedMacros; //Set of all macros that were defined while lexing this file
     Cpp::StringSetRepository::LazySet m_definedMacroNames;
-    QList<KDevelop::Problem> m_problems;
     QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
     mutable int m_contentStartLine; //Line-number where the actual content starts. Needs to be kept current when edited
     /*
