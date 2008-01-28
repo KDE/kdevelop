@@ -1280,13 +1280,17 @@ QString pp::currentFile() const
   return "<internal>";
 }
 
-const QList< KDevelop::Problem > & rpp::pp::problems() const
+const QList< KDevelop::ProblemPointer > & rpp::pp::problems() const
 {
   return m_problems;
 }
 
 void rpp::pp::problemEncountered(const KDevelop::Problem & problem)
 {
-  m_problems.append(problem);
+  problemEncountered(KDevelop::ProblemPointer(new KDevelop::Problem(problem)));
 }
 
+void rpp::pp::problemEncountered(const KDevelop::ProblemPointer & problem)
+{
+  m_problems.append(problem);
+}

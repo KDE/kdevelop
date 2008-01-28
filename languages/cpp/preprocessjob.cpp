@@ -211,10 +211,10 @@ void PreprocessJob::run()
     ///@todo preprocessor should work in utf8 too, for performance-reasons
     QString result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
 
-    foreach (KDevelop::Problem p, preprocessor.problems()) {
-      p.setLocationStack(parentJob()->includeStack());
-      p.setSource(KDevelop::Problem::Preprocessor);
-      KDevelop::DUChain::problemEncountered(p);
+    foreach (KDevelop::ProblemPointer p, preprocessor.problems()) {
+      p->setLocationStack(parentJob()->includeStack());
+      p->setSource(KDevelop::Problem::Preprocessor);
+      parentJob()->addPreprocessorProblem(p);
     }
 
     parentJob()->parseSession()->setContents( result.toUtf8(), m_currentEnvironment->takeLocationTable() );
@@ -393,14 +393,13 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
     } else {
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
-        KDevelop::Problem p;
-        p.setSource(KDevelop::Problem::Preprocessor);
-        p.setDescription(i18n("Included file was not found: %1", fileName ));
-        p.setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePathUrls())));
-        p.setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
-        p.setLocationStack(parentJob()->includeStack());
-        KDevelop::DUChain::problemEncountered( p );
-        
+        KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
+        p->setSource(KDevelop::Problem::Preprocessor);
+        p->setDescription(i18n("Included file was not found: %1", fileName ));
+        p->setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePathUrls())));
+        p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
+        p->setLocationStack(parentJob()->includeStack());
+        parentJob()->addPreprocessorProblem(p);
     }
 
         /*} else {

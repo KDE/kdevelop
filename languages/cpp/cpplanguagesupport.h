@@ -67,7 +67,8 @@ public:
     QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath) const;
     
     ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
-    KUrl::List findIncludePaths(const KUrl& source) const;
+    ///@param problems If this is nonzero, eventual problems will be added to the list
+    KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems) const;
 
     static CppLanguageSupport* self();
 
@@ -87,7 +88,7 @@ public:
  *
  * @warning The du-chain must be locked before calling this.
 * */
-  virtual KDevelop::TopDUContext *standardContext(const KUrl& url);
+  virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
   
 private slots:
     void documentLoaded(KDevelop::IDocument*);

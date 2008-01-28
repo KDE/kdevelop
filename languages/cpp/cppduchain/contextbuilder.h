@@ -81,6 +81,7 @@ public:
 
   /**
    * Builds or updates a proxy-context that represents a content-context under a different environment.
+   * The built proxy-context will have exactly 1 imported content-context, or zero imports in case of failure.
    * */
   
   KDevelop::TopDUContext* buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext);

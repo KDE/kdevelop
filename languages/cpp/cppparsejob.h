@@ -127,6 +127,9 @@ public:
     const CPPParseJob* masterJob() const;
     CPPParseJob* masterJob();
 
+    void addPreprocessorProblem(const ProblemPointer problem);
+    QList<ProblemPointer> preprocessorProblems() const;
+  
 private:
     
     KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
@@ -145,6 +148,8 @@ private:
     KDevelop::TopDUContextPointer m_contentContext;
     KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
 
+    mutable QList<ProblemPointer> m_preprocessorProblems;
+  
     KUrl m_includedFromPath;
     mutable bool m_includePathsComputed;
     mutable QList<HashedString> m_includePaths; //Only a master-job has this set

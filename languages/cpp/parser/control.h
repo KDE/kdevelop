@@ -38,9 +38,10 @@ public:
   Control();
   ~Control();
 
-  const QList<KDevelop::Problem>& problems() const;
+  const QList<KDevelop::ProblemPointer>& problems() const;
 
   /**Adds a problem to the list of problems.*/
+  void reportProblem(const KDevelop::ProblemPointer &problem);
   void reportProblem(const KDevelop::Problem &problem);
 
   inline bool skipFunctionBody() const { return _M_skip_function_body; }
@@ -48,7 +49,7 @@ public:
 
 private:
   bool _M_skip_function_body;
-  QList<KDevelop::Problem> _M_problems;
+  QList<KDevelop::ProblemPointer> _M_problems;
 };
 
 #endif // CONTROL_H

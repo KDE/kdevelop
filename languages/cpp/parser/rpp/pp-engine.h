@@ -124,7 +124,7 @@ class KDEVCPPRPP_EXPORT pp
   pp_skip_number skip_number;
   QStack<QString> m_files;
   Preprocessor* m_preprocessor;
-  QList<KDevelop::Problem> m_problems;
+  QList<KDevelop::ProblemPointer> m_problems;
 
   enum { MAX_LEVEL = 512 };
   int _M_skipping[MAX_LEVEL];
@@ -203,8 +203,9 @@ public:
 
   QString currentFile() const;
 
-  const QList<KDevelop::Problem>& problems() const;
+  const QList<KDevelop::ProblemPointer>& problems() const;
   void problemEncountered(const KDevelop::Problem& problem);
+  void problemEncountered(const KDevelop::ProblemPointer& problem);
 
   //Returns a hash-value computed from all until currently open branching-conditions and their decisions(like #ifdef's)
   uint branchingHash() const;

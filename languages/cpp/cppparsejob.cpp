@@ -135,7 +135,7 @@ const QList<HashedString>& CPPParseJob::includePaths() const {
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
             m_includePathsComputed = true;
-            m_includePathUrls = cpp()->findIncludePaths(KUrl(document().str()));
+            m_includePathUrls = cpp()->findIncludePaths(KUrl(document().str()), &m_preprocessorProblems);
             m_includePaths = convertFromUrls(m_includePathUrls);
         }
         return m_includePaths;
@@ -230,6 +230,14 @@ void CPPParseJob::setContentEnvironmentFile( Cpp::EnvironmentFile* file ) {
     m_contentEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
 }
 
+void CPPParseJob::addPreprocessorProblem(const ProblemPointer problem) {
+  m_preprocessorProblems << problem;
+}
+
+QList<ProblemPointer> CPPParseJob::preprocessorProblems() const {
+  return m_preprocessorProblems;
+}
+
 Cpp::EnvironmentFile* CPPParseJob::contentEnvironmentFile() {
     return m_contentEnvironmentFile.data();
 }
@@ -263,7 +271,7 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 ///If @param ctx is a proxy-context, returns the target-context. Else returns ctx. @warning du-chain must be locked
 LineContextPair contentFromProxy(LineContextPair ctx) {
     if( ctx.context->flags() & TopDUContext::ProxyContextFlag ) {
-        Q_ASSERT(ctx.context->importedParentContexts().count() == 1);
+        Q_ASSERT(!ctx.context->importedParentContexts().isEmpty());
         return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().data()), ctx.sourceLine );
     }else{
         return ctx;
@@ -284,6 +292,7 @@ void CPPInternalParseJob::run()
 
     TranslationUnitAST* ast = 0L;
 
+    QList<ProblemPointer> problems;
     {
       Control control;
       Parser parser(&control);
@@ -299,10 +308,17 @@ void CPPInternalParseJob::run()
           ast->session = parentJob()->parseSession();
       }
 
-      foreach (KDevelop::Problem p, control.problems()) {
-        p.setLocationStack(parentJob()->includeStack());
-        p.setSource(KDevelop::Problem::Lexer);
-        KDevelop::DUChain::problemEncountered(p);
+      if(parentJob()->updatingContext()) {
+        DUChainWriteLocker l(DUChain::lock());
+        parentJob()->updatingContext()->clearProblems();
+      }
+
+      problems = parentJob()->preprocessorProblems();
+
+      foreach (KDevelop::ProblemPointer p, control.problems()) {
+        p->setLocationStack(parentJob()->includeStack());
+        p->setSource(KDevelop::Problem::Lexer);
+        problems << p;
       }
 
       parentJob()->setAST(ast);
@@ -339,21 +355,22 @@ void CPPInternalParseJob::run()
 
         {
             DUChainReadLocker lock(DUChain::lock());
-            ///We directly insert the content-contexts, to create a cleaner structure. Else the tree would be cluttered and redundant.
+            ///We directly insert the included content-contexts, to create a cleaner structure. Else the tree would be cluttered and redundant.
             foreach ( LineContextPair context, parentJob()->includedFiles() ) {
                 chains << contentFromProxy(context);
                 encounteredIncludeUrls << context.context->url();
             }
         }
 
-        
         if( parentJob()->parentPreprocessor() ) {
             DUChainReadLocker lock(DUChain::lock());
             //Temporarily insert the parent's chains here, so forward-declarations can be resolved and types can be used, as it should be.
-            //In theory, we would need to insert the whole until-now parsed part of the parent, but that's not possible because preprocessing and parsing are
-            //separate steps. So we simply assume that the includes are at the top of the file.
+            //In theory, we would need to insert the whole until-now parsed part of the parent, but that's not possible because
+            //we mix preprocessing and parsing, by triggering the parsing of included files by the preprocessor of the including file
+            //So we simply assume that the includes are at the top of the file.
             foreach ( LineContextPair topContext, parentJob()->parentPreprocessor()->parentJob()->includedFiles() ) {
                 //As above, we work with the content-contexts.
+                ///@todo Care about the higher levels!
                 LineContextPair context = contentFromProxy(topContext);
                 DUContextPointer ptr(context.context);
                 if( !containsContext(chains, context.context)  && (!parentJob()->contentContext().data() || !updating || !updating->importedParentContexts().contains(ptr)) ) {
@@ -380,6 +397,11 @@ void CPPInternalParseJob::run()
                 ///We need to update or build a context
                 kDebug( 9007 ) << "building duchain";
 
+                if(updating) {
+                    DUChainWriteLocker l(DUChain::lock());
+                    updating->clearProblems();
+                }
+              
                 DeclarationBuilder declarationBuilder(&editor);
                 topContext = declarationBuilder.buildDeclarations(environmentFile, ast, &chains, updating, !(bool)parentJob()->contentContext());
 
@@ -402,6 +424,7 @@ void CPPInternalParseJob::run()
                 // We save some time here by not running the use compiler if the file is not loaded... (it's only needed
                 // for navigation in that case)
                 // FIXME make configurable
+                /// @todo create a more scalable structure of use-building, so we can build uses for all files.
                 if (!parentJob()->wasReadFromDisk()) {
                     UseBuilder useBuilder(&editor);
                     useBuilder.buildUses(ast);
@@ -444,11 +467,26 @@ void CPPInternalParseJob::run()
 
             Q_ASSERT(topContext);
 
-            //If we are using simplified environment-matching, create a proxy-context that represents the parsed content-context environment-wise
+            //If we are using simplified environment-matching, create a proxy-context that represents the parsed content-context environment-wise, or update the existing one
             if( parentJob()->contentEnvironmentFile() ) {
                 ContextBuilder builder(&editor);
                 TopDUContextPointer ptr(topContext);
                 topContext = builder.buildProxyContextFromContent(Cpp::EnvironmentFilePointer(parentJob()->environmentFile()), ptr, parentJob()->updatingContext());
+
+                ///Add the non-content contexts behind to content-context to the created proxy,
+                ///By walking the chain of proxy-contexts.
+                DUChainWriteLocker lock(DUChain::lock());
+                foreach ( LineContextPair context, parentJob()->includedFiles() )
+                  topContext->addImportedParentContext(context.context, SimpleCursor(context.sourceLine, 0));
+            }
+
+            /**
+             * Move all problems from the preprocessor/parser into the proxy-context, or the normal context.
+             * */
+            {
+              DUChainWriteLocker lock(DUChain::lock());
+              foreach( ProblemPointer problem, problems )
+                topContext->addProblem( problem );
             }
 
             parentJob()->setDuChain(topContext);

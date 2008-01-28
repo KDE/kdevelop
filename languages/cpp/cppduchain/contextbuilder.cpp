@@ -200,8 +200,8 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
     }
 
+    cppContext->clearImportedParentContexts();
     if(content) {
-      cppContext->clearImportedParentContexts();
       cppContext->addImportedParentContext(content.data());
     } else {
       ///This happens if a content-context is deleted from the du-chain during the time that the du-chain is not locked by this thread

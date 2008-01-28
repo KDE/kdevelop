@@ -240,7 +240,7 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
     //TODO: Anything to do here?!?!
 }
 
-KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
+KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems) const
 {
   KUrl::List allPaths;
   QSet<KUrl> hasPath;
@@ -336,12 +336,15 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
                         hasPath.insert(r);
                         
                         kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.prettyUrl();
-                        KDevelop::Problem p;
-                        p.setSource(KDevelop::Problem::Preprocessor);
-                        p.setDescription(i18n("Build-manager did not return an include-path" ));
-                        p.setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.prettyUrl()));
-                        p.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
-                        KDevelop::DUChain::problemEncountered( p );
+
+                        if( problems ) {
+                          KDevelop::Problem p;
+                          p.setSource(KDevelop::Problem::Preprocessor);
+                          p.setDescription(i18n("Build-manager did not return an include-path" ));
+                          p.setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.prettyUrl()));
+                          p.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                          *problems << KDevelop::ProblemPointer( new KDevelop::Problem(p) );
+                        }
                     }
                 }
                 
@@ -374,8 +377,8 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source) const
         }
     }
 
-    if( allPaths.isEmpty() && problem.source() != KDevelop::Problem::Unknown )
-      KDevelop::DUChain::problemEncountered( problem );
+    if( allPaths.isEmpty() && problem.source() != KDevelop::Problem::Unknown && problems )
+      *problems << KDevelop::ProblemPointer( new KDevelop::Problem(problem) );
       
 
     //Insert the standard-paths at the end
@@ -395,7 +398,7 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
     QMap<KUrl, bool> hadPaths; //Only process each path once
     QList<Cpp::IncludeItem> ret;
 
-    KUrl::List paths = findIncludePaths(source);
+    KUrl::List paths = findIncludePaths(source, 0);
 
     if(local) {
         KUrl localPath = source;
@@ -517,7 +520,7 @@ void CppLanguageSupport::documentActivated(KDevelop::IDocument * document)
   Q_UNUSED(document)
 }
 
-TopDUContext* CppLanguageSupport::standardContext(const KUrl& url)
+TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowProxyContext)
 {
   DUChainReadLocker lock(DUChain::lock());
   ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
@@ -529,13 +532,10 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url)
     top = DUChain::self()->chainForDocument(url);
   }
 
-  if(top && top->flags() & TopDUContext::ProxyContextFlag)
+  if(top && (top->flags() & TopDUContext::ProxyContextFlag) && !allowProxyContext)
   {
     if(!top->importedParentContexts().isEmpty())
     {
-      if(top->importedParentContexts().count() != 1)
-        kDebug(9007) << "WARNING: Proxy-context has more than one content-contexts, this should never happen";
-
       top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
 
       if(!top)
