@@ -256,6 +256,20 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
   headerSectionEndedInternal(&stream);
 }
 
+bool PreprocessJob::needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl::List& includePaths)
+{
+  for( Cpp::StringSetRepository::Iterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
+
+    ///@todo model correctly, and check modification-revisions of actually included files
+    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( includePaths, KUrl(), (*it).str(), IncludeLocal, KUrl(), true );
+    if(!included.first.isEmpty()) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 {
     bool closeStream = false;
@@ -338,19 +352,25 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     if (skipCurrentPath)
       from = parentJob()->includedFromPath();
 
-    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude(parentJob()->includePathUrls(), localPath, fileName, type, from );
+    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile;
 
         KDevelop::TopDUContext* includedContext;
+        bool updateNeeded = false;
 
         {
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, m_contentEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag);
+            if(includedContext) {
+              Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
+              if( includedEnvironment )
+                updateNeeded = needsUpdate(includedEnvironment, parentJob()->includePathUrls());
+            }
         }
 
-        if( includedContext ) {
+        if( includedContext && !updateNeeded ) {
             kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": took included file from the du-chain" << fileName;
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -400,6 +420,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
         p->setLocationStack(parentJob()->includeStack());
         parentJob()->addPreprocessorProblem(p);
+
+        ///@todo respect all the specialties like starting search at a specific path
+        ///Before doing that, model findInclude(..) exactly after the standard
+        m_environmentFile->addMissingIncludeFile(HashedString(fileName));
     }
 
         /*} else {

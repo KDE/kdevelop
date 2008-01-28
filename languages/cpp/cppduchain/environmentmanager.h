@@ -190,6 +190,11 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
      * */
     //const HashedStringSet& includeFiles() const;
 
+    void addMissingIncludeFile(const KDevelop::HashedString& file);
+    const StringSetRepository::LazySet& missingIncludeFiles() const;
+
+    void clearMissingIncludeFiles();
+  
     ///Set of all defined macros, including those of all deeper included files
     const MacroRepository::LazySet& definedMacros() const;
 
@@ -228,6 +233,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     KDevelop::ModificationRevision m_modificationTime;
     Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
     Cpp::StringSetRepository::LazySet m_includeFiles; //Set of all files with absolute paths
+    Cpp::StringSetRepository::LazySet m_missingIncludeFiles; //Set of relative file-names of missing includes
     Cpp::MacroRepository::LazySet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
     Cpp::StringSetRepository::LazySet m_usedMacroNames; //Set the names of all used macros
     Cpp::MacroRepository::LazySet m_definedMacros; //Set of all macros that were defined while lexing this file

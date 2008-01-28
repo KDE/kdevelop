@@ -87,12 +87,8 @@ void EnvironmentManager::addEnvironmentFile( const EnvironmentFilePointer& file 
 
   int cnt = 0;
   while ( files.first != files.second ) {
-    if ( hasSourceChanged( *( *( files.first ) ).second ) ) {
-      m_files.erase( files.first++ ); ///@todo give notification to du-chain
-    } else  {
-      cnt++;
-      files.first++;
-    }
+    cnt++;
+    files.first++;
   }
   //kDebug( 9007 ) << "EnvironmentManager: new count of cached instances for the file:" << cnt;
 }
@@ -256,7 +252,7 @@ void EnvironmentManager::erase( const CacheNode* node ) {
   ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url().str()  );
 }
 
-EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_contentStartLine(0) {
+EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_missingIncludeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_contentStartLine(0) {
   QFileInfo fileInfo( KUrl(fileName.str()).path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
   ifDebug( kDebug(9007) << "created for" << fileName.str() << "modification-time:" << m_modificationTime  );
@@ -350,6 +346,21 @@ HashedString EnvironmentFile::url() const {
   return m_url;
 }
 
+void EnvironmentFile::addMissingIncludeFile(const HashedString& file)
+{
+  m_missingIncludeFiles.insert(file);
+}
+
+const StringSetRepository::LazySet& EnvironmentFile::missingIncludeFiles() const
+{
+  return m_missingIncludeFiles;
+}
+
+void EnvironmentFile::clearMissingIncludeFiles()
+{
+  m_missingIncludeFiles.clear();
+}
+
 void EnvironmentFile::addIncludeFile( const HashedString& file, const ModificationRevision& modificationTime ) {
   m_includeFiles.insert(file);
   m_allModificationTimes[file] = modificationTime;
@@ -399,6 +410,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 
   ///Merge include-files, problems and other stuff
   m_includeFiles += file.m_includeFiles.set();
+  m_missingIncludeFiles += file.m_missingIncludeFiles.set();
   
   for( QMap<HashedString, KDevelop::ModificationRevision>::const_iterator it = file.m_allModificationTimes.begin(); it != file.m_allModificationTimes.end(); ++it )
     m_allModificationTimes[it.key()] = *it;

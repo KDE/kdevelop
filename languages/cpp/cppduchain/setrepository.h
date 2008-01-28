@@ -311,7 +311,6 @@ public:
       }
       
       return (bool)(set() & m_rep->createSet(i)).iterator();
-      
     }
 
     LazySet& operator +=(const Set& set) {
@@ -342,6 +341,17 @@ public:
       QMutexLocker l(m_lockBeforeAccess);
       Set ret = m_set - set;
       return LazySet(m_rep, m_lockBeforeAccess, ret);
+    }
+
+    void clear() {
+      QMutexLocker l(m_lockBeforeAccess);
+      m_set = Set();
+      m_temporaryIndices.clear();
+      m_temporaryRemoveIndices.clear();
+    }
+
+    Iterator iterator() const {
+      return Iterator(m_rep, set().iterator());
     }
     
     ///Returns an iterator that can conveniently be used to iterate over the items contained in this set
