@@ -287,6 +287,7 @@ void Parser::reportError(const QString& msg)
       KDevelop::Problem p;
       p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.textCursor(), 0)));
       p.setDescription(msg);
+      p.setSource(KDevelop::Problem::Parser);
 
       control->reportProblem(p);
     }
