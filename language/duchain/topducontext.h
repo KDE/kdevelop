@@ -33,6 +33,9 @@ namespace KDevelop
   class IdentifiedFile; //Defined in parsingenvironment.h
   class ParsingEnvironmentFile;
   class TopDUContextPrivate;
+  class Problem;
+
+  typedef KSharedPtr<Problem> ProblemPointer;
 /**
  * The top context in a definition-use chain for one source file.
  *
@@ -69,6 +72,20 @@ public:
   bool inDuChain() const;
   /// This flag is only used by DUChain, never change it from outside.
   void setInDuChain(bool);
+
+  /**
+   * Returns a list of all problems encountered while parsing this top-context.
+   * Does not include the problems of imported contexts.
+   * */
+  QList<ProblemPointer> problems() const;
+
+  /**
+   * Add a parsing-problem to this context.
+   * */
+  void addProblem(const ProblemPointer& problem);
+  
+  /// Clear the list of problems
+  void clearProblems();
   
   /**
    * Determine if this chain imports another chain.
@@ -90,6 +107,9 @@ public:
      * If this flag is set on a context, the first imported context should be used for any computations
      * like searches, listing, etc. instead of using this context.
      *
+     * The problems should be stored within the proxy-contexts, and optionally there may be
+     * any count of imported proxy-contexts imported behind the content-context(This can be used for tracking problems)
+     * 
      * Note: This flag does not directly change the behavior of the language-independent du-chain.
      * */
     ProxyContextFlag = 1,

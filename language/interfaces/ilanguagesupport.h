@@ -40,10 +40,21 @@ public:
     virtual ParseJob *createParseJob(const KUrl &url) = 0;
     /** @return the language for this support.*/
     virtual ILanguage *language() = 0;
-    /** @return the standard context used by this language for the given url.
+    /**
       * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
-      * The default-implementation for other languages is "return DUChain::chainForDocument(url);" */
-    virtual TopDUContext *standardContext(const KUrl& url);
+     * The default-implementation for other languages is "return DUChain::chainForDocument(url);"
+     * 
+     * @param allowProxyContext Whether proxy-contexts are allowed to be returned. In C++, a proxy-contexts has no direct content.
+     *                          It mainly just imports an actual content-context, and represents multiple different versions
+     *                          of the same content in the eyes of the preprocessor. Also, a proxy-context may contain the problem-
+     *                          descriptions of preprocessor problems, so it should be used by anything that is interested in those
+     *                          problems.
+     *
+     *  @warning The DUChain must be locked before calling this, @see KDevelop::DUChainReadLocker
+     * 
+     *  @return the standard context used by this language for the given @param url.
+      * */
+    virtual TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
 };
 
 }

@@ -24,6 +24,8 @@
 #include <klocale.h>
 
 #include <hashedstring.h>
+#include <duchain.h>
+#include <duchainlock.h>
 
 #include "problemreporterplugin.h"
 
@@ -36,7 +38,7 @@ ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
 
 ProblemModel::~ ProblemModel()
 {
-    qDeleteAll(m_problems);
+  m_problems.clear();
 }
 
 int ProblemModel::rowCount(const QModelIndex & parent) const
@@ -44,7 +46,7 @@ int ProblemModel::rowCount(const QModelIndex & parent) const
     if (!parent.isValid())
         return m_problems.count();
 
-    if (!parent.internalPointer() && parent.column() == 0)
+    if (parent.internalId() && parent.column() == 0)
         return m_problems.at(parent.row())->locationStack().count();
 
     return 0;
@@ -55,9 +57,11 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    Problem* p = problemForIndex(index);
+    DUChainReadLocker lock(DUChain::lock());
+  
+    ProblemPointer p = problemForIndex(index);
 
-    if (!index.internalPointer()) {
+    if (!index.internalId()) {
         // Top level
         switch (role) {
             case Qt::DisplayRole:
@@ -122,7 +126,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
 
 QModelIndex ProblemModel::parent(const QModelIndex & index) const
 {
-    if (index.internalPointer())
+    if (index.internalId())
         return createIndex(m_problems.indexOf(problemForIndex(index)), 0, 0);
 
     return QModelIndex();
@@ -130,21 +134,23 @@ QModelIndex ProblemModel::parent(const QModelIndex & index) const
 
 QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent) const
 {
+    DUChainReadLocker lock(DUChain::lock());
+  
     if (row < 0 || column < 0 || column >= LastColumn)
         return QModelIndex();
 
     if (parent.isValid()) {
-        if (parent.internalPointer())
+        if (parent.internalId())
             return QModelIndex();
 
         if (parent.column() != 0)
             return QModelIndex();
 
-        Problem* problem = problemForIndex(parent);
+        ProblemPointer problem = problemForIndex(parent);
         if (row >= problem->locationStack().count())
             return QModelIndex();
 
-        return createIndex(row, column, problem);
+        return createIndex(row, column, row);
     }
 
     if (row < m_problems.count())
@@ -164,19 +170,31 @@ ProblemReporterPlugin * ProblemModel::plugin() const
     return static_cast<ProblemReporterPlugin*>(const_cast<QObject*>(sender()));
 }
 
-KDevelop::Problem * ProblemModel::problemForIndex(const QModelIndex & index) const
+KDevelop::ProblemPointer ProblemModel::problemForIndex(const QModelIndex & index) const
 {
-    if (index.internalPointer())
-        return static_cast<KDevelop::Problem*>(index.internalPointer());
+    if (index.internalId())
+        return m_problems.at(index.internalId());
     else
         return m_problems.at(index.row());
 }
 
-void ProblemModel::addProblem(KDevelop::Problem * problem)
+void ProblemModel::addProblem(KDevelop::ProblemPointer problem)
 {
     beginInsertRows(QModelIndex(), m_problems.count(), m_problems.count());
     m_problems.append(problem);
     endInsertRows();
+}
+
+void ProblemModel::setProblems(const QList<KDevelop::ProblemPointer>& problems)
+{
+  m_problems = problems;
+  reset();
+}
+
+void ProblemModel::clear()
+{
+  m_problems.clear();
+  reset();
 }
 
 QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int role) const

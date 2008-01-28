@@ -29,6 +29,12 @@
 
 #include <iproblem.h>
 
+namespace KDevelop {
+  class ParseJob;
+  class TopDUContext;
+  class IDocument;
+}
+
 class ProblemReporterPlugin;
 
 class ProblemWidget : public QTreeView
@@ -45,11 +51,13 @@ protected:
   virtual void showEvent(QShowEvent* event);
 
 private Q_SLOTS:
-  void problemEncountered(KDevelop::Problem problem);
-
   void itemActivated(const QModelIndex& index);
+    
+  void parseJobFinished(KDevelop::ParseJob* job);
 
+  void documentActivated(KDevelop::IDocument*);
 private:
+  void showProblems(KDevelop::TopDUContext* ctx);
   ProblemReporterPlugin* m_plugin;
 };
 

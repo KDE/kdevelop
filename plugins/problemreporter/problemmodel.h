@@ -45,8 +45,11 @@ public:
         LastColumn
     };
     
-    void addProblem(KDevelop::Problem* problem);
-    
+    void addProblem(KDevelop::ProblemPointer problem);
+    void setProblems(const QList<KDevelop::ProblemPointer>& problems);
+  
+    void clear();
+
     virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex & index) const;
@@ -54,12 +57,12 @@ public:
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
     virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    KDevelop::Problem* problemForIndex(const QModelIndex& index) const;
-    
+    KDevelop::ProblemPointer problemForIndex(const QModelIndex& index) const;
+
 private:
     ProblemReporterPlugin* plugin() const;
 
-    QList<KDevelop::Problem*> m_problems;
+    QList<KDevelop::ProblemPointer> m_problems;
 };
 
 #endif // PROBLEMMODEL_H

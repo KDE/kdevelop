@@ -25,7 +25,6 @@
 #include "duchainobserver.h"
 
 #include "topducontext.h"
-#include "../interfaces/iproblem.h"
 
 class KUrl;
 
@@ -127,8 +126,6 @@ public:
   static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);*/
 
   static void branchAdded(DUContext* context);
-
-  static void problemEncountered(KDevelop::Problem problem);
 
   /**
    * @see ParsingEnvironmentManager

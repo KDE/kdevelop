@@ -39,10 +39,16 @@
 
 #include <icore.h>
 #include <idocumentcontroller.h>
+#include <ilanguagecontroller.h>
+#include <ilanguagesupport.h>
+#include <ilanguage.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/backgroundparser/parsejob.h>
 #include <idocument.h>
 
 #include "duchain.h"
 #include "duchainobserver.h"
+#include "duchainlock.h"
 
 #include "problemreporterplugin.h"
 #include "problemmodel.h"
@@ -65,7 +71,9 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     //new ModelTest(model());
 
     connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
-    bool success = connect(DUChain::self()->notifier(), SIGNAL(problemEncountered(KDevelop::Problem)), SLOT(problemEncountered(KDevelop::Problem)), Qt::QueuedConnection);
+  bool success = connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::QueuedConnection);
+    connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
+    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
     Q_ASSERT(success);
 }
 
@@ -73,9 +81,71 @@ ProblemWidget::~ProblemWidget()
 {
 }
 
-void ProblemWidget::problemEncountered(Problem problem)
+void collectProblems(QList<ProblemPointer>& allProblems, TopDUContext* context, QSet<TopDUContext*>& hadContexts)
 {
-    model()->addProblem(new Problem(problem));
+  if(hadContexts.contains(context))
+    return;
+  
+  hadContexts.insert(context);
+  
+  allProblems += context->problems();
+  bool isProxy = context->flags() & TopDUContext::ProxyContextFlag;
+  foreach(DUContextPointer ctx, context->importedParentContexts()) {
+    TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.data());
+    if(topCtx) {
+      //If we are starting at a proxy-context, only recurse into other proxy-contexts,
+      //because those contain the problems.
+      if(!isProxy || (topCtx->flags() & TopDUContext::ProxyContextFlag))
+        collectProblems(allProblems, topCtx, hadContexts);
+    }
+  }
+}
+
+void ProblemWidget::showProblems(TopDUContext* ctx)
+{
+  if(ctx) {
+    QList<ProblemPointer> allProblems;
+    QSet<TopDUContext*> hadContexts;
+    DUChainReadLocker lock(DUChain::lock());
+    collectProblems(allProblems, ctx, hadContexts);
+    model()->setProblems(allProblems);
+    resizeColumnToContents(0);
+  }else{
+    model()->clear();
+  }
+}
+
+void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
+{
+  kDebug() << "activated document:" << doc->url();
+  
+  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
+
+  KDevelop::TopDUContext* chosen = 0;
+  
+  foreach( KDevelop::ILanguage* language, languages)
+    if(!chosen)
+      chosen = language->languageSupport()->standardContext(doc->url(), true);
+
+  showProblems(chosen);
+}
+
+void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
+{
+  KUrl url(job->document().str());
+  IDocument* active = ICore::self()->documentController()->activeDocument();
+
+  kDebug() << "active document:" << active->url() << "url:" << url;
+  
+  if(active) {
+    //For now, only show problems from the current document
+    if(active->url() == url && job->duChain()) {
+      showProblems(job->duChain());
+    }else{
+      //Clear all problems
+      showProblems(0);
+    }
+  }
 }
 
 void ProblemWidget::itemActivated(const QModelIndex& index)
@@ -83,12 +153,22 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     if (!index.isValid())
         return;
 
-    KDevelop::Problem* problem = model()->problemForIndex(index);
+  KTextEditor::Cursor start;
+    KUrl url;
+  
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      KDevelop::ProblemPointer problem = model()->problemForIndex(index);
+      if (!index.internalPointer()) {
+        url = KUrl(problem->finalLocation().document().str());
+        start = problem->finalLocation().start();
+      }else{
+        url = KUrl(problem->locationStack().at(index.row()).document().str());
+        start = problem->locationStack().at(index.row());
+      }
+    }
 
-    if (!index.internalPointer())
-        m_plugin->core()->documentController()->openDocument(KUrl(problem->finalLocation().document().str()), problem->finalLocation().start());
-    else
-        m_plugin->core()->documentController()->openDocument(KUrl(problem->locationStack().at(index.row()).document().str()), problem->locationStack().at(index.row()));
+    m_plugin->core()->documentController()->openDocument(url, start);
 }
 
 ProblemModel * ProblemWidget::model() const

@@ -42,7 +42,7 @@ Problem::Problem()
 }
 
 Problem::Problem(const Problem& other)
-    : d(new Private(*other.d))
+    : QSharedData(), d(new Private(*other.d))
 {
 }
 

@@ -100,8 +100,6 @@ Q_SIGNALS:
   void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);*/
 
   void branchAdded(KDevelop::DUContextPointer context);
-
-  void problemEncountered(KDevelop::Problem problem);
 };
 
 }

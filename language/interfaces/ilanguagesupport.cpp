@@ -22,7 +22,7 @@
 
 namespace KDevelop {
 
-TopDUContext* ILanguageSupport::standardContext(const KUrl& url) {
+TopDUContext* ILanguageSupport::standardContext(const KUrl& url, bool allowProxyContext) {
   return DUChain::self()->chainForDocument(url);
 }
 

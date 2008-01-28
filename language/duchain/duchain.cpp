@@ -338,11 +338,6 @@ void DUChain::branchAdded(DUContext* context)
   emit sdDUChainPrivate->notifier->branchAdded(DUContextPointer(context));
 }
 
-void DUChain::problemEncountered(Problem problem)
-{
-  emit sdDUChainPrivate->notifier->problemEncountered(problem);
-}
-
 void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
   ENSURE_CHAIN_WRITE_LOCKED
   Q_ASSERT( sdDUChainPrivate->m_managers.find(manager->type()) == sdDUChainPrivate->m_managers.end() ); //If this fails, there may be multiple managers with the same type, which is wrong

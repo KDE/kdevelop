@@ -24,6 +24,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QStack>
 
+#include <ksharedptr.h>
+
 #include <documentcursor.h>
 #include <documentrange.h>
 
@@ -32,8 +34,13 @@ namespace KDevelop
 
 /**
  * An object representing a problem in preprocessing, parsing, definition-use chain compilation, etc.
+ * 
+ * You should always use ProblemPointer, because Problem may be subclassed.
+ * The subclass would be lost while copying.
+ * 
+ * Warning: Access to problems must be serialized through DUChainLock.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Problem
+class KDEVPLATFORMLANGUAGE_EXPORT Problem : public KShared
 {
 public:
     Problem();
@@ -84,6 +91,8 @@ private:
     class Private;
     Private* d;
 };
+
+typedef KSharedPtr<Problem> ProblemPointer;
 
 }
 

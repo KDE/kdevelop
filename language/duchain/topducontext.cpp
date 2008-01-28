@@ -27,6 +27,7 @@
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
 #include <hashedstring.h>
+#include <iproblem.h>
 
 #include "ducontext_p.h"
 
@@ -140,6 +141,7 @@ public:
   TopDUContext::Flags m_flags;
   TopDUContext* m_ctxt;
   ParsingEnvironmentFilePointer m_file;
+  QList<ProblemPointer> m_problems;
   ///Maps from the target context to the next one in the import trace.
   ///This can be used to reconstruct the import trace.
   mutable QHash<const TopDUContext*, const TopDUContext*> m_importsCache;
@@ -397,6 +399,25 @@ bool TopDUContext::deleting() const
 {
   return d_func()->m_deleting;
 }
+
+QList<ProblemPointer> TopDUContext::problems() const
+{
+  ENSURE_CAN_READ
+  return d_func()->m_problems;
+}
+
+void TopDUContext::addProblem(const ProblemPointer& problem)
+{
+  ENSURE_CAN_WRITE
+  d_func()->m_problems << problem;
+}
+
+void TopDUContext::clearProblems()
+{
+  ENSURE_CAN_WRITE
+  d_func()->m_problems.clear();
+}
+
 
 bool TopDUContext::imports(const DUContext * origin, const SimpleCursor& position) const
 {
