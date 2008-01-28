@@ -365,6 +365,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
         }
     }
 
+    if( allPaths.isEmpty() && problem.source() != KDevelop::Problem::Unknown && problems )
+      *problems << KDevelop::ProblemPointer( new KDevelop::Problem(problem) );
+    
     if( allPaths.isEmpty() ) {
         ///Last chance: Take a parsed version of the file from the du-chain, and get its include-paths(We will then get the include-path that some time was used to parse the file)
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -376,10 +379,6 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
             kDebug(9007) << "Took include-path for" << source << "from a random parsed duchain-version of it";
         }
     }
-
-    if( allPaths.isEmpty() && problem.source() != KDevelop::Problem::Unknown && problems )
-      *problems << KDevelop::ProblemPointer( new KDevelop::Problem(problem) );
-      
 
     //Insert the standard-paths at the end
     foreach( QString path, *m_standardIncludePaths) {
