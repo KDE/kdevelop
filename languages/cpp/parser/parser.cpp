@@ -3606,15 +3606,15 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
         std::size_t op = session->token_stream->cursor();
         advance();
 
-        std::size_t templ = 0;
-        if (session->token_stream->lookAhead() == Token_template)
-          {
-            templ = session->token_stream->cursor();
-            advance();
-          }
+//         std::size_t templ = 0;
+//         if (session->token_stream->lookAhead() == Token_template)
+//           {
+//             templ = session->token_stream->cursor();
+//             advance();
+//           }
 
         NameAST *name = 0;
-        if (!parseName(name, templ))
+        if (!parseName(name, true)) ///@todo this used to be "templ" as the second parameter. Can this cause problems with expressions?
           return false;
 
         ClassMemberAccessAST *ast = CreateNode<ClassMemberAccessAST>(session->mempool);
