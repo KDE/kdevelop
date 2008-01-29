@@ -186,9 +186,9 @@ bool Project::open( const KUrl& projectFileUrl_ )
     }
 
     d->projectFileUrl = projectFileUrl;
-    d->developerFileUrl = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash )
-                                  + ".kdev4/"
-                                  + projectFileUrl.fileName() );
+    d->developerFileUrl = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) );
+    d->developerFileUrl.addPath(".kdev4");
+    d->developerFileUrl.addPath( projectFileUrl.fileName() );
 
     statJob = KIO::stat( d->developerFileUrl, KIO::HideProgressInfo );
     if( !statJob->exec() )
