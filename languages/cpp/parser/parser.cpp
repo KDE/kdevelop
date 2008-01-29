@@ -3540,7 +3540,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
       break;
 
     default:
-      if (!parseName(ast->name))
+      if (!parseName(ast->name, true))
         return false;
 
       break;
