@@ -440,7 +440,7 @@ void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Ra
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
-  if( !element || !element->asItem() )
+  if( !element )
     return QVariant();
 
   DUChainReadLocker lock(DUChain::lock());
