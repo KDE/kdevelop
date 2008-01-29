@@ -20,6 +20,7 @@
 # KDEVPLATFORM_VCS_LIBRARY         - vcs module library
 #
 # KDEVPLATFORM_LIBRARIES           - all platform module libraries
+# KDEVPLATFORM_LIBRARY_DIR         - the directory containing the KDevPlatform libraries
 #
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
