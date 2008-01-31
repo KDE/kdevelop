@@ -23,6 +23,8 @@
 #include "duchain/classfunctiondeclaration.h"
 #include "cppduchain/cpptypes.h"
 #include "viablefunctions.h"
+#include "templatedeclaration.h"
+#include "typeutils.h"
 #include <QtAlgorithms>
 
 using namespace Cpp;
@@ -134,7 +136,11 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   
   for( QList<Declaration*>::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
   {
-    ViableFunction viable( m_topContext.data(), *it , noUserDefinedConversion );
+    Declaration* decl = applyImplicitTemplateParameters( params, *it );
+    if( !decl )
+      continue;
+    
+    ViableFunction viable( m_topContext.data(), decl, noUserDefinedConversion );
     viable.matchParameters( params );
     
     if( viable.isBetter(bestViableFunction) ) {
@@ -178,3 +184,269 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
   
   return viableFunctions;
 }
+
+Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterList& params, Declaration* declaration ) const
+{
+  TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(declaration);
+  if(!tempDecl)
+    return declaration;
+
+  KDevelop::DUContext* templateContext = tempDecl->templateParameterContext();
+  if(!templateContext) {
+    kDebug(9007) << "Template function missing template context";
+    return declaration;
+  }
+
+  CppFunctionType::Ptr functionType = declaration->type<CppFunctionType>();
+  if(!functionType) {
+    kDebug(9007) << "Template function has no function type";
+    return declaration;
+  }
+
+  const QList<AbstractType::Ptr>& arguments( functionType->arguments() );
+  if(params.parameters.count() > arguments.count())
+    return declaration;
+  
+  //templateContext contains the template-parameters that we need to find instantiations for
+
+  QMap<QString, AbstractType::Ptr> instantiatedParameters; //Here we store the values assigned to each template-parameter
+
+  foreach( Declaration* decl, templateContext->localDeclarations() ) {
+    CppTemplateParameterType* paramType = dynamic_cast<CppTemplateParameterType*>(decl->abstractType().data());
+    if( paramType ) //Parameters that are not of type CppTemplateParameterType are already assigned.
+      instantiatedParameters[paramType->identifier().last().identifier()] = AbstractType::Ptr();
+  }
+
+  if( instantiatedParameters.isEmpty() )
+    return declaration; //All parameters already have a type assigned
+  
+  for( int a = 0; a < params.parameters.count(); a++ )
+    matchParameterTypes(const_cast<AbstractType*>(params.parameters[a].type.data()), const_cast<AbstractType*>(arguments[a].data()), instantiatedParameters);
+
+  bool allInstantiated = true;
+  for( QMap<QString, AbstractType::Ptr>::const_iterator it = instantiatedParameters.begin(); it != instantiatedParameters.end(); ++it )
+    if( !(*it) )
+      allInstantiated = false;
+
+  if( allInstantiated ) {
+    //We have new template-parameters at hand, we can specialize now.
+    QList<ExpressionEvaluationResult> instantiateWith;
+    foreach( Declaration* decl, templateContext->localDeclarations() ) {
+      ExpressionEvaluationResult res;
+      
+      CppTemplateParameterType* paramType = dynamic_cast<CppTemplateParameterType*>(decl->abstractType().data());
+      if( paramType ) //Take the type we have assigned.
+        res.type = instantiatedParameters[paramType->identifier().last().identifier()];
+      else
+        res.type = decl->abstractType(); //Take the type that was available already earlier
+
+      instantiateWith << res;
+    }
+    return tempDecl->instantiate( instantiateWith, m_topContext->importTrace(declaration->topContext()) );
+  }
+  
+  return declaration;
+}
+
+bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, AbstractType* _parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const
+{
+  if(!_argumentType || !_parameterType)
+    return true;
+  if(instantiatedTypes.isEmpty())
+    return true;
+  AbstractType::Ptr argumentType = TypeUtils::resolvedType(_argumentType, m_topContext.data());
+  AbstractType::Ptr parameterType = TypeUtils::resolvedType(_parameterType, m_topContext.data());
+  
+  DelayedType* delayed = dynamic_cast<DelayedType*>(parameterType.data());
+  if(delayed)
+    return matchParameterTypes( argumentType.data(), delayed->qualifiedIdentifier(), instantiatedTypes );
+
+  ///In case of references on both sides, match the target-types
+  CppReferenceType* argumentRef = dynamic_cast<CppReferenceType*>(argumentType.data());
+  CppReferenceType* parameterRef = dynamic_cast<CppReferenceType*>(parameterType.data());
+
+  if( argumentRef && parameterRef )
+    return matchParameterTypes( argumentRef->baseType().data(), parameterRef->baseType().data(), instantiatedTypes );
+  else if(argumentRef)
+    return matchParameterTypes( argumentRef->baseType().data(), parameterType.data(), instantiatedTypes );
+  else if(parameterRef)
+    return matchParameterTypes( argumentType.data(), parameterRef->baseType().data(), instantiatedTypes );
+
+  ///In case of pointers on both sides, match the target-types
+  CppPointerType* argumentPointer = dynamic_cast<CppPointerType*>(argumentType.data());
+  CppPointerType* parameterPointer = dynamic_cast<CppPointerType*>(parameterType.data());
+
+  if( argumentPointer && parameterPointer )
+    return matchParameterTypes( argumentPointer->baseType().data(), parameterPointer->baseType().data(), instantiatedTypes );
+
+  ///Match assigned template-parameters, for example when matching QList<int> to QList<T>, assign int to T.
+  IdentifiedType* identifiedArgument = dynamic_cast<IdentifiedType*>(argumentType.data());
+  IdentifiedType* identifiedParameter = dynamic_cast<IdentifiedType*>(parameterType.data());
+
+  if( identifiedArgument && identifiedParameter )
+  {
+    if( identifiedArgument->identifier() == identifiedParameter->identifier() )
+    {
+      TemplateDeclaration* argumentTemplateDeclaration = dynamic_cast<TemplateDeclaration*>(identifiedArgument->declaration());
+      TemplateDeclaration* parameterTemplateDeclaration = dynamic_cast<TemplateDeclaration*>(identifiedParameter->declaration());
+
+      if( argumentTemplateDeclaration && parameterTemplateDeclaration )
+      {
+        DUContext* argumentTemplateDeclarationContext = argumentTemplateDeclaration->templateParameterContext();
+        DUContext* parameterTemplateDeclarationContext = parameterTemplateDeclaration->templateParameterContext();
+
+        if( argumentTemplateDeclarationContext->localDeclarations().count() == parameterTemplateDeclarationContext->localDeclarations().count() ) {
+          for( int a = 0; a < argumentTemplateDeclarationContext->localDeclarations().count(); ++a )
+            matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType().data(), parameterTemplateDeclarationContext->localDeclarations()[a]->abstractType().data(), instantiatedTypes );
+        }
+      }
+    }
+  }
+  
+  return true;
+}
+
+AbstractType* getContainerType(AbstractType* type, int depth, TopDUContext* topContext) {
+  for(int a = 0; a < depth; a++) {
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(type, topContext));
+    if(!idType)
+      return 0;
+    
+    Declaration* decl = idType->declaration();
+    Declaration* containerDecl = decl->context()->owner()->asDeclaration();
+    
+    if(containerDecl)
+      type = containerDecl->abstractType().data();
+    else
+      return 0;
+  }
+  return type;
+}
+
+bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const QualifiedIdentifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const
+{
+  if(!_argumentType)
+    return true;
+  if(instantiatedTypes.isEmpty())
+    return true;
+  if(parameterType.isEmpty())
+    return true;
+  ///@todo what about References or pointers? Something like QList<T*> where the qualified-identifier is "T*"
+  ///In theory, we need to parse the whole expression in "parameterType" in order to get a type to work with.
+  ///But that is too expensive. Unfortunately parameterType here may contain things like "const T&" or "T*"
+
+  for( int a = 0; a < parameterType.count(); ++a ) {
+    AbstractType* pType = getContainerType(_argumentType, parameterType.count() - a - 1, m_topContext.data());
+    if(!matchParameterTypes(pType, parameterType.at(a), instantiatedTypes))
+      return false;
+  }
+  return true;
+}
+
+bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const Identifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const
+{
+  if(!_argumentType)
+    return true;
+  if(instantiatedTypes.isEmpty())
+    return true;
+
+  AbstractType::Ptr argumentType = TypeUtils::resolvedType(_argumentType, m_topContext.data());
+  
+  IdentifiedType* identifiedArgument = dynamic_cast<IdentifiedType*>(argumentType.data());
+
+  if( !identifiedArgument )
+    return true;
+
+  KDevelop::Identifier argumentId = identifiedArgument->identifier().last();
+
+  if( instantiatedTypes.contains(parameterType.identifier()) ) {
+    instantiatedTypes[parameterType.identifier()] = AbstractType::Ptr(_argumentType);
+    return true;
+  } else if( argumentId.identifier() != parameterType.identifier() )
+    return false;
+  
+  TemplateDeclaration* argumentTemplateDeclaration = dynamic_cast<TemplateDeclaration*>(identifiedArgument->declaration());
+
+  if( argumentTemplateDeclaration && !parameterType.templateIdentifiers().isEmpty() )
+  {
+    DUContext* argumentTemplateDeclarationContext = argumentTemplateDeclaration->templateParameterContext();
+
+    if( argumentTemplateDeclarationContext )
+    {
+      int matchLength = argumentTemplateDeclarationContext->localDeclarations().count();
+      if( parameterType.templateIdentifiers().count() < matchLength )
+        matchLength = parameterType.templateIdentifiers().count();
+    
+      for( int a = 0; a < matchLength; ++a )
+        matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType().data(), parameterType.templateIdentifiers()[a], instantiatedTypes );
+    }else{
+      kDebug(9007) << "Template-declaration missing template-parameter context";
+    }
+  }
+
+  return true;
+}
+
+///Version of matchParameters that would be correct if we used CppTemplateParameterType* instead of DelayedType. Maybe we should doing that some time, it's more correct, and more complicated.
+// bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, AbstractType* _parameterType, QMap<CppTemplateParameterType*, AbstractType::Ptr>& instantiatedTypes) const
+// {
+//   if(!_argumentType || !_parameterType)
+//     return true;
+//   if(instantiatedTypes.isEmpty())
+//     return true;
+// 
+//   AbstractType::Ptr argumentType = TypeUtils::resolvedType(_argumentType, m_topContext.data());
+//   AbstractType::Ptr parameterType = TypeUtils::resolvedType(_parameterType, m_topContext.data());
+//   
+//   CppTemplateParameterType* temp = dynamic_cast<CppTemplateParameterType*>(parameterType.data());
+//   if(temp) {
+//     if( instantiatedTypes.contains(temp) ) {
+//       if( instantiatedTypes[temp].data() == 0 ) {
+//         instantiatedTypes[temp] = argumentType;
+//       }else{
+//         ///@todo compare if the type already instantiated for this parameter is the same as argumentType, and else fail.
+//       }
+//     }
+//     return true;
+//   }
+// 
+//   ///Match assigned template-parameters, for example when matching QList<int> to QList<T>, assign int to T.
+//   IdentifiedType* identifiedArgument = dynamic_cast<IdentifiedType*>(argumentType.data());
+//   IdentifiedType* identifiedParameter = dynamic_cast<IdentifiedType*>(parameterType.data());
+// 
+//   if( identifiedArgument && identifiedParameter )
+//   {
+//     if( identifiedArgument->identifier() == identifiedParameter->identifier() )
+//     {
+//       TemplateDeclaration* argumentTemplateDeclaration = dynamic_cast<TemplateDeclaration*>(identifiedArgument->declaration());
+//       TemplateDeclaration* parameterTemplateDeclaration = dynamic_cast<TemplateDeclaration*>(identifiedParameter->declaration());
+// 
+//       if( argumentTemplateDeclaration && parameterTemplateDeclaration )
+//       {
+//         DUContext* argumentTemplateDeclarationContext = argumentTemplateDeclaration->templateParameterContext();
+//         DUContext* parameterTemplateDeclarationContext = parameterTemplateDeclaration->templateParameterContext();
+//         
+//         if( argumentTemplateDeclarationContext->localDeclarations().count() == parameterTemplateDeclarationContext->localDeclarations().count() ) {
+//           for( int a = 0; a < argumentTemplateDeclarationContext->localDeclarations().count(); ++a )
+//             matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType().data(), parameterTemplateDeclarationContext->localDeclarations()[a]->abstractType().data(), instantiatedTypes );
+//         }
+//       }
+//     }
+//   }
+// 
+//   ///In case of references on both sides, match the target-types
+//   CppReferenceType* argumentRef = dynamic_cast<CppReferenceType*>(argumentType.data());
+//   CppReferenceType* parameterRef = dynamic_cast<CppReferenceType*>(parameterType.data());
+// 
+//   if( argumentRef && parameterRef )
+//     return matchParameterTypes( argumentRef->baseType().data(), parameterRef->baseType().data(), instantiatedTypes );
+// 
+//   ///In case of pointers on both sides, match the target-types
+//   CppPointerType* argumentPointer = dynamic_cast<CppPointerType*>(argumentType.data());
+//   CppPointerType* parameterPointer = dynamic_cast<CppPointerType*>(parameterType.data());
+// 
+//   if( argumentPointer && parameterPointer )
+//     return matchParameterTypes( argumentPointer->baseType().data(), parameterPointer->baseType().data(), instantiatedTypes );
+//   
+//   return true;
+// }

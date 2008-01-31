@@ -25,6 +25,18 @@
 
 namespace TypeUtils {
   using namespace KDevelop;
+  
+  AbstractType::Ptr resolvedType(AbstractType* base, const TopDUContext* topContext) {
+
+    ForwardDeclarationType* forward = dynamic_cast<ForwardDeclarationType*>( base );
+    if( forward ) {
+      AbstractType::Ptr ret( forward->resolve(topContext) );
+      if(ret)
+        return ret;
+    }
+    
+    return AbstractType::Ptr(base);
+  }
 
   AbstractType* realType(AbstractType* base, const TopDUContext* topContext, bool* constant) {
 

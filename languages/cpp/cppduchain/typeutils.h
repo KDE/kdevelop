@@ -51,6 +51,15 @@ namespace TypeUtils {
   }
 
   /**
+   * Resolves the type in case it is a forward-declaration.
+   *
+   *  !!DU-Chain must be locked!
+   * @warning The returned type may be newly created, in case of template forward-declarations.
+   *          This means that the returned shared pointer must be kept to keep the type alive.
+   * @return return-value will never be zero. Either the type is resolved, or base is returned.
+   */
+  AbstractType::Ptr resolvedType(AbstractType* base, const TopDUContext* topContext);
+  /**
    * Returns the completely dereferenced type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
    *
    *  !!DU-Chain must be locked!

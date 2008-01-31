@@ -416,6 +416,14 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
       {
         DUContext* ctx = instantiateDeclarationContext( parentContext, inclusionTrace, importedContext.data(), templateArguments, 0, 0);
         contextCopy->addImportedParentContext( ctx, SimpleCursor(), true );
+        
+        if( instantiatedDeclaration && importedContext->type() == KDevelop::DUContext::Template ) {
+          TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
+          if( instantiatedDeclaration )
+            tempDecl->setTemplateParameterContext( ctx );
+          else
+            kWarning(9007) << "instantiated declaration is not a template declaration";
+        }
       }
       else
       {
@@ -452,7 +460,14 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     }
 
   } else {
-    ///Note: this is possible, for example for template function-declarations(They do not have an internal context, because they have no compound statement), for variables, etc.
+    ///Note: this is possible, for example for template function-declarations(They do not have an internal context, because they have no compound statement), for variables, etc..
+    ///Directly take their assigned template-parameter-context and specialize it. We need it at least for overload-resolution.
+    TemplateDeclaration* fromTemplateDecl = dynamic_cast<TemplateDeclaration*>(instantiatedFrom);
+    TemplateDeclaration* toTemplateDecl = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
+    if( toTemplateDecl && fromTemplateDecl && fromTemplateDecl->templateParameterContext() ) {
+        DUContext* ctx = instantiateDeclarationContext( parentContext, inclusionTrace, fromTemplateDecl->templateParameterContext(), templateArguments, 0, 0);
+        toTemplateDecl->setTemplateParameterContext( ctx );
+    }
   }
 
   if( instantiatedDeclaration ) {
@@ -504,6 +519,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
 ///@todo Use explicitly declared specializations
 Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const ImportTrace& inclusionTrace )
 {
+  if( m_instantiatedFrom )
+    return m_instantiatedFrom->instantiate( templateArguments, inclusionTrace ); ///@todo update inclusion-trace
+  
   {
     QMutexLocker l(&instantiationsMutex);
    InstantiationsHash::const_iterator it;

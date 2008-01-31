@@ -819,13 +819,12 @@ void TestExpressionParser::testOperators() {
 }
 
 void TestExpressionParser::testTemplateFunctions() {
-  QByteArray method("class A { template<class T> T a(T& q) {}; }; template<class T> T a(T& q) {}; A* aClass;");
+  QByteArray method("template<class T> class A { template<class T> T a(T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T>& q) {}; template<class T> T c(A<T*>& q) {}; A* aClass;");
 
-  DUContext* top = parse(method, DumpNone);
-  
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->localDeclarations().count(), 6);
   Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
   QVERIFY(d);
   CppFunctionType* cppFunction = dynamic_cast<CppFunctionType*>(d->abstractType().data());
@@ -835,13 +834,37 @@ void TestExpressionParser::testTemplateFunctions() {
   QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
   
   Cpp::ExpressionParser parser(false, true);
-  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
+
+  Cpp::ExpressionEvaluationResult result;
+  
+  result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
 
+  result = parser.evaluateExpression( "A<C>()", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  
   result = parser.evaluateExpression( "aClass->a<A>(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
+  
+  result = parser.evaluateExpression( "a(A())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
+  
+  result = parser.evaluateExpression( "aClass->a(A())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
+  kDebug() << result.type->toString();
+
+  result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type, top->localDeclarations()[1]->abstractType());
+  
+  ///@todo Make this kind of matching work too(needs changes about handling DelayedType cppducontext and/or typebuilder)
+/*  result = parser.evaluateExpression( "c(A<C*>())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type, top->localDeclarations()[1]->abstractType());*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -26,6 +26,8 @@
 
 using namespace Cpp;
 
+///@todo prefer more specialized template-functions above less specialized ones
+
 inline bool ViableFunction::ParameterConversion::operator<(const ParameterConversion& rhs) const {
   if( rank < rhs.rank )
     return true;

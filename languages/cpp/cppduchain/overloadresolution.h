@@ -26,6 +26,7 @@
 #include "cppduchainexport.h"
 
 class CppFunctionType;
+class CppTemplateParameterType;
 
 namespace KDevelop {
   class DUContext;
@@ -145,7 +146,18 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     ///Replace class-instances with operator() functions, and pure classes with their constructors
     void expandDeclarations( const QList<Declaration*>& from, QList<Declaration*>& to );
     void expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& from, QList<QPair<OverloadResolver::ParameterList, Declaration*> >& to );
+    ///Returns zero if applying failed. Returns the given declaration if it isn't a template function.
+    Declaration* applyImplicitTemplateParameters( const ParameterList& params, Declaration* declaration ) const;
 
+    /**
+     * @param argumentType The type actually given
+     * @param parameterType The type argumentType should be matched to. Once CppTemplateParameterType's are encountered here, they will be instantiated in instantiatedTypes
+     * @return false if the matching failed
+     * */
+    bool matchParameterTypes(AbstractType* argumentType, AbstractType* parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
+    bool matchParameterTypes(AbstractType* argumentType, const QualifiedIdentifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
+    bool matchParameterTypes(AbstractType* argumentType, const Identifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
+    
     DUContextPointer m_context;
     TopDUContextPointer m_topContext;
     uint m_worstConversionRank;
