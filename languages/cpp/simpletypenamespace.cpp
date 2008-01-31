@@ -278,7 +278,6 @@ std::set<size_t> SimpleTypeNamespace::updateAliases( const IncludeFiles& files/*
       }
 
       TypeDesc descS = d.first.first;
-      size_t id = current->first;
       TypePointer p = d.second; //perspective
 
       HashedStringSet importIncludeFiles = d.first.second;

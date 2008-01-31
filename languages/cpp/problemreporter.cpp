@@ -253,7 +253,6 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 
 void EfficientKListView::limitSize( int size )
 {
-	int safety = 0;
 	if( m_map.size() <= size + 50 ) return;
 	
 	QMap<int, HashedString> backMap;

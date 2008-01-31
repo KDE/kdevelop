@@ -919,7 +919,6 @@ void Scope::init()
 
     kdDebug(9024) << "Initializing Scope: " << scopeName() << this << endl;
     m_maxCustomVarNum = 1;
-    m_unfinishedScopes = new QValueList<Scope*>();
 
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )

@@ -176,6 +176,8 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	mimeSourceFactory()->setImage("warning", QImage((const char**)warning_xpm));
 	mimeSourceFactory()->setImage("message", QImage((const char**)message_xpm));
 
+        dirstack.setAutoDelete(true);
+
 	childproc = new KProcess(this);
 	procLineMaker = new ProcessLineMaker( childproc );
 
@@ -556,7 +558,7 @@ void MakeWidget::slotProcessExited(KProcess *)
 
 	MakeItem* item = new ExitStatusItem( childproc->normalExit(), childproc->exitStatus() );
 	insertItem( item );
-  displayPendingItem();
+        displayPendingItem();
 
 	m_part->mainWindow()->statusBar()->message( QString("%1: %2").arg(currentCommand).arg(item->m_text), 3000);
 	m_part->core()->running(m_part, false);

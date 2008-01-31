@@ -53,6 +53,10 @@ KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char
 
 KDevProject::~KDevProject()
 {
+    d->m_timer->stop();
+    delete d->m_iface;
+    delete d->m_timer;
+    delete d;
 }
 
 void KDevProject::changedFile( const QString & fileName )

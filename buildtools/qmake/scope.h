@@ -262,7 +262,6 @@ private:
     TrollProjectPart* m_part;
     QMakeDefaultOpts* m_defaultopts;
     QMap<QString, QStringList> m_varCache;
-    QValueList<Scope*>* m_unfinishedScopes;
     QMap<QString,QString> m_environment;
 
 #ifdef DEBUG

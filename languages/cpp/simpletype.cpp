@@ -148,7 +148,6 @@ void SimpleType::resolve( Repository rep ) const {
 
 void SimpleType::destroyStore() {
   resetGlobalNamespace();
-  bool unregistered = true;
   int cnt = m_typeStore.size();
   kdDebug( 9007 ) << cnt << "types in type-store before destruction" << endl;
 
@@ -869,8 +868,6 @@ SimpleType SimpleTypeImpl::parent() {
 }
 
 const TypeDesc& SimpleTypeImpl::desc() {
-  if ( ! scope().isEmpty() )
-    ;
   if ( m_desc.name().isEmpty() )
     m_desc.setName( cutTemplateParams( scope().back() ) );
   m_desc.setResolved( this );

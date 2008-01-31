@@ -84,7 +84,7 @@ QStringList getGccMacros(bool *ok)
   }
   proc.closeStdin();
   processStdout = proc.stdOut(); 
-  QStringList lines = QStringList::split('\n', processStdout);  
+  QStringList lines = QStringList::split('\n', processStdout);
   return lines;
 }
 

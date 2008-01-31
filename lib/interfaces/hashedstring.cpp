@@ -321,7 +321,6 @@ void HashedStringSetGroup::removeSet( size_t id ) {
 }
 
 void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target ) const {
-  bool first = true;
   target.clear();
   if( !strings.m_data ) {
     std::set_difference( m_global.begin(), m_global.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
