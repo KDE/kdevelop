@@ -97,7 +97,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
         QStringList ret;
         if(type==ENV)
         {
-            foreach(QString s, envVarDirectories(var))
+            foreach(const QString& s, envVarDirectories(var))
             {
                 QString res=exp;
                 ret += res.replace(QString("$ENV{%1}").arg(var), s);
@@ -107,7 +107,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
         {
             if(values->contains(var))
             {
-                foreach(QString s, values->value(var))
+                foreach(const QString& s, values->value(var))
                 {
                     QString res=exp;
                     ret += resolveVariable(res.replace(QString("${%1}").arg(var), s), values);
@@ -257,7 +257,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             filename=file;
             break;
     }
-    foreach(QString mpath, folders) {
+    foreach(const QString& mpath, folders) {
         KUrl p(mpath);
         p.addPath(filename);
 
@@ -393,7 +393,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
 #endif
     kDebug(9042) << "Find:" << fprog->variableName() /*<< "program into" << modulePath<<":"<< fprog->path()*/;
     QStringList paths;
-    foreach(QString file, fprog->filenames())
+    foreach(const QString& file, fprog->filenames())
     {
         QString path=findFile(file, modulePath, Executable);
         if(!path.isEmpty()) {
@@ -424,7 +424,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     }
 
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
-    foreach(QString p, files) {
+    foreach(const QString& p, files) {
         QString p1=findFile(p, locationOptions, Location);
         if(p1.isEmpty()) {
             kDebug(9032) << p << "not found";
@@ -460,7 +460,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         locationOptions += m_defaultPaths;
     }
     
-    foreach(QString p, files) {
+    foreach(const QString& p, files) {
         QString p1=findFile(p, locationOptions, Library);
         if(p1.isEmpty()) {
             kDebug(9042) << p << "not found";
@@ -490,7 +490,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     QStringList path, files=ffile->filenames();
 
     kDebug(9042) << "Find File:" << ffile->filenames();
-    foreach(QString p, files) {
+    foreach(const QString& p, files) {
         QString p1=findFile(p, locationOptions, File);
         if(p1.isEmpty()) {
             kDebug(9042) << p << "not found";
@@ -600,7 +600,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     
             //Restoring
             i=1;
-            foreach(QString name, code.knownArgs)
+            foreach(const QString& name, code.knownArgs)
             {
                 m_vars->take(QString("ARGV%1").arg(i));
                 m_vars->take(name);
@@ -705,12 +705,12 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
     QStringList argsTemp = exec->arguments();
     QStringList args;
 
-    foreach(QString arg, argsTemp)
+    foreach(const QString& arg, argsTemp)
     {
         if(arg.contains(' '))
         {
             QStringList val=arg.split(' ');
-            foreach(QString s, val)
+            foreach(const QString& s, val)
             {
                 args.append(s);
             }
@@ -931,7 +931,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             break;
         case ListAst::INSERT: {
             int p=list->index().first();
-            foreach(QString elem, list->elements())
+            foreach(const QString& elem, list->elements())
             {
                 theList.insert(p, elem);
                 p++;
@@ -939,7 +939,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), theList);
         }   break;
         case ListAst::REMOVE_ITEM:
-            foreach(QString elem, list->elements())
+            foreach(const QString& elem, list->elements())
             {
                 theList.removeAll(elem);
             }
@@ -965,7 +965,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             break;
         case ListAst::REVERSE: {
             QStringList reversed;
-            foreach(QString elem, theList)
+            foreach(const QString& elem, theList)
                 reversed.prepend(elem);
             m_vars->insert(list->list(), reversed);
             }
@@ -1010,7 +1010,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
         }
         else
         {
-            foreach(QString s, args)
+            foreach(const QString& s, args)
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(s));
                 end=walk(fea->content(), fea->line()+1);
@@ -1034,7 +1034,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             switch(sast->cmdType())
             {
                 case StringAst::MATCH:
-                    foreach(QString in, sast->input())
+                    foreach(const QString& in, sast->input())
                     {
                         int match=rx.indexIn(in);
                         if(match>=0) {
@@ -1044,7 +1044,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     }
                     break;
                 case StringAst::MATCHALL:
-                    foreach(QString in, sast->input())
+                    foreach(const QString& in, sast->input())
                     {
                         int match=rx.indexIn(in);
                         if(match>0) {
@@ -1180,7 +1180,7 @@ int CMakeProjectVisitor::visit(const CustomCommandAst *ccast)
     {}
     else
     {
-        foreach(QString out, ccast->outputs())
+        foreach(const QString& out, ccast->outputs())
         {
             m_generatedFiles[out] = QStringList(ccast->mainDependency())/*+ccast->otherDependencies()*/;
             kDebug(9042) << "Have to generate:" << out << "with" << m_generatedFiles[out];
@@ -1204,7 +1204,7 @@ int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
 //     kDebug(9042) << "Adding defs: " << addDef->definitions();
     QString regex="-D([A-Za-z0-9_]+)=?([A-Za-z0-9_]*)";
     QRegExp rx(regex);
-    foreach(QString def, addDef->definitions())
+    foreach(const QString& def, addDef->definitions())
     {
         if(def.isEmpty()) continue;
         if(rx.indexIn(def)<0)
@@ -1334,7 +1334,7 @@ bool generated(const QString& name)
 QStringList CMakeProjectVisitor::targetDependencies(const QString & target) const
 {
     QStringList ret;
-    foreach(QString s, m_filesPerTarget[target])
+    foreach(const QString& s, m_filesPerTarget[target])
     {
         if(generated(s))
         {

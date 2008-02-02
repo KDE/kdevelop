@@ -26,6 +26,8 @@
 #include <QString>
 #include <QtCore/QVariant>
 
+#include <KDirWatch>
+
 #include <ibuildsystemmanager.h>
 #include <iplugin.h>
 
@@ -91,9 +93,17 @@ public:
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
 
-    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
+    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const
+        { return QList<KDevelop::ProjectTargetItem*>(); }
+public slots:
+    void dirtyFile(const QString& file);
 
 private:
+    void parseOnly(KDevelop::IProject* project, const KUrl &url);
+    void reimport(CMakeFolderItem*);
+    
+    void initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
+    
     static QStringList guessCMakeModulesDirectories(const QString& cmakeBin);
     static QString guessCMakeShare(const QString& cmakeBin);
     static QString guessCMakeRoot(const QString& cmakeBin);
@@ -105,6 +115,9 @@ private:
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
+    QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
+    
+    QMap<KUrl, CMakeFolderItem*> m_folderPerUrl;
 
     QStringList cmakeInitScripts;
     ICMakeBuilder* m_builder;

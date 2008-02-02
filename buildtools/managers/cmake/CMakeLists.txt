@@ -55,7 +55,7 @@ target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LI
 #QtScript is used for the MathAst
 
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
-target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS}
+target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon ${KDEVPLATFORM_PROJECT_LIBRARY} )
 
 

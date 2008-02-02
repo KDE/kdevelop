@@ -117,6 +117,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         VariableMap *m_vars;
         MacroMap *m_macros;
         DefineList m_defs;
+        QStringList m_filesRead;
 };
 
 #endif
