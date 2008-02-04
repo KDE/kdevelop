@@ -13,6 +13,7 @@ Name[pt]=Aplicação em QtRuby4
 Name[pt_BR]=Aplicação em QtRuby4
 Name[sk]=QtRuby4 Aplikácia
 Name[sv]=QtRuby 4-program
+Name[zh_TW]=QtRuby4 應用程式
 Icon=qtruby4app.png
 Category=Ruby/Qt
 Category[fr]=Ruby/Qt
@@ -29,6 +30,7 @@ Comment[pt]=Gera uma aplicação baseada no QtRuby4 (compatível com várias pla
 Comment[pt_BR]=Gera uma aplicação baseada no QtRuby4 (compatível com várias plataformas) - Necessita do QtRuby4
 Comment[sk]=Vygeneruje aplikáciu založenú na QtRuby4 (multiplatformovo kompatibilnú) - vyžaduje QtRuby4
 Comment[sv]=Skapar ett QtRuby 4-baserat program (fungerar på andra plattformar). Kräver QtRuby 4.
+Comment[zh_TW]=產生一個 QtRuby4 為基礎的應用程式（跨平台相容）─需要 QtRuby4
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb,%{dest}/ReadMe
 Archive=qtruby4app.tar.gz
@@ -113,6 +115,7 @@ Comment[pt]=Foi criada uma aplicação baseada em QtRuby4 em %{dest}
 Comment[pt_BR]=Foi criada uma aplicação baseada em QtRuby4 em %{dest}
 Comment[sk]=QtRuby4 aplikácia bola vytvorená v %{dest}
 Comment[sv]=Ett program baserat på QtRuby 4 skapades i %{dest}
+Comment[zh_TW]=一個 QtRuby4 為基礎的應用程式框架已建立於 %{dest}
 
 Comment=
 
