@@ -94,7 +94,7 @@ protected:
   void injectType(const AbstractType::Ptr& type, AST* node);
 
   ///Returns whether a type was opened
-  bool openTypeFromName(NameAST* name);
+  bool openTypeFromName(NameAST* name, bool needClass = false);
 
   bool lastTypeWasInstance() const;
   

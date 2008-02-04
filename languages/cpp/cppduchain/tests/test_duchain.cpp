@@ -1370,7 +1370,7 @@ void TestDUChain::testTemplates() {
     QVERIFY(typedefDecl->abstractType());
     DelayedType* delayed = dynamic_cast<DelayedType*>(typedefDecl->abstractType().data());
     QVERIFY(delayed);
-    QCOMPARE(delayed->qualifiedIdentifier(), QualifiedIdentifier("T"));
+    QCOMPARE(delayed->identifier(), TypeIdentifier("T"));
   }
 
   ///Test creating a template instance of class A<B,C>
@@ -1454,16 +1454,16 @@ void TestDUChain::testTemplateDefaultParameters() {
 }
 
 void TestDUChain::testTemplates2() {
-  QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> struct Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; }; Class<S*> instance;");
+  QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> struct Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; }; Class<S*&> instance;");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
   Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("instance"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("Class< S* >"));
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("Class< S*& >"));
   
 /*  memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::Alloc<S>::referenceType"));
   QVERIFY(memberDecl);

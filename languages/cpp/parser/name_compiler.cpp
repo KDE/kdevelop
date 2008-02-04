@@ -29,28 +29,89 @@
 
 using namespace KDevelop;
 
-NameCompiler::NameCompiler(ParseSession* session)
-  : m_session(session)
-{
-}
-
-QString NameCompiler::decode(AST* ast, bool without_spaces) const
+QString decode(ParseSession* session, AST* ast, bool without_spaces = false)
 {
   QString ret;
   if( without_spaces ) {
     //Decode operator-names without spaces for now, since we rely on it in other places.
     ///@todo change this, here and in all the places that rely on it. Operators should then by written like "operator [ ]"(space between each token)
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = m_session->token_stream->token(a);
+      const Token &tk = session->token_stream->token(a);
       ret += tk.symbol();
     }
   } else {
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = m_session->token_stream->token(a);
+      const Token &tk = session->token_stream->token(a);
       ret += tk.symbol() + " ";
     }
   }
   return ret;
+}
+
+Declaration::CVSpecs parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv)
+{
+  Declaration::CVSpecs ret = Declaration::CVNone;
+
+  if (cv) {
+    const ListNode<std::size_t> *it = cv->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = session->token_stream->kind(it->element);
+      if (kind == Token_const)
+        ret |= Declaration::Const;
+      else if (kind == Token_volatile)
+        ret |= Declaration::Volatile;
+
+      it = it->next;
+    } while (it != end);
+  }
+
+  return ret;
+}
+
+TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, TemplateArgumentAST *node)
+{
+  TypeIdentifier id;
+  if(node->expression) {
+    id = TypeIdentifier(decode(session, node));
+    id.setIsExpression(true);
+  }else{
+    //Parse the pointer operators
+    TypeCompiler tc(session);
+    tc.run(node->type_id->type_specifier);
+    id = TypeIdentifier(tc.identifier());
+    
+    if(node->type_id->declarator && node->type_id->declarator->ptr_ops)
+    {
+      const ListNode<PtrOperatorAST*> *it = node->type_id->declarator->ptr_ops->toFront();
+      const ListNode<PtrOperatorAST*> *end = it; ///@todo check ordering, eventually walk the list in reversed order
+      do
+        {
+          if(it->element) {
+            if( session->token_stream->token(it->element->op).symbol().startsWith('&')) {
+              //We're handling a 'reference'
+              id.setIsReference(true);
+              if(it->element->cv)
+                id.setIsConstant(parseConstVolatile(session, it->element->cv) & Declaration::Const);
+            } else {
+              //We're handling a real pointer
+              id.setPointerDepth(id.pointerDepth()+1);
+
+              if(it->element->cv)
+                id.setIsConstant(parseConstVolatile(session, it->element->cv) & Declaration::Const);
+            }
+          }
+          it = it->next;
+        }
+      while (it != end);
+    }
+  }
+  return id;
+}
+
+NameCompiler::NameCompiler(ParseSession* session)
+  : m_session(session)
+{
 }
 
 void NameCompiler::internal_run(AST *node)
@@ -78,7 +139,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
       tmp_name += QLatin1String("operator");
 
       if (op_id->op && op_id->op->op)
-        tmp_name +=  decode(op_id->op, true);
+        tmp_name +=  decode(m_session, op_id->op, true);
       else
         tmp_name += QLatin1String("{...cast...}");
 
@@ -101,7 +162,7 @@ TypeSpecifierAST* NameCompiler::lastTypeSpecifier() const {
 
 void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
 {
-  m_currentIdentifier.appendTemplateIdentifier(QualifiedIdentifier(decode(node)));
+  m_currentIdentifier.appendTemplateIdentifier( typeIdentifierFromTemplateArgument(m_session, node) );
 }
 
 const QualifiedIdentifier& NameCompiler::identifier() const

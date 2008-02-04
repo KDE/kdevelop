@@ -65,7 +65,7 @@ private:
 
   QMultiHash<KDevelop::AbstractType::Ptr, CppPointerType::Ptr> m_pointers;
   QMultiHash<KDevelop::AbstractType::Ptr, CppReferenceType::Ptr> m_references;
-  QMultiHash<KDevelop::QualifiedIdentifier, KDevelop::DelayedType::Ptr> m_delayedTypes;
+  QMultiHash<KDevelop::TypeIdentifier, KDevelop::DelayedType::Ptr> m_delayedTypes;
   QMultiHash<int, CppFunctionType::Ptr> m_functions;
   //QSet<CppClassType::Ptr> m_structures;
   QMultiHash<KDevelop::AbstractType::Ptr, KDevelop::ArrayType::Ptr> m_arrays;

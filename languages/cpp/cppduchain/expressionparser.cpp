@@ -42,8 +42,8 @@ using namespace KDevelop;
 ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
 }
 
-QualifiedIdentifier ExpressionEvaluationResult::identifier() const {
-  static QualifiedIdentifier noIdentifier("(no type)");
+TypeIdentifier ExpressionEvaluationResult::identifier() const {
+  static TypeIdentifier noIdentifier("(no type)");
   
   const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.data());
   if( idType )
@@ -51,10 +51,10 @@ QualifiedIdentifier ExpressionEvaluationResult::identifier() const {
   
   const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type.data());
   if( delayedType )
-    return delayedType->qualifiedIdentifier();
+    return delayedType->identifier();
   
   if( type )
-    return QualifiedIdentifier( type->toString() );
+    return TypeIdentifier( type->toString() );
   else
     return noIdentifier;
   

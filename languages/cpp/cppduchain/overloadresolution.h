@@ -155,7 +155,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * @return false if the matching failed
      * */
     bool matchParameterTypes(AbstractType* argumentType, AbstractType* parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
-    bool matchParameterTypes(AbstractType* argumentType, const QualifiedIdentifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
+    bool matchParameterTypes(AbstractType* argumentType, const TypeIdentifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
     bool matchParameterTypes(AbstractType* argumentType, const Identifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
     
     DUContextPointer m_context;

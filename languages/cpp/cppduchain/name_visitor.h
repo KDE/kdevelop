@@ -37,6 +37,7 @@ namespace Cpp {
   class ExpressionVisitor;
 }
 
+///This searches for the name while walking its AST.
 class KDEVCPPDUCHAIN_EXPORT NameASTVisitor: protected DefaultVisitor
 {
 public:
@@ -56,6 +57,7 @@ public:
    * */
   TypeSpecifierAST* lastTypeSpecifier() const;
 
+  ///Retrieve the declarations found for the name
   QList<KDevelop::DeclarationPointer> declarations() const;
   
 protected:

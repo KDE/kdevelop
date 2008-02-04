@@ -20,6 +20,7 @@
 //krazy:excludeall=cpp
 
 #include "name_visitor.h"
+#include "name_compiler.h"
 #include "type_visitor.h"
 #include "lexer.h"
 #include "symbol.h"
@@ -147,6 +148,34 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
       if( v.declarations()[0] )
         res.type = v.declarations()[0]->abstractType();
       res.allDeclarations = v.declarations();
+
+      if( node->type_id->declarator && node->type_id->declarator->ptr_ops ) {
+        //Apply pointer operators
+        const ListNode<PtrOperatorAST*> *it = node->type_id->declarator->ptr_ops->toFront(), *end = it;
+
+        do
+          {
+            PtrOperatorAST* ptrOp = it->element;
+            if (ptrOp && ptrOp->op) { ///@todo check ordering, eventually walk the chain in reversed order
+              QString op = m_session->token_stream->token(ptrOp->op).symbol();
+              if (!op.isEmpty()) {
+                if (op[0] == '&') {
+                  CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(m_session, ptrOp->cv)));
+                  pointer->setBaseType(res.type);
+                  res.type = AbstractType::Ptr( pointer.data() );
+                } else if (op[0] == '*') {
+                  CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(m_session, ptrOp->cv)));
+                  pointer->setBaseType(res.type);
+                  res.type = AbstractType::Ptr( pointer.data() );
+                }
+              }
+            }
+            it = it->next;
+          }
+        while (it != end);
+      }
+      
+      
       m_find.openQualifiedIdentifier(res);
       opened = true;
     }
@@ -160,7 +189,8 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
   LOCKDUCHAIN;
   if(opened)
     m_find.closeQualifiedIdentifier();
-  m_currentIdentifier.appendTemplateIdentifier(QualifiedIdentifier(decode(m_session, node)));
+
+  m_currentIdentifier.appendTemplateIdentifier( typeIdentifierFromTemplateArgument(m_session, node) );
 }
 
 const QualifiedIdentifier& NameASTVisitor::identifier() const
@@ -181,6 +211,7 @@ QList<KDevelop::DeclarationPointer> NameASTVisitor::declarations() const
 {
   return m_find.lastDeclarations();
 }
+
 
 void NameASTVisitor::run(NameAST *node)
 {

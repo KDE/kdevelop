@@ -58,9 +58,10 @@ uint qHash( const ExpressionEvaluationResult& key )
 {
   uint ret = 13*key.instance.isInstance;// + 17*(quint64)key.instance.declaration*/;
 
-  if( key.type )
+/*  if( key.type )
     ret += qHash(key.type->toString()); ///@todo Expensive
-  
+  else*/
+  ret += key.identifier().hash();
 /*  if( key.type )
     return qHash(key.type);*/
   
@@ -81,6 +82,31 @@ bool InstantiationKey::operator==(const InstantiationKey & rhs) const
 
 uint qHash( const InstantiationKey& key ) {
   return qHash( key.args );
+}
+
+AbstractType* applyPointerReference( AbstractType* ptr, const KDevelop::TypeIdentifier& id ) {
+  AbstractType* ret = ptr;
+  for( int a = 0; a < id.pointerDepth(); ++a ) {
+    Declaration::CVSpec spec = Declaration::CVNone;
+    if( id.isConstPointer( a ) )
+      spec = Declaration::Const;
+    
+    CppPointerType* newRet = new CppPointerType( spec );
+    newRet->setBaseType( AbstractType::Ptr(ret) );
+    ret = newRet;
+  }
+
+  if(id.isReference() ) {
+    Declaration::CVSpec spec = Declaration::CVNone;
+    if( id.isConstant() )
+      spec = Declaration::Const;
+    
+    CppReferenceType* newRet = new CppReferenceType( spec );
+    newRet->setBaseType( AbstractType::Ptr(ret) );
+    ret = newRet;
+  }
+
+  return ret;
 }
 
 ///Finds out whether any DelayedType's are involved in a given type(It searches return-values, argument-types, base-classes, etc.)
@@ -153,25 +179,25 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
     const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
 
     if( delayedType && delayedType->kind() == DelayedType::Delayed ) {
-      if( !delayedType->qualifiedIdentifier().isExpression() ) {
+      if( !delayedType->identifier().isExpression() ) {
         QList<QualifiedIdentifier> identifiers;
-        identifiers << delayedType->qualifiedIdentifier();
+        identifiers << delayedType->identifier();
         QList<Declaration*> decls;
         
         if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) )
           return const_cast<AbstractType*>(type);
         
         if( !decls.isEmpty() )
-          return decls.front()->abstractType().data();
+          return applyPointerReference(decls.front()->abstractType().data(), delayedType->identifier());
       }
       ///Resolution as type has failed, or is not appropriate.
       ///Resolve delayed expression, for example static numeric expressions
       ExpressionParser p;
       ExpressionEvaluationResult res;
-      if( delayedType->qualifiedIdentifier().isExpression() )
-        res = p.evaluateExpression( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), inclusionTrace );
+      if( delayedType->identifier().isExpression() )
+        res = p.evaluateExpression( delayedType->identifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), inclusionTrace );
       else
-        res = p.evaluateType( delayedType->qualifiedIdentifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), inclusionTrace );
+        res = p.evaluateType( delayedType->identifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), inclusionTrace );
 
       ///@todo make this nicer
       keepAlive = res.type; //Since the API uses AbstractType*, use keepAlive to make sure the type cannot be deleted
@@ -396,7 +422,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           //Use the already available delayed-type resolution to resolve the value/type
           if( !templateDecl->defaultParameter().isEmpty() ) {
             DelayedType::Ptr delayed( new DelayedType() );
-            delayed->setQualifiedIdentifier( templateDecl->defaultParameter() );
+            delayed->setIdentifier( templateDecl->defaultParameter() );
             declCopy->setAbstractType( resolveDelayedTypes( AbstractType::Ptr(delayed.data()), contextCopy, inclusionTrace + parentContext->topContext()->importTrace(contextCopy->topContext()) ) );
           }else{
             //Parameter missing

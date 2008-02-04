@@ -428,15 +428,15 @@ class CppDUContext : public BaseContext {
           for( int a = 0; a < currentIdentifier.templateIdentifiers().size(); a++ ) {
             //Use the already available mechanism for resolving delayed types
             Cpp::ExpressionEvaluationResult res;
-            QualifiedIdentifier i = currentIdentifier.templateIdentifiers().at(a);
+            TypeIdentifier i = currentIdentifier.templateIdentifiers().at(a);
             //If the identifier is empty, it is probably just a mark that a template should be instantiated, but without explicit paremeters.
             if( !i.isEmpty() ) {
               DelayedType::Ptr delayed( new DelayedType() );
-              delayed->setQualifiedIdentifier( i );
+              delayed->setIdentifier( i );
               
               res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, trace, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags );
               
-              if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && (dynamic_cast<CppTemplateParameterType*>(res.type.data()) || dynamic_cast<DelayedType*>(res.type.data())) ) {
+              if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && (dynamic_cast<CppTemplateParameterType*>(TypeUtils::targetType(res.type.data(), 0)) || dynamic_cast<DelayedType*>(TypeUtils::targetType(res.type.data(), 0))) ) {
                 return false;
               }
 

@@ -922,10 +922,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
   QualifiedIdentifier ident( id );
   ident.setIsExpression( expression );
-  type->setQualifiedIdentifier( ident );
+  type->setIdentifier( ident );
   m_lastType = AbstractType::Ptr( type.data() );
 }
-
 
   /**
    *

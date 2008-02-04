@@ -177,52 +177,8 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     
     CppClassType* klass = dynamic_cast<CppClassType*>(m_typeStack.top().data());
     Q_ASSERT( klass );
-    
-    QualifiedIdentifier baseClassIdentifier = identifierForName(node->name);
 
-    bool delay = false;
-    bool openedType = false;
-
-    if(!delay) {
-      SimpleCursor  pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-      
-      QList<Declaration*> declarations = searchContext()->findDeclarations(baseClassIdentifier, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
-      /**
-      * @todo If we somewhere within a template class/function declaration,
-      * we need to check here whether the found declaration is template-dependent.
-      * If it is, it needs to be delayed. Template-dependent means:
-      * - Does it contain any types that depend on an unresolved template-parameter?
-      *
-      * Until we correctly check for that, we need to make all types within template-classes delayed. This hurts.
-      * */
-      if( !declarations.isEmpty() )
-      {
-        if( declarations.count() > 1 )
-          kDebug(9007) << "found multiple declarations for" << baseClassIdentifier.toString();
-        
-        foreach( Declaration* decl, declarations )
-        {
-          if( decl->kind() == Declaration::Type && decl->abstractType() && dynamic_cast<CppClassType*>(decl->abstractType().data()) )
-          {
-            if( !templateDeclarationDepth() || !isTemplateDependent(decl) ) {
-              openType( decl->abstractType(), node );
-              openedType = true;
-            } else {
-              delay = true;
-            }
-            break;
-          }
-        }
-      } else {
-        delay = true;
-      }
-    }
-    
-    if(delay) {
-        //We are in a template, and the searched type probably involves undefined template-parameters. So delay the resolution.
-       openedType = true;
-       openDelayedType( baseClassIdentifier, node, (templateDeclarationDepth() != 0) ? DelayedType::Delayed : DelayedType::Unresolved );
-    }
+    bool openedType = openTypeFromName(node->name, true);
 
     if( openedType ) {
       closeType();
@@ -253,7 +209,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
       
       addBaseType(instance);
     } else { //A case for the problem-reporter
-      kDebug(9007) << "Could not find declaration for" << baseClassIdentifier.toString();
+      kDebug(9007) << "Could not find base declaration for" << identifierForName(node->name);
     }
   }
 
@@ -476,7 +432,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     closeType();
 }
 
-bool TypeBuilder::openTypeFromName(NameAST* name) {
+bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
   QualifiedIdentifier id = identifierForName(name);
 
   bool openedType = false;
@@ -486,22 +442,33 @@ bool TypeBuilder::openTypeFromName(NameAST* name) {
   if(!delay) {
     SimpleCursor pos = m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
+    
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
 
-    
-    if (!dec.isEmpty() && dec.front()->abstractType() && (!templateDeclarationDepth() || !isTemplateDependent(dec.front()))) {
-
-      if(dec.front()->kind() == KDevelop::Declaration::Instance)
-        m_lastTypeWasInstance = true;
-      
-      ///@todo only functions may have multiple declarations here
-      ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
-      //kDebug(9007) << "found for" << id.toString() << ":" << dec.front()->toString() << "type:" << dec.front()->abstractType()->toString() << "context:" << dec.front()->context();
-      openedType = true;
-      openType(dec.front()->abstractType(), name);
-    } else {
+    if ( dec.isEmpty() || (templateDeclarationDepth() && isTemplateDependent(dec.front())) )
       delay = true;
+
+    if(!delay) {
+      foreach( Declaration* decl, dec ) {
+        if( needClass && !dynamic_cast<CppClassType*>(decl->abstractType().data()) )
+          continue;
+        
+        if (decl->abstractType() ) {
+          if(decl->kind() == KDevelop::Declaration::Instance)
+            m_lastTypeWasInstance = true;
+          
+          ///@todo only functions may have multiple declarations here
+          ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
+          //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
+          openedType = true;
+          openType(decl->abstractType(), name);
+          break;
+        }
+      }
     }
+    
+    if(!openedType)
+      delay = true;
   }
     ///@todo What about position?
 
@@ -715,7 +682,7 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
 
 void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* node, DelayedType::Kind kind) {
   DelayedType::Ptr type(new DelayedType());
-  type->setQualifiedIdentifier(identifier);
+  type->setIdentifier(identifier);
   type->setKind(kind);
   openType(type, node);
 }

@@ -819,7 +819,7 @@ void TestExpressionParser::testOperators() {
 }
 
 void TestExpressionParser::testTemplateFunctions() {
-  QByteArray method("template<class T> class A { template<class T> T a(T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T>& q) {}; template<class T> T c(A<T*>& q) {}; A* aClass;");
+  QByteArray method("template<class T> class A { template<class T> T a(T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T>& q) {}; template<class T> T c(A<T*&>& q) {}; A* aClass;");
 
   DUContext* top = parse(method, DumpAll);
 
@@ -836,6 +836,12 @@ void TestExpressionParser::testTemplateFunctions() {
   Cpp::ExpressionParser parser(false, true);
 
   Cpp::ExpressionEvaluationResult result;
+
+  ///@todo Make this kind of matching work too(needs changes about handling DelayedType cppducontext and/or typebuilder)
+  result = parser.evaluateExpression( "c(A<C*&>())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  kDebug() << result.toString();
+  QCOMPARE(result.type, top->localDeclarations()[1]->abstractType());
   
   result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
@@ -860,11 +866,6 @@ void TestExpressionParser::testTemplateFunctions() {
   result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type, top->localDeclarations()[1]->abstractType());
-  
-  ///@todo Make this kind of matching work too(needs changes about handling DelayedType cppducontext and/or typebuilder)
-/*  result = parser.evaluateExpression( "c(A<C*>())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type, top->localDeclarations()[1]->abstractType());*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

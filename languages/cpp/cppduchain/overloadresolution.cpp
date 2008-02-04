@@ -250,6 +250,8 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
 
 bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, AbstractType* _parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const
 {
+  //kDebug() << "matching" << _argumentType->toString() << "to" << _parameterType->toString();
+  
   if(!_argumentType || !_parameterType)
     return true;
   if(instantiatedTypes.isEmpty())
@@ -259,7 +261,7 @@ bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, Abstract
   
   DelayedType* delayed = dynamic_cast<DelayedType*>(parameterType.data());
   if(delayed)
-    return matchParameterTypes( argumentType.data(), delayed->qualifiedIdentifier(), instantiatedTypes );
+    return matchParameterTypes( argumentType.data(), delayed->identifier(), instantiatedTypes );
 
   ///In case of references on both sides, match the target-types
   CppReferenceType* argumentRef = dynamic_cast<CppReferenceType*>(argumentType.data());
@@ -323,18 +325,36 @@ AbstractType* getContainerType(AbstractType* type, int depth, TopDUContext* topC
   return type;
 }
 
-bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const QualifiedIdentifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const
+bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const TypeIdentifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const
 {
+  //kDebug() << "matching" << _argumentType->toString() << "to" << parameterType.toString();
   if(!_argumentType)
     return true;
   if(instantiatedTypes.isEmpty())
     return true;
   if(parameterType.isEmpty())
     return true;
-  ///@todo what about References or pointers? Something like QList<T*> where the qualified-identifier is "T*"
-  ///In theory, we need to parse the whole expression in "parameterType" in order to get a type to work with.
-  ///But that is too expensive. Unfortunately parameterType here may contain things like "const T&" or "T*"
 
+  {
+    CppReferenceType* argumentRef = dynamic_cast<CppReferenceType*>(_argumentType);
+
+    if( argumentRef && parameterType.isReference() )
+      _argumentType = argumentRef->baseType().data();
+    else if( parameterType.isReference() )
+      return false; //Reference on right side, but not on left
+  }
+  {
+    CppPointerType* argumentPointer = dynamic_cast<CppPointerType*>(_argumentType);
+    int cnt = 0; ///@todo correct ordering of the pointers and their constnesses
+    while( argumentPointer && cnt < parameterType.pointerDepth() ) {
+      ++cnt;
+      _argumentType = argumentPointer->baseType().data();
+      argumentPointer = dynamic_cast<CppPointerType*>(_argumentType);
+    }
+    if( cnt != parameterType.pointerDepth() || !_argumentType )
+      return false; //Do not have the needed count of pointers
+  }
+  
   for( int a = 0; a < parameterType.count(); ++a ) {
     AbstractType* pType = getContainerType(_argumentType, parameterType.count() - a - 1, m_topContext.data());
     if(!matchParameterTypes(pType, parameterType.at(a), instantiatedTypes))
@@ -345,6 +365,8 @@ bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const Qu
 
 bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const Identifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const
 {
+  //kDebug() << "matching" << _argumentType->toString() << "to" << parameterType.toString();
+  
   if(!_argumentType)
     return true;
   if(instantiatedTypes.isEmpty())

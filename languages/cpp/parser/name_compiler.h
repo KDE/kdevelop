@@ -22,6 +22,7 @@
 #include "default_visitor.h"
 #include <identifier.h>
 #include <cppparserexport.h>
+#include <declaration.h>
 
 class ParseSession;
 class OperatorAST;
@@ -50,7 +51,6 @@ protected:
   virtual void visitTemplateArgument(TemplateArgumentAST *node);
 
   void internal_run(AST *node);
-  QString decode(AST* ast, bool without_spaces = false) const;
 
 private:
   ParseSession* m_session;
@@ -59,6 +59,10 @@ private:
   KDevelop::Identifier m_currentIdentifier;
   KDevelop::QualifiedIdentifier _M_name;
 };
+
+//Extracts a type-identifier from a template argument
+KDevelop::TypeIdentifier KDEVCPPPARSER_EXPORT typeIdentifierFromTemplateArgument(ParseSession* session, TemplateArgumentAST *node);
+KDevelop::Declaration::CVSpecs KDEVCPPPARSER_EXPORT parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv);
 
 #endif // NAME_COMPILER_H
 

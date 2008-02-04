@@ -65,7 +65,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     }
 
     ///Duchain must be read-locked
-    QualifiedIdentifier identifier() const;
+    TypeIdentifier identifier() const;
     
     ///@return A short version, that only contains the name or value, without instance-information etc. Should be language-processable.
     QString toShortString() const;

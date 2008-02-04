@@ -304,14 +304,13 @@ KDevelop::AbstractType::Ptr TypeRepository::registerDelayedType(KDevelop::Delaye
 {
   QMutexLocker lock(&m_mutex);
   Q_ASSERT(input);
-  
-  QMultiHash<QualifiedIdentifier, DelayedType::Ptr>::const_iterator it = m_delayedTypes.find(input->qualifiedIdentifier());
+  QMultiHash<TypeIdentifier, DelayedType::Ptr>::const_iterator it = m_delayedTypes.find(input->identifier());
   for(;it != m_delayedTypes.end(); ++it) {
     if( (*it)->kind() == input->kind() )
       return KDevelop::AbstractType::Ptr::staticCast(*it);
   }
 
-  m_delayedTypes.insert(input->qualifiedIdentifier(), input);
+  m_delayedTypes.insert(input->identifier(), input);
   return KDevelop::AbstractType::Ptr::staticCast(input);
 }
 
