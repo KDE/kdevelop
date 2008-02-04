@@ -126,14 +126,12 @@ QSet<HashedString> ProjectFileDataProvider::files() const {
 }
 
 QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start, uint end ) const {
-  if( end > Base::filteredItems().count() )
+  if( end > (uint)Base::filteredItems().count() )
     end = Base::filteredItems().count();
-  if( start < 0 )
-    start = 0;
 
   QList<KDevelop::QuickOpenDataPointer> ret;
   
-  for( int a = start; a < end; a++ ) {
+  for( uint a = start; a < end; a++ ) {
     ProjectFile f( Base::filteredItems()[a] );
     ret << KDevelop::QuickOpenDataPointer( new ProjectFileData( Base::filteredItems()[a] ) );
   }
