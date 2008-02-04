@@ -44,14 +44,14 @@ public:
 
   int m_unique;
   HashedString m_identifier;
-  QList<QualifiedIdentifier> m_templateIdentifiers;
+  QList<TypeIdentifier> m_templateIdentifiers;
 
 private:
     void computeHash() const {
       //this must stay thread-safe(may be called by multiple threads at a time)
       //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
       uint hash = m_identifier.hash();
-      for( QList<QualifiedIdentifier>::const_iterator it = m_templateIdentifiers.begin(); it != m_templateIdentifiers.end(); ++it )
+      for( QList<TypeIdentifier>::const_iterator it = m_templateIdentifiers.begin(); it != m_templateIdentifiers.end(); ++it )
         hash = hash * 13 + (*it).hash();
       m_hash += m_unique;
       m_hash = hash;
@@ -64,11 +64,15 @@ private:
 class QualifiedIdentifierPrivate : public KShared
 {
 public:
-  QualifiedIdentifierPrivate() : m_hash(0), m_explicitlyGlobal(false), m_isExpression(false) {
+  QualifiedIdentifierPrivate() : m_explicitlyGlobal(false), m_isExpression(false), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstantMask(0), m_hash(0) {
   }
   QList<Identifier> m_identifiers;
   bool m_explicitlyGlobal:1;
   bool m_isExpression:1;
+  bool m_isConstant:1; //Data for TypeIdentifier, stored here.
+  bool m_isReference:1; //Data for TypeIdentifier, stored here.
+  uchar m_pointerDepth;
+  uint m_pointerConstantMask; //Stores in a mask for each pointer-depth whether it is constant. Supports only max. 32 levels.
   mutable uint m_hash;
 
   //Constructs m_identifiers
@@ -95,6 +99,9 @@ public:
       uint mhash = 0;
       foreach( const Identifier& identifier, m_identifiers )
         mhash = 11*mhash + identifier.hash();
+
+      mhash += 17 * m_isConstant + 19 * m_isReference + 23 * m_pointerDepth + 31 * m_pointerConstantMask;
+
       m_hash = mhash;
     }
     return m_hash;
@@ -127,7 +134,7 @@ Identifier::Identifier(const QString& id, uint start, uint* takenRange)
   ParamIterator paramIt("<>:", id, start);
   d->m_identifier = paramIt.prefix().trimmed();
   while( paramIt ) {
-    appendTemplateIdentifier( QualifiedIdentifier(*paramIt) );
+    appendTemplateIdentifier( TypeIdentifier(*paramIt) );
     ++paramIt;
   }
 
@@ -174,12 +181,12 @@ void Identifier::setIdentifier(const QString& identifier)
   d->m_identifier = identifier;
 }
 
-const QList<QualifiedIdentifier>& Identifier::templateIdentifiers() const
+const QList<TypeIdentifier>& Identifier::templateIdentifiers() const
 {
   return d->m_templateIdentifiers;
 }
 
-void Identifier::appendTemplateIdentifier(const QualifiedIdentifier& identifier)
+void Identifier::appendTemplateIdentifier(const TypeIdentifier& identifier)
 {
   prepareWrite();
   d->m_templateIdentifiers.append(identifier);
@@ -191,7 +198,7 @@ void Identifier::clearTemplateIdentifiers()
   d->m_templateIdentifiers.clear();
 }
 
-void Identifier::setTemplateIdentifiers(const QList<QualifiedIdentifier>& templateIdentifiers)
+void Identifier::setTemplateIdentifiers(const QList<TypeIdentifier>& templateIdentifiers)
 {
   prepareWrite();
   d->m_templateIdentifiers = templateIdentifiers;
@@ -294,8 +301,15 @@ QualifiedIdentifier::~QualifiedIdentifier() {
 QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
   : d(id.d)
 {
+  if( d->m_pointerConstantMask || d->m_isReference || d->m_pointerDepth || d->m_isConstant ) {
+    //When copying from a type-identifier, do not share the d-pointer, because it contains invalid information.
+    prepareWrite();
+    d->m_pointerConstantMask = 0;
+    d->m_isReference = 0;
+    d->m_pointerDepth = 0;
+    d->m_isConstant = 0;
+  }
 }
-
 QStringList QualifiedIdentifier::toStringList() const
 {
   QStringList ret;
@@ -528,6 +542,11 @@ uint QualifiedIdentifier::hash() const {
   return d->hash();
 }
 
+uint qHash(const TypeIdentifier& id)
+{
+  return id.hash();
+}
+
 uint qHash(const QualifiedIdentifier& id)
 {
   return id.hash();
@@ -670,6 +689,91 @@ void QualifiedIdentifier::prepareWrite() {
   d->clearHash();
 }
 
+bool TypeIdentifier::isSame(const TypeIdentifier& rhs, bool ignoreExplicitlyGlobal) const {
+  return QualifiedIdentifier::isSame(rhs, ignoreExplicitlyGlobal) && d->m_isConstant == rhs.d->m_isConstant && d->m_isReference == rhs.d->m_isReference && d->m_pointerConstantMask == rhs.d->m_pointerConstantMask;
+}
+
+bool TypeIdentifier::operator==(const TypeIdentifier& rhs) const {
+  return QualifiedIdentifier::operator==(rhs) && d->m_isConstant == rhs.d->m_isConstant && d->m_isReference == rhs.d->m_isReference && d->m_pointerConstantMask == rhs.d->m_pointerConstantMask && d->m_pointerDepth == rhs.d->m_pointerDepth;
+}
+
+bool TypeIdentifier::operator!=(const TypeIdentifier& rhs) const {
+  return !operator==(rhs);
+}
+
+bool TypeIdentifier::isReference() const {
+  return d->m_isReference;
+}
+
+void TypeIdentifier::setIsReference(bool isRef) {
+  prepareWrite();
+  d->m_isReference = isRef;
+}
+
+bool TypeIdentifier::isConstant() const {
+  return d->m_isConstant;
+}
+
+void TypeIdentifier::setIsConstant(bool isConst) {
+  prepareWrite();
+  d->m_isConstant = isConst;
+}
+
+///Returns the pointer depth. Example for C++: "char*" has pointer-depth 1, "char***" has pointer-depth 3
+int TypeIdentifier::pointerDepth() const {
+  return d->m_pointerDepth;
+}
+
+/**Sets the pointer-depth to the specified count
+  * For efficiency-reasons the maximum currently is 32. */
+void TypeIdentifier::setPointerDepth(int depth) {
+  prepareWrite();
+  ///Clear the mask in removed fields
+  for(int s = depth; s < (int)d->m_pointerDepth; ++s)
+    setIsConstPointer(s, false);
+    
+  d->m_pointerDepth = depth;
+}
+
+bool TypeIdentifier::isConstPointer(int depthNumber) const {
+  return d->m_pointerConstantMask & (1 << depthNumber);
+}
+
+void TypeIdentifier::setIsConstPointer(int depthNumber, bool constant) {
+  prepareWrite();
+  if(constant)
+    d->m_pointerConstantMask |= (1 << depthNumber);
+  else
+    d->m_pointerConstantMask &= (~(1 << depthNumber));
+}
+
+QString TypeIdentifier::toString(bool ignoreExplicitlyGlobal) const {
+  QString ret;
+  if(d->m_isConstant)
+    ret += "const ";
+  ret += QualifiedIdentifier::toString(ignoreExplicitlyGlobal);
+  for(int a = 0; a < d->m_pointerDepth; ++a) {
+    ret += '*';
+    if( isConstPointer(a) )
+      ret += "const";
+  }
+  if(d->m_isReference)
+    ret += '&';
+  return ret;
+}
+
+TypeIdentifier::TypeIdentifier() : QualifiedIdentifier() {
+}
+
+TypeIdentifier::TypeIdentifier(const QString& str) : QualifiedIdentifier(str) {
+}
+
+TypeIdentifier::TypeIdentifier(const TypeIdentifier& id) : QualifiedIdentifier() {
+  d = id.d;
+}
+
+TypeIdentifier::TypeIdentifier(const QualifiedIdentifier& id) : QualifiedIdentifier(id) {
+}
 
 }
 

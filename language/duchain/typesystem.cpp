@@ -127,7 +127,7 @@ public:
       m_kind( rhs.m_kind )
   {
   }
-  QualifiedIdentifier m_identifier;
+  TypeIdentifier m_identifier;
   DelayedType::Kind m_kind;
 };
 
@@ -817,7 +817,7 @@ AbstractType::WhichType DelayedType::whichType() const
 
 QString DelayedType::toString() const
 {
-  return (d_func()->m_kind == Delayed ? "<delayed> " : "<unresolved> ") + qualifiedIdentifier().toString();
+  return (d_func()->m_kind == Delayed ? "<delayed> " : "<unresolved> ") + identifier().toString();
 }
 
 DelayedType::Kind DelayedType::kind() const {
@@ -837,12 +837,12 @@ DelayedType::~DelayedType()
 {
 }
 
-void DelayedType::setQualifiedIdentifier(const QualifiedIdentifier& identifier)
+void DelayedType::setIdentifier(const TypeIdentifier& identifier)
 {
   d_func()->m_identifier = identifier;
 }
 
-QualifiedIdentifier DelayedType::qualifiedIdentifier() const
+TypeIdentifier DelayedType::identifier() const
 {
   return d_func()->m_identifier;
 }

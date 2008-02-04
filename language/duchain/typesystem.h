@@ -426,8 +426,8 @@ public:
   DelayedType();
   virtual ~DelayedType();
 
-  KDevelop::QualifiedIdentifier qualifiedIdentifier() const;
-  void setQualifiedIdentifier(const KDevelop::QualifiedIdentifier& identifier);
+  KDevelop::TypeIdentifier identifier() const;
+  void setIdentifier(const KDevelop::TypeIdentifier& identifier);
 
   virtual QString toString() const;
 

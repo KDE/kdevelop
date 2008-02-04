@@ -34,6 +34,7 @@
 namespace KDevelop
 {
 
+class TypeIdentifier;
 class QualifiedIdentifier;
 class QualifiedIdentifierPrivate;
 class IdentifierPrivate;
@@ -74,10 +75,10 @@ public:
    * */
   bool nameEquals(const Identifier& rhs) const;
 
-  const QList<QualifiedIdentifier>& templateIdentifiers() const;
-  void appendTemplateIdentifier(const QualifiedIdentifier& identifier);
+  const QList<TypeIdentifier>& templateIdentifiers() const;
+  void appendTemplateIdentifier(const TypeIdentifier& identifier);
   void clearTemplateIdentifiers();
-  void setTemplateIdentifiers(const QList<QualifiedIdentifier>& templateIdentifiers);
+  void setTemplateIdentifiers(const QList<TypeIdentifier>& templateIdentifiers);
 
   QString toString() const;
 
@@ -213,11 +214,54 @@ public:
     */
   inline friend kndbgstream& operator<< (kndbgstream& s, const QualifiedIdentifier&) { return s; }
 
-private:
+protected:
   void prepareWrite();
   KSharedPtr<QualifiedIdentifierPrivate> d;
 };
 
+/**
+ * Extends QualifiedIdentifier by:
+ * - Arbitrary count of pointer-poperators with cv-qualifiers
+ * - Reference operator
+ * All the properties set here are respected in the hash value.
+ * */
+class KDEVPLATFORMLANGUAGE_EXPORT TypeIdentifier : public QualifiedIdentifier
+{
+public:
+  ///Variables like pointerDepth, isReference, etc. are not parsed from the string, so this parsing is quite limited.
+  TypeIdentifier();
+  TypeIdentifier(const QString& str);
+  TypeIdentifier(const QualifiedIdentifier& id);
+  TypeIdentifier(const TypeIdentifier& id);
+  bool isReference() const;
+  void setIsReference(bool);
+  
+  bool isConstant() const;
+  void setIsConstant(bool);
+
+  ///Returns the pointer depth. Example for C++: "char*" has pointer-depth 1, "char***" has pointer-depth 3
+  int pointerDepth() const;
+  /**Sets the pointer-depth to the specified count
+   * When the pointer-depth is increased, the "isConstPointer" values for new depths will be initialized with false.
+   * For efficiency-reasons the maximum currently is 32. */
+  void setPointerDepth(int);
+
+  ///Whether the target of pointer 'depthNumber' is constant
+  bool isConstPointer(int depthNumber) const;
+  void setIsConstPointer(int depthNumber, bool constant);
+
+  bool isSame(const TypeIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
+
+  QString toString(bool ignoreExplicitlyGlobal = false) const;
+  
+  /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
+   * This is for convenient use in hash-tables etc.
+   * */
+  bool operator==(const TypeIdentifier& rhs) const;
+  bool operator!=(const TypeIdentifier& rhs) const;
+};
+
+KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const TypeIdentifier& id);
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
 
