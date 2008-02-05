@@ -622,7 +622,16 @@ void TrollProjectWidget::slotDetailsExecuted( QListViewItem *item )
         return ;
 
     FileItem *fitem = static_cast<FileItem*>( pvitem );
-    QString filePath = m_shownSubproject->scope->projectDir() + QChar( QDir::separator() ) + m_shownSubproject->scope->resolveVariables( fitem->localFilePath );
+
+    QString filePath;
+    if( m_shownSubproject->scope->scopeType() == Scope::IncludeScope )
+    {
+        filePath = m_shownSubproject->scope->parent()->projectDir();
+    }else
+    {
+        filePath = m_shownSubproject->scope->projectDir();
+    }
+    filePath += QChar( QDir::separator() ) + m_shownSubproject->scope->resolveVariables( fitem->localFilePath );
 
     bool isUiFile = QFileInfo( fitem->text( 0 ) ).extension() == "ui";
     kdDebug(9024) << "Opening file: " << filePath << endl;
