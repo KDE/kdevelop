@@ -146,7 +146,7 @@ ENDMACRO (_Boost_ADJUST_LIB_VARS)
 #-------------------------------------------------------------------------------
 
 
-SET( _boost_IN_CACHE TRUE)
+SET( _boost_IN_CACHE FALSE)
 
 IF(Boost_INCLUDE_DIR)
   FOREACH(COMPONENT ${Boost_FIND_COMPONENTS})
