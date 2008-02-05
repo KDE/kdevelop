@@ -2,7 +2,7 @@
 [General]
 Name=Opie Applet
 Name[br]=Arloadig Opie
-Name[ca]=Applet per a Opie
+Name[ca]=Miniaplicació per a Opie
 Name[da]=Opie-applet
 Name[de]=Opie-Miniprogramm (Applet)
 Name[el]=Μικροεφαρμογή Opie
@@ -34,7 +34,7 @@ Name[zh_TW]=Opie 小程式
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie applet.
-Comment[ca]=Genera un applet per a Opie.
+Comment[ca]=Genera una miniaplicació per a Opie.
 Comment[da]=Generér en Opie-applet.
 Comment[de]=Erstellt ein Opie-Miniprogramm (Applet).
 Comment[el]=Δημιουργία μίας μικροεφαρμογής Opie.
@@ -104,7 +104,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie applet was created in %{dest}
-Comment[ca]=Una applet per a Opie ha estat creat en %{dest}
+Comment[ca]=Una miniaplicació per a Opie ha estat creat en %{dest}
 Comment[da]=En opie-applet blev oprettet i %{dest}
 Comment[de]=Ein Opie-Miniprogramm (Applet) wurde in %{dest} erstellt.
 Comment[el]=Μία μικροεφαρμογή opie δημιουργήθηκε στο %{dest}

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KDE4 Application framework
+Name[ca]=Entorn de treball d'aplicacions pel KDE4
 Name[da]=KDE4 program-framework
 Name[de]=KDE 4-Anwendungsgrundgerüst
 Name[el]=Πλαίσιο εφαρμογής του KDE4
@@ -10,6 +11,7 @@ Name[hu]=Keretrendszer KDE4-alapú alkalmazáshoz
 Name[it]=Infrastruttura per applicazioni KDE4
 Name[nds]=KDE4-Programmrahmenwark
 Name[nl]=KDE4-programmaframewerk
+Name[pl]=Szablon programu dla KDE4
 Name[pt]=Plataforma de aplicações do KDE4
 Name[pt_BR]=Plataforma de aplicações do KDE4
 Name[ru]=Инструментарий для создания приложений KDE 4
@@ -21,6 +23,7 @@ Name[zh_TW]=KDE4 應用程式框架
 Icon=kde4app.png
 Category=C++/KDE4
 Comment=Generates a simple KDE4 application with one toplevel window, menus and toolbars.
+Comment[ca]=Genera una aplicació senzilla per al KDE4 amb una finestra principal, menús i barres d'eines.
 Comment[da]=Genererer et simpelt KDE4-program med et vindue på topniveau, menuer og værktøjslinjer.
 Comment[de]=Erstellt eine einfache KDE 4-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten.
 Comment[el]=Δημιουργεί μια απλή εφαρμογή του KDE4 με ένα ανώτερο παράθυρο, μενού, και γραμμές εργαλείων.
@@ -30,6 +33,7 @@ Comment[hu]=Létrehoz egy egyszerű KDE4-alkalmazást egy főablakkal, menükkel
 Comment[it]=Genera una semplice applicazione KDE4 con una finestra toplevel, menu e barre degli strumenti.
 Comment[nds]=Stellt en eenfach KDE4-Programm mit een böverst Finster, Menüs un Warktüüchbalkens op.
 Comment[nl]=Genereert een eenvoudig KDE4-programma met een topniveauvenster, menu's en werkbalken.
+Comment[pl]=Generuje prosty program dla KDE4 posiadający okno, menu i paski narzędzi.
 Comment[pt]=Gera uma aplicação para KDE4 simples, com uma janela de topo, menus e barras de ferramentas.
 Comment[pt_BR]=Gera uma aplicação para KDE4 simples, com uma janela de topo, menus e barras de ferramentas.
 Comment[ru]=Создание простого приложения KDE 4 с одним окном верхнего уровня, меню и панелями инструментов.
@@ -130,6 +134,7 @@ Dir=%{dest}/build
 [MSG]
 Type=message
 Comment=A KDE4 Application was created at %{dest}
+Comment[ca]=S'ha creat una aplicació per al KDE4 a %{dest}
 Comment[da]=Et KDE4-program blev oprettet i %{dest}
 Comment[de]=Eine KDE 4-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή KDE4 δημιουργήθηκε στο %{dest}
@@ -139,6 +144,7 @@ Comment[hu]=Létrejött egy KDE4-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione KDE4 in %{dest}
 Comment[nds]=In %{dest} wöör en KDE4-Programm opstellt
 Comment[nl]=Een KDE4-toepassing is aangemaakt in %{dest}
+Comment[pl]=Program dla KDE4 został utworzony w %{dest}
 Comment[pt]=Foi criada uma aplicação do KDE4 em %{dest}
 Comment[pt_BR]=Foi criada uma aplicação do KDE4 em %{dest}
 Comment[ru]=Приложение KDE 4 создано в %{dest}

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Empty Custom Makefile Template
+Name[ca]=Plantilla Makefile personalitzada buida
 Name[da]=Tom brugertilpasset Makefile-skabelon
 Name[de]=Leere Vorlage für benutzerdefiniertes Makefile
 Name[el]=Κενό προσαρμοσμένο πρότυπο Makefile
@@ -10,6 +11,7 @@ Name[hu]=Üres egyedi Makefile-ra épülő sablon
 Name[it]=Modello di makefile personalizzato vuoto
 Name[nds]=Egen leddig Makefile-Vörlaag
 Name[nl]=Leeg aangepast Makefile-sjabloon
+Name[pl]=Pusty własny szablon pliku Makefile
 Name[pt]=Modelo de Makefile Personalizada Vazio            
 Name[pt_BR]=Modelo de Makefile Personalizada Vazio            
 Name[ru]=Пустой шаблон с пользовательским Makefile
@@ -21,6 +23,7 @@ Name[zh_TW]=空的自訂 Makefile 樣板
 Icon=makefileempty.png
 Category=C++
 Comment=Generate an empty Custom Makefile based application
+Comment[ca]=Genera una aplicació personalitzada buida basada en Makefile
 Comment[da]=Opretter et tomt brugertilpasset Makefile-baseret program
 Comment[de]=Erstellt eine auf einem benutzerdefinierten Makefile basierende Anwendung
 Comment[el]=Δημιουργία μίας κενής εφαρμογής βασισμένης σε προσαρμοσμένο Makefile
@@ -30,6 +33,7 @@ Comment[hu]=Létrehoz egy egyedi Makefile-ra épülő alkalmazást
 Comment[it]=Genera un'applicazione basata su makefile personalizzato
 Comment[nds]=Stellt en leddig Programm op, dat op en egen Makefile opbuut
 Comment[nl]=Genereer een leeg op een aangepast Makefile gebaseerd programma
+Comment[pl]=Generuje pusty program z własnym plikiem Makefile
 Comment[pt]=Gera uma aplicação baseada em Makefile's personalizadas
 Comment[pt_BR]=Gera uma aplicação baseada em Makefile's personalizadas
 Comment[ru]=Создание каркаса приложения, использующего пользовательский Makefile
@@ -59,6 +63,7 @@ Dest=%{dest}/Makefile
 [MSG]
 Type=message
 Comment=A Custom Makefile based application was created in %{dest}
+Comment[ca]=S'ha creat una aplicació basada en Makefile en %{dest}
 Comment[da]=Et brugertilpasset Makefile-baseret program blev oprettet i %{dest}
 Comment[de]=Eine auf einem benutzerdefinierten Makefile basierende Anwendung wurde in %{dest} erstellt.
 Comment[el]=Δημιουργήθηκε μία εφαρμογή βασισμένη σε προσαρμοσμένο Makefile στο %{dest}
@@ -68,6 +73,7 @@ Comment[hu]=Létrejött egy egyedi Makefile-ra épülő alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione basata su un makefile personalizzato in %{dest}
 Comment[nds]=In %{dest} wöör en Programm opstellt, dat op en egen Makefile opbuut
 Comment[nl]=Een op een aangepast Makefile gebaseerd programma is aangemaakt in %{dest}
+Comment[pl]=Program używający własnego Makefile został utworzony w %{dest}
 Comment[pt]=Foi criada uma aplicação baseada em Makefile's personalizadas em %{dest}
 Comment[pt_BR]=Foi criada uma aplicação baseada em Makefile's personalizadas em %{dest}
 Comment[ru]=Приложение с пользовательским Makefile создано в %{dest}
