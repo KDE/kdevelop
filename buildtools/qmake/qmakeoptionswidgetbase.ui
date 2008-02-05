@@ -144,13 +144,21 @@ Leave this empty to automatically search for a .pro file in the project director
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Repla&amp;ce File Paths with matching Variables</string>
+                <string>Repla&amp;ce File Paths with matching Variables when adding files</string>
             </property>
             <property name="checked">
                 <bool>false</bool>
             </property>
             <property name="toolTip" stdset="0">
                 <string>This replaces the relative paths of added files with existing custom variables if the value assigned to it is the same as the path.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>showVariablesInTree</cstring>
+            </property>
+            <property name="text">
+                <string>Show variables in filenames in the QMake projectmanager view.</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -200,11 +208,10 @@ This disables the reading of any .qmake.cache files or mkspecs.</string>
         </spacer>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

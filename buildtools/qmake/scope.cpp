@@ -155,7 +155,7 @@ bool Scope::loadFromFile( const QString& filename )
     if ( !QFileInfo(filename).exists() || QMake::Driver::parseFile( filename, &m_root, 0 ) != 0 )
     {
         kdDebug( 9024 ) << "Couldn't parse project: " << filename << endl;
-        if( DomUtil::readBoolEntry( *m_part->projectDom(), 
+        if( DomUtil::readBoolEntry( *m_part->projectDom(),
             "/kdevtrollproject/qmake/showParseErrors", true ) )
         {
             KMessageBox::error( 0, i18n( "Couldn't parse project file: %1" ).arg( filename ),
@@ -344,11 +344,11 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
 
     if ( ( scopeType() == FunctionScope || scopeType() == SimpleScope ) && fetchFromParent )
     {
-        m_parent->calcValuesFromStatements( variable, result, checkIncParent, this->m_root );
+        m_parent->calcValuesFromStatements( variable, result, checkIncParent, this->m_root, fetchFromParent, setDefault, evaluateSubScopes );
     }
     else if ( scopeType() == IncludeScope && checkIncParent && fetchFromParent )
     {
-        m_parent->calcValuesFromStatements( variable, result, true, this->m_incast );
+        m_parent->calcValuesFromStatements( variable, result, true, this->m_incast, fetchFromParent, setDefault, evaluateSubScopes );
     }
 
     QValueList<QMake::AST*>::const_iterator it;

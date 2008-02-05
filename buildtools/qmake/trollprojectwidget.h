@@ -96,6 +96,7 @@ public:
     QMakeScopeItem* currentSubproject();
 
     bool showFilenamesOnly() const;
+    bool showVariablesInTree() const;
 
 public slots:
     void slotBuildTarget();
@@ -205,6 +206,7 @@ private:
 
     bool m_filesCached;
     bool m_showFilenamesOnly;
+    bool m_showVariablesInTree;
     QStringList m_allFilesCache;
 
     friend class ChooseSubprojectDlg;

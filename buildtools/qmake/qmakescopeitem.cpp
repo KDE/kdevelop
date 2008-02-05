@@ -581,6 +581,10 @@ FileItem* QMakeScopeItem::createFileItem( const QString& name )
         if  ( dirSepPos != - 1 )
             display = name.mid( dirSepPos + 1 );
     }
+    if( !m_widget->showVariablesInTree() )
+    {
+        display = scope->resolveVariables( display );
+    }
     FileItem * fitem = new FileItem( listView(), display );
     listView() ->takeItem( fitem );
 

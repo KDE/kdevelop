@@ -83,7 +83,6 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     : QVBox( 0, "troll project widget" ), m_shownSubproject( 0 ), m_rootSubproject( 0 ),
         m_rootScope ( 0 ), m_part ( part ), m_configDlg( 0 ), m_filesCached(false)
 {
-    m_showFilenamesOnly = DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/enableFilenamesOnly", false );
 
     QSplitter * splitter = new QSplitter( Vertical, this );
 
@@ -323,19 +322,22 @@ void TrollProjectWidget::openProject( const QString &dirName )
     QDomDocument & dom = *( m_part->projectDom() );
     m_subclasslist = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
                      "subclass", "sourcefile", "uifile" );
-    
+
     QString projectfile = DomUtil::readEntry( dom, "/kdevtrollproject/qmake/projectfile", "" );
-    
+
+    m_showFilenamesOnly = DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/enableFilenamesOnly", false );
+    m_showVariablesInTree = DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/showVariablesInTree", true );
+
     QString proname;
-    
+
     if( projectfile.isEmpty() )
     {
         QFileInfo fi( dirName );
         QDir dir( dirName );
         //    QString proname = item->path + "/" + fi.baseName() + ".pro";
-    
+
         QStringList l = dir.entryList( "*.pro" );
-    
+
         QString profile;
         if( l.count() && l.findIndex( m_part->projectName() + ".pro") != -1  )
             profile = m_part->projectName()+".pro";
@@ -2508,6 +2510,12 @@ bool TrollProjectWidget::showFilenamesOnly() const
 {
     return m_showFilenamesOnly;
 }
+
+bool TrollProjectWidget::showVariablesInTree() const
+{
+    return m_showVariablesInTree;
+}
+
 
 QMap<QString,QString> TrollProjectWidget::qmakeEnvironment() const
 {

@@ -258,6 +258,8 @@ QString TrollProjectPart::makeEnvironment()
          environstr += QString( "QTDIR=" ) + EnvVarTools::quote( DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "") ) + QString( " PATH=$QTDIR/bin:$PATH " );
     }
 
+
+    environstr += " LC_MESSAGES=\"C\" ";
     return environstr;
 }
 

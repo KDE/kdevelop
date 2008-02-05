@@ -28,7 +28,8 @@ QMakeOptionsWidget::QMakeOptionsWidget( const QString& projectdir, QDomDocument 
     checkReplacePaths->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/replacePaths", false ) );
     checkDisableDefaultOpts->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/disableDefaultOpts", true ) );
     checkFilenamesOnly->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/enableFilenamesOnly", false ) );
-    checkShowParseErrors->setChecked( DomUtil::readBoolEntry( dom, 
+    showVariablesInTree->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/showVariablesInTree", true ) );
+    checkShowParseErrors->setChecked( DomUtil::readBoolEntry( dom,
             configGroup+"/qmake/showParseErrors", true ) );
     qmakeProjectFile->setURL( DomUtil::readEntry( dom, configGroup+"/qmake/projectfile", "" ) );
     qmakeProjectFile->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
@@ -50,6 +51,7 @@ void QMakeOptionsWidget::accept()
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/replacePaths", checkReplacePaths->isChecked() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/disableDefaultOpts", checkDisableDefaultOpts->isChecked() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/enableFilenamesOnly", checkFilenamesOnly->isChecked() );
+    DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/showVariablesInTree", showVariablesInTree->isChecked() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/showParseErrors", checkShowParseErrors->isChecked() );
     QString projfile = qmakeProjectFile->url();
     if( projfile != m_projectDir && QFileInfo( projfile ).isFile() && ( projfile.endsWith( ".pro" ) || projfile.endsWith( ".pri" ) ) )
