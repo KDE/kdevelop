@@ -382,7 +382,7 @@ void pp::operator () (Stream& input, Stream& output)
     }
   }
 
-  if (iflevel != previousIfLevel) {
+  if (iflevel != previousIfLevel && !input.skippedToEnd()) {
     KDevelop::Problem problem;
     problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(i18n("Unterminated #if statement"));

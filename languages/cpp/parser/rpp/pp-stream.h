@@ -52,6 +52,9 @@ class KDEVCPPRPP_EXPORT Stream
 
     void toEnd();
 
+    /// Returns true if toEnd was called on this stream.
+    bool skippedToEnd() const;
+
     int offset() const;
 
     const QChar& peek(int offset = 1) const;
@@ -107,7 +110,7 @@ class KDEVCPPRPP_EXPORT Stream
     QString* m_string;
     const QChar* c;
     const QChar* end;
-    bool m_isNull;
+    bool m_isNull, m_skippedToEnd;
     int m_pos;
     int m_inputLine;
     int m_inputLineStartedAt;

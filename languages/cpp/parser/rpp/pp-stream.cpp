@@ -32,6 +32,7 @@ static const QChar nullchar;
 Stream::Stream()
   : m_string(new QString())
   , m_isNull(true)
+  , m_skippedToEnd(false)
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
@@ -43,6 +44,7 @@ Stream::Stream()
 Stream::Stream( QString * string, const KDevelop::SimpleCursor& offset, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
+  , m_skippedToEnd(false)
   , m_pos(0)
   , m_inputLine(offset.line)
   , m_inputLineStartedAt(-offset.column)
@@ -56,6 +58,7 @@ Stream::Stream( QString * string, const KDevelop::SimpleCursor& offset, Location
 Stream::Stream( QString * string, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
+  , m_skippedToEnd(false)
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
@@ -97,7 +100,13 @@ bool Stream::atEnd() const
 
 void Stream::toEnd()
 {
+  m_skippedToEnd = true;
   c = end;
+}
+
+bool Stream::skippedToEnd() const
+{
+  return m_skippedToEnd;
 }
 
 const QChar& Stream::peek(int offset) const
