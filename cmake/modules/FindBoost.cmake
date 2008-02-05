@@ -146,12 +146,11 @@ ENDMACRO (_Boost_ADJUST_LIB_VARS)
 #-------------------------------------------------------------------------------
 
 
-SET( _boost_IN_CACHE FALSE)
+SET( _boost_IN_CACHE TRUE)
 
 IF(Boost_INCLUDE_DIR)
   FOREACH(COMPONENT ${Boost_FIND_COMPONENTS})
     STRING(TOUPPER ${COMPONENT} COMPONENT)
-    SET(Boost_${COMPONENT}_FOUND "1" CACHE STRING "Was the boost ${basename} library found")
     IF(NOT Boost_${COMPONENT}_FOUND)
       SET( _boost_IN_CACHE FALSE)
     ENDIF(NOT Boost_${COMPONENT}_FOUND)
@@ -168,11 +167,11 @@ IF (_boost_IN_CACHE)
     _Boost_ADJUST_LIB_VARS( ${COMPONENT} )
   ENDFOREACH(COMPONENT)
   SET(Boost_INCLUDE_DIRS ${Boost_INCLUDE_DIR})
-  IF(NOT "${Boost_VERSION}" STREQUAL "0")
+  IF(Boost_VERSION AND NOT "${Boost_VERSION}" STREQUAL "0")
     MATH(EXPR Boost_MAJOR_VERSION "${Boost_VERSION} / 100000")
     MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
     MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
-  ENDIF(NOT "${Boost_VERSION}" STREQUAL "0")
+  ENDIF(Boost_VERSION AND NOT "${Boost_VERSION}" STREQUAL "0")
 
 ELSE (_boost_IN_CACHE)
   # Need to search for boost
