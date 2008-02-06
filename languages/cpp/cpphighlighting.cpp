@@ -30,6 +30,7 @@
 #include "cpptypes.h"
 #include <duchain.h>
 #include <duchainlock.h>
+#include "cpplanguagesupport.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -216,12 +217,27 @@ ColorMap emptyColorMap() {
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
   kDebug( 9007 ) << "highighting du chain";
+  
   DUChainReadLocker lock(DUChain::lock());
-  Q_ASSERT(context->topContext() == context);
-  highlightDUChainSimple(static_cast<DUContext*>(context));
+  TopDUContext* standardCtx = CppLanguageSupport::self()->standardContext(KUrl(context->url().str()), false);
 
-  m_functionColorsForDeclarations.clear();
-  m_functionDeclarationsForColors.clear();
+  //Only highlight if this is the standard context(we only want exactly one context highlighted at a time)
+  if(context == standardCtx) {
+    //Clear the highlighting of all other contexts for this file
+    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(context->url());
+
+    foreach(TopDUContext* ctx, contexts) {
+      if(ctx == context)
+        continue;
+      deleteHighlighting(ctx);
+    }
+    
+    //Highlight
+    highlightDUChainSimple(static_cast<DUContext*>(context));
+
+    m_functionColorsForDeclarations.clear();
+    m_functionDeclarationsForColors.clear();
+  }
 }
 
 void CppHighlighting::highlightDUChainSimple(DUContext* context) const
@@ -251,6 +267,26 @@ void CppHighlighting::highlightDUChainSimple(DUContext* context) const
   foreach (DUContext* child, context->childContexts()) {
     highlightDUChainSimple(child );
   }
+}
+
+void CppHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
+  if (!context->smartRange())
+    return;
+
+  foreach (Declaration* dec, context->localDeclarations())
+    if(dec->smartRange())
+      dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
+
+  foreach (Definition* def, context->localDefinitions())
+    if(def->smartRange())
+      def->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
+
+  foreach (Use* use, context->uses())
+    if(use->smartRange())
+      use->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
+
+  foreach (DUContext* child, context->childContexts())
+    deleteHighlighting(child);
 }
 
 void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors) const

@@ -84,6 +84,8 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     void highlightTree(KTextEditor::SmartRange* topRange) const;
     void highlightDUChain(KDevelop::TopDUContext* context) const;
 
+    void deleteHighlighting(KDevelop::DUContext* context) const;
+  
     virtual void highlightDefinition(KDevelop::Definition* definition) const;
     virtual void highlightDeclaration(KDevelop::Declaration* declaration, uint color) const;
     virtual void highlightUse(KDevelop::Use* use, uint color) const;
