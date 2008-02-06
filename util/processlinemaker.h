@@ -56,6 +56,7 @@ public:
      * emitting the related signal
      */
     void discardBuffers();
+
     /**
      * Flush the data from the buffers and then clear them. 
      * This should be called once when the process has 
@@ -110,8 +111,6 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT(d, void slotReadyReadStdout( ) )
     Q_PRIVATE_SLOT(d, void slotReadyReadStderr( ) )
-    Q_PRIVATE_SLOT(d, void slotTimeoutStdout( ) )
-    Q_PRIVATE_SLOT(d, void slotTimeoutStderr( ) )
     class ProcessLineMakerPrivate* const d;
     friend class ProcessLineMakerPrivate;
 };

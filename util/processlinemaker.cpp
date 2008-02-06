@@ -33,16 +33,12 @@ class ProcessLineMakerPrivate
 public:
     QByteArray stdoutbuf;
     QByteArray stderrbuf;
-    QTimer stdouttimer;
-    QTimer stderrtimer;
     ProcessLineMaker* p;
     QProcess* m_proc;
 
     ProcessLineMakerPrivate( ProcessLineMaker* maker )
         : p(maker)
     {
-        stdouttimer.setSingleShot(true);
-        stderrtimer.setSingleShot(true);
     }
 
     void slotReadyReadStdout()
@@ -53,7 +49,6 @@ public:
 
     void processStdOut()
     {
-        stdouttimer.stop();
         QStringList lineList;
         int pos;
         while ( (pos = stdoutbuf.indexOf('\n')) != -1) {
@@ -64,14 +59,6 @@ public:
             stdoutbuf.remove(0, pos+1);
         }
         emit p->receivedStdoutLines(lineList);
-        if (!stdoutbuf.isEmpty())
-            stdouttimer.start(100);
-    }
-
-    void slotTimeoutStdout()
-    {
-        emit p->receivedStdoutLines(QStringList(QString::fromLocal8Bit(stdoutbuf)));
-        stdoutbuf.truncate(0);
     }
 
     void slotReadyReadStderr()
@@ -82,7 +69,6 @@ public:
 
     void processStdErr()
     {
-        stderrtimer.stop();
         QStringList lineList;
         int pos;
         while ( (pos = stderrbuf.indexOf('\n')) != -1) {
@@ -93,14 +79,6 @@ public:
             stderrbuf.remove(0, pos+1);
         }
         emit p->receivedStderrLines(lineList);
-        if (!stderrbuf.isEmpty())
-            stderrtimer.start(100);
-    }
-
-    void slotTimeoutStderr()
-    {
-        emit p->receivedStderrLines(QStringList(QString::fromLocal8Bit(stderrbuf)));
-        stderrbuf.truncate(0);
     }
 
 };
@@ -121,10 +99,6 @@ ProcessLineMaker::ProcessLineMaker( QProcess* proc, QObject* parent )
             this, SLOT(slotReadyReadStdout()) );
     connect(proc, SIGNAL(readyReadStandardError()),
             this, SLOT(slotReadyReadStderr()) );
-    connect(&d->stdouttimer, SIGNAL(timeout()),
-            this, SLOT(slotTimeoutStdout()) );
-    connect(&d->stderrtimer, SIGNAL(timeout()),
-            this, SLOT(slotTimeoutStderr()) );
 }
 
 ProcessLineMaker::~ProcessLineMaker()
@@ -148,8 +122,6 @@ void ProcessLineMaker::discardBuffers( )
 {
     d->stderrbuf.truncate(0);
     d->stdoutbuf.truncate(0);
-    d->stdouttimer.stop();
-    d->stderrtimer.stop();
 }
 
 void ProcessLineMaker::flushBuffers()
