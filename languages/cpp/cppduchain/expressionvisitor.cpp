@@ -397,6 +397,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
 
   AbstractType::Ptr ExpressionVisitor::realLastType(bool* constant) const {
+    LOCKDUCHAIN;
     return AbstractType::Ptr(realType( m_lastType, topContext(), constant ));
   }
   
