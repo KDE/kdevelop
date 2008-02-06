@@ -177,6 +177,9 @@ void UseHighlightPlugin::updateViews()
           if( use->range().contains(c) ) {
             kDebug() << "found use" << use->range().textRange();
             foundDeclaration = use->declaration();
+            if(use->declaration())
+              if(!use->declaration()->uses().contains(use))
+                kWarning() << "use is not registered at the declaration";
             break;
           }
         }
@@ -199,6 +202,7 @@ void UseHighlightPlugin::updateViews()
       m_highlightedDeclarations.remove(view);
     }
   }
+  m_updateViews.clear();
 }
 
 void UseHighlightPlugin::documentLoaded( KDevelop::IDocument* document )
