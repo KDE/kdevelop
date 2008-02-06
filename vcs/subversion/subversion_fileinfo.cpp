@@ -84,8 +84,8 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 		QString path;
-		int text_status, prop_status, repos_text_status, repos_prop_status;
-		long int rev;
+		int text_status = 0, prop_status = 0, repos_text_status = 0, repos_prop_status = 0;
+		long int rev = 0;
 		int curIdx, lastIdx;
 
 		QRegExp rx( "([0-9]*)(.*)" );
@@ -171,8 +171,8 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 	QString path;
-	int text_status, prop_status, repos_text_status, repos_prop_status;
-	long int rev;
+	int text_status = 0, prop_status = 0, repos_text_status = 0, repos_prop_status = 0;
+	long int rev = 0;
 	int curIdx, lastIdx;
 
 	QRegExp rx( "([0-9]*)(.*)" );
@@ -341,8 +341,8 @@ const VCSFileInfoMap *SVNFileInfoProvider::statusExt( const QString &dirPath,
 	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 	QString path;
-	int text_status, prop_status, repos_text_status, repos_prop_status;
-	long int rev;
+	int text_status = 0, prop_status = 0, repos_text_status = 0, repos_prop_status = 0;
+	long int rev = 0;
 	int curIdx, lastIdx;
 
 	QRegExp rx( "([0-9]*)(.*)" );
