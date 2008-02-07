@@ -259,7 +259,6 @@ QString TrollProjectPart::makeEnvironment()
     }
 
 
-    environstr += " LC_MESSAGES=\"C\" ";
     return environstr;
 }
 
