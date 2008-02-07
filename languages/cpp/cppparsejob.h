@@ -129,9 +129,14 @@ public:
 
     void addPreprocessorProblem(const ProblemPointer problem);
     QList<ProblemPointer> preprocessorProblems() const;
+
+    ///Whether every single context encountered needs an update
+    bool needUpdateEverything() const;
+    ///Set whether every single context encountered needs an update
+    void setNeedUpdateEverything(bool);
   
 private:
-    
+    bool m_needUpdateEverything;
     KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;

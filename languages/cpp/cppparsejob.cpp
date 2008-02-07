@@ -69,9 +69,18 @@ QString cppStringUnifier (const QString& str) {
   return Cpp::EnvironmentManager::unifyString(str).str();
 }
 
+bool CPPParseJob::needUpdateEverything() const {
+  return m_needUpdateEverything;
+}
+
+void CPPParseJob::setNeedUpdateEverything(bool need) {
+  m_needUpdateEverything = need;
+}
+
 CPPParseJob::CPPParseJob( const KUrl &url,
                     CppLanguageSupport *parent, PreprocessJob* parentPreprocessor )
         : KDevelop::ParseJob( url, parent ),
+        m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession(&cppStringUnifier) ),
         m_AST( 0 ),

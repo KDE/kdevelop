@@ -72,12 +72,13 @@ public:
      * */
     static KDevelop::ParsingEnvironment* createStandardEnvironment();
 private:
-    bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl::List& path);
+    bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& path);
     void headerSectionEndedInternal(rpp::Stream* stream);
     bool checkAbort();
 
     CppPreprocessEnvironment* m_currentEnvironment;
     KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
+    KSharedPtr<Cpp::EnvironmentFile> m_updatingEnvironmentFile;
     //If simplified matching is used, a separate EnvironmentFile is used for the content, as opposed to the #include statements.
     KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
     bool m_success;

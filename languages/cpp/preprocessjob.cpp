@@ -197,7 +197,14 @@ void PreprocessJob::run()
     {
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-        parentJob()->setUpdatingContext( KDevelop::TopDUContextPointer( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_contentEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) ) );
+      
+        KDevelop::TopDUContextPointer updating( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_contentEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
+      
+        parentJob()->setUpdatingContext( updating );
+      
+        if( updating ) {
+          m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>( dynamic_cast<Cpp::EnvironmentFile*>(updating->parsingEnvironmentFile().data()) );
+        }
         if( m_contentEnvironmentFile && parentJob()->updatingContext() ) {
             //Must be true, because we explicity passed the flag to chaonForDocument
             Q_ASSERT((parentJob()->updatingContext()->flags() & KDevelop::TopDUContext::ProxyContextFlag));
@@ -256,12 +263,12 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
   headerSectionEndedInternal(&stream);
 }
 
-bool PreprocessJob::needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl::List& includePaths)
+bool PreprocessJob::needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths)
 {
   for( Cpp::StringSetRepository::Iterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
 
     ///@todo model correctly, and check modification-revisions of actually included files
-    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( includePaths, KUrl(), (*it).str(), IncludeLocal, KUrl(), true );
+    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( includePaths, localPath, (*it).str(), IncludeLocal, KUrl(), true );
     if(!included.first.isEmpty()) {
       return true;
     }
@@ -303,7 +310,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             //We have found a content-context that we can use
             parentJob()->setContentContext(KDevelop::TopDUContextPointer(content));
 
-            if( content->parsingEnvironmentFile()->modificationRevision() == KDevelop::EditorIntegrator::modificationRevision(parentJob()->document()) ) {
+            if( content->parsingEnvironmentFile()->modificationRevision() == KDevelop::EditorIntegrator::modificationRevision(parentJob()->document()) && !parentJob()->masterJob()->needUpdateEverything() ) {
                 //We can completely re-use the specialized context
                 m_contentEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
 
@@ -355,6 +362,15 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
+        
+        if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(HashedString(fileName)) ) {
+          //We are finding a file that was not in the include-path last time
+          /// @todo Support this within the content-part
+          //All following contexts need to be updated, because they may contain references to missing declarations
+          parentJob()->masterJob()->setNeedUpdateEverything( true ); //@todo make this a bit more intelligent, instead of updating everything that follows
+          kDebug(9007) << "Marking every following encountered context to be updated";
+        }
+
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile;
 
         KDevelop::TopDUContext* includedContext;
@@ -366,11 +382,11 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment )
-                updateNeeded = needsUpdate(includedEnvironment, parentJob()->includePathUrls());
+                updateNeeded = needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
             }
         }
 
-        if( includedContext && !updateNeeded ) {
+        if( includedContext && !updateNeeded && !parentJob()->masterJob()->needUpdateEverything() ) {
             kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": took included file from the du-chain" << fileName;
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -386,7 +402,12 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             }
         } else {
             kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry in du-chain, parsing";
-            
+
+/*            if( updateNeeded && !parentJob()->masterJob()->needUpdateEverything() ) {
+              //When a new include-file was found, that can influence not found declarations in all following encountered contexts, so they all need updating.
+              kDebug(9007) << "Marking every following encountered context to be updated";
+              parentJob()->masterJob()->setNeedUpdateEverything( true ); //@todo make this a bit more intelligent, instead of updating everything that follows
+            }*/
             /// Why bother the threadweaver? We need the preprocessed text NOW so we simply parse the
             /// included file right here. Parallel parsing cannot be used here, because we need the
             /// macros before we can continue.
@@ -425,13 +446,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         ///Before doing that, model findInclude(..) exactly after the standard
         m_environmentFile->addMissingIncludeFile(HashedString(fileName));
     }
-
-        /*} else {
-            kWarning(9007) << "Language support disappeared!!" ;
-        }
-    } else {
-        kWarning(9007) << "Parent job disappeared!!" ;
-    }*/
 
     return 0;
 }
