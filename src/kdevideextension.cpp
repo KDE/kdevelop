@@ -66,6 +66,8 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
     gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
     gsw->compileOutputCombo->setCurrentItem(config->readNumEntry("CompilerOutputLevel",2));
+    gsw->forceCLocaleRadio->setChecked( config->readBoolEntry( "ForceCLocale", true ) );
+    gsw->userLocaleRadio->setChecked( !config->readBoolEntry( "ForceCLocale", true ) );
 
     config->setGroup("General Options");
     gsw->projectsURL->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
@@ -102,6 +104,7 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
     config->setGroup("MakeOutputView");
     config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
     config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
+    config->writeEntry( "ForceCLocale", gsw->forceCLocaleRadio->isChecked() );
     //current item id must be in sync with the enum!
     config->writeEntry("CompilerOutputLevel",gsw->compileOutputCombo->currentItem());
     config->sync();

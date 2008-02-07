@@ -31,6 +31,8 @@
 #include <qgroupbox.h>
 
 
+#include <kapplication.h>
+#include <kconfig.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -498,6 +500,11 @@ QString AutoProjectPart::makeEnvironment() const
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
+
+    KConfigGroup grp( kapp->config(), "MakeOutputView" );
+    if( grp.readBoolEntry( "ForceCLocale", true ) )
+        environstr += "LC_MESSAGES="+EnvVarTools::quote("C")+" ";
+
     return environstr;
 }
 

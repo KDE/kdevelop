@@ -14,6 +14,7 @@
 #include "customprojectpart.h"
 
 #include <qapplication.h>
+#include <kapplication.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
@@ -26,6 +27,7 @@
 #include <qdom.h>
 
 #include <kaction.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <keditlistbox.h>
@@ -859,6 +861,11 @@ QString CustomProjectPart::makeEnvironment() const
         environstr += EnvVarTools::quote(( *it ).second );
         environstr += " ";
     }
+
+    KConfigGroup grp( kapp->config(), "MakeOutputWidget" );
+    if( grp.readBoolEntry( "ForceCLocale", true ) )
+        environstr += "LC_MESSAGES=" + EnvVarTools::quote( "C" )+" ";
+
     return environstr;
 }
 
@@ -925,6 +932,7 @@ void CustomProjectPart::startMakeCommand( const QString &dir, const QString &tar
         cmdline = "kdesu -t -c '" + cmdline + "'";
 
     m_buildCommand = dircmd + cmdline;
+
 
     makeFrontend()->queueCommand( dir, dircmd + cmdline );
 }
@@ -1636,7 +1644,4 @@ void CustomProjectPart::removeFromProject( const QString& fileName )
 
 
 #include "customprojectpart.moc"
-
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
-
 

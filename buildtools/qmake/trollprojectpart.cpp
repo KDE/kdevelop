@@ -31,6 +31,8 @@
 #include <kaction.h>
 #include <kparts/part.h>
 #include <kprocess.h>
+#include <kconfig.h>
+#include <kapplication.h>
 #include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
 #include <kurlcompletion.h>
@@ -258,6 +260,9 @@ QString TrollProjectPart::makeEnvironment()
          environstr += QString( "QTDIR=" ) + EnvVarTools::quote( DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "") ) + QString( " PATH=$QTDIR/bin:$PATH " );
     }
 
+    KConfigGroup grp( kapp->config(), "MakeOutputView" );
+    if( grp.readBoolEntry( "ForceCLocale", true ) )
+        environstr += "LC_MESSAGES="+EnvVarTools::quote("C")+" ";
 
     return environstr;
 }
