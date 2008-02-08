@@ -503,7 +503,7 @@ QString AutoProjectPart::makeEnvironment() const
 
     KConfigGroup grp( kapp->config(), "MakeOutputView" );
     if( grp.readBoolEntry( "ForceCLocale", true ) )
-        environstr += "LC_MESSAGES="+EnvVarTools::quote("C")+" ";
+        environstr += "LC_MESSAGES="+EnvVarTools::quote("C")+" "+"LC_CTYPE="+EnvVarTools::quote("C")+" ";
 
     return environstr;
 }
