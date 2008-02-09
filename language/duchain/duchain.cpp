@@ -222,7 +222,7 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
 }
 
 TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
-  return chainForDocument(IdentifiedFile(document.prettyUrl()));
+  return chainForDocument(IdentifiedFile(document));
 }
 
 TopDUContext* DUChain::chainForDocument(const HashedString& document) const {

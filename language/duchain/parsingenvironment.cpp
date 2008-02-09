@@ -42,6 +42,13 @@ IdentifiedFile::IdentifiedFile( const HashedString& url , uint identity )
   d->m_identity = identity;
 }
 
+IdentifiedFile::IdentifiedFile( const KUrl& url , uint identity )
+  : d(new IdentifiedFilePrivate)
+{
+  d->m_url = HashedString( url.prettyUrl() );
+  d->m_identity = identity;
+}
+
 IdentifiedFile::~IdentifiedFile() {
  delete d;
 }

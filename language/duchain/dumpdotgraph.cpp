@@ -134,7 +134,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       //Find the context this one is derived from. If there is one, connect it with a line, and shorten the url.
       if( m_hadVersions.contains(url) ) {
         stream << shortLabel(context) << " -> " << m_hadVersions[url] << "[color=blue,label=\"version\"];\n";
-        file = IdentifiedFile( KUrl(file.url().str()).fileName(), file.identity() );
+        file = IdentifiedFile( HashedString( KUrl(file.url().str()).fileName() ), file.identity() );
       } else {
         m_hadVersions[url] = shortLabel(context);
       }

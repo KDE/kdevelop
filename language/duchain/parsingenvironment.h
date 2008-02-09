@@ -45,6 +45,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile
     IdentifiedFile(const IdentifiedFile&);
 
     explicit IdentifiedFile( const HashedString& url , uint identity = 0 );
+    explicit IdentifiedFile( const KUrl& url , uint identity = 0 );
 
     ~IdentifiedFile();
 
