@@ -220,7 +220,7 @@ QString IncludeFileData::htmlDescription() const
 IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
 }
 
-void allIncludedRecursion( QSet<const DUContext*> used, QMap<HashedString, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
+void allIncludedRecursion( QSet<const DUContext*>& used, QMap<HashedString, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
 
   if( !ctx )
     return;
