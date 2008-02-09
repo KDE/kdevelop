@@ -147,7 +147,7 @@ void TestDUChain::initTestCase()
   topContext = new TopDUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(0,0),SimpleCursor(25,0)));
   DUChainWriteLocker lock(DUChain::lock());
   
-  DUChain::self()->addDocumentChain(IdentifiedFile(file1.prettyUrl()), topContext);
+  DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
 
   typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
   typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
