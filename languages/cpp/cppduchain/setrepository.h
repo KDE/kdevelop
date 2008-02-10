@@ -85,9 +85,10 @@ public:
   ///Returns the count of items in the set
   unsigned int count() const;
 
+  bool contains(Index index) const;
   ///@warning: The following operations can change the global repository, and thus need to be serialized
   ///          using mutexes in case of multi-threading.
-  
+
   ///Set union
   Set operator +(const Set& rhs) const;
   Set& operator +=(const Set& rhs);
@@ -307,10 +308,10 @@ public:
         for( typename std::list<T>::const_iterator it = m_temporaryIndices.begin(); it != m_temporaryIndices.end(); ++it )
           if( *it == item )
             return true;
-        return (bool)(m_set & m_rep->createSet(i)).iterator();
+        return m_set.contains(i);
       }
       
-      return (bool)(set() & m_rep->createSet(i)).iterator();
+      return set().contains(i);
     }
 
     LazySet& operator +=(const Set& set) {

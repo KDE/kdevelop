@@ -675,6 +675,17 @@ SetNode* set_intersect(SetNode* first, SetNode* second)
   return 0;
 }
 
+bool set_contains(SetNode* first, Index index)
+{
+  if(first->start > index || first->end <= index)
+    return false;
+
+  if(first->contiguous || !first->left || !first->right)
+    return true;
+
+  return set_contains(first->left.data(), index) || set_contains(first->right.data(), index);
+}
+
 SetNode* set_subtract(SetNode* first, SetNode* second)
 {
   Index firstStart = first->start, secondEnd=second->end;
@@ -947,6 +958,13 @@ QString BasicSetRepository::dumpDotGraph() const {
     return d->m_root->dumpDotGraph();
   else
     return QString::null;
+}
+
+bool Set::contains(Index index) const
+{
+  if(!d->m_tree)
+    return false;
+  set_contains(d->m_tree, index);
 }
 
 Set Set::operator +(const Set& first) const
