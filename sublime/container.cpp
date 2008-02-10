@@ -79,9 +79,11 @@ void Container::addWidget(View *view)
 
 void Sublime::Container::removeWidget(QWidget *w)
 {
-    d->switcher->removeItem(d->stack->indexOf(w));
-    d->stack->removeWidget(w);
-    d->viewForWidget.remove(w);
+    if (w) {
+        d->switcher->removeItem(d->stack->indexOf(w));
+        d->stack->removeWidget(w);
+        d->viewForWidget.remove(w);
+    }
 }
 
 int Container::count() const
