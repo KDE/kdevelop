@@ -152,7 +152,16 @@ void DUContextPrivate::addChildContext( DUContext * context )
   // Internal, don't need to assert a lock
 
   bool inserted = false;
-  for (int i = 0; i < m_childContexts.count(); ++i) {
+
+  int childCount = m_childContexts.count();
+
+  //Optimization: In most cases while parsing, the new child-context will be added to the end, so check if it is the case.
+  if(!m_childContexts.isEmpty()) {
+    if(m_childContexts.at(childCount-1).range().start < context->range().start)
+      goto insertAtEnd;
+  }
+  
+  for (int i = 0; i < childCount; ++i) {
     DUContext* child = m_childContexts.at(i);
     if (context->range().start < child->range().start) {
       m_childContexts.insert(i, context);
@@ -161,6 +170,8 @@ void DUContextPrivate::addChildContext( DUContext * context )
       break;
     }
   }
+
+  insertAtEnd:
   if( !inserted ) {
     m_childContexts.append(context);
     context->d_func()->m_parentContext = m_context;
