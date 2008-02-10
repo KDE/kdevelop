@@ -258,13 +258,26 @@ AbstractType::Ptr TypeRepository::registerReference(CppReferenceType::Ptr input)
   return AbstractType::Ptr::staticCast(input);
 }
 
+int hashFromFunction(CppFunctionType* function) {
+  int ret = 1;
+  const int numElements = function->arguments().count();
+  for (int i = 0; i < numElements; ++i)
+    ret = ((int)function->arguments()[i].data()) + ret*13;
+  ret = ((int)function) + ret * 37;
+  ret = ((int)function->cv()) + ret * 17;
+  return ret;
+  
+}
+
 AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
 {
   QMutexLocker lock(&m_mutex);
 
   Q_ASSERT(input);
 
-  if (!input->returnType())
+  AbstractType* returnType = input->returnType().data();
+  const int numElements = input->arguments().count();
+  if (!returnType)
     // Invalid
     return AbstractType::Ptr::staticCast(input);
 
@@ -273,14 +286,17 @@ AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
       // Invalid
       return AbstractType::Ptr::staticCast(input);
 
-  const int numElements = input->arguments().count();
+  int hash = hashFromFunction(input.data());
+  
   const Declaration::CVSpecs cv = input->cv();
 
-  QMultiHash<int, CppFunctionType::Ptr>::ConstIterator it = m_functions.constFind(numElements);
+  QMultiHash<int, CppFunctionType::Ptr>::ConstIterator it = m_functions.constFind(hash);
   if (it != m_functions.constEnd()) {
-    for (; it.key() == numElements; ++it) {
+    for (; it.key() == hash; ++it) {
+      if(numElements != (*it).arguments().count())
+        continue;
       if (it.value()->cv() == cv) {
-        if (it.value()->returnType() != input->returnType())
+        if (it.value()->returnType() != returnType)
           goto nomatch;
 
         for (int i = 0; i < numElements; ++i)
@@ -296,7 +312,7 @@ AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
   }
 
   // No match
-  m_functions.insert(input->arguments().count(), input);
+  m_functions.insert(hash, input);
   return AbstractType::Ptr::staticCast(input);
 }
 
