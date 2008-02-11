@@ -65,12 +65,12 @@ void KDevAppFrontendIface::insertStdoutLine( const QCString & line )
     m_appFrontend->insertStdoutLine(line);
 }
 
-void KDevAppFrontEndIface::addPartialStderrLine( const QCString& line )
+void KDevAppFrontendIface::addPartialStderrLine( const QCString& line )
 {
     m_appFrontend->addPartialStderrLine(line);
 }
 
-void KDevAppFrontEndIface::addPartialStdoutLine( const QCString& line )
+void KDevAppFrontendIface::addPartialStdoutLine( const QCString& line )
 {
     m_appFrontend->addPartialStdoutLine(line);
 }
