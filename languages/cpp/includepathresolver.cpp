@@ -178,6 +178,7 @@ namespace CppTools {
 
     QStringList possibleTargets( const QString& targetBaseName ) const {
       QStringList ret;
+      ///@todo open the make-file, and read the target-names from there.
       if( isUnsermake() ) {
         //unsermake breaks if the first given target does not exist, so in worst-case 2 calls are necessary
         ret << targetBaseName + ".lo";
@@ -188,6 +189,7 @@ namespace CppTools {
         ret << targetBaseName + ".lo";
         //ret << targetBaseName + ".lo " + targetBaseName + ".o";
       }
+      ret << targetBaseName + ".ko";
       return ret;
     }
 
@@ -434,6 +436,14 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   if( !res )
     return res;
 
+  QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" );
+  QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.
+  QString escapedPathRx( "(([^)(\"'\\s]*)(\\\\\\s)?)*" ); //Matches /usr/I\ am \ a\ strange\ path/include
+
+  QRegExp includeRx( QString( "%1(%2|%3)(?=\\s)" ).arg( includeParameterRx ).arg( quotedRx ).arg( escapedPathRx ) );
+  includeRx.setMinimal( true );
+  includeRx.setCaseSensitivity( Qt::CaseSensitive );
+  
   QRegExp newLineRx("\\\\\\n");
   fullOutput.replace( newLineRx, "" );
   ///@todo collect multiple outputs at the same time for performance-reasons
@@ -449,84 +459,77 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
    * */
 
   ///STEP 1: Test if it is a recursive make-call
-  QRegExp makeRx( "\\bmake\\s" );
-  int offset = 0;
-  while( (offset = makeRx.indexIn( firstLine, offset )) != -1 )
+  if( !fullOutput.contains( includeRx ) ) //Do not search for recursive make-calls if we already have include-paths available. Happens in kernel modules.
   {
-    QString prefix = firstLine.left( offset ).trimmed();
-    if( prefix.endsWith( "&&") || prefix.endsWith( ';' ) || prefix.isEmpty() )
+    QRegExp makeRx( "\\bmake\\s" );
+    int offset = 0;
+    while( (offset = makeRx.indexIn( firstLine, offset )) != -1 )
     {
-      QString newWorkingDirectory = workingDirectory;
-      ///Extract the new working-directory
-      if( !prefix.isEmpty() ) {
-        if( prefix.endsWith( "&&" ) )
-          prefix.truncate( prefix.length() - 2 );
-        else if( prefix.endsWith( ';' ) )
-          prefix.truncate( prefix.length() - 1 );
+      QString prefix = firstLine.left( offset ).trimmed();
+      if( prefix.endsWith( "&&") || prefix.endsWith( ';' ) || prefix.isEmpty() )
+      {
+        QString newWorkingDirectory = workingDirectory;
+        ///Extract the new working-directory
+        if( !prefix.isEmpty() ) {
+          if( prefix.endsWith( "&&" ) )
+            prefix.truncate( prefix.length() - 2 );
+          else if( prefix.endsWith( ';' ) )
+            prefix.truncate( prefix.length() - 1 );
 
-        ///Now test if what we have as prefix is a simple "cd /foo/bar" call.
-        
-        //In cases like "cd /media/data/kdedev/4.0/build/kdevelop && cd /media/data/kdedev/4.0/build/kdevelop"
-        //We use the second directory. For t hat reason we search for the last index of "cd "
-        int cdIndex = prefix.lastIndexOf( "cd ");
-        if( cdIndex != -1 ) {
-          newWorkingDirectory = prefix.right( prefix.length() - 3 - cdIndex ).trimmed();
-          if( !newWorkingDirectory.startsWith('/') )
-            newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
-          KUrl u( newWorkingDirectory );
-          u.cleanPath();
-          newWorkingDirectory = u.path();
+          ///Now test if what we have as prefix is a simple "cd /foo/bar" call.
+          
+          //In cases like "cd /media/data/kdedev/4.0/build/kdevelop && cd /media/data/kdedev/4.0/build/kdevelop"
+          //We use the second directory. For t hat reason we search for the last index of "cd "
+          int cdIndex = prefix.lastIndexOf( "cd ");
+          if( cdIndex != -1 ) {
+            newWorkingDirectory = prefix.right( prefix.length() - 3 - cdIndex ).trimmed();
+            if( !newWorkingDirectory.startsWith('/') )
+              newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
+            KUrl u( newWorkingDirectory );
+            u.cleanPath();
+            newWorkingDirectory = u.path();
+          }
         }
-      }
-      QFileInfo d( newWorkingDirectory );
-      if( d.exists() ) {
-        ///The recursive working-directory exists.
-        QString makeParams = firstLine.mid( offset+5 );
-        if( !makeParams.contains( ';' ) && !makeParams.contains( "&&" ) ) {
-          ///Looks like valid parameters
-          ///Make the file-name absolute, so it can be referenced from any directory
-          QString absoluteFile = file;
-          if( !absoluteFile.startsWith('/') )
-            absoluteFile = workingDirectory +  '/' + file;
-          KUrl u( absoluteFile );
-          u.cleanPath();
-          ///Try once with absolute, and if that fails with relative path of the file
-          SourcePathInformation newSource( newWorkingDirectory );
-          PathResolutionResult res = resolveIncludePathInternal( u.path(), newWorkingDirectory, makeParams, newSource );
-          if( res )
-            return res;
-          return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory,u.path()), newWorkingDirectory, makeParams , newSource );
-        }else{
-          return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The parameter-string \"%1\" does not seem to be valid. Output was: %2", makeParams, fullOutput) );
+        QFileInfo d( newWorkingDirectory );
+        if( d.exists() ) {
+          ///The recursive working-directory exists.
+          QString makeParams = firstLine.mid( offset+5 );
+          if( !makeParams.contains( ';' ) && !makeParams.contains( "&&" ) ) {
+            ///Looks like valid parameters
+            ///Make the file-name absolute, so it can be referenced from any directory
+            QString absoluteFile = file;
+            if( !absoluteFile.startsWith('/') )
+              absoluteFile = workingDirectory +  '/' + file;
+            KUrl u( absoluteFile );
+            u.cleanPath();
+            ///Try once with absolute, and if that fails with relative path of the file
+            SourcePathInformation newSource( newWorkingDirectory );
+            PathResolutionResult res = resolveIncludePathInternal( u.path(), newWorkingDirectory, makeParams, newSource );
+            if( res )
+              return res;
+            return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory,u.path()), newWorkingDirectory, makeParams , newSource );
+          }else{
+            return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The parameter-string \"%1\" does not seem to be valid. Output was: %2", makeParams, fullOutput) );
+          }
+        } else {
+          return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The directory \"%1\" does not exist. Output was: %2", newWorkingDirectory, fullOutput) );
         }
+
       } else {
-        return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The directory \"%1\" does not exist. Output was: %2", newWorkingDirectory, fullOutput) );
+        return PathResolutionResult( false, i18n("Recursive make-call malformed"), i18n("Output was: %1", fullOutput) );
       }
 
-    } else {
-      return PathResolutionResult( false, i18n("Recursive make-call malformed"), i18n("Output was: %1", fullOutput) );
+      ++offset;
+      if( offset >= firstLine.length() ) break;
     }
-
-    ++offset;
-    if( offset >= firstLine.length() ) break;
   }
 
-  ////STEP 2: Search the output for include-paths
-//   QRegExp validRx( "\\b([cg]\\+\\+|gcc)" );
-//   if( validRx.indexIn( fullOutput ) == -1 )
-//     return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
+  ///STEP 2: Search the output for include-paths
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;
 
-  QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" );
-  QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.
-  QString escapedPathRx( "(([^)(\"'\\s]*)(\\\\\\s)?)*" ); //Matches /usr/I\ am \ a\ strange\ path/include
-
-  QRegExp includeRx( QString( "%1(%2|%3)(?=\\s)" ).arg( includeParameterRx ).arg( quotedRx ).arg( escapedPathRx ) );
-  includeRx.setMinimal( true );
-  includeRx.setCaseSensitivity( Qt::CaseSensitive );
-  offset = 0;
+  int offset = 0;
   
   while( (offset = includeRx.indexIn( fullOutput, offset )) != -1 ) {
     offset += 1; ///The previous white space
