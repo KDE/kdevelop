@@ -68,6 +68,7 @@ class BasicSetRepository;
 class KDEVCPPDUCHAIN_EXPORT Set {
 public:
   class Iterator;
+  typedef unsigned int Index;
   
   Set();
   ~Set();

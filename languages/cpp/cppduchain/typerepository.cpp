@@ -293,7 +293,7 @@ AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
   QMultiHash<int, CppFunctionType::Ptr>::ConstIterator it = m_functions.constFind(hash);
   if (it != m_functions.constEnd()) {
     for (; it.key() == hash; ++it) {
-      if(numElements != (*it).arguments().count())
+      if(numElements != (*it)->arguments().count())
         continue;
       if (it.value()->cv() == cv) {
         if (it.value()->returnType() != returnType)
