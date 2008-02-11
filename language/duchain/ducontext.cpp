@@ -157,7 +157,7 @@ void DUContextPrivate::addChildContext( DUContext * context )
 
   //Optimization: In most cases while parsing, the new child-context will be added to the end, so check if it is the case.
   if(!m_childContexts.isEmpty()) {
-    if(m_childContexts.at(childCount-1).range().start < context->range().start)
+    if(m_childContexts.at(childCount-1)->range().start < context->range().start)
       goto insertAtEnd;
   }
   
