@@ -78,6 +78,6 @@ GenericName[zh_TW]=新增工具選單
 Icon=configure
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtools
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=AdditionalTools

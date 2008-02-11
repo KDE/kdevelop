@@ -40,5 +40,5 @@ Comment[tr]=KDevelopTOC belgelendirmesi için belgelendirme eklentisi
 Comment[zh_CN]=KDevelopTOC 文档的文档插件
 Comment[zh_TW]=KDevelop 目錄文件外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDE-Library=libdockdevtocplugin

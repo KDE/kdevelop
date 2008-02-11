@@ -71,6 +71,6 @@ GenericName[zh_CN]=模块浏览器工具
 GenericName[zh_TW]=元件探索工具
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevpartexplorer
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=KDEDevelopment

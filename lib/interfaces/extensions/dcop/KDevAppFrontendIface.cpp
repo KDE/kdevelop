@@ -55,12 +55,22 @@ void KDevAppFrontendIface::clearView( )
     m_appFrontend->clearView();
 }
 
-void KDevAppFrontendIface::insertStderrLine( const QString & line )
+void KDevAppFrontendIface::insertStderrLine( const QCString & line )
 {
     m_appFrontend->insertStderrLine(line);
 }
 
-void KDevAppFrontendIface::insertStdoutLine( const QString & line )
+void KDevAppFrontendIface::insertStdoutLine( const QCString & line )
 {
     m_appFrontend->insertStdoutLine(line);
+}
+
+void KDevAppFrontEndIface::addPartialStderrLine( const QCString& line )
+{
+    m_appFrontend->addPartialStderrLine(line);
+}
+
+void KDevAppFrontEndIface::addPartialStdoutLine( const QCString& line )
+{
+    m_appFrontend->addPartialStdoutLine(line);
 }

@@ -388,12 +388,20 @@ void GrepViewWidget::slotExecuted(QListBoxItem* item)
 }
 
 
-void GrepViewProcessWidget::insertStdoutLine(const QString &line)
+void GrepViewProcessWidget::insertStdoutLine(const QCString &line)
 {
 	int pos;
 	QString filename, linenumber, rest;
 
-	QString str = line;
+	QString str;
+        if( !grepbuf.isEmpty() )
+        {
+            str = QString::fromLocal8Bit( grepbuf+line );
+            grepbuf.truncate( 0 );
+        }else
+        {
+            str = QString::fromLocal8Bit( line );
+        }
 	if ( (pos = str.find(':')) != -1)
 	{
 		filename = str.left(pos);
@@ -516,6 +524,11 @@ void GrepViewProcessWidget::childFinished( bool normal, int status )
 	maybeScrollToBottom();
 
 	ProcessWidget::childFinished(normal, status);
+}
+
+void GrepViewProcessWidget::addPartialStdoutLine(const QCString & line)
+{
+    grepbuf += line;
 }
 
 

@@ -85,6 +85,6 @@ GenericName[zh_CN]=TMake 工程
 GenericName[zh_TW]=TMake 專案
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevtrollproject
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Args=TMake
 

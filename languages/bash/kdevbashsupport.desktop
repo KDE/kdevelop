@@ -82,5 +82,5 @@ GenericName[zh_CN]=Bash 支持
 GenericName[zh_TW]=Bash 支援
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevbashsupport
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=Bash

@@ -77,6 +77,6 @@ GenericName[zh_TW]=Doxygen 支援
 ServiceTypes=KDevelop/Plugin
 Icon=kdevelop
 X-KDE-Library=libkdevdoxygen
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=CProjectDocumentation,CPPProjectDocumentation,JavaProjectDocumentation,PHPProjectDocumentation

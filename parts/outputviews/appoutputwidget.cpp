@@ -96,7 +96,7 @@ void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 }
 
 
-void AppOutputWidget::insertStdoutLine(const QString &line)
+void AppOutputWidget::insertStdoutLine(const QCString &line)
 {
 // 	kdDebug(9004) << k_funcinfo << line << endl;
 
@@ -105,15 +105,25 @@ void AppOutputWidget::insertStdoutLine(const QString &line)
 		m_part->showView();
 	}
 
-	m_contentList.append(QString("o-")+line);
-	if ( filterSingleLine( line ) )
+        QString sline;
+        if( !stdoutbuf.isEmpty() )
+        {
+            sline = QString::fromLocal8Bit( stdoutbuf+line );
+            stdoutbuf.truncate( 0 );
+        }else
+        {
+            sline = QString::fromLocal8Bit( line );
+        }
+
+	m_contentList.append(QString("o-")+sline);
+	if ( filterSingleLine( sline ) )
 	{
-		ProcessWidget::insertStdoutLine(line);
+            ProcessWidget::insertStdoutLine( sline.local8Bit() );
 	}
 }
 
 
-void AppOutputWidget::insertStderrLine(const QString &line)
+void AppOutputWidget::insertStderrLine(const QCString &line)
 {
 // 	kdDebug(9004) << k_funcinfo << line << endl;
 
@@ -122,10 +132,21 @@ void AppOutputWidget::insertStderrLine(const QString &line)
 		m_part->showView();
 	}
 
-	m_contentList.append(QString("e-")+line);
-	if ( filterSingleLine( line ) )
+
+        QString sline;
+        if( !stderrbuf.isEmpty() )
+        {
+            sline = QString::fromLocal8Bit( stderrbuf+line );
+            stderrbuf.truncate( 0 );
+        }else
+        {
+            sline = QString::fromLocal8Bit( line );
+        }
+
+	m_contentList.append(QString("e-")+sline);
+	if ( filterSingleLine( sline ) )
 	{
-		ProcessWidget::insertStderrLine(line);
+            ProcessWidget::insertStderrLine( sline.local8Bit() );
 	}
 }
 
@@ -146,7 +167,7 @@ void AppOutputWidget::editFilter()
 
 		reinsertAndFilter();
 	}
-	
+
 }
 bool AppOutputWidget::filterSingleLine(const QString & line)
 {
@@ -200,14 +221,14 @@ void AppOutputWidget::reinsertAndFilter()
 	}
 
 	//... and reinsert the found items into the listbox
-	for ( QStringList::Iterator it = strListFound.begin(); it != strListFound.end(); ++it ) 
+	for ( QStringList::Iterator it = strListFound.begin(); it != strListFound.end(); ++it )
 	{
 		if ((*it).startsWith("o-"))
 		 {
 			(*it).remove(0,2);
 			insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Normal));
-		} 
-		else if ((*it).startsWith("e-")) 
+		}
+		else if ((*it).startsWith("e-"))
 		{
 			(*it).remove(0,2);
 			insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Error));
@@ -314,6 +335,16 @@ void AppOutputWidget::copySelected()
       buffer += item(i)->text() + "\n";
   }
   kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
+}
+
+void AppOutputWidget::addPartialStderrLine(const QCString & line)
+{
+    stderrbuf += line;
+}
+
+void AppOutputWidget::addPartialStdoutLine(const QCString & line)
+{
+    stdoutbuf += line;
 }
 
 #include "appoutputwidget.moc"

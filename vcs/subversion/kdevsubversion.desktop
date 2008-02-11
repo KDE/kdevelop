@@ -31,5 +31,5 @@ GenericName[tg]=Зер-ривоят
 Icon=misc
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevsubversion
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Properties=VCS,SubversionVCS

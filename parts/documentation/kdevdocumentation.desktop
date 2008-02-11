@@ -76,6 +76,6 @@ Icon=khelpcenter
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
 X-KDE-Library=libkdevdocumentation
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Mode=AssistantMode
 X-KDevelop-Properties=Documentation

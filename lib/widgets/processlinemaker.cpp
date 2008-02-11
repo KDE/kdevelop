@@ -40,9 +40,13 @@ void ProcessLineMaker::slotReceivedStdout( const char *buffer )
     stdoutbuf += buffer;
     int pos;
     while ( (pos = stdoutbuf.find('\n')) != -1) {
-        QString line = QString::fromLocal8Bit(stdoutbuf, pos);
+        QCString line = stdoutbuf.left( pos );
         emit receivedStdoutLine(line);
         stdoutbuf.remove(0, pos+1);
+    }
+    if( !stdoutbuf.isEmpty() ) {
+        emit receivedPartialStdoutLine( stdoutbuf );
+        stdoutbuf.truncate(0);
     }
 }
 
@@ -57,9 +61,13 @@ void ProcessLineMaker::slotReceivedStderr( const char *buffer )
     stderrbuf += buffer;
     int pos;
     while ( (pos = stderrbuf.find('\n')) != -1) {
-        QString line = QString::fromLocal8Bit(stderrbuf, pos);
+        QCString line = stderrbuf.left( pos );
         emit receivedStderrLine(line);
         stderrbuf.remove(0, pos+1);
+    }
+    if( !stderrbuf.isEmpty() ) {
+        emit receivedPartialStderrLine( stderrbuf );
+        stderrbuf.truncate(0);
     }
 }
 
@@ -77,9 +85,9 @@ void ProcessLineMaker::clearBuffers( )
 void ProcessLineMaker::flush()
 {
     if( !stderrbuf.isEmpty() )
-        emit receivedStderrLine(QString::fromLocal8Bit(stderrbuf));
+        emit receivedStderrLine(stderrbuf);
     if( !stdoutbuf.isEmpty() )
-        emit receivedStdoutLine(QString::fromLocal8Bit(stdoutbuf));
+        emit receivedStdoutLine(stdoutbuf);
     clearBuffers();
 }
 

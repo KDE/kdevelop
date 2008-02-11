@@ -81,6 +81,6 @@ GenericName[zh_CN]=SQL 支持
 GenericName[zh_TW]=SQL 支援
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevsqlsupport
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=SQL
 X-KDevelop-Args=SQL

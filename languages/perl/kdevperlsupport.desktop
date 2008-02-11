@@ -81,6 +81,6 @@ GenericName[zh_CN]=Perl 支持
 GenericName[zh_TW]=Perl 支援
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevperlsupport
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=Perl
 

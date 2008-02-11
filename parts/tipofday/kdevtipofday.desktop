@@ -90,6 +90,6 @@ GenericName[zh_TW]=本日小提示
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtipofday
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Core
 X-KDevelop-Properties=Documentation

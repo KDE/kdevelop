@@ -82,6 +82,6 @@ GenericName[zh_TW]=除錯器前端
 Icon=debugger
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdebugger
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=CompiledDevelopment

@@ -82,14 +82,17 @@ public slots:
      * be overridden by subclasses to implement
      * syntax highlighting.
      */
-    virtual void insertStdoutLine(const QString &line);
+    virtual void insertStdoutLine(const QCString &line);
     /**
      * Inserts one line from stderr into the listbox. This can
      * be overridden by subclasses to implement
      * syntax highlighting. By default, a ProcessListBoxItem
      * is used.
      */
-    virtual void insertStderrLine(const QString &line);
+    virtual void insertStderrLine(const QCString &line);
+
+    virtual void addPartialStdoutLine(const QCString&);
+    virtual void addPartialStderrLine(const QCString&);
 
 protected:
     /**
@@ -114,6 +117,10 @@ protected slots:
 private:
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
+    QCString stderrbuf;
+    QCString stdoutbuf;
+    int lastRowStdout;
+    int lastRowStderr;
 };
 
 

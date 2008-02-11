@@ -82,5 +82,5 @@ GenericName[zh_TW]=應用程式精靈
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevappwizard
 X-KDevelop-Scope=Core
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Properties=ProjectCreation

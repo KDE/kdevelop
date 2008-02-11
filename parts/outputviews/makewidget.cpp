@@ -181,10 +181,14 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	childproc = new KProcess(this);
 	procLineMaker = new ProcessLineMaker( childproc );
 
-	connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-	         this, SLOT(insertStdoutLine(const QString&) ));
-	connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-	         this, SLOT(insertStderrLine(const QString&) ));
+	connect( procLineMaker, SIGNAL(receivedStdoutLine(const QCString&)),
+	         this, SLOT(insertStdoutLine(const QCString&) ));
+	connect( procLineMaker, SIGNAL(receivedStderrLine(const QCString&)),
+                 this, SLOT(insertStderrLine(const QCString&) ));
+        connect( procLineMaker, SIGNAL(receivedPartialStdoutLine(const QCString&)),
+                 this, SLOT(storePartialStdoutLine(const QCString&) ));
+        connect( procLineMaker, SIGNAL(receivedPartialStderrLine(const QCString&)),
+                 this, SLOT(storePartialStderrLine(const QCString&) ));
 
 	connect( childproc, SIGNAL(processExited(KProcess*)),
 	         this, SLOT(slotProcessExited(KProcess*) )) ;
@@ -524,19 +528,32 @@ void MakeWidget::searchItem(int parag)
 	}
 }
 
-void MakeWidget::insertStdoutLine( const QString& line )
+void MakeWidget::insertStdoutLine( const QCString& line )
 {
-	if ( !appendToLastLine( line ) )
-		m_directoryStatusFilter.processLine( line );
+    QString sline;
+    bool forceCLocale = KConfigGroup( kapp->config(), "MakeOutputWidget" ).readBoolEntry( "ForceCLocale", true );
+    if( forceCLocale )
+        sline = QString::fromAscii( stdoutbuf+line );
+    else
+        sline = QString::fromLocal8Bit( stdoutbuf+line );
+    stdoutbuf.truncate(0);
+
+    if ( !appendToLastLine( sline ) )
+        m_directoryStatusFilter.processLine( sline );
 }
 
-void MakeWidget::insertStderrLine( const QString& line )
+void MakeWidget::insertStderrLine( const QCString& line )
 {
-	if ( !appendToLastLine( line ) )
-        {
-            kdDebug() << "inserting stderr line: " << line << endl;
-		m_errorFilter.processLine( line );
-  }
+    QString sline;
+    bool forceCLocale = KConfigGroup( kapp->config(), "MakeOutputWidget" ).readBoolEntry( "ForceCLocale", true );
+    if( forceCLocale ) {
+        sline = QString( stderrbuf+line );
+    }
+    else
+        sline = QString::fromLocal8Bit( stderrbuf+line );
+    stderrbuf.truncate(0);
+    if ( !appendToLastLine( line ) )
+        m_errorFilter.processLine( line );
 }
 
 void MakeWidget::slotProcessExited(KProcess *)
@@ -806,6 +823,16 @@ bool MakeWidget::scanErrorBackward( int parag )
 		return true;
 	}
 	return false;
+}
+
+void MakeWidget::storePartialStderrLine(const QCString & line)
+{
+    stderrbuf += line;
+}
+
+void MakeWidget::storePartialStdoutLine(const QCString & line)
+{
+    stderrbuf += line;
 }
 
 #include "makewidget.moc"

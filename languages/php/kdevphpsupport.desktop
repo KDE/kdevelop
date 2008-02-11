@@ -82,6 +82,6 @@ GenericName[zh_CN]=PHP 支持
 GenericName[zh_TW]=PHP 支援
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevphpsupport
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=PHP
 

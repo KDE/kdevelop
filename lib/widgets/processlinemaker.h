@@ -52,8 +52,10 @@ protected slots:
 	void slotReceivedStderr(KProcess *, char *buffer, int buflen);
 
 signals:
-	void receivedStdoutLine( const QString& line );
-	void receivedStderrLine( const QString& line );
+	void receivedStdoutLine( const QCString& line );
+        void receivedStderrLine( const QCString& line );
+        void receivedPartialStdoutLine( const QCString& line );
+        void receivedPartialStderrLine( const QCString& line );
 
 private:
 	QCString stdoutbuf;

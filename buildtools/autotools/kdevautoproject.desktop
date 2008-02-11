@@ -92,5 +92,5 @@ GenericName[zh_TW]=Automake 專案
 ServiceTypes=KDevelop/Project
 Icon=make
 X-KDE-Library=libkdevautoproject
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Args=

@@ -43,4 +43,4 @@ Name[pl]=Program KChm
 Name[sv]=Kchm-del
 ServiceTypes=KParts/ReadOnlyPart,Browser/View
 X-KDE-Library=libkchmpart
-X-KDevelop-Version=4
+X-KDevelop-Version=5

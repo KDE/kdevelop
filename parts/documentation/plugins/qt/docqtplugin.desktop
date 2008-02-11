@@ -41,5 +41,5 @@ Comment[tr]=Qt DCF Belgelendirmesi için belgelendirme eklentisi
 Comment[zh_CN]=Qt DCF 文档的文档插件
 Comment[zh_TW]=Qt DCF 文件外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDE-Library=libdocqtplugin

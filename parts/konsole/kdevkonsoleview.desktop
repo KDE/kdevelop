@@ -82,6 +82,6 @@ GenericName[zh_TW]=嵌入式主控台
 Icon=konsole
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevkonsoleview
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=Console

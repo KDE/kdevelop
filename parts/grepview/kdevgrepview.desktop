@@ -82,6 +82,6 @@ GenericName[zh_TW]=Grep 前端介面
 Icon=find
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevgrepview
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=FileSearch

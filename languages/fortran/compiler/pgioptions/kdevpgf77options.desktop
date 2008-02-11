@@ -49,6 +49,6 @@ Name[tg]=Pgf77Интихобҳо
 Name[zh_TW]=Pgf77 選項
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevpgioptions
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=Fortran
 X-KDevelop-Args=pgf77

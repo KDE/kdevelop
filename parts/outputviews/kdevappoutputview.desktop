@@ -80,6 +80,6 @@ GenericName[zh_TW]=應用程式輸出檢視
 Icon=exec
 ServiceTypes=KDevelop/AppFrontend
 X-KDE-Library=libkdevappview
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Core
 X-KDevelop-Properties=OutputTool

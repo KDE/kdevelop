@@ -73,6 +73,6 @@ GenericName[zh_TW]=檔案建立
 Icon=wizard
 ServiceTypes=KDevelop/CreateFile
 X-KDE-Library=libkdevfilecreate
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Properties=FileCreation
 X-KDevelop-Scope=Core

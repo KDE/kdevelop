@@ -117,10 +117,14 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
 
     procLineMaker = new ProcessLineMaker( childproc );
 
-    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-             this, SLOT(insertStdoutLine(const QString&) ));
-    connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-             this, SLOT(insertStderrLine(const QString&) ));
+    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QCString&)),
+             this, SLOT(insertStdoutLine(const QCString&) ));
+    connect( procLineMaker, SIGNAL(receivedStderrLine(const QCString&)),
+             this, SLOT(insertStderrLine(const QCString&) ));
+    connect( procLineMaker, SIGNAL(receivedPartialStdoutLine(const QCString&)),
+             this, SLOT(addPartialStdoutLine(const QCString&) ));
+    connect( procLineMaker, SIGNAL(receivedPartialStderrLine(const QCString&)),
+             this, SLOT(addPartialStderrLine(const QCString&) ));
 
     connect(childproc, SIGNAL(processExited(KProcess*)),
             this, SLOT(slotProcessExited(KProcess*) )) ;
@@ -174,18 +178,40 @@ void ProcessWidget::slotProcessExited(KProcess *)
 }
 
 
-void ProcessWidget::insertStdoutLine(const QString &line)
+void ProcessWidget::insertStdoutLine(const QCString &line)
 {
-    insertItem(new ProcessListBoxItem(line,
-                                      ProcessListBoxItem::Normal));
+    if( !stdoutbuf.isEmpty() )
+    {
+        stdoutbuf += line;
+        insertItem( new ProcessListBoxItem( QString::fromLocal8Bit(stdoutbuf),
+                                            ProcessListBoxItem::Normal ),
+                    lastRowStdout+1 );
+        stdoutbuf.truncate( 0 );
+    }else
+    {
+        insertItem( new ProcessListBoxItem( QString::fromLocal8Bit( line ),
+                                            ProcessListBoxItem::Normal) );
+    }
+    lastRowStdout = count() - 1;
     maybeScrollToBottom();
 }
 
 
-void ProcessWidget::insertStderrLine(const QString &line)
+void ProcessWidget::insertStderrLine(const QCString &line)
 {
-    insertItem(new ProcessListBoxItem(line,
-                                      ProcessListBoxItem::Error));
+    if( !stderrbuf.isEmpty() )
+    {
+        stderrbuf += line;
+        insertItem( new ProcessListBoxItem( QString::fromLocal8Bit( stderrbuf ),
+                                            ProcessListBoxItem::Error ),
+                    lastRowStderr+1 );
+        stderrbuf.truncate( 0 );
+    } else
+    {
+        insertItem( new ProcessListBoxItem( QString::fromLocal8Bit( line ),
+                                            ProcessListBoxItem::Error) );
+    }
+    lastRowStderr = count() - 1;
     maybeScrollToBottom();
 }
 
@@ -238,6 +264,16 @@ void ProcessWidget::maybeScrollToBottom()
     {
         setBottomItem( count() -1 );
     }
+}
+
+void ProcessWidget::addPartialStderrLine(const QCString& linepart)
+{
+    stderrbuf += linepart;
+}
+
+void ProcessWidget::addPartialStdoutLine(const QCString& linepart)
+{
+    stdoutbuf += linepart;
 }
 
 #include "processwidget.moc"

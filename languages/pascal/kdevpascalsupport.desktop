@@ -81,5 +81,5 @@ GenericName[zh_CN]=Pascal 语言支持
 GenericName[zh_TW]=Pascal 語言支援
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevpascalsupport
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=Pascal

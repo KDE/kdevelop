@@ -77,6 +77,6 @@ GenericName[zh_TW]=縮寫擴展
 ServiceTypes=KDevelop/Plugin
 Icon=fontsizeup
 X-KDE-Library=libkdevabbrev
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=CodeEditing

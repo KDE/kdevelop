@@ -28,23 +28,24 @@ class GrepViewProcessWidget : public ProcessWidget
 public:
 	GrepViewProcessWidget(QWidget* parent) : ProcessWidget(parent) {};
 	~GrepViewProcessWidget(){};
-	void setMatchCount(int newCount) 
+	void setMatchCount(int newCount)
 	{
 		m_matchCount = newCount;
 	}
-	
+
 	void incrementMatchCount(uint amount = 1)
 	{
 		m_matchCount += amount;
 	}
-	
+
 	void setLastFileName(const QString& lastFileName)
 	{
 		_lastfilename = lastFileName;
 	}
-	
+
 public slots:
-	virtual void insertStdoutLine(const QString &line);
+	virtual void insertStdoutLine(const QCString &line);
+        virtual void addPartialStdoutLine( const QCString &line );
 
 protected:
 	virtual void childFinished(bool normal, int status);
@@ -52,6 +53,7 @@ protected:
 private:
 	int m_matchCount;
 	QString _lastfilename;
+        QCString grepbuf;
 };
 
 class GrepViewWidget : public QWidget
@@ -65,7 +67,7 @@ public:
 	void projectChanged(KDevProject *project);
 	void killJob( int signo = SIGTERM );
 	bool isRunning() const;
-	
+
 public slots:
 	void showDialog();
 	void showDialogWithPattern(QString pattern);
@@ -91,7 +93,7 @@ private slots:
 	 * as the main output tab must not be closed.
 	 */
 	void slotOutputTabChanged();
-	
+
 	void slotSearchProcessExited();
 
 private:

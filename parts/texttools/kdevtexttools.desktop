@@ -80,6 +80,6 @@ GenericName[zh_CN]=文件结构
 GenericName[zh_TW]=文字結構
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtexttools
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=CodeNavigation

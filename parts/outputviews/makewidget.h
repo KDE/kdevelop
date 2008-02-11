@@ -59,8 +59,10 @@ protected:
     virtual void contentsMouseReleaseEvent( QMouseEvent* e );
 
 private slots:
-    void insertStdoutLine(const QString& line);
-    void insertStderrLine(const QString& line);
+    void insertStdoutLine(const QCString& line);
+    void insertStderrLine(const QCString& line);
+    void storePartialStdoutLine(const QCString& line);
+    void storePartialStderrLine(const QCString& line);
     void slotProcessExited(KProcess *);
     void verticScrollingOn() { m_vertScrolling = true; }
     void verticScrollingOff() { m_vertScrolling = false; }
@@ -116,6 +118,9 @@ private:
 
     bool m_vertScrolling, m_horizScrolling;
     bool m_bCompiling;
+
+    QCString stderrbuf;
+    QCString stdoutbuf;
 
     bool m_bLineWrapping;
     EOutputLevel m_compilerOutputLevel;

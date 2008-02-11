@@ -132,13 +132,13 @@ bool AppOutputViewPart::isRunning()
 }
 
 
-void AppOutputViewPart::insertStdoutLine(const QString &line)
+void AppOutputViewPart::insertStdoutLine(const QCString &line)
 {
     m_widget->insertStdoutLine(line);
 }
 
 
-void AppOutputViewPart::insertStderrLine(const QString &line)
+void AppOutputViewPart::insertStderrLine(const QCString &line)
 {
     m_widget->insertStderrLine(line);
 }
@@ -163,6 +163,16 @@ void AppOutputViewPart::showView()
 bool AppOutputViewPart::isViewVisible()
 {
     return m_viewIsVisible;
+}
+
+void AppOutputViewPart::addPartialStderrLine(const QCString & line)
+{
+    m_widget->addPartialStderrLine(line);
+}
+
+void AppOutputViewPart::addPartialStdoutLine(const QCString & line)
+{
+    m_widget->addPartialStdoutLine(line);
 }
 
 #include "appoutputviewpart.moc"

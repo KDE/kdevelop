@@ -41,5 +41,5 @@ Comment[tr]=Doxygen belgelendirmesi için belgelendirme eklentisi
 Comment[zh_CN]=Doxygen 文档的文档插件
 Comment[zh_TW]=Doxygen 文件外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDE-Library=libdocdoxygenplugin

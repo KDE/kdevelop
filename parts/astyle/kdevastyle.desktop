@@ -76,6 +76,6 @@ GenericName[zh_TW]=程式源碼格式器
 Icon=kdevelop
 ServiceTypes=KDevelop/SourceFormatter
 X-KDE-Library=libkdevastyle
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=CDevelopment,CPPDevelopment,JavaDevelopment

@@ -82,6 +82,6 @@ GenericName[zh_TW]=檔案群組
 ServiceTypes=KDevelop/Plugin
 Icon=attach
 X-KDE-Library=libkdevfilegroups
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=ProjectFileGroupsManagement

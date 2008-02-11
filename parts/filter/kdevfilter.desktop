@@ -78,6 +78,6 @@ GenericName[zh_CN]=Shell 过滤和插入
 GenericName[zh_TW]=Shell 過濾與插入
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevfilter
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=OptionalCodeEditing

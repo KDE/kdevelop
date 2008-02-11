@@ -41,5 +41,5 @@ Comment[tr]=Her tür belgelendirme için belgelendirme eklentisi
 Comment[zh_CN]=全部类型文档的文档插件
 Comment[zh_TW]=所有型態的文件外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDE-Library=libdoccustomplugin

@@ -88,5 +88,5 @@ GenericName[zh_CN]=自定义工程
 GenericName[zh_TW]=自訂專案
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevcustomproject
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Args=

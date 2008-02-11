@@ -78,6 +78,6 @@ GenericName[zh_CN]=正则表达式测试
 GenericName[zh_TW]=正規表示式測試器
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevregexptest
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=ScriptDevelopment,CDevelopment,CPPDevelopment

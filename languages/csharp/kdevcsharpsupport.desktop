@@ -53,6 +53,6 @@ GenericName[sv]=C#-stöd
 GenericName[zh_TW]=C# 支援
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevcsharpsupport
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=CSharp
 

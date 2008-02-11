@@ -91,5 +91,5 @@ GenericName[zh_CN]=Ant 工程
 GenericName[zh_TW]=Ant 專案
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevantproject
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Args=

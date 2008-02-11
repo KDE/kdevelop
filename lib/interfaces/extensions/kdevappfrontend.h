@@ -78,31 +78,34 @@ public slots:
     /**
      * The component shall start to execute an app-like command.
      * Running the application is always asynchronous.
-     * @param directory The working directory to start the app in, 
+     * @param directory The working directory to start the app in,
      * if empty then the user's home directory is used.
      * @param program A program to start.
      * @param inTerminal If true then the program is started in an external konsole.
      */
     virtual void startAppCommand(const QString &directory, const QString &program, bool inTerminal) = 0;
-    
+
     /**
      * Stops the currently running application.
      */
     virtual void stopApplication() = 0;
-    
+
     /**
      * Inserts a string into the application output view.
      * @param line A string to insert.
      */
-    virtual void insertStdoutLine(const QString &line) = 0;
-    
+    virtual void insertStdoutLine(const QCString &line) = 0;
+
     /**
      * Inserts a string into the application output view marked as stderr output
      * (usually colored).
      * @param line An error string to insert.
      */
-    virtual void insertStderrLine(const QString &line) = 0;
-    
+    virtual void insertStderrLine(const QCString &line) = 0;
+
+    virtual void addPartialStderrLine( const QCString& line ) = 0;
+    virtual void addPartialStdoutLine( const QCString& line ) = 0;
+
     /**
      * Clears the output view.
      */

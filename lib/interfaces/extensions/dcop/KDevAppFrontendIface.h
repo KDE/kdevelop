@@ -40,8 +40,10 @@ k_dcop:
     void stopApplication();
     bool isRunning();
     void clearView();
-    void insertStderrLine(const QString &line);
-    void insertStdoutLine(const QString &line);
+    void insertStderrLine(const QCString &line);
+    void insertStdoutLine(const QCString &line);
+    void addPartialStderrLine(const QCString &line);
+    void addPartialStdoutLine(const QCString &line);
     
 private:
     KDevAppFrontend *m_appFrontend;

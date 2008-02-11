@@ -73,5 +73,5 @@ Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
 X-KDE-Library=libkdevfilelist
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Properties=OpenFileNavigation

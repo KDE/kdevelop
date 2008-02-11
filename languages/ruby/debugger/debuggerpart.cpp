@@ -255,10 +255,14 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
 
     procLineMaker = new ProcessLineMaker();
 
-    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-             appFrontend(), SLOT(insertStdoutLine(const QString&)) );
-    connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-             appFrontend(), SLOT(insertStderrLine(const QString&)) );
+    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QCString&)),
+             appFrontend(), SLOT(insertStdoutLine(const QCString&)) );
+    connect( procLineMaker, SIGNAL(receivedStderrLine(const QCString&)),
+             appFrontend(), SLOT(insertStderrLine(const QCString&)) );
+    connect( procLineMaker, SIGNAL(receivedPartialStdoutLine(const QCString&)),
+             appFrontend(), SLOT(addPartialStdoutLine(const QCString&)) );
+    connect( procLineMaker, SIGNAL(receivedPartialStderrLine(const QCString&)),
+             appFrontend(), SLOT(addPartialStderrLine(const QCString&)) );
 
     setupController();
     QTimer::singleShot(0, this, SLOT(setupDcop()));

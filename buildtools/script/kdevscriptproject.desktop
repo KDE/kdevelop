@@ -84,4 +84,4 @@ GenericName[zh_TW]=文稿語言專案
 ServiceTypes=KDevelop/Project
 Icon=kdevelop
 X-KDE-Library=libkdevscriptproject
-X-KDevelop-Version=4
+X-KDevelop-Version=5

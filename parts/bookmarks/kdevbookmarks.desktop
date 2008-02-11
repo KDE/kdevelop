@@ -80,5 +80,5 @@ Icon=bookmark
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Project
 X-KDE-Library=libkdevbookmarks
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Properties=CodeEditing

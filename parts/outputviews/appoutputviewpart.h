@@ -31,8 +31,10 @@ public:
     virtual void startAppCommand(const QString &directory, const QString &command, bool inTerminal);
     virtual void stopApplication();
     virtual bool isRunning();
-    virtual void insertStdoutLine(const QString &line);
-    virtual void insertStderrLine(const QString &line);
+    virtual void insertStdoutLine(const QCString &line);
+    virtual void insertStderrLine(const QCString &line);
+    virtual void addPartialStdoutLine(const QCString &line);
+    virtual void addPartialStderrLine(const QCString &line);
     virtual void clearView();
     void hideView();
     void showView();

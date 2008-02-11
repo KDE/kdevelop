@@ -76,6 +76,6 @@ GenericName[zh_CN]=类查看器
 GenericName[zh_TW]=類別檢視
 ServiceTypes=KDevelop/CodeBrowserFrontend
 X-KDE-Library=libkdevclassview
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=CodeNavigation

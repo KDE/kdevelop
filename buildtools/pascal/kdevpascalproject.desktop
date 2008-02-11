@@ -89,4 +89,4 @@ GenericName[zh_CN]=Pascal 工程
 GenericName[zh_TW]=Pascal 專案
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevpascalproject
-X-KDevelop-Version=4
+X-KDevelop-Version=5

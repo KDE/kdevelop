@@ -41,5 +41,5 @@ Comment[zh_CN]=DevHelp 文档的文档插件
 Comment[zh_TW]=DevHelp 文件外掛程式
 Exec=blubb
 ServiceTypes=KDevelop/DocumentationPlugins
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDE-Library=libdocdevhelpplugin

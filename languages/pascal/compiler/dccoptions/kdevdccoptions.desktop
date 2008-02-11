@@ -50,6 +50,6 @@ Name[tg]=DccИнтихобҳо
 Name[zh_TW]=Dcc 選項
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevdccoptions
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Language=Pascal
 X-KDevelop-Args=dcc

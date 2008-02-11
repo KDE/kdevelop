@@ -30,8 +30,10 @@ public:
 
 public slots:
 	void slotRowSelected(QListBoxItem* row);
-	void insertStdoutLine(const QString &line);
-	void insertStderrLine(const QString &line);
+	void insertStdoutLine(const QCString &line);
+        void insertStderrLine(const QCString &line);
+        void addPartialStdoutLine(const QCString &line);
+        void addPartialStderrLine(const QCString &line);
 	void slotContextMenu(QListBoxItem *, const QPoint &);
 	void hideView();
 	void clearViewAndContents();
@@ -60,6 +62,8 @@ private:
 
 	AppOutputViewPart* m_part;
 	OutputFilter m_filter;
+        QCString stdoutbuf;
+        QCString stderrbuf;
 };
 
 #endif

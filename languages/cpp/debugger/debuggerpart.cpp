@@ -343,10 +343,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     procLineMaker = new ProcessLineMaker();
 
-    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-             appFrontend(), SLOT(insertStdoutLine(const QString&)) );
-    connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-             appFrontend(), SLOT(insertStderrLine(const QString&)) );
+    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QCString&)),
+             appFrontend(), SLOT(insertStdoutLine(const QCString&)) );
+    connect( procLineMaker, SIGNAL(receivedStderrLine(const QCString&)),
+             appFrontend(), SLOT(insertStderrLine(const QCString&)) );
 
     // The output from tracepoints goes to "application" window, because
     // we don't have any better alternative, and using yet another window

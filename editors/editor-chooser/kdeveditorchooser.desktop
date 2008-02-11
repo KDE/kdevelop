@@ -85,6 +85,6 @@ GenericName[zh_TW]=編輯器選擇
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdeveditorchooser
-X-KDevelop-Version=4
+X-KDevelop-Version=5
 X-KDevelop-Scope=Core
 X-KDevelop-Properties=EditorChooser
