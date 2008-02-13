@@ -38,6 +38,11 @@ CppEditorIntegrator::CppEditorIntegrator( ParseSession* session )
 
 SimpleCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 {
+  if(token == 0) {
+    kDebug() << "Searching position of invalid token";
+    return SimpleCursor();
+  }
+  
   const Token& t = m_session->token_stream->token(token);
   return findPosition(t, edge);
 }

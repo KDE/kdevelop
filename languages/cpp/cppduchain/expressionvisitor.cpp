@@ -1716,7 +1716,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastInstance = Instance(constructedType->declaration());
       DeclarationPointer decl(constructedType->declaration());
       lock.unlock();
-      newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
+      if(oldCurrentUse.isValid)
+        newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
       return;
     }
     
@@ -1776,7 +1777,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.
     lock.unlock();
-    newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, chosenFunction );
+    if(oldCurrentUse.isValid)
+      newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, chosenFunction );
 
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
