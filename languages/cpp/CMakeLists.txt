@@ -16,6 +16,8 @@ include_directories(${CMAKE_TOP_BUILD_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain/viewer
 )
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 ) 
+
 add_subdirectory(parser)
 add_subdirectory(cppduchain)
 add_subdirectory(app_templates)

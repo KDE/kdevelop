@@ -1,4 +1,6 @@
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9040 )
+
 add_subdirectory(rpp)
 add_subdirectory(tests)
 add_subdirectory(headergen)
