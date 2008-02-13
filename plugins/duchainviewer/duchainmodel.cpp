@@ -50,6 +50,14 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
+///When the context is a proxy-context, returns the assigned content-context.
+TopDUContext* getRealContext(TopDUContext* ctx) {
+  if(ctx && ctx->flags() & TopDUContext::ProxyContextFlag && !ctx->importedParentContexts().isEmpty())
+    return dynamic_cast<TopDUContext*>(ctx->importedParentContexts()[0].data());
+  else
+    return ctx;
+}
+
 ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
 : DUChainBase(HashedString(), _object->range())
   , parent(_parent)
@@ -108,6 +116,8 @@ void DUChainModel::setTopContext(TopDUContextPointer context)
   else
     m_document = KUrl();
 
+  context = TopDUContextPointer(getRealContext(context.data()));
+  
   if (m_chain != context)
     m_chain = context;
 
@@ -214,6 +224,9 @@ QVariant DUChainModel::data(const QModelIndex& index, int role) const
   if (proxy)
     base = proxy->object;
 
+  if(role == Qt::ToolTipRole)
+    return i18n("Range: %1:%2 -> %3 %4", base->range().start.line, base->range().start.column, base->range().end.line, base->range().start.column);
+  
   if (DUContext* context = dynamic_cast<DUContext*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
