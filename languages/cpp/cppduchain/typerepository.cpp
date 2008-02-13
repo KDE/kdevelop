@@ -262,9 +262,9 @@ int hashFromFunction(CppFunctionType* function) {
   int ret = 1;
   const int numElements = function->arguments().count();
   for (int i = 0; i < numElements; ++i)
-    ret = ((int)function->arguments()[i].data()) + ret*13;
-  ret = ((int)function) + ret * 37;
-  ret = ((int)function->cv()) + ret * 17;
+    ret = (int)((size_t)function->arguments()[i].data()) + ret*13;
+  ret = (int)((size_t)function) + ret * 37;
+  ret = (int)((size_t)function->cv()) + ret * 17;
   return ret;
   
 }
