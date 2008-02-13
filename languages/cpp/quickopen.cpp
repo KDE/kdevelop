@@ -52,12 +52,12 @@ TopDUContextPointer getCurrentTopDUContext() {
 }
 
 ///Finds the shortest path through the imports to a given included file @param used Is needed to prevent endless recursion
-QList<KUrl> getInclusionPath( QSet<const DUContext*>& used, const DUContext* context, const DUContext* import ) {
+QList<HashedString> getInclusionPath( QSet<const DUContext*>& used, const DUContext* context, const DUContext* import ) {
 
-  QList<KUrl> ret;
+  QList<HashedString> ret;
   
   if( context == import ) {
-    ret << KUrl(import->url().str());
+    ret << import->url();
     return ret;
   }
   
@@ -66,7 +66,7 @@ QList<KUrl> getInclusionPath( QSet<const DUContext*>& used, const DUContext* con
   used.insert(context);
   
   if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->range().end ) ) {
-    used.remove(context);
+    //Leave context in the "used" set, so it isn't searched again
     return ret;
   }
   
@@ -76,14 +76,14 @@ QList<KUrl> getInclusionPath( QSet<const DUContext*>& used, const DUContext* con
     if( !i )
       continue;
     
-    QList<KUrl> ret2 = getInclusionPath( used, i.data(), import );
+    QList<HashedString> ret2 = getInclusionPath( used, i.data(), import );
 
     if( !ret2.isEmpty() && ( ret.isEmpty() || ret.count() > ret2.count() ) )
       ret = ret2;
   }
 
   if( !ret.isEmpty() )
-    ret.push_front( KUrl(context->url().str()) );
+    ret.push_front( context->url() );
   
   used.remove(context);
   return ret;
@@ -161,10 +161,13 @@ QWidget* IncludeFileData::expandingWidget() const {
       if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
       {
         QSet<const DUContext*> used;
-        QList<KUrl> inclusion = getInclusionPath( used, m_includedFrom.data(), t );
+        QList<HashedString> inclusion = getInclusionPath( used, m_includedFrom.data(), t );
 
-        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
-          inclusionPath = inclusion;
+        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
+          inclusionPath.clear();
+          foreach(HashedString s, inclusion)
+            inclusionPath << KUrl(s.str());
+        }
       }
     }
   }else if( m_item.pathNumber == -1 && m_includedFrom )
@@ -179,10 +182,13 @@ QWidget* IncludeFileData::expandingWidget() const {
       if( t->imports( m_includedFrom.data(), m_includedFrom->range().end ) )
       {
         QSet<const DUContext*> used;
-        QList<KUrl> inclusion = getInclusionPath( used, t, m_includedFrom.data() );
+        QList<HashedString> inclusion = getInclusionPath( used, t, m_includedFrom.data() );
 
-        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() )
-          inclusionPath = inclusion;
+        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
+          inclusionPath.clear();
+          foreach(HashedString s, inclusion)
+            inclusionPath << KUrl(s.str());
+        }
       }
     }
   }
