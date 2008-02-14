@@ -442,15 +442,15 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   if (m_compilingContexts && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
-      // This is a class function
+      // This is a class function definition
       functionName.pop();
 
       DUChainReadLocker lock(DUChain::lock());
 
       QList<DUContext*> classContexts = currentContext()->findContexts(DUContext::Class, functionName);
-      if (classContexts.count() == 1)
+      if (classContexts.count() != 0)
         m_importedParentContexts.append(classContexts.first());
-      else if (classContexts.count() > 1) {
+      if (classContexts.count() > 1) {
         kWarning(9007) << "Muliple class contexts for" << functionName.toString() << "- shouldn't happen!" ;
         foreach (DUContext* classContext, classContexts) {
           kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->range().textRange() << "in" << classContext->url().str();
