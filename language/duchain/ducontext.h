@@ -472,6 +472,13 @@ public:
    * */
   void applyAliases(const QList<QualifiedIdentifier>& identifier, QList<QualifiedIdentifier>& targetIdentifiers, const SimpleCursor& position, bool canBeNamespace) const;
 
+  /**
+   * Applies the aliases that need to be applied when moving the search from this context up to the parent-context.
+   * The default-implementation adds a set of identifiers with the own local identifier prefixed, if this is a namespace.
+   * For C++, this is needed when searching out of a namespace, so the item can be found within that namespace in another place.
+   * */
+  virtual void applyUpwardsAliases(QList<QualifiedIdentifier>& identifiers) const;
+  
   DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
   
 private:

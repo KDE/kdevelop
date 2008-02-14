@@ -546,12 +546,7 @@ bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
 
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext()) {
-    if( type() == Namespace ) {
-      //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended
-      int oldCount = aliasedIdentifiers.count();
-      for(int a = 0; a < oldCount; a++)
-        aliasedIdentifiers << localScopeIdentifier() + aliasedIdentifiers[a];
-    }
+    applyUpwardsAliases(aliasedIdentifiers);
     return parentContext()->findDeclarationsInternal(aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, dataType, ret, trace, flags);
   }
   return true;
@@ -953,6 +948,16 @@ void DUContext::applyAliases(const QList<QualifiedIdentifier>& baseIdentifiers, 
   }
 }
 
+void DUContext::applyUpwardsAliases(QList<QualifiedIdentifier>& identifiers) const {
+  if(type() == Namespace) {
+    //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended
+    int cnt = identifiers.count();
+
+    for(int a = 0; a < cnt; ++a)
+      identifiers << localScopeIdentifier() + identifiers[a];
+  }
+}
+
 void DUContext::findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const
 {
   Q_D(const DUContext);
@@ -992,8 +997,10 @@ void DUContext::findContextsInternal(ContextType contextType, const QList<Qualif
   }
 
   ///Step 3: Continue search in parent
-  if ( !(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext())
+  if ( !(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext()) {
+    applyUpwardsAliases(aliasedIdentifiers);
     parentContext()->findContextsInternal(contextType, aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, ret, flags);
+  }
 }
 
 const QList<Definition*>& DUContext::localDefinitions() const
