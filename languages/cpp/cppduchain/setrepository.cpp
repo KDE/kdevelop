@@ -965,6 +965,7 @@ bool Set::contains(Index index) const
   if(!d->m_tree)
     return false;
   set_contains(d->m_tree.data(), index);
+  return true;
 }
 
 Set Set::operator +(const Set& first) const
