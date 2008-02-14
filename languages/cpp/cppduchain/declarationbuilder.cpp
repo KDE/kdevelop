@@ -886,7 +886,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
        * Said shortly it means:
        * - Search for an existing declaration of the type. If it is found,
        *   it will be used, and we don't need to create a declaration.
-       * - If it is not found, create a forward-declaration in the global scope.
+       * - If it is not found, create a forward-declaration in the global/namespace scope.
        * - @todo While searching for the existing declarations, non-fitting overloaded names should be ignored.
        * */
 
@@ -929,8 +929,8 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
           DUContext* globalCtx;
           {
             DUChainReadLocker lock(DUChain::lock());
-            globalCtx = currentContext();
-            while(globalCtx && globalCtx->type() != DUContext::Global)
+            globalCtx = currentContext(); 
+            while(globalCtx && globalCtx->type() != DUContext::Global && globalCtx->type() != DUContext::Namespace)
               globalCtx = globalCtx->parentContext();
             Q_ASSERT(globalCtx);
           }
