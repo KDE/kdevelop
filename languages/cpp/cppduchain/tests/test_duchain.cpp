@@ -1864,7 +1864,7 @@ void TestDUChain::testHashedStringRepository() {
   BasicSetRepository rep;
   
   for(Index a = 0; a < itemCount; a++)
-    Q_ASSERT( a+1 == rep.appendIndices(1) );
+    QVERIFY( a+1 == rep.appendIndices(1) );
 
   kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
@@ -1923,7 +1923,7 @@ void TestDUChain::testHashedStringRepository() {
 
       kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
     }
-    Q_ASSERT(tempSet == realSets[a]);
+    QVERIFY(tempSet == realSets[a]);
   }
 
   for(int cycle = 0; cycle < 100; ++cycle) {
@@ -1977,7 +1977,7 @@ void TestDUChain::testHashedStringRepository() {
             kDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
           }
         }        
-        Q_ASSERT(_difference.stdSet() == _realDifference);
+        QVERIFY(_difference.stdSet() == _realDifference);
 
 
         /// ------ UNION
@@ -2029,7 +2029,7 @@ void TestDUChain::testHashedStringRepository() {
             kDebug() << "DOT-Graph:\n\n" << _union.dumpDotGraph() << "\n\n";
           }
         }        
-        Q_ASSERT(_union.stdSet() == _realUnion);
+        QVERIFY(_union.stdSet() == _realUnion);
       
         std::set<Index> _realIntersection;
 
@@ -2091,7 +2091,7 @@ void TestDUChain::testHashedStringRepository() {
             kDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
           }
         }
-        Q_ASSERT(_intersection.stdSet() == _realIntersection);
+        QVERIFY(_intersection.stdSet() == _realIntersection);
       }
     }
 #ifdef DEBUG_STRINGREPOSITORY
