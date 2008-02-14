@@ -675,15 +675,22 @@ SetNode* set_intersect(SetNode* first, SetNode* second)
   return 0;
 }
 
-bool set_contains(SetNode* first, Index index)
+bool set_contains(SetNode* node, Index index)
 {
-  if(first->start > index || first->end <= index)
-    return false;
+  while(true) {
+    if(node->start > index || node->end <= index)
+      return false;
 
-  if(first->contiguous || !first->left || !first->right)
-    return true;
+    if(node->contiguous || !node->left || !node->right)
+      return true;
 
-  return set_contains(first->left.data(), index) || set_contains(first->right.data(), index);
+    if(index < node->left->end)
+      node = node->left.data();
+    else
+      node = node->right.data();
+  }
+  
+  return false;
 }
 
 SetNode* set_subtract(SetNode* first, SetNode* second)
@@ -964,8 +971,7 @@ bool Set::contains(Index index) const
 {
   if(!d->m_tree)
     return false;
-  set_contains(d->m_tree.data(), index);
-  return true;
+  return set_contains(d->m_tree.data(), index);
 }
 
 Set Set::operator +(const Set& first) const
