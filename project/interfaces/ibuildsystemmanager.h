@@ -64,7 +64,13 @@ public:
      * Provide a list of files that contain the preprocessor defines for the
      * project
      */
-    virtual QMap<QString,QString> preprocessorDefines(ProjectBaseItem*) const = 0;
+    virtual QHash<QString,QString> defines(ProjectBaseItem*) const = 0;
+
+    /**
+     * Provide a list of files that contains environment variables for the
+     * project
+     */
+    virtual QHash<QString,QString> environment(ProjectBaseItem*) const = 0;
 
     /**
      * Create a new target
@@ -114,8 +120,6 @@ public:
      * Get the toplevel build directory for the project
      */
     virtual KUrl buildDirectory(ProjectBaseItem*) const = 0;
-
-
 };
 
 }

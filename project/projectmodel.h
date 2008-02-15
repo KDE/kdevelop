@@ -149,20 +149,6 @@ public:
     ///Reimplemented from QStandardItem
     virtual int type() const;
 
-    void setIncludeDirectories( const KUrl::List& includeList );
-
-    /**
-     * @return Return a list of directories that are used as include directories
-     * for all targets in this directory.
-     */
-    KUrl::List includeDirectories() const;
-
-    /**
-     * @return Returns an association of environment variables which have been defined
-     * for all targets in this directory.
-     */
-    QHash<QString, QString> environment() const;
-
     virtual void setIcon();
 
 protected:
@@ -186,23 +172,6 @@ public:
     virtual int type() const;
 
     virtual ProjectTargetItem *target() const;
-
-    /**
-     * Return a list of directories that are used as additional include directories
-     * specific to this target.
-     */
-    virtual KUrl::List includeDirectories() const = 0;
-
-    /**
-     * Returns an association of additional environment variables which have been defined
-     * specifically for this target.
-     */
-    virtual QHash<QString, QString> environment() const = 0;
-
-    /**
-     * Returns a list of defines passed to the compiler with -D(macro) (value)
-     */
-    virtual QList<QPair<QString, QString> > defines() const = 0;
 protected:
     ProjectTargetItem( ProjectTargetItemPrivate& );
 private:

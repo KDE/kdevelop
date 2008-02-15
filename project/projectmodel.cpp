@@ -54,8 +54,6 @@ public:
 class ProjectBuildFolderItemPrivate : public ProjectFolderItemPrivate
 {
 public:
-    KUrl::List m_includeDirs; ///include directories
-    QHash<QString, QString> m_env;
 };
 
 class ProjectFileItemPrivate : public ProjectBaseItemPrivate
@@ -288,24 +286,6 @@ ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &d
 int ProjectBuildFolderItem::type() const
 {
     return ProjectBaseItem::BuildFolder;
-}
-
-void ProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
-{
-    Q_D(ProjectBuildFolderItem);
-    d->m_includeDirs = dirList;
-}
-
-KUrl::List ProjectBuildFolderItem::includeDirectories() const
-{
-    Q_D(const ProjectBuildFolderItem);
-    return d->m_includeDirs;
-}
-
-QHash<QString, QString> ProjectBuildFolderItem::environment() const
-{
-    Q_D(const ProjectBuildFolderItem);
-    return d->m_env;
 }
 
 void ProjectBuildFolderItem::setIcon()
