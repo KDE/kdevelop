@@ -26,7 +26,8 @@
 
 #include <projectmodel.h>
 #include "cmakelistsparser.h"
-#include <cmakeexport.h>
+#include "cmakeexport.h"
+#include "cmaketypes.h"
 #include "cmakeast.h"
 
 namespace KDevelop {
@@ -45,11 +46,12 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
 
         void setIncludeDirectories(const KUrl::List &l) { m_includeList=l; }
-        virtual KUrl::List includeDirectories() const;
-        virtual QList<QPair<QString, QString> > defines() const;
+        KUrl::List includeDirectories() const;
+        Definitions definitions() const { return m_defines; }
+        void setDefinitions(const Definitions& defs) { m_defines=defs; }
     private:
         KUrl::List m_includeList;
-        QList<QPair<QString, QString> > m_defines;
+        Definitions m_defines;
 };
 
 /**
@@ -64,12 +66,9 @@ public:
     CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item );
     ~CMakeTargetItem();
 
-    virtual KUrl::List includeDirectories() const;
-    virtual QHash< QString, QString > environment() const;
-    virtual QList<QPair<QString, QString> > defines() const;
+    KUrl::List includeDirectories() const;
+    Definitions defines() const;
 private:
-    QHash<QString, QString> m_environment;
-//     QString m_relativePath;
     CMakeFolderItem *m_parent;
 };
 

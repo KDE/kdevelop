@@ -287,6 +287,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         v.setVariableMap(vm);
         v.setMacroMap(mm);
         v.setModulePath(m_modulePathPerProject[item->project()]);
+        v.setDefinitions(folder->definitions());
         v.walk(f, 0);
         vm->remove("CMAKE_CURRENT_LIST_FILE");
         vm->remove("CMAKE_CURRENT_SOURCE_DIR");
@@ -311,6 +312,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
             
             a->setUrl(path);
+            a->setDefinitions(v.definitions());
             folderList.append( a );
         }
 
@@ -330,6 +332,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             directories.append(path);
         }
         folder->setIncludeDirectories(directories);
+        folder->setDefinitions(v.definitions());
     
         foreach ( QString t, v.targets())
         {
@@ -362,6 +365,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             }
         }
     }
+    
     foreach( QString entry, entries )
     {
         KUrl folderurl = item->url();
@@ -430,6 +434,23 @@ KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *it
     KUrl::List l = resolveSystemDirs(folder->project(), folder->includeDirectories());
     kDebug(9042) << "Include directories!" << l;
     return l;
+}
+
+QHash< QString, QString > CMakeProjectManager::defines(KDevelop::ProjectBaseItem *item ) const
+{
+    CMakeFolderItem* folder=0;
+    kDebug(9042) << "Querying defines dirs for " << item;
+    while(!folder)
+    {
+        folder = dynamic_cast<CMakeFolderItem*>( item );
+        item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
+        kDebug(9042) << "Looking for a folder: " << folder << item;
+    }
+
+    if(!folder)
+        return QHash<QString, QString>();
+
+    return folder->definitions();
 }
 
 KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectFolderItem *) const

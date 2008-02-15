@@ -82,6 +82,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void setVariableMap( VariableMap* vars );
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
+        void setDefinitions(const Definitions& defs) { m_defs=defs; }
+        const Definitions& definitions() { return m_defs; }
         
         QString projectName() const { return m_projectName; }
         QStringList subdirectories() const { return m_subdirectories; }
@@ -116,7 +118,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList m_defaultPaths;
         VariableMap *m_vars;
         MacroMap *m_macros;
-        DefineList m_defs;
+        Definitions m_defs;
         QStringList m_filesRead;
 };
 

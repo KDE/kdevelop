@@ -1210,12 +1210,13 @@ int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
         if(rx.indexIn(def)<0)
             kDebug(9042) << "error: definition not matched" << def;
         QStringList captured=rx.capturedTexts();
-        Definition d;
-        d.first=captured[1];
+        
+        QString name, value;
+        name=captured[1];
         if(captured.count()==3)
-            d.second=captured[2];
-        m_defs.append(d);
-        kDebug(9042) << "added definition" << d << " from " << def;
+            value=captured[2];
+        m_defs[name]=value;
+        kDebug(9042) << "added definition" << name << "=" << value << " from " << def;
     }
     return 1;
 }

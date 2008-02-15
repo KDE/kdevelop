@@ -36,11 +36,6 @@ CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& na
 CMakeTargetItem::~CMakeTargetItem()
 {}
 
-QHash< QString, QString > CMakeTargetItem::environment() const
-{
-    return m_environment;
-}
-
 KUrl::List CMakeFolderItem::includeDirectories() const
 {
     KUrl::List urls(m_includeList);
@@ -55,22 +50,13 @@ KUrl::List CMakeFolderItem::includeDirectories() const
     return urls;
 }
 
-QList< QPair < QString , QString > > CMakeFolderItem::defines() const
-{
-    CMakeFolderItem *par = dynamic_cast<CMakeFolderItem*>(parent());
-    if(par)
-        return m_defines+par->defines();
-    else
-        return m_defines;
-}
-
 KUrl::List CMakeTargetItem::includeDirectories() const
 {
     return m_parent->includeDirectories();
 }
 
-QList< QPair < QString , QString > > CMakeTargetItem::defines() const
+Definitions CMakeTargetItem::defines() const
 {
-    return m_parent->defines();
+    return m_parent->definitions();
 }
 
