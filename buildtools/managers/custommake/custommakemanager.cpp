@@ -117,9 +117,9 @@ KUrl::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem*) con
     return KUrl::List();
 }
 
-QMap<QString,QString> CustomMakeManager::preprocessorDefines(KDevelop::ProjectBaseItem*) const
+QHash<QString,QString> CustomMakeManager::defines(KDevelop::ProjectBaseItem*) const
 {
-    return QMap<QString,QString>();
+    return QHash<QString,QString>();
 }
 
 ProjectTargetItem* CustomMakeManager::createTarget(const QString& target, KDevelop::ProjectFolderItem *parent)
