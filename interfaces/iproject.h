@@ -97,7 +97,7 @@ public:
 
     virtual QList<ProjectFileItem*> files() const = 0;
 
-    virtual ProjectFileItem *fileForUrl( const KUrl& ) const = 0;
+    virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const = 0;
 
 //     virtual KUrl projectConfigFile() const = 0;
 //     virtual KUrl projectDefaultsConfigFile() const = 0;

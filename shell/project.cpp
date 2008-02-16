@@ -104,6 +104,40 @@ public:
         return files;
     }
 
+    QList<ProjectFileItem*> filesForUrlInternal( const KUrl& url, ProjectFolderItem* folder ) const
+    {
+        QList<ProjectFileItem*> files;
+        if( !folder )
+            return files;
+        // Check top level files
+        foreach( ProjectFileItem* file, folder->fileList() )
+        {
+            if( file->url() == url )
+            {
+                files << file;
+            }
+        }
+    
+        // Check top level targets
+        foreach( ProjectTargetItem* target, folder->targetList() )
+        {
+            foreach( ProjectFileItem* file, target->fileList() )
+            {
+                if( file->url() == url )
+                {
+                    files << file;
+                }
+            }
+        }
+        
+        foreach( ProjectFolderItem* top, folder->folderList() )
+        {
+            files += filesForUrlInternal( url, top );
+        }
+        return files;
+    }
+
+
     void importDone( KJob* )
     {
         Core::self()->projectControllerInternal()->projectImportingFinished( project );
@@ -231,7 +265,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
         d->tmp->close();
     }
 
-    kdDebug(9501) << "Creating KConfig object for project files" << d->developerTempFile << d->projectTempFile;
+    kDebug(9501) << "Creating KConfig object for project files" << d->developerTempFile << d->projectTempFile;
     d->m_cfg = KSharedConfig::openConfig( d->developerTempFile );
     d->m_cfg->addConfigSources( QStringList() << d->projectTempFile );
 
@@ -314,7 +348,7 @@ void Project::close()
 
 bool Project::inProject( const KUrl& url ) const
 {
-    return ( fileForUrl( url ) != 0 || url.equals( d->topItem->url(), KUrl::CompareWithoutTrailingSlash ) );
+    return ( !filesForUrl( url ).isEmpty() || url.equals( d->topItem->url(), KUrl::CompareWithoutTrailingSlash ) );
 }
 
 ProjectFileItem* Project::fileAt( int num ) const
@@ -336,84 +370,16 @@ QList<ProjectFileItem *> KDevelop::Project::files() const
     return files;
 }
 
-ProjectFileItem *Project::fileForUrl(const KUrl& url) const
+QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const
 {
     // TODO: This is moderately efficient, but could be much faster with a
     // QHash<QString, ProjectFolderItem> member. Would it be worth it?
 
     KUrl u = d->topItem->url();
     if ( u.protocol() != url.protocol() || u.host() != url.host() )
-        return 0;
+        return QList<ProjectFileItem*>();
 
-    foreach( ProjectFileItem* file, d->topItem->fileList() )
-    {
-        if( file->url() == url )
-        {
-            return file;
-        }
-    }
-
-    foreach( ProjectTargetItem* target, d->topItem->targetList() )
-    {
-        foreach( ProjectFileItem* file, target->fileList() )
-        {
-            if( file->url() == url )
-            {
-                return file;
-            }
-        }
-    }
-    
-    foreach( ProjectFolderItem* top, d->topItem->folderList() )
-    {
-        while ( top )
-        {
-            u = top->url();
-            if ( u.isParentOf( url ) )
-            {
-                ProjectFolderItem *parent = 0;
-                QList<ProjectFolderItem*> folder_list = top->folderList();
-                foreach( ProjectFolderItem *folder, folder_list )
-                {
-                    if ( folder->url().isParentOf( url ) )
-                    {
-                        parent = folder;
-                        break;
-                    }
-                }
-                if ( !parent ) //the subfolders are not parent of url
-                {
-                    QList<ProjectFileItem*> file_list = top->fileList();
-                    foreach( ProjectFileItem *file, file_list )
-                    {
-                        if ( file->url() == url )
-                        {
-                            return file; //we found it
-                            break;
-                        }
-                    }
-                    QList<ProjectTargetItem*> target_list = top->targetList();
-                    foreach( ProjectTargetItem *target, target_list )
-                    {
-                        QList<ProjectFileItem*> targetfile_list = target->fileList();
-                        foreach( ProjectFileItem *file, targetfile_list )
-                        {
-                            if ( file->url() == url )
-                            {
-                                return file; //we found it
-                                break;
-                            }
-                        }
-                    }
-                    return 0; //not in the project
-                }
-                top = parent;
-            }
-            else
-                top = 0;
-        }
-    }
-    return 0;
+    return d->filesForUrlInternal( url, d->topItem );
 }
 
 int Project::fileCount() const

@@ -70,7 +70,7 @@ public:
 
     virtual QList<ProjectFileItem*> files() const;
 
-    virtual ProjectFileItem *fileForUrl( const KUrl& ) const;
+    virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const;
 
     QString projectTempFile() const;
     QString developerTempFile() const;
