@@ -68,3 +68,4 @@ install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install(FILES kdevcppsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kdevcppsupport.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppsupport)

@@ -3,6 +3,7 @@
 *
 * Copyright 2005 Matt Rogers <mattr@kde.org>
 * Copyright 2006 Adam Treat <treat@kde.org>
+* Copyright 2007-2008 David Nolden<david.nolden.kdevelop@art-master.de>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -27,6 +28,9 @@
 #include <QFileInfo>
 #include <QSet>
 #include <QApplication>
+#include <QAction>
+#include <kactioncollection.h>
+#include <kaction.h>
 #include <QExtensionFactory>
 #include <QtDesigner/QExtensionFactory>
 
@@ -39,6 +43,7 @@
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 #include <icore.h>
 #include <iproblem.h>
@@ -76,6 +81,17 @@
 #include "setuphelpers.h"
 #include "quickopen.h"
 
+//List of possible headers used for definition/declaration fallback switching
+QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
+QStringList sourceExtensions(QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(','));
+
+QString addDot(QString ext) {
+  if(ext.contains('.')) //We need this check because of the _impl.h thing
+    return ext;
+  else
+    return "." + ext;
+}
+
 //#define DEBUG
 
 //When this is enabled, the include-path-resolver will always be issued,
@@ -94,6 +110,32 @@ QList<KUrl> convertToUrls(const QList<HashedString>& stringList) {
   return ret;
 }
 
+Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, DUContext* ctx) {
+  foreach(Declaration* decl, ctx->localDeclarations())
+    if(decl->range().start.line == cursor.line)
+      return decl;
+  
+  foreach(DUContext* child, ctx->childContexts()){
+    Declaration* decl = declarationInLine(cursor, child);
+    if(decl)
+      return decl;
+  }
+
+  return 0;
+}
+
+///Tries to find a definition for the given cursor-position and document-url. DUChain must be locked.
+Definition* definitionForCursor(const KDevelop::SimpleCursor& cursor, const KUrl& url) {
+  QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument( url );
+  foreach(TopDUContext* ctx, topContexts) {
+    Declaration* decl = declarationInLine(cursor, ctx);
+    if(decl && decl->definition())
+      return decl->definition();
+  }
+  return 0;
+}
+
+
 K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
 K_EXPORT_PLUGIN(KDevCppSupportFactory("kdevcppsupport"))
 
@@ -105,6 +147,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_self = this;
 
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
+    setXMLFile( "kdevcppsupport.rc" );
 
     m_highlights = new CppHighlighting( this );
     m_cc = new CppCodeCompletion( this );
@@ -157,6 +200,178 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
         quickOpen->registerProvider( IncludeFileDataProvider::scopes(), QStringList(i18n("Files")), m_quickOpenDataProvider );
     else
         kWarning() << "Quickopen not found";
+
+    KActionCollection* actions = actionCollection();
+
+    QAction* switchDefinitionDeclaration = actions->addAction("switch_definition_declaration");
+    switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
+    switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
+    connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
+}
+
+KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url )
+{
+  QString urlPath = url.path(); ///@todo Make this work with real urls
+  
+// get the path of the currently active document
+  QFileInfo fi( urlPath );
+  QString path = fi.filePath();
+  // extract the exension
+  QString ext = fi.suffix();
+  if ( ext.isEmpty() )
+    return KUrl();
+  // extract the base path (full path without '.' and extension)
+  QString base = path.left( path.length() - ext.length() - 1 );
+  //kDebug( 9007 ) << "base: " << base << ", ext: " << ext << endl;
+  // just the filename without the extension
+  QString fileNameWoExt = fi.fileName();
+  if ( !ext.isEmpty() )
+    fileNameWoExt.replace( "." + ext, "" );
+  QStringList possibleExts;
+  // depending on the current extension assemble a list of
+  // candidate files to look for
+  QStringList candidates;
+  // special case for template classes created by the new class dialog
+  if ( path.endsWith( "_impl.h" ) )
+  {
+    QString headerpath = path;
+    headerpath.replace( "_impl.h", ".h" );
+    candidates << headerpath;
+    fileNameWoExt.replace( "_impl", "" );
+    possibleExts << "h";
+  }
+  // if file is a header file search for implementation file
+  else if ( headerExtensions.contains( ext ) )
+  {
+    foreach(QString ext, sourceExtensions)
+      candidates << ( base + addDot(ext) );
+    
+    possibleExts = sourceExtensions;
+  }
+  // if file is an implementation file, search for header file
+  else if ( sourceExtensions.contains( ext ) )
+  {
+    foreach(QString ext, headerExtensions)
+      candidates << ( base + addDot(ext) );
+    
+    possibleExts = headerExtensions;
+  }
+  // search for files from the assembled candidate lists, return the first
+  // candidate file that actually exists or QString::null if nothing is found.
+  QStringList::ConstIterator it;
+  for ( it = candidates.begin(); it != candidates.end(); ++it )
+  {
+    //kDebug( 9007 ) << "Trying " << ( *it ) << endl;
+    if ( QFileInfo( *it ).exists() )
+    {
+      kDebug( 9007 ) << "using: " << *it << endl;
+      return * it;
+    }
+  }
+  //kDebug( 9007 ) << "Now searching in project files." << endl;
+  // Our last resort: search the project file list for matching files
+  KUrl::List projectFileList;
+
+  foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
+      KDevelop::ProjectFileItem *file = project->fileForUrl(url);
+      if (file) {
+        QList<ProjectFileItem*> files = project->files();
+        foreach(ProjectFileItem* file, files)
+          projectFileList << file->url();
+      }
+  }
+  QFileInfo candidateFileWoExt;
+  QString candidateFileWoExtString;
+  foreach ( KUrl url, projectFileList )
+  {
+    candidateFileWoExt.setFile(url.path());
+    //kDebug( 9007 ) << "candidate file: " << url << endl;
+    if( !candidateFileWoExt.suffix().isEmpty() )
+      candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.suffix(), "" );
+    
+    if ( candidateFileWoExtString == fileNameWoExt )
+    {
+      if ( possibleExts.contains( candidateFileWoExt.suffix() ) || candidateFileWoExt.suffix().isEmpty() )
+      {
+        //kDebug( 9007 ) << "checking if " << url << " exists" << endl;
+        return url;
+      }
+    }
+  }
+  return KUrl();
+}
+
+void CppLanguageSupport::switchDefinitionDeclaration()
+{
+  kDebug(9007) << "switching definition/declaration";
+  ///Step 1: Find the current top-level context of type DUContext::Other(the highest code-context).
+  ///-- If it belongs to a function-declaration or definition, it can be retrieved through owner(), and we are in a definition.
+  ///-- If no such context could be found, search for a declaration on the same line as the cursor, and switch to the according definition
+  KDevelop::IDocument* doc = core()->documentController()->activeDocument();
+  if(!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
+    kDebug(9007) << "No active document";
+    return;
+  }
+  kDebug(9007) << "Document:" << doc->url();
+
+  DUChainReadLocker lock(DUChain::lock());
+  
+  TopDUContext* standardCtx = standardContext(doc->url());
+  if(standardCtx) {
+    DUContext* ctx = standardCtx->findContext(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()));
+    while(ctx && ctx->parentContext() && ctx->parentContext()->type() == DUContext::Other)
+      ctx = ctx->parentContext();
+
+    if(ctx && ctx->owner() && ctx->type() == DUContext::Other) {
+      if(ctx->owner()->asDefinition()) {
+        Declaration* decl = ctx->owner()->asDefinition()->declaration();
+
+        if(decl) {
+          KTextEditor::Cursor c = decl->range().textRange().start();
+          lock.unlock();
+          core()->documentController()->openDocument(KUrl(decl->url().str()), c);
+          return;
+        }else{
+          kDebug(9007) << "Definition has no assigned declaration";
+        }
+      }else if(ctx->owner()->asDeclaration()) {
+        kDebug(9007) << "In internal context of declaration+definition, nowhere to switch";
+        return;
+      }
+    }
+    kDebug(9007) << "Could not get definition/declaration from context";
+  }else{
+    kDebug(9007) << "Got no context for the current document";
+  }
+
+  Definition* def = definitionForCursor(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), doc->url());
+
+  if(def) {
+    ///@todo If the cursor is already in the target context, do not move it.
+    if(def->internalContext()) {
+      KTextEditor::Cursor c = def->internalContext()->range().textRange().start();
+      lock.unlock();
+      core()->documentController()->openDocument(KUrl(def->url().str()), c);
+    }else{
+      kWarning(9007) << "Declaration does not have internal context";
+      KTextEditor::Cursor c = def->range().textRange().start();
+      lock.unlock();
+      core()->documentController()->openDocument(KUrl(def->url().str()), c);
+    }
+    return;
+  }else{
+    kDebug(9007) << "Found no definition assigned to cursor position";
+  }
+  
+  lock.unlock();
+  ///- If no definition/declaration could be found to switch to, just switch the document using normal header/source heuristic by file-extension
+  KUrl url = sourceOrHeaderCandidate(doc->textDocument()->url());
+
+  if(url.isValid()) {
+    core()->documentController()->openDocument(url);
+  }else{
+    kDebug(9007) << "Found no source/header candidate to switch";
+  }
 }
 
 CppLanguageSupport::~CppLanguageSupport()

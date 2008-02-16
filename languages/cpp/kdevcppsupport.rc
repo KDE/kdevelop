@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevQuickopen" version="1">
+<MenuBar>
+  <Menu name="navigation"><text>&amp;Navigation</text>
+    <Action name="switch_definition_declaration"/>
+  </Menu>
+</MenuBar>
+</kpartgui>

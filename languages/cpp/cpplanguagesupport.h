@@ -98,7 +98,11 @@ private slots:
     void documentChanged( KDevelop::IDocument* document );
     void documentActivated( KDevelop::IDocument* document );
 
+    ///UI:
+    void switchDefinitionDeclaration();
+
 private:
+    KUrl sourceOrHeaderCandidate( const KUrl &url );
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
