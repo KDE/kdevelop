@@ -44,6 +44,7 @@
 #include <kparts/partmanager.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <ktexteditor/smartinterface.h>
 
 #include <icore.h>
 #include <iproblem.h>
@@ -417,14 +418,17 @@ void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
 {
     kDebug( 9007 ) << "CppLanguageSupport::documentLoaded";
 
-    // Convert any duchains to the smart equivalent first
     EditorIntegrator editor;
-    SmartConverter sc(&editor, codeHighlighting());
+    editor.setCurrentUrl(doc->url().prettyUrl());
 
     QList<TopDUContext*> chains = DUChain::self()->chainsForDocument(doc->url());
 
     foreach (TopDUContext* chain, chains) {
-        sc.convertDUChain(chain);
+      if ( codeHighlighting() && editor.smart() )
+      {
+          QMutexLocker lock(editor.smart()->smartMutex());
+          codeHighlighting()->highlightDUChain( chain );
+      }
     }
     if( chains.isEmpty() )
         core()->languageController()->backgroundParser()->addDocument(doc->url());
