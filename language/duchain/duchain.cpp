@@ -34,6 +34,8 @@
 #include "use.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
+#include <idocumentcontroller.h>
+#include <icore.h>
 
 namespace KDevelop
 {
@@ -80,6 +82,8 @@ K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 DUChain::DUChain()
 {
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
+  Q_ASSERT(ICore::self()->documentController());
+  connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
 }
 
 DUChain::~DUChain()
@@ -372,9 +376,20 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document * doc)
 
     QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
-    foreach (TopDUContext* chain, chains) {
+    foreach (TopDUContext* chain, chains)
         sc.unconvertDUChain(chain);
-    }
+}
+
+void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
+{
+    // Convert any duchains to the smart equivalent first
+    EditorIntegrator editor;
+  SmartConverter sc(&editor/*, codeHighlighting()*/); ///@todo find a way to do the highlighting right now
+
+    QList<TopDUContext*> chains = chainsForDocument(doc->url());
+
+    foreach (TopDUContext* chain, chains)
+        sc.convertDUChain(chain);
 }
 
 }

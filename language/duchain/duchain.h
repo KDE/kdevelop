@@ -145,7 +145,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
-
+  void documentLoadedPrepare(KDevelop::IDocument* document);
 private:
   void addToEnvironmentManager( TopDUContext * chain );
   void removeFromEnvironmentManager( TopDUContext * chain );

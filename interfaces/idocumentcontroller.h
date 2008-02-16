@@ -107,6 +107,11 @@ Q_SIGNALS:
     /**This is emitted when the document content changed.*/
     void documentContentChanged( KDevelop::IDocument* document );
 
+    /**Emitted when a document has been loaded, but before documentLoaded(..) is emitted.
+     * this allows parts of kdevplatform to prepare data-structures that can be used by other parts
+     * during documentLoaded(..).*/
+    void documentLoadedPrepare( KDevelop::IDocument* document );
+
     friend class IDocument;
 };
 

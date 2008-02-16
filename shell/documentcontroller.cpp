@@ -338,8 +338,10 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     d->fileOpenRecent->addUrl( url );
 
     // Deferred signals, wait until it's all ready first
-    if( emitLoaded )
+    if( emitLoaded ) {
+        emit documentLoadedPrepare( d->documents[url] );
         emit documentLoaded( d->documents[url] );
+    }
 
     if (activate == IDocumentController::ActivateOnOpen)
         emit documentActivated( doc );
