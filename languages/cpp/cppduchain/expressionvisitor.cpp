@@ -37,6 +37,7 @@
 #include "overloadresolution.h"
 #include "cppduchain.h"
 #include "overloadresolutionhelper.h"
+#include "pushvalue.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
 #define DEBUG_RESOLUTION_PROBLEMS
@@ -164,40 +165,6 @@ void ExpressionVisitor::visitIndependentNodes(const ListNode<_Tp> *nodes)
     }
   while (it != end);
 }
-
-  
-///Replaces a given value if the new value evaluates to be positive, and puts the old one back on destruction
-template<class Value>
-class PushPositiveValue {
-  public:
-    PushPositiveValue( Value& ptr, const Value& push = Value()  ) : m_ptr(ptr)  {
-      m_oldPtr = m_ptr;
-      if( push ) {
-        m_ptr = push;
-      }
-    }
-    ~PushPositiveValue() {
-      m_ptr = m_oldPtr;
-    }
-  private:
-    Value& m_ptr;
-    Value m_oldPtr;
-};
-
-template<class Value>
-class PushValue {
-  public:
-    PushValue( Value& ptr, const Value& push = Value()  ) : m_ptr(ptr)  {
-      m_oldPtr = m_ptr;
-      m_ptr = push;
-    }
-    ~PushValue() {
-      m_ptr = m_oldPtr;
-    }
-  private:
-    Value& m_ptr;
-    Value m_oldPtr;
-};
 
 typedef PushPositiveValue<DUContext*> PushPositiveContext;
 

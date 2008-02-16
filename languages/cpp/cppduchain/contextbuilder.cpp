@@ -37,6 +37,7 @@
 #include "name_compiler.h"
 #include "dumpchain.h"
 #include "environmentmanager.h"
+#include "pushvalue.h"
 
 #include <climits>
 
@@ -103,6 +104,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   , m_ownsEditorIntegrator(false)
   , m_compilingContexts(false)
   , m_recompiling(false)
+  , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
   , m_lastContext(0)
 {
@@ -439,6 +441,8 @@ void ContextBuilder::visitTypedef (TypedefAST *node)
 
 void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
+  PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body);
+                 
   if (m_compilingContexts && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {

@@ -204,6 +204,7 @@ protected:
   bool m_ownsEditorIntegrator: 1;
   bool m_compilingContexts: 1;
   bool m_recompiling : 1;
+  bool m_inFunctionDefinition;
   bool smart() const;
 
   int m_templateDeclarationDepth;

@@ -233,12 +233,14 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
       if (!def) {
         QualifiedIdentifier id = identifierForName(node->id);
-        if (id.count() > 1) {
+        DUChainWriteLocker lock(DUChain::lock());
+        if (id.count() > 1 ||
+            (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
           SimpleCursor pos = currentDeclaration()->range().start;//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
           //kDebug(9007) << "Searching for declaration of" << id;
           // TODO: potentially excessive locking
-          DUChainWriteLocker lock(DUChain::lock());
+          
           QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
 
           CppFunctionType::Ptr currentFunction = CppFunctionType::Ptr(dynamic_cast<CppFunctionType*>(lastType().data()));

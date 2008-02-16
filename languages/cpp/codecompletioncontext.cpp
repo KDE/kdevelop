@@ -39,6 +39,7 @@
 #include "parser/rpp/pp-macro.h"
 #include <iproblem.h>
 #include "environmentmanager.h"
+#include "pushvalue.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -68,21 +69,6 @@ QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
       ret << decl.data();
   return ret;
 }
-
-template<class Value>
-class PushValue {
-  public:
-    PushValue( Value& ptr, const Value& push = Value()  ) : m_ptr(ptr)  {
-      m_oldPtr = m_ptr;
-      m_ptr = push;
-    }
-    ~PushValue() {
-      m_ptr = m_oldPtr;
-    }
-  private:
-    Value& m_ptr;
-    Value m_oldPtr;
-};
 
 typedef PushValue<int> IntPusher;
 
