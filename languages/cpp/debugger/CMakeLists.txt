@@ -1,4 +1,6 @@
 
+#remove cpp default area first
+remove_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}/util

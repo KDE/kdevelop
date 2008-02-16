@@ -1,5 +1,7 @@
 ########### next target ###############
 
+#First remove the cpp language part default area, then set our own
+remove_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9041 )
 
 add_subdirectory(tests)
