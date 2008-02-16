@@ -136,7 +136,9 @@ void CustomMakeTreeSynchronizer::fileChanged( const QString& file, KDevelop::Pro
         KUrl url(file);
         project = m_customMan->core()->projectController()->findProjectForUrl( url );
         Q_ASSERT(project);
-        makefileItem = project->fileForUrl( KUrl(file) );
+        QList<KDevelop::ProjectFileItem*> files = project->filesForUrl( KUrl(file) );
+        if( !files.isEmpty() )
+            makefileItem = files.first();
     }
     else
     {

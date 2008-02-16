@@ -274,8 +274,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url )
   KUrl::List projectFileList;
 
   foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
-      KDevelop::ProjectFileItem *file = project->fileForUrl(url);
-      if (file) {
+      if (project->inProject(url)) {
         QList<ProjectFileItem*> files = project->files();
         foreach(ProjectFileItem* file, files)
           projectFileList << file->url();
@@ -480,13 +479,18 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
     bool gotPathsFromManager = false;
     
     foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
-        KDevelop::ProjectFileItem *file = project->fileForUrl(source);
+        QList<KDevelop::ProjectFileItem*> files = project->filesForUrl(source);
+        ProjectFileItem* file = 0;
+        if( !files.isEmpty() )
+            file = files.first();
         if (!file) {
+                kDebug() << "Didn't find file for url:" << source << "in project" << project->name();
             continue;
         }
 
         KDevelop::IBuildSystemManager* buildManager = project->buildSystemManager();
         if (!buildManager) {
+                kDebug() << "didn't get build manager for project:" << project->name();
             // We found the project, but no build manager!!
             continue;
         }
