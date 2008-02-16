@@ -30,9 +30,13 @@
 #include <duchain/duchainpointer.h>
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/rangefeedback.h>
+#include <simplecursor.h>
 
 namespace KDevelop {
   class IDocument;
+  class ParseJob;
+  class DUContext;
+  class DUChainBase;
 }
 
 namespace KTextEditor {
@@ -53,6 +57,7 @@ class UseHighlightPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRa
     virtual void unload();
 
   private slots:
+    void parseJobFinished(KDevelop::ParseJob* job);
     void documentLoaded( KDevelop::IDocument* document );
     void documentClosed( KDevelop::IDocument* document );
     void documentDestroyed( QObject* obj );
@@ -62,13 +67,22 @@ class UseHighlightPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRa
     void updateViews();
   private:
     virtual void rangeDeleted (KTextEditor::SmartRange *range);
-    void changeHighlight( KTextEditor::SmartRange* range, bool highlight, bool declaration );
-    void changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight );
-    
+    virtual void mouseEnteredRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
+    virtual void mouseExitedRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
+  
+    void changeHighlight( KTextEditor::SmartRange* range, bool highlight, bool declaration, bool mouseHighlight );
+    void changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight, bool mouseHighlight );
+
+    void registerAsRangeWatcher(KDevelop::DUChainBase* base);
+    void registerAsRangeWatcher(KDevelop::DUContext* ctx);
+  
     QTimer* m_updateTimer;
     QMap<KTextEditor::SmartRange*, KTextEditor::Attribute::Ptr> m_backups;
     QSet<KTextEditor::View*> m_updateViews;
     QMap<KTextEditor::View*, DeclarationPointer> m_highlightedDeclarations;
+
+    KUrl m_mouseHoverDocument;
+    SimpleCursor m_mouseHoverCursor;
 };
 
 }
