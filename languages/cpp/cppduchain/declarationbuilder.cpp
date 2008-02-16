@@ -254,6 +254,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
             foreach (Declaration* dec, declarations) {
               if (dec->isForwardDeclaration())
                 continue;
+              if(dec == currentDeclaration() || dec->isDefinition())
+                continue;
               //Compare signatures of function-declarations:
               if(dec->abstractType() == lastType()
                  || (dec->abstractType() && lastType() && dec->abstractType()->equals(lastType().data())))
