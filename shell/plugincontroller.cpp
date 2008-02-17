@@ -91,7 +91,7 @@ PluginController::PluginController(Core *core)
 PluginController::~PluginController()
 {
     if ( d->cleanupMode != PluginControllerPrivate::CleanupDone )
-        kWarning(9000) << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
+        kWarning(9501) << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
                        << endl << kBacktrace() << endl;
 
     // Quick cleanup of the remaining plugins, hope it helps
@@ -100,7 +100,7 @@ PluginController::~PluginController()
     while ( !d->loadedPlugins.empty() )
     {
         PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
-        kWarning(9000) << "Deleting stale plugin '" << it.key().pluginName()
+        kWarning(9501) << "Deleting stale plugin '" << it.key().pluginName()
                 << "'" << endl;
         delete it.value();
     }
@@ -257,7 +257,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     KPluginInfo info = infoForPluginId( pluginId );
     if ( !info.isValid() )
     {
-        kWarning(9000) << "Unable to find a plugin named '" << pluginId << "'!" ;
+        kWarning(9501) << "Unable to find a plugin named '" << pluginId << "'!" ;
         return 0L;
     }
 
@@ -294,12 +294,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     {
         if( str_error.isEmpty() && !missingInterfaces.isEmpty() )
         {
-            kDebug(9501) << "Can't load plugin '" << pluginId
+            kWarning(9501) << "Can't load plugin '" << pluginId
                     << "' some of its required dependecies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         }else
         {
-            kDebug(9501) << "Loading plugin '" << pluginId
+            kWarning(9501) << "Loading plugin '" << pluginId
                 << "' failed, KPluginLoader reported error: '" << endl <<
                 str_error << "'";
         }
