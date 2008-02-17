@@ -389,7 +389,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
   
     QAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
     quickOpenNavigate->setText( i18n("Navigate Declaration") );
-    quickOpenNavigate->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_N );
+    quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
   
     {
