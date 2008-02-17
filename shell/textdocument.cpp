@@ -317,8 +317,15 @@ QWidget * KDevelop::TextView::widget(QWidget * parent)
 
 QString KDevelop::TextView::viewState() const
 {
-    KTextEditor::Cursor cursor = m_view->cursorPosition();
-    return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
+    if( m_view )
+    {
+        KTextEditor::Cursor cursor = m_view->cursorPosition();
+        return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
+    }else
+    {
+        kDebug(9001) << "TextView's internal KTE view disappeared!";
+        return QString();
+    }
 }
 
 void KDevelop::TextView::setState(const QString & state)
