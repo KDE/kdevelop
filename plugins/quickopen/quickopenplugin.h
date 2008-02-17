@@ -67,7 +67,8 @@ public slots:
     void quickOpenFile();
     void quickOpenFunction();
     void quickOpenClass();
-    
+    void quickOpenDeclaration();
+    void quickOpenDefinition();
   private:
 
     QuickOpenModel* m_model;

@@ -62,24 +62,32 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
 
-QString cursorItemText() {
+Declaration* cursorDeclaration() {
   IDocument* doc = ICore::self()->documentController()->activeDocument();
   if(!doc)
-    return QString();
+    return 0;
 
   KTextEditor::Document* textDoc = doc->textDocument();
   if(!textDoc)
-    return QString();
+    return 0;
 
   KTextEditor::View* view = textDoc->activeView();
   if(!view)
-    return QString();
+    return 0;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   
   Declaration* decl = DUChainUtils::declarationForItem( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
+  return decl;
+}
+
+QString cursorItemText() {
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+  Declaration* decl = cursorDeclaration();
   if(!decl)
     return QString();
+  
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data());
   if( idType && idType->declaration() )
     decl = idType->declaration();
@@ -359,6 +367,16 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
+    QAction* quickOpenDeclaration = actions->addAction("quick_open_jump_declaration");
+    quickOpenDeclaration->setText( i18n("Jump to Declaration") );
+    quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
+    connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
+  
+    QAction* quickOpenDefinition = actions->addAction("quick_open_jump_definition");
+    quickOpenDefinition->setText( i18n("Jump to Definition") );
+    quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
+    connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
+  
     {
       m_projectFileData = new ProjectFileDataProvider();
       QStringList scopes, items;
@@ -439,6 +457,46 @@ bool QuickOpenPlugin::removeProvider( KDevelop::QuickOpenDataProviderBase* provi
 {
   m_model->removeProvider( provider );
   return true;
+}
+
+void QuickOpenPlugin::quickOpenDeclaration()
+{
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  Declaration* decl = cursorDeclaration();
+
+  if(!decl) {
+    kDebug() << "Found no declaration for cursor, cannot jump";
+    return;
+  }
+
+  HashedString u = decl->url();
+  SimpleCursor c = decl->range().start;
+  
+  lock.unlock();
+  core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+}
+
+void QuickOpenPlugin::quickOpenDefinition()
+{
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  Declaration* decl = cursorDeclaration();
+
+  if(!decl) {
+    kDebug() << "Found no declaration for cursor, cannot jump";
+    return;
+  }
+
+  HashedString u = decl->url();
+  SimpleCursor c = decl->range().start;
+  if(decl->definition()) { ///@todo search for the definition in other parsed versions of the document
+    u = decl->definition()->url();
+    c = decl->definition()->range().start;
+  }else{
+    kDebug() << "Found no definition for declaration";
+  }
+
+  lock.unlock();
+  core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
 }
 
 
