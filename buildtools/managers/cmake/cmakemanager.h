@@ -90,12 +90,10 @@ public:
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
+    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
-
-    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const
-        { return QList<KDevelop::ProjectTargetItem*>(); }
     
 public slots:
     void dirtyFile(const QString& file);

@@ -28,17 +28,9 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &na
     : KDevelop::ProjectBuildFolderItem( project, name, item )
 {}
 
-CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item)
-    : KDevelop::ProjectTargetItem( project, name, item ), m_parent(item)
-{}
-
-
-CMakeTargetItem::~CMakeTargetItem()
-{}
-
-KUrl::List CMakeFolderItem::includeDirectories() const
+QStringList CMakeFolderItem::includeDirectories() const
 {
-    KUrl::List urls(m_includeList);
+    QStringList urls(m_includeList);
 
     CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(parent());
     while(folder)
@@ -46,17 +38,6 @@ KUrl::List CMakeFolderItem::includeDirectories() const
         urls += folder->includeDirectories();
         folder = dynamic_cast<CMakeFolderItem*>(folder->parent());
     }
-    kDebug(9032) << "include directories: " << url() << urls;
     return urls;
-}
-
-KUrl::List CMakeTargetItem::includeDirectories() const
-{
-    return m_parent->includeDirectories();
-}
-
-Definitions CMakeTargetItem::defines() const
-{
-    return m_parent->definitions();
 }
 

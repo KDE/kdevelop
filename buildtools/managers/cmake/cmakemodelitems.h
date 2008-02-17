@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,31 +45,15 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
     public:
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
 
-        void setIncludeDirectories(const KUrl::List &l) { m_includeList=l; }
-        KUrl::List includeDirectories() const;
+        void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
+        QStringList includeDirectories() const;
         Definitions definitions() const { return m_defines; }
         void setDefinitions(const Definitions& defs) { m_defines=defs; }
     private:
-        KUrl::List m_includeList;
+        QStringList m_includeList;
         Definitions m_defines;
 };
 
-/**
- * The project model item for CMake targets.
- *
- * @author Matt Rogers <mattr@kde.org>
- * @author Aleix Pol <aleixpol@gmail.com>
- */
-class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public KDevelop::ProjectTargetItem
-{
-public:
-    CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item );
-    ~CMakeTargetItem();
-
-    KUrl::List includeDirectories() const;
-    Definitions defines() const;
-private:
-    CMakeFolderItem *m_parent;
-};
+typedef KDevelop::ProjectTargetItem CMakeTargetItem;
 
 #endif

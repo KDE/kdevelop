@@ -316,20 +316,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             folderList.append( a );
         }
 
-        KUrl::List directories;
+        QStringList directories;
         foreach(QString s, v.includeDirectories())
         {
-            KUrl path;
-            if(s.startsWith('/'))
+            if(!s.startsWith('/') && !s.startsWith("#["))
             {
-                path=s;
-            }
-            else
-            {
-                path=folder->url();
+                KUrl path=folder->url();
                 path.addPath(s);
+                s=path.toLocalFile();
             }
-            directories.append(path);
+            directories.append(s);
         }
         folder->setIncludeDirectories(directories);
         folder->setDefinitions(v.definitions());
@@ -390,29 +386,27 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
     return m_targets;
 }
 
-KUrl::List resolveSystemDirs(KDevelop::IProject* project, const KUrl::List& dirs)
+KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs)
 {
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
     QString bindir=group.readEntry("CurrentBuildDir", QString());
     QString instdir=group.readEntry("CurrentBuildDir", QString());
 
-    //FIXME: I wonder how i could do it better
     KUrl::List newList;
-    foreach(KUrl u, dirs)
+    foreach(QString s, dirs)
     {
-        QString s=u.toLocalFile();
 //         kDebug(9042) << "replace? " << s;
-        if(s.startsWith(QString::fromUtf8("#[bin_dir]"))) {
+        if(s.startsWith(QString::fromUtf8("#[bin_dir]")))
+        {
             s=s.replace("#[bin_dir]", bindir);
-            u=KUrl(s);
-            kDebug(9042) << "bindir" << u;
-        } else if(s.startsWith(QString::fromUtf8("#[install_dir]"))) {
-            s=s.replace("#[install_dir]", bindir);
-            u=KUrl(s);
-            kDebug(9042) << "installdir" << u;
         }
-        newList.append(u);
+        else if(s.startsWith(QString::fromUtf8("#[install_dir]")))
+        {
+            s=s.replace("#[install_dir]", bindir);
+        }
+//         kDebug(9042) << "adding " << s;
+        newList.append(KUrl(s));
     }
     return newList;
 }
@@ -583,6 +577,11 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
         kDebug(9042) << "Outside project file modified, should regenerate the whole project";
         //TODO: Should regenerate the whole project :D
     }
+}
+
+QList< KDevelop::ProjectTargetItem * > CMakeProjectManager::targets(KDevelop::ProjectFolderItem * folder) const
+{
+    return folder->targetList();
 }
 
 #include "cmakemanager.moc"

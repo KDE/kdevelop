@@ -221,7 +221,7 @@ int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
         m_includeDirectories += toInclude;
     else
         m_includeDirectories = toInclude + m_includeDirectories;
-    kDebug(9042) << "done." << dirs->includedDirectories();
+    kDebug(9042) << "done." << m_includeDirectories;
     return 1;
 }
 
@@ -230,8 +230,8 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
     if(file.isEmpty())
         return file;
     QString path, filename;
-	if( QFileInfo(file).isAbsolute() )
-		return file;
+    if( QFileInfo(file).isAbsolute() )
+         return file;
     switch(t) {
         case Library:
 #ifdef Q_OS_WIN
@@ -1216,6 +1216,26 @@ int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
         if(captured.count()==3)
             value=captured[2];
         m_defs[name]=value;
+        kDebug(9042) << "added definition" << name << "=" << value << " from " << def;
+    }
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
+{
+    QString regex="-D([A-Za-z0-9_]+)=?([A-Za-z0-9_]*)";
+    QRegExp rx(regex);
+    foreach(const QString& def, remDef->definitions())
+    {
+        if(def.isEmpty())
+            continue;
+        if(rx.indexIn(def)<0)
+            kDebug(9042) << "error: definition not matched" << def;
+        QStringList captured=rx.capturedTexts();
+        
+        QString name, value;
+        name=captured[1];
+        m_defs.remove(name);
         kDebug(9042) << "added definition" << name << "=" << value << " from " << def;
     }
     return 1;

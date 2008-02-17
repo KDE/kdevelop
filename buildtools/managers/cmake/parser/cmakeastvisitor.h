@@ -58,6 +58,7 @@ class MathAst;
 class MessageAst;
 class OptionAst;
 class ProjectAst;
+class RemoveDefinitionsAst;
 class SetAst;
 class StringAst;
 class SubdirsAst;
@@ -103,6 +104,7 @@ class CMakeAstVisitor {
         virtual int visit( const MessageAst * ) = 0;
         virtual int visit( const OptionAst * ) = 0;
         virtual int visit( const ProjectAst * ) = 0;
+        virtual int visit( const RemoveDefinitionsAst * ) = 0;
         virtual int visit( const SetAst * ) = 0;
         virtual int visit( const StringAst * ) = 0;
         virtual int visit( const SubdirsAst * ) = 0;
