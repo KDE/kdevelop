@@ -49,6 +49,7 @@
 #include <duchain/duchainutils.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
+#include <duchain/identifiedtype.h>
 
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
@@ -79,6 +80,9 @@ QString cursorItemText() {
   Declaration* decl = DUChainUtils::declarationForItem( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
   if(!decl)
     return QString();
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data());
+  if( idType && idType->declaration() )
+    decl = idType->declaration();
 
   return decl->qualifiedIdentifier().toString();
 }
