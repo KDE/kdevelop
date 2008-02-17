@@ -34,6 +34,7 @@
 #include <duchain/declaration.h>
 #include <duchain/definition.h>
 #include <duchain/use.h>
+#include <duchain/duchainutils.h>
 #include <icore.h>
 #include <idocumentcontroller.h>
 #include <ilanguage.h>
@@ -172,55 +173,10 @@ void UseHighlightPlugin::updateViews()
       c = m_mouseHoverCursor;
       mouseHighlight = true;
     }
-    
-    ///Pick a non-proxy context
-    KDevelop::TopDUContext* chosen = 0;
+
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
-    
-    Declaration* foundDeclaration = 0;
+    Declaration* foundDeclaration = DUChainUtils::declarationForItem( DUChainUtils::itemUnderCursor(view->document()->url(), c) );
 
-
-    QList<KDevelop::ILanguage*> languages = core()->languageController()->languagesForUrl(view->document()->url());
-    
-    foreach( KDevelop::ILanguage* language, languages)
-      if(!chosen)
-        chosen = language->languageSupport()->standardContext(view->document()->url());
-
-    if( chosen )
-    {
-      DUContext* ctx = chosen->findContextAt(c);
-      //It may happen, for example in the case of function-declarations, that the use is one context higher.
-      while( ctx && !foundDeclaration ) {
-        //Try finding a declaration under the cursor
-        foreach( Declaration* decl, ctx->localDeclarations() ) {
-          if( decl->range().contains(c) ) {
-            foundDeclaration = decl;
-            break;
-          }
-        }
-        foreach( Definition* def, ctx->localDefinitions() ) {
-          if( def->range().contains(c) ) {
-            foundDeclaration = def->declaration();
-            break;
-          }
-        }
-        //Try finding a use under the cursor
-        foreach( Use* use, ctx->uses() ) {
-          if( use->range().contains(c) ) {
-            kDebug() << "found use" << use->range().textRange();
-            foundDeclaration = use->declaration();
-            if(use->declaration())
-              if(!use->declaration()->uses().contains(use))
-                kWarning() << "use is not registered at the declaration";
-            break;
-          }
-        }
-        ctx = ctx->parentContext();
-      }
-    } else {
-      kDebug() << "Found no valid context";
-    }
-    
     if( m_highlightedDeclarations.contains(view) ) {
       ///Step 1: unhighlight the old uses
       changeHighlight( view, m_highlightedDeclarations[view].data(), false, mouseHighlight );

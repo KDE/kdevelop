@@ -34,6 +34,8 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
 #include <kaction.h>
@@ -42,7 +44,11 @@
 
 #include <icore.h>
 #include <iuicontroller.h>
+#include <idocumentcontroller.h>
 #include <hashedstring.h>
+#include <duchain/duchainutils.h>
+#include <duchain/duchainlock.h>
+#include <duchain/duchain.h>
 
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
@@ -50,8 +56,32 @@
 #include "projectfilequickopen.h"
 #include "projectitemquickopen.h"
 
+using namespace KDevelop;
+
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
+
+QString cursorItemText() {
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
+  if(!doc)
+    return QString();
+
+  KTextEditor::Document* textDoc = doc->textDocument();
+  if(!textDoc)
+    return QString();
+
+  KTextEditor::View* view = textDoc->activeView();
+  if(!view)
+    return QString();
+
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  
+  Declaration* decl = DUChainUtils::declarationForItem( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
+  if(!decl)
+    return QString();
+
+  return decl->qualifiedIdentifier().toString();
+}
 
 QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes ) : QObject( d ), m_dialog(d), m_model(model) {
 
@@ -118,6 +148,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
 
   o.list->setColumnWidth( 0, 20 );
   
+  o.searchLine->setText(cursorItemText());
   d->show();
 
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );

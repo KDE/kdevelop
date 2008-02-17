@@ -26,9 +26,17 @@
 #include "classfunctiondeclaration.h"
 #include "ducontext.h"
 #include "duchain.h"
+#include "use.h"
+#include "declaration.h"
+#include "definition.h"
+#include "duchainlock.h"
 #include "classmemberdeclaration.h"
 #include "typesystem.h"
 #include "kiconloader.h"
+#include <ilanguage.h>
+#include <ilanguagesupport.h>
+#include <icore.h>
+#include <ilanguagecontroller.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -200,4 +208,53 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
 QIcon DUChainUtils::iconForDeclaration(Declaration* dec)
 {
   return iconForProperties(completionProperties(dec));
+}
+
+DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
+{
+  KDevelop::TopDUContext* chosen = 0;
+
+  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
+
+  foreach( KDevelop::ILanguage* language, languages)
+    if(!chosen)
+      chosen = language->languageSupport()->standardContext(url);
+
+  if( chosen )
+  {
+    DUContext* ctx = chosen->findContextAt(c);
+    
+    while( ctx ) {
+      //Try finding a declaration under the cursor
+      foreach( Declaration* decl, ctx->localDeclarations() )
+        if( decl->range().contains(c) )
+          return decl;
+
+      //Try finding a definition under the cursor
+      foreach( Definition* def, ctx->localDefinitions() )
+        if( def->range().contains(c) )
+          return def;
+
+      //Try finding a use under the cursor
+      foreach( Use* use, ctx->uses() )
+        if( use->range().contains(c) )
+          return use;
+
+      ctx = ctx->parentContext(); //It may happen, for example in the case of function-declarations, that the use is one context higher.
+    }
+  }
+  return 0;
+}
+
+Declaration* DUChainUtils::declarationForItem(DUChainBase* item) {
+  if( dynamic_cast<Declaration*>(item) )
+    return static_cast<Declaration*>(item);
+
+  if( dynamic_cast<Definition*>(item) )
+    return static_cast<Definition*>(item)->declaration();
+
+  if( dynamic_cast<Use*>(item) )
+    return static_cast<Use*>(item)->declaration();
+  
+  return 0;
 }

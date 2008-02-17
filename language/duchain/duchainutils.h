@@ -28,14 +28,22 @@
 
 #include "../languageexport.h"
 
+class KUrl;
+
 namespace KDevelop {
 
 class Declaration;
+class DUChainBase;
+class SimpleCursor;
+class HashedString;
 
 namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::CodeCompletionModel::CompletionProperties completionProperties(Declaration* dec);
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(Declaration* dec);
+  /** Returns the Declaration/Definition/Use under the cursor, or zero. DUChain does not need to be locked. */
+  KDEVPLATFORMLANGUAGE_EXPORT DUChainBase* itemUnderCursor(const KUrl& url, const SimpleCursor& cursor);
+  KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForItem(DUChainBase* item);
 }
 
 }
