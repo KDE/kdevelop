@@ -63,12 +63,12 @@ void QuickOpenModel::registerProvider( const QStringList& scopes, const QStringL
 
   connect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
 
-  restart();
+  restart(true);
 }
 
 bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provider )
 {
-  restart();
+  restart(true);
   for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
     if( (*it).provider == provider ) {
       m_providers.erase( it );
@@ -115,11 +115,12 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
     }
   }
 
-  restart();
+  restart(true);
 }
 
 void QuickOpenModel::textChanged( const QString& str )
 {
+  m_filterText = str;
   foreach( const ProviderEntry& provider, m_providers )
     if( provider.enabled )
       provider.provider->setFilterText( str );
@@ -129,8 +130,11 @@ void QuickOpenModel::textChanged( const QString& str )
   reset();
 }
 
-void QuickOpenModel::restart()
+void QuickOpenModel::restart(bool keepFilterText)
 {
+  if(!keepFilterText)
+    m_filterText = QString();
+  
   bool anyEnabled = false;
 
   foreach( const ProviderEntry& e, m_providers )
@@ -155,10 +159,14 @@ void QuickOpenModel::restart()
       provider.provider->reset();
   }
 
-  m_cachedData.clear();
-  clearExpanding();
+  if(keepFilterText) {
+    textChanged(m_filterText);
+  }else{
+    m_cachedData.clear();
+    clearExpanding();
 
-  reset();
+    reset();
+  }
 }
 
 void QuickOpenModel::destroyed( QObject* obj )

@@ -55,7 +55,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     void enableProviders( const QStringList& items, const QStringList& scopes );
     
     ///Reset all providers, unexpand everything, empty caches.
-    void restart();
+    void restart(bool keepFilterText = false);
 
     QModelIndex index( int, int, const QModelIndex& parent ) const;
     QModelIndex parent( const QModelIndex& ) const;
@@ -110,6 +110,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
   //typedef QMultiMap< QString, ProviderEntry > ProviderMap;
     typedef QList<ProviderEntry> ProviderList;
     QList<ProviderEntry> m_providers;
+    QString m_filterText;
 };
 
 #endif
