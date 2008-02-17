@@ -452,6 +452,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
 bool PreprocessJob::checkAbort()
 {
+  if(!CppLanguageSupport::self()->environmentManager()) {
+    kDebug(9007) << "Environment-manager disappeared" ;
+    return true;
+  }
     if (CPPParseJob* parent = parentJob()) {
         if (parent->abortRequested()) {
             parent->abortJob();
