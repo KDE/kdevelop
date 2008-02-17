@@ -20,12 +20,12 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
-#include "../languageexport.h"
 
-#include <documentcursorobject.h>
+#include <editor/documentcursorobject.h>
 #include "identifier.h"
 #include "typesystem.h"
 #include "duchainbase.h"
+#include "../languageexport.h"
 
 template<class T>
 class QSet;

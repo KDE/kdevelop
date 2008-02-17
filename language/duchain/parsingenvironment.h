@@ -21,10 +21,10 @@
 
 #include <QtCore/QDateTime>
 
-#include "../languageexport.h"
 #include <ksharedptr.h>
 #include <kurl.h>
-#include <hashedstring.h>
+#include <editor/hashedstring.h>
+#include "../languageexport.h"
 
 namespace KDevelop
 {

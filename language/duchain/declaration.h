@@ -20,10 +20,11 @@
 #define DECLARATION_H
 
 #include <QtCore/QList>
+#include <editor/documentrangeobject.h>
+
 #include "../languageexport.h"
 
 #include "identifier.h"
-#include <documentrangeobject.h>
 #include "typesystem.h"
 #include "duchainbase.h"
 #include "contextowner.h"

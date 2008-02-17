@@ -20,7 +20,7 @@
 #define TOPDUCONTEXT_H
 
 #include "ducontext.h"
-#include "languageexport.h"
+#include "../languageexport.h"
 #include <QtCore/QMutex>
 
 template< class T >

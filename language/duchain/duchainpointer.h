@@ -20,6 +20,7 @@
 #define DUCHAINPOINTER_H
 
 #include <QMetaType>
+#include <ksharedptr.h>
 
 #include "ducontext.h"
 #include "topducontext.h"
@@ -28,7 +29,6 @@
 #include "abstractfunctiondeclaration.h"
 #include "definition.h"
 
-#include <ksharedptr.h>
 #include "../languageexport.h"
 
 //krazy:excludeall=dpointer

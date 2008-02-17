@@ -26,8 +26,8 @@ Boston, MA 02110-1301, USA.
 
 #include <ksharedptr.h>
 
-#include <documentcursor.h>
-#include <documentrange.h>
+#include <editor/documentcursor.h>
+#include <editor/documentrange.h>
 
 namespace KDevelop
 {

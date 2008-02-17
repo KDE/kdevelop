@@ -19,7 +19,7 @@
 #ifndef DEFINITION_H
 #define DEFINITION_H
 
-#include <documentrangeobject.h>
+#include <editor/documentrangeobject.h>
 #include "duchainbase.h"
 #include "../languageexport.h"
 #include "contextowner.h"
