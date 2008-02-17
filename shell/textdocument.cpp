@@ -103,6 +103,15 @@ private:
     TextDocument *m_textDocument;
 };
 
+class TextViewPrivate
+{
+public:
+    TextViewPrivate()
+    {
+        m_view = 0;
+    }
+    QPointer<KTextEditor::View> m_view;
+};
 
 TextDocument::TextDocument(const KUrl &url, ICore* core)
     :PartDocument(url, core), d(new TextDocumentPrivate(this))
@@ -301,25 +310,30 @@ Sublime::View* TextDocument::newView(Sublime::Document* doc)
 }
 
 KDevelop::TextView::TextView(TextDocument * doc)
-    : View(doc)
-    , m_view(0)
+    : View(doc), d( new TextViewPrivate )
 {
+}
+
+KDevelop::TextView::~TextView()
+{
+    delete d;
 }
 
 QWidget * KDevelop::TextView::widget(QWidget * parent)
 {
-    if (!m_view) {
-        m_view = static_cast<KTextEditor::View*>(static_cast<TextDocument*>(document())->createViewWidget(parent));
+    if (!d->m_view) {
+        d->m_view = static_cast<KTextEditor::View*>(static_cast<TextDocument*>(document())->createViewWidget(parent));
+        connect( d->m_view, SIGNAL( destroyed( QObject* ) ), this, SLOT( viewDestroyed( QObject* ) ) );
     }
 
-    return m_view;
+    return d->m_view;
 }
 
 QString KDevelop::TextView::viewState() const
 {
-    if( m_view )
+    if( d->m_view.isNull() )
     {
-        KTextEditor::Cursor cursor = m_view->cursorPosition();
+        KTextEditor::Cursor cursor = d->m_view->cursorPosition();
         return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
     }else
     {
@@ -332,7 +346,7 @@ void KDevelop::TextView::setState(const QString & state)
 {
     static QRegExp re("Cursor=([\\d]+),([\\d]+)");
     if (re.exactMatch(state))
-        m_view->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
+        d->m_view->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
 }
 
 #include "textdocument.moc"

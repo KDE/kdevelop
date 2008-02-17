@@ -70,6 +70,7 @@ class TextView : public Sublime::View
 {
 public:
     TextView(TextDocument* doc);
+    virtual ~TextView();
 
     virtual QWidget *widget(QWidget *parent = 0);
 
@@ -77,7 +78,7 @@ public:
     virtual void setState(const QString& state);
 
 private:
-    KTextEditor::View* m_view;
+    class TextViewPrivate* const d;
 };
 
 }
