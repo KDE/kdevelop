@@ -69,11 +69,12 @@ public slots:
     void quickOpenClass();
     void quickOpenDeclaration();
     void quickOpenDefinition();
+    void quickOpenNavigate();
   private:
 
     QuickOpenModel* m_model;
     class ProjectFileDataProvider* m_projectFileData;
-    class DUChainItemDataProvider* m_projectItemData;
+    class ProjectItemDataProvider* m_projectItemData;
 };
 
 class QuickOpenWidgetHandler : public QObject {
@@ -83,7 +84,7 @@ class QuickOpenWidgetHandler : public QObject {
    * @param initialItems List of items that should initially be enabled in the quickopen-list. If empty, all are enabled.
    * @param initialScopes List of scopes that should initially be enabled in the quickopen-list. If empty, all are enabled.
    * */
-  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes );
+  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false );
   ~QuickOpenWidgetHandler();
   
   private slots:

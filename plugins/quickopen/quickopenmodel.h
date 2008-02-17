@@ -81,6 +81,9 @@ class QuickOpenModel : public ExpandingWidgetModel {
     virtual QTreeView* treeView() const;
 
     virtual QSet<KDevelop::HashedString> fileSet() const;
+
+    ///This value will be added to the height of all created expanding-widgets
+    void setExpandingWidgetHeightIncrease(int pixels);
   public slots:
     void textChanged( const QString& str );
   private slots:
@@ -111,6 +114,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     typedef QList<ProviderEntry> ProviderList;
     QList<ProviderEntry> m_providers;
     QString m_filterText;
+    int m_expandingWidgetHeightIncrease;
 };
 
 #endif

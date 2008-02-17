@@ -56,6 +56,7 @@
 #include "quickopenmodel.h"
 #include "projectfilequickopen.h"
 #include "projectitemquickopen.h"
+#include "declarationlistquickopen.h"
 
 using namespace KDevelop;
 
@@ -95,7 +96,7 @@ QString cursorItemText() {
   return decl->qualifiedIdentifier().toString();
 }
 
-QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes ) : QObject( d ), m_dialog(d), m_model(model) {
+QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly ) : QObject( d ), m_dialog(d), m_model(model) {
 
   o.setupUi( d );
   o.list->header()->hide();
@@ -104,47 +105,55 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
 
   o.list->setItemDelegate( new ExpandingDelegate( m_model, o.list ) );
 
-  QStringList allTypes = m_model->allTypes();
-  QStringList allScopes = m_model->allScopes();
+  if(!listOnly) {
+    QStringList allTypes = m_model->allTypes();
+    QStringList allScopes = m_model->allScopes();
 
-  QVBoxLayout *itemsLayout = new QVBoxLayout;
-  
-  foreach( QString type, allTypes )
-  {
-    QCheckBox* check = new QCheckBox( type );
-    itemsLayout->addWidget( check );
-
-    if( initialItems.isEmpty() || initialItems.contains( type ) )
-      check->setCheckState( Qt::Checked );
-    else
-      check->setCheckState( Qt::Unchecked );
-  
-    connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
-  }
-
-  itemsLayout->addStretch( 1 );
-  o.itemsGroup->setLayout( itemsLayout );
+    QVBoxLayout *itemsLayout = new QVBoxLayout;
     
-  QVBoxLayout *scopesLayout = new QVBoxLayout;
-  
-  foreach( QString scope, allScopes )
-  {
-    QCheckBox* check = new QCheckBox( scope );
-    scopesLayout->addWidget( check );
-    
-    if( initialScopes.isEmpty() || initialScopes.contains( scope ) )
-      check->setCheckState( Qt::Checked );
-    else
-      check->setCheckState( Qt::Unchecked );
-  
-    connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
-  }
+    foreach( QString type, allTypes )
+    {
+      QCheckBox* check = new QCheckBox( type );
+      itemsLayout->addWidget( check );
 
-  scopesLayout->addStretch( 1 );
-  o.scopeGroup->setLayout( scopesLayout );
-  
+      if( initialItems.isEmpty() || initialItems.contains( type ) )
+        check->setCheckState( Qt::Checked );
+      else
+        check->setCheckState( Qt::Unchecked );
+    
+      connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
+    }
+
+    itemsLayout->addStretch( 1 );
+    o.itemsGroup->setLayout( itemsLayout );
+      
+    QVBoxLayout *scopesLayout = new QVBoxLayout;
+    
+    foreach( QString scope, allScopes )
+    {
+      QCheckBox* check = new QCheckBox( scope );
+      scopesLayout->addWidget( check );
+      
+      if( initialScopes.isEmpty() || initialScopes.contains( scope ) )
+        check->setCheckState( Qt::Checked );
+      else
+        check->setCheckState( Qt::Unchecked );
+    
+      connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
+    }
+
+    scopesLayout->addStretch( 1 );
+    o.scopeGroup->setLayout( scopesLayout );
+  }else{
+    o.searchLine->hide();
+    o.searchLabel->hide();
+    o.list->setFocusPolicy(Qt::StrongFocus);
+    o.scopeGroup->hide();
+    o.itemsGroup->hide();
+  }
   o.searchLine->installEventFilter( this );
   o.list->installEventFilter( this );
+  o.buttonBox->installEventFilter( this );
 
   connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
   connect( d, SIGNAL(accepted()), this, SLOT(accept()) );
@@ -159,8 +168,9 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
   o.list->setModel( m_model );
 
   o.list->setColumnWidth( 0, 20 );
-  
-  o.searchLine->setText(cursorItemText());
+
+  if(!listOnly)
+    o.searchLine->setText(cursorItemText());
   d->show();
 
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
@@ -377,6 +387,11 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
   
+    QAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
+    quickOpenNavigate->setText( i18n("Navigate Declaration") );
+    quickOpenNavigate->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_N );
+    connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
+  
     {
       m_projectFileData = new ProjectFileDataProvider();
       QStringList scopes, items;
@@ -385,10 +400,10 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
       m_model->registerProvider( scopes, items, m_projectFileData );
     }
     {
-      m_projectItemData = new DUChainItemDataProvider(this);
+      m_projectItemData = new ProjectItemDataProvider(this);
       QStringList scopes, items;
       scopes << i18n("Project");
-      items << DUChainItemDataProvider::supportedItemTypes();
+      items << ProjectItemDataProvider::supportedItemTypes();
       m_model->registerProvider( scopes, items, m_projectItemData );
     }
 }
@@ -497,6 +512,37 @@ void QuickOpenPlugin::quickOpenDefinition()
 
   lock.unlock();
   core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+}
+
+void QuickOpenPlugin::quickOpenNavigate()
+{
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  Declaration* decl = cursorDeclaration();
+
+  if(!decl) {
+    kDebug() << "Found no declaration for cursor, cannot navigate";
+    return;
+  }
+
+  QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
+
+  d->setAttribute( Qt::WA_DeleteOnClose, true );
+
+  QuickOpenModel* model = new QuickOpenModel( d );
+  model->setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
+
+  QList<DUChainItem> items;
+  DUChainItem item;
+  item.m_item = DeclarationPointer(decl);
+  item.m_text = decl->qualifiedIdentifier().toString();
+  items << item;
+
+  model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
+
+  //Change the parent so there are no conflicts in destruction order
+  model->setParent(new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true ));
+
+  model->setExpanded(model->index(0,0, QModelIndex()), true);
 }
 
 

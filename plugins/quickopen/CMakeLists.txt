@@ -18,6 +18,8 @@ set(kdevquickopen_PART_SRCS
     quickopenplugin.cpp
     quickopenmodel.cpp
     projectfilequickopen.cpp
+    duchainitemquickopen.cpp
+    declarationlistquickopen.cpp
     projectitemquickopen.cpp
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp

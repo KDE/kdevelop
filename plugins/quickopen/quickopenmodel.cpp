@@ -27,9 +27,13 @@
 
 using namespace KDevelop;
 
-QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent )
+QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_expandingWidgetHeightIncrease(0)
 {
+}
 
+void QuickOpenModel::setExpandingWidgetHeightIncrease(int pixels)
+{
+  m_expandingWidgetHeightIncrease = pixels;
 }
 
 QStringList QuickOpenModel::allScopes() const
@@ -230,6 +234,9 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
     case KTextEditor::CodeCompletionModel::ExpandingWidget: {
       QVariant v;
       QWidget* w =  d->expandingWidget();
+      if(w && m_expandingWidgetHeightIncrease)
+        w->resize(w->width(), w->height() + m_expandingWidgetHeightIncrease);
+      
       v.setValue<QWidget*>(w);
       return v;
     }

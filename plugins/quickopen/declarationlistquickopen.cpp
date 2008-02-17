@@ -1,5 +1,6 @@
+
 /* This file is part of the KDE libraries
-   Copyright (C) 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright (C) 2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,29 +16,17 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef PROJECT_ITEM_QUICKOPEN
-#define PROJECT_ITEM_QUICKOPEN
 
-#include "duchainitemquickopen.h"
+#include "declarationlistquickopen.h"
 
-class ProjectItemDataProvider : public DUChainItemDataProvider {
-public:
-  enum ItemTypes {
-    NoItems = 0,
-    Classes = 1,
-    Functions = 2,
-    AllItemTypes = Classes + Functions
-  };
-  
-  ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen );
 
-  virtual void enableData( const QStringList& items, const QStringList& scopes );
+using namespace KDevelop;
 
-  virtual void reset();
+DeclarationListDataProvider::DeclarationListDataProvider( KDevelop::IQuickOpen* quickopen, QList<DUChainItem> items ) : DUChainItemDataProvider( quickopen ), m_items(items) {
+  reset();
+}
 
-  static QStringList supportedItemTypes();
-private:
-  ItemTypes m_itemTypes;
-};
-
-#endif
+void DeclarationListDataProvider::reset() {
+  DUChainItemDataProvider::clearFilter();
+  setItems(m_items);
+}

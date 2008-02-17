@@ -6,6 +6,7 @@
     <Action name="quick_open_file"/>
     <Action name="quick_open_class"/>
     <Action name="quick_open_function"/>
+    <Action name="quick_open_navigate"/>
     <Action name="quick_open_jump_declaration"/>
     <Action name="quick_open_jump_definition"/>
   </Menu>
