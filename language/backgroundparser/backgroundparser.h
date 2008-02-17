@@ -32,7 +32,7 @@
 #include <kurl.h>
 
 #include "../languageexport.h"
-#include <istatus.h>
+#include <interfaces/istatus.h>
 
 class QMutex;
 

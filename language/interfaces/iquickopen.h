@@ -21,7 +21,7 @@
 
 #include <KUrl>
 #include <QSet>
-#include <iextension.h>
+#include <interfaces/iextension.h>
 #include "../languageexport.h"
 
 class QStringList;

@@ -24,8 +24,8 @@
 
 #include <JobSequence.h>
 #include <kurl.h>
+#include <editor/hashedstring.h>
 #include "../languageexport.h"
-#include <hashedstring.h>
 
 
 namespace KDevelop
