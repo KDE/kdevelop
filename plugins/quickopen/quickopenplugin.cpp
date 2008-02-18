@@ -50,6 +50,7 @@
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
 #include <duchain/identifiedtype.h>
+#include <duchain/typesystem.h>
 
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
@@ -80,6 +81,42 @@ Declaration* cursorDeclaration() {
   
   Declaration* decl = DUChainUtils::declarationForItem( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
   return decl;
+}
+
+///The first declaration(or definition's declaration) that belongs to a context that surrounds the current cursor
+Declaration* cursorContextDeclaration() {
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
+  if(!doc)
+    return 0;
+
+  KTextEditor::Document* textDoc = doc->textDocument();
+  if(!textDoc)
+    return 0;
+
+  KTextEditor::View* view = textDoc->activeView();
+  if(!view)
+    return 0;
+
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
+  if(!ctx)
+    return 0;
+  
+  SimpleCursor cursor(view->cursorPosition());
+
+  DUContext* subCtx = ctx->findContext(cursor);
+
+  while(subCtx && !subCtx->owner())
+    subCtx = subCtx->parentContext();
+
+  if(!subCtx || !subCtx->owner())
+    return 0;
+
+  if(subCtx->owner()->asDefinition())
+    return subCtx->owner()->asDefinition()->declaration();
+  else
+    return subCtx->owner()->asDeclaration();
 }
 
 QString cursorItemText() {
@@ -392,6 +429,10 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
   
+    QAction* quickOpenNavigateFunctions = actions->addAction("quick_open_navigate_function_definitions");
+    quickOpenNavigateFunctions->setText( i18n("Navigate Function Definitions") );
+    quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
+    connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
     {
       m_projectFileData = new ProjectFileDataProvider();
       QStringList scopes, items;
@@ -545,6 +586,165 @@ void QuickOpenPlugin::quickOpenNavigate()
   model->setExpanded(model->index(0,0, QModelIndex()), true);
 }
 
+class DUChainItemFilter {
+public:
+  //Both should return whether processing should be continued
+  virtual bool accept(Declaration* decl) = 0;
+  virtual bool accept(DUContext* ctx) = 0;
+  virtual ~DUChainItemFilter() {
+  }
+};
+
+void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFilter& filter ) {
+
+  QList<DUContext*> children = context->childContexts();
+  QList<Declaration*> localDeclarations = context->localDeclarations();
+  QList<Definition*> localDefinitions = context->localDefinitions();
+
+  QList<DUContext*>::const_iterator childIt = children.begin();
+  QList<Declaration*>::const_iterator declIt = localDeclarations.begin();
+  QList<Definition*>::const_iterator defIt = localDefinitions.begin();
+
+  while(childIt != children.end() || declIt != localDeclarations.end() || defIt != localDefinitions.end()) {
+
+    DUContext* child = 0;
+    if(childIt != children.end())
+      child = *childIt;
+
+    Declaration* decl = 0;
+    if(declIt != localDeclarations.end())
+      decl = *declIt;
+
+    Definition* def = 0;
+    if(defIt != localDefinitions.end())
+      def = *defIt;
+
+    if(decl) {
+      if(child && child->range().start >= decl->range().start)
+        child = 0;
+      if(def && def ->range().start >= decl->range().start)
+        def = 0;
+    }
+    
+    if(def) {
+      if(child && child->range().start >= def->range().start)
+        child = 0;
+      if(decl && decl->range().start >= def->range().start)
+        decl = 0;
+    }
+
+    if(child) {
+      if(decl && decl->range().start >= child->range().start)
+        decl = 0;
+      if(def && def ->range().start >= child->range().start)
+        def = 0;
+    }
+    
+    if(child) {
+      if( filter.accept(child) )
+        collectItems(items, child, filter);
+      ++childIt;
+      continue;
+    }
+
+    if(decl) {
+      if( filter.accept(decl) ) {
+        DUChainItem item;
+        item.m_item = DeclarationPointer(decl);
+        item.m_text = decl->qualifiedIdentifier().toString();
+        items << item;
+      }
+
+      ++declIt;
+      continue;
+    }
+    
+    if(def) {
+      decl = def->declaration();
+      
+      if( filter.accept(decl) ) {
+        DUChainItem item;
+        item.m_item = DeclarationPointer(decl);
+        item.m_text = decl->qualifiedIdentifier().toString();
+        
+        FunctionType* functionType = dynamic_cast<FunctionType*>(decl->abstractType().data());
+
+        if(functionType) {
+          item.m_text += functionType->partToString(FunctionType::SignatureArguments);
+        }
+        
+        items << item;
+      }
+
+      ++defIt;
+      continue;
+    }
+  }
+}
+
+void QuickOpenPlugin::quickOpenNavigateFunctions()
+{
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
+  if(!doc) {
+    kDebug() << "No active document";
+    return;
+  }
+
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+  TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
+
+  if( !context ) {
+    kDebug() << "Got no standard context";
+    return;
+  }
+  
+  QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
+
+  d->setAttribute( Qt::WA_DeleteOnClose, true );
+
+  QuickOpenModel* model = new QuickOpenModel( d );
+
+  QList<DUChainItem> items;
+
+  class FunctionFilter : public DUChainItemFilter {
+  public:
+    virtual bool accept(Declaration* decl) {
+      if(dynamic_cast<AbstractFunctionDeclaration*>(decl))
+        return true;
+      else
+        return false;
+    }
+    virtual bool accept(DUContext* ctx) {
+      if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global )
+        return true;
+      else
+        return false;
+    }
+  } filter;
+  
+  collectItems( items, context, filter );
+
+  Declaration* cursorDecl = cursorContextDeclaration();
+  if(!cursorDecl)
+    cursorDecl = cursorDeclaration();
+  
+  model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
+
+  //Change the parent so there are no conflicts in destruction order
+  QuickOpenWidgetHandler* handler = new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true );
+  model->setParent(handler);
+
+  //Select the declaration that contains the cursor
+  if(cursorDecl) {
+    int num = 0;
+    foreach(const DUChainItem& item, items) {
+      if(item.m_item.data() == cursorDecl)
+        handler->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
+      ++num;
+    }
+  }
+}
 
 #include "quickopenplugin.moc"
 

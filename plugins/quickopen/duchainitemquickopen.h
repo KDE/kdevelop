@@ -39,7 +39,7 @@ struct DUChainItem {
 
 class DUChainItemData : public KDevelop::QuickOpenDataBase {
   public:
-    DUChainItemData( const DUChainItem& item );
+    DUChainItemData( const DUChainItem& item, bool openDefinition = false );
     
     virtual QString text() const;
     virtual QString htmlDescription() const;
@@ -50,8 +50,10 @@ class DUChainItemData : public KDevelop::QuickOpenDataBase {
     virtual QWidget* expandingWidget() const;
 
     virtual QIcon icon() const;
-    
-  DUChainItem m_item;
+
+private:
+    DUChainItem m_item;
+    bool m_openDefinition;
 };
 
 /**
@@ -62,8 +64,9 @@ class DUChainItemData : public KDevelop::QuickOpenDataBase {
 class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::Filter<DUChainItem> {
   public:
     typedef KDevelop::Filter<DUChainItem> Base;
-  
-    DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen );
+
+    /// When openDefinitions is true, the definitions will be opened if available on execute().
+    DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen, bool openDefinitions = false );
     virtual void setFilterText( const QString& text );
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
@@ -76,6 +79,8 @@ class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual QString itemText( const DUChainItem& data ) const;
 
     KDevelop::IQuickOpen* m_quickopen;
+  private:
+    bool m_openDefinitions;
 };
 
 

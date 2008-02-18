@@ -36,11 +36,14 @@ class Declaration;
 class DUChainBase;
 class SimpleCursor;
 class HashedString;
+class TopDUContext;
 
 namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::CodeCompletionModel::CompletionProperties completionProperties(Declaration* dec);
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(Declaration* dec);
+  /** Asks the language-plugins for standard-contexts for the given url, and returns one if available. */
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url);
   /** Returns the Declaration/Definition/Use under the cursor, or zero. DUChain does not need to be locked. */
   KDEVPLATFORMLANGUAGE_EXPORT DUChainBase* itemUnderCursor(const KUrl& url, const SimpleCursor& cursor);
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForItem(DUChainBase* item);

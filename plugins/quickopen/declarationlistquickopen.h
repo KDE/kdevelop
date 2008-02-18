@@ -27,7 +27,7 @@ namespace KDevelop {
 
 class DeclarationListDataProvider : public DUChainItemDataProvider {
 public:
-  DeclarationListDataProvider( KDevelop::IQuickOpen* quickopen, QList<DUChainItem> items );
+  DeclarationListDataProvider( KDevelop::IQuickOpen* quickopen, QList<DUChainItem> items, bool openDefinitions = false );
   
   virtual void reset();
 private:

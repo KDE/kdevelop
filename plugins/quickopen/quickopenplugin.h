@@ -70,6 +70,7 @@ public slots:
     void quickOpenDeclaration();
     void quickOpenDefinition();
     void quickOpenNavigate();
+    void quickOpenNavigateFunctions();
   private:
 
     QuickOpenModel* m_model;
@@ -99,8 +100,9 @@ class QuickOpenWidgetHandler : public QObject {
   
   virtual bool eventFilter ( QObject * watched, QEvent * event );
   QDialog* m_dialog; //Warning: m_dialog is also the parent
-  Ui::QuickOpen o;
   QuickOpenModel* m_model;
+  public:
+  Ui::QuickOpen o;
 };
 
 #endif // DUCHAINVIEW_PART_H

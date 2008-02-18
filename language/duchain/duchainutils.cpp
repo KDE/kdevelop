@@ -210,8 +210,7 @@ QIcon DUChainUtils::iconForDeclaration(Declaration* dec)
   return iconForProperties(completionProperties(dec));
 }
 
-DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
-{
+TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
   KDevelop::TopDUContext* chosen = 0;
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
@@ -219,7 +218,14 @@ DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
   foreach( KDevelop::ILanguage* language, languages)
     if(!chosen)
       chosen = language->languageSupport()->standardContext(url);
+  
+  return chosen;
+}
 
+DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
+{
+  KDevelop::TopDUContext* chosen = standardContextForUrl(url);
+  
   if( chosen )
   {
     DUContext* ctx = chosen->findContextAt(c);

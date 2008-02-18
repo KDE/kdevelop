@@ -31,7 +31,7 @@
 
 using namespace KDevelop;
 
-DUChainItemData::DUChainItemData( const DUChainItem& file ) : m_item(file) {
+DUChainItemData::DUChainItemData( const DUChainItem& file, bool openDefinition ) : m_item(file), m_openDefinition(openDefinition) {
 }
 
 QString DUChainItemData::text() const {
@@ -57,8 +57,17 @@ bool DUChainItemData::execute( QString& /*filterText*/ ) {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   if(!m_item.m_item)
     return false;
+
+  KUrl url = KUrl(m_item.m_item->url().str());
+  KTextEditor::Cursor cursor = m_item.m_item->range().textRange().start();
+
+  if(m_openDefinition && m_item.m_item->definition()) {
+    url = KUrl(m_item.m_item->definition()->url().str());
+    cursor = m_item.m_item->definition()->range().textRange().start();
+  }
   
-  ICore::self()->documentController()->openDocument( KUrl(m_item.m_item->url().str()), m_item.m_item->range().textRange().start() );
+  lock.unlock();
+  ICore::self()->documentController()->openDocument( url, cursor );
   return true;
 }
 
@@ -83,7 +92,7 @@ QIcon DUChainItemData::icon() const {
   return QIcon();
 }
 
-DUChainItemDataProvider::DUChainItemDataProvider( IQuickOpen* quickopen ) : m_quickopen(quickopen) {
+DUChainItemDataProvider::DUChainItemDataProvider( IQuickOpen* quickopen, bool openDefinitions ) : m_quickopen(quickopen), m_openDefinitions(openDefinitions) {
   reset();
 }
 
@@ -103,7 +112,7 @@ QList<KDevelop::QuickOpenDataPointer> DUChainItemDataProvider::data( uint start,
   
   for( uint a = start; a < end; a++ ) {
     DUChainItem f( Base::filteredItems()[a] );
-    ret << KDevelop::QuickOpenDataPointer( new DUChainItemData( Base::filteredItems()[a] ) );
+    ret << KDevelop::QuickOpenDataPointer( new DUChainItemData( Base::filteredItems()[a], m_openDefinitions ) );
   }
 
   return ret;
