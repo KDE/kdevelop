@@ -88,7 +88,6 @@ public:
 
   bool isEmpty() const;
 
-#ifndef KDE_NO_DEBUG_OUTPUT
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -97,11 +96,6 @@ public:
     return s;
   }
 
-  /**
-    * Non-debug stream operator; does nothing.
-    */
-  inline friend kndbgstream& operator<< (kndbgstream& s, const Identifier&) { return s; }
-#endif
 private:
   void prepareWrite();
   KSharedPtr<IdentifierPrivate> d;
@@ -208,11 +202,6 @@ public:
   
   ///The hash does not respect explicitlyGlobal, only the real scope.
   HashType hash() const;
-
-  /**
-    * Non-debug stream operator; does nothing.
-    */
-  inline friend kndbgstream& operator<< (kndbgstream& s, const QualifiedIdentifier&) { return s; }
 
 protected:
   void prepareWrite();
