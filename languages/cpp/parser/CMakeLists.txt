@@ -33,4 +33,4 @@ set(kdevcppparser_LIB_SRCS
 #       to the plugin target
 kde4_add_library(kdev4cppparser SHARED ${kdevcppparser_LIB_SRCS})
 target_link_libraries(kdev4cppparser ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} kdev4cpprpp )
-install(TARGETS kdev4cppparser DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kdev4cppparser DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
