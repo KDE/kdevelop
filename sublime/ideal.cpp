@@ -41,6 +41,7 @@ IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     : QToolButton(parent), _area(area)
 {
     setCheckable(true);
+    setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     if (orientation() == Qt::Vertical)
