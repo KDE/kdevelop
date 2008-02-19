@@ -23,4 +23,4 @@ kde4_add_library(diff2 SHARED ${diff2_PART_SRCS})
 
 target_link_libraries(diff2  ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
 
-install(TARGETS diff2 DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS diff2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})

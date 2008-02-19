@@ -16,7 +16,7 @@ set(kdevplatformeditor_LIB_SRCS
 kde4_add_library(kdevplatformeditor SHARED ${kdevplatformeditor_LIB_SRCS})
 target_link_libraries(kdevplatformeditor ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS})
 set_target_properties(kdevplatformeditor PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformeditor DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kdevplatformeditor DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 

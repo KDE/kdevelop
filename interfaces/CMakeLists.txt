@@ -24,7 +24,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
 target_link_libraries(kdevplatforminterfaces ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} )
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
-install(TARGETS kdevplatforminterfaces DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kdevplatforminterfaces DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     context.h

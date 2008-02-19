@@ -49,7 +49,7 @@ kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES}
     kdevplatforminterfaces kdevplatformeditor)
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
-install(TARGETS kdevplatformlanguage DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kdevplatformlanguage DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
