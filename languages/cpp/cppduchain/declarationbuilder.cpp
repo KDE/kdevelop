@@ -300,16 +300,18 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
               return;
             }
           }
-          //We do not want unresolved definitions to hide declarations.
-          //As declarations are named by Identifiers, not by QualifiedIdentifiers,
-          //they would be named by only one part of their scope, and thus be wrong anyway.
-          Declaration* oldDec = currentDeclaration();
-          abortDeclaration();
-          delete oldDec;
-          kDebug(9007) << "No declaration found for definition " << id << ", discarding definition";
+          if(id.count() > 1) {
+            //We do not want unresolved definitions to hide declarations.
+            //As declarations are named by Identifiers, not by QualifiedIdentifiers,
+            //they would be named by only one part of their scope, and thus be wrong anyway.
+            Declaration* oldDec = currentDeclaration();
+            abortDeclaration();
+            delete oldDec;
+            kDebug(9007) << "No declaration found for definition " << id << ", discarding definition";
 
-          node->parameter_declaration_clause = parameter_declaration_clause_backup;
-          return;
+            node->parameter_declaration_clause = parameter_declaration_clause_backup;
+            return;
+          }
         }
       }
     }
