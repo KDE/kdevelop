@@ -536,7 +536,15 @@ class NavigationContext : public KShared {
 
         if( idType ) {
           if( idType->declaration() ) {
-            makeLink( type->toString(), DeclarationPointer(idType->declaration()), NavigationAction::NavigateDeclaration );
+
+            //Remove the last template-identifiers, because we create those directly
+            QualifiedIdentifier id = idType->identifier();
+            Identifier lastId = id.last();
+            id.pop();
+            lastId.clearTemplateIdentifiers();
+            id.push(lastId);
+
+            makeLink(id.toString() , DeclarationPointer(idType->declaration()), NavigationAction::NavigateDeclaration );
           } else {
             m_currentText += Qt::escape(type->toString());
           }
