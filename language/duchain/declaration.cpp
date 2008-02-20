@@ -37,6 +37,8 @@
 #include "definition_p.h"
 #include "ducontext_p.h"
 #include "use_p.h"
+#include "declarationid.h"
+#include "definitions.h"
 
 using namespace KTextEditor;
 
@@ -48,7 +50,6 @@ DeclarationPrivate::DeclarationPrivate()
     m_isTypeAlias(false), m_anonymousInContext(false) 
 {
   m_context = 0;
-  m_definition = 0;
   m_kind = Declaration::Instance;
 }
   
@@ -63,7 +64,6 @@ DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChai
   m_isTypeAlias = rhs.m_isTypeAlias;
   m_inSymbolTable = false;
   m_context = 0;
-  m_definition = 0;
   m_anonymousInContext = rhs.m_anonymousInContext;
 }
   
@@ -121,9 +121,6 @@ Declaration::~Declaration()
   QList<Use*> _uses = uses();
   foreach (Use* use, _uses)
     use->d_func()->setDeclaration(0);
-
-  if (Definition* def = definition())
-    def->d_func()->setDeclaration(0);
 
   // context is only null in the test cases
   if (context())
@@ -304,9 +301,10 @@ Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) {
 
 DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) const {
   ENSURE_CAN_READ
-  
-  if( definition() )
-    return definition()->internalContext();
+
+  Definition* def = definition();
+  if( def )
+    return def->internalContext();
 
   if( d_func()->m_isTypeAlias ) {
     ///If this is a type-alias, return the internal context of the actual type.
@@ -343,6 +341,7 @@ bool Declaration::isDefinition() const
 {
   ENSURE_CAN_READ
   Q_D(const Declaration);
+
   return d->m_isDefinition;
 }
 
@@ -351,9 +350,9 @@ void Declaration::setDeclarationIsDefinition(bool dd)
   ENSURE_CAN_WRITE
   Q_D(Declaration);
   d->m_isDefinition = dd;
-  if (d->m_isDefinition && definition()) {
-    setDefinition(0);
-  }
+//   if (d->m_isDefinition && definition()) {
+//     setDefinition(0);
+//   }
 }
 
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
@@ -370,28 +369,19 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
 Definition* Declaration::definition() const
 {
   ENSURE_CAN_READ
-  Q_D(const Declaration);
-  return d->m_definition;
+  
+  DeclarationId id(url(), qualifiedIdentifier(), additionalIdentity());
+
+  return DUChain::definitions()->definition(id);
 }
 
 void Declaration::setDefinition(Definition* definition)
 {
   ENSURE_CAN_WRITE
-  Q_D(Declaration);
-  if (d->m_definition) {
-    d->m_definition->d_func()->setDeclaration(0);
 
-    //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, d->m_definition);
-  }
+  DeclarationId id(url(), qualifiedIdentifier(), additionalIdentity());
 
-  d->m_definition = definition;
-
-  if (d->m_definition) {
-    d->m_definition->d_func()->setDeclaration(this);
-    d->m_isDefinition = false;
-
-    //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, d->m_definition);
-  }
+  DUChain::definitions()->setDefinition(id, definition);
 }
 
 bool Declaration::inSymbolTable() const
@@ -432,6 +422,11 @@ Declaration* Declaration::clone() const  {
 bool Declaration::isForwardDeclaration() const
 {
   return false;
+}
+
+uint Declaration::additionalIdentity() const
+{
+  return 0;
 }
 
 

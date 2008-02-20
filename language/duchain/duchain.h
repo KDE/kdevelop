@@ -39,6 +39,7 @@ class IdentifiedFile;
 class ParsingEnvironmentManager;
 class ParsingEnvironment;
 class ParsingEnvironmentFile;
+class Definitions;
 
 /**
  * Holds references to all top level source file contexts.
@@ -104,6 +105,9 @@ public:
 
   static DUChain* self();
 
+  /// Returns the structure that manages mapping between definitions and declarations
+  static Definitions* definitions();
+  
   /**
    * Retrieve the read write lock for the entire definition-use chain.
    * To call non-const methods, you must be holding a write lock.

@@ -48,11 +48,13 @@ struct DumpDotGraphPrivate {
   
   QMap<KUrl,QString> m_hadVersions;
   QMap<KDevelop::DUChainBase*, bool> m_hadObjects;
+  TopDUContext* m_topContext;
 };
 
 QString DumpDotGraph::dotGraph(KDevelop::DUContext* context, bool shortened ) {
   d->m_hadObjects.clear();
   d->m_hadVersions.clear();
+  d->m_topContext = context->topContext(); ///@todo maybe get this as a parameter
   return d->dotGraphInternal(context, true, shortened);
 }
 
@@ -86,11 +88,11 @@ void DumpDotGraphPrivate::addDefinition(QTextStream& stream, Definition* def) {
 
   m_hadObjects[def] = true;
   
-  stream << shortLabel(def) <<  "[shape=regular,color=yellow,label=\"" << (def->declaration() ? def->declaration()->toString() : QString("no declaration")) << " "<< rangeToString(def->range().textRange()) <<  "\"];\n";
+  stream << shortLabel(def) <<  "[shape=regular,color=yellow,label=\"" << (def->declaration(m_topContext) ? def->declaration(m_topContext)->toString() : QString("no declaration")) << " "<< rangeToString(def->range().textRange()) <<  "\"];\n";
   stream << shortLabel(def->context()) << " -> " << shortLabel(def) << ";\n";
-  if( def->declaration() ) {
-    stream << shortLabel(def) << " -> " << shortLabel(def->declaration()) << "[label=\"defines\",color=green];\n";
-    addDeclaration(stream, def->declaration());
+  if( def->declaration(m_topContext) ) {
+    stream << shortLabel(def) << " -> " << shortLabel(def->declaration(m_topContext)) << "[label=\"defines\",color=green];\n";
+    addDeclaration(stream, def->declaration(m_topContext));
   }
 
   if( def->internalContext() )

@@ -71,5 +71,13 @@ QString FunctionDeclaration::toString() const {
   return QString("function %1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
 }
 
+uint FunctionDeclaration::additionalIdentity() const
+{
+  if(abstractType())
+    return abstractType()->hash();
+  else
+    return 0;
+}
+
 }
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

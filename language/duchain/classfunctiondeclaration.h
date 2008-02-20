@@ -68,6 +68,8 @@ public:
   virtual void setAbstractType(AbstractType::Ptr type);
 
   virtual Declaration* clone() const;
+  
+  virtual uint additionalIdentity() const;
 protected:
   ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs);
 private:

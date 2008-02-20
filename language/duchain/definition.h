@@ -29,6 +29,7 @@ namespace KDevelop
 
 class Declaration;
 class DUContext;
+class TopDUContext;
 class DefinitionPrivate;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
@@ -47,8 +48,9 @@ public:
 
   /**
    * Retrieve the declaration for this use.
+   * @param topContext The top-context from where this is triggered.
    */
-  Declaration* declaration() const;
+  Declaration* declaration(TopDUContext* topContext = 0) const;
 
 private:
   Q_DECLARE_PRIVATE(Definition)

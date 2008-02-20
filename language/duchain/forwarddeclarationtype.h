@@ -31,6 +31,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclarationType : public AbstractType, 
 
   ///Returns the resolved type, or this if it could not be resolved.
   AbstractType::Ptr resolve(const TopDUContext* topContext) const;
+
+  virtual uint hash() const;
   
   virtual bool equals(const AbstractType* rhs) const;
   virtual QString toString() const;

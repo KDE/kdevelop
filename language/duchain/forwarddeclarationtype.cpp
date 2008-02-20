@@ -63,3 +63,7 @@ AbstractType::Ptr ForwardDeclarationType::resolve(const TopDUContext* topContext
   }
   return AbstractType::Ptr(const_cast<ForwardDeclarationType*>(this));
 }
+
+uint ForwardDeclarationType::hash() const {
+  return identifier().hash();
+}

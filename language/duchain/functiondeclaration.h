@@ -43,6 +43,8 @@ public:
   virtual Declaration* clone() const;
 
   virtual QString toString() const;
+
+  virtual uint additionalIdentity() const;
 private:
   Q_DECLARE_PRIVATE(FunctionDeclaration)
 };

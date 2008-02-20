@@ -114,7 +114,7 @@ Declaration* cursorContextDeclaration() {
     return 0;
 
   if(subCtx->owner()->asDefinition())
-    return subCtx->owner()->asDefinition()->declaration();
+    return subCtx->owner()->asDefinition()->declaration(ctx);
   else
     return subCtx->owner()->asDeclaration();
 }

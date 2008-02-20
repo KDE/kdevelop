@@ -853,10 +853,19 @@ void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
 /*    v->endVisit(this);*/
 }
 
+uint DelayedType::hash() const
+{
+  return d_func()->m_identifier.hash();
+}
 
-/*uint PointerType::hash() const
+uint PointerType::hash() const
 {
   return baseType()->hash() * 13;
+}
+
+uint IntegralType::hash() const
+{
+  return qHash(d_func()->m_name) * 17;
 }
 
 uint ReferenceType::hash() const
@@ -868,7 +877,7 @@ uint FunctionType::hash() const
 {
   uint hash_value = returnType()->hash();
 
-  foreach (const AbstractType::Ptr& t, m_arguments)
+  foreach (const AbstractType::Ptr& t, d_func()->m_arguments)
     hash_value = (hash_value << 5) - hash_value + t->hash();
 
   return hash_value;
@@ -878,7 +887,7 @@ uint StructureType::hash() const
 {
   uint hash_value = 101;
 
-  foreach (const AbstractType::Ptr& t, m_elements)
+  foreach (const AbstractType::Ptr& t, d_func()->m_elements)
     hash_value = (hash_value << 3) - hash_value + t->hash();
 
   return hash_value;
@@ -887,7 +896,7 @@ uint StructureType::hash() const
 uint ArrayType::hash() const
 {
   return elementType()->hash() * 47 * dimension();
-}*/
+}
 
 }
 

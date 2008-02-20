@@ -30,14 +30,8 @@ class Definition;
 class KDEVPLATFORMLANGUAGE_EXPORT DefinitionPrivate : public DUChainBasePrivate
 {
 public:
-  DefinitionPrivate( Definition* d);
+  DefinitionPrivate();
   DUContext* m_context;
-  Declaration* m_declaration;
-  /**
-   * Set the declaration for this use.
-   */
-  void setDeclaration(Declaration* declaration);
-  Definition* m_definition;
 };
 
 }

@@ -28,7 +28,7 @@ namespace  KDevelop {
 ContextOwnerPrivate::ContextOwnerPrivate() : m_internalContext(0) {
   }
   
-ContextOwner::ContextOwner(DUChainBase* self) : d(new ContextOwnerPrivate) {
+ContextOwner::ContextOwner(DUChainBase* /*self*/) : d(new ContextOwnerPrivate) {
 }
 
 ContextOwner::~ContextOwner()

@@ -31,6 +31,7 @@
 #include "parsingenvironment.h"
 #include "declaration.h"
 #include "definition.h"
+#include "definitions.h"
 #include "use.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
@@ -64,6 +65,7 @@ public:
   QMap<IdentifiedFile, TopDUContext*> m_chains;
   QMap<int,ParsingEnvironmentManager*> m_managers;
   DUChainObserver* notifier;
+  Definitions m_definitions;
 
   ParsingEnvironmentManager* managerForType(int type)
   {
@@ -82,8 +84,10 @@ K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 DUChain::DUChain()
 {
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
-  Q_ASSERT(ICore::self()->documentController());
-  connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
+  if(ICore::self()) {
+    Q_ASSERT(ICore::self()->documentController());
+    connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
+  }
 }
 
 DUChain::~DUChain()
@@ -390,6 +394,11 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
     foreach (TopDUContext* chain, chains)
         sc.convertDUChain(chain);
+}
+
+Definitions* DUChain::definitions()
+{
+    return &sdDUChainPrivate->m_definitions;
 }
 
 }

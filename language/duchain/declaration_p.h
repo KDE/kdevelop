@@ -46,8 +46,6 @@ public:
   
   QByteArray m_comment;
 
-  Definition* m_definition;
-
   QList<Use*> m_uses;
 
   Declaration::Kind m_kind;

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -107,6 +108,13 @@ public:
 
   /**
    * Set the definition for this declaration.
+   * 
+   * Definitions and declarations are coupled by identity
+   * rather than by their pointer. When you call this, you will
+   * effectively set the definition for ALL declarations that have:
+   * - The same qualifiedIdentifier()
+   * - Are declared within the same file
+   * - Have the same additionalIdentity() value
    */
   void setDefinition(Definition* definition);
 
@@ -200,6 +208,15 @@ public:
   virtual QString toString() const;
 
   /**
+    * This hash-value should differentiate between multiple different
+    * declarations that have the same qualifiedIdentifier, but should have a different
+    * identity, and thus own Definitions and own Uses assigned.
+    *
+    * Affected by function-arguments, whether this is a template-declaration, etc..
+    * */
+  virtual uint additionalIdentity() const;
+
+  /**
    * Returns a clone of this declaration, with the difference that:
    * - context will be zero
    * - internalContext will be zero
@@ -220,6 +237,7 @@ public:
 protected:
     Declaration( DeclarationPrivate & dd );
     Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range, Scope scope );
+
 private:
   Q_DECLARE_PRIVATE(Declaration)
 };

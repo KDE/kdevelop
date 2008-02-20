@@ -23,35 +23,22 @@
 #include "declaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
+#include "definitions.h"
+
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-DefinitionPrivate::DefinitionPrivate( Definition* d )
-  : m_context(0), m_definition(d)
+DefinitionPrivate::DefinitionPrivate()
+  : m_context(0)
 {
-}
-
-void DefinitionPrivate::setDeclaration(Declaration* declaration)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  //if (m_declaration)
-    //DUChain::definitionChanged(m_definition, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, m_declaration);
-
-  // TODO if declaration is 0, highlight as definition without declaration
-  m_declaration = declaration;
-
-  //if (m_declaration)
-    //DUChain::definitionChanged(m_definition, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, m_declaration);
 }
 
 Definition::Definition(const HashedString& url, const SimpleRange& range, DUContext* context)
-  : DUChainBase(*new DefinitionPrivate(this), url, range)
+  : DUChainBase(*new DefinitionPrivate(), url, range)
   , ContextOwner(this)
 {
-  d_func()->m_declaration = 0;
   if( context )
     setContext(context);
 }
@@ -59,9 +46,6 @@ Definition::Definition(const HashedString& url, const SimpleRange& range, DUCont
 Definition::~Definition()
 {
   setContext(0);
-
-  if (Declaration* dec = declaration())
-    dec->setDefinition(0);
 
   //DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
@@ -90,11 +74,11 @@ void Definition::setContext(DUContext* context)
   }
 }
 
-Declaration* Definition::declaration() const
+Declaration* Definition::declaration(TopDUContext* topContext) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return d_func()->m_declaration;
+  return DUChain::definitions()->declaration(this, topContext ? topContext : this->topContext());
 }
 
 // kate: indent-width 2;

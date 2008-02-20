@@ -150,6 +150,11 @@ public:
    * */
   virtual AbstractType* clone() const = 0;
 
+  /**
+   * A hash-value that should have the following properties:
+   * - When two types match on equals(), it should be same.
+   * - When two types don't match on qualis(), it should be different.
+   * */
   uint hash() const;
 
   enum WhichType {
@@ -201,7 +206,8 @@ public:
 
   virtual QString toString() const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
+  
   virtual WhichType whichType() const;
 
   virtual AbstractType* clone() const;
@@ -231,7 +237,7 @@ public:
 
   virtual QString toString() const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual WhichType whichType() const;
 
@@ -265,7 +271,7 @@ public:
 
   virtual QString toString() const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual WhichType whichType() const;
 
@@ -318,7 +324,7 @@ public:
   ///Creates a string that represents the given part of the signature
   virtual QString partToString( SignaturePart sigPart ) const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual WhichType whichType() const;
 
@@ -355,7 +361,7 @@ public:
 
   virtual QString toString() const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual WhichType whichType() const;
 
@@ -395,7 +401,7 @@ public:
 
   virtual QString toString() const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual WhichType whichType() const;
 
@@ -438,6 +444,8 @@ public:
   Kind kind() const;
   void setKind(Kind kind);
 
+  virtual uint hash() const;
+  
   virtual WhichType whichType() const;
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;
