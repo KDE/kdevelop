@@ -137,6 +137,10 @@ namespace Cpp {
       return new SpecialTemplateDeclaration(*this);
     }
 
+    virtual uint additionalIdentity() const {
+      return BaseDeclaration::additionalIdentity() + 101;
+    }
+    
     //Is specialized for ForwardDeclaration in templatedeclaration.cpp to actively instantiate template forward declarations
     virtual Declaration* resolve(const TopDUContext* /*topContext*/) const {
       Q_ASSERT(0);
