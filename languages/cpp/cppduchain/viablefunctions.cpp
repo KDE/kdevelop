@@ -23,6 +23,7 @@
 #include "duchain/declaration.h"
 #include "duchain/classfunctiondeclaration.h"
 #include "cppduchain/cpptypes.h"
+#include "templatedeclaration.h"
 
 using namespace Cpp;
 
@@ -113,10 +114,10 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
    * - this is a non-template function while other is one
    * - this is a template-function that is more specialized than other
    */
-  if( !m_type->isTemplate() && other.m_type->isTemplate() )
-    return true;
-  if( m_type->isMoreSpecialized( other.m_type.data() ) )
-    return true;
+    if(!dynamic_cast<TemplateDeclaration*>(m_declaration.data()) && dynamic_cast<TemplateDeclaration*>(other.m_declaration.data()))
+      return true;
+//   if( m_type->isMoreSpecialized( other.m_type.data() ) )
+//     return true;
 
   return false;
 }
