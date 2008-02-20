@@ -597,7 +597,7 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
   if (node->parameter_declaration_clause) {
     // New function type
     openType(CppFunctionType::Ptr(openFunction(node)), node);
-    m_importedParentContexts.append(openContext(node, DUContext::Function, node->id));
+    m_importedParentContexts.append(openContext(node->parameter_declaration_clause, DUContext::Function, node->id));
   }
 
   //BEGIN Copied from default visitor
