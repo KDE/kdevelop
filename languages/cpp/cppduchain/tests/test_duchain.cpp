@@ -1049,6 +1049,50 @@ void TestDUChain::testFunctionDefinition() {
   release(top);
 }
 
+void TestDUChain::testFunctionDefinition2() {
+  QByteArray text("class B{B();}; B::B() {} ");
+
+  DUContext* top = parse(text, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 3);
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDefinitions().count(), 1);
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDefinitions()[0]->declaration(top->topContext()));
+
+  QCOMPARE(top->childContexts()[1]->type(), DUContext::Function);
+  QCOMPARE(top->childContexts()[1]->range().start.column, 20);
+  QCOMPARE(top->childContexts()[1]->range().end.column, 20);
+
+  release(top);
+}
+
+void TestDUChain::testFunctionDefinition3() {
+  QByteArray text("class B{template<class T> void test(T t); B(int i); int test(int a); int test(char a); template<class T2, class T3> void test(T2 t, T3 t3); int test(Unknown k); int test(Unknown2 k); }; template<class T> void B::test(T t) {}; B::B(int) {}; int B::test(int a){}; int B::test(char a){}; template<class T2, class T3> void B::test(T2 t, T3 t3) {}; int B::test(Unknown k){}; int B::test( Unknown2 k) {}; ");
+
+  DUContext* top = parse(text, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 17);
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 7);
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDefinitions().count(), 7);
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDefinitions()[0]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[1], top->localDefinitions()[1]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[2], top->localDefinitions()[2]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[3], top->localDefinitions()[3]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[4], top->localDefinitions()[4]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[5], top->localDefinitions()[5]->declaration(top->topContext()));
+
+  release(top);
+}
 void TestDUChain::testBaseClasses() {
   QByteArray text("class A{int aValue; }; class B{int bValue;}; class C : public A{int cValue;}; class D : public A, B {int dValue;}; template<class Base> class F : public Base { int fValue;};");
 

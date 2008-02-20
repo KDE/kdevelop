@@ -87,6 +87,8 @@ private slots:
   void testContextAssignment();
   void testSpecializedTemplates();
   void testFunctionDefinition();
+  void testFunctionDefinition2();
+  void testFunctionDefinition3();
   void testBaseClasses();
   void testForwardDeclaration();
   void testForwardDeclaration2();
