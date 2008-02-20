@@ -143,6 +143,11 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
   }
 }
 
+QString CppEnumerationType::mangled() const
+{
+  return QString("E_%1_%2").arg(CppIntegralType::mangled()).arg(identifier().toString());
+}
+
 bool CppEnumerationType::equals(const AbstractType* _rhs) const
 {
   if( !dynamic_cast<const CppEnumerationType*>(_rhs) && !dynamic_cast<const ForwardDeclarationType*>(_rhs))
@@ -310,6 +315,12 @@ void CppConstantIntegralType::setValue<double>(double value) {
   memcpy(&m_value, &value, sizeof(double));
 }
 
+uint CppConstantIntegralType::hash() const {
+  uint ret = IntegralType::hash();
+  ret += 47 * (uint)m_value + 11*(uint)integralType();
+  return ret;
+}
+
 QString CppConstantIntegralType::toString() const {
   switch(integralType()) {
     case TypeNone:
@@ -445,7 +456,7 @@ QString CppArrayType::toString() const
   return QString("%1%2").arg(cvString()).arg(ArrayType::toString());
 }*/
 
-/*uint CppIntegralType::hash() const
+uint CppIntegralType::hash() const
 {
   return cvHash(IntegralType::hash());
 }
@@ -462,23 +473,23 @@ uint CppReferenceType::hash() const
 
 uint CppFunctionType::hash() const
 {
-  return cvHash(FunctionType::hash());
+  return cvHash(FunctionType::hash()) + 31 * identifier().hash();
 }
 
 uint CppClassType::hash() const
 {
-  uint hash_val = cvHash(StructureType::hash());
+  return identifier().hash();
 
-  foreach (const BaseClassInstance& base, m_baseClasses)
+/*  foreach (const BaseClassInstance& base, m_baseClasses)
     hash_val = (hash_val << 5) - hash_val + base.baseClass->hash() + (base.access + base.virtualInheritance) * 281;
 
-  return hash_val;
+  return hash_val;*/
 }
 
 uint CppTypeAliasType::hash() const
 {
-  return type() ? type()->hash() + 83 : 0;
-}*/
+  return 31 * identifier().hash() + (type() ? type()->hash() + 83 : 0);
+}
 
 QString CppTypeAliasType::toString() const
 {
@@ -540,10 +551,10 @@ QString CppEnumerationType::toString() const
 {
   return "enum " + identifier().toString();
 }
-/*uint CppEnumerationType::hash() const
+uint CppEnumerationType::hash() const
 {
-  return reinterpret_cast<long>(this);
-}*/
+  return identifier().hash();
+}
 
 QString CppIntegralType::mangled() const
 {
@@ -588,7 +599,7 @@ QString CppIntegralType::mangled() const
       ret += '?';
       break;
   }
-  return ret;
+  return ret + cvMangled();
 }
 
 QString CppCVType::cvMangled() const
@@ -603,7 +614,7 @@ QString CppCVType::cvMangled() const
 
 QString CppPointerType::mangled() const
 {
-  QString ret = "P";
+  QString ret = "P" + cvMangled();
   if (baseType())
     ret += baseType()->mangled();
   return ret;
@@ -611,7 +622,7 @@ QString CppPointerType::mangled() const
 
 QString CppReferenceType::mangled() const
 {
-  QString ret = "R";
+  QString ret = "R" + cvMangled();
   if (baseType())
     ret += baseType()->mangled();
   return ret;
@@ -619,24 +630,15 @@ QString CppReferenceType::mangled() const
 
 QString CppClassType::mangled() const
 {
-  return idMangled();
+  return idMangled() + cvMangled();
 }
 
 QString CppTypeAliasType::mangled() const
 {
   if( type() )
-    return "TA" + type()->mangled();
+    return "TA" + type()->mangled() + cvMangled();
   else
-    return "TA";
-}
-
-bool CppFunctionType::isTemplate() const {
-  return false;
-}
-
-bool CppFunctionType::isMoreSpecialized( const CppFunctionType* other ) const {
-  Q_UNUSED(other)
-  return false;
+    return "TA" + cvMangled();
 }
 
 QString CppFunctionType::mangled() const
@@ -684,3 +686,8 @@ void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
     v->visit(this);
 /*    v->endVisit(this);*/
 }
+
+uint CppTemplateParameterType::hash() const {
+  return 41*identifier().hash();
+}
+

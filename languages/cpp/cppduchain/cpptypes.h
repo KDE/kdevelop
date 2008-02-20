@@ -65,7 +65,7 @@ public:
   QString cvString() const;
   QString cvMangled() const;
 
-  //uint cvHash(uint input) const { return input; }
+  uint cvHash(uint input) const { return input + (m_constant ? 7 : 0) + (m_volatile ? 3 : 0); }
 
   KDevelop::Declaration::CVSpecs cv() const { return static_cast<KDevelop::Declaration::CVSpecs>((m_constant & KDevelop::Declaration::Const) | (m_volatile & KDevelop::Declaration::Volatile)); }
 
@@ -117,7 +117,7 @@ public:
 
   virtual QString mangled() const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual AbstractType* clone() const;
 
@@ -168,6 +168,8 @@ public:
 
   virtual AbstractType* clone() const;
 
+  virtual uint hash() const;
+  
   CppConstantIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
 private:
   qint64 m_value;
@@ -180,20 +182,11 @@ class KDEVCPPDUCHAIN_EXPORT CppFunctionType : public KDevelop::FunctionType, pub
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
 
-  ///@todo implement these
-  /** @return whether this is a template-function
-   * */
-  bool isTemplate() const;
-
-  /** @return whether this function is a specialization of the given function, or whether they are specialized from the same function and this is more specialized.
-   * */
-  bool isMoreSpecialized( const CppFunctionType* other ) const;
-  
   ///Declarations of this class(@see KDevelop::IdentifiedType::declaration()) are guaranteed to be based on AbstractFunctionDeclaration
   
   virtual QString toString() const;
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual QString mangled() const;
 
@@ -216,7 +209,8 @@ public:
   virtual AbstractType* clone() const;
   
   virtual bool equals(const AbstractType* rhs) const;
-  //virtual uint hash() const;
+
+  virtual uint hash() const;
 };
 
 class KDEVCPPDUCHAIN_EXPORT CppReferenceType : public KDevelop::ReferenceType, public CppCVType
@@ -233,7 +227,8 @@ public:
   virtual AbstractType* clone() const;
   
   virtual bool equals(const AbstractType* rhs) const;
-  //virtual uint hash() const;
+
+  virtual uint hash() const;
 };
 
 class KDEVCPPDUCHAIN_EXPORT CppClassType : public KDevelop::StructureType, public KDevelop::IdentifiedType, public CppCVType
@@ -276,7 +271,7 @@ public:
   /// Error if the type is closed.
   virtual void addElement(KDevelop::AbstractType::Ptr element);
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual QString toString() const;
 
@@ -316,7 +311,7 @@ public:
   KDevelop::AbstractType::Ptr type() const;
   void setType(KDevelop::AbstractType::Ptr type);
 
-  //virtual uint hash() const;
+  virtual uint hash() const;
 
   virtual QString toString() const;
 
@@ -353,12 +348,15 @@ public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
 
   CppEnumerationType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
-  //virtual uint hash() const;
+
+  virtual uint hash() const;
 
   virtual AbstractType* clone() const;
   
   virtual bool equals(const AbstractType* rhs) const;
 
+  virtual QString mangled() const;
+  
   virtual QString toString() const;
 };
 
@@ -373,20 +371,6 @@ public:
   
   virtual bool equals(const AbstractType* rhs) const;
 };
-
-/*class CppTemplateParameterType : public
-{
-public:
-  TypeInfo type() const;
-  void setType(const TypeInfo &type);
-
-  bool defaultValue() const;
-  void setDefaultValue(bool defaultValue);
-
-private:
-  TypeInfo m_type;
-  bool m_defaultValue;
-};*/
 
 /**
  * This class represents a template-parameter on the type-level(it is strictly attached to a template-declaration)
@@ -407,6 +391,8 @@ public:
   virtual AbstractType* clone() const;
   
   virtual bool equals(const AbstractType* rhs) const;
+
+  virtual uint hash() const;
   
   protected:
   virtual void accept0 (KDevelop::TypeVisitor *v) const;
