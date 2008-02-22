@@ -155,7 +155,7 @@ public:
    * - When two types match on equals(), it should be same.
    * - When two types don't match on qualis(), it should be different.
    * */
-  uint hash() const;
+  virtual uint hash() const;
 
   enum WhichType {
     TypeAbstract,
@@ -454,7 +454,7 @@ public:
 };
 
 template <class T>
-uint qHash(const KSharedPtr<T>& type) { return type->hash(); }
+uint qHash(const KSharedPtr<T>& type) { return (uint)type.data(); }
 
 }
 

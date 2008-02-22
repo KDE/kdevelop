@@ -860,7 +860,7 @@ uint DelayedType::hash() const
 
 uint PointerType::hash() const
 {
-  return baseType()->hash() * 13;
+  return (baseType() ? baseType()->hash() : 0) * 13;
 }
 
 uint IntegralType::hash() const
@@ -870,15 +870,18 @@ uint IntegralType::hash() const
 
 uint ReferenceType::hash() const
 {
-  return baseType()->hash() * 29;
+  return (baseType() ? baseType()->hash() : 1) * 29;
 }
 
 uint FunctionType::hash() const
 {
-  uint hash_value = returnType()->hash();
+  uint hash_value = 0;
+  if(returnType())
+    hash_value += returnType()->hash();
 
-  foreach (const AbstractType::Ptr& t, d_func()->m_arguments)
-    hash_value = (hash_value << 5) - hash_value + t->hash();
+  foreach (const AbstractType::Ptr& t, d_func()->m_arguments) {
+    hash_value = (hash_value << 5) - hash_value + (t ? t->hash() : 0);
+  }
 
   return hash_value;
 }
@@ -888,14 +891,14 @@ uint StructureType::hash() const
   uint hash_value = 101;
 
   foreach (const AbstractType::Ptr& t, d_func()->m_elements)
-    hash_value = (hash_value << 3) - hash_value + t->hash();
+    hash_value = (hash_value << 3) - hash_value + (t ? t->hash() : 0);
 
   return hash_value;
 }
 
 uint ArrayType::hash() const
 {
-  return elementType()->hash() * 47 * dimension();
+  return (elementType() ? elementType()->hash() : 0) * 47 * dimension();
 }
 
 }
