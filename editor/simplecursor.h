@@ -77,4 +77,8 @@ struct KDEVPLATFORMEDITOR_EXPORT SimpleCursor {
 };
 }
 
+inline uint qHash(const KDevelop::SimpleCursor& cursor) {
+    return cursor.line * 53 + cursor.column * 47;
+}
+
 #endif
