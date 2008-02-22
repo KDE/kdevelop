@@ -29,6 +29,11 @@
 
 #include "duchainpointer.h"
 #include "simplecursor.h"
+#include "use.h"
+
+namespace KTextEditor {
+  class SmartRange;
+}
 
 namespace KDevelop{
 class DUContext;
@@ -56,12 +61,29 @@ public:
   DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
   
   QList<Definition*> m_localDefinitions;
-  QList<Use*> m_uses;
-  QList<Use*> m_orphanUses;
+
+  /**
+   * Vector of all uses in this document
+   * Mutable for synchronization
+   * */
+  mutable QVector<Use> m_uses;
+
+  /**
+   * If this document is loaded, this contains a smart-range for each use.
+   * This may temporarily contain zero ranges.
+   * */
+  mutable QVector<KTextEditor::SmartRange*> m_rangesForUses;
+
+  //Synchronizes the use-ranges from the smart-ranges
+  void synchronizeUsesFromSmart() const;
+  //Synchronizes the smart-ranges from the use-ranges
+  void synchronizeUsesToSmart() const;
+  
   DUContext* m_context;
   bool m_inSymbolTable : 1;
   bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
   bool m_propagateDeclarations : 1;
+  mutable bool m_rangesChanged : 1;
     /**
    * Adds a child context.
    *
@@ -84,9 +106,6 @@ public:
    * @return Whether a declaration was removed
    * */
   bool removeDeclaration(Declaration* declaration);
-
-  void addUse(Use* use);
-  void removeUse(Use* use);
 
   /**
    * This propagates the declaration into the parent search-hashes,

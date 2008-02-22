@@ -44,7 +44,8 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(Declaration* dec);
   /** Asks the language-plugins for standard-contexts for the given url, and returns one if available. */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url);
-  /** Returns the Declaration/Definition/Use under the cursor, or zero. DUChain does not need to be locked. */
+  /** Returns the Declaration/Definition under the cursor, or zero. DUChain does not need to be locked.
+   * If the item under the cursor is a use, the declaration is returned. */
   KDEVPLATFORMLANGUAGE_EXPORT DUChainBase* itemUnderCursor(const KUrl& url, const SimpleCursor& cursor);
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForItem(DUChainBase* item);
 }

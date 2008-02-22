@@ -65,9 +65,6 @@ public:
   /// Returns true if this object is being deleted, otherwise false.
   bool deleting() const;
 
-  bool hasUses() const;
-  void setHasUses(bool hasUses);
-
   /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
   bool inDuChain() const;
   /// This flag is only used by DUChain, never change it from outside.
@@ -119,7 +116,35 @@ public:
     AnyFlag=2,
     LastFlag
   };
+
+  bool hasUses() const;
+  void setHasUses(bool hasUses);
   
+  /**
+   * Retrieves or creates a local index that is to be used for referencing the given @param declaration
+   * in local uses. Also registers this context as a user of the declaration.
+   * @param create If this is false, only already registered indices will be returned.
+   *               If the declaration is not registered, std::limits<int>::max is returned
+   *
+   * The duchain must be write-locked if create is true, else it must at least be read-locked.
+   * */
+  int indexForUsedDeclaration(Declaration* declaration, bool create = true);
+
+  /**
+   * Tries to retrieve the used declaration @param declarationIndex
+   * @param context must be the context where the use happened
+   * */
+  Declaration* usedDeclarationForIndex(int declarationIndex) const;
+
+  /**
+   * You can use this before you rebuild all uses. This does not affect any uses directly,
+   * it only invalidates the mapping of declarationIndices to Declarations.
+   *
+   * usedDeclarationForIndex(..) must not be called until the use has gotten a new index through
+   * indexForUsedDeclaration(..).
+   * */
+  void clearDeclarationIndices();
+
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */
@@ -139,7 +164,7 @@ protected:
   virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   /// Place \a contexts of type \a contextType that are visible in this document from \a position in a \a{ret}urn list
-  void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret) const;
+  void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret, bool dontCheckImport) const;
 
   /**
    * Does the same as DUContext::updateAliases, except that it uses the symbol-store, and processes the whole identifier.
@@ -154,6 +179,16 @@ private:
   Q_DECLARE_PRIVATE(TopDUContext)
   friend class DUChain; //To allow access to setParsingEnvironmentFile
 };
+
+/**
+  * Returns all uses of the given declaration within this top-context and all sub-contexts
+  * */
+QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration);
+
+/**
+  * Returns the smart-ranges of all uses
+  * */
+QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration);
 
 }
 

@@ -33,7 +33,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT SmartConverter
 public:
   SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl = 0);
   ~SmartConverter();
+  ///Converts all ranges in the given context to smart-ranges
   void convertDUChain(DUContext* context) const;
+  ///@todo Why doesn't unconvertDUChain unconvert the duchain?
   void unconvertDUChain(DUContext* context) const;
 
 private:

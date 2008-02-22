@@ -61,12 +61,13 @@ public:
       m_editor->exitCurrentRange();
     }
 
-    foreach (Use* use, context->uses()) {
-      use->setSmartRange(m_editor->createRange(use->range().textRange())->toSmartRange());
-      if( m_hl )
-        m_hl->highlightUse(use);
+    for(int a = 0; a < context->uses().count(); ++a) {
+      context->setUseSmartRange(a, m_editor->createRange(context->uses()[a].m_range.textRange())->toSmartRange());
       m_editor->exitCurrentRange();
     }
+    
+    if( m_hl )
+      m_hl->highlightUses(context);
 
     foreach (DUContext* child, context->childContexts())
       convertDUChainInternal(child);

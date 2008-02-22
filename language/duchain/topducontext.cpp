@@ -24,10 +24,13 @@
 #include "duchainlock.h"
 #include "parsingenvironment.h"
 #include "duchainpointer.h"
+#include "declarationid.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
 #include <hashedstring.h>
 #include <iproblem.h>
+#include <limits>
+#include "uses.h"
 
 #include "ducontext_p.h"
 
@@ -42,7 +45,7 @@ class TopDUContextPrivate : public DUContextPrivate
 {
 public:
   TopDUContextPrivate( TopDUContext* ctxt)
-    : DUContextPrivate(ctxt), m_inDuChain(false), m_searchingImport(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt)
+    : DUContextPrivate(ctxt), m_inDuChain(false), m_searchingImport(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt), m_currentUsedDeclarationIndex(0)
   {
   }
   /// Clears the import-cache for @param context in this and all context that import this
@@ -144,7 +147,22 @@ public:
   QList<ProblemPointer> m_problems;
   ///Maps from the target context to the next one in the import trace.
   ///This can be used to reconstruct the import trace.
+  ///@todo make this a simple "QSet<TopDUContext> m_importsCache;" by using the caches of all used top-contexts.
   mutable QHash<const TopDUContext*, const TopDUContext*> m_importsCache;
+
+  uint m_currentUsedDeclarationIndex;
+
+  ///Maps a declarationIndex to a DeclarationId.
+  QVector<DeclarationId> m_usedDeclarationIds;
+  ///Maps a declarationIndex to an actual used Declaration
+  QVector<DeclarationPointer> m_usedDeclarations;
+
+  /**Maps a declarationIndex to local declarations. Generally, negative indices are considered
+   * to be indices within m_usedLocalDeclarations, and positive indices within m_usedDeclarationIds
+   * Any declarations that are within the same top-context are considered local.
+   * */
+  QVector<Declaration*> m_usedLocalDeclarations;
+  
 };
 
 ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
@@ -191,6 +209,7 @@ KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const 
 TopDUContext::~TopDUContext( )
 {
   d_func()->m_deleting = true;
+  clearDeclarationIndices();
 }
 
 void TopDUContext::setHasUses(bool hasUses)
@@ -239,7 +258,7 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
         continue;
 
       // Make sure that this declaration is accessible
-      if (!importsPrivate(top, position))
+      if (!(flags & DUContext::NoImportsCheck) && !importsPrivate(top, position))
         continue;
 
     } else {
@@ -358,11 +377,11 @@ void TopDUContext::findContextsInternal(ContextType contextType, const QList<Qua
 
   foreach( const QualifiedIdentifier& identifier, targetIdentifiers ) {
     QList<DUContext*> allContexts = SymbolTable::self()->findContexts(identifier);
-    checkContexts(contextType, allContexts, position, ret);
+    checkContexts(contextType, allContexts, position, ret, flags & DUContext::NoImportsCheck);
   }
 }
 
-void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret) const
+void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret, bool ignoreImports) const
 {
   ENSURE_CAN_READ
 
@@ -374,7 +393,7 @@ void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*
         continue;
 
       // Make sure that this declaration is accessible
-      if (!importsPrivate(top, position))
+      if (!ignoreImports && !importsPrivate(top, position))
         continue;
 
     } else {
@@ -465,6 +484,82 @@ TopDUContext::Flags TopDUContext::flags() const {
 
 void TopDUContext::setFlags(Flags f) {
   d_func()->m_flags = f;
+}
+
+void TopDUContext::clearDeclarationIndices() {
+  ENSURE_CAN_WRITE
+  for(int a = 0; a < d_func()->m_usedDeclarationIds.size(); ++a)
+      DUChain::uses()->removeUse(d_func()->m_usedDeclarationIds[a], this);
+  
+  d_func()->m_usedDeclarations.clear();
+  d_func()->m_usedDeclarationIds.clear();
+  d_func()->m_usedLocalDeclarations.clear();
+}
+
+Declaration* TopDUContext::usedDeclarationForIndex(int declarationIndex) const {
+  ENSURE_CAN_READ
+  Q_ASSERT(context);
+  if(declarationIndex < 0) {
+    declarationIndex = -(declarationIndex + 1);//Add one, because we have subtracted one in another place
+    Q_ASSERT(declarationIndex >= 0 && declarationIndex < d_func()->m_usedLocalDeclarations.size());
+    return d_func()->m_usedLocalDeclarations[declarationIndex];
+  }else{
+    Q_ASSERT(declarationIndex >= 0 && declarationIndex < d_func()->m_usedDeclarationIds.size());
+    if(d_func()->m_usedDeclarations[declarationIndex])
+      return d_func()->m_usedDeclarations[declarationIndex].data();
+
+    //If no real declaration is available, we need to search the declaration. This is currently not used, we need to think about whether we need it.
+    return d_func()->m_usedDeclarationIds[declarationIndex].getDeclaration( context);
+  }
+}
+
+int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create) {
+  if(create) {
+    ENSURE_CAN_WRITE
+  }else{
+    ENSURE_CAN_READ
+  }
+  if(declaration->topContext() == this) {
+    //It is a local declaration, so we need a negative index.
+    int index = d_func()->m_usedLocalDeclarations.indexOf(declaration);
+    if(index != -1)
+      return -index - 1; //Subtract one so it's always negative
+    if(!create)
+      return std::numeric_limits<int>::max();
+    d_func()->m_usedLocalDeclarations.append(declaration);
+    return -(d_func()->m_usedLocalDeclarations.count()-1) - 1; //Subtract one so it's always negative
+  }else{
+    DeclarationId id = declaration->id();
+    int index = d_func()->m_usedDeclarationIds.indexOf(id);
+
+    if(index != -1)
+      return index;
+    if(!create)
+      return std::numeric_limits<int>::max();
+
+    d_func()->m_usedDeclarationIds.append(id);
+    d_func()->m_usedDeclarations.append(DeclarationPointer(declaration));
+
+    DUChain::uses()->addUse(id, this);
+    
+    return d_func()->m_usedDeclarationIds.count()-1;
+  }
+}
+
+QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration) {
+  QList<KTextEditor::SmartRange*> ret;
+  int declarationIndex = context->indexForUsedDeclaration(declaration, false);
+  if(declarationIndex == std::numeric_limits<int>::max())
+    return ret;
+  return allSmartUses(context, declarationIndex);
+}
+
+QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration) {
+  QList<SimpleRange> ret;
+  int declarationIndex = context->indexForUsedDeclaration(declaration, false);
+  if(declarationIndex == std::numeric_limits<int>::max())
+    return ret;
+  return allUses(context, declarationIndex);
 }
 
 }

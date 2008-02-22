@@ -150,12 +150,15 @@ void UseHighlightPlugin::changeHighlight( KTextEditor::View* view, KDevelop::Dec
     changeHighlight( range, highlight, true, mouseHighlight );
   
 
-  foreach( Use* use, decl->uses() ) {
-    KTextEditor::SmartRange* range = use->smartRange();
-    if( !range )
-      continue;
-    changeHighlight( range, highlight, false, mouseHighlight );
+  QList<KTextEditor::SmartRange*> uses;
+  {
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+    uses = decl->smartUses();
   }
+
+  foreach(KTextEditor::SmartRange* range, uses)
+    changeHighlight( range, highlight, false, mouseHighlight );
+  
   if( decl->definition() && decl->definition()->smartRange() ) {
     changeHighlight( decl->definition()->smartRange(), highlight, false, mouseHighlight );
   }
@@ -216,9 +219,14 @@ void UseHighlightPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
   
   foreach(Declaration* decl, ctx->localDeclarations())
     registerAsRangeWatcher(decl);
-    
-  foreach(Use* use, ctx->uses())
-    registerAsRangeWatcher(use);
+
+  for(int a = 0; a < ctx->uses().size(); ++a) {
+    KTextEditor::SmartRange* range = ctx->useSmartRange(a);
+    if(range) {
+      range->removeWatcher(this); //Make sure we're never registered twice
+      range->addWatcher(this);
+    }
+  }
 
   foreach(DUContext* child, ctx->childContexts())
     registerAsRangeWatcher(child);

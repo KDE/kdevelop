@@ -40,6 +40,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/forwarddeclarationtype.cpp
     duchain/declarationid.cpp
     duchain/definitions.cpp
+    duchain/uses.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp

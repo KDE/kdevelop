@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2008 David Nolden<david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,44 +19,35 @@
 #ifndef DEFINITIONUSE_H
 #define DEFINITIONUSE_H
 
-#include <editor/documentrangeobject.h>
-#include "duchainbase.h"
+#include <editor/simplerange.h>
 #include "../languageexport.h"
+#include <limits>
 
 namespace KDevelop
 {
-
-class DUContext;
-class Declaration;
-class UsePrivate;
 /**
- * Represents a single variable definition in a definition-use chain.
+ * Represents a position in a document where a specific declaration is used.
+ *
+ * Since we want to build uses for all files, and every single function may contain
+ * tens to hundreds of uses, uses must be extremely light-weight.
+ *
+ * For that reason they are built in a way that a use can completely be stored in a simple vector,
+ * and they only contain indices that represent the actual declaration used. Since the same
+ * Declarations are used over and over again, the actual declarations are stored and indexed centrally
+ * in the enclosing top-context. Additionally, because a use may refer to a not globally adressable item,
+ * each top-context contains a local map that maps declaration-indices to local decarations.
+ *
+ * Since only a small fraction of all files is loaded as document at any time, only few documents actually
+ * need smart-ranges. For that reason we do not store them here, but instead only map them to the uses
+ * when there actually IS smart-ranges for them.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Use : public DUChainBase
+struct KDEVPLATFORMLANGUAGE_EXPORT Use
 {
-  friend class Declaration;
-  friend class ForwardDeclaration;
+  Use(const SimpleRange& range = SimpleRange::invalid(), int declarationIndex = std::numeric_limits<int>::max()) : m_range(range), m_declarationIndex(declarationIndex) {
+  }
 
-public:
-  Use(const HashedString& url, const SimpleRange& range, DUContext* context);
-  virtual ~Use();
-
-  virtual TopDUContext* topContext() const;
-
-  DUContext* context() const;
-  void setContext(DUContext* context);
-
-  /**
-   * Retrieve the declaration for this use.
-   *
-   * \note Does not require the chain to be locked.
-   */
-  Declaration* declaration() const;
-
-  bool isOrphan() const;
-
-private:
-  Q_DECLARE_PRIVATE(Use)
+  SimpleRange m_range;
+  int m_declarationIndex;
 };
 
 }

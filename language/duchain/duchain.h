@@ -40,6 +40,7 @@ class ParsingEnvironmentManager;
 class ParsingEnvironment;
 class ParsingEnvironmentFile;
 class Definitions;
+class Uses;
 
 /**
  * Holds references to all top level source file contexts.
@@ -107,6 +108,9 @@ public:
 
   /// Returns the structure that manages mapping between definitions and declarations
   static Definitions* definitions();
+  
+  /// Returns the structure that manages mapping between uses and declarations
+  static Uses* uses();
   
   /**
    * Retrieve the read write lock for the entire definition-use chain.

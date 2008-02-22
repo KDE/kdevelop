@@ -32,6 +32,10 @@
 
 class QByteArray;
 
+namespace KTextEditor {
+  class SmartRange;
+}
+
 namespace KDevelop
 {
 
@@ -41,6 +45,7 @@ class Use;
 class ForwardDeclaration;
 class Definition;
 class DeclarationPrivate;
+class DeclarationId;
 
 struct ImportTraceItem;
 typedef QList<ImportTraceItem> ImportTrace;
@@ -199,14 +204,27 @@ public:
   bool inSymbolTable() const;
   void setInSymbolTable(bool inSymbolTable);
 
-  const QList<Use*>& uses() const;
-  void addUse(Use* range);
-  void removeUse(Use* range);
-
   bool operator==(const Declaration& other) const;
 
   virtual QString toString() const;
 
+  ///@todo The following two are convenience-functions. Think whether they should stay here, or be moved out.
+  
+  /**
+   * Returns a list of pairs:
+   * An url of a file, paired together with all use-ranges of this declaration in that file.
+   * The uses are unique.
+   *
+   * This is a non-trivial operation.
+   * */
+  QMap<HashedString, QList<SimpleRange> > uses() const;
+
+  /**
+   * Collects the smart-ranges for all uses. Uses that do not have smart ranges are not represented
+   * in the result.
+   * */
+  QList<KTextEditor::SmartRange*> smartUses() const;
+  
   /**
     * This hash-value should differentiate between multiple different
     * declarations that have the same qualifiedIdentifier, but should have a different
@@ -216,6 +234,11 @@ public:
     * */
   virtual uint additionalIdentity() const;
 
+  /**
+   * @see DeclarationId
+   * */
+  virtual DeclarationId id() const;
+  
   /**
    * Returns a clone of this declaration, with the difference that:
    * - context will be zero

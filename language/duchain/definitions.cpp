@@ -70,16 +70,7 @@ Declaration* Definitions::declaration(const Definition* definition, TopDUContext
   if(it == d->m_declarationIds.end())
     return 0;
 
-  //Resolve DeclarationId
-  QList<Declaration*> declarations = context->findDeclarations((*it).identifier(), SimpleCursor(), AbstractType::Ptr(), 0, DUContext::NoFiltering);
-
-  for(QList<Declaration*>::const_iterator it2 = declarations.begin(); it2 != declarations.end(); ++it2) {
-    if( (*it).additionalIdentity() == (*it2)->additionalIdentity() &&
-        (*it).url() == (*it2)->url() )
-      return *it2;
-  }
-
-  return 0;
+  return (*it).getDeclaration(context);
 }
 
 

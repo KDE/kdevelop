@@ -231,14 +231,6 @@ DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
     DUContext* ctx = chosen->findContextAt(c);
     
     while( ctx ) {
-      kDebug() << "in context:" << ctx->range().textRange() << "got" << ctx->localDefinitions().count() << "definitions";
-      foreach( Definition* def, ctx->localDefinitions() ) {
-        if(def->declaration(chosen))
-          kDebug() << def->declaration(chosen)->toString() << def->range().textRange();
-        else
-          kDebug() << "unknown" << def->range().textRange();
-      }
-      
       //Try finding a declaration under the cursor
       foreach( Declaration* decl, ctx->localDeclarations() )
         if( decl->range().contains(c) )
@@ -250,9 +242,9 @@ DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
           return def;
 
       //Try finding a use under the cursor
-      foreach( Use* use, ctx->uses() )
-        if( use->range().contains(c) )
-          return use;
+      for(int a = 0; a < ctx->uses().count(); ++a)
+        if( ctx->uses()[a].m_range.contains(c) )
+          return ctx->declarationForUse(a, chosen);
 
       ctx = ctx->parentContext(); //It may happen, for example in the case of function-declarations, that the use is one context higher.
     }
@@ -267,8 +259,5 @@ Declaration* DUChainUtils::declarationForItem(DUChainBase* item) {
   if( dynamic_cast<Definition*>(item) )
     return static_cast<Definition*>(item)->declaration(static_cast<Definition*>(item)->topContext()); ///@todo maybe take topContext from outside
 
-  if( dynamic_cast<Use*>(item) )
-    return static_cast<Use*>(item)->declaration();
-  
   return 0;
 }

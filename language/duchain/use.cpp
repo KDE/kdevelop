@@ -17,105 +17,12 @@
 */
 
 #include "use.h"
-#include "use_p.h"
 
-#include "declaration.h"
-#include "topducontext.h"
-#include "duchain.h"
-#include "duchainlock.h"
-#include "ducontext_p.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
-
-UsePrivate::UsePrivate( Use* u)
-  : m_use(u)
-{
-  m_context = 0;
-  m_declaration = 0;
-}
-
-void UsePrivate::setDeclaration(Declaration* declaration)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  //if (m_declaration)
-    //DUChain::useChanged(m_use, DUChainObserver::Removal, DUChainObserver::DeclarationRelationship, m_declaration);
-
-  m_declaration = declaration;
-
-  //if (m_declaration)
-    //DUChain::useChanged(m_use, DUChainObserver::Addition, DUChainObserver::DeclarationRelationship, m_declaration);
-}
-
-
-Use::Use(const HashedString& url, const SimpleRange& range, DUContext* context)
-  : DUChainBase(*new UsePrivate(this), url, range)
-{
-  if (context)
-    setContext(context);
-}
-
-Use::~Use()
-{
-  setContext(0);
-  Q_D(Use);
-  if (d->m_declaration)
-    d->m_declaration->removeUse(this);
-
-  //DUChain::useChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
-}
-
-Declaration* Use::declaration() const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  return d_func()->m_declaration;
-}
-
-void Use::setContext(DUContext * context)
-{
-  Q_D(Use);
-  if (d->m_context) {
-    ENSURE_CHAIN_WRITE_LOCKED
-
-    d->m_context->d_func()->removeUse(this);
-
-    //DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
-  }
-
-  d->m_context = context;
-
-  if (d->m_context) {
-    ENSURE_CHAIN_WRITE_LOCKED
-
-    d->m_context->d_func()->addUse(this);
-
-    //DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
-  }
-}
-
-DUContext * Use::context() const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  return d_func()->m_context;
-}
-
-bool Use::isOrphan() const
-{
-  return !declaration();
-}
-
-TopDUContext * Use::topContext() const
-{
-  if (context())
-    return context()->topContext();
-
-  return 0;
-}
 
 }
 

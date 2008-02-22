@@ -32,6 +32,10 @@ class QSet;
 
 class QWidget;
 
+namespace KTextEditor {
+  class SmartRange;
+}
+
 namespace KDevelop
 {
 
@@ -111,7 +115,8 @@ public:
     NoUndefinedTemplateParams = 8, //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
     DirectQualifiedLookup = 16, //When this flag is used, the searched qualified identifier should NOT be split up into it's components and looked up one by one. Currently only plays a role in C++ specific parts.
     NoFiltering = 32,           //Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default)
-    OnlyFunctions = 64 //When this is given, only function-declarations are returned. In case of C++, this also means that constructors can be retrieved, while normally they are filtered out.
+    OnlyFunctions = 64, //When this is given, only function-declarations are returned. In case of C++, this also means that constructors can be retrieved, while normally they are filtered out.
+    NoImportsCheck = 128 //With this parameter, a global search will return all matching items, from all contexts, not only from imported ones.
   };
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)
@@ -379,32 +384,6 @@ public:
   QList<Declaration*> allLocalDeclarations(const Identifier& identifier) const;
 
   /**
-   * Find the use which encompasses \a position, if one exists.
-   */
-  Use* findUseAt(const SimpleCursor& position) const;
-
-  /**
-   * Return a list of all uses which occur in this context.
-   */
-  const QList<Use*>& uses() const;
-
-  /**
-   * Return a list of uses which don't have a corresponding definition.
-   */
-  const QList<Use*>& orphanUses() const;
-
-  /**
-   * Add an orphan use (a use which doesn't have a corresponding definition)
-   * to this context.
-   */
-  void addOrphanUse(Use* orphan);
-
-  /**
-   * Clear and delete all uses in this context.
-   */
-  void deleteUses();
-
-  /**
    * Delete and remove all slaves(uses, declarations, definitions, contexts) that are not in the given set
    */
   void cleanIfNotEncountered(const QSet<DUChainBase*>& encountered, bool firstPass);
@@ -413,6 +392,73 @@ public:
    * Used exclusively by Declaration, do not use this.
    * */
   void changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to );
+
+   /**
+    * Uses:
+    * A "Use" represents any position in a document where a Declaration is used literally.
+    * For efficiency, since there can be many many uses, they are managed efficiently by
+    * TopDUContext and DUContext. In TopDUContext, the used declarations are registered
+    * and assigned a "Declaration-Index" while calling TopDUContext::indexForUsedDeclaration.
+    * From such a declaration-index, the declaration can be retrieved back by calling TopDUContext::usedDeclarationForIndex.
+    *
+    * The actual uses are stored within DUContext, where each use consists of a range and the declaration-index of
+    * the used declaration.
+    *
+    * To save memory, smart-ranges are only attached to the uses when the document is actually loaded.
+    * Uses need to be ordered by their appearance.
+    * */
+  
+  /**
+   * Return a list of all uses which occur in this context.
+   * To get the actual declarations, use TopDUContext::usedDeclarationForIndex(..) with the declarationIndex.
+   */
+  const QVector<Use>& uses() const;
+
+  /**
+   * Find the use which encompasses \a position, if one exists.
+   * @return The local index of the use, or -1
+   */
+  int findUseAt(const SimpleCursor& position) const;
+  
+  /**
+   * Returns the SmartRange assigned to the given use, or zero.
+   * */
+  KTextEditor::SmartRange* useSmartRange(int useIndex);
+  
+  /**
+   * Assigns the given SmartRange to the given use.
+   * If one use gets a smart range, all uses need to get a smart range.
+   * The ownership of the range is given to this context.
+   * */
+  void setUseSmartRange(int useIndex, KTextEditor::SmartRange* range);
+  
+  /**
+   * Assigns the declaration represented by @param declarationIndex to the use with index @param useIndex
+   * */
+  void setUseDeclaration(int useIndex, int declarationIndex);
+
+  /**
+   * Creates a new use of the declaration given  through @param declarationIndex.
+   * The index must be retrieved through TopDUContext::indexForUsedDeclaration(..).
+   * @param range The range of the use
+   * @param smartRange The smart range, or zero if the document is not opened.
+   * @param insertBefore A hint where in the vector of uses to insert the use.
+   *                     Must be correct so the order is preserved(ordered by position),
+   *                     or -1 to automatically choose the position.
+   *
+   * @return Local index of the created use
+   * */
+  int createUse(int declarationIndex, const SimpleRange& range, KTextEditor::SmartRange* smartRange, int insertBefore = -1);
+
+  /**
+   * Deletes the use number @param index . index is the position in the vector of uses, not a used declaration index.
+   * */
+  void deleteUse(int index);
+  
+  /**
+   * Clear and delete all uses in this context.
+   */
+  void deleteUses();
 
   /**
    * Can be specialized by languages to create a navigation/information-widget.
@@ -482,6 +528,11 @@ public:
   DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
   
 private:
+  virtual void rangePositionChanged(KTextEditor::SmartRange* range);
+  virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* range2);
+  virtual void rangeContentsChanged(KTextEditor::SmartRange* range);
+  virtual void rangeDeleted(KTextEditor::SmartRange* range);
+
   Q_DECLARE_PRIVATE(DUContext)
 };
 
@@ -492,6 +543,16 @@ private:
  * @see NamespaceAliasDeclaration.
  * */
 KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier globalImportIdentifier;
+
+/**
+  * Collects all uses of the given @param declarationIndex
+  * */
+QList<SimpleRange> allUses(DUContext* context, int declarationIndex);
+
+/**
+  * Collects the smart-ranges of all uses of the given @param declarationIndex
+  * */
+QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex);
 
 }
 

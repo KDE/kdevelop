@@ -17,6 +17,9 @@
 */
 
 #include "declarationid.h"
+#include "ducontext.h"
+#include <editor/simplecursor.h>
+#include "declaration.h"
 
 namespace KDevelop {
 
@@ -39,6 +42,29 @@ HashedString DeclarationId::url() const
 uint DeclarationId::additionalIdentity() const
 {
   return m_additionalIdentity;
+}
+
+Declaration* DeclarationId::getDeclaration(DUContext* context) const
+{
+  ///@todo This is quite slow, maybe think of a better way, especially for template-declarations.
+  //Resolve DeclarationId
+kDebug() << "searching" << m_identifier.toString();
+  QList<Declaration*> declarations = context->findDeclarations(m_identifier, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::NoFiltering);
+kDebug() << "searched" << m_identifier.toString() <<", found" << declarations.count();
+  for(QList<Declaration*>::const_iterator it2 = declarations.begin(); it2 != declarations.end(); ++it2) {
+    if( m_additionalIdentity == (*it2)->additionalIdentity() &&
+        m_url == (*it2)->url() )
+      return *it2;
+  }
+
+  declarations = context->findDeclarations(m_identifier, SimpleCursor::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoFiltering | DUContext::NoImportsCheck));
+  for(QList<Declaration*>::const_iterator it2 = declarations.begin(); it2 != declarations.end(); ++it2) {
+    if( m_additionalIdentity == (*it2)->additionalIdentity() &&
+        m_url == (*it2)->url() )
+      return *it2;
+  }
+
+  return 0;
 }
 
 }

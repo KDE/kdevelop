@@ -33,6 +33,7 @@
 #include "definition.h"
 #include "definitions.h"
 #include "use.h"
+#include "uses.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
 #include <idocumentcontroller.h>
@@ -66,6 +67,7 @@ public:
   QMap<int,ParsingEnvironmentManager*> m_managers;
   DUChainObserver* notifier;
   Definitions m_definitions;
+  Uses m_uses;
 
   ParsingEnvironmentManager* managerForType(int type)
   {
@@ -394,6 +396,11 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
     foreach (TopDUContext* chain, chains)
         sc.convertDUChain(chain);
+}
+
+Uses* DUChain::uses()
+{
+  return &sdDUChainPrivate->m_uses;
 }
 
 Definitions* DUChain::definitions()

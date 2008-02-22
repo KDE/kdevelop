@@ -28,6 +28,9 @@
 
 namespace KDevelop {
 
+class Declaration;
+class DUContext;
+  
 /**
  * Allows clearly identifying a Declaration.
  *
@@ -40,7 +43,7 @@ namespace KDevelop {
 
 class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
   public:
-    DeclarationId(const HashedString& url, const QualifiedIdentifier& id, uint additionalId);
+    DeclarationId(const HashedString& url = HashedString(), const QualifiedIdentifier& id = QualifiedIdentifier(), uint additionalId = 0);
     
     bool operator==(const DeclarationId& rhs) const {
       return m_url == rhs.m_url && m_identifier == rhs.m_identifier && m_additionalIdentity == rhs.m_additionalIdentity;
@@ -54,6 +57,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     HashedString url() const;
     uint additionalIdentity() const;
 
+    /**
+     * Tries to retrieve the declaration, from the perspective of @param context
+     * */
+    Declaration* getDeclaration(DUContext* context) const;
+    
   private:
     HashedString m_url;
     QualifiedIdentifier m_identifier;

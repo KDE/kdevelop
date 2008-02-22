@@ -199,8 +199,8 @@ QModelIndex DUChainModel::parent(const QModelIndex & index) const
   if (Definition* def = dynamic_cast<Definition*>(base))
     return createParentIndex(createPointerForObject(def->declaration()));
 
-  if (Use* use = dynamic_cast<Use*>(base))
-    return createParentIndex(createPointerForObject(use->declaration()));
+//   if (Use* use = dynamic_cast<Use*>(base))
+//     return createParentIndex(createPointerForObject(use->declaration()));
 
   // Shouldn't really hit this
   //Q_ASSERT(false);
@@ -250,18 +250,18 @@ QVariant DUChainModel::data(const QModelIndex& index, int role) const
         return i18n("Definition: %1", def->declaration()->identifier().toString());
     }
 
-  } else if (Use* use = dynamic_cast<Use*>(base)) {
+  }/* else if (Use* use = dynamic_cast<Use*>(base)) {
     switch (role) {
       case Qt::DisplayRole:
         return i18n("Use: %1", use->declaration() ? use->declaration()->identifier().toString() : i18n("[No definition found]"));
     }
 
-  } else {
+  }*/ else {
     switch (role) {
       case Qt::DisplayRole:
         return i18n("Unknown object!");
     }
-  }
+   }
 
   return QVariant();
 }
@@ -323,7 +323,7 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
     QListIterator<DUContext*> importedParentContexts = importedParentContextsData;
     QListIterator<Declaration*> declarations = context->localDeclarations();
     QListIterator<Definition*> definitions = context->localDefinitions();
-    QListIterator<Use*> uses = context->uses();
+//     QListIterator<Use*> uses = context->uses();
 
 
     bool firstInit = true;
@@ -336,7 +336,7 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
       TEST_NEXT(importedParentContexts, 2)
       TEST_NEXT(declarations, 3)
       TEST_NEXT(definitions, 4)
-      TEST_NEXT(uses, 5)
+//       TEST_NEXT(uses, 5)
 
       if (first.isValid()) {
         switch (found) {
@@ -352,9 +352,9 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
           case 4:
             currentItem = proxyItem(context, definitions);
             break;
-          case 5:
+/*          case 5:
             currentItem = proxyItem(context, uses);
-            break;
+            break;*/
           default:
             Q_ASSERT(false);
             break;
@@ -381,12 +381,12 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
       list->append(createPointerForObject(dec->definition()));
     }
 
-    foreach (Use* use, dec->uses()) {
-      if (!list)
-        list = new QList<DUChainBasePointer*>();
-
-      list->append(createPointerForObject(use));
-    }
+//     foreach (Use* use, dec->uses()) {
+//       if (!list)
+//         list = new QList<DUChainBasePointer*>();
+// 
+//       list->append(createPointerForObject(use));
+//     }
 
   } else {
     // No child items for definitions or uses

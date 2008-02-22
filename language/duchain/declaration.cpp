@@ -25,6 +25,7 @@
 #include <ktexteditor/document.h>
 
 #include <hashedstring.h>
+#include <limits>
 
 #include "topducontext.h"
 #include "use.h"
@@ -39,6 +40,7 @@
 #include "use_p.h"
 #include "declarationid.h"
 #include "definitions.h"
+#include "uses.h"
 
 using namespace KTextEditor;
 
@@ -118,10 +120,6 @@ Declaration::~Declaration()
   if (d->m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
 
-  QList<Use*> _uses = uses();
-  foreach (Use* use, _uses)
-    use->d_func()->setDeclaration(0);
-
   // context is only null in the test cases
   if (context())
     context()->d_func()->removeDeclaration(this);
@@ -150,33 +148,6 @@ void Declaration::setComment(const QByteArray& str) {
 void Declaration::setComment(const QString& str) {
   Q_D(Declaration);
   d->m_comment = str.toUtf8();
-}
-
-void Declaration::removeUse( Use* use )
-{
-  ENSURE_CAN_WRITE
-  Q_D(Declaration);
-  use->d_func()->setDeclaration(0L);
-  d->m_uses.removeAll(use);
-
-  //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Uses, use);
-}
-
-void Declaration::addUse( Use* use )
-{
-  ENSURE_CAN_WRITE
-  Q_D(Declaration);
-  use->d_func()->setDeclaration(this);
-  d->m_uses.append(use);
-
-  //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Uses, use);
-}
-
-const QList< Use* > & Declaration::uses( ) const
-{
-  ENSURE_CAN_READ
-  Q_D(const Declaration);
-  return d->m_uses;
 }
 
 const Identifier& Declaration::identifier( ) const
@@ -366,22 +337,24 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
   d->m_isTypeAlias = isTypeAlias;
 }
 
+DeclarationId Declaration::id() const
+{
+  ENSURE_CAN_READ
+  return DeclarationId(url(), qualifiedIdentifier(), additionalIdentity());
+}
+
 Definition* Declaration::definition() const
 {
   ENSURE_CAN_READ
   
-  DeclarationId id(url(), qualifiedIdentifier(), additionalIdentity());
-
-  return DUChain::definitions()->definition(id);
+  return DUChain::definitions()->definition(id());
 }
 
 void Declaration::setDefinition(Definition* definition)
 {
   ENSURE_CAN_WRITE
 
-  DeclarationId id(url(), qualifiedIdentifier(), additionalIdentity());
-
-  DUChain::definitions()->setDefinition(id, definition);
+  DUChain::definitions()->setDefinition(id(), definition);
 }
 
 bool Declaration::inSymbolTable() const
@@ -429,6 +402,58 @@ uint Declaration::additionalIdentity() const
   return 0;
 }
 
+QList<KTextEditor::SmartRange*> Declaration::smartUses() const
+{
+  ENSURE_CAN_READ
+  QSet<KTextEditor::SmartRange*> tempUses;
+
+  //First, search for uses within the own context
+  {
+    foreach(KTextEditor::SmartRange* range, topContext()->allSmartUses(const_cast<Declaration*>(this)))
+      tempUses.insert(range);
+  }
+
+  QList<TopDUContext*> useContexts = DUChain::uses()->uses(id());
+
+  foreach(TopDUContext* context, useContexts) {
+    foreach(KTextEditor::SmartRange* range, context->allSmartUses(const_cast<Declaration*>(this)))
+      tempUses.insert(range);
+  }
+
+  return tempUses.toList();
+}
+
+QMap<HashedString, QList<SimpleRange> > Declaration::uses() const
+{
+  ENSURE_CAN_READ
+  QMap<HashedString, QMap<SimpleRange, bool> > tempUses;
+
+  //First, search for uses within the own context
+  {
+    QMap<SimpleRange, bool>& ranges(tempUses[topContext()->url()]);
+    foreach(const SimpleRange& range, allUses(topContext(), const_cast<Declaration*>(this)))
+      ranges[range] = true;
+  }
+
+  QList<TopDUContext*> useContexts = DUChain::uses()->uses(id());
+
+  foreach(TopDUContext* context, useContexts) {
+    QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
+    foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
+      ranges[range] = true;
+  }
+
+  QMap<HashedString, QList<SimpleRange> > ret;
+
+  for(QMap<HashedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.begin(); it != tempUses.end(); ++it) {
+    if(!(*it).isEmpty()) {
+      QList<SimpleRange>& list(ret[it.key()]);
+      for(QMap<SimpleRange, bool>::const_iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2)
+        list << it2.key();
+    }
+  }
+  return ret;
+}
 
 }
 
