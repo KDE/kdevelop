@@ -93,18 +93,9 @@ DocumentRangeObject::~ DocumentRangeObject( )
     QMutexLocker lock(&m_mutex);
     
     if (d->m_smartRange) {
+        d->m_smartRange->removeWatcher(this);
         //If a smart-range is deleted, move it's child-ranges into it's parent.
         //That way we do not delete other DocumentRangeObject's smart-ranges, which corrupts the structure integrity.
-        if( d->m_smartRange->parentRange() )
-        {
-            SmartRange* oldParent = d->m_smartRange->parentRange();
-            d->m_smartRange->setParentRange(0);
-            QList<SmartRange*> childRanges = d->m_smartRange->childRanges();
-            foreach( SmartRange* range, childRanges )
-                range->setParentRange(oldParent);
-        }
-        d->m_smartRange->removeWatcher(this);
-        
         if (d->m_ownsRange == DocumentRangeObject::Own)
             EditorIntegrator::releaseRange(d->m_smartRange);
     }

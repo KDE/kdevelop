@@ -90,10 +90,10 @@ protected:
     DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range);
     
     DocumentRangeObjectPrivate* const d_ptr;
+    
+    virtual void rangeDeleted(KTextEditor::SmartRange* range);
 private:
 
-    virtual void rangeDeleted(KTextEditor::SmartRange* range);
-    
     Q_DISABLE_COPY(DocumentRangeObject)
     Q_DECLARE_PRIVATE(DocumentRangeObject)
 };

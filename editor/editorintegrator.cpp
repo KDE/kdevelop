@@ -274,20 +274,21 @@ void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)
   //kWarning() << "Could not find top range to delete." ;
 }
 
+
 void EditorIntegrator::releaseRange(KTextEditor::SmartRange* range)
 {
-  if (range) {
-    if (range->isSmartRange()) {
-      if (SmartInterface* iface = dynamic_cast<SmartInterface*>(range->toSmartRange()->document())) {
-        QMutexLocker lock(iface->smartMutex());
-        delete range;
-      } else {
-        delete range;
-      }
-    } else {
-      delete range;
-    }
+  SmartInterface* iface = dynamic_cast<SmartInterface*>(range->toSmartRange()->document());
+  QMutexLocker lock(iface ? iface->smartMutex() : 0);
+  
+  if( range->parentRange() )
+  {
+    SmartRange* oldParent = range->parentRange();
+    range->setParentRange(0);
+    QList<SmartRange*> childRanges = range->childRanges();
+    foreach( SmartRange* range, childRanges )
+      range->setParentRange(oldParent);
   }
+  delete range;
 }
 
 KDevelop::EditorIntegratorStatic * EditorIntegrator::data()
