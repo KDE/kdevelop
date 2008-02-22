@@ -498,7 +498,6 @@ void TopDUContext::clearDeclarationIndices() {
 
 Declaration* TopDUContext::usedDeclarationForIndex(int declarationIndex) const {
   ENSURE_CAN_READ
-  Q_ASSERT(context);
   if(declarationIndex < 0) {
     declarationIndex = -(declarationIndex + 1);//Add one, because we have subtracted one in another place
     Q_ASSERT(declarationIndex >= 0 && declarationIndex < d_func()->m_usedLocalDeclarations.size());
@@ -509,7 +508,7 @@ Declaration* TopDUContext::usedDeclarationForIndex(int declarationIndex) const {
       return d_func()->m_usedDeclarations[declarationIndex].data();
 
     //If no real declaration is available, we need to search the declaration. This is currently not used, we need to think about whether we need it.
-    return d_func()->m_usedDeclarationIds[declarationIndex].getDeclaration( context);
+    return d_func()->m_usedDeclarationIds[declarationIndex].getDeclaration(const_cast<TopDUContext*>(this));
   }
 }
 

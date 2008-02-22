@@ -409,14 +409,14 @@ QList<KTextEditor::SmartRange*> Declaration::smartUses() const
 
   //First, search for uses within the own context
   {
-    foreach(KTextEditor::SmartRange* range, topContext()->allSmartUses(const_cast<Declaration*>(this)))
+    foreach(KTextEditor::SmartRange* range, allSmartUses(topContext(), const_cast<Declaration*>(this)))
       tempUses.insert(range);
   }
 
   QList<TopDUContext*> useContexts = DUChain::uses()->uses(id());
 
   foreach(TopDUContext* context, useContexts) {
-    foreach(KTextEditor::SmartRange* range, context->allSmartUses(const_cast<Declaration*>(this)))
+    foreach(KTextEditor::SmartRange* range, allSmartUses(context, const_cast<Declaration*>(this)))
       tempUses.insert(range);
   }
 

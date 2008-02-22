@@ -1311,7 +1311,7 @@ QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declaration
         ret << range;
     }
 
-  foreach(DUContext* child, d_func()->m_childContexts)
+  foreach(DUContext* child, context->childContexts())
     ret += allSmartUses(child, declarationIndex);
   
   return ret;

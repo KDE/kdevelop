@@ -244,7 +244,7 @@ DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
       //Try finding a use under the cursor
       for(int a = 0; a < ctx->uses().count(); ++a)
         if( ctx->uses()[a].m_range.contains(c) )
-          return ctx->declarationForUse(a, chosen);
+          return ctx->topContext()->usedDeclarationForIndex(ctx->uses()[a].m_declarationIndex);
 
       ctx = ctx->parentContext(); //It may happen, for example in the case of function-declarations, that the use is one context higher.
     }
