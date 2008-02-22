@@ -340,7 +340,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
 
   for(int a = 0; a < context->uses().count(); ++a) {
     if(context->uses()[a].m_declarationIndex < 0) {
-      Declaration* decl = context->declarationForUse(a, context->topContext());
+      Declaration* decl = context->topContext()->usedDeclarationForIndex(a);
       uint colorNum = numColors;
       if( colorsForDeclarations.contains(decl) )
         colorNum = colorsForDeclarations[decl];
@@ -424,7 +424,7 @@ void CppHighlighting::highlightUse(DUContext* context, int index, uint color) co
 {
   if (SmartRange* range = context->useSmartRange(index)) {
     Types type = ErrorVariableType;
-    Declaration* decl = context->declarationForUse(index, context->topContext());
+    Declaration* decl = context->topContext()->usedDeclarationForIndex(index);
     if (decl)
       type = typeForDeclaration(decl);
 
@@ -437,7 +437,7 @@ void CppHighlighting::highlightUses(DUContext* context) const
   for(int a = 0; a < context->uses().count(); ++a) {
     if (SmartRange* range = context->useSmartRange(a)) {
       Types type = ErrorVariableType;
-      Declaration* decl = context->declarationForUse(a, context->topContext());
+      Declaration* decl = context->topContext()->usedDeclarationForIndex(a);
       if (decl)
         type = typeForDeclaration(decl);
 
