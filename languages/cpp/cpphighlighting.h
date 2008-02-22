@@ -40,6 +40,8 @@ class DUContext;
 class Declaration;
 }
 
+///@todo make the colorized highlighting work while smart-conversion
+
 typedef QVector<KDevelop::Declaration*> ColorMap;
 
 class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
@@ -88,9 +90,9 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
   
     virtual void highlightDefinition(KDevelop::Definition* definition) const;
     virtual void highlightDeclaration(KDevelop::Declaration* declaration, uint color) const;
-    virtual void highlightUse(KDevelop::Use* use, uint color) const;
+    virtual void highlightUse(KDevelop::DUContext* context, int index, uint color) const;
     virtual void highlightDeclaration(KDevelop::Declaration* declaration) const;
-    virtual void highlightUse(KDevelop::Use* use) const;
+    virtual void highlightUses(KDevelop::DUContext* context) const;
 
     //color should be zero when undecided
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, uint color ) const;

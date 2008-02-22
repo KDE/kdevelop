@@ -636,7 +636,7 @@ void DeclarationBuilder::closeDeclaration()
         idType->setDeclaration( currentDeclaration() );
 
     //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
-    if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) )
+    if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) )
       currentDeclaration()->setKind(Declaration::Instance);
     else
       currentDeclaration()->setKind(Declaration::Type);

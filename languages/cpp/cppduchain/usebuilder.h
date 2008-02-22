@@ -79,7 +79,13 @@ private:
   void newUse(NameAST* name);
 
   inline int& nextUseIndex() { return m_nextUseStack.top(); }
+  inline QVector<int>& skippedUses() { return m_skippedUses.top(); }
   QStack<int> m_nextUseStack;
+  QStack<QVector<int> > m_skippedUses;
+  QStack<DUContext*> m_contexts;
+
+  //Whether not encountered uses should be deleted during closeContext()
+  bool m_finishContext;
 };
 
 #endif // USEBUILDER_H

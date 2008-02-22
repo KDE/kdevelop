@@ -35,7 +35,7 @@ using namespace KTextEditor;
 using namespace KDevelop;
 
 UseBuilder::UseBuilder (ParseSession* session)
-  : UseBuilderBase(session)
+  : UseBuilderBase(session), m_finishContext(true)
 {
 }
 
@@ -46,26 +46,19 @@ UseBuilder::UseBuilder (CppEditorIntegrator* editor)
 
 void UseBuilder::buildUses(AST *node)
 {
+  TopDUContext* top = dynamic_cast<TopDUContext*>(node->ducontext);
+
+  if (top) {
+    DUChainWriteLocker lock(DUChain::lock());
+    top->clearDeclarationIndices();
+    if(top->hasUses())
+      setRecompiling(true);
+  }
+  
   supportBuild(node);
 
-  if (TopDUContext* top = dynamic_cast<TopDUContext*>(node->ducontext))
+  if (top)
     top->setHasUses(true);
-}
-
-void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* node)
-{
-  UseBuilderBase::visitPrimaryExpression(node);
-
-  if (node->name)
-    newUse(node->name);
-}
-
-void UseBuilder::visitMemInitializer(MemInitializerAST * node)
-{
-  UseBuilderBase::visitMemInitializer(node);
-
-  if (node->initializer_id)
-    newUse(node->initializer_id);
 }
 
 void UseBuilder::newUse(NameAST* name)
@@ -91,6 +84,11 @@ void UseBuilder::newUse(NameAST* name)
 void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop::Declaration* declaration)
 {
   DUChainWriteLocker lock(DUChain::lock());
+
+  if(!declaration) {
+    kDebug(9007) << "Tried to create use of zero declaration";
+    return;
+  }
   
   SimpleRange newRange = m_editor->findRange(start_token, end_token);
 
@@ -108,13 +106,21 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
     ++contextUpSteps;
   }
 
-  if (contextUpSteps)
+  if (contextUpSteps) {
     openContext(newContext);
+    nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
+    skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
+    
+    Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == currentContext());
+    Q_ASSERT(currentContext()->uses().count() >= nextUseIndex());
+  }
   
-  Use* ret = 0;
+  bool encountered = false;
+
+  int declarationIndex = currentContext()->topContext()->indexForUsedDeclaration(declaration);
 
   if (recompiling()) {
-    const QList<Use*>& uses = currentContext()->uses();
+    const QVector<Use>& uses = currentContext()->uses();
 
     QMutexLocker smartLock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
@@ -123,29 +129,26 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
       translated = SimpleRange( m_editor->smart()->translateFromRevision(translated.textRange()) );
 
     for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
-      Use* use = uses.at(nextUseIndex());
+      const Use& use = uses[nextUseIndex()];
 
-      if (use->range().start > translated.end && use->smartRange() )
+      if (use.m_range.start > translated.end && m_editor->smart() )
         break;
 
-      if (use->range() == translated &&
-          ((!use->declaration() && !declaration) ||
-           (declaration && use->declaration() == declaration)))
+      if (use.m_range == translated)
       {
+        currentContext()->setUseDeclaration(nextUseIndex(), declarationIndex);
+        ++nextUseIndex();
         // Match
-        ret = use;
-
-        setEncountered(ret);
-        //Eventually upgrade the range to a smart-range
-        /*if( m_editor->smart() && !ret->smartRange() )
-          ret->setTextRange(m_editor->createRange(newRange));*/
+        encountered = true;
 
         break;
       }
+      //Not encountered, and before the current range. Remove all intermediate uses.
+      skippedUses().append(nextUseIndex());
     }
   }
 
-  if (!ret) {
+  if (!encountered) {
 
     SmartRange* prior = m_editor->currentRange();
 
@@ -161,40 +164,53 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
     SmartRange* use = m_editor->createRange(newRange.textRange());
     m_editor->exitCurrentRange();
 
-    Use* newUse = new Use(m_editor->currentUrl(), newRange, currentContext());
-    newUse->setSmartRange(use);
+    currentContext()->createUse(declarationIndex, newRange, use, nextUseIndex());
+    ++nextUseIndex();
 
-    setEncountered(newUse);
-
-    if (declaration)
-      declaration->addUse(newUse);
-    else
-      currentContext()->addOrphanUse(newUse);
-      //kWarning(9007) << "Could not find definition for identifier" << id << "at" << *use ;
-
-    //Put back parent-ranges of higher contexts that we have moved by side
     for (QList<SmartRange*>::const_iterator it = backupRanges.begin(); it != backupRanges.end(); ++it)
       m_editor->setCurrentRange( *it );
 
     Q_ASSERT(m_editor->currentRange() == prior);
   }
 
-  if (contextUpSteps)
+  if (contextUpSteps) {
+    Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == currentContext());
+    Q_ASSERT(currentContext()->uses().count() >= nextUseIndex());
+    m_nextUseStack[m_nextUseStack.size()-contextUpSteps-2] = nextUseIndex();
+    m_skippedUses[m_skippedUses.size()-contextUpSteps-2] = skippedUses();
+    m_finishContext = false;
     closeContext();
+    m_finishContext = true;
+  }
 }
 
 void UseBuilder::openContext(DUContext * newContext)
 {
   UseBuilderBase::openContext(newContext);
 
+  m_contexts.push(newContext);
   m_nextUseStack.push(0);
+  m_skippedUses.push(QVector<int>());
 }
 
 void UseBuilder::closeContext()
 {
+  if(m_finishContext) {
+    DUChainWriteLocker lock(DUChain::lock());
+    
+    //Delete all uses that were not encountered
+    //That means: All uses in skippedUses, and all uses from nextUseIndex() to currentContext()->uses().count()
+    for(int a = currentContext()->uses().count()-1; a >= nextUseIndex(); --a)
+      currentContext()->deleteUse(a);
+    for(int a = skippedUses().count()-1; a >= 0; --a)
+      currentContext()->deleteUse(skippedUses()[a]);
+  }
+  
   UseBuilderBase::closeContext();
 
+  m_contexts.pop();
   m_nextUseStack.pop();
+  m_skippedUses.pop();
 }
 
 void UseBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST * exp) {
@@ -244,6 +260,22 @@ void UseBuilder::visitUnaryExpression(UnaryExpressionAST * exp) {
   visitExpression(exp);
 }
 
+void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* exp)
+{
+  visitExpression(exp);
+/*  UseBuilderBase::visitPrimaryExpression(node);
+
+  if (node->name)
+    newUse(node->name);*/
+}
+
+void UseBuilder::visitMemInitializer(MemInitializerAST * node)
+{
+  UseBuilderBase::visitMemInitializer(node);
+
+  if (node->initializer_id)
+    newUse(node->initializer_id);
+}
 
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:

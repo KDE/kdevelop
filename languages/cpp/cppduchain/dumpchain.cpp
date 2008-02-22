@@ -190,8 +190,12 @@ void DumpChain::dump( DUContext * context, bool imported )
       kDebug(9007) << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "," << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
       if (dec->definition())
         kDebug(9007) << QString((indent+1) * 2 + 1, ' ') << "Definition:" << dec->definition()->range().textRange();
-      foreach (Use* use, dec->uses())
-        kDebug(9007) << QString((indent+2) * 2, ' ') << "Use:" << use->range().textRange();
+      QMap<HashedString, QList<SimpleRange> > uses = dec->uses();
+      for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
+        kDebug(9007) << QString((indent+2) * 2, ' ') << "File:" << it.key().str();
+        foreach (const SimpleRange& range, *it)
+          kDebug(9007) << QString((indent+2) * 2+1, ' ') << "Use:" << range.textRange();
+      }
     }
   }
 

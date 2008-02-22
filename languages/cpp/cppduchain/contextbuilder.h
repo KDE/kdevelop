@@ -144,6 +144,7 @@ protected:
   // Notifications for subclasses
   /// Returns true if we are recompiling a definition-use chain
   inline bool recompiling() const { return m_recompiling; }
+  inline void setRecompiling(bool recomp) { m_recompiling = recomp; }
 
   virtual void addBaseType( CppClassType::BaseClassInstance base );
   

@@ -402,15 +402,17 @@ void TestDUChain::testTypedefUses()
   //                 012345678901234567890123456789012345678901234567890123456789
   QByteArray method("class A{}; typedef A B; A c; B d;");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
   QCOMPARE(top->localDeclarations().count(), 4);
   QCOMPARE(top->uses().count(), 3);
-  QCOMPARE(top->localDeclarations()[0]->uses().count(), 2); //Typedef and "A c;"
-  QCOMPARE(top->localDeclarations()[1]->uses().count(), 1); //"B d;"
+  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1); //1 File
+  QCOMPARE(top->localDeclarations()[1]->uses().count(), 1); //1 File
   
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 2); //Typedef and "A c;"
+  QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1); //"B d;"
 }
 
 void TestDUChain::testDeclareFor()
@@ -466,7 +468,8 @@ void TestDUChain::testDeclareFor()
 
   Declaration* defI = forParamCtx->localDeclarations().first();
   QCOMPARE(defI->identifier(), Identifier("i"));
-  QCOMPARE(defI->uses().count(), 4);
+  QCOMPARE(defI->uses().count(), 1);
+  QCOMPARE(defI->uses().begin()->count(), 4);
 
   QCOMPARE(findDeclaration(forCtx, defI->identifier()), defI);
 
@@ -500,12 +503,14 @@ void TestDUChain::testDeclareForeach()
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
   QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 1);
   
   DUContext* mainContext = top->childContexts()[2];
   QCOMPARE(mainContext->childContexts().count(), 2);
   QCOMPARE(mainContext->childContexts()[0]->localDeclarations().count(), 1);
   QCOMPARE(mainContext->childContexts()[1]->localDeclarations().count(), 0);
   QCOMPARE(mainContext->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+  QCOMPARE(mainContext->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 1);
 
   release(top);
 }
@@ -591,6 +596,7 @@ void TestDUChain::testDeclareStruct()
   Declaration* defStructA = top->localDeclarations().first();
   QCOMPARE(defStructA->identifier(), Identifier("A"));
   QCOMPARE(defStructA->uses().count(), 1);
+  QCOMPARE(defStructA->uses().begin()->count(), 1);
   QVERIFY(defStructA->type<CppClassType>());
   QCOMPARE(defStructA->type<CppClassType>()->elements().count(), 3);
   QCOMPARE(defStructA->type<CppClassType>()->elements().first(), typeShort);
@@ -607,6 +613,7 @@ void TestDUChain::testDeclareStruct()
   Declaration* defI = structA->localDeclarations().first();
   QCOMPARE(defI->identifier(), Identifier("i"));
   QCOMPARE(defI->uses().count(), 1);
+  QCOMPARE(defI->uses().begin()->count(), 1);
 
   QCOMPARE(findDeclaration(structA,  Identifier("i")), defI);
   QCOMPARE(findDeclaration(structA,  Identifier("b")), noDef);
@@ -632,6 +639,7 @@ void TestDUChain::testDeclareStruct()
   Declaration* defC = ctorCtx->localDeclarations()[1];
   QCOMPARE(defC->identifier(), Identifier("c"));
   QCOMPARE(defC->uses().count(), 1);
+  QCOMPARE(defC->uses().begin()->count(), 1);
 
   QCOMPARE(findDeclaration(ctorCtx,  Identifier("i")), defI);
   QCOMPARE(findDeclaration(ctorCtx,  Identifier("b")), defB);
@@ -719,7 +727,8 @@ void TestDUChain::testVariableDeclaration()
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3); // "A instance(c)" evaluates to a function declaration, so we have one function context.
   QCOMPARE(top->localDeclarations().count(), 5);
-  QCOMPARE(top->localDeclarations()[0]->uses().count(), 2);
+  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
 //   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[1]->abstractType().data());
@@ -758,6 +767,7 @@ void TestDUChain::testDeclareClass()
   Declaration* defClassA = top->localDeclarations().first();
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QCOMPARE(defClassA->uses().count(), 1);
+  QCOMPARE(defClassA->uses().begin()->count(), 1);
   QVERIFY(defClassA->type<CppClassType>());
   QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 3);
   CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements()[2]);
@@ -859,6 +869,7 @@ void TestDUChain::testDeclareNamespace()
   QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
   QCOMPARE(findDeclaration(testCtx,  QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(bar->uses().count(), 1);
+  QCOMPARE(bar->uses().begin()->count(), 1);
   QCOMPARE(findDeclaration(top, bar->identifier()), bar2);
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
 
@@ -977,6 +988,7 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(bar->identifier(), Identifier("bar"));
   QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
   QCOMPARE(bar->uses().count(), 1);
+  QCOMPARE(bar->uses().begin()->count(), 1);
   QCOMPARE(findDeclaration(top, bar->identifier(), top->range().start), noDef);
   QCOMPARE(findDeclaration(top, bar->identifier()), bar);
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
@@ -1652,6 +1664,8 @@ void TestDUChain::testCaseUse()
   QCOMPARE(top->localDeclarations().count(), 5);
   QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
   QCOMPARE(top->localDeclarations()[2]->uses().count(), 1);
+  QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1);
+  QCOMPARE(top->localDeclarations()[2]->uses().begin()->count(), 1);
 }
 
 void TestDUChain::testForwardDeclaration2()

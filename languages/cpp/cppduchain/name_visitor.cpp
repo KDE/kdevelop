@@ -106,9 +106,20 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
     m_find.closeIdentifier();
   }
 
-  if( node->id && !m_find.lastDeclarations().isEmpty() )
-    m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
-  else if( m_debug )
+  if( node->id && !m_find.lastDeclarations().isEmpty() ) {
+    bool had = false;
+    foreach(DeclarationPointer decl, m_find.lastDeclarations()) {
+      if(decl && !decl->isForwardDeclaration()) {
+        //Prefer registering non forward-declaration uses
+        m_visitor->newUse( node, node->id, node->id+1, decl );
+        had = true;
+        break;
+      }
+    }
+    
+    if(!had) //only forward-declarations, register to any.
+      m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
+  } else if( m_debug )
     kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
 
     

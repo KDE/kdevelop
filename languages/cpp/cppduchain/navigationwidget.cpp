@@ -406,21 +406,17 @@ class NavigationContext : public KShared {
                 eventuallyMakeTypeLinks(base.baseClass.data());
               }
               m_currentText += " ";
-              if( !klass->isClosed() )
-                m_currentText += i18n("(forward-declaration)") + " ";
-              else {
-                if(m_declaration->isForwardDeclaration()) {
-                  ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
-                  Declaration* resolved = forwardDec->resolve(m_topContext.data());
-                  if(resolved) {
-                    m_currentText += "(" + i18n("resolved forward-declaration") + ": ";
-                    makeLink(resolved->identifier().toString(), KDevelop::DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
-                    m_currentText += ") ";
-                  }else{
-                    m_currentText += i18n("(bad forward-declaration)") + " ";
-                  }
-                  
-                }
+            }
+            
+            if(m_declaration->isForwardDeclaration()) {
+              ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
+              Declaration* resolved = forwardDec->resolve(m_topContext.data());
+              if(resolved) {
+                m_currentText += "(" + i18n("resolved forward-declaration") + ": ";
+                makeLink(resolved->identifier().toString(), KDevelop::DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
+                m_currentText += ") ";
+              }else{
+                m_currentText += i18n("(bad forward-declaration)") + " ";
               }
             }
           }
@@ -486,6 +482,19 @@ class NavigationContext : public KShared {
         if( m_declaration->definition() ) {
           m_currentText += labelHighlight(i18n( "Def.: " ));
           makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+        }
+        
+        QMap<HashedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
+
+        if(!uses.isEmpty()) {
+          m_currentText += labelHighlight(i18n("<br />Uses:<br />"));
+          for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
+            m_currentText += " " + it.key().str() + "<br />";
+            foreach(const SimpleRange& range, *it) {
+              m_currentText += "  ";
+              makeLink( QString("%1:%2").arg(range.start.line).arg(range.start.column), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
+            }
+          }
         }
       }
       //m_currentText += "<br />";
