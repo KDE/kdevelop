@@ -28,6 +28,7 @@ namespace KDevelop
 class TopDUContext;
 class Definition;
 class Declaration;
+class DUContext;
 class Use;
 
 /**
