@@ -28,7 +28,6 @@
 
 #include "ducontext.h"
 #include "declaration.h"
-#include "definition.h"
 #include "use.h"
 #include "topducontext.h"
 #include "duchain.h"
@@ -51,13 +50,6 @@ public:
       dec->setSmartRange(m_editor->createRange(dec->range().textRange())->toSmartRange());
       if( m_hl )
         m_hl->highlightDeclaration(dec);
-      m_editor->exitCurrentRange();
-    }
-
-    foreach (Definition* def, context->localDefinitions()) {
-      def->setSmartRange(m_editor->createRange(def->range().textRange())->toSmartRange());
-      if( m_hl )
-        m_hl->highlightDefinition(def);
       m_editor->exitCurrentRange();
     }
 

@@ -32,7 +32,6 @@
 #include <duchain/duchain.h>
 #include <duchain/ducontext.h>
 #include <duchain/declaration.h>
-#include <duchain/definition.h>
 #include <duchain/use.h>
 #include <duchain/duchainutils.h>
 #include <icore.h>
@@ -178,7 +177,7 @@ void UseHighlightPlugin::updateViews()
     }
 
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
-    Declaration* foundDeclaration = DUChainUtils::declarationForItem( DUChainUtils::itemUnderCursor(view->document()->url(), c) );
+    Declaration* foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), c) );
 
     if( m_highlightedDeclarations.contains(view) ) {
       ///Step 1: unhighlight the old uses

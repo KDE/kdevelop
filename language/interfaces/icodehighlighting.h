@@ -26,7 +26,6 @@ namespace KDevelop
 {
 
 class TopDUContext;
-class Definition;
 class Declaration;
 class DUContext;
 class Use;
@@ -42,7 +41,6 @@ public:
     virtual ~ICodeHighlighting() {}
 
     virtual void highlightDUChain(TopDUContext* context) const = 0;
-    virtual void highlightDefinition(Definition* definition) const = 0;
     virtual void highlightDeclaration(Declaration* declaration) const = 0;
     //Should highlight the local uses in the given context
     virtual void highlightUses(DUContext* context) const = 0;

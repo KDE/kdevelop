@@ -68,7 +68,7 @@ public:
   Node* objectForIndex(const QModelIndex& index) const;
 
   KDevelop::Declaration* declarationForObject(const KDevelop::DUChainBasePointer& pointer) const;
-  KDevelop::Definition* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
+  KDevelop::Declaration* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
 
   void setFilterByProject(bool filterByProject);
   

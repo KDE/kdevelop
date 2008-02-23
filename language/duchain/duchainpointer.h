@@ -27,7 +27,6 @@
 #include "declaration.h"
 #include "use.h"
 #include "abstractfunctiondeclaration.h"
-#include "definition.h"
 
 #include "../languageexport.h"
 
@@ -41,7 +40,6 @@ class DUChainBase;
 class Declaration;
 class AbstractFunctionDeclaration;
 class Use;
-class Definition;
 
 /**
  * Whenever the du-chain is unlocked and locked again, any du-chain item may have been deleted in between.
@@ -184,7 +182,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
   typedef DUChainPointer<TopDUContext> TopDUContextPointer;
   typedef DUChainPointer<Declaration> DeclarationPointer;
   typedef DUChainPointer<Use> UsePointer;
-  typedef DUChainPointer<Definition> DefinitionPointer;
   typedef DUChainPointer<AbstractFunctionDeclaration> FunctionDeclarationPointer;
 }
 

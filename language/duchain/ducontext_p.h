@@ -44,7 +44,7 @@ public:
   DUContext::ContextType m_contextType;
   QualifiedIdentifier m_scopeIdentifier;
   DUContextPointer m_parentContext;
-  ContextOwner* m_owner;
+  Declaration* m_owner;
   QList<DUContextPointer> m_importedParentContexts;
   ///Contains the import-positions of those imported contexts that have a valid one
   QMap<DUContextPointer, SimpleCursor> m_importedParentContextPositions;
@@ -60,8 +60,6 @@ public:
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
   DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
   
-  QList<Definition*> m_localDefinitions;
-
   /**
    * Vector of all uses in this document
    * Mutable for synchronization

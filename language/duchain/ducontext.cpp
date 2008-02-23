@@ -26,7 +26,6 @@
 #include <ktexteditor/smartinterface.h>
 
 #include "declaration.h"
-#include "definition.h"
 #include "duchain.h"
 #include "duchainlock.h"
 #include "use.h"
@@ -34,7 +33,6 @@
 #include "typesystem.h"
 #include "topducontext.h"
 #include "symboltable.h"
-#include "contextowner.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
 #include <hashedstring.h>
@@ -327,8 +325,6 @@ DUContext::~DUContext( )
 
   deleteUses();
 
-  deleteLocalDefinitions();
-
   deleteLocalDeclarations();
 
   //DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
@@ -341,18 +337,18 @@ const QList< DUContext * > & DUContext::childContexts( ) const
   return d_func()->m_childContexts;
 }
 
-ContextOwner* DUContext::owner() const {
+Declaration* DUContext::owner() const {
   ENSURE_CAN_READ
   return d_func()->m_owner;
 }
 
-void DUContext::setOwner(ContextOwner* owner) {
+void DUContext::setOwner(Declaration* owner) {
   ENSURE_CAN_WRITE
   Q_D(DUContext);
   if( owner == d->m_owner )
     return;
 
-  ContextOwner* oldOwner = d->m_owner;
+  Declaration* oldOwner = d->m_owner;
   
   d->m_owner = owner;
 
@@ -1068,45 +1064,6 @@ void DUContext::findContextsInternal(ContextType contextType, const QList<Qualif
   }
 }
 
-const QList<Definition*>& DUContext::localDefinitions() const
-{
-  ENSURE_CAN_READ
-
-  return d_func()->m_localDefinitions;
-}
-
-Definition* DUContext::addDefinition(Definition* definition)
-{
-  ENSURE_CAN_WRITE
-
-  d_func()->m_localDefinitions.append(definition);
-
-  //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::LocalDefinitions, definition);
-
-  return definition;
-}
-
-Definition* DUContext::takeDefinition(Definition* definition)
-{
-  ENSURE_CAN_WRITE
-
-  d_func()->m_localDefinitions.removeAll(definition);
-
-  //DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::LocalDefinitions, definition);
-
-  return definition;
-}
-
-void DUContext::deleteLocalDefinitions()
-{
-  // No need to assert a lock
-
-  QList<Definition*> definitions = localDefinitions();
-  qDeleteAll(definitions);
-
-  Q_ASSERT(localDefinitions().isEmpty());
-}
-
 const QVector< Use > & DUContext::uses() const
 {
   ENSURE_CAN_READ
@@ -1264,10 +1221,6 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered, boo
     foreach (Declaration* dec, localDeclarations())
       if (!encountered.contains(dec))
         delete dec;
-
-    foreach (Definition* def, localDefinitions())
-      if ( !encountered.contains(def))
-        delete def;
   }
 }
 

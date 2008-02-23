@@ -16,7 +16,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/ducontext.cpp
     duchain/topducontext.cpp
     duchain/declaration.cpp
-    duchain/definition.cpp
     duchain/classmemberdeclaration.cpp
     duchain/classfunctiondeclaration.cpp
     duchain/use.cpp
@@ -34,7 +33,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/stringhelpers.cpp
     duchain/namespacealiasdeclaration.cpp
     duchain/dumpdotgraph.cpp
-    duchain/contextowner.cpp
     duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
     duchain/forwarddeclarationtype.cpp
@@ -87,9 +85,7 @@ install(FILES
     duchain/declaration_p.h
     duchain/duchainbase_p.h
     duchain/ducontext_p.h
-    duchain/contextowner_p.h
     duchain/classmemberdeclaration_p.h
-    duchain/definition.h
     duchain/classmemberdeclaration.h
     duchain/classfunctiondeclaration.h
     duchain/use.h
@@ -108,7 +104,6 @@ install(FILES
     duchain/stringhelpers.h
     duchain/namespacealiasdeclaration.h
     duchain/dumpdotgraph.h
-    duchain/contextowner.h
     duchain/duchainutils.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )

@@ -47,7 +47,6 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "declaration.h"
-#include "definition.h"
 
 using namespace KDevelop;
 
@@ -199,16 +198,15 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
       QAction* openDef = menu->addAction(i18n("Open De&finition"), this, SLOT(openDefinition()));
       openDef->setData(QVariant::fromValue(*base));
 
+      Declaration* dec = 0;
+      
       if (DUContext* d = dynamic_cast<DUContext*>(base->data())) {
-        if (d->owner())
-          if (d->owner()->asDeclaration()) {
-            openDef->setEnabled(false);
-          }
-
-      } else if (dynamic_cast<Declaration*>(base->data())) {
-        openDef->setEnabled(false);
-
+        dec = d->owner();
+      } else if (dec = dynamic_cast<Declaration*>(base->data())) {
       }
+
+      if(!dec || dec->definition() || dec->declaration())
+        openDef->setEnabled(false);
     }
   }
   menu->exec(QCursor::pos());
@@ -273,7 +271,7 @@ void ClassTree::openDefinition()
 
   DUChainBasePointer base = qvariant_cast<DUChainBasePointer>(static_cast<QAction*>(sender())->data());
   if (base) {
-    Definition* def = model()->definitionForObject(base);
+    Declaration* def = model()->definitionForObject(base);
 
     if (def) {
       KUrl url(def->url().str());

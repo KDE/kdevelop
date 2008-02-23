@@ -32,7 +32,6 @@ namespace KDevelop {
 
   class Declaration;
   class DeclarationId;
-  class Definition;
   class TopDUContext;
 
   class KDEVPLATFORMLANGUAGE_EXPORT Definitions {
@@ -44,13 +43,13 @@ namespace KDevelop {
      *
      * If @param definition is zero, removes the assignment.
      * */
-    void setDefinition(const DeclarationId& id, Definition* definition);
+    void setDefinition(const DeclarationId& id, Declaration* definition);
 
     ///Gets the definition assigned to @param id, or zero.
-    Definition* definition(const DeclarationId& id) const;
+    Declaration* definition(const DeclarationId& id) const;
 
     ///Gets the declaration assigned to the given @param definition in @param context
-    Declaration* declaration(const Definition* definition, TopDUContext* context) const;
+    Declaration* declaration(const Declaration* definition, TopDUContext* context) const;
     
     private:
       class DefinitionsPrivate* d;

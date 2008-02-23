@@ -38,7 +38,6 @@
 #include "classbrowserplugin.h"
 #include "topducontext.h"
 #include "declaration.h"
-#include "definition.h"
 #include "parsingenvironment.h"
 #include "duchain.h"
 #include "duchainlock.h"
@@ -191,9 +190,6 @@ bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
   if (!context->localDeclarations().isEmpty())
     return true;
 
-  if (!context->localDefinitions().isEmpty())
-    return true;
-
   if (context->childContexts().isEmpty())
     return false;
 
@@ -250,9 +246,6 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
     if (dynamic_cast<Declaration*>(p2->data()))
       return true;
 
-    if (dynamic_cast<Definition*>(p2->data()))
-      return true;
-
     if (DUContext* d2 = dynamic_cast<DUContext*>(p2->data())) {
       if (d2->type() != d->type())
         if (d->type() == DUContext::Namespace)
@@ -265,9 +258,6 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
     if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
       return false;
 
-  } else if (Definition* d = dynamic_cast<Definition*>(p1->data())) {
-    if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
-      return false;
   }
 
   QString s1 = ClassModel::data(p1).toString();
@@ -357,10 +347,6 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
     foreach (Declaration* declaration, context->localDeclarations())
       if (declaration->isForwardDeclaration() && !filterObject(declaration))
         list->append(createPointer(declaration, parent));
-
-    foreach (Definition* definition, context->localDefinitions())
-      if (definition->declaration() && !definition->declaration()->isForwardDeclaration() && !filterObject(definition))
-        list->append(createPointer(definition, parent));
   }
 }
 
@@ -539,15 +525,10 @@ QVariant ClassModel::data(Node* node, int role)
     switch (context->type()) {
       case DUContext::Class:
         if (context->owner()) {
-          if (Definition* definition = context->owner()->asDefinition()) {
-            switch (role) {
-              case Qt::DisplayRole:
-                return definition->declaration()->identifier().toString();
-              case Qt::DecorationRole:
-                return DUChainUtils::iconForDeclaration(definition->declaration());
-            }
-
-          } else if (Declaration* declaration = context->owner()->asDeclaration()) {
+          if (Declaration* declaration = context->owner()) {
+            if(context->owner()->isDefinition() && context->owner()->declaration())
+              declaration = context->owner()->declaration();
+            
             switch (role) {
               case Qt::DisplayRole:
                 return declaration->identifier().toString();
@@ -569,6 +550,9 @@ QVariant ClassModel::data(Node* node, int role)
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
     switch (role) {
       case Qt::DisplayRole: {
+        if(dec->isDefinition() && dec->declaration())
+          dec = dec->declaration();
+        
         QString ret = dec->identifier().toString();
         if (FunctionType::Ptr type = dec->type<FunctionType>())
           ret += type->partToString(FunctionType::SignatureArguments);
@@ -576,18 +560,6 @@ QVariant ClassModel::data(Node* node, int role)
       }
       case Qt::DecorationRole:
         return DUChainUtils::iconForDeclaration(dec);
-    }
-
-  } else if (Definition* def = dynamic_cast<Definition*>(base)) {
-    switch (role) {
-      case Qt::DisplayRole:
-        if (def->declaration())
-          return def->declaration()->identifier().toString();
-        else
-          return i18n("<No declaration for definition>");
-      case Qt::DecorationRole:
-        if (def->declaration())
-          return DUChainUtils::iconForDeclaration(def->declaration());
     }
 
   } else {
@@ -609,35 +581,46 @@ Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer)
     return 0L;
 
   if (Declaration* declaration = dynamic_cast<Declaration*>(pointer.data())) {
-    return declaration;
 
-  } else if (Definition* d = dynamic_cast<Definition*>(pointer.data())) {
-    return d->declaration();
+    if(declaration->isDefinition() && declaration->declaration())
+      return declaration->declaration();
+    
+    return declaration;
 
   } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
     if (context->owner())
-      if (Definition* definition = context->owner()->asDefinition())
-        return definition->declaration();
+      if(context->owner()->declaration())
+        return context->owner()->declaration();
       else
-        return context->owner()->asDeclaration();
+        return context->owner();
   }
 
   return 0L;
 }
 
-Definition* ClassModel::definitionForObject(const DUChainBasePointer& pointer) const
+Declaration* ClassModel::definitionForObject(const DUChainBasePointer& pointer) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
   if (!pointer)
     return 0L;
 
-  if (Definition* d = dynamic_cast<Definition*>(pointer.data())) {
+  if (Declaration* d = dynamic_cast<Declaration*>(pointer.data())) {
+    if(!d->isDefinition()) {
+      if(d->definition())
+        return d->definition();
+      else
+        return 0L;
+    }
     return d;
-
   } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
-    if (context->owner())
-      return context->owner()->asDefinition();
+    if (context->owner()) {
+      if(context->owner()->isDefinition())
+        return context->owner();
+      else
+        if(context->owner()->definition())
+          return context->owner()->definition();
+    }
   }
 
   return 0L;

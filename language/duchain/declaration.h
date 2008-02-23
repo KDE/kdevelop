@@ -28,7 +28,6 @@
 #include "identifier.h"
 #include "typesystem.h"
 #include "duchainbase.h"
-#include "contextowner.h"
 
 class QByteArray;
 
@@ -43,7 +42,6 @@ class AbstractType;
 class DUContext;
 class Use;
 class ForwardDeclaration;
-class Definition;
 class DeclarationPrivate;
 class DeclarationId;
 
@@ -57,7 +55,7 @@ typedef QList<ImportTraceItem> ImportTrace;
  * In the moment the parent-context is set, the context may only be edited when it
  * is allowed to edited it's top-level context(@see TopLevelContext::inDUChain()
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase, public ContextOwner
+class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 {
 
 public:
@@ -106,10 +104,19 @@ public:
   ///Is this a type-alias(in c++ typedef)?
   bool isTypeAlias() const;
   void setIsTypeAlias(bool);
+
   /**
-   * Retrieve the definition for this declaration.
-   */
-  Definition* definition() const;
+   * If this is a definition, and has an attached declaration, that declaration is returned.
+   * Else zero.
+   * @param topContext the top-context from which to search
+   * */
+  Declaration* declaration(TopDUContext* topContext = 0) const;
+
+  /**
+   * If this is a declaration, and has an attached definition, that definition is returned.
+   * Else zero.
+   * */
+  Declaration* definition() const;
 
   /**
    * Set the definition for this declaration.
@@ -121,12 +128,13 @@ public:
    * - Are declared within the same file
    * - Have the same additionalIdentity() value
    */
-  void setDefinition(Definition* definition);
+  void setDefinition(Declaration* definition);
 
   /**
    * This returns the context that is opened by this declaration, or zero.
    * */
-  virtual DUContext * internalContext() const;
+  DUContext * internalContext() const;
+  void setInternalContext(DUContext* context);
 
   /**
    * If this declaration has a definition, and the definition is resolved, it returns the internal context of the definition.

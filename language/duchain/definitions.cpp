@@ -29,8 +29,10 @@ uint qHash(const KDevelop::DeclarationId& id) {
 }
 
 struct DefinitionsPrivate {
-  QHash<DeclarationId, DefinitionPointer> m_definitions;
-  QHash<DefinitionPointer, DeclarationId> m_declarationIds;
+  //Maps definitions to declaration-ids
+  QHash<DeclarationId, DeclarationPointer> m_definitions;
+  //Maps declaration-ids to definitions
+  QHash<DeclarationPointer, DeclarationId> m_declarationIdsForDefinitions;
 };
 
 Definitions::Definitions() : d(new DefinitionsPrivate())
@@ -43,20 +45,20 @@ Definitions::~Definitions()
 }
 
 ///Assigns @param definition to the given @param id.
-void Definitions::setDefinition(const DeclarationId& id, Definition* definition)
+void Definitions::setDefinition(const DeclarationId& id, Declaration* definition)
 {
   if(!definition)
     d->m_definitions.remove(id);
   else {
-    d->m_declarationIds.insert(DefinitionPointer(definition), id);
-    d->m_definitions.insert(id, DefinitionPointer(definition));
+    d->m_declarationIdsForDefinitions.insert(DeclarationPointer(definition), id);
+    d->m_definitions.insert(id, DeclarationPointer(definition));
   }
 }
 
 ///Gets the definition assigned to @param id, or zero.
-Definition* Definitions::definition(const DeclarationId& id) const
+Declaration* Definitions::definition(const DeclarationId& id) const
 {
-  QHash<DeclarationId, DefinitionPointer>::const_iterator it = d->m_definitions.find(id);
+  QHash<DeclarationId, DeclarationPointer>::const_iterator it = d->m_definitions.find(id);
   if(it != d->m_definitions.end()) {
     return (*it).data();
   }else{
@@ -64,10 +66,10 @@ Definition* Definitions::definition(const DeclarationId& id) const
   }
 }
 
-Declaration* Definitions::declaration(const Definition* definition, TopDUContext* context) const
+Declaration* Definitions::declaration(const Declaration* definition, TopDUContext* context) const
 {
-  QHash<DefinitionPointer, DeclarationId>::const_iterator it = d->m_declarationIds.find(DefinitionPointer(const_cast<Definition*>(definition)));
-  if(it == d->m_declarationIds.end())
+  QHash<DeclarationPointer, DeclarationId>::const_iterator it = d->m_declarationIdsForDefinitions.find(DeclarationPointer(const_cast<Declaration*>(definition)));
+  if(it == d->m_declarationIdsForDefinitions.end())
     return 0;
 
   return (*it).getDeclaration(context);

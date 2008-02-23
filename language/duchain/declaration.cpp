@@ -29,13 +29,11 @@
 
 #include "topducontext.h"
 #include "use.h"
-#include "definition.h"
 #include "symboltable.h"
 #include "forwarddeclaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
 #include "identifiedtype.h"
-#include "definition_p.h"
 #include "ducontext_p.h"
 #include "use_p.h"
 #include "declarationid.h"
@@ -51,6 +49,7 @@ DeclarationPrivate::DeclarationPrivate()
   : m_isDefinition(false), m_inSymbolTable(false),  
     m_isTypeAlias(false), m_anonymousInContext(false) 
 {
+  m_internalContext = 0;
   m_context = 0;
   m_kind = Declaration::Instance;
 }
@@ -66,6 +65,7 @@ DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChai
   m_isTypeAlias = rhs.m_isTypeAlias;
   m_inSymbolTable = false;
   m_context = 0;
+  m_internalContext = 0;
   m_anonymousInContext = rhs.m_anonymousInContext;
 }
   
@@ -89,7 +89,6 @@ bool Declaration::inDUChain() const {
 
 Declaration::Declaration( const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context )
   : DUChainBase(*new DeclarationPrivate, url, range)
-  , ContextOwner(this)
 {
   d_func()->m_scope = scope;
   if(context)
@@ -97,17 +96,16 @@ Declaration::Declaration( const HashedString& url, const SimpleRange& range, Sco
 }
 
 Declaration::Declaration(const Declaration& rhs) 
-  : DUChainBase(*new DeclarationPrivate( *rhs.d_func() )),
-    ContextOwner(this) {
+  : DUChainBase(*new DeclarationPrivate( *rhs.d_func() )) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-Declaration::Declaration( DeclarationPrivate & dd ) : DUChainBase(dd), ContextOwner(this)
+Declaration::Declaration( DeclarationPrivate & dd ) : DUChainBase(dd)
 {
 }
 
 Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range, Scope scope )
-  : DUChainBase(dd, url, range), ContextOwner(this)
+  : DUChainBase(dd, url, range)
 {
   Q_D(Declaration);
   d->m_scope = scope;
@@ -117,6 +115,9 @@ Declaration::~Declaration()
 {
   Q_D(Declaration);
   // Inserted by the builder after construction has finished.
+  if( d->m_internalContext )
+    d->m_internalContext->setOwner(0);
+  
   if (d->m_inSymbolTable)
     SymbolTable::self()->removeDeclaration(this);
 
@@ -131,7 +132,6 @@ Declaration::~Declaration()
       type->setDeclaration(0);
 
   setAbstractType(AbstractType::Ptr());
-
   //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 
@@ -161,11 +161,18 @@ void Declaration::setIdentifier(const Identifier& identifier)
 {
   ENSURE_CAN_WRITE
   Q_D(Declaration);
+  bool wasInSymbolTable = d->m_inSymbolTable;
+  
+  if(wasInSymbolTable)
+    SymbolTable::self()->removeDeclaration(this);
+    
   if( d->m_context && !d->m_anonymousInContext )
     d->m_context->changingIdentifier( this, d->m_identifier, identifier );
 
   d->m_identifier = identifier;
   
+  if(wasInSymbolTable)
+    SymbolTable::self()->addDeclaration(this);
   //DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
@@ -273,9 +280,11 @@ Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) {
 DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) const {
   ENSURE_CAN_READ
 
-  Definition* def = definition();
-  if( def )
-    return def->internalContext();
+  if(!isDefinition()) {
+    Declaration* def = definition();
+    if( def )
+      return def->internalContext();
+  }
 
   if( d_func()->m_isTypeAlias ) {
     ///If this is a type-alias, return the internal context of the actual type.
@@ -284,15 +293,36 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
       return idType->declaration()->logicalInternalContext( topContext );
   }
   
-  return ContextOwner::internalContext();
+  return internalContext();
 }
 
 DUContext * Declaration::internalContext() const
 {
   ENSURE_CAN_READ
-  
-  return ContextOwner::internalContext();
+  return d_func()->m_internalContext;
 }
+
+void Declaration::setInternalContext(DUContext* context)
+{
+  ENSURE_CAN_WRITE
+  Q_D(Declaration);
+
+  if( context == d->m_internalContext )
+    return;
+
+  DUContext* oldInternalContext = d->m_internalContext;
+  
+  d->m_internalContext = context;
+
+  //Q_ASSERT( !oldInternalContext || oldInternalContext->owner() == this );
+  if( oldInternalContext && oldInternalContext->owner() == this )
+    oldInternalContext->setOwner(0);
+  
+
+  if( d->m_internalContext )
+    d->m_internalContext->setOwner(this);
+}
+
 
 bool Declaration::operator ==(const Declaration & other) const
 {
@@ -343,14 +373,26 @@ DeclarationId Declaration::id() const
   return DeclarationId(url(), qualifiedIdentifier(), additionalIdentity());
 }
 
-Definition* Declaration::definition() const
+Declaration* Declaration::declaration(TopDUContext* topContext) const
 {
   ENSURE_CAN_READ
+  
+  if(!isDefinition())
+    return 0;
+  
+  return DUChain::definitions()->declaration(const_cast<Declaration*>(this), topContext ? topContext : this->topContext());
+}
+
+Declaration* Declaration::definition() const
+{
+  ENSURE_CAN_READ
+  if(isDefinition())
+    return 0;
   
   return DUChain::definitions()->definition(id());
 }
 
-void Declaration::setDefinition(Definition* definition)
+void Declaration::setDefinition(Declaration* definition)
 {
   ENSURE_CAN_WRITE
 

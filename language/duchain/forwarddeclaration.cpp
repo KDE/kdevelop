@@ -26,7 +26,6 @@
 #include "duchainlock.h"
 #include "ducontext.h"
 #include "use.h"
-#include "definition.h"
 #include "symboltable.h"
 #include "use_p.h"
 #include "declaration_p.h"

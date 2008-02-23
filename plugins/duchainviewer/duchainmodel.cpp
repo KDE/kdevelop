@@ -38,7 +38,6 @@
 #include "dumpdotgraph.h"
 #include "topducontext.h"
 #include "declaration.h"
-#include "definition.h"
 #include "parsingenvironment.h"
 #include "use.h"
 #include "duchain.h"
@@ -196,9 +195,6 @@ QModelIndex DUChainModel::parent(const QModelIndex & index) const
   if (Declaration* dec = dynamic_cast<Declaration*>(base))
     return createParentIndex(createPointerForObject(dec->context()));
 
-  if (Definition* def = dynamic_cast<Definition*>(base))
-    return createParentIndex(createPointerForObject(def->declaration()));
-
 //   if (Use* use = dynamic_cast<Use*>(base))
 //     return createParentIndex(createPointerForObject(use->declaration()));
 
@@ -240,14 +236,12 @@ QVariant DUChainModel::data(const QModelIndex& index, int role) const
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
     switch (role) {
-      case Qt::DisplayRole:
-        return i18n("Declaration: %1", dec->identifier().toString());
-    }
-
-  } else if (Definition* def = dynamic_cast<Definition*>(base)) {
-    switch (role) {
-      case Qt::DisplayRole:
-        return i18n("Definition: %1", def->declaration()->identifier().toString());
+      case Qt::DisplayRole: {
+        if(dec->isDefinition() && dec->declaration(m_chain.data()))
+          return i18n("Definition: %1", dec->declaration(m_chain.data())->identifier().toString());
+        else
+          return i18n("Declaration: %1", dec->identifier().toString());
+      }
     }
 
   }/* else if (Use* use = dynamic_cast<Use*>(base)) {
@@ -322,7 +316,6 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
     QListIterator<DUContext*> contexts = context->childContexts();
     QListIterator<DUContext*> importedParentContexts = importedParentContextsData;
     QListIterator<Declaration*> declarations = context->localDeclarations();
-    QListIterator<Definition*> definitions = context->localDefinitions();
 //     QListIterator<Use*> uses = context->uses();
 
 
@@ -335,8 +328,6 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
       TEST_NEXT(contexts, 1)
       TEST_NEXT(importedParentContexts, 2)
       TEST_NEXT(declarations, 3)
-      TEST_NEXT(definitions, 4)
-//       TEST_NEXT(uses, 5)
 
       if (first.isValid()) {
         switch (found) {
@@ -349,12 +340,6 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
           case 3:
             currentItem = item(declarations);
             break;
-          case 4:
-            currentItem = proxyItem(context, definitions);
-            break;
-/*          case 5:
-            currentItem = proxyItem(context, uses);
-            break;*/
           default:
             Q_ASSERT(false);
             break;
@@ -376,7 +361,7 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(parent)) {
-    if (dec->definition()) {
+    if (!dec->isDefinition() && dec->definition()) {
       list = new QList<DUChainBasePointer*>();
       list->append(createPointerForObject(dec->definition()));
     }

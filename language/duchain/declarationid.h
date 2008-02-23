@@ -59,6 +59,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
 
     /**
      * Tries to retrieve the declaration, from the perspective of @param context
+     * Never returns a declaration that has isDefinition(..) set.
      * */
     Declaration* getDeclaration(DUContext* context) const;
     

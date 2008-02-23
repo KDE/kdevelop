@@ -21,14 +21,12 @@
 
 #include "duchainutils.h"
 
-#include "definition.h"
 #include "declaration.h"
 #include "classfunctiondeclaration.h"
 #include "ducontext.h"
 #include "duchain.h"
 #include "use.h"
 #include "declaration.h"
-#include "definition.h"
 #include "duchainlock.h"
 #include "classmemberdeclaration.h"
 #include "typesystem.h"
@@ -222,7 +220,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
   return chosen;
 }
 
-DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
+Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
   
@@ -236,11 +234,6 @@ DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
         if( decl->range().contains(c) )
           return decl;
 
-      //Try finding a definition under the cursor
-      foreach( Definition* def, ctx->localDefinitions() )
-        if( def->range().contains(c) )
-          return def;
-
       //Try finding a use under the cursor
       for(int a = 0; a < ctx->uses().count(); ++a)
         if( ctx->uses()[a].m_range.contains(c) )
@@ -252,12 +245,19 @@ DUChainBase* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
   return 0;
 }
 
-Declaration* DUChainUtils::declarationForItem(DUChainBase* item) {
-  if( dynamic_cast<Declaration*>(item) )
-    return static_cast<Declaration*>(item);
-
-  if( dynamic_cast<Definition*>(item) )
-    return static_cast<Definition*>(item)->declaration(static_cast<Definition*>(item)->topContext()); ///@todo maybe take topContext from outside
-
-  return 0;
+Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, TopDUContext* topContext)
+{
+  if(!definition)
+    return 0;
+  
+  if(!topContext)
+    topContext = definition->topContext();
+  
+  if(definition->isDefinition()) {
+    Declaration* ret = definition->declaration();
+    if(ret)
+      return ret;
+  }
+  
+  return definition;
 }

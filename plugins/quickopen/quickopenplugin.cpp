@@ -79,8 +79,7 @@ Declaration* cursorDeclaration() {
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   
-  Declaration* decl = DUChainUtils::declarationForItem( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
-  return decl;
+  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
 }
 
 ///The first declaration(or definition's declaration) that belongs to a context that surrounds the current cursor
@@ -113,10 +112,7 @@ Declaration* cursorContextDeclaration() {
   if(!subCtx || !subCtx->owner())
     return 0;
 
-  if(subCtx->owner()->asDefinition())
-    return subCtx->owner()->asDefinition()->declaration(ctx);
-  else
-    return subCtx->owner()->asDeclaration();
+  return DUChainUtils::declarationForDefinition(subCtx->owner());
 }
 
 QString cursorItemText() {
@@ -544,7 +540,7 @@ void QuickOpenPlugin::quickOpenDefinition()
 
   HashedString u = decl->url();
   SimpleCursor c = decl->range().start;
-  if(decl->definition()) { ///@todo search for the definition in other parsed versions of the document
+  if(decl->definition()) {
     u = decl->definition()->url();
     c = decl->definition()->range().start;
   }else{
@@ -599,13 +595,11 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
 
   QList<DUContext*> children = context->childContexts();
   QList<Declaration*> localDeclarations = context->localDeclarations();
-  QList<Definition*> localDefinitions = context->localDefinitions();
 
   QList<DUContext*>::const_iterator childIt = children.begin();
   QList<Declaration*>::const_iterator declIt = localDeclarations.begin();
-  QList<Definition*>::const_iterator defIt = localDefinitions.begin();
 
-  while(childIt != children.end() || declIt != localDeclarations.end() || defIt != localDefinitions.end()) {
+  while(childIt != children.end() || declIt != localDeclarations.end()) {
 
     DUContext* child = 0;
     if(childIt != children.end())
@@ -615,29 +609,14 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
     if(declIt != localDeclarations.end())
       decl = *declIt;
 
-    Definition* def = 0;
-    if(defIt != localDefinitions.end())
-      def = *defIt;
-
     if(decl) {
       if(child && child->range().start >= decl->range().start)
         child = 0;
-      if(def && def ->range().start >= decl->range().start)
-        def = 0;
     }
     
-    if(def) {
-      if(child && child->range().start >= def->range().start)
-        child = 0;
-      if(decl && decl->range().start >= def->range().start)
-        decl = 0;
-    }
-
     if(child) {
       if(decl && decl->range().start >= child->range().start)
         decl = 0;
-      if(def && def ->range().start >= child->range().start)
-        def = 0;
     }
     
     if(child) {
@@ -649,34 +628,22 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
 
     if(decl) {
       if( filter.accept(decl) ) {
+        if(decl->isDefinition() && decl->declaration())
+          decl = decl->declaration();
+        
         DUChainItem item;
         item.m_item = DeclarationPointer(decl);
         item.m_text = decl->qualifiedIdentifier().toString();
         items << item;
-      }
-
-      ++declIt;
-      continue;
-    }
-    
-    if(def) {
-      decl = def->declaration();
-      
-      if( filter.accept(decl) ) {
-        DUChainItem item;
-        item.m_item = DeclarationPointer(decl);
-        item.m_text = decl->qualifiedIdentifier().toString();
         
         FunctionType* functionType = dynamic_cast<FunctionType*>(decl->abstractType().data());
 
         if(functionType) {
           item.m_text += functionType->partToString(FunctionType::SignatureArguments);
         }
-        
-        items << item;
       }
 
-      ++defIt;
+      ++declIt;
       continue;
     }
   }

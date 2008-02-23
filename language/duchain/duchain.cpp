@@ -30,7 +30,6 @@
 #include "topducontext.h"
 #include "parsingenvironment.h"
 #include "declaration.h"
-#include "definition.h"
 #include "definitions.h"
 #include "use.h"
 #include "uses.h"
@@ -52,7 +51,6 @@ public:
     qRegisterMetaType<TopDUContextPointer>("KDevelop::TopDUContextPointer");
     qRegisterMetaType<DeclarationPointer>("KDevelop::DeclarationPointer");
     qRegisterMetaType<UsePointer>("KDevelop::UsePointer");
-    qRegisterMetaType<DefinitionPointer>("KDevelop::DefinitionPointer");
     qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
     qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
     qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");

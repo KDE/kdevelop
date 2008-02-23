@@ -16,7 +16,6 @@
 #include <ducontext.h>
 #include <topducontext.h>
 #include <declaration.h>
-#include <definition.h>
 #include <duchainpointer.h>
 #include <parsingenvironment.h>
 #include <identifier.h>
@@ -31,10 +30,6 @@ QString shortLabel(KDevelop::Declaration* declaration) {
   return QString("q%1").arg((quint64)declaration);
 }
 
-QString shortLabel(KDevelop::Definition* definition) {
-  return QString("q%1").arg((quint64)definition);
-}
-
 QString rangeToString( const KTextEditor::Range& r ) {
   return QString("%1:%2->%3:%4").arg(r.start().line()).arg(r.start().column()).arg(r.end().line()).arg(r.end().column());
 }
@@ -44,7 +39,6 @@ struct DumpDotGraphPrivate {
   QString dotGraphInternal(KDevelop::DUContext* contex, bool isMaster, bool shortened);
 
   void addDeclaration(QTextStream& stream, Declaration* decl);
-  void addDefinition(QTextStream& stream, Definition* decl);
   
   QMap<KUrl,QString> m_hadVersions;
   QMap<KDevelop::DUChainBase*, bool> m_hadObjects;
@@ -72,31 +66,31 @@ void DumpDotGraphPrivate::addDeclaration(QTextStream& stream, Declaration* dec) 
 
   m_hadObjects[dec] = true;
 
-  stream << shortLabel(dec) <<
-      "[shape=distortion,label=\"" <<
-      dec->toString() << " [" <<
-      dec->qualifiedIdentifier().toString() << "]" << " " <<
-      rangeToString(dec->range().textRange()) << "\"];\n";
-  stream << shortLabel(dec->context()) << " -> " << shortLabel(dec) << "[color=green];\n";
-  if( dec->internalContext() )
-    stream << shortLabel(dec) << " -> " << shortLabel(dec->internalContext()) << "[label=\"internal\", color=blue];\n";
-}
+  Declaration* declarationForDefinition = 0;
+  if(dec->isDefinition())
+    declarationForDefinition = dec->declaration(m_topContext);
 
-void DumpDotGraphPrivate::addDefinition(QTextStream& stream, Definition* def) {
-  if( m_hadObjects.contains(def) )
-    return;
+  if(!declarationForDefinition) {
+    //Declaration
+    stream << shortLabel(dec) <<
+        "[shape=distortion,label=\"" <<
+        dec->toString() << " [" <<
+        dec->qualifiedIdentifier().toString() << "]" << " " <<
+        rangeToString(dec->range().textRange()) << "\"];\n";
+    stream << shortLabel(dec->context()) << " -> " << shortLabel(dec) << "[color=green];\n";
+    if( dec->internalContext() )
+      stream << shortLabel(dec) << " -> " << shortLabel(dec->internalContext()) << "[label=\"internal\", color=blue];\n";
+  }else{
+    //Definition
+    stream << shortLabel(dec) <<  "[shape=regular,color=yellow,label=\"" << declarationForDefinition->toString() << " "<< rangeToString(dec->range().textRange()) <<  "\"];\n";
+    stream << shortLabel(dec->context()) << " -> " << shortLabel(dec) << ";\n";
+    
+    stream << shortLabel(dec) << " -> " << shortLabel(declarationForDefinition) << "[label=\"defines\",color=green];\n";
+    addDeclaration(stream, declarationForDefinition);
 
-  m_hadObjects[def] = true;
-  
-  stream << shortLabel(def) <<  "[shape=regular,color=yellow,label=\"" << (def->declaration(m_topContext) ? def->declaration(m_topContext)->toString() : QString("no declaration")) << " "<< rangeToString(def->range().textRange()) <<  "\"];\n";
-  stream << shortLabel(def->context()) << " -> " << shortLabel(def) << ";\n";
-  if( def->declaration(m_topContext) ) {
-    stream << shortLabel(def) << " -> " << shortLabel(def->declaration(m_topContext)) << "[label=\"defines\",color=green];\n";
-    addDeclaration(stream, def->declaration(m_topContext));
+    if( dec->internalContext() )
+      stream << shortLabel(dec) << " -> " << shortLabel(dec->internalContext()) << "[label=\"internal\", color=blue];\n";
   }
-
-  if( def->internalContext() )
-    stream << shortLabel(def) << " -> " << shortLabel(def->internalContext()) << "[label=\"internal\", color=blue];\n";
 }
 
 
@@ -192,22 +186,12 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   {
     foreach (Declaration* dec, context->localDeclarations())
       addDeclaration(stream, dec);
-    
-    foreach (Definition* def, context->localDefinitions())
-      addDefinition(stream, def);
   }
 
   if( context->owner() ) {
-    if( context->owner()->asDeclaration() )
-      addDeclaration(stream, context->owner()->asDeclaration());
-    else if(context->owner()->asDefinition() )
-      addDefinition(stream, context->owner()->asDefinition());
+    addDeclaration(stream, context->owner());
   }
 
-  if( !context->localDefinitions().isEmpty() ) {
-    label += QString(", %1 Df.").arg(context->localDefinitions().count());
-  }
-  
   stream << shortLabel(context) << "[shape=" << shape << ",label=\"" << label << "\"" << (isMaster ? QString("color=red") : QString("color=blue")) << "];\n";
 
   if( isMaster )

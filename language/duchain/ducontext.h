@@ -41,7 +41,6 @@ namespace KDevelop
 
 class ContextOwner;
 class Declaration;
-class Definition;
 class DUChain;
 class Use;
 class TopDUContext;
@@ -129,11 +128,11 @@ public:
    * If this context was opened by a declaration or definition, this returns that item.
    * The returned declaration/definition will have this context set as internalContext()
    * */
-  ContextOwner* owner() const;
+  Declaration* owner() const;
   /**
    * Sets the declaration/definition, and also updates it's internal context(they are strictly paired together)
    * */
-  void setOwner(ContextOwner* decl);
+  void setOwner(Declaration* decl);
 
   /**
    * Calculate the depth of this context, from the top level context in the file.
@@ -311,27 +310,6 @@ public:
    * Returns all local declarations
    */
   const QList<Declaration*> localDeclarations() const;
-
-  /**
-   * Returns all local definitions
-   */
-  const QList<Definition*>& localDefinitions() const;
-
-  /**
-   * Adds a new definition to this context. Passes back that definition for convenience.
-   */
-  Definition* addDefinition(Definition* definition);
-
-  /**
-   * Take a specified \a definition from this context and pass ownership to the caller.
-   */
-  Definition* takeDefinition(Definition* definition);
-
-  /**
-   * Clears all local definitions. Deletes these definitions, as the context has
-   * ownership.
-   */
-  void deleteLocalDefinitions();
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
