@@ -213,7 +213,7 @@ public:
   /**
    * Returns a list of pairs:
    * An url of a file, paired together with all use-ranges of this declaration in that file.
-   * The uses are unique.
+   * The uses are unique, no 2 uses are returend that have the same range within the same file.
    *
    * This is a non-trivial operation.
    * */
