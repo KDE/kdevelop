@@ -26,7 +26,6 @@
 #include <klocale.h>
 
 #include <duchain/declaration.h>
-#include <duchain/definition.h>
 #include <duchain/ducontext.h>
 #include <duchain/duchainlock.h>
 #include <duchain/typesystem.h>
@@ -148,6 +147,9 @@ struct NavigationAction {
 class NavigationContext : public KShared {
   public:
     NavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, NavigationContext* previousContext = 0 ) : m_declaration(decl), m_selectedLink(0), m_linkCount(-1), m_previousContext(previousContext), m_topContext(topContext) {
+      //Jump from definition to declaration if possible
+      if(m_declaration && m_declaration->isDefinition() && m_declaration->declaration())
+        m_declaration = DeclarationPointer(m_declaration->declaration()); 
     }
     virtual ~NavigationContext() {
     }
@@ -424,9 +426,11 @@ class NavigationContext : public KShared {
 
         QualifiedIdentifier identifier = m_declaration->qualifiedIdentifier();
         if( identifier.count() > 1 ) {
-          if( m_declaration->context() && m_declaration->context()->owner() && m_declaration->context()->owner()->asDeclaration() )
+          if( m_declaration->context() && m_declaration->context()->owner() )
           {
-            Declaration* decl = m_declaration->context()->owner()->asDeclaration();
+            Declaration* decl = m_declaration->context()->owner();
+            if(decl->isDefinition() && decl->declaration())
+              decl = decl->declaration();
             m_currentText += labelHighlight(i18n("Container: "));
             makeLink( declarationName(decl), DeclarationPointer(decl), NavigationAction::NavigateDeclaration );
             m_currentText += " ";
@@ -475,13 +479,22 @@ class NavigationContext : public KShared {
       }
 
       if( !shorten ) {
-        m_currentText += labelHighlight(i18n( "Decl.: " ));
+        if(m_declaration->isDefinition())
+          m_currentText += labelHighlight(i18n( "Def.: " ));
+        else
+          m_currentText += labelHighlight(i18n( "Decl.: " ));
+        
         makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
         m_currentText += " ";
         //m_currentText += "<br />";
         if( m_declaration->definition() ) {
           m_currentText += labelHighlight(i18n( "Def.: " ));
           makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+        }
+        
+        if( m_declaration->declaration() ) {
+          m_currentText += labelHighlight(i18n( "Decl.: " ));
+          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->declaration()->url().str()).fileName() ).arg( m_declaration->declaration()->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
         }
         
         QMap<HashedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();

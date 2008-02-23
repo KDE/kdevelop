@@ -42,8 +42,8 @@ QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, 
 template<>
 QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
   if( decl == 0 ) {
-    if( owner() && owner()->asDeclaration() )
-      return new NavigationWidget( DeclarationPointer(owner()->asDeclaration()), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
+    if( owner() )
+      return new NavigationWidget( DeclarationPointer(owner()), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
     else
       return 0;
   } else {

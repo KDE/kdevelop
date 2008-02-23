@@ -28,7 +28,6 @@
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
-#include <definition.h>
 #include <dumpdotgraph.h>
 #include <time.h>
 #include <set>
@@ -761,7 +760,7 @@ void TestDUChain::testDeclareClass()
   
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
-  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
   Declaration* defClassA = top->localDeclarations().first();
@@ -1014,7 +1013,7 @@ void TestDUChain::testDeclareUsingNamespace()
 void TestDUChain::testFunctionDefinition() {
   QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() {}; A::~A() {}; ");
 
-  DUContext* top = parse(text, DumpNone);
+  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1026,22 +1025,40 @@ void TestDUChain::testFunctionDefinition() {
   
   QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(atInA));
 
-  foreach( Definition* def, top->localDefinitions() )
-    kDebug() << "definition: " << def->declaration()->toString();
-  QCOMPARE(top->localDeclarations().count(), 2);
-  QCOMPARE(top->localDefinitions().count(), 3);
+  QCOMPARE(top->localDeclarations().count(), 5);
 
+  QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
+  QVERIFY(!top->childContexts()[1]->localDeclarations()[0]->isDefinition());
+  QVERIFY(!top->childContexts()[1]->localDeclarations()[1]->isDefinition());
+  QVERIFY(!top->childContexts()[1]->localDeclarations()[2]->isDefinition());
+
+  QVERIFY(top->localDeclarations()[2]->isDefinition());
+  QVERIFY(top->localDeclarations()[3]->isDefinition());
+  QVERIFY(top->localDeclarations()[4]->isDefinition());
   
-  QCOMPARE(top->localDefinitions()[0]->declaration(), top->childContexts()[1]->localDeclarations()[0]);
-  QCOMPARE(top->localDefinitions()[0], top->childContexts()[1]->localDeclarations()[0]->definition());
-
-  QCOMPARE(top->localDefinitions()[1]->declaration(), top->childContexts()[1]->localDeclarations()[1]);
-  QCOMPARE(top->localDefinitions()[1], top->childContexts()[1]->localDeclarations()[1]->definition());
-
-  QCOMPARE(top->localDefinitions()[2]->declaration(), top->childContexts()[1]->localDeclarations()[2]);
-  QCOMPARE(top->localDefinitions()[2], top->childContexts()[1]->localDeclarations()[2]->definition());
+  QVERIFY(top->localDeclarations()[2]->internalContext());
+  QVERIFY(top->localDeclarations()[3]->internalContext());
+  QVERIFY(top->localDeclarations()[4]->internalContext());
   
-  QCOMPARE(top->childContexts()[3]->owner()->asDefinition(), top->localDefinitions()[0]);
+  QCOMPARE(top->localDeclarations()[2]->internalContext()->owner(), top->localDeclarations()[2]);
+  QCOMPARE(top->localDeclarations()[3]->internalContext()->owner(), top->localDeclarations()[3]);
+  QCOMPARE(top->localDeclarations()[4]->internalContext()->owner(), top->localDeclarations()[4]);
+
+  QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
+  
+  QCOMPARE(top->localDeclarations()[2]->declaration(), top->childContexts()[1]->localDeclarations()[0]);
+  QCOMPARE(top->localDeclarations()[2], top->childContexts()[1]->localDeclarations()[0]->definition());
+
+  QCOMPARE(top->localDeclarations()[3]->declaration(), top->childContexts()[1]->localDeclarations()[1]);
+  QCOMPARE(top->localDeclarations()[3], top->childContexts()[1]->localDeclarations()[1]->definition());
+
+    QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
+QCOMPARE(top->localDeclarations()[4]->declaration(), top->childContexts()[1]->localDeclarations()[2]);
+  QCOMPARE(top->localDeclarations()[4], top->childContexts()[1]->localDeclarations()[2]->definition());
+
+  QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
+  
+  QCOMPARE(top->childContexts()[3]->owner(), top->localDeclarations()[2]);
   QCOMPARE(top->childContexts()[3]->importedParentContexts().count(), 1);
   QCOMPARE(top->childContexts()[3]->importedParentContexts()[0].data(), top->childContexts()[2]);
   
@@ -1051,12 +1068,8 @@ void TestDUChain::testFunctionDefinition() {
   
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
 
-  QVERIFY(top->localDefinitions()[0]->internalContext());
-  QCOMPARE(top->localDefinitions()[0]->internalContext()->localDeclarations().count(), 1);
-  
-  ///How exactly should this look now?
-/*  QCOMPARE(top->localDeclarations().count(), 2);
-  QVERIFY(top->localDeclarations()[1]->isDefinition());*/
+  QVERIFY(top->localDeclarations()[2]->internalContext());
+  QCOMPARE(top->localDeclarations()[2]->internalContext()->localDeclarations().count(), 1);
   
   release(top);
 }
@@ -1071,10 +1084,9 @@ void TestDUChain::testFunctionDefinition2() {
   QCOMPARE(top->childContexts().count(), 3);
   
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  QCOMPARE(top->localDeclarations().count(), 1);
-  QCOMPARE(top->localDefinitions().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 2);
 
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDefinitions()[0]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDeclarations()[1]->declaration(top->topContext()));
 
   QCOMPARE(top->childContexts()[1]->type(), DUContext::Function);
   QCOMPARE(top->childContexts()[1]->range().start.column, 20);
@@ -1093,15 +1105,22 @@ void TestDUChain::testFunctionDefinition3() {
   QCOMPARE(top->childContexts().count(), 17);
   
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 7);
-  QCOMPARE(top->localDeclarations().count(), 1);
-  QCOMPARE(top->localDefinitions().count(), 7);
+  QCOMPARE(top->localDeclarations().count(), 8);
 
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDefinitions()[0]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[1], top->localDefinitions()[1]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[2], top->localDefinitions()[2]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[3], top->localDefinitions()[3]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[4], top->localDefinitions()[4]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[5], top->localDefinitions()[5]->declaration(top->topContext()));
+  QVERIFY(top->localDeclarations()[0]->isDefinition()); //Class-declarations are considered definitions too.
+  QVERIFY(top->localDeclarations()[1]->isDefinition());
+  QVERIFY(top->localDeclarations()[2]->isDefinition());
+  QVERIFY(top->localDeclarations()[3]->isDefinition());
+  QVERIFY(top->localDeclarations()[4]->isDefinition());
+  QVERIFY(top->localDeclarations()[5]->isDefinition());
+  QVERIFY(top->localDeclarations()[6]->isDefinition());
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDeclarations()[1]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[1], top->localDeclarations()[2]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[2], top->localDeclarations()[3]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[3], top->localDeclarations()[4]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[4], top->localDeclarations()[5]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[5], top->localDeclarations()[6]->declaration(top->topContext()));
 
   release(top);
 }

@@ -22,7 +22,6 @@
 #include <duchain.h>
 #include <parsesession.h>
 #include <declaration.h>
-#include <definition.h>
 #include <identifiedtype.h>
 #include <typeinfo>
 #include "tokens.h"
@@ -590,20 +589,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       ///Step 1: Find the function-declaration for the function we are in
       Declaration* functionDeclaration = 0;
 
-      if( context->owner() && context->owner()->asDefinition() )
-      {
-        //If we are in a definition, move the classContext to the declaration's classContext, and take the type from there
-        if(!context->owner()->asDefinition()->declaration()) {
-          problem(node, "No declaration for definition");
-          return;
-        }
-        
-        functionDeclaration = context->owner()->asDefinition()->declaration();
-      }
-      else if( context->owner()->asDeclaration() )
-      {
-        functionDeclaration = context->owner()->asDeclaration();
-      }
+      if( context->owner() && context->owner()->isDefinition() )
+        functionDeclaration = context->owner()->declaration(m_topContext);
+
+      if( !functionDeclaration && context->owner() )
+        functionDeclaration = context->owner();
        
       if( !functionDeclaration )
       {
@@ -615,8 +605,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       DUContext* classContext = functionDeclaration->context();
 
       //Take the type from the classContext
-      if( classContext && classContext->type() == DUContext::Class && classContext->owner() && classContext->owner()->asDeclaration() )
-        thisType = classContext->owner()->asDeclaration()->abstractType();
+      if( classContext && classContext->type() == DUContext::Class && classContext->owner() && classContext->owner() )
+        thisType = classContext->owner()->abstractType();
 
       if( !thisType ) {
         problem(node, "\"this\" used in invalid classContext");
@@ -633,8 +623,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(thisPointer.data()) );
         m_lastInstance = Instance(true);
       }else{
-        if( context->owner() && context->owner()->asDeclaration() && context->owner()->asDeclaration()->abstractType() )
-          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( typeid(m_currentContext->owner()->asDeclaration()->abstractType().data()).name() ) .arg(m_currentContext->owner()->asDeclaration()->abstractType()->toString()));
+        if( context->owner() && context->owner() && context->owner()->abstractType() )
+          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( typeid(m_currentContext->owner()->abstractType().data()).name() ) .arg(m_currentContext->owner()->abstractType()->toString()));
         else
           problem(node, "\"this\" used in non-function context with invalid type");
       }

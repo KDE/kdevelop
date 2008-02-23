@@ -25,7 +25,6 @@
 
 #include <topducontext.h>
 #include <declaration.h>
-#include <definition.h>
 #include <use.h>
 #include "cpptypes.h"
 #include <duchain.h>
@@ -257,9 +256,6 @@ void CppHighlighting::highlightDUChainSimple(DUContext* context) const
     highlightDeclaration(dec, 0);
   }
 
-  foreach (Definition* def, context->localDefinitions())
-    highlightDefinition(def);
-
   highlightUses(context);
 
   foreach (DUContext* child, context->childContexts()) {
@@ -274,10 +270,6 @@ void CppHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
   foreach (Declaration* dec, context->localDeclarations())
     if(dec->smartRange())
       dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
-
-  foreach (Definition* def, context->localDefinitions())
-    if(def->smartRange())
-      def->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
 
   for(int a = 0; a < context->uses().count(); ++a)
     if(context->useSmartRange(a))
@@ -335,12 +327,9 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
     highlightDeclaration(dec, colors[colorNum]);
   }
 
-  foreach (Definition* def, context->localDefinitions())
-    highlightDefinition(def);
-
   for(int a = 0; a < context->uses().count(); ++a) {
     if(context->uses()[a].m_declarationIndex < 0) {
-      Declaration* decl = context->topContext()->usedDeclarationForIndex(a);
+      Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
       uint colorNum = numColors;
       if( colorsForDeclarations.contains(decl) )
         colorNum = colorsForDeclarations[decl];
@@ -401,13 +390,6 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) co
   return type;
 }
 
-void CppHighlighting::highlightDefinition(Definition * definition) const
-{
-  if (Declaration* declaration = definition->declaration())
-    if (SmartRange* range = definition->smartRange())
-      range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext, 0));
-}
-
 void CppHighlighting::highlightDeclaration(Declaration * declaration, uint color) const
 {
   if (SmartRange* range = declaration->smartRange())
@@ -424,7 +406,7 @@ void CppHighlighting::highlightUse(DUContext* context, int index, uint color) co
 {
   if (SmartRange* range = context->useSmartRange(index)) {
     Types type = ErrorVariableType;
-    Declaration* decl = context->topContext()->usedDeclarationForIndex(index);
+    Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
     if (decl)
       type = typeForDeclaration(decl);
 
@@ -437,7 +419,7 @@ void CppHighlighting::highlightUses(DUContext* context) const
   for(int a = 0; a < context->uses().count(); ++a) {
     if (SmartRange* range = context->useSmartRange(a)) {
       Types type = ErrorVariableType;
-      Declaration* decl = context->topContext()->usedDeclarationForIndex(a);
+      Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
       if (decl)
         type = typeForDeclaration(decl);
 

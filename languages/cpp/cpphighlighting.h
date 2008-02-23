@@ -88,7 +88,6 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
 
     void deleteHighlighting(KDevelop::DUContext* context) const;
   
-    virtual void highlightDefinition(KDevelop::Definition* definition) const;
     virtual void highlightDeclaration(KDevelop::Declaration* declaration, uint color) const;
     virtual void highlightUse(KDevelop::DUContext* context, int index, uint color) const;
     virtual void highlightDeclaration(KDevelop::Declaration* declaration) const;

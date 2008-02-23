@@ -167,8 +167,8 @@ extern QMutex cppDuContextInstantiationsMutex;
                 break;
             }
             
-            if( scopeContext && scopeContext->owner()->asDeclaration() && scopeContext->owner()->asDeclaration()->isForwardDeclaration() ) {
-              kDebug(9007) << "Tried to search in forward-declaration of " << scopeContext->owner()->asDeclaration()->identifier().toString();
+            if( scopeContext && scopeContext->owner() && scopeContext->owner()->isForwardDeclaration() ) {
+              kDebug(9007) << "Tried to search in forward-declaration of " << scopeContext->owner()->identifier().toString();
               m_lastScopeContext = DUContextPointer(scopeContext);
               scopeContext = 0;
             }

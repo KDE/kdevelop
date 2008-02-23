@@ -601,7 +601,6 @@ void TestExpressionParser::testThis() {
   DUContext* extTestCtx = top->childContexts()[2];
   QCOMPARE(extTestCtx->type(), DUContext::Other);
   QVERIFY(extTestCtx->owner());
-  QVERIFY(extTestCtx->owner()->asDefinition());
   
   Cpp::ExpressionEvaluationResult result3 = parser.evaluateExpression( "this", KDevelop::DUContextPointer(extTestCtx));
   QVERIFY(result3.isValid());

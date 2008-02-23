@@ -30,7 +30,6 @@
 #include <ducontext.h>
 #include <topducontext.h>
 #include <declaration.h>
-#include <definition.h>
 #include <duchainpointer.h>
 #include <parsingenvironment.h>
 #include <identifier.h>

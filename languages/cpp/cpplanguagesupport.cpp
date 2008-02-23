@@ -126,7 +126,7 @@ Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, DUContext* 
 }
 
 ///Tries to find a definition for the given cursor-position and document-url. DUChain must be locked.
-Definition* definitionForCursor(const KDevelop::SimpleCursor& cursor, const KUrl& url) {
+Declaration* definitionForCursor(const KDevelop::SimpleCursor& cursor, const KUrl& url) {
   QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument( url );
   foreach(TopDUContext* ctx, topContexts) {
     Declaration* decl = declarationInLine(cursor, ctx);
@@ -323,8 +323,8 @@ void CppLanguageSupport::switchDefinitionDeclaration()
       ctx = ctx->parentContext();
 
     if(ctx && ctx->owner() && ctx->type() == DUContext::Other) {
-      if(ctx->owner()->asDefinition()) {
-        Declaration* decl = ctx->owner()->asDefinition()->declaration();
+      if(ctx->owner()->isDefinition()) {
+        Declaration* decl = ctx->owner()->declaration();
 
         if(decl) {
           KTextEditor::Cursor c = decl->range().textRange().start();
@@ -334,9 +334,6 @@ void CppLanguageSupport::switchDefinitionDeclaration()
         }else{
           kDebug(9007) << "Definition has no assigned declaration";
         }
-      }else if(ctx->owner()->asDeclaration()) {
-        kDebug(9007) << "In internal context of declaration+definition, nowhere to switch";
-        return;
       }
     }
     kDebug(9007) << "Could not get definition/declaration from context";
@@ -344,7 +341,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     kDebug(9007) << "Got no context for the current document";
   }
 
-  Definition* def = definitionForCursor(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), doc->url());
+  Declaration* def = definitionForCursor(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), doc->url());
 
   if(def) {
     ///@todo If the cursor is already in the target context, do not move it.

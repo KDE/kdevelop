@@ -274,12 +274,12 @@ namespace TypeUtils {
 
   void getConstructors(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions) {
     DUContext* context = klass->declaration() ? klass->declaration()->internalContext() : 0;
-    if( !context || !context->owner() || !context->owner()->asDeclaration() ) {
+    if( !context || !context->owner() || !context->owner() ) {
       kDebug(9007) << "Tried to get constructors of a class without context";
       return;
     }
 
-    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(context->owner()->asDeclaration()->identifier()), SimpleCursor::invalid(), topContext);
+    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(context->owner()->identifier()), SimpleCursor::invalid(), topContext);
     
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );

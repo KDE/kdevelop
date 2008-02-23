@@ -28,7 +28,6 @@
 #include "parser/type_compiler.h"
 #include "parser/commentformatter.h"
 
-#include <definition.h>
 #include <symboltable.h>
 #include <forwarddeclaration.h>
 #include <duchain.h>
@@ -224,94 +223,73 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
   if (node->parameter_declaration_clause) {
     if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top() && node->id) {
-      // TODO: make correct for incremental parsing; at the moment just skips if there is a definition
-      Definition* def = 0;
-      {
-        DUChainReadLocker lock(DUChain::lock());
-        def = currentDeclaration()->definition();
-      }
+        
+      QualifiedIdentifier id = identifierForName(node->id);
+      DUChainWriteLocker lock(DUChain::lock());
+      if (id.count() > 1 ||
+          (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
+        SimpleCursor pos = currentDeclaration()->range().start;//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
-      if (!def) {
-        QualifiedIdentifier id = identifierForName(node->id);
-        DUChainWriteLocker lock(DUChain::lock());
-        if (id.count() > 1 ||
-            (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
-          SimpleCursor pos = currentDeclaration()->range().start;//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
+        //kDebug(9007) << "Searching for declaration of" << id;
+        // TODO: potentially excessive locking
 
-          //kDebug(9007) << "Searching for declaration of" << id;
-          // TODO: potentially excessive locking
-          
-          QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
+        QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
 
-          CppFunctionType::Ptr currentFunction = CppFunctionType::Ptr(dynamic_cast<CppFunctionType*>(lastType().data()));
-          int functionArgumentCount = 0;
-          if(currentFunction)
-            functionArgumentCount = currentFunction->arguments().count();
-          
-          for( int cycle = 0; cycle < 3; cycle++ ) {
-            bool found = false;
-            ///We do 2 cycles: In the first cycle, we want an exact match. In the second, we accept approximate matches.
-            foreach (Declaration* dec, declarations) {
-              if (dec->isForwardDeclaration())
+        CppFunctionType::Ptr currentFunction = CppFunctionType::Ptr(dynamic_cast<CppFunctionType*>(lastType().data()));
+        int functionArgumentCount = 0;
+        if(currentFunction)
+          functionArgumentCount = currentFunction->arguments().count();
+
+        for( int cycle = 0; cycle < 3; cycle++ ) {
+          bool found = false;
+          ///We do 2 cycles: In the first cycle, we want an exact match. In the second, we accept approximate matches.
+          foreach (Declaration* dec, declarations) {
+            if (dec->isForwardDeclaration())
+              continue;
+            if(dec == currentDeclaration() || dec->isDefinition())
+              continue;
+            //Compare signatures of function-declarations:
+            if(dec->abstractType() == lastType()
+                || (dec->abstractType() && lastType() && dec->abstractType()->equals(lastType().data())))
+            {
+              //The declaration-type matches this definition, good.
+            }else{
+              if(cycle == 0) {
+                //First cycle, only accept exact matches
                 continue;
-              if(dec == currentDeclaration() || dec->isDefinition())
-                continue;
-              //Compare signatures of function-declarations:
-              if(dec->abstractType() == lastType()
-                 || (dec->abstractType() && lastType() && dec->abstractType()->equals(lastType().data())))
-              {
-                //The declaration-type matches this definition, good.
-              }else{
-                if(cycle == 0) {
-                  //First cycle, only accept exact matches
+              }else if(cycle == 1){
+                //Second cycle, match by argument-count
+                CppFunctionType::Ptr matchFunction = dec->type<CppFunctionType>();
+                if(currentFunction && matchFunction && currentFunction->arguments().count() == functionArgumentCount ) {
+                  //We have a match
+                }else{
                   continue;
-                }else if(cycle == 1){
-                  //Second cycle, match by argument-count
-                  CppFunctionType::Ptr matchFunction = dec->type<CppFunctionType>();
-                  if(currentFunction && matchFunction && currentFunction->arguments().count() == functionArgumentCount ) {
-                    //We have a match
-                  }else{
-                    continue;
-                  }
-                }else if(cycle == 2){
-                  //Accept any match, so just continue
                 }
-                if(dec->definition() && wasEncountered(dec->definition()))
-                  continue; //Do not steal declarations
+              }else if(cycle == 2){
+                //Accept any match, so just continue
               }
-
-              Declaration* oldDec = currentDeclaration();
-              abortDeclaration();
-              Definition* def = new Definition(m_editor->currentUrl(), oldDec->range(), currentContext());
-              def->setSmartRange(oldDec->takeRange());
-              setEncountered(def);
-              delete oldDec;
-              dec->setDefinition(def);
-              
-              if( m_lastContext && !m_lastContext->owner() )
-                def->setInternalContext(m_lastContext);
-              m_lastContext = 0;
-
-              found = true;
-              break;
+              if(dec->definition() && wasEncountered(dec->definition()))
+                continue; //Do not steal declarations
             }
-            if(found) {
-              node->parameter_declaration_clause = parameter_declaration_clause_backup;
-              return;
-            }
-          }
-          if(id.count() > 1) {
-            //We do not want unresolved definitions to hide declarations.
-            //As declarations are named by Identifiers, not by QualifiedIdentifiers,
-            //they would be named by only one part of their scope, and thus be wrong anyway.
-            Declaration* oldDec = currentDeclaration();
-            abortDeclaration();
-            delete oldDec;
-            kDebug(9007) << "No declaration found for definition " << id << ", discarding definition";
 
-            node->parameter_declaration_clause = parameter_declaration_clause_backup;
-            return;
+            dec->setDefinition(currentDeclaration());
+            found = true;
+            break;
           }
+          if(found)
+            break;
+        }
+        if(id.count() > 1) {
+          //Merge the scope of the declaration. Add dollar-signs instead of the ::.
+          //Else the declarations could be confused with global functions.
+
+          Identifier identifier = currentDeclaration()->identifier();
+          QString newId = identifier.identifier();
+          for(int a = id.count()-2; a >= 0; --a)
+            newId = id.at(a).identifier() + "$$" + newId;
+
+          identifier.setIdentifier(newId);
+          currentDeclaration()->setIdentifier(identifier);
         }
       }
     }
@@ -610,7 +588,7 @@ void DeclarationBuilder::eventuallyAssignInternalContext()
     
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
-      if( !m_lastContext->owner() || (!wasEncountered(m_lastContext->owner()->asDeclaration()) && !wasEncountered(m_lastContext->owner()->asDefinition()) ) ) { //if the context is already internalContext of another declaration, leave it alone
+      if( !m_lastContext->owner() || !wasEncountered(m_lastContext->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
         currentDeclaration()->setInternalContext(m_lastContext);
         
         if( currentDeclaration()->range().start >= currentDeclaration()->range().end )

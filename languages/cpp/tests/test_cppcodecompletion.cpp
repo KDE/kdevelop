@@ -247,6 +247,11 @@ void TestCppCodeCompletion::testTypeConversion() {
 
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Heinz") ));
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Erna") ));
+  QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Erna::Erna") ));
+  Declaration* decl = findDeclaration( testContext, QualifiedIdentifier("Erna") )->logicalInternalContext(testContext->topContext());
+  QVERIFY(decl);
+  QVERIFY(decl->logicalInternalContext(context->topContext()));
+  QVERIFY(findDeclaration( decl->logicalInternalContext(context->topContext()), QualifiedIdentifier("Erna") ));
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("Honk") ));
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("A") ));
   QVERIFY(findDeclaration( testContext, QualifiedIdentifier("B") ));
