@@ -193,7 +193,7 @@ void TestCppCodeCompletion::testCompletionContext() {
       kDebug(9007) << (*it).function.declaration()->toString() << ((*it).function.isViable() ? QString("(viable)") : QString("(not viable)")) ;
     lock.unlock();
     
-    QVERIFY(function->functions().size() == 4);
+    QCOMPARE(function->functions().size(), 4);
     QVERIFY(function->functions()[0].function.isViable());
     //Because Honk has a conversion-function to int, globalFunction(int) is yet viable(although it can take only 1 parameter)
     QVERIFY(function->functions()[1].function.isViable());
@@ -488,9 +488,9 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
-    top->localDeclarations()[0]->uses()[0][0].start.column;
-    QCOMPARE(top->localDeclarations()[0]->uses()[0][0].start.column, 9);
-    QCOMPARE(top->localDeclarations()[0]->uses()[0][0].end.column, 10);
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 1);
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0).start.column, 9);
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0).end.column, 10);
   }
   {
     ///2 uses of x, that go through the macro TEST(..), and effectively are in line 2 column 5.
@@ -501,20 +501,16 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
-    QCOMPARE(top->localDeclarations()[0]->uses().count(), 2);
+    QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+    //Since uses() returns unique uses, and both uses of x in TEST(x) have the same range,
+    //only one use is returned.
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 1);
 
-    const SimpleRange& range1(top->localDeclarations()[0]->uses()[0][0]);
+    SimpleRange range1(top->localDeclarations()[0]->uses().begin()->at(0));
     QCOMPARE(range1.start.line, 2);
     QCOMPARE(range1.end.line, 2);
     QCOMPARE(range1.start.column, 5);
     QCOMPARE(range1.end.column, 6);
-    
-    const SimpleRange& range2(top->localDeclarations()[0]->uses()[0][1]);
-    QCOMPARE(range2.start.line, 2);
-    QCOMPARE(range2.end.line, 2);
-    
-    QCOMPARE(range2.start.column, 5);
-    QCOMPARE(range2.end.column, 6);
   }
 }
 
