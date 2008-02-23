@@ -488,9 +488,9 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
-    top->localDeclarations()[0]->uses()[0]->range().start.column;
-    QCOMPARE(top->localDeclarations()[0]->uses()[0]->range().start.column, 9);
-    QCOMPARE(top->localDeclarations()[0]->uses()[0]->range().end.column, 10);
+    top->localDeclarations()[0]->uses()[0].range().start.column;
+    QCOMPARE(top->localDeclarations()[0]->uses()[0].range().start.column, 9);
+    QCOMPARE(top->localDeclarations()[0]->uses()[0].range().end.column, 10);
   }
   {
     ///2 uses of x, that go through the macro TEST(..), and effectively are in line 2 column 5.
