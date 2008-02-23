@@ -488,9 +488,9 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
-    top->localDeclarations()[0]->uses()[0].range().start.column;
-    QCOMPARE(top->localDeclarations()[0]->uses()[0].range().start.column, 9);
-    QCOMPARE(top->localDeclarations()[0]->uses()[0].range().end.column, 10);
+    top->localDeclarations()[0]->uses()[0][0].start.column;
+    QCOMPARE(top->localDeclarations()[0]->uses()[0][0].start.column, 9);
+    QCOMPARE(top->localDeclarations()[0]->uses()[0][0].end.column, 10);
   }
   {
     ///2 uses of x, that go through the macro TEST(..), and effectively are in line 2 column 5.
@@ -503,13 +503,13 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
     QCOMPARE(top->localDeclarations().count(), 2);
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 2);
 
-    const SimpleRange& range1(top->localDeclarations()[0]->uses()[0]->range());
+    const SimpleRange& range1(top->localDeclarations()[0]->uses()[0][0]);
     QCOMPARE(range1.start.line, 2);
     QCOMPARE(range1.end.line, 2);
     QCOMPARE(range1.start.column, 5);
     QCOMPARE(range1.end.column, 6);
     
-    const SimpleRange& range2(top->localDeclarations()[0]->uses()[1]->range());
+    const SimpleRange& range2(top->localDeclarations()[0]->uses()[0][1]);
     QCOMPARE(range2.start.line, 2);
     QCOMPARE(range2.end.line, 2);
     
