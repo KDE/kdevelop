@@ -30,7 +30,7 @@ kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
 kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
 target_link_libraries(kdevplatformvcs ${KDE4_KDEUI_LIBS} kdevplatforminterfaces )
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
-install(TARGETS kdevplatformvcs DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdevplatformvcs ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     vcsexport.h
