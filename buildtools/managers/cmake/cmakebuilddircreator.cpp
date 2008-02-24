@@ -116,16 +116,16 @@ bool CMakeBuildDirCreator::isBuildDirProject(const KUrl& buildDir)
     QString srcfold=m_srcFolder.toLocalFile();
     if(srcfold.endsWith("/"))
         srcfold=srcfold.left(srcfold.size()-1);
-    QFile file(buildDir.toLocalFile()+"/CMakeFiles/CMakeDirectoryInformation.cmake");
+    QFile file(buildDir.toLocalFile()+"/CMakeCache.txt");
     
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        kWarning(9032) << "Something really strange happened at" << buildDir.toLocalFile()+"/CMakeDirectoryInformation.cmake";
+        kWarning(9032) << "Something really strange happened reading CMakeCache.txt";
         return false;
     }
 
     bool correct=false;
-    const QString pLine=QString("SET(CMAKE_RELATIVE_PATH_TOP_SOURCE \"%1").arg(srcfold);
+    const QString pLine=QString("CMAKE_HOME_DIRECTORY:INTERNAL=%1").arg(srcfold);
     while (!correct && !file.atEnd()) {
         QString line = file.readLine().trimmed();
         if(line.startsWith("#") || line.isEmpty())
