@@ -47,7 +47,7 @@ kde4_add_library( kdev4qmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS}
 target_link_libraries(kdev4qmakeparser ${KDE4_KDECORE_LIBS})
 
 install(TARGETS qmake-parser DESTINATION ${BIN_INSTALL_DIR})
-install(TARGETS kdev4qmakeparser DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdev4qmakeparser ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_custom_target( copy-generated
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakeast.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakeast.h"
