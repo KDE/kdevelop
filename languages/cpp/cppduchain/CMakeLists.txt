@@ -52,7 +52,7 @@ set(kdevcppduchain_LIB_SRCS
 
 kde4_add_library(kdev4cppduchain SHARED ${kdevcppduchain_LIB_SRCS})
 target_link_libraries(kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY} kdev4cppparser)
-install(TARGETS kdev4cppduchain DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdev4cppduchain ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
