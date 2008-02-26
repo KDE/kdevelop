@@ -23,8 +23,8 @@
 
 bool rpp::isComment(Stream& input)
 {
-  QChar c1 = input;
-  QChar c2 = input.peek();
+  char c1 = input;
+  char c2 = input.peek();
 
   return c1 == '/' && (c2 == '/' || c2 == '*');
 }

@@ -129,7 +129,7 @@ void Environment::visitBlock(MacroBlock* block, int depth)
   m_replaying = wasReplaying;
 }
 
-MacroBlock* Environment::enterBlock(int sourceLine, const QString& condition)
+MacroBlock* Environment::enterBlock(int sourceLine, const QByteArray& condition)
 {
   MacroBlock* ret = new MacroBlock(sourceLine);
   ret->condition = condition;
@@ -139,7 +139,7 @@ MacroBlock* Environment::enterBlock(int sourceLine, const QString& condition)
   return ret;
 }
 
-MacroBlock* Environment::elseBlock(int sourceLine, const QString& condition)
+MacroBlock* Environment::elseBlock(int sourceLine, const QByteArray& condition)
 {
   MacroBlock* ret = new MacroBlock(sourceLine);
   ret->condition = condition;
@@ -213,6 +213,11 @@ pp_macro* Environment::retrieveStoredMacro(const KDevelop::HashedString& name) c
     return m_environment[name];
 
   return 0;
+}
+
+pp_macro* Environment::retrieveMacro(const QByteArray& name) const
+{
+  return retrieveMacro(QString::fromUtf8(name));
 }
 
 pp_macro* Environment::retrieveMacro(const KDevelop::HashedString& name) const

@@ -1,6 +1,5 @@
 /*
-  Copyright 2005 Harald Fernengel <harry@kdevelop.org>
-  Copyright 2006 Hamish Rodda <rodda@kde.org>
+  Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -19,46 +18,26 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "preprocessor.h"
+#ifndef CHARTOOLS
+#define CHARTOOLS
 
-#include <QFile>
-#include <QTextStream>
+//A set of simple commands for handling simple characters
+//Are in a separate file so we can optimize them if needed
 
-#include <kurl.h>
-#include <kdebug.h>
-
-#include "pp-stream.h"
-#include "pp-engine.h"
-#include "pp-environment.h"
-
-using namespace rpp;
-
-Preprocessor::~Preprocessor()
-{
+inline bool isSpace(char c) {
+  return QChar(c).isSpace();
 }
 
-QString Preprocessor::processString(const QString& string)
-{
-    pp proc(this);
-
-    QString ret = QString::fromUtf8(proc.processFile("anonymous", pp::Data, string.toUtf8()));
-
-    proc.environment()->cleanup();
-
-    return ret;
+inline bool isLetter(char c) {
+  return QChar(c).isLetter();
 }
 
-Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type, int sourceLine, bool skipCurrentPath )
-{
-  Q_UNUSED(fileName)
-  Q_UNUSED(type)
-  Q_UNUSED(sourceLine)
-  Q_UNUSED(skipCurrentPath)
-
-  return 0;
+inline bool isLetterOrNumber(char c) {
+  return QChar(c).isLetterOrNumber();
 }
 
-void Preprocessor::headerSectionEnded(rpp::Stream& stream)
-{
-  Q_UNUSED(stream)
+inline bool isNumber(char c) {
+  return QChar(c).isNumber();
 }
+
+#endif

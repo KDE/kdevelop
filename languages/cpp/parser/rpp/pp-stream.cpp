@@ -26,11 +26,11 @@
 
 using namespace rpp;
 
-const QChar Stream::newline('\n');
-static const QChar nullchar;
+const char Stream::newline('\n');
+static const char nullchar(0);
 
 Stream::Stream()
-  : m_string(new QString())
+  : m_string(new QByteArray())
   , m_isNull(true)
   , m_skippedToEnd(false)
   , m_pos(0)
@@ -41,7 +41,7 @@ Stream::Stream()
 {
 }
 
-Stream::Stream( QString * string, const KDevelop::SimpleCursor& offset, LocationTable* table )
+Stream::Stream( QByteArray * string, const KDevelop::SimpleCursor& offset, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
   , m_skippedToEnd(false)
@@ -55,7 +55,7 @@ Stream::Stream( QString * string, const KDevelop::SimpleCursor& offset, Location
   end = m_string->constData() + m_string->length();
 }
 
-Stream::Stream( QString * string, LocationTable* table )
+Stream::Stream( QByteArray * string, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
   , m_skippedToEnd(false)
@@ -109,7 +109,7 @@ bool Stream::skippedToEnd() const
   return m_skippedToEnd;
 }
 
-const QChar& Stream::peek(int offset) const
+const char& Stream::peek(int offset) const
 {
   if (c + offset > end)
     return nullchar;
@@ -132,7 +132,7 @@ void Stream::seek(int offset)
   }
 }
 
-Stream & Stream::operator<< ( const QChar& c )
+Stream & Stream::operator<< ( const char& c )
 {
   // Keep in sync with below
   if (!isNull()) {
@@ -150,7 +150,7 @@ Stream & Stream::operator<< ( const QChar& c )
 
 Stream& Stream::operator<< ( const Stream& input )
 {
-  const QChar c = input;
+  const char c = input;
 
   // Keep in sync with above
   if (!isNull()) {
@@ -167,7 +167,7 @@ Stream& Stream::operator<< ( const Stream& input )
   return *this;
 }
 
-Stream& Stream::appendString( const KDevelop::SimpleCursor& position, const QString & string )
+Stream& Stream::appendString( const KDevelop::SimpleCursor& position, const QByteArray & string )
 {
   if (!isNull()) {
     mark(position);
@@ -218,7 +218,7 @@ void Stream::reset( )
   m_inputLineStartedAt = m_inputLine = m_pos = 0;
 }
 
-QString rpp::Stream::stringFrom(int offset) const
+QByteArray rpp::Stream::stringFrom(int offset) const
 {
   return m_string->mid(offset, m_pos);
 }

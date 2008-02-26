@@ -136,7 +136,7 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
                     rpp::pp_macro macro;
                     if (pos != -1) {
                         macro.name = line.left(pos);
-                        macro.definition = line.right(line.length() - pos - 1);
+                        macro.definition = line.right(line.length() - pos - 1).toUtf8();
                     } else {
                         macro.name = line;
                     }

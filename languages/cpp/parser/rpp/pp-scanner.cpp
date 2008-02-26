@@ -20,6 +20,7 @@
 */
 
 #include "pp-scanner.h"
+#include "chartools.h"
 
 using namespace rpp;
 
@@ -38,7 +39,7 @@ void pp_skip_blanks::operator()(Stream& input, Stream& output)
       }
     }
 
-    if (input == '\n' || !input.current().isSpace())
+    if (input == '\n' || !isSpace(input.current()))
       return;
 
     output << input;
@@ -49,7 +50,7 @@ void pp_skip_blanks::operator()(Stream& input, Stream& output)
 void pp_skip_whitespaces::operator()(Stream& input, Stream& output)
 {
   while (!input.atEnd()) {
-    if (!input.current().isSpace())
+    if (!isSpace(input.current()))
       return;
 
     output << input;
@@ -123,13 +124,13 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
   }
 }
 
-QString pp_skip_identifier::operator()(Stream& input)
+QByteArray pp_skip_identifier::operator()(Stream& input)
 {
-  QString identifier;
+  QByteArray identifier;
   identifier.reserve(10);
 
   while (!input.atEnd()) {
-    if (!input.current().isLetterOrNumber() && input != '_')
+    if (!isLetterOrNumber(input.current()) && input != '_')
         break;
 
     identifier.append(input);
@@ -143,7 +144,7 @@ QString pp_skip_identifier::operator()(Stream& input)
 void pp_skip_number::operator()(Stream& input, Stream& output)
 {
   while (!input.atEnd()) {
-    if (!input.current().isLetterOrNumber() && input != '_')
+    if (!isLetterOrNumber(input.current()) && input != '_')
         return;
 
     output << input;
@@ -260,12 +261,12 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
       skip_comment_or_divop (input, output, true);
       continue;
 
-    } else if (input.current().isLetter() || input == '_') {
+    } else if (isLetter(input.current()) || input == '_') {
       KDevelop::SimpleCursor inputPosition = input.inputPosition();
       output.appendString(inputPosition, skip_identifier(input));
       continue;
 
-    } else if (input.current().isNumber()) {
+    } else if (isNumber(input.current())) {
       KDevelop::SimpleCursor inputPosition = input.inputPosition();
       output.appendString(inputPosition, skip_number(input));
       continue;

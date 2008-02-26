@@ -108,7 +108,7 @@ QString preprocess( const QString& text, const Cpp::EnvironmentFilePointer& file
     }
   }
 
-  QString ret = pp.processFile("anonymous", rpp::pp::Data, text);
+  QString ret = pp.processFile("anonymous", rpp::pp::Data, text.toUtf8());
   pp.environment()->cleanup();
   
   return ret;

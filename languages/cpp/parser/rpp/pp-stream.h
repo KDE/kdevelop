@@ -38,12 +38,12 @@ class LocationTable;
  */
 class KDEVCPPRPP_EXPORT Stream
 {
-    static const QChar newline;
+    static const char newline;
 
   public:
     Stream();
-    explicit Stream( QString * string, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0), LocationTable* table = 0 );
-    explicit Stream( QString * string, LocationTable* table );
+    explicit Stream( QByteArray * string, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0), LocationTable* table = 0 );
+    explicit Stream( QByteArray * string, LocationTable* table );
     virtual ~Stream();
 
     bool isNull() const;
@@ -57,9 +57,9 @@ class KDEVCPPRPP_EXPORT Stream
 
     int offset() const;
 
-    const QChar& peek(int offset = 1) const;
+    const char& peek(int offset = 1) const;
 
-    QString stringFrom(int offset) const;
+    QByteArray stringFrom(int offset) const;
 
     /// Move back \a offset chars in the stream
     void rewind(int offset = 1);
@@ -72,8 +72,8 @@ class KDEVCPPRPP_EXPORT Stream
     /// Start from the beginning again
     void reset();
 
-    inline const QChar& current() const { return *c; } //krazy:exclude=inline
-    inline operator const QChar&() const { return *c; } //krazy:exclude=inline
+    inline const char& current() const { return *c; } //krazy:exclude=inline
+    inline operator const char&() const { return *c; } //krazy:exclude=inline
     inline Stream& operator++() //krazy:exclude=inline
     {
       if (c == end)
@@ -100,23 +100,22 @@ class KDEVCPPRPP_EXPORT Stream
 
     void mark(const KDevelop::SimpleCursor& position);
 
-    Stream & operator<< ( const QChar& c );
+    Stream & operator<< ( const char& c );
     Stream & operator<< ( const Stream& input );
-    Stream& appendString( const KDevelop::SimpleCursor& position, const QString & string );
+    Stream& appendString( const KDevelop::SimpleCursor& position, const QByteArray & string );
 
   private:
     Q_DISABLE_COPY(Stream)
 
-    QString* m_string;
-    const QChar* c;
-    const QChar* end;
+    QByteArray* m_string;
+    const char* c;
+    const char* end;
     bool m_isNull, m_skippedToEnd;
     int m_pos;
     int m_inputLine;
     int m_inputLineStartedAt;
     LocationTable* m_locationTable;
     KDevelop::SimpleCursor m_originalInputPosition;
-    //QString output;
 };
 
 }

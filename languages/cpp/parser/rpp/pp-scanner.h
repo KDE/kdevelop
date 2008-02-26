@@ -56,7 +56,7 @@ private:
 class pp_skip_identifier
 {
 public:
-  QString operator()(Stream& input);
+  QByteArray operator()(Stream& input);
 };
 
 class pp_skip_number

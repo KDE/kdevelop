@@ -38,10 +38,10 @@ public:
   typedef size_t HashType;
   
   KDevelop::HashedString name;
-  QString definition; //body
+  QByteArray definition; //body in utf8
   KDevelop::HashedString file; //fileName
   int sourceLine; //line
-  QStringList formals; // argumentList
+  QList<QByteArray> formals; // argumentList
 
   bool defined: 1; // !isUndefMacro
   bool hidden: 1;

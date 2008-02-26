@@ -138,7 +138,7 @@ class KDEVCPPRPP_EXPORT pp
     long token_value;
     unsigned long token_uvalue;
   };
-  QString token_text;
+  QByteArray token_text;
 
   enum TOKEN_TYPE
   {
@@ -186,9 +186,10 @@ public:
   /**
    * If @param stringType is Data, @param data must be set.
    * The file-name is needed so macros can be correctly marked.
+   * Currently the file is expected to be utf8-encoded.
    * */
-  QString processFile(const QString& fileName, StringType stringType, const QString& data = QString());
-  QString processFile(QIODevice* input);
+  QByteArray processFile(const QString& fileName, StringType stringType, const QByteArray& data = QByteArray());
+  QByteArray processFile(QIODevice* input);
 
   void operator () (Stream& input, Stream& output);
 
@@ -215,9 +216,9 @@ private:
   int skipping() const;
   bool test_if_level();
 
-  PP_DIRECTIVE_TYPE find_directive (const QString& directive) const;
-
-  QString find_header_protection(Stream& input);
+  void createProblem(Stream& input, const QString& description);
+  
+  PP_DIRECTIVE_TYPE find_directive (const QByteArray& directive) const;
 
   void skip(Stream& input, Stream& output, bool outputText = true);
 
@@ -245,7 +246,7 @@ private:
 
   Value eval_constant_expression(Stream& input);
 
-  void handle_directive(const QString& directive, Stream& input, Stream& output);
+  void handle_directive(const QByteArray& directive, Stream& input, Stream& output);
 
   void handle_include(bool skip_current_path, Stream& input, Stream& output);
 

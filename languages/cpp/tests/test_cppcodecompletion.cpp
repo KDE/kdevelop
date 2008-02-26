@@ -803,7 +803,7 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
     if( parent )
       preprocessor.environment()->swapMacros(parent->environment());
     
-    QString result = preprocessor.processFile("<test>", rpp::pp::Data, text);
+    QString result = QString::fromUtf8(preprocessor.processFile("<test>", rpp::pp::Data, text.toUtf8()));
 
     if (returnLocationTable)
       *returnLocationTable = preprocessor.environment()->takeLocationTable();

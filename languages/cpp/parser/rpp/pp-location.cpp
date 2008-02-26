@@ -33,7 +33,7 @@ LocationTable::LocationTable(const QByteArray& contents)
 {
   anchor(0, KDevelop::SimpleCursor(0,0));
 
-  const QChar newline = '\n';
+  const char newline = '\n';
   int line = 0;
 
   for (std::size_t i = 0; i < (std::size_t)contents.size(); ++i)
@@ -120,7 +120,7 @@ void LocationTable::dump() const
   }
 }
 
-void LocationTable::splitByAnchors(const QString& text, const KDevelop::SimpleCursor& textStartPosition, QStringList& strings, QList<KDevelop::SimpleCursor>& anchors) const {
+void LocationTable::splitByAnchors(const QByteArray& text, const KDevelop::SimpleCursor& textStartPosition, QList<QByteArray>& strings, QList<KDevelop::SimpleCursor>& anchors) const {
 
   KDevelop::SimpleCursor currentCursor = textStartPosition;
   size_t currentOffset = 0;

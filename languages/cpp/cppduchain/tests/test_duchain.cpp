@@ -1075,7 +1075,7 @@ QCOMPARE(top->localDeclarations()[4]->declaration(), top->childContexts()[1]->lo
 }
 
 void TestDUChain::testFunctionDefinition2() {
-  QByteArray text("class B{B();}; B::B() {} ");
+  QByteArray text("//ääää\nclass B{B();}; B::B() {} "); //the ääää tests whether the column-numbers are resistant to special characters
 
   DUContext* top = parse(text, DumpNone);
 

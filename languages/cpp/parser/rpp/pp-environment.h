@@ -48,7 +48,7 @@ public:
   QList<MacroBlock*> childBlocks;
 
   // The condition that opened this block
-  QString condition;
+  QByteArray condition;
   // The block to use if this block's condition was not met
   MacroBlock* elseBlock;
 
@@ -71,8 +71,8 @@ public:
   MacroBlock* currentBlock() const;
 
   void enterBlock(MacroBlock* block);
-  MacroBlock* enterBlock(int sourceLine, const QString& condition);
-  MacroBlock* elseBlock(int sourceLine, const QString& condition = QString());
+  MacroBlock* enterBlock(int sourceLine, const QByteArray& condition);
+  MacroBlock* elseBlock(int sourceLine, const QByteArray& condition = QByteArray());
   void leaveBlock();
 
   // Replay previously saved blocks on this environment
@@ -88,7 +88,8 @@ public:
   //Note: Undef-macros are allowed too
   virtual void setMacro(pp_macro* macro);
   virtual pp_macro* retrieveMacro(const KDevelop::HashedString& name) const;
-
+  pp_macro* retrieveMacro(const QByteArray& name) const;
+  
   //Returns macros that are really stored locally(retrieveMacro may be overridden to perform more complex actions)
   pp_macro* retrieveStoredMacro(const KDevelop::HashedString& name) const;
   

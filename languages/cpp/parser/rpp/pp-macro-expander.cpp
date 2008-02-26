@@ -34,6 +34,17 @@
 #include "pp-environment.h"
 #include "pp-location.h"
 #include "preprocessor.h"
+#include "chartools.h"
+
+QString joinByteArray(const QList<QByteArray>& arrays, QString between) {
+  QString ret;
+  foreach(const QByteArray& array, arrays) {
+    if(!ret.isEmpty())
+      ret += between;
+    ret += QString::fromUtf8(array);
+  }
+  return ret;
+}
 
 using namespace rpp;
 
@@ -43,14 +54,14 @@ pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals
 {
 }
 
-pp_actual pp_macro_expander::resolve_formal(const QString& name, Stream& input)
+pp_actual pp_macro_expander::resolve_formal(const QByteArray& name, Stream& input)
 {
   if (!m_frame)
     return pp_actual();
 
   Q_ASSERT(m_frame->expandingMacro != 0);
 
-  const QStringList& formals = m_frame->expandingMacro->formals;
+  const QList<QByteArray>& formals = m_frame->expandingMacro->formals;
 
   if(name.isEmpty()) {
     KDevelop::Problem problem;
@@ -67,8 +78,8 @@ pp_actual pp_macro_expander::resolve_formal(const QString& name, Stream& input)
       else {
         KDevelop::Problem problem;
         problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
-        problem.setDescription(i18n("Call to macro %1 missing argument number %2", name, index));
-        problem.setExplanation(i18n("Formals: %1", formals.join(", ")));
+        problem.setDescription(i18n("Call to macro %1 missing argument number %2", QString::fromUtf8(name), index));
+        problem.setExplanation(i18n("Formals: %1", joinByteArray(formals, ", ")));
         m_engine->problemEncountered(problem);
       }
     }
@@ -119,11 +130,11 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       {
         skip_blanks(++input, output);
 
-        QString identifier = skip_identifier(input);
+        QByteArray identifier = skip_identifier(input);
 
         KDevelop::SimpleCursor inputPosition = input.inputPosition();
         KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
-        QString formal = resolve_formal(identifier, input).mergeText();
+        QByteArray formal = resolve_formal(identifier, input).mergeText();
 
         if (!formal.isEmpty()) {
           Stream is(&formal, inputPosition);
@@ -165,28 +176,28 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         
         skip_char_literal(input, output);
       }
-      else if (input.current().isSpace())
+      else if (isSpace(input.current()))
       {
         do {
-          if (input == '\n' || !input.current().isSpace())
+          if (input == '\n' || !isSpace(input.current()))
             break;
 
           output << input;
 
         } while (!(++input).atEnd());
       }
-      else if (input.current().isNumber())
+      else if (isNumber(input.current()))
       {
         check_header_section
         
         skip_number (input, output);
       }
-      else if (input.current().isLetter() || input == '_')
+      else if (isLetter(input.current()) || input == '_')
       {
         check_header_section
         
         KDevelop::SimpleCursor inputPosition = input.inputPosition();
-        QString name = skip_identifier (input);
+        QByteArray name = skip_identifier (input);
 
         // search for the paste token
         int blankStart = input.offset();
@@ -210,7 +221,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         if (actual.isValid()) {
           Q_ASSERT(actual.text.size() == actual.inputPosition.size());
           
-          QStringList::const_iterator textIt = actual.text.begin();
+          QList<QByteArray>::const_iterator textIt = actual.text.begin();
           QList<KDevelop::SimpleCursor>::const_iterator cursorIt = actual.inputPosition.begin();
 
           for( ; textIt != actual.text.end(); ++textIt, ++cursorIt )
@@ -229,13 +240,13 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           m_engine->setHideNextMacro(name == "defined");
 
           if (name == "__LINE__")
-            output.appendString(inputPosition, QString::number(input.inputPosition().line));
+            output.appendString(inputPosition, QString::number(input.inputPosition().line).toUtf8());
           else if (name == "__FILE__")
-            output.appendString(inputPosition, QString("\"%1\"").arg(m_engine->currentFile()));
+            output.appendString(inputPosition, QString("\"%1\"").arg(m_engine->currentFile()).toUtf8());
           else if (name == "__DATE__")
-            output.appendString(inputPosition, QDate::currentDate().toString("MMM dd yyyy"));
+            output.appendString(inputPosition, QDate::currentDate().toString("MMM dd yyyy").toUtf8());
           else if (name == "__TIME__")
-            output.appendString(inputPosition, QTime::currentTime().toString("hh:mm:ss"));
+            output.appendString(inputPosition, QTime::currentTime().toString("hh:mm:ss").toUtf8());
           else
             output.appendString(inputPosition, name);
           continue;
@@ -251,7 +262,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             pp_macro_expander expand_macro(m_engine);
             Stream ms(&macro->definition, input.inputPosition());
             ms.setOriginalInputPosition(input.originalInputPosition());
-            QString expanded;
+            QByteArray expanded;
             {
               Stream es(&expanded);
               expand_macro(ms, es);
@@ -262,7 +273,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               Stream es(&expanded, input.inputPosition());
               es.setOriginalInputPosition(input.originalInputPosition());
               skip_whitespaces(es, devnull());
-              QString identifier = skip_identifier(es);
+              QByteArray identifier = skip_identifier(es);
 
               pp_macro* m2 = 0;
               if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier)) && m2->defined) {
@@ -303,7 +314,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         {
           actual.clear();
 
-          QString actualText;
+          QByteArray actualText;
           KDevelop::SimpleCursor actualStart = input.inputPosition();
           {
             Stream as(&actualText);
@@ -314,7 +325,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           {
             pp_actual newActual;
             {
-              QString newActualText;
+              QByteArray newActualText;
               Stream as(&actualText, actualStart);
               as.setOriginalInputPosition(input.originalInputPosition());///@todo What does originalInputPosition mean?
 
@@ -335,7 +346,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input; // skip ','
 
           {
-            QString actualText;
+            QByteArray actualText;
             KDevelop::SimpleCursor actualStart = input.inputPosition();
             {
               Stream as(&actualText);
@@ -344,11 +355,11 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
             pp_actual newActual;
             {
-              QString newActualText;
+              QByteArray newActualText;
               Stream as(&actualText, actualStart);
               as.setOriginalInputPosition(input.originalInputPosition());
 
-              QString actualText;
+              QByteArray actualText;
               rpp::LocationTable table;
               Stream nas(&newActualText, actualStart, &table);
               expand_actual(as, nas);

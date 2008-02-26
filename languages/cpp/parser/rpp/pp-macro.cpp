@@ -65,6 +65,21 @@ size_t fastHashString( const QString& str ) {
   return hash;
 }
 
+size_t fastHashString( const QByteArray& str ) {
+  size_t hash = 0;
+  if( !str.isEmpty() ) {
+    const char* curr = str.constData();
+    const char* end = curr + str.length();
+    char c;
+    for(; curr < end ;) {
+      c = *curr;
+      hash = c + ( hash * 17 );
+      ++curr;
+    }
+  }
+  return hash;
+}
+
 void pp_macro::computeHash() const {
     if( m_valueHashValid || m_idHashValid )
       return;
@@ -74,7 +89,7 @@ void pp_macro::computeHash() const {
 
     m_valueHash = 27 * ( fastHashString( definition ) +  (defined ? 1 : 0 ) );
 
-    for( QStringList::const_iterator it = formals.begin(); it != formals.end(); ++it ) {
+    for( QList<QByteArray>::const_iterator it = formals.begin(); it != formals.end(); ++it ) {
         a *= 19;
         m_valueHash += a * fastHashString( *it );
     }

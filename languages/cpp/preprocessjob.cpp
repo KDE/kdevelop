@@ -113,7 +113,7 @@ void PreprocessJob::run()
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
     parentJob()->setReadFromDisk(readFromDisk);
 
-    QString contents;
+    QByteArray contents;
 
     QString localFile(KUrl(parentJob()->document().str()).toLocalFile());
   
@@ -129,8 +129,8 @@ void PreprocessJob::run()
             return ;
         }
 
-        QByteArray fileData = file.readAll();
-        contents = QString::fromUtf8( fileData.constData() );
+        contents = file.readAll(); ///@todo respect local encoding settings. Currently, the file is expected to be utf-8
+        
     //        Q_ASSERT( !contents.isEmpty() );
         file.close();
         
@@ -154,7 +154,7 @@ void PreprocessJob::run()
             }
         }*/
 
-        contents = parentJob()->contentsFromEditor(true);
+        contents = parentJob()->contentsFromEditor(true).toUtf8();
         m_environmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
     }
 
@@ -215,8 +215,7 @@ void PreprocessJob::run()
 
     preprocessor.environment()->enterBlock(parentJob()->masterJob()->parseSession()->macros);
 
-    ///@todo preprocessor should work in utf8 too, for performance-reasons
-    QString result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
+    QByteArray result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
 
     foreach (KDevelop::ProblemPointer p, preprocessor.problems()) {
       p->setLocationStack(parentJob()->includeStack());
@@ -224,7 +223,7 @@ void PreprocessJob::run()
       parentJob()->addPreprocessorProblem(p);
     }
 
-    parentJob()->parseSession()->setContents( result.toUtf8(), m_currentEnvironment->takeLocationTable() );
+    parentJob()->parseSession()->setContents( result, m_currentEnvironment->takeLocationTable() );
     parentJob()->parseSession()->setUrl( parentJob()->document() );
     parentJob()->setEnvironmentFile( m_environmentFile.data() );
 

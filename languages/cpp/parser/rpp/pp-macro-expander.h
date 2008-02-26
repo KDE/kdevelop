@@ -38,7 +38,7 @@ class pp;
 //The value of a preprocessor function-like macro parameter
 class pp_actual {
 public:
-  QStringList text;
+  QList<QByteArray> text;
   QList<KDevelop::SimpleCursor> inputPosition; //Each inputPosition marks the beginning of one item in the text list
 
   bool isValid() const {
@@ -49,8 +49,15 @@ public:
     inputPosition.clear();
   }
 
-  QString mergeText() const {
-    return text.join(QString());
+  QByteArray mergeText() const {
+    if(text.count() == 1)
+      return text.at(0);
+    
+    QByteArray ret;
+    
+    foreach(const QByteArray& t, text)
+      ret += t;
+    return ret;
   }
 };
 
@@ -68,7 +75,7 @@ class pp_macro_expander
 public:
   explicit pp_macro_expander(pp* engine, pp_frame* frame = 0, bool inHeaderSection = false);
 
-  pp_actual resolve_formal(const QString& name, Stream& input);
+  pp_actual resolve_formal(const QByteArray& name, Stream& input);
 
   /// Expands text with the known macros. Continues until it finds a new text line
   /// beginning with #, at which point control is returned.

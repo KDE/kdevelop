@@ -39,6 +39,7 @@ class KDEVCPPRPP_EXPORT LocationTable
 
     void anchor(std::size_t offset, KDevelop::SimpleCursor cursor);
 
+    /// @todo Correctly respect utf-8 characters. They may have the byte-length of 2, but actually are one character.
     KDevelop::SimpleCursor positionForOffset(std::size_t offset) const;
 
     void dump() const;
@@ -48,7 +49,7 @@ class KDEVCPPRPP_EXPORT LocationTable
      * @param textStartPosition must be given as the start-position, because the location-table might not contain an anchor
      * for the first character.
     * */
-    void splitByAnchors(const QString& text, const KDevelop::SimpleCursor& textStartPosition, QStringList& strings, QList<KDevelop::SimpleCursor>& anchors) const;
+    void splitByAnchors(const QByteArray& text, const KDevelop::SimpleCursor& textStartPosition, QList<QByteArray>& strings, QList<KDevelop::SimpleCursor>& anchors) const;
   
   private:
     QMap<std::size_t, KDevelop::SimpleCursor> m_offsetTable;
