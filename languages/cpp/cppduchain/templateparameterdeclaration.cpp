@@ -18,19 +18,19 @@
 
 #include "templateparameterdeclaration.h"
 #include <duchain/identifier.h>
-#include <duchain/declaration_p.h>
+#include <duchain/declaration.h>
 
 
 using namespace KDevelop;
 
-class TemplateParameterDeclarationPrivate : public DeclarationPrivate
+class TemplateParameterDeclarationPrivate
 {
 public:
   QualifiedIdentifier m_defaultParameter;
 };
 
 TemplateParameterDeclaration::TemplateParameterDeclaration(const HashedString& url, const KDevelop::SimpleRange& range, DUContext* context)
-  : Declaration(*new TemplateParameterDeclarationPrivate, url, range, LocalScope)
+  : Declaration(url, range, LocalScope, context), d_ptr(new TemplateParameterDeclarationPrivate)
 {
   if(context)
     setContext(context);
@@ -48,7 +48,9 @@ void TemplateParameterDeclaration::setDefaultParameter(const QualifiedIdentifier
   d_func()->m_defaultParameter = str;
 }
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(*new TemplateParameterDeclarationPrivate(*rhs.d_func())) {
+TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(rhs), 
+        d_ptr(new TemplateParameterDeclarationPrivate) {
+  d_func()->m_defaultParameter = rhs.d_func()->m_defaultParameter;
   setIsTypeAlias(true);
 }
 

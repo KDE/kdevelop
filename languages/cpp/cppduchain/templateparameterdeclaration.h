@@ -52,6 +52,7 @@ public:
   virtual Declaration* clone() const;
   
 private:
+  TemplateParameterDeclarationPrivate* const d_ptr;
   Q_DECLARE_PRIVATE(TemplateParameterDeclaration)
 };
 
