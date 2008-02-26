@@ -27,7 +27,7 @@
 namespace KDevelop
 {
 
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainBasePrivate : public DocumentRangeObjectPrivate
+class DUChainBasePrivate : public DocumentRangeObjectPrivate
 {
   public:
   DUChainBasePrivate() {

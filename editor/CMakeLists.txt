@@ -23,7 +23,6 @@ install(TARGETS kdevplatformeditor ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install(FILES
     documentrange.h
     documentrangeobject.h
-    documentrangeobject_p.h
     documentcursor.h
     documentcursorobject.h
     editorintegrator.h

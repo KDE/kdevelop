@@ -32,7 +32,7 @@
 namespace KDevelop
 {
 
-class KDEVPLATFORMLANGUAGE_EXPORT DeclarationPrivate : public DUChainBasePrivate
+class DeclarationPrivate : public DUChainBasePrivate
 {
 public:
   DeclarationPrivate();
