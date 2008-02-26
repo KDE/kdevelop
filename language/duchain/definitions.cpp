@@ -24,10 +24,6 @@
 
 namespace KDevelop {
 
-uint qHash(const KDevelop::DeclarationId& id) {
-  return id.hash();
-}
-
 struct DefinitionsPrivate {
   //Maps definitions to declaration-ids
   QHash<DeclarationId, DeclarationPointer> m_definitions;

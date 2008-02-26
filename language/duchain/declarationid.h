@@ -70,10 +70,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
 
 };
 
-}
-
 inline uint qHash(const KDevelop::DeclarationId& id) {
   return id.hash();
+}
+
 }
 
 #endif

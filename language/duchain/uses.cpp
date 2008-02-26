@@ -24,10 +24,6 @@
 
 namespace KDevelop {
 
-inline uint qHash(const KDevelop::DeclarationId& id) {
-  return id.hash();
-}
-
 struct UsesPrivate {
   QHash<DeclarationId, QList<TopDUContext*> > m_uses;
 };
