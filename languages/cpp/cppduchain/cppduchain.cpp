@@ -38,8 +38,8 @@ KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDev
   if( context->type() != DUContext::Class )
     return ret;
   
-  QList<DUContextPointer> bases = context->importedParentContexts();
-  for( QList<DUContextPointer>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
+  QVector<DUContextPointer> bases = context->importedParentContexts();
+  for( QVector<DUContextPointer>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
     if( *it )
       ret += findLocalDeclarations( (*it).data(), identifier, topContext );
   }

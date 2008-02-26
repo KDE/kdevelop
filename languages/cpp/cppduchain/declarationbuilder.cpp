@@ -310,23 +310,26 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, b
   return openDeclaration(name, rangeNode, isFunction, false, true);
 }
 
-KDevelop::DUContext* hasTemplateContext( const QList<KDevelop::DUContext*>& contexts ) {
-  foreach( DUContext* context, contexts )
+template<class Type>
+Type hasTemplateContext( const QList<Type>& contexts ) {
+  foreach( const Type& context, contexts )
     if( context->type() == KDevelop::DUContext::Template )
       return context;
-  return 0;
+  return Type(0);
 }
 
-KDevelop::DUContext* hasTemplateContext( const QList<KDevelop::DUContextPointer>& contexts ) {
-  foreach( DUContextPointer context, contexts )
-    if( context.data() && context->type() == KDevelop::DUContext::Template )
-      return context.data();
-  return 0;
+template<class Type>
+Type hasTemplateContext( const QVector<Type>& contexts ) {
+  foreach( const Type& context, contexts )
+    if( context->type() == KDevelop::DUContext::Template )
+      return context;
+  
+  return Type(0);
 }
 
 //Check whether the given context is a template-context by checking whether it imports a template-parameter context
 KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
-  return hasTemplateContext( context->importedParentContexts() );
+  return hasTemplateContext( context->importedParentContexts() ).data();
 }
 
 template<class DeclarationType>
@@ -715,11 +718,11 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
                 if( forwardTemplateContext->localDeclarations().count() != currentTemplateContext->localDeclarations().count() ) {
                 } else {
                   
-                  const QList<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
-                  const QList<Declaration*>& realList = currentTemplateContext->localDeclarations();
+                  const QVector<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
+                  const QVector<Declaration*>& realList = currentTemplateContext->localDeclarations();
                   
-                  QList<Declaration*>::const_iterator forwardIt = forwardList.begin();
-                  QList<Declaration*>::const_iterator realIt = realList.begin();
+                  QVector<Declaration*>::const_iterator forwardIt = forwardList.begin();
+                  QVector<Declaration*>::const_iterator realIt = realList.begin();
                     
                   for( ; forwardIt != forwardList.end(); ++forwardIt, ++realIt ) {
                     TemplateParameterDeclaration* forwardParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*forwardIt);
@@ -1047,23 +1050,13 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
   
   if( function ) {
     if( node->expression ) {
-      //Fill default-parameters and parameter-names
+      //Fill default-parameters
       QString defaultParam;
       for( size_t token = node->expression->start_token; token != node->expression->end_token; ++token )
         defaultParam += m_editor->tokenToString(token);
 
 
       function->addDefaultParameter(defaultParam);
-    }
-    if( node->declarator && node->declarator->id) {
-      QString paramName;
-      for( size_t token = node->declarator->id->start_token; token != node->declarator->id->end_token; ++token )
-        paramName += m_editor->tokenToString(token);
-
-
-      function->addParameterName(paramName);
-    }else{
-      function->addParameterName(QString());
     }
   }
 }

@@ -62,6 +62,20 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+DUContext* getFunctionContext(Declaration* decl) {
+  DUContext* internal = decl->internalContext();
+  if( !internal )
+    return 0;
+  if( internal->type() == DUContext::Function )
+    return internal;
+  foreach( DUContextPointer ctx, internal->importedParentContexts() ) {
+    if( ctx )
+      if( ctx->type() == DUContext::Function )
+        return ctx.data();
+  }
+  return 0;
+}
+
 //Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
 AbstractType::Ptr effectiveType( Declaration* decl )
 {
@@ -202,10 +216,13 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
   CppFunctionType::Ptr functionType = dec->type<CppFunctionType>();
   if (functionType && decl) {
 
-    QStringList paramNames = decl->parameterNames();
+    QVector<Declaration*> parameters;
+    if( getFunctionContext(dec) )
+      parameters = getFunctionContext(dec)->localDeclarations();
+    
     QStringList defaultParams = decl->defaultParameters();
 
-    QStringList::const_iterator paramNameIt = paramNames.begin();
+    QVector<Declaration*>::const_iterator paramNameIt = parameters.begin();
     QStringList::const_iterator defaultParamIt = defaultParams.begin();
 
     int firstDefaultParam = functionType->arguments().count() - defaultParams.count();
@@ -266,8 +283,8 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       else
         ret += "<incomplete type>";
 
-      if( paramNameIt != paramNames.end() && !(*paramNameIt).isEmpty() )
-        ret += " " + *paramNameIt;
+      if( paramNameIt != parameters.end() && !(*paramNameIt)->identifier().isEmpty() )
+        ret += " " + (*paramNameIt)->identifier().toString();
 
       if( doHighlight  )
       {
@@ -286,7 +303,7 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
       }
 
       ++num;
-      if( paramNameIt != paramNames.end() )
+      if( paramNameIt != parameters.end() )
         ++paramNameIt;
     }
     ret += ')';

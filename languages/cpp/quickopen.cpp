@@ -70,7 +70,7 @@ QList<HashedString> getInclusionPath( QSet<const DUContext*>& used, const DUCont
     return ret;
   }
   
-  QList<DUContextPointer> imports = context->importedParentContexts();
+  QVector<DUContextPointer> imports = context->importedParentContexts();
   
   foreach( DUContextPointer i, imports ) {
     if( !i )

@@ -317,6 +317,9 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     m_importedParentContexts.clear();
   }
 
+  
+  DUChainWriteLocker lock(DUChain::lock());
+  topLevelContext->squeeze();
   return topLevelContext;
 }
 
@@ -554,7 +557,7 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
     DUChainReadLocker readLock(DUChain::lock());
 
     if (recompiling()) {
-      const QList<DUContext*>& childContexts = currentContext()->childContexts();
+      const QVector<DUContext*>& childContexts = currentContext()->childContexts();
 
       QMutexLocker lock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
       // Translate cursor to take into account any changes the user may have made since the text was retrieved

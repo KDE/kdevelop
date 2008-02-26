@@ -748,8 +748,8 @@ private:
 
   void addDeclarationsFromContext(DUContext* ctx, QString indent = "", bool first = true) {
     //m_currentText += indent + ctx->localScopeIdentifier().toString() + "{<br />";
-    QList<DUContext*>::const_iterator childIterator = ctx->childContexts().begin();
-    QList<Declaration*>::const_iterator declarationIterator = ctx->localDeclarations().begin();
+    QVector<DUContext*>::const_iterator childIterator = ctx->childContexts().begin();
+    QVector<Declaration*>::const_iterator declarationIterator = ctx->localDeclarations().begin();
 
     while(childIterator != ctx->childContexts().end() || declarationIterator != ctx->localDeclarations().end()) {
 

@@ -419,7 +419,7 @@ void CPPInternalParseJob::run()
                     DUChainWriteLocker l(DUChain::lock());
                     //We have updated a context. Now remove all headers that were not encountered while this parse(maybe one was removed)
                     ///@todo What if a header was found in another path? Then it will be removed here.
-                    QList<DUContextPointer> imports = topContext->importedParentContexts();
+                    QVector<DUContextPointer> imports = topContext->importedParentContexts();
                     foreach(DUContextPointer ctx, imports) {
                         if(ctx.data() && !encounteredIncludeUrls.contains(ctx->url())) {
                             topContext->removeImportedParentContext(ctx.data());
