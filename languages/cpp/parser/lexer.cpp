@@ -518,11 +518,6 @@ void Lexer::scan_minus()
     {
       ++cursor;
       (*session->token_stream)[index++].kind = Token_arrow;
-      if (*cursor == '*')
-	{
-	  ++cursor;
-	  (*session->token_stream)[index++].kind = Token_ptrmem;
-	}
     }
   else
     {
