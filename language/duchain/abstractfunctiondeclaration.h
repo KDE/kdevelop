@@ -68,13 +68,6 @@ public:
 
   void addDefaultParameter(const QString& str);
 
-  /**
-   * Returns the set list of parameter-names. There is no guarantee that they match the count of available parameters.
-   * */
-  const QList<QString>& parameterNames() const;
-
-  void addParameterName(const QString& str);
-
   private:
     AbstractFunctionDeclarationPrivate* const d;
 };

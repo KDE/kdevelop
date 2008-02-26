@@ -88,7 +88,7 @@ private:
   QModelIndex createParentIndex(KDevelop::DUChainBasePointer* type) const;
 
   template <typename T>
-  KTextEditor::Cursor nextItem(QListIterator<T*>& it, bool initialise) const
+  KTextEditor::Cursor nextItem(QVectorIterator<T*>& it, bool initialise) const
   {
     if (initialise)
       if (it.hasNext())
@@ -101,7 +101,7 @@ private:
   }
 
   template <typename T>
-  KDevelop::DUChainBase* item(QListIterator<T*>& it) const
+  KDevelop::DUChainBase* item(QVectorIterator<T*>& it) const
   {
     Q_ASSERT(it.hasPrevious());
     KDevelop::DUChainBase* item = it.peekPrevious();
@@ -115,7 +115,7 @@ private:
   }
 
   template <typename T>
-  KDevelop::DUChainBase* proxyItem(KDevelop::DUChainBase* parent, QListIterator<T*>& it) const
+  KDevelop::DUChainBase* proxyItem(KDevelop::DUChainBase* parent, QVectorIterator<T*>& it) const
   {
     KDevelop::DUChainBase* target = item(it);
     KDevelop::DUChainBase* proxy = new ProxyObject(parent, target);

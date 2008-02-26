@@ -35,6 +35,12 @@ namespace KTextEditor {
   class SmartRange;
 }
 
+/**
+ * For memory-efficiency, we store everything using QVector instead of QList, because in QVector
+ * we have no more space allocated what is physically needed, while QList allocates each element
+ * separately.
+ * */
+
 namespace KDevelop{
 class DUContext;
 class DUContextPrivate : public DUChainBasePrivate
@@ -45,18 +51,18 @@ public:
   QualifiedIdentifier m_scopeIdentifier;
   DUContextPointer m_parentContext;
   Declaration* m_owner;
-  QList<DUContextPointer> m_importedParentContexts;
+  QVector<DUContextPointer> m_importedParentContexts;
   ///Contains the import-positions of those imported contexts that have a valid one
   QMap<DUContextPointer, SimpleCursor> m_importedParentContextPositions;
-  QList<DUContext*> m_childContexts;
-  QList<DUContext*> m_importedChildContexts;
+  QVector<DUContext*> m_childContexts;
+  QVector<DUContext*> m_importedChildContexts;
 
   //Use DeclarationPointer instead of declaration, so we can locate management-problems
   typedef QMultiHash<Identifier, DeclarationPointer> DeclarationsHash;
   
   static QMutex m_localDeclarationsMutex;
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsMutex must be locked.
-  QList<Declaration*> m_localDeclarations;
+  QVector<Declaration*> m_localDeclarations;
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
   DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
   

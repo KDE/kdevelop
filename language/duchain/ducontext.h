@@ -190,7 +190,7 @@ public:
    * @warning The list may contain objects that are not valid any more(data() returns zero, but that can only happen when using anonymous imports, @see addImportedParentContext)
    * @warning The import structure may contain loops if this is a TopDUContext, so be careful when traversing the tree.
    */
-  const QList<DUContextPointer>& importedParentContexts() const;
+  const QVector<DUContextPointer>& importedParentContexts() const;
 
   /**
    * If the given context is directly imported into this one, and
@@ -238,12 +238,12 @@ public:
   /**
    * Returns the list of contexts importing this context.
    */
-  const QList<DUContext*>& importedChildContexts() const;
+  const QVector<DUContext*>& importedChildContexts() const;
 
   /**
    * Returns the list of immediate child contexts for this context.
    */
-  const QList<DUContext*>& childContexts() const;
+  const QVector<DUContext*>& childContexts() const;
 
   /**
    * Clears and deletes all child contexts recursively.
@@ -298,7 +298,7 @@ public:
    * Clears all local declarations. Does not delete the declaration; the caller
    * assumes ownership.
    */
-  QList<Declaration*> clearLocalDeclarations();
+  QVector<Declaration*> clearLocalDeclarations();
 
   /**
    * Clears all local declarations. Deletes these declarations, as the context has
@@ -309,7 +309,7 @@ public:
   /**
    * Returns all local declarations
    */
-  const QList<Declaration*> localDeclarations() const;
+  const QVector<Declaration*> localDeclarations() const;
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
@@ -470,6 +470,9 @@ public:
    * */
   virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
 
+  ///Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
+  void squeeze();
+  
   protected:
 
   /**

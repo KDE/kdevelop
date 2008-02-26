@@ -57,14 +57,14 @@ void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* d
 }
 
 void fillItems( const QString& project, QList<DUChainItem>& items, DUContext* context, ProjectItemDataProvider::ItemTypes itemTypes ) {
-  QList<DUContext*> contexts = context->childContexts();
-  QList<Declaration*> declarations = context->localDeclarations();
+  QVector<DUContext*> contexts = context->childContexts();
+  QVector<Declaration*> declarations = context->localDeclarations();
   
-  QList<DUContext*>::const_iterator contextIterator = contexts.begin();
-  QList<Declaration*>::const_iterator declarationIterator = declarations.begin();
+  QVector<DUContext*>::const_iterator contextIterator = contexts.begin();
+  QVector<Declaration*>::const_iterator declarationIterator = declarations.begin();
 
-  QList<DUContext*>::const_iterator contextEnd = contexts.end();
-  QList<Declaration*>::const_iterator declarationEnd = declarations.end();
+  QVector<DUContext*>::const_iterator contextEnd = contexts.end();
+  QVector<Declaration*>::const_iterator declarationEnd = declarations.end();
 
   while( contextIterator != contextEnd || declarationIterator != declarationEnd ) {
     if( contextIterator != contextEnd && declarationIterator != declarationEnd ) {

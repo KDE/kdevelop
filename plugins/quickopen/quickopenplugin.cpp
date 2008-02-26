@@ -593,11 +593,11 @@ public:
 
 void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFilter& filter ) {
 
-  QList<DUContext*> children = context->childContexts();
-  QList<Declaration*> localDeclarations = context->localDeclarations();
+  QVector<DUContext*> children = context->childContexts();
+  QVector<Declaration*> localDeclarations = context->localDeclarations();
 
-  QList<DUContext*>::const_iterator childIt = children.begin();
-  QList<Declaration*>::const_iterator declIt = localDeclarations.begin();
+  QVector<DUContext*>::const_iterator childIt = children.begin();
+  QVector<Declaration*>::const_iterator declIt = localDeclarations.begin();
 
   while(childIt != children.end() || declIt != localDeclarations.end()) {
 

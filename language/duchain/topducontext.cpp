@@ -97,9 +97,9 @@ public:
       return false;
     }
 
-    const QList<DUContextPointer>& importedContexts(m_ctxt->importedParentContexts());
-    QList<DUContextPointer>::const_iterator end = importedContexts.end();
-    for( QList<DUContextPointer>::const_iterator it = importedContexts.begin(); it != end; ++it) {
+    const QVector<DUContextPointer>& importedContexts(m_ctxt->importedParentContexts());
+    QVector<DUContextPointer>::const_iterator end = importedContexts.end();
+    for( QVector<DUContextPointer>::const_iterator it = importedContexts.begin(); it != end; ++it) {
       if(!(*it)) {
         kWarning() << "Imported context was invalidated";
         continue;
