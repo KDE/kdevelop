@@ -418,7 +418,7 @@ class NavigationContext : public KShared {
                 makeLink(resolved->identifier().toString(), KDevelop::DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
                 m_currentText += ") ";
               }else{
-                m_currentText += i18n("(bad forward-declaration)") + " ";
+                m_currentText += i18n("(unresolved forward-declaration)") + " ";
               }
             }
           }
@@ -502,7 +502,7 @@ class NavigationContext : public KShared {
         if(!uses.isEmpty()) {
           m_currentText += labelHighlight(i18n("<br />Uses:<br />"));
           for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
-            m_currentText += " " + it.key().str() + "<br />";
+            m_currentText += " " + KUrl(it.key().str()).fileName() + "<br />";
             foreach(const SimpleRange& range, *it) {
               m_currentText += "  ";
               makeLink( QString("%1:%2").arg(range.start.line).arg(range.start.column), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
