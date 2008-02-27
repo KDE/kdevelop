@@ -532,28 +532,31 @@ void MakeWidget::insertStdoutLine( const QCString& line )
 {
     QString sline;
     bool forceCLocale = KConfigGroup( kapp->config(), "MakeOutputWidget" ).readBoolEntry( "ForceCLocale", true );
+    
     if( forceCLocale )
         sline = QString::fromAscii( stdoutbuf+line );
     else
         sline = QString::fromLocal8Bit( stdoutbuf+line );
-    stdoutbuf.truncate(0);
 
     if ( !appendToLastLine( sline ) )
         m_directoryStatusFilter.processLine( sline );
+    stdoutbuf.truncate(0);
 }
 
 void MakeWidget::insertStderrLine( const QCString& line )
 {
     QString sline;
     bool forceCLocale = KConfigGroup( kapp->config(), "MakeOutputWidget" ).readBoolEntry( "ForceCLocale", true );
+    
     if( forceCLocale ) {
         sline = QString( stderrbuf+line );
     }
     else
         sline = QString::fromLocal8Bit( stderrbuf+line );
+    
+    if ( !appendToLastLine( sline ) )
+        m_errorFilter.processLine( sline );
     stderrbuf.truncate(0);
-    if ( !appendToLastLine( line ) )
-        m_errorFilter.processLine( line );
 }
 
 void MakeWidget::slotProcessExited(KProcess *)
@@ -832,7 +835,7 @@ void MakeWidget::storePartialStderrLine(const QCString & line)
 
 void MakeWidget::storePartialStdoutLine(const QCString & line)
 {
-    stderrbuf += line;
+    stdoutbuf += line;
 }
 
 #include "makewidget.moc"
