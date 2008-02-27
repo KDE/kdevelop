@@ -238,4 +238,4 @@ KTextEditor::SmartRange* DocumentRangeObject::takeRange()
 
 }
 
-QMutex KDevelop::DocumentRangeObject::m_mutex;
+QMutex KDevelop::DocumentRangeObject::m_mutex(QMutex::Recursive);
