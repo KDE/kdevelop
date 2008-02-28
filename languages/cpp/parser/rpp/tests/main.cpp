@@ -48,7 +48,7 @@ int main (int /*argc*/, char *argv[])
 
   preprocess.processFile(QString("pp-configuration"), pp::File); // ### put your macros here!
 
-  preprocess.environment()->enterBlock(0, QString());
+  preprocess.environment()->enterBlock(0, QByteArray());
 
   QString result = preprocess.processFile(QString(filename), pp::File);
 
