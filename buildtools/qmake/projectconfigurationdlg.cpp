@@ -319,8 +319,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
     else
     {
-        myProjectItem->addValue( "CONFIG", "warn_on" );
-        myProjectItem->removeValue( "CONFIG", "warn_off" );
+        myProjectItem->addValue( "CONFIG", "warn_off" );
+        myProjectItem->removeValue( "CONFIG", "warn_on" );
     }
     if ( checkWindows->isChecked() )
         myProjectItem->addValue( "CONFIG", "windows" );
