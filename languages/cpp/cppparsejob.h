@@ -34,7 +34,6 @@
 #include <contextbuilder.h>
 
 class PreprocessJob;
-class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
 class CPPInternalParseJob;
@@ -70,9 +69,6 @@ public:
 
     ParseSession* parseSession() const;
 
-    void setAST(TranslationUnitAST* ast);
-    virtual TranslationUnitAST *AST() const;
-
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
 
@@ -94,30 +90,36 @@ public:
 
     const KTextEditor::Range& textRangeToParse() const;
 
-    void setEnvironmentFile( Cpp::EnvironmentFile* file );
+    /**
+     * Get/set the environment-file of the proxy-context, if simpified matching is used.
+     * When simplified-matching is used, two separate contexts will be created, with separate environment-descriptions.
+     * */
+    void setProxyEnvironmentFile( Cpp::EnvironmentFile* file );
+    /**
+     * Returns the environment-file to be used for the proxy context.
+     * @return Pointer or zero if simpified matching is disabled.
+     * */
+    Cpp::EnvironmentFile* proxyEnvironmentFile();
 
-    Cpp::EnvironmentFile* environmentFile();
-
-    /**When simplified-matching is used, two separate contexts will be created.
-     * One that contains all the imports, and one that contains the real parsed content. */
+    /**
+     * Set the EnvironmentFile for the content-context. */
     void setContentEnvironmentFile( Cpp::EnvironmentFile* file );
     /**
-     * If this is set, a separate context for the content should be built. If contentContext is set,
-     * contentContext should be used or updated. If contentContext is not set, it should be created separetely
-     * and registered using this EnvironmentFile.
+     * Environment-file for the content. This is always valid.
      * */
     Cpp::EnvironmentFile* contentEnvironmentFile();
 
-    ///Set whether the contentContext should be re-used directly. If false, it will be updated instead.
-    void setUseContentContext(bool b);
-    bool useContentContext() const;
-    
-    void setUpdatingContext( const KDevelop::TopDUContextPointer& context );
-    KDevelop::TopDUContextPointer updatingContext() const;
+    ///Set this to true if the existing du-chain of the parsed file should be left as it is, without updating.
+    void setKeepDuchain(bool b);
+    bool keepDuchain() const;
 
-    void setContentContext( const KDevelop::TopDUContextPointer& context );
-    ///If this is set, the contentContext should either be used without modification, or updated if it is outdated.
-    KDevelop::TopDUContextPointer contentContext() const;
+    ///Proxy-context that is being updated, or zero.
+    void setUpdatingProxyContext( const KDevelop::TopDUContextPointer& context );
+    KDevelop::TopDUContextPointer updatingProxyContext() const;
+
+    void setUpdatingContentContext( const KDevelop::TopDUContextPointer& context );
+    ///If this is set, the updatingContentContext should either be used without modification, or updated if it is outdated.
+    KDevelop::TopDUContextPointer updatingContentContext() const;
 
     ///If this file was included from another, this contains the path within the search-paths that this file was found through
     KUrl includedFromPath() const;
@@ -134,23 +136,27 @@ public:
     bool needUpdateEverything() const;
     ///Set whether every single context encountered needs an update
     void setNeedUpdateEverything(bool);
-  
+
+    bool wasUpdated(const KDevelop::DUContext* context) const;
+    void setWasUpdated(const KDevelop::DUContext* context);
+
+    const QSet<const KDevelop::DUContext*>& updated() const;
+    
 private:
     bool m_needUpdateEverything;
-    KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
+    KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession* m_session;
-    TranslationUnitAST* m_AST;
     bool m_readFromDisk;
     PreprocessJob* m_preprocessJob;
     CPPInternalParseJob* m_parseJob;
     KTextEditor::Range m_textRangeToParse;
     IncludeFileList m_includedFiles;
 
-    KDevelop::TopDUContextPointer m_updatingContext;
+    KDevelop::TopDUContextPointer m_updatingProxyContext;
     
     //The following two members are used when simplified-matching is used, which means that one content-context and one specialized context will be used.
-    KDevelop::TopDUContextPointer m_contentContext;
+    KDevelop::TopDUContextPointer m_updatingContentContext;
     KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
 
     mutable QList<ProblemPointer> m_preprocessorProblems;
@@ -159,8 +165,9 @@ private:
     mutable bool m_includePathsComputed;
     mutable QList<HashedString> m_includePaths; //Only a master-job has this set
     mutable KUrl::List m_includePathUrls; //Only a master-job has this set
-    bool m_useContentContext;
+    bool m_keepDuchain;
     QStack<DocumentCursor> m_includeStack;
+    QSet<const KDevelop::DUContext*> m_updated;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job
@@ -178,6 +185,7 @@ public:
     virtual void run();
 
 private:
+    bool needUses() const;
     int m_priority;
 };
 

@@ -45,6 +45,15 @@ namespace rpp {
 
 class CppPreprocessEnvironment;
 
+/**
+ * The preprocess-job preprocesses the actual content and registers it at the parent-job parse-session.
+ * Additional it sets CPPParseJob::contentEnvironmentFile, CPPParseJob::proxyEnvironmentFile,
+ * CPPParseJob::updatingProxyContext, CPPParseJob::updatingContentContext, and CPPParseJob::keepDuchain.
+ *
+ * When simplified matching is enabled, all those members will be filled accordingly. Else, only contentEnvironmentFile
+ * and updatingContentContext will be filled.
+ * */
+
 class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
 {
     Q_OBJECT
@@ -77,10 +86,11 @@ private:
     bool checkAbort();
 
     CppPreprocessEnvironment* m_currentEnvironment;
-    KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
-    KSharedPtr<Cpp::EnvironmentFile> m_updatingEnvironmentFile;
+    KSharedPtr<Cpp::EnvironmentFile> m_firstEnvironmentFile; //First environment-file. If simplified matching is used, this is the proxy.
     //If simplified matching is used, a separate EnvironmentFile is used for the content, as opposed to the #include statements.
-    KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
+    KSharedPtr<Cpp::EnvironmentFile> m_secondEnvironmentFile;
+    //This is the environment-file that is currently updated. May be the proxy in the beginning, and context later after header-section ended.
+    KSharedPtr<Cpp::EnvironmentFile> m_updatingEnvironmentFile;
     bool m_success;
     bool m_headerSectionEnded;
     rpp::pp* m_pp;
