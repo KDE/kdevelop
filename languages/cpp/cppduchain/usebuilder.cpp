@@ -40,7 +40,7 @@ UseBuilder::UseBuilder (ParseSession* session)
 }
 
 UseBuilder::UseBuilder (CppEditorIntegrator* editor)
-  : UseBuilderBase(editor)
+  : UseBuilderBase(editor), m_finishContext(true)
 {
 }
 
@@ -313,8 +313,8 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
     virtual void problem(AST* node, const QString& str) {
       if(m_dumpProblems)
         Cpp::ExpressionVisitor::problem(node, str);
-      else
-        kDebug(9007) << "problem";
+/*      else
+        kDebug(9007) << "problem";*/
     }
 
     UseBuilder* m_builder;
