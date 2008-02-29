@@ -454,7 +454,7 @@ public:
 };
 
 template <class T>
-uint qHash(const KSharedPtr<T>& type) { return (uint)type.data(); }
+uint qHash(const KSharedPtr<T>& type) { return (uint)((size_t)type.data()); }
 
 }
 
