@@ -1352,7 +1352,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
     if (session->token_stream->lookAhead() == '(')
       {
         advance();
-
+        ///@todo Sometimes something like (test()) is parsed as a parameter declaration clause, although it cannot be one.
         ParameterDeclarationClauseAST *params = 0;
         if (!parseParameterDeclarationClause(params))
           {
