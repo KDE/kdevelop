@@ -104,12 +104,6 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   QString ret;
   stream.setString(&ret, QIODevice::WriteOnly);
 
-  //Only work on each context once
-  if( m_hadObjects.contains(context) )
-    return QString();
-  
-  m_hadObjects[context] = true;
-  
   if( isMaster )
     stream << "Digraph chain {\n";
   
