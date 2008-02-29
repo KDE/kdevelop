@@ -163,7 +163,7 @@ private:
 class HeaderStream : public rpp::Stream
 {
 public:
-  HeaderStream(QString* string)
+  HeaderStream(QByteArray* string)
     : Stream(string)
     , m_string(string)
   {
@@ -175,7 +175,7 @@ public:
   }
 
 private:
-  QString* m_string;
+  QByteArray* m_string;
 };
 
 class FileBlock : public rpp::MacroBlock
@@ -368,7 +368,7 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 
   preprocessor.environment()->enterBlock(fileMacros);
 
-  QString ret = preprocessor.processFile(url.prettyUrl(), rpp::pp::Data, QString(sourceToParse.readAll()));
+  QByteArray ret = preprocessor.processFile(url.prettyUrl(), rpp::pp::Data, sourceToParse.readAll());
 
   preprocessor.environment()->leaveBlock();
 
