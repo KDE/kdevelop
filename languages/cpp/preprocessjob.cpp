@@ -425,18 +425,19 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
             ///The second parameter is zero because we are in a background-thread and we here
             ///cannot create a slave of the foreground cpp-support-part.
-            CPPParseJob slaveJob(includedFile, 0, this);
+            CPPParseJob* slaveJob = new CPPParseJob(includedFile, 0, this);
 
-            slaveJob.setIncludedFromPath(included.second);
+            slaveJob->setIncludedFromPath(included.second);
 
             includeStack.append(DocumentCursor(parentJob()->document(), KTextEditor::Cursor(sourceLine, 0)));
-            slaveJob.setIncludeStack(includeStack);
+            slaveJob->setIncludeStack(includeStack);
 
-            slaveJob.parseForeground();
+            slaveJob->parseForeground();
 
             // Add the included file.
-            Q_ASSERT(slaveJob.duChain());
-            parentJob()->addIncludedFile(slaveJob.duChain(), sourceLine);
+            Q_ASSERT(slaveJob->duChain());
+            parentJob()->addIncludedFile(slaveJob->duChain(), sourceLine);
+            delete slaveJob;
         }
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included";
     } else {
