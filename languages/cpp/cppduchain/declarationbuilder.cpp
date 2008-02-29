@@ -1092,6 +1092,11 @@ void DeclarationBuilder::applyFunctionSpecifiers()
 
 bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause)
 {
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      if(currentContext()->type() == DUContext::Other) //Cannot declare a function in a code-context
+        return false;
+    }
     if(!clause || !clause->parameter_declarations)
       return true;
     AbstractType::Ptr oldLastType = lastType();
