@@ -1262,12 +1262,23 @@ void DUContext::squeeze()
 {
   Q_D(DUContext);
 
-  d->m_uses.squeeze();
-  d->m_importedParentContexts.squeeze();
-  d->m_childContexts.squeeze();
-  d->m_importedChildContexts.squeeze();
-  d->m_localDeclarations.squeeze();
-  d->m_rangesForUses.squeeze();
+  if(!d->m_uses.isEmpty())
+    d->m_uses.squeeze();
+  
+  if(!d->m_importedParentContexts.isEmpty())
+    d->m_importedParentContexts.squeeze();
+  
+  if(!d->m_childContexts.isEmpty())
+    d->m_childContexts.squeeze();
+  
+  if(!d->m_importedChildContexts.isEmpty())
+    d->m_importedChildContexts.squeeze();
+  
+  if(!d->m_localDeclarations.isEmpty())
+    d->m_localDeclarations.squeeze();
+  
+  if(!d->m_rangesForUses.isEmpty())
+    d->m_rangesForUses.squeeze();
   
   foreach(DUContext* child, childContexts())
     child->squeeze();
