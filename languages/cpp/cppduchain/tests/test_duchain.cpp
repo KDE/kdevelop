@@ -520,7 +520,7 @@ void TestDUChain::testEnum()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 = 0x02 };");
+    QByteArray method("enum Enum { Value1 = 5 //Comment\n, value2 //Comment1\n }; enum Enum2 { Value21, value22 = 0x02 };");
 
   DUContext* top = parse(method, DumpNone);
 
