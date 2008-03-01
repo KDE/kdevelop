@@ -78,7 +78,8 @@ public:
 
     void unloadAllProjectPlugins()
     {
-        m_core->pluginController()->unloadPlugins( IPluginController::Project );
+        if( m_projects.isEmpty() )
+            m_core->pluginController()->unloadPlugins( IPluginController::Project );
     }
 
     void projectConfig( QObject * obj )
