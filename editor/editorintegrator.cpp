@@ -342,7 +342,7 @@ bool ModificationRevision::operator ==( const ModificationRevision& rhs ) const 
 }
 
 bool ModificationRevision::operator !=( const ModificationRevision& rhs ) const {
-  return modificationTime != rhs.modificationTime && revision != rhs.revision;
+  return modificationTime != rhs.modificationTime || revision != rhs.revision;
 }
 
 QString ModificationRevision::toString() const {
