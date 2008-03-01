@@ -2198,7 +2198,7 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
   std::size_t start = session->token_stream->cursor();
 
   CHECK(Token_identifier);
-  std::size_t id = session->token_stream->cursor() - 1;
+  std::size_t id = start;
 
   EnumeratorAST *ast = CreateNode<EnumeratorAST>(session->mempool);
   ast->id = id;
@@ -2697,6 +2697,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
 
   std::size_t start = session->token_stream->cursor();
 
+  ///@todo solve -1 thing
   StatementAST *decl_ast = 0;
   bool maybe_amb = parseDeclarationStatement(decl_ast);
   maybe_amb &= session->token_stream->kind(session->token_stream->cursor() - 1) == ';';
@@ -3160,8 +3161,9 @@ bool Parser::parseNamespaceAliasDefinition(DeclarationAST *&node)
   NamespaceAliasDefinitionAST *ast
     = CreateNode<NamespaceAliasDefinitionAST>(session->mempool);
 
+  size_t pos = session->token_stream->cursor();
   ADVANCE(Token_identifier,  "identifier");
-  ast->namespace_name = session->token_stream->cursor() - 1;
+  ast->namespace_name = pos;
 
   ADVANCE('=', "=");
 
@@ -3900,8 +3902,9 @@ bool Parser::parseNewExpression(ExpressionAST *&node)
       advance();
     }
 
+  size_t pos = session->token_stream->cursor();
   CHECK(Token_new);
-  ast->new_token = session->token_stream->cursor() - 1;
+  ast->new_token = pos;
 
   if (session->token_stream->lookAhead() == '(')
     {
@@ -4006,15 +4009,17 @@ bool Parser::parseDeleteExpression(ExpressionAST *&node)
       advance();
     }
 
+  size_t pos = session->token_stream->cursor();
   CHECK(Token_delete);
-  ast->delete_token = session->token_stream->cursor() - 1;
+  ast->delete_token =  pos;
 
   if (session->token_stream->lookAhead() == '[')
     {
       ast->lbracket_token = session->token_stream->cursor();
       advance();
+      size_t pos = session->token_stream->cursor();
       CHECK(']');
-      ast->rbracket_token = session->token_stream->cursor() - 1;
+      ast->rbracket_token = pos;
     }
 
   if (!parseCastExpression(ast->expression))
@@ -4480,10 +4485,12 @@ bool Parser::parseThrowExpression(ExpressionAST *&node)
 {
   std::size_t start = session->token_stream->cursor();
 
+  size_t pos = session->token_stream->cursor();
+  
   CHECK(Token_throw);
 
   ThrowExpressionAST *ast = CreateNode<ThrowExpressionAST>(session->mempool);
-  ast->throw_token = session->token_stream->cursor() - 1;
+  ast->throw_token = pos;
 
   parseAssignmentExpression(ast->expression);
 
