@@ -274,7 +274,12 @@ bool ProjectController::openProject( const KUrl &projectFile )
             if ( KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
                                              i18n( "Reopen the current project?" ) )
                     == KMessageBox::No )
+            {
                 return false;
+            } else 
+            {
+                closeProject( project );
+            }
         }
     }
 
