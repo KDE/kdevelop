@@ -39,7 +39,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-QMutex importSearchMutex;
+QMutex importSearchMutex(QMutex::Recursive);
 
 class TopDUContextPrivate : public DUContextPrivate
 {
@@ -172,6 +172,8 @@ ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
     if(!d->imports(target))
       return ret;
 
+    importSearchMutex.lock();
+
     const TopDUContext* nextContext = d->m_importsCache[target];
     if(nextContext) {
       ret << ImportTraceItem(this, DUContext::importPosition(nextContext));
@@ -181,6 +183,9 @@ ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
     }else{
       kWarning() << "inconsistent import-structure";
     }
+    
+    importSearchMutex.unlock();
+    
     return ret;
   }
 
