@@ -147,34 +147,25 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
     kDebug(9505) << "duchain: error: A document with the same identity is already in the du-chain";
   }
   
-  {
-    ///Remove obsolete versions of the document
-    IdentifiedFile firstDoc( document.url(), 0 );
-    QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(firstDoc);
-
-    ModificationRevision rev = EditorIntegrator::modificationRevision( document.url() );
-
-    for( ;it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); )
-    {
-      ModificationRevision thisRev = (*it)->parsingEnvironmentFile()->modificationRevision();
-      
-      if( (*it)->parsingEnvironmentFile() && !(thisRev == rev) )
-      {
-        //Don't remove obsolete chains here, because the caller may not be prepared to it, and also the chains may yet be updated.
-/*        kDebug(9505) << "duchain: removing obsolete document " << (*it)->parsingEnvironmentFile()->identity().toString() << " from du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
-
-        if( ParsingEnvironmentManager* manager = sdDUChainPrivate->managerForType((*it)->parsingEnvironmentFile()->type() ) )
-          manager->removeFile( (*it)->parsingEnvironmentFile().data() );
-        
-        delete *it;
-        it = sdDUChainPrivate->m_chains.erase(it);
-        continue;*/
-      } else {
-        kDebug(9505) << "duchain: leaving other version of document " << (*it)->parsingEnvironmentFile()->identity().toString() << " in du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
-      }
-      ++it;
-    }
-  }
+//   {
+//     ///Remove obsolete versions of the document
+//     IdentifiedFile firstDoc( document.url(), 0 );
+//     QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(firstDoc);
+// 
+//     ModificationRevision rev = EditorIntegrator::modificationRevision( document.url() );
+// 
+//     for( ;it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); )
+//     {
+//       ModificationRevision thisRev = (*it)->parsingEnvironmentFile()->modificationRevision();
+//       
+//       if( (*it)->parsingEnvironmentFile() && !(thisRev == rev) )
+//       {
+//       } else {
+//         kDebug(9505) << "duchain: leaving other version of document " << (*it)->parsingEnvironmentFile()->identity().toString() << " in du-chain. Current rev.: " << rev << " document's rev.: " << (*it)->parsingEnvironmentFile()->modificationRevision();
+//       }
+//       ++it;
+//     }
+//   }
 
   sdDUChainPrivate->m_chains.insert(document, chain);
   {
