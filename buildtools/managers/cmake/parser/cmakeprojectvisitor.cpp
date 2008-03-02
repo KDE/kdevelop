@@ -27,6 +27,7 @@
 #include <KDebug>
 #include <QHash>
 #include <QFile>
+#include <QDir>
 #include <QtCore/qglobal.h>
 #include <QByteArray>
 #include <QRegExp>
@@ -229,7 +230,8 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 {
     if(file.isEmpty())
         return file;
-    QString path, filename;
+    QString filename;
+    KUrl path;
     if( QFileInfo(file).isAbsolute() )
          return file;
     switch(t) {
@@ -257,30 +259,42 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             filename=file;
             break;
     }
-    foreach(const QString& mpath, folders) {
-        KUrl p(mpath);
-        p.addPath(filename);
-
-        QString possib=p.toLocalFile();
+    foreach(const QString& mpath, folders)
+    {
+        QDir direc(mpath);
 
 //         kDebug(9042) << "Trying:" << possib << "." << p << "." << mpath;
-        if(QFile::exists(possib))
+#ifndef Q_OS_WIN
+        if(t==Library)
+        {
+            QFileInfoList entries=direc.entryInfoList(QStringList(filename) << filename+".*");
+            if(!entries.isEmpty())
+            {
+                path=KUrl(mpath);
+                path.addPath(entries.first().fileName());
+            }
+            break;
+        }
+        else
+#endif
+        if(direc.exists(filename))
         {
             switch(t) {
                 case Location:
                     path=mpath;
                     break;
                 case Executable:    //TODO: Must check if it is an executable.
-                case Library:
                 case File:
-                    path=p.toLocalFile();
+                case Library:
+                    path=KUrl(mpath);
+                    path.addPath(filename);
                     break;
             }
             break;
         }
     }
     kDebug(9042) << "find file" << filename << "into:" << folders << "found at:" << path;
-    return path;
+    return path.toLocalFile();
 }
 
 int CMakeProjectVisitor::visit(const IncludeAst *inc)
