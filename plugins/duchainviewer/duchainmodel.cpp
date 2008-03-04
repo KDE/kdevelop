@@ -150,7 +150,7 @@ QModelIndex DUChainModel::index(int row, int column, const QModelIndex & parent)
     if (parent.row() > 0 || parent.column() > 0)
       return QModelIndex();
 
-    return createIndex(row, column, const_cast<void*>(static_cast<const void*>(&m_chain)));
+	return createIndex(row,column,createPointerForObject(m_chain.data()));
   }
 
   DUChainReadLocker readLock(DUChain::lock());
