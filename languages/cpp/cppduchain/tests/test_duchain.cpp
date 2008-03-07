@@ -1095,6 +1095,25 @@ void TestDUChain::testFunctionDefinition2() {
   release(top);
 }
 
+void TestDUChain::testFunctionDefinition4() {
+  QByteArray text("namespace A{class B{B();};} namespace A{ B::B() {} } ");
+
+  DUContext* top = parse(text, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 2);
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  
+  QVERIFY(top->childContexts()[1]->localDeclarations()[0]->isDefinition());
+  QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->declaration(), top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]);
+
+  release(top);
+}
+
 void TestDUChain::testFunctionDefinition3() {
   QByteArray text("class B{template<class T> void test(T t); B(int i); int test(int a); int test(char a); template<class T2, class T3> void test(T2 t, T3 t3); int test(Unknown k); int test(Unknown2 k); }; template<class T> void B::test(T t) {}; B::B(int) {}; int B::test(int a){}; int B::test(char a){}; template<class T2, class T3> void B::test(T2 t, T3 t3) {}; int B::test(Unknown k){}; int B::test( Unknown2 k) {}; ");
 
