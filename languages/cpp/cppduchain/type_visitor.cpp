@@ -100,7 +100,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
           {
             LOCKDUCHAIN;
-            find.closeIdentifier();
+            find.closeIdentifier(it == end);
             _M_type.push(id);
           }
           

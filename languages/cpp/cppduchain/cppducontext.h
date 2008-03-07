@@ -135,8 +135,9 @@ extern QMutex cppDuContextInstantiationsMutex;
          * When closeIdentifier() is called, the last opened identifier is searched, and can be retrieved using lastDeclarations().
          * Returns false when the search should be stopped.
          * The DUChain needs to be locked when this is called.
+         * @param isFinalIdentifier Whether the closed identifier the last one. Needed to know when to apply what search-flags.
          * */
-        bool closeIdentifier() {
+        bool closeIdentifier(bool isFinalIdentifier) {
           State& s = m_states.top();
           QualifiedIdentifier lookup = s.identifier;
           ///Search a Declaration of the identifier
@@ -182,12 +183,12 @@ extern QMutex cppDuContextInstantiationsMutex;
           m_lastScopeContext = DUContextPointer(scopeContext);
           
           /// Look up Declarations
-//           DUContext::SearchFlags flags = (num != (identifier.count()-1)) ? BaseContext::OnlyContainerTypes : BaseContext::NoSearchFlags;
-//           flags |= m_flags;
 
+          DUContext::SearchFlags basicFlags = isFinalIdentifier ? m_flags : DUContext::OnlyContainerTypes;
+          
           QList<Declaration*> tempDecls;
           if( !scopeContext ) {
-            m_context->findDeclarationsInternal( toList(lookup), m_position, m_dataType, tempDecls, m_trace, m_flags | DUContext::DirectQualifiedLookup );
+            m_context->findDeclarationsInternal( toList(lookup), m_position, m_dataType, tempDecls, m_trace, basicFlags | DUContext::DirectQualifiedLookup );
             if( tempDecls.isEmpty() ) {
               ///If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
               //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
@@ -211,7 +212,7 @@ extern QMutex cppDuContextInstantiationsMutex;
               }
             }
           } else { //Create a new trace, so template-parameters can be resolved globally
-            scopeContext->findDeclarationsInternal( toList(lookup), scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext()->importTrace(scopeContext->topContext()), m_flags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup );
+            scopeContext->findDeclarationsInternal( toList(lookup), scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext()->importTrace(scopeContext->topContext()), basicFlags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup );
           }
 
           if( !tempDecls.isEmpty() ) {
@@ -411,7 +412,8 @@ class CppDUContext : public BaseContext {
 
       find.openQualifiedIdentifier( identifier.explicitlyGlobal() );
 
-      for( int num = 0; num < identifier.count(); num++ )
+      int idCount = identifier.count();
+      for( int num = 0; num < idCount; num++ )
       {
         {
           Identifier current = identifier.at(num);
@@ -425,7 +427,8 @@ class CppDUContext : public BaseContext {
           ///Step 1: Resolve the template-arguments
           //Since there may be non-type template-parameters, represent them as ExpressionEvaluationResult's
 
-          for( int a = 0; a < currentIdentifier.templateIdentifiers().size(); a++ ) {
+          int tempCount = currentIdentifier.templateIdentifiers().size();
+          for( int a = 0; a < tempCount; a++ ) {
             //Use the already available mechanism for resolving delayed types
             Cpp::ExpressionEvaluationResult res;
             TypeIdentifier i = currentIdentifier.templateIdentifiers().at(a);
@@ -449,7 +452,7 @@ class CppDUContext : public BaseContext {
           }
         }
 
-        if( !find.closeIdentifier() )
+        if( !find.closeIdentifier( num == idCount-1 ) )
           return false;
       }
       find.closeQualifiedIdentifier();

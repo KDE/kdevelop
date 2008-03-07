@@ -74,6 +74,7 @@ private:
   KDevelop::QualifiedIdentifier _M_name;
   Cpp::FindDeclaration m_find;
   bool m_debug;
+  UnqualifiedNameAST* m_finalName;
 };
 
 QString decode(ParseSession* session, AST* ast, bool without_spaces = false);

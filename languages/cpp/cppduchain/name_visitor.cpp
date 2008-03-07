@@ -38,7 +38,7 @@ using namespace KDevelop;
 using namespace Cpp;
 
 NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
-: m_session(session), m_visitor(visitor), m_context(context), m_trace(trace), m_find(m_context, m_trace, localSearchFlags, SimpleCursor(position) ), m_debug(debug)
+: m_session(session), m_visitor(visitor), m_context(context), m_trace(trace), m_find(m_context, m_trace, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
 {
 }
 
@@ -97,7 +97,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   {
     LOCKDUCHAIN;
-    m_find.closeIdentifier();
+    m_find.closeIdentifier(node == m_finalName);
   }
 
   if( node->id && !m_find.lastDeclarations().isEmpty() ) {
@@ -188,7 +188,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     LOCKDUCHAIN;
     m_find.openQualifiedIdentifier(false);
     m_find.openIdentifier(Identifier(decode(m_session, node)));
-    m_find.closeIdentifier();
+    m_find.closeIdentifier(false);
     opened = true;
   }
   LOCKDUCHAIN;
@@ -205,6 +205,8 @@ const QualifiedIdentifier& NameASTVisitor::identifier() const
 
 void NameASTVisitor::run(UnqualifiedNameAST *node)
 {
+  m_finalName = node;
+  
   m_find.openQualifiedIdentifier(false);
   m_typeSpecifier = 0;
   _M_name.clear();
@@ -225,6 +227,8 @@ void NameASTVisitor::run(NameAST *node, bool skipLastNamePart)
   m_typeSpecifier = 0;
 
   _M_name.clear();
+
+  m_finalName = node->unqualified_name;
 
   if(skipLastNamePart)
     visitNodes(this, node->qualified_names); //Skip the unqualified name
