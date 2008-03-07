@@ -93,5 +93,38 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
   }
 }
 
+Declaration* localClassFromCodeContext(DUContext* context)
+{
+  if(!context)
+    return 0;
+  
+  DUContext* startContext = context;
+  
+  while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
+  { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
+    context = context->parentContext();
+  }
+
+  ///Step 1: Find the function-declaration for the function we are in
+  Declaration* functionDeclaration = 0;
+
+  if( context->owner() && context->owner()->isDefinition() )
+    functionDeclaration = context->owner()->declaration(startContext->topContext());
+
+  if( !functionDeclaration && context->owner() )
+    functionDeclaration = context->owner();
+
+  if(!functionDeclaration)
+    return 0;
+
+  return functionDeclaration->context()->owner();
+}
+
+KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, Declaration* declaration)
+{
+  ///@todo implement
+  return true;
+}
+
 }
 

@@ -59,6 +59,15 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
  * declarations, they are hidden here.
  * */
 KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<KDevelop::Declaration*, int> >& declarations );
+
+  /**Tries determining the local class that the given code-context belongs to.*/
+KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context);
+
+/**
+ * Returns whether the given declaration can be accessed from the given context. Checks for private/protected and such stuff.
+ * Not implemented yet.
+ * */
+KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::Declaration* declaration);
 }
 
 #endif
