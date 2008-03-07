@@ -225,12 +225,27 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top() && node->id) {
         
       QualifiedIdentifier id = identifierForName(node->id);
+
       DUChainWriteLocker lock(DUChain::lock());
       if (id.count() > 1 ||
           (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
         SimpleCursor pos = currentDeclaration()->range().start;//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
-        //kDebug(9007) << "Searching for declaration of" << id;
+        
+        if(id.count() > 1) {
+          //Merge the scope of the declaration. Add dollar-signs instead of the ::.
+          //Else the declarations could be confused with global functions.
+          //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
+
+          Identifier identifier = currentDeclaration()->identifier();
+          QString newId = identifier.identifier();
+          for(int a = id.count()-2; a >= 0; --a)
+            newId = id.at(a).identifier() + "$$" + newId;
+
+          identifier.setIdentifier(newId);
+          currentDeclaration()->setIdentifier(identifier);
+        }
+        
         // TODO: potentially excessive locking
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
@@ -278,18 +293,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
           }
           if(found)
             break;
-        }
-        if(id.count() > 1) {
-          //Merge the scope of the declaration. Add dollar-signs instead of the ::.
-          //Else the declarations could be confused with global functions.
-
-          Identifier identifier = currentDeclaration()->identifier();
-          QString newId = identifier.identifier();
-          for(int a = id.count()-2; a >= 0; --a)
-            newId = id.at(a).identifier() + "$$" + newId;
-
-          identifier.setIdentifier(newId);
-          currentDeclaration()->setIdentifier(identifier);
         }
       }
     }
