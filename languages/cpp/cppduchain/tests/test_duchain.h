@@ -99,6 +99,7 @@ private slots:
   void testHashedStringRepository();
   void testEnum();
   void testCaseUse();
+  void testDefinitionUse();
 
   void testCStruct();
   void testCStruct2();

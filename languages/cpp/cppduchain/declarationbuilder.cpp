@@ -386,7 +386,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   }
 
   
-  SimpleRange newRange = m_editor->findRange(name ? static_cast<AST*>(name) : rangeNode);
+  SimpleRange newRange = m_editor->findRange(name ? static_cast<AST*>(name->unqualified_name) : rangeNode);
   
   if(newRange.start >= newRange.end)
     kWarning(9007) << "Range collapsed";

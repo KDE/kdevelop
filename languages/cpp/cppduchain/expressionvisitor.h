@@ -76,6 +76,9 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
      **/
     void parse( AST* ast );
 
+    ///Parses the qualification prefix of the given name
+    void parseNamePrefix( NameAST* ast );
+    
     AbstractType::Ptr lastType();
     Instance lastInstance();
 
@@ -126,7 +129,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
 
     TopDUContext* topContext() const;
     
-    bool m_strict, m_memberAccess;
+    bool m_strict, m_memberAccess, m_skipLastNamePart;
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
 

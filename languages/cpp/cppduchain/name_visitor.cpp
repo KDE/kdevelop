@@ -61,12 +61,6 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces)
   return ret;
 }
 
-void NameASTVisitor::internal_run(AST *node)
-{
-  _M_name.clear();
-  visit(node);
-}
-
 void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 {
   QString tmp_name;
@@ -213,7 +207,8 @@ void NameASTVisitor::run(UnqualifiedNameAST *node)
 {
   m_find.openQualifiedIdentifier(false);
   m_typeSpecifier = 0;
-  internal_run(node);
+  _M_name.clear();
+  visit(node);
   LOCKDUCHAIN;
   m_find.closeQualifiedIdentifier();
 }
@@ -224,10 +219,19 @@ QList<KDevelop::DeclarationPointer> NameASTVisitor::declarations() const
 }
 
 
-void NameASTVisitor::run(NameAST *node)
+void NameASTVisitor::run(NameAST *node, bool skipLastNamePart)
 {
   m_find.openQualifiedIdentifier(node->global);
-  m_typeSpecifier = 0; internal_run(node); _M_name.setExplicitlyGlobal( node->global );
+  m_typeSpecifier = 0;
+
+  _M_name.clear();
+
+  if(skipLastNamePart)
+    visitNodes(this, node->qualified_names); //Skip the unqualified name
+  else
+    visit(node);
+
+  _M_name.setExplicitlyGlobal( node->global );
   LOCKDUCHAIN;
   m_find.closeQualifiedIdentifier();
 }

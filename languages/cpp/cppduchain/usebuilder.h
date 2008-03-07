@@ -71,6 +71,7 @@ protected:
 
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node);
   virtual void visitCondition(ConditionAST *node);
+  virtual void visitDeclarator(DeclaratorAST* node);
 private:
 
   void visitExpression(AST* node);

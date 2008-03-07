@@ -766,7 +766,7 @@ void TestDUChain::testDeclareClass()
   Declaration* defClassA = top->localDeclarations().first();
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QCOMPARE(defClassA->uses().count(), 1);
-  QCOMPARE(defClassA->uses().begin()->count(), 1);
+  QCOMPARE(defClassA->uses().begin()->count(), 2);
   QVERIFY(defClassA->type<CppClassType>());
   QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 3);
   CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements()[2]);
@@ -1704,6 +1704,17 @@ void TestDUChain::testCaseUse()
   QCOMPARE(top->localDeclarations()[2]->uses().count(), 1);
   QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1);
   QCOMPARE(top->localDeclarations()[2]->uses().begin()->count(), 1);
+}
+
+void TestDUChain::testDefinitionUse()
+{
+  QByteArray method("class C{ void test(); }; C::test() {} ");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->uses().count(), 1);
 }
 
 void TestDUChain::testForwardDeclaration2()

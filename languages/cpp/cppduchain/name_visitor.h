@@ -43,7 +43,7 @@ class KDEVCPPDUCHAIN_EXPORT NameASTVisitor: protected DefaultVisitor
 public:
   NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, const KDevelop::SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags, bool debug = false);
 
-  void run(NameAST *node);
+  void run(NameAST *node, bool skipLastNamePart = false);
   void run(UnqualifiedNameAST *node);
 
   QString name() const { return _M_name.toString(); }
@@ -63,8 +63,6 @@ public:
 protected:
   virtual void visitUnqualifiedName(UnqualifiedNameAST *node);
   virtual void visitTemplateArgument(TemplateArgumentAST *node);
-
-  void internal_run(AST *node);
 
 private:
   ParseSession* m_session;

@@ -186,7 +186,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
   return instance && (instance.declaration || isReferenceType(type));
 }
 
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_memberAccess(false), m_inclusionTrace(inclusionTrace), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_inclusionTrace(inclusionTrace), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -209,6 +209,12 @@ void ExpressionVisitor::parse( AST* ast ) {
   visit(ast);
   m_topContext = 0;
   flushUse();
+}
+
+void ExpressionVisitor::parseNamePrefix( NameAST* ast ) {
+  m_skipLastNamePart = true;
+  parse(ast);
+  m_skipLastNamePart = false;
 }
 
 void ExpressionVisitor::problem( AST* node, const QString& str ) {
@@ -451,7 +457,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     }
     
     NameASTVisitor nameV( m_session, this, m_currentContext, trace, position.isValid() ? position : m_currentContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
-    nameV.run(node);
+    nameV.run(node, m_skipLastNamePart);
 
     if( nameV.identifier().isEmpty() ) {
       problem( node, "name is empty" );
