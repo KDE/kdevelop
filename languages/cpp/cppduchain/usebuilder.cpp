@@ -330,6 +330,14 @@ void UseBuilder::visitExpression(AST* node) {
   visitor.parse( node );
 }
 
+void UseBuilder::visitBaseSpecifier(BaseSpecifierAST* node) {
+  UseExpressionVisitor visitor( m_editor->parseSession(), this );
+  if( !node->name->ducontext )
+    node->name->ducontext = currentContext();
+  
+  visitor.parse( node->name );
+}
+
 void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
   UseBuilderBase::visitSimpleTypeSpecifier(node);

@@ -69,6 +69,7 @@ protected:
   //virtual void visitThrowExpression(ThrowExpressionAST *) ;
   virtual void visitUnaryExpression(UnaryExpressionAST *) ;
 
+  virtual void visitBaseSpecifier(BaseSpecifierAST* node);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node);
   virtual void visitCondition(ConditionAST *node);
   virtual void visitDeclarator(DeclaratorAST* node);
