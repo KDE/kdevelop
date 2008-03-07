@@ -390,9 +390,13 @@ class NavigationContext : public KShared {
             }
           }
         } else if( !shorten ) {
+          
           if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
             if( m_declaration->isTypeAlias() )
               m_currentText += importantHighlight("typedef ");
+            
+            if(m_declaration->type<CppEnumeratorType>())
+              m_currentText += i18n("enumerator") + " ";
 
             eventuallyMakeTypeLinks( m_declaration->abstractType().data() );
 
@@ -409,7 +413,12 @@ class NavigationContext : public KShared {
               }
               m_currentText += " ";
             }
-            
+
+            if(m_declaration->type<CppEnumerationType>()) {
+              CppEnumerationType::Ptr enumeration = m_declaration->type<CppEnumerationType>();
+              m_currentText += i18n("enumeration") + " " + m_declaration->identifier().toString() + "<br>";
+            }
+
             if(m_declaration->isForwardDeclaration()) {
               ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
               Declaration* resolved = forwardDec->resolve(m_topContext.data());
