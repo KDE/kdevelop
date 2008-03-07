@@ -1,6 +1,7 @@
 /*
  * KDevelop C++ Highlighting Support
  *
+ * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,26 +53,34 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
   public:
     enum Types {
       UnknownType,
-      ArgumentType,
+      //Primary highlighting:
+      LocalClassMemberType,
+      InheritedClassMemberType,
+      LocalVariableType,
+
+      //Other highlighting:
       ClassType,
-      CodeType,
+      FunctionType,
+      ForwardDeclarationType,
       EnumType,
       EnumeratorType,
+      TypeAliasType,
+
+      //If none of the above match:
+      MemberVariableType,
+      NamespaceVariableType,
+      GlobalVariableType,
+      
+      //Most of these are currently not used:
+      ArgumentType,
+      CodeType,
       FileType,
-      FunctionDefinitionType,
-      FunctionType,
       NamespaceType,
       ScopeType,
       TemplateType,
       TemplateParameterType,
-      TypeAliasType,
-      LocalVariableType,
       FunctionVariableType,
-      MemberVariableType,
-      NamespaceVariableType,
-      GlobalVariableType,
-      ErrorVariableType,
-      ForwardDeclarationType
+      ErrorVariableType
     };
 
     enum Contexts {
@@ -102,7 +111,10 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap) const;
     void outputRange( KTextEditor::SmartRange * range ) const;
 
-    Types typeForDeclaration(KDevelop::Declaration* dec) const;
+    /**
+     * @param context Should be the context from where the declaration is used, if a use is highlighted.
+     * */
+    Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const;
 
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;

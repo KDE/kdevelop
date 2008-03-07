@@ -1,6 +1,7 @@
 /*
  * KDevelop C++ Highlighting Support
  *
+ * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,6 +31,7 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include "cpplanguagesupport.h"
+#include "cppduchain.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -85,19 +87,17 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
     }
 
     switch (type) {
-      case UnknownType:
-        // Chocolate orange
-        a->setForeground(QColor(0xA0320A));
-        break;
+//       case UnknownType:
+//         // Chocolate orange
+//         a->setForeground(QColor(0xA0320A));
+//         break;
 
-      case ArgumentType:
+/*      case ArgumentType:
         // Steel
         a->setBackground(QColor(0x435361));
-        break;
-
+        break;*/
       case ClassType: {
-        // Scarlet
-        a->setForeground(QColor(0x7B0859));
+        a->setForeground(QColor(0x005912)); //Dark green
 
         KTextEditor::Attribute::Ptr e(new KTextEditor::Attribute());
         e->setForeground(QColor(0x005500));
@@ -105,10 +105,17 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         //a->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
         break;
       }
-
-      case FunctionDefinitionType:
-        //a->setFontBold();
-        // fallthrough
+      case TypeAliasType:
+        a->setForeground(QColor(0x00981e)); //Lighter greyish green
+        break;
+        
+      case EnumType:
+        a->setForeground(QColor(0x6c101e)); //Dark red
+        break;
+        
+      case EnumeratorType:
+        a->setForeground(QColor(0x862a38)); //Greyish red
+        break;
 
       case FunctionType:
         // Navy blue
@@ -120,6 +127,14 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         a->setForeground(QColor(0x443069));
         break;
 
+      case LocalClassMemberType:
+        a->setForeground(QColor(0xae7d00)); //Light orange
+        break;
+        
+      case InheritedClassMemberType:
+        a->setForeground(QColor(0x705000)); //Dark orange
+        break;
+        
       case LocalVariableType:
         // Dark aquamarine
         a->setForeground(QColor(0x0C4D3C));
@@ -140,14 +155,14 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         a->setForeground(QColor(0x12762B));
         break;
 
-      case NamespaceType:
-        // Dark rose
-        a->setForeground(QColor(0x6B2840));
-        break;
+//       case NamespaceType:
+//         // Dark rose
+//         a->setForeground(QColor(0x6B2840));
+//         break;
 
       case ErrorVariableType:
-        // Slightly less intense red
-        a->setForeground(QColor(0x9F3C5F));
+        // Pure red
+        a->setForeground(QColor(0x8b0019));
         break;
 
       case ForwardDeclarationType:
@@ -158,10 +173,7 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
       case ScopeType:
       case TemplateType:
       case TemplateParameterType:
-      case TypeAliasType:
       case CodeType:
-      case EnumType:
-      case EnumeratorType:
       case FileType:
         break;
     }
@@ -259,7 +271,7 @@ void CppHighlighting::highlightDUChainSimple(DUContext* context) const
   highlightUses(context);
 
   foreach (DUContext* child, context->childContexts()) {
-    highlightDUChainSimple(child );
+    highlightDUChainSimple(child);
   }
 }
 
@@ -328,13 +340,11 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
   }
 
   for(int a = 0; a < context->uses().count(); ++a) {
-    if(context->uses()[a].m_declarationIndex < 0) {
-      Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
-      uint colorNum = numColors;
-      if( colorsForDeclarations.contains(decl) )
-        colorNum = colorsForDeclarations[decl];
-      highlightUse(context, a, colors[colorNum]);
-    }
+    Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
+    uint colorNum = numColors;
+    if( colorsForDeclarations.contains(decl) )
+      colorNum = colorsForDeclarations[decl];
+    highlightUse(context, a, colors[colorNum]);
   }
 
   foreach (DUContext* child, context->childContexts())
@@ -358,21 +368,51 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
   return m_depthAttributes[depth];
 }
 
-#include "cpphighlighting.moc"
-
-
-CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) const
+CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DUContext* context) const
 {
+  /**
+   * We highlight in 3 steps by priority:
+   * 1. Is the item in the local class or an inherited class? If yes, highlight.
+   * 2. What kind of item is it? If it's a type/function/enumerator, highlight by type.
+   * 3. Else, highlight by scope.
+   * 
+   * */
+
+  if(!Cpp::isAccessible(context, dec))
+    return ErrorVariableType;
+  
   Types type = LocalVariableType;
-  if (dec->context()->scopeIdentifier().isEmpty())
-    type = GlobalVariableType;
-  if (dec->isForwardDeclaration())
-    type = ForwardDeclarationType;
-  else if (dec->type<CppClassType>())
-    type = ClassType;
-  else if (dec->type<CppFunctionType>())
-    type = FunctionType;
-  else
+  if (context) {
+    //It is a use.
+    //Determine the class we're in
+    Declaration* klass = Cpp::localClassFromCodeContext(context);
+    if(klass) {
+      if (klass->internalContext() == dec->context())
+        type = LocalClassMemberType; //Using Member of the local class
+      else if (klass->internalContext() && klass->internalContext()->imports(dec->context()))
+        type = InheritedClassMemberType; //Using Member of an inherited class
+    }
+  }
+
+  if (type == LocalVariableType) {
+    if (dec->kind() == Declaration::Type || dec->type<CppFunctionType>() || dec->type<CppEnumeratorType>()) {
+      if (dec->isForwardDeclaration())
+        type = ForwardDeclarationType;
+      else if (dec->type<CppFunctionType>())
+          type = FunctionType;
+      else if(dec->type<CppClassType>())
+          type = ClassType;
+      else if(dec->type<CppTypeAliasType>())
+          type = TypeAliasType;
+      else if(dec->type<CppEnumerationType>())
+        type = EnumType;
+      else if(dec->type<CppEnumeratorType>())
+        type = EnumeratorType;
+    }
+  }
+
+  if (type == LocalVariableType) {
+
     switch (dec->context()->type()) {
       case DUContext::Namespace:
         type = NamespaceVariableType;
@@ -386,6 +426,7 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) co
       default:
         break;
     }
+  }
 
   return type;
 }
@@ -393,13 +434,13 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec) co
 void CppHighlighting::highlightDeclaration(Declaration * declaration, uint color) const
 {
   if (SmartRange* range = declaration->smartRange())
-    range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext, color));
+    range->setAttribute(attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color));
 }
 
 void CppHighlighting::highlightDeclaration(Declaration * declaration) const
 {
   if (SmartRange* range = declaration->smartRange())
-    range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext, 0));
+    range->setAttribute(attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, 0));
 }
 
 void CppHighlighting::highlightUse(DUContext* context, int index, uint color) const
@@ -408,7 +449,7 @@ void CppHighlighting::highlightUse(DUContext* context, int index, uint color) co
     Types type = ErrorVariableType;
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
     if (decl)
-      type = typeForDeclaration(decl);
+      type = typeForDeclaration(decl, context);
 
     range->setAttribute(attributeForType(type, ReferenceContext, color));
   }
@@ -421,9 +462,11 @@ void CppHighlighting::highlightUses(DUContext* context) const
       Types type = ErrorVariableType;
       Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
       if (decl)
-        type = typeForDeclaration(decl);
+        type = typeForDeclaration(decl, context);
 
       range->setAttribute(attributeForType(type, ReferenceContext, 0));
     }
   }
 }
+
+#include "cpphighlighting.moc"
