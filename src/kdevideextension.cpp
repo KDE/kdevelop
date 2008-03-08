@@ -55,3 +55,13 @@ KDevelop::AreaParams KDevIDEExtension::defaultArea()
     return params;
 }
 
+QString KDevIDEExtension::projectFileExtension()
+{
+    return i18n("*.kdev4");
+}
+
+QString KDevIDEExtension::projectFileDescription()
+{
+    return i18n("KDevelop4 Project Files");
+}
+
