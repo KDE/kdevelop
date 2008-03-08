@@ -56,7 +56,7 @@ class CMakeBuildDirCreator : public QDialog
         void cmakeCommandDone(int exitCode, QProcess::ExitStatus exitStatus);
         void updated();
     private:
-        bool isBuildDirProject(const KUrl& buildDir);
+        static QString buildDirProject(const KUrl& buildDir);
 
         static QString executeProcess(const QString& execName, const QStringList& args=QStringList());
         Ui::CMakeBuildDirCreator* m_creatorUi;

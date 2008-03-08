@@ -111,11 +111,8 @@ void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus e
     m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(successful);
 }
 
-bool CMakeBuildDirCreator::isBuildDirProject(const KUrl& buildDir)
+QString CMakeBuildDirCreator::buildDirProject(const KUrl& buildDir)
 {
-    QString srcfold=m_srcFolder.toLocalFile();
-    if(srcfold.endsWith("/"))
-        srcfold.chop(1);
     QFile file(buildDir.toLocalFile()+"/CMakeCache.txt");
     
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -124,8 +121,9 @@ bool CMakeBuildDirCreator::isBuildDirProject(const KUrl& buildDir)
         return false;
     }
 
+    QString ret;
     bool correct=false;
-    const QString pLine=QString("CMAKE_HOME_DIRECTORY:INTERNAL=%1").arg(srcfold);
+    const QString pLine="CMAKE_HOME_DIRECTORY:INTERNAL=";
     while (!correct && !file.atEnd())
     {
         QString line = file.readLine().trimmed();
@@ -133,9 +131,12 @@ bool CMakeBuildDirCreator::isBuildDirProject(const KUrl& buildDir)
             continue;
         
         if(line.startsWith(pLine))
+        {
             correct=true;
+            ret=line.mid(pLine.count());
+        }
     }
-    return correct;
+    return ret;
 }
 
 void CMakeBuildDirCreator::updated()
@@ -153,6 +154,7 @@ void CMakeBuildDirCreator::updated()
         return;
     }
 
+    QString srcDir;
     bool dirEmpty=!m_creatorUi->buildFolder->url().isEmpty();
     bool alreadyCreated=false, correctProject=false;
     if(dirEmpty)
@@ -164,7 +166,12 @@ void CMakeBuildDirCreator::updated()
             alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
             if(alreadyCreated)
             {
-                correctProject=isBuildDirProject(m_creatorUi->buildFolder->url());
+                QString srcfold=m_srcFolder.toLocalFile();
+                if(srcfold.endsWith("/"))
+                    srcfold.chop(1);
+                
+                srcDir=buildDirProject(m_creatorUi->buildFolder->url());
+                correctProject= (srcDir==srcfold);
             }
         }
     }
@@ -197,7 +204,8 @@ void CMakeBuildDirCreator::updated()
             if(!alreadyCreated)
                 m_creatorUi->status->setText(i18n("The selected build directory does not exist or is not empty"));
             else
-                m_creatorUi->status->setText(i18n("The selected build directory is for another kind of project"));
+                m_creatorUi->status->setText(i18n("This build directory is for %1, "
+                        "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
         }
     }
 }
