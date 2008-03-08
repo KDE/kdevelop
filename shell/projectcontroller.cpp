@@ -48,6 +48,7 @@ Boston, MA 02110-1301, USA.
 #include "iprojectfilemanager.h"
 #include "project.h"
 #include "mainwindow.h"
+#include "shellextension.h"
 #include "projectmodel.h"
 #include "plugincontroller.h"
 #include "uicontroller.h"
@@ -260,7 +261,10 @@ bool ProjectController::openProject( const KUrl &projectFile )
         QString dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
 
-        url = KFileDialog::getOpenUrl( dir, i18n( "*.kdev4|KDevelop 4 Project Files\n" ),
+        QString projectFileInfo = ShellExtension::getInstance()->projectFileExtension()
+                + "|" + ShellExtension::getInstance()->projectFileDescription()
+                + "\n";
+        url = KFileDialog::getOpenUrl( dir, projectFileInfo,
                                        d->m_core->uiControllerInternal()->defaultMainWindow(),
                                        i18n( "Open Project" ) );
     }

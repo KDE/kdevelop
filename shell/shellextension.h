@@ -62,6 +62,12 @@ public:
     /**Reimplement to return the name of the default ui area.*/
     virtual AreaParams defaultArea() = 0;
 
+    /**Reimplement to return the filename extension for project files.*/
+    virtual QString projectFileExtension() = 0;
+
+    /**Reimplement to return the description for project files.*/
+    virtual QString projectFileDescription() = 0;
+
 protected:
     ShellExtension();
     static ShellExtension *s_instance;
