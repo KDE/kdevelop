@@ -242,9 +242,6 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             filename=QString("lib%1.so").arg(file);
 #endif
             break;
-        case Location:
-            filename=file;
-            break;
         case Executable:
 #ifdef Q_OS_WIN
             kDebug(9042) << "Setting file extension to .exe";
@@ -255,6 +252,9 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             filename=file;
             break;
 #endif
+        case Location:
+            filename=file;
+            break;
         case File:
             filename=file;
             break;
@@ -262,12 +262,15 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
     foreach(const QString& mpath, folders)
     {
         QDir direc(mpath);
+        if(mpath.isEmpty())
+            continue;
 
-//         kDebug(9042) << "Trying:" << possib << "." << p << "." << mpath;
+        kDebug(9042) << "Trying:" << mpath << "." << mpath;
 #ifndef Q_OS_WIN
         if(t==Library)
         {
             QFileInfoList entries=direc.entryInfoList(QStringList(filename) << filename+".*");
+            kDebug(9042) << "lib entries" << entries.count() << filename;
             if(!entries.isEmpty())
             {
                 path=KUrl(mpath);

@@ -63,9 +63,13 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     
     showInternal(m_prefsUi->showInternal->checkState());
     //TODO: This will break when the kdevelop project file is not inside the source dir
-    m_srcFolder=KUrl(args[0].toString());
-    m_srcFolder=m_srcFolder.upUrl().upUrl();
-    kDebug(9042) << "Source folder: " << m_srcFolder << args[0].toString();
+    m_srcFolder=KUrl(args[1].toString());
+    m_srcFolder=m_srcFolder.upUrl();
+    kDebug(9042) << "Source folder: " << m_srcFolder << args[1].toString();
+//     foreach(const QVariant &v, args)
+//     {
+//         kDebug(9042) << "arg: " << v.toString();
+//     }
 
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);

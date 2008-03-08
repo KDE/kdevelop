@@ -115,7 +115,7 @@ bool CMakeBuildDirCreator::isBuildDirProject(const KUrl& buildDir)
 {
     QString srcfold=m_srcFolder.toLocalFile();
     if(srcfold.endsWith("/"))
-        srcfold=srcfold.left(srcfold.size()-1);
+        srcfold.chop(1);
     QFile file(buildDir.toLocalFile()+"/CMakeCache.txt");
     
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -126,7 +126,8 @@ bool CMakeBuildDirCreator::isBuildDirProject(const KUrl& buildDir)
 
     bool correct=false;
     const QString pLine=QString("CMAKE_HOME_DIRECTORY:INTERNAL=%1").arg(srcfold);
-    while (!correct && !file.atEnd()) {
+    while (!correct && !file.atEnd())
+    {
         QString line = file.readLine().trimmed();
         if(line.startsWith("#") || line.isEmpty())
             continue;
@@ -168,6 +169,8 @@ void CMakeBuildDirCreator::updated()
         }
     }
 
+    kDebug(9042) << "already" << alreadyCreated
+                 << "correct" << correctProject;
 //     m_creatorUi->buildFolder->setEnabled(true);
     if(alreadyCreated && correctProject)
     {
@@ -192,7 +195,7 @@ void CMakeBuildDirCreator::updated()
         {
             //Useful to prevent disasters
             if(!alreadyCreated)
-                m_creatorUi->status->setText(QString(i18n("The selected build directory does not exist or is not empty")));
+                m_creatorUi->status->setText(i18n("The selected build directory does not exist or is not empty"));
             else
                 m_creatorUi->status->setText(i18n("The selected build directory is for another kind of project"));
         }
