@@ -172,6 +172,13 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPlugin::requestContextMenuAct
             buildItemsAdded = true;
         }
     }
+    if( items.count() == 1 )
+    {
+        KAction* action = new KAction( i18n( "Project Configuration" ), this );
+        connect( action, SIGNAL( triggered() ), this, SLOT( projectConfiguration() ) );
+        actions << action;
+    }
+    
     return qMakePair(QString("Project Management"), actions);
 }
 
@@ -362,6 +369,14 @@ void ProjectManagerViewPlugin::storeBuildset()
     KConfigGroup setgrp = KGlobal::config()->group("Buildset");
     buildSet()->saveSettings( setgrp );
     setgrp.sync();
+}
+
+void ProjectManagerViewPlugin::projectConfiguration( )
+{
+    if( d->ctxProjectItemList.count() > 0 )
+    {
+        core()->projectController()->configureProject( d->ctxProjectItemList.at( 0 )->project() );
+    }
 }
 
 

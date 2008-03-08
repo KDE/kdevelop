@@ -101,7 +101,7 @@ public:
             //the plugin will show up on all projects settings dialogs.
 
             QStringList pluginsForPrj = findPluginsForProject( proj );
-	    kDebug(9501) << "Using pluginlist:" << pluginsForPrj;
+            kDebug(9501) << "Using pluginlist:" << pluginsForPrj;
             pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
             m_cfgDlgs[proj] = new KSettings::Dialog( pluginsForPrj,
                                                      m_core->uiController()->activeMainWindow() );
@@ -513,6 +513,13 @@ IProject* ProjectController::findProjectByName( const QString& name )
     return 0;
 }
 
+bool ProjectController::configureProject( IProject* project )
+{
+    d->projectConfig( project );
+    return true;
+}
+
 }
 #include "projectcontroller.moc"
+
 

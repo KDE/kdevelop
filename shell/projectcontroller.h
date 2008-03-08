@@ -57,6 +57,7 @@ public Q_SLOTS:
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
     bool projectImportingFinished( IProject* );
     bool closeProject( IProject* );
+    bool configureProject( IProject* );
 //     void changeCurrentProject( ProjectBaseItem* );
 
 Q_SIGNALS:

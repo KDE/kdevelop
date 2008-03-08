@@ -69,6 +69,7 @@ protected Q_SLOTS:
     void pruneProjectItems();
     void buildAllProjects();
     void addItemsFromContextMenuToBuildset();
+    void projectConfiguration();
 
 private:
     void executeBuild( KDevelop::ProjectBaseItem* );
