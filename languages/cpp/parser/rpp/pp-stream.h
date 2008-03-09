@@ -57,7 +57,7 @@ class KDEVCPPRPP_EXPORT Stream
 
     int offset() const;
 
-    const char& peek(int offset = 1) const;
+    const char& peek(uint offset = 1) const;
 
     QByteArray stringFrom(int offset) const;
 

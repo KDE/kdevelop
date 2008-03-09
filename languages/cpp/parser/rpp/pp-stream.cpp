@@ -109,7 +109,7 @@ bool Stream::skippedToEnd() const
   return m_skippedToEnd;
 }
 
-const char& Stream::peek(int offset) const
+const char& Stream::peek(uint offset) const
 {
   if (c + offset > end)
     return nullchar;
